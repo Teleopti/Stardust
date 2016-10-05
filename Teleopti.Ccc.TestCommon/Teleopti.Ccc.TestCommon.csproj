@@ -220,6 +220,7 @@
     <Compile Include="FakeRepositories\Rta\FakeAgentStatePersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAllLicenseActivator.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAllLicenseActivatorProvider.cs" />
+    <Compile Include="FakeRepositories\Rta\FakeDatabaseReader.cs" />
     <Compile Include="FakeRepositories\Rta\FakeNoRtaLicenseActivator.cs" />
     <Compile Include="FakeRepositories\Rta\FakeMappingReadModelPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeNoRtaLicenseActivatorProvider.cs" />

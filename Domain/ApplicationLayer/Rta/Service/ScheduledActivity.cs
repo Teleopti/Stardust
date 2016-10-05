@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		[RemoveMeWithToggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 		IEnumerable<ScheduledActivity> GetCurrentSchedule(DateTime utcNow, Guid personId);
+
 		[RemoveMeWithToggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 		IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<Guid> personIds);
 
@@ -66,8 +67,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IBusinessUnitRepository _businessUnits;
 
 		public FromPersonAssignment(
-			IScheduleStorage scheduleStorage, 
-			IPersonRepository personRepository, 
+			IScheduleStorage scheduleStorage,
+			IPersonRepository personRepository,
 			IScenarioRepository scenarios,
 			IBusinessUnitRepository businessUnits)
 		{
@@ -98,7 +99,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				.SelectMany(x =>
 				{
 					var scenario = _scenarios.LoadDefaultScenario(_businessUnits.Load(x.Key));
-					var people = x.Select(id => _personRepository.Load(id));
+					var people = x.Select(id => _personRepository.Load(id)).ToArray();
 					return MakeScheduledActivities(
 						scenario,
 						_scheduleStorage,

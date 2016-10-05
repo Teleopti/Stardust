@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 							UserCode = "user"
 						}
 					}
-				});
+				}, DeadLockVictim.Yes);
 				AgentStatePersister.Update(new AgentStateForUpsert
 				{
 					PersonId = person,

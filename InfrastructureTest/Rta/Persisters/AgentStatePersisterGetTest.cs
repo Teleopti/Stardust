@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
-		public void ShouldFetchPersonIdsForLogout()
+		public void ShouldFetchPersonsForLogout()
 		{
 			var person1 = Guid.NewGuid();
 			var person2 = Guid.NewGuid();
@@ -156,17 +156,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				PersonId = person1,
 				ReceivedTime = "2016-09-12 13:00".Utc(),
 				SourceId = "6",
-				StateCode = Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot
+				StateCode = Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot,
+				DataSourceId = 1,
+				UserCode = "usercode1"
 			});
 			Persister.Upsert(new AgentStateForUpsert
 			{
 				PersonId = person2,
 				ReceivedTime = "2016-09-12 13:00".Utc(),
-				SourceId = "6"
+				SourceId = "6",
+				DataSourceId = 1,
+				UserCode = "usercode2"
 			});
 
-			Persister.GetPersonIdsForClosingSnapshot("2016-09-12 13:01".Utc(), "6", Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
-				.Single().Should().Be(person2);
+			var result = Persister.FindForClosingSnapshot("2016-09-12 13:01".Utc(), "6", Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.Single();
+			result.DataSourceId.Should().Be(1);
+			result.UserCode.Should().Be("usercode2");
 		}
 	}
 }

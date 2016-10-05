@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 					}
 					catch (Exception e)
 					{
+						PreserveStack.ForInnerOf(e);
 						ex = e;
 					}
 				})

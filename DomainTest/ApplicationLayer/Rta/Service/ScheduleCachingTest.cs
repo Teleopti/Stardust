@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	[TestFixture]
 	[RtaTest]
 	[RealPermissions]
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_ScheduleQueryOptimization_40260)]
 	public class ScheduleCachingTest
 	{
 		public FakeRtaDatabase Database;

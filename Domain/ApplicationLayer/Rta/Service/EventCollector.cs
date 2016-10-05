@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public IEnumerable<IEvent> Publish()
 		{
 			var publisher = _publisher.Current();
-			_events
+			var toPublish = _events
 				.OrderBy(@event =>
 				{
 					if (@event is PersonShiftStartEvent)
@@ -45,8 +45,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 					return DateTime.MinValue;
 				})
-				.ForEach(@event => publisher.Publish(@event));
-			return _events;
+				.ToArray();
+			publisher.Publish(toPublish);
+			return toPublish;
 		}
 
 	}

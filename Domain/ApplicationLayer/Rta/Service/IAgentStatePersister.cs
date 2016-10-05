@@ -4,24 +4,31 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
+	public enum DeadLockVictim
+	{
+		Yes,
+		No
+	}
+
 	public interface IAgentStatePersister
 	{
 		// maintainer stuff
-		void Delete(Guid personId);
-		void Prepare(AgentStatePrepare model);
-		void InvalidateSchedules(Guid personId);
+		void Delete(Guid personId, DeadLockVictim deadLockVictim);
+		void Prepare(AgentStatePrepare model, DeadLockVictim deadLockVictim);
+		void InvalidateSchedules(Guid personId, DeadLockVictim deadLockVictim);
 
-		// query states by external logon
-		IEnumerable<AgentStateFound> Find(int dataSourceId, string userCode);
-		IEnumerable<AgentStateFound> Find(int dataSourceId, IEnumerable<string> userCodes);
-		IEnumerable<Guid> GetAllPersonIds();
-		AgentState Get(Guid personId);
+		// rta service stuff
+		IEnumerable<ExternalLogon> FindAll();
+		IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState);
+		IEnumerable<AgentStateFound> Find(ExternalLogon externalLogon, DeadLockVictim deadLockVictim);
+		IEnumerable<AgentStateFound> Find(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim);
 		IEnumerable<AgentState> GetStates();
-		[RemoveMeWithToggle(Toggles.RTA_PersonOrganizationQueryOptimization_40261)]
-		IEnumerable<AgentState> GetStatesNotInSnapshot(DateTime snapshotId, string sourceId);
-		IEnumerable<Guid> GetPersonIdsForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState);
 		void Update(AgentState model);
 
+		[RemoveMeWithToggle(Toggles.RTA_ScheduleQueryOptimization_40260)]
+		AgentState Get(Guid personId);
+		[RemoveMeWithToggle(Toggles.RTA_PersonOrganizationQueryOptimization_40261)]
+		IEnumerable<AgentState> GetStatesNotInSnapshot(DateTime snapshotId, string sourceId);
 		[RemoveMeWithToggle(Toggles.RTA_PersonOrganizationQueryOptimization_40261)]
 		IEnumerable<AgentState> Get(IEnumerable<Guid> personIds);
 

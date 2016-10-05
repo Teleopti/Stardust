@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -39,10 +40,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 						UserCode = "usercode2"
 					}
 				}
-			});
+			}, DeadLockVictim.Yes);
 
-			Target.Find(3, "usercode1").Single().PersonId.Should().Be(person);
-			Target.Find(4, "usercode2").Single().PersonId.Should().Be(person);
+			Target.Find(new ExternalLogon {DataSourceId = 3, UserCode = "usercode1"}, DeadLockVictim.Yes).Single().PersonId.Should().Be(person);
+			Target.Find(new ExternalLogon {DataSourceId = 4, UserCode = "usercode2"}, DeadLockVictim.Yes).Single().PersonId.Should().Be(person);
 		}
 
 		[Test]
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 						UserCode = "usercode"
 					}
 				}
-			});
+			}, DeadLockVictim.Yes);
 			Target.Prepare(new AgentStatePrepare
 			{
 				PersonId = person2,
@@ -74,9 +75,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 						UserCode = "usercode"
 					}
 				}
-			});
+			}, DeadLockVictim.Yes);
 
-			Target.Find(7, "usercode").Should().Have.Count.EqualTo(2);
+			Target.Find(new ExternalLogon {DataSourceId = 7, UserCode = "usercode"}, DeadLockVictim.Yes).Should().Have.Count.EqualTo(2);
 		}
 
 		[Test]
@@ -110,7 +111,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 						UserCode = "usercodeB"
 					},
 				}
-			});
+			}, DeadLockVictim.Yes);
 			Target.Prepare(new AgentStatePrepare
 			{
 				PersonId = person,
@@ -127,12 +128,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 						UserCode = "usercodeB"
 					},
 				}
-			});
+			}, DeadLockVictim.Yes);
 
-			Target.Find(1, "usercodeA").Should().Have.Count.EqualTo(0);
-			Target.Find(2, "usercodeA").Should().Have.Count.EqualTo(1);
-			Target.Find(1, "usercodeB").Should().Have.Count.EqualTo(1);
-			Target.Find(2, "usercodeB").Should().Have.Count.EqualTo(0);
+			Target.Find(new ExternalLogon {DataSourceId = 1, UserCode = "usercodeA"}, DeadLockVictim.Yes).Should().Have.Count.EqualTo(0);
+			Target.Find(new ExternalLogon {DataSourceId = 2, UserCode = "usercodeA"}, DeadLockVictim.Yes).Should().Have.Count.EqualTo(1);
+			Target.Find(new ExternalLogon {DataSourceId = 1, UserCode = "usercodeB"}, DeadLockVictim.Yes).Should().Have.Count.EqualTo(1);
+			Target.Find(new ExternalLogon {DataSourceId = 2, UserCode = "usercodeB"}, DeadLockVictim.Yes).Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
@@ -151,11 +152,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 						UserCode = "usercodeA"
 					}
 				}
-			});
+			}, DeadLockVictim.Yes);
 			Target.Prepare(new AgentStatePrepare
 			{
 				PersonId = person
-			});
+			}, DeadLockVictim.Yes);
 
 			Target.Get(person).Should().Be.Null();
 		}
@@ -179,7 +180,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 						UserCode = "usercode2"
 					}
 				}
-			});
+			}, DeadLockVictim.Yes);
 
 			Target.Get(person).PersonId.Should().Be(person);
 		}
@@ -203,7 +204,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 						UserCode = "usercode2"
 					}
 				}
-			});
+			}, DeadLockVictim.Yes);
 
 			Target.Get(new[] {person}).Single().PersonId.Should().Be(person);
 		}
@@ -227,7 +228,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 						UserCode = "usercode2"
 					}
 				}
-			});
+			}, DeadLockVictim.Yes);
 
 			Target.GetStates().Single().PersonId.Should().Be(person);
 		}
@@ -253,15 +254,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 						UserCode = "usercode2"
 					}
 				}
-			});
+			}, DeadLockVictim.Yes);
 			Target.Update(new AgentState
 			{
 				PersonId = person,
 				StateCode = "statecode"
 			});
 
-			Target.Find(1, "usercode1").Single().StateCode.Should().Be("statecode");
-			Target.Find(2, "usercode2").Single().StateCode.Should().Be("statecode");
+			Target.Find(new ExternalLogon {DataSourceId = 1, UserCode = "usercode1"}, DeadLockVictim.Yes).Single().StateCode.Should().Be("statecode");
+			Target.Find(new ExternalLogon {DataSourceId = 2, UserCode = "usercode2"}, DeadLockVictim.Yes).Single().StateCode.Should().Be("statecode");
 		}
 
 		[Test]
@@ -279,7 +280,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 						UserCode = "usercode1"
 					},
 				}
-			});
+			}, DeadLockVictim.Yes);
 			Target.Update(new AgentState
 			{
 				PersonId = person,
@@ -297,10 +298,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 						UserCode = "usercode2"
 					}
 				}
-			});
+			}, DeadLockVictim.Yes);
 
-			Target.Find(2, "usercode2").Single().StateCode.Should().Be("code");
-			Target.Find(2, "usercode2").Single().ReceivedTime.Should().Be("2016-09-14".Utc());
+			Target.Find(new ExternalLogon {DataSourceId = 2, UserCode = "usercode2"}, DeadLockVictim.Yes).Single().StateCode.Should().Be("code");
+			Target.Find(new ExternalLogon {DataSourceId = 2, UserCode = "usercode2"}, DeadLockVictim.Yes).Single().ReceivedTime.Should().Be("2016-09-14".Utc());
 		}
 
 
@@ -326,7 +327,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 						UserCode = "usercode2"
 					}
 				}
-			});
+			}, DeadLockVictim.Yes);
 			Target.Update(new AgentState
 			{
 				PersonId = person,
@@ -362,7 +363,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 						UserCode = usercodeA
 					}
 				}
-			});
+			}, DeadLockVictim.Yes);
 			Target.Prepare(new AgentStatePrepare
 			{
 				PersonId = person2,
@@ -374,17 +375,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 						UserCode = usercodeB
 					}
 				}
-			});
+			}, DeadLockVictim.Yes);
 
-			Target.Find(1, new[] {usercodeA, usercodeB})
-				.Select(x => x.UserCode)
+			Target.Find(new[]
+				{
+					new ExternalLogon
+					{
+						DataSourceId = 1,
+						UserCode = usercodeB
+					},
+					new ExternalLogon
+					{
+						DataSourceId = 1,
+						UserCode = usercodeA
+					}
+				}, DeadLockVictim.Yes)
+				.Select(x => x.PersonId)
 				.OrderBy(x => x)
-				.Should().Have.SameSequenceAs(new [] { usercodeA, usercodeB}.OrderBy(x => x));
+				.Should().Have.SameSequenceAs(new [] { person1, person2}.OrderBy(x => x));
 		}
 
 
 		[Test]
-		public void ShouldGetAllPersonIds()
+		public void ShouldFindAllExternalLogons()
 		{
 			var person1 = Guid.NewGuid();
 			var person2 = Guid.NewGuid();
@@ -407,7 +420,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 						UserCode = usercodeA
 					}
 				}
-			});
+			}, DeadLockVictim.No);
 			Target.Prepare(new AgentStatePrepare
 			{
 				PersonId = person2,
@@ -419,12 +432,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 						UserCode = usercodeB
 					}
 				}
-			});
+			}, DeadLockVictim.No);
 
-			Target.GetAllPersonIds()
-				.OrderBy(x => x)
-				.Should()
-				.Have.SameSequenceAs(new[] {person1, person2}.OrderBy(x => x));
+			var result = Target.FindAll();
+			(result.Any(x => x.DataSourceId == 1 && x.UserCode == usercodeA) ^ 
+				result.Any(x => x.DataSourceId == 2 && x.UserCode == usercodeA))
+				.Should().Be.True();
+			result.Any(x => x.DataSourceId == 1 && x.UserCode == usercodeB)
+				.Should().Be.True();
 		}
 
 		[Test]
@@ -432,7 +447,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var person = Guid.NewGuid();
 			UnitOfWork.Current().FetchSession()
-				.CreateSQLQuery(@"INSERT INTO [dbo].[AgentState] (PersonId) VALUES (:PersonId)")
+				.CreateSQLQuery(@"INSERT INTO [dbo].[AgentState] (PersonId, DataSourceIdUserCode) VALUES (:PersonId, '')")
 				.SetParameter("PersonId", person)
 				.ExecuteUpdate();
 
@@ -447,10 +462,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 						UserCode = "user"
 					}
 				}
-			});
+			}, DeadLockVictim.Yes);
 
 			UnitOfWork.Current().FetchSession()
-				.CreateSQLQuery(@"SELECT COUNT(*) FROM [dbo].[AgentState] WHERE DataSourceId IS NULL AND UserCode IS NULL")
+				.CreateSQLQuery(@"SELECT COUNT(*) FROM [dbo].[AgentState] WHERE DataSourceIdUserCode = ''")
 				.UniqueResult<int>().Should().Be(0);
 		}
 	}

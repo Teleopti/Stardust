@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Measurements
 							{
 								UserCode = y,
 								StateCode = "phone"
-							})
+							}).ToArray()
 					}).ToArray();
 
 				var wcfBatches = batches

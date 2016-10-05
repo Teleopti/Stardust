@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			});
 		}
 
-		public void Prepare(AgentStatePrepare model)
+		public void Prepare(AgentStatePrepare model, DeadLockVictim deadLockVictim)
 		{
 			lock(_lock)
 				model.ExternalLogons.ForEach(x =>
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				});
 		}
 
-		public void InvalidateSchedules(Guid personId)
+		public void InvalidateSchedules(Guid personId, DeadLockVictim deadLockVictim)
 		{
 			lock (_lock)
 			{
@@ -63,7 +63,27 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			}
 		}
 
-		public void Delete(Guid personId)
+		public IEnumerable<ExternalLogon> FindAll()
+		{
+			lock (_lock)
+				return _data
+					.GroupBy(x => x.PersonId, (guid, states) => states.First())
+					.Select(x => new ExternalLogon {DataSourceId = x.DataSourceId, UserCode = x.UserCode})
+					.ToArray();
+		}
+
+		public IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState)
+		{
+			lock (_lock)
+				return _data
+					.Select(x => x.State)
+					.Where(s => s.SourceId == sourceId && (s.BatchId < snapshotId || s.BatchId == null) && s.StateCode != loggedOutState)
+					.GroupBy(x => x.PersonId, (guid, states) => states.First())
+					.Select(x => new ExternalLogon {DataSourceId = x.DataSourceId, UserCode = x.UserCode})
+					.ToArray();
+		}
+
+		public void Delete(Guid personId, DeadLockVictim deadLockVictim)
 		{
 			lock (_lock)
 			{
@@ -94,27 +114,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					});
 		}
 
-		public IEnumerable<AgentStateFound> Find(int dataSourceId, string userCode)
+		public IEnumerable<AgentStateFound> Find(ExternalLogon externalLogon, DeadLockVictim deadLockVictim)
 		{
 			lock (_lock)
 				return _data
-					.Where(x => x.DataSourceId == dataSourceId && x.UserCode == userCode)
+					.Where(x => x.DataSourceId == externalLogon.DataSourceId && x.UserCode == externalLogon.UserCode)
 					.Select(x => x.State)
 					.ToArray();
 		}
 
-		public IEnumerable<AgentStateFound> Find(int dataSourceId, IEnumerable<string> userCodes)
+		public IEnumerable<AgentStateFound> Find(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim)
 		{
 			lock (_lock)
 				return _data
-					.Where(x => dataSourceId == x.DataSourceId && userCodes.Any(userCode => userCode == x.UserCode))
+					.Where(x => externalLogons.Any(y => y.UserCode == x.UserCode && y.DataSourceId == x.DataSourceId))
 					.Select(x => x.State)
 					.ToArray();
-		}
-
-		public IEnumerable<Guid> GetAllPersonIds()
-		{
-			return GetStates().Select(x => x.PersonId).ToArray();
 		}
 
 		public AgentState Get(Guid personId)
@@ -142,17 +157,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					.Where(x => personIds.Contains(x.PersonId))
 					.Select(x => x.State)
 					.GroupBy(x => x.PersonId, (guid, states) => states.First())
-					.ToArray();
-		}
-
-		public IEnumerable<Guid> GetPersonIdsForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState)
-		{
-			lock (_lock)
-				return _data
-					.Select(x => x.State)
-					.Where(s => s.SourceId == sourceId && (s.BatchId < snapshotId || s.BatchId == null) && s.StateCode != loggedOutState)
-					.Select(x => x.PersonId)
-					.Distinct()
 					.ToArray();
 		}
 

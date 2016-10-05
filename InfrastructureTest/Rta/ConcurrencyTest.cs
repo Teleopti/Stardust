@@ -1,5 +1,7 @@
+using System.Configuration;
 using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -21,6 +23,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	[Toggle(Toggles.RTA_BatchConnectionOptimization_40116)]
 	[Toggle(Toggles.RTA_BatchQueryOptimization_40169)]
 	[Toggle(Toggles.RTA_PersonOrganizationQueryOptimization_40261)]
+	[Toggle(Toggles.RTA_ScheduleQueryOptimization_40260)]
+	[Toggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262)]
+	[Toggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
+	[Explicit]
 	public class ConcurrencyTest : ISetup
 	{
 		public Database Database;
@@ -31,14 +37,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public ConfigurableSyncEventPublisher Publisher;
 		public IKeyValueStorePersister KeyValues;
 		public WithReadModelUnitOfWork WithReadModelUnitOfWork;
+		public WithUnitOfWork UnitOfWork;
+		public RetryingQueueSimulator QueueSimulator;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
+			system.AddService<RetryingQueueSimulator>();
 			system.UseTestDouble<ConfigurableSyncEventPublisher>().For<IEventPublisher>();
 		}
 
 		[Test]
-		[Explicit]
 		public void ShouldNotDeadlockBetweenProcesses()
 		{
 			Publisher.AddHandler(typeof(PersonAssociationChangedEventPublisher));
@@ -53,11 +61,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					.WithStateGroup(x)
 					.WithStateCode(x);
 			});
-			var userCodes = Enumerable.Range(0, 100).Select(x => $"user{x}").ToArray();
+			var userCodes = Enumerable.Range(0, 2000).Select(x => $"user{x}").ToArray();
 			userCodes.ForEach(x => Database.WithAgent(x));
 			Database.PublishRecurringEvents();
 
 			var done = false;
+			// agent state maintainer
 			Run.InParallel(() =>
 			{
 				while (!done)
@@ -66,43 +75,43 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					{
 						KeyValues.Update("PersonAssociationChangedPublishTrigger", true);
 					});
-					Database.PublishRecurringEvents();
+					QueueSimulator.ProcessAsync(() =>
+					{
+						Database.PublishRecurringEvents();
+					});
+					QueueSimulator.WaitForAll();
 				}
 			});
+			// activity checker
 			Run.InParallel(() =>
 			{
 				while (!done)
 				{
 					Rta.CheckForActivityChanges(tenant);
 				}
-			}).Times(2);
+			});
+			// batches
 			Run.InParallel(() =>
 			{
-				while (!done)
-				{
-					Rta.SaveState(new StateForTest
+				var batches = Enumerable.Range(0, 10000)
+					.Batch(500)
+					.Select(_ => new BatchForTest
 					{
 						SourceId = "sourceId",
-						UserCode = userCodes.Randomize().First(),
-						StateCode = stateCodes.Randomize().First()
-					});
-				}
-			}).Times(2);
-			Run.InParallel(() =>
-			{
+						States = userCodes
+							.Randomize()
+							.Take(500)
+							.Select(y => new BatchStateForTest
+							{
+								UserCode = y,
+								StateCode = stateCodes.Randomize().First()
+							}).ToArray()
+					}).ToArray();
 				try
 				{
-					20000.Times(() =>
-					{
-						Rta.SaveState(new StateForTest
-						{
-							SourceId = "sourceId",
-							UserCode = userCodes.Randomize().First(),
-							StateCode = stateCodes.Randomize().First()
-						});
-					});
+					batches.ForEach(Rta.SaveStateBatch);
 				}
-				finally 
+				finally
 				{
 					done = true;
 				}

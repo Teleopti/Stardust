@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				SiteId = model.SiteId,
 				BusinessUnitId = model.BusinessUnitId,
 				ExternalLogons = new[] {new ExternalLogon {DataSourceId = model.DataSourceId, UserCode = model.UserCode} }
-			});
+			}, DeadLockVictim.Yes);
 			instance.Update(model);
 		}
 	}

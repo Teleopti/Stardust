@@ -355,7 +355,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				{
 					persons.ForEach(p =>
 					{
-						AgentState.InvalidateSchedules(p.Id.Value);
+						AgentState.InvalidateSchedules(p.Id.Value, DeadLockVictim.Yes);
 					});
 				});
 

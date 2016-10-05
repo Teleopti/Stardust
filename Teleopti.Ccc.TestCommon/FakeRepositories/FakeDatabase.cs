@@ -298,11 +298,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_externalLogOns = externalLogOns;
 			_dataSources = dataSources;
 			_mappings = mappings;
+
 			createDefaultData();
 		}
 		
 		private void createDefaultData()
 		{
+			// default data already created. ugly for now...
+			if (_applicationFunctions.LoadAll().Count > 0)
+				return;
+
 			// all application functions
 			_allApplicationFunctions.ApplicationFunctions.ForEach(_applicationFunctions.Add);
 

@@ -49,11 +49,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				var now = _now.UtcDateTime();
 				var dataSourceId = ValidateSourceId(batch);
 
-				var userCodes = batch.States.Select(x => x.UserCode);
-				var agentStates = _agentStatePersister.Find(dataSourceId, userCodes);
+				var userCodes = batch.States.Select(x => new ExternalLogon {DataSourceId = dataSourceId, UserCode = x.UserCode });
+				var agentStates = _agentStatePersister.Find(userCodes, DeadLockVictim.No);
 
 				userCodes
-					.Where(x => agentStates.All(s => s.UserCode != x))
+					.Where(x => agentStates.All(s => s.UserCode != x.UserCode))
 					.Select(x => new InvalidUserCodeException($"No person found for UserCode {x}, DataSourceId {dataSourceId}, SourceId {batch.SourceId}"))
 					.ForEach(exceptions.Add);
 
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				var userCode = input.UserCode;
 				var now = _now.UtcDateTime();
 
-				_agentStatePersister.Find(dataSourceId, userCode)
+				_agentStatePersister.Find(new ExternalLogon {DataSourceId = dataSourceId, UserCode = userCode}, DeadLockVictim.No)
 					.ForEach(state =>
 					{
 						found = true;
@@ -210,34 +210,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var mappings = new MappingsState(() => _mappingReader.Read());
 			var now = _now.UtcDateTime();
 
-			IEnumerable<Guid> personIds = null;
+			IEnumerable<ExternalLogon> personIds = null;
 			WithUnitOfWork(() =>
 			{
-				personIds = _agentStatePersister.GetAllPersonIds();
+				personIds = _agentStatePersister.FindAll();
 			});
 
 			personIds.ForEach(x =>
 			{
 				WithUnitOfWork(() =>
 				{
-					var state = _agentStatePersister.Get(x);
-					if (state == null)
-						return;
-					action.Invoke(new Context(
-						now,
-						null,
-						state.PersonId,
-						state.BusinessUnitId,
-						state.TeamId.GetValueOrDefault(),
-						state.SiteId.GetValueOrDefault(),
-						() => state,
-						() => makeScheduleState(state, now),
-						s => mappings,
-						c => _agentStatePersister.Update(c.MakeAgentState()),
-						_stateMapper,
-						_appliedAdherence,
-						_appliedAlarm
+					var states = _agentStatePersister.Find(x, DeadLockVictim.Yes);
+					states.ForEach(state =>
+					{
+						action.Invoke(new Context(
+							now,
+							null,
+							state.PersonId,
+							state.BusinessUnitId,
+							state.TeamId.GetValueOrDefault(),
+							state.SiteId.GetValueOrDefault(),
+							() => state,
+							() => makeScheduleState(state, now),
+							s => mappings,
+							c => _agentStatePersister.Update(c.MakeAgentState()),
+							_stateMapper,
+							_appliedAdherence,
+							_appliedAlarm
 						));
+					});
 				});
 			});
 		}

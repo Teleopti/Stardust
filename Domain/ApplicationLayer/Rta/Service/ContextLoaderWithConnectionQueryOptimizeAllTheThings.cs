@@ -34,9 +34,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			process(new batchStrategy(_config, _agentStatePersister, _databaseLoader, action, batch));
 		}
 
+		public override void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action)
+		{
+			var personIds = WithUnitOfWork(() => _agentStatePersister.FindForClosingSnapshot(snapshotId, sourceId, Rta.LogOutBySnapshot));
+			process(new closingSnapshotStrategy(_config, _agentStatePersister, action, snapshotId, personIds));
+		}
+
 		public override void ForActivityChanges(Action<Context> action)
 		{
-			var personIds = WithUnitOfWork(() => _agentStatePersister.GetAllPersonIds());
+			var personIds = WithUnitOfWork(() => _agentStatePersister.FindAll());
 			process(new activityChangesStrategy(_config, _agentStatePersister, action, personIds));
 		}
 
@@ -76,7 +82,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					var dataSourceId = ValidateSourceId(_databaseLoader, _model);
 
 					var userCode = _model.UserCode;
-					var agentStates = _persister.Find(dataSourceId, userCode);
+					var agentStates = _persister.Find(new ExternalLogon {DataSourceId = dataSourceId, UserCode = userCode}, DeadLockVictim.No);
 					if (agentStates.IsEmpty())
 						throw new InvalidUserCodeException($"No person found for SourceId {_model.SourceId} and UserCode {_model.UserCode}");
 
@@ -118,17 +124,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<BatchStateInputModel> AllThings()
 			{
-				return _batch.States;
+				return _batch.States.OrderBy(x => x.UserCode).ToArray();
 			}
 
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<BatchStateInputModel> states, Action<Exception> addException)
 			{
 				var dataSourceId = ValidateSourceId(_databaseLoader, _batch);
-				var userCodes = states.Select(x => x.UserCode);
-				var agentStates = _persister.Find(dataSourceId, userCodes);
+				var userCodes = states.Select(x => new ExternalLogon {DataSourceId = dataSourceId, UserCode = x.UserCode});
+				var agentStates = _persister.Find(userCodes, DeadLockVictim.No);
 
 				userCodes
-					.Where(x => agentStates.All(s => s.UserCode != x))
+					.Where(x => agentStates.All(s => s.UserCode != x.UserCode))
 					.Select(x => new InvalidUserCodeException($"No person found for UserCode {x}, DataSourceId {dataSourceId}, SourceId {_batch.SourceId}"))
 					.ForEach(addException);
 
@@ -151,25 +157,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		}
 
-		private class activityChangesStrategy : baseStrategy<Guid>
+		private class activityChangesStrategy : baseStrategy<ExternalLogon>
 		{
-			private readonly IEnumerable<Guid> _things;
+			private readonly IEnumerable<ExternalLogon> _things;
 
-			public activityChangesStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, IEnumerable<Guid> things) : base(config, persister, action)
+			public activityChangesStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, IEnumerable<ExternalLogon> things) : base(config, persister, action)
 			{
 				_things = things;
 				ParallelTransactions = _config.ReadValue("RtaActivityChangesParallelTransactions", 7);
 				MaxTransactionSize = _config.ReadValue("RtaActivityChangesMaxTransactionSize", 100);
 			}
 
-			public override IEnumerable<Guid> AllThings()
+			public override IEnumerable<ExternalLogon> AllThings()
 			{
-				return _things;
+				return _things.OrderBy(x => x.UserCode).ToArray();
 			}
 
-			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<Guid> ids, Action<Exception> addException)
+			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogon> ids, Action<Exception> addException)
 			{
-				return _persister.Get(ids);
+				return _persister.Find(ids, DeadLockVictim.Yes);
 			}
 
 			public override InputInfo GetInputFor(AgentState state)
@@ -178,18 +184,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}
 		}
 
-		public override void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action)
-		{
-			var personIds = WithUnitOfWork(() => _agentStatePersister.GetPersonIdsForClosingSnapshot(snapshotId, sourceId, Rta.LogOutBySnapshot));
-			process(new closingSnapshotStrategy(_config, _agentStatePersister, action, snapshotId, personIds));
-		}
-
-		private class closingSnapshotStrategy : baseStrategy<Guid>
+		private class closingSnapshotStrategy : baseStrategy<ExternalLogon>
 		{
 			private readonly DateTime _snapshotId;
-			private readonly IEnumerable<Guid> _things;
+			private readonly IEnumerable<ExternalLogon> _things;
 
-			public closingSnapshotStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, DateTime snapshotId, IEnumerable<Guid> things) : base(config, persister, action)
+			public closingSnapshotStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, DateTime snapshotId, IEnumerable<ExternalLogon> things) : base(config, persister, action)
 			{
 				_snapshotId = snapshotId;
 				_things = things;
@@ -197,14 +197,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				MaxTransactionSize = _config.ReadValue("RtaCloseSnapshotMaxTransactionSize", 1000);
 			}
 
-			public override IEnumerable<Guid> AllThings()
+			public override IEnumerable<ExternalLogon> AllThings()
 			{
 				return _things;
 			}
 
-			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<Guid> ids, Action<Exception> addException)
+			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogon> ids, Action<Exception> addException)
 			{
-				return _persister.Get(ids);
+				return _persister.Find(ids, DeadLockVictim.No);
 			}
 
 			public override InputInfo GetInputFor(AgentState state)
@@ -390,16 +390,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							schedules = schedules
 						};
 					});
-				});
+				}).ToArray();
 
 			var tenant = _dataSource.CurrentName();
 			Parallel.ForEach(
 				transactions,
 				new ParallelOptions {MaxDegreeOfParallelism = strategy.ParallelTransactions},
-				sharedData =>
-					Transaction(tenant, strategy, sharedData)
-						.ForEach(exceptions.Add)
-				);
+				sharedData => Transaction(tenant, strategy, sharedData)
+					.ForEach(exceptions.Add)
+			);
 
 			if (exceptions.Count == 1)
 			{

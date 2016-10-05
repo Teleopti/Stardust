@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var model = new AgentStateForUpsert { PersonId = personId };
 			Target.Upsert(model);
 
-			Target.Delete(personId);
+			Target.Delete(personId, DeadLockVictim.Yes);
 
 			Target.Get(personId).Should()
 				.Be.Null();

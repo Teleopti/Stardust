@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				{
 					PersonId = personId,
 					ExternalLogons = new[] {new ExternalLogon {UserCode = "usercode"}}
-				});
+				}, DeadLockVictim.Yes);
 			}
 			
 			[UnitOfWork]

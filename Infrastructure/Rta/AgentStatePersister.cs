@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Infrastructure;
+using ExternalLogon = Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.ExternalLogon;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
@@ -84,8 +85,10 @@ WHERE
 		}
 
 		[LogInfo]
-		public virtual void Prepare(AgentStatePrepare model)
+		public virtual void Prepare(AgentStatePrepare model, DeadLockVictim deadLockVictim)
 		{
+			setDeadLockPriority(deadLockVictim);
+
 			if (model.ExternalLogons.IsNullOrEmpty())
 			{
 				_unitOfWork.Current().Session()
@@ -107,13 +110,9 @@ WHERE
 DELETE FROM [dbo].[AgentState]
 WHERE
 	PersonId = :PersonId AND
-	(
-		CAST(DataSourceId AS varchar(max)) + ';' + UserCode NOT IN (:DataSourceIdUserCode) OR
-		DataSourceId IS NULL OR
-		UserCode IS NULL
-	)")
+	DataSourceIdUserCode NOT IN (:DataSourceIdUserCode)")
 				.SetParameter("PersonId", model.PersonId)
-				.SetParameterList("DataSourceIdUserCode", model.ExternalLogons.Select(x => $"{x.DataSourceId};{x.UserCode}"))
+				.SetParameterList("DataSourceIdUserCode", model.ExternalLogons.Select(x => $"{x.DataSourceId}__{x.UserCode}").ToArray())
 				.ExecuteUpdate();
 
 			_unitOfWork.Current().Session()
@@ -161,8 +160,7 @@ INSERT INTO [dbo].[AgentState]
 	TimeWindowCheckSum,
 	Schedule,
 	Adherence,
-	DataSourceId,
-	UserCode
+	DataSourceIdUserCode
 )
 VALUES
 (
@@ -186,8 +184,7 @@ VALUES
 	:TimeWindowCheckSum,
 	:Schedule,
 	:Adherence,
-	:DataSourceId,
-	:UserCode
+	:DataSourceIdUserCode
 )")
 						.SetParameter("PersonId", model.PersonId)
 						.SetParameter("BatchId", copyFrom?.BatchId)
@@ -209,15 +206,16 @@ VALUES
 						.SetParameter("TimeWindowCheckSum", copyFrom?.TimeWindowCheckSum)
 						.SetParameter("Schedule", copyFrom?.Schedule != null ? _serializer.SerializeObject(copyFrom.Schedule) : null, NHibernateUtil.StringClob)
 						.SetParameter("Adherence", (int?) copyFrom?.Adherence)
-						.SetParameter("DataSourceId", e.DataSourceId)
-						.SetParameter("UserCode", e.UserCode)
+						.SetParameter("DataSourceIdUserCode", e.DataSourceId + "__" + e.UserCode)
 						.ExecuteUpdate();
 				});
 		}
 		
 		[LogInfo]
-		public virtual void InvalidateSchedules(Guid personId)
+		public virtual void InvalidateSchedules(Guid personId, DeadLockVictim deadLockVictim)
 		{
+			setDeadLockPriority(deadLockVictim);
+
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery("UPDATE [dbo].[AgentState] SET Schedule = NULL WHERE PersonId = :PersonId")
 				.SetParameter("PersonId", personId)
@@ -273,105 +271,85 @@ WHERE
 				.ExecuteUpdate();
 		}
 
-		public void Delete(Guid personId)
+		public void Delete(Guid personId, DeadLockVictim deadLockVictim)
 		{
+			setDeadLockPriority(deadLockVictim);
+
 			_unitOfWork.Current().Session()
-				.CreateSQLQuery(
-					@"DELETE [dbo].[AgentState] WHERE PersonId = :PersonId")
+				.CreateSQLQuery("DELETE [dbo].[AgentState] WHERE PersonId = :PersonId")
 				.SetParameter("PersonId", personId)
 				.ExecuteUpdate()
 				;
 		}
-		
-		[LogInfo]
-		public virtual AgentState Get(Guid personId)
-		{
-			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE PersonId = :PersonId";
-			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetParameter("PersonId", personId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
-				.SetReadOnly(true)
-				.List<AgentState>()
-				.FirstOrDefault();
-		}
 
 		[LogInfo]
-		public virtual IEnumerable<AgentStateFound> Find(int dataSourceId, string userCode)
+		public virtual IEnumerable<ExternalLogon> FindAll()
 		{
-			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE DataSourceId = :DataSourceId AND UserCode = :UserCode";
+			var sql = "SELECT PersonId, DataSourceIdUserCode FROM [dbo].[AgentState] WITH (NOLOCK)";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetParameter("DataSourceId", dataSourceId)
-				.SetParameter("UserCode", userCode)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalExternalLogon)))
 				.SetReadOnly(true)
-				.List<AgentStateFound>()
-				;
-		}
-
-		[LogInfo]
-		public virtual IEnumerable<AgentStateFound> Find(int dataSourceId, IEnumerable<string> userCodes)
-		{
-			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE DataSourceId = :DataSourceId AND UserCode IN (:UserCodes)";
-			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetParameter("DataSourceId", dataSourceId)
-				.SetParameterList("UserCodes", userCodes)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
-				.SetReadOnly(true)
-				.List<AgentStateFound>()
-				;
-		}
-
-		[LogInfo]
-		public virtual IEnumerable<AgentState> Get(IEnumerable<Guid> personIds)
-		{
-			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE PersonId IN (:PersonIds)";
-			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetParameterList("PersonIds", personIds)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
-				.SetReadOnly(true)
-				.List<AgentState>()
+				.List<internalExternalLogon>()
 				.GroupBy(x => x.PersonId, (guid, states) => states.First())
 				.ToArray()
 				;
 		}
 
 		[LogInfo]
-		public virtual IEnumerable<Guid> GetPersonIdsForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState)
+		public virtual IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState)
 		{
 			return _unitOfWork.Current().Session().CreateSQLQuery(@"
-SELECT DISTINCT
-	PersonId
+SELECT
+	PersonId,
+	DataSourceIdUserCode
 FROM [dbo].[AgentState] WITH (NOLOCK)
 WHERE
 	SourceId = :SourceId AND 
 	(BatchId < :SnapshotId OR BatchId IS NULL) AND
 	(StateCode <> :State OR StateCode IS NULL)")
-				.AddScalar("PersonId", NHibernateUtil.Guid)
 				.SetParameter("SourceId", sourceId)
 				.SetParameter("SnapshotId", snapshotId)
 				.SetParameter("State", loggedOutState)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalExternalLogon)))
 				.SetReadOnly(true)
-				.List<Guid>()
-				.ToArray()
+				.List<internalExternalLogon>()
+				.GroupBy(x => x.PersonId, (guid, states) => states.First())
+				.ToArray();
+		}
+
+		[LogInfo]
+		public virtual IEnumerable<AgentStateFound> Find(ExternalLogon externalLogon, DeadLockVictim deadLockVictim)
+		{
+			setDeadLockPriority(deadLockVictim);
+
+			var sql = SelectAgentState + "WITH (UPDLOCK, ROWLOCK) WHERE DataSourceIdUserCode = :DataSourceIdUserCode";
+			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
+				.SetParameter("DataSourceIdUserCode", $"{externalLogon.DataSourceId}__{externalLogon.UserCode}")
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
+				.SetReadOnly(true)
+				.List<AgentStateFound>()
 				;
 		}
 
 		[LogInfo]
-		public virtual IEnumerable<Guid> GetAllPersonIds()
+		public virtual IEnumerable<AgentStateFound> Find(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim)
 		{
-			var sql = @"SELECT DISTINCT PersonId FROM [dbo].[AgentState] WITH (NOLOCK)";
+			setDeadLockPriority(deadLockVictim);
+
+			var dataSourceIdUserCodes = externalLogons.Select(x => $"{x.DataSourceId}__{x.UserCode}").ToArray();
+			var sql = SelectAgentState + "WITH (UPDLOCK, ROWLOCK) WHERE DataSourceIdUserCode IN (:DataSourceIdUserCodes)";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.AddScalar("PersonId", NHibernateUtil.Guid)
+				.SetParameterList("DataSourceIdUserCodes", dataSourceIdUserCodes)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
 				.SetReadOnly(true)
-				.List<Guid>()
-				.ToArray()
+				.List<AgentStateFound>()
 				;
 		}
 
 		[LogInfo]
 		public virtual IEnumerable<AgentState> GetStates()
 		{
-			var sql = SelectAgentState + "WITH (TABLOCK UPDLOCK)";
+			var sql = SelectAgentState + "WITH (TABLOCK, UPDLOCK)";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
 				.SetReadOnly(true)
@@ -379,6 +357,18 @@ WHERE
 				.GroupBy(x => x.PersonId, (guid, states) => states.First())
 				.ToArray()
 				;
+		}
+
+		[LogInfo]
+		public virtual AgentState Get(Guid personId)
+		{
+			var sql = SelectAgentState + "WITH (UPDLOCK, ROWLOCK) WHERE PersonId = :PersonId";
+			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
+				.SetParameter("PersonId", personId)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
+				.SetReadOnly(true)
+				.List<AgentState>()
+				.FirstOrDefault();
 		}
 
 		[LogInfo]
@@ -402,7 +392,27 @@ WHERE
 				.ToArray()
 				;
 		}
-		
+
+		[LogInfo]
+		public virtual IEnumerable<AgentState> Get(IEnumerable<Guid> personIds)
+		{
+			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE PersonId IN (:PersonIds)";
+			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
+				.SetParameterList("PersonIds", personIds)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
+				.SetReadOnly(true)
+				.List<AgentState>()
+				.GroupBy(x => x.PersonId, (guid, states) => states.First())
+				.ToArray()
+				;
+		}
+
+		private void setDeadLockPriority(DeadLockVictim deadLockVictim)
+		{
+			var sql = "SET DEADLOCK_PRIORITY " + (deadLockVictim == DeadLockVictim.Yes ? "LOW" : "HIGH");
+			_unitOfWork.Current().Session().CreateSQLQuery(sql).ExecuteUpdate();
+		}
+
 		private static string SelectAgentState = @"SELECT * FROM [dbo].[AgentState] ";
 
 		private class internalAgentState : AgentStateFound
@@ -415,6 +425,35 @@ WHERE
 			public new int? Adherence
 			{
 				set { base.Adherence = (EventAdherence?) value; }
+			}
+
+			public string DataSourceIdUserCode
+			{
+				set
+				{
+					if (string.IsNullOrEmpty(value))
+						return;
+					var x = value.Split('_');
+					DataSourceId = int.Parse(x[0]);
+					UserCode = x[2];
+				}
+			}
+		}
+
+		private class internalExternalLogon : ExternalLogon
+		{
+			public Guid PersonId { get; set; }
+
+			public string DataSourceIdUserCode
+			{
+				set
+				{
+					if (string.IsNullOrEmpty(value))
+						return;
+					var x = value.Split('_');
+					DataSourceId = int.Parse(x[0]);
+					UserCode = x[2];
+				}
 			}
 		}
 	}

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			{
 				PersonId = personId,
 				ExternalLogons = new[] {new ExternalLogon {DataSourceId = 1, UserCode = "user"}}
-			});
+			}, DeadLockVictim.Yes);
 			var expected = new ScheduledActivity
 			{
 				PersonId = personId,
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			{
 				PersonId = personId,
 				ExternalLogons = new[] { new ExternalLogon { DataSourceId = 1, UserCode = "user" } }
-			});
+			}, DeadLockVictim.Yes);
 			var expected = new ScheduleProjectionReadOnlyModel
 			{
 				PersonId = personId,
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			{
 				PersonId = personId,
 				ExternalLogons = new[] { new ExternalLogon { DataSourceId = 1, UserCode = "user" } }
-			});
+			}, DeadLockVictim.Yes);
 			var expected = Enumerable.Range(0, 30)
 				.Select(h =>
 				{
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			{
 				PersonId = personId,
 				ExternalLogons = new[] { new ExternalLogon { DataSourceId = 1, UserCode = "user" } }
-			});
+			}, DeadLockVictim.Yes);
 			Target.Update(new AgentState
 			{
 				PersonId = personId,

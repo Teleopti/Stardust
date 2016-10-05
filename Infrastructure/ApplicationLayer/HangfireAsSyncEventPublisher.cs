@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly ICurrentDataSource _dataSource;
 		private readonly HangfireEventProcessor _processor;
 		private readonly ResolveEventHandlers _resolver;
-		private readonly Queue<IEvent> _queue = new Queue<IEvent>();
+		private readonly ConcurrentQueue<IEvent> _queue = new ConcurrentQueue<IEvent>();
 		private readonly object processLock = new object();
 
 		public HangfireAsSyncEventPublisher(
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				_queue.Enqueue(e);
 			});
 
-			if (_queue.Any() && Monitor.TryEnter(processLock, 0))
+			if (_queue.Count > 0 && Monitor.TryEnter(processLock, 0))
 				process();
 		}
 
@@ -68,9 +69,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		private void processQueue(string tenant, ICollection<Exception> exceptions)
 		{
-			while (_queue.Any())
+			IEvent @event;
+			while (_queue.TryDequeue(out @event))
 			{
-				var @event = _queue.Dequeue();
 				foreach (var handler in _resolver.HandlerTypesFor<IRunOnHangfire>(@event))
 				{
 					try

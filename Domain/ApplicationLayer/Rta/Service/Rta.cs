@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[UnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
-			_persister.Delete(@event.PersonId);
+			_persister.Delete(@event.PersonId, DeadLockVictim.Yes);
 		}
 
 		[UnitOfWork]
@@ -38,12 +38,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			if (!@event.TeamId.HasValue)
 			{
-				_persister.Delete(@event.PersonId);
+				_persister.Delete(@event.PersonId, DeadLockVictim.Yes);
 				return;
 			}
 			if (@event.ExternalLogons.IsNullOrEmpty())
 			{
-				_persister.Delete(@event.PersonId);
+				_persister.Delete(@event.PersonId, DeadLockVictim.Yes);
 				return;
 			}
 
@@ -57,8 +57,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					DataSourceId = x.DataSourceId,
 					UserCode = x.UserCode,
-				})
-			});
+				}).ToArray()
+			}, DeadLockVictim.Yes);
 		}
 
 		[UnitOfWork]
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[DisabledBy(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 		public virtual void Handle(ScheduleProjectionReadOnlyChangedEvent @event)
 		{
-			_persister.InvalidateSchedules(@event.PersonId);
+			_persister.InvalidateSchedules(@event.PersonId, DeadLockVictim.Yes);
 		}
 
 		[UnitOfWork]
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public virtual void Handle(ScheduleChangedEvent @event)
 		{
 			if (scheduleChangeToday(@event))
-				_persister.InvalidateSchedules(@event.PersonId);
+				_persister.InvalidateSchedules(@event.PersonId, DeadLockVictim.Yes);
 		}
 
 		public string QueueTo(ScheduleChangedEvent @event)

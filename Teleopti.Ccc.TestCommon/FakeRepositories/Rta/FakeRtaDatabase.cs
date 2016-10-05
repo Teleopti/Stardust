@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using Newtonsoft.Json;
@@ -10,9 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
@@ -61,11 +57,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		}
 	}
 
-	public class FakeRtaDatabase : IDatabaseReader
+	public class FakeRtaDatabase
 	{
-		private readonly INow _now;
 		private readonly FakeDatabase _database;
-		private readonly FakeDataSources _dataSources;
 		private readonly FakeAgentStateReadModelPersister _agentStateReadModels;
 		private readonly FakeAgentStatePersister _agentStates;
 		private readonly FakeRtaStateGroupRepository _rtaStateGroupRepository;
@@ -81,9 +75,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		private readonly IScheduleStorage _scheduleStorage;
 		
 		public FakeRtaDatabase(
-			INow now,
 			FakeDatabase database,
-			FakeDataSources dataSources,
 			FakeAgentStateReadModelPersister agentStateReadModels,
 			FakeAgentStatePersister agentStates,
 			FakeRtaStateGroupRepository rtaStateGroupRepository,
@@ -99,9 +91,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			IScheduleStorage scheduleStorage
 			)
 		{
-			_now = now;
 			_database = database;
-			_dataSources = dataSources;
 			_agentStateReadModels = agentStateReadModels;
 			_agentStates = agentStates;
 			_rtaStateGroupRepository = rtaStateGroupRepository;
@@ -188,7 +178,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 						UserCode = userCode
 					}
 				}
-			});
+			}, DeadLockVictim.Yes);
 			return this;
 		}
 
@@ -200,24 +190,30 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_database.WithAssignedActivity(start, end);
 
 			_schedules.Clear();
-			var min = _personAssignments.LoadAll().SelectMany(x => x.ShiftLayers).Min(x => x.Period.StartDateTime);
-			var max = _personAssignments.LoadAll().SelectMany(x => x.ShiftLayers).Max(x => x.Period.EndDateTime);
-			var period = new DateOnlyPeriod(new DateOnly(min.AddDays(-2)), new DateOnly(max.AddDays(2)));
-			FromPersonAssignment.MakeScheduledActivities(
-					_scenarios.Load(_database.CurrentScenarioId()),
-					_scheduleStorage,
-					_persons.LoadAll(),
-					period)
+			MakeScheduledActivities()
 				.Select(l => JsonConvert.DeserializeObject<ScheduleProjectionReadOnlyModel>(JsonConvert.SerializeObject(l)))
 				.ForEach(x => _schedules.AddActivity(x));
-			
+
 			_agentStateMaintainer.Handle(new ScheduleProjectionReadOnlyChangedEvent
 			{
 				PersonId = personId
 			});
 			return this;
 		}
-		
+
+		[FullPermissions]
+		protected virtual IEnumerable<ScheduledActivity> MakeScheduledActivities()
+		{
+			var min = _personAssignments.LoadAll().SelectMany(x => x.ShiftLayers).Min(x => x.Period.StartDateTime);
+			var max = _personAssignments.LoadAll().SelectMany(x => x.ShiftLayers).Max(x => x.Period.EndDateTime);
+			var period = new DateOnlyPeriod(new DateOnly(min.AddDays(-2)), new DateOnly(max.AddDays(2)));
+			return FromPersonAssignment.MakeScheduledActivities(
+				_scenarios.Load(_database.CurrentScenarioId()),
+				_scheduleStorage,
+				_persons.LoadAll(),
+				period);
+		}
+
 		public FakeRtaDatabase ClearSchedule(Guid personId)
 		{
 			_schedules.Clear(personId);
@@ -259,73 +255,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return this;
 		}
 		
-		public ConcurrentDictionary<string, int> Datasources()
-		{
-			return new ConcurrentDictionary<string, int>(
-				_dataSources
-					.Datasources
-					.GroupBy(x => x.Key, (key, g) => g.First()
-					));
-		}
-
-		public IEnumerable<PersonOrganizationData> LoadPersonOrganizationData(int dataSourceId, string externalLogOn)
-		{
-			return userDatas()
-				.Where(x =>
-					x.Data.UserCode == externalLogOn &&
-					x.DataSourceId == dataSourceId)
-				.Select(m => m.Data)
-				.ToArray();
-		}
-
-		public IEnumerable<PersonOrganizationData> LoadPersonOrganizationDatas(int dataSourceId, IEnumerable<string> externalLogOns)
-		{
-			return userDatas()
-				.Where(x =>
-					externalLogOns.Contains(x.Data.UserCode) &&
-					x.DataSourceId == dataSourceId)
-				.Select(m => m.Data)
-				.ToArray();
-		}
-
-		public IEnumerable<PersonOrganizationData> LoadAllPersonOrganizationData()
-		{
-			return userDatas()
-				.Select(x => x.Data);
-		}
-
-		private class userData
-		{
-			public int DataSourceId;
-			public PersonOrganizationData Data;
-		}
-
-		private IEnumerable<userData> userDatas()
-		{
-			return _persons.LoadAll()
-				.Select(x => x.Period(new DateOnly(_now.UtcDateTime())))
-				.Where(x => x != null)
-				.SelectMany(x =>
-					x.ExternalLogOnCollection.Select(e => new
-					{
-						externalLogon = e,
-						period = x
-					}))
-				.Select(x =>
-					new userData
-					{
-						DataSourceId = x.externalLogon.DataSourceId,
-						Data = new PersonOrganizationData
-						{
-							UserCode = x.externalLogon.AcdLogOnOriginalId,
-							PersonId = x.period.Parent.Id.Value,
-							TeamId = x.period.Team.Id.Value,
-							SiteId = x.period.Team.Site.Id.Value,
-							BusinessUnitId = x.period.Team.Site.BusinessUnit.Id.Value,
-						}
-					})
-				.ToArray();
-		}
 	}
 
 	public static class FakeDatabaseUserExtensions
