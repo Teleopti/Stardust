@@ -75,6 +75,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public double Forecast { get; set; }
 		public double StaffingLevel { get; set; }
 		public double ForecastWithShrinkage { get; set; }
+
+		public TimeSpan GetTimeSpan()
+		{
+			return EndDateTime.Subtract(StartDateTime);
+		}
 	}
 
 	public class StaffingIntervalChange : IEquatable<StaffingIntervalChange>
