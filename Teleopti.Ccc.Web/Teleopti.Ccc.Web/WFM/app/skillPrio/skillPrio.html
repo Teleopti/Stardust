@@ -1,0 +1,164 @@
+<div class="view-header with-desc">
+    <div class="view-title">
+        <h1>
+            <i class="mdi mdi-account"></i>Skill Priority</h1>
+        <p>
+            Manage the way your skills are handled
+        </p>
+
+    </div>
+    <div class="wab-wrapper">
+        <button ng-click="vm.save()" class="wfm-fab  material-depth-1">
+            <i class="mdi mdi-content-save"></i>
+            <md-tooltip>Save Changes</md-tooltip>
+        </button>
+    </div>
+</div>
+
+<div class="con-row selectActivityInput">
+    <div class="con-flex">
+        <div class="panel material-depth-1">
+            <div class="con-row">
+                <div class="con-flex">
+                    <md-autocomplete id="activity" class="autocomplete-skill" md-no-cache="true" md-selected-item="vm.selectedActivity" md-select-on-match="true"
+                        md-search-text="searchActiviyText" md-selected-item-change="vm.updateSelectedSkill(vm.selectedActivitys)"
+                        md-items="activity in vm.activitys" md-item-text="activity.name" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
+                        <md-item-template>
+                            <span md-highlight-text="searchSkillText">{{activity.name}}</span>
+                        </md-item-template>
+                        <md-not-found>
+                            {{'RepViewerNoMoreMatches'|translate}}
+                        </md-not-found>
+                    </md-autocomplete>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="con-row" ng-if="vm.selectedActivity">
+    <div class="con-flex">
+        <div class="panel material-depth-1 skill-prio-wrapper">
+            <div class="sub-header">
+                <h2>Unsorted Skills</h2>
+            </div>
+            <ul class="wfm-list">
+                <li ng-repeat="skill in vm.skills">
+                    {{skill.name}}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="con-flex split-3-1">
+        <div class="panel material-depth-1 skill-prio-wrapper">
+            <div class="sub-header" ng-if="!vm.noSortedSkills()">
+                <h2>Sorted Skills</h2>
+            </div>
+            <div class="skill-devider" ng-repeat="skill in vm.sortedSkills | orderBy:'-value'">
+                <div class="con-row" ng-if="skill.showAutoCompleteTop">
+                    <div class="con-flex">
+                        <md-autocomplete id="" md-items="skilltoBeSelected in vm.query(searchText)" md-item-text="skilltoBeSelected.name" md-selected-item="selectedSkill"
+                            md-search-text="searchText" md-selected-item-change="vm.addSkill(skilltoBeSelected, skill.value+1); skill.showAutoCompleteTop = false"
+                            md-select-on-match="true" md-input-id="showAutoCompleteTop" md-input-name="nameAttribute" md-menu-class="dropdown-class"
+                            autofocus md-autoselect="true" placeholder="placeholder">
+                            <md-item-template>
+                                <span md-highlight-text="searchText" md-highlight-flags="^i">{{skilltoBeSelected.name}}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                No states matching "{{skilltoBeSelected.name}}" were found.
+                            </md-not-found>
+                        </md-autocomplete>
+                    </div>
+                </div>
+                <div class="con-row">
+                    <div class="con-flex">
+                        <div class="wfm-grid">
+                            <div class="grid-card">
+                                <div class="list-content">
+                                     <h2>
+                                         {{skill.name}}      
+                                            <i class="mdi mdi-close pull-right" ng-click="vm.removeSkill(skill)"></i>
+                                     </h2>
+                                </div>
+                            </div>
+                            <div class="grid-card" ng-repeat="sibling in skill.siblings">
+                                <div class="list-content">
+                                    <h2>{{sibling.name}}
+                                        <i class="mdi mdi-close pull-right" ng-click="vm.removeSkill(sibling)"></i>
+                                    </h2>
+                                </div>
+                            </div>
+                            <div class="grid-card line-centeron-grid-card line-center" ng-if="skill.showAutoCompleteMiddle">
+                                <md-autocomplete md-items="skilltoBeSelected in vm.query(searchTextMiddle)" md-item-text="skilltoBeSelected.name" md-selected-item="selectedSkill"
+                                    md-search-text="searchTextMiddle" md-selected-item-change="vm.addSkill(skilltoBeSelected, skill.value); skill.showAutoCompleteMiddle = false"
+                                    md-select-on-match="true" md-input-id="input-ID" md-input-name="nameAttribute" md-menu-class="dropdown-class"
+                                    md-autofocus="true" md-autoselect="true" placeholder="placeholder">
+                                    <md-item-template>
+                                        <span md-highlight-text="searchTextMiddle" md-highlight-flags="^i">{{skilltoBeSelected.name}}</span>
+                                    </md-item-template>
+                                    <md-not-found>
+                                        No states matching "{{skilltoBeSelected.name}}" were found.
+                                    </md-not-found>
+                                </md-autocomplete>
+                            </div>
+                            <div class="grid-card line-center">
+                                <div tabindex=0 class="context-menu card-context" ng-click="vm.displayAutoComplete(skill, 'Top')">
+                                    <i class="mdi mdi-chevron-up"></i>
+                                    <md-tooltip>Add skill above</md-tooltip>
+                                </div>
+                                <div tabindex=0 class="context-menu card-context" ng-click="vm.displayAutoComplete(skill, 'Middle')">
+                                    <i class="mdi mdi-plus"></i>
+                                    <md-tooltip>
+                                        Add skill inside
+                                    </md-tooltip>
+                                </div>
+                                <div tabindex=0 class="context-menu card-context" ng-click="vm.displayAutoComplete(skill, 'Bottom')">
+                                    <i class="mdi mdi-chevron-down"></i>
+                                    <md-tooltip>
+                                        Add skill bellow
+                                    </md-tooltip>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="con-row" ng-if="skill.showAutoCompleteBottom">
+                    <div class="con-flex">
+                        <md-autocomplete md-items="skilltoBeSelected in vm.query(searchText)" md-item-text="skilltoBeSelected.name" md-selected-item="selectedSkill"
+                            md-search-text="searchText" md-selected-item-change="vm.addSkill(skilltoBeSelected, skill.value-1);skill.showAutoCompleteBottom = false"
+                            md-select-on-match="true" md-input-id="input-ID" md-input-name="nameAttribute" md-menu-class="dropdown-class"
+                            md-autofocus="true" md-autoselect="true" placeholder="placeholder">
+                            <md-item-template>
+                                <span md-highlight-text="searchText" md-highlight-flags="^i">{{skilltoBeSelected.name}}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                No states matching "{{skilltoBeSelected.name}}" were found.
+                            </md-not-found>
+                        </md-autocomplete>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- show once !-->
+        <div class=skillprio-warning " ng-if="vm.noSortedSkills() ">
+            <div class="con-row ">
+                <div class="con-flex split-1-2 ">
+                    no skills are prioritized,
+                    <a ng-click="showAutoCompleteOnce = true ">would you like to add one?</a>
+                    <md-autocomplete ng-if="showAutoCompleteOnce" id="skill-id" class="autocomplete-skill" md-no-cache="true
+            " md-selected-item="vm.selectedSkill" md-autoselect = "true"
+                        md-select-on-match="true " md-search-text="searchSkillText " md-selected-item-change="vm.addSkill(skill, 1); showAutoCompleteOnce = false;searchSkillText=''"
+                        md-items="skill in vm.query(searchSkillText) " md-item-text="skill.name " md-min-length="0 " placeholder="{{
+            'SelectSkill'|translate}}">
+                        <md-item-template>
+                            <span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.name}}</span>
+                        </md-item-template>
+                        <md-not-found>
+                            {{'RepViewerNoMoreMatches'|translate}}
+                        </md-not-found>
+                    </md-autocomplete>
+                </div>
+            </div>
+        </div>
+    </div>

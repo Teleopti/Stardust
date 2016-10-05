@@ -1,0 +1,30 @@
+.skill-prio-wrapper{
+	.wfm-list li {
+		border-left: 3px solid transparent!important;
+		&:hover{
+			border-left: 3px solid transparent!important;
+			background-color:transparent!important;
+		}
+	}
+}
+
+.singleItem {
+	&:hover{
+		background-color:$gray012!important;
+	}
+}
+.selectedSingleItem {
+	background-color:$green-300!important;
+}
+
+.prio-order-actions{
+	i{
+		color:$text-color-standard;
+	}
+}
+
+.skill-devider{
+	border-top: 1px dashed $brown-300;
+}
+
+

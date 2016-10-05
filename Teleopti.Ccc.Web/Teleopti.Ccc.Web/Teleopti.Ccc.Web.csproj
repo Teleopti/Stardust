@@ -1344,6 +1344,11 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.note-editor.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.scheduleNote.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.scheduleNote.spec.js" />
+    <Content Include="WFM\app\skillPrio\skillPrio.controller.js" />
+    <Content Include="WFM\app\skillPrio\skillPrio.html" />
+    <Content Include="WFM\app\skillPrio\skillprio.routes.js" />
+    <Content Include="WFM\app\skillPrio\skillPrio.service.js" />
+    <Content Include="WFM\app\skillPrio\_modules.js" />
     <Content Include="WFM\index_desktop_client.tpl.html" />
     <Content Include="WFM\index.tpl.html" />
     <Content Include="WFM\app\app_desktop_client.js" />
