@@ -196,11 +196,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 		[Test]
 		public void ShouldPurgeChangesOlderThanGivenDate()
 		{
-			var skillId = Guid.NewGuid();
+			var skillWithOldChange = Guid.NewGuid();
+			var skillWithNewChange = Guid.NewGuid();
 			Now.Is("2016-06-16 08:00");
 			Target.PersistChange(new StaffingIntervalChange()
 								 {
-									 SkillId = Guid.NewGuid(),
+									 SkillId = skillWithOldChange,
 									 StartDateTime = new DateTime(2016, 06, 16, 8, 0, 0, DateTimeKind.Utc),
 									 EndDateTime = new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc),
 									 StaffingLevel = 1
@@ -209,7 +210,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			Now.Is("2016-06-16 09:00");
 			Target.PersistChange(new StaffingIntervalChange()
 								 {
-									 SkillId = skillId,
+									 SkillId = skillWithNewChange,
 									 StartDateTime = new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc),
 									 EndDateTime = new DateTime(2016, 06, 16, 8, 30, 0, DateTimeKind.Utc),
 									 StaffingLevel = 1
@@ -221,7 +222,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 				{
 					new SkillStaffingInterval()
 					{
-						SkillId = skillId,
+						SkillId = skillWithOldChange,
 						StaffingLevel = 10,
 						EndDateTime = new DateTime(2016, 06, 16, 02, 15, 0, DateTimeKind.Utc),
 						Forecast = 20,
@@ -231,10 +232,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			Target.Persist(items, new DateTime(2016, 06, 16, 9, 0, 0, DateTimeKind.Utc));
 
 			var changes = Target.GetReadModelChanges(new DateTimePeriod(new DateTime(2016, 06, 16, 8, 0, 0, DateTimeKind.Utc), new DateTime(2016, 06, 16, 8, 30, 0, DateTimeKind.Utc)));
-			changes.Should().Be.Equals(1);
+			changes.Count().Should().Be.EqualTo(1);
 			changes.First().StartDateTime.Should().Be.EqualTo(new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc));
 			changes.First().EndDateTime.Should().Be.EqualTo(new DateTime(2016, 06, 16, 8, 30, 0, DateTimeKind.Utc));
-			changes.First().SkillId.Should().Be.EqualTo(skillId);
+			changes.First().SkillId.Should().Be.EqualTo(skillWithNewChange);
 
 		}
 
