@@ -244,43 +244,35 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			Now.Is("2016-06-16 03:15");
 			var skillId1 = Guid.NewGuid();
 			var skillId2 = Guid.NewGuid();
-			var items = new List<ResourcesDataModel>()
-			{
-				new ResourcesDataModel()
-				{
-					Id = skillId1,
-					Intervals =
+			var items = 
 						new List<SkillStaffingInterval>()
 						{
 							new SkillStaffingInterval()
 							{
+								SkillId = skillId1,
 								StaffingLevel = 10,
 								EndDateTime = new DateTime(2016, 06, 16, 02, 15, 0,DateTimeKind.Utc),
 								Forecast = 20,
 								StartDateTime = new DateTime(2016, 06, 16, 02, 0, 0,DateTimeKind.Utc)
 							}
-						}
-				}
+						
+				
 			};
 			Target.Persist(items, DateTime.Now);
 
-			items = new List<ResourcesDataModel>()
-			{
-				new ResourcesDataModel()
-				{
-					Id = skillId2,
-					Intervals =
+			items =
 						new List<SkillStaffingInterval>()
 						{
 							new SkillStaffingInterval()
 							{
+								SkillId = skillId2,
 								StaffingLevel = 10,
 								EndDateTime = new DateTime(2016, 06, 16, 02, 15, 0,DateTimeKind.Utc),
 								Forecast = 20,
 								StartDateTime = new DateTime(2016, 06, 16, 02, 0, 0,DateTimeKind.Utc)
 							}
-						}
-				}
+
+
 			};
 
 			Target.Persist(items, DateTime.Now);
@@ -320,23 +312,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 
 			CurrentUnitOfWork.Current().PersistAll();
 
-			var items = new List<ResourcesDataModel>()
-			{
-				new ResourcesDataModel()
-				{
-					Id = skill2,
-					Intervals =
+			var items = 
 						new List<SkillStaffingInterval>()
 						{
 							new SkillStaffingInterval()
 							{
+								SkillId = skill2,
 								StaffingLevel = 10,
 								EndDateTime = new DateTime(2016, 06, 16, 02, 15, 0,DateTimeKind.Utc),
 								Forecast = 20,
 								StartDateTime = new DateTime(2016, 06, 16, 02, 0, 0,DateTimeKind.Utc)
 							}
-						}
-				}
+						
+				
 			};
 			Target.Persist(items, DateTime.Now);
 
