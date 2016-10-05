@@ -187,8 +187,8 @@ namespace Teleopti.Analytics.Parameters
 					if (_listBox.Items[i].Value == s)
 					{
 						_listBox2.Items.Add(_listBox.Items[i]);
-						_textBoxText.Text = _textBoxText.Text + _listBox.Items[i].Text + ",";
-						_textBox.Text = _textBox.Text + _listBox.Items[i].Value + ",";
+						_textBoxText.Text = _textBoxText.Text + _listBox.Items[i].Text + ", ";
+						_textBox.Text = _textBox.Text + _listBox.Items[i].Value + ", ";
 						_listBox.Items.Remove(_listBox.Items[i]);
 
 						break;
