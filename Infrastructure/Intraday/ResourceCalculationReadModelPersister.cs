@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Intraday;
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 		public void Persist(IEnumerable<SkillStaffingInterval> intervals, DateTime timeWhenResourceCalcDataLoaded)
 		{
+			var skills = items.Select(x => x.Id);
 			var dt = new DataTable();
 			dt.Columns.Add("SkillId",typeof(Guid));
 			dt.Columns.Add("BelongsToDate",typeof(DateTime));
@@ -59,8 +61,10 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 				connection.Open();
                 using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
                 {
-                    var deleteCommandstring = @"DELETE from ReadModel.ScheduleForecastSkill";
-                    var deleteCommand = new SqlCommand(deleteCommandstring, connection);
+					var deleteCommand = new SqlCommand( );
+					var deleteCommandstring = string.Format(@"DELETE from ReadModel.ScheduleForecastSkill where skillid in({0})" , AddArrayParameters(deleteCommand, skills.ToArray(), "ids")) ;
+	                deleteCommand.CommandText = deleteCommandstring;
+	                deleteCommand.Connection = connection;
                     deleteCommand.Transaction = transaction;
                     deleteCommand.ExecuteNonQuery();
 					
@@ -70,7 +74,12 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
                         sqlBulkCopy.WriteToServer(dt);
                     }
 
-					var deleteCommandForChanges = new SqlCommand(@"DELETE from ReadModel.ScheduleForecastSkillChange where insertedOn < @timeWhenResourceCalcDataLoaded ", connection);
+					var deleteCommandForChanges = new SqlCommand();
+	                deleteCommandForChanges.CommandText =
+		                string.Format(
+			                @"DELETE from ReadModel.ScheduleForecastSkillChange where insertedOn < @timeWhenResourceCalcDataLoaded and skillid in ({0})",
+			                AddArrayParameters(deleteCommandForChanges, skills.ToArray(), "ids"));
+	                deleteCommandForChanges.Connection = connection;
 					deleteCommandForChanges.Transaction = transaction;
 					deleteCommandForChanges.Parameters.AddWithValue("@timeWhenResourceCalcDataLoaded", timeWhenResourceCalcDataLoaded);
 					deleteCommandForChanges.ExecuteNonQuery();
@@ -193,5 +202,23 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
             return result;
         }
+
+		protected string AddArrayParameters(SqlCommand sqlCommand, Guid[] array, string paramName)
+		{
+			/* An array cannot be simply added as a parameter to a SqlCommand so we need to loop through things and add it manually. 
+			 * Each item in the array will end up being it's own SqlParameter so the return value for this must be used as part of the
+			 * IN statement in the CommandText.
+			 */
+			var parameters = new string[array.Length];
+			for (int i = 0; i < array.Length; i++)
+			{
+				parameters[i] = string.Format("@{0}{1}", paramName, i);
+				sqlCommand.Parameters.AddWithValue(parameters[i], array[i]);
+			}
+
+			return string.Join(", ", parameters);
+		}
 	}
+
+	
 }

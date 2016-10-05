@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 								 });
 
 			var changes = Target.GetReadModelChanges(new DateTimePeriod(new DateTime(2016, 06, 16, 8, 0, 0, DateTimeKind.Utc), new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc)));
-			changes.Should().Be.Equals(1);
+            changes.Count().Should().Be.EqualTo(1);
 			changes.First().StartDateTime.Should().Be.EqualTo(new DateTime(2016, 06, 16, 8, 0, 0, DateTimeKind.Utc));
 			changes.First().EndDateTime.Should().Be.EqualTo(new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc));
 			changes.First().StaffingLevel.Should().Be.EqualTo(1);
@@ -235,6 +235,115 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			changes.First().StartDateTime.Should().Be.EqualTo(new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc));
 			changes.First().EndDateTime.Should().Be.EqualTo(new DateTime(2016, 06, 16, 8, 30, 0, DateTimeKind.Utc));
 			changes.First().SkillId.Should().Be.EqualTo(skillId);
+
+		}
+
+		[Test]
+		public void ShouldPrugeReadModelDataPerSkill()
+		{
+			Now.Is("2016-06-16 03:15");
+			var skillId1 = Guid.NewGuid();
+			var skillId2 = Guid.NewGuid();
+			var items = new List<ResourcesDataModel>()
+			{
+				new ResourcesDataModel()
+				{
+					Id = skillId1,
+					Intervals =
+						new List<SkillStaffingInterval>()
+						{
+							new SkillStaffingInterval()
+							{
+								StaffingLevel = 10,
+								EndDateTime = new DateTime(2016, 06, 16, 02, 15, 0,DateTimeKind.Utc),
+								Forecast = 20,
+								StartDateTime = new DateTime(2016, 06, 16, 02, 0, 0,DateTimeKind.Utc)
+							}
+						}
+				}
+			};
+			Target.Persist(items, DateTime.Now);
+
+			items = new List<ResourcesDataModel>()
+			{
+				new ResourcesDataModel()
+				{
+					Id = skillId2,
+					Intervals =
+						new List<SkillStaffingInterval>()
+						{
+							new SkillStaffingInterval()
+							{
+								StaffingLevel = 10,
+								EndDateTime = new DateTime(2016, 06, 16, 02, 15, 0,DateTimeKind.Utc),
+								Forecast = 20,
+								StartDateTime = new DateTime(2016, 06, 16, 02, 0, 0,DateTimeKind.Utc)
+							}
+						}
+				}
+			};
+
+			Target.Persist(items, DateTime.Now);
+
+			Target.GetBySkill(skillId1, new DateTime(2016, 06, 16, 0, 0, 0), new DateTime(2016, 06, 16, 23, 59, 59))
+				.Count()
+				.Should()
+				.Be.EqualTo(1);
+			Target.GetBySkill(skillId2, new DateTime(2016, 06, 16, 0, 0, 0), new DateTime(2016, 06, 16, 23, 59, 59))
+				.Count()
+				.Should()
+				.Be.EqualTo(1);
+
+		}
+
+		[Test]
+		public void ShouldPrugeReadModelChangeDataPerSkill()
+		{
+			Now.Is("2016-06-15 03:15");
+			var skill1 = Guid.NewGuid();
+			var skill2 = Guid.NewGuid();
+			Target.PersistChange(new StaffingIntervalChange()
+			{
+				SkillId = skill1,
+				StartDateTime = new DateTime(2016, 06, 16, 8, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc),
+				StaffingLevel = 1
+			});
+
+			Target.PersistChange(new StaffingIntervalChange()
+			{
+				SkillId = skill2,
+				StartDateTime = new DateTime(2016, 06, 16, 8, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc),
+				StaffingLevel = 1
+			});
+
+			CurrentUnitOfWork.Current().PersistAll();
+
+			var items = new List<ResourcesDataModel>()
+			{
+				new ResourcesDataModel()
+				{
+					Id = skill2,
+					Intervals =
+						new List<SkillStaffingInterval>()
+						{
+							new SkillStaffingInterval()
+							{
+								StaffingLevel = 10,
+								EndDateTime = new DateTime(2016, 06, 16, 02, 15, 0,DateTimeKind.Utc),
+								Forecast = 20,
+								StartDateTime = new DateTime(2016, 06, 16, 02, 0, 0,DateTimeKind.Utc)
+							}
+						}
+				}
+			};
+			Target.Persist(items, DateTime.Now);
+
+			
+
+			var changes = Target.GetReadModelChanges(new DateTimePeriod(new DateTime(2016, 06, 16, 8, 0, 0, DateTimeKind.Utc), new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc)));
+			changes.Count().Should().Be.EqualTo(1);
 
 		}
 
