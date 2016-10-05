@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AbsenceRequestStrategyProcessor>().As<IAbsenceRequestStrategyProcessor>().SingleInstance();
 			builder.RegisterType<ArrangeRequestsByProcessOrder>().As<ArrangeRequestsByProcessOrder>().SingleInstance();
 			builder.RegisterType<IntradayRequestProcessor>().As<IIntradayRequestProcessor>().SingleInstance();
+			builder.RegisterType<ResourceAllocator>().As<ResourceAllocator>().SingleInstance();
 			
 
 			if (_configuration.Toggle (Toggles.Wfm_Requests_Show_Pending_Reasons_39473))

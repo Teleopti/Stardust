@@ -20,11 +20,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
+		private readonly ResourceAllocator _resourceAllocator;
 
-		public IntradayRequestProcessor(ICommandDispatcher commandDispatcher, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository)
+		public IntradayRequestProcessor(ICommandDispatcher commandDispatcher, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, ResourceAllocator resourceAllocator)
 		{
 			_commandDispatcher = commandDispatcher;
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
+			_resourceAllocator = resourceAllocator;
 		}
 
 		public void Process(IPersonRequest personRequest)
@@ -47,39 +49,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					return;
 				}
 			}
-			updateResources(personRequest, lowestIndex.GetValueOrDefault());
+			updateResources(personRequest);
 			sendApproveCommand(personRequest.Id.GetValueOrDefault());
 			
 		}
 
-		private void updateResources(IPersonRequest personRequest, int primarySkillIndex)
+		private void updateResources(IPersonRequest personRequest)
 		{
-			var skills = personRequest.Person.Period(DateOnly.Today).PersonSkillCollection.Select(x => x.Skill).Where(y => !y.IsCascading() || y.CascadingIndex == primarySkillIndex);
-			
-			var skillStaffingIntervals = new List<SkillStaffingInterval>();
-			foreach (var skill in skills)
+			var staffingIntervalChanges = _resourceAllocator.AllocateResource(personRequest);
+			foreach (var staffingIntervalChange in staffingIntervalChanges)
 			{
-				var intervals = _scheduleForecastSkillReadModelRepository.GetBySkill(skill.Id.GetValueOrDefault(), personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime).ToList();
-				skillStaffingIntervals.AddRange(intervals);
-			}
-
-			foreach (var startDate in skillStaffingIntervals.GroupBy(x => x.StartDateTime))
-			{
-				var intervalsWithSamePeriod = skillStaffingIntervals.Where(x => x.StartDateTime == startDate.Key);
-
-				double totaloverstaffing = intervalsWithSamePeriod.Sum(interval => interval.StaffingLevel - interval.ForecastWithShrinkage);
-
-				foreach (var interval in intervalsWithSamePeriod)
-				{
-					var staffingIntervalChange = new StaffingIntervalChange()
-					{
-						StartDateTime = interval.StartDateTime,
-						EndDateTime = interval.EndDateTime,
-						SkillId = interval.SkillId,
-						StaffingLevel = -(interval.StaffingLevel-interval.ForecastWithShrinkage) / totaloverstaffing
-					};
-					_scheduleForecastSkillReadModelRepository.PersistChange(staffingIntervalChange);
-				}
+				_scheduleForecastSkillReadModelRepository.PersistChange(staffingIntervalChange);
 			}
 		}
 

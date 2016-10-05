@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -25,17 +25,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 	public class IntradayRequestProcessorTest : ISetup
 	{
 		public IntradayRequestProcessor Target;
-		public IPersonRepository PersonRepository;
 		public FakePersonRequestRepository PersonRequestRepository;
 		public FakeCurrentScenario CurrentScenario;
 		public FakeConfigReader ConfigReader;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeScheduleForecastSkillReadModelRepository ScheduleForecastSkillReadModelRepository;
 		public FakeSkillRepository SkillRepository;
-		private ISkill _skill1;
-		private ISkill _skill2;
-		private ISkill _skill3;
-		private ISkill _skill4;
+		private ISkill _primarySkill1;
+		private ISkill _primarySkill2;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -44,7 +41,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<ApprovalServiceForTest>().For<IRequestApprovalService>();
-
 		}
 
 		[Test]
@@ -56,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				new SkillStaffingInterval()
 				{
-					SkillId =  _skill1.Id.GetValueOrDefault(),
+					SkillId =  _primarySkill1.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
 					EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
                     ForecastWithShrinkage = 2,
@@ -69,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				new SkillStaffingInterval()
 				{
-					SkillId =  _skill2.Id.GetValueOrDefault(),
+					SkillId =  _primarySkill2.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
 					EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
 					ForecastWithShrinkage = 20,
@@ -95,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				new SkillStaffingInterval()
 				{
-					SkillId =  _skill1.Id.GetValueOrDefault(),
+					SkillId =  _primarySkill1.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
 					EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
 					Forecast = 2,
@@ -107,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				new SkillStaffingInterval()
 				{
-					SkillId =  _skill2.Id.GetValueOrDefault(),
+					SkillId =  _primarySkill2.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
 					EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
 					Forecast = 5,
@@ -123,96 +119,43 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 
 		[Test]
-		public void ShouldUpdateResourcesWhenApproveBySplitResourceDependentOnStaffing()
+		public void ShouldUpdateResourcesWhenApprove()
 		{
 			var request = createNewRequest();
+
 			var startDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc);
 			var endDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc);
-			const double forecasted = 2;
-			const double shrinkage = 0.2;
-			const double forcastedWithShringage = forecasted*shrinkage;
-			const double staffing1 = 3;
-			const double staffing2 = 5;
-			const double staffing3 = 10;
-			const double staffing4 = 5; //secondary skill, should not be used
-			const double overstaffed1 = staffing1 - forcastedWithShringage;
-			const double overstaffed2 = staffing2 - forcastedWithShringage;
-			const double overstaffed3 = staffing3 - forcastedWithShringage;
-			const double totaloverstaffed = overstaffed1 + overstaffed2 + overstaffed3;
 
-
-			var resourceList = new List<SkillStaffingInterval>
+			var staffingList = new List<SkillStaffingInterval>()
 			{
 				new SkillStaffingInterval()
 				{
-					SkillId = _skill1.Id.GetValueOrDefault(),
+					SkillId =  _primarySkill1.Id.GetValueOrDefault(),
 					StartDateTime = startDateTime,
 					EndDateTime = endDateTime,
-					Forecast = forecasted,
-					ForecastWithShrinkage = forcastedWithShringage,
-					StaffingLevel = staffing1
-				},
-				new SkillStaffingInterval()
-				{
-					SkillId = _skill2.Id.GetValueOrDefault(),
-					StartDateTime = startDateTime,
-					EndDateTime = endDateTime,
-					Forecast = forecasted,
-					ForecastWithShrinkage = forcastedWithShringage,
-					StaffingLevel = staffing2
-				},
-				new SkillStaffingInterval()
-				{
-					SkillId = _skill3.Id.GetValueOrDefault(),
-					StartDateTime = startDateTime,
-					EndDateTime = endDateTime,
-					Forecast = forecasted,
-					ForecastWithShrinkage = forcastedWithShringage,
-					StaffingLevel = staffing3
-				},
-				new SkillStaffingInterval()
-				{
-					SkillId = _skill4.Id.GetValueOrDefault(),
-					StartDateTime = startDateTime,
-					EndDateTime = endDateTime,
-					Forecast = forecasted,
-					ForecastWithShrinkage = forcastedWithShringage,
-					StaffingLevel = staffing4
+					Forecast = 2,
+					StaffingLevel = 10
 				}
 			};
-
-			ScheduleForecastSkillReadModelRepository.Persist(resourceList, DateTime.Now);
+			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
+			staffingList = new List<SkillStaffingInterval>()
+			{
+				new SkillStaffingInterval()
+				{
+					SkillId =  _primarySkill2.Id.GetValueOrDefault(),
+					StartDateTime = startDateTime,
+					EndDateTime = endDateTime,
+					Forecast = 5,
+					StaffingLevel = 10
+				}
+			};
+			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
 
 			Target.Process(request);
 
 			var changes = ScheduleForecastSkillReadModelRepository.GetReadModelChanges(new DateTimePeriod(startDateTime, endDateTime)).ToList();
 
-			var expectedChanges = new List<StaffingIntervalChange>()
-			{
-				new StaffingIntervalChange()
-				{
-					StartDateTime = startDateTime,
-					EndDateTime = endDateTime,
-					SkillId = _skill1.Id.GetValueOrDefault(),
-					StaffingLevel = - overstaffed1/totaloverstaffed 
-				},
-				new StaffingIntervalChange()
-				{
-					StartDateTime = startDateTime,
-					EndDateTime = endDateTime,
-					SkillId = _skill2.Id.GetValueOrDefault(),
-					StaffingLevel = - overstaffed2/totaloverstaffed 
-				},
-				new StaffingIntervalChange()
-				{
-					StartDateTime = startDateTime,
-					EndDateTime = endDateTime,
-					SkillId = _skill3.Id.GetValueOrDefault(),
-					StaffingLevel = - overstaffed3/totaloverstaffed 
-				}
-			};
-
-			CollectionAssert.AreEquivalent(expectedChanges, changes);
+			changes.Count.Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -224,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				new SkillStaffingInterval()
 				{
-					SkillId = _skill1.Id.GetValueOrDefault(),
+					SkillId = _primarySkill1.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
 					EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
 					ForecastWithShrinkage = 10,
@@ -236,14 +179,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
-				SkillId = _skill1.Id.GetValueOrDefault(),
+				SkillId = _primarySkill1.Id.GetValueOrDefault(),
 				StaffingLevel = -1
 			});
 			ScheduleForecastSkillReadModelRepository.PersistChange(new StaffingIntervalChange()
 			{
 				StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
-				SkillId = _skill1.Id.GetValueOrDefault(),
+				SkillId = _primarySkill1.Id.GetValueOrDefault(),
 				StaffingLevel = -1
 			});
 
@@ -252,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				new SkillStaffingInterval()
 				{
-					SkillId =  _skill2.Id.GetValueOrDefault(),
+					SkillId =  _primarySkill2.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
 					EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
 					ForecastWithShrinkage = 5,
@@ -274,7 +217,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var staffingList = new List<SkillStaffingInterval>()
 			{
 				new SkillStaffingInterval()
-				{	SkillId = _skill1.Id.GetValueOrDefault(),
+				{	SkillId = _primarySkill1.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
 					EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
 					ForecastWithShrinkage = 10,
@@ -286,7 +229,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 14, 13, 30, 0, DateTimeKind.Utc),
-				SkillId = _skill1.Id.GetValueOrDefault(),
+				SkillId = _primarySkill1.Id.GetValueOrDefault(),
 				StaffingLevel = -1
 			});
 			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
@@ -319,17 +262,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		private IPerson createAndSetupPerson(IWorkflowControlSet workflowControlSet, bool useWorkflowControlSet)
 		{
-			//var person = PersonFactory.CreatePersonWithId();
-			_skill1 = SkillFactory.CreateSkillWithId("PrimarySkill1");
-			_skill1.SetCascadingIndex(1);
-			_skill2 = SkillFactory.CreateSkillWithId("PrimarySkill2");
-			_skill2.SetCascadingIndex(1);
-			_skill3 = SkillFactory.CreateSkillWithId("NotCascadingSkill");
-			_skill4 = SkillFactory.CreateSkillWithId("SecondarySkill");
-			_skill4.SetCascadingIndex(2);
+			_primarySkill1 = SkillFactory.CreateSkillWithId("PrimarySkill1");
+			_primarySkill1.SetCascadingIndex(1);
+			_primarySkill2 = SkillFactory.CreateSkillWithId("PrimarySkill2");
+			_primarySkill2.SetCascadingIndex(1);
 
-			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 03, 01), new[] {_skill1, _skill2, _skill3, _skill4});
-			PersonRepository.Add(person);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 03, 01), new[] {_primarySkill1, _primarySkill2});
 
 			if(useWorkflowControlSet)
 				person.WorkflowControlSet = workflowControlSet;

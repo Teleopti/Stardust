@@ -67,16 +67,25 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return skill;
         }
 
-        /// <summary>
-        /// Creates the skill.
-        /// </summary>
-        /// <param name="skillName">Name of the skill.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: sumeda herath
-        /// Created date: 2008-01-15
-        /// </remarks>
-        public static ISkill CreateSkill(string skillName)
+		public static ISkill CreateSkillWithId(string name, int defaultSolution)
+		{
+			var skillType = SkillTypeFactory.CreateSkillType();
+			var skill = CreateSkill(name, skillType, defaultSolution);
+			skill.SetId(Guid.NewGuid());
+
+			return skill;
+		}
+
+		/// <summary>
+		/// Creates the skill.
+		/// </summary>
+		/// <param name="skillName">Name of the skill.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: sumeda herath
+		/// Created date: 2008-01-15
+		/// </remarks>
+		public static ISkill CreateSkill(string skillName)
         {
             SkillType skillType = SkillTypeFactory.CreateSkillType();
             ISkill skill = CreateSkill(skillName, skillType, 15);
