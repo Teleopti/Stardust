@@ -12,10 +12,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	/// </summary>
 	public class ResourceOptimizationHelperExtended : IResourceOptimizationHelperExtended
 	{
-		private readonly IResourceOptimizationHelper _basicHelper;
+		private readonly IResourceOptimization _basicHelper;
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
 
-		public ResourceOptimizationHelperExtended(IResourceOptimizationHelper basicHelper, Func<ISchedulerStateHolder> stateHolder)
+		public ResourceOptimizationHelperExtended(IResourceOptimization basicHelper, Func<ISchedulerStateHolder> stateHolder)
 		{
 			_basicHelper = basicHelper;
 			_stateHolder = stateHolder;

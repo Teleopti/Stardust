@@ -19,9 +19,9 @@ namespace Teleopti.Interfaces.Domain
         private readonly IPersonAccountBalanceCalculator _personAccountBalanceCalculator;
         private readonly IBudgetGroupAllowanceSpecification _budgetGroupAllowanceSpecification;
         private readonly IBudgetGroupHeadCountSpecification _budgetGroupHeadCountSpecification;
-        private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+        private readonly IResourceOptimization _resourceOptimizationHelper;
 
-        public RequiredForHandlingAbsenceRequest(ISchedulingResultStateHolder schedulingResultStateHolder, IPersonAccountBalanceCalculator personAccountBalanceCalculator, IResourceOptimizationHelper resourceOptimizationHelper, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification = null)
+        public RequiredForHandlingAbsenceRequest(ISchedulingResultStateHolder schedulingResultStateHolder, IPersonAccountBalanceCalculator personAccountBalanceCalculator, IResourceOptimization resourceOptimizationHelper, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification = null)
         {
             _resourceOptimizationHelper = resourceOptimizationHelper;
             _budgetGroupAllowanceSpecification = budgetGroupAllowanceSpecification;
@@ -45,7 +45,7 @@ namespace Teleopti.Interfaces.Domain
             get { return _budgetGroupAllowanceSpecification; }
         }
 
-        public IResourceOptimizationHelper ResourceOptimizationHelper
+        public IResourceOptimization ResourceOptimizationHelper
         {
             get { return _resourceOptimizationHelper; }
         }

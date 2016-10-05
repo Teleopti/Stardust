@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         private IAbsenceRequestValidator _target;
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private PersonRequestFactory _personRequestFactory;
-        private IResourceOptimizationHelper _resourceOptimizationHelper;
+        private IResourceOptimization _resourceOptimizationHelper;
         private IPerson _person;
 
         private ISkill _skill;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _dictionary = new ScheduleDictionaryForTest(MockRepository.GenerateMock<IScenario>(),schedulingDateTimePeriod.StartDateTime);
             _schedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(schedulingDateTimePeriod);
             _schedulingResultStateHolder.Schedules = _dictionary;
-			_resourceOptimizationHelper = MockRepository.GenerateMock<IResourceOptimizationHelper>();
+			_resourceOptimizationHelper = MockRepository.GenerateMock<IResourceOptimization>();
             _personRequestFactory = new PersonRequestFactory();
             _person = PersonFactory.CreatePersonWithId();
             _person.PermissionInformation.SetCulture(new CultureInfo(1033));

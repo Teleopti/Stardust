@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
 		private readonly IDayOffDecisionMaker _dayOffDecisionMaker;
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IResourceOptimization _resourceOptimizationHelper;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly IDayOffOptimizerValidator _dayOffOptimizerValidator;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
 			IDayOffDecisionMaker dayOffDecisionMaker,
-			IResourceOptimizationHelper resourceOptimizationHelper, 
+			IResourceOptimization resourceOptimizationHelper, 
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IDayOffOptimizerValidator dayOffOptimizerValidator,
 			ISchedulingOptionsCreator schedulingOptionsCreator, 

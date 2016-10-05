@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IOptimizationPreferences _optimizerPreferences;
         private readonly ISchedulePartModifyAndRollbackService _rollbackService;
     	private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
-    	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+    	private readonly IResourceOptimization _resourceOptimizationHelper;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly IScheduleMatrixOriginalStateContainer _workShiftOriginalStateContainer;
 	    private readonly IOptimizationLimits _optimizationLimits;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IOptimizationPreferences optimizerPreferences,
             ISchedulePartModifyAndRollbackService rollbackService,
             IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
-            IResourceOptimizationHelper resourceOptimizationHelper,
+            IResourceOptimization resourceOptimizationHelper,
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
             IScheduleMatrixOriginalStateContainer workShiftOriginalStateContainer,
 			IOptimizationLimits optimizationLimits,

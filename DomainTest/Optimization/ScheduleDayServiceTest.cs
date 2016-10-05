@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDayService _target;
 		private IScheduleService _scheduleService;
         private IDeleteSchedulePartService _deleteSchedulePartService;
-        private IResourceOptimizationHelper _resourceOptimizationHelper;
+        private IResourceOptimization _resourceOptimizationHelper;
         private IScheduleDay _newSchedulePart;
         private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _mocks = new MockRepository();
             _newSchedulePart = _mocks.StrictMock<IScheduleDay>();
-            _resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
+            _resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimization>();
             _deleteSchedulePartService = _mocks.StrictMock<IDeleteSchedulePartService>();
             _scheduleService = _mocks.StrictMock<IScheduleService>();
             _effectiveRestrictionCreator = _mocks.DynamicMock<IEffectiveRestrictionCreator>();

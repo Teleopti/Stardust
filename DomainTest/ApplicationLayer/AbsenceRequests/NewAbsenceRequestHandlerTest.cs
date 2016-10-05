@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private IBudgetGroupAllowanceSpecification _budgetGroupAllowanceSpecification;
 		private IBudgetGroupHeadCountSpecification _budgetGroupHeadCountSpecification;
 		private ILoadSchedulingStateHolderForResourceCalculation _loader;
-		private IResourceOptimizationHelper _resourceOptimizationHelper;
+		private IResourceOptimization _resourceOptimizationHelper;
 		private IScheduleRange _scheduleRange;
 		private IValidatedRequest _validatedRequest;
 		private ILoadSchedulesForRequestWithoutResourceCalculation _loaderWithoutResourceCalculation;
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_loaderWithoutResourceCalculation = MockRepository.GenerateMock<ILoadSchedulesForRequestWithoutResourceCalculation>();
 			_budgetGroupAllowanceSpecification = MockRepository.GenerateMock<IBudgetGroupAllowanceSpecification>();
 			_budgetGroupHeadCountSpecification = MockRepository.GenerateMock<IBudgetGroupHeadCountSpecification>();
-			_resourceOptimizationHelper = MockRepository.GenerateMock<IResourceOptimizationHelper>();
+			_resourceOptimizationHelper = MockRepository.GenerateMock<IResourceOptimization>();
 
 			_personAccountUpdater = MockRepository.GenerateMock<IPersonAccountUpdater>();
 

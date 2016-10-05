@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IRequiredScheduleHelper _requiredScheduleOptimizerHelper;
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IResourceOptimization _resourceOptimizationHelper;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly ITeamBlockScheduleCommand _teamBlockScheduleCommand;
 		private readonly IClassicScheduleCommand _classicScheduleCommand;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public ScheduleCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
 			IRequiredScheduleHelper requiredScheduleOptimizerHelper,
-			IResourceOptimizationHelper resourceOptimizationHelper,
+			IResourceOptimization resourceOptimizationHelper,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			ITeamBlockScheduleCommand teamBlockScheduleCommand,
 			IClassicScheduleCommand classicScheduleCommand,

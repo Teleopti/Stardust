@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
 				_container.Resolve<ISchedulePartModifyAndRollbackService>();
 			IDeleteSchedulePartService deleteSchedulePartService = _container.Resolve<IDeleteSchedulePartService>();
-			IResourceOptimizationHelper resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
+			IResourceOptimization resourceOptimizationHelper = _container.Resolve<IResourceOptimization>();
 			IEffectiveRestrictionCreator effectiveRestrictionCreator =
 				_container.Resolve<IEffectiveRestrictionCreator>();
 			IResourceCalculateDaysDecider resourceCalculateDaysDecider =

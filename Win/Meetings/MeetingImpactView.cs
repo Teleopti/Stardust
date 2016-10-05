@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Win.Meetings
 								ISchedulerStateHolder schedulerStateHolder, 
 								MeetingComposerView meetingComposerView, 
 								IToggleManager toggleManager,
-								IResourceOptimizationHelper resourceOptimizationHelper)
+								IResourceOptimization resourceOptimizationHelper)
 			: this()
 		{
 			_toggleManager = toggleManager;

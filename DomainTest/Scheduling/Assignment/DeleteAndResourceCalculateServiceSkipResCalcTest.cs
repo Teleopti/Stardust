@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void ShouldResourceCalculate()
 		{
-			var resourceOptHelper = MockRepository.GenerateMock<IResourceOptimizationHelper>();
+			var resourceOptHelper = MockRepository.GenerateMock<IResourceOptimization>();
 			var skillGroupInfo = MockRepository.GenerateStub<IResourceCalculateAfterDeleteDecider>();
 			var agent = new Person();
 			var date = new DateOnly(2000,1,1);
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void ShouldNotResourceCalculate()
 		{
-			var resourceOptHelper = MockRepository.GenerateMock<IResourceOptimizationHelper>();
+			var resourceOptHelper = MockRepository.GenerateMock<IResourceOptimization>();
 			var skillGroupInfo = MockRepository.GenerateStub<IResourceCalculateAfterDeleteDecider>();
 			var agent = new Person();
 			var date = new DateOnly(2000, 1, 1);

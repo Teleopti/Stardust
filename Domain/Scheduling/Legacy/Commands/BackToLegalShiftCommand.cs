@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly IBackToLegalShiftService _backToLegalShiftService;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IResourceOptimization _resourceOptimizationHelper;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly IPersonListExtractorFromScheduleParts _extractor;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			IBackToLegalShiftService backToLegalShiftService,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
-			IResourceOptimizationHelper resourceOptimizationHelper,
+			IResourceOptimization resourceOptimizationHelper,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			IPersonListExtractorFromScheduleParts extractor,
 			PeriodExtractorFromScheduleParts periodExtractor)

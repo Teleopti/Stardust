@@ -21,13 +21,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
-		private readonly Func<IResourceOptimizationHelper> _resourceOptimizationHelper;
+		private readonly Func<IResourceOptimization> _resourceOptimizationHelper;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 
 		public ClassicScheduleCommand(IMatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
-			Func<IResourceOptimizationHelper> resourceOptimizationHelper,
+			Func<IResourceOptimization> resourceOptimizationHelper,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			PeriodExtractorFromScheduleParts periodExtractor)
 		{

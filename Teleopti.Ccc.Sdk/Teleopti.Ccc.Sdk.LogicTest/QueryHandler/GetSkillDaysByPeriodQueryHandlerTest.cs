@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private ISkillRepository skillRepository;
 		private IResourceCalculationPrerequisitesLoader resourceCalculationPrerequisitesLoader;
 		private IDateTimePeriodAssembler dateTimePeriodAssembler;
-		private IResourceOptimizationHelper resourceOptimizationHelper;
+		private IResourceOptimization resourceOptimizationHelper;
 		private ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation;
 		private ISchedulingResultStateHolder schedulingResultStateHolder;
 		private IServiceLevelCalculator serviceLevelCalculator;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			resourceCalculationPrerequisitesLoader = MockRepository.GenerateMock<IResourceCalculationPrerequisitesLoader>();
-			resourceOptimizationHelper = MockRepository.GenerateMock<IResourceOptimizationHelper>();
+			resourceOptimizationHelper = MockRepository.GenerateMock<IResourceOptimization>();
 			loadSchedulingStateHolderForResourceCalculation =
 				MockRepository.GenerateMock<ILoadSchedulingStateHolderForResourceCalculation>();
 			schedulingResultStateHolder = MockRepository.GenerateMock<ISchedulingResultStateHolder>();

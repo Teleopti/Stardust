@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class DayOffOptimizationDesktopTeamBlock : IDayOffOptimizationDesktop
 	{
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IResourceOptimization _resourceOptimizationHelper;
 		private readonly ITeamBlockDayOffOptimizerService _teamBlockDayOffOptimizerService;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IMatrixListFactory _matrixListFactory;
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 
-		public DayOffOptimizationDesktopTeamBlock(IResourceOptimizationHelper resourceOptimizationHelper,
+		public DayOffOptimizationDesktopTeamBlock(IResourceOptimization resourceOptimizationHelper,
 								ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
 								Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 								IMatrixListFactory matrixListFactory,

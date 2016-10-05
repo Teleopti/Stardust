@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IStudentSchedulingService _studentSchedulingService;
 		private readonly Func<IOptimizationPreferences> _optimizationPreferences;
 		private readonly IScheduleService _scheduleService;
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IResourceOptimization _resourceOptimizationHelper;
 		private readonly IGridlockManager _gridlockManager;
 		private readonly IDaysOffSchedulingService _daysOffSchedulingService;
 		private readonly Func<IWorkShiftFinderResultHolder> _allResults;
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				IStudentSchedulingService studentSchedulingService, 
 				Func<IOptimizationPreferences> optimizationPreferences, 
 				IScheduleService scheduleService, 
-				IResourceOptimizationHelper resourceOptimizationHelper, 
+				IResourceOptimization resourceOptimizationHelper, 
 				IGridlockManager gridlockManager, 
 				IDaysOffSchedulingService daysOffSchedulingService, 
 				Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder, 

@@ -14,11 +14,11 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
     public class MeetingImpactCalculator : IMeetingImpactCalculator
     {
-        private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+        private readonly IResourceOptimization _resourceOptimizationHelper;
         private readonly IMeeting _meeting;
         private readonly ISchedulerStateHolder _schedulerStateHolder;
 
-        public MeetingImpactCalculator(ISchedulerStateHolder schedulerStateHolder, IResourceOptimizationHelper resourceOptimizationHelper, IMeeting meeting)
+        public MeetingImpactCalculator(ISchedulerStateHolder schedulerStateHolder, IResourceOptimization resourceOptimizationHelper, IMeeting meeting)
         {
             _schedulerStateHolder = schedulerStateHolder;
             _resourceOptimizationHelper = resourceOptimizationHelper;

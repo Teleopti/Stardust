@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		{
 			using (var container = buildContainer())
 			{
-				container.Resolve<IResourceOptimizationHelper>()
+				container.Resolve<IResourceOptimization>()
 					.Should().Be.OfType<CascadingResourceCalculation>();
 			}
 		}

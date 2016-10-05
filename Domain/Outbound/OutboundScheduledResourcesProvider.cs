@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 
 	public class OutboundScheduledResourcesProvider : IOutboundScheduledResourcesProvider
 	{
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IResourceOptimization _resourceOptimizationHelper;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IScenarioRepository _scenarioRepository;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 		private readonly OutboundAssignedStaffProvider _outboundAssignedStaffProvider;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 
-		public OutboundScheduledResourcesProvider(IResourceOptimizationHelper resourceOptimizationHelper,
+		public OutboundScheduledResourcesProvider(IResourceOptimization resourceOptimizationHelper,
 			IUserTimeZone userTimeZone, Func<ISchedulerStateHolder> schedulerStateHolder, IScenarioRepository scenarioRepository,
 			ISkillDayLoadHelper skillDayLoadHelper, ISkillRepository skillRepository, IScheduleStorage scheduleStorage,
 			IPeopleAndSkillLoaderDecider decider,

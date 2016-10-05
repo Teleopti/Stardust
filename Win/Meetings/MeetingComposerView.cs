@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Win.Meetings
 		private IMeetingDetailView _currentView;
 		private readonly IEventAggregator _eventAggregator;
 		private readonly IToggleManager _toogleManager;
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IResourceOptimization _resourceOptimizationHelper;
 
 		public event EventHandler<ModifyMeetingEventArgs> ModificationOccurred;
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Win.Meetings
 
 		public MeetingComposerView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, 
 			bool editPermission, bool viewSchedulesPermission, IEventAggregator eventAggregator, IToggleManager toogleManager,
-			IResourceOptimizationHelper resourceOptimizationHelper)
+			IResourceOptimization resourceOptimizationHelper)
 			: this()
 		{
 			bool editMeetingPermission = editPermission;

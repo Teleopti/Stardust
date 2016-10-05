@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
 		private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IResourceOptimization _resourceOptimizationHelper;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly IIntradayOptimizeOneDayCallback _intradayOptimizeOneDayCallback;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ISkillIntervalDataDivider skillIntervalDataDivider,
 			ISkillIntervalDataAggregator skillIntervalDataAggregator,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			IResourceOptimizationHelper resourceOptimizationHelper,
+			IResourceOptimization resourceOptimizationHelper,
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
 			IIntradayOptimizeOneDayCallback intradayOptimizeOneDayCallback,
 			Func<ISchedulerStateHolder> schedulerStateHolder,

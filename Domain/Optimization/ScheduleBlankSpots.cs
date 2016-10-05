@@ -13,13 +13,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ISchedulePartModifyAndRollbackService _rollbackService;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IResourceOptimization _resourceOptimizationHelper;
 
 		public ScheduleBlankSpots(IScheduleService scheduleService,
 			ISchedulePartModifyAndRollbackService rollbackService,
 			Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			IResourceOptimizationHelper resourceOptimizationHelper)
+			IResourceOptimization resourceOptimizationHelper)
 		{
 			_scheduleService = scheduleService;
 			_rollbackService = rollbackService;

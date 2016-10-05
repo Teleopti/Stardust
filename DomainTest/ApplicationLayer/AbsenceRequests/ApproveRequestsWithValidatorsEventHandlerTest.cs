@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return personRequest;
 		}
 
-		private IResourceOptimizationHelper createResourceOptimizationHelper()
+		private IResourceOptimization createResourceOptimizationHelper()
 		{
 			//should really use ioc here instead...
 			return new CascadingResourceCalculation(

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	[DomainTest]
 	public class CascadingResourceCalculationOverstaffedSkillGroupsTest
 	{
-		public IResourceOptimizationHelper Target;
+		public IResourceOptimization Target;
 
 		[Test]
 		public void ShouldMoveResourceOnlyWithinSkillGroup()

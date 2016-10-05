@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly IBudgetGroupAllowanceSpecification _budgetGroupAllowanceSpecification;
 		private readonly IScheduleIsInvalidSpecification _scheduleIsInvalidSpecification;
 		private readonly IAlreadyAbsentSpecification _alreadyAbsentSpecification;
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IResourceOptimization _resourceOptimizationHelper;
 		private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
 		private readonly IPersonRequestCheckAuthorization _authorization;
 		private readonly IRequestFactory _requestFactory;
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			IRequestFactory requestFactory, IAlreadyAbsentSpecification alreadyAbsentSpecification,
 			IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization,
 			IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification,
-			IResourceOptimizationHelper resourceOptimizationHelper,
+			IResourceOptimization resourceOptimizationHelper,
 			IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification,
 			IScheduleDifferenceSaver scheduleDictionarySaver, IPersonAccountUpdater personAccountUpdater,
 			IToggleManager toggleManager)

@@ -25,11 +25,11 @@ namespace Teleopti.Ccc.Win.Scheduling
     {
         private readonly IInitiatorIdentifier _initiatorIdentifier;
         private readonly ISchedulerStateHolder _schedulerStateHolder;
-	    private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+	    private readonly IResourceOptimization _resourceOptimizationHelper;
 	    private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
 	    private readonly MeetingParticipantPermittedChecker _meetingParticipantPermittedChecker = new MeetingParticipantPermittedChecker();
 
-	    internal SchedulerMeetingHelper(IInitiatorIdentifier initiatorIdentifier, ISchedulerStateHolder schedulerStateHolder, IResourceOptimizationHelper resourceOptimizationHelper)
+	    internal SchedulerMeetingHelper(IInitiatorIdentifier initiatorIdentifier, ISchedulerStateHolder schedulerStateHolder, IResourceOptimization resourceOptimizationHelper)
         {
             _initiatorIdentifier = initiatorIdentifier;
             _schedulerStateHolder = schedulerStateHolder;

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private IEffectiveRestriction _effectiveRestriction;
     	private IScheduleService _scheduleService;
         private ISchedulingOptions _schedulingOptions;
-    	private IResourceOptimizationHelper _resourceOptimizationHelper;
+    	private IResourceOptimization _resourceOptimizationHelper;
     	private IResourceCalculateDelayer _resourceCalculateDelayer;
     	private ISchedulePartModifyAndRollbackService _rollbackService;
 	    private ISkill _skill1;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         	_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
         	_scheduleService = _mocks.StrictMock<IScheduleService>();
             _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
-			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
+			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimization>();
 			_skill1 = SkillFactory.CreateSkill("Skill 1");
 			_skill2 = SkillFactory.CreateSkill("Skill 2");
 			_studentSchedulingService = new StudentSchedulingService( _schedulingResultStateHolder,

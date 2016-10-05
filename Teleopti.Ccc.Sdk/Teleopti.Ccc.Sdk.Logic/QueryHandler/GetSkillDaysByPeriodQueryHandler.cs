@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		private readonly ISkillRepository _skillRepository;
 		private readonly IResourceCalculationPrerequisitesLoader _resourceCalculationPrerequisitesLoader;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IResourceOptimization _resourceOptimizationHelper;
 		private readonly ILoadSchedulingStateHolderForResourceCalculation _loadSchedulingStateHolderForResourceCalculation;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IServiceLevelCalculator _serviceLevelCalculator;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			ISkillRepository skillRepository, 
 			IResourceCalculationPrerequisitesLoader resourceCalculationPrerequisitesLoader,
 			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
-			IResourceOptimizationHelper resourceOptimizationHelper,
+			IResourceOptimization resourceOptimizationHelper,
 			ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IServiceLevelCalculator serviceLevelCalculator)

@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				var daysOffLegalStateValidatorsFactory = _container.Resolve<IDaysOffLegalStateValidatorsFactory>();
 				var validators = daysOffLegalStateValidatorsFactory.CreateLegalStateValidators(bitArray,
 					optimizerPreferences, dayOffOptimizePreference);
-				var resourceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1, true, schedulerStateHolder.SchedulingResultState);
+				var resourceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimization>(), 1, true, schedulerStateHolder.SchedulingResultState);
 
 				INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
 					new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),

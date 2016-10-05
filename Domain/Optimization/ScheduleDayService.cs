@@ -11,14 +11,14 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
     	private readonly IScheduleService _scheduleService;
         private readonly IDeleteSchedulePartService _deleteSchedulePartService;
-        private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+        private readonly IResourceOptimization _resourceOptimizationHelper;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
     	private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 	    private readonly Func<ISchedulerStateHolder> _schedulingResultStateHolder;
 
 	    public ScheduleDayService(IScheduleService scheduleService,
 								  IDeleteSchedulePartService deleteSchedulePartService,
-								  IResourceOptimizationHelper resourceOptimizationHelper,
+								  IResourceOptimization resourceOptimizationHelper,
 								  IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			Func<ISchedulerStateHolder> schedulingResultStateHolder

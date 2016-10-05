@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	[DomainTest]
 	public class CascadingResourceCalculationContextTest
 	{
-		public IResourceOptimizationHelper Target;
+		public IResourceOptimization Target;
 
 		[Test]
 		public void ShouldRestoreCallersContext()

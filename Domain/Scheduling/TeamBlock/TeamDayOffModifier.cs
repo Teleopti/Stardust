@@ -21,11 +21,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	public class TeamDayOffModifier : ITeamDayOffModifier
 	{
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IResourceOptimization _resourceOptimizationHelper;
 		private readonly Func<IScheduleDayForPerson> _scheduleDayForPerson;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 
-		public TeamDayOffModifier(IResourceOptimizationHelper resourceOptimizationHelper, Func<IScheduleDayForPerson> scheduleDayForPerson, Func<ISchedulingResultStateHolder> schedulingResultStateHolder)
+		public TeamDayOffModifier(IResourceOptimization resourceOptimizationHelper, Func<IScheduleDayForPerson> scheduleDayForPerson, Func<ISchedulingResultStateHolder> schedulingResultStateHolder)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_scheduleDayForPerson = scheduleDayForPerson;

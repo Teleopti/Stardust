@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private IEffectiveRestriction _effectiveRestriction;
 		private IScheduleService _scheduleService;
         private ISchedulingOptions _schedulingOptions;
-		private IResourceOptimizationHelper _resourceOptimizationHelper;
+		private IResourceOptimization _resourceOptimizationHelper;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
 
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																				  new List<IActivityRestriction>());
             _schedulingOptions = new SchedulingOptions();
 			_scheduleService = _mocks.StrictMock<IScheduleService>();
-			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
+			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimization>();
 			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
 
 			_mocks.ReplayAll();

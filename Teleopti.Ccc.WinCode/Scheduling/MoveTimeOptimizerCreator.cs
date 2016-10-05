@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly ISchedulePartModifyAndRollbackService _rollbackService;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IResourceOptimization _resourceOptimizationHelper;
 		private readonly IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly PersonalSkillsProvider _personalSkillsProvider;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			IResourceOptimizationHelper resourceOptimizationHelper,
+			IResourceOptimization resourceOptimizationHelper,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
 			PersonalSkillsProvider personalSkillsProvider)

@@ -480,7 +480,7 @@
     <Compile Include="Domain\IRemoveLayerFromSchedule.cs" />
     <Compile Include="Domain\IRequestApprovalService.cs" />
     <Compile Include="Domain\IRequest.cs" />
-    <Compile Include="Domain\IResourceOptimizationHelper.cs" />
+    <Compile Include="Domain\IResourceOptimization.cs" />
     <Compile Include="Domain\IRestrictionBase.cs" />
     <Compile Include="Domain\IRestrictionOwner.cs" />
     <Compile Include="Domain\IRotationDay.cs" />
