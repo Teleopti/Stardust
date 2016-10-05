@@ -23,9 +23,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
         }
 
-        public IEnumerable<SkillStaffingInterval> GetBySkill(Guid skillId, DateTime startDateTime, DateTime endDateTime)
+		public IEnumerable<SkillStaffingInterval> GetBySkill(Guid skillId, DateTime startDateTime, DateTime endDateTime)
         {
-	       return _fakeStaffingList.Where(x => x.SkillId == skillId && x.StartDateTime >= startDateTime && x.EndDateTime <= endDateTime);
+	       return _fakeStaffingList.Where(x => x.SkillId == skillId && 
+					((x.StartDateTime < startDateTime && x.EndDateTime > startDateTime) || (x.StartDateTime >= startDateTime && x.StartDateTime < endDateTime) ));
         }
 
         public IEnumerable<SkillStaffingInterval> GetBySkillArea(Guid skillAreaId, DateTime startDateTime, DateTime endDateTime)
@@ -52,8 +53,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		    return
 			    _readModelChanges.Where(
 				    x =>
-					    x.StaffingIntervalChange.StartDateTime >= dateTimePeriod.StartDateTime &&
-					    x.StaffingIntervalChange.EndDateTime <= dateTimePeriod.EndDateTime).Select(y => y.StaffingIntervalChange);
+					    (x.StaffingIntervalChange.StartDateTime < dateTimePeriod.StartDateTime && x.StaffingIntervalChange.EndDateTime > dateTimePeriod.StartDateTime) ||
+					    (x.StaffingIntervalChange.StartDateTime >= dateTimePeriod.StartDateTime&& dateTimePeriod.EndDateTime > x.StaffingIntervalChange.StartDateTime)).Select(y => y.StaffingIntervalChange);
 	    }
 
         public DateTime LastCalculatedDate { get; set; }

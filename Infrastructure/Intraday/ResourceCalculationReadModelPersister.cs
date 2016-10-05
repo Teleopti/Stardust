@@ -101,7 +101,8 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			,[StaffingLevel],
             [ForecastWithShrinkage]
 				 FROM [ReadModel].[ScheduleForecastSkill]
-				where [startDateTime] between :startDateTime and :endDateTime
+				where (( [StartDateTime] < :startDateTime  and   [EndDateTime] > :startDateTime) 
+					or ( [StartDateTime] >= :startDateTime  and :endDateTime > [StartDateTime])  )
 				and SkillId = :skillId")
 				.AddScalar("StartDateTime", NHibernateUtil.DateTime)
 				.AddScalar("EndDateTime", NHibernateUtil.DateTime)
@@ -109,7 +110,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 				.AddScalar("StaffingLevel", NHibernateUtil.Double)
                 .AddScalar("ForecastWithShrinkage", NHibernateUtil.Double)
                 .SetDateTime("startDateTime", startDateTime)
-				.SetDateTime("endDateTime", endDateTime.AddSeconds(-1)) //-1 to not include next interval
+				.SetDateTime("endDateTime", endDateTime)
 				.SetGuid("skillId", skillId)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (SkillStaffingInterval)))
 				.List<SkillStaffingInterval>();
@@ -184,13 +185,14 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 	    public IEnumerable<StaffingIntervalChange> GetReadModelChanges(DateTimePeriod dateTimePeriod)
 	    {
             var result = ((NHibernateUnitOfWork)_currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
-                @"SELECT 
+				@"SELECT 
 					[SkillId]
                             ,[StartDateTime]
                             ,[EndDateTime]
                             ,[StaffingLevel]
 				 FROM [ReadModel].[ScheduleForecastSkillChange]
-                    where [StartDateTime] >= :startDateTime and [EndDateTime] <= :endDateTime")
+                    where (( [StartDateTime] < :startDateTime  and   [EndDateTime] > :startDateTime) 
+					or ( [StartDateTime] >= :startDateTime  and :endDateTime > [StartDateTime])  )")
                 .AddScalar("StartDateTime", NHibernateUtil.DateTime)
                 .AddScalar("EndDateTime", NHibernateUtil.DateTime)
                 .AddScalar("SkillId", NHibernateUtil.Guid)
