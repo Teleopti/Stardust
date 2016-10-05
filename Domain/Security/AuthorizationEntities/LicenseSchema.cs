@@ -14,26 +14,25 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
     {
 	    private readonly ReadOnlyCollection<LicenseOption> _licenseOptions = DefinedLicenseDataFactory.CreateDefinedLicenseOptions();
 
-        private static readonly ConcurrentDictionary<string, LicenseSchema> _activeLicenseSchemas = new ConcurrentDictionary<string, LicenseSchema>();
-        
+        private static readonly ConcurrentDictionary<string, LicenseSchema> activeLicenseSchemas = new ConcurrentDictionary<string, LicenseSchema>();
         /// <summary>
         /// Gets the singleton instance of the active license schema.
         /// </summary>
         /// <value>The instance.</value>
         public static LicenseSchema GetActiveLicenseSchema(string dataSource)
         {
-            LicenseSchema activeLicenseSchema;
-            _activeLicenseSchemas.TryGetValue(dataSource, out activeLicenseSchema);
-            if (activeLicenseSchema != null)
-                return activeLicenseSchema;
-            var licenseSchema = DefinedLicenseDataFactory.CreateActiveLicenseSchema(dataSource);
-            _activeLicenseSchemas.TryAdd(dataSource, licenseSchema);
-            return licenseSchema;
+		    LicenseSchema activeLicenseSchema;
+		    activeLicenseSchemas.TryGetValue(dataSource, out activeLicenseSchema);
+		    if (activeLicenseSchema != null)
+			    return activeLicenseSchema;
+		    var licenseSchema = DefinedLicenseDataFactory.CreateActiveLicenseSchema(dataSource);
+		    activeLicenseSchemas.TryAdd(dataSource, licenseSchema);
+		    return licenseSchema;
         }
 
         public static void SetActiveLicenseSchema(string dataSource, LicenseSchema licenseSchema)
         {
-            _activeLicenseSchemas.AddOrUpdate(dataSource, licenseSchema, (d, l) => licenseSchema);
+            activeLicenseSchemas.AddOrUpdate(dataSource, licenseSchema, (d, l) => licenseSchema);
         }
 
 	    /// <summary>

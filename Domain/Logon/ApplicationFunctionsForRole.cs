@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Logon
 
 		public IEnumerable<IApplicationFunction> AvailableFunctions(IApplicationRole applicationRole, string tenantName)
 		{
-			var licensedFunctions = _licensedFunctionsProvider.LicensedFunctions(tenantName);
+			var licensedFunctions = _licensedFunctionsProvider.LicensedFunctions(tenantName).ToList();
 			var availableFunctions = new List<IApplicationFunction>();
 
 			if (_roleIsPermittedToAllFunctionsSpecification.IsSatisfiedBy(applicationRole))
@@ -50,18 +50,19 @@ namespace Teleopti.Ccc.Domain.Logon
 				foreach (var applicationFunction in applicationRole.ApplicationFunctionCollection)
 				{
 					if (((IDeleteTag)applicationFunction).IsDeleted) continue;
-					if (applicationFunction.ForeignSource == DefinedForeignSourceNames.SourceRaptor)
+					var copy = (IApplicationFunction)applicationFunction.Clone(); // Clone to avoid possibly changing state of the item
+					if (copy.ForeignSource == DefinedForeignSourceNames.SourceRaptor)
 					{
-						var function = ApplicationFunction.FindByPath(licensedFunctions, applicationFunction.FunctionPath);
+						var function = ApplicationFunction.FindByPath(licensedFunctions, copy.FunctionPath);
 						if (function != null)
 						{
-							applicationFunction.IsPreliminary = function.IsPreliminary;
-							applicationFunction.FunctionCode = function.FunctionCode;
-							applicationFunction.FunctionDescription = function.FunctionDescription;
-							applicationFunction.SortOrder = function.SortOrder;
+							copy.IsPreliminary = function.IsPreliminary;
+							copy.FunctionCode = function.FunctionCode;
+							copy.FunctionDescription = function.FunctionDescription;
+							copy.SortOrder = function.SortOrder;
 						}
 					}
-					availableFunctions.Add(applicationFunction);
+					availableFunctions.Add(copy);
 				}
 			}
 			return availableFunctions;

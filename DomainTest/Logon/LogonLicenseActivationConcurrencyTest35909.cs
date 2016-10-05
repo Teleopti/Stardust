@@ -46,16 +46,19 @@ namespace Teleopti.Ccc.DomainTest.Logon
 					var dataSource = DataSourceForTenant.Tenant("tenant" + i);
 					var businessUnit = BusinessUnits.LoadAll().Single();
 					LogOnOff.LogOn(dataSource, person, businessUnit);
+
 					foreach (var role in person.PermissionInformation.ApplicationRoleCollection)
+					{
 						Principal.Current().AddClaimSet(ClaimSetForApplicationRole.Transform(role, "tenant" + i));
+					}
 
 					Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview).Should().Be.True();
 					Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SeatPlanner).Should().Be.False();
 				});
 
-			}).Times(10);
-
-			Run.Wait();
+			})
+			.Times(10)
+			.Wait();
 		}
 	}
 }

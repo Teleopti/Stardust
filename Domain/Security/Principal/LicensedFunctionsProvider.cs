@@ -24,8 +24,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public IEnumerable<IApplicationFunction> LicensedFunctions(string tenantName)
 		{
-			if (_licensedFunctions.ContainsKey(tenantName))
-				return _licensedFunctions[tenantName];
 			lock (locker)
 			{
 				if (_licensedFunctions.ContainsKey(tenantName))
@@ -37,14 +35,13 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		private IEnumerable<IApplicationFunction> fetchLicensedFunctions(string tenantName)
 		{
-			var licensedFunctions = 
+			var licensedFunctions =
 				LicenseSchema.GetActiveLicenseSchema(tenantName).EnabledLicenseOptions
 				.SelectMany(o =>
 				{
 					o.EnableApplicationFunctions(_definedRaptorApplicationFunctionFactory.ApplicationFunctions);
 					return o.EnabledApplicationFunctions;
-				})
-				;
+				});
 			return new HashSet<IApplicationFunction>(licensedFunctions);
 		}
 	}
