@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -15,26 +17,35 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 	[DatabaseTest]
 	public class Bug40950DeadlockTest : DatabaseTestWithoutTransaction
 	{
-		private const int numberOfAgents = 10000;
+		private const int numberOfAgents = 200;
+		private const int numberOfOpeningScheduler = 100;
 		public IPersonRepository PersonRepository;
 		public IPersonAssignmentRepository PersonAssignmentRepository;
 		public ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
 		public IScenarioRepository ScenarioRepository;
 
-		[Test, Ignore("#40950")]
+		[Test, Ignore("Failing for #40950")]
 		public void ShouldNotCauseDeadlock()
 		{
 			IScenario scenario;
 			IList<IPerson> agents;
 			setupAgentsAndSchedules(out scenario, out agents);
 
-			var cancelAssignmentReading = readAssignmentsOverAndOverAgainOnOtherThread(scenario, agents);
+			var cancelAssignmentReading = updatePersonsOverAndOverAgainOnOtherThread(agents);
 
 			try
 			{
 				Assert.DoesNotThrow(() =>
 				{
-					updateAgentsOnThisThread(agents);
+					for (var i = 0; i < numberOfOpeningScheduler; i++)
+					{
+						using (CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+						{
+							//TODO: let's see if we could use "real code" here
+							PersonRepository.LoadAll();
+							PersonAssignmentRepository.Find(new DateOnlyPeriod(DateOnly.Today.AddDays(-1), DateOnly.Today.AddDays(1)), scenario);
+						}
+					}
 				});
 			}
 			finally
@@ -43,36 +54,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 			}
 		}
 
-		private CancellationTokenSource readAssignmentsOverAndOverAgainOnOtherThread(IScenario scenario, IList<IPerson> agents)
+		private CancellationTokenSource updatePersonsOverAndOverAgainOnOtherThread(IEnumerable<IPerson> agents)
 		{
 			var cancellationTokenSource = new CancellationTokenSource();
 			var cancellationToken = cancellationTokenSource.Token;
 
 			Task.Factory.StartNew(() =>
 			{
+				var rnd = new Random();
 				while (true)
 				{
-					using (CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+					foreach (var agentsToUpdate in agents.Reverse().Batch(1))
 					{
-						PersonAssignmentRepository.Find(agents, DateOnly.Today.ToDateOnlyPeriod(), scenario);
+						using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+						{
+							foreach (var agent in agentsToUpdate)
+							{
+								agent.Name = new Name(rnd.Next().ToString(), rnd.Next().ToString());
+								PersonRepository.Add(agent);
+							}
+							uow.PersistAll();
+						}
 					}
 					cancellationToken.ThrowIfCancellationRequested();
-				}
+					}
 			}, cancellationToken);
 			return cancellationTokenSource;
-		}
-
-		private void updateAgentsOnThisThread(IEnumerable<IPerson> agents)
-		{
-			foreach (var agent in agents)
-			{
-				using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-				{
-					agent.Name = new Name("fo0", "bar");
-					PersonRepository.Add(agent);
-					uow.PersistAll();
-				}
-			}
 		}
 
 		private void setupAgentsAndSchedules(out IScenario scenario, out IList<IPerson> agents)
