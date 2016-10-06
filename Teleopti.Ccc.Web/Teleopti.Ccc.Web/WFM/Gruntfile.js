@@ -232,9 +232,9 @@ module.exports = function(grunt) {
 		uglify: {
 			dist: {
 				files: {
-					'dist/main.min.js': ['app/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/**/*.fortest.js', '!app/app_desktop_client.js'],
+					'dist/main.min.js': ['app/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/**/*.fortest.js', '!app/global/app_desktop_client.js'],
 					'dist/modules.min.js': ['dist/modules.js'],
-					'dist/templates.min.js': ['dist/templates.js']
+					'dist/templates.min.js': ['dist/templates.js'],
 				},
 				options: {
 					sourceMap: false,
@@ -244,12 +244,12 @@ module.exports = function(grunt) {
 			},
 			distForDesktop: {
 				files: {
-					'dist/mainForDesktop.min.js': ['app/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/**/*.fortest.js', '!app/app.js']
+					'dist/mainForDesktop.min.js': ['app/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/**/*.fortest.js', '!app/app.js','app/global/app_desktop_client_checkAlive.js']
 				}
 			},
 			dev: {
 				files: {
-					'dist/main.min.js': ['app/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/**/*.fortest.js', '!app/app_desktop_client.js']
+					'dist/main.min.js': ['app/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/**/*.fortest.js', '!app/global/app_desktop_client.js']
 				},
 				options: {
 					sourceMap: true,
