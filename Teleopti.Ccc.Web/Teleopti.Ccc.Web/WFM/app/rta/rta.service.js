@@ -168,6 +168,17 @@
 				}).query().$promise;
 			};
 
+			this.getAdherenceForAllSitesBySkill = function (data) {
+				return $resource('../api/Sites/GetOutOfAdherenceForAllSitesBySkill', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					skillId: data
+				}).$promise;
+			};
+
 			this.getSites = function (data) {
 				return $resource('../api/Sites', {}, {
 					query: {

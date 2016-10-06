@@ -3,16 +3,26 @@
 angular.module('wfm.rta').provider('RtaState', function() {
 
 	var toggles = {
-		RTA_HideAgentsByStateGroup_40469: false
+		RTA_HideAgentsByStateGroup_40469: false,
+		RTA_SiteAndTeamOnSkillOverview_40817: true
 	};
 	var rtaAgentsTemplateUrl = function(elem, attr) {
 		return toggles.RTA_HideAgentsByStateGroup_40469 ? 'app/rta/agents/rta-agents-HideAgentsByStateGroup_40469.html' : 'app/rta/agents/rta-agents.html';
+	}
+
+	var rtaSiteAndTeamOnSkillOverviewTemplateUrl = function(elem, attr) {
+		return toggles.RTA_SiteAndTeamOnSkillOverview_40817 ? 'app/rta/skills/rta-selectSkill-SiteAndTeamOnSkillOverview.html' : 'app/rta/skills/rta-selectSkill.html'
+	}
+
+	var rtaSelectSkillCtrl = function() {
+		return toggles.RTA_SiteAndTeamOnSkillOverview_40817 ? 'RtaSiteAndTeamOnSkillOverviewCtrl' : 'RtaSelectSkillCtrl';
 	}
 
 	this.$get = function() {
 		return function(toggleService) {
 			toggleService.togglesLoaded.then(function() {
 				toggles.RTA_HideAgentsByStateGroup_40469 = toggleService.RTA_HideAgentsByStateGroup_40469;
+				toggles.RTA_SiteAndTeamOnSkillOverview_40817 = toggleService.RTA_SiteAndTeamOnSkillOverview_40817;
 			});
 		};
 	};
@@ -24,8 +34,8 @@ angular.module('wfm.rta').provider('RtaState', function() {
 			})
 			.state('rta.select-skill', {
 				url: '/select-skill',
-				templateUrl: 'app/rta/skills/rta-selectSkill.html',
-				controller: 'RtaSelectSkillCtrl'
+				templateUrl: rtaSiteAndTeamOnSkillOverviewTemplateUrl,
+				controller: rtaSelectSkillCtrl()
 			})
 			.state('rta.sites', {
 				templateUrl: 'app/rta/overview/rta-sites.html',
