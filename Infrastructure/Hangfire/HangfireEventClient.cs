@@ -18,11 +18,11 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		public HangfireEventClient(
 			Lazy<IBackgroundJobClient> jobClient,
 			Lazy<RecurringJobManager> recurringJob,
-			IJobStorageWrapper storage)
+			Lazy<JobStorage> storage)
 		{
 			_jobClient = jobClient;
 			_recurringJob = recurringJob;
-			_storage = new Lazy<JobStorage>(storage.GetJobStorage);
+			_storage = storage;
 		}
 		
 		public void Enqueue(HangfireEventJob job)

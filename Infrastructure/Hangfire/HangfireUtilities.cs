@@ -21,11 +21,11 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		private readonly IMonitoringApi _monitoring;
 
 		public HangfireUtilities(
-			IJobStorageWrapper storage,
+			JobStorage storage,
 			IBackgroundJobClient backgroundJobs,
 			RecurringJobManager recurringJobs)
 		{
-			_storage = storage.GetJobStorage();
+			_storage = storage;
 			_backgroundJobs = backgroundJobs;
 			_recurringJobs = recurringJobs;
 			_monitoring = _storage.GetMonitoringApi();
