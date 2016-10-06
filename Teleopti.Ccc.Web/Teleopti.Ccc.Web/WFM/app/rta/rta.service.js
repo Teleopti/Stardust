@@ -188,6 +188,17 @@
 				}).query().$promise;
 			};
 
+			this.getSitesForSkill = function (data) {
+				return $resource('../api/SitesForSkill', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					skillId: data
+				}).$promise;
+			};
+
 			this.getTeams = function (data) {
 				return $resource('../api/Teams/Build', {}, {
 					query: {

@@ -34,6 +34,7 @@
 				$scope.skillAreas = [];
 				$scope.skillsLoaded = false;
 				$scope.skillAreasLoaded = false;
+				$scope.skillId = $stateParams.skillId || null;
 
 				RtaService.getSkills()
 					.then(function(skills) {
@@ -81,7 +82,7 @@
 				}
 
 				function getSitesOrTeamsForSkill(skillid){
-					RtaService.getSites().then(function (sites) {
+					RtaService.getSitesForSkill(skillid).then(function (sites) {
 						$scope.sites = sites;
 						return RtaService.getAdherenceForAllSitesBySkill(skillid);
 					}).then(function (siteAdherences) {
