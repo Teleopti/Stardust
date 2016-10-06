@@ -1,7 +1,5 @@
-using System.Configuration;
 using System.Linq;
 using NUnit.Framework;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -27,6 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	[Toggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262)]
 	[Toggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 	[Explicit]
+	[Category("LongRunning")]
 	public class ConcurrencyTest : ISetup
 	{
 		public Database Database;
