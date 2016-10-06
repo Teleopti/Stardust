@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 						PlatformTypeId = Guid.Empty.ToString(),
 						SourceId = _stateHolder.SourceId,
 					})
-					.Batch(500)
+					.Batch(1000)
 					.ForEach(state => _http.PostJson("Rta/State/Batch", state));
 			});
 		}
