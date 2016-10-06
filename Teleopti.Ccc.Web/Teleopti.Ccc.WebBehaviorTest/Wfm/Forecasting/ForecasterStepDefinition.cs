@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I clear override values")]
 		public void WhenIClearOverrideValues()
 		{
-			Browser.Interactions.Click(".forecast-clear-override-button");
+			Browser.Interactions.Click(".forecast-clear-override-button.wfm-btn-invis-primary");
 		}
 
 		[When(@"I clear campaign values")]

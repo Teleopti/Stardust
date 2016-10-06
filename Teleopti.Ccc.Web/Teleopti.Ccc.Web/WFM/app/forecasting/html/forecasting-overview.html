@@ -151,7 +151,7 @@
 								<span>{{ 'Campaign' | translate }}</span>
 							</label>
 
-							<label ng-click="clearOverride()" class="wfm-btn wfm-btn-invis-default forecast-clear-override-button" style="font-weight: normal;">
+							<label ng-click="clearOverride()" class="wfm-btn wfm-btn-invis-disabled forecast-clear-override-button" ng-class="{'wfm-btn-invis-primary': !disableClearOverride(),'wfm-btn-invis-disabled': disableClearOverride()}" style="font-weight: normal;">
 								<input type="checkbox" style="display: none;" />
 								<span>{{ 'ClearOverride' | translate }}</span>
 							</label>
