@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Teleopti.Ccc.Infrastructure.Security
 {
-	public class OneWayEncryption : IPasswordHashFunction
+	public class OneWayEncryption : IHashFunction
 	{
 		private const string salt = "adgvabar4g61qt46gv";
 

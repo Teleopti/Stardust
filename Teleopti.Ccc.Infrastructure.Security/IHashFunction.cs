@@ -1,6 +1,6 @@
 ﻿namespace Teleopti.Ccc.Infrastructure.Security
 {
-	public interface IPasswordHashFunction
+	public interface IHashFunction
 	{
 		string CreateHash(string password);
 		bool Verify(string password, string hash);

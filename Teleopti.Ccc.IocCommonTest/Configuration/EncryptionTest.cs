@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
             containerBuilder.RegisterModule(new EncryptionModule());
             using(var container = containerBuilder.Build())
             {
-                var encryption = container.Resolve<IPasswordHashFunction>();
+                var encryption = container.Resolve<IHashFunction>();
 
                 Assert.IsNotNull(encryption);
             }            
