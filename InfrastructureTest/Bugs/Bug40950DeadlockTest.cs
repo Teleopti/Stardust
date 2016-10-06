@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -64,20 +62,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 				var rnd = new Random();
 				while (true)
 				{
-					foreach (var agentsToUpdate in agents.Reverse().Batch(1))
+					foreach (var agent in agents)
 					{
 						using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 						{
-							foreach (var agent in agentsToUpdate)
-							{
-								agent.Name = new Name(rnd.Next().ToString(), rnd.Next().ToString());
-								PersonRepository.Add(agent);
-							}
+							agent.Name = new Name(rnd.Next().ToString(), rnd.Next().ToString());
+							PersonRepository.Add(agent);
 							uow.PersistAll();
 						}
 					}
 					cancellationToken.ThrowIfCancellationRequested();
-					}
+				}
 			}, cancellationToken);
 			return cancellationTokenSource;
 		}
