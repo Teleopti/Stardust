@@ -10,17 +10,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-
-	public class Attempts : Attribute
-	{
-		public int Retries { get; set; }
-
-		public Attempts(int retries)
-		{
-			Retries = retries;
-		}
-	}
-
 	public class HangfireEventPublisher : IEventPublisher, IRecurringEventPublisher
 	{
 		private const string delimiter = ":::";
@@ -106,8 +95,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				QueueName = _resolver.QueueTo(handlerType, @event),
 				Attempts = _resolver
 							   .HandleMethodFor(handlerType, @event)
-							   .GetCustomAttributes(typeof(Attempts), true)
-							   .Cast<Attempts>().SingleOrDefault()?.Retries ?? 3
+							   .GetCustomAttributes(typeof(AttemptsAttribute), true)
+							   .Cast<AttemptsAttribute>().SingleOrDefault()?.Attempts ?? 3
 			});
 		}
 
