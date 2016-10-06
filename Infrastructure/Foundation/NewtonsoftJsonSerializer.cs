@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		{
 			//Maybe this is a good idea? ;)
 			//DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+			NullValueHandling = NullValueHandling.Ignore;
 			ContractResolver = new customContractResolver();
 		}
 
