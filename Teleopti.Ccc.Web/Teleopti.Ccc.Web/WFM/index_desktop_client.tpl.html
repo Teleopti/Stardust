@@ -83,7 +83,6 @@
 			<div ui-view></div>
 			<wfm-notice notices="$parent.wfmNotices"></wfm-notice>
 		</div>
-
 	</div>
 	<script type="text/javascript">
 		var materialcontainer = document.getElementById('materialcontainer');
@@ -93,14 +92,22 @@
 		}
 
 		function ahAhAhAhStayingAlive() {
-			$.get('../api/Global/User/CurrentUser')
-				.success(function() {
+			var request = new XMLHttpRequest();
+			request.open('GET', '../api/Global/User/CurrentUser', true);
+			request.onload = function() {
+			  if (request.status >= 200 && request.status < 400) {
 					return true;
-				}).error(function(xhr, ajaxOptions, thrownError) {
+			  } else {
+			  	function(xhr, ajaxOptions, thrownError) 
+			  	{
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 					errorStayingAlive();
-				});
+				}
+			  }
+			};
+			request.send();
 		}
+
 		window.onerror = function(errorMessage, url, line) {
 			var req = new XMLHttpRequest();
 			req.open('POST', '../api/Logging/LogError', true);
