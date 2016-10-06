@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 		[ImpersonateSystem] 
 		[UnitOfWork]
 		[AnalyticsUnitOfWork]
+		[Attempts(10)]
 		public new virtual void Handle(SettingsForPersonPeriodChangedEvent @event)
 		{
 			base.Handle(@event);

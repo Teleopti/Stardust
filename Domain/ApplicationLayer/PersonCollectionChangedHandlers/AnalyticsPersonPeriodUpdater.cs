@@ -197,6 +197,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		}
 
 		[AnalyticsUnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
 			logger.Debug($"Removing all person periods with person code {@event.PersonId}");
