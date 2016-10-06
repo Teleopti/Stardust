@@ -1337,10 +1337,7 @@
     <Content Include="Content\moment-datepicker\moment-datepicker-ext.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.0.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.0.min.js" />
-    <Content Include="WFM\app\global\wfm-cultural-datepicker\wfm-cultural-datepicker.directive.js.rej" />
-    <Content Include="WFM\app\global\wfm-cultural-datepicker\wfm-cultural-datepicker.html.rej" />
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
-    <Content Include="WFM\app\global\desktop-client\app_desktop_client_checkAlive.js" />
     <Content Include="WFM\app\skillPrio\skillprio.controller.spec.js" />
     <Content Include="WFM\app\skillPrio\skillprio.service.spec.js" />
     <Content Include="WFM\app\teamSchedule\html\noteEditor.html" />
@@ -1356,7 +1353,7 @@
     <Content Include="WFM\app\skillPrio\_modules.js" />
     <Content Include="WFM\index_desktop_client.tpl.html" />
     <Content Include="WFM\index.tpl.html" />
-    <Content Include="WFM\app\global\desktop-client\app_desktop_client.js" />
+    <Content Include="WFM\app\app_desktop_client.js" />
     <Content Include="WFM\app\forecasting\forecasting.advanced.controller.spec.js" />
     <Content Include="WFM\app\forecasting\forecasting.routes.js" />
     <Content Include="WFM\app\forecasting\forecasting.start.controller.spec.js" />

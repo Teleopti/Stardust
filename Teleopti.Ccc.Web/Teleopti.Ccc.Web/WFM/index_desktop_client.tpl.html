@@ -91,6 +91,28 @@
 			materialcontainer.style["margin-top"] = '0';
 			materialcontainer.style.height = '100vh';
 		}
+
+		function ahAhAhAhStayingAlive() {
+			$.get('../api/Global/User/CurrentUser')
+				.success(function() {
+					return true;
+				}).error(function(xhr, ajaxOptions, thrownError) {
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+					errorStayingAlive();
+				});
+		}
+		window.onerror = function(errorMessage, url, line) {
+			var req = new XMLHttpRequest();
+			req.open('POST', '../api/Logging/LogError', true);
+			req.setRequestHeader("Content-type", "application/json");
+			req.send(JSON.stringify({
+				Message: errorMessage,
+				Url: url,
+				LineNumber: line,
+				ParentUrl: document.location.href,
+				UserAgent: navigator.userAgent
+			}));
+		};
 	</script>
 	<script src="dist/modules.min.js"></script>
 	<script src="dist/templates.js"></script>
