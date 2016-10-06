@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 		private readonly IPersonScheduleDayReadModelPersister _personScheduleDayReadModelPersister;
 		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
-		private readonly ILog logger = LogManager.GetLogger(typeof(ScheduleProjectionReadOnlyUpdaterBase));
+		private readonly ILog logger = LogManager.GetLogger(typeof(ReadModelFixer));
 
 		public ReadModelFixer(IProjectionVersionPersister projectionVersionPersister, IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, ICurrentScenario currentScenario, IPersonAssignmentRepository personAssignmentRepository, IPersonScheduleDayReadModelPersister personScheduleDayReadModelPersister, IScheduleDayReadModelRepository scheduleDayReadModelRepository)
 		{
