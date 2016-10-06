@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		{
 			base.AfterTest();
 
-			//SetupFixtureForAssembly.RestoreAnalyticsDatabase();
+			SetupFixtureForAssembly.RestoreAnalyticsDatabase();
 		}
 
 	}
