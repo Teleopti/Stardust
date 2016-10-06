@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http.Controllers;
@@ -82,6 +83,29 @@ namespace Teleopti.Ccc.WebTest.Core
 			filter.OnActionExecuting(context);
 
 			context.Response.IsSuccessStatusCode.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldIgnoreCheckWhenRequestIsNull()
+		{
+			var context = new HttpActionContext();
+			var filter = new CsrfFilterHttp();
+			filter.OnActionExecuting(context);
+
+			context.Response.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldCreateResponseWhenNotSet()
+		{
+			var context = CreateExecutedContext();
+			context.Request.RequestUri = new Uri("http://wfmserver1/teleoptiwfm");
+			context.Request.Headers.Add("Origin", "http://wfmserver2/test/2");
+			context.Response = null;
+			var filter = new CsrfFilterHttp();
+			filter.OnActionExecuting(context);
+
+			context.Response.IsSuccessStatusCode.Should().Be.False();
 		}
 
 		private HttpActionContext CreateExecutedContext()

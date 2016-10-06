@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Web.Http.Controllers;
 using System.Web.Mvc;
 
@@ -12,6 +13,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		public override void OnActionExecuting(HttpActionContext actionContext)
 		{
 			base.OnActionExecuting(actionContext);
+			if (actionContext?.Request == null) return;
 
 			var referrer = actionContext.Request.Headers.Referrer;
 			IEnumerable<string> foundValues;
@@ -25,6 +27,10 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			}
 			if (referrer != null && referrer.IsAbsoluteUri && referrer.Host != actionContext.Request.RequestUri.Host)
 			{
+				if (actionContext.Response == null)
+				{
+					actionContext.Response = new HttpResponseMessage();
+				}
 				actionContext.Response.StatusCode = HttpStatusCode.Forbidden;
 			}
 		}
