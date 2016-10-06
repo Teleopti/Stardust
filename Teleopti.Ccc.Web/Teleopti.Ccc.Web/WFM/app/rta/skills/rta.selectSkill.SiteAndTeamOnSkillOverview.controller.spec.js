@@ -103,9 +103,10 @@ fdescribe('RtaSiteAndTeamOnSkillOverviewCtrl', function () {
 				});
 			});
 			expect(scope.sites[0].OutOfAdherence).toEqual(5);
+			expect(scope.sites[0].Name).toEqual("Paris");
 	});
 
-	xit('should display agents out of adherence in sites for selected skill', function () {
+	it('should display agents out of adherence in sites for pre selected skill', function () {
 		stateParams.skillId= "emailSkillGuid";
 		$fakeBackend
 		.withSite({
@@ -127,7 +128,71 @@ fdescribe('RtaSiteAndTeamOnSkillOverviewCtrl', function () {
 				SkillId: "emailSkillGuid"
 			});
 
-		$controllerBuilder.createController();
+		$controllerBuilder.createController().wait(5000);
 			expect(scope.sites[0].OutOfAdherence).toEqual(5);
+	});
+
+	it('should display teams for pre selected skill and sites', function () {
+		stateParams.skillId= "EmailSkillGuid";
+		stateParams.siteIds = ["ParisGuid"];
+		$fakeBackend
+			.withTeam({
+				Id: "LondonTeamGuid",
+				Name: "London Team",
+				SiteId:"LondonGuid"
+			})
+			.withTeam({
+				Id: "ParisTeamGuid",
+				Name: "Paris Team",
+				SiteId:"ParisGuid"
+			})
+			.withTeamAdherenceForSkill({
+				Id: "LondonTeamGuid",
+				OutOfAdherence: 1,
+				SkillId: "PhoneSkillGuid"
+			})
+			.withTeamAdherenceForSkill({
+				Id: "ParisTeamGuid",
+				OutOfAdherence: 5,
+				SkillId: "EmailSkillGuid"
+			});
+
+			$controllerBuilder.createController()
+			.wait(5000);
+
+			expect(scope.teams.length).toEqual(1);
+			//expect(scope.teams[0].OutOfAdherence).toEqual(5);
+			expect(scope.teams[0].Name).toEqual("Paris Team");
+	});
+
+	it('should display agents out of adherence in teams for pre selected skill and sites', function () {
+		stateParams.skillId= "EmailSkillGuid";
+		stateParams.siteIds = ["ParisGuid"];
+		$fakeBackend
+			.withTeam({
+				Id: "LondonTeamGuid",
+				Name: "London Team",
+				SiteId:"LondonGuid"
+			})
+			.withTeam({
+				Id: "ParisTeamGuid",
+				Name: "Paris Team",
+				SiteId:"ParisGuid"
+			})
+			.withTeamAdherenceForSkill({
+				Id: "LondonTeamGuid",
+				OutOfAdherence: 1,
+				SkillId: "PhoneSkillGuid"
+			})
+			.withTeamAdherenceForSkill({
+				Id: "ParisTeamGuid",
+				OutOfAdherence: 5,
+				SkillId: "EmailSkillGuid"
+			});
+
+			$controllerBuilder.createController()
+			.wait(5000);
+
+			expect(scope.teams[0].OutOfAdherence).toEqual(5);
 	});
 });

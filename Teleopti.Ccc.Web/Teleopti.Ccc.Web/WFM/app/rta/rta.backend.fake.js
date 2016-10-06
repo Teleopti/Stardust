@@ -19,6 +19,8 @@
 					var skillAreas = [];
 					var phoneStates = [];
 					var siteAdherencesForSkill = [];
+					var teamAdherencesForSkill = [];
+
 					var paramsOf = function(url) {
 						var result = {};
 						var queryString = url.split("?")[1];
@@ -294,15 +296,20 @@
 							return [200, sites];
 						});
 
-					function getSiteAdherenceForSkill(theSkillId) {
-						return siteAdherencesForSkill.filter(function(sa){
+					function getSiteOrTeamAdherenceForSkill(collection, theSkillId) {
+						return collection.filter(function(sa){
 							return sa.SkillId === theSkillId;
 						});
 					};
 
+					fake(/\.\.\/api\/GetOutOfAdherenceForAllSitesBySkill(.*)/,
+						function(params) {
+							return [200, getSiteOrTeamAdherenceForSkill(siteAdherencesForSkill, params.skillId)];
+						});
+
 					fake(/\.\.\/api\/SitesForSkill(.*)/,
 						function(params) {
-							var filteredSiteIds = getSiteAdherenceForSkill(params.skillId)
+							var filteredSiteIds = getSiteOrTeamAdherenceForSkill(siteAdherencesForSkill, params.skillId)
 							.map(function(fsa){
 								return fsa.Id;
 							});
@@ -312,9 +319,21 @@
 							return [200, filteredSites];
 					});
 
-				fake(/\.\.\/api\/Sites\/GetOutOfAdherenceForAllSitesBySkill(.*)/,
-					function(params) {
-						return [200, getSiteAdherenceForSkill(params.skillId)];
+					fake(/\.\.\/api\/GetOutOfAdherenceForAllTeamsOnSitesBySkill(.*)/,
+						function(params) {
+							return [200, getSiteOrTeamAdherenceForSkill(teamAdherencesForSkill, params.skillId)];
+						});
+
+					fake(/\.\.\/api\/TeamsForSitesAndSkill(.*)/,
+						function(params) {
+							var filteredTeamIds = getSiteOrTeamAdherenceForSkill(teamAdherencesForSkill, params.skillId)
+							.map(function(fta){
+								return fta.Id;
+							});
+							var filteredTeams= teams.filter(function(t){
+								return filteredTeamIds.indexOf(t.Id) > -1;
+							});
+							return [200, filteredTeams];
 					});
 
 				fake(/\.\.\/api\/Sites\/GetOutOfAdherenceForAllSites(.*)/,
@@ -368,6 +387,7 @@
 					skillAreas = [];
 					phoneStates = [];
 					siteAdherencesForSkill = [];
+					teamAdherencesForSkill = [];
 				}
 
 				this.withToggle = function(toggle) {
@@ -432,6 +452,11 @@
 
 				this.withTeam = function(team) {
 					teams.push(team);
+					return this;
+				};
+
+				this.withTeamAdherenceForSkill = function(teamAdherenceForSkill) {
+					teamAdherencesForSkill.push(teamAdherenceForSkill);
 					return this;
 				};
 
