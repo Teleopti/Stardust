@@ -1,17 +1,14 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.InfrastructureTest.Persisters.Schedules;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 {
 	[TestFixture]
-	[Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733)]
 	[ScheduleDictionaryPersistTest]
 	public class TransactionHookInvokationScheduleTest
 	{

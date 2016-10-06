@@ -44,7 +44,6 @@ Wfm_MinimumScaffolding_32659 = RC
 Wfm_ResourcePlanner_32892 = true
 Wfm_ChangePlanningPeriod_33043 = true
 MyTimeWeb_ShowSeatBookingMonthView_39068 = true
-MessageBroker_SchedulingScreenMailbox_32733 = true
 RTA_ScheduleProjectionReadOnlyHangfire_35703 = true
 
 RTA_Optimize_39667 = true

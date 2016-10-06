@@ -1,20 +1,16 @@
 using System;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.MessagingTest.Http.Mailbox
 {
 	[TestFixture]
 	[MessagingTest]
-	[Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733)]
 	public class SubscriptionsTest
 	{
 		public IMessageListener Client;

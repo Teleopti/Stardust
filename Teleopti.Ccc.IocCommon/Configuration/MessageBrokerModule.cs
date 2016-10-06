@@ -74,8 +74,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<SystemCheckerValidator>();
 			builder.RegisterType<CheckMessageBroker>().As<ISystemCheck>();
-			if (_configuration.Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
-				builder.RegisterType<CheckMessageBrokerMailBox>().As<ISystemCheck>();
+			builder.RegisterType<CheckMessageBrokerMailBox>().As<ISystemCheck>();
 		}
 	}
 }

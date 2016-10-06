@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.MessageBroker.Scheduling;
 using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
 
@@ -21,11 +20,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
             builder.RegisterType<MeetingRefresher>().As<IMeetingRefresher>();
             builder.RegisterType<PersonRequestRefresher>().As<IPersonRequestRefresher>();
             builder.RegisterType<ScheduleScreenRefresher>().As<IScheduleScreenRefresher>();
-
-		    if (_configuration.Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
-			    builder.RegisterType<MailboxSubscriber>().As<IScheduleMessageSubscriber>().SingleInstance();
-		    else
-				builder.RegisterType<SignalRSubscriber>().As<IScheduleMessageSubscriber>().SingleInstance();
+			builder.RegisterType<MailboxSubscriber>().As<IScheduleMessageSubscriber>().SingleInstance();
         }
     }
 }

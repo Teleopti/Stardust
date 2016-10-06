@@ -32,10 +32,6 @@
 		RTA_FasterUpdateOfScheduleChanges_40536,
 		RTA_SiteAndTeamOnSkillOverview_40817,
 
-
-
-		MessageBroker_SchedulingScreenMailbox_32733,
-
 		Portal_NewLandingpage_29415,
 		Show_StaticPageOnNoInternet_29415,
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
