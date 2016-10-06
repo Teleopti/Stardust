@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var unmergedIntervalChanges = new List<StaffingIntervalChange>();
 			foreach (var period in periods)
 			{
-				var staffingIntervalsInPeriod = skillStaffingIntervals.Where(x => period.Overlaps(new DateTimePeriod(x.StartDateTime, x.EndDateTime))).ToList(); 
+				var staffingIntervalsInPeriod = skillStaffingIntervals.Where(x => period.Intersect(new DateTimePeriod(x.StartDateTime, x.EndDateTime))).ToList(); 
 				var totaloverstaffing = staffingIntervalsInPeriod.Sum(interval => interval.StaffingLevel - interval.ForecastWithShrinkage);
 				unmergedIntervalChanges.AddRange(staffingIntervalsInPeriod.Select(skillStaffingInterval => new StaffingIntervalChange()
 																				  {
@@ -55,7 +55,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		private static double getStaffingFactor(DateTimePeriod period, DateTimePeriod requestPeriod)
 		{
-			var factor = (double) requestPeriod.EndDateTime.Subtract(requestPeriod.StartDateTime).Ticks/period.EndDateTime.Subtract(period.StartDateTime).Ticks;
+			var overlappingPeriod = period.Intersection(requestPeriod);
+			double factor = 0;
+			if (overlappingPeriod.HasValue)
+			{
+				var overlappingTimeSpan = overlappingPeriod.Value.EndDateTime.Subtract(overlappingPeriod.Value.StartDateTime);
+				var periodTimeSpan = period.EndDateTime.Subtract(period.StartDateTime);
+				factor = (double)overlappingTimeSpan.Ticks/periodTimeSpan.Ticks;
+			}
+		//	var factor = (double) requestPeriod.EndDateTime.Subtract(requestPeriod.StartDateTime).Ticks/period.EndDateTime.Subtract(period.StartDateTime).Ticks;
 			return factor < 1 ? factor : 1;
 		}
 
@@ -68,8 +76,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				if (interval.GetTimeSpan() > shortestPeriod)
 				{
 					var period = new DateTimePeriod(interval.StartDateTime, interval.EndDateTime);
-					var intervalsInPeriod = unmergedIntervalChanges.Where(x => (period.Overlaps(new DateTimePeriod(x.StartDateTime, x.EndDateTime)) && x.SkillId == interval.SkillId)).ToList();
-					var sumOverstaffed = intervalsInPeriod.Sum(i => i.StaffingLevel)*intervalsInPeriod.Count()/interval.GetTimeSpanFactor(shortestPeriod);
+					var intervalsInPeriod = unmergedIntervalChanges.Where(x => period.Intersect(new DateTimePeriod(x.StartDateTime, x.EndDateTime)) && x.SkillId == interval.SkillId).ToList();
+					var sumOverstaffed = intervalsInPeriod.Sum(i => i.StaffingLevel)/interval.divideBy(shortestPeriod);
 
 					var staffingIntervalChange = new StaffingIntervalChange()
 					{

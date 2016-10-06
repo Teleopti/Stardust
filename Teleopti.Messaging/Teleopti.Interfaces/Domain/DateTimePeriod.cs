@@ -758,12 +758,5 @@ namespace Teleopti.Interfaces.Domain
             }
             return timePeriods;
         }
-
-
-
-		public bool Overlaps(DateTimePeriod other)
-		{
-			return !(EndDateTime <= other.StartDateTime || other.EndDateTime <= StartDateTime);
-		}
 	}
 }

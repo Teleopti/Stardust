@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return EndDateTime.Subtract(StartDateTime);
 		}
 
-		public double GetTimeSpanFactor(TimeSpan ts)
+		public double divideBy(TimeSpan ts)
 		{
 			return (double)GetTimeSpan().Ticks/ts.Ticks;
 		}
