@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -102,6 +104,12 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 			{
 				var absence = AbsenceRepository.Get(new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F"));
 				var person = PersonRepository.Get(new Guid("FBA68B4E-AFB2-4502-880E-A39D008D7F86")); //Viktor Hansson, NAY209, FL_Sup_Far1_00065
+				var personPeriod = (PersonPeriod)person.PersonPeriodCollection.First();
+
+				foreach (var skill in person.Period(new DateOnly(2016,03,15)).PersonSkillCollection.Where(y => !(y.Skill.CascadingIndex > 0)))
+				{
+					personPeriod.DeletePersonSkill(skill);
+				}
 
 				var wfcs = WorkflowControlSetRepository.Get(new Guid("E97BC114-8939-4A70-AE37-A338010FFF19")); //Consumer Support
 				foreach (var period in wfcs.AbsenceRequestOpenPeriods)

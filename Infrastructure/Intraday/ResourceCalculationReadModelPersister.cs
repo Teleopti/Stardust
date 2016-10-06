@@ -95,7 +95,8 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 		{
 			var result = ((NHibernateUnitOfWork) _currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
 				@"SELECT 
-			[StartDateTime]
+				[SkillId]
+			,[StartDateTime]
 			,[EndDateTime]
 			,[Forecast]
 			,[StaffingLevel],
@@ -109,7 +110,8 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 				.AddScalar("Forecast", NHibernateUtil.Double)
 				.AddScalar("StaffingLevel", NHibernateUtil.Double)
                 .AddScalar("ForecastWithShrinkage", NHibernateUtil.Double)
-                .SetDateTime("startDateTime", startDateTime)
+				.AddScalar("SkillId", NHibernateUtil.Guid)
+				.SetDateTime("startDateTime", startDateTime)
 				.SetDateTime("endDateTime", endDateTime)
 				.SetGuid("skillId", skillId)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (SkillStaffingInterval)))

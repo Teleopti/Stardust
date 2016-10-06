@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -10,18 +11,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	public class ResourceAllocator
 	{
 		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
+		private readonly INow _now;
 
-		public ResourceAllocator(IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository)
+		public ResourceAllocator(IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, INow now)
 		{
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
+			_now = now;
 		}
 
 		public IEnumerable<StaffingIntervalChange> AllocateResource(IPersonRequest personRequest)
 		{
 			//Get skillStaffingIntervals 
-			var cascadingPersonSkills = personRequest.Person.Period(DateOnly.Today).CascadingSkills();
+			var cascadingPersonSkills = personRequest.Person.Period(new DateOnly(_now.UtcDateTime())).CascadingSkills();
 			var lowestIndex = cascadingPersonSkills.Min(x => x.Skill.CascadingIndex);
-			var skills = personRequest.Person.Period(DateOnly.Today).PersonSkillCollection.Select(x => x.Skill).Where(y => !y.IsCascading() || y.CascadingIndex == lowestIndex);
+			var skills = personRequest.Person.Period(new DateOnly(_now.UtcDateTime())).PersonSkillCollection.Select(x => x.Skill).Where(y => !y.IsCascading() || y.CascadingIndex == lowestIndex);
 			var skillStaffingIntervals = new List<SkillStaffingInterval>();
 
 			foreach (var skill in skills)
@@ -36,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var unmergedIntervalChanges = new List<StaffingIntervalChange>();
 			foreach (var period in periods)
 			{
-				var staffingIntervalsInPeriod = skillStaffingIntervals.Where(x => period.Intersect(new DateTimePeriod(x.StartDateTime, x.EndDateTime))).ToList(); 
+				var staffingIntervalsInPeriod = skillStaffingIntervals.Where(x => period.Intersect(new DateTimePeriod(x.StartDateTime.Utc(), x.EndDateTime.Utc()))).ToList(); 
 				var totaloverstaffing = staffingIntervalsInPeriod.Sum(interval => interval.StaffingLevel - interval.ForecastWithShrinkage);
 				unmergedIntervalChanges.AddRange(staffingIntervalsInPeriod.Select(skillStaffingInterval => new StaffingIntervalChange()
 																				  {
@@ -75,8 +78,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			{
 				if (interval.GetTimeSpan() > shortestPeriod)
 				{
-					var period = new DateTimePeriod(interval.StartDateTime, interval.EndDateTime);
-					var intervalsInPeriod = unmergedIntervalChanges.Where(x => period.Intersect(new DateTimePeriod(x.StartDateTime, x.EndDateTime)) && x.SkillId == interval.SkillId).ToList();
+					var period = new DateTimePeriod(interval.StartDateTime.Utc(), interval.EndDateTime.Utc());
+					var intervalsInPeriod = unmergedIntervalChanges.Where(x => period.Intersect(new DateTimePeriod(x.StartDateTime.Utc(), x.EndDateTime.Utc())) && x.SkillId == interval.SkillId).ToList();
 					var sumOverstaffed = intervalsInPeriod.Sum(i => i.StaffingLevel)/interval.divideBy(shortestPeriod);
 
 					var staffingIntervalChange = new StaffingIntervalChange()
@@ -104,13 +107,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var intervalWithShortestSkillInterval = skillStaffingIntervals.Aggregate((interval, nextInterval) => interval.GetTimeSpan() < nextInterval.GetTimeSpan() ? interval : nextInterval);
 			var shortestTimeSpan = intervalWithShortestSkillInterval.GetTimeSpan();
 
-			var ret = new List<DateTimePeriod>(){new DateTimePeriod(period.StartDateTime, period.StartDateTime.Add(shortestTimeSpan))};
+			var ret = new List<DateTimePeriod>(){new DateTimePeriod(period.StartDateTime.Utc(), period.StartDateTime.Add(shortestTimeSpan).Utc())};
 			
 			while (ret.Last().EndDateTime < period.EndDateTime)
 			{
 				var startDateTime = ret.Last().EndDateTime;
 				var endDateTime = startDateTime.Add(shortestTimeSpan);
-				ret.Add(new DateTimePeriod(startDateTime, endDateTime));
+				ret.Add(new DateTimePeriod(startDateTime.Utc(), endDateTime.Utc()));
 			}
 			return ret;
 		}

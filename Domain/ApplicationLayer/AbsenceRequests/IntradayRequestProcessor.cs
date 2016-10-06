@@ -21,25 +21,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
 		private readonly ResourceAllocator _resourceAllocator;
+		private readonly INow _now;
 
-		public IntradayRequestProcessor(ICommandDispatcher commandDispatcher, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, ResourceAllocator resourceAllocator)
+		public IntradayRequestProcessor(ICommandDispatcher commandDispatcher, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, ResourceAllocator resourceAllocator, INow now)
 		{
 			_commandDispatcher = commandDispatcher;
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 			_resourceAllocator = resourceAllocator;
+			_now = now;
 		}
 
 		public void Process(IPersonRequest personRequest)
 		{
 			personRequest.Pending();
-			var cascadingPersonSkills = personRequest.Person.Period(DateOnly.Today).CascadingSkills();
+			var cascadingPersonSkills = personRequest.Person.Period(new DateOnly(_now.UtcDateTime())).CascadingSkills();
 			var lowestIndex = cascadingPersonSkills.Min(x => x.Skill.CascadingIndex);
 			
 			var primaryAndUnSortedSkills =
-				personRequest.Person.Period(DateOnly.Today).PersonSkillCollection.Where(x => (x.Skill.CascadingIndex == lowestIndex) || !x.Skill.CascadingIndex.HasValue );
-			foreach (var primarySkill in primaryAndUnSortedSkills)
+				personRequest.Person.Period(new DateOnly(_now.UtcDateTime())).PersonSkillCollection.Where(x => (x.Skill.CascadingIndex == lowestIndex) || !x.Skill.CascadingIndex.HasValue );
+			foreach (var skill in primaryAndUnSortedSkills)
 			{
-				var skillStaffingIntervals = getSkillStaffIntervals(primarySkill.Skill.Id.GetValueOrDefault(), personRequest.Request.Period);
+				var skillStaffingIntervals = getSkillStaffIntervals(skill.Skill.Id.GetValueOrDefault(), personRequest.Request.Period);
 				var underStaffingDetails = getUnderStaffedPeriods(skillStaffingIntervals);
 				if (underStaffingDetails.UnderstaffingTimes.Any())
 				{
