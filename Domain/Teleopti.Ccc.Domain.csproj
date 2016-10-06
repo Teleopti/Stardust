@@ -2124,9 +2124,6 @@
     <Compile Include="Security\LicenseOptions\TeleoptiCccOvertimeAvailabilityLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccSmsLinkLicenseOption.cs" />
     <Compile Include="Security\LicenseStatus.cs" />
-    <Compile Include="Security\IOneWayEncryption.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Security\ISystemUserSpecification.cs" />
     <Compile Include="Security\Matrix\ApplicationFunctionResolver.cs" />
     <Compile Include="Security\AuthorizationData\ShippedApplicationRoleNames.cs" />
@@ -2159,9 +2156,6 @@
     <Compile Include="Security\MultiTenancyAuthentication\ITenantLogonDataManager.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\LogonInfoModel.cs" />
     <Compile Include="Security\DataSourceConfigDecryption.cs" />
-    <Compile Include="Security\OneWayEncryption.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Security\PasswordPolicy.cs" />
     <Compile Include="Security\PasswordStrengthRule.cs" />
     <Compile Include="Security\Matrix\MatrixPermissionsResolver.cs" />

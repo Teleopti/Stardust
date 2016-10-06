@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Infrastructure.Security;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<OneWayEncryption>()
-                .As<IOneWayEncryption>()
+                .As<IPasswordHashFunction>()
                 .SingleInstance();
         }
     }

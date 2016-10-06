@@ -14,6 +14,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -91,7 +92,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LoggedOnUser>().As<ILoggedOnUser>().SingleInstance();
 			builder.RegisterType<UserTimeZone>().As<IUserTimeZone>().SingleInstance();
 			
-			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();
 			builder.RegisterType<CurrentIdentity>().As<ICurrentIdentity>().SingleInstance();
 			builder.RegisterType<UpdatedBy>()
 				.As<IUpdatedBy>()

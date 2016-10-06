@@ -6,10 +6,10 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.MultiTenancy;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Hangfire;
 using Teleopti.Wfm.Administration.Models;
@@ -21,7 +21,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
 		private readonly IHangfireCookie _hangfireCookie;
-		private readonly IOneWayEncryption _oneWayEncryption = new OneWayEncryption();
+		private readonly IPasswordHashFunction _oneWayEncryption = new OneWayEncryption();
 
 		public AccountController(ICurrentTenantSession currentTenantSession, IHangfireCookie hangfireCookie)
 		{
@@ -39,7 +39,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if (string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password))
 				return Json(new LoginResult { Success = false, Message = "Both user name and password must be provided." });
 
-			var hashed = _oneWayEncryption.EncryptString(model.Password);
+			var hashed = _oneWayEncryption.CreateHash(model.Password);
 
 			string sql = "SELECT Id, Name, AccessToken FROM Tenant.AdminUser WHERE  Email=@email AND Password=@password";
 			using (var sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString))
@@ -198,8 +198,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			try
 			{
-				var encryptedPassword = _oneWayEncryption.EncryptString(model.Password);
-				var token = _oneWayEncryption.EncryptString(model.Email);
+				var encryptedPassword = _oneWayEncryption.CreateHash(model.Password);
+				var token = _oneWayEncryption.CreateHash(model.Email);
 				var user = new TenantAdminUser
 				{
 					Email = model.Email,
@@ -237,7 +237,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return Json(new UpdateUserResultModel { Success = false, Message = "Can not find the user." });
 
 			
-			var hashed = _oneWayEncryption.EncryptString(model.OldPassword);
+			var hashed = _oneWayEncryption.CreateHash(model.OldPassword);
 			if (!hashed.Equals(user.Password))
 				return Json(new UpdateUserResultModel { Success = false, Message = "The password is not correct." });
 
@@ -246,7 +246,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			try
 			{
-				var encryptedPassword = _oneWayEncryption.EncryptString(model.NewPassword);
+				var encryptedPassword = _oneWayEncryption.CreateHash(model.NewPassword);
 
 				user.Password = encryptedPassword;
 

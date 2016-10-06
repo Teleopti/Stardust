@@ -1,4 +1,4 @@
-﻿using Teleopti.Ccc.Domain.Security;
+﻿using Teleopti.Ccc.Infrastructure.Security;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		public static string ToDbFormat(string visiblePassword)
 		{
-			return new OneWayEncryption().EncryptString(visiblePassword);
+			return new OneWayEncryption().CreateHash(visiblePassword);
 		}
 	}
 }

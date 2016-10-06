@@ -393,6 +393,10 @@
       <Project>{cf33f7a6-78d3-4167-a42d-20e453f8b1b6}</Project>
       <Name>Teleopti.Ccc.DBManager.Library</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Infrastructure.Security\Teleopti.Ccc.Infrastructure.Security.csproj">
+      <Project>{50B5A39C-88B6-469E-84F1-D42A5DAEAC6E}</Project>
+      <Name>Teleopti.Ccc.Infrastructure.Security</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>

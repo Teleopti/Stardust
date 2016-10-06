@@ -1,12 +1,12 @@
 using System;
-using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public class ApplicationLogonInfo
 	{
-		private static readonly OneWayEncryption oneWayEncryption = new OneWayEncryption();
+		private static readonly IPasswordHashFunction passwordHashFunction = new OneWayEncryption();
 
 		public ApplicationLogonInfo()
 		{
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		{
 			checkPasswordStrength.Validate(newPassword);
 			//todo: tenant get rid of domain dependency here
-			LogonPassword = new OneWayEncryption().EncryptString(newPassword);
+			LogonPassword = passwordHashFunction.CreateHash(newPassword);
 		}
 
 		public virtual void Lock()
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			if (LogonName == null)
 				return false;
 
-			var encryptedPassword = oneWayEncryption.EncryptString(unencryptedPassword);
+			var encryptedPassword = passwordHashFunction.CreateHash(unencryptedPassword);
 
 			var utcNow = now.UtcDateTime();
 			if (utcNow > InvalidAttemptsSequenceStart.Add(passwordPolicy.InvalidAttemptWindow))

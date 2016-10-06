@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using Autofac;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.IocCommon.Configuration;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
             containerBuilder.RegisterModule(new EncryptionModule());
             using(var container = containerBuilder.Build())
             {
-                var encryption = container.Resolve<IOneWayEncryption>();
+                var encryption = container.Resolve<IPasswordHashFunction>();
 
                 Assert.IsNotNull(encryption);
             }            

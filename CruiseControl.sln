@@ -213,6 +213,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestApplications", "TestApp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.IntegrationTest", "Teleopti.Ccc.Web\Teleopti.Ccc.Web.IntegrationTest\Teleopti.Ccc.Web.IntegrationTest.csproj", "{D61286BC-ADC7-44DB-860C-AAAF6707EA6D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Infrastructure.Security", "Teleopti.Ccc.Infrastructure.Security\Teleopti.Ccc.Infrastructure.Security.csproj", "{50B5A39C-88B6-469E-84F1-D42A5DAEAC6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Infrastructure.SecurityTest", "Teleopti.Ccc.Infrastructure.SecurityTest\Teleopti.Ccc.Infrastructure.SecurityTest.csproj", "{74915EF1-0759-4E25-A521-5A2F67B6F6A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -1153,6 +1157,38 @@ Global
 		{D61286BC-ADC7-44DB-860C-AAAF6707EA6D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D61286BC-ADC7-44DB-860C-AAAF6707EA6D}.Release|x86.ActiveCfg = Release|Any CPU
 		{D61286BC-ADC7-44DB-860C-AAAF6707EA6D}.Release|x86.Build.0 = Release|Any CPU
+		{50B5A39C-88B6-469E-84F1-D42A5DAEAC6E}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{50B5A39C-88B6-469E-84F1-D42A5DAEAC6E}.Debug|.NET.Build.0 = Debug|Any CPU
+		{50B5A39C-88B6-469E-84F1-D42A5DAEAC6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50B5A39C-88B6-469E-84F1-D42A5DAEAC6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50B5A39C-88B6-469E-84F1-D42A5DAEAC6E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{50B5A39C-88B6-469E-84F1-D42A5DAEAC6E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{50B5A39C-88B6-469E-84F1-D42A5DAEAC6E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{50B5A39C-88B6-469E-84F1-D42A5DAEAC6E}.Debug|x86.Build.0 = Debug|Any CPU
+		{50B5A39C-88B6-469E-84F1-D42A5DAEAC6E}.Release|.NET.ActiveCfg = Release|Any CPU
+		{50B5A39C-88B6-469E-84F1-D42A5DAEAC6E}.Release|.NET.Build.0 = Release|Any CPU
+		{50B5A39C-88B6-469E-84F1-D42A5DAEAC6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50B5A39C-88B6-469E-84F1-D42A5DAEAC6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50B5A39C-88B6-469E-84F1-D42A5DAEAC6E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{50B5A39C-88B6-469E-84F1-D42A5DAEAC6E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{50B5A39C-88B6-469E-84F1-D42A5DAEAC6E}.Release|x86.ActiveCfg = Release|Any CPU
+		{50B5A39C-88B6-469E-84F1-D42A5DAEAC6E}.Release|x86.Build.0 = Release|Any CPU
+		{74915EF1-0759-4E25-A521-5A2F67B6F6A1}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{74915EF1-0759-4E25-A521-5A2F67B6F6A1}.Debug|.NET.Build.0 = Debug|Any CPU
+		{74915EF1-0759-4E25-A521-5A2F67B6F6A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74915EF1-0759-4E25-A521-5A2F67B6F6A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74915EF1-0759-4E25-A521-5A2F67B6F6A1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{74915EF1-0759-4E25-A521-5A2F67B6F6A1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{74915EF1-0759-4E25-A521-5A2F67B6F6A1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{74915EF1-0759-4E25-A521-5A2F67B6F6A1}.Debug|x86.Build.0 = Debug|Any CPU
+		{74915EF1-0759-4E25-A521-5A2F67B6F6A1}.Release|.NET.ActiveCfg = Release|Any CPU
+		{74915EF1-0759-4E25-A521-5A2F67B6F6A1}.Release|.NET.Build.0 = Release|Any CPU
+		{74915EF1-0759-4E25-A521-5A2F67B6F6A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74915EF1-0759-4E25-A521-5A2F67B6F6A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74915EF1-0759-4E25-A521-5A2F67B6F6A1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{74915EF1-0759-4E25-A521-5A2F67B6F6A1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{74915EF1-0759-4E25-A521-5A2F67B6F6A1}.Release|x86.ActiveCfg = Release|Any CPU
+		{74915EF1-0759-4E25-A521-5A2F67B6F6A1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1189,10 +1225,11 @@ Global
 		{DF7B23CB-0FDA-4C03-93EA-3A136C6D7A7B} = {3927D214-3A04-4289-8083-7F56FADC19FC}
 		{AA2B64E2-1EF7-4242-916F-815411F23E66} = {3927D214-3A04-4289-8083-7F56FADC19FC}
 		{D61286BC-ADC7-44DB-860C-AAAF6707EA6D} = {FEFF4A24-4851-4A21-BF0F-68A36655E0E7}
+		{74915EF1-0759-4E25-A521-5A2F67B6F6A1} = {5AC253DA-DE38-4EB4-8ECB-4E5E332D6011}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45;packages\EnterpriseLibrary.TransientFaultHandling.WindowsAzure.Storage.6.0.1304.0\lib\NET45
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
 	EndGlobalSection
 	GlobalSection(TextTemplating) = postSolution
 		TextTemplating = 1
