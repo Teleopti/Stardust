@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
 	[DatabaseTest]
-	[Toggle(Toggles.RTA_ScheduleProjectionReadOnlyHangfire_35703)]
 	public class ScheduleProjectionReadOnlyConcurrencyTest : ISetup
 	{
 		public void Setup(ISystem system, IIocConfiguration configuration)

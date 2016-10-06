@@ -2,69 +2,33 @@
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
 {
-	[EnabledBy(Toggles.RTA_ScheduleProjectionReadOnlyHangfire_35703)]
 	public class ScheduleProjectionReadOnlyUpdater :
-		ScheduleProjectionReadOnlyUpdaterBase,
 		IHandleEvent<ProjectionChangedEventForScheduleProjection>,
 		IHandleEvent<ProjectionChangedEvent>,
 		IRunOnHangfire
 	{
-		public ScheduleProjectionReadOnlyUpdater(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, IEventPublisher eventPublisher)
-			: base(scheduleProjectionReadOnlyPersister, eventPublisher)
-		{
-		}
-
-		[UnitOfWork]
-		public override void Handle(ProjectionChangedEvent @event)
-		{
-			base.Handle(@event);
-		}
-
-		[UnitOfWork]
-		public override void Handle(ProjectionChangedEventForScheduleProjection @event)
-		{
-			base.Handle(@event);
-		}
-	}
-
-	[DisabledBy(Toggles.RTA_ScheduleProjectionReadOnlyHangfire_35703)]
-	public class ScheduleProjectionReadOnlyUpdaterBus:
-		ScheduleProjectionReadOnlyUpdaterBase,
-		IHandleEvent<ProjectionChangedEventForScheduleProjection>,
-		IHandleEvent<ProjectionChangedEvent>,
-#pragma warning disable 618
-		IRunOnServiceBus
-#pragma warning restore 618
-	{
-		public ScheduleProjectionReadOnlyUpdaterBus(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, IEventPublisher eventPublisher) : 
-			base(scheduleProjectionReadOnlyPersister, eventPublisher)
-		{
-		}
-	}
-
-	public class ScheduleProjectionReadOnlyUpdaterBase
-	{
 		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 		private readonly IEventPublisher _eventPublisher;
-		private readonly ILog logger = LogManager.GetLogger(typeof(ScheduleProjectionReadOnlyUpdaterBase));
+		private readonly ILog logger = LogManager.GetLogger(typeof(ScheduleProjectionReadOnlyUpdater));
 
-		public ScheduleProjectionReadOnlyUpdaterBase(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, IEventPublisher eventPublisher)
+		public ScheduleProjectionReadOnlyUpdater(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, IEventPublisher eventPublisher)
 		{
 			_scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
 			_eventPublisher = eventPublisher;
 		}
 
-		public virtual void Handle(ProjectionChangedEventForScheduleProjection @event)
+		[UnitOfWork]
+		public virtual void Handle(ProjectionChangedEvent @event)
 		{
 			handleProjectionChanged(@event);
 		}
 
-		public virtual void Handle(ProjectionChangedEvent @event)
+		[UnitOfWork]
+		public virtual void Handle(ProjectionChangedEventForScheduleProjection @event)
 		{
 			handleProjectionChanged(@event);
 		}
@@ -72,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		private void handleProjectionChanged(ProjectionChangedEventBase @event)
 		{
 			if (!@event.IsDefaultScenario) return;
-			
+
 			foreach (var scheduleDay in @event.ScheduleDays)
 			{
 				var date = new DateOnly(scheduleDay.Date);
@@ -92,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				{
 					logger.Error("Cannot add Schedule!", exception);
 				}
-				
+
 				if (scheduleDay.Shift == null) continue;
 
 				foreach (var layer in scheduleDay.Shift.Layers)
@@ -121,4 +85,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			});
 		}
 	}
+	
 }

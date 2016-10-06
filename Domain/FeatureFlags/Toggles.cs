@@ -19,7 +19,6 @@
 		Settings_AlertViaEmailFromSMSLink_30444,
 
 		RTA_AdherenceDetails_34267,
-		RTA_ScheduleProjectionReadOnlyHangfire_35703,
 		RTA_Optimize_39667,
 		RTA_RuleMappingOptimization_39812,
 		RTA_BatchConnectionOptimization_40116,

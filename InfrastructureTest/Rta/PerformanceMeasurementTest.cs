@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[MultiDatabaseTest]
-	[Toggle(Toggles.RTA_ScheduleProjectionReadOnlyHangfire_35703)]
 	[Toggle(Toggles.RTA_Optimize_39667)]
 	[Toggle(Toggles.RTA_RuleMappingOptimization_39812)]
 	[Toggle(Toggles.RTA_BatchConnectionOptimization_40116)]

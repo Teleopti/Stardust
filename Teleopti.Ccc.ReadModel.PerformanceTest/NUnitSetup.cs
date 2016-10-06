@@ -105,8 +105,6 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 
 		private readonly List<Toggles> enabledTogglesOnStartup = new List<Toggles>
 		{
-			Toggles.RTA_ScheduleProjectionReadOnlyHangfire_35703,
-
 			// Analytics stuff based on events
 			Toggles.ETL_SpeedUpIntradayBusinessUnit_38932,
 			Toggles.ETL_SpeedUpScenario_38300,

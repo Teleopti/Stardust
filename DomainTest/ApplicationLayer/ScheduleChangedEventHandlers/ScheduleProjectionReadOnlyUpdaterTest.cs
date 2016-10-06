@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	[TestFixture]
 	[DomainTest]
-	[Toggle(Toggles.RTA_ScheduleProjectionReadOnlyHangfire_35703)]
 	public class ScheduleProjectionReadOnlyUpdaterTest
 	{
 		public ScheduleProjectionReadOnlyUpdater Target;

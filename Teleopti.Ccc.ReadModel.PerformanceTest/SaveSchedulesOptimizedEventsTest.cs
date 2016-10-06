@@ -16,13 +16,11 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.ReadModel.PerformanceTest
 {
 	[TestFixture]
 	[PerformanceTest]
-	[Toggle(Toggles.RTA_ScheduleProjectionReadOnlyHangfire_35703)]
 	[Toggle(Toggles.ETL_SpeedUpIntradayBusinessUnit_38932)]
 	[Toggle(Toggles.ETL_SpeedUpScenario_38300)]
 	[Toggle(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
