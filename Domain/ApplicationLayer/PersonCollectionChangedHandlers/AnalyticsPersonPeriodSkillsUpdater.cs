@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		}
 
 		[AnalyticsUnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(AnalyticsPersonPeriodSkillsChangedEvent @event)
 		{
 			var personPeriodId = @event.AnalyticsPersonPeriodId;

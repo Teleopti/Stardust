@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 		[ImpersonateSystem]
 		[UnitOfWork]
 		[AnalyticsUnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(PersonRequestCreatedEvent @event)
 		{
 			handle(@event);
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 		[ImpersonateSystem]
 		[UnitOfWork]
 		[AnalyticsUnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(PersonRequestDeletedEvent @event)
 		{
 			handle(@event);
@@ -59,6 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 		[ImpersonateSystem]
 		[UnitOfWork]
 		[AnalyticsUnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(PersonRequestChangedEvent @event)
 		{
 			handle(@event);

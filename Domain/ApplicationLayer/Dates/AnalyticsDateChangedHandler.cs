@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Dates
 		}
 
 		[AnalyticsUnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(AnalyticsDatesChangedEvent @event)
 		{
 			// Use a distributed lock to make other events trying to update at the same time fail

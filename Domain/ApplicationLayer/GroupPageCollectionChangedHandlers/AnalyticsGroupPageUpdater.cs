@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 		[ImpersonateSystem]
 		[UnitOfWork]
 		[AnalyticsUnitOfWork]
+		[Attempts(10)]
 		public new virtual void Handle(GroupPageCollectionChangedEvent @event)
 		{
 			base.Handle(@event);

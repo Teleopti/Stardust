@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Workload
 		[ImpersonateSystem]
 		[UnitOfWork]
 		[AnalyticsUnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(WorkloadChangedEvent @event)
 		{
 			var workload = _workloadRepository.Get(@event.WorkloadId);

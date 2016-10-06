@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(PersonCollectionChangedEvent @event)
 		{
 			var persons = _personRepository.FindPeople(@event.PersonIdCollection.Distinct());

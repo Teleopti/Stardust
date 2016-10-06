@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.MultiplicatorDefinitionSetHandler
 		[ImpersonateSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(MultiplicatorDefinitionSetCreated @event)
 		{
 			logger.Debug($"Consuming {nameof(MultiplicatorDefinitionSetCreated)} for event id = {@event.MultiplicatorDefinitionSetId}.");
@@ -45,6 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.MultiplicatorDefinitionSetHandler
 		[ImpersonateSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(MultiplicatorDefinitionSetChanged @event)
 		{
 			logger.Debug($"Consuming {nameof(MultiplicatorDefinitionSetChanged)} for event id = {@event.MultiplicatorDefinitionSetId}.");
@@ -54,6 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.MultiplicatorDefinitionSetHandler
 		[ImpersonateSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(MultiplicatorDefinitionSetDeleted @event)
 		{
 			logger.Debug($"Consuming {nameof(MultiplicatorDefinitionSetDeleted)} for event id = {@event.MultiplicatorDefinitionSetId}.");

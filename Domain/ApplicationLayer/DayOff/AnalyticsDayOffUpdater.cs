@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.DayOff
 		[AsSystem]
 		[UnitOfWork]
 		[AnalyticsUnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(DayOffTemplateChangedEvent @event)
 		{
 			logger.Debug($"Consuming {nameof(DayOffTemplateChangedEvent)} for day off template id = {@event.DayOffTemplateId}.");

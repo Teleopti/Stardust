@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Activity
 		[AsSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(ActivityChangedEvent @event)
 		{
 			logger.Debug($"Consuming {nameof(ActivityChangedEvent)} for event id = {@event.ActivityId}.");

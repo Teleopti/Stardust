@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.BusinessUnit
 		}
 
 		[AnalyticsUnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(BusinessUnitChangedEvent @event)
 		{
 			logger.Info($"Consuming {nameof(BusinessUnitChangedEvent)} for BusinessUnit {@event.BusinessUnitName} ({@event.BusinessUnitId})");

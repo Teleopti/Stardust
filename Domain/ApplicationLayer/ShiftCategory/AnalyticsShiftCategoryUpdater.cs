@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategory
 		[ImpersonateSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(ShiftCategoryChangedEvent @event)
 		{
 			logger.Debug($"Consuming {nameof(AnalyticsShiftCategoryUpdater)} for shiftCategory id = {@event.ShiftCategoryId}. (Message timestamp = {@event.Timestamp})");
@@ -75,6 +76,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategory
 		}
 
 		[AnalyticsUnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(ShiftCategoryDeletedEvent @event)
 		{
 			logger.Debug($"Consuming {nameof(ShiftCategoryDeletedEvent)} for shift category id = {@event.ShiftCategoryId}. (Message timestamp = {@event.Timestamp})");

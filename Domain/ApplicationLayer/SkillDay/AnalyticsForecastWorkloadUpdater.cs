@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 		[ImpersonateSystem]
 		[UnitOfWork]
 		[AnalyticsUnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(SkillDayChangedEvent @event)
 		{
 			var skillDay = _skillDayRepository.Get(@event.SkillDayId);

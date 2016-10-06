@@ -78,6 +78,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 		[AsSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(PreferenceDeletedEvent @event)
 		{
 			logger.Debug($"Consuming deleted event for preference Id = {@event.PreferenceDayId}. (Message timestamp = {@event.Timestamp})");
@@ -96,6 +97,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 		[AsSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(PreferenceCreatedEvent @event)
 		{
 			logger.Debug($"Consuming created event for preference Id = {@event.PreferenceDayId}. (Message timestamp = {@event.Timestamp})");
@@ -106,6 +108,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 		[AsSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(PreferenceChangedEvent @event)
 		{
 			logger.Debug($"Consuming changed event for preference Id = {@event.PreferenceDayId}. (Message timestamp = {@event.Timestamp})");

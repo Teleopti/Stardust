@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Scenario
 		}
 
 		[AnalyticsUnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(ScenarioDeleteEvent @event)
 		{
 			logger.Debug($"Consuming {nameof(ScenarioDeleteEvent)} for scenario id = {@event.ScenarioId}. (Message timestamp = {@event.Timestamp})");
@@ -59,6 +60,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Scenario
 		[ImpersonateSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(ScenarioChangeEvent @event)
 		{
 			logger.Debug($"Consuming {nameof(ScenarioChangeEvent)} for scenario id = {@event.ScenarioId}. (Message timestamp = {@event.Timestamp})");

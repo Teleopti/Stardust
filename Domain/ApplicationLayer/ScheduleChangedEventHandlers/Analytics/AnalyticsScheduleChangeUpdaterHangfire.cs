@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		[ImpersonateSystem]
 		[UnitOfWork]
 		[AnalyticsUnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(ProjectionChangedEvent @event)
 		{
 			if (!_analyticsScheduleChangeUpdaterFilter.ContinueProcessingEvent(@event))

@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		}
 
 		[UnitOfWork, AnalyticsUnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(AnalyticsPersonCollectionChangedEvent @event)
 		{
 			logger.Debug($"Handle AnalyticsPersonCollectionChangedEvent for {@event.SerializedPeople}");

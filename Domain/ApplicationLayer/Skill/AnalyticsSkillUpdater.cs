@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Skill
 
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(SkillChangedEvent @event)
 		{
 			Handle(@event.SkillId);
@@ -68,6 +69,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Skill
 
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(SkillCreatedEvent @event)
 		{
 			Handle(@event.SkillId);
@@ -75,6 +77,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Skill
 
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(SkillDeletedEvent @event)
 		{
 			Handle(@event.SkillId);

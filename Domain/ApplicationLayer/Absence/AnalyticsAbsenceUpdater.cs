@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Absence
 		[ImpersonateSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(AbsenceChangedEvent @event)
 		{
 			logger.Debug($"Consuming {nameof(AbsenceChangedEvent)} for absence id = {@event.AbsenceId}. (Message timestamp = {@event.Timestamp})");
@@ -84,6 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Absence
 		}
 
 		[AnalyticsUnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(AbsenceDeletedEvent @event)
 		{
 			logger.Debug($"Consuming {nameof(AbsenceDeletedEvent)} for absence id = {@event.AbsenceId}. (Message timestamp = {@event.Timestamp})");
