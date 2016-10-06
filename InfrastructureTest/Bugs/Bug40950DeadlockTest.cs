@@ -82,9 +82,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 			agents = new List<IPerson>();
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
+				ScenarioRepository.Add(scenario);
 				for (var i = 0; i < numberOfAgents; i++)
 				{
-					ScenarioRepository.Add(scenario);
 					var agent = new Person();
 					agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 					PersonRepository.Add(agent);
