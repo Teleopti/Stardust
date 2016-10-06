@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// <summary>
     /// Tests for Multiplicator Repository.
     /// </summary>
-    [TestFixture, Category("LongRunning")]
+    [TestFixture, Category("BucketB")]
     public class MultiplicatorDefinitionSetRepositoryTest: RepositoryTest<IMultiplicatorDefinitionSet>
     {
         private IMultiplicator _multiplicator;

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Tests for ValidatedVolumeDayRepository
     /// </summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class ValidatedVolumeDayRepositoryTest : RepositoryTest<IValidatedVolumeDay>
     {
         /// <summary>

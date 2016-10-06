@@ -14,7 +14,7 @@ using Campaign = Teleopti.Ccc.Domain.Outbound.Campaign;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
     class OutboundCampaignRepositoryTest : RepositoryTest<IOutboundCampaign>
 	{
 		private SkillType _skillType;

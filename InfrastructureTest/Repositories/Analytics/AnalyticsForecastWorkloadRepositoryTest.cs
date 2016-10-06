@@ -10,7 +10,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	[AnalyticsDatabaseTest]
 	public class AnalyticsForecastWorkloadRepositoryTest
 	{

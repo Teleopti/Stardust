@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-    [TestFixture, Category("LongRunning")]
+    [TestFixture, Category("BucketB")]
     public class KpiTargetRepositoryTest : RepositoryTest<IKpiTarget>
     {
         private ITeam _team;

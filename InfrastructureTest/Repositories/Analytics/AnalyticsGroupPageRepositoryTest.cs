@@ -12,7 +12,7 @@ using BusinessUnit = Teleopti.Ccc.TestCommon.TestData.Analytics.BusinessUnit;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	[TestFixture]
 	[AnalyticsUnitOfWorkTest]
 	public class AnalyticsGroupPageRepositoryTest

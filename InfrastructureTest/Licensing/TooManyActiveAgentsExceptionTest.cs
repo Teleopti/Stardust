@@ -11,7 +11,7 @@ using Teleopti.Ccc.TestCommon;
 namespace Teleopti.Ccc.InfrastructureTest.Licensing
 {
     [TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
     public class TooManyActiveAgentsExceptionTest : ExceptionTest<TooManyActiveAgentsException>
     {
         /// <summary>

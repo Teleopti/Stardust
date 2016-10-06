@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Tests for AvailableData repository
     /// </summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class AvailableDataRepositoryTest : RepositoryTest<IAvailableData>
     {
         private AvailableDataRepository _target;

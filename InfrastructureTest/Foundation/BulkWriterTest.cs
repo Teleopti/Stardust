@@ -11,7 +11,7 @@ using Teleopti.Ccc.TestCommon.TestData.Analytics.Tables;
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	public class BulkWriterTest
 	{
 		private SqlTransaction _transaction;

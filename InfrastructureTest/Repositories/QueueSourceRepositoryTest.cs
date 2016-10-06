@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Test for QueueSourceRepository
     /// </summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class QueueSourceRepositoryTest : RepositoryTest<IQueueSource>
     {
         private QueueSourceRepository _target;

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Created date: 10/3/2008
     /// </remarks>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class ForecastProcessReportRepositoryTest : DatabaseTest
     {
         private ISkillType skillType;

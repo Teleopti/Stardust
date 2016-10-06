@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class LicenseRepositoryTest : RepositoryTest<ILicense>
     {
         private readonly string toVerify = Guid.NewGuid().ToString();

@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	public class PersonInApplicationRoleTest : DatabaseTestWithoutTransaction
 	{
 		private IDataSource dataSource;

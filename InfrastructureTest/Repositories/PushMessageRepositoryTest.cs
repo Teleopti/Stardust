@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class PushMessageRepositoryTest : RepositoryTest<IPushMessage>
     {
         private IPerson _sender;

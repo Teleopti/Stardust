@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Tests for MultisiteDayRepository
     /// </summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class MultisiteDayRepositoryTest : RepositoryTest<IMultisiteDay>
     {
         private IScenario _scenario;

@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	public abstract class AuditTest : DatabaseTestWithoutTransaction
 	{
 		protected IPersonAssignment PersonAssignment { get; private set; }

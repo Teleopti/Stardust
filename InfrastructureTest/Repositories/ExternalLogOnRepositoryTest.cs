@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Test for ExternalLogOnRepository
     /// </summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class ExternalLogOnRepositoryTest : RepositoryTest<IExternalLogOn>
     {
         /// <summary>

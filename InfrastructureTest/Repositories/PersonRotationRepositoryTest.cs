@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	/// Tests PersonRotationRepository
 	///</summary>
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	public class PersonRotationRepositoryTest : RepositoryTest<IPersonRotation>
 	{
 		private IPerson _person;

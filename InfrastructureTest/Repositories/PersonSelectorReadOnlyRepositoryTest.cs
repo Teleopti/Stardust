@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-	[TestFixture, Category("LongRunning")]
+	[TestFixture, Category("BucketB")]
 	public class PersonSelectorReadOnlyRepositoryTest : DatabaseTest
 	{
 		private PersonSelectorReadOnlyRepository _target;

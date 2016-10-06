@@ -9,7 +9,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DetailedAdherenceForDay
 {
-	[TestFixture, Category("LongRunning")]
+	[TestFixture, Category("BucketB")]
 	public class DisplayColorForDateTest : WebReportTest
 	{
 		private const int scheduledReadyTimeOneMinutes = 1;

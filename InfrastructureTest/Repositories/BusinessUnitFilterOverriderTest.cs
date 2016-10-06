@@ -11,7 +11,7 @@ using Teleopti.Ccc.TestCommon.TestData;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class BusinessUnitFilterOverriderTest : DatabaseTest
     {
         [Test]

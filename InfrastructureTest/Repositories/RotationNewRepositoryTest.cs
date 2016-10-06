@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Tests RotationRepository
     ///</summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class RotationNewRepositoryTest : RepositoryTest<IRotation>
     {
         private IShiftCategory _shiftCategory;

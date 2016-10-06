@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Tests ContractScheduleRepository
     ///</summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class ContractScheduleRepositoryTest : RepositoryTest<IContractSchedule>
     {
         /// <summary>

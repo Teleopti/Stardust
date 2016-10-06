@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	/// Tests for TeamRepository
 	/// </summary>
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	public class TeamRepositoryTest : RepositoryTest<ITeam>
 	{
 		private ISite teamSite;

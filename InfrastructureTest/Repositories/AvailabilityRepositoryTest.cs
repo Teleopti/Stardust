@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Tests AvailabilityRepository
     ///</summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class AvailabilityRepositoryTest : RepositoryTest<IAvailabilityRotation>
     {
 

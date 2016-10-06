@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	/// Tests ContractRepository
 	///</summary>
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	public class GamificationSettingRepositoryTest : RepositoryTest<IGamificationSetting>
 	{
 		private IGamificationSetting _gamificationSetting;

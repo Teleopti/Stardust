@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Tests ActivityRepository
     ///</summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class ActivityRepositoryTest : RepositoryTest<IActivity>
     {
         private IActivity _activity1;

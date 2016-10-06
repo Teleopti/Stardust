@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
     [TestFixture ]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class PayrollExportRepositoryTest : RepositoryTest<IPayrollExport>
     {
         private readonly Guid _formatId = Guid.NewGuid();

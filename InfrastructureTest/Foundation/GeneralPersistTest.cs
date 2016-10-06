@@ -18,7 +18,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
 {
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class GeneralPersistTest : DatabaseTest
     {
 

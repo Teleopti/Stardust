@@ -7,7 +7,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
-	[TestFixture, Category("LongRunning")]
+	[TestFixture, Category("BucketB")]
 	public class AverageAfterCallWorkTest : WebReportTest
 	{
 		private const int afterCallWorkQueueOne = 100;

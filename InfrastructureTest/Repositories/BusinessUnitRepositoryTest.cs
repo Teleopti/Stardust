@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Testclass for BusinessUnitRepository
     /// </summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class BusinessUnitRepositoryTest : DatabaseTest  
     {
         private BusinessUnitRepository rep;

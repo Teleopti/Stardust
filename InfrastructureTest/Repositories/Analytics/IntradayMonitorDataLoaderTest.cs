@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	[AnalyticsDatabaseTest]
 	public class IntradayMonitorDataLoaderTest
 	{

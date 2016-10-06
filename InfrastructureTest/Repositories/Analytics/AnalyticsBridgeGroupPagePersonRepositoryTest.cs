@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	[TestFixture]
 	[AnalyticsUnitOfWorkTest]
 	public class AnalyticsBridgeGroupPagePersonRepositoryTest

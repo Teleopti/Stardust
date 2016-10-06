@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
     /// Tests for State
     /// </summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class StateTest
     {
         private State target;

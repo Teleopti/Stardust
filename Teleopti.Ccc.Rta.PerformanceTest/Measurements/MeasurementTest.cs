@@ -9,13 +9,10 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Rta.PerformanceTest.Code;
 using Teleopti.Ccc.Rta.TestApplication.TeleoptiRtaService;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest.Measurements

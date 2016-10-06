@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Tests PartTimePercentageRepository
     ///</summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class PartTimePercentageRepositoryTest : RepositoryTest<IPartTimePercentage>
     {
         /// <summary>

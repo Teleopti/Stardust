@@ -14,7 +14,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class PushMessageDialogueRepositoryTest : RepositoryTest<IPushMessageDialogue>
     {
         private PushMessage _pushMessage;

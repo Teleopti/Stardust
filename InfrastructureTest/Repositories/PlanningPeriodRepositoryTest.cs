@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-	[TestFixture, Category("LongRunning")]
+	[TestFixture, Category("BucketB")]
 	public class PlanningPeriodRepositoryTest : RepositoryTest<IPlanningPeriod>
 	{
 		private static readonly DateOnly _startDate = new DateOnly(2001, 1, 1);

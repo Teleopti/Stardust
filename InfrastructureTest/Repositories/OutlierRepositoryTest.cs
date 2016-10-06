@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Tests for OutlierRepository
     /// </summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class OutlierRepositoryTest : RepositoryTest<IOutlier>
     {
         private IWorkload _workload;

@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
 {
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class MatrixRaptorExternalLogOnSynchronizationTest
     {
 		private IExternalLogOnRepository _repMock;

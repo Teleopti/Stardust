@@ -8,7 +8,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	[TestFixture]
 	[AnalyticsDatabaseTest]
 	public class AnalyticsTimeZoneRepositoryTest

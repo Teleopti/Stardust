@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -9,7 +8,6 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
 	[TestFixture]
-	[Category("LongRunning")]
 	public class IntervalLengthFetcherTest
 	{
 		[SetUp]

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Tests for MultisiteSkillRepository
     /// </summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class MultisiteSkillRepositoryTest : RepositoryTest<IMultisiteSkill>
     {
         private ISkillType _skillType;

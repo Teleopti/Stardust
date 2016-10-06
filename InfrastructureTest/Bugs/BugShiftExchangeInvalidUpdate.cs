@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Bugs
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	public class BugShiftExchangeInvalidUpdate : DatabaseTest
 	{
 		private IPersonRequestRepository personRequestRepository;

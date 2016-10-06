@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class PersonAvailabilityRepositoryTest : RepositoryTest<IPersonAvailability>
     {
         private IPerson _person;

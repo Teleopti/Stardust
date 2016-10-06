@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	public class PayrollFormatRepositoryTest: RepositoryTest<IPayrollFormat>
 	{
 

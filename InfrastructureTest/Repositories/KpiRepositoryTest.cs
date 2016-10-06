@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-    [TestFixture, Category("LongRunning")]
+    [TestFixture, Category("BucketB")]
     public class KpiRepositoryTest : RepositoryTest<IKeyPerformanceIndicator>
     {
         

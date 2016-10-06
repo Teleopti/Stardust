@@ -12,7 +12,7 @@ using Teleopti.Ccc.TestCommon;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	public class IndexMaintenanceRepositoryTest
 	{
 		private IIndexMaintenanceRepository _indexMaintenanceRepository;

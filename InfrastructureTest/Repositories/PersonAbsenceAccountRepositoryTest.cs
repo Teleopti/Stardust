@@ -14,7 +14,7 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class PersonAbsenceAccountRepositoryTest : RepositoryTest<IPersonAbsenceAccount>
     {
 

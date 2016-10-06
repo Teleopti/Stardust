@@ -6,7 +6,7 @@ using Teleopti.Ccc.TestCommon;
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
 {
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class ConstraintViolationExceptionTest : ExceptionTest<ConstraintViolationException>
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes"), Test]

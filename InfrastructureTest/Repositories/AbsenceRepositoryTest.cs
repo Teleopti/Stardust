@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Tests AbsenceRepository
     ///</summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class AbsenceRepositoryTest : RepositoryTest<IAbsence>
     {
         /// <summary>

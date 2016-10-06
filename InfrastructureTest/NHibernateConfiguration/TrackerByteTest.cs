@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 {
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class TrackerByteTest
     {
         private ITracker _target;

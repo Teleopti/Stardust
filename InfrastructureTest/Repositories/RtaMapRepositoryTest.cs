@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class RtaMapRepositoryTest : RepositoryTest<IRtaMap>
     {
         private IActivity activity;

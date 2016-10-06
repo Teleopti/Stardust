@@ -7,7 +7,7 @@ using Teleopti.Ccc.InfrastructureTest.Helper;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-    [TestFixture, Category("LongRunning")]
+    [TestFixture, Category("BucketB")]
     public class ApplicationRolePersonRepositoryTest :DatabaseTest
     {
         private ApplicationRolePersonRepository _target;

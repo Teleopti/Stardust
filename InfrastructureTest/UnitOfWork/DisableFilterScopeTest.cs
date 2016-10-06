@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	public class DisableFilterScopeTest : DatabaseTest
 	{
 		private IPerson deletedPerson;

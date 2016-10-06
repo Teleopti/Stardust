@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Tests ContractRepository
     ///</summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class ContractRepositoryTest : RepositoryTest<IContract>
     {
         private IContract _contract;

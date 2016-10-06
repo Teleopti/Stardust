@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	public class DataSourcesFactoryTest
 	{
 		private IDataSourcesFactory target;

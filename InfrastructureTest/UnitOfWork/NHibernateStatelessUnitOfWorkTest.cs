@@ -7,7 +7,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public sealed class NHibernateStatelessUnitOfWorkTest
     {
         private NHibernateStatelessUnitOfWork uow;

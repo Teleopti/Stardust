@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DetailedAdherenceForDay
 {
-	[TestFixture, Category("LongRunning")]
+	[TestFixture, Category("BucketB")]
 	public class IntervalIdForDateTest : WebReportTest
 	{
 		private const int scheduledReadyTimeOneMinutes = 1;

@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Licensing
 {
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class LicenseProviderTest
     {
 	    private const string customerName = "Kundnamn";

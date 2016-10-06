@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Tests for SkillTypeRepository
     /// </summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class SkillTypeRepositoryTest : RepositoryTest<ISkillType>
     {
  

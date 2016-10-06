@@ -14,7 +14,7 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	[AnalyticsDatabaseTest]
 	public class AnalyticsPreferenceRepositoryTest
 	{

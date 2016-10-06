@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Tests JobResultRepository
     ///</summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class JobResultRepositoryTest : RepositoryTest<IJobResult>
     {
         private IPerson person;

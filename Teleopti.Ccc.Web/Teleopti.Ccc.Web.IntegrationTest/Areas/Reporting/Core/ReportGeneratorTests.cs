@@ -15,7 +15,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Reporting.Core
 {
 	[TestFixture]
-	[Category("LongRunning")]
 	public class ReportGeneratorTests
 	{
 		IDataSource _dataSource;

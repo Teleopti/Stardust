@@ -12,7 +12,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	[AnalyticsDatabaseTest]
 	[ToggleOff(Toggles.ETL_EventbasedDate_39562)]
 	public class AnalyticsDateRepositoryTest

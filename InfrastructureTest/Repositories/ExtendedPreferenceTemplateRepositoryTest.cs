@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Tests UserDetailRepository
     ///</summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class ExtendedPreferenceTemplateRepositoryTest : RepositoryTest<IExtendedPreferenceTemplate>
     {
         private IPerson person;

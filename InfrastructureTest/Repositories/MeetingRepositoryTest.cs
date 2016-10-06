@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Tests MeetingRepository
     ///</summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class MeetingRepositoryTest : RepositoryTest<IMeeting>
     {
         private IPerson _organizer;

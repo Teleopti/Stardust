@@ -10,7 +10,7 @@ using Teleopti.Ccc.TestCommon;
 namespace Teleopti.Ccc.InfrastructureTest.Bugs
 {
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class Bug11558 
     {
         [Test]

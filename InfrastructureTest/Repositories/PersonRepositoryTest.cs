@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	/// Also includes tests for LazyLoadingManager
 	/// Easier that way, because db is involved in those tests
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	public class PersonRepositoryTest : RepositoryTest<IPerson>
 	{
 		private PersonRepository target;

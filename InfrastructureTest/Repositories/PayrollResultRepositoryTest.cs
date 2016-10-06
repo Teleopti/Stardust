@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Tests PayrollResultRepository
     ///</summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class PayrollResultRepositoryTest : RepositoryTest<IPayrollResult>
     {
         private IPayrollExport payrollExport;

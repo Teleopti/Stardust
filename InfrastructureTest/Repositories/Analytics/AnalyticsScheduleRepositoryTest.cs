@@ -16,7 +16,7 @@ using Scenario = Teleopti.Ccc.TestCommon.TestData.Analytics.Scenario;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	[AnalyticsDatabaseTest]
 	public class AnalyticsScheduleRepositoryTest
 	{

@@ -21,7 +21,7 @@ using Teleopti.Interfaces.Infrastructure.Analytics;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	[AnalyticsDatabaseTest]
 	[Toggle(Toggles.ETL_EventbasedDate_39562)]
 	public class AnalyticsDateRepositoryWithCreationTest : ISetup

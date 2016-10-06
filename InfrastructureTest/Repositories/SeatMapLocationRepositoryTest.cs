@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	class SeatMapLocationRepositoryTest: RepositoryTest<ISeatMapLocation>
 	{
 		protected override void ConcreteSetup()

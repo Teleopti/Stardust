@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	public class SqlServerExceptionConverterTest : DatabaseTest
 	{
 		[Test]

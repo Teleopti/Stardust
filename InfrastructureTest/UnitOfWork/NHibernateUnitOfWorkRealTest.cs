@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
     //going to a physical db (not mocks)
 
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class NHibernateUnitOfWorkRealTest : DatabaseTest
     {
         [Test]

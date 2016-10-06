@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Tests for PersonAssignmentRepository
     /// </summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class ShiftCategoryRepositoryTest : RepositoryTest<IShiftCategory>
     {
         /// <summary>

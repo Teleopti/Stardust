@@ -9,7 +9,7 @@ using Teleopti.Ccc.TestCommon;
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
 {
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class OptimisticLockExceptionTest : ExceptionTest<OptimisticLockException>
     {
         [Test]

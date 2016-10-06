@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	/// Tests PersonRequestRepository
 	///</summary>
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	public class PersonRequestRepositoryTest : RepositoryTest<IPersonRequest>
 	{
 		private IPerson _person;

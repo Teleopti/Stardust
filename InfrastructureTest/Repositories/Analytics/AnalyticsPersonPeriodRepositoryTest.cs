@@ -15,7 +15,7 @@ using Person = Teleopti.Ccc.TestCommon.TestData.Analytics.Person;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	[AnalyticsUnitOfWorkTest]
 	public class AnalyticsPersonPeriodRepositoryTest
 	{

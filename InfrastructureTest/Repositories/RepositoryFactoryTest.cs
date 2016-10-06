@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	/// Tests for RepositoryFactory
 	/// </summary>
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	public class RepositoryFactoryTest
 	{
 		private MockRepository mocks;

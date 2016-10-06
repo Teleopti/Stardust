@@ -20,7 +20,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	public class PeopleForShiftTradeFinderTest : DatabaseTest
 	{
 		private PeopleForShiftTradeFinder target;

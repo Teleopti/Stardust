@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	/// Tests for SkillDayRepository
 	/// </summary>
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	public class SkillDayRepositoryTest : RepositoryTest<ISkillDay>
 	{
 		private IScenario _scenario;

@@ -9,7 +9,7 @@ using Teleopti.Ccc.Secrets.Licensing;
 namespace Teleopti.Ccc.InfrastructureTest.Licensing
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	public class XmlLicenseTest
 	{
 		private const string folder = "Licensing\\";

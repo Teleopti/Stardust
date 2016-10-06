@@ -5,7 +5,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
-	[TestFixture, Category("LongRunning")]
+	[TestFixture, Category("BucketB")]
 	public class NoDataAvailableTest : WebReportTest
 	{
 		protected override void InsertTestSpecificData(AnalyticsDataFactory analyticsDataFactory)

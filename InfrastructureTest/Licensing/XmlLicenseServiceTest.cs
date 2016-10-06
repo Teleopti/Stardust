@@ -18,7 +18,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.Licensing
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	public class XmlLicenseServiceTest : IDisposable
 	{
 		private ILicenseService _licenseService;

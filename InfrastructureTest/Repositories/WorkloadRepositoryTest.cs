@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Tests for WorkloadRepository
     /// </summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class WorkloadRepositoryTest : RepositoryTest<IWorkload>
     {
         private ISkillType _skillType;

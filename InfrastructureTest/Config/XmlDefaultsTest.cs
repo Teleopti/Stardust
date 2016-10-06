@@ -6,7 +6,7 @@ using Teleopti.Ccc.Infrastructure.Config;
 
 namespace Teleopti.Ccc.InfrastructureTest.Config
 {
-    [TestFixture,Category("LongRunning")]
+    [TestFixture,Category("BucketB")]
     public class XmlDefaultsTest
     {
         private LoadPasswordPolicyService _service;

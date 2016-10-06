@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     /// Tests for Site repository
     /// </summary>
     [TestFixture]
-    [Category("LongRunning")]
+    [Category("BucketB")]
     public class SiteRepositoryTest : RepositoryTest<ISite>
     {
         /// <summary>

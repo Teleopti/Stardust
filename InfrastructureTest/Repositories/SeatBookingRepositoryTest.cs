@@ -21,7 +21,7 @@ using Teleopti.Ccc.Domain.MessageBroker.Client;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	class SeatBookingRepositoryTest : RepositoryTest<ISeatBooking>
 	{
 		private readonly DateOnly startDate = new DateOnly(2015, 10, 1);

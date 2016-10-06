@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-	[TestFixture, Category("LongRunning")]
+	[TestFixture, Category("BucketB")]
 	public class PersonScheduleDayReadModelFinderTest : DatabaseTest
 	{
 		private PersonScheduleDayReadModelFinder _target;

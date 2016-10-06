@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
 	[TestFixture]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	[AnalyticsUnitOfWorkTest]
 	public class AnalyticsTeamRepositoryTest
 	{
