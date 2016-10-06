@@ -11,20 +11,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	public class ResourceAllocator
 	{
 		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
-		private readonly INow _now;
 
-		public ResourceAllocator(IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, INow now)
+		public ResourceAllocator(IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository)
 		{
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
-			_now = now;
 		}
 
-		public IEnumerable<StaffingIntervalChange> AllocateResource(IPersonRequest personRequest)
+		public IEnumerable<StaffingIntervalChange> AllocateResource(IPersonRequest personRequest, DateTime startDate)
 		{
 			//Get skillStaffingIntervals 
-			var cascadingPersonSkills = personRequest.Person.Period(new DateOnly(_now.UtcDateTime())).CascadingSkills();
+			var cascadingPersonSkills = personRequest.Person.Period(new DateOnly(startDate)).CascadingSkills();
 			var lowestIndex = cascadingPersonSkills.Min(x => x.Skill.CascadingIndex);
-			var skills = personRequest.Person.Period(new DateOnly(_now.UtcDateTime())).PersonSkillCollection.Select(x => x.Skill).Where(y => !y.IsCascading() || y.CascadingIndex == lowestIndex);
+			var skills = personRequest.Person.Period(new DateOnly(startDate)).PersonSkillCollection.Select(x => x.Skill).Where(y => !y.IsCascading() || y.CascadingIndex == lowestIndex);
 			var skillStaffingIntervals = new List<SkillStaffingInterval>();
 
 			foreach (var skill in skills)

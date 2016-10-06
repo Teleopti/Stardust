@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 			if (isIntradayRequest && validators.Any(v => typeof(StaffingThresholdValidator) == v.GetType()))
 			{
-				_intradayRequestProcessor.Process(personRequest);
+				_intradayRequestProcessor.Process(personRequest, startDateTime);
 			}
 			else
 			{

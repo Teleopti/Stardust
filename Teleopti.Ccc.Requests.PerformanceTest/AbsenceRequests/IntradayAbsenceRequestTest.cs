@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 		public IDataSourceScope DataSource;
 		public AsSystem AsSystem;
 		public ICurrentUnitOfWork CurrentUnitOfWork;
+	    public IMutateNow Now;
 
 		[Test]
 		public void ShouldApproveAbsenceRequest()

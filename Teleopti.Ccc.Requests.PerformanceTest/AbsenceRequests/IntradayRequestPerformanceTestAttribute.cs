@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -15,6 +16,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Messaging.Client;
 
@@ -42,8 +44,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 			system.UseTestDouble<ResourceCalculateReadModelUpdater>().For<IHandleEvent<UpdateResourceCalculateReadModelEvent>>();
 			system.AddService<Database>();
 			system.AddModule(new TenantServerModule(configuration));
-
-		}
+        }
 
 		protected override void BeforeTest()
 		{

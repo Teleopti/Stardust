@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var startDateTime2 = endDateTime1;
 			var endDateTime2 = startDateTime2.AddMinutes(15);
 
-			var changes = Target.AllocateResource(request);
+			var changes = Target.AllocateResource(request, _now);
 
 			var expectedChanges = new List<StaffingIntervalChange>()
 			{
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var startDateTime2 = endDateTime1;
 			var endDateTime2 = startDateTime2.AddMinutes(15);
 
-			var changes = Target.AllocateResource(request);
+			var changes = Target.AllocateResource(request, _now);
 
 			var expectedChanges = new List<StaffingIntervalChange>()
 			{
@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var startDateTime2 = endDateTime1;
 			var endDateTime2 = startDateTime2.AddMinutes(15);
 
-			var changes = Target.AllocateResource(request);
+			var changes = Target.AllocateResource(request, _now);
 
 			var expectedChanges = new List<StaffingIntervalChange>()
 			{
@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var startDateTime2 = endDateTime1;
 			var endDateTime2 = startDateTime2.AddMinutes(15);
 
-			var changes = Target.AllocateResource(request);
+			var changes = Target.AllocateResource(request, _now);
 
 			var expectedChanges = new List<StaffingIntervalChange>()
 			{

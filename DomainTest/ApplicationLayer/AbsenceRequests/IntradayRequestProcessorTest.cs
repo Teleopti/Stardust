@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeScheduleForecastSkillReadModelRepository ScheduleForecastSkillReadModelRepository;
 		public FakeSkillRepository SkillRepository;
+	    private DateTime _now;
 		private ISkill _primarySkill1;
 		private ISkill _primarySkill2;
 
@@ -41,7 +43,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<ApprovalServiceForTest>().For<IRequestApprovalService>();
-		}
+       
+            _now = new DateTime(2016,03,14,0,5,0);
+        }
 
 		[Test]
 		public void ShouldDenyIfUnderstaffedOnAtLeastOnePrimarySkill()
@@ -73,9 +77,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				}
 			};
 			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
-
-
-			Target.Process(request);
+            
+			Target.Process(request, _now);
 
 			Assert.AreEqual(4, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
 
@@ -112,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			};
 			ScheduleForecastSkillReadModelRepository.Persist( staffingList, DateTime.Now);
 
-			Target.Process(request);
+			Target.Process(request, _now);
 
 			Assert.AreEqual(2, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
 		}
@@ -151,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			};
 			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
 
-			Target.Process(request);
+			Target.Process(request, _now);
 
 			var changes = ScheduleForecastSkillReadModelRepository.GetReadModelChanges(new DateTimePeriod(startDateTime, endDateTime)).ToList();
 
@@ -204,7 +207,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			};
 			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
 
-			Target.Process(request);
+			Target.Process(request, _now);
 
 			Assert.AreEqual(4, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
 		}
@@ -234,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			});
 			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
 
-			Target.Process(request);
+			Target.Process(request, _now);
 
 			Assert.AreEqual(2, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
 		}
@@ -292,7 +295,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			};
 			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
 
-			Target.Process(request);
+			Target.Process(request, _now);
 
 			Assert.AreEqual(4, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
 		}
@@ -350,7 +353,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			};
 			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
 
-			Target.Process(request);
+			Target.Process(request, _now);
 
 			Assert.AreEqual(2, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
 		}

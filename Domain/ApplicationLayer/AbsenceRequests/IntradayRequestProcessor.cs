@@ -21,24 +21,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
 		private readonly ResourceAllocator _resourceAllocator;
-		private readonly INow _now;
 
-		public IntradayRequestProcessor(ICommandDispatcher commandDispatcher, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, ResourceAllocator resourceAllocator, INow now)
+		public IntradayRequestProcessor(ICommandDispatcher commandDispatcher, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, ResourceAllocator resourceAllocator)
 		{
 			_commandDispatcher = commandDispatcher;
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 			_resourceAllocator = resourceAllocator;
-			_now = now;
 		}
 
-		public void Process(IPersonRequest personRequest)
+		public void Process(IPersonRequest personRequest, DateTime startTime)
 		{
 			personRequest.Pending();
-			var cascadingPersonSkills = personRequest.Person.Period(new DateOnly(_now.UtcDateTime())).CascadingSkills();
+			var cascadingPersonSkills = personRequest.Person.Period(new DateOnly(startTime)).CascadingSkills();
 			var lowestIndex = cascadingPersonSkills.Min(x => x.Skill.CascadingIndex);
 			
 			var primaryAndUnSortedSkills =
-				personRequest.Person.Period(new DateOnly(_now.UtcDateTime())).PersonSkillCollection.Where(x => (x.Skill.CascadingIndex == lowestIndex) || !x.Skill.CascadingIndex.HasValue );
+				personRequest.Person.Period(new DateOnly(startTime)).PersonSkillCollection.Where(x => (x.Skill.CascadingIndex == lowestIndex) || !x.Skill.CascadingIndex.HasValue );
 			foreach (var skill in primaryAndUnSortedSkills)
 			{
 				var skillStaffingIntervals = getSkillStaffIntervals(skill.Skill.Id.GetValueOrDefault(), personRequest.Request.Period);
@@ -51,14 +49,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				}
 				//approve an absence request if its outside the opening hours 
 			}
-			updateResources(personRequest);
+			updateResources(personRequest, startTime);
 			sendApproveCommand(personRequest.Id.GetValueOrDefault());
 			
 		}
 
-		private void updateResources(IPersonRequest personRequest)
+		private void updateResources(IPersonRequest personRequest, DateTime startDate)
 		{
-			var staffingIntervalChanges = _resourceAllocator.AllocateResource(personRequest);
+			var staffingIntervalChanges = _resourceAllocator.AllocateResource(personRequest, startDate);
 			foreach (var staffingIntervalChange in staffingIntervalChanges)
 			{
 				_scheduleForecastSkillReadModelRepository.PersistChange(staffingIntervalChange);
