@@ -63,7 +63,6 @@ define([
 				personScheduleSubscription.promise.done(function() {
 					loadPersonSchedules(buId, date, personId, callback);
 				});
-
 			});
 		},
 		

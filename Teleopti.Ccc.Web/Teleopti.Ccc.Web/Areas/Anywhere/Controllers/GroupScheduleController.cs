@@ -22,12 +22,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		public virtual IHttpActionResult Get(Guid groupId, DateTime date)
 		{
 			var userTimeZone = _user.CurrentUser().PermissionInformation.DefaultTimeZone();
-			var dateTimeInUtc = TimeZoneInfo.ConvertTime(date, userTimeZone, TimeZoneInfo.Utc);
+			var dateTimeInUtc = TimeZoneHelper.ConvertToUtc(date, userTimeZone);
 			
 			var schedules = _groupScheduleViewModelFactory.CreateViewModel(groupId, date).ToArray();
 			return Ok(new {BaseDate = dateTimeInUtc,
-				Schedules = schedules.ToArray(),
-				TotalCount = schedules.Count()});
+				Schedules = schedules,
+				TotalCount = schedules.Length});
 		}
 	}
 }

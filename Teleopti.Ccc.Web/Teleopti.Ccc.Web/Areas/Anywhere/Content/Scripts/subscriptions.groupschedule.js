@@ -49,23 +49,27 @@ define([
 		subscribeGroupSchedule: function (buId, groupId, date, peopleCheckCallback, callback) {
 			unsubscribeGroupSchedule();
 			messagebroker.started.done(function () {
-				loadGroupSchedules(buId, date, groupId, callback);
 				groupScheduleSubscription = messagebroker.subscribe({
 					businessUnitId: buId,
 					domainType: 'IPersonScheduleDayReadModel',
-					callback: function (notification) {
+					callback: function(notification) {
 						if (isMatchingDates(date, notification.StartDate, notification.EndDate)) {
 							if (peopleCheckCallback(notification.DomainReferenceId)) {
 								if (!currentThrottleTimeout) {
-									currentThrottleTimeout = setTimeout(function () {
-										clearTimeout(currentThrottleTimeout);
-										currentThrottleTimeout = undefined;
-										loadGroupSchedules(buId, date, groupId, callback);
-									}, 500);
+									currentThrottleTimeout = setTimeout(function() {
+											clearTimeout(currentThrottleTimeout);
+											currentThrottleTimeout = undefined;
+											loadGroupSchedules(buId, date, groupId, callback);
+										},
+										500);
 								}
 							}
 						}
 					}
+				});
+
+				groupScheduleSubscription.promise.done(function () {
+					loadGroupSchedules(buId, date, groupId, callback);
 				});
 			});
 		},

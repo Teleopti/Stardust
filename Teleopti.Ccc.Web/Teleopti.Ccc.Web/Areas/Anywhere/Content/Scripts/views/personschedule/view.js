@@ -108,7 +108,6 @@ define([
 
 		moveactivity: function (options) {
 			viewModel.MovingActivity(true);
-			
 		},
 
 		setDateFromTest: function (date) {

@@ -32,7 +32,7 @@ define([
 		this.permissionAddActivity = ko.observable();
 		this.permissionMoveActivity = ko.observable();
 
-		this.Loading = ko.observable(false);
+		this.Loading = ko.observable(true);
 		
 		this.PreSelectedPersonId = ko.observable(false);
 		this.PreSelectedStartMinute = ko.observable(NaN);
