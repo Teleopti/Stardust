@@ -8,7 +8,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 namespace Teleopti.Ccc.InfrastructureTest.Authentication
 {
 	[DatabaseTest]
-	[Category("LongRunning")]
+	[Category("BucketB")]
 	public class CryptoKeyInfoRepositoryTest 
 	{
 		public ITenantUnitOfWork TenantUnitOfWork;
