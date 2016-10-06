@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 		public void Persist(IEnumerable<SkillStaffingInterval> intervals, DateTime timeWhenResourceCalcDataLoaded)
 		{
+			if (!intervals.Any()) return;
+
 			var skills = intervals.Select(x => x.SkillId).Distinct();
 			var dt = new DataTable();
 			dt.Columns.Add("SkillId",typeof(Guid));
