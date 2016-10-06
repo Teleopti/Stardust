@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 		public IDataSourceScope DataSource;
 		public AsSystem AsSystem;
 		public ICurrentUnitOfWork CurrentUnitOfWork;
-	    public IMutateNow Now;
 
 		[Test]
 		public void ShouldApproveAbsenceRequest()
