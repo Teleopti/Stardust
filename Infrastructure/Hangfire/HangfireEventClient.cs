@@ -24,22 +24,22 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			_recurringJob = recurringJob;
 			_storage = new Lazy<JobStorage>(storage.GetJobStorage);
 		}
-
-		public void Enqueue(string displayName, string tenant, string queueName, int attempts, string eventType, string serializedEvent, string handlerType)
+		
+		public void Enqueue(HangfireEventJob job)
 		{
-			_jobClient.Value.Enqueue<HangfireEventServer>(x => x.Process(displayName, tenant, queueName, attempts, eventType, serializedEvent, handlerType));
+			_jobClient.Value.Enqueue<HangfireEventServer>(x => x.Process(job.DisplayName, job));
 		}
 
-		public void AddOrUpdateHourly(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
+		public void AddOrUpdateHourly(HangfireEventJob job)
 		{
-			Expression<Action<HangfireEventServer>> f = x => x.Process(displayName, tenant, null, 1, eventType, serializedEvent, handlerType);
-			_recurringJob.Value.AddOrUpdate(id, Job.FromExpression(f), Cron.Hourly());
+			Expression<Action<HangfireEventServer>> f = x => x.Process(job.DisplayName, job);
+			_recurringJob.Value.AddOrUpdate(job.RecurringId(), Job.FromExpression(f), Cron.Hourly());
 		}
 
-		public void AddOrUpdateMinutely(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
+		public void AddOrUpdateMinutely(HangfireEventJob job)
 		{
-			Expression<Action<HangfireEventServer>> f = x => x.Process(displayName, tenant, null, 1, eventType, serializedEvent, handlerType);
-			_recurringJob.Value.AddOrUpdate(id, Job.FromExpression(f), Cron.Minutely());
+			Expression<Action<HangfireEventServer>> f = x => x.Process(job.DisplayName, job);
+			_recurringJob.Value.AddOrUpdate(job.RecurringId(), Job.FromExpression(f), Cron.Minutely());
 		}
 
 		public void RemoveIfExists(string id)

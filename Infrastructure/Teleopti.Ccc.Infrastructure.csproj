@@ -246,6 +246,7 @@
     <Compile Include="Foundation\WebRequestPrincipalContext.cs" />
     <Compile Include="Hangfire\HangfireClientStarter.cs" />
     <Compile Include="Hangfire\HangfireEventClient.cs" />
+    <Compile Include="Hangfire\HangfireEventJob.cs" />
     <Compile Include="Hangfire\HangfireEventServer.cs" />
     <Compile Include="Hangfire\HangfireServerStarter.cs" />
     <Compile Include="Hangfire\HangfireStarter.cs" />
@@ -253,8 +254,8 @@
     <Compile Include="Hangfire\IgnoreNHibernateErrorsInHangfireWorkers.cs" />
     <Compile Include="Hangfire\JobStorageWrapper.cs" />
     <Compile Include="Hangfire\AutomaticRetryAttribute.cs" />
-    <Compile Include="Hangfire\AttemptsFromAttribute.cs" />
-    <Compile Include="Hangfire\QueueNameFromAttribute.cs" />
+    <Compile Include="Hangfire\AttemptsFromArgumentAttribute.cs" />
+    <Compile Include="Hangfire\QueueFromArgumentAttribute.cs" />
     <Compile Include="Hangfire\JobExpirationTimeAttribute.cs" />
     <Compile Include="Intraday\ResourceCalculationReadModelPersister.cs" />
     <Compile Include="Licensing\ISetLicenseActivator.cs" />

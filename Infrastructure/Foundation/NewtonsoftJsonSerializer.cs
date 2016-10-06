@@ -44,12 +44,20 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		}
 		
 
-		private readonly JsonSerializerSettings _eventSerializationSettings = new JsonSerializerSettings
+		private readonly JsonSerializerSettings _eventSerializationSettings = new CustomJsonSerializerSettings();
+
+		
+
+	}
+
+	public class CustomJsonSerializerSettings : JsonSerializerSettings
+	{
+		public CustomJsonSerializerSettings()
 		{
 			//Maybe this is a good idea? ;)
 			//DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-			ContractResolver = new customContractResolver()
-		};
+			ContractResolver = new customContractResolver();
+		}
 
 		private class customContractResolver : DefaultContractResolver
 		{
@@ -78,6 +86,5 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 				return (resolved) ? resolvedName : base.ResolvePropertyName(propertyName);
 			}
 		}
-
 	}
 }

@@ -2,11 +2,14 @@ using System;
 using System.Linq;
 using Autofac;
 using Hangfire;
+using Hangfire.Common;
 using Hangfire.SqlServer;
 using Hangfire.States;
 using Hangfire.Storage;
 using log4net;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
@@ -25,13 +28,15 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		// GOSH.. Sooo much text...
 		public void Start(string connectionString)
 		{
+			JobHelper.SetSerializerSettings(new CustomJsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
+
 			var jobExpiration = _config.ReadValue("HangfireJobExpirationSeconds", TimeSpan.FromHours(1).TotalSeconds);
 			var pollInterval = _config.ReadValue("HangfireQueuePollIntervalSeconds", TimeSpan.FromSeconds(2).TotalSeconds);
 			var jobExpirationCheck = _config.ReadValue("HangfireJobExpirationCheckIntervalSeconds", TimeSpan.FromMinutes(15).TotalSeconds);
 			var dashboardStatistics = _config.ReadValue("HangfireDashboardStatistics", false);
 			var dashboardCounters = _config.ReadValue("HangfireDashboardCounters", false);
 
-			var defaultCountersAggregateInterval = 0;
+			int defaultCountersAggregateInterval;
 			if (dashboardStatistics || dashboardCounters)
 				defaultCountersAggregateInterval = (int)new SqlServerStorageOptions().CountersAggregateInterval.TotalSeconds;
 			else
@@ -40,31 +45,25 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				// because we dont have any counters any more
 				// well, today anyway...
 				// NOT FUTURE PROOF! DANGER DANGER!
-				defaultCountersAggregateInterval = (int) TimeSpan.FromDays(1).TotalSeconds;
+				defaultCountersAggregateInterval = (int)TimeSpan.FromDays(1).TotalSeconds;
 			}
 			var countersAggregateInterval = _config.ReadValue("HangfireCountersAggregateIntervalSeconds", defaultCountersAggregateInterval);
 
-			var sqlServerStorageOptions = new SqlServerStorageOptions
-			{
-				PrepareSchemaIfNecessary = false,
-				QueuePollInterval = TimeSpan.FromSeconds(pollInterval),
-				JobExpirationCheckInterval = TimeSpan.FromSeconds(jobExpirationCheck),
-				CountersAggregateInterval = TimeSpan.FromSeconds(countersAggregateInterval)
-			};
-
-			GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString, sqlServerStorageOptions);
+			GlobalConfiguration.Configuration.UseSqlServerStorage(
+				connectionString,
+				new SqlServerStorageOptions
+				{
+					PrepareSchemaIfNecessary = false,
+					QueuePollInterval = TimeSpan.FromSeconds(pollInterval),
+					JobExpirationCheckInterval = TimeSpan.FromSeconds(jobExpirationCheck),
+					CountersAggregateInterval = TimeSpan.FromSeconds(countersAggregateInterval)
+				});
 
 			GlobalConfiguration.Configuration.UseAutofacActivator(_lifetimeScope);
-
 
 			// for optimization, only add the filters that we currently use
 			// NOT FUTURE PROOF! DANGER DANGER!
 			GlobalJobFilters.Filters.Clear();
-			//GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute
-			//{
-			//	Attempts = 10,
-			//	OnAttemptsExceeded = AttemptsExceededAction.Fail
-			//});
 			GlobalJobFilters.Filters.Add(new JobExpirationTimeAttribute
 			{
 				JobExpirationTimeoutSeconds = (int) jobExpiration

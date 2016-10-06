@@ -1,21 +1,27 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
 	public class CannotPublishToHangfire : IHangfireEventClient
 	{
-		public void Enqueue(string displayName, string tenant, string queueName, int attempts, string eventType, string serializedEvent, string handlerType)
+		//public void Enqueue(string displayName, string tenant, string queueName, int attempts, string eventType, string serializedEvent, string handlerType)
+		//{
+		//	throw new System.NotImplementedException();
+		//}
+
+		public void Enqueue(HangfireEventJob job)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddOrUpdateHourly(HangfireEventJob job)
 		{
 			throw new System.NotImplementedException();
 		}
 
-		public void AddOrUpdateHourly(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public void AddOrUpdateMinutely(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
+		public void AddOrUpdateMinutely(HangfireEventJob job)
 		{
 			throw new NotImplementedException();
 		}

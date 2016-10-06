@@ -24,9 +24,14 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void Process(string displayName, string tenant, string eventType, string serializedEvent, string handlerType)
 		{
-			var handlerT = Type.GetType(handlerType, true);
 			var eventT = Type.GetType(eventType, true);
 			var @event = _deserializer.DeserializeEvent(serializedEvent, eventT) as IEvent;
+			Process(displayName, tenant, @event, handlerType);
+		}
+
+		public void Process(string displayName, string tenant, IEvent @event, string handlerType)
+		{
+			var handlerT = Type.GetType(handlerType, true);
 			var handlers = _resolver.HandlerTypesFor<IRunOnHangfire>(@event);
 
 			var publishTo = handlers.Single(o => o == handlerT);
@@ -38,5 +43,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			_processor.Process(tenant, @event, handlerType);
 		}
+
 	}
 }

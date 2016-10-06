@@ -6,6 +6,13 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeHangfireEventClient : IHangfireEventClient
 	{
+		private readonly IJsonEventSerializer _serializer;
+
+		public FakeHangfireEventClient(IJsonEventSerializer serializer)
+		{
+			_serializer = serializer;
+		}
+
 		public class JobInfo
 		{
 			public string Id;
@@ -35,7 +42,19 @@ namespace Teleopti.Ccc.TestCommon
 		public string HandlerType { get { return HandlerTypes.First(); } }
 
 		public bool WasEnqueued { get { return _enqueuedJobs.Any(); } }
-		
+
+		public void Enqueue(Infrastructure.Hangfire.HangfireEventJob job)
+		{
+			_enqueuedJobs.Add(new JobInfo
+			{
+				DisplayName = job.DisplayName,
+				Tenant = job.Tenant,
+				EventType = job.EventTypeName(),
+				Event = _serializer.SerializeEvent(job.Event),
+				HandlerType = job.HandlerTypeName
+			});
+		}
+
 		public void Enqueue(string displayName, string tenant, string queueName, int attempts, string eventType, string serializedEvent, string handlerType)
 		{
 			_enqueuedJobs.Add(new JobInfo
@@ -58,15 +77,15 @@ namespace Teleopti.Ccc.TestCommon
 
 		public bool HasRecurringJobs { get { return _recurringJobs.Any(); } }
 
-		public void AddOrUpdateHourly(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
+		public void AddOrUpdateHourly(Infrastructure.Hangfire.HangfireEventJob job2)
 		{
-			var job = recurring(displayName, id, tenant, eventType, serializedEvent, handlerType);
+			var job = recurring(job2.DisplayName, job2.RecurringId(), job2.Tenant, job2.EventTypeName(), _serializer.SerializeEvent(job2.Event), job2.HandlerTypeName);
 			job.Hourly = true;
 		}
 
-		public void AddOrUpdateMinutely(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
+		public void AddOrUpdateMinutely(Infrastructure.Hangfire.HangfireEventJob job2)
 		{
-			var job = recurring(displayName, id, tenant, eventType, serializedEvent, handlerType);
+			var job = recurring(job2.DisplayName, job2.RecurringId(), job2.Tenant, job2.EventTypeName(), _serializer.SerializeEvent(job2.Event), job2.HandlerTypeName);
 			job.Minutely = true;
 		}
 
