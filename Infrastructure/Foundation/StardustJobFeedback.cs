@@ -7,4 +7,13 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	{
 		public Action<string> SendProgress { get; set; }
 	}
+
+	public class FakeStardustJobFeedback : IStardustJobFeedback
+	{
+		private static void fakeSend(string message)
+		{
+		}
+
+		public Action<string> SendProgress { get; set; } = fakeSend;
+	}
 }

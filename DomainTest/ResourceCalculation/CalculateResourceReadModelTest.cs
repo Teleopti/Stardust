@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			system.UseTestDouble<CalculateResourceReadModel>().For<CalculateResourceReadModel>();
 			system.UseTestDouble<FakeExtractSkillStaffDataForResourceCalculation>().For<IExtractSkillStaffDataForResourceCalculation>();
-			system.UseTestDouble<StardustJobFeedback>().For<IStardustJobFeedback>();
+			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 		}
 
 		[Test]
