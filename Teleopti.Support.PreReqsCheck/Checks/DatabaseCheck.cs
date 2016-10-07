@@ -24,7 +24,7 @@ namespace CheckPreRequisites.Checks
 
 		public void DBConnectionCheck(ref bool dbConn, string connString, string dbName)
 		{
-			_form1.printNewFeature("Database", "DB Connection", "", "Connecting: " + dbName);
+			var lineNumber = _form1.printNewFeature("Database", "DB Connection", "", "Connecting: " + dbName);
 
 			using (var conn = new SqlConnection(connString))
 			{
@@ -32,13 +32,13 @@ namespace CheckPreRequisites.Checks
 				{
 					conn.Open();
 					if (conn.State == ConnectionState.Open)
-						_form1.printFeatureStatus(true);
+						_form1.printFeatureStatus(true, "", lineNumber);
 					conn.Close();
 					dbConn = true;
 				}
 				catch
 				{
-					_form1.printFeatureStatus(false);
+					_form1.printFeatureStatus(false, "", lineNumber);
 				}
 			}
 		}
@@ -131,12 +131,12 @@ namespace CheckPreRequisites.Checks
 		private void ServiceCheck(string target, string serviceName)
 		{
 			//print something that people might recongise for SSIS
-			_form1.printNewFeature(serviceName.Contains("MSDTSSERVER")
+			var lineNumber= _form1.printNewFeature(serviceName.Contains("MSDTSSERVER")
 				                       ? "SSIS Service"
 				                       : serviceName, "Service", "Running", "");
 
 			_form1.listView1.Items[_form1.listView1.Items.Count - 1].SubItems[2].Text = CheckServiceRunning(target, serviceName);
-			_form1.printFeatureStatus(CheckServiceRunning(target, serviceName) == "Running");
+			_form1.printFeatureStatus(CheckServiceRunning(target, serviceName) == "Running", "", lineNumber);
 		}
 
 		private static string CheckServiceRunning(string server, string serviceName)
@@ -196,16 +196,16 @@ namespace CheckPreRequisites.Checks
 
 			if (softwareList.Count > 0)
 			{
-				for (var i = 0; i < softwareList.Count; i++)
+				foreach (string s in softwareList)
 				{
-					_form1.printNewFeature("Database", "Software", minValue, softwareList[i]);
-					_form1.printFeatureStatus(true);
+					var lineNumber = _form1.printNewFeature("Database", "Software", minValue, s);
+					_form1.printFeatureStatus(true, "", lineNumber);
 				}
 			}
 			else
 			{
-				_form1.printNewFeature("Database", "Software", minValue, software);
-				_form1.printFeatureStatus("Check Manually");
+				var lineNumber = _form1.printNewFeature("Database", "Software", minValue, software);
+				_form1.printFeatureStatus("Check Manually", lineNumber);
 			}
 		}
 
@@ -279,14 +279,14 @@ namespace CheckPreRequisites.Checks
 			var dbMajorVersion = SQLServerMajorVersion(connString);
 			var dbFullVersion = SQLServerFullVersion(connString);
 
-			_form1.printNewFeature("Database", "Full Version", "MS SQL Server 2008 R2 or later", dbFullVersion);
-			_form1.printFeatureStatus(dbMajorVersion >= 10.5);
+			var lineNumber = _form1.printNewFeature("Database", "Full Version", "MS SQL Server 2008 R2 or later", dbFullVersion);
+			_form1.printFeatureStatus(dbMajorVersion >= 10.5, "", lineNumber);
 		}
 
 		private void DBSysAdminCheck(string connString)
 		{
 			const string sysAdminCommand = "SELECT IS_SRVROLEMEMBER('sysadmin')";
-			_form1.printNewFeature("Database", "Permission", "SysAdmin role required", "Sys Admin role");
+			var lineNumber = _form1.printNewFeature("Database", "Permission", "SysAdmin role required", "Sys Admin role");
 
 			using (var conn = new SqlConnection(connString))
 			{
@@ -297,13 +297,13 @@ namespace CheckPreRequisites.Checks
 					using (var reader = cmd.ExecuteReader())
 					{
 						reader.Read();
-						_form1.printFeatureStatus(reader.GetInt32(0) == 1);
+						_form1.printFeatureStatus(reader.GetInt32(0) == 1, "", lineNumber);
 					}
 					conn.Close();
 				}
 				catch
 				{
-					_form1.printFeatureStatus(false);
+					_form1.printFeatureStatus(false, "", lineNumber);
 				}
 			}
 		}
@@ -311,15 +311,15 @@ namespace CheckPreRequisites.Checks
 		private void DBCollationCheck(string connString)
 		{
 			var collation = SQLServerCollation(connString);
-			_form1.printNewFeature("Database", "Collation", "SQL_Latin1_General_CP1_CI_AS", collation);
+			var lineNumber = _form1.printNewFeature("Database", "Collation", "SQL_Latin1_General_CP1_CI_AS", collation);
 
 			if (collation.ToUpper().Contains("_BIN")) //Binary collation
-				_form1.printFeatureStatus(false);
+				_form1.printFeatureStatus(false, "", lineNumber);
 
 			else if (collation.ToUpper().Contains("_CS_")) //Case Sensitive
-				_form1.printFeatureStatus("Warning");
+				_form1.printFeatureStatus("Warning", lineNumber);
 			else
-				_form1.printFeatureStatus(true);
+				_form1.printFeatureStatus(true, "", lineNumber);
 		}
 
 		private static string SQLServerCollation(string connString)
@@ -385,9 +385,9 @@ namespace CheckPreRequisites.Checks
 							stopwatch.Stop();
 							var bandWidth = Math.Round(8*mBytesRead*1000/stopwatch.Elapsed.TotalMilliseconds, 2);
 
-							_form1.printNewFeature("Database", "Server Lan speed [mbps]", "200",
+							var serverLanSpeedLineNumber = _form1.printNewFeature("Database", "Server Lan speed [mbps]", "200",
 							                       bandWidth.ToString(CultureInfo.InvariantCulture));
-							_form1.printFeatureStatus(true);
+							_form1.printFeatureStatus(true, "", serverLanSpeedLineNumber);
 
 
 							//IOLatency figures
@@ -400,16 +400,15 @@ namespace CheckPreRequisites.Checks
 							if (ioWriteLatency > 0)
 								displayIoWriteLatency = ioWriteLatency.ToString(CultureInfo.InvariantCulture);
 
-							_form1.printNewFeature("Database", "IoWriteLatency [ms]", "5", displayIoWriteLatency);
-							_form1.printFeatureStatus(ioWriteLatency <= 5);
+							var ioWriteLatencyLineNumber = _form1.printNewFeature("Database", "IoWriteLatency [ms]", "5", displayIoWriteLatency);
+							_form1.printFeatureStatus(ioWriteLatency <= 5, "", ioWriteLatencyLineNumber);
 
 							reader.Close();
 						}
 					}
 					finally
 					{
-						if (file != null)
-							file.Close();
+						file?.Close();
 					}
 				}
 				conn.Close();

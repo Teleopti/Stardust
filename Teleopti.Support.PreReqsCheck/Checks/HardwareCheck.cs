@@ -35,12 +35,11 @@ namespace CheckPreRequisites.Checks
 				CheckMemory(numberOfAgent, webLimits);
 				CheckCpuCores(numberOfAgent, webLimits);
 			}
-			
 		}
 
 		private void CheckOS()
 		{
-			_form1.printNewFeature("Operating System", "OS Version", "Windows Server 2008 R2 or later",
+			var lineNumber = _form1.printNewFeature("Operating System", "OS Version", "Windows Server 2008 R2 or later",
 			                       SystemInfo.Version.ToString());
 			
 			switch (SystemInfo.MajorVersion)
@@ -48,12 +47,12 @@ namespace CheckPreRequisites.Checks
 				case 6:
 					if (SystemInfo.Version == WindowsVersion.WindowsServer2008R2 || SystemInfo.Version == WindowsVersion.WindowsServer2012
 					    || SystemInfo.Version == WindowsVersion.WindowsServer2012R2)
-						_form1.printFeatureStatus(true);
+						_form1.printFeatureStatus(true, "", lineNumber);
 					else
-						_form1.printFeatureStatus(false);
+						_form1.printFeatureStatus(false, "", lineNumber);
 					break;
 				default:
-					_form1.printFeatureStatus(false);
+					_form1.printFeatureStatus(false, "", lineNumber);
 					break;
 			}
 		}
@@ -62,10 +61,10 @@ namespace CheckPreRequisites.Checks
 		{
 			var computerName = SystemInformation.ComputerName;
 			var hostName = Dns.GetHostName();
-			_form1.printNewFeature("Operating system", "Computer name", "Allowed characters for computer is [A-Z,a-z,0-9], and maximum length is 15",
+			var lineNumber = _form1.printNewFeature("Operating system", "Computer name", "Allowed characters for computer is [A-Z,a-z,0-9], and maximum length is 15",
 								   hostName);
 			_form1.printFeatureStatus(computerName == Regex.Replace(computerName, "[^a-zA-Z0-9_]", "") &&
-			                          String.Equals(computerName, hostName, StringComparison.CurrentCultureIgnoreCase));
+									  String.Equals(computerName, hostName, StringComparison.CurrentCultureIgnoreCase), "", lineNumber);
 		}
 
 		private void CheckArchitecture()
@@ -77,8 +76,8 @@ namespace CheckPreRequisites.Checks
 					return;
 
 				var architecture = (string) componentsKey.GetValue("PROCESSOR_ARCHITECTURE", "N/A");
-				_form1.printNewFeature("Operating System", "Architecture", "x64 required", architecture);
-				_form1.printFeatureStatus(architecture.Contains("64"));
+				var lineNumber = _form1.printNewFeature("Operating System", "Architecture", "x64 required", architecture);
+				_form1.printFeatureStatus(architecture.Contains("64"), "", lineNumber);
 			}
 		}
 		
@@ -96,6 +95,7 @@ namespace CheckPreRequisites.Checks
 					
 
 					var isOk = false;
+					var message = "";
 					foreach (var limit in limits.All)
 					{
 						if (numberOfAgent <= limit.MaxAgents)
@@ -104,23 +104,24 @@ namespace CheckPreRequisites.Checks
 							{
 								isOk = true;
 							}
-							var message = limit.Memory.ToString();
+							message = limit.Memory.ToString();
 							if (limit.NumberOfServers > 1)
 							{
 								message = $"{limit.Memory} per server. High Availability is mandatory with {limit.NumberOfServers} servers.";
 							}
-							_form1.printNewFeature("Hardware", "RAM Size in Giga Bytes", message,
-										   Math.Round(ramBytes / oneGb, 1).ToString(CultureInfo.InvariantCulture));
+							
 							break;
 						}
 					}
-					_form1.printFeatureStatus(isOk);
+					var lineNumber = _form1.printNewFeature("Hardware", "RAM Size in Giga Bytes", message,
+										   Math.Round(ramBytes / oneGb, 1).ToString(CultureInfo.InvariantCulture));
+					_form1.printFeatureStatus(isOk, "", lineNumber);
 				}
 			}
 			catch (Exception ex)
 			{
-				_form1.printNewFeature("Hardware", "RAM Size in Giga Bytes", "", "Error when checking " + ex.Message);
-				_form1.printFeatureStatus(false);
+				var lineNumber = _form1.printNewFeature("Hardware", "RAM Size in Giga Bytes", "", "Error when checking " + ex.Message);
+				_form1.printFeatureStatus(false, "", lineNumber);
 			}
 		}
 
@@ -134,6 +135,8 @@ namespace CheckPreRequisites.Checks
 				var processors = componentsKey.SubKeyCount;
 
 				var isOk = false;
+				var message = "";
+
 				foreach (var limit in limits.All)
 				{
 					if (numberOfAgent <= limit.MaxAgents)
@@ -142,16 +145,16 @@ namespace CheckPreRequisites.Checks
 						{
 							isOk = true;
 						}
-						var message = limit.Processor.ToString();
+						message = limit.Processor.ToString();
 						if (limit.NumberOfServers > 1)
 						{
 							message = $"{limit.Processor} per server. High Availability is mandatory with {limit.NumberOfServers} servers.";
 						}
-						_form1.printNewFeature("Hardware", "Processor CPU's ", message, processors.ToString(CultureInfo.InvariantCulture));
 						break;
 					}
 				}
-				_form1.printFeatureStatus(isOk);
+				var lineNumber = _form1.printNewFeature("Hardware", "Processor CPU's ", message, processors.ToString(CultureInfo.InvariantCulture));
+				_form1.printFeatureStatus(isOk, "", lineNumber);
 			}
 		}
 	}

@@ -37,7 +37,7 @@ namespace CheckPreRequisites.Checks
                     {
                         _form1.Cursor = Cursors.WaitCursor;
                         var strings = line.Split(',');
-                        _form1.printNewFeature("IIS", "Windows feature", "Enabled", strings[1]);
+                        var lineNumber = _form1.printNewFeature("IIS", "Windows feature", "Enabled", strings[1]);
                         var result = FeatureChecker.CheckAndEnable(strings[1], strings[0]);
                         if (result.NotInElevatedMood)
                         {
@@ -45,7 +45,7 @@ namespace CheckPreRequisites.Checks
                             return;
                         }
 
-                        _form1.printFeatureStatus(result.Enabled, result.ToolTip);
+                        _form1.printFeatureStatus(result.Enabled, result.ToolTip, lineNumber);
                         Application.DoEvents();
                         _form1.Cursor = Cursors.Default;
                     }
@@ -78,20 +78,20 @@ namespace CheckPreRequisites.Checks
         }
         private void Get461FromRegistry()
         {
-            _form1.printNewFeature(".NET Framework", "System", "Installed", "4.6.1");
+            var lineNumber = _form1.printNewFeature(".NET Framework", "System", "Installed", "4.6.1");
             using (RegistryKey ndpKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey("SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full\\"))
             {
-                if (ndpKey != null && ndpKey.GetValue("Release") != null)
+                if (ndpKey?.GetValue("Release") != null)
                 {
                     var installed = (int)ndpKey.GetValue("Release");
                     if (installed == 394271 || installed == 394254)
-                        _form1.printFeatureStatus(true, ".Net framework 4.6.1 is installed");
+                        _form1.printFeatureStatus(true, ".Net framework 4.6.1 is installed", lineNumber);
                     else
-                        _form1.printFeatureStatus(false, ".Net framework 4.6.1 is not installed");
+                        _form1.printFeatureStatus(false, ".Net framework 4.6.1 is not installed", lineNumber);
                 }
                 else
                 {
-                    _form1.printFeatureStatus(false, ".Net framework 4.6.1 is not installed");
+                    _form1.printFeatureStatus(false, ".Net framework 4.6.1 is not installed", lineNumber);
                 }
             }
         }

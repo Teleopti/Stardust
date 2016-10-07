@@ -76,40 +76,43 @@ namespace CheckPreRequisites
 			labelInfo.Text = info;
 		}
 
-		public void printNewFeature(string checkWhat, string feature, string minValue, string featureValue)
+		public int printNewFeature(string checkWhat, string feature, string minValue, string featureValue)
 		{
 			listView1.Items.Add(checkWhat);
-			listView1.Items[listView1.Items.Count - 1].SubItems.Add(feature);
-			listView1.Items[listView1.Items.Count - 1].SubItems.Add(featureValue);
-			listView1.Items[listView1.Items.Count - 1].SubItems.Add(minValue);
+			var lineNumber = listView1.Items.Count - 1;
+			listView1.Items[lineNumber].SubItems.Add(feature);
+			listView1.Items[lineNumber].SubItems.Add(featureValue);
+			listView1.Items[lineNumber].SubItems.Add(minValue);
+
+			return lineNumber;
 		}
 
-		public void printFeatureStatus(bool featureStatus, string toolTip = "")
+		public void printFeatureStatus(bool featureStatus, string toolTip, int lineNumber)
 		{
 			if (featureStatus)
 			{
-				listView1.Items[listView1.Items.Count - 1].SubItems.Add("OK");
-				listView1.Items[listView1.Items.Count - 1].ForeColor = Color.Green;
+				listView1.Items[lineNumber].SubItems.Add("OK");
+				listView1.Items[lineNumber].ForeColor = Color.Green;
 			}
 			else
 			{
-				listView1.Items[listView1.Items.Count - 1].SubItems.Add("not OK!");
-				listView1.Items[listView1.Items.Count - 1].ForeColor = Color.Red;
+				listView1.Items[lineNumber].SubItems.Add("not OK!");
+				listView1.Items[lineNumber].ForeColor = Color.Red;
 			}
-			listView1.Items[listView1.Items.Count - 1].ToolTipText = toolTip;
+			listView1.Items[lineNumber].ToolTipText = toolTip;
 		}
 
-		public void printFeatureStatus(string status)
+		public void printFeatureStatus(string status, int lineNumber)
 		{
 			if (status == "Warning")
 			{
-				listView1.Items[listView1.Items.Count - 1].SubItems.Add("Warning");
-				listView1.Items[listView1.Items.Count - 1].ForeColor = Color.Orange;
+				listView1.Items[lineNumber].SubItems.Add("Warning");
+				listView1.Items[lineNumber].ForeColor = Color.Orange;
 			}
 			else
 			{
-				listView1.Items[listView1.Items.Count - 1].SubItems.Add(status);
-				listView1.Items[listView1.Items.Count - 1].ForeColor = Color.Black;
+				listView1.Items[lineNumber].SubItems.Add(status);
+				listView1.Items[lineNumber].ForeColor = Color.Black;
 			}
 		}
 
