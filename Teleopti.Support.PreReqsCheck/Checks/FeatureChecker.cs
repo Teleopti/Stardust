@@ -40,6 +40,7 @@ namespace CheckPreRequisites.Checks
 				PowerShell ps = PowerShell.Create().AddCommand("dism");
 				ps.AddArgument("/online");
 				ps.AddArgument("/enable-feature");
+				ps.AddArgument("/all");
 				ps.AddArgument("/featurename:" + feature);
 
 				string output = ps.Invoke().Aggregate("", (current, result) => current + System.Environment.NewLine + result);
