@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Threading;
@@ -10,6 +9,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 	public class AnalyticsDataFactory
 	{
 		private readonly IList<IAnalyticsDataSetup> _analyticsSetups = new List<IAnalyticsDataSetup>();
+		private static readonly CultureInfo swedishCulture = CultureInfo.GetCultureInfo("sv-SE");
 
 		public void Apply(IAnalyticsDataSetup analyticsDataSetup)
 		{
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 			{
 				var culture = Thread.CurrentThread.CurrentCulture;
 				connection.Open();
-				analyticsDataSetup.Apply(connection, culture, CultureInfo.GetCultureInfo("sv-SE"));
+				analyticsDataSetup.Apply(connection, culture, swedishCulture);
 			}
 		}
 
@@ -33,11 +33,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 			using (var connection = new SqlConnection(InfraTestConfigReader.AnalyticsConnectionString))
 			{
 				connection.Open();
-				_analyticsSetups.ForEach(s => s.Apply(connection, culture, CultureInfo.GetCultureInfo("sv-SE")));
+				_analyticsSetups.ForEach(s => s.Apply(connection, culture, swedishCulture));
 			}
 		}
 
-		public IEnumerable<IAnalyticsDataSetup> Setups { get { return _analyticsSetups; } } 
-
+		public IEnumerable<IAnalyticsDataSetup> Setups => _analyticsSetups;
 	}
 }

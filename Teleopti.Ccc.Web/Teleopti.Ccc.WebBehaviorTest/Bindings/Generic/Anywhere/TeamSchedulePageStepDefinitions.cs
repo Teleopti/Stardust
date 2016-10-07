@@ -3,11 +3,9 @@ using System.Linq;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
-using Teleopti.Ccc.WebBehaviorTest.Toggle;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
@@ -162,8 +160,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see '(.*)' with the scheduled activity")]
 		public void ThenIShouldSeeWithTheScheduledActivity(string personName, Table table)
 		{
-			var scheduledActivity = table.CreateInstance<ScheduledActivityInfo>();
-			assertScheduledActivity(personName, scheduledActivity);
+			using (Browser.TimeoutScope(TimeSpan.FromSeconds(25)))
+			{
+				var scheduledActivity = table.CreateInstance<ScheduledActivityInfo>();
+				assertScheduledActivity(personName, scheduledActivity);
+			}
 		}
 
 		[Then(@"I should see '(.*)' with the scheduled activities")]
