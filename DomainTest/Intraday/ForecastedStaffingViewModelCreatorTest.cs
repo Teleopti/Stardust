@@ -269,7 +269,31 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.ActualStaffing.Should().Be.Empty();
 		}
 
-		[Test]
+        [Test]
+        public void ShouldNotShowAnyStaffingDataWhenNoForecast()
+        {
+            var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+            var latestStatsTime = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
+
+            Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+            var scenario = fakeScenarioAndIntervalLength();
+
+            var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30));
+            SkillRepository.Has(skill);
+
+           IntradayQueueStatisticsLoader.Has(new List<SkillIntervalStatistics>
+            {
+                new SkillIntervalStatistics { SkillId = skill.Id.Value, StartTime = latestStatsTime, Calls = 30 }
+            });
+
+            var vm = Target.Load(new[] { skill.Id.Value });
+
+            vm.DataSeries.ForecastedStaffing.Should().Be.Empty();
+            vm.DataSeries.UpdatedForecastedStaffing.Should().Be.Empty();
+            vm.DataSeries.ActualStaffing.Should().Be.Empty();
+        }
+
+        [Test]
 		public void ShouldCalculateUpdatedForecastedStaffingCorrectlyForThreeSkills()
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);

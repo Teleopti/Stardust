@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 
 
-			if (!latestStatsTime.HasValue || !actualStaffingPerSkill.Any())
-				return new List<double?>();
+		    if (!latestStatsTime.HasValue || !actualStaffingPerSkill.Any())
+		        return new List<double?>();
 
 			returnValue.AddRange(actualStaffingPerSkill
 				.OrderBy(x => x.StartTime)
@@ -127,7 +127,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 			if (!latestStatsTime.HasValue)
 				return new List<double?>();
 
-			if (latestStatsTime > usersNow) // This case only for dev, test and demo
+		    if (forecastedCallsPerSkillDictionary.Count(x => x.Value.Any()) == 0)
+		    {
+		        return new List<double?>();
+		    }
+		    
+
+
+            if (latestStatsTime > usersNow) // This case only for dev, test and demo
 				usersNow = latestStatsTime.Value.AddMinutes(minutesPerInterval);
 
 
