@@ -43,7 +43,7 @@ namespace CheckPreRequisites.Checks
 
 			string output = ps.Invoke().Aggregate("", (current, result) => current + System.Environment.NewLine + result);
 			if (output.Contains("successfully"))
-				return new FeatureState { ToolTip = output, Enabled = true, Status = "Enabled", DisplayName = displayName };
+				return new FeatureState { ToolTip = output, Enabled = true, Status = "Fixed and Enabled", DisplayName = displayName };
 
 			return new FeatureState { ToolTip = output, Enabled = false, Status = "Could not enabled feature!", DisplayName = displayName };
 		}
