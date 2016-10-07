@@ -65,6 +65,8 @@
 		<Exec Command="$(NpmDedupeCmd)" Condition="'@(DepsAreModified)' == 'True'" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
 		<Message Text="Dependencies are modified and has been updated " Condition="'@(DepsAreModified)' == 'True'" Importance="high"/>
 		<Message Text="Dependencies are not modified and have been left as they are" Condition="'@(DepsAreModified)' == 'False'" Importance="high"/>
+			<Message Text="Restore Node Packages Command: $(NpmInstallGruntCliCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" Condition="'@(DepsAreModified)' == 'True'" />
+		<Exec Command="$(NpmInstallGruntCliCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" Condition="'@(DepsAreModified)' == 'True'"  />
 	</Target>
 
 	<!-- Executes Build -->
@@ -82,8 +84,4 @@
 	  <Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" Command="$(GruntBuildForDesktop)" />
 	</Target>
 
-	<Target Name="RunGruntBuildDev" Inputs="@(OriginalJsFiles);@(DistCssFiles)" Outputs="@(DistJsFiles);@(DistCssFiles)">
-		<Message Text="Restore Node Packages Command: $(NpmInstallGruntCliCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" />
-		<Exec Command="$(NpmInstallGruntCliCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
-	</Target>
 </Project>
