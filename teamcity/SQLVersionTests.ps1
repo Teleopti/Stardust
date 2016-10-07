@@ -33,7 +33,7 @@ properties {
 }
 
 # Dot sourcing support files
-    Include "$PSScriptroot\TransientSqlSupport.ps1"
+    . "$PSScriptroot\TransientSqlSupport.ps1"
 
 # Initialize Default Retry Policy in TransientSqlSupport.ps1
 	SetDefaultRetryPolicy
