@@ -169,14 +169,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>().SingleInstance();
 
-            if (!_config.Toggle(Toggles.ETL_SpeedUpIntradayPreference_37124))
-            {
-                _config.Cache().This<IAnalyticsScheduleRepository>(b => b
-                    .CacheMethod(x => x.ShiftLengths())
-                    );
-                builder.CacheByInterfaceProxy<AnalyticsScheduleRepository, IAnalyticsScheduleRepository>();
-            }
-
             builder.RegisterType<PerformanceCounter>().As<IPerformanceCounter>().SingleInstance();
             builder.RegisterType<DeviceInfoProvider>().As<IDeviceInfoProvider>().SingleInstance();
 

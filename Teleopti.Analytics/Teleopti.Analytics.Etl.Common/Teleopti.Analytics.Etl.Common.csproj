@@ -193,7 +193,6 @@
     <Compile Include="Interfaces\Transformer\IGeneralFunctions.cs" />
     <Compile Include="Interfaces\Transformer\IGroupPagePersonTransformer.cs" />
     <Compile Include="Interfaces\Transformer\IIntradayAvailabilityTransformer.cs" />
-    <Compile Include="Interfaces\Transformer\IIntradaySchedulePreferenceTransformer.cs" />
     <Compile Include="Interfaces\Transformer\IJob.cs" />
     <Compile Include="Interfaces\Transformer\IJobHelper.cs" />
     <Compile Include="Interfaces\Transformer\IJobMultipleDate.cs" />
@@ -243,7 +242,6 @@
     <Compile Include="Transformer\IntervalFactory.cs" />
     <Compile Include="Transformer\IntervalTransformer.cs" />
     <Compile Include="Transformer\IntradayHourlyAvailabilityTransformer.cs" />
-    <Compile Include="Transformer\IntradaySchedulePreferenceTransformer.cs" />
     <Compile Include="Transformer\IocContainerHolder.cs" />
     <Compile Include="Transformer\Job\JobHelper.cs" />
     <Compile Include="Transformer\Job\JobResult.cs" />
@@ -330,7 +328,6 @@
     <Compile Include="Transformer\Job\Steps\IntradayStageRequestJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\IntradayStageScheduleDayOffCountJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\IntradayStageScheduleJobStep.cs" />
-    <Compile Include="Transformer\Job\Steps\IntradayStageSchedulePreferenceJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\JobBase.cs" />
     <Compile Include="Transformer\Job\Steps\LicenseCheckJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\MaintenanceJobStep.cs" />

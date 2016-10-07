@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.Common.Transformer;
-using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
-using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 {
@@ -38,57 +30,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 			Assert.IsFalse(target.IsBusinessUnitIndependent);
 		}
 
-		[Test]
-		public void ShouldProcessDayOffAlsoInThisStep()
-		{
-			var jobParameters = _mock.DynamicMock<IJobParameters>();
-			var stateHolder = _mock.DynamicMock<ICommonStateHolder>();
-			var jobHelper = _mock.DynamicMock<IJobHelper>();
-			var repository = _mock.DynamicMock<IRaptorRepository>();
-			var transformer = _mock.DynamicMock<IIntradaySchedulePreferenceTransformer>();
-			var subStep = _mock.DynamicMock<IEtlDayOffSubStep>();
-			var scenario = new Scenario("scenario") {DefaultScenario = true};
-
-			Expect.Call(stateHolder.ScenarioCollectionDeletedExcluded).Return(new List<IScenario> { scenario });
-			
-			Expect.Call(jobParameters.StateHolder).Return(stateHolder);
-			Expect.Call(repository.LastChangedDate(null, "")).IgnoreArguments().Return(new LastChangedReadModel { LastTime = DateTime.Now, ThisTime = DateTime.Now });
-			Expect.Call(repository.ChangedPreferencesOnStep(new DateTime(), null))
-				.IgnoreArguments()
-				.Return(new List<IPreferenceDay>());
-			Expect.Call(() => transformer.Transform(new List<IPreferenceDay>(), new DataTable("d"),stateHolder, scenario)).IgnoreArguments();
-			Expect.Call(jobParameters.Helper).Return(jobHelper);
-			Expect.Call(jobHelper.Repository).Return(repository);
-			Expect.Call(repository.PersistSchedulePreferences(new DataTable("d"))).IgnoreArguments().Return(5);
-			Expect.Call(subStep.StageAndPersistToMart(DayOffEtlLoadSource.SchedulePreference, RaptorTransformerHelper.CurrentBusinessUnit, repository)).Return(5);
-			_mock.ReplayAll();
-			
-			var target = new IntradayStageSchedulePreferenceJobStep(jobParameters)
-			{
-				Transformer = transformer,
-				DayOffSubStep = subStep
-			};
-			
-			
-			var result = target.Run(new List<IJobStep>(), null, new List<IJobResult>(), true);
-
-			result.RowsAffected.Should().Be.EqualTo(10);
-			_mock.VerifyAll();
-		}
-
-		[Test]
-		public void ShouldNotProcessOtherThanDefaultScenario()
-		{
-			var jobParameters = _mock.DynamicMock<IJobParameters>();
-			var stateHolder = _mock.DynamicMock<ICommonStateHolder>();
-			
-			Expect.Call(jobParameters.StateHolder).Return(stateHolder);
-			Expect.Call(stateHolder.ScenarioCollectionDeletedExcluded).Return(new List<IScenario> { new Scenario("scenario") { DefaultScenario = false } });
-			_mock.ReplayAll();
-			var target = new IntradayStageSchedulePreferenceJobStep(jobParameters);
-			target.Run(new List<IJobStep>(), null, new List<IJobResult>(), true);
-			_mock.VerifyAll();
-		}
 
 		[Test]
 		public void ShouldRunDifferentInFactOnIntraday()

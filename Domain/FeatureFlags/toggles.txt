@@ -158,7 +158,6 @@ ETL_SpeedUpPersonPeriodNightly_38097 = RC
 Stardust_MoveAbsenceRequestTo_37941 = RC
 ETL_SpeedUpNightlyReloadDatamart_38131 = RC
 ETL_SpeedUpFactScheduleNightly_38019 = true # not to be released until pbi 38304 is done 
-ETL_SpeedUpIntradayPreference_37124 = true # not to be released until pbi 38304 is done 
 ETL_SpeedUpIntradayDayOff_38213 = true # not to be released until pbi 38304 is done 
 ETL_SpeedUpScenario_38300 = true # not to be released until pbi 38304 is done 
 ETL_SpeedUpScenarioNightly_38300 = false

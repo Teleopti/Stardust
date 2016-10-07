@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
@@ -17,7 +16,6 @@ using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 {
-	[EnabledBy(Toggles.ETL_SpeedUpIntradayPreference_37124)]
 	public class AnalyticsPreferenceUpdater :
 		IHandleEvent<PreferenceCreatedEvent>,
 		IHandleEvent<PreferenceDeletedEvent>,

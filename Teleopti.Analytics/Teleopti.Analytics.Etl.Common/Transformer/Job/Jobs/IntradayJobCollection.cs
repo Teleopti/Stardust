@@ -24,7 +24,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			AddWhenAllDisabled(new StageShiftCategoryJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayShiftCategory_38718);
 			AddWhenAllDisabled(new IntradayStageScheduleJobStep(jobParameters), Toggles.ETL_SpeedUpETL_30791);
 			AddWhenAllDisabled(new IntradayStageScheduleDayOffCountJobStep(jobParameters), Toggles.ETL_SpeedUpETL_30791);
-			AddWhenAllDisabled(new IntradayStageSchedulePreferenceJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayPreference_37124);
 			AddWhenAllDisabled(new IntradayStageAvailabilityJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayAvailability_38926);
 			AddWhenAllDisabled(new StageSkillJobStep(jobParameters), Toggles.ETL_SpeedUpIntradaySkill_37543);
 			AddWhenAllDisabled(new StageWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayWorkload_38928);
@@ -57,7 +56,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			// FACT TABLES
 			AddWhenAllDisabled(new FactScheduleJobStep(jobParameters, true), Toggles.ETL_SpeedUpETL_30791);
 			AddWhenAllDisabled(new FactScheduleDayCountJobStep(jobParameters, true), Toggles.ETL_SpeedUpETL_30791);
-			AddWhenAllDisabled(new FactSchedulePreferenceJobStep(jobParameters, true), Toggles.ETL_SpeedUpIntradayPreference_37124);
 			AddWhenAllDisabled(new FactAvailabilityJobStep(jobParameters, true), Toggles.ETL_SpeedUpIntradayAvailability_38926);
 			
 			AddWhenAllEnabled(new IntradayFactQueueJobStep(jobParameters), Toggles.ETL_OnlyLatestQueueAgentStatistics_30787);
