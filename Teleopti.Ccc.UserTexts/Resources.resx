@@ -14998,4 +14998,8 @@ These options are activated:
     <value>Full or partial</value>
     <comment>Full or partial</comment>
   </data>
+  <data name="NoPermissionToViewErrorMessage" xml:space="preserve">
+    <value>You do not have permission to view this page.</value>
+    <comment>Error message for no permission to view modules in new web</comment>
+  </data>
 </root>

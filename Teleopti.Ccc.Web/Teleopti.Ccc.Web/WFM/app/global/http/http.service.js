@@ -39,9 +39,14 @@
 				connected = false;
 				var CurrentUserInfo = $injector.get('CurrentUserInfo');
 				CurrentUserInfo.resetContext();
+				NoticeService.error("<span class='test-alert'></span>" + $translate.instant('NoPermissionToViewErrorMessage'), null, false);
 				break;
 
-				case (rejection.status > 401 && rejection.status < 600):
+				case (rejection.status === 403):
+				NoticeService.error("<span class='test-alert'></span>" + $translate.instant('NoPermissionToViewErrorMessage'), null, false);
+				break;
+
+				case (rejection.status > 403 && rejection.status < 600):
 				//don't remove class test-alert - used in perf tests
 				NoticeService.error("<span class='test-alert'></span>" + $translate.instant('InternalErrorMessage') +
 				'<a href="mailto:' + Settings.supportEmailSetting + '">' + Settings.supportEmailSetting + '</a>', null, false);
