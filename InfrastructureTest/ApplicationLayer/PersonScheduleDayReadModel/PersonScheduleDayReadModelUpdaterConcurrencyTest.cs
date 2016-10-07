@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.PersonScheduleDayRead
 {
 	[PrincipalAndStateTest]
 	[Explicit]
-	[Category("ConcurrencyTest")]
+	[Category("LongRunning")]
 	[Toggle(Toggles.ReadModel_ToHangfire_39147)]
 	public class PersonScheduleDayReadModelUpdaterHangfireConcurrencyTest : ISetup
 	{
