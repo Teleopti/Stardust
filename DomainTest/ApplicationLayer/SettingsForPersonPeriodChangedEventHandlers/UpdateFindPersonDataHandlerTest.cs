@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
     public class UpdateFindPersonDataHandlerTest
     {
         private MockRepository _mocks;
-        private UpdateFindPersonDataHandlerHangfire _target;
+        private UpdateFindPersonDataHandler _target;
         private IPersonFinderReadOnlyRepository _finderReadOnlyRep;
 
         [SetUp]
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
         {
             _mocks = new MockRepository();
             _finderReadOnlyRep = _mocks.StrictMock<IPersonFinderReadOnlyRepository>();
-            _target = new UpdateFindPersonDataHandlerHangfire(_finderReadOnlyRep);
+            _target = new UpdateFindPersonDataHandler(_finderReadOnlyRep);
         }
 
         [Test]

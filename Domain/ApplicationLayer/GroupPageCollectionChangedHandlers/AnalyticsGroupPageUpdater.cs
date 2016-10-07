@@ -11,69 +11,31 @@ using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandlers
 {
-#pragma warning disable 618
 	[EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
-			 Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439),
-		DisabledBy(Toggles.GroupPageCollection_ToHangfire_38178)]
-	public class AnalyticsGroupPageUpdaterOnServicebus : AnalyticsGroupPageUpdaterBase,
-	IHandleEvent<GroupPageCollectionChangedEvent>,
-	IRunOnServiceBus
-#pragma warning restore 618
+			 Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
+	public class AnalyticsGroupPageUpdater :
+		IHandleEvent<GroupPageCollectionChangedEvent>,
+		IRunOnHangfire
 	{
-		public AnalyticsGroupPageUpdaterOnServicebus(
-			IGroupPageRepository groupPageRepository,
-			IAnalyticsGroupPageRepository analyticsGroupPageRepository,
-			IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository) : 
-			base(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository)
-		{
-		}
-
-		[AnalyticsUnitOfWork]
-		public new virtual void Handle(GroupPageCollectionChangedEvent @event)
-		{
-			base.Handle(@event);
-		}
-	}
-
-	[EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
-			 Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439,
-			Toggles.GroupPageCollection_ToHangfire_38178)]
-	public class AnalyticsGroupPageUpdaterOnHangfire : AnalyticsGroupPageUpdaterBase,
-	IHandleEvent<GroupPageCollectionChangedEvent>,
-	IRunOnHangfire
-	{
-		public AnalyticsGroupPageUpdaterOnHangfire(IGroupPageRepository groupPageRepository, 
-			IAnalyticsGroupPageRepository analyticsGroupPageRepository,
-			IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository) : 
-			base(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository)
-		{
-		}
-
-		[ImpersonateSystem]
-		[UnitOfWork]
-		[AnalyticsUnitOfWork]
-		[Attempts(10)]
-		public new virtual void Handle(GroupPageCollectionChangedEvent @event)
-		{
-			base.Handle(@event);
-		}
-	}
-
-	public class AnalyticsGroupPageUpdaterBase
-	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsGroupPageUpdaterBase));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsGroupPageUpdater));
 		private readonly IGroupPageRepository _groupPageRepository;
 		private readonly IAnalyticsGroupPageRepository _analyticsGroupPageRepository;
 		private readonly IAnalyticsBridgeGroupPagePersonRepository _analyticsBridgeGroupPagePersonRepository;
 
-		public AnalyticsGroupPageUpdaterBase(IGroupPageRepository groupPageRepository, IAnalyticsGroupPageRepository analyticsGroupPageRepository, IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository)
+		public AnalyticsGroupPageUpdater(IGroupPageRepository groupPageRepository, 
+			IAnalyticsGroupPageRepository analyticsGroupPageRepository,
+			IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository) 
 		{
 			_groupPageRepository = groupPageRepository;
 			_analyticsGroupPageRepository = analyticsGroupPageRepository;
 			_analyticsBridgeGroupPagePersonRepository = analyticsBridgeGroupPagePersonRepository;
 		}
 
-		public void Handle(GroupPageCollectionChangedEvent @event)
+		[ImpersonateSystem]
+		[UnitOfWork]
+		[AnalyticsUnitOfWork]
+		[Attempts(10)]
+		public virtual void Handle(GroupPageCollectionChangedEvent @event)
 		{
 			var groupPages = _groupPageRepository.LoadGroupPagesByIds(@event.GroupPageIdCollection);
 

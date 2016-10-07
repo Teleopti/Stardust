@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 	[TestFixture]
 	public class GroupingReadModelGroupPageUpdaterTests
 	{
-		private GroupingReadModelGroupPageUpdaterHangfire _target;
+		private GroupingReadModelGroupPageUpdater _target;
 		private MockRepository _mocks;
 		private IGroupingReadOnlyRepository _groupReadOnlyRepository;
 
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 		{
 			_mocks = new MockRepository();
 			_groupReadOnlyRepository = _mocks.DynamicMock<IGroupingReadOnlyRepository>();
-			_target = new GroupingReadModelGroupPageUpdaterHangfire(_groupReadOnlyRepository);
+			_target = new GroupingReadModelGroupPageUpdater(_groupReadOnlyRepository);
 		}
 
 		[Test]

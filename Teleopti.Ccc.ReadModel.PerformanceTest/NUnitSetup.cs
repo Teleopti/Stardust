@@ -112,7 +112,6 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			Toggles.ETL_EventbasedDate_39562,
 			Toggles.ETL_SpeedUpIntradayPreference_37124,
 			Toggles.ETL_SpeedUpIntradaySkill_37543,
-			Toggles.SettingsForPersonPeriodChanged_ToHangfire_38207,
 			Toggles.ETL_SpeedUpIntradayDayOff_38213,
 			Toggles.ETL_SpeedUpIntradayActivity_38303,
 			Toggles.ETL_SpeedUpIntradayOvertime_38304,

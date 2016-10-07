@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 		private IGroupPageRepository _groupPageRepository;
 		private IAnalyticsGroupPageRepository _analyticsGroupPageRepository;
 		private IAnalyticsBridgeGroupPagePersonRepository _analyticsBridgeGroupPagePersonRepository;
-		private AnalyticsGroupPageUpdaterBase _target;
+		private AnalyticsGroupPageUpdater _target;
 
 		[SetUp]
 		public void Setup()
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			_analyticsGroupPageRepository = MockRepository.GenerateMock<IAnalyticsGroupPageRepository>();
 			_analyticsBridgeGroupPagePersonRepository = MockRepository.GenerateMock<IAnalyticsBridgeGroupPagePersonRepository>();
 
-			_target = new AnalyticsGroupPageUpdaterBase(_groupPageRepository, _analyticsGroupPageRepository, _analyticsBridgeGroupPagePersonRepository);
+			_target = new AnalyticsGroupPageUpdater(_groupPageRepository, _analyticsGroupPageRepository, _analyticsBridgeGroupPagePersonRepository);
 			_businessUnitId = Guid.NewGuid();
 		}
 
