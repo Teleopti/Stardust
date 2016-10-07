@@ -36,9 +36,12 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 		public void Modify(Guid personId, string oldPassword, string newPassword)
 		{
 			var personInfo = _findPersonInfo.GetById(personId);
+			if (personInfo == null)
+				throw new HttpException(403, "Invalid user name or password.");
 
 			var hashFunction = _hashFunctions.FirstOrDefault(x => x.IsGeneratedByThisFunction(personInfo.ApplicationLogonInfo.LogonPassword));
-			if (personInfo == null || !personInfo.ApplicationLogonInfo.IsValidPassword(_now, _passwordPolicy, oldPassword, hashFunction))
+			
+			if (hashFunction == null || !personInfo.ApplicationLogonInfo.IsValidPassword(_now, _passwordPolicy, oldPassword, hashFunction))
 				throw new HttpException(403, "Invalid user name or password.");
 			
 			if(oldPassword.Equals(newPassword))

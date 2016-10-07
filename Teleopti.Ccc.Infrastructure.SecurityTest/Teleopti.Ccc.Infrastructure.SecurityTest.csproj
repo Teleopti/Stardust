@@ -1,76 +1,78 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-	<PropertyGroup>
-		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-		<ProjectGuid>{74915EF1-0759-4E25-A521-5A2F67B6F6A1}</ProjectGuid>
-		<OutputType>Library</OutputType>
-		<AppDesignerFolder>Properties</AppDesignerFolder>
-		<RootNamespace>Teleopti.Ccc.Infrastructure.SecurityTest</RootNamespace>
-		<AssemblyName>Teleopti.Ccc.Infrastructure.SecurityTest</AssemblyName>
-		<SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-		<RestorePackages>true</RestorePackages>
-		<TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-		<FileAlignment>512</FileAlignment>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<DebugSymbols>true</DebugSymbols>
-		<DebugType>full</DebugType>
-		<Optimize>false</Optimize>
-		<OutputPath>bin\Debug\</OutputPath>
-		<DefineConstants>DEBUG;TRACE</DefineConstants>
-		<ErrorReport>prompt</ErrorReport>
-		<WarningLevel>4</WarningLevel>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<DebugType>pdbonly</DebugType>
-		<Optimize>true</Optimize>
-		<OutputPath>bin\Release\</OutputPath>
-		<DefineConstants>TRACE</DefineConstants>
-		<ErrorReport>prompt</ErrorReport>
-		<WarningLevel>4</WarningLevel>
-	</PropertyGroup>
-	<ItemGroup>
-		<Reference Include="nunit.framework, Version=3.4.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-			<HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
-			<Private>True</Private>
-		</Reference>
-		<Reference Include="SharpTestsEx, Version=1.1.1.0, Culture=neutral, PublicKeyToken=8c60d8070630b1c1, processorArchitecture=MSIL">
-			<HintPath>..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.dll</HintPath>
-			<Private>True</Private>
-		</Reference>
-		<Reference Include="SharpTestsEx.Mvc, Version=1.1.1.0, Culture=neutral, PublicKeyToken=8c60d8070630b1c1, processorArchitecture=MSIL">
-			<HintPath>..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.Mvc.dll</HintPath>
-			<Private>True</Private>
-		</Reference>
-		<Reference Include="System" />
-		<Reference Include="System.Core" />
-		<Reference Include="System.Xml.Linq" />
-		<Reference Include="System.Data.DataSetExtensions" />
-		<Reference Include="Microsoft.CSharp" />
-		<Reference Include="System.Data" />
-		<Reference Include="System.Net.Http" />
-		<Reference Include="System.Xml" />
-	</ItemGroup>
-	<ItemGroup>
-		<Compile Include="BCryptHashFunctionTest.cs" />
-		<Compile Include="OneWayEncryptionTest.cs" />
-		<Compile Include="Properties\AssemblyInfo.cs" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\Teleopti.Ccc.Infrastructure.Security\Teleopti.Ccc.Infrastructure.Security.csproj">
-			<Project>{50b5a39c-88b6-469e-84f1-d42a5daeac6e}</Project>
-			<Name>Teleopti.Ccc.Infrastructure.Security</Name>
-		</ProjectReference>
-	</ItemGroup>
-	<ItemGroup>
-		<None Include="packages.config" />
-	</ItemGroup>
-	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-	<Import Project="$(SolutionDir)\.nuget\nuget.targets" />
-	<!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{74915EF1-0759-4E25-A521-5A2F67B6F6A1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Teleopti.Ccc.Infrastructure.SecurityTest</RootNamespace>
+    <AssemblyName>Teleopti.Ccc.Infrastructure.SecurityTest</AssemblyName>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework, Version=3.4.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpTestsEx, Version=1.1.1.0, Culture=neutral, PublicKeyToken=8c60d8070630b1c1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpTestsEx.Mvc, Version=1.1.1.0, Culture=neutral, PublicKeyToken=8c60d8070630b1c1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BCryptHashFunctionTest.cs" />
+    <Compile Include="OneWayEncryptionTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Teleopti.Ccc.Infrastructure.Security\Teleopti.Ccc.Infrastructure.Security.csproj">
+      <Project>{50b5a39c-88b6-469e-84f1-d42a5daeac6e}</Project>
+      <Name>Teleopti.Ccc.Infrastructure.Security</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
