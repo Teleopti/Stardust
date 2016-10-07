@@ -11,8 +11,7 @@ using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandlers
 {
-	[EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
-			 Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
+	[EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623)]
 	public class AnalyticsGroupPageUpdater :
 		IHandleEvent<GroupPageCollectionChangedEvent>,
 		IRunOnHangfire

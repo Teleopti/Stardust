@@ -128,7 +128,6 @@
 		Wfm_Use_Stardust,
 		Wfm_ForecastFileImportOnStardust_37047,
 
-		ETL_SpeedUpPersonPeriodIntraday_37162_37439,
 		ETL_SpeedUpGroupPagePersonIntraday_37623,
 		WfmGlobalLayout_personalOptions_37114,
 

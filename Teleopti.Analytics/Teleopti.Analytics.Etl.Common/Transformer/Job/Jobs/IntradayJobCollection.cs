@@ -18,8 +18,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new DimQualityQuestLoadJobStep(jobParameters));          // BU independent
 			Add(new RaptorQueueSynchronizationStep(jobParameters));
 			Add(new RaptorAgentLogOnSynchronizationStep(jobParameters));
-			AddWhenAllDisabled(new StagePersonJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
-			AddWhenAllDisabled(new StageAgentSkillJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
 			AddWhenAllDisabled(new StageActivityJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayActivity_38303);
 			AddWhenAllDisabled(new StageAbsenceJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayAbsence_38301);
 			AddWhenAllDisabled(new StageScenarioJobStep(jobParameters), Toggles.ETL_SpeedUpScenario_38300);
@@ -36,7 +34,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			AddWhenAllDisabled(new StageScorecardJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
 			AddWhenAllDisabled(new StageScorecardKpiJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
 			AddWhenAllDisabled(new StageKpiTargetTeamJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
-			AddWhenAnyDisabled(new StageGroupPagePersonJobStep(jobParameters), Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623, Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
+			AddWhenAnyDisabled(new StageGroupPagePersonJobStep(jobParameters), Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623);
 			AddWhenAllDisabled(new StageOvertimeJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayOvertime_38304);
 			AddWhenAllDisabled(new IntradayStageRequestJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayRequest_38914);
 
@@ -45,11 +43,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			AddWhenAllDisabled(new DimScorecardJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
 			AddWhenAllDisabled(new DimKpiJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
 			AddWhenAllDisabled(new ScorecardKpiJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
-			AddWhenAllDisabled(new DimSiteJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
-			AddWhenAllDisabled(new DimTeamJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
 			AddWhenAllDisabled(new DimSkillJobStep(jobParameters), Toggles.ETL_SpeedUpIntradaySkill_37543);
-			AddWhenAllDisabled(new DimSkillSetJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
-			AddWhenAllDisabled(new DimPersonJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
 			AddWhenAllDisabled(new DimActivityJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayActivity_38303);
 			AddWhenAllDisabled(new DimAbsenceJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayAbsence_38301);
 			AddWhenAllDisabled(new DimScenarioJobStep(jobParameters), Toggles.ETL_SpeedUpScenario_38300);
@@ -59,11 +53,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 
 			AddWhenAllDisabled(new DimOvertimeJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayOvertime_38304);
 
-			AddWhenAllDisabled(new BridgeSkillSetSkillJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
-			AddWhenAllDisabled(new BridgeAcdLogOnPersonJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
 			AddWhenAllDisabled(new BridgeQueueWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayWorkload_38928);
-			AddWhenAnyDisabled(new DimGroupPageJobStep(jobParameters), Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623, Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
-			AddWhenAnyDisabled(new BridgeGroupPagePersonJobStep(jobParameters), Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623, Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
+			AddWhenAnyDisabled(new DimGroupPageJobStep(jobParameters), Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623);
+			AddWhenAnyDisabled(new BridgeGroupPagePersonJobStep(jobParameters), Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623);
 
 			// FACT TABLES
 			AddWhenAllDisabled(new FactScheduleJobStep(jobParameters, true), Toggles.ETL_SpeedUpETL_30791);
@@ -87,8 +79,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			AddWhenAllDisabled(new FactKpiTargetTeamJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
 			AddWhenAllDisabled(new FactRequestJobStep(jobParameters, true), Toggles.ETL_SpeedUpIntradayRequest_38914);
 			AddWhenAllDisabled(new FactRequestedDaysJobStep(jobParameters, true), Toggles.ETL_SpeedUpIntradayRequest_38914);
-
-			AddWhenAllDisabled(new FactAgentSkillJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
 		}
 	}
 }

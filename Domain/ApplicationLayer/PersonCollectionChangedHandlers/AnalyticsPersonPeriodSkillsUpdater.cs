@@ -1,13 +1,11 @@
 ﻿using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Aop;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
-	[EnabledBy(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
 	public class AnalyticsPersonPeriodSkillsUpdater :
 		IHandleEvent<AnalyticsPersonPeriodSkillsChangedEvent>,
 	    IRunOnHangfire

@@ -10,8 +10,7 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEventHandlers
 {
-	[EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
-		Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
+	[EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623)]
 	public class BuildInGroupsAnalyticsUpdater :
 		IHandleEvent<SettingsForPersonPeriodChangedEvent>,
 		IRunOnHangfire
