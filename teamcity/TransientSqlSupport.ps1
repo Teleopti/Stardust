@@ -1,7 +1,8 @@
 ﻿$path = (get-item $PSScriptroot ).parent.Fullname
-$NugetPath = "$WorkingDirectory..\.nuget"
+$NugetPath = "$WorkingDirectory\..\packages"
+$NugetExe = "$WorkingDirectory\..\.nuget"
 
-#.nuget\nuget install EnterpriseLibrary.TransientFaultHandling.Configuration -o $path -ExcludeVersion
+. $NugetExe\nuget.exe install EnterpriseLibrary.TransientFaultHandling.Configuration -o $NugetPath -ExcludeVersion
 
 # Loading EnterpriseLibrary TransientFaultHandling Dll's
 Add-Type -Path "$NugetPath\EnterpriseLibrary.TransientFaultHandling\lib\portable-net45+win+wp8\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.dll"

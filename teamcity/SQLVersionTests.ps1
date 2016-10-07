@@ -25,9 +25,9 @@ properties {
 	$DbNamePrefix = 'teamcity'
 	$AppDB = "$DbNamePrefix"+"_AppDB"
 	$MartDB = "$DbNamePrefix"+"_MartDB"
-	$DbManagerExe = "$WorkingDirectory\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\$Configuration\DBManager.exe"
-    $SecurityExe = "$WorkingDirectory\Teleopti.Support.Security\bin\$Configuration\Teleopti.Support.Security.exe"
-	$DatabasePath = "$WorkingDirectory\database"
+	$DbManagerExe = "$WorkingDirectory\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\$Configuration\DBManager.exe"
+    $SecurityExe = "$WorkingDirectory\..\Teleopti.Support.Security\bin\$Configuration\Teleopti.Support.Security.exe"
+	$DatabasePath = "$WorkingDirectory\..\database"
     $global:DropInstallAndPatchSqlLoginCommand = "DROP LOGIN [$global:InstallAndPatchSqlLogin]"
 	$global:DropApplicationDbLoginCommand = "DROP LOGIN [$global:ApplicationDbLogin]"
 }
@@ -354,13 +354,13 @@ function global:ScriptedTestsRunOnAllDBs () {
     if (!($global:SQLEdition -eq $SQLAzure)) {
 
     $ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=$MartDB;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
-    $query = Get-Content "$WorkingDirectory\Database\Tools\PK-namingStandard.sql"
+    $query = Get-Content "$WorkingDirectory\..\Database\Tools\PK-namingStandard.sql"
     
     Write-Output "$(Get-Date -f $timeStampFormat) - Running script: [PK-namingStandard.sql] on [$MartDB]" 
     RunAndRetryNonQuery $ConnectionString $query
 
     $ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=$AppDB;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
-    $query = Get-Content "$WorkingDirectory\Database\Tools\NoHeapsCheck.sql"
+    $query = Get-Content "$WorkingDirectory\..\Database\Tools\NoHeapsCheck.sql"
     
     Write-Output "$(Get-Date -f $timeStampFormat) - Running script: [NoHeapsCheck.sql] on [$AppDB]"
     RunAndRetryNonQuery $ConnectionString $query
@@ -370,14 +370,14 @@ function global:ScriptedTestsRunOnAllDBs () {
 
 function global:AnalyticsReportsTest () {
     
-    $path = "$WorkingDirectory\Database\Tools\AnalyticsReportsCompile.sql"
+    $path = "$WorkingDirectory\..\Database\Tools\AnalyticsReportsCompile.sql"
     $word = "BEGIN TRY"
     $replacement = ""
     $text = get-content $path 
     $newText = $text -replace $word,$replacement
     $newText > $path
     
-    $query = Get-Content "$WorkingDirectory\Database\Tools\AnalyticsReportsCompile.sql"
+    $query = Get-Content "$WorkingDirectory\..\Database\Tools\AnalyticsReportsCompile.sql"
     $ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=$MartDB;User Id=$global:ApplicationDbLogin;Password=$global:ApplicationDbPwd"
     
     Write-Output "$(Get-Date -f $timeStampFormat) - Running script: [AnalyticsReportsCompile.sql] on [$MartDB]"
@@ -386,7 +386,7 @@ function global:AnalyticsReportsTest () {
 
 function global:CleanUpLog () {
 
-    Get-ChildItem $WorkingDirectory -Filter DBManager*.log -Recurse | Remove-Item | Out-null
+    Get-ChildItem $WorkingDirectory\..\ -Filter DBManager*.log -Recurse | Remove-Item | Out-null
 
     Write-Output "$(Get-Date -f $timeStampFormat) - Cleaning DBManager*.log files from $WorkingDirectory\*"
 }    
