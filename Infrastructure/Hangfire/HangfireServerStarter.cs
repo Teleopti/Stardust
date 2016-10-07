@@ -30,12 +30,11 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		{
 			_starter.Start(_config.ConnectionString("Hangfire"));
 
-			var options = new BackgroundJobServerOptions
+			app.UseHangfireServer(new BackgroundJobServerOptions
 			{
 				WorkerCount = setThisToOneAndErikWillHuntYouDownAndKillYouSlowlyAndPainfully,
 				Queues = Queues.OrderOfPriority().ToArray()
-			};
-			app.UseHangfireServer(options);
+			});
 		}
 	}
 }

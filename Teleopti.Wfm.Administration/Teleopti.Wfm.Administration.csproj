@@ -323,7 +323,6 @@
     <Compile Include="Controllers\HangfireController.cs" />
     <Compile Include="Core\CreateBusinessUnit.cs" />
     <Compile Include="Core\Hangfire\HangfireCookie.cs" />
-    <Compile Include="Core\Hangfire\HangfireDashboardAuthorization.cs" />
     <Compile Include="Core\IRunWithUnitOfWork.cs" />
     <Compile Include="Core\NoCacheFilter.cs" />
     <Compile Include="Core\RtaStateGroupCreator.cs" />

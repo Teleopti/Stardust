@@ -245,6 +245,7 @@
     <Compile Include="Foundation\DatabaseConnectionLostException.cs" />
     <Compile Include="Foundation\WebRequestPrincipalContext.cs" />
     <Compile Include="Hangfire\HangfireClientStarter.cs" />
+    <Compile Include="Hangfire\HangfireDashboardStarter.cs" />
     <Compile Include="Hangfire\HangfireEventClient.cs" />
     <Compile Include="Hangfire\HangfireEventJob.cs" />
     <Compile Include="Hangfire\HangfireEventServer.cs" />

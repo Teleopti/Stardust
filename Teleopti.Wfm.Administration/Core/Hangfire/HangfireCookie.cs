@@ -4,19 +4,18 @@ using System.Security.Claims;
 using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 
 namespace Teleopti.Wfm.Administration.Core.Hangfire
 {
 	public class HangfireCookie : IHangfireCookie
 	{
-		public static string TenantAdminRoleName = "TenantAdmin";
-
 		// This cookie is used only for getting authenticated in Hangfire
 		public void SetHangfireAdminCookie(string userName, string email)
 		{
 			var claims = new List<Claim>
 							{
-								new Claim(ClaimTypes.Role, TenantAdminRoleName),
+								new Claim(ClaimTypes.Role, HangfireDashboardAuthorization.TenantAdminRoleName),
 								new Claim(ClaimTypes.Name, userName),
 								new Claim(ClaimTypes.Email, email)
 							};
