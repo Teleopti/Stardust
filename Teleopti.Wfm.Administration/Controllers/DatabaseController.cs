@@ -11,6 +11,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Wfm.Administration.Core;
 
@@ -27,6 +28,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly PersistTenant _persistTenant;
 		private readonly IUpdateCrossDatabaseView _updateCrossDatabaseView;
 		private readonly ICreateBusinessUnit _createBusinessUnit;
+		private readonly IHashFunction _currentHashFunction;
 
 		public DatabaseController(
 			IDatabaseHelperWrapper databaseHelperWrapper, 
@@ -36,7 +38,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			ICheckPasswordStrength checkPasswordStrength,
 			PersistTenant persistTenant,
 			IUpdateCrossDatabaseView updateCrossDatabaseView,
-			ICreateBusinessUnit createBusinessUnit)
+			ICreateBusinessUnit createBusinessUnit, IHashFunction currentHashFunction)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_currentTenantSession = currentTenantSession;
@@ -46,6 +48,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_persistTenant = persistTenant;
 			_updateCrossDatabaseView = updateCrossDatabaseView;
 			_createBusinessUnit = createBusinessUnit;
+			_currentHashFunction = currentHashFunction;
 		}
 
 
@@ -371,7 +374,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var personInfo = new PersonInfo(tenant, personId);
 
 			// todo handle passwordStrength error this is just to get it to work, the loader is in applicationdata and I don't think it is so good
-			personInfo.SetApplicationLogonCredentials(_checkPasswordStrength, userName, password);
+			personInfo.SetApplicationLogonCredentials(_checkPasswordStrength, userName, password, _currentHashFunction);
 			_currentTenantSession.CurrentSession().Save(personInfo);
 
 			return new TenantResultModel { Success = true, Message = "Created new user." };

@@ -14,5 +14,6 @@
 		<assembly path=".\Teleopti.Ccc.WinCodeTest\bin\Release\Teleopti.Ccc.WinCodeTest.dll"/>
 		<assembly path=".\Teleopti.MessagingTest\bin\Release\Teleopti.MessagingTest.dll"/>
 		<assembly path=".\Teleopti.Support.CodeTest\bin\Release\Teleopti.Support.CodeTest.dll"/>
+		<assembly path=".\Teleopti.Ccc.Infrastructure.SecurityTest\bin\Release\Teleopti.Ccc.Infrastructure.SecurityTest.dll"/>
 	</Config>
 </NUnitProject>

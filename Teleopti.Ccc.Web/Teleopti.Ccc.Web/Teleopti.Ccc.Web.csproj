@@ -2456,6 +2456,10 @@
       <Project>{8a8c2fc6-ad5a-4234-b887-21de7e8d75cd}</Project>
       <Name>Teleopti.Analytics.Parameters</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.Infrastructure.Security\Teleopti.Ccc.Infrastructure.Security.csproj">
+      <Project>{50B5A39C-88B6-469E-84F1-D42A5DAEAC6E}</Project>
+      <Name>Teleopti.Ccc.Infrastructure.Security</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>

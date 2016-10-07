@@ -6,8 +6,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public class ApplicationLogonInfo
 	{
-		private static readonly IHashFunction hashFunction = new OneWayEncryption();
-
 		public ApplicationLogonInfo()
 		{
 			LastPasswordChange=DateTime.UtcNow;
@@ -29,19 +27,24 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			IsLocked = false;
 		}
 
-		protected internal virtual void SetApplicationLogonCredentialsInternal(ICheckPasswordStrength checkPasswordStrength, string logonName, string password)
+		protected internal virtual void SetApplicationLogonCredentialsInternal(ICheckPasswordStrength checkPasswordStrength, string logonName, string password, IHashFunction currentHashFunction)
 		{
 			if(!string.IsNullOrEmpty(password))
-				setPassword(checkPasswordStrength, password);
+				setPassword(checkPasswordStrength, password, currentHashFunction);
 			LogonName = logonName;
 			registerPasswordChange();
 		}
 
-		private void setPassword(ICheckPasswordStrength checkPasswordStrength, string newPassword)
+		public virtual void SetCurrentPasswordWithNewHashFunction(string password, IHashFunction currentHashFunction)
+		{
+			LogonPassword = currentHashFunction.CreateHash(password);
+		}
+
+		private void setPassword(ICheckPasswordStrength checkPasswordStrength, string newPassword, IHashFunction currentHashFunction)
 		{
 			checkPasswordStrength.Validate(newPassword);
 			//todo: tenant get rid of domain dependency here
-			LogonPassword = hashFunction.CreateHash(newPassword);
+			LogonPassword = currentHashFunction.CreateHash(newPassword);
 		}
 
 		public virtual void Lock()
@@ -49,7 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			IsLocked = true;
 		}
 
-		public virtual bool IsValidPassword(INow now, IPasswordPolicy passwordPolicy, string unencryptedPassword)
+		public virtual bool IsValidPassword(INow now, IPasswordPolicy passwordPolicy, string unencryptedPassword, IHashFunction hashFunction)
 		{
 			if (LogonName == null)
 				return false;
@@ -59,7 +62,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			{
 				clearInvalidAttempts(utcNow);
 			}
-
 			var isValid = hashFunction.Verify(unencryptedPassword, LogonPassword);
 			if (isValid)
 			{

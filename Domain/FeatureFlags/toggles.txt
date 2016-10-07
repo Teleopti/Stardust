@@ -204,3 +204,4 @@ AbsenceRequests_UseMultiRequestProcessing_39960 = RC
 AbsenceRequests_SpeedupIntradayRequests_40754 = RC
 ETL_EventbasedDate_39562 = RC
 ReadModel_ToHangfire_39147 = RC
+NewPasswordHash_40460 = RC

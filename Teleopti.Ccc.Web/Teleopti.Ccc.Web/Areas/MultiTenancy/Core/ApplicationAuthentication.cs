@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -13,18 +16,24 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 		private readonly INow _now;
 		private readonly IVerifyPasswordPolicy _verifyPasswordPolicy;
 		private readonly IDataSourceConfigurationEncryption _dataSourceConfigurationEncryption;
+		private readonly IEnumerable<IHashFunction> _hashFunctions;
+		private readonly IHashFunction _currentHashFunction;
 
 		public ApplicationAuthentication(IApplicationUserQuery applicationUserQuery,
 																	Func<IPasswordPolicy> passwordPolicy, 
 																	INow now, 
 																	IVerifyPasswordPolicy verifyPasswordPolicy,
-																	IDataSourceConfigurationEncryption dataSourceConfigurationEncryption)
+																	IDataSourceConfigurationEncryption dataSourceConfigurationEncryption, 
+																	IEnumerable<IHashFunction> hashFunctions, 
+																	IHashFunction currentHashFunction)
 		{
 			_applicationUserQuery = applicationUserQuery;
 			_passwordPolicy = passwordPolicy;
 			_now = now;
 			_verifyPasswordPolicy = verifyPasswordPolicy;
 			_dataSourceConfigurationEncryption = dataSourceConfigurationEncryption;
+			_hashFunctions = hashFunctions;
+			_currentHashFunction = currentHashFunction;
 		}
 
 		public TenantAuthenticationResult Logon(string userName, string password)
@@ -35,7 +44,11 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 
 			var applicationLogonInfo = personInfo.ApplicationLogonInfo;
 
-			if(!applicationLogonInfo.IsValidPassword(_now, _passwordPolicy(), password))
+			var hashFunction = _hashFunctions.FirstOrDefault(x => x.IsGeneratedByThisFunction(applicationLogonInfo.LogonPassword));
+			if (hashFunction == null)
+				return createFailingResult(Resources.LogOnFailedInvalidUserNameOrPassword);
+
+			if (!applicationLogonInfo.IsValidPassword(_now, _passwordPolicy(), password, hashFunction))
 				return createFailingResult(Resources.LogOnFailedInvalidUserNameOrPassword);
 
 			if (applicationLogonInfo.IsLocked)
@@ -52,6 +65,8 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 					TenantPassword = personInfo.TenantPassword
 				};
 
+			if (hashFunction.GetType() != _currentHashFunction.GetType())
+				applicationLogonInfo.SetCurrentPasswordWithNewHashFunction(password, _currentHashFunction);
 			return new TenantAuthenticationResult
 			{
 				Success = true,

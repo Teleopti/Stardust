@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Wfm.Administration.Controllers;
@@ -77,7 +78,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldSetHangfireCookie()
 		{
 			var hangfireCookie = new FakeHangfireCookie();
-			Target = new AccountController(TenantTestAttribute.TenantUnitOfWorkForTest(), hangfireCookie);
+			Target = new AccountController(TenantTestAttribute.TenantUnitOfWorkForTest(), hangfireCookie, new OneWayEncryption(), new[] { new OneWayEncryption() });
 			hangfireCookie.CookieIsSet.Should().Be.False();
 
 			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
@@ -100,7 +101,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldNotSetHangfireCookie()
 		{
 			var hangfireCookie = new FakeHangfireCookie();
-			Target = new AccountController(TenantTestAttribute.TenantUnitOfWorkForTest(), hangfireCookie);
+			Target = new AccountController(TenantTestAttribute.TenantUnitOfWorkForTest(), hangfireCookie, new OneWayEncryption(), new []{ new OneWayEncryption()});
 			hangfireCookie.CookieIsSet.Should().Be.False();
 
 			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");

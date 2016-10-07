@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 				NewPassword = RandomName.Make()
 			};
 			var personInfo = new PersonInfo(new Tenant(string.Empty), model.PersonId);
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), model.OldPassword);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), model.OldPassword, new OneWayEncryption());
 			FindPersonInfo.Add(personInfo);
 
 			Target.Modify(model);
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 				NewPassword = RandomName.Make()
 			};
 			var personInfo = new PersonInfo(new Tenant(string.Empty), Guid.NewGuid());
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), model.OldPassword);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), model.OldPassword, new OneWayEncryption());
 			FindPersonInfo.Add(personInfo);
 
 			var ex = Assert.Throws<HttpException>(() => Target.Modify(model));
@@ -75,7 +76,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 				NewPassword = RandomName.Make()
 			};
 			var personInfo = new PersonInfo(new Tenant(string.Empty), model.PersonId);
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make());
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make(), new OneWayEncryption());
 			FindPersonInfo.Add(personInfo);
 
 			var ex = Assert.Throws<HttpException>(() => Target.Modify(model));
@@ -95,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 				NewPassword = pw
 			};
 			var personInfo = new PersonInfo(new Tenant(string.Empty), model.PersonId);
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), pw);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), pw, new OneWayEncryption());
 			FindPersonInfo.Add(personInfo);
 
 			var ex = Assert.Throws<HttpException>(() => Target.Modify(model));
@@ -114,7 +115,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 				NewPassword = RandomName.Make()
 			};
 			var personInfo = new PersonInfo(new Tenant(string.Empty), model.PersonId);
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), model.OldPassword);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), model.OldPassword, new OneWayEncryption());
 			FindPersonInfo.Add(personInfo);
 
 			var ex = Assert.Throws<HttpException>(() => Target.Modify(model));
@@ -132,7 +133,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 				NewPassword = RandomName.Make()
 			};
 			var personInfo = new PersonInfo(new Tenant(string.Empty), model.PersonId);
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make());
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make(), new OneWayEncryption());
 			FindPersonInfo.Add(personInfo);
 
 			var invalidAttemptsBefore = personInfo.ApplicationLogonInfo.InvalidAttempts;
@@ -151,7 +152,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 				NewPassword = RandomName.Make()
 			};
 			var personInfo = new PersonInfo(new Tenant(string.Empty), model.PersonId);
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), model.OldPassword);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), model.OldPassword, new OneWayEncryption());
 			personInfo.ApplicationLogonInfo.Lock();
 			FindPersonInfo.Add(personInfo);
 

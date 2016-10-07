@@ -230,7 +230,6 @@
     <Compile Include="FakeTransactionHook.cs" />
     <Compile Include="FakeUserUiCulture.cs" />
     <Compile Include="InfraTestConfigReader.cs" />
-    <Compile Include="EncryptPassword.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="Extensions.cs" />

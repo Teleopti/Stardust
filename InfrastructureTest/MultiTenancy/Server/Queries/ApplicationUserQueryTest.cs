@@ -4,6 +4,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
 
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var tenant = new Tenant(RandomName.Make());
 			_tenantUnitOfWorkManager.CurrentSession().Save(tenant);
 			existingPerson = new PersonInfo(tenant, Guid.NewGuid());
-			existingPerson.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make());
+			existingPerson.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make(), new OneWayEncryption());
 			var personInfoPersister = new PersistPersonInfo(_tenantUnitOfWorkManager);
 			personInfoPersister.Persist(existingPerson);
 			_tenantUnitOfWorkManager.CurrentSession().Flush();

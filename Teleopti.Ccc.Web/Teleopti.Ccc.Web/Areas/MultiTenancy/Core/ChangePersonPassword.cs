@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
@@ -12,23 +15,30 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 		private readonly IPasswordPolicy _passwordPolicy;
 		private readonly IFindPersonInfo _findPersonInfo;
 		private readonly ICheckPasswordStrength _checkPasswordStrength;
+		private readonly IEnumerable<IHashFunction> _hashFunctions;
+		private readonly IHashFunction _currentHashFunction;
 
 		public ChangePersonPassword(INow now,
 													IPasswordPolicy passwordPolicy,
 													IFindPersonInfo findPersonInfo,
-													ICheckPasswordStrength checkPasswordStrength)
+													ICheckPasswordStrength checkPasswordStrength, 
+													IEnumerable<IHashFunction> hashFunctions, 
+													IHashFunction currentHashFunction)
 		{
 			_now = now;
 			_passwordPolicy = passwordPolicy;
 			_findPersonInfo = findPersonInfo;
 			_checkPasswordStrength = checkPasswordStrength;
+			_hashFunctions = hashFunctions;
+			_currentHashFunction = currentHashFunction;
 		}
 
 		public void Modify(Guid personId, string oldPassword, string newPassword)
 		{
 			var personInfo = _findPersonInfo.GetById(personId);
 
-			if (personInfo == null || !personInfo.ApplicationLogonInfo.IsValidPassword(_now, _passwordPolicy, oldPassword))
+			var hashFunction = _hashFunctions.FirstOrDefault(x => x.IsGeneratedByThisFunction(personInfo.ApplicationLogonInfo.LogonPassword));
+			if (personInfo == null || !personInfo.ApplicationLogonInfo.IsValidPassword(_now, _passwordPolicy, oldPassword, hashFunction))
 				throw new HttpException(403, "Invalid user name or password.");
 			
 			if(oldPassword.Equals(newPassword))
@@ -36,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			
 			try
 			{
-				personInfo.SetApplicationLogonCredentials(_checkPasswordStrength, personInfo.ApplicationLogonInfo.LogonName, newPassword);
+				personInfo.SetApplicationLogonCredentials(_checkPasswordStrength, personInfo.ApplicationLogonInfo.LogonName, newPassword, _currentHashFunction);
 			}
 			catch (PasswordStrengthException)
 			{

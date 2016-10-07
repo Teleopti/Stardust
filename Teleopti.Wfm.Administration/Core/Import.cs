@@ -54,7 +54,7 @@ namespace Teleopti.Wfm.Administration.Core
 			{
 				var personInfo = new PersonInfo(newTenant, userModel.PersonId);
 				personInfo.SetIdentity(userModel.Identity);
-				personInfo.SetApplicationLogonCredentials(null, userModel.AppLogon, null);
+				personInfo.SetApplicationLogonCredentials(null, userModel.AppLogon, null, null);
 				personInfo.ApplicationLogonInfo.SetEncryptedPasswordIfLogonNameExistButNoPassword(userModel.AppPassword);
 				_currentTenantSession.CurrentSession().Save(personInfo);
 			}

@@ -21,12 +21,15 @@ namespace Teleopti.Wfm.Administration.Controllers
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
 		private readonly IHangfireCookie _hangfireCookie;
-		private readonly IHashFunction _hashFunction = new OneWayEncryption();
+		private readonly IHashFunction _currentHashFunction;
+		private readonly IEnumerable<IHashFunction> _hashFunctions;
 
-		public AccountController(ICurrentTenantSession currentTenantSession, IHangfireCookie hangfireCookie)
+		public AccountController(ICurrentTenantSession currentTenantSession, IHangfireCookie hangfireCookie, IHashFunction currentHashFunction, IEnumerable<IHashFunction> hashFunctions)
 		{
 			_currentTenantSession = currentTenantSession;
 			_hangfireCookie = hangfireCookie;
+			_currentHashFunction = currentHashFunction;
+			_hashFunctions = hashFunctions;
 		}
 
 		[OverrideAuthentication]
@@ -55,8 +58,19 @@ namespace Teleopti.Wfm.Administration.Controllers
 							var userName = reader.GetString(1);
 							var passwordHash = reader.GetString(2);
 							var accessToken = reader.GetString(3);
-							if (!_hashFunction.Verify(model.Password, passwordHash))
+							var hashFunction = _hashFunctions.FirstOrDefault(x => x.IsGeneratedByThisFunction(passwordHash));
+							if (hashFunction == null)
 								break;
+							if (!hashFunction.Verify(model.Password, passwordHash))
+								break;
+
+							if (_currentHashFunction.GetType() != hashFunction.GetType())
+							{
+								// Update the password with new hash
+								var user = _currentTenantSession.CurrentSession().Get<TenantAdminUser>(id);
+								user.Password = _currentHashFunction.CreateHash(model.Password);
+								_currentTenantSession.CurrentSession().Save(user);
+							}
 
 							_hangfireCookie.SetHangfireAdminCookie(userName, model.UserName);
 							return Json(new LoginResult { Success = true, Id = id, UserName = userName, AccessToken = accessToken });
@@ -198,8 +212,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			try
 			{
-				var encryptedPassword = _hashFunction.CreateHash(model.Password);
-				var token = _hashFunction.CreateHash(model.Email);
+				var encryptedPassword = _currentHashFunction.CreateHash(model.Password);
+				var token = _currentHashFunction.CreateHash(model.Email);
 				var user = new TenantAdminUser
 				{
 					Email = model.Email,
@@ -236,7 +250,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if (user == null)
 				return Json(new UpdateUserResultModel { Success = false, Message = "Can not find the user." });
 
-			if (!_hashFunction.Verify(model.OldPassword, user.Password))
+			var hashFunction = _hashFunctions.FirstOrDefault(x => x.IsGeneratedByThisFunction(user.Password));
+			if (hashFunction == null)
+				return Json(new UpdateUserResultModel { Success = false, Message = "The password is not correct. (2)" });
+
+			if (!hashFunction.Verify(model.OldPassword, user.Password))
 				return Json(new UpdateUserResultModel { Success = false, Message = "The password is not correct." });
 
 			if (!model.NewPassword.Equals(model.ConfirmNewPassword))
@@ -244,7 +262,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			try
 			{
-				var encryptedPassword = _hashFunction.CreateHash(model.NewPassword);
+				var encryptedPassword = _currentHashFunction.CreateHash(model.NewPassword);
 
 				user.Password = encryptedPassword;
 

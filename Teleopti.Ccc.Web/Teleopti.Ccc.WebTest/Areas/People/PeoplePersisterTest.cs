@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
@@ -125,7 +126,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var personInfo = new PersonInfo(new Tenant("Test"), personInfoModel.PersonId);
 			personInfo.SetIdentity(personInfoModel.Identity);
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), personInfoModel.ApplicationLogonName,
-				personInfoModel.Password);
+				personInfoModel.Password, new OneWayEncryption());
 			return personInfo;
 		}
 	}

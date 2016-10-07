@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -43,7 +44,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			{
 				CurrentTenantSession.CurrentSession().Save(tenant);
 				var personInfo = new PersonInfo(tenant, Guid.NewGuid());
-				personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "Perra", "passadej");
+				personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "Perra", "passadej", new OneWayEncryption());
 				CurrentTenantSession.CurrentSession().Save(personInfo);
 			}
 
@@ -62,7 +63,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			{
 				CurrentTenantSession.CurrentSession().Save(tenant);
 				var personInfo = new PersonInfo(tenant, Guid.NewGuid());
-				personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "Perra", "passadej");
+				personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "Perra", "passadej", new OneWayEncryption());
 				CurrentTenantSession.CurrentSession().Save(personInfo);
 			}
 

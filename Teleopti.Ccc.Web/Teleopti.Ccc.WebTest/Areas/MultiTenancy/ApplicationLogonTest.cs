@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		{
 			var logonName = RandomName.Make();
 			var personInfo = new PersonInfo();
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, RandomName.Make());
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, RandomName.Make(), new OneWayEncryption());
 			ApplicationUserQuery.Has(personInfo);
 
 			var result =
@@ -75,7 +76,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var encryptedDataSourceConfiguration = new DataSourceConfigurationEncryption().EncryptConfig(tenant.DataSourceConfiguration);
 
 			var personInfo = new PersonInfo(tenant, Guid.NewGuid());
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password, new OneWayEncryption());
 			ApplicationUserQuery.Has(personInfo);
 
 			var res = Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = password}).Result<TenantAuthenticationResult>();
@@ -96,7 +97,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var logonName = RandomName.Make();
 			var password = RandomName.Make();
 			var personInfo = new PersonInfo();
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password, new OneWayEncryption());
 			ApplicationUserQuery.Has(personInfo);
 
 			Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = password})
@@ -127,7 +128,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		{
 			var logonName = RandomName.Make();
 			var personInfo = new PersonInfo();
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, RandomName.Make());
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, RandomName.Make(), new OneWayEncryption());
 			ApplicationUserQuery.Has(personInfo);
 
 			Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = RandomName.Make()});
@@ -143,7 +144,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		{
 			var logonName = RandomName.Make();
 			var personInfo = new PersonInfo();
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, RandomName.Make());
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, RandomName.Make(), new OneWayEncryption());
 			ApplicationUserQuery.Has(personInfo);
 			PasswordPolicy.MaxAttemptCount = 1;
 			PasswordPolicy.InvalidAttemptWindow = TimeSpan.FromHours(1);
@@ -162,7 +163,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var logonName = RandomName.Make();
 			var password = RandomName.Make();
 			var personInfo = new PersonInfo();
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password, new OneWayEncryption());
 			ApplicationUserQuery.Has(personInfo);
 			PasswordPolicy.MaxAttemptCount = 1;
 
@@ -179,7 +180,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		{
 			var logonName = RandomName.Make();
 			var personInfo = new PersonInfo();
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, RandomName.Make());
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, RandomName.Make(), new OneWayEncryption());
 			ApplicationUserQuery.Has(personInfo);
 			PasswordPolicy.MaxAttemptCount = 100;
 			PasswordPolicy.InvalidAttemptWindow = TimeSpan.FromHours(1);
@@ -203,7 +204,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var logonName = RandomName.Make();
 			var password = RandomName.Make();
 			var personInfo = new PersonInfo();
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password, new OneWayEncryption());
 			personInfo.ApplicationLogonInfo.Lock();
 			ApplicationUserQuery.Has(personInfo);
 
@@ -221,7 +222,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var logonName = RandomName.Make();
 			var password = RandomName.Make();
 			var personInfo = new PersonInfo(new Tenant(RandomName.Make()), Guid.NewGuid());
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password, new OneWayEncryption());
 			ApplicationUserQuery.Has(personInfo);
 			PasswordPolicy.PasswordValidForDayCount = 1;
 			PasswordPolicy.PasswordExpireWarningDayCount = 2;
@@ -239,7 +240,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var logonName = RandomName.Make();
 			var password = RandomName.Make();
 			var personInfo = new PersonInfo(new Tenant(RandomName.Make()), Guid.NewGuid());
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password, new OneWayEncryption());
 			ApplicationUserQuery.Has(personInfo);
 			PasswordPolicy.PasswordValidForDayCount = 0;
 

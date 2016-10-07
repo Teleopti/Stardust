@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Infrastructure.Security;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
@@ -22,9 +23,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public virtual Tenant Tenant { get; protected set; }
 		public virtual ApplicationLogonInfo ApplicationLogonInfo { get; protected set; }
 
-		public virtual void SetApplicationLogonCredentials(ICheckPasswordStrength checkPasswordStrength, string logonName, string password)
+		public virtual void SetApplicationLogonCredentials(ICheckPasswordStrength checkPasswordStrength, string logonName, string password, IHashFunction currentHashFunction)
 		{
-			ApplicationLogonInfo.SetApplicationLogonCredentialsInternal(checkPasswordStrength, logonName, password);
+			ApplicationLogonInfo.SetApplicationLogonCredentialsInternal(checkPasswordStrength, logonName, password, currentHashFunction);
 		}
 
 		public virtual void SetIdentity(string identityName)

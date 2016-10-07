@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
 
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		public void ShouldGetLogonInfo()
 		{
 			var info = new PersonInfo(tenantPresentInDatabase, Guid.NewGuid());
-			info.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make());
+			info.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make(), new OneWayEncryption());
 			info.SetIdentity(RandomName.Make());
 			_tenantUnitOfWorkManager.CurrentSession().Save(info);
 			var currentTenant = new CurrentTenantFake();
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		public void ShouldNotGetPersonInfoFromWrongTenant()
 		{
 			var info = new PersonInfo(tenantPresentInDatabase, Guid.NewGuid());
-			info.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make());
+			info.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make(), new OneWayEncryption());
 			info.SetIdentity(RandomName.Make());
 			var loggedOnTenant = new Tenant("_");
 			_tenantUnitOfWorkManager.CurrentSession().Save(info);
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		public void ShouldGetLogonInfoByName()
 		{
 			var info = new PersonInfo(tenantPresentInDatabase, Guid.NewGuid());
-			info.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make());
+			info.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make(), new OneWayEncryption());
 			info.SetIdentity(RandomName.Make());
 			_tenantUnitOfWorkManager.CurrentSession().Save(info);
 			var currentTenant = new CurrentTenantFake();
@@ -102,7 +103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		public void ShouldNotGetPersonInfoFromWrongTenantByLogonName()
 		{
 			var info = new PersonInfo(tenantPresentInDatabase, Guid.NewGuid());
-			info.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make());
+			info.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make(), new OneWayEncryption());
 			info.SetIdentity(RandomName.Make());
 			var loggedOnTenant = new Tenant("_");
 			_tenantUnitOfWorkManager.CurrentSession().Save(info);
@@ -132,7 +133,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		public void ShouldReturnNullForNonExistingColumnsByLogonName()
 		{
 			var info = new PersonInfo(tenantPresentInDatabase, Guid.NewGuid());
-			info.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make());
+			info.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make(), new OneWayEncryption());
 			_tenantUnitOfWorkManager.CurrentSession().Save(info);
 			var currentTenant = new CurrentTenantFake();
 			currentTenant.Set(tenantPresentInDatabase);

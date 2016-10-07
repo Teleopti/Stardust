@@ -4,6 +4,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
 
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			session.Flush();
 			session.Clear();
 
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), newLogonName, RandomName.Make());
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), newLogonName, RandomName.Make(), new OneWayEncryption());
 			target.Persist(personInfo);
 
 			session.Flush();
@@ -90,9 +91,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var logonName = RandomName.Make();
 
 			var personInfo1 = new PersonInfo(tenant, Guid.NewGuid());
-			personInfo1.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, RandomName.Make());
+			personInfo1.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, RandomName.Make(), new OneWayEncryption());
 			var personInfo2 = new PersonInfo(tenant, Guid.NewGuid());
-			personInfo2.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, RandomName.Make());
+			personInfo2.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, RandomName.Make(), new OneWayEncryption());
 
 			target.Persist(personInfo1);
 			_tenantUnitOfWorkManager.CurrentSession().Flush();
@@ -103,9 +104,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		public void MultipleNullApplicationLogonShouldNotThrow()
 		{
 			var personInfo1 = new PersonInfo(tenant, Guid.NewGuid());
-			personInfo1.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), null, RandomName.Make());
+			personInfo1.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), null, RandomName.Make(), new OneWayEncryption());
 			var personInfo2 = new PersonInfo(tenant, Guid.NewGuid());
-			personInfo2.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), null, RandomName.Make());
+			personInfo2.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), null, RandomName.Make(), new OneWayEncryption());
 
 			target.Persist(personInfo1);
 			target.Persist(personInfo2);
@@ -176,12 +177,12 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var id = Guid.NewGuid();
 
 			var personInfo = new PersonInfo(tenant, id);
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "logonName", RandomName.Make());
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "logonName", RandomName.Make(), new OneWayEncryption());
 			var oldPw = personInfo.ApplicationLogonInfo.LogonPassword;
 			target.Persist(personInfo);
 
 			var personInfoNew = new PersonInfo(tenant, id);
-			personInfoNew.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "newLogonName", string.Empty);
+			personInfoNew.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "newLogonName", string.Empty, new OneWayEncryption());
 			target.Persist(personInfoNew);
 
 			var loaded = session.Get<PersonInfo>(id);
@@ -198,13 +199,13 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var id = Guid.NewGuid();
 
 			var personInfo = new PersonInfo(tenant, id);
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "whatever", RandomName.Make());
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "whatever", RandomName.Make(), new OneWayEncryption());
 			var pw = personInfo.ApplicationLogonInfo.LogonPassword;
 
 			target.Persist(personInfo);
 
 			var personInfoNew = new PersonInfo(tenant, id);
-			personInfoNew.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), "whatever");
+			personInfoNew.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), "whatever", new OneWayEncryption());
 			target.Persist(personInfoNew);
 			
 

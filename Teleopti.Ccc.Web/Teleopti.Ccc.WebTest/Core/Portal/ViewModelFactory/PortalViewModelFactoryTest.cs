@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -143,7 +144,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		public void ShouldShowChangePasswordIfApplicationLogonExists()
 		{
 			var agent = new PersonInfo();
-			agent.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make());
+			agent.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make(), new OneWayEncryption());
 			var loggedOnUser = MockRepository.GenerateMock<ICurrentTenantUser>();
 			loggedOnUser.Expect(m => m.CurrentUser()).Return(agent);
 			var target = new PortalViewModelFactory(MockRepository.GenerateStub<IPermissionProvider>(),

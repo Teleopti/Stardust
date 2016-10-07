@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 				builder.RegisterModule(new CommonModule(configuration));
 				builder.RegisterType<WinTenantCredentials>().As<ICurrentTenantCredentials>().SingleInstance();
-				builder.RegisterModule<EncryptionModule>();
+				builder.RegisterModule(new EncryptionModule(configuration));
 				builder.RegisterModule<EventAggregatorModule>();
 				builder.RegisterModule(new StartupModule(configuration));
 				builder.RegisterModule(new NavigationModule(configuration));
