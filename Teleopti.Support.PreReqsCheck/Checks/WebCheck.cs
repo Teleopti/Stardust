@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
@@ -16,7 +17,7 @@ namespace CheckPreRequisites.Checks
             _form1 = form1;
         }
 
-        private void checkFeatures()
+        private async void checkFeatures()
         {
             if (getFileToRun() == "")
             {
@@ -29,29 +30,39 @@ namespace CheckPreRequisites.Checks
                 var file = new StreamReader(stream, Encoding.UTF8);
                 _form1.printInfo("Checking features and enabling them. If a feature needs downloading it can take some minutes to run this.");
                 string line;
-                while ((line = file.ReadLine()) != null)
+				var allTasks = new List<Task>();
+				var notInElevateMood = false;
+				_form1.Cursor = Cursors.WaitCursor;
+				while ((line = file.ReadLine()) != null)
                 {
                     if (!string.IsNullOrEmpty(line))
                         line = line.Trim();
-                    if (!string.IsNullOrEmpty(line) && !line.StartsWith("#"))
-                    {
-                        _form1.Cursor = Cursors.WaitCursor;
-                        var strings = line.Split(',');
-                        var lineNumber = _form1.printNewFeature("IIS", "Windows feature", "Enabled", strings[1]);
-                        var result = FeatureChecker.CheckAndEnable(strings[1], strings[0]);
-                        if (result.NotInElevatedMood)
-                        {
-                            MessageBox.Show("Elevated permissions are required to run this.", "Restart application in elevated mood to complete these tasks.");
-                            return;
-                        }
+	                if (!string.IsNullOrEmpty(line) && !line.StartsWith("#"))
+	                {
+		                var strings = line.Split(',');
+		                var lineNumber = _form1.printNewFeature("IIS", "Windows feature", "Enabled", strings[1]);
+		                allTasks.Add(
+			                Task.Run(() =>
+			                {
+								var result = FeatureChecker.CheckAndEnable(strings[1], strings[0]);
+								notInElevateMood = result.NotInElevatedMood;
+								if (result.NotInElevatedMood)
+									return;
 
-                        _form1.printFeatureStatus(result.Enabled, result.ToolTip, lineNumber);
-                        Application.DoEvents();
-                        _form1.Cursor = Cursors.Default;
-                    }
-
+								_form1.Invoke((Action) (() =>
+								{
+									_form1.printFeatureStatus(result.Enabled, result.ToolTip, lineNumber);
+									Application.DoEvents();
+								}));
+			                }));
+	                }
                 }
-            }
+	            await Task.WhenAll(allTasks.ToArray());
+				_form1.Cursor = Cursors.Default;
+				if(notInElevateMood)
+					MessageBox.Show("Elevated permissions are required to run this.",
+										"Restart application in elevated mood to complete these tasks.");
+			}
             _form1.printInfo("Ready checking features");
 
         }

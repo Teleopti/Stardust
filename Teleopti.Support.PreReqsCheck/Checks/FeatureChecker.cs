@@ -1,12 +1,11 @@
 ﻿using System.Linq;
 using System.Management.Automation;
-using System.Runtime.InteropServices;
 
 namespace CheckPreRequisites.Checks
 {
 	public static class FeatureChecker
 	{
-		
+		private static readonly object featureLock = new object();
 
 		public static FeatureState CheckAndEnable(string displayName, string feature)
 		{
@@ -36,16 +35,19 @@ namespace CheckPreRequisites.Checks
 
 		private static FeatureState EnableFeature(string displayName,string feature)
 		{
-			PowerShell ps = PowerShell.Create().AddCommand("dism");
-			ps.AddArgument("/online");
-			ps.AddArgument("/enable-feature");
-			ps.AddArgument("/featurename:" + feature);
+			lock (featureLock)
+			{
+				PowerShell ps = PowerShell.Create().AddCommand("dism");
+				ps.AddArgument("/online");
+				ps.AddArgument("/enable-feature");
+				ps.AddArgument("/featurename:" + feature);
 
-			string output = ps.Invoke().Aggregate("", (current, result) => current + System.Environment.NewLine + result);
-			if (output.Contains("successfully"))
-				return new FeatureState { ToolTip = output, Enabled = true, Status = "Fixed and Enabled", DisplayName = displayName };
+				string output = ps.Invoke().Aggregate("", (current, result) => current + System.Environment.NewLine + result);
+				if (output.Contains("successfully"))
+					return new FeatureState { ToolTip = output, Enabled = true, Status = "Fixed and Enabled", DisplayName = displayName };
 
-			return new FeatureState { ToolTip = output, Enabled = false, Status = "Could not enabled feature!", DisplayName = displayName };
+				return new FeatureState { ToolTip = output, Enabled = false, Status = "Could not enabled feature!", DisplayName = displayName };
+			}
 		}
 	}
 
