@@ -49,9 +49,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				}
 				//approve an absence request if its outside the opening hours 
 			}
-			updateResources(personRequest, startTime);
-			sendApproveCommand(personRequest.Id.GetValueOrDefault());
-			
+			if(sendApproveCommand(personRequest.Id.GetValueOrDefault()))
+				updateResources(personRequest, startTime);
+
 		}
 
 		private void updateResources(IPersonRequest personRequest, DateTime startDate)
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			return errorMessageBuilder.ToString();
 		}
 
-		private void sendDenyCommand(Guid personRequestId, string denyReason)
+		private bool sendDenyCommand(Guid personRequestId, string denyReason)
 		{
 			var command = new DenyRequestCommand()
 			{
@@ -104,13 +104,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			};
 			_commandDispatcher.Execute(command);
 
-			if (command.ErrorMessages != null)
+			if (command.ErrorMessages.Any())
 			{
 				logger.Warn(command.ErrorMessages);
 			}
+
+			return !command.ErrorMessages.Any();
 		}
 
-		private void sendApproveCommand(Guid personRequestId)
+		private bool sendApproveCommand(Guid personRequestId)
 		{
 			var command = new ApproveRequestCommand()
 			{
@@ -119,10 +121,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			};
 			_commandDispatcher.Execute(command);
 
-			if (command.ErrorMessages != null)
+			if (command.ErrorMessages.Any())
 			{
 				logger.Warn(command.ErrorMessages);
 			}
+
+			return !command.ErrorMessages.Any();
 		}
 
 	}

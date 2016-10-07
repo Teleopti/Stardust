@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				}
             };
 
-            var sum = expectedChanges.Sum(x => x.StaffingLevel) + expectedChanges.Last().StaffingLevel; //Should be -1..
+          //  var sum = expectedChanges.Sum(x => x.StaffingLevel) + expectedChanges.Last().StaffingLevel; //Should be -1..
             CollectionAssert.AreEquivalent(expectedChanges, changes);
         }
 
@@ -316,7 +316,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					StaffingLevel = -(overstaffedUnsorted30/totaloverstaffed1 + overstaffedUnsorted30/totaloverstaffed2)/2 
 				},
 			};
-			var sum = expectedChanges.Sum(x => x.StaffingLevel) + expectedChanges.Last().StaffingLevel; //Should be -2
+		//	var sum = expectedChanges.Sum(x => x.StaffingLevel) + expectedChanges.Last().StaffingLevel; //Should be -2
 			CollectionAssert.AreEquivalent(expectedChanges, changes);
 		}
 

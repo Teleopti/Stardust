@@ -7,9 +7,7 @@ using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
@@ -103,7 +101,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				stopwatch.Start();
 				loadDataForResourceCalculation(personRequests, aggregatedValidatorList);
 				stopwatch.Stop();
-				_feedback.SendProgress?.Invoke($"Done loading data for resource calculation! It took {stopwatch.Elapsed}");
+				_feedback.SendProgress($"Done loading data for resource calculation! It took {stopwatch.Elapsed}");
 
 				var seniority = _arrangeRequestsByProcessOrder.GetRequestsSortedBySeniority(personRequests);
 				var firstComeFirstServe = _arrangeRequestsByProcessOrder.GetRequestsSortedByDate(personRequests);
@@ -134,9 +132,9 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				{
 					string errorMessage = $"Optimistic lock when persisting request ({personRequest.Id.GetValueOrDefault()})! Number of retries: {count}";
 					logger.Error(errorMessage);
-					_feedback.SendProgress?.Invoke(errorMessage);
+					_feedback.SendProgress(errorMessage);
 				}
-				_feedback.SendProgress?.Invoke($"Persisted request {personRequest.Id}.");
+				_feedback.SendProgress($"Persisted request {personRequest.Id}.");
 			}
 		}
 
@@ -217,7 +215,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				string response = "approved or denied";
 				if (personRequest.IsApproved) response = "approved";
 				if (personRequest.IsDenied) response = "denied";
-				_feedback.SendProgress?.Invoke($"PreProcessed request {personRequest.Id} ({personRequest.Person.Name}, {personRequest.Request.Period}). Request will be {response}!");
+				_feedback.SendProgress($"PreProcessed request {personRequest.Id} ({personRequest.Person.Name}, {personRequest.Request.Period}). Request will be {response}!");
 			}
 		}
 
@@ -250,7 +248,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					logger.Warn(command.ErrorMessages);
 					foreach (var error in command.ErrorMessages)
 					{
-						_feedback.SendProgress?.Invoke(error);
+						_feedback.SendProgress(error);
 					}
 				}
 				else
@@ -260,7 +258,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 						response = "approved";
 					if (command.GetType() == typeof(DenyRequestCommand))
 						response = "denied";
-					_feedback.SendProgress?.Invoke($"Request {personRequest.Id.GetValueOrDefault()} was succesfully {response}!");
+					_feedback.SendProgress($"Request {personRequest.Id.GetValueOrDefault()} was succesfully {response}!");
 				}
 			}
 		}
@@ -340,7 +338,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			}
 			totalPeriod.ChangeStartTime(TimeSpan.FromDays(-1));
 
-			_feedback.SendProgress?.Invoke($"Started loading data for requests in period {totalPeriod}");
+			_feedback.SendProgress($"Started loading data for requests in period {totalPeriod}");
 
 			if (shouldLoadDataForResourceCalculation)
 			{

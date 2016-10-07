@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Interfaces.Domain;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public virtual void ResourceCalculatePeriod(DateTimePeriod period)
 		{
 			var periodDateOnly = new DateOnlyPeriod(new DateOnly(period.StartDateTime), new DateOnly(period.EndDateTime));
-			_feedback.SendProgress?.Invoke($"Starting Read Model update for period {period}");
+			_feedback.SendProgress($"Starting Read Model update for period {period}");
 			var timeWhenResourceCalcDataLoaded = _now.UtcDateTime();
 			var skillStaffPeriodDictionary =
 				_extractSkillStaffDataForResourceCalculation.ExtractSkillStaffPeriodDictionary(periodDateOnly);
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public virtual IEnumerable<SkillStaffingInterval> CreateReadModel(ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodExtendedDictionary, DateTimePeriod period)
 		{
 			var ret = new List<SkillStaffingInterval>();
-			_feedback.SendProgress?.Invoke($"Will update {skillSkillStaffPeriodExtendedDictionary.Keys.Count} skills.");
+			_feedback.SendProgress($"Will update {skillSkillStaffPeriodExtendedDictionary.Keys.Count} skills.");
 			if (skillSkillStaffPeriodExtendedDictionary.Keys.Count > 0)
 			{
 				foreach (var skill in skillSkillStaffPeriodExtendedDictionary.Keys)
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 							ForecastWithShrinkage = skillStaffPeriod.ForecastedDistributedDemandWithShrinkage
 						});
 					}
-					_feedback.SendProgress?.Invoke($"Updated {skill}.");
+					_feedback.SendProgress($"Updated {skill}.");
 				}
 			}
 			return ret;
