@@ -4,13 +4,11 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Exceptions;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Skill
 {
-	[EnabledBy(Toggles.ETL_SpeedUpIntradaySkill_37543)]
 	public class AnalyticsSkillUpdater :
 		IHandleEvent<SkillChangedEvent>,
 		IHandleEvent<SkillCreatedEvent>,
