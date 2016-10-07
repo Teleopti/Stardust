@@ -13,5 +13,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 	    DateTime GetLastCalculatedTime();
 	    void PersistChange(StaffingIntervalChange staffingIntervalChanges);
 	    IEnumerable<StaffingIntervalChange> GetReadModelChanges(DateTimePeriod dateTimePeriod);
+	    IEnumerable<SkillStaffingInterval> ReadMergedStaffingAndChanges(Guid skillId, DateTimePeriod period);
+
 	}
 }

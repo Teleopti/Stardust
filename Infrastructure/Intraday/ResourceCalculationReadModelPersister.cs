@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -91,9 +92,24 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			    
             }
 		}
-		
 
-		public IEnumerable<SkillStaffingInterval> GetBySkill(Guid skillId, DateTime startDateTime, DateTime endDateTime)
+	    public IEnumerable<SkillStaffingInterval> ReadMergedStaffingAndChanges(Guid skillId, DateTimePeriod period)
+	    {
+            var mergedStaffingIntervals = new List<SkillStaffingInterval>();
+	        var intervals = GetBySkill(skillId, period.StartDateTime, period.EndDateTime).ToList();
+           intervals.CopyTo(mergedStaffingIntervals.ToArray());
+	        var changes = GetReadModelChanges(period);
+	        foreach (var change in changes.Where(x => x.SkillId == skillId))
+	        {
+	            var staffingInterval = mergedStaffingIntervals.FirstOrDefault(x => x.StartDateTime == change.StartDateTime && x.EndDateTime == change.EndDateTime);
+	            if (staffingInterval != null)
+                    staffingInterval.StaffingLevel += change.StaffingLevel;
+	        }
+            return mergedStaffingIntervals;
+	    }
+
+
+	    public IEnumerable<SkillStaffingInterval> GetBySkill(Guid skillId, DateTime startDateTime, DateTime endDateTime)
 		{
 			var result = ((NHibernateUnitOfWork) _currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
 				@"SELECT 
@@ -208,6 +224,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
             return result;
         }
+
 
 		protected string AddArrayParameters(SqlCommand sqlCommand, Guid[] array, string paramName)
 		{

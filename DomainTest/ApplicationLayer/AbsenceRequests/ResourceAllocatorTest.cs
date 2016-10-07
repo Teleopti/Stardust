@@ -63,7 +63,61 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 
-		[Test]
+        [Test]
+        public void ShouldMergeChangesWithReadModelValuesWhenAllocating()
+        {
+            var requestLength = new TimeSpan(0, 15, 0);
+            var request = createNewRequest(requestLength);
+            populateReadModel();
+
+            var startDateTime1 = request.Request.Period.StartDateTime;
+            var endDateTime1 = startDateTime1.AddMinutes(15);
+
+            var startDateTime2 = endDateTime1;
+            var endDateTime2 = startDateTime2.AddMinutes(15);
+
+            ScheduleForecastSkillReadModelRepository.PersistChange(
+                new StaffingIntervalChange()
+                {
+                    SkillId = _unsortedSkill15.Id.GetValueOrDefault(),
+                    StartDateTime = startDateTime1,
+                    EndDateTime = endDateTime1,
+                    StaffingLevel = -1
+                });
+
+            var changes = Target.AllocateResource(request, _now);
+
+            var expectedChanges = new List<StaffingIntervalChange>()
+            {
+               new StaffingIntervalChange()
+                {
+                    StartDateTime = startDateTime1,
+                    EndDateTime = endDateTime1,
+                    SkillId = _primarySkill.Id.GetValueOrDefault(),
+                    StaffingLevel = -overstaffedPrimary/(totaloverstaffed1-1)
+                },
+                new StaffingIntervalChange()
+                {
+                    StartDateTime = startDateTime1,
+                    EndDateTime = endDateTime1,
+                    SkillId = _unsortedSkill15.Id.GetValueOrDefault(),
+                    StaffingLevel = -(overstaffedUnsorted15 - 1)/(totaloverstaffed1-1)
+                },
+                new StaffingIntervalChange()
+                {
+                    StartDateTime = startDateTime1,
+                    EndDateTime = endDateTime2,
+                    SkillId = _unsortedSkill30.Id.GetValueOrDefault(),
+                    StaffingLevel = -overstaffedUnsorted30/((totaloverstaffed1-1)*2) 
+				}
+            };
+
+            var sum = expectedChanges.Sum(x => x.StaffingLevel) + expectedChanges.Last().StaffingLevel; //Should be -1..
+            CollectionAssert.AreEquivalent(expectedChanges, changes);
+        }
+
+
+        [Test]
 		public void ShouldSplitResourceOverWholeSkillIntervalIfRequestIsNotCoveringWholeIntervalAndRequestIsLargerThanShortestInterval()
 		{
 			var requestLength = new TimeSpan(0, 20, 0);

@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				personRequest.Person.Period(new DateOnly(startTime)).PersonSkillCollection.Where(x => (x.Skill.CascadingIndex == lowestIndex) || !x.Skill.CascadingIndex.HasValue );
 			foreach (var skill in primaryAndUnSortedSkills)
 			{
-				var skillStaffingIntervals = getSkillStaffIntervals(skill.Skill.Id.GetValueOrDefault(), personRequest.Request.Period);
+			    var skillStaffingIntervals = _scheduleForecastSkillReadModelRepository.ReadMergedStaffingAndChanges(skill.Skill.Id.GetValueOrDefault(), personRequest.Request.Period);
 				var underStaffingDetails = getUnderStaffedPeriods(skillStaffingIntervals, personRequest.Person.PermissionInformation.DefaultTimeZone());
 				if (underStaffingDetails.UnderstaffingTimes.Any())
 				{
@@ -61,32 +61,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			{
 				_scheduleForecastSkillReadModelRepository.PersistChange(staffingIntervalChange);
 			}
-		}
-
-		private IEnumerable<SkillStaffingInterval> getSkillStaffIntervals(Guid skillId, DateTimePeriod requestPeriod)
-		{
-			var skillStaffingIntervals =
-				_scheduleForecastSkillReadModelRepository.GetBySkill(skillId, requestPeriod.StartDateTime, requestPeriod.EndDateTime);
-			var mergedStaffingIntervals = new List<SkillStaffingInterval>();
-			var intervalChanges =  _scheduleForecastSkillReadModelRepository.GetReadModelChanges(requestPeriod).Where(x => x.SkillId == skillId);
-			if (intervalChanges.Any())
-			{
-				skillStaffingIntervals.ForEach(interval =>
-				{
-					var changes =
-						intervalChanges.Where(x => x.StartDateTime == interval.StartDateTime && x.EndDateTime == interval.EndDateTime);
-					if (changes.Any())
-					{
-						interval.StaffingLevel += changes.Sum((x => x.StaffingLevel));
-					}
-					mergedStaffingIntervals.Add(interval);
-				});
-			}
-			else
-			{
-				mergedStaffingIntervals = skillStaffingIntervals.ToList();
-			}
-			return mergedStaffingIntervals;
 		}
 		
 

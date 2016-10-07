@@ -57,6 +57,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 					    (x.StaffingIntervalChange.StartDateTime >= dateTimePeriod.StartDateTime&& dateTimePeriod.EndDateTime > x.StaffingIntervalChange.StartDateTime)).Select(y => y.StaffingIntervalChange);
 	    }
 
+        public IEnumerable<SkillStaffingInterval> ReadMergedStaffingAndChanges(Guid skillId, DateTimePeriod period)
+        {
+            var intervals = GetBySkill(skillId, period.StartDateTime, period.EndDateTime);
+            var changes = GetReadModelChanges(period);
+            foreach (var change in changes.Where(x => x.SkillId == skillId))
+            {
+                var staffingInterval = intervals.FirstOrDefault(x => x.StartDateTime == change.StartDateTime && x.EndDateTime == change.EndDateTime);
+                if (staffingInterval != null)
+                    staffingInterval.StaffingLevel += change.StaffingLevel;
+            }
+            return intervals;
+        }
+
         public DateTime LastCalculatedDate { get; set; }
     }
 

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 			foreach (var skill in skills)
 			{
-				var intervals = _scheduleForecastSkillReadModelRepository.GetBySkill(skill.Id.GetValueOrDefault(), personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime).ToList();
+				var intervals = _scheduleForecastSkillReadModelRepository.ReadMergedStaffingAndChanges(skill.Id.GetValueOrDefault(), personRequest.Request.Period).ToList();
 				skillStaffingIntervals.AddRange(intervals);
 			}
 

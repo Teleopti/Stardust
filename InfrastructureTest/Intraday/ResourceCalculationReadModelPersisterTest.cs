@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
@@ -240,7 +241,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 		}
 
 		[Test]
-		public void ShouldPrugeReadModelDataPerSkill()
+		public void ShouldPurgeReadModelDataPerSkill()
 		{
 			Now.Is("2016-06-16 03:15");
 			var skillId1 = Guid.NewGuid();
@@ -290,7 +291,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 		}
 
 		[Test]
-		public void ShouldPrugeReadModelChangeDataPerSkill()
+		public void ShouldPurgeReadModelChangeDataPerSkill()
 		{
 			Now.Is("2016-06-15 03:15");
 			var skill1 = Guid.NewGuid();
@@ -480,7 +481,56 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			changes.FirstOrDefault().EndDateTime.Should().Be.EqualTo(new DateTime(2016, 06, 16, 2, 45, 0, DateTimeKind.Utc));
 		}
 
-	}
+        [Test]
+        public void LoadIntervallMergedWithChanges()
+        {
+            Now.Is("2016-06-16 02:15");
+            var skillId = Guid.NewGuid();
+            var items =
+                new List<SkillStaffingInterval>()
+                {
+                    new SkillStaffingInterval()
+                    {
+                        SkillId = skillId,
+                         StartDateTime = new DateTime(2016, 06, 16, 02, 15, 0, DateTimeKind.Utc),
+                        EndDateTime = new DateTime(2016, 06, 16, 02, 30, 0, DateTimeKind.Utc),
+                        StaffingLevel = 10,
+                        Forecast = 20
+                    },
+                       new SkillStaffingInterval()
+                    {
+                        SkillId = skillId,
+                         StartDateTime = new DateTime(2016, 06, 16, 02, 30, 0, DateTimeKind.Utc),
+                        EndDateTime = new DateTime(2016, 06, 16, 02, 45, 0, DateTimeKind.Utc),
+                        StaffingLevel = 5,
+                        Forecast = 10
+                    }
+                };
+            Target.Persist(items, DateTime.Now);
+
+            Target.PersistChange(new StaffingIntervalChange()
+            {
+                SkillId = skillId,
+                StartDateTime = new DateTime(2016, 06, 16, 2, 15, 0, DateTimeKind.Utc),
+                EndDateTime = new DateTime(2016, 06, 16, 2, 30, 0, DateTimeKind.Utc),
+                StaffingLevel = 1
+            });
+            Target.PersistChange(new StaffingIntervalChange()
+            {
+                SkillId = skillId,
+                StartDateTime = new DateTime(2016, 06, 16, 2, 30, 0, DateTimeKind.Utc),
+                EndDateTime = new DateTime(2016, 06, 16, 2, 45, 0, DateTimeKind.Utc),
+                StaffingLevel = 1
+            });
+
+            var result = Target.ReadMergedStaffingAndChanges(skillId, new DateTimePeriod(new DateTime(2016, 06, 16, 02, 15, 0, DateTimeKind.Utc),
+                new DateTime(2016, 06, 16, 02, 45, 0, DateTimeKind.Utc)));
+            result.Count().Should().Be.EqualTo(2);
+            result.First().StaffingLevel.Should().Be.EqualTo(11);
+            result.Second().StaffingLevel.Should().Be.EqualTo(6);
+        }
+
+    }
 
 
 }
