@@ -319,7 +319,7 @@
 			this.numericUpDownAgents.AccessibleName = "Agents";
 			this.numericUpDownAgents.Location = new System.Drawing.Point(10, 23);
 			this.numericUpDownAgents.Maximum = new decimal(new int[] {
-            10000,
+            50000,
             0,
             0,
             0});

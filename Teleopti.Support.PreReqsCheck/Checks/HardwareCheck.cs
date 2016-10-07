@@ -18,14 +18,24 @@ namespace CheckPreRequisites.Checks
 			_form1 = form1;
 		}
 
-		public void RunHardWareChecks(int numberOfAgent)
+		public void RunHardWareChecks(int numberOfAgent, CheckType checkType)
 		{
 			CheckOS();
 			CheckComputerName();
 			CheckArchitecture();
 
-			CheckMemory(numberOfAgent);
-			CheckCpuCores(numberOfAgent);
+			if (checkType == CheckType.Db)
+			{
+				var dbLimits = new DbLimits();
+				CheckMemory(numberOfAgent, dbLimits);
+				CheckCpuCores(numberOfAgent, dbLimits);
+			}else if (checkType == CheckType.Web)
+			{
+				var webLimits = new WebLimits();
+				CheckMemory(numberOfAgent, webLimits);
+				CheckCpuCores(numberOfAgent, webLimits);
+			}
+			
 		}
 
 		private void CheckOS()
@@ -71,8 +81,9 @@ namespace CheckPreRequisites.Checks
 				_form1.printFeatureStatus(architecture.Contains("64"));
 			}
 		}
+		
 
-		private void CheckMemory(int numberOfAgent)
+		private void CheckMemory(int numberOfAgent, Limits limits)
 		{
 			const int oneGb = 1073741824;
 
@@ -82,21 +93,28 @@ namespace CheckPreRequisites.Checks
 				foreach (var mobject in search.Get())
 				{
 					var ramBytes = (Convert.ToDouble(mobject["TotalPhysicalMemory"]));
-					_form1.printNewFeature("Hardware", "RAM Size in Giga Bytes", "",
-					                       Math.Round(ramBytes/oneGb, 1).ToString(CultureInfo.InvariantCulture));
+					
 
-					if (numberOfAgent < 400 && Math.Round(ramBytes/oneGb, 1) >= 8)
-						_form1.printFeatureStatus(true);
-					else if (numberOfAgent <= 1500 && Math.Round(ramBytes/oneGb, 1) >= 16)
-						_form1.printFeatureStatus(true);
-					else if (numberOfAgent <= 4000 && Math.Round(ramBytes/oneGb, 1) >= 32)
-						_form1.printFeatureStatus(true);
-					else if (numberOfAgent <= 10000 && Math.Round(ramBytes/oneGb, 1) >= 64)
-						_form1.printFeatureStatus(true);
-					else if (numberOfAgent > 10000 && Math.Round(ramBytes / oneGb, 1) >= 128)
-						_form1.printFeatureStatus(true);
-					else
-						_form1.printFeatureStatus(false);
+					var isOk = false;
+					foreach (var limit in limits.All)
+					{
+						if (numberOfAgent <= limit.MaxAgents)
+						{
+							if (Math.Round(ramBytes/oneGb, 1) >= limit.Memory)
+							{
+								isOk = true;
+							}
+							var message = limit.Memory.ToString();
+							if (limit.NumberOfServers > 1)
+							{
+								message = $"{limit.Memory} per server. High Availability is mandatory with {limit.NumberOfServers} servers.";
+							}
+							_form1.printNewFeature("Hardware", "RAM Size in Giga Bytes", message,
+										   Math.Round(ramBytes / oneGb, 1).ToString(CultureInfo.InvariantCulture));
+							break;
+						}
+					}
+					_form1.printFeatureStatus(isOk);
 				}
 			}
 			catch (Exception ex)
@@ -106,31 +124,36 @@ namespace CheckPreRequisites.Checks
 			}
 		}
 
-		private void CheckCpuCores(int numberOfAgent)
+		private void CheckCpuCores(int numberOfAgent, Limits limits)
 		{
-			using (var componentsKey =
-				Registry.LocalMachine.OpenSubKey(@"Hardware\Description\System\CentralProcessor", false))
+			using (var componentsKey = Registry.LocalMachine.OpenSubKey(@"Hardware\Description\System\CentralProcessor", false))
 			{
 				if (componentsKey == null)
 					return;
 
 				var processors = componentsKey.SubKeyCount;
-				_form1.printNewFeature("Hardware", "Processor CPU's ", "", processors.ToString(CultureInfo.InvariantCulture));
-				if (numberOfAgent < 400 && processors >= 2)
-					_form1.printFeatureStatus(true);
-				else if (numberOfAgent <= 1500 && processors >= 4)
-					_form1.printFeatureStatus(true);
-				else if (numberOfAgent <= 4000 && processors >= 8)
-					_form1.printFeatureStatus(true);
-				else if (numberOfAgent <= 10000 && processors >= 16)
-					_form1.printFeatureStatus(true);
-				else if (numberOfAgent > 10000 && processors >= 32)
-					_form1.printFeatureStatus(true);
-				else
-					_form1.printFeatureStatus(false);
+
+				var isOk = false;
+				foreach (var limit in limits.All)
+				{
+					if (numberOfAgent <= limit.MaxAgents)
+					{
+						if (processors >= limit.Processor)
+						{
+							isOk = true;
+						}
+						var message = limit.Processor.ToString();
+						if (limit.NumberOfServers > 1)
+						{
+							message = $"{limit.Processor} per server. High Availability is mandatory with {limit.NumberOfServers} servers.";
+						}
+						_form1.printNewFeature("Hardware", "Processor CPU's ", message, processors.ToString(CultureInfo.InvariantCulture));
+						break;
+					}
+				}
+				_form1.printFeatureStatus(isOk);
 			}
 		}
-
-		// ReSharper restore InconsistentNaming
 	}
+
 }

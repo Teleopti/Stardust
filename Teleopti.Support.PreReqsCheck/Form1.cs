@@ -29,14 +29,14 @@ namespace CheckPreRequisites
 			if (comboBoxServerSetup.SelectedItem.ToString().Contains("Web"))
 			{
 				AgentLevel();
-				_hardwareCheck.RunHardWareChecks((int) numericUpDownAgents.Value);
+				_hardwareCheck.RunHardWareChecks((int) numericUpDownAgents.Value, CheckType.Web);
 				_webCheck.RunWebChecks();
 			}
 
 			if (comboBoxServerSetup.SelectedItem.ToString().Contains("DB"))
 			{
 				AgentLevel();
-				_hardwareCheck.RunHardWareChecks((int) numericUpDownAgents.Value);
+				_hardwareCheck.RunHardWareChecks((int) numericUpDownAgents.Value, CheckType.Db);
 				_databaseCheck.RunDbChecks(comboBoxSQLInstance.SelectedItem.ToString().Trim());
 			}
 		}
