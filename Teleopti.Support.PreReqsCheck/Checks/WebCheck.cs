@@ -51,7 +51,7 @@ namespace CheckPreRequisites.Checks
 
 								_form1.Invoke((Action) (() =>
 								{
-									_form1.printFeatureStatus(result.Enabled, result.ToolTip, lineNumber);
+									_form1.printFeatureStatus(result.Enabled, result.ToolTip, lineNumber, result.FixByUs);
 									Application.DoEvents();
 								}));
 			                }));

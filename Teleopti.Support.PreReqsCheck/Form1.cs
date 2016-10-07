@@ -87,11 +87,11 @@ namespace CheckPreRequisites
 			return lineNumber;
 		}
 
-		public void printFeatureStatus(bool featureStatus, string toolTip, int lineNumber)
+		public void printFeatureStatus(bool featureStatus, string toolTip, int lineNumber, bool fixByUs=false)
 		{
 			if (featureStatus)
 			{
-				listView1.Items[lineNumber].SubItems.Add("OK");
+				listView1.Items[lineNumber].SubItems.Add(fixByUs ? "Fixed, OK" : "OK");
 				listView1.Items[lineNumber].ForeColor = Color.Green;
 			}
 			else
