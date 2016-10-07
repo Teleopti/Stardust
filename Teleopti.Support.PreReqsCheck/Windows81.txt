@@ -28,6 +28,6 @@ IIS-LegacyScripts,IIS 6 Scripting Tools
 
 WAS-WindowsActivationService,Windows Process Activation Service
 WAS-ProcessModel,Process Model
-WAS-ConfigurationAPI, Configuration APIs
+WAS-ConfigurationAPI,Configuration APIs
 WCF-Services45,WCF Services
 WCF-HTTP-Activation45,HTTP Activation

@@ -22,4 +22,4 @@ IIS-LegacyScripts,IIS 6 Scripting Tools
 
 WAS-WindowsActivationService,Windows Process Activation Service
 WAS-ProcessModel,Process Model
-WAS-ConfigurationAPI, Configuration APIs
+WAS-ConfigurationAPI,Configuration APIs
