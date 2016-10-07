@@ -152,7 +152,6 @@ ResourcePlanner_FilterOvertimeAvail_37113 = true
 Wfm_DisplayOnlineHelp_39402 = RC
 
 Wfm_QuickForecastOnHangfire_35845 = true
-ETL_SpeedUpPermissionReport_33584 = true
 Wfm_RecalculateForecastOnHangfire_37971 = true
 
 ETL_SpeedUpPersonPeriodNightly_38097 = RC

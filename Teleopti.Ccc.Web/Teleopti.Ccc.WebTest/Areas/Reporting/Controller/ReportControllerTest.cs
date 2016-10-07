@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Controller
 			});
 
 			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
-			toggleManager.Stub(x => x.IsEnabled(Toggles.ETL_SpeedUpPermissionReport_33584)).Return(true);
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var person = PersonFactory.CreatePersonWithGuid("first", "last");
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);

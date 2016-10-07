@@ -61,8 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 			var agentName = _personNameProvider.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name);
 			var buName = _currentBusinessUnit.Current().Name;
 
-			if (_toggleManager.IsEnabled(Toggles.ETL_SpeedUpPermissionReport_33584))
-				_analyticsPermissionsUpdater.Handle(_loggedOnUser.CurrentUser().Id.GetValueOrDefault(), _currentBusinessUnit.Current().Id.GetValueOrDefault());
+			_analyticsPermissionsUpdater.Handle(_loggedOnUser.CurrentUser().Id.GetValueOrDefault(), _currentBusinessUnit.Current().Id.GetValueOrDefault());
 
 			using (var commonReports = _commonReportsFactory.CreateAndLoad(((TeleoptiIdentity)Thread.CurrentPrincipal.Identity).DataSource.Analytics.ConnectionString, id.Value))
 			{

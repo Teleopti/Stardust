@@ -51,7 +51,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new StageScorecardKpiJobStep(jobParameters));
 			Add(new StageKpiTargetTeamJobStep(jobParameters));
 
-			AddWhenAllDisabled(new StagePermissionJobStep(jobParameters), Toggles.ETL_SpeedUpPermissionReport_33584);
 			AddWhenAllDisabled(new StageGroupPagePersonJobStep(jobParameters), Toggles.ETL_SpeedUpGroupPagePersonNightly_37623);
 			AddWhenAllDisabled(new StageOvertimeJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyOvertime_38304);
 			AddWhenAllDisabled(new StageRequestJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyRequest_38914);
@@ -114,7 +113,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			AddWhenAllDisabled(new FactRequestJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyRequest_38914);
 			AddWhenAllDisabled(new FactRequestedDaysJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyRequest_38914);
 			AddWhenAllDisabled(new FactAgentSkillJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-			AddWhenAllDisabled(new PermissionReportJobStep(jobParameters), Toggles.ETL_SpeedUpPermissionReport_33584);
 			// If PM is installed then show PM job steps
 			if (jobParameters.IsPmInstalled)
 			{
