@@ -1339,6 +1339,8 @@
     <Content Include="Content\signalr\jquery.signalR-2.2.0.min.js" />
     <Content Include="WFM\app\people\people.keywordFormat.directive.js" />
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
+    <Content Include="WFM\app\rta\historical\rta-historical-SeeAllOutOfAdherences_39146.html" />
+    <Content Include="WFM\app\rta\historical\rta.historical.controller.js" />
     <Content Include="WFM\app\skillPrio\skillprio.controller.spec.js" />
     <Content Include="WFM\app\skillPrio\skillprio.service.spec.js" />
     <Content Include="WFM\app\teamSchedule\html\noteEditor.html" />

@@ -56,6 +56,7 @@ RTA_ConnectionQueryOptimizeAllTheThings_40262 = true
 RTA_HideAgentsByStateGroup_40469 = RC
 RTA_FasterUpdateOfScheduleChanges_40536 = true
 RTA_SiteAndTeamOnSkillOverview_40817 = DEV
+RTA_SeeAllOutOfAdherencesToday_39146 = false
 
 WfmPermission_ReplaceOldPermission_34671 = true
 

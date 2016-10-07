@@ -98,8 +98,11 @@ angular.module('wfm.rta').provider('RtaState', function() {
 					}
 				}
 			})
-
-
+			.state('rta.historical', {
+				url: '/historical',
+				templateUrl: 'app/rta/historical/rta-historical-SeeAllOutOfAdherences_39146.html',
+				controller: 'RtaHistoricalController as vm'
+			})
 			.state('rta.agent-details', {
 				url: '/agent-details/:personId',
 				templateUrl: 'app/rta/details/rta-agent-details.html',

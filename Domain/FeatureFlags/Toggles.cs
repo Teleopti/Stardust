@@ -30,6 +30,7 @@
         RTA_HideAgentsByStateGroup_40469,
 		RTA_FasterUpdateOfScheduleChanges_40536,
 		RTA_SiteAndTeamOnSkillOverview_40817,
+		RTA_SeeAllOutOfAdherencesToday_39146,
 
 		Portal_NewLandingpage_29415,
 		Show_StaticPageOnNoInternet_29415,
