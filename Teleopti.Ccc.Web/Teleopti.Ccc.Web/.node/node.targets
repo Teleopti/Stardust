@@ -46,7 +46,7 @@
 
 	<!-- Runs NPM command -->
 	<Target Name="RestoreNodePackages" >
-		<Exec ConsoleToMSBuild="true" WorkingDirectory="$(NodeDir)" Command="powershell ./CheckPackageJsonIsModified.ps1" >
+		<Exec ConsoleToMSBuild="true" WorkingDirectory="$(NodeDir)" Command="powershell -ExecutionPolicy Bypass ./CheckPackageJsonIsModified.ps1" >
 			<Output TaskParameter="ConsoleOutput" ItemName="DepsAreModified" />
 		</Exec>
 
