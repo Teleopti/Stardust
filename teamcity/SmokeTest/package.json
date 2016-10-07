@@ -5,6 +5,7 @@
   "scripts": {},
   "author": "Teleopti",
   "dependencies": {
+	"fibers": "1.0.14",
     "request": "2.74.0",
     "wdio-teamcity-reporter": "1.1.0",
     "webdriverio": "4.2.8"
