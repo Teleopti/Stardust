@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture]
-	[Category ("BucketB")]
+	[Category("BucketB")]
 	internal class SeatPlanRepositoryTest : RepositoryTest<ISeatPlan>
 	{
 		private DateOnly date = new DateOnly(2015, 10, 2);
