@@ -4,13 +4,11 @@ using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEventHandlers
 {
-	[EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623)]
 	public class BuildInGroupsAnalyticsUpdater :
 		IHandleEvent<SettingsForPersonPeriodChangedEvent>,
 		IRunOnHangfire

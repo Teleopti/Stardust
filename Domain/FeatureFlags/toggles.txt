@@ -141,7 +141,6 @@ MyTimeWeb_ShiftTradeOptimization_40792 = true
 Scheduler_AgentSkillAnalyzer_12345 = DEV
 Wfm_Use_Stardust = true
 Wfm_ForecastFileImportOnStardust_37047 = true
-ETL_SpeedUpGroupPagePersonIntraday_37623 = true
 Scheduler_IntradayOptimization_36617 = true
 WfmGlobalLayout_personalOptions_37114 = true
 

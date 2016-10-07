@@ -5,7 +5,6 @@ using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
@@ -14,7 +13,6 @@ using Teleopti.Ccc.Domain.Aop;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
-	[EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623)]
     public class AnalyticsPersonGroupsHandler : 
 		IHandleEvent<AnalyticsPersonCollectionChangedEvent>,
 		IRunOnHangfire

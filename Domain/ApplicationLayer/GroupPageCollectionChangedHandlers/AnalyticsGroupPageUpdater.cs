@@ -4,14 +4,12 @@ using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandlers
 {
-	[EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623)]
 	public class AnalyticsGroupPageUpdater :
 		IHandleEvent<GroupPageCollectionChangedEvent>,
 		IRunOnHangfire
