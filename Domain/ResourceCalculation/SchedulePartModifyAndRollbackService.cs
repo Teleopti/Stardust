@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void ModifyStrictly(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter, INewBusinessRuleCollection newBusinessRuleCollection)
+		public bool ModifyStrictly(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter, INewBusinessRuleCollection newBusinessRuleCollection)
 		{
 			IScheduleRange range = _stateHolder.Schedules[schedulePart.Person];
 			IScheduleDay partToSave = range.ReFetch(schedulePart);
@@ -54,7 +54,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_rollbackStack.Push(partToSave);
 			_modificationStack.Push(schedulePart);
 			if (responses.Any())
+			{
 				rollbackLast();
+				return false;
+			}
+
+			return true;
 		}
 	
         public void Rollback()

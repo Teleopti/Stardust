@@ -124,12 +124,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		[Test]
 		public void ShouldSkipWhenNoSuitablePeriods()
 		{
+			var period = new DateTimePeriod(2014, 1, 1, 8, 2014, 1, 1, 10);
+			var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(period, new Task(), new ServiceAgreement());
+			var skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(period, new Task(), new ServiceAgreement());
+			skillStaffPeriod2.SetCalculatedResource65(10);
+			IList<ISkillStaffPeriod> skillStaffPeriods1 = new List<ISkillStaffPeriod> { skillStaffPeriod1 };
+
 			using (_mock.Record())
 			{
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_overtimeLengthDecider.Decide(_person, _dateOnly, _scheduleDay, _activity,
 					new MinMax<TimeSpan>(TimeSpan.Zero, new TimeSpan(1, 6, 0, 0)), new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero),
 					false)).IgnoreArguments().Return(new List<DateTimePeriod>());
+				Expect.Call(_schedulingResultStateHolder.SkillStaffPeriodHolder).Return(_skillStaffPeriodHolder).Repeat.AtLeastOnce();
+				Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skill, _dateTimePeriod)).Return(skillStaffPeriods1).Repeat.AtLeastOnce().IgnoreArguments();
 			}
 
 			using (_mock.Playback())
@@ -208,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 					false)).IgnoreArguments().Return(new List<DateTimePeriod> {_dateTimePeriod});
 				Expect.Call(() => _scheduleDay.CreateAndAddOvertime(_activity, _dateTimePeriod, null));
 				Expect.Call(_schedulePartModifyAndRollbackService.ClearModificationCollection);
-				Expect.Call((() => _schedulePartModifyAndRollbackService.ModifyStrictly(_scheduleDay, _scheduleTagSetter, _rules)));
+				Expect.Call(_schedulePartModifyAndRollbackService.ModifyStrictly(_scheduleDay, _scheduleTagSetter, _rules)).Return(true);
 				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null, false)).Return(true).Repeat.Twice();
 				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly.AddDays(1), null, false)).Return(true).Repeat.Twice();
 				Expect.Call(_schedulingResultStateHolder.SkillStaffPeriodHolder).Return(_skillStaffPeriodHolder).Repeat.AtLeastOnce();

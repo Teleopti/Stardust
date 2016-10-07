@@ -52,6 +52,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			var overtimeSpecifiedPeriod = new MinMax<TimeSpan>(overtimePreferences.SelectedSpecificTimePeriod.StartTime, overtimePreferences.SelectedSpecificTimePeriod.EndTime);
 			var overtimeLayerLengthPeriodsUtc = _overtimeLengthDecider.Decide(person, dateOnly, scheduleDay, overtimePreferences.SkillActivity, overtimeDuration, overtimeSpecifiedPeriod, overtimePreferences.AvailableAgentsOnly);
 
+			var oldRmsValue = calculatePeriodValue(dateOnly, overtimePreferences.SkillActivity, person, timeZoneInfo);
+
 			DateTimePeriod? overtimeLayerLengthPeriod = null;
 			foreach (var dateTimePeriod in overtimeLayerLengthPeriodsUtc)
 			{
@@ -59,31 +61,39 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				var periodEndMyViewPoint = dateTimePeriod.EndDateTimeLocal(timeZoneInfo);
 				var overtimeSpecifiedPeriodStartDateTime = dateOnly.Date.Add(overtimeSpecifiedPeriod.Minimum);
 				var overtimeSpecifiedPeriodEndDateTime = dateOnly.Date.Add(overtimeSpecifiedPeriod.Maximum);
+
 				var startOk = periodStartMyViewPoint >= overtimeSpecifiedPeriodStartDateTime && periodStartMyViewPoint < overtimeSpecifiedPeriodEndDateTime;
+				if (!startOk) continue;
+
 				var endOk = periodEndMyViewPoint <= overtimeSpecifiedPeriodEndDateTime && periodEndMyViewPoint > overtimeSpecifiedPeriodStartDateTime;
-				if (startOk && endOk)
+				if (!endOk) continue;
+
+				overtimeLayerLengthPeriod = dateTimePeriod;
+				scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity, overtimeLayerLengthPeriod.Value, overtimePreferences.OvertimeType);
+
+				if (!overtimePreferences.AllowBreakNightlyRest)
+					rules.Add(new NewNightlyRestRule(new WorkTimeStartEndExtractor()));
+				if (!overtimePreferences.AllowBreakMaxWorkPerWeek)
+					rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
+				if (!overtimePreferences.AllowBreakWeeklyRest)
 				{
-					overtimeLayerLengthPeriod = dateTimePeriod;
-					break;
+					IWorkTimeStartEndExtractor workTimeStartEndExtractor = new WorkTimeStartEndExtractor();
+					IDayOffMaxFlexCalculator dayOffMaxFlexCalculator = new DayOffMaxFlexCalculator(workTimeStartEndExtractor);
+					IEnsureWeeklyRestRule ensureWeeklyRestRule = new EnsureWeeklyRestRule(workTimeStartEndExtractor, dayOffMaxFlexCalculator);
+					rules.Add(new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(),
+						new PersonWeekViolatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(),
+							new VerifyWeeklyRestAroundDayOffSpecification(), ensureWeeklyRestRule)));
 				}
+
+				_schedulePartModifyAndRollbackService.ClearModificationCollection();
+				if (_schedulePartModifyAndRollbackService.ModifyStrictly(scheduleDay, scheduleTagSetter, rules))
+					break;
+
+				scheduleDay = scheduleDay.ReFetch();
 			}
+
 			if (!overtimeLayerLengthPeriod.HasValue) return false;
 
-			var oldRmsValue = calculatePeriodValue(dateOnly, overtimePreferences.SkillActivity, person, timeZoneInfo);
-			scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity, overtimeLayerLengthPeriod.Value, overtimePreferences.OvertimeType);
-
-			if (!overtimePreferences.AllowBreakNightlyRest) rules.Add(new NewNightlyRestRule(new WorkTimeStartEndExtractor()));
-			if (!overtimePreferences.AllowBreakMaxWorkPerWeek) rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
-			if (!overtimePreferences.AllowBreakWeeklyRest)
-			{
-				IWorkTimeStartEndExtractor workTimeStartEndExtractor = new WorkTimeStartEndExtractor();
-				IDayOffMaxFlexCalculator dayOffMaxFlexCalculator = new DayOffMaxFlexCalculator(workTimeStartEndExtractor);
-				IEnsureWeeklyRestRule ensureWeeklyRestRule = new EnsureWeeklyRestRule(workTimeStartEndExtractor, dayOffMaxFlexCalculator);
-				rules.Add(new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(), new PersonWeekViolatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(), new VerifyWeeklyRestAroundDayOffSpecification(), ensureWeeklyRestRule)));
-			}
-
-			_schedulePartModifyAndRollbackService.ClearModificationCollection();
-			_schedulePartModifyAndRollbackService.ModifyStrictly(scheduleDay, scheduleTagSetter, rules);
 			resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
 			resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null, false);
 

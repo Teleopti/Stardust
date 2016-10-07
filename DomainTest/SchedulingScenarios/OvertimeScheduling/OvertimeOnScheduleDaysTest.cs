@@ -147,8 +147,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
 		}
 
-		[Test, Ignore("#41004")]
-		public void ShouldScheduleNextTimePeriodIfBestCouldNotBeScheduled()
+		[Test]
+		public void ShouldScheduleNextAvailablePeriodIfCurrentCouldNotBeScheduled()
 		{
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			var phoneActivity = ActivityFactory.CreateActivity("phone");

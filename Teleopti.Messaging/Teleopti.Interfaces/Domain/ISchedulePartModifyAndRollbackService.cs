@@ -12,7 +12,7 @@ namespace Teleopti.Interfaces.Domain
 
 	    void Modify(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter);
 
-	    void ModifyStrictly(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter, INewBusinessRuleCollection newBusinessRuleCollection);
+	    bool ModifyStrictly(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter, INewBusinessRuleCollection newBusinessRuleCollection);
 
 	    void Rollback();
 	    IEnumerable<IScheduleDay> ModificationCollection { get; }
