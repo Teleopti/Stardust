@@ -1,16 +1,16 @@
 ﻿$path = (get-item $PSScriptroot ).parent.Fullname
-$path = "$WorkingDirectory"
+$NugetPath = "$WorkingDirectory..\.nuget"
 
-.nuget\nuget install EnterpriseLibrary.TransientFaultHandling.Configuration -o $path -ExcludeVersion
+#.nuget\nuget install EnterpriseLibrary.TransientFaultHandling.Configuration -o $path -ExcludeVersion
 
 # Loading EnterpriseLibrary TransientFaultHandling Dll's
-Add-Type -Path "$path\EnterpriseLibrary.TransientFaultHandling\lib\portable-net45+win+wp8\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.dll"
-Add-Type -Path "$path\EnterpriseLibrary.Common\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Common.dll"
-Add-Type -Path "$path\EnterpriseLibrary.TransientFaultHandling.Caching\lib\NET45\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.Caching.dll"
-Add-Type -Path "$path\EnterpriseLibrary.TransientFaultHandling.Configuration\lib\NET45\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.Configuration.dll"
-Add-Type -Path "$path\EnterpriseLibrary.TransientFaultHandling.Data\lib\NET45\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.Data.dll"
-Add-Type -Path "$path\EnterpriseLibrary.TransientFaultHandling.ServiceBus\lib\NET45\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.ServiceBus.dll"
-Add-Type -Path "$path\EnterpriseLibrary.TransientFaultHandling.WindowsAzure.Storage\lib\NET45\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.WindowsAzure.Storage.dll"
+Add-Type -Path "$NugetPath\EnterpriseLibrary.TransientFaultHandling\lib\portable-net45+win+wp8\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.dll"
+Add-Type -Path "$NugetPath\EnterpriseLibrary.Common\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Common.dll"
+Add-Type -Path "$NugetPath\EnterpriseLibrary.TransientFaultHandling.Caching\lib\NET45\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.Caching.dll"
+Add-Type -Path "$NugetPath\EnterpriseLibrary.TransientFaultHandling.Configuration\lib\NET45\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.Configuration.dll"
+Add-Type -Path "$NugetPath\EnterpriseLibrary.TransientFaultHandling.Data\lib\NET45\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.Data.dll"
+Add-Type -Path "$NugetPath\EnterpriseLibrary.TransientFaultHandling.ServiceBus\lib\NET45\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.ServiceBus.dll"
+Add-Type -Path "$NugetPath\EnterpriseLibrary.TransientFaultHandling.WindowsAzure.Storage\lib\NET45\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.WindowsAzure.Storage.dll"
 
 $timeStampFormat = "g"
 $CommandTimeout = 60 * 180
