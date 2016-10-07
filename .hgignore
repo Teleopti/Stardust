@@ -106,3 +106,6 @@ Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/index_desktop_client.html
 Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/css/style_classic.css
 Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/css/style_dark.css
 .debug-Setup/PatchAndUseMyCustomerDB.bat
+Teleopti.Ccc.Web/Teleopti.Ccc.Web/.node/PackageJsonHash.txt
+Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/.vscode/settings.json
+Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/.vscode/tasks.json

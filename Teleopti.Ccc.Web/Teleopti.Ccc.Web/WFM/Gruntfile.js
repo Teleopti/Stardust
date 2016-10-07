@@ -61,7 +61,9 @@ module.exports = function(grunt) {
 			options: {
 				configFile: 'karma.conf.js',
 			},
-			unit: {},
+			unit: {
+				browsers: ['Chrome_small']
+			},
 			dev: {
 				singleRun: false
 			},
