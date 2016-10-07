@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IIntradayQueueStatisticsLoader
 	{
-		IList<SkillIntervalCalls> LoadActualCallPerSkillInterval(IList<Guid> skillIdList, TimeZoneInfo timeZone, DateOnly today);
+		IList<SkillIntervalStatistics> LoadActualCallPerSkillInterval(IList<Guid> skillIdList, TimeZoneInfo timeZone, DateOnly today);
 	}
 }

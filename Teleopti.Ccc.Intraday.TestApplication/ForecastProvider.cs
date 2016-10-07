@@ -43,9 +43,11 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 				{
 					DateId = (int) row["date_id"],
 					IntervalId = Convert.ToInt16(row["interval_id"]),
-					Calls = Convert.ToDouble(row["forecasted_calls"]),
-					HandleTime = Convert.ToDouble(row["forecasted_handling_time_s"])
-				};
+					Calls = Convert.ToDouble(row["forecasted_calls"]),					
+                    TalkTime = Convert.ToDouble(row["forecasted_talk_time_s"]),
+                    AfterTalkTime = Convert.ToDouble(row["forecasted_after_call_work_s"]),
+                    HandleTime = Convert.ToDouble(row["forecasted_handling_time_s"])
+                };
 
 				forecastIntervals.Add(interval);
 			}

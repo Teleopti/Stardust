@@ -6,5 +6,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 		public int IntervalId { get; set; }
 		public double Calls { get; set; }
 		public double HandleTime { get; set; }
+	    public double TalkTime { get; set; }
+	    public double AfterTalkTime { get; set; }
 	}
 }

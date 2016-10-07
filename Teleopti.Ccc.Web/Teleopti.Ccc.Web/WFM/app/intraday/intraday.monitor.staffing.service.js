@@ -12,7 +12,8 @@
 					updatedSeries: []
 				},
 				hasMonitorData:false,
-				timeSeries:[],
+				timeSeries: [],
+                actualStaffingSeries:[],
 				currentInterval: []
 			};
 
@@ -23,12 +24,12 @@
 				staffingData.timeSeries = [];
 				staffingData.forecastedStaffing.series = [];
 				staffingData.forecastedStaffing.updatedSeries = [];
+			    staffingData.actualStaffingSeries = [];
 
 				staffingData.forecastedStaffing.series = result.DataSeries.ForecastedStaffing;
 				staffingData.forecastedStaffing.updatedSeries = result.DataSeries.UpdatedForecastedStaffing;
-				// staffingData.latestActualInterval = $filter('date')(result.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(result.LatestActualIntervalEnd, 'shortTime');
+			    staffingData.actualStaffingSeries = result.DataSeries.ActualStaffing;
 
-				staffingData.timeSeries = [];
 
 				angular.forEach(result.DataSeries.Time, function (value, key) {
 					this.push($filter('date')(value, 'shortTime'));
@@ -40,6 +41,7 @@
 
 				staffingData.forecastedStaffing.series.splice(0, 0, 'Forecasted_staffing');
 				staffingData.forecastedStaffing.updatedSeries.splice(0, 0, 'Updated_forecasted_staffing');
+			    staffingData.actualStaffingSeries.splice(0, 0, 'Actual_staffing');
 
 				staffingData.hasMonitorData = true;
 
@@ -94,16 +96,18 @@
 								columns: [
 									staffingData.timeSeries,
 									staffingData.forecastedStaffing.series,
-									staffingData.forecastedStaffing.updatedSeries
+									staffingData.forecastedStaffing.updatedSeries,
+                                    staffingData.actualStaffingSeries
 								],
 								groups: [
-									['Forecasted_staffing'],['Updated_forecasted_staffing']
+									['Forecasted_staffing'],['Updated_forecasted_staffing'],['Actual_staffing']
 								],
 								order: 'asc',
 								hide: hiddenArray,
 								names: {
 									Forecasted_staffing: $translate.instant('ForecastedStaff') + ' ←',
-									Updated_forecasted_staffing: $translate.instant('ReforecastedStaff') + ' ←'
+									Updated_forecasted_staffing: $translate.instant('ReforecastedStaff') + ' ←',
+									Actual_staffing: 'XXActual Staffing' + ' ←'
 								}
 							},
 							axis: {

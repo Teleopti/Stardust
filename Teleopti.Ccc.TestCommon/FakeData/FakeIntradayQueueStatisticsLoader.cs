@@ -8,14 +8,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeIntradayQueueStatisticsLoader : IIntradayQueueStatisticsLoader
 	{
-		private IList<SkillIntervalCalls> _latestStatisticsTimeAndWorkload = new List<SkillIntervalCalls>();
+		private IList<SkillIntervalStatistics> _latestStatisticsTimeAndWorkload = new List<SkillIntervalStatistics>();
 
-		public IList<SkillIntervalCalls> LoadActualCallPerSkillInterval(IList<Guid> skillList, TimeZoneInfo timeZone, DateOnly today)
+		public IList<SkillIntervalStatistics> LoadActualCallPerSkillInterval(IList<Guid> skillList, TimeZoneInfo timeZone, DateOnly today)
 		{
 			return _latestStatisticsTimeAndWorkload;
 		}
 
-		public void Has(IList<SkillIntervalCalls> latestStatisticsTimeAndWorkload)
+		public void Has(IList<SkillIntervalStatistics> latestStatisticsTimeAndWorkload)
 		{
 			_latestStatisticsTimeAndWorkload = latestStatisticsTimeAndWorkload;
 		}

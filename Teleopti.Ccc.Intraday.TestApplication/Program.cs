@@ -10,7 +10,9 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 {
 	class Program
 	{
-		static void Main(string[] args)
+        private static readonly object syncLock = new object();
+        private static readonly Random random = new Random();
+        static void Main(string[] args)
 		{
 			string connectionString = ConfigurationManager.AppSettings["analyticsConnectionString"];
 			IForecastProvider forecastProvider = new ForecastProvider(connectionString);
@@ -129,9 +131,19 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			Console.ReadKey();
 		}
 
-		private static IList<QueueInterval> generateQueueDataIntervals(IList<ForecastInterval> forecastIntervals, QueueInfo targetQueue)
+        private static int RandomNumber(int min, int max)
+        {
+            lock (syncLock)
+            { // synchronize
+                return random.Next(min, max);
+            }
+        }
+
+
+        private static IList<QueueInterval> generateQueueDataIntervals(IList<ForecastInterval> forecastIntervals, QueueInfo targetQueue)
 		{
 			var queueDataList = new List<QueueInterval>();
+           
 			foreach (var interval in forecastIntervals)
 			{
 				if (Math.Abs(interval.Calls) < 0.0001)
@@ -140,19 +152,20 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 				var algorithmProperties = getAlgorithmProperties(forecastIntervals);
 
 				var index = forecastIntervals.IndexOf(interval);
-				var calculatedHandleTime = (decimal) Math.Round(interval.HandleTime + algorithmProperties.HandleTimeConstant*index);
-			    var talkTime = calculatedHandleTime * new decimal(0.9);
-			    var acw = calculatedHandleTime * new decimal(0.1);
+			    var forecastedAverageHandleTime = interval.Calls > 0 ? interval.HandleTime/interval.Calls : 0;                             
 			    var offeredCalls = (decimal) Math.Round(
 			        (interval.Calls + 1) +
 			        algorithmProperties.CallsConstant*index*(1 - ((double) index/algorithmProperties.IntervalCount)),
 			        0);
-			    var answeredCalls = Math.Round((offeredCalls * new Random().Next(75, 100)) / 100, 0);
-			    var speedOfAnswer = createSpeedOfAnswer(answeredCalls);
+			    var answeredCalls = Math.Round((offeredCalls * RandomNumber(80, 100)) / 100, 0);
+			    var actualHandleTime = forecastedAverageHandleTime*(double)answeredCalls;
+                var talkTime = actualHandleTime * (interval.TalkTime/interval.HandleTime);
+                var acw = actualHandleTime * (interval.AfterTalkTime / interval.HandleTime);
+                var speedOfAnswer = createSpeedOfAnswer(answeredCalls);
 			    var isASAWithinSL = speedOfAnswer / answeredCalls <= 20;
 			    var answeredCallsWithinSL = isASAWithinSL
-			        ? Math.Round(answeredCalls*new Random().Next(75, 100)/100, 0)
-			        : Math.Round(answeredCalls*new Random().Next(50, 100)/100, 0);
+			        ? Math.Round(answeredCalls* RandomNumber(100, 100)/100, 0)
+			        : Math.Round(answeredCalls * RandomNumber(100, 100) / 100, 0);
                 var queueData = new QueueInterval()
 				{
 					DateId = interval.DateId,
@@ -162,11 +175,11 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 					OfferedCalls = offeredCalls,
                     AnsweredCalls = answeredCalls,
                     AbandonedCalls = offeredCalls - answeredCalls,
-                    TalkTime = talkTime,
-					Acw = acw,
-					HandleTime = (decimal)Math.Round(interval.HandleTime + algorithmProperties.HandleTimeConstant * index),
+                    TalkTime = (decimal) talkTime,
+					Acw = (decimal) acw,
+					HandleTime = new decimal(talkTime + acw),
                     SpeedOfAnswer = speedOfAnswer,
-                    AnsweredCallsWithinSL = answeredCallsWithinSL
+                    AnsweredCallsWithinSL = answeredCallsWithinSL                   
                 };
 				queueDataList.Add(queueData);
 			}
@@ -176,9 +189,8 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 
 	    private static decimal createSpeedOfAnswer(decimal offeredCalls)
 	    {
-            var random = new Random().Next(5,28);
-	        return offeredCalls * random;
-	    }
+	        return offeredCalls * RandomNumber(5, 28);
+        }
 
 	    private static QueueInfo getTargetQueue(IEnumerable<QueueInfo> queues, bool doReplace)
 		{

@@ -20,7 +20,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 			IUserTimeZone timeZone,
 			ForecastedStaffingProvider forecastedStaffingProvider,
 			IIntradayQueueStatisticsLoader intradayQueueStatisticsLoader,
-			IIntervalLengthFetcher intervalLengthFetcher)
+			IIntervalLengthFetcher intervalLengthFetcher
+            )
 		{
 			_now = now;
 			_timeZone = timeZone;
@@ -88,7 +89,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 		{
 			var returnValue = new List<double?>();
 
-			if (!latestStatsTime.HasValue)
+
+
+			if (!latestStatsTime.HasValue || !actualStaffingPerSkill.Any())
 				return new List<double?>();
 
 			returnValue.AddRange(actualStaffingPerSkill
@@ -97,21 +100,24 @@ namespace Teleopti.Ccc.Domain.Intraday
 				.Select(s => (double?) s.Sum(a => a.Agents))
 				.ToList());
 
-			var nullStartTime = latestStatsTime.Value.AddMinutes(minutesPerInterval);
-			var nullEndTime = staffingForUsersToday.Max(x => x.StartTime);
+		    var actualStartTime = actualStaffingPerSkill.Min(x => x.StartTime);
+		    var actualEndTime = actualStaffingPerSkill.Max(x => x.StartTime).AddMinutes(minutesPerInterval);
+            var forecastStartTime = staffingForUsersToday.Min(x => x.StartTime);
+			var forecastEndTime = staffingForUsersToday.Max(x => x.StartTime).AddMinutes(minutesPerInterval);
 
-			for (DateTime i = nullStartTime; i <= nullEndTime; i = i.AddMinutes(minutesPerInterval))
-			{
-				returnValue.Add(null);
-			}
+            for (DateTime i = forecastStartTime; i < actualStartTime; i = i.AddMinutes(minutesPerInterval))
+                returnValue.Insert(0, null);
 
-			return returnValue;
+            for (DateTime i = actualEndTime; i < forecastEndTime; i = i.AddMinutes(minutesPerInterval))
+		        returnValue.Add(null);
+
+		    return returnValue;
 		}
 
 		private List<double?> getUpdatedForecastedStaffing(
 			List<StaffingIntervalModel> forecastedStaffingList, 
-			IList<SkillIntervalCalls> actualCallsPerSkillList, 
-			Dictionary<Guid, List<SkillIntervalCalls>> forecastedCallsPerSkillDictionary, 
+			IList<SkillIntervalStatistics> actualCallsPerSkillList, 
+			Dictionary<Guid, List<SkillIntervalStatistics>> forecastedCallsPerSkillDictionary, 
 			DateTime? latestStatsTime, 
 			DateTime usersNow, 
 			int minutesPerInterval)
@@ -124,46 +130,41 @@ namespace Teleopti.Ccc.Domain.Intraday
 			if (latestStatsTime > usersNow) // This case only for dev, test and demo
 				usersNow = latestStatsTime.Value.AddMinutes(minutesPerInterval);
 
-			var forecastedStaffingDictionary = forecastedStaffingList
-				.GroupBy(g => g.SkillId)
-				.Select(s => s)
-				.ToDictionary(x => x.Key, x => forecastedStaffingList.Where(s => s.SkillId == x.Key));
-
-			var actualCallsPerSkillDictionary = actualCallsPerSkillList
-				.GroupBy(g => g.SkillId)
-				.Select(s => s)
-				.ToDictionary(x => x.Key, x => actualCallsPerSkillList.Where(s => s.SkillId == x.Key));
 
 			var updatedForecastedSeries = new List<StaffingIntervalModel>();
 
 			foreach (var skillId in forecastedCallsPerSkillDictionary.Keys)
 			{
-				double averageDeviation = 1;
-				if (actualCallsPerSkillDictionary.ContainsKey(skillId))
-				{
-					IEnumerable<SkillIntervalCalls> actualCalls = actualCallsPerSkillDictionary[skillId];
+			    List<SkillIntervalStatistics> actualStats = actualCallsPerSkillList.Where(x => x.SkillId == skillId).ToList();
+
+                double averageDeviation = 1;
+				if (actualStats.Count > 0)
+				{					
 					double callsDeviationFactor = 0;
+				    int intervalCounter = 0;
 					foreach (var forecastedIntervalCalls in forecastedCallsPerSkillDictionary[skillId])
 					{
 						var actualIntervalCalls =
-							actualCalls.SingleOrDefault(x => x.StartTime == forecastedIntervalCalls.StartTime);
+                            actualStats.SingleOrDefault(x => x.StartTime == forecastedIntervalCalls.StartTime);
 						if (actualIntervalCalls == null)
 							continue;
-						callsDeviationFactor += actualIntervalCalls.Calls / forecastedIntervalCalls.Calls;
+                        intervalCounter++;
+                        callsDeviationFactor += actualIntervalCalls.Calls / forecastedIntervalCalls.Calls;
 					}
-
-					averageDeviation = callsDeviationFactor / actualCalls.Count();
+				    
+					averageDeviation = callsDeviationFactor / intervalCounter;
 				}
 				
-				var updatedForecastedSeriesPerSkill = forecastedStaffingDictionary[skillId]
-					.Where(s => s.StartTime >= usersNow)
-					.Select(t => new StaffingIntervalModel
-					{
-						SkillId = skillId ,
-						Agents = t.Agents * averageDeviation,
-						StartTime = t.StartTime					
-					})
-					.ToList();
+                var updatedForecastedSeriesPerSkill = forecastedStaffingList
+                    .Where(x => x.SkillId == skillId && x.StartTime >= usersNow)
+                    .Select(t => new StaffingIntervalModel
+                    {
+                        SkillId = skillId,
+                        Agents = t.Agents * averageDeviation,
+                        StartTime = t.StartTime
+                    })
+                    .OrderBy(y => y.StartTime)
+                    .ToList();
 
 				updatedForecastedSeries.AddRange(updatedForecastedSeriesPerSkill);
 			}
@@ -174,10 +175,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 				.Select(s => (double?)s.Sum(a => a.Agents))
 				.ToList();
 
-			var nullStartTime = forecastedStaffingDictionary
-				.Select(x => x.Value.Min(m => m.StartTime))
-				.Min(t => t);
-			var nullEndTime = updatedForecastedSeries.Min(m => m.StartTime);
+		    var nullStartTime = forecastedStaffingList
+		        .Min(y => y.StartTime);
+
+			var nullEndTime = updatedForecastedSeries
+                .Min(m => m.StartTime);
+
 			for (DateTime i = nullStartTime; i < nullEndTime; i = i.AddMinutes(minutesPerInterval))
 			{
 				returnValue.Insert(0, null);

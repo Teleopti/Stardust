@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_timeZone = timeZone;
 		}
 
-		public ForecastedStaffingModel Load(Guid[] skillIdList, DateTime? latestStatisticsTime, int minutesPerInterval, IList<SkillIntervalCalls> actualCallsPerSkillInterval)
+		public ForecastedStaffingModel Load(Guid[] skillIdList, DateTime? latestStatisticsTime, int minutesPerInterval, IList<SkillIntervalStatistics> actualCallsPerSkillInterval)
 		{
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var staffingIntervals = new List<StaffingIntervalModel>();
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			TimeSpan wantedIntervalResolution = TimeSpan.FromMinutes(minutesPerInterval);
 			var staffingCalculatorService = new StaffingCalculatorServiceFacade();
 
-			var callsPerSkill= new Dictionary<Guid, List<SkillIntervalCalls>>();
+			var callsPerSkill= new Dictionary<Guid, List<SkillIntervalStatistics>>();
 			var actualStaffingPerSkill= new  List<StaffingIntervalModel>();
 
 			var latestStatisticsTimeUtc = latestStatisticsTime.HasValue
@@ -61,11 +61,21 @@ namespace Teleopti.Ccc.Domain.Intraday
 				foreach (var skillDay in skillDays)
 				{
 					staffingIntervals.AddRange(getStaffingIntervalModels(skillDay, wantedIntervalResolution));
-					mergedTaskPeriodList.AddRange(getTaskPeriods(skillDay, minutesPerInterval, latestStatisticsTimeUtc, usersNowStartOfDayUtc));
-					actualStaffingPerSkill.AddRange(getActualStaffing(actualStatsPerInterval, skillDay, staffingCalculatorService, wantedIntervalResolution));
+				    var templateTaskPeriods = getTaskPeriods(skillDay, minutesPerInterval, latestStatisticsTimeUtc, usersNowStartOfDayUtc)
+                        .ToList();
+				    mergedTaskPeriodList.AddRange(templateTaskPeriods);
+                    if (!templateTaskPeriods.Any())
+                        continue;
+				    var skillOpenTime = TimeZoneHelper.ConvertFromUtc(templateTaskPeriods.Min(t => t.Period.StartDateTime), _timeZone.TimeZone());
+				    var skillEndTime = TimeZoneHelper.ConvertFromUtc(templateTaskPeriods.Max(t => t.Period.EndDateTime), _timeZone.TimeZone());
+				    actualStatsPerInterval = actualStatsPerInterval
+                        .Where(x => x.StartTime >= skillOpenTime && x.StartTime < skillEndTime)
+                        .ToList();
+
+                    actualStaffingPerSkill.AddRange(getActualStaffing(actualStatsPerInterval, skillDay, staffingCalculatorService, wantedIntervalResolution));
 				}
 
-				callsPerSkill.Add(skill.Id.Value, mergedTaskPeriodList.Select(x => new SkillIntervalCalls
+				callsPerSkill.Add(skill.Id.Value, mergedTaskPeriodList.Select(x => new SkillIntervalStatistics
 				{
 					SkillId = skill.Id.Value,
 					StartTime = TimeZoneHelper.ConvertFromUtc(x.Period.StartDateTime, _timeZone.TimeZone()),
@@ -85,43 +95,44 @@ namespace Teleopti.Ccc.Domain.Intraday
 		}
 
 		private List<StaffingIntervalModel> getActualStaffing(
-			List<SkillIntervalCalls> actualStatsPerInterval, 
+			List<SkillIntervalStatistics> actualStatsPerInterval, 
 			ISkillDay skillDay, 
 			StaffingCalculatorServiceFacade staffingCalculatorService, 
 			TimeSpan wantedIntervalResolution)
 		{
-			var returnValue = new List<StaffingIntervalModel>();
+            
+            var actualStaffingIntervals = new List<StaffingIntervalModel>();
+
+		    foreach (var actualStatsinterval in actualStatsPerInterval)
+		    {
+                var actualStatsStartTimeUtc = TimeZoneHelper.ConvertToUtc(actualStatsinterval.StartTime, _timeZone.TimeZone());
+                var skillData =
+                    skillDay.SkillDataPeriodCollection.SingleOrDefault(
+                        skillDataPeriod => skillDataPeriod.Period.StartDateTime <= actualStatsStartTimeUtc &&
+                                                 skillDataPeriod.Period.EndDateTime > actualStatsStartTimeUtc
+                    );
+
+		        if (skillData == null)
+		            continue;
+
+		        actualStaffingIntervals.Add(new StaffingIntervalModel()
+		        {
+		            SkillId = skillDay.Skill.Id.Value,
+		            StartTime = actualStatsinterval.StartTime,
+		            Agents = staffingCalculatorService.AgentsUseOccupancy(
+		                skillData.ServiceAgreement.ServiceLevel.Percent.Value,
+		                (int) skillData.ServiceAgreement.ServiceLevel.Seconds,
+		                actualStatsinterval.Calls,
+		                actualStatsinterval.AverageHandleTime,
+		                wantedIntervalResolution,
+		                skillData.ServiceAgreement.MinOccupancy.Value,
+		                skillData.ServiceAgreement.MaxOccupancy.Value,
+		                skillDay.Skill.MaxParallelTasks
+		            )
+		        });
+		    }
 			
-			returnValue.AddRange(actualStatsPerInterval.Select(actualStatsPeriod =>
-					{
-						var actualStatsStartTimeUtc = TimeZoneHelper.ConvertToUtc(actualStatsPeriod.StartTime, _timeZone.TimeZone());
-						var skillData =
-							skillDay.SkillDataPeriodCollection.SingleOrDefault(
-								skillDataPeriod => skillDataPeriod.Period.StartDateTime <= actualStatsStartTimeUtc &&
-														 skillDataPeriod.Period.EndDateTime > actualStatsStartTimeUtc
-							);
-
-						var interval = new StaffingIntervalModel()
-						{
-							SkillId = skillDay.Skill.Id.Value,
-							StartTime = actualStatsPeriod.StartTime,
-							Agents = staffingCalculatorService.AgentsUseOccupancy(
-								skillData.ServiceAgreement.ServiceLevel.Percent.Value,
-								(int) skillData.ServiceAgreement.ServiceLevel.Seconds,
-								actualStatsPeriod.Calls,
-								actualStatsPeriod.AverageHandleTime,
-								wantedIntervalResolution,
-								skillData.ServiceAgreement.MinOccupancy.Value,
-								skillData.ServiceAgreement.MaxOccupancy.Value,
-								skillDay.Skill.MaxParallelTasks
-							)
-						};
-						return interval;
-					})
-					.ToList()
-			);
-
-			return returnValue;
+			return actualStaffingIntervals;
 		}
 
 		private IEnumerable<ITemplateTaskPeriod> getTaskPeriods(ISkillDay skillDay, int minutesPerInterval, DateTime? latestStatisticsTimeUtc, DateTime utcDateTime)
@@ -174,21 +185,23 @@ namespace Teleopti.Ccc.Domain.Intraday
 					.Where(t =>
 						t.Period.StartDateTime >= usersNowUtc.Value &&
 						t.Period.EndDateTime <= latestStatisticsTimeUtc.Value.AddMinutes(targetMinutesPerInterval)
-					);
+					)
+                    .ToList();
 			}
 
 			return templateTaskPeriodCollection
 				.Where(t => 
 					t.Period.StartDateTime >= usersNowUtc.Value && 
 					t.Period.EndDateTime <= latestStatisticsTimeUtc.Value.AddMinutes(targetMinutesPerInterval)
-				);
+				)
+                .ToList();
 		}
 	}
 
 	public class ForecastedStaffingModel
 	{
 		public IList<StaffingIntervalModel> StaffingIntervals { get; set; }
-		public Dictionary<Guid, List<SkillIntervalCalls>> CallsPerSkill { get; set; }
+		public Dictionary<Guid, List<SkillIntervalStatistics>> CallsPerSkill { get; set; }
 
 		public List<StaffingIntervalModel> ActualStaffingPerSkill { get; set; }
 	}
