@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 	    private DateTime _now;
 		private ISkill _primarySkill1;
 		private ISkill _primarySkill2;
+		
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -81,7 +82,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Target.Process(request, _now);
 
 			Assert.AreEqual(4, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
-
 		}
 
 		[Test]
@@ -119,8 +119,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Assert.AreEqual(2, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
 		}
-
-
+		
 		[Test]
 		public void ShouldUpdateResourcesWhenApprove()
 		{
@@ -358,6 +357,44 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.AreEqual(2, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
 		}
 
+		[Test]
+		public void ShouldDenyWithIntervalsInAgentsTimezone()
+		{
+			var request = createNewRequest();
+
+			var staffingList = new List<SkillStaffingInterval>()
+			{
+				new SkillStaffingInterval()
+				{
+					SkillId =  _primarySkill1.Id.GetValueOrDefault(),
+					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
+					ForecastWithShrinkage = 2,
+					StaffingLevel = 10
+				}
+			};
+			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
+
+			staffingList = new List<SkillStaffingInterval>()
+			{
+				new SkillStaffingInterval()
+				{
+					SkillId =  _primarySkill2.Id.GetValueOrDefault(),
+					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
+					ForecastWithShrinkage = 20,
+					StaffingLevel = 10
+				}
+			};
+			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
+
+			Target.Process(request, _now);
+
+			var personRequest = PersonRequestRepository.Get(request.Id.GetValueOrDefault());
+			personRequest.DenyReason.Should().Not.Contain("13:00 - 13:15");
+			personRequest.DenyReason.Should().Contain("14:00 - 14:15");
+		}
+
 		private IPersonRequest createNewRequest(bool useWorkflowControlSet = true)
 		{
 
@@ -369,7 +406,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			var workflowControlSet = createWorkFlowControlSet(absence);
 			var person = createAndSetupPerson(workflowControlSet, useWorkflowControlSet);
-
+			
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
@@ -387,7 +424,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_primarySkill2.SetCascadingIndex(1);
 
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 03, 01), new[] {_primarySkill1, _primarySkill2});
-
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			if(useWorkflowControlSet)
 				person.WorkflowControlSet = workflowControlSet;
 
@@ -414,7 +451,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return workflowControlSet;
 		}
 		
-
 		private PersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod requestDateTimePeriod)
 		{
 			var personRequest = new FakePersonRequest(person, new AbsenceRequest(absence, requestDateTimePeriod));
@@ -425,8 +461,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			return personRequest;
 		}
-
-
+		
 		private int getRequestStatus(IPersonRequest request)
 		{
 			var requestStatus = 10;

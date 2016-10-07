@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			foreach (var skill in primaryAndUnSortedSkills)
 			{
 				var skillStaffingIntervals = getSkillStaffIntervals(skill.Skill.Id.GetValueOrDefault(), personRequest.Request.Period);
-				var underStaffingDetails = getUnderStaffedPeriods(skillStaffingIntervals);
+				var underStaffingDetails = getUnderStaffedPeriods(skillStaffingIntervals, personRequest.Person.PermissionInformation.DefaultTimeZone());
 				if (underStaffingDetails.UnderstaffingTimes.Any())
 				{
 					var denyReason = GetUnderStaffingHourString(underStaffingDetails, personRequest);
@@ -90,12 +90,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		}
 		
 
-		private UnderstaffingDetails getUnderStaffedPeriods(IEnumerable<SkillStaffingInterval> skillStaffingIntervals)
+		private UnderstaffingDetails getUnderStaffedPeriods(IEnumerable<SkillStaffingInterval> skillStaffingIntervals, TimeZoneInfo defaultTimeZone)
 		{
 			var result = new UnderstaffingDetails();
 			foreach (var interval in skillStaffingIntervals.Where(x => x.StaffingLevel < x.ForecastWithShrinkage + 1))
 			{
-				result.AddUnderstaffingTime(new TimePeriod(interval.StartDateTime.Hour, interval.StartDateTime.Minute, interval.EndDateTime.Hour, interval.EndDateTime.Minute));
+				var startDateTime = TimeZoneHelper.ConvertFromUtc(interval.StartDateTime, defaultTimeZone);
+				var endDateTime = TimeZoneHelper.ConvertFromUtc(interval.EndDateTime, defaultTimeZone);
+				result.AddUnderstaffingTime(new TimePeriod(startDateTime.Hour, startDateTime.Minute, endDateTime.Hour, endDateTime.Minute));
 			}
 			return result;
 		}
