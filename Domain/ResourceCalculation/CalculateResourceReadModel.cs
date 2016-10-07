@@ -33,7 +33,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var skillStaffPeriodDictionary =
 				_extractSkillStaffDataForResourceCalculation.ExtractSkillStaffPeriodDictionary(periodDateOnly);
 			var models = CreateReadModel(skillStaffPeriodDictionary, period);
-			_scheduleForecastSkillReadModelRepository.Persist(models, timeWhenResourceCalcDataLoaded);
+			if(models.Any())
+				_scheduleForecastSkillReadModelRepository.Persist(models, timeWhenResourceCalcDataLoaded);
 		}
 
 
