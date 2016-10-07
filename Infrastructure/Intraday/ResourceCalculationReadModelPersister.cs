@@ -5,7 +5,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -95,17 +94,27 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 	    public IEnumerable<SkillStaffingInterval> ReadMergedStaffingAndChanges(Guid skillId, DateTimePeriod period)
 	    {
-            var mergedStaffingIntervals = new List<SkillStaffingInterval>();
-	        var intervals = GetBySkill(skillId, period.StartDateTime, period.EndDateTime).ToList();
-           intervals.CopyTo(mergedStaffingIntervals.ToArray());
-	        var changes = GetReadModelChanges(period);
-	        foreach (var change in changes.Where(x => x.SkillId == skillId))
+	        var skillStaffingIntervals = GetBySkill(skillId, period.StartDateTime, period.EndDateTime).ToList();
+	        var mergedStaffingIntervals = new List<SkillStaffingInterval>();
+	        var intervalChanges = GetReadModelChanges(period).Where(x => x.SkillId == skillId).ToList();
+	        if (intervalChanges.Any())
 	        {
-	            var staffingInterval = mergedStaffingIntervals.FirstOrDefault(x => x.StartDateTime == change.StartDateTime && x.EndDateTime == change.EndDateTime);
-	            if (staffingInterval != null)
-                    staffingInterval.StaffingLevel += change.StaffingLevel;
+	            skillStaffingIntervals.ForEach(interval =>
+	                                           {
+	                                               var changes =
+	                                                   intervalChanges.Where(x => x.StartDateTime == interval.StartDateTime && x.EndDateTime == interval.EndDateTime).ToList();
+	                                               if (changes.Any())
+	                                               {
+	                                                   interval.StaffingLevel += changes.Sum((x => x.StaffingLevel));
+	                                               }
+	                                               mergedStaffingIntervals.Add(interval);
+	                                           });
 	        }
-            return mergedStaffingIntervals;
+	        else
+	        {
+	            mergedStaffingIntervals = skillStaffingIntervals.ToList();
+	        }
+	        return mergedStaffingIntervals;
 	    }
 
 
