@@ -384,7 +384,7 @@
 					var headerHeight = 30;
 					var agentMenuHeight = 45;
 					return {
-						height: ($scope.filteredData.length * rowHeight + headerHeight + agentMenuHeight) + "px"
+						height: ($scope.filteredData.length * rowHeight + headerHeight + agentMenuHeight + rowHeight/2) + "px"
 					};
 				};
 
