@@ -16,6 +16,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -23,6 +24,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class AuthenticationModule : Module
 	{
+		private readonly IIocConfiguration _configuration;
+
+		public AuthenticationModule(IIocConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<TenantScopeAspect>().SingleInstance();
@@ -61,7 +69,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			})
 				.As<IPasswordPolicy>()
 				.SingleInstance();
-			builder.RegisterType<LicensedFunctionsProvider>().As<ILicensedFunctionsProvider>().SingleInstance();
+
+
+			if (typeof(LicensedFunctionsProvider).TypeEnabledByToggle(_configuration))
+			{
+				builder.RegisterType<LicensedFunctionsProvider>().As<ILicensedFunctionsProvider>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<LicensedFunctionsProviderWithoutToggle41309>().As<ILicensedFunctionsProvider>().SingleInstance();
+			}
+
+			
 			builder.RegisterType<ApplicationFunctionsProvider>().As<IApplicationFunctionsProvider>().SingleInstance();
 			builder.RegisterType<ApplicationFunctionsToggleFilter>().As<IApplicationFunctionsToggleFilter>().SingleInstance();
 			builder.RegisterType<DefinedRaptorApplicationFunctionFactory>().As<IDefinedRaptorApplicationFunctionFactory>().InstancePerDependency();

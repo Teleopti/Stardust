@@ -84,6 +84,8 @@
 		WfmTeamSchedule_MakePersonalActivityUnmerged_40252,
 		WfmTeamSchedule_WeeklyContractTime_39871,
 
+		WfmTeamSchedule_MoveToBaseLicense_41039,
+
 		WfmReportPortal_Basic_38825,
 		WfmReportPortal_LeaderBoard_39440,
 

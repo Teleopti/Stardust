@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new AnalyticsUnitOfWorkModule(_configuration));
 			builder.RegisterModule(new DataSourceModule(_configuration));
 			builder.RegisterModule(new UnitOfWorkModule(_configuration));
-			builder.RegisterModule(new AuthenticationModule());
+			builder.RegisterModule(new AuthenticationModule(_configuration));
 			builder.RegisterModule(new EncryptionModule(_configuration));
 			builder.RegisterModule<ForecasterModule>();
 			builder.RegisterModule(new EventHandlersModule(_configuration));

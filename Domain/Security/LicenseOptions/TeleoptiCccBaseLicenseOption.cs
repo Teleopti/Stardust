@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
@@ -8,6 +9,8 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 {
 	public class TeleoptiCccBaseLicenseOption : LicenseOption
 	{
+		private bool _notIncludeWebTeams;
+
 		public TeleoptiCccBaseLicenseOption()
 			: base(DefinedLicenseOptionPaths.TeleoptiCccBase, DefinedLicenseOptionNames.TeleoptiCccBase)
 		{
@@ -68,8 +71,6 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				DefinedRaptorApplicationFunctionPaths.TextRequests,
 				DefinedRaptorApplicationFunctionPaths.MyTimeCancelRequest,
 				DefinedRaptorApplicationFunctionPaths.TeamSchedule,
-				DefinedRaptorApplicationFunctionPaths.EditShiftCategory,
-				DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity,
 				DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages,
 				DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics,
 				DefinedRaptorApplicationFunctionPaths.Anywhere,
@@ -88,7 +89,25 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				DefinedRaptorApplicationFunctionPaths.WebIntraday,
 				DefinedRaptorApplicationFunctionPaths.WebPeople,
 				DefinedRaptorApplicationFunctionPaths.WebModifySkillArea
+
 			};
+
+			var webTeamsFunctionPaths = new List<string>
+			{
+				DefinedRaptorApplicationFunctionPaths.MyTeamSchedules,
+				DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence,
+				DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence,
+				DefinedRaptorApplicationFunctionPaths.RemoveAbsence,
+				DefinedRaptorApplicationFunctionPaths.AddActivity,
+				DefinedRaptorApplicationFunctionPaths.AddPersonalActivity,
+				DefinedRaptorApplicationFunctionPaths.MoveActivity,
+				DefinedRaptorApplicationFunctionPaths.RemoveActivity,
+				DefinedRaptorApplicationFunctionPaths.SwapShifts,
+				DefinedRaptorApplicationFunctionPaths.EditShiftCategory,
+				DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity
+			};
+
+			if (! _notIncludeWebTeams) webTeamsFunctionPaths.ForEach(appFunctionPaths.Add);
 
 			var all = allApplicationFunctions.ToList();
 			EnabledApplicationFunctions.Clear();
@@ -96,6 +115,12 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 			{
 				EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, appFunctionPath));
 			}
+		}
+
+		[DisabledBy(Toggles.WfmTeamSchedule_MoveToBaseLicense_41039)]
+		public void SetNotIncludeWebTeams()
+		{
+			_notIncludeWebTeams = true;
 		}
 	}
 }
