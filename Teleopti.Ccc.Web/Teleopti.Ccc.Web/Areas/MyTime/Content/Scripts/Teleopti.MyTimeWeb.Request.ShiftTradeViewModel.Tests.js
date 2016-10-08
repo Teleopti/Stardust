@@ -392,8 +392,8 @@ $(document).ready(function () {
 			}
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
-		viewModel.selectedTeamInternal(null);
-		viewModel.myTeamId(null);
+		viewModel.selectedTeamInternal(undefined);
+		viewModel.myTeamId(undefined);
 
 
 		viewModel.loadTeams();
