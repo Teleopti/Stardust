@@ -428,8 +428,7 @@ Scenario: Cannot trade shifts when teamless
 	| Shift category		| Day	           |
 	And the time is '2030-01-01'
 	When I view Add Shift Trade Request
-	Then I should see a message text saying that I have no access to any teams
-	And I should not see a possible schedule trade with 'OtherAgent'
+	Then I should not see a possible schedule trade with 'OtherAgent'
 
 Scenario: Show possible shift trades from my team
 	Given I have the role 'Full access to mytime'

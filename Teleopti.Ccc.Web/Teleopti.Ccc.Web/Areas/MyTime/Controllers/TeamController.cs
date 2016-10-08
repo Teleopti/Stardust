@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
@@ -50,7 +51,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			if (!date.HasValue) date = _now.LocalDateOnly();
 
-			var allSiteIds = siteIds.Split(',').Select(siteId => new Guid(siteId)).ToList();
+			var ids = siteIds.Split(',');
+			if (ids[0] == "") return Json(new List<Guid>());
+
+			var allSiteIds = ids.Select(siteId => new Guid(siteId)).ToList();
 			return Json(_siteViewModelFactory.GetTeams(allSiteIds, date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb));
 		}
 
