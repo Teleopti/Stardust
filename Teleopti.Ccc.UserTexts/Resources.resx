@@ -14368,9 +14368,9 @@ Check your internet connection or contact your administrator.</value>
     <value>If you cancel this approved absence request then any absences created from this request will be deleted from the agent's schedule.</value>
     <comment>Used as a description on the confirmation dialog shown when cancelling an absence request in the new Angel project request view</comment>
   </data>
-  <data name="TryOutTheNewImprovedMyTeam" xml:space="preserve">
-    <value>Try out the new improved MyTeam!</value>
-    <comment>Notification message to user in old anywhere to try the new WFM MyTeam.</comment>
+  <data name="TryOutTheNewImprovedTeams" xml:space="preserve">
+    <value>Try out the new improved Teams!</value>
+    <comment>Notification message to user in old anywhere to try the new WFM Teams.</comment>
   </data>
   <data name="WFMReleaseNotification" xml:space="preserve">
     <value>{0} has been improved! We appreciate your {1}feedback.{2} Old {3} can be accessed for a limited time.</value>

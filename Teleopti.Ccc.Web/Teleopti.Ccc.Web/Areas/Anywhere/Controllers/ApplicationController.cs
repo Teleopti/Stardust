@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				UserTexts.Resources.Schedules,
 				UserTexts.Resources.NoAbsenceToRemoveInCurrentShift,
 				UserTexts.Resources.NoHierarchiesExist,
-				UserTexts.Resources.TryOutTheNewImprovedMyTeam,
+				UserTexts.Resources.TryOutTheNewImprovedTeams,
 
 				DateAndTimeFormatExtensions.FixedDateFormat,
 				DateAndTimeFormatExtensions.FixedDateTimeFormat,

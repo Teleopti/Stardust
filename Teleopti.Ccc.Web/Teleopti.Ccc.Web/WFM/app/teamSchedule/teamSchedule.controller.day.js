@@ -34,7 +34,7 @@
 		vm.permissionsAndTogglesLoaded = false;
 		vm.lastCommandTrackId = '';
 
-		vm.searchEnabled = $state.current.name != 'myTeamSchedule.for';
+		vm.searchEnabled = $state.current.name != 'teams.for';
 		vm.showDatePicker = false;
 
 		vm.paginationOptions = {
@@ -365,7 +365,7 @@
 			vm.resetSchedulePage();
 
 			var template = $translate.instant('WFMReleaseNotification');
-			var moduleName = $translate.instant('MyTeam');
+			var moduleName = $translate.instant('Teams');
 			var message = template.replace('{0}', moduleName)
 				.replace('{1}', '<a href="http://www.teleopti.com/wfm/customer-feedback.aspx">')
 				.replace('{2}', '</a>')

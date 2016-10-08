@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		}
 
 		[Test]
-		public void ShouldHaveMyTeamWhenPermittedAndFeatureEnabled()
+		public void ShouldHaveTeamsWhenPermittedAndFeatureEnabled()
 		{
 			PermissionProvider.Enable();
 			ToggleManager.Enable(Toggles.WfmTeamSchedule_AbsenceReporting_35995);
@@ -63,12 +63,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			var areas = Target.GetWfmAreasWithPermissions();
 
 			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
-			areas.Single().Name.Invoke().Should().Be(Resources.MyTeam);
-			areas.Single().InternalName.Should().Be("myTeamSchedule");
+			areas.Single().Name.Invoke().Should().Be(Resources.Teams);
+			areas.Single().InternalName.Should().Be("teams");
 		}
 
 		[Test]
-		public void ShouldNotHaveMyTeamWhenItNotPermitted()
+		public void ShouldNotHaveTeamsWhenItNotPermitted()
 		{
 			PermissionProvider.Enable();
 			ToggleManager.Enable(Toggles.WfmTeamSchedule_AbsenceReporting_35995);
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		}
 
 		[Test]
-		public void ShouldReturnMyTeamScheduleWhenWfmTeamScheduleIsReleased()
+		public void ShouldReturnMyTeamScheduleWhenWfmTeamsIsReleased()
 		{
 			PermissionProvider.Enable();
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);

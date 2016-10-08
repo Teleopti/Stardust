@@ -6,25 +6,25 @@
 	.config(stateConfig);
 
 	function stateConfig($stateProvider) {
-		$stateProvider.state('myTeamSchedule', {
-			url: '/myTeam',
+		$stateProvider.state('teams', {
+			url: '/teams',
 			templateUrl: 'app/teamSchedule/html/schedule.html',
 			controller: 'TeamScheduleDefaultCtrl as vm'
-		}).state('myTeamSchedule.dayView', {
+		}).state('teams.dayView', {
 			templateUrl: 'app/teamSchedule/html/dayViewSchedule.html',
 			controller: 'TeamScheduleCtrl as vm',
 			params: {
 				keyword: '',
 				selectedDate: new Date()
 			}
-		}).state('myTeamSchedule.for', {
+		}).state('teams.for', {
 			url: '/?personId',
 			templateUrl: 'app/teamSchedule/html/dayViewSchedule.html',
 			controller: 'TeamScheduleCtrl as vm',
 			params: {
 				personId: ''
 			}
-		}).state('myTeamSchedule.weekView', {
+		}).state('teams.weekView', {
 			url: '/week',
 			params: {
 				keyword: '',

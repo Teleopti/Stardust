@@ -37,7 +37,7 @@ define([
 		this.PreSelectedPersonId = ko.observable(false);
 		this.PreSelectedStartMinute = ko.observable(NaN);
 		this.BusinessUnitId = ko.observable();
-		this.TryOutTheNewImprovedMyTeam = ko.observable();
+		this.TryOutTheNewImprovedTeams = ko.observable();
 
 		this.URLPath = ko.observable(getNewImprovedMyTeamUrl());
 
@@ -45,7 +45,7 @@ define([
 			var currentUrl = document.location.href;
 			var match = currentUrl.match(/(.*?)\/(?:areas\/)?anywhere\b/i);
 			if (!match) return '';
-			return match[1] + '/wfm/#/myTeam';
+			return match[1] + '/wfm/#/teams';
 		}
 
 		this.Persons = ko.observableArray();

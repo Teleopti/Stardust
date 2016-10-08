@@ -28,8 +28,8 @@
         vc.viewState = $state.current.name;
 
         vc.viewStateMap = {
-            'day': 'myTeamSchedule.dayView',
-            'week': 'myTeamSchedule.weekView'
+            'day': 'teams.dayView',
+            'week': 'teams.weekView'
         };
 
         vc.changeView = function (viewState) {

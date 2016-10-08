@@ -18425,6 +18425,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You do not have permission to view this page..
+        /// </summary>
+        public static string NoPermissionToViewErrorMessage {
+            get {
+                return ResourceManager.GetString("NoPermissionToViewErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have no permission to view restricted scenarios and all scenarios are restricted..
         /// </summary>
         public static string NoPermissionToViewRestrictedScenarios {
@@ -31258,11 +31267,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Try out the new improved MyTeam!.
+        ///   Looks up a localized string similar to Try out the new improved Teams!.
         /// </summary>
-        public static string TryOutTheNewImprovedMyTeam {
+        public static string TryOutTheNewImprovedTeams {
             get {
-                return ResourceManager.GetString("TryOutTheNewImprovedMyTeam", resourceCulture);
+                return ResourceManager.GetString("TryOutTheNewImprovedTeams", resourceCulture);
             }
         }
         

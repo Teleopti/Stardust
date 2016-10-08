@@ -90,7 +90,7 @@ define([
 			viewModel.Loading(true);
 
 			viewModel.SetViewOptions(options);
-			viewModel.TryOutTheNewImprovedMyTeam(resources.TryOutTheNewImprovedMyTeam);
+			viewModel.TryOutTheNewImprovedTeams(resources.TryOutTheNewImprovedTeams);
 
 			var groupPagesDeferred = $.Deferred();
 
