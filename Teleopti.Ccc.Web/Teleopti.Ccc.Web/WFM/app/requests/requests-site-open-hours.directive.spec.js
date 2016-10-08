@@ -87,7 +87,7 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 		expect(requestsNotificationService.getNotificationResult()).toEqual(openHoursHandleResult);
 	});
 
-	it('should format data before save open hours', function () {
+	it('should format data before saving open hours', function () {
 		var test = setUpTarget();
 		var openHoursFormatResult = [{
 			OpenHours: [
@@ -100,8 +100,8 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 		test.targetScope.sites = [{
 			OpenHours: [
 			{
-				EndTime: 'Tue Aug 09 2016 17:00:20 GMT+0800 (China Standard Time)',
-				StartTime: 'Tue Aug 09 2016 08:00:20 GMT+0800 (China Standard Time)',
+				EndTime: '2016-08-09 17:00',
+				StartTime: '2016-08-09 08:00',
 				WeekDaySelections: [
 					{ Checked: true, WeekDay: 1 },
 					{ Checked: false, WeekDay: 2 },
