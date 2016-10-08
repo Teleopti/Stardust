@@ -50,7 +50,7 @@
 		</div>
 		<!-- /ko -->
 
-		<div class="col-sm-6 col-md-6 col-lg-3" data-bind="if: !missingMyTeam(), css:{'col-sm-3 col-md-3 col-lg-2': isSiteFilterEnabled}">
+		<div class="col-sm-6 col-md-6 col-lg-3" data-bind="if: !noAnyTeamToShow(), css:{'col-sm-3 col-md-3 col-lg-2': isSiteFilterEnabled}">
 			<div class="schedule-filter-component">
 				<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
 					<option data-bind="text: text, value: id"></option>
@@ -136,10 +136,10 @@
 		</div>
 	</div>
 	<div data-bind="visible: isReadyLoaded(), fadeInIf: !IsLoading() , fadeInDuration: 150, fadeOutDuration: 50">
-		<div class="shift-trade-missing-team-message alert alert-warning" data-bind="visible: missingMyTeam">
+		<div class="shift-trade-missing-team-message alert alert-warning" data-bind="visible: noAnyTeamToShow">
 			@Resources.YouDoNotHaveAccessToAnyTeams
 		</div>
-		<div class="shift-trade-add-schedule" data-bind="visible: !missingMyTeam() && !missingWorkflowControlSet()">
+		<div class="shift-trade-add-schedule" data-bind="visible: !noAnyTeamToShow() && !missingWorkflowControlSet()">
 			<div class="shift-trade-timeline">
 				<div class="relative">
 					<div data-bind="foreach: hours">

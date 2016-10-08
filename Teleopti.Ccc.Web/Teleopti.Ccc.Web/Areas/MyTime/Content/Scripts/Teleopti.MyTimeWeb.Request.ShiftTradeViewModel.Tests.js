@@ -377,8 +377,28 @@ $(document).ready(function () {
 		viewModel.loadMyTeamId();
 
 		equal(viewModel.myTeamId(), undefined);
-		equal(viewModel.missingMyTeam(), true);
+		equal(viewModel.noAnyTeamToShow(), false);
+	});
 
+	test("should set true when get no any team", function() {
+		var noTeam = [];
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url == "Team/TeamsForShiftTrade") {
+					options.success(
+							noTeam
+					);
+				}
+			}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+		viewModel.selectedTeamInternal(null);
+		viewModel.myTeamId(null);
+
+
+		viewModel.loadTeams();
+
+		equal(viewModel.noAnyTeamToShow(), true);
 	});
 
 	test("should load my team ID", function () {
@@ -397,7 +417,7 @@ $(document).ready(function () {
 		viewModel.loadMyTeamId();
 
 		equal(viewModel.myTeamId(), myTeamId);
-		equal(viewModel.missingMyTeam(), false);
+		equal(viewModel.noAnyTeamToShow(), false);
 	});
 
 	test("should load my site ID", function () {
