@@ -176,7 +176,8 @@
 					endDate: vm.period ? vm.period.endDate : null,
 					agentSearchTerm: vm.agentSearchTerm ? vm.agentSearchTerm : '',
 					filters: vm.filters,
-					isActive: vm.isActive
+					isActive: vm.isActive,
+					sortingOrders: vm.sortingOrders
 				};
 				return target;
 			}, function (newValue) {
@@ -192,14 +193,6 @@
 				}
 
 			}, true);
-
-			scope.$watch(function() {
-				return vm.sortingOrders;
-			}, function(newValue) {
-				if (ctrl.loaded) {
-					reload();
-				}
-			});
 
 			function listenToReload() {
 				scope.$on('reload.requests.with.selection', function (event) {

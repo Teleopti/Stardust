@@ -181,6 +181,43 @@
 			expect(getStatusFilter()['Status']).toEqual(vm.filters[0].Status);
 		});
 
+		it('should not call data service more than once in the first time', function() {
+			requestsDataService.setRequests([]);
+			targetScope.selectedTabIndex = 0;
+			targetScope.absencePeriod = {
+				startDate: moment().startOf('week')._d,
+				endDate: moment().endOf('week')._d
+			};
+			targetElement = $compile('<requests-overview ' +
+				'is-active="selectedTabIndex == 0" ' +
+				'period="absencePeriod"></requests-overview>')(targetScope);
+			targetScope.$digest();
+
+			expect(requestsDataService.getCallCounts()).toEqual(1);
+		});
+
+		it('should not call data service more than once when switching tab with different date period', function () {
+			requestsDataService.setRequests([]);
+			targetScope.selectedTabIndex = 0;
+			targetScope.absencePeriod = {
+				startDate: moment().startOf('week')._d,
+				endDate: moment().endOf('week')._d
+			};
+			targetScope.shiftTradePeriod = {
+				startDate: moment().add(-1, 'd')._d,
+				endDate: moment().add(1, 'd')._d
+			};
+			targetElement = $compile('<requests-overview is-active="selectedTabIndex == 0" period="absencePeriod"></requests-overview>' +
+				'<requests-overview is-active="selectedTabIndex == 1" period="shiftTradePeriod"></requests-overview>')(targetScope);
+			targetScope.$digest();
+
+			requestsDataService.reset();
+			targetScope.selectedTabIndex = 1;
+			targetScope.$digest();
+
+			expect(requestsDataService.getCallCounts()).toEqual(1);
+		});
+
 		function getInnerScope(element) {
 			var targets = element.find('requests-table-container');
 			return angular.element(targets[0]).scope();
@@ -511,11 +548,13 @@
 		var _requests;
 		var _hasSentRequests;
 		var _lastRequestParameters;
+		var _callCounts = 0;
 
 		this.reset = function () {
 			_requests = [];
 			_hasSentRequests = false;
 			_lastRequestParameters = null;
+			_callCounts = 0;
 		};
 
 		this.setRequests = function (requests) {
@@ -540,6 +579,7 @@
 			_lastRequestParameters = arguments;
 			return {
 				then: function (cb) {
+					_callCounts++;
 					cb({
 						data: {
 							Requests: _requests,
@@ -568,6 +608,10 @@
 				{ Id: 0, Name: "Status0" },
 				{ Id: 1, Name: "Status1" }
 			];
+		}
+
+		this.getCallCounts = function() {
+			return _callCounts;
 		}
 	}
 })();
