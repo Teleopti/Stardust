@@ -130,6 +130,15 @@ Scenario: Show possible shift trades
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see a possible schedule trade with 'OtherAgent'
 
+Scenario: Should show error message for server side error
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And the time is '2079-05-20'
+	# Max smalldatetime for SQL Server is 2079-06-06
+	When I view Add Shift Trade Request for date '2079-06-07'
+	Then I should see an error message
+
 Scenario: Show possible shift trade when victim has full day absence
 	Given I have the role 'Full access to mytime'
 	And there is an absence with

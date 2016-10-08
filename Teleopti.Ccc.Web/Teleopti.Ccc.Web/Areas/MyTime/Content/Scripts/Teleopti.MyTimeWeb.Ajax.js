@@ -139,7 +139,7 @@ Teleopti.MyTimeWeb.Ajax.UI = (function ($) {
 		var message = 'An error has occurred ' + ((errorThrown && errorThrown.length > 0) ? '(' + errorThrown + ')' : '');
 		var htmlString = '<h4 style="text-align:center;">' + message + '</h4>';
 		htmlString += '<p style="text-align:center;"><a href="javascript:window.location.reload()">Refresh</a></p>';
-		$('#body-inner').html(htmlString);
+		$('#body-inner').html('<div id="error-panel">' + htmlString + '</div>');
 	}
 
 	function _ajaxErrorDialog(jqXHR, textStatus, errorThrown) {

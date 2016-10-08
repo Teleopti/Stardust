@@ -482,9 +482,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				// Redraw layers after data loaded
 				self.redrawLayers();
 			},
-			error: function (e) {
-				//console.log(e);
-			},
 			complete: function () {
 				self.IsLoading(false);
 				self.isReadyLoaded(true);
@@ -497,8 +494,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 			}
 		});
 	};
-
-
 
 	self.selectedTeam = ko.computed({
 		read: function () {
@@ -515,7 +510,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 			self.loadSchedule(self.getFormattedDateForServiceCall(), teamId);
 		}
 	});
-
 
 	self.selectedSite = ko.computed({
 		read: function () {
@@ -682,8 +676,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				}
 				self.myTeamId(data);
 				self.tryLoadAllAvialableTeams(date);
-			},
-			error: function (e) {
 			}
 		});
 	};
@@ -708,8 +700,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				self.noAnySiteToShow(false);
 				self.mySiteId(data);
 				self.loadSites(date);
-			},
-			error: function (e) {
 			}
 		});
 	}
@@ -735,8 +725,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				if (siteToSelect !== undefined) self.selectedSite(siteToSelect);
 				else self.noAnySiteToShow(true);
 				self.loadMyTeamId(self.getFormattedDateForServiceCall());
-			},
-			error: function (e) {
 			}
 		});
 	};
@@ -771,9 +759,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				}
 				if (teamToSelect !== undefined) self.selectedTeam(teamToSelect);
 				else self.noAnyTeamToShow(true);
-			},
-			error: function (e) {
-				//console.log(e);
 			}
 		});
 	};
@@ -800,9 +785,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				}
 				if (teamToSelect !== undefined) self.selectedTeam(teamToSelect);
 				else self.noAnyTeamToShow(true);
-			},
-			error: function (e) {
-				//console.log(e);
 			}
 		});
 	};
