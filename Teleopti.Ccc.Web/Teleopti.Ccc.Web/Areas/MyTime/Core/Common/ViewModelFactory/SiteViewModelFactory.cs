@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 
 		public IEnumerable<ISelectOption> CreateSiteOptionsViewModel(DateOnly date, string applicationFunctionPath)
 		{
-			var sites = _siteProvider.GetPermittedSites(date, applicationFunctionPath).ToList();
+			var sites = _siteProvider.GetShowListSites(date, applicationFunctionPath).ToList();
 			var businessUnits = sites
 				.Select(t => t.BusinessUnit)
 				.Distinct();

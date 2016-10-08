@@ -416,7 +416,7 @@ $(document).ready(function () {
 		viewModel.loadMySiteId();
 
 		equal(viewModel.mySiteId(), mySiteId);
-		equal(viewModel.missingMySite(), false);
+		equal(viewModel.noAnySiteToShow(), false);
 	});
 
 	test("should hide page view when no data", function() {

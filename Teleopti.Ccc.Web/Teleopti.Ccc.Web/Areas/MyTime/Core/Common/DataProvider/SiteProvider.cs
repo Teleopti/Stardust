@@ -8,31 +8,28 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 {
 	public class SiteProvider : ISiteProvider
 	{
-		private readonly ISiteRepository _repository;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ITeamRepository _teamRepository;
 
-		public SiteProvider(ISiteRepository repository, IPermissionProvider permissionProvider, ITeamRepository teamRepository)
+		public SiteProvider(IPermissionProvider permissionProvider, ITeamRepository teamRepository)
 		{
-			_repository = repository;
 			_permissionProvider = permissionProvider;
 			_teamRepository = teamRepository;
 		}
 
-		public IEnumerable<ISite> GetPermittedSites(DateOnly date, string functionPath)
+		public IEnumerable<ISite> GetShowListSites(DateOnly date, string functionPath)
 		{
-			var permittedSite = new List<ISite>();
-			var sites = _repository.LoadAllOrderByName() ?? new ISite[] { };
-			 foreach (var site in sites)
+			var allTeams = _teamRepository.FindAllTeamByDescription() ?? new ITeam[] { };
+			var sitesToShow = new List<ISite>();
+			foreach (var team in allTeams)
 			{
-				var teams = _teamRepository.FindTeamsForSite(site.Id.Value);
-				if (teams.Any(team => _permissionProvider.HasTeamPermission(functionPath, date, team)))
+				if (_permissionProvider.HasTeamPermission(functionPath, date, team) && !sitesToShow.Contains(team.Site))
 				{
-					permittedSite.Add(site);
+					sitesToShow.Add(team.Site);
 				}
 			}
 
-			return permittedSite;
+			return sitesToShow;
 		}
 
 		public IEnumerable<ITeam> GetPermittedTeamsUnderSite(Guid siteId, DateOnly date, string functionPath)

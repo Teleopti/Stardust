@@ -36,7 +36,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.selectedSiteInternal = ko.observable();
 	self.selectedTeamInternal = ko.observable();
 	self.missingMyTeam = ko.observable();
-	self.missingMySite = ko.observable();
+	self.noAnySiteToShow = ko.observable();
 	self.myTeamId = ko.observable();
 	self.mySiteId = ko.observable();
 	self.maxShiftsPerPage = 20;
@@ -674,9 +674,10 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				self.missingMyTeam(false);
 				self.myTeamId(data);
 				if (self.isSiteFilterEnabled) {
-					var siteId = self.selectedSite() ? self.selectedSite() : self.mySiteId();
-					self.loadTeamsUnderSite(siteId, date);
-				} else {
+					if (self.selectedSite() == null) self.loadTeams(date);
+					else self.loadTeamsUnderSite(self.selectedSite(), date);
+				}
+				else {
 				self.loadTeams(date);
 				}
 				
@@ -698,13 +699,14 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 			success: function (data, textStatus, jqXHR) {
 				if (!data) {
 					self.mySiteId(undefined);
-					self.missingMySite(true);
-					self.missingMyTeam(true);
+					//self.noAnySiteToShow(true);
+					//self.missingMyTeam(true);
 					self.IsLoading(false);
 					self.isReadyLoaded(true);
+					self.loadSites(date);
 					return;
 				}
-				self.missingMySite(false);
+				self.noAnySiteToShow(false);
 				self.mySiteId(data);
 				self.loadSites(date);
 			},
@@ -727,8 +729,13 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 			success: function (data, textStatus, jqXHR) {
 				self.selectedSite(null);
 				self.availableSites(data);
-				if (data && data.length > 0) self.setSiteAll();
-				self.selectedSite(siteToSelect);
+				if (data && data.length > 0) {
+					self.setSiteAll();
+					if (siteToSelect == undefined) siteToSelect = self.allSitesId;
+				}
+				if (siteToSelect !== null) self.selectedSite(siteToSelect);
+				else self.noAnySiteToShow(true);
+				//self.selectedSite(siteToSelect);
 				self.loadMyTeamId(self.getFormattedDateForServiceCall());
 			},
 			error: function (e) {

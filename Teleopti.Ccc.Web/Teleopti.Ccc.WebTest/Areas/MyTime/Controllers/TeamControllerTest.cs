@@ -121,12 +121,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnSiteOptionsAsJsonForShiftTradeBoard()
 		{
-			var siteRepository = new FakeSiteRepository();
+			//var siteRepository = new FakeSiteRepository();
 			var businessUnit = new BusinessUnit("myBU");
 			var site = new Site("mySite");
 			site.SetId(Guid.NewGuid());
 			site.SetBusinessUnit(businessUnit);
-			siteRepository.Add(site);
+			//siteRepository.Add(site);
 
 			var team1 = new Team();
 			team1.Site = site;
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var authorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(teleoptiPrincipal));
 			var permissionProvider = new PermissionProvider(authorization);
 
-			var siteProvider = new SiteProvider(siteRepository, permissionProvider, teamRepository);
+			var siteProvider = new SiteProvider(permissionProvider, teamRepository);
 
 			var viewModelFactory = new SiteViewModelFactory(siteProvider);
 			var target = new TeamController(null, new Now(), viewModelFactory);

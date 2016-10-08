@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -147,7 +146,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
-		public void ShouldReturnMySiteForGivenDate()
+		public void ShouldReturnMySiteWhenMyTeamHasPermission()
 		{
 			var theDate = DateOnly.Today;
 			var myTeam = new Team();
@@ -159,8 +158,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			person.Stub(x => x.MyTeam(theDate).Site).Return(mySite);
-			permissionProvider.Stub(x => x.HasSitePermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, theDate, mySite)).Return(true);
+			person.Stub(x => x.MyTeam(theDate)).Return(myTeam);
+			permissionProvider.Stub(x => x.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, theDate, myTeam)).Return(true);
 
 			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), permissionProvider);
 

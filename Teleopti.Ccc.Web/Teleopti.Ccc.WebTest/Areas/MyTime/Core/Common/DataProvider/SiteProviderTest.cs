@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		[Test]
 		public void ShouldFilterPermittedTeamsWhenQueryingAll()
 		{
-			var repository = MockRepository.GenerateMock<ISiteRepository>();
 			var sites = new ISite[] { new Site("site1"), new Site("site2"),  };
 			sites[0].SetId(Guid.NewGuid());
 			sites[1].SetId(Guid.NewGuid());
@@ -37,17 +36,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var team2 = new Team();
 			team2.Site = sites[1];
 
-			repository.Stub(x => x.LoadAllOrderByName()).Return(sites);
-			_teamRepository.Stub(x => x.FindTeamsForSite(sites[0].Id.Value)).Return(new List<Team>() { team1 });
-			_teamRepository.Stub(x => x.FindTeamsForSite(sites[1].Id.Value)).Return(new List<Team>() { team2 });
-			_permissionProvider.Stub(x => x.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, DateOnly.Today, team1)).Return(false);
-			_permissionProvider.Stub(x => x.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, DateOnly.Today, team2)).Return(true);
+			_teamRepository.Stub(x => x.FindAllTeamByDescription()).Return(new List<ITeam>{ team1, team2 });
+			_permissionProvider.Stub(x => x.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, DateOnly.Today, team1)).Return(true);
+			_permissionProvider.Stub(x => x.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, DateOnly.Today, team2)).Return(false);
 
-			var target = new SiteProvider(repository, _permissionProvider, _teamRepository);
+			var target = new SiteProvider(_permissionProvider, _teamRepository);
 
-			var result = target.GetPermittedSites(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb);
+			var result = target.GetShowListSites(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb);
 
-			result.Single().Should().Be(sites.ElementAt(1));
+			result.Single().Should().Be(sites.ElementAt(0));
 		}
 
 		[Test]
@@ -64,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			_permissionProvider.Stub(x => x.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, DateOnly.Today, team1)).Return(false);
 			_permissionProvider.Stub(x => x.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, DateOnly.Today, team2)).Return(true);
 
-			var target = new SiteProvider(null, _permissionProvider, _teamRepository);
+			var target = new SiteProvider(_permissionProvider, _teamRepository);
 
 			var result = target.GetPermittedTeamsUnderSite(site.Id.Value, DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb);
 			result.ToList().Count.Should().Be.EqualTo(1);

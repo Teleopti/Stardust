@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 			var sites = new[] { site };
 			sites[0].SetId(Guid.NewGuid());
 
-			_siteProvider.Stub(x => x.GetPermittedSites(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(sites);
+			_siteProvider.Stub(x => x.GetShowListSites(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(sites);
 
 			var target = new SiteViewModelFactory(_siteProvider);
 

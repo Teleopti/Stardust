@@ -41,7 +41,7 @@
 		</div>
 
 		<!-- ko if: isSiteFilterEnabled -->
-		<div class="col-sm-3 col-md-3 col-lg-2" data-bind="if: !missingMySite()">
+		<div class="col-sm-3 col-md-3 col-lg-2" data-bind="if: !noAnySiteToShow()">
 			<div class="schedule-filter-component">
 				<select id="Site-Picker" data-bind="foreach: availableSites, select2: { value: selectedSite } ">
 					<option data-bind="text: text, value: id"></option>

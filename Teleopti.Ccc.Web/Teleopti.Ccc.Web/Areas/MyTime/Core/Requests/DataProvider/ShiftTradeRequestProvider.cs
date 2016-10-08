@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		{
 			var myTeam = _loggedOnUser.CurrentUser().MyTeam(date);
 			var mySite = myTeam?.Site;
-			if (mySite == null || !_permissionProvider.HasSitePermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, date, mySite))
+			if (mySite == null || !_permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, date, myTeam))
 			{
 				return null;
 			}
