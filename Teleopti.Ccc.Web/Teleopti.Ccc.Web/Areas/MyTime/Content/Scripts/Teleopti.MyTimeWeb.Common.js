@@ -263,6 +263,10 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		AjaxFailed: function (jqXHR, noIdea, title) {
 			var msg = $.parseJSON(jqXHR.responseText);
 			$('#dialog-modal').attr('title', 'Error: ' + msg.ShortMessage);
+
+			// Refer to bug #41058
+			// Temporary remove the error dialog since it will cause "Uncaught TypeError: $(...).dialog is not a function" error.
+			/*
 			$('#dialog-modal').dialog({
 				width: 800,
 				height: 500,
@@ -273,6 +277,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 					$(this).html(responseText);
 				}
 			});
+			*/
 			_log("Method Failed" + jqXHR + noIdea + title);
 		},
 		Log: function (logmessage) {

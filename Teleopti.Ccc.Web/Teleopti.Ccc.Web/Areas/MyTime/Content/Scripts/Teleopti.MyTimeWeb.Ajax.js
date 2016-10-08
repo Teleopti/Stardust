@@ -2,7 +2,6 @@
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/Scripts/jquery.qtip.js" />
 
-
 if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
 }
@@ -15,7 +14,6 @@ Teleopti.MyTimeWeb.Ajax = function () {
 	var callWhenAllAjaxIsCompleted;
 
 	function _ajax(options) {
-
 		_setupUrl(options);
 		_setupError(options);
 		_setupCache(options);
@@ -35,7 +33,6 @@ Teleopti.MyTimeWeb.Ajax = function () {
 	}
 
 	function _setupError(options) {
-
 		options.statusCode401 = options.statusCode401 || function () { window.location.href = Teleopti.MyTimeWeb.AjaxSettings.baseUrl; };
 		options.statusCode403 = options.statusCode403 || function () { window.location.href = Teleopti.MyTimeWeb.AjaxSettings.baseUrl; };
 		options.abort = options.abort || function () { };
@@ -43,7 +40,6 @@ Teleopti.MyTimeWeb.Ajax = function () {
 		var errorCallback = options.error;
 
 		options.error = function (jqXHR, textStatus, errorThrown) {
-			
 			if (options.abort && jqXHR && textStatus == "abort") {
 				options.abort(jqXHR, textStatus, errorThrown);
 				return;
@@ -68,7 +64,7 @@ Teleopti.MyTimeWeb.Ajax = function () {
 				errorCallback(jqXHR, textStatus, errorThrown);
 				return;
 			}
-			
+
 			Teleopti.MyTimeWeb.Ajax.UI.ShowAjaxError(jqXHR, textStatus, errorThrown);
 		};
 	}
@@ -82,7 +78,6 @@ Teleopti.MyTimeWeb.Ajax = function () {
 	}
 
 	function _setupHeaders(options) {
-
 		if (options.headers) {
 			options.headers['X-Use-GregorianCalendar'] = true;
 		} else {
@@ -91,7 +86,6 @@ Teleopti.MyTimeWeb.Ajax = function () {
 	}
 
 	function _setupRequestStack(options) {
-
 		var beforeSendCallback = options.beforeSend;
 		options.beforeSend = function (jqXHR) {
 			_requests.push(jqXHR);
@@ -108,7 +102,6 @@ Teleopti.MyTimeWeb.Ajax = function () {
 				completeCallback(jqXHR, textStatus);
 			_handleCallWhenAllAjaxCompleted();
 		};
-
 	}
 
 	function _handleCallWhenAllAjaxCompleted() {
@@ -137,13 +130,11 @@ Teleopti.MyTimeWeb.Ajax = function () {
 			_handleCallWhenAllAjaxCompleted();
 		}
 	};
-
 };
 
 Teleopti.MyTimeWeb.AjaxSettings = { baseUrl: '' };
 
 Teleopti.MyTimeWeb.Ajax.UI = (function ($) {
-
 	function _ajaxErrorBody(jqXHR, textStatus, errorThrown) {
 		var message = 'An error has occurred ' + ((errorThrown && errorThrown.length > 0) ? '(' + errorThrown + ')' : '');
 		var htmlString = '<h4 style="text-align:center;">' + message + '</h4>';
@@ -153,6 +144,10 @@ Teleopti.MyTimeWeb.Ajax.UI = (function ($) {
 
 	function _ajaxErrorDialog(jqXHR, textStatus, errorThrown) {
 		$('#dialog-modal').attr('title', 'Ajax error: ' + errorThrown);
+
+		// Refer to bug #41058
+		// Temporary remove the error dialog since it will cause "Uncaught TypeError: $(...).dialog is not a function" error.
+		/*
 		$('#dialog-modal').dialog({
 			width: 800,
 			height: 500,
@@ -163,6 +158,7 @@ Teleopti.MyTimeWeb.Ajax.UI = (function ($) {
 				$(this).html(responseText);
 			}
 		});
+		*/
 	}
 
 	return {
@@ -171,5 +167,4 @@ Teleopti.MyTimeWeb.Ajax.UI = (function ($) {
 			_ajaxErrorDialog(jqXHR, textStatus, errorThrown);
 		}
 	};
-
 })(jQuery);
