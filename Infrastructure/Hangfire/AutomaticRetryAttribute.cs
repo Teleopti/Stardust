@@ -1,5 +1,5 @@
-// This file is part of Hangfire.
-// Copyright © 2014 Sergey Odinokov.
+ï»¿// This file is part of Hangfire.
+// Copyright Â© 2014 Sergey Odinokov.
 // 
 // Hangfire is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as 
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 			const int maxMessageLength = 50;
 			var exceptionMessage = failedState.Exception.Message.Length > maxMessageLength
-				? failedState.Exception.Message.Substring(0, maxMessageLength - 1) + "…"
+				? failedState.Exception.Message.Substring(0, maxMessageLength - 1) + "â€¦"
 				: failedState.Exception.Message;
 
 			// If attempt number is less than max attempts, we should
