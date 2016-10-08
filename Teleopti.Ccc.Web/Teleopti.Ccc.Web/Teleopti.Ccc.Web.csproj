@@ -1337,6 +1337,7 @@
     <Content Include="Content\moment-datepicker\moment-datepicker-ext.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.0.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.0.min.js" />
+    <Content Include="WFM\app\people\people.keywordFormat.directive.js" />
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
     <Content Include="WFM\app\skillPrio\skillprio.controller.spec.js" />
     <Content Include="WFM\app\skillPrio\skillprio.service.spec.js" />

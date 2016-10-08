@@ -9,7 +9,7 @@
 					'<md-tooltip>Filter people</md-tooltip></i>' +
 					'<input id="simple-people-search" type="text" placeholder="{{\'Search\'|translate}}..." '+
 						'ng-model="vm.searchOptions.keyword" ng-keydown="$event.which === 13 && vm.searchCallback(vm.searchOptions.keyword) || vm.turnOffAdvancedSearch()" ng-change="vm.validateSearchKeywordChanged()" ' +
-						'ng-click="vm.toggleAdvancedSearchOption($event)" />'+
+						'ng-click="vm.toggleAdvancedSearchOption($event)" keyword-format/>' +
 					'<advance-search class="dropdown" ng-cloak ng-if="vm.showAdvancedSearchOption" outside-click="vm.turnOffAdvancedSearch()"></advance-search>' +
 				'</label>'
 			);
@@ -43,8 +43,7 @@
 
 			var expression = "";
 			angular.forEach(allSearchTypes, function (searchType) {
-				// Change first letter to lowercase
-				var title = searchType.charAt(0).toLowerCase() + searchType.slice(1);
+				var title = searchType;
 				expression += getSearchCriteria(title, vm.advancedSearchForm[searchType]);
 			});
 

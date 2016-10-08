@@ -27,7 +27,7 @@ describe("PeopleSearchInputCtrl", function () {
 
 		controller.advancedSearch();
 
-		expect(controller.searchOptions.keyword).toEqual('firstName: Ashley Smith; organization: London Shenzhen;');
+		expect(controller.searchOptions.keyword).toEqual('FirstName: Ashley Smith; Organization: London Shenzhen;');
 	}));
 
 	it("should handle both single quote and double quote in search value correctly", inject(function () {
