@@ -185,7 +185,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				FirstDayOfWeek = (int) CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek,
 				ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
 
-				RTA_AdherenceDetails_34267 = _toggles.IsEnabled(Toggles.RTA_AdherenceDetails_34267)
+				RTA_AdherenceDetails_34267 = _toggles.IsEnabled(Toggles.RTA_AdherenceDetails_34267),
+				WfmTeamSchedule_MoveToBaseLicense_41039 = _toggles.IsEnabled(Toggles.WfmTeamSchedule_MoveToBaseLicense_41039)
 
 			}, Formatting.Indented);
 
