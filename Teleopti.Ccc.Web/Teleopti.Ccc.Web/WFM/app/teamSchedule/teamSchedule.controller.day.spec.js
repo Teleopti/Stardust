@@ -120,6 +120,24 @@ describe("teamschedule controller tests", function() {
 		expect(searchScheduleCalledTimes).toEqual(0);
 	}));
 
+	it("should populate available timezones", inject(function() {
+		controller.scheduleDate = new Date("2015-10-26");
+		rootScope.$digest();
+
+		expect(controller.availableTimezones.length).toEqual(3);
+		expect(controller.availableTimezones[0].ianaId).toEqual("Etc/UTC");
+		expect(controller.availableTimezones[1].ianaId).toEqual("Europe/Berlin");
+		expect(controller.availableTimezones[2].ianaId).toEqual("Asia/Shanghai");
+	}));
+
+	it("should extract the right abbreviation of the selected time zone ", inject(function() {
+		controller.scheduleDate = new Date("2015-10-26");
+		rootScope.$digest();
+		controller.selectedTimezone = "Europe/Berlin";
+		var displayedName = controller.onTimeZoneSelected();
+		expect(displayedName).toEqual("UTC+01:00");
+	}));
+
 	
 	function setUpController($controller) {
 		return $controller("TeamScheduleCtrl", {
@@ -177,7 +195,11 @@ describe("teamschedule controller tests", function() {
 								}
 							],
 							"IsFullDayAbsence": false,
-							"DayOff": null
+							"DayOff": null,
+							"Timezone": {
+								"IanaId": "Europe/Berlin", 
+								"DisplayName": "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna"
+							}
 						},
 						{
 							"PersonId": "221B-Sherlock",
@@ -193,7 +215,11 @@ describe("teamschedule controller tests", function() {
 								}
 							],
 							"IsFullDayAbsence": false,
-							"DayOff": null
+							"DayOff": null,
+							"Timezone": {
+								"IanaId": "Europe/Berlin",
+								"DisplayName": "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna"
+							}
 						},
 						{
 							"PersonId": "person-emptySchedule",
@@ -201,7 +227,11 @@ describe("teamschedule controller tests", function() {
 							"Date": today,
 							"Projection": [],
 							"IsFullDayAbsence": false,
-							"DayOff": null
+							"DayOff": null,
+							"Timezone": {
+								"IanaId": "Asia/Shanghai",
+								"DisplayName": "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
+							}
 						}
 					],
 					Total: 3,
@@ -253,6 +283,7 @@ describe("teamschedule controller tests", function() {
 			CurrentUserInfo: function() {
 				return {
 					DefaultTimeZone: "Etc/UTC",
+					DefaultTimeZoneName: "Etc/UTC",
 					DateFormatLocale: "en-GB"
 				};
 			}			
