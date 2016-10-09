@@ -13,7 +13,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			if (personSchedule.IsSelected) {
 				var absences = [], activities = [];
 				var shiftsForCurrentDate = personSchedule.Shifts.filter(function (shift) {
-					return personSchedule.Date.isSame(shift.Date, 'day');
+					return personSchedule.Date === shift.Date;
 				});
 				if (shiftsForCurrentDate.length > 0) {
 					var projectionsForCurrentDate = shiftsForCurrentDate[0].Projections;
@@ -81,7 +81,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 					svc.personInfo[personId].AllowSwap = personSchedule.AllowSwap();
 					var shiftLength = personSchedule.Shifts.length;
 					for (var i = 0; i < shiftLength; i++) {
-						if (!personSchedule.Shifts[i].Date.isSame(personSchedule.Date, 'day')) {
+						if (personSchedule.Shifts[i].Date !== personSchedule.Date) {
 							continue;
 						}
 						angular.forEach(personSchedule.Shifts[i].Projections, function (projection) {
@@ -115,7 +115,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 
 		svc.toggleAllPersonProjections = function (personSchedule, viewDate) {
 			angular.forEach(personSchedule.Shifts, function (shift) {
-				if (shift.Date.format("YYYY-MM-DD") === moment(viewDate).format("YYYY-MM-DD")) {
+				if (shift.Date === moment(viewDate).format("YYYY-MM-DD")) {
 					angular.forEach(shift.Projections, function (projection) {
 						if (projection.ParentPersonAbsences || (!projection.IsOvertime && projection.ShiftLayerIds)) {
 							projection.Selected = personSchedule.IsSelected;
@@ -130,7 +130,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			var personId = personSchedule.PersonId;
 
 			angular.forEach(personSchedule.Shifts, function (shift) {
-				if (shift.Date.isSame(personSchedule.Date, 'day')) {
+				if (shift.Date === personSchedule.Date) {
 					angular.forEach(shift.Projections, function (projection) {
 						var sameActivity = currentProjection.ShiftLayerIds && angular.equals(projection.ShiftLayerIds, currentProjection.ShiftLayerIds);
 						var sameAbsence = currentProjection.ParentPersonAbsences && angular.equals(currentProjection.ParentPersonAbsences, projection.ParentPersonAbsences);

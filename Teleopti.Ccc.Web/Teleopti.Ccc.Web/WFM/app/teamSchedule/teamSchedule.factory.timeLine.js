@@ -2,9 +2,9 @@
 
 (function () {
 	
-	angular.module('wfm.teamSchedule').factory('TeamScheduleTimeLineFactory', ['CurrentUserInfo', 'ShiftHelper', TeamScheduleTimeLineFactory]);
+	angular.module('wfm.teamSchedule').factory('TeamScheduleTimeLineFactory', ['ShiftHelper', TeamScheduleTimeLineFactory]);
 
-	function TeamScheduleTimeLineFactory(currentUserInfo, shiftHelper) {
+	function TeamScheduleTimeLineFactory(shiftHelper) {
 
 		var timeLineFactory = {
 			Create: create
@@ -149,8 +149,8 @@
 
 		function hourPointViewModel(baseDate, minutes, start, percentPerMinute, isLabelHidden) {
 			var time = ((baseDate == undefined)
-				? moment.tz(currentUserInfo.DefaultTimeZone)
-				: moment.tz(baseDate, currentUserInfo.DefaultTimeZone)).startOf('day').add(minutes, 'minutes');
+				? moment()
+				: moment(baseDate)).startOf('day').add(minutes, 'minutes');
 
 			var formattedTime = time.format('LT');
 

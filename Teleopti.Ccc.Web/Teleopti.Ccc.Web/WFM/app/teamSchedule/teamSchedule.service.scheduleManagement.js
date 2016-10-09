@@ -53,7 +53,7 @@
 						if (person === schedule.PersonId) {
 							schedule.IsSelected = false;
 							var shiftsForSelectedDate = schedule.Shifts.filter(function(shift) {
-								return shift.Date.isSame(schedule.Date, 'day');
+								return shift.Date === schedule.Date;
 							});
 							if (shiftsForSelectedDate.length > 0) {
 								angular.forEach(shiftsForSelectedDate[0].Projections, function(projection) {
@@ -126,7 +126,7 @@
 					if (selectedPersonIds.indexOf(schedule.PersonId) > -1) {
 						previousDayShifts = previousDayShifts.concat(schedule.Shifts.filter(function(shift) {
 							return shift.Projections.length > 0
-								&& new Date(shift.Date.format('YYYY-MM-DD')) < new Date(scheduleDateMoment.format('YYYY-MM-DD'));
+								&& shift.Date !== scheduleDateMoment.format('YYYY-MM-DD');
 						}));
 					}
 				});
@@ -160,7 +160,7 @@
 				svc.groupScheduleVm.Schedules.forEach(function (schedule) {
 					if (selectedPersonIds.indexOf(schedule.PersonId) > -1) {
 						currentDayShifts = currentDayShifts.concat(schedule.Shifts.filter(function (shift) {
-							return shift.Date.format('YYYY-MM-DD') === scheduleDateMoment.format('YYYY-MM-DD');
+							return shift.Date === scheduleDateMoment.format('YYYY-MM-DD');
 						}));
 					}
 				});

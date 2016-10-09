@@ -1,8 +1,8 @@
 ﻿(function() {
 	'use strict';
-	angular.module('wfm.teamSchedule').factory('PersonSchedule', ['CurrentUserInfo', PersonSchedule]);
+	angular.module('wfm.teamSchedule').factory('PersonSchedule', [PersonSchedule]);
 
-	function PersonSchedule(currentUserInfo) {
+	function PersonSchedule() {
 
 		var personScheduleFactory = {
 			Create: create
@@ -45,10 +45,10 @@
 			var personSchedule = {
 				PersonId: schedule.PersonId,
 				Name: schedule.Name,
-				Date: moment.tz(schedule.Date, currentUserInfo.CurrentUserInfo().DefaultTimeZone),
+				Date: schedule.Date,
 				Shifts: projectionVms == undefined ? [] : [
 					{
-						Date: moment.tz(schedule.Date, currentUserInfo.CurrentUserInfo().DefaultTimeZone),
+						Date: schedule.Date,
 						Projections: projectionVms,
 						AbsenceCount: getPersonAbsencesCount,
 						ActivityCount: getPersonActivitiesCount
@@ -63,19 +63,19 @@
 				},
 				ContractTime: formatContractTimeMinutes(schedule.ContractTimeMinutes),
 				ScheduleStartTime: function () {
-					var start = this.Date.format('YYYY-MM-DDTHH:mm:00');
+					var start = this.Date;
 					angular.forEach(this.Shifts, function (shift) {
-						if (shift.Date.format('YYYY-MM-DDT00:00:00') === start && shift.Projections.length > 0) {
+						if (shift.Date === start && shift.Projections.length > 0) {
 							start = shift.Projections[0].Start;
 						}
 					});
-					return start;
+					return moment(start).format("YYYY-MM-DDTHH:mm:00");
 				},
 				ScheduleEndTime: function () {
-					var start = this.Date;
+					var scheduleDate = this.Date;
 					var end = moment(schedule.Date).endOf('day');
 					angular.forEach(this.Shifts, function (shift) {
-						if (shift.Date.format('YYYY-MM-DD') == start.format('YYYY-MM-DD') && shift.Projections.length > 0) {
+						if (shift.Date == scheduleDate && shift.Projections.length > 0) {
 							end = moment(shift.Projections[shift.Projections.length - 1].Start).add(shift.Projections[shift.Projections.length - 1].Minutes,'minutes');
 						}
 					});
@@ -83,7 +83,7 @@
 				},
 				AbsenceCount: function(){
 					var shiftsForCurrentDate = this.Shifts.filter(function (shift) {
-						return this.Date.isSame(shift.Date, 'day');
+						return this.Date===shift.Date;
 					}, this);
 					if(shiftsForCurrentDate.length > 0) {
 						return shiftsForCurrentDate[0].AbsenceCount();
@@ -92,7 +92,7 @@
 				},
 				ActivityCount: function(){
 					var shiftsForCurrentDate = this.Shifts.filter(function (shift) {
-						return this.Date.isSame(shift.Date, 'day');
+						return this.Date === shift.Date;
 					}, this);
 					if(shiftsForCurrentDate.length > 0) {
 						return shiftsForCurrentDate[0].ActivityCount();
@@ -232,7 +232,7 @@
 			var otherProjections = createProjections(otherSchedule.Projection, timeLine);
 			if (otherProjections != undefined) {
 				this.Shifts.push({
-					Date: moment.tz(otherSchedule.Date, currentUserInfo.CurrentUserInfo().DefaultTimeZone),
+					Date: otherSchedule.Date,
 					Projections: otherProjections,
 					AbsenceCount: getPersonAbsencesCount,
 					ActivityCount: getPersonActivitiesCount

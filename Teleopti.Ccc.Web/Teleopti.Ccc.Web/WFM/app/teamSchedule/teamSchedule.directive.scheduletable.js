@@ -52,7 +52,7 @@
 			if (!vm.toggles.RemoveAbsenceEnabled && !vm.toggles.RemoveActivityEnabled)
 				return false;
 
-			var isSameDay = shift.Date.format('YYYY-MM-DD') === moment(viewDate).format('YYYY-MM-DD');
+			var isSameDay = shift.Date === moment(viewDate).format('YYYY-MM-DD');
 
 			if (!isSameDay || currentProjection.IsOvertime || (currentProjection.ParentPersonAbsences == null && currentProjection.ShiftLayerIds == null)) {
 				return false;

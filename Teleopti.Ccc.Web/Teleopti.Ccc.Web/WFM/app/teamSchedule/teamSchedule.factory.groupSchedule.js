@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', ['CurrentUserInfo', 'TeamScheduleTimeLineFactory', 'PersonSchedule',
+angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', ['TeamScheduleTimeLineFactory', 'PersonSchedule',
 
-	function (currentUserInfo, timeLineFactory, personSchedule) {
+	function (timeLineFactory, personSchedule) {
 
 		var groupScheduleFactory = {
 			Create: create

@@ -22,7 +22,7 @@
 
 						var scheduleLength = newScheduleEnd.diff(newScheduleStart, 'minutes');
 
-						if (newScheduleStart.format('YYYY-MM-DD') !== schedules[i].Date.format('YYYY-MM-DD') || scheduleLength > MAX_SCHEDULE_LENGTH_IN_MINUTES) {
+						if (newScheduleStart.format('YYYY-MM-DD') !== schedules[i].Date || scheduleLength > MAX_SCHEDULE_LENGTH_IN_MINUTES) {
 							invalidPeople.push(schedules[i].Name);
 						}
 
@@ -40,18 +40,18 @@
 			return moment(projections[projections.length - 1].Start).diff(moment(projections[0].Start), 'minutes') + projections[projections.length - 1].Minutes;
 		}
 
-		function getUnselectedProjections(scheduleDateMoment, personSchedule) {
+		function getUnselectedProjections(scheduleDate, personSchedule) {
 			var shiftsOnCurrentDate = personSchedule.Shifts.filter(function (shift) {
-				return shift.Date.format('YYYY-MM-DD') === scheduleDateMoment.format('YYYY-MM-DD');
+				return shift.Date === scheduleDate;
 			});
 			if (shiftsOnCurrentDate.length === 0) return null;
 			if (!shiftsOnCurrentDate[0].Projections || shiftsOnCurrentDate[0].Projections.length === 0) return null;
 			return shiftsOnCurrentDate[0].Projections.filter(function(p) { return !p.Selected; });
 		}
 
-		function getSelectedProjections(scheduleDateMoment, personSchedule) {
+		function getSelectedProjections(scheduleDate, personSchedule) {
 			var shiftsOnCurrentDate = personSchedule.Shifts.filter(function (shift) {
-				return shift.Date.format('YYYY-MM-DD') === scheduleDateMoment.format('YYYY-MM-DD');
+				return shift.Date === scheduleDate;
 			});
 			if (shiftsOnCurrentDate.length === 0) return null;
 			if (!shiftsOnCurrentDate[0].Projections || shiftsOnCurrentDate[0].Projections.length === 0) return null;
@@ -76,8 +76,8 @@
 			return latestM;
 		}
 		
-		function getNewScheduleStartMoment(scheduleDateMoment, personSchedule, newStartMoment) {
-			var unselected = getUnselectedProjections(scheduleDateMoment, personSchedule);
+		function getNewScheduleStartMoment(scheduleDate, personSchedule, newStartMoment) {
+			var unselected = getUnselectedProjections(scheduleDate, personSchedule);
 			if (!unselected || unselected.length === 0) return newStartMoment;
 
 			var starts = unselected.map(function(p) { return moment(p.Start); });
@@ -85,15 +85,15 @@
 			return findEarliestMoment(starts);
 		}
 
-		function getLatestScheduleEndMoment(scheduleDateMoment, personSchedule, newStartMoment) {
-			var selected = getSelectedProjections(scheduleDateMoment, personSchedule);
+		function getLatestScheduleEndMoment(scheduleDate, personSchedule, newStartMoment) {
+			var selected = getSelectedProjections(scheduleDate, personSchedule);
 
 			var pl = calculateMaximumProjectionLengthInMinute(selected);
 			if (pl === null) return null;
 
 			var newEndMoment = newStartMoment.clone().add(pl, 'minutes');
 
-			var unselected = getUnselectedProjections(scheduleDateMoment, personSchedule);
+			var unselected = getUnselectedProjections(scheduleDate, personSchedule);
 			if (!unselected || unselected.length === 0) return newEndMoment;
 			
 			var ends =  unselected.map(function(p) {

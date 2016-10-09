@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-describe("teamschedule person dchedule tests", function () {
-	var dateTimeFormat = "YYYY-MM-DD HH:mm:ss";
+describe("teamschedule person schedule tests", function () {
+	
 	var target;
 
 	beforeEach(function() {
@@ -56,7 +56,7 @@ describe("teamschedule person dchedule tests", function () {
 
 		expect(personSchedule.PersonId).toEqual(schedule.PersonId);
 		expect(personSchedule.Name).toEqual(schedule.Name);
-		expect(personSchedule.Date.format(dateTimeFormat)).toEqual(moment(schedule.Date).format(dateTimeFormat));
+		expect(personSchedule.Date).toEqual(schedule.Date);
 
 		expect(personSchedule.Shifts.length).toEqual(1);
 		expect(personSchedule.DayOffs.length).toEqual(0);
@@ -94,7 +94,7 @@ describe("teamschedule person dchedule tests", function () {
 
 		expect(personSchedule.PersonId).toEqual(schedule.PersonId);
 		expect(personSchedule.Name).toEqual(schedule.Name);
-		expect(personSchedule.Date.format(dateTimeFormat)).toEqual(moment(schedule.Date).format(dateTimeFormat));
+		expect(personSchedule.Date).toEqual(schedule.Date);
 		expect(personSchedule.Shifts.length).toEqual(0);
 		expect(personSchedule.DayOffs.length).toEqual(1);
 
@@ -157,7 +157,7 @@ describe("teamschedule person dchedule tests", function () {
 
 		expect(personSchedule.PersonId).toEqual(schedule.PersonId);
 		expect(personSchedule.Name).toEqual(schedule.Name);
-		expect(personSchedule.Date.format(dateTimeFormat)).toEqual(moment(yesterday).format(dateTimeFormat));
+		expect(personSchedule.Date).toEqual(yesterday);
 		expect(personSchedule.Shifts.length).toEqual(2);
 		expect(personSchedule.DayOffs.length).toEqual(0);
 
@@ -210,7 +210,7 @@ describe("teamschedule person dchedule tests", function () {
 
 		expect(personSchedule.PersonId).toEqual(schedule4Yesterday.PersonId);
 		expect(personSchedule.Name).toEqual(schedule4Yesterday.Name);
-		expect(personSchedule.Date.format(dateTimeFormat)).toEqual(moment(schedule4Yesterday.Date).format(dateTimeFormat));
+		expect(personSchedule.Date).toEqual(schedule4Yesterday.Date);
 		expect(personSchedule.Shifts.length).toEqual(0);
 		expect(personSchedule.DayOffs.length).toEqual(2);
 

@@ -98,12 +98,12 @@ describe('teamschedule schedule table controller tests', function () {
 		}
 		var allProjections = [personAbsence1, personAbsence2, personAbsence3];
 		var shift = {
-			"Date": moment("2016-02-19"),
+			"Date": "2016-02-19",
 			"Projections": allProjections
 		};
 		var schedule = {
 			"PersonId": "1234",
-			"Date": moment("2016-02-19"),
+			"Date": "2016-02-19",
 			"Shifts": [ shift ],
 			ScheduleStartTime: function () {
 				return "2016-02-19 08:00";
@@ -185,12 +185,12 @@ describe('teamschedule schedule table controller tests', function () {
 		};
 		var allProjections = [personActivity1, personActivity2, personActivity3];
 		var shift = {
-			"Date": moment("2016-02-19"),
+			"Date":"2016-02-19",
 			"Projections": allProjections
 		};
 		var schedule = {
 			"PersonId": "1234",
-			"Date": moment("2016-02-19"),
+			"Date": "2016-02-19",
 			"Shifts": [
 				shift
 			],
@@ -282,13 +282,13 @@ describe('teamschedule schedule table controller tests', function () {
 		};
 		var allProjections = [personActivity1, personActivity2, personActivity3];
 		var shift = {
-			"Date": moment("2016-02-19"),
+			"Date": "2016-02-19",
 			"Projections": allProjections
 		};
 
 		var schedule = {
 			"PersonId": "1234",
-			"Date": moment("2016-02-19"),
+			"Date": "2016-02-19",
 			"Shifts": [
 				shift
 			],
@@ -398,12 +398,12 @@ describe('teamschedule schedule table controller tests', function () {
 		};
 		var allProjections = [personActivity1, overtimeActivity];
 		var shift = {
-			"Date": moment("2016-02-19"),
+			"Date": "2016-02-19",
 			"Projections": allProjections
 		};
 		var schedule = {
 			"PersonId": "1234",
-			"Date": moment("2016-02-19"),
+			"Date": "2016-02-19",
 			"Shifts": [
 				shift
 			],
