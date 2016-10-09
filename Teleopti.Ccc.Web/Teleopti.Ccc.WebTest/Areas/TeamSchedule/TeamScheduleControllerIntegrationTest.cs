@@ -887,6 +887,31 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		}
 
 		[Test]
+		public void ShouldReturnEmptyInternalNotesWhenThereIsWithNotPermittedUnpublishedScheduleForScheduleSearch()
+		{
+			PermissionProvider.Enable();
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock", "Holmes");
+			person.WorkflowControlSet = new WorkflowControlSet("testWCS")
+			{
+				SchedulePublishedToDate = new DateTime(2019, 12, 30)
+			};
+			PeopleSearchProvider.Add(person);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
+			scheduleDay.CreateAndAddNote("dummy notes");
+
+			ScheduleProvider.AddScheduleDay(scheduleDay);
+
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			result.Count.Should().Be.EqualTo(1);
+
+			var schedule = result.Single();
+			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
+			schedule.InternalNotes.Should().Be(String.Empty);
+		}
+
+		[Test]
 		public void ShouldReturnTimezoneWhenThereIsForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);

@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							Projection = new List<GroupScheduleProjectionViewModel>()
 						};
 					var note = scheduleDay.NoteCollection().FirstOrDefault();
-					vm.InternalNotes = note != null && scheduleDay.DateOnlyAsPeriod.DateOnly == dateInUserTimeZone
+					vm.InternalNotes = (isPublished || canSeeUnpublishedSchedules) && (note != null && scheduleDay.DateOnlyAsPeriod.DateOnly == dateInUserTimeZone)
 						? note.GetScheduleNote(new NormalizeText())
 						: string.Empty;
 					vm.Timezone = new TimeZoneViewModel
