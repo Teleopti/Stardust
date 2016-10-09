@@ -54,7 +54,7 @@
 		expect(vm.showAdvancedSearchOption).toBe(false);
 		expect(vm.searchOptions.searchKeywordChanged).toBe(true);
 		expect(scope.searchOptions.keyword).toBe(searchExpression);
-		expect(scope.searchOptions.keyword).toBe('firstName: Ash22; lastName: Bcd;');
+		expect(scope.searchOptions.keyword).toBe('FirstName: Ash22; LastName: Bcd;');
 	});
 
 	it("should parse terms correctly by search with option", inject(function () {
@@ -65,7 +65,7 @@
 
 		vm.advancedSearch();
 
-		expect(vm.searchOptions.keyword).toEqual('firstName: Ashley Smith; organization: London Shenzhen;');
+		expect(vm.searchOptions.keyword).toEqual('FirstName: Ashley Smith; Organization: London Shenzhen;');
 	}));
 
 	it("should handle both single quote and double quote in search value correctly", inject(function () {

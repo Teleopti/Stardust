@@ -2,12 +2,12 @@
 
 	'use strict';
 
+	var searchExpressionSeprator = ";";
+	var keyValueSeprator = ":";
+
 	var multipleSearchInputCtrl = function () {
 		var vm = this;
 		vm.advancedSearchForm = {};
-
-		var searchExpressionSeprator = ";";
-		var keyValueSeprator = ":";
 
 		vm.validateSearchKeywordChanged = function () {
 			vm.searchOptions.searchKeywordChanged = true;
@@ -27,7 +27,7 @@
 
 			var expression = "";
 			angular.forEach(vm.searchOptions.searchFields, function (searchType) {
-				var title = searchType.charAt(0).toLowerCase() + searchType.slice(1);
+				var title = searchType;
 				expression += getSearchCriteria(title, vm.advancedSearchForm[searchType]);
 			});
 
@@ -134,9 +134,41 @@
 		}
 	}
 
+	var keywordFormatDirective = function ($translate) {
+		return {
+			restrict: 'A',
+			require: '?ngModel',
+			link: linkFunction
+		};
+
+		function linkFunction(scope, element, attrs, ctrl) {
+			if (!ctrl) return;
+
+			ctrl.$formatters.unshift(function () {
+				var modelValue = ctrl.$modelValue;
+				var formattedValues = [];
+				var expressions = modelValue.split(searchExpressionSeprator);
+				angular.forEach(expressions, function(expression) {
+					var items = expression.split(keyValueSeprator);
+					var key = items[0];
+					var value = items[1];
+					if (value) {
+						var displayKey = $translate.instant(key);
+						formattedValues.push(displayKey + keyValueSeprator + value);
+					}
+				});
+				if (formattedValues.length > 0) {
+					return formattedValues.join(searchExpressionSeprator);
+				}
+				return modelValue;
+			});
+		}
+	}
+
 	angular.module('wfm.multiplesearchinput', [])
 		.directive('wfmMultipleSearchInput', multipleSearchInputDirective)
 		.directive('outsideClick', ['$document', '$parse', outsideClickDirective])
+		.directive('keywordFormat', ['$translate', keywordFormatDirective])
 		.controller('multipleSearchInputCtrl', multipleSearchInputCtrl);
 
 })();
