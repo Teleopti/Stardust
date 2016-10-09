@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -885,6 +884,27 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var schedule = result.Single();
 			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
 			schedule.InternalNotes.Should().Be("dummy notes");
+		}
+
+		[Test]
+		public void ShouldReturnTimezoneWhenThereIsForScheduleSearch()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock", "Holmes");
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("China Standard Time"));
+			PeopleSearchProvider.Add(person);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
+
+			ScheduleProvider.AddScheduleDay(scheduleDay);
+
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			result.Count.Should().Be.EqualTo(1);
+
+			var schedule = result.Single();
+			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
+			schedule.Timezone.DisplayName.Should().Be("(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi");
+			schedule.Timezone.IanaId.Should().Be("Asia/Shanghai");
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

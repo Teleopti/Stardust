@@ -83,7 +83,7 @@
 		WfmTeamSchedule_WeekView_39870,
 		WfmTeamSchedule_MakePersonalActivityUnmerged_40252,
 		WfmTeamSchedule_WeeklyContractTime_39871,
-		WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40874,
+		WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925,
 
 
 		WfmTeamSchedule_MoveToBaseLicense_41039,

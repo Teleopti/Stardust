@@ -19,7 +19,7 @@
 			</span>
 
 			<view-changer ng-if="vm.toggles.WeekViewEnabled && vm.searchEnabled" selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword"></view-changer>
-			<md-select ng-model="vm.selectedTimezone" placeholder="Pick an option" md-selected-text="vm.onTimeZoneSelected()">
+			<md-select ng-model="vm.selectedTimezone" placeholder="Pick an option" md-selected-text="vm.onTimeZoneSelected()" ng-if="vm.toggles.ViewScheduleOnTimezoneEnabled">
 				<md-option ng-repeat="tz in vm.availableTimezones" ng-value="tz.ianaId">{{::tz.displayName}}</md-option>
 			</md-select>
 		</div>

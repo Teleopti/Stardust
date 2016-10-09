@@ -88,6 +88,7 @@ WfmTeamSchedule_MakeNewMyTeamDefault_39744 = RC
 WfmTeamSchedule_WeekView_39870 = true
 WfmTeamSchedule_MakePersonalActivityUnmerged_40252 = true
 WfmTeamSchedule_WeeklyContractTime_39871 = true
+WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925 = DEV
 
 WfmTeamSchedule_MoveToBaseLicense_41039 = DEV
 
