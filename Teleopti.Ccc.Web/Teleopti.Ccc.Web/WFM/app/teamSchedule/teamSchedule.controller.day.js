@@ -338,6 +338,7 @@
 				EditAndViewInternalNoteEnabled : toggleSvc.WfmTeamSchedule_EditAndDisplayInternalNotes_40671,
 				
 				FilterValidationWarningsEnabled: toggleSvc.WfmTeamSchedule_FilterValidationWarnings_40110,
+				MoveToBaseLicenseEnabled: toggleSvc.WfmTeamSchedule_MoveToBaseLicense_41039,
 				ShowValidationWarnings: toggleSvc.WfmTeamSchedule_ShowNightlyRestWarning_39619
 									 || toggleSvc.WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799
 									 || toggleSvc.WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800
@@ -363,14 +364,15 @@
 										|| vm.toggles.SwapShiftEnabled
 										|| vm.toggles.ModifyShiftCategoryEnabled;
 			vm.resetSchedulePage();
-
-			var template = $translate.instant('WFMReleaseNotification');
-			var moduleName = $translate.instant('Teams');
-			var message = template.replace('{0}', moduleName)
-				.replace('{1}', '<a href="http://www.teleopti.com/wfm/customer-feedback.aspx">')
-				.replace('{2}', '</a>')
-				.replace('{3}', '<a href="../Anywhere#teamschedule">' + moduleName + '</a>');
-			NoticeService.info(message, null, true);
+			if(!vm.toggles.MoveToBaseLicenseEnabled){
+				var template = $translate.instant('WFMReleaseNotification');
+				var moduleName = $translate.instant('Teams');
+				var message = template.replace('{0}', moduleName)
+					.replace('{1}', '<a href="http://www.teleopti.com/wfm/customer-feedback.aspx">')
+					.replace('{2}', '</a>')
+					.replace('{3}', '<a href="../Anywhere#teamschedule">' + moduleName + '</a>');
+				NoticeService.info(message, null, true);
+			}
 		};
 
 		$q.all([
