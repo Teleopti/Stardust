@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-fdescribe("Timezone filter tests", function () {
+describe("Timezone filter tests", function () {
 
 	var mockCurrentUserInfo = {
 		CurrentUserInfo: function() {
