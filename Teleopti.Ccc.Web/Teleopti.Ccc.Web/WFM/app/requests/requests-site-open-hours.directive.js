@@ -238,23 +238,7 @@
 			controller: 'requestsSiteOpenHoursCtrl',
 			controllerAs: 'requestsSiteOpenHours',
 			bindToController: true,
-			templateUrl: 'app/requests/html/requests-open-hours.html',
-			link: link
+			templateUrl: 'app/requests/html/requests-open-hours.html'
 		}
-	}
-
-	function link(scope, elem, attrs) {
-		scope.$watch('requestsSiteOpenHours.selectedSite',
-		function (newValue, oldValue) {
-			if (newValue) {
-				setTimeout(function() {
-					var pickerScope = angular.element(document.getElementsByTagName('time-range-picker')).scope();
-					if (pickerScope) {
-						pickerScope.disableNextDay = false;
-						pickerScope.$apply();
-					}
-				});
-			}
-		});
 	}
 }());
