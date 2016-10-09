@@ -19,6 +19,20 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 		{
 		}
 
+		public void TryUntil(Action tryThis, Func<bool> until, TimeSpan waitBeforeRetry)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool IsAnyVisible(string selector)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool IsExists(string selector)
+		{
+			throw new NotImplementedException();
+		}
 		public void Click(string selector)
 		{
 			throw new NotSupportedException(notAllowedAction);

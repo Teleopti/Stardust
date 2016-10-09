@@ -7,7 +7,9 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 		string Javascript(string javascript);
 
 		void GoTo(string uri);
-
+		void TryUntil(Action tryThis, Func<bool> until, TimeSpan waitBeforeRetry);
+		bool IsAnyVisible(string selector);
+		bool IsExists(string selector);
 		void Click(string selector);
 		void ClickVisibleOnly(string selector);
 		void ClickContaining(string selector, string text);
