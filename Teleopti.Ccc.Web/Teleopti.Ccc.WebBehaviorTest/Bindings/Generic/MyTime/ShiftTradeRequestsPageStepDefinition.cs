@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 					Browser.Interactions.Click("#addShiftTradeRequest");
 				},
 				() => Browser.Interactions.IsExists(".ready-loading-flag.is-ready-loaded"),
-				TimeSpan.FromMilliseconds(50));
+				TimeSpan.FromMilliseconds(1000));
 		}
 
 		private static void gotoShiftTradeBulletinBoardToday()
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 					Browser.Interactions.Click("#addShiftTradeRequestFromBulletinBoard");
 				},
 				() => Browser.Interactions.IsExists(".bulletin-ready-loading-flag.is-ready-loaded"),
-				TimeSpan.FromMilliseconds(50));
+				TimeSpan.FromMilliseconds(1000));
 		}
 
 		[When(@"I see '(.*)' shift on Shift Trade Bulletin Board on date '(.*)'")]
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.TryUntil(
 				() => Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString),
 				() => Browser.Interactions.IsAnyVisible(selector),
-				TimeSpan.FromMilliseconds(50));
+				TimeSpan.FromMilliseconds(1000));
 		}
 
 		[Then(@"I should see a message text saying I am missing a workflow control set")]
@@ -408,7 +408,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.TryUntil(
 				() => Browser.Interactions.Click("#agent-in-bulletin-board"),
 				() => Browser.Interactions.IsAnyVisible("#Request-add-shift-trade-detail-section"),
-				TimeSpan.FromMilliseconds(50));
+				TimeSpan.FromMilliseconds(1000));
 
 			Browser.Interactions.AssertAnyContains("#Request-add-shift-trade-detail-section", Resources.SureToMakeShiftTrade);
 		}
@@ -420,7 +420,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.TryUntil(
 				() => Browser.Interactions.Click("#agent-in-bulletin-board"),
 				() => Browser.Interactions.IsAnyVisible("#Request-add-shift-trade-detail-section"),
-				TimeSpan.FromMilliseconds(50));
+				TimeSpan.FromMilliseconds(1000));
 		}
 
 		[Then(@"I should not see the agent name in detail view")]
