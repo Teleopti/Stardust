@@ -4,19 +4,17 @@ using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Exceptions;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
-	[EnabledBy(Toggles.ETL_RobustAnalyticsScheduleChangeUpdater_39556)]
-	public class AnalyticsScheduleChangeUpdaterHangfire:
+	public class AnalyticsScheduleChangeUpdater:
 		IHandleEvent<ProjectionChangedEvent>,
 		IRunOnHangfire
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsScheduleChangeUpdaterHangfire));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsScheduleChangeUpdater));
 		private readonly IAnalyticsFactScheduleHandler _factScheduleHandler;
 		private readonly IAnalyticsFactSchedulePersonHandler _factSchedulePersonHandler;
 		private readonly IAnalyticsFactScheduleDateHandler _factScheduleDateHandler;
@@ -26,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		private readonly IAnalyticsScenarioRepository _analyticsScenarioRepository;
 		private readonly IAnalyticsShiftCategoryRepository _analyticsShiftCategoryRepository;
 
-		public AnalyticsScheduleChangeUpdaterHangfire(
+		public AnalyticsScheduleChangeUpdater(
 			IAnalyticsFactScheduleHandler factScheduleHandler,
 			IAnalyticsFactScheduleDateHandler factScheduleDateHandler,
 			IAnalyticsFactSchedulePersonHandler factSchedulePersonHandler,
@@ -120,5 +118,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				return -1;
 			return cat.ShiftCategoryId;
 		}
+	}
+
+	public interface IAnalyticsScheduleChangeUpdaterFilter
+	{
+		bool ContinueProcessingEvent(ProjectionChangedEvent @event);
 	}
 }

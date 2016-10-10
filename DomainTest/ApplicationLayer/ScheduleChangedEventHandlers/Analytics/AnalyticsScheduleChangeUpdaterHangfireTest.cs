@@ -16,9 +16,9 @@ using Teleopti.Interfaces.Infrastructure.Analytics;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
 	[TestFixture]
-	public class AnalyticsScheduleChangeUpdaterHangfireTest
+	public class AnalyticsScheduleChangeUpdaterTest
 	{
-		private AnalyticsScheduleChangeUpdaterHangfire _target;
+		private AnalyticsScheduleChangeUpdater _target;
 		private IAnalyticsScheduleRepository _analyticsScheduleRepository;
 		private IAnalyticsFactScheduleDateHandler _dateHandler;
 		private IAnalyticsFactSchedulePersonHandler _personHandler;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_analyticsScenarioRepository = new FakeAnalyticsScenarioRepository();
 			_analyticsShiftCategoryRepository = MockRepository.GenerateMock<IAnalyticsShiftCategoryRepository>();
 
-			_target = new AnalyticsScheduleChangeUpdaterHangfire(
+			_target = new AnalyticsScheduleChangeUpdater(
 				_factScheduleHandler,
 				_dateHandler,
 				_personHandler,

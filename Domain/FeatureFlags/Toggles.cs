@@ -169,7 +169,6 @@
 
 		ETL_SpeedUpIntradayBusinessUnit_38932,
 		ETL_SpeedUpNightlyBusinessUnit_38932,
-		ETL_RobustAnalyticsScheduleChangeUpdater_39556,
 
 		AbsenceRequests_UseMultiRequestProcessing_39960,
         AbsenceRequests_SpeedupIntradayRequests_40754,
