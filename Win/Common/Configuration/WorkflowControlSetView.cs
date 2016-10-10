@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public partial class WorkflowControlSetView : BaseUserControl, ISettingPage, IWorkflowControlSetView
 	{
+		private readonly IToggleManager _toggleManager;
 		private readonly WorkflowControlSetPresenter _presenter;
 		private SFGridColumnGridHelper<AbsenceRequestPeriodModel> _gridHelper;
 
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public WorkflowControlSetView(IToggleManager toggleManager) : this()
 		{
+			_toggleManager = toggleManager;
 			if (DesignMode) return;
 			_presenter = new WorkflowControlSetPresenter(this, UnitOfWorkFactory.Current, new RepositoryFactory());
 			GridStyleInfoStore.CellValueProperty.IsCloneable = false;
@@ -151,11 +153,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 					typeof(IAbsenceRequestValidator));
 
 			columnList.Add(checkPersonAccountColumn);
-
+			//hack this can be removed completely when AbsenceRequests_SpeedupIntradayRequests_40754 is removed, remove it in SFGridDynamicDropDownColumn too
+			var hideLastValidator = !_toggleManager.IsEnabled(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754);
 			var checkStaffingColumn =
 				new SFGridDynamicDropDownColumn<AbsenceRequestPeriodModel, IAbsenceRequestValidator>(
 					"StaffingThresholdValidator", Resources.CheckStaffing, " ", "StaffingThresholdValidatorList", "DisplayText",
-					typeof(IAbsenceRequestValidator));
+					typeof(IAbsenceRequestValidator), hideLastValidator);
 
 			columnList.Add(checkStaffingColumn);
 

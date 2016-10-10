@@ -280,6 +280,8 @@
     <Compile Include="Exceptions\SkillMissingInAnalyticsException.cs" />
     <Compile Include="Exceptions\TimeZoneMissingInAnalyticsException.cs" />
     <Compile Include="Exceptions\WorkloadMissingInAnalyticsException.cs" />
+    <Compile Include="Forecasting\IntervalShrinkageHasUnderstaffing.cs" />
+    <Compile Include="Forecasting\IntervalShrinkageHasSeriousUnderstaffing.cs" />
     <Compile Include="Forecasting\SkillDayExtensions.cs" />
     <Compile Include="Infrastructure\DatabaseEnum.cs" />
     <Compile Include="Infrastructure\Events\IndexMaintenanceEvent.cs" />
@@ -2488,6 +2490,7 @@
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeValidator.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShouldShiftTradeBeAutoGrantedSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\TargetTimeFlexibilityValidator.cs" />
+    <Compile Include="WorkflowControl\StaffingThresholdWithShrinkageValidator.cs" />
     <Compile Include="WorkflowControl\StaffingThresholdValidator.cs" />
     <Compile Include="WorkflowControl\WorkflowControlSet.cs" />
   </ItemGroup>

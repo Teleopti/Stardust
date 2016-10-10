@@ -338,7 +338,6 @@
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationEslTest.cs" />
     <Compile Include="SchedulingScenarios\ScheduleDictionaryCreator.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\BackToLegalShiftCommandTest.cs" />
-    <Compile Include="SchedulingScenarios\Scheduling\DoNotRunNightRestWhiteSpotTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCallbackDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCommandSpecificTest.cs" />
@@ -1558,6 +1557,7 @@
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeValidatorTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShouldShiftTradeBeAutoGrantedSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\TargetTimeFlexibilitySpecificationTest.cs" />
+    <Compile Include="WorkflowControl\StaffingThresholdWithShrinkageValidatorTest.cs" />
     <Compile Include="WorkflowControl\StaffingThresholdValidatorTest.cs" />
     <Compile Include="WorkflowControl\UnderstaffingDetailsTest.cs" />
     <Compile Include="WorkflowControl\ValidatedRequestTest.cs" />

@@ -13742,4 +13742,8 @@ Dessa val är aktiverade:
   <data name="ReforecastedStaff" xml:space="preserve">
     <value>Omprognostiserad bemanning</value>
   </data>
+  <data name="IntradayWithShrinkage" xml:space="preserve">
+    <value>Inom dag med shrinkage</value>
+    <comment>Staffing validator in Workflow control set</comment>
+  </data>
 </root>

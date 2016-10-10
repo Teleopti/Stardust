@@ -13327,6 +13327,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Intraday With Shrinkage.
+        /// </summary>
+        public static string IntradayWithShrinkage {
+            get {
+                return ResourceManager.GetString("IntradayWithShrinkage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Intra interval balance issue.
         /// </summary>
         public static string IntraIntervalIssue {
