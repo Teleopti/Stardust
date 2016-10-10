@@ -25,19 +25,9 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			_starter.Start(_config.ConnectionString("Hangfire"));
 			app.UseHangfireServer(new BackgroundJobServerOptions
 			{
-				WorkerCount = getNumberOfHangfireWorkers(),
+				WorkerCount = _config.ReadValue("HangFireWorkerCount", 8),
 				Queues = Queues.OrderOfPriority().ToArray()
 			});
-		}
-
-		private int getNumberOfHangfireWorkers()
-		{
-			var workerCountSetting = 8;
-			if(_config.AppConfig("HangFireWorkerCount") != null && int.Parse(_config.AppConfig("HangFireWorkerCount")) > 0)
-			{
-				workerCountSetting = int.Parse(_config.AppConfig("HangFireWorkerCount"));
-			}
-			return workerCountSetting;
 		}
 	}
 }
