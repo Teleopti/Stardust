@@ -20,7 +20,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new RaptorAgentLogOnSynchronizationStep(jobParameters));
 			AddWhenAllDisabled(new IntradayStageScheduleJobStep(jobParameters), Toggles.ETL_SpeedUpETL_30791);
 			AddWhenAllDisabled(new IntradayStageScheduleDayOffCountJobStep(jobParameters), Toggles.ETL_SpeedUpETL_30791);
-			AddWhenAllDisabled(new IntradayStageAvailabilityJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayAvailability_38926);
 			AddWhenAllDisabled(new StageWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayWorkload_38928);
 
 			AddWhenAllDisabled(new IntradayStageForecastWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayForecastWorkload_38929);
@@ -36,7 +35,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			// FACT TABLES
 			AddWhenAllDisabled(new FactScheduleJobStep(jobParameters, true), Toggles.ETL_SpeedUpETL_30791);
 			AddWhenAllDisabled(new FactScheduleDayCountJobStep(jobParameters, true), Toggles.ETL_SpeedUpETL_30791);
-			AddWhenAllDisabled(new FactAvailabilityJobStep(jobParameters, true), Toggles.ETL_SpeedUpIntradayAvailability_38926);
 			
 			AddWhenAllEnabled(new IntradayFactQueueJobStep(jobParameters), Toggles.ETL_OnlyLatestQueueAgentStatistics_30787);
 			AddWhenAllEnabled(new IntradayFactAgentJobStep(jobParameters), Toggles.ETL_OnlyLatestQueueAgentStatistics_30787); // BU independent

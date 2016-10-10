@@ -85,28 +85,5 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 			target.Run(new List<IJobStep>(), null, new List<IJobResult>(), true);
 			_mock.VerifyAll();
 		}
-
-		[Test]
-		public void ShouldRunDifferentInFactOnIntraday()
-		{
-			var raptorRepository = _mock.StrictMock<IRaptorRepository>();
-			var commonStateHolder = _mock.StrictMock<ICommonStateHolder>();
-
-			var jobParameters = JobParametersFactory.SimpleParameters(false);
-			jobParameters.StateHolder = commonStateHolder;
-			jobParameters.Helper = new JobHelperForTest(raptorRepository, null);
-			var scenario = _mock.DynamicMock<IScenario>();
-			Expect.Call(commonStateHolder.ScenarioCollectionDeletedExcluded).Return(new List<IScenario> { scenario });
-			Expect.Call(scenario.DefaultScenario).Return(true);
-
-			var step = new FactAvailabilityJobStep(jobParameters, true);
-
-			var bu = _mock.DynamicMock<IBusinessUnit>();
-			Expect.Call(raptorRepository.FillIntradayFactAvailabilityMart(bu, scenario)).Return(5).IgnoreArguments();
-			Expect.Call(() => commonStateHolder.UpdateThisTime("Availability", bu)).IgnoreArguments();
-			_mock.ReplayAll();
-			step.Run(new List<IJobStep>(), bu, null, true);
-			_mock.VerifyAll();
-		}
 	}
 }

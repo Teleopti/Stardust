@@ -312,20 +312,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		}
 
-		public int FillIntradayFactAvailabilityMart(IBusinessUnit businessUnit, IScenario scenario)
-		{
-			var parameterList = new[]
-				{
-					new SqlParameter("business_unit_code", businessUnit.Id),
-					new SqlParameter("scenario_code", scenario.Id)
-				};
-
-
-			return
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_hourly_availability_intraday_load", parameterList,
-											  _dataMartConnectionString);
-		}
-
 		public ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTimePeriod period)
 		{
 			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork())

@@ -229,7 +229,6 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		int FillIntradayFactSchedulePreferenceMart(IBusinessUnit currentBusinessUnit, IScenario scenario);
 		int PersistAvailability(DataTable dataTable);
 		int FillFactAvailabilityMart(DateTimePeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
-		int FillIntradayFactAvailabilityMart(IBusinessUnit businessUnit, IScenario scenario);
 		ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTimePeriod period);
 
 		int FillIntradayFactQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);

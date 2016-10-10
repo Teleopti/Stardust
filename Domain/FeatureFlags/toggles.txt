@@ -172,7 +172,6 @@ ETL_MoveBadgeCalculationToETL_38421 = true
 ETL_SpeedUpNightlyShiftCategory_38718 = RC
 ETL_SpeedUpNightlyPreference_38283 = true
 ETL_FasterIndexMaintenance_38847 = true
-ETL_SpeedUpIntradayAvailability_38926 = true
 ETL_SpeedUpNightlyAvailability_38926 = RC
 ETL_SpeedUpNightlyRequest_38914 = RC
 ETL_SpeedUpGroupPagePersonNightly_37623 = RC
