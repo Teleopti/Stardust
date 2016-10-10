@@ -185,6 +185,7 @@
 		vm.changeTimezone = function (timezone) {
 			vm.currentTimezone = timezone;
 			scheduleMgmtSvc.recreateScheduleVm(vm.scheduleDateMoment(), timezone);			
+			personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 		};
 	
 		vm.loadSchedules = function() {
