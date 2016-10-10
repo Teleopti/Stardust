@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
@@ -10,6 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
@@ -17,6 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	[TestFixture]
 	[DatabaseTest]
 	[Toggle(Toggles.RTA_RuleMappingOptimization_39812)]
+	[Toggle(Toggles.ETL_SpeedUpIntradayBusinessUnit_38932)]
 	public class MappingReadModelReaderSelectionTest : ISetup
 	{
 		public IRtaMapRepository Maps;
@@ -26,6 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public IMappingReader Target;
 		public WithUnitOfWorkWithRecurringEvents WithUnitOfWork;
 		public WithReadModelUnitOfWork WithReadModels;
+		public IEventPublisher EventPublisher;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -81,6 +86,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldReadForActivity()
 		{
+			ensureBusinessUnitInAnalytics();
+
 			var phone = new Activity("Phone");
 			WithUnitOfWork.Do(() =>
 			{
@@ -95,6 +102,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldReadFor3Activities()
 		{
+			ensureBusinessUnitInAnalytics();
+
 			var phone = new Activity("Phone");
 			var brejk = new Activity("Break");
 			var lunch = new Activity("Lunch");
@@ -117,6 +126,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldExcludeIrrelevantActivity()
 		{
+			ensureBusinessUnitInAnalytics();
+
 			var phone = new Activity("Phone");
 			var brejk = new Activity("Break");
 			var loggedOut = new RtaStateGroup("loggedOut").AddState("loggedout", Guid.NewGuid());
@@ -138,6 +149,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldExcludeIrrelevantStateActivityCombination()
 		{
+			ensureBusinessUnitInAnalytics();
+
 			var phone = new Activity("Phone");
 			var brejk = new Activity("Break");
 			var phoneState = new RtaStateGroup("Phone").AddState("phone", Guid.NewGuid());
@@ -161,6 +174,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldReadUnmappedState()
 		{
+			ensureBusinessUnitInAnalytics();
+
 			var phone = new Activity("Phone");
 			var brejk = new Activity("Break");
 			var phoneState = new RtaStateGroup("Phone").AddState("phone", Guid.NewGuid());
@@ -181,6 +196,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldReadUnmappedState2()
 		{
+			ensureBusinessUnitInAnalytics();
+
 			var phone = new Activity("Phone");
 			var brejk = new Activity("Break");
 			var phoneState = new RtaStateGroup("Phone").AddState("phone", Guid.NewGuid());
@@ -201,6 +218,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldReadAllStateActivityCombinations()
 		{
+			ensureBusinessUnitInAnalytics();
+
 			var phone = new Activity("Phone");
 			var brejk = new Activity("Break");
 			var lunch = new Activity("Lunch");
@@ -235,6 +254,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldReadAllStateActivityCombinationsWithNull()
 		{
+			ensureBusinessUnitInAnalytics();
+
 			var phone = new Activity("Phone");
 			var brejk = new Activity("Break");
 			var lunch = new Activity("Lunch");
@@ -264,6 +285,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result.Where(x => x.StateCode == null && x.ActivityId == brejk.Id.Value).Should().Not.Be.Empty();
 			result.Where(x => x.StateCode == "phone" && x.ActivityId == null).Should().Not.Be.Empty();
 			result.Where(x => x.StateCode == null && x.ActivityId == null).Should().Not.Be.Empty();
+		}
+
+		private void ensureBusinessUnitInAnalytics()
+		{
+			// To prevend analytics handlers from failing we need a BU in analytics, this is a slightly backwards way of achieving that
+			WithUnitOfWork.Do(() =>
+			{
+				EventPublisher.Publish(new BusinessUnitChangedEvent
+				{
+					BusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
+					BusinessUnitName = BusinessUnitFactory.BusinessUnitUsedInTest.Name,
+					UpdatedOn = DateTime.Now
+				});
+			});
 		}
 	}
 }

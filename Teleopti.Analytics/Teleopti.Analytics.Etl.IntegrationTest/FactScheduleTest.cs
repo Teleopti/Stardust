@@ -14,7 +14,6 @@ using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.IntegrationTest.TestData;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
@@ -164,109 +163,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			time = testDate.AddDays(-2).AddHours(19);
 			var first = SqlCommands.RowsInFactSchedule(time);
 			Assert.That(first, Is.EqualTo(44));
-		}
-
-		[Test]
-		public void ShouldFindAdherence()
-		{
-			var testDate = new DateTime(2013, 06, 15);
-			const string timeZoneId = "W. Europe Standard Time";
-			const int queueId = 19;
-
-			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
-			AnalyticsRunner.RunSysSetupTestData(testDate, queueId);
-
-			var el = new ExternalLogonConfigurable
-			{
-				AcdLogOnAggId = 52,
-				AcdLogOnMartId = 1,
-				AcdLogOnOriginalId = "152",
-				AcdLogOnName = "Ola H"
-			};
-			Data.Apply(el);
-
-			IPerson person;
-			BasicShiftSetup.SetupBasicForShifts();
-			BasicShiftSetup.AddPerson(out person, "Ola H", "Ola H", testDate);
-
-			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
-			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
-			var activityLunch = new ActivityConfigurable { Name = "Lunch", Color = "Red", InWorkTime = false };
-
-			Data.Apply(cat);
-			Data.Apply(activityPhone);
-			Data.Apply(activityLunch);
-
-
-			//Add overlapping
-			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-2), 21, 11, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
-			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-1), 6, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
-
-			var period = new DateTimePeriod(testDate.AddDays(-14).ToUniversalTime(), testDate.AddDays(14).ToUniversalTime());
-			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
-			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
-			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.AgentStatistics);
-			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Forecast);
-			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.QueueStatistics);
-			var jobParameters = new JobParameters(
-				dateList, 1, "UTC", 15, "", "False",
-				CultureInfo.CurrentCulture,
-				new FakeContainerHolder(), false
-				)
-			{
-				Helper = new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, null), null),
-				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
-			};
-
-			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
-
-			//Run ETL.Intraday first time just to set "LastUpdatedPerStep"
-			StepRunner.RunIntraday(jobParameters);
-
-			//Nightly
-			StepRunner.RunNightly(jobParameters);
-			AssertOverlapping(person, timeZoneId, "Nightly", testDate);
-
-			//Re-Add overlapping
-			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", testDate.AddDays(-1), person);
-			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", testDate.AddDays(-2), person);
-			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-2), 21, 11, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
-			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-1), 6, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
-
-			//Intraday
-			StepRunner.RunIntraday(jobParameters);
-			AssertOverlapping(person, timeZoneId, "Intraday", testDate);
-
-			//Edit shifts and remove Overlapping
-			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", testDate.AddDays(-1), person);
-			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", testDate.AddDays(-2), person);
-			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-2), 17, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
-			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-1), 6, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
-
-			//Intraday
-			StepRunner.RunIntraday(jobParameters);
-
-			//Assert on Intraday, shifts back to normal
-			Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, testDate.AddDays(-1)), Is.EqualTo(35));
-			Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, testDate.AddDays(-2)), Is.EqualTo(32));
-			var column = "deviation_schedule_s";
-			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(24540));
-			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(21960));
-			column = "scheduled_ready_time_s";
-			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(25200));
-			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(25200));
-			column = "ready_time_s";
-			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(4740));
-			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(3240));
-			column = "deviation_schedule_ready_s";
-			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(22500));
-			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(21960));
-
-			var adherance = SqlCommands.ReportDataAgentScheduleAdherence(testDate.AddDays(-2), testDate.AddDays(-1), aheranceTypeReadyTime, person, timeZoneId);
-
-			var cellValue = IntervalValueGet(adherance, testDate.AddDays(-1), "deviation_m", "09:15-09:30", person);
-			Assert.That(cellValue, Is.EqualTo(0));
-
 		}
 
 		[Test]

@@ -3,6 +3,8 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
@@ -11,6 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -19,6 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	[TestFixture]
 	[DatabaseTest]
 	[Toggle(Toggles.RTA_RuleMappingOptimization_39812)]
+	[Toggle(Toggles.ETL_SpeedUpIntradayBusinessUnit_38932)]
 	public class MappingReadModelReaderTest : ISetup
 	{
 		public IRtaMapRepository Maps;
@@ -28,6 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public IMappingReader Target;
 		public WithReadModelUnitOfWork WithReadModels;
 		public WithUnitOfWorkWithRecurringEvents WithUnitOfWork;
+		public IEventPublisher EventPublisher;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -48,6 +53,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldReadActivity()
 		{
+			ensureBusinessUnitInAnalytics();
+
 			var phone = new Activity("Phone");
 			WithUnitOfWork.Do(() =>
 			{
@@ -168,6 +175,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			WithReadModels.Get(() => Target.Read())
 				.Single(x => x.StateGroupId == group.Id.Value)
 				.BusinessUnitId.Should().Be(group.BusinessUnit.Id.Value);
+		}
+
+		private void ensureBusinessUnitInAnalytics()
+		{
+			// To prevend analytics handlers from failing we need a BU in analytics, this is a slightly backwards way of achieving that
+			WithUnitOfWork.Do(() =>
+			{
+				EventPublisher.Publish(new BusinessUnitChangedEvent
+				{
+					BusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
+					BusinessUnitName = BusinessUnitFactory.BusinessUnitUsedInTest.Name,
+					UpdatedOn = DateTime.Now
+				});
+			});
 		}
 
 	}
