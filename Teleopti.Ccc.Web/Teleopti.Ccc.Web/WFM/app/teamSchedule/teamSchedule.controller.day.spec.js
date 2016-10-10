@@ -119,26 +119,7 @@ describe("teamschedule controller tests", function() {
 
 		expect(searchScheduleCalledTimes).toEqual(0);
 	}));
-
-	it("should populate available timezones", inject(function() {
-		controller.scheduleDate = new Date("2015-10-26");
-		rootScope.$digest();
-
-		expect(controller.availableTimezones.length).toEqual(3);
-		expect(controller.availableTimezones[0].ianaId).toEqual("Etc/UTC");
-		expect(controller.availableTimezones[1].ianaId).toEqual("Europe/Berlin");
-		expect(controller.availableTimezones[2].ianaId).toEqual("Asia/Shanghai");
-	}));
-
-	it("should extract the right abbreviation of the selected time zone ", inject(function() {
-		controller.scheduleDate = new Date("2015-10-26");
-		rootScope.$digest();
-		controller.selectedTimezone = "Europe/Berlin";
-		var displayedName = controller.onTimeZoneSelected();
-		expect(displayedName).toEqual("UTC+01:00");
-	}));
-
-	
+		
 	function setUpController($controller) {
 		return $controller("TeamScheduleCtrl", {
 			$scope: rootScope,

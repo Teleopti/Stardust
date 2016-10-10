@@ -18,10 +18,9 @@
 		'ValidateRulesService',
 		'CommandCheckService',
 		'ScheduleNoteManagementService',
-		'CurrentUserInfo',
 		TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc, scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService, CurrentUserInfo) {
+	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc, scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService) {
 
 		var vm = this;
 
@@ -30,8 +29,8 @@
 		vm.scheduleDate = $stateParams.selectedDate ? $stateParams.selectedDate : new Date();
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.availableTimezones = [];
-		vm.selectedTimezone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
-
+		vm.currentTimezone;
+	
 		vm.toggleForSelectAgentsPerPageEnabled = false;
 		vm.onlyLoadScheduleWithAbsence = false;
 		vm.permissionsAndTogglesLoaded = false;
@@ -178,40 +177,16 @@
 		};
 
 		function populateAvailableTimezones(schedules) {
-			vm.availableTimezones = [];
-			var timeZones = {};
-			timeZones[CurrentUserInfo.CurrentUserInfo().DefaultTimeZone] = CurrentUserInfo.CurrentUserInfo().DefaultTimeZoneName;
-
-			schedules.Schedules.forEach(function(s) {
-				timeZones[s.Timezone.IanaId] = s.Timezone.DisplayName;
-			});
-			for (var ianaId in timeZones) {
-				vm.availableTimezones.push({
-					ianaId: ianaId,
-					displayName: timeZones[ianaId]
-				});
-			}
+			vm.availableTimezones = schedules.Schedules.map(function(s) {
+				return s.Timezone;
+			});			
 		}
-
-		vm.onTimeZoneSelected = function () {
-
-			var displayName = '';
-			var reg = /\((.+?)\)/;
-			for (var i = 0; i < vm.availableTimezones.length; i++) {
-				if (vm.availableTimezones[i].ianaId === vm.selectedTimezone) {
-					displayName = vm.availableTimezones[i].displayName;
-					break;
-				}
-			}
-
-			var result = reg.exec(displayName);
-			return result ? result[1] : displayName;
+	
+		vm.changeTimezone = function (timezone) {
+			vm.currentTimezone = timezone;
+			scheduleMgmtSvc.recreateScheduleVm(vm.scheduleDateMoment(), timezone);			
 		};
-
-		vm.onSelectedTimezoneChanged = function () {
-			scheduleMgmtSvc.recreateScheduleVm(vm.scheduleDateMoment(), vm.selectedTimezone);
-		};
-
+	
 		vm.loadSchedules = function() {
 			vm.isLoading = true;
 			var preSelectPersonIds = $stateParams.personId ? [$stateParams.personId] : [];
@@ -220,8 +195,8 @@
 				var params = getParamsForLoadingSchedules();
 
 				teamScheduleSvc.searchSchedules.query(params).$promise.then(function (result) {
-					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment(), vm.selectedTimezone);
-					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, vm.scheduleDateMoment());
+					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
+					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, vm.scheduleDateMoment(), vm.currentTimezone);
 					afterSchedulesLoaded(result);
 					personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 					vm.isLoading = false;
@@ -232,7 +207,7 @@
 				var date = vm.scheduleDateMoment().format('YYYY-MM-DD');
 
 				teamScheduleSvc.getSchedules(date, preSelectPersonIds).then(function(result) {
-					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment(), vm.selectedTimezone);
+					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment(), vm.currentTimezone);
 					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, vm.scheduleDateMoment());
 					afterSchedulesLoaded(result);
 					personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
@@ -267,7 +242,7 @@
 
 		vm.updateSchedules = function (personIdList) {
 			vm.isLoading = true;
-			scheduleMgmtSvc.updateScheduleForPeoples(personIdList, vm.scheduleDateMoment(), vm.selectedTimezone, function() {
+			scheduleMgmtSvc.updateScheduleForPeoples(personIdList, vm.scheduleDateMoment(), vm.currentTimezone, function() {
 				personSelectionSvc.clearPersonInfo();
 				vm.isLoading = false;
 				vm.hasSelectedAllPeopleInEveryPage = false;
@@ -375,7 +350,7 @@
 
 				ShowContractTimeEnabled: toggleSvc.WfmTeamSchedule_ShowContractTime_38509,
 				ShowWeeklyContractTimeEnabled: toggleSvc.WfmTeamSchedule_WeeklyContractTime_39871,
-				
+
 				EditAndViewInternalNoteEnabled : toggleSvc.WfmTeamSchedule_EditAndDisplayInternalNotes_40671,
 				
 				FilterValidationWarningsEnabled: toggleSvc.WfmTeamSchedule_FilterValidationWarnings_40110,
