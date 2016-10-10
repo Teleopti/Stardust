@@ -30376,6 +30376,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The other agent has no permission to trade with you..
+        /// </summary>
+        public static string TheOtherAgentHasNoPermissionToShiftTrade {
+            get {
+                return ResourceManager.GetString("TheOtherAgentHasNoPermissionToShiftTrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The person&apos;s roles.
         /// </summary>
         public static string ThePersonsRoles {

@@ -1,6 +1,7 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
@@ -99,8 +100,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				long checksumFrom = new ShiftTradeChecksumCalculator(shiftTradeSwapDetail.SchedulePartFrom).CalculateChecksum();
 				long checksumTo = new ShiftTradeChecksumCalculator(shiftTradeSwapDetail.SchedulePartTo).CalculateChecksum();
 
-				if (shiftTradeSwapDetail.ChecksumFrom != checksumFrom ||
-                    shiftTradeSwapDetail.ChecksumTo != checksumTo)
+					if (checksumFrom == -1 && checksumTo != -1)
+					{
+						((IPersonRequest)shiftTradeRequest.Parent).Deny(null, Resources.TheOtherAgentHasNoPermissionToShiftTrade, authorization);
+						shiftTradeRequest.Deny(shiftTradeRequest.PersonTo);
+						return scheduleUnchanged;
+					}
+
+					if (shiftTradeSwapDetail.ChecksumFrom != checksumFrom || shiftTradeSwapDetail.ChecksumTo != checksumTo)
                 {
                     shiftTradeRequest.Refer(authorization);
                     scheduleUnchanged = false;
