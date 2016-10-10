@@ -4,7 +4,7 @@ angular.module('wfm.rta').provider('RtaState', function() {
 
 	var toggles = {
 		RTA_HideAgentsByStateGroup_40469: false,
-		RTA_SiteAndTeamOnSkillOverview_40817: true
+		RTA_SiteAndTeamOnSkillOverview_40817: false
 	};
 	var rtaAgentsTemplateUrl = function(elem, attr) {
 		return toggles.RTA_HideAgentsByStateGroup_40469 ? 'app/rta/agents/rta-agents-HideAgentsByStateGroup_40469.html' : 'app/rta/agents/rta-agents.html';
