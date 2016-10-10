@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			system.UseTestDouble<ConfigurableSyncEventPublisher>().For<IEventPublisher>();
 		}
 
+		[Ignore("Flaky test (Bug #41061)")]
 		[Test]
 		public void ShouldNotDeadlockBetweenProcesses()
 		{
