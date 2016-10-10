@@ -246,6 +246,30 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
+		public void ShouldReturnNightShiftScheduleViewForEmptySiteOpenHour()
+		{
+			var personFrom = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>());
+			prepareData(personFrom);
+
+			var person1 = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>());
+
+			var shiftTradeAddPersonScheduleViews = new[]
+			{
+				createShiftTradeAddPersonScheduleViewModel(person1, _shiftTradeDate, new[]
+				{
+					new TimePeriod(TimeSpan.FromHours(22), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(5)))
+				})
+			};
+
+			var datePersons = new DatePersons { Date = _shiftTradeDate, Persons = new[] { person1 } };
+			var filteredShiftTradeAddPersonScheduleViews =
+				Target.FilterScheduleView(shiftTradeAddPersonScheduleViews, _personFromScheduleView, datePersons).ToList();
+
+			filteredShiftTradeAddPersonScheduleViews.Count.Should().Be(1);
+			filteredShiftTradeAddPersonScheduleViews.FirstOrDefault().PersonId.Should().Be(person1.Id.GetValueOrDefault());
+		}
+
+		[Test]
 		public void ShouldFilterShiftExchangeOfferByCurrentUserSiteOpenHour()
 		{
 			prepareData();

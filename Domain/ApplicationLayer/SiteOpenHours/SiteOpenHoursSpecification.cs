@@ -21,7 +21,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours
 			foreach (var personToScheduleTimePeriod in personScheduleTimePeriods)
 			{
 				var personSiteOpenHourPeriod = getPersonSiteOpenHourPeriod(person, personToScheduleTimePeriod.Key);
-				isSatisfied = isSatisfied && personSiteOpenHourPeriod.Contains(personToScheduleTimePeriod.Value);
+				if (personSiteOpenHourPeriod.HasValue)
+				{
+					isSatisfied = isSatisfied && personSiteOpenHourPeriod.Value.Contains(personToScheduleTimePeriod.Value);
+				}
 			}
 			return isSatisfied;
 		}
@@ -45,12 +48,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours
 			return dateTimePeriodDictionary;
 		}
 
-		private static TimePeriod getPersonSiteOpenHourPeriod(IPerson person, DateOnly scheduleDate)
+		private static TimePeriod? getPersonSiteOpenHourPeriod(IPerson person, DateOnly scheduleDate)
 		{
 			var siteOpenHour = person.SiteOpenHour(scheduleDate);
 			if (siteOpenHour == null)
 			{
-				return new TimePeriod(TimeSpan.Zero, TimeSpan.FromHours(24).Subtract(new TimeSpan(1)));
+				return null;
 			}
 			if (siteOpenHour.IsClosed)
 			{
