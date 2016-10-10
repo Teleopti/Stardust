@@ -196,7 +196,7 @@
 		vm.onTimeZoneSelected = function () {
 
 			var displayName = '';
-			var reg = /\((.+)\)/;
+			var reg = /\((.+?)\)/;
 			for (var i = 0; i < vm.availableTimezones.length; i++) {
 				if (vm.availableTimezones[i].ianaId === vm.selectedTimezone) {
 					displayName = vm.availableTimezones[i].displayName;
