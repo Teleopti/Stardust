@@ -54,7 +54,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new SqlServerUpdateStatistics(jobParameters));
 
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
-			AddWhenAllEnabled(new DimDayOffJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayDayOff_38213);
+			Add(new DimDayOffJobStep(jobParameters));
 
 			Add(new BridgeTimeZoneJobStep(jobParameters));      // BU independent
 			Add(new DimBusinessUnitJobStep(jobParameters));

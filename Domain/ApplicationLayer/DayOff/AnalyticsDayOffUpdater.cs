@@ -5,14 +5,12 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Exceptions;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.DayOff
 {
-	[EnabledBy(Toggles.ETL_SpeedUpIntradayDayOff_38213)]
 	public class AnalyticsDayOffUpdater :
 		IHandleEvent<DayOffTemplateChangedEvent>,
 		IRunOnHangfire

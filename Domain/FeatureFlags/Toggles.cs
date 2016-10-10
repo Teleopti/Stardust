@@ -146,7 +146,6 @@
 		Wfm_MoveNewAbsenceReportOnHangfire_38203,
 		ETL_SpeedUpNightlySkill_37543,
 		ShiftTrade_ToHangfire_38181,
-		ETL_SpeedUpIntradayDayOff_38213,
 		Wfm_MoveExportMultiSiteSkillOnStardust_38134,
 		Payroll_ToStardust_38204,
 		ETL_SpeedUpScenario_38300,

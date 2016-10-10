@@ -61,7 +61,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new BridgeTimeZoneJobStep(jobParameters));              // BU independent
 			AddWhenAllDisabled(new DimBusinessUnitJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyBusinessUnit_38932);
 
-			AddWhenAllEnabled(new DimDayOffJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayDayOff_38213);
+			Add(new DimDayOffJobStep(jobParameters));
 
 			Add(new DimScorecardJobStep(jobParameters));
 
