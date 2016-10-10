@@ -19,9 +19,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			AddWhenAllDisabled(new IntradayStageScheduleJobStep(jobParameters), Toggles.ETL_SpeedUpETL_30791);
 			AddWhenAllDisabled(new IntradayStageScheduleDayOffCountJobStep(jobParameters), Toggles.ETL_SpeedUpETL_30791);
 
-			AddWhenAllDisabled(new IntradayStageForecastWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayForecastWorkload_38929);
-
-
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
 			AddWhenAllDisabled(new DimBusinessUnitJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayBusinessUnit_38932);
 			AddWhenAllDisabled(new DimShiftLengthJobStep(jobParameters), Toggles.ETL_SpeedUpETL_30791);
@@ -41,7 +38,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			AddWhenAllDisabled(new FactAgentQueueJobStep(jobParameters), Toggles.ETL_OnlyLatestQueueAgentStatistics_30787); // BU independent
 
 			Add(new FactQualityLoadJobStep(jobParameters));             // BU independent
-			AddWhenAllDisabled(new FactForecastWorkloadJobStep(jobParameters, true), Toggles.ETL_SpeedUpIntradayForecastWorkload_38929);
 			Add(new FactScheduleDeviationJobStep(jobParameters, true));
 		}
 	}

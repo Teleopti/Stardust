@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Exceptions;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -13,7 +12,6 @@ using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 {
-	[EnabledBy(Toggles.ETL_SpeedUpIntradayForecastWorkload_38929)]
 	public class AnalyticsForecastWorkloadUpdater :
 		IHandleEvent<SkillDayChangedEvent>,
 		IRunOnHangfire

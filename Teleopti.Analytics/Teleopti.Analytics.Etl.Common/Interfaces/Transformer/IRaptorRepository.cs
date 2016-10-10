@@ -101,7 +101,7 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSkillDays(DateTimePeriod period, IList<ISkill> skills, IScenario scenario);
 		IEnumerable<ISkillDay> LoadSkillDays(IScenario scenario, DateTime lastCheck);
 		int PersistForecastWorkload(DataTable dataTable);
-		int FillForecastWorkloadDataMart(DateTimePeriod period, IBusinessUnit businessUnit, bool isIntraday);
+		int FillForecastWorkloadDataMart(DateTimePeriod period, IBusinessUnit businessUnit);
 		int FillSkillDataMart(IBusinessUnit businessUnit);
 
 		//Agent stats

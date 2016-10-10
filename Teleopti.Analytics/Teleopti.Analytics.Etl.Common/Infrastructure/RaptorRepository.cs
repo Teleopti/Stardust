@@ -1285,10 +1285,8 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			HelperFunctions.TruncateTable("stage.etl_stg_forecast_workload_delete", _dataMartConnectionString);
 			return HelperFunctions.BulkInsert(dataTable, "stage.stg_forecast_workload", _dataMartConnectionString);
 		}
-		public int FillForecastWorkloadDataMart(DateTimePeriod period, IBusinessUnit businessUnit, bool isIntraday)
+		public int FillForecastWorkloadDataMart(DateTimePeriod period, IBusinessUnit businessUnit)
 		{
-			int result;
-
 			//Prepare sql parameters
 			var parameterList = new[]
 			{
@@ -1297,16 +1295,9 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				new SqlParameter("business_unit_code", businessUnit.Id)
 			};
 
-			if (isIntraday)
-			{
-				result = HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_forecast_workload_intraday_load", parameterList,
-											_dataMartConnectionString);
-			}
-			else
-			{
-				result = HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_forecast_workload_load", parameterList,
-											_dataMartConnectionString);
-			}
+
+			var result = HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_forecast_workload_load", parameterList,
+				_dataMartConnectionString);
 			return result;
 
 		}
