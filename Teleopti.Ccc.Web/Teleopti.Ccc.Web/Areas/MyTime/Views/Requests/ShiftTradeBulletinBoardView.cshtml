@@ -15,7 +15,7 @@
 		<div class="col-sm-6 col-lg-4 fix-margin">
 			<div class="input-group">
 				<span class="input-group-btn">
-					<button class="bulletin-previous-date btn" data-bind="click: previousDate, clickable: previousDateValid, enable: previousDateValid">
+					<button class="bulletin-previous-date btn" data-bind="click: previousDate, clickable: previousDateValid && !IsLoading(), enable: previousDateValid && !IsLoading()">
 						<i class="glyphicon glyphicon-chevron-left" data-bind="enable: !IsLoading()"></i>
 					</button>
 				</span>
@@ -25,7 +25,7 @@
 					<button class="btn" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
 						<i class="glyphicon glyphicon-calendar"></i>
 					</button>
-					<button class="next-date btn" data-bind="click: nextDate, clickable: nextDateValid, enable: nextDateValid">
+					<button class="next-date btn" data-bind="click: nextDate, clickable: nextDateValid && !IsLoading(), enable: nextDateValid && !IsLoading()">
 						<i class="glyphicon glyphicon-chevron-right" data-bind="enable: !IsLoading()"></i>
 					</button>
 				</span>
