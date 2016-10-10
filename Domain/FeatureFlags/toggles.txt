@@ -90,7 +90,7 @@ WfmTeamSchedule_MakePersonalActivityUnmerged_40252 = true
 WfmTeamSchedule_WeeklyContractTime_39871 = true
 WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925 = DEV
 
-WfmTeamSchedule_MoveToBaseLicense_41039 = DEV
+WfmTeamSchedule_MoveToBaseLicense_41039 = RC
 
 WfmReportPortal_Basic_38825 = true
 WfmReportPortal_LeaderBoard_39440 = true
