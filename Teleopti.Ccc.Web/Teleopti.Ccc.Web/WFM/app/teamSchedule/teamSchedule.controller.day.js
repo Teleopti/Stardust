@@ -382,15 +382,14 @@
 										|| vm.toggles.SwapShiftEnabled
 										|| vm.toggles.ModifyShiftCategoryEnabled;
 			vm.resetSchedulePage();
-			if(!vm.toggles.MoveToBaseLicenseEnabled){
-				var template = $translate.instant('WFMReleaseNotification');
-				var moduleName = $translate.instant('Teams');
-				var message = template.replace('{0}', moduleName)
-					.replace('{1}', '<a href="http://www.teleopti.com/wfm/customer-feedback.aspx">')
-					.replace('{2}', '</a>')
-					.replace('{3}', '<a href="../Anywhere#teamschedule">' + moduleName + '</a>');
-				NoticeService.info(message, null, true);
-			}
+			
+			var template = $translate.instant('WFMReleaseNotification');
+			var moduleName = $translate.instant('Teams');
+			var message = template.replace('{0}', moduleName)
+				.replace('{1}', '<a href="http://www.teleopti.com/wfm/customer-feedback.aspx">')
+				.replace('{2}', '</a>')
+				.replace('{3}', '<a href="../Anywhere#teamschedule">' + $translate.instant('TeamSchedule') + '</a>');
+			NoticeService.info(message, null, true);
 		};
 
 		$q.all([
