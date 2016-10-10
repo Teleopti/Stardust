@@ -151,7 +151,6 @@
 		ETL_SpeedUpScenarioNightly_38300,
 		Scheduler_LoadWithoutRequests_38567,
 		ETL_SpeedUpNightlyActivity_38303,
-		ETL_SpeedUpIntradayOvertime_38304,
 		ETL_SpeedUpNightlyOvertime_38304,
 		ETL_SpeedUpIntradayAbsence_38301,
 		ETL_SpeedUpNightlyAbsence_38301,

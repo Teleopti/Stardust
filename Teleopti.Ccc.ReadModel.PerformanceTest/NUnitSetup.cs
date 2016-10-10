@@ -108,7 +108,6 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			// Analytics stuff based on events
 			Toggles.ETL_SpeedUpIntradayBusinessUnit_38932,
 			Toggles.ETL_EventbasedDate_39562,
-			Toggles.ETL_SpeedUpIntradayOvertime_38304,
 			Toggles.ETL_SpeedUpIntradayAbsence_38301,
 			Toggles.ETL_SpeedUpIntradayShiftCategory_38718,
 			Toggles.ETL_SpeedUpIntradayRequest_38914,

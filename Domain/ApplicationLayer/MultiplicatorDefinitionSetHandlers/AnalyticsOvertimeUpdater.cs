@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Exceptions;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -12,7 +11,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.MultiplicatorDefinitionSetHandlers
 {
-	[EnabledBy(Toggles.ETL_SpeedUpIntradayOvertime_38304)]
 	public class AnalyticsOvertimeUpdater : 
 		IRunOnHangfire,
 		IHandleEvent<MultiplicatorDefinitionSetCreated>,

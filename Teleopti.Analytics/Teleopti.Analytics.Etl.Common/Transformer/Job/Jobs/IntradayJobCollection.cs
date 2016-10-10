@@ -30,7 +30,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			AddWhenAllDisabled(new StageScorecardJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
 			AddWhenAllDisabled(new StageScorecardKpiJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
 			AddWhenAllDisabled(new StageKpiTargetTeamJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
-			AddWhenAllDisabled(new StageOvertimeJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayOvertime_38304);
 			AddWhenAllDisabled(new IntradayStageRequestJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayRequest_38914);
 
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
@@ -43,7 +42,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			AddWhenAllDisabled(new DimShiftLengthJobStep(jobParameters), Toggles.ETL_SpeedUpETL_30791);
 			AddWhenAllDisabled(new DimWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayWorkload_38928);
 
-			AddWhenAllDisabled(new DimOvertimeJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayOvertime_38304);
 
 			AddWhenAllDisabled(new BridgeQueueWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayWorkload_38928);
 
