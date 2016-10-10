@@ -692,13 +692,12 @@ FROM mart.dim_activity a WITH (NOLOCK)
 INNER JOIN #result r
 	ON r.activity_id=a.activity_id and r.absence_id = -1
 
---If more the one activity per interval, then we display the "not defined" color
+--If more the one activity per interval, then we display that these are multiple activities or absencens with null color
+--The name of this should not be used, use resource file instead.
 UPDATE #result
-SET display_color=a.display_color,activity_absence_name=activity_name
+SET display_color=NULL, activity_absence_name='Multiple things', activity_id = -1, absence_id = -1
 FROM #result  r
-INNER JOIN mart.dim_activity a WITH (NOLOCK) on a.activity_id =-1
-WHERE r.count_activity_per_interval >1
-
+WHERE r.count_activity_per_interval > 1
 
 --Sorting on Shift Start & Shift End
 

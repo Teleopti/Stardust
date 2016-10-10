@@ -84,7 +84,7 @@ body
 .ReportDateTime
 {
 	font-size: 8pt;
-	padding-bottom: 0px;
+	padding-bottom: 0;
 	
 }
 
@@ -133,6 +133,17 @@ body
 .ReportIntervalCell.Bright
 {
 	color: White;
+}
+
+.ReportIntervalCell.MultipleActivities
+{
+	background : repeating-linear-gradient(
+		45deg,
+		#C5C5C5,
+		#C5C5C5 3px,
+		#EDEDED 3px,
+		#EDEDED 6px
+	);
 }
 
 .ReportIntervalTotalAdherenceCell

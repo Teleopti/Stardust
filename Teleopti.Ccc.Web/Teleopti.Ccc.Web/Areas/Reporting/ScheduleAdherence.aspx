@@ -27,7 +27,7 @@
 <body class="ReportBody">
 	<form id="aspnetForm" style="margin-top: 10px" runat="server">
 		<asp:HiddenField ID="dateOffset" Value="0" runat="server" />
-		<asp:ImageButton ID="buttonShowSelection" Visible="False" alt="Show selection" runat="server" OnClick="showSelection" src="images/down.png" /><asp:ImageButton ID="buttonHideSelection" alt="Hide selection" runat="server" OnClick="hideSelection" src="images/up.png" />
+		<asp:ImageButton ID="buttonShowSelection" Visible="False" alt="Show selection" runat="server" OnClick="ShowSelection" src="images/down.png" /><asp:ImageButton ID="buttonHideSelection" alt="Hide selection" runat="server" OnClick="HideSelection" src="images/up.png" />
 		<asp:ScriptManager ID="ScriptManager1" EnablePartialRendering="true" runat="server" EnableScriptGlobalization="true" EnableScriptLocalization="true" />
 		<asp:Panel ID="selectionPanel" runat="server">
 			<div class="Panel">
@@ -39,7 +39,7 @@
 					</div>
 					<div style="float: right; width: 69%">
 						<div id="buttonId" style="float: left; width: 33%;">
-							<asp:ImageButton Style="float: right; margin-right: 25px" OnClientClick="hideThings();" OnClick="buttonShowTheReport" ID="buttonShowReport" Width="48" Height="48" ImageUrl="images/icon-show.png" ToolTip='Show report' runat="server" />
+							<asp:ImageButton Style="float: right; margin-right: 25px" OnClientClick="hideThings();" OnClick="ButtonShowTheReport" ID="buttonShowReport" Width="48" Height="48" ImageUrl="images/icon-show.png" ToolTip='Show report' runat="server" />
 						</div>
 					</div>
 					<asp:Label runat="server" ForeColor="red" ID="labelError"></asp:Label>
@@ -114,11 +114,11 @@
 													<tr runat="server" >
 														<td runat="server" >
 															<asp:ImageButton ID="imageButtonPreviousDay" runat="server"
-																ImageUrl="images/previous.gif" OnClientClick="hideThings();" OnClick="imageButtonPreviousDay_Click" /></td>
+																ImageUrl="images/previous.gif" OnClientClick="hideThings();" OnClick="ImageButtonPreviousDayClick" /></td>
 														<td id="tdDateText" runat="server" align="center">xx2008-07-02</td>
 														<td runat="server" >
 															<asp:ImageButton ID="imageButtonNextDay" runat="server"
-																ImageUrl="images/next.gif" OnClientClick="hideThings();" OnClick="imageButtonNextDay_Click" /></td>
+																ImageUrl="images/next.gif" OnClientClick="hideThings();" OnClick="ImageButtonNextDayClick" /></td>
 
 													</tr>
 												</table>

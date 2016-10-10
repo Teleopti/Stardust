@@ -17,70 +17,15 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Reports.CCC
 			DataRow = dataRow;
 		}
 
-		public string PersonName
-		{
-			get { return (string)DataRow["person_name"]; }
-		}
-
-		public string DateText
-		{
-			get { return ShiftStartDate.ToShortDateString(); }
-		}
-
-		private DateTime IntervalDate
-		{
-			get { return (DateTime)DataRow["date"]; }
-		}
-
-		public DateTime ShiftStartDate
-
-		{
-			get { return ((DateTime)DataRow["shift_startdate"]); }
-		}
-
-		public decimal? AdherenceTotal
-		{
-			get
-			{
-				if (DataRow["adherence_tot"] == DBNull.Value)
-					return null;
-				return (decimal)DataRow["adherence_tot"];
-			}
-		}
-
-		public decimal? DeviationTotal
-		{
-			get
-			{
-				if (DataRow["deviation_tot_m"] == DBNull.Value)
-					return null;
-				return (decimal)DataRow["deviation_tot_m"];
-			}
-		}
-
-		public decimal? TeamAdherenceTotal
-		{
-			get
-			{
-				if (DataRow["team_adherence_tot"] == DBNull.Value)
-					return null;
-				return (decimal)DataRow["team_adherence_tot"];
-			}
-		}
-
-		public decimal? TeamDeviationTotal
-		{
-			get
-			{
-				if (DataRow["team_deviation_tot_m"] == DBNull.Value)
-					return null;
-				return (decimal)DataRow["team_deviation_tot_m"];
-			}
-		}
-
-		public int FirstIntervalId { get { return (int)DataRow["interval_id"]; } }
-
-
+		public string PersonName => (string)DataRow["person_name"];
+		public string DateText => ShiftStartDate.ToShortDateString();
+		private DateTime intervalDate => (DateTime)DataRow["date"];
+		public DateTime ShiftStartDate => (DateTime)DataRow["shift_startdate"];
+		public decimal? AdherenceTotal => DataRow["adherence_tot"] == DBNull.Value ? (decimal?) null : (decimal) DataRow["adherence_tot"];
+		public decimal? DeviationTotal => DataRow["deviation_tot_m"] == DBNull.Value ? (decimal?) null : (decimal) DataRow["deviation_tot_m"];
+		public decimal? TeamAdherenceTotal => DataRow["team_adherence_tot"] == DBNull.Value ? (decimal?) null : (decimal) DataRow["team_adherence_tot"];
+		public decimal? TeamDeviationTotal => DataRow["team_deviation_tot_m"] == DBNull.Value ? (decimal?) null : (decimal) DataRow["team_deviation_tot_m"];
+		public int FirstIntervalId => (int)DataRow["interval_id"];
 
 		public bool Equals(PersonModel other)
 		{
@@ -112,18 +57,8 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Reports.CCC
 			return Equals((PersonModel) obj);
 		}
 
-		public override int GetHashCode()
-		{
-			if (_perDate)
-				return ShiftStartDate.GetHashCode();
-			return _personId;
-		}
-
+		public override int GetHashCode() => _perDate ? ShiftStartDate.GetHashCode() : _personId;
 		public bool EndsOnNextDate { get; set; }
-
-		public bool LoggedInOnTheDayBefore
-		{
-			get { return IntervalDate.IsEarlierThan(ShiftStartDate); }
-		}
+		public bool LoggedInOnTheDayBefore => intervalDate.IsEarlierThan(ShiftStartDate);
 	}
 }

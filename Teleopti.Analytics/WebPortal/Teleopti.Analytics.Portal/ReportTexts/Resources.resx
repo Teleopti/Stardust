@@ -1385,4 +1385,8 @@ Schedule</value>
     <value>Waitlisted</value>
     <comment>Waitlisted</comment>
   </data>
+  <data name="MultipleActivitiesOrAbsences" xml:space="preserve">
+    <value>Multiple activities/absences</value>
+    <comment>Multiple activities/absences</comment>
+  </data>
 </root>

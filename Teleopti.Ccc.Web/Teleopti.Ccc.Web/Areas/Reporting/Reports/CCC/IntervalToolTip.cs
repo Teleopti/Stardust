@@ -1,7 +1,6 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 
-namespace Teleopti.Analytics.Portal.Reports.Ccc
+namespace Teleopti.Ccc.Web.Areas.Reporting.Reports.CCC
 {
 	public class IntervalToolTip
 	{
@@ -12,19 +11,19 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		public int EndIntervalCounter { get; set; }
 
 
-		public String AbsenceOrActivityName { get; set; }
+		public string AbsenceOrActivityName { get; set; }
 
-		public String ToolTip(int intervalsPerHour)
+		public string ToolTip(int intervalsPerHour)
 		{
-			return String.Concat(AbsenceOrActivityName, "\n", GetTimeString(intervalsPerHour, StartInterval), "-",
-			                     GetTimeString(intervalsPerHour, EndInterval + 1));
+			return string.Concat(AbsenceOrActivityName, "\n", getTimeString(intervalsPerHour, StartInterval), "-",
+			                     getTimeString(intervalsPerHour, EndInterval + 1));
 		}
 
-		private static String GetTimeString(int intervalsPerHour, int interval)
+		private static string getTimeString(int intervalsPerHour, int interval)
 		{
-			int hourPart = interval / intervalsPerHour;
-			int minutePart = (interval % intervalsPerHour) * (60 / intervalsPerHour);
-			return String.Concat(hourPart.ToString("00", CultureInfo.InvariantCulture), ":",
+			var hourPart = interval / intervalsPerHour;
+			var minutePart = (interval % intervalsPerHour) * (60 / intervalsPerHour);
+			return string.Concat(hourPart.ToString("00", CultureInfo.InvariantCulture), ":",
 			                     minutePart.ToString("00", CultureInfo.InvariantCulture));
 		}
 	}

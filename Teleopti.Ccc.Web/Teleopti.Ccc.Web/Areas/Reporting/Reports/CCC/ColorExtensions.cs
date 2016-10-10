@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Teleopti.Analytics.Portal.Reports.Ccc
+namespace Teleopti.Ccc.Web.Areas.Reporting.Reports.CCC
 {
 	public static class ColorExtensions
 	{

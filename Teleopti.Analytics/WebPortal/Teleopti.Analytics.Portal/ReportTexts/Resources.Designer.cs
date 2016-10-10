@@ -305,6 +305,15 @@ namespace Teleopti.Analytics.ReportTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Multiple activities/absences.
+        /// </summary>
+        public static string MultipleActivitiesOrAbsences {
+            get {
+                return ResourceManager.GetString("MultipleActivitiesOrAbsences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Note.
         /// </summary>
         public static string Note {
