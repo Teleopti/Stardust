@@ -25,7 +25,7 @@
 
 			this.createController = function () {
 
-				$controller(controllerName, {
+				var vm = $controller(controllerName, {
 					$scope: scope
 				});
 				scope.$digest();
@@ -48,7 +48,8 @@
 						$interval.flush(milliseconds);
 						safeBackendFlush();
 						return callbacks;
-					}
+					},
+					vm: vm
 
 				};
 

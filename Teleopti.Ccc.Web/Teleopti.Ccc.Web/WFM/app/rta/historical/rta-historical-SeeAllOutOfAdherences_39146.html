@@ -23,16 +23,16 @@
 
 			<table class="wfm-table">
 				<thead>
-          <tr>
-            <td style="position: relative; padding: 4px 0; height: 20px;">
-              <div ng-repeat="row in vm.fullTimeline" class="label label-info" ng-attr-style="position: absolute; left: {{row.Offset}}; top: 10%;">{{row.Time}}</div>
-            </td>
-          </tr>
+					<tr>
+						<td style="position: relative; padding: 4px 0; height: 20px;">
+							<div ng-repeat="row in vm.fullTimeline" class="label label-info" ng-attr-style="position: absolute; left: {{row.Offset}}; top: 10%;">{{row.Time}}</div>
+						</td>
+					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td style="position: relative;">
-              <span ng-repeat="outOfAdherence in vm.outOfAdherences" class="rta-alarmline" ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}}; bottom: 46%;">
+							<span ng-repeat="outOfAdherence in vm.outOfAdherences" class="rta-alarmline" ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}}; bottom: 46%;">
                 <md-tooltip md-direction="top">
                   {{outOfAdherence.StartTime}}
                   -
@@ -40,21 +40,17 @@
                 </md-tooltip>
               </span>
 							<div class="rta-shift" style="height: 50px;">
-								<div
-									ng-repeat="activity in vm.agentsFullSchedule"
-									class="rta-layer absolute floatleft"
-									tabindex="0"
-									ng-attr-style="width: {{activity.Width}}; left: {{activity.Offset}}; background-color: {{activity.Color}}; top: 12%;">
+								<div ng-repeat="activity in vm.agentsFullSchedule" class="rta-layer absolute floatleft" tabindex="0" ng-attr-style="width: {{activity.Width}}; left: {{activity.Offset}}; background-color: {{activity.Color}}; top: 12%;">
 
-									</div>
+								</div>
 							</div>
 						</td>
 					</tr>
 				</tbody>
 			</table>
-      </div>
-		</div>
-		<div class="con-row">
-			<div class="con-flex"></div>
 		</div>
 	</div>
+	<div class="con-row">
+		<div class="con-flex"></div>
+	</div>
+</div>

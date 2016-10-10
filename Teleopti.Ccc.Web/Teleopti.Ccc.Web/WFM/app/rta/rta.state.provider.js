@@ -99,9 +99,9 @@ angular.module('wfm.rta').provider('RtaState', function() {
 				}
 			})
 			.state('rta.historical', {
-				url: '/historical',
+				url: '/historical/:personId',
 				templateUrl: 'app/rta/historical/rta-historical-SeeAllOutOfAdherences_39146.html',
-				controller: 'RtaHistoricalController as vm'
+				controller: 'RtaHistoricalController as vm',
 			})
 			.state('rta.agent-details', {
 				url: '/agent-details/:personId',

@@ -315,6 +315,15 @@
 					return [200, result];
 				});
 
+			fake(/\.\.\/api\/HistoricalAdherence\/For(.*)/,
+				function (params) {
+					var result = agents.find(function(agent){
+						return params.personId == agent.PersonId;
+					});
+					return [200, result];
+				});
+
+
 			this.clear = function () {
 				serverTime = null;
 				toggles = {};
