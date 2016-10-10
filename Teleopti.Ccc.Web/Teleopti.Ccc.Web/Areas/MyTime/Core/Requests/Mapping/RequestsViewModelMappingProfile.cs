@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -74,16 +74,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					return (shiftTradeRequest != null &&
 							shiftTradeRequest.GetShiftTradeStatus(
 								_shiftTradeRequestStatusChecker) == ShiftTradeStatus.Referred);
-				}))
-				.ForMember(d=>d.IsNotValid, o=>o.ResolveUsing(s =>
-				{
-					var language = _loggedOnUser.CurrentUser().PermissionInformation.UICulture();
-					var noPermissionToTrade = Resources.ResourceManager.GetString("TheOtherAgentHasNoPermissionToShiftTrade", language);
-					if (string.Equals(noPermissionToTrade, s.DenyReason) && !isCreatedByUser(s.Request, _loggedOnUser))
-					{
-						return true;
-					}
-					return false;
 				}))
 				.ForMember(d => d.Text, o => o.MapFrom(s => s.GetMessage(new NoFormatting())))
 				.ForMember(d => d.Type, o => o.MapFrom(s => s.Request.RequestTypeDescription))

@@ -50,7 +50,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		});
 
 		self.isReferred = ko.observable(false);
-		self.isNotValid = ko.observable(false);
 		self.isCreatedByUser = ko.observable(false);
 
 		self.IsFullDay = ko.observable();
@@ -114,7 +113,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		};
 
 		self.isValid = function () {
-			return (!(self.isReferred() && !self.isCreatedByUser()) && !self.isNotValid());
+			return (!(self.isReferred() && !self.isCreatedByUser()));
 		};
 	}
 
@@ -398,7 +397,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			self.CanCancel(data.Link.Methods.indexOf("CANCEL") != -1);
 			self.isCreatedByUser(data.IsCreatedByUser);
 			self.isReferred(data.IsReferred);
-			self.isNotValid(data.IsNotValid);
 			self.IsSelected(false);
 			self.IsCancelPending(false);
 			self.ErrorMessage(null);
