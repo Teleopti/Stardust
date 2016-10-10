@@ -50,11 +50,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var raptorRep = new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, null);
 			//so we have a NULL absence
 			raptorRep.FillAbsenceDataMart(TestState.BusinessUnit);
-			raptorRep.FillIntradayFactRequestMart(TestState.BusinessUnit);
-			
-
 		}
-
-
 	}
 }

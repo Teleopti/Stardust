@@ -157,7 +157,6 @@
 		ETL_SpeedUpNightlyShiftCategory_38718,
 		ETL_SpeedUpNightlyPreference_38283,
 		ETL_FasterIndexMaintenance_38847,
-		ETL_SpeedUpIntradayScorecard_38933,
 		ETL_SpeedUpIntradayAvailability_38926,
 		ETL_SpeedUpNightlyAvailability_38926,
 		ETL_SpeedUpNightlyRequest_38914,
