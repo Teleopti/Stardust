@@ -46,6 +46,7 @@
 				PersonId: schedule.PersonId,
 				Name: schedule.Name,
 				Date: schedule.Date,
+				Timezone: schedule.Timezone,
 				Shifts: projectionVms == undefined ? [] : [
 					{
 						Date: schedule.Date,

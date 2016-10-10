@@ -72,7 +72,7 @@
 			}
 
 			var result = reg.exec(displayName);
-			return result ? result[1] : '';
+			return result ? result[1] : displayName;
 		}
 
 		function onSelectionChanged() {

@@ -19,7 +19,7 @@
 			</span>
 
 			<view-changer ng-if="vm.toggles.WeekViewEnabled && vm.searchEnabled" selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword"></view-changer>
-			<timezone-picker available-timezones="vm.availableTimezones" on-pick="vm.changeTimezone(timezone)" ng-if="vm.toggles.ViewScheduleOnTimezoneEnabled"></timezone-picker>
+			<timezone-picker available-timezones="vm.availableTimezones" on-pick="vm.changeTimezone(timezone)" ng-if="true ||vm.toggles.ViewScheduleOnTimezoneEnabled"></timezone-picker>
 		</div>
 
 		<div class="warning-container" ng-if="vm.toggles.ShowValidationWarnings">
@@ -54,7 +54,7 @@
 				<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
 			</div>
 			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-			<schedule-table select-mode="vm.scheduleTableSelectMode" selected-date="vm.scheduleDate" show-warnings="vm.cmdConfigurations.validateWarningToggle" cmd-configurations="vm.cmdConfigurations"/>
+			<schedule-table select-mode="vm.scheduleTableSelectMode" selected-date="vm.scheduleDate" show-warnings="vm.cmdConfigurations.validateWarningToggle" cmd-configurations="vm.cmdConfigurations" selected-timezone="vm.currentTimezone"/>
 		</div>
 
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="teamschedule-command-container">

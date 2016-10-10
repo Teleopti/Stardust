@@ -799,3 +799,9 @@ md-select-menu md-option:first-child:not([disabled]):focus {
 md-select-menu md-option:first-child:not([disabled]):hover {	
 	background: $gray-300;		
 }
+
+.timezone-tip {
+	.mdi:before {
+		font-size: 12px !important;
+	}
+}

@@ -9,6 +9,7 @@
 			scope: {
 				selectMode: '=',
 				selectedDate: '=',
+				selectedTimezone: '<',
 				showWarnings: '=?',
 				cmdConfigurations: '='
 			},

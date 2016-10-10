@@ -28,7 +28,11 @@
 					<input type="checkbox" ng-model="personSchedule.IsSelected" ng-change="vm.updatePersonSelection(personSchedule)">
 					<span class="wfm-checkbox-toggle"></span>
 					<span class="wfm-checkbox-label person-name">{{personSchedule.Name}}</span>
+					<span class="timezone-tip" ng-if="vm.selectedTimezone && personSchedule.Timezone.IanaId !== vm.selectedTimezone"><i class="mdi mdi-earth"></i></span>
 				</label>
+				<md-tooltip md-direction="right" ng-if="vm.selectedTimezone && personSchedule.Timezone.IanaId !== vm.selectedTimezone">
+					{{personSchedule.Timezone.DisplayName}}
+				</md-tooltip>
 			</div>
 			
 			<div class="person-name" ng-hide="vm.selectMode">{{personSchedule.Name}}</div>
