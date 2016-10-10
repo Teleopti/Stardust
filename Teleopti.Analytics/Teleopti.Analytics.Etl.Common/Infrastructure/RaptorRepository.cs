@@ -240,19 +240,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 											  _dataMartConnectionString);
 		}
 
-		public int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit, IScenario scenario)
-		{
-			var parameterList = new[]
-				{
-					new SqlParameter("business_unit_code", currentBusinessUnit.Id),
-					new SqlParameter("scenario_code", scenario.Id)
-				};
-
-			return
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_day_count_intraday_load", parameterList,
-											  _dataMartConnectionString);
-		}
-
 		public int FillDayOffDataMart(IBusinessUnit businessUnit)
 		{
 			var parameterList = new[] { new SqlParameter("business_unit_code", businessUnit.Id) };
@@ -419,15 +406,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_load", parameterList,
-											  _dataMartConnectionString);
-		}
-
-		public int FillIntradayScheduleDataMart(IBusinessUnit businessUnit)
-		{
-			var parameterList = new[] { new SqlParameter("business_unit_code", businessUnit.Id) };
-
-			return
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "[mart].[etl_fact_schedule_intraday_load]", parameterList,
 											  _dataMartConnectionString);
 		}
 
@@ -622,7 +600,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 				var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period);
 				var schedulesDictionary = scheduleRepository.FindSchedulesForPersons(scheduleDateTimePeriod, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, persons);
-				removeScheduleDataOutsideRanges(schedulesDictionary);
 
 				//Clean ScheduleDictionary from all persons not present in PersonsInOrganization
 				IList<IPerson> personsToRemove = new List<IPerson>();
@@ -638,18 +615,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 				return schedulesDictionary;
 			}
-		}
-
-		[RemoveMeWithToggle("Please check if this one could be removed when toggle is removed", Toggles.ETL_SpeedUpETL_30791)]
-		private static void removeScheduleDataOutsideRanges(IScheduleDictionary schedulesDictionary)
-		{
-			//don't think this is needed but at the time #40763 was fixed, three ETL tests was failing so keep old behavior
-			//can maybe/probably be removed when old intradaystep is removed
-			foreach (ScheduleRange range in schedulesDictionary.Values)
-			{
-				range.RemoveSchedulesOutsideRange_Hack_RemoveMeLater();
-			}
-			schedulesDictionary.TakeSnapshot();
 		}
 
 		public void RemoveDuplicatesWorkaroundFor27636()

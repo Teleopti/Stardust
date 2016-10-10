@@ -33,7 +33,6 @@ Show_StaticPageOnNoInternet_29415 = false
 Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635 = true
 Settings_SetAgentDescription_23257 = true
 Settings_AlertViaEmailFromSMSLink_30444 = true
-ETL_SpeedUpETL_30791 = true
 #Cannot be relreased yet due to performance and IO #
 RTA_AdherenceDetails_34267 = RC
 Gamification_NewBadgeCalculation_31185 = true

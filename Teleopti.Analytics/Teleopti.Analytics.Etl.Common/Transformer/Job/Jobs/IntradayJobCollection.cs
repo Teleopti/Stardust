@@ -16,17 +16,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new DimQualityQuestLoadJobStep(jobParameters));          // BU independent
 			Add(new RaptorQueueSynchronizationStep(jobParameters));
 			Add(new RaptorAgentLogOnSynchronizationStep(jobParameters));
-			AddWhenAllDisabled(new IntradayStageScheduleJobStep(jobParameters), Toggles.ETL_SpeedUpETL_30791);
-			AddWhenAllDisabled(new IntradayStageScheduleDayOffCountJobStep(jobParameters), Toggles.ETL_SpeedUpETL_30791);
 
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
 			AddWhenAllDisabled(new DimBusinessUnitJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayBusinessUnit_38932);
-			AddWhenAllDisabled(new DimShiftLengthJobStep(jobParameters), Toggles.ETL_SpeedUpETL_30791);
 
 			// FACT TABLES
-			AddWhenAllDisabled(new FactScheduleJobStep(jobParameters, true), Toggles.ETL_SpeedUpETL_30791);
-			AddWhenAllDisabled(new FactScheduleDayCountJobStep(jobParameters, true), Toggles.ETL_SpeedUpETL_30791);
-			
 			AddWhenAllEnabled(new IntradayFactQueueJobStep(jobParameters), Toggles.ETL_OnlyLatestQueueAgentStatistics_30787);
 			AddWhenAllEnabled(new IntradayFactAgentJobStep(jobParameters), Toggles.ETL_OnlyLatestQueueAgentStatistics_30787); // BU independent
 			AddWhenAllDisabled(new FactQueueJobStep(jobParameters), Toggles.ETL_OnlyLatestQueueAgentStatistics_30787); // BU independent

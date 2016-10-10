@@ -102,7 +102,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			step = new DimShiftLengthJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
-			step = new FactScheduleJobStep(jobParameters, false);
+			step = new FactScheduleJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			step = new FactScheduleDayCountJobStep(jobParameters);
@@ -112,17 +112,17 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var factSchedules = SqlCommands.RowsInFactSchedule();
 
 			Assert.That(factSchedules, Is.EqualTo(96));
-			step = new IntradayStageScheduleJobStep(jobParameters);
+			step = new StageScheduleJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
-			step = new FactScheduleJobStep(jobParameters, true);
+			step = new FactScheduleJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			factSchedules = SqlCommands.RowsInFactSchedule();
 			// still it should have data on all three dates 96 interval, in the bug only 64 one day extra before the two was deleted
 			Assert.That(factSchedules, Is.EqualTo(96));
 
-			step = new FactScheduleDayCountJobStep(jobParameters, true);
+			step = new FactScheduleDayCountJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 		}
 
@@ -194,17 +194,17 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			step = new DimShiftLengthJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
-			step = new FactScheduleJobStep(jobParameters, false);
+			step = new FactScheduleJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			// now it should have data on all three dates 96 interval
 			var factSchedules = SqlCommands.RowsInFactSchedule();
 
 			Assert.That(factSchedules, Is.EqualTo(96));
-			step = new IntradayStageScheduleJobStep(jobParameters);
+			step = new StageScheduleJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
-			step = new FactScheduleJobStep(jobParameters, true);
+			step = new FactScheduleJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 			factSchedules = SqlCommands.RowsInFactSchedule();
 

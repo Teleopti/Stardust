@@ -7,13 +7,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 {
 	public class FactScheduleJobStep : JobStepBase
 	{
-		private readonly bool _isIntraday;
-
-		public FactScheduleJobStep(IJobParameters jobParameters) : this(jobParameters, false) { }
-		public FactScheduleJobStep(IJobParameters jobParameters, bool isIntraday)
+		public FactScheduleJobStep(IJobParameters jobParameters)
 			: base(jobParameters)
 		{
-			_isIntraday = isIntraday;
 			Name = "fact_schedule";
 			JobCategory = JobCategoryType.Schedule;
 		}
@@ -21,9 +17,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
 			//Load data from stage to datamart 
-			if (_isIntraday)
-				return _jobParameters.Helper.Repository.FillIntradayScheduleDataMart(RaptorTransformerHelper.CurrentBusinessUnit);
-
 			var period = new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling);
 			return
 			_jobParameters.Helper.Repository.FillScheduleDataMart(period, RaptorTransformerHelper.CurrentBusinessUnit);

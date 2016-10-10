@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
-	[EnabledBy(Toggles.ETL_SpeedUpETL_30791, Toggles.ETL_RobustAnalyticsScheduleChangeUpdater_39556)]
+	[EnabledBy(Toggles.ETL_RobustAnalyticsScheduleChangeUpdater_39556)]
 	public class AnalyticsScheduleChangeUpdaterHangfire:
 		IHandleEvent<ProjectionChangedEvent>,
 		IRunOnHangfire

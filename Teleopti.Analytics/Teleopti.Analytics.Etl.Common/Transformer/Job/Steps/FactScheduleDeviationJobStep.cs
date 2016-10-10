@@ -11,13 +11,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 	public class FactScheduleDeviationJobStep : JobStepBase
 	{
 		private readonly bool _isIntraday;
-		private readonly bool _speedUpEtl;
 
 		public FactScheduleDeviationJobStep(IJobParameters jobParameters, bool isIntraday = false)
 			: base(jobParameters)
 		{
 			_isIntraday = isIntraday;
-			_speedUpEtl = jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpETL_30791);
 
 			Name = "fact_schedule_deviation";
 			JobCategory = JobCategoryType.AgentStatistics;
@@ -43,9 +41,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			if (_isIntraday)
 			{
 				var paramIsIntraday = 3;
-
-				if (!_speedUpEtl)
-					paramIsIntraday = 1;
 
 				affectedRows =
 					 _jobParameters.Helper.Repository.FillScheduleDeviationDataMart(new DateTimePeriod(fromDate, toDate),
