@@ -2,27 +2,46 @@
 	'use strict';
 
 	angular.module("wfm.teamSchedule").service("ScheduleManagement", [
-		"$resource", "Toggle", "$q", 'TeamSchedule', 'GroupScheduleFactory',
-		function ($resource, toggleSvc, $q, teamScheduleSvc, groupScheduleFactory) {
+		"$resource", "Toggle", "$q", "$filter", 'TeamSchedule', 'GroupScheduleFactory', 'CurrentUserInfo',
+		function ($resource, toggleSvc, $q, $filter, teamScheduleSvc, groupScheduleFactory, CurrentUserInfo) {
 			var svc = this;
 
 			svc.rawSchedules = [];
 			svc.groupScheduleVm = {};
 
-			var recreateScheduleVm = function(scheduleDateMoment) {
-				svc.groupScheduleVm = groupScheduleFactory.Create(svc.rawSchedules, scheduleDateMoment);
+			function convertScheduleToTimezone(schedule, timezone) {
+
+				if ((!timezone) || (timezone === CurrentUserInfo.CurrentUserInfo().DefaultTimeZone)) return schedule;
+
+				var copiedSchedule = angular.copy(schedule);
+
+				
+				angular.forEach(copiedSchedule.Projection, function(p) {
+					p.Start = $filter('timezone')(p.Start, timezone);
+				});
+								
+				return copiedSchedule;
+			}
+
+			var recreateScheduleVm = function (scheduleDateMoment, timezone) {				
+				var timezoneAdjustedSchedules = svc.rawSchedules.map(function(schedule) {
+					return convertScheduleToTimezone(schedule, timezone);
+				});
+				svc.groupScheduleVm = groupScheduleFactory.Create(timezoneAdjustedSchedules, scheduleDateMoment);
 			};
 
-			svc.resetSchedules = function (schedules, scheduleDateMoment) {
+			svc.recreateScheduleVm = recreateScheduleVm;
+
+			svc.resetSchedules = function (schedules, scheduleDateMoment, timezone) {
 				svc.rawSchedules = schedules;
-				recreateScheduleVm(scheduleDateMoment);
+				recreateScheduleVm(scheduleDateMoment, timezone);
 			};
 
-			svc.mergeSchedules = function(schedules, scheduleDateMoment) {
-				recreateScheduleVm(scheduleDateMoment);
+			svc.mergeSchedules = function (schedules, scheduleDateMoment, timezone) {
+				recreateScheduleVm(scheduleDateMoment, timezone);
 			};
 
-			svc.updateScheduleForPeoples = function(personIdList, scheduleDateMoment, afterLoading) {
+			svc.updateScheduleForPeoples = function(personIdList, scheduleDateMoment, timezone, afterLoading) {
 				var scheduleDateStr = scheduleDateMoment.format('YYYY-MM-DD');
 				teamScheduleSvc.getSchedules(scheduleDateStr, personIdList).then(function(result) {
 
@@ -40,7 +59,7 @@
 						}
 
 					});
-					svc.mergeSchedules(svc.rawSchedules, scheduleDateMoment);
+					svc.mergeSchedules(svc.rawSchedules, scheduleDateMoment, timezone);
 					afterLoading();
 				});
 			};

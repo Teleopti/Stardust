@@ -8,6 +8,20 @@ describe("teamschedule schedule management service tests", function() {
 	});
 
 
+	var mockCurrentUserInfo = {
+		CurrentUserInfo: function () {
+			return { DefaultTimeZone: "Asia/Hong_Kong" };
+		}
+	};
+
+	beforeEach(function () {
+		module(function ($provide) {
+			$provide.service('CurrentUserInfo', function () {
+				return mockCurrentUserInfo;
+			});
+		});
+	});
+
 	beforeEach(function () {
 		fakeTeamScheduleSvc = new FakeTeamScheduleSvc();
 		module(function ($provide) {
@@ -20,6 +34,7 @@ describe("teamschedule schedule management service tests", function() {
 	beforeEach(inject(function (ScheduleManagement) {
 		target = ScheduleManagement;
 	}));
+
 
 	function FakeTeamScheduleSvc() {
 		var newData = {
@@ -116,6 +131,17 @@ describe("teamschedule schedule management service tests", function() {
 		"DayOff": null
 	};
 
+	it("Can recreate schedule view model with specified timezone", function() {
+		target.resetSchedules([schedule1], scheduleDateMoment);
+
+		var timezone = 'Europe/Berlin';
+		
+		target.recreateScheduleVm(scheduleDateMoment, timezone);
+		var schedule = target.groupScheduleVm.Schedules[0];
+	
+		expect(schedule.Shifts[0].Projections[0].Start).toEqual(scheduleDate + "T04:00");
+	});
+
 	it("Can create group schedule", inject(function () {
 		target.resetSchedules([schedule1, schedule2], scheduleDateMoment);
 		var schedules = target.groupScheduleVm.Schedules;
@@ -134,7 +160,7 @@ describe("teamschedule schedule management service tests", function() {
 		target.resetSchedules([schedule1, schedule3, schedule2], scheduleDateMoment);
 		expect(target.groupScheduleVm.Schedules.length).toEqual(2);
 
-		target.updateScheduleForPeoples(["221B-Baker-SomeoneElse"], scheduleDateMoment, function (){});
+		target.updateScheduleForPeoples(["221B-Baker-SomeoneElse"], scheduleDateMoment,null, function (){});
 		expect(target.groupScheduleVm.Schedules.length).toEqual(2);
 		expect(target.rawSchedules[0].PersonId).toEqual("221B-Baker-SomeoneElse");
 		expect(target.rawSchedules[0].Date).toEqual(scheduleDate);

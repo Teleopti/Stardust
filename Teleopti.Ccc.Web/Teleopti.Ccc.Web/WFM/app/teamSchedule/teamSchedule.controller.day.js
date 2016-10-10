@@ -178,13 +178,13 @@
 		};
 
 		function populateAvailableTimezones(schedules) {
+			vm.availableTimezones = [];
 			var timeZones = {};
 			timeZones[CurrentUserInfo.CurrentUserInfo().DefaultTimeZone] = CurrentUserInfo.CurrentUserInfo().DefaultTimeZoneName;
 
 			schedules.Schedules.forEach(function(s) {
 				timeZones[s.Timezone.IanaId] = s.Timezone.DisplayName;
 			});
-
 			for (var ianaId in timeZones) {
 				vm.availableTimezones.push({
 					ianaId: ianaId,
@@ -205,7 +205,11 @@
 			}
 
 			var result = reg.exec(displayName);
-			return result ? result[1] : '';
+			return result ? result[1] : displayName;
+		};
+
+		vm.onSelectedTimezoneChanged = function () {
+			scheduleMgmtSvc.recreateScheduleVm(vm.scheduleDateMoment(), vm.selectedTimezone);
 		};
 
 		vm.loadSchedules = function() {
@@ -216,7 +220,7 @@
 				var params = getParamsForLoadingSchedules();
 
 				teamScheduleSvc.searchSchedules.query(params).$promise.then(function (result) {
-					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
+					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment(), vm.selectedTimezone);
 					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, vm.scheduleDateMoment());
 					afterSchedulesLoaded(result);
 					personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
@@ -228,7 +232,7 @@
 				var date = vm.scheduleDateMoment().format('YYYY-MM-DD');
 
 				teamScheduleSvc.getSchedules(date, preSelectPersonIds).then(function(result) {
-					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
+					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment(), vm.selectedTimezone);
 					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, vm.scheduleDateMoment());
 					afterSchedulesLoaded(result);
 					personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
@@ -263,7 +267,7 @@
 
 		vm.updateSchedules = function (personIdList) {
 			vm.isLoading = true;
-			scheduleMgmtSvc.updateScheduleForPeoples(personIdList, vm.scheduleDateMoment(), function() {
+			scheduleMgmtSvc.updateScheduleForPeoples(personIdList, vm.scheduleDateMoment(), vm.selectedTimezone, function() {
 				personSelectionSvc.clearPersonInfo();
 				vm.isLoading = false;
 				vm.hasSelectedAllPeopleInEveryPage = false;
