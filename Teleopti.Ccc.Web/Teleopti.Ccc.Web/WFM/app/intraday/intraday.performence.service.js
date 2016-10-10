@@ -127,9 +127,9 @@
 									performanceData.currentInterval
 								],
 								groups: [
-									['ASA'],['Abandoned_rate'],['Service_level']
+									['Abandoned_rate'],['ASA'],['Service_level']
 								],
-								order: 'asc',
+								order: 'desc',
 								hide: hiddenArray,
 								types: {
 									Current:'bar'
