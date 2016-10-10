@@ -43,7 +43,6 @@
 
 		Backlog_Module_23980,
 
-		ETL_OnlyLatestQueueAgentStatistics_30787,
 		Gamification_NewBadgeCalculation_31185,
 
 		MyTimeWeb_ShowSeatBookingMonthView_39068,

@@ -92,20 +92,20 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Assert.That(schedule.Rows.Count, Is.EqualTo(3));
 			foreach (DataRow row in schedule.Rows)
 			{
-				if ((row["date"]).Equals(testDate.AddDays(-2)))
+				if (row["date"].Equals(testDate.AddDays(-2)))
 				{
-					Assert.That((row["activity_absence_name"]), Is.EqualTo(phone));
-					Assert.That((row["scheduled_contract_time_m"]), Is.EqualTo(180));
+					Assert.That(row["activity_absence_name"], Is.EqualTo(phone));
+					Assert.That(row["scheduled_contract_time_m"], Is.EqualTo(180));
 				}
-				if ((row["date"]).Equals(testDate.AddDays(-1)))
+				if (row["date"].Equals(testDate.AddDays(-1)))
 				{
-					Assert.That((row["activity_absence_name"]), Is.EqualTo(phone));
-					Assert.That((row["scheduled_contract_time_m"]), Is.EqualTo(840));
+					Assert.That(row["activity_absence_name"], Is.EqualTo(phone));
+					Assert.That(row["scheduled_contract_time_m"], Is.EqualTo(840));
 				}
-				if ((row["date"]).Equals(testDate.AddDays(0)))
+				if (row["date"].Equals(testDate.AddDays(0)))
 				{
-					Assert.That((row["activity_absence_name"]), Is.EqualTo(phone));
-					Assert.That((row["scheduled_contract_time_m"]), Is.EqualTo(420));
+					Assert.That(row["activity_absence_name"], Is.EqualTo(phone));
+					Assert.That(row["scheduled_contract_time_m"], Is.EqualTo(420));
 				}
 			}
 		}
@@ -327,7 +327,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			//var jobHelper = new JobHelper(null, null, null,new LogOnHelper(""));
 			jobHelper.LogOffTeleoptiCccDomain();
 			var fakeManager = new FakeContainerHolder();
-			fakeManager.EnableToggle(Toggles.ETL_OnlyLatestQueueAgentStatistics_30787);
 			var jobParameters = new JobParameters(
 				dateList, 1, "UTC", 15, "", "False",
 				CultureInfo.CurrentCulture,
@@ -420,13 +419,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			foreach (DataRow dtRow in adherance.Rows)
 			{
-				if ((dtRow["date"]).Equals(testDate))
+				if (dtRow["date"].Equals(testDate))
 				{
 					foreach (DataColumn dc in adherance.Columns)
 					{
 						if (dc.ColumnName.Equals(testColumn))
 						{
-							if ((dtRow["interval_name"]).ToString().Equals(intervalName))
+							if (dtRow["interval_name"].ToString().Equals(intervalName))
 							{
 								return Convert.ToInt32(dtRow[testColumn]);
 							}
@@ -450,52 +449,52 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				{
 					case 1:
 						{
-							Assert.That((row["date"]), Is.EqualTo(testDate.AddDays(-2)));
-							Assert.That((row["interval_id"]), Is.EqualTo(78));
-							Assert.That((row["interval_name"]), Is.EqualTo("19:30-19:45"));
-							Assert.That((row["deviation_tot_m"]), Is.EqualTo(543));
+							Assert.That(row["date"], Is.EqualTo(testDate.AddDays(-2)));
+							Assert.That(row["interval_id"], Is.EqualTo(78));
+							Assert.That(row["interval_name"], Is.EqualTo("19:30-19:45"));
+							Assert.That(row["deviation_tot_m"], Is.EqualTo(543));
 							break;
 						}
 					case 7:
 						{
-							Assert.That((row["date"]), Is.EqualTo(testDate.AddDays(-2)), "60% interval");
-							Assert.That((row["interval_id"]), Is.EqualTo(88), "60% interval");
-							Assert.That((row["interval_name"]), Is.EqualTo("22:00-22:15"), "60% interval");
-							Assert.That((row["adherence"]), Is.EqualTo(0.6), "60% interval");
-							Assert.That((row["deviation_m"]), Is.EqualTo(6), "60% interval");
-							Assert.That((row["adherence_calc_s"]), Is.EqualTo(900), "60% interval");
-							Assert.That((row["ready_time_m"]), Is.EqualTo(9), "60% interval");
+							Assert.That(row["date"], Is.EqualTo(testDate.AddDays(-2)), "60% interval");
+							Assert.That(row["interval_id"], Is.EqualTo(88), "60% interval");
+							Assert.That(row["interval_name"], Is.EqualTo("22:00-22:15"), "60% interval");
+							Assert.That(row["adherence"], Is.EqualTo(0.6), "60% interval");
+							Assert.That(row["deviation_m"], Is.EqualTo(6), "60% interval");
+							Assert.That(row["adherence_calc_s"], Is.EqualTo(900), "60% interval");
+							Assert.That(row["ready_time_m"], Is.EqualTo(9), "60% interval");
 							break;
 						}
 					case 8:
 						{
-							Assert.That((row["date"]), Is.EqualTo(testDate.AddDays(-2)), "100% interval");
-							Assert.That((row["interval_id"]), Is.EqualTo(89), "100% interval");
-							Assert.That((row["interval_name"]), Is.EqualTo("22:15-22:30"), "100% interval");
-							Assert.That((row["adherence"]), Is.EqualTo(1), "100% interval");
-							Assert.That((row["deviation_m"]), Is.EqualTo(0), "100% interval");
-							Assert.That((row["adherence_calc_s"]), Is.EqualTo(900), "100% interval");
-							Assert.That((row["ready_time_m"]), Is.EqualTo(15), "100% interval");
+							Assert.That(row["date"], Is.EqualTo(testDate.AddDays(-2)), "100% interval");
+							Assert.That(row["interval_id"], Is.EqualTo(89), "100% interval");
+							Assert.That(row["interval_name"], Is.EqualTo("22:15-22:30"), "100% interval");
+							Assert.That(row["adherence"], Is.EqualTo(1), "100% interval");
+							Assert.That(row["deviation_m"], Is.EqualTo(0), "100% interval");
+							Assert.That(row["adherence_calc_s"], Is.EqualTo(900), "100% interval");
+							Assert.That(row["ready_time_m"], Is.EqualTo(15), "100% interval");
 							break;
 						}
 
 					case 46:
 						{
-							Assert.That((row["date"]), Is.EqualTo(testDate.AddDays(-1)));
-							Assert.That((row["interval_id"]), Is.EqualTo(31));
-							Assert.That((row["interval_name"]), Is.EqualTo("07:45-08:00"));
+							Assert.That(row["date"], Is.EqualTo(testDate.AddDays(-1)));
+							Assert.That(row["interval_id"], Is.EqualTo(31));
+							Assert.That(row["interval_name"], Is.EqualTo("07:45-08:00"));
 							break;
 						}
 
 					case 79:
 						{
-							Assert.That((row["ready_time_m"]), Is.EqualTo(4));
+							Assert.That(row["ready_time_m"], Is.EqualTo(4));
 							break;
 						}
 
 					case 81:
 						{
-							Assert.That((row["ready_time_m"]), Is.EqualTo(9));
+							Assert.That(row["ready_time_m"], Is.EqualTo(9));
 							break;
 						}
 
@@ -513,28 +512,28 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				{
 					case 1:
 						{
-							Assert.That((row["date"]), Is.EqualTo(testDate.AddDays(-2)));
-							Assert.That((row["interval_id"]), Is.EqualTo(78), "First interval_id yesterday");
-							Assert.That((row["interval_name"]), Is.EqualTo("19:30-19:45"), "First interval_name yesterday");
+							Assert.That(row["date"], Is.EqualTo(testDate.AddDays(-2)));
+							Assert.That(row["interval_id"], Is.EqualTo(78), "First interval_id yesterday");
+							Assert.That(row["interval_name"], Is.EqualTo("19:30-19:45"), "First interval_name yesterday");
 							break;
 						}
 					case 46:
 						{
-							Assert.That((row["date"]), Is.EqualTo(testDate.AddDays(-1)));
-							Assert.That((row["interval_id"]), Is.EqualTo(31), "First interval_id today");
-							Assert.That((row["interval_name"]), Is.EqualTo("07:45-08:00"), "First interval_name today");
+							Assert.That(row["date"], Is.EqualTo(testDate.AddDays(-1)));
+							Assert.That(row["interval_id"], Is.EqualTo(31), "First interval_id today");
+							Assert.That(row["interval_name"], Is.EqualTo("07:45-08:00"), "First interval_name today");
 							break;
 						}
 
 					case 79:
 						{
-							Assert.That((row["ready_time_m"]), Is.EqualTo(4));
+							Assert.That(row["ready_time_m"], Is.EqualTo(4));
 							break;
 						}
 
 					case 81:
 						{
-							Assert.That((row["ready_time_m"]), Is.EqualTo(9));
+							Assert.That(row["ready_time_m"], Is.EqualTo(9));
 							break;
 						}
 

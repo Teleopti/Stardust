@@ -21,15 +21,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			AddWhenAllDisabled(new DimBusinessUnitJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayBusinessUnit_38932);
 
 			// FACT TABLES
-			AddWhenAllEnabled(new IntradayFactQueueJobStep(jobParameters), Toggles.ETL_OnlyLatestQueueAgentStatistics_30787);
-			AddWhenAllEnabled(new IntradayFactAgentJobStep(jobParameters), Toggles.ETL_OnlyLatestQueueAgentStatistics_30787); // BU independent
-			AddWhenAllDisabled(new FactQueueJobStep(jobParameters), Toggles.ETL_OnlyLatestQueueAgentStatistics_30787); // BU independent
-			AddWhenAllDisabled(new FactAgentJobStep(jobParameters), Toggles.ETL_OnlyLatestQueueAgentStatistics_30787); // BU independent
+			Add(new IntradayFactQueueJobStep(jobParameters));
+			Add(new IntradayFactAgentJobStep(jobParameters)); // BU independent
 
 			Add(new StatisticsUpdateNotificationJobStep(jobParameters));                   // BU independent
 
-			AddWhenAllEnabled(new IntradayFactAgentQueueJobStep(jobParameters), Toggles.ETL_OnlyLatestQueueAgentStatistics_30787); // BU independent
-			AddWhenAllDisabled(new FactAgentQueueJobStep(jobParameters), Toggles.ETL_OnlyLatestQueueAgentStatistics_30787); // BU independent
+			Add(new IntradayFactAgentQueueJobStep(jobParameters)); // BU independent
 
 			Add(new FactQualityLoadJobStep(jobParameters));             // BU independent
 			Add(new FactScheduleDeviationJobStep(jobParameters, true));
