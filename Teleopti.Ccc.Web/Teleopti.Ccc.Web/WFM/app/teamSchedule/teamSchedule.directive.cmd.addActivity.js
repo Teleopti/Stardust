@@ -79,15 +79,15 @@
 			}
 		};
 
-		function getRequestData() {
+		function getRequestData() {		
 			vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 			return {
 				PersonIds: vm.selectedAgents.map(function (agent) {
 					return agent.PersonId;
 				}),
 				Date: vm.selectedDate(),
-				StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"),
-				EndTime: moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"),
+				StartTime: vm.convertTime(moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm")),
+				EndTime: vm.convertTime(moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm")),
 				ActivityId: vm.selectedActivityId,
 				ActivityType: 1,
 				TrackedCommandInfo: {
@@ -174,6 +174,7 @@
 				selfCtrl = ctrls[1];
 
 			scope.vm.selectedDate = containerCtrl.getDate;
+			scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
 			scope.vm.trackId = containerCtrl.getTrackId();
 			scope.vm.getActionCb = containerCtrl.getActionCb;
 			scope.vm.checkCommandActivityLayerOrders = containerCtrl.hasToggle('CheckOverlappingCertainActivitiesEnabled');

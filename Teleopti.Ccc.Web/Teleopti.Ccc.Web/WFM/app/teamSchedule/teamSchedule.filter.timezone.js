@@ -4,9 +4,11 @@
 
 	timezoneFilter.$inject = ['CurrentUserInfo'];
 	function timezoneFilter(currentUserInfo) {		
-		return function (inputString, timezone) {
+		return function (inputString, toTimezone, fromTimezone) {
 			
-			var currentUserTimezone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
+			if (!fromTimezone) fromTimezone =  currentUserInfo.CurrentUserInfo().DefaultTimeZone;
+			if (!toTimezone) toTimezone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
+
 			var dateString;
 			var timeOnly = false;
 			
@@ -17,7 +19,7 @@
 				dateString = inputString;
 			}
 
-			var converted = moment.tz(dateString, currentUserTimezone).clone().tz(timezone);
+			var converted = moment.tz(dateString, fromTimezone).clone().tz(toTimezone);
 			return converted.format(timeOnly ? "HH:mm" : "YYYY-MM-DDTHH:mm");
 		}
 	}

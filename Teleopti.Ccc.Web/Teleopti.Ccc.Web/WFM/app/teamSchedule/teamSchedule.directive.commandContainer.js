@@ -1,12 +1,17 @@
 ﻿(function () {
 	angular.module('wfm.teamSchedule').directive('teamscheduleCommandContainer', teamscheduleCommandContainer);
 
-	teamscheduleCommandContainerCtrl.$inject = ['guidgenerator', 'CommandCheckService'];
+	teamscheduleCommandContainerCtrl.$inject = ['$filter',  'guidgenerator', 'CommandCheckService'];
 
-	function teamscheduleCommandContainerCtrl(guidgenerator, CommandCheckService) {
+	function teamscheduleCommandContainerCtrl($filter, guidgenerator, CommandCheckService) {
 		var vm = this;
 
 		vm.getDate = function () { return vm.date; };
+
+		vm.convertTimeToCurrentUserTimezone = function(time) {
+			return $filter('timezone')(time, null, vm.timezone);
+		};
+
 		vm.getTrackId = guidgenerator.newGuid;
 
 		vm.activeCmd = null;
@@ -55,6 +60,7 @@
 			controller: teamscheduleCommandContainerCtrl,
 			scope: {
 				date: '=',
+				timezone: '=',
 				actionCallback: '&?',
 				configurations: '=?'
 			},
