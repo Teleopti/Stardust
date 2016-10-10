@@ -148,7 +148,6 @@
 		ShiftTrade_ToHangfire_38181,
 		Wfm_MoveExportMultiSiteSkillOnStardust_38134,
 		Payroll_ToStardust_38204,
-		ETL_SpeedUpScenario_38300,
 		ETL_SpeedUpScenarioNightly_38300,
 		Scheduler_LoadWithoutRequests_38567,
 		ETL_SpeedUpIntradayActivity_38303,

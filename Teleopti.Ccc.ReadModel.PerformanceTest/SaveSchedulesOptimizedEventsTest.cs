@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 	[TestFixture]
 	[PerformanceTest]
 	[Toggle(Toggles.ETL_SpeedUpIntradayBusinessUnit_38932)]
-	[Toggle(Toggles.ETL_SpeedUpScenario_38300)]
 	[Setting("OptimizeScheduleChangedEvents_DontUseFromWeb", true)]
 	[Category("SaveSchedulesOptimizedEventsTest")]
 	public class SaveSchedulesOptimizedEventsTest
