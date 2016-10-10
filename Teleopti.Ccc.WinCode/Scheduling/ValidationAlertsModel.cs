@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public IList<ValidationAlert> GetAlerts(IEnumerable<IPerson> filteredPersons)
 		{
-			var result = new List<ValidationAlert>();
+			var result = new HashSet<ValidationAlert>();
 			foreach (var person in filteredPersons)
 			{
 				var range = _schedules[person];
@@ -30,27 +30,41 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					if(!_visiblePeriod.Contains(businessRuleResponse.DateOnlyPeriod.StartDate))
 						continue;
 
-					result.Add(new ValidationAlert()
-					{
-						Date = businessRuleResponse.DateOnlyPeriod.StartDate,
-						PersonName = businessRuleResponse.Person.Name.ToString(_nameOrderOption),
-						Person = businessRuleResponse.Person,
-						Alert = businessRuleResponse.Message,
-						TypeName = businessRuleResponse.FriendlyName
-					});
+					var alert = new ValidationAlert(businessRuleResponse.DateOnlyPeriod.StartDate,
+						businessRuleResponse.Person.Name.ToString(_nameOrderOption), businessRuleResponse.FriendlyName);
+					alert.Person = businessRuleResponse.Person;
+					alert.Alert = businessRuleResponse.Message;
+					result.Add(alert);
 				}
 			}
 
-			return result;
+			return result.ToList();
 		}
 
 		public class ValidationAlert
 		{
-			public DateOnly Date { get; set; }
-			public string PersonName { get; set; }
+			public ValidationAlert(DateOnly date, string personName, string typeName)
+			{
+				Date = date;
+				PersonName = personName;
+				TypeName = typeName;
+			}
+
+			public DateOnly Date { get; }
+			public string PersonName { get; }
 			public IPerson Person { get; set; }
 			public string Alert { get; set; }
-			public string TypeName { get; set; }
+			public string TypeName { get; }
+
+			public override int GetHashCode()
+			{
+				return Date.GetHashCode() ^ PersonName.GetHashCode() ^ TypeName.GetHashCode();
+			}
+
+			public override bool Equals(object obj)
+			{
+				return GetHashCode().Equals(obj.GetHashCode());
+			}
 		}
 	}
 	

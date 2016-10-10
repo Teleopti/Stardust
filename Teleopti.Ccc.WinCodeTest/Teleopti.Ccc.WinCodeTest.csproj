@@ -668,6 +668,7 @@
     <Compile Include="Scheduler\SmartDayOffBackToLegalStateSolverContainerTest.cs" />
     <Compile Include="Scheduler\SplitLongDayAbsencesTest.cs" />
     <Compile Include="Scheduler\TryModifyTests.cs" />
+    <Compile Include="Scheduler\ValidationAlertsModelTest.cs" />
     <Compile Include="Scheduler\WorkShiftMasterActivityCheckerTest.cs" />
     <Compile Include="Settings\AbsenceViewTest.cs" />
     <Compile Include="Settings\PageHelperTest.cs" />
@@ -867,6 +868,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
