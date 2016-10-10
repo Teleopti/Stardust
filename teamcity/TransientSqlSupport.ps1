@@ -2,7 +2,7 @@
 $NugetPath = "$WorkingDirectory\..\packages"
 $NugetExe = "$WorkingDirectory\..\.nuget"
 
-. $NugetExe\nuget.exe install EnterpriseLibrary.TransientFaultHandling.Configuration -o $NugetPath -ExcludeVersion
+. $NugetExe install EnterpriseLibrary.TransientFaultHandling.Configuration -o $NugetPath -Source "https://www.nuget.org/api/v2/" -ExcludeVersion
 
 # Loading EnterpriseLibrary TransientFaultHandling Dll's
 Add-Type -Path "$NugetPath\EnterpriseLibrary.TransientFaultHandling\lib\portable-net45+win+wp8\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.dll"
