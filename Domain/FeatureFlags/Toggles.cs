@@ -152,7 +152,6 @@
 		Scheduler_LoadWithoutRequests_38567,
 		ETL_SpeedUpNightlyActivity_38303,
 		ETL_SpeedUpNightlyOvertime_38304,
-		ETL_SpeedUpIntradayAbsence_38301,
 		ETL_SpeedUpNightlyAbsence_38301,
 		ETL_SpeedUpIntradayShiftCategory_38718,
 		ETL_MoveBadgeCalculationToETL_38421,
