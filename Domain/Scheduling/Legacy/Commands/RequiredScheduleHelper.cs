@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
@@ -37,7 +36,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IFixedStaffSchedulingService> _fixedStaffSchedulingService;
 		private readonly IStudentSchedulingService _studentSchedulingService;
 		private readonly Func<IOptimizationPreferences> _optimizationPreferences;
-		private readonly IScheduleService _scheduleService;
 		private readonly IResourceOptimization _resourceOptimizationHelper;
 		private readonly IGridlockManager _gridlockManager;
 		private readonly IDaysOffSchedulingService _daysOffSchedulingService;
@@ -46,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly ITeamBlockRemoveShiftCategoryBackToLegalService _teamBlockRemoveShiftCategoryBackToLegalService;
-		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
+		private readonly INightRestWhiteSpotSolverServiceFactory _nightRestWhiteSpotSolverServiceFactory;
 
 
 		public RequiredScheduleHelper(ISchedulePeriodListShiftCategoryBackToLegalStateService shiftCategoryBackToLegalState, 
@@ -55,7 +53,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				Func<IFixedStaffSchedulingService> fixedStaffSchedulingService, 
 				IStudentSchedulingService studentSchedulingService, 
 				Func<IOptimizationPreferences> optimizationPreferences, 
-				IScheduleService scheduleService, 
 				IResourceOptimization resourceOptimizationHelper, 
 				IGridlockManager gridlockManager, 
 				IDaysOffSchedulingService daysOffSchedulingService, 
@@ -64,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				IScheduleDayEquator scheduleDayEquator, 
 				IMatrixListFactory matrixListFactory, 
 				ITeamBlockRemoveShiftCategoryBackToLegalService teamBlockRemoveShiftCategoryBackToLegalService,
-				IDeleteAndResourceCalculateService deleteAndResourceCalculateService)
+				INightRestWhiteSpotSolverServiceFactory nightRestWhiteSpotSolverServiceFactory)
 		{
 			_shiftCategoryBackToLegalState = shiftCategoryBackToLegalState;
 			_ruleSetBagsOfGroupOfPeopleCanHaveShortBreak = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
@@ -72,7 +69,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_studentSchedulingService = studentSchedulingService;
 			_optimizationPreferences = optimizationPreferences;
-			_scheduleService = scheduleService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_gridlockManager = gridlockManager;
 			_daysOffSchedulingService = daysOffSchedulingService;
@@ -81,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_scheduleDayEquator = scheduleDayEquator;
 			_matrixListFactory = matrixListFactory;
 			_teamBlockRemoveShiftCategoryBackToLegalService = teamBlockRemoveShiftCategoryBackToLegalService;
-			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
+			_nightRestWhiteSpotSolverServiceFactory = nightRestWhiteSpotSolverServiceFactory;
 		}
 
 		public void RemoveShiftCategoryBackToLegalState(
@@ -169,11 +165,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_resultStateHolder(),
 				_scheduleDayChangeCallback,
 				tagSetter);
-			INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
-				new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
-					_deleteAndResourceCalculateService,
-					_scheduleService, _allResults,
-					new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _resultStateHolder()));
 
 			using (PerformanceOutput.ForOperation(string.Concat("Scheduling ", unlockedSchedules.Count, " days")))
 			{
@@ -207,6 +198,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				fixedStaffSchedulingService.FinderResults.Clear();
 				fixedStaffSchedulingService.DayScheduled -= onDayScheduled;
 
+				var nightRestWhiteSpotSolverService = _nightRestWhiteSpotSolverServiceFactory.Create(schedulingOptions.ConsiderShortBreaks);
 				var progressChangeEvent = new TeleoptiProgressChangeMessage(Resources.TryingToResolveUnscheduledDaysDotDotDot);
 				backgroundWorker.ReportProgress(0, progressChangeEvent);
 				foreach (var scheduleMatrixOriginalStateContainer in originalStateContainers)

@@ -484,7 +484,9 @@
     <Compile Include="Scheduling\Assignment\IsDayScheduledExcludeDayOff.cs" />
     <Compile Include="Scheduling\DesktopScheduling.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IGridlockManager.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\INightRestWhiteSpotSolverServiceFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\LockInfo.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\NightRestWhiteSpotSolverServiceFactory.cs" />
     <Compile Include="Scheduling\Restrictions\MustHaveRestrictionProvider.cs" />
     <Compile Include="Scheduling\Rules\BusinessRuleProvider.cs" />
     <Compile Include="Scheduling\Rules\NotOverwriteLayerRule.cs" />

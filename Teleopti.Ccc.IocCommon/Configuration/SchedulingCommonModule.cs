@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<VirtualSkillGroupsResultProvider>().SingleInstance();
 			builder.RegisterType<VirtualSkillContext>().InstancePerLifetimeScope();
 			builder.RegisterType<IntradayOptimizationContext>().InstancePerLifetimeScope();
-
+			builder.RegisterType<NightRestWhiteSpotSolverServiceFactory>().As<INightRestWhiteSpotSolverServiceFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<VirtualSkillGroupsCreator>().SingleInstance();
 			builder.RegisterType<SkillGroupIslandsAnalyzer>().SingleInstance();
 			builder.RegisterType<CreateIslands>().SingleInstance();
