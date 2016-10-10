@@ -34,38 +34,46 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExists(".ready-loading-flag.is-ready-loaded");
 		}
 
-		[When(@"I view Shift Trade Bulletin Board for date '(.*)'")]
-		[Given(@"I view Shift Trade Bulletin Board for date '(.*)'")]
-		public void WhenIViewShiftTradeBulletinBoardForDate(DateTime date)
-		{
-			gotoShiftTradeBulletinBoardToday();
-			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
-			var script = string.Format("return Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeBulletinBoardDate('{0}');", dateAsSwedishString);
-			Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString);
-			Browser.Interactions.AssertExists(".bulletin-ready-loading-flag.is-ready-loaded");
-		}
-
-		[When(@"I see '(.*)' in agent name area")]
-		public void ShouldSeeInShiftTradeAgentNameArea(string name)
-		{
-			Browser.Interactions.AssertKnockoutContextContains(".agent-name-row", "agentName", name);
-			Browser.Interactions.AssertAnyContains(".shift-trade-agent-name", name);
-		}
-
 		private static void gotoAddRequestToday()
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoRequests();
-			Browser.Interactions.Click("#addShiftTradeRequest");
-			Browser.Interactions.AssertExists(".ready-loading-flag.is-ready-loaded");
-		}		
-		
+
+			Browser.Interactions.TryUntil(
+				() =>
+				{
+					Navigation.GotoRequests();
+					Browser.Interactions.Click("#addShiftTradeRequest");
+				},
+				() => Browser.Interactions.IsExists(".ready-loading-flag.is-ready-loaded"),
+				TimeSpan.FromMilliseconds(50));
+		}
+
 		private static void gotoShiftTradeBulletinBoardToday()
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoRequests();
-			Browser.Interactions.Click("#addShiftTradeRequestFromBulletinBoard");
-			Browser.Interactions.AssertExists(".bulletin-ready-loading-flag.is-ready-loaded");
+
+			Browser.Interactions.TryUntil(
+				() =>
+				{
+					Navigation.GotoRequests();
+					Browser.Interactions.Click("#addShiftTradeRequestFromBulletinBoard");
+				},
+				() => Browser.Interactions.IsExists(".bulletin-ready-loading-flag.is-ready-loaded"),
+				TimeSpan.FromMilliseconds(50));
+		}
+
+		[When(@"I see '(.*)' shift on Shift Trade Bulletin Board on date '(.*)'")]
+		public void WhenISeeWhoseShiftOnDate(string owner, DateTime date)
+		{
+			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
+			var script = string.Format("Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.IsRunningBehaviorTest(); return Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeBulletinBoardDate('{0}');", dateAsSwedishString);
+			var selector = owner == "my" ? ".shift-trade-my-schedule .shift-trade-layer" : "#agent-in-bulletin-board";
+			gotoShiftTradeBulletinBoardToday();
+
+			Browser.Interactions.TryUntil(
+				() => Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString),
+				() => Browser.Interactions.IsAnyVisible(selector),
+				TimeSpan.FromMilliseconds(50));
 		}
 
 		[Then(@"I should see a message text saying I am missing a workflow control set")]
@@ -397,6 +405,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see a confirm message on bulletin trade board")]
 		public void ThenIShouldSeeAConfirmMessageOnBulletinTradeBoard()
 		{
+			Browser.Interactions.TryUntil(
+				() => Browser.Interactions.Click("#agent-in-bulletin-board"),
+				() => Browser.Interactions.IsAnyVisible("#Request-add-shift-trade-detail-section"),
+				TimeSpan.FromMilliseconds(50));
+
 			Browser.Interactions.AssertAnyContains("#Request-add-shift-trade-detail-section", Resources.SureToMakeShiftTrade);
 		}
 
@@ -404,7 +417,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Given(@"I click OtherAgent shift")]
 		public void WhenIClickOtherAgentShift()
 		{
-			Browser.Interactions.Click("#agent-in-bulletin-board");
+			Browser.Interactions.TryUntil(
+				() => Browser.Interactions.Click("#agent-in-bulletin-board"),
+				() => Browser.Interactions.IsAnyVisible("#Request-add-shift-trade-detail-section"),
+				TimeSpan.FromMilliseconds(50));
 		}
 
 		[Then(@"I should not see the agent name in detail view")]

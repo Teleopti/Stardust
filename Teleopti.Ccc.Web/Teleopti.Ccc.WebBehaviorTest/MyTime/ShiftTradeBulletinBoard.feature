@@ -1,5 +1,4 @@
 ﻿
-@ignore
 @MyTimeShiftTrades
 Feature: Shift trade bulletin board from requests
 	In order to make a shift trade with someone who has the same wishs
@@ -53,7 +52,7 @@ Scenario: Shift trade in Bulletin board should start from tomorrow
 	And the time is '2029-10-18'
 	And I am viewing requests
 	When I click to shift trade bulletin board
-	Then I cannot navigate to the bulletin previous date	
+	Then I cannot navigate to the bulletin previous date
 
 Scenario: Should show my shift and other shift in bulletin board
 	Given I have the role 'Full access to mytime'
@@ -75,7 +74,7 @@ Scenario: Should show my shift and other shift in bulletin board
 	| StartTime | 2030-01-01 09:00 |
 	| EndTime   | 2030-01-01 17:00 |
 	And the time is '2029-12-27'
-	When I view Shift Trade Bulletin Board for date '2030-01-01'
+	When I see 'my' shift on Shift Trade Bulletin Board on date '2030-01-01'
 	Then I should see my schedule with
 	| Field			| Value |
 	| Start time	| 09:00 |
@@ -103,8 +102,7 @@ Scenario: Should possible make shift trade in Bulletin board
 	| EndTime       | 2030-01-01 17:00 |
 	| WishShiftType | WorkingShift     |
 	And the time is '2029-12-27'
-	When I view Shift Trade Bulletin Board for date '2030-01-01'
-	When I see 'OtherAgent' in agent name area
+	When I see 'the other agent' shift on Shift Trade Bulletin Board on date '2030-01-01'
 	And I click agent 'OtherAgent'
 	And I enter subject 'A nice subject'
 	And I enter message 'A cute little message'
@@ -132,8 +130,7 @@ Scenario: Should possible make shift trade in Bulletin board with day off
 	| EndTime       | 2030-01-01 17:00 |
 	| WishShiftType | Day Off          |
 	And the time is '2029-12-27'
-	When I view Shift Trade Bulletin Board for date '2030-01-01'
-	When I see 'OtherAgent' in agent name area
+	When I see 'the other agent' shift on Shift Trade Bulletin Board on date '2030-01-01'
 	And I click agent 'OtherAgent'
 	And I enter subject 'A nice subject'
 	And I enter message 'A cute little message'
@@ -160,8 +157,7 @@ Scenario: Should possibly make my empty day trade with main shift day in Bulleti
 	| EndTime       | 2030-01-01 17:00 |
 	| WishShiftType | EmptyDay       |
 	And the time is '2029-12-27'
-	When I view Shift Trade Bulletin Board for date '2030-01-01'
-	When I see 'OtherAgent' in agent name area
+	When I see 'the other agent' shift on Shift Trade Bulletin Board on date '2030-01-01'
 	And I click agent 'OtherAgent'
 	And I enter subject 'A nice subject'
 	And I enter message 'A cute little message'
@@ -186,15 +182,13 @@ Scenario: Should possible make shift trade with empty day in Bulletin board
 	| EndTime       | 2030-01-01 17:00 |
 	| WishShiftType | EmptyDay         |
 	And the time is '2029-12-27'
-	When I view Shift Trade Bulletin Board for date '2030-01-01'
-	When I see 'OtherAgent' in agent name area
+	When I see 'the other agent' shift on Shift Trade Bulletin Board on date '2030-01-01'
 	And I click agent 'OtherAgent'
 	And I enter subject 'A nice subject'
 	And I enter message 'A cute little message'
 	And I click send button in bulletin board
 	Then Shift trade bulletin board view should not be visible
 	And I should see a shift trade request in the list with subject 'A nice subject'
-	
 
 Scenario: Should see the anonymous name when viewing empty day in Bulletin board
 	Given I have the role 'Full access to mytime'
@@ -213,11 +207,9 @@ Scenario: Should see the anonymous name when viewing empty day in Bulletin board
 	| EndTime       | 2030-01-01 17:00 |
 	| WishShiftType | EmptyDay         |
 	And the time is '2029-12-27'
-	When I view Shift Trade Bulletin Board for date '2030-01-01'
+	When I see 'the other agent' shift on Shift Trade Bulletin Board on date '2030-01-01'
 	Then I should see agent name as Anonym
 	
-	
-
 Scenario: Should list announced shift
 	Given  I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -235,7 +227,6 @@ Scenario: Should list announced shift
 	When I am viewing requests
 	Then I should see the request of type 'Shift Trade Post' in the list
 
-
 Scenario: Delete shift exchange offer in request list
 	Given  I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -252,7 +243,6 @@ Scenario: Delete shift exchange offer in request list
 	And I am viewing requests
 	When I delete the existing request in the list
 	Then I should not see any requests in the list
-
 
 Scenario: View shift trade post details
 	Given  I have the role 'Full access to mytime'
@@ -275,7 +265,6 @@ Scenario: View shift trade post details
 	| Offer end date | 2029-12-31 |
 	| Start time     | 6:00       |
 	| End time       | 14:00      |
-
 
 Scenario: Should modify shift trade post
 	Given  I have the role 'Full access to mytime'
@@ -305,7 +294,6 @@ Scenario: Should modify shift trade post
 	| Start time     | 8:00       |
 	| End time       | 16:00      |
 
-
 Scenario: Should not show agent name in shift trade board list
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Anonymous trade 30 days forward'
@@ -326,9 +314,8 @@ Scenario: Should not show agent name in shift trade board list
 	| StartTime | 2030-01-01 09:00 |
 	| EndTime   | 2030-01-01 17:00 |
 	And the time is '2029-12-27'
-	When I view Shift Trade Bulletin Board for date '2030-01-01'
+	When I see 'the other agent' shift on Shift Trade Bulletin Board on date '2030-01-01'
 	Then I should not see agent name in the possible schedule trade list
-
 
 Scenario: Should not show subject and message box
 	Given I have the role 'Full access to mytime'
@@ -350,10 +337,9 @@ Scenario: Should not show subject and message box
 	| StartTime | 2030-01-01 09:00 |
 	| EndTime   | 2030-01-01 17:00 |
 	And the time is '2029-12-27'
-	And I view Shift Trade Bulletin Board for date '2030-01-01'
-	When I click OtherAgent shift
+	When I see 'the other agent' shift on Shift Trade Bulletin Board on date '2030-01-01'
+	And I click OtherAgent shift
 	Then I should see a confirm message on bulletin trade board
-	
 
 Scenario: Should not show agent name in shift trade request detail view
 	Given I have the role 'Full access to mytime'
@@ -376,11 +362,11 @@ Scenario: Should not show agent name in shift trade request detail view
 	| EndTime       | 2030-01-01 17:00 |
 	| WishShiftType | WorkingShift     |
 	And the time is '2029-12-27'
-	And I view Shift Trade Bulletin Board for date '2030-01-01'
+	When I see 'the other agent' shift on Shift Trade Bulletin Board on date '2030-01-01'
 	And I click OtherAgent shift
 	And I click send button in bulletin board
 	And I am viewing requests
-	When I click on the existing request in the list
+	And I click on the existing request in the list
 	Then I should not see the agent name in detail view
 
 Scenario: Should show my shift and other shifts filtered by site open hours in bulletin board
@@ -404,7 +390,7 @@ Scenario: Should show my shift and other shifts filtered by site open hours in b
 	| StartTime | 2030-01-01 08:00 |
 	| EndTime   | 2030-01-01 17:00 |
 	And the time is '2029-12-27'
-	When I view Shift Trade Bulletin Board for date '2030-01-01'
+	When I see 'my' shift on Shift Trade Bulletin Board on date '2030-01-01'
 	Then I should see my schedule with
 	| Field			| Value |
 	| Start time	| 08:00 |

@@ -18,6 +18,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function (ajax) {
 	self.requestedDateInternal = ko.observable(moment().startOf('day').add('days', -1));
 	self.IsLoading = ko.observable(false);
 	self.isReadyLoaded = ko.observable(false);
+	self.isRunningBehaviorTest = ko.observable(false);
 	self.weekStart = ko.observable(1);
 	self.DatePickerFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
 	self.hours = ko.observableArray();
@@ -76,7 +77,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function (ajax) {
 			return self.requestedDateInternal();
 		},
 		write: function (value) {
-			if (self.requestedDateInternal().diff(value) == 0) return;
+			if (self.requestedDateInternal().diff(value) == 0 && !self.isRunningBehaviorTest()) return;
 			self.requestedDateInternal(value);
 
 			self.prepareLoad();
