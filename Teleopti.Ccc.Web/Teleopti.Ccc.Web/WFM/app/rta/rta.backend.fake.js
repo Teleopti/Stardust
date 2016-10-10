@@ -320,6 +320,9 @@
 					var result = agents.find(function(agent){
 						return params.personId == agent.PersonId;
 					});
+					if (result != null)
+						result.Date = serverTime;
+
 					return [200, result];
 				});
 

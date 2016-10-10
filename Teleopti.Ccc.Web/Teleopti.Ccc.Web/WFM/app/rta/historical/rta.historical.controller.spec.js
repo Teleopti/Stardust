@@ -50,40 +50,40 @@ describe('RtaHistoricalController', function() {
 		expect(vm.agentName).toEqual('Mikkey Dee');
 	});
 
-	it('should display schedule', function () {
+	it('should display schedule', function() {
 		stateParams.personId = '1';
 		$fakeBackend.withAgent({
 			PersonId: '1',
 			Name: 'Mikkey Dee',
 			Schedule: [{
 				Color: 'lightgreen',
-				StartTime: '2016-10-10 08:00:00',
-				EndTime: '2016-10-10 17:00:00'
+				StartTime: '2016-10-10T08:00:00',
+				EndTime: '2016-10-10T17:00:00'
 			}],
 			OutOfAdherences: []
 		});
 
 		var vm = $controllerBuilder.createController().vm;
 
-		expect(vm.agentsFullSchedule[0].StartTime).toEqual('2016-10-10 08:00:00');
-		expect(vm.agentsFullSchedule[0].EndTime).toEqual('2016-10-10 17:00:00');
+		expect(vm.agentsFullSchedule[0].StartTime).toEqual('2016-10-10T08:00:00');
+		expect(vm.agentsFullSchedule[0].EndTime).toEqual('2016-10-10T17:00:00');
 		expect(vm.agentsFullSchedule[0].Width).toEqual('100%');
 		expect(vm.agentsFullSchedule[0].Offset).toEqual('0%');
 	});
 
-	it('should display schedule', function () {
+	it('should display schedule', function() {
 		stateParams.personId = '1';
 		$fakeBackend.withAgent({
 			PersonId: '1',
 			Name: 'Mikkey Dee',
 			Schedule: [{
 				Color: 'lightgreen',
-				StartTime: '2016-10-10 08:00:00',
-				EndTime: '2016-10-10 12:00:00'
+				StartTime: '2016-10-10T08:00:00',
+				EndTime: '2016-10-10T12:00:00'
 			}, {
 				Color: 'lightgreen',
-				StartTime: '2016-10-10 12:00:00',
-				EndTime: '2016-10-10 18:00:00'
+				StartTime: '2016-10-10T12:00:00',
+				EndTime: '2016-10-10T18:00:00'
 			}],
 			OutOfAdherences: []
 		});
@@ -96,19 +96,19 @@ describe('RtaHistoricalController', function() {
 		expect(vm.agentsFullSchedule[1].Offset).toEqual('40%');
 	});
 
-	it('should display schedule', function () {
+	it('should display schedule', function() {
 		stateParams.personId = '1';
 		$fakeBackend.withAgent({
 			PersonId: '1',
 			Name: 'Mikkey Dee',
 			Schedule: [{
 				Color: 'lightgreen',
-				StartTime: '2016-10-10 08:00:00',
-				EndTime: '2016-10-10 12:30:00'
+				StartTime: '2016-10-10T08:00:00',
+				EndTime: '2016-10-10T12:30:00'
 			}, {
 				Color: 'lightgreen',
-				StartTime: '2016-10-10 12:30:00',
-				EndTime: '2016-10-10 18:30:00'
+				StartTime: '2016-10-10T12:30:00',
+				EndTime: '2016-10-10T18:30:00'
 			}],
 			OutOfAdherences: []
 		});
@@ -121,46 +121,46 @@ describe('RtaHistoricalController', function() {
 		expect(vm.agentsFullSchedule[1].Offset).toEqual(4.5 / 10.5 * 100 + '%');
 	});
 
-	it('should display out of adherence', function () {
+	it('should display out of adherence', function() {
 		stateParams.personId = '1';
 		$fakeBackend.withAgent({
 			PersonId: '1',
 			Name: 'Mikkey Dee',
 			Schedule: [{
 				Color: 'lightgreen',
-				StartTime: '2016-10-10 08:00:00',
-				EndTime: '2016-10-10 18:00:00'
+				StartTime: '2016-10-10T08:00:00',
+				EndTime: '2016-10-10T18:00:00'
 			}],
 			OutOfAdherences: [{
-				StartTime: '2016-10-10 08:00:00',
-				EndTime: '2016-10-10 08:15:00'
+				StartTime: '2016-10-10T08:00:00',
+				EndTime: '2016-10-10T08:15:00'
 			}]
 		});
 
 		var vm = $controllerBuilder.createController().vm;
 
-		expect(vm.outOfAdherences[0].StartTime).toEqual('2016-10-10 08:00:00');
-		expect(vm.outOfAdherences[0].EndTime).toEqual('2016-10-10 08:15:00');
+		expect(vm.outOfAdherences[0].StartTime).toEqual('2016-10-10T08:00:00');
+		expect(vm.outOfAdherences[0].EndTime).toEqual('2016-10-10T08:15:00');
 		expect(vm.outOfAdherences[0].Width).toEqual('2.5%');
 		expect(vm.outOfAdherences[0].Offset).toEqual('0%');
 	});
 
-	it('should display out of adherence', function () {
+	it('should display out of adherence', function() {
 		stateParams.personId = '1';
 		$fakeBackend.withAgent({
 			PersonId: '1',
 			Name: 'Mikkey Dee',
 			Schedule: [{
 				Color: 'lightgreen',
-				StartTime: '2016-10-10 08:00:00',
-				EndTime: '2016-10-10 18:00:00'
+				StartTime: '2016-10-10T08:00:00',
+				EndTime: '2016-10-10T18:00:00'
 			}],
 			OutOfAdherences: [{
-				StartTime: '2016-10-10 08:00:00',
-				EndTime: '2016-10-10 08:15:00'
+				StartTime: '2016-10-10T08:00:00',
+				EndTime: '2016-10-10T08:15:00'
 			}, {
-				StartTime: '2016-10-10 09:15:00',
-				EndTime: '2016-10-10 10:00:00'
+				StartTime: '2016-10-10T09:15:00',
+				EndTime: '2016-10-10T10:00:00'
 			}]
 		});
 
@@ -179,12 +179,12 @@ describe('RtaHistoricalController', function() {
 			Name: 'Mikkey Dee',
 			Schedule: [{
 				Color: 'lightgreen',
-				StartTime: '2016-10-10 08:00:00',
-				EndTime: '2016-10-10 09:00:00'
+				StartTime: '2016-10-10T08:00:00',
+				EndTime: '2016-10-10T09:00:00'
 			}, {
 				Color: 'lightgreen',
-				StartTime: '2016-10-10 15:00:00',
-				EndTime: '2016-10-10 17:00:00'
+				StartTime: '2016-10-10T15:00:00',
+				EndTime: '2016-10-10T17:00:00'
 			}],
 			OutOfAdherences: []
 		});
@@ -202,16 +202,16 @@ describe('RtaHistoricalController', function() {
 			Name: 'Mikkey Dee',
 			Schedule: [{
 				Color: 'lightgreen',
-				StartTime: '2016-10-10 08:00:00',
-				EndTime: '2016-10-10 09:00:00'
+				StartTime: '2016-10-10T08:00:00',
+				EndTime: '2016-10-10T09:00:00'
 			}, {
 				Color: 'lightgreen',
-				StartTime: '2016-10-10 15:00:00',
-				EndTime: '2016-10-10 17:00:00'
+				StartTime: '2016-10-10T15:00:00',
+				EndTime: '2016-10-10T17:00:00'
 			}],
 			OutOfAdherences: [{
-				StartTime: '2016-10-10 18:00:00',
-				EndTime: '2016-10-10 18:05:00'
+				StartTime: '2016-10-10T18:00:00',
+				EndTime: '2016-10-10T18:05:00'
 			}]
 		});
 
@@ -228,16 +228,16 @@ describe('RtaHistoricalController', function() {
 			Name: 'Mikkey Dee',
 			Schedule: [{
 				Color: 'lightgreen',
-				StartTime: '2016-10-10 08:00:00',
-				EndTime: '2016-10-10 09:00:00'
+				StartTime: '2016-10-10T08:00:00',
+				EndTime: '2016-10-10T09:00:00'
 			}, {
 				Color: 'lightgreen',
-				StartTime: '2016-10-10 15:00:00',
-				EndTime: '2016-10-10 17:00:00'
+				StartTime: '2016-10-10T15:00:00',
+				EndTime: '2016-10-10T17:00:00'
 			}],
 			OutOfAdherences: [{
-				StartTime: '2016-10-10 07:00:00',
-				EndTime: '2016-10-10 07:05:00'
+				StartTime: '2016-10-10T07:00:00',
+				EndTime: '2016-10-10T07:05:00'
 			}]
 		});
 
@@ -245,5 +245,34 @@ describe('RtaHistoricalController', function() {
 
 		expect(vm.fullTimeline[0].Time).toEqual('07:00');
 		expect(vm.fullTimeline[vm.fullTimeline.length - 1].Time).toEqual('17:00');
+	});
+
+	it('should handle out of adherence without end time', function() {
+		stateParams.personId = '1';
+		$fakeBackend
+			.withTime('2016-10-10T15:00:00')
+			.withAgent({
+				PersonId: '1',
+				Name: 'Mikkey Dee',
+				Schedule: [{
+					Color: 'lightgreen',
+					StartTime: '2016-10-10T08:00:00',
+					EndTime: '2016-10-10T09:00:00'
+				}, {
+					Color: 'lightgreen',
+					StartTime: '2016-10-10T15:00:00',
+					EndTime: '2016-10-10T17:00:00'
+				}],
+				OutOfAdherences: [{
+					StartTime: '2016-10-10T07:00:00',
+					EndTime: null
+				}]
+			});
+
+		var vm = $controllerBuilder.createController().vm;
+
+		expect(vm.outOfAdherences.length).toEqual(1);
+		expect(vm.outOfAdherences[0].Offset).toEqual('0%');
+		expect(vm.outOfAdherences[0].Width).toEqual('80%');
 	});
 });

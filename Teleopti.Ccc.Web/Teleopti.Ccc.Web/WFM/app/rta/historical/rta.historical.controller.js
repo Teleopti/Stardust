@@ -10,7 +10,7 @@
 
 		RtaService.getAgentHistoricalData(id)
 			.then(function(data) {
-				var o = compareEarliestLastest(data.Schedule, data.OutOfAdherences);
+				var o = compareEarliestLastest(data.Schedule, data.OutOfAdherences, data.Date);
 
 				vm.personId = data.PersonId;
 				vm.agentName = data.Name;
@@ -24,6 +24,9 @@
 				});
 
 				vm.outOfAdherences = data.OutOfAdherences.map(function(ooa) {
+					if (ooa.EndTime == null)
+						ooa.EndTime = data.Date;
+
 					return {
 						Width: calculateWidth(ooa.StartTime, ooa.EndTime, o.totalSeconds),
 						Offset: calculateWidth(o.start, ooa.StartTime, o.totalSeconds),
@@ -35,11 +38,10 @@
 				vm.fullTimeline = buildTimeline(vm.agentsFullSchedule, vm.outOfAdherences);
 			});
 
-		function compareEarliestLastest(schedule, outOfAdherences) {
+		function compareEarliestLastest(schedule, outOfAdherences, serverTime) {
 			if (schedule.length == 0 && outOfAdherences.length == 0)
 				return {};
 
-			var neededSchedule = {};
 			var earliestScheduleLayer = earliest(schedule);
 			var earliestOOA = earliest(outOfAdherences);
 			var earliestStartTime;
@@ -50,8 +52,8 @@
 			else
 				earliestStartTime = earliestScheduleLayer < earliestOOA ? earliestScheduleLayer : earliestOOA;
 
-			var latestScheduleLayer = latest(schedule);
-			var latestOOA = latest(outOfAdherences);
+			var latestScheduleLayer = latest(schedule, serverTime);
+			var latestOOA = latest(outOfAdherences, serverTime);
 			var latestEndTime;
 			if (latestScheduleLayer == null)
 				latestEndTime = latestOOA;
@@ -64,13 +66,12 @@
 			start.startOf('hour');
 			var end = latestEndTime.clone();
 			end.endOf('hour');
-			neededSchedule = {
+
+			return {
 				start: start,
 				end: end,
 				totalSeconds: latestEndTime.diff(earliestStartTime, 'seconds')
-			}
-
-			return neededSchedule;
+			};
 		}
 
 		function calculateWidth(startTime, endTime, totalSeconds) {
@@ -105,15 +106,15 @@
 		function earliest(arr) {
 			return arr
 				.map(function(el) {
-					return moment(el.StartTime, 'YYYY-MM-DD HH:mm:ss');
+					return moment(el.StartTime);
 				})
 				.sort(sorter)[0];
 		}
 
-		function latest(arr) {
+		function latest(arr, serverTime) {
 			return arr
 				.map(function(el) {
-					return moment(el.EndTime, 'YYYY-MM-DD HH:mm:ss');
+					return el.EndTime != null ? moment(el.EndTime) : moment(serverTime);
 				})
 				.sort(reverseSorter)[0];
 		}
