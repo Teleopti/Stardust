@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public CountCallsToNightRestWhiteSpotSolverServiceFactory NightRestWhiteSpotSolverService;
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
 
-		[Test]//, Ignore("#41001")]
+		[Test]
 		public void ShouldNotRunNightlyRestIfCancelled()
 		{
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());

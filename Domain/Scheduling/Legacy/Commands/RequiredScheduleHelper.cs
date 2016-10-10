@@ -158,7 +158,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					backgroundWorker.ReportProgress(1, e);
 					scheduledCount = 0;
 				}
-				scheduleRunCancelled = e.Cancel;
 			};
 
 			DateTime schedulingTime = DateTime.Now;
@@ -198,29 +197,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				fixedStaffSchedulingService.FinderResults.Clear();
 				fixedStaffSchedulingService.DayScheduled -= onDayScheduled;
 
-				var nightRestWhiteSpotSolverService = _nightRestWhiteSpotSolverServiceFactory.Create(schedulingOptions.ConsiderShortBreaks);
-				var progressChangeEvent = new TeleoptiProgressChangeMessage(Resources.TryingToResolveUnscheduledDaysDotDotDot);
-				backgroundWorker.ReportProgress(0, progressChangeEvent);
-				foreach (var scheduleMatrixOriginalStateContainer in originalStateContainers)
+				if (!scheduleRunCancelled)
 				{
-					int iterations = 0;
-					while (
-						nightRestWhiteSpotSolverService.Resolve(scheduleMatrixOriginalStateContainer.ScheduleMatrix, schedulingOptions,
-							rollbackService) && iterations < 10)
+					var nightRestWhiteSpotSolverService = _nightRestWhiteSpotSolverServiceFactory.Create(schedulingOptions.ConsiderShortBreaks);
+					var progressChangeEvent = new TeleoptiProgressChangeMessage(Resources.TryingToResolveUnscheduledDaysDotDotDot);
+					backgroundWorker.ReportProgress(0, progressChangeEvent);
+					foreach (var scheduleMatrixOriginalStateContainer in originalStateContainers)
 					{
-						if (backgroundWorker.CancellationPending || scheduleRunCancelled)
-							break;
-
-						iterations++;
+						var iterations = 0;
+						while (nightRestWhiteSpotSolverService.Resolve(scheduleMatrixOriginalStateContainer.ScheduleMatrix, schedulingOptions, rollbackService) && iterations < 10)
+						{
+							iterations++;
+						}
 					}
-					if (backgroundWorker.CancellationPending || scheduleRunCancelled)
-						break;
 				}
 
 				if (schedulingOptions.RotationDaysOnly || schedulingOptions.PreferencesDaysOnly ||
 					schedulingOptions.UsePreferencesMustHaveOnly || schedulingOptions.AvailabilityDaysOnly)
 					schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
-
 			}
 		}
 
