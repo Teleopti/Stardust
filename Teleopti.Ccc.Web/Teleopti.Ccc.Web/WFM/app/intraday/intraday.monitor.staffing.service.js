@@ -18,9 +18,8 @@
 			};
 
 			var hiddenArray = [];
-			var interval;
 
-			service.setStaffingData = function (result) {
+			service.setStaffingData = function (result, showOptimalStaffing) {
 				staffingData.timeSeries = [];
 				staffingData.forecastedStaffing.series = [];
 				staffingData.forecastedStaffing.updatedSeries = [];
@@ -28,8 +27,9 @@
 
 				staffingData.forecastedStaffing.series = result.DataSeries.ForecastedStaffing;
 				staffingData.forecastedStaffing.updatedSeries = result.DataSeries.UpdatedForecastedStaffing;
-			    staffingData.actualStaffingSeries = result.DataSeries.ActualStaffing;
 
+				if (showOptimalStaffing)
+					staffingData.actualStaffingSeries = result.DataSeries.ActualStaffing;
 
 				angular.forEach(result.DataSeries.Time, function (value, key) {
 					this.push($filter('date')(value, 'shortTime'));
@@ -62,26 +62,26 @@
 				return staffingData;
 			}
 
-			service.pollSkillData = function (selectedItem) {
+			service.pollSkillData = function (selectedItem, showOptimalStaffing) {
 				intradayService.getSkillStaffingData.query(
 					{
 						id: selectedItem.Id
 					})
 					.$promise.then(function (result) {
-						return service.setStaffingData(result);
+						return service.setStaffingData(result, showOptimalStaffing);
 					},
 					function (error) {
 						staffingData.hasMonitorData = false;
 					});
 				};
 
-				service.pollSkillAreaData = function (selectedItem) {
+			service.pollSkillAreaData = function (selectedItem, showOptimalStaffing) {
 					intradayService.getSkillAreaStaffingData.query(
 						{
 							id: selectedItem.Id
 						})
 						.$promise.then(function (result) {
-							return service.setStaffingData(result);
+							return service.setStaffingData(result, showOptimalStaffing);
 						},
 						function (error) {
 							staffingData.hasMonitorData = false;

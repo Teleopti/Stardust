@@ -1,63 +1,86 @@
 (function() {
 	'use strict';
-	angular.module('wfm.intraday')
-	.controller('IntradayAreaCtrl', [
-		'$scope', '$state', 'intradayService', '$filter', 'NoticeService', '$interval', '$timeout', '$compile', '$translate', 'intradayTrafficService', 'intradayPerformanceService', 'intradayMonitorStaffingService','intradayLatestTimeService',
-		function($scope, $state, intradayService, $filter, NoticeService, $interval, $timeout, $compile, $translate, intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService, intradayLatestTimeService) {
 
-			var autocompleteSkill;
-			var autocompleteSkillArea;
-			var timeoutPromise;
-			var pollingTimeout = 60000;
-			var activeTab = 0;
-			$scope.DeleteSkillAreaModal = false;
-			$scope.prevArea;
-			$scope.drillable;
-			var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
+	angular.module('wfm.intraday').controller('IntradayAreaCtrl', intradayController);
+
+	intradayController.$inject = [
+		'$scope', '$state', 'intradayService', '$filter', 'NoticeService', '$interval', '$timeout', '$compile', '$translate',
+		'intradayTrafficService', 'intradayPerformanceService', 'intradayMonitorStaffingService', 'intradayLatestTimeService',
+		'Toggle'
+	];
+
+	function intradayController($scope,
+		$state,
+		intradayService,
+		$filter,
+		NoticeService,
+		$interval,
+		$timeout,
+		$compile,
+		$translate,
+		intradayTrafficService,
+		intradayPerformanceService,
+		intradayMonitorStaffingService,
+		intradayLatestTimeService,
+		toggleSvc) {
+
+		var autocompleteSkill;
+		var autocompleteSkillArea;
+		var timeoutPromise;
+		var pollingTimeout = 60000;
+		var activeTab = 0;
+		$scope.DeleteSkillAreaModal = false;
+		$scope.prevArea;
+		$scope.drillable;
+		var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
 			.replace('{0}', $translate.instant('Intraday'))
 			.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank'>")
 			.replace('{2}', '</a>');
-			var noDataMessage = $translate.instant('NoDataAvailable');
-			var prevSkill;
-			$scope.currentInterval = [];
-			$scope.format = intradayService.formatDateTime;
-			$scope.viewObj;
+		var noDataMessage = $translate.instant('NoDataAvailable');
+		var prevSkill;
+		$scope.currentInterval = [];
+		$scope.format = intradayService.formatDateTime;
+		$scope.viewObj;
 
-			NoticeService.info(message, null, true);
+		NoticeService.info(message, null, true);
+
+		toggleSvc.togglesLoaded.then(function () {
+			$scope.showOptimalStaffing = toggleSvc.Wfm_Intraday_OptimalStaffing_40921;
+		});
 
 
-			var getAutoCompleteControls = function() {
-				var autocompleteSkillDOM = document.querySelector('.autocomplete-skill');
-				autocompleteSkill = angular.element(autocompleteSkillDOM).scope();
+		var getAutoCompleteControls = function() {
+			var autocompleteSkillDOM = document.querySelector('.autocomplete-skill');
+			autocompleteSkill = angular.element(autocompleteSkillDOM).scope();
 
-				var autocompleteSkillAreaDOM = document.querySelector('.autocomplete-skillarea');
-				autocompleteSkillArea = angular.element(autocompleteSkillAreaDOM).scope();
-			};
+			var autocompleteSkillAreaDOM = document.querySelector('.autocomplete-skillarea');
+			autocompleteSkillArea = angular.element(autocompleteSkillAreaDOM).scope();
+		};
 
-			$scope.openSkillFromArea = function(item) {
-				prevSkill = item;
-				autocompleteSkill.selectedSkill = item;
-				$scope.drillable = true;
-			};
+		$scope.openSkillFromArea = function(item) {
+			prevSkill = item;
+			autocompleteSkill.selectedSkill = item;
+			$scope.drillable = true;
+		};
 
-			$scope.openSkillAreaFromSkill = function() {
-				autocompleteSkillArea.selectedSkillArea = $scope.prevArea;
-				$scope.drillable = false;
-			};
+		$scope.openSkillAreaFromSkill = function() {
+			autocompleteSkillArea.selectedSkillArea = $scope.prevArea;
+			$scope.drillable = false;
+		};
 
-			$scope.skillSelected = function(item) {
-				$scope.selectedItem = item;
-				clearSkillAreaSelection();
-			};
+		$scope.skillSelected = function(item) {
+			$scope.selectedItem = item;
+			clearSkillAreaSelection();
+		};
 
-			$scope.skillAreaSelected = function(item) {
-				$scope.selectedItem = item;
-				clearSkillSelection();
-			};
+		$scope.skillAreaSelected = function(item) {
+			$scope.selectedItem = item;
+			clearSkillSelection();
+		};
 
-			$scope.deleteSkillArea = function(skillArea) {
-				cancelTimeout();
-				intradayService.deleteSkillArea.remove({
+		$scope.deleteSkillArea = function(skillArea) {
+			cancelTimeout();
+			intradayService.deleteSkillArea.remove({
 					id: skillArea.Id
 				})
 				.$promise.then(function(result) {
@@ -68,190 +91,196 @@
 					notifySkillAreaDeletion();
 				});
 
-				$scope.toggleModal();
-			};
+			$scope.toggleModal();
+		};
 
-			var clearPrev = function() {
-				$scope.drillable = false;
-				$scope.prevArea = false;
-				prevSkill = false;
-			}
+		var clearPrev = function() {
+			$scope.drillable = false;
+			$scope.prevArea = false;
+			prevSkill = false;
+		}
 
-			$scope.selectedSkillChange = function(item) {
-				if (item) {
-					$scope.skillSelected(item);
-					pollActiveTabData($scope.activeTab);
+		$scope.selectedSkillChange = function(item) {
+			if (item) {
+				$scope.skillSelected(item);
+				pollActiveTabData($scope.activeTab);
 
-					if(prevSkill){
-						if (!(prevSkill  === autocompleteSkill.selectedSkill)) {
-							clearPrev();
-						}
-						return;
+				if (prevSkill) {
+					if (!(prevSkill === autocompleteSkill.selectedSkill)) {
+						clearPrev();
 					}
-
+					return;
 				}
-			};
 
-			$scope.selectedSkillAreaChange = function(item) {
-				if (item) {
-					$scope.skillAreaSelected(item);
-					pollActiveTabData($scope.activeTab);
-					$scope.prevArea = $scope.selectedItem;
-				}
-				if ($scope.drillable === true && $scope.selectedItem.skills) {
-					$scope.drillable = false;
-				}
-			};
+			}
+		};
 
-			var reloadSkillAreas = function(isNew) {
-				intradayService.getSkillAreas.query()
+		$scope.selectedSkillAreaChange = function(item) {
+			if (item) {
+				$scope.skillAreaSelected(item);
+				pollActiveTabData($scope.activeTab);
+				$scope.prevArea = $scope.selectedItem;
+			}
+			if ($scope.drillable === true && $scope.selectedItem.skills) {
+				$scope.drillable = false;
+			}
+		};
+
+		var reloadSkillAreas = function(isNew) {
+			intradayService.getSkillAreas.query()
 				.$promise.then(function(result) {
 					getAutoCompleteControls();
 					$scope.skillAreas = $filter('orderBy')(result.SkillAreas, 'Name');
 					if (isNew) $scope.latest = $filter('orderBy')(result.SkillAreas, 'created_at', true);
 					$scope.HasPermissionToModifySkillArea = result.HasPermissionToModifySkillArea;
 
-					intradayService.getSkills.query().
-					$promise.then(function(result) {
-						$scope.skills = result;
-						if ($scope.skillAreas.length === 0) {
-							$scope.selectedItem = $scope.skills[0];
-							if (autocompleteSkill) {
-								autocompleteSkill.selectedSkill = $scope.selectedItem;
+					intradayService.getSkills.query()
+						.$promise.then(function(result) {
+							$scope.skills = result;
+							if ($scope.skillAreas.length === 0) {
+								$scope.selectedItem = $scope.skills[0];
+								if (autocompleteSkill) {
+									autocompleteSkill.selectedSkill = $scope.selectedItem;
+								}
 							}
-						}
-						if ($scope.skillAreas.length > 0) {
-							if (isNew) {
-								$scope.selectedItem = $scope.latest[0];
-								if (autocompleteSkillArea)
-								autocompleteSkillArea.selectedSkillArea = $scope.selectedItem;
-							} else {
-								$scope.selectedItem = $scope.skillAreas[0];
-								if (autocompleteSkillArea)
-								autocompleteSkillArea.selectedSkillArea = $scope.selectedItem;
+							if ($scope.skillAreas.length > 0) {
+								if (isNew) {
+									$scope.selectedItem = $scope.latest[0];
+									if (autocompleteSkillArea)
+										autocompleteSkillArea.selectedSkillArea = $scope.selectedItem;
+								} else {
+									$scope.selectedItem = $scope.skillAreas[0];
+									if (autocompleteSkillArea)
+										autocompleteSkillArea.selectedSkillArea = $scope.selectedItem;
+								}
 							}
-						}
-					});
+						});
 				});
-			};
+		};
 
-			$scope.clearSkillHelper = function() {
-				clearSkillSelection();
-			}
+		$scope.clearSkillHelper = function() {
+			clearSkillSelection();
+		}
 
-			$scope.clearSkillAreaHelper = function() {
-				clearSkillAreaSelection();
-			}
+		$scope.clearSkillAreaHelper = function() {
+			clearSkillAreaSelection();
+		}
 
-			function clearSkillSelection() {
-				if (!autocompleteSkill) return;
-				autocompleteSkill.selectedSkill = null;
-				autocompleteSkill.searchSkillText = '';
-				$scope.drillable = false;
-			};
+		function clearSkillSelection() {
+			if (!autocompleteSkill) return;
+			autocompleteSkill.selectedSkill = null;
+			autocompleteSkill.searchSkillText = '';
+			$scope.drillable = false;
+		};
 
-			function clearSkillAreaSelection() {
-				if (!autocompleteSkillArea) return;
-				autocompleteSkillArea.selectedSkillArea = null;
-				autocompleteSkillArea.searchSkillAreaText = '';
-			};
+		function clearSkillAreaSelection() {
+			if (!autocompleteSkillArea) return;
+			autocompleteSkillArea.selectedSkillArea = null;
+			autocompleteSkillArea.searchSkillAreaText = '';
+		};
 
-			$scope.querySearch = function(query, myArray) {
-				var results = query ? myArray.filter(createFilterFor(query)) : myArray,
+		$scope.querySearch = function(query, myArray) {
+			var results = query ? myArray.filter(createFilterFor(query)) : myArray,
 				deferred;
-				return results;
+			return results;
+		};
+
+		function createFilterFor(query) {
+			var lowercaseQuery = angular.lowercase(query);
+			return function filterFn(item) {
+				var lowercaseName = angular.lowercase(item.Name);
+				return (lowercaseName.indexOf(lowercaseQuery) === 0);
 			};
+		};
 
-			function createFilterFor(query) {
-				var lowercaseQuery = angular.lowercase(query);
-				return function filterFn(item) {
-					var lowercaseName = angular.lowercase(item.Name);
-					return (lowercaseName.indexOf(lowercaseQuery) === 0);
-				};
-			};
+		if (!$scope.selectedSkillArea && !$scope.selectedSkill && $scope.latestActualInterval === '--:--') {
+			$scope.hasMonitorData = false;
+		};
 
-			if (!$scope.selectedSkillArea && !$scope.selectedSkill && $scope.latestActualInterval === '--:--') {
-				$scope.hasMonitorData = false;
-			};
-
-			var cancelTimeout = function() {
-				if (timeoutPromise) {
-					$timeout.cancel(timeoutPromise);
-					timeoutPromise = undefined;
-				}
-			};
-
-			$scope.pollActiveTabDataHelper = function(activeTab) {
-				pollActiveTabData(activeTab);
-			};
-
-			function pollActiveTabData(activeTab) {
-				var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
-
-				if ($scope.selectedItem !== null && $scope.selectedItem !== undefined) {
-					if ($scope.selectedItem.Skills) {
-						services[activeTab].pollSkillAreaData($scope.selectedItem);
-						var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
-					} else {
-						services[activeTab].pollSkillData($scope.selectedItem);
-						var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
-					}
-					$scope.viewObj = services[activeTab].getData();
-					$scope.latestActualInterval = timeData;
-					$scope.hasMonitorData = $scope.viewObj.hasMonitorData;
-				} else {
-					$timeout(function() {
-						pollActiveTabData($scope.activeTab);
-					}, 1000);
-				}
+		var cancelTimeout = function() {
+			if (timeoutPromise) {
+				$timeout.cancel(timeoutPromise);
+				timeoutPromise = undefined;
 			}
+		};
 
-			$scope.$on("$destroy", function(event) {
+		$scope.pollActiveTabDataHelper = function(activeTab) {
+			pollActiveTabData(activeTab);
+		};
+
+		function pollActiveTabData(activeTab) {
+			var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
+
+			if ($scope.selectedItem !== null && $scope.selectedItem !== undefined) {
+				if ($scope.selectedItem.Skills) {
+					services[activeTab].pollSkillAreaData($scope.selectedItem, $scope.showOptimalStaffing);
+					var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
+				} else {
+					services[activeTab].pollSkillData($scope.selectedItem, $scope.showOptimalStaffing);
+					var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
+				}
+				$scope.viewObj = services[activeTab].getData();
+				$scope.latestActualInterval = timeData;
+				$scope.hasMonitorData = $scope.viewObj.hasMonitorData;
+			} else {
+				$timeout(function() {
+						pollActiveTabData($scope.activeTab);
+					},
+					1000);
+			}
+		}
+
+		$scope.$on("$destroy",
+			function(event) {
 				cancelTimeout();
 			});
 
-			$scope.$on('$locationChangeStart', function() {
+		$scope.$on('$locationChangeStart',
+			function() {
 				cancelTimeout();
 			});
 
-			$scope.configMode = function() {
-				$state.go('intraday.config', {
-					isNewSkillArea: false
-				});
-			};
+		$scope.configMode = function() {
+			$state.go('intraday.config',
+			{
+				isNewSkillArea: false
+			});
+		};
 
-			$scope.toggleModal = function() {
-				$scope.DeleteSkillAreaModal = !$scope.DeleteSkillAreaModal;
-			};
+		$scope.toggleModal = function() {
+			$scope.DeleteSkillAreaModal = !$scope.DeleteSkillAreaModal;
+		};
 
-			$scope.onStateChanged = function(evt, to, params, from) {
-				if (to.name !== 'intraday.area')
+		$scope.onStateChanged = function(evt, to, params, from) {
+			if (to.name !== 'intraday.area')
 				return;
-				if (params.isNewSkillArea === true) {
-					reloadSkillAreas(true);
-				} else
+			if (params.isNewSkillArea === true) {
+				reloadSkillAreas(true);
+			} else
 				reloadSkillAreas(false);
-			};
+		};
 
-			$scope.$on('$stateChangeSuccess', $scope.onStateChanged);
+		$scope.$on('$stateChangeSuccess', $scope.onStateChanged);
 
-			$scope.$on('$viewContentLoaded', function() {
+		$scope.$on('$viewContentLoaded',
+			function() {
 				pollActiveTabData($scope.activeTab);
 			});
 
-			var polling = $interval(function() {
+		var polling = $interval(function() {
 				pollActiveTabData($scope.activeTab);
-			}, pollingTimeout);
+			},
+			pollingTimeout);
 
-			var notifySkillAreaDeletion = function() {
-				var message = $translate.instant('Deleted');
-				NoticeService.success(message, 5000, true);
-			};
+		var notifySkillAreaDeletion = function() {
+			var message = $translate.instant('Deleted');
+			NoticeService.success(message, 5000, true);
+		};
 
-			$scope.$on('$destroy', function() {
+		$scope.$on('$destroy',
+			function() {
 				$interval.cancel(polling);
 			});
 
-		}
-	]);
+	}
 })();

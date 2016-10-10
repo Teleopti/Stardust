@@ -174,7 +174,8 @@
         AbsenceRequests_SpeedupIntradayRequests_40754,
         ETL_EventbasedDate_39562,
 		ReadModel_ToHangfire_39147,
-		NewPasswordHash_40460
-		// ReSharper restore InconsistentNaming
-	}
+		NewPasswordHash_40460,
+        Wfm_Intraday_OptimalStaffing_40921
+        // ReSharper restore InconsistentNaming
+    }
 }

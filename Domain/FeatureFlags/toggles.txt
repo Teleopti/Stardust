@@ -188,3 +188,4 @@ AbsenceRequests_SpeedupIntradayRequests_40754 = RC
 ETL_EventbasedDate_39562 = RC
 ReadModel_ToHangfire_39147 = RC
 NewPasswordHash_40460 = RC
+Wfm_Intraday_OptimalStaffing_40921 = RC
