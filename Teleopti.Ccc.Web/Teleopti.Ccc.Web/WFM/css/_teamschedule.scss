@@ -669,12 +669,21 @@
 			line-height: 25px;
 			max-width: 500px;
 			white-space: normal;
-
 		}
+
 		br {
 			display: inline;
 			line-height: 5px;
 		}
+	}
+}
+
+.multiline-tooltip.max-width-600 .md-content {
+	span {
+		display: inline-block;
+		line-height: 25px;
+		max-width: 600px;
+		white-space: normal;	
 	}
 }
 
