@@ -8,7 +8,7 @@
 	skillPrioController.$inject = ['$stateParams', 'Toggle', '$filter', 'NoticeService', '$translate', '$q', 'skillPrioService'];
 	function skillPrioController($stateParams, toggleService, $filter, NoticeService, $translate, $q, skillPrioService) {
 		var vm = this;
-		vm.selectedActivity = 'Backoffice';
+		vm.selectedActivity = '';
 		vm.sortedSkills = [];
 		vm.activitys = getActivitys();
 		vm.skills = getSkills();
