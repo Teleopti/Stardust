@@ -35,7 +35,6 @@ namespace CheckPreRequisites
 
 			if (comboBoxServerSetup.SelectedItem.ToString().Contains("DB"))
 			{
-				AgentLevel();
 				_hardwareCheck.RunHardWareChecks((int) numericUpDownAgents.Value, CheckType.Db);
 				_databaseCheck.RunDbChecks(comboBoxSQLInstance.SelectedItem.ToString().Trim());
 			}
@@ -146,24 +145,18 @@ namespace CheckPreRequisites
 		}
 
 		//If shared web+Db server then get a higher number of agents
-		private int AgentLevel()
+		private void AgentLevel()
 		{
 			var numberOfAgent = (int) numericUpDownAgents.Value;
 
 			//Check if the server is intended to be both web AND db
-			if (comboBoxServerSetup.SelectedItem.ToString().Contains("Web")
-			    && comboBoxServerSetup.SelectedItem.ToString().Contains("DB"))
+			if (comboBoxServerSetup.SelectedItem.ToString().Contains("Web"))
 			{
-				if (numberOfAgent < 500)
-					numberOfAgent = numberOfAgent + 1500;
-				else if (numberOfAgent <= 4000)
-					numberOfAgent = numberOfAgent + 4000;
-				else if (numberOfAgent > 4000)
+				if (numberOfAgent > 10000)
 					// ReSharper disable LocalizableElement
-					MessageBox.Show("Warning! Running more then 4000 agents on a single server is not supported");
-				// ReSharper restore LocalizableElement
+					MessageBox.Show("Warning! Running more than 10000 agents on a single server is not supported.");
+					// ReSharper restore LocalizableElement
 			}
-			return numberOfAgent;
 		}
 
 		private static void CopyListViewToClipboard(ListView lv)
