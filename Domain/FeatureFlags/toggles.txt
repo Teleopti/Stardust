@@ -175,7 +175,6 @@ ETL_FasterIndexMaintenance_38847 = true
 ETL_SpeedUpNightlyAvailability_38926 = RC
 ETL_SpeedUpNightlyRequest_38914 = RC
 ETL_SpeedUpGroupPagePersonNightly_37623 = RC
-ETL_SpeedUpIntradayWorkload_38928 = true
 ETL_SpeedUpNightlyWorkload_38928 = RC
 ETL_SpeedUpIntradayDate_38934 = true
 ETL_SpeedUpIntradayForecastWorkload_38929 = true

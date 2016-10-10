@@ -161,7 +161,6 @@
 		ETL_SpeedUpNightlyRequest_38914,
 		ETL_SpeedUpGroupPagePersonNightly_37623,
 		Intraday_ResourceCalculateReadModel_39200,
-		ETL_SpeedUpIntradayWorkload_38928,
 		ETL_SpeedUpNightlyWorkload_38928,
 		ETL_SpeedUpIntradayDate_38934,
 		ETL_SpeedUpIntradayForecastWorkload_38929,

@@ -13,7 +13,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Workload
 {
-	[EnabledBy(Toggles.ETL_SpeedUpIntradayWorkload_38928)]
 	public class AnalyticsWorkloadUpdater : 
 		IHandleEvent<WorkloadChangedEvent>, 
 		IRunOnHangfire
