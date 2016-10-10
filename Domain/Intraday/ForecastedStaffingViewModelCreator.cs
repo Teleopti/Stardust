@@ -155,7 +155,10 @@ namespace Teleopti.Ccc.Domain.Intraday
                             actualStats.SingleOrDefault(x => x.StartTime == forecastedIntervalCalls.StartTime);
 						if (actualIntervalCalls == null)
 							continue;
-                        intervalCounter++;
+						if (Math.Abs(forecastedIntervalCalls.Calls) < 0.1)
+							continue;
+
+						intervalCounter++;
                         callsDeviationFactor += actualIntervalCalls.Calls / forecastedIntervalCalls.Calls;
 					}
 				    
