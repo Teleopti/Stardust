@@ -42,6 +42,7 @@
 					field: 'Subject',
 					headerCellFilter: 'translate',
 					cellClass: 'request-subject',
+					cellTooltip: true,
 					headerCellClass: 'request-subject-header',
 					filter: {
 						disableCancelFilterButton: true,
@@ -64,7 +65,7 @@
 					},
 					filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\" > <input ng-enter=\"enter()\" type=\"text\" ng-model=\"colFilter.term\" ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\" aria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" /></div>'
 				},
-				{ displayName: 'DenyReason', field: 'DenyReason', headerCellFilter: 'translate', cellClass: 'request-deny-reason', headerCellClass: 'request-deny-reason-header', visible: false },
+				{ displayName: 'DenyReason', field: 'DenyReason', headerCellFilter: 'translate', cellClass: 'request-deny-reason', headerCellClass: 'request-deny-reason-header', visible: false, cellTooltip: true },
 				{
 					displayName: 'Status',
 					field: 'StatusText',

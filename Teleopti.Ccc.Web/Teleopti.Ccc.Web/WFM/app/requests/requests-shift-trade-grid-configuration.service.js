@@ -198,6 +198,7 @@
 						pinnedRight: true,
 						enablePinning: false,
 						minWidth: 111,
+						cellTooltip: true,
 						filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\" > <input ng-enter=\"enter()\" ' +
 							'style=\"background-color:#FFF\" type=\"text\" class=\"ui-grid-filter-input ui-grid-filter-input-{{$index}}\" ng-model=\"colFilter.term\" ' +
 							'ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\" aria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" /></div>'
@@ -230,7 +231,8 @@
 						visible: false,
 						pinnedRight: true,
 						enablePinning: false,
-						minWidth: 111
+						minWidth: 111,
+						cellTooltip: true
 					},
 					{
 						displayName: 'Status',
