@@ -168,8 +168,19 @@
 				}).query().$promise;
 			};
 
+			this.getAdherenceForAllSitesBySkillArea = function (data) {
+				return $resource('../api/Sites/GetOutOfAdherenceForAllSitesBySkillArea', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					skillAreaId: data
+				}).$promise;
+			};
+
 			this.getAdherenceForAllSitesBySkill = function (data) {
-				return $resource('../api/GetOutOfAdherenceForAllSitesBySkill', {}, {
+				return $resource('../api/Sites/GetOutOfAdherenceForAllSitesBySkill', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
@@ -199,14 +210,37 @@
 				}).$promise;
 			};
 
+			this.getSitesForSkillArea = function (skillAreaId) {
+				return $resource('../api/SitesForSkillArea', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					skillAreaId: skillAreaId
+				}).$promise;
+			};
+
 			this.getAdherenceForAllTeamsOnSitesBySkill = function (data) {
-				return $resource('../api/GetOutOfAdherenceForAllTeamsOnSitesBySkill', {}, {
+				return $resource('../api/Teams/GetOutOfAdherenceForAllTeamsOnSitesBySkill', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
 					}
 				}).query({
 					skillId: data.skillId,
+					teamIds: data.teamIds
+				}).$promise;
+			};
+
+			this.getAdherenceForAllTeamsOnSitesBySkillArea = function (data) {
+				return $resource('../api/Teams/GetOutOfAdherenceForAllTeamsOnSitesBySkillArea', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					skillAreaId: data.skillAreaId,
 					teamIds: data.teamIds
 				}).$promise;
 			};
@@ -230,6 +264,18 @@
 					}
 				}).query({
 					skillId: data.skillId,
+					siteIds: data.siteIds
+				}).$promise;
+			};
+
+			this.getTeamsForSitesAndSkillArea = function (data) {
+				return $resource('../api/TeamsForSitesAndSkillArea', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					skillAreaId: data.skillAreaId,
 					siteIds: data.siteIds
 				}).$promise;
 			};
