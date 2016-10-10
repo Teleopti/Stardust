@@ -52,8 +52,8 @@
 				requestData.EndDate = moment(vm.timeRange.endTime).format("YYYY-MM-DD");
 				actionPromise = PersonAbsenceSvc.addFullDayAbsence(requestData);
 			} else {
-				requestData.StartTime = moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm");
-				requestData.EndTime = moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm");
+				requestData.StartTime = vm.convertTime(moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"));
+				requestData.EndTime = vm.convertTime(moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"));
 				actionPromise = PersonAbsenceSvc.addIntradayAbsence(requestData);
 			}
 
@@ -118,6 +118,7 @@
 
 			scope.vm.selectedDate = containerCtrl.getDate;
 			scope.vm.trackId = containerCtrl.getTrackId();
+			scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
 			scope.vm.getActionCb = containerCtrl.getActionCb;
 			scope.vm.isAddFullDayAbsenceAvailable = function () {
 				return containerCtrl.hasPermission('IsAddFullDayAbsenceAvailable');

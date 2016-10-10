@@ -7,6 +7,12 @@
 		fakeScheduleManagementSvc,
 		fakePersonSelectionService;
 
+	var mockCurrentUserInfo = {
+		CurrentUserInfo: function () {
+			return { DefaultTimeZone: "Asia/Hong_Kong" };
+		}
+	};
+
 	beforeEach(module('wfm.templates'));
 	beforeEach(module('wfm.teamSchedule'));
 
@@ -24,6 +30,9 @@
 			});
 			$provide.service('ScheduleManagement', function () {
 				return fakeScheduleManagementSvc;
+			});
+			$provide.service('CurrentUserInfo', function () {
+				return mockCurrentUserInfo;
 			});
 		});
 	});
@@ -187,8 +196,8 @@
 		expect(activityData).not.toBeNull();
 		expect(activityData.PersonIds.length).toEqual(vm.selectedAgents.length);
 		expect(activityData.ActivityId).toEqual(vm.selectedActivityId);
-		expect(moment(activityData.StartTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.startTime).format('YYYY-MM-DDTHH:mm:00'));
-		expect(moment(activityData.EndTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.endTime).format('YYYY-MM-DDTHH:mm:00'));
+		expect(moment(activityData.StartTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.startTime).add(8, 'hours').format('YYYY-MM-DDTHH:mm:00'));
+		expect(moment(activityData.EndTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.endTime).add(8, 'hours').format('YYYY-MM-DDTHH:mm:00'));
 		expect(activityData.Date).toEqual(vm.selectedDate());
 		expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
 	});
@@ -267,7 +276,7 @@
 
 	function setUp(inputDate) {
 		var date;
-		var html = '<teamschedule-command-container date="curDate"></teamschedule-command-container>';
+		var html = '<teamschedule-command-container date="curDate" timezone="timezone"></teamschedule-command-container>';
 		var scope = $rootScope.$new();
 
 		if (inputDate == null)
@@ -276,6 +285,7 @@
 			date = inputDate;
 
 		scope.curDate = date;
+		scope.timezone = "Etc/UTC";
 		fakeActivityService.setAvailableActivities(getAvailableActivities());
 
 		var container = $compile(html)(scope);

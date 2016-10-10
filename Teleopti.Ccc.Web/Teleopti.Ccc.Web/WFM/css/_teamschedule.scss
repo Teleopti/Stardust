@@ -31,6 +31,10 @@
 			-ms-flex: none;
 			flex: 0 1 auto;
 		}
+		
+		& > *{
+			align-self: center;
+		}
 
 		.leftside-part {
 			display: flex;
@@ -64,6 +68,14 @@
 			flex-direction: row;
 			justify-content: flex-start;
 			padding-left: 20px;
+		}
+
+		timezone-picker{
+			margin: 0 10px;
+
+			.md-select-value{
+				min-height: initial;
+			}
 		}
 
 		.wfm-switch {

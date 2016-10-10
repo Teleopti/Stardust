@@ -83,7 +83,7 @@
 				PersonActivities: personProjectionsWithSelectedActivities.map(function (x) {
 					return { PersonId: x.PersonId, ShiftLayerIds: x.SelectedActivities };
 				}),
-				StartTime: vm.getMoveToStartTimeStr(),
+				StartTime: vm.convertTime(vm.getMoveToStartTimeStr()),
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			};
 
@@ -144,6 +144,7 @@
 
 			scope.vm.selectedDate = containerCtrl.getDate;
 			scope.vm.trackId = containerCtrl.getTrackId();
+			scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
 			scope.vm.getActionCb = containerCtrl.getActionCb;
 
 			scope.vm.moveToTime = selfCtrl.getDefaultMoveToStartTime();

@@ -11,6 +11,12 @@ describe("teamschedule move activity directive tests", function () {
 		fakePersonSelectionService,
 		fakeMoveActivityValidator;
 
+	var mockCurrentUserInfo = {
+		CurrentUserInfo: function () {
+			return { DefaultTimeZone: "Asia/Hong_Kong" };
+		}
+	};
+
 	beforeEach(module('wfm.templates'));
 	beforeEach(module('wfm.teamSchedule'));
 
@@ -32,6 +38,9 @@ describe("teamschedule move activity directive tests", function () {
 			});
 			$provide.service('MoveActivityValidator', function () {
 				return fakeMoveActivityValidator;
+			});
+			$provide.service('CurrentUserInfo', function () {
+				return mockCurrentUserInfo;
 			});
 		});
 	});
@@ -161,7 +170,7 @@ describe("teamschedule move activity directive tests", function () {
 		var activityData = fakeActivityService.getMoveActivityCalledWith();
 		expect(activityData).not.toBeNull();
 		expect(activityData.PersonActivities.length).toEqual(vm.selectedAgents.length);
-		expect(moment(activityData.StartTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.moveToTime).format('YYYY-MM-DDTHH:mm:00'));
+		expect(moment(activityData.StartTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.moveToTime).add(8, 'hours').format('YYYY-MM-DDTHH:mm:00'));
 		expect(activityData.Date).toEqual(vm.selectedDate());
 		expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
 	});
@@ -225,7 +234,7 @@ describe("teamschedule move activity directive tests", function () {
 
 	function setUp(inputDate) {
 		var date;
-		var html = '<teamschedule-command-container date="curDate"></teamschedule-command-container>';
+		var html = '<teamschedule-command-container date="curDate" timezone="timezone"></teamschedule-command-container>';
 		var scope = $rootScope.$new();
 
 		if (inputDate == null)
@@ -234,6 +243,7 @@ describe("teamschedule move activity directive tests", function () {
 			date = inputDate;
 
 		scope.curDate = date;
+		scope.timezone = "Etc/UTC";
 
 		var container = $compile(html)(scope);
 		scope.$apply();

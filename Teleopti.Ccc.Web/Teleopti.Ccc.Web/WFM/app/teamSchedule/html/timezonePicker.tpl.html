@@ -1,3 +1,3 @@
-﻿<md-select ng-model="$ctrl.selectedTimezone" placeholder="Pick an option" md-selected-text="$ctrl.shortDisplayNameOfTheSelected()" ng-change="$ctrl.onSelectionChanged()">
+﻿<md-select ng-show="$ctrl.timezoneList && $ctrl.timezoneList.length > 1" ng-model="$ctrl.selectedTimezone" placeholder="Pick an option" md-selected-text="$ctrl.shortDisplayNameOfTheSelected()" ng-change="$ctrl.onSelectionChanged()">
 	<md-option ng-repeat="tz in $ctrl.timezoneList" ng-value="tz.ianaId">{{::tz.displayName}}</md-option>
 </md-select>

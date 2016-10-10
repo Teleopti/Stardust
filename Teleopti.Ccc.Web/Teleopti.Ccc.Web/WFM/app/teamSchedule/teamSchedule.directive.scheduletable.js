@@ -172,7 +172,9 @@
 									 || toggleSvc.WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799
 									 || toggleSvc.WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800
 									 || toggleSvc.WfmTeamSchedule_ShowDayOffWarning_39801
-									 || toggleSvc.WfmTeamSchedule_ShowOverwrittenLayerWarning_40109
+									 || toggleSvc.WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
+
+				ViewScheduleOnTimezoneEnabled: toggleSvc.WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925
 			};
 		};
 
