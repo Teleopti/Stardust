@@ -72,27 +72,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private static IEnumerable<StaffingIntervalChange> mergeIntervalChanges(List<StaffingIntervalChange> unmergedIntervalChanges, IEnumerable<SkillStaffingInterval> staffingIntervals, TimeSpan shortestPeriod)
 		{
 			var mergedIntervalChanges = new List<StaffingIntervalChange>();
-			foreach (var interval in staffingIntervals)
+
+			if (unmergedIntervalChanges.Any())
 			{
-				if (interval.GetTimeSpan() > shortestPeriod)
+				foreach (var interval in staffingIntervals)
 				{
-					var period = new DateTimePeriod(interval.StartDateTime.Utc(), interval.EndDateTime.Utc());
-					var intervalsInPeriod = unmergedIntervalChanges.Where(x => period.Intersect(new DateTimePeriod(x.StartDateTime.Utc(), x.EndDateTime.Utc())) && x.SkillId == interval.SkillId).ToList();
-					var sumOverstaffed = intervalsInPeriod.Sum(i => i.StaffingLevel)/interval.divideBy(shortestPeriod);
-
-					var staffingIntervalChange = new StaffingIntervalChange()
+					if (interval.GetTimeSpan() > shortestPeriod)
 					{
-						StartDateTime = interval.StartDateTime,
-						EndDateTime = interval.EndDateTime,
-						SkillId = interval.SkillId,
-						StaffingLevel = sumOverstaffed
-					};
+						var period = new DateTimePeriod(interval.StartDateTime.Utc(), interval.EndDateTime.Utc());
+						var intervalsInPeriod = unmergedIntervalChanges.Where(x => period.Intersect(new DateTimePeriod(x.StartDateTime.Utc(), x.EndDateTime.Utc())) && x.SkillId == interval.SkillId).ToList();
+						var sumOverstaffed = intervalsInPeriod.Sum(i => i.StaffingLevel) / interval.divideBy(shortestPeriod);
 
-					mergedIntervalChanges.Add(staffingIntervalChange);
-				}
-				else
-				{
-					mergedIntervalChanges.Add(unmergedIntervalChanges.FirstOrDefault(x => x.SkillId == interval.SkillId && x.StartDateTime == interval.StartDateTime));
+						var staffingIntervalChange = new StaffingIntervalChange()
+						{
+							StartDateTime = interval.StartDateTime,
+							EndDateTime = interval.EndDateTime,
+							SkillId = interval.SkillId,
+							StaffingLevel = sumOverstaffed
+						};
+
+						mergedIntervalChanges.Add(staffingIntervalChange);
+					}
+					else
+					{
+						mergedIntervalChanges.Add(unmergedIntervalChanges.FirstOrDefault(x => x.SkillId == interval.SkillId && x.StartDateTime == interval.StartDateTime));
+					}
 				}
 			}
 			return mergedIntervalChanges;
@@ -102,6 +106,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		private static IEnumerable<DateTimePeriod> getShortestCommonPeriods(List<SkillStaffingInterval> skillStaffingIntervals, DateTimePeriod period)
 		{
+			if (!skillStaffingIntervals.Any())
+				return new List<DateTimePeriod>();
+
 			var intervalWithShortestSkillInterval = skillStaffingIntervals.Aggregate((interval, nextInterval) => interval.GetTimeSpan() < nextInterval.GetTimeSpan() ? interval : nextInterval);
 			var shortestTimeSpan = intervalWithShortestSkillInterval.GetTimeSpan();
 

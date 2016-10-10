@@ -103,12 +103,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 			{
 				var absence = AbsenceRepository.Get(new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F"));
 				var person = PersonRepository.Get(new Guid("FBA68B4E-AFB2-4502-880E-A39D008D7F86")); //Viktor Hansson, NAY209, FL_Sup_Far1_00065
-                var personPeriod = (PersonPeriod)person.Period(new DateOnly(2016, 03, 15));
-
-                foreach (var skill in person.Period(new DateOnly(2016,03,15)).PersonSkillCollection.Where(y => !(y.Skill.CascadingIndex > 0)))
-				{
-					personPeriod.DeletePersonSkill(skill);
-				}
 
 				var wfcs = WorkflowControlSetRepository.Get(new Guid("E97BC114-8939-4A70-AE37-A338010FFF19")); //Consumer Support
 				foreach (var period in wfcs.AbsenceRequestOpenPeriods)
@@ -123,6 +117,13 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 
 				var supportBb = SkillRepository.Get(new Guid("0165E0EA-210A-4393-B25A-A15000925656"));
 				supportBb.SetCascadingIndex(1);
+
+				var personPeriod = (PersonPeriod)person.Period(new DateOnly(2016, 03, 15));
+
+				foreach (var skill in person.Period(new DateOnly(2016, 03, 15)).PersonSkillCollection.Where(y => !(y.Skill.CascadingIndex > 0)))
+				{
+					personPeriod.DeletePersonSkill(skill);
+				}
 
 				request = createAbsenceRequest(person, absence, requestPeriod);
 
