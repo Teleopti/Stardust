@@ -6,14 +6,12 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Exceptions;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Activity
 {
-	[EnabledBy(Toggles.ETL_SpeedUpIntradayActivity_38303)]
 	public class AnalyticsActivityUpdater :
 		IHandleEvent<ActivityChangedEvent>,
 		IRunOnHangfire

@@ -18,7 +18,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new DimQualityQuestLoadJobStep(jobParameters));          // BU independent
 			Add(new RaptorQueueSynchronizationStep(jobParameters));
 			Add(new RaptorAgentLogOnSynchronizationStep(jobParameters));
-			AddWhenAllDisabled(new StageActivityJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayActivity_38303);
 			AddWhenAllDisabled(new StageAbsenceJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayAbsence_38301);
 			AddWhenAllDisabled(new StageShiftCategoryJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayShiftCategory_38718);
 			AddWhenAllDisabled(new IntradayStageScheduleJobStep(jobParameters), Toggles.ETL_SpeedUpETL_30791);
@@ -39,7 +38,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			AddWhenAllDisabled(new DimScorecardJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
 			AddWhenAllDisabled(new DimKpiJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
 			AddWhenAllDisabled(new ScorecardKpiJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
-			AddWhenAllDisabled(new DimActivityJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayActivity_38303);
 			AddWhenAllDisabled(new DimAbsenceJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayAbsence_38301);
 			AddWhenAllDisabled(new DimShiftCategoryJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayShiftCategory_38718);
 			AddWhenAllDisabled(new DimShiftLengthJobStep(jobParameters), Toggles.ETL_SpeedUpETL_30791);
