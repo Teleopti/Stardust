@@ -3,13 +3,12 @@
 properties {
 	
     #Default Properties
-    $global:SQLServerInstance = 'Erebus\SQL2016'        #Name of SQL Server for exampel: s8v4m110k9.database.windows.net or Erebus\SQL2008R2
-    $global:TestEdition = 'Standard Edition (64-bit)'                                    #Name of SQL Edition for exampel: SQL Azure or "Standard Edition (64-bit)
-    $global:TestMajorMinor = '13.0'                                      #Name of SQL Version for exampel: 12.0 or 10.50
-
-    $global:Configuration = "Release"
-	$global:AdminSqlLogin = 'teamcityAdmin'
-	$global:AdminSqlPwd = 'Dkjh3###KKa908'
+    $global:SQLServerInstance = "$env:SQLServerInstance"        #Name of SQL Server for exampel: s8v4m110k9.database.windows.net or Erebus\SQL2008R2
+    $global:TestEdition = "$env:TestEdition"                    #Name of SQL Edition for exampel: SQL Azure or "Standard Edition (64-bit)
+    $global:TestMajorMinor = "$env:TestMajorMinor"              #Name of SQL Version for exampel: 12.0 or 10.50
+    $global:Configuration = "$env:Configuration"
+	$global:AdminSqlLogin = "$env:AdminSqlLogin"
+	$global:AdminSqlPwd = "$env:AdminSqlPwd"
     
     $global:InstallAndPatchSqlLogin = 'teamcityInstallAndPatch'
 	$global:InstallAndPatchSqlPwd = 'asldkj345HHG'
