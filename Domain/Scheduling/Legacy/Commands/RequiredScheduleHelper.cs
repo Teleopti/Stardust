@@ -150,6 +150,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				if (backgroundWorker.CancellationPending)
 				{
 					e.Cancel = true;
+					scheduleRunCancelled = true;
 				}
 				if (e.IsSuccessful)
 					scheduledCount++;

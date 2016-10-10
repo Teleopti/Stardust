@@ -19,8 +19,11 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
+	[TestFixture(typeof(FakeCancelSchedulingProgress))]
+	[TestFixture(typeof(FakeCloseSchedulingProgress))]
 	public class DoNotRunNightRestWhiteSpotTest : ISetup
 	{
+		private readonly Type _schedulingProgressFake;
 		public FullScheduling Target;
 		public FakePersonRepository PersonRepository;
 		public FakeActivityRepository ActivityRepository;
@@ -32,6 +35,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public CountCallsToNightRestWhiteSpotSolverServiceFactory NightRestWhiteSpotSolverService;
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
+
+		public DoNotRunNightRestWhiteSpotTest(Type schedulingProgressFake)
+		{
+			_schedulingProgressFake = schedulingProgressFake;
+		}
 
 		[Test]
 		public void ShouldNotRunNightlyRestIfCancelled()
@@ -61,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeCancelSchedulingProgress>().For<ISchedulingProgress>();
+			system.UseTestDoubleForType(_schedulingProgressFake).For<ISchedulingProgress>();
 			system.UseTestDouble<CountCallsToNightRestWhiteSpotSolverServiceFactory>().For<INightRestWhiteSpotSolverServiceFactory>();
 		}
 	}
