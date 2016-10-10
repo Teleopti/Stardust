@@ -1,5 +1,5 @@
 'use strict';
-fdescribe('RtaAgentsCtrl', function() {
+describe('RtaAgentsCtrl', function() {
 	var $interval,
 		$httpBackend,
 		$state,
@@ -195,7 +195,7 @@ fdescribe('RtaAgentsCtrl', function() {
 		expect(vm.fullTimeline[vm.fullTimeline.length - 1].Time).toEqual('17:00');
 	});
 
-	it('should display longer timeline if out of adherence outside of shift', function() {
+	it('should display longer timeline if out of adherence after of shift', function() {
 		stateParams.personId = '1';
 		$fakeBackend.withAgent({
 			PersonId: '1',
@@ -219,5 +219,31 @@ fdescribe('RtaAgentsCtrl', function() {
 
 		expect(vm.fullTimeline[0].Time).toEqual('08:00');
 		expect(vm.fullTimeline[vm.fullTimeline.length - 1].Time).toEqual('18:00');
+	});
+
+	it('should display longer timeline if out of adherence before of shift', function() {
+		stateParams.personId = '1';
+		$fakeBackend.withAgent({
+			PersonId: '1',
+			Name: 'Mikkey Dee',
+			Schedule: [{
+				Color: 'lightgreen',
+				StartTime: '2016-10-10 08:00:00',
+				EndTime: '2016-10-10 09:00:00'
+			}, {
+				Color: 'lightgreen',
+				StartTime: '2016-10-10 15:00:00',
+				EndTime: '2016-10-10 17:00:00'
+			}],
+			OutOfAdherences: [{
+				StartTime: '2016-10-10 07:00:00',
+				EndTime: '2016-10-10 07:05:00'
+			}]
+		});
+
+		var vm = $controllerBuilder.createController().vm;
+
+		expect(vm.fullTimeline[0].Time).toEqual('07:00');
+		expect(vm.fullTimeline[vm.fullTimeline.length - 1].Time).toEqual('17:00');
 	});
 });
