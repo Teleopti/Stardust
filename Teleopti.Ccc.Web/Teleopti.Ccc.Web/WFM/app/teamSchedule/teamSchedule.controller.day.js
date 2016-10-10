@@ -195,8 +195,8 @@
 				var params = getParamsForLoadingSchedules();
 
 				teamScheduleSvc.searchSchedules.query(params).$promise.then(function (result) {
-					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
-					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, vm.scheduleDateMoment(), vm.currentTimezone);
+					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment(), vm.currentTimezone);
+					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, vm.scheduleDateMoment());
 					afterSchedulesLoaded(result);
 					personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 					vm.isLoading = false;
