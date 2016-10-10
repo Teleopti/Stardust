@@ -1,6 +1,6 @@
 ﻿$path = (get-item $PSScriptroot ).parent.Fullname
 $NugetPath = "$WorkingDirectory\..\packages"
-$NugetExe = "$WorkingDirectory\..\.nuget"
+$NugetExe = "$WorkingDirectory\..\.nuget\nuget.exe"
 
 . $NugetExe install EnterpriseLibrary.TransientFaultHandling.Configuration -o $NugetPath -Source "https://www.nuget.org/api/v2/" -ExcludeVersion
 
