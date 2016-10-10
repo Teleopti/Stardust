@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -11,7 +10,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class ApproveRequestCommandHandler : IHandleCommand<ApproveRequestCommand>
 	{
-
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IRequestApprovalServiceFactory _requestApprovalServiceFactory;
 		private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
@@ -34,12 +32,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_requestApprovalServiceFactory = requestApprovalServiceFactory;
 			_currentScenario = currentScenario;
 			_writeProtectedScheduleCommandValidator = writeProtectedScheduleCommandValidator;
-
 		}
 
 		public void Handle(ApproveRequestCommand command)
 		{
-
 			command.ErrorMessages = new List<string>();
 
 			var personRequest = _personRequestRepository.Get(command.PersonRequestId);
@@ -87,7 +83,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			foreach (var range in scheduleDictionary.Values)
 			{
-
 				var diff = range.DifferenceSinceSnapshot(_differenceService);
 				_scheduleDictionarySaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate)range);
 			}
@@ -110,7 +105,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			if (absenceRequest != null)
 			{
 				personList.Add(absenceRequest.Person);
-
 			}
 			var shiftTradeRequest = personRequest.Request as IShiftTradeRequest;
 			if (shiftTradeRequest != null)
@@ -134,6 +128,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			((IReadOnlyScheduleDictionary)scheduleDictionary).MakeEditable();
 			return scheduleDictionary;
 		}
-		
 	}
 }

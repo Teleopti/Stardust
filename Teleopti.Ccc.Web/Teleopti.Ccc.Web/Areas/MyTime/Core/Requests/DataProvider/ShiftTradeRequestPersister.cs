@@ -3,6 +3,7 @@ using AutoMapper;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
@@ -35,7 +36,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			ICurrentDataSource dataSourceProvider,
 			ICurrentBusinessUnit businessUnitProvider,
 			ICurrentUnitOfWork currentUnitOfWork,
-			IShiftTradeRequestSetChecksum shiftTradeSetChecksum, IShiftTradeRequestProvider shiftTradeRequestprovider, IToggleManager toggleManager)
+			IShiftTradeRequestSetChecksum shiftTradeSetChecksum,
+			IShiftTradeRequestProvider shiftTradeRequestprovider,
+			IToggleManager toggleManager)
 		{
 			_personRequestRepository = personRequestRepository;
 			_shiftTradeRequestMapper = shiftTradeRequestMapper;
@@ -44,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_now = now;
 			_dataSourceProvider = dataSourceProvider;
 			_businessUnitProvider = businessUnitProvider;
-			_currentUnitOfWork = currentUnitOfWork;;
+			_currentUnitOfWork = currentUnitOfWork;
 			_shiftTradeSetChecksum = shiftTradeSetChecksum;
 			_shiftTradeRequestprovider = shiftTradeRequestprovider;
 			_toggleManager = toggleManager;
@@ -54,26 +57,34 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		{
 			if (!isOfferAvailable(form))
 			{
-				return new RequestViewModel() {ExchangeOffer = new ShiftExchangeOfferRequestViewModel() {IsOfferAvailable = false}};
+				return new RequestViewModel
+				{
+					ExchangeOffer = new ShiftExchangeOfferRequestViewModel
+					{
+						IsOfferAvailable = false
+					}
+				};
 			}
-		
+
 			var personRequest = _shiftTradeRequestMapper.Map(form);
 			_shiftTradeSetChecksum.SetChecksum(personRequest.Request);
 			_personRequestRepository.Add(personRequest);
 
 			createMessage(personRequest, form);
-				
+
 			var requestViewModel = _autoMapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 			var workflowControlSet = _shiftTradeRequestprovider.RetrieveUserWorkflowControlSet();
-			if (form.ShiftExchangeOfferId != null && workflowControlSet.LockTrading)
+			if (form.ShiftExchangeOfferId == null || !workflowControlSet.LockTrading)
 			{
-				if (!workflowControlSet.AutoGrantShiftTradeRequest)
-				{
-					var offer = getOffer(form);
-					offer.Status = ShiftExchangeOfferStatus.PendingAdminApproval;
-				}
-				requestViewModel.Status = Resources.WaitingThreeDots;
+				return requestViewModel;
 			}
+
+			if (!workflowControlSet.AutoGrantShiftTradeRequest)
+			{
+				var offer = getOffer(form);
+				offer.Status = ShiftExchangeOfferStatus.PendingAdminApproval;
+			}
+			requestViewModel.Status = Resources.WaitingThreeDots;
 
 			return requestViewModel;
 		}
@@ -95,9 +106,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 						LogOnDatasource = _dataSourceProvider.Current().DataSourceName,
 						PersonRequestId = personRequest.Id.GetValueOrDefault(),
 						AcceptingPersonId = shiftTrade.PersonTo.Id.GetValueOrDefault(),
-						UseMinWeekWorkTime =
-							_toggleManager.IsEnabled(Domain.FeatureFlags.Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635),
-						UseSiteOpenHoursRule = _toggleManager.IsEnabled(Domain.FeatureFlags.Toggles.Wfm_Requests_Site_Open_Hours_39936)
+						UseMinWeekWorkTime = _toggleManager.IsEnabled(Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635),
+						UseSiteOpenHoursRule = _toggleManager.IsEnabled(Toggles.Wfm_Requests_Site_Open_Hours_39936)
 					};
 				}
 			}
@@ -116,21 +126,27 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 		private IShiftExchangeOffer getOffer(ShiftTradeRequestForm form)
 		{
-			var personRequest = _personRequestRepository.FindPersonRequestByRequestId(form.ShiftExchangeOfferId.Value);
+			var shiftExchangeOfferId = form.ShiftExchangeOfferId.Value;
+			var personRequest = _personRequestRepository.FindPersonRequestByRequestId(shiftExchangeOfferId);
 			return personRequest.Request as IShiftExchangeOffer;
 		}
 
 		private bool isOfferAvailable(ShiftTradeRequestForm form)
 		{
 			var workflowControlSet = _shiftTradeRequestprovider.RetrieveUserWorkflowControlSet();
-			if (form.ShiftExchangeOfferId != null && workflowControlSet.LockTrading)
+			if (form.ShiftExchangeOfferId == null || !workflowControlSet.LockTrading)
 			{
-				var offer = getOffer(form);
-				if (offer == null) return true;
-				return offer.Status != ShiftExchangeOfferStatus.Completed && offer.Status != ShiftExchangeOfferStatus.PendingAdminApproval;
+				return true;
 			}
 
-			return true;
+			var offer = getOffer(form);
+			if (offer == null)
+			{
+				return  true;
+			}
+
+			return offer.Status != ShiftExchangeOfferStatus.Completed &&
+				   offer.Status != ShiftExchangeOfferStatus.PendingAdminApproval;
 		}
 	}
 }

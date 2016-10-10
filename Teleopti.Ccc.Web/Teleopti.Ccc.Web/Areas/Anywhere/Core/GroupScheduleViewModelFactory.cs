@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			var userTimeZone = _user.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var dateTimeInUtc = TimeZoneInfo.ConvertTime(dateInUserTimeZone, userTimeZone, TimeZoneInfo.Utc);
 			var nextDateTimeUtc = TimeZoneInfo.ConvertTime(dateInUserTimeZone.AddDays(1), userTimeZone, TimeZoneInfo.Utc);
-			
+
 			var dateTimePeriod = new DateTimePeriod(dateTimeInUtc, nextDateTimeUtc);
 
 			var allPeople = people.ToList();
