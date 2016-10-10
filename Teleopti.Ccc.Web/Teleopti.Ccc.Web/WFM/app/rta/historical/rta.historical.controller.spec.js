@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaAgentsCtrl', function() {
+describe('RtaHistoricalController', function() {
 	var $interval,
 		$httpBackend,
 		$state,
