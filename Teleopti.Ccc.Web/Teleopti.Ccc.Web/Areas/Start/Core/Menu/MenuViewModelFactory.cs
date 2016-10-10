@@ -1,5 +1,4 @@
-﻿using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Web.Areas.Start.Models.Menu;
 using Teleopti.Interfaces.Domain;

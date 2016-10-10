@@ -1,5 +1,4 @@
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
 using Teleopti.Interfaces.Domain;
 
@@ -16,13 +15,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory
 
 		public SettingsPermissionViewModel CreateViewModel()
 		{
-					var permission = new SettingsPermissionViewModel
-					{
-						ShareCalendarPermission = 
-							_permissionProvider.HasApplicationFunctionPermission(
-							DefinedRaptorApplicationFunctionPaths.ShareCalendar)
-					};
-					return permission;
+			var permission = new SettingsPermissionViewModel
+			{
+				ShareCalendarPermission =
+					_permissionProvider.HasApplicationFunctionPermission(
+						DefinedRaptorApplicationFunctionPaths.ShareCalendar)
+			};
+			return permission;
 		}
 	}
 }
