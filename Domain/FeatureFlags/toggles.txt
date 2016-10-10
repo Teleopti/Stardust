@@ -176,7 +176,6 @@ ETL_SpeedUpNightlyAvailability_38926 = RC
 ETL_SpeedUpNightlyRequest_38914 = RC
 ETL_SpeedUpGroupPagePersonNightly_37623 = RC
 ETL_SpeedUpNightlyWorkload_38928 = RC
-ETL_SpeedUpIntradayDate_38934 = true
 ETL_SpeedUpIntradayForecastWorkload_38929 = true
 ETL_SpeedUpNightlyForecastWorkload_38929 = RC
 HealthCheck_ValidateReadModelPersonScheduleDay_39421 = true
