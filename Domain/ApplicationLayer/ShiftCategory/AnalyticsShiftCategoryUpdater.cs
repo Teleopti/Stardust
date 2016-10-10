@@ -5,14 +5,12 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Exceptions;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategory
 {
-	[EnabledBy(Toggles.ETL_SpeedUpIntradayShiftCategory_38718)]
 	public class AnalyticsShiftCategoryUpdater :
 		IHandleEvent<ShiftCategoryChangedEvent>,
 		IHandleEvent<ShiftCategoryDeletedEvent>,
