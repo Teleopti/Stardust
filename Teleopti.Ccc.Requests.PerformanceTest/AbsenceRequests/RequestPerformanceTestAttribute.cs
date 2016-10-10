@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 			system.UseTestDouble<DenyRequestCommandHandler>().For<IHandleCommand<DenyRequestCommand>>();
 			system.UseTestDouble<RequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
-			system.UseTestDouble<StardustJobFeedback>().For<IStardustJobFeedback>();
+			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 			system.UseTestDouble<ArrangeRequestsByProcessOrder>().For<ArrangeRequestsByProcessOrder>();
 			system.AddService<Database>();
 			system.AddModule(new TenantServerModule(configuration));
