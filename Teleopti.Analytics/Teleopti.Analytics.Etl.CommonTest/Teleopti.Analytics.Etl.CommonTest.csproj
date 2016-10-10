@@ -148,13 +148,11 @@
     <Compile Include="Transformer\Job\Steps\CleanupJobStepsTest.cs" />
     <Compile Include="Transformer\Job\Steps\CommonJobStepsTest.cs" />
     <Compile Include="Transformer\Job\Steps\EtlDayOffSubStepTest.cs" />
-    <Compile Include="Transformer\Job\Steps\FactIntradayRequestJobStepTest.cs" />
     <Compile Include="Transformer\Job\Steps\FactScheduleDeviationJobStepTest.cs" />
     <Compile Include="Transformer\Job\Steps\ForecastJobStepsTest.cs" />
     <Compile Include="Transformer\Job\Steps\IndexMaintenanceJobsTest.cs" />
     <Compile Include="Transformer\Job\Steps\InitialJobStepsTest.cs" />
     <Compile Include="Transformer\Job\Steps\IntradayStageAvailabilityJobStepTest.cs" />
-    <Compile Include="Transformer\Job\Steps\IntradayStageRequestJobStepTest.cs" />
     <Compile Include="Transformer\Job\Steps\IntradayStageScheduleDayOffCountJobStepTest.cs" />
     <Compile Include="Transformer\Job\Steps\IntradayStageScheduleJobStepTest.cs" />
     <Compile Include="Transformer\Job\Steps\IntradayStageSchedulePreferenceJobStepTest.cs" />

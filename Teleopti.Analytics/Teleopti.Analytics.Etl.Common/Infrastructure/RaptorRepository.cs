@@ -1102,18 +1102,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			}
 		}
 
-		public IList<IPersonRequest> LoadIntradayRequest(DateTime lastTime)
-		{
-			IList<IPersonRequest> personRequests;
-			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var rep = new PersonRequestRepository(uow);
-				uow.Reassociate(((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit);
-				personRequests = rep.FindPersonRequestUpdatedAfter(lastTime);
-			}
-			return personRequests;
-		}
-
 		public IList<IPersonRequest> LoadRequest(DateTimePeriod period)
 		{
 			IList<IPersonRequest> personRequests;
@@ -1137,18 +1125,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return HelperFunctions.BulkInsert(dataTable, "stage.stg_request", _dataMartConnectionString);
 		}
 
-		public int FillIntradayFactRequestMart(IBusinessUnit businessUnit)
-		{
-			// currently we are considering only UTC time instead of converting into Local if we need it in future we will change it here.
-
-			//Prepare sql parameters
-			var parameterList = new[] { new SqlParameter("business_unit_code", businessUnit.Id) };
-
-			return
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_request_intraday_load", parameterList,
-											  _dataMartConnectionString);
-		}
-
 		public int FillFactRequestMart(DateTimePeriod period, IBusinessUnit businessUnit)
 		{
 			// currently we are considering only UTC time instead of converting into Local if we need it in future we will change it here.
@@ -1163,15 +1139,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_request_load", parameterList,
-											  _dataMartConnectionString);
-		}
-
-		public int FillIntradayFactRequestedDaysMart(IBusinessUnit businessUnit)
-		{
-			var parameterList = new[] { new SqlParameter("business_unit_code", businessUnit.Id) };
-
-			return
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_requested_days_intraday_load", parameterList,
 											  _dataMartConnectionString);
 		}
 

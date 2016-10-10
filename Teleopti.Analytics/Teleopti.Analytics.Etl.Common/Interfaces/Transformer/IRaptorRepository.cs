@@ -211,14 +211,11 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 
 		ITimeZoneDim DefaultTimeZone { get; }
 		IList<IPersonRequest> LoadRequest(DateTimePeriod period);
-		IList<IPersonRequest> LoadIntradayRequest(DateTime lastTime);
 		int PersistRequest(DataTable dataTable);
 		void TruncateRequest();
 		int FillFactRequestMart(DateTimePeriod period, IBusinessUnit businessUnit);
-		int FillIntradayFactRequestMart(IBusinessUnit businessUnit);
 		int PerformPurge();
 		int FillFactRequestedDaysMart(DateTimePeriod period, IBusinessUnit businessUnit);
-		int FillIntradayFactRequestedDaysMart(IBusinessUnit businessUnit);
 		ILicenseStatusUpdater LicenseStatusUpdater { get; }
 		int LoadQualityQuestDataMart(int dataSourceId, IBusinessUnit currentBusinessUnit);
 		int FillFactQualityDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit currentBusinessUnit);

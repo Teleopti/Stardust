@@ -325,7 +325,6 @@
     <Compile Include="Transformer\Job\Steps\IntradayFactQueueJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\IntradayStageAvailabilityJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\IntradayStageForecastWorkloadJobStep.cs" />
-    <Compile Include="Transformer\Job\Steps\IntradayStageRequestJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\IntradayStageScheduleDayOffCountJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\IntradayStageScheduleJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\JobBase.cs" />

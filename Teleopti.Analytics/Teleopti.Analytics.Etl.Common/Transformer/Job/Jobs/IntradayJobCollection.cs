@@ -28,7 +28,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			AddWhenAllDisabled(new StageScorecardJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
 			AddWhenAllDisabled(new StageScorecardKpiJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
 			AddWhenAllDisabled(new StageKpiTargetTeamJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
-			AddWhenAllDisabled(new IntradayStageRequestJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayRequest_38914);
 
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
 			AddWhenAllDisabled(new DimBusinessUnitJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayBusinessUnit_38932);
@@ -60,8 +59,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			AddWhenAllDisabled(new FactForecastWorkloadJobStep(jobParameters, true), Toggles.ETL_SpeedUpIntradayForecastWorkload_38929);
 			Add(new FactScheduleDeviationJobStep(jobParameters, true));
 			AddWhenAllDisabled(new FactKpiTargetTeamJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
-			AddWhenAllDisabled(new FactRequestJobStep(jobParameters, true), Toggles.ETL_SpeedUpIntradayRequest_38914);
-			AddWhenAllDisabled(new FactRequestedDaysJobStep(jobParameters, true), Toggles.ETL_SpeedUpIntradayRequest_38914);
 		}
 	}
 }
