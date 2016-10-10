@@ -8,11 +8,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	{
 		private readonly IScheduleDictionary _schedules;
 		private readonly NameOrderOption _nameOrderOption;
+		private readonly DateOnlyPeriod _visiblePeriod;
 
-		public ValidationAlertsModel(IScheduleDictionary schedules, NameOrderOption nameOrderOption)
+		public ValidationAlertsModel(IScheduleDictionary schedules, NameOrderOption nameOrderOption, DateOnlyPeriod visiblePeriod)
 		{
 			_schedules = schedules;
 			_nameOrderOption = nameOrderOption;
+			_visiblePeriod = visiblePeriod;
 		}
 
 		public IList<ValidationAlert> GetAlerts(IEnumerable<IPerson> filteredPersons)
@@ -25,6 +27,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					continue;
 				foreach (var businessRuleResponse in range.BusinessRuleResponseInternalCollection)
 				{
+					if(!_visiblePeriod.Contains(businessRuleResponse.DateOnlyPeriod.StartDate))
+						continue;
+
 					result.Add(new ValidationAlert()
 					{
 						Date = businessRuleResponse.DateOnlyPeriod.StartDate,

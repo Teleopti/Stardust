@@ -4410,7 +4410,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_schedulerState);
 			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredCombinedAgentsDictionary.Values);
 			schedulerSplitters1.InsertShiftCategoryDistributionModel(_shiftCategoryDistributionModel);
-			schedulerSplitters1.InsertValidationAlertsModel(new	ValidationAlertsModel(_schedulerState.Schedules, NameOrderOption.LastNameFirstName));
+			schedulerSplitters1.InsertValidationAlertsModel(new	ValidationAlertsModel(_schedulerState.Schedules, NameOrderOption.LastNameFirstName, _schedulerState.RequestedPeriod.DateOnlyPeriod));
 			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
 		}
 
