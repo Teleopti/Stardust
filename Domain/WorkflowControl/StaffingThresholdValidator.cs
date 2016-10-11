@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             InParameter.NotNull("ResourceOptimizationHelper", requiredForHandlingAbsenceRequest.ResourceOptimizationHelper);
 
             var result = new UnderstaffingDetails();
-            var personSkillProvider = new PersonSkillProvider();
+            var personSkillProvider = new CascadingPersonSkillProvider();
             var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
             var localPeriod = absenceRequest.Period.ToDateOnlyPeriod(timeZone);
             var schedules = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Schedules[absenceRequest.Person].ScheduledDayCollection(localPeriod);
