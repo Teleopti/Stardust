@@ -206,12 +206,26 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 						if (affectedPersonAbsenceAccount != null)
 							trackAccounts(affectedPersonAbsenceAccount, dateOnlyPeriod, absenceRequest);
 					});
-				using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills))
+				if (_toggleManager.IsEnabled(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754))
 				{
-					if (_toggleManager.IsEnabled(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754))
+					using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills))
 					{
 						ResourceCalculationContext.Fetch().PrimarySkillMode = true;
+						var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(
+						_schedulingResultStateHolder,
+						personAccountBalanceCalculator,
+						_resourceOptimizationHelper,
+						_budgetGroupAllowanceSpecification,
+						_budgetGroupHeadCountSpecification);
+
+						processAbsenceRequest.Process(null, absenceRequest,
+										requiredForProcessingAbsenceRequest,
+										requiredForHandlingAbsenceRequest,
+										validatorList);
 					}
+				}
+				else
+				{
 					var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(
 					_schedulingResultStateHolder,
 					personAccountBalanceCalculator,
