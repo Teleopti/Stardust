@@ -18,9 +18,8 @@
 			var skills = [];
 			var skillAreas = [];
 			var phoneStates = [];
-			var siteAdherencesForSkill = [];
-			var teamAdherencesForSkill = [];
-
+			var siteAdherencesForSkillArea = [];
+			var teamAdherencesForSkillArea =[];
 			var paramsOf = function(url) {
 				var result = {};
 				var queryString = url.split("?")[1];
@@ -295,30 +294,30 @@
 				function(params) {
 					return [200, sites];
 				});
-
-			function getSiteOrTeamAdherenceForSkillOrSkillArea(adherenceFor, skillIds) {
-				return (Array.isArray(skillIds)) ?
-					processAdherenceForSkillArea(adherenceFor, skillIds) :
-					adherenceFor.filter(function(sa) {
-						return sa.SkillId === skillIds;
+			function sitesOrTeamsForSkillOrSkillArea(adherences,adherenceKey,paramId,sitesOrTeams){
+				var siteOrTeamIdsBySkillOrSkillAreaId = adherences.filter(function(a){
+						return a[adherenceKey] ===  paramId;
+					}).map(function(s){
+				return sitesOrTeams.filter(function(s){
+					return siteOrTeamIdsBySkillOrSkillAreaId.indexOf(s.Id) >-1;
+				});
+					var filteredSites = sitesOrTeamsForSkillOrSkillArea(siteAdherencesForSkillArea,'SkillAreaId',params.skillAreaId,sites);
+					var filteredSites = sitesOrTeamsForSkillOrSkillArea(siteAdherencesForSkill,'SkillId',params.skillId,sites);
+				function(params) {	
+					var teamsBySites = teams.filter(function(t){
+						return params.siteIds.indexOf(t.SiteId) > -1;
+					var filteredTeams = sitesOrTeamsForSkillOrSkillArea(teamAdherencesForSkillArea,'SkillAreaId',params.skillAreaId,teamsBySites);
+					var teamsBySites = teams.filter(function(t){
+						return params.siteIds.indexOf(t.SiteId) > -1;
+					var filteredTeams = sitesOrTeamsForSkillOrSkillArea(teamAdherencesForSkill,'SkillId',params.skillId,teamsBySites);
+					var siteAdherencesBySkillAreaId = siteAdherencesForSkillArea.filter(function(sa){
+						return sa.SkillAreaId ===  params.skillAreaId;
 					});
-			};
-
-			function processAdherenceForSkillArea(adherenceFor, skillIds) {
-				var adherenceBySkill = adherenceFor.filter(function(sa) {
-					return skillIds.indexOf(sa.SkillId) > -1;
-				});
-				var adherenceBySkillFilteredBySiteOrTeamId = {};
-				adherenceBySkill.forEach(function(sa) {
-					if (!(sa.Id in adherenceBySkillFilteredBySiteOrTeamId))
-						adherenceBySkillFilteredBySiteOrTeamId[sa.Id] = sa;
-					else if (sa.Id in adherenceBySkillFilteredBySiteOrTeamId) {
-						if (adherenceBySkillFilteredBySiteOrTeamId[sa.Id]['OutOfAdherence'] < sa.OutOfAdherence)
-							adherenceBySkillFilteredBySiteOrTeamId[sa.Id]['OutOfAdherence'] = sa.OutOfAdherence;
-					}
-				});
-				return objToArray(adherenceBySkillFilteredBySiteOrTeamId);
-			}
+					return [200, siteAdherencesBySkillAreaId];
+					var siteAdherencesBySkillId = siteAdherencesForSkill.filter(function(s){
+						return s.SkillId ===  params.skillId;
+					});
+					return [200, siteAdherencesBySkillId];
 
 			function objToArray(obj) {
 				return Object.keys(obj).map(function(key) {
@@ -451,14 +450,15 @@
 					})];
 				});
 			fake(/\.\.\/api\/Teams\/GetOutOfAdherenceForAllTeamsOnSitesBySkillArea(.*)/,
-				function(params) {
-					var skillIdsForSelectedSkillArea = skillIdsFromTheSkillArea(skillAreas, params.skillAreaId);
-					return [200, getSiteOrTeamAdherenceForSkillOrSkillArea(teamAdherencesForSkill, skillIdsForSelectedSkillArea)];
-				});
-			fake(/\.\.\/api\/Teams\/GetOutOfAdherenceForAllTeamsOnSitesBySkill(.*)/,
-				function(params) {
-					return [200, getSiteOrTeamAdherenceForSkillOrSkillArea(teamAdherencesForSkill, params.skillId)];
-				});
+					var teamAdherencesBySkillAreaId = teamAdherencesForSkillArea.filter(function(sa){
+						return sa.SkillAreaId ===  params.skillAreaId && sa.Id ===  params.teamIds;
+					});
+					return [200, teamAdherencesBySkillAreaId];
+			});
+					var teamAdherencesBySkillId = teamAdherencesForSkill.filter(function(s){
+						return s.SkillId ===  params.skillId && s.Id ===  params.teamIds;
+					});
+					return [200, teamAdherencesBySkillId];
 			fake(/\.\.\/api\/Teams\/GetOutOfAdherenceForTeamsOnSite(.*)/,
 				function(params) {
 					var result =
@@ -497,8 +497,8 @@
 				teamAdherences = [];
 				skillAreas = [];
 				phoneStates = [];
-				siteAdherencesForSkill = [];
-				teamAdherencesForSkill = [];
+				siteAdherencesForSkillArea =[];
+				teamAdherencesForSkillArea = [];
 			}
 
 			this.withToggle = function(toggle) {
@@ -551,8 +551,8 @@
 				return this;
 			};
 
-			this.withSiteAdherenceForSkill = function(siteAdherenceForSkill) {
-				siteAdherencesForSkill.push(siteAdherenceForSkill);
+			this.withSiteAdherenceForSkillArea = function(siteAdherenceForSkillArea) {
+				siteAdherencesForSkillArea.push(siteAdherenceForSkillArea);
 				return this;
 			};
 
@@ -566,11 +566,11 @@
 				return this;
 			};
 
-			this.withTeamAdherenceForSkill = function(teamAdherenceForSkill) {
-				teamAdherencesForSkill.push(teamAdherenceForSkill);
 				return this;
 			};
-
+			
+			this.withTeamAdherenceForSkillArea = function(teamAdherenceForSkillArea) {
+				teamAdherencesForSkillArea.push(teamAdherenceForSkillArea);
 			this.withTeamAdherence = function(teamAdherence) {
 				teamAdherences.push(teamAdherence);
 				return this;
