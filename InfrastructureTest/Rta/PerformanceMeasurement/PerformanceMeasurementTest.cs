@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 	[Toggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262)]
 	[Toggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 	[Explicit]
-	[Category("LongRunning")]
+	//[Category("LongRunning")]
 	public class PerformanceMeasurementTest : ISetup
 	{
 		public Database Database;
