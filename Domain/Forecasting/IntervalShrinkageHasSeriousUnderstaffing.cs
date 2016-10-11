@@ -3,19 +3,18 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
-    public class IntervalShrinkageHasSeriousUnderstaffing : Specification<ISkillStaffPeriod>
-    {
-        private readonly ISkill _skill;
+	public class IntervalShrinkageHasSeriousUnderstaffing : Specification<ISkillStaffPeriod>
+	{
+		private readonly ISkill _skill;
 
-        public IntervalShrinkageHasSeriousUnderstaffing(ISkill skill)
-        {
-            _skill = skill;
-        }
+		public IntervalShrinkageHasSeriousUnderstaffing(ISkill skill)
+		{
+			_skill = skill;
+		}
 
-        public override bool IsSatisfiedBy(ISkillStaffPeriod obj)
-        {
-				//todo change to correct value to compare with
-            return obj.RelativeDifference * (1d + obj.Payload.Shrinkage.Value) < _skill.StaffingThresholds.SeriousUnderstaffing.Value;
-        }
-    }
+		public override bool IsSatisfiedBy(ISkillStaffPeriod obj)
+		{
+			return obj.RelativeDifferenceWithShrinkage < _skill.StaffingThresholds.SeriousUnderstaffing.Value;
+		}
+	}
 }

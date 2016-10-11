@@ -78,6 +78,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public double StaffingLevel { get; set; }
 		public double ForecastWithShrinkage { get; set; }
 
+		public double GetForecast(bool withShrinkage)
+		{
+			return withShrinkage ? ForecastWithShrinkage : Forecast;
+		}
+
 		public TimeSpan GetTimeSpan()
 		{
 			return EndDateTime.Subtract(StartDateTime);

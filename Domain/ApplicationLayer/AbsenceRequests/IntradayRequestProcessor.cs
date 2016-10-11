@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -34,13 +35,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			personRequest.Pending();
 			var cascadingPersonSkills = personRequest.Person.Period(new DateOnly(startTime)).CascadingSkills();
 			var lowestIndex = cascadingPersonSkills.Min(x => x.Skill.CascadingIndex);
-			
+			var periods = personRequest.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod(personRequest.Request as IAbsenceRequest);
+			var useShrinkage = periods.StaffingThresholdValidatorList.Any(x => x.GetType() == typeof(StaffingThresholdWithShrinkageValidator));
 			var primaryAndUnSortedSkills =
 				personRequest.Person.Period(new DateOnly(startTime)).PersonSkillCollection.Where(x => (x.Skill.CascadingIndex == lowestIndex) || !x.Skill.CascadingIndex.HasValue );
 			foreach (var skill in primaryAndUnSortedSkills)
 			{
 			    var skillStaffingIntervals = _scheduleForecastSkillReadModelRepository.ReadMergedStaffingAndChanges(skill.Skill.Id.GetValueOrDefault(), personRequest.Request.Period);
-				var underStaffingDetails = getUnderStaffedPeriods(skillStaffingIntervals, personRequest.Person.PermissionInformation.DefaultTimeZone());
+				var underStaffingDetails = getUnderStaffedPeriods(skillStaffingIntervals, personRequest.Person.PermissionInformation.DefaultTimeZone(), useShrinkage);
 				if (underStaffingDetails.UnderstaffingTimes.Any())
 				{
 					var denyReason = GetUnderStaffingHourString(underStaffingDetails, personRequest);
@@ -64,10 +66,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		}
 		
 
-		private UnderstaffingDetails getUnderStaffedPeriods(IEnumerable<SkillStaffingInterval> skillStaffingIntervals, TimeZoneInfo defaultTimeZone)
+		private UnderstaffingDetails getUnderStaffedPeriods(IEnumerable<SkillStaffingInterval> skillStaffingIntervals, TimeZoneInfo defaultTimeZone, bool useShrinkage)
 		{
 			var result = new UnderstaffingDetails();
-			foreach (var interval in skillStaffingIntervals.Where(x => x.StaffingLevel < x.ForecastWithShrinkage + 1))
+			foreach (var interval in skillStaffingIntervals.Where(x => x.StaffingLevel < x.GetForecast(useShrinkage) + 1))
 			{
 				var startDateTime = TimeZoneHelper.ConvertFromUtc(interval.StartDateTime, defaultTimeZone);
 				var endDateTime = TimeZoneHelper.ConvertFromUtc(interval.EndDateTime, defaultTimeZone);
