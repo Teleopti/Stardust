@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				.Not.Be.Empty();
 		}
 
-		[Test, Ignore("#41075")]
+		[Test]
 		public void ShouldConsiderAllPeriodsWhenAvailableAgentsOnly()
 		{
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
