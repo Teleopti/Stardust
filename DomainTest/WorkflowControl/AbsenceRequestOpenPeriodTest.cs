@@ -30,11 +30,12 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         [Test]
         public void VerifyStaffingThresholdValidations()
         {
-            Assert.AreEqual(4, Target.StaffingThresholdValidatorList.Count);
+            Assert.AreEqual(5, Target.StaffingThresholdValidatorList.Count);
             Assert.IsTrue(typeof(AbsenceRequestNoneValidator).IsInstanceOfType(Target.StaffingThresholdValidatorList[0]));
             Assert.IsTrue(typeof(StaffingThresholdValidator).IsInstanceOfType(Target.StaffingThresholdValidatorList[1]));
             Assert.IsTrue(typeof(BudgetGroupAllowanceValidator).IsInstanceOfType(Target.StaffingThresholdValidatorList[2]));
             Assert.IsTrue(typeof(BudgetGroupHeadCountValidator).IsInstanceOfType(Target.StaffingThresholdValidatorList[3]));
+            Assert.IsTrue(typeof(StaffingThresholdWithShrinkageValidator).IsInstanceOfType(Target.StaffingThresholdValidatorList[4]));
         }
 
         [Test]
