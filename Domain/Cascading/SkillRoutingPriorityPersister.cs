@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
@@ -40,8 +40,14 @@ namespace Teleopti.Ccc.Domain.Cascading
 				}
 			}
 
-			var allSkills = _skillRepository.LoadAll().ToDictionary(s => s.Id.Value);
-			confirm(allSkills,skillPrioDic,skillWithoutPrioList);
+			var allSkills = _skillRepository.LoadAll();
+			foreach (var skill in allSkills)
+			{
+				if (((IDeleteTag)skill).IsDeleted)
+					skill.ClearCascadingIndex();
+			}
+			var allSkillsDic = allSkills.ToDictionary(s => s.Id.Value);
+			confirm(allSkillsDic,skillPrioDic,skillWithoutPrioList);
 		}
 
 		private void confirm(IDictionary<Guid, ISkill> allSkills, SortedDictionary<int, IList<Guid>> prioSortedDictionary,
@@ -58,8 +64,11 @@ namespace Teleopti.Ccc.Domain.Cascading
 					{
 						throw new InvalidOperationException("Two skills with different activities on the same cascading level");
 					}
-					detectedActivityGuid = allSkills[skillGuid].Activity.Id.Value;
-					allSkills[skillGuid].SetCascadingIndex(index + 1);
+					if(!((IDeleteTag)allSkills[skillGuid]).IsDeleted)
+					{
+						detectedActivityGuid = allSkills[skillGuid].Activity.Id.Value;
+						allSkills[skillGuid].SetCascadingIndex(index + 1);
+					}
 				}
 
 				index++;

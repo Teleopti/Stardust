@@ -9,6 +9,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.Cascading
 {
@@ -46,6 +47,32 @@ namespace Teleopti.Ccc.DomainTest.Cascading
 			skillRoutingPriorityRows.Add(createRow(createSkill("skill1", activity1), 7));
 			skillRoutingPriorityRows.Add(createRow(createSkill("skill2", activity2), 7));
 			Assert.Throws<InvalidOperationException>(() => Target.Persist(skillRoutingPriorityRows));
+		}
+
+		[Test]
+		public void ShouldNotTrowIfSkillsWithSameActivityDoesNotHaveAnyPrio()
+		{
+			var activity1 = new Activity("activity1").WithId();
+			var activity2 = new Activity("activity2").WithId();
+			var skillRoutingPriorityRows = new List<SkillRoutingPriorityModelRow>();
+			skillRoutingPriorityRows.Add(createRow(createSkill("skill1", activity1), null));
+			skillRoutingPriorityRows.Add(createRow(createSkill("skill2", activity2), null));
+			Assert.DoesNotThrow(() => Target.Persist(skillRoutingPriorityRows));
+		}
+
+		[Test]
+		public void DeletedSkillShouldLoosePriority()
+		{
+			var activity = new Activity("activity").WithId();
+			var skillRoutingPriorityRows = new List<SkillRoutingPriorityModelRow>();
+			var skill = createSkill("skill1", activity);
+			skill.SetCascadingIndex(77);
+			((IDeleteTag)skill).SetDeleted();
+			skillRoutingPriorityRows.Add(createRow(skill, skill.CascadingIndex.Value));
+			Target.Persist(skillRoutingPriorityRows);
+
+			var skillList = SkillRepository.LoadAll();
+			skillList[0].CascadingIndex.HasValue.Should().Be.False();
 		}
 
 		private SkillRoutingPriorityModelRow createRow(ISkill skill, int? priority)
