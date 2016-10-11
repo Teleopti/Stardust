@@ -51,8 +51,14 @@ namespace Teleopti.Ccc.Domain.Cascading
 			foreach (var keyValuePair in prioSortedDictionary)
 			{
 				var skillList = prioSortedDictionary[keyValuePair.Key];
+				var detectedActivityGuid = Guid.Empty;
 				foreach (var skillGuid in skillList)
 				{
+					if (detectedActivityGuid != Guid.Empty && allSkills[skillGuid].Activity.Id != detectedActivityGuid)
+					{
+						throw new InvalidOperationException("Two skills with different activities on the same cascading level");
+					}
+					detectedActivityGuid = allSkills[skillGuid].Activity.Id.Value;
 					allSkills[skillGuid].SetCascadingIndex(index + 1);
 				}
 

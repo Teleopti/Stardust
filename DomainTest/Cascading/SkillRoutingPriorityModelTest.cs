@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.Cascading
 	[DomainTest]
 	public class SkillRoutingPriorityModelTest
 	{
-		public ISkillRoutingPriorityModel Target;
+		public SkillRoutingPriorityModel Target;
 		public FakeSkillRepository SkillRepository;
 
 		[Test]

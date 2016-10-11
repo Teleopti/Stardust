@@ -37,11 +37,16 @@ namespace Teleopti.Ccc.DomainTest.Cascading
 			skillDic["skill4"].CascadingIndex.Value.Should().Be.EqualTo(2);
 		}
 
-		//[Test, ]
-		//public void ShouldThrowIfSkillsWithDifferentActivityHaveSamePrioValue()
-		//{
-			
-		//}
+		[Test]
+		public void ShouldThrowIfSkillsWithDifferentActivityHaveSamePrioValue()
+		{
+			var activity1 = new Activity("activity1").WithId();
+			var activity2 = new Activity("activity2").WithId();
+			var skillRoutingPriorityRows = new List<SkillRoutingPriorityModelRow>();
+			skillRoutingPriorityRows.Add(createRow(createSkill("skill1", activity1), 7));
+			skillRoutingPriorityRows.Add(createRow(createSkill("skill2", activity2), 7));
+			Assert.Throws<InvalidOperationException>(() => Target.Persist(skillRoutingPriorityRows));
+		}
 
 		private SkillRoutingPriorityModelRow createRow(ISkill skill, int? priority)
 		{

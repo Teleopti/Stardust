@@ -6,12 +6,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
-	public interface ISkillRoutingPriorityModel
-	{
-		List<SkillRoutingPriorityModelRow> SkillRoutingPriorityModelRows();
-	}
-
-	public class SkillRoutingPriorityModel : ISkillRoutingPriorityModel
+	public class SkillRoutingPriorityModel
 	{
 		private readonly ISkillRepository _skillRepository;
 
