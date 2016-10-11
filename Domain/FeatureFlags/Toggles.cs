@@ -116,6 +116,7 @@
 		Wfm_Requests_Save_Grid_Columns_37976,
 		Wfm_Requests_Check_Max_Seats_39937,
 		Wfm_Requests_Check_Max_Seats_NoReadModel_39937,
+		Wfm_Requests_Check_Expired_Requests_40274,
 
 		Wfm_Intraday_38074,
 
