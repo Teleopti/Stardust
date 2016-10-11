@@ -2490,6 +2490,7 @@
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeValidator.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShouldShiftTradeBeAutoGrantedSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\TargetTimeFlexibilityValidator.cs" />
+    <Compile Include="WorkflowControl\StaffingThresholdValidatorBase.cs" />
     <Compile Include="WorkflowControl\StaffingThresholdWithShrinkageValidator.cs" />
     <Compile Include="WorkflowControl\StaffingThresholdValidator.cs" />
     <Compile Include="WorkflowControl\WorkflowControlSet.cs" />
