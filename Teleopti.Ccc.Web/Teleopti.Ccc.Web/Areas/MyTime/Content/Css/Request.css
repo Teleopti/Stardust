@@ -164,7 +164,8 @@
 
 @media(max-width: 768px){
 	.bootstrap-timepicker.request-time {
-		margin-top: 5px;	
+		margin-top: 5px;
+	    left: -20px;
 	}
 }
 
