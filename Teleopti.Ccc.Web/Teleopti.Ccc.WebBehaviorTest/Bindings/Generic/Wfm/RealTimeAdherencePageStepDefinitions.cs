@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExists($".{cssClass.Name}");
 		}
 		
-		[Then(@"I should see historical adherence for '(.*)' with adherence of (.*)%")]
+		[Then(@"I should see adherence percentage for '(.*)' at (.*)%")]
 		public void ThenIShouldSeeHistoricalAdherenceForWithAdherenceOf(string person, string adherence)
 		{
 			const string selector = ".historical-adherence";

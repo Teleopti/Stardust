@@ -50,7 +50,7 @@ Scenario: Should adherence percentage with neutral adherence
 	And the time is '2015-03-02 10:00:00'
 	And I view real time adherence view for team 'Red'
 	And I click on an agent state
-	Then I should see historical adherence for 'Pierre Baldi' with adherence of 100%
+	Then I should see adherence percentage for 'Pierre Baldi' at 100%
 
 @ignore
 Scenario: Should see adherence details with neutral adherence

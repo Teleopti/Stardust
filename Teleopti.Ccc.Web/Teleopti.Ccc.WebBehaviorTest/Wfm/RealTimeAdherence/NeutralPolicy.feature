@@ -46,7 +46,7 @@ Scenario: See adherence percentage with neutral adherence
 	And the time is '2015-03-02 10:00:00'
 	And I view real time adherence for all agents on team 'Red'
 	And I click on an agent state
-	Then I should see historical adherence for 'Pierre Baldi' with adherence of 100%
+	Then I should see adherence percentage for 'Pierre Baldi' at 100%
 
 @OnlyRunIfEnabled('RTA_AdherenceDetails_34267')
 Scenario: See adherence details with neutral adherence

@@ -40,7 +40,7 @@ Scenario: See adherence percentage when call center is in Hawaii
 	And the utc time is '2014-10-07 05:00:00'
 	And I view real time adherence for all agents on team 'Red'
 	And I click on an agent state
-	Then I should see historical adherence for 'Pierre Baldi' with adherence of 50%
+	Then I should see adherence percentage for 'Pierre Baldi' at 50%
 
 @OnlyRunIfEnabled('RTA_AdherenceDetails_34267')
 Scenario: See adherence details when call center is in Hawaii
