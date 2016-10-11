@@ -192,11 +192,16 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		$('.col-1').hide(); //hide footer that takes "empty" space
 	}
 
-	function _listenForScheduleChanges(options, eventListeners, domainType) {
-	    Teleopti.MyTimeWeb.AlertActivity.GetNotificationDisplayTime(function (displayTime) {
-	        notifyOptions[domainType] = options;
-	        notifyOptions[domainType].timeout = displayTime * 1000;
+	function _updateNotificationDisplayTimeSetting(displayTime){
+		for (var type in notifyOptions){
+			notifyOptions[type].timeout = displayTime * 1000;
+		}
+	}
 
+	function _listenForScheduleChanges(options, eventListeners, domainType) {
+		Teleopti.MyTimeWeb.AlertActivity.GetNotificationDisplayTime(function (displayTime) {
+			notifyOptions[domainType] = options;
+			notifyOptions[domainType].timeout = displayTime * 1000;
 			Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
 				successCallback: eventListeners,
 				domainType: domainType
@@ -251,6 +256,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			_startPollingToAvoidLogOut();
 		},
 		ListenForScheduleChanges: _listenForScheduleChanges,
+		UpdateNotificationDisplayTimeSetting: _updateNotificationDisplayTimeSetting,
 		NotifyWhenScheduleChangedListener: function (notification, skipValidSchedulePeriod) {
 		    var shouldValid = skipValidSchedulePeriod ? true : _validSchedulePeriod(notification);
 		    if ( shouldValid && _validateNotificationSource(notification)) {

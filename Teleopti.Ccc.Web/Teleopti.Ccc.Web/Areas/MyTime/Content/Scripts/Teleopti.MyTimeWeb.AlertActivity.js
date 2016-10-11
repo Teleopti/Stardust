@@ -18,7 +18,8 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 	var notifyOptions;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var currentTimeout = null;
-
+	var notificationDisplayTime;
+	var getNotificationCallCount = 0;
 	
 	function loadBeforeAlertTimeSetting(callback) {
 		ajax.Ajax({
@@ -30,12 +31,22 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 	}
 
 	function loadAlertNotificationDisplayingTimeSetting(callback) {
-		ajax.Ajax({
-			url: 'Asm/NotificationsTimeToStaySetting',
-			dataType: 'json',
-			type: 'GET',
-			success: callback
-		});
+		getNotificationCallCount++;
+		if(getNotificationCallCount == 1 ){
+			ajax.Ajax({
+				url: 'Asm/NotificationsTimeToStaySetting',
+				dataType: 'json',
+				type: 'GET',
+				success: function(displayTime){
+					notificationDisplayTime = displayTime;
+					callback(displayTime);
+					Teleopti.MyTimeWeb.Asm.UpdateNotificationDisplayTimeSetting(displayTime);
+					notifyOptions.timeout = displayTime * 1000;
+				}
+			});
+		}else if(notificationDisplayTime){
+			callback(notificationDisplayTime);
+		}
 	}
 
 	function activityLayer(layer) {
@@ -225,10 +236,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		var settingLoadDeffered = $.Deferred();
 		loadBeforeAlertTimeSetting(function (data) {
 			beforeAlertTimeSetting = data.SecondsBeforeChange;
-			loadAlertNotificationDisplayingTimeSetting(function (displayTime) {
-				notifyOptions.timeout = displayTime * 1000;
-				settingLoadDeffered.resolve();
-			});
+			settingLoadDeffered.resolve();
 		});
 
 		$.when(dataLoadDeffered, settingLoadDeffered).done(function () {
