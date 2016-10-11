@@ -11,17 +11,17 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OrganizeCascadingSkills)]
 	public class SkillRoutingPriorityController : ApiController
 	{
-		//private readonly ISkillRoutingPriorityModel _skillRoutingPriorityModel;
+		private readonly SkillRoutingPriorityModel _skillRoutingPriorityModel;
 
-		//SkillRoutingPriorityController(ISkillRoutingPriorityModel skillRoutingPriorityModel)
-		//{
-		//	_skillRoutingPriorityModel = skillRoutingPriorityModel;
-		//}
+		public SkillRoutingPriorityController(SkillRoutingPriorityModel skillRoutingPriorityModel)
+		{
+			_skillRoutingPriorityModel = skillRoutingPriorityModel;
+		}
 
 		[Route("api/ResourcePlanner/AdminSkillRoutingPriority"), HttpGet, UnitOfWork]
 		public virtual IHttpActionResult AdminSkillRoutingPriority()
 		{
-			var skillList = new List<int>(); //_skillRoutingPriorityModel.SkillRoutingPriorityModelRows();
+			var skillList = _skillRoutingPriorityModel.SkillRoutingPriorityModelRows();
 			return Ok(skillList); //current
 		}
 
