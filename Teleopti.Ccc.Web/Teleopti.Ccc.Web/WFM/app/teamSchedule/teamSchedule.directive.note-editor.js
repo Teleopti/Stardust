@@ -10,12 +10,16 @@
 		var vm = this;
 		vm.label = 'InternalNote';
 		vm.submit = function () {
-			var result = ScheduleNoteMgmt.setInternalNoteForPerson(vm.noteInputOption.personId, vm.internalNotes, vm.noteInputOption.selectedDate);
-			vm.noteInputOption.showEditor = false;
-			if (result && result.length > 0) {
-				var errorMsg = result[0].ErrorMessages.join(', ');
-				NoticeService.error(errorMsg, null, true);
-			}
+			ScheduleNoteMgmt.submitInternalNoteForPerson(vm.noteInputOption.personId, vm.internalNotes, vm.noteInputOption.selectedDate).then(function(data) {
+				vm.noteInputOption.showEditor = false;
+				if (data && data.length > 0) {
+					var errorMsg = data[0].ErrorMessages.join(', ');
+					NoticeService.error(errorMsg, null, true);
+				} else {
+					ScheduleNoteMgmt.setInternalNoteForPerson(vm.noteInputOption.personId, vm.internalNotes);
+				}
+			});
+			
 		};
 		
 		vm.cancel = function () {

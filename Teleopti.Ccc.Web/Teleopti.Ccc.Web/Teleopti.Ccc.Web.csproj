@@ -1350,6 +1350,7 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.cmd.moveOverlappedActivity.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.note-editor.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.timezonePicker.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.directive.note-editor.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.filter.timezone.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.filter.timezone.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.scheduleNote.js" />
