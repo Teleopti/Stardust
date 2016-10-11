@@ -8,13 +8,16 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -45,6 +48,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly IStardustJobFeedback _feedback;
 		private readonly ArrangeRequestsByProcessOrder _arrangeRequestsByProcessOrder;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly IToggleManager _toggleManager;
 
 		public MultiAbsenceRequestsUpdater(IResourceCalculationPrerequisitesLoader prereqLoader, 
 			ICurrentScenario scenarioRepository,
@@ -62,7 +67,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			IStardustJobFeedback feedback, 
 			ArrangeRequestsByProcessOrder arrangeRequestsByProcessOrder, 
 			IScheduleDayChangeCallback scheduleDayChangeCallback, 
-			ISchedulingResultStateHolder schedulingResultStateHolder)
+			ISchedulingResultStateHolder schedulingResultStateHolder, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IToggleManager toggleManager)
 		{
 			_prereqLoader = prereqLoader;
 			_scenarioRepository = scenarioRepository;
@@ -81,6 +86,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_arrangeRequestsByProcessOrder = arrangeRequestsByProcessOrder;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
+			_toggleManager = toggleManager;
 		}
 
 		public void UpdateAbsenceRequest(List<IPersonRequest> personRequests)
@@ -199,18 +206,24 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 						if (affectedPersonAbsenceAccount != null)
 							trackAccounts(affectedPersonAbsenceAccount, dateOnlyPeriod, absenceRequest);
 					});
-
-				var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(
+				using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills))
+				{
+					if (_toggleManager.IsEnabled(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754))
+					{
+						ResourceCalculationContext.Fetch().PrimarySkillMode = true;
+					}
+					var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(
 					_schedulingResultStateHolder,
 					personAccountBalanceCalculator,
 					_resourceOptimizationHelper,
 					_budgetGroupAllowanceSpecification,
 					_budgetGroupHeadCountSpecification);
 
-				processAbsenceRequest.Process(null, absenceRequest,
-								requiredForProcessingAbsenceRequest,
-								requiredForHandlingAbsenceRequest,
-								validatorList);
+					processAbsenceRequest.Process(null, absenceRequest,
+									requiredForProcessingAbsenceRequest,
+									requiredForHandlingAbsenceRequest,
+									validatorList);
+				}
 
 				string response = "approved or denied";
 				if (personRequest.IsApproved) response = "approved";
