@@ -1,9 +1,10 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
+using System.Threading;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
-
 	public class SyncPublishTo : IEventPublisher
 	{
 		private readonly ResolveEventHandlers _resolver;
@@ -23,24 +24,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public void Publish(params IEvent[] events)
 		{
-			foreach (var @event in events)
+			onAnotherThread(() =>
 			{
-				foreach (var handler in _handlers)
+				foreach (var @event in events)
 				{
-					var method = _resolver.HandleMethodFor(handler.GetType(), @event);
-					if (method == null)
-						continue;
-					try
+					foreach (var handler in _handlers)
 					{
-						method.Invoke(handler, new[] { @event });
+						var method = _resolver.HandleMethodFor(handler.GetType(), @event);
+						if (method == null)
+							continue;
+						try
+						{
+							method.Invoke(handler, new[] {@event});
+						}
+						catch (TargetInvocationException e)
+						{
+							PreserveStack.ForInnerOf(e);
+							throw e;
+						}
 					}
-					catch (TargetInvocationException e)
-					{
-						PreserveStack.ForInnerOf(e);
-						throw e;
-					}
-				}				
-			}
+				}
+			});
 		}
+
+		private static void onAnotherThread(Action action)
+		{
+			var thread = new Thread(action.Invoke);
+			thread.Start();
+			thread.Join();
+		}
+
 	}
 }

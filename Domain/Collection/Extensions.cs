@@ -149,8 +149,14 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		public static IEnumerable<T> Randomize<T>(this IEnumerable<T> source)
 		{
-			Random rnd = new Random();
-			return source.OrderBy((item) => rnd.Next());
+			var rnd = new Random();
+			return source.OrderBy(_ => rnd.Next());
+		}
+
+		public static IEnumerable<T> RandomizeBetter<T>(this IEnumerable<T> source)
+		{
+			var rnd = new Random(Guid.NewGuid().GetHashCode());
+			return source.OrderBy(_ => rnd.Next());
 		}
 
 		public static bool NonSequenceEquals<T>(this IEnumerable<T> source, IEnumerable<T> other)

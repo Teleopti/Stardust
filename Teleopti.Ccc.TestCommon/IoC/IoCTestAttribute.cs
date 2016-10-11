@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Autofac;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -27,24 +25,16 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		private IContainer _container;
 		private TestDoubles _testDoubles;
 		private IoCTestService _service;
+		private object _fixture;
 
 		protected virtual FakeToggleManager Toggles()
 		{
-			var toggles = new FakeToggleManager();
-			if (QueryAllAttributes<AllTogglesOnAttribute>().Any())
-				toggles.EnableAll();
-			if (QueryAllAttributes<AllTogglesOffAttribute>().Any())
-				toggles.DisableAll();
-			QueryAllAttributes<ToggleAttribute>().ForEach(a => toggles.Enable(a.Toggle));
-			QueryAllAttributes<ToggleOffAttribute>().ForEach(a => toggles.Disable(a.Toggle));
-			return toggles;
+			return _service.Toggles();
 		}
 
 		protected virtual FakeConfigReader Config()
 		{
-			var config = new FakeConfigReader();
-			QueryAllAttributes<SettingAttribute>().ForEach(x => config.FakeSetting(x.Setting, x.Value));
-			return config;
+			return _service.Config();
 		}
 
 		protected virtual void Setup(ISystem system, IIocConfiguration configuration)
@@ -65,6 +55,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		public void BeforeTest(ITest testDetails)
 		{
+			_fixture = testDetails.Fixture;
 			_service = new IoCTestService(testDetails, this);
 			buildContainer();
 			Startup(_container);
@@ -103,27 +94,32 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		private void setupBuilder(ISystem system)
 		{
-			var configReader = Config();
-			var toggleManager = Toggles();
-			(_service.Fixture as IConfigureToggleManager)?.Configure(toggleManager);
-			var args = new IocArgs(configReader);
-			(_service.Fixture as ISetupConfiguration)?.SetupConfiguration(args);
-			var configuration = new IocConfiguration(args, toggleManager);
-			
-			system.AddModule(new CommonModule(configuration));
+			var config = Config();
+			var toggles = Toggles();
+			(_fixture as IConfigureToggleManager)?.Configure(toggles);
+			var args = new IocArgs(config);
+			(_fixture as ISetupConfiguration)?.SetupConfiguration(args);
+			var configuration = new IocConfiguration(args, toggles);
 
-			system.UseTestDouble(new MutableNow("2014-12-18 13:31")).For<INow>();
-			system.UseTestDouble<FakeTime>().For<ITime>();
-			system.UseTestDouble(configReader).For<IConfigReader>();
-			// we really shouldnt inject this, but if we do, maybe its better its correct...
-			system.UseTestDouble(toggleManager).For<IToggleManager>();
+			SetupSystem(system, configuration, config, toggles);
 
 			// Test helpers
 			system.AddService(this);
 			system.AddService<ConcurrencyRunner>();
 
 			Setup(system, configuration);
-			(_service.Fixture as ISetup)?.Setup(system, configuration);
+			(_fixture as ISetup)?.Setup(system, configuration);
+		}
+
+		public static void SetupSystem(ISystem system, IocConfiguration configuration, FakeConfigReader config, FakeToggleManager toggles)
+		{
+			system.AddModule(new CommonModule(configuration));
+
+			system.UseTestDouble(new MutableNow("2014-12-18 13:31")).For<INow>();
+			system.UseTestDouble<FakeTime>().For<ITime>();
+			system.UseTestDouble(config).For<IConfigReader>();
+			// we really shouldnt inject this, but if we do, maybe its better its correct...
+			system.UseTestDouble(toggles).For<IToggleManager>();
 		}
 
 		private void disposeContainer()

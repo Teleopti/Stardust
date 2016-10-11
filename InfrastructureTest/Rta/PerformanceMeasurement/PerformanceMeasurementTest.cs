@@ -24,7 +24,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta
+namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 {
 	[TestFixture]
 	[MultiDatabaseTest]
@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	[Toggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262)]
 	[Toggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 	[Explicit]
+	[Category("LongRunning")]
 	public class PerformanceMeasurementTest : ISetup
 	{
 		public Database Database;
@@ -63,76 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		{
 			system.UseTestDouble<ConfigurableSyncEventPublisher>().For<IEventPublisher>();
 		}
-
-		[Test]
-		public void MeasureBatch()
-		{
-			Publisher.AddHandler<MappingReadModelUpdater>();
-			Publisher.AddHandler<PersonAssociationChangedEventPublisher>();
-			Publisher.AddHandler<AgentStateMaintainer>();
-			Analytics.WithDataSource(9, "sourceId");
-			Database
-				.WithDefaultScenario("default")
-				.WithStateGroup("phone")
-				.WithStateCode("phone");
-			Enumerable.Range(0, 100).ForEach(x => Database.WithStateGroup($"code{x}").WithStateCode($"code{x}"));
-			Enumerable.Range(0, 10).ForEach(x => Database.WithActivity($"activity{x}"));
-			var userCodes = Enumerable.Range(0, 1000).Select(x => $"user{x}").ToArray();
-			userCodes.ForEach(x => Database.WithAgent(x));
-			Publisher.Publish(new TenantMinuteTickEvent());
-			var states = 5000;
-
-			var results = (
-				from parallelTransactions in new[] {5, 7, 9}
-				from transactionSize in new[] {80, 100, 150}
-				from batchSize in new[] {400, 500, 600, 700, 1500, 2500}
-				from variation in new[] {"A", "B", "C"}
-				select new {parallelTransactions, transactionSize, batchSize, variation}).Select(x =>
-			{
-				var batches = Enumerable.Range(0, states)
-					.Batch(x.batchSize)
-					.Select(_ => new BatchForTest
-					{
-						States = userCodes
-							.Randomize()
-							.Take(x.batchSize)
-							.Select(y => new BatchStateForTest
-							{
-								UserCode = y,
-								StateCode = "phone"
-							})
-							.ToArray()
-					});
-					
-				RemoveMeWithToggleAttribute.This(Toggles.RTA_ScheduleQueryOptimization_40260);
-				Config.FakeSetting("RtaBatchTransactions", x.parallelTransactions.ToString());
-
-				Config.FakeSetting("RtaParallelTransactions", x.parallelTransactions.ToString());
-				Config.FakeSetting("RtaMaxTransactionSize", x.transactionSize.ToString());
-
-				var timer = new Stopwatch();
-				timer.Start();
-
-				batches.ForEach(Rta.SaveStateBatch);
-
-				timer.Stop();
-
-				return new
-				{
-					timer.Elapsed,
-					stateTime = new TimeSpan(timer.Elapsed.Ticks / states),
-					x.parallelTransactions,
-					x.transactionSize,
-					x.batchSize,
-					x.variation
-				};
-			});
-
-			results
-				.OrderBy(x => x.Elapsed)
-				.ForEach(x => Console.WriteLine($"{x.Elapsed} - {x.stateTime} {x.transactionSize} {x.parallelTransactions} {x.batchSize} {x.variation}"));
-		}
-
+		
 		[Test]
 		public void MeasureActivityChecker()
 		{

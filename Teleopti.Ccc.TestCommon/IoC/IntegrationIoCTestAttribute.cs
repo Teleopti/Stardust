@@ -2,16 +2,10 @@ using System;
 using Autofac;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.MessageBroker.Client;
-using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
@@ -35,15 +29,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args));
 
 			builder.RegisterModule(new CommonModule(configuration));
-
 			builder.RegisterModule(new TenantServerModule(configuration));
-
-			builder.RegisterType<MutableNow>().AsSelf().As<INow>().SingleInstance();
-			builder.RegisterType<DefaultDataCreator>().SingleInstance();
-			builder.RegisterType<DefaultAnalyticsDataCreator>().SingleInstance();
-			builder.RegisterType<Http>().SingleInstance();
-			builder.RegisterType<Database>().AsSelf().AsImplementedInterfaces().SingleInstance().ApplyAspects();
-			builder.RegisterType<AnalyticsDatabase>().AsSelf().AsImplementedInterfaces().SingleInstance().ApplyAspects();
+			builder.RegisterModule(new TestModule());
 
 			registrations?.Invoke(builder);
 

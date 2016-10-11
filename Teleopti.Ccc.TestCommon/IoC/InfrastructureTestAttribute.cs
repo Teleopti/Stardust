@@ -53,6 +53,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			base.Setup(system, configuration);
 
+			SetupSystem(system, configuration);
+		}
+
+		public static void SetupSystem(ISystem system, IIocConfiguration configuration)
+		{
 			// Tenant stuff
 			system.AddModule(new TenantServerModule(configuration));
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();

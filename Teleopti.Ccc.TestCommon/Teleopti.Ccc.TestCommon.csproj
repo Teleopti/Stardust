@@ -326,6 +326,7 @@
     <Compile Include="IoC\RealPermissionsAttribute.cs" />
     <Compile Include="IoC\SystemImpl.cs" />
     <Compile Include="IoC\TestDoubles.cs" />
+    <Compile Include="IoC\TestModule.cs" />
     <Compile Include="IoC\UseEventPublisherAttribute.cs" />
     <Compile Include="IoC\ShareLogonOnThreadsAttribute.cs" />
     <Compile Include="MessageBrokerCompositeDummy.cs" />

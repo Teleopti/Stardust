@@ -5,31 +5,31 @@ using System.Reflection;
 using Autofac;
 using NUnit.Framework.Interfaces;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.IocCommon.Toggle;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
 	public class IoCTestService
 	{
 		private IContainer _container;
-		private readonly object _attribute;
-		private readonly Type _fixtureType;
 		private readonly MethodInfo _method;
+		private readonly IEnumerable<object> _injectTo;
 
 		public IoCTestService(ITest testDetails, object attribute)
+			: this(new[] {testDetails.Fixture, attribute}, testDetails.Method.MethodInfo)
 		{
-			_attribute = attribute;
-			Fixture = testDetails.Fixture;
-			_fixtureType = Fixture.GetType();
-			_method = testDetails.Method.MethodInfo;
 		}
 
-		public object Fixture { get; }
+		public IoCTestService(IEnumerable<object> injectTo, MethodInfo method)
+		{
+			_injectTo = injectTo;
+			_method = method;
+		}
 
 		public void InjectFrom(IContainer container)
 		{
 			_container = container;
-			InjectTo(_container, _attribute);
-			InjectTo(_container, Fixture);
+			_injectTo.ForEach(x => InjectTo(_container, x));
 		}
 
 		public static void InjectTo(IContainer container, object instance)
@@ -41,14 +41,32 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			fields.ForEach(x => x.SetValue(instance, container.Resolve(x.FieldType)));
 		}
 
+		public FakeToggleManager Toggles()
+		{
+			var toggles = new FakeToggleManager();
+			if (QueryAllAttributes<AllTogglesOnAttribute>().Any())
+				toggles.EnableAll();
+			if (QueryAllAttributes<AllTogglesOffAttribute>().Any())
+				toggles.DisableAll();
+			QueryAllAttributes<ToggleAttribute>().ForEach(a => toggles.Enable(a.Toggle));
+			QueryAllAttributes<ToggleOffAttribute>().ForEach(a => toggles.Disable(a.Toggle));
+			return toggles;
+		}
+
+		public FakeConfigReader Config()
+		{
+			var config = new FakeConfigReader();
+			QueryAllAttributes<SettingAttribute>().ForEach(x => config.FakeSetting(x.Setting, x.Value));
+			return config;
+		}
+
 		public IEnumerable<T> QueryAllAttributes<T>()
 		{
-			var fromFixture = _fixtureType.GetCustomAttributes(typeof(T), true).Cast<T>();
-			var fromTest = _method.GetCustomAttributes(typeof(T), true).Cast<T>();
-			var fromAttribute = _attribute.GetType().GetCustomAttributes(typeof(T), true).Cast<T>();
-			return fromFixture
+			var fromInjectTargets = _injectTo
+				.SelectMany(x => x.GetType().GetCustomAttributes(typeof(T), true).Cast<T>());
+			var fromTest = _method?.GetCustomAttributes(typeof(T), true).Cast<T>() ?? Enumerable.Empty<T>();
+			return fromInjectTargets
 				.Union(fromTest)
-				.Union(fromAttribute)
 				.ToArray();
 		}
 
