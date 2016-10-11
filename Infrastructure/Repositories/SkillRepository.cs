@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var templateIds = getWorkloadDayTemplateIds(workloadIds);
 			var openhours = getOpenhours(templateIds);
 
-			var multiCriteria = Session.CreateMultiCriteria().Add(workloads).Add(templates).Add(openhours);
+			var multiCriteria = Session.CreateMultiCriteria().Add(workloads).Add(templates).Add(openhours).Add(getSkillTypeIds());
 			var fetchedSkills = CollectionHelper.ToDistinctGenericCollection<ISkill>(wrapMultiCriteria(multiCriteria));
 
 			return fetchedSkills;
@@ -266,7 +266,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .SetProjection(Projections.Property("Id")).SetResultTransformer(Transformers.DistinctRootEntity);
         }
 
-        private DetachedCriteria getQueues(DetachedCriteria workloadIds)
+		private DetachedCriteria getSkillTypeIds()
+		{
+			return DetachedCriteria.For<SkillType>()
+				.SetProjection(Projections.Property("Id")).SetResultTransformer(Transformers.DistinctRootEntity);
+		}
+
+		private DetachedCriteria getQueues(DetachedCriteria workloadIds)
         {
             return DetachedCriteria.For<Workload>()
                 .Add(Subqueries.PropertyIn("Id", workloadIds))
