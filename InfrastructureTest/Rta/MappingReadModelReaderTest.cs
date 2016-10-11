@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public WithReadModelUnitOfWork WithReadModels;
 		public WithUnitOfWorkWithRecurringEvents WithUnitOfWork;
 		public IEventPublisher EventPublisher;
+		public ICurrentBusinessUnit CurrentBusinessUnit;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -184,8 +185,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			{
 				EventPublisher.Publish(new BusinessUnitChangedEvent
 				{
-					BusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
-					BusinessUnitName = BusinessUnitFactory.BusinessUnitUsedInTest.Name,
+					BusinessUnitId = CurrentBusinessUnit.Current().Id.GetValueOrDefault(),
+					BusinessUnitName = CurrentBusinessUnit.Current().Name,
 					UpdatedOn = DateTime.Now
 				});
 			});

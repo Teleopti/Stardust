@@ -14,6 +14,7 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
@@ -31,6 +32,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public WithUnitOfWorkWithRecurringEvents WithUnitOfWork;
 		public WithReadModelUnitOfWork WithReadModels;
 		public IEventPublisher EventPublisher;
+		public ICurrentBusinessUnit CurrentBusinessUnit;
+
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -292,10 +295,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			// To prevend analytics handlers from failing we need a BU in analytics, this is a slightly backwards way of achieving that
 			WithUnitOfWork.Do(() =>
 			{
+				
 				EventPublisher.Publish(new BusinessUnitChangedEvent
 				{
-					BusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
-					BusinessUnitName = BusinessUnitFactory.BusinessUnitUsedInTest.Name,
+					BusinessUnitId = CurrentBusinessUnit.Current().Id.GetValueOrDefault(),
+					BusinessUnitName = CurrentBusinessUnit.Current().Name,
 					UpdatedOn = DateTime.Now
 				});
 			});
