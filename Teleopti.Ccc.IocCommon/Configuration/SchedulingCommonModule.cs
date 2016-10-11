@@ -70,7 +70,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<SkillRoutingPriorityModel>().SingleInstance();
+			builder.RegisterType<SkillRoutingPriorityModel>().As<ISkillRoutingPriorityModel>().AsSelf().SingleInstance();
+			builder.RegisterType<SkillRoutingPriorityPersister>().SingleInstance();
 
 			builder.RegisterType<ShovelResources>().SingleInstance();
 			builder.RegisterType<AddResourcesToSubSkills>().SingleInstance();

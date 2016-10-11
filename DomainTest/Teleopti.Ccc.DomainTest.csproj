@@ -263,6 +263,7 @@
     <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastWorkloadUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Workload\AnalyticsWorkloadUpdaterTest.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityModelTest.cs" />
+    <Compile Include="Cascading\SkillRoutingPriorityPersisterTest.cs" />
     <Compile Include="Common\ScheduleChangedEventDetector.cs" />
     <Compile Include="ApplicationLayer\Skill\AnalyticsSkillUpdaterTest.cs" />
     <Compile Include="Intraday\ForecastedStaffingViewModelCreatorTest.cs" />

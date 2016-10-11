@@ -210,6 +210,7 @@
     <Compile Include="Cascading\OrderedSkillGroups.cs" />
     <Compile Include="Cascading\ResourceDistributionForSkillGroupsWithSameIndex.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityModel.cs" />
+    <Compile Include="Cascading\SkillRoutingPriorityPersister.cs" />
     <Compile Include="Common\IScheduleDayProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\NonoverwritableLayerMovabilityChecker.cs" />
     <Compile Include="ApplicationLayer\Commands\IRequestCommand.cs" />
