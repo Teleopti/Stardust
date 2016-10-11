@@ -1,5 +1,5 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.Security.Authentication;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		
 		private TimeZoneGuard()
 		{
-			TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			TimeZone = UserTimeZone.Make().TimeZone();			
 		}
 
 		public static TimeZoneGuard Instance
