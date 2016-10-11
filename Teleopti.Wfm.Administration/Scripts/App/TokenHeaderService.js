@@ -1,15 +1,15 @@
 ﻿angular
-		 .module('adminApp').service('tokenHeaderService', function () {
-	var tokenKey = 'accessToken';
-
-	this.getHeaders = function() {
-		var token = sessionStorage.getItem(tokenKey);
-		if (token === null) {
-			return null;
-		}
-		return {
-			headers: { 'Authorization': 'Bearer ' + token }
+	.module('adminApp').service('tokenHeaderService', function ($cookies) {
+		var tokenKey = 'accessToken';
+		this.getHeaders = function () {
+			var cookie = $cookies.getObject('WfmAdminAuth');
+			var token = cookie ? cookie.tokenKey : null;
+			if (token === null) {
+				return null;
+			}
+			return {
+				headers: { 'Authorization': 'Bearer ' + token }
+			};
 		};
 	}
-	}
-	)
+	);

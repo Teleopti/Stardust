@@ -1,9 +1,9 @@
-(function() {
+(function () {
 	'use strict';
 	angular
 		.module('adminApp')
-		.controller('loginController', loginController, ['$scope', '$http', '$window', loginController])
-		.directive('menuItem', function() {
+		.controller('loginController', loginController, ['$scope', '$http', '$window', '$cookies', loginController])
+		.directive('menuItem', function () {
 			return {
 				scope: {
 					text: "@",
@@ -14,11 +14,11 @@
 				templateUrl: 'menuitem.html',
 				replace: true,
 				bindToController: true,
-				controller: function($scope, $window) {
-					this.isSelected = function() {
+				controller: function ($scope, $window) {
+					this.isSelected = function () {
 						return this.state.selected === this.index;
 					};
-					this.setSelected = function() {
+					this.setSelected = function () {
 						this.state.selected = this.index;
 					};
 
@@ -29,22 +29,23 @@
 			};
 		});
 
-	function loginController($scope, $http) {
+	function loginController($scope, $http, $cookies) {
 		var tokenKey = 'accessToken';
 		var userKey = 'userToken';
 		var emailKey = 'lastEmail';
 		var idKey = 'idToken';
 		var firstUser = false;
-		var token = sessionStorage.getItem(tokenKey);
-
+		var cookie = $cookies.getObject('WfmAdminAuth');
+		var token = cookie ? cookie.tokenKey : null;
+		var today = new Date();
+		var expireDate = new Date().setDate(today.getDate() + 30);
 		var vm = this;
 		vm.loginEmail = sessionStorage.getItem(emailKey);
 		vm.loginPassword = "";
 		vm.Message = '';
-		vm.Id = sessionStorage.getItem(idKey);
+		vm.Id = cookie ? cookie.idKey : null;
+		vm.user = cookie ? cookie.userKey : null;
 
-
-		vm.user = sessionStorage.getItem(userKey);
 		$scope.state = {
 			selected: 1
 		};
@@ -59,7 +60,7 @@
 			link: "#/HangfireDashboard"
 		}];
 		$scope.message = "något som jag vill visa"; //?
-		$http.get("./HasNoUser").success(function(data) {
+		$http.get("./HasNoUser").success(function (data) {
 			firstUser = data;
 			if (firstUser) {
 				vm.user = 'xxfirstxx';
@@ -75,7 +76,7 @@
 					});
 				}
 			}
-		}).error(function(xhr, ajaxOptions, thrownError) {
+		}).error(function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 		});
 
@@ -83,7 +84,7 @@
 			vm.Message = jqXHR.Message + ': ' + jqXHR.ExceptionMessage;
 		}
 
-		vm.login = function() {
+		vm.login = function () {
 			vm.Id = 0;
 			$("#modal-login").toggleClass("wait");
 			var loginData = {
@@ -94,7 +95,7 @@
 
 			$http.post('./Login',
 				loginData
-			).success(function(data) {
+			).success(function (data) {
 				$("#modal-login").toggleClass("wait");
 				if (data.Success === false) {
 					//alert(data.Message);
@@ -104,25 +105,23 @@
 				vm.user = data.userName;
 				vm.Id = data.Id;
 				vm.Message = 'Successful log in...';
-				// Cache the access token in session storage.
-				sessionStorage.setItem(tokenKey, data.AccessToken);
-				sessionStorage.setItem(userKey, data.UserName);
+				// Cache the username token in session storage.
 				sessionStorage.setItem(emailKey, vm.loginEmail);
-				sessionStorage.setItem(idKey, data.Id);
+				//lets do authentication in cookie
+				$cookies.putObject('WfmAdminAuth', { 'tokenKey': data.AccessToken, 'userKey': data.UserName, 'idKey': data.Id }, { 'expires': new Date(expireDate) });
 				document.location = "#/";
 				location.reload();
 				$('#modal-login').dialog('close');
 			}).error(showError);
-		}
+		};
 
-		vm.logout = function() {
-			sessionStorage.removeItem(tokenKey);
-			sessionStorage.removeItem(userKey);
+		vm.logout = function () {
+			$cookies.remove('WfmAdminAuth');
 			$http.post('./Logout');
 			vm.user = null;
 			document.location = "#/";
 			location.reload();
-		}
+		};
 	}
 
 })();
