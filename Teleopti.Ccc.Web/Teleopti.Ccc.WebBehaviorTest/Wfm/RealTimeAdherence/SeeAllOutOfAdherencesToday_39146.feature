@@ -13,9 +13,9 @@ Background:
 	And there is a team named 'Justin' on site 'Paris'
 	And I have a role with full access
 	And Pierre Baldi has a person period with
-	 | Field          | Value        |
-	 | Team           | Justin          |
-	 | Start Date     | 2014-01-21   |
+	 | Field      | Value      |
+	 | Team       | Justin     |
+	 | Start Date | 2014-01-21 |
 	And Pierre Baldi has a shift with
 	| Field                    | Value            |
 	| Start time               | 2016-10-11 09:00 |
@@ -23,7 +23,7 @@ Background:
 	| Activity                 | Phone            |
 	| Next activity            | Lunch            |
 	| Next activity start time | 2016-10-11 11:00 |
-	| Next activity end time   | 2016-10-11 12:00|
+	| Next activity end time   | 2016-10-11 12:00 |
 	And there is a rule with 
 	| Field           | Value    |
 	| Name            | Adhering |
