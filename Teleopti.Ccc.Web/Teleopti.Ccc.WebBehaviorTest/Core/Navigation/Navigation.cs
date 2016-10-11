@@ -502,7 +502,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage("wfm/#/rta/agents-skill/" + skillId);
 		}
-		
+
+		public static void GoToAgentHistoricalAdherence(Guid personId)
+		{
+			GoToPage("wfm/#/rta/agent-historical/" + personId);
+		}
+
 		public static void GotoPageCiscoFinesse()
 		{
 			GoToPage("MyTime/CiscoWidget");
