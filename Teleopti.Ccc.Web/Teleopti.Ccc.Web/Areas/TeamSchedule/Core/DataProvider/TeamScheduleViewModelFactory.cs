@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
@@ -353,6 +354,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			});
 			var nameDescriptionSetting = _commonAgentNameProvider.CommonAgentNameSettings;
 			var list = new List<GroupScheduleShiftViewModel>();
+
+
 			foreach (var personScheduleDay in requestedPersonScheduleDays)
 			{
 				var person = personScheduleDay.Person;
@@ -386,6 +389,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					list.Add(vm);
 				}
 			}
+
+			people.Where(p => list.All(x => x.PersonId != p.Id.GetValueOrDefault().ToString())).ForEach(person =>
+			{
+				list.Add(new GroupScheduleShiftViewModel
+				{
+					PersonId = person.Id.GetValueOrDefault().ToString(),
+					Name = nameDescriptionSetting.BuildCommonNameDescription(person),
+					Date = scheduleDate.Date.ToFixedDateFormat(),
+					Projection = new List<GroupScheduleProjectionViewModel>()
+				});
+			});
 
 			return new GroupScheduleViewModel
 			{

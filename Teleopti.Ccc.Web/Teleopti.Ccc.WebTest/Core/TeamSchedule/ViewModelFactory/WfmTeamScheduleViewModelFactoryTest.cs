@@ -509,5 +509,27 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			first.PersonId.Should().Be(person.Id.GetValueOrDefault());			
 			first.ContractTimeMinutes.Should().Be.EqualTo(9*60);
 		}
+
+		[Test]
+		public void CreateViewModelForPeopleShouldReturnAgentsEvenTheyhaveNoScheduleDay()
+		{
+
+			UserCulture.Is(CultureInfoFactory.CreateSwedishCulture());
+			var scheduleDate = new DateOnly(2020,1,1);
+			var person = PersonFactory.CreatePerson("Sherlock","Holmes");
+			person.WithId();
+			PeopleSearchProvider.Add(person);
+			PersonRepository.Has(person);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
+			CurrentScenario.FakeScenario(scenario);
+
+			var result = Target.CreateViewModelForPeople(new[] {person.Id.Value}, scheduleDate);
+
+			result.Total.Should().Be.EqualTo(1);
+			var schedule = result.Schedules.Single();
+			schedule.PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault().ToString());
+			schedule.Projection.Should().Be.Empty();
+
+		}
 	}
 }
