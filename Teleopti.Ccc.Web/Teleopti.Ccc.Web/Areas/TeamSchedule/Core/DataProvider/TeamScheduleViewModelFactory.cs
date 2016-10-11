@@ -366,7 +366,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						PersonId = person.Id.GetValueOrDefault().ToString(),
 						Name = nameDescriptionSetting.BuildCommonNameDescription(person),
 						Date = scheduleDate.Date.ToFixedDateFormat(),
-						Projection = new List<GroupScheduleProjectionViewModel>()
+						Projection = new List<GroupScheduleProjectionViewModel>(),
+						Timezone = new TimeZoneViewModel
+						{
+							IanaId = _ianaTimeZoneProvider.WindowsToIana(person.PermissionInformation.DefaultTimeZone().Id),
+							DisplayName = person.PermissionInformation.DefaultTimeZone().DisplayName
+						}
 					});
 				}
 
@@ -380,7 +385,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							PersonId = person.Id.GetValueOrDefault().ToString(),
 							Name = nameDescriptionSetting.BuildCommonNameDescription(person),
 							Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat(),
-							Projection = new List<GroupScheduleProjectionViewModel>()
+							Projection = new List<GroupScheduleProjectionViewModel>(),
+							Timezone = new TimeZoneViewModel
+							{
+								IanaId = _ianaTimeZoneProvider.WindowsToIana(person.PermissionInformation.DefaultTimeZone().Id),
+								DisplayName = person.PermissionInformation.DefaultTimeZone().DisplayName
+							}
 						};
 					var note = scheduleDay.NoteCollection().FirstOrDefault();
 					vm.InternalNotes = note != null && scheduleDay.DateOnlyAsPeriod.DateOnly == scheduleDate
@@ -397,7 +407,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					PersonId = person.Id.GetValueOrDefault().ToString(),
 					Name = nameDescriptionSetting.BuildCommonNameDescription(person),
 					Date = scheduleDate.Date.ToFixedDateFormat(),
-					Projection = new List<GroupScheduleProjectionViewModel>()
+					Projection = new List<GroupScheduleProjectionViewModel>(),
+					Timezone = new TimeZoneViewModel
+					{
+						IanaId = _ianaTimeZoneProvider.WindowsToIana(person.PermissionInformation.DefaultTimeZone().Id),
+						DisplayName = person.PermissionInformation.DefaultTimeZone().DisplayName
+					}
 				});
 			});
 

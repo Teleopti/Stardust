@@ -23,8 +23,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IToggleManager _toggleManager;
 		private readonly IScheduleProjectionHelper _projectionHelper;
 		private readonly IProjectionSplitter _projectionSplitter;
+		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 
-		public TeamScheduleProjectionProvider(IProjectionProvider projectionProvider, ILoggedOnUser loggedOnUser, IPersonNameProvider personNameProvider, IToggleManager toggleManager, IScheduleProjectionHelper projectionHelper, IProjectionSplitter projectionSplitter)
+		public TeamScheduleProjectionProvider(IProjectionProvider projectionProvider, ILoggedOnUser loggedOnUser, IPersonNameProvider personNameProvider, IToggleManager toggleManager, IScheduleProjectionHelper projectionHelper, IProjectionSplitter projectionSplitter, IIanaTimeZoneProvider ianaTimeZoneProvider)
 		{
 			_projectionProvider = projectionProvider;
 			_loggedOnUser = loggedOnUser;
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_toggleManager = toggleManager;
 			_projectionHelper = projectionHelper;
 			_projectionSplitter = projectionSplitter;
+			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 		}
 
 		public GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential, ICommonNameDescriptionSetting agentNameSetting)
@@ -45,7 +47,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				Name = agentNameSetting.BuildCommonNameDescription(scheduleDay.Person),
 				Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat(),
 				IsFullDayAbsence = IsFullDayAbsence(scheduleDay),
-				ShiftCategory = getShiftCategoryDescription(scheduleDay)
+				ShiftCategory = getShiftCategoryDescription(scheduleDay),
+				Timezone = new TimeZoneViewModel
+				{
+					IanaId = _ianaTimeZoneProvider.WindowsToIana(scheduleDay.Person.PermissionInformation.DefaultTimeZone().Id),
+					DisplayName = scheduleDay.Person.PermissionInformation.DefaultTimeZone().DisplayName
+				}
 			};
 			var personAssignment = scheduleDay.PersonAssignment();
 
