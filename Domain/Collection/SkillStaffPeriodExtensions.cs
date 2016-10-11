@@ -197,6 +197,7 @@ namespace Teleopti.Ccc.Domain.Collection
 			public bool HasIntraIntervalIssue { get; set; }
 			public double IntraIntervalValue { get; set; }
 			public IList<int> IntraIntervalSamples { get; set; }
+			public double RelativeDifferenceWithShrinkage { get; }
 		}
 	}
 }
