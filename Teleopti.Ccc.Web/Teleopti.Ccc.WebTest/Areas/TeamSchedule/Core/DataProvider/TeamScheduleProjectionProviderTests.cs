@@ -16,6 +16,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
+using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Ccc.WebTest.Core.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			fakeGlobalSettingRepo.PersistSettingValue("CommonNameDescription", new CommonNameDescriptionSetting("{FirstName}{LastName}"));
 			_commonAgentNameProvider = new CommonAgentNameProvider(fakeGlobalSettingRepo);
 			_toggleManager = new FakeToggleManager();
-			target = new TeamScheduleProjectionProvider(projectionProvider, loggonUser, new FakePersonNameProvider(), _toggleManager, new ScheduleProjectionHelper(), new ProjectionSplitter(projectionProvider, new ScheduleProjectionHelper()));
+			target = new TeamScheduleProjectionProvider(projectionProvider, loggonUser, new FakePersonNameProvider(), _toggleManager, new ScheduleProjectionHelper(), new ProjectionSplitter(projectionProvider, new ScheduleProjectionHelper()), new FakeIanaTimeZoneProvider());
 		}
 
 		[Test]
