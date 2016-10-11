@@ -48,15 +48,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		{
 			var shiftEndTime = new DateTime(2014, 03, 05, 15, 30, 0, DateTimeKind.Utc);
 			var overtimePeriod = new DateTimePeriod(shiftEndTime, shiftEndTime.Add(TimeSpan.FromHours(2)));
-			var overtimePeriods = new List<DateTimePeriod> {overtimePeriod};
-
+			
 			using (_mock.Record())
 			{
 				Expect.Call(_scheduleDay.OvertimeAvailablityCollection()).Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>()));
 			}
 			using (_mock.Playback())
 			{
-				Assert.AreEqual(0, _target.AdustOvertimeAvailability(_scheduleDay, _today, TimeZoneInfo.Utc, overtimePeriods).Count());
+				Assert.IsNull(_target.AdustOvertimeAvailability(_scheduleDay, _today, TimeZoneInfo.Utc, overtimePeriod));
 			}
 
 		}
@@ -68,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			IOvertimeAvailability overtimeAvailability = new OvertimeAvailability(_person, _today, TimeSpan.FromHours(11), TimeSpan.FromHours(12));
 
 			var overtimePeriod = new DateTimePeriod(shiftEndTime, shiftEndTime.Add(TimeSpan.FromHours(2)));
-			var overtimePeriods = new List<DateTimePeriod> { overtimePeriod };
+	
 
 			using (_mock.Record())
 			{
@@ -79,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			}
 			using (_mock.Playback())
 			{
-				Assert.AreEqual(0, _target.AdustOvertimeAvailability(_scheduleDay, _today, TimeZoneInfo.Utc, overtimePeriods).Count);
+				Assert.IsNull(_target.AdustOvertimeAvailability(_scheduleDay, _today, TimeZoneInfo.Utc, overtimePeriod));
 			}
 
 		}

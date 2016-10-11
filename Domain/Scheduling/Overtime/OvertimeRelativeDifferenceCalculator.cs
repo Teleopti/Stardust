@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
@@ -30,9 +29,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				if (onlyOvertimeAvaialbility)
 				{
 					var timeZoneInfo = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
-					var adjustedPeriods = _analyzePersonAccordingToAvailability.AdustOvertimeAvailability(scheduleDay, scheduleDay.DateOnlyAsPeriod.DateOnly, timeZoneInfo, new List<DateTimePeriod> { period });
-					if (!adjustedPeriods.IsEmpty()) 
-						calculateAndAddToPossiblePeriods(possibleOvertimePeriods, overtimePeriodValueMappedData, adjustedPeriods.First());
+					var adjustedPeriod = _analyzePersonAccordingToAvailability.AdustOvertimeAvailability(scheduleDay, scheduleDay.DateOnlyAsPeriod.DateOnly, timeZoneInfo, period);
+					if (adjustedPeriod.HasValue) 
+						calculateAndAddToPossiblePeriods(possibleOvertimePeriods, overtimePeriodValueMappedData, adjustedPeriod.Value);
 				}
 				else
 				{
