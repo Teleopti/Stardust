@@ -37,13 +37,14 @@ BEGIN
 END
 
 DECLARE @currentVersion int
+DECLARE @found uniqueidentifier
 
-SELECT @currentVersion = [Version]
+SELECT @currentVersion = [Version], @found = PersonId
 FROM ReadModel.PersonScheduleDay WITH (UPDLOCK)
 WHERE PersonId = @PersonId
 AND BelongsToDate = @BelongsToDate
 
-IF (@currentVersion IS NULL)
+IF (@currentVersion IS NULL AND @found IS NULL)
 BEGIN
 	INSERT INTO ReadModel.PersonScheduleDay (PersonId,Start,[End],BelongsToDate,IsDayOff,Model,ScheduleLoadedTime, [Version]) 
 	VALUES (@PersonId,@Start,@End,@BelongsToDate,@IsDayOff,@Model,@ScheduleLoadedTime, @Version)
@@ -51,7 +52,7 @@ BEGIN
 	RETURN
 END
 
-IF (@currentVersion < @Version)
+IF (ISNULL(@currentVersion, -1) < @Version)
 BEGIN
 	DELETE FROM ReadModel.PersonScheduleDay
 	WHERE PersonId = @PersonId
