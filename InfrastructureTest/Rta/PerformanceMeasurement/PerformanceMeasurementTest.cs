@@ -66,62 +66,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 		}
 		
 		[Test]
-		public void MeasureActivityChecker()
-		{
-			Publisher.AddHandler<MappingReadModelUpdater>();
-			Publisher.AddHandler<PersonAssociationChangedEventPublisher>();
-			Publisher.AddHandler<AgentStateMaintainer>();
-			Analytics.WithDataSource(9, "sourceId");
-			Database
-				.WithDefaultScenario("default")
-				.WithStateGroup("phone")
-				.WithStateCode("phone");
-			Enumerable.Range(0, 100).ForEach(x => Database.WithStateGroup($"code{x}").WithStateCode($"code{x}"));
-			Enumerable.Range(0, 10).ForEach(x => Database.WithActivity($"activity{x}"));
-			var userCodes = Enumerable.Range(0, 12000).Select(x => $"user{x}").ToArray();
-			userCodes.ForEach(x => Database.WithAgent(x));
-			Publisher.Publish(new TenantMinuteTickEvent());
-			userCodes
-				.Batch(1000)
-				.Select(x => new BatchForTest
-				{
-					States = x.Select(y => new BatchStateForTest
-					{
-						UserCode = y,
-						StateCode = "phone"
-					}).ToArray()
-				}).ForEach(Rta.SaveStateBatch);
-			
-			var results = (
-				from transactions in new[] {6, 7, 8}
-				from size in new[] {90, 100, 110}
-				from variation in new[] {"A", "B", "C"}
-				select new {transactions, size, variation}).Select(x =>
-				{
-					Config.FakeSetting("RtaActivityChangesParallelTransactions", x.transactions.ToString());
-					Config.FakeSetting("RtaActivityChangesMaxTransactionSize", x.size.ToString());
-
-					var timer = new Stopwatch();
-					timer.Start();
-
-					Rta.CheckForActivityChanges(DataSourceHelper.TestTenantName);
-
-					timer.Stop();
-					return new
-					{
-						timer.Elapsed,
-						x.transactions,
-						x.size,
-						x.variation
-					};
-				});
-
-			results
-				.OrderBy(x => x.Elapsed)
-				.ForEach(x => Debug.WriteLine($"{x.Elapsed} - {x.size} {x.transactions} {x.variation}"));
-		}
-
-		[Test]
 		public void MeasureClosingSnapshot()
 		{
 			Publisher.AddHandler<MappingReadModelUpdater>();
