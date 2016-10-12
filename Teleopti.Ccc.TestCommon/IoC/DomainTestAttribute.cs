@@ -20,6 +20,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -77,6 +78,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			QueryAllAttributes<UseEventPublisherAttribute>()
 				.ForEach(a => system.UseTestDoubleForType(a.EventPublisher).For<IEventPublisher>());
 			system.UseTestDouble<FakeRecurringEventPublisher>().For<IRecurringEventPublisher>();
+			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 			//
 
 			// Database aspects

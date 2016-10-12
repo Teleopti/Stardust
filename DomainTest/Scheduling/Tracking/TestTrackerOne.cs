@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 
         protected override void PerformTracking(ITraceable target, IAbsence absence, IList<IScheduleDay> scheduleDays)
         {
-            throw new NotImplementedException();
+           
         }
     }
 }
