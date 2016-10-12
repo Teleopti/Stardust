@@ -27,12 +27,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IPersonRepository _personRepository;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IMultiAbsenceRequestsUpdater _multiAbsenceRequestsUpdater;
+		private readonly IContractRepository _contractRepository;
+		private readonly IPartTimePercentageRepository _partTimePercentageRepository;
+		private readonly IContractScheduleRepository _contractScheduleRepository;
+
 
 
 		public MultiAbsenceRequestsHandler(IPersonRequestRepository personRequestRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
 			IStardustJobFeedback stardustJobFeedback, IWorkflowControlSetRepository workflowControlSetRepository, 
 			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IPersonRepository personRepository, 
-			ISkillRepository skillRepository, IMultiAbsenceRequestsUpdater multiAbsenceRequestsUpdater)
+			ISkillRepository skillRepository, IMultiAbsenceRequestsUpdater multiAbsenceRequestsUpdater, IContractRepository contractRepository, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository)
 		{
 			_personRequestRepository = personRequestRepository;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
@@ -42,6 +46,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_personRepository = personRepository;
 			_skillRepository = skillRepository;
 			_multiAbsenceRequestsUpdater = multiAbsenceRequestsUpdater;
+			_contractRepository = contractRepository;
+			_partTimePercentageRepository = partTimePercentageRepository;
+			_contractScheduleRepository = contractScheduleRepository;
 		}
 
 		[AsSystem]
@@ -127,6 +134,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				//preload some data
 				_personRepository.FindPeople(requests.Select(x => x.Person.Id.GetValueOrDefault()));
 				_skillRepository.LoadAllSkills();
+				_contractRepository.LoadAll();
+				_partTimePercentageRepository.LoadAll();
+				_contractScheduleRepository.LoadAllAggregate();
 
 				uow.PersistAll();
 			}
