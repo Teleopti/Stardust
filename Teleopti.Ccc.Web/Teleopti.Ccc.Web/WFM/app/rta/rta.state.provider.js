@@ -22,7 +22,7 @@ angular.module('wfm.rta').provider('RtaState', function() {
 		return function(toggleService) {
 			toggleService.togglesLoaded.then(function() {
 				toggles.RTA_HideAgentsByStateGroup_40469 = toggleService.RTA_HideAgentsByStateGroup_40469;
-				toggles.RTA_SiteAndTeamOnSkillOverview_40817 = toggleService.RTA_SiteAndTeamOnSkillOverview_40817;
+				//toggles.RTA_SiteAndTeamOnSkillOverview_40817 = toggleService.RTA_SiteAndTeamOnSkillOverview_40817;
 			});
 		};
 	};

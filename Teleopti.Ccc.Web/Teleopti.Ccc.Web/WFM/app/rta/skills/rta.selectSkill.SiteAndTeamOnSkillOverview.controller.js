@@ -41,7 +41,7 @@
 				$scope.siteIds = $stateParams.siteIds || [];
 				$scope.selectedItemIds = [];
 				$scope.getAdherencePercent = RtaFormatService.numberToPercent;
-
+				
 				RtaService.getSkills()
 					.then(function(skills) {
 						$scope.skillsLoaded = true;
@@ -90,7 +90,6 @@
 					if ($scope.siteIds.length) {
 						getTeamsForSitesAndSkillOrSkillArea()
 							.then(function(teams) {
-
 								$scope.teams = teams;
 								var teamIds = teams.map(function(team) {
 									return team.Id;

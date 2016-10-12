@@ -9,23 +9,7 @@ xdescribe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 		$controllerBuilder,
 		$timeout;
 	var stateParams = {};
-	var phoneEmailSkills = [{
-		Id: "PhoneSkillGuid",
-		Name: "PhoneSkill"
-	}, {
-		Id: "EmailSkillGuid",
-		Name: "EmailSkill"
-	}];
-	var xYSkills = [{
-		Id: "SkillXGuid",
-		Name: "skill x"
-	}, {
-		Id: "SkillYGuid",
-		Name: "skill y"
-	}];
-
 	beforeEach(module('wfm.rta'));
-
 	beforeEach(function() {
 		module(function($provide) {
 			$provide.service('$stateParams', function() {
@@ -261,39 +245,8 @@ xdescribe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 		expect(scope.teams[0].Name).toEqual("London Team");
 		expect(scope.teams[0].OutOfAdherence).toEqual(3);
 	});
-});
 
 
-			})
-			.withTeam({
-				Id: "ParisTeamGuid",
-				Name: "Paris Team",
-				SiteId: "ParisGuid"
-			})
-			.withTeamAdherenceForSkill({
-				Id: "LondonTeamGuid",
-				OutOfAdherence: 1,
-				SkillId: "PhoneSkillGuid"
-			})
-			.withTeamAdherenceForSkill({
-				Id: "LondonTeamGuid",
-				OutOfAdherence: 3,
-				SkillId: "EmailSkillGuid"
-			})
-			.withTeamAdherenceForSkill({
-				Id: "ParisTeamGuid",
-				OutOfAdherence: 5,
-				SkillId: "EmailSkillGuid"
-			});
-
-
-		$controllerBuilder.createController().wait(5000);
-
-		expect(scope.teams.length).toEqual(1);
-		expect(scope.teams[0].Name).toEqual("London Team");
-		expect(scope.teams[0].OutOfAdherence).toBeLessThan(5);
-	});
-});
 
 	it('should display agents out of adherence in teams for pre selected skill and sites', function() {
 		stateParams.skillId = "EmailSkillGuid";
@@ -327,18 +280,8 @@ xdescribe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 	});
 
 	it('should display teams for pre selected skillArea and sites', function() {
-		stateParams.skillAreaId = "SkillAreaGuid1";
-		stateParams.siteIds = ["LondonGuid"];
-		$fakeBackend
-			.withSkillAreas([{
-				Id: "SkillAreaGuid1",
-				Name: "my skill area 1",
-				Skills: skills1
-			}, {
-				Id: "SkillAreaGuid2",
-				Name: "my skill area 2",
-				Skills: skills2
-			}])
+		stateParams.skillAreaId = "EmailSkillGuid";
+		stateParams.siteIds = ["ParisGuid"];
 		$fakeBackend
 			.withTeam({
 				Id: "LondonTeamGuid",
@@ -350,28 +293,23 @@ xdescribe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				Name: "Paris Team",
 				SiteId: "ParisGuid"
 			})
-			.withTeamAdherenceForSkill({
+			.withTeamAdherenceForSkillArea({
 				Id: "LondonTeamGuid",
 				OutOfAdherence: 1,
-				SkillId: "PhoneSkillGuid"
+				SkillAreaId: "PhoneSkillGuid"
 			})
-			.withTeamAdherenceForSkill({
-				Id: "LondonTeamGuid",
-				OutOfAdherence: 3,
-				SkillId: "EmailSkillGuid"
-			})
-			.withTeamAdherenceForSkill({
+			.withTeamAdherenceForSkillArea({
 				Id: "ParisTeamGuid",
 				OutOfAdherence: 5,
-				SkillId: "EmailSkillGuid"
+				SkillAreaId: "EmailSkillGuid"
 			});
-
 
 		$controllerBuilder.createController().wait(5000);
 
 		expect(scope.teams.length).toEqual(1);
-		expect(scope.teams[0].Name).toEqual("London Team");
-		expect(scope.teams[0].OutOfAdherence).toEqual(3);
+		expect(scope.teams[0].Name).toEqual("Paris Team");
+		expect(scope.teams[0].OutOfAdherence).toEqual(5);
 	});
 
 
+});
