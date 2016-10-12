@@ -12,7 +12,7 @@
   'use strict';
 
   // TIMEPICKER PUBLIC CLASS DEFINITION
-  var Timepicker = function(element, options) {
+  var Timepicker = function (element, options) {
     this.widget = '';
     this.$element = $(element);
     this.defaultTime = options.defaultTime;
@@ -35,7 +35,12 @@
     constructor: Timepicker,
 
     _init: function() {
-      var self = this;
+        var self = this;
+        if (this.$element.hasClass('left-align')) {
+            this.leftAlign = true;
+        } else {
+            this.leftAlign = false;
+        }
 
       if (this.$element.parent().hasClass('input-group') || this.$element.parent().hasClass('input-group')) {
         this.$element.parent('.input-group, .input-group').find('.input-group-addon').on({
@@ -331,7 +336,8 @@
         '</div>';
         break;
       case 'dropdown':
-        template = '<div class="bootstrap-timepicker-widget dropdown-menu">'+ templateContent +'</div>';
+          var alignmentClass = this.leftAlign ? 'left-align' : 'right-align';
+          template = '<div class="bootstrap-timepicker-widget dropdown-menu ' + alignmentClass + '">' + templateContent + '</div>';
         break;
       }
 

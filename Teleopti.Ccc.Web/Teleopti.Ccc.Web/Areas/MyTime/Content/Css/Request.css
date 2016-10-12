@@ -165,8 +165,17 @@
 @media(max-width: 768px){
 	.bootstrap-timepicker.request-time {
 		margin-top: 5px;
-	    left: -20px;
 	}
+
+    .right-align.bootstrap-timepicker-widget.dropdown-menu {
+        left: auto;
+        right: 0!important;
+    }
+
+    .left-align.bootstrap-timepicker-widget.dropdown-menu {
+        right: auto;
+        left: 0!important;
+    }
 }
 
 .shift-trade-layer-container {
