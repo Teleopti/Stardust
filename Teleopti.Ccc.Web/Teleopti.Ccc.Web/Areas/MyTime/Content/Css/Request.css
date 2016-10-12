@@ -317,7 +317,8 @@
 .shift-trade-agent-name {
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: nowrap;
+	word-break: break-all;
+	white-space: normal;
 	width: 114px;
 }
 
