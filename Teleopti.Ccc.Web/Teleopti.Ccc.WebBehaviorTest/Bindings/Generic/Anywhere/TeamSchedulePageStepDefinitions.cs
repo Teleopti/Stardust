@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see '(.*)' with the scheduled activity")]
 		public void ThenIShouldSeeWithTheScheduledActivity(string personName, Table table)
 		{
-			using (Browser.TimeoutScope(TimeSpan.FromSeconds(25)))
+			using (Browser.TimeoutScope(TimeSpan.FromSeconds(30)))
 			{
 				var scheduledActivity = table.CreateInstance<ScheduledActivityInfo>();
 				assertScheduledActivity(personName, scheduledActivity);
