@@ -10,6 +10,6 @@
             url: '/skillprio',
             templateUrl: 'app/skillPrio/skillprio.html',
             controller: 'skillPrioController as vm'
-        })
+        });
     }
 })();

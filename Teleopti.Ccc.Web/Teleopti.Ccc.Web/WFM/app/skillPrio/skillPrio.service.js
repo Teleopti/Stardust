@@ -25,8 +25,8 @@
                 }, {
                     name: 'Social Media'
                 },];
-            return activitys
-        };
+            return activitys;
+        }
         function getMockSkills() {
             var skills = [{
                 name: "English",
@@ -53,7 +53,7 @@
                     value: 0,
                     siblings: []
                 }];
-            return skills
-        };
+            return skills;
+        }
     }
 })();

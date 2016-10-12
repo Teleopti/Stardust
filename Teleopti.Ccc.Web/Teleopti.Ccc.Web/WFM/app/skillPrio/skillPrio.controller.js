@@ -23,53 +23,53 @@
 		
 		function getActivitys() {
 			return skillPrioService.getMockActivitys();
-		};
+		}
 
 		function getSkills() {
 			return skillPrioService.getMockSkills();
-		};
+		}
 		
 		function removeFromUnsorted(skill) {
 			vm.skills.splice(vm.skills.indexOf(skill), 1);
-		}; 
+		} 
 
 		function addToUnsorted(skill){
 			vm.skills.push(skill);
-		};
+		}
 
 		function removeFromSorted(skill){
 			if(skill.hasParent){
 				vm.sortedSkills.forEach(function(parent){
 					if(parent.value === skill.value){
 						skill.hasParent = false;
-						parent.siblings.splice(parent.siblings.indexOf(skill), 1)
-					};
-				})
+						parent.siblings.splice(parent.siblings.indexOf(skill), 1);
+					}
+				});
 			}else{
-				skill.siblings = new Array();
+				skill.siblings = [];
 				skill.hasParent = false;
-				vm.sortedSkills.splice(vm.sortedSkills.indexOf(skill), 1)
+				vm.sortedSkills.splice(vm.sortedSkills.indexOf(skill), 1);
 			}
 			
-		};
+		}
 
 		function promoteSiblings(arr){
 			arr.forEach(function(sibling){
-				addSkill(sibling.skill, sibling.value, sibling.isSibling)
+				addSkill(sibling.skill, sibling.value, sibling.isSibling);
 			});
 		}
 
 		function removeSkill(skill){
-			var skillRepository = []
+			var skillRepository = [];
 			if(skill.siblings.length > 0){
 				skill.siblings[0].hasParent = false;
 				skill.siblings.forEach(function(sibling){
-					var temp = {skill: sibling, value:skill.value, isSibling:true}
+					var temp = {skill: sibling, value:skill.value, isSibling:true};
 					skillRepository.push(temp);
 				});
 			}
-			removeFromSorted(skill)
-			addToUnsorted(skill)
+			removeFromSorted(skill);
+			addToUnsorted(skill);
 			if(skillRepository.length > 0){
 				promoteSiblings(skillRepository);
 			}
@@ -77,8 +77,8 @@
 
 		function query(query) {
 			var results = $filter('filter')(vm.skills,query);
-				return results
-		};
+				return results;
+		}
 
 		function addSkill(skill, prio, isSibling) {
 			if(!skill || !prio) return;
@@ -97,18 +97,19 @@
 			if(!isSibling){
 				removeFromUnsorted(skill);
 			}
-		};
+		}
 
 		function displayAutoComplete(skill, position) {
 			if (!skill || !position) return;
-			var currentAutocompletePosition = "showAutoComplete" + position
+			var currentAutocompletePosition = "showAutoComplete" + position;
 			if (skill[currentAutocompletePosition]) {
-				return skill[currentAutocompletePosition] = !skill[currentAutocompletePosition]
+				var skillAutocompletePosition = skill[currentAutocompletePosition] = !skill[currentAutocompletePosition];
+				return skillAutocompletePosition;
 			} else {
 				skill[currentAutocompletePosition] = true;
-				return 
+				return;
 			}
-		};
+		}
 
 		function save(){
 			NoticeService.success('All changes are saved', 5000, true);
@@ -116,11 +117,11 @@
 
 		function noSortedSkills() {
 			if (vm.sortedSkills.length > 0) {
-				return false
+				return false;
 			} else {
-				return true
+				return true;
 			}
-		};
+		}
 
 	}
 })();
