@@ -1339,6 +1339,7 @@
     <Content Include="Content\signalr\jquery.signalR-2.2.0.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.0.min.js" />
     <Content Include="WFM\app\people\people.keywordFormat.directive.js" />
+    <Content Include=".node\yarn.cmd" />
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
     <Content Include="WFM\app\rta\historical\rta-historical-SeeAllOutOfAdherences_39146.html" />
     <Content Include="WFM\app\rta\historical\rta.historical.controller.js" />
