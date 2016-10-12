@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_requestApprovalServiceFactory = new RequestApprovalServiceFactory(
 				new SwapAndModifyService(null, null), 
 				new FakeGlobalSettingDataRepository(),
-				businessRules, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository)
+				businessRules, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), new DoNothingScheduleDayChangeCallBack()
 			);
 			
 			var writeProtectedScheduleCommandValidator = new WriteProtectedScheduleCommandValidator ( 
