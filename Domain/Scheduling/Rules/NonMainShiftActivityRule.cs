@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private bool isPersonalActivityOverSchedule(IScheduleDay currentSchedule)
 		{
-			var shiftLayers = (List<IShiftLayer>)currentSchedule.PersonAssignment().ShiftLayers;
+			var shiftLayers = currentSchedule.PersonAssignment().ShiftLayers;
 			var activities = currentSchedule.PersonAssignment().PersonalActivities();
 			if (activities != null && activities.Any(activity => isOverSchedule(activity.Period, shiftLayers)))
 			{
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private bool isMeetingOverSchedule(IScheduleDay currentSchedule)
 		{
-			var shiftLayers = (List<IShiftLayer>)currentSchedule.PersonAssignment().ShiftLayers;
+			var shiftLayers = currentSchedule.PersonAssignment().ShiftLayers;
 			var meetings = currentSchedule.PersonMeetingCollection();
 			if (meetings != null && meetings.Any(personMeeting => isOverSchedule(personMeeting.Period, shiftLayers)))
 			{
@@ -83,9 +83,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return false;
 		}
 
-		private bool isOverSchedule(DateTimePeriod period, IList<IShiftLayer> layers)
+		private bool isOverSchedule(DateTimePeriod period, IEnumerable<IShiftLayer> layers)
 		{
-			if (layers.Count == 0) return true;
+			if (!layers.Any()) return true;
 
 			var maxPeriod = new DateTimePeriod( layers.Min(p => p.Period.StartDateTime) , layers.Max(p=>p.Period.EndDateTime));
 			if (period.EndDateTime <= maxPeriod.StartDateTime || period.StartDateTime >= maxPeriod.EndDateTime) return true;
