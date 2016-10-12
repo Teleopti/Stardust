@@ -1,8 +1,8 @@
 ﻿(function() {
 	'use strict';
-	angular.module('wfm.teamSchedule').factory('PersonSchedule', [PersonSchedule]);
+	angular.module('wfm.teamSchedule').factory('PersonSchedule', ['$filter',PersonSchedule]);
 
-	function PersonSchedule() {
+	function PersonSchedule($filter) {
 
 		var personScheduleFactory = {
 			Create: create
@@ -206,8 +206,6 @@
 			var lengthMinutes = startTimeMinutes < 0 ? projectionMinutes - (startTimeMinutes * -1) : projectionMinutes;
 			var length = lengthMinutes * timeLine.LengthPercentPerMinute;
 
-		
-
 			var shiftProjectionVm = {
 				ParentPersonAbsences: projection.ParentPersonAbsences,
 				ShiftLayerIds: projection.ShiftLayerIds,
@@ -223,7 +221,12 @@
 				},
 				Minutes: projectionMinutes,
 				UseLighterBorder: useLightColor(projection.Color),
-				SameTypeAsLast: lproj ? (lproj.Description === projection.Description) : false
+				SameTypeAsLast: lproj ? (lproj.Description === projection.Description) : false,
+				TimeSpan: function () {
+					var start = new Date(this.Start);
+					var end = moment(this.Start).add(this.Minutes, 'minute').toDate();
+					return $filter('date')(start, 'shortTime') + ' - ' + $filter('date')(end, 'shortTime');
+				}
 			};
 
 			return shiftProjectionVm;

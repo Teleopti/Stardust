@@ -68,7 +68,10 @@
 							 hasSelected:vm.totalSelectedProjections() != 0 && !projection.IsOvertime, selected:projection.Selected, lighterBorder: projection.UseLighterBorder, unselectable: !vm.canToggleSelection(projection, shift, vm.selectedDate),
 							 sameTypeAsLast: projection.SameTypeAsLast}"
 						 ng-click="vm.ToggleProjectionSelection(projection, personSchedule, shift, vm.selectedDate)">
-						<md-tooltip>{{projection.Description}}</md-tooltip>
+						<md-tooltip class="multiline-tooltip layer-summary">
+							<div>{{projection.Description}}</div>
+							<div>{{projection.TimeSpan()}}</div>
+						</md-tooltip>
 					</div>
 				</div>
 			</div>
