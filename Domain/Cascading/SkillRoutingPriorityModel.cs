@@ -37,14 +37,14 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public List<SkillRoutingActivityRow> SkillRoutingActivites()
 		{
-			var allActivites = _activityRepository.LoadAll().Where(x => !((IDeleteTag)x).IsDeleted);
-			var resultList = new List<SkillRoutingActivityRow>();
+			var allActivites = _activityRepository.LoadAll().Where(x => !x.IsDeleted && x.RequiresSkill);
+			var activityList = new List<SkillRoutingActivityRow>();
 			foreach (var activity in allActivites)
 			{
-				resultList.Add(new SkillRoutingActivityRow {ActivityGuid = activity.Id.Value, ActivityName = activity.Name});
+				activityList.Add(new SkillRoutingActivityRow {ActivityGuid = activity.Id.Value, ActivityName = activity.Name});
 			}
 
-			return resultList;
+			return activityList;
 		}
 	}
 

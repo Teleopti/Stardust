@@ -175,7 +175,8 @@
         ETL_EventbasedDate_39562,
 		ReadModel_ToHangfire_39147,
 		NewPasswordHash_40460,
-        Wfm_Intraday_OptimalStaffing_40921
+        Wfm_Intraday_OptimalStaffing_40921,
+		Wfm_SkillPriorityRoutingGUI_39885
         // ReSharper restore InconsistentNaming
     }
 }

@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[Route("api/ResourcePlanner/AdminSkillRoutingActivity"), HttpGet, UnitOfWork]
 		public virtual IHttpActionResult AdminSkillRoutingActivity()
 		{
-			var resultList = _skillRoutingPriorityModel.SkillRoutingActivites();
-			return Ok(resultList);
+			var activityList = _skillRoutingPriorityModel.SkillRoutingActivites();
+			return Ok(activityList);
 		}
 
 		[Route("api/ResourcePlanner/AdminSkillRoutingPriority"), HttpGet, UnitOfWork]

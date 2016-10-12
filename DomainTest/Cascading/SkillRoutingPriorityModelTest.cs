@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Cascading
 	{
 		public SkillRoutingPriorityModel Target;
 		public FakeSkillRepository SkillRepository;
+		public FakeActivityRepository ActivityRepository;
 
 		[Test]
 		public void ShouldReturnSkillData()
@@ -80,6 +81,28 @@ namespace Teleopti.Ccc.DomainTest.Cascading
 			result[0].ActivityName.Should().Be.EqualTo(activity.Name);
 			result[0].SkillName.Should().Be.EqualTo(skill.Name);
 			result[0].Priority.Should().Be.EqualTo(null);
+		}
+
+		[Test]
+		public void ShouldOnlyReturnActiviesNotDeletedAndRequriesSkill()
+		{
+			var activity1 = new Activity("activity").WithId();
+			activity1.RequiresSkill = false;
+			ActivityRepository.Add(activity1);
+
+			var activity2 = new Activity("this").WithId();
+			activity2.RequiresSkill = true;
+			ActivityRepository.Add(activity2);
+
+			var activity3 = new Activity("activity").WithId();
+			activity3.RequiresSkill = true;
+			activity3.SetDeleted();
+			ActivityRepository.Add(activity3);
+
+			var result = Target.SkillRoutingActivites();
+			result.Count.Should().Be.EqualTo(1);
+			result[0].ActivityGuid.Should().Be.EqualTo(activity2.Id.Value);
+			result[0].ActivityName.Should().Be.EqualTo(activity2.Name);
 		}
 	}
 }
