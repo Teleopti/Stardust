@@ -166,6 +166,8 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
 		void SetAbsenceRequestCancellation(IWorkflowControlSetModel selectedModel);
 
+		void SetAbsenceRequestExpiration(IWorkflowControlSetModel selectedModel);
+
 		/// <summary>
 		/// Sets the lock trading.
 		/// </summary>

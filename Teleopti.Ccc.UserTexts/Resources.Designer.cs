@@ -259,6 +259,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Minimum minutes before absence time that requests may be valid:.
+        /// </summary>
+        public static string AbsenceRequestExpiredThreshold {
+            get {
+                return ResourceManager.GetString("AbsenceRequestExpiredThreshold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The absence request {0} was approved..
         /// </summary>
         public static string AbsenceRequestForOneDayHasBeenApprovedDot {

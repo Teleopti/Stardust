@@ -14400,6 +14400,10 @@ Check your internet connection or contact your administrator.</value>
     <value>Number of days before absence date that requests may be cancelled:</value>
     <comment>Used in the workflow control set, Absence Request settings page in the Admin Client.</comment>
   </data>
+  <data name="AbsenceRequestExpiredThreshold" xml:space="preserve">
+    <value>Minimum minutes before absence time that requests may be valid:</value>
+    <comment>Used in the workflow control set, Absence Request settings page in the Admin Client.</comment>
+  </data>
   <data name="NoPermissionMoveAgentActivity" xml:space="preserve">
     <value>No permission to move activity for agent {0}.	</value>
     <comment>Error message to notify missing permission for moving activity</comment>

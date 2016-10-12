@@ -90,27 +90,38 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				radioButtonWaitlistFirstComeFirstServed.Visible = false;
 				radioButtonWaitlistBySeniority.Visible = false;
 			}
+
+			if (!toggleManager.IsEnabled(Toggles.Wfm_Requests_Check_Expired_Requests_40274))
+			{
+				hideAbsenceRequestExpirationOptions();
+			}
+		}
+
+		private void hideAbsenceRequestExpirationOptions()
+		{
+			hideControl(tableLayoutPanelAbsenceRequestExpiration);
 		}
 
 		private void hideAbsenceRequestWaitlistingOptions()
 		{
-			checkBoxEnableAbsenceRequestWaitlisting.Hide();
-
-			var rowIndex = tableLayoutPanelBasic.GetRow(checkBoxEnableAbsenceRequestWaitlisting);
-			tableLayoutPanelAbsenceRequestPeriods.RowStyles[rowIndex].Height = 0;
+			hideControl(checkBoxEnableAbsenceRequestWaitlisting);
 		}
 
 		private void hideAbsenceCancellationOptions()
 		{
-			txtAbsenceRequestCancellationThreshold.Hide();
 			labelAbsenceRequestCancellationThreshold.Hide();
-			var rowIndex = tableLayoutPanelBasic.GetRow(txtAbsenceRequestCancellationThreshold);
-			tableLayoutPanelAbsenceRequestPeriods.RowStyles[rowIndex].Height = 0;
+			hideControl(txtAbsenceRequestCancellationThreshold);
 		}
 
 		private void hideMiscAbsenceRequestOptions()
 		{
-			var rowIndex = tableLayoutPanelBasic.GetRow(tableLayoutPanelAbsenceRequestMiscellaneous);
+			hideControl(tableLayoutPanelAbsenceRequestMiscellaneous);
+		}
+
+		private void hideControl(Control control)
+		{
+			control.Hide();
+			var rowIndex = tableLayoutPanelBasic.GetRow(control);
 			tableLayoutPanelAbsenceRequestPeriods.RowStyles[rowIndex].Height = 0;
 		}
 
@@ -780,6 +791,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			txtAbsenceRequestCancellationThreshold.Leave += txtAbsenceRequestCancellationThreshold_Leave;
 		}
 
+		public void SetAbsenceRequestExpiration(IWorkflowControlSetModel selectedModel)
+		{
+			txtAbsenceRequestExpiredThreshold.Leave -= txtAbsenceRequestExpiredThreshold_Leave;
+			txtAbsenceRequestExpiredThreshold.Text = selectedModel.AbsenceRequestExpiredThreshold.ToString();
+			txtAbsenceRequestExpiredThreshold.Leave += txtAbsenceRequestExpiredThreshold_Leave;
+		}
+
 		public void SetLockTrading(bool lockTrading)
 		{
 			checkBoxAdvLockTrading.CheckStateChanged -= checkBoxAdvLockTrading_CheckStateChanged;
@@ -1180,6 +1198,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void txtAbsenceRequestCancellationThreshold_Leave(object sender, EventArgs e)
 		{
 			_presenter.SetAbsenceRequestCancellationThreshold(txtAbsenceRequestCancellationThreshold.IntegerValue());
+		}
+
+		private void txtAbsenceRequestExpiredThreshold_Leave(object sender, EventArgs e)
+		{
+			_presenter.SetAbsenceRequestExpiredThreshold(txtAbsenceRequestExpiredThreshold.IntegerValue());
 		}
 	}
 }
