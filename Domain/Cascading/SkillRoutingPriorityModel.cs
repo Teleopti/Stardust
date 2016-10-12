@@ -9,10 +9,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 	public class SkillRoutingPriorityModel
 	{
 		private readonly ISkillRepository _skillRepository;
+		private readonly IActivityRepository _activityRepository;
 
-		public SkillRoutingPriorityModel(ISkillRepository skillRepository)
+		public SkillRoutingPriorityModel(ISkillRepository skillRepository, IActivityRepository activityRepository)
 		{
 			_skillRepository = skillRepository;
+			_activityRepository = activityRepository;
 		}
 
 		public List<SkillRoutingPriorityModelRow> SkillRoutingPriorityModelRows()
@@ -32,6 +34,18 @@ namespace Teleopti.Ccc.Domain.Cascading
 			}
 			return skillList;
 		}
+
+		public List<SkillRoutingActivityRow> SkillRoutingActivites()
+		{
+			var allActivites = _activityRepository.LoadAll().Where(x => !((IDeleteTag)x).IsDeleted);
+			var resultList = new List<SkillRoutingActivityRow>();
+			foreach (var activity in allActivites)
+			{
+				resultList.Add(new SkillRoutingActivityRow {ActivityGuid = activity.Id.Value, ActivityName = activity.Name});
+			}
+
+			return resultList;
+		}
 	}
 
 	[Serializable]
@@ -42,5 +56,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 		public int? Priority { get; set; }
 		public string SkillName { get; set; }
 		public Guid SkillGuid { get; set; }
+	}
+
+	[Serializable]
+	public class SkillRoutingActivityRow
+	{
+		public Guid ActivityGuid { get; set; }
+		public string ActivityName { get; set; }
 	}
 }
