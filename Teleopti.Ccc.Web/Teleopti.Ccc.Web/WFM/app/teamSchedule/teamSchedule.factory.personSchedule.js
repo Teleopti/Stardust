@@ -223,7 +223,7 @@
 				UseLighterBorder: useLightColor(projection.Color),
 				SameTypeAsLast: lproj ? (lproj.Description === projection.Description) : false,
 				TimeSpan: function () {
-					var start = new Date(this.Start);
+					var start = moment(this.Start).toDate();
 					var end = moment(this.Start).add(this.Minutes, 'minute').toDate();
 					return $filter('date')(start, 'shortTime') + ' - ' + $filter('date')(end, 'shortTime');
 				}
