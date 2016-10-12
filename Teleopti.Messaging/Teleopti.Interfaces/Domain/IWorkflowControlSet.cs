@@ -274,6 +274,8 @@ namespace Teleopti.Interfaces.Domain
 
 		int? AbsenceRequestCancellationThreshold { get; set; }
 
+		int? AbsenceRequestExpiredThreshold { get; set; }
+
 		/// <summary>
 		/// Adds an absence allowed for report.
 		/// </summary>
