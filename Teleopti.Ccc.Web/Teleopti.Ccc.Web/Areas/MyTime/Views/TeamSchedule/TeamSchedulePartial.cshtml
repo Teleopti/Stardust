@@ -35,14 +35,14 @@
 
 <div class="container pagebody">
 	<div id="teamschedule-body-inner" class="teamschedule-body-inner relative">
-		<div id="existsWhenLoadingStarts" data-bind="if: isLocked()"></div>
+		<div id="existsWhenLoadingStarts" data-bind="if: isLocked"></div>
 		<div id="draw-schedule-container" class="well well-sm fixed-non-responsive">
 			<div class="row">
 				<div class="col-sm-6 col-md-6 col-lg-3">
 					<div id="ScheduleDatePicker" class="input-group schedule-filter-component">
 						<span class="input-group-btn">
 							<button disabled="disabled" class="previous-date btn" data-bind="click: previousDate, clickable: previousDateValid, enable: previousDateValid">
-								<i class="glyphicon glyphicon-chevron-left" data-bind="enable: !isLocked()"></i>
+								<i class="glyphicon glyphicon-chevron-left" data-bind="disable: isLocked"></i>
 							</button>
 						</span>
 						<![if (!IE)|(gt IE 8)]>
@@ -53,11 +53,11 @@
 						<![endif]-->
 						<!-- ko if : cultureLoaded -->
 						<span class="input-group-btn">
-							<button disabled="disabled" class="btn moment-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { autoHide: true, weekStart: weekStart() }, enable: !isLoading()">
+							<button disabled="disabled" class="btn moment-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { autoHide: true, weekStart: weekStart() }, disable: isLoading">
 								<i class="glyphicon glyphicon-calendar"></i>
 							</button>
 							<button disabled="disabled" class="next-date btn" data-bind="click: nextDate, clickable: nextDateValid, enable: nextDateValid">
-								<i class="glyphicon glyphicon-chevron-right" data-bind="enable: !isLoading()"></i>
+								<i class="glyphicon glyphicon-chevron-right" data-bind="disable: isLoading"></i>
 							</button>
 						</span>
 						<!-- /ko -->
@@ -159,7 +159,7 @@
 
 					<div class="col-sm-5 col-md-6 col-lg-2">
 						<div class="input-group name-search schedule-filter-component">
-							<input type="search" class="form-control" placeholder='@Resources.SearchHintForName' data-bind="value: searchNameText, disable: isLocked(), event: { change: changeInSearchBox} " />
+							<input type="search" class="form-control" placeholder='@Resources.SearchHintForName' data-bind="value: searchNameText, disable: isLocked, event: { change: changeInSearchBox} " />
 							<span class="input-group-addon input-group-addon-narrow">
 								<!-- ko if: isLocked -->
 								<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
@@ -190,7 +190,7 @@
 							<td></td>
 						</tr>
 					</thead>
-					<!--ko if:isTeamScheduleNoReadModelEnable() -->
+					<!--ko if:isTeamScheduleNoReadModelEnable -->
 					<tbody>
 						<tr class="shift-trade-my-schedule-row">
 							<td class="shift-trade-agent-name">@Resources.MySchedule</td>
@@ -230,7 +230,7 @@
 							<td class="shift-trade-possible-trade-schedule">
 								<!--ko if:isFullDayAbsence -->
 								<div data-bind="foreach: $data.layers">
-									<!--ko if:!$parent.isDayOff-->
+									<!--ko ifnot:$parent.isDayOff-->
 									<div class="shift-trade-layer-container floatleft">
 										<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true}"></div>
 									</div>
@@ -242,7 +242,7 @@
 									<!--/ko-->
 								</div>
 								<!--/ko-->
-								<!--ko if:!isFullDayAbsence -->
+								<!--ko ifnot:isFullDayAbsence -->
 								<div data-bind="foreach: $data.layers">
 									<div class="shift-trade-layer-container floatleft">
 										<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true}"></div>
@@ -258,8 +258,8 @@
 						</tr>
 					</tbody>
 					<!--/ko-->
-					<!--ko if:!isTeamScheduleNoReadModelEnable() -->
-					<tbody data-bind="foreach: toDrawSchedules, visiblile:!isTeamScheduleNoReadModelEnable()">
+					<!--ko ifnot:isTeamScheduleNoReadModelEnable -->
+					<tbody data-bind="foreach: toDrawSchedules, visible:!isTeamScheduleNoReadModelEnable()">
 						<tr class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible">
 							<td id="shift-trade-agent-name" class="shift-trade-agent-name floatleft " data-bind="text: $data.agentName, tooltip: { title: $data.agentName, html: true}"></td>
 							<td class="shift-trade-possible-trade-schedule">
@@ -304,6 +304,6 @@
 			<!-- /ko -->
 			<div class="clearfix"></div>
 		</div>
-		<div id="existsWhenLoadingFinishes" data-bind="if: !isLoading()"></div>
+		<div id="existsWhenLoadingFinishes" data-bind="ifnot: isLoading"></div>
 	</div>
 </div>

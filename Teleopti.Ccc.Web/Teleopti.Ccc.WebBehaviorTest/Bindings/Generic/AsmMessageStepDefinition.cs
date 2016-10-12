@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				id = pushMessageDialogue.Id.GetValueOrDefault();
 			}
 
-			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + "1" + ");");
+			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(1);");
 			
 			Thread.Sleep(400); //wait for making sure the message has been added
 			var javaScript = new StringBuilder();

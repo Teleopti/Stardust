@@ -212,23 +212,16 @@ Teleopti.MyTimeWeb.PagingMixin = function () {
 
 	self.setPagingInfo = function (pageCount) {
 		self.pageCount(pageCount);
+		self.isPageVisible(pageCount > 0);
 
-		if (self.pageCount() == 0) {
-			self.isPageVisible(false);
-		} else {
-			self.isPageVisible(true);
+		var selectablePages = self.selectablePages();
+		if (selectablePages.length == 0) {
+			self.initSelectablePages(pageCount);
 		}
 
-		if (self.selectablePages().length == 0) {
-			self.initSelectablePages(self.pageCount());
-		}
-
-		$.each(self.selectablePages(), function (index, item) {
-			if (item.index() == self.selectedPageIndex()) {
-				item.isSelected(true);
-			} else {
-				item.isSelected(false);
-			}
+		var selectedPageIndex = self.selectedPageIndex();
+		$.each(selectablePages, function (index, item) {
+			item.isSelected(item.index() == selectedPageIndex);
 		});
 	};
 
