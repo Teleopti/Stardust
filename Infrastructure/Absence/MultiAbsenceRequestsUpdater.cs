@@ -198,17 +198,20 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 							if (affectedPersonAbsenceAccount != null)
 								trackAccounts(affectedPersonAbsenceAccount, dateOnlyPeriod, absenceRequest);
 						});
-				if (_toggleManager.IsEnabled(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754))
-				{
-					using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills))
-					{
-						ResourceCalculationContext.Fetch().PrimarySkillMode = true;
-						var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(
+
+				var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(
 						_schedulingResultStateHolder,
 						personAccountBalanceCalculator,
 						_resourceOptimizationHelper,
 						_budgetGroupAllowanceSpecification,
 						_budgetGroupHeadCountSpecification);
+
+				if (_toggleManager.IsEnabled(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754))
+				{
+					using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills))
+					{
+						ResourceCalculationContext.Fetch().PrimarySkillMode = true;
+						
 
 						processAbsenceRequest.Process(null, absenceRequest,
 										requiredForProcessingAbsenceRequest,
@@ -218,13 +221,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				}
 				else
 				{
-					var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(
-					_schedulingResultStateHolder,
-					personAccountBalanceCalculator,
-					_resourceOptimizationHelper,
-					_budgetGroupAllowanceSpecification,
-					_budgetGroupHeadCountSpecification);
-
 					processAbsenceRequest.Process(null, absenceRequest,
 								requiredForProcessingAbsenceRequest,
 								requiredForHandlingAbsenceRequest,

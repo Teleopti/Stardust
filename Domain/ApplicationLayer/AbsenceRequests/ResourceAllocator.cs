@@ -38,13 +38,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			foreach (var period in periods)
 			{
 				var staffingIntervalsInPeriod = skillStaffingIntervals.Where(x => period.Intersect(new DateTimePeriod(x.StartDateTime.Utc(), x.EndDateTime.Utc()))).ToList(); 
-				var totaloverstaffing = staffingIntervalsInPeriod.Sum(interval => interval.StaffingLevel - interval.ForecastWithShrinkage);
+				var totaloverstaffing = staffingIntervalsInPeriod.Sum(interval => interval.StaffingLevel - interval.Forecast);
 				unmergedIntervalChanges.AddRange(staffingIntervalsInPeriod.Select(skillStaffingInterval => new StaffingIntervalChange()
 																				  {
 																					  StartDateTime = period.StartDateTime,
 																					  EndDateTime = period.EndDateTime,
 																					  SkillId = skillStaffingInterval.SkillId,
-																					  StaffingLevel = -((skillStaffingInterval.StaffingLevel - skillStaffingInterval.ForecastWithShrinkage)/totaloverstaffing)*getStaffingFactor(period, personRequest.Request.Period)
+																					  StaffingLevel = -((skillStaffingInterval.StaffingLevel - skillStaffingInterval.Forecast)/totaloverstaffing)*getStaffingFactor(period, personRequest.Request.Period)
 																				  }));
 			}
 

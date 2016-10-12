@@ -31,22 +31,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private ISkill _unsortedSkill15;
 		private ISkill _unsortedSkill30;
 
-		private const double shrinkage = 1;
-
 		private const double forecastedPrimary = 2;
 		private const double staffingPrimary = 3;
-		private const double overstaffedPrimary = staffingPrimary - forecastedPrimary * shrinkage;
+		private const double overstaffedPrimary = staffingPrimary - forecastedPrimary;
 
 		private const double forecastedSecondary = 2; //secondary skill, should not be used
 		private const double staffingSecondary = 5;
 
 		private const double forecastedUnsorted15 = 2;
 		private const double staffingUnsorted15 = 10;
-		private const double overstaffedUnsorted15 = staffingUnsorted15 - forecastedUnsorted15 * shrinkage;
+		private const double overstaffedUnsorted15 = staffingUnsorted15 - forecastedUnsorted15;
 
 		private const double forecastedUnsorted30 = 2;
 		private const double staffingUnsorted30 = 10;
-		private const double overstaffedUnsorted30 = staffingUnsorted30 - forecastedUnsorted30 * shrinkage;
+		private const double overstaffedUnsorted30 = staffingUnsorted30 - forecastedUnsorted30;
 
 		private const double totaloverstaffed1 = overstaffedPrimary + overstaffedUnsorted15 + overstaffedUnsorted30;
 		private const double totaloverstaffed2 = overstaffedPrimary + overstaffedUnsorted15 + overstaffedUnsorted30;
@@ -337,7 +335,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					StartDateTime = startDateTime1,
 					EndDateTime = endDateTime1,
 					Forecast = forecastedPrimary,
-					ForecastWithShrinkage = forecastedPrimary*shrinkage,
+					ForecastWithShrinkage = forecastedPrimary,
 					StaffingLevel = staffingPrimary
 				},
 				new SkillStaffingInterval()
@@ -346,7 +344,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					StartDateTime = startDateTime2,
 					EndDateTime = endDateTime2,
 					Forecast = forecastedPrimary,
-					ForecastWithShrinkage = forecastedPrimary*shrinkage,
+					ForecastWithShrinkage = forecastedPrimary,
 					StaffingLevel = staffingPrimary
 				},
 				new SkillStaffingInterval()
@@ -355,7 +353,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					StartDateTime = startDateTime1,
 					EndDateTime = endDateTime1,
 					Forecast = forecastedUnsorted15,
-					ForecastWithShrinkage = forecastedUnsorted15 * shrinkage,
+					ForecastWithShrinkage = forecastedUnsorted15,
 					StaffingLevel = staffingUnsorted15
 				},
 				new SkillStaffingInterval()
@@ -364,7 +362,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					StartDateTime = startDateTime2,
 					EndDateTime = endDateTime2,
 					Forecast = forecastedUnsorted15,
-					ForecastWithShrinkage = forecastedUnsorted15 * shrinkage,
+					ForecastWithShrinkage = forecastedUnsorted15,
 					StaffingLevel = staffingUnsorted15
 				},
 				new SkillStaffingInterval()
@@ -373,7 +371,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					StartDateTime = startDateTime1,
 					EndDateTime = endDateTime2,
 					Forecast = forecastedUnsorted30,
-					ForecastWithShrinkage = forecastedUnsorted30 * shrinkage,
+					ForecastWithShrinkage = forecastedUnsorted30,
 					StaffingLevel = staffingUnsorted30
 				},
 				new SkillStaffingInterval()
@@ -382,7 +380,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					StartDateTime = startDateTime1,
 					EndDateTime = endDateTime1,
 					Forecast = forecastedSecondary,
-					ForecastWithShrinkage = forecastedSecondary * shrinkage,
+					ForecastWithShrinkage = forecastedSecondary,
 					StaffingLevel = staffingSecondary
 				},
 				new SkillStaffingInterval()
@@ -391,7 +389,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					StartDateTime = startDateTime2,
 					EndDateTime = endDateTime2,
 					Forecast = forecastedSecondary,
-					ForecastWithShrinkage = forecastedSecondary * shrinkage,
+					ForecastWithShrinkage = forecastedSecondary,
 					StaffingLevel = staffingSecondary
 				}
 			};
