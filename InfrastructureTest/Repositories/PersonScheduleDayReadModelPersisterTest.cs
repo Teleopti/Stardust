@@ -211,6 +211,53 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 		}
 
 		[Test]
+		public void ShouldPersistNewerReadModelWhenOldVersionIsNull()
+		{
+			var uow = CurrentUnitOfWork.Make();
+			var target = new PersonScheduleDayReadModelPersister(uow, MockRepository.GenerateMock<IMessageBrokerComposite>(), null);
+			var date = new DateTime(2012, 8, 29);
+			DateTime oldTimestamp = DateTime.UtcNow;
+			var personId = Guid.NewGuid();
+
+			var oldReadModel = new PersonScheduleDayReadModel
+			{
+				Date = date,
+				PersonId = personId,
+				Start = date.AddHours(10),
+				End = date.AddHours(18),
+				Model = "{shift: blablabla}",
+				ScheduleLoadTimestamp = oldTimestamp,
+				Version = null
+			};
+
+			var newerReadModel = new PersonScheduleDayReadModel
+			{
+				Date = date,
+				PersonId = personId,
+				Start = date.AddHours(10),
+				End = date.AddHours(18),
+				IsDayOff = true,
+				Model = "{shift: blablabla}",
+				ScheduleLoadTimestamp = oldTimestamp.AddHours(1),
+				Version = 2
+			};
+
+			var buId = Guid.NewGuid();
+
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldReadModel.PersonId, buId, new[] { oldReadModel }, false);
+			new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make())
+				.ForPerson(new DateOnly(oldReadModel.Date), oldReadModel.PersonId)
+				.IsDayOff.Should()
+				.Be.False();
+
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newerReadModel.PersonId, buId, new[] { newerReadModel }, false);
+			new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make())
+				.ForPerson(new DateOnly(newerReadModel.Date), newerReadModel.PersonId)
+				.IsDayOff.Should()
+				.Be.True();
+		}
+
+		[Test]
 		public void ShouldNotPersistOlderReadModel()
 		{
 			var uow = CurrentUnitOfWork.Make();

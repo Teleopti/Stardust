@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public bool IsLastPage { get; set; }
 		public int Total { get; set; }
 		public DateTime ScheduleLoadTimestamp { get; set; }
-		public int Version { get; set; }
+		public int? Version { get; set; }
 
 		public bool Equals(PersonScheduleDayReadModel other)
 		{
