@@ -41,6 +41,10 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 	this.TargetDaysOffLower = ko.observable();
 	this.TargetDaysOffUpper = ko.observable();
 	this.PossibleResultDaysOff = ko.observable();
+	this.shouldShowWarningDetail = ko.observable(true);
+	this.toggleWarningDetail = function() {
+		self.shouldShowWarningDetail(!self.shouldShowWarningDetail());
+	};
 
 	this.TargetContractTimeLowerMinutes = ko.observable();
 	this.TargetContractTimeUpperMinutes = ko.observable();
@@ -138,5 +142,19 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 	    return self.PreferenceDaysOffIsOutOfRange() || self.PreferenceTimeIsOutOfRange() || self.IsWeeklyWorkTimeBroken() ? 'alert-danger' : 'alert-info';
 	}).extend({ throttle: 1 });
 
+	this.WarningCount = ko.computed(function () {
+		var count = 2 + possibleNightRestViolationsArray.length;
+		if ((self.TargetContractTimeLower() == self.TargetContractTimeUpper()) ||
+			(self.TargetContractTimeLower() != self.TargetContractTimeUpper()) &&
+			(self.PossibleResultContractTimeLower() == self.PossibleResultContractTimeUpper()) ||
+			(self.PossibleResultContractTimeLower() != self.PossibleResultContractTimeUpper())) {
+			count++;
+		}
+		var isWeeklyWorkTimeEnabled = $('#Preference-period-feedback-view').data('mytime-isweeklyworktimeenabled');
+		if (self.IsWeeklyWorkTimeBroken() && isWeeklyWorkTimeEnabled) {
+			count++;
+		}
+		return count;
+	});
 };
 

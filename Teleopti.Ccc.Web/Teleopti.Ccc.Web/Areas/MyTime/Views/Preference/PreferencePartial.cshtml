@@ -22,7 +22,7 @@
 						<button class="btn btn-default moment-datepicker" type="button">
 							<i class="glyphicon glyphicon-calendar"></i>
 						</button>
-						<button class="btn btn-default" data-bind="click: nextPeriod, css: 'done'" type="button">
+						<button class="btn btn-default p-10-13" data-bind="click: nextPeriod, css: 'done'" type="button">
 							<i class="glyphicon glyphicon-chevron-right"></i>
 						</button>
 					</span>
@@ -115,63 +115,67 @@
 		@Html.Partial("AddPreferencesPartial")
 	</div>
 
-	<div class="alert alert-preference" data-bind="css: PreferenceFeedbackClass" id="Preference-period-feedback-view">
-		<div>
-			<!-- ko if: TargetContractTimeLower() == TargetContractTimeUpper() -->
-			@Html.Raw(string.Format(Resources.YouShouldWorkXHours, "<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>"))
-			<!-- /ko -->
-			<!-- ko if: TargetContractTimeLower() != TargetContractTimeUpper() -->
-			@Html.Raw(string.Format(Resources.YouShouldWorkBetweenXAndYHours, "<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>", "<span data-bind='text: TargetContractTimeUpper' class='feedback-detail'>-</span>"))
-			<!-- /ko -->
-			<!-- ko if: PossibleResultContractTimeLower() == PossibleResultContractTimeUpper() -->
-			@Html.Raw(string.Format(Resources.YourPreferencesCanResultXHours, "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>"))
-			<!-- /ko -->
-			<!-- ko if: PossibleResultContractTimeLower() != PossibleResultContractTimeUpper() -->
-			@Html.Raw(string.Format(Resources.YourPreferencesCanResultXToYHours, "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>", "<span data-bind='text: PossibleResultContractTimeUpper' class='feedback-detail'>-</span>"))
-			<!-- /ko -->
-			<!-- ko if: PreferenceTimeIsOutOfRange -->
-			<span class="glyphicon glyphicon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange" />
-			<!-- /ko -->
-		</div>
-		<div>
-			<!-- ko if: TargetDaysOffLower() == TargetDaysOffUpper() -->
-			@Html.Raw(string.Format(Resources.YouShouldHaveXDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>"))
-			<!-- /ko -->
-			<!-- ko if: TargetDaysOffLower() != TargetDaysOffUpper() -->
-			@Html.Raw(string.Format(Resources.YouShouldHaveBetweenXAndYDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>", "<span data-bind='text: TargetDaysOffUpper' class='feedback-detail'>-</span>"))
-			<!-- /ko -->
-			@Html.Raw(string.Format(Resources.YourPreferencesCanResultXDaysOff, "<span data-bind='text: PossibleResultDaysOff' class='feedback-detail'>-</span>"))
-			<!-- ko if: PreferenceDaysOffIsOutOfRange-->
-			<span class="glyphicon glyphicon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange" />
-			<!-- /ko -->
-		</div>
-		<div data-bind="foreach:PossibleNightRestViolations()">
-			<div>
-				@Html.Raw(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "<span data-bind='text:nightRestTimes'>-</span>", "<span data-bind='text:firstDay'>-</span>", "<span data-bind='text:sencondDay'>-</span>", "<span data-bind='text:hoursBetweenTwoDays'>-</span>"))
+	<div id="Preference-period-feedback-view" class="phone-warning-indicator" data-mytime-isweeklyworktimeenabled="@Model.IsWeeklyWorkTimeEnabled" >
+		<div class="warning-indicator" data-bind="click: toggleWarningDetail"><span data-bind="css: PreferenceFeedbackClass,text:WarningCount" class="warning-count">!</span></div>
+		<div data-bind="css:{warningDetail:shouldShowWarningDetail()}">
+			<div class="alert alert-preference " data-bind="css: PreferenceFeedbackClass">
+				<div>
+					<!-- ko if: TargetContractTimeLower() == TargetContractTimeUpper() -->
+					@Html.Raw(string.Format(Resources.YouShouldWorkXHours, "<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>"))
+					<!-- /ko -->
+					<!-- ko if: TargetContractTimeLower() != TargetContractTimeUpper() -->
+					@Html.Raw(string.Format(Resources.YouShouldWorkBetweenXAndYHours, "<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>", "<span data-bind='text: TargetContractTimeUpper' class='feedback-detail'>-</span>"))
+					<!-- /ko -->
+					<!-- ko if: PossibleResultContractTimeLower() == PossibleResultContractTimeUpper() -->
+					@Html.Raw(string.Format(Resources.YourPreferencesCanResultXHours, "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>"))
+					<!-- /ko -->
+					<!-- ko if: PossibleResultContractTimeLower() != PossibleResultContractTimeUpper() -->
+					@Html.Raw(string.Format(Resources.YourPreferencesCanResultXToYHours, "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>", "<span data-bind='text: PossibleResultContractTimeUpper' class='feedback-detail'>-</span>"))
+					<!-- /ko -->
+					<!-- ko if: PreferenceTimeIsOutOfRange -->
+					<span class="glyphicon glyphicon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange" />
+					<!-- /ko -->
+				</div>
+				<div>
+					<!-- ko if: TargetDaysOffLower() == TargetDaysOffUpper() -->
+					@Html.Raw(string.Format(Resources.YouShouldHaveXDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>"))
+					<!-- /ko -->
+					<!-- ko if: TargetDaysOffLower() != TargetDaysOffUpper() -->
+					@Html.Raw(string.Format(Resources.YouShouldHaveBetweenXAndYDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>", "<span data-bind='text: TargetDaysOffUpper' class='feedback-detail'>-</span>"))
+					<!-- /ko -->
+					@Html.Raw(string.Format(Resources.YourPreferencesCanResultXDaysOff, "<span data-bind='text: PossibleResultDaysOff' class='feedback-detail'>-</span>"))
+					<!-- ko if: PreferenceDaysOffIsOutOfRange-->
+					<span class="glyphicon glyphicon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange" />
+					<!-- /ko -->
+				</div>
+				<div data-bind="foreach:PossibleNightRestViolations()">
+					<div>
+						@Html.Raw(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "<span data-bind='text:nightRestTimes'>-</span>", "<span data-bind='text:firstDay'>-</span>", "<span data-bind='text:sencondDay'>-</span>", "<span data-bind='text:hoursBetweenTwoDays'>-</span>"))
+					</div>
+				</div>
+				@if (Model.IsWeeklyWorkTimeEnabled)
+			{
+				<!-- ko if: IsWeeklyWorkTimeBroken() -->
+					<div id="weekly-work-time-broken">
+						<span>@Resources.WeeklyWorkTimeBroken</span>
+						<span class="glyphicon glyphicon-exclamation-sign"></span>
+					</div>
+				<!-- /ko -->
+			}
+				<p></p>
+				<div>
+					@if (Model.PreferencePeriod == null)
+					{
+						@String.Format("{0} : {1}", Resources.PreferencePeriod, Resources.MissingWorkflowControlSet)
+					}
+					else
+					{
+						@String.Format("{0} : {1} | ", Resources.PreferencePeriod, Model.PreferencePeriod.Period)
+						@String.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
+					}
+				</div>
 			</div>
 		</div>
-		@if (Model.IsWeeklyWorkTimeEnabled)
-		{
-			<!-- ko if: IsWeeklyWorkTimeBroken() -->
-			<div id="weekly-work-time-broken">
-				<span>@Resources.WeeklyWorkTimeBroken</span>
-				<span class="glyphicon glyphicon-exclamation-sign"></span>
-			</div>
-			<!-- /ko -->
-		}
-		<p></p>
-		<div>
-			@if (Model.PreferencePeriod == null)
-			{
-				@String.Format("{0} : {1}", Resources.PreferencePeriod, Resources.MissingWorkflowControlSet)
-			}
-			else
-			{
-				@String.Format("{0} : {1} | ", Resources.PreferencePeriod, Model.PreferencePeriod.Period)
-				@String.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
-			}
-		</div>
-
 	</div>
 
 	<div id="Preference-body"

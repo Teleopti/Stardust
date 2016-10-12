@@ -28,6 +28,18 @@ $(document).ready(function () {
 		equal(viewModel.PossibleResultContractTimeUpper(), "160:05");
 	});
 
+	test("should count warnings", function () {
+		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+		var viewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(null, [viewModelDay], null, []);
+		viewModelDay.PossibleContractTimeMinutesLower(100 * 60 + 30);
+		viewModelDay.PossibleContractTimeMinutesUpper(160 * 60 + 5);
+
+		viewModel.TargetDaysOffLower(1);
+		viewModel.TargetDaysOffUpper(2);
+
+		equal(viewModel.WarningCount(), 3);
+	});
+
 	test("should load feedback", function () {
 
 		var ajax = {
