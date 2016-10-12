@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		}
 	}
 
-	[EnabledBy(Toggles.ReadModel_ToHangfire_39147)]
+	[DisabledBy(Toggles.ReadModel_ToHangfire_39147)]
 	public class ScheduleDayReadModelHandlerServiceBus :
 		ScheduleDayReadModelHandlerBase,
 		IHandleEvent<ProjectionChangedEvent>,
