@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -18,6 +19,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			var target = new UserController(currentPrinciple, new FakeIanaTimeZoneProvider());
 			dynamic result = target.CurrentUser();
 			Assert.AreEqual("Pelle", result.UserName);
+		}
+
+		[Test]
+		public void ShouldGetTheCurrentLoggonUserTimezone()
+		{
+			var person = PersonFactory.CreatePerson();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Pelle", null, null, null, null), person);
+			var currentPrinciple = new FakeCurrentTeleoptiPrincipal(principal);
+			var target = new UserController(currentPrinciple, new FakeIanaTimeZoneProvider());
+			dynamic result = target.CurrentUser();
+			Assert.AreEqual(TimeZoneInfo.Local.DisplayName, result.DefaultTimeZoneName);
 		}
 	}
 

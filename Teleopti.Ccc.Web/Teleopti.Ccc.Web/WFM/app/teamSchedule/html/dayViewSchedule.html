@@ -21,7 +21,7 @@
 			<view-changer ng-if="vm.toggles.WeekViewEnabled && vm.searchEnabled" selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword"></view-changer>
 		</div>
 		
-		<timezone-picker available-timezones="vm.availableTimezones" on-pick="vm.changeTimezone(timezone)" ng-show="vm.toggles.ViewScheduleOnTimezoneEnabled"></timezone-picker>
+		<timezone-picker available-timezones="vm.availableTimezones" on-pick="vm.changeTimezone(timezone)" selected-timezone="vm.currentTimezone" ng-show="vm.toggles.ViewScheduleOnTimezoneEnabled"></timezone-picker>
 		
 		<div class="warning-container" ng-if="vm.toggles.ShowValidationWarnings">
 			<div id="show-warnings" class="wfm-switch">

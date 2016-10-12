@@ -8,7 +8,8 @@
 			controller: timezonePickerCtrl,
 			bindings: {
 				availableTimezones: '<',
-				onPick: '&'
+				onPick: '&',
+				selectedTimezone: '='
 			}
 		});
 
@@ -24,7 +25,6 @@
 
 		function $onInit() {
 			populateTimezoneList();
-			ctrl.selectedTimezone = ctrl.timezoneList[0].ianaId;			
 		}
 
 		function $onChanges(changesObj) {
@@ -50,15 +50,15 @@
 			ctrl.availableTimezones.forEach(function(z) {
 				timezoneDict[z.IanaId] = z.DisplayName;
 			});
-
 			ctrl.timezoneList = [];
 		
-			angular.forEach(timezoneDict, function(value, key) {
+			angular.forEach(timezoneDict, function (value, key) {
 				ctrl.timezoneList.push({
 					ianaId: key,
 					displayName: value
 				});
 			});
+			ctrl.selectedTimezone = defaultTimezone;
 		}
 
 		function shortDisplayNameOfTheSelected() {
