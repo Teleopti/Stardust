@@ -36,10 +36,10 @@
 
     _init: function() {
         var self = this;
-        if (this.$element.hasClass('left-align')) {
-            this.leftAlign = true;
+        if (this.$element.hasClass('right-align')) {
+            this.rightAlign = true;
         } else {
-            this.leftAlign = false;
+            this.rightAlign = false;
         }
 
       if (this.$element.parent().hasClass('input-group') || this.$element.parent().hasClass('input-group')) {
@@ -336,7 +336,7 @@
         '</div>';
         break;
       case 'dropdown':
-          var alignmentClass = this.leftAlign ? 'left-align' : 'right-align';
+          var alignmentClass = this.rightAlign ? 'right-align' : 'left-align';
           template = '<div class="bootstrap-timepicker-widget dropdown-menu ' + alignmentClass + '">' + templateContent + '</div>';
         break;
       }
