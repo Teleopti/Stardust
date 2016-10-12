@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 		}
 	}
 
+	[Serializable]
 	public class SkillRoutingPriorityModelRow
 	{
 		public Guid ActivityGuid { get; set; }
