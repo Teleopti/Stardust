@@ -70,4 +70,4 @@ Scenario: Should be able to navigate to next week in week view
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
 	And I toggle "WEEK" view
 	And I navigate to next week in week view
-	Then The dispaly date should be "2016-10-16"
+	Then The display date should be "2016-10-16"

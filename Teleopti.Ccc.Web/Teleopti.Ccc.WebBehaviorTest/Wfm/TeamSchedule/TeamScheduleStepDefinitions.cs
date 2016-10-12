@@ -364,8 +364,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.ClickVisibleOnly(".teamschedule-datepicker .mdi-chevron-double-right");
 		}
 
-		[Then(@"The dispaly date should be ""(.*)""")]
-		public void ThenTheDispalyDateShouldBe(string date)
+		[Then(@"The display date should be ""(.*)""")]
+		public void ThenTheDisplayDateShouldBe(string date)
 		{
 			Browser.Interactions.AssertInputValue("#teamschedule-datepicker-input", date);
 		}
