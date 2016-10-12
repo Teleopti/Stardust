@@ -41,11 +41,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 			}
 
 			var allSkills = _skillRepository.LoadAll();
-			foreach (var skill in allSkills)
-			{
-				if (((IDeleteTag)skill).IsDeleted)
-					skill.ClearCascadingIndex();
-			}
 			var allSkillsDic = allSkills.ToDictionary(s => s.Id.Value);
 			confirm(allSkillsDic,skillPrioDic,skillWithoutPrioList);
 		}

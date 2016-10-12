@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.Cascading
 {
@@ -64,27 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Cascading
 		}
 
 		[Test]
-		public void ShouldNotReturnDeletedSkillData()
-		{
-			var activity = new Activity("activity").WithId();
-			var skill = SkillFactory.CreateSkillWithId("_");
-			skill.Activity = activity;
-			var deletedSkill = SkillFactory.CreateSkillWithId("_");
-			((IDeleteTag)deletedSkill).SetDeleted();
-			SkillRepository.Add(skill);
-			SkillRepository.Add(deletedSkill);
-
-			var result = Target.SkillRoutingPriorityModelRows();
-			result.Count.Should().Be.EqualTo(1);
-			result[0].SkillGuid.Should().Be.EqualTo(skill.Id);
-			result[0].ActivityGuid.Should().Be.EqualTo(activity.Id);
-			result[0].ActivityName.Should().Be.EqualTo(activity.Name);
-			result[0].SkillName.Should().Be.EqualTo(skill.Name);
-			result[0].Priority.Should().Be.EqualTo(null);
-		}
-
-		[Test]
-		public void ShouldOnlyReturnActiviesNotDeletedAndRequriesSkill()
+		public void ShouldOnlyReturnActiviesThatRequriesSkill()
 		{
 			var activity1 = new Activity("activity").WithId();
 			activity1.RequiresSkill = false;
@@ -93,11 +72,6 @@ namespace Teleopti.Ccc.DomainTest.Cascading
 			var activity2 = new Activity("this").WithId();
 			activity2.RequiresSkill = true;
 			ActivityRepository.Add(activity2);
-
-			var activity3 = new Activity("activity").WithId();
-			activity3.RequiresSkill = true;
-			activity3.SetDeleted();
-			ActivityRepository.Add(activity3);
 
 			var result = Target.SkillRoutingActivites();
 			result.Count.Should().Be.EqualTo(1);

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public List<SkillRoutingPriorityModelRow> SkillRoutingPriorityModelRows()
 		{
-			var allSkills = _skillRepository.LoadAll().Where(x => !((IDeleteTag)x).IsDeleted);
+			var allSkills = _skillRepository.LoadAll();
 			var skillList = new List<SkillRoutingPriorityModelRow>();
 			foreach (var skill in allSkills)
 			{
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public List<SkillRoutingActivityRow> SkillRoutingActivites()
 		{
-			var allActivites = _activityRepository.LoadAll().Where(x => !x.IsDeleted && x.RequiresSkill);
+			var allActivites = _activityRepository.LoadAll().Where(x => x.RequiresSkill);
 			var activityList = new List<SkillRoutingActivityRow>();
 			foreach (var activity in allActivites)
 			{
