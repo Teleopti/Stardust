@@ -18,8 +18,8 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 	var notifyOptions;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var currentTimeout = null;
-	var notificationDisplayTime;
-	var getNotificationCallCount = 0;
+	var notificationDisplayTime = null;
+	var notificationDisplayTimeRequest = null;
 	
 	function loadBeforeAlertTimeSetting(callback) {
 		ajax.Ajax({
@@ -31,22 +31,19 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 	}
 
 	function loadAlertNotificationDisplayingTimeSetting(callback) {
-		getNotificationCallCount++;
-		if(getNotificationCallCount == 1 ){
-			ajax.Ajax({
+		if (!notificationDisplayTimeRequest) {
+			notificationDisplayTimeRequest = ajax.Ajax({
 				url: 'Asm/NotificationsTimeToStaySetting',
 				dataType: 'json',
 				type: 'GET',
-				success: function(displayTime){
+				success: function(displayTime) {
 					notificationDisplayTime = displayTime;
-					callback(displayTime);
 					Teleopti.MyTimeWeb.Asm.UpdateNotificationDisplayTimeSetting(displayTime);
 					notifyOptions.timeout = displayTime * 1000;
 				}
 			});
-		}else if(notificationDisplayTime){
-			callback(notificationDisplayTime);
 		}
+		notificationDisplayTimeRequest.done(function() { callback(notificationDisplayTime); });
 	}
 
 	function activityLayer(layer) {
