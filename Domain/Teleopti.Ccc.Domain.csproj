@@ -1478,8 +1478,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\IAgentStateReadModelReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ScheduledActivity.cs" />
     <Compile Include="Scheduling\Assignment\DayOffMaxFlexCalculator.cs" />
-    <Compile Include="Scheduling\Assignment\MoveShiftLayerDown.cs" />
-    <Compile Include="Scheduling\Assignment\MoveShiftLayerUp.cs" />
     <Compile Include="Scheduling\BackToLegalShift\BackToLegalShiftService.cs" />
     <Compile Include="Scheduling\BackToLegalShift\BackToLegalShiftWorker.cs" />
     <Compile Include="Scheduling\BackToLegalShift\LegalShiftDecider.cs" />
@@ -1680,7 +1678,6 @@
     <Compile Include="Scheduling\Assignment\EditableShift.cs" />
     <Compile Include="Scheduling\Assignment\EditorShiftMapper.cs" />
     <Compile Include="Scheduling\Assignment\MainShiftLayer.cs" />
-    <Compile Include="Scheduling\Assignment\MoveLayerVertical.cs" />
     <Compile Include="Scheduling\Assignment\OvertimeShiftLayer.cs" />
     <Compile Include="Scheduling\Assignment\PersonalShiftLayer.cs" />
     <Compile Include="Scheduling\Assignment\ReplaceLayerInSchedule.cs" />

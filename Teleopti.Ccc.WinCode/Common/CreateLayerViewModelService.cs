@@ -61,23 +61,21 @@ namespace Teleopti.Ccc.WinCode.Common
             InParameter.NotNull("scheduleDay", scheduleDay);
             IList<ILayerViewModel> layerViewModels = new List<ILayerViewModel>();
             IPersonAssignment assignment = scheduleDay.PersonAssignment();
-	        //var moveUpDown = new MoveLayerVertical();
-	        var moveUpDown = new MoveShiftLayerVertical();
 			if (assignment != null)
             {
 	            foreach (var layer in assignment.MainActivities())
 	            {
-		            layerViewModels.Add(new MainShiftLayerViewModel(observer, layer, assignment, eventAggregator, moveUpDown));
+		            layerViewModels.Add(new MainShiftLayerViewModel(observer, layer, assignment, eventAggregator));
 	            }
 
 	            foreach (var layer in assignment.OvertimeActivities())
 	            {
-								layerViewModels.Add(new OvertimeLayerViewModel(observer, layer, assignment, eventAggregator, moveUpDown));
+								layerViewModels.Add(new OvertimeLayerViewModel(observer, layer, assignment, eventAggregator));
 	            }
 
 	            foreach (var personalLayer in assignment.PersonalActivities())
 	            {
-		            layerViewModels.Add(new PersonalShiftLayerViewModel(observer, personalLayer, assignment, eventAggregator, moveUpDown));
+		            layerViewModels.Add(new PersonalShiftLayerViewModel(observer, personalLayer, assignment, eventAggregator));
 	            }
             }
 			// bug 14478 show meetings even if there is no assignment

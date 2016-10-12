@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			_mocks.ReplayAll();
 
-			_target = new PersonalShiftLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, null, null, null);
+			_target = new PersonalShiftLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, null, null);
 
 			_testRunner = new CrossThreadTestRunner();
 		}
@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			personAssignment.AddPersonalActivity(activity, period2);
 
 
-			_target = new PersonalShiftLayerViewModel(null, personAssignment.PersonalActivities().Last(), personAssignment, null, new MoveShiftLayerVertical());
+			_target = new PersonalShiftLayerViewModel(null, personAssignment.PersonalActivities().Last(), personAssignment, null);
 			_target.MoveUp();
 
 			personAssignment.PersonalActivities().First().Period.Should().Be.EqualTo(period2);

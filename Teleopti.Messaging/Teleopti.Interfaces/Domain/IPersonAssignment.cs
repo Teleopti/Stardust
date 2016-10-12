@@ -67,7 +67,6 @@ namespace Teleopti.Interfaces.Domain
 			IMultiplicatorDefinitionSet multiplicatorDefinitionSet);
 
 		void InsertPersonalLayer(IActivity activity, DateTimePeriod period, int index);
-		void MoveLayerVertical(IMoveLayerVertical target, IShiftLayer layer);
 
 		void MoveActivityAndSetHighestPriority(IActivity activity, DateTime currentStartTime, DateTime newStartTime,
 			TimeSpan length, TrackedCommandInfo trackedCommandInfo);
@@ -77,5 +76,7 @@ namespace Teleopti.Interfaces.Domain
 
 		void AddActivity(IActivity activity, TimePeriod period);
 		void SetActivitiesAndShiftCategoryFromWithOffset(IPersonAssignment sourceAssignment, TimeSpan periodOffset);
+		void MoveLayerDown(IShiftLayer shiftLayer);
+		void MoveLayerUp(IShiftLayer shiftLayer);
 	}
 }

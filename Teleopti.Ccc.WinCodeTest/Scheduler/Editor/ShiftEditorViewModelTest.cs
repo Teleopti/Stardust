@@ -357,7 +357,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             IActivity activity = new Activity("test");
             DateTimePeriod period= new DateTimePeriod(2001,1,1,2001,1,2);
             var layer = new MainShiftLayer(activity, period);
-						ILayerViewModel model = new MainShiftLayerViewModel(null, layer, null, null, null);
+						ILayerViewModel model = new MainShiftLayerViewModel(null, layer, null, null);
             
             #endregion
 
@@ -442,7 +442,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             IActivity activity = new Activity("test");
             DateTimePeriod period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
             var layer = new MainShiftLayer(activity, period);
-						return new MainShiftLayerViewModel(null, layer, null, null, null);
+						return new MainShiftLayerViewModel(null, layer, null, null);
         }
 
         private static void VerifyApplicationCommandModel(CommandModel commandModel,string appFunction)
@@ -456,7 +456,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
         {
             TesterForCommandModels testerForCommandModels = new TesterForCommandModels();
             var layer = new MainShiftLayer(new Activity("asfdgh"), new DateTimePeriod(2001, 1, 1, 2001, 2, 2));
-						MainShiftLayerViewModel mainShiftLayerViewModel = new MainShiftLayerViewModel(null, layer, null, null, null);
+						MainShiftLayerViewModel mainShiftLayerViewModel = new MainShiftLayerViewModel(null, layer, null, null);
             _target.SelectLayer(mainShiftLayerViewModel);
             Assert.IsFalse(testerForCommandModels.CanExecute(model), "Should not be able to execute if the selected layer isnt a meeting");
             CreateAndSelectAMeeting();

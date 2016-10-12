@@ -1,8 +1,14 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
@@ -24,8 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			var layerToMove = scheduleDay.PersonAssignment().ShiftLayers.First(s => s.Payload.Description.Name == "activity3");
 
-			var target = new MoveShiftLayerUp();
-			scheduleDay.PersonAssignment().MoveLayerVertical(target,layerToMove);
+			scheduleDay.PersonAssignment().MoveLayerUp(layerToMove);
 
 			scheduleDay.PersonAssignment().PersonalActivities().Select(l => l.Payload.Description.Name)
 										 .Should().Have.SameSequenceAs("activity1", "activity3", "activity2");
@@ -45,9 +50,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 											.CreatePart();
 
 			var layerToMove = scheduleDay.PersonAssignment().ShiftLayers.First(s => s.Payload.Description.Name == "activity1");
-			var target = new MoveShiftLayerDown();
 
-			scheduleDay.PersonAssignment().MoveLayerVertical(target, layerToMove);
+			scheduleDay.PersonAssignment().MoveLayerDown(layerToMove);
+
 
 			scheduleDay.PersonAssignment().PersonalActivities().Select(l => l.Payload.Description.Name)
 										 .Should().Have.SameSequenceAs("activity2", "activity1", "activity3");
@@ -68,9 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 											.CreatePart();
 
 			var layerToMove = scheduleDay.PersonAssignment().ShiftLayers.First(s => s.Payload.Description.Name == "activity3");
-			var target = new MoveShiftLayerUp();
-
-			scheduleDay.PersonAssignment().MoveLayerVertical(target,layerToMove);
+			scheduleDay.PersonAssignment().MoveLayerUp(layerToMove);
 
 			scheduleDay.PersonAssignment().MainActivities().Select(l => l.Payload.Description.Name)
 										 .Should().Have.SameSequenceAs("activity1", "activity3", "activity2");
@@ -91,9 +94,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 											.CreatePart();
 
 			var layerToMove = scheduleDay.PersonAssignment().ShiftLayers.First(s => s.Payload.Description.Name == "activity2");
-			var target = new MoveShiftLayerDown();
 
-			scheduleDay.PersonAssignment().MoveLayerVertical(target, layerToMove);
+			scheduleDay.PersonAssignment().MoveLayerDown(layerToMove);
+
 
 			scheduleDay.PersonAssignment().MainActivities().Select(l => l.Payload.Description.Name)
 										 .Should().Have.SameSequenceAs("activity1", "activity3", "activity2");
@@ -114,9 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 											.CreatePart();
 
 			var layerToMove = scheduleDay.PersonAssignment().ShiftLayers.First(s => s.Payload.Description.Name == "activity3");
-			var target = new MoveShiftLayerUp();
-
-			scheduleDay.PersonAssignment().MoveLayerVertical(target, layerToMove);
+			scheduleDay.PersonAssignment().MoveLayerUp(layerToMove);
 
 			scheduleDay.PersonAssignment().OvertimeActivities().Select(l => l.Payload.Description.Name)
 										 .Should().Have.SameSequenceAs("activity1", "activity3", "activity2");
@@ -137,9 +138,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 											.CreatePart();
 
 			var layerToMove = scheduleDay.PersonAssignment().ShiftLayers.First(s => s.Payload.Description.Name == "activity2");
-			var target = new MoveShiftLayerDown();
 
-			scheduleDay.PersonAssignment().MoveLayerVertical(target, layerToMove);
+			scheduleDay.PersonAssignment().MoveLayerDown(layerToMove);
+
 
 			scheduleDay.PersonAssignment().OvertimeActivities().Select(l => l.Payload.Description.Name)
 										 .Should().Have.SameSequenceAs("activity1", "activity3", "activity2");
@@ -154,9 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 										.CreatePart();
 
 			var layerToMove = scheduleDay.PersonAssignment().PersonalActivities().Last();
-			var target = new MoveShiftLayerUp();
-
-			scheduleDay.PersonAssignment().MoveLayerVertical(target, layerToMove);
+			scheduleDay.PersonAssignment().MoveLayerUp(layerToMove);
 
 			scheduleDay.PersonAssignment().PersonalActivities().First().Payload.Description.Name.Should().Be.EqualTo("second");
 		}
@@ -170,9 +169,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 										.CreatePart();
 
 			var layerToMove = scheduleDay.PersonAssignment().MainActivities().Last();
-			var target = new MoveShiftLayerUp();
-
-			scheduleDay.PersonAssignment().MoveLayerVertical(target, layerToMove);
+			scheduleDay.PersonAssignment().MoveLayerUp(layerToMove);
 
 			scheduleDay.PersonAssignment().MainActivities().First().Payload.Description.Name.Should().Be.EqualTo("second");
 		}
@@ -186,11 +183,31 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 										.CreatePart();
 
 			var layerToMove = scheduleDay.PersonAssignment().MainActivities().First();
-			var target = new MoveShiftLayerDown();
 
-			scheduleDay.PersonAssignment().MoveLayerVertical(target, layerToMove);
+			scheduleDay.PersonAssignment().MoveLayerDown(layerToMove);
 
 			scheduleDay.PersonAssignment().MainActivities().Last().Payload.Description.Name.Should().Be.EqualTo("first");
+		}
+
+		[Test]
+		public void ShouldNotReusePassedInLayer()
+		{
+			//setup an ass with two layers
+			var assignment = new PersonAssignment(new Person(), new Scenario("_"), DateOnly.Today).WithId();
+			assignment.AddActivity(new Activity("_"), new TimePeriod(10, 0, 11, 0));
+			assignment.AddActivity(new Activity("_"), new TimePeriod(10, 0, 11, 0));
+			assignment.ShiftLayers.ForEach(x => x.SetId(Guid.NewGuid()));
+
+			//clone the assignment....
+			var assignmentClone = assignment.EntityClone();
+			var layerToMove = assignmentClone.ShiftLayers.Last();
+
+			//....and use its layer when moving layer
+			assignment.MoveLayerUp(layerToMove);
+
+
+			assignment.ShiftLayers.Select(x => ((ShiftLayer) x).OrderIndex)
+				.Should().Have.SameSequenceAs(0, 1);
 		}
 	}
 }

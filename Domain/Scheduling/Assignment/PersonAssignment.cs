@@ -9,7 +9,6 @@ using Teleopti.Interfaces.Domain;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -485,9 +484,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_shiftLayers.Insert(index,layer);
 		}
 
-		public virtual void MoveLayerVertical(IMoveLayerVertical target, IShiftLayer layer)
+		public virtual void MoveLayerDown(IShiftLayer shiftLayer)
 		{
-			target.Move(_shiftLayers, layer);
+			var t = shiftLayer.GetType();
+			var currentIndex = _shiftLayers.IndexOf(shiftLayer);
+			var toBeReplaced = _shiftLayers.Skip(currentIndex + 1).First(l => l.GetType() == t);
+
+			moveLayer(_shiftLayers.IndexOf(toBeReplaced), currentIndex);
+		}
+
+		public virtual void MoveLayerUp(IShiftLayer shiftLayer)
+		{
+			var t = shiftLayer.GetType();
+			var currentIndex = _shiftLayers.IndexOf(shiftLayer);
+			var toBeReplaced = _shiftLayers.Take(currentIndex).Last(l => l.GetType() == t);
+			var indexToInsert = _shiftLayers.IndexOf(toBeReplaced);
+
+			moveLayer(currentIndex, indexToInsert);
+		}
+
+		private void moveLayer(int currentIndex, int newIndex)
+		{
+			var layer = _shiftLayers[currentIndex];
+			_shiftLayers.RemoveAt(currentIndex);
+			if (newIndex > currentIndex)
+				newIndex--;
+			_shiftLayers.Insert(newIndex, layer);
 		}
 
 		public virtual void MoveActivityAndSetHighestPriority(IActivity activity, DateTime currentStartTime, DateTime newStartTime, TimeSpan length, TrackedCommandInfo trackedCommandInfo)

@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TimeZoneHelper.CurrentSessionTimeZone)).Repeat.Any();
 
 			_mocks.ReplayAll();
-			_target = new OvertimeLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, null, null, null);
+			_target = new OvertimeLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, null, null);
 			_testRunner = new CrossThreadTestRunner();
 		}
 
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeOvertimeLayers();
 			var lastLayer = ass.OvertimeActivities().Last();
 			var expectedLastAfterMove = ass.OvertimeActivities().Last(l => l != lastLayer);
-			var target = new OvertimeLayerViewModel(observer, lastLayer, ass, stubbedEventAggregator(), new MoveShiftLayerVertical());
+			var target = new OvertimeLayerViewModel(observer, lastLayer, ass, stubbedEventAggregator());
 			target.MoveUp();
 
 			ass.OvertimeActivities().Last().Should().Be.EqualTo(expectedLastAfterMove);
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeOvertimeLayers();
 			var firstLayer = ass.OvertimeActivities().First();
 			var expectedFirstAfterMove = ass.OvertimeActivities().Skip(1).First();
-			var target = new OvertimeLayerViewModel(observer, firstLayer, ass, stubbedEventAggregator(), new MoveShiftLayerVertical());
+			var target = new OvertimeLayerViewModel(observer, firstLayer, ass, stubbedEventAggregator());
 			target.MoveDown();
 
 			observer.AssertWasCalled(x => x.LayerMovedVertically(target));
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			_mocks.ReplayAll();
 
-			var target = new OvertimeLayerViewModel(null, overtimeLayer, null, null, null);
+			var target = new OvertimeLayerViewModel(null, overtimeLayer, null, null);
 			Assert.AreEqual("Qualified overtime", target.LayerDescription);
 		}
 
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		{
 			var layerObserver = MockRepository.GenerateMock<ILayerViewModelObserver>();
 
-			_target = new OvertimeLayerViewModel(layerObserver, _layerWithPayload, null, null, null);
+			_target = new OvertimeLayerViewModel(layerObserver, _layerWithPayload, null, null);
 			
 			_target.IsChanged = true;
 			_target.UpdatePeriod();

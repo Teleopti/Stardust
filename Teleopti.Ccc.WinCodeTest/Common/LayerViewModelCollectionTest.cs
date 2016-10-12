@@ -160,8 +160,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             }
             using (mocks.Playback())
             {
-                ILayerViewModel model1 = new MainShiftLayerViewModel(target, layer, null,null, null);
-                ILayerViewModel model2 = new MainShiftLayerViewModel(target, layer, null,null, null);
+                ILayerViewModel model1 = new MainShiftLayerViewModel(target, layer, null,null);
+                ILayerViewModel model2 = new MainShiftLayerViewModel(target, layer, null,null);
                 model1.CanMoveAll = true;
                 model2.CanMoveAll = true;
                 target.Add(model1);
@@ -343,10 +343,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             AbsenceLayer absenceLayer = new AbsenceLayer(AbsenceFactory.CreateAbsence("absence"), period);
 
 
-            MainShiftLayerViewModel mainShiftModel1 = new MainShiftLayerViewModel(null, assignment.MainActivities().First(), assignment, null, null);
-            MainShiftLayerViewModel mainShiftModel2 = new MainShiftLayerViewModel(null, assignment.MainActivities().Last(), assignment, null, null);
-			OvertimeLayerViewModel overtimeLayerViewModel = new OvertimeLayerViewModel(null, assignment.OvertimeActivities().Single(), assignment, null, null);
-			PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(null,assignment.PersonalActivities().Single(), assignment, null,null);
+            MainShiftLayerViewModel mainShiftModel1 = new MainShiftLayerViewModel(null, assignment.MainActivities().First(), assignment, null);
+            MainShiftLayerViewModel mainShiftModel2 = new MainShiftLayerViewModel(null, assignment.MainActivities().Last(), assignment, null);
+			OvertimeLayerViewModel overtimeLayerViewModel = new OvertimeLayerViewModel(null, assignment.OvertimeActivities().Single(), assignment, null);
+			PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(null,assignment.PersonalActivities().Single(), assignment, null);
             AbsenceLayerViewModel absenceLayerViewModel = new AbsenceLayerViewModel(null, absenceLayer,null);
 	        var meetingPerson = new MeetingPerson(new Person(), false);
 						Meeting meeting = new Meeting(new Person(), new[]{meetingPerson }, "subject", "location", "description", ActivityFactory.CreateActivity("activity"), ScenarioFactory.CreateScenarioAggregate());

@@ -12,14 +12,12 @@ namespace Teleopti.Ccc.WinCode.Common
 	{
 		private readonly IPersonalShiftLayer _layer;
 		private readonly IPersonAssignment _parent;
-		private readonly IMoveShiftLayerVertical _moveShiftLayerVertical;
 
-		public PersonalShiftLayerViewModel(ILayerViewModelObserver observer, IPersonalShiftLayer layer, IPersonAssignment parent, IEventAggregator eventAggregator, IMoveShiftLayerVertical moveShiftLayerVertical)
+		public PersonalShiftLayerViewModel(ILayerViewModelObserver observer, IPersonalShiftLayer layer, IPersonAssignment parent, IEventAggregator eventAggregator)
 			: base(observer, layer, eventAggregator, false)
 		{
 			_layer = layer;
 			_parent = parent;
-			_moveShiftLayerVertical = moveShiftLayerVertical;
 		}
 
 		public override string LayerDescription
@@ -66,7 +64,7 @@ namespace Teleopti.Ccc.WinCode.Common
 		{
 			if (CanMoveDown)
 			{
-				_parent.MoveLayerVertical(_moveShiftLayerVertical.MoveDown,_layer);
+				_parent.MoveLayerDown(_layer);
 				LayerMoved();
 			}
 		}
@@ -75,7 +73,7 @@ namespace Teleopti.Ccc.WinCode.Common
 		{
 			if (CanMoveUp)
 			{
-				_parent.MoveLayerVertical(_moveShiftLayerVertical.MoveUp, _layer);
+				_parent.MoveLayerUp(_layer);
 				LayerMoved();
 			}
 		}
