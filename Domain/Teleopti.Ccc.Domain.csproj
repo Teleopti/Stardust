@@ -197,6 +197,7 @@
     <Compile Include="ApplicationLayer\Commands\ChangeShiftCategoryCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\INonoverwritableLayerMovabilityChecker.cs" />
     <Compile Include="ApplicationLayer\Commands\IReplyCommand.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\HistoricalAdherenceUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ContextLoaderWithBatchConnectionOptimization.cs" />
     <Compile Include="ApplicationLayer\Events\AnalyticsDatesChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ContextLoaderWithBatchQueryOptimization.cs" />
@@ -206,8 +207,8 @@
     <Compile Include="ApplicationLayer\Rta\Service\ContextLoaderWithConnectionQueryOptimizeAllTheThings.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ContextLoaderWithScheduleOptimization.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\HistoricalAdherenceReadModel.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\IHistoricalAdherenceReadModelPersister.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\IHistoricalAdherenceReadModelReader.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IHistoricalAdherenceReadModelReader.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IHistoricalAdherenceReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IScheduleCacheStrategy.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder.cs" />

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -30,9 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				Date = "2016-10-10".Date()
 			};
 
-			Target.Persist(state);
-
-			Reader.Get(personId, new DateOnly()).Date
+			Reader.Read(personId, new DateOnly()).Date
 				.Should().Be.Null();
 		}
 
@@ -51,9 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			};
 
-			Target.Persist(state);
-
-			var outOfAdherence = Reader.Get(state.PersonId, new DateOnly())
+			var outOfAdherence = Reader.Read(state.PersonId, new DateOnly())
 				.OutOfAdherences.Single();
 			outOfAdherence.StartTime.Should().Be("2016-10-11 08:00".Utc());
 			outOfAdherence.EndTime.Should().Be("2016-10-11 08:10".Utc());

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public HistoricalAdherenceViewModel Build(Guid personId)
 		{
-			var result = _reader.Get(personId, new DateOnly(_now.UtcDateTime()));
+			var result = _reader.Read(personId, new DateOnly(_now.UtcDateTime()));
 			var person = _persons.Load(personId);
 			var schedule = getCurrentSchedules(person);
 			

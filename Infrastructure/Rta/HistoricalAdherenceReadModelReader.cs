@@ -4,6 +4,7 @@ using System.Security.Cryptography.Xml;
 using Newtonsoft.Json;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_unitOfWork = unitOfWork;
 		}
 
-		public HistoricalAdherenceReadModel Get(Guid personId, DateOnly date)
+		public HistoricalAdherenceReadModel Read(Guid personId, DateOnly date)
 		{
 			var selectHistoricalAdherence = @"SELECT * FROM [ReadModel].HistoricalAdherence {0}";
 			var query = string.Format(selectHistoricalAdherence, @"WHERE PersonId = :personId AND [Date] = :date");
