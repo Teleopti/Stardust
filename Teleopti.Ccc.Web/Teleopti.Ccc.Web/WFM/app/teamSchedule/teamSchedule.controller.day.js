@@ -115,7 +115,7 @@
 			$mdSidenav(settingsContainerId).isOpen() && $mdSidenav(settingsContainerId).close();
 		}
 
-		vm.selectorChanged = function() {
+		vm.onPageSizeSelectorChange = function() {
 			teamScheduleSvc.updateAgentsPerPageSetting.post({ agents: vm.paginationOptions.pageSize }).$promise.then(function () {
 				vm.resetSchedulePage();
 			});
