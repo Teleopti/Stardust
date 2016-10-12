@@ -287,6 +287,7 @@
     <Compile Include="Rta\Persisters\AgentStatePersisterScheduleTest.cs" />
     <Compile Include="Rta\Persisters\AgentStateReadModelPersisterTest.cs" />
     <Compile Include="Rta\AgentStateReadModelReaderForSkillTest.cs" />
+    <Compile Include="Rta\Persisters\HistoricalAdherenceReadModelPersisterTest.cs" />
     <Compile Include="Rta\Persisters\MappingReadModelPersisterTest.cs" />
     <Compile Include="Rta\Persisters\MappingReadModelUpdaterTest.cs" />
     <Compile Include="Rta\Persisters\SiteInAlarmFromAgentStatesReadModelTest.cs" />

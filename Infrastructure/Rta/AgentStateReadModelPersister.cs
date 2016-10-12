@@ -16,7 +16,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		private readonly IJsonSerializer _serializer;
 		private readonly IJsonDeserializer _deserializer;
 
-		public AgentStateReadModelPersister(ICurrentUnitOfWork unitOfWork, IJsonSerializer serializer, IJsonDeserializer deserializer)
+		public AgentStateReadModelPersister(ICurrentUnitOfWork unitOfWork, IJsonSerializer serializer,
+			IJsonDeserializer deserializer)
 		{
 			_unitOfWork = unitOfWork;
 			_serializer = serializer;
@@ -180,14 +181,15 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(@"SELECT * FROM [ReadModel].[AgentState] WHERE PersonId = :PersonId")
 				.SetParameter("PersonId", personId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
 				.List<internalModel>()
 				.Select(x =>
 				{
 					(x as AgentStateReadModel).Shift = _deserializer.DeserializeObject<AgentStateActivityReadModel[]>(x.Shift);
 					x.Shift = null;
-					(x as AgentStateReadModel).OutOfAdherences = _deserializer.DeserializeObject<AgentStateOutOfAdherenceReadModel[]>(x.OutOfAdherences);
+					(x as AgentStateReadModel).OutOfAdherences =
+						_deserializer.DeserializeObject<AgentStateOutOfAdherenceReadModel[]>(x.OutOfAdherences);
 					x.OutOfAdherences = null;
 					return x;
 				})
@@ -246,7 +248,7 @@ MERGE INTO [ReadModel].[AgentState] AS T
 		private class internalModel : AgentStateReadModel
 		{
 			public new string Shift { get; set; }
-			public new string OutOfAdherences{ get; set; }
+			public new string OutOfAdherences { get; set; }
 		}
 	}
 }

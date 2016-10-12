@@ -254,7 +254,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_database.WithAlarm(threshold, null);
 			return this;
 		}
-		
+
+		public FakeRtaDatabase WithScenario(Guid? id, bool @default)
+		{
+			_database.WithScenario(id, @default);
+			return this;
+		}
 	}
 
 	public static class FakeDatabaseUserExtensions

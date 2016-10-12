@@ -336,9 +336,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			WithTenant(DefaultTenantName, LegacyAuthenticationKey.TheKey);
 			WithBusinessUnit(DefaultBusinessUnitId);
 
+			WithScenario(null, true);
+
 			// seems to always exist
 			_dataSources.Add("-1", -1);
 			_dataSources.Add("-1", 1);
+
+	
 		}
 
 		public Guid CurrentBusinessUnitId()

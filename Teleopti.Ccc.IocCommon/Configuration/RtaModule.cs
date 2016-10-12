@@ -111,6 +111,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SkillViewModelBuilder>().SingleInstance();
 			builder.RegisterType<AdherencePercentageViewModelBuilder>().SingleInstance().As<IAdherencePercentageViewModelBuilder>();
 			builder.RegisterType<AdherenceDetailsViewModelBuilder>().SingleInstance().As<IAdherenceDetailsViewModelBuilder>();
+			builder.RegisterType<HistoricalAdherenceViewModelBuilder>().SingleInstance();
+
+			builder.RegisterType<HistoricalAdherenceReadModelReader>().As<IHistoricalAdherenceReadModelReader>();
+			builder.RegisterType<HistoricalAdherenceReadModelPersister>().As<IHistoricalAdherenceReadModelPersister>();
 
 			builder.RegisterType<ShiftEventPublisher>().SingleInstance();
 			builder.RegisterType<AdherenceEventPublisher>().SingleInstance();

@@ -121,6 +121,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var activityId = Guid.NewGuid();
 			Database
 				.WithBusinessUnit(businessUnitId)
+				.WithScenario(null, true)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-11-11 10:00", "2014-11-11 12:00")
 				.WithRule("statecode", activityId, 0);

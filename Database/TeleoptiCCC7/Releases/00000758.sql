@@ -2,3 +2,12 @@ if not exists (select * from sys.columns where name = 'AbsenceRequestExpiredThre
 begin
 	alter table WorkflowControlSet add AbsenceRequestExpiredThreshold int default 15
 end
+
+
+CREATE TABLE ReadModel.HistoricalAdherence (
+  PersonId uniqueidentifier not null,
+  AgentName nvarchar(max),
+  Schedules nvarchar(max),
+  OutOfAdherences nvarchar(max),
+  [Date] datetime
+);

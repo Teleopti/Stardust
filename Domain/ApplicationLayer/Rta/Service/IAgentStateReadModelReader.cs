@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-    public interface IAgentStateReadModelReader
+	public interface IAgentStateReadModelReader
     {
         IEnumerable<AgentStateReadModel> Load(IEnumerable<IPerson> persons);
         IEnumerable<AgentStateReadModel> Load(IEnumerable<Guid> personIds);
