@@ -23,28 +23,28 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         public void VerifyPersonAccountValidations()
         {
             Assert.AreEqual(2, Target.PersonAccountValidatorList.Count);
-            Assert.IsTrue(typeof(AbsenceRequestNoneValidator).IsInstanceOfType(Target.PersonAccountValidatorList[0]));
-            Assert.IsTrue(typeof(PersonAccountBalanceValidator).IsInstanceOfType(Target.PersonAccountValidatorList[1]));
+            Assert.IsTrue(Target.PersonAccountValidatorList[0] is AbsenceRequestNoneValidator);
+            Assert.IsTrue(Target.PersonAccountValidatorList[1] is PersonAccountBalanceValidator);
         }
 
         [Test]
         public void VerifyStaffingThresholdValidations()
         {
             Assert.AreEqual(5, Target.StaffingThresholdValidatorList.Count);
-            Assert.IsTrue(typeof(AbsenceRequestNoneValidator).IsInstanceOfType(Target.StaffingThresholdValidatorList[0]));
-            Assert.IsTrue(typeof(StaffingThresholdValidator).IsInstanceOfType(Target.StaffingThresholdValidatorList[1]));
-            Assert.IsTrue(typeof(BudgetGroupAllowanceValidator).IsInstanceOfType(Target.StaffingThresholdValidatorList[2]));
-            Assert.IsTrue(typeof(BudgetGroupHeadCountValidator).IsInstanceOfType(Target.StaffingThresholdValidatorList[3]));
-            Assert.IsTrue(typeof(StaffingThresholdWithShrinkageValidator).IsInstanceOfType(Target.StaffingThresholdValidatorList[4]));
+            Assert.IsTrue(Target.StaffingThresholdValidatorList[0] is AbsenceRequestNoneValidator);
+            Assert.IsTrue(Target.StaffingThresholdValidatorList[1] is StaffingThresholdValidator);
+            Assert.IsTrue(Target.StaffingThresholdValidatorList[2] is BudgetGroupAllowanceValidator);
+            Assert.IsTrue(Target.StaffingThresholdValidatorList[3] is BudgetGroupHeadCountValidator);
+            Assert.IsTrue(Target.StaffingThresholdValidatorList[4] is StaffingThresholdWithShrinkageValidator);
         }
 
         [Test]
         public void VerifyProcessAbsenceRequestList()
         {
             Assert.AreEqual(3, Target.AbsenceRequestProcessList.Count);
-            Assert.IsTrue(typeof(PendingAbsenceRequest).IsInstanceOfType(Target.AbsenceRequestProcessList[0]));
-            Assert.IsTrue(typeof(GrantAbsenceRequest).IsInstanceOfType(Target.AbsenceRequestProcessList[1]));
-            Assert.IsTrue(typeof(DenyAbsenceRequest).IsInstanceOfType(Target.AbsenceRequestProcessList[2]));
+            Assert.IsTrue(Target.AbsenceRequestProcessList[0] is PendingAbsenceRequest);
+            Assert.IsTrue(Target.AbsenceRequestProcessList[1] is GrantAbsenceRequest);
+            Assert.IsTrue(Target.AbsenceRequestProcessList[2] is DenyAbsenceRequest);
         }
 
         [Test]

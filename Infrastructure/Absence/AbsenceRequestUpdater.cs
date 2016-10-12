@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		private void loadDataForResourceCalculation(IAbsenceRequest absenceRequest, IEnumerable<IAbsenceRequestValidator> validatorList)
 		{
-			var shouldLoadDataForResourceCalculation = validatorList != null && validatorList.Any(v => typeof(StaffingThresholdValidator) == v.GetType());
+			var shouldLoadDataForResourceCalculation = validatorList != null && validatorList.Any(v => v is StaffingThresholdValidator);
 			if (shouldLoadDataForResourceCalculation)
 			{
 				var periodForResourceCalc = absenceRequest.Period.ChangeStartTime(TimeSpan.FromDays(-1));

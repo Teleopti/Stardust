@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 			bool isIntradayRequest = intradayPeriod.Contains(personRequest.Request.Period.StartDateTime) && intradayPeriod.Contains(personRequest.Request.Period.EndDateTime);
 
-			if (isIntradayRequest && validators.Any(v => typeof(StaffingThresholdValidator) == v.GetType()))
+			if (isIntradayRequest && validators.Any(v => v is StaffingThresholdValidator))
 			{
 				_intradayRequestProcessor.Process(personRequest, startDateTime);
 			}
@@ -104,7 +104,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var personRequest = CheckPersonRequest(@event.PersonRequestId);
 			if (personRequest == null)
 				return;
-
 
 			var queuedAbsenceRequest = new QueuedAbsenceRequest()
 			{

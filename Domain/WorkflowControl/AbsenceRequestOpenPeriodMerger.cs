@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             mergedPeriod.AbsenceRequestProcess = mergedPeriod.AbsenceRequestProcessList[processIndex];
             foreach (IAbsenceRequestOpenPeriod absenceRequestOpenPeriod in absenceRequestOpenPeriods)
             {
-                if (typeof(PersonAccountBalanceValidator).IsInstanceOfType(absenceRequestOpenPeriod.PersonAccountValidator))
+                if (absenceRequestOpenPeriod.PersonAccountValidator is PersonAccountBalanceValidator)
                 {
                     mergedPeriod.PersonAccountValidator = absenceRequestOpenPeriod.PersonAccountValidator;
                 }
@@ -23,9 +23,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                 {
                     mergedPeriod.AbsenceRequestProcess = absenceRequestOpenPeriod.AbsenceRequestProcess;
                 }
-                if (typeof(StaffingThresholdValidator).IsInstanceOfType(absenceRequestOpenPeriod.StaffingThresholdValidator)
-                    ||typeof(BudgetGroupAllowanceValidator).IsInstanceOfType(absenceRequestOpenPeriod.StaffingThresholdValidator)
-                    || typeof(BudgetGroupHeadCountValidator).IsInstanceOfType(absenceRequestOpenPeriod.StaffingThresholdValidator))
+                if (absenceRequestOpenPeriod.StaffingThresholdValidator is StaffingThresholdValidator
+                    ||absenceRequestOpenPeriod.StaffingThresholdValidator is BudgetGroupAllowanceValidator
+                    || absenceRequestOpenPeriod.StaffingThresholdValidator is BudgetGroupHeadCountValidator)
                 {
                     mergedPeriod.StaffingThresholdValidator = absenceRequestOpenPeriod.StaffingThresholdValidator;
                 }

@@ -346,7 +346,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		private void loadDataForResourceCalculation(List<IPersonRequest> personRequests, IEnumerable<IAbsenceRequestValidator> validatorList)
 		{
-			var shouldLoadDataForResourceCalculation = validatorList != null && validatorList.Any(v => typeof(StaffingThresholdValidator) == v.GetType());
+			var shouldLoadDataForResourceCalculation = validatorList != null && validatorList.Any(v => v is StaffingThresholdValidator);
 
 			var totalPeriod = personRequests.First().Request.Period;
 			var persons = new HashSet<IPerson>();

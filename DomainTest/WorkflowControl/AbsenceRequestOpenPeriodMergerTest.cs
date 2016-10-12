@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             IAbsenceRequestOpenPeriod mergedPeriod =
                 _target.Merge(new List<IAbsenceRequestOpenPeriod> {period1, period2});
 
-            Assert.IsTrue(typeof(PendingAbsenceRequest).IsInstanceOfType(mergedPeriod.AbsenceRequestProcess));
+            Assert.IsTrue(mergedPeriod.AbsenceRequestProcess is PendingAbsenceRequest);
         }
 
         [Test]
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             IAbsenceRequestOpenPeriod mergedPeriod =
                 _target.Merge(new List<IAbsenceRequestOpenPeriod> { period1, period2 });
 
-            Assert.IsTrue(typeof(DenyAbsenceRequest).IsInstanceOfType(mergedPeriod.AbsenceRequestProcess));
+            Assert.IsTrue(mergedPeriod.AbsenceRequestProcess is DenyAbsenceRequest);
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             IAbsenceRequestOpenPeriod mergedPeriod =
                 _target.Merge(new List<IAbsenceRequestOpenPeriod> { period1, period2 });
 
-            Assert.IsTrue(typeof(PersonAccountBalanceValidator).IsInstanceOfType(mergedPeriod.PersonAccountValidator));
+            Assert.IsTrue(mergedPeriod.PersonAccountValidator is PersonAccountBalanceValidator);
         }
 
         [Test]
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             IAbsenceRequestOpenPeriod mergedPeriod =
                 _target.Merge(new List<IAbsenceRequestOpenPeriod> { period1, period2 });
 
-            Assert.IsTrue(typeof(StaffingThresholdValidator).IsInstanceOfType(mergedPeriod.StaffingThresholdValidator));
+            Assert.IsTrue(mergedPeriod.StaffingThresholdValidator is StaffingThresholdValidator);
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             IAbsenceRequestOpenPeriod mergedPeriod =
                 _target.Merge(new List<IAbsenceRequestOpenPeriod> { period1, period2 });
 
-            Assert.IsTrue(typeof(BudgetGroupAllowanceValidator).IsInstanceOfType(mergedPeriod.StaffingThresholdValidator));
+            Assert.IsTrue(mergedPeriod.StaffingThresholdValidator is BudgetGroupAllowanceValidator);
         }
 
         [Test]
@@ -90,18 +90,18 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             IAbsenceRequestOpenPeriod mergedPeriod =
                 _target.Merge(new List<IAbsenceRequestOpenPeriod> { period1, period2, period3 });
 
-            Assert.IsTrue(typeof(StaffingThresholdValidator).IsInstanceOfType(mergedPeriod.StaffingThresholdValidator));
-            Assert.IsTrue(typeof(PersonAccountBalanceValidator).IsInstanceOfType(mergedPeriod.PersonAccountValidator));
-            Assert.IsFalse(typeof(GrantAbsenceRequest).IsInstanceOfType(mergedPeriod.AbsenceRequestProcess));
+            Assert.IsTrue(mergedPeriod.StaffingThresholdValidator is StaffingThresholdValidator);
+            Assert.IsTrue(mergedPeriod.PersonAccountValidator is PersonAccountBalanceValidator);
+            Assert.IsFalse(mergedPeriod.AbsenceRequestProcess is GrantAbsenceRequest);
         }
 
         [Test]
         public void VerifyWhenPeriodListEmpty()
         {
             IAbsenceRequestOpenPeriod mergedPeriod = _target.Merge(new List<IAbsenceRequestOpenPeriod>());
-            Assert.IsTrue(typeof(AbsenceRequestNoneValidator).IsInstanceOfType(mergedPeriod.StaffingThresholdValidator));
-            Assert.IsTrue(typeof(AbsenceRequestNoneValidator).IsInstanceOfType(mergedPeriod.PersonAccountValidator));
-            Assert.IsTrue(typeof(DenyAbsenceRequest).IsInstanceOfType(mergedPeriod.AbsenceRequestProcess));
+            Assert.IsTrue(mergedPeriod.StaffingThresholdValidator is AbsenceRequestNoneValidator);
+            Assert.IsTrue(mergedPeriod.PersonAccountValidator is AbsenceRequestNoneValidator);
+            Assert.IsTrue(mergedPeriod.AbsenceRequestProcess is DenyAbsenceRequest);
         }
     }
 }

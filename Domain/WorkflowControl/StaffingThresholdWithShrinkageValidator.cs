@@ -5,19 +5,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
-	public class StaffingThresholdWithShrinkageValidator : StaffingThresholdValidatorBase, IAbsenceRequestValidator
+	public class StaffingThresholdWithShrinkageValidator : StaffingThresholdValidator
 	{
-		public IAbsenceRequestValidator CreateInstance()
+		public override IAbsenceRequestValidator CreateInstance()
 		{
 			return new StaffingThresholdWithShrinkageValidator();
 		}
 
-		public string InvalidReason
-		{
-			get { return "RequestDenyReasonSkillThreshold"; }
-		}
-
-		public string DisplayText
+		public override string DisplayText
 		{
 			get { return Resources.IntradayWithShrinkage; }
 		}
