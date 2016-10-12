@@ -32374,6 +32374,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Validate requests based on expired threshold.
+        /// </summary>
+        public static string ValidateRequestsBasedOnExpiration {
+            get {
+                return ResourceManager.GetString("ValidateRequestsBasedOnExpiration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validate requests based on intraday staffing check.
         /// </summary>
         public static string ValidateRequestsBasedOnIntraday {

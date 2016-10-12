@@ -273,7 +273,8 @@
 
 		function isApproveBasedOnBusinessRulesEnabled() {
 			return (toggleSvc.Wfm_Requests_Approve_Based_On_Budget_Allotment_39626
-				|| toggleSvc.Wfm_Requests_Approve_Based_On_Intraday_39868)
+				|| toggleSvc.Wfm_Requests_Approve_Based_On_Intraday_39868
+				|| toggleSvc.Wfm_Requests_Check_Expired_Requests_40274)
 				&& !vm.isShiftTradeViewActive;
 		}
 

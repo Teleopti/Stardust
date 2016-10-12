@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		None = 0,
 		BudgetAllotmentValidator = 1 << 0,
 		IntradayValidator = 1 << 1,
+		ExpirationValidator = 1 << 2
 	}
 }

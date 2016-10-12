@@ -512,12 +512,14 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 					Id: 1,
 					Checked: true,
 					Name: "BudgetAllotmentValidator",
-					Description: "ValidateRequestsBasedOnBudgetAllotment"
+					Description: "ValidateRequestsBasedOnBudgetAllotment",
+					Enabled:true
 				}, {
 					Id: 2,
 					Checked: false,
 					Name: "IntradayValidator",
-					Description: "ValidateRequestsBasedOnIntraday"
+					Description: "ValidateRequestsBasedOnIntraday",
+					Enabled:true
 				}
 			];
 		}

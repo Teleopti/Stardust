@@ -1,9 +1,9 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.requests').service('requestsDataService', ['$http', '$translate', 'requestsDefinitions', requestsDataService]);
+	angular.module('wfm.requests').service('requestsDataService', ['$http', '$translate', 'requestsDefinitions', 'Toggle', requestsDataService]);
 
-	function requestsDataService($http, $translate, requestsDefinitions) {
+	function requestsDataService($http, $translate, requestsDefinitions, toggleSvc) {
 		var loadTextAndAbsenceRequestsUrl_old = '../api/Requests/loadTextAndAbsenceRequests';
 		var listRequestsUrl = '../api/Requests/requests';
 		var listShiftTradeRequestsUrl = '../api/Requests/shiftTradeRequests';
@@ -108,12 +108,22 @@
 					Id: requestsDefinitions.REQUEST_VALIDATORS.BudgetAllotmentValidator,
 					Checked: false,
 					Name: "BudgetAllotmentValidator",
-					Description: $translate.instant("ValidateRequestsBasedOnBudgetAllotment")
-				}, {
+					Description: $translate.instant("ValidateRequestsBasedOnBudgetAllotment"),
+					Enabled: toggleSvc.Wfm_Requests_Approve_Based_On_Budget_Allotment_39626
+				},
+				{
 					Id: requestsDefinitions.REQUEST_VALIDATORS.IntradayValidator,
 					Checked: false,
 					Name: "IntradayValidator",
-					Description: $translate.instant("ValidateRequestsBasedOnIntraday")
+					Description: $translate.instant("ValidateRequestsBasedOnIntraday"),
+					Enabled: toggleSvc.Wfm_Requests_Approve_Based_On_Intraday_39868
+				},
+				{
+					Id: requestsDefinitions.REQUEST_VALIDATORS.ExpirationValidator,
+					Checked: false,
+					Name: "ExpirationValidator",
+					Description: $translate.instant("ValidateRequestsBasedOnExpiration"),
+					Enabled: toggleSvc.Wfm_Requests_Check_Expired_Requests_40274
 				}
 			];
 		}

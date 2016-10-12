@@ -121,7 +121,7 @@
 			</h1>
 			<div class="modal-inner-content">
 				<div ng-repeat="rule in requestsCommandsPane.allBusinessRulesForApproving">
-					<div class="wfm-checkbox">
+					<div class="wfm-checkbox" ng-if="rule.Enabled">
 						<input type="checkbox" id="{{'checkbox-' + rule.Name}}" ng-model="rule.Checked" />
 						<label for="{{'checkbox-' + rule.Name}}">
 							<span class="wfm-checkbox-toggle"></span>

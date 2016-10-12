@@ -15014,4 +15014,8 @@ These options are activated:
     <value>Intraday With Shrinkage</value>
     <comment>Staffing validator in Workflow control set</comment>
   </data>
+  <data name="ValidateRequestsBasedOnExpiration" xml:space="preserve">
+    <value>Validate requests based on expired threshold</value>
+    <comment>Staffing validator in Workflow control set</comment>
+  </data>
 </root>

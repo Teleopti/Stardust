@@ -54,7 +54,8 @@
 		this.REQUEST_VALIDATORS = {
 			None: 0,
 			BudgetAllotmentValidator: 1,
-			IntradayValidator: 2
+			IntradayValidator: 2,
+			ExpirationValidator: 4
 		};
 
 		this.normalizeRequestsFilter = function (filter, sortingOrders, paging) {
