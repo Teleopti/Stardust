@@ -23,7 +23,8 @@
 		ctrl.shortDisplayNameOfTheSelected = shortDisplayNameOfTheSelected;
 
 		function $onInit() {
-		    populateTimezoneList();
+			populateTimezoneList();
+			ctrl.selectedTimezone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
 		    onSelectionChanged();
 		}
 
@@ -36,7 +37,7 @@
 			});
 
 			if (ianaList.indexOf(ctrl.selectedTimezone) < 0) {
-				ctrl.selectedTimezone = ianaList[0];
+				ctrl.selectedTimezone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
 				onSelectionChanged();
 			}
 		}
@@ -58,7 +59,6 @@
 					displayName: value
 				});
 			});
-			ctrl.selectedTimezone = defaultTimezone;
 		}
 
 		function shortDisplayNameOfTheSelected() {
