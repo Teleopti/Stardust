@@ -1730,7 +1730,6 @@
     <Compile Include="Scheduling\DayOffTemplateSorter.cs" />
     <Compile Include="Scheduling\DeletedDescription.cs" />
     <Compile Include="ApplicationLayer\Events\FullDayAbsenceAddedEvent.cs" />
-    <Compile Include="Scheduling\ISkillLoaderDecider.cs" />
     <Compile Include="Scheduling\LoadScheduleByPersonSpecification.cs" />
     <Compile Include="Scheduling\LoadSchedulesForRequestWithoutResourceCalculation.cs" />
     <Compile Include="Scheduling\Meetings\AllLayersAreInWorkTimeSpecification.cs" />
