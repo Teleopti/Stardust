@@ -73,6 +73,7 @@
 		WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
 		WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279,
 		WfmTeamSchedule_EditAndDisplayInternalNotes_40671,
+		WfmTeamSchedule_CheckPersonalAccountWhenAddingAbsence_41088,
 
 		WebByPassDefaultPermissionCheck_37984,
 		WfmTeamSchedule_RevertToPreviousSchedule_39002,
