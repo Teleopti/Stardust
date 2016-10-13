@@ -219,13 +219,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I select to do override calls")]
 		public void WhenISelectToDoOverrideCalls()
 		{
-			Browser.Interactions.Click(".forecast-override-tasks-button:enabled");
+			Browser.Interactions.ClickVisibleOnly(".forecast-override-tasks-button:enabled");
 		}
 
 		[When(@"I clear override values")]
 		public void WhenIClearOverrideValues()
 		{
-			Browser.Interactions.Click(".forecast-clear-override-button.wfm-btn-invis-primary");
+			Browser.Interactions.ClickVisibleOnly(".forecast-clear-override-button.wfm-btn-invis-primary");
 		}
 
 		[When(@"I clear campaign values")]
