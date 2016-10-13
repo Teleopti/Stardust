@@ -51,7 +51,7 @@
 		function removeFromSorted(skill) {
 			if (skill.hasParent) {
 				vm.sortedSkills.forEach(function (parent) {
-					if (parent.value === skill.value) {
+					if (parent.Priority === skill.Priority) {
 						skill.hasParent = false;
 						parent.siblings.splice(parent.siblings.indexOf(skill), 1);
 					}
@@ -66,7 +66,7 @@
 
 		function promoteSiblings(arr) {
 			arr.forEach(function (sibling) {
-				addSkill(sibling.skill, sibling.value, sibling.isSibling);
+				addSkill(sibling.skill, sibling.Priority, sibling.isSibling);
 			});
 		}
 
@@ -75,7 +75,7 @@
 			if (skill.siblings.length > 0) {
 				skill.siblings[0].hasParent = false;
 				skill.siblings.forEach(function (sibling) {
-					var temp = { skill: sibling, value: skill.value, isSibling: true };
+					var temp = { skill: sibling, Priority: skill.Priority, isSibling: true };
 					skillRepository.push(temp);
 				});
 			}
@@ -97,10 +97,11 @@
 
 		function addSkill(skill, prio, isSibling) {
 			if (!skill || !prio) return;
-			skill.value = prio;
+			skill.Priority = prio;
 			var isDuplicate = false;
+			console.log(vm.sortedSkills);
 			vm.sortedSkills.forEach(function (sortedSkill) {
-				if (skill.value === sortedSkill.value) {
+				if (skill.Priority === sortedSkill.Priority) {
 					skill.hasParent = true;
 					sortedSkill.siblings.push(skill);
 					isDuplicate = true;
@@ -110,6 +111,7 @@
 				vm.sortedSkills.push(skill);
 			}
 			if (!isSibling) {
+				skill.siblings = [];
 				removeFromUnsorted(skill);
 			}
 		}
