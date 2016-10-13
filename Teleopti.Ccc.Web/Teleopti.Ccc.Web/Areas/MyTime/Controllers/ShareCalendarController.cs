@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar;
+using Teleopti.Ccc.Web.Core.Startup;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
@@ -18,6 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[HttpGet]
+		[NoCacheFilterMvc]
 		public ContentResult iCal(string id, string type = "text/calendar")
 		{
 			try
