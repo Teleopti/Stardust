@@ -125,7 +125,6 @@ define([
 				var receivedSchedules = [];
 
 				if (viewModel.GroupId() != null) {
-
 					groupschedulesubscriptions.subscribeGroupSchedule(
 						viewModel.BusinessUnitId(),
 						viewModel.GroupId(),
@@ -150,11 +149,8 @@ define([
 						}
 					);
 				} else {
-					//viewModel.UpdateSchedules({ BaseDate: data.BaseDate, Schedules: receivedSchedules });
 					groupScheduleDeferred.resolve();
-					
 				}
-
 			});
 
 
@@ -172,8 +168,6 @@ define([
 					viewModel.Loading(false);
 					resize.notify();
 				});
-
-
 		},
 
 		dispose: function (options) {

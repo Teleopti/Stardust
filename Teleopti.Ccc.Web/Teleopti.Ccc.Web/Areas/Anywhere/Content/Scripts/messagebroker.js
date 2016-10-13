@@ -47,11 +47,14 @@ define([
 	};
 
 	var unsubscribe = function (subscription) {
+		var deferred = $.Deferred();
 		subscription.promise
 		    .done(function () {
 		    	hub.server.removeSubscription(subscription.route);
 		    	subscriptions.splice(subscriptions.indexOf(subscription), 1);
+				deferred.resolve();
 		    });
+		return deferred.promise();
 	};
 
 	return {
@@ -59,5 +62,4 @@ define([
 		subscribe: subscribe,
 		unsubscribe: unsubscribe
 	};
-
 });

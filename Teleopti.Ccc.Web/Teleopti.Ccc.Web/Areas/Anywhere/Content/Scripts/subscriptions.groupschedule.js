@@ -11,10 +11,18 @@ define([
 	var groupScheduleSubscription = null;
 
 	var unsubscribeGroupSchedule = function () {
-		if (!groupScheduleSubscription)
-			return;
-		messagebroker.unsubscribe(groupScheduleSubscription);
-		groupScheduleSubscription = null;
+		if (!groupScheduleSubscription) {
+			var deferred = $.Deferred();
+			deferred.resolve();
+			return deferred.promise();
+		}
+
+		var promise = messagebroker.unsubscribe(groupScheduleSubscription);
+		promise.done(function() {
+			groupScheduleSubscription = null;
+		});
+
+		return promise;
 	};
 
 	var loadGroupSchedules = function (buid, date, groupId, callback) {
@@ -47,31 +55,33 @@ define([
 
 	return {
 		subscribeGroupSchedule: function (buId, groupId, date, peopleCheckCallback, callback) {
-			unsubscribeGroupSchedule();
-			messagebroker.started.done(function () {
-				groupScheduleSubscription = messagebroker.subscribe({
-					businessUnitId: buId,
-					domainType: 'IPersonScheduleDayReadModel',
-					callback: function(notification) {
-						if (isMatchingDates(date, notification.StartDate, notification.EndDate)) {
-							if (peopleCheckCallback(notification.DomainReferenceId)) {
-								if (!currentThrottleTimeout) {
-									currentThrottleTimeout = setTimeout(function() {
-											clearTimeout(currentThrottleTimeout);
-											currentThrottleTimeout = undefined;
-											loadGroupSchedules(buId, date, groupId, callback);
-										},
-										500);
+			unsubscribeGroupSchedule()
+				.done(function() {
+					messagebroker.started.done(function() {
+						groupScheduleSubscription = messagebroker.subscribe({
+							businessUnitId: buId,
+							domainType: 'IPersonScheduleDayReadModel',
+							callback: function(notification) {
+								if (isMatchingDates(date, notification.StartDate, notification.EndDate)) {
+									if (peopleCheckCallback(notification.DomainReferenceId)) {
+										if (!currentThrottleTimeout) {
+											currentThrottleTimeout = setTimeout(function() {
+													clearTimeout(currentThrottleTimeout);
+													currentThrottleTimeout = undefined;
+													loadGroupSchedules(buId, date, groupId, callback);
+												},
+												500);
+										}
+									}
 								}
 							}
-						}
-					}
-				});
+						});
 
-				groupScheduleSubscription.promise.done(function () {
-					loadGroupSchedules(buId, date, groupId, callback);
+						groupScheduleSubscription.promise.done(function() {
+							loadGroupSchedules(buId, date, groupId, callback);
+						});
+					});
 				});
-			});
 		},
 		unsubscribeGroupSchedule: unsubscribeGroupSchedule,
 	};
