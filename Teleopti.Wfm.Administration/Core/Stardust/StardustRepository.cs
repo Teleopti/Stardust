@@ -173,7 +173,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			const string selectCommandText = @"SELECT DISTINCT Id, Url, Heartbeat, Alive, Running
 											FROM (SELECT Id, Url, Heartbeat, Alive, CASE WHEN Url IN 
 											(SELECT SentToWorkerNodeUri FROM Stardust.Job WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running 
-											FROM [Stardust].WorkerNode, [Stardust].job) w
+											FROM [Stardust].WorkerNode) w
 											WHERE w.Id = @Id";
 			WorkerNode node = null;
 			using (var connection = new SqlConnection(_connectionString))
@@ -209,7 +209,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			var commandText = @"SELECT DISTINCT Id, Url, Heartbeat, Alive, Running
 							FROM (SELECT Id, Url, Heartbeat, Alive, CASE WHEN Url IN 
 							(SELECT SentToWorkerNodeUri FROM Stardust.Job WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running 
-							FROM [Stardust].WorkerNode, [Stardust].job) w";
+							FROM [Stardust].WorkerNode) w";
 			using (var connection = new SqlConnection(_connectionString))
 			{
 				connection.OpenWithRetry(_retryPolicy);
