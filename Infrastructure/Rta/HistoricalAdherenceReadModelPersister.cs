@@ -17,16 +17,16 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_serializer = serializer;
 		}
 
-		public void AddIn(Guid personid, DateOnly date, DateTime timestamp)
+		public void AddIn(Guid personid, DateTime timestamp)
 		{
 		}
 
-		public void AddNeutral(Guid personid, DateOnly date, DateTime timestamp)
+		public void AddNeutral(Guid personid, DateTime timestamp)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void AddOut(Guid personid, DateOnly date, DateTime timestamp)
+		public void AddOut(Guid personid, DateTime timestamp)
 		{
 			throw new NotImplementedException();
 		}

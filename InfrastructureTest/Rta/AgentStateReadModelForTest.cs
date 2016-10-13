@@ -1,7 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.TestCommon.TestData;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
@@ -10,7 +9,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public HistoricalAdherenceReadModelForTest()
 		{
 			RandomName.Make();
-			Date = DateOnly.Today;
 		}
 	}
 

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_unitOfWork = unitOfWork;
 		}
 
-		public HistoricalAdherenceReadModel Read(Guid personId, DateOnly date)
+		public HistoricalAdherenceReadModel Read(Guid personId, DateTime startTime, DateTime endTime)
 		{
 			var selectHistoricalAdherence = @"SELECT * FROM [ReadModel].HistoricalAdherence {0}";
 			var query = string.Format(selectHistoricalAdherence, @"WHERE PersonId = :personId AND [Date] = :date");
@@ -41,14 +41,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				set
 				{
 					//base.OutOfAdherences = value != null ? JsonConvert.DeserializeObject<IEnumerable<AgentStateOutOfAdherenceReadModel>>(value) : null;
-				}
-			}
-
-			public new DateTime Date
-			{
-				set
-				{
-					base.Date = new DateOnly(value);
 				}
 			}
 

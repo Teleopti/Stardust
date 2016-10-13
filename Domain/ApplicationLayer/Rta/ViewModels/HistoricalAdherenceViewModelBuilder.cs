@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public HistoricalAdherenceViewModel Build(Guid personId)
 		{
-			var result = _reader.Read(personId, new DateOnly(_now.UtcDateTime()));
+			var result = _reader.Read(personId, _now.UtcDateTime().Date, _now.UtcDateTime().AddDays(1).Date);
 			var person = _persons.Load(personId);
 			var schedule = getCurrentSchedules(person);
 			

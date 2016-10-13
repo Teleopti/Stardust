@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -46,7 +45,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			ReadModel.Has(new HistoricalAdherenceReadModel
 			{
 				PersonId = person,
-				Date = "2016-10-10".Date(),
 				OutOfAdherences = new[]
 				{
 					new HistoricalOutOfAdherenceReadModel
@@ -68,7 +66,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		{
 			Now.Is("2016-10-10 15:00");
 			var person = Guid.NewGuid();
-			var name = RandomName.Make();
 
 			Database
 				.WithAgent(person, "name");
@@ -77,13 +74,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.Has(new HistoricalAdherenceReadModel
 				{
 					PersonId = person,
-					Date = "2016-10-09".Date()
+					OutOfAdherences = new[] { new HistoricalOutOfAdherenceReadModel { StartTime = "2016-10-08 00:00".Utc() } }
 				})
 				.Has(new HistoricalAdherenceReadModel
 				{
 					PersonId = person,
-					Date = "2016-10-10".Date(),
-					OutOfAdherences = new[] {new HistoricalOutOfAdherenceReadModel() }
+					OutOfAdherences = new[] { new HistoricalOutOfAdherenceReadModel { StartTime = "2016-10-10 00:00".Utc() } }
 				});
 
 			var historicalData = Target.Build(person);
