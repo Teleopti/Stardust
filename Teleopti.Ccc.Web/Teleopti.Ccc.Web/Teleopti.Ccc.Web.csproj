@@ -1344,6 +1344,7 @@
     <Content Include="WFM\app\rta\historical\rta-historical-SeeAllOutOfAdherences_39146.html" />
     <Content Include="WFM\app\rta\historical\rta.historical.controller.js" />
     <Content Include="WFM\app\skillPrio\skillprio.controller.spec.js" />
+    <Content Include="WFM\app\skillPrio\skillprio.service.js" />
     <Content Include="WFM\app\skillPrio\skillprio.service.spec.js" />
     <Content Include="WFM\app\teamSchedule\html\noteEditor.html" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.hideStates.spec.js" />
@@ -1360,7 +1361,7 @@
     <Content Include="WFM\app\skillPrio\skillprio.controller.js" />
     <Content Include="WFM\app\skillPrio\skillprio.html" />
     <Content Include="WFM\app\skillPrio\skillprio.routes.js" />
-    <Content Include="WFM\app\skillPrio\skillprio.service.js" />
+    <Content Include="WFM\app\skillPrio\skillprio.list.service.js" />
     <Content Include="WFM\app\skillPrio\_modules.js" />
     <Content Include="WFM\index_desktop_client.tpl.html" />
     <Content Include="WFM\index.tpl.html" />

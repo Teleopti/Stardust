@@ -14,17 +14,16 @@
         </button>
     </div>
 </div>
-
 <div class="con-row selectActivityInput">
     <div class="con-flex">
         <div class="panel material-depth-1">
             <div class="con-row">
                 <div class="con-flex">
                     <md-autocomplete id="activity" class="autocomplete-skill" md-no-cache="true" md-selected-item="vm.selectedActivity" md-select-on-match="true"
-                        md-search-text="searchActiviyText" md-selected-item-change="vm.updateSelectedSkill(vm.selectedActivitys)"
-                        md-items="activity in vm.activitys" md-item-text="activity.name" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
+                        md-search-text="searchActiviyText" md-selected-item-change="vm.updateSelectedSkill(vm.selectedActivity)"
+                        md-items="activity in vm.activitys" md-item-text="activity.ActivityName" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
                         <md-item-template>
-                            <span md-highlight-text="searchSkillText">{{activity.name}}</span>
+                            <span md-highlight-text="searchActivityText" md-highlight-flags="^i">{{activity.ActivityName}}</span>
                         </md-item-template>
                         <md-not-found>
                             {{'RepViewerNoMoreMatches'|translate}}
@@ -57,7 +56,7 @@
             <div class="skill-devider" ng-repeat="skill in vm.sortedSkills | orderBy:'-value'">
                 <div class="con-row" ng-if="skill.showAutoCompleteTop">
                     <div class="con-flex">
-                        <md-autocomplete id="" md-items="skilltoBeSelected in vm.query(searchText)" md-item-text="skilltoBeSelected.name" md-selected-item="selectedSkill"
+                        <md-autocomplete id="" md-items="skilltoBeSelected in vm.querySkills(searchText)" md-item-text="skilltoBeSelected.name" md-selected-item="selectedSkill"
                             md-search-text="searchText" md-selected-item-change="vm.addSkill(skilltoBeSelected, skill.value+1); skill.showAutoCompleteTop = false"
                             md-select-on-match="true" md-input-id="showAutoCompleteTop" md-input-name="nameAttribute" md-menu-class="dropdown-class"
                             autofocus md-autoselect="true" placeholder="placeholder">
@@ -89,7 +88,7 @@
                                 </div>
                             </div>
                             <div class="grid-card line-centeron-grid-card line-center" ng-if="skill.showAutoCompleteMiddle">
-                                <md-autocomplete md-items="skilltoBeSelected in vm.query(searchTextMiddle)" md-item-text="skilltoBeSelected.name" md-selected-item="selectedSkill"
+                                <md-autocomplete md-items="skilltoBeSelected in vm.querySkills(searchTextMiddle)" md-item-text="skilltoBeSelected.name" md-selected-item="selectedSkill"
                                     md-search-text="searchTextMiddle" md-selected-item-change="vm.addSkill(skilltoBeSelected, skill.value); skill.showAutoCompleteMiddle = false"
                                     md-select-on-match="true" md-input-id="input-ID" md-input-name="nameAttribute" md-menu-class="dropdown-class"
                                     md-autofocus="true" md-autoselect="true" placeholder="placeholder">
@@ -124,7 +123,7 @@
                 </div>
                 <div class="con-row" ng-if="skill.showAutoCompleteBottom">
                     <div class="con-flex">
-                        <md-autocomplete md-items="skilltoBeSelected in vm.query(searchText)" md-item-text="skilltoBeSelected.name" md-selected-item="selectedSkill"
+                        <md-autocomplete md-items="skilltoBeSelected in vm.querySkills(searchText)" md-item-text="skilltoBeSelected.name" md-selected-item="selectedSkill"
                             md-search-text="searchText" md-selected-item-change="vm.addSkill(skilltoBeSelected, skill.value-1);skill.showAutoCompleteBottom = false"
                             md-select-on-match="true" md-input-id="bottomInput-ID" md-menu-class="dropdown-class"
                             md-autoselect="true" placeholder="placeholder">
@@ -149,7 +148,7 @@
                     <md-autocomplete ng-if="showAutoCompleteOnce" md-input-id="autoCompleteOnceId" class="autocomplete-skill panel" md-no-cache="true
             " md-selected-item="vm.selectedSkill" md-autoselect = "true"
                         md-select-on-match="true " md-search-text="searchSkillText " md-selected-item-change="vm.addSkill(skill, 1000); showAutoCompleteOnce = false;searchSkillText=''"
-                        md-items="skill in vm.query(searchSkillText) " md-item-text="skill.name " md-min-length="0 " placeholder="{{
+                        md-items="skill in vm.querySkills(searchSkillText) " md-item-text="skill.name " md-min-length="0 " placeholder="{{
             'SelectSkill'|translate}}">
                         <md-item-template>
                             <span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.name}}</span>

@@ -5,8 +5,8 @@
 		.module('wfm.skillPrio')
 		.controller('skillPrioController', skillPrioController);
 
-	skillPrioController.$inject = ['$stateParams', 'Toggle', '$filter', 'NoticeService', '$translate', '$q', 'skillPrioService'];
-	function skillPrioController($stateParams, toggleService, $filter, NoticeService, $translate, $q, skillPrioService) {
+	skillPrioController.$inject = ['$stateParams', 'Toggle', '$filter', 'NoticeService', '$translate', '$q', 'skillPrioListService'];
+	function skillPrioController($stateParams, toggleService, $filter, NoticeService, $translate, $q, skillPrioListService) {
 		var vm = this;
 		vm.selectedActivity = '';
 		vm.sortedSkills = [];
@@ -16,72 +16,78 @@
 		vm.removeSkill = removeSkill;
 		vm.noSortedSkills = noSortedSkills;
 		vm.displayAutoComplete = displayAutoComplete;
-		vm.query = query;
+		vm.querySkills = querySkills;
 		vm.save = save;
 
 		////////////////
-		
+
 		function getActivitys() {
-			return skillPrioService.getMockActivitys();
+			return skillPrioListService.getActivitys().then(function(res){
+				vm.activitys = res;
+			});
 		}
 
 		function getSkills() {
-			return skillPrioService.getMockSkills();
+			return skillPrioListService.getSkills();
 		}
-		
+
 		function removeFromUnsorted(skill) {
 			vm.skills.splice(vm.skills.indexOf(skill), 1);
-		} 
+		}
 
-		function addToUnsorted(skill){
+		function addToUnsorted(skill) {
 			vm.skills.push(skill);
 		}
 
-		function removeFromSorted(skill){
-			if(skill.hasParent){
-				vm.sortedSkills.forEach(function(parent){
-					if(parent.value === skill.value){
+		function removeFromSorted(skill) {
+			if (skill.hasParent) {
+				vm.sortedSkills.forEach(function (parent) {
+					if (parent.value === skill.value) {
 						skill.hasParent = false;
 						parent.siblings.splice(parent.siblings.indexOf(skill), 1);
 					}
 				});
-			}else{
+			} else {
 				skill.siblings = [];
 				skill.hasParent = false;
 				vm.sortedSkills.splice(vm.sortedSkills.indexOf(skill), 1);
 			}
-			
+
 		}
 
-		function promoteSiblings(arr){
-			arr.forEach(function(sibling){
+		function promoteSiblings(arr) {
+			arr.forEach(function (sibling) {
 				addSkill(sibling.skill, sibling.value, sibling.isSibling);
 			});
 		}
 
-		function removeSkill(skill){
+		function removeSkill(skill) {
 			var skillRepository = [];
-			if(skill.siblings.length > 0){
+			if (skill.siblings.length > 0) {
 				skill.siblings[0].hasParent = false;
-				skill.siblings.forEach(function(sibling){
-					var temp = {skill: sibling, value:skill.value, isSibling:true};
+				skill.siblings.forEach(function (sibling) {
+					var temp = { skill: sibling, value: skill.value, isSibling: true };
 					skillRepository.push(temp);
 				});
 			}
 			removeFromSorted(skill);
 			addToUnsorted(skill);
-			if(skillRepository.length > 0){
+			if (skillRepository.length > 0) {
 				promoteSiblings(skillRepository);
 			}
 		}
 
-		function query(query) {
-			var results = $filter('filter')(vm.skills,query);
-				return results;
+		function querySkills(query) {
+			var results = $filter('filter')(vm.skills, query);
+			return results;
+		}
+		function queryActivitys(query) {
+			var results = $filter('filter')(vm.activitys, query);
+			return results;
 		}
 
 		function addSkill(skill, prio, isSibling) {
-			if(!skill || !prio) return;
+			if (!skill || !prio) return;
 			skill.value = prio;
 			var isDuplicate = false;
 			vm.sortedSkills.forEach(function (sortedSkill) {
@@ -94,7 +100,7 @@
 			if (!isDuplicate) {
 				vm.sortedSkills.push(skill);
 			}
-			if(!isSibling){
+			if (!isSibling) {
 				removeFromUnsorted(skill);
 			}
 		}
@@ -111,7 +117,7 @@
 			}
 		}
 
-		function save(){
+		function save() {
 			NoticeService.success('All changes are saved', 5000, true);
 		}
 

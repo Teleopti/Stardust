@@ -1,59 +1,29 @@
-(function () {
+﻿(function () {
     'use strict';
 
     angular
         .module('wfm.skillPrio')
         .service('skillPrioService', skillPrioService);
 
-    //Service.$inject = ['dependency1'];
-    function skillPrioService() {
-        this.getMockActivitys = getMockActivitys;
-        this.getMockSkills = getMockSkills;
+    skillPrioService.$inject = ['$resource','$q'];
+    function skillPrioService($resource, $q) {
+        this.getAdminSkillRoutingActivity = getAdminSkillRoutingActivity;
+        this.getSkills = getSkills;
 
         ////////////////
-        function getMockActivitys() {
-            var activitys = [{
-                name: 'Phone'
-            }, {
-                    name: 'Backoffice'
-                }, {
-                    name: 'Webchat'
-                }, {
-                    name: 'Store'
-                }, {
-                    name: 'Email'
-                }, {
-                    name: 'Social Media'
-                },];
-            return activitys;
+
+        function getAdminSkillRoutingActivity() {
+            return $resource('../api/ResourcePlanner/AdminSkillRoutingActivity', {}, {
+                query: {
+                    method: 'GET',
+                    isArray: true
+                }
+            }).query().$promise;
         }
-        function getMockSkills() {
-            var skills = [{
-                name: "English",
-                value: 0,
-                siblings: []
-            }, {
-                    name: "Norwegian",
-                    value: 0,
-                    siblings: []
-                }, {
-                    name: "Swedish",
-                    value: 0,
-                    siblings: []
-                }, {
-                    name: "Finnish",
-                    value: 0,
-                    siblings: []
-                }, {
-                    name: "Danish",
-                    value: 0,
-                    siblings: []
-                }, {
-                    name: "Klingon",
-                    value: 0,
-                    siblings: []
-                }];
-            return skills;
+
+        function getSkills() {
+            return ['test skill'];
         }
+
     }
 })();
