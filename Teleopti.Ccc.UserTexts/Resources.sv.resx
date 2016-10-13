@@ -9902,7 +9902,7 @@ Produktaktiveringsnyckeln heter "{3}" och har dessa tillval aktiverade:
     <value>Tagga ändringar med:</value>
   </data>
   <data name="InvalidTimeValue" xml:space="preserve">
-    <value>Ogiltid tid '{0}'</value>
+    <value>Ogiltig tid '{0}'</value>
     <comment>Invalid time value 'Ogiltig tid'</comment>
   </data>
   <data name="WorkWeekStartsAt" xml:space="preserve">
