@@ -4,14 +4,17 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.HistoricalAdherence
 {
-	[ReadModelUpdaterTest]
+	[DomainTest]
 	[TestFixture]
+	[Toggle(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
 	public class HistoricalAdherenceUpdaterTest
 	{
 		public FakeHistoricalAdherenceReadModelPersister Persister;
