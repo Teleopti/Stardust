@@ -59,7 +59,7 @@ namespace Stardust.Manager
 
 		public void AssignJobToWorkerNodes()
 		{
-			_jobRepository.AssignJobToWorkerNode(_httpSender);
+			_jobRepository.AssignJobToWorkerNode();
 		}
 
 		private void CheckHeartbeats_Elapsed(object sender, ElapsedEventArgs e)
@@ -123,8 +123,7 @@ namespace Stardust.Manager
 		
 		public void CancelJobByJobId(Guid jobId)
 		{
-			_jobRepository.CancelJobByJobId(jobId,
-			                                _httpSender);
+			_jobRepository.CancelJobByJobId(jobId);
 		}
 
 		public void UpdateResultForJob(Guid jobId,

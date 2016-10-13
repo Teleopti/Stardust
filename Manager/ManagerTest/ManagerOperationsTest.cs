@@ -50,7 +50,7 @@ namespace ManagerTest
 
 			JobRepository.AddItemToJobQueue(jobQueueItem);
 
-			JobRepository.AssignJobToWorkerNode(HttpSender);
+			JobRepository.AssignJobToWorkerNode();
 
 			HttpSender.CallToWorkerNodes.Clear();
 			ManagerController.CancelJobByJobId(jobQueueItem.JobId);
@@ -131,7 +131,7 @@ namespace ManagerTest
 
 			JobRepository.AddItemToJobQueue(jobQueueItem);
 
-			JobRepository.AssignJobToWorkerNode(HttpSender);
+			JobRepository.AssignJobToWorkerNode();
 
 			ManagerController.CancelJobByJobId(jobQueueItem.JobId);
 

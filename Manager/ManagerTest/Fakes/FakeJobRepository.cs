@@ -58,12 +58,12 @@ namespace ManagerTest.Fakes
 			}
 		}
 
-		public void AssignJobToWorkerNode(IHttpSender httpSender)
+		public void AssignJobToWorkerNode( )
 		{
 			throw new NotImplementedException();
 		}
 
-		public void CancelJobByJobId(Guid jobId, IHttpSender httpSender)
+		public void CancelJobByJobId(Guid jobId)
 		{
 			throw new NotImplementedException();
 		}

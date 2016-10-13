@@ -16,9 +16,9 @@ namespace Stardust.Manager.Interfaces
 
 		void RequeueJobThatDidNotEndByWorkerNodeUri(string workerNodeUri);
 
-		void AssignJobToWorkerNode(IHttpSender httpSender);
+		void AssignJobToWorkerNode();
 
-		void CancelJobByJobId(Guid jobId, IHttpSender httpSender);
+		void CancelJobByJobId(Guid jobId );
 
 		void UpdateResultForJob(Guid jobId, string result, DateTime ended);
 

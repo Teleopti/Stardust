@@ -23,9 +23,12 @@ namespace Stardust.Manager
 
 		private readonly CreateSqlCommandHelper _createSqlCommandHelper;
 
+		private readonly IHttpSender _httpSender;
+
 		public JobRepository(ManagerConfiguration managerConfiguration,
 		                     RetryPolicyProvider retryPolicyProvider,
-							 CreateSqlCommandHelper createSqlCommandHelper)
+							 CreateSqlCommandHelper createSqlCommandHelper, 
+							 IHttpSender httpSender)
 		{
 			if (retryPolicyProvider == null)
 			{
@@ -39,6 +42,7 @@ namespace Stardust.Manager
 
 			_connectionString = managerConfiguration.ConnectionString;
 			_createSqlCommandHelper = createSqlCommandHelper;
+			_httpSender = httpSender;
 
 			_retryPolicy = retryPolicyProvider.GetPolicy();
 		}
@@ -126,7 +130,7 @@ namespace Stardust.Manager
 			}
 		}
 
-		public void AssignJobToWorkerNode(IHttpSender httpSender)
+		public void AssignJobToWorkerNode()
 		{
 			try
 			{
@@ -157,7 +161,7 @@ namespace Stardust.Manager
 
 				foreach (var uri in allAliveWorkerNodesUri)
 				{
-					AssignJobToWorkerNodeWorker(httpSender, uri);
+					AssignJobToWorkerNodeWorker(uri);
 				}
 			}
 			catch (Exception exp)
@@ -166,7 +170,7 @@ namespace Stardust.Manager
 			}
 		}
 
-		public void CancelJobByJobId(Guid jobId, IHttpSender httpSender)
+		public void CancelJobByJobId(Guid jobId )
 		{
 			try
 			{
@@ -176,7 +180,7 @@ namespace Stardust.Manager
 				}
 				else
 				{
-					CancelJobByJobIdWorker(jobId, httpSender);
+					CancelJobByJobIdWorker(jobId);
 				}
 			}
 			catch (Exception exp)
@@ -446,7 +450,7 @@ namespace Stardust.Manager
 		}
 	
 
-		private void CancelJobByJobIdWorker(Guid jobId, IHttpSender httpSender)
+		private void CancelJobByJobIdWorker(Guid jobId)
 		{
 			try
 			{
@@ -472,7 +476,7 @@ namespace Stardust.Manager
 						{
 							var builderHelper = new NodeUriBuilderHelper(sentToWorkerNodeUri);
 							var uriCancel = builderHelper.GetCancelJobUri(jobId);
-							var response = httpSender.DeleteAsync(uriCancel).Result;
+							var response = _httpSender.DeleteAsync(uriCancel).Result;
 
 							if (response != null && response.IsSuccessStatusCode)
 							{
@@ -503,7 +507,7 @@ namespace Stardust.Manager
 		}
 
 
-		private void AssignJobToWorkerNodeWorker(IHttpSender httpSender, Uri availableNode)
+		private void AssignJobToWorkerNodeWorker(Uri availableNode)
 		{
 			try
 			{
@@ -537,7 +541,7 @@ namespace Stardust.Manager
 
 					var builderHelper = new NodeUriBuilderHelper(availableNode);
 					var urijob = builderHelper.GetJobTemplateUri();
-					var response = httpSender.PostAsync(urijob, jobQueueItem).Result;
+					var response = _httpSender.PostAsync(urijob, jobQueueItem).Result;
 
 					if (response != null && (response.IsSuccessStatusCode || response.StatusCode.Equals(HttpStatusCode.BadRequest)))
 					{
@@ -570,7 +574,7 @@ namespace Stardust.Manager
 						urijob = builderHelper.GetUpdateJobUri(jobQueueItem.JobId);
 
 						//what should happen if this response is not 200? 
-						var resp = httpSender.PutAsync(urijob, null);
+						var resp = _httpSender.PutAsync(urijob, null);
 
 					}
 					else
