@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WebBehaviorTest.Data;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 {
@@ -25,9 +28,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 				{"vm.scheduleDate", string.Format("new Date('{0}')", scheduleDate)}
 			};
 
-			Browser.Interactions.SetScopeValues(".team-schedule",propertyValues);			
-			Browser.Interactions.AssertScopeValue(".team-schedule","vm.scheduleDateMoment().format('YYYY-MM-DD')",scheduleDate);
-			Browser.Interactions.InvokeScopeAction(".team-schedule","vm.onScheduleDateChanged");		
+			Browser.Interactions.SetScopeValues(".team-schedule", propertyValues);
+			Browser.Interactions.AssertScopeValue(".team-schedule", "vm.scheduleDateMoment().format('YYYY-MM-DD')", scheduleDate);
+			Browser.Interactions.InvokeScopeAction(".team-schedule", "vm.onScheduleDateChanged");
 			Browser.Interactions.InvokeServiceAction(".team-schedule", "ScenarioTestUtil", "inScenarioTest");
 		}
 
@@ -35,7 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[Then(@"I should see schedule with absence '(.*)' for '(.*)' displayed")]
 		public void ThenIShouldSeeScheduleForDisplayed(string absence, string agentName)
 		{
-			Browser.Interactions.AssertScopeValue(".team-schedule","vm.scheduleFullyLoaded",true);
+			Browser.Interactions.AssertScopeValue(".team-schedule", "vm.scheduleFullyLoaded", true);
 			Browser.Interactions.AssertAnyContains(".person-name", agentName);
 			Browser.Interactions.AssertExists($".schedule .layer.personAbsence[projection-name='{absence}']");
 		}
@@ -43,7 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[Then(@"I should see schedule with no absence for '(.*)' displayed")]
 		public void ThenIShouldSeeScheduleWithNoAbsenceForDisplayed(string agentName)
 		{
-			Browser.Interactions.AssertScopeValue(".team-schedule","vm.isLoading", false);
+			Browser.Interactions.AssertScopeValue(".team-schedule", "vm.isLoading", false);
 			Browser.Interactions.AssertNotExists(".person-name", ".schedule div.personAbsence");
 		}
 
@@ -103,32 +106,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I set new activity as")]
 		public void WhenISetNewActivityAs(Table table)
 		{
-			Browser.Interactions.WaitScopeCondition(".add-activity", "vm.availableActivitiesLoaded", true,
-				() =>
-				{
-					var values = table.CreateInstance<AddActivityFormInfo>();
-
-					Browser.Interactions.ClickVisibleOnly(".add-activity .activity-selector");
-                    Browser.Interactions.ClickContaining(".md-select-menu-container md-option .md-text", values.Activity);
-
-                    var startTime = string.Format("new Date('{0}')", values.StartTime);
-					var endTime = string.Format("new Date('{0}')", values.EndTime);
-					var timeRangeStr = string.Format("{{startTime:{0}, endTime:{1}}}", startTime, endTime);
-					var selectedDate = string.Format("function(){{return new Date('{0}');}}", values.SelectedDate);
-					var timeRange = new Dictionary<string, string>
+			var values = table.CreateInstance<AddActivityFormInfo>();
+			var startTime = string.Format("new Date('{0}')", values.StartTime);
+			var endTime = string.Format("new Date('{0}')", values.EndTime);
+			var timeRangeStr = string.Format("{{startTime:{0}, endTime:{1}}}", startTime, endTime);
+			var selectedDate = string.Format("function(){{return new Date('{0}');}}", values.SelectedDate);
+			var selectedId = idForActivity(values.Activity).ToString();
+			var timeRange = new Dictionary<string, string>
 					{
 						{"vm.selectedDate", selectedDate},
-						{"vm.timeRange", timeRangeStr}
+						{"vm.timeRange", timeRangeStr},
+						{"vm.selectedActivityId", "'"+ selectedId + "'"}
 					};
-					Browser.Interactions.SetScopeValues(".add-activity .activity-time-range", timeRange);
-				});
+			Browser.Interactions.SetScopeValues(".add-activity .activity-time-range", timeRange);
 		}
 
 		[Then(@"I should be able to apply my new activity")]
 		public void ThenIShouldBeAbleToApplyMyNewActivity()
 		{
 			Browser.Interactions.AssertScopeValue("#applyActivity", "newActivityForm.$valid", true);
-			Browser.Interactions.AssertScopeValue("#applyActivity","vm.isInputValid()",true);
+			Browser.Interactions.AssertScopeValue("#applyActivity", "vm.isInputValid()", true);
 			Browser.Interactions.AssertExists("#applyActivity.wfm-btn-primary");
 		}
 
@@ -247,8 +244,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I selected activity '(.*)'")]
 		public void WhenISelectedActivity(string description)
 		{
-			Browser.Interactions.AssertScopeValue(".team-schedule","vm.scheduleFullyLoaded",true);				
-			Browser.Interactions.Click($".projection-layer[projection-name={description}]");				
+			Browser.Interactions.AssertScopeValue(".team-schedule", "vm.scheduleFullyLoaded", true);
+			Browser.Interactions.Click($".projection-layer[projection-name={description}]");
 		}
 
 		[When(@"I apply remove activity")]
@@ -357,7 +354,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		{
 			Browser.Interactions.AssertExists(".weekview-td");
 		}
-		
+
 		[When(@"I navigate to next week in week view")]
 		public void WhenINavigateToNextWeekInWeekView()
 		{
@@ -393,9 +390,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I choose to view '(.*)' validation result")]
 		public void WhenIChooseToViewValidationResult(string ruleType)
 		{
-			Browser.Interactions.AssertExists($"div[test-attr={ ruleType}] input:checked");			
+			Browser.Interactions.AssertExists($"div[test-attr={ ruleType}] input:checked");
 		}
 
+		private static Guid idForActivity(string activityName)
+		{
+			var activityId = (from a in DataMaker.Data().UserDatasOfType<ActivityConfigurable>()
+							  let activity = a.Activity
+							  where activity.Name.Equals(activityName)
+							  select activity.Id.GetValueOrDefault()).First();
+			return activityId;
+		}
 	}
 
 	public class AddActivityFormInfo
