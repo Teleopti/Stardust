@@ -442,7 +442,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new PersonAccountBalanceValidator(),
 				Period = dateOnlyPeriod,
-				OpenForRequestsPeriod = dateOnlyPeriod
+				OpenForRequestsPeriod = dateOnlyPeriod,
+				StaffingThresholdValidator = new StaffingThresholdWithShrinkageValidator()
 			};
 
 			workflowControlSet.InsertPeriod(absenceRequestOpenPeriod, 0);
