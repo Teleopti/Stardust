@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -36,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 
             using (_mocks.Record())
             {
-                Expect.Call(() => _finderReadOnlyRep.UpdateFindPersonData(ids));
+                Expect.Call(() => _finderReadOnlyRep.UpdateFindPersonData(Arg<ICollection<Guid>>.Matches(x => x.All(y => ids.Contains(y)))));
             }
             using (_mocks.Playback())
             {
