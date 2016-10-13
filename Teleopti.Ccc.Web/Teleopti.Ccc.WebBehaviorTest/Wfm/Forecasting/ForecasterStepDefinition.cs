@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 	[Binding]
 	public class ForecasterSteps
 	{
+
 		[Then(@"there is a SkillDay for '(.*)'")]
 		public void ThenThereIsASkillDayFor(string date)
 		{
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
 			new SkillDayRepository(LocalSystem.UnitOfWork).LoadAll().Should().Be.Empty();
 		}
-		
+
 		[Given(@"I select workload '(.*)'")]
 		[When(@"I select workload '(.*)'")]
 		public void WhenISelectWorkload(string workload)
@@ -47,32 +48,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I choose scenario '(.*)'")]
 		public void WhenIChooseScenario(string scenario)
 		{
-			Browser.Interactions.Click(".wfm-card-selected .scenario-select:enabled");
+			Browser.Interactions.Click(".wfm-card-selected .scenario-select");
 			Browser.Interactions.ClickContaining(".wfm-card-selected .scenario-select option", scenario);
 		}
 
 		[When(@"I continue with advanced")]
 		public void WhenIContinueWithAdvanced()
 		{
-			Browser.Interactions.Click(".wfm-card-selected .wfm-btn:enabled");
+			Browser.Interactions.Click(".wfm-card-selected .wfm-btn");
 			Browser.Interactions.AssertExists(".back");
 		}
 
 		[When(@"I choose to forecast the selected targets")]
 		public void WhenIChooseToForecastTheSelectedTargets()
 		{
-			Browser.Interactions.Click(".apply:enabled");
+			Browser.Interactions.Click(".apply");
 		}
 
 		[When(@"I use default forecast period and forecast for all")]
 		public void WhenIUseDefaultForecastPeriodAndForecastForAll()
 		{
 			Browser.Interactions.AssertVisibleUsingJQuery(".forecast-create-button");
-			Browser.Interactions.Click(".forecast-create-button:enabled");
+			Browser.Interactions.Click(".forecast-create-button");
 			Browser.Interactions.AssertVisibleUsingJQuery(".date-range-start-date strong");
 			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-start-date strong"), CultureInfo.GetCultureInfo(1053))));
 			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-end-date strong"), CultureInfo.GetCultureInfo(1053))));
-			Browser.Interactions.Click(".do-forecast:enabled");
+			Browser.Interactions.Click(".do-forecast");
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".do-forecast");
 		}
 
@@ -82,13 +83,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		public void WhenIUseDefaultForecastPeriodAndForecastForOneWorkload()
 		{
 			Browser.Interactions.AssertNotExists(".wfm-card-selected .wfm-btn-invis-default.forecast-workload", ".wfm-card-selected .wfm-btn-invis-disabled.forecast-workload");
-			Browser.Interactions.Click(".wfm-card-selected .wfm-btn-invis-default.forecast-workload:enabled");
+			Browser.Interactions.Click(".wfm-card-selected .wfm-btn-invis-default.forecast-workload");
 			Browser.Interactions.AssertExists(".date-range-start-date strong");
 			if (!ScenarioContext.Current.ContainsKey("startdate"))
 				ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-start-date strong"), CultureInfo.GetCultureInfo(1053))));
 			if (!ScenarioContext.Current.ContainsKey("enddate"))
 				ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-end-date strong"), CultureInfo.GetCultureInfo(1053))));
-			Browser.Interactions.Click(".do-forecast:enabled");
+			Browser.Interactions.Click(".do-forecast");
 		}
 
 		[Given(@"forecast result has loaded")]
@@ -123,8 +124,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 
 		private static void checkForecastResult(string workload, string scenario)
 		{
-			var choosenPeriod = new DateOnlyPeriod((DateOnly) ScenarioContext.Current["startdate"],
-				((DateOnly) ScenarioContext.Current["enddate"]).AddDays(-1));
+			var choosenPeriod = new DateOnlyPeriod((DateOnly)ScenarioContext.Current["startdate"],
+				((DateOnly)ScenarioContext.Current["enddate"]).AddDays(-1));
 
 			var workloadId = new WorkloadRepository(LocalSystem.UnitOfWork).LoadAll().SingleOrDefault(x => x.Name == workload).Id;
 			var allSkillDays = new SkillDayRepository(LocalSystem.UnitOfWork).LoadAll();
@@ -142,8 +143,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 
 		private static void checkNoForecastResult(string workload, string scenario)
 		{
-			var choosenPeriod = new DateOnlyPeriod((DateOnly) ScenarioContext.Current["startdate"],
-				((DateOnly) ScenarioContext.Current["enddate"]).AddDays(-1));
+			var choosenPeriod = new DateOnlyPeriod((DateOnly)ScenarioContext.Current["startdate"],
+				((DateOnly)ScenarioContext.Current["enddate"]).AddDays(-1));
 
 			var workloadId = new WorkloadRepository(LocalSystem.UnitOfWork).LoadAll().SingleOrDefault(x => x.Name == workload).Id;
 			var allSkillDays = new SkillDayRepository(LocalSystem.UnitOfWork).LoadAll();
@@ -191,17 +192,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.Click(".c3-event-rect-0");
 		}
 
-        [When(@"I select the first two days in the forecast chart")]
-        public void WhenISelectTheFirstTwoDaysInTheForecastChart()
-        {
-            Browser.Interactions.Click(".c3-event-rect-0");
-            Browser.Interactions.Click(".c3-event-rect-1");
-        }
+		[When(@"I select the first two days in the forecast chart")]
+		public void WhenISelectTheFirstTwoDaysInTheForecastChart()
+		{
+			Browser.Interactions.Click(".c3-event-rect-0");
+			Browser.Interactions.Click(".c3-event-rect-1");
+		}
 
-        [When(@"I select to modify the forecast")]
+		[When(@"I select to modify the forecast")]
 		public void WhenISelectToModifyTheForecast()
 		{
-			Browser.Interactions.Click(".forecast-modify-button:enabled");
+			Browser.Interactions.Click(".forecast-modify-button");
 		}
 
 		[When(@"I select to override forecasted values")]
@@ -213,7 +214,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I choose to add a campaign")]
 		public void WhenIChooseToAddACampaign()
 		{
-           Browser.Interactions.Click(".forecast-add-campaign-button");
+			Browser.Interactions.Click(".forecast-add-campaign-button");
 		}
 
 		[When(@"I select to do override calls")]
@@ -275,16 +276,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I apply the campaign")]
 		public void WhenIApplyTheCampaign()
 		{
-            Browser.Interactions.WaitScopeCondition(".modal-inner-content", "disableApplyCampaign()", false,
-              () => {
-                  Browser.Interactions.Click(".forecast-apply-campaign-button.wfm-btn-invis-primary:enabled");
-              });
+			Browser.Interactions.WaitScopeCondition(".modal-inner-content", "disableApplyCampaign()", false,
+			  () => {
+				  Browser.Interactions.Click(".forecast-apply-campaign-button.wfm-btn-invis-primary");
+			  });
 		}
 
 		[When(@"I apply the override calls")]
 		public void WhenIApplyTheOverrideCalls()
 		{
-			Browser.Interactions.Click(".forecast-apply-override-tasks-button:enabled");
+			Browser.Interactions.Click(".forecast-apply-override-tasks-button");
 		}
 
 		[When(@"I should see that the total calls for the first day has the double forecasted value")]
@@ -412,7 +413,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[Then(@"I should see the accuracy for the forecast method")]
 		public void ThenIShouldSeeTheAccuracyForTheForecastMethod()
 		{
-			Browser.Interactions.AssertAnyContains(".forecast-relative-error","%");
+			Browser.Interactions.AssertAnyContains(".forecast-relative-error", "%");
 		}
 
 		[Then(@"I should see the total forecasting accuracy")]
@@ -454,7 +455,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I choose to add a new skill")]
 		public void GivenIChooseToAddANewSkill()
 		{
-			Browser.Interactions.Click(".skill-create-button:enabled");
+			Browser.Interactions.Click(".skill-create-button");
 		}
 
 		[When(@"I input the new skill with")]
@@ -491,22 +492,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
 			var openingHours = table.CreateInstance<OpeningHours>();
 		}
-		
-        [When(@"I check calls checkbox but enter no calls value")]
-        public void WhenICheckCallsCheckboxButEnterNoCallsValue()
-        {
-            Browser.Interactions.Click(".override-tasks-checkbox");
-        }
 
-        [Then(@"I should see override apply button disabled")]
-        public void ThenIShouldSeeOverrideApplyButtonDisabled()
-        {
-	        Browser.Interactions.WaitScopeCondition(".modal-inner-content","disableApplyOverride()", true,
-                () => {
-                    Browser.Interactions.AssertExists(".modal-inner-content .forecast-apply-override-tasks-button.wfm-btn-invis-disabled");
-                });
-        }
-    }
+
+		[When(@"I check calls checkbox but enter no calls value")]
+		public void WhenICheckCallsCheckboxButEnterNoCallsValue()
+		{
+			Browser.Interactions.Click(".override-tasks-checkbox");
+		}
+
+		[Then(@"I should see override apply button disabled")]
+		public void ThenIShouldSeeOverrideApplyButtonDisabled()
+		{
+			Browser.Interactions.WaitScopeCondition(".modal-inner-content", "disableApplyOverride()", true,
+				() => {
+					Browser.Interactions.AssertExists(".modal-inner-content .forecast-apply-override-tasks-button.wfm-btn-invis-disabled");
+				});
+		}
+	}
 
 	public class OpeningHours
 	{
