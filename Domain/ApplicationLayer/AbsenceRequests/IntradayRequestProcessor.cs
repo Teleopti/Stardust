@@ -22,12 +22,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
 		private readonly ResourceAllocator _resourceAllocator;
+		private readonly IIntradayRequestWithinOpenHourValidator _intradayRequestWithinOpenHourValidator;
 
-		public IntradayRequestProcessor(ICommandDispatcher commandDispatcher, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, ResourceAllocator resourceAllocator)
+		public IntradayRequestProcessor(ICommandDispatcher commandDispatcher, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, ResourceAllocator resourceAllocator, 
+			IIntradayRequestWithinOpenHourValidator intradayRequestWithinOpenHourValidator)
 		{
 			_commandDispatcher = commandDispatcher;
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 			_resourceAllocator = resourceAllocator;
+			_intradayRequestWithinOpenHourValidator = intradayRequestWithinOpenHourValidator;
 		}
 
 		public void Process(IPersonRequest personRequest, DateTime startTime)
@@ -40,20 +43,40 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var primaryAndUnSortedSkills =
 				personRequest.Person.Period(new DateOnly(startTime))
 					.PersonSkillCollection.Where(x => (x.Skill.CascadingIndex == lowestIndex) || !x.Skill.CascadingIndex.HasValue);
-			foreach (var skill in primaryAndUnSortedSkills)
+			if (!areAllSkillsClosed(primaryAndUnSortedSkills, personRequest.Request.Period))
 			{
-				var skillStaffingIntervals = _scheduleForecastSkillReadModelRepository.ReadMergedStaffingAndChanges(skill.Skill.Id.GetValueOrDefault(), personRequest.Request.Period);
-				var underStaffingDetails = getUnderStaffedPeriods(skillStaffingIntervals, personRequest.Person.PermissionInformation.DefaultTimeZone(), useShrinkage);
-				if (underStaffingDetails.UnderstaffingTimes.Any())
+				foreach (var skill in primaryAndUnSortedSkills)
 				{
-					var denyReason = GetUnderStaffingHourString(underStaffingDetails, personRequest);
-					sendDenyCommand(personRequest.Id.GetValueOrDefault(), denyReason);
-					return;
+					var skillStaffingIntervals = _scheduleForecastSkillReadModelRepository.ReadMergedStaffingAndChanges(skill.Skill.Id.GetValueOrDefault(), personRequest.Request.Period);
+				var underStaffingDetails = getUnderStaffedPeriods(skillStaffingIntervals, personRequest.Person.PermissionInformation.DefaultTimeZone(), useShrinkage);
+					if (underStaffingDetails.UnderstaffingTimes.Any())
+					{
+						var denyReason = GetUnderStaffingHourString(underStaffingDetails, personRequest);
+						sendDenyCommand(personRequest.Id.GetValueOrDefault(), denyReason);
+						return;
+					}
 				}
-				//approve an absence request if its outside the opening hours 
-			}
 			if (sendApproveCommand(personRequest.Id.GetValueOrDefault()))
-				updateResources(personRequest, startTime);
+					updateResources(personRequest, startTime);
+			}
+			else
+			{
+				//absence on a day which has no opening hours or on an period where all skills are closed
+				//approve and no need to update resource
+				sendApproveCommand(personRequest.Id.GetValueOrDefault());
+			}
+			
+
+		}
+
+		private bool areAllSkillsClosed(IEnumerable<IPersonSkill> primaryAndUnSortedSkills, DateTimePeriod requestPeriod)
+		{
+			foreach (var personSkill in primaryAndUnSortedSkills)
+			{
+				if (_intradayRequestWithinOpenHourValidator.Validate(personSkill.Skill, requestPeriod) == OpenHourStatus.WithinOpenHour)
+					return false;
+			}
+			return true;
 		}
 
 		private void updateResources(IPersonRequest personRequest, DateTime startDate)

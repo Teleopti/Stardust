@@ -31,7 +31,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeScheduleForecastSkillReadModelRepository ScheduleForecastSkillReadModelRepository;
 		public FakeSkillRepository SkillRepository;
-	    private DateTime _now;
+		public FakeIntradayRequestWithinOpenHourValidator IntradayRequestWithinOpenHourValidator;
+		private DateTime _now;
 		private ISkill _primarySkill1;
 		private ISkill _primarySkill2;
 		
@@ -43,15 +44,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<ApprovalServiceForTest>().For<IRequestApprovalService>();
+			system.UseTestDouble<FakeIntradayRequestWithinOpenHourValidator>().For<IIntradayRequestWithinOpenHourValidator>();
        
             _now = new DateTime(2016,03,14,0,5,0);
         }
 
 		[Test]
-		public void ShouldDenyIfUnderstaffedOnAtLeastOnePrimarySkill()
+		public void DenyIfUnderstaffedOnAtLeastOnePrimarySkill()
 		{
 			var request = createNewRequest();
-
+			
 			var staffingList = new List<SkillStaffingInterval>()
 			{
 				new SkillStaffingInterval()
@@ -84,10 +86,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
-		public void ShouldApproveIfAllChecksOk()
+		public void ApproveIfAllChecksOk()
 		{
 			var request = createNewRequest();
-
 			
 			var staffingList = new List<SkillStaffingInterval>()
 			{
@@ -120,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 		
 		[Test]
-		public void ShouldUpdateResourcesWhenApprove()
+		public void UpdateResourcesAllocationWhenApproved()
 		{
 			var request = createNewRequest();
 
@@ -160,10 +161,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
-		public void ShouldDenyIfUnderstaffedAfterApplyingChanges()
+		public void DenyIfUnderstaffedAfterApplyingChanges()
 		{
 			var request = createNewRequest();
-			
+
 			var staffingList = new List<SkillStaffingInterval>()
 			{
 				new SkillStaffingInterval()
@@ -211,7 +212,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
-		public void ShouldApproveIfTheReadModelChangeIsOnDifferentInterval()
+		public void ApproveIfTheReadModelChangeIsOnDifferentInterval()
 		{
 			var request = createNewRequest();
 			
@@ -256,6 +257,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 03, 01), new[] { primarySkill, cascadingSkill });
 			person.WorkflowControlSet = workflowControlSet;
+
+			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(primarySkill.Id.GetValueOrDefault(), OpenHourStatus.WithinOpenHour);
+			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(cascadingSkill.Id.GetValueOrDefault(), OpenHourStatus.WithinOpenHour);
 
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
@@ -315,6 +319,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 03, 01), new[] { primarySkill, cascadingSkill });
 			person.WorkflowControlSet = workflowControlSet;
 
+			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(primarySkill.Id.GetValueOrDefault(), OpenHourStatus.WithinOpenHour);
+			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(cascadingSkill.Id.GetValueOrDefault(), OpenHourStatus.WithinOpenHour);
+
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
@@ -357,7 +364,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
-		public void ShouldDenyWithIntervalsInAgentsTimezone()
+		public void DenyWithIntervalsInAgentsTimezone()
 		{
 			var request = createNewRequest();
 
@@ -394,6 +401,95 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest.DenyReason.Should().Contain("14:00 - 14:15");
 		}
 
+		[Test]
+		public void ShouldApproveIfAllSkillAreClosedOrMissingOpenHours()
+		{
+			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 05:00");
+
+			var period = new DateTimePeriod(new DateTime(2016, 3, 14, 12, 0, 0, DateTimeKind.Utc),
+											new DateTime(2016, 3, 14, 14, 59, 00, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var workflowControlSet = createWorkFlowControlSet(absence);
+			var skill1 = SkillFactory.CreateSkillWithId("PrimarySkill1");
+			skill1.SetCascadingIndex(1);
+			var skill2 = SkillFactory.CreateSkillWithId("PrimarySkill2");
+			skill2.SetCascadingIndex(1);
+
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 03, 01), new[] { skill1, skill2 });
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			person.WorkflowControlSet = workflowControlSet;
+
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
+
+			var personRequest = new FakePersonRequest(person, new AbsenceRequest(absence, period));
+
+			personRequest.SetId(Guid.NewGuid());
+			personRequest.SetCreated(new DateTime(2016, 3, 14, 0, 5, 0, DateTimeKind.Utc));
+			PersonRequestRepository.Add(personRequest);
+			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(skill1.Id.GetValueOrDefault(), OpenHourStatus.OutsideOpenHour);
+			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(skill2.Id.GetValueOrDefault(), OpenHourStatus.MissingOpenHour);
+			Target.Process(personRequest, _now);
+
+			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
+			Assert.AreEqual(2, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
+		}
+
+		[Test]
+		public void ShouldApproveOnIntervalsEvenIfSomeSkillsAreClosed()
+		{
+			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 05:00");
+
+			var period = new DateTimePeriod(new DateTime(2016, 3, 14, 12, 0, 0, DateTimeKind.Utc),
+											new DateTime(2016, 3, 14, 14, 59, 00, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var workflowControlSet = createWorkFlowControlSet(absence);
+			var skill1 = SkillFactory.CreateSkillWithId("PrimarySkill1");
+			skill1.SetCascadingIndex(1);
+			var skill2 = SkillFactory.CreateSkillWithId("PrimarySkill2");
+			skill2.SetCascadingIndex(1);
+			var skill3 = SkillFactory.CreateSkillWithId("PrimarySkill2");
+			
+
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 03, 01), new[] { skill1, skill2,skill3 });
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			person.WorkflowControlSet = workflowControlSet;
+
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
+
+			var personRequest = new FakePersonRequest(person, new AbsenceRequest(absence, period));
+
+			personRequest.SetId(Guid.NewGuid());
+			personRequest.SetCreated(new DateTime(2016, 3, 14, 0, 5, 0, DateTimeKind.Utc));
+			PersonRequestRepository.Add(personRequest);
+			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(skill1.Id.GetValueOrDefault(), OpenHourStatus.OutsideOpenHour);
+			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(skill2.Id.GetValueOrDefault(), OpenHourStatus.MissingOpenHour);
+			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(skill3.Id.GetValueOrDefault(), OpenHourStatus.WithinOpenHour);
+
+			var staffingList = new List<SkillStaffingInterval>()
+			{
+				new SkillStaffingInterval()
+				{
+					SkillId =  skill3.Id.GetValueOrDefault(),
+					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
+					Forecast = 2,
+					StaffingLevel = 10
+				}
+			};
+			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
+
+			Target.Process(personRequest, _now);
+
+			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
+			Assert.AreEqual(2, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
+		}
+
 		private IPersonRequest createNewRequest(bool useWorkflowControlSet = true)
 		{
 
@@ -411,6 +507,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
 
 			var request = createAbsenceRequest(person, absence, period);
+
+			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(_primarySkill1.Id.GetValueOrDefault(), OpenHourStatus.WithinOpenHour);
+			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(_primarySkill2.Id.GetValueOrDefault(), OpenHourStatus.WithinOpenHour);
 
 			return request;
 		}
@@ -485,5 +584,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return requestStatus;
 		}
 
+	}
+
+	public class FakeIntradayRequestWithinOpenHourValidator : IIntradayRequestWithinOpenHourValidator
+	{
+		public Dictionary<Guid, OpenHourStatus> FakeOpenHourStatus = new Dictionary<Guid, OpenHourStatus>();
+		public OpenHourStatus Validate(ISkill skill, DateTimePeriod requestPeriod)
+		{
+			return FakeOpenHourStatus[skill.Id.GetValueOrDefault()];
+		}
 	}
 }
