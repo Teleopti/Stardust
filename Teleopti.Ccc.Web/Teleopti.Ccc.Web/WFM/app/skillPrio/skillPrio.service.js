@@ -5,10 +5,10 @@
         .module('wfm.skillPrio')
         .service('skillPrioService', skillPrioService);
 
-    skillPrioService.$inject = ['$resource','$q'];
+    skillPrioService.$inject = ['$resource', '$q'];
     function skillPrioService($resource, $q) {
         this.getAdminSkillRoutingActivity = getAdminSkillRoutingActivity;
-        this.getSkills = getSkills;
+        this.getAdminSkillRoutingPriority = getAdminSkillRoutingPriority;
 
         ////////////////
 
@@ -21,8 +21,13 @@
             }).query().$promise;
         }
 
-        function getSkills() {
-            return ['test skill'];
+        function getAdminSkillRoutingPriority() {
+            return $resource('../api/ResourcePlanner/AdminSkillRoutingPriority', {}, {
+                query: {
+                    method: 'GET',
+                    isArray: true
+                }
+            }).query().$promise;
         }
 
     }

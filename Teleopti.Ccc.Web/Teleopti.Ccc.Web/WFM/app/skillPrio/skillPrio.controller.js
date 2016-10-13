@@ -11,13 +11,14 @@
 		vm.selectedActivity = '';
 		vm.sortedSkills = [];
 		vm.activitys = getActivitys();
-		vm.skills = getSkills();
+		vm.skills = [];
 		vm.addSkill = addSkill;
 		vm.removeSkill = removeSkill;
 		vm.noSortedSkills = noSortedSkills;
 		vm.displayAutoComplete = displayAutoComplete;
 		vm.querySkills = querySkills;
 		vm.save = save;
+		vm.getSkills = getSkills;
 
 		////////////////
 
@@ -27,8 +28,16 @@
 			});
 		}
 
-		function getSkills() {
-			return skillPrioListService.getSkills();
+		function getSkills(activity) {
+			if(!activity){
+				vm.skills = [];
+			}
+			vm.selectedActivity = activity;
+			return skillPrioListService.getSkillsForActivity(activity).then(function(res){
+				vm.skills = res;
+				console.log(vm.skills);
+			});
+			
 		}
 
 		function removeFromUnsorted(skill) {

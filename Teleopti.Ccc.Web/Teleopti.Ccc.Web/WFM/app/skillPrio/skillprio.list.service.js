@@ -8,7 +8,7 @@
     skillPrioListService.$inject = ['skillPrioService'];
     function skillPrioListService(skillPrioService) {
         this.getActivitys = getActivitys;
-        this.getSkills = getSkills;
+        this.getSkillsForActivity = getSkillsForActivity;
 
         ////////////////
         function getActivitys() {
@@ -18,8 +18,28 @@
             });
         }
 
-        function getSkills() {
-            return skillPrioService.getSkills();
+        function fetchFromServer() {
+            return skillPrioService.getAdminSkillRoutingPriority().then(function (response) {
+                return response;
+            });
+        }
+
+        function getSkills(activity) {
+            return fetchFromServer().then(function(res){
+                var aggregatedSkills = [];
+                res.forEach(function(skill){
+                    if(skill.ActivityGuid === activity.ActivityGuid){
+                        aggregatedSkills.push(skill);
+                    }
+                });
+                return aggregatedSkills;
+            });
+        }
+
+        function getSkillsForActivity(activity) {
+            return getSkills(activity).then(function(res){
+                return res;
+            });
         }
 
     }
