@@ -37,13 +37,14 @@ namespace Teleopti.Ccc.Web.Core
 
         // This will return the "primary" IANA zone that matches the given windows zone.
         // If the primary zone is a link, it then resolves it to the canonical ID.
-        public string WindowsToIana(string windowsZoneId)
-        {
-            if (windowsZoneId.Equals("UTC", StringComparison.OrdinalIgnoreCase))
-                return "Etc/UTC";
-       var tzi = TimeZoneInfo.FindSystemTimeZoneById(windowsZoneId);
-            var tzid = _tzdbSource.MapTimeZoneId(tzi);
-            return _tzdbSource.CanonicalIdMap[tzid];
-        }
+	    public string WindowsToIana(string windowsZoneId)
+	    {
+		    if (windowsZoneId.Equals("UTC", StringComparison.OrdinalIgnoreCase))
+			    return "Etc/UTC";
+			var tzi = TimeZoneInfo.FindSystemTimeZoneById(windowsZoneId);
+			var tzid = _tzdbSource.MapTimeZoneId(tzi);
+			if (tzid == null) return String.Empty;
+			return _tzdbSource.CanonicalIdMap[tzid];
+	    }
     }
 }
