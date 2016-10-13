@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using SharpTestsEx;
@@ -17,7 +16,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 	[Binding]
 	public class ForecasterSteps
 	{
-		
 		[Then(@"there is a SkillDay for '(.*)'")]
 		public void ThenThereIsASkillDayFor(string date)
 		{
@@ -36,7 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[Given(@"there is no forecast data")]
 		public void GivenThereIsNoForecastData()
 		{
-			new SkillDayRepository(LocalSystem.UnitOfWork).LoadAll().Any().Should().Be.False();
+			new SkillDayRepository(LocalSystem.UnitOfWork).LoadAll().Should().Be.Empty();
 		}
 		
 		[Given(@"I select workload '(.*)'")]
@@ -49,32 +47,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I choose scenario '(.*)'")]
 		public void WhenIChooseScenario(string scenario)
 		{
-			Browser.Interactions.Click(".wfm-card-selected .scenario-select");
+			Browser.Interactions.Click(".wfm-card-selected .scenario-select:enabled");
 			Browser.Interactions.ClickContaining(".wfm-card-selected .scenario-select option", scenario);
 		}
 
 		[When(@"I continue with advanced")]
 		public void WhenIContinueWithAdvanced()
 		{
-			Browser.Interactions.Click(".wfm-card-selected .wfm-btn");
+			Browser.Interactions.Click(".wfm-card-selected .wfm-btn:enabled");
 			Browser.Interactions.AssertExists(".back");
 		}
 
 		[When(@"I choose to forecast the selected targets")]
 		public void WhenIChooseToForecastTheSelectedTargets()
 		{
-			Browser.Interactions.Click(".apply");
+			Browser.Interactions.Click(".apply:enabled");
 		}
 
 		[When(@"I use default forecast period and forecast for all")]
 		public void WhenIUseDefaultForecastPeriodAndForecastForAll()
 		{
 			Browser.Interactions.AssertVisibleUsingJQuery(".forecast-create-button");
-			Browser.Interactions.Click(".forecast-create-button");
+			Browser.Interactions.Click(".forecast-create-button:enabled");
 			Browser.Interactions.AssertVisibleUsingJQuery(".date-range-start-date strong");
 			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-start-date strong"), CultureInfo.GetCultureInfo(1053))));
 			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-end-date strong"), CultureInfo.GetCultureInfo(1053))));
-			Browser.Interactions.Click(".do-forecast");
+			Browser.Interactions.Click(".do-forecast:enabled");
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".do-forecast");
 		}
 
@@ -84,13 +82,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		public void WhenIUseDefaultForecastPeriodAndForecastForOneWorkload()
 		{
 			Browser.Interactions.AssertNotExists(".wfm-card-selected .wfm-btn-invis-default.forecast-workload", ".wfm-card-selected .wfm-btn-invis-disabled.forecast-workload");
-			Browser.Interactions.Click(".wfm-card-selected .wfm-btn-invis-default.forecast-workload");
+			Browser.Interactions.Click(".wfm-card-selected .wfm-btn-invis-default.forecast-workload:enabled");
 			Browser.Interactions.AssertExists(".date-range-start-date strong");
 			if (!ScenarioContext.Current.ContainsKey("startdate"))
 				ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-start-date strong"), CultureInfo.GetCultureInfo(1053))));
 			if (!ScenarioContext.Current.ContainsKey("enddate"))
 				ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-end-date strong"), CultureInfo.GetCultureInfo(1053))));
-			Browser.Interactions.Click(".do-forecast");
+			Browser.Interactions.Click(".do-forecast:enabled");
 		}
 
 		[Given(@"forecast result has loaded")]
@@ -104,9 +102,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I use default forecast period and continue with advanced")]
 		public void WhenIClickQuickforecaster()
 		{
-			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-start-date strong"), CultureInfo.GetCultureInfo(1053))));
-			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-end-date strong"), CultureInfo.GetCultureInfo(1053))));
-			Browser.Interactions.Click(".next-step-advanced");
+			var swedishCulture = CultureInfo.GetCultureInfo(1053);
+			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-start-date strong"), swedishCulture)));
+			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-end-date strong"), swedishCulture)));
+			Browser.Interactions.Click(".next-step-advanced:enabled");
 		}
 
 		[Then(@"there is forecast data for default period for")]
@@ -202,7 +201,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
         [When(@"I select to modify the forecast")]
 		public void WhenISelectToModifyTheForecast()
 		{
-			Browser.Interactions.Click(".forecast-modify-button");
+			Browser.Interactions.Click(".forecast-modify-button:enabled");
 		}
 
 		[When(@"I select to override forecasted values")]
@@ -220,7 +219,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I select to do override calls")]
 		public void WhenISelectToDoOverrideCalls()
 		{
-			Browser.Interactions.Click(".forecast-override-tasks-button");
+			Browser.Interactions.Click(".forecast-override-tasks-button:enabled");
 		}
 
 		[When(@"I clear override values")]
@@ -234,8 +233,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
 			Browser.Interactions.Click(".forecast-clear-campaign-button");
 		}
-
-
+		
 		[When(@"I enter '(.*)' calls per day")]
 		public void WhenIEnterCallsPerDay(string calls)
 		{
@@ -279,14 +277,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
             Browser.Interactions.WaitScopeCondition(".modal-inner-content", "disableApplyCampaign()", false,
               () => {
-                  Browser.Interactions.Click(".forecast-apply-campaign-button.wfm-btn-invis-primary");
+                  Browser.Interactions.Click(".forecast-apply-campaign-button.wfm-btn-invis-primary:enabled");
               });
 		}
 
 		[When(@"I apply the override calls")]
 		public void WhenIApplyTheOverrideCalls()
 		{
-			Browser.Interactions.Click(".forecast-apply-override-tasks-button");
+			Browser.Interactions.Click(".forecast-apply-override-tasks-button:enabled");
 		}
 
 		[When(@"I should see that the total calls for the first day has the double forecasted value")]
@@ -296,8 +294,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			WhenForecastHasSucceeded();
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var vtc= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
-				"var vc= (parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vc')[0])*2);" +
+				"var scope = angular.element(document.querySelector('.c3')).scope();" + 
+				"var vtc = parseFloat(scope.chart.data.values('vtc')[0]);" +
+				"var vc = (parseFloat(scope.chart.data.values('vc')[0])*2);" +
 				"return (vtc==vc) + '  ' + vtc+'  '+ vc;"
 				, "true");
 		}
@@ -309,7 +308,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			WhenForecastHasSucceeded();
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var vtc= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var vtc = parseFloat(scope.chart.data.values('vtc')[0]);" +
 				"return Math.round(vtc);"
 				, calls);
 		}
@@ -321,7 +321,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			WhenForecastHasSucceeded();
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var vttt= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vttt')[0]);" +
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var vttt = parseFloat(scope.chart.data.values('vttt')[0]);" +
 				"return Math.round(vttt);"
 				, talkTime);
 		}
@@ -333,7 +334,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			WhenForecastHasSucceeded();
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var vtacw= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var vtacw = parseFloat(scope.chart.data.values('vtacw')[0]);" +
 				"return Math.round(vtacw);"
 				, afterCallWork);
 		}
@@ -344,8 +346,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			WhenForecastHasSucceeded();
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var vttt= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vttt')[0]);" +
-				"var vtt= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtt')[0]);" +
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var vttt = parseFloat(scope.chart.data.values('vttt')[0]);" +
+				"var vtt = parseFloat(scope.chart.data.values('vtt')[0]);" +
 				"return (vttt==vtt) + '  ' + vttt+'  '+ vtt+'  ';"
 				, "true");
 		}
@@ -356,8 +359,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			WhenForecastHasSucceeded();
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var vtacw= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
-				"var vacw= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vacw')[0]);" +
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var vtacw = parseFloat(scope.chart.data.values('vtacw')[0]);" +
+				"var vacw = parseFloat(scope.chart.data.values('vacw')[0]);" +
 				"return (vtacw==vacw) + '  ' + vtacw+'  '+ vacw+'  ';"
 				, "true");
 		}
@@ -369,13 +373,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			WhenForecastHasSucceeded();
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var vtc= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
-				"var vc= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vc')[0]);" +
-				"var vttt= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vttt')[0]);" +
-				"var vtt= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtt')[0]);" +
-				"var vtacw= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
-				"var vacw= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vacw')[0]);" +
-				"var voverride= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('voverride')[0]);" +
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var vtc= parseFloat(scope.chart.data.values('vtc')[0]);" +
+				"var vc= parseFloat(scope.chart.data.values('vc')[0]);" +
+				"var vttt= parseFloat(scope.chart.data.values('vttt')[0]);" +
+				"var vtt= parseFloat(scope.chart.data.values('vtt')[0]);" +
+				"var vtacw= parseFloat(scope.chart.data.values('vtacw')[0]);" +
+				"var vacw= parseFloat(scope.chart.data.values('vacw')[0]);" +
+				"var voverride= parseFloat(scope.chart.data.values('voverride')[0]);" +
 				"return (vtc!=vc && vttt!=vtt && vtacw!=vacw && voverride==-1) + '  ' + vtc+'  '+ vc+'  '+ vttt+'  '+ vtt+'  '+ vtacw+'  '+ vacw+'  '+ voverride;"
 				, "true");
 		}
@@ -387,12 +392,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			WhenForecastHasSucceeded();
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var vtc= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
-				"var vc= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vc')[0]);" +
-				"var vttt= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vttt')[0]);" +
-				"var vtt= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtt')[0]);" +
-				"var vtacw= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
-				"var vacw= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vacw')[0]);" +
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var vtc= parseFloat(scope.chart.data.values('vtc')[0]);" +
+				"var vc= parseFloat(scope.chart.data.values('vc')[0]);" +
+				"var vttt= parseFloat(scope.chart.data.values('vttt')[0]);" +
+				"var vtt= parseFloat(scope.chart.data.values('vtt')[0]);" +
+				"var vtacw= parseFloat(scope.chart.data.values('vtacw')[0]);" +
+				"var vacw= parseFloat(scope.chart.data.values('vacw')[0]);" +
 				"return (vtc==vc && vttt==vtt && vtacw==vacw) + '  ' + vtc+'  '+ vc+'  '+ vttt+'  '+ vtt+'  '+ vtacw+'  '+ vacw;"
 				, "true");
 		}
@@ -448,7 +454,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I choose to add a new skill")]
 		public void GivenIChooseToAddANewSkill()
 		{
-			Browser.Interactions.Click(".skill-create-button");
+			Browser.Interactions.Click(".skill-create-button:enabled");
 		}
 
 		[When(@"I input the new skill with")]
@@ -471,7 +477,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I save the new skill")]
 		public void WhenISaveTheNewSkill()
 		{
-			Browser.Interactions.Click(".skill-save");
+			Browser.Interactions.Click(".skill-save:enabled");
 		}
 
 		[Then(@"I should see the new skill '(.*)' in the list")]
@@ -485,8 +491,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
 			var openingHours = table.CreateInstance<OpeningHours>();
 		}
-
-
+		
         [When(@"I check calls checkbox but enter no calls value")]
         public void WhenICheckCallsCheckboxButEnterNoCallsValue()
         {
