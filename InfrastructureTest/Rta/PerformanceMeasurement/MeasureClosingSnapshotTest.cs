@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -59,11 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 
 			// trigger tick to populate mappings
 			Publisher.Publish(new TenantMinuteTickEvent());
-		}
 
-		[SetUp]
-		public void Setup()
-		{
 			// states for all and init (touch will think its already done)
 			userCodes
 				.Batch(1000)
@@ -89,13 +87,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			[Values("A", "B", "C")] string variation
 		)
 		{
+			userCodes
+				.Batch(1000)
+				.Select(x => new BatchForTest
+				{
+					SnapshotId = "2016-09-09 10:00".Utc(),
+					States = x.Select(y => new BatchStateForTest
+					{
+						UserCode = y,
+						StateCode = "phone"
+					}).ToArray()
+				}).ForEach(Rta.SaveStateBatch);
+
 			Config.FakeSetting("RtaCloseSnapshotParallelTransactions", parallelTransactions.ToString());
 			Config.FakeSetting("RtaCloseSnapshotMaxTransactionSize", transactionSize.ToString());
+
+			var timer = new Stopwatch();
+			timer.Start();
 
 			Rta.CloseSnapshot(new CloseSnapshotForTest
 			{
 				SnapshotId = "2016-09-09 10:01".Utc()
 			});
+
+			timer.Stop();
+			Console.WriteLine($"Time {timer.Elapsed}");
 		}
 
 	}

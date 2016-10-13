@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -103,9 +104,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			});
 			Synchronizer.Initialize();
 		}
+		
+		private static IEnumerable<string> userCodes => Enumerable.Range(0, 1000).Select(x => $"user{x}").ToArray();
 
-		[SetUp]
-		public void Setup()
+		[Test]
+		//[ToggleOff(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
+		[Setting("OptimizeScheduleChangedEvents_DontUseFromWeb", true)]
+		public void Measure(
+			[Values(50, 500, 1000)] int batchSize,
+			[Values(1, 2, 3, 4, 5)] string variation
+		)
 		{
 			var persons = Uow.Get(uow => Persons.LoadAll());
 
@@ -117,18 +125,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 				});
 			});
 
-		}
-
-		private static IEnumerable<string> userCodes => Enumerable.Range(0, 1000).Select(x => $"user{x}").ToArray();
-
-		[Test]
-		//[ToggleOff(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
-		[Setting("OptimizeScheduleChangedEvents_DontUseFromWeb", true)]
-		public void Measure(
-			[Values(50, 500, 1000)] int batchSize,
-			[Values(1, 2, 3, 4, 5)] string variation
-		)
-		{
+			var timer = new Stopwatch();
+			timer.Start();
 
 			userCodes
 				.Batch(batchSize)
@@ -143,6 +141,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 						.ToArray()
 				}).ForEach(Rta.SaveStateBatch);
 
+			timer.Stop();
+			Console.WriteLine($"Time {timer.Elapsed}");
 		}
 	}
 }
