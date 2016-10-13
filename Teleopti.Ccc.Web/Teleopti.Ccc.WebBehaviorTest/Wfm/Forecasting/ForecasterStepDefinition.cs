@@ -477,7 +477,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I save the new skill")]
 		public void WhenISaveTheNewSkill()
 		{
-			Browser.Interactions.Click(".skill-save:enabled");
+			Browser.Interactions.Click(".skill-save");
 		}
 
 		[Then(@"I should see the new skill '(.*)' in the list")]
