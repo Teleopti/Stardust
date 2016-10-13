@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 	[Toggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 	[Explicit]
 	[Category("LongRunning")]
-	public class MeasureActivityCheckerTest : PerformanceMeasurementTestBase, ISetup
+	public class MeasureClosingSnapshotTest : PerformanceMeasurementTestBase, ISetup
 	{
 		public Database Database;
 		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
@@ -49,7 +50,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			Publisher.AddHandler<AgentStateMaintainer>();
 			Analytics.WithDataSource(9, "sourceId");
 			Database
-				.WithDefaultScenario("default")
 				.WithStateGroup("phone")
 				.WithStateCode("phone");
 			stateCodes.ForEach(x => Database.WithStateGroup($"code{x}").WithStateCode($"code{x}"));
@@ -59,12 +59,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 
 			// trigger tick to populate mappings
 			Publisher.Publish(new TenantMinuteTickEvent());
+		}
 
+		[SetUp]
+		public void Setup()
+		{
 			// states for all and init (touch will think its already done)
 			userCodes
 				.Batch(1000)
 				.Select(x => new BatchForTest
 				{
+					SnapshotId = "2016-09-09 10:00".Utc(),
 					States = x.Select(y => new BatchStateForTest
 					{
 						UserCode = y,
@@ -74,20 +79,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			Synchronizer.Initialize();
 		}
 
-		private static IEnumerable<string> userCodes => Enumerable.Range(0, 12000).Select(x => $"user{x}").ToArray();
+		private static IEnumerable<string> userCodes => Enumerable.Range(0, 3000).Select(x => $"user{x}").ToArray();
 		private static IEnumerable<string> stateCodes => Enumerable.Range(0, 100).Select(x => $"code{x}").ToArray();
 
 		[Test]
 		public void MeasureBatch(
-			[Values(6, 7, 8)] int parallelTransactions,
-			[Values(90, 100, 110)] int transactionSize,
+			[Values(4, 6, 8)] int parallelTransactions,
+			[Values(200, 500, 1500)] int transactionSize,
 			[Values("A", "B", "C")] string variation
 		)
 		{
-			Config.FakeSetting("RtaActivityChangesParallelTransactions", parallelTransactions.ToString());
-			Config.FakeSetting("RtaActivityChangesMaxTransactionSize", transactionSize.ToString());
+			Config.FakeSetting("RtaCloseSnapshotParallelTransactions", parallelTransactions.ToString());
+			Config.FakeSetting("RtaCloseSnapshotMaxTransactionSize", transactionSize.ToString());
 
-			Rta.CheckForActivityChanges(DataSourceHelper.TestTenantName);
+			Rta.CloseSnapshot(new CloseSnapshotForTest
+			{
+				SnapshotId = "2016-09-09 10:01".Utc()
+			});
 		}
 
 	}

@@ -66,67 +66,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 		}
 		
 		[Test]
-		public void MeasureClosingSnapshot()
-		{
-			Publisher.AddHandler<MappingReadModelUpdater>();
-			Publisher.AddHandler<PersonAssociationChangedEventPublisher>();
-			Publisher.AddHandler<AgentStateMaintainer>();
-			Analytics.WithDataSource(9, "sourceId");
-			Database
-				.WithStateGroup("phone")
-				.WithStateCode("phone");
-			Enumerable.Range(0, 100).ForEach(x => Database.WithStateGroup($"code{x}").WithStateCode($"code{x}"));
-			Enumerable.Range(0, 10).ForEach(x => Database.WithActivity($"activity{x}"));
-			var userCodes = Enumerable.Range(0, 3000).Select(x => $"user{x}").ToArray();
-			userCodes.ForEach(x => Database.WithAgent(x));
-			Publisher.Publish(new TenantMinuteTickEvent());
-			var batches = userCodes
-				.Batch(1000)
-				.Select(x => new BatchForTest
-				{
-					SnapshotId = "2016-09-09 10:00".Utc(),
-					States = x.Select(y => new BatchStateForTest
-					{
-						UserCode = y,
-						StateCode = "phone"
-					}).ToArray()
-				}).ToArray();
-
-			var results = (
-				from transactions in new[] {1, 2, 3, 4, 5, 6, 7}
-				from size in new[] {200, 500, 1000, 1500}
-				from variation in new[] {"A"} //, "B", "C"}
-				select new {transactions, size, variation}).Select(x =>
-				{
-					Config.FakeSetting("RtaParallelTransactions", x.transactions.ToString());
-					Config.FakeSetting("RtaMaxTransactionSize", x.size.ToString());
-
-					batches.ForEach(Rta.SaveStateBatch);
-
-					var timer = new Stopwatch();
-					timer.Start();
-
-					Rta.CloseSnapshot(new CloseSnapshotForTest
-					{
-						SnapshotId = "2016-09-09 10:01".Utc()
-					});
-
-					timer.Stop();
-					return new
-					{
-						timer.Elapsed,
-						x.transactions,
-						x.size,
-						x.variation
-					};
-				});
-
-			results
-				.OrderBy(x => x.Elapsed)
-				.ForEach(x => Debug.WriteLine($"{x.Elapsed} - {x.size} {x.transactions} {x.variation}"));
-		}
-		
-		[Test]
 		[ToggleOff(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 		[Setting("OptimizeScheduleChangedEvents_DontUseFromWeb", true)]
 		public void MeasureScheduleLoading()

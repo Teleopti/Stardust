@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -7,13 +8,10 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 {
@@ -29,28 +27,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 	[Toggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 	[Explicit]
 	[Category("LongRunning")]
-	public class MeasureBatchTest : InfrastructureTestWithOneTimeSetup, ISetup
+	public class MeasureBatchTest : PerformanceMeasurementTestBase, ISetup
 	{
 		public Database Database;
-		public AnalyticsDatabase Analytics;
 		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
 		public FakeConfigReader Config;
 		public ConfigurableSyncEventPublisher Publisher;
 		public AgentStateMaintainer Maintainer;
 		public StateStreamSynchronizer Synchronizer;
 		public MutableNow Now;
-		public WithUnitOfWork Uow;
-		public IPersonRepository Persons;
-		public IActivityRepository Activities;
-		public IPersonAssignmentRepository PersonAssignments;
-		public IScenarioRepository Scenarios;
-		public IAgentStatePersister AgentState;
-		public IContractRepository Contracts;
-		public IPartTimePercentageRepository PartTimePercentages;
-		public IContractScheduleRepository ContractSchedules;
-		public IExternalLogOnRepository ExternalLogOns;
-		public ITeamRepository Teams;
-		public ISiteRepository Sites;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -64,9 +49,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			Publisher.AddHandler<AgentStateMaintainer>();
 			Analytics.WithDataSource(9, "sourceId");
 			Database.WithDefaultScenario("default");
-			StateCodes().ForEach(x => Database.WithStateGroup(x).WithStateCode(x));
+			stateCodes.ForEach(x => Database.WithStateGroup(x).WithStateCode(x));
 			Enumerable.Range(0, 10).ForEach(x => Database.WithActivity($"activity{x}"));
-			UserCodes().ForEach(x => Database.WithAgent(x));
+
+			MakeUsersFaster(userCodes);
 
 			// trigger tick to populate mappings
 			Publisher.Publish(new TenantMinuteTickEvent());
@@ -74,22 +60,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			// single state and init (touch will think its already done)
 			Rta.SaveState(new StateForTest
 			{
-				UserCode = UserCodes().First(),
+				UserCode = userCodes.First(),
 				StateCode = "code1"
 			});
 			Synchronizer.Initialize();
 		}
 
-		private static string[] UserCodes()
-		{
-			return Enumerable.Range(0, 1000).Select(x => $"user{x}").ToArray();
-		}
-
-		private static string[] StateCodes()
-		{
-			return Enumerable.Range(0, 100).Select(x => $"code{x}").ToArray();
-		}
-
+		private static IEnumerable<string> userCodes => Enumerable.Range(0, 1000).Select(x => $"user{x}").ToArray();
+		private static IEnumerable<string> stateCodes => Enumerable.Range(0, 100).Select(x => $"code{x}").ToArray();
+		
 		[Test]
 		public void MeasureBatch(
 			[Values(5, 7, 9)] int parallelTransactions,
@@ -102,8 +81,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 			Config.FakeSetting("RtaBatchMaxTransactionSize", transactionSize.ToString());
 
 			var states = 5000;
-			var userCodes = UserCodes();
-			var stateCodes = StateCodes();
 
 			var batches = Enumerable.Range(0, states)
 				.Batch(batchSize)
