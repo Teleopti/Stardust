@@ -223,9 +223,12 @@
 				UseLighterBorder: useLightColor(projection.Color),
 				SameTypeAsLast: lproj ? (lproj.Description === projection.Description) : false,
 				TimeSpan: function () {
-					var start = moment(this.Start).toDate();
-					var end = moment(this.Start).add(this.Minutes, 'minute').toDate();
-					return $filter('date')(start, 'shortTime') + ' - ' + $filter('date')(end, 'shortTime');
+					var start = moment(this.Start);
+					var end = moment(this.Start).add(this.Minutes, 'minute');
+					if (!start.isSame(end, 'day')) {
+						return $filter('date')(start.toDate(), 'short') + ' - ' + $filter('date')(end.toDate(), 'short');
+					}
+					return $filter('date')(start.toDate(), 'shortTime') + ' - ' + $filter('date')(end.toDate(), 'shortTime');
 				}
 			};
 
