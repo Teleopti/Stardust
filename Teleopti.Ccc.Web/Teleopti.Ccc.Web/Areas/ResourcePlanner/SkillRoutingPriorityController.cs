@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Cascading;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 
@@ -12,10 +12,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	public class SkillRoutingPriorityController : ApiController
 	{
 		private readonly SkillRoutingPriorityModel _skillRoutingPriorityModel;
+		private readonly SkillRoutingPriorityPersister _skillRoutingPriorityPersister;
 
-		public SkillRoutingPriorityController(SkillRoutingPriorityModel skillRoutingPriorityModel)
+		public SkillRoutingPriorityController(SkillRoutingPriorityModel skillRoutingPriorityModel, SkillRoutingPriorityPersister skillRoutingPriorityPersister)
 		{
 			_skillRoutingPriorityModel = skillRoutingPriorityModel;
+			_skillRoutingPriorityPersister = skillRoutingPriorityPersister;
 		}
 
 		[Route("api/ResourcePlanner/AdminSkillRoutingActivity"), HttpGet, UnitOfWork]
@@ -32,6 +34,18 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return Ok(skillList); //current
 		}
 
-
+		[Route("api/ResourcePlanner/AdminSkillRoutingPriorityPost"), HttpPost, UnitOfWork]
+		public virtual IHttpActionResult AdminSkillRoutingPriorityPost(IEnumerable<SkillRoutingPriorityModelRow> result)
+		{
+			try
+			{
+				_skillRoutingPriorityPersister.Persist(result);
+			}
+			catch (Exception)
+			{
+				return BadRequest();
+			}
+			return Ok();
+		}
 	}
 }
