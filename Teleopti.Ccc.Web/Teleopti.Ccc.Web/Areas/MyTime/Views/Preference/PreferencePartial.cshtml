@@ -111,11 +111,13 @@
 	</div>
 </div>
 <div id="preferencebody" class="container pagebody">
-	<div id="Preference-add-extended-form" class="well well-small clearfix form-preference" data-bind="visible: AddPreferenceFormVisible">
+<div id="Preference-add-extended-form" data-bind="visible: AddPreferenceFormVisible" class="phone-form-preference">
+	<div class="well well-small clearfix form-preference" >
 		@Html.Partial("AddPreferencesPartial")
 	</div>
-
-	<div id="Preference-period-feedback-view" class="phone-warning-indicator" data-mytime-isweeklyworktimeenabled="@Model.IsWeeklyWorkTimeEnabled" >
+	<div class="phone-background" ></div>
+</div>
+<div id="Preference-period-feedback-view" class="phone-warning-indicator" data-mytime-isweeklyworktimeenabled="@Model.IsWeeklyWorkTimeEnabled" >
 		<div class="warning-indicator" data-bind="click: toggleWarningDetail"><span data-bind="css: PreferenceFeedbackClass,text:WarningCount" class="warning-count">!</span></div>
 		<div data-bind="css:{warningDetail:shouldShowWarningDetail()}">
 			<div class="alert alert-preference " data-bind="css: PreferenceFeedbackClass">

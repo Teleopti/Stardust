@@ -10,6 +10,68 @@
 }
 
 @media (max-width: 767px) {
+	.phone-form-preference {
+		margin-bottom: 0 !important;
+	}
+	.phone-form-preference .form-preference > span > span:nth-child(1) > button{
+		margin-bottom: 5px;
+	}
+	.phone-form-preference .form-preference > span > span:nth-child(2),.phone-form-preference .form-preference > span > span:nth-child(1){
+		display: block;
+		margin-top: 5px;
+	}
+	.phone-form-preference .form-preference > span > span:nth-child(2) button {
+		vertical-align: top;
+	}
+	.phone-form-preference .preference-template-list {
+		width: 70%;
+		display: inline-block;
+	}
+	.phone-form-preference .form-preference div:nth-child(5) {
+		padding-left: 0;
+	}
+	.phone-form-preference .preference-end-time-min-next-day,.phone-form-preference .preference-end-time-max-next-day {
+		height: 20px;
+		width: 20px;
+	}
+	.phone-form-preference #Template-name-section {
+		display: block;
+	}
+	.phone-form-preference .preference-input-left {
+		padding-left: 0;
+		padding-right: 0;
+	}
+	.phone-form-preference #Preference-extended-save-template {
+		vertical-align: top;
+	}
+	.phone-form-preference .preference-template-name {
+		display: inline-block;
+		width: 70%;
+		padding: 10px 8px;
+	}
+	.phone-form-preference .form-inline > button:last-child {
+		display: none;
+	}
+	.phone-form-preference .form-preference{
+		position: fixed;
+		top: 50%;
+		left: 0;
+		z-index: 100;
+		margin-top: -200px;
+		margin-left: 5px;
+		margin-right: 5px;
+		max-height: 400px;
+		overflow-y: scroll;
+	}
+	.phone-form-preference .phone-background {
+		height: 100%;
+		width: 100%;
+		z-index: 99;
+		background-color: rgba(0,0,0,0.5);
+		position: fixed;
+		top: 0;
+		left: 0;
+	}
 	.phone-warning-indicator {
 		position: relative;
 	}
