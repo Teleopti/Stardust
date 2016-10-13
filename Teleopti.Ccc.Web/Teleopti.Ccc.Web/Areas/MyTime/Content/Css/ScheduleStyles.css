@@ -1,8 +1,4 @@
-﻿.schedule-table-container{
-	overflow: auto;
-}
-
-.schedule-table-container > .container{
+﻿.schedule-table-container > .container{
 	padding: 0;
 }
 
@@ -11,7 +7,6 @@
 	border-left-color: beige;
 	border-right-color: beige;
 }
-
 
 .calendarview-week li.dayoff .day-content
 {
@@ -28,30 +23,30 @@
     height: 10px;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
-    border-radius: 8px;	
-	margin-top: 2px;
+    border-radius: 8px;
+    margin-top: 2px;
 }
 
-.teamschedule .dayoff 
+.teamschedule .dayoff
 {
 	background-color: beige;
 }
 .teamschedule .striped
 {
 	background-image: url(../Images/stripe.png);
-	
+
 	/* Until IE supports gradites for real
 
 	-webkit-background-size: 6px 6px;
-	background-image: -webkit-linear-gradient(-45deg, 
-			rgba(0, 0, 0, .5) 0%, 
-			rgba(0, 0, 0, .5) 10%, 
-			transparent 10%, 
-			transparent 50%, 
-			rgba(0, 0, 0, .5) 50%, 
-			rgba(0, 0, 0, .5) 60%, 
-			transparent 60%, 
-			transparent 100%)*/
+	background-image: -webkit-linear-gradient(-45deg,
+		rgba(0, 0, 0, .5) 0%,
+		rgba(0, 0, 0, .5) 10%,
+		transparent 10%,
+		transparent 50%,
+		rgba(0, 0, 0, .5) 50%,
+		rgba(0, 0, 0, .5) 60%,
+		transparent 60%,
+		transparent 100%)*/
 }
 
 .request-body-inner .dayoff

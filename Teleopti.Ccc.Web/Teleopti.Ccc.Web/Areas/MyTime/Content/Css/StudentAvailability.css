@@ -29,10 +29,6 @@
 	margin: 10px auto;
 }
 
-.student-availability-body-container {
-	overflow: auto;
-}
-
 #StudentAvailability-body {
 	width: 965px;
 	margin: auto;

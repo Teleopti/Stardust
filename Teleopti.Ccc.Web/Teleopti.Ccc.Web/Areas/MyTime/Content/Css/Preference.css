@@ -263,10 +263,6 @@ color: #333333;
 	width: 1024px !important;
 }
 
-#Preference-body{
-	overflow: auto;
-}
-
 #Preference-body-inner {
 	margin: auto;
 	text-align: center;
