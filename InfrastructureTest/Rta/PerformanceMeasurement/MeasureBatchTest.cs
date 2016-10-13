@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 		private static IEnumerable<string> stateCodes => Enumerable.Range(0, 100).Select(x => $"code{x}").ToArray();
 		
 		[Test]
-		public void MeasureBatch(
+		public void Measure(
 			[Values(5, 7, 9)] int parallelTransactions,
 			[Values(80, 100, 150)] int transactionSize,
 			[Values(50, 500, 1000)] int batchSize,

@@ -1,8 +1,7 @@
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
@@ -11,17 +10,13 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
@@ -37,38 +32,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 	[Toggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262)]
 	[Toggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 	[Explicit]
-	//[Category("LongRunning")]
-	public class PerformanceMeasurementTest : ISetup
+	[Category("LongRunning")]
+	public class MeasureScheduleLoadingTest : PerformanceMeasurementTestBase, ISetup
 	{
 		public Database Database;
-		public AnalyticsDatabase Analytics;
 		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
 		public FakeConfigReader Config;
 		public ConfigurableSyncEventPublisher Publisher;
 		public AgentStateMaintainer Maintainer;
+		public StateStreamSynchronizer Synchronizer;
 		public MutableNow Now;
-		public WithUnitOfWork Uow;
-		public IPersonRepository Persons;
-		public IActivityRepository Activities;
-		public IPersonAssignmentRepository PersonAssignments;
-		public IScenarioRepository Scenarios;
-		public IAgentStatePersister AgentState;
-		public IContractRepository Contracts;
-		public IPartTimePercentageRepository PartTimePercentages;
-		public IContractScheduleRepository ContractSchedules;
-		public IExternalLogOnRepository ExternalLogOns;
-		public ITeamRepository Teams;
-		public ISiteRepository Sites;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<ConfigurableSyncEventPublisher>().For<IEventPublisher>();
 		}
 		
-		[Test]
-		[ToggleOff(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
-		[Setting("OptimizeScheduleChangedEvents_DontUseFromWeb", true)]
-		public void MeasureScheduleLoading()
+		public override void OneTimeSetUp()
 		{
 			Now.Is("2016-09-20 00:00");
 			Publisher.AddHandler<MappingReadModelUpdater>();
@@ -83,56 +63,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 				.WithActivity("break")
 				.WithActivity("lunch");
 			var dates = new DateOnly(Now.UtcDateTime()).DateRange(100);
-			var userCodes = Enumerable.Range(0, 1000).Select(x => $"user{x}").ToArray();
-			Uow.Do(() =>
-			{
 
-				var contract = new Contract(RandomName.Make());
-				Contracts.Add(contract);
-
-				var partTimePercentage = new PartTimePercentage(RandomName.Make());
-				PartTimePercentages.Add(partTimePercentage);
-
-				var contractSchedule = new ContractSchedule(RandomName.Make());
-				ContractSchedules.Add(contractSchedule);
-
-				var site = new Site(RandomName.Make());
-				Sites.Add(site);
-
-				var team = new Team
-				{
-					Description = new Description(RandomName.Make()),
-					Site = site
-				};
-				Teams.Add(team);
-				site.AddTeam(team);
-
-				userCodes.ForEach(name =>
-				{
-					var person = new Person { Name = new Name(name, name) };
-					person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-
-					var personContract = new PersonContract(
-						contract,
-						partTimePercentage,
-						contractSchedule);
-
-					var personPeriod = new PersonPeriod("2001-01-01".Date(), personContract, team);
-					person.AddPersonPeriod(personPeriod);
-
-					var exteralLogOn = new ExternalLogOn
-					{
-						//AcdLogOnName = name, // is not used?
-						AcdLogOnMartId = -1, // NotDefined should be there, 0 probably wont
-						DataSourceId = Analytics.CurrentDataSourceId,
-						AcdLogOnOriginalId = name // this is what the rta receives
-					};
-					ExternalLogOns.Add(exteralLogOn);
-					person.AddExternalLogOn(exteralLogOn, personPeriod);
-
-					Persons.Add(person);
-				});
-			});
+			MakeUsersFaster(userCodes);
 
 			var persons = Uow.Get(uow => Persons.LoadAll());
 
@@ -159,47 +91,58 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 					});
 				});
 			});
+
+			// trigger tick to populate mappings
 			Publisher.Publish(new TenantMinuteTickEvent());
 
-			var results = (
-				from variation in Enumerable.Range(1, 5)
-				select new {variation}).Select(x =>
+			// single state and init (touch will think its already done)
+			Rta.SaveState(new StateForTest
 			{
-				Uow.Do(() =>
+				UserCode = userCodes.First(),
+				StateCode = "code1"
+			});
+			Synchronizer.Initialize();
+		}
+
+		[SetUp]
+		public void Setup()
+		{
+			var persons = Uow.Get(uow => Persons.LoadAll());
+
+			Uow.Do(() =>
+			{
+				persons.ForEach(p =>
 				{
-					persons.ForEach(p =>
-					{
-						AgentState.InvalidateSchedules(p.Id.Value, DeadLockVictim.Yes);
-					});
+					AgentState.InvalidateSchedules(p.Id.Value, DeadLockVictim.Yes);
 				});
-
-				var timer = new Stopwatch();
-				timer.Start();
-
-				userCodes
-					.Batch(50)
-					.Select(u => new BatchForTest
-					{
-						States = u
-							.Select(y => new BatchStateForTest
-							{
-								UserCode = y,
-								StateCode = x.variation.ToString()
-							})
-							.ToArray()
-					}).ForEach(Rta.SaveStateBatch);
-
-				timer.Stop();
-				return new
-				{
-					timer.Elapsed,
-					x.variation
-				};
 			});
 
-			results
-				.OrderBy(x => x.Elapsed)
-				.ForEach(x => Console.WriteLine($"{x.Elapsed} - {x.variation}"));			
+		}
+
+		private static IEnumerable<string> userCodes => Enumerable.Range(0, 1000).Select(x => $"user{x}").ToArray();
+
+		[Test]
+		//[ToggleOff(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
+		[Setting("OptimizeScheduleChangedEvents_DontUseFromWeb", true)]
+		public void Measure(
+			[Values(50, 500, 1000)] int batchSize,
+			[Values(1, 2, 3, 4, 5)] string variation
+		)
+		{
+
+			userCodes
+				.Batch(batchSize)
+				.Select(u => new BatchForTest
+				{
+					States = u
+						.Select(y => new BatchStateForTest
+						{
+							UserCode = y,
+							StateCode = variation.ToString()
+						})
+						.ToArray()
+				}).ForEach(Rta.SaveStateBatch);
+
 		}
 	}
 }

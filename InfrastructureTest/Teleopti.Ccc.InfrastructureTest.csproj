@@ -271,7 +271,7 @@
     <Compile Include="Rta\PerformanceMeasurement\MeasureClosingSnapshotTest.cs" />
     <Compile Include="Rta\PerformanceMeasurement\MeasureActivityCheckerTest.cs" />
     <Compile Include="Rta\PerformanceMeasurement\MeasureBatchTest.cs" />
-    <Compile Include="Rta\PerformanceMeasurement\PerformanceMeasurementTest.cs" />
+    <Compile Include="Rta\PerformanceMeasurement\MeasureScheduleLoadingTest.cs" />
     <Compile Include="Rta\ConcurrencyTest.cs" />
     <Compile Include="Rta\DatabaseReaderDatasourcesTest.cs" />
     <Compile Include="Rta\DatabaseReaderLoadAllPersonOrganizationDataTest.cs" />

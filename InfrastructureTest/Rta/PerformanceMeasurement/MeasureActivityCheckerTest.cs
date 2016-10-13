@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 		private static IEnumerable<string> stateCodes => Enumerable.Range(0, 100).Select(x => $"code{x}").ToArray();
 
 		[Test]
-		public void MeasureBatch(
+		public void Measure(
 			[Values(6, 7, 8)] int parallelTransactions,
 			[Values(90, 100, 110)] int transactionSize,
 			[Values("A", "B", "C")] string variation
