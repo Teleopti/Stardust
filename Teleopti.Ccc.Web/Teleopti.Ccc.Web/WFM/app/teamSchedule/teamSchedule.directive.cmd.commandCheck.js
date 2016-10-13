@@ -141,7 +141,7 @@
 		vm.init = function() {
 			var personIds = [];
 
-			CommandCheckService.getOverlappingAgentList().forEach(function(agent) {
+			CommandCheckService.getCheckFailedList().forEach(function(agent) {
 				personIds.push(agent.PersonId);
 				vm.overlappedLayers.push({
 					PersonId: agent.PersonId,

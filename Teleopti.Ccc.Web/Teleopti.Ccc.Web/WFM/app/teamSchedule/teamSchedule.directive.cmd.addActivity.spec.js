@@ -380,7 +380,7 @@
 			checkStatus = false;
 		}
 
-		this.getOverlappingAgentList = function() {
+		this.getCheckFailedList = function() {
 			return fakeOverlappingList;
 		}
 	}

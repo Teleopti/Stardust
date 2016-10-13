@@ -139,7 +139,7 @@
 			checkStatus = true;
 		}
 
-		this.getOverlappingAgentList = function() {
+		this.getCheckFailedList = function() {
 			return fakeOverlappingList;
 		}
 	}

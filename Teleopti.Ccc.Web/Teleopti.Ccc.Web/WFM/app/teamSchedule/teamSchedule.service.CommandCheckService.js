@@ -1,71 +1,78 @@
 ﻿(function() {
-    angular.module('wfm.teamSchedule').service('CommandCheckService', CommandCheckService);
+	angular.module('wfm.teamSchedule').service('CommandCheckService', CommandCheckService);
 
-    CommandCheckService.$inject = ['$http', '$q'];
+	CommandCheckService.$inject = ['$http', '$q'];
 
-    function CommandCheckService($http, $q) {
-    	var checkOverlappingUrl = "../api/TeamScheduleData/CheckOverlapppingCertainActivities";
-	    var checkOverlappingMoveActivityUrl = "../api/TeamScheduleData/CheckMoveActivityOverlapppingCertainActivities";
-        var overlappingPeopleList = [], commandRquestData;
-        var commandCheckDeferred, commandCheckedStatus = false;
+	function CommandCheckService($http, $q) {
+		var checkOverlappingUrl = "../api/TeamScheduleData/CheckOverlapppingCertainActivities";
+		var checkOverlappingMoveActivityUrl = "../api/TeamScheduleData/CheckMoveActivityOverlapppingCertainActivities";
+		var checkPersonalAccountsUrl = '../api/TeamScheduleData/CheckPersonalAccounts';
 
-        this.checkOverlappingCertainActivities = checkOverlappingCertainActivities;
-	    this.checkMoveActivityOverlappingCertainActivities = checkMoveActivityOverlappingCertainActivities;
+		var checkFailedList = [], commandRquestData;
+		var commandCheckDeferred, commandCheckedStatus = false;
 
-        this.getOverlappingAgentList = getOverlappingAgentList;
-        this.getCommandCheckStatus = getCommandCheckStatus;
-        this.resetCommandCheckStatus = resetCommandCheckStatus;
-        this.completeCommandCheck = completeCommandCheck;
-        this.getRequestData = getRequestData;
+		this.checkOverlappingCertainActivities = checkOverlappingCertainActivities;
+		this.checkMoveActivityOverlappingCertainActivities = checkMoveActivityOverlappingCertainActivities;
+		this.checkPersonalAccounts = checkPersonalAccounts;
 
-        function checkOverlappingCertainActivities(requestData) {
-	        return getCheck(checkOverlappingUrl)(requestData);
-        }
+		this.getCheckFailedList = getCheckFailedList;
+		this.getCommandCheckStatus = getCommandCheckStatus;
+		this.resetCommandCheckStatus = resetCommandCheckStatus;
+		this.completeCommandCheck = completeCommandCheck;
+		this.getRequestData = getRequestData;
 
-        function checkMoveActivityOverlappingCertainActivities(requestData) {
-            commandRquestData = requestData;
-        	return getCheck(checkOverlappingMoveActivityUrl)(requestData);
-        }
+		function checkOverlappingCertainActivities(requestData) {
+			return getCheck(checkOverlappingUrl)(requestData);
+		}
 
-	    function getCheck(url) {
-		    return function(requestData) {
-			    commandCheckDeferred = $q.defer();
+		function checkMoveActivityOverlappingCertainActivities(requestData) {
+			commandRquestData = requestData;
+			return getCheck(checkOverlappingMoveActivityUrl)(requestData);
+		}
 
-			    $http.post(url, requestData)
-				    .then(function(resp) {
-					    if (resp.data.length === 0) {
-						    commandCheckDeferred.resolve();
-					    } else {
-                            overlappingPeopleList = resp.data;
-						    commandCheckedStatus = true;
-					    }
-				    })
-				    .catch(function(e) {
-					    commandCheckDeferred.reject(e);
-				    });
+		function getCheck(url) {
+			return function(requestData) {
+				commandCheckDeferred = $q.defer();
 
-			    return commandCheckDeferred.promise;
-		    };
-	    }
+				$http.post(url, requestData)
+					.then(function(resp) {
+						if (resp.data.length === 0) {
+							commandCheckDeferred.resolve();
+						} else {
+							checkFailedList = resp.data;
+							commandCheckedStatus = true;
+						}
+					})
+					.catch(function(e) {
+						commandCheckDeferred.reject(e);
+					});
 
-        function getRequestData(){
-            return commandRquestData;
-        }
+				return commandCheckDeferred.promise;
+			};
+		}
 
-	    function getCommandCheckStatus(){
-            return commandCheckedStatus;
-        }
+		function getRequestData() {
+			return commandRquestData;
+		}
 
-        function resetCommandCheckStatus(){
-            commandCheckedStatus = false;
-        }
+		function getCommandCheckStatus() {
+			return commandCheckedStatus;
+		}
 
-        function completeCommandCheck(option) {
-        	commandCheckDeferred.resolve(option);
-        }
+		function resetCommandCheckStatus() {
+			commandCheckedStatus = false;
+		}
 
-        function getOverlappingAgentList() {
-            return overlappingPeopleList;
-        }
-    }
+		function completeCommandCheck(option) {
+			commandCheckDeferred.resolve(option);
+		}
+
+		function getCheckFailedList() {
+			return checkFailedList;
+		}
+
+		function checkPersonalAccounts(requestData) {
+			return getCheck(checkPersonalAccountsUrl)(requestData);
+		}
+	}
 })();
