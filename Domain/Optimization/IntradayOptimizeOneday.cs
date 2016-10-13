@@ -58,7 +58,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
-		//change to void when toggle is gone
 		public bool Execute(DateOnly dateOnly)
 		{
 			_intradayOptimizeOneDayCallback.Optimizing(_matrix.Person, dateOnly);
