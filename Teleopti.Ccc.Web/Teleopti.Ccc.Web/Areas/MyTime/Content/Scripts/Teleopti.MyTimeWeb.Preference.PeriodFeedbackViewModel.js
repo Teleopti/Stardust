@@ -41,6 +41,7 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 	this.TargetDaysOffLower = ko.observable();
 	this.TargetDaysOffUpper = ko.observable();
 	this.PossibleResultDaysOff = ko.observable();
+	this.isPreferenceForMobileEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_PreferenceForMobile_40265');
 	this.shouldShowWarningDetail = ko.observable(true);
 	this.toggleWarningDetail = function() {
 		self.shouldShowWarningDetail(!self.shouldShowWarningDetail());

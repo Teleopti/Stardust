@@ -41,6 +41,7 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	this.ActivityMaximumTime = ko.observable();
 	this.IsSaveAsNewTemplate = ko.observable();
 	this.NewTemplateName = ko.observable('');
+	this.isPreferenceForMobileEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_PreferenceForMobile_40265');
 	this.AddPreferenceFormVisible = ko.observable(false);
 	this.ValidationError = ko.observable();
 	this.IsPreferenceInputVisible = ko.observable(true);
@@ -114,8 +115,9 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
         saveAsNewTemplateMethod(ko.toJS(self));
     };
 
-    this.SavePreferences = function() {
-        savePreferenceMethod(ko.toJS(self));
+    this.SavePreferences = function () {
+    	savePreferenceMethod(ko.toJS(self));
+	    if (self.isPreferenceForMobileEnabled && $(".phone-form-preference").length > 0) self.AddPreferenceFormVisible(false);
     };
 
 	this.ToggleAddPreferenceFormVisible = function () {
