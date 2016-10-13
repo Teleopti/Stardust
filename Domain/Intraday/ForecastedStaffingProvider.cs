@@ -75,15 +75,25 @@ namespace Teleopti.Ccc.Domain.Intraday
                     actualStaffingPerSkill.AddRange(getActualStaffing(actualStatsPerInterval, skillDay, staffingCalculatorService, wantedIntervalResolution));
 				}
 
-				callsPerSkill.Add(skill.Id.Value, mergedTaskPeriodList.Select(x => new SkillIntervalStatistics
-				{
-					SkillId = skill.Id.Value,
-					StartTime = TimeZoneHelper.ConvertFromUtc(x.Period.StartDateTime, _timeZone.TimeZone()),
-					Calls = x.TotalTasks
-				})
-				.ToList());
+				var mergedTaskPeriodPerSkill = mergedTaskPeriodList
+					.Select(x => new SkillIntervalStatistics
+					{
+						SkillId = skill.Id.Value,
+						StartTime = TimeZoneHelper.ConvertFromUtc(x.Period.StartDateTime, _timeZone.TimeZone()),
+						Calls = x.TotalTasks
+					})
+					.ToList();
 
-				
+				callsPerSkill.Add(skill.Id.Value, mergedTaskPeriodPerSkill
+					.GroupBy(h => h.StartTime)
+					.Select(s => new SkillIntervalStatistics
+					{
+						SkillId = skill.Id.Value,
+						StartTime = s.First().StartTime,
+						Calls = s.Sum(c => c.Calls)
+					})
+					.OrderBy(g => g.StartTime)
+					.ToList());
 			}
 			
 			return new ForecastedStaffingModel()
