@@ -8,8 +8,7 @@
 			controller: timezonePickerCtrl,
 			bindings: {
 				availableTimezones: '<',
-				onPick: '&',
-				selectedTimezone: '='
+				onPick: '&'
 			}
 		});
 
@@ -24,7 +23,8 @@
 		ctrl.shortDisplayNameOfTheSelected = shortDisplayNameOfTheSelected;
 
 		function $onInit() {
-			populateTimezoneList();
+		    populateTimezoneList();
+		    onSelectionChanged();
 		}
 
 		function $onChanges(changesObj) {
