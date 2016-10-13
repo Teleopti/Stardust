@@ -19,19 +19,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 	public class MaxSeatOptimizationTest
 	{
 		public MaxSeatOptimization Target;
-		public FakeSkillRepository SkillRepository;
 		public FakePersonRepository PersonRepository;
-		public FakeSkillDayRepository SkillDayRepository;
-		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 
 		[Test, Ignore("#40939")]
 		public void ShouldConsiderMaxSeat()
 		{
 			var activity = new Activity("_") {RequiresSeat = true};
-			var maxSeatSkill = SkillRepository.Has("skill", activity);
 			var dateOnly = DateOnly.Today;
-			var scenario = ScenarioRepository.Has("some name");
+			var scenario = new Scenario("_");
 			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 9, 0, 60), new TimePeriodWithSegment(16, 0, 17, 0, 60), shiftCategory));
@@ -39,12 +35,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			{
 				MaxSeats = 1
 			};
-			var agentScheduledForAnHour = PersonRepository.Has(new Contract("contract"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = site }, schedulePeriod, ruleSet, maxSeatSkill);
+			var agentScheduledForAnHour = PersonRepository.Has(new Contract("contract"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = site }, schedulePeriod, ruleSet);
 			PersonAssignmentRepository.Has(agentScheduledForAnHour, scenario, activity, shiftCategory, dateOnly, new TimePeriod(8, 0, 9, 0)); //should force other agent to start 9
-			var agent = PersonRepository.Has(new Contract("contract"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = site }, schedulePeriod, ruleSet, maxSeatSkill);
+			var agent = PersonRepository.Has(new Contract("contract"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = site }, schedulePeriod, ruleSet);
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, dateOnly, new TimePeriod(8, 0, 16, 0));
 
-			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] {agentScheduledForAnHour, agent});
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] {agentScheduledForAnHour, agent}, scenario);
 
 			PersonAssignmentRepository.GetSingle(dateOnly, agent).Period.StartDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(9));
