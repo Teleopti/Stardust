@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		IHistoricalAdherenceReadModelReader
 
 	{
-		private readonly IList<internalModel> _data = new List<internalModel>();
+		private readonly IList<HIstoricalAdherenceInternalModel> _data = new List<HIstoricalAdherenceInternalModel>();
 
 		public FakeHistoricalAdherenceReadModelPersister Has(HistoricalAdherenceReadModel model)
 		{
@@ -27,31 +28,31 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return this;
 		}
 
-		public void AddIn(Guid personid, DateTime timestamp)
+		public void AddIn(Guid personId, DateTime timestamp)
 		{
-			_data.Add(new internalModel
+			_data.Add(new HIstoricalAdherenceInternalModel
 			{
-				PersonId = personid,
+				PersonId = personId,
 				Timestamp = timestamp,
 				Adherence = 0
 			});
 		}
 
-		public void AddNeutral(Guid personid, DateTime timestamp)
+		public void AddNeutral(Guid personId, DateTime timestamp)
 		{
-			_data.Add(new internalModel
+			_data.Add(new HIstoricalAdherenceInternalModel
 			{
-				PersonId = personid,
+				PersonId = personId,
 				Timestamp = timestamp,
 				Adherence = 1
 			});
 		}
 
-		public void AddOut(Guid personid, DateTime timestamp)
+		public void AddOut(Guid personId, DateTime timestamp)
 		{
-			_data.Add(new internalModel
+			_data.Add(new HIstoricalAdherenceInternalModel
 			{
-				PersonId = personid,
+				PersonId = personId,
 				Timestamp = timestamp,
 				Adherence = 2
 			});
@@ -69,35 +70,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				.Where(x => x.PersonId == personId && new DateTimePeriod(startTime.AddHours(-2), endTime.AddDays(1)).Contains(x.Timestamp))
 				.OrderBy(x => x.Timestamp)
 				.ToArray();
-
-			var seed = new HistoricalAdherenceReadModel
-			{
-				PersonId = personId
-			};
-			return filteredData
-				.Aggregate(seed, (x, im) =>
-				{
-					if (im.Adherence == 2)
-						x.OutOfAdherences = x.OutOfAdherences
-						.EmptyIfNull()
-						.Append(new HistoricalOutOfAdherenceReadModel {StartTime = im.Timestamp})
-						.ToArray();
-					else
-					{
-						var existing = x.OutOfAdherences.FirstOrDefault(y => !y.EndTime.HasValue);
-						if (existing != null)
-							existing.EndTime = im.Timestamp;
-					}
-
-					return x;
-				});
-		}
-
-		private class internalModel
-		{
-			public Guid PersonId { get; set; }
-			public DateTime Timestamp { get; set; }
-			public int Adherence { get; set; }
+			return HistoricalAdherenceReadModelReader.BuildReadModel(filteredData, personId);
 		}
 	}
 }
