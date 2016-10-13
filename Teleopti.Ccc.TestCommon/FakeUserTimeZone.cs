@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			Is(TimeZoneInfoFactory.NewYorkTimeZoneInfo());
 		}
+
 		public void IsAustralia()
 		{
 			Is(TimeZoneInfoFactory.AustralianTimeZoneInfo());

@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return database.WithAgent(null, name, null, null, null, null, timeZone);
 		}
-
+		
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name, string terminalDate, TimeZoneInfo timeZone)
 		{
 			return database.WithAgent(null, name, terminalDate, null, null, null, timeZone);

@@ -64,8 +64,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public HistoricalAdherenceViewModel Build(Guid personId)
 		{
-			var result = _reader.Read(personId, _now.UtcDateTime().Date, _now.UtcDateTime().AddDays(1).Date);
 			var person = _persons.Load(personId);
+			var utcDateTime = UtcDateTime(person);
+
+			var result = _reader.Read(personId, utcDateTime, utcDateTime.AddDays(1));
 			var schedule = getCurrentSchedules(person);
 			
 			return new HistoricalAdherenceViewModel
@@ -86,6 +88,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					};
 				})
 			};
+		}
+
+		private DateTime UtcDateTime(IPerson person)
+		{
+			if (person == null)
+				return _now.UtcDateTime().Date;
+
+			var tz = person.PermissionInformation.DefaultTimeZone();
+			var tzNow = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), tz);
+			var tzDate = tzNow.Date;
+			var utcDateTime = TimeZoneInfo.ConvertTimeToUtc(tzDate, tz);
+			return utcDateTime;
 		}
 	}
 }

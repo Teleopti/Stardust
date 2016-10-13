@@ -7,10 +7,12 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 {
@@ -106,5 +108,68 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			historicalData.Schedules.Single().StartTime.Should().Be("2016-10-11T09:00:00");
 			historicalData.Schedules.Single().EndTime.Should().Be("2016-10-11T17:00:00");
 		}
+
+		[Test]
+		public void ShouldGetOutOfAdherencesForAgentInChina()
+		{
+			Now.Is("2016-10-12 12:00");
+			var person = Guid.NewGuid();
+			Database.WithAgent(person, "nicklas", TimeZoneInfoFactory.ChinaTimeZoneInfo());
+			ReadModel.Has(new HistoricalAdherenceReadModel
+			{
+				PersonId = person,
+				OutOfAdherences = new[]
+				{
+					new HistoricalOutOfAdherenceReadModel
+					{
+						StartTime = "2016-10-11 14:00".Utc(),
+						EndTime = "2016-10-11 15:00".Utc(),
+					}
+				}
+			});
+
+			var data = Target.Build(person);
+
+			data.OutOfAdherences.Single().StartTime.Should().Be("2016-10-11T14:00:00");
+
+			// "2016-10-12 12:00" utc
+			// "2016-10-12 20:00" +8
+			// "2016-10-12" agents date
+			// "2016-10-12 00:00 - 2016-10-13 00:00" +8
+			// "2016-10-11 16:00 - 2016-10-12 16:00" utc
+			// "2016-10-11 14:00 - 2016-10-13 16:00" +extra
+		}
+
+		[Test]
+		public void ShouldGetOutOfAdherencesForAgentInHawaii()
+		{
+			Now.Is("2016-10-12 09:00");
+			var person = Guid.NewGuid();
+			Database.WithAgent(person, "nicklas", TimeZoneInfoFactory.HawaiiTimeZoneInfo());
+			ReadModel.Has(new HistoricalAdherenceReadModel
+			{
+				PersonId = person,
+				OutOfAdherences = new[]
+				{
+					new HistoricalOutOfAdherenceReadModel
+					{
+						StartTime = "2016-10-11 08:00".Utc(),
+						EndTime = "2016-10-11 09:00".Utc()
+					}
+				}
+			});
+
+			var data = Target.Build(person);
+
+			data.OutOfAdherences.Single().StartTime.Should().Be("2016-10-11T08:00:00");
+
+			// "2016-10-12 09:00" utc
+			// "2016-10-11 23:00" -10
+			// "2016-10-11" agents date
+			// "2016-10-11 00:00 - 2016-10-12 00:00" -10
+			// "2016-10-11 10:00 - 2016-10-12 10:00" utc
+			// "2016-10-11 08:00 - 2016-10-13 10:00" +extra
+		}
+
 	}
 }
