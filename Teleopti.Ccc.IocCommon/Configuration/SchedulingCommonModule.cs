@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.MaxSeat;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
@@ -70,6 +71,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterType<MaxSeatOptimization>().SingleInstance();
 			builder.RegisterType<SkillRoutingPriorityModel>().As<SkillRoutingPriorityModel>().SingleInstance();
 			builder.RegisterType<SkillRoutingPriorityPersister>().SingleInstance();
 
