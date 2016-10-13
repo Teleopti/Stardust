@@ -1564,8 +1564,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			{
 				GetUnitOfWork.PersistAll();
 				uow.PersistAll();
-				PersistTenantData();
 			}
+			PersistTenantData();
 		}
 
 		public void PersistTenantData()
@@ -1590,9 +1590,15 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 					{
 						if (result.ExistingPerson != Guid.Empty)
 						{
-							//check and repair if an old delete has went wrong and a deleted person still exists in tenant
-							var isThisDeleted = _personRepository.Load(result.ExistingPerson) as IDeleteTag;
-							if (isThisDeleted != null && isThisDeleted.IsDeleted)
+							bool isThisDeleted = false;
+							using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+							{
+								//check and repair if an old delete has went wrong and a deleted person still exists in tenant
+								var deletedPerson = _personRepository.Load(result.ExistingPerson) as IDeleteTag;
+								if (deletedPerson != null && deletedPerson.IsDeleted)
+									isThisDeleted = true;
+							}
+							if (isThisDeleted)
 							{
 								_tenantDataManager.DeleteTenantPersons(new List<Guid> {result.ExistingPerson});
 								goto retrySave;
