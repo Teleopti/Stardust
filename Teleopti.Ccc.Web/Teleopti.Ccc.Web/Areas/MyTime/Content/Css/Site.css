@@ -1448,11 +1448,6 @@ End personal drop down menu
 	max-width: 965px;
 }
 
-#page.fixed-non-responsive{
-	z-index: -10;
-	position: relative;
-}
-
 .fixed-non-responsive.container {
 	width: 965px;
 }
