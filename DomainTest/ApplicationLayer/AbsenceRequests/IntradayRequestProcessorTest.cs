@@ -226,7 +226,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					StaffingLevel = 12
 				}
 			};
-			
+
+			staffingList.Add(
+				new SkillStaffingInterval()
+				{   SkillId = _primarySkill2.Id.GetValueOrDefault(),
+					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
+					ForecastWithShrinkage = 10,
+					StaffingLevel = 12
+				
+			});
+
 			ScheduleForecastSkillReadModelRepository.PersistChange(new StaffingIntervalChange()
 			{
 				StartDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
@@ -402,7 +412,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
-		public void ShouldApproveIfAllSkillAreClosedOrMissingOpenHours()
+		public void ApproveIfAllSkillAreClosedOrMissingOpenHours()
 		{
 			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 05:00");
 
@@ -438,7 +448,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
-		public void ShouldApproveOnIntervalsEvenIfSomeSkillsAreClosed()
+		public void ApproveOnIntervalsEvenIfSomeSkillsAreClosed()
 		{
 			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 05:00");
 
@@ -490,7 +500,103 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.AreEqual(2, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
 		}
 
-		private IPersonRequest createNewRequest(bool useWorkflowControlSet = true)
+		[Test]
+		public void DenyIfNoStaffingIntervalsFoundForASkill()
+		{
+			var request = createNewRequest();
+
+			var staffingList = new List<SkillStaffingInterval>()
+			{
+				new SkillStaffingInterval()
+				{
+					SkillId =  _primarySkill1.Id.GetValueOrDefault(),
+					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
+					Forecast = 2,
+					StaffingLevel = 10
+				}
+			};
+			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
+			Target.Process(request, _now);
+
+			Assert.AreEqual(4, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
+		}
+
+		[Test]
+		public void ApproveIfForecastWithShrinkageIsZero()
+		{
+			var request = createNewRequest();
+
+			var staffingList = new List<SkillStaffingInterval>()
+			{
+				new SkillStaffingInterval()
+				{
+					SkillId =  _primarySkill1.Id.GetValueOrDefault(),
+					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
+					Forecast = 10,
+					ForecastWithShrinkage = 0,
+					StaffingLevel = 0
+				}
+			};
+			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
+			staffingList = new List<SkillStaffingInterval>()
+			{
+				new SkillStaffingInterval()
+				{
+					SkillId =  _primarySkill2.Id.GetValueOrDefault(),
+					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
+					Forecast = 10,
+					ForecastWithShrinkage = 0,
+					StaffingLevel = 0
+				}
+			};
+			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
+
+			Target.Process(request, _now);
+
+			Assert.AreEqual(2, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
+		}
+
+		[Test]
+		public void ApproveIfForecastIsZero()
+		{
+			var request = createNewRequest(true,false);
+
+			var staffingList = new List<SkillStaffingInterval>()
+			{
+				new SkillStaffingInterval()
+				{
+					SkillId =  _primarySkill1.Id.GetValueOrDefault(),
+					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
+					Forecast = 0,
+					ForecastWithShrinkage = 10,
+					StaffingLevel = 10
+				}
+			};
+			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
+			staffingList = new List<SkillStaffingInterval>()
+			{
+				new SkillStaffingInterval()
+				{
+					SkillId =  _primarySkill2.Id.GetValueOrDefault(),
+					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
+					Forecast = 0,
+					ForecastWithShrinkage = 10,
+					StaffingLevel = 0
+				}
+			};
+			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
+
+			Target.Process(request, _now);
+
+			Assert.AreEqual(2, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
+		}
+
+		private IPersonRequest createNewRequest(bool useWorkflowControlSet = true, bool useThresholdValidator = true)
 		{
 
 			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 05:00");
@@ -499,7 +605,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 											new DateTime(2016, 3, 14, 14, 59, 00, DateTimeKind.Utc));
 
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
-			var workflowControlSet = createWorkFlowControlSet(absence);
+			var workflowControlSet = createWorkFlowControlSet(absence, useThresholdValidator);
 			var person = createAndSetupPerson(workflowControlSet, useWorkflowControlSet);
 			
 			LoggedOnUser.SetFakeLoggedOnUser(person);
@@ -529,11 +635,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return person;
 		}
 
-		private static WorkflowControlSet createWorkFlowControlSet(IAbsence absence)
+		private static WorkflowControlSet createWorkFlowControlSet(IAbsence absence, bool useThresholdValidator = true)
 		{
 			var workflowControlSet = new WorkflowControlSet { AbsenceRequestWaitlistEnabled = false };
 			workflowControlSet.SetId(Guid.NewGuid());
-
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(2016, 01, 01), new DateOnly(2016, 12, 31));
 
 			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod()
@@ -541,9 +646,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new PersonAccountBalanceValidator(),
 				Period = dateOnlyPeriod,
-				OpenForRequestsPeriod = dateOnlyPeriod,
-				StaffingThresholdValidator = new StaffingThresholdWithShrinkageValidator()
+				OpenForRequestsPeriod = dateOnlyPeriod
 			};
+
+			if(useThresholdValidator)
+				absenceRequestOpenPeriod.StaffingThresholdValidator = new StaffingThresholdWithShrinkageValidator();
+			else
+				absenceRequestOpenPeriod.StaffingThresholdValidator = new StaffingThresholdValidator();
 
 			workflowControlSet.InsertPeriod(absenceRequestOpenPeriod, 0);
 

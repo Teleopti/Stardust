@@ -28853,6 +28853,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Staffing information is missing on skill {0}.
+        /// </summary>
+        public static string StaffingInformationMissing {
+            get {
+                return ResourceManager.GetString("StaffingInformationMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Staffing levels.
         /// </summary>
         public static string StaffingLevels {

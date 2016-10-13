@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -38,7 +37,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			personRequest.Pending();
 			var cascadingPersonSkills = personRequest.Person.Period(new DateOnly(startTime)).CascadingSkills();
 			var lowestIndex = cascadingPersonSkills.Min(x => x.Skill.CascadingIndex);
-			var periods = personRequest.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod(personRequest.Request as IAbsenceRequest);
+			var periods =
+				personRequest.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod(personRequest.Request as IAbsenceRequest);
 			var useShrinkage = periods.GetSelectedValidatorList().Any(x => x is StaffingThresholdWithShrinkageValidator);
 			var primaryAndUnSortedSkills =
 				personRequest.Person.Period(new DateOnly(startTime))
@@ -47,8 +47,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			{
 				foreach (var skill in primaryAndUnSortedSkills)
 				{
-					var skillStaffingIntervals = _scheduleForecastSkillReadModelRepository.ReadMergedStaffingAndChanges(skill.Skill.Id.GetValueOrDefault(), personRequest.Request.Period);
-				var underStaffingDetails = getUnderStaffedPeriods(skillStaffingIntervals, personRequest.Person.PermissionInformation.DefaultTimeZone(), useShrinkage);
+					var skillOpenHourStatus = _intradayRequestWithinOpenHourValidator.Validate(skill.Skill,personRequest.Request.Period);
+					if (skillOpenHourStatus == OpenHourStatus.MissingOpenHour || skillOpenHourStatus == OpenHourStatus.OutsideOpenHour) continue;
+
+					var skillStaffingIntervals =
+						_scheduleForecastSkillReadModelRepository.ReadMergedStaffingAndChanges(skill.Skill.Id.GetValueOrDefault(),
+							personRequest.Request.Period);
+					if (!skillStaffingIntervals.Any())
+					{
+						sendDenyCommand(personRequest.Id.GetValueOrDefault(),
+							string.Format(Resources.StaffingInformationMissing, skill.Skill.Name));
+						return;
+					}
+					if (hasZeroForecast(skillStaffingIntervals.ToList(),useShrinkage)) continue;
+
+					var underStaffingDetails = getUnderStaffedPeriods(skillStaffingIntervals,
+						personRequest.Person.PermissionInformation.DefaultTimeZone(), useShrinkage);
 					if (underStaffingDetails.UnderstaffingTimes.Any())
 					{
 						var denyReason = GetUnderStaffingHourString(underStaffingDetails, personRequest);
@@ -56,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						return;
 					}
 				}
-			if (sendApproveCommand(personRequest.Id.GetValueOrDefault()))
+				if (sendApproveCommand(personRequest.Id.GetValueOrDefault()))
 					updateResources(personRequest, startTime);
 			}
 			else
@@ -65,9 +79,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				//approve and no need to update resource
 				sendApproveCommand(personRequest.Id.GetValueOrDefault());
 			}
-			
 
 		}
+
+		private bool hasZeroForecast(List<SkillStaffingInterval> staffingIntervals, bool useShrinkage)
+		{
+			return staffingIntervals.Count(x => x.GetForecast(useShrinkage) > 0) == 0;
+		}
+
 
 		private bool areAllSkillsClosed(IEnumerable<IPersonSkill> primaryAndUnSortedSkills, DateTimePeriod requestPeriod)
 		{

@@ -530,7 +530,38 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
             result.Second().StaffingLevel.Should().Be.EqualTo(6);
         }
 
-    }
+		[Test]
+		public void NoIntervalsAreReturnedIfMissingDataInReadModelWithNoChanges()
+		{
+			var skillId = Guid.NewGuid();
+		var intervals = Target.ReadMergedStaffingAndChanges(skillId, new DateTimePeriod(new DateTime(2016, 06, 16, 2, 30, 0, DateTimeKind.Utc), new DateTime(2016, 06, 16, 2, 45, 0, DateTimeKind.Utc)));
+			intervals.Count().Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void NoIntervalsAreReturnedIfMissingDataInReadModelWithChanges()
+		{
+			var skillId = Guid.NewGuid();
+			Target.PersistChange(new StaffingIntervalChange()
+			{
+				SkillId = skillId,
+				StartDateTime = new DateTime(2016, 06, 16, 2, 15, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 06, 16, 2, 30, 0, DateTimeKind.Utc),
+				StaffingLevel = 1
+			});
+			Target.PersistChange(new StaffingIntervalChange()
+			{
+				SkillId = skillId,
+				StartDateTime = new DateTime(2016, 06, 16, 2, 30, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 06, 16, 2, 45, 0, DateTimeKind.Utc),
+				StaffingLevel = 1
+			});
+
+			var intervals = Target.ReadMergedStaffingAndChanges(skillId, new DateTimePeriod(new DateTime(2016, 06, 16, 2, 15, 0, DateTimeKind.Utc), new DateTime(2016, 06, 16, 2, 30, 0, DateTimeKind.Utc)));
+			intervals.Count().Should().Be.EqualTo(0);
+		}
+
+	}
 
 
 }

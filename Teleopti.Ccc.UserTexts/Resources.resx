@@ -15018,4 +15018,8 @@ These options are activated:
     <value>Validate requests based on expired threshold</value>
     <comment>Staffing validator in Workflow control set</comment>
   </data>
+  <data name="StaffingInformationMissing" xml:space="preserve">
+    <value>Staffing information is missing on skill {0}</value>
+    <comment>While running the intraday request using the readmodel if for a certain skill we have missing intervals in the readmodel </comment>
+  </data>
 </root>
