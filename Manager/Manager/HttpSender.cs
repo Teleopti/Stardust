@@ -29,7 +29,7 @@ namespace Stardust.Manager
 			}
 			catch (Exception exp)
 			{
-				this.Log().ErrorWithLineNumber(exp.Message, exp);
+				this.Log().InfoWithLineNumber(exp.Message);
 				return null;
 			}
 		}
@@ -53,7 +53,7 @@ namespace Stardust.Manager
 			}
 			catch (Exception exp)
 			{
-				this.Log().ErrorWithLineNumber(exp.Message, exp);
+				this.Log().InfoWithLineNumber(exp.Message);
 				return null;
 			}
 		}
@@ -75,7 +75,7 @@ namespace Stardust.Manager
 			}
 			catch (Exception exp)
 			{
-				this.Log().ErrorWithLineNumber(exp.Message, exp);
+				this.Log().InfoWithLineNumber(exp.Message);
 				return null;
 			}
 		}
