@@ -34,7 +34,7 @@ Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635 = true
 Settings_SetAgentDescription_23257 = true
 Settings_AlertViaEmailFromSMSLink_30444 = true
 #Cannot be relreased yet due to performance and IO #
-RTA_AdherenceDetails_34267 = RC
+RTA_AdherenceDetails_34267 = false
 Gamification_NewBadgeCalculation_31185 = true
 Backlog_Module_23980 = DEV
 # Set this to true to enable first page link to the new WFM web #
