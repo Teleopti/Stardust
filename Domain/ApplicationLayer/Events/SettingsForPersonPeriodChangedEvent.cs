@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
@@ -14,18 +15,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		{
 			get
 			{
-				if (_idCollection == null)
-				{
-					_idCollection = new List<Guid>();
-					if (!string.IsNullOrEmpty(_serializedIds))
-					{
-						var items = _serializedIds.Split(',');
-						foreach (var item in items)
-						{
-							_idCollection.Add(new Guid(item));
-						}
-					}
-				}
+				if (_idCollection != null) return _idCollection;
+				_idCollection = string.IsNullOrEmpty(_serializedIds)
+					? new HashSet<Guid>()
+					: new HashSet<Guid>(_serializedIds.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse));
 				return _idCollection;
 			}
 		}
@@ -34,16 +27,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		{
 			if (idCollection != null)
 			{
-				var stringCollection = new string[idCollection.Count];
-				var index = 0;
-				foreach (var guid in idCollection)
-				{
-					stringCollection[index] = guid.ToString();
-					index++;
-				}
-				_serializedIds = string.Join(",", stringCollection);
+				_serializedIds = string.Join(",", new HashSet<Guid>(idCollection).Select(p => p.ToString()));
 			}
-
 		}
 
 		public string SerializedIds

@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 			{
 				if (_personIdCollection != null) return _personIdCollection;
 				_personIdCollection = string.IsNullOrEmpty(_serializedPeople)
-					? new List<Guid>()
-					: _serializedPeople.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse).ToList();
+					? new HashSet<Guid>()
+					: new HashSet<Guid>(_serializedPeople.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse));
 				return _personIdCollection;
 			}
 		}
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		{
             if (personIdCollection != null)
 			{
-                _serializedPeople = string.Join(",", personIdCollection.Select(p => p.ToString()));
+                _serializedPeople = string.Join(",", new HashSet<Guid>(personIdCollection).Select(p => p.ToString()));
 			}
 		}
         

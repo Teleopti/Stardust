@@ -47,10 +47,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		[Attempts(10)]
 		public virtual void Handle(PersonCollectionChangedEvent @event)
 		{
-			var persons = _personRepository.FindPeople(@event.PersonIdCollection.Distinct());
+			var persons = _personRepository.FindPeople(@event.PersonIdCollection);
 
 			var changedPeople = new List<Guid>();
-			foreach (var personCodeGuid in @event.PersonIdCollection.Distinct())
+			foreach (var personCodeGuid in @event.PersonIdCollection)
 			{
 				// Check if person does exists => if not it is deleted and handled by other handle-method
 				if (!persons.Any(a => a.Id.Equals(personCodeGuid)))
@@ -152,7 +152,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			}
 			_currentAnalyticsUnitOfWork.Current().AfterSuccessfulTx(() =>
 			{
-				changedPeople = changedPeople.Distinct().ToList();
 				if (!changedPeople.Any()) return;
 				var analyticsPersonCollectionChangedEvent = new AnalyticsPersonCollectionChangedEvent
 				{
