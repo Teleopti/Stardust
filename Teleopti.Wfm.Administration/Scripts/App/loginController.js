@@ -38,7 +38,7 @@
 		var cookie = $cookies.getObject('WfmAdminAuth');
 		var token = cookie ? cookie.tokenKey : null;
 		var today = new Date();
-		var expireDate = new Date().setDate(today.getDate() + 30);
+		var expireDate = new Date().setDate(today.getMinutes() + 30);
 		var vm = this;
 		vm.loginEmail = sessionStorage.getItem(emailKey);
 		vm.loginPassword = "";
