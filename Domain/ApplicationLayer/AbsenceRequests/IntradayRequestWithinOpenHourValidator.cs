@@ -20,6 +20,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					allOpenHours.AddRange(forecastDayTemplate1.OpenHourList);
 				}
 			}
+			var periodOf24 = new TimePeriod(new TimeSpan(0, 0, 0), new TimeSpan(1, 0, 0,0));
+			if(allOpenHours.Contains(periodOf24)) return OpenHourStatus.WithinOpenHour;
 			if (allOpenHours.Any())
 			{
 				var openHours = new TimePeriod(allOpenHours.Min(x=>x.StartTime),allOpenHours.Max(y=>y.EndTime));

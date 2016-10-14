@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -88,6 +90,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, timePeriodSmall);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, timePeriodLarge);
 			
+			Target.Validate(skill, requestPeriod).Should().Be.EqualTo(OpenHourStatus.WithinOpenHour);
+		}
+
+		[Test]
+		public void ReturnWitinOpenHoursIfSkillIsOpen24Hours()
+		{
+			var skill = SkillFactory.CreateSkill("myskill");
+			var timePeriodLarge = new TimePeriod(new TimeSpan(6, 0, 0), new TimeSpan(18, 0, 0));
+			var requestPeriod = new DateTimePeriod(new DateTime(2016, 09, 3, 2, 0, 0, DateTimeKind.Utc), new DateTime(2016, 09, 3, 3, 0, 0, DateTimeKind.Utc));
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, timePeriodLarge);
+			IWorkload workload = new Domain.Forecasting.Workload(skill);
+			workload.Description = "desc from factory";
+			workload.Name = "name from factory";
+			workload.TemplateWeekCollection.ForEach(x => x.Value.MakeOpen24Hours());
+			skill.AddWorkload(workload);
+
 			Target.Validate(skill, requestPeriod).Should().Be.EqualTo(OpenHourStatus.WithinOpenHour);
 		}
 	}
