@@ -14,7 +14,6 @@ Scenario: Period feedback of contract day off
 	Then I should see a message that I should have 2 days off
 
 
-
 Scenario: Period feedback of day off preferences
 	Given I am an agent
 	And I have a scheduling period of 1 week
