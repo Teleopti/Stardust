@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 {
 	public class StaffingThresholdValidator :  IAbsenceRequestValidator
 	{
-		private const int maxUnderStaffingItemCount = 5;
+		private const int maxUnderStaffingItemCount = 4;// bug #40906 needs to be max 4 
 		public IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification { get; set; }
 
 

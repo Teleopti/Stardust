@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				Resources.ResourceManager.GetString("InsufficientStaffingHours", uiCulture),
 				dateTime.ToString("d", culture));
 			var insufficientHours = string.Join(", ",
-				underStaffingDetails.UnderstaffingTimes.Select(t => t.ToShortTimeString(culture)).Take(5)); //5 = max items
+				underStaffingDetails.UnderstaffingTimes.Select(t => t.ToShortTimeString(culture)).Take(4)); //4 = max items, NEEDS TO BE MAX 4 WHEN DENYREASON IS NVARCHAR(300)
 			errorMessageBuilder.AppendLine(string.Format("{0}{1}{2}", understaffingHoursValidationError, insufficientHours,
 				Environment.NewLine));
 			return errorMessageBuilder.ToString();
