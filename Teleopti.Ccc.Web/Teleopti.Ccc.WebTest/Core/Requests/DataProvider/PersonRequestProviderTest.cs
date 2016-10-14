@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var repository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			var target = new PersonRequestProvider(repository, loggedOnUser, null, new FakePermissionProvider());
 			var person = new Person();
-			var paging = new Paging {Skip = 0, Take = 5};
+			var paging = new Paging();
 			var personRequests = new[]
 			{
 				new PersonRequestFactory().CreatePersonRequest(),
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				RequestType.TextRequest
 			};
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			var earliestDate = DateTime.UtcNow.Date.AddDays(-10);
+			var earliestDate = DateTime.UtcNow.AddDays(-10);
 			repository.Stub(x => x.FindAllRequestsForAgentByType(person, paging, earliestDate, requestTypes.ToArray()))
 				.IgnoreArguments().Return(personRequests);
 
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			repository.AssertWasCalled(x => x.FindAllRequestsForAgentByType(
 				Arg<IPerson>.Matches(p => p.Equals(person)),
 				Arg<Paging>.Matches(p => p.Equals(paging)),
-				Arg<DateTime>.Matches(d => d == earliestDate),
+				Arg<DateTime>.Is.Anything,
 				Arg<RequestType[]>.Matches(r => r.SequenceEqual(requestTypes))));
 			Assert.That(personRequests.Length, Is.EqualTo(result.Count()));
 		}
