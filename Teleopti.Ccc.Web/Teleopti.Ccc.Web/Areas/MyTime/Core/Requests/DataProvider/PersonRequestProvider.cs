@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				types.Remove(RequestType.ShiftTradeRequest);
 			}
 
-			var earliestDate = hideOldRequest ? DateTime.UtcNow.AddDays(-10) : (DateTime?) null;
+			var earliestDate = hideOldRequest ? DateTime.UtcNow.Date.AddDays(-10) : (DateTime?) null;
 			return _repository.FindAllRequestsForAgentByType(_loggedOnUser.CurrentUser(), paging, earliestDate, types.ToArray());
 		}
 
