@@ -1,0 +1,27 @@
+﻿<div class="container body-content" ng-controller="stardustController as vm">
+	<div class="nav" ng-include="'./StardustDashboard/menu.html'" role="navigation"></div>
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Job Queue</h3>
+			<div>
+				<table>
+					<thead>
+					<tr>
+						<th>Type</th>
+						<th>Created By</th>
+						<th>Created At </th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat="job in vm.QueuedJobs">
+						<td>{{job.Name}}</td>
+						<td>{{job.CreatedBy}}</td>
+						<td>{{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+

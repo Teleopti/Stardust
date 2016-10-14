@@ -55,15 +55,15 @@
 					controller: 'stardustController'
 				})
 				.when('/StardustDashboard/nodes', {
-					templateUrl: 'StardustDashboard/stardustDashboardNodes.html',
+					templateUrl: 'StardustDashboard/nodes.html',
 					controller: 'stardustController'
 				})
-				.when('/StardustDashboard/history', {
-					templateUrl: 'StardustDashboard/stardustDashboardHistory.html',
+				.when('/StardustDashboard/jobs', {
+					templateUrl: 'StardustDashboard/jobs.html',
 					controller: 'stardustController'
 				})
 				.when('/StardustDashboard/queue', {
-					templateUrl: 'StardustDashboard/stardustDashboardQueue.html',
+					templateUrl: 'StardustDashboard/queue.html',
 					controller: 'stardustController'
 				})
 				.when('/jobdetails/:jobId', {

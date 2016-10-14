@@ -273,10 +273,10 @@
     <Content Include="StardustDashboard\stardust.html" />
     <Content Include="Scripts\StardustApp\jobDetailsController.js" />
     <Content Include="Scripts\StardustApp\stardustController.js" />
-    <Content Include="StardustDashboard\stardustDashboardHistory.html" />
-    <Content Include="StardustDashboard\stardustDashboardNodes.html" />
-    <Content Include="StardustDashboard\stardustDashboardMenu.html" />
-    <Content Include="StardustDashboard\stardustDashboardQueue.html" />
+    <Content Include="StardustDashboard\jobs.html" />
+    <Content Include="StardustDashboard\nodes.html" />
+    <Content Include="StardustDashboard\menu.html" />
+    <Content Include="StardustDashboard\queue.html" />
     <Content Include="StardustDashboard\style.css" />
     <Content Include="userdetails.html" />
     <Content Include="details.html" />
