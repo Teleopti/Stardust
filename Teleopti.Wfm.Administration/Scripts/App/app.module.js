@@ -1,9 +1,9 @@
-(function() {
+(function () {
 	'use strict';
 
 	angular
 		.module('adminApp', ['ngRoute', 'ngMaterial', 'adminAppHttp', 'ngCookies'])
-		.config(function($routeProvider, $httpProvider) {
+		.config(function ($routeProvider, $httpProvider) {
 
 			$routeProvider
 				.when('/', {
@@ -51,7 +51,15 @@
 					controller: 'otherController'
 				})
 				.when('/StardustDashboard', {
-					templateUrl: 'StardustDashboard/stardust.html',
+					templateUrl: 'StardustDashboard/stardustDashboardNodes.html',
+					controller: 'stardustController'
+				})
+				.when('/StardustDashboard/history', {
+					templateUrl: 'StardustDashboard/stardustDashboardHistory.html',
+					controller: 'stardustController'
+				})
+				.when('/StardustDashboard/queue', {
+					templateUrl: 'StardustDashboard/stardustDashboardQueue.html',
 					controller: 'stardustController'
 				})
 				.when('/jobdetails/:jobId', {
