@@ -1,3 +1,18 @@
+--bug #40731 - Remove NULL values
+--Becuase the later statments in this script would generate yet another null value when concatinating NULL + srting = NULL
+DELETE FROM dbo.AgentState WHERE DataSourceId IS NULL
+DELETE FROM dbo.AgentState WHERE StateCode IS NULL
+GO
+
+--bug #41161 - Remove any remaining duplicates
+WITH cte as(
+  SELECT ROW_NUMBER() OVER (PARTITION BY PersonId,DataSourceId,StateCode,ReceivedTime
+                            ORDER BY  ReceivedTime DESC ) RN
+  FROM   dbo.AgentState
+  )
+delete from cte where RN>1
+
+
 DROP INDEX [IX_AgentState_DataSourceIdUserCode] ON dbo.AgentState
 GO
 
