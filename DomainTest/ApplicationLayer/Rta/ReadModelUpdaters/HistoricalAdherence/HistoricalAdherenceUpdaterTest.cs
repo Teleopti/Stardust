@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 		}
 
 		[Test]
-		public void ShouldAddOutOfAdherenc�()
+		public void ShouldAddOutOfAdherencä()
 		{
 			var personId = Guid.NewGuid();
 
