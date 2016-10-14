@@ -51,6 +51,10 @@
 					controller: 'otherController'
 				})
 				.when('/StardustDashboard', {
+					templateUrl: 'StardustDashboard/stardust.html',
+					controller: 'stardustController'
+				})
+				.when('/StardustDashboard/nodes', {
 					templateUrl: 'StardustDashboard/stardustDashboardNodes.html',
 					controller: 'stardustController'
 				})
