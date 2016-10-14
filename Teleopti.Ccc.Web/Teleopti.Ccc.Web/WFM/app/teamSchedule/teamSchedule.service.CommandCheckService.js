@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
 	angular.module('wfm.teamSchedule').service('CommandCheckService', CommandCheckService);
 
 	CommandCheckService.$inject = ['$http', '$q'];
@@ -8,42 +8,65 @@
 		var checkOverlappingMoveActivityUrl = "../api/TeamScheduleData/CheckMoveActivityOverlapppingCertainActivities";
 		var checkPersonalAccountsUrl = '../api/TeamScheduleData/CheckPersonalAccounts';
 
-		var checkFailedList = [], commandRquestData;
+		var checkFailedAgentList = [], commandRquestData, currentCheckConfig;
 		var commandCheckDeferred, commandCheckedStatus = false;
 
-		this.checkOverlappingCertainActivities = checkOverlappingCertainActivities;
-		this.checkMoveActivityOverlappingCertainActivities = checkMoveActivityOverlappingCertainActivities;
+		var checkConfigs = {};
+		populateAllCheckConfigs();
+			
+		this.checkAddActivityOverlapping = checkAddActivityOverlapping;
+		this.checkAddPersonalActivityOverlapping = checkAddPersonalActivityOverlapping;
+		this.checkMoveActivityOverlapping = checkMoveActivityOverlapping;
 		this.checkPersonalAccounts = checkPersonalAccounts;
-
-		this.getCheckFailedList = getCheckFailedList;
+		this.getCheckFailedAgentList = getCheckFailedAgentList;
 		this.getCommandCheckStatus = getCommandCheckStatus;
 		this.resetCommandCheckStatus = resetCommandCheckStatus;
 		this.completeCommandCheck = completeCommandCheck;
 		this.getRequestData = getRequestData;
+		this.getCheckConfig = getCheckConfig;
 
-		function checkOverlappingCertainActivities(requestData) {
+		function getCheckConfig() {
+			return currentCheckConfig;
+		}
+
+		function checkAddActivityOverlapping(requestData) {
+			commandRquestData = requestData;
+			currentCheckConfig = checkConfigs.checkAddActivityOverlapping;
 			return getCheck(checkOverlappingUrl)(requestData);
 		}
 
-		function checkMoveActivityOverlappingCertainActivities(requestData) {
+		function checkAddPersonalActivityOverlapping(requestData) {
 			commandRquestData = requestData;
+			currentCheckConfig = checkConfigs.checkAddPersonalActivityOverlapping;
+			return getCheck(checkOverlappingUrl)(requestData);
+		}
+
+		function checkMoveActivityOverlapping(requestData) {
+			commandRquestData = requestData;
+			currentCheckConfig = checkConfigs.checkMoveActivityOverlapping;
 			return getCheck(checkOverlappingMoveActivityUrl)(requestData);
 		}
 
+		function checkPersonalAccounts(requestData) {
+			commandRquestData = requestData;
+			currentCheckConfig = checkConfigs.checkPersonalAccounts;
+			return getCheck(checkPersonalAccountsUrl)(requestData);
+		}
+
 		function getCheck(url) {
-			return function(requestData) {
+			return function (requestData) {
 				commandCheckDeferred = $q.defer();
 
 				$http.post(url, requestData)
-					.then(function(resp) {
+					.then(function (resp) {
 						if (resp.data.length === 0) {
 							commandCheckDeferred.resolve();
 						} else {
-							checkFailedList = resp.data;
+							checkFailedAgentList = resp.data;
 							commandCheckedStatus = true;
 						}
 					})
-					.catch(function(e) {
+					.catch(function (e) {
 						commandCheckDeferred.reject(e);
 					});
 
@@ -67,12 +90,31 @@
 			commandCheckDeferred.resolve(option);
 		}
 
-		function getCheckFailedList() {
-			return checkFailedList;
+		function getCheckFailedAgentList() {
+			return checkFailedAgentList;
 		}
 
-		function checkPersonalAccounts(requestData) {
-			return getCheck(checkPersonalAccountsUrl)(requestData);
+		function populateAllCheckConfigs() {
+			checkConfigs.checkAddActivityOverlapping = {
+				subject: 'ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping',
+				body: 'TheFollowingAgentsHaveAffectedActivities',
+				actionOptions: ['MoveNonoverwritableActivityForTheseAgents', 'DoNotModifyForTheseAgents', 'OverrideForTheseAgents'],
+			};
+			checkConfigs.checkAddPersonalActivityOverlapping = {
+				subject: 'ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping',
+				body: 'TheFollowingAgentsHaveAffectedActivities',
+				actionOptions: ['DoNotModifyForTheseAgents', 'OverrideForTheseAgents'],
+			};
+			checkConfigs.checkMoveActivityOverlapping = {
+				subject: 'ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping',
+				body: 'TheFollowingAgentsHaveAffectedActivities',
+				actionOptions: ['DoNotModifyForTheseAgents', 'OverrideForTheseAgents'],
+			};
+			checkConfigs.checkPersonalAccounts = {
+				subject: 'TBD',
+				body: 'TBD',
+				actionOptions: ['DoNotModifyForTheseAgents', 'OverrideForTheseAgents'],
+			};
 		}
 	}
 })();

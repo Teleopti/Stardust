@@ -94,7 +94,7 @@
 		vm.addPersonalActivity = function() {
 			if (vm.checkCommandActivityLayerOrders){
 				vm.checkingCommand = true;
-				CommandCheckService.checkOverlappingCertainActivities(getRequestData()).then(addPersonalActivity);
+				CommandCheckService.checkAddPersonalActivityOverlapping(getRequestData()).then(addPersonalActivity);
 			}
 			else
 				addPersonalActivity();

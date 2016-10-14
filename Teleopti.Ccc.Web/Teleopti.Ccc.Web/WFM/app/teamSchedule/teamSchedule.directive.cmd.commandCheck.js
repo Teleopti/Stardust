@@ -34,10 +34,6 @@
 
 		scope.vm.currentCommandLabel = containerCtrl.activeCmd;
 		scope.vm.getDate = containerCtrl.getDate;
-		if (!containerCtrl.hasToggle('AutoMoveOverwrittenActivityForOperationsEnabled') || scope.vm.currentCommandLabel == 'MoveActivity' || scope.vm.currentCommandLabel == 'AddPersonalActivity' ){
-			scope.vm.actionOptions.shift();
-			scope.vm.currentActionOptionValue = scope.vm.actionOptions[0].value;
-		}
 
 		var focusTarget = elem[0].querySelector('.focus-default');
 		if (focusTarget) angular.element(focusTarget).focus();
@@ -49,109 +45,74 @@
 	function commandCheckCtrl($scope, $translate, CommandCheckService, personSelectionSvc, ScheduleManagementSvc) {
 		var vm = this;
 		vm.showCheckbox = false;
-		vm.overlappedAgents = [];
-		vm.overlappedLayers = [];
+
+		vm.checkFailedAgentList = [];
 		vm.initFinished = false;
-
-		var moveConflictLayerAllowed = false;
-
-		vm.actionOptions = [
-			{
-				value: 'MoveNonoverwritableActivityForTheseAgents',
-				getName: function() {
-					return $translate.instant(this.value);
-				},
-				beforeAction: function() {
-					moveConflictLayerAllowed = true;
-				}
-			},
-			{
-				value: 'DoNotModifyForTheseAgents',
-				getName: function(currentCmdLabel) {
-					return $translate.instant(this.value).replace('{0}', $translate.instant(currentCmdLabel));
-				},
-				beforeAction: function () {
-					vm.toggleAllPersonSelection(false);
-				}
-			},
-			{
-				value: 'OverrideForTheseAgents',
-				getName: function() {
-					return $translate.instant(this.value);
-				},
-				beforeAction: function() {
-					vm.toggleAllPersonSelection(true);
-				}
-			}
-		];
-
-		vm.currentActionOptionValue = vm.actionOptions[0].value;
+				
 
 		vm.updatePersonSelection = function(agent) {
 			personSelectionSvc.updatePersonSelection(agent);
 			personSelectionSvc.toggleAllPersonProjections(agent, vm.getDate());
 		};
 
-		vm.toggleAllPersonSelection = function(isSelected) {
-			if (vm.currentCommandLabel == 'MoveActivity'){
-				var personActivities = CommandCheckService.getRequestData().PersonActivities;
-				vm.overlappedAgents.forEach(function(agent) {
-					agent.IsSelected = isSelected;
-					personActivities.forEach(function(personActivity){
-						if(personActivity.PersonId == agent.PersonId){
-							personSelectionSvc.updatePersonSelection(agent, personActivity.ShiftLayerIds);
-						}
-					});
-				});
-			}else{
-				vm.overlappedAgents.forEach(function(agent) {
-					agent.IsSelected = isSelected;
-					personSelectionSvc.updatePersonSelection(agent);
-				});
-			}
+		vm.toggleAllPersonSelection = function(isSelected) {			
+			vm.agentSchedulesList.forEach(function (agent) {
+				agent.scheduleVm.IsSelected = isSelected;
+				personSelectionSvc.updatePersonSelection(agent.scheduleVm);
+			});			
 		};
 
-		vm.getOverlappedLayersForAgent = function (personId) {
-			var overlappedLayers, result = [];
-
-			vm.overlappedLayers.forEach(function (agent) {
-				if (agent.PersonId == personId)
-					overlappedLayers = agent.OverlappedLayers;
-			});
-
-			overlappedLayers.forEach(function (overlappedLayer) {
+		function getTooltipMessageForAgent(overlappedLayers) {
+			var result = [];
+			overlappedLayers.forEach(function(overlappedLayer) {
 				result.push(overlappedLayer.Name);
 				result.push(moment(overlappedLayer.StartTime).format('YYYY-MM-DD HH:mm'));
 				result.push(moment(overlappedLayer.EndTime).format('YYYY-MM-DD HH:mm'));
 			});
 			return result;
-		};
+		}
 
-		vm.applyCommandFix = function() {
-			vm.actionOptions.forEach(function (option) {
-				if (option.value == vm.currentActionOptionValue) {
-					option.beforeAction && option.beforeAction();
+		vm.applyCommandFix = function () {
+			var moveConflictLayerAllowed = false;
+			vm.config.actionOptions.forEach(function (option) {
+				if (option == vm.currentActionOptionValue) {
+					if (option == 'DoNotModifyForTheseAgents') {
+						vm.toggleAllPersonSelection(false);
+					} else if (option == 'OverrideForTheseAgents') {
+						vm.toggleAllPersonSelection(true);
+					} else if (option == 'MoveNonoverwritableActivityForTheseAgents') {
+						moveConflictLayerAllowed = true;
+					}
 				}
 			});
+
 			CommandCheckService.completeCommandCheck({
 				moveConflictLayerAllowed: moveConflictLayerAllowed
 			});
 		};
 
 		vm.init = function() {
-			var personIds = [];
 
-			CommandCheckService.getCheckFailedList().forEach(function(agent) {
-				personIds.push(agent.PersonId);
-				vm.overlappedLayers.push({
-					PersonId: agent.PersonId,
-					OverlappedLayers: agent.OverlappedLayers
+			var groupSchedules = ScheduleManagementSvc.groupScheduleVm.Schedules;
+
+			function getScheduleVm(personId) {
+				var filtered = groupSchedules.filter(function(schedule) {
+					return schedule.PersonId === personId;
+				});
+				return filtered.length > 0? filtered[0]: null;
+			}
+
+			CommandCheckService.getCheckFailedAgentList().forEach(function(agent) {
+				
+				vm.checkFailedAgentList.push({
+					personId: agent.PersonId,
+					tooltips: getTooltipMessageForAgent(agent.OverlappedLayers),
+					scheduleVm: getScheduleVm(agent.PersonId)
 				});
 			});
-
-			vm.overlappedAgents = ScheduleManagementSvc.groupScheduleVm.Schedules.filter(function(personSchedule) {
-				return personIds.indexOf(personSchedule.PersonId) > -1;
-			});
+			
+			vm.config = CommandCheckService.getCheckConfig();
+			vm.currentActionOptionValue = vm.config.actionOptions[0];
 
 			vm.initFinished = true;
 		};

@@ -104,7 +104,7 @@
 
 			if (vm.checkCommandActivityLayerOrders){
 				vm.checkingCommand = true;
-				CommandCheckService.checkMoveActivityOverlappingCertainActivities(getRequestData()).then(moveActivity);
+				CommandCheckService.checkMoveActivityOverlapping(getRequestData()).then(moveActivity);
 			}
 			else
 				moveActivity();

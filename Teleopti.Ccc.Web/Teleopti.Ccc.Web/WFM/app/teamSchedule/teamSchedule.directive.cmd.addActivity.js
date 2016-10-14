@@ -99,7 +99,7 @@
 		vm.addActivity = function () {
 			if (vm.checkCommandActivityLayerOrders){
 				vm.checkingCommand = true;
-				CommandCheckService.checkOverlappingCertainActivities(getRequestData())
+				CommandCheckService.checkAddActivityOverlapping(getRequestData())
 					.then(function(option) {
 						addActivity(option);
 					});

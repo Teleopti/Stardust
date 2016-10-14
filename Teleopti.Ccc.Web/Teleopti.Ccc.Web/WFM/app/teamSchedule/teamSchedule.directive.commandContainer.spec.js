@@ -118,7 +118,13 @@
 		var checkStatus = false,
 			fakeOverlappingList = [];
 
-		this.checkOverlappingCertainActivities = function() {
+		var fakeCheckConfig = {
+			subject: 'ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping',
+			body: 'TheFollowingAgentsHaveAffectedActivities',
+			actionOptions: ['MoveNonoverwritableActivityForTheseAgents', 'DoNotModifyForTheseAgents', 'OverrideForTheseAgents']
+		};
+
+		this.checkAddActivityOverlapping = function () {
 			return {
 				then: function(cb) {
 					checkStatus = true;
@@ -139,8 +145,12 @@
 			checkStatus = true;
 		}
 
-		this.getCheckFailedList = function() {
+		this.getCheckFailedAgentList = function () {
 			return fakeOverlappingList;
 		}
+
+		this.getCheckConfig = function() {
+			return fakeCheckConfig;
+		};
 	}
 });

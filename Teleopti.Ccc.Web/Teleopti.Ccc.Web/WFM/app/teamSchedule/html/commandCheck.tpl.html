@@ -4,25 +4,25 @@
         <div class="command-info">
             <p>
                 <span><i class="mdi mdi-alert"></i></span>
-                {{'ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping' | translate}} 
+                {{vm.config.subject | translate}} 
             </p>
             <p>
-                {{'TheFollowingAgentsHaveAffectedActivities' | translate}}
+                {{vm.config.body | translate}}
             </p>
         </div>
 
         <md-select class="command-check-selector focus-default" ng-model="vm.currentActionOptionValue" placeholder="{{'SelectAnOption' | translate}}" autofocus>
-            <md-option ng-repeat="action in vm.actionOptions" ng-value="action.value">
-                <span> {{action.getName(vm.currentCommandLabel)}}</span>
+            <md-option ng-repeat="action in vm.config.actionOptions" ng-value="action">
+                <span> {{action | translate}}</span>
             </md-option>
         </md-select>
 
         <div class="agent-list">
             <ul>
-                <li class="cursor-pointer" ng-repeat="agent in vm.overlappedAgents">
-                    <span>{{agent.Name}}</span>
+                <li class="cursor-pointer" ng-repeat="agent in vm.checkFailedAgentList">
+                    <span>{{agent.scheduleVm.Name}}</span>
                     <md-tooltip class="multiline-tooltip margin-top-22">
-                        <span ng-bind-html="vm.getOverlappedLayersForAgent(agent.PersonId) | br"></span>
+                        <span ng-bind-html="agent.tooltips| br"></span>
                     </md-tooltip>
                 </li>
             </ul>
