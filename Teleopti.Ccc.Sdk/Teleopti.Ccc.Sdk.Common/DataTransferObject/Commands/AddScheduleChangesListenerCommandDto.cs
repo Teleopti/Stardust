@@ -5,6 +5,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 {
 	/// <summary>
 	/// <para>Command for adding a schedule changes listener</para>
+	/// <para>No limitation on count of listeners can be created, but too many listeners might slow server down.</para>
 	/// <para>The schedule changes will arrive as POST data to the endpoint you specify through the SDK.</para>
 	/// <para>The function to get information about current subscriptions and listener endpoints is <see cref="GetScheduleChangesSubscriptionSettingsQueryDto"/> on the SchedulingService.</para>
 	/// <para>The response on this function also contains the details needed to verify the signature of the incoming data.</para>
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 	/// <para>The schedule data sent from Teleopti WFM is formatted as json.</para>
 	/// <para>In the http request there will be a header named Signature with a base64 encoded signature value. That signature can be used to verify the contents of the request body. Use the public key exposed in the SDK mentioned before in combination with the signature. The hashing algorithm used is SHA1. If the request body cannot be verified with the signature someone has tampered with the contents and the request should be discarded.</para>
 	/// <para>Only schedule information for the default scenario gets sent to the listener. You might get ScheduleDays outside your predefined filter, so always make sure you filter the schedule days on the recieving side as well.</para>
+	/// <para>If the listener failed to push schedule changes to customer’s app, the schedule changes will not be resent or retried. So today it can be considered more of a notification service, it’s is not a fully transactional replication. We still recommend a complete synchronization on regular intervals to keep everything in sync.</para>
 	/// <para>The content of the messages will contain the following information:</para>
 	/// <pre>
 	/// ├─ IsDefaultScenario: (always true)
