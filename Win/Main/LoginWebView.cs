@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Windows.Forms;
 using EO.Base;
 using EO.WebBrowser;
@@ -26,6 +27,10 @@ namespace Teleopti.Ccc.Win.Main
 			labelVersion.Text = string.Concat("Version ", Application.ProductVersion);
 			webView1.CertificateError += handlingCertificateErrors;
 			EO.Base.Runtime.Exception += handlingRuntimeErrors;
+			var enableLargeAddressSpace = false;
+			var enableLargeAddressSpaceSetting = ConfigurationManager.AppSettings["EOEnableLargeAddressSpace"];
+			if (bool.TryParse(enableLargeAddressSpaceSetting, out enableLargeAddressSpace))
+				EO.Base.Runtime.EnableLargeAddressSpace = enableLargeAddressSpace;
 		}
 
 		private void logInfo(string message)

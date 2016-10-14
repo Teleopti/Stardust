@@ -95,6 +95,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			wfmWebView.RegisterJSExtensionFunction("errorStayingAlive",wfmWebView_JSerrorStayingAlive);
 			EO.Base.Runtime.Exception += handlingEoRuntimeErrors;
+			var enableLargeAddressSpaceSetting = ConfigurationManager.AppSettings["EOEnableLargeAddressSpace"];
+			var enableLargeAddressSpace = false;
+			if(bool.TryParse(enableLargeAddressSpaceSetting, out enableLargeAddressSpace))
+				EO.Base.Runtime.EnableLargeAddressSpace = enableLargeAddressSpace;
 		}
 		private void logInfo(string message)
 		{
