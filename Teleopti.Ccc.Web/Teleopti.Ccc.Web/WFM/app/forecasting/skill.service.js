@@ -7,7 +7,7 @@
 					get: { method: 'GET', params: {}, isArray: true }
 				});
 
-				this.timezones = $resource('../api/Skill/Timezones', {}, {
+				this.timezones = $resource('../api/Global/TimeZone', {}, {
 					get: { method: 'GET', params: {}, isArray: false }
 				});
 

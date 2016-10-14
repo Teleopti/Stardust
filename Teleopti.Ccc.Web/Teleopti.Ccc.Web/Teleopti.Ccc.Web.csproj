@@ -465,6 +465,7 @@
     <Compile Include="Areas\Global\JavascriptLoggingController.cs" />
     <Compile Include="Areas\Global\NotificationsController.cs" />
     <Compile Include="Areas\Global\StatusController.cs" />
+    <Compile Include="Areas\Global\TimeZoneController.cs" />
     <Compile Include="Areas\Global\WfmAreaRegistration.cs" />
     <Compile Include="Areas\Global\UserController.cs" />
     <Compile Include="Areas\HealthCheck\Controllers\HealthCheckApiController.cs" />

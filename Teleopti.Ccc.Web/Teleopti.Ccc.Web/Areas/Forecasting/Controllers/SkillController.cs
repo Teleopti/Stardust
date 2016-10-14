@@ -21,18 +21,16 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IActivityProvider _activityProvider;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
-		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IQueueSourceRepository _queueSourceRepository;
 		private readonly IActivityRepository _activityRepository;
 		private readonly ISkillTypeProvider _skillTypeProvider;
 		private readonly IWorkloadRepository _workloadRepository;
 
-		public SkillController(IActivityProvider activityProvider, ISkillRepository skillRepository, IIntervalLengthFetcher intervalLengthFetcher, ILoggedOnUser loggedOnUser, IQueueSourceRepository queueSourceRepository, IActivityRepository activityRepository, ISkillTypeProvider skillTypeProvider, IWorkloadRepository workloadRepository)
+		public SkillController(IActivityProvider activityProvider, ISkillRepository skillRepository, IIntervalLengthFetcher intervalLengthFetcher, IQueueSourceRepository queueSourceRepository, IActivityRepository activityRepository, ISkillTypeProvider skillTypeProvider, IWorkloadRepository workloadRepository)
 		{
 			_activityProvider = activityProvider;
 			_skillRepository = skillRepository;
 			_intervalLengthFetcher = intervalLengthFetcher;
-			_loggedOnUser = loggedOnUser;
 			_queueSourceRepository = queueSourceRepository;
 			_activityRepository = activityRepository;
 			_skillTypeProvider = skillTypeProvider;
@@ -43,18 +41,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public virtual IEnumerable<dynamic> Activities()
 		{
 			return _activityProvider.GetAllRequireSkill().Select(activity => new {Id = activity.Id.GetValueOrDefault(), activity.Name});
-		}
-
-		[UnitOfWork, Route("api/Skill/Timezones"), HttpGet]
-		public virtual dynamic Timezones()
-		{
-			var defaultTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-			return
-				new
-				{
-					DefaultTimezone = defaultTimeZone.Id,
-					Timezones = TimeZoneInfo.GetSystemTimeZones().Select(x => new {x.Id, Name = x.DisplayName})
-				};
 		}
 
 		[UnitOfWork, Route("api/Skill/Queues"), HttpGet]

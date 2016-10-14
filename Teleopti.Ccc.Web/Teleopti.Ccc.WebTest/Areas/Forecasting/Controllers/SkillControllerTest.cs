@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using NUnit.Framework;
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var skillTypeProvider = MockRepository.GenerateMock<ISkillTypeProvider>();
 			skillTypeProvider.Stub(x=>x.InboundTelephony()).Return(new SkillTypePhone(new Description("Skill type"), ForecastSource.InboundTelephony));
 			var workloadRepository = new FakeWorkloadRepository();
-			var target = new SkillController(null, skillRepository, intervalLengthFetcher, null, queueSourceRepository, activityRepository, skillTypeProvider, workloadRepository);
+			var target = new SkillController(null, skillRepository, intervalLengthFetcher, queueSourceRepository, activityRepository, skillTypeProvider, workloadRepository);
 			var input = new SkillInput
 			{
 				Name = "test1",
@@ -74,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var activityRepository = MockRepository.GenerateMock<IActivityRepository>();
 			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
 			skillTypeProvider.Stub(x => x.InboundTelephony()).Return(new SkillTypePhone(new Description("Skill type"), ForecastSource.InboundTelephony));
-			var target = new SkillController(null, skillRepository, intervalLengthFetcher, null, queueSourceRepository, activityRepository, skillTypeProvider, workloadRepository);
+			var target = new SkillController(null, skillRepository, intervalLengthFetcher, queueSourceRepository, activityRepository, skillTypeProvider, workloadRepository);
 			var input = new SkillInput
 			{
 				Name = "test1",
@@ -132,7 +131,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var skillTypeProvider = MockRepository.GenerateMock<ISkillTypeProvider>();
 			skillTypeProvider.Stub(x => x.InboundTelephony()).Return(new SkillTypePhone(new Description("Skill type"), ForecastSource.InboundTelephony));
 			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
-			var target = new SkillController(null, skillRepository, intervalLengthFetcher, null, queueSourceRepository, activityRepository, skillTypeProvider, workloadRepository);
+			var target = new SkillController(null, skillRepository, intervalLengthFetcher, queueSourceRepository, activityRepository, skillTypeProvider, workloadRepository);
 			var input = new SkillInput
 			{
 				Name = "test1",
@@ -197,7 +196,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			var skillTypeProvider = MockRepository.GenerateMock<ISkillTypeProvider>();
 			skillTypeProvider.Stub(x => x.InboundTelephony()).Return(new SkillTypePhone(new Description("Skill type"), ForecastSource.InboundTelephony));
-			var target = new SkillController(null, skillRepository, intervalLengthFetcher, null, queueSourceRepository, activityRepository, skillTypeProvider, MockRepository.GenerateMock<IWorkloadRepository>());
+			var target = new SkillController(null, skillRepository, intervalLengthFetcher, queueSourceRepository, activityRepository, skillTypeProvider, MockRepository.GenerateMock<IWorkloadRepository>());
 
 			target.Create(input);
 
@@ -216,33 +215,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			queueSource.SetId(Guid.NewGuid());
 			queueSource.LogObjectName = "logObjectName1";
 			queueSourceRepository.Stub(x => x.LoadAll()).Return(new IQueueSource[] {queueSource});
-			var target = new SkillController(null, null, null, null, queueSourceRepository, null, null, MockRepository.GenerateMock<IWorkloadRepository>());
+			var target = new SkillController(null, null, null, queueSourceRepository, null, null, MockRepository.GenerateMock<IWorkloadRepository>());
 			var first = target.Queues().First();
 			Assert.AreEqual(queueSource.Id, first.Id);
 			Assert.AreEqual(queueSource.Name, first.Name);
 			Assert.AreEqual(queueSource.LogObjectName, first.LogObjectName);
 			Assert.AreEqual(queueSource.Description, first.Description);
-		}
-
-		[Test]
-		public void ShouldGetDefaultTimezone()
-		{
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(PersonFactory.CreatePerson("test1"));
-			var target = new SkillController(null, null, null, loggedOnUser, null, null, null, MockRepository.GenerateMock<IWorkloadRepository>());
-			var result = target.Timezones();
-			Assert.AreEqual(loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone().Id, result.DefaultTimezone);
-		}
-
-		[Test]
-		public void ShouldGetTimezones()
-		{
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(PersonFactory.CreatePerson("test1"));
-			var target = new SkillController(null, null, null, loggedOnUser, null, null, null, MockRepository.GenerateMock<IWorkloadRepository>());
-			var timezones = TimeZoneInfo.GetSystemTimeZones();
-			var result = target.Timezones();
-			Assert.AreEqual(timezones.Count, ((IEnumerable<dynamic>)result.Timezones).Count());
 		}
 
 		[Test]
@@ -264,7 +242,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			skillRepository.Stub(x => x.LoadAll()).Return(new[] {skill});
 			var intervalLengthFetcher = MockRepository.GenerateMock<IIntervalLengthFetcher>();
 			intervalLengthFetcher.Stub(x => x.IntervalLength).Return(30);
-			var target = new SkillController(activityProvider, skillRepository, intervalLengthFetcher, null, null, null, null, MockRepository.GenerateMock<IWorkloadRepository>());
+			var target = new SkillController(activityProvider, skillRepository, intervalLengthFetcher, null, null, null, MockRepository.GenerateMock<IWorkloadRepository>());
 			var result  = target.Activities();
 
 			var first = result.First();
@@ -272,5 +250,4 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			Assert.AreEqual(activityViewModel.Name, first.Name);
 		}
 	}
-
 }

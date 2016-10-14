@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			_globalSettingDataRepository = globalSettingDataRepository;
 		}
 
-		[UnitOfWork, System.Web.Http.HttpGet, System.Web.Http.Route("api/Global/Application/Areas")]
+		[UnitOfWork, HttpGet, Route("api/Global/Application/Areas")]
 		public virtual IEnumerable<object> GetAreas()
 		{
 			return _areaWithPermissionPathProvider.GetWfmAreasWithPermissions()
 				.Select(a => new { Name = a.Name(), a.InternalName, _links = a.Links.ToArray() }).ToArray();
 		}
 
-		[UnitOfWork, System.Web.Http.HttpGet, System.Web.Http.Route("api/Settings/SupportEmail")]
+		[UnitOfWork, HttpGet, Route("api/Settings/SupportEmail")]
 		public virtual IHttpActionResult GetSupportEmailSetting()
 		{
 			var emailSetting = _globalSettingDataRepository.FindValueByKey("SupportEmailSetting",

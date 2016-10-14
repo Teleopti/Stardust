@@ -25,18 +25,18 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		{
 			//only getting the jobnotificatiosn for now but this module will group the nofications
 			var loadedJobs =
-				_jobResultRepository.LoadHistoryWithPaging(new PagingDetail() {Skip = 0, Take = 5, TotalNumberOfResults = 5},
-					new[] {JobCategory.QuickForecast, JobCategory.ForecastsImport, JobCategory.MultisiteExport});
+				_jobResultRepository.LoadHistoryWithPaging(new PagingDetail {Skip = 0, Take = 5, TotalNumberOfResults = 5},
+					JobCategory.QuickForecast, JobCategory.ForecastsImport, JobCategory.MultisiteExport);
 			var result = loadedJobs.Select(
 				x =>
-					new JobResultNotificationModel()
+					new JobResultNotificationModel
 					{
 						Status = determineStatus(x),
 						JobCategory = x.JobCategory,
 						Owner = x.Owner.Name.ToString(),
 						Timestamp = TimeZoneInfo.ConvertTimeFromUtc(x.Timestamp, _timeZone.TimeZone())
-					}).OrderByDescending(x=>x.Timestamp).ToList();
-			return Ok(result.AsEnumerable());
+					}).OrderByDescending(x=>x.Timestamp).ToArray();
+			return Ok(result);
 		}
 
 		private static string determineStatus(IJobResult jobResult)
