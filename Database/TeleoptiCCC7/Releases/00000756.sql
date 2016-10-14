@@ -19,5 +19,14 @@ GO
 ALTER TABLE dbo.AgentState DROP COLUMN UserCode
 GO
 
+--#41161 - Make sure there are no duplicates before adding the PK
+WITH cte as(
+  SELECT ROW_NUMBER() OVER (PARTITION BY PersonId,DataSourceIdUserCode
+                            ORDER BY  ReceivedTime DESC ) RN
+  FROM   dbo.AgentState
+  )
+delete from cte where RN>1
+GO
+
 ALTER TABLE dbo.AgentState ADD CONSTRAINT PK_AgentState PRIMARY KEY CLUSTERED (DataSourceIdUserCode, PersonId)
 GO
