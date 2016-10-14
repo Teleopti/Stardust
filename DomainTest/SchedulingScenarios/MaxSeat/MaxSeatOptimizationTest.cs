@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			assigmentHour.SetShiftCategory(shiftCategory);
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1);
-			var personPeriod = new PersonPeriod(dateOnly.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = new RuleSetBag(ruleSet) };
-			agent.AddPersonPeriod(personPeriod);
+			agent.AddPersonPeriod(new PersonPeriod(dateOnly.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = new RuleSetBag(ruleSet) });
+			agentScheduledForAnHour.AddPersonPeriod(new PersonPeriod(dateOnly.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = new RuleSetBag(ruleSet) });
 			agent.AddSchedulePeriod(schedulePeriod);
 			var assignmentToBeMoved = new PersonAssignment(agent, scenario, dateOnly);
 			assignmentToBeMoved.AddActivity(activity, new TimePeriod(8, 0, 16, 0)); 
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.EqualTo(TimeSpan.FromHours(9));
 		}
 
-		[Test, Ignore("#40939")]
+		[Test]
 		public void ShouldDoNothingWhenNotAboveMaxSeatLimitation()
 		{
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
@@ -66,12 +66,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var team = new Team { Site = site };
 			var agentScheduledForAnHour = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			var assigmentHour = new PersonAssignment(agentScheduledForAnHour, scenario, dateOnly);
-			assigmentHour.AddActivity(activity, new TimePeriod(8, 0, 9, 0)); //should not be enough to break max seat
+			assigmentHour.AddActivity(activity, new TimePeriod(8, 0, 9, 0)); //should not break max seat
 			assigmentHour.SetShiftCategory(shiftCategory);
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1);
-			var personPeriod = new PersonPeriod(dateOnly.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = new RuleSetBag(ruleSet) };
-			agent.AddPersonPeriod(personPeriod);
+			agent.AddPersonPeriod(new PersonPeriod(dateOnly.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = new RuleSetBag(ruleSet) });
+			agentScheduledForAnHour.AddPersonPeriod(new PersonPeriod(dateOnly.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = new RuleSetBag(ruleSet) });
 			agent.AddSchedulePeriod(schedulePeriod);
 			var assignmentToBeMoved = new PersonAssignment(agent, scenario, dateOnly);
 			assignmentToBeMoved.AddActivity(activity, new TimePeriod(8, 0, 16, 0));

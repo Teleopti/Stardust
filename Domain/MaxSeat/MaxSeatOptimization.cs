@@ -8,7 +8,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.MaxSeat
 {
-	//bara testeri, testara just nu...
 	public class MaxSeatOptimization
 	{
 		private readonly MaxSeatSkillCreator _maxSeatSkillCreator;
@@ -42,27 +41,34 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 					{
 						foreach (var skillDay in skillPair.Value)
 						{
-							if (skillDay.CurrentDate != date)
-								continue; //FIX LATER
-
-							//hitta gubbe random?
-							foreach (var person in persons)
+							foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 							{
-								//BEST SHIFT STUFF
-								var timeZone = person.PermissionInformation.DefaultTimeZone();
-								var personPeriod = person.Period(skillDay.CurrentDate);
-								if(personPeriod==null)
+								if (skillDay.CurrentDate != date)
+									continue; //FIX LATER
+
+								if (skillStaffPeriod.Payload.CalculatedUsedSeats <= skillStaffPeriod.Payload.MaxSeats)
 									continue;
-								var bag = personPeriod.RuleSetBag;
-								var bestShift = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(skillDay.CurrentDate, timeZone, bag, false, true).Last().TheMainShift;
-								//
+
+							
+
+								//hitta gubbe random?
+								foreach (var person in persons)
+								{
+									//BEST SHIFT STUFF
+									var timeZone = person.PermissionInformation.DefaultTimeZone();
+									var personPeriod = person.Period(date);
+									if (personPeriod == null)
+										continue;
+									var bag = personPeriod.RuleSetBag;
+									var bestShift = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(date, timeZone, bag, false, true).Last().TheMainShift;
+									//
 
 
-								//REPLACE SHIFT
-								var schedule = schedules[person].ScheduledDay(skillDay.CurrentDate);
-								schedule.AddMainShift(bestShift);
-								schedules.Modify(schedule, new DoNothingScheduleDayChangeCallBack()); //ska vara den andra
-																																											//
+									//REPLACE SHIFT
+									var schedule = schedules[person].ScheduledDay(date);
+									schedule.AddMainShift(bestShift);
+									schedules.Modify(schedule, new DoNothingScheduleDayChangeCallBack());
+								}
 							}
 						}
 					}
