@@ -19,10 +19,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 	public class MaxSeatOptimizationTest
 	{
 		public MaxSeatOptimization Target;
-		public FakePersonRepository PersonRepository;
-		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakePersonRepository PersonRepository; //TA bort sen
+		public FakePersonAssignmentRepository PersonAssignmentRepository; //TA bort sen
+		public IScheduleStorage ScheduleStorage; //TA BORT SEN
 
-		[Test, Ignore("#40939")]
+		[Test]
 		public void ShouldConsiderMaxSeat()
 		{
 			var activity = new Activity("_") {RequiresSeat = true};
@@ -40,9 +41,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var agent = PersonRepository.Has(new Contract("contract"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = site }, schedulePeriod, ruleSet);
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, dateOnly, new TimePeriod(8, 0, 16, 0));
 
-			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] {agentScheduledForAnHour, agent}, scenario);
+			//FIXA SEN
+			var schedules = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateOnly.ToDateOnlyPeriod().ToDateTimePeriod(TimeZoneInfo.Utc)), scenario, new PersonProvider(new[] { agentScheduledForAnHour, agent }), new ScheduleDictionaryLoadOptions(false, false, false), new[] { agentScheduledForAnHour, agent });
+			//
 
-			PersonAssignmentRepository.GetSingle(dateOnly, agent).Period.StartDateTime.TimeOfDay
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] {agentScheduledForAnHour, agent}, schedules, scenario);
+
+			schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).Period.StartDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(9));
 		}
 	}
