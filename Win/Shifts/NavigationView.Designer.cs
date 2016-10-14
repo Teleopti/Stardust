@@ -87,11 +87,11 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.tabPageRuleSetBag.Image = null;
 			this.tabPageRuleSetBag.ImageIndex = 1;
 			this.tabPageRuleSetBag.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageRuleSetBag.Location = new System.Drawing.Point(2, 37);
+			this.tabPageRuleSetBag.Location = new System.Drawing.Point(2, 31);
 			this.tabPageRuleSetBag.Name = "tabPageRuleSetBag";
 			this.tabPageRuleSetBag.Padding = new System.Windows.Forms.Padding(6);
 			this.tabPageRuleSetBag.ShowCloseButton = true;
-			this.tabPageRuleSetBag.Size = new System.Drawing.Size(584, 654);
+			this.tabPageRuleSetBag.Size = new System.Drawing.Size(584, 660);
 			this.tabPageRuleSetBag.TabIndex = 1;
 			this.tabPageRuleSetBag.Text = "xxBags";
 			this.tabPageRuleSetBag.ThemesEnabled = true;
@@ -102,6 +102,8 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
 			this.imageList1.Images.SetKeyName(0, "ccc_ShiftRuleSet.png");
 			this.imageList1.Images.SetKeyName(1, "ccc_ShiftBag.png");
+			this.imageList1.Images.SetKeyName(2, "bullet_black.png");
+			this.imageList1.Images.SetKeyName(3, "bullet_white.png");
 			// 
 			// NavigationView
 			// 

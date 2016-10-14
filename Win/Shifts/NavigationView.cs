@@ -76,7 +76,8 @@ namespace Teleopti.Ccc.Win.Shifts
 				Dock = DockStyle.Fill,
 				ShouldSelectNodeOnEnter = false,
 				SelectionMode = TreeSelectionMode.MultiSelectAll,
-				BorderStyle = BorderStyle.None
+				BorderStyle = BorderStyle.None,
+				LeftImageList = imageList1
 			};
 			tabPageWorkShiftRule.Controls.Add(_defaultTreeView);
 			tabPageWorkShiftRule.Focus();
@@ -244,9 +245,9 @@ namespace Teleopti.Ccc.Win.Shifts
 			var ruleSet = node.TagObject as IWorkShiftRuleSet;
 
 			if (ruleSet != null && ruleSet.OnlyForRestrictions)
-				node.LeftImageIndices = new[] { 0 };
+				node.LeftImageIndices = new[] { 2 };
 			else if(ruleSet != null)
-				node.LeftImageIndices = new[] { 1 };	
+				node.LeftImageIndices = new[] { 3 };	
 		}
 
 		private static TreeNodeAdv createNode(string name, object tagObject)
