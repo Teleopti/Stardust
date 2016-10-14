@@ -63,6 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 				.WithActivity("phone")
 				.WithActivity("break")
 				.WithActivity("lunch");
+			stateCodes.ForEach(x => Database.WithStateGroup($"code{x}").WithStateCode($"code{x}"));
 			var dates = new DateOnly(Now.UtcDateTime()).DateRange(100);
 
 			MakeUsersFaster(userCodes);
@@ -106,13 +107,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 		}
 		
 		private static IEnumerable<string> userCodes => Enumerable.Range(0, 1000).Select(x => $"user{x}").ToArray();
+		private static IEnumerable<string> stateCodes => Enumerable.Range(0, 2).Select(x => $"code{x}").ToArray();
 
 		[Test]
 		//[ToggleOff(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 		[Setting("OptimizeScheduleChangedEvents_DontUseFromWeb", true)]
 		public void Measure(
 			[Values(50, 500, 1000)] int batchSize,
-			[Values(1, 2, 3, 4, 5)] string variation
+			[Values(1, 2, 3, 4, 5)] int variation
 		)
 		{
 			var persons = Uow.Get(uow => Persons.LoadAll());
@@ -136,7 +138,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 						.Select(y => new BatchStateForTest
 						{
 							UserCode = y,
-							StateCode = variation.ToString()
+							StateCode = $"code{variation}"
 						})
 						.ToArray()
 				}).ForEach(Rta.SaveStateBatch);
