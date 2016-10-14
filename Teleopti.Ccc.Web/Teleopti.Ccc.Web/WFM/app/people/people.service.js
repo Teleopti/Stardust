@@ -2,14 +2,6 @@
 
 angular.module('peopleService', ['ngResource']).service('People', [
 	'$resource', '$http', function($resource, $http) {
-		this.loadPeopleInMyTeam = $resource('../api/TestData/CurrentTeam', {}, {
-			get: {
-				method: "GET",
-				params: {},
-				isArray: true
-			}
-		});
-
 		this.search = $resource('../api/Search/People/Keyword', {
 			keyword: "@searchKey",
 			pageSize: "@pageSize",
@@ -21,15 +13,6 @@ angular.module('peopleService', ['ngResource']).service('People', [
 				params: {},
 				isArray: false
 			}
-		});
-
-		this.importUsers = $resource('../api/People/ImportPeople', {}, {
-			post: {
-				method: 'POST',
-				params: {},
-				isArray: false
-			}
-
 		});
 
 		this.loadAllSkills = $resource("../api/PeopleData/loadAllSkills", {}, {
