@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Interfaces.Domain;
 
@@ -12,18 +10,18 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 	{
 		private readonly MaxSeatSkillCreator _maxSeatSkillCreator;
 		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
-		private readonly CascadingResourceCalculation _resourceCalculation;
 		private readonly IShiftProjectionCacheManager _shiftProjectionCacheManager;
+		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
 		public MaxSeatOptimization(MaxSeatSkillCreator maxSeatSkillCreator,
 														CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
-														CascadingResourceCalculation resourceCalculation,
-														IShiftProjectionCacheManager shiftProjectionCacheManager)
+														IShiftProjectionCacheManager shiftProjectionCacheManager,
+														IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			_maxSeatSkillCreator = maxSeatSkillCreator;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
-			_resourceCalculation = resourceCalculation;
 			_shiftProjectionCacheManager = shiftProjectionCacheManager;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
 		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> persons, IScheduleDictionary schedules, IScenario scenario)
@@ -31,10 +29,9 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 			var generatedMaxSeatSkills = _maxSeatSkillCreator.CreateMaxSeatSkills(period, scenario, persons.ToArray(), Enumerable.Empty<ISkill>());
 			var skillDays = generatedMaxSeatSkills.SkillDaysToAddToStateholder;
 
+
 			using (_resourceCalculationContextFactory.Create(schedules, generatedMaxSeatSkills.SkillsToAddToStateholder))
 			{
-				_resourceCalculation.ResourceCalculate(period, new ResourceCalculationData(schedules, generatedMaxSeatSkills.SkillsToAddToStateholder, skillDays, false, false));
-
 				foreach (var date in period.DayCollection())
 				{
 					foreach (var skillPair in skillDays)
@@ -46,14 +43,12 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 								if (skillDay.CurrentDate != date)
 									continue; //FIX LATER
 
-								if (skillStaffPeriod.Payload.CalculatedUsedSeats <= skillStaffPeriod.Payload.MaxSeats)
-									continue;
-
-							
-
 								//hitta gubbe random?
 								foreach (var person in persons)
 								{
+									if (ResourceCalculationContext.Fetch().ActivityResourcesWhereSeatRequired(skillDay.Skill, skillStaffPeriod.Period) <= skillStaffPeriod.Payload.MaxSeats)
+										continue;
+
 									//BEST SHIFT STUFF
 									var timeZone = person.PermissionInformation.DefaultTimeZone();
 									var personPeriod = person.Period(date);
@@ -66,8 +61,11 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 
 									//REPLACE SHIFT
 									var schedule = schedules[person].ScheduledDay(date);
+									var tempAssLengthPeriodBeforeREMOVEME = schedule.PersonAssignment(true).Period.ElapsedTime();
 									schedule.AddMainShift(bestShift);
-									schedules.Modify(schedule, new DoNothingScheduleDayChangeCallBack());
+									var tempAssLEngthPeriodAfterREMOVEME = schedule.PersonAssignment(true).Period.ElapsedTime();
+									if(tempAssLEngthPeriodAfterREMOVEME == tempAssLengthPeriodBeforeREMOVEME)
+										schedules.Modify(schedule, _scheduleDayChangeCallback);
 								}
 							}
 						}
