@@ -20,13 +20,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			var workloadList = new List<WorkloadInfo>();
 			var dbCommand = new DatabaseCommand(CommandType.StoredProcedure, "mart.web_intraday_simulator_get_workloads", _connectionString);
 			
-			var parameterList = new[]
-												{
-													 new SqlParameter("today", DateTime.Now.Date),
-													 new SqlParameter("@time_zone_code", TimeZoneInfo.Local.Id)
-												};
-
-			DataSet resultSet = dbCommand.ExecuteDataSet(parameterList);
+			DataSet resultSet = dbCommand.ExecuteDataSet(new List<SqlParameter>().ToArray());
 
 			if (resultSet == null || resultSet.Tables.Count == 0)
 			{
@@ -35,12 +29,14 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 
 			var table = resultSet.Tables[0];
 			var previousWorkloadId = -2;
+			var previousWorkloadCode = new Guid();
 			var previousSkillName = String.Empty;
 			WorkloadInfo workloadInfo = null;
 
 			foreach (DataRow row in table.Rows)
 			{
 				var workloadId = (int) row["WorkloadId"];
+				var workloadCode = (Guid) row["WorkloadCode"];
 				var skillName = (string)row["SkillName"];
 				if (workloadId != previousWorkloadId)
 				{
@@ -50,6 +46,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 					workloadInfo = new WorkloadInfo
 					{
 						WorkloadId = workloadId, 
+						WorkloadCode = workloadCode,
 						SkillName = skillName,
 						Queues = new List<QueueInfo>()
 					};
@@ -58,11 +55,12 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 				workloadInfo.Queues.Add(new QueueInfo
 				{
 					QueueId = (int)row["QueueId"],
+					QueueName = (string)row["QueueName"],
 					DatasourceId = (int)row["DatasourceId"],
-					HasDataToday = (bool)row["HasQueueStats"]
 				});
 
 				previousWorkloadId = workloadId;
+				previousWorkloadCode = workloadCode;
 				previousSkillName = skillName;
 			}
 
@@ -72,6 +70,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 				workloadInfo = new WorkloadInfo
 				{
 					WorkloadId = previousWorkloadId,
+					WorkloadCode = previousWorkloadCode,
 					SkillName = previousSkillName,
 					Queues = new List<QueueInfo>()
 				};

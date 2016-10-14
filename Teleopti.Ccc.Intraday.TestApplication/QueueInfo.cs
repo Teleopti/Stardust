@@ -3,7 +3,7 @@
 	public class QueueInfo
 	{
 		public int QueueId { get; set; }
-		public bool HasDataToday { get; set; }
 		public int DatasourceId { get; set; }
+		public string QueueName { get; set; }
 	}
 }

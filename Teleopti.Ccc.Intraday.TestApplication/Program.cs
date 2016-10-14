@@ -10,18 +10,19 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 {
 	class Program
 	{
-        private static readonly object syncLock = new object();
-        private static readonly Random random = new Random();
-        static void Main(string[] args)
+		private static readonly object syncLock = new object();
+		private static readonly Random random = new Random();
+		static void Main(string[] args)
 		{
-			string connectionString = ConfigurationManager.AppSettings["analyticsConnectionString"];
-			IForecastProvider forecastProvider = new ForecastProvider(connectionString);
-			IWorkloadQueuesProvider workloadQueuesProvider = new WorkloadQueuesProvider(connectionString);
+			string analyticsConnectionString = ConfigurationManager.AppSettings["analyticsConnectionString"];
+			string appDbConnectonString = ConfigurationManager.AppSettings["appConnectionString"];
+			IForecastProvider forecastProvider = new ForecastProvider(analyticsConnectionString);
+			IWorkloadQueuesProvider workloadQueuesProvider = new WorkloadQueuesProvider(analyticsConnectionString);
 			IDictionary<int, IList<QueueInterval>> queueDataDictionary = new Dictionary<int, IList<QueueInterval>>();
-			IQueueDataPersister queueDataPersister = new QueueDataPersister(connectionString);
-			TimeZoneprovider timeZoneprovider = new TimeZoneprovider(connectionString);
+			IQueueDataPersister queueDataPersister = new QueueDataPersister(analyticsConnectionString);
+			TimeZoneprovider timeZoneprovider = new TimeZoneprovider(analyticsConnectionString);
 			var timeZoneIntervalLength = timeZoneprovider.Provide();
-			var doReplace = false;
+			UniqueQueueProvider uniqueQueueProvider = new UniqueQueueProvider(appDbConnectonString, analyticsConnectionString);
 
 			Console.WriteLine("This tool will generate queue statistics for today for forecasted skills.");
 			Console.WriteLine("");
@@ -36,12 +37,6 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			Console.ReadKey();
 			Console.WriteLine("");
 			Console.WriteLine("");
-			Console.WriteLine("Replace queue statistics for today? (Y/N)");
-			ConsoleKeyInfo replace = Console.ReadKey();
-			if (replace.KeyChar.ToString().ToUpper().Equals("Y"))
-			{
-				doReplace = true;
-			}
 
 			var time = IntervalHelper.GetValidIntervalTime(timeZoneIntervalLength.IntervalLength, DateTime.Now);
 			Console.WriteLine("");
@@ -56,36 +51,31 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 					Console.ReadKey();
 					return;
 				}
-				
+
 				time = IntervalHelper.GetValidIntervalTime(timeZoneIntervalLength.IntervalLength, time);
-            }
-            Console.WriteLine("");
-            Console.WriteLine("We're doing stuff. Please hang around...");
+			}
 
-            var currentInterval = IntervalHelper.GetIntervalId(timeZoneIntervalLength.IntervalLength, time);
+			Console.WriteLine("");
+			Console.WriteLine("We're doing stuff. Please hang around...");
 
+			var timeUtc = TimeZoneInfo.Local.SafeConvertTimeToUtc(DateTime.SpecifyKind(time, DateTimeKind.Unspecified));
+			var currentIntervalUtc = IntervalHelper.GetIntervalId(timeZoneIntervalLength.IntervalLength, timeUtc);
 
 			var workloads = workloadQueuesProvider.Provide();
 
 			foreach (var workloadInfo in workloads)
 			{
-				var targetQueue = getTargetQueue(workloadInfo.Queues, doReplace);
-				if (targetQueue == null)
-					continue;
-
-				if (queueDataDictionary.ContainsKey(targetQueue.QueueId))
-					continue;
-
-				var forecastIntervals = forecastProvider.Provide(workloadInfo.WorkloadId, currentInterval);
-
+				var forecastIntervals = forecastProvider.Provide(workloadInfo.WorkloadId, currentIntervalUtc);
 
 				if (forecastIntervals.Count == 0 || Math.Abs(forecastIntervals.Sum(x => x.Calls)) < 0.001)
 					continue;
 
+				var targetQueue = uniqueQueueProvider.Get(workloadInfo);
+
 				queueDataDictionary.Add(targetQueue.QueueId, generateQueueDataIntervals(forecastIntervals, targetQueue));
 			}
 
-			queueDataPersister.Persist(queueDataDictionary, doReplace);
+			queueDataPersister.Persist(queueDataDictionary);
 
 			var skillsContainingQueue = new List<string>();
 
@@ -101,7 +91,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 							{
 								skillsContainingQueue.Add(workload.SkillName);
 							}
-							
+
 						}
 					}
 				}
@@ -131,19 +121,19 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			Console.ReadKey();
 		}
 
-        private static int RandomNumber(int min, int max)
-        {
-            lock (syncLock)
-            { // synchronize
-                return random.Next(min, max);
-            }
-        }
+		private static int RandomNumber(int min, int max)
+		{
+			lock (syncLock)
+			{ // synchronize
+				return random.Next(min, max);
+			}
+		}
 
 
-        private static IList<QueueInterval> generateQueueDataIntervals(IList<ForecastInterval> forecastIntervals, QueueInfo targetQueue)
+		private static IList<QueueInterval> generateQueueDataIntervals(IList<ForecastInterval> forecastIntervals, QueueInfo targetQueue)
 		{
 			var queueDataList = new List<QueueInterval>();
-           
+
 			foreach (var interval in forecastIntervals)
 			{
 				if (Math.Abs(interval.Calls) < 0.0001)
@@ -152,53 +142,44 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 				var algorithmProperties = getAlgorithmProperties(forecastIntervals);
 
 				var index = forecastIntervals.IndexOf(interval);
-			    var forecastedAverageHandleTime = interval.Calls > 0 ? interval.HandleTime/interval.Calls : 0;                             
-			    var offeredCalls = (decimal) Math.Round(
-			        (interval.Calls + 1) +
-			        algorithmProperties.CallsConstant*index*(1 - ((double) index/algorithmProperties.IntervalCount)),
-			        0);
-			    var answeredCalls = Math.Round((offeredCalls * RandomNumber(80, 100)) / 100, 0);
-			    var actualHandleTime = forecastedAverageHandleTime*(double)answeredCalls;
-                var talkTime = actualHandleTime * (interval.TalkTime/interval.HandleTime);
-                var acw = actualHandleTime * (interval.AfterTalkTime / interval.HandleTime);
-                var speedOfAnswer = createSpeedOfAnswer(answeredCalls);
-			    var isASAWithinSL = speedOfAnswer / answeredCalls <= 20;
-			    var answeredCallsWithinSL = isASAWithinSL
-			        ? Math.Round(answeredCalls* RandomNumber(100, 100)/100, 0)
-			        : Math.Round(answeredCalls * RandomNumber(100, 100) / 100, 0);
-                var queueData = new QueueInterval()
+				var forecastedAverageHandleTime = interval.Calls > 0 ? interval.HandleTime / interval.Calls : 0;
+				var offeredCalls = (decimal)Math.Round(
+					 (interval.Calls + 1) +
+					 algorithmProperties.CallsConstant * index * (1 - ((double)index / algorithmProperties.IntervalCount)),
+					 0);
+				var answeredCalls = Math.Round((offeredCalls * RandomNumber(80, 100)) / 100, 0);
+				var actualHandleTime = forecastedAverageHandleTime * (double)answeredCalls;
+				var talkTime = actualHandleTime * (interval.TalkTime / interval.HandleTime);
+				var acw = actualHandleTime * (interval.AfterTalkTime / interval.HandleTime);
+				var speedOfAnswer = createSpeedOfAnswer(answeredCalls);
+				var isASAWithinSL = speedOfAnswer / answeredCalls <= 20;
+				var answeredCallsWithinSL = isASAWithinSL
+					 ? Math.Round(answeredCalls * RandomNumber(100, 100) / 100, 0)
+					 : Math.Round(answeredCalls * RandomNumber(100, 100) / 100, 0);
+				var queueData = new QueueInterval()
 				{
 					DateId = interval.DateId,
 					IntervalId = interval.IntervalId,
 					QueueId = targetQueue.QueueId,
 					DatasourceId = targetQueue.DatasourceId,
 					OfferedCalls = offeredCalls,
-                    AnsweredCalls = answeredCalls,
-                    AbandonedCalls = offeredCalls - answeredCalls,
-                    TalkTime = (decimal) talkTime,
-					Acw = (decimal) acw,
+					AnsweredCalls = answeredCalls,
+					AbandonedCalls = offeredCalls - answeredCalls,
+					TalkTime = (decimal)talkTime,
+					Acw = (decimal)acw,
 					HandleTime = new decimal(talkTime + acw),
-                    SpeedOfAnswer = speedOfAnswer,
-                    AnsweredCallsWithinSL = answeredCallsWithinSL                   
-                };
+					SpeedOfAnswer = speedOfAnswer,
+					AnsweredCallsWithinSL = answeredCallsWithinSL
+				};
 				queueDataList.Add(queueData);
 			}
 
 			return queueDataList;
 		}
 
-	    private static decimal createSpeedOfAnswer(decimal offeredCalls)
-	    {
-	        return offeredCalls * RandomNumber(5, 28);
-        }
-
-	    private static QueueInfo getTargetQueue(IEnumerable<QueueInfo> queues, bool doReplace)
+		private static decimal createSpeedOfAnswer(decimal offeredCalls)
 		{
-			var queueInfos = queues as QueueInfo[] ?? queues.ToArray();
-			if (!doReplace && queueInfos.Any(x => x.HasDataToday))
-				return null;
-
-			return queueInfos.First();
+			return offeredCalls * RandomNumber(5, 28);
 		}
 
 		private static AlgorithmProperties getAlgorithmProperties(IList<ForecastInterval> forecastIntervals)

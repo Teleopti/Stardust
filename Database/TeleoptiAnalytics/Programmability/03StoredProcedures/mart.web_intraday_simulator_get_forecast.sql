@@ -7,10 +7,9 @@ GO
 -- Create date: 2016-03-31
 -- Description:	Load forecast data for given workload. Used by  for web intraday
 -- =============================================
--- EXEC [mart].[web_intraday_simulator_get_forecast] 8, 'W. Europe Standard Time', '2016-10-06', 48
+-- EXEC [mart].[web_intraday_simulator_get_forecast] 8, '2016-10-12', 40
 CREATE PROCEDURE [mart].[web_intraday_simulator_get_forecast]
 @workload_id int,
-@time_zone_code nvarchar(100),
 @today smalldatetime,
 @interval_id int
 
@@ -18,7 +17,6 @@ AS
 BEGIN
 	SET NOCOUNT ON;
             
-	DECLARE @time_zone_id as int
 	DECLARE @default_scenario_id int
 	DECLARE @bu_id int
 	
@@ -28,8 +26,6 @@ BEGIN
 	FROM mart.dim_scenario 
 	WHERE business_unit_id = @bu_id
 		AND default_scenario = 1
-					
-	SELECT @time_zone_id = time_zone_id FROM mart.dim_time_zone WHERE time_zone_code = @time_zone_code
 	
 	SELECT 
 		fw.date_id,
@@ -40,15 +36,12 @@ BEGIN
 		fw.forecasted_handling_time_s
 	FROM
 		mart.fact_forecast_workload fw
-		INNER JOIN mart.bridge_time_zone bz ON fw.date_id = bz.date_id AND fw.interval_id = bz.interval_id
-		INNER JOIN mart.dim_date d ON bz.local_date_id = d.date_id
-		INNER JOIN mart.dim_interval i ON bz.local_interval_id = i.interval_id
+		INNER JOIN mart.dim_date d ON fw.date_id = d.date_id
 	WHERE
 		fw.workload_id = @workload_id
 		AND fw.scenario_id = @default_scenario_id
-		AND bz.time_zone_id = @time_zone_id
 		AND d.date_date = @today
-		AND i.interval_id < @interval_id
+		AND fw.interval_id < @interval_id
 	ORDER BY
 		fw.date_id, fw.interval_id
 END

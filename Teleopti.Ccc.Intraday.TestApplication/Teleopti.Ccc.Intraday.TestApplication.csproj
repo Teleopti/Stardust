@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -12,7 +12,7 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
-	<SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -59,7 +59,6 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ForecastProvider.cs" />
-    <Compile Include="ForecastProviderFake.cs" />
     <Compile Include="Infrastructure\BulkWriter.cs" />
     <Compile Include="Infrastructure\CloudSafeSqlExecute.cs" />
     <Compile Include="Infrastructure\DatabaseCommand.cs" />
@@ -72,13 +71,13 @@
     <Compile Include="Program.cs" />
     <Compile Include="QueueDataPersister.cs" />
     <Compile Include="QueueInterval.cs" />
-    <Compile Include="QueueDataPersisterFake.cs" />
     <Compile Include="QueueInfo.cs" />
+    <Compile Include="TimeZoneInfoExtensions.cs" />
     <Compile Include="TimeZoneInterval.cs" />
     <Compile Include="TimeZoneprovider.cs" />
+    <Compile Include="UniqueQueueProvider.cs" />
     <Compile Include="WorkloadInfo.cs" />
     <Compile Include="WorkloadQueuesProvider.cs" />
-    <Compile Include="WorkloadQueuesProviderFake.cs" />
     <Compile Include="Infrastructure\SqlTransientErrorChecker.cs" />
   </ItemGroup>
   <ItemGroup>

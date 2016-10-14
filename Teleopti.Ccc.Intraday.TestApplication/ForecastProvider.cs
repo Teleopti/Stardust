@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			var parameterList = new[]
 												{
 													 new SqlParameter("@workload_id", workloadId),	
-													 new SqlParameter("@time_zone_code", TimeZoneInfo.Local.Id),
 													 new SqlParameter("@today", DateTime.Now.Date),
 													 new SqlParameter("@interval_id", intervalId)
 												};
