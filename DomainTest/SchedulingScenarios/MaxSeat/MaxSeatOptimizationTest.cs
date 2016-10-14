@@ -8,8 +8,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -19,31 +17,33 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 	public class MaxSeatOptimizationTest
 	{
 		public MaxSeatOptimization Target;
-		public FakePersonRepository PersonRepository; //TA bort sen
-		public FakePersonAssignmentRepository PersonAssignmentRepository; //TA bort sen
-		public IScheduleStorage ScheduleStorage; //TA BORT SEN
 
 		[Test]
-		public void ShouldConsiderMaxSeat()
+		public void ShouldMoveShiftAwayFromMaxSeatPeak()
 		{
 			var activity = new Activity("_") {RequiresSeat = true};
 			var dateOnly = DateOnly.Today;
 			var scenario = new Scenario("_");
-			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 9, 0, 60), new TimePeriodWithSegment(16, 0, 17, 0, 60), shiftCategory));
 			var site = new Site("_")
 			{
 				MaxSeats = 1
 			};
-			var agentScheduledForAnHour = PersonRepository.Has(new Contract("contract"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = site }, schedulePeriod, ruleSet);
-			PersonAssignmentRepository.Has(agentScheduledForAnHour, scenario, activity, shiftCategory, dateOnly, new TimePeriod(8, 0, 9, 0)); //should force other agent to start 9
-			var agent = PersonRepository.Has(new Contract("contract"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = site }, schedulePeriod, ruleSet);
-			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, dateOnly, new TimePeriod(8, 0, 16, 0));
-
-			//FIXA SEN
-			var schedules = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateOnly.ToDateOnlyPeriod().ToDateTimePeriod(TimeZoneInfo.Utc)), scenario, new PersonProvider(new[] { agentScheduledForAnHour, agent }), new ScheduleDictionaryLoadOptions(false, false, false), new[] { agentScheduledForAnHour, agent });
-			//
+			var team = new Team {Site = site};
+			var agentScheduledForAnHour = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			var assigmentHour = new PersonAssignment(agentScheduledForAnHour, scenario, dateOnly);
+			assigmentHour.AddActivity(activity, new TimePeriod(8, 0, 9, 0)); //should force other agent to start 9
+			assigmentHour.SetShiftCategory(shiftCategory);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1);
+			var personPeriod = new PersonPeriod(dateOnly.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = new RuleSetBag(ruleSet) };
+			agent.AddPersonPeriod(personPeriod);
+			agent.AddSchedulePeriod(schedulePeriod);
+			var assignmentToBeMoved = new PersonAssignment(agent, scenario, dateOnly);
+			assignmentToBeMoved.AddActivity(activity, new TimePeriod(8, 0, 16, 0)); 
+			assignmentToBeMoved.SetShiftCategory(shiftCategory);
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] {assigmentHour, assignmentToBeMoved});
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] {agentScheduledForAnHour, agent}, schedules, scenario);
 

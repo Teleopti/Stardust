@@ -51,6 +51,8 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 								//BEST SHIFT STUFF
 								var timeZone = person.PermissionInformation.DefaultTimeZone();
 								var personPeriod = person.Period(skillDay.CurrentDate);
+								if(personPeriod==null)
+									continue;
 								var bag = personPeriod.RuleSetBag;
 								var bestShift = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(skillDay.CurrentDate, timeZone, bag, false, true).Last().TheMainShift;
 								//
