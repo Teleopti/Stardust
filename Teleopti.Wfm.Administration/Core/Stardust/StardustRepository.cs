@@ -99,6 +99,44 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			return jobs;
 		}
 
+		public IList<Job> GetAllRunningJobs()
+		{
+			var jobs = new List<Job>();
+
+			using (var sqlConnection = new SqlConnection(_connectionString))
+			{
+				sqlConnection.OpenWithRetry(_retryPolicy);
+				var selectCommandText = @"SELECT  [JobId]
+											  ,[Name]
+											  ,[Created]
+											  ,[CreatedBy]
+											  ,[Started]
+											  ,[Ended]
+											  ,[Serialized]
+											  ,[Type]
+											  ,[SentToWorkerNodeUri]
+											  ,[Result]
+										  FROM [Stardust].[Job] 
+											WHERE Ended IS NULL order by Created desc";
+				using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
+				{
+					using (var sqlDataReader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
+					{
+						if (sqlDataReader.HasRows)
+						{
+							while (sqlDataReader.Read())
+							{
+								var job = createJobFromSqlDataReader(sqlDataReader);
+								setTotalDuration(job);
+								jobs.Add(job);
+							}
+						}
+					}
+				}
+			}
+			return jobs;
+		}
+
 		public Job GetJobByJobId(Guid jobId)
 		{
 			var job = new Job();

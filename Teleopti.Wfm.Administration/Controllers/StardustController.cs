@@ -21,6 +21,13 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Ok(_stardustRepository.GetAllJobs());
 		}
 
+		[HttpGet, Route("Stardust/RunningJobs")]
+		public IHttpActionResult RunningJobsList()
+		{
+			return Ok(_stardustRepository.GetAllRunningJobs());
+		}
+
+
 		[HttpGet, Route("Stardust/JobsByNode/{nodeId}")]
 		public IHttpActionResult JobHistoryList(Guid nodeId)
 		{

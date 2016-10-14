@@ -19,7 +19,17 @@
         	    if (xhr !== "") {
         	        vm.JobError = vm.JobError + " " + xhr.Message + ': ' + xhr.ExceptionMessage;
 	            } 
-        	});
+        });
+
+        $http.get("./Stardust/RunningJobs", tokenHeaderService.getHeaders()).success(function (data) {
+        	vm.RunningJobs = data;
+        }).error(function (xhr, ajaxOptions, thrownError) {
+        	console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+        	vm.JobError = ajaxOptions;
+        	if (xhr !== "") {
+        		vm.JobError = vm.JobError + " " + xhr.Message + ': ' + xhr.ExceptionMessage;
+        	}
+        });
 
         $http.get("./Stardust/QueuedJobs", tokenHeaderService.getHeaders()).success(function (data) {
         	vm.QueuedJobs = data;
