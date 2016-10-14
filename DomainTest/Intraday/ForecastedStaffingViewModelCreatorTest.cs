@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -86,6 +87,57 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.UpdatedForecastedStaffing.Length.Should().Be.EqualTo(2);
 			vm.DataSeries.UpdatedForecastedStaffing.First().Should().Be.EqualTo(null);
 			var expectedUpdatedForecastOnLastInterval = vm.DataSeries.ForecastedStaffing.Last() * 1.2;
+			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(expectedUpdatedForecastOnLastInterval);
+		}
+
+		[Test]
+		public void ShouldReturnUpdatedStaffingForecastCorrectlyWithMoreThanOneWorkload()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+
+			var scenario = fakeScenarioAndIntervalLength();
+
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30));
+
+			SkillRepository.Has(skill);
+
+			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
+
+			IWorkload workload = new Workload(skill);
+			workload.Description = "second workload";
+			workload.Name = "second name from factory";
+			workload.TemplateWeekCollection.ForEach(x => x.Value.ChangeOpenHours(new List<TimePeriod> { new TimePeriod(8, 0, 8, 30) }));
+			var workloadDay = new WorkloadDay();
+			workloadDay.CreateFromTemplate(new DateOnly(userNow), workload,
+				(IWorkloadDayTemplate)workload.GetTemplate(TemplateTarget.Workload, userNow.DayOfWeek));
+			skillDay.AddWorkloadDay(workloadDay);
+
+			skillDay.WorkloadDayCollection.First().TaskPeriodList[0].Tasks = 5;
+			skillDay.WorkloadDayCollection.Last().TaskPeriodList[0].Tasks = 10;
+
+			var actualCallsPerSkill = skillDay.WorkloadDayCollection.First().TaskPeriodList[0].Tasks +
+									  skillDay.WorkloadDayCollection.Last().TaskPeriodList[0].Tasks;
+
+			SkillDayRepository.Add(skillDay);
+
+			var actualIntervals = new List<SkillIntervalStatistics>
+			{
+				new SkillIntervalStatistics
+				{
+					SkillId = skill.Id.Value,
+					StartTime = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc),
+					Calls = actualCallsPerSkill * 1.2d
+				},
+			};
+
+			IntradayQueueStatisticsLoader.Has(actualIntervals);
+
+			var vm = Target.Load(new[] { skill.Id.Value });
+
+			vm.DataSeries.UpdatedForecastedStaffing.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.UpdatedForecastedStaffing.First().Should().Be.EqualTo(null);
+			var expectedUpdatedForecastOnLastInterval = vm.DataSeries.ForecastedStaffing.Last() * 1.2d;
 			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(expectedUpdatedForecastOnLastInterval);
 		}
 
