@@ -6,7 +6,7 @@ GO
 
 --bug #41161 - Remove any remaining duplicates
 WITH cte as(
-  SELECT ROW_NUMBER() OVER (PARTITION BY PersonId,DataSourceId,StateCode,ReceivedTime
+  SELECT ROW_NUMBER() OVER (PARTITION BY PersonId,DataSourceId,StateCode
                             ORDER BY  ReceivedTime DESC ) RN
   FROM   dbo.AgentState
   )
