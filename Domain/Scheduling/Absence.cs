@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         private bool isPermittedToSeePayloadInfo(IPerson assignedPerson)
         {
-            var principal = TeleoptiPrincipal.CurrentPrincipal;
+            var principal = ServiceLocatorForLegacy.CurrentTeleoptiPrincipal.Current();
 	        var dateOnly = DateOnly.Today;
 
 			if (assignedPerson != null && assignedPerson.IsTerminated() && assignedPerson.PersonPeriodCollection.Count > 0)
