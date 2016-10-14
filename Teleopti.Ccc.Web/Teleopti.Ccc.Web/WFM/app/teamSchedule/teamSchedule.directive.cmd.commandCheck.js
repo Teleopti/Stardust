@@ -40,9 +40,9 @@
 		elem.removeAttr('tabindex');
 	}
 
-	commandCheckCtrl.$inject = ['$scope', '$translate', 'CommandCheckService', 'PersonSelection', 'ScheduleManagement'];
+	commandCheckCtrl.$inject = ['$scope', '$translate', 'CommandCheckService', 'ScheduleManagement'];
 
-	function commandCheckCtrl($scope, $translate, CommandCheckService, personSelectionSvc, ScheduleManagementSvc) {
+	function commandCheckCtrl($scope, $translate, CommandCheckService, ScheduleManagementSvc) {
 		var vm = this;
 		vm.showCheckbox = false;
 
@@ -55,11 +55,15 @@
 			personSelectionSvc.toggleAllPersonProjections(agent, vm.getDate());
 		};
 
-		vm.toggleAllPersonSelection = function(isSelected) {			
-			vm.agentSchedulesList.forEach(function (agent) {
-				agent.scheduleVm.IsSelected = isSelected;
-				personSelectionSvc.updatePersonSelection(agent.scheduleVm);
-			});			
+		function getAgentListModifier(keepAgents) {
+			var checkFailedAgentIdList = vm.checkFailedAgentList.map(function(agent) { return agent.personId; });
+			return function (requestData) {
+				if (keepAgents) return requestData;
+				requestData.PersonIds = requestData.PersonIds.filter(function(id) {
+					return checkFailedAgentIdList.indexOf(id) < 0;
+				});
+				return requestData;
+			}	
 		};
 
 		function getTooltipMessageForAgent(overlappedLayers) {
@@ -72,23 +76,21 @@
 			return result;
 		}
 
-		vm.applyCommandFix = function () {
-			var moveConflictLayerAllowed = false;
+		vm.applyCommandFix = function () {	
 			vm.config.actionOptions.forEach(function (option) {
 				if (option == vm.currentActionOptionValue) {
-					if (option == 'DoNotModifyForTheseAgents') {
-						vm.toggleAllPersonSelection(false);
-					} else if (option == 'OverrideForTheseAgents') {
-						vm.toggleAllPersonSelection(true);
+					if (option == 'DoNotModifyForTheseAgents') {					
+						CommandCheckService.completeCommandCheck(getAgentListModifier(false));
+					} else if (option == 'OverrideForTheseAgents') {						
+						CommandCheckService.completeCommandCheck(getAgentListModifier(true));
 					} else if (option == 'MoveNonoverwritableActivityForTheseAgents') {
-						moveConflictLayerAllowed = true;
+						CommandCheckService.completeCommandCheck(function (requestData) {
+							requestData.MoveConflictLayerAllowed = true;
+							return requestData;
+						});
 					}
 				}
-			});
-
-			CommandCheckService.completeCommandCheck({
-				moveConflictLayerAllowed: moveConflictLayerAllowed
-			});
+			});		
 		};
 
 		vm.init = function() {

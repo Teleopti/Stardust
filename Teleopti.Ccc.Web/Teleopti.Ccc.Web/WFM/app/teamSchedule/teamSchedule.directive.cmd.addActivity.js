@@ -48,13 +48,7 @@
 			}
 		};
 
-		var addActivity = function (option) {
-			var requestData = getRequestData();
-
-			if (option && option.moveConflictLayerAllowed) {
-				requestData.MoveConflictLayerAllowed = true;
-			}
-
+		var addActivity = function (requestData) {				
 			if(requestData.PersonIds.length > 0){
 				activityService.addActivity(requestData).then(function (response) {
 					if (vm.getActionCb(vm.label)) {
@@ -97,15 +91,16 @@
 		}
 
 		vm.addActivity = function () {
+			var requestData = getRequestData();
 			if (vm.checkCommandActivityLayerOrders){
 				vm.checkingCommand = true;
-				CommandCheckService.checkAddActivityOverlapping(getRequestData())
-					.then(function(option) {
-						addActivity(option);
+				CommandCheckService.checkAddActivityOverlapping(requestData)
+					.then(function(data) {
+						addActivity(data);
 					});
 			}
 			else
-				addActivity();
+				addActivity(requestData);
 		};
 
 		vm.getDefaultActvityStartTime =  function () {

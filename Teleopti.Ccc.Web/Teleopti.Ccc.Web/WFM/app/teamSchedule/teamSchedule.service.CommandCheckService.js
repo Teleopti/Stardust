@@ -86,8 +86,9 @@
 			commandCheckedStatus = false;
 		}
 
-		function completeCommandCheck(option) {
-			commandCheckDeferred.resolve(option);
+		function completeCommandCheck(requestDataTransformer) {
+			var requestData = getRequestData();
+			commandCheckDeferred.resolve(requestDataTransformer ? requestDataTransformer(requestData) : requestData);
 		}
 
 		function getCheckFailedAgentList() {

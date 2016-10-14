@@ -43,8 +43,7 @@
 			return dateStr + 'T' + timeStr;
 		};
 
-	    function moveActivity() {
-	    	var requestData = getRequestData();
+	    function moveActivity(requestData) {
 	    	if(requestData.PersonActivities.length > 0){
 				activityService.moveActivity(requestData).then(function (response) {
 					var personIds = requestData.PersonActivities.map(function (agent) { return agent.PersonId; });
@@ -91,6 +90,7 @@
 	    }
 
 	    vm.moveActivity = function () {
+		    var requestData = getRequestData();
 	    	var multiActivitiesSelectedAgentsList = vm.selectedAgents.filter(function (x) {
 	    		return (Array.isArray(x.SelectedActivities) && x.SelectedActivities.length > 1);
 	    	});
@@ -104,10 +104,12 @@
 
 			if (vm.checkCommandActivityLayerOrders){
 				vm.checkingCommand = true;
-				CommandCheckService.checkMoveActivityOverlapping(getRequestData()).then(moveActivity);
+				CommandCheckService.checkMoveActivityOverlapping(requestData).then(function(data) {
+					moveActivity(data);
+				});
 			}
 			else
-				moveActivity();
+				moveActivity(requestData);
 		}
 	}
 

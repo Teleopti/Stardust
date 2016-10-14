@@ -48,8 +48,7 @@
 			}
 		};
 
-		function addPersonalActivity() {
-			var requestData = getRequestData();
+		function addPersonalActivity(requestData) {
 			if(requestData.PersonIds.length > 0){
 				activityService.addPersonalActivity(requestData).then(function (response) {
 					if (vm.getActionCb(vm.label)) {
@@ -91,13 +90,16 @@
 			};
 		}
 
-		vm.addPersonalActivity = function() {
+		vm.addPersonalActivity = function () {
+			var requestData = getRequestData();
 			if (vm.checkCommandActivityLayerOrders){
 				vm.checkingCommand = true;
-				CommandCheckService.checkAddPersonalActivityOverlapping(getRequestData()).then(addPersonalActivity);
+				CommandCheckService.checkAddPersonalActivityOverlapping(requestData).then(function(data) {
+					addPersonalActivity(data);
+				});
 			}
 			else
-				addPersonalActivity();
+				addPersonalActivity(requestData);
 		};
 
 		vm.getDefaultActvityStartTime = function() {
