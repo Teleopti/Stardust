@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core;
 using Teleopti.Ccc.Web.Areas.Global;
@@ -23,15 +21,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldGetSkillsAndWorkloads()
 		{
-			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
-			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
-			var skill1 = SkillFactory.CreateSkillWithWorkloadAndSources();
+			var principalAuthorization = new FullPermission();
+			var skill1 = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var skillRepository = new FakeSkillRepository();
+			skillRepository.Has(skill1);
 			var forecastMisc = MockRepository.GenerateMock<IForecastMisc>();
 			var workload = skill1.WorkloadCollection.Single();
 			var workloadName = skill1.Name + " - " + workload.Name;
 			forecastMisc.Stub(x => x.WorkloadName(skill1.Name, workload.Name)).Return(workloadName);
-			skill1.SetId(Guid.NewGuid());
-			skillRepository.Stub(x => x.FindSkillsWithAtLeastOneQueueSource()).Return(new[] {skill1});
 			var target = new ForecastController(null, skillRepository, null, null, null, new BasicActionThrottler(), null, null, null, null, principalAuthorization, forecastMisc);
 			var result = target.Skills();
 			result.Skills.Single().Id.Should().Be.EqualTo(skill1.Id.Value);
@@ -42,12 +39,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldHavePermissionForModifySkill()
 		{
-			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
-			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
-
-			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkill)).Return(true);
-			skillRepository.Stub(x => x.FindSkillsWithAtLeastOneQueueSource()).Return(new List<ISkill>());
-
+			var principalAuthorization = new FullPermission();
+			var skillRepository = new FakeSkillRepository();
+			
 			var target = new ForecastController(null, skillRepository, null, null, null, new BasicActionThrottler(), null, null, null, null, principalAuthorization, null);
 			var result = target.Skills();
 			result.IsPermittedToModifySkill.Should().Be.EqualTo(true);
@@ -56,14 +50,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldGetScenarios()
 		{
-			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
-			var scenario = new Scenario("scenario1");
-			scenario.SetId(Guid.NewGuid());
-			scenarioRepository.Stub(x => x.FindAllSorted()).Return(new IScenario[] { scenario });;
+			var scenario = new Scenario("scenario1").WithId();
+			var scenarioRepository = new FakeScenarioRepository(scenario);
 			var target = new ForecastController(null, null, null, null, null, null, scenarioRepository, null, null, null, null, null);
-			var result = target.Scenarios();
-			result.Single().Id.Should().Be.EqualTo(scenario.Id.Value);
-			result.Single().Name.Should().Be.EqualTo("scenario1");
+			var result = target.Scenarios().Single();
+			result.Id.Should().Be.EqualTo(scenario.Id.Value);
+			result.Name.Should().Be.EqualTo("scenario1");
 		}
 
 		[Test]
@@ -81,10 +73,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				BlockToken = new BlockToken(),
 				IsLastWorkload = false
 			};
-			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
-			var scenario = new Scenario("test1");
-			scenario.SetId(scenarioId);
-			scenarioRepository.Stub(x => x.Get(forecastInput.ScenarioId)).Return(scenario);
+			var scenario = new Scenario("test1").WithId(scenarioId);
+			var scenarioRepository = new FakeScenarioRepository(scenario);
 			var target = new ForecastController(forecastCreator, null, null, null, null, new BasicActionThrottler(), scenarioRepository, null, null, null, null, null);
 			var result = target.Forecast(forecastInput);
 			result.Result.Success.Should().Be.True();
@@ -96,7 +86,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		public void ShouldFinishToken()
 		{
 			var actionThrottler = MockRepository.GenerateMock<IActionThrottler>();
-			var target = new ForecastController(MockRepository.GenerateMock<IForecastCreator>(), null, null, null, null, actionThrottler, MockRepository.GenerateMock<IScenarioRepository>(), null, null, null, null, null);
+			var target = new ForecastController(MockRepository.GenerateMock<IForecastCreator>(), null, null, null, null, actionThrottler, new FakeScenarioRepository(), null, null, null, null, null);
 
 			var blockToken = new BlockToken();
 			target.Forecast(new ForecastInput
@@ -125,7 +115,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		public void ShouldUseOldToken()
 		{
 			var actionThrottler = MockRepository.GenerateMock<IActionThrottler>();
-			var target = new ForecastController(MockRepository.GenerateMock<IForecastCreator>(), null, null, null, null, actionThrottler, MockRepository.GenerateMock<IScenarioRepository>(), null, null, null, null, null);
+			var target = new ForecastController(MockRepository.GenerateMock<IForecastCreator>(), null, null, null, null, actionThrottler, new FakeScenarioRepository(), null, null, null, null, null);
 
 			var blockToken = new BlockToken();
 			target.Forecast(new ForecastInput
@@ -143,7 +133,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var actionThrottler = MockRepository.GenerateMock<IActionThrottler>();
 			var blockToken = new BlockToken();
 			actionThrottler.Stub(x => x.Block(ThrottledAction.Forecasting)).Return(blockToken);
-			var target = new ForecastController(MockRepository.GenerateMock<IForecastCreator>(), null, null, null, null, actionThrottler, MockRepository.GenerateMock<IScenarioRepository>(), null, null, null, null, null);
+			var target = new ForecastController(MockRepository.GenerateMock<IForecastCreator>(), null, null, null, null, actionThrottler, new FakeScenarioRepository(), null, null, null, null, null);
 
 			target.Forecast(new ForecastInput());
 			actionThrottler.AssertWasCalled(x => x.Pause(blockToken, TimeSpan.FromSeconds(20)));
@@ -182,8 +172,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		public void ShouldGetForecastResult()
 		{
 			var workloadId = Guid.NewGuid();
-			var scenario = new Scenario("test1");
-			scenario.SetId(Guid.NewGuid());
+			var scenario = new Scenario("test1").WithId();
 			var forecastStart = new DateTime(2014,4,1);
 			var forecastEnd = new DateTime(2014,4,29);
 			var forecastResultViewModelFactory = MockRepository.GenerateMock<IForecastResultViewModelFactory>();
@@ -191,8 +180,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			forecastResultViewModelFactory.Stub(
 				x => x.Create(workloadId, new DateOnlyPeriod(new DateOnly(forecastStart), new DateOnly(forecastEnd)), scenario))
 				.Return(workloadForecastResultViewModel);
-			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
-			scenarioRepository.Stub(x => x.Get(scenario.Id.GetValueOrDefault())).Return(scenario);
+			var scenarioRepository = new FakeScenarioRepository(scenario);
 			var target = new ForecastController(null, null, null, forecastResultViewModelFactory, null, new BasicActionThrottler(), scenarioRepository, null, null, null, null, null);
 
 			var forecastResultInput = new ForecastResultInput
@@ -234,14 +222,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				WorkloadId = Guid.NewGuid(),
 				CampaignTasksPercent = 50
 			};
+			var scenario = new Scenario("default").WithId(input.ScenarioId);
 			var campaignPersister = MockRepository.GenerateMock<ICampaignPersister>();
-			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
-			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
-			var scenario = new Scenario("default");
-			scenarioRepository.Stub(x => x.Get(input.ScenarioId)).Return(scenario);
-			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("skill"));
-			workloadRepository.Stub(x => x.Get(input.WorkloadId))
-				.Return(workload);
+			var scenarioRepository = new FakeScenarioRepository(scenario);
+			var workloadRepository = new FakeWorkloadRepository();
+			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("skill")).WithId(input.WorkloadId);
+			workloadRepository.Add(workload);
 			var target = new ForecastController(null, null, null, null, null, new BasicActionThrottler(), scenarioRepository, workloadRepository, campaignPersister, null, null, null);
 
 			var result = target.AddCampaign(input);
@@ -264,14 +250,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ShouldSetOverrideTalkTime = true,
 				ShouldSetOverrideAfterCallWork = true
 			};
+			var scenario = new Scenario("default").WithId(input.ScenarioId);
 			var overrideTasksPersister = MockRepository.GenerateMock<IOverridePersister>();
-			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
-			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
-			var scenario = new Scenario("default");
-			scenarioRepository.Stub(x => x.Get(input.ScenarioId)).Return(scenario);
-			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("skill"));
-			workloadRepository.Stub(x => x.Get(input.WorkloadId))
-				.Return(workload);
+			var scenarioRepository = new FakeScenarioRepository(scenario);
+			var workloadRepository = new FakeWorkloadRepository();
+			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("skill")).WithId(input.WorkloadId);
+			workloadRepository.Add(workload);
 			var target = new ForecastController(null, null, null, null, null, new BasicActionThrottler(), scenarioRepository, workloadRepository, null, overrideTasksPersister, null, null);
 
 			var result = target.Override(input);
@@ -295,14 +279,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ShouldSetOverrideTalkTime = true,
 				ShouldSetOverrideAfterCallWork = true
 			};
+			var scenario = new Scenario("default").WithId(input.ScenarioId);
 			var overrideTasksPersister = MockRepository.GenerateMock<IOverridePersister>();
-			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
-			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
-			var scenario = new Scenario("default");
-			scenarioRepository.Stub(x => x.Get(input.ScenarioId)).Return(scenario);
-			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("skill"));
-			workloadRepository.Stub(x => x.Get(input.WorkloadId))
-				.Return(workload);
+			var scenarioRepository = new FakeScenarioRepository(scenario);
+			var workloadRepository = new FakeWorkloadRepository();
+			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("skill")).WithId(input.WorkloadId);
+			workloadRepository.Add(workload);
 			var overrideTarget = new ForecastController(null, null, null, null, null, new BasicActionThrottler(), scenarioRepository, workloadRepository, null, overrideTasksPersister, null, null);
 			var overrideResult = overrideTarget.Override(input);
 			overrideResult.Result.Success.Should().Be.True();
@@ -326,6 +308,4 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			overrideTasksPersister.AssertWasCalled(x => x.Persist(scenario, workload, input));
 		}
 	}
-
-	
 }
