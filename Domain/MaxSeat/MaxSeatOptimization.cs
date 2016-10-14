@@ -55,14 +55,24 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 									if (personPeriod == null)
 										continue;
 									var bag = personPeriod.RuleSetBag;
-									var bestShift = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(date, timeZone, bag, false, true).Last().TheMainShift;
-									//
+									IEditableShift shiftToUse = null;
+									foreach (var shift in _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(date, timeZone, bag, false, true).Reverse()) //fix reverse soon - only to get a green build
+									{
+										var layerThisPeriod = shift.MainShiftProjection.SingleOrDefault(x => x.Period.Contains(skillStaffPeriod.Period)); //should handle "containspart" and multiple layers on period cases
+										if (layerThisPeriod == null || !((IActivity) layerThisPeriod.Payload).RequiresSeat)
+										{
+											shiftToUse = shift.TheMainShift;
+											break;
+										}
+									}
 
 
 									//REPLACE SHIFT
+									if(shiftToUse==null)
+										continue;
 									var schedule = schedules[person].ScheduledDay(date);
 									var tempAssLengthPeriodBeforeREMOVEME = schedule.PersonAssignment(true).Period.ElapsedTime();
-									schedule.AddMainShift(bestShift);
+									schedule.AddMainShift(shiftToUse);
 									var tempAssLEngthPeriodAfterREMOVEME = schedule.PersonAssignment(true).Period.ElapsedTime();
 									if(tempAssLEngthPeriodAfterREMOVEME == tempAssLengthPeriodBeforeREMOVEME)
 										schedules.Modify(schedule, _scheduleDayChangeCallback);

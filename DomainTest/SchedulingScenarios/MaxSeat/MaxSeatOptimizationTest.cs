@@ -129,5 +129,37 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).Period.StartDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(8));
 		}
+
+		[Test]
+		public void ShouldConsiderActivityRequireSeat()
+		{
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var activityRequireNoSeat = new Activity("_") {RequiresSeat = false}.WithId();
+			var dateOnly = DateOnly.Today;
+			var scenario = new Scenario("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), shiftCategory));
+			var ruleSetNotRequireSeat = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityRequireNoSeat, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), shiftCategory));
+			var site = new Site("_")
+			{
+				MaxSeats = 0
+			}.WithId();
+			var team = new Team { Site = site };
+			
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1);
+			var ruleSetBag = new RuleSetBag(ruleSetNotRequireSeat);
+			ruleSetBag.AddRuleSet(ruleSet);
+			agent.AddPersonPeriod(new PersonPeriod(dateOnly.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = ruleSetBag });
+			agent.AddSchedulePeriod(schedulePeriod);
+			var assignmentToBeMoved = new PersonAssignment(agent, scenario, dateOnly);
+			assignmentToBeMoved.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
+			assignmentToBeMoved.SetShiftCategory(shiftCategory);
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { assignmentToBeMoved });
+
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] {  agent }, schedules, scenario);
+
+			schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).ShiftLayers.First().Payload.RequiresSeat.Should().Be.False();
+		}
 	}	
 }
