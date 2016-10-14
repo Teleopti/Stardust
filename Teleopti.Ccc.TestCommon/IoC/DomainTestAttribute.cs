@@ -180,25 +180,26 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		private void fakePrincipal(ISystem system)
 		{
-			var context = QueryAllAttributes<ShareLogonOnThreadsAttribute>().Any() ? 
-				(IThreadPrincipalContext) new FakePrincipalContext() : 
+			var context = QueryAllAttributes<LoggedOnAppDomainAttribute>().Any() ? 
+				(IThreadPrincipalContext) new FakeAppDomainPrincipalContext() : 
 				new FakeThreadPrincipalContext();
 
 			var signedIn = QueryAllAttributes<LoggedOffAttribute>().IsEmpty();
 			if (signedIn)
 			{
 				// because DomainTest project has a SetupFixtureForAssembly that creates a principal and sets it to that static thing... 
-				var thePrincipal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
-				if (thePrincipal == null)
+				var existingThreadPrincipal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
+				if (existingThreadPrincipal == null)
 				{
-					var person = new Person { Name = new Name("Fake", "Login") };
+					var person = new Person {Name = new Name("Fake", "Login")};
 					person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 					person.PermissionInformation.SetCulture(CultureInfoFactory.CreateEnglishCulture());
 					person.PermissionInformation.SetUICulture(CultureInfoFactory.CreateEnglishCulture());
-					thePrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("Fake Login", null, null, null, null), person);
+					existingThreadPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("Fake Login", null, null, null, null), person);
 				}
-				context.SetCurrentPrincipal(thePrincipal);
+				context.SetCurrentPrincipal(existingThreadPrincipal);
 			}
+
 			system.UseTestDouble(context).For<IThreadPrincipalContext>();
 		}
 

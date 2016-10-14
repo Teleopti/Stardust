@@ -329,7 +329,7 @@
     <Compile Include="IoC\TestDoubles.cs" />
     <Compile Include="IoC\TestModule.cs" />
     <Compile Include="IoC\UseEventPublisherAttribute.cs" />
-    <Compile Include="IoC\ShareLogonOnThreadsAttribute.cs" />
+    <Compile Include="IoC\LoggedOnAppDomainAttribute.cs" />
     <Compile Include="MessageBrokerCompositeDummy.cs" />
     <Compile Include="ObjectCopyExtension.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAdherenceDetailsReadModelPersister.cs" />

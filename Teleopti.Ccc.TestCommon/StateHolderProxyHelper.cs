@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.TestCommon
 
 	    public static void ClearAndSetStateHolder(IPerson loggedOnPerson, IBusinessUnit businessUnit, IApplicationData appData, IDataSource logonDataSource, IState stateMock)
 	    {
-		    var principalContext = new WindowsAppDomainPrincipalContext(new ThreadPrincipalContext(), new ThreadPrincipalContext());
+		    var principalContext = new AppDomainPrincipalContext(new ThreadPrincipalContext(), new ThreadPrincipalContext());
 			loggedOnPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 		    var principal = new TeleoptiPrincipalFactory().MakePrincipal(loggedOnPerson, logonDataSource, businessUnit, null);
 		    principalContext.SetCurrentPrincipal(principal);
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.TestCommon
 			IBusinessUnit businessUnit
 			)
 		{
-			CreateSessionData(loggedOnPerson, dataSource, businessUnit, new WindowsAppDomainPrincipalContext(new ThreadPrincipalContext(), new ThreadPrincipalContext()));
+			CreateSessionData(loggedOnPerson, dataSource, businessUnit, new AppDomainPrincipalContext(new ThreadPrincipalContext(), new ThreadPrincipalContext()));
 		}
 
 		public static void CreateSessionData(

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
-	[ShareLogonOnThreads]
+	[LoggedOnAppDomain]
 	public class IntradayOptimizationIslandTests : ISetup
 	{
 		public IntradayOptimizationFromWeb Target;

@@ -4,12 +4,12 @@ using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-	public class WindowsAppDomainPrincipalContext : ICurrentPrincipalContext
+	public class AppDomainPrincipalContext : ICurrentPrincipalContext
 	{
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private readonly IThreadPrincipalContext _threadPrincipalContext;
 
-		public WindowsAppDomainPrincipalContext(
+		public AppDomainPrincipalContext(
 			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, 
 			IThreadPrincipalContext threadPrincipalContext)
 		{

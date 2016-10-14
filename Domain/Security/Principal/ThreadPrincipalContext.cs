@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 	{
 	}
 
-	public class FakePrincipalContext : IThreadPrincipalContext
+	public class FakeAppDomainPrincipalContext : IThreadPrincipalContext
 	{
 		private ITeleoptiPrincipal _principal;
 

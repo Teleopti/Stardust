@@ -553,7 +553,7 @@
     <Compile Include="Security\Principal\CurrentProcess.cs" />
     <Compile Include="Security\Principal\ThreadPrincipalContext.cs" />
     <Compile Include="Security\Principal\UserUiCulture.cs" />
-    <Compile Include="Security\Principal\WindowsAppDomainPrincipalContext.cs" />
+    <Compile Include="Security\Principal\AppDomainPrincipalContext.cs" />
     <Compile Include="ApplicationLayer\Events\SettingsForPersonPeriodChangedEvent.cs" />
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupingReadModelGroupPageUpdater.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\GroupingReadModelDataUpdater.cs" />
