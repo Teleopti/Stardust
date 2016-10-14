@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				dateOnly = assignedPerson.PersonPeriodCollection.Last().EndDate();
 
 	        return !Confidential ||
-				   principal != null ||
+				   (principal?.Organisation.IsUser(assignedPerson) ?? false) ||
 				   PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewConfidential, dateOnly, assignedPerson);
 
         }
