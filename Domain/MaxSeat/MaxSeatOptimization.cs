@@ -50,16 +50,13 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 										continue;
 
 									//BEST SHIFT STUFF
-									var timeZone = person.PermissionInformation.DefaultTimeZone();
-									var personPeriod = person.Period(date);
-									if (personPeriod == null)
-										continue;
-									var bag = personPeriod.RuleSetBag;
 									IEditableShift shiftToUse = null;
-									foreach (var shift in _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(date, timeZone, bag, false, true).Reverse()) //fix reverse soon - only to get a green build
+									var shiftLengthBeforeTEMPremoveMe = schedules[person].ScheduledDay(date).PersonAssignment(true).Period.ElapsedTime();
+									foreach (var shift in _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(date, person.PermissionInformation.DefaultTimeZone(), person.Period(date).RuleSetBag, false, true))
 									{
 										var layerThisPeriod = shift.MainShiftProjection.SingleOrDefault(x => x.Period.Contains(skillStaffPeriod.Period)); //should handle "containspart" and multiple layers on period cases
-										if (layerThisPeriod == null || !((IActivity) layerThisPeriod.Payload).RequiresSeat)
+										if ((layerThisPeriod == null || !((IActivity) layerThisPeriod.Payload).RequiresSeat)
+											&& shift.MainShiftProjection.Period().Value.ElapsedTime() == shiftLengthBeforeTEMPremoveMe) //remove this line later
 										{
 											shiftToUse = shift.TheMainShift;
 											break;
@@ -71,11 +68,8 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 									if(shiftToUse==null)
 										continue;
 									var schedule = schedules[person].ScheduledDay(date);
-									var tempAssLengthPeriodBeforeREMOVEME = schedule.PersonAssignment(true).Period.ElapsedTime();
 									schedule.AddMainShift(shiftToUse);
-									var tempAssLEngthPeriodAfterREMOVEME = schedule.PersonAssignment(true).Period.ElapsedTime();
-									if(tempAssLEngthPeriodAfterREMOVEME == tempAssLengthPeriodBeforeREMOVEME)
-										schedules.Modify(schedule, _scheduleDayChangeCallback);
+									schedules.Modify(schedule, _scheduleDayChangeCallback);
 								}
 							}
 						}
