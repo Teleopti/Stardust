@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		[Ignore("WIP")]
 		public void ShouldPersistConfidentialAbsence()
 		{
 			var person = Guid.NewGuid();
