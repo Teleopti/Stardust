@@ -39,8 +39,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			if (scenario == null || person == null)
 				return Enumerable.Empty<HistoricalAdherenceActivityViewModel>();
 
-			var from = new DateOnly(_now.UtcDateTime().AddDays(-1));
-			var to = new DateOnly(_now.UtcDateTime().AddDays(1));
+			var tz = person.PermissionInformation.DefaultTimeZone();
+			var utcDateTime = utcDateForSchedules(person);
+			var from = utcDateTime.AddDays(-1);
+			var to = utcDateTime.AddDays(1);
 
 			var period = new DateOnlyPeriod(from.AddDays(-1), to.AddDays(1));
 
@@ -53,11 +55,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			return (
 				from scheduleDay in schedules[person].ScheduledDayCollection(period)
 				from layer in scheduleDay.ProjectionService().CreateProjection()
+				where layer.Period.ToDateOnlyPeriod(tz).Contains(utcDateTime)
 				select new HistoricalAdherenceActivityViewModel
 				{
 					Color = ColorTranslator.ToHtml(layer.DisplayColor()),
-					StartTime = layer.Period.StartDateTime.ToString("yyyy-MM-ddTHH:mm:ss"),
-					EndTime = layer.Period.EndDateTime.ToString("yyyy-MM-ddTHH:mm:ss")
+					StartTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, tz).ToString("yyyy-MM-ddTHH:mm:ss"),
+					EndTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, tz).ToString("yyyy-MM-ddTHH:mm:ss")
 				})
 				.ToArray();
 		}
@@ -65,7 +68,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public HistoricalAdherenceViewModel Build(Guid personId)
 		{
 			var person = _persons.Load(personId);
-			var utcDateTime = UtcDateTime(person);
+			var tz = person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc;
+			var utcDateTime = utcDateTimeForOoa(person);
 
 			var result = _reader.Read(personId, utcDateTime, utcDateTime.AddDays(1));
 			var schedule = getCurrentSchedules(person);
@@ -75,22 +79,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				PersonId = personId,
 				AgentName = person?.Name.ToString(),
 				Schedules = schedule,
-				Now = _now.UtcDateTime().ToString("yyyy-MM-ddTHH:mm:ss"),
+				Now = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), tz).ToString("yyyy-MM-ddTHH:mm:ss"),
 				OutOfAdherences = (result?.OutOfAdherences).EmptyIfNull().Select(y =>
 				{
 					string endTime = null;
 					if (y.EndTime.HasValue)
-						endTime = y.EndTime.Value.ToString("yyyy-MM-ddTHH:mm:ss");
+						endTime = TimeZoneInfo.ConvertTimeFromUtc(y.EndTime.Value, tz).ToString("yyyy-MM-ddTHH:mm:ss");
 					return new AgentOutOfAdherenceViewModel
 					{
-						StartTime = y.StartTime.ToString("yyyy-MM-ddTHH:mm:ss"),
+						StartTime = TimeZoneInfo.ConvertTimeFromUtc(y.StartTime, tz).ToString("yyyy-MM-ddTHH:mm:ss"),
 						EndTime = endTime
 					};
 				})
 			};
 		}
 
-		private DateTime UtcDateTime(IPerson person)
+		private DateOnly utcDateForSchedules(IPerson person)
+		{
+			if (person == null)
+				return new DateOnly(_now.UtcDateTime());
+
+			var tz = person.PermissionInformation.DefaultTimeZone();
+			return new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), tz));
+		}
+
+		private DateTime utcDateTimeForOoa(IPerson person)
 		{
 			if (person == null)
 				return _now.UtcDateTime().Date;
@@ -98,8 +111,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			var tz = person.PermissionInformation.DefaultTimeZone();
 			var tzNow = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), tz);
 			var tzDate = tzNow.Date;
-			var utcDateTime = TimeZoneInfo.ConvertTimeToUtc(tzDate, tz);
-			return utcDateTime;
+			return TimeZoneInfo.ConvertTimeToUtc(tzDate, tz);
 		}
 	}
 }

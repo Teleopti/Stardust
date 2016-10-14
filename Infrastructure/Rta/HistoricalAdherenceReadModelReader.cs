@@ -32,41 +32,40 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetParameter("PersonId", personId)
 				.SetParameter("StartTime", startTime)
 				.SetParameter("EndTime", endTime)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(HIstoricalAdherenceInternalModel)))
-				.List<HIstoricalAdherenceInternalModel>();
+				.SetResultTransformer(Transformers.AliasToBean(typeof(HistoricalAdherenceInternalModel)))
+				.List<HistoricalAdherenceInternalModel>();
 
 			return BuildReadModel(result, personId);
 		}
 
-		public static HistoricalAdherenceReadModel BuildReadModel(IEnumerable<HIstoricalAdherenceInternalModel> data, Guid personId)
+		public static HistoricalAdherenceReadModel BuildReadModel(IEnumerable<HistoricalAdherenceInternalModel> data, Guid personId)
 		{
 			var seed = new HistoricalAdherenceReadModel
 			{
 				PersonId = personId
 			};
-			return data
-				  .Aggregate(seed, (x, im) =>
-				  {
-					  if (im.Adherence == 2)
-						  x.OutOfAdherences = x.OutOfAdherences
-						  .EmptyIfNull()
-						  .Append(new HistoricalOutOfAdherenceReadModel { StartTime = im.Timestamp })
-						  .ToArray();
-					  else
-					  {
-						  var existing = x.OutOfAdherences.FirstOrDefault(y => !y.EndTime.HasValue);
-						  if (existing != null)
-							  existing.EndTime = im.Timestamp;
-					  }
+			return data.Aggregate(seed, (x, im) =>
+			{
+				if (im.Adherence == 2)
+					x.OutOfAdherences = x.OutOfAdherences
+						.EmptyIfNull()
+						.Append(new HistoricalOutOfAdherenceReadModel {StartTime = im.Timestamp})
+						.ToArray();
+				else
+				{
+					var existing = x.OutOfAdherences.FirstOrDefault(y => !y.EndTime.HasValue);
+					if (existing != null)
+						existing.EndTime = im.Timestamp;
+				}
 
-					  return x;
-				  });
+				return x;
+			});
 		}
 
 		
 	}
 
-	public class HIstoricalAdherenceInternalModel
+	public class HistoricalAdherenceInternalModel
 	{
 		public Guid PersonId { get; set; }
 		public DateTime Timestamp { get; set; }
