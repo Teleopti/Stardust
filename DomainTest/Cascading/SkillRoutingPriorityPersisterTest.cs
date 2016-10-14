@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -38,14 +37,14 @@ namespace Teleopti.Ccc.DomainTest.Cascading
 		}
 
 		[Test]
-		public void ShouldThrowIfSkillsWithDifferentActivityHaveSamePrioValue()
+		public void ShouldNotThrowIfSkillsWithDifferentActivityHaveSamePrioValue()
 		{
 			var activity1 = new Activity("activity1").WithId();
 			var activity2 = new Activity("activity2").WithId();
 			var skillRoutingPriorityRows = new List<SkillRoutingPriorityModelRow>();
 			skillRoutingPriorityRows.Add(createRow(createSkill("skill1", activity1), 7));
 			skillRoutingPriorityRows.Add(createRow(createSkill("skill2", activity2), 7));
-			Assert.Throws<InvalidOperationException>(() => Target.Persist(skillRoutingPriorityRows));
+			Assert.DoesNotThrow(() => Target.Persist(skillRoutingPriorityRows));
 		}
 
 		[Test]
