@@ -186,6 +186,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			if (layer.StartTime.Equals("00:00"))
 			{
 				// not sure how to assert the length for the night shift starting from yesterday
+				Browser.Interactions.AssertExists(".shift .layer[style*='left: 0px']");
 				Browser.Interactions.AssertExistsUsingJQuery(
 					".person:contains('{0}') .shift .layer[style*='background-color: {1}'][style*='left: 0px']",
 					personName,
@@ -194,6 +195,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			}
 			else
 			{
+				Browser.Interactions.AssertExists(".shift .layer[data-start-time='{0}'][data-length-minutes='{1}']",
+					layer.StartTime,
+					layer.LengthMinutes());
 				Browser.Interactions.AssertExistsUsingJQuery(
 					".person:contains('{0}') .shift .layer[data-start-time='{1}'][data-length-minutes='{2}'][style*='background-color: {3}']",
 					personName,
