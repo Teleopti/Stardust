@@ -74,13 +74,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IScenario> FindAllSorted()
 		{
-			return _scenario.OrderBy(s => s.DefaultScenario).ThenBy(s => s.Description.Name).ToArray();
+			return _scenario.OrderByDescending(s => s.DefaultScenario).ThenBy(s => s.Description.Name).ToArray();
 		}
 
 		public IList<IScenario> FindEnabledForReportingSorted()
 		{
 			return
-				_scenario.OrderBy(s => s.DefaultScenario).ThenBy(s => s.Description.Name).Where(s => s.EnableReporting).ToArray();
+				_scenario.OrderByDescending(s => s.DefaultScenario).ThenBy(s => s.Description.Name).Where(s => s.EnableReporting).ToArray();
 		}
 
 		public IScenario LoadDefaultScenario()

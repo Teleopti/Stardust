@@ -80,17 +80,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			};
 		}
 
-		[UnitOfWork, Route("api/Forecasting/Scenarios"), HttpGet]
-		public virtual IEnumerable<ScenarioViewModel> Scenarios()
-		{
-			var scenarios = _scenarioRepository.FindAllSorted();
-			return scenarios.Select(x => new ScenarioViewModel
-			{
-				Id = x.Id.GetValueOrDefault(),
-				Name = x.Description.Name
-			});
-		}
-
 		[UnitOfWork, HttpPost, Route("api/Forecasting/Evaluate")]
 		public virtual Task<WorkloadEvaluateViewModel> Evaluate(EvaluateInput input)
 		{
@@ -246,12 +235,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	{
 		public IEnumerable<SkillAccuracy> Skills { get; set; }
 		public bool IsPermittedToModifySkill { get; set; }
-	}
-
-	public class ScenarioViewModel
-	{
-		public Guid Id { get; set; }
-		public string Name { get; set; }
 	}
 
 	public class ForecastResultViewModel

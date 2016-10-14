@@ -12,7 +12,7 @@
 					get: { method: 'GET', params: {}, isArray: false }
 				});
 
-				this.scenarios = $resource('../api/Forecasting/Scenarios', {}, {
+				this.scenarios = $resource('../api/Global/Scenario', {}, {
 					query: { method: 'GET', params: {}, isArray: true }
 				});
 

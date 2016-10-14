@@ -249,6 +249,7 @@
     <Compile Include="Areas\Global\GlobalAreaControllerTest.cs" />
     <Compile Include="Areas\Global\JavascriptLoggingControllerTest.cs" />
     <Compile Include="Areas\Global\NotificationsControllerTest.cs" />
+    <Compile Include="Areas\Global\ScenarioControllerTest.cs" />
     <Compile Include="Areas\Global\StatusControllerTest.cs" />
     <Compile Include="Areas\Global\TimeZoneControllerTest.cs" />
     <Compile Include="Areas\Global\UserControllerTest.cs" />

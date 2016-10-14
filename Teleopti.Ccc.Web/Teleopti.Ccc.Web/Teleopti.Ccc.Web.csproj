@@ -427,6 +427,8 @@
     <Compile Include="Areas\Forecasting\Core\IForecastMisc.cs" />
     <Compile Include="Areas\Forecasting\Core\IOverridePersister.cs" />
     <Compile Include="Areas\Forecasting\Core\OverridePersister.cs" />
+    <Compile Include="Areas\Global\ScenarioController.cs" />
+    <Compile Include="Areas\Global\ScenarioViewModel.cs" />
     <Compile Include="Areas\Global\ThemeController.cs" />
     <Compile Include="Areas\Global\BusinessUnitController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupPageController.cs" />

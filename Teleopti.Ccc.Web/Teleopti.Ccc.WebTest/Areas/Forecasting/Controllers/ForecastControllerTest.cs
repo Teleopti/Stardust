@@ -46,18 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var result = target.Skills();
 			result.IsPermittedToModifySkill.Should().Be.EqualTo(true);
 		}
-
-		[Test]
-		public void ShouldGetScenarios()
-		{
-			var scenario = new Scenario("scenario1").WithId();
-			var scenarioRepository = new FakeScenarioRepository(scenario);
-			var target = new ForecastController(null, null, null, null, null, null, scenarioRepository, null, null, null, null, null);
-			var result = target.Scenarios().Single();
-			result.Id.Should().Be.EqualTo(scenario.Id.Value);
-			result.Name.Should().Be.EqualTo("scenario1");
-		}
-
+		
 		[Test]
 		public void ShouldForecast()
 		{
