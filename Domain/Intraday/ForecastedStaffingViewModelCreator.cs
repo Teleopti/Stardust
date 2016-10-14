@@ -58,18 +58,22 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			staffingForUsersToday = staffingForUsersToday
 				.GroupBy(g => g.StartTime)
-				.Select(s => new StaffingIntervalModel
+				.Select(s =>
 				{
-					SkillId = s.First().SkillId,
-					StartTime = s.First().StartTime,
-					Agents = s.Sum(a => a.Agents)
+					var staffingIntervalModel = s.First();
+					return new StaffingIntervalModel
+					{
+						SkillId = staffingIntervalModel.SkillId,
+						StartTime = staffingIntervalModel.StartTime,
+						Agents = s.Sum(a => a.Agents)
+					};
 				})
 				.OrderBy(o => o.StartTime)
 				.ToList();
 
-			return new IntradayStaffingViewModel()
+			return new IntradayStaffingViewModel
 			{
-				DataSeries = new StaffingDataSeries()
+				DataSeries = new StaffingDataSeries
 				{
 					Time = staffingForUsersToday
 								.Select(t => t.StartTime)
@@ -88,9 +92,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private List<double?> getActualStaffingSeries(List<StaffingIntervalModel> actualStaffingPerSkill, DateTime? latestStatsTime, int minutesPerInterval, List<StaffingIntervalModel> staffingForUsersToday)
 		{
 			var returnValue = new List<double?>();
-
-
-
+			
 		    if (!latestStatsTime.HasValue || !actualStaffingPerSkill.Any())
 		        return new List<double?>();
 
@@ -122,8 +124,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 			DateTime usersNow, 
 			int minutesPerInterval)
 		{
-
-
 			if (!latestStatsTime.HasValue)
 				return new List<double?>();
 
@@ -132,12 +132,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 		        return new List<double?>();
 		    }
 		    
-
-
             if (latestStatsTime > usersNow) // This case only for dev, test and demo
 				usersNow = latestStatsTime.Value.AddMinutes(minutesPerInterval);
-
-
+			
 			var updatedForecastedSeries = new List<StaffingIntervalModel>();
 
 			foreach (var skillId in forecastedCallsPerSkillDictionary.Keys)
@@ -197,7 +194,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 			}
 
 			return returnValue;
-
 		}
 	}
 }
