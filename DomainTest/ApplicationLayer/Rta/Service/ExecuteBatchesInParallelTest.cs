@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("user1", personId);
+				.WithAgent("user1", personId);
 			
 			Assert.Throws<AggregateException>(() => Target.SaveStateBatch(new BatchForTest
 			{
@@ -60,8 +60,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
 			Database
-				.WithUser("user1", personId1)
-				.WithUser("user2", personId2);
+				.WithAgent("user1", personId1)
+				.WithAgent("user2", personId2);
 			Target.SaveStateBatch(new BatchForTest
 			{
 				SnapshotId = "2016-07-11 08:00".Utc(),
@@ -107,9 +107,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldNotAddDuplicateStateCodes()
 		{
 			Database
-				.WithUser("usercode1")
-				.WithUser("usercode2")
-				.WithUser("usercode3")
+				.WithAgent("usercode1")
+				.WithAgent("usercode2")
+				.WithAgent("usercode3")
 				.WithRule();
 
 			Target.SaveStateBatch(new BatchForTest

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var person = Guid.NewGuid();
 			Database
-				.WithUser("user", person)
+				.WithAgent("user", person)
 				.WithSchedule(person, Guid.NewGuid(), "Phone", "2016-08-17 10:00", "2016-08-17 16:00");
 			Now.Is("2016-08-17 10:00");
 			Target.CheckForActivityChanges(Database.TenantName());

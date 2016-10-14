@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldAddStateCodeToDatabase()
 		{
 			Database
-				.WithUser("usercode")
+				.WithAgent("usercode")
 				.WithRule();
 
 			Target.SaveState(new StateForTest
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldAddStateCodeWithDescription()
 		{
 			Database
-				.WithUser("usercode")
+				.WithAgent("usercode")
 				.WithRule();
 
 			Target.SaveState(new StateForTest
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithRule("someStateCode");
 
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithRule();
 			Target.SaveState(new StateForTest
 			{
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldUpdateReadModelWithDefaultState()
 		{
 			Database
-				.WithUser("usercode")
+				.WithAgent("usercode")
 				.WithRule(Guid.NewGuid(), "loggedout", null, "Logged Out");
 
 			Target.SaveState(new StateForTest
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldUpdateReadModelWithRuleForDefaultState3()
 		{
 			Database
-				.WithUser("usercode")
+				.WithAgent("usercode")
 				.WithRule(Guid.NewGuid(), "loggedout", null, "adhering");
 
 			Target.SaveState(new StateForTest

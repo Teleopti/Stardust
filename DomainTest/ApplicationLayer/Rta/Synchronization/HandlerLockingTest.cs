@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 		public void HangfireShouldNotPublishToHandlerWhileInitializing()
 		{
 			var personId = Guid.NewGuid();
-			Database.WithUser("user", personId);
+			Database.WithAgent("user", personId);
 			Now.Is("2015-01-15 08:00");
 			Rta.SaveState(new StateForTest
 			{

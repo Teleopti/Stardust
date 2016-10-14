@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var phone = Guid.NewGuid();
 			var brejk = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2016-03-04 8:00", "2016-03-04 10:15")
 				;
 			Now.Is("2016-03-04 9:00");
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2016-03-04 8:00", "2016-03-04 10:15")
 				.WithRule("phone", phone, 0, Adherence.In)
 				.WithRule("admin", phone, 0, Adherence.Out)
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithRule("phone", null, "Ready")
 				;
 			Now.Is("2016-03-04 9:00");

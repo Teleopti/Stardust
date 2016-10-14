@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, activityId, "Phone", "2014-10-20 10:00", "2014-10-20 11:00")
 				;
 			Now.Is("2014-10-20 10:00");
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId);
+				.WithAgent("usercode", personId);
 
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldNotPersistWithCurrentActivityIfNoSchedule()
 		{
 			Database
-				.WithUser("usercode")
+				.WithAgent("usercode")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 11:00", "2014-10-20 12:00")
 				;
 			Now.Is("2014-10-20 10:00");
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, Guid.NewGuid(), "Lunch", "2014-10-20 10:00", "2014-10-20 11:00")
 				.WithSchedule(personId, Guid.NewGuid(), "Phone", "2014-10-20 11:00", "2014-10-20 12:00")
 				;
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, Guid.NewGuid(), "Phone", "2014-10-20 10:00", "2014-10-20 11:00")
 				.WithSchedule(personId, Guid.NewGuid(), "Phone", "2014-10-21 10:00", "2014-10-21 11:00")
 				;
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, activityId, "Phone", "2014-10-20 11:00", "2014-10-20 12:00")
 				;
 			Now.Is("2014-10-20 10:00");

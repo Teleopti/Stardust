@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var person = Guid.NewGuid();
 			Now.Is("2016-05-30 09:00");
 			Database
-				.WithUser("usercode", person)
+				.WithAgent("usercode", person)
 				.WithSchedule(person, Color.Green, "2016-05-30 09:00", "2016-05-30 10:00");
 
 			Target.CheckForActivityChanges(Database.TenantName());
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var person = Guid.NewGuid();
 			Now.Is("2016-05-30 09:00");
 			Database
-				.WithUser("usercode", person)
+				.WithAgent("usercode", person)
 				.WithSchedule(person, "Phone", "2016-05-30 09:00", "2016-05-30 10:00");
 
 			Target.CheckForActivityChanges(Database.TenantName());
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var person = Guid.NewGuid();
 			Now.Is("2016-05-30 09:00");
 			Database
-				.WithUser("usercode", person)
+				.WithAgent("usercode", person)
 				.WithSchedule(person, Color.Green, "2016-05-30 09:00", "2016-05-30 10:00")
 				.WithSchedule(person, Color.Red, "2016-05-30 10:00", "2016-05-30 11:00");
 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var person = Guid.NewGuid();
 			Now.Is("2016-05-30 11:30");
 			Database
-				.WithUser("usercode", person)
+				.WithAgent("usercode", person)
 				.WithSchedule(person, Color.Green, "2016-05-30 09:00", "2016-05-30 10:00")
 				.WithSchedule(person, Color.Red, "2016-05-30 10:00", "2016-05-30 11:00");
 
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var person = Guid.NewGuid();
 			Now.Is("2016-05-30 06:30");
 			Database
-				.WithUser("usercode", person)
+				.WithAgent("usercode", person)
 				.WithSchedule(person, Color.Green, "2016-05-30 09:00", "2016-05-30 10:00")
 				.WithSchedule(person, Color.Red, "2016-05-30 10:00", "2016-05-30 11:00");
 
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var person = Guid.NewGuid();
 			Now.Is("2016-05-30 09:55");
 			Database
-				.WithUser("usercode", person)
+				.WithAgent("usercode", person)
 				.WithSchedule(person, Color.Green, "2016-05-30 13:00", "2016-05-30 14:00");
 
 			Target.CheckForActivityChanges(Database.TenantName());
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var person = Guid.NewGuid();
 			Now.Is("2016-05-30 09:55");
 			Database
-				.WithUser("usercode", person)
+				.WithAgent("usercode", person)
 				.WithSchedule(person, Color.Green, "2016-05-30 13:00", "2016-05-30 14:00");
 
 			Target.CheckForActivityChanges(Database.TenantName());
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var person = Guid.NewGuid();
 			Now.Is("2016-05-30 10:00");
 			Database
-				.WithUser("usercode", person)
+				.WithAgent("usercode", person)
 				.WithSchedule(person, Color.Green, "2016-05-30 10:00", "2016-05-30 11:00");
 
 			Target.CheckForActivityChanges(Database.TenantName());
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var shortbreak = Guid.NewGuid();
 			Now.Is("2016-05-30 10:00");
 			Database
-				.WithUser("usercode", person)
+				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2016-05-30 10:00", "2016-05-30 11:00")
 				.WithSchedule(person, shortbreak, "2016-05-30 11:00", "2016-05-30 12:00")
 				.WithSchedule(person, Color.Orange, "2016-05-30 12:00", "2016-05-30 13:00");
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var shortbreak = Guid.NewGuid();
 			Now.Is("2016-05-30 10:00");
 			Database
-				.WithUser("usercode", person)
+				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2016-05-30 10:00", "2016-05-30 11:00")
 				.WithSchedule(person, shortbreak, "2016-05-30 11:00", "2016-05-30 12:00")
 				.WithSchedule(person, Color.Orange, "2016-05-30 12:00", "2016-05-30 13:00");

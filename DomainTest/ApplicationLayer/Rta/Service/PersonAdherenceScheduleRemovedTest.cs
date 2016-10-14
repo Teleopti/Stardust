@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2016-02-23 08:00", "2016-02-23 10:00")
 				.WithRule("loggedout", phone, -1, Adherence.Out)
 				.WithRule("loggedout", null, 0, Adherence.In)

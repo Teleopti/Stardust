@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, "phone", "2016-09-06 14:00", "2016-09-06 16:00")
 				;
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				;
 
 			Now.Is("2016-09-28 13:00");
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, "phone", "2016-09-06 14:00", "2016-09-06 16:00")
 				;
 
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, "phone", "2016-09-06 14:00", "2016-09-06 16:00")
 				;
 
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, "phone", "2016-09-06 14:00", "2016-09-06 16:00")
 				.WithSchedule(personId, "admin", "2016-09-16 14:00", "2016-09-16 16:00")
 				;
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, "phone", "2016-09-11 00:00", "2016-09-11 06:00")
 				.WithSchedule(personId, "phone", "2016-09-11 08:00", "2016-09-11 12:00")
 				.WithSchedule(personId, "admin", "2016-09-11 12:00", "2016-09-11 17:00")
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, "phone", "2016-09-12 08:00", "2016-09-12 12:00")
 				.WithSchedule(personId, "admin", "2016-09-12 12:00", "2016-09-12 17:00")
 				.WithSchedule(personId, "phone", "2016-09-13 08:00", "2016-09-13 17:00")
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, "phone", "2016-09-11 08:00", "2016-09-11 12:00")
 				.WithSchedule(personId, "admin", "2016-09-11 12:00", "2016-09-11 17:00")
 				.WithSchedule(personId, "phone", "2016-09-12 08:00", "2016-09-12 12:00")
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, "phone", "2016-09-12 03:00", "2016-09-12 04:00")
 				.WithSchedule(personId, "admin", "2016-09-12 05:00", "2016-09-12 06:15")
 				.WithSchedule(personId, "phone", "2016-09-12 06:15", "2016-09-12 06:30")
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, "phone", "2016-09-12 08:00", "2016-09-12 08:30")
 				.WithSchedule(personId, "admin", "2016-09-12 08:30", "2016-09-12 09:00")
 				.WithSchedule(personId, "phone", "2016-09-12 09:30", "2016-09-12 12:00")
@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, "phone", "2016-09-12 08:00", "2016-09-12 17:00")
 				.WithSchedule(personId, "admin", "2016-09-12 19:00", "2016-09-12 23:00")
 				.WithSchedule(personId, "phone", "2016-09-13 08:00", "2016-09-13 17:00")
@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, "phone", "2016-09-11 08:00", "2016-09-11 17:00")
 				.WithSchedule(personId, "phone", "2016-09-12 08:00", "2016-09-12 17:00")
 				.WithSchedule(personId, "admin", "2016-09-13 08:00", "2016-09-13 17:00")
@@ -315,7 +315,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, "phone", "2016-09-12 01:00", "2016-09-12 08:00")
 				.WithSchedule(personId, "phone", "2016-09-12 10:00", "2016-09-12 18:00")
 				.WithSchedule(personId, "phone", "2016-09-12 20:00", "2016-09-13 23:00")

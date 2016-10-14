@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-03-12 8:00", "2015-03-12 9:00")
 				.WithRule(null, phone, 0, Adherence.Out)
 				;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-03-12 8:00", "2015-03-12 9:00")
 				.WithRule("phone", phone, (Guid?) null)
 				;
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var platform1 = Guid.NewGuid();
 			var platform2 = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-05-11 08:00", "2015-05-11 09:00")
 				.WithRule("AUX1", platform1, phone, -1, Adherence.Out)
 				.WithRule("AUX1", platform2, phone, 0, Adherence.In)
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var person = Guid.NewGuid();
 			Database
-				.WithUser("usercode", person)
+				.WithAgent("usercode", person)
 				.WithMapWithStateGroupWithoutStateCodes()
 				.WithRule(null, null, 0, Adherence.In)
 				;

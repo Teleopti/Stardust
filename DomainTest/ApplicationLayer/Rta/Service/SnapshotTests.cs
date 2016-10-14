@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode1", Guid.NewGuid())
-				.WithUser("usercode2", personId)
+				.WithAgent("usercode1", Guid.NewGuid())
+				.WithAgent("usercode2", personId)
 				.WithRule("statecode", Guid.Empty)
 				;
 
@@ -75,10 +75,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithSource("source1")
-				.WithUser("usercode1", Guid.NewGuid())
-				.WithSource("source2")
-				.WithUser("usercode2", personId)
+				.WithDataSource("source1")
+				.WithAgent("usercode1", Guid.NewGuid())
+				.WithDataSource("source2")
+				.WithAgent("usercode2", personId)
 				.WithRule("statecode", Guid.Empty)
 				;
 			Now.Is("2014-10-20 10:00");
@@ -147,9 +147,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithSource("source1")
-				.WithUser("usercode1", "source1", Guid.NewGuid())
-				.WithUser("usercode2", "source1", personId)
+				.WithDataSource("source1")
+				.WithAgent("usercode1", "source1", Guid.NewGuid())
+				.WithAgent("usercode2", "source1", personId)
 				.WithRule("statecode1", Guid.Empty)
 				;
 			Now.Is("2014-10-20 10:00");
@@ -196,10 +196,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithSource("source1")
-				.WithUser("usercode1", "source1", Guid.NewGuid())
-				.WithSource("source2")
-				.WithUser("usercode2", "source2", personId)
+				.WithDataSource("source1")
+				.WithAgent("usercode1", "source1", Guid.NewGuid())
+				.WithDataSource("source2")
+				.WithAgent("usercode2", "source2", personId)
 				.WithRule("statecode1", Guid.Empty)
 				;
 			Now.Is("2014-10-20 10:00");
@@ -246,8 +246,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var user2 = Guid.NewGuid();
 			Database
-				.WithUser("usercode1", Guid.NewGuid())
-				.WithUser("usercode2", user2)
+				.WithAgent("usercode1", Guid.NewGuid())
+				.WithAgent("usercode2", user2)
 				.WithRule("statecode", Guid.Empty)
 				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty);
 
@@ -303,8 +303,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var platformTypeId = Guid.NewGuid();
 			Database
 				.WithPlatform(platformTypeId)
-				.WithUser("usercode1", Guid.NewGuid())
-				.WithUser("usercode2", personId)
+				.WithAgent("usercode1", Guid.NewGuid())
+				.WithAgent("usercode2", personId)
 				.WithRule("statecode", Guid.Empty)
 				;
 			Now.Is("2014-10-20 10:00");

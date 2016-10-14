@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldAcceptAuthenticationKeyForATenant()
 		{
 			Database
-				.WithUser("user")
+				.WithAgent("user")
 				.WithTenant("key");
 
 			Target.SaveState(new StateForTest
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldAcceptLegacyAuthenticationKeyIf1Tenant()
 		{
 			Database
-				.WithUser("user")
+				.WithAgent("user")
 				.WithTenant(LegacyAuthenticationKey.TheKey);
 
 			Target.SaveState(new StateForTest
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldAcceptIfThirdAndFourthLetterOfAuthenticationKeyIsCorrupted_BecauseOfEncodingIssuesWithThe3rdLetterOfTheDefaultKeyAndWeAreNotAllowedToChangeTheDefault()
 		{
 			Database
-				.WithUser("user")
+				.WithAgent("user")
 				.WithTenant(LegacyAuthenticationKey.TheKey);
 
 			Target.SaveState(new StateForTest
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldThrowInvalidAuthenticationKeyExceptionWithPriorState()
 		{
-			Database.WithUser("user");
+			Database.WithAgent("user");
 			Target.SaveState(new StateForTest
 			{
 				UserCode = "user"

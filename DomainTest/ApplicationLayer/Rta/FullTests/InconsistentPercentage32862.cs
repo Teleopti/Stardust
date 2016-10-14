@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 			var phone = Guid.NewGuid();
 			var admin = Guid.NewGuid();
 			Database
-					.WithUser("user", personId)
+					.WithAgent("user", personId)
 					.WithSchedule(personId, phone, "2015-03-31 4:45", "2015-03-31 5:00")
 					.WithSchedule(personId, admin, "2015-03-31 5:00", "2015-03-31 5:15")
 					.WithRule("ready", phone, 0, Adherence.In)
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 			var phone = Guid.NewGuid();
 			var admin = Guid.NewGuid();
 			Database
-				.WithUser("user", personId)
+				.WithAgent("user", personId)
 				.WithSchedule(personId, phone, "2015-03-31 4:45", "2015-03-31 5:00")
 				.WithSchedule(personId, admin, "2015-03-31 5:00", "2015-03-31 5:15")
 				.WithRule("ready", phone, 0, Adherence.In)

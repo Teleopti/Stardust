@@ -180,7 +180,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public static FakeDatabase WithAbsence(this FakeDatabase database, Guid? id)
 		{
-			return database.WithAbsence(id, null);
+			return database.WithAbsence(id, null, null);
+		}
+
+		public static FakeDatabase WithAbsence(this FakeDatabase database, string name)
+		{
+			return database.WithAbsence(null, name, null);
 		}
 	}
 
@@ -196,18 +201,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 	public class FakeDatabase
 	{
-		private readonly FakeTenants _tenants;
-		private readonly FakePersonRepository _persons;
-		private readonly FakeBusinessUnitRepository _businessUnits;
+		protected readonly FakeTenants _tenants;
+		protected readonly FakePersonRepository _persons;
+		protected readonly FakeBusinessUnitRepository _businessUnits;
 		private readonly FakeSiteRepository _sites;
 		private readonly FakeTeamRepository _teams;
 		private readonly FakeContractRepository _contracts;
 		private readonly FakePartTimePercentageRepository _partTimePercentages;
 		private readonly FakeContractScheduleRepository _contractSchedules;
 		private readonly FakeApplicationRoleRepository _applicationRoles;
-		private readonly FakeScenarioRepository _scenarios;
+		protected readonly FakeScenarioRepository _scenarios;
 		private readonly FakeDayOffTemplateRepository _dayOffTemplates;
-		private readonly FakePersonAssignmentRepository _personAssignments;
+		protected readonly FakePersonAssignmentRepository _personAssignments;
 		private readonly FakeApplicationFunctionRepository _applicationFunctions;
 		private readonly FakeAvailableDataRepository _availableDatas;
 		private readonly IDefinedRaptorApplicationFunctionFactory _allApplicationFunctions;
@@ -217,8 +222,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakeCommonAgentNameProvider _commonAgentNameProvider;
 		private readonly FakeSkillRepository _skills;
 		private readonly FakeGroupingReadOnlyRepository _groupings;
-		private readonly FakeRtaStateGroupRepository _stateGroups;
-		private readonly FakeRtaMapRepository _mappings;
+		protected readonly FakeRtaStateGroupRepository _stateGroups;
+		protected readonly FakeRtaMapRepository _mappings;
 		private readonly FakeExternalLogOnRepository _externalLogOns;
 		private readonly FakeDataSources _dataSources;
 
@@ -341,8 +346,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			// seems to always exist
 			_dataSources.Add("-1", -1);
 			_dataSources.Add("-1", 1);
-
-	
 		}
 
 		public Guid CurrentBusinessUnitId()
@@ -600,25 +603,33 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeDatabase WithAbsence(Guid? id, bool? confidential)
+		public FakeDatabase WithAbsence(Guid? id, string name, bool? confidential)
 		{
 			_absence = new Absence();
 			_absence.SetId(id ?? Guid.NewGuid());
 			if (confidential.HasValue)
 				_absence.Confidential = confidential.Value;
+			_absence.Description = new Description(name ?? RandomName.Make());
 			_absences.Has(_absence);
 			return this;
 		}
 
 		public FakeDatabase WithConfidentialAbsence()
 		{
-			return WithAbsence(null, true);
+			return WithAbsence(null, null, true);
 		}
 
 		public FakeDatabase WithPersonAbsence(string date)
 		{
-			ensureExists(_absences, null, () => this.WithAbsence(null));
-			_personAbsence = new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, new DateTimePeriod(date.Utc(), date.Utc().AddHours(24))));
+			// only correct for utc guys
+			return WithPersonAbsence(date, date.Utc().AddHours(24).ToShortTimeString());
+		}
+
+		public FakeDatabase WithPersonAbsence(string start, string end)
+		{
+			ensureExists(_absences, null, () => this.WithAbsence(null, null, null));
+			var period = new DateTimePeriod(start.Utc(), end.Utc());
+			_personAbsence = new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, period));
 			_personAbsence.SetId(Guid.NewGuid());
 			_personAbsences.Has(_personAbsence);
 			return this;

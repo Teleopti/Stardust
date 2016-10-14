@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldPersist()
 		{
 			Database
-				.WithUser("usercode")
+				.WithAgent("usercode")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldPersistStateCode()
 		{
 			Database
-				.WithUser("usercode");
+				.WithAgent("usercode");
 
 			Target.SaveState(new StateForTest
 			{
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldPersistWithReceivedSystemTime()
 		{
 			Database
-				.WithUser("usercode")
+				.WithAgent("usercode")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId);
+				.WithAgent("usercode", personId);
 
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
 

@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var person1 = Guid.NewGuid();
 			var person2 = Guid.NewGuid();
 			Database
-				.WithUser("usercode", person1)
-				.WithUser("usercode", person2);
+				.WithAgent("usercode", person1)
+				.WithAgent("usercode", person2);
 
 			Target.SaveState(new StateForTest
 			{
@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var phone = Guid.NewGuid();
 			var person = Guid.NewGuid();
 			Database
-				.WithUser("usercode1", person)
-				.WithUser("usercode2", person)
+				.WithAgent("usercode1", person)
+				.WithAgent("usercode2", person)
 				.WithRule("phone", phone, 0, Adherence.In)
 				.WithRule("loggedOut", phone, -1, Adherence.Out)
 				.WithSchedule(person, phone, "2016-08-29 10:00", "2016-08-29 11:00")
@@ -86,10 +86,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var person1 = Guid.NewGuid();
 			var person2 = Guid.NewGuid();
 			Database
-				.WithUser("usercode1", person1)
-				.WithUser("usercode2", person1)
-				.WithUser("usercode2", person2)
-				.WithUser("usercode3", person2)
+				.WithAgent("usercode1", person1)
+				.WithAgent("usercode2", person1)
+				.WithAgent("usercode2", person2)
+				.WithAgent("usercode3", person2)
 				.WithRule("phone", phone, 0, Adherence.In)
 				.WithRule("loggedOut", phone, -1, Adherence.Out)
 				.WithSchedule(person1, phone, "2016-08-29 10:00", "2016-08-29 11:00")

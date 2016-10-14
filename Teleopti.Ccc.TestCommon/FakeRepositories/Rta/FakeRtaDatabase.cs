@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
@@ -57,72 +58,96 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		}
 	}
 
-	public class FakeRtaDatabase
+	public class FakeRtaDatabase : FakeDatabase
 	{
-		private readonly FakeDatabase _database;
-		private readonly FakeAgentStateReadModelPersister _agentStateReadModels;
 		private readonly FakeAgentStatePersister _agentStates;
-		private readonly FakeRtaStateGroupRepository _rtaStateGroupRepository;
-		private readonly FakeRtaMapRepository _rtaMapRepository;
-		private readonly FakeTenants _tenants;
+		private readonly FakeAgentStateReadModelPersister _agentStateReadModels;
 		private readonly FakeDataSourceForTenant _dataSourceForTenant;
-		private readonly FakeBusinessUnitRepository _businessUnits;
 		private readonly FakeScheduleProjectionReadOnlyPersister _schedules;
 		private readonly AgentStateMaintainer _agentStateMaintainer;
-		private readonly FakePersonRepository _persons;
-		private readonly FakePersonAssignmentRepository _personAssignments;
-		private readonly FakeScenarioRepository _scenarios;
 		private readonly IScheduleStorage _scheduleStorage;
-		
+
 		public FakeRtaDatabase(
-			FakeDatabase database,
-			FakeAgentStateReadModelPersister agentStateReadModels,
+			FakeTenants tenants, 
+			FakePersonRepository persons, 
+			FakeBusinessUnitRepository businessUnits, 
+			FakeSiteRepository sites, 
+			FakeTeamRepository teams, 
+			FakeContractRepository contracts, 
+			FakePartTimePercentageRepository partTimePercentages, 
+			FakeContractScheduleRepository contractSchedules, 
+			FakeApplicationRoleRepository applicationRoles, 
+			FakeScenarioRepository scenarios, 
+			FakeDayOffTemplateRepository dayOffTemplates, 
+			FakePersonAssignmentRepository personAssignments, 
+			FakeApplicationFunctionRepository applicationFunctions, 
+			FakeAvailableDataRepository availableDatas, 
+			IDefinedRaptorApplicationFunctionFactory allApplicationFunctions, 
+			FakeAbsenceRepository absences, 
+			FakePersonAbsenceRepository personAbsences, 
+			FakeActivityRepository activities, 
+			FakeCommonAgentNameProvider commonAgentNameProvider, 
+			FakeSkillRepository skills, 
+			FakeGroupingReadOnlyRepository groupings, 
+			FakeRtaStateGroupRepository stateGroups, 
+			FakeRtaMapRepository mappings, 
+			FakeExternalLogOnRepository externalLogOns, 
+			FakeDataSources dataSources,
 			FakeAgentStatePersister agentStates,
-			FakeRtaStateGroupRepository rtaStateGroupRepository,
-			FakeRtaMapRepository rtaMapRepository,
-			FakeTenants tenants,
+			FakeAgentStateReadModelPersister agentStateReadModels,
 			FakeDataSourceForTenant dataSourceForTenant,
-			FakeBusinessUnitRepository businessUnits,
 			FakeScheduleProjectionReadOnlyPersister schedules,
 			AgentStateMaintainer agentStateMaintainer,
-			FakePersonRepository persons,
-			FakePersonAssignmentRepository personAssignments,
-			FakeScenarioRepository scenarios,
 			IScheduleStorage scheduleStorage
-			)
+			) : base(
+				tenants, 
+				persons, 
+				businessUnits, 
+				sites, 
+				teams, 
+				contracts, 
+				partTimePercentages, 
+				contractSchedules, 
+				applicationRoles, 
+				scenarios, 
+				dayOffTemplates, 
+				personAssignments, 
+				applicationFunctions, 
+				availableDatas, 
+				allApplicationFunctions, 
+				absences, 
+				personAbsences, 
+				activities, 
+				commonAgentNameProvider, 
+				skills, 
+				groupings, 
+				stateGroups, 
+				mappings, 
+				externalLogOns, 
+				dataSources)
 		{
-			_database = database;
-			_agentStateReadModels = agentStateReadModels;
 			_agentStates = agentStates;
-			_rtaStateGroupRepository = rtaStateGroupRepository;
-			_rtaMapRepository = rtaMapRepository;
-			_tenants = tenants;
+			_agentStateReadModels = agentStateReadModels;
 			_dataSourceForTenant = dataSourceForTenant;
-			_businessUnits = businessUnits;
 			_schedules = schedules;
 			_agentStateMaintainer = agentStateMaintainer;
-			_persons = persons;
-			_personAssignments = personAssignments;
-			_scenarios = scenarios;
 			_scheduleStorage = scheduleStorage;
 
-			withTenant("default", LegacyAuthenticationKey.TheKey);
-			WithSource(new StateForTest().SourceId);
+			WithDataSource(new StateForTest().SourceId);
 			WithPlatform(new Guid(new StateForTest().PlatformTypeId));
 		}
 
 		public AgentState StoredState => _agentStates.GetStates().SingleOrDefault();
 		public AgentState StoredStateFor(Guid personId) => _agentStates.Get(personId);
 		public AgentStateReadModel PersistedReadModel => _agentStateReadModels.Models.SingleOrDefault();
-		public IEnumerable<IRtaState> StateCodes => _rtaStateGroupRepository.LoadAll().Single().StateCollection;
-		
+		public IEnumerable<IRtaState> StateCodes => _stateGroups.LoadAll().Single().StateCollection;
+
 		public FakeRtaDatabase WithPlatform(Guid platformTypeId)
 		{
-			_database.WithPlatform(platformTypeId);
-			return this;
+			return base.WithPlatform(platformTypeId) as FakeRtaDatabase;
 		}
-		
-		public FakeRtaDatabase WithTenant(string key)
+
+		public new FakeRtaDatabase WithTenant(string key)
 		{
 			return withTenant(key, key);
 		}
@@ -146,35 +171,33 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return _tenants.Tenants().Single().Name;
 		}
 
-		public FakeRtaDatabase WithSource(string sourceId)
+		public FakeRtaDatabase WithDataSource(string sourceId)
 		{
-			_database.WithDataSource(new Random().Next(0, 1000), sourceId);
-			return this;
+			return WithDataSource(new Random().Next(100, 1000), sourceId) as FakeRtaDatabase;
 		}
 
 		public FakeRtaDatabase WithBusinessUnit(Guid businessUnitId)
 		{
 			if (_businessUnits.LoadAll().Any(x => x.Id.Equals(businessUnitId)))
 				return this;
-			_database.WithBusinessUnit(businessUnitId);
-			return this;
+			return base.WithBusinessUnit(businessUnitId) as FakeRtaDatabase;
 		}
 
-		public FakeRtaDatabase WithUser(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId)
+		public FakeRtaDatabase WithAgent(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId)
 		{
-			_database.WithAgent(personId, userCode, teamId, siteId, businessUnitId);
+			this.WithAgent(personId, userCode, teamId, siteId, businessUnitId);
 			
 			_agentStates.Prepare(new AgentStatePrepare
 			{
 				PersonId = personId,
-				BusinessUnitId = _database.CurrentBusinessUnitId(),
-				TeamId = _database.CurrentTeamId(),
-				SiteId = _database.CurrentSiteId(),
+				BusinessUnitId = CurrentBusinessUnitId(),
+				TeamId = CurrentTeamId(),
+				SiteId = CurrentSiteId(),
 				ExternalLogons = new[]
 				{
 					new ExternalLogon
 					{
-						DataSourceId = _database.CurrentDataSourceId(),
+						DataSourceId = CurrentDataSourceId(),
 						UserCode = userCode
 					}
 				}
@@ -184,10 +207,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public FakeRtaDatabase WithSchedule(Guid personId, Guid activityId, string start, string end, string belongsToDate, string name, Color? color)
 		{
-			_database.WithPerson(personId, null);
-			_database.WithAssignment(personId, belongsToDate ?? start);
-			_database.WithActivity(activityId, name, color);
-			_database.WithAssignedActivity(start, end);
+			this.WithPerson(personId, null);
+			WithAssignment(personId, belongsToDate ?? start);
+			WithActivity(activityId, name, color);
+			WithAssignedActivity(start, end);
 
 			_schedules.Clear();
 			MakeScheduledActivities()
@@ -208,7 +231,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			var max = _personAssignments.LoadAll().SelectMany(x => x.ShiftLayers).Max(x => x.Period.EndDateTime);
 			var period = new DateOnlyPeriod(new DateOnly(min.AddDays(-2)), new DateOnly(max.AddDays(2)));
 			return FromPersonAssignment.MakeScheduledActivities(
-				_scenarios.Load(_database.CurrentScenarioId()),
+				_scenarios.Load(CurrentScenarioId()),
 				_scheduleStorage,
 				_persons.LoadAll(),
 				period);
@@ -217,7 +240,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public FakeRtaDatabase ClearSchedule(Guid personId)
 		{
 			_schedules.Clear(personId);
-			_database.ClearScheduleData(personId);
+			ClearScheduleData(personId);
 			_agentStateMaintainer.Handle(new ScheduleProjectionReadOnlyChangedEvent
 			{
 				PersonId = personId
@@ -227,61 +250,58 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public FakeRtaDatabase WithRule(Guid? ruleId, string stateCode, Guid? platformTypeId, Guid? activityId, int staffingEffect, string name, Adherence? adherence)
 		{
-			_database.WithRule(ruleId, stateCode, platformTypeId, activityId, staffingEffect, name, adherence, null);
+			base.WithRule(ruleId, stateCode, platformTypeId, activityId, staffingEffect, name, adherence, null);
 			return this;
 		}
 
-		public FakeRtaDatabase WithMapWithStateGroupWithoutStateCodes()
+		public new FakeRtaDatabase WithMapWithStateGroupWithoutStateCodes()
 		{
-			_database.WithMapWithStateGroupWithoutStateCodes();
-			return this;
+			return base.WithMapWithStateGroupWithoutStateCodes() as FakeRtaDatabase;
 		}
 
 		public FakeRtaDatabase ClearRuleMap()
 		{
-			_rtaMapRepository.Clear();
+			_mappings.Clear();
 			return this;
 		}
 
 		public FakeRtaDatabase ClearStates()
 		{
-			_rtaStateGroupRepository.Clear();
+			_stateGroups.Clear();
 			return this;
 		}
 
 		public FakeRtaDatabase WithAlarm(TimeSpan threshold)
 		{
-			_database.WithAlarm(threshold, null);
-			return this;
+			return WithAlarm(threshold, null) as FakeRtaDatabase;
 		}
 
 		public FakeRtaDatabase WithScenario(Guid? id, bool @default)
 		{
-			_database.WithScenario(id, @default);
-			return this;
+			return base.WithScenario(id, @default) as FakeRtaDatabase;
 		}
 	}
 
 	public static class FakeDatabaseUserExtensions
 	{
-		public static FakeRtaDatabase WithUser(this FakeRtaDatabase fakeDataBuilder, string userCode)
+		public static FakeRtaDatabase WithAgent(this FakeRtaDatabase fakeDataBuilder, string userCode)
 		{
-			return fakeDataBuilder.WithUser(userCode, Guid.NewGuid(), null, null, null);
+			return fakeDataBuilder.WithAgent(userCode, Guid.NewGuid(), null, null, null);
 		}
 
-		public static FakeRtaDatabase WithUser(this FakeRtaDatabase fakeDataBuilder, string userCode, Guid personId)
+		public static FakeRtaDatabase WithAgent(this FakeRtaDatabase fakeDataBuilder, string userCode, Guid personId)
 		{
-			return fakeDataBuilder.WithUser(userCode, personId, null, null, null);
+			return fakeDataBuilder.WithAgent(userCode, personId, null, null, null);
 		}
 
-		public static FakeRtaDatabase WithUser(this FakeRtaDatabase fakeDataBuilder, string userCode, string source, Guid personId)
+		public static FakeRtaDatabase WithAgent(this FakeRtaDatabase fakeDataBuilder, string userCode, string source, Guid personId)
 		{
-			return fakeDataBuilder.WithUser(userCode, personId, null, null, null);
+			return fakeDataBuilder.WithAgent(userCode, personId, null, null, null);
 		}
 
-		public static FakeRtaDatabase WithUser(this FakeRtaDatabase fakeDataBuilder, string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId)
+		public static FakeRtaDatabase WithAgent(this FakeRtaDatabase fakeDataBuilder, string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId)
 		{
-			return fakeDataBuilder.WithUser(userCode, personId, businessUnitId, teamId, siteId);
+			return fakeDataBuilder.WithAgent(userCode, personId, businessUnitId, teamId, siteId);
 		}
 	}
 

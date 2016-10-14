@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId2 = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			Database
-				.WithUser("usercode1", personId1)
-				.WithUser("usercode2", personId2)
+				.WithAgent("usercode1", personId1)
+				.WithAgent("usercode2", personId2)
 				.WithSchedule(personId1, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithSchedule(personId2, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithRule("statecode1", activityId, 0)
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var activityId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithRule("statecode1", activityId, 0)
 				.WithRule("statecode2", activityId, 0);

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldPersistReadModel()
 		{
 			Database
-				.WithUser("usercode");
+				.WithAgent("usercode");
 
 			Target.SaveState(new StateForTest
 			{
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldPersistWithReceivedSystemTime()
 		{
 			Database
-				.WithUser("usercode")
+				.WithAgent("usercode")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldNotPersistAssociation()
 		{
 			Database
-				.WithUser("user", Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
+				.WithAgent("user", Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
 
 			Target.SaveState(new StateForTest
 			{
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var person = Guid.NewGuid();
 			Database
-				.WithUser("user", person);
+				.WithAgent("user", person);
 			Now.Is("2016-05-30 14:00");
 
 			Target.CheckForActivityChanges(Database.TenantName());
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var person = Guid.NewGuid();
 			Database
-				.WithUser("user", person);
+				.WithAgent("user", person);
 			Now.Is("2016-05-30 14:00");
 
 			Target.CheckForActivityChanges(Database.TenantName());
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var person = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			Database
-				.WithUser("user", person);
+				.WithAgent("user", person);
 			Now.Is("2016-05-30 14:00");
 			Database.WithSchedule(person, phone, "Phone", "2016-05-30 15:00", "2016-05-30 16:00");
 
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var activityId = Guid.NewGuid();
 			var alarmId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
 				.WithRule("statecode", activityId, alarmId, "rule")
 				;
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 09:00", "2014-10-20 11:00")
 				.WithRule("statecode", activityId, "my state");
 			Now.Is("2014-10-20 10:00");
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId)
+				.WithAgent("usercode", personId)
 				.WithRule("statecode", activityId, 0)
 				.WithSchedule(personId, activityId, "2014-10-20 9:00", "2014-10-20 11:00");
 			Now.Is("2014-10-20 10:01");
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldPersistStateGroupId()
 		{
 			Database
-				.WithUser("usercode")
+				.WithAgent("usercode")
 				.WithRule("phone");
 			var stateGroupId = StateGroups.LoadAll().Single().Id;
 

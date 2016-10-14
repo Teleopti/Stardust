@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var person = Guid.NewGuid();
 			Database
-				.WithUser("usercode", person)
+				.WithAgent("usercode", person)
 				.WithRule("phone")
 				.WithRule("loggedOff");
 			
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var person = Guid.NewGuid();
 			Database
-				.WithUser("usercode", person)
+				.WithAgent("usercode", person)
 				.WithRule("phone")
 				.WithRule("loggedOff");
 

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var person = Guid.NewGuid();
 			var team = Guid.NewGuid();
 			Database
-				.WithUser("user", person, null, team, null)
+				.WithAgent("user", person, null, team, null)
 				;
 
 			Rta.Touch(Database.TenantName());
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var person = Guid.NewGuid();
 			var team = Guid.NewGuid();
 			Database
-				.WithUser("user", person, null, team, null)
+				.WithAgent("user", person, null, team, null)
 				;
 
 			Rta.CheckForActivityChanges(Database.TenantName());

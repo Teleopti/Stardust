@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("user", personId)
+				.WithAgent("user", personId)
 				.WithRule("state", Guid.NewGuid())
 				.WithRule("anotherstate", Guid.NewGuid());
 			Now.Is("2015-01-15 08:00");
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			var personId = Guid.NewGuid();
 			Now.Is("2015-10-01 08:00");
 			Database
-				.WithUser("user", personId)
+				.WithAgent("user", personId)
 				.WithRule("statecode")
 				;
 			Rta.SaveState(new StateForTest

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var lunch = Guid.NewGuid();
 
 			Database
-				.WithUser("usercode", person)
+				.WithAgent("usercode", person)
 				.WithSchedule(person, inbound, "2015-11-25 14:00:00", "2015-11-25 15:05:00")
 				.WithSchedule(person, breaks, "2015-11-25 15:05:00", "2015-11-25 15:15:00")
 				.WithSchedule(person, inbound, "2015-11-25 15:15:00", "2015-11-25 17:15:00")
