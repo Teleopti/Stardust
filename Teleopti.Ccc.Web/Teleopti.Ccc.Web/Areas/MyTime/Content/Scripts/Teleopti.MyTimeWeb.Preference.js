@@ -147,7 +147,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		});
 	}
 
-	function _setPreference(preference) {
+	function _setPreference(preference,cb) {
 		var promises = [];
 
 		addExtendedPreferenceFormViewModel.ValidationError('');
@@ -172,6 +172,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				periodFeedbackViewModel.LoadFeedback();
 				loadNeighborFeedback();
 				periodFeedbackViewModel.PossibleNightRestViolations();
+				cb();
 			});
 		}
 	}

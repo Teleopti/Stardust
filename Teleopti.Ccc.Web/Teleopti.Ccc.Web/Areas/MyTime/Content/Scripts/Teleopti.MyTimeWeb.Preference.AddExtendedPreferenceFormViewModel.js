@@ -116,8 +116,9 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
     };
 
     this.SavePreferences = function () {
-    	savePreferenceMethod(ko.toJS(self));
-	    if (self.isPreferenceForMobileEnabled && $(".phone-form-preference").length > 0) self.AddPreferenceFormVisible(false);
+    	savePreferenceMethod(ko.toJS(self), function () {
+    		if (!self.ShowError() && self.isPreferenceForMobileEnabled && $(window).width() <= 767) self.AddPreferenceFormVisible(false);
+	    });
     };
 
 	this.ToggleAddPreferenceFormVisible = function () {
