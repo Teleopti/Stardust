@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		[Test]
 		public void ShouldMoveShiftAwayFromMaxSeatPeak()
 		{
-			var activity = new Activity("_") {RequiresSeat = true};
+			var activity = new Activity("_") {RequiresSeat = true}.WithId();
 			var dateOnly = DateOnly.Today;
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var site = new Site("_")
 			{
 				MaxSeats = 1
-			};
+			}.WithId();
 			var team = new Team {Site = site};
 			var agentScheduledForAnHour = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			var assigmentHour = new PersonAssignment(agentScheduledForAnHour, scenario, dateOnly);
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		[Test, Ignore("#40939")]
 		public void ShouldDoNothingWhenNotAboveMaxSeatLimitation()
 		{
-			var activity = new Activity("_") { RequiresSeat = true };
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = DateOnly.Today;
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
@@ -62,11 +62,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var site = new Site("_")
 			{
 				MaxSeats = 2
-			};
+			}.WithId();
 			var team = new Team { Site = site };
 			var agentScheduledForAnHour = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			var assigmentHour = new PersonAssignment(agentScheduledForAnHour, scenario, dateOnly);
-			assigmentHour.AddActivity(activity, new TimePeriod(8, 0, 9, 0)); //should force other agent to start 9
+			assigmentHour.AddActivity(activity, new TimePeriod(8, 0, 9, 0)); //should not be enough to break max seat
 			assigmentHour.SetShiftCategory(shiftCategory);
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1);
