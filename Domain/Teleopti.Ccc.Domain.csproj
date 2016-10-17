@@ -506,6 +506,9 @@
     <Compile Include="Scheduling\SeatLimitation\IInitMaxSeatForStateHolder.cs" />
     <Compile Include="Scheduling\SeatLimitation\InitMaxSeatForStateHolder.cs" />
     <Compile Include="Scheduling\SeatLimitation\InitMaxSeatForStateHolderOld.cs" />
+    <Compile Include="Scheduling\SeatLimitation\MaxSeatSkillData.cs" />
+    <Compile Include="Scheduling\SeatLimitation\MaxSeatSkillDataFactory.cs" />
+    <Compile Include="Scheduling\SeatLimitation\SkillsFromMaxSeatSite.cs" />
     <Compile Include="Scheduling\TeamBlock\AssignScheduledLayers.cs" />
     <Compile Include="Scheduling\TeamBlock\BetweenDayOffBlockFinder.cs" />
     <Compile Include="Scheduling\TeamBlock\ReturnPeriodBasedOnDayBlockFinder.cs" />

@@ -8,17 +8,17 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 {
 	public class MaxSeatOptimization
 	{
-		private readonly MaxSeatSkillCreator _maxSeatSkillCreator;
+		private readonly MaxSeatSkillDataFactory _maxSeatSkillDataFactory;
 		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IShiftProjectionCacheManager _shiftProjectionCacheManager;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
-		public MaxSeatOptimization(MaxSeatSkillCreator maxSeatSkillCreator,
+		public MaxSeatOptimization(MaxSeatSkillDataFactory maxSeatSkillDataFactory, 
 														CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 														IShiftProjectionCacheManager shiftProjectionCacheManager,
 														IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
-			_maxSeatSkillCreator = maxSeatSkillCreator;
+			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_shiftProjectionCacheManager = shiftProjectionCacheManager;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
@@ -26,20 +26,21 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 
 		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> persons, IScheduleDictionary schedules, IScenario scenario, IOptimizationPreferences optimizationPreferences)
 		{
-			var generatedMaxSeatSkills = _maxSeatSkillCreator.CreateMaxSeatSkills(period, scenario, persons.ToArray(), Enumerable.Empty<ISkill>());
-			var allSkillDays = generatedMaxSeatSkills.SkillDaysToAddToStateholder.SelectMany(x => x.Value);
-			using (_resourceCalculationContextFactory.Create(schedules, generatedMaxSeatSkills.SkillsToAddToStateholder))
+			var maxSeatData = _maxSeatSkillDataFactory.Create(period, persons, scenario);
+
+
+			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills()))
 			{
 				foreach (var date in period.DayCollection())
 				{
-					foreach (var skillDay in allSkillDays.Where(x => x.CurrentDate == date))
+					foreach (var skillDay in maxSeatData.SkillDaysForDate(date))
 					{
 						foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 						{
 							//hitta gubbe random?
 							foreach (var person in persons)
 							{
-								if (!person.Period(date).PersonMaxSeatSkillCollection.Select(x => x.Skill).Contains(skillDay.Skill)) //titta över
+								if (person.Period(date).Team.Site.Id.Value != skillDay.Skill.Id.Value) //titta över
 									continue;
 
 								if (ResourceCalculationContext.Fetch().ActivityResourcesWhereSeatRequired(skillDay.Skill, skillStaffPeriod.Period) <= skillStaffPeriod.Payload.MaxSeats)

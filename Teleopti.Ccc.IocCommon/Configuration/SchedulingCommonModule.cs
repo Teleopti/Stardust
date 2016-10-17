@@ -584,6 +584,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<InitMaxSeatForStateHolderOld>().As<IInitMaxSeatForStateHolder>().SingleInstance();
 			}
+			builder.RegisterType<MaxSeatSkillDataFactory>().SingleInstance();
+			builder.RegisterType<SkillsFromMaxSeatSite>().SingleInstance();
 		}
 
 		[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
