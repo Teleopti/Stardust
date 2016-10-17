@@ -15030,4 +15030,8 @@ These options are activated:
     <value>Required Staff</value>
     <comment>Required Staff in web intraday</comment>
   </data>
+  <data name="RequestDenyReasonRequestExpired" xml:space="preserve">
+    <value>Your absence request has been denied automatically. The start time of this request is {0}, it must be at least {1} minutes later than current time</value>
+    <comment>{0} start time of request, {1} minimum minutes for expired threshold</comment>
+  </data>
 </root>

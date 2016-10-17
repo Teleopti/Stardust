@@ -23514,6 +23514,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your absence request has been denied automatically. The start time of this request is {0}, it must be at least {1} minutes later than current time.
+        /// </summary>
+        public static string RequestDenyReasonRequestExpired {
+            get {
+                return ResourceManager.GetString("RequestDenyReasonRequestExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your absence request has been denied automatically, since it would bring the needed number of resources below the required threshold..
         /// </summary>
         public static string RequestDenyReasonSkillThreshold {

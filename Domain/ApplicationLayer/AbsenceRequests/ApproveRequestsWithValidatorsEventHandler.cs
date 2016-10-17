@@ -22,17 +22,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IList<BeforeApproveAction> _beforeApproveActions;
 		private readonly IWriteProtectedScheduleCommandValidator _writeProtectedScheduleCommandValidator;
 		private readonly IMessageBrokerComposite _messageBroker;
+		private readonly IGlobalSettingDataRepository _globalSettingsDataRepository;
+		private readonly INow _now;
 
 		public ApproveRequestsWithValidatorsEventHandler(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 			IAbsenceRequestProcessor absenceRequestProcessor, IPersonRequestRepository personRequestRepository,
 			IWriteProtectedScheduleCommandValidator writeProtectedScheduleCommandValidator,
-			IMessageBrokerComposite messageBroker)
+			IMessageBrokerComposite messageBroker,
+			IGlobalSettingDataRepository globalSettingsDataRepository, INow now)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_absenceRequestProcessor = absenceRequestProcessor;
 			_personRequestRepository = personRequestRepository;
 			_writeProtectedScheduleCommandValidator = writeProtectedScheduleCommandValidator;
 			_messageBroker = messageBroker;
+			_globalSettingsDataRepository = globalSettingsDataRepository;
+			_now = now;
 			_beforeApproveActions = new List<BeforeApproveAction>
 			{
 				checkPersonRequest,
@@ -87,12 +92,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			return !(personRequest.Request is IAbsenceRequest);
 		}
 
-		private static IEnumerable<IAbsenceRequestValidator> getAbsenceRequestValidators(RequestValidatorsFlag validator)
+		private IEnumerable<IAbsenceRequestValidator> getAbsenceRequestValidators(RequestValidatorsFlag validator)
 		{
 			if (validator.HasFlag(RequestValidatorsFlag.BudgetAllotmentValidator))
 				yield return new BudgetGroupHeadCountValidator();
 			if (validator.HasFlag(RequestValidatorsFlag.IntradayValidator))
 				yield return new StaffingThresholdValidator();
+			if (validator.HasFlag(RequestValidatorsFlag.ExpirationValidator))
+				yield return new RequestExpirationValidator(_now, _globalSettingsDataRepository);
 		}
 
 		private delegate bool BeforeApproveAction(IPersonRequest personRequest);

@@ -773,7 +773,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					new BudgetGroupAllowanceSpecification(_currentScenario, _fakeBudgetDayRepository,
 						_scheduleProjectionReadOnlyPersister),
 					new FakeScheduleDifferenceSaver(_scheduleRepository),
-					_personAccountUpdaterDummy, toggleManager);
+					_personAccountUpdaterDummy, toggleManager, new AbsenceRequestValidatorProvider(toggleManager, new FakeGlobalSettingDataRepository(), new Now()));
 			return absenceRequestStatusUpdater;
 		}
 

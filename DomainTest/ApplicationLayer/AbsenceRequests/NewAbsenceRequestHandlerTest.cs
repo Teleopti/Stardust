@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -86,12 +87,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			_validatedRequest = new ValidatedRequest { IsValid = true, ValidationErrors = "" };
 
+			var toggleManager = new FalseToggleManager();
 			_absenceRequest.Stub(x => x.Person).Return(_person);
 			var absenceRequestStatusUpdater = new AbsenceRequestUpdater(_personAbsenceAccountProvider,
 				_prereqLoader, _scenarioRepository, _loader, _loaderWithoutResourceCalculation, _factory,
 				_alreadyAbsentSpecification, _scheduleIsInvalidSpecification, _authorization, _budgetGroupHeadCountSpecification,
 				_resourceOptimizationHelper, _budgetGroupAllowanceSpecification, _scheduleDictionarySaver, _personAccountUpdater,
-				new FalseToggleManager());
+				toggleManager, new AbsenceRequestValidatorProvider(toggleManager, new FakeGlobalSettingDataRepository(), new Now()));
 
 
 			var absenceProcessor = new AbsenceRequestProcessor(absenceRequestStatusUpdater, () => _schedulingResultStateHolder);

@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private IProcessAbsenceRequest _process;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IToggleManager _toggleManager;
+		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
 
 		public AbsenceRequestUpdater(IPersonAbsenceAccountProvider personAbsenceAccountProvider,
 			IResourceCalculationPrerequisitesLoader prereqLoader, ICurrentScenario scenarioRepository,
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			IResourceOptimization resourceOptimizationHelper,
 			IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification,
 			IScheduleDifferenceSaver scheduleDictionarySaver, IPersonAccountUpdater personAccountUpdater,
-			IToggleManager toggleManager)
+			IToggleManager toggleManager, IAbsenceRequestValidatorProvider absenceRequestValidatorProvider)
 		{
 			_personAbsenceAccountProvider = personAbsenceAccountProvider;
 			_prereqLoader = prereqLoader;
@@ -69,6 +70,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_scheduleDictionarySaver = scheduleDictionarySaver;
 			_personAccountUpdater = personAccountUpdater;
 			_toggleManager = toggleManager;
+			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
 		}
 
 		public bool UpdateAbsenceRequest(IPersonRequest personRequest, IAbsenceRequest absenceRequest, IUnitOfWork unitOfWork,
@@ -76,7 +78,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 
-			IAbsenceRequestValidator[] validatorList = null;
+			List<IAbsenceRequestValidator> validatorList = null;
 			IPersonAccountBalanceCalculator personAccountBalanceCalculator = null;
 			IRequestApprovalService requestApprovalServiceScheduler = null;
 			IPersonAbsenceAccount affectedPersonAbsenceAccount = null;
@@ -101,7 +103,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				affectedPersonAbsenceAccount = allAccounts.Find(absenceRequest.Absence);
 
 				var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod(absenceRequest);
-				validatorList = (validators ?? mergedPeriod.GetSelectedValidatorList()).ToArray();
+				validatorList = (validators ?? _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod)).ToList();
 				_process = process ?? mergedPeriod.AbsenceRequestProcess;
 
 				loadDataForResourceCalculation(absenceRequest, validatorList);
@@ -398,7 +400,5 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		{
 			_scheduleDictionarySaver.SaveChanges(_schedulingResultStateHolder.Schedules.DifferenceSinceSnapshot(), (IUnvalidatedScheduleRangeUpdate)_schedulingResultStateHolder.Schedules[person]);
 		}
-
-
 	}
 }

@@ -2470,6 +2470,7 @@
     <Compile Include="WorkflowControl\ApproveAbsenceRequestWithValidators.cs" />
     <Compile Include="WorkflowControl\BudgetGroupAllowanceValidator.cs" />
     <Compile Include="WorkflowControl\BudgetGroupHeadCountValidator.cs" />
+    <Compile Include="WorkflowControl\RequestExpirationValidator.cs" />
     <Compile Include="WorkflowControl\SchedulePublishedSpecificationForAbsence.cs" />
     <Compile Include="WorkflowControl\DenyAbsenceRequest.cs" />
     <Compile Include="WorkflowControl\EmptyPersonAccountBalanceCalculator.cs" />

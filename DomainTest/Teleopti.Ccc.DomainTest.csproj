@@ -1544,6 +1544,7 @@
     <Compile Include="WorkflowControl\BudgetGroupAllowanceValidatorTest.cs" />
     <Compile Include="WorkflowControl\AlreadyAbsentValidatorTest.cs" />
     <Compile Include="WorkflowControl\BudgetGroupHeadCountValidatorTest.cs" />
+    <Compile Include="WorkflowControl\RequestExpirationValidatorTest.cs" />
     <Compile Include="WorkflowControl\SchedulePublishedSpecificationForAbsenseTest.cs" />
     <Compile Include="WorkflowControl\EmptyPersonAccountBalanceCalculatorTest.cs" />
     <Compile Include="WorkflowControl\DenyAbsenceRequestTest.cs" />

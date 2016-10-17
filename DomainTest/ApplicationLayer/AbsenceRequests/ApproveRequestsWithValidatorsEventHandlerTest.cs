@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			_target = new ApproveRequestsWithValidatorsEventHandler(_currentUnitOfWorkFactory,
 				getAbsenceRequestProcessor(_person, _personRequest), _personRequestRepository,
-				_writeProtectedScheduleCommandValidator, _messageBroker);
+				_writeProtectedScheduleCommandValidator, _messageBroker, new FakeGlobalSettingDataRepository(), new Now());
 		}
 
 		private void prepareTestData()
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			_target = new ApproveRequestsWithValidatorsEventHandler(_currentUnitOfWorkFactory,
 				getAbsenceRequestProcessor(_person, _personRequest), _personRequestRepository,
-				_writeProtectedScheduleCommandValidator, _messageBroker);
+				_writeProtectedScheduleCommandValidator, _messageBroker, new FakeGlobalSettingDataRepository(), new Now());
 
 			var personRequest2 = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime),
 				true);
@@ -298,7 +298,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					resourceOptimizationHelper,
 					budgetGroupAllowanceSpecification,
 					new FakeScheduleDifferenceSaver(_scheduleRepository),
-					_personAccountUpdaterDummy, toggleManager);
+					_personAccountUpdaterDummy, toggleManager, new AbsenceRequestValidatorProvider(toggleManager, new FakeGlobalSettingDataRepository(), new Now()));
 
 			return absenceRequestStatusUpdater;
 		}

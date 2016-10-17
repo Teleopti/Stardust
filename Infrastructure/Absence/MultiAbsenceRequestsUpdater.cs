@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IToggleManager _toggleManager;
+		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
 
 		public MultiAbsenceRequestsUpdater(IResourceCalculationPrerequisitesLoader prereqLoader, 
 			ICurrentScenario scenarioRepository,
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			IStardustJobFeedback feedback, 
 			ArrangeRequestsByProcessOrder arrangeRequestsByProcessOrder, 
 			IScheduleDayChangeCallback scheduleDayChangeCallback, 
-			ISchedulingResultStateHolder schedulingResultStateHolder, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IToggleManager toggleManager)
+			ISchedulingResultStateHolder schedulingResultStateHolder, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IToggleManager toggleManager, IAbsenceRequestValidatorProvider absenceRequestValidatorProvider)
 		{
 			_prereqLoader = prereqLoader;
 			_scenarioRepository = scenarioRepository;
@@ -88,6 +89,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_toggleManager = toggleManager;
+			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
 		}
 
 		public void UpdateAbsenceRequest(List<IPersonRequest> personRequests)
@@ -168,7 +170,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				var currentScenario = _scenarioRepository.Current();
 
 				var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod(absenceRequest);
-				var validatorList = mergedPeriod.GetSelectedValidatorList();
+				var validatorList = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
 				var processAbsenceRequest = mergedPeriod.AbsenceRequestProcess;
 
 
@@ -430,6 +432,5 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			}
 			return process;
 		}
-
 	}
 }
