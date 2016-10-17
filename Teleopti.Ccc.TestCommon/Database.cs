@@ -105,6 +105,12 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		[UnitOfWork]
+		public virtual Guid CurrentSiteId()
+		{
+			return site().Id.Value;
+		}
+
+		[UnitOfWork]
 		public virtual Guid SkillIdFor(string name)
 		{
 			return _skills.LoadAll().Where(x => x.Name == name).Select(x => x.Id).Single().Value;
@@ -143,8 +149,13 @@ namespace Teleopti.Ccc.TestCommon
 
 
 
-
-
+		
+		[UnitOfWork]
+		public virtual Database WithSite()
+		{
+			site();
+			return this;
+		}
 
 		private ISite site()
 		{
@@ -231,11 +242,22 @@ namespace Teleopti.Ccc.TestCommon
 		[UnitOfWork]
 		public virtual Database WithAgent()
 		{
-			return WithAgent(RandomName.Make());
+			return withAgent(RandomName.Make());
 		}
 
 		[UnitOfWork]
 		public virtual Database WithAgent(string name)
+		{
+			return withAgent(name);
+		}
+
+		[UnitOfWork]
+		public virtual Database WithTerminatedAgent(string name, string date)
+		{
+			return withAgent(name, date.Date());
+		}
+
+		private Database withAgent(string name, DateOnly? terminationDate = null)
 		{
 			var existing = _persons.LoadAll().SingleOrDefault(x => x.Name.FirstName == name);
 			if (existing != null)
@@ -254,6 +276,8 @@ namespace Teleopti.Ccc.TestCommon
 				contractSchedule());
 
 			var personPeriod = new PersonPeriod("2001-01-01".Date(), personContract, team());
+			if (terminationDate != null)
+				person.TerminatePerson(terminationDate.Value, new PersonAccountUpdaterDummy());
 			person.AddPersonPeriod(personPeriod);
 
 			var exteralLogOn = new ExternalLogOn
@@ -270,7 +294,7 @@ namespace Teleopti.Ccc.TestCommon
 
 			return this;
 		}
-		
+
 		private IPerson person()
 		{
 			return _persons.LoadAll().Single(x => x.Name.ToString() == _person);
@@ -462,6 +486,6 @@ namespace Teleopti.Ccc.TestCommon
 			_eventPublisher.Publish(new TenantMinuteTickEvent(), new TenantHourTickEvent());
 			return this;
 		}
-		
+
 	}
 }

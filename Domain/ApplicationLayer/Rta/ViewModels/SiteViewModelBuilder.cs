@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public IEnumerable<SiteViewModel> Build()
 		{
 			var sites = allPermittedSites();
-			var numberOfAgents = sites.Any() ? _numberOfAgentsInSiteReader.FetchNumberOfAgents(sites) : new Dictionary<Guid, int>();
+			var numberOfAgents = sites.Any() ? _numberOfAgentsInSiteReader.FetchNumberOfAgents(sites.Select(x => x.Id.Value)) : new Dictionary<Guid, int>();
 			return sites.Select(site => new SiteViewModel
 			{
 				Id = site.Id.Value,

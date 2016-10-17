@@ -44,17 +44,17 @@ group by a.Site";
 			_now = now;
 		}
 
-		public IDictionary<Guid, int> FetchNumberOfAgents(IEnumerable<ISite> sites)
+		public IDictionary<Guid, int> FetchNumberOfAgents(IEnumerable<Guid> sites)
 		{
 			var ret = new Dictionary<Guid, int>();
 			var queryResult = _currentUnitOfWork.Session().CreateSQLQuery(sqlQuery)
-				.SetParameterList("sites", sites.Select(x => x.Id.Value))
+				.SetParameterList("sites", sites)
 				.SetDateTime("now", _now.UtcDateTime())
 				.List();
 
 			foreach (var site in sites)
 			{
-				ret[site.Id.Value] = 0;
+				ret[site] = 0;
 			}
 
 			foreach (var resItemArray in queryResult)

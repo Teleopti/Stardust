@@ -26,9 +26,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				});
 		}
 
-		public IDictionary<Guid, int> FetchNumberOfAgents(IEnumerable<ISite> sites)
+		public IDictionary<Guid, int> FetchNumberOfAgents(IEnumerable<Guid> sites)
 		{
-			return _data.ToDictionary(x => x.SiteId, y => y.NumberOfAgents);
+			return 
+				(from siteId in sites
+					from model in _data
+					where siteId == model.SiteId
+					select new
+					{
+						SiteId = siteId,
+						NumberOfAgents = model.NumberOfAgents
+					}).ToDictionary(x => x.SiteId, y => y.NumberOfAgents);
 		}
 
 		public IDictionary<Guid, int> ForSkills(IEnumerable<Guid> sites, IEnumerable<Guid> skillIds)
