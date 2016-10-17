@@ -11427,7 +11427,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Forecasted staff.
+        ///   Looks up a localized string similar to Forecasted Staff.
         /// </summary>
         public static string ForecastedStaff {
             get {
@@ -23852,6 +23852,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Required {
             get {
                 return ResourceManager.GetString("Required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Required Staff.
+        /// </summary>
+        public static string RequiredStaff {
+            get {
+                return ResourceManager.GetString("RequiredStaff", resourceCulture);
             }
         }
         

@@ -9154,8 +9154,8 @@ Longterm</value>
     <comment>Difference in percent</comment>
   </data>
   <data name="ForecastedStaff" xml:space="preserve">
-    <value>Forecasted staff</value>
-    <comment>Forecasted staff</comment>
+    <value>Forecasted Staff</value>
+    <comment>Forecasted Staff</comment>
   </data>
   <data name="FulltimeEquivalentHoursPerDay" xml:space="preserve">
     <value>FTE h/day</value>
@@ -15025,5 +15025,9 @@ These options are activated:
   <data name="TeamsModule" xml:space="preserve">
     <value>Teams</value>
     <comment>name for WFM  Teams Module</comment>
+  </data>
+  <data name="RequiredStaff" xml:space="preserve">
+    <value>Required Staff</value>
+    <comment>Required Staff in web intraday</comment>
   </data>
 </root>
