@@ -183,6 +183,7 @@
 		Wfm_Intraday_OptimalStaffing_40921,
 		Wfm_SkillPriorityRoutingGUI_39885,
 		AbsenceRequest_WithOrWithoutShrinkage_41060,
+		LastHandlers_ToHangfire_41203,
 		ETL_EventbasedTimeZone_40870
 
 		// ReSharper restore InconsistentNaming

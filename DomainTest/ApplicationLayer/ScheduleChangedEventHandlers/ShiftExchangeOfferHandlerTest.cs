@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			personRequestRepository.Stub(x => x.FindOfferByStatus(person, date, 0)).Return(new[] { shiftExchangeOffer });
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.Get(personId)).Return(person);
-			var target = new ShiftExchangeOfferHandler(personRepository,
+			var target = new ShiftExchangeOfferHandlerHangfire(personRepository,
 				MockRepository.GenerateMock<IPushMessagePersister>(), personRequestRepository);
 			target.Handle(new ProjectionChangedEvent
 			{
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			personRepository.Stub(x => x.Get(personId)).Return(person);
 
 
-			var target = new ShiftExchangeOfferHandler(personRepository,
+			var target = new ShiftExchangeOfferHandlerHangfire(personRepository,
 				MockRepository.GenerateMock<IPushMessagePersister>(), personRequestRepository);
 			target.Handle(new ProjectionChangedEvent
 			{
