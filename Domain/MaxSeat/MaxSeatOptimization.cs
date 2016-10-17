@@ -27,50 +27,41 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> persons, IScheduleDictionary schedules, IScenario scenario)
 		{
 			var generatedMaxSeatSkills = _maxSeatSkillCreator.CreateMaxSeatSkills(period, scenario, persons.ToArray(), Enumerable.Empty<ISkill>());
-			var skillDays = generatedMaxSeatSkills.SkillDaysToAddToStateholder;
-
-
+			var allSkillDays = generatedMaxSeatSkills.SkillDaysToAddToStateholder.SelectMany(x => x.Value);
 			using (_resourceCalculationContextFactory.Create(schedules, generatedMaxSeatSkills.SkillsToAddToStateholder))
 			{
 				foreach (var date in period.DayCollection())
 				{
-					foreach (var skillPair in skillDays)
+					foreach (var skillDay in allSkillDays.Where(x => x.CurrentDate == date))
 					{
-						foreach (var skillDay in skillPair.Value)
+						foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 						{
-							foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
+							//hitta gubbe random?
+							foreach (var person in persons)
 							{
-								if (skillDay.CurrentDate != date)
-									continue; //FIX LATER
+								if (ResourceCalculationContext.Fetch().ActivityResourcesWhereSeatRequired(skillDay.Skill, skillStaffPeriod.Period) <= skillStaffPeriod.Payload.MaxSeats)
+									continue;
 
-								//hitta gubbe random?
-								foreach (var person in persons)
+								//BEST SHIFT STUFF
+								IEditableShift shiftToUse = null;
+								var shiftLengthBeforeTEMPremoveMe = schedules[person].ScheduledDay(date).PersonAssignment(true).Period.ElapsedTime();
+								foreach (var shift in _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(date, person.PermissionInformation.DefaultTimeZone(), person.Period(date).RuleSetBag, false, true))
 								{
-									if (ResourceCalculationContext.Fetch().ActivityResourcesWhereSeatRequired(skillDay.Skill, skillStaffPeriod.Period) <= skillStaffPeriod.Payload.MaxSeats)
-										continue;
-
-									//BEST SHIFT STUFF
-									IEditableShift shiftToUse = null;
-									var shiftLengthBeforeTEMPremoveMe = schedules[person].ScheduledDay(date).PersonAssignment(true).Period.ElapsedTime();
-									foreach (var shift in _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(date, person.PermissionInformation.DefaultTimeZone(), person.Period(date).RuleSetBag, false, true))
+									var layerThisPeriod = shift.MainShiftProjection.SingleOrDefault(x => x.Period.Contains(skillStaffPeriod.Period)); //should handle "containspart" and multiple layers on period cases
+									if ((layerThisPeriod == null || !((IActivity)layerThisPeriod.Payload).RequiresSeat)
+										&& shift.MainShiftProjection.Period().Value.ElapsedTime() == shiftLengthBeforeTEMPremoveMe) //remove this line later
 									{
-										var layerThisPeriod = shift.MainShiftProjection.SingleOrDefault(x => x.Period.Contains(skillStaffPeriod.Period)); //should handle "containspart" and multiple layers on period cases
-										if ((layerThisPeriod == null || !((IActivity) layerThisPeriod.Payload).RequiresSeat)
-											&& shift.MainShiftProjection.Period().Value.ElapsedTime() == shiftLengthBeforeTEMPremoveMe) //remove this line later
-										{
-											shiftToUse = shift.TheMainShift;
-											break;
-										}
+										shiftToUse = shift.TheMainShift;
+										break;
 									}
-
-
-									//REPLACE SHIFT
-									if(shiftToUse==null)
-										continue;
-									var schedule = schedules[person].ScheduledDay(date);
-									schedule.AddMainShift(shiftToUse);
-									schedules.Modify(schedule, _scheduleDayChangeCallback);
 								}
+
+								//REPLACE SHIFT
+								if (shiftToUse == null)
+									continue;
+								var schedule = schedules[person].ScheduledDay(date);
+								schedule.AddMainShift(shiftToUse);
+								schedules.Modify(schedule, _scheduleDayChangeCallback);
 							}
 						}
 					}
