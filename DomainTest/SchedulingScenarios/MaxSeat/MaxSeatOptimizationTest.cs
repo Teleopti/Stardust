@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment(true).ShiftLayers.First().Payload.RequiresSeat.Should().Be.False();
 		}
 
-		[Test, Ignore("#40939")]
+		[Test]
 		public void ShouldOnlyOptimizeAgentsHavingTheMaxSeatSkillThatIsOverLimit()
 		{
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var siteUnderLimit = new Site("_") {MaxSeats =  10}.WithId();
 			var dateOnly = DateOnly.Today;
 			var scenario = new Scenario("_");
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 9, 0, 60), new TimePeriodWithSegment(16, 0, 17, 0, 60), new ShiftCategory("_").WithId()));
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 9, 0, 60), new TimePeriodWithSegment(17, 0, 17, 0, 60), new ShiftCategory("_").WithId()));
 			var bag = new RuleSetBag(ruleSet);
 			var agentDataSiteOverLimit = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, siteOverLimit, bag, scenario, activity, new TimePeriod(8, 0, 16, 0));
 			var agentDataSiteUnderLimit = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, siteUnderLimit, bag, scenario, activity, new TimePeriod(8, 0, 16, 0));

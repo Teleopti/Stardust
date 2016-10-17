@@ -39,6 +39,9 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 							//hitta gubbe random?
 							foreach (var person in persons)
 							{
+								if(!person.Period(date).PersonMaxSeatSkillCollection.Select(x => x.Skill).Contains(skillDay.Skill)) //titta över
+									continue;
+
 								if (ResourceCalculationContext.Fetch().ActivityResourcesWhereSeatRequired(skillDay.Skill, skillStaffPeriod.Period) <= skillStaffPeriod.Payload.MaxSeats)
 									continue;
 
