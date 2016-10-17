@@ -5,7 +5,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -24,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public Func<IResourceOptimizationHelperExtended> ResourceOptimizationHelperExtended;
-		public MaxSeatSkillCreator MaxSeatSkillCreator; //Fix later
+		public IInitMaxSeatForStateHolder InitMaxSeatForStateHolder;
 
 		[TestCase(2000, 0, 2000)]
 		[TestCase(2000, 0.38, 3225)] //some "magic numbers" here to expose bug #40338
@@ -111,8 +110,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			agent.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = siteWithMaxSeats }), Enumerable.Empty<ISkill>());
 			var ass = new PersonAssignment(agent, scenario, date);
 			ass.AddActivity(activity, new TimePeriod(9, 0, 17, 0));
-			var stateHolder = SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, Enumerable.Empty<ISkillDay>());
-			stateHolder.InitMaxSeats(MaxSeatSkillCreator);
+			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, Enumerable.Empty<ISkillDay>());
+			InitMaxSeatForStateHolder.Execute();
 
 			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 

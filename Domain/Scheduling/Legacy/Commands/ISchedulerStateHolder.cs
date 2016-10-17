@@ -86,7 +86,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		bool AgentFilter();
 		void LoadCommonStateForResourceCalculationOnly(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory);
-
-		void InitMaxSeats(MaxSeatSkillCreator maxSeatSkillCreator);
 	}
 }

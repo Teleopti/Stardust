@@ -4962,7 +4962,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 						stateHolder.RequestedPeriod.DateOnlyPeriod.EndDate.AddDays(8)), stateHolder.SchedulingResultState.Skills,
 					stateHolder.RequestedScenario);
 
-					stateHolder.InitMaxSeats(_container.Resolve<MaxSeatSkillCreator>());
+				_container.Resolve<IInitMaxSeatForStateHolder>().Execute();
+
 					IList<ISkillStaffPeriod> skillStaffPeriods =
 					stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
 						stateHolder.SchedulingResultState.Skills, stateHolder.LoadedPeriod.Value);
