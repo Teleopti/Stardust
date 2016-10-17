@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner, () => Resources.SeatMap, "seatMap"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, () => Resources.RealTimeAdherence, "rta"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebIntraday, () => Resources.Intraday, "intraday"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, () => Resources.Teams, "teams"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, () => Resources.TeamsModule, "teams"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.AccessToReports, () => Resources.Reports, "reports")
 		};
 

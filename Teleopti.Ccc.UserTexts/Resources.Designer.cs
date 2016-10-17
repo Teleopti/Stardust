@@ -29942,6 +29942,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Teams.
+        /// </summary>
+        public static string TeamsModule {
+            get {
+                return ResourceManager.GetString("TeamsModule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to teams or locations are unselected.
         /// </summary>
         public static string TeamsOrLocationsAreUnselected {

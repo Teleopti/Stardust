@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 
 			// Web
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.Anywhere, "xxAnywhere", DefinedRaptorApplicationFunctionForeignIds.Anywhere, null);
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, "xxTeams", DefinedRaptorApplicationFunctionForeignIds.MyTeamSchedules, null);
+			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, "xxTeamsModule", DefinedRaptorApplicationFunctionForeignIds.MyTeamSchedules, null);
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence, "xxAddFullDayAbsence", DefinedRaptorApplicationFunctionForeignIds.AddFullDayAbsence, null);
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence, "xxAddIntradayAbsence", DefinedRaptorApplicationFunctionForeignIds.AddIntradayAbsence, null);
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.RemoveAbsence, "xxRemoveAbsence", DefinedRaptorApplicationFunctionForeignIds.RemoveAbsence, null);
