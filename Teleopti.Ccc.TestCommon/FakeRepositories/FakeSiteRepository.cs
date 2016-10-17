@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Has(Guid siteId)
 		{
-			var site = new Site(RandomName.Make());
-			site.SetId(siteId);
+			var site = new Site(RandomName.Make())
+				.WithId(siteId);
 			_data.Add(site);
 		}
 

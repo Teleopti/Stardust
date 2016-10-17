@@ -38,5 +38,10 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.List()
 				.Cast<TeamInAlarmModel>();
 		}
+
+		public IEnumerable<TeamInAlarmModel> ReadForSkills(Guid siteId, Guid[] skillIds)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

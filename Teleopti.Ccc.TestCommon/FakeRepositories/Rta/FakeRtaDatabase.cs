@@ -98,7 +98,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			FakeDataSourceForTenant dataSourceForTenant,
 			FakeScheduleProjectionReadOnlyPersister schedules,
 			AgentStateMaintainer agentStateMaintainer,
-			IScheduleStorage scheduleStorage
+			IScheduleStorage scheduleStorage,
+			FakeSiteInAlarmReader siteInAlarmReader,
+			FakeTeamInAlarmReader teamInAlarmReader
 			) : base(
 				tenants, 
 				persons, 
@@ -124,7 +126,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				stateGroups, 
 				mappings, 
 				externalLogOns, 
-				dataSources)
+				dataSources,
+				siteInAlarmReader, 
+				teamInAlarmReader)
 		{
 			_agentStates = agentStates;
 			_agentStateReadModels = agentStateReadModels;

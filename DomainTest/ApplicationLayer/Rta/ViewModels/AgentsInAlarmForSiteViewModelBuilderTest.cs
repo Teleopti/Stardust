@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 {
 	[DomainTest]
 	[TestFixture]
-	public class SiteAdherenceForSkillTest
+	public class AgentsInAlarmForSiteViewModelBuilderTest
 	{
 		public AgentsInAlarmForSiteViewModelBuilder Target;
 		public FakeSiteInAlarmReader Database;

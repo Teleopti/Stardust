@@ -220,7 +220,6 @@
     </Compile>
     <Compile Include="Areas\Anywhere\BusinessUnitControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Rta\FakeNumberOfAgentsInTeamReader.cs" />
-    <Compile Include="Areas\Anywhere\Rta\FakeTeamOutOfAdherenceReadModelReader.cs" />
     <Compile Include="Areas\Anywhere\GroupPageControllerTest.cs" />
     <Compile Include="Areas\Anywhere\ReportsControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Rta\TeamsControllerTest.cs" />

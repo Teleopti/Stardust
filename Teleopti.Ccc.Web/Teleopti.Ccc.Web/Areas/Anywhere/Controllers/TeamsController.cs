@@ -7,16 +7,16 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
 	public class TeamsController : ApiController
 	{
-		private readonly IGetTeamAdherence _getTeamAdherence;
+		private readonly AgentsInAlarmForTeamsViewModelBuilder _inAlarmForTeams;
 		private readonly TeamViewModelBuilder _teamViewModelBuilder;
 		private readonly IGetBusinessUnitId _getBusinessUnitId;
 
 		public TeamsController(
-			IGetTeamAdherence getTeamAdherence,
+			AgentsInAlarmForTeamsViewModelBuilder inAlarmForTeams,
 			TeamViewModelBuilder teamViewModelBuilder,
 			IGetBusinessUnitId getBusinessUnitId)
 		{
-			_getTeamAdherence = getTeamAdherence;
+			_inAlarmForTeams = inAlarmForTeams;
 			_teamViewModelBuilder = teamViewModelBuilder;
 			_getBusinessUnitId = getBusinessUnitId;
 		}
@@ -26,11 +26,17 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		{
 			return Ok(_teamViewModelBuilder.Build(siteId));
 		}
-		
+
 		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Teams/GetOutOfAdherenceForTeamsOnSite")]
 		public virtual IHttpActionResult GetOutOfAdherenceForTeamsOnSite(Guid siteId)
 		{
-			return Ok(_getTeamAdherence.GetOutOfAdherenceForTeamsOnSite(siteId));
+			return Ok(_inAlarmForTeams.GetOutOfAdherenceForTeamsOnSite(siteId));
+		}
+
+		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Teams/GetOutOfAdherenceForAllTeamsOnSitesBySkill")]
+		public virtual IHttpActionResult InAlarmCountForTeamsOnSiteForSkills(Guid siteId, Guid[] skillIds)
+		{
+			return Ok(_inAlarmForTeams.ForSkills(siteId, skillIds));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Teams/GetBusinessUnitId")]

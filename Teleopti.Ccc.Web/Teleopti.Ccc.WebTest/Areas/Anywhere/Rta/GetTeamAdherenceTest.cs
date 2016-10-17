@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 	[DomainTest]
 	public class GetTeamAdherenceTest : ISetup
 	{
-		public IGetTeamAdherence Target;
+		public AgentsInAlarmForTeamsViewModelBuilder Target;
 		public FakeTeamRepository Teams;
 		public FakeSiteRepository Sites;
 		public FakeTeamInAlarmReader OutOfAdherence;

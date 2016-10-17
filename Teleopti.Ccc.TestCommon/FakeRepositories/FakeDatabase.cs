@@ -226,6 +226,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		protected readonly FakeRtaMapRepository _mappings;
 		private readonly FakeExternalLogOnRepository _externalLogOns;
 		private readonly FakeDataSources _dataSources;
+		private readonly FakeSiteInAlarmReader _siteInAlarmReader;
+		private readonly FakeTeamInAlarmReader _teamInAlarmReader;
 
 
 		private BusinessUnit _businessUnit;
@@ -275,7 +277,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakeRtaStateGroupRepository stateGroups,
 			FakeRtaMapRepository mappings,
 			FakeExternalLogOnRepository externalLogOns,
-			FakeDataSources dataSources
+			FakeDataSources dataSources,
+			FakeSiteInAlarmReader siteInAlarmReader,
+			FakeTeamInAlarmReader teamInAlarmReader
 			)
 		{
 			_tenants = tenants;
@@ -302,6 +306,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_stateGroups = stateGroups;
 			_externalLogOns = externalLogOns;
 			_dataSources = dataSources;
+			_siteInAlarmReader = siteInAlarmReader;
+			_teamInAlarmReader = teamInAlarmReader;
 			_mappings = mappings;
 
 			createDefaultData();
@@ -795,6 +801,20 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_rtaRule.IsAlarm = true;
 			_rtaRule.ThresholdTime = (int) threshold.TotalSeconds;
 			_rtaRule.AlarmColor = color.GetValueOrDefault();
+			return this;
+		}
+		
+		public FakeDatabase WithAgentState(AgentStateReadModel agentStateReadModel)
+		{
+			_siteInAlarmReader.Has(agentStateReadModel);
+			_teamInAlarmReader.Has(agentStateReadModel);
+			return this;
+		}
+		
+		public FakeDatabase OnSkill(Guid skill)
+		{
+			_siteInAlarmReader.OnSkill(skill);
+			_teamInAlarmReader.OnSkill(skill);
 			return this;
 		}
 
