@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Http;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Stardust;
@@ -50,6 +51,19 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public IHttpActionResult JobQueueList()
 		{
 			return Ok(_stardustRepository.GetAllQueuedJobs());
+		}
+
+		[HttpGet, Route("Stardust/QueuedJobsSummary")]
+		public IHttpActionResult JobQueueListSummary()
+		{
+			return Ok(_stardustRepository.GetTop5QueuedJobs());
+		}
+
+		[HttpGet, Route("Stardust/AliveWorkerNodes")]
+		public IHttpActionResult AliveWorkerNodes()
+		{
+			var allNodes = _stardustRepository.GetAllWorkerNodes();
+			return Ok(allNodes.Where(x => x.Alive));
 		}
 
 		[HttpGet, Route("Stardust/WorkerNodes")]

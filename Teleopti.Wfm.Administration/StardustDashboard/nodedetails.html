@@ -1,39 +1,39 @@
-﻿<div class="nav" ng-include="'./StardustDashboard/menu.html'" role="navigation"></div>
-<div ng-controller="nodeDetailsController as vm" style="margin-left: 50px;margin-right: 50px">
+﻿<div class="container body-content" ng-controller="nodeDetailsController as vm">
+	<div class="nav" ng-include="'./StardustDashboard/menu.html'" role="navigation"></div>
 	<div class="col-md-12">
-		<a style="float: left; padding-top: 25px; padding-right: 50px" href="#StardustDashboard"><img alt="back" title="Back to Stardust Manager" src="Content/images/left_round.png"/></a>
+		<a style="float: left; padding-top: 25px; padding-right: 50px" href="#StardustDashboard/nodes"><img alt="back" title="Back to Stardust Manager" src="Content/images/left_round.png" /></a>
 		<h2>Node details</h2>
 		<h5>Note! All timestamps are in UTC!</h5>
 		<div>
 			<div class="row">
 				<table>
 					<thead>
-					<tr>
-						<th>Url</th>
-						<th>Latest Heartbeat</th>
-						<th>Working</th>
-						<th>Alive</th>
-					</tr>
+						<tr>
+							<th>Url</th>
+							<th>Latest Heartbeat</th>
+							<th>Working</th>
+							<th>Alive</th>
+						</tr>
 					</thead>
 					<tbody>
-					<tr ng-class="{'greenNode': vm.Node.Alive === true, 'redNode':vm.Node.Alive === false}">
-						<td>{{vm.Node.Url}}</td>
-						<td>{{vm.Node.Heartbeat | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-						<td>{{vm.Node.Running}}</td>
-						<td>{{vm.Node.Alive}}</td>
-					</tr>
+						<tr ng-class="{'greenNode': vm.Node.Alive === true, 'redNode':vm.Node.Alive === false}">
+							<td>{{vm.Node.Url}}</td>
+							<td>{{vm.Node.Heartbeat | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+							<td>{{vm.Node.Running}}</td>
+							<td>{{vm.Node.Alive}}</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
 		</div>
 	</div>
 
-    <div class="row">
-        <div class="col-md-12">
-	        <h3>Latest Jobs</h3>
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Latest Jobs</h3>
 			<h5>Click the Type of a job to see details.</h5>
-            <div>
-                <table>
+			<div>
+				<table>
 					<thead>
 						<tr>
 							<th>Type</th>
@@ -52,8 +52,8 @@
 							<td>{{job.Result}}</td>
 						</tr>
 					</tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+				</table>
+			</div>
+		</div>
+	</div>
 </div>

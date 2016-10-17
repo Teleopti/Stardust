@@ -313,6 +313,37 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			return jobs;
 		}
 
+		public List<Job> GetTop5QueuedJobs()
+		{
+			var jobs = new List<Job>();
+
+			using (var sqlConnection = new SqlConnection(_connectionString))
+			{
+				sqlConnection.OpenWithRetry(_retryPolicy);
+				var selectCommandText = @"SELECT TOP 5 [JobId]
+											  ,[Name]
+											  ,[Created]
+											  ,[CreatedBy]
+										  FROM [Stardust].[JobQueue] order by Created asc";
+				using (var getAllQueuedJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
+				{
+					using (var sqlDataReader = getAllQueuedJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
+					{
+						if (sqlDataReader.HasRows)
+						{
+							while (sqlDataReader.Read())
+							{
+								var job = createQueuedJobFromSqlDataReader(sqlDataReader);
+								jobs.Add(job);
+							}
+						}
+					}
+				}
+			}
+			return jobs;
+		}
+
+
 		private T getDBNullSafeValue<T>(object value) where T : class
 		{
 			return value == DBNull.Value ? null : (T)value;

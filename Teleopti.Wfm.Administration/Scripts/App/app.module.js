@@ -52,19 +52,19 @@
 				})
 				.when('/StardustDashboard', {
 					templateUrl: 'StardustDashboard/stardust.html',
-					controller: 'stardustController'
+					controller: 'summaryController'
 				})
 				.when('/StardustDashboard/nodes', {
 					templateUrl: 'StardustDashboard/nodes.html',
-					controller: 'stardustController'
+					controller: 'nodeController'
 				})
 				.when('/StardustDashboard/jobs', {
 					templateUrl: 'StardustDashboard/jobs.html',
-					controller: 'stardustController'
+					controller: 'jobController'
 				})
 				.when('/StardustDashboard/queue', {
 					templateUrl: 'StardustDashboard/queue.html',
-					controller: 'stardustController'
+					controller: 'jobQueueController'
 				})
 				.when('/jobdetails/:jobId', {
 					templateUrl: 'StardustDashboard/jobdetails.html',
