@@ -576,7 +576,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SchedulerSkillDayHelper>().As<ISchedulerSkillDayHelper>().SingleInstance();
 			builder.RegisterType<CreatePersonalSkillsFromMaxSeatSites>().As<ICreatePersonalSkillsFromMaxSeatSites>().SingleInstance();
 			builder.RegisterType<MaxSeatSkillCreator>().SingleInstance();
-			builder.RegisterType<InitMaxSeatForStateHolder>().As<IInitMaxSeatForStateHolder>().SingleInstance();
+			builder.RegisterType<InitMaxSeatForStateHolderOld>().As<IInitMaxSeatForStateHolder>().SingleInstance();
 		}
 
 		[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]

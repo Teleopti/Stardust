@@ -5,12 +5,12 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 
 namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 {
-	public class InitMaxSeatForStateHolder : IInitMaxSeatForStateHolder
+	public class InitMaxSeatForStateHolderOld : IInitMaxSeatForStateHolder
 	{
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
 		private readonly MaxSeatSkillCreator _maxSeatSkillCreator;
 
-		public InitMaxSeatForStateHolder(Func<ISchedulerStateHolder> stateHolder, MaxSeatSkillCreator maxSeatSkillCreator)
+		public InitMaxSeatForStateHolderOld(Func<ISchedulerStateHolder> stateHolder, MaxSeatSkillCreator maxSeatSkillCreator)
 		{
 			_stateHolder = stateHolder;
 			_maxSeatSkillCreator = maxSeatSkillCreator;

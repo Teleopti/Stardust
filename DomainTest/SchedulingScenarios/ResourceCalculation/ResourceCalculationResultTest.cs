@@ -6,11 +6,13 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -19,11 +21,19 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
-	public class ResourceCalculationResultTest
+	[TestFixture(true)]
+	[TestFixture(false)]
+	public class ResourceCalculationResultTest : IConfigureToggleManager
 	{
+		private readonly bool _resourcePlannerMaxSeatsNew40939;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public Func<IResourceOptimizationHelperExtended> ResourceOptimizationHelperExtended;
 		public IInitMaxSeatForStateHolder InitMaxSeatForStateHolder;
+
+		public ResourceCalculationResultTest(bool resourcePlannerMaxSeatsNew40939)
+		{
+			_resourcePlannerMaxSeatsNew40939 = resourcePlannerMaxSeatsNew40939;
+		}
 
 		[TestCase(2000, 0, 2000)]
 		[TestCase(2000, 0.38, 3225)] //some "magic numbers" here to expose bug #40338
@@ -121,6 +131,18 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.SkillStaffPeriodCollection.Single(x => x.Period.StartDateTime.TimeOfDay == TimeSpan.FromHours(9))
 				.Payload.CalculatedUsedSeats
 				.Should().Be.EqualTo(1);
+		}
+
+		public void Configure(FakeToggleManager toggleManager)
+		{
+			if (_resourcePlannerMaxSeatsNew40939)
+			{
+				toggleManager.Enable(Toggles.ResourcePlanner_MaxSeatsNew_40939);
+			}
+			else
+			{
+				toggleManager.Disable(Toggles.ResourcePlanner_MaxSeatsNew_40939);
+			}
 		}
 	}
 }
