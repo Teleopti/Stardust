@@ -28,20 +28,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			var types = new List<RequestType>
 			{
 				RequestType.AbsenceRequest,
-				RequestType.ShiftExchangeOffer,
-				RequestType.ShiftTradeRequest,
 				RequestType.TextRequest
 			};
 
-			if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb,
-				DateOnly.Today, _loggedOnUser.CurrentUser()))
+			var hasPermissionForShiftTrade = _permissionProvider.HasPersonPermission(
+				DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, DateOnly.Today,
+				_loggedOnUser.CurrentUser());
+			if (hasPermissionForShiftTrade)
 			{
-				types.Remove(RequestType.ShiftExchangeOffer);
-				types.Remove(RequestType.ShiftTradeRequest);
+				types.Add(RequestType.ShiftExchangeOffer);
+				types.Add(RequestType.ShiftTradeRequest);
 			}
 
-			var earliestDate = hideOldRequest ? DateTime.UtcNow.AddDays(-10) : (DateTime?) null;
-			return _repository.FindAllRequestsForAgentByType(_loggedOnUser.CurrentUser(), paging, earliestDate, types.ToArray());
+			var currentTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var earliestDate = hideOldRequest
+				? TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, currentTimezone).AddDays(-10).Date
+				: (DateTime?) null;
+			return _repository.FindAllRequestsForAgentByType(_loggedOnUser.CurrentUser(), paging,
+				earliestDate, types.ToArray());
 		}
 
 		public IEnumerable<IPersonRequest> RetrieveRequestsForLoggedOnUser(DateOnlyPeriod period)

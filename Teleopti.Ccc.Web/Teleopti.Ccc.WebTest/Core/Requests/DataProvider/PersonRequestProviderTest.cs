@@ -101,31 +101,42 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldFindAllRequestsForCurrentUserAfterSpecificDateWithPaging()
 		{
+			var timezone = TimeZoneInfo.FindSystemTimeZoneById("China Standard Time");
+			var person = MockRepository.GenerateMock<IPerson>();
+			person.Stub(x => x.PermissionInformation.DefaultTimeZone()).Return(timezone);
+
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+
 			var repository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			var target = new PersonRequestProvider(repository, loggedOnUser, null, new FakePermissionProvider());
-			var person = new Person();
 			var paging = new Paging();
+
+			var personRequestFactory = new PersonRequestFactory
+			{
+				Person = person
+			};
+
 			var personRequests = new[]
 			{
-				new PersonRequestFactory().CreatePersonRequest(),
-				new PersonRequestFactory().CreatePersonRequest()
+				personRequestFactory.CreatePersonRequest(),
+				personRequestFactory.CreatePersonRequest()
 			};
 			var requestTypes = new List<RequestType>
 			{
 				RequestType.AbsenceRequest,
 				RequestType.TextRequest
 			};
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			var earliestDate = DateTime.UtcNow.AddDays(-10);
+
+			var earliestDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timezone).AddDays(-10).Date;
 			repository.Stub(x => x.FindAllRequestsForAgentByType(person, paging, earliestDate, requestTypes.ToArray()))
 				.IgnoreArguments().Return(personRequests);
 
 			var result = target.RetrieveRequestsForLoggedOnUser(paging, true);
 			repository.AssertWasCalled(x => x.FindAllRequestsForAgentByType(
-				Arg<IPerson>.Matches(p => p.Equals(person)),
+				Arg<IPerson>.Matches(p => p == person),
 				Arg<Paging>.Matches(p => p.Equals(paging)),
-				Arg<DateTime>.Is.Anything,
+				Arg<DateTime>.Matches(d => d == earliestDate),
 				Arg<RequestType[]>.Matches(r => r.SequenceEqual(requestTypes))));
 			Assert.That(personRequests.Length, Is.EqualTo(result.Count()));
 		}
