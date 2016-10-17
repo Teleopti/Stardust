@@ -42,14 +42,23 @@
 			}
 		}
 
+		ctrl.isSelectedEnabled = function(timezoneId) {
+			return timezoneId && (timezoneId.indexOf('invalidIanaId') < 0);
+		}
+
 		function populateTimezoneList() {
 			var defaultTimezone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
 			var defaultTimezoneName = currentUserInfo.CurrentUserInfo().DefaultTimeZoneName;
 
 			var timezoneDict = {};
 			timezoneDict[defaultTimezone] = defaultTimezoneName;
-			ctrl.availableTimezones.forEach(function(z) {
-				timezoneDict[z.IanaId] = z.DisplayName;
+			ctrl.availableTimezones.forEach(function (z) {
+				if (z.IanaId === "") {
+					timezoneDict['invalidIanaId' +' '+ z.DisplayName] = z.DisplayName;
+				} else {
+					timezoneDict[z.IanaId] = z.DisplayName;
+				}
+				
 			});
 			ctrl.timezoneList = [];
 		

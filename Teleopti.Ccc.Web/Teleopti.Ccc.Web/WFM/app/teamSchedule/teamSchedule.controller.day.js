@@ -177,7 +177,7 @@
 		};
 
 		function populateAvailableTimezones(schedules) {
-			vm.availableTimezones = schedules.Schedules.map(function(s) {
+			vm.availableTimezones = schedules.Schedules.map(function (s) {
 				return s.Timezone;
 			});			
 		}
