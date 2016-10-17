@@ -128,15 +128,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				RequestType.TextRequest
 			};
 
-			var earliestDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timezone).AddDays(-10).Date;
-			repository.Stub(x => x.FindAllRequestsForAgentByType(person, paging, earliestDate, requestTypes.ToArray()))
+			var earliestDateLocal = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timezone).AddDays(-10).Date;
+			var earliestDateUtc = TimeZoneInfo.ConvertTimeToUtc(earliestDateLocal);
+			repository.Stub(x => x.FindAllRequestsForAgentByType(person, paging, earliestDateUtc, requestTypes.ToArray()))
 				.IgnoreArguments().Return(personRequests);
 
 			var result = target.RetrieveRequestsForLoggedOnUser(paging, true);
 			repository.AssertWasCalled(x => x.FindAllRequestsForAgentByType(
 				Arg<IPerson>.Matches(p => p == person),
 				Arg<Paging>.Matches(p => p.Equals(paging)),
-				Arg<DateTime>.Matches(d => d == earliestDate),
+				Arg<DateTime>.Matches(d => d == earliestDateUtc),
 				Arg<RequestType[]>.Matches(r => r.SequenceEqual(requestTypes))));
 			Assert.That(personRequests.Length, Is.EqualTo(result.Count()));
 		}

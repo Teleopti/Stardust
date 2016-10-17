@@ -40,12 +40,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				types.Add(RequestType.ShiftTradeRequest);
 			}
 
-			var currentTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-			var earliestDate = hideOldRequest
-				? TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, currentTimezone).AddDays(-10).Date
-				: (DateTime?) null;
+			DateTime? earliestDateUtc = null;
+			if (hideOldRequest)
+			{
+				var currentTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+				var earliestDateLocal = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, currentTimezone).AddDays(-10).Date;
+				earliestDateUtc = TimeZoneInfo.ConvertTimeToUtc(earliestDateLocal);
+			}
+
 			return _repository.FindAllRequestsForAgentByType(_loggedOnUser.CurrentUser(), paging,
-				earliestDate, types.ToArray());
+				earliestDateUtc, types.ToArray());
 		}
 
 		public IEnumerable<IPersonRequest> RetrieveRequestsForLoggedOnUser(DateOnlyPeriod period)
