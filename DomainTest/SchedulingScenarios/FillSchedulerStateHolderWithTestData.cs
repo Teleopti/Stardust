@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 				TimeZoneInfo timeZone)
 		{
 			var stateHolder = stateHolderFunc();
+			stateHolder.SetRequestedScenario(scenario);
 			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
 			stateHolder.SchedulingResultState.Schedules = ScheduleDictionaryCreator.WithData(scenario, period, persistableScheduleData);
 			foreach (var agent in agents)

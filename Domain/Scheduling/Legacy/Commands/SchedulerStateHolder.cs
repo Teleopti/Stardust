@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Specification;
@@ -222,6 +223,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			CommonStateHolder.LoadCommonStateHolderForResourceCalculationOnly(repositoryFactory, unitOfWork);
 			_schedulingResultState.ShiftCategories = CommonStateHolder.ShiftCategories;
+		}
+
+		public void InitMaxSeats(MaxSeatSkillCreator maxSeatSkillCreator)
+		{
+			var result = maxSeatSkillCreator.CreateMaxSeatSkills(RequestedPeriod.DateOnlyPeriod, RequestedScenario,
+				SchedulingResultState.PersonsInOrganization.ToList(), SchedulingResultState.Skills);
+			result.SkillsToAddToStateholder.ForEach(s => SchedulingResultState.AddSkills(s));
+			result.SkillDaysToAddToStateholder.ForEach(kvp => SchedulingResultState.SkillDays.Add(kvp));
 		}
 
 		public void LoadPersonRequests(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory, IPersonRequestCheckAuthorization authorization, int numberOfDaysToShowNonPendingRequests)

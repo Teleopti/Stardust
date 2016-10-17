@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -86,5 +87,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		bool AgentFilter();
 		void LoadCommonStateForResourceCalculationOnly(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory);
 
+		void InitMaxSeats(MaxSeatSkillCreator maxSeatSkillCreator);
 	}
 }

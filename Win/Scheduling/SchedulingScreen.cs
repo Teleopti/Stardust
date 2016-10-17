@@ -3659,14 +3659,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_lastSaved = DateTime.Now;
 		}
 
-		private void createMaxSeatSkills()
-		{
-			var maxSeatSkillCreator = _container.Resolve<MaxSeatSkillCreator>();
-			var result = maxSeatSkillCreator.CreateMaxSeatSkills(SchedulerState.RequestedPeriod.DateOnlyPeriod, SchedulerState.RequestedScenario,
-				SchedulerState.SchedulingResultState.PersonsInOrganization.ToList(), SchedulerState.SchedulingResultState.Skills);
-			result.SkillsToAddToStateholder.ForEach(s => SchedulerState.SchedulingResultState.AddSkills(s));
-			result.SkillDaysToAddToStateholder.ForEach(kvp => SchedulerState.SchedulingResultState.SkillDays.Add(kvp));		
-		}
 
 		private IBusinessRuleResponse validatePersonAccounts(IPerson person)
 		{
@@ -4970,8 +4962,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 						stateHolder.RequestedPeriod.DateOnlyPeriod.EndDate.AddDays(8)), stateHolder.SchedulingResultState.Skills,
 					stateHolder.RequestedScenario);
 
-				createMaxSeatSkills();
-				IList<ISkillStaffPeriod> skillStaffPeriods =
+					stateHolder.InitMaxSeats(_container.Resolve<MaxSeatSkillCreator>());
+					IList<ISkillStaffPeriod> skillStaffPeriods =
 					stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
 						stateHolder.SchedulingResultState.Skills, stateHolder.LoadedPeriod.Value);
 

@@ -5,11 +5,13 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -18,10 +20,11 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
-	public class ResourceCalculationEslTest
+	public class ResourceCalculationResultTest
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public Func<IResourceOptimizationHelperExtended> ResourceOptimizationHelperExtended;
+		public MaxSeatSkillCreator MaxSeatSkillCreator; //Fix later
 
 		[TestCase(2000, 0, 2000)]
 		[TestCase(2000, 0.38, 3225)] //some "magic numbers" here to expose bug #40338
@@ -95,6 +98,30 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 
 			skillDay.SkillStaffPeriodCollection.First().EstimatedServiceLevelShrinkage.Value.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldSetCalculatedMaxUsedSeats()
+		{
+			var scenario = new Scenario("_");
+			var date = DateOnly.Today;
+			var activity = new Activity("_") {RequiresSeat = true};
+			var agent = new Person().WithId();
+			var siteWithMaxSeats = new Site("_") {MaxSeats = 10}.WithId();
+			agent.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = siteWithMaxSeats }), Enumerable.Empty<ISkill>());
+			var ass = new PersonAssignment(agent, scenario, date);
+			ass.AddActivity(activity, new TimePeriod(9, 0, 17, 0));
+			var stateHolder = SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, Enumerable.Empty<ISkillDay>());
+			stateHolder.InitMaxSeats(MaxSeatSkillCreator);
+
+			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+
+			SchedulerStateHolder()
+				.SchedulingResultState.SkillDays.Single()
+				.Value.Single(x => x.CurrentDate == date)
+				.SkillStaffPeriodCollection.Single(x => x.Period.StartDateTime.TimeOfDay == TimeSpan.FromHours(9))
+				.Payload.CalculatedUsedSeats
+				.Should().Be.EqualTo(1);
 		}
 	}
 }
