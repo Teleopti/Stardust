@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
-		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> persons, IScheduleDictionary schedules, IScenario scenario)
+		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> persons, IScheduleDictionary schedules, IScenario scenario, IOptimizationPreferences optimizationPreferences)
 		{
 			var generatedMaxSeatSkills = _maxSeatSkillCreator.CreateMaxSeatSkills(period, scenario, persons.ToArray(), Enumerable.Empty<ISkill>());
 			var allSkillDays = generatedMaxSeatSkills.SkillDaysToAddToStateholder.SelectMany(x => x.Value);
@@ -53,6 +53,8 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 										.ProjectionService()
 										.CreateProjection()
 										.ContractTime();
+
+								
 
 
 								foreach (var shift in _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(date, person.PermissionInformation.DefaultTimeZone(), person.Period(date).RuleSetBag, false, true))

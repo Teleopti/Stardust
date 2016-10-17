@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.MaxSeat;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, site, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] {agentData.Assignment, agentScheduledForAnHourData.Assignment});
 
-			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] {agentData.Agent, agentScheduledForAnHourData.Agent}, schedules, scenario);
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] {agentData.Agent, agentScheduledForAnHourData.Agent}, schedules, scenario, new OptimizationPreferences());
 
 			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment(true).Period.StartDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(9));
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var agent2Data = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, site, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentScheduledForAnHourData.Assignment, agentData.Assignment, agent2Data.Assignment});
 
-			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentScheduledForAnHourData.Agent, agentData.Agent, agent2Data.Agent}, schedules, scenario);
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentScheduledForAnHourData.Agent, agentData.Agent, agent2Data.Agent}, schedules, scenario, new OptimizationPreferences());
 
 			schedules.SchedulesForPeriod(dateOnly.ToDateOnlyPeriod(), agentData.Agent, agent2Data.Agent).Select(x => x.PersonAssignment().Period.StartDateTime.TimeOfDay)
 				.Should().Have.SameValuesAs(TimeSpan.FromHours(8), TimeSpan.FromHours(9));
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, site, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentScheduledForAnHourData.Assignment, agentData.Assignment });
 		
-			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentScheduledForAnHourData.Agent, agentData.Agent }, schedules, scenario);
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentScheduledForAnHourData.Agent, agentData.Agent }, schedules, scenario, new OptimizationPreferences());
 
 			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment(true).Period.StartDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(8));
@@ -87,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, site, ruleSetBag, scenario, activity, new TimePeriod(8, 0, 16, 0));
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData.Assignment });
 
-			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] {  agentData.Agent }, schedules, scenario);
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] {  agentData.Agent }, schedules, scenario, new OptimizationPreferences());
 
 			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment(true).ShiftLayers.First().Payload.RequiresSeat.Should().Be.False();
 		}
@@ -107,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var agentScheduledForAnHourData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, siteOverLimit, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 9, 0));
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentDataSiteOverLimit.Assignment, agentDataSiteUnderLimit.Assignment, agentScheduledForAnHourData.Assignment });
 
-			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentDataSiteUnderLimit.Agent, agentDataSiteOverLimit.Agent, agentScheduledForAnHourData.Agent  }, schedules, scenario);
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentDataSiteUnderLimit.Agent, agentDataSiteOverLimit.Agent, agentScheduledForAnHourData.Agent  }, schedules, scenario, new OptimizationPreferences());
 
 			schedules[agentDataSiteUnderLimit.Agent].ScheduledDay(dateOnly).PersonAssignment(true).Period.StartDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(8));
@@ -128,10 +129,29 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, site, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData.Assignment, agentScheduledForAnHourData.Assignment });
 
-			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent, agentScheduledForAnHourData.Agent }, schedules, scenario);
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent, agentScheduledForAnHourData.Agent }, schedules, scenario, new OptimizationPreferences());
 
 			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment(true).Period.EndDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(18));
+		}
+
+		[Test, Ignore("#40939")]
+		public void ShouldConsiderKeepStartTime()
+		{
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var site = new Site("_") { MaxSeats = 1 }.WithId();
+			var dateOnly = DateOnly.Today;
+			var scenario = new Scenario("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 9, 0, 60), new TimePeriodWithSegment(16, 0, 17, 0, 60), new ShiftCategory("_").WithId()));
+			var agentScheduledForAnHourData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, site, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 9, 0));
+			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, site, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] {agentData.Assignment, agentScheduledForAnHourData.Assignment});
+			var optPrefs = new OptimizationPreferences {Shifts = {KeepStartTimes = true}};
+
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent, agentScheduledForAnHourData.Agent }, schedules, scenario, optPrefs);
+
+			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment(true).Period.StartDateTime.TimeOfDay
+				.Should().Be.EqualTo(TimeSpan.FromHours(8));
 		}
 	}	
 }
