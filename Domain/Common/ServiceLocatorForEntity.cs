@@ -1,5 +1,6 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -11,18 +12,11 @@ namespace Teleopti.Ccc.Domain.Common
 	public static class ServiceLocatorForLegacy
 	{
 		private static ICurrentAuthorization _currentAuthorization;
-		private static ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 
 		public static ICurrentAuthorization CurrentAuthorization
 		{
 			get { return _currentAuthorization ?? Security.Principal.CurrentAuthorization.Make(); }
 			set { _currentAuthorization = value; }
-		}
-
-		public static ICurrentTeleoptiPrincipal CurrentTeleoptiPrincipal
-		{
-			get { return _currentTeleoptiPrincipal ?? Security.Principal.CurrentTeleoptiPrincipal.Make(); }
-			set { _currentTeleoptiPrincipal = value; }
 		}
 
 	}
@@ -32,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Common
 		private static ICurrentBusinessUnit _currentBusinessUnit;
 		private static ProperAlarm _appliedAlarm;
 		private static IUpdatedBy _updatedBy;
+		private static ILoggedOnUserIsPerson _loggedOnUserIsPerson;
 		private static INow _now;
 
 		public static ICurrentBusinessUnit CurrentBusinessUnit
@@ -50,6 +45,12 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			get { return _updatedBy ?? Security.Principal.UpdatedBy.Make(); }
 			set { _updatedBy = value; }
+		}
+
+		public static ILoggedOnUserIsPerson LoggedOnUserIsPerson
+		{
+			get { return _loggedOnUserIsPerson ?? new LoggedOnUserIsPerson(CurrentTeleoptiPrincipal.Make()); }
+			set { _loggedOnUserIsPerson = value; }
 		}
 
 		public static INow Now

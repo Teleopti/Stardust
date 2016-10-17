@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-    public interface IOrganisationMembership
+	public interface IOrganisationMembership
     {
-        bool BelongsToBusinessUnit(IBusinessUnit businessUnit, DateOnly dateOnly);
-        bool BelongsToSite(ISite site, DateOnly dateOnly);
-        bool BelongsToTeam(ITeam team, DateOnly dateOnly);
-        bool IsUser(IPerson person);
+		bool BelongsToBusinessUnit(Guid businessUnitId, DateOnly dateOnly);
+		bool BelongsToSite(Guid siteId, DateOnly dateOnly);
+		bool BelongsToTeam(Guid teamId, DateOnly dateOnly);
+		bool IsUser(Guid? personId);
         IEnumerable<DateOnlyPeriod> Periods();
     }
 }

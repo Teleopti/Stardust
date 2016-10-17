@@ -18,7 +18,8 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 		public IPerson CurrentUser()
 		{
 			var pricipal = _currentTeleoptiPrincipal.Current();
-			return pricipal == null ? null : pricipal.GetPerson(_personRepository);
+			return pricipal?.GetPerson(_personRepository);
 		}
+
 	}
 }

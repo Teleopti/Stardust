@@ -517,6 +517,7 @@
     <Compile Include="Scheduling\TeamBlock\TeamInfoFactoryFactory.cs" />
     <Compile Include="Scheduling\WebLegacy\LoaderForResourceCalculation.cs" />
     <Compile Include="Scheduling\WebLegacy\ResourceCalculateRangeToLoadCalculator.cs" />
+    <Compile Include="Security\Authentication\LoggedOnUserIsPerson.cs" />
     <Compile Include="Security\PermissionProvider.cs" />
     <Compile Include="Security\Principal\CurrentAuthorization.cs" />
     <Compile Include="Security\Principal\IUpdatedBy.cs" />

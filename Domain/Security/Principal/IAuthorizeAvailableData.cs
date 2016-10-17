@@ -8,6 +8,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
         bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ITeam team);
         bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ISite site);
         bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IBusinessUnit businessUnit);
-    	bool Check(IOrganisationMembershipWithId queryingPerson, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail);
+    	bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail);
     }
 }

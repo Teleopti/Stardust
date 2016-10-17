@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             return result.GetValueOrDefault(false);
         }
 
-    	public bool Check(IOrganisationMembershipWithId queryingPerson, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
+    	public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
     	{
     		return _availableTeams.Contains(authorizeOrganisationDetail.TeamId.GetValueOrDefault()) ||
     		       _availableSites.Contains(authorizeOrganisationDetail.SiteId.GetValueOrDefault()) ||

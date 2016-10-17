@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             return queryingPerson.BelongsToBusinessUnit(businessUnit,dateOnly);
         }
 
-    	public bool Check(IOrganisationMembershipWithId queryingPerson, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
+    	public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
     	{
     		return queryingPerson.BelongsToBusinessUnit(authorizeOrganisationDetail.BusinessUnitId, dateOnly);
     	}

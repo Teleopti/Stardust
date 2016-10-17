@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
 		{
-			return checkPermitted(functionPath, a => a.Check((IOrganisationMembershipWithId)_teleoptiPrincipal.Current().Organisation, dateOnly, authorizeOrganisationDetail));
+			return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, authorizeOrganisationDetail));
 		}
 
         public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeam team)

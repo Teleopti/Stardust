@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -132,21 +131,21 @@ namespace Teleopti.Ccc.Domain.Scheduling
                        ? DisplayColor : ConfidentialPayloadValues.DisplayColor;
         }
 
-        private bool isPermittedToSeePayloadInfo(IPerson assignedPerson)
-        {
-            var principal = ServiceLocatorForLegacy.CurrentTeleoptiPrincipal.Current();
-	        var dateOnly = DateOnly.Today;
+		private bool isPermittedToSeePayloadInfo(IPerson assignedPerson)
+		{
+			if (!Confidential)
+				return true;
+			if (ServiceLocatorForEntity.LoggedOnUserIsPerson.IsPerson(assignedPerson))
+				return true;
 
+			var dateOnly = DateOnly.Today;
 			if (assignedPerson != null && assignedPerson.IsTerminated() && assignedPerson.PersonPeriodCollection.Count > 0)
 				dateOnly = assignedPerson.PersonPeriodCollection.Last().EndDate();
+			return ServiceLocatorForLegacy.CurrentAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewConfidential, dateOnly, assignedPerson);
 
-	        return !Confidential ||
-				   (principal?.Organisation.IsUser(assignedPerson) ?? false) ||
-				   PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewConfidential, dateOnly, assignedPerson);
+		}
 
-        }
-
-        public virtual object Clone()
+		public virtual object Clone()
         {
             return NoneEntityClone();
         }

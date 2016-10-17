@@ -1,11 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Xml;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 using System.Drawing;
-using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
