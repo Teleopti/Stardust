@@ -578,11 +578,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MaxSeatSkillCreator>().SingleInstance();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_MaxSeatsNew_40939))
 			{
-				builder.RegisterType<InitMaxSeatForStateHolder>().As<IInitMaxSeatForStateHolder>().SingleInstance();
+				builder.RegisterType<InitMaxSeatForStateHolder>().As<IInitMaxSeatForStateHolder>().InstancePerLifetimeScope();
 			}
 			else
 			{
-				builder.RegisterType<InitMaxSeatForStateHolderOld>().As<IInitMaxSeatForStateHolder>().SingleInstance();
+				builder.RegisterType<InitMaxSeatForStateHolderOld>().As<IInitMaxSeatForStateHolder>().InstancePerLifetimeScope();
 			}
 			builder.RegisterType<MaxSeatSkillDataFactory>().SingleInstance();
 			builder.RegisterType<SkillsFromMaxSeatSite>().SingleInstance();
