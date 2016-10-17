@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public void ShouldSendBrokerMessageOnScheduleChange()
 		{
 			var broker = MockRepository.GenerateMock<IMessageCreator>();
-			var handler = new ScheduleChangedNotifier(broker);
+			var handler = new ScheduleChangedNotifierHangfire(broker);
 
 			var message = new ScheduleChangedEvent
 				{
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public void ShouldNotSendBrokerMessageOnScheduleChangeOnInitialLoad()
 		{
 			var broker = MockRepository.GenerateMock<IMessageCreator>();
-			var handler = new ScheduleChangedNotifier(broker);
+			var handler = new ScheduleChangedNotifierHangfire(broker);
 
 			var message = new ScheduleChangedEvent
 			{

@@ -1,8 +1,10 @@
 using System.Collections.Specialized;
 using System.Linq;
 using log4net;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Interfaces.Domain;
@@ -10,9 +12,42 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
+	[EnabledBy(Toggles.LastHandlers_ToHangfire_41203)]
+	public class ScheduleChangesPublisherHangfire :
+		ScheduleChangesPublisher,
+		IHandleEvent<ProjectionChangedEvent>,
+		IRunOnHangfire
+	{
+		public ScheduleChangesPublisherHangfire(IHttpServer server, INow now, IGlobalSettingDataRepository settingsRepository, SignatureCreator signatureCreator) : base(server, now, settingsRepository, signatureCreator)
+		{
+		}
+
+		[UnitOfWork]
+		public virtual void Handle(ProjectionChangedEvent @event)
+		{
+			HandleBase(@event);
+		}
+	}
+
+	[DisabledBy(Toggles.LastHandlers_ToHangfire_41203)]
+	public class ScheduleChangesPublisherServiceBus :
+		ScheduleChangesPublisher,
+		IHandleEvent<ProjectionChangedEvent>,
 #pragma warning disable 618
-	public class ScheduleChangesPublisher : IHandleEvent<ProjectionChangedEvent>, IRunOnServiceBus
+		IRunOnServiceBus
 #pragma warning restore 618
+	{
+		public ScheduleChangesPublisherServiceBus(IHttpServer server, INow now, IGlobalSettingDataRepository settingsRepository, SignatureCreator signatureCreator) : base(server, now, settingsRepository, signatureCreator)
+		{
+		}
+
+		public void Handle(ProjectionChangedEvent @event)
+		{
+			HandleBase(@event);
+		}
+	}
+
+	public class ScheduleChangesPublisher
 	{
 		private readonly IHttpServer _server;
 		private readonly INow _now;
@@ -28,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_signatureCreator = signatureCreator;
 		}
 
-		public void Handle(ProjectionChangedEvent @event)
+		public void HandleBase(ProjectionChangedEvent @event)
 		{
 			if (!@event.IsDefaultScenario) return;
 
