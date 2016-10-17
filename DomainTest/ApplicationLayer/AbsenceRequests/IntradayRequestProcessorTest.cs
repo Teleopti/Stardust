@@ -596,6 +596,68 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.AreEqual(2, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
 		}
 
+		[Test]
+		public void DenyIfRequestIsOvernightWithProperDenyReason()
+		{
+
+			var period = new DateTimePeriod(new DateTime(2016, 10, 17, 21, 15, 0, DateTimeKind.Utc),
+											new DateTime(2016, 10, 17, 22, 15, 00, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var workflowControlSet = createWorkFlowControlSet(absence);
+			var primarySkill = SkillFactory.CreateSkillWithId("PrimarySkill1");
+			primarySkill.SetCascadingIndex(1);
+			
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 03, 01), new[] { primarySkill });
+			person.WorkflowControlSet = workflowControlSet;
+
+			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(primarySkill.Id.GetValueOrDefault(), OpenHourStatus.WithinOpenHour);
+			
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
+
+			var request = new FakePersonRequest(person, new AbsenceRequest(absence, period));
+
+			request.SetId(Guid.NewGuid());
+			request.SetCreated(new DateTime(2016, 10, 17, 0, 5, 0, DateTimeKind.Utc));
+			PersonRequestRepository.Add(request);
+
+			var staffingList = new List<SkillStaffingInterval>()
+			{
+				new SkillStaffingInterval()
+				{
+					SkillId = primarySkill.Id.GetValueOrDefault(),
+					StartDateTime = new DateTime(2016, 10, 17, 21, 30, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2016, 10, 17, 21, 45, 0, DateTimeKind.Utc),
+					ForecastWithShrinkage = 10,
+					StaffingLevel = 10
+				}
+			};
+			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
+
+			staffingList = new List<SkillStaffingInterval>()
+			{
+				new SkillStaffingInterval()
+				{
+					SkillId = primarySkill.Id.GetValueOrDefault(),
+					StartDateTime = new DateTime(2016, 10, 17, 21, 45, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2016, 10, 17, 22, 0, 0, DateTimeKind.Utc),
+					ForecastWithShrinkage = 15,
+					StaffingLevel = 15
+				}
+			};
+			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
+
+			Target.Process(request, _now);
+
+			var result = PersonRequestRepository.Get(request.Id.GetValueOrDefault());
+
+			Assert.AreEqual(4, getRequestStatus(result));
+			result.DenyReason.Should().Contain("23:30 - 23:45, 23:45 - 00:00 +1");
+
+		}
+
 		private IPersonRequest createNewRequest(bool useWorkflowControlSet = true, bool useThresholdValidator = true)
 		{
 

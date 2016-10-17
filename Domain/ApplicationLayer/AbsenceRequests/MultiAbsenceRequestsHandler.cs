@@ -137,6 +137,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				//preload some data
 				_personRepository.FindPeople(requests.Select(x => x.Person.Id.GetValueOrDefault()));
+				//this is thrown away move it up before person request as this will be thrown away.
+				//had a chat with robin and he suggested that we should do that before person request we may run into problems
 				_skillRepository.LoadAllSkills();
 				_contractRepository.LoadAll();
 				_skillTypeRepository.LoadAll();
