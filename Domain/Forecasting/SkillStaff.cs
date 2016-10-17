@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
@@ -346,6 +347,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			set { _calculatedUsedSeats = value; }
 		}
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		public int MaxSeats
 		{
 			get { return _maxSeats; }
