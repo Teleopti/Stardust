@@ -95,6 +95,9 @@
 	.phone-warning-indicator .warningDetail {
 		display: none;
 	}
+	.phone-warning-indicator + #Preference-body {
+		overflow-x: scroll;
+	}
 	.phone-navbar {
 		margin: 0 -15px 0 -15px;
 	}
