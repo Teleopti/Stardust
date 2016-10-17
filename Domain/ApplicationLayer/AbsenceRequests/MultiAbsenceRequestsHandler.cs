@@ -30,13 +30,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IContractRepository _contractRepository;
 		private readonly IPartTimePercentageRepository _partTimePercentageRepository;
 		private readonly IContractScheduleRepository _contractScheduleRepository;
+		private readonly ISkillTypeRepository _skillTypeRepository;
+		private readonly IActivityRepository _activityRepository;
 
 
 
 		public MultiAbsenceRequestsHandler(IPersonRequestRepository personRequestRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
 			IStardustJobFeedback stardustJobFeedback, IWorkflowControlSetRepository workflowControlSetRepository, 
 			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IPersonRepository personRepository, 
-			ISkillRepository skillRepository, IMultiAbsenceRequestsUpdater multiAbsenceRequestsUpdater, IContractRepository contractRepository, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository)
+			ISkillRepository skillRepository, IMultiAbsenceRequestsUpdater multiAbsenceRequestsUpdater, IContractRepository contractRepository, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository, ISkillTypeRepository skillTypeRepository, IActivityRepository activityRepository)
 		{
 			_personRequestRepository = personRequestRepository;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
@@ -49,6 +51,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_contractRepository = contractRepository;
 			_partTimePercentageRepository = partTimePercentageRepository;
 			_contractScheduleRepository = contractScheduleRepository;
+			_skillTypeRepository = skillTypeRepository;
+			_activityRepository = activityRepository;
 		}
 
 		[AsSystem]
@@ -135,9 +139,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				_personRepository.FindPeople(requests.Select(x => x.Person.Id.GetValueOrDefault()));
 				_skillRepository.LoadAllSkills();
 				_contractRepository.LoadAll();
+				_skillTypeRepository.LoadAll();
 				_partTimePercentageRepository.LoadAll();
 				_contractScheduleRepository.LoadAllAggregate();
-
+				_activityRepository.LoadAll();
+				
 				uow.PersistAll();
 			}
 			return requests;
