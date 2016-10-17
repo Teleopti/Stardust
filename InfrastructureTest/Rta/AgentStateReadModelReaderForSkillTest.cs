@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			WithUnitOfWork.Get(() => Target.LoadForSkills(new []{ currentSkillId }))
 				.Count().Should().Be(1);
 		}
+
 		[Test]
 		public void ShouldLoadForMultipleSkills()
 		{
