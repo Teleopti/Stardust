@@ -79,7 +79,7 @@ WfmTeamSchedule_FilterValidationWarnings_40110 = true
 WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938 = true
 WfmTeamSchedule_ShowOverwrittenLayerWarning_40109 = true
 WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279 = true
-WfmTeamSchedule_EditAndDisplayInternalNotes_40671 = RC
+WfmTeamSchedule_EditAndDisplayInternalNotes_40671 = true
 WfmTeamSchedule_CheckPersonalAccountWhenAddingAbsence_41088 = DEV
 
 WfmTeamSchedule_ShowShiftCategory_39796 = true
@@ -120,7 +120,7 @@ Wfm_Requests_Approve_Based_On_Intraday_39868 = RC
 Wfm_Requests_Site_Open_Hours_39936 = true
 Wfm_Requests_Waitlist_Process_Order_39869 = true
 Wfm_Requests_Save_Grid_Columns_37976 = true
-Wfm_Requests_Check_Max_Seats_39937 = RC
+Wfm_Requests_Check_Max_Seats_39937 = true
 Wfm_Requests_Check_Max_Seats_NoReadModel_39937 = false  # do not use read model - much slower, perhaps more accurate.
 Wfm_Requests_Check_Expired_Requests_40274 = DEV
 
@@ -134,7 +134,7 @@ WfmIntraday_MonitorActualvsForecasted_35176 = true
 MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211 = true
 MyTimeWeb_ShiftTradeBoardNoReadModel_36662 = true
 MyTimeWeb_MakeRequestsResponsiveOnMobile_40266 = DEV
-MyTimeWeb_ShiftTradeFilterSite_40374 = RC
+MyTimeWeb_ShiftTradeFilterSite_40374 = true
 MyTimeWeb_ShiftTradeOptimization_40792 = true
 MyTimeWeb_PreferenceForMobile_40265 = RC
 
@@ -156,7 +156,7 @@ Wfm_QuickForecastOnHangfire_35845 = true
 Wfm_RecalculateForecastOnHangfire_37971 = true
 
 ETL_SpeedUpPersonPeriodNightly_38097 = RC
-Stardust_MoveAbsenceRequestTo_37941 = RC
+Stardust_MoveAbsenceRequestTo_37941 = RC #Will never be released as other development (batch/bulk) made it obsolete. OK to just remove toggle and code (if any).
 ETL_SpeedUpNightlyReloadDatamart_38131 = RC
 ETL_SpeedUpFactScheduleNightly_38019 = true # not to be released until pbi 38304 is done 
 ETL_SpeedUpScenarioNightly_38300 = false
@@ -189,7 +189,7 @@ AddActivity_TriggerResourceCalculation_39346 = RC
 AbsenceRequests_UseMultiRequestProcessing_39960 = true
 AbsenceRequests_SpeedupIntradayRequests_40754 = RC
 ETL_EventbasedDate_39562 = RC
-ReadModel_ToHangfire_39147 = RC
-NewPasswordHash_40460 = RC
+ReadModel_ToHangfire_39147 = true
+NewPasswordHash_40460 = true
 Wfm_Intraday_OptimalStaffing_40921 = RC
 Wfm_SkillPriorityRoutingGUI_39885 = DEV
