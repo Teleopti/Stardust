@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
 	[TestFixture]
 	[UnitOfWorkTest]
-	public class SiteInAlarmFromAgentStatesReadModelTest
+	public class SiteInAlarmReaderTest
 	{
 		public IAgentStateReadModelPersister Persister;
 		public ISiteInAlarmReader Target;

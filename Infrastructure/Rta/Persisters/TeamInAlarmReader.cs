@@ -41,7 +41,30 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 
 		public IEnumerable<TeamInAlarmModel> ReadForSkills(Guid siteId, Guid[] skillIds)
 		{
-			throw new NotImplementedException();
+			
+			return _unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
+					SELECT a.TeamId, COUNT(*) AS Count
+					FROM ReadModel.AgentState  AS a
+					
+					INNER JOIN ReadModel.GroupingReadOnly AS g
+					ON a.PersonId = g.PersonId					
+					WHERE g.GroupId IN (:skillIds)
+					AND g.PageId = :skillGroupingPageId
+
+					AND a.AlarmStartTime <= :now
+					AND a.SiteId = :siteId
+					AND (a.IsDeleted != 1
+					OR a.IsDeleted IS NULL)
+					GROUP BY a.TeamId
+					")
+				.SetParameter("siteId", siteId)
+				.SetParameter("now", _now.UtcDateTime())
+				.SetParameterList("skillIds", skillIds)
+				.SetParameter("skillGroupingPageId", AgentStateReadModelReader.HardcodedSkillGroupingPageId)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(TeamInAlarmModel)))
+				.List()
+				.Cast<TeamInAlarmModel>();
 		}
 	}
 }
