@@ -205,16 +205,17 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			if (_transaction == null || !_transaction.IsActive) return;
 
+			_transactionSynchronization = null;
+			var transaction = _transaction;
+			_transaction = null;
 			try
 			{
-				_transaction.Rollback();
-				_transaction.Dispose();
-				_transaction = null;
-				_transactionSynchronization = null;
+				transaction.Rollback();
+				transaction.Dispose();
 			}
 			catch (Exception ex)
 			{
-				_logger.Error("Cannot rollback transaction! " + ex);
+				_logger.Error("Cannot rollback transaction!", ex);
 				//don't do anything - should be handled higher up the chain
 			}
 		}

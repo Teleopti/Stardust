@@ -7,10 +7,16 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 	{
 		public override FilterDecision Decide(LoggingEvent loggingEvent)
 		{
-			if (loggingEvent.Level == Level.Error &&
-				loggingEvent.LoggerName.StartsWith("NHibernate") &&
-				loggingEvent.ThreadName.Contains("Worker #"))
-				return FilterDecision.Deny;
+			if (loggingEvent.Level == Level.Error && loggingEvent.ThreadName.Contains("Worker #"))
+			{
+				if (loggingEvent.LoggerName.StartsWith("NHibernate"))
+					return FilterDecision.Deny;
+				if (loggingEvent.LoggerName.Contains(".NHibernateUnitOfWork"))
+					return FilterDecision.Deny;
+				if (loggingEvent.LoggerName.Contains(".AnalyticsUnitOfWork"))
+					return FilterDecision.Deny;
+			}
+
 			return FilterDecision.Neutral;
 		}
 	}
