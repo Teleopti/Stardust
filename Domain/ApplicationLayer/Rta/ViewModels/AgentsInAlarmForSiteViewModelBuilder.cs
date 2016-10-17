@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
@@ -5,12 +6,12 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
-	public class GetSiteAdherence : IGetSiteAdherence
+	public class AgentsInAlarmForSiteViewModelBuilder
 	{
 		private readonly ISiteInAlarmReader _siteInAlarmReader;
 		private readonly ISiteRepository _siteRepository;
 
-		public GetSiteAdherence(
+		public AgentsInAlarmForSiteViewModelBuilder(
 			ISiteInAlarmReader siteInAlarmReader,
 			ISiteRepository siteRepository)
 		{
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_siteRepository = siteRepository;
 		}
 
-		public IEnumerable<SiteOutOfAdherence> OutOfAdherence()
+		public IEnumerable<SiteOutOfAdherence> Build()
 		{
 			var adherence = _siteInAlarmReader.Read();
 			var sites = _siteRepository.LoadAll();
@@ -28,6 +29,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					Id = s.Id.GetValueOrDefault(),
 					OutOfAdherence = adherence
 						.Where(a => a.SiteId == s.Id.Value)
+						.Select(a => a.Count)
+						.SingleOrDefault()
+				}).ToArray();
+		}
+
+		public IEnumerable<SiteOutOfAdherence> ForSkills(Guid[] skillIds)
+		{
+			var adherence = _siteInAlarmReader.ReadForSkills(skillIds);
+			var sites = _siteRepository.LoadAll();
+			return sites.Select(s => new SiteOutOfAdherence
+				{
+					Id = s.Id.Value,
+					OutOfAdherence = adherence
 						.Select(a => a.Count)
 						.SingleOrDefault()
 				}).ToArray();

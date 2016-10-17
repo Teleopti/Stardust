@@ -11,16 +11,16 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	public class SitesController : ApiController
 	{
 		private readonly ISiteRepository _siteRepository;
-		private readonly IGetSiteAdherence _getAdherence;
+		private readonly AgentsInAlarmForSiteViewModelBuilder _inAlarmForSites;
 		private readonly SiteViewModelBuilder _siteViewModelBuilder;
 
 		public SitesController(
 			ISiteRepository siteRepository,
-			IGetSiteAdherence getAdherence,
+			AgentsInAlarmForSiteViewModelBuilder inAlarmForSites,
 			SiteViewModelBuilder siteViewModelBuilder)
 		{
 			_siteRepository = siteRepository;
-			_getAdherence = getAdherence;
+			_inAlarmForSites = inAlarmForSites;
 			_siteViewModelBuilder = siteViewModelBuilder;
 		}
 
@@ -51,7 +51,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Sites/GetOutOfAdherenceForAllSites")]
 		public virtual IHttpActionResult GetOutOfAdherenceForAllSites()
 		{
-			return Ok(_getAdherence.OutOfAdherence());
+			return Ok(_inAlarmForSites.Build());
+		}
+
+		[ReadModelUnitOfWork, HttpGet, Route("api/Sites/GetOutOfAdherenceForAllSitesBySkills")]
+		public virtual IHttpActionResult InAlarmCountForAllSitesForSkills(Guid[] skillIds)
+		{
+			return Ok(_inAlarmForSites.ForSkills(skillIds));
 		}
 	}
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Transform;
@@ -34,6 +35,30 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.SetResultTransformer(Transformers.AliasToBean(typeof(SiteInAlarmModel)))
 				.List()
 				.Cast<SiteInAlarmModel>();
+		}
+
+		public IEnumerable<SiteInAlarmModel> ReadForSkills(Guid[] skillIds)
+		{
+			yield break;
+			//return _currentUnitOfWork.Current().Session()
+			//	.CreateSQLQuery(@"
+			//		SELECT SiteId, COUNT(*) AS Count
+			//		FROM ReadModel.AgentState AS a
+					
+			//		INNER JOIN ReadModel.GroupingReadOnly AS g
+			//		ON a.PersonId = g.PersonId					
+			//		WHERE g.GroupId IN (:skillIds)
+
+			//		WHERE a.AlarmStartTime <= :now
+			//		AND (a.IsDeleted != 1
+			//		OR a.IsDeleted IS NULL)
+			//		GROUP BY a.SiteId
+			//		")
+			//	.SetParameter("now", _now.UtcDateTime())
+			//	.SetParameter("skillIds", skillIds)
+			//	.SetResultTransformer(Transformers.AliasToBean(typeof(SiteInAlarmModel)))
+			//	.List()
+			//	.Cast<SiteInAlarmModel>();
 		}
 	}
 }

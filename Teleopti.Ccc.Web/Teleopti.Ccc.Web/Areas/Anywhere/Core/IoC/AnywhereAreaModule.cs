@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			
 			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>().SingleInstance();
 			builder.RegisterType<PeriodDistributionService>().As<IPeriodDistributionService>().SingleInstance();
-			builder.RegisterType<GetSiteAdherence>().As<IGetSiteAdherence>().InstancePerLifetimeScope();
+
 			builder.RegisterType<GetTeamAdherence>().As<IGetTeamAdherence>().InstancePerLifetimeScope();
 			builder.RegisterType<GetBusinessUnitId>().As<IGetBusinessUnitId>().InstancePerLifetimeScope();
 

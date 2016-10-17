@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 	[IoCTest]
 	public class GetSiteAdherenceTest : ISetup
 	{
-		public IGetSiteAdherence Target;
+		public AgentsInAlarmForSiteViewModelBuilder Target;
 		public FakeSiteRepository Sites;
 		public FakeSiteInAlarmReader AgentState;
 
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 				AlarmStartTime = DateTime.MinValue
 			});
 
-			var result = Target.OutOfAdherence();
+			var result = Target.Build();
 
 			result.Single().Id.Should().Be(site.Id);
 			result.Single().OutOfAdherence.Should().Be(1);
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			var site = new Site("s").WithId();
 			Sites.Has(site);
 			
-			var result = Target.OutOfAdherence();
+			var result = Target.Build();
 
 			result.Single().Id.Should().Be(site.Id);
 			result.Single().OutOfAdherence.Should().Be(0);

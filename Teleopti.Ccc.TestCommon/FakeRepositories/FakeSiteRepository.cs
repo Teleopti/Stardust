@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -9,7 +11,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeSiteRepository : ISiteRepository
 	{
-		private List<ISite> _data = new List<ISite>(); 
+		private readonly List<ISite> _data = new List<ISite>(); 
 
 		public void Add(ISite root)
 		{
@@ -23,6 +25,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Has(ISite site)
 		{
+			_data.Add(site);
+		}
+
+		public void Has(Guid siteId)
+		{
+			var site = new Site(RandomName.Make());
+			site.SetId(siteId);
 			_data.Add(site);
 		}
 

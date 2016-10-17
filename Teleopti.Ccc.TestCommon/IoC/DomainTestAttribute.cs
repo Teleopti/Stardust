@@ -110,6 +110,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeNumberOfAgentsInTeamReader>().For<INumberOfAgentsInTeamReader>();
 			system.UseTestDouble<FakeMappingReadModelPersister>().For<IMappingReadModelPersister>();
 			system.UseTestDouble<FakeAllLicenseActivatorProvider>().For<ILicenseActivatorProvider>();
+			system.UseTestDouble<FakeSiteInAlarmReader>().For<ISiteInAlarmReader>();
 			//
 
 			system.UseTestDouble<FakeScheduleRangePersister>().For<IScheduleRangePersister>();
