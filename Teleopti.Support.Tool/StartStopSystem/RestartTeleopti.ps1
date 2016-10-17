@@ -210,6 +210,25 @@ function EventlogSource-Create {
         }
 }
 
+function RemoveAppOfflinePage {
+    param([bool]$IsAzure)
+    if ($IsAzure) {
+        $webOffline = "..\..\..\..\sitesroot\3\app_offline.htm"
+        $administrationOffline = "..\..\..\..\sitesroot\8\app_offline.htm"
+    }else{
+        $webOffline = "..\..\TeleoptiCCC\Web\app_offline.htm"
+        $administrationOffline = "..\..\TeleoptiCCC\Administration\app_offline.htm"
+    }
+    if (Test-Path "$webOffline") {
+        write-host "removing" $webOffline
+        Remove-Item $webOffline
+    }
+    if (Test-Path "$administrationOffline") { 
+        write-host "removing" $administrationOffline
+        Remove-Item $administrationOffline
+    }
+}
+
 ##===========
 ## Main
 ##===========
@@ -245,12 +264,12 @@ Try
 	If (!(Test-Administrator($myWindowsID=[System.Security.Principal.WindowsIdentity]::GetCurrent()))) {
 		throw "User is not Admin!"
 	}
-
+	
 	import-module WebAdministration
-
 	EventlogSource-Create "$JOB"
 
-	$isAzure = fnIsAzure
+    $isAzure = fnIsAzure
+    RemoveAppOfflinePage $isAzure
 	$BaseUrl = BaseUrl-get $isAzure
 	TeleoptiWindowsServices-Stop
 	IIS-Restart
