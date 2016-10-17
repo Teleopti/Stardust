@@ -67,5 +67,10 @@ group by a.Site";
 
 			return ret;
 		}
+
+		public IDictionary<Guid, int> ForSkills(IEnumerable<Guid> sites, IEnumerable<Guid> skillIds)
+		{
+			return null;
+		}
 	}
 }

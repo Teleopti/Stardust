@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -33,38 +34,56 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public IEnumerable<SiteViewModel> Build()
 		{
-			var sites = _siteRepository.LoadAll()
+			var sites = allPermittedSites();
+			var numberOfAgents = sites.Any() ? _numberOfAgentsInSiteReader.FetchNumberOfAgents(sites) : new Dictionary<Guid, int>();
+			return sites.Select(site => new SiteViewModel
+			{
+				Id = site.Id.Value,
+				Name = site.Description.Name,
+				NumberOfAgents = getNumberOfAgents(numberOfAgents, site.Id.Value),
+				OpenHours = openHours(site)
+			}).ToList();
+		}
+
+		private static IEnumerable<SiteOpenHourViewModel> openHours(ISite site)
+		{
+			return site.OpenHourCollection.Select(
+				openHour =>
+					new SiteOpenHourViewModel()
+					{
+						WeekDay = openHour.WeekDay,
+						StartTime = openHour.TimePeriod.StartTime,
+						EndTime = openHour.TimePeriod.EndTime,
+						IsClosed = openHour.IsClosed
+					}).ToList();
+		}
+		
+		public IEnumerable<SiteViewModel> ForSkills(Guid[] skillIds)
+		{
+			var sites = allPermittedSites();
+			var numberOfAgents = sites.Any() ? _numberOfAgentsInSiteReader.ForSkills(sites.Select(x => x.Id.Value), skillIds) : new Dictionary<Guid, int>();
+			return sites.Select(site => new SiteViewModel
+			{
+				Id = site.Id.Value,
+				Name = site.Description.Name,
+				NumberOfAgents = getNumberOfAgents(numberOfAgents, site.Id.Value)
+			}).ToList();
+		}
+
+		private IOrderedEnumerable<ISite> allPermittedSites()
+		{
+			return _siteRepository.LoadAll()
 				.Where(
 					s =>
 						_authorization.Current()
 							.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _now.LocalDateOnly(), s))
 				.OrderBy(x => x.Description.Name, StringComparer.Create(_uiCulture.GetUiCulture(), false));
+		}
 
-			IDictionary<Guid, int> numberOfAgents = new Dictionary<Guid, int>();
-			if (sites.Any())
-				numberOfAgents = _numberOfAgentsInSiteReader.FetchNumberOfAgents(sites);
-
-			return sites.Select(site =>
-			{
-				var valueOrDefault = site.Id.GetValueOrDefault();
-				var openHours =
-					site.OpenHourCollection.Select(
-						openHour =>
-							new SiteOpenHourViewModel()
-							{
-								WeekDay = openHour.WeekDay,
-								StartTime = openHour.TimePeriod.StartTime,
-								EndTime = openHour.TimePeriod.EndTime,
-								IsClosed = openHour.IsClosed
-							}).ToList();
-				return new SiteViewModel
-				{
-					Id = valueOrDefault,
-					Name = site.Description.Name,
-					NumberOfAgents = numberOfAgents[valueOrDefault],
-					OpenHours = openHours
-				};
-			}).ToList();
+		private static int getNumberOfAgents(IDictionary<Guid, int> agentsInSites, Guid siteId)
+		{
+			int tempNumberOfAgents;
+			return agentsInSites.TryGetValue(siteId, out tempNumberOfAgents) ? tempNumberOfAgents : 0;
 		}
 	}
 }

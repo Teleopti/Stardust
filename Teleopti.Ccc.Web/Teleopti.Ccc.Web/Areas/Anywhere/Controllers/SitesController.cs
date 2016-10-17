@@ -30,6 +30,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Ok(_siteViewModelBuilder.Build());
 		}
 
+		[ReadModelUnitOfWork, HttpGet, Route("api/Sites/ForSkill")]
+		public virtual IHttpActionResult SitesForSkill(Guid[] skillIds)
+		{
+			return Ok(_siteViewModelBuilder.ForSkills(skillIds));
+		}
+
 		[UnitOfWork, HttpGet, Route("api/Sites/Get")]
 		public virtual IHttpActionResult Get(Guid siteId)
 		{
@@ -59,5 +65,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		{
 			return Ok(_inAlarmForSites.ForSkills(skillIds));
 		}
+
 	}
 }
