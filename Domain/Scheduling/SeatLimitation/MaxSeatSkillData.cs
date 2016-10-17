@@ -6,41 +6,51 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 {
 	public class MaxSeatSkillData
 	{
-		public MaxSeatSkillData(IEnumerable<MaxSeatSkillDataPerSkill> maxSeatSkillDataPerSkills)
+		private readonly IList<maxSeatSkillDataPerSkill> _maxSeatSkillDataPerSkills;
+
+		public MaxSeatSkillData()
 		{
-			MaxSeatSkillDataPerSkills = maxSeatSkillDataPerSkills;
+			_maxSeatSkillDataPerSkills = new List<maxSeatSkillDataPerSkill>();
 		}
 
-		public IEnumerable<MaxSeatSkillDataPerSkill> MaxSeatSkillDataPerSkills { get; }
+		public void Add(ISkill skill, IEnumerable<ISkillDay> skillDays, ISite site)
+		{
+			_maxSeatSkillDataPerSkills.Add(new maxSeatSkillDataPerSkill(skill, skillDays, site));
+		}
 
 		public IEnumerable<ISkill> AllMaxSeatSkills()
 		{
-			return MaxSeatSkillDataPerSkills.Select(x => x.Skill);
+			return _maxSeatSkillDataPerSkills.Select(x => x.Skill);
 		}
 
 		public IEnumerable<ISkillDay> SkillDaysForDate(DateOnly date)
 		{
-			return MaxSeatSkillDataPerSkills.SelectMany(x => x.SkillDays).Where(x => x.CurrentDate == date);
+			return _maxSeatSkillDataPerSkills.SelectMany(x => x.SkillDays).Where(x => x.CurrentDate == date);
 		}
 
 		public IDictionary<ISkill, IEnumerable<ISkillDay>> AllMaxSeatSkillDaysPerSkill()
 		{
-			return MaxSeatSkillDataPerSkills.
-				ToDictionary(maxSeatSkillDataPerSkill => maxSeatSkillDataPerSkill.Skill, maxSeatSkillDataPerSkill => maxSeatSkillDataPerSkill.SkillDays);
+			return _maxSeatSkillDataPerSkills.ToDictionary(maxSeatSkillDataPerSkill => maxSeatSkillDataPerSkill.Skill, maxSeatSkillDataPerSkill => maxSeatSkillDataPerSkill.SkillDays);
 		}
-	}
 
-	public class MaxSeatSkillDataPerSkill
-	{
-		public MaxSeatSkillDataPerSkill(ISkill skill, IEnumerable<ISkillDay> skillDays, int maxSeatsValue)
+		public int MaxSeats(ISkill skill)
 		{
-			Skill = skill;
-			SkillDays = skillDays;
-			MaxSeatsValue = maxSeatsValue;
+			return _maxSeatSkillDataPerSkills.Single(x => x.Skill.Equals(skill)).Site.MaxSeats.Value;
 		}
 
-		public ISkill Skill { get; }
-		public IEnumerable<ISkillDay> SkillDays { get; }
-		public int MaxSeatsValue { get; }
+
+		private class maxSeatSkillDataPerSkill
+		{
+			public maxSeatSkillDataPerSkill(ISkill skill, IEnumerable<ISkillDay> skillDays, ISite site)
+			{
+				Skill = skill;
+				SkillDays = skillDays;
+				Site = site;
+			}
+
+			public ISkill Skill { get; }
+			public IEnumerable<ISkillDay> SkillDays { get; }
+			public ISite Site { get; }
+		}
 	}
 }

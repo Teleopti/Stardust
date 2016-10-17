@@ -28,13 +28,14 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 		{
 			var maxSeatData = _maxSeatSkillDataFactory.Create(period, persons, scenario);
 
-
 			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills()))
 			{
 				foreach (var date in period.DayCollection())
 				{
 					foreach (var skillDay in maxSeatData.SkillDaysForDate(date))
 					{
+						var maxSeats = maxSeatData.MaxSeats(skillDay.Skill);
+
 						foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 						{
 							//hitta gubbe random?
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 								if (person.Period(date).Team.Site.Id.Value != skillDay.Skill.Id.Value) //titta över
 									continue;
 
-								if (ResourceCalculationContext.Fetch().ActivityResourcesWhereSeatRequired(skillDay.Skill, skillStaffPeriod.Period) <= skillStaffPeriod.Payload.MaxSeats)
+								if (ResourceCalculationContext.Fetch().ActivityResourcesWhereSeatRequired(skillDay.Skill, skillStaffPeriod.Period) <= maxSeats)
 									continue;
 
 								//BEST SHIFT STUFF
@@ -54,9 +55,6 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 										.ProjectionService()
 										.CreateProjection()
 										.ContractTime();
-
-								
-
 
 								foreach (var shift in _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(date, person.PermissionInformation.DefaultTimeZone(), person.Period(date).RuleSetBag, false, true))
 								{
