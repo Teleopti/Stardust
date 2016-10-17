@@ -37,14 +37,16 @@
 		var firstUser = false;
 		var cookie = $cookies.getObject('WfmAdminAuth');
 		var token = cookie ? cookie.tokenKey : null;
-		var today = new Date();
-		var expireDate = new Date(today.getTime() + 30*60000);
+
 		var vm = this;
 		vm.loginEmail = sessionStorage.getItem(emailKey);
 		vm.loginPassword = "";
 		vm.Message = '';
 		vm.Id = cookie ? cookie.idKey : null;
 		vm.user = cookie ? cookie.userKey : null;
+
+
+
 
 		$scope.state = {
 			selected: 1
@@ -97,6 +99,7 @@
 				loginData
 			).success(function (data) {
 				$("#modal-login").toggleClass("wait");
+				//destory previous cookies
 				if (data.Success === false) {
 					//alert(data.Message);
 					vm.Message = data.Message;
@@ -108,6 +111,8 @@
 				// Cache the username token in session storage.
 				sessionStorage.setItem(emailKey, vm.loginEmail);
 				//lets do authentication in cookie
+				var today = new Date();
+				var expireDate = new Date(today.getTime() + 30 * 60000);
 				$cookies.putObject('WfmAdminAuth', { 'tokenKey': data.AccessToken, 'userKey': data.UserName, 'idKey': data.Id }, { 'expires': new Date(expireDate) });
 				document.location = "#/";
 				location.reload();

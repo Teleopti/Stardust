@@ -14,7 +14,7 @@
 			// optional method
 			'requestError': function(rejection) {
 				// do something on error
-        return(rejection)
+        return(rejection);
 			},
 
 			// optional method
