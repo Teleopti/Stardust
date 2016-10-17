@@ -39,8 +39,8 @@ describe('RtaHistoricalController', function() {
 		stateParams.personId = id;
 		$fakeBackend.withAgent({
 			PersonId: id,
-			Name: 'Mikkey Dee',
-			Schedule: [],
+			AgentName: 'Mikkey Dee',
+			Schedules: [],
 			OutOfAdherences: []
 		});
 
@@ -54,8 +54,8 @@ describe('RtaHistoricalController', function() {
 		stateParams.personId = '1';
 		$fakeBackend.withAgent({
 			PersonId: '1',
-			Name: 'Mikkey Dee',
-			Schedule: [{
+			AgentName: 'Mikkey Dee',
+			Schedules: [{
 				Color: 'lightgreen',
 				StartTime: '2016-10-10T08:00:00',
 				EndTime: '2016-10-10T17:00:00'
@@ -75,8 +75,8 @@ describe('RtaHistoricalController', function() {
 		stateParams.personId = '1';
 		$fakeBackend.withAgent({
 			PersonId: '1',
-			Name: 'Mikkey Dee',
-			Schedule: [{
+			AgentName: 'Mikkey Dee',
+			Schedules: [{
 				Color: 'lightgreen',
 				StartTime: '2016-10-10T08:00:00',
 				EndTime: '2016-10-10T12:00:00'
@@ -100,8 +100,8 @@ describe('RtaHistoricalController', function() {
 		stateParams.personId = '1';
 		$fakeBackend.withAgent({
 			PersonId: '1',
-			Name: 'Mikkey Dee',
-			Schedule: [{
+			AgentName: 'Mikkey Dee',
+			Schedules: [{
 				Color: 'lightgreen',
 				StartTime: '2016-10-10T08:00:00',
 				EndTime: '2016-10-10T12:30:00'
@@ -125,8 +125,8 @@ describe('RtaHistoricalController', function() {
 		stateParams.personId = '1';
 		$fakeBackend.withAgent({
 			PersonId: '1',
-			Name: 'Mikkey Dee',
-			Schedule: [{
+			AgentName: 'Mikkey Dee',
+			Schedules: [{
 				Color: 'lightgreen',
 				StartTime: '2016-10-10T08:00:00',
 				EndTime: '2016-10-10T18:00:00'
@@ -149,8 +149,8 @@ describe('RtaHistoricalController', function() {
 		stateParams.personId = '1';
 		$fakeBackend.withAgent({
 			PersonId: '1',
-			Name: 'Mikkey Dee',
-			Schedule: [{
+			AgentName: 'Mikkey Dee',
+			Schedules: [{
 				Color: 'lightgreen',
 				StartTime: '2016-10-10T08:00:00',
 				EndTime: '2016-10-10T18:00:00'
@@ -176,8 +176,8 @@ describe('RtaHistoricalController', function() {
 		stateParams.personId = '1';
 		$fakeBackend.withAgent({
 			PersonId: '1',
-			Name: 'Mikkey Dee',
-			Schedule: [{
+			AgentName: 'Mikkey Dee',
+			Schedules: [{
 				Color: 'lightgreen',
 				StartTime: '2016-10-10T08:00:00',
 				EndTime: '2016-10-10T09:00:00'
@@ -199,8 +199,8 @@ describe('RtaHistoricalController', function() {
 		stateParams.personId = '1';
 		$fakeBackend.withAgent({
 			PersonId: '1',
-			Name: 'Mikkey Dee',
-			Schedule: [{
+			AgentName: 'Mikkey Dee',
+			Schedules: [{
 				Color: 'lightgreen',
 				StartTime: '2016-10-10T08:00:00',
 				EndTime: '2016-10-10T09:00:00'
@@ -225,8 +225,8 @@ describe('RtaHistoricalController', function() {
 		stateParams.personId = '1';
 		$fakeBackend.withAgent({
 			PersonId: '1',
-			Name: 'Mikkey Dee',
-			Schedule: [{
+			AgentName: 'Mikkey Dee',
+			Schedules: [{
 				Color: 'lightgreen',
 				StartTime: '2016-10-10T08:00:00',
 				EndTime: '2016-10-10T09:00:00'
@@ -253,8 +253,8 @@ describe('RtaHistoricalController', function() {
 			.withTime('2016-10-10T15:00:00')
 			.withAgent({
 				PersonId: '1',
-				Name: 'Mikkey Dee',
-				Schedule: [{
+				AgentName: 'Mikkey Dee',
+				Schedules: [{
 					Color: 'lightgreen',
 					StartTime: '2016-10-10T08:00:00',
 					EndTime: '2016-10-10T09:00:00'
@@ -274,5 +274,20 @@ describe('RtaHistoricalController', function() {
 		expect(vm.outOfAdherences.length).toEqual(1);
 		expect(vm.outOfAdherences[0].Offset).toEqual('0%');
 		expect(vm.outOfAdherences[0].Width).toEqual('80%');
+	});
+
+	it('should display current date', function() {
+		stateParams.personId = '1';
+		$fakeBackend
+			.withTime('2016-10-10T15:00:00')
+			.withAgent({
+				PersonId: '1',
+				Schedules: [],
+				OutOfAdherences: []
+			});
+
+		var vm = $controllerBuilder.createController().vm;
+
+		expect(vm.date).toBe('2016-10-10');
 	});
 });

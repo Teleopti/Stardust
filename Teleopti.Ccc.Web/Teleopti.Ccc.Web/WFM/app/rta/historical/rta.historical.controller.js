@@ -10,11 +10,12 @@
 
 		RtaService.getAgentHistoricalData(id)
 			.then(function(data) {
-				var o = compareEarliestLastest(data.Schedule, data.OutOfAdherences, data.Date);
+				var o = compareEarliestLastest(data.Schedules, data.OutOfAdherences, data.Now);
 
 				vm.personId = data.PersonId;
-				vm.agentName = data.Name;
-				vm.agentsFullSchedule = data.Schedule.map(function(layer) {
+				vm.agentName = data.AgentName;
+				vm.date = moment(data.Now).format('YYYY-MM-DD');
+				vm.agentsFullSchedule = data.Schedules.map(function(layer) {
 					return {
 						Width: calculateWidth(layer.StartTime, layer.EndTime, o.totalSeconds),
 						Offset: calculateWidth(o.start, layer.StartTime, o.totalSeconds),
@@ -25,7 +26,7 @@
 
 				vm.outOfAdherences = data.OutOfAdherences.map(function(ooa) {
 					if (ooa.EndTime == null)
-						ooa.EndTime = data.Date;
+						ooa.EndTime = data.Now;
 
 					return {
 						Width: calculateWidth(ooa.StartTime, ooa.EndTime, o.totalSeconds),

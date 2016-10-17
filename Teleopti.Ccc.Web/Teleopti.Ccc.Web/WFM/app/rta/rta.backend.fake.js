@@ -406,7 +406,7 @@
 						return params.personId == agent.PersonId;
 					});
 					if (result != null)
-						result.Date = serverTime;
+						result.Now = serverTime;
 
 					return [200, result];
 				});
@@ -486,12 +486,12 @@
 				siteAdherencesForSkill.push(siteAdherenceForSkill);
 				return this;
 			};
-			
+
 			this.withSiteAdherenceForSkillArea = function(siteAdherenceForSkillArea) {
 				siteAdherencesForSkillArea.push(siteAdherenceForSkillArea);
 				return this;
 			};
-			
+
 			this.clearSiteAdherences = function() {
 				siteAdherences = [];
 				return this;
@@ -502,7 +502,7 @@
 				return this;
 			};
 
-			
+
 			this.withTeamAdherenceForSkill = function(teamAdherenceForSkill) {
 				teamAdherencesForSkill.push(teamAdherenceForSkill);
 				return this;
