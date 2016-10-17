@@ -112,5 +112,26 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			schedules[agentDataSiteUnderLimit.Agent].ScheduledDay(dateOnly).PersonAssignment(true).Period.StartDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(8));
 		}
+
+		[Test]
+		public void ShouldBeAbleToUseLongerShiftIfContractTimeIsTheSame()
+		{
+			var activity = new Activity("_") { RequiresSeat = true, InContractTime = true}.WithId();
+			var nonContractTimeActivity = new Activity("_") { RequiresSeat = true, InContractTime = false}.WithId();
+			var site = new Site("_") { MaxSeats = 1 }.WithId();
+			var dateOnly = DateOnly.Today;
+			var scenario = new Scenario("_");
+			// 1 shift -> contract time 9-17, non contract time 17-18
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 9, 0, 60), new TimePeriodWithSegment(18, 0, 18, 0, 60), new ShiftCategory("_").WithId()));
+			ruleSet.AddExtender(new ActivityAbsoluteStartExtender(nonContractTimeActivity, new TimePeriodWithSegment(1, 0, 1, 0, 60), new TimePeriodWithSegment(17, 0, 17, 0, 60)));
+			var agentScheduledForAnHourData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, site, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 9, 0));
+			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, site, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData.Assignment, agentScheduledForAnHourData.Assignment });
+
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent, agentScheduledForAnHourData.Agent }, schedules, scenario);
+
+			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment(true).Period.EndDateTime.TimeOfDay
+				.Should().Be.EqualTo(TimeSpan.FromHours(18));
+		}
 	}	
 }

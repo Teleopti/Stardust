@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 							//hitta gubbe random?
 							foreach (var person in persons)
 							{
-								if(!person.Period(date).PersonMaxSeatSkillCollection.Select(x => x.Skill).Contains(skillDay.Skill)) //titta över
+								if (!person.Period(date).PersonMaxSeatSkillCollection.Select(x => x.Skill).Contains(skillDay.Skill)) //titta över
 									continue;
 
 								if (ResourceCalculationContext.Fetch().ActivityResourcesWhereSeatRequired(skillDay.Skill, skillStaffPeriod.Period) <= skillStaffPeriod.Payload.MaxSeats)
@@ -47,12 +47,19 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 
 								//BEST SHIFT STUFF
 								IEditableShift shiftToUse = null;
-								var shiftLengthBeforeTEMPremoveMe = schedules[person].ScheduledDay(date).PersonAssignment(true).Period.ElapsedTime();
+								var contractTimeBefore =
+									schedules[person].ScheduledDay(date) // don't do this every interval/skillstaffperiod
+										.PersonAssignment(true)
+										.ProjectionService()
+										.CreateProjection()
+										.ContractTime();
+
+
 								foreach (var shift in _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(date, person.PermissionInformation.DefaultTimeZone(), person.Period(date).RuleSetBag, false, true))
 								{
 									var layerThisPeriod = shift.MainShiftProjection.SingleOrDefault(x => x.Period.Contains(skillStaffPeriod.Period)); //should handle "containspart" and multiple layers on period cases
-									if ((layerThisPeriod == null || !((IActivity)layerThisPeriod.Payload).RequiresSeat)
-										&& shift.MainShiftProjection.Period().Value.ElapsedTime() == shiftLengthBeforeTEMPremoveMe) //remove this line later
+									if ((layerThisPeriod == null || !((IActivity)layerThisPeriod.Payload).RequiresSeat) &&
+										shift.MainShiftProjection.ContractTime() == contractTimeBefore)
 									{
 										shiftToUse = shift.TheMainShift;
 										break;
