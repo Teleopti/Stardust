@@ -52,7 +52,7 @@ RTA_ScheduleQueryOptimization_40260 = true
 RTA_ScheduleQueryOptimizationFilteredCache_40260 = false
 RTA_ConnectionQueryOptimizeAllTheThings_40262 = true
 RTA_HideAgentsByStateGroup_40469 = RC
-RTA_FasterUpdateOfScheduleChanges_40536 = false
+RTA_FasterUpdateOfScheduleChanges_40536 = true
 RTA_SiteAndTeamOnSkillOverview_40817 = DEV
 RTA_SeeAllOutOfAdherencesToday_39146 = false
 
