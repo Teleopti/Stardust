@@ -107,7 +107,7 @@
 								names: {
 									Forecasted_staffing: $translate.instant('ForecastedStaff') + ' ←',
 									Updated_forecasted_staffing: $translate.instant('ReforecastedStaff') + ' ←',
-									Actual_staffing: 'XXActual Staffing' + ' ←'
+									Actual_staffing: $translate.instant('RequiredStaff') + ' ←'
 								}
 							},
 							axis: {
