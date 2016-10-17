@@ -9,12 +9,12 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 {
-	public class TeamInAlarmFromAgentStatesReadModelReader : ITeamInAlarmReader
+	public class TeamInAlarmReader : ITeamInAlarmReader
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly INow _now;
 
-		public TeamInAlarmFromAgentStatesReadModelReader(ICurrentUnitOfWork unitOfWork, INow now)
+		public TeamInAlarmReader(ICurrentUnitOfWork unitOfWork, INow now)
 		{
 			_unitOfWork = unitOfWork;
 			_now = now;

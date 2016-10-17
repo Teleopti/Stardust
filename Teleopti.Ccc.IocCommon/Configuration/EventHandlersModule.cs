@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SiteInAlarmReader>()
 					.As<ISiteInAlarmReader>()
 					.SingleInstance();
-			builder.RegisterType<TeamInAlarmFromAgentStatesReadModelReader>()
+			builder.RegisterType<TeamInAlarmReader>()
 				.As<ITeamInAlarmReader>()
 				.SingleInstance();
 			
