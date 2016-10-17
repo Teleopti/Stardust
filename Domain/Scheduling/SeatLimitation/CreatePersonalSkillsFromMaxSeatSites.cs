@@ -1,14 +1,17 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public interface ICreatePersonalSkillsFromMaxSeatSites
 	{
 		void Process(DateOnlyPeriod period, IEnumerable<IPerson> personsInOrganisation);
 	}
 
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public class CreatePersonalSkillsFromMaxSeatSites : ICreatePersonalSkillsFromMaxSeatSites
 	{
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]

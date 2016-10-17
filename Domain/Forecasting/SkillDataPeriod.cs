@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		private double? _manualAgents;
 		private Percent _shrinkage = new Percent(0);
 		private Percent _efficiency = new Percent(1);
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		private int _maxSeats;
 
 		/// <summary>

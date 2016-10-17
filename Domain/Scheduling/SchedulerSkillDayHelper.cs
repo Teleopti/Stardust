@@ -1,17 +1,20 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-    public interface ISchedulerSkillDayHelper
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
+	public interface ISchedulerSkillDayHelper
     {
 		IDictionary<ISkill, IEnumerable<ISkillDay>> AddMaxSeatSkillDaysToStateHolder(DateOnlyPeriod datePeriod, IEnumerable<ISkill> maxSeatSkills, IScenario scenario);
     }
 
-    public class SchedulerSkillDayHelper : ISchedulerSkillDayHelper
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
+	public class SchedulerSkillDayHelper : ISchedulerSkillDayHelper
     {
 	    private readonly IWorkloadDayHelper _workLoadDayHelper;
 

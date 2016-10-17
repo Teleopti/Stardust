@@ -135,6 +135,7 @@
 		ResourcePlanner_CalculateFarAwayTimeZones_40646,
 		ResourcePlanner_FilterOvertimeAvail_37113,
 		ResourcePlanner_NegativeOrderIndex_39062,
+		ResourcePlanner_MaxSeatsNew_40939,
 
 		Wfm_DisplayOnlineHelp_39402,
 
