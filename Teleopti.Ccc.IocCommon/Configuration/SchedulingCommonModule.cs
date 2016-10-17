@@ -568,7 +568,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ExtractIntervalsViolatingMaxSeat>().As<IExtractIntervalsViolatingMaxSeat>();
 		}
 
-		private static void registerMaxSeatSkillCreator(ContainerBuilder builder)
+		private void registerMaxSeatSkillCreator(ContainerBuilder builder)
 		{
 			builder.RegisterType<WorkloadDayHelper>().As<IWorkloadDayHelper>().SingleInstance();
 			builder.RegisterType<MaxSeatSitesExtractor>().As<IMaxSeatSitesExtractor>().SingleInstance();
@@ -576,7 +576,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SchedulerSkillDayHelper>().As<ISchedulerSkillDayHelper>().SingleInstance();
 			builder.RegisterType<CreatePersonalSkillsFromMaxSeatSites>().As<ICreatePersonalSkillsFromMaxSeatSites>().SingleInstance();
 			builder.RegisterType<MaxSeatSkillCreator>().SingleInstance();
-			builder.RegisterType<InitMaxSeatForStateHolderOld>().As<IInitMaxSeatForStateHolder>().SingleInstance();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_MaxSeatsNew_40939))
+			{
+				builder.RegisterType<InitMaxSeatForStateHolder>().As<IInitMaxSeatForStateHolder>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<InitMaxSeatForStateHolderOld>().As<IInitMaxSeatForStateHolder>().SingleInstance();
+			}
 		}
 
 		[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
