@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 
@@ -7,25 +6,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 {
 	public class InitMaxSeatForStateHolder : IInitMaxSeatForStateHolder
 	{
-		//CURRENTLY JUST COPIED THE OLD ONE - continue later...
-
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
-		private readonly MaxSeatSkillCreator _maxSeatSkillCreator;
+		private readonly MaxSeatSkillDataFactory _maxSeatSkillDataFactory;
 
-		public InitMaxSeatForStateHolder(Func<ISchedulerStateHolder> stateHolder, MaxSeatSkillCreator maxSeatSkillCreator)
+		public InitMaxSeatForStateHolder(Func<ISchedulerStateHolder> stateHolder, MaxSeatSkillDataFactory maxSeatSkillDataFactory)
 		{
 			_stateHolder = stateHolder;
-			_maxSeatSkillCreator = maxSeatSkillCreator;
+			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
 		}
 
 		public void Execute()
 		{
 			var stateHolder = _stateHolder();
-			var result = _maxSeatSkillCreator.CreateMaxSeatSkills(stateHolder.RequestedPeriod.DateOnlyPeriod,
-				stateHolder.RequestedScenario,
-				stateHolder.SchedulingResultState.PersonsInOrganization.ToList(), stateHolder.SchedulingResultState.Skills);
-			result.SkillsToAddToStateholder.ForEach(s => stateHolder.SchedulingResultState.AddSkills(s));
-			result.SkillDaysToAddToStateholder.ForEach(kvp => stateHolder.SchedulingResultState.SkillDays.Add(kvp));
+			var result = _maxSeatSkillDataFactory.Create(stateHolder.RequestedPeriod.DateOnlyPeriod, stateHolder.SchedulingResultState.PersonsInOrganization, stateHolder.RequestedScenario);
+			result.AllMaxSeatSkills().ForEach(s => stateHolder.SchedulingResultState.AddSkills(s));
+			result.AllMaxSeatSkillDaysPerSkill().ForEach(kvp => stateHolder.SchedulingResultState.SkillDays.Add(kvp));
 		}
 	}
 }

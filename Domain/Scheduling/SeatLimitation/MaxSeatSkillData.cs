@@ -22,6 +22,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		{
 			return MaxSeatSkillDataPerSkills.SelectMany(x => x.SkillDays).Where(x => x.CurrentDate == date);
 		}
+
+		public IDictionary<ISkill, IEnumerable<ISkillDay>> AllMaxSeatSkillDaysPerSkill()
+		{
+			return MaxSeatSkillDataPerSkills.
+				ToDictionary(maxSeatSkillDataPerSkill => maxSeatSkillDataPerSkill.Skill, maxSeatSkillDataPerSkill => maxSeatSkillDataPerSkill.SkillDays);
+		}
 	}
 
 	public class MaxSeatSkillDataPerSkill
