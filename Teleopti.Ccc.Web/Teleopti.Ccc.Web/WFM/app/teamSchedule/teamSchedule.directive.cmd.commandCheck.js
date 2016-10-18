@@ -57,11 +57,19 @@
 
 		function getAgentListModifier(keepAgents) {
 			var checkFailedAgentIdList = vm.checkFailedAgentList.map(function(agent) { return agent.personId; });
-			return function (requestData) {
+			return function(requestData) {
 				if (keepAgents) return requestData;
-				requestData.PersonIds = requestData.PersonIds.filter(function(id) {
-					return checkFailedAgentIdList.indexOf(id) < 0;
-				});
+
+				if (requestData.PersonIds) {
+					requestData.PersonIds = requestData.PersonIds.filter(function(id) {
+						return checkFailedAgentIdList.indexOf(id) < 0;
+					});
+				}
+				if (requestData.PersonActivities) {
+					requestData.PersonActivities = requestData.PersonActivities.filter(function (personActivity) {
+						return checkFailedAgentIdList.indexOf(personActivity.PersonId) < 0;
+					});
+				}
 				return requestData;
 			}
 		};
