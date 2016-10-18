@@ -180,7 +180,7 @@
 			};
 
 			this.getAdherenceForAllSitesBySkill = function (data) {
-				return $resource('../api/Sites/GetOutOfAdherenceForAllSitesBySkill', {}, {
+				return $resource('../api/Sites/InAlarmCountForSkills', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
@@ -200,7 +200,7 @@
 			};
 
 			this.getSitesForSkill = function (skillId) {
-				return $resource('../api/SitesForSkill', {}, {
+				return $resource('../api/Sites/ForSkills', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
@@ -211,7 +211,7 @@
 			};
 
 			this.getSitesForSkillArea = function (skillAreaId) {
-				return $resource('../api/SitesForSkillArea', {}, {
+				return $resource('../api/Sites/ForSkillArea', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
@@ -222,7 +222,7 @@
 			};
 
 			this.getAdherenceForAllTeamsOnSitesBySkill = function (data) {
-				return $resource('../api/Teams/GetOutOfAdherenceForAllTeamsOnSitesBySkill', {}, {
+				return $resource('../api/Teams/InAlarmCountForSkills', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
@@ -257,7 +257,7 @@
 			};
 
 			this.getTeamsForSitesAndSkill = function (data) {
-				return $resource('../api/TeamsForSitesAndSkill', {}, {
+				return $resource('../api/Teams/ForSkills', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
@@ -269,7 +269,7 @@
 			};
 
 			this.getTeamsForSitesAndSkillArea = function (data) {
-				return $resource('../api/TeamsForSitesAndSkillArea', {}, {
+				return $resource('../api/Teams/ForSitesAndSkillArea', {}, {
 					query: {
 						method: 'GET',
 						isArray: true

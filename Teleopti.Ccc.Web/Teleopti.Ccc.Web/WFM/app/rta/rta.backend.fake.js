@@ -316,18 +316,18 @@
 					});
 			}
 
-			fake(/\.\.\/api\/SitesForSkillArea(.*)/,
+			fake(/\.\.\/api\/Sites\/ForSkillArea(.*)/,
 				function(params) {
 					var filteredSites = sitesOrTeamsForSkillOrSkillArea(siteAdherencesForSkillArea,'SkillAreaId',params.skillAreaId,sites);
 					return [200, filteredSites];
 				});
 
-			fake(/\.\.\/api\/SitesForSkill(.*)/,
+			fake(/\.\.\/api\/Sites\/ForSkills(.*)/,
 				function(params) {
 					var filteredSites = sitesOrTeamsForSkillOrSkillArea(siteAdherencesForSkill,'SkillId',params.skillId,sites);
 					return [200, filteredSites];
 				});
-			fake(/\.\.\/api\/TeamsForSitesAndSkillArea(.*)/,
+			fake(/\.\.\/api\/Teams\/ForSitesAndSkillArea(.*)/,
 				function(params) {
 					var teamsBySite = teams.filter(function(t) {
 						return params.siteIds.indexOf(t.SiteId) > -1;
@@ -336,7 +336,7 @@
 					return [200, filteredTeams];
 				});
 
-			fake(/\.\.\/api\/TeamsForSitesAndSkill(.*)/,
+			fake(/\.\.\/api\/Teams\/ForSkills(.*)/,
 				function(params) {
 					var teamsBySite = teams.filter(function(t) {
 						return params.siteIds.indexOf(t.SiteId) > -1;
@@ -353,7 +353,7 @@
 					});
 					return [200, sAdherencesForSkillArea];
 				});
-			fake(/\.\.\/api\/Sites\/GetOutOfAdherenceForAllSitesBySkill(.*)/,
+			fake(/\.\.\/api\/Sites\/InAlarmCountForSkills(.*)/,
 				function(params) {
 					var sAdherencesForSkill = siteAdherencesForSkill.filter(function(sa){
 						return sa.SkillId === params.skillId;
@@ -380,7 +380,7 @@
 					return [200, teamAdherencesBySkillAreaId];
 			});
 
-			fake(/\.\.\/api\/Teams\/GetOutOfAdherenceForAllTeamsOnSitesBySkill(.*)/,
+			fake(/\.\.\/api\/Teams\/InAlarmCountForSkills(.*)/,
 				function(params) {
 					var teamAdherencesBySkillId = teamAdherencesForSkill.filter(function(sa){
 						return sa.SkillId ===  params.skillId && sa.Id ===  params.teamIds;

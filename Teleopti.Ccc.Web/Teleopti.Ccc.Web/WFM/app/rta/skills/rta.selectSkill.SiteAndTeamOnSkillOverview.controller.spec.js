@@ -1,5 +1,5 @@
 'use strict';
-xdescribe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
+describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 	var $interval,
 		$httpBackend,
 		$state,
