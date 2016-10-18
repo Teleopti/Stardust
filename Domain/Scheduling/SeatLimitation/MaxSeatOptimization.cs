@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -11,21 +12,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IShiftProjectionCacheManager _shiftProjectionCacheManager;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
+		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 
 		public MaxSeatOptimization(MaxSeatSkillDataFactory maxSeatSkillDataFactory, 
 														CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 														IShiftProjectionCacheManager shiftProjectionCacheManager,
-														IScheduleDayChangeCallback scheduleDayChangeCallback)
+														IScheduleDayChangeCallback scheduleDayChangeCallback,
+														IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
+														ISchedulingOptionsCreator schedulingOptionsCreator)
 		{
 			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_shiftProjectionCacheManager = shiftProjectionCacheManager;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
+			_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
+			_schedulingOptionsCreator = schedulingOptionsCreator;
 		}
 
 		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> persons, IScheduleDictionary schedules, IScenario scenario, IOptimizationPreferences optimizationPreferences)
 		{
 			var maxSeatData = _maxSeatSkillDataFactory.Create(period, persons, scenario);
+			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 
 			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills()))
 			{
@@ -48,18 +56,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 								//BEST SHIFT STUFF
 								IEditableShift shiftToUse = null;
-								var contractTimeBefore =
-									schedules[person].ScheduledDay(date) // don't do this every interval/skillstaffperiod
+								var scheduleDay = schedules[person].ScheduledDay(date);
+								var contractTimeBefore = scheduleDay // don't do this every interval/skillstaffperiod
 										.PersonAssignment(true)
 										.ProjectionService()
 										.CreateProjection()
 										.ContractTime();
 
+								_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(schedulingOptions, optimizationPreferences, scheduleDay.GetEditorShift(), date);
+								
 								foreach (var shift in _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(date, person.PermissionInformation.DefaultTimeZone(), person.Period(date).RuleSetBag, false, true))
 								{
 									var layerThisPeriod = shift.MainShiftProjection.SingleOrDefault(x => x.Period.Contains(skillStaffPeriod.Period)); 
 									if ((layerThisPeriod == null || !((IActivity)layerThisPeriod.Payload).RequiresSeat) &&
-										shift.MainShiftProjection.ContractTime() == contractTimeBefore)
+										shift.MainShiftProjection.ContractTime() == contractTimeBefore &&
+										isSatisfied(schedulingOptions.MainShiftOptimizeActivitySpecification, shift.MainShiftProjection)) //refactor when all shift tests are in place
 									{
 										shiftToUse = shift.TheMainShift;
 										break;
@@ -76,7 +87,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						}
 					}
 				}
-			}
+			}		
+		}
+
+		//remove when all shift tests are in place
+		private bool isSatisfied(ISpecification<IEditableShift> specification, IVisualLayerCollection visualLayerCollection)
+		{
+			var mainShiftOptimizeActivitiesSpecification = specification as MainShiftOptimizeActivitiesSpecification;
+
+			if (mainShiftOptimizeActivitiesSpecification == null) return true;
+
+			if (!mainShiftOptimizeActivitiesSpecification.CorrectStart(visualLayerCollection))
+				return false;
+
+			return true;
 		}
 	}
 }

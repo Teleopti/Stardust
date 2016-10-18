@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.EqualTo(TimeSpan.FromHours(18));
 		}
 
-		[Test, Ignore("#40939")]
+		[Test]
 		public void ShouldConsiderKeepStartTime()
 		{
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
@@ -152,6 +152,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment(true).Period.StartDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(8));
-		}
+		}	
 	}	
 }
