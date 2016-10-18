@@ -8,12 +8,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
     public class MaxSeatSkillCreator
     {
-        private readonly IMaxSeatSitesExtractor _maxSeatSitesExtractor;
+        private readonly MaxSeatSitesExtractor _maxSeatSitesExtractor;
         private readonly ICreateSkillsFromMaxSeatSites _createSkillsFromMaxSeatSites;
         private readonly ICreatePersonalSkillsFromMaxSeatSites _createPersonalSkillsFromMaxSeatSites;
 	    private readonly ISchedulerSkillDayHelper _schedulerSkillDayHelper;
 
-	    public MaxSeatSkillCreator(IMaxSeatSitesExtractor maxSeatSitesExtractor, ICreateSkillsFromMaxSeatSites createSkillsFromMaxSeatSites,
+	    public MaxSeatSkillCreator(MaxSeatSitesExtractor maxSeatSitesExtractor, ICreateSkillsFromMaxSeatSites createSkillsFromMaxSeatSites,
 			ICreatePersonalSkillsFromMaxSeatSites createPersonalSkillsFromMaxSeatSites, ISchedulerSkillDayHelper schedulerSkillDayHelper)
         {
             _maxSeatSitesExtractor = maxSeatSitesExtractor;

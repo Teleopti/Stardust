@@ -7,12 +7,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 {
 	public class MaxSeatSkillDataFactory
 	{
-		private readonly IMaxSeatSitesExtractor _maxSeatSitesExtractor;
+		private readonly MaxSeatSitesExtractor _maxSeatSitesExtractor;
 		private readonly SkillsFromMaxSeatSite _skillsFromMaxSeatSite;
 		private readonly IWorkloadDayHelper _workloadDayHelper;
 
 
-		public MaxSeatSkillDataFactory(IMaxSeatSitesExtractor maxSeatSitesExtractor, 
+		public MaxSeatSkillDataFactory(MaxSeatSitesExtractor maxSeatSitesExtractor, 
 							SkillsFromMaxSeatSite skillsFromMaxSeatSite, 
 							IWorkloadDayHelper workloadDayHelper)
 		{
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			{
 				var skill = _skillsFromMaxSeatSite.CreateMaxSeatSkill(site, 15);//why 15?
 
-				//todo: REMOVE ME!
+				//todo: REMOVE ME?
 				foreach (var agent in agents)
 				{
 					var personSkill = new PersonSkill(skill, new Percent(1));

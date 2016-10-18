@@ -570,7 +570,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		private void registerMaxSeatSkillCreator(ContainerBuilder builder)
 		{
 			builder.RegisterType<WorkloadDayHelper>().As<IWorkloadDayHelper>().SingleInstance();
-			builder.RegisterType<MaxSeatSitesExtractor>().As<IMaxSeatSitesExtractor>().SingleInstance();
+			builder.RegisterType<MaxSeatSitesExtractor>().SingleInstance();
 			builder.RegisterType<CreateSkillsFromMaxSeatSites>().As<ICreateSkillsFromMaxSeatSites>().SingleInstance();
 			builder.RegisterType<SchedulerSkillDayHelper>().As<ISchedulerSkillDayHelper>().SingleInstance();
 			builder.RegisterType<CreatePersonalSkillsFromMaxSeatSites>().As<ICreatePersonalSkillsFromMaxSeatSites>().SingleInstance();

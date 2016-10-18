@@ -3,12 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 {
-	public interface IMaxSeatSitesExtractor
-    {
-		HashSet<ISite> MaxSeatSites(DateOnlyPeriod requestedPeriod, IEnumerable<IPerson> personsInOrganization);
-    }
-
-	public class MaxSeatSitesExtractor : IMaxSeatSitesExtractor
+	public class MaxSeatSitesExtractor
     {
 		public HashSet<ISite> MaxSeatSites(DateOnlyPeriod requestedPeriod, IEnumerable<IPerson> personsInOrganization)
         {
