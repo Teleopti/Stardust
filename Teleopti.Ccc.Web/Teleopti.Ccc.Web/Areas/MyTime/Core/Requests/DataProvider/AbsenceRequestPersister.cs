@@ -15,19 +15,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IMappingEngine _mapper;
 		private readonly IEventPublisher _publisher;
-		
+
 		private readonly ICurrentBusinessUnit _businessUnitProvider;
 		private readonly ICurrentDataSource _currentDataSource;
 		private readonly INow _now;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
+		private readonly IAbsenceRequestSynchronousValidator _absenceRequestSynchronousValidator;
+		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 
 		public AbsenceRequestPersister(IPersonRequestRepository personRequestRepository,
-											IMappingEngine mapper,
-											IEventPublisher publisher,
-											ICurrentBusinessUnit businessUnitProvider,
-											ICurrentDataSource currentDataSource,
-											INow now,
-											ICurrentUnitOfWork currentUnitOfWork)
+			IMappingEngine mapper,
+			IEventPublisher publisher,
+			ICurrentBusinessUnit businessUnitProvider,
+			ICurrentDataSource currentDataSource,
+			INow now,
+			ICurrentUnitOfWork currentUnitOfWork, IAbsenceRequestSynchronousValidator absenceRequestSynchronousValidator, IPersonRequestCheckAuthorization personRequestCheckAuthorization)
 		{
 			_personRequestRepository = personRequestRepository;
 			_mapper = mapper;
@@ -36,6 +38,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_currentDataSource = currentDataSource;
 			_now = now;
 			_currentUnitOfWork = currentUnitOfWork;
+			_absenceRequestSynchronousValidator = absenceRequestSynchronousValidator;
+			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 		}
 
 		public RequestViewModel Persist(AbsenceRequestForm form)
@@ -64,10 +68,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			else
 			{
 				personRequest = _mapper.Map<AbsenceRequestForm, IPersonRequest>(form);
+				var result = _absenceRequestSynchronousValidator.Validate(personRequest);
+				if (!result.IsValid)
+				{
+					personRequest.Deny(null, result.ValidationErrors, _personRequestCheckAuthorization,
+						PersonRequestDenyOption.AutoDeny);
+				}
 				_personRequestRepository.Add(personRequest);
 			}
 
-			if (_currentUnitOfWork != null)
+			if (_currentUnitOfWork != null && !personRequest.IsDenied)
 			{
 				var message = new NewAbsenceRequestCreatedEvent
 				{

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         	scenario = ScenarioFactory.CreateScenarioAggregate();
 			person = PersonFactory.CreatePerson();
 			stateHolder = mocks.DynamicMock<ISchedulingResultStateHolder>();
-			target = new AlreadyAbsentSpecification();
+			target = new AlreadyAbsentSpecification(new AlreadyAbsentValidator());
         }
 
         [Test]

@@ -8,22 +8,17 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 	public class AlreadyAbsentSpecification : Specification<IAbsenceRequestAndSchedules>, IAlreadyAbsentSpecification
 	{
+		private readonly IAlreadyAbsentValidator _alreadyAbsentValidator;
+
+		public AlreadyAbsentSpecification(IAlreadyAbsentValidator alreadyAbsentValidator)
+		{
+			_alreadyAbsentValidator = alreadyAbsentValidator;
+		}
+
 		public override bool IsSatisfiedBy(IAbsenceRequestAndSchedules obj)
 		{
-			var scheduleDays = obj.SchedulingResultStateHolder.Schedules[obj.AbsenceRequest.Person]
-				.ScheduledDayCollection(
-					obj.AbsenceRequest.Period.ToDateOnlyPeriod(obj.AbsenceRequest.Person.PermissionInformation.DefaultTimeZone()));
-			foreach (var scheduleDay in scheduleDays)
-			{
-				var projection = scheduleDay.ProjectionService().CreateProjection();
-				var absenceLayers = projection.FilterLayers(obj.AbsenceRequest.Period).FilterLayers<IAbsence>();
-				if (absenceLayers.Count()>0)
-				{
-					return true;
-				}
-			}
-
-			return false;
+			var scheduleRange = obj.SchedulingResultStateHolder.Schedules[obj.AbsenceRequest.Person];
+			return _alreadyAbsentValidator.Validate(obj.AbsenceRequest, scheduleRange);
 		}
 	}
 }

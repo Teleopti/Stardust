@@ -11,15 +11,12 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 	public class AbsenceRequestValidatorProvider : IAbsenceRequestValidatorProvider
 	{
 		private readonly IToggleManager _toggleManager;
-		private readonly IGlobalSettingDataRepository _globalSettingsDataRepository;
-		private readonly INow _now;
+		private readonly IExpiredRequestValidator _expiredRequestValidator;
 
-		public AbsenceRequestValidatorProvider(IToggleManager toggleManager
-			, IGlobalSettingDataRepository globalSettingsDataRepository, INow now)
+		public AbsenceRequestValidatorProvider(IToggleManager toggleManager, IExpiredRequestValidator expiredRequestValidator)
 		{
 			_toggleManager = toggleManager;
-			_globalSettingsDataRepository = globalSettingsDataRepository;
-			_now = now;
+			_expiredRequestValidator = expiredRequestValidator;
 		}
 
 		public IEnumerable<IAbsenceRequestValidator> GetValidatorList(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
@@ -28,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 			if (_toggleManager.IsEnabled(Toggles.Wfm_Requests_Check_Expired_Requests_40274))
 			{
-				var requestExpirationValidator = new RequestExpirationValidator(_now, _globalSettingsDataRepository);
+				var requestExpirationValidator = new RequestExpirationValidator(_expiredRequestValidator);
 				if (!validators.Contains(requestExpirationValidator))
 					validators.Add(requestExpirationValidator);
 			}

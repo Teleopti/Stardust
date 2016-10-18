@@ -73,6 +73,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 																		   IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 																		   DateTimePeriod dateTimePeriod, IScenario scenario)
 		{
+			if (!_data.Any())
+			{
+				return ScheduleDictionaryForTest.WithScheduleData(person, scenario, dateTimePeriod);
+			}
 			ThePeriodThatWasUsedForFindingSchedules = dateTimePeriod;
 
 			var period = _data.First().Period; // max period?
@@ -140,6 +144,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			data.ForEach(_data.Add);
 		}
 
-
+		public void Clear()
+		{
+			_data.Clear();
+		}
 	}
 }

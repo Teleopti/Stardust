@@ -18,6 +18,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void Add(IPersonRequest entity)
 		{
 			_requestRepository.Add(entity);
+			if (!entity.Id.HasValue)
+			{
+				entity.SetId(Guid.NewGuid());
+			}
 		}
 
 		public void Remove(IPersonRequest entity)

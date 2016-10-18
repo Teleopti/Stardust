@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		private RequestExpirationValidator getTarget()
 		{
 			var now = new ThisIsNow(_utcNow);
-			var target = new RequestExpirationValidator(now, _globalSettingDataRepository);
+			var target = new RequestExpirationValidator(new ExpiredRequestValidator(_globalSettingDataRepository, now));
 			return target;
 		}
 

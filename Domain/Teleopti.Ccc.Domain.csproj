@@ -2464,11 +2464,14 @@
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriod.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriodMerger.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenRollingPeriod.cs" />
+    <Compile Include="WorkflowControl\AbsenceRequestSynchronousValidator.cs" />
     <Compile Include="WorkflowControl\AbsenceRequstAndSchedules.cs" />
     <Compile Include="WorkflowControl\AlreadyAbsentSpecification.cs" />
+    <Compile Include="WorkflowControl\AlreadyAbsentValidator.cs" />
     <Compile Include="WorkflowControl\ApproveAbsenceRequestWithValidators.cs" />
     <Compile Include="WorkflowControl\BudgetGroupAllowanceValidator.cs" />
     <Compile Include="WorkflowControl\BudgetGroupHeadCountValidator.cs" />
+    <Compile Include="WorkflowControl\ExpiredRequestValidator.cs" />
     <Compile Include="WorkflowControl\RequestExpirationValidator.cs" />
     <Compile Include="WorkflowControl\SchedulePublishedSpecificationForAbsence.cs" />
     <Compile Include="WorkflowControl\DenyAbsenceRequest.cs" />

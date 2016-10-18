@@ -22,22 +22,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IList<BeforeApproveAction> _beforeApproveActions;
 		private readonly IWriteProtectedScheduleCommandValidator _writeProtectedScheduleCommandValidator;
 		private readonly IMessageBrokerComposite _messageBroker;
-		private readonly IGlobalSettingDataRepository _globalSettingsDataRepository;
-		private readonly INow _now;
+		private readonly IExpiredRequestValidator _expiredRequestValidator;
 
 		public ApproveRequestsWithValidatorsEventHandler(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 			IAbsenceRequestProcessor absenceRequestProcessor, IPersonRequestRepository personRequestRepository,
 			IWriteProtectedScheduleCommandValidator writeProtectedScheduleCommandValidator,
 			IMessageBrokerComposite messageBroker,
-			IGlobalSettingDataRepository globalSettingsDataRepository, INow now)
+			IExpiredRequestValidator expiredRequestValidator)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_absenceRequestProcessor = absenceRequestProcessor;
 			_personRequestRepository = personRequestRepository;
 			_writeProtectedScheduleCommandValidator = writeProtectedScheduleCommandValidator;
 			_messageBroker = messageBroker;
-			_globalSettingsDataRepository = globalSettingsDataRepository;
-			_now = now;
+			_expiredRequestValidator = expiredRequestValidator;
 			_beforeApproveActions = new List<BeforeApproveAction>
 			{
 				checkPersonRequest,
@@ -99,7 +97,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			if (validator.HasFlag(RequestValidatorsFlag.IntradayValidator))
 				yield return new StaffingThresholdValidator();
 			if (validator.HasFlag(RequestValidatorsFlag.ExpirationValidator))
-				yield return new RequestExpirationValidator(_now, _globalSettingsDataRepository);
+				yield return new RequestExpirationValidator(_expiredRequestValidator);
 		}
 
 		private delegate bool BeforeApproveAction(IPersonRequest personRequest);

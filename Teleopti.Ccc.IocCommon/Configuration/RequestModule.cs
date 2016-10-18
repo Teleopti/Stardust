@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using Autofac;
+﻿using Autofac;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -57,8 +56,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayRequestProcessor>().As<IIntradayRequestProcessor>().SingleInstance();
 			builder.RegisterType<ResourceAllocator>().As<ResourceAllocator>().SingleInstance();
 			builder.RegisterType<IntradayRequestWithinOpenHourValidator>().As<IIntradayRequestWithinOpenHourValidator>().SingleInstance();
-			
+		    builder.RegisterType<ExpiredRequestValidator>().As<IExpiredRequestValidator>();
+		    builder.RegisterType<AlreadyAbsentValidator>().As<IAlreadyAbsentValidator>();
 
+			if (_configuration.Toggle(Toggles.MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747))
+			{
+				builder.RegisterType<AbsenceRequestSynchronousValidator>().As<IAbsenceRequestSynchronousValidator>();
+			}
+			else
+			{
+				builder.RegisterType<AbsenceRequestSynchronousValidator40747ToggleOff>().As<IAbsenceRequestSynchronousValidator>();
+			}
+			
 			if (_configuration.Toggle (Toggles.Wfm_Requests_Show_Pending_Reasons_39473))
 		    {
 				builder.RegisterType<ShiftTradePendingReasonsService>().As<IShiftTradePendingReasonsService>().SingleInstance();

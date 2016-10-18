@@ -6,6 +6,10 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
@@ -21,7 +25,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
+			var person = MockRepository.GenerateMock<IPerson>();
+			var workflowControlSet = MockRepository.GenerateMock<IWorkflowControlSet>();
 			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
+			var absenceRequest = MockRepository.GenerateMock<IAbsenceRequest>();
+			personRequest.Stub(x => x.Request).Return(absenceRequest);
+			personRequest.Stub(x => x.Person).Return(person);
+			person.Stub(x => x.WorkflowControlSet).Return(workflowControlSet);
+			absenceRequest.Stub(x => x.Person).Return(person);
 			var serviceBusSender = MockRepository.GenerateMock<IEventPublisher>();
 			var currentBusinessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			var currentDataSourceProvider = MockRepository.GenerateMock<ICurrentDataSource>();
@@ -42,7 +53,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			mapper.Stub(x => x.Map<AbsenceRequestForm, IPersonRequest>(form)).Return(personRequest);
 
-			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, new Now(), null);
+			var absenceRequestSynchronousValidator = MockRepository.GenerateMock<IAbsenceRequestSynchronousValidator>();
+			absenceRequestSynchronousValidator.Stub(x => x.Validate(null)).IgnoreArguments().Return(new ValidatedRequest { IsValid = true });
+			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, new Now(), null,
+				absenceRequestSynchronousValidator, new PersonRequestAuthorizationCheckerForTest());
 			target.Persist(form);
 
 			personRequestRepository.AssertWasCalled(x => x.Add(personRequest));
@@ -88,7 +102,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			              		Timestamp = time
 			              	};
 
-			var target = new AbsenceRequestPersister(personRequestRepository, mapper, eventSender, currentBusinessUnitProvider, currentDataSourceProvider, now, currentUnitOfWork);
+			var absenceRequestSynchronousValidator = MockRepository.GenerateMock<IAbsenceRequestSynchronousValidator>();
+			absenceRequestSynchronousValidator.Stub(x => x.Validate(null)).IgnoreArguments().Return(new ValidatedRequest { IsValid = true });
+			var target = new AbsenceRequestPersister(personRequestRepository, mapper, eventSender, currentBusinessUnitProvider, currentDataSourceProvider, now, currentUnitOfWork,
+				absenceRequestSynchronousValidator, new PersonRequestAuthorizationCheckerForTest());
 			target.Persist(form);
 
 			currUow.Expect(c => c.AfterSuccessfulTx(() => eventSender.Publish(message)));
@@ -112,7 +129,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			mapper.Stub(x => x.Map<AbsenceRequestForm, IPersonRequest>(form)).Return(personRequest);
 
-			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now, null);
+			var absenceRequestSynchronousValidator = new AbsenceRequestSynchronousValidator(new ExpiredRequestValidator(new FakeGlobalSettingDataRepository(), new Now()),
+				new AlreadyAbsentValidator(), new FakeScheduleDataReadScheduleStorage(), new FakeCurrentScenario());
+			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now, null,
+				absenceRequestSynchronousValidator, new PersonRequestAuthorizationCheckerForTest());
 			target.Persist(form);
 
 			personRequestRepository.AssertWasNotCalled(x => x.Add(personRequest));

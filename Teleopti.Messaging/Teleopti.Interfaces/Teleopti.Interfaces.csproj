@@ -115,6 +115,7 @@
     <Compile Include="Domain\IAbsenceRequestCancelService.cs" />
     <Compile Include="Domain\IAbsenceRequestDetailViewModel.cs" />
     <Compile Include="Domain\IAbsenceRequestDetailViewModelFactory.cs" />
+    <Compile Include="Domain\IAbsenceRequestSynchronousValidator.cs" />
     <Compile Include="Domain\IAbsenceRequestValidatorProvider.cs" />
     <Compile Include="Domain\IAbsenceRequestProcessor.cs" />
     <Compile Include="Domain\IAbsenceRequestUpdater.cs" />
@@ -127,11 +128,13 @@
     <Compile Include="Domain\IAgentBadgeWithRankTransaction.cs" />
     <Compile Include="Domain\IAgentBadgeWithRankTransactionRepository.cs" />
     <Compile Include="Domain\IAgentBadgeWithRankRepository.cs" />
+    <Compile Include="Domain\IAlreadyAbsentValidator.cs" />
     <Compile Include="Domain\IApplicationData.cs" />
     <Compile Include="Domain\IBlockFinder.cs" />
     <Compile Include="Domain\IBlockInfo.cs" />
     <Compile Include="Domain\IBusinessRuleProvider.cs" />
     <Compile Include="Domain\ICheckingPersonalAccountDaysProvider.cs" />
+    <Compile Include="Domain\IExpiredRequestValidator.cs" />
     <Compile Include="Domain\IOverrideTask.cs" />
     <Compile Include="Domain\IPaging.cs" />
     <Compile Include="Domain\IPermissionProvider.cs" />

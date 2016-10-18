@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				_prereqLoader, _scenarioRepository, _loader, _loaderWithoutResourceCalculation, _factory,
 				_alreadyAbsentSpecification, _scheduleIsInvalidSpecification, _authorization, _budgetGroupHeadCountSpecification,
 				_resourceOptimizationHelper, _budgetGroupAllowanceSpecification, _scheduleDictionarySaver, _personAccountUpdater,
-				toggleManager, new AbsenceRequestValidatorProvider(toggleManager, new FakeGlobalSettingDataRepository(), new Now()));
+				toggleManager, new AbsenceRequestValidatorProvider(toggleManager, new ExpiredRequestValidator(new FakeGlobalSettingDataRepository(), new Now())));
 
 
 			var absenceProcessor = new AbsenceRequestProcessor(absenceRequestStatusUpdater, () => _schedulingResultStateHolder);
