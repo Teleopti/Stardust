@@ -215,6 +215,11 @@ function RemoveAppOfflinePage {
     if ($IsAzure) {
         $webOffline = "..\..\..\..\sitesroot\3\app_offline.htm"
         $administrationOffline = "..\..\..\..\sitesroot\8\app_offline.htm"
+		$rtaOffline = "..\..\..\..\sitesroot\5\app_offline.htm"
+		if (Test-Path "$rtaOffline") {
+			write-host "removing" $rtaOffline
+			Remove-Item $rtaOffline
+		}
     }else{
         $webOffline = "..\..\TeleoptiCCC\Web\app_offline.htm"
         $administrationOffline = "..\..\TeleoptiCCC\Administration\app_offline.htm"
