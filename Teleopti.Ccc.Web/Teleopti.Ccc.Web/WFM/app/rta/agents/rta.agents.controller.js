@@ -416,6 +416,9 @@
 				$scope.changeScheduleUrl = function (personId) {
 					return RtaRouteService.urlForChangingSchedule(personId);
 				};
+				$scope.historicalAdherenceUrl = function (personId) {
+					return RtaRouteService.urlForHistoricalAdherence(personId);
+				};
 
 				$scope.agentDetailsUrl = function (personId) {
 					return RtaRouteService.urlForAgentDetails(personId);

@@ -21,7 +21,7 @@
 	<div class="con-row" style="padding-top: 10px">
 		<div class="con-flex">
 			<div style="position: relative; padding: 4px 0; height: 20px;">
-				<div ng-repeat="row in vm.fullTimeline" class="label label-info" ng-attr-style="position: absolute; left: {{row.Offset}}; top: 10%;">{{row.Time}}</div>
+				<div ng-repeat="row in vm.fullTimeline" class="label label-info" ng-attr-style="position: absolute; left: {{row.Offset}}; top: 10%; width: 36px; margin-left: -18px;">{{row.Time}}</div>
 			</div>
 
 			<div style="position: relative;">
@@ -29,20 +29,21 @@
 					ng-repeat="outOfAdherence in vm.outOfAdherences"
 					class="rta-alarmline out-of-adherence"
 					ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}}; bottom: 46%;"
-					data-starttime="{{outOfAdherence.DisplayStartTime}}"
-					data-endtime="{{outOfAdherence.DisplayEndTime}}">
+					data-starttime="{{outOfAdherence.DisplayStartDateTime}}"
+					data-endtime="{{outOfAdherence.DisplayEndDateTime}}">
 					<md-tooltip md-direction="top">
 						{{outOfAdherence.DisplayStartTime}} - {{outOfAdherence.DisplayEndTime}}
 					</md-tooltip>
 				</span>
+				<span class="rta-current-time" ng-attr-style="left: {{vm.currentTimeOffset}}; height: 70%; margin-top: 6px;"></span>
 				<div class="rta-shift" style="height: 50px;">
 					<div
 						ng-repeat="activity in vm.agentsFullSchedule"
 						class="rta-layer absolute floatleft activity"
 						tabindex="0"
 						ng-attr-style="width: {{activity.Width}}; left: {{activity.Offset}}; background-color: {{activity.Color}}; top: 12%;"
-						data-starttime="{{activity.DisplayStartTime}}"
-						data-endtime="{{activity.DisplayEndTime}}">
+						data-starttime="{{activity.DisplayStartDateTime}}"
+						data-endtime="{{activity.DisplayEndDateTime}}">
 					</div>
 				</div>
 			</div>

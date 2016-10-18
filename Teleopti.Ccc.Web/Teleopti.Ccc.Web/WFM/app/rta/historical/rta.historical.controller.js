@@ -17,6 +17,9 @@
 				vm.date = moment(data.Now).format('YYYY-MM-DD');
 				var totalSeconds = o.totalSeconds + 7200;
 				var startOfShift = o.start != null ? o.start.clone().add(-1, 'hour') : moment().hour(7).minute(0).second(0);
+
+				vm.currentTimeOffset = calculateWidth(startOfShift, data.Now, totalSeconds);
+
 				vm.agentsFullSchedule = data.Schedules.map(function(layer) {
 					var startTime = moment(layer.StartTime);
 					var endTime = moment(layer.EndTime);
@@ -26,8 +29,10 @@
 						StartTime: startTime,
 						EndTime: endTime,
 						Color: layer.Color,
-						DisplayStartTime: startTime.format('YYYY-MM-DD HH:mm:ss'),
-						DisplayEndTime: endTime.format('YYYY-MM-DD HH:mm:ss')
+						DisplayStartTime: startTime.format('HH:mm:ss'),
+						DisplayEndTime: endTime.format('HH:mm:ss'),
+						DisplayStartDateTime: startTime.format('YYYY-MM-DD HH:mm:ss'),
+						DisplayEndDateTime: endTime.format('YYYY-MM-DD HH:mm:ss')
 					};
 				});
 
@@ -43,8 +48,10 @@
 						Offset: calculateWidth(startOfShift, ooa.StartTime, totalSeconds),
 						StartTime: startTime,
 						EndTime: endTime,
-						DisplayStartTime: startTime.format('YYYY-MM-DD HH:mm:ss'),
-						DisplayEndTime: endTime.format('YYYY-MM-DD HH:mm:ss')
+						DisplayStartTime: startTime.format('HH:mm:ss'),
+						DisplayEndTime: endTime.format('HH:mm:ss'),
+						DisplayStartDateTime: startTime.format('YYYY-MM-DD HH:mm:ss'),
+						DisplayEndDateTime: endTime.format('YYYY-MM-DD HH:mm:ss')
 					};
 				});
 
@@ -95,14 +102,15 @@
 			var hourPercent = 100 / totalHours;
 			for (var i = 0; i <= totalHours; i++) {
 				var percent = hourPercent * i;
-				if (percent >= 0 && percent < 100)
-					timeline.push({
-						Offset: percent + '%',
-						Time: currentMoment.format('HH:mm')
-					});
+				timeline.push({
+					Offset: percent + '%',
+					Time: currentMoment.format('HH:mm')
+				});
 
 				currentMoment.add(1, 'hour');
 			}
+			timeline.shift();
+			timeline.pop();
 
 			return timeline;
 		}

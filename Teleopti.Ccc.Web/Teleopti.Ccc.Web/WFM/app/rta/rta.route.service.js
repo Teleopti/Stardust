@@ -17,6 +17,10 @@
 				return "#/teams/?personId=" + personId;
 			};
 
+			this.urlForHistoricalAdherence = function (personId) {
+				return "#/rta/agent-historical/" + personId;
+			};
+
 			this.urlForAgentDetails = function(personId) {
 				return "#/rta/agent-details/" + personId;
 			};
