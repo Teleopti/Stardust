@@ -27,7 +27,7 @@
 		RTA_ScheduleQueryOptimization_40260,
 		RTA_ScheduleQueryOptimizationFilteredCache_40260,
 		RTA_ConnectionQueryOptimizeAllTheThings_40262,
-        RTA_HideAgentsByStateGroup_40469,
+		RTA_HideAgentsByStateGroup_40469,
 		RTA_FasterUpdateOfScheduleChanges_40536,
 		RTA_SiteAndTeamOnSkillOverview_40817,
 		RTA_SeeAllOutOfAdherencesToday_39146,
@@ -175,12 +175,13 @@
 		ETL_SpeedUpNightlyBusinessUnit_38932,
 
 		AbsenceRequests_UseMultiRequestProcessing_39960,
-        AbsenceRequests_SpeedupIntradayRequests_40754,
-        ETL_EventbasedDate_39562,
+		AbsenceRequests_SpeedupIntradayRequests_40754,
+		ETL_EventbasedDate_39562,
 		ReadModel_ToHangfire_39147,
 		NewPasswordHash_40460,
-        Wfm_Intraday_OptimalStaffing_40921,
-		Wfm_SkillPriorityRoutingGUI_39885
-        // ReSharper restore InconsistentNaming
-    }
+		Wfm_Intraday_OptimalStaffing_40921,
+		Wfm_SkillPriorityRoutingGUI_39885,
+		AbsenceRequest_WithOrWithoutShrinkage_41060
+		// ReSharper restore InconsistentNaming
+	}
 }

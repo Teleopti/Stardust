@@ -193,3 +193,4 @@ ReadModel_ToHangfire_39147 = true
 NewPasswordHash_40460 = true
 Wfm_Intraday_OptimalStaffing_40921 = RC
 Wfm_SkillPriorityRoutingGUI_39885 = DEV
+AbsenceRequest_WithOrWithoutShrinkage_41060 = RC
