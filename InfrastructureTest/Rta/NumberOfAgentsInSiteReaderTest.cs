@@ -55,5 +55,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			result[siteId].Should().Be(1);
 		}
+
+		[Test]
+		public void ShouldLoadForSkill()
+		{
+			Database
+				.WithAgent()
+				.WithSkill("phone")
+				.UpdateGroupings();
+			var siteId = Database.CurrentSiteId();
+			var skillId = Database.SkillIdFor("phone");
+
+			var result = WithUnitOfWork.Get(() => Target.ForSkills(new[] { siteId }, new[] { skillId }));
+
+			result[siteId].Should().Be(1);
+		}
 	}
 }

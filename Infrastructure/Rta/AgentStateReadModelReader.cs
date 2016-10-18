@@ -176,7 +176,6 @@ WHERE PageId = :skillGroupingPageId
 AND g.GroupId IN (:skillIds)
 AND :today BETWEEN g.StartDate and g.EndDate 
 {1}";
-		public const string HardcodedSkillGroupingPageId = "4CE00B41-0722-4B36-91DD-0A3B63C545CF";
 
 		public IEnumerable<AgentStateReadModel> LoadForSkills(IEnumerable<Guid> skillIds)
 		{
@@ -185,7 +184,7 @@ AND :today BETWEEN g.StartDate and g.EndDate
 					.CreateSQLQuery(string.Format(agentsForSkillQuery, "", ""))
 					.SetParameterList("skillIds", skillIds)
 					.SetParameter("today", _now.UtcDateTime().Date)
-					.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId)
+					.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
 				);
 		}
 
@@ -209,7 +208,7 @@ AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC ";
 					.SetParameterList("skillIds", skillIds)
 					.SetParameter("today", _now.UtcDateTime().Date)
 					.SetParameter("now", _now.UtcDateTime())
-					.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId)
+					.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
 				);
 		}
 
@@ -246,7 +245,7 @@ AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC ";
 				.SetParameter("now", _now.UtcDateTime())
 				.SetParameterList("skillIds", skillIds)
 				.SetParameter("today", _now.UtcDateTime().Date)
-				.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId));
+				.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get));
 		}
 
 		private IEnumerable<AgentStateReadModel> transform(IQuery query)
@@ -272,5 +271,10 @@ AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC ";
 			public new string Shift { get; set; }
 			public new string OutOfAdherences { get; set; }
 		}
+	}
+
+	public static class HardcodedSkillGroupingPageId
+	{
+		public const string Get = "4CE00B41-0722-4B36-91DD-0A3B63C545CF";
 	}
 }

@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Mapping;
+using NHibernate.Transform;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -32,7 +35,8 @@ FROM
 ) a
 inner join person p on 
 a.parent = p.id
-where a.is_current=1
+
+{0} a.is_current=1
 and a.Site in (:sites)
 and (p.TerminalDate is null or p.TerminalDate > :now)
 group by a.Site";
@@ -44,33 +48,56 @@ group by a.Site";
 			_now = now;
 		}
 
-		public IDictionary<Guid, int> FetchNumberOfAgents(IEnumerable<Guid> sites)
+		public IDictionary<Guid, int> FetchNumberOfAgents(IEnumerable<Guid> siteIds)
 		{
-			var ret = new Dictionary<Guid, int>();
-			var queryResult = _currentUnitOfWork.Session().CreateSQLQuery(sqlQuery)
-				.SetParameterList("sites", sites)
-				.SetDateTime("now", _now.UtcDateTime())
-				.List();
-
-			foreach (var site in sites)
-			{
-				ret[site] = 0;
-			}
-
-			foreach (var resItemArray in queryResult)
-			{
-				var resItem = (IList) resItemArray;
-				var siteId = (Guid)resItem[0];
-				var noOf = (int)resItem[1];
-				ret[siteId] = noOf;
-			}
-
-			return ret;
+			var models =
+				_currentUnitOfWork.Session().CreateSQLQuery(string.Format(sqlQuery, " WHERE "))
+					.SetDateTime("now", _now.UtcDateTime())
+					.SetParameterList("sites", siteIds)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(siteViewModel)))
+					.List()
+					.Cast<siteViewModel>();
+			return initializeAndConcat(siteIds, models);
 		}
 
-		public IDictionary<Guid, int> ForSkills(IEnumerable<Guid> sites, IEnumerable<Guid> skillIds)
+		public IDictionary<Guid, int> ForSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
 		{
-			return null;
+			var models =
+				_currentUnitOfWork.Session()
+					.CreateSQLQuery(
+						string.Format(sqlQuery, @"
+						INNER JOIN ReadModel.GroupingReadOnly AS g
+						ON p.Id = g.PersonId					
+						WHERE g.GroupId IN (:skillIds)
+						AND g.PageId = :skillGroupingPageId
+						AND "))
+					.SetDateTime("now", _now.UtcDateTime())
+					.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+					.SetParameterList("sites", siteIds)
+					.SetParameterList("skillIds", skillIds)
+
+					.SetResultTransformer(Transformers.AliasToBean(typeof(siteViewModel)))
+					.List()
+					.Cast<siteViewModel>();
+
+			return initializeAndConcat(siteIds, models);
+		}
+
+		private IDictionary<Guid, int> initializeAndConcat(IEnumerable<Guid> siteIds, IEnumerable<siteViewModel> models)
+		{
+			var initializedSites =
+				from siteId in siteIds
+				where !models.Select(x => x.SiteId).Contains(siteId)
+				select new siteViewModel {SiteId = siteId, NumberOfAgents = 0};
+
+			return initializedSites.Concat(models).ToDictionary(x => x.SiteId, y => y.NumberOfAgents);
+		}
+
+
+		private class siteViewModel
+		{
+			public Guid SiteId { get; set; }
+			public int NumberOfAgents { get; set; }
 		}
 	}
 }

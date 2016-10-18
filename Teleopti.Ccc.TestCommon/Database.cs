@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.TestCommon
 		private readonly IRtaRuleRepository _rules;
 		private readonly IRtaMapRepository _mappings;
 		private readonly IExternalLogOnRepository _externalLogOns;
+		private readonly IGroupingReadOnlyRepository _groupings;
 
 		private DateOnly _date;
 		private string _person;
@@ -64,7 +65,8 @@ namespace Teleopti.Ccc.TestCommon
 			IRtaStateGroupRepository stateGroups,
 			IRtaRuleRepository rules,
 			IRtaMapRepository mappings,
-			IExternalLogOnRepository externalLogOns
+			IExternalLogOnRepository externalLogOns,
+			IGroupingReadOnlyRepository groupings
 			)
 		{
 			_analytics = analytics;
@@ -84,6 +86,7 @@ namespace Teleopti.Ccc.TestCommon
 			_rules = rules;
 			_mappings = mappings;
 			_externalLogOns = externalLogOns;
+			_groupings = groupings;
 		}
 
 		[UnitOfWork]
@@ -478,8 +481,7 @@ namespace Teleopti.Ccc.TestCommon
 			return this;
 		}
 
-
-
+		
 
 		public Database PublishRecurringEvents()
 		{
@@ -487,5 +489,14 @@ namespace Teleopti.Ccc.TestCommon
 			return this;
 		}
 
+
+
+
+		[UnitOfWork]
+		public virtual Database UpdateGroupings()
+		{
+			_groupings.UpdateGroupingReadModel(_persons.LoadAll().Select(x => x.Id.Value).ToArray());
+			return this;
+		}
 	}
 }

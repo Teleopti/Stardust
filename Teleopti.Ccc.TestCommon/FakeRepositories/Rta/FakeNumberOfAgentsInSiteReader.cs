@@ -26,10 +26,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				});
 		}
 
-		public IDictionary<Guid, int> FetchNumberOfAgents(IEnumerable<Guid> sites)
+		public IDictionary<Guid, int> FetchNumberOfAgents(IEnumerable<Guid> siteIds)
 		{
 			return 
-				(from siteId in sites
+				(from siteId in siteIds
 					from model in _data
 					where siteId == model.SiteId
 					select new
@@ -39,10 +39,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					}).ToDictionary(x => x.SiteId, y => y.NumberOfAgents);
 		}
 
-		public IDictionary<Guid, int> ForSkills(IEnumerable<Guid> sites, IEnumerable<Guid> skillIds)
+		public IDictionary<Guid, int> ForSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
 		{
 			return (
-				from siteId in sites
+				from siteId in siteIds
 				from skillId in skillIds
 				from model in _data
 				where model.SiteId == siteId &&

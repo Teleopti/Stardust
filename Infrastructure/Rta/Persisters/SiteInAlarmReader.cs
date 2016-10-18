@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 					")
 				.SetParameter("now", _now.UtcDateTime())
 				.SetParameterList("skillIds", skillIds)
-				.SetParameter("skillGroupingPageId", AgentStateReadModelReader.HardcodedSkillGroupingPageId)
+				.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(SiteInAlarmModel)))
 				.List()
 				.Cast<SiteInAlarmModel>();
