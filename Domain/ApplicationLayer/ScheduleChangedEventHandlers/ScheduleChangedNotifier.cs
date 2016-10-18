@@ -1,6 +1,8 @@
 using System;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Interfaces.Domain;
 
@@ -16,7 +18,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 		}
 
-		public void Handle(ScheduleChangedEvent @event)
+		[ImpersonateSystem]
+		[UnitOfWork]
+		public virtual void Handle(ScheduleChangedEvent @event)
 		{
 			HandleBase(@event);
 		}
