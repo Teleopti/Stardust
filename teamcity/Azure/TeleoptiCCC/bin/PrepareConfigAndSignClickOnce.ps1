@@ -265,6 +265,7 @@ function SetDefaultSettings{
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(DNS_ALIAS)" -content "`$(DNS_ALIAS)|https://$DataSourceName.teleopticloud.com/"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(NEXT_ACTIVITY_TIME_TO_STAY)" -content "`$(NEXT_ACTIVITY_TIME_TO_STAY)|30"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(HSTS_HEADER)" -content "`$(HSTS_HEADER)|<add name=`"Strict-Transport-Security`" value=`"max-age=31536000`"/>"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(CSP_PARENT_URL)" -content "`$(CSP_PARENT_URL)|"
 }
 
 ##===========

@@ -33,3 +33,4 @@ $(SIGNALR_BACKPLANE_PREFIX)|
 <compilation targetFramework="4.0"|<compilation debug="true" targetFramework="4.0"
 <compilation targetFramework="4.5"|<compilation debug="true" targetFramework="4.5"
 $(HSTS_HEADER)|
+$(CSP_PARENT_URL)|
