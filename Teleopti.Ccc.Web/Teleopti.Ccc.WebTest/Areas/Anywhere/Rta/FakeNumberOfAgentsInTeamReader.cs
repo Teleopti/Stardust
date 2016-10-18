@@ -14,6 +14,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			return _data;
 		}
 
+		public IDictionary<Guid, int> ForSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		{
+			return null;
+		}
+
 		public void Has(ITeam team, int numberOfAgents)
 		{
 			_data[team.Id.Value] = numberOfAgents;

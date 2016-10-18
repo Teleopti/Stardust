@@ -52,5 +52,45 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				.Should().Be.Empty();
 		}
 
+		[Test]
+		public void ShouldLoadForSkill()
+		{
+			Database
+				.WithAgent()
+				.WithSkill("phone")
+				.UpdateGroupings();
+			var teamId = Database.CurrentTeamId();
+			var skillId = Database.SkillIdFor("phone");
+
+			var result = WithUnitOfWork.Get(() => Target.ForSkills(new[] { teamId }, new[] { skillId }));
+
+			result[teamId].Should().Be(1);
+		}
+		
+		[Test]
+		public void ShouldNotReturnSiteWithoutAgents()
+		{
+			WithUnitOfWork.Get(() => Target.ForSkills(new[] { Guid.NewGuid() }, new[] { Guid.NewGuid() }))
+				.Should().Be.Empty();
+		}
+
+
+		[Test]
+		public void ShouldOnlyLoadForWantedSkill()
+		{
+			Database
+				.WithAgent()
+				.WithSkill("phone")
+				.WithAgent()
+				.WithSkill("email")
+				.UpdateGroupings();
+			var teamId = Database.CurrentTeamId();
+			var skillId = Database.SkillIdFor("phone");
+
+			var result = WithUnitOfWork.Get(() => Target.ForSkills(new[] { teamId }, new[] { skillId }));
+
+			result[teamId].Should().Be(1);
+		}
+
 	}
 }

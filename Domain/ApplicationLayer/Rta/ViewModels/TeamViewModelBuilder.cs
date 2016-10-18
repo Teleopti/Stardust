@@ -21,25 +21,44 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public IEnumerable<TeamViewModel> Build(Guid siteId)
 		{
-			var teams = _teamRepository.FindTeamsForSite(siteId)
-				.OrderBy(x => x.Description.Name, StringComparer.Create(_uiCulture.GetUiCulture(), false)).ToArray();
+			var teams = teamsForSite(siteId).ToArray();
 			var numberOfAgents = _numberOfAgentsInTeamReader.FetchNumberOfAgents(teams.Select(x => x.Id.Value));
-
-			return teams.Select(team => new TeamViewModel
+			return teams.Select(team =>
 			{
-				Id = team.Id.GetValueOrDefault(),
-				Name = team.Description.Name,
-				NumberOfAgents = tryGetNumberOfAgents(numberOfAgents, team),
-				SiteId = siteId
+				int result;
+				var agents = numberOfAgents.TryGetValue(team.Id.Value, out result) ? result : 0;
+				return new TeamViewModel
+				{
+					Id = team.Id.GetValueOrDefault(),
+					Name = team.Description.Name,
+					NumberOfAgents = agents,
+					SiteId = siteId
+				};
 			});
 		}
 
-		private static int tryGetNumberOfAgents(IDictionary<Guid, int> numberOfAgents, ITeam team)
+		public IEnumerable<TeamViewModel> ForSkills(Guid siteId, Guid[] skillIds)
 		{
-			var teamId = team.Id.GetValueOrDefault();
-			int result;
-			return numberOfAgents != null && numberOfAgents.TryGetValue(teamId, out result) ? result : 0;
-		}
+			var teams = teamsForSite(siteId).ToArray();
+			var numberOfAgents = _numberOfAgentsInTeamReader.ForSkills(teams.Select(x => x.Id.Value), skillIds);
+			return
+				from num in numberOfAgents
+				from team in teams
+				where num.Key == team.Id.Value
+				select new TeamViewModel
+				{
+					Id = team.Id.GetValueOrDefault(),
+					Name = team.Description.Name,
+					NumberOfAgents = num.Value,
+					SiteId = siteId
 
+				};
+		}
+		
+		private IEnumerable<ITeam> teamsForSite(Guid siteId)
+		{
+			return _teamRepository.FindTeamsForSite(siteId)
+				.OrderBy(x => x.Description.Name, StringComparer.Create(_uiCulture.GetUiCulture(), false));
+		}
 	}
 }

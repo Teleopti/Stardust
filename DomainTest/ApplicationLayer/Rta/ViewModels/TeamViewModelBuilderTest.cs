@@ -7,6 +7,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		public TeamViewModelBuilder Target;
 		public FakeDatabase Database;
 		public FakeUserUiCulture UiCulture;
+		public FakeNumberOfAgentsInTeamReader AgentsInTeam;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -69,6 +71,58 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			result.Select(x => x.Name)
 				.Should().Have.SameSequenceAs(new[] { "A", "Ĺ", "Ä" });
+		}
+
+		[Test]
+		public void ShouldGetNumberOfAgents()
+		{
+			var siteId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			Database
+				.WithSite(siteId)
+				.WithTeam(teamId, "Team Red");
+			AgentsInTeam.Has(teamId, 20);
+
+			var result = Target.Build(siteId).Single();
+
+			result.Name.Should().Be("Team Red");
+			result.Id.Should().Be(teamId);
+			result.NumberOfAgents.Should().Be(20);
+		}
+
+		[Test]
+		public void ShouldGetNumberOfAgentsForSkill()
+		{
+			var siteId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			var skillId = Guid.NewGuid();
+			Database
+				.WithSite(siteId)
+				.WithTeam(teamId, "Team Red");
+			AgentsInTeam.Has(teamId, skillId, 20);
+
+			var result = Target.ForSkills(siteId, new[] { skillId }).Single();
+
+			result.Name.Should().Be("Team Red");
+			result.Id.Should().Be(teamId);
+			result.NumberOfAgents.Should().Be(20);
+		}
+
+		[Test]
+		public void ShouldNotReturnEmptyTeam()
+		{
+			var siteId = Guid.NewGuid();
+			var teamId1 = Guid.NewGuid();
+			var teamId2 = Guid.NewGuid();
+			var skillId = Guid.NewGuid();
+			Database
+				.WithSite(siteId)
+				.WithTeam(teamId1)
+				.WithTeam(teamId2);
+			AgentsInTeam.Has(teamId1, skillId, 20);
+
+			Target.ForSkills(siteId, new[] { skillId }).Single()
+				.Id.Should().Be(teamId1);
 		}
 	}
 }
