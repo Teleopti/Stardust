@@ -1178,7 +1178,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			ScheduleStorage.Add(personAssignment);
 
 			var accountDay = createAccountDay(new DateOnly(2016, 10, 10), TimeSpan.FromDays(0), TimeSpan.FromDays(1),
-				TimeSpan.FromDays(1));
+				TimeSpan.FromDays(2));
 
 			var absence = AbsenceFactory.CreateAbsence("abs").WithId();
 			AbsenceRepository.Add(absence);
