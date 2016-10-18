@@ -133,6 +133,7 @@ Scenario: Should be able to remove single activity
 	Then I should see a successful notice
 	
 @OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
+@ignore 
 Scenario: Should be able to remove multiple activities
 	Given 'John Smith' has a shift with
 	| Field                         | Value            |
