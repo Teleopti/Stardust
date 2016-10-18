@@ -117,6 +117,9 @@ namespace Teleopti.Interfaces.Domain
                                                   IScheduleTagSetter scheduleTagSetter
             );
 
+	    IEnumerable<IBusinessRuleResponse> CheckBusinessRules(IEnumerable<IScheduleDay> scheduleParts,
+		    INewBusinessRuleCollection newBusinessRuleCollection);
+
 
 		/// <summary>
 		/// Gets all the schedules for the specified period.

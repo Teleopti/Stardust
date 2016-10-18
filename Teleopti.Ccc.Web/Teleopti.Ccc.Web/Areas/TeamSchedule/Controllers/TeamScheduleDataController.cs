@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -103,11 +104,25 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return _validationProvider.GetActivityLayerOverlapCheckingResult(input);
 		}
 
+		[UnitOfWork, HttpPost, Route("api/TeamScheduleData/CheckPersonAccounts")]
+		public virtual IList<CheckingResult> CheckPersonAccounts(CheckPersonAccountFormData input)
+		{
+			return _validationProvider.CheckPersonAccounts(input);
+		}
+
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleData/CheckMoveActivityOverlapppingCertainActivities")]
 		public virtual IList<ActivityLayerOverlapCheckingResult> CheckMoveActivityOverlapppingCertainActivities(CheckMoveActivityLayerOverlapFormData input)
 		{
 			return _validationProvider.GetMoveActivityLayerOverlapCheckingResult(input);
 		}
 
+	}
+
+	public class CheckPersonAccountFormData
+	{
+		public IEnumerable<Guid> PersonIds { get; set; }
+		public Guid AbsenceId { get; set; }
+		public DateTime StartDate { get; set; }
+		public DateTime EndDate { get; set; }
 	}
 }

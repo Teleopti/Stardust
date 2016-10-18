@@ -18,12 +18,9 @@
 				return deferred.promise;
 			};
 
-			service.addFullDayAbsence = function(data) {
-				return $http.post(addFullDayAbsenceUrl, data);
-			};
-
-			service.addIntradayAbsence = function(data) {
-				return $http.post(addIntradayAbsenceUrl, data);
+			service.addAbsence = function (requestData, isFullDay) {
+				var url = isFullDay ? addFullDayAbsenceUrl : addIntradayAbsenceUrl;
+				return $http.post(url, requestData);
 			};
 
 			service.removeAbsence = function(data) {

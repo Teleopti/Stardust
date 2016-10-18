@@ -5,7 +5,10 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
@@ -23,10 +26,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IUserTimeZone _timeZone;
 		private readonly IProxyForId<IActivity> _activityForId;
 		private readonly INonoverwritableLayerChecker _nonoverwritableLayerChecker;
+		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
+		private readonly IAbsenceRepository _absenceRepository;
 
 		public ScheduleValidationProvider(IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
 			IPersonRepository personRepository, IPersonWeekViolatingWeeklyRestSpecification personWeekViolating,
-			IUserTimeZone timeZone, IPersonNameProvider personNameProvider, IProxyForId<IActivity> activityForId, INonoverwritableLayerChecker nonoverwritableLayerChecker)
+			IUserTimeZone timeZone, IPersonNameProvider personNameProvider, IProxyForId<IActivity> activityForId, INonoverwritableLayerChecker nonoverwritableLayerChecker, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IAbsenceRepository absenceRepository)
 		{
 			_scheduleStorage = scheduleStorage;
 			_currentScenario = currentScenario;
@@ -36,6 +41,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_personNameProvider = personNameProvider;
 			_activityForId = activityForId;
 			_nonoverwritableLayerChecker = nonoverwritableLayerChecker;
+			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
+			_absenceRepository = absenceRepository;
 		}
 
 		public IList<ActivityLayerOverlapCheckingResult> GetActivityLayerOverlapCheckingResult(
@@ -122,6 +129,48 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			}
 			
 			return rules.Select(getValidationRuleName).ToList();
+		}
+
+		public IList<CheckingResult> CheckPersonAccounts(CheckPersonAccountFormData input)
+		{
+			var people = _personRepository.FindPeople(input.PersonIds);
+			var period = new DateOnlyPeriod(new DateOnly(input.StartDate), new DateOnly(input.EndDate));
+			var extendedPeriod = period.Inflate(1);
+			var scenario = _currentScenario.Current();
+			var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people,
+				new ScheduleDictionaryLoadOptions(false, false),
+				extendedPeriod,
+				scenario);
+			((IReadOnlyScheduleDictionary)schedules).MakeEditable();
+			var results = new List<CheckingResult>();
+
+			var abs = _absenceRepository.Load(input.AbsenceId);
+			var userTimezone = _timeZone.TimeZone();
+			var absPeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(input.StartDate, userTimezone), TimeZoneHelper.ConvertToUtc(input.EndDate, userTimezone));
+			var absenceLayer = new AbsenceLayer(abs, absPeriod);
+			foreach (var person in people)
+			{
+				var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(schedules[person], true);
+				var scheduleDay = schedules[person].ScheduledDay(new DateOnly(input.StartDate));  //for multi day absence ??
+				scheduleDay.CreateAndAddAbsence(absenceLayer);
+
+				var responses = schedules.CheckBusinessRules(new []{ scheduleDay }, businessRulesForPersonAccountUpdate);
+				if (responses.Any(r =>
+				{
+					var accountRuleResponse = r as BusinessRuleResponseWithAbsenceId;
+					if (accountRuleResponse == null) return false;
+					return accountRuleResponse.AbsenceId.HasValue && accountRuleResponse.AbsenceId.Value == input.AbsenceId;
+				}))
+				{
+					results.Add(new CheckingResult
+					{
+						PersonId = person.Id.Value,
+						Name = _personNameProvider.BuildNameFromSetting(person.Name)
+					});
+				}
+
+			}
+			return results;
 		}
 
 		private string getValidationRuleName(Type rule)
@@ -245,12 +294,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			CheckMoveActivityLayerOverlapFormData input);
 
 		IList<string> GetAllValidationRuleTypes(BusinessRuleFlags ruleFlags);
+		IList<CheckingResult> CheckPersonAccounts(CheckPersonAccountFormData input);
 	}
 
-	public class ActivityLayerOverlapCheckingResult
-	{
-		public Guid PersonId { get; set; }
-		public string Name { get; set; }
-		public IList<OverlappedLayer> OverlappedLayers { get; set; }
-	}
 }

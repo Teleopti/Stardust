@@ -361,7 +361,8 @@
 									 || toggleSvc.WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800
 									 || toggleSvc.WfmTeamSchedule_ShowDayOffWarning_39801
 									 || toggleSvc.WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
-				ViewScheduleOnTimezoneEnabled: toggleSvc.WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925
+				ViewScheduleOnTimezoneEnabled: toggleSvc.WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925,
+				CheckPersonalAccountEnabled: toggleSvc.WfmTeamSchedule_CheckPersonalAccountWhenAddingAbsence_41088
 			};
 
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();

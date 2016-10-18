@@ -236,6 +236,24 @@ namespace Teleopti.Ccc.Domain.Collection
             return Modify(modifier, new List<IScheduleDay> { schedulePart }, newBusinessRuleCollection, scheduleDayChangeCallback, scheduleTagSetter);
         }
 
+	    public IEnumerable<IBusinessRuleResponse> CheckBusinessRules(IEnumerable<IScheduleDay> scheduleParts, INewBusinessRuleCollection newBusinessRuleCollection)
+	    {
+			var lstErrors = new List<IBusinessRuleResponse>();
+			var rangeClones = new Dictionary<IPerson, IScheduleRange>();
+			var persList = new HashSet<IPerson>();
+			foreach (var part in scheduleParts)
+			{
+				persList.Add(part.Person);
+			}
+			foreach (var person in persList)
+			{
+				rangeClones.Add(person, (IScheduleRange)this[person].Clone());
+			}
+
+			lstErrors.AddRange(CheckIfCanModify(rangeClones, scheduleParts, newBusinessRuleCollection));
+		    return lstErrors;
+	    }
+
 		public IEnumerable<IBusinessRuleResponse> Modify(ScheduleModifier modifier, IEnumerable<IScheduleDay> scheduleParts, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTagSetter scheduleTagSetter)
         {
             var lstErrors = new List<IBusinessRuleResponse>();

@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                 	var oldResponses = rangeCloneValueKey.Value.BusinessRuleResponseInternalCollection;
                     foreach (var scheduleDay in scheduleDaysForAccount)
                     {
-                        oldResponses.Remove(createResponse(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod, string.Empty, typeof(NewPersonAccountRule)));
+                        oldResponses.Remove(createResponse(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod, string.Empty, typeof(NewPersonAccountRule), affectedAccount.Owner.Absence.Id));
                     }
                     if(affectedAccount.IsExceeded)
                     {
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                                                     affectedAccount.Owner.Absence.Description.Name, affectedAccount.Period().StartDate.ToShortDateString());
 
                             if (!ForDelete)
-                                responseList.Add(createResponse(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod, message, typeof(NewPersonAccountRule)));
+                                responseList.Add(createResponse(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod, message, typeof(NewPersonAccountRule), affectedAccount.Owner.Absence.Id));
                         }
                     }
                     
@@ -131,11 +131,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return !_schedulingResultStateHolder.Schedules.Scenario.DefaultScenario;
         }
 
-        private IBusinessRuleResponse createResponse(IPerson person, IDateOnlyAsDateTimePeriod dateOnly, string message, Type type)
+        private IBusinessRuleResponse createResponse(IPerson person, IDateOnlyAsDateTimePeriod dateOnly, string message, Type type, Guid? absenceId)
         {
             var dop = new DateOnlyPeriod(dateOnly.DateOnly, dateOnly.DateOnly);
-            IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, dateOnly.Period(), person, dop, FriendlyName) { Overridden = !_haltModify };
+            IBusinessRuleResponse response = new BusinessRuleResponseWithAbsenceId(type, message, _haltModify, IsMandatory, dateOnly.Period(), person, dop, FriendlyName, absenceId) { Overridden = !_haltModify };
             return response;
         }
+
+
     }
+
+	public class BusinessRuleResponseWithAbsenceId : BusinessRuleResponse
+	{
+		public Guid? AbsenceId { get; set; }
+		public BusinessRuleResponseWithAbsenceId(Type typeOfRule, string message, bool error, bool mandatory, DateTimePeriod period, IPerson person, DateOnlyPeriod dateOnlyPeriod, string friendlyName, Guid? absenceId) : base(typeOfRule, message, error, mandatory, period, person, dateOnlyPeriod, friendlyName)
+		{
+			AbsenceId = absenceId;
+		}
+	}
+
 }

@@ -6,14 +6,14 @@
 	function CommandCheckService($http, $q) {
 		var checkOverlappingUrl = "../api/TeamScheduleData/CheckOverlapppingCertainActivities";
 		var checkOverlappingMoveActivityUrl = "../api/TeamScheduleData/CheckMoveActivityOverlapppingCertainActivities";
-		var checkPersonalAccountsUrl = '../api/TeamScheduleData/CheckPersonalAccounts';
+		var checkPersonalAccountsUrl = '../api/TeamScheduleData/CheckPersonAccounts';
 
-		var checkFailedAgentList = [], commandRquestData, currentCheckConfig;
+		var checkFailedAgentList = [], commandRequestData, currentCheckConfig;
 		var commandCheckDeferred, commandCheckedStatus = false;
 
 		var checkConfigs = {};
 		populateAllCheckConfigs();
-			
+
 		this.checkAddActivityOverlapping = checkAddActivityOverlapping;
 		this.checkAddPersonalActivityOverlapping = checkAddPersonalActivityOverlapping;
 		this.checkMoveActivityOverlapping = checkMoveActivityOverlapping;
@@ -30,25 +30,25 @@
 		}
 
 		function checkAddActivityOverlapping(requestData) {
-			commandRquestData = requestData;
+			commandRequestData = requestData;
 			currentCheckConfig = checkConfigs.checkAddActivityOverlapping;
 			return getCheck(checkOverlappingUrl)(requestData);
 		}
 
 		function checkAddPersonalActivityOverlapping(requestData) {
-			commandRquestData = requestData;
+			commandRequestData = requestData;
 			currentCheckConfig = checkConfigs.checkAddPersonalActivityOverlapping;
 			return getCheck(checkOverlappingUrl)(requestData);
 		}
 
 		function checkMoveActivityOverlapping(requestData) {
-			commandRquestData = requestData;
+			commandRequestData = requestData;
 			currentCheckConfig = checkConfigs.checkMoveActivityOverlapping;
 			return getCheck(checkOverlappingMoveActivityUrl)(requestData);
 		}
 
 		function checkPersonalAccounts(requestData) {
-			commandRquestData = requestData;
+			commandRequestData = requestData;
 			currentCheckConfig = checkConfigs.checkPersonalAccounts;
 			return getCheck(checkPersonalAccountsUrl)(requestData);
 		}
@@ -60,7 +60,7 @@
 				$http.post(url, requestData)
 					.then(function (resp) {
 						if (resp.data.length === 0) {
-							commandCheckDeferred.resolve();
+							commandCheckDeferred.resolve(commandRequestData);
 						} else {
 							checkFailedAgentList = resp.data;
 							commandCheckedStatus = true;
@@ -75,7 +75,7 @@
 		}
 
 		function getRequestData() {
-			return commandRquestData;
+			return commandRequestData;
 		}
 
 		function getCommandCheckStatus() {

@@ -48,7 +48,7 @@
 
 		vm.checkFailedAgentList = [];
 		vm.initFinished = false;
-				
+
 
 		vm.updatePersonSelection = function(agent) {
 			personSelectionSvc.updatePersonSelection(agent);
@@ -63,10 +63,13 @@
 					return checkFailedAgentIdList.indexOf(id) < 0;
 				});
 				return requestData;
-			}	
+			}
 		};
 
 		function getTooltipMessageForAgent(overlappedLayers) {
+			if (!overlappedLayers) {
+				return [];
+			}
 			var result = [];
 			overlappedLayers.forEach(function(overlappedLayer) {
 				result.push(overlappedLayer.Name);
@@ -76,12 +79,12 @@
 			return result;
 		}
 
-		vm.applyCommandFix = function () {	
+		vm.applyCommandFix = function () {
 			vm.config.actionOptions.forEach(function (option) {
 				if (option == vm.currentActionOptionValue) {
-					if (option == 'DoNotModifyForTheseAgents') {					
+					if (option == 'DoNotModifyForTheseAgents') {
 						CommandCheckService.completeCommandCheck(getAgentListModifier(false));
-					} else if (option == 'OverrideForTheseAgents') {						
+					} else if (option == 'OverrideForTheseAgents') {
 						CommandCheckService.completeCommandCheck(getAgentListModifier(true));
 					} else if (option == 'MoveNonoverwritableActivityForTheseAgents') {
 						CommandCheckService.completeCommandCheck(function (requestData) {
@@ -90,7 +93,7 @@
 						});
 					}
 				}
-			});		
+			});
 		};
 
 		vm.init = function() {
@@ -105,14 +108,14 @@
 			}
 
 			CommandCheckService.getCheckFailedAgentList().forEach(function(agent) {
-				
+
 				vm.checkFailedAgentList.push({
 					personId: agent.PersonId,
 					tooltips: getTooltipMessageForAgent(agent.OverlappedLayers),
 					scheduleVm: getScheduleVm(agent.PersonId)
 				});
 			});
-			
+
 			vm.config = CommandCheckService.getCheckConfig();
 			vm.currentActionOptionValue = vm.config.actionOptions[0];
 

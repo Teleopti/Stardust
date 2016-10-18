@@ -114,6 +114,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
+		public IEnumerable<IBusinessRuleResponse> CheckBusinessRules(IEnumerable<IScheduleDay> scheduleParts, INewBusinessRuleCollection newBusinessRuleCollection)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IEnumerable<IScheduleDay> SchedulesForDay(DateOnly dateOnly)
 		{
 			throw new NotImplementedException();

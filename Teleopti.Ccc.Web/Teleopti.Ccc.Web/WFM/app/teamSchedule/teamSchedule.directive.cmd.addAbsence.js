@@ -3,9 +3,9 @@
 
 	angular.module('wfm.teamSchedule').directive('addAbsence', addAbsenceDirective);
 
-	addAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService', '$locale'];
+	addAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService', '$locale', 'CommandCheckService'];
 
-	function addAbsenceCtrl(PersonAbsenceSvc, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService, $locale) {
+	function addAbsenceCtrl(PersonAbsenceSvc, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService, $locale, CommandCheckService) {
 		var vm = this;
 
 		vm.label = 'AddAbsence';
@@ -39,25 +39,40 @@
 			return moment(vm.getDefaultAbsenceStartTime()).add(1, 'hour').toDate();
 		}
 
-		vm.addAbsence = function () {
+		vm.addAbsence = function() {
 			var requestData = {
-				PersonIds: vm.selectedAgents.map(function (agent) { return agent.PersonId; }),
+				PersonIds: vm.selectedAgents.map(function(agent) { return agent.PersonId; }),
 				Date: vm.selectedDate(),
 				AbsenceId: vm.selectedAbsenceId,
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			};
-			var actionPromise;
 			if (vm.isFullDayAbsence) {
 				requestData.StartDate = moment(vm.timeRange.startTime).format("YYYY-MM-DD");
 				requestData.EndDate = moment(vm.timeRange.endTime).format("YYYY-MM-DD");
-				actionPromise = PersonAbsenceSvc.addFullDayAbsence(requestData);
 			} else {
 				requestData.StartTime = vm.convertTime(moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"));
 				requestData.EndTime = vm.convertTime(moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"));
-				actionPromise = PersonAbsenceSvc.addIntradayAbsence(requestData);
 			}
 
-			actionPromise.then(function (response) {
+			if (vm.checkPersonalAccountEnabled()) {
+				CommandCheckService.checkPersonalAccounts(requestData)
+					.then(function(data) {
+						addAbsence(data);
+					});
+			} else {
+				addAbsence(requestData);
+			}
+
+		};
+
+		function addAbsence(requestData) {
+			if (requestData.PersonIds.length === 0) {
+				if (vm.getActionCb(vm.label)) {
+					vm.getActionCb(vm.label)(vm.trackId, requestData.PersonIds);
+				}
+				return;
+			}
+			PersonAbsenceSvc.addAbsence(requestData, vm.isFullDayAbsence).then(function (response) {
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, requestData.PersonIds);
 				}
@@ -71,7 +86,7 @@
 					}
 				}), response.data);
 			});
-		};
+		}
 
 		vm.updateDateAndTimeFormat = function () {
 			var timeFormat = $locale.DATETIME_FORMATS.shortTime;
@@ -123,6 +138,7 @@
 			scope.vm.isAddFullDayAbsenceAvailable = function () {
 				return containerCtrl.hasPermission('IsAddFullDayAbsenceAvailable');
 			};
+			scope.vm.checkPersonalAccountEnabled = containerCtrl.hasToggle('CheckPersonalAccountEnabled');
 
 			scope.vm.isAddIntradayAbsenceAvailable = function () {
 				return containerCtrl.hasPermission('IsAddIntradayAbsenceAvailable');

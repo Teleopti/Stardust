@@ -6,7 +6,9 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
@@ -15,6 +17,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.Web.Core;
@@ -32,6 +35,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 		public ScheduleValidationProvider Target;
 		public FakeWriteSideRepository<IActivity> ActivityForId;
 		public FakeUserTimeZone UserTimeZone;
+		public FakeAbsenceRepository AbsenceRepository;
+		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -41,6 +46,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			system.UseTestDouble<FakePersonNameProvider>().For<IPersonNameProvider>();
 			system.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();
 			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
+			system.UseTestDouble<FakeAbsenceRepository>().For<IAbsenceRepository>();
+			//system.UseTestDouble<FakeSchedulingResultStateHolder>().For<ISchedulingResultStateHolder>();
+			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
 
 			var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
 			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
@@ -1155,5 +1163,93 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			ruleTypes.Contains("NewDayOffRuleName").Should().Be.True();
 		}
 
+		[Test]
+		public void ShouldReturnPeopleWhosePersonAccountWillBeExceededWhenAddingAbsence()
+		{
+			var scenario = CurrentScenario.Current();
+			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
+			PersonRepository.Has(person);
+
+			var activity = ActivityFactory.CreateActivity("activity");
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
+				new DateTimePeriod(new DateTime(2016, 10, 10, 8, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 10, 10, 17, 0, 0, DateTimeKind.Utc)), shiftCategory, scenario);
+			ScheduleStorage.Add(personAssignment);
+
+			var accountDay = createAccountDay(new DateOnly(2016, 10, 10), TimeSpan.FromDays(0), TimeSpan.FromDays(1),
+				TimeSpan.FromDays(1));
+
+			var absence = AbsenceFactory.CreateAbsence("abs").WithId();
+			AbsenceRepository.Add(absence);
+			var account = PersonAbsenceAccountFactory.CreatePersonAbsenceAccount(person, absence, accountDay);
+			PersonAbsenceAccountRepository.Add(account);
+
+			var input = new CheckPersonAccountFormData
+			{
+				AbsenceId = absence.Id.GetValueOrDefault(),
+				PersonIds =  new []{person.Id.GetValueOrDefault()},
+				StartDate = new DateTime(2016, 10, 10, 0, 0, 0, DateTimeKind.Utc),
+				EndDate = new DateTime(2016, 10, 11, 0, 0, 0, DateTimeKind.Utc)
+			};
+
+			var result = Target.CheckPersonAccounts(input);
+
+			result.Count.Should().Be(1);
+			result[0].PersonId.Should().Be(person.Id.Value);
+		}
+
+		[Test]
+		public void ShouldNotReturnPeopleWhosePersonAccountHasBeExceededWhenAddingDifferentAbsence()
+		{
+			var scenario = CurrentScenario.Current();
+			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
+			PersonRepository.Has(person);
+			var absence = AbsenceFactory.CreateAbsence("abs").WithId();
+			var anotherAbs = AbsenceFactory.CreateAbsence("anotherAbs").WithId();
+			AbsenceRepository.Add(absence);
+			AbsenceRepository.Add(anotherAbs);
+
+
+			var activity = ActivityFactory.CreateActivity("activity");
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
+				new DateTimePeriod(new DateTime(2016, 10, 10, 8, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 10, 10, 17, 0, 0, DateTimeKind.Utc)), shiftCategory, scenario);
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
+				new DateTimePeriod(new DateTime(2016, 10, 10, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 10, 10, 23, 0, 0, DateTimeKind.Utc)), absence);
+			ScheduleStorage.Add(personAssignment);
+			ScheduleStorage.Add(personAbsence);
+
+			var accountDay = createAccountDay(new DateOnly(2016, 10, 10), TimeSpan.FromDays(0), TimeSpan.FromDays(1),
+				TimeSpan.FromDays(2));
+			var account = PersonAbsenceAccountFactory.CreatePersonAbsenceAccount(person, absence, accountDay);
+			PersonAbsenceAccountRepository.Add(account);
+
+			var input = new CheckPersonAccountFormData
+			{
+				AbsenceId = anotherAbs.Id.GetValueOrDefault(),
+				PersonIds =  new []{person.Id.GetValueOrDefault()},
+				StartDate = new DateTime(2016, 10, 10, 0, 0, 0, DateTimeKind.Utc),
+				EndDate = new DateTime(2016, 10, 11, 0, 0, 0, DateTimeKind.Utc)
+			};
+
+			var result = Target.CheckPersonAccounts(input);
+
+			result.Count.Should().Be(0);
+		}
+
+
+		private AccountDay createAccountDay(DateOnly startDate, TimeSpan balanceIn, TimeSpan accrued, TimeSpan balance)
+		{
+			return new AccountDay(startDate)
+			{
+				BalanceIn = balanceIn,
+				Accrued = accrued,
+				Extra = TimeSpan.FromDays(0),
+				LatestCalculatedBalance = balance
+			};
+		}
 	}
 }
