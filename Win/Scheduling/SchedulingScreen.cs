@@ -2088,8 +2088,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if ((_schedulerState.SchedulingResultState.SkipResourceCalculation || _teamLeaderMode) && _uIEnabled)
 			{
-				Refresh();
 				validatePersons();
+				_schedulerState.ClearDaysToRecalculate();
 				return;
 			}
 

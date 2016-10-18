@@ -27,11 +27,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			if (_model == null)
 				return;
 			_model.ShouldUpdateViews = true;
-			foreach (var control in tabControlShiftCategoryDistribution.SelectedTab.Controls)
-			{
-				var child = control as ShiftPerDateControl;
-				child?.DoResizeToFit();
-			}
 		}
 
 		public void SetModel(IShiftCategoryDistributionModel model)
