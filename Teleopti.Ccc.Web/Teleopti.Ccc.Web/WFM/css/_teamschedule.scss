@@ -67,6 +67,7 @@
 			flex-wrap: wrap;
 			flex-direction: row;
 			justify-content: flex-start;
+			padding-left: 20px;
 		}
 
 		timezone-picker{
@@ -219,12 +220,6 @@
 				padding-right: 5px;
 				padding-left: 5px;
 				min-width: 150px;
-				
-				span.person-name{
-					float: right;
-					word-break: break-word;
-					white-space: normal;
-				}
 			}
 
 			th.right-border-empty, td.right-border-empty {
@@ -331,7 +326,6 @@
 			}
 		
 			td.weekview-person-name{
-				word-break: break-word;
 				padding: 0 5px;
 			}
 		}
