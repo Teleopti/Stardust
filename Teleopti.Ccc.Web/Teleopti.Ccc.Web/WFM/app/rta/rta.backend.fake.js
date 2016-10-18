@@ -298,7 +298,7 @@
 				});
 			function sitesOrTeamsForSkillOrSkillArea(adherences,adherenceKey,paramId,sitesOrTeams){
 				var siteOrTeamIdsBySkillOrSkillAreaId = adherences.filter(function(a){
-						return a[adherenceKey] ===  paramId;
+						return paramId.indexOf(a[adherenceKey]) > -1;
 					}).map(function(s){
 						return s.Id;
 					});
@@ -324,9 +324,10 @@
 
 			fake(/\.\.\/api\/Sites\/ForSkills(.*)/,
 				function(params) {
-					var filteredSites = sitesOrTeamsForSkillOrSkillArea(siteAdherencesForSkill,'SkillId',params.skillId,sites);
+					var filteredSites = sitesOrTeamsForSkillOrSkillArea(siteAdherencesForSkill,'SkillId',params.skillIds,sites);
 					return [200, filteredSites];
 				});
+
 			fake(/\.\.\/api\/Teams\/ForSitesAndSkillArea(.*)/,
 				function(params) {
 					var teamsBySite = teams.filter(function(t) {
@@ -341,7 +342,7 @@
 					var teamsBySite = teams.filter(function(t) {
 						return params.siteIds.indexOf(t.SiteId) > -1;
 					});
-					var filteredSites = sitesOrTeamsForSkillOrSkillArea(teamAdherencesForSkill,'SkillId',params.skillId,teamsBySite);
+					var filteredSites = sitesOrTeamsForSkillOrSkillArea(teamAdherencesForSkill,'SkillId',params.skillIds,teamsBySite);
 					return [200, filteredSites];
 				});
 
@@ -356,8 +357,9 @@
 			fake(/\.\.\/api\/Sites\/InAlarmCountForSkills(.*)/,
 				function(params) {
 					var sAdherencesForSkill = siteAdherencesForSkill.filter(function(sa){
-						return sa.SkillId === params.skillId;
+						return params.skillIds.indexOf(sa.SkillId) > -1;
 					});
+					
 					return [200, sAdherencesForSkill];
 				});
 
@@ -375,7 +377,7 @@
 			fake(/\.\.\/api\/Teams\/GetOutOfAdherenceForAllTeamsOnSitesBySkillArea(.*)/,
 				function(params) {
 					var teamAdherencesBySkillAreaId = teamAdherencesForSkillArea.filter(function(sa){
-						return sa.SkillAreaId ===  params.skillAreaId && sa.Id ===  params.teamIds;
+						return sa.SkillAreaId ===  params.skillAreaId && sa.SiteId ===  params.siteId;
 					});
 					return [200, teamAdherencesBySkillAreaId];
 			});
@@ -383,7 +385,7 @@
 			fake(/\.\.\/api\/Teams\/InAlarmCountForSkills(.*)/,
 				function(params) {
 					var teamAdherencesBySkillId = teamAdherencesForSkill.filter(function(sa){
-						return sa.SkillId ===  params.skillId && sa.Id ===  params.teamIds;
+						return params.skillIds.indexOf(sa.SkillId)> -1   && sa.SiteId ===  params.siteId;
 					});
 					return [200, teamAdherencesBySkillId];
 			});

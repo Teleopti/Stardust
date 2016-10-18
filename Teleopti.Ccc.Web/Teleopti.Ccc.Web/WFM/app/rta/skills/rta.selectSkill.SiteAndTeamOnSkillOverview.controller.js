@@ -95,7 +95,7 @@
 									return team.Id;
 								});
 
-								return getAdherenceForAllTeamsOnSitesBySkillOrSkillArea(teamIds)
+								return getAdherenceForAllTeamsOnSitesBySkillOrSkillArea($scope.siteIds)
 									.then(function(teamAdherences) {
 										RtaAdherenceService.updateAdherence($scope.teams, teamAdherences);
 									});
@@ -103,6 +103,7 @@
 					} else {
 						getSitesForSkillOrSkillArea()
 							.then(function(sites) {
+								
 								$scope.sites = sites;
 								return getAdherenceForAllSitesBySkillOrSkillArea();
 							}).then(function(siteAdherences) {
@@ -113,7 +114,7 @@
 
 				function getSitesForSkillOrSkillArea() {
 					if ($scope.skillId !== null) {
-						return RtaService.getSitesForSkill($scope.skillId);
+						return RtaService.getSitesForSkill([$scope.skillId]);
 					} else {
 						return RtaService.getSitesForSkillArea($scope.skillAreaId);
 					}
@@ -122,7 +123,7 @@
 				function getTeamsForSitesAndSkillOrSkillArea() {
 					return $scope.skillId !== null ?
 						RtaService.getTeamsForSitesAndSkill({
-							skillId: $scope.skillId,
+							skillIds: [$scope.skillId],
 							siteIds: $scope.siteIds
 						})
 						:
@@ -134,21 +135,21 @@
 
 				function getAdherenceForAllSitesBySkillOrSkillArea(){
 					return $scope.skillId !== null ?
-								RtaService.getAdherenceForAllSitesBySkill($scope.skillId)
+								RtaService.getAdherenceForAllSitesBySkill([$scope.skillId])
 								:
 								RtaService.getAdherenceForAllSitesBySkillArea($scope.skillAreaId);
 				}
 
-				function getAdherenceForAllTeamsOnSitesBySkillOrSkillArea(teamIds) {
+				function getAdherenceForAllTeamsOnSitesBySkillOrSkillArea(siteId) {
 					return $scope.skillId !== null ?
 						RtaService.getAdherenceForAllTeamsOnSitesBySkill({
-							skillId: $scope.skillId,
-							teamIds: teamIds
+							skillIds: [$scope.skillId],
+							siteId: siteId
 						})
 						:
 						RtaService.getAdherenceForAllTeamsOnSitesBySkillArea({
 							skillAreaId: $scope.skillAreaId,
-							teamIds: teamIds
+							siteId: siteId
 						});
 				}
 

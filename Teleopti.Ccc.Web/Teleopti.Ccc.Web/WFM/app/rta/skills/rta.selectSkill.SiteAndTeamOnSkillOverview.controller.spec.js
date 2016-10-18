@@ -191,11 +191,13 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				SiteId: "ParisGuid"
 			})
 			.withTeamAdherenceForSkill({
+				SiteId: "ParisGuid" ,
 				Id: "ParisTeamGreenGuid",
 				OutOfAdherence: 5,
 				SkillId: "PhoneSkillGuid"
 			})
 			.withTeamAdherenceForSkill({
+				SiteId: "ParisGuid",
 				Id: "ParisTeamRedGuid",
 				OutOfAdherence: 7,
 				SkillId: "EmailSkillGuid"
@@ -223,16 +225,19 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				SiteId: "ParisGuid"
 			})
 			.withTeamAdherenceForSkillArea({
+				SiteId: "LondonGuid",
 				Id: "LondonTeamGuid",
 				OutOfAdherence: 1,
 				SkillAreaId: "PhoneSkillGuid"
 			})
 			.withTeamAdherenceForSkillArea({
+				SiteId: "LondonGuid",
 				Id: "LondonTeamGuid",
 				OutOfAdherence: 3,
 				SkillAreaId: "EmailSkillGuid"
 			})
 			.withTeamAdherenceForSkillArea({
+				SiteId: "ParisGuid",
 				Id: "ParisTeamGuid",
 				OutOfAdherence: 5,
 				SkillAreaId: "EmailSkillGuid"
@@ -263,11 +268,13 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				SiteId: "ParisGuid"
 			})
 			.withTeamAdherenceForSkill({
+				SiteId: "LondonGuid",
 				Id: "LondonTeamGuid",
 				OutOfAdherence: 1,
 				SkillId: "PhoneSkillGuid"
 			})
 			.withTeamAdherenceForSkill({
+				SiteId: "ParisGuid",
 				Id: "ParisTeamGuid",
 				OutOfAdherence: 5,
 				SkillId: "EmailSkillGuid"
@@ -294,11 +301,13 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				SiteId: "ParisGuid"
 			})
 			.withTeamAdherenceForSkillArea({
+				SiteId: "LondonGuid",
 				Id: "LondonTeamGuid",
 				OutOfAdherence: 1,
 				SkillAreaId: "PhoneSkillGuid"
 			})
 			.withTeamAdherenceForSkillArea({
+				SiteId: "ParisGuid",
 				Id: "ParisTeamGuid",
 				OutOfAdherence: 5,
 				SkillAreaId: "EmailSkillGuid"

@@ -186,7 +186,7 @@
 						isArray: true
 					}
 				}).query({
-					skillId: data
+					skillIds: data
 				}).$promise;
 			};
 
@@ -206,7 +206,7 @@
 						isArray: true
 					}
 				}).query({
-					skillId: skillId
+					skillIds: skillId
 				}).$promise;
 			};
 
@@ -228,8 +228,8 @@
 						isArray: true
 					}
 				}).query({
-					skillId: data.skillId,
-					teamIds: data.teamIds
+					skillIds: data.skillIds,
+					siteId: data.siteId
 				}).$promise;
 			};
 
@@ -241,7 +241,7 @@
 					}
 				}).query({
 					skillAreaId: data.skillAreaId,
-					teamIds: data.teamIds
+					siteId: data.siteId
 				}).$promise;
 			};
 
@@ -263,7 +263,7 @@
 						isArray: true
 					}
 				}).query({
-					skillId: data.skillId,
+					skillIds: data.skillIds,
 					siteIds: data.siteIds
 				}).$promise;
 			};
