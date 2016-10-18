@@ -114,11 +114,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			{
 				var startDateTime = TimeZoneHelper.ConvertFromUtc(interval.StartDateTime, defaultTimeZone);
 				var endDateTime = TimeZoneHelper.ConvertFromUtc(interval.EndDateTime, defaultTimeZone);
-				var startTimeSpan = new TimeSpan(startDateTime.Hour,startDateTime.Minute,startDateTime.Second);
-				var endTimeSpan = new TimeSpan( endDateTime.Hour, endDateTime.Minute, endDateTime.Second);
-				if (endDateTime.Date>startDateTime.Date)
-					endTimeSpan = new TimeSpan(1, endDateTime.Hour, endDateTime.Minute, endDateTime.Second);
-
+				var startTimeSpan = startDateTime.TimeOfDay;
+				var endTimeSpan = endDateTime.Subtract(startDateTime.Date);
+					
 				result.AddUnderstaffingTime(new TimePeriod(startTimeSpan, endTimeSpan));
 			}
 			return result;
