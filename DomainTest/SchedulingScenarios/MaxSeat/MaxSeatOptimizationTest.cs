@@ -37,6 +37,26 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.EqualTo(TimeSpan.FromHours(9));
 		}
 
+
+		[Test]
+		public void ShouldMoveShiftAwayFromMaxSeatPeakWhenOptimizingNotAllAgents()
+		{
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var site = new Site("_") { MaxSeats = 1 }.WithId();
+			var dateOnly = DateOnly.Today;
+			var scenario = new Scenario("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 9, 0, 60), new TimePeriodWithSegment(16, 0, 17, 0, 60), new ShiftCategory("_").WithId()));
+			var agentScheduledForAnHourData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, site, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 9, 0));
+			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, site, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData.Assignment, agentScheduledForAnHourData.Assignment });
+
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, scenario, new OptimizationPreferences());
+
+			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay
+				.Should().Be.EqualTo(TimeSpan.FromHours(9));
+		}
+
+
 		[Test]
 		public void ShouldNotMoveMoreSchedulesThanNecessary()
 		{

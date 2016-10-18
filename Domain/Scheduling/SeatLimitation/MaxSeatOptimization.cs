@@ -30,9 +30,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 		}
 
-		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> persons, IScheduleDictionary schedules, IScenario scenario, IOptimizationPreferences optimizationPreferences)
+		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IScenario scenario, IOptimizationPreferences optimizationPreferences)
 		{
-			var maxSeatData = _maxSeatSkillDataFactory.Create(period, persons, scenario);
+			var allAgents = schedules.Select(schedule => schedule.Key);
+			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, scenario, allAgents);
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 
 			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills()))
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 						{
 							//hitta gubbe random?
-							foreach (var person in persons)
+							foreach (var person in agentsToOptimize)
 							{
 								if (!person.Period(date).Team.Site.Equals(siteForSkill))
 									continue;

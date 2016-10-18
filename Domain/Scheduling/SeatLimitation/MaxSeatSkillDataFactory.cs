@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_workloadDayHelper = workloadDayHelper;
 		}
 
-		public MaxSeatSkillData Create(DateOnlyPeriod period, IEnumerable<IPerson> agents, IScenario scenario)
+		public MaxSeatSkillData Create(DateOnlyPeriod period, IEnumerable<IPerson> agents, IScenario scenario,IEnumerable<IPerson> allAgents)
 		{
 			var ret = new MaxSeatSkillData();
 			var sites = _maxSeatSitesExtractor.MaxSeatSites(period, agents);
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				var skill = _skillsFromMaxSeatSite.CreateMaxSeatSkill(site, 15);//TODO: why 15?
 
 				//todo: REMOVE ME?
-				foreach (var agent in agents)
+				foreach (var agent in allAgents)
 				{
 					var personSkill = new PersonSkill(skill, new Percent(1));
 					agent.Period(period.StartDate).AddPersonMaxSeatSkill(personSkill);

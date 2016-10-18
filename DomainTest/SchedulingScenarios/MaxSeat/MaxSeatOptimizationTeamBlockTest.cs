@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 	{
 		public MaxSeatOptimization Target;
 
-		[Test, Ignore("first teamblock test")]
+		[Test, Ignore("40939")]
 		public void ShouldChooseShiftForAllAgentsInTeam()
 		{
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				}
 			};
 
-			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData1.Agent, agentData2.Agent, agentScheduledForAnHourData.Agent }, schedules, scenario, optPreferences);
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData1.Agent, agentData2.Agent}, schedules, scenario, optPreferences);
 
 			schedules.SchedulesForDay(dateOnly)
 				.Count(x => x.PersonAssignment().Period.StartDateTime.TimeOfDay == TimeSpan.FromHours(9))
