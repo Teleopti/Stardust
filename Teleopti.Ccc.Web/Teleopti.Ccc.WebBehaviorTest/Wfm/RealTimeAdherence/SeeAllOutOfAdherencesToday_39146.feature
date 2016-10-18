@@ -9,6 +9,7 @@ Feature: See all out of adherences for today
 Background:
 	Given there is a switch
 	And there is an activity named 'Phone'
+	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
 	And there is a team named 'Justin' on site 'Paris'
 	And I have a role with full access
@@ -42,10 +43,11 @@ Background:
 	| Adherence   | Out      |
 	| Activity    |          |
 	| Phone state | Ready    |
-
-@ignore
+	
+@OnlyRunIfEnabled('RTA_SeeAllOutOfAdherencesToday_39146')
 Scenario: See out of adherences
-	And at '2016-10-11 08:30:00' 'Pierre Baldi' sets his phone state to 'Ready'
+	Given the time is '2016-10-11 08:30:00'
+	And 'Pierre Baldi' sets his phone state to 'Ready'
 	And at '2016-10-11 08:45:00' 'Pierre Baldi' sets his phone state to 'Pause'
 	And at '2016-10-11 09:00:00' 'Pierre Baldi' sets his phone state to 'Ready'
 	And at '2016-10-11 10:00:00' 'Pierre Baldi' sets his phone state to 'Pause'

@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			}
 
 			IActivity activity = null;
-			if (Activity != null)
+			if (!Activity.IsNullOrEmpty())
 				activity = activityRepository.LoadAll().First(a => a.Name == Activity);
 
 			var rtaMap = new RtaMap(stateGroup, activity) { RtaRule = rule };

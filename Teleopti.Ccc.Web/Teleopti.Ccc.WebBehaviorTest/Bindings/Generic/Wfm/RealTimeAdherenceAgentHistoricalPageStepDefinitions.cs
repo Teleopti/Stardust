@@ -25,17 +25,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			var outOfAdherences = table.CreateSet<StartEndTimePair>();
 			outOfAdherences.ForEach(x =>
 			{
-				Browser.Interactions.AssertExists(".out-of-adherence[data-starttime={0}][data-endtime={1}]", x.StartTime, x.EndTime);
+				Browser.Interactions.AssertExists(".out-of-adherence[data-starttime='{0}'][data-endtime='{1}']", x.StartTime, x.EndTime);
 			});
 		}
 
 		[Then(@"I should see activities")]
 		public void ThenIShouldSeeActivities(Table table)
 		{
-			var outOfAdherences = table.CreateSet<StartEndTimePair>();
-			outOfAdherences.ForEach(x =>
+			var activities = table.CreateSet<StartEndTimePair>();
+			activities.ForEach(x =>
 			{
-				Browser.Interactions.AssertExists(".activity[data-starttime={0}][data-endtime={1}]", x.StartTime, x.EndTime);
+				Browser.Interactions.AssertExists(".activity[data-starttime='{0}'][data-endtime='{1}']", x.StartTime, x.EndTime);
 			});
 		}
 

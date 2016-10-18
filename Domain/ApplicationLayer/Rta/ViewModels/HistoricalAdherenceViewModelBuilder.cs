@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_persons = persons;
 			_now = now;
 		}
-
+		
 		private IEnumerable<HistoricalAdherenceActivityViewModel> getCurrentSchedules(IPerson person)
 		{
 			var scenario = _scenario.Current();
@@ -41,10 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 			var tz = person.PermissionInformation.DefaultTimeZone();
 			var utcDateTime = utcDateForSchedules(person);
-			var from = utcDateTime.AddDays(-1);
-			var to = utcDateTime.AddDays(1);
-
-			var period = new DateOnlyPeriod(from.AddDays(-1), to.AddDays(1));
+			var period = new DateOnlyPeriod(utcDateTime.AddDays(-2), utcDateTime.AddDays(2));
 
 			var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 				new[] {person},
@@ -64,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				})
 				.ToArray();
 		}
-
+		
 		public HistoricalAdherenceViewModel Build(Guid personId)
 		{
 			var person = _persons.Load(personId);

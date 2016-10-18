@@ -1,22 +1,16 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class HistoricalAdherenceReadModelPersister : IHistoricalAdherenceReadModelPersister {
 
 		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
-		private readonly IJsonSerializer _serializer;
 
-		public HistoricalAdherenceReadModelPersister(ICurrentReadModelUnitOfWork unitOfWork, IJsonSerializer serializer)
+		public HistoricalAdherenceReadModelPersister(ICurrentReadModelUnitOfWork unitOfWork)
 		{
 			_unitOfWork = unitOfWork;
-			_serializer = serializer;
 		}
 
 		public void AddIn(Guid personId, DateTime timestamp)

@@ -10,17 +10,24 @@
 
 		RtaService.getAgentHistoricalData(id)
 			.then(function(data) {
-				var o = compareEarliestLastest(data.Schedules, data.OutOfAdherences, data.Now);
+				var o = compareEarliestLatest(data.Schedules, data.OutOfAdherences, data.Now);
 
 				vm.personId = data.PersonId;
 				vm.agentName = data.AgentName;
 				vm.date = moment(data.Now).format('YYYY-MM-DD');
+				var totalSeconds = o.totalSeconds + 7200;
+				var startOfShift = o.start != null ? o.start.clone().add(-1, 'hour') : moment().hour(7).minute(0).second(0);
 				vm.agentsFullSchedule = data.Schedules.map(function(layer) {
+					var startTime = moment(layer.StartTime);
+					var endTime = moment(layer.EndTime);
 					return {
-						Width: calculateWidth(layer.StartTime, layer.EndTime, o.totalSeconds),
-						Offset: calculateWidth(o.start, layer.StartTime, o.totalSeconds),
-						StartTime: layer.StartTime,
-						EndTime: layer.EndTime
+						Width: calculateWidth(layer.StartTime, layer.EndTime, totalSeconds),
+						Offset: calculateWidth(startOfShift, layer.StartTime, totalSeconds),
+						StartTime: startTime,
+						EndTime: endTime,
+						Color: layer.Color,
+						DisplayStartTime: startTime.format('YYYY-MM-DD HH:mm:ss'),
+						DisplayEndTime: endTime.format('YYYY-MM-DD HH:mm:ss')
 					};
 				});
 
@@ -28,50 +35,44 @@
 					if (ooa.EndTime == null)
 						ooa.EndTime = data.Now;
 
+					var startTime = moment(ooa.StartTime);
+					var endTime = ooa.EndTime != null ? moment(ooa.EndTime) : moment(data.Now);
+
 					return {
-						Width: calculateWidth(ooa.StartTime, ooa.EndTime, o.totalSeconds),
-						Offset: calculateWidth(o.start, ooa.StartTime, o.totalSeconds),
-						StartTime: ooa.StartTime,
-						EndTime: ooa.EndTime
+						Width: calculateWidth(ooa.StartTime, ooa.EndTime, totalSeconds),
+						Offset: calculateWidth(startOfShift, ooa.StartTime, totalSeconds),
+						StartTime: startTime,
+						EndTime: endTime,
+						DisplayStartTime: startTime.format('YYYY-MM-DD HH:mm:ss'),
+						DisplayEndTime: endTime.format('YYYY-MM-DD HH:mm:ss')
 					};
 				});
 
 				vm.fullTimeline = buildTimeline(vm.agentsFullSchedule, vm.outOfAdherences);
 			});
 
-		function compareEarliestLastest(schedule, outOfAdherences, serverTime) {
-			if (schedule.length == 0 && outOfAdherences.length == 0)
+		function compareEarliestLatest(schedule, outOfAdherences, serverTime) {
+			if (schedule.length === 0 && outOfAdherences.length === 0)
 				return {};
 
-			var earliestScheduleLayer = earliest(schedule);
-			var earliestOOA = earliest(outOfAdherences);
-			var earliestStartTime;
-			if (earliestScheduleLayer == null)
-				earliestStartTime = earliestOOA;
-			else if (earliestOOA == null)
-				earliestStartTime = earliestScheduleLayer;
-			else
-				earliestStartTime = earliestScheduleLayer < earliestOOA ? earliestScheduleLayer : earliestOOA;
+			var earliestStartTime = earliest(schedule);
+			var latestEndTime = latest(schedule, serverTime);
 
-			var latestScheduleLayer = latest(schedule, serverTime);
-			var latestOOA = latest(outOfAdherences, serverTime);
-			var latestEndTime;
-			if (latestScheduleLayer == null)
-				latestEndTime = latestOOA;
-			else if (latestOOA == null)
-				latestEndTime = latestScheduleLayer;
-			else
-				latestEndTime = latestScheduleLayer > latestOOA ? latestScheduleLayer : latestOOA;
-
-			var start = earliestStartTime.clone();
-			start.startOf('hour');
-			var end = latestEndTime.clone();
-			end.endOf('hour');
+			var start = null;
+			if (earliestStartTime != null) {
+				start = earliestStartTime.clone();
+				start.startOf('hour');
+			}
+			var end = null;
+			if (latestEndTime != null) {
+				end = latestEndTime.clone();
+				end.endOf('hour');
+			}
 
 			return {
 				start: start,
 				end: end,
-				totalSeconds: latestEndTime.diff(earliestStartTime, 'seconds')
+				totalSeconds: earliestStartTime != null && latestEndTime != null ? latestEndTime.diff(earliestStartTime, 'seconds') : null
 			};
 		}
 
@@ -85,18 +86,20 @@
 				return [];
 
 			var timeline = [];
+			var timePrepare = compareEarliestLatest(schedule, outOfAdherences);
+			if (timePrepare.start == null)
+				return timeline;
+			var currentMoment = timePrepare.start.clone().add(-1, 'hours');
 
-			var timePrepare = compareEarliestLastest(schedule, outOfAdherences);
-
-			var currentMoment = timePrepare.start.clone();
-
-			var totalHours = timePrepare.totalSeconds / 3600;
+			var totalHours = timePrepare.totalSeconds / 3600 + 2;
 			var hourPercent = 100 / totalHours;
 			for (var i = 0; i <= totalHours; i++) {
-				timeline.push({
-					Offset: hourPercent * i + '%',
-					Time: currentMoment.format('HH:mm')
-				});
+				var percent = hourPercent * i;
+				if (percent >= 0 && percent < 100)
+					timeline.push({
+						Offset: percent + '%',
+						Time: currentMoment.format('HH:mm')
+					});
 
 				currentMoment.add(1, 'hour');
 			}

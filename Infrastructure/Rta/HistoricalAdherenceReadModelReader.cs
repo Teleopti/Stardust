@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.Xml;
-using Newtonsoft.Json;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
@@ -28,7 +22,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public HistoricalAdherenceReadModel Read(Guid personId, DateTime startTime, DateTime endTime)
 		{
 			var result = _unitOfWork.Current()
-				.CreateSqlQuery("SELECT * FROM [ReadModel].[HistoricalAdherence] WHERE PersonId = :PersonId AND [Timestamp] BETWEEN :StartTime AND :EndTime")
+				.CreateSqlQuery(@"
+SELECT *
+FROM [ReadModel].[HistoricalAdherence]
+WHERE PersonId = :PersonId
+AND [Timestamp] BETWEEN :StartTime AND :EndTime
+ORDER BY [Timestamp] ASC")
 				.SetParameter("PersonId", personId)
 				.SetParameter("StartTime", startTime)
 				.SetParameter("EndTime", endTime)
@@ -53,7 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 						.ToArray();
 				else
 				{
-					var existing = x.OutOfAdherences.FirstOrDefault(y => !y.EndTime.HasValue);
+					var existing = x.OutOfAdherences?.FirstOrDefault(y => !y.EndTime.HasValue);
 					if (existing != null)
 						existing.EndTime = im.Timestamp;
 				}

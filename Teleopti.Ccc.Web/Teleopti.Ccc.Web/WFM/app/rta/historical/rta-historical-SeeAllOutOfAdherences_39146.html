@@ -25,15 +25,24 @@
 			</div>
 
 			<div style="position: relative;">
-				<span ng-repeat="outOfAdherence in vm.outOfAdherences" class="rta-alarmline" ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}}; bottom: 46%;" data-starttime="{{outOfAdherence.StartTime}}" data-endtime="{{outOfAdherence.EndTime}}">
+				<span
+					ng-repeat="outOfAdherence in vm.outOfAdherences"
+					class="rta-alarmline out-of-adherence"
+					ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}}; bottom: 46%;"
+					data-starttime="{{outOfAdherence.DisplayStartTime}}"
+					data-endtime="{{outOfAdherence.DisplayEndTime}}">
 					<md-tooltip md-direction="top">
-						{{outOfAdherence.StartTime}}
-						-
-						{{outOfAdherence.EndTime}}
+						{{outOfAdherence.DisplayStartTime}} - {{outOfAdherence.DisplayEndTime}}
 					</md-tooltip>
 				</span>
 				<div class="rta-shift" style="height: 50px;">
-					<div ng-repeat="activity in vm.agentsFullSchedule" class="rta-layer absolute floatleft" tabindex="0" ng-attr-style="width: {{activity.Width}}; left: {{activity.Offset}}; background-color: {{activity.Color}}; top: 12%;" data-starttime="{{activity.StartTime}}" data-endtime="{{activity.EndTime}}">
+					<div
+						ng-repeat="activity in vm.agentsFullSchedule"
+						class="rta-layer absolute floatleft activity"
+						tabindex="0"
+						ng-attr-style="width: {{activity.Width}}; left: {{activity.Offset}}; background-color: {{activity.Color}}; top: 12%;"
+						data-starttime="{{activity.DisplayStartTime}}"
+						data-endtime="{{activity.DisplayEndTime}}">
 					</div>
 				</div>
 			</div>
