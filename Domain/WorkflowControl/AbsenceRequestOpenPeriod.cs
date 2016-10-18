@@ -78,7 +78,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				if (value is StaffingThresholdWithShrinkageValidator)
 					_staffingThresholdValidator = 4;
 				_currentStaffingThresholdValidator = value.CreateInstance();
-				Debug.Print(_staffingThresholdValidator.ToString() + _currentStaffingThresholdValidator.GetType());
 			}
 		}
 
