@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 									var layerThisPeriod = shift.MainShiftProjection.SingleOrDefault(x => x.Period.Contains(skillStaffPeriod.Period)); 
 									if ((layerThisPeriod == null || !((IActivity)layerThisPeriod.Payload).RequiresSeat) &&
 										shift.MainShiftProjection.ContractTime() == contractTimeBefore &&
-										isSatisfied(schedulingOptions.MainShiftOptimizeActivitySpecification, shift.MainShiftProjection)) //refactor when all shift tests are in place
+										isSatisfied(schedulingOptions.MainShiftOptimizeActivitySpecification, shift)) //refactor when all shift tests are in place
 									{
 										shiftToUse = shift.TheMainShift;
 										break;
@@ -91,8 +91,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		}
 
 		//remove when all shift tests are in place
-		private bool isSatisfied(ISpecification<IEditableShift> specification, IVisualLayerCollection visualLayerCollection)
+		private bool isSatisfied(ISpecification<IEditableShift> specification, IShiftProjectionCache shift)
 		{
+			var visualLayerCollection = shift.MainShiftProjection;
+
 			var mainShiftOptimizeActivitiesSpecification = specification as MainShiftOptimizeActivitiesSpecification;
 
 			if (mainShiftOptimizeActivitiesSpecification == null)
@@ -111,6 +113,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				return false;
 
 			if (!mainShiftOptimizeActivitiesSpecification.LengthOfActivityEqual(visualLayerCollection))
+				return false;
+
+			if (!mainShiftOptimizeActivitiesSpecification.CorrectShiftCategory(shift.TheMainShift))
 				return false;
 
 			return true;
