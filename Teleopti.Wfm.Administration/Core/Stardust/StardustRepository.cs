@@ -55,9 +55,9 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 
 		private void setTotalDuration(Job job)
 		{
-			if (string.IsNullOrEmpty(job.Ended.ToString()))
-				return;
-			string totalDuration = (job.Ended - job.Started).ToString();
+			string totalDuration = (DateTime.UtcNow - job.Started).ToString();
+			if (!string.IsNullOrEmpty(job.Ended.ToString()))
+				totalDuration = (job.Ended - job.Started).ToString();
 			job.TotalDuration = totalDuration.Substring(0, 8);
 		}
 

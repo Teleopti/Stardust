@@ -43,5 +43,5 @@ td {
 	font-weight: bold;
 }
 .processingResult {
-	
+	visibility: hidden
 }

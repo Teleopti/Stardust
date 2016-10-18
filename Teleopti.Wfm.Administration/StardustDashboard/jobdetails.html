@@ -4,7 +4,7 @@
 	<h2>Job Details</h2>
 	<div>
 		<div class="row">
-			<h4 ng-class="vm.Job.Result=='Success' ? 'successResult' : (vm.Job.Result=='' ? 'processingResult' : 'failureResult')">Job {{vm.Job.Result}}!</h4>
+			<h4 ng-class="vm.Job.Result=='Success' ? 'successResult' : (vm.Job.Result==null ? 'processingResult' : 'failureResult')">Job {{vm.Job.Result}}!</h4>
 			<div style="font-size: 14p; font-weight: bold; color: red">{{vm.JobError}}</div>
 			<h4>{{vm.Job.Name}}</h4>
 		</div>
