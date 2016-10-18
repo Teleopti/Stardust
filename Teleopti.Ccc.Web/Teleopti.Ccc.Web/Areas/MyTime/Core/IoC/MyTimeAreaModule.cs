@@ -100,10 +100,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PersonPersister>().As<IPersonPersister>().SingleInstance();
 			builder.RegisterType<SettingsPermissionViewModelFactory>().As<ISettingsPermissionViewModelFactory>();
 			builder.RegisterType<SettingsViewModelFactory>().As<ISettingsViewModelFactory>().SingleInstance();
-			builder.RegisterType<CalendarLinkSettingsPersisterAndProvider>().As<ISettingsPersisterAndProvider<CalendarLinkSettings>>().SingleInstance();
+			builder.RegisterType<CalendarLinkSettingsPersisterAndProvider>()
+				.As<ISettingsPersisterAndProvider<CalendarLinkSettings>>()
+				.SingleInstance();
 
-            builder.RegisterType<NameFormatSettingsPersisterAndProvider>().As<ISettingsPersisterAndProvider<NameFormatSettings>>().SingleInstance();
-		    builder.RegisterType<CalendarLinkIdGenerator>().As<ICalendarLinkIdGenerator>().SingleInstance();
+			builder.RegisterType<NameFormatSettingsPersisterAndProvider>()
+				.As<ISettingsPersisterAndProvider<NameFormatSettings>>()
+				.SingleInstance();
+			builder.RegisterType<CalendarLinkIdGenerator>().As<ICalendarLinkIdGenerator>().SingleInstance();
 			builder.RegisterType<CalendarLinkGenerator>().As<ICalendarLinkGenerator>().SingleInstance();
 			builder.RegisterType<CalendarLinkViewModelFactory>().As<ICalendarLinkViewModelFactory>().SingleInstance();
 			builder.RegisterType<CalendarTransformer>().As<ICalendarTransformer>().SingleInstance();
@@ -119,6 +123,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PersonRequestProvider>().As<IPersonRequestProvider>();
 			builder.RegisterType<AbsenceAccountProvider>().As<IAbsenceAccountProvider>();
 			builder.RegisterType<TextRequestPersister>().As<ITextRequestPersister>();
+			builder.RegisterType<ShiftTradeRequestPersonToPermissionValidator>().As<IShiftTradeRequestPersonToPermissionValidator>();
 			builder.RegisterType<ShiftExchangeOfferPersister>().As<IShiftExchangeOfferPersister>();
 			builder.RegisterType<ShiftTradeRequestPersister>().As<IShiftTradeRequestPersister>();
 			builder.RegisterType<AbsenceRequestPersister>().As<IAbsenceRequestPersister>();
@@ -134,8 +139,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ShiftTradeAddPersonScheduleViewModelMapper>().As<IShiftTradeAddPersonScheduleViewModelMapper>();
 			builder.RegisterType<ShiftTradeTimeLineHoursViewModelMapper>().As<IShiftTradeTimeLineHoursViewModelMapper>();
 			builder.RegisterType<ShiftTradeAddScheduleLayerViewModelMapper>().As<IShiftTradeAddScheduleLayerViewModelMapper>();
-			builder.RegisterType<RequestsShiftTradeScheduleFilterViewModelFactory>().As<IRequestsShiftTradeScheduleFilterViewModelFactory>().SingleInstance();
-			builder.RegisterType<RequestsShiftTradeBulletinViewModelFactory>().As<IRequestsShiftTradeBulletinViewModelFactory>().SingleInstance();
+			builder.RegisterType<RequestsShiftTradeScheduleFilterViewModelFactory>()
+				.As<IRequestsShiftTradeScheduleFilterViewModelFactory>()
+				.SingleInstance();
+			builder.RegisterType<RequestsShiftTradeBulletinViewModelFactory>()
+				.As<IRequestsShiftTradeBulletinViewModelFactory>()
+				.SingleInstance();
 			builder.RegisterType<RequestsShiftTradeScheduleViewModelFactory>()
 				.As<IRequestsShiftTradeScheduleViewModelFactory>()
 				.SingleInstance();
@@ -160,11 +169,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 				.SingleInstance()
 				.As<Profile>();
 			builder.RegisterType<StudentAvailabilityDomainData>();
-			builder.RegisterType<StudentAvailabilityDayFormMappingProfile.StudentAvailabilityDayFormToStudentAvailabilityDay>().SingleInstance();
+			builder.RegisterType<StudentAvailabilityDayFormMappingProfile.StudentAvailabilityDayFormToStudentAvailabilityDay>()
+				.SingleInstance();
 			builder.RegisterType<PreferenceDayInputMappingProfile.PreferenceDayInputToPreferenceDay>().SingleInstance();
-			builder.RegisterType<PreferenceTemplateInputMappingProfile.PreferenceTemplateInputToExtendedPreferenceTemplate>().SingleInstance();
-			builder.RegisterType<TextRequestFormMappingProfile.TextRequestFormToPersonRequest>().As<ITypeConverter<TextRequestForm, IPersonRequest>>().SingleInstance();
-			builder.RegisterType<AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest>().As<ITypeConverter<AbsenceRequestForm, IPersonRequest>>().SingleInstance();
+			builder.RegisterType<PreferenceTemplateInputMappingProfile.PreferenceTemplateInputToExtendedPreferenceTemplate>()
+				.SingleInstance();
+			builder.RegisterType<TextRequestFormMappingProfile.TextRequestFormToPersonRequest>()
+				.As<ITypeConverter<TextRequestForm, IPersonRequest>>()
+				.SingleInstance();
+			builder.RegisterType<AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest>()
+				.As<ITypeConverter<AbsenceRequestForm, IPersonRequest>>()
+				.SingleInstance();
 			builder.RegisterType<PreferenceNightRestChecker>().As<IPreferenceNightRestChecker>().SingleInstance();
 		}
 
@@ -186,23 +201,30 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<RestrictionRetrievalOperation>().As<IRestrictionRetrievalOperation>();
 			builder.RegisterType<WorkTimeMinMaxCalculator>().As<IWorkTimeMinMaxCalculator>();
 			builder.RegisterType<PersonRuleSetBagProvider>().As<IPersonRuleSetBagProvider>();
-			builder.RegisterType<SchedulePeriodTargetDayOffCalculator>().As<ISchedulePeriodTargetDayOffCalculator>().SingleInstance();
-			builder.RegisterType<PeriodScheduledAndRestrictionDaysOff>().As<IPeriodScheduledAndRestrictionDaysOff>().SingleInstance();
+			builder.RegisterType<SchedulePeriodTargetDayOffCalculator>()
+				.As<ISchedulePeriodTargetDayOffCalculator>()
+				.SingleInstance();
+			builder.RegisterType<PeriodScheduledAndRestrictionDaysOff>()
+				.As<IPeriodScheduledAndRestrictionDaysOff>()
+				.SingleInstance();
 			builder.RegisterType<SchedulePeriodTargetTimeCalculator>().As<ISchedulePeriodTargetTimeCalculator>().SingleInstance();
 			builder.RegisterType<ExtendedPreferencePredicate>().As<IExtendedPreferencePredicate>().SingleInstance();
 			builder.RegisterType<PreferenceTemplateProvider>().As<IPreferenceTemplateProvider>();
 			builder.RegisterType<PreferenceWeeklyWorkTimeSettingProvider>().As<IPreferenceWeeklyWorkTimeSettingProvider>();
 			builder.RegisterType<PreferenceTemplatePersister>().As<IPreferenceTemplatePersister>();
-			builder.RegisterType<PersonPreferenceDayOccupationFactory>().As<IPersonPreferenceDayOccupationFactory>().SingleInstance();
+			builder.RegisterType<PersonPreferenceDayOccupationFactory>()
+				.As<IPersonPreferenceDayOccupationFactory>()
+				.SingleInstance();
 		}
-		 
+
 		private static void registerStudentAvailabilityTypes(ContainerBuilder builder)
 		{
-			builder.RegisterType<StudentAvailabilityViewModelFactory>().As<IStudentAvailabilityViewModelFactory>();		
+			builder.RegisterType<StudentAvailabilityViewModelFactory>().As<IStudentAvailabilityViewModelFactory>();
 			builder.RegisterType<StudentAvailabilityPersister>().As<IStudentAvailabilityPersister>();
 			builder.RegisterType<StudentAvailabilityFeedbackProvider>().As<IStudentAvailabilityFeedbackProvider>();
 			builder.RegisterType<StudentAvailabilityPeriodFeedbackProvider>().As<IStudentAvailabilityPeriodFeedbackProvider>();
-			builder.RegisterType<StudentAvailabilityPeriodFeedbackViewModelFactory>().As<IStudentAvailabilityPeriodFeedbackViewModelFactory>();
+			builder.RegisterType<StudentAvailabilityPeriodFeedbackViewModelFactory>()
+				.As<IStudentAvailabilityPeriodFeedbackViewModelFactory>();
 		}
 
 		private static void registerScheduleTypes(ContainerBuilder builder)
@@ -224,7 +246,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<TeamScheduleViewModelFactory>().As<ITeamScheduleViewModelFactory>();
 			builder.RegisterType<TeamSchedulePersonsProvider>().As<ITeamSchedulePersonsProvider>();
 			builder.RegisterType<TeamScheduleProjectionForMtwForMtwProvider>().As<ITeamScheduleProjectionForMTWProvider>();
-			builder.RegisterType<LayerViewModelReworkedMapper>().As<ILayerViewModelReworkedMapper>();	
+			builder.RegisterType<LayerViewModelReworkedMapper>().As<ILayerViewModelReworkedMapper>();
 			builder.RegisterType<TeamScheduleViewModelReworkedFactory>().As<ITeamScheduleViewModelReworkedFactory>();
 			builder.RegisterType<TimeLineViewModelReworkedFactory>().As<ITimeLineViewModelReworkedFactory>();
 			builder.RegisterType<TimeLineViewModelReworkedMapper>().As<ITimeLineViewModelReworkedMapper>();

@@ -22638,6 +22638,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Recipient has no shift trade permission.
+        /// </summary>
+        public static string RecipientHasNoShiftTradePermission {
+            get {
+                return ResourceManager.GetString("RecipientHasNoShiftTradePermission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recruitment.
         /// </summary>
         public static string Recruitment {

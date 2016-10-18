@@ -508,9 +508,11 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceNightRestChecker.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\CommandProvider\CancelAbsenceRequestCommandProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeRequestPersonToPermissionValidator.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradePersonScheduleProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeSiteOpenHourFilter.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftTradePersonScheduleProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftTradeRequestPersonToPermissionValidator.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftTradeSiteOpenHourFilter.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DateTimeMappingUtils.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradePersonScheduleViewModelMapper.cs" />

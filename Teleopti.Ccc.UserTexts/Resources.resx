@@ -15042,4 +15042,8 @@ These options are activated:
     <value>This absence will exceed person account limits. </value>
     <comment>Message to show when an absence will exceed person account limits.</comment>
   </data>
+  <data name="RecipientHasNoShiftTradePermission" xml:space="preserve">
+    <value>Recipient has no shift trade permission</value>
+    <comment>Error message on deny shift trade request</comment>
+  </data>
 </root>

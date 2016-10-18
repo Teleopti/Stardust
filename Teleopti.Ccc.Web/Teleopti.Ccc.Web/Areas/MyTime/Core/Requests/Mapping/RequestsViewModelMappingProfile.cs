@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			_toggleManager = toggleManager;
 		}
 
-
 		protected override void Configure()
 		{
 			CreateMap<IPersonRequest, RequestViewModel>()
@@ -206,7 +205,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				return "GET, CANCEL";
 			}
-			
+
 			return personRequest.IsWaitlisted ? "GET, DELETE" : "GET";
 		}
 
@@ -217,12 +216,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				return false;
 			}
 
-
 			if (!(personRequest.Request is AbsenceRequest))
 			{
 				return false;
 			}
-
 
 			var dateforDayCancellationCheck = new DateOnly (personRequest.Request.Period.LocalStartDateTime);
 			if ( dateforDayCancellationCheck >= DateOnly.Today)

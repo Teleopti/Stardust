@@ -27,6 +27,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeSetChecksum;
 		private readonly IShiftTradeRequestProvider _shiftTradeRequestprovider;
 		private readonly IToggleManager _toggleManager;
+		private readonly IShiftTradeRequestPersonToPermissionValidator _shiftTradeRequestPermissionValidator;
+		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 
 		public ShiftTradeRequestPersister(IPersonRequestRepository personRequestRepository,
 			IShiftTradeRequestMapper shiftTradeRequestMapper,
@@ -38,7 +40,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			ICurrentUnitOfWork currentUnitOfWork,
 			IShiftTradeRequestSetChecksum shiftTradeSetChecksum,
 			IShiftTradeRequestProvider shiftTradeRequestprovider,
-			IToggleManager toggleManager)
+			IToggleManager toggleManager,
+			IShiftTradeRequestPersonToPermissionValidator shiftTradePersonToPermissionValidator,
+			IPersonRequestCheckAuthorization personRequestCheckAuthorization)
 		{
 			_personRequestRepository = personRequestRepository;
 			_shiftTradeRequestMapper = shiftTradeRequestMapper;
@@ -51,6 +55,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_shiftTradeSetChecksum = shiftTradeSetChecksum;
 			_shiftTradeRequestprovider = shiftTradeRequestprovider;
 			_toggleManager = toggleManager;
+			_shiftTradeRequestPermissionValidator = shiftTradePersonToPermissionValidator;
+			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 		}
 
 		public RequestViewModel Persist(ShiftTradeRequestForm form)
@@ -70,9 +76,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_shiftTradeSetChecksum.SetChecksum(personRequest.Request);
 			_personRequestRepository.Add(personRequest);
 
-			createMessage(personRequest, form);
+			var permissionSatisfied =
+				_shiftTradeRequestPermissionValidator.IsSatisfied(personRequest.Request as IShiftTradeRequest);
+			if (!permissionSatisfied)
+			{
+				personRequest.Deny(null, Resources.RecipientHasNoShiftTradePermission, _personRequestCheckAuthorization);
+			}
 
 			var requestViewModel = _autoMapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+			if (!permissionSatisfied)
+			{
+				return requestViewModel;
+			}
+
+			createMessage(personRequest, form);
+
 			var workflowControlSet = _shiftTradeRequestprovider.RetrieveUserWorkflowControlSet();
 			if (form.ShiftExchangeOfferId == null || !workflowControlSet.LockTrading)
 			{
