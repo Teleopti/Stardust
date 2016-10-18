@@ -16,5 +16,6 @@ namespace Teleopti.Wfm.Administration.Core
 		bool LoginCanBeCreated(string connectionString, string login, string password, SqlVersion sqlVersion, out string message);
 		void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, string pwd, SqlVersion sqlVersion);
 		SqlVersion Version(string connectionToNewDb);
+		void AddSystemUserToPersonInfo(string connectionToNewDb, Guid personId, string userName, string password, string tenantPassword);
 	}
 }

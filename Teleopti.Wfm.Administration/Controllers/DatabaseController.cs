@@ -377,7 +377,21 @@ namespace Teleopti.Wfm.Administration.Controllers
 			personInfo.SetApplicationLogonCredentials(_checkPasswordStrength, userName, password, _currentHashFunction);
 			_currentTenantSession.CurrentSession().Save(personInfo);
 
+			addTheUserToTheTheTenantToo(_currentTenantSession.CurrentSession().Connection.ConnectionString,
+				tenant.DataSourceConfiguration.ApplicationConnectionString, personInfo);
+			
 			return new TenantResultModel { Success = true, Message = "Created new user." };
+		}
+
+		private void addTheUserToTheTheTenantToo(string currentTenant, string superUserInTenant, PersonInfo personInfo)
+		{
+			var currTenant = new SqlConnectionStringBuilder(currentTenant);
+			var userTenant = new SqlConnectionStringBuilder(superUserInTenant);
+			if(currTenant.DataSource.Equals(userTenant.DataSource) && currTenant.InitialCatalog.Equals(userTenant.InitialCatalog))
+				return;
+			_databaseHelperWrapper.AddSystemUserToPersonInfo(superUserInTenant, personInfo.Id,
+				personInfo.ApplicationLogonInfo.LogonName, personInfo.ApplicationLogonInfo.LogonPassword, personInfo.TenantPassword);
+
 		}
 	}
 

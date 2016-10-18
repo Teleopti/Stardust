@@ -22,6 +22,17 @@ INSERT INTO PersonInApplicationRole
 SELECT '{2}', '193AD35C-7735-44D7-AC0C-B8EDA0011E5F' , GETUTCDATE()", firstName, lastName, personId);
 			_execute.ExecuteNonQuery(sql);
 		}
+		//
+		public void AddSystemUserToPersonInfo(Guid personId, string userName, string password, string tenantPassword)
+		{
+			var sql = string.Format(@"if exists (select top 1 id from Tenant.PersonInfo WHERE ApplicationLogonName = '{0}') return
+if (select top 1 id from Tenant.Tenant) = 1
+BEGIN INSERT INTO Tenant.PersonInfo 
+(Id, Tenant, [Identity], ApplicationLogonName, ApplicationLogonPassword, LastPasswordChange, InvalidAttemptsSequenceStart, IsLocked, InvalidAttempts, TenantPassword)
+VALUES('{2}', 1, null, '{0}', '{1}', GETUTCDATE(), GETUTCDATE(), 0, 0,  '{3}')
+END", userName, password, personId, tenantPassword);
+			_execute.ExecuteNonQuery(sql);
+		}
 
 		public void AddBusinessUnit(string name)
 		{

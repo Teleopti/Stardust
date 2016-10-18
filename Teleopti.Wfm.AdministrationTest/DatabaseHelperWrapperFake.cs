@@ -57,5 +57,11 @@ namespace Teleopti.Wfm.AdministrationTest
 		{
 			return new SqlVersion(12,false);
 		}
+
+		public void AddSystemUserToPersonInfo(string connectionToNewDb, Guid personId, string userName, string password,
+			string tenantPassword)
+		{
+			
+		}
 	}
 }

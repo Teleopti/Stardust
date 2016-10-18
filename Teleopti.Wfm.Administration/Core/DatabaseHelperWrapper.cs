@@ -102,6 +102,12 @@ namespace Teleopti.Wfm.Administration.Core
 			helper.ConfigureSystem().AddSystemUser(personId, firstName, lastName);
 		}
 
+		public void AddSystemUserToPersonInfo(string connectionToNewDb, Guid personId, string userName, string password, string tenantPassword)
+		{
+			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
+			helper.ConfigureSystem().AddSystemUserToPersonInfo(personId, userName, password, tenantPassword);
+		}
+
 		public SqlVersion Version(string connectionToNewDb)
 		{
 			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
