@@ -36,12 +36,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		{
 			var sites = allPermittedSites();
 			var numberOfAgents = sites.Any() ? _numberOfAgentsInSiteReader.FetchNumberOfAgents(sites.Select(x => x.Id.Value)) : new Dictionary<Guid, int>();
-			return sites.Select(site => new SiteViewModel
+			return sites.Select(site =>
 			{
-				Id = site.Id.Value,
-				Name = site.Description.Name,
-				NumberOfAgents = getNumberOfAgents(numberOfAgents, site.Id.Value),
-				OpenHours = openHours(site)
+				int tempNumberOfAgents;
+				var agents = numberOfAgents.TryGetValue(site.Id.Value, out tempNumberOfAgents) ? tempNumberOfAgents : 0;
+				return new SiteViewModel
+				{
+					Id = site.Id.Value,
+					Name = site.Description.Name,
+					NumberOfAgents = agents,
+					OpenHours = openHours(site)
+				};
 			}).ToList();
 		}
 
@@ -62,12 +67,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		{
 			var sites = allPermittedSites();
 			var numberOfAgents = sites.Any() ? _numberOfAgentsInSiteReader.ForSkills(sites.Select(x => x.Id.Value), skillIds) : new Dictionary<Guid, int>();
-			return sites.Select(site => new SiteViewModel
-			{
-				Id = site.Id.Value,
-				Name = site.Description.Name,
-				NumberOfAgents = getNumberOfAgents(numberOfAgents, site.Id.Value)
-			}).ToList();
+			return
+				from num in numberOfAgents
+				from site in sites
+				where num.Key == site.Id.Value
+				select new SiteViewModel
+				{
+					Id = site.Id.Value,
+					Name = site.Description.Name,
+					NumberOfAgents = num.Value
+				};
 		}
 
 		private IOrderedEnumerable<ISite> allPermittedSites()
@@ -78,12 +87,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						_authorization.Current()
 							.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _now.LocalDateOnly(), s))
 				.OrderBy(x => x.Description.Name, StringComparer.Create(_uiCulture.GetUiCulture(), false));
-		}
-
-		private static int getNumberOfAgents(IDictionary<Guid, int> agentsInSites, Guid siteId)
-		{
-			int tempNumberOfAgents;
-			return agentsInSites.TryGetValue(siteId, out tempNumberOfAgents) ? tempNumberOfAgents : 0;
 		}
 	}
 }

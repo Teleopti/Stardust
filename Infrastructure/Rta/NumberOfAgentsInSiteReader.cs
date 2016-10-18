@@ -6,6 +6,7 @@ using NHibernate.Mapping;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -80,7 +81,7 @@ group by a.Site";
 					.List()
 					.Cast<siteViewModel>();
 
-			return initializeAndConcat(siteIds, models);
+			return models.ToDictionary(x => x.SiteId, y => y.NumberOfAgents);
 		}
 
 		private IDictionary<Guid, int> initializeAndConcat(IEnumerable<Guid> siteIds, IEnumerable<siteViewModel> models)
@@ -90,7 +91,7 @@ group by a.Site";
 				where !models.Select(x => x.SiteId).Contains(siteId)
 				select new siteViewModel {SiteId = siteId, NumberOfAgents = 0};
 
-			return initializedSites.Concat(models).ToDictionary(x => x.SiteId, y => y.NumberOfAgents);
+			return  initializedSites.Concat(models).ToDictionary(x => x.SiteId, y => y.NumberOfAgents);
 		}
 
 

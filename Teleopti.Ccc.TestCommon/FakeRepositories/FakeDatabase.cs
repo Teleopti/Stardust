@@ -41,6 +41,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return database.WithSite(id, "s");
 		}
+
+		public static FakeDatabase WithSite(this FakeDatabase database)
+		{
+			return database.WithSite(null, "s");
+		}
 	}
 
 	public static class FakeDatabaseAgentExtensions

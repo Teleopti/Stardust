@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -69,6 +70,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var result = WithUnitOfWork.Get(() => Target.ForSkills(new[] { siteId }, new[] { skillId }));
 
 			result[siteId].Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldNotReturnSiteWithoutAgents()
+		{
+			WithUnitOfWork.Get(() => Target.ForSkills(new[] {Guid.NewGuid()}, new[] {Guid.NewGuid()}))
+				.Should().Be.Empty();
 		}
 	}
 }

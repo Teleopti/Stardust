@@ -99,6 +99,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			result.NumberOfAgents.Should().Be(20);
 		}
 
+		[Test]
+		public void ShouldNotReturnEmptySite()
+		{
+			var siteId = Guid.NewGuid();
+			var skillId = Guid.NewGuid();
+			Database
+				.WithSite(siteId)
+				.WithSite();
+			AgentsInSite.Has(siteId, skillId, 20);
+
+			Target.ForSkills(new[] {skillId}).Single()
+				.Id.Should().Be(siteId);
+		}
+
 
 	}
 }
