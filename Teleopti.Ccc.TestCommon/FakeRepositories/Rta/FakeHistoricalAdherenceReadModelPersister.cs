@@ -66,8 +66,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public HistoricalAdherenceReadModel Read(Guid personId, DateTime startTime, DateTime endTime)
 		{
+			var period = new DateTimePeriod(startTime.AddHours(-2), endTime.AddDays(1));
 			var filteredData = _data
-				.Where(x => x.PersonId == personId && new DateTimePeriod(startTime.AddHours(-2), endTime.AddDays(1)).Contains(x.Timestamp))
+				.Where(x => x.PersonId == personId && period.Contains(x.Timestamp))
 				.OrderBy(x => x.Timestamp)
 				.ToArray();
 			return HistoricalAdherenceReadModelReader.BuildReadModel(filteredData, personId);

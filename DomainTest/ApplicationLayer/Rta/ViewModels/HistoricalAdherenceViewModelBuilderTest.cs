@@ -206,5 +206,33 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			data.Schedules.Single().StartTime.Should().Be("2016-10-12T08:00:00");
 		}
+
+		[Test]
+		public void ShouldNotCreateMultipleOutOfAdherencesWithoutEndTime()
+		{
+			Now.Is("2016-10-12 12:00");
+			var person = Guid.NewGuid();
+
+			Database.WithAgent(person, "nicklas", TimeZoneInfoFactory.UtcTimeZoneInfo());
+			ReadModel.Has(new HistoricalAdherenceReadModel
+			{
+				PersonId = person,
+				OutOfAdherences = new[]
+				{
+					new HistoricalOutOfAdherenceReadModel
+					{
+						StartTime = "2016-10-12 08:00".Utc()
+					},
+					new HistoricalOutOfAdherenceReadModel
+					{
+						StartTime = "2016-10-12 09:00".Utc()
+					}
+				}
+			});
+
+			var data = Target.Build(person);
+
+			data.OutOfAdherences.Single().StartTime.Should().Be("2016-10-12T08:00:00");
+		}
 	}
 }

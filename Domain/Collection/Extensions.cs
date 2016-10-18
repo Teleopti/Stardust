@@ -137,6 +137,11 @@ namespace Teleopti.Ccc.Domain.Collection
 			return !source.Any();
 		}
 
+		public static bool IsEmpty<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+		{
+			return !source.Any(predicate);
+		}
+
 		public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
 		{
 			return source == null || !source.Any();

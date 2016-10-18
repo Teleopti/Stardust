@@ -31,7 +31,7 @@ ORDER BY [Timestamp] ASC")
 				.SetParameter("PersonId", personId)
 				.SetParameter("StartTime", startTime)
 				.SetParameter("EndTime", endTime)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(HistoricalAdherenceInternalModel)))
+				.SetResultTransformer(Transformers.AliasToBean<HistoricalAdherenceInternalModel>())
 				.List<HistoricalAdherenceInternalModel>();
 
 			return BuildReadModel(result, personId);
@@ -41,18 +41,21 @@ ORDER BY [Timestamp] ASC")
 		{
 			var seed = new HistoricalAdherenceReadModel
 			{
-				PersonId = personId
+				PersonId = personId,
+				OutOfAdherences = Enumerable.Empty<HistoricalOutOfAdherenceReadModel>()
 			};
 			return data.Aggregate(seed, (x, im) =>
 			{
 				if (im.Adherence == 2)
-					x.OutOfAdherences = x.OutOfAdherences
-						.EmptyIfNull()
-						.Append(new HistoricalOutOfAdherenceReadModel {StartTime = im.Timestamp})
-						.ToArray();
+				{
+					if (x.OutOfAdherences.IsEmpty(y => !y.EndTime.HasValue))
+						x.OutOfAdherences = x.OutOfAdherences
+							.Append(new HistoricalOutOfAdherenceReadModel {StartTime = im.Timestamp})
+							.ToArray();
+				}
 				else
 				{
-					var existing = x.OutOfAdherences?.FirstOrDefault(y => !y.EndTime.HasValue);
+					var existing = x.OutOfAdherences.FirstOrDefault(y => !y.EndTime.HasValue);
 					if (existing != null)
 						existing.EndTime = im.Timestamp;
 				}
