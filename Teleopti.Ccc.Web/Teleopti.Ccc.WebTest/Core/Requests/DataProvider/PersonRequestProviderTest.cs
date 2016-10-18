@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			};
 
 			var earliestDateLocal = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timezone).AddDays(-10).Date;
-			var earliestDateUtc = TimeZoneInfo.ConvertTimeToUtc(earliestDateLocal);
+			var earliestDateUtc = TimeZoneInfo.ConvertTimeToUtc(earliestDateLocal, timezone);
 			repository.Stub(x => x.FindAllRequestsForAgentByType(person, paging, earliestDateUtc, requestTypes.ToArray()))
 				.IgnoreArguments().Return(personRequests);
 

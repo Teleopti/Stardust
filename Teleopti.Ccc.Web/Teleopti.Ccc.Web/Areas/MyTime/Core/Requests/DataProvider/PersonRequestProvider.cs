@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			{
 				var currentTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 				var earliestDateLocal = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, currentTimezone).AddDays(-10).Date;
-				earliestDateUtc = TimeZoneInfo.ConvertTimeToUtc(earliestDateLocal);
+				earliestDateUtc = TimeZoneInfo.ConvertTimeToUtc(earliestDateLocal, currentTimezone);
 			}
 
 			return _repository.FindAllRequestsForAgentByType(_loggedOnUser.CurrentUser(), paging,
