@@ -28,7 +28,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void JobHistoryListShouldNotCrash()
 		{
-			Target.JobHistoryList();
+			Target.JobHistoryList(1, 10);
 		}
 
 		[Test]
