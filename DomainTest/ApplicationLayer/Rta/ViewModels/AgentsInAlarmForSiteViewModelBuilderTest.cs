@@ -46,6 +46,47 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		}
 
 		[Test]
+		public void ShouldBuildForMultipleSitesForSkill()
+		{
+			Now.Is("2016-06-21 08:30");
+			var siteId1 = Guid.NewGuid();
+			var siteId2 = Guid.NewGuid();
+			var skill = Guid.NewGuid();
+			Sites.Has(siteId1);
+			Sites.Has(siteId2);
+			Database
+				.Has(new AgentStateReadModel
+				{
+					PersonId = Guid.NewGuid(),
+					SiteId = siteId1,
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-06-21 08:29".Utc(),
+				})
+				.OnSkill(skill)
+				.Has(new AgentStateReadModel
+				{
+					PersonId = Guid.NewGuid(),
+					SiteId = siteId2,
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-06-21 08:29".Utc(),
+				})
+				.OnSkill(skill)
+				.Has(new AgentStateReadModel
+				{
+					PersonId = Guid.NewGuid(),
+					SiteId = siteId2,
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-06-21 08:29".Utc(),
+				})
+				.OnSkill(skill);
+
+			var result = Target.ForSkills(new[] {skill});
+
+			result.Single(x => x.Id == siteId1).OutOfAdherence.Should().Be(1);
+			result.Single(x => x.Id == siteId2).OutOfAdherence.Should().Be(2);
+		}
+
+		[Test]
 		public void ShouldBuildForSkillWihNoAgentsInAlarm()
 		{
 			var skill = Guid.NewGuid();

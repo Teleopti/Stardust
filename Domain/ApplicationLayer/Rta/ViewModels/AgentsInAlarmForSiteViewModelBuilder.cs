@@ -38,13 +38,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		{
 			var adherence = _siteInAlarmReader.ReadForSkills(skillIds);
 			var sites = _siteRepository.LoadAll();
-			return sites.Select(s => new SiteOutOfAdherence
-				{
-					Id = s.Id.Value,
-					OutOfAdherence = adherence
-						.Select(a => a.Count)
-						.SingleOrDefault()
-				}).ToArray();
+			return from site in sites
+				   select new SiteOutOfAdherence()
+				   {
+					   Id = site.Id.Value,
+					   OutOfAdherence = 
+						   (from ad in adherence
+							where site.Id.Value == ad.SiteId
+							select ad.Count).SingleOrDefault()
+				   };
 		}
 	}
 }
