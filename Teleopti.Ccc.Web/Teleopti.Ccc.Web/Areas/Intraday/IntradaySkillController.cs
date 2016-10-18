@@ -21,7 +21,14 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		[UnitOfWork, HttpGet, Route("api/intraday/skills")]
 		public virtual IHttpActionResult GetAllSkills()
 		{
-			return Ok(_fetchSkillInIntraday.GetAll().Select(x => new { x.Id, x.Name }).ToArray());
+			return Ok(_fetchSkillInIntraday.GetAll()
+				.Select(x => new
+				{
+					x.Id,
+					x.Name,
+					x.DoDisplayData
+				})
+				.ToArray());
 		}
 	}
 }

@@ -5,6 +5,7 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -28,11 +29,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					Id = skill.Id.Value,
 					Name = skill.Name,
 					IsDeleted = ((Skill) skill).IsDeleted,
-					DoDisplayData =
-						skill.SkillType.Description.Name.Equals("SkillTypeInboundTelephony", StringComparison.InvariantCulture)
+					DoDisplayData = checkDisplay(skill)
 				})
 				.OrderBy(s => s.Name)
 				.ToList();
+		}
+
+		private bool checkDisplay(ISkill skill)
+		{
+			var isMultisiteSkill = skill.GetType() == typeof(MultisiteSkill);
+
+			return !isMultisiteSkill && skill.SkillType.Description.Name.Equals("SkillTypeInboundTelephony", StringComparison.InvariantCulture);
 		}
 	}
 }

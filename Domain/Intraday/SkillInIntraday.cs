@@ -4,12 +4,33 @@ namespace Teleopti.Ccc.Domain.Intraday
 {
 	public class SkillInIntraday
 	{
-		public string Name { get; set; }
+		private string _name;
+		private Guid _id;
+		private bool _isDeleted;
+		private bool _doDisplayData;
 
-		public Guid Id { get; set; }
+		public virtual string Name
+		{
+			get { return _name; }
+			set { _name = value; }
+		}
 
-		public bool IsDeleted { get; set; }
+		public virtual Guid Id
+		{
+			get { return _id; }
+			set { _id = value; }
+		}
 
-		public bool DoDisplayData { get; set; }
+		public virtual bool IsDeleted
+		{
+			get { return _isDeleted; }
+			set { _isDeleted = value; }
+		}
+
+		public virtual bool DoDisplayData
+		{
+			get { return _doDisplayData; }
+			set { _doDisplayData = value; }
+		}
 	}
 }

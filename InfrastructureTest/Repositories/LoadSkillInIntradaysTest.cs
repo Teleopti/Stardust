@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldOnlyLoadInboundPhoneSkill()
+		public void ShouldOnlyMarkInboundPhoneSkillForDisplay()
 		{
 			ISkillTypePhone skillTypePhone = new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony);
 			ISkillTypeEmail skillTypeEmail = new SkillTypeEmail(new Description("SkillTypeEmail"), ForecastSource.Email);
@@ -106,6 +106,42 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var skills = target.Skills().ToList();
 			skills.Count().Should().Be.EqualTo(2);
 			skills.First().Name.Should().Be.EqualTo(emailSkill.Name);
+			skills.First().DoDisplayData.Should().Be.EqualTo(false);
+			skills.Last().DoDisplayData.Should().Be.EqualTo(true);
+		}
+
+		[Test]
+		public void ShouldNotMarkMultisiteSkillForDisplay()
+		{
+			ISkillTypePhone skillTypePhone = new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony);
+			var phoneSkill = SkillFactory.CreateSkill("Phone", skillTypePhone, 15);
+			var multiSiteSkill = SkillFactory.CreateMultisiteSkill("Multisite", skillTypePhone, 15);
+			var activity = new Activity("dummyActivity");
+			phoneSkill.Activity = activity;
+			multiSiteSkill.Activity = activity;
+			var queueSourceHelpdesk = QueueSourceFactory.CreateQueueSourceHelpdesk();
+
+			PersistAndRemoveFromUnitOfWork(queueSourceHelpdesk);
+
+			PersistAndRemoveFromUnitOfWork(skillTypePhone);
+
+			PersistAndRemoveFromUnitOfWork(activity);
+			PersistAndRemoveFromUnitOfWork(phoneSkill);
+			PersistAndRemoveFromUnitOfWork(multiSiteSkill);
+
+			PersistAndRemoveFromUnitOfWork(queueSourceHelpdesk);
+
+			var workloadPhone = WorkloadFactory.CreateWorkload(phoneSkill);
+			var workloadEmail = WorkloadFactory.CreateWorkload(multiSiteSkill);
+			workloadPhone.AddQueueSource(queueSourceHelpdesk);
+			workloadEmail.AddQueueSource(queueSourceHelpdesk);
+			PersistAndRemoveFromUnitOfWork(workloadPhone);
+			PersistAndRemoveFromUnitOfWork(workloadEmail);
+
+			var target = new LoadSkillInIntradays(CurrUnitOfWork);
+			var skills = target.Skills().ToList();
+			skills.Count().Should().Be.EqualTo(2);
+			skills.First().Name.Should().Be.EqualTo(multiSiteSkill.Name);
 			skills.First().DoDisplayData.Should().Be.EqualTo(false);
 			skills.Last().DoDisplayData.Should().Be.EqualTo(true);
 		}
