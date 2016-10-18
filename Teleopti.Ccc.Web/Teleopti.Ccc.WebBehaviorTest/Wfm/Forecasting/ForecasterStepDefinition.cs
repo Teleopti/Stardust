@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.AssertVisibleUsingJQuery(".date-range-start-date strong");
 			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-start-date strong"), CultureInfo.GetCultureInfo(1053))));
 			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-end-date strong"), CultureInfo.GetCultureInfo(1053))));
-			Browser.Interactions.Click(".do-forecast");
+			Browser.Interactions.Click(".wfm-btn-invis-primary.do-forecast");
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".do-forecast");
 		}
 
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 				ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-start-date strong"), CultureInfo.GetCultureInfo(1053))));
 			if (!ScenarioContext.Current.ContainsKey("enddate"))
 				ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-end-date strong"), CultureInfo.GetCultureInfo(1053))));
-			Browser.Interactions.Click(".do-forecast");
+			Browser.Interactions.Click(".wfm-btn-invis-primary.do-forecast");
 		}
 
 		[Given(@"forecast result has loaded")]
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I select to modify the forecast")]
 		public void WhenISelectToModifyTheForecast()
 		{
-			Browser.Interactions.Click(".forecast-modify-button");
+			Browser.Interactions.Click(".wfm-btn-invis-primary.forecast-modify-button");
 		}
 
 		[When(@"I select to override forecasted values")]
