@@ -124,43 +124,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		// for logging
 		public override string ToString()
 		{
-			return $"PersonId: {PersonId}, BusinessUnitId: {BusinessUnitId}, TeamId: {TeamId}, SiteId: {SiteId}";
+			return $"Time: {CurrentTime}, UserCode: {UserCode}, StateCode: {StateCode}, SourceId: {SourceId}, DataSourceId: {DataSourceId}, PersonId: {PersonId}, BusinessUnitId: {BusinessUnitId}, TeamId: {TeamId}, SiteId: {SiteId}";
 		}
 
-		public DateTime? SnapshotId
-		{
-			get { return Input.SnapshotId ?? Stored?.BatchId; }
-		}
-
-		public Guid PlatformTypeId
-		{
-			get { return string.IsNullOrEmpty(Input.PlatformTypeId) ? Stored.PlatformTypeId() : Input.ParsedPlatformTypeId(); }
-		}
-
-		public string StateCode
-	    {
-	        get { return Input.StateCode ?? Stored?.StateCode; }
-	    }
-
-		public DateTime? StateStartTime
-	    {
-	        get { return State.StateChanged() ? CurrentTime : Stored?.StateStartTime; }
-	    }
-
-		public DateTime? RuleStartTime
-	    {
-		    get { return State.RuleChanged() ? CurrentTime : Stored?.RuleStartTime; }
-	    }
-
-		public bool IsAlarm
-		{
-			get { return _appliedAlarm.IsAlarm(State); }
-		}
-
-		public DateTime? AlarmStartTime
-		{
-		    get { return _appliedAlarm.StartTime(State, Stored, CurrentTime); }
-		}
+		public string SourceId => Input.SourceId ?? Stored.SourceId();
+		public int? DataSourceId => (Stored as AgentStateFound)?.DataSourceId;
+		public string UserCode => (Stored as AgentStateFound)?.UserCode ?? Input?.StateCode;
+		public DateTime? SnapshotId => Input.SnapshotId ?? Stored?.BatchId;
+		public Guid PlatformTypeId => string.IsNullOrEmpty(Input.PlatformTypeId) ? Stored.PlatformTypeId() : Input.ParsedPlatformTypeId();
+		public string StateCode => Input.StateCode ?? Stored?.StateCode;
+		public DateTime? StateStartTime => State.StateChanged() ? CurrentTime : Stored?.StateStartTime;
+		public DateTime? RuleStartTime => State.RuleChanged() ? CurrentTime : Stored?.RuleStartTime;
+		public bool IsAlarm => _appliedAlarm.IsAlarm(State);
+		public DateTime? AlarmStartTime => _appliedAlarm.StartTime(State, Stored, CurrentTime);
 
 		public AgentState MakeAgentState()
 		{
