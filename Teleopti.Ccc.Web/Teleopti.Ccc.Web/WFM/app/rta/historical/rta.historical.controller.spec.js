@@ -65,8 +65,8 @@ describe('RtaHistoricalController', function() {
 
 		var vm = $controllerBuilder.createController().vm;
 
-		expect(vm.agentsFullSchedule[0].DisplayStartTime).toEqual('2016-10-10 08:00:00');
-		expect(vm.agentsFullSchedule[0].DisplayEndTime).toEqual('2016-10-10 17:00:00');
+		expect(vm.agentsFullSchedule[0].DisplayStartTime).toEqual('08:00:00');
+		expect(vm.agentsFullSchedule[0].DisplayEndTime).toEqual('17:00:00');
 		expect(vm.agentsFullSchedule[0].Width).toEqual((9 / 11 * 100) + '%');
 		expect(vm.agentsFullSchedule[0].Offset).toEqual((1 / 11 * 100) + '%');
 	});
@@ -139,8 +139,8 @@ describe('RtaHistoricalController', function() {
 
 		var vm = $controllerBuilder.createController().vm;
 
-		expect(vm.outOfAdherences[0].DisplayStartTime).toEqual('2016-10-10 08:00:00');
-		expect(vm.outOfAdherences[0].DisplayEndTime).toEqual('2016-10-10 08:15:00');
+		expect(vm.outOfAdherences[0].DisplayStartTime).toEqual('08:00:00');
+		expect(vm.outOfAdherences[0].DisplayEndTime).toEqual('08:15:00');
 		expect(vm.outOfAdherences[0].Width).toEqual((15 * 60) / (12 * 3600) * 100 + '%');
 		expect(vm.outOfAdherences[0].Offset).toEqual(1 / 12 * 100 + '%');
 	});
@@ -191,7 +191,7 @@ describe('RtaHistoricalController', function() {
 
 		var vm = $controllerBuilder.createController().vm;
 
-		expect(vm.fullTimeline[1].Time).toEqual('08:00');
+		expect(vm.fullTimeline[0].Time).toEqual('08:00');
 		expect(vm.fullTimeline[vm.fullTimeline.length - 1].Time).toEqual('17:00');
 	});
 
