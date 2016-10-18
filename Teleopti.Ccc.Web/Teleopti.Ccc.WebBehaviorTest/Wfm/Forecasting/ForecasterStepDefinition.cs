@@ -82,13 +82,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[Then(@"I use default forecast period and forecast for one workload")]
 		public void WhenIUseDefaultForecastPeriodAndForecastForOneWorkload()
 		{
-			Browser.Interactions.AssertNotExists(".wfm-card-selected .wfm-btn-invis-default.forecast-workload", ".wfm-card-selected .wfm-btn-invis-disabled.forecast-workload");
+			Browser.Interactions.AssertExists(".wfm-card-selected .wfm-btn-invis-default.forecast-workload");
 			Browser.Interactions.Click(".wfm-card-selected .wfm-btn-invis-default.forecast-workload");
 			Browser.Interactions.AssertExists(".date-range-start-date strong");
+			
+			var swedishCulture = CultureInfo.GetCultureInfo(1053);
 			if (!ScenarioContext.Current.ContainsKey("startdate"))
-				ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-start-date strong"), CultureInfo.GetCultureInfo(1053))));
+				ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-start-date strong"), swedishCulture)));
 			if (!ScenarioContext.Current.ContainsKey("enddate"))
-				ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-end-date strong"), CultureInfo.GetCultureInfo(1053))));
+				ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-end-date strong"), swedishCulture)));
+			Browser.Interactions.AssertExists(".wfm-btn-invis-primary.do-forecast");
 			Browser.Interactions.Click(".wfm-btn-invis-primary.do-forecast");
 		}
 
