@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.IocCommon
 		public bool BehaviorTestServer { get; set; }
 		public bool AllEventPublishingsAsSync { get; set; }
 		public bool WebByPassDefaultPermissionCheck_37984 { get; set; }
+		public string RtaAgentStateTraceMatch { get; set; }
 
 		public IocArgs(IConfigReader configReader)
 		{
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.IocCommon
 			DataSourceConfigurationSetter = Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForDesktop();
 			ImplementationTypeForCurrentUnitOfWork = typeof(CurrentUnitOfWork);
 			MessageBrokerUrl = configReader.AppConfig("MessageBroker");
+			RtaAgentStateTraceMatch = configReader.AppConfig("RtaAgentStateTraceMatch");
 		}
 
 	}

@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly Action<Context> _updateState;
 		private readonly ProperAlarm _appliedAlarm;
 		private readonly Lazy<ScheduleState> _schedule;
+		private readonly AgentStateFound _found;
 
 		public Context(
 			DateTime utcNow,
@@ -54,6 +55,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (stored != null)
 			{
 				Stored = stored.Invoke();
+				_found = Stored as AgentStateFound;
 				// if the stored state has no time
 				// its just a prepared state
 				// and there's no real previous state
@@ -127,9 +129,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return $"Time: {CurrentTime}, UserCode: {UserCode}, StateCode: {StateCode}, SourceId: {SourceId}, DataSourceId: {DataSourceId}, PersonId: {PersonId}, BusinessUnitId: {BusinessUnitId}, TeamId: {TeamId}, SiteId: {SiteId}";
 		}
 
-		public string SourceId => Input.SourceId ?? Stored.SourceId();
-		public int? DataSourceId => (Stored as AgentStateFound)?.DataSourceId;
-		public string UserCode => (Stored as AgentStateFound)?.UserCode ?? Input?.StateCode;
+		public string UserCode => _found?.UserCode;
+		public int? DataSourceId => _found?.DataSourceId;
+		public string SourceId => Input.SourceId ?? Stored?.SourceId;
 		public DateTime? SnapshotId => Input.SnapshotId ?? Stored?.BatchId;
 		public Guid PlatformTypeId => string.IsNullOrEmpty(Input.PlatformTypeId) ? Stored.PlatformTypeId() : Input.ParsedPlatformTypeId();
 		public string StateCode => Input.StateCode ?? Stored?.StateCode;
@@ -149,7 +151,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				BatchId = SnapshotId,
 
 				PlatformTypeId = PlatformTypeId,
-				SourceId = Input.SourceId ?? Stored.SourceId(),
+				SourceId = SourceId,
 				ReceivedTime = CurrentTime,
 
 				StateCode = StateCode,

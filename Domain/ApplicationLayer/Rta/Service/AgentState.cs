@@ -61,26 +61,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		public static Guid PlatformTypeId(this AgentState stored)
 		{
-			return stored.get(s => s.PlatformTypeId);
-		}
-
-		public static string SourceId(this AgentState stored)
-		{
-			return stored.get(s => s.SourceId);
+			return stored?.PlatformTypeId ?? default(Guid);
 		}
 
 		public static DateTime ReceivedTime(this AgentState stored)
 		{
-			return stored.get(s => s.ReceivedTime ?? DateTime.MinValue);
-		}
-		
-
-
-		private static T get<T>(this AgentState stored, Func<AgentState, T> getter)
-		{
-			if (stored == null)
-				return default(T);
-			return getter(stored);
+			return stored?.ReceivedTime ?? DateTime.MinValue;
 		}
 	}
 }

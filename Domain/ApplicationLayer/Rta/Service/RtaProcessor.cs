@@ -1,7 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -14,6 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly ICurrentEventPublisher _eventPublisher;
 		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
+		private readonly IAgentStateTracer _agentStateTracer;
 
 		public RtaProcessor(
 			ShiftEventPublisher shiftEventPublisher,
@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			AdherenceEventPublisher adherenceEventPublisher,
 			IEventPublisherScope eventPublisherScope,
 			ICurrentEventPublisher eventPublisher,
-			IAgentStateReadModelUpdater agentStateReadModelUpdater)
+			IAgentStateReadModelUpdater agentStateReadModelUpdater,
+			IAgentStateTracer agentStateTracer)
 		{
 			_shiftEventPublisher = shiftEventPublisher;
 			_activityEventPublisher = activityEventPublisher;
@@ -31,31 +32,51 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_eventPublisherScope = eventPublisherScope;
 			_eventPublisher = eventPublisher;
 			_agentStateReadModelUpdater = agentStateReadModelUpdater;
+			_agentStateTracer = agentStateTracer;
 		}
 
 		[LogInfo]
 		public virtual void Process(Context context)
 		{
-			if (!context.ShouldProcessState())
-				return;
-			
-			var eventCollector = new EventCollector(_eventPublisher);
-
-			context.UpdateAgentState();
-
-			using (_eventPublisherScope.OnThisThreadPublishTo(eventCollector))
+			using (var trace = _agentStateTracer.Trace(context))
 			{
-				_shiftEventPublisher.Publish(context);
-				_activityEventPublisher.Publish(context);
-				_stateEventPublisher.Publish(context);
+				try
+				{
+					if (!context.ShouldProcessState())
+					{
+						trace.ProcessSkipped();
+						return;
+					}
 
-				context.Adherence.AdherenceChanges()
-					.ForEach(x => _adherenceEventPublisher.Publish(context, x.Time, x.Adherence));
+					var eventCollector = new EventCollector(_eventPublisher);
+
+					context.UpdateAgentState();
+					trace.AgentStateUpdated();
+
+					using (_eventPublisherScope.OnThisThreadPublishTo(eventCollector))
+					{
+						_shiftEventPublisher.Publish(context);
+						_activityEventPublisher.Publish(context);
+						_stateEventPublisher.Publish(context);
+
+						context.Adherence.AdherenceChanges()
+							.ForEach(x => _adherenceEventPublisher.Publish(context, x.Time, x.Adherence));
+					}
+
+					var events = eventCollector.Publish();
+					trace.EventsPublished(events);
+
+					_agentStateReadModelUpdater.Update(context, events);
+				}
+				catch (Exception)
+				{
+					trace.Error();
+					throw;
+				}
+
 			}
 
-			var events = eventCollector.Publish();
-			
-			_agentStateReadModelUpdater.Update(context, events);
 		}
 	}
+
 }
