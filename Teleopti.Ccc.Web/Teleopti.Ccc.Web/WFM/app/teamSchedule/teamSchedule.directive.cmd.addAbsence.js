@@ -54,7 +54,7 @@
 				requestData.EndTime = vm.convertTime(moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"));
 			}
 
-			if (vm.checkPersonalAccountEnabled()) {
+			if (vm.checkPersonalAccountEnabled) {
 				CommandCheckService.checkPersonalAccounts(requestData)
 					.then(function(data) {
 						addAbsence(data);

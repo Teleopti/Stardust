@@ -112,8 +112,8 @@
 				actionOptions: ['DoNotModifyForTheseAgents', 'OverrideForTheseAgents'],
 			};
 			checkConfigs.checkPersonalAccounts = {
-				subject: 'TBD',
-				body: 'TBD',
+				subject: 'ThisAbsenceWillExceedPersonAccountLimits',
+				body: 'TheFollowingAgentsPersonAccountsWillBeAffected',
 				actionOptions: ['DoNotModifyForTheseAgents', 'OverrideForTheseAgents'],
 			};
 		}

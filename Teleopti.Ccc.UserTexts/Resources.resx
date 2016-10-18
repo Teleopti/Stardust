@@ -15034,4 +15034,12 @@ These options are activated:
     <value>Your absence request has been denied automatically. The start time of this request is {0}, it must be at least {1} minutes later than current time</value>
     <comment>{0} start time of request, {1} minimum minutes for expired threshold</comment>
   </data>
+  <data name="TheFollowingAgentsPersonAccountsWillBeAffected" xml:space="preserve">
+    <value>The following agents' person accounts will be affected. </value>
+    <comment>Message to show a list of agents whose person account is affected. </comment>
+  </data>
+  <data name="ThisAbsenceWillExceedPersonAccountLimits" xml:space="preserve">
+    <value>This absence will exceed person account limits. </value>
+    <comment>Message to show when an absence will exceed person account limits.</comment>
+  </data>
 </root>

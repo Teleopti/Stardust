@@ -30375,6 +30375,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The following agents&apos; person accounts will be affected. .
+        /// </summary>
+        public static string TheFollowingAgentsPersonAccountsWillBeAffected {
+            get {
+                return ResourceManager.GetString("TheFollowingAgentsPersonAccountsWillBeAffected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The group has to be empty before it is deleted.
         /// </summary>
         public static string TheGroupHasToBeEmptyBeforeDeleted {
@@ -30561,6 +30570,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ThirtyMinutes {
             get {
                 return ResourceManager.GetString("ThirtyMinutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This absence will exceed person account limits. .
+        /// </summary>
+        public static string ThisAbsenceWillExceedPersonAccountLimits {
+            get {
+                return ResourceManager.GetString("ThisAbsenceWillExceedPersonAccountLimits", resourceCulture);
             }
         }
         
