@@ -45,19 +45,19 @@ group by a.Team";
 			_now = now;
 		}
 
-		public IDictionary<Guid, int> FetchNumberOfAgents(ITeam[] teams)
+		public IDictionary<Guid, int> FetchNumberOfAgents(IEnumerable<Guid> teams)
 		{
 			var ret = new Dictionary<Guid, int>();
 			if (!teams.Any()) return ret;
 
 			var queryResult = _currentUnitOfWork.Session().CreateSQLQuery(sqlQuery)
-				.SetParameterList("teams", teams.Select(x => x.Id.Value))
+				.SetParameterList("teams", teams)
 				.SetDateTime("now", _now.UtcDateTime())
 				.List();
 
 			foreach (var team in teams)
 			{
-				ret[team.Id.Value] = 0;
+				ret[team] = 0;
 			}
 
 			foreach (var resItemArray in queryResult)

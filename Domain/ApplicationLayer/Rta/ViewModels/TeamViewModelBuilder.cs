@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		{
 			var teams = _teamRepository.FindTeamsForSite(siteId)
 				.OrderBy(x => x.Description.Name, StringComparer.Create(_uiCulture.GetUiCulture(), false)).ToArray();
-			var numberOfAgents = _numberOfAgentsInTeamReader.FetchNumberOfAgents(teams);
+			var numberOfAgents = _numberOfAgentsInTeamReader.FetchNumberOfAgents(teams.Select(x => x.Id.Value));
 
 			return teams.Select(team => new TeamViewModel
 			{

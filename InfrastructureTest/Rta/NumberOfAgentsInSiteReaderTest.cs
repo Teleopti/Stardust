@@ -48,8 +48,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		{
 			Now.Is("2016-10-17 08:00");
 			Database
-				.WithAgent("Ashley")
-				.WithTerminatedAgent("Pierre", "2016-10-17");
+				.WithAgent()
+				.WithTerminatedAgent("2016-10-17");
 			var siteId = Database.CurrentSiteId();
 
 			var result = WithUnitOfWork.Get(() => Target.FetchNumberOfAgents(new[] { siteId }));

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 	{
 		private readonly Dictionary<Guid, int> _data = new Dictionary<Guid, int>();
 
-		public IDictionary<Guid, int> FetchNumberOfAgents(ITeam[] teams)
+		public IDictionary<Guid, int> FetchNumberOfAgents(IEnumerable<Guid> teams)
 		{
 			return _data;
 		}

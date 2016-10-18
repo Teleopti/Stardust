@@ -114,6 +114,12 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		[UnitOfWork]
+		public virtual Guid CurrentTeamId()
+		{
+			return team().Id.Value;
+		}
+
+		[UnitOfWork]
 		public virtual Guid SkillIdFor(string name)
 		{
 			return _skills.LoadAll().Where(x => x.Name == name).Select(x => x.Id).Single().Value;
@@ -255,9 +261,9 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		[UnitOfWork]
-		public virtual Database WithTerminatedAgent(string name, string date)
+		public virtual Database WithTerminatedAgent(string date)
 		{
-			return withAgent(name, date.Date());
+			return withAgent(RandomName.Make(), date.Date());
 		}
 
 		private Database withAgent(string name, DateOnly? terminationDate = null)
