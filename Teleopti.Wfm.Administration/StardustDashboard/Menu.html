@@ -1,6 +1,5 @@
-﻿<ul class="nav nav-pills">
-	<li role="presentation" class="active"><a href="#/StardustDashboard">Stardust Dashboard</a></li>
-	<li role="presentation"><a href="#/StardustDashboard/nodes">Nodes</a></li>
-	<li role="presentation"><a href="#/StardustDashboard/queue">Queue</a></li>
-	<li role="presentation"><a href="#/StardustDashboard/jobs">Jobs</a></li>
+﻿<ul class="nav nav-tabs" ng-controller="menuController as vm">
+	<li role="presentation" id="nodes" ng-class="{'active': vm.nodesisActive}" ng-click="vm.changeCurrentTab('nodes')"><a href>Nodes</a></li>
+	<li role="presentation" id="queue" ng-class="{'active': vm.queueisActive}" ng-click="vm.changeCurrentTab('queue')"><a href>Queue</a></li>
+	<li role="presentation" id="jobs" ng-class="{'active': vm.jobsisActive}" ng-click="vm.changeCurrentTab('jobs')"><a href>Jobs</a></li>
 </ul>

@@ -33,6 +33,7 @@
 /// <reference path="stardustapp/jobcontroller.js" />
 /// <reference path="stardustapp/jobdetailscontroller.js" />
 /// <reference path="stardustapp/jobqueuecontroller.js" />
+/// <reference path="stardustapp/menucontroller.js" />
 /// <reference path="stardustapp/nodecontroller.js" />
 /// <reference path="stardustapp/nodedetailscontroller.js" />
 /// <reference path="stardustapp/summarycontroller.js" />
