@@ -1,38 +1,66 @@
 ﻿<div class="container body-content" ng-controller="jobDetailsController as vm">
 	<div class="nav" ng-include="'./StardustDashboard/menu.html'" role="navigation"></div>
-	<div class="col-md-12">
-		<a style="float: left; padding-top: 25px; padding-right: 50px" href="#StardustDashboard/jobs"><img alt="back" title="Back to List Jobs" src="Content/images/left_round.png" /></a>
-		<h2>Job Details</h2>
-		<h5>Note! All timestamps are in UTC!</h5>
-		<div>
+	<a style="float: left; padding-top: 25px; padding-right: 50px" href="#StardustDashboard/jobs"><img alt="back" title="Back to List Jobs" src="Content/images/left_round.png" /></a>
+	<h2>Job Details</h2>
+	<div>
+		<div class="row">
+			<h4 ng-class="vm.Job.Result=='Success' ? 'successResult' : (vm.Job.Result=='' ? 'processingResult' : 'failureResult')">Job {{vm.Job.Result}}!</h4>
+			<div style="font-size: 14p; font-weight: bold; color: red">{{vm.JobError}}</div>
+			<h4>{{vm.Job.Name}}</h4>
+		</div>
 			<div class="row">
-				<div style="font-size: 14p; font-weight: bold; color: red">{{vm.JobError}}</div>
-				<table>
-					<thead>
-						<tr>
-							<th>Type</th>
-							<th>Created By</th>
-							<th>Created At </th>
-							<th>Started</th>
-							<th>Ended</th>
-							<th>Total Duration</th>
-							<th>Sent to</th>
-							<th>Result</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>{{vm.Job.Name}}</td>
-							<td>{{vm.Job.CreatedBy}}</td>
-							<td>{{vm.Job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-							<td>{{vm.Job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-							<td>{{vm.Job.Ended | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-							<td>{{vm.Job.TotalDuration}}</td>
-							<td>{{vm.Job.SentToWorkerNodeUri}}</td>
-							<td>{{vm.Job.Result}}</td>
-						</tr>
-					</tbody>
-				</table>
+				<div class="col-md-7">
+					<div class="row">
+						<div class="col-md-2">
+							<p class="titleBlue">Created</p>
+						</div>
+						<div class="col-md-10">
+							{{vm.Job.CreatedBy}} {{vm.Job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2">
+							<p class="titleBlue">Duration</p>
+						</div>
+						<div class="col-md-10">
+							{{vm.Job.TotalDuration | date : 'yyyy-MM-dd HH:mm:ss'}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2">
+							<p class="titleBlue">Payload</p>
+						</div>
+						<div class="col-md-10">
+							{{vm.Job.Serialized}}
+						</div>
+					</div>
+				</div>
+				<div class="col-md-5">
+					<div class="row">
+						<div class="col-md-2">
+							<p class="titleBlue">Started</p>
+						</div>
+						<div class="col-md-10">
+							{{vm.Job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2">
+							<p class="titleBlue">Ended</p>
+						</div>
+						<div class="col-md-10">
+							{{vm.Job.Ended | date : 'yyyy-MM-dd HH:mm:ss'}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2">
+							<p class="titleBlue">Node</p>
+						</div>
+						<div class="col-md-10">
+							{{vm.Job.SentToWorkerNodeUri}}
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<div class="row">
@@ -54,6 +82,6 @@
 					</table>
 				</div>
 			</div>
+
 		</div>
-	</div>
 </div>
