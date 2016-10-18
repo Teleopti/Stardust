@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCC.CCC7Prereq", "CCC.CCC7Prereq.csproj", "{F2AAC129-9537-4381-9634-1F188E4C2A8C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCC.CCC7Prereq", "Teleopti.Support.PreReqsCheck\CCC.CCC7Prereq.csproj", "{F2AAC129-9537-4381-9634-1F188E4C2A8C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
