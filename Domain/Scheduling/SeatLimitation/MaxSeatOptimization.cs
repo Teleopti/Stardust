@@ -95,12 +95,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		{
 			var mainShiftOptimizeActivitiesSpecification = specification as MainShiftOptimizeActivitiesSpecification;
 
-			if (mainShiftOptimizeActivitiesSpecification == null) return true;
+			if (mainShiftOptimizeActivitiesSpecification == null)
+				return true;
 
 			if (!mainShiftOptimizeActivitiesSpecification.CorrectStart(visualLayerCollection))
 				return false;
 
 			if (!mainShiftOptimizeActivitiesSpecification.CorrectEnd(visualLayerCollection))
+				return false;
+
+			if (!mainShiftOptimizeActivitiesSpecification.CorrectAlteredBetween(visualLayerCollection))
 				return false;
 
 			return true;
