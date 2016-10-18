@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] {agentData.Agent, agentScheduledForAnHourData.Agent}, schedules, scenario, new OptimizationPreferences());
 
-			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment(true).Period.StartDateTime.TimeOfDay
+			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(9));
 		}
 
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentScheduledForAnHourData.Agent, agentData.Agent }, schedules, scenario, new OptimizationPreferences());
 
-			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment(true).Period.StartDateTime.TimeOfDay
+			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(8));
 		}
 
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] {  agentData.Agent }, schedules, scenario, new OptimizationPreferences());
 
-			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment(true).ShiftLayers.First().Payload.RequiresSeat.Should().Be.False();
+			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().ShiftLayers.First().Payload.RequiresSeat.Should().Be.False();
 		}
 
 		[Test]
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentDataSiteUnderLimit.Agent, agentDataSiteOverLimit.Agent, agentScheduledForAnHourData.Agent  }, schedules, scenario, new OptimizationPreferences());
 
-			schedules[agentDataSiteUnderLimit.Agent].ScheduledDay(dateOnly).PersonAssignment(true).Period.StartDateTime.TimeOfDay
+			schedules[agentDataSiteUnderLimit.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(8));
 		}
 
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent, agentScheduledForAnHourData.Agent }, schedules, scenario, new OptimizationPreferences());
 
-			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment(true).Period.EndDateTime.TimeOfDay
+			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.EndDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(18));
 		}
 
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent, agentScheduledForAnHourData.Agent }, schedules, scenario, optPrefs);
 
-			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment(true).Period.StartDateTime.TimeOfDay
+			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(8));
 		}
 
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent, agentScheduledForAnHourData.Agent }, schedules, scenario, optPrefs);
 
-			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment(true).Period.EndDateTime.TimeOfDay
+			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.EndDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(16));
 		}
 
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent, agentScheduledForAnHourData.Agent }, schedules, scenario, optPrefs);
 
-			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment(true).Period.StartDateTime.TimeOfDay
+			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(8));
 		}
 
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent, agentScheduledForAnHourData.Agent }, schedules, scenario, optPrefs);
 
-			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment(true).Period.StartDateTime.TimeOfDay
+			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(8));
 		}
 
@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent, agentScheduledForAnHourData.Agent }, schedules, scenario, optPrefs);
 
-			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment(true).Period.EndDateTime.TimeOfDay
+			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.EndDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(19));
 		}
 
@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent, agentScheduledForAnHourData.Agent }, schedules, scenario, optPrefs);
 
-			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment(true).ShiftCategory
+			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().ShiftCategory
 				.Should().Be.SameInstanceAs(oldShiftCategory);
 		}
 
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent, agentScheduledForAnHourData.Agent }, schedules, scenario, optPrefs);
 
-			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment(true).Period.StartDateTime.TimeOfDay
+			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(8));
 		}
 	}	
