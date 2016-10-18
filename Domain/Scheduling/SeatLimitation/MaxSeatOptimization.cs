@@ -110,6 +110,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			if (!mainShiftOptimizeActivitiesSpecification.LockedActivityNotMoved(visualLayerCollection))
 				return false;
 
+			if (!mainShiftOptimizeActivitiesSpecification.LengthOfActivityEqual(visualLayerCollection))
+				return false;
+
 			return true;
 		}
 	}
