@@ -113,9 +113,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			private void appendInfo()
 			{
-				append(_context.UserCode);
-				append(_context.StateCode);
-				append(_context.Schedule.CurrentActivityName());
+				try
+				{
+					append(_context.UserCode);
+					append(_context.StateCode);
+					append(_context.Schedule.CurrentActivityName());
+				}
+				catch (Exception)
+				{
+				}
 			}
 
 			public void EventsPublished(IEnumerable<IEvent> events)
