@@ -8,78 +8,68 @@
 
 		var id = $stateParams.personId;
 
+		vm.ooaTooltipTime = function(time) {
+			if (time == null)
+				return '';
+
+			return time.format('HH:mm:ss');
+		};
+
 		RtaService.getAgentHistoricalData(id)
 			.then(function(data) {
-				var o = compareEarliestLatest(data.Schedules, data.OutOfAdherences, data.Now);
+				var shiftInfo = buildShiftInfo(data.Schedules);
 
 				vm.personId = data.PersonId;
 				vm.agentName = data.AgentName;
-				vm.date = moment(data.Now).format('YYYY-MM-DD');
-				var totalSeconds = o.totalSeconds + 7200;
-				var startOfShift = o.start != null ? o.start.clone().add(-1, 'hour') : moment().hour(7).minute(0).second(0);
+				vm.date = moment(data.Now);
+				var totalSeconds = shiftInfo.totalSeconds + 7200;
+				var startOfShift = shiftInfo.start.clone().add(-1, 'hour');
 
 				vm.currentTimeOffset = calculateWidth(startOfShift, data.Now, totalSeconds);
 
 				vm.agentsFullSchedule = data.Schedules.map(function(layer) {
-					var startTime = moment(layer.StartTime);
-					var endTime = moment(layer.EndTime);
 					return {
 						Width: calculateWidth(layer.StartTime, layer.EndTime, totalSeconds),
 						Offset: calculateWidth(startOfShift, layer.StartTime, totalSeconds),
-						StartTime: startTime,
-						EndTime: endTime,
-						Color: layer.Color,
-						DisplayStartTime: startTime.format('HH:mm:ss'),
-						DisplayEndTime: endTime.format('HH:mm:ss'),
-						DisplayStartDateTime: startTime.format('YYYY-MM-DD HH:mm:ss'),
-						DisplayEndDateTime: endTime.format('YYYY-MM-DD HH:mm:ss')
+						StartTime: moment(layer.StartTime),
+						EndTime: moment(layer.EndTime),
+						Color: layer.Color
 					};
 				});
 
 				vm.outOfAdherences = data.OutOfAdherences.map(function(ooa) {
-					if (ooa.EndTime == null)
-						ooa.EndTime = data.Now;
-
 					var startTime = moment(ooa.StartTime);
-					var endTime = ooa.EndTime != null ? moment(ooa.EndTime) : moment(data.Now);
-
+					var endTime = ooa.EndTime != null ? moment(ooa.EndTime) : null
 					return {
-						Width: calculateWidth(ooa.StartTime, ooa.EndTime, totalSeconds),
+						Width: calculateWidth(ooa.StartTime, ooa.EndTime != null ? ooa.EndTime : data.Now, totalSeconds),
 						Offset: calculateWidth(startOfShift, ooa.StartTime, totalSeconds),
 						StartTime: startTime,
-						EndTime: endTime,
-						DisplayStartTime: startTime.format('HH:mm:ss'),
-						DisplayEndTime: endTime.format('HH:mm:ss'),
-						DisplayStartDateTime: startTime.format('YYYY-MM-DD HH:mm:ss'),
-						DisplayEndDateTime: endTime.format('YYYY-MM-DD HH:mm:ss')
+						EndTime: endTime
 					};
 				});
 
-				vm.fullTimeline = buildTimeline(vm.agentsFullSchedule, vm.outOfAdherences);
+				vm.fullTimeline = buildTimeline(shiftInfo);
 			});
 
-		function compareEarliestLatest(schedule, outOfAdherences, serverTime) {
-			if (schedule.length === 0 && outOfAdherences.length === 0)
-				return {};
+		function buildShiftInfo(schedule) {
+			if (schedule.length === 0)
+				return {
+					start: moment().hour(8).minute(0).second(0),
+					stop: moment().hour(17).minute(0).second(0),
+					totalSeconds: (17 - 8) * 3600
+				};
 
 			var earliestStartTime = earliest(schedule);
-			var latestEndTime = latest(schedule, serverTime);
-
-			var start = null;
-			if (earliestStartTime != null) {
-				start = earliestStartTime.clone();
-				start.startOf('hour');
-			}
-			var end = null;
-			if (latestEndTime != null) {
-				end = latestEndTime.clone();
-				end.endOf('hour');
-			}
+			var latestEndTime = latest(schedule);
+			var start = earliestStartTime.clone();
+			start.startOf('hour');
+			var end = latestEndTime.clone();
+			end.endOf('hour');
 
 			return {
 				start: start,
 				end: end,
-				totalSeconds: earliestStartTime != null && latestEndTime != null ? latestEndTime.diff(earliestStartTime, 'seconds') : null
+				totalSeconds: latestEndTime.diff(earliestStartTime, 'seconds')
 			};
 		}
 
@@ -88,29 +78,20 @@
 			return (diff / totalSeconds) * 100 + '%';
 		}
 
-		function buildTimeline(schedule, outOfAdherences) {
-			if (schedule.length == 0 && outOfAdherences.length == 0)
-				return [];
-
+		function buildTimeline(shiftInfo) {
 			var timeline = [];
-			var timePrepare = compareEarliestLatest(schedule, outOfAdherences);
-			if (timePrepare.start == null)
-				return timeline;
-			var currentMoment = timePrepare.start.clone().add(-1, 'hours');
+			var currentMoment = shiftInfo.start.clone().add(-1, 'hours');
 
-			var totalHours = timePrepare.totalSeconds / 3600 + 2;
+			var totalHours = shiftInfo.totalSeconds / 3600 + 2;
 			var hourPercent = 100 / totalHours;
-			for (var i = 0; i <= totalHours; i++) {
+			for (var i = 1; i < totalHours; i++) {
+				currentMoment.add(1, 'hour');
 				var percent = hourPercent * i;
 				timeline.push({
 					Offset: percent + '%',
-					Time: currentMoment.format('HH:mm')
+					Time: currentMoment.clone()
 				});
-
-				currentMoment.add(1, 'hour');
 			}
-			timeline.shift();
-			timeline.pop();
 
 			return timeline;
 		}
@@ -123,10 +104,10 @@
 				.sort(sorter)[0];
 		}
 
-		function latest(arr, serverTime) {
+		function latest(arr) {
 			return arr
 				.map(function(el) {
-					return el.EndTime != null ? moment(el.EndTime) : moment(serverTime);
+					return moment(el.EndTime);
 				})
 				.sort(reverseSorter)[0];
 		}
