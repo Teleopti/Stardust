@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 									var layerThisPeriod = shift.MainShiftProjection.SingleOrDefault(x => x.Period.Contains(skillStaffPeriod.Period)); 
 									if ((layerThisPeriod == null || !((IActivity)layerThisPeriod.Payload).RequiresSeat) &&
 										shift.MainShiftProjection.ContractTime() == contractTimeBefore &&
-										isSatisfied(schedulingOptions.MainShiftOptimizeActivitySpecification, shift)) //refactor when all shift tests are in place
+										schedulingOptions.MainShiftOptimizeActivitySpecification.IsSatisfiedBy(shift.TheMainShift))
 									{
 										shiftToUse = shift.TheMainShift;
 										break;
@@ -88,37 +88,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					}
 				}
 			}		
-		}
-
-		//remove when all shift tests are in place
-		private bool isSatisfied(ISpecification<IEditableShift> specification, IShiftProjectionCache shift)
-		{
-			var visualLayerCollection = shift.MainShiftProjection;
-
-			var mainShiftOptimizeActivitiesSpecification = specification as MainShiftOptimizeActivitiesSpecification;
-
-			if (mainShiftOptimizeActivitiesSpecification == null)
-				return true;
-
-			if (!mainShiftOptimizeActivitiesSpecification.CorrectStart(visualLayerCollection))
-				return false;
-
-			if (!mainShiftOptimizeActivitiesSpecification.CorrectEnd(visualLayerCollection))
-				return false;
-
-			if (!mainShiftOptimizeActivitiesSpecification.CorrectAlteredBetween(visualLayerCollection))
-				return false;
-
-			if (!mainShiftOptimizeActivitiesSpecification.LockedActivityNotMoved(visualLayerCollection))
-				return false;
-
-			if (!mainShiftOptimizeActivitiesSpecification.LengthOfActivityEqual(visualLayerCollection))
-				return false;
-
-			if (!mainShiftOptimizeActivitiesSpecification.CorrectShiftCategory(shift.TheMainShift))
-				return false;
-
-			return true;
 		}
 	}
 }
