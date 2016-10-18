@@ -13,6 +13,23 @@
 	.phone-form-preference {
 		margin-bottom: 0 !important;
 	}
+	.phone-form-preference .form-inline td:nth-child(4) .left-align,.phone-form-preference .preference-activity-section .form-inline td:nth-child(3) .left-align{
+		left: auto !important;
+		right: 0 !important;
+	}
+	.phone-form-preference .select-input-auto .dropdown-menu{
+		left: auto;
+		right: 0;
+	}
+	.phone-form-preference .preference-extended-work-time-min + .dropdown-menu ,.phone-form-preference .preference-extended-work-time-max + .dropdown-menu,.phone-form-preference .preference-activity-extended-work-time-min + .dropdown-menu ,.phone-form-preference .preference-activity-extended-work-time-max + .dropdown-menu {
+		max-height: 200px !important;
+		min-width: inherit;
+		width: 100%;
+	}
+	.phone-form-preference .preference-activity-extended-work-time-max + .dropdown-menu {
+		left: auto;
+		right: 0;
+	}
 	.phone-form-preference .form-preference > span > span:nth-child(1) > button{
 		margin-bottom: 5px;
 	}
@@ -31,8 +48,8 @@
 		padding-left: 0;
 	}
 	.phone-form-preference .preference-end-time-min-next-day,.phone-form-preference .preference-end-time-max-next-day {
-		height: 20px;
-		width: 20px;
+		height: 15px;
+		width: 15px;
 	}
 	.phone-form-preference #Template-name-section {
 		display: block;
@@ -54,13 +71,12 @@
 	}
 	.phone-form-preference .form-preference{
 		position: fixed;
-		top: 50%;
+		top: 10%;
 		left: 0;
 		z-index: 100;
-		margin-top: -200px;
 		margin-left: 5px;
 		margin-right: 5px;
-		max-height: 400px;
+		max-height: 70%;
 		overflow-y: scroll;
 	}
 	.phone-form-preference .phone-background {
