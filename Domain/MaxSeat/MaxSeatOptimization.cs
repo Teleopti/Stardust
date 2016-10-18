@@ -34,17 +34,17 @@ namespace Teleopti.Ccc.Domain.MaxSeat
 				{
 					foreach (var skillDay in maxSeatData.SkillDaysForDate(date))
 					{
-						var maxSeats = maxSeatData.MaxSeats(skillDay.Skill);
+						var siteForSkill = maxSeatData.SiteForSkill(skillDay.Skill);
 
 						foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 						{
 							//hitta gubbe random?
 							foreach (var person in persons)
 							{
-								if (person.Period(date).Team.Site.Id.Value != skillDay.Skill.Id.Value) //titta över
+								if (!person.Period(date).Team.Site.Equals(siteForSkill))
 									continue;
 
-								if (ResourceCalculationContext.Fetch().ActivityResourcesWhereSeatRequired(skillDay.Skill, skillStaffPeriod.Period) <= maxSeats)
+								if (ResourceCalculationContext.Fetch().ActivityResourcesWhereSeatRequired(skillDay.Skill, skillStaffPeriod.Period) <= siteForSkill.MaxSeats.Value)
 									continue;
 
 								//BEST SHIFT STUFF

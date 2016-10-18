@@ -33,11 +33,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			return _maxSeatSkillDataPerSkills.ToDictionary(maxSeatSkillDataPerSkill => maxSeatSkillDataPerSkill.Skill, maxSeatSkillDataPerSkill => maxSeatSkillDataPerSkill.SkillDays);
 		}
 
-		public int MaxSeats(ISkill skill)
+		public ISite SiteForSkill(ISkill skill)
 		{
-			return _maxSeatSkillDataPerSkills.Single(x => x.Skill.Equals(skill)).Site.MaxSeats.Value;
+			return _maxSeatSkillDataPerSkills.Single(x => x.Skill.Equals(skill)).Site;
 		}
-
 
 		private class maxSeatSkillDataPerSkill
 		{
