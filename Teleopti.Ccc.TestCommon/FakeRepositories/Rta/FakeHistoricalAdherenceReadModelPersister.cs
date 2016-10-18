@@ -30,31 +30,26 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public void AddIn(Guid personId, DateTime timestamp)
 		{
-			_data.Add(new HistoricalAdherenceInternalModel
-			{
-				PersonId = personId,
-				Timestamp = timestamp,
-				Adherence = 0
-			});
+			add(personId, timestamp, HistoricalAdherenceInternalAdherence.In);
 		}
 
 		public void AddNeutral(Guid personId, DateTime timestamp)
 		{
-			_data.Add(new HistoricalAdherenceInternalModel
-			{
-				PersonId = personId,
-				Timestamp = timestamp,
-				Adherence = 1
-			});
+			add(personId, timestamp, HistoricalAdherenceInternalAdherence.Neutral);
 		}
 
 		public void AddOut(Guid personId, DateTime timestamp)
+		{
+			add(personId, timestamp, HistoricalAdherenceInternalAdherence.Out);
+		}
+
+		private void add(Guid personId, DateTime timestamp, HistoricalAdherenceInternalAdherence adherence)
 		{
 			_data.Add(new HistoricalAdherenceInternalModel
 			{
 				PersonId = personId,
 				Timestamp = timestamp,
-				Adherence = 2
+				Adherence = adherence
 			});
 		}
 

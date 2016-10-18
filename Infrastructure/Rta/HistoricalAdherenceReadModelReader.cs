@@ -46,7 +46,7 @@ ORDER BY [Timestamp] ASC")
 			};
 			return data.Aggregate(seed, (x, im) =>
 			{
-				if (im.Adherence == 2)
+				if (im.Adherence == HistoricalAdherenceInternalAdherence.Out)
 				{
 					if (x.OutOfAdherences.IsEmpty(y => !y.EndTime.HasValue))
 						x.OutOfAdherences = x.OutOfAdherences
@@ -64,13 +64,23 @@ ORDER BY [Timestamp] ASC")
 			});
 		}
 
-		
+		private class internalModel : HistoricalAdherenceInternalModel
+		{
+			public new int Adherence { set { base.Adherence = (HistoricalAdherenceInternalAdherence) value; } }
+		}
 	}
 
 	public class HistoricalAdherenceInternalModel
 	{
 		public Guid PersonId { get; set; }
 		public DateTime Timestamp { get; set; }
-		public int Adherence { get; set; }
+		public HistoricalAdherenceInternalAdherence Adherence { get; set; }
+	}
+
+	public enum HistoricalAdherenceInternalAdherence
+	{
+		In,
+		Neutral,
+		Out
 	}
 }
