@@ -27,7 +27,7 @@
 							<td>{{job.Ended | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 							<td>{{job.TotalDuration}}</td>
 							<td>{{job.SentToWorkerNodeUri}}</td>
-							<td ng-class="job.Result=='Success' ? 'successResult' : (vm.Job.Result==null ? 'processingResult' : 'failureResult')">{{job.Result}}</td>
+							<td ng-class="job.Result=='Success' ? 'successResult' : (job.Result==null ? 'processingResult' : 'failureResult')">{{job.Result}}</td>
 						</tr>
 					</tbody>
 				</table>

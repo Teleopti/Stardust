@@ -24,23 +24,20 @@ td {
 }
 .redNode {
     background-color: tomato;
-    color: whitesmoke;
 }
 
 .titleBlue {
 	color: #266d90;
 	font-size: 14px;
-
 }
 
 .successResult {
 	background-color: palegreen;
-	font-weight: bold;
-
+	visibility: visible;
 }
 .failureResult {
 	background-color: tomato;
-	font-weight: bold;
+	visibility: visible;
 }
 .processingResult {
 	visibility: hidden
