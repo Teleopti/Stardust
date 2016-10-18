@@ -31,8 +31,5 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			Target.GetAll().Single().Name.Should().Be.EqualTo(name);
 		}
-
-		//[Test]
-		//public void ShouldGetAllSkillsInTheSkillArea
 	}
 }
