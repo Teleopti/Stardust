@@ -22,7 +22,7 @@
 				</table>
 			</div>
 		</div>
-		<button ng-hide="vm.noMoreJobs" ng-click="vm.getNewFreshData()" class="btn-primary col-md-2"> load {{vm.limit}} more</button>
+		<button ng-disabled="vm.noMoreJobs" ng-click="vm.getNewFreshData()" class="btn-primary col-md-2"> load {{vm.limit}} more</button>
 	</div>
 </div>
 
