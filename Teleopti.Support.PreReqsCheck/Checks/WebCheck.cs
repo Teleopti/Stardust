@@ -41,20 +41,25 @@ namespace CheckPreRequisites.Checks
 	                {
 		                var strings = line.Split(',');
 		                var lineNumber = _form1.printNewFeature("IIS", "Windows feature", "Enabled", strings[1]);
-		                allTasks.Add(
-			                Task.Run(() =>
-			                {
-								var result = FeatureChecker.CheckAndEnable(strings[1], strings[0]);
-								notInElevateMood = result.NotInElevatedMood;
-								if (result.NotInElevatedMood)
-									return;
+		                var task = Task.Run(() =>
+		                {
+			                var result = FeatureChecker.CheckAndEnable(strings[1], strings[0]);
+			                notInElevateMood = result.NotInElevatedMood;
+			                if (result.NotInElevatedMood)
+				                return;
 
-								_form1.Invoke((Action) (() =>
-								{
-									_form1.printFeatureStatus(result.Enabled, result.ToolTip, lineNumber, result.FixByUs);
-									Application.DoEvents();
-								}));
+			                _form1.Invoke((Action) (() =>
+			                {
+								_form1.printFeatureStatus(result.Enabled, result.ToolTip, lineNumber, result.FixByUs);
+				                Application.DoEvents();
 			                }));
+		                });
+						// windows server 2008r2 doesn't support drun dism in parallel
+		                if (SystemInfo.Version.ToString().Contains("2008R2"))
+		                {
+			                await task;
+		                }
+		                allTasks.Add(task);
 	                }
                 }
 	            await Task.WhenAll(allTasks.ToArray());
