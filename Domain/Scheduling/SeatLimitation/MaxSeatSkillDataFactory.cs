@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			var sites = _maxSeatSitesExtractor.MaxSeatSites(period, agents);
 			foreach (var site in sites)
 			{
-				var skill = _skillsFromMaxSeatSite.CreateMaxSeatSkill(site, 15);//why 15?
+				var skill = _skillsFromMaxSeatSite.CreateMaxSeatSkill(site, 15);//TODO: why 15?
 
 				//todo: REMOVE ME?
 				foreach (var agent in agents)
