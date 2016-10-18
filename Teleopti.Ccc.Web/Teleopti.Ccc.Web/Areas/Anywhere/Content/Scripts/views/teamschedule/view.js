@@ -97,6 +97,7 @@ define([
 
 			var groupPagesDeferred = $.Deferred();
 
+			viewModel.internalStatusMessages.push("loadGroupPages started");
 			loadGroupPages(
 				viewModel.BusinessUnitId(),
 				helpers.Date.ToServer(viewModel.Date()),
@@ -117,11 +118,13 @@ define([
 					viewModel.SetGroupPages(data);
 					viewModel.GroupId(currentGroupId());
 					groupPagesDeferred.resolve();
+					viewModel.internalStatusMessages.push("loadGroupPages finished");
 				});
 
 
 			var groupScheduleDeferred = $.Deferred();
 			groupPagesDeferred.done(function () {
+				viewModel.internalStatusMessages.push("subscribeGroupSchedules started");
 				var receivedSchedules = [];
 
 				if (viewModel.GroupId() != null) {
@@ -146,25 +149,29 @@ define([
 								groupScheduleDeferred.resolve();
 								receivedSchedules = [];
 							}
+							viewModel.internalStatusMessages.push("subscribeGroupSchedules finished ok");
 						}
 					);
 				} else {
+					viewModel.internalStatusMessages.push("subscribeGroupSchedules finished no group id");
 					groupScheduleDeferred.resolve();
 				}
 			});
 
-
+			viewModel.internalStatusMessages.push("getPermissions started");
 			permissions.get().done(function (data) {
 				viewModel.permissionAddFullDayAbsence(data.IsAddFullDayAbsenceAvailable);
 				viewModel.permissionAddIntradayAbsence(data.IsAddIntradayAbsenceAvailable);
 				viewModel.permissionRemoveAbsence(data.IsRemoveAbsenceAvailable);
 				viewModel.permissionAddActivity(data.IsAddActivityAvailable);
 				viewModel.permissionMoveActivity(data.IsMoveActivityAvailable);
+				viewModel.internalStatusMessages.push("getPermissions finished");
 			});
 
 
 			return $.when(groupPagesDeferred, groupScheduleDeferred)
 				.done(function () {
+					viewModel.internalStatusMessages.push("complete loading finished");
 					viewModel.Loading(false);
 					resize.notify();
 				});

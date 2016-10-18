@@ -86,6 +86,17 @@ define([
 			return self.GroupPages().length > 0;
 		});
 
+		this.internalStatusMessages = ko.observableArray();
+
+		this.internalStatus = ko.computed(function() {
+			var text = "";
+			ko.utils.arrayForEach(self.internalStatusMessages(),
+				function(s) {
+					text += s;
+				});
+			return text;
+		});
+
 		this.DisplayDescriptions = ko.observable(true);
 		this.ToggleDisplayDescriptions = function () {
 			self.DisplayDescriptions(!self.DisplayDescriptions());
