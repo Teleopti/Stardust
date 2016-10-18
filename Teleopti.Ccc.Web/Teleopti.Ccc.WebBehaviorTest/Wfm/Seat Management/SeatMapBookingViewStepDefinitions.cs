@@ -1,4 +1,5 @@
-﻿using TechTalk.SpecFlow;
+﻿using System;
+using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 
@@ -53,8 +54,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		[When(@"I click add agents to seat button")]
 		public void WhenIClickAddAgentsToSeatButton()
 		{
-			Browser.Interactions.Click(".seatbooking-operations-add .add-agents");
-		}
+            Browser.Interactions.TryUntil(
+                () => Browser.Interactions.Click(".seatbooking-operations-add .add-agents"),
+                () => Browser.Interactions.IsAnyVisible(".seatbooking-operations-cancel .cancel-operation"),
+                TimeSpan.FromMilliseconds(1000));
+        }
 
 		[Then(@"I should see people search list")]
 		public void ThenIShouldSeePeopleSearchList()
