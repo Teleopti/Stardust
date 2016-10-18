@@ -100,6 +100,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			if (!mainShiftOptimizeActivitiesSpecification.CorrectStart(visualLayerCollection))
 				return false;
 
+			if (!mainShiftOptimizeActivitiesSpecification.CorrectEnd(visualLayerCollection))
+				return false;
+
 			return true;
 		}
 	}
