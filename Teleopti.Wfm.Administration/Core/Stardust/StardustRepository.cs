@@ -74,7 +74,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 										(
 										  SELECT top (1000000) *,
 												 ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber'
-											FROM PerfA.Stardust.Job
+											FROM Stardust.Job
 											ORDER BY Created desc
 										) 
 										SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
