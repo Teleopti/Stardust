@@ -28,12 +28,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IPersonRepository _personRepository;
 		private readonly IUserCulture _userCulture;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
+		private readonly IUserTimeZone _userTimeZone;
 
 
 		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider, IScheduleProvider scheduleProvider, 
 			ITeamScheduleProjectionProvider teamScheduleProjectionProvider, ILoggedOnUser loggedOnUser,
 			ICommonAgentNameProvider commonAgentNameProvider, IPeopleSearchProvider searchProvider,
-			IPersonRepository personRepository, IUserCulture userCulture, IProjectionProvider projectionProvider, IIanaTimeZoneProvider ianaTimeZoneProvider)
+			IPersonRepository personRepository, IUserCulture userCulture, IProjectionProvider projectionProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IUserTimeZone userTimeZone)
 		{
 			_permissionProvider = permissionProvider;
 			_scheduleProvider = scheduleProvider;
@@ -45,6 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_userCulture = userCulture;
 			_projectionProvider = projectionProvider;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
+			_userTimeZone = userTimeZone;
 		}
 
 		public GroupScheduleViewModel CreateViewModel(IDictionary<PersonFinderField, string> criteriaDictionary,
@@ -273,8 +275,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						else if (significantPart == SchedulePartView.MainShift)
 						{
 							dayScheduleViewModel.Title = personAssignment.ShiftCategory.Description.Name;
-							dayScheduleViewModel.TimeSpan = personAssignment.PeriodExcludingPersonalActivity()
-								.TimePeriod(scheduleDay.TimeZone);
+							dayScheduleViewModel.TimeSpan = personAssignment.PeriodExcludingPersonalActivity().TimePeriod(_userTimeZone.TimeZone());
 
 							if (personAssignment.ShiftCategory != null)
 							{

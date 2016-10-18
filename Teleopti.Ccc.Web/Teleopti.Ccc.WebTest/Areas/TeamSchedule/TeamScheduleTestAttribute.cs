@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			system.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 			system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
 			system.UseTestDouble<FakePeopleSearchProvider>().For<IPeopleSearchProvider>();
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
