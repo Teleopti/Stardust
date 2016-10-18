@@ -16,10 +16,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_stardustRepository = stardustRepository;
 		}
 
-		[HttpGet, Route("Stardust/Jobs")]
-		public IHttpActionResult JobHistoryList()
+		[HttpGet, Route("Stardust/Jobs/{from}/{to}")]
+		public IHttpActionResult JobHistoryList(int from, int to)
 		{
-			return Ok(_stardustRepository.GetAllJobs());
+			return Ok(_stardustRepository.GetAllJobs(from, to));
 		}
 
 		[HttpGet, Route("Stardust/RunningJobs")]
@@ -27,7 +27,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			return Ok(_stardustRepository.GetAllRunningJobs());
 		}
-
 
 		[HttpGet, Route("Stardust/JobsByNode/{nodeId}")]
 		public IHttpActionResult JobHistoryList(Guid nodeId)
@@ -47,16 +46,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Ok(_stardustRepository.GetJobByJobId(jobId));
 		}
 
-		[HttpGet, Route("Stardust/QueuedJobs")]
-		public IHttpActionResult JobQueueList()
+		[HttpGet, Route("Stardust/QueuedJobs/{from}/{to}")]
+		public IHttpActionResult JobQueueList(int from, int to)
 		{
-			return Ok(_stardustRepository.GetAllQueuedJobs());
-		}
-
-		[HttpGet, Route("Stardust/QueuedJobsSummary")]
-		public IHttpActionResult JobQueueListSummary()
-		{
-			return Ok(_stardustRepository.GetTop5QueuedJobs());
+			return Ok(_stardustRepository.GetAllQueuedJobs(from, to));
 		}
 
 		[HttpGet, Route("Stardust/AliveWorkerNodes")]

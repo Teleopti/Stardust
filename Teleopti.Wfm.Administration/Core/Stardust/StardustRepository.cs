@@ -62,24 +62,22 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 		}
 
 
-		public IList<Job> GetAllJobs()
+		public IList<Job> GetAllJobs(int from, int to)
 		{
 			var jobs = new List<Job>();
 			
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
-					var selectCommandText = @"SELECT  [JobId]
-											  ,[Name]
-											  ,[Created]
-											  ,[CreatedBy]
-											  ,[Started]
-											  ,[Ended]
-											  ,[Serialized]
-											  ,[Type]
-											  ,[SentToWorkerNodeUri]
-											  ,[Result]
-										  FROM [Stardust].[Job] order by Created desc";
+					var selectCommandText = $@"	
+										WITH Ass AS
+										(
+										  SELECT top (1000000) *,
+												 ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber'
+											FROM PerfA.Stardust.Job
+											ORDER BY Created desc
+										) 
+										SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
 				using (var getAllJobsCommand = new SqlCommand(selectCommandText,sqlConnection))
 					{
 					using (var sqlDataReader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
@@ -283,48 +281,22 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			return listToReturn;
 		}
 
-		public List<Job> GetAllQueuedJobs()
+		public List<Job> GetAllQueuedJobs(int from, int to)
 		{
 			var jobs = new List<Job>();
 
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
 				sqlConnection.OpenWithRetry(_retryPolicy);
-				var selectCommandText = @"SELECT  [JobId]
-											  ,[Name]
-											  ,[Created]
-											  ,[CreatedBy]
-										  FROM [Stardust].[JobQueue] order by Created desc";
-				using (var getAllQueuedJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
-				{
-					using (var sqlDataReader = getAllQueuedJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
-					{
-						if (sqlDataReader.HasRows)
-						{
-							while (sqlDataReader.Read())
-							{
-								var job = createQueuedJobFromSqlDataReader(sqlDataReader);
-								jobs.Add(job);
-							}
-						}
-					}
-				}
-			}
-			return jobs;
-		}
-
-		public List<Job> GetTop5QueuedJobs()
-		{
-			var jobs = new List<Job>();
-
-			using (var sqlConnection = new SqlConnection(_connectionString))
-			{
-				sqlConnection.OpenWithRetry(_retryPolicy);
-				var selectCommandText = @"SELECT TOP 5 [JobId]
-											  ,[Name]
-											  ,[Created]
-											  ,[CreatedBy]
-										  FROM [Stardust].[JobQueue] order by Created asc";
+				var selectCommandText = $@"	
+										WITH Ass AS
+										(
+										  SELECT top (1000000) *,
+												 ROW_NUMBER() OVER (ORDER BY Created asc) AS 'RowNumber'
+											FROM PerfA.Stardust.JobQueue
+											ORDER BY Created asc
+										) 
+										SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
 				using (var getAllQueuedJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
 					using (var sqlDataReader = getAllQueuedJobsCommand.ExecuteReaderWithRetry(_retryPolicy))

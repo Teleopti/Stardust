@@ -24,7 +24,7 @@
 				}
 			});
 
-		$http.get("./Stardust/QueuedJobsSummary", tokenHeaderService.getHeaders())
+		$http.get("./Stardust/QueuedJobs/1/5", tokenHeaderService.getHeaders())
 			.success(function(data) {
 				vm.QueuedJobs = data;
 			})

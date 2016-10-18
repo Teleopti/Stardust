@@ -4,8 +4,12 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h3>Job History</h3>
-			<h5>Click the Type of a job to see details.</h5>
-			<div style="font-size: 14p; font-weight: bold; color: red">{{vm.JobError}}</div>
+			<div class="row">
+				<div class="col-md-7">
+					<p>Click the Type of a job to see details.</p>
+				</div>
+			</div>
+						<div style="font-size: 14p; font-weight: bold; color: red">{{vm.JobError}}</div>
 			<div>
 				<table>
 					<thead>
@@ -28,6 +32,7 @@
 					</tbody>
 				</table>
 			</div>
+			<button ng-hide="vm.noMoreJobs" ng-click="vm.getNewFreshData()" class="btn-primary col-md-2"> load {{vm.limit}} more</button>
 		</div>
 	</div>
 </div>
