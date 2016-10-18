@@ -20,29 +20,27 @@ td {
 	border-bottom-style: solid*/
 }
 .greenNode {
-    color: green;
+    color: palegreen;
 }
 .redNode {
-    background-color: red;
+    background-color: tomato;
     color: whitesmoke;
 }
 
 .titleBlue {
 	color: #266d90;
 	font-size: 14px;
-	
+
 }
 
 .successResult {
 	background-color: palegreen;
 	font-weight: bold;
-	height: 200%;
 
 }
 .failureResult {
 	background-color: tomato;
 	font-weight: bold;
-	height: 200%;
 }
 .processingResult {
 	

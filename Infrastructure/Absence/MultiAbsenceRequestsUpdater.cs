@@ -320,12 +320,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			}
 		}
 
-		private IProcessAbsenceRequest handleNoWorkflowControlSet(IAbsenceRequest absenceRequest)
-		{
-			return denyAbsenceRequest(UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonNoWorkflow",
-				absenceRequest.Person.PermissionInformation.Culture()));
-		}
-
 		private IProcessAbsenceRequest denyAbsenceRequest(string reasonResourceKey, bool alreadyAbsence = false)
 		{
 			_denyAbsenceRequest.DenyReason = reasonResourceKey;

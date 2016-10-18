@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	{
 		private static void fakeSend(string message)
 		{
+			Console.WriteLine(message);
 		}
 
 		public Action<string> SendProgress { get; set; } = fakeSend;
