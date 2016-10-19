@@ -58,6 +58,13 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
         return !self.IsPreferenceInputVisible() ? 'glyphicon glyphicon-circle-arrow-down' : 'glyphicon glyphicon-circle-arrow-up';
     });
 
+    this.IsHostAMobile = ko.observable((/Mobile/i.test(navigator.userAgent) && !/ipad/i.test(navigator.userAgent)));
+
+    this.ToggleOpen = function (data, event) { //for mobile compatibility
+		if (!self.IsHostAMobile()) return;
+		$(event.currentTarget).toggleClass('open');
+	};
+
 	this.SelectedTemplateId = ko.computed({
 		read: self.SelectedTemplateIdInternal,
 		write: function (value) {

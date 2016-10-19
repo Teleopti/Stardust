@@ -13,6 +13,22 @@
 	.phone-form-preference {
 		margin-bottom: 0 !important;
 	}
+	.phone-form-preference .open[data-bind="click:ToggleOpen"]:before{
+		content: '';
+		border: 0;
+		margin: 0;
+		padding: 0;
+		position: fixed;
+		left: 0;
+		top: 0;
+		min-height: 100%;
+		min-width: 100%;
+		height: auto;
+		width: auto;
+		opacity: 0;
+		z-index: 998;
+		background-color: #fff;
+	}
 	.phone-form-preference .form-inline td:nth-child(4) .left-align,.phone-form-preference .preference-activity-section .form-inline td:nth-child(3) .left-align{
 		left: auto !important;
 		right: 0 !important;
