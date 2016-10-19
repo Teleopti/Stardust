@@ -14,20 +14,22 @@
             vm.startPageisActive = false;
             vm.nodesisActive = false;
             vm.queueisActive = false;
-            vm.jobsisActive = false;
+            vm.jobs_isActive = false;
         }
-        function selectCurrentTab(){
+        function selectCurrentTab() {
             var current = $location.path();
-            current = current.slice(19);
+            if (!current.indexOf('StardustDashboard/')) return;
+            current = current.slice(19,24);
             var currentElement = [current] + 'isActive';
             vm[currentElement] = true;
+
+
         }
         selectCurrentTab();
 
         function changeCurrentTab(node) {
-          //  deselectAllNodes();
-            $location.path('StardustDashboard/'+node);
+            //  deselectAllNodes();
+            $location.path('StardustDashboard/' + node);
         }
-
     }
 })();

@@ -58,26 +58,32 @@
 					templateUrl: 'StardustDashboard/nodes.html',
 					controller: 'nodeController'
 				})
-				.when('/StardustDashboard/jobs', {
+				.when('/StardustDashboard/nodes/:nodeId', {
+					templateUrl: 'StardustDashboard/nodedetails.html',
+					controller: 'nodeDetailsController'
+				})
+				.when('/StardustDashboard/jobs_', {
 					templateUrl: 'StardustDashboard/jobs.html',
 					controller: 'jobController'
+				})
+				.when('/StardustDashboard/jobs_/:jobId', {
+					templateUrl: 'StardustDashboard/jobdetails.html',
+					controller: 'jobDetailsController'
+				})
+<<<<<<< dest
+				.when('/jobqueuedetails/:jobId', {
+					templateUrl: 'StardustDashboard/jobqueuedetails.html',
+					controller: 'jobQueueDetailsController'
+				})
+					templateUrl: 'StardustDashboard/jobdetails.html',
+					controller: 'jobDetailsController'
 				})
 				.when('/StardustDashboard/queue', {
 					templateUrl: 'StardustDashboard/queue.html',
 					controller: 'jobQueueController'
 				})
-				.when('/jobqueuedetails/:jobId', {
-					templateUrl: 'StardustDashboard/jobqueuedetails.html',
-					controller: 'jobQueueDetailsController'
-				})
-				.when('/jobdetails/:jobId', {
-					templateUrl: 'StardustDashboard/jobdetails.html',
-					controller: 'jobDetailsController'
-				})
-				.when('/nodedetails/:nodeId', {
-					templateUrl: 'StardustDashboard/nodedetails.html',
-					controller: 'nodeDetailsController'
-				})
+=======
+>>>>>>> source
 				.when('/HangfireDashboard', {
 					templateUrl: 'HangfireDashboard.html',
 					controller: 'hangfireController'
