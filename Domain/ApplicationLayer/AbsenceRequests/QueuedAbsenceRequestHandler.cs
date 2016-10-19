@@ -140,6 +140,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		public IPersonRequest CheckPersonRequest(Guid requestId)
 		{
 			IPersonRequest personRequest = _personRequestRepository.Get(requestId);
+			
 			if (personRequestSpecification.IsSatisfiedBy(personRequest))
 			{
 				if (logger.IsWarnEnabled)
@@ -160,6 +161,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				}
 				return null;
 			}
+			personRequest.Pending(); 
 			return personRequest;
 		}
 

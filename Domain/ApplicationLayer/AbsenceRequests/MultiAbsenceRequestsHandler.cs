@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			DateTime max = DateTime.MinValue;
 			var requests = new List<IPersonRequest>();
 
-			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var wfcs = _workflowControlSetRepository.LoadAll();
 				if (wfcs.Any(x => x.AbsenceRequestWaitlistEnabled))
@@ -122,7 +122,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					}
 					else
 					{
-						personRequest.Pending();
 						requests.Add(personRequest);
 					}
 
@@ -145,9 +144,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				//preload some data
 				_personRepository.FindPeople(requests.Select(x => x.Person.Id.GetValueOrDefault()));
-				
-				
-				uow.PersistAll();
 			}
 			return requests;
 		}

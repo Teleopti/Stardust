@@ -585,8 +585,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 			var req = new AbsenceRequest(absence,
 										 new DateTimePeriod(new DateTime(2016, 3, 10, 8, 0, 0, DateTimeKind.Utc),
 															new DateTime(2016, 3, 10, 18, 0, 0, DateTimeKind.Utc)));
-			
-			return new PersonRequest(person) { Request = req };
+			var personReq = new PersonRequest(person) { Request = req };
+			personReq.Pending();
+			return personReq;
 		}
 
 		private IPersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod dateTimePeriod)

@@ -85,7 +85,7 @@
 					</thead>
 					<tbody>
 						<tr ng-repeat="job in vm.RunningJobs">
-							<td><a href="#StardustDashboard/jobdetails/{{job.JobId}}">{{job.Name}}</a></td>
+							<td><a href="#StardustDashboard/jobs_/{{job.JobId}}">{{job.Name}}</a></td>
 							<td>{{job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 							<td>{{job.SentToWorkerNodeUri}}</td>
 						</tr>
