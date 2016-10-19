@@ -113,7 +113,7 @@
 				//lets do authentication in cookie
 				var today = new Date();
 				var expireDate = new Date(today.getTime() + 30 * 60000);
-				$cookies.putObject('WfmAdminAuth', { 'tokenKey': data.AccessToken, 'userKey': data.UserName, 'idKey': data.Id }, { 'expires': new Date(expireDate) });
+				$cookies.putObject('WfmAdminAuth', { 'tokenKey': data.AccessToken, 'userKey': data.UserName, 'idKey': data.Id }, {});
 				document.location = "#/";
 				location.reload();
 				$('#modal-login').dialog('close');
