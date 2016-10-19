@@ -20,12 +20,18 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			_retryPolicy = new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(maxRetry, TimeSpan.FromMilliseconds(delayMs));
 		}
 		
-		public IList<Job> GetJobsByNodeId(Guid nodeId)
+		public IList<Job> GetJobsByNodeId(Guid nodeId, int from, int to)
 		{
-			var selectCommandText = @"SELECT * FROM [Stardust].Job
-								WHERE SentToWorkerNodeUri IN 
-								(SELECT Url FROM [Stardust].WorkerNode 
-									WHERE Id = @NodeId) ORDER by Created desc";
+			var selectCommandText = $@"	WITH Ass AS (
+									SELECT top (1000000) *, ROW_NUMBER() OVER (ORDER BY Started desc) AS 'RowNumber'
+									FROM (
+									SELECT * FROM [Stardust].Job
+									WHERE SentToWorkerNodeUri IN 
+										(SELECT Url FROM [Stardust].WorkerNode 
+										WHERE Id = '{nodeId}')
+									) as b
+									ORDER BY Started desc ) 
+									SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
 
 			var returnList = new List<Job>();
 
@@ -34,7 +40,6 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 				connection.OpenWithRetry(_retryPolicy);
 				using (var selectCommand = new SqlCommand(selectCommandText, connection))
 				{
-					selectCommand.Parameters.AddWithValue("@NodeId", nodeId);
 					using (var reader = selectCommand.ExecuteReaderWithRetry(_retryPolicy))
 					{
 						if (reader.HasRows)
