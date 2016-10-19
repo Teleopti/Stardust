@@ -37,20 +37,23 @@ For /f "tokens=2 delims=[]" %%G in ('ver') Do (set version=%%G)
 For /f "tokens=2,3,4 delims=. " %%G in ('echo %version%') Do (set /A major=%%G & set minor=%%H & set build=%%I) 
 
 if %major% equ 5 (
-call StopSystem.bat
-call StartSystem.bat
-)
-
-if %major% GEQ 6 (
-	if %minor% GEQ 1 (
-	powershell set-executionpolicy unrestricted
-	ECHO powershell . .\RestartTeleopti.ps1
-	powershell . .\RestartTeleopti.ps1
-	) else (
 	echo "WARNING: This OS version is not supported by Teleopti!"
 	call StopSystem.bat
 	call StartSystem.bat
+) else if %major% equ 6 (
+	if %minor% equ 0 (
+		echo "WARNING: This OS version is not supported by Teleopti!"
+		call StopSystem.bat
+		call StartSystem.bat
+	) else (
+		powershell set-executionpolicy unrestricted
+		ECHO powershell . .\RestartTeleopti.ps1
+		powershell . .\RestartTeleopti.ps1
 	)
+) else (
+	powershell set-executionpolicy unrestricted
+	ECHO powershell . .\RestartTeleopti.ps1
+	powershell . .\RestartTeleopti.ps1
 )
 
 exit /b
