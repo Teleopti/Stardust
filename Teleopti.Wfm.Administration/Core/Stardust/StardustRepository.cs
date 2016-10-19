@@ -20,19 +20,12 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			_connectionString = connectionString;
 			_retryPolicy = new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(maxRetry, TimeSpan.FromMilliseconds(delayMs));
 		}
-		
+
 		public IList<Job> GetJobsByNodeId(Guid nodeId, int from, int to)
 		{
-			var selectCommandText = $@"	WITH Ass AS (
-									SELECT top (1000000) *, ROW_NUMBER() OVER (ORDER BY Started desc) AS 'RowNumber'
-									FROM (
-									SELECT * FROM [Stardust].Job
-									WHERE SentToWorkerNodeUri IN 
-										(SELECT Url FROM [Stardust].WorkerNode 
-										WHERE Id = '{nodeId}')
-									) as b
-									ORDER BY Started desc ) 
-									SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
+			var selectCommandText = $@"WITH Ass AS (SELECT top (1000000) *, ROW_NUMBER() OVER (ORDER BY Started desc) AS 'RowNumber' FROM (SELECT * FROM [Stardust].Job
+WHERE SentToWorkerNodeUri IN (SELECT Url FROM [Stardust].WorkerNode WHERE Id = '{nodeId}')) as b ORDER BY Started desc ) 
+SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
 
 			var returnList = new List<Job>();
 
@@ -71,35 +64,27 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 		public IList<Job> GetAllJobs(int from, int to)
 		{
 			var jobs = new List<Job>();
-			
-				using (var sqlConnection = new SqlConnection(_connectionString))
+
+			using (var sqlConnection = new SqlConnection(_connectionString))
+			{
+				sqlConnection.OpenWithRetry(_retryPolicy);
+				var selectCommandText = $@"WITH Ass AS (SELECT top (1000000) *,  ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber' FROM Stardust.Job ORDER BY Created desc ) SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
+				using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
-					sqlConnection.OpenWithRetry(_retryPolicy);
-					var selectCommandText = $@"	
-										WITH Ass AS
-										(
-										  SELECT top (1000000) *,
-												 ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber'
-											FROM Stardust.Job
-											ORDER BY Created desc
-										) 
-										SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
-				using (var getAllJobsCommand = new SqlCommand(selectCommandText,sqlConnection))
-					{
 					using (var sqlDataReader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
+					{
+						if (sqlDataReader.HasRows)
 						{
-							if (sqlDataReader.HasRows)
+							while (sqlDataReader.Read())
 							{
-								while (sqlDataReader.Read())
-								{
-									var job = createJobFromSqlDataReader(sqlDataReader);
-									setTotalDuration(job);
-									jobs.Add(job);
-								}
+								var job = createJobFromSqlDataReader(sqlDataReader);
+								setTotalDuration(job);
+								jobs.Add(job);
 							}
 						}
 					}
 				}
+			}
 			return jobs;
 		}
 
@@ -110,18 +95,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
 				sqlConnection.OpenWithRetry(_retryPolicy);
-				var selectCommandText = @"SELECT  [JobId]
-											  ,[Name]
-											  ,[Created]
-											  ,[CreatedBy]
-											  ,[Started]
-											  ,[Ended]
-											  ,[Serialized]
-											  ,[Type]
-											  ,[SentToWorkerNodeUri]
-											  ,[Result]
-										  FROM [Stardust].[Job] 
-											WHERE Ended IS NULL order by Created desc";
+				var selectCommandText = @"SELECT  [JobId] ,[Name] ,[Created] ,[CreatedBy] ,[Started] ,[Ended] ,[Serialized] ,[Type] ,[SentToWorkerNodeUri] ,[Result] FROM [Stardust].[Job] WHERE Ended IS NULL order by Created desc";
 				using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
 					using (var sqlDataReader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
@@ -148,17 +122,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
 				sqlConnection.OpenWithRetry(_retryPolicy);
-				var selectCommandText = @"SELECT  [JobId]
-											  ,[Name]
-											  ,[Created]
-											  ,[CreatedBy]
-											  ,[Started]
-											  ,[Ended]
-											  ,[Serialized]
-											  ,[Type]
-											  ,[SentToWorkerNodeUri]
-											  ,[Result]
-										  FROM [Stardust].[Job] WHERE JobId = @jobId";
+				var selectCommandText = @"SELECT  [JobId] ,[Name] ,[Created] ,[CreatedBy] ,[Started] ,[Ended] ,[Serialized] ,[Type] ,[SentToWorkerNodeUri] ,[Result] FROM [Stardust].[Job] WHERE JobId = @jobId";
 				using (var selectCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
 					selectCommand.Parameters.AddWithValue("@JobId", jobId);
@@ -184,13 +148,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
 				sqlConnection.OpenWithRetry(_retryPolicy);
-				var selectCommandText = @"SELECT  
-											Id, 
-											JobId, 
-											Created, 
-											Detail  
-										FROM [Stardust].[JobDetail] WITH (NOLOCK) 
-										WHERE JobId = @JobId ORDER BY Created desc";
+				var selectCommandText = @"SELECT Id, JobId, Created, Detail	FROM [Stardust].[JobDetail] WITH (NOLOCK) WHERE JobId = @JobId ORDER BY Created desc";
 				using (var selectCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
 					selectCommand.Parameters.AddWithValue("@JobId", jobId);
@@ -212,11 +170,8 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 
 		public WorkerNode WorkerNode(Guid nodeId)
 		{
-			const string selectCommandText = @"SELECT DISTINCT Id, Url, Heartbeat, Alive, Running
-											FROM (SELECT Id, Url, Heartbeat, Alive, CASE WHEN Url IN 
-											(SELECT SentToWorkerNodeUri FROM Stardust.Job WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running 
-											FROM [Stardust].WorkerNode) w
-											WHERE w.Id = @Id";
+			const string selectCommandText = @"SELECT DISTINCT Id, Url, Heartbeat, Alive, Running FROM (SELECT Id, Url, Heartbeat, Alive, CASE WHEN Url IN 
+(SELECT SentToWorkerNodeUri FROM Stardust.Job WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running FROM [Stardust].WorkerNode) w WHERE w.Id = @Id";
 			WorkerNode node = null;
 			using (var connection = new SqlConnection(_connectionString))
 			{
@@ -244,14 +199,12 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			}
 			return node;
 		}
-		
+
 		public List<WorkerNode> GetAllWorkerNodes()
 		{
 			var listToReturn = new List<WorkerNode>();
-			var commandText = @"SELECT DISTINCT Id, Url, Heartbeat, Alive, Running
-							FROM (SELECT Id, Url, Heartbeat, Alive, CASE WHEN Url IN 
-							(SELECT SentToWorkerNodeUri FROM Stardust.Job WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running 
-							FROM [Stardust].WorkerNode) w";
+			var commandText = @"SELECT DISTINCT Id, Url, Heartbeat, Alive, Running FROM (SELECT Id, Url, Heartbeat, Alive, CASE WHEN Url IN 
+(SELECT SentToWorkerNodeUri FROM Stardust.Job WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running FROM [Stardust].WorkerNode) w";
 			using (var connection = new SqlConnection(_connectionString))
 			{
 				connection.OpenWithRetry(_retryPolicy);
@@ -272,10 +225,10 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 							{
 								var workerNode = new WorkerNode
 								{
-									Id = (Guid) reader.GetValue(ordinalPositionForIdField),
-									Url = new Uri((string) reader.GetValue(ordinalPositionForUrlField)),
-									Alive = (bool) reader.GetValue(ordinalPositionForAliveField),
-									Heartbeat = (DateTime) reader.GetValue(ordinalPositionForHeartbeatField),
+									Id = (Guid)reader.GetValue(ordinalPositionForIdField),
+									Url = new Uri((string)reader.GetValue(ordinalPositionForUrlField)),
+									Alive = (bool)reader.GetValue(ordinalPositionForAliveField),
+									Heartbeat = (DateTime)reader.GetValue(ordinalPositionForHeartbeatField),
 									Running = (bool)reader.GetValue(ordinalPositionForRunningField),
 								};
 								listToReturn.Add(workerNode);
@@ -294,15 +247,8 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
 				sqlConnection.OpenWithRetry(_retryPolicy);
-				var selectCommandText = $@"	
-										WITH Ass AS
-										(
-										  SELECT top (1000000) *,
-												 ROW_NUMBER() OVER (ORDER BY Created asc) AS 'RowNumber'
-											FROM Stardust.JobQueue
-											ORDER BY Created asc
-										) 
-										SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
+				var selectCommandText = $@"WITH Ass AS (SELECT top (1000000) *, ROW_NUMBER() OVER (ORDER BY Created asc) AS 'RowNumber'
+FROM Stardust.JobQueue ORDER BY Created asc ) SELECT * FROM Ass WHERE RowNumber BETWEEN {from} AND {to}";
 				using (var getAllQueuedJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
 					using (var sqlDataReader = getAllQueuedJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
@@ -335,8 +281,8 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 						if (sqlDataReader.HasRows)
 						{
 							sqlDataReader.Read();
-							 job = createQueuedJobFromSqlDataReader(sqlDataReader);
-							
+							job = createQueuedJobFromSqlDataReader(sqlDataReader);
+
 						}
 					}
 				}
@@ -344,7 +290,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			return job;
 		}
 
-public void DeleteQueuedJobs(Guid[] jobIds)
+		public void DeleteQueuedJobs(Guid[] jobIds)
 		{
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
@@ -353,7 +299,7 @@ public void DeleteQueuedJobs(Guid[] jobIds)
 				{
 					var stringIds = string.Join("','", ids);
 					var sql = $@"DELETE FROM Stardust.JobQueue WHERE JobId IN ('{stringIds}')";
-					var comm = new SqlCommand(sql,sqlConnection);
+					var comm = new SqlCommand(sql, sqlConnection);
 					comm.ExecuteNonQuery();
 				}
 			}
@@ -363,7 +309,7 @@ public void DeleteQueuedJobs(Guid[] jobIds)
 		{
 			return value == DBNull.Value ? null : (T)value;
 		}
-		
+
 
 		private Job createJobFromSqlDataReader(SqlDataReader sqlDataReader)
 		{
@@ -425,5 +371,4 @@ public void DeleteQueuedJobs(Guid[] jobIds)
 			return reader.GetString(ordinalPosition);
 		}
 	}
-} 
-	
+}

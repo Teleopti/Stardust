@@ -9,30 +9,33 @@
 			<div>
 				<table>
 					<thead>
-						<tr>
-							<th>
-								<md-checkbox style="margin-bottom: 0" ng-checked="vm.isChecked()"
-												 md-indeterminate="vm.isIndeterminate()"
-												 ng-click="vm.toggleAll()">
-								</md-checkbox>
-							</th>
-							<th>Type</th>
-							<th>Created By</th>
-							<th>Created At </th>
-						</tr>
+					<tr>
+						<th>
+							<md-checkbox style="margin-bottom: 0" ng-checked="vm.isChecked()"
+											 md-indeterminate="vm.isIndeterminate()"
+											 ng-click="vm.toggleAll()">
+							</md-checkbox>
+						</th>
+						<th>Type</th>
+						<th>Created By</th>
+						<th>Created At </th>
+					</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="job in vm.Jobs">
-							<td><md-checkbox style="margin-bottom: 0" type="checkbox" ng-checked="vm.exists(job.JobId, vm.selected)" ng-click="vm.toggle(job.JobId, vm.selected)" /></td>
+					<tr ng-repeat="job in vm.Jobs">
+						<td><md-checkbox style="margin-bottom: 0" type="checkbox" ng-checked="vm.exists(job.JobId, vm.selected)" ng-click="vm.toggle(job.JobId, vm.selected)"/></td>
 						<td><a href="#StardustDashboard/queue/{{job.JobId}}">{{job.Name}}</a></td>
-							<td>{{job.CreatedBy}}</td>
-							<td>{{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-						</tr>
+						<td>{{job.CreatedBy}}</td>
+						<td>{{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+					</tr>
 					</tbody>
 				</table>
 			</div>
-		</div>
-		<button ng-disabled="vm.noMoreJobs" ng-click="vm.getNewFreshData()" class="btn-primary col-md-2"> load {{vm.limit}} more</button>
+			<div style="margin-top: 10px">
+				<button ng-disabled="vm.noMoreJobs" ng-click="vm.getNewFreshData()" class="btn-primary col-md-2"> load {{vm.limit}} more</button>
+			</div>
+			</div>
+		
 	</div>
 </div>
 
