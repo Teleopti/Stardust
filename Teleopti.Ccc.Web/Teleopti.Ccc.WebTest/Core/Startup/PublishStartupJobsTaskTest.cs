@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		private IDataSourceScope _dataSourceScope;
 		private FakeBusinessUnitRepository _businessUnitRepository;
 		private PublishStartupJobsTask _target;
-		private IUnitOfWorkFactory _unitOfWorkFactory;
+		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
 		[SetUp]
 		public void Setup()
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			_tenantUnitOfWorkFake = new TenantUnitOfWorkFake();
 			_dataSourceScope = MockRepository.GenerateMock<IDataSourceScope>();
 			_businessUnitRepository = new FakeBusinessUnitRepository();
-			_unitOfWorkFactory = new FakeUnitOfWorkFactory();
+			_unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
 
 			_target = new PublishStartupJobsTask(_toggleManager, _eventPublisher, _loadAllTenants, _dataSourceScope, _tenantUnitOfWorkFake, uow => _businessUnitRepository, _unitOfWorkFactory);
 		}

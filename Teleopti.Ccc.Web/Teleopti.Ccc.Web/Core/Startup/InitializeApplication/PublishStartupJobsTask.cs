@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		private readonly IDataSourceScope _dataSourceScope;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly Func<ICurrentUnitOfWork, IBusinessUnitRepository> _businessUnitRepository;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-		public PublishStartupJobsTask(IToggleManager toggleManager, IEventPublisher eventPublisher, ILoadAllTenants loadAllTenants, IDataSourceScope dataSourceScope, ITenantUnitOfWork tenantUnitOfWork, Func<ICurrentUnitOfWork, IBusinessUnitRepository> businessUnitRepository, IUnitOfWorkFactory unitOfWorkFactory)
+		public PublishStartupJobsTask(IToggleManager toggleManager, IEventPublisher eventPublisher, ILoadAllTenants loadAllTenants, IDataSourceScope dataSourceScope, ITenantUnitOfWork tenantUnitOfWork, Func<ICurrentUnitOfWork, IBusinessUnitRepository> businessUnitRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_toggleManager = toggleManager;
 			_eventPublisher = eventPublisher;
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 			{
 				using (_dataSourceScope.OnThisThreadUse(tenant.Name))
 				{
-					using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+					using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 					{
 						var businessUnits = _businessUnitRepository(new ThisUnitOfWork(uow)).LoadAll();
 						foreach (var businessUnit in businessUnits)
