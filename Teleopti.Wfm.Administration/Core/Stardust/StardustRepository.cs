@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Wfm.Administration.Models.Stardust;
 
 namespace Teleopti.Wfm.Administration.Core.Stardust
@@ -343,6 +344,20 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			return job;
 		}
 
+public void DeleteQueuedJobs(Guid[] jobIds)
+		{
+			using (var sqlConnection = new SqlConnection(_connectionString))
+			{
+				sqlConnection.OpenWithRetry(_retryPolicy);
+				foreach (var ids in jobIds.Batch(400))
+				{
+					var stringIds = string.Join("','", ids);
+					var sql = $@"DELETE FROM Stardust.JobQueue WHERE JobId IN ('{stringIds}')";
+					var comm = new SqlCommand(sql,sqlConnection);
+					comm.ExecuteNonQuery();
+				}
+			}
+		}
 
 		private T getDBNullSafeValue<T>(object value) where T : class
 		{

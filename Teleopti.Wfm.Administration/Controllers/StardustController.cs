@@ -76,5 +76,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			return Ok(_stardustRepository.WorkerNode(id));
 		}
+
+		[HttpPost, Route("Stardust/DeleteQueuedJobs")]
+		public IHttpActionResult DeleteQueuedJobs(Guid[] ids)
+		{
+			_stardustRepository.DeleteQueuedJobs(ids);
+			return Ok();
+		}
 	}
 }

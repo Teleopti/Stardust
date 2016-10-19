@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 
 	angular
@@ -17,7 +17,14 @@
 		vm.noMoreJobs = false;
 
 		vm.getNewFreshData = getNewFreshData;
+		vm.toggle = toggle;
+		vm.exists = exists;
+		vm.isIndeterminate = isIndeterminate;
+		vm.deleteQueuedJobs = deleteQueuedJobs;
+		vm.isChecked = isChecked;
+		vm.toggleAll = toggleAll;
 		vm.Jobs = [];
+		vm.selected = [];
 
 		getJobs();
 
@@ -46,5 +53,57 @@
 			vm.resultsTo += vm.limit;
 			getJobs(true);
 		}
+
+		function toggle(item, list) {
+			var idx = list.indexOf(item);
+			if (idx > -1) {
+				list.splice(idx, 1);
+			}
+			else {
+				list.push(item);
+			}
+		};
+
+		function exists(item, list) {
+			return list.indexOf(item) > -1;
+		};
+
+		function isIndeterminate() {
+			return (vm.selected.length !== 0 &&
+				 vm.selected.length !== vm.Jobs.length);
+		};
+
+		function isChecked() {
+			if (vm.Jobs.length === 0) return false;
+			return vm.selected.length === vm.Jobs.length;
+		};
+
+		function toggleAll() {
+			if (vm.selected.length === vm.Jobs.length) {
+				vm.selected = [];
+			} else if (vm.selected.length === 0 || vm.selected.length > 0) {
+				vm.selected = [];
+				vm.Jobs.forEach(function (job) {
+					vm.selected.push(job.JobId);
+				});
+			}
+		};
+
+		function deleteQueuedJobs() {
+			$http.post("./Stardust/DeleteQueuedJobs",vm.selected, tokenHeaderService.getHeaders())
+				.success(function (data) {
+					vm.selected = [];
+					vm.Jobs = [];
+					vm.resultsFrom = 1;
+					getJobs();
+				})
+				.error(function (xhr, ajaxOptions, thrownError) {
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+					vm.JobError = ajaxOptions;
+					if (xhr !== "") {
+						vm.JobError = vm.JobError + " " + xhr.Message + ': ' + xhr.ExceptionMessage;
+					}
+				});
+		};
 	}
 })();
