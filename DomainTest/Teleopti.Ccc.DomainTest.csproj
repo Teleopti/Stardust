@@ -184,6 +184,7 @@
     <Compile Include="ApplicationLayer\PersonAssociationChanged\ExternalLogonTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodTransformerTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\PersonCollectionChangedEventTest.cs" />
+    <Compile Include="ApplicationLayer\ReadModelInitializeHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ReplyRequestCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Maintainer\ScheduleInvalidationTest.cs" />

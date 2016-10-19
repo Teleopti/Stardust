@@ -23,49 +23,57 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 
 		public IDisposable LockForTypeOf(object lockObject)
 		{
-			var connection = new SqlConnection(_connectionStrings.Application());
-			connection.Open();
-			var @lock = _monitor.Enter(ProxyUtil.GetUnproxiedType(lockObject).Name, timeout(), connection);
-			return new GenericDisposable(() =>
-			{
-				@lock.Dispose();
-				connection.Close();
-				connection.Dispose();
-			});
+			return @lock(ProxyUtil.GetUnproxiedType(lockObject).Name);
 		}
 
 		public IDisposable LockForGuid(object lockObject, Guid guid)
 		{
-			var connection = new SqlConnection(_connectionStrings.Application());
-			connection.Open();
-			var @lock = _monitor.Enter(ProxyUtil.GetUnproxiedType(lockObject).Name + guid, timeout(), connection);
-			return new GenericDisposable(() =>
-			{
-				@lock.Dispose();
-				connection.Close();
-				connection.Dispose();
-			});
+			return @lock($"{ProxyUtil.GetUnproxiedType(lockObject).Name}{guid}");
 		}
 
+		
+
 		public void TryLockForTypeOf(object lockObject, Action action)
+		{
+			tryLock(ProxyUtil.GetUnproxiedType(lockObject).Name, action);
+		}
+
+		public void TryLockForGuid(object lockObject, Guid guid, Action action)
+		{
+			tryLock($"{ProxyUtil.GetUnproxiedType(lockObject).Name}{guid}", action);
+		}
+
+		private void tryLock(string name, Action action)
 		{
 			using (var connection = new SqlConnection(_connectionStrings.Application()))
 			{
 				connection.Open();
-				var resource = ProxyUtil.GetUnproxiedType(lockObject).Name;
-				if (_monitor.TryEnter(resource, TimeSpan.Zero, connection))
+				if (_monitor.TryEnter(name, TimeSpan.Zero, connection))
 				{
 					try
 					{
 						action();
 					}
-					finally 
+					finally
 					{
-						_monitor.Exit(resource, TimeSpan.Zero, connection);
+						_monitor.Exit(name, TimeSpan.Zero, connection);
 					}
 				}
 				connection.Close();
 			}
+		}
+
+		private IDisposable @lock(string name)
+		{
+			var connection = new SqlConnection(_connectionStrings.Application());
+			connection.Open();
+			var @lock = _monitor.Enter(name, timeout(), connection);
+			return new GenericDisposable(() =>
+			{
+				@lock.Dispose();
+				connection.Close();
+				connection.Dispose();
+			});
 		}
 
 		private TimeSpan timeout()

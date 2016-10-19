@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.Denormalize;
 
@@ -13,15 +15,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	{
 		private readonly Func<IServiceBus> _serviceBusFinder;
 		private readonly IDataSourceForTenant _dataSourceForTenant;
+		private readonly IToggleManager _toggleManager;
 
-		public InitialLoadOfScheduleProjectionReadModel(Func<IServiceBus> serviceBusFinder, IDataSourceForTenant dataSourceForTenant)
+		public InitialLoadOfScheduleProjectionReadModel(Func<IServiceBus> serviceBusFinder, IDataSourceForTenant dataSourceForTenant, IToggleManager toggleManager)
 		{
 			_serviceBusFinder = serviceBusFinder;
 			_dataSourceForTenant = dataSourceForTenant;
+			_toggleManager = toggleManager;
 		}
 
 		public void Check()
 		{
+			if (_toggleManager.IsEnabled(Toggles.LastHandlers_ToHangfire_41203))
+				return;
+
 			var messagesOnBoot = true;
 			if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["MessagesOnBoot"]))
 				bool.TryParse(ConfigurationManager.AppSettings["MessagesOnBoot"], out messagesOnBoot);

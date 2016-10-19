@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Autofac;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			Task.Run(() =>
 			{
-				var initialLoad = new InitialLoadOfScheduleProjectionReadModel(() => Container.Resolve<IServiceBus>(), Container.Resolve<DataSourceForTenantWrapper>().DataSource()());
+				var initialLoad = new InitialLoadOfScheduleProjectionReadModel(() => Container.Resolve<IServiceBus>(), Container.Resolve<DataSourceForTenantWrapper>().DataSource()(), Container.Resolve<IToggleManager>());
 				initialLoad.Check();
 			});
 		}

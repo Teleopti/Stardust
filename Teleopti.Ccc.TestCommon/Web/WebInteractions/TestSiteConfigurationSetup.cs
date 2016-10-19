@@ -164,6 +164,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			settingsFile.UpdateFileByName("MachineKey", CryptoCreator.MachineKeyCreator.StaticMachineKeyForBehaviorTest());
 			settingsFile.UpdateFileByName("TimeLoggerConfiguration", "<logger name='Teleopti.LogTime'><level value='DEBUG'/></logger>");
 			settingsFile.UpdateFileByName("BehaviorTestServer", "true");
+			settingsFile.UpdateFileByName("MessagesOnBoot", "false");
 			settingsFile.UpdateFileByName("HangfireDashboard", "true");
 			settingsFile.UpdateFileByName("HangfireDashboardStatistics", "true");
 			settingsFile.UpdateFileByName("HangfireDashboardCounters", "true");
@@ -180,7 +181,6 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			// settings.txt
 			settingsFile.UpdateFileByName("URL", TestSiteConfigurationSetup.URL.ToString());
 			settingsFile.UpdateFileByName("UrlAuthenticationBridge", TestSiteConfigurationSetup.UrlAuthenticationBridge.ToString());
-			settingsFile.UpdateFileByName("WEB_BROKER_FOR_WEB", TestSiteConfigurationSetup.URL.ToString());
 			settingsFile.UpdateFileByName("WindowsClaimProvider", TestSiteConfigurationSetup.WindowsClaimProvider);
 			settingsFile.UpdateFileByName("TeleoptiClaimProvider", TestSiteConfigurationSetup.TeleoptiClaimProvider);
 			settingsFile.UpdateFileByName("URL_WINDOWS_IDENTITY_PROVIDER", TestSiteConfigurationSetup.UrlWindowsIdentityProvider);

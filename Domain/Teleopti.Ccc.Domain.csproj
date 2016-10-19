@@ -199,6 +199,8 @@
     <Compile Include="ApplicationLayer\Commands\IReplyCommand.cs" />
     <Compile Include="ApplicationLayer\Events\AnalyticsTimeZoneChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateTracer.cs" />
+    <Compile Include="ApplicationLayer\Events\InitialLoadScheduleProjectionEvent.cs" />
+    <Compile Include="ApplicationLayer\ReadModelInitializeHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\HistoricalAdherenceUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ContextLoaderWithBatchConnectionOptimization.cs" />
     <Compile Include="ApplicationLayer\Events\AnalyticsDatesChangedEvent.cs" />
