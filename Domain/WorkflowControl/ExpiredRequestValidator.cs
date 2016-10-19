@@ -19,6 +19,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		public IValidatedRequest ValidateExpiredRequest(IAbsenceRequest absenceRequest, IScheduleRange scheduleRange)
 		{
 			var person = absenceRequest.Person;
+			if (person.WorkflowControlSet == null)
+				return new ValidatedRequest { IsValid = true, ValidationErrors = string.Empty };
+
 			var absenceRequestExpiredThreshold = person.WorkflowControlSet.AbsenceRequestExpiredThreshold;
 			if (!absenceRequestExpiredThreshold.HasValue)
 				return new ValidatedRequest { IsValid = true, ValidationErrors = string.Empty };
