@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public void ThenIShouldSeeScheduleForDisplayed(string absence, string agentName)
 		{
 			Browser.Interactions.AssertScopeValue(".team-schedule", "vm.scheduleFullyLoaded", true);
-			Browser.Interactions.AssertAnyContains(".person-name", agentName);
+			Browser.Interactions.AssertAnyContains(".person-name-text", agentName);
 			Browser.Interactions.AssertExists($".schedule .layer.personAbsence[projection-name='{absence}']");
 		}
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public void ThenIShouldSeeScheduleWithNoAbsenceForDisplayed(string agentName)
 		{
 			Browser.Interactions.AssertScopeValue(".team-schedule", "vm.isLoading", false);
-			Browser.Interactions.AssertNotExists(".person-name", ".schedule div.personAbsence");
+			Browser.Interactions.AssertNotExists(".schedule ", "div.personAbsence");
 		}
 
 		[When(@"I selected the person absence for '(.*)'")]
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
 				() =>
 				{
-					Browser.Interactions.ClickContaining(".person-name .wfm-checkbox-label", "John Smith");
+					Browser.Interactions.ClickContaining(".person-name-text", "John Smith");
 				});
 		}
 
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 				{
 					Browser.Interactions.AssertScopeValue(".team-schedule", "vm.scheduleFullyLoaded", true);
 					Browser.Interactions.AssertScopeValue(".team-schedule", "vm.isLoading", false);
-					Browser.Interactions.ClickContaining(".person-name", agentName);
+					Browser.Interactions.ClickContaining(".person-name-text", agentName);
 				});
 		}
 

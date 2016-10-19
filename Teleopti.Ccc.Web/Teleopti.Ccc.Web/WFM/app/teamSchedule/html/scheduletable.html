@@ -1,12 +1,12 @@
 ﻿<table class="table" ng-if="vm.scheduleVm.Schedules.length > 0" id="team-schedule">
 	<thead>
 	<tr class="person">
-		<th class="person-name person-name-column">
+		<th class="person-name-column">
 			<div class="wfm-checkbox" ng-if="::vm.selectMode">
 				<label>
 					<input type="checkbox" ng-model="vm.toggleAllInCurrentPage" ng-change="vm.updateAllSelectionInCurrentPage(vm.toggleAllInCurrentPage)">
 					<span class="wfm-checkbox-toggle"></span>
-					<span class="wfm-checkbox-label person-name nowrap">{{'AgentName' | translate}}</span>
+					<span class="wfm-checkbox-label nowrap">{{'AgentName' | translate}}</span>
 				</label>
 			</div>
 			<div ng-hide="::vm.selectMode" class="wfm-checkbox-label person-name nowrap">{{'AgentName' | translate}}</div>
@@ -27,8 +27,7 @@
 				<label>
 					<input type="checkbox" ng-model="personSchedule.IsSelected" ng-change="vm.updatePersonSelection(personSchedule)">
 					<span class="wfm-checkbox-toggle"></span>
-					<span class="wfm-checkbox-label person-name">{{::personSchedule.Name}}</span>
-					<span class="timezone-tip" ng-if="vm.toggles.ViewScheduleOnTimezoneEnabled && vm.selectedTimezone && personSchedule.Timezone.IanaId !== vm.selectedTimezone"><i class="mdi mdi-earth"></i></span>
+					<span class="wfm-checkbox-label person-name-text">{{::personSchedule.Name}} <span class="timezone-tip" ng-if="vm.toggles.ViewScheduleOnTimezoneEnabled && vm.selectedTimezone && personSchedule.Timezone.IanaId !== vm.selectedTimezone"><i class="mdi mdi-earth"></i></span></span>
 				</label>
 				<md-tooltip md-direction="right" ng-if="vm.toggles.ViewScheduleOnTimezoneEnabled && vm.selectedTimezone && personSchedule.Timezone.IanaId !== vm.selectedTimezone">
 					{{::personSchedule.Timezone.DisplayName}}
