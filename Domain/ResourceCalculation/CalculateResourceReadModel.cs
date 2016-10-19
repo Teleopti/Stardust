@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Interfaces.Domain;
@@ -34,13 +32,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var skillStaffPeriodDictionary =
 				_extractSkillStaffDataForResourceCalculation.ExtractSkillStaffPeriodDictionary(periodDateOnly);
 			var models = CreateReadModel(skillStaffPeriodDictionary, period);
-			if(models.Any())
-				_scheduleForecastSkillReadModelRepository.Persist(models, timeWhenResourceCalcDataLoaded);
+			// to always insert one so we don't get new jobs all the time if no forecast and no schedule
+			models.Add(new SkillStaffingInterval
+			{
+				SkillId = Guid.Empty,
+				StartDateTime = DateTime.UtcNow,
+				EndDateTime = DateTime.UtcNow,
+				Forecast = 0,
+				StaffingLevel = 0,
+				ForecastWithShrinkage = 0
+			});
+			_scheduleForecastSkillReadModelRepository.Persist(models, timeWhenResourceCalcDataLoaded);
 		}
 
-
 		[LogTime]
-		public virtual IEnumerable<SkillStaffingInterval> CreateReadModel(ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodExtendedDictionary, DateTimePeriod period)
+		public virtual IList<SkillStaffingInterval> CreateReadModel(ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodExtendedDictionary, DateTimePeriod period)
 		{
 			var ret = new List<SkillStaffingInterval>();
 			_feedback.SendProgress($"Will update {skillSkillStaffPeriodExtendedDictionary.Keys.Count} skills.");
@@ -90,7 +96,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public double divideBy(TimeSpan ts)
 		{
-			return (double)GetTimeSpan().Ticks/ts.Ticks;
+			return (double)GetTimeSpan().Ticks / ts.Ticks;
 		}
 	}
 
