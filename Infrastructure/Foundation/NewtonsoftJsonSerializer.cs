@@ -35,38 +35,36 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		public string SerializeEvent(object value)
 		{
-			return JsonConvert.SerializeObject(value, _eventSerializationSettings);
+			return JsonConvert.SerializeObject(value, EventSettings);
 		}
 
 		public object DeserializeEvent(string value, Type type)
 		{
-			return JsonConvert.DeserializeObject(value, type, _eventSerializationSettings);
+			return JsonConvert.DeserializeObject(value, type, EventSettings);
 		}
 		
 
-		private readonly JsonSerializerSettings _eventSerializationSettings = new CustomJsonSerializerSettings();
+		public static readonly JsonSerializerSettings EventSettings = new eventSerializerSettings();
 
-		
 
-	}
-
-	public class CustomJsonSerializerSettings : JsonSerializerSettings
-	{
-		public CustomJsonSerializerSettings()
+		private class eventSerializerSettings : JsonSerializerSettings
 		{
-			//Maybe this is a good idea? ;)
-			//DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-			NullValueHandling = NullValueHandling.Ignore;
-			ContractResolver = new customContractResolver();
-		}
-
-		private class customContractResolver : DefaultContractResolver
-		{
-			private readonly Dictionary<string, string> propertyMappings;
-
-			public customContractResolver()
+			public eventSerializerSettings()
 			{
-				propertyMappings = new Dictionary<string, string>
+				//Maybe this is a good idea? ;)
+				//DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+				TypeNameHandling = TypeNameHandling.Auto;
+				NullValueHandling = NullValueHandling.Ignore;
+				ContractResolver = new customContractResolver();
+			}
+
+			private class customContractResolver : DefaultContractResolver
+			{
+				private readonly Dictionary<string, string> propertyMappings;
+
+				public customContractResolver()
+				{
+					propertyMappings = new Dictionary<string, string>
 				{
 					{"PersonId", "p"},
 					{"BelongsToDate", "d"},
@@ -78,14 +76,16 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 					{"AdherenceWithPreviousActivity", "ap"},
 					{"InOrNeutralAdherenceWithPreviousActivity", "ax"},
 				};
-			}
+				}
 
-			protected override string ResolvePropertyName(string propertyName)
-			{
-				string resolvedName;
-				var resolved = propertyMappings.TryGetValue(propertyName, out resolvedName);
-				return (resolved) ? resolvedName : base.ResolvePropertyName(propertyName);
+				protected override string ResolvePropertyName(string propertyName)
+				{
+					string resolvedName;
+					var resolved = propertyMappings.TryGetValue(propertyName, out resolvedName);
+					return (resolved) ? resolvedName : base.ResolvePropertyName(propertyName);
+				}
 			}
 		}
 	}
+
 }

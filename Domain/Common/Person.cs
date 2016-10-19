@@ -131,11 +131,15 @@ namespace Teleopti.Ccc.Domain.Common
 					}
 				}
 			}
-			info.ExternalLogons = period?.ExternalLogOnCollection.Select(x => new ExternalLogon
-			{
-				UserCode = x.AcdLogOnOriginalId,
-				DataSourceId = x.DataSourceId
-			}) ?? Enumerable.Empty<ExternalLogon>();
+			info.ExternalLogons =
+			(
+				period?.ExternalLogOnCollection
+					.Select(x => new ExternalLogon
+					{
+						UserCode = x.AcdLogOnOriginalId,
+						DataSourceId = x.DataSourceId
+					}) ?? Enumerable.Empty<ExternalLogon>()
+			).ToArray();
 			return info;
 		}
 

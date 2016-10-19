@@ -1,23 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Util;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Common
 {
 	[TestFixture]
+	[DomainTest]
 	public class PersonTest
 	{
+		public MutableNow Now;
+		public IJsonEventSerializer Serializer;
+		public IJsonEventDeserializer Deserializer;
+
 		[Test]
 		public void AddingNoteShouldBeTrimmed()
 		{
@@ -805,19 +814,73 @@ namespace Teleopti.Ccc.DomainTest.Common
 		}
 
 		[Test]
-		public void ShouldPublish()
+		public void ShouldPublishPersonPeriodChangedEventOnAddExternalLogOn()
 		{
 			var person = new Person();
-			var personPeriod = new PersonPeriod("2016-09-26".Date(),
+			var period = new PersonPeriod("2016-09-26".Date(),
 				new PersonContract(
 					new Contract("_"), 
 					new PartTimePercentage("_"), 
 					new ContractSchedule("_")), 
 				new Team());
+			person.AddPersonPeriod(period);
+			person.PopAllEvents();
 
-			person.AddExternalLogOn(new ExternalLogOn(),personPeriod);
+			person.AddExternalLogOn(new ExternalLogOn(), period);
 
 			person.PopAllEvents().OfType<PersonPeriodChangedEvent>().Should().Not.Be.Empty();
+		}
+
+		[Test]
+		public void ShouldPublishTeamChangedEventOnAddExternalLogOn()
+		{
+			var person = new Person();
+			var team1 = new Team();
+			var team2 = new Team();
+			var period = new PersonPeriod("2016-09-26".Date(),
+				new PersonContract(
+					new Contract("_"),
+					new PartTimePercentage("_"),
+					new ContractSchedule("_")),
+				team1);
+			person.AddPersonPeriod(period);
+			person.PopAllEvents();
+
+			person.ChangeTeam(team2, period);
+
+			person.PopAllEvents().OfType<PersonTeamChangedEvent>().Should().Not.Be.Empty();
+		}
+
+		[Test]
+		public void ShouldPublishEventsSerializable()
+		{
+			Now.Is("2016-10-19 12:00");
+			var person = new Person();
+			var team1 = new Team();
+			var team2 = new Team();
+			var period = new PersonPeriod("2016-10-01".Date(),
+				new PersonContract(
+					new Contract("_"),
+					new PartTimePercentage("_"),
+					new ContractSchedule("_")),
+				team1);
+			person.AddPersonPeriod(period);
+			person.ChangeTeam(team2, period);
+			person.AddExternalLogOn(new ExternalLogOn(), period);
+
+			var events = person.PopAllEvents();
+
+			var serialized = events.Select(x =>
+				new
+				{
+					e = Serializer.SerializeEvent(x),
+					t = x.GetType()
+				}).ToArray();
+
+			serialized.ForEach(s =>
+			{
+				Assert.DoesNotThrow(() => Deserializer.DeserializeEvent(s.e, s.t));
+			});
 		}
 	}
 }

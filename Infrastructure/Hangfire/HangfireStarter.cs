@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		// GOSH.. Sooo much text...
 		public void Start(string connectionString)
 		{
-			JobHelper.SetSerializerSettings(new CustomJsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
+			JobHelper.SetSerializerSettings(NewtonsoftJsonSerializer.EventSettings);
 
 			var jobExpiration = _config.ReadValue("HangfireJobExpirationSeconds", TimeSpan.FromHours(1).TotalSeconds);
 			var pollInterval = _config.ReadValue("HangfireQueuePollIntervalSeconds", TimeSpan.FromSeconds(2).TotalSeconds);
