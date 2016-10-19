@@ -68,9 +68,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 					_agentStateReadModelUpdater.Update(context, events);
 				}
-				finally
+				catch(Exception)
 				{
 					trace.Error();
+					throw;
 				}
 
 			}
