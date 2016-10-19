@@ -70,20 +70,16 @@
 					templateUrl: 'StardustDashboard/jobdetails.html',
 					controller: 'jobDetailsController'
 				})
-<<<<<<< dest
-				.when('/jobqueuedetails/:jobId', {
-					templateUrl: 'StardustDashboard/jobqueuedetails.html',
-					controller: 'jobQueueDetailsController'
-				})
-					templateUrl: 'StardustDashboard/jobdetails.html',
-					controller: 'jobDetailsController'
-				})
+
 				.when('/StardustDashboard/queue', {
 					templateUrl: 'StardustDashboard/queue.html',
 					controller: 'jobQueueController'
 				})
-=======
->>>>>>> source
+				.when('/StardustDashboard/queue/:jobId', {
+					templateUrl: 'StardustDashboard/jobqueuedetails.html',
+					controller: 'jobQueueDetailsController'
+				})
+
 				.when('/HangfireDashboard', {
 					templateUrl: 'HangfireDashboard.html',
 					controller: 'hangfireController'
