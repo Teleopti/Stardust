@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 		public ScheduleValidationProvider Target;
 		public FakeWriteSideRepository<IActivity> ActivityForId;
 		public FakeUserTimeZone UserTimeZone;
-		public FakeAbsenceRepository AbsenceRepository;
+		public FakeWriteSideRepository<IAbsence> AbsenceRepository;
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -45,10 +46,12 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			system.UseTestDouble<ScheduleValidationProvider>().For<IScheduleValidationProvider>();
 			system.UseTestDouble<FakePersonNameProvider>().For<IPersonNameProvider>();
 			system.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();
+			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
+			system.UseTestDouble<FakeWriteSideRepository<IAbsence>>().For<IProxyForId<IAbsence>>();
 			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
-			system.UseTestDouble<FakeAbsenceRepository>().For<IAbsenceRepository>();
-			//system.UseTestDouble<FakeSchedulingResultStateHolder>().For<ISchedulingResultStateHolder>();
 			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
+			system.UseTestDouble<AbsenceCommandConverter>().For<IAbsenceCommandConverter>();
+			system.UseTestDouble<PersonAccountUpdaterDummy>().For<IPersonAccountUpdater>();
 
 			var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
 			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
@@ -1177,8 +1180,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 					new DateTime(2016, 10, 10, 17, 0, 0, DateTimeKind.Utc)), shiftCategory, scenario);
 			ScheduleStorage.Add(personAssignment);
 
-			var accountDay = createAccountDay(new DateOnly(2016, 10, 10), TimeSpan.FromDays(0), TimeSpan.FromDays(1),
-				TimeSpan.FromDays(2));
+			var accountDay = createAccountDay(new DateOnly(2016, 10, 10), TimeSpan.FromDays(0), TimeSpan.FromDays(0),
+				TimeSpan.FromDays(0));
 
 			var absence = AbsenceFactory.CreateAbsence("abs").WithId();
 			AbsenceRepository.Add(absence);
@@ -1189,8 +1192,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			{
 				AbsenceId = absence.Id.GetValueOrDefault(),
 				PersonIds =  new []{person.Id.GetValueOrDefault()},
-				StartDate = new DateTime(2016, 10, 10, 0, 0, 0, DateTimeKind.Utc),
-				EndDate = new DateTime(2016, 10, 11, 0, 0, 0, DateTimeKind.Utc)
+				Start = new DateTime(2016, 10, 10),
+				End = new DateTime(2016, 10, 10),
+				IsFullDay = true
 			};
 
 			var result = Target.CheckPersonAccounts(input);
@@ -1209,7 +1213,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			var anotherAbs = AbsenceFactory.CreateAbsence("anotherAbs").WithId();
 			AbsenceRepository.Add(absence);
 			AbsenceRepository.Add(anotherAbs);
-
 
 			var activity = ActivityFactory.CreateActivity("activity");
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
@@ -1231,8 +1234,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			{
 				AbsenceId = anotherAbs.Id.GetValueOrDefault(),
 				PersonIds =  new []{person.Id.GetValueOrDefault()},
-				StartDate = new DateTime(2016, 10, 10, 0, 0, 0, DateTimeKind.Utc),
-				EndDate = new DateTime(2016, 10, 11, 0, 0, 0, DateTimeKind.Utc)
+				Start = new DateTime(2016, 10, 10),
+				End = new DateTime(2016, 10, 10)
 			};
 
 			var result = Target.CheckPersonAccounts(input);

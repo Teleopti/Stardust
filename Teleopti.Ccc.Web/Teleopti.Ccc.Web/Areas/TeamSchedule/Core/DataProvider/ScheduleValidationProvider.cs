@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -27,11 +28,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IProxyForId<IActivity> _activityForId;
 		private readonly INonoverwritableLayerChecker _nonoverwritableLayerChecker;
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
-		private readonly IAbsenceRepository _absenceRepository;
-
+		private readonly IProxyForId<IAbsence> _absenceRepository;
+		private readonly IAbsenceCommandConverter _absenceCommandConverter;
+		private readonly IPersonAccountUpdater _personAccountUpdater;
 		public ScheduleValidationProvider(IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
 			IPersonRepository personRepository, IPersonWeekViolatingWeeklyRestSpecification personWeekViolating,
-			IUserTimeZone timeZone, IPersonNameProvider personNameProvider, IProxyForId<IActivity> activityForId, INonoverwritableLayerChecker nonoverwritableLayerChecker, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IAbsenceRepository absenceRepository)
+			IUserTimeZone timeZone, IPersonNameProvider personNameProvider, IProxyForId<IActivity> activityForId, 
+			INonoverwritableLayerChecker nonoverwritableLayerChecker, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate,
+			IProxyForId<IAbsence> absenceRepository, IAbsenceCommandConverter absenceCommandConverter, IPersonAccountUpdater personAccountUpdater)
 		{
 			_scheduleStorage = scheduleStorage;
 			_currentScenario = currentScenario;
@@ -43,6 +47,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_nonoverwritableLayerChecker = nonoverwritableLayerChecker;
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_absenceRepository = absenceRepository;
+			_absenceCommandConverter = absenceCommandConverter;
+			_personAccountUpdater = personAccountUpdater;
 		}
 
 		public IList<ActivityLayerOverlapCheckingResult> GetActivityLayerOverlapCheckingResult(
@@ -134,7 +140,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		public IList<CheckingResult> CheckPersonAccounts(CheckPersonAccountFormData input)
 		{
 			var people = _personRepository.FindPeople(input.PersonIds);
-			var period = new DateOnlyPeriod(new DateOnly(input.StartDate), new DateOnly(input.EndDate));
+			var period = new DateOnlyPeriod(new DateOnly(input.Start), new DateOnly(input.End));
 			var extendedPeriod = period.Inflate(1);
 			var scenario = _currentScenario.Current();
 			var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people,
@@ -145,16 +151,20 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var results = new List<CheckingResult>();
 
 			var abs = _absenceRepository.Load(input.AbsenceId);
-			var userTimezone = _timeZone.TimeZone();
-			var absPeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(input.StartDate, userTimezone), TimeZoneHelper.ConvertToUtc(input.EndDate, userTimezone));
-			var absenceLayer = new AbsenceLayer(abs, absPeriod);
+			var userTimezone = _timeZone.TimeZone();		
+
+			
 			foreach (var person in people)
 			{
-				var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(schedules[person], true);
-				var scheduleDay = schedules[person].ScheduledDay(new DateOnly(input.StartDate));  //for multi day absence ??
-				scheduleDay.CreateAndAddAbsence(absenceLayer);
+				var absPeriod =
+					input.IsFullDay ? _absenceCommandConverter.GetFullDayAbsencePeriod(person, input.Start, input.End)
+					: new DateTimePeriod(TimeZoneHelper.ConvertToUtc(input.Start, userTimezone), TimeZoneHelper.ConvertToUtc(input.End, userTimezone));
+				var absenceLayer = new AbsenceLayer(abs, absPeriod);
 
-				var responses = schedules.CheckBusinessRules(new []{ scheduleDay }, businessRulesForPersonAccountUpdate);
+				var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(schedules[person], true);
+				var scheduleDays = schedules[person].ScheduledDayCollection(extendedPeriod);  //for multi day absence ??
+				scheduleDays.Single(d => d.DateOnlyAsPeriod.DateOnly == period.StartDate).CreateAndAddAbsence(absenceLayer);
+				var responses = schedules.CheckBusinessRules(scheduleDays, businessRulesForPersonAccountUpdate);
 				if (responses.Any(r =>
 				{
 					var accountRuleResponse = r as BusinessRuleResponseWithAbsenceId;
@@ -168,7 +178,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						Name = _personNameProvider.BuildNameFromSetting(person.Name)
 					});
 				}
-
+				_personAccountUpdater.UpdateForAbsence(person, abs, new DateOnly(input.Start));
 			}
 			return results;
 		}

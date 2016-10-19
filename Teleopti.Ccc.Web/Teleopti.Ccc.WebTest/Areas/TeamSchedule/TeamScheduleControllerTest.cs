@@ -184,17 +184,17 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			{
 				PersonIds = new List<Guid> {Guid.NewGuid()},
 				AbsenceId = Guid.NewGuid(),
-				StartDate = DateTime.MinValue,
-				EndDate = DateTime.MaxValue,
+				Start = DateTime.MinValue,
+				End = DateTime.MaxValue,
 			};
 			target.AddFullDayAbsence(form);
 
 			absencePersister.AssertWasCalled(
 				x => x.PersistFullDayAbsence(Arg<AddFullDayAbsenceCommand>.Matches(s => s.AbsenceId == form.AbsenceId)));
 			absencePersister.AssertWasCalled(
-				x => x.PersistFullDayAbsence(Arg<AddFullDayAbsenceCommand>.Matches(s => s.StartDate == form.StartDate)));
+				x => x.PersistFullDayAbsence(Arg<AddFullDayAbsenceCommand>.Matches(s => s.StartDate == form.Start)));
 			absencePersister.AssertWasCalled(
-				x => x.PersistFullDayAbsence(Arg<AddFullDayAbsenceCommand>.Matches(s => s.EndDate == form.EndDate)));
+				x => x.PersistFullDayAbsence(Arg<AddFullDayAbsenceCommand>.Matches(s => s.EndDate == form.End)));
 		}
 
 		[Test]
@@ -213,8 +213,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			{
 				PersonIds = new List<Guid>(),
 				TrackedCommandInfo = new TrackedCommandInfo(),
-				StartTime = DateTime.MinValue,
-				EndTime = DateTime.MaxValue
+				Start = DateTime.MinValue,
+				End = DateTime.MaxValue
 			};
 			target.AddIntradayAbsence(form);
 
@@ -233,8 +233,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var person2 = Guid.NewGuid();
 			var form = new IntradayAbsenceForm
 			{
-				StartTime = DateTime.MinValue,
-				EndTime = DateTime.MaxValue,
+				Start = DateTime.MinValue,
+				End = DateTime.MaxValue,
 				PersonIds = new List<Guid> {person1, person2}
 			};
 			target.AddIntradayAbsence(form);
@@ -257,17 +257,17 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			{
 				PersonIds = new List<Guid> {Guid.NewGuid()},
 				AbsenceId = Guid.NewGuid(),
-				StartTime = DateTime.MinValue,
-				EndTime = DateTime.MaxValue,
+				Start = DateTime.MinValue,
+				End = DateTime.MaxValue,
 			};
 			target.AddIntradayAbsence(form);
 
 			absencePersister.AssertWasCalled(
 				x => x.PersistIntradayAbsence(Arg<AddIntradayAbsenceCommand>.Matches(s => s.AbsenceId == form.AbsenceId)));
 			absencePersister.AssertWasCalled(
-				x => x.PersistIntradayAbsence(Arg<AddIntradayAbsenceCommand>.Matches(s => s.StartTime == form.StartTime)));
+				x => x.PersistIntradayAbsence(Arg<AddIntradayAbsenceCommand>.Matches(s => s.StartTime == form.Start)));
 			absencePersister.AssertWasCalled(
-				x => x.PersistIntradayAbsence(Arg<AddIntradayAbsenceCommand>.Matches(s => s.EndTime == form.EndTime)));
+				x => x.PersistIntradayAbsence(Arg<AddIntradayAbsenceCommand>.Matches(s => s.EndTime == form.End)));
 		}
 
 		[Test]
@@ -278,8 +278,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			var form = new IntradayAbsenceForm
 			{
-				StartTime = DateTime.MaxValue,
-				EndTime = DateTime.MinValue,
+				Start = DateTime.MaxValue,
+				End = DateTime.MinValue,
 			};
 			var result = target.AddIntradayAbsence(form);
 

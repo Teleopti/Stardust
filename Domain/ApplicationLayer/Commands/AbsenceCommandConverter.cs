@@ -30,11 +30,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var period = new DateOnlyPeriod(new DateOnly(command.StartDate.AddDays(-1)), new DateOnly(command.EndDate));
 
 			var scheduleRange = getScheduleRangeForPeriod(period, person);
-			var scheduleDays = scheduleRange.ScheduledDayCollection(period).ToList();
 			var scheduleDay = scheduleRange.ScheduledDay(new DateOnly(command.StartDate));
 
-			var previousDay = scheduleDays.First();
-			var absenceTimePeriod = getDateTimePeriodForAbsence(scheduleDays.Except(new[] { previousDay }), previousDay);
+			var absenceTimePeriod = GetFullDayAbsencePeriod(person, command.StartDate, command.EndDate);
 
 			var creatorInfo = new AbsenceCreatorInfo()
 			{
@@ -47,6 +45,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			};
 
 			return creatorInfo;
+		}
+
+		public DateTimePeriod GetFullDayAbsencePeriod(IPerson person, DateTime start, DateTime end)
+		{
+			var period = new DateOnlyPeriod(new DateOnly(start.AddDays(-1)), new DateOnly(end));
+
+			var scheduleRange = getScheduleRangeForPeriod(period, person);
+			var scheduleDays = scheduleRange.ScheduledDayCollection(period).ToList();
+
+			var previousDay = scheduleDays.First();
+			return getDateTimePeriodForAbsence(scheduleDays.Except(new[] { previousDay }), previousDay);
 		}
 
 		public AbsenceCreatorInfo GetCreatorInfoForIntradayAbsence(AddIntradayAbsenceCommand command)

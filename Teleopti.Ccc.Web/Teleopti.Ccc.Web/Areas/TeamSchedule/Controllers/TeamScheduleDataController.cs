@@ -122,7 +122,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 	{
 		public IEnumerable<Guid> PersonIds { get; set; }
 		public Guid AbsenceId { get; set; }
-		public DateTime StartDate { get; set; }
-		public DateTime EndDate { get; set; }
+		public DateTime Start { get; set; }
+		public DateTime End { get; set; }
+		public bool IsFullDay { get; set; }
 	}
 }

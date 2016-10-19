@@ -140,8 +140,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				{
 					PersonId = personId,
 					AbsenceId = form.AbsenceId,
-					StartDate = form.StartDate,
-					EndDate = form.EndDate,
+					StartDate = form.Start,
+					EndDate = form.End,
 					TrackedCommandInfo = form.TrackedCommandInfo
 				};
 				var persistResult = _absencePersister.PersistFullDayAbsence(command);
@@ -170,8 +170,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				{
 					PersonId = personId,
 					AbsenceId = form.AbsenceId,
-					StartTime = form.StartTime,
-					EndTime = form.EndTime,
+					StartTime = form.Start,
+					EndTime = form.End,
 					TrackedCommandInfo = form.TrackedCommandInfo
 				};
 				var persistResult = _absencePersister.PersistIntradayAbsence(command);

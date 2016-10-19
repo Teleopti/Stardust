@@ -47,12 +47,13 @@
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			};
 			if (vm.isFullDayAbsence) {
-				requestData.StartDate = moment(vm.timeRange.startTime).format("YYYY-MM-DD");
-				requestData.EndDate = moment(vm.timeRange.endTime).format("YYYY-MM-DD");
+				requestData.Start = moment(vm.timeRange.startTime).format("YYYY-MM-DD");
+				requestData.End = moment(vm.timeRange.endTime).format("YYYY-MM-DD");
 			} else {
-				requestData.StartTime = vm.convertTime(moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"));
-				requestData.EndTime = vm.convertTime(moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"));
+				requestData.Start = vm.convertTime(moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"));
+				requestData.End = vm.convertTime(moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"));
 			}
+			requestData.IsFullDay = vm.isFullDayAbsence;
 
 			if (vm.checkPersonalAccountEnabled) {
 				CommandCheckService.checkPersonalAccounts(requestData)

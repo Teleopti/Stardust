@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 	{
 		public IEnumerable<Guid> PersonIds { get; set; }
 		public Guid AbsenceId { get; set; }
-		public DateTime StartDate { get; set; }
-		public DateTime EndDate { get; set; }
+		public DateTime Start { get; set; }
+		public DateTime End { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 	}	
 	
@@ -53,13 +53,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 	{
 		public IEnumerable<Guid> PersonIds { get; set; }
 		public Guid AbsenceId { get; set; }
-		public DateTime StartTime { get; set; }
-		public DateTime EndTime { get; set; }
+		public DateTime Start { get; set; }
+		public DateTime End { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 
 		public bool IsValid()
 		{
-			return StartTime < EndTime;
+			return Start < End;
 		}
 	}
 
