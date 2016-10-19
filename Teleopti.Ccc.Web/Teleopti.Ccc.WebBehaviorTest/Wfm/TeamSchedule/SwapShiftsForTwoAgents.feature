@@ -36,6 +36,7 @@ Background:
 	And there is a shift bag named 'A shift bag' with rule set 'A rule set'
 	And there is a skill named 'A skill' with activity 'Phone'
 	And 'John Smith' has a workflow control set publishing schedules until '2016-12-01'
+	And 'Bill Gates' has a workflow control set publishing schedules until '2016-12-01'
 	And 'John Smith' has a person period with
 	| Field                | Value                |
 	| Shift bag            | A shift bag          |
@@ -45,7 +46,6 @@ Background:
 	| Contract             | A contract           |
 	| Contract schedule    | A contract schedule  |
 	| Part time percentage | Part time percentage |
-	And 'Bill Gates' has a workflow control set publishing schedules until '2016-12-01'
 	And 'Bill Gates' has a person period with
 	| Field                | Value                |
 	| Shift bag            | A shift bag          |
