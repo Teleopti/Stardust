@@ -347,7 +347,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				}
 				persons.Add(personRequest.Person);
 			}
-			totalPeriod = totalPeriod.ChangeStartTime(TimeSpan.FromDays(-1));
 
 			_feedback.SendProgress($"Started loading data for requests in period {totalPeriod}");
 
