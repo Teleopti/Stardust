@@ -1,4 +1,6 @@
+using System;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -22,6 +24,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			if (string.IsNullOrEmpty(culture) || !int.TryParse(culture, out cultureId))
 				return CultureInfo.CurrentCulture;
 			return CultureInfo.GetCultureInfo(cultureId);
+		}
+
+		public TimeZoneInfo GetTimeZone()
+		{
+			var timeZoneCode = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
+				@"select [value] from [mart].[sys_configuration]
+					where [key] = 'TimeZoneCode'").UniqueResult<string>();
+			if (string.IsNullOrEmpty(timeZoneCode))
+				throw new DataMissingInAnalyticsException("Timezone is not set in ETL.");
+			return TimeZoneInfo.FindSystemTimeZoneById(timeZoneCode);
 		}
 	}
 }

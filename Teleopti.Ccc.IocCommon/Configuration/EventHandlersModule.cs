@@ -196,6 +196,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.CacheByInterfaceProxy<AnalyticsDateRepository, IAnalyticsDateRepository>();
 				builder.RegisterType<AnalyticsDateRepository>().As<IAnalyticsDateRepository>().SingleInstance();
 			}
+
+	        if (_config.Toggle(Toggles.ETL_EventbasedTimeZone_40870))
+				builder.RegisterType<AnalyticsTimeZoneRepositoryWithCreation>().As<IAnalyticsTimeZoneRepository>().SingleInstance();
+			else
+				builder.RegisterType<AnalyticsTimeZoneRepository>().As<IAnalyticsTimeZoneRepository>().SingleInstance();
 		}
 	}
 

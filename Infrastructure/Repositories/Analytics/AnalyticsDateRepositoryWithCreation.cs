@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		private readonly IDistributedLockAcquirer _distributedLockAcquirer;
 		private readonly IEventPublisher _eventPublisher;
 		private readonly IAnalyticsConfigurationRepository _analyticsConfigurationRepository;
-		private static bool shouldPublish;
 
 		public AnalyticsDateRepositoryWithCreation(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork, IDistributedLockAcquirer distributedLockAcquirer, IEventPublisher eventPublisher, IAnalyticsConfigurationRepository analyticsConfigurationRepository) : base(analyticsUnitOfWork)
 		{
@@ -44,6 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 				var currentDay = base.MaxDate().DateDate;
 				var culture = _analyticsConfigurationRepository.GetCulture();
+				var shouldPublish = false;
 				while ((currentDay += TimeSpan.FromDays(1)) <= dateDate)
 				{
 					AnalyticsUnitOfWork.Current().Session().Save(new AnalyticsDate(currentDay, culture));

@@ -197,6 +197,7 @@
     <Compile Include="ApplicationLayer\Commands\ChangeShiftCategoryCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\INonoverwritableLayerMovabilityChecker.cs" />
     <Compile Include="ApplicationLayer\Commands\IReplyCommand.cs" />
+    <Compile Include="ApplicationLayer\Events\AnalyticsTimeZoneChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateTracer.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\HistoricalAdherenceUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ContextLoaderWithBatchConnectionOptimization.cs" />

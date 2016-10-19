@@ -248,6 +248,7 @@
     <Compile Include="Repositories\Analytics\AnalyticsShiftCategoryRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSkillRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsTimeZoneRepositoryTest.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsTimeZoneRepositoryWithCreationTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsWorkloadRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\IntradayMonitorDataLoaderTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsPersonPeriodRepositoryTest.cs" />

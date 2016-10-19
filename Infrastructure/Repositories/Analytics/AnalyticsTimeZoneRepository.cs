@@ -6,18 +6,25 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
-	public class AnalyticsTimeZoneRepository : IAnalyticsTimeZoneRepository
+	public class AnalyticsTimeZoneRepository : AnalyticsTimeZoneRepositoryBase, IAnalyticsTimeZoneRepository
 	{
-		private readonly ICurrentAnalyticsUnitOfWork _analyticsUnitOfWork;
-
-		public AnalyticsTimeZoneRepository(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork)
+		public AnalyticsTimeZoneRepository(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork) : base(analyticsUnitOfWork)
 		{
-			_analyticsUnitOfWork = analyticsUnitOfWork;
+		}
+	}
+
+	public abstract class AnalyticsTimeZoneRepositoryBase
+	{
+		protected readonly ICurrentAnalyticsUnitOfWork AnalyticsUnitOfWork;
+
+		protected AnalyticsTimeZoneRepositoryBase(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork)
+		{
+			AnalyticsUnitOfWork = analyticsUnitOfWork;
 		}
 
 		public AnalyticsTimeZone Get(string timeZoneCode)
 		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
+			return AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
 				$@"select 
 	                time_zone_id {nameof(AnalyticsTimeZone.TimeZoneId)},
 					time_zone_code {nameof(AnalyticsTimeZone.TimeZoneCode)}
@@ -29,7 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public IList<AnalyticsTimeZone> GetAll()
 		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
+			return AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
 				$@"select 
 	                time_zone_id {nameof(AnalyticsTimeZone.TimeZoneId)},
 					time_zone_code {nameof(AnalyticsTimeZone.TimeZoneCode)}

@@ -50,9 +50,27 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		private CultureInfo persistCulture(CultureInfo culture)
 		{
 			analyticsDataFactory = new AnalyticsDataFactory();
-			analyticsDataFactory.Setup(new SysConfiguration("Culture", culture.LCID.ToString(CultureInfo.InvariantCulture)));
+			analyticsDataFactory.Setup(new SysConfiguration("Culture", culture.LCID.ToString(CultureInfo.InvariantCulture)));			
 			analyticsDataFactory.Persist();
 			return culture;
+		}
+
+		[Test]
+		public void TimeZoneCodeCanBeMapped()
+		{
+			var expected = persistTimeZone("W. Europe Standard Time");
+
+			var result = WithAnalyticsUnitOfWork.Get(() => Target.GetTimeZone());
+
+			result.Id.Should().Be.EqualTo(expected);
+		}
+
+		private string persistTimeZone(string timeZone)
+		{
+			analyticsDataFactory = new AnalyticsDataFactory();
+			analyticsDataFactory.Setup(new SysConfiguration("TimeZoneCode", timeZone));
+			analyticsDataFactory.Persist();
+			return timeZone;
 		}
 	}
 }

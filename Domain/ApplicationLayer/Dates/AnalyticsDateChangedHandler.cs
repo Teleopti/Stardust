@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Dates
 {
 	public class AnalyticsDateChangedHandler :
 		IHandleEvent<AnalyticsDatesChangedEvent>,
+		IHandleEvent<AnalyticsTimeZoneChangedEvent>,
 		IRunOnHangfire
 	{
 		private readonly IAnalyticsIntervalRepository _analyticsIntervalRepository;
@@ -31,6 +32,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Dates
 		[AnalyticsUnitOfWork]
 		[Attempts(10)]
 		public virtual void Handle(AnalyticsDatesChangedEvent @event)
+		{
+			// Use a distributed lock to make other events trying to update at the same time fail
+			_distributedLockAcquirer.TryLockForTypeOf(this, updateBridges);
+		}
+
+		[AnalyticsUnitOfWork]
+		[Attempts(10)]
+		public virtual void Handle(AnalyticsTimeZoneChangedEvent @event)
 		{
 			// Use a distributed lock to make other events trying to update at the same time fail
 			_distributedLockAcquirer.TryLockForTypeOf(this, updateBridges);
@@ -76,4 +85,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Dates
 			}
 		}
 	}
+
 }

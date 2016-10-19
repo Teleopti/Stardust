@@ -66,5 +66,40 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Date
 				.Count(x => x.LocalIntervalId == 8 || x.LocalIntervalId == 9 || x.LocalIntervalId == 10 || x.LocalIntervalId == 11).Should().Be.EqualTo(0);
 
 		}
+
+		[Test]
+		public void ShouldAddOneEntryForEachTimezoneDateIntervalCombinationForTimeZoneChanged()
+		{
+			_analyticsDateRepository = new FakeAnalyticsDateRepository(new DateTime(2016, 01, 01), new DateTime(2016, 01, 31));
+
+			target().Handle(new AnalyticsTimeZoneChangedEvent());
+
+			_analyticsBridgeTimeZoneRepository.Bridges.Count.Should().Be.EqualTo(31 * 96 * 2 - 4); // 31 days, 96 intervals, 2 timezones, excluding 4 who are on the next day and can't be mapped
+		}
+
+		[Test]
+		public void ShouldRepeatFourIntervalsInLocalWhenWinterTimeChangeHappensForTimeZoneChanged()
+		{
+			_analyticsDateRepository = new FakeAnalyticsDateRepository(new DateTime(2016, 10, 29), new DateTime(2016, 10, 31)); // Winter time happens on 30
+
+			target().Handle(new AnalyticsTimeZoneChangedEvent());
+
+			var bridgesDuringDstShift = _analyticsBridgeTimeZoneRepository.Bridges.Where(x => x.DateId == 1 && x.TimeZoneId == 2).ToList();
+			bridgesDuringDstShift
+				.Count(x => x.LocalIntervalId == 8 || x.LocalIntervalId == 9 || x.LocalIntervalId == 10 || x.LocalIntervalId == 11).Should().Be.EqualTo(8);
+		}
+
+		[Test]
+		public void ShouldSkipFourIntervalsInLocalWhenSummerTimeChangeHappensForTimeZoneChanged()
+		{
+			_analyticsDateRepository = new FakeAnalyticsDateRepository(new DateTime(2016, 03, 26), new DateTime(2016, 03, 28)); // Summer time happens on 27
+
+			target().Handle(new AnalyticsTimeZoneChangedEvent());
+
+			var bridgesDuringDstShift = _analyticsBridgeTimeZoneRepository.Bridges.Where(x => x.DateId == 1 && x.TimeZoneId == 2).ToList();
+			bridgesDuringDstShift
+				.Count(x => x.LocalIntervalId == 8 || x.LocalIntervalId == 9 || x.LocalIntervalId == 10 || x.LocalIntervalId == 11).Should().Be.EqualTo(0);
+
+		}
 	}
 }
