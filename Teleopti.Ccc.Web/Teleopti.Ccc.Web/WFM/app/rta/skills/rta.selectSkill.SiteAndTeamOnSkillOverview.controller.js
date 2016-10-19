@@ -94,7 +94,6 @@
 								var teamIds = teams.map(function(team) {
 									return team.Id;
 								});
-
 								return getAdherenceForAllTeamsOnSitesBySkillOrSkillArea($scope.siteIds)
 									.then(function(teamAdherences) {
 										RtaAdherenceService.updateAdherence($scope.teams, teamAdherences);
@@ -116,7 +115,7 @@
 					if ($scope.skillId !== null) {
 						return RtaService.getSitesForSkill([$scope.skillId]);
 					} else {
-						return RtaService.getSitesForSkillArea($scope.skillAreaId);
+						return RtaService.getSitesForSkill(getSkillIdsFromSkillArea($scope.skillAreaId));
 					}
 				}
 
@@ -127,8 +126,8 @@
 							siteIds: $scope.siteIds
 						})
 						:
-						RtaService.getTeamsForSitesAndSkillArea({
-							skillAreaId: $scope.skillAreaId,
+						RtaService.getTeamsForSitesAndSkill({
+							skillIds: getSkillIdsFromSkillArea($scope.skillAreaId),
 							siteIds: $scope.siteIds
 						});
 				}
@@ -137,7 +136,7 @@
 					return $scope.skillId !== null ?
 								RtaService.getAdherenceForAllSitesBySkill([$scope.skillId])
 								:
-								RtaService.getAdherenceForAllSitesBySkillArea($scope.skillAreaId);
+								RtaService.getAdherenceForAllSitesBySkill(getSkillIdsFromSkillArea($scope.skillAreaId));
 				}
 
 				function getAdherenceForAllTeamsOnSitesBySkillOrSkillArea(siteId) {
@@ -147,12 +146,21 @@
 							siteId: siteId
 						})
 						:
-						RtaService.getAdherenceForAllTeamsOnSitesBySkillArea({
-							skillAreaId: $scope.skillAreaId,
+							RtaService.getAdherenceForAllTeamsOnSitesBySkill({
+							skillIds: getSkillIdsFromSkillArea($scope.skillAreaId),
 							siteId: siteId
 						});
 				}
 
+				function getSkillIdsFromSkillArea(skillAreaId){
+					console.log($scope.skillAreas);
+					return $scope.skillAreas.find(function(skillArea){
+						return skillArea.Id === skillAreaId;
+					})
+					.Skills.map(function(skill){
+						return skill.Id;
+					});
+				}
 				var polling = $interval(function() {
 					if ($scope.skillId !== null || $scope.skillAreaId !== null) {
 						getSitesOrTeamsForSkillOrSkillArea();

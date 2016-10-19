@@ -168,17 +168,6 @@
 				}).query().$promise;
 			};
 
-			this.getAdherenceForAllSitesBySkillArea = function (data) {
-				return $resource('../api/Sites/GetOutOfAdherenceForAllSitesBySkillArea', {}, {
-					query: {
-						method: 'GET',
-						isArray: true
-					}
-				}).query({
-					skillAreaId: data
-				}).$promise;
-			};
-
 			this.getAdherenceForAllSitesBySkill = function (data) {
 				return $resource('../api/Sites/InAlarmCountForSkills', {}, {
 					query: {
@@ -199,25 +188,14 @@
 				}).query().$promise;
 			};
 
-			this.getSitesForSkill = function (skillId) {
+			this.getSitesForSkill = function (skillIds) {
 				return $resource('../api/Sites/ForSkills', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
 					}
 				}).query({
-					skillIds: skillId
-				}).$promise;
-			};
-
-			this.getSitesForSkillArea = function (skillAreaId) {
-				return $resource('../api/Sites/ForSkillArea', {}, {
-					query: {
-						method: 'GET',
-						isArray: true
-					}
-				}).query({
-					skillAreaId: skillAreaId
+					skillIds: skillIds
 				}).$promise;
 			};
 
@@ -229,18 +207,6 @@
 					}
 				}).query({
 					skillIds: data.skillIds,
-					siteId: data.siteId
-				}).$promise;
-			};
-
-			this.getAdherenceForAllTeamsOnSitesBySkillArea = function (data) {
-				return $resource('../api/Teams/GetOutOfAdherenceForAllTeamsOnSitesBySkillArea', {}, {
-					query: {
-						method: 'GET',
-						isArray: true
-					}
-				}).query({
-					skillAreaId: data.skillAreaId,
 					siteId: data.siteId
 				}).$promise;
 			};
@@ -264,18 +230,6 @@
 					}
 				}).query({
 					skillIds: data.skillIds,
-					siteIds: data.siteIds
-				}).$promise;
-			};
-
-			this.getTeamsForSitesAndSkillArea = function (data) {
-				return $resource('../api/Teams/ForSitesAndSkillArea', {}, {
-					query: {
-						method: 'GET',
-						isArray: true
-					}
-				}).query({
-					skillAreaId: data.skillAreaId,
 					siteIds: data.siteIds
 				}).$promise;
 			};
