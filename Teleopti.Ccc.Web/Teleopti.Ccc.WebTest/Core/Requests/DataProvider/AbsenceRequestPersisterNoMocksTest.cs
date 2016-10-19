@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public ICurrentScenario CurrentScenario;
 
 		private INow _now;
+		private DateTime _nowTime = new DateTime(2016, 10, 18, 8, 0, 0, DateTimeKind.Utc);
 		private AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest _absenceRequestFormToPersonRequest;
 		private RequestsViewModelMappingProfile _requestsViewModelMappingProfile;
 
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				c.AddProfile(_requestsViewModelMappingProfile);
 			});
 
-			_now = new ThisIsNow(new DateTime(2016, 10, 18, 8, 0, 0, DateTimeKind.Utc));
+			_now = new ThisIsNow(_nowTime);
 
 			((FakeScheduleDataReadScheduleStorage) ScheduleStorage).Clear();
 
@@ -109,8 +110,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			var period = new DateTimePeriodForm
 			{
-				StartDate = DateOnly.Today,
-				EndDate = DateOnly.Today,
+				StartDate = new DateOnly(_nowTime),
+				EndDate = new DateOnly(_nowTime),
 				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			};
