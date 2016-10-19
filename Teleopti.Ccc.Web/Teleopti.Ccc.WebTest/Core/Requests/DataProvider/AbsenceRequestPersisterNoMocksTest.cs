@@ -42,6 +42,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private DateTime _nowTime = new DateTime(2016, 10, 18, 8, 0, 0, DateTimeKind.Utc);
 		private AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest _absenceRequestFormToPersonRequest;
 		private RequestsViewModelMappingProfile _requestsViewModelMappingProfile;
+		private IWorkflowControlSet _workflowControlSet;
+		private IAbsence _absence;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -76,6 +78,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				, DateOnly.Today.ToDateTimePeriod(UserTimeZone.TimeZone())));
 
 			((FakeCurrentBusinessUnit) CurrentBusinessUnit).FakeBusinessUnit(new BusinessUnit("test"));
+
+			_workflowControlSet = new WorkflowControlSet().WithId();
+			_absence = createAbsence();
 		}
 
 		[Test]
@@ -143,11 +148,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			var form = createAbsenceRequestForm(dateTimePeriodForm);
 
-			var absence = AbsenceRepository.Get(form.AbsenceId);
-
 			ScheduleStorage.Add(PersonAbsenceFactory.CreatePersonAbsence(LoggedOnUser.CurrentUser(), CurrentScenario.Current()
 				, DateOnly.Today.ToDateTimePeriod(new TimePeriod(dateTimePeriodForm.StartTime.Time, dateTimePeriodForm.EndTime.Time)
-					, UserTimeZone.TimeZone()), absence).WithId());
+					, UserTimeZone.TimeZone()), _absence).WithId());
 
 			var requestViewModel = persist(form);
 			var personRequest = PersonRequestRepository.Get(new Guid(requestViewModel.Id));
@@ -158,19 +161,47 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			((FakeEventPublisher)EventPublisher).PublishedEvents.Count().Should().Be(0);
 		}
 
-		private void setWorkflowControlSet(int? absenceRequestExpiredThreshold = null)
+		[Test]
+		public void ShouldDenyWhenAutoDenyIsOn()
 		{
-			LoggedOnUser.CurrentUser().WorkflowControlSet = new WorkflowControlSet
+			SetUp();
+
+			setWorkflowControlSet(autoDeny:true);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
 			{
-				AbsenceRequestExpiredThreshold = absenceRequestExpiredThreshold
-			}.WithId();
+				StartDate = DateOnly.Today,
+				EndDate = DateOnly.Today,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
+			});
+
+			var requestViewModel = persist(form);
+			var personRequest = PersonRequestRepository.Get(new Guid(requestViewModel.Id));
+
+			personRequest.Should().Not.Be(null);
+			personRequest.IsDenied.Should().Be(true);
+			personRequest.DenyReason.Should().Be("RequestDenyReasonAutodeny");
+		}
+
+		private void setWorkflowControlSet(int? absenceRequestExpiredThreshold = null, bool autoDeny = false)
+		{
+			_workflowControlSet.AbsenceRequestExpiredThreshold = absenceRequestExpiredThreshold;
+			_workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = _absence,
+				AbsenceRequestProcess = autoDeny ? (IProcessAbsenceRequest) new DenyAbsenceRequest() : new GrantAbsenceRequest(),
+				OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(_nowTime), DateOnly.Today.AddDays(30)),
+				Period = new DateOnlyPeriod(new DateOnly(_nowTime), DateOnly.Today.AddDays(30)),
+			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = _workflowControlSet;
 		}
 
 		private RequestViewModel persist(AbsenceRequestForm form)
 		{
 			var absenceRequestSynchronousValidator =
 				new AbsenceRequestSynchronousValidator(new ExpiredRequestValidator(new FakeGlobalSettingDataRepository(), _now),
-					new AlreadyAbsentValidator(), ScheduleStorage, CurrentScenario);
+					new AlreadyAbsentValidator(), ScheduleStorage, CurrentScenario, new AbsenceRequestWorkflowControlSetValidator());
 			var target = new AbsenceRequestPersister(PersonRequestRepository, Mapper.Engine, EventPublisher
 				, CurrentBusinessUnit, CurrentDataSource, _now, new ThisUnitOfWork(new FakeUnitOfWork())
 				, absenceRequestSynchronousValidator, new PersonRequestAuthorizationCheckerForTest());
@@ -180,10 +211,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 		private AbsenceRequestForm createAbsenceRequestForm(DateTimePeriodForm period)
 		{
-			var absence = createAbsence();
 			var form = new AbsenceRequestForm
 			{
-				AbsenceId = absence.Id.Value,
+				AbsenceId = _absence.Id.Value,
 				Subject = "test",
 				Period = period
 			};

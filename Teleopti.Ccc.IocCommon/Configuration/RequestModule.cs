@@ -58,6 +58,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayRequestWithinOpenHourValidator>().As<IIntradayRequestWithinOpenHourValidator>().SingleInstance();
 		    builder.RegisterType<ExpiredRequestValidator>().As<IExpiredRequestValidator>();
 		    builder.RegisterType<AlreadyAbsentValidator>().As<IAlreadyAbsentValidator>();
+		    builder.RegisterType<AbsenceRequestWorkflowControlSetValidator>()
+			    .As<IAbsenceRequestWorkflowControlSetValidator>();
 
 			if (_configuration.Toggle(Toggles.MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747))
 			{
