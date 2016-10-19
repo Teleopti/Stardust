@@ -19,12 +19,10 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		public IValidatedRequest ValidateExpiredRequest(IAbsenceRequest absenceRequest, IScheduleRange scheduleRange)
 		{
 			var person = absenceRequest.Person;
-			if (person.WorkflowControlSet == null)
-				return new ValidatedRequest { IsValid = true, ValidationErrors = string.Empty };
 
-			var absenceRequestExpiredThreshold = person.WorkflowControlSet.AbsenceRequestExpiredThreshold;
-			if (!absenceRequestExpiredThreshold.HasValue)
-				return new ValidatedRequest { IsValid = true, ValidationErrors = string.Empty };
+			var absenceRequestExpiredThreshold = person.WorkflowControlSet?.AbsenceRequestExpiredThreshold;
+			if (absenceRequestExpiredThreshold == null)
+				return ValidatedRequest.Valid;
 
 			var period = absenceRequest.Period;
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
@@ -48,7 +46,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				return new ValidatedRequest { IsValid = false, ValidationErrors = validationError };
 			}
 
-			return new ValidatedRequest { IsValid = true, ValidationErrors = string.Empty };
+			return ValidatedRequest.Valid;
 		}
 
 		private bool validateRequestStartTime(DateTime requestStartTime, TimeZoneInfo timeZone, int expiredThreshold)

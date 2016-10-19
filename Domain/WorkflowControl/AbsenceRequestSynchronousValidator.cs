@@ -11,16 +11,18 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private readonly IAbsenceRequestWorkflowControlSetValidator _absenceRequestWorkflowControlSetValidator;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentScenario _currentScenario;
+		private readonly IAbsenceRequestPersonAccountValidator _absenceRequestPersonAccountValidator;
 
 		public AbsenceRequestSynchronousValidator(IExpiredRequestValidator expiredRequestValidator
 			, IAlreadyAbsentValidator alreadyAbsentValidator, IScheduleStorage scheduleStorage
-			, ICurrentScenario currentScenario, IAbsenceRequestWorkflowControlSetValidator absenceRequestWorkflowControlSetValidator)
+			, ICurrentScenario currentScenario, IAbsenceRequestWorkflowControlSetValidator absenceRequestWorkflowControlSetValidator, IAbsenceRequestPersonAccountValidator absenceRequestPersonAccountValidator)
 		{
 			_expiredRequestValidator = expiredRequestValidator;
 			_alreadyAbsentValidator = alreadyAbsentValidator;
 			_scheduleStorage = scheduleStorage;
 			_currentScenario = currentScenario;
 			_absenceRequestWorkflowControlSetValidator = absenceRequestWorkflowControlSetValidator;
+			_absenceRequestPersonAccountValidator = absenceRequestPersonAccountValidator;
 		}
 
 		public IValidatedRequest Validate(IPersonRequest personRequest)
@@ -32,7 +34,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var person = personRequest.Person;
 			var absenceRequest = personRequest.Request as IAbsenceRequest;
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
-				new ScheduleDictionaryLoadOptions(false, false), absenceRequest.Period, _currentScenario.Current());
+				new ScheduleDictionaryLoadOptions(false, false), absenceRequest.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone())
+				, _currentScenario.Current());
 
 			var scheduleRange = scheduleDictionary[person];
 			var requestExpired = _expiredRequestValidator.ValidateExpiredRequest(absenceRequest, scheduleRange);
@@ -41,6 +44,10 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			if (_alreadyAbsentValidator.Validate(absenceRequest, scheduleRange))
 				return new ValidatedRequest { IsValid = false, ValidationErrors = Resources.RequestDenyReasonAlreadyAbsent };
+
+			var personAccountValidateResult = _absenceRequestPersonAccountValidator.Validate(personRequest, scheduleRange);
+			if (!personAccountValidateResult.IsValid)
+				return personAccountValidateResult;
 
 			return new ValidatedRequest { IsValid = true };
 		}

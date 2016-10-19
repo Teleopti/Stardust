@@ -7,6 +7,8 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
@@ -37,13 +39,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public ICurrentDataSource CurrentDataSource;
 		public IScheduleStorage ScheduleStorage;
 		public ICurrentScenario CurrentScenario;
+		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 
-		private INow _now;
-		private DateTime _nowTime = new DateTime(2016, 10, 18, 8, 0, 0, DateTimeKind.Utc);
+		private static readonly DateTime _nowTime = new DateTime(2016, 10, 18, 8, 0, 0, DateTimeKind.Utc);
+		private INow _now = new ThisIsNow(_nowTime);
+		private DateOnly _today = new DateOnly(_nowTime);
 		private AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest _absenceRequestFormToPersonRequest;
 		private RequestsViewModelMappingProfile _requestsViewModelMappingProfile;
 		private IWorkflowControlSet _workflowControlSet;
 		private IAbsence _absence;
+		private IPerson _person;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -52,7 +57,153 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			system.UseTestDouble(new FakeCurrentDatasource("test")).For<ICurrentDataSource>();
 		}
 
-		public void SetUp()
+		[Test]
+		public void ShouldAddRequest()
+		{
+			setUp();
+
+			setWorkflowControlSet(usePersonAccountValidator:true);
+
+			var accountDay = new AccountDay(_today)
+			{
+				Accrued = TimeSpan.FromDays(1)
+			};
+			createPersonAbsenceAccount(_person, _absence, accountDay);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
+			});
+
+			var personRequest = persist(form);
+			assertPersonRequest(personRequest, false, string.Empty);
+		}
+
+		[Test]
+		public void ShouldDenyExpiredRequest()
+		{
+			setUp();
+
+			setWorkflowControlSet(15);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
+			});
+
+			var personRequest = persist(form);
+			assertPersonRequest(personRequest, true, string.Format(Resources.RequestDenyReasonRequestExpired, personRequest.Request.Period.StartDateTime, 15));
+		}
+
+		[Test]
+		public void ShouldDenyWhenAlreadyAbsent()
+		{
+			setUp();
+
+			setWorkflowControlSet();
+
+			var dateTimePeriodForm = new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
+			};
+
+			var form = createAbsenceRequestForm(dateTimePeriodForm);
+
+			ScheduleStorage.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, CurrentScenario.Current()
+				, _today.ToDateTimePeriod(new TimePeriod(dateTimePeriodForm.StartTime.Time, dateTimePeriodForm.EndTime.Time)
+					, UserTimeZone.TimeZone()), _absence).WithId());
+
+			var personRequest = persist(form);
+			assertPersonRequest(personRequest, true, Resources.RequestDenyReasonAlreadyAbsent);
+		}
+
+		[Test]
+		public void ShouldDenyWhenAutoDenyIsOn()
+		{
+			setUp();
+
+			setWorkflowControlSet(autoDeny:true);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = DateOnly.Today,
+				EndDate = DateOnly.Today,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
+			});
+
+			var personRequest = persist(form);
+			assertPersonRequest(personRequest, true, "RequestDenyReasonAutodeny");
+		}
+
+		[Test]
+		public void ShouldDenyWhenPersonAccountDaysAreExceeded()
+		{
+			setUp();
+
+			setWorkflowControlSet(usePersonAccountValidator:true);
+
+			var accountDay = new AccountDay(_today)
+			{
+				Accrued = TimeSpan.FromDays(1)
+			};
+			createPersonAbsenceAccount(_person, _absence, accountDay);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today.AddDays(1),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
+			});
+
+			var personRequest = persist(form);
+			assertPersonRequest(personRequest, true, Resources.RequestDenyReasonPersonAccount);
+		}
+
+		[Test]
+		public void ShouldDenyWhenPersonAccountTimeIsExceeded()
+		{
+			setUp();
+
+			setWorkflowControlSet(usePersonAccountValidator: true);
+
+			var accountTime1 = new AccountTime(_today)
+			{
+				Accrued = TimeSpan.FromMinutes(60)
+			};
+			var accountTime2 = new AccountTime(_today.AddDays(1))
+			{
+				Accrued = TimeSpan.FromMinutes(20)
+			};
+			createPersonAbsenceAccount(_person, _absence, accountTime1, accountTime2);
+
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				CurrentScenario.Current(), _person
+				, _today.AddDays(1).ToDateTimePeriod(UserTimeZone.TimeZone())));
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today.AddDays(1),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(23)),
+				EndTime = new TimeOfDay(TimeSpan.FromMinutes(21))
+			});
+
+			var personRequest = persist(form);
+			assertPersonRequest(personRequest, true, Resources.RequestDenyReasonPersonAccount);
+		}
+
+		private void setUp()
 		{
 			_absenceRequestFormToPersonRequest =
 				new AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest(() => Mapper.Engine, () => LoggedOnUser, () => AbsenceRepository, () => UserTimeZone);
@@ -69,144 +220,64 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				c.AddProfile(_requestsViewModelMappingProfile);
 			});
 
-			_now = new ThisIsNow(_nowTime);
+			((FakeScheduleDataReadScheduleStorage)ScheduleStorage).Clear();
 
-			((FakeScheduleDataReadScheduleStorage) ScheduleStorage).Clear();
+			_person = LoggedOnUser.CurrentUser();
 
 			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				CurrentScenario.Current(), LoggedOnUser.CurrentUser()
-				, DateOnly.Today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+				CurrentScenario.Current(), _person
+				, _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
 
-			((FakeCurrentBusinessUnit) CurrentBusinessUnit).FakeBusinessUnit(new BusinessUnit("test"));
-
+			((FakeCurrentBusinessUnit)CurrentBusinessUnit).FakeBusinessUnit(new BusinessUnit("test"));
 			_workflowControlSet = new WorkflowControlSet().WithId();
 			_absence = createAbsence();
 		}
 
-		[Test]
-		public void ShouldAddRequest()
-		{
-			SetUp();
-
-			setWorkflowControlSet();
-
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
-			{
-				StartDate = DateOnly.Today,
-				EndDate = DateOnly.Today,
-				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
-				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
-			});
-
-			var requestViewModel = persist(form);
-			var personRequest = PersonRequestRepository.Get(new Guid(requestViewModel.Id));
-			personRequest.Should().Not.Be(null);
-			personRequest.IsDenied.Should().Be(false);
-
-			((FakeEventPublisher) EventPublisher).PublishedEvents.Count().Should().Be(1);
-		}
-
-		[Test]
-		public void ShouldDenyExpiredRequest()
-		{
-			SetUp();
-
-			setWorkflowControlSet(15);
-
-			var period = new DateTimePeriodForm
-			{
-				StartDate = new DateOnly(_nowTime),
-				EndDate = new DateOnly(_nowTime),
-				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
-				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
-			};
-			var form = createAbsenceRequestForm(period);
-
-			var requestViewModel = persist(form);
-			var personRequest = PersonRequestRepository.Get(new Guid(requestViewModel.Id));
-			personRequest.Should().Not.Be(null);
-			personRequest.IsDenied.Should().Be(true);
-			personRequest.DenyReason.Should().Be(string.Format(Resources.RequestDenyReasonRequestExpired, personRequest.Request.Period.StartDateTime, 15));
-
-			((FakeEventPublisher)EventPublisher).PublishedEvents.Count().Should().Be(0);
-		}
-
-		[Test]
-		public void ShouldDenyWhenAlreadyAbsent()
-		{
-			SetUp();
-
-			setWorkflowControlSet();
-
-			var dateTimePeriodForm = new DateTimePeriodForm
-			{
-				StartDate = DateOnly.Today,
-				EndDate = DateOnly.Today,
-				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
-				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
-			};
-
-			var form = createAbsenceRequestForm(dateTimePeriodForm);
-
-			ScheduleStorage.Add(PersonAbsenceFactory.CreatePersonAbsence(LoggedOnUser.CurrentUser(), CurrentScenario.Current()
-				, DateOnly.Today.ToDateTimePeriod(new TimePeriod(dateTimePeriodForm.StartTime.Time, dateTimePeriodForm.EndTime.Time)
-					, UserTimeZone.TimeZone()), _absence).WithId());
-
-			var requestViewModel = persist(form);
-			var personRequest = PersonRequestRepository.Get(new Guid(requestViewModel.Id));
-			personRequest.Should().Not.Be(null);
-			personRequest.IsDenied.Should().Be(true);
-			personRequest.DenyReason.Should().Be(Resources.RequestDenyReasonAlreadyAbsent);
-
-			((FakeEventPublisher)EventPublisher).PublishedEvents.Count().Should().Be(0);
-		}
-
-		[Test]
-		public void ShouldDenyWhenAutoDenyIsOn()
-		{
-			SetUp();
-
-			setWorkflowControlSet(autoDeny:true);
-
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
-			{
-				StartDate = DateOnly.Today,
-				EndDate = DateOnly.Today,
-				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
-				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
-			});
-
-			var requestViewModel = persist(form);
-			var personRequest = PersonRequestRepository.Get(new Guid(requestViewModel.Id));
-
-			personRequest.Should().Not.Be(null);
-			personRequest.IsDenied.Should().Be(true);
-			personRequest.DenyReason.Should().Be("RequestDenyReasonAutodeny");
-		}
-
-		private void setWorkflowControlSet(int? absenceRequestExpiredThreshold = null, bool autoDeny = false)
+		private void setWorkflowControlSet(int? absenceRequestExpiredThreshold = null, bool autoDeny = false, bool usePersonAccountValidator = false)
 		{
 			_workflowControlSet.AbsenceRequestExpiredThreshold = absenceRequestExpiredThreshold;
 			_workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
 			{
 				Absence = _absence,
 				AbsenceRequestProcess = autoDeny ? (IProcessAbsenceRequest) new DenyAbsenceRequest() : new GrantAbsenceRequest(),
-				OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(_nowTime), DateOnly.Today.AddDays(30)),
-				Period = new DateOnlyPeriod(new DateOnly(_nowTime), DateOnly.Today.AddDays(30)),
+				OpenForRequestsPeriod = new DateOnlyPeriod(_today, DateOnly.Today.AddDays(30)),
+				Period = new DateOnlyPeriod(_today, DateOnly.Today.AddDays(30)),
+				PersonAccountValidator = usePersonAccountValidator? (IAbsenceRequestValidator)new PersonAccountBalanceValidator() : new AbsenceRequestNoneValidator()
 			});
-			LoggedOnUser.CurrentUser().WorkflowControlSet = _workflowControlSet;
+			
+			_person.WorkflowControlSet = _workflowControlSet;
 		}
 
-		private RequestViewModel persist(AbsenceRequestForm form)
+		private void createPersonAbsenceAccount(IPerson person, IAbsence absence, params IAccount[] accounts)
 		{
+			var personAbsenceAccount = new PersonAbsenceAccount(person, absence);
+
+			foreach (var account in accounts)
+			{
+				if (account is AccountDay)
+					personAbsenceAccount.Absence.Tracker = Tracker.CreateDayTracker();
+
+				if (account is AccountTime)
+					personAbsenceAccount.Absence.Tracker = Tracker.CreateTimeTracker();
+
+				personAbsenceAccount.Add(account);
+			}
+			
+			PersonAbsenceAccountRepository.Add(personAbsenceAccount);
+		}
+
+		private IPersonRequest persist(AbsenceRequestForm form)
+		{
+			var absenceRequestPersonAccountValidator = new AbsenceRequestPersonAccountValidator(
+				new PersonAbsenceAccountProvider(PersonAbsenceAccountRepository));
 			var absenceRequestSynchronousValidator =
 				new AbsenceRequestSynchronousValidator(new ExpiredRequestValidator(new FakeGlobalSettingDataRepository(), _now),
-					new AlreadyAbsentValidator(), ScheduleStorage, CurrentScenario, new AbsenceRequestWorkflowControlSetValidator());
+					new AlreadyAbsentValidator(), ScheduleStorage, CurrentScenario, new AbsenceRequestWorkflowControlSetValidator(), absenceRequestPersonAccountValidator);
 			var target = new AbsenceRequestPersister(PersonRequestRepository, Mapper.Engine, EventPublisher
 				, CurrentBusinessUnit, CurrentDataSource, _now, new ThisUnitOfWork(new FakeUnitOfWork())
 				, absenceRequestSynchronousValidator, new PersonRequestAuthorizationCheckerForTest());
 			var requestViewModel = target.Persist(form);
-			return requestViewModel;
+			return PersonRequestRepository.Get(new Guid(requestViewModel.Id));
 		}
 
 		private AbsenceRequestForm createAbsenceRequestForm(DateTimePeriodForm period)
@@ -225,6 +296,19 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var absence = AbsenceFactory.CreateAbsence("holiday").WithId();
 			AbsenceRepository.Add(absence);
 			return absence;
+		}
+
+		private void assertPersonRequest(IPersonRequest personRequest, bool isDenied, string denyReason = null)
+		{
+			personRequest.Should().Not.Be(null);
+			personRequest.IsDenied.Should().Be(isDenied);
+			personRequest.DenyReason.Should().Be(denyReason);
+			publishedEventsCountShouldBe(isDenied ? 0 : 1);
+		}
+
+		private void publishedEventsCountShouldBe(int count)
+		{
+			((FakeEventPublisher)EventPublisher).PublishedEvents.Count().Should().Be(count);
 		}
 	}
 }

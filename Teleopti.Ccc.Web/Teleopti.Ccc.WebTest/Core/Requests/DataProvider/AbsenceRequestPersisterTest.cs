@@ -129,8 +129,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			mapper.Stub(x => x.Map<AbsenceRequestForm, IPersonRequest>(form)).Return(personRequest);
 
+			var absenceRequestPersonAccountValidator = new AbsenceRequestPersonAccountValidator(
+				new PersonAbsenceAccountProvider(new FakePersonAbsenceAccountRepository()));
 			var absenceRequestSynchronousValidator = new AbsenceRequestSynchronousValidator(new ExpiredRequestValidator(new FakeGlobalSettingDataRepository(), new Now()),
-				new AlreadyAbsentValidator(), new FakeScheduleDataReadScheduleStorage(), new FakeCurrentScenario(), new AbsenceRequestWorkflowControlSetValidator());
+				new AlreadyAbsentValidator(), new FakeScheduleDataReadScheduleStorage(), new FakeCurrentScenario(), new AbsenceRequestWorkflowControlSetValidator(), absenceRequestPersonAccountValidator);
 			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now, null,
 				absenceRequestSynchronousValidator, new PersonRequestAuthorizationCheckerForTest());
 			target.Persist(form);

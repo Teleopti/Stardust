@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var absenceRequestProcess = absenceRequestOpenPeriod.AbsenceRequestProcess as DenyAbsenceRequest;
 			if (absenceRequestProcess != null)
 				return new ValidatedRequest {IsValid = false, ValidationErrors = absenceRequestProcess.DenyReason};
-			return new ValidatedRequest {IsValid = true};
+			return ValidatedRequest.Valid;
 		}
 	}
 }

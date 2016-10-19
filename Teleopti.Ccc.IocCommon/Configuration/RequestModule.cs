@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		    builder.RegisterType<AlreadyAbsentValidator>().As<IAlreadyAbsentValidator>();
 		    builder.RegisterType<AbsenceRequestWorkflowControlSetValidator>()
 			    .As<IAbsenceRequestWorkflowControlSetValidator>();
+		    builder.RegisterType<AbsenceRequestPersonAccountValidator>().As<IAbsenceRequestPersonAccountValidator>();
 
 			if (_configuration.Toggle(Toggles.MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747))
 			{
