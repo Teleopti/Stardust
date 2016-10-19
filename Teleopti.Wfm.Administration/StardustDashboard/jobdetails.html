@@ -1,11 +1,11 @@
 ﻿<div class="container body-content" ng-controller="jobDetailsController as vm">
 	<div class="nav" ng-include="'./StardustDashboard/menu.html'" role="navigation"></div>
-	<a style="float: left; padding-top: 25px; padding-right: 50px" href="#StardustDashboard/jobs"><img alt="back" title="Back to List Jobs" src="Content/images/left_round.png" /></a>
+	<a style="float: left; padding-top: 25px; padding-right: 50px"><img alt="back" src="Content/images/left_round.png" ng-click="vm.back()" /></a>
 	<h2>Job Details</h2>
 	<div>
 		<div class="row">
-			<h4 ng-class="vm.Job.Result=='Success' ? 'successResult' : (vm.Job.Result==null ? 'processingResult' : 'failureResult')">Job {{vm.Job.Result}}!</h4>
-			<div style="font-size: 14p; font-weight: bold; color: red">{{vm.JobError}}</div>
+			<h4 ng-class="vm.Job.Result=='Success' ? 'green' : (vm.Job.Result==null ? 'hide' : 'red')">Job {{vm.Job.Result}}!</h4>
+			<div style="font-size: 14p; font-weight: bold; color: tomato">{{vm.JobError}}</div>
 			<h4>{{vm.Job.Name}}</h4>
 		</div>
 			<div class="row">

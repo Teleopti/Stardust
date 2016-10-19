@@ -19,26 +19,18 @@ td {
 	border-bottom-color: black;
 	border-bottom-style: solid*/
 }
-.greenNode {
-    color: palegreen;
-}
-.redNode {
-    background-color: tomato;
-}
 
 .titleBlue {
 	color: #266d90;
 	font-size: 14px;
 }
 
-.successResult {
+.green {
 	background-color: palegreen;
-	visibility: visible;
 }
-.failureResult {
+.red {
 	background-color: tomato;
-	visibility: visible;
 }
-.processingResult {
+.hide {
 	visibility: hidden
 }

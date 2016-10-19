@@ -268,11 +268,13 @@
     <Content Include="Scripts\jquery-3.1.0.slim.js" />
     <Content Include="Scripts\jquery-3.1.0.slim.min.js" />
     <Content Include="Scripts\StardustApp\jobController.js" />
+    <Content Include="Scripts\StardustApp\jobQueueDetailsController.js" />
     <Content Include="Scripts\StardustApp\jobQueueController.js" />
     <Content Include="Scripts\StardustApp\menuController.js" />
     <Content Include="Scripts\StardustApp\nodeController.js" />
     <Content Include="Scripts\StardustApp\nodeDetailsController.js" />
     <Content Include="Scripts\StardustApp\summaryController.js" />
+    <Content Include="StardustDashboard\jobqueuedetails.html" />
     <Content Include="StardustDashboard\nodedetails.html" />
     <Content Include="StardustDashboard\jobdetails.html" />
     <Content Include="StardustDashboard\stardust.html" />

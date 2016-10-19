@@ -315,6 +315,29 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			return jobs;
 		}
 
+		public Job GetQueuedJob(Guid jobId)
+		{
+			var job = new Job(); ;
+			using (var sqlConnection = new SqlConnection(_connectionString))
+			{
+				sqlConnection.OpenWithRetry(_retryPolicy);
+				var selectCommandText = $"SELECT * FROM Stardust.JobQueue WHERE JobId = '{jobId}'";
+				using (var getQueuedJob = new SqlCommand(selectCommandText, sqlConnection))
+				{
+					using (var sqlDataReader = getQueuedJob.ExecuteReaderWithRetry(_retryPolicy))
+					{
+						if (sqlDataReader.HasRows)
+						{
+							sqlDataReader.Read();
+							 job = createQueuedJobFromSqlDataReader(sqlDataReader);
+							
+						}
+					}
+				}
+			}
+			return job;
+		}
+
 
 		private T getDBNullSafeValue<T>(object value) where T : class
 		{
@@ -347,7 +370,8 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 				JobId = sqlDataReader.GetGuid(sqlDataReader.GetOrdinal("JobId")),
 				Name = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Name")),
 				CreatedBy = sqlDataReader.GetString(sqlDataReader.GetOrdinal("CreatedBy")),
-				Created = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("Created"))
+				Created = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("Created")),
+				Serialized = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Serialized"))
 			};
 			return job;
 		}

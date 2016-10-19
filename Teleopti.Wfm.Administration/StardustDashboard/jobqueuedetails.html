@@ -1,0 +1,28 @@
+﻿<div class="container body-content" ng-controller="jobQueueDetailsController as vm">
+	<div class="nav" ng-include="'./StardustDashboard/menu.html'" role="navigation"></div>
+	<a style="float: left; padding-top: 25px; padding-right: 50px"><img alt="back" src="Content/images/left_round.png" ng-click="vm.back()" /></a>
+	<h2>Job Details</h2>
+	<div class="row">
+		<h4>{{vm.Job.Name}}</h4>
+	</div>
+	<div class="row">
+		<div class="col-md-7">
+			<div class="row">
+				<div class="col-md-2">
+					<p class="titleBlue">Created</p>
+				</div>
+				<div class="col-md-10">
+					{{vm.Job.CreatedBy}} {{vm.Job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-2">
+					<p class="titleBlue">Payload</p>
+				</div>
+				<div class="col-md-10">
+					{{vm.Job.Serialized}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

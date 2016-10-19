@@ -1,56 +1,56 @@
 ﻿<div class="container body-content" ng-controller="nodeDetailsController as vm">
 	<div class="nav" ng-include="'./StardustDashboard/menu.html'" role="navigation"></div>
-	<div class="col-md-12">
-		<a style="float: left; padding-top: 25px; padding-right: 50px" href="#StardustDashboard/nodes"><img alt="back" title="Back to Stardust Manager" src="Content/images/left_round.png" /></a>
-		<h2>Node details</h2>
-		<h5>Note! All timestamps are in UTC!</h5>
-		<div>
-			<div class="row">
-				<table>
-					<thead>
-						<tr>
-							<th>Url</th>
-							<th>Latest Heartbeat</th>
-							<th>Working</th>
-							<th>Alive</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-class="{'greenNode': vm.Node.Alive === true, 'redNode':vm.Node.Alive === false}">
-							<td>{{vm.Node.Url}}</td>
-							<td>{{vm.Node.Heartbeat | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-							<td>{{vm.Node.Running}}</td>
-							<td>{{vm.Node.Alive}}</td>
-						</tr>
-					</tbody>
-				</table>
+	<a style="float: left; padding-top: 25px; padding-right: 50px"><img alt="back" src="Content/images/left_round.png" ng-click="vm.back()" /></a>
+	<h2>Node details</h2>
+	<div>
+		<div class="row">
+			<h4 ng-class="vm.Node.Alive === false ? 'red' : 'hide' ">The node is dead!</h4>
+			<h4>{{vm.Node.Url}}</h4>
+		</div>
+
+		<div class="row">
+			<div class="col-md-7">
+				<div class="row">
+					<div class="col-md-2">
+						<p class="titleBlue">Latest Heartbeat</p>
+					</div>
+					<div class="col-md-10">
+						{{vm.Node.Heartbeat | date : 'yyyy-MM-dd HH:mm:ss'}}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<p class="titleBlue">Running</p>
+					</div>
+					<div class="col-md-10">
+						{{vm.Node.Running}}
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>
 
-	<div class="row">
-		<div class="col-md-12">
+		<div class="row">
 			<h3>Latest Jobs</h3>
 			<h5>Click the Type of a job to see details.</h5>
 			<div>
 				<table>
 					<thead>
-						<tr>
-							<th>Type</th>
-							<th>Finished</th>
-							<th>Total Duration</th>
-							<th>Sent to</th>
-							<th>Result</th>
-						</tr>
+					<tr>
+						<th>Type</th>
+						<th>Finished</th>
+						<th>Total Duration</th>
+						<th>Sent to</th>
+						<th>Result</th>
+					</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="job in vm.Jobs">
-							<td><a href="#jobdetails\{{job.JobId}}">{{job.Name}}</a></td>
-							<td>{{job.Ended | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-							<td>{{job.TotalDuration}}</td>
-							<td>{{job.SentToWorkerNodeUri}}</td>
-							<td>{{job.Result}}</td>
-						</tr>
+					<tr ng-repeat="job in vm.Jobs">
+						<td><a href="#jobdetails\{{job.JobId}}">{{job.Name}}</a></td>
+						<td>{{job.Ended | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+						<td>{{job.TotalDuration}}</td>
+						<td>{{job.SentToWorkerNodeUri}}</td>
+						<td ng-class="job.Result=='Success' ? 'green' : (job.Result==null ? 'hide' : 'red')">{{job.Result}}</td>
+					</tr>
 					</tbody>
 				</table>
 			</div>

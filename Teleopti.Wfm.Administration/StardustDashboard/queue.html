@@ -14,7 +14,7 @@
 					</thead>
 					<tbody>
 					<tr ng-repeat="job in vm.Jobs">
-						<td>{{job.Name}}</td>
+						<td><a href="#jobqueuedetails\{{job.JobId}}">{{job.Name}}</a></td>
 						<td>{{job.CreatedBy}}</td>
 						<td>{{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 					</tr>

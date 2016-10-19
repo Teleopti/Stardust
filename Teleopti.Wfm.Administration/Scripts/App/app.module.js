@@ -66,6 +66,10 @@
 					templateUrl: 'StardustDashboard/queue.html',
 					controller: 'jobQueueController'
 				})
+				.when('/jobqueuedetails/:jobId', {
+					templateUrl: 'StardustDashboard/jobqueuedetails.html',
+					controller: 'jobQueueDetailsController'
+				})
 				.when('/jobdetails/:jobId', {
 					templateUrl: 'StardustDashboard/jobdetails.html',
 					controller: 'jobDetailsController'

@@ -9,7 +9,7 @@
 					<p>Click the Type of a job to see details.</p>
 				</div>
 			</div>
-			<div style="font-size: 14px; font-weight: bold; color: red">{{vm.JobError}}</div>
+			<div style="font-size: 14px; font-weight: bold; color: tomato">{{vm.JobError}}</div>
 			<div>
 				<table>
 					<thead>
@@ -27,7 +27,7 @@
 							<td>{{job.Ended | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 							<td>{{job.TotalDuration}}</td>
 							<td>{{job.SentToWorkerNodeUri}}</td>
-							<td ng-class="job.Result=='Success' ? 'successResult' : (job.Result==null ? 'processingResult' : 'failureResult')">{{job.Result}}</td>
+							<td ng-class="job.Result=='Success' ? 'green' : (job.Result==null ? 'hide' : 'red')">{{job.Result}}</td>
 						</tr>
 					</tbody>
 				</table>

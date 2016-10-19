@@ -8,7 +8,9 @@
 	function nodeDetailsController($http, $routeParams, tokenHeaderService) {
 		/* jshint validthis:true */
 		var vm = this;
+		vm.back = back;
 		vm.NodeId = $routeParams.nodeId;
+
 		$http.get("./Stardust/WorkerNode/" + vm.NodeId, tokenHeaderService.getHeaders())
 			.success(function(data) {
 				vm.Node = data;
@@ -24,5 +26,11 @@
 			.error(function(xhr, ajaxOptions, thrownError) {
 				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 			});
+
+		function back() {
+			window.history.back();
+		};
 	}
+
+
 })();

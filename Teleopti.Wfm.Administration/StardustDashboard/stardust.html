@@ -20,7 +20,7 @@
 				Monitor jobs that are in queue waiting for a free node.
 			</div>
 			<div class="panel-footer">
-				<a href="#StardustDashboard/queue container-Stardust">
+				<a href="#StardustDashboard/queue">
 					<button class="btn btn-primary">
 						<span class="text-white">Monitor queue &raquo;</span>
 					</button>
@@ -48,7 +48,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h4>Nodes</h4>
-			<div style="font-size: 14p; font-weight: bold; color: red">{{vm.NodeError}}</div>
+			<div style="font-size: 14p; font-weight: bold; color: tomato">{{vm.NodeError}}</div>
 			<div>
 				<table>
 					<thead>
@@ -73,7 +73,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h4>Currently Running Jobs</h4>
-			<div style="font-size: 14p; font-weight: bold; color: red">{{vm.JobError}}</div>
+			<div style="font-size: 14p; font-weight: bold; color: tomato">{{vm.JobError}}</div>
 			<div>
 				<table>
 					<thead>
@@ -109,7 +109,7 @@
 					</thead>
 					<tbody>
 					<tr ng-repeat="job in vm.QueuedJobs">
-						<td>{{job.Name}}</td>
+						<td><a href="#jobqueuedetails\{{job.JobId}}">{{job.Name}}</a></td>
 						<td>{{job.CreatedBy}}</td>
 						<td>{{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 					</tr>

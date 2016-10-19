@@ -8,6 +8,7 @@
 	function jobDetailsController($http, $routeParams, tokenHeaderService) {
 		/* jshint validthis:true */
 		var vm = this;
+		vm.back = back;
 		vm.JobId = $routeParams.jobId;
 		$http.get("./Stardust/JobDetails/" + vm.JobId, tokenHeaderService.getHeaders())
 			.success(function(data) {
@@ -23,5 +24,9 @@
 			.error(function(xhr, ajaxOptions, thrownError) {
 				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 			});
+
+		function back() {
+			window.history.back();
+		};
 	}
 })();
