@@ -9,11 +9,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeWorkflowControlSetRepository : IWorkflowControlSetRepository
 	{
-		private IList<IWorkflowControlSet> _workflowControlSets = new List<IWorkflowControlSet>();
+		private readonly IList<IWorkflowControlSet> _workflowControlSets = new List<IWorkflowControlSet>();
 
 		public void Add(IWorkflowControlSet root)
 		{
-			throw new NotImplementedException();
+			_workflowControlSets.Add(root);
 		}
 
 		public void Remove(IWorkflowControlSet root)

@@ -522,6 +522,10 @@
     <Compile Include="Areas\MyTime\Core\WeekScheduleDomainDataProvider.cs" />
     <Compile Include="Areas\Options\IoC\OptionsAreaModule.cs" />
     <Compile Include="Areas\Options\SiteOpenHourController.cs" />
+    <Compile Include="Areas\People\Controllers\PeopleSmartWorkflowControlSetController.cs" />
+    <Compile Include="Areas\People\Controllers\SmartAssignSuggestionModel.cs" />
+    <Compile Include="Areas\People\Controllers\SmartAssignWorkflowControlSetModel.cs" />
+    <Compile Include="Areas\People\Controllers\WorkflowControlSetModel.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\PerformanceToolApiController.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\LocalHostAccessAttribute.cs" />
     <Compile Include="Areas\Reporting\Core\ServerPathProvider.cs" />

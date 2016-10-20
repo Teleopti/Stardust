@@ -84,15 +84,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public static IPerson CreatePersonWithId()
 		{
-			var ret = CreatePerson();
-			ret.SetId(Guid.NewGuid());
-			return ret;
+			return CreatePerson().WithId();
 		}
 
 		public static IPerson CreatePersonWithSchedulePublishedToDate(DateOnly dateOnly)
 		{
-			var ret = CreatePerson();
-			ret.SetId(Guid.NewGuid());
+			var ret = CreatePerson().WithId();
 			ret.WorkflowControlSet = new WorkflowControlSet
 				{
 					SchedulePublishedToDate = dateOnly.Date
@@ -102,9 +99,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
         public static IPerson CreatePersonWithGuid(string firstName, string lastName)
         {
-            var ret = CreatePerson(firstName, lastName);
-            ret.SetId(Guid.NewGuid());
-            return ret;
+            return CreatePerson(firstName, lastName).WithId();
         }
 
         public static IPerson GetPerson(IPerson person, IList<IPersonPeriod> personPeriodList)
@@ -126,19 +121,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public static IPerson CreatePersonWithPersonPeriodTeamSite(DateOnly personPeriodStart)
 		{
-			var site = SiteFactory.CreateSimpleSite("Site");
-			site.SetId(Guid.NewGuid());
-			var team = new Team() {Site = site};
+			var site = SiteFactory.CreateSimpleSite("Site").WithId();
+			var team = new Team {Description = new Description("Team 1"),Site = site};
 			var person = CreatePersonWithPersonPeriod(new Person(), personPeriodStart, new ISkill[] { }, team, new Contract("ctr"), new PartTimePercentage("ptc"));
-			person.SetId(Guid.NewGuid());
 			return person;
 		}
 
 		public static IPerson CreatePersonWithPersonPeriodFromTeam(DateOnly personPeriodStart, ITeam team)
 		{
 			var person = CreatePersonWithPersonPeriod(new Person(), personPeriodStart, new ISkill[] { }, team, new Contract("ctr"), new PartTimePercentage("ptc"));
-			person.SetId(Guid.NewGuid());
-			return person;
+			return person.WithId();
 		}
 
 	    public static IPerson CreatePersonWithPersonPeriod(DateOnly personPeriodStart, IEnumerable<ISkill> skillsInPersonPeriod)
