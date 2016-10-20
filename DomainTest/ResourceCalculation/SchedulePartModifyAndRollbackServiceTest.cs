@@ -53,10 +53,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Record())
             {
+				Expect.Call(schedulePart.ReFetch()).Return(schedulePart);
 				Expect.Call(_stateHolder.AllPersonAccounts).Return(new Dictionary<IPerson, IPersonAccountCollection>());
                 Expect.Call(_stateHolder.Schedules).Return(schedules).Repeat.AtLeastOnce();
-                Expect.Call(schedules[person]).Return(range).IgnoreArguments().Repeat.AtLeastOnce();
-                Expect.Call(range.ReFetch(schedulePart)).Return(partToSave);
                 Expect.Call(schedules.Modify(ScheduleModifier.Scheduler, schedulePart, _businessRuleCollection, _scheduleDayChangeCallback, _tagSetter)).IgnoreArguments().Return(validationList).Repeat.AtLeastOnce();
                 Expect.Call(schedulePart.Person).Return(person).Repeat.Any();
                 Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
@@ -88,9 +87,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mocks.Record())
 			{
+				Expect.Call(schedulePart.ReFetch()).Return(schedulePart);
 				Expect.Call(_stateHolder.Schedules).Return(schedules).Repeat.AtLeastOnce();
-				Expect.Call(schedules[person]).Return(range).IgnoreArguments().Repeat.AtLeastOnce();
-				Expect.Call(range.ReFetch(schedulePart)).Return(partToSave);
 				Expect.Call(schedules.Modify(ScheduleModifier.Scheduler, schedulePart, rules, _scheduleDayChangeCallback, _tagSetter)).IgnoreArguments().Return(validationList).Repeat.AtLeastOnce();
 				Expect.Call(schedulePart.Person).Return(person).Repeat.Any();
 				Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
@@ -120,9 +118,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mocks.Record())
 			{
+				Expect.Call(schedulePart.ReFetch()).Return(schedulePart);
 				Expect.Call(_stateHolder.Schedules).Return(schedules).Repeat.AtLeastOnce();
-				Expect.Call(schedules[person]).Return(range).IgnoreArguments().Repeat.AtLeastOnce();
-				Expect.Call(range.ReFetch(schedulePart)).Return(partToSave);
 				Expect.Call(schedules.Modify(ScheduleModifier.Scheduler, schedulePart, rules, _scheduleDayChangeCallback, _tagSetter)).IgnoreArguments().Return(validationList).Repeat.AtLeastOnce();
 				Expect.Call(schedulePart.Person).Return(person).Repeat.Any();
 				Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
@@ -153,17 +150,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Record())
             {
+	            Expect.Call(schedulePart.ReFetch()).Return(schedulePart);
             	Expect.Call(_stateHolder.AllPersonAccounts).Return(new Dictionary<IPerson, IPersonAccountCollection>()).Repeat.AtLeastOnce();
                 Expect.Call(_stateHolder.Schedules).Return(schedules).Repeat.AtLeastOnce();
-                Expect.Call(schedulePart.Person).Return(person).Repeat.AtLeastOnce();
-                Expect.Call(schedules[person]).Return(range).IgnoreArguments().Repeat.AtLeastOnce();
-                Expect.Call(range.ReFetch(schedulePart)).Return(partToSave);
                 Expect.Call(schedules.Modify(ScheduleModifier.Scheduler, schedulePart, null, _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance))).Return(validationList).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
                 Expect.Call(_stateHolder.UseValidation).Return(true).Repeat.AtLeastOnce();
 	            Expect.Call(_stateHolder.UseMinWeekWorkTime).Return(false).Repeat.AtLeastOnce();
-	            //Expect.Call(person.Name).Return(new Name()).Repeat.Once();
-	            //Expect.Call(schedulePart.DateOnlyAsPeriod).Return((new DateOnlyAsDateTimePeriod(new DateOnly(2008, 1, 1), (TimeZoneInfo.Utc)))).Repeat.Once();
             }
 
             using (_mocks.Playback())
@@ -190,17 +183,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Record())
             {
+				Expect.Call(schedulePart.ReFetch()).Return(schedulePart);
 				Expect.Call(_stateHolder.AllPersonAccounts).Return(new Dictionary<IPerson, IPersonAccountCollection>());
                 Expect.Call(_stateHolder.Schedules).Return(schedules).Repeat.AtLeastOnce();
-                Expect.Call(schedulePart.Person).Return(person).Repeat.AtLeastOnce();
-                Expect.Call(schedules[person]).Return(range).IgnoreArguments().Repeat.AtLeastOnce();
-                Expect.Call(range.ReFetch(schedulePart)).Return(partToSave);
                 Expect.Call(schedules.Modify(ScheduleModifier.Scheduler, schedulePart, null, _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance))).Return(validationList).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
                 Expect.Call(_stateHolder.UseValidation).Return(true).Repeat.AtLeastOnce();
 				Expect.Call(_stateHolder.UseMinWeekWorkTime).Return(false).Repeat.AtLeastOnce();
-                //Expect.Call(person.Name).Return(new Name()).Repeat.Once();
-                //Expect.Call(schedulePart.DateOnlyAsPeriod).Return((new DateOnlyAsDateTimePeriod(new DateOnly(2008, 1, 1), (TimeZoneInfo.Utc)))).Repeat.Once();
             }
 
             using (_mocks.Playback())
