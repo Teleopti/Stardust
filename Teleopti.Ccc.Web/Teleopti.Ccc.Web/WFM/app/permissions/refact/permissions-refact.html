@@ -1,0 +1,36 @@
+<div class="con-row">
+  <div class="con-flex">
+    <form ng-submit="vm.createRole(roleName)">
+    <input type="text" name="name" ng-model="roleName">
+    <button type="submit" name="button">create</button>
+    </form>
+
+    <div ng-repeat="role in vm.roles">
+      <button type="submit" name="button2" ng-click="vm.deleteRole(role)">Delete</button>
+        
+    <p>
+      Name: {{role.Name}}
+      </br>
+      BuiltIn: {{role.BuiltIn}}
+      </br>
+      DescriptionText: {{role.DescriptionText}}
+      </br>
+      Id: {{role.Id}}
+      </br>
+      IsAnyBuiltIn: {{role.IsAnyBuiltIn}}
+      </br>
+      IsMyRole: {{role.IsMyRole}}
+      </br>
+      <form ng-submit="vm.editRole(newRoleName, role.Id)">
+      <input type="text" name="name" ng-model="newRoleName">
+      <button type="submit" name="button">Edit</button>
+      </form>
+    </br>
+    <hr>
+    </p>
+    </div>
+  </div>
+  <div class="con-flex">
+
+  </div>
+</div>

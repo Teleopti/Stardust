@@ -1,103 +1,144 @@
 ﻿'use strict';
-describe('PermissionsCtrl', function () {
-	var $q,
-	    $rootScope,
-	    $httpBackend,
-	    	rolesList = [{ Id: 1, DescriptionText: 'text' }];
-	var mockPermissionsService = {
-		roles: {
-			post: function () {
-				var queryDeferred = $q.defer();
-				queryDeferred.resolve({ Id: 1, DescriptionText: 'text' });
-				return { $promise: queryDeferred.promise };
-			},
-			get: function () {
-				var queryDeferred = $q.defer();
-				queryDeferred.resolve(rolesList);
-				return { $promise: queryDeferred.promise };
-			}
-		},
-		applicationFunctions: {
-			query: function () {
-				var queryDeferred = $q.defer();
-				queryDeferred.resolve([
-				{
-					FunctionDescription: "desc",
-					LocalizedFunctionDescription: "",
-					FunctionCode: "",
-					IsDisabled: false,
-					FunctionId: 1,
-					ChildFunctions: []
-				}]);
-				return { $promise: queryDeferred.promise };
-			}
-		},
-		organizationSelections: {
-			query: function () {
-				var queryDeferred = $q.defer();
-				return { $promise: queryDeferred.promise };
-			}
-		},
-		postFunction: {
-			query: function () {
-				var queryDeferred = $q.defer();
-				queryDeferred.resolve({});
-				return { $promise: queryDeferred.promise };
-			}
-		},
-		rolesPermissions: {
-			query: function () {
-				var result = {
-					AvailableFunctions: [
-					{
-						Id: "1", FunctionCode: "", FunctionPath: "", LocalizedFunctionDescription: ""
-					}],
-					AvailableBusinessUnits: [],
-					AvailableSites: [],
-					AvailableTeams: []
-				};
-				var queryDeferred = $q.defer();
-				queryDeferred.resolve(result);
-				return { $promise: queryDeferred.promise };
-			}
-		}
-	};
+//DONT REMOVE X
+xdescribe('PermissionsCtrlRefact', function () {
+	var $httpBackend,
+		fakeBackend,
+		$controller,
+		vm;
 
 	beforeEach(function () {
 		module('wfm.permissions');
-		module('externalModules');
-		module(function ($provide) {
-			$provide.service('PermissionsService', function() { return mockPermissionsService; });
-		});
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_) {
-		$q = _$q_;
-		$rootScope = _$rootScope_;
+	beforeEach(inject(function (_$httpBackend_, _fakePermissionsBackend_, _$controller_) {
 		$httpBackend = _$httpBackend_;
+		fakeBackend = _fakePermissionsBackend_;
+		$controller = _$controller_;
+
+		fakeBackend.clear();
+		vm = $controller('PermissionsCtrlRefact');
+
+		$httpBackend.whenPOST('../api/Permissions/Roles').respond(function (method, url, data, headers) {
+			vm.roles.unshift(angular.fromJson(data));
+			return [201, {}];
+		});
+		$httpBackend.whenDELETE('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64').respond(function(method, url, data, headers){
+			return 200;
+		});
+		$httpBackend.whenPUT('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64?newDescription=%7B%7D').respond(function (method, url, data, headers) {
+			var parsedObj = angular.fromJson(data);
+			vm.roles[0].DescriptionText = parsedObj.newDescription;
+			return 200;
+		});
+
 	}));
 
+	it('should get a role', function () {
+		fakeBackend.withRole({
+			BuiltIn: false,
+			DescriptionText: 'Agent',
+			Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+			IsAnyBuiltIn: true,
+			IsMyRole: false,
+			Name: 'Agent'
+		});
 
-	it('creates a role in the list', inject(function($controller) {
-		var scope = $rootScope.$new();
+		$httpBackend.flush();
 
-		$controller('PermissionsCtrl', { $scope: scope, PermissionsService: mockPermissionsService });
+		expect(vm.roles[0].Id).toEqual('e7f360d3-c4b6-41fc-9b2d-9b5e015aae64');
+	});
 
-		scope.roleName = 'name';
-		scope.createRole();
-		scope.$digest();
+	it('should get roles', function () {
+		fakeBackend.withRole({
+			BuiltIn: false,
+			DescriptionText: 'Agent',
+			Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+			IsAnyBuiltIn: true,
+			IsMyRole: false,
+			Name: 'Agent'
+		})
+		.withRole(
+		{
+			BuiltIn: true,
+			DescriptionText: 'SuperAdmin',
+			Id: '7afefc4f-3231-401b-8174-6525a5e47f23',
+			IsAnyBuiltIn: true,
+			IsMyRole: true,
+			Name: '_superAdmin'
+		});
 
-		expect(scope.roles.length).toEqual(2);
-	}));
+		$httpBackend.flush();
 
-	it('permission is loaded without roles', inject(function ($controller) {
-		var scope = $rootScope.$new();
+		expect(vm.roles.length).toEqual(2);
+	});
 
-		rolesList = [];
-		$controller('PermissionsCtrl', { $scope: scope, PermissionsService: mockPermissionsService });
+	it('should create role', function () {
+		var name = 'rolename';
 
-		scope.$digest();
+		vm.createRole(name);
+		$httpBackend.flush();
 
-		expect(scope.roles.length).toEqual(0);
-	}));
+		expect(vm.roles.length).toBe(1);
+	});
+
+	it('should put newly created roll on top of roles list', function () {
+		var name = 'rolename'
+		fakeBackend.withRole({
+			BuiltIn: false,
+			DescriptionText: 'Agent',
+			Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+			IsAnyBuiltIn: true,
+			IsMyRole: false,
+			Name: 'Agent'
+		})
+		.withRole(
+		{
+			BuiltIn: true,
+			DescriptionText: 'SuperAdmin',
+			Id: '7afefc4f-3231-401b-8174-6525a5e47f23',
+			IsAnyBuiltIn: true,
+			IsMyRole: true,
+			Name: '_superAdmin'
+		});
+
+		vm.createRole(name);
+		$httpBackend.flush();
+
+		expect(vm.roles[0].Description).toBe(name);
+	});
+
+	it('should be able to edit the name of a role', function () {
+		fakeBackend.withRole({
+			BuiltIn: false,
+			DescriptionText: 'Agent',
+			Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+			IsAnyBuiltIn: true,
+			IsMyRole: false,
+			Name: 'Agent'
+		});
+		
+		vm.editRole('newRoleName', 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64');
+		$httpBackend.flush();
+
+		expect(vm.roles[0].DescriptionText).toBe('newRoleName');
+	});
+
+	it('should be able to delete a roll', function	(){
+		var roleId = 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64';
+		fakeBackend.withRole({
+			BuiltIn: false,
+			DescriptionText: 'Agent',
+			Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+			IsAnyBuiltIn: true,
+			IsMyRole: false,
+			Name: 'Agent'
+		});
+		$httpBackend.flush();
+
+		vm.deleteRole(vm.roles[0]);
+		$httpBackend.flush();
+
+		expect(vm.roles.length).toEqual(0);
+	});
+
 });
