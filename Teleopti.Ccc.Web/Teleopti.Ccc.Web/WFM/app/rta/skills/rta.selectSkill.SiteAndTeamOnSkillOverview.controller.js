@@ -153,7 +153,6 @@
 				}
 
 				function getSkillIdsFromSkillArea(skillAreaId){
-					console.log($scope.skillAreas);
 					return $scope.skillAreas.find(function(skillArea){
 						return skillArea.Id === skillAreaId;
 					})
