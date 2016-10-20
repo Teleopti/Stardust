@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -6,15 +6,11 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebTest.Areas.Global
+namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeJobResultRepository : IJobResultRepository
 	{
-		private ICollection<IJobResult> _result;
-		public FakeJobResultRepository()
-		{
-			_result = new Collection<IJobResult>();
-		}
+		private readonly ICollection<IJobResult> _result = new Collection<IJobResult>();
 
 		public void Add(IJobResult entity)
 		{
