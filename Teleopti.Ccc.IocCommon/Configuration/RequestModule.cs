@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -56,30 +57,35 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayRequestProcessor>().As<IIntradayRequestProcessor>().SingleInstance();
 			builder.RegisterType<ResourceAllocator>().As<ResourceAllocator>().SingleInstance();
 			builder.RegisterType<IntradayRequestWithinOpenHourValidator>().As<IIntradayRequestWithinOpenHourValidator>().SingleInstance();
-		    builder.RegisterType<ExpiredRequestValidator>().As<IExpiredRequestValidator>();
 		    builder.RegisterType<AlreadyAbsentValidator>().As<IAlreadyAbsentValidator>();
 		    builder.RegisterType<AbsenceRequestWorkflowControlSetValidator>()
 			    .As<IAbsenceRequestWorkflowControlSetValidator>();
 		    builder.RegisterType<AbsenceRequestPersonAccountValidator>().As<IAbsenceRequestPersonAccountValidator>();
 
-			if (_configuration.Toggle(Toggles.MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747))
-			{
-				builder.RegisterType<AbsenceRequestSynchronousValidator>().As<IAbsenceRequestSynchronousValidator>();
-			}
-			else
-			{
-				builder.RegisterType<AbsenceRequestSynchronousValidator40747ToggleOff>().As<IAbsenceRequestSynchronousValidator>();
-			}
-			
-			if (_configuration.Toggle (Toggles.Wfm_Requests_Show_Pending_Reasons_39473))
+			registerType<IExpiredRequestValidator, ExpiredRequestValidator, ExpiredRequestValidator40274ToggleOff>(builder,
+				Toggles.Wfm_Requests_Check_Expired_Requests_40274);
+			registerType
+				<IAbsenceRequestSynchronousValidator, AbsenceRequestSynchronousValidator,
+					AbsenceRequestSynchronousValidator40747ToggleOff>(builder,
+						Toggles.MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747);
+			registerType
+				<IShiftTradePendingReasonsService, ShiftTradePendingReasonsService,
+					ShiftTradePendingReasonsService39473ToggleOff>(builder,
+						Toggles.Wfm_Requests_Show_Pending_Reasons_39473);
+		}
+
+	    private void registerType<T, TToggleOn, TToggleOff>(ContainerBuilder builder, Toggles toggle)
+		    where TToggleOn : T
+		    where TToggleOff : T
+	    {
+		    if (_configuration.Toggle(toggle))
 		    {
-				builder.RegisterType<ShiftTradePendingReasonsService>().As<IShiftTradePendingReasonsService>().SingleInstance();
-			}
+			    builder.RegisterType<TToggleOn>().As<T>().SingleInstance();
+		    }
 		    else
 		    {
-				builder.RegisterType<ShiftTradePendingReasonsService39473ToggleOff>().As<IShiftTradePendingReasonsService>().SingleInstance();
-			}
-			
-		}
+			    builder.RegisterType<TToggleOff>().As<T>().SingleInstance();
+		    }
+	    }
     }
 }
