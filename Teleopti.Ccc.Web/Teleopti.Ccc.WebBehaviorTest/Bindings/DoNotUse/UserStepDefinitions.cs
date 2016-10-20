@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
@@ -443,7 +444,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 		[Given(@"'?(.*)'? is located in [hH]awaii")]
 		public void GivenIAmLocatedInHawaii(string userName)
 		{
-			DataMaker.Person(userName).Apply(new HawaiiTimeZone());
+			var hawaiianStandardTime = "Hawaiian Standard Time";
+			DataMaker.Data().Analytics().Apply(new SpecificTimeZone(hawaiianStandardTime));
+			DataMaker.Person(userName).Apply(new SpecificUserTimeZone(hawaiianStandardTime));
 		}
 
 		[Given(@"I am iranian")]
@@ -456,20 +459,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 		[Given(@"'?(.*)'? is located in [iI]stanbul")]
 		public void GivenIAmLocatedInIstanbul(string userName)
 		{
-			DataMaker.Person(userName).Apply(new IstanbulTimeZone());
+			var turkeyStandardTime = "Turkey Standard Time";
+			DataMaker.Data().Analytics().Apply(new SpecificTimeZone(turkeyStandardTime));
+			DataMaker.Person(userName).Apply(new SpecificUserTimeZone(turkeyStandardTime));
 		}
 
 		[Given(@"'?(I)'? am located in [sS]tockholm")]
 		[Given(@"'?(.*)'? is located in [sS]tockholm")]
 		public void GivenIAmLocatedInStockholm(string userName)
 		{
-			DataMaker.Person(userName).Apply(new StockholmTimeZone());
+			var wEuropeStandardTime = "W. Europe Standard Time";
+			DataMaker.Data().Analytics().Apply(new SpecificTimeZone(wEuropeStandardTime));
+			DataMaker.Person(userName).Apply(new SpecificUserTimeZone(wEuropeStandardTime));
 		}
 
 		[Given(@"'?(I)'? am located in Brasilia")]
 		public void GivenIAmLocatedInBrasilia(string userName)
 		{
-			DataMaker.Person(userName).Apply(new BrasilianTimeZone());
+			var eSouthAmericaStandardTime = "E. South America Standard Time";
+			DataMaker.Data().Analytics().Apply(new SpecificTimeZone(eSouthAmericaStandardTime));
+			DataMaker.Person(userName).Apply(new SpecificUserTimeZone(eSouthAmericaStandardTime));
 		}
 
 
