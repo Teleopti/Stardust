@@ -29,8 +29,8 @@ WHERE PersonId = :PersonId
 AND [Timestamp] BETWEEN :StartTime AND :EndTime
 ORDER BY [Timestamp] ASC")
 				.SetParameter("PersonId", personId)
-				.SetParameter("StartTime", startTime)
-				.SetParameter("EndTime", endTime)
+				.SetParameter("StartTime", startTime.AddHours(-2))
+				.SetParameter("EndTime", endTime.AddDays(1))
 				.SetResultTransformer(Transformers.AliasToBean<HistoricalAdherenceInternalModel>())
 				.List<HistoricalAdherenceInternalModel>();
 
