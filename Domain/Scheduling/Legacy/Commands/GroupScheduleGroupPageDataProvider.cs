@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         private IList<IPartTimePercentage> _partTimePercentageCollection;
         private IList<IRuleSetBag> _ruleSetBagCollection;
         private IList<IGroupPage> _groupPageCollection;
-        private IBusinessUnit _businessUnitCollection;
+        private IBusinessUnit _businessUnit;
         private IList<ISkill> _skillCollection;
         private IList<IPerson> _personCollection;
 		private IList<IPerson> _allPersons;
@@ -203,6 +203,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}	
 		}
 
+	    public void SetBusinessUnit_UseFromTestOnly(IBusinessUnit businessUnit)
+	    {
+		    _businessUnit = businessUnit;
+	    }
 		
         public IBusinessUnit BusinessUnit
         {
@@ -210,19 +214,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				lock (_lockObject)
 				{
-					if (_businessUnitCollection == null)
+					if (_businessUnit == null)
 					{
 						using (var uow = maybeDisposableUnitOfWork.Create(_unitOfWorkFactory))
 						{
 							var repository = _repositoryFactory.CreateBusinessUnitRepository(uow.Uow);
 							var businessUnit = repository.Get(ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault());
 							businessUnit = repository.LoadHierarchyInformation(businessUnit);
-							_businessUnitCollection = businessUnit;
+							_businessUnit = businessUnit;
 						}
 					}
 				}
 
-				return _businessUnitCollection;
+				return _businessUnit;
 	        }
         }
 

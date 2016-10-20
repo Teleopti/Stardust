@@ -63,5 +63,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             swedenBusinessUnit.AddSite(strangnasUnit);
             return swedenBusinessUnit;
         }
+
+	    public static IBusinessUnit CreateBusinessUnitAndAppend(ITeam team)
+	    {
+		    var bu = new BusinessUnit("_");
+			bu.AddSite(team.Site);
+		    return bu;
+	    }
     }
 }

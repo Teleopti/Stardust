@@ -6,10 +6,11 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -19,18 +20,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 	public class MaxSeatOptimizationTeamBlockTest
 	{
 		public MaxSeatOptimization Target;
-		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
 
 		[Test, Ignore("40939")]
 		public void ShouldChooseShiftForAllAgentsInTeam()
 		{
-			//ARGH! Fix!
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var site = new Site("_") { MaxSeats = 2 }.WithId();
-			ServiceLocatorForEntity.CurrentBusinessUnit.Current().AddSite(site);
-			var team = new Team { Site = site, Description = new Description("_") };
-			site.AddTeam(team);
-			//
+			var team = new Team { Description = new Description("_"), Site = site};
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = DateOnly.Today;
 			var scenario = new Scenario("_");

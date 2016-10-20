@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
             get { return _site; }
             set
             {
+				value.AddTeam(this);
 	            _site = value;
             }
         }

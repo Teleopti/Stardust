@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<SchedulerGroupPagesProvider>().As<ISchedulerGroupPagesProvider>().InstancePerLifetimeScope();
 
-			builder.RegisterType<GroupScheduleGroupPageDataProvider>().As<IGroupScheduleGroupPageDataProvider>().InstancePerLifetimeScope();
+			builder.RegisterType<GroupScheduleGroupPageDataProvider>().AsSelf().As<IGroupScheduleGroupPageDataProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<GroupPageCreator>().As<IGroupPageCreator>().SingleInstance();
 			builder.RegisterType<GroupPageFactory>().As<IGroupPageFactory>().SingleInstance();
 			builder.RegisterType<GroupCreator>().As<IGroupCreator>().SingleInstance();
