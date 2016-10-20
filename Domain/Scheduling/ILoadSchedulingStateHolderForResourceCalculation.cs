@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
     public interface ILoadSchedulingStateHolderForResourceCalculation
     {
-        void Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> requestedPersons, ISchedulingResultStateHolder schedulingResultStateHolder);
+        void Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> requestedPersons, ISchedulingResultStateHolder schedulingResultStateHolder, bool loadLight = false);
     }
 }

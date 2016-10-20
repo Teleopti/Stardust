@@ -50,11 +50,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_personProviderMaker = personProviderMaker;
 		}
 
-		public void Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> requestedPersons, ISchedulingResultStateHolder schedulingResultStateHolder)
+		public void Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> requestedPersons, ISchedulingResultStateHolder schedulingResultStateHolder, bool loadLight)
 		{
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfo.Utc);
 
-			schedulingResultStateHolder.PersonsInOrganization = _personRepository.FindPeopleInOrganization(dateOnlyPeriod, false);
+			schedulingResultStateHolder.PersonsInOrganization = loadLight ? 
+				_personRepository.FindPeopleInOrganizationQuiteLight(dateOnlyPeriod) : _personRepository.FindPeopleInOrganization(dateOnlyPeriod, false);
 
 			var skills = _skillRepository.FindAllWithSkillDays(dateOnlyPeriod).ToArray();
 			_workloadRepository.LoadAll();
