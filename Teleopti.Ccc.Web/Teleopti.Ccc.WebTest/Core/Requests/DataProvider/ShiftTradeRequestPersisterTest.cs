@@ -37,6 +37,17 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			mapper = MockRepository.GenerateMock<IShiftTradeRequestMapper>();
 			autoMapper = MockRepository.GenerateMock<IMappingEngine>();
+			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(new PersonRequest(new Person())))
+				.IgnoreArguments()
+				.Do((Func<IPersonRequest, RequestViewModel>)(request => new RequestViewModel
+				{
+					Status = request.StatusText,
+					DenyReason = request.DenyReason,
+					ExchangeOffer = new ShiftExchangeOfferRequestViewModel
+					{
+						IsOfferAvailable = true
+					}
+				}));
 			repository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			publisher = MockRepository.GenerateMock<IEventPublisher>();
 			shiftTradeSetChecksum = MockRepository.GenerateMock<IShiftTradeRequestSetChecksum>();
@@ -49,15 +60,20 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldPersistMappedData()
 		{
-			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null,
+			var viewModel = new RequestViewModel();
+			var shiftTradeRequest = new PersonRequest(new Person());
+			var newAutoMapper = MockRepository.GenerateMock<IMappingEngine>();
+			newAutoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest))
+				.Return(viewModel);
+
+			var form = new ShiftTradeRequestForm();
+			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
+
+			mockPermissionValidatorPassed(true);
+
+			var target = new ShiftTradeRequestPersister(repository, mapper, newAutoMapper, publisher, null,
 				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
 				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization);
-			var form = new ShiftTradeRequestForm();
-			var shiftTradeRequest = new PersonRequest(new Person());
-			var viewModel = new RequestViewModel();
-
-			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
-			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest)).Return(viewModel);
 
 			var result = target.Persist(form);
 
@@ -70,23 +86,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
 				.Return(new WorkflowControlSet("bla") {LockTrading = true});
+
 			var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
 			offer.Stub(x => x.Status).Return(ShiftExchangeOfferStatus.Completed);
+
 			var personRequests = new PersonRequest(new Person()) {Request = offer};
 			repository.Stub(x => x.FindPersonRequestByRequestId(Guid.Empty)).Return(personRequests);
-			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null,
-				null, null, currentUnitOfWork, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
-				shiftTradeRequestPermissionValidator, null);
+
 			var form = new ShiftTradeRequestForm {ShiftExchangeOfferId = Guid.Empty};
 			var shiftTradeRequest = new PersonRequest(new Person());
 			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
-			var viewModel = new RequestViewModel
-			{
-				ExchangeOffer = new ShiftExchangeOfferRequestViewModel {IsOfferAvailable = true}
-			};
-			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest)).Return(viewModel);
+
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			currentUnitOfWork.Expect(x => x.Current()).Return(uow);
+
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null,
+				null, null, currentUnitOfWork, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
+				shiftTradeRequestPermissionValidator, null);
 
 			var result = target.Persist(form);
 
@@ -100,23 +116,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
 				.Return(new WorkflowControlSet("bla") {LockTrading = true});
+
 			var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
 			offer.Stub(x => x.Status).Return(ShiftExchangeOfferStatus.PendingAdminApproval);
+
 			var personRequests = new PersonRequest(new Person()) {Request = offer};
 			repository.Stub(x => x.FindPersonRequestByRequestId(Guid.Empty)).Return(personRequests);
-			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null,
-				null, null, currentUnitOfWork, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
-				shiftTradeRequestPermissionValidator, null);
+
 			var form = new ShiftTradeRequestForm {ShiftExchangeOfferId = Guid.Empty};
 			var shiftTradeRequest = new PersonRequest(new Person());
 			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
-			var viewModel = new RequestViewModel
-			{
-				ExchangeOffer = new ShiftExchangeOfferRequestViewModel {IsOfferAvailable = true}
-			};
-			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest)).Return(viewModel);
+
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			currentUnitOfWork.Expect(x => x.Current()).Return(uow);
+
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null,
+				null, null, currentUnitOfWork, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
+				shiftTradeRequestPermissionValidator, null);
 
 			var result = target.Persist(form);
 
@@ -130,26 +146,22 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
 				.Return(new WorkflowControlSet("bla") {LockTrading = true});
-			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null,
-				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
-				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization);
-			var form = new ShiftTradeRequestForm {ShiftExchangeOfferId = Guid.Empty};
-			var shiftTradeRequest = new PersonRequest(new Person());
-			var viewModel = new RequestViewModel
-			{
-				Status = Resources.New,
-				ExchangeOffer = new ShiftExchangeOfferRequestViewModel {IsOfferAvailable = true}
-			};
+
 			var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
 			offer.Stub(x => x.Status).Return(ShiftExchangeOfferStatus.Pending);
+
 			var personRequests = new PersonRequest(new Person()) {Request = offer};
 			repository.Stub(x => x.FindPersonRequestByRequestId(Guid.Empty)).Return(personRequests);
 
-			shiftTradeRequestPermissionValidator.Stub(
-				x => x.IsSatisfied(new ShiftTradeRequest(new List<IShiftTradeSwapDetail>())))
-				.IgnoreArguments().Return(true);
+			var form = new ShiftTradeRequestForm { ShiftExchangeOfferId = Guid.Empty };
+			var shiftTradeRequest = new PersonRequest(new Person());
 			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
-			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest)).Return(viewModel);
+
+			mockPermissionValidatorPassed(true);
+
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null,
+				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
+				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization);
 
 			var result = target.Persist(form);
 
@@ -160,29 +172,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldAutoDeniedIfRecipientHasNoPermissionForShiftTrade()
 		{
-			shiftTradeRequestPermissionValidator.Stub(
-				x => x.IsSatisfied(new ShiftTradeRequest(new List<IShiftTradeSwapDetail>())))
-				.IgnoreArguments().Return(false);
 			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
 				.Return(new WorkflowControlSet("bla") { LockTrading = true });
-			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null,
-				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
-				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization);
-			var form = new ShiftTradeRequestForm { ShiftExchangeOfferId = Guid.Empty };
-			var shiftTradeRequest = new PersonRequest(new Person());
 
 			var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
 			offer.Stub(x => x.Status).Return(ShiftExchangeOfferStatus.Pending);
 			var personRequests = new PersonRequest(new Person()) { Request = offer };
 			repository.Stub(x => x.FindPersonRequestByRequestId(Guid.Empty)).Return(personRequests);
 
+			var form = new ShiftTradeRequestForm { ShiftExchangeOfferId = Guid.Empty };
+			var shiftTradeRequest = new PersonRequest(new Person());
 			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
-			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest))
-				.Do((Func<IPersonRequest, RequestViewModel>)(request => new RequestViewModel {
-					Status = request.StatusText,
-					DenyReason = request.DenyReason
-				}));
 
+			mockPermissionValidatorPassed(false);
+
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null,
+				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
+				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization);
 			var result = target.Persist(form);
 
 			result.Status.Should().Be.EqualTo(Resources.Denied);
@@ -193,27 +199,27 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public void ShouldSetPendingAdminApprovalWhenLockShiftTradeFromBulletinBoard()
 		{
 			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
-				.Return(new WorkflowControlSet("bla") {LockTrading = true, AutoGrantShiftTradeRequest = false});
-			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null,
-				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
-				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization);
-			var form = new ShiftTradeRequestForm {ShiftExchangeOfferId = Guid.Empty};
-			var shiftTradeRequest = new PersonRequest(new Person());
-			var viewModel = new RequestViewModel
-			{
-				Status = Resources.New,
-				ExchangeOffer = new ShiftExchangeOfferRequestViewModel {IsOfferAvailable = true}
-			};
+				.Return(new WorkflowControlSet("bla")
+				{
+					LockTrading = true,
+					AutoGrantShiftTradeRequest = false
+				});
+
 			var currentShift = ScheduleDayFactory.Create(DateOnly.Today.AddDays(1));
 			var offer = new ShiftExchangeOffer(currentShift, new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Pending);
 			var personRequests = new PersonRequest(new Person()) {Request = offer};
 			repository.Stub(x => x.FindPersonRequestByRequestId(Guid.Empty)).Return(personRequests);
 
-			shiftTradeRequestPermissionValidator.Stub(
-				x => x.IsSatisfied(new ShiftTradeRequest(new List<IShiftTradeSwapDetail>())))
-				.IgnoreArguments().Return(true);
+			var form = new ShiftTradeRequestForm {ShiftExchangeOfferId = Guid.Empty};
+			var shiftTradeRequest = new PersonRequest(new Person());
 			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
-			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest)).Return(viewModel);
+
+			mockPermissionValidatorPassed(true);
+
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null,
+				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
+				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization);
+
 			var result = target.Persist(form);
 
 			offer.Status.Should().Be.EqualTo(ShiftExchangeOfferStatus.PendingAdminApproval);
@@ -226,23 +232,21 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
 				.Return(new WorkflowControlSet("bla") {LockTrading = false});
-			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null,
-				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
-				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization);
+
 			var form = new ShiftTradeRequestForm {ShiftExchangeOfferId = Guid.Empty};
 			var shiftTradeRequest = new PersonRequest(new Person());
-			var viewModel = new RequestViewModel {Status = Resources.New};
+			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
+
 			var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
 			offer.Stub(x => x.Status).Return(ShiftExchangeOfferStatus.Pending);
 			var personRequests = new PersonRequest(new Person()) {Request = offer};
 			repository.Stub(x => x.FindPersonRequestByRequestId(Guid.Empty)).Return(personRequests);
 
-			shiftTradeRequestPermissionValidator.Stub(
-				x => x.IsSatisfied(new ShiftTradeRequest(new List<IShiftTradeSwapDetail>())))
-				.IgnoreArguments().Return(true);
-			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
-			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest)).Return(viewModel);
+			mockPermissionValidatorPassed(true);
 
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null,
+				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
+				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization);
 			var result = target.Persist(form);
 
 			result.Status.Should().Be.EqualTo(Resources.New);
@@ -253,19 +257,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
 				.Return(new WorkflowControlSet("bla") {LockTrading = true});
+
+			var form = new ShiftTradeRequestForm {ShiftExchangeOfferId = null};
+			var shiftTradeRequest = new PersonRequest(new Person());
+			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
+
+			mockPermissionValidatorPassed(true);
+
 			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null,
 				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
 				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization);
-			var form = new ShiftTradeRequestForm {ShiftExchangeOfferId = null};
-			var shiftTradeRequest = new PersonRequest(new Person());
-			var viewModel = new RequestViewModel {Status = Resources.New};
-
-			shiftTradeRequestPermissionValidator.Stub(
-				x => x.IsSatisfied(new ShiftTradeRequest(new List<IShiftTradeSwapDetail>())))
-				.IgnoreArguments().Return(true);
-			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
-			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest)).Return(viewModel);
-
 			var result = target.Persist(form);
 
 			result.Status.Should().Be.EqualTo(Resources.New);
@@ -278,15 +279,21 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			//therefore - just dummy test
 			var now = MockRepository.GenerateMock<INow>();
 			now.Expect(x => x.UtcDateTime()).Return(DateTime.Now);
+
 			var dataSourceProvider = MockRepository.GenerateMock<ICurrentDataSource>();
 			dataSourceProvider.Expect(x => x.Current()).Return(MockRepository.GenerateMock<IDataSource>());
+
 			var businessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			businessUnitProvider.Expect(x => x.Current()).Return(new BusinessUnit("d"));
+
 			var form = new ShiftTradeRequestForm();
 			mapper.Stub(x => x.Map(form)).Return(new PersonRequest(new Person()));
-			shiftTradeRequestPermissionValidator.Stub(
-				x => x.IsSatisfied(new ShiftTradeRequest(new List<IShiftTradeSwapDetail>())))
-				.IgnoreArguments().Return(true);
+
+			mockPermissionValidatorPassed(true);
+
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			currentUnitOfWork.Expect(x => x.Current()).Return(uow);
+
 			var target = new ShiftTradeRequestPersister(MockRepository.GenerateMock<IPersonRequestRepository>(),
 				mapper,
 				autoMapper,
@@ -297,8 +304,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				currentUnitOfWork,
 				shiftTradeSetChecksum, shiftTradeRequestProvider, null,
 				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization);
-			var uow = MockRepository.GenerateMock<IUnitOfWork>();
-			currentUnitOfWork.Expect(x => x.Current()).Return(uow);
 
 			target.Persist(form);
 
@@ -309,20 +314,25 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public void ShouldSetChecksumOnRequest()
 		{
 			//elände - borde inte behöva anropa setchecksum explicit
-			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null,
-				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
-				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization);
 			var form = new ShiftTradeRequestForm();
 			var shiftTradeRequest = new PersonRequest(new Person());
 
 			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
-			shiftTradeRequestPermissionValidator.Stub(
-				x => x.IsSatisfied(new ShiftTradeRequest(new List<IShiftTradeSwapDetail>())))
-				.IgnoreArguments().Return(true);
+			mockPermissionValidatorPassed(true);
 
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null,
+				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
+				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization);
 			target.Persist(form);
 
 			shiftTradeSetChecksum.AssertWasCalled(x => x.SetChecksum(shiftTradeRequest.Request));
+		}
+
+		private void mockPermissionValidatorPassed(bool result)
+		{
+			shiftTradeRequestPermissionValidator.Stub(
+				x => x.IsSatisfied(new ShiftTradeRequest(new List<IShiftTradeSwapDetail>())))
+				.IgnoreArguments().Return(result);
 		}
 	}
 }
