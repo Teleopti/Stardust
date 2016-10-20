@@ -66,5 +66,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var person = PersonFactory.CreatePerson("First", "Last");
 			_target.GetPersonName(person).Should().Be.EqualTo("Last First");
 		}
+
+		[Test]
+		public void PersonNameSettingsShouldNotBeCachedInTransformerObject()
+		{
+			_globalSettingDataRepository.PersistSettingValue("CommonNameDescription",
+				new CommonNameDescriptionSetting($"{CommonNameDescriptionSetting.LastName} {CommonNameDescriptionSetting.FirstName}"));
+
+			var person = PersonFactory.CreatePerson("First", "Last");
+			person.EmploymentNumber = "123";
+			_target.GetPersonName(person).Should().Be.EqualTo("Last First");
+
+			_globalSettingDataRepository.PersistSettingValue("CommonNameDescription",
+			new CommonNameDescriptionSetting($"{CommonNameDescriptionSetting.LastName} {CommonNameDescriptionSetting.FirstName} - {CommonNameDescriptionSetting.EmployeeNumber}"));
+
+			_target.GetPersonName(person).Should().Be.EqualTo("Last First - 123");
+		}
 	}
 }

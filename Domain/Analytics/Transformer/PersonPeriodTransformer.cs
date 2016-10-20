@@ -22,16 +22,15 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		private readonly IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
 		private readonly IAnalyticsIntervalRepository _analyticsIntervalRepository;
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
-		private ICommonNameDescriptionSetting _commonNameDescription;
 
 		public PersonPeriodTransformer(
-			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, 
-			IAnalyticsSkillRepository analyticsSkillRepository, 
+			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
+			IAnalyticsSkillRepository analyticsSkillRepository,
 			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
-			IAnalyticsTeamRepository analyticsTeamRepository, 
-			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined, 
-			IAnalyticsDateRepository analyticsDateRepository, 
-			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository, 
+			IAnalyticsTeamRepository analyticsTeamRepository,
+			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined,
+			IAnalyticsDateRepository analyticsDateRepository,
+			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository,
 			IAnalyticsIntervalRepository analyticsIntervalRepository,
 			IGlobalSettingDataRepository globalSettingDataRepository)
 		{
@@ -57,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			var skillsetId = MapSkillsetId(
 				personPeriod.PersonSkillCollection.Select(a => a.Skill.Id.GetValueOrDefault()).ToList(),
 				businessUnitId, _analyticsPersonPeriodMapNotDefined, out analyticsSkills);
-			
+
 			var analyticsPersonPeriod = new AnalyticsPersonPeriod
 			{
 				PersonCode = person.Id.GetValueOrDefault(),
@@ -104,9 +103,8 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 
 		public string GetPersonName(IPerson person)
 		{
-			if (_commonNameDescription == null)
-				_commonNameDescription = _globalSettingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
-			return _commonNameDescription.BuildCommonNameDescription(person);
+			return _globalSettingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting())
+				.BuildCommonNameDescription(person);
 		}
 
 		public AnalyticsPersonPeriod FixDatesAndInterval(AnalyticsPersonPeriod analyticsPersonPeriod,
@@ -295,7 +293,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 				return analyticsPersonPeriodMapNotDefined.MaybeThrowErrorOrNotDefined(
 					$"Some skill missing in analytics = [{string.Join(", ", applicationSkillCodes.Where(a => allAnalyticsSkills.All(b => a != b.SkillCode)))}]");
 			}
-			
+
 			var skillSetId = _analyticsSkillRepository.SkillSetId(mappedAnalyticsSkills);
 
 			if (skillSetId.HasValue)
