@@ -37,10 +37,7 @@ namespace Teleopti.Interfaces.Domain
         ///</summary>
         IEnumerable<IGroupPage> UserDefinedGroupings { get; }
 
-        ///<summary>
-        /// Gets the business unit (this collection should only contain one item!).
-        ///</summary>
-        IEnumerable<IBusinessUnit> BusinessUnitCollection { get; }
+        IBusinessUnit BusinessUnit { get; }
 
         ///<summary>
         /// Gets the period to base the structure on

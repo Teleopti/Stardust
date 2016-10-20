@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			repository.Stub(x => x.Get(expected.Id.GetValueOrDefault())).Return(expected);
 			repository.Stub(x => x.LoadHierarchyInformation(expected)).Return(expected);
 
-			Assert.AreEqual(expected, _target.BusinessUnitCollection.FirstOrDefault());
+			Assert.AreEqual(expected, _target.BusinessUnit);
 		}
 
 		[Test]

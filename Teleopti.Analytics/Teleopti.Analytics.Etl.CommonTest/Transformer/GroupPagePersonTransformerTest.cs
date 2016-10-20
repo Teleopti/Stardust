@@ -431,9 +431,9 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			}
 		}
 
-		public IEnumerable<IBusinessUnit> BusinessUnitCollection
+		public IBusinessUnit BusinessUnit
 		{
-			get { return new List<IBusinessUnit> { BusinessUnitFactory.BusinessUnitUsedInTest }; }
+			get { return BusinessUnitFactory.BusinessUnitUsedInTest; }
 		}
 
 		public DateOnlyPeriod SelectedPeriod

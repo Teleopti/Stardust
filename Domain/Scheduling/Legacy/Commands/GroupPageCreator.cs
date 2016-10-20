@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				case GroupPageType.Hierarchy:
 					{
 						var personGroupPage = _groupPageFactory.GetPersonsGroupPageCreator();
-						groupPage = personGroupPage.CreateGroupPage(groupPageDataProvider.BusinessUnitCollection, options);
+						groupPage = personGroupPage.CreateGroupPage(new[] { groupPageDataProvider.BusinessUnit}, options);
 						break;
 					}
 				case GroupPageType.Contract:

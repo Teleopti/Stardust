@@ -73,9 +73,9 @@ namespace Teleopti.Ccc.WinCode.Common
 			}
 		}
 
-		public IEnumerable<IBusinessUnit> BusinessUnitCollection
+		public IBusinessUnit BusinessUnit
 		{
-			get { yield return ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit; }
+			get { return ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit; }
 		}
 
 		public DateOnlyPeriod SelectedPeriod { get; private set; }

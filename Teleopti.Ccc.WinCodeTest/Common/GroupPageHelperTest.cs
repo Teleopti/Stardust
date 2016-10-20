@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         [Test]
         public void ShouldReturnCurrentBusinessUnit()
         {
-            Assert.IsNotNull(_target.BusinessUnitCollection.SingleOrDefault());
+            Assert.IsNotNull(_target.BusinessUnit);
         }
 
         [Test]

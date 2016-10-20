@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
                 PersonGroupPage personGroupPage = new PersonGroupPage();
                 options.CurrentGroupPageName = Resources.Main;
                 options.CurrentGroupPageNameKey = "Main";
-                groupPage = personGroupPage.CreateGroupPage(_groupPageDataProvider.BusinessUnitCollection, options);
+                groupPage = personGroupPage.CreateGroupPage(new[] { _groupPageDataProvider.BusinessUnit}, options);
                 pages.Add(groupPage);
             }
 

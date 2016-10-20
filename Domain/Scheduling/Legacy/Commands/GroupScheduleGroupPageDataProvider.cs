@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         private IList<IPartTimePercentage> _partTimePercentageCollection;
         private IList<IRuleSetBag> _ruleSetBagCollection;
         private IList<IGroupPage> _groupPageCollection;
-        private IList<IBusinessUnit> _businessUnitCollection;
+        private IBusinessUnit _businessUnitCollection;
         private IList<ISkill> _skillCollection;
         private IList<IPerson> _personCollection;
 		private IList<IPerson> _allPersons;
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		
-        public IEnumerable<IBusinessUnit> BusinessUnitCollection
+        public IBusinessUnit BusinessUnit
         {
 	        get
 			{
@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 							var repository = _repositoryFactory.CreateBusinessUnitRepository(uow.Uow);
 							var businessUnit = repository.Get(ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault());
 							businessUnit = repository.LoadHierarchyInformation(businessUnit);
-							_businessUnitCollection = new List<IBusinessUnit>{businessUnit};
+							_businessUnitCollection = businessUnit;
 						}
 					}
 				}

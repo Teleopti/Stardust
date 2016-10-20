@@ -21,11 +21,7 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
             IGroupPageDataProvider groupingsDataProvider = mocks.StrictMock<IGroupPageDataProvider>();
             using (mocks.Record())
             {
-                Expect.Call(groupingsDataProvider.BusinessUnitCollection).Return(new List<IBusinessUnit>
-                                                                                     {
-                                                                                         BusinessUnitFactory.
-                                                                                             BusinessUnitUsedInTest
-                                                                                     });
+                Expect.Call(groupingsDataProvider.BusinessUnit).Return(BusinessUnitFactory.BusinessUnitUsedInTest);
                 Expect.Call(groupingsDataProvider.ContractCollection).Return(new List<IContract>());
                 Expect.Call(groupingsDataProvider.ContractScheduleCollection).Return(new List<IContractSchedule>());
                 Expect.Call(groupingsDataProvider.PartTimePercentageCollection).Return(new List<IPartTimePercentage>());

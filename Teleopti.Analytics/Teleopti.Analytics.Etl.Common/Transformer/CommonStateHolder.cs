@@ -223,9 +223,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			}
 		}
 
-		public IEnumerable<IBusinessUnit> BusinessUnitCollection
+		public IBusinessUnit BusinessUnit
 		{
-			get { yield return ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit; }
+			get { return ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit; }
 		}
 
 		public DateOnlyPeriod SelectedPeriod
