@@ -75,7 +75,7 @@
 				<div class="row">
 					<div class="form-group col-xs-12">
 						<div class="input-group bootstrap-timepicker" title="@Resources.EarliestStartTime">
-							<input type="text" class="preference-start-time-min input-sm form-control" data-bind="timepicker: EarliestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
+							<input type="text" class="preference-start-time-min input-sm form-control" data-bind="timepicker: EarliestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true },attr:{readonly:IsHostAMobile()}" />
 							<span class="input-group-addon input-sm"><i class="glyphicon glyphicon-time"></i></span>
 						</div>
 					</div>
@@ -86,7 +86,7 @@
 				<div class="row">
 					<div class="form-group col-xs-12">
 						<div class="input-group bootstrap-timepicker" title="@Resources.LatestStartTime">
-							<input type="text" class="preference-start-time-max input-sm form-control" data-bind="timepicker: LatestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
+							<input type="text" class="preference-start-time-max input-sm form-control" data-bind="timepicker: LatestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true },attr:{readonly:IsHostAMobile()} " />
 							<span class="input-group-addon input-sm"><i class="glyphicon glyphicon-time"></i></span>
 						</div>
 					</div>
@@ -102,7 +102,7 @@
 				<div class="row">
 					<div class="form-group col-xs-12">
 						<div class="input-group bootstrap-timepicker" title="@Resources.EarliestEndTime">
-							<input type="text" class="preference-end-time-min input-sm form-control" data-bind="timepicker: EarliestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
+							<input type="text" class="preference-end-time-min input-sm form-control" data-bind="timepicker: EarliestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true },attr:{readonly:IsHostAMobile()} " />
 							<span class="input-group-addon input-sm"><i class="glyphicon glyphicon-time"></i></span>
 						</div>
 					</div>
@@ -116,7 +116,7 @@
 				<div class="row">
 					<div class="form-group col-xs-12">
 						<div class="input-group bootstrap-timepicker" title="@Resources.LatestEndTime">
-							<input type="text" class="preference-end-time-max input-sm form-control" data-bind="timepicker: LatestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
+							<input type="text" class="preference-end-time-max input-sm form-control" data-bind="timepicker: LatestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true },attr:{readonly:IsHostAMobile()} " />
 							<span class="input-group-addon input-sm"><i class="glyphicon glyphicon-time"></i></span>
 						</div>
 					</div>
@@ -134,7 +134,7 @@
 			</td>
 			<td>
 				<div class="input-group" data-bind="click:ToggleOpen">
-					<input type="text" class="preference-extended-work-time-min input-sm form-control" data-bind="value: MinimumWorkTime" title="@Resources.MinWorkTime">
+					<input type="text" class="preference-extended-work-time-min input-sm form-control" data-bind="value: MinimumWorkTime,attr:{readonly:IsHostAMobile()} " title="@Resources.MinWorkTime">
 					<ul role="menu" class="dropdown-menu" style="max-height: 270px; overflow-y:scroll; ">
 						@foreach (var timeSpan in timeLengths)
 						{
@@ -149,7 +149,7 @@
 			<td></td>
 			<td class="select-input-auto">
 				<div class="input-group" data-bind="click:ToggleOpen">
-					<input type="text" class="preference-extended-work-time-max input-sm form-control" data-bind="value: MaximumWorkTime" title="@Resources.MaxWorkTime">
+					<input type="text" class="preference-extended-work-time-max input-sm form-control" data-bind="value: MaximumWorkTime,attr:{readonly:IsHostAMobile()} " title="@Resources.MaxWorkTime">
 					<ul role="menu" class="dropdown-menu" style="max-height: 270px; overflow-y:scroll; ">
 						@foreach (var timeSpan in timeLengths)
 						{
@@ -192,13 +192,13 @@
 			</td>
 			<td class="col-xs-1">
 				<div class="input-group bootstrap-timepicker " title="@Resources.EarliestStartTime">
-					<input type="text" class="preference-activity-start-time-min input-sm form-control" data-bind="timepicker: ActivityEarliestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
+					<input type="text" class="preference-activity-start-time-min input-sm form-control" data-bind="timepicker: ActivityEarliestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true },attr:{readonly:IsHostAMobile()} " />
 					<span class="input-group-addon input-sm"><i class="glyphicon glyphicon-time"></i></span>
 				</div>
 			</td>
 			<td class="col-xs-3">
 				<div class="input-group bootstrap-timepicker" title="@Resources.LatestStartTime">
-					<input type="text" class="preference-activity-start-time-max input-sm form-control" data-bind="timepicker: ActivityLatestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
+					<input type="text" class="preference-activity-start-time-max input-sm form-control" data-bind="timepicker: ActivityLatestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true },attr:{readonly:IsHostAMobile()} " />
 					<span class="input-group-addon input-sm"><i class="glyphicon glyphicon-time"></i></span>
 				</div>
 			</td>
@@ -209,13 +209,13 @@
 			</td>
 			<td class="col-xs-3">
 				<div class="input-group bootstrap-timepicker" title="@Resources.EarliestEndTime">
-					<input type="text" class="preference-activity-end-time-min input-sm form-control" data-bind="timepicker: ActivityEarliestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
+					<input type="text" class="preference-activity-end-time-min input-sm form-control" data-bind="timepicker: ActivityEarliestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true },attr:{readonly:IsHostAMobile()} " />
 					<span class="input-group-addon input-sm"><i class="glyphicon glyphicon-time"></i></span>
 				</div>
 			</td>
 			<td class="col-xs-3">
 				<div class="input-group bootstrap-timepicker" title="@Resources.LatestEndTime">
-					<input type="text" class="preference-activity-end-time-max input-sm form-control" data-bind="timepicker: ActivityLatestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
+					<input type="text" class="preference-activity-end-time-max input-sm form-control" data-bind="timepicker: ActivityLatestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true },attr:{readonly:IsHostAMobile()} " />
 					<span class="input-group-addon input-sm"><i class="glyphicon glyphicon-time"></i></span>
 				</div>
 			</td>
@@ -226,7 +226,7 @@
 			</td>
 			<td>
 				<div class="input-group" data-bind="click:ToggleOpen">
-					<input type="text" class="preference-activity-extended-work-time-min input-sm form-control" data-bind="value: ActivityMinimumTime" title="@Resources.MinWorkTime">
+					<input type="text" class="preference-activity-extended-work-time-min input-sm form-control" data-bind="value: ActivityMinimumTime,attr:{readonly:IsHostAMobile()} " title="@Resources.MinWorkTime">
 					<ul role="menu" class="dropdown-menu" style="max-height: 270px; overflow-y:scroll; ">
 						@foreach (var timeSpan in timeLengths)
 						{
@@ -240,7 +240,7 @@
 			</td>
 			<td>
 				<div class="input-group" data-bind="click:ToggleOpen">
-					<input type="text" class="preference-activity-extended-work-time-max input-sm form-control" data-bind="value: ActivityMaximumTime" title="@Resources.MaxWorkTime">
+					<input type="text" class="preference-activity-extended-work-time-max input-sm form-control" data-bind="value: ActivityMaximumTime,attr:{readonly:IsHostAMobile()} " title="@Resources.MaxWorkTime">
 					<ul role="menu" class="dropdown-menu" style="max-height: 270px; overflow-y:scroll; ">
 						@foreach (var timeSpan in timeLengths)
 						{

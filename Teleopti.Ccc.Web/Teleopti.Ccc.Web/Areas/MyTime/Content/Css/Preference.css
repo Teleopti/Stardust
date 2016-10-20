@@ -13,6 +13,9 @@
 	.phone-form-preference {
 		margin-bottom: 0 !important;
 	}
+	.phone-form-preference input:read-only {
+		background-color: #ffffff;
+	}
 	.phone-form-preference .open[data-bind="click:ToggleOpen"]:before{
 		content: '';
 		border: 0;
