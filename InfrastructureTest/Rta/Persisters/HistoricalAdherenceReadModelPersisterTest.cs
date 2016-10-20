@@ -3,15 +3,15 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
-using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
 	[TestFixture]
 	[ReadModelUnitOfWorkTest]
+	[Toggle(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
 	public class HistoricalAdherenceReadModelPersisterTest
 	{
 		public IHistoricalAdherenceReadModelPersister Target;
