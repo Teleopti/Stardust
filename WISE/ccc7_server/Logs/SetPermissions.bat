@@ -58,6 +58,7 @@ ping 127.0.0.1 -n 2 >NUL
 "%TargetFolder%\RegisterEventLogSource.exe" "TeleoptiSdkWebService"
 "%TargetFolder%\RegisterEventLogSource.exe" "Teleopti Service Bus"
 "%TargetFolder%\RegisterEventLogSource.exe" "TeleoptiWebApps"
+"%TargetFolder%\RegisterEventLogSource.exe" "TeleoptiAgentStateTracer"
 "%TargetFolder%\RegisterEventLogSource.exe" "TeleoptiWebBroker"
 "%TargetFolder%\RegisterEventLogSource.exe" "TeleoptiPMService"
 
