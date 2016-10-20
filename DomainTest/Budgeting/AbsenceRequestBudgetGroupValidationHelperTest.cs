@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
             var languageTwo = new CultureInfo("fr-BE");
             var validRequestTwo = AbsenceRequestBudgetGroupValidationHelper.BudgetDaysAreNotEqualToRequestedPeriodDays(languageTwo, cultureTwo, dateOnlyPeriod);
 			validRequestTwo.ValidationErrors.Should()
-				.Be.EqualTo("Un jour ou plus de cette période demandée 25-04-16 - 25-04-16 n'a pas de permission budgetée.");
+				.Be.EqualTo("Un jour ou plus de cette période demandée 25-04-16 - 25-04-16 n'a pas de permission budgétée.");
 		}
 	}
 }
