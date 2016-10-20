@@ -15,7 +15,6 @@
 
 		<property name="Name"/>
 		<property name="IsDeleted"/>
-		<property name="DoDisplayData"/>
 	</class>
 
 </hibernate-mapping>
