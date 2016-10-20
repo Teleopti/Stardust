@@ -1,0 +1,1 @@
+ALTER TABLE [mart].[dim_time_zone] ADD CONSTRAINT AK_time_zone_code UNIQUE (time_zone_code)
