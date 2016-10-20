@@ -67,6 +67,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	    public static IBusinessUnit CreateBusinessUnitAndAppend(ITeam team)
 	    {
 		    var bu = new BusinessUnit("_");
+		    if (team.Site == null)
+		    {
+			    team.Site = new Site("_");
+		    }
 			bu.AddSite(team.Site);
 		    return bu;
 	    }

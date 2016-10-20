@@ -29,16 +29,18 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeActivityRepository ActivityRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeScenarioRepository ScenarioRepository;
-		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakePersonAssignmentRepository AssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
+		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public IFillSchedulerStateHolder FillSchedulerStateHolder;
 
 		[Test]
 		public void ShouldRestoreToLegalShiftBagShiftWithSameStartAndEndTime()
 		{
+			var team = new Team { Description = new Description("team") };
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var firstDay = new DateOnly(2015, 10, 12);
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
 			var phoneActivity = ActivityRepository.Has("_");
@@ -46,12 +48,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			otherActivity.RequiresSkill = false;
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
-			var site = new Site("site");
-			var team = new Team { Description = new Description("team") };
-			site.AddTeam(team);
-			businessUnit.AddSite(site);
-			BusinessUnitRepository.Has(businessUnit);
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
 			var shiftCategory = new ShiftCategory("_").WithId();
@@ -94,6 +90,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldKeepOvertimeWhenRestoreToLegalShiftBagShiftWithSameStartAndEndTime()
 		{
+			var team = new Team { Description = new Description("team")};
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var firstDay = new DateOnly(2015, 10, 12);
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
 			var phoneActivity = ActivityRepository.Has("_");
@@ -101,13 +99,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			otherActivity.RequiresSkill = false;
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
-			var site = new Site("site");
-			var team = new Team { Description = new Description("team") };
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-			site.AddTeam(team);
-			businessUnit.AddSite(site);
-			BusinessUnitRepository.Has(businessUnit);
 			var contract = new Contract("_");
 			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
@@ -150,6 +142,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldFindLegalShiftWhenNotAllowPersonalActivityOverwriteActivity()
 		{
+			var team = new Team { Description = new Description("team") };
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var firstDay = new DateOnly(2015, 10, 12);
 			var secondDay = firstDay.AddDays(1);
 			var thirdDay = firstDay.AddDays(2);
@@ -162,12 +156,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			personalActivity.RequiresSkill = false;
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
-			var site = new Site("site");
-			var team = new Team { Description = new Description("team") };
-			site.AddTeam(team);
-			businessUnit.AddSite(site);
-			BusinessUnitRepository.Has(businessUnit);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(7, 0, 7, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), shiftCategory));
 			ruleSet.AddExtender(new ActivityRelativeStartExtender(otherActivity, new TimePeriodWithSegment(0, 15, 0, 15, 15), new TimePeriodWithSegment(0, 0, 0, 15, 15)));
@@ -209,6 +197,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldFindLegalShiftWhenNotAllowedMeetingOverwriteActivity()
 		{
+			var team = new Team { Description = new Description("team") };
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var firstDay = new DateOnly(2015, 10, 12);
 			var secondDay = firstDay.AddDays(1);
 			var thirdDay = firstDay.AddDays(2);
@@ -221,12 +211,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			meetingActivity.RequiresSkill = false;
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
-			var site = new Site("site");
-			var team = new Team { Description = new Description("team") };
-			site.AddTeam(team);
-			businessUnit.AddSite(site);
-			BusinessUnitRepository.Has(businessUnit);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(7, 0, 7, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), shiftCategory));
 			ruleSet.AddExtender(new ActivityRelativeStartExtender(otherActivity, new TimePeriodWithSegment(0, 15, 0, 15, 15), new TimePeriodWithSegment(0, 0, 0, 15, 15)));
