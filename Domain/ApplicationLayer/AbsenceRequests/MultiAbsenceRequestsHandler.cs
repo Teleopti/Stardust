@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				{
 					if (personRequestSpecification.IsSatisfiedBy(personRequest))
 					{
-						string warning = $"No person request found with the supplied Id, or the request is not in New status mode. (Id = {personRequest.Id})";
+						string warning = $"No person request found with the supplied Id or the request is not in pending status mode. (Id = {personRequest.Id})";
 						_feedback.SendProgress?.Invoke(warning);
 						logger.Warn(warning);
 					}
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			public override bool IsSatisfiedBy(IPersonRequest obj)
 			{
-				return (obj == null || !(obj.IsNew || obj.IsPending));
+				return (obj == null || !(obj.IsPending));
 			}
 		}
 
