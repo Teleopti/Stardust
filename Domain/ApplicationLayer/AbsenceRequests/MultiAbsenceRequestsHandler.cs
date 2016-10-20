@@ -33,12 +33,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly ISkillTypeRepository _skillTypeRepository;
 		private readonly IActivityRepository _activityRepository;
 
-
-
-		public MultiAbsenceRequestsHandler(IPersonRequestRepository personRequestRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
-			IStardustJobFeedback stardustJobFeedback, IWorkflowControlSetRepository workflowControlSetRepository, 
-			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IPersonRepository personRepository, 
-			ISkillRepository skillRepository, IMultiAbsenceRequestsUpdater multiAbsenceRequestsUpdater, IContractRepository contractRepository, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository, ISkillTypeRepository skillTypeRepository, IActivityRepository activityRepository)
+		public MultiAbsenceRequestsHandler(IPersonRequestRepository personRequestRepository,
+			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
+			IStardustJobFeedback stardustJobFeedback, IWorkflowControlSetRepository workflowControlSetRepository,
+			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IPersonRepository personRepository,
+			ISkillRepository skillRepository, IMultiAbsenceRequestsUpdater multiAbsenceRequestsUpdater,
+			IContractRepository contractRepository, IPartTimePercentageRepository partTimePercentageRepository,
+			IContractScheduleRepository contractScheduleRepository, ISkillTypeRepository skillTypeRepository,
+			IActivityRepository activityRepository)
 		{
 			_personRequestRepository = personRequestRepository;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
@@ -78,12 +80,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			DateTime min = DateTime.MaxValue;
 			DateTime max = DateTime.MinValue;
 			var requests = new List<IPersonRequest>();
+			var atleastOneWaitlistedWfc = false;
 
 			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var wfcs = _workflowControlSetRepository.LoadAll();
 				if (wfcs.Any(x => x.AbsenceRequestWaitlistEnabled))
 				{
+					atleastOneWaitlistedWfc = true;
 					var queuedRequests = _queuedAbsenceRequestRepository.LoadAll().Where(x => x.Sent == @event.Sent);
 
 					foreach (var request in queuedRequests)
@@ -95,12 +99,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					}
 				}
 
-				//this is thrown away move it up before person request as this will be thrown away.
-				//had a chat with robin and he suggested that we should do that before person request we may run into problems
 				_skillRepository.LoadAllSkills();
 				_contractRepository.LoadAll();
 				_skillTypeRepository.LoadAll();
 				_partTimePercentageRepository.LoadAll();
+
+				//formally part of prereq loader
 				_contractScheduleRepository.LoadAllAggregate();
 				_activityRepository.LoadAll();
 
@@ -134,7 +138,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						max = requests.Max(x => x.Request.Period.EndDateTime);
 				}
 
-				if (max > min)
+				if (max > min && atleastOneWaitlistedWfc)
 				{
 					DateTimePeriod period = new DateTimePeriod(min.Utc(), max.Utc());
 					var waitListIds = _personRequestRepository.GetWaitlistRequests(period).ToList();

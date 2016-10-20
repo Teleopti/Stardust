@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
@@ -31,7 +30,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly DenyAbsenceRequest _denyAbsenceRequest = new DenyAbsenceRequest();
 		private readonly PendingAbsenceRequest _pendingAbsenceRequest = new PendingAbsenceRequest();
 
-		private readonly IResourceCalculationPrerequisitesLoader _prereqLoader;
 		private readonly ILoadSchedulingStateHolderForResourceCalculation _loadSchedulingStateHolderForResourceCalculation;
 		private readonly ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulesForRequestWithoutResourceCalculation;
 		private readonly IBudgetGroupHeadCountSpecification _budgetGroupHeadCountSpecification;
@@ -52,7 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly IToggleManager _toggleManager;
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
 
-		public MultiAbsenceRequestsUpdater(IResourceCalculationPrerequisitesLoader prereqLoader, 
+		public MultiAbsenceRequestsUpdater(
 			ICurrentScenario scenarioRepository,
 			ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation,
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation,
@@ -70,7 +68,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			IScheduleDayChangeCallback scheduleDayChangeCallback, 
 			ISchedulingResultStateHolder schedulingResultStateHolder, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IToggleManager toggleManager, IAbsenceRequestValidatorProvider absenceRequestValidatorProvider)
 		{
-			_prereqLoader = prereqLoader;
 			_scenarioRepository = scenarioRepository;
 			_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
 			_loadSchedulesForRequestWithoutResourceCalculation = loadSchedulesForRequestWithoutResourceCalculation;
@@ -357,7 +354,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 			if (shouldLoadDataForResourceCalculation)
 			{
-				_prereqLoader.Execute();
 				_loadSchedulingStateHolderForResourceCalculation.Execute(_scenarioRepository.Current(),
 																		 totalPeriod,
 																		 persons, _schedulingResultStateHolder);
