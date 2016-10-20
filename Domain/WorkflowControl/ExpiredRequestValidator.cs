@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 					string.Format(UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonRequestExpired", language),
 						period.StartDateTimeLocal(timeZone),
 						absenceRequestExpiredThreshold.GetValueOrDefault());
-				return new ValidatedRequest { IsValid = false, ValidationErrors = validationError };
+				return new ValidatedRequest { IsValid = false, ValidationErrors = validationError, DenyOption = PersonRequestDenyOption.RequestExpired };
 			}
 
 			return ValidatedRequest.Valid;

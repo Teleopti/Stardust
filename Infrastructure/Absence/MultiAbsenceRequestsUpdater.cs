@@ -251,11 +251,16 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				}
 				else
 				{
+					var denyOption = PersonRequestDenyOption.None;
+					if (personRequest.IsAlreadyAbsent)
+						denyOption = PersonRequestDenyOption.AlreadyAbsence;
+					else if (personRequest.IsExpired)
+						denyOption = PersonRequestDenyOption.RequestExpired;
 					command = new DenyRequestCommand()
 					{
 						PersonRequestId = personRequest.Id.GetValueOrDefault(),
 						DenyReason = personRequest.DenyReason,
-						IsAlreadyAbsent = personRequest.IsAlreadyAbsent
+						DenyOption = denyOption
 					};
 				}
 				_commandDispatcher.Execute(command);
@@ -323,7 +328,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private IProcessAbsenceRequest denyAbsenceRequest(string reasonResourceKey, bool alreadyAbsence = false)
 		{
 			_denyAbsenceRequest.DenyReason = reasonResourceKey;
-			_denyAbsenceRequest.AlreadyAbsence = alreadyAbsence;
+			_denyAbsenceRequest.DenyOption = alreadyAbsence ? PersonRequestDenyOption.AlreadyAbsence : PersonRequestDenyOption.None;
 			return _denyAbsenceRequest;
 		}
 

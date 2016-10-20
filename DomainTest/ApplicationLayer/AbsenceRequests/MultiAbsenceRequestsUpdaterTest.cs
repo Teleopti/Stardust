@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
@@ -12,6 +13,7 @@ using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -32,7 +34,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
 		public FakeScheduleStorage ScheduleStorage;
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
-	
+		public FakeToggleManager ToggleManager;
+		public INow Now;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -40,6 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeWorkloadRepository>().For<IWorkloadRepository>();
+			system.UseTestDouble(new MutableNow(DateTime.UtcNow)).For<INow>();
 		}
 
 		[Test]
@@ -103,6 +107,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Target.UpdateAbsenceRequest(reqs);
 			reqs.SingleOrDefault().DenyReason.Should().Be.EqualTo(Resources.RequestDenyReasonPersonAccount);
+		}
+
+		[Test]
+		public void ShouldDenyExpiredRequestWithWaitlistingEnabled()
+		{
+			ToggleManager.Enable(Domain.FeatureFlags.Toggles.Wfm_Requests_Check_Expired_Requests_40274);
+			ScenarioRepository.Add(CurrentScenario.Current());
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+
+			var wfcs = createWorkFlowControlSet(absence, new AbsenceRequestNoneValidator(), new StaffingThresholdValidator());
+			wfcs.AbsenceRequestExpiredThreshold = 15;
+			wfcs.AbsenceRequestWaitlistEnabled = true;
+
+			var person = createAndSetupPerson(wfcs);
+			var reqs = createNewRequest(absence, person);
+
+			Target.UpdateAbsenceRequest(reqs);
+
+			var req = reqs.SingleOrDefault();
+			req.IsDenied.Should().Be.EqualTo(true);
+			req.IsWaitlisted.Should().Be.EqualTo(false);
+			req.DenyReason.Should().Be.EqualTo(string.Format(Resources.RequestDenyReasonRequestExpired, req.Request.Period.StartDateTime, 15));
 		}
 
 		[Test, Ignore("Nightmare to test due to cast between FakeScheduleRange and ScheduleRange")]

@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 					var denyAbsenceRequest = new DenyAbsenceRequest
 					{
 						DenyReason = validatedRequest.ValidationErrors,
+						DenyOption = validatedRequest.DenyOption
 					};
 					denyAbsenceRequest.Process(processingPerson, absenceRequest, requiredForProcessingAbsenceRequest,
 						requiredForHandlingAbsenceRequest, null);

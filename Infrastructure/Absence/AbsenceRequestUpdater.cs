@@ -268,7 +268,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private void denyAbsenceRequest(string reasonResourceKey, bool alreadyAbsence = false)
 		{
 			_denyAbsenceRequest.DenyReason = reasonResourceKey;
-			_denyAbsenceRequest.AlreadyAbsence = alreadyAbsence;
+			_denyAbsenceRequest.DenyOption = alreadyAbsence ? PersonRequestDenyOption.AlreadyAbsence : PersonRequestDenyOption.None;
 			_process = _denyAbsenceRequest;
 		}
 

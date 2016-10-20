@@ -145,8 +145,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var command = new DenyRequestCommand()
 			{
 				PersonRequestId = personRequestId,
-				DenyReason = denyReason,
-				IsAlreadyAbsent = false
+				DenyReason = denyReason
 			};
 			_commandDispatcher.Execute(command);
 

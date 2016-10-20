@@ -17,5 +17,7 @@
         /// </summary>
         /// <value>Is Valid Absence Request</value>
         public bool IsValid { get; set; }
-    }
+
+		public PersonRequestDenyOption? DenyOption { get; set; }
+	}
 }

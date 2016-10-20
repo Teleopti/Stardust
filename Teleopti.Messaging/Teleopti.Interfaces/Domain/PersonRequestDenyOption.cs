@@ -7,6 +7,7 @@ namespace Teleopti.Interfaces.Domain
 	{
 		None = 0,
 		AutoDeny = 1,
-		AlreadyAbsence = 2
+		AlreadyAbsence = 2,
+		RequestExpired = 4
 	}
 }

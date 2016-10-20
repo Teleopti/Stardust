@@ -34,8 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			try
 			{
 				var denyOption = !command.IsManualDeny ? PersonRequestDenyOption.AutoDeny : PersonRequestDenyOption.None;
-				if(command.IsAlreadyAbsent)
-					denyOption = denyOption | PersonRequestDenyOption.AlreadyAbsence;
+				denyOption = denyOption | command.DenyOption.GetValueOrDefault(PersonRequestDenyOption.None);
 
 				personRequest.Deny(null, command.DenyReason, _authorization, denyOption);
 				return true;

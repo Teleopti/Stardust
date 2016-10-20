@@ -99,6 +99,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			get { return _personRequestDenyOption.HasFlag(PersonRequestDenyOption.AlreadyAbsence); }
 		}
 
+		public virtual bool IsExpired
+		{
+			get { return _personRequestDenyOption.HasFlag(PersonRequestDenyOption.RequestExpired); }
+		}
+
 		public virtual bool TrySetMessage(string message)
 		{
 			if(!checkIfCanSetMessage()) return false;
@@ -490,9 +495,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		{
 			var autoDenied = personRequestDenyOption.HasFlag(PersonRequestDenyOption.AutoDeny);
 			var alreadyAbsent = personRequestDenyOption.HasFlag(PersonRequestDenyOption.AlreadyAbsence);
+			var expired = personRequestDenyOption.HasFlag(PersonRequestDenyOption.RequestExpired);
 			if (autoDenied)
 			{
-				if (waitlistingIsEnabled() && !alreadyAbsent)
+				if (waitlistingIsEnabled() && !alreadyAbsent && !expired)
 				{
 					RequestState = new waitListedPersonRequest(this);
 				}

@@ -205,5 +205,7 @@ namespace Teleopti.Interfaces.Domain
 	    IList<IPersonAbsence> PersonAbsences { get; }
 
 		bool IsAlreadyAbsent { get; }
+
+		bool IsExpired { get; }
     }
 }

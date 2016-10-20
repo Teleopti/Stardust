@@ -826,6 +826,22 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			waitlistedPersonRequest.IsWaitlisted.Should().Be(false);
 		}
 
+		[Test]
+		public void ShouldDenyExpiredRequestWithWaitlistEnabled()
+		{
+			var person = PersonFactory.CreatePerson("Kalle", "kula");
+			var waitlistedPersonRequest = new PersonRequest(person);
+			var absence = new Absence();
+			person.WorkflowControlSet = createWorkFlowControlSet(
+				new DateTime(2015, 12, 12, 00, 00, 00, DateTimeKind.Utc),
+				new DateTime(2016, 12, 12, 00, 00, 00, DateTimeKind.Utc), absence, new GrantAbsenceRequest(), true);
+			waitlistedPersonRequest.Request = new AbsenceRequest(absence, new DateTimePeriod(2016, 9, 6, 2016, 9, 6));
+			waitlistedPersonRequest.ForcePending();
+			waitlistedPersonRequest.Deny(null, null, _authorization, PersonRequestDenyOption.AutoDeny | PersonRequestDenyOption.RequestExpired);
+			waitlistedPersonRequest.IsDenied.Should().Be(true);
+			waitlistedPersonRequest.IsWaitlisted.Should().Be(false);
+		}
+
 		private PersonRequest tryMovePersonRequestFromDeniedToApproved(bool waitlistingEnabled)
 		{
 			var absence = new Absence();
