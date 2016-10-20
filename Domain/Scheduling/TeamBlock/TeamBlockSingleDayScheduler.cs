@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		bool ScheduleSingleDay(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, DateOnly day,
 			IShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
+			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays,
 			IEffectiveRestriction shiftNudgeRestriction, INewBusinessRuleCollection businessRules, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled);
 
 		IList<IWorkShiftCalculationResultHolder> GetShiftProjectionCaches(
@@ -88,11 +88,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (shifts.IsNullOrEmpty())
 				return resultList;
 
-			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockSingleDayInfo, day, schedulingResultStateHolder.AllSkillDays(), false);
-
-
-			IDictionary<DateTime, IntervalLevelMaxSeatInfo> maxSeatInfo =
-						_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, day, schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone, true);
+			var allSkillDays = schedulingResultStateHolder.AllSkillDays();
+			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockSingleDayInfo, day, allSkillDays, false);
+			var maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, day, allSkillDays, TimeZoneGuard.Instance.TimeZone, true);
 			
 
 			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(),
@@ -111,7 +109,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public bool ScheduleSingleDay(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, DateOnly day,
 			IShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
+			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays,
 			IEffectiveRestriction shiftNudgeRestriction, INewBusinessRuleCollection businessRules, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled)
 		{
 			var cancelMe = false;
@@ -148,11 +146,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						restriction = restriction.Combine(shiftNudgeRestriction);
 
 					bestShiftProjectionCache = filterAndSelect(teamBlockInfo, schedulingOptions, day, person, teamBlockSingleDayInfo,
-						restriction, schedulingResultStateHolder, false);
+						restriction, allSkillDays, false);
 
 					if (bestShiftProjectionCache == null && restriction.IsRestriction)
 						bestShiftProjectionCache = filterAndSelect(teamBlockInfo, schedulingOptions, day, person, teamBlockSingleDayInfo,
-						restriction, schedulingResultStateHolder, true);
+						restriction, allSkillDays, true);
 
 					if (bestShiftProjectionCache == null)
 						continue;
@@ -172,7 +170,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		private IShiftProjectionCache filterAndSelect(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, DateOnly day,
 			IPerson person, TeamBlockSingleDayInfo teamBlockSingleDayInfo,
-			IEffectiveRestriction restriction, ISchedulingResultStateHolder schedulingResultStateHolder, bool useShiftsForRestrictions)
+			IEffectiveRestriction restriction, IEnumerable<ISkillDay> allSkillDays, bool useShiftsForRestrictions)
 		{
 			var shifts = _workShiftFilterService.FilterForTeamMember(day, person, teamBlockSingleDayInfo, restriction,
 						schedulingOptions,
@@ -182,10 +180,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (shifts.IsNullOrEmpty())
 				return null;
 
-			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockSingleDayInfo, day, schedulingResultStateHolder.AllSkillDays(), false);
-
-			IDictionary<DateTime, IntervalLevelMaxSeatInfo> maxSeatInfo =
-				_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, day, schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone, true);
+		
+			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockSingleDayInfo, day, allSkillDays, false);
+			var maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, day, allSkillDays, TimeZoneGuard.Instance.TimeZone, true);
 
 			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(),
 				new DateOnlyPeriod(day, day));

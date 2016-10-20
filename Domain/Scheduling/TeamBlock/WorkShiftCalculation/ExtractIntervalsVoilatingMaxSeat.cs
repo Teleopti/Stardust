@@ -21,18 +21,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
 		public IDictionary<DateTime, IntervalLevelMaxSeatInfo> IdentifyIntervalsWithBrokenMaxSeats(ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder, TimeZoneInfo timeZone, DateOnly baseDatePointer)
 		{
-			var aggregatedIntervalsForTheWholeBlockNew =
-				new Dictionary<DateTime , IntervalLevelMaxSeatInfo>();
+			var aggregatedIntervalsForTheWholeBlockNew = new Dictionary<DateTime , IntervalLevelMaxSeatInfo>();
+			var allSkillDays = schedulingResultStateHolder.AllSkillDays();
 			foreach (var dateOnly in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
 			{
-				var eachDayIntervals = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, dateOnly,
-					schedulingResultStateHolder, timeZone,false);
+				var eachDayIntervals = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, dateOnly, allSkillDays, timeZone,false);
 				mergeIntervalsWithMaxSeatInformation(eachDayIntervals, aggregatedIntervalsForTheWholeBlockNew,baseDatePointer);
 			}
 			//get the intervals of last day 
 			var lastNextDay = baseDatePointer.AddDays(1);
-			var lastNextDayIntervals = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, teamBlockInfo.BlockInfo.BlockPeriod.EndDate.AddDays(1),
-					schedulingResultStateHolder, timeZone,false);
+			var lastNextDayIntervals = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, teamBlockInfo.BlockInfo.BlockPeriod.EndDate.AddDays(1), allSkillDays, timeZone,false);
 			mergeIntervalsWithMaxSeatInformation(lastNextDayIntervals, aggregatedIntervalsForTheWholeBlockNew, lastNextDay);
 			//
 			return aggregatedIntervalsForTheWholeBlockNew;

@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 				Expect.Call(_teamBlockSingleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions,
 					new DateOnly(2014, 9, 22), _roleModelShift, _rollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, null, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null)).IgnoreArguments().Return(true);
+					null, null, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null)).IgnoreArguments().Return(true);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 			}
 
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 				Expect.Call(_teamBlockSingleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions,
 					new DateOnly(2014, 9, 22), _roleModelShift, _rollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, null, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null)).IgnoreArguments().Return(false);
+					null, null, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null)).IgnoreArguments().Return(false);
 				Expect.Call(() => _safeRollBackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 			}

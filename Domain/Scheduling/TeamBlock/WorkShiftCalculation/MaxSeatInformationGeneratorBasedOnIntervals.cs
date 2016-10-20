@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
 	public interface IMaxSeatInformationGeneratorBasedOnIntervals
 	{
-		IDictionary<DateTime, IntervalLevelMaxSeatInfo> GetMaxSeatInfo(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingResultStateHolder schedulingResultStateHolder, TimeZoneInfo timeZone, bool considerEqualMaxAndCalSeatAsBroken);
+		IDictionary<DateTime, IntervalLevelMaxSeatInfo> GetMaxSeatInfo(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, IEnumerable<ISkillDay> allSkillDays, TimeZoneInfo timeZone, bool considerEqualMaxAndCalSeatAsBroken);
 	}
 
 	public class MaxSeatInformationGeneratorBasedOnIntervals : IMaxSeatInformationGeneratorBasedOnIntervals
@@ -21,10 +22,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			_maxSeatsSpecificationDictionaryExtractor = maxSeatsSpecificationDictionaryExtractor;
 		}
 
-		public IDictionary<DateTime, IntervalLevelMaxSeatInfo> GetMaxSeatInfo(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingResultStateHolder schedulingResultStateHolder, TimeZoneInfo timeZone, bool considerEqualMaxAndCalSeatAsBroken)
+		public IDictionary<DateTime, IntervalLevelMaxSeatInfo> GetMaxSeatInfo(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, IEnumerable<ISkillDay> allSkillDays, TimeZoneInfo timeZone, bool considerEqualMaxAndCalSeatAsBroken)
 		{
 			var skills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(), new DateOnlyPeriod(datePointer,datePointer ) ).ToList();
-			var skillDaysOnDatePointer = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { datePointer });
+			var skillDaysOnDatePointer = allSkillDays.FilterOnDate(datePointer);
 			var skillDaysHavingMaxSeatInfo = new List<ISkillDay>();
 			foreach (var skillDay in skillDaysOnDatePointer)
 			{

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -17,15 +18,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		private MockRepository _mock;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
+		private IEnumerable<ISkillDay> _skillDays;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mock = new MockRepository();
+			_skillDays = Enumerable.Empty<ISkillDay>();
 			_maxSeatInformationGeneratorBasedOnIntervals = _mock.StrictMock<IMaxSeatInformationGeneratorBasedOnIntervals>();
 			_target = new ExtractIntervalsViolatingMaxSeat(_maxSeatInformationGeneratorBasedOnIntervals);
 			_teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
 			_schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
+			_schedulingResultStateHolder.Expect(x => x.AllSkillDays()).Return(_skillDays).Repeat.Any();
 		}
 
 		[Test]
@@ -44,9 +48,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			{
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo).Repeat.Twice() ;
 				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, new DateOnly(2014, 6, 11),
-					_schedulingResultStateHolder, TimeZoneInfo.Utc,false )).Return(intervalOnDay);
+					_skillDays, TimeZoneInfo.Utc,false )).Return(intervalOnDay);
 				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, new DateOnly(2014, 6, 12),
-					_schedulingResultStateHolder, TimeZoneInfo.Utc, false)).Return(intervalOnDaySecDay);
+					_skillDays, TimeZoneInfo.Utc, false)).Return(intervalOnDaySecDay);
 			}
 			using (_mock.Playback())
 			{
@@ -91,11 +95,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			{
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo).Repeat.AtLeastOnce() ;
 				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, new DateOnly(2014, 6, 11),
-					_schedulingResultStateHolder, TimeZoneInfo.Utc,false )).Return(intervalOnDay1);
+					_skillDays, TimeZoneInfo.Utc,false )).Return(intervalOnDay1);
 				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, new DateOnly(2014, 6, 12),
-					_schedulingResultStateHolder, TimeZoneInfo.Utc,false)).Return(intervalOnDay2);
+					_skillDays, TimeZoneInfo.Utc,false)).Return(intervalOnDay2);
 				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, new DateOnly(2014, 6, 13),
-					_schedulingResultStateHolder, TimeZoneInfo.Utc, false)).Return(intervalOnDay3);
+					_skillDays, TimeZoneInfo.Utc, false)).Return(intervalOnDay3);
 			}
 			using (_mock.Playback())
 			{
@@ -143,13 +147,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			{
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo).Repeat.Twice() ;
 				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, new DateOnly(2014, 6, 11),
-					_schedulingResultStateHolder, TimeZoneInfo.Utc,false )).Return(intervalOnDay1);
+					_skillDays, TimeZoneInfo.Utc,false )).Return(intervalOnDay1);
 				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, new DateOnly(2014, 6, 12),
-					_schedulingResultStateHolder, TimeZoneInfo.Utc, false)).Return(intervalOnDay2);
+					_skillDays, TimeZoneInfo.Utc, false)).Return(intervalOnDay2);
 				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, new DateOnly(2014, 6, 13),
-					_schedulingResultStateHolder, TimeZoneInfo.Utc, false)).Return(intervalOnDay3);
+					_skillDays, TimeZoneInfo.Utc, false)).Return(intervalOnDay3);
 				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, new DateOnly(2014, 6, 14),
-					_schedulingResultStateHolder, TimeZoneInfo.Utc,false )).Return(intervalOnDay4);
+					_skillDays, TimeZoneInfo.Utc,false )).Return(intervalOnDay4);
 			}
 			using (_mock.Playback())
 			{
@@ -196,11 +200,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			{
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo).Repeat.Twice() ;
 				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, new DateOnly(2014, 6, 11),
-					_schedulingResultStateHolder, TimeZoneInfo.Utc,false )).Return(intervalOnDay1);
+					_skillDays, TimeZoneInfo.Utc,false )).Return(intervalOnDay1);
 				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, new DateOnly(2014, 6, 12),
-					_schedulingResultStateHolder, TimeZoneInfo.Utc, false)).Return(intervalOnDay2);
+					_skillDays, TimeZoneInfo.Utc, false)).Return(intervalOnDay2);
 				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, new DateOnly(2014, 6, 13),
-					_schedulingResultStateHolder, TimeZoneInfo.Utc, false)).Return(intervalOnDay3);
+					_skillDays, TimeZoneInfo.Utc, false)).Return(intervalOnDay3);
 			}
 			using (_mock.Playback())
 			{
