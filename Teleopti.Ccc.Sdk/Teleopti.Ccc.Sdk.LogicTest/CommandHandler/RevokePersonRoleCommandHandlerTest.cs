@@ -5,7 +5,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.TestCommon;
@@ -104,7 +103,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_applicationRoleRepository.Stub(x => x.Get(_role.Id.GetValueOrDefault())).Return(_role);
 			_person.PermissionInformation.AddApplicationRole(_role);
 
-			using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
+			using (new CustomAuthorizationContext(new NoPermission()))
 			{
 				Assert.Throws<FaultException>(() => _target.Handle(_commandDto));
 			}

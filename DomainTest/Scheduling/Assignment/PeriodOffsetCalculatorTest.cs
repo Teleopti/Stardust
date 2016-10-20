@@ -10,8 +10,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
     [TestFixture]
-	[LegacyTest]
-	public class PeriodOffsetCalculatorTest
+    public class PeriodOffsetCalculatorTest
     {
         private PeriodOffsetCalculator _target;
         private MockRepository _mocks; 

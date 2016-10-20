@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 			}
 			using (_mocks.Playback())
 			{
-				using (CurrentAuthorization.ThreadlyUse(authorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					actualMatrixFunctions = _target.PermittedMatrixFunctions;
 				}
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 			}
 			using (_mocks.Playback())
 			{
-				using (CurrentAuthorization.ThreadlyUse(authorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					acctualFunctions = _target.PermittedOnlineReportFunctions;
 				}
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 			}
 			using (_mocks.Playback())
 			{
-				using (CurrentAuthorization.ThreadlyUse(authorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					actualMatrixFunctionGroups = _target.GroupedPermittedMatrixFunctions;
 					Assert.That(actualMatrixFunctionGroups.Count(), Is.EqualTo(1));
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 			}
 			using (_mocks.Playback())
 			{
-				using (CurrentAuthorization.ThreadlyUse(authorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					orphanMatrixFunctions = _target.OrphanPermittedMatrixFunctions;
 

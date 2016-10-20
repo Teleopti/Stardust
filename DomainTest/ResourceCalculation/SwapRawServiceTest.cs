@@ -17,7 +17,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
 	[TestFixture]
-	[LegacyTest]
 	public class SwapRawServiceTest
 	{
 		private ISwapRawService _swapRawService;

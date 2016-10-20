@@ -10,8 +10,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Forecasting
 {
     [TestFixture]
-	[LegacyTest]
-	public class SkillDayTemplateTest
+    public class SkillDayTemplateTest
     {
         private ISkillDayTemplate target;
         private IList<ITemplateSkillDataPeriod> _skillDataPeriods;

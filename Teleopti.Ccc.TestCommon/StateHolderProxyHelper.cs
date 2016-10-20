@@ -122,5 +122,22 @@ namespace Teleopti.Ccc.TestCommon
             return person;
         }
     }
-	
+
+  
+	public class CustomAuthorizationContext : IDisposable
+	{
+		private IAuthorization _previousAuthorization;
+
+		public CustomAuthorizationContext(IAuthorization authorization)
+		{
+			_previousAuthorization = PrincipalAuthorization.Current();
+			CurrentAuthorization.GloballyUse(authorization);
+		}
+
+		public void Dispose()
+		{
+			CurrentAuthorization.GloballyUse(_previousAuthorization);
+			_previousAuthorization = null;
+		}
+	}
 }

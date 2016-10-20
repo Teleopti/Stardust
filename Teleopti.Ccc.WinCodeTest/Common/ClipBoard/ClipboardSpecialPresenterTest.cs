@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 
             using (_mocks.Playback())
             {
-                using(CurrentAuthorization.ThreadlyUse(authorization))
+                using(new CustomAuthorizationContext(authorization))
                 {
                     _presenter.Initialize();
                 }

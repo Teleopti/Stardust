@@ -14,7 +14,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 {
 	[TestFixture]
-	[LegacyTest]
 	public class MeetingSlotImpactCalculatorTest
 	{
 		private MeetingSlotImpactCalculator _target;
@@ -36,7 +35,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 		private FakeSchedulingResultStateHolder _schedulingResultState;
 		private MeetingSlotImpactCalculator _calculator;
 			
-		private void setup()
+		[SetUp]
+		public void Setup()
 		{
 			_mocks = new MockRepository();
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
@@ -63,7 +63,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldReturnSomething()
 		{
-			setup();
 			var person = _mocks.StrictMock<IPerson>();
 			var permissionInfo = new PermissionInformation(person);
 			permissionInfo.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("Utc")));
@@ -151,7 +150,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 		[Test]
 		public void ShouldNotCalulateOnIntradayAbsences()
 		{
-			setup();
 			var dateTimePeriodAbsence = new DateTimePeriod(_dateTimePeriod.StartDateTime, _dateTimePeriod.StartDateTime.AddHours(1)); 
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario, dateTimePeriodAbsence, _absence);
 			_scheduleDictionaryWithPersonAssignment.AddPersonAbsence(personAbsence);
@@ -162,7 +160,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 		[Test]
 		public void ShouldNotCalculateOnDayOff()
 		{
-			setup();
 			_scheduleDictionaryWithPersonAssignment.Remove(_person);
 			var personAssignmentWithDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(_dateTimePeriod.StartDateTime), TimeSpan.FromHours(24), TimeSpan.FromHours(0), TimeSpan.FromHours(12));
 			_scheduleDictionaryWithPersonAssignment.AddPersonAssignment(personAssignmentWithDayOff);
@@ -173,7 +170,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 		[Test]
 		public void SholdNotCalculateWhenNoAssignment()
 		{
-			setup();
 			_scheduleDictionaryWithPersonAssignment.Remove(_person);
 			_calculator.GetImpact(_persons, _dateTimePeriod).HasValue.Should().Be.False();	
 		}
@@ -181,7 +177,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 		[Test]
 		public void ShouldNotCalculateWhenNoContractTime()
 		{
-			setup();
 			_activity.InContractTime = false;
 			_calculator.GetImpact(_persons, _dateTimePeriod).HasValue.Should().Be.False();
 		}
@@ -189,7 +184,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 		[Test]
 		public void ShouldNotCalculateWhenNoWorkTime()
 		{
-			setup();
 			_activity.InWorkTime = false;
 			_calculator.GetImpact(_persons, _dateTimePeriod).HasValue.Should().Be.False();
 		}

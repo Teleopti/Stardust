@@ -12,8 +12,7 @@ namespace Teleopti.Ccc.DomainTest.Common
     /// Tests for Scenario class
     /// </summary>
     [TestFixture]
-	[LegacyTest]
-	public class ScenarioTest
+    public class ScenarioTest
     {
         private Scenario _scenario;
 

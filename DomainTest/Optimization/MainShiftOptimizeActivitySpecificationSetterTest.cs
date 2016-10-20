@@ -10,7 +10,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
 	[TestFixture]
-	[LegacyTest]
 	public class MainShiftOptimizeActivitySpecificationSetterTest
 	{
 		private IMainShiftOptimizeActivitySpecificationSetter _target;

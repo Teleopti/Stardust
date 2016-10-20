@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
             }
             using (mocks.Playback())
             {
-                using (CurrentAuthorization.ThreadlyUse(authorization))
+                using (new CustomAuthorizationContext(authorization))
                 {
                     var ret = _target.AllPermittedPersons;
                     Assert.AreEqual(1, ret.Count());

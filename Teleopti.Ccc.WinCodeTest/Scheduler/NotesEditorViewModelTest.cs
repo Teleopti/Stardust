@@ -13,7 +13,6 @@ using Teleopti.Ccc.WinCodeTest.Common.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.WinCode.Scheduling;
 using System.Collections.ObjectModel;
-using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
@@ -132,7 +131,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             using (_mockRep.Playback())
             {
-                using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
+                using (new CustomAuthorizationContext(new NoPermission()))
                 {
                     _model1 = new NotesEditorViewModel(null);
                     _model1.Load(_part);

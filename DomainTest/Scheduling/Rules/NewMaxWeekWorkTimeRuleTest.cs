@@ -10,8 +10,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
     [TestFixture]
-	[LegacyTest]
-	public class NewMaxWeekWorkTimeRuleTest
+    public class NewMaxWeekWorkTimeRuleTest
     {
         private MockRepository _mocks;
         private IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;

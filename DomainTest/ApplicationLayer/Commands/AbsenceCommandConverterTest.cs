@@ -11,7 +11,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 {
 	[TestFixture]
-	[LegacyTest]
 	public class AbsenceCommandConverterTest
 	{
 		private FakeWriteSideRepository<IPerson> _personRepository;

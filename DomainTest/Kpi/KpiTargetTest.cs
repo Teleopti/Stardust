@@ -12,8 +12,7 @@ namespace Teleopti.Ccc.DomainTest.Kpi
     /// Test class for KpiTarget
     /// </summary>
     [TestFixture]
-	[LegacyTest]
-	public class KpiTargetTest
+    public class KpiTargetTest
     {
         private KpiTarget target;
         private Team targetTeam;

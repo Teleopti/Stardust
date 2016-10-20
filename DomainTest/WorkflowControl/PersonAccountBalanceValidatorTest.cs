@@ -14,8 +14,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
     [TestFixture]
-	[LegacyTest]
-	public class PersonAccountBalanceValidatorTest
+    public class PersonAccountBalanceValidatorTest
     {
         private IAbsenceRequestValidator _target;
         private MockRepository _mocks;

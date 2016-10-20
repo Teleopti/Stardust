@@ -2,7 +2,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Meetings.Commands;
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
             Expect.Call(_model.CurrentScenario).Return(scenario);
             Expect.Call(scenario.Restricted).Return(true);
             _mocks.ReplayAll();
-            using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
+            using (new CustomAuthorizationContext(new NoPermission()))
             {
                 _target.CanExecute.Should().Be.False();
             }
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
             Expect.Call(_model.CurrentScenario).Return(scenario);
             Expect.Call(scenario.Restricted).Return(false);
             _mocks.ReplayAll();
-            using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
+            using (new CustomAuthorizationContext(new NoPermission()))
             {
                 _target.CanExecute.Should().Be.False();
             }

@@ -17,8 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
     /// Test class for Absence
     /// </summary>
     [TestFixture]
-	[LegacyTest]
-	public class AbsenceTest
+    public class AbsenceTest
     {
         private Absence target;
 
@@ -84,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
             Assert.IsFalse(target.Confidential);
             target.Confidential = true;
-            using(CurrentAuthorization.ThreadlyUse(new NoPermission()))
+            using(new CustomAuthorizationContext(new NoPermission()))
             {
                 Assert.AreEqual(ConfidentialPayloadValues.Description, target.ConfidentialDescription(null));
                 Assert.AreEqual(ConfidentialPayloadValues.DisplayColor, target.ConfidentialDisplayColor(null));
@@ -193,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			principal.AddClaimSet(claimSet);
 
 			target.Confidential = true;
-			using (CurrentAuthorization.ThreadlyUse(new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal))))
+			using (new CustomAuthorizationContext(new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal))))
 			{
 				Assert.AreEqual(target.Description, target.ConfidentialDescription(targetPerson));
 				Assert.AreEqual(target.DisplayColor, target.ConfidentialDisplayColor(targetPerson));

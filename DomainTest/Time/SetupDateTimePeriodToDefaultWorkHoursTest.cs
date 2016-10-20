@@ -7,8 +7,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Time
 {
     [TestFixture]
-	[LegacyTest]
-	public class SetupDateTimePeriodToDefaultWorkHoursTest
+    public class SetupDateTimePeriodToDefaultWorkHoursTest
     {
         private ISetupDateTimePeriod _target;
         private DateTime _start = new DateTime(2001, 12, 27, 8, 0, 0, DateTimeKind.Utc);
@@ -20,7 +19,8 @@ namespace Teleopti.Ccc.DomainTest.Time
 
         private DateTimePeriod _defaultLocal;
 
-        private void setup()
+        [SetUp]
+        public void Setup()
         {
             TimeSpan localStartTimeOfDay = TimeSpan.FromHours(6);
             TimeSpan localEndTimeOfDay = TimeSpan.FromHours(13);
@@ -41,9 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyGetsEightToFiveUtc()
         {
-	        setup();
-
-			_target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal,null, (TimeZoneInfo.Utc));
+            _target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal,null, (TimeZoneInfo.Utc));
 
             DateTimePeriod result = _target.Period;
             Assert.AreEqual(_defaultLocal.LocalStartDateTime.TimeOfDay, result.StartDateTime.TimeOfDay);
@@ -54,8 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void TimeIsSetFromLocalTimeZoneInfo()
         {
-			setup();
-			_target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal,null, _info);
+            _target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal,null, _info);
 
             DateTimePeriod p = _target.Period;
             Assert.AreEqual(_defaultLocal.LocalStartDateTime.TimeOfDay, p.StartDateTimeLocal(_info).TimeOfDay);
@@ -65,8 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyDateIsFromTheStartDate()
         {
-			setup();
-			_target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal,null, _info);
+            _target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal,null, _info);
 
             DateTimePeriod p = _target.Period;
             Assert.AreEqual(_targetDateTimePeriod.StartDateTime.Date, p.StartDateTimeLocal(_info).Date);
@@ -77,8 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void CanCreateOvertimeOnPeriod()
         {
-			setup();
-			_target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal,_scheduleDay, _info);
+            _target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal,_scheduleDay, _info);
             DateTimePeriod? period = _scheduleDay.PersonAssignment().Period;
             var newPeriod = new DateTimePeriod(period.Value.EndDateTime, period.Value.EndDateTime.AddHours(1));
             Assert.AreEqual(newPeriod, _target.Period);

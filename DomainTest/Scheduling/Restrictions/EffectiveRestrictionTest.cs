@@ -14,9 +14,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 {
 	[TestFixture]
-	[LegacyTest]
-
-	public class EffectiveRestrictionTest
+    public class EffectiveRestrictionTest
     {
         private EffectiveRestriction _target;
         private StartTimeLimitation _startTimeLimitation;

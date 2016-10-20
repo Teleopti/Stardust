@@ -5,7 +5,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 				new ShiftExchangeOfferMapper(new FakeLoggedOnUser(person), scheduleProvider));
 
 
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			using (new CustomAuthorizationContext(new FullPermission()))
 			{
 				target.Persist(
 					new ShiftExchangeOfferForm
@@ -75,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 				new ShiftExchangeOfferMapper(new FakeLoggedOnUser(person), scheduleProvider));
 
 
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			using (new CustomAuthorizationContext(new FullPermission()))
 			{
 				target.Persist(
 					new ShiftExchangeOfferForm
@@ -111,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 				new ShiftExchangeOfferMapper(new FakeLoggedOnUser(person), scheduleProvider));
 
 
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			using (new CustomAuthorizationContext(new FullPermission()))
 			{
 				target.Persist(
 					new ShiftExchangeOfferForm
@@ -147,7 +146,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 				MockRepository.GenerateMock<IMappingEngine>(),
 				new ShiftExchangeOfferMapper(new FakeLoggedOnUser(person), scheduleProvider));
 
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			using (new CustomAuthorizationContext(new FullPermission()))
 			{
 				target.Persist(
 					new ShiftExchangeOfferForm
@@ -182,7 +181,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 				MockRepository.GenerateMock<IMappingEngine>(),
 				new ShiftExchangeOfferMapper(new FakeLoggedOnUser(person), scheduleProvider));
 
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			using (new CustomAuthorizationContext(new FullPermission()))
 			{
 				target.Persist(
 					new ShiftExchangeOfferForm

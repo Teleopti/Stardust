@@ -5,7 +5,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -96,7 +95,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		[Test]
 		public void ShouldThrowExceptionIfNotPermitted()
 		{
-			using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
+			using (new CustomAuthorizationContext(new NoPermission()))
 			{
 				Assert.Throws<FaultException>(() => _target.Handle(_importForecastsFileCommandDto));
 			}

@@ -23,7 +23,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
 	[DomainTest]
-	[LegacyTest]
 	[TestFixture]
 	[UseEventPublisher(typeof(FakeEventPublisherWithOverwritingHandlers))]
 	public class SwapAndModifyServiceNewByFakeTest : ISetup

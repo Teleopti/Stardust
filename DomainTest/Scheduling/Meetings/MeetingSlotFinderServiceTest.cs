@@ -11,9 +11,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 {
     [TestFixture]
-	[LegacyTest]
-
-	public class MeetingSlotFinderServiceTest
+    public class MeetingSlotFinderServiceTest
     {
         private MeetingSlotFinderService _target;
         private IPerson _person1;

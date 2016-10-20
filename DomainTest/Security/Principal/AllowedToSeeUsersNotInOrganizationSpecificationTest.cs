@@ -9,8 +9,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Security.Principal
 {
     [TestFixture]
-	[LegacyTest]
-	public class AllowedToSeeUsersNotInOrganizationSpecificationTest
+    public class AllowedToSeeUsersNotInOrganizationSpecificationTest
     {
         private ISpecification<IEnumerable<ClaimSet>> target;
         private const string Function = "test";

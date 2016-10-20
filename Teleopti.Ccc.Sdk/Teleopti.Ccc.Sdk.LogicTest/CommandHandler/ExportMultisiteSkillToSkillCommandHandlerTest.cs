@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
@@ -142,7 +141,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	        {
 				using (_mock.Playback())
 				{
-					using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
+					using (new CustomAuthorizationContext(new NoPermission()))
 					{
 						_target.Handle(_exportMultisiteSkillToSkillCommandDto);
 					}

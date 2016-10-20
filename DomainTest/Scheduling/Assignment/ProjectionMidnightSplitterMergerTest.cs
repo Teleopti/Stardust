@@ -11,7 +11,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
 	[TestFixture]
-	[LegacyTest]
 	public class ProjectionMidnightSplitterMergerTest
 	{
 		private IProjectionMerger target;
@@ -20,7 +19,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		private IVisualLayerFactory visualLayerFactory;
 		private TimeSpan tzDiffTime;
 
-		private void setup()
+		[SetUp]
+		public void Setup()
 		{
 			var userZone = StateHolderReader.Instance.StateReader.UserTimeZone;
 			tzDiffTime = userZone.BaseUtcOffset;
@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void ShouldSplitOverMidnight()
 		{
-			setup();
 			var start = new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc);
 			var end = new DateTime(2000, 1, 2, 7, 0, 0, DateTimeKind.Utc);
 			var midnightInUtc = new DateTime(2000, 1, 2, 0, 0, 0, DateTimeKind.Utc);
@@ -54,7 +53,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void ShouldKeepDefinitionSetWhenSplit()
 		{
-			setup();
 			var start = new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc);
 			var end = new DateTime(2000, 1, 2, 7, 0, 0, DateTimeKind.Utc);
 			var layer = createLayer(new DateTimePeriod(start, end));
@@ -73,8 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void ShouldKeepPersonWhenSplit()
         {
-			setup();
-			var start = new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc);
+            var start = new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc);
             var end = new DateTime(2000, 1, 2, 7, 0, 0, DateTimeKind.Utc);
             var layer = createLayer(new DateTimePeriod(start, end));
 
@@ -93,7 +90,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void ShouldKeepAbsenceWhenSplit()
 		{
-			setup();
 			var start = new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc);
 			var end = new DateTime(2000, 1, 2, 7, 0, 0, DateTimeKind.Utc);
 			var layer = createLayer(new DateTimePeriod(start, end));
@@ -112,8 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void ShouldSplitMidnightUsingPassedInTimeZone()
         {
-			setup();
-			var userDefinedTimeZone = (TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
+            var userDefinedTimeZone = (TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
             target = new ProjectionMidnightSplitterMerger(userDefinedTimeZone);
             var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
             var end = new DateTime(2000, 1, 2, 10, 0, 0, DateTimeKind.Utc);

@@ -16,8 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
     [TestFixture]
-	[LegacyTest]
-	public class NewDayOffRuleTest
+    public class NewDayOffRuleTest
     {
         private NewDayOffRule _target;
         private MockRepository _mocks;
@@ -48,7 +47,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
     	private DateTimePeriod _personAssignmentConflictingWithDayOffEndPeriod;
     	private DateTimePeriod _personAssignmentJustBeforeDayOffPeriod;
 
-        private void setup()
+    	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
+        public void Setup()
         {
 			_mocks = new MockRepository();
 			_workTimeStartEndExtractor = _mocks.StrictMock<IWorkTimeStartEndExtractor>();
@@ -113,8 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void CanAccessSimpleProperties()
         {
-	        setup();
-			Assert.IsNotNull(_target);
+            Assert.IsNotNull(_target);
             Assert.AreEqual("", _target.ErrorMessage);
             Assert.IsTrue(_target.HaltModify);
             _target.HaltModify = false;
@@ -124,8 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void WhenNoDayOffRuleReportsNoError()
         {
-			setup();
-			_mocks.ReplayAll();
+            _mocks.ReplayAll();
             Assert.AreEqual(0, _target.Validate(_dic, _days).Count());
             _mocks.VerifyAll();
         }
@@ -133,8 +131,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void ValidatedFailsWhenAssignmentJustBeforeAndConflictingAssignmentAfter()
         {
-			setup();
-			var assWithDayOff = new PersonAssignment(_person, _scenario, new DateOnly(2007, 8, 3));
+					var assWithDayOff = new PersonAssignment(_person, _scenario, new DateOnly(2007, 8, 3));
 	        var template = new DayOffTemplate(new Description());
 	        template.Anchor = new TimeSpan(10, 30, 0);
 					template.SetTargetAndFlexibility(_dayOff1.TargetLength, _dayOff1.Flexibility);
@@ -164,8 +161,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void ValidatedFailsWhenAssignmentJustAfterAndConflictingAssignmentBefore()
         {
-			setup();
-			var assWithDayOff = new PersonAssignment(_person, _scenario, new DateOnly(2007, 8, 3));
+					var assWithDayOff = new PersonAssignment(_person, _scenario, new DateOnly(2007, 8, 3));
 					var template = new DayOffTemplate(new Description());
 					template.Anchor = new TimeSpan(10, 30, 0);
 					template.SetTargetAndFlexibility(_dayOff1.TargetLength, _dayOff1.Flexibility);
@@ -195,8 +191,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void ValidatedFailsWhenAssignmentBeforeAndAfterConflicts()
         {
-			setup();
-			var assWithDayOff = new PersonAssignment(_person, _scenario, new DateOnly(2007, 8, 3));
+					var assWithDayOff = new PersonAssignment(_person, _scenario, new DateOnly(2007, 8, 3));
 					var template = new DayOffTemplate(new Description());
 					template.Anchor = new TimeSpan(10, 30, 0);
 					template.SetTargetAndFlexibility(_dayOff1.TargetLength, _dayOff1.Flexibility);
@@ -226,8 +221,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void WhenDayOffDoesNotFitBetweenAssignmentsRuleReportsError()
         {
-			setup();
-			var date = new DateTime(2010, 9, 6, 6, 0, 0, DateTimeKind.Utc);
+            var date = new DateTime(2010, 9, 6, 6, 0, 0, DateTimeKind.Utc);
             var assBeforePeriod = new DateTimePeriod(date, date.AddHours(13));
             var assAfterPeriod = new DateTimePeriod(date.AddDays(2), date.AddDays(2).AddHours(8));
 
@@ -240,8 +234,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void WhenAssignmentsFitsButConflictsBeforeAndDayOffHaveEnoughFlexibilityNoError()
         {
-			setup();
-			var date = new DateTime(2010, 9, 6, 6, 0, 0, DateTimeKind.Utc);
+            var date = new DateTime(2010, 9, 6, 6, 0, 0, DateTimeKind.Utc);
             // the day must move one hour forward
             var assBeforePeriod = new DateTimePeriod(date, date.AddHours(13));
             // and there is room for that
@@ -256,8 +249,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void WhenAssignmentsFitsButConflictsAfterAndDayOffHaveEnoughFlexibilityNoError()
         {
-			setup();
-			var date = new DateTime(2010, 9, 6, 6, 0, 0, DateTimeKind.Utc);
+            var date = new DateTime(2010, 9, 6, 6, 0, 0, DateTimeKind.Utc);
             // the day must move one hour forward
             var assBeforePeriod = new DateTimePeriod(date, date.AddHours(8));
             // and there is room for that
@@ -272,8 +264,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void WhenAssignmentBeforeConflictAndNoFlexibilityError()
         {
-			setup();
-			var date = new DateTime(2010, 9, 6, 6, 0, 0, DateTimeKind.Utc);
+            var date = new DateTime(2010, 9, 6, 6, 0, 0, DateTimeKind.Utc);
             // the day must move one hour forward
             var assBeforePeriod = new DateTimePeriod(date, date.AddHours(13));
             // and there is room for that
@@ -288,8 +279,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void WhenAssignmentAfterConflictAndNoFlexibilityError()
         {
-			setup();
-			var date = new DateTime(2010, 9, 6, 6, 0, 0, DateTimeKind.Utc);
+            var date = new DateTime(2010, 9, 6, 6, 0, 0, DateTimeKind.Utc);
             // the day must move one hour forward
             var assBeforePeriod = new DateTimePeriod(date, date.AddHours(10));
             // and there is room for that
@@ -304,8 +294,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void WhenAssignmentIsOnSameDateAsDayOffItIsNoConflict()
         {
-			setup();
-			var date = new DateTime(2007, 8, 3, 0, 0, 0, DateTimeKind.Utc);
+            var date = new DateTime(2007, 8, 3, 0, 0, 0, DateTimeKind.Utc);
             Assert.IsFalse(NewDayOffRule.DayOffConflictWithAssignmentAfter(_dayOff1, new DateTimePeriod(date, date.AddHours(8))));
 						Assert.IsFalse(NewDayOffRule.DayOffConflictWithAssignmentBefore(_dayOff1, new DateTimePeriod(date, date.AddHours(8))));
         }
@@ -313,22 +302,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void WhenAssignmentEndBeforeAnchorItIsNoConflictAfter()
         {
-			setup();
-			var date = new DateTime(2007, 8, 2, 0, 0, 0, DateTimeKind.Utc);
+            var date = new DateTime(2007, 8, 2, 0, 0, 0, DateTimeKind.Utc);
 						Assert.IsFalse(NewDayOffRule.DayOffConflictWithAssignmentAfter(_dayOff1, new DateTimePeriod(date, date.AddHours(8))));
         }
         [Test]
         public void WhenAssignmentStartsAnchorItIsNoConflictBefore()
         {
-			setup();
-			var date = new DateTime(2007, 8, 4, 0, 0, 0, DateTimeKind.Utc);
+            var date = new DateTime(2007, 8, 4, 0, 0, 0, DateTimeKind.Utc);
 						Assert.IsFalse(NewDayOffRule.DayOffConflictWithAssignmentBefore(_dayOff1, new DateTimePeriod(date, date.AddHours(8))));
         }
 
 		[Test]
 		public void ShouldNotConsiderOnlyOvertimeOnSameDayAsDayOff()
 		{
-			setup();
 			var date = new DateOnly(2007, 8, 3);
 			var activity = new Activity("_") {InWorkTime = true};
 
@@ -359,7 +345,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldBreakRuleWhenHavingDayOffAndOvertime()
 		{
-			setup();
 			var date = new DateOnly(2007, 8, 3);
 			var activity = new Activity("_") { InWorkTime = true };
 
@@ -390,7 +375,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldBreakRuleWhenHavingDayOffAndOvertimeIfDayBeforeAndDayAfterIsAssignedWithOvertime()
 		{
-			setup();
 			var date = new DateOnly(2007, 8, 3);
 			var activity = new Activity("_") { InWorkTime = true };
 
@@ -420,7 +404,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldBreakRuleWhenHavingDayOffAndOvertimeIfDayBeforeAndDayAfterIsAssignedWithOvertimeAgain()
 		{
-			setup();
 			var date = new DateOnly(2007, 8, 3);
 			var activity = new Activity("_") { InWorkTime = true };
 

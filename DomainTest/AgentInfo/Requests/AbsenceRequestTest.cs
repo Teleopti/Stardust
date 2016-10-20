@@ -19,9 +19,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
     /// Created date: 2008-06-05
     /// </remarks>
     [TestFixture]
-	[LegacyTest]
-
-	public class AbsenceRequestTest
+    public class AbsenceRequestTest
     {
         private DateTimePeriod _period;
         private Absence _absence;

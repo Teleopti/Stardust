@@ -11,7 +11,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 {
 	[TestFixture]
-	[LegacyTest]
 	public class SendImportForecastBusMessageTest
 	{
 		private ISplitImportForecastMessage _target;

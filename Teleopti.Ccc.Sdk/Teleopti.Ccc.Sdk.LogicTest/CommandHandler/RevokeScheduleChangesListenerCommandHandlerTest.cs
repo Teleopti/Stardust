@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.TestCommon;
@@ -48,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				ListenerName = "Facebook"
 			};
-			using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
+			using (new CustomAuthorizationContext(new NoPermission()))
 			{
 				Assert.Throws<FaultException>(() => handler.Handle(commandDto));
 			}

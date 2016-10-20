@@ -11,8 +11,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
     [TestFixture]
-	[LegacyTest]
-	public class NewNightlyRestRuleTest
+    public class NewNightlyRestRuleTest
     {
         private INewBusinessRule _target;
         private IDictionary<IPerson, IScheduleRange> _ranges;

@@ -4,7 +4,6 @@ using System.ServiceModel;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -60,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			};
 			query.PersonIdCollection.Add(person.Id.GetValueOrDefault());
 
-			using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
+			using (new CustomAuthorizationContext(new NoPermission()))
 			{
 				var result = target.Handle(query);
 				result.Count.Should().Be.EqualTo(0);

@@ -12,7 +12,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
-	[LegacyTest]
 	public class PublishScheduleChangesTest
 	{
 		private readonly SignatureCreator signatureCreator =

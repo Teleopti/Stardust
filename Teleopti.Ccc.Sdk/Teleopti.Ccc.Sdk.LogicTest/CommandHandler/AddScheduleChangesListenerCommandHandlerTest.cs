@@ -3,7 +3,6 @@ using System.ServiceModel;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
@@ -119,7 +118,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 						DaysEndFromCurrentDate = 1
 					}
 			};
-			using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
+			using (new CustomAuthorizationContext(new NoPermission()))
 			{
 				Assert.Throws<FaultException>(() => handler.Handle(commandDto));
 			}

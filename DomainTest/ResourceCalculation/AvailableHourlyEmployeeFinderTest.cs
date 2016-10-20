@@ -10,7 +10,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
 	[TestFixture]
-	[LegacyTest]
 	public class AvailableHourlyEmployeeFinderTest
 	{
 		private IAvailableHourlyEmployeeFinder _target;

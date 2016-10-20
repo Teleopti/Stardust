@@ -10,7 +10,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 {
 	[TestFixture]
-	[LegacyTest]
 	public class ScheduleDayIntraIntervalIssueExtractorTest
 	{
 		private ScheduleDayIntraIntervalIssueExtractor _target;
@@ -28,8 +27,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		private ISkill _skill;
 		private DateTimePeriod _intervalPeriod;
 		private DateTimePeriod _mainShiftPeriod;
-
-		private void setup()
+		
+		[SetUp]
+		public void SetUp()
 		{
 			_mock = new MockRepository();
 			_scenario = new Scenario("scenario");
@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		[Test]
 		public void ShouldExtract()
 		{
-			setup();
 			using (_mock.Record())
 			{
 				Expect.Call(_skillStaffPeriod.Period).Return(_intervalPeriod).Repeat.AtLeastOnce();
@@ -70,7 +69,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		[Test]
 		public void ShouldNotExtractWhenNoMainShift()
 		{
-			setup();
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario, _mainShiftPeriod);
 			_scheduleDictionary = ScheduleDictionaryForTest.WithPersonAbsence(_scenario, _mainShiftPeriod, personAbsence);
 			_skill.Activity = _mainActivity;
@@ -81,7 +79,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		[Test]
 		public void ShouldNotExtractWhenPersonAssingmentDontIntersectIntervalPeriod()
 		{
-			setup();
 			using (_mock.Record())
 			{
 				Expect.Call(_skillStaffPeriod.Period).Return(_intervalPeriod.MovePeriod(TimeSpan.FromHours(4))).Repeat.AtLeastOnce();

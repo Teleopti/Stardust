@@ -17,7 +17,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture]
-	[LegacyTest]
 	public class AddIntradayAbsenceCommandHandlerTest
 	{
 

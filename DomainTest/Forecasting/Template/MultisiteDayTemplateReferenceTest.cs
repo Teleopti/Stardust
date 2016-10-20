@@ -10,7 +10,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Forecasting.Template
 {
     [TestFixture, SetUICulture("en-US")]
-	[LegacyTest]
     public class MultisiteDayTemplateReferenceTest
     {
         private MultisiteDay target;
@@ -24,7 +23,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
         private ISkillDay _multisiteSkillDay;
         private MultisiteSkillDayCalculator calculator;
 
-		private void setup()
+        [SetUp]
+        public void Setup()
         {
             _dt = new DateOnly(2007, 1, 1);
             _skill = SkillFactory.CreateMultisiteSkill("skill1");
@@ -61,22 +61,19 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
         [Test]
         public void VerifyCanGetProperties()
         {
-	        setup();
             Assert.AreEqual(_skill,((MultisiteDayTemplateReference) target.TemplateReference).MultisiteSkill);
         }
         [Test]
         public void VerifyCanSetAndGetName()
         {
-			setup();
-			target.TemplateReference.TemplateName = TemplateReference.LongtermTemplateKey;
+            target.TemplateReference.TemplateName = TemplateReference.LongtermTemplateKey;
             Assert.AreEqual(TemplateReference.LongtermTemplateKey, target.TemplateReference.TemplateName);
         }
 
         [Test]
         public void CanApplyTemplate()
         {
-			setup();
-			IList<ITemplateMultisitePeriod> multisitePeriods = new List<ITemplateMultisitePeriod>();
+            IList<ITemplateMultisitePeriod> multisitePeriods = new List<ITemplateMultisitePeriod>();
             //SkillPersonData skillPersonData = new SkillPersonData(11, 27);
 
             DateTimePeriod timePeriod = new DateTimePeriod(

@@ -8,14 +8,13 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
 	[TestFixture]
-	[LegacyTest]
 	public class SwapAndModifyServiceNewTest
 	{
 		private SwapAndModifyServiceNew _swapAndModifyServiceNew;
@@ -124,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_dates = new List<DateOnly> {new DateOnly(2011, 1, 1)};
 			var authorizer = new NoPermission();
-			using (CurrentAuthorization.ThreadlyUse(authorizer))
+			using (new CustomAuthorizationContext(authorizer))
 			{
 				Assert.Throws<PermissionException>(() => _swapAndModifyServiceNew.Swap(_person1, _person2, _dates, _lockedDates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance)));
 			}
@@ -181,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			}
 			using (_mock.Playback())
 			{
-				using (CurrentAuthorization.ThreadlyUse(authorizer))
+				using (new CustomAuthorizationContext(authorizer))
 				{
 					_swapAndModifyServiceNew.Swap(_person1, _person2, _dates, _lockedDates, _dictionary, null,
 						new ScheduleTagSetter(NullScheduleTag.Instance));

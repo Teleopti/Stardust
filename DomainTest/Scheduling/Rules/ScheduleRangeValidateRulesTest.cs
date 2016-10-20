@@ -15,8 +15,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
     [TestFixture]
-	[LegacyTest]
-	public class ScheduleRangeValidateRulesTest
+    public class ScheduleRangeValidateRulesTest
     {
         private IScheduleRange _scheduleRange;
         private IScenario _scenario;  

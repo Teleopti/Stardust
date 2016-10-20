@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
             using (_mocks.Playback())
             {
-	            using (CurrentAuthorization.ThreadlyUse(_authorization))
+	            using (new CustomAuthorizationContext(_authorization))
 	            {
 		            bool result = _target.Execute(_matrixList, _schedulingOptions, _rollbackService);
 		            Assert.IsTrue(result);
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
             using (_mocks.Playback())
             {
-	            using (CurrentAuthorization.ThreadlyUse(_authorization))
+	            using (new CustomAuthorizationContext(_authorization))
 	            {
 		            bool result = _target.Execute(_matrixList, _schedulingOptions, _rollbackService);
 		            Assert.IsFalse(result);
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 			using (_mocks.Playback())
 			{
-				using (CurrentAuthorization.ThreadlyUse(_authorization))
+				using (new CustomAuthorizationContext(_authorization))
 				{
 					bool result = _target.Execute(_matrixList, _schedulingOptions, _rollbackService);
 					Assert.IsFalse(result);
@@ -293,7 +293,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
             using (_mocks.Playback())
             {
-	            using (CurrentAuthorization.ThreadlyUse(_authorization))
+	            using (new CustomAuthorizationContext(_authorization))
 	            {
 		            bool result = _target.Execute(_matrixList, _schedulingOptions, _rollbackService);
 		            Assert.IsTrue(result);

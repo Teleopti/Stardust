@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
 	[TestFixture]
-	[LegacyTest]
 	public class TimeZoneGuardTest
 	{
 		private TimeZoneGuard _target;

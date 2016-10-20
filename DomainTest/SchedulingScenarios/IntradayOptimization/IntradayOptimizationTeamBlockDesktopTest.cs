@@ -19,7 +19,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
-	[LegacyTest]
 	public class IntradayOptimizationTeamBlockDesktopTest
 	{
 		public IOptimizationCommand Target;

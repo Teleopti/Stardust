@@ -33,7 +33,6 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[TestFixture]
-	[LegacyTest]
 	public class ApproveRequestsWithValidatorsEventHandlerTest
 	{
 		private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
@@ -63,7 +62,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private DateTime _startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
 		private DateTime _endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
 
-		private void setup()
+		[SetUp]
+		public void SetUp()
 		{
 			var skillRepository = new FakeSkillRepository();
 			var workloadRepository = new FakeWorkloadRepository();
@@ -123,7 +123,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldApproveAbsenceRequestWithEnoughBudgetHeadCount()
 		{
-			setup();
 			setBudgetAndAllowance(_person, 1, 2);
 			_target.Handle(_event);
 
@@ -134,7 +133,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldDoNothingToAbsenceRequestWithNotEnoughBudgetHeadCount()
 		{
-			setup();
 			setBudgetAndAllowance(_person, 2, 1);
 			_target.Handle(_event);
 
@@ -146,7 +144,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldApproveAbsenceRequestInWaitlistedStatus()
 		{
-			setup();
 			_personRequest = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime), false);
 			_personRequest.Deny(null, "test", new PersonRequestAuthorizationCheckerForTest(), PersonRequestDenyOption.AutoDeny);
 			_event.PersonRequestIdList = new Guid[] { _personRequest.Id.GetValueOrDefault() };
@@ -159,7 +156,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldDenyDuplicatedAbsenceRequest()
 		{
-			setup();
 			_startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
 			_endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
 
@@ -191,7 +187,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldApproveMultipleAbsenceRequestsInTheSameDayWithDifferentHours()
 		{
-			setup();
 			setBudgetAndAllowance(_person, 1, 2);
 			_startDateTime = new DateTime(2016, 3, 1, 8, 0, 0, DateTimeKind.Utc);
 			_endDateTime = new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc);
@@ -219,7 +214,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldApproveAbsenceRequestCheckByIntradayWithEnoughStaffing()
 		{
-			setup();
 			var skill = createSkillWithOpenHours();
 			setPersonPeriodWithSkill(skill);
 			setSkillStaffPeriodHolder(skill, -0.05d);
@@ -234,7 +228,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldDoNothingToAbsenceRequestWithUnderStaffing()
 		{
-			setup();
 			var skill = createSkillWithOpenHours();
 			setPersonPeriodWithSkill(skill);
 			setSkillStaffPeriodHolder(skill, -0.5d);

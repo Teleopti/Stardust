@@ -16,14 +16,13 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SeatPlanning
 {
 	[TestFixture]
-	[LegacyTest]
 	internal class SeatPlannerTests
 	{
 		private ICurrentScenario _currentScenario;
 		private FakeSeatBookingRepository _seatBookingRepository;
 		private FakeSeatPlanRepository _seatPlanRepository;
-
-		private void setup()
+		[SetUp]
+		public void SetUp()
 		{
 			_currentScenario = new FakeCurrentScenario();
 			_seatBookingRepository = new FakeSeatBookingRepository();
@@ -101,7 +100,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldBookSeat()
 		{
-			setup();
 			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var endDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
@@ -128,7 +126,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldBookSeatForMutipleDays()
 		{
-			setup();
 			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var endDate = new DateTime(2015, 1, 22, 0, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
@@ -160,7 +157,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldSkipNonSelectedLocations()
 		{
-			setup();
 			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var endDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
@@ -193,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldGroupTeamBookings()
 		{
-			setup();
+
 			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var endDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
@@ -243,7 +239,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldGroupManyTeamBookings()
 		{
-			setup();
 			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var endDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
@@ -314,7 +309,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldGroupTeamBookingsAcrossMultipleDays()
 		{
-			setup();
 			var startDateDay1 = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var endDateDay1 = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 
@@ -402,7 +396,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldHonourExistingBookingsForOtherAgents()
 		{
-			setup();
 			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var endDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
@@ -443,7 +436,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldHonourExistingBookingsOnChildLocation()
 		{
-			setup();
 			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var endDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
@@ -487,7 +479,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldOverwriteExistingBookingForAgent()
 		{
-			setup();
 			var date = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date));
 			var team = addTeam("Team");
@@ -522,7 +513,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldHonourExistingOvernightBookingOutsideOfCommandPeriod()
 		{
-			setup();
 			var date = new DateTime(2015, 1, 20, 8, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date));
 			var team = addTeam("Team");
@@ -560,7 +550,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldAddAfterOvernightBooking()
 		{
-			setup();
 			var date = new DateTime(2015, 1, 20, 9, 1, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date));
 
@@ -600,7 +589,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void BookingsOfAnEarlierTimeShouldGetPrecedence()
 		{
-			setup();
 			var startDateTime = new DateTime(2015, 01, 21);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDateTime), new DateOnly(startDateTime));
 
@@ -638,7 +626,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldAllocateSeatsInOrderWhenPlanningOvernightEvenWhenBookingsExist()
 		{
-			setup();
 			var date = new DateTime(2015, 1, 20, 8, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date.AddDays(1)));
 
@@ -694,7 +681,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldPersistSeatPlans()
 		{
-			setup();
 			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var endDate = new DateTime(2015, 1, 21, 0, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
@@ -726,7 +712,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldUpdateExistingSeatPlan()
 		{
-			setup();
 			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var endDate = new DateTime(2015, 1, 20, 8, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
@@ -763,7 +748,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldPersistSeatPlanWithErrorStatus()
 		{
-			setup();
 			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var endDate = new DateTime(2015, 1, 20, 8, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
@@ -790,7 +774,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldPersistSeatPlanWithDifferentStatusInsidePlanningPeriod()
 		{
-			setup();
 			var startDate1 = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var endDate1 = new DateTime(2015, 1, 20, 8, 0, 0, DateTimeKind.Utc);
 			var startDate2 = new DateTime(2015, 1, 21, 0, 0, 0, DateTimeKind.Utc);
@@ -828,7 +811,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldBookSeatBySeatAndPerson()
 		{
-			setup();
 			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var endDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
@@ -861,7 +843,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldBookSeatBySeatsAndPeople()
 		{
-			setup();
 			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var endDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
@@ -913,7 +894,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldHonourExistingBookingsForOtherAgentsBySeatAndPerson()
 		{
-			setup();
 			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var endDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
@@ -955,7 +935,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldOverwriteExistingBookingForAgentBySeatAndPerson()
 		{
-			setup();
 			var date = new DateTime(2015, 01, 01, 0, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date));
 			var team = addTeam("Team");
@@ -991,7 +970,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldHonourExistingOvernightBookingOutsideOfCommandPeriodIfGivingASeatAndPerson()
 		{
-			setup();
 			var date = new DateTime(2015, 01, 01, 0, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date));
 			var team = addTeam("Team");
@@ -1029,15 +1007,13 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldReturnSeatPlanningResultInformation()
 		{
-			setup();
 			testSeatPlanningResultInformation( false);
 		}
 
 		[Test]
 		public void ShouldReturnSeatPlanningResultInformationBySeatsAndPeople()
 		{
-			setup();
-			testSeatPlanningResultInformation(true);
+			testSeatPlanningResultInformation (true);
 		}
 
 		private void testSeatPlanningResultInformation(bool manuallyPlanSeatsAndPeople)
@@ -1102,7 +1078,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldPlanSeatsConsideringFrequency()
 		{
-			setup();
 			var date = new DateTime(2015, 01, 02, 0, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date));
 			var team = addTeam("Team");
@@ -1139,7 +1114,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldNotAllocateASeatToAnAgentWithADayOff()
 		{
-			setup();
 			var date = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date));
 			var team = addTeam("Team");
@@ -1169,7 +1143,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldRemoveExistingBookingForAgentWhenTheirScheduleChangesToDayOff()
 		{
-			setup();
 			var date = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date));
 			var team = addTeam("Team");

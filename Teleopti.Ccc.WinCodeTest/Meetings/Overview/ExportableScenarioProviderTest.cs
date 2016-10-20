@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Meetings.Overview;
@@ -54,12 +53,12 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
             Expect.Call(_model.CurrentScenario).Return(_scenario3).Repeat.Twice();
             Expect.Call(() => _unitOfWork.Dispose()).Repeat.Twice();
             _mocks.ReplayAll();
-            using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
+            using (new CustomAuthorizationContext(new NoPermission()))
             {
                 _target.AllowedScenarios().Count.Should().Be.EqualTo(1);
             }
 
-            using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+            using (new CustomAuthorizationContext(new FullPermission()))
             {
                 _target.AllowedScenarios().Count.Should().Be.EqualTo(2);
             }

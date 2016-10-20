@@ -18,8 +18,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
     [DomainTest]
-	[LegacyTest]
-	public class DayOffRuleTest
+    public class DayOffRuleTest
     {
         private IActivity _activity;
         private ShiftCategory _category;
@@ -44,7 +43,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
-        private void setup()
+		[SetUp]
+        public void Setup()
         {
             _mocks = new MockRepository();
             _dic = _mocks.StrictMock<IScheduleDictionary>();
@@ -87,7 +87,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test, SetCulture("en-US"), SetUICulture("en-US")]
 		public void ShouldBeAbleToScheduleWith36HourDayOffExposesBug38242()
 		{
-			setup();
 			var firstDay = new DateOnly(2016, 5, 22);
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
 			var activity = ActivityRepository.Has("_");
@@ -143,8 +142,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
         public void VerifyBeforeDayOffWithAssignmentAfter()
         {
-			setup();
-			createDayOffRule();
+            createDayOffRule();
             var dayOff = new DayOffTemplate(new Description("test"));
             dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(4));
             dayOff.Anchor = TimeSpan.FromHours(14); //för att få 12:00 UTC
@@ -161,9 +159,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
         [Test]
         public void VerifyBeforeDayOffWithNoAssignmentAfter()
-		{
-			setup();
-			createDayOffRule();
+        {
+            createDayOffRule();
             DayOffTemplate dayOff = new DayOffTemplate(new Description("test"));
             dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(4));
             dayOff.Anchor = TimeSpan.FromHours(14); //för att få 12:00 UTC
@@ -180,8 +177,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void VerifyAfterDayOffWithAssignmentBeforeOnTheSameDayAsDayOff()
         {
-			setup();
-			createDayOffRule();
+            createDayOffRule();
             DayOffTemplate dayOff = new DayOffTemplate(new Description("test"));
             dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(6));
             dayOff.Anchor = TimeSpan.FromHours(12);
@@ -201,8 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void VerifyBeforeDayOffWithAssignmentAfterOnTheSameDayAsDayOff()
         {
-			setup();
-			createDayOffRule();
+            createDayOffRule();
             DayOffTemplate dayOff = new DayOffTemplate(new Description("test"));
             dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(6));
             dayOff.Anchor = TimeSpan.FromHours(12);
@@ -222,8 +217,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void VerifyAfterDayOffWithNoAssignmentBefore()
         {
-			setup();
-			createDayOffRule();
+            createDayOffRule();
             DayOffTemplate dayOff = new DayOffTemplate(new Description("test"));
             dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(4));
             dayOff.Anchor = TimeSpan.FromHours(14); //för att få 12:00 UTC
@@ -238,8 +232,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void VerifyCanFindLongestDateTimePeriodForAssignmentWhenSeekingBetweenTwoDayOffs()
         {
-			setup();
-			createSchedulePartWithTwoDayOffs();
+            createSchedulePartWithTwoDayOffs();
             DateTime anchorDayOffTwo = new DateTime(2007, 8, 5, 8, 30, 0);
             DateTime anchorDayOffOne = new DateTime(2007, 8, 3, 8, 30, 0);
  
@@ -252,8 +245,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void VerifyCanFindLongestDateTimePeriodForAssignmentWhenSeekingBetweenTwoDayOffsAndAssignmentAfterHindersBend()
         {
-			setup();
-			createSchedulePartWithTwoDayOffs();
+            createSchedulePartWithTwoDayOffs();
             //DateTime anchorDayOffTwo = new DateTime(2007, 8, 5, 8, 30, 0);
             DateTime anchorDayOffOne = new DateTime(2007, 8, 3, 8, 30, 0);
             DateTime two = new DateTime(2007, 8, 5, 8, 30, 0 , DateTimeKind.Utc);
@@ -272,8 +264,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void VerifyCanFindLongestDateTimePeriodForAssignmentWhenSeekingBetweenTwoDayOffsAndAssignmentBeforeHindersBend()
         {
-			setup();
-			createSchedulePartWithTwoDayOffs();
+            createSchedulePartWithTwoDayOffs();
             DateTime anchorDayOffTwo = new DateTime(2007, 8, 5, 8, 30, 0);
             //DateTime anchorDayOffOne = new DateTime(2007, 8, 3, 8, 30, 0);
 
@@ -313,10 +304,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
         #endregion
 
-        //[TearDown]
-        //public void Teardown()
-        //{
-        //    _mocks.Verify(_dic);
-        //}
+        [TearDown]
+        public void Teardown()
+        {
+            _mocks.Verify(_dic);
+        }
 	}
 }

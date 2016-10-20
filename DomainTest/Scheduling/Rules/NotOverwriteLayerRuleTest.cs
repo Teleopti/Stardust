@@ -19,7 +19,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
 	[DomainTest]
-	[LegacyTest]
 	public class NotOverwriteLayerRuleTest
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;

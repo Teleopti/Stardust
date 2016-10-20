@@ -12,8 +12,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
     [TestFixture]
-	[LegacyTest]
-	public class ResourceCalculateDaysDeciderTest
+    public class ResourceCalculateDaysDeciderTest
     {
         private IResourceCalculateDaysDecider _target;
         private MockRepository _mocks;

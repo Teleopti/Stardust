@@ -16,8 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
     [TestFixture]
-	[LegacyTest]
-	public class ShiftProjectionCacheFilterTest
+    public class ShiftProjectionCacheFilterTest
     {
         private ShiftProjectionCacheFilter _target;
         private DateOnly _dateOnly;

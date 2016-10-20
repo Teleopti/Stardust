@@ -10,8 +10,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
     [TestFixture]
-	[LegacyTest]
-	public class ScheduleProjectionExtractorTest
+    public class ScheduleProjectionExtractorTest
     {
         ScheduleProjectionExtractor _target;
 	    private MockRepository _mocks;

@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
     //tests when permissions are disabled on scheduledictionary
     [TestFixture]
-	[LegacyTest]
     public class ScheduleRangeLowPermissionCheckTest
     {
 	    private const string function = DefinedRaptorApplicationFunctionPaths.ViewSchedules;
@@ -60,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             dic.Stub(x => x.Scenario).Return(scenario);
             dic.Stub(x => x.PermissionsEnabled).Return(false);
 
-	        using (CurrentAuthorization.ThreadlyUse(authorization))
+	        using (new CustomAuthorizationContext(authorization))
 	        {
 		        target.AddRange(new List<IPersonAssignment> {assInside, assOutSide});
 		        target.Add(absInside);
@@ -92,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			dic.Stub(x => x.Scenario).Return(scenario);
 			dic.Stub(x => x.PermissionsEnabled).Return(false);
 
-		    using (CurrentAuthorization.ThreadlyUse(authorization))
+		    using (new CustomAuthorizationContext(authorization))
 		    {
 			    target.AddRange(new List<IPersonAssignment> {ass1, ass2});
 			    target.ExtractAllScheduleData(extractor,
@@ -130,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			inside.Stub(x => x.BelongsToPeriod(new DateOnlyPeriod())).IgnoreArguments().Return(true); //check permission - should be ok
 		    
-		    using (CurrentAuthorization.ThreadlyUse(authorization))
+		    using (new CustomAuthorizationContext(authorization))
 		    {
 			    target.Add(outside);
 			    target.Add(inside);
@@ -154,7 +153,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		    authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
 			    .Return(true);
 
-		    using (CurrentAuthorization.ThreadlyUse(authorization))
+		    using (new CustomAuthorizationContext(authorization))
 		    {
 			    IScheduleDay part = target.ScheduledDay(paramStartLocal.AddDays(20));
 			    Assert.AreEqual(false, part.FullAccess);

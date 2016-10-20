@@ -15,8 +15,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
     [TestFixture]
-	[LegacyTest]
-	public class RelativeDailyStandardDeviationsByPersonalSkillsExtractorTest
+    public class RelativeDailyStandardDeviationsByPersonalSkillsExtractorTest
     {
         private RelativeDailyValueByPersonalSkillsExtractor _target;
         private MockRepository _mocks;

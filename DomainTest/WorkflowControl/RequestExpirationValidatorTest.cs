@@ -13,7 +13,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
 	[TestFixture]
-	[LegacyTest]
 	public class RequestExpirationValidatorTest
 	{
 		private FakeGlobalSettingDataRepository _globalSettingDataRepository;

@@ -8,7 +8,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Ccc.TestCommon;
@@ -91,7 +90,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var query = new GetPeopleOptionalValuesByPersonIdQueryDto();
 			query.PersonIdCollection.Add(person.Id.GetValueOrDefault());
 
-			using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
+			using (new CustomAuthorizationContext(new NoPermission()))
 			{
 				Assert.Throws<FaultException>(() => target.Handle(query));
 			}

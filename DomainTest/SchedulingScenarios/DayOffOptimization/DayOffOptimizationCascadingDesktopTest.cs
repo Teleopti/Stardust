@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[TestFixture(false)]
 	[TestFixture(true)]
 	[DomainTest]
-	[LegacyTest]
 	public class DayOffOptimizationCascadingDesktopTest : DayOffOptimizationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;

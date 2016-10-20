@@ -17,7 +17,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
 	[TestFixture]
-	[LegacyTest]
 	public class ScheduleProjectionServiceTest
 	{
 		private IScheduleDay scheduleDay;
@@ -25,7 +24,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	    private ScheduleDictionary dic;
 		private IPersistableScheduleDataPermissionChecker permissionChecker;
 
-		private void setup()
+	    [SetUp]
+		public void Setup()
 		{
 			permissionChecker = new PersistableScheduleDataPermissionChecker();
 			var person = PersonFactory.CreatePerson();
@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyFakeActivity()
 		{
-			setup();
 			var fake = target.FakeActivity;
 			Assert.AreSame(target.FakeActivity, fake);
 			Assert.IsTrue(fake.InWorkTime);
@@ -59,7 +58,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyEnumeratorDoesNotMessWithLayers()
 		{
-			setup();
 			var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scheduleDay.Scenario, scheduleDay.Person,
 				createPeriod(8, 16));
 			var pActivity = ActivityFactory.CreateActivity("personal");
@@ -79,7 +77,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyMultiplePersonAbsencesAndCorrectUnderlyingLayers()
 		{
-			setup();
 			var ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
 			ass.AddActivity(new Activity("första"), createPeriod(2, 9));
 			ass.AddActivity(new Activity("andra"), createPeriod(11, 19));
@@ -145,7 +142,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyTotallyOverlapping()
 		{
-			setup();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scheduleDay.Scenario, scheduleDay.Person,
 				new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 
@@ -166,7 +162,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyResultWhenAbsenceAndContractSaysDayOff()
 		{
-			setup();
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario,
 				createPeriod(0, 24));
 			personAbsence.SetId(Guid.NewGuid());
@@ -214,7 +209,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyHalfOverlapping()
 		{
-			setup();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scheduleDay.Scenario, scheduleDay.Person,
 				new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			var abs = createPersonAbsence(100, new DateTimePeriod(1900, 1, 1, 2000, 6, 1));
@@ -238,7 +232,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyTinyOverlapping()
 		{
-			setup();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scheduleDay.Scenario, scheduleDay.Person,
 				new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			var abs = createPersonAbsence(100, new DateTimePeriod(2000, 6, 1, 2000, 6, 2));
@@ -265,7 +258,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyOverlappingTwoAssignmentsWithDifferentActivities()
 		{
-			setup();
 			var ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
 			ass.AddActivity(ActivityFactory.CreateActivity("1"), new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			ass.AddActivity(ActivityFactory.CreateActivity("2"), new DateTimePeriod(2001, 1, 1, 2002, 1, 1));
@@ -289,7 +281,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyAssignmentAbsenceMeeting()
 		{
-			setup();
 			IPersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
 			ass.AddActivity(new Activity("1"), createPeriod(0, 1));
 			ass.AddActivity(new Activity("2"), createPeriod(1, 20));
@@ -313,7 +304,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyAbsenceHasHigherPriorityThanMeeting()
 		{
-			setup();
 			var abs = createPersonAbsence(100, createPeriod(10, 20));
 			var meeting = createPersonMeeting(createPeriod(13, 14));
 
@@ -332,7 +322,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyMergeDoesNotMergeDifferentUnderlyingActivityInContractTime()
 		{
-			setup();
 			var phone = new Activity("phone") { InContractTime = true };
 			var lunch = new Activity("lunch") { InContractTime = false };
 			var sjuk = new Absence { InContractTime = true };
@@ -371,7 +360,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyAbsenceLongerThanOrEqualContractTimeLengthOnNonMainShiftDay()
 		{
-			setup();
 			var perYes = new DateTimePeriod(new DateTime(2000, 1, 1, 7, 0, 0, DateTimeKind.Utc),
 				new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc));
 			var ass = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(ActivityFactory.CreateActivity("f"),
@@ -396,7 +384,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void OnlyAbsenceWithinPeriodAffectContractTime()
 		{
-			setup();
 			var pAbs = createPersonAbsence(100, new DateTimePeriod(2000, 1, 3, 2000, 1, 4));
 			pAbs.Layer.Payload.InContractTime = true;
 			scheduleDay.Add(pAbs);
@@ -410,7 +397,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyLongAbsenceContractTimeInPlus5Time()
 		{
-			setup();
 			addPeriodAndContractToPerson(true);
 			scheduleDay.Person.Period(new DateOnly(2000, 1, 1)).PersonContract.Contract.WorkTime = new WorkTime(TimeSpan.FromHours(12));
 
@@ -427,7 +413,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyLongAbsenceContractTimeInMinus5Time()
 		{
-			setup();
 			addPeriodAndContractToPerson(true);
 			scheduleDay.Person.Period(new DateOnly(2000, 1, 1)).PersonContract.Contract.WorkTime =
 				new WorkTime(TimeSpan.FromHours(12));
@@ -449,7 +434,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyOnlyFakeLayersFullyCoveredByAbsenceIsCreated()
 		{
-			setup();
 			var pAbs = createPersonAbsence(100, createPeriod(10, 21));
 			pAbs.Layer.Payload.InContractTime = true;
 			scheduleDay.Add(pAbs);
@@ -464,7 +448,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void NoFakeLayerIfNoPersonPeriod()
 		{
-			setup();
 			var pAbs = createPersonAbsence(100, new DateTimePeriod(1999, 12, 31, 2000, 1, 20));
 			scheduleDay.Add(pAbs);
 
@@ -474,7 +457,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyDayOffOnNonShiftDay()
 		{
-			setup();
 			scheduleDay.Person.PermissionInformation.SetDefaultTimeZone(
 				(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 
@@ -497,8 +479,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	    [Test]
 	    public void VerifyContractTimeIsZeroOnEmptyDayWithEmptyContract()
 	    {
-			setup();
-			addPeriodAndContractToPerson(false);
+	        addPeriodAndContractToPerson(false);
 	        scheduleDay.Person.Period(new DateOnly(2000, 1, 1)).PersonContract.Contract.WorkTime =
 	            new WorkTime(TimeSpan.Zero);
 
@@ -511,7 +492,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	    [Test]
 		public void VerifyContractTimeIsZeroIfOvertime()
 		{
-			setup();
 			IMultiplicatorDefinitionSet def = new MultiplicatorDefinitionSet("foo", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(scheduleDay.Person, def);
 			IPersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
@@ -523,7 +503,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyContractTimeIsZeroIfOvertimeOverlappedWithContractAbsence()
 		{
-			setup();
 			var def = new MultiplicatorDefinitionSet("foo", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(scheduleDay.Person, def);
 			var ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
@@ -544,7 +523,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void OvertimeShouldBeZeroIfAbsence()
 		{
-			setup();
 			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
 			var set = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			var personContract = new PersonContract(new Contract("d"), new PartTimePercentage("d"), new ContractSchedule("d"));
@@ -565,7 +543,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyContractTimeAndCorrectActivityIfOvertimeOverlappedWithMeeting()
 		{
-			setup();
 			var def = new MultiplicatorDefinitionSet("foo", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(scheduleDay.Person, def);
 			var ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
@@ -584,7 +561,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void ContractTimeShouldBeCalculatedCorrectOnEachLayerIfInContractTimeIsMixed()
 		{
-			setup();
 			var ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
 			var actCtr = new Activity("phone");
 			var actNoCtr = new Activity("lunch") { InContractTime = false };
@@ -606,7 +582,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyAbsencesOverlappingEndOfNightshiftWhenFakeLayer()
 		{
-			setup();
 			const int nextDay = 24;
 			var scheduleRange = new ScheduleRange(scheduleDay.Owner,
 				new ScheduleParameters(scheduleDay.Scenario, scheduleDay.Person, scheduleDay.Owner.Period.VisiblePeriod), permissionChecker);
@@ -635,7 +610,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void FakeLayerShouldBeCreatedIfDayOffAndAbsenceAndContract()
 		{
-			setup();
 			var abs = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario, createPeriod(-100, 100));
 			abs.Layer.Payload.InContractTime = true;
 			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scheduleDay.Scenario, scheduleDay.Person,
@@ -650,8 +624,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void FakeLayerShouldHaveRightContractTimeForFullDayAbsenceIfContractTimeIsFromContract()
         {
-			setup();
-			var abs = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario,
+	        var abs = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario,
 		        createPeriod(-100, 100));
             abs.Layer.Payload.InContractTime = true;
             scheduleDay.Add(abs);
@@ -680,8 +653,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void FakeLayerShouldHaveRightContractTimeForFullDayAbsenceIfContractTimeIsFromSchedulePeriod()
         {
-			setup();
-			var abs = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario,
+	        var abs = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario,
 		        createPeriod(-100, 100));
             abs.Layer.Payload.InContractTime = true;
             scheduleDay.Add(abs);
@@ -710,8 +682,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	    [Test]
 		public void FakeLayerShouldBeCreatedIfDayOffAndAbsenceAndNoContract()
 	    {
-			setup();
-			var abs = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario,
+		    var abs = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario,
 			    createPeriod(-100, 100));
 			abs.Layer.Payload.InContractTime = true;
 		    var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scheduleDay.Scenario, scheduleDay.Person,
@@ -726,7 +697,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void NoContractTimeIfFakeLayerIsCreatedDueToDayOffAndAbsenceAndContract()
 		{
-			setup();
 			var abs = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario, createPeriod(-100, 100));
 			abs.Layer.Payload.InContractTime = true;
 			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scheduleDay.Scenario, scheduleDay.Person,
@@ -741,7 +711,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void NoContractTimeIfFakeLayerIsCreatedDueToDayOffAndAbsenceAndNoContract()
 		{
-			setup();
 			var abs = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario, createPeriod(-100, 100));
 			abs.Layer.Payload.InContractTime = true;
 			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scheduleDay.Scenario, scheduleDay.Person,
@@ -756,8 +725,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void ShouldGetContractTimeFromSchedulePeriodForProjection()
         {
-			setup();
-			var dateOnly = new DateOnly(2012, 12, 1);
+            var dateOnly = new DateOnly(2012, 12, 1);
             var person = PersonFactory.CreatePerson();
             var team = TeamFactory.CreateSimpleTeam("Team");
 	        var personContract = new PersonContract(new Contract("contract")

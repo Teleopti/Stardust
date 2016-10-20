@@ -2,7 +2,6 @@ using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Grouping;
@@ -18,7 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
         {
 			var personSelectorView = MockRepository.GenerateMock<IPersonSelectorView>();
 			var target = new ModifyGroupPageCommand(personSelectorView);
-            using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
+            using (new CustomAuthorizationContext(new NoPermission()))
             {
                Assert.That(target.CanExecute(), Is.False);  
             }

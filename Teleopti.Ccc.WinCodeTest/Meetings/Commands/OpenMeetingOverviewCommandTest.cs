@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -41,7 +40,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
         [Test]
         public void ShouldReturnFalseIfNotAllowed()
         {
-            using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
+            using (new CustomAuthorizationContext(new NoPermission()))
             {
                 _target = new OpenMeetingsOverviewCommand(_repositoryFactory, _unitOfWorkFactory, _personSelectorPresenter, _meetingOverviewFactory);
                 Assert.That(_target.CanExecute(), Is.False);

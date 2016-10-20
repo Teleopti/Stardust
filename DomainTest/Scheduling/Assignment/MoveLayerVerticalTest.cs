@@ -13,7 +13,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
 	[TestFixture]
-	[LegacyTest]
 	public class MoveLayerVerticalTest
 	{
 		[Test]
