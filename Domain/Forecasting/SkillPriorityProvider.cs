@@ -9,7 +9,7 @@
 
 	}
 
-	public class SkillPriorityProviderForToggle41312
+	public class SkillPriorityProviderForToggle41312 : ISkillPriorityProvider
 	{
 		
 	}
