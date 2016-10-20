@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
@@ -14,11 +15,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 	{
 		private readonly IIsMaxSeatsReachedOnSkillStaffPeriodSpecification _isMaxSeatsReachedOnSkillStaffPeriodSpecification;
 		private readonly MaxSeatBoostingFactorCalculator _maxSeatBoostingFactorCalculator;
+		private readonly IUsedSeats _usedSeats;
 
-		public MaxSeatsSpecificationDictionaryExtractor(IIsMaxSeatsReachedOnSkillStaffPeriodSpecification isMaxSeatsReachedOnSkillStaffPeriodSpecification, MaxSeatBoostingFactorCalculator maxSeatBoostingFactorCalculator)
+		public MaxSeatsSpecificationDictionaryExtractor(IIsMaxSeatsReachedOnSkillStaffPeriodSpecification isMaxSeatsReachedOnSkillStaffPeriodSpecification, 
+																						MaxSeatBoostingFactorCalculator maxSeatBoostingFactorCalculator,
+																						IUsedSeats usedSeats)
 		{
 			_isMaxSeatsReachedOnSkillStaffPeriodSpecification = isMaxSeatsReachedOnSkillStaffPeriodSpecification;
 			_maxSeatBoostingFactorCalculator = maxSeatBoostingFactorCalculator;
+			_usedSeats = usedSeats;
 		}
 
 		public IDictionary<DateTime, IntervalLevelMaxSeatInfo> ExtractMaxSeatsFlag(List<ISkillStaffPeriod> skillStaffPeriodList, TimeZoneInfo timeZoneInfo, bool considerEqualMaxAndCalSeatAsBroken)
@@ -32,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				var utcPeriod = skillStaffPeriod.Period;
 				var localStartTime = DateTime.SpecifyKind(utcPeriod.StartDateTimeLocal(timeZoneInfo), DateTimeKind.Utc);
 				var maxSeat = skillStaffPeriod.Payload.MaxSeats;
-				var calculatedUsedSeats = skillStaffPeriod.Payload.CalculatedUsedSeats;
+				var calculatedUsedSeats = _usedSeats.Fetch(skillStaffPeriod);
 				var isMaxSeatsReachedOnGivenInterval = false;
 				if(considerEqualMaxAndCalSeatAsBroken )
 					isMaxSeatsReachedOnGivenInterval =_isMaxSeatsReachedOnSkillStaffPeriodSpecification.IsSatisfiedByWithEqualCondition(calculatedUsedSeats,maxSeat);

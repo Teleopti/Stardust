@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -12,11 +13,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     public class TeamBlockMaxSeatChecker : ITeamBlockMaxSeatChecker
     {
         private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
+	    private readonly IUsedSeats _usedSeats;
 
-        public TeamBlockMaxSeatChecker(Func<ISchedulingResultStateHolder> schedulingResultStateHolder)
-        {
-            _schedulingResultStateHolder = schedulingResultStateHolder;
-        }
+	    public TeamBlockMaxSeatChecker(Func<ISchedulingResultStateHolder> schedulingResultStateHolder, IUsedSeats usedSeats)
+	    {
+		    _schedulingResultStateHolder = schedulingResultStateHolder;
+		    _usedSeats = usedSeats;
+	    }
 
 		public bool CheckMaxSeat(DateOnly dateOnly, ISchedulingOptions schedulingOption, ITeamInfo teamInfo)
         {
@@ -45,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                     {
                         foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
                         {
-                            if (skillStaffPeriod.Payload.CalculatedUsedSeats > skillStaffPeriod.Payload.MaxSeats)
+                            if (_usedSeats.Fetch(skillStaffPeriod) > skillStaffPeriod.Payload.MaxSeats)
                             {
                                 return false ;
                             }

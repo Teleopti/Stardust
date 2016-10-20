@@ -2,10 +2,9 @@
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
             _schedulingOption = new SchedulingOptions();
 	         _schedulingOption.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak;
-            _target=new TeamBlockMaxSeatChecker(()=>_schedulingResultStateHolder);
+            _target=new TeamBlockMaxSeatChecker(()=>_schedulingResultStateHolder, new UsedSeatsFromSkillStaff());
             _dateOnly = DateOnly.Today;
             _skill1 = _mock.StrictMock<ISkill>();
             _skill2 = _mock.StrictMock<ISkill>();

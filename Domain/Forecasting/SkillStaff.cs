@@ -27,7 +27,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		private bool _isCalculated;
 		private bool _useShrinkage;
 		private double? _manualAgents;
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		private double _calculatedUsedSeats;
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		private int _maxSeats;
 
 	    /// <summary>
@@ -347,7 +349,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			set { _calculatedUsedSeats = value; }
 		}
 
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		public int MaxSeats
 		{
 			get { return _maxSeats; }

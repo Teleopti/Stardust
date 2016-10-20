@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			_mocks = new MockRepository();
 			_isMaxSeatsReachedOnSkillStaffPeriodSpecification = new IsMaxSeatsReachedOnSkillStaffPeriodSpecification();
 			_maxSeatBoostingFactorCalculator = new MaxSeatBoostingFactorCalculator();
-			_target = new MaxSeatsSpecificationDictionaryExtractor(_isMaxSeatsReachedOnSkillStaffPeriodSpecification,_maxSeatBoostingFactorCalculator );
+			_target = new MaxSeatsSpecificationDictionaryExtractor(_isMaxSeatsReachedOnSkillStaffPeriodSpecification,_maxSeatBoostingFactorCalculator, new UsedSeatsFromSkillStaff());
 			_skillStaffPeriod1 = _mocks.StrictMock<ISkillStaffPeriod>();
 			_skillStaffPeriod2 = _mocks.StrictMock<ISkillStaffPeriod>();
 			_skillStaff1 = _mocks.StrictMock<ISkillStaff>();
