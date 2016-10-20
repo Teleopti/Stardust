@@ -241,7 +241,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		{
 			var isAutoDeny = personRequestDenyOption.HasFlag(PersonRequestDenyOption.AutoDeny);
 			var alreadyAbsence = personRequestDenyOption.HasFlag(PersonRequestDenyOption.AlreadyAbsence);
-			return (!isAutoDeny && IsWaitlisted) || !IsDenied || alreadyAbsence;
+			var isExpired = personRequestDenyOption.HasFlag(PersonRequestDenyOption.RequestExpired);
+			return (!isAutoDeny && IsWaitlisted) || !IsDenied || alreadyAbsence || isExpired;
 		}
 
 		public virtual bool IsEditable

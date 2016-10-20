@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			{
 				var requestExpirationValidator = new RequestExpirationValidator(_expiredRequestValidator);
 				if (!validators.Contains(requestExpirationValidator))
-					validators.Add(requestExpirationValidator);
+					validators.Insert(0, requestExpirationValidator);
 			}
 
 			return validators;

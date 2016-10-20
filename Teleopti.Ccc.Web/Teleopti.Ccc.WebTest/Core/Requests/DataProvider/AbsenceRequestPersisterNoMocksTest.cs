@@ -83,11 +83,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
-		public void ShouldDenyExpiredRequest()
+		public void ShouldDenyExpiredRequest([Values]bool autoGrant)
 		{
 			setUp();
 
-			setWorkflowControlSet(15);
+			setWorkflowControlSet(15, autoGrant);
 
 			var form = createAbsenceRequestForm(new DateTimePeriodForm
 			{
@@ -98,15 +98,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 
 			var personRequest = persist(form);
-			assertPersonRequest(personRequest, true, string.Format(Resources.RequestDenyReasonRequestExpired, personRequest.Request.Period.StartDateTime, 15));
+			assertPersonRequest(personRequest, true
+				, string.Format(Resources.RequestDenyReasonRequestExpired, personRequest.Request.Period.StartDateTime, 15));
 		}
 
 		[Test]
-		public void ShouldDenyWhenAlreadyAbsent()
+		public void ShouldDenyWhenAlreadyAbsent([Values]bool autoGrant)
 		{
 			setUp();
 
-			setWorkflowControlSet();
+			setWorkflowControlSet(autoGrant: autoGrant);
 
 			var dateTimePeriodForm = new DateTimePeriodForm
 			{
@@ -131,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			setUp();
 
-			setWorkflowControlSet(autoDeny:true);
+			setWorkflowControlSet(autoDeny: true);
 
 			var form = createAbsenceRequestForm(new DateTimePeriodForm
 			{
@@ -146,11 +147,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
-		public void ShouldDenyWhenPersonAccountDaysAreExceeded()
+		public void ShouldDenyWhenPersonAccountDaysAreExceeded([Values]bool autoGrant)
 		{
 			setUp();
 
-			setWorkflowControlSet(usePersonAccountValidator:true);
+			setWorkflowControlSet(usePersonAccountValidator:true, autoGrant:autoGrant);
 
 			var accountDay = new AccountDay(_today)
 			{
@@ -167,15 +168,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 
 			var personRequest = persist(form);
-			assertPersonRequest(personRequest, true, Resources.RequestDenyReasonPersonAccount);
+			var isWaitlisted = autoGrant;
+			assertPersonRequest(personRequest, true, Resources.RequestDenyReasonPersonAccount, isWaitlisted);
 		}
 
 		[Test]
-		public void ShouldDenyWhenPersonAccountTimeIsExceeded()
+		public void ShouldDenyWhenPersonAccountTimeIsExceeded([Values]bool autoGrant)
 		{
 			setUp();
 
-			setWorkflowControlSet(usePersonAccountValidator: true);
+			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: autoGrant);
 
 			var accountTime1 = new AccountTime(_today)
 			{
@@ -200,7 +202,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 
 			var personRequest = persist(form);
-			assertPersonRequest(personRequest, true, Resources.RequestDenyReasonPersonAccount);
+			var isWaitlisted = autoGrant;
+			assertPersonRequest(personRequest, true, Resources.RequestDenyReasonPersonAccount, isWaitlisted);
 		}
 
 		private void setUp()
@@ -233,13 +236,20 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			_absence = createAbsence();
 		}
 
-		private void setWorkflowControlSet(int? absenceRequestExpiredThreshold = null, bool autoDeny = false, bool usePersonAccountValidator = false)
+		private void setWorkflowControlSet(int? absenceRequestExpiredThreshold = null, bool autoGrant = false
+			, bool usePersonAccountValidator = false, bool autoDeny = false)
 		{
+			_workflowControlSet.AbsenceRequestWaitlistEnabled = true;
 			_workflowControlSet.AbsenceRequestExpiredThreshold = absenceRequestExpiredThreshold;
+			var absenceRequestProcess = autoGrant
+				? (IProcessAbsenceRequest) new GrantAbsenceRequest()
+				: new PendingAbsenceRequest();
+			if (autoDeny)
+				absenceRequestProcess = new DenyAbsenceRequest();
 			_workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
 			{
 				Absence = _absence,
-				AbsenceRequestProcess = autoDeny ? (IProcessAbsenceRequest) new DenyAbsenceRequest() : new GrantAbsenceRequest(),
+				AbsenceRequestProcess = absenceRequestProcess,
 				OpenForRequestsPeriod = new DateOnlyPeriod(_today, DateOnly.Today.AddDays(30)),
 				Period = new DateOnlyPeriod(_today, DateOnly.Today.AddDays(30)),
 				PersonAccountValidator = usePersonAccountValidator? (IAbsenceRequestValidator)new PersonAccountBalanceValidator() : new AbsenceRequestNoneValidator()
@@ -298,10 +308,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			return absence;
 		}
 
-		private void assertPersonRequest(IPersonRequest personRequest, bool isDenied, string denyReason = null)
+		private void assertPersonRequest(IPersonRequest personRequest, bool isDenied, string denyReason = null, bool isWaitlisted = false)
 		{
 			personRequest.Should().Not.Be(null);
 			personRequest.IsDenied.Should().Be(isDenied);
+			personRequest.IsWaitlisted.Should().Be(isWaitlisted);
 			personRequest.DenyReason.Should().Be(denyReason);
 			publishedEventsCountShouldBe(isDenied ? 0 : 1);
 		}

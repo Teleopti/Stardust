@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				if (!result.IsValid)
 				{
 					personRequest.Deny(null, result.ValidationErrors, _personRequestCheckAuthorization,
-						PersonRequestDenyOption.AutoDeny);
+						PersonRequestDenyOption.AutoDeny | result.DenyOption.GetValueOrDefault(PersonRequestDenyOption.None));
 				}
 				_personRequestRepository.Add(personRequest);
 			}
