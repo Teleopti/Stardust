@@ -92,7 +92,7 @@ define([
 			var text = "";
 			ko.utils.arrayForEach(self.internalStatusMessages(),
 				function(s) {
-					text += s;
+					text += s + (text.length > 0 ? ", " : "");
 				});
 			return text;
 		});
