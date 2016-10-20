@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumbe
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -275,7 +276,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				optimizationPreferences,
 				schedulePartModifyAndRollbackService,
 				resourceCalculateDelayer,
-				_schedulerStateHolder().SchedulingResultState);
+				_schedulerStateHolder().SchedulingResultState.AllSkillDays(),
+				NewBusinessRuleCollection.AllForScheduling(_schedulerStateHolder().SchedulingResultState));
 			teamBlockIntradayOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 
