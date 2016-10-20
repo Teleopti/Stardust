@@ -5556,7 +5556,7 @@ Periods</comment>
     <comment>Person Period couldn't load error</comment>
   </data>
   <data name="People" xml:space="preserve">
-    <value>сотрудники</value>
+    <value>Сотрудники</value>
     <comment>people</comment>
   </data>
   <data name="SwapCannotBePerformed" xml:space="preserve">
@@ -12761,5 +12761,516 @@ Teleopti R&amp;D</value>
   </data>
   <data name="CancelAbsenceRequestDescription" xml:space="preserve">
     <value>Если вы отмените подвержденный запрос на отсутствие, то отсутствие из него будет удалено из расписания оператора.</value>
+  </data>
+  <data name="RequestWaitlistedReasonPersonAccount" xml:space="preserve">
+    <value>У вас осталось недостаточно времени на индивидуальном счете.</value>
+  </data>
+  <data name="ConfirmDeleteCampaign" xml:space="preserve">
+    <value>Уверены, что хотите удалить эту кампанию?</value>
+  </data>
+  <data name="YouHaveSelectedXAgent" xml:space="preserve">
+    <value>Вы выбрали {0} оператора(-ов).</value>
+  </data>
+  <data name="IncludedSkills" xml:space="preserve">
+    <value>Включенные навыки</value>
+  </data>
+  <data name="PartialSuccessMessageForRemovingActivity" xml:space="preserve">
+    <value>Удаление активностей для {0} операторов: {1} успешно, {2} не удалось.</value>
+  </data>
+  <data name="AddAbsenceFailed" xml:space="preserve">
+    <value>Не удалось добавить отсутствие(-я)</value>
+  </data>
+  <data name="PartialSuccessMessageForAddingActivity" xml:space="preserve">
+    <value>Добавление активностей для {0} операторов: {1} успешно, {2} не удалось.</value>
+  </data>
+  <data name="PartialSuccessMessageForRemovingAbsence" xml:space="preserve">
+    <value>Удаление активностей для {0} операторов: {1} успешно, {2} не удалось.</value>
+  </data>
+  <data name="TryOutTheNewImprovedTeams" xml:space="preserve">
+    <value>Попробуйте новый улучшенный модуль Teams!</value>
+  </data>
+  <data name="WFMReleaseNotification" xml:space="preserve">
+    <value>Модуль {0} улучшен! Мы благодарны за ваши {1}отзывы. {2} Предыдущая версия {3} будет доступна ограниченное время.</value>
+  </data>
+  <data name="CanNotAddActivityToAgentWithoutShift" xml:space="preserve">
+    <value>Вы не можете добавить активность {0} на следующий день без смены</value>
+  </data>
+  <data name="PreviewTheNewIntradayTool" xml:space="preserve">
+    <value>Предпросмотр нового модуля Мониторинг!</value>
+  </data>
+  <data name="ExtendExistingShift" xml:space="preserve">
+    <value>Продлить текущую смену</value>
+  </data>
+  <data name="NonWorkingDays" xml:space="preserve">
+    <value>Нерабочие дни</value>
+  </data>
+  <data name="UseShiftsFromColon" xml:space="preserve">
+    <value>Использовать смены из:</value>
+  </data>
+  <data name="AbsenceRequestCancellationThreshold" xml:space="preserve">
+    <value>За сколько дней до даты отсутствия запрос может быть отменен:</value>
+  </data>
+  <data name="NoPermissionMoveAgentActivity" xml:space="preserve">
+    <value>Нет прав доступа на изменение активности для оператора {0}.</value>
+  </data>
+  <data name="SelectedAgentsColon" xml:space="preserve">
+    <value>Выбранные операторы:</value>
+  </data>
+  <data name="CanNotMoveMultipleAcivitiesForAgent" xml:space="preserve">
+    <value>Невозможно изменить несколько активностей для оператора {0}.</value>
+  </data>
+  <data name="CannotDeleteBaseActivity" xml:space="preserve">
+    <value>Невозможно удалить базовую активность</value>
+  </data>
+  <data name="LatestActualInterval" xml:space="preserve">
+    <value>Последний актуальный интервал</value>
+  </data>
+  <data name="PartialSuccessMessageForMovingActivity" xml:space="preserve">
+    <value>Изменение активностей для {0} оператора(-ов), {1} успешно и {2} не удалось.</value>
+  </data>
+  <data name="SuccessfulMessageForMovingActivity" xml:space="preserve">
+    <value>Активности для выбранных операторов успешно изменены</value>
+  </data>
+  <data name="TheNewTimeIsNotAllowedFor" xml:space="preserve">
+    <value>Новое время недопустимо для</value>
+  </data>
+  <data name="ScheduleIsWriteProtected" xml:space="preserve">
+    <value>Невозможно изменить расписание для {0} на {1}, так как оно защищено.</value>
+  </data>
+  <data name="ConfirmCancelRequest" xml:space="preserve">
+    <value>Отмена этого подтвержденного запроса удалит все соответствующие отсутствия из вашего расписания. Продолжить?</value>
+  </data>
+  <data name="AbsenceRequestCancellationThresholdExceeded" xml:space="preserve">
+    <value>Время отмены этого запроса истекло. Этот запрос мог быть отменен не позднее, чем за {0} дня(-ей) до даты начала.</value>
+  </data>
+  <data name="ActivityConflictsWithOvernightShiftsFromPreviousDay" xml:space="preserve">
+    <value>Невозможно добавить активность в смену, которая принадлежит предыдущему дню</value>
+  </data>
+  <data name="LoadRequests" xml:space="preserve">
+    <value>Запросы</value>
+  </data>
+  <data name="RequestInvalidStateTransition" xml:space="preserve">
+    <value>Запрос, который {0}, не может быть {1}.</value>
+  </data>
+  <data name="PersonAssignmentIsNotValid" xml:space="preserve">
+    <value>Назначение сотрудника не действительно</value>
+  </data>
+  <data name="Unselect" xml:space="preserve">
+    <value>Отменить выделение</value>
+  </data>
+  <data name="NoPermissionAddPersonalActivity" xml:space="preserve">
+    <value>Нет прав доступа для добавления персональной активности для оператора {0}.</value>
+  </data>
+  <data name="CanNotAddPersonalActivityToAgentWithoutShift" xml:space="preserve">
+    <value>Вы не можете добавить персональную активность, если нет смены</value>
+  </data>
+  <data name="HelpLabel" xml:space="preserve">
+    <value>Помощь</value>
+  </data>
+  <data name="SubmitProcessWaitlistedRequestsSuccess" xml:space="preserve">
+    <value>Начата обработка запросов, помещенных в лист ожидания, на период {0}.</value>
+  </data>
+  <data name="WaitlistPeriod" xml:space="preserve">
+    <value>Все запросы, помещенные в лист ожидания, за выбранный период будут обработаны.</value>
+  </data>
+  <data name="ProcessWaitlistedRequestsFinished" xml:space="preserve">
+    <value>Запросы, помещенные в лист ожидания, за период {0} обработаны.</value>
+  </data>
+  <data name="ProcessWaitlist" xml:space="preserve">
+    <value>Лист ожидания</value>
+  </data>
+  <data name="ProcessWaitlistRequestsReminder" xml:space="preserve">
+    <value>Обработка листа ожидания будет выполнена в фоновом режиме и может занять некоторое время</value>
+  </data>
+  <data name="ShiftTrade" xml:space="preserve">
+    <value>Обмены сменами</value>
+  </data>
+  <data name="CanNotMoveMultipleActivitiesForSelectedAgents" xml:space="preserve">
+    <value>Невозможно изменить несколько активностей для выбранных операторов</value>
+  </data>
+  <data name="ProductActivationKeyV8Perpetual" xml:space="preserve">
+    <value>Система лицензирована для "{0}" в соответствии с условиями и положениями лицензионного соглашения.
+
+Ключ активации продукта рассчитан максимум на {1} активных операторов.
+
+Основная версия: {4}
+
+Схема ключа "{2}".
+Активированы следующие опции:
+{3}</value>
+  </data>
+  <data name="SeatProductActivationKeyV8Perpetual" xml:space="preserve">
+    <value>Система лицензирована для "{0}" в соответствии с условиями и положениями лицензионного соглашения.
+
+Ключ активации продукта рассчитан максимум на {1} рабочих мест.
+
+Основная версия: {4}
+
+Схема ключа "{2}".
+Активированы следующие опции:
+{3}</value>
+  </data>
+  <data name="FilterReports" xml:space="preserve">
+    <value>Фильтр</value>
+  </data>
+  <data name="AbandonedRate" xml:space="preserve">
+    <value>Потерянные звонки</value>
+  </data>
+  <data name="SummaryUpToLatestActualInterval" xml:space="preserve">
+    <value>Сводка к последнему актуальному интервалу</value>
+  </data>
+  <data name="ShiftLengthExceed36Hours" xml:space="preserve">
+    <value>Длина смены превышает 36 часов</value>
+  </data>
+  <data name="CannotUndoScheduleChange" xml:space="preserve">
+    <value>Невозможно отменить изменение расписания</value>
+  </data>
+  <data name="PreviewTheNewRequestsModule" xml:space="preserve">
+    <value>Предпросмотр нового модуля Запросы!</value>
+  </data>
+  <data name="PreviewTheNewPeopleModule" xml:space="preserve">
+    <value>Предпросмотр нового модуля Сотрудники!</value>
+  </data>
+  <data name="WFMReleaseNotificationWithoutOldModuleLink" xml:space="preserve">
+    <value>Модуль {0} улучшен! Мы благодарны за ваши {1}отзывы. {2}</value>
+  </data>
+  <data name="DateRange" xml:space="preserve">
+    <value>Диапазон дат</value>
+  </data>
+  <data name="ReportOptions" xml:space="preserve">
+    <value>Опции отчета</value>
+  </data>
+  <data name="ShowOnlyAgentsWithNoSeat" xml:space="preserve">
+    <value>Показать только операторов без места</value>
+  </data>
+  <data name="AreYouSureToUndoSelectedSchedule" xml:space="preserve">
+    <value>Уверены, что хотите отменить последнее изменение расписания для выбранных операторов?</value>
+  </data>
+  <data name="FailedMessageForUndoSchedule" xml:space="preserve">
+    <value>Не удалось отменить изменение расписания для выбранных операторов</value>
+  </data>
+  <data name="PartialSuccessMessageForUndoSchedule" xml:space="preserve">
+    <value>Отмена изменения расписания для {0} операторов, {1} успешно и {2} не удалось</value>
+  </data>
+  <data name="SuccessfulMessageForUndoSchedule" xml:space="preserve">
+    <value>Последнее изменение расписания для выбранных операторов успешно отменено</value>
+  </data>
+  <data name="Backout" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="ShiftTradeRequestScheduleChanged" xml:space="preserve">
+    <value>Запрос на обмен сменами для {0} должен быть подтвержден еще раз. Расписание другого оператора было изменено.</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>Пауза</value>
+  </data>
+  <data name="PausedAt" xml:space="preserve">
+    <value>Приостановлено в</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>Запуск</value>
+  </data>
+  <data name="RtaPauseDisableNotice" xml:space="preserve">
+    <value>RTA мониторинг активирован</value>
+  </data>
+  <data name="RtaPauseEnabledNotice" xml:space="preserve">
+    <value>RTA мониторинг приостановлен в {0}! Включите, нажав запуск</value>
+  </data>
+  <data name="SelectAllPeopleInEveryPage" xml:space="preserve">
+    <value>Выбрать всех сотрудников на каждой странице</value>
+  </data>
+  <data name="UnselectAllPeopleInEveryPage" xml:space="preserve">
+    <value>Отменить выбор всех сотрудников на каждой странице</value>
+  </data>
+  <data name="DeletePerson" xml:space="preserve">
+    <value>Удалить сотрудников</value>
+  </data>
+  <data name="DateRangeIsAMaximumOfSixtyDays" xml:space="preserve">
+    <value>Диапазон дат может быть максимум в 60 дней</value>
+  </data>
+  <data name="OrganizeCascadingSkills" xml:space="preserve">
+    <value>Организовать каскадные навыки</value>
+  </data>
+  <data name="EditLocationProperty" xml:space="preserve">
+    <value>Редактировать свойства расположения</value>
+  </data>
+  <data name="LocationProperties" xml:space="preserve">
+    <value>Свойства расположения</value>
+  </data>
+  <data name="Prefix" xml:space="preserve">
+    <value>Префикс</value>
+  </data>
+  <data name="Suffix" xml:space="preserve">
+    <value>Окончание </value>
+  </data>
+  <data name="NotAllowedChange" xml:space="preserve">
+    <value>Недопустимое изменение</value>
+  </data>
+  <data name="NightRest" xml:space="preserve">
+    <value>Время отдыха между сменами</value>
+  </data>
+  <data name="WeeklyRestTime" xml:space="preserve">
+    <value>Недельное время отдыха</value>
+  </data>
+  <data name="PersonAccount" xml:space="preserve">
+    <value>Индивидуальный счет</value>
+  </data>
+  <data name="SkillOpeningHours" xml:space="preserve">
+    <value>Часы работы навыка</value>
+  </data>
+  <data name="ShiftActivity" xml:space="preserve">
+    <value>Активность смены</value>
+  </data>
+  <data name="MinWeeklyWorkTime" xml:space="preserve">
+    <value>Мин время работы в неделю</value>
+  </data>
+  <data name="BrokenRules" xml:space="preserve">
+    <value>Нарушенные правила</value>
+  </data>
+  <data name="ShowWarnings" xml:space="preserve">
+    <value>Показать предупреждения</value>
+  </data>
+  <data name="ApproveBasedOnBusinessRules" xml:space="preserve">
+    <value>Подтверждение на основе бизнес-правил</value>
+  </data>
+  <data name="SubmitApproveBasedOnBusinessRulesSuccess" xml:space="preserve">
+    <value>Выбранные запросы обрабатываются для подтверждения на основе бизнес-правил.</value>
+  </data>
+  <data name="ApproveBasedOnBusinessRulesFinished" xml:space="preserve">
+    <value>Обработка запросов на основе бизнес-правил завершена.</value>
+  </data>
+  <data name="NoPermissionToModifyPersonAssignment" xml:space="preserve">
+    <value>Больше информации о методах прогнозирования и выявлении выпадающих значений</value>
+  </data>
+  <data name="PartialSuccessMessageForEditingShiftCategory" xml:space="preserve">
+    <value>Изменение категории смены для {0} оператора(-ов), {1} успешно и {2} не удалось.</value>
+  </data>
+  <data name="SuccessfulMessageForEditingShiftCategory" xml:space="preserve">
+    <value>Успешное измнение категории смены для выбранных операторов</value>
+  </data>
+  <data name="MultipleSeatsSelected" xml:space="preserve">
+    <value>(Выбрано несколько мест)</value>
+  </data>
+  <data name="SeatNumber" xml:space="preserve">
+    <value>Номер места</value>
+  </data>
+  <data name="AgentsDoNotRequireSeats" xml:space="preserve">
+    <value>Операторы не требуют места</value>
+  </data>
+  <data name="AgentsWithoutBookings" xml:space="preserve">
+    <value>Операторы без брони</value>
+  </data>
+  <data name="SeatBookingSummary" xml:space="preserve">
+    <value>Сводка брони мест</value>
+  </data>
+  <data name="SuccessfulBookings" xml:space="preserve">
+    <value>Удачные брони</value>
+  </data>
+  <data name="EditShiftCategory" xml:space="preserve">
+    <value>Редактировать категорию смены</value>
+  </data>
+  <data name="SelectACategory" xml:space="preserve">
+    <value>Выбрать категорию</value>
+  </data>
+  <data name="LoadingSkills" xml:space="preserve">
+    <value>Загрузка навыков...</value>
+  </data>
+  <data name="LoadingSkillAreas" xml:space="preserve">
+    <value>Загрузка сводок навыков...</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="NotOk" xml:space="preserve">
+    <value>Не ОК</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>Счет</value>
+  </data>
+  <data name="RequestInvalidMessageLength" xml:space="preserve">
+    <value>Невозможно сохранить этот ответ, так как сообщение превышает лимит в 2000 символов</value>
+  </data>
+  <data name="RequestInvalidMessageModification" xml:space="preserve">
+    <value>Невозможно сохранить ваш ответ на этот запрос, так как он был {0}</value>
+  </data>
+  <data name="ReplyAndCancel" xml:space="preserve">
+    <value>Ответить и отменить</value>
+  </data>
+  <data name="ReplySuccess" xml:space="preserve">
+    <value>Ваше сообщение на {0} запрос(-ы) было сохранено</value>
+  </data>
+  <data name="SelectBusinessRulesWithColon" xml:space="preserve">
+    <value>Выбрать бизнес-правила:</value>
+  </data>
+  <data name="ValidateRequestsBasedOnBudgetAllotment" xml:space="preserve">
+    <value>Проверять запросы на основе допущения бюджета</value>
+  </data>
+  <data name="ValidateRequestsBasedOnIntraday" xml:space="preserve">
+    <value>Проверять запросы на основе внутридневного распределения персонала</value>
+  </data>
+  <data name="NoPermissionToEditShiftCategory" xml:space="preserve">
+    <value>Не разрешено редактировать категорию смены для оператора(-ов)</value>
+  </data>
+  <data name="ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping" xml:space="preserve">
+    <value>Эта активность перекроет существующие активности, которые не позволяют наложения.</value>
+  </data>
+  <data name="DoNotModifyForTheseAgents" xml:space="preserve">
+    <value>Не изменять для данных операторов</value>
+  </data>
+  <data name="OverrideForTheseAgents" xml:space="preserve">
+    <value>Перезаписать для данных операторов</value>
+  </data>
+  <data name="ManageOpenHours" xml:space="preserve">
+    <value>Часы работы сайта</value>
+  </data>
+  <data name="SaveSiteOpenHoursSuccess" xml:space="preserve">
+    <value>Часы работы обновлены</value>
+  </data>
+  <data name="TheFollowingAgentsHaveAffectedActivities" xml:space="preserve">
+    <value>Следующие операторы имеют затрагиваемые активности:</value>
+  </data>
+  <data name="BusinessRuleNoSiteOpenHourErrorMessage" xml:space="preserve">
+    <value>Не найдено часов работы для {0} сайта {1} между {2} - {3}</value>
+  </data>
+  <data name="SiteOpeningHours" xml:space="preserve">
+    <value>Часы работы сайта</value>
+  </data>
+  <data name="BySeniority" xml:space="preserve">
+    <value>По приоритету</value>
+  </data>
+  <data name="FirstComeFirstServed" xml:space="preserve">
+    <value>Первый отклик</value>
+  </data>
+  <data name="NoChangeHasBeenMade" xml:space="preserve">
+    <value>Ничего не было изменено</value>
+  </data>
+  <data name="BusinessRuleOverlappingErrorMessage3" xml:space="preserve">
+    <value>Неперезаписываемая активность {0} в интервал {1} была перезаписана {2} в интервал {3}.</value>
+  </data>
+  <data name="ConfigureValidationWarnings" xml:space="preserve">
+    <value>Предупреждения проверки</value>
+  </data>
+  <data name="MinWeeklyRestRuleName" xml:space="preserve">
+    <value>Недельное время отдыха</value>
+  </data>
+  <data name="MinWeekWorkTimeRuleName" xml:space="preserve">
+    <value>Мин время работы в неделю</value>
+  </data>
+  <data name="NewDayOffRuleName" xml:space="preserve">
+    <value>Смена перекрытая выходным</value>
+  </data>
+  <data name="NewMaxWeekWorkTimeRuleName" xml:space="preserve">
+    <value>Макс время работы в неделю</value>
+  </data>
+  <data name="NewNightlyRestRuleName" xml:space="preserve">
+    <value>Время отдыха между сменами</value>
+  </data>
+  <data name="NotOverwriteLayerRuleName" xml:space="preserve">
+    <value>Допускается перезапись</value>
+  </data>
+  <data name="MoveNonoverwritableActivityForTheseAgents" xml:space="preserve">
+    <value>Изменить неперезаписываемые активности для этих операторов</value>
+  </data>
+  <data name="NewActivityOverlapsNonoverwritableActivities" xml:space="preserve">
+    <value>Добавленная активность накладывается на неперезаписываемые активности</value>
+  </data>
+  <data name="Alert" xml:space="preserve">
+    <value>Предупреждение</value>
+  </data>
+  <data name="BusinessRuleDayOffFriendlyName" xml:space="preserve">
+    <value>Конфликт выходного дня</value>
+  </data>
+  <data name="BusinessRuleMaxWeekWorkTimeFriendlyName" xml:space="preserve">
+    <value>Неделя содержит слишком много рабочего времени</value>
+  </data>
+  <data name="BusinessRuleMinWeekWorktimeFriendlyName" xml:space="preserve">
+    <value>Неделя содержит слишком мало рабочего времени</value>
+  </data>
+  <data name="BusinessRuleNightlyRestRuleFriendlyName" xml:space="preserve">
+    <value>Время отдыха между сменами нарушено</value>
+  </data>
+  <data name="BusinessRuleNoSiteOpenHourFriendlyName" xml:space="preserve">
+    <value>Активность вне рабочих часов сайта</value>
+  </data>
+  <data name="BusinessRuleNoSkillsOpenFriendlyName" xml:space="preserve">
+    <value>Активность вне рабочих часов навыка</value>
+  </data>
+  <data name="BusinessRuleOverlappingFriendlyName3" xml:space="preserve">
+    <value>Неперезаписываемая активность перезаписана</value>
+  </data>
+  <data name="BusinessRulePersonAccountFriendlyName" xml:space="preserve">
+    <value>Превышено значение начислено из индивидуального счета</value>
+  </data>
+  <data name="BusinessRuleShiftCategoryLimitationFriendlyName" xml:space="preserve">
+    <value>Ограничение категории смен нарушено в периоде</value>
+  </data>
+  <data name="BusinessRuleShiftCategoryLimitationFriendlyName1" xml:space="preserve">
+    <value>Ограничение категории смен нарушено в неделе</value>
+  </data>
+  <data name="BusinessRuleWeeklyRestFriendlyName" xml:space="preserve">
+    <value>Неделя содержит слишком мало времени отдыха</value>
+  </data>
+  <data name="Overwritable" xml:space="preserve">
+    <value>Перезапись</value>
+  </data>
+  <data name="ValidationAlerts" xml:space="preserve">
+    <value>Предупреждения проверки</value>
+  </data>
+  <data name="AllPermittedSitesToMakeShiftTradeWith" xml:space="preserve">
+    <value>Все сайты</value>
+  </data>
+  <data name="ReforecastedStaff" xml:space="preserve">
+    <value>Обновленный прогноз штата</value>
+  </data>
+  <data name="ShiftTradeMaxSeatViolationDenyReason" xml:space="preserve">
+    <value>Запрос на обмен сменами отклонен, так как недостаточно доступных рабочих мест.</value>
+  </data>
+  <data name="EnableShiftTradeRequestMaxSeatsValidation" xml:space="preserve">
+    <value>Проверка рабочих мест</value>
+  </data>
+  <data name="ShiftTradeRequestMaxSeatValidationInterval" xml:space="preserve">
+    <value>Интервал проверки использования рабочих мест</value>
+  </data>
+  <data name="ShiftTradeRequestMaxSeatsValidation" xml:space="preserve">
+    <value>Проверка макс количества раб мест</value>
+  </data>
+  <data name="ShiftTradeRequestSettings" xml:space="preserve">
+    <value>Настройки запроса на обмен сменами</value>
+  </data>
+  <data name="MoveInvalidOverlappedActivity" xml:space="preserve">
+    <value>Изменить недействительную перекрытую активность</value>
+  </data>
+  <data name="NoPermissionToMoveInvalidOverlappedActivity" xml:space="preserve">
+    <value>У вас нет прав, чтобы изменить недействительную перекрытую активность.</value>
+  </data>
+  <data name="OverlappedNonoverwritableActivitiesExist" xml:space="preserve">
+    <value>Здесь есть перекрытые неперезаписываемые активности</value>
+  </data>
+  <data name="MoveInvalidOverlappedActivitySuccess" xml:space="preserve">
+    <value>Успешно изменена недействительная перекрытая активность для выбранных операторов</value>
+  </data>
+  <data name="MoveInvalidOverlappedActivityWarning" xml:space="preserve">
+    <value>Изменение недействительных перекрытых активностей для {0} оператора(-ов), {1} успешно и {2} не удалось.</value>
+  </data>
+  <data name="InternalNote" xml:space="preserve">
+    <value>Внутреннее примечание</value>
+  </data>
+  <data name="Full" xml:space="preserve">
+    <value>Полный</value>
+  </data>
+  <data name="MatchColon" xml:space="preserve">
+    <value>Соответствие:</value>
+  </data>
+  <data name="FullOrPartial" xml:space="preserve">
+    <value>Полный или частичный</value>
+  </data>
+  <data name="NoPermissionToViewErrorMessage" xml:space="preserve">
+    <value>У вас не хватает прав для просмотра этой страницы.</value>
+  </data>
+  <data name="TheOtherAgentHasNoPermissionToShiftTrade" xml:space="preserve">
+    <value>Другой оператор не имеет прав доступа на обмен с вами.</value>
+  </data>
+  <data name="IntradayWithShrinkage" xml:space="preserve">
+    <value>Мониторинг с сокращением</value>
   </data>
 </root>

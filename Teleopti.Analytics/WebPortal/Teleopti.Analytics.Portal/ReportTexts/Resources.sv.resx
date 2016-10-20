@@ -1353,4 +1353,7 @@
   <data name="ResRequestStatusWaitlisted" xml:space="preserve">
     <value>Väntelistad</value>
   </data>
+  <data name="MultipleActivitiesOrAbsences" xml:space="preserve">
+    <value>Flera aktiviteter/frånvarotyper</value>
+  </data>
 </root>

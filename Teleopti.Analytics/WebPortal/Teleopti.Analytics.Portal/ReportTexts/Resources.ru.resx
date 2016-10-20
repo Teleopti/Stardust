@@ -1099,4 +1099,16 @@
   <data name="ResStateGroupColon" xml:space="preserve">
     <value>Группы состояний:</value>
   </data>
+  <data name="ResIncludeDetails" xml:space="preserve">
+    <value>Включая подробности:</value>
+  </data>
+  <data name="ResRequestStatusCancelled" xml:space="preserve">
+    <value>Отменено</value>
+  </data>
+  <data name="ResRequestStatusWaitlisted" xml:space="preserve">
+    <value>Помещено в лист ожидания</value>
+  </data>
+  <data name="MultipleActivitiesOrAbsences" xml:space="preserve">
+    <value>Несколько активностей/отсутствий</value>
+  </data>
 </root>

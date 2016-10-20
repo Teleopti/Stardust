@@ -13746,4 +13746,37 @@ Dessa val är aktiverade:
     <value>Inom dag med shrinkage</value>
     <comment>Staffing validator in Workflow control set</comment>
   </data>
+  <data name="ShiftTradeMaxSeatViolationDenyReason" xml:space="preserve">
+    <value>Skiftbytet har nekats eftersom det inte finns några tillgängliga arbetsplatser. </value>
+  </data>
+  <data name="EnableShiftTradeRequestMaxSeatsValidation" xml:space="preserve">
+    <value>Aktivera kontroll av max arbetsplatser</value>
+  </data>
+  <data name="ShiftTradeRequestMaxSeatValidationInterval" xml:space="preserve">
+    <value>Intervall för att kontrollera arbetsplatsanvändning</value>
+  </data>
+  <data name="ShiftTradeRequestMaxSeatsValidation" xml:space="preserve">
+    <value>Kontroll av max arbetsplatser</value>
+  </data>
+  <data name="ShiftTradeRequestSettings" xml:space="preserve">
+    <value>Inställningar för skiftbytesförfrågningar</value>
+  </data>
+  <data name="InternalNote" xml:space="preserve">
+    <value>Intern notering</value>
+  </data>
+  <data name="NoPermissionToViewErrorMessage" xml:space="preserve">
+    <value>Du har inte rättigheter för att visa denna sida. </value>
+  </data>
+  <data name="TheOtherAgentHasNoPermissionToShiftTrade" xml:space="preserve">
+    <value>Den andra agenten har inte rättigheter för att byta med dig.</value>
+  </data>
+  <data name="StaffingInformationMissing" xml:space="preserve">
+    <value>Bemanningsinformation saknas för kompetens {0}</value>
+  </data>
+  <data name="RequiredStaff" xml:space="preserve">
+    <value>Bemanningsbehov</value>
+  </data>
+  <data name="RequestDenyReasonRequestExpired" xml:space="preserve">
+    <value>Din frånvaroförfrågan har avslagits automatiskt. Starttiden för förfrågan är {0}, och den måste vara minst {1} minuter senare än aktuell tid</value>
+  </data>
 </root>
