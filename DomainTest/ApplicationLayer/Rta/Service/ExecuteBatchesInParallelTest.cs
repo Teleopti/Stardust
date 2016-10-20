@@ -102,61 +102,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		[ToggleOff(Toggles.RTA_RuleMappingOptimization_39812)]
-		// this works for real with RTA_RuleMappingOptimization_39812, see infra test
-		public void ShouldNotAddDuplicateStateCodes()
-		{
-			Database
-				.WithAgent("usercode1")
-				.WithAgent("usercode2")
-				.WithAgent("usercode3")
-				.WithRule();
-
-			Target.SaveStateBatch(new BatchForTest
-			{
-				SnapshotId = "2016-05-18 08:00".Utc(),
-				States = new[]
-				{
-					new BatchStateForTest
-					{
-						UserCode = "usercode1",
-						StateCode = "phone"
-					},
-					new BatchStateForTest
-					{
-						UserCode = "usercode2",
-						StateCode = "phone"
-					}
-				}
-			});
-			Target.CloseSnapshot(new CloseSnapshotForTest
-			{
-				SnapshotId = "2016-05-18 08:00".Utc()
-			});
-
-			Target.SaveStateBatch(new BatchForTest
-			{
-				SnapshotId = "2016-05-18 08:05".Utc(),
-				States = new[]
-				{
-					new BatchStateForTest
-					{
-						UserCode = "usercode3",
-						StateCode = "phone"
-					}
-				}
-			});
-			Target.CloseSnapshot(new CloseSnapshotForTest
-			{
-				SnapshotId = "2016-05-18 08:05".Utc()
-			});
-
-
-			Database.StateCodes.Where(x => x.StateCode == Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
-				.Should().Have.Count.EqualTo(1);
-		}
-
-		[Test]
 		public void ShouldThrowForAllMissingPersons()
 		{
 			var users = (
