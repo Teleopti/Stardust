@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -8,16 +9,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeRuleSetBagRepository : IRuleSetBagRepository
 	{
-		private IList<IRuleSetBag> _ruleSetBags;
-
-		public FakeRuleSetBagRepository()
-		{
-			_ruleSetBags = new List<IRuleSetBag>();
-		}
-
+		private readonly IList<IRuleSetBag> _ruleSetBags = new List<IRuleSetBag>();
+		
 		public void Add(IRuleSetBag root)
 		{
-			throw new NotImplementedException();
+			_ruleSetBags.Add(root);
 		}
 
 		public IRuleSetBag Has(IRuleSetBag ruleSetBag)
@@ -28,12 +24,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Remove(IRuleSetBag root)
 		{
-			throw new NotImplementedException();
+			_ruleSetBags.Remove(root);
 		}
 
 		public IRuleSetBag Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _ruleSetBags.FirstOrDefault(r => r.Id == id);
 		}
 
 		public IList<IRuleSetBag> LoadAll()
@@ -43,18 +39,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IRuleSetBag Load(Guid id)
 		{
-			throw new NotImplementedException();
+			return _ruleSetBags.FirstOrDefault(r => r.Id == id);
 		}
 
 		public IUnitOfWork UnitOfWork { get; }
 		public IEnumerable<IRuleSetBag> LoadAllWithRuleSets()
 		{
-			throw new NotImplementedException();
+			return _ruleSetBags.Where(r => r.RuleSetCollection.Any());
 		}
 
 		public IRuleSetBag Find(Guid id)
 		{
-			throw new NotImplementedException();
+			return _ruleSetBags.FirstOrDefault(r => r.Id == id);
 		}
 	}
 }

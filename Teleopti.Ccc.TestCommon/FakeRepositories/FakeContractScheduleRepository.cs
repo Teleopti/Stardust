@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IContractSchedule root)
 		{
-			throw new NotImplementedException();
+			_contractSchedules.Add(root);
 		}
 
 		public void Remove(IContractSchedule root)

@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.People.Controllers;
 using Teleopti.Interfaces.Domain;
@@ -342,8 +343,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var workRuleSet = WorkShiftRuleSetFactory.Create();
 			WorkShiftRuleSetRepository.Add(workRuleSet);
 
-			var shiftbag = new RuleSetBag();
-			shiftbag.SetId(Guid.NewGuid());
+			var shiftbag = new RuleSetBag().WithId();
 			shiftbag.AddRuleSet(workRuleSet);
 			RuleSetBagRepository.Add(shiftbag);
 
@@ -362,7 +362,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			});
 			var updatedPerson = PersonRepository.Get(person.Id.GetValueOrDefault());
 			updatedPerson.PersonPeriodCollection.Count.Should().Be.EqualTo(1);
-			var personPeriod = updatedPerson.PersonPeriods(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date))).First();
+			var personPeriod = updatedPerson.Period(new DateOnly(date));
 			personPeriod.RuleSetBag.Id.Should().Be.EqualTo(shiftbag.Id.GetValueOrDefault());
 			result.Content.Success.Should().Be.EqualTo(true);
 			result.Content.SuccessCount.Should().Be.EqualTo(1);
