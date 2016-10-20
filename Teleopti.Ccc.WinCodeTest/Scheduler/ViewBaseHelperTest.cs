@@ -327,7 +327,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             }
             using (_mockRep.Playback())
             {
-                using (new CustomAuthorizationContext(authorization))
+                using (CurrentAuthorization.ThreadlyUse(authorization))
                 {
                     Assert.AreEqual(expected,
                                     ViewBaseHelper.GetToolTip(_scheduleRange.ScheduledDay(new DateOnly(2006, 1, 2))));

@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -20,6 +21,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
 	[DomainTest]
+	[LegacyTest]
 	public class NewBusinessRuleCollectionTest
 	{
 		private INewBusinessRuleCollection _target;
@@ -28,8 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
-		[SetUp]
-		public void Setup()
+		private void setup()
 		{
 			_target = NewBusinessRuleCollection.All(new SchedulingResultStateHolder());
 		}
@@ -37,6 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void VerifyAll()
 		{
+			setup();
 			//rk: kolla istället vilka IBusiness rules-typer som finns i domain... orkar inte just nu
 			INewBusinessRule rule = _target.Item(typeof(NewShiftCategoryLimitationRule));
 			Assert.AreEqual(totalNumberOfRules, _target.Count);
@@ -46,6 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldGetCorrectRulesFromFlag()
 		{
+			setup();
 			const BusinessRuleFlags flag = BusinessRuleFlags.MinWeekWorkTimeRule
 										   | BusinessRuleFlags.NewMaxWeekWorkTimeRule
 										   | BusinessRuleFlags.DataPartOfAgentDay;
@@ -60,6 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldGetCorrectFlagFromRules()
 		{
+			setup();
 			const BusinessRuleFlags expectedFlag = BusinessRuleFlags.MinWeekWorkTimeRule
 												   | BusinessRuleFlags.NewMaxWeekWorkTimeRule
 												   | BusinessRuleFlags.DataPartOfAgentDay;
@@ -78,6 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test, SetUICulture("en-GB")]
 		public void ShouldSetCulture()
 		{
+			setup();
 			_target.SetUICulture(CultureInfo.GetCultureInfo(1053));
 			Assert.AreEqual("sv-SE",_target.UICulture.Name);
 		}
@@ -85,6 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void VerifyMinimum()
 		{
+			setup();
 			INewBusinessRuleCollection targetSmall = NewBusinessRuleCollection.Minimum();
 			foreach (var rule in _target)
 			{
@@ -95,6 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void VerifyRemoveBusinessRuleResponse()
 		{
+			setup();
 			INewBusinessRule rule = _target.Item(typeof(NewShiftCategoryLimitationRule));
 			var dateOnlyPeriod = new DateOnlyPeriod();
 			_target.Remove(new BusinessRuleResponse(typeof(NewShiftCategoryLimitationRule), "d", false, false, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), new Person(), dateOnlyPeriod, "tjillevippen"));
@@ -105,6 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void RemovingMandatoryRuleShouldResultDoingNothing()
 		{
+			setup();
 			_target.Add(new dummyRule(true));
 			_target.Remove(typeof(dummyRule));
 			Assert.AreEqual(totalNumberOfRules + 1, _target.Count);
@@ -113,15 +121,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void VerifyClearKeepsMandatory()
 		{
+			setup();
 			_target.Add(new dummyRule(true));
 			_target.Clear();
 			Assert.AreEqual(totalNumberOfRules + 1, _target.Count);
 		}
 
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		[Test]
 		public void NewOverlappingAssignmentRuleHasSetPropertyForDeleteInAllRules()
 		{
+			setup();
 			var rulesForDelete = NewBusinessRuleCollection.AllForDelete(new SchedulingResultStateHolder());
 			foreach (INewBusinessRule rule in rulesForDelete)
 			{
@@ -135,6 +144,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void MinimumAndPersonAccountShouldContainPersonAccountRule()
 		{
+			setup();
 			_state = new SchedulingResultStateHolder();
 			var miniAndPa = NewBusinessRuleCollection.MinimumAndPersonAccount(_state);
 			Assert.That(miniAndPa.Count, Is.EqualTo(NewBusinessRuleCollection.Minimum().Count + 1));
@@ -144,6 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void AllForSchedulingShouldConsiderUseValidation()
 		{
+			setup();
 			_state = new SchedulingResultStateHolder();
 			_state.UseValidation = true;
 			var allForScheduling = NewBusinessRuleCollection.AllForScheduling(_state);
@@ -157,6 +168,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldConsiderUseMinWorktimePerWeek()
 		{
+			setup();
 			_state = new SchedulingResultStateHolder();
 			_state.UseMinWeekWorkTime = true;
 			_state.UseValidation = true;
@@ -168,6 +180,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldHandleAgentWithNoAssignment()
 		{
+			setup();
 			var scenario = new Scenario("_");
 			var dateOnly = new DateOnly(2016, 05, 23);
 
@@ -176,10 +189,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			schedulePeriod.PeriodType = SchedulePeriodType.Week;
 
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)),
-				new[] { agent }, Enumerable.Empty<IScheduleData>(), Enumerable.Empty<ISkillDay>());
+				new[] {agent}, Enumerable.Empty<IScheduleData>(), Enumerable.Empty<ISkillDay>());
 
 			var bussinesRuleCollection = NewBusinessRuleCollection.All(stateHolder.SchedulingResultState);
-			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> { agent }, CultureInfo.InvariantCulture, bussinesRuleCollection);
+			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> {agent}, CultureInfo.InvariantCulture,
+				bussinesRuleCollection);
 
 			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
 			scheduleDay.CreateAndAddAbsence(new AbsenceLayer(new Absence(), new DateTimePeriod(2016, 05, 22, 2016, 05, 24)));
@@ -192,6 +206,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldShowValidationAlertIfModifyIsCanceled()
 		{
+			setup();
 			var scenario = new Scenario("_");
 			var phoneActivity = new Activity("_") { AllowOverwrite = true };
 			var lunch = new Activity("_") { AllowOverwrite = false };

@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Commands
             }
             using(_mocker.Playback())
             {
-                using (new CustomAuthorizationContext(authorization))
+                using (CurrentAuthorization.ThreadlyUse(authorization))
                 {
                     Assert.IsTrue(_models.CanExecute(_target));
                     Assert.IsFalse(_models.CanExecute(_target));
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Commands
             }
             using (_mocker.Playback())
             {
-                using (new CustomAuthorizationContext(authorization))
+                using (CurrentAuthorization.ThreadlyUse(authorization))
                 {
                     Assert.IsTrue(_models.CanExecute(_target));
                     ((ApplicationCommandModelForTest) _target).CanExec = false;

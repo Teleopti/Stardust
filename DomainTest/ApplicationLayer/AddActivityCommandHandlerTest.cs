@@ -20,6 +20,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture, DomainTest]
+	[LegacyTest]
 	public class AddActivityCommandHandlerTest:ISetup
 	{
 		public AddActivityCommandHandler Target;

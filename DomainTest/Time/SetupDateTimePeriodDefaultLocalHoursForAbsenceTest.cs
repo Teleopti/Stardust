@@ -9,7 +9,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Time
 {
     [TestFixture]
-    public class SetupDateTimePeriodDefaultLocalHoursForAbsenceTest
+	[LegacyTest]
+	public class SetupDateTimePeriodDefaultLocalHoursForAbsenceTest
     {
         private ISetupDateTimePeriod _target;
         private MockRepository _mockRepository;

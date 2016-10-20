@@ -15,6 +15,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 {
 	[TestFixture]
+	[LegacyTest]
 	public class AnalyticsAvailabilityUpdaterTest
 	{
 		private AnalyticsAvailabilityUpdater _target;

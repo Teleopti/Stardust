@@ -10,7 +10,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
     [TestFixture]
-    public class DailyBoostedSkillForecastAndScheduledValueCalculatorTest
+	[LegacyTest]
+	public class DailyBoostedSkillForecastAndScheduledValueCalculatorTest
     {
         private IDailySkillForecastAndScheduledValueCalculator _target;
         private MockRepository _mock;

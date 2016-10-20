@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Budgeting;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
         [Test]
         public void ShouldShowNoPermission()
         {
-            using (new CustomAuthorizationContext(new NoPermission()))
+            using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
             {
                 Assert.IsFalse(target.IsAllowancePermitted);
             }
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
         [Test]
         public void ShouldShowWithPermission()
         {
-            using (new CustomAuthorizationContext(new FullPermission()))
+            using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
             {
                 Assert.IsTrue(target.IsAllowancePermitted);
             }

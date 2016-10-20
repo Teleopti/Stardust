@@ -9,7 +9,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
     [TestFixture]
-    public class ShiftTradeChecksumCalculatorTest
+	[LegacyTest]
+	public class ShiftTradeChecksumCalculatorTest
     {
         private ShiftTradeChecksumCalculator _target;
         private MockRepository _mocks;

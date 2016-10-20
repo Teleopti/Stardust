@@ -12,7 +12,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ProTest"), TestFixture]
-    public class ScheduleMatrixValueCalculatorProTest
+	[LegacyTest]
+	public class ScheduleMatrixValueCalculatorProTest
     {
         private MockRepository _mockRepository;
         private ScheduleMatrixValueCalculatorPro _target;

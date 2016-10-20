@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Commands;
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
         [Test]
         public void ShouldReturnFalseIfNotAllowed()
         {
-            using (new CustomAuthorizationContext(new NoPermission()))
+            using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
             {
                 Assert.That(_target.CanExecute(), Is.False);
             }

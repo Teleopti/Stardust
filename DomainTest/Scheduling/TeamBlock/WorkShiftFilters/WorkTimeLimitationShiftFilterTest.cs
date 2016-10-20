@@ -14,6 +14,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 {
 	[TestFixture]
+	[LegacyTest]
 	public class WorkTimeLimitationShiftFilterTest
 	{
 		private MockRepository _mocks;

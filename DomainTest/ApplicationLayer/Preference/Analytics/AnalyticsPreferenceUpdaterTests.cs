@@ -18,6 +18,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 {
 	[TestFixture]
+	[LegacyTest]
 	public class AnalyticsPreferenceUpdaterTests
 	{
 		private AnalyticsPreferenceUpdater _target;

@@ -11,6 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 {
+	[LegacyTest]
 	[DomainTest]
 	public class MaxSeatSkillCreatorTest
 	{

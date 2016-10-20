@@ -8,6 +8,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.TestCommon;
@@ -158,7 +159,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			}
 			using (mock.Playback())
 			{
-				using (new CustomAuthorizationContext(new NoPermission()))
+				using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
 				{
 					var command = new SendPushMessageToPeopleCommandDto();
 					command.Recipients.Add(person.Id.GetValueOrDefault());

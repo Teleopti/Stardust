@@ -19,11 +19,7 @@ namespace Teleopti.Ccc.Domain.Logon
 
 		public IDisposable Apply()
 		{
-			_authorization.OnThisThreadUse(_systemUserAuthorization);
-			return new GenericDisposable(() =>
-			{
-				_authorization.OnThisThreadUse(null);
-			});
+			return _authorization.OnThisThreadUse(_systemUserAuthorization);
 		}
 	}
 }

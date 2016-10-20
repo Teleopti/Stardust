@@ -215,25 +215,21 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		public IAuthorizationScope AuthorizationScope;
 		public ICurrentTeleoptiPrincipal CurrentTeleoptiPrincipal;
+		private IDisposable _authorizationScope;
 
 		protected override void BeforeTest()
 		{
 			base.BeforeTest();
 
-			// because DomainTest project has a SetupFixtureForAssembly that sets FullPermissions globally... 
-			if (realPermissions())
-				AuthorizationScope.OnThisThreadUse(new PrincipalAuthorization(CurrentTeleoptiPrincipal));
-			else
-				AuthorizationScope.OnThisThreadUse(new FullPermission());
+			if (!realPermissions())
+				_authorizationScope = AuthorizationScope.OnThisThreadUse(new FullPermission());
 		}
 
 		protected override void AfterTest()
 		{
 			base.AfterTest();
 
-			// because DomainTest project has a SetupFixtureForAssembly that sets FullPermissions globally... 
-			if (realPermissions())
-				AuthorizationScope.OnThisThreadUse(null);
+			_authorizationScope?.Dispose();
 		}
 	}
 }

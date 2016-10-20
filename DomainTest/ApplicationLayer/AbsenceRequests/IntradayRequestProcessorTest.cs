@@ -21,6 +21,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
+	[LegacyTest]
 	[TestFixture]
 	public class IntradayRequestProcessorTest : ISetup
 	{

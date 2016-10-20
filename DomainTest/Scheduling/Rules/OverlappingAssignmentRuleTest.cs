@@ -12,7 +12,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
     [TestFixture]
-    public class OverlappingAssignmentRuleTest
+	[LegacyTest]
+	public class OverlappingAssignmentRuleTest
     {
         private IContract _contract;
         private TimeSpan _nightlyRest;

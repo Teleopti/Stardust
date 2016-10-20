@@ -11,6 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
+	[LegacyTest]
 	public class PlanningPeriodTest
 	{
 		[Test, SetCulture("sv-SE")]

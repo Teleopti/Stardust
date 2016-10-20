@@ -16,15 +16,15 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
     [TestFixture]
-    public class MoveDataBetweenSchedulesTest
+	[LegacyTest]
+	public class MoveDataBetweenSchedulesTest
     {
         private IMoveDataBetweenSchedules target;
         private IScheduleDictionary destination;
         private INewBusinessRuleCollection newRules;
 	    private IPersistableScheduleDataPermissionChecker permissionChecker;
 
-        [SetUp]
-        public void Setup()
+		private void setup()
         {
 	        permissionChecker = new PersistableScheduleDataPermissionChecker();
 			newRules = NewBusinessRuleCollection.Minimum();
@@ -35,7 +35,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         [Test]
         public void VerifySimpleExport()
         {
-            var person1 = new Person {Name=new Name("person1", "person1")};
+	        setup();
+			var person1 = new Person {Name=new Name("person1", "person1")};
             var person2 = new Person { Name = new Name("person2", "person2") };
             IPersonAssignment assValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("dummy1"), 
                                                                                         person1,
@@ -67,7 +68,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         [Test]
         public void VerifyCorrectBusinessRuleIsReturned()
         {
-            var nfRule = new NewFailingRule();
+			setup();
+			var nfRule = new NewFailingRule();
             var nr = NewBusinessRuleCollection.Minimum();
             nr.Add(nfRule);
             target =new MoveDataBetweenSchedules( nr, new DoNothingScheduleDayChangeCallBack());
@@ -84,7 +86,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         [Test]
         public void VerifyDoNotDoAnythingOnScheduleDataNotImplementingIExportToAnotherScenario()
         {
-            var person = PersonFactory.CreatePerson();
+			setup();
+			var person = PersonFactory.CreatePerson();
             var prefDay = new PreferenceDay(person, new DateOnly(2000, 1, 2), new PreferenceRestriction());
             var org1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(destination.Scenario, person,
                                                                             new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
@@ -105,6 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldNotAffectAbsencesOnNextDay()
 		{
+			setup();
 			var scenario = new Scenario("scenario");
 			var person = PersonFactory.CreatePerson("person");
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, new DateTimePeriod(2000, 1, 3, 2000, 1, 3));
@@ -121,7 +125,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			[Test]
 			public void ShouldReplaceAssignmentIfSameDatePersonScenario()
 			{
-				var person = PersonFactory.CreatePerson("person");
+			setup();
+			var person = PersonFactory.CreatePerson("person");
 				var date = new DateOnly(2000, 1, 1);
 				var orgAss = new PersonAssignment(person, destination.Scenario, date);
 				orgAss.SetId(Guid.NewGuid());
@@ -144,7 +149,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			[Test]
 			public void ShouldConsiderAllExportedDaysWhenValidatingNightlyRest()
 			{
-				var activity = new Activity("activity") { InWorkTime = true };
+			setup();
+			var activity = new Activity("activity") { InWorkTime = true };
 				var shiftCategory = new ShiftCategory("shiftCategory");
 				var person1 = new Person { Name = new Name("person1", "person1") };
 				var dateOnly = new DateOnly(new DateTime(2000, 1, 1));

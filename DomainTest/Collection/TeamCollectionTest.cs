@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
             }
             using (mocks.Playback())
             {
-                using (new CustomAuthorizationContext(authorization))
+                using (CurrentAuthorization.ThreadlyUse(authorization))
                 {
                     var ret = _target.AllPermittedTeams;
                     Assert.AreEqual(1, ret.Count());
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
             }
             using (mocks.Playback())
             {
-                using (new CustomAuthorizationContext(authorization))
+                using (CurrentAuthorization.ThreadlyUse(authorization))
                 {
                     var ret = _target.AllPermittedSites;
                     Assert.AreEqual(1, ret.Count());

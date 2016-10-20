@@ -18,6 +18,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[DomainTest]
+	[LegacyTest]
 	[TestFixture]
 	public class BackoutScheduleChangeCommandHandlerTest : ISetup
 	{

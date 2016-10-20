@@ -20,6 +20,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
+	[LegacyTest]
 	[DomainTest]
 	[TestFixture(true)]
 	[TestFixture(false)]

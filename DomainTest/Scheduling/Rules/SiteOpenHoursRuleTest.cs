@@ -15,6 +15,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
 	[TestFixture, DomainTest]
+	[LegacyTest]
 	public class SiteOpenHoursRuleTest
 	{
 		private readonly DateOnly _periodStartDate = new DateOnly(2016, 1, 1);

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
@@ -9,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 	public interface IAuthorizationScope
 	{
-		void OnThisThreadUse(IAuthorization principalAuthorization);
+		IDisposable OnThisThreadUse(IAuthorization authorization);
 	}
 
 	public class ThisAuthorization : ICurrentAuthorization
@@ -31,14 +33,14 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 	{
 		private readonly IAuthorization _authorization;
 		private static IAuthorization _globalAuthorization;
-		private readonly ThreadLocal<IAuthorization> _threadAuthorization = new ThreadLocal<IAuthorization>();
+		private static readonly ThreadLocal<Stack<IAuthorization>> _threadAuthorization = new ThreadLocal<Stack<IAuthorization>>(() => new Stack<IAuthorization>());
 
 		public CurrentAuthorization(IAuthorization authorization)
 		{
 			_authorization = authorization;
 		}
 
-		public static ICurrentAuthorization Make()
+		public static CurrentAuthorization Make()
 		{
 			return new CurrentAuthorization(new PrincipalAuthorization(CurrentTeleoptiPrincipal.Make()));
 		}
@@ -47,16 +49,22 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		{
 			_globalAuthorization = authorization;
 		}
-
-		public void OnThisThreadUse(IAuthorization principalAuthorization)
+		 
+		public static IDisposable ThreadlyUse(IAuthorization authorization)
 		{
-			_threadAuthorization.Value = principalAuthorization;
+			_threadAuthorization.Value.Push(authorization);
+			return new GenericDisposable(() => _threadAuthorization.Value.Pop());
+		}
+
+		public IDisposable OnThisThreadUse(IAuthorization authorization)
+		{
+			return ThreadlyUse(authorization);
 		}
 
 		public IAuthorization Current()
 		{
-			if (_threadAuthorization.Value != null)
-				return _threadAuthorization.Value;
+			if (_threadAuthorization.Value.Count > 0)
+				return _threadAuthorization.Value.Peek();
 			if (_globalAuthorization != null)
 				return _globalAuthorization;
 			return _authorization;

@@ -24,6 +24,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
+	[LegacyTest]
 	public class SchedulingCascadingDesktopTest
 	{
 		public DesktopScheduling Target;

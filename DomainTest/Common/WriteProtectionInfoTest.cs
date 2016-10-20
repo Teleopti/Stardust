@@ -11,7 +11,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Common
 {
     [TestFixture]
-    public class WriteProtectionInfoTest
+	[LegacyTest]
+	public class WriteProtectionInfoTest
     {
         private PersonWriteProtectionInfo _target;
         private IPerson _person;
@@ -114,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 	        {
 				using (mocks.Playback())
 				{
-					using (new CustomAuthorizationContext(authorization))
+					using (CurrentAuthorization.ThreadlyUse(authorization))
 					{
 						_target.PersonWriteProtectedDate = new DateOnly(2000, 1, 1);
 					}

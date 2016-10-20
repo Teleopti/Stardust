@@ -9,7 +9,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Kpi
 {
     [TestFixture]
-    public class ScorecardTest
+	[LegacyTest]
+	public class ScorecardTest
     {
         private Scorecard  target;
         private KeyPerformanceIndicator kpi1;

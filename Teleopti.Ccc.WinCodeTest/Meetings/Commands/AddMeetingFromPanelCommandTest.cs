@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
         [Test]
         public void ShouldReturnFalseIfNotAllowed()
         {
-            using (new CustomAuthorizationContext(new NoPermission()))
+            using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
             {
                 _target = new AddMeetingFromPanelCommand(_repositoryFactory, _unitOfWorkFactory, _personSelectorPresenter, _meetingOverviewFactory);
                 Assert.That(_target.CanExecute(), Is.False);

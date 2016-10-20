@@ -25,6 +25,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {
+	[LegacyTest]
 	[TestFixture]
 	public class WorkShiftFilterServiceTest
 	{

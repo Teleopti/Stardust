@@ -14,14 +14,13 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
-
 	[TestFixture]
+	[LegacyTest]
 	public class ScheduleRangeTest
 	{
 		private string _function;
@@ -58,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			}
 			using(_mocks.Playback())
 			{
-                using (new CustomAuthorizationContext(_authorization))
+                using (CurrentAuthorization.ThreadlyUse(_authorization))
                 {
                     _target.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
                     var part = _target.ScheduledDay(new DateOnly(2000, 1, 2));
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			}
 			using(_mocks.Playback())
 			{
-                using (new CustomAuthorizationContext(_authorization))
+                using (CurrentAuthorization.ThreadlyUse(_authorization))
                 {
                     _target.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
                     IScheduleDay yes = _target.ReFetch(partWithHit);
@@ -103,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocks.Playback())
             {
-                using (new CustomAuthorizationContext(_authorization))
+                using (CurrentAuthorization.ThreadlyUse(_authorization))
                 {
                     var data = (PersonAssignment) createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
                     ((IEntity) data).SetId(Guid.NewGuid());
@@ -130,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocks.Playback())
             {
-                using (new CustomAuthorizationContext(_authorization))
+                using (CurrentAuthorization.ThreadlyUse(_authorization))
                 {
                     var clientData =
                         (PersonAssignment) createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
@@ -151,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			}
 			using (_mocks.Playback())
 			{
-                using (new CustomAuthorizationContext(_authorization))
+                using (CurrentAuthorization.ThreadlyUse(_authorization))
                 {
                     _target.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
                     var part = _target.ScheduledDay(new DateOnly(2000, 1, 2));
@@ -170,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			}
 			using (_mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(_authorization))
+				using (CurrentAuthorization.ThreadlyUse(_authorization))
 				{
 					_target.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
 					var part =
@@ -197,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			}
             using (_mocks.Playback())
             {
-                using (new CustomAuthorizationContext(_authorization))
+                using (CurrentAuthorization.ThreadlyUse(_authorization))
                 {
                     _target.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
                     var part = _target.ScheduledDay(new DateOnly(2000, 1, 2));
@@ -232,7 +231,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocks.Playback())
             {
-                using (new CustomAuthorizationContext(_authorization))
+                using (CurrentAuthorization.ThreadlyUse(_authorization))
                 {
                     DateOnly dateOnly = new DateOnly(2000, 1, 2);
                     _target.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
@@ -253,7 +252,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocks.Playback())
             {
-                using (new CustomAuthorizationContext(_authorization))
+                using (CurrentAuthorization.ThreadlyUse(_authorization))
                 {
 									_person.PermissionInformation.SetDefaultTimeZone(
 											(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time")));
@@ -279,7 +278,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocks.Playback())
             {
-                using (new CustomAuthorizationContext(_authorization))
+                using (CurrentAuthorization.ThreadlyUse(_authorization))
                 {
                     IPersonAssignment ass1 = createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
                     IPersonAbsence abs1 = createPersonAbsence(new DateTimePeriod(2000, 1, 1, 2000, 1, 4));
@@ -317,7 +316,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocks.Playback())
             {
-                using (new CustomAuthorizationContext(_authorization))
+                using (CurrentAuthorization.ThreadlyUse(_authorization))
                 {
                     var restriction1 = new AvailabilityRestriction();
                     var restriction2 = new RotationRestriction();
@@ -355,7 +354,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			using (_mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(_authorization))
+				using (CurrentAuthorization.ThreadlyUse(_authorization))
 				{
 					var studenrestColl = new List<IStudentAvailabilityRestriction>
 					                     	{
@@ -384,7 +383,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			using (_mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(_authorization))
+				using (CurrentAuthorization.ThreadlyUse(_authorization))
 				{
 					var preferenceDay1 = new PreferenceDay(_person, new DateOnly(2000, 1, 1), new PreferenceRestriction());
                     preferenceDay1.SetId(Guid.NewGuid());
@@ -406,7 +405,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			fullPermission(true);
 			_mocks.ReplayAll();
-            using (new CustomAuthorizationContext(_authorization))
+            using (CurrentAuthorization.ThreadlyUse(_authorization))
             {
                 IMultiplicatorDefinitionSet defSet = new MultiplicatorDefinitionSet("def", MultiplicatorType.Overtime);
                 PersonFactory.AddDefinitionSetToPerson(_person, defSet);
@@ -436,7 +435,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			fullPermission(true);
 			_mocks.ReplayAll();
 
-            using (new CustomAuthorizationContext(_authorization))
+            using (CurrentAuthorization.ThreadlyUse(_authorization))
             {
                 IPersonAbsence absOk1 = createPersonAbsence(createPeriod(2, 20));
                 IPersonAbsence absOk2 = createPersonAbsence(createPeriod(5, 20));
@@ -495,7 +494,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Expect.Call(_dic.PermissionsEnabled).Return(true).Repeat.Any();
 			_mocks.ReplayAll();
 
-            using (new CustomAuthorizationContext(_authorization))
+            using (CurrentAuthorization.ThreadlyUse(_authorization))
             {
                 DateTimePeriod earlyPeriod = new DateTimePeriod(2001, 1, 3, 2001, 1, 12);
                 DateTimePeriod latePeriod = new DateTimePeriod(2001, 1, 14, 2001, 1, 19);
@@ -523,7 +522,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			fullPermission(true);
 			_mocks.ReplayAll();
-            using (new CustomAuthorizationContext(_authorization))
+            using (CurrentAuthorization.ThreadlyUse(_authorization))
             {
                 var id = Guid.NewGuid();
                 var ass = createPersonAssignment(new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
@@ -639,7 +638,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			fullPermission(true);
 			_mocks.ReplayAll();
-            using (new CustomAuthorizationContext(_authorization))
+            using (CurrentAuthorization.ThreadlyUse(_authorization))
             {
                 IPersonAssignment pAss = createPersonAssignment(new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
                 _target.Add(pAss);
@@ -656,7 +655,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			fullPermission(true);
 			_mocks.ReplayAll();
-            using (new CustomAuthorizationContext(_authorization))
+            using (CurrentAuthorization.ThreadlyUse(_authorization))
             {
                 IPersonAbsence pAbs = createPersonAbsence(new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
                 _target.Add(pAbs);
@@ -673,7 +672,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			fullPermission(true);
 			_mocks.ReplayAll();
-            using (new CustomAuthorizationContext(_authorization))
+            using (CurrentAuthorization.ThreadlyUse(_authorization))
             {
                 IPersonMeeting meeting = createPersonMeeting(new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 
@@ -730,7 +729,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			{
 				using (_mocks.Playback())
 				{
-					using (new CustomAuthorizationContext(_authorization))
+					using (CurrentAuthorization.ThreadlyUse(_authorization))
 					{
 						_target.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario,
 																			 new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
@@ -756,7 +755,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			{
 				using (_mocks.Playback())
 				{
-					using (new CustomAuthorizationContext(_authorization))
+					using (CurrentAuthorization.ThreadlyUse(_authorization))
 					{
 						_target.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario,
 																			 new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
@@ -771,7 +770,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			fullPermission(true);
 			_mocks.ReplayAll();
-            using (new CustomAuthorizationContext(_authorization))
+            using (CurrentAuthorization.ThreadlyUse(_authorization))
             {
                 IList<IPersonAssignment> pAsses = new List<IPersonAssignment>();
                 pAsses.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
@@ -798,7 +797,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			fullPermission(true);
 			_mocks.ReplayAll();
-            using (new CustomAuthorizationContext(_authorization))
+            using (CurrentAuthorization.ThreadlyUse(_authorization))
             {
                 //no deep clone, just shallow. Better test later if needed
                 IActivity activity = ActivityFactory.CreateActivity("sdf");

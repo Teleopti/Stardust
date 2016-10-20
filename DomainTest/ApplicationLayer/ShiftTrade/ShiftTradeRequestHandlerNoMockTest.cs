@@ -22,6 +22,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 {
 	[TestFixture]
+	[LegacyTest]
 	public class ShiftTradeRequestHandlerNoMockTest
 	{
 		private ShiftTradeRequestHandler _target;

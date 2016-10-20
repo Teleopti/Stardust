@@ -11,7 +11,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Security.Principal
 {
 	[TestFixture]
-    public class TeleoptiPrincipalTest
+	[LegacyTest]
+	public class TeleoptiPrincipalTest
     {
         private IPerson person;
         private ITeleoptiIdentity identity;

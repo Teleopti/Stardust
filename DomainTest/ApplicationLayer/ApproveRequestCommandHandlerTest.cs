@@ -22,6 +22,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture]
+	[LegacyTest]
 	class ApproveRequestCommandHandlerTest
 	{
 		private FakeCurrentScenario _scenario;

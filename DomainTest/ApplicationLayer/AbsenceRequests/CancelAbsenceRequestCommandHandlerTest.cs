@@ -30,6 +30,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
+	[LegacyTest]
 	[TestFixture]
 	[UseEventPublisher(typeof (FakeEventPublisherWithOverwritingHandlers))]
 	public class CancelAbsenceRequestCommandHandlerEventTest :ISetup

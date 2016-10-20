@@ -12,6 +12,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
     [TestFixture, SetCulture("sv-SE"), SetUICulture("en-US")]
+	[LegacyTest]
     public class SchedulePartStringVisualizerTest
     {
         private IPerson _agent;
@@ -27,8 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
         private IDictionary<IPerson, IScheduleRange> underlyingDictionary;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
-        public void Setup()
+        private void setup()
         {
             _scenario = ScenarioFactory.CreateScenarioAggregate();
             IPerson person = PersonFactory.CreatePerson();
@@ -76,7 +76,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyToolTipPersonalAssignments()
         {
-            string meetingPeriod1 = DateTime.MinValue.Add(meeting1.StartTime).ToShortTimeString() +
+	        setup();
+			string meetingPeriod1 = DateTime.MinValue.Add(meeting1.StartTime).ToShortTimeString() +
                                     " - " + DateTime.MinValue.Add(meeting1.EndTime).ToShortTimeString();
 
             string meetingPeriod2 = DateTime.MinValue.Add(meeting2.StartTime).ToShortTimeString() +

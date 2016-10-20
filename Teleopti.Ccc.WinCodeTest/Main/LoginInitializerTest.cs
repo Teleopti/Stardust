@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -114,7 +115,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			loggedOnUnitOfWorkFactory.Expect(l => l.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null)).IgnoreArguments();
 
-			using (new CustomAuthorizationContext(new NoPermission()))
+			using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
 			{
 				var result = _target.InitializeApplication(datasourceContainer);
 				result.Should().Be.False();

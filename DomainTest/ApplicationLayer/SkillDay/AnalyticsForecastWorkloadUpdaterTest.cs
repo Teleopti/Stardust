@@ -13,6 +13,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SkillDay
 {
 	[TestFixture]
+	[LegacyTest]
 	public class AnalyticsForecastWorkloadUpdaterTest
 	{
 		private AnalyticsForecastWorkloadUpdater _target;

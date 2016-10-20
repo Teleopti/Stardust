@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.Common
 	public static class ServiceLocatorForLegacy
 	{
 		private static ICurrentAuthorization _currentAuthorization;
+		//private static IAuthorizationScope _authorizationScope;
 
 		public static ICurrentAuthorization CurrentAuthorization
 		{
@@ -19,6 +20,11 @@ namespace Teleopti.Ccc.Domain.Common
 			set { _currentAuthorization = value; }
 		}
 
+		//public static IAuthorizationScope AuthorizationScope
+		//{
+		//	get { return _authorizationScope ?? Security.Principal.CurrentAuthorization.Make(); }
+		//	set { _authorizationScope = value; }
+		//}
 	}
 
 	public static class ServiceLocatorForEntity

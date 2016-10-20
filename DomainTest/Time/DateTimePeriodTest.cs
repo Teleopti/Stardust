@@ -11,7 +11,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Time
 {
     [TestFixture]
-    public class DateTimePeriodTest
+	[LegacyTest]
+	public class DateTimePeriodTest
     {
         private readonly DateTime _start = new DateTime(2007, 06, 01, 12, 31, 0, DateTimeKind.Utc);
         private readonly DateTime _end = new DateTime(2008, 02, 28, 0, 0, 0, DateTimeKind.Utc);

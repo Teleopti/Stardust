@@ -11,7 +11,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 {
     [TestFixture]
-    public class EnsureWeeklyRestRuleTest
+	[LegacyTest]
+	public class EnsureWeeklyRestRuleTest
     {
         private IEnsureWeeklyRestRule _target;
         private IPerson _person;
