@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	//[Toggle(Domain.FeatureFlags.Toggles.RTA_ScheduleQueryOptimizationFilteredCache_40260)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
+	[Toggle(Domain.FeatureFlags.Toggles.Wfm_Requests_Check_Expired_Requests_40274)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)

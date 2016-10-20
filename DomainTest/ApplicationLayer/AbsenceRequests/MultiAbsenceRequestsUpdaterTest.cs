@@ -112,7 +112,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldDenyExpiredRequestWithWaitlistingEnabled()
 		{
-			ToggleManager.Enable(Domain.FeatureFlags.Toggles.Wfm_Requests_Check_Expired_Requests_40274);
 			ScenarioRepository.Add(CurrentScenario.Current());
 
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
