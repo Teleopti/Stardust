@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			IUserTimeZone userTimeZone = new HawaiiTimeZone();
 			var target = new NotificationsController(fakeJobResultRepository,userTimeZone);
 			var result = (OkNegotiatedContentResult<JobResultNotificationModel[]>)target.GetNotifications();
-			result.Content.Count().Should().Be.EqualTo(2);
+			result.Content.Length.Should().Be.EqualTo(2);
 		}
 
 		[Test]
