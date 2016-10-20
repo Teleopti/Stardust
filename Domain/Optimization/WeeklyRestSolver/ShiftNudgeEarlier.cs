@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 
 			bool result = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, shiftDate, schedulingOptions,
-				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder,
+				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(),
 				new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Left), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder));
 
 

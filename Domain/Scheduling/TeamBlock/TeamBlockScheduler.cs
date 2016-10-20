@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 								ISchedulingOptions schedulingOptions, 
 								ISchedulePartModifyAndRollbackService rollbackService, 
 								IResourceCalculateDelayer resourceCalculateDelayer,
-								ISchedulingResultStateHolder schedulingResultStateHolder,
+								IEnumerable<ISkillDay> allSkillDays,
 								ShiftNudgeDirective shiftNudgeDirective,
 								INewBusinessRuleCollection businessRules);
 
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			ISchedulingOptions schedulingOptions,
 			ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer,
-			ISchedulingResultStateHolder schedulingResultStateHolder,
+			IEnumerable<ISkillDay> allSkillDays,
 			ShiftNudgeDirective shiftNudgeDirective,
 			INewBusinessRuleCollection businessRules)
 
@@ -99,7 +99,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				onDayScheduledFailed(new SchedulingServiceFailedEventArgs(()=>cancelMe=true));
 				return false;
 			}
-			var allSkillDays = schedulingResultStateHolder.AllSkillDays();
 			var selectedBlockDays = teamBlockInfo.BlockInfo.UnLockedDates();
 			bool success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedBlockDays,
 				roleModelShift, rollbackService, resourceCalculateDelayer, allSkillDays, shiftNudgeDirective, businessRules, () =>
