@@ -390,6 +390,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CalculateResourceReadModel>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<ExtractSkillStaffDataForResourceCalculation>().As<IExtractSkillStaffDataForResourceCalculation>().InstancePerLifetimeScope().ApplyAspects();
 
+			if (_configuration.Toggle(Toggles.ResourcePlanner_HideSkillPrioSliders_41312))
+			{
+				builder.RegisterType<SkillPriorityProviderForToggle41312>().As<ISkillPriorityProvider>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<SkillPriorityProvider>().As<ISkillPriorityProvider>().SingleInstance();
+			}
+
 			// Analytics fact schedule updates
 			if (_configuration.Toggle(Toggles.ETL_SpeedUpFactScheduleNightly_38019))
 			{

@@ -137,6 +137,7 @@
 		ResourcePlanner_FilterOvertimeAvail_37113,
 		ResourcePlanner_NegativeOrderIndex_39062,
 		ResourcePlanner_MaxSeatsNew_40939,
+		ResourcePlanner_HideSkillPrioSliders_41312,
 
 		Wfm_DisplayOnlineHelp_39402,
 
