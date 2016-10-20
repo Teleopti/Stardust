@@ -29,8 +29,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void Modify(IScheduleDay schedulePart, INewBusinessRuleCollection newBusinessRuleCollection)
 		{
-			IScheduleRange range = _stateHolder.Schedules[schedulePart.Person];
-			IScheduleDay partToSave = range.ReFetch(schedulePart);
+			var partToSave = schedulePart.ReFetch();
 			modifyWithNoValidation(schedulePart, ScheduleModifier.Scheduler, _scheduleTagSetter, newBusinessRuleCollection);
 			_rollbackStack.Push(partToSave);
 			_modificationStack.Push(schedulePart);
@@ -38,18 +37,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void Modify(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter)
         {
-            IScheduleRange range = _stateHolder.Schedules[schedulePart.Person];
-            IScheduleDay partToSave = range.ReFetch(schedulePart);
-            modifyWithNoValidation(schedulePart, ScheduleModifier.Scheduler, scheduleTagSetter);
+			var partToSave = schedulePart.ReFetch();
+			modifyWithNoValidation(schedulePart, ScheduleModifier.Scheduler, scheduleTagSetter);
             _rollbackStack.Push(partToSave);
             _modificationStack.Push(schedulePart);
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool ModifyStrictly(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter, INewBusinessRuleCollection newBusinessRuleCollection)
 		{
-			IScheduleRange range = _stateHolder.Schedules[schedulePart.Person];
-			IScheduleDay partToSave = range.ReFetch(schedulePart);
+			var partToSave = schedulePart.ReFetch();
 			var responses = modifyWithNoValidation(schedulePart, ScheduleModifier.Scheduler, scheduleTagSetter, newBusinessRuleCollection);
 			_rollbackStack.Push(partToSave);
 			_modificationStack.Push(schedulePart);
