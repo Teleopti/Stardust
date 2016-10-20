@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
@@ -37,11 +38,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 		private IScheduleDictionary _scheduleDictionary;
 		private IScheduleRange _scheduleRange;
 		private IScheduleDay _scheduleDay;
+		private IEnumerable<ISkillDay> _skillDays;
 
 		[SetUp]
 		public void SetUp()
 		{
 			_mock = new MockRepository();
+			_skillDays = Enumerable.Empty<ISkillDay>();
 			_createSkillIntervalDataPerDateAndActivity = _mock.StrictMock<ICreateSkillIntervalDataPerDateAndActivity>();
 			_skillIntervalDataOpenHour = _mock.StrictMock<ISkillIntervalDataOpenHour>();
 			_target = new TeamBlockOpenHoursValidator(_createSkillIntervalDataPerDateAndActivity, _skillIntervalDataOpenHour);
@@ -57,6 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 			_blockInfo = new BlockInfo(new DateOnlyPeriod(_startDate, _endDate));
 			_teamBlockInfo = new TeamBlockInfo(_teaminfo, _blockInfo);
 			_schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
+			_schedulingResultStateHolder.Expect(x => x.AllSkillDays()).Return(_skillDays);
 			_activity = new Activity("activity");
 			_skillIntervalDatas1 = new List<ISkillIntervalData>();
 			_skillIntervalDatas2 = new List<ISkillIntervalData>();
@@ -80,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 
 			using (_mock.Record())
 			{
-				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder)).Return(_dateOnlyDictionary);
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _skillDays)).Return(_dateOnlyDictionary);
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
 				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
 				Expect.Call(_scheduleRange.ScheduledDay(_startDate)).Return(_scheduleDay);
@@ -108,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 
 			using (_mock.Record())
 			{
-				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder)).Return(_dateOnlyDictionary);
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _skillDays)).Return(_dateOnlyDictionary);
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
 				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
 				Expect.Call(_scheduleRange.ScheduledDay(_startDate)).Return(_scheduleDay);
@@ -135,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 
 			using (_mock.Record())
 			{
-				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder)).Return(_dateOnlyDictionary);
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _skillDays)).Return(_dateOnlyDictionary);
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
 				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
 				Expect.Call(_scheduleRange.ScheduledDay(_startDate)).Return(_scheduleDay);
@@ -160,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 		{
 			using (_mock.Record())
 			{
-				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder)).Return(_dateOnlyDictionary);
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _skillDays)).Return(_dateOnlyDictionary);
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
 				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
 				Expect.Call(_scheduleRange.ScheduledDay(_startDate)).Return(_scheduleDay);
@@ -187,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 
 			using (_mock.Record())
 			{
-				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder)).Return(_dateOnlyDictionary);
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _skillDays)).Return(_dateOnlyDictionary);
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
 				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
 				Expect.Call(_scheduleRange.ScheduledDay(_startDate)).Return(_scheduleDay);

@@ -16,5 +16,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 			return ret;
 		}
+
+		public static IEnumerable<ISkillDay> FilterOnDate(this IEnumerable<ISkillDay> allSkillDays, DateOnly date)
+		{
+			return allSkillDays.Where(x => x.CurrentDate == date);
+		}
 	}
 }

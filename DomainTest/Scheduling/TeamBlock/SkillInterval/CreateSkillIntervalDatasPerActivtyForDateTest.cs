@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -21,7 +22,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 		private ISkill _skill2;
 		private ISkillDay _skillDayForSkill1;
 		private ISkillDay _skillDayForSkill2;
-		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 
 		[SetUp]
 		public void Setup()
@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 			_target = new CreateSkillIntervalDatasPerActivtyForDate(_calculateAggregatedDataForActivtyAndDate, _skillResolutionProvider);
 			_skill1 = SkillFactory.CreateSkill("s1");
 			_skill2 = SkillFactory.CreateSkill("s1");
-			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_skillDayForSkill1 = _mocks.StrictMock<ISkillDay>();
 			_skillDayForSkill2 = _mocks.StrictMock<ISkillDay>();
 		}
@@ -40,6 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 		[Test]
 		public void ShouldCreateOneListPerSkillIfDifferentActivity()
 		{
+			var date = DateOnly.Today;
 			var skillList = new List<ISkill> {_skill1, _skill2};
 			var skillDayList = new List<ISkillDay> {_skillDayForSkill1, _skillDayForSkill2};
 			var skillIntervalData1 =
@@ -51,12 +51,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 					new DateTimePeriod(new DateTime(2013, 10, 02, 16, 0, 0, DateTimeKind.Utc),
 									   new DateTime(2013, 10, 02, 17, 0, 0, DateTimeKind.Utc)), 6, 6, 0, null, null);
 			using (_mocks.Record())
-			{
+			{ 
 				Expect.Call(_skillResolutionProvider.MinimumResolution(skillList)).Return(15);
-				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> {new DateOnly()}))
-				      .Return(skillDayList);
 				Expect.Call(_skillDayForSkill1.Skill).Return(_skill1).Repeat.Any();
+				Expect.Call(_skillDayForSkill1.CurrentDate).Return(date).Repeat.Any();
 				Expect.Call(_skillDayForSkill2.Skill).Return(_skill2).Repeat.Any();
+				Expect.Call(_skillDayForSkill2.CurrentDate).Return(date).Repeat.Any();
 				Expect.Call(_calculateAggregatedDataForActivtyAndDate.CalculateFor(skillDayList, _skill1.Activity, 15))
 					  .Return(new List<ISkillIntervalData> { skillIntervalData1 });
 				Expect.Call(_calculateAggregatedDataForActivtyAndDate.CalculateFor(skillDayList, _skill2.Activity, 15))
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 
 			using (_mocks.Playback())
 			{
-				var result = _target.CreateFor(new DateOnly(), skillList, _schedulingResultStateHolder);
+				var result = _target.CreateFor(date, skillList, skillDayList);
 				Assert.AreEqual(2, result.Count);
 			}
       

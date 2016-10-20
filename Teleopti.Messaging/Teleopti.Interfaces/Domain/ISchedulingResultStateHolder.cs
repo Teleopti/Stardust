@@ -146,5 +146,6 @@ namespace Teleopti.Interfaces.Domain
 		void AddAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay);
 	    int AddedAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay);
 	    void SubtractAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay);
+	    IEnumerable<ISkillDay> AllSkillDays();
     }
 }

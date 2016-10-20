@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -18,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
 		private IDayIntervalDataCalculator _dayIntervalDataCalculator;
 		private ITeamBlockInfo _teamBlockInfo;
-		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IDictionary<IActivity, IList<ISkillIntervalData>> _skillIntervalDatasPerActivity;
 		private Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>> _skillIntervalDatasPerActivityAndDate;
 		private List<ISkillIntervalData> _skillIntevalDataList;
@@ -35,11 +35,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_dayIntervalDataCalculator = _mocks.StrictMock<IDayIntervalDataCalculator>();
 			_target = new ActivityIntervalDataCreator(_createSkillIntervalDataPerDateAndActivity, _dayIntervalDataCalculator);
 			_teamBlockInfo = _mocks.StrictMock<ITeamBlockInfo>();
-			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_skillIntervalDatasPerActivity = new Dictionary<IActivity, IList<ISkillIntervalData>>();
 			_skillIntervalData = new SkillIntervalData(new DateTimePeriod(), 77, 76, 1, null, null);
 			_activity = new Activity("hej");
-			_skillIntevalDataList = new List<ISkillIntervalData> {_skillIntervalData};
+			_skillIntevalDataList = new List<ISkillIntervalData> { _skillIntervalData };
 			_skillIntervalDatasPerActivity.Add(_activity, _skillIntevalDataList);
 			_skillIntervalDatasPerActivityAndDate = new Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>>();
 			_skillIntervalDatasPerActivityAndDate.Add(DateOnly.MinValue, _skillIntervalDatasPerActivity);
@@ -52,17 +51,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldCreate()
 		{
+			var skillDays = Enumerable.Empty<ISkillDay>();
 			using (_mocks.Record())
 			{
-				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder))
-					  .Return(_skillIntervalDatasPerActivityAndDate);
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, skillDays))
+						.Return(_skillIntervalDatasPerActivityAndDate);
 				Expect.Call(_dayIntervalDataCalculator.Calculate(_skillIntervalDataListPerDate, DateOnly.MinValue))
-					  .Return(_skillIntervalDataPerTimeSpan);
+						.Return(_skillIntervalDataPerTimeSpan);
 			}
 
 			using (_mocks.Playback())
 			{
-				var result = _target.CreateFor(_teamBlockInfo, DateOnly.MinValue, _schedulingResultStateHolder, true);
+				var result = _target.CreateFor(_teamBlockInfo, DateOnly.MinValue, skillDays, true);
 				Assert.IsTrue(result[_activity].ContainsKey(new DateTimePeriod().StartDateTime));
 				Assert.AreEqual(_skillIntevalDataList[0], result[_activity][new DateTimePeriod().StartDateTime]);
 			}

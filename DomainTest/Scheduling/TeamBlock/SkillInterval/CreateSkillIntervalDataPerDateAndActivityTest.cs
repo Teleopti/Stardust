@@ -66,6 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 		[Test]
 		public void ShouldExecuteSuccessfullyWithMaxSeatSkill()
 		{
+			var skillDays = Enumerable.Empty<ISkillDay>();
 			IEnumerable<IPerson> personList = new List<IPerson> {_person1};
 			IEnumerable<ISkill> skillList = new List<ISkill> {_skill1};
 			var maxSeatSkillList  =new HashSet<ISkill>{_maxSeatSkill};
@@ -83,16 +84,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 					.Return(maxSeatSkillList);
 			
 				Expect.Call(_createSkillIntervalDatasPerActivtyForDate.CreateFor(new DateOnly(2014, 05, 28), skillList.ToList(),
-					_schedulingResultStateHolder)).Return(activityToIntervalList);			
+					skillDays)).Return(activityToIntervalList);			
 				Expect.Call(_intervalDataDivider.SplitSkillIntervalData(skillIntervalList, 15)).Return(spliedIntervalList);
 
 				Expect.Call(_createSkillIntervalDatasPerActivtyForDate.CreateFor(new DateOnly(2014, 05, 28).AddDays(1), skillList.ToList(),
-					_schedulingResultStateHolder)).Return(activityToIntervalList);
+					skillDays)).Return(activityToIntervalList);
 				Expect.Call(_intervalDataDivider.SplitSkillIntervalData(skillIntervalList, 15)).Return(spliedIntervalList);
 			}
 			using (_mock.Playback() )
 			{
-				var result =  _target.CreateFor(_teamBlockInfo, _schedulingResultStateHolder);
+				var result =  _target.CreateFor(_teamBlockInfo, skillDays);
 				Assert.AreEqual(2,result.Count );
 			}
 		}
@@ -100,6 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 		[Test]
 		public void ShouldExecuteSuccessfullyIfNoMaxSeatSkill()
 		{
+			var skillDays = Enumerable.Empty<ISkillDay>();
 			IEnumerable<IPerson> personList = new List<IPerson> { _person1 };
 			IEnumerable<ISkill> skillList = new List<ISkill> { _skill1 };
 			var activityToIntervalList = new Dictionary<IActivity, IList<ISkillIntervalData>>();
@@ -116,14 +118,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 
 
 				Expect.Call(_createSkillIntervalDatasPerActivtyForDate.CreateFor(new DateOnly(2014, 05, 28), skillList.ToList(),
-					_schedulingResultStateHolder)).Return(activityToIntervalList);
+					skillDays)).Return(activityToIntervalList);
 
 				Expect.Call(_createSkillIntervalDatasPerActivtyForDate.CreateFor(new DateOnly(2014, 05, 28).AddDays(1), skillList.ToList(),
-					_schedulingResultStateHolder)).Return(activityToIntervalList);
+					skillDays)).Return(activityToIntervalList);
 			}
 			using (_mock.Playback())
 			{
-				var result = _target.CreateFor(_teamBlockInfo, _schedulingResultStateHolder);
+				var result = _target.CreateFor(_teamBlockInfo, skillDays);
 				Assert.AreEqual(2, result.Count);
 			}
 		}
@@ -131,6 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 		[Test]
 		public void ShouldExecuteSuccessfullyIfNoSkillIntervalDataFound()
 		{
+			var skillDays = Enumerable.Empty<ISkillDay>();
 			IEnumerable<IPerson> personList = new List<IPerson> { _person1 };
 			IEnumerable<ISkill> skillList = new List<ISkill> { _skill1 };
 			var activityToIntervalList = new Dictionary<IActivity, IList<ISkillIntervalData>>();
@@ -147,14 +150,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 
 
 				Expect.Call(_createSkillIntervalDatasPerActivtyForDate.CreateFor(new DateOnly(2014, 05, 28), skillList.ToList(),
-					_schedulingResultStateHolder)).Return(activityToIntervalList);
+					skillDays)).Return(activityToIntervalList);
 
 				Expect.Call(_createSkillIntervalDatasPerActivtyForDate.CreateFor(new DateOnly(2014, 05, 28).AddDays(1), skillList.ToList(),
-					_schedulingResultStateHolder)).Return(activityToIntervalList);
+					skillDays)).Return(activityToIntervalList);
 			}
 			using (_mock.Playback())
 			{
-				var result = _target.CreateFor(_teamBlockInfo, _schedulingResultStateHolder);
+				var result = _target.CreateFor(_teamBlockInfo, skillDays);
 				Assert.AreEqual(2, result.Count);
 			}
 		}

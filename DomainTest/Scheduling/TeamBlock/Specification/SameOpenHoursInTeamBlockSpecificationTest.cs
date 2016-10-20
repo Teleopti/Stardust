@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -20,12 +21,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 		private IOpenHourForDate _openHourForDate;
 		private ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
 		private BlockInfo _blockInfo;
+		private IEnumerable<ISkillDay> _skillDays;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mock = new MockRepository();
+			_skillDays = Enumerable.Empty<ISkillDay>();
 			_scheduleResultStartHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
+			_scheduleResultStartHolder.Expect(x => x.AllSkillDays()).Return(_skillDays);
 			_openHourForDate = _mock.StrictMock<IOpenHourForDate>();
 			_createSkillIntervalDataPerDateAndActivity = _mock.StrictMock<ICreateSkillIntervalDataPerDateAndActivity>();
 			_teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
@@ -56,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 
 			using (_mock.Record())
 			{
-				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _scheduleResultStartHolder))
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _skillDays))
 					.Return(skillIntervalDataPerDateAndActivity);
 				//sample date
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 17), intervalDataForDate1))
@@ -94,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 
 			using (_mock.Record())
 			{
-				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _scheduleResultStartHolder))
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _skillDays))
 					.Return(skillIntervalDataPerDateAndActivity);
 				//sample date
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 17), intervalDataForDate1))
@@ -132,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 
 			using (_mock.Record())
 			{
-				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _scheduleResultStartHolder))
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _skillDays))
 					.Return(skillIntervalDataPerDateAndActivity);
 				//sample date
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 17), intervalDataForDate1))
@@ -170,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 
 			using (_mock.Record())
 			{
-				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _scheduleResultStartHolder))
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _skillDays))
 					.Return(skillIntervalDataPerDateAndActivity);
 				//sample date
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 17), intervalDataForDate1))

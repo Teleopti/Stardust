@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private PeriodValueCalculationParameters _periodValueCalculationParameters;
 		private IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
 		private IMaxSeatSkillAggregator _maxSeatSkillAggregator;
+		private IEnumerable<ISkillDay> _skillDays;
 
 		[SetUp]
 		public void Setup()
@@ -53,7 +54,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_teamBlockSchedulingCompletionChecker = _mocks.StrictMock<ITeamBlockSchedulingCompletionChecker>();
 			_proposedRestrictionAggregator = _mocks.StrictMock<IProposedRestrictionAggregator>();
 			_workShiftFilterService = _mocks.StrictMock<IWorkShiftFilterService>();
+			_skillDays = Enumerable.Empty<ISkillDay>();
 			_schedulingResultStateHolder = _mocks.Stub<ISchedulingResultStateHolder>();
+			_schedulingResultStateHolder.Expect(x => x.AllSkillDays()).Return(_skillDays).Repeat.Any();
 			_workShiftSelector = _mocks.StrictMock<IWorkShiftSelector>();
 			_teamScheduling = _mocks.StrictMock<ITeamScheduling>();
 			_activityIntervalDataCreator = _mocks.StrictMock<IActivityIntervalDataCreator>();
@@ -185,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 						.Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_dateOnly, _person2, _teamBlockInfo, restriction,
 																		 _schedulingOptions, finderResult, false)).Return(shifts);
-				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _schedulingResultStateHolder, false))
+				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _skillDays, false))
 					.Return(activityData).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _periodValueCalculationParameters, TimeZoneGuard.Instance.TimeZone, _schedulingOptions)).IgnoreArguments().Return(shifts[0]).Repeat.AtLeastOnce();
@@ -243,7 +246,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_dateOnly, _person2, _teamBlockInfo, restriction,
 															_schedulingOptions, finderResult, false)).Return(shifts);
-				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _schedulingResultStateHolder, false))
+				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _skillDays, false))
 					.Return(activityData).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _periodValueCalculationParameters, TimeZoneGuard.Instance.TimeZone, _schedulingOptions)).IgnoreArguments().Return(shifts[0]).Repeat.AtLeastOnce();
@@ -301,7 +304,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 						.Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_dateOnly, _person2, _teamBlockInfo, restriction,
 																		 _schedulingOptions, finderResult, false)).Return(shifts);
-				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _schedulingResultStateHolder, false))
+				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _skillDays, false))
 					.Return(activityData).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _periodValueCalculationParameters, TimeZoneGuard.Instance.TimeZone, _schedulingOptions)).IgnoreArguments().Return(shifts[0]).Repeat.AtLeastOnce();

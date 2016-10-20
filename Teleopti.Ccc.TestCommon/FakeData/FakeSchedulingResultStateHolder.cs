@@ -110,5 +110,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public void SubtractAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
 		{
 		}
+
+		public IEnumerable<ISkillDay> AllSkillDays()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

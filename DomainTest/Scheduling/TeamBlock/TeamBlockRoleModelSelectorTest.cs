@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -36,14 +37,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
 		private IMaxSeatSkillAggregator _maxSeatSkillAggregator;
 		private IFirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
+		private IEnumerable<ISkillDay> _skillDays;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
+			_skillDays = Enumerable.Empty<ISkillDay>();
 			_restrictionAggregator = _mocks.StrictMock<ITeamBlockRestrictionAggregator>();
 			_workShiftFilterService = _mocks.StrictMock<IWorkShiftFilterService>();
-			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
+			_schedulingResultStateHolder = _mocks.DynamicMock<ISchedulingResultStateHolder>();
+			_schedulingResultStateHolder.Expect(x => x.AllSkillDays()).Return(_skillDays).Repeat.Any();
 			_sameOpenHoursInTeamBlockSpecification = _mocks.StrictMock<ISameOpenHoursInTeamBlockSpecification>();
 			_workShiftSelector = _mocks.StrictMock<IWorkShiftSelector>();
 			_dateOnly = new DateOnly(2013, 4, 8);
@@ -134,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 																		new WorkShiftFinderResult(_person, _dateOnly), true, false))
 					  .Return(shifts);
-				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _schedulingResultStateHolder, true))
+				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _skillDays, true))
 					  .Return(activityData);
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData, _periodValueCalculationParameters
 																		  , TimeZoneGuard.Instance.TimeZone, _schedulingOptions)).IgnoreArguments()
@@ -172,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 																		new WorkShiftFinderResult(_person, _dateOnly), true, false))
 					  .Return(shifts);
-				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _schedulingResultStateHolder, true))
+				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _skillDays, true))
 					  .Return(activityData);
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData, _periodValueCalculationParameters
 																		  , TimeZoneGuard.Instance.TimeZone, _schedulingOptions)).IgnoreArguments()

@@ -78,8 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (shifts.IsNullOrEmpty())
 				return null;
 
-			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockInfo, datePointer,
-				_schedulingResultStateHolder, true);
+			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockInfo, datePointer, _schedulingResultStateHolder.AllSkillDays(), true);
 			var maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, datePointer, _schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone, true);
 			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(), new DateOnlyPeriod(datePointer, datePointer));
 			bool hasMaxSeatSkill = maxSeatSkills.Any();

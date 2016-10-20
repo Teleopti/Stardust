@@ -156,6 +156,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			addedAbsenceHeadCountDictionary.AddOrUpdate(budgetDay, 0, (b, m) => Math.Max(0, m - 1));
 		}
 
+		public IEnumerable<ISkillDay> AllSkillDays()
+		{
+			return _skillDays.Values.SelectMany(skillDays => skillDays);
+		}
+
 		public void ClearAbsenceDataDuringCurrentRequestHandlingCycle()
 		{
 			addedAbsenceMinutesDictionary.Clear();

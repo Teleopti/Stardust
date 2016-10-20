@@ -88,8 +88,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (shifts.IsNullOrEmpty())
 				return resultList;
 
-			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockSingleDayInfo, day,
-				schedulingResultStateHolder, false);
+			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockSingleDayInfo, day, schedulingResultStateHolder.AllSkillDays(), false);
 
 
 			IDictionary<DateTime, IntervalLevelMaxSeatInfo> maxSeatInfo =
@@ -183,8 +182,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (shifts.IsNullOrEmpty())
 				return null;
 
-			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockSingleDayInfo, day,
-				schedulingResultStateHolder, false);
+			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockSingleDayInfo, day, schedulingResultStateHolder.AllSkillDays(), false);
 
 			IDictionary<DateTime, IntervalLevelMaxSeatInfo> maxSeatInfo =
 				_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, day, schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone, true);

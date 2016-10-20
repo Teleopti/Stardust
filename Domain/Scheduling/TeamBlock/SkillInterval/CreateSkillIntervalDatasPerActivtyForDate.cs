@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 {
 	public interface ICreateSkillIntervalDatasPerActivtyForDate
 	{
-		Dictionary<IActivity, IList<ISkillIntervalData>> CreateFor(DateOnly dateOnly, List<ISkill> skills,
-																				   ISchedulingResultStateHolder
-																					   schedulingResultStateHolder);
+		Dictionary<IActivity, IList<ISkillIntervalData>> CreateFor(DateOnly dateOnly, List<ISkill> skills, IEnumerable<ISkillDay> allSkillDays);
 	}
 
 	public class CreateSkillIntervalDatasPerActivtyForDate : ICreateSkillIntervalDatasPerActivtyForDate
@@ -21,12 +20,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 			_resolutionProvider = resolutionProvider;
 		}
 
-		public Dictionary<IActivity, IList<ISkillIntervalData>> CreateFor(DateOnly dateOnly, List<ISkill> skills,
-		                                                                  ISchedulingResultStateHolder
-			                                                                  schedulingResultStateHolder)
+		public Dictionary<IActivity, IList<ISkillIntervalData>> CreateFor(DateOnly dateOnly, List<ISkill> skills, IEnumerable<ISkillDay> allSkillDays)
 		{
 			var minimumResolution = _resolutionProvider.MinimumResolution(skills);
-			var skilldaysForDate = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> {dateOnly});
+			var skilldaysForDate = allSkillDays.FilterOnDate(dateOnly);
 			var skillDaysForPersonalSkill = new List<ISkillDay>();
 			foreach (var skillDay in skilldaysForDate)
 			{

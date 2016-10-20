@@ -28,8 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
 
 		public override bool IsSatisfiedBy(ITeamBlockInfo teamBlockInfo)
 		{
-			var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo,
-				_schedulingResultStateHolder());
+			var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo, _schedulingResultStateHolder().AllSkillDays());
 
 			var dates = skillIntervalDataPerDateAndActivity.Keys;
 			TimePeriod? sampleOpenHour = null;
