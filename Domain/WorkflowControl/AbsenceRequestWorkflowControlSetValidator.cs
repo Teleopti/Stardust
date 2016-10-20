@@ -8,6 +8,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 			var person = personRequest.Person;
 			var workflowControlSet = person.WorkflowControlSet;
+			if (workflowControlSet == null)
+				return ValidatedRequest.Valid;
+
 			var absenceRequestOpenPeriod =
 				workflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest) personRequest.Request);
 			var absenceRequestProcess = absenceRequestOpenPeriod.AbsenceRequestProcess as DenyAbsenceRequest;
