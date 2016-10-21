@@ -277,7 +277,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			var personPeriod = person.Period(new DateOnly(restrictionDate.Date));
 			var analyticsPersonPeriod = _analyticsPersonPeriodRepository.PersonPeriod(personPeriod.Id.GetValueOrDefault());
 			if (analyticsPersonPeriod == null)
-				throw new PersonPeriodMissingInAnalyticsException();
+				throw new PersonPeriodMissingInAnalyticsException(personPeriod.Id.GetValueOrDefault());
 			return analyticsPersonPeriod;
 		}
 	}

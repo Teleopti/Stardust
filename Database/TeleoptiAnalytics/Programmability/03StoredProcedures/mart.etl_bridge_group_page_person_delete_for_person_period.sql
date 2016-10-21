@@ -6,20 +6,18 @@ GO
 -- Description:	Delete all group mappings for a specific person_period
 -- =============================================
 CREATE PROCEDURE [mart].[etl_bridge_group_page_person_delete_for_person_period]
-@person_period_code uniqueidentifier,
+@person_id int,
 @group_codes nvarchar(max),
 @business_unit_code uniqueidentifier
 AS
 BEGIN
 
 	delete bgpp from [mart].[bridge_group_page_person] bgpp
-	join (select person_id from [mart].[dim_person] 
-			where person_period_code = @person_period_code AND business_unit_code=@business_unit_code) person
-		on bgpp.person_id = person.person_id
 	join (select group_page_id from mart.SplitStringGuid(@group_codes) 
 			join [mart].dim_group_page gp 
 				on gp.group_code = id AND gp.business_unit_code = @business_unit_code) group_page
 		on group_page.group_page_id = bgpp.group_page_id
+	where bgpp.person_id=@person_id
 END
 
 GO

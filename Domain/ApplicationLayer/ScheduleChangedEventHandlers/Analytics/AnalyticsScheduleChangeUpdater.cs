@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				if (personPart.PersonId == -1)
 				{
 					logger.Warn($"PersonPeriodId {scheduleDay.PersonPeriodId} could not be found. Schedule changes for agent {@event.PersonId} is not saved into Analytics database.");
-					throw new PersonPeriodMissingInAnalyticsException();
+					throw new PersonPeriodMissingInAnalyticsException(scheduleDay.PersonPeriodId);
 				}
 
 				_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId, scenarioId);

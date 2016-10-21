@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 				throw new ApplicationException("Person period was not found for person in application");
 			var analyticsPersonPeriod = _analyticsPersonPeriodRepository.PersonPeriod(personPeriod.Id.GetValueOrDefault());
 			if (analyticsPersonPeriod == null)
-				throw new PersonPeriodMissingInAnalyticsException();
+				throw new PersonPeriodMissingInAnalyticsException(personPeriod.Id.GetValueOrDefault());
 			return analyticsPersonPeriod;
 		}
 

@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Exceptions;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
@@ -22,13 +23,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private readonly IAnalyticsBridgeGroupPagePersonRepository _analyticsBridgeGroupPagePersonRepository;
 		private readonly IAnalyticsGroupPageRepository _analyticsGroupPageRepository;
 		private readonly IGroupPageRepository _groupPageRepository;
+	    private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
 
-		public AnalyticsPersonGroupsHandler(IPersonRepository personRepository, IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository, IAnalyticsGroupPageRepository analyticsGroupPageRepository, IGroupPageRepository groupPageRepository)
+		public AnalyticsPersonGroupsHandler(IPersonRepository personRepository, IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository, IAnalyticsGroupPageRepository analyticsGroupPageRepository, IGroupPageRepository groupPageRepository, IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository)
 		{
 			_personRepository = personRepository;
 			_analyticsBridgeGroupPagePersonRepository = analyticsBridgeGroupPagePersonRepository;
 			_analyticsGroupPageRepository = analyticsGroupPageRepository;
 			_groupPageRepository = groupPageRepository;
+			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
 		}
 
 		[UnitOfWork, AnalyticsUnitOfWork]
@@ -39,8 +42,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			foreach (var personId in @event.PersonIdCollection)
 			{
 				var person = _personRepository.Get(personId) ?? new Person();
+				var analyticsPersonPeriods = _analyticsPersonPeriodRepository.GetPersonPeriods(personId);
 				foreach (var personPeriod in person.PersonPeriodCollection)
 				{
+					var analyticsPersonPeriod =
+						analyticsPersonPeriods.FirstOrDefault(x => x.PersonPeriodCode == personPeriod.Id.GetValueOrDefault() && x.BusinessUnitCode == @event.LogOnBusinessUnitId);
+					if (analyticsPersonPeriod == null)
+						throw new PersonPeriodMissingInAnalyticsException(personPeriod.Id.GetValueOrDefault());
 					var groupPages = _analyticsGroupPageRepository.GetBuildInGroupPageBase(@event.LogOnBusinessUnitId).ToList();
 					var groupIds = new List<analyticsGroupForPerson>();
 
@@ -52,14 +60,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					handleNotes(person.Note, groupIds, groupPages);
 					handleCustomGroups(personId, groupIds);
 
-					var deletedGroupIds = updatePersonGroups(personPeriod.Id.GetValueOrDefault(), groupIds, @event.LogOnBusinessUnitId);
+					var deletedGroupIds = updatePersonGroups(analyticsPersonPeriod.PersonId, groupIds, @event.LogOnBusinessUnitId);
 
 					clearEmptyGroups(deletedGroupIds, @event.LogOnBusinessUnitId);
 				}
 				// Remove any group pages associated with deleted person periods or deleted persons
-				var personPeriodIds = person.PersonPeriodCollection.Select(p => p.Id.GetValueOrDefault()).ToList();
-				logger.Debug($"Deleting bridge group page person {personId} excluding person periods {string.Join(",", personPeriodIds)}");
-				_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePersonExcludingPersonPeriods(personId, personPeriodIds, @event.LogOnBusinessUnitId);
+				var analyticsPersonPeriodIds = analyticsPersonPeriods.Select(x => x.PersonId).ToList();
+				logger.Debug($"Deleting bridge group page person {personId} excluding person periods {string.Join(",", analyticsPersonPeriodIds)}");
+				_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePersonExcludingPersonPeriods(personId, analyticsPersonPeriodIds, @event.LogOnBusinessUnitId);
 			}
 		}
 
@@ -82,15 +90,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		}
 
 		// Add/Remove groups for a person period
-		private IEnumerable<Guid> updatePersonGroups(Guid personPeriodId, ICollection<analyticsGroupForPerson> groups, Guid businessUnitId)
+		private IEnumerable<Guid> updatePersonGroups(int personId, ICollection<analyticsGroupForPerson> groups, Guid businessUnitId)
 		{
-			var currentGroups = _analyticsBridgeGroupPagePersonRepository.GetGroupPagesForPersonPeriod(personPeriodId, businessUnitId).ToList();
+			var currentGroups = _analyticsBridgeGroupPagePersonRepository.GetGroupPagesForPersonPeriod(personId, businessUnitId).ToList();
 
 			var toBeDeleted = currentGroups.Where(g => groups.All(t => t.GroupCode != g)).ToList();
 			var toBeAdded = groups.Where(t => currentGroups.All(g => g != t.GroupCode)).ToList();
 			
-			_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, toBeDeleted, businessUnitId);
-			logger.Debug($"Deleting groups {string.Join(",", toBeDeleted)} for period {personPeriodId}");
+			_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePersonForPersonPeriod(personId, toBeDeleted, businessUnitId);
+			logger.Debug($"Deleting groups {string.Join(",", toBeDeleted)} for period {personId}");
 			foreach (var groupInfo in toBeAdded)
 			{
 				logger.Debug($"Add group page if not existing for {groupInfo.GroupPageCode}, {groupInfo.GroupPageName}, {groupInfo.GroupCode}, {groupInfo.GroupCode}");
@@ -105,8 +113,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					GroupPageNameResourceKey = groupInfo.GroupPageNameResourceKey
 				});
 			}
-			logger.Debug($"Adding groups {string.Join(",", toBeAdded)} for period {personPeriodId}");
-			_analyticsBridgeGroupPagePersonRepository.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, toBeAdded.Select(x => x.GroupCode).ToList(), businessUnitId);
+			logger.Debug($"Adding groups {string.Join(",", toBeAdded)} for period {personId}");
+			_analyticsBridgeGroupPagePersonRepository.AddBridgeGroupPagePersonForPersonPeriod(personId, toBeAdded.Select(x => x.GroupCode).ToList(), businessUnitId);
 			return toBeDeleted;
 		}
 
