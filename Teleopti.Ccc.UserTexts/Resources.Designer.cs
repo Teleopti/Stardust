@@ -1745,6 +1745,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Historical Adherence.
+        /// </summary>
+        public static string AgentHistoricalAdherence {
+            get {
+                return ResourceManager.GetString("AgentHistoricalAdherence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Info.
         /// </summary>
         public static string AgentInfo {

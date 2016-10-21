@@ -15042,4 +15042,8 @@ These options are activated:
     <value>Recipient has no shift trade permission</value>
     <comment>Error message on deny shift trade request</comment>
   </data>
+  <data name="AgentHistoricalAdherence" xml:space="preserve">
+    <value>Historical Adherence</value>
+    <comment>Historical Adherence</comment>
+  </data>
 </root>
