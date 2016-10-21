@@ -8,7 +8,6 @@ using NodeTest.Fakes;
 using NUnit.Framework;
 using Stardust.Node;
 using Stardust.Node.Timers;
-using Stardust.Node.Workers;
 
 namespace NodeTest.Timers
 {
@@ -22,6 +21,12 @@ namespace NodeTest.Timers
 		public void TestFixtureSetup()
 		{
 			_nodeConfiguration = new NodeConfiguration();
+			_nodeConfiguration.SetUp(
+			new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
+			Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
+			14100,
+			"TestNode",
+			60);
 			_httpSenderFake = new FakeHttpSender();
 		}
 

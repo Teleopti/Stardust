@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
@@ -8,29 +7,26 @@ namespace Stardust.Node
 {
 	public class NodeConfiguration
 	{
-		public NodeConfiguration()
+		public void SetUp(Uri managerLocation, Assembly handlerAssembly, int port, string nodeName, int pingToManagerSeconds)
 		{
-			BaseAddress = new Uri(CreateBaseAddress());
-			ManagerLocation = new Uri(ConfigurationManager.AppSettings["ManagerLocation"]);
-			HandlerAssembly = Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]);
-			NodeName = ConfigurationManager.AppSettings["NodeName"];
-			PingToManagerSeconds = int.Parse(ConfigurationManager.AppSettings["PingToManagerSeconds"]);
-			
+			BaseAddress = CreateNodeAddress(port);
+			ManagerLocation = managerLocation;
+			HandlerAssembly = handlerAssembly;
+			NodeName = nodeName;
+			PingToManagerSeconds = pingToManagerSeconds;
+
 			ValidateParameters();
 		}
-
-		public double PingToManagerSeconds { get; private set; }
+		
 		public Uri BaseAddress { get; private set; }
 		public Uri ManagerLocation { get; private set; }
 		public string NodeName { get; private set; }
 		public Assembly HandlerAssembly { get; private set; }
+		public double PingToManagerSeconds { get; private set; }
 
 		private void ValidateParameters()
 		{
-			if (BaseAddress == null)
-			{
-				throw new ArgumentNullException("baseAddress");
-			}
+
 			if (ManagerLocation == null)
 			{
 				throw new ArgumentNullException("managerLocation");
@@ -38,10 +34,6 @@ namespace Stardust.Node
 			if (HandlerAssembly == null)
 			{
 				throw new ArgumentNullException("handlerAssembly");
-			}
-			if (string.IsNullOrEmpty(NodeName))
-			{
-				throw new ArgumentNullException("nodeName");
 			}
 			if (PingToManagerSeconds <= 0)
 			{
@@ -64,14 +56,14 @@ namespace Stardust.Node
 		}
 
 
-		private string CreateBaseAddress()
+		private Uri CreateNodeAddress(int port)
 		{
-			string baseAddress = ConfigurationManager.AppSettings["BaseAddress"];
-			if (string.IsNullOrEmpty(baseAddress))
+			if (port <= 0)
 			{
-				baseAddress = "http://" + GetIPAddress() + ":" + ConfigurationManager.AppSettings["Port"] + "/";
+				throw new ArgumentNullException("port");
 			}
-			return baseAddress;
+			return new Uri("http://" + GetIPAddress() + ":" + port + "/");
 		}
+
 	}
 }

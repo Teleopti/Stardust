@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Reflection;
 using NUnit.Framework;
 using Stardust.Node;
@@ -14,6 +15,14 @@ namespace NodeTest
 		public void TestFixtureSetUp()
 		{
 			NodeConfiguration = new NodeConfiguration();
+
+			NodeConfiguration.SetUp(
+				new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
+				Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
+				14100,
+				"TestNode",
+				60);
+				
 
 			UriToTest = NodeConfiguration.ManagerLocation;
 

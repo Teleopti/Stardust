@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Autofac;
@@ -10,6 +11,7 @@ using log4net.Config;
 using NodeTest.JobHandlers;
 using Stardust.Node;
 using Stardust.Node.Extensions;
+using Stardust.Node.Interfaces;
 
 namespace NodeConsoleHost
 {
@@ -72,13 +74,20 @@ namespace NodeConsoleHost
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
 			var nodeConfig = new NodeConfiguration();
+			nodeConfig.SetUp(
+				new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
+				Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
+				int.Parse(ConfigurationManager.AppSettings["Port"]),
+				ConfigurationManager.AppSettings["NodeName"],
+				int.Parse(ConfigurationManager.AppSettings["PingToManagerSeconds"])
+				);
 
 			WhoAmI = "[NODE CONSOLE HOST ( " + nodeConfig.NodeName + ", " + nodeConfig.BaseAddress + " ), " + Environment.MachineName.ToUpper() + "]";
 			Logger.InfoWithLineNumber(WhoAmI + " : started.");
 
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new WorkerModule());
-			Container = builder.Build();
+			Container = builder.Build();	
 
 			NodeStarter = new NodeStarter();
 
