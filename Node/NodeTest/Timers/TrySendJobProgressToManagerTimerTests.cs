@@ -20,13 +20,12 @@ namespace NodeTest.Timers
 		[TestFixtureSetUp]
 		public void TestFixtureSetup()
 		{
-			_nodeConfiguration = new NodeConfiguration();
-			_nodeConfiguration.SetUp(
-			new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-			Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
-			14100,
-			"TestNode",
-			60);
+			_nodeConfiguration = new NodeConfiguration(
+				new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
+				Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
+				14100,
+				"TestNode",
+				60);
 			_httpSenderFake = new FakeHttpSender();
 		}
 

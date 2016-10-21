@@ -17,13 +17,12 @@ namespace NodeTest
 		[SetUp]
 		public void SetUp()
 		{
-			var nodeConfiguration = new NodeConfiguration();
-			nodeConfiguration.SetUp(
-			new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-			Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
-			14100,
-			"TestNode",
-			60);
+			var nodeConfiguration = new NodeConfiguration(
+				new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
+				Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
+				14100,
+				"TestNode",
+				60);
 
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new NodeModule(nodeConfiguration));

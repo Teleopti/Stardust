@@ -14,15 +14,13 @@ namespace NodeTest
 		[TestFixtureSetUp]
 		public void TestFixtureSetUp()
 		{
-			NodeConfiguration = new NodeConfiguration();
-
-			NodeConfiguration.SetUp(
+			NodeConfiguration = new NodeConfiguration(
 				new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
 				Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
 				14100,
 				"TestNode",
 				60);
-				
+
 
 			UriToTest = NodeConfiguration.ManagerLocation;
 

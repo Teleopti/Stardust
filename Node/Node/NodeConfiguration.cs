@@ -7,7 +7,7 @@ namespace Stardust.Node
 {
 	public class NodeConfiguration
 	{
-		public void SetUp(Uri managerLocation, Assembly handlerAssembly, int port, string nodeName, int pingToManagerSeconds)
+		public NodeConfiguration(Uri managerLocation, Assembly handlerAssembly, int port, string nodeName, int pingToManagerSeconds)
 		{
 			BaseAddress = CreateNodeAddress(port);
 			ManagerLocation = managerLocation;

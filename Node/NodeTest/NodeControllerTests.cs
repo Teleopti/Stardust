@@ -62,8 +62,7 @@ namespace NodeTest
 		[TestFixtureSetUp]
 		public void TestFixtureSetUp()
 		{
-			_nodeConfigurationFake = new NodeConfiguration();
-			_nodeConfigurationFake.SetUp(
+			_nodeConfigurationFake = new NodeConfiguration(
 				new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
 				Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
 				14100,

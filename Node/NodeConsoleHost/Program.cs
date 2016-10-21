@@ -73,8 +73,7 @@ namespace NodeConsoleHost
 			AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-			var nodeConfig = new NodeConfiguration();
-			nodeConfig.SetUp(
+			var nodeConfig = new NodeConfiguration(
 				new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
 				Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
 				int.Parse(ConfigurationManager.AppSettings["Port"]),
