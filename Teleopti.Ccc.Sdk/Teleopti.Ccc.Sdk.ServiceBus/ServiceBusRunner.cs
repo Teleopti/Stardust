@@ -2,6 +2,7 @@ using System;
 using System.Configuration;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	[Serializable]
 	public class ServiceBusRunner
 	{
+		private readonly IConfigReader _configReader;
 		private readonly Action<int> _requestAdditionalTime;
 
 		[NonSerialized]
@@ -46,9 +48,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private IContainer _sharedContainer;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(ServiceBusRunner));
 
-		public ServiceBusRunner(Action<int> requestAdditionalTime)
+		public ServiceBusRunner(Action<int> requestAdditionalTime )
 		{
 			_requestAdditionalTime = requestAdditionalTime;
+			_configReader = new ConfigReader();
 		}
 
 		public void Start()
@@ -187,7 +190,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		private void startNode()
 		{
-			var nodeConfig = new NodeConfiguration();
+			var nodeConfig = new NodeConfiguration(
+				new Uri(_configReader.AppConfig("ManagerLocation")),
+				Assembly.Load(_configReader.ReadValue("handlerAssembly", "Teleopti.Ccc.Domain")),
+				_configReader.ReadValue("port", 14100),
+				_configReader.ReadValue("nodeName", "NodeName"),
+				_configReader.ReadValue("pingToManagerSeconds", 30)
+				);
 
 			var iocArgs = new IocArgs(new ConfigReader());
 			var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));

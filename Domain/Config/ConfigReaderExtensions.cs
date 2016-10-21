@@ -42,5 +42,11 @@ namespace Teleopti.Ccc.Domain.Config
 			return double.TryParse(value, out result) ? result : @default;
 		}
 
+		public static string ReadValue(this IConfigReader reader, string name, string @default)
+		{
+			var value = reader.AppConfig(name);
+			return string.IsNullOrEmpty(value) ? @default : value;
+		}
+
 	}
 }
