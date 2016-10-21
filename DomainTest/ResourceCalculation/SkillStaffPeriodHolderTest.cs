@@ -591,11 +591,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod dateTimePeriod2 = new DateTimePeriod(dateTime.AddMinutes(15), dateTime.AddMinutes(30));
             DateTimePeriod dateTimePeriod3 = new DateTimePeriod(dateTime.AddMinutes(15), dateTime.AddMinutes(30));
             DateTimePeriod dateTimePeriod4 = new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(45));
+			IActivity activity1 = new Activity("one");
+			ISkill skill1 = SkillFactory.CreateSkill("skill1");
+            ISkill skill2 = SkillFactory.CreateSkill("skill2");
+	        skill1.Activity = activity1;
+			skill2.Activity = activity1;
 
-            ISkill skill1 = mocks.StrictMock<ISkill>();
-            ISkill skill2 = mocks.StrictMock<ISkill>();
-
-            IList<ISkill> skills = new List<ISkill> {skill1, skill2};
+			IList<ISkill> skills = new List<ISkill> {skill1, skill2};
 
             IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>>
                                                                             {
@@ -603,7 +605,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                                                 {skill2, skillDays2}
                                                                             };
 
-            IActivity activity1 = new Activity("one");
+            
 
             ISkillStaff payload1 = mocks.StrictMock<ISkillStaff>();
             ISkillStaff payload2 = mocks.StrictMock<ISkillStaff>();
@@ -647,8 +649,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(payload3.CalculatedResource).Return(2);
                 Expect.Call(payload4.CalculatedResource).Return(2);
 
-                Expect.Call(skill1.Activity).Return(activity1).Repeat.AtLeastOnce();
-                Expect.Call(skill2.Activity).Return(activity1).Repeat.AtLeastOnce();
                 Expect.Call(period1.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads(true)).Return(0).Repeat.AtLeastOnce();
                 Expect.Call(period2.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads(true)).Return(0).Repeat.AtLeastOnce();
                 Expect.Call(period3.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads(true)).Return(0).Repeat.AtLeastOnce();
@@ -657,11 +657,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(period2.PeriodDistribution).Return(periodDistribution);
                 Expect.Call(period3.PeriodDistribution).Return(periodDistribution);
                 Expect.Call(period4.PeriodDistribution).Return(periodDistribution);
-                
-                //Expect.Call(skill1.OverstaffingFactor).Return(new Percent(.5)).Repeat.AtLeastOnce();
-                //Expect.Call(skill1.PriorityValue).Return(1).Repeat.AtLeastOnce();
-                //Expect.Call(skill2.OverstaffingFactor).Return(new Percent(.5)).Repeat.AtLeastOnce();
-                //Expect.Call(skill2.PriorityValue).Return(1).Repeat.AtLeastOnce();
             }
 
             using (mocks.Playback())
