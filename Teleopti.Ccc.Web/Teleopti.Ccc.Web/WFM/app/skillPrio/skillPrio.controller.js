@@ -5,8 +5,8 @@
 		.module('wfm.skillPrio')
 		.controller('skillPrioController', skillPrioController);
 
-	skillPrioController.$inject = ['$stateParams', 'Toggle', '$filter', 'NoticeService', '$translate', '$q', 'skillPrioListService'];
-	function skillPrioController($stateParams, toggleService, $filter, NoticeService, $translate, $q, skillPrioListService) {
+	skillPrioController.$inject = ['Toggle', '$filter', 'NoticeService', '$translate', '$q', 'skillPrioAggregator'];
+	function skillPrioController(toggleService, $filter, NoticeService, $translate, $q, skillPrioAggregator) {
 		var vm = this;
 		vm.selectedActivity = '';
 		vm.sortedSkills = [];
@@ -23,21 +23,16 @@
 		////////////////
 
 		function getActivitys() {
-			return skillPrioListService.getActivitys().then(function(res){
-				vm.activitys = res;
-			});
+				return skillPrioAggregator.getActivitys();
 		}
 
 		function getSkills(activity) {
-			if(!activity){
+			if (!activity) {
 				vm.skills = [];
 			}
 			vm.selectedActivity = activity;
-			return skillPrioListService.getSkillsForActivity(activity).then(function(res){
-				vm.skills = res;
-				console.log(vm.skills);
-			});
-			
+			vm.skills = skillPrioAggregator.getSkillsForActivity(activity);
+
 		}
 
 		function removeFromUnsorted(skill) {
@@ -129,6 +124,7 @@
 		}
 
 		function save() {
+			//skillPrioListService.save
 			NoticeService.success('All changes are saved', 5000, true);
 		}
 

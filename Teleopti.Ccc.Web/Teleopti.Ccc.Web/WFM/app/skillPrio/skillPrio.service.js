@@ -1,34 +1,53 @@
-﻿(function () {
+﻿// (function () {
+//     'use strict';
+
+//     angular
+//         .module('wfm.skillPrio')
+//         .service('skillPrioService', skillPrioService);
+
+//     skillPrioService.$inject = ['$resource', '$q'];
+//     function skillPrioService($resource, $q) {
+//         this.getAdminSkillRoutingActivity = getAdminSkillRoutingActivity;
+
+//         ///////////////////
+//         ////should be factory!/////
+//         //////////////////
+
+//         function getAdminSkillRoutingActivity() {
+//             return $resource('../api/ResourcePlanner/AdminSkillRoutingActivity', {}, {
+//                 query: {
+//                     method: 'GET',
+//                     isArray: true
+//                 }
+//             }).query().$promise;
+//         }
+
+
+//     }
+// })();
+
+(function () {
     'use strict';
 
     angular
         .module('wfm.skillPrio')
-        .service('skillPrioService', skillPrioService);
+        .factory('skillPrioService', skillPrioService);
 
-    skillPrioService.$inject = ['$resource', '$q'];
-    function skillPrioService($resource, $q) {
-        this.getAdminSkillRoutingActivity = getAdminSkillRoutingActivity;
-        this.getAdminSkillRoutingPriority = getAdminSkillRoutingPriority;
-
+    skillPrioService.$inject = ['$resource'];
+    function skillPrioService($resource) {
+        var adminSkillRoutingActivity = $resource('../api/ResourcePlanner/AdminSkillRoutingActivity');
+        var adminSkillRoutingPriority = $resource('../api/ResourcePlanner/AdminSkillRoutingPriority');
+        
         ////////////////
 
-        function getAdminSkillRoutingActivity() {
-            return $resource('../api/ResourcePlanner/AdminSkillRoutingActivity', {}, {
-                query: {
-                    method: 'GET',
-                    isArray: true
-                }
-            }).query().$promise;
-        }
+        var service = {
+            getAdminSkillRoutingActivity: adminSkillRoutingActivity,
+            getAdminSkillRoutingPriority: adminSkillRoutingPriority
+        };
 
-        function getAdminSkillRoutingPriority() {
-            return $resource('../api/ResourcePlanner/AdminSkillRoutingPriority', {}, {
-                query: {
-                    method: 'GET',
-                    isArray: true
-                }
-            }).query().$promise;
-        }
+        return service;
+
+
 
     }
 })();
