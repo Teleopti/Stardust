@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Sql;
@@ -11,6 +12,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 	{
 		private readonly TimeZoneInfo _timeZone;
 		private readonly int _id;
+		public static readonly IList<string> TimeZones = new List<string>();
 
 		public SpecificTimeZone(TimeZoneInfo timeZone, int id=123)
 		{
@@ -25,18 +27,22 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 
 		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)
 		{
-			using (var table = dim_time_zone.CreateTable())
+			if (!TimeZones.Contains(_timeZone.Id) && _timeZone.Id!="UTC" && _timeZone.Id != "W. Europe Standard Time")
 			{
-				table.AddTimeZone(
-					_id,
-					_timeZone.Id,
-					_timeZone.DisplayName,
-					false,
-					(int)_timeZone.BaseUtcOffset.TotalMinutes,
-					0,
-					-1
-					);
-				Bulk.Insert(connection, table);
+				using (var table = dim_time_zone.CreateTable())
+				{
+					table.AddTimeZone(
+						_id,
+						_timeZone.Id,
+						_timeZone.DisplayName,
+						false,
+						(int)_timeZone.BaseUtcOffset.TotalMinutes,
+						0,
+						-1
+						);
+					Bulk.Insert(connection, table);
+				}
+				TimeZones.Add(_timeZone.Id);
 			}
 		}
 	}

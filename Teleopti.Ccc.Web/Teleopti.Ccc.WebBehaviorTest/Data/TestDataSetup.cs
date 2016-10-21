@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Domain;
@@ -41,7 +42,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			DataSourceHelper.ClearAnalyticsData();
 			LocalSystem.DefaultAnalyticsDataCreator.Create();
-			TestCommon.TestData.Analytics.BusinessUnit.IdCounter = 0;
+			BusinessUnit.IdCounter = 0;
+			SpecificTimeZone.TimeZones.Clear();
 		}
 
 		public static void RestoreCcc7Data()
