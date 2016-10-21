@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				foreach (var personPeriod in person.PersonPeriodCollection)
 				{
 					var analyticsPersonPeriod =
-						analyticsPersonPeriods.FirstOrDefault(x => x.PersonPeriodCode == personPeriod.Id.GetValueOrDefault() && x.BusinessUnitCode == @event.LogOnBusinessUnitId);
+						analyticsPersonPeriods.FirstOrDefault(x => x.PersonPeriodCode == personPeriod.Id.GetValueOrDefault() && x.BusinessUnitCode == personPeriod.Team.BusinessUnitExplicit.Id.GetValueOrDefault());
 					if (analyticsPersonPeriod == null)
 						throw new PersonPeriodMissingInAnalyticsException(personPeriod.Id.GetValueOrDefault());
 					var groupPages = _analyticsGroupPageRepository.GetBuildInGroupPageBase(@event.LogOnBusinessUnitId).ToList();

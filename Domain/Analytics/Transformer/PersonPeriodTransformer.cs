@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		public AnalyticsPersonPeriod Transform(IPerson person, IPersonPeriod personPeriod, out List<AnalyticsSkill> analyticsSkills)
 		{
 			var businessUnitId =
-				MapBusinessId(person.PersonPeriodCollection.First().Team.BusinessUnitExplicit.Id.GetValueOrDefault());
+				MapBusinessId(personPeriod.Team.BusinessUnitExplicit.Id.GetValueOrDefault());
 			var siteId = MapSiteId(businessUnitId, personPeriod.Team.Site.Id.GetValueOrDefault(),
 				personPeriod.Team.Site.Description.Name);
 			var teamId = MapTeamId(personPeriod.Team.Id.GetValueOrDefault(), siteId,
