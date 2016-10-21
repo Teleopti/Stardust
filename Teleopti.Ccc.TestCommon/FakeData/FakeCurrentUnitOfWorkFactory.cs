@@ -6,7 +6,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	{
 		public IUnitOfWorkFactory Current()
 		{
-			return new FakeUnitOfWorkFactory();
+			return FakeUnitOfWorkFactory;
 		}
+
+		 public IUnitOfWorkFactory FakeUnitOfWorkFactory = new FakeUnitOfWorkFactory();
 	}
 }
