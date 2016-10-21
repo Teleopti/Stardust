@@ -102,7 +102,8 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 				UserTexts.Resources.StatusColon,
 				UserTexts.Resources.Sent,
 				UserTexts.Resources.Pending,
-				UserTexts.Resources.InsufficientPermission
+				UserTexts.Resources.InsufficientPermission,
+				UserTexts.Resources.TooManySelectedAgents
 
 			}, Formatting.Indented);
 

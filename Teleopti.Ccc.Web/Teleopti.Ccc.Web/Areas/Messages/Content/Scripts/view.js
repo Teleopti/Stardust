@@ -44,7 +44,12 @@ define([
 			if (data.status === 403) {
 				vm.ErrorMessage(resources.InsufficientPermission);
 				vm.DisplayContent(false);
-			} else {
+			}
+			else if (data.status === 404) {
+				vm.ErrorMessage(resources.TooManySelectedAgents);
+				vm.DisplayContent(false);
+			}
+			else {
 				vm.ErrorMessage(data.statusText);
 				vm.DisplayContent(true);
 			}

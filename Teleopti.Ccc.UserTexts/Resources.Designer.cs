@@ -31051,6 +31051,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have selected too many agents. Please select less than 55..
+        /// </summary>
+        public static string TooManySelectedAgents {
+            get {
+                return ResourceManager.GetString("TooManySelectedAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Top.
         /// </summary>
         public static string Top {

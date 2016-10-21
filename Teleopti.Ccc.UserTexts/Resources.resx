@@ -15046,4 +15046,8 @@ These options are activated:
     <value>Historical Adherence</value>
     <comment>Historical Adherence</comment>
   </data>
+  <data name="TooManySelectedAgents" xml:space="preserve">
+    <value>You have selected too many agents. Please select less than 55.</value>
+    <comment>Notify agents friendly message when selected agents are too many.</comment>
+  </data>
 </root>
