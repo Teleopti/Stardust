@@ -13,6 +13,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	public class SkillIntervalDataSkillFactorApplier : ISkillIntervalDataSkillFactorApplier
 	{
+		private readonly ISkillPriorityProvider _skillPriorityProvider;
+
+		public SkillIntervalDataSkillFactorApplier(ISkillPriorityProvider skillPriorityProvider)
+		{
+			_skillPriorityProvider = skillPriorityProvider;
+		}
+
 		//PBI 1156 contains an excel-sheet on how to calculate
 		public ISkillIntervalData ApplyFactors(ISkillIntervalData skillIntervalData, ISkill skill)
 		{
@@ -24,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				                                 intervalLength;
 				
 				double tweakedDemand = getTweakedCurrentDemand(originalDemandsInMinutes, assignedResourcesInMinutes,
-				                                                skill.PriorityValue, skill.OverstaffingFactor);
+																_skillPriorityProvider.GetPriorityValue(skill), _skillPriorityProvider.GetOverstaffingFactor(skill));
 				//Change sign because of demand is positive in teamblock
 				double currentDemand = tweakedDemand/intervalLength*-1;
 

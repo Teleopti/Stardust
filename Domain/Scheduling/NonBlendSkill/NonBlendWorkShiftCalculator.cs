@@ -16,11 +16,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
 	{
 	    private readonly INonBlendSkillImpactOnPeriodForProjection _nonBlendSkillImpactOnPeriodForProjection;
 		private readonly IWorkShiftCalculator _workShiftCalculator;
+		private readonly ISkillPriorityProvider _skillPriorityProvider;
 
-		public NonBlendWorkShiftCalculator(INonBlendSkillImpactOnPeriodForProjection nonBlendSkillImpactOnPeriodForProjection, IWorkShiftCalculator workShiftCalculator)
+		public NonBlendWorkShiftCalculator(INonBlendSkillImpactOnPeriodForProjection nonBlendSkillImpactOnPeriodForProjection, IWorkShiftCalculator workShiftCalculator, ISkillPriorityProvider skillPriorityProvider)
         {
         	_nonBlendSkillImpactOnPeriodForProjection = nonBlendSkillImpactOnPeriodForProjection;
 			_workShiftCalculator = workShiftCalculator;
+			_skillPriorityProvider = skillPriorityProvider;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -68,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
 																									minimumPersons,
 																									maximumPersons,
 																									absoluteDifferenceScheduledHeadsAndMinMaxHeads,
-																									skillStaffPeriod.PeriodDistribution, skill.OverstaffingFactor, skill.PriorityValue);
+																									skillStaffPeriod.PeriodDistribution, _skillPriorityProvider.GetOverstaffingFactor(skill), _skillPriorityProvider.GetPriorityValue(skill));
 
 					var intervalLength = (int)skillStaffPeriod.Period.ElapsedTime().TotalMinutes;
 					var minutesImpact = (int)(intervalLength * thisImpact);

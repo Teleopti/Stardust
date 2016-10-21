@@ -29,19 +29,22 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
     	private bool _hasHelp = true;
 
         private  ChartSettings _chartSettings = new ChartSettings();
-        private readonly ChartSettings _defaultChartSettings = new ChartSettings();
+	    private readonly ISkillPriorityProvider _skillPriorityProvider;
+	    private readonly ChartSettings _defaultChartSettings = new ChartSettings();
 
 
-        public SkillIntradayGridPresenter(TeleoptiGridControl gridControl, ChartSettings chartSettings)
+        public SkillIntradayGridPresenter(TeleoptiGridControl gridControl, ChartSettings chartSettings, ISkillPriorityProvider skillPriorityProvider)
         {
             _gridControl = gridControl;
             _chartSettings = chartSettings;
+	        _skillPriorityProvider = skillPriorityProvider;
         }
 
-        public SkillIntradayGridPresenter(TeleoptiGridControl gridControl, string settingName)
+        public SkillIntradayGridPresenter(TeleoptiGridControl gridControl, string settingName, ISkillPriorityProvider skillPriorityProvider)
         {
             _gridControl = gridControl;
-            setupChartDefault();
+	        _skillPriorityProvider = skillPriorityProvider;
+	        setupChartDefault();
 
             //temp
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -213,7 +216,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 
                 gridRow = new SkillStaffPeriodGridRowBoostedRelativeDifference(_rowManager, "NumericReadOnlyCell",
                                                                                 "RelativeBoostedDifferenceForDisplayOnly",
-                                                                                UserTexts.Resources.AdjustedDifference, _skill);
+                                                                                UserTexts.Resources.AdjustedDifference, _skill, _skillPriorityProvider);
                 gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
                 _gridRows.Add(_rowManager.AddRow(gridRow));
 

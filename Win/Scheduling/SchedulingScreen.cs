@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			setUpZomMenu();
 
-			_skillIntradayGridControl = new SkillIntradayGridControl("SchedulerSkillIntradayGridAndChart", toggleManager)
+			_skillIntradayGridControl = new SkillIntradayGridControl("SchedulerSkillIntradayGridAndChart", _container.Resolve<ISkillPriorityProvider>())
 			{
 				ContextMenu = contextMenuStripResultView.ContextMenu
 			};

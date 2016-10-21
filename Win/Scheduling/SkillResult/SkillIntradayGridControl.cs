@@ -5,7 +5,6 @@ using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Forecasting.Forms;
@@ -21,9 +20,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
         private const int headerHeight12HourClock = 26;
         private readonly SkillIntradayGridPresenter _presenter;
 
-        public SkillIntradayGridControl(ChartSettings chartSettings)
+        public SkillIntradayGridControl(ChartSettings chartSettings, ISkillPriorityProvider skillPriorityProvider)
         {
-            _presenter = new SkillIntradayGridPresenter(this, chartSettings);
+            _presenter = new SkillIntradayGridPresenter(this, chartSettings, skillPriorityProvider);
             QueryCellInfo += gridSkillDataQueryCellInfo;
             ColWidths[0] = headerWidth;
             if (!TimeHelper.CurrentCultureUsing24HourClock()) RowHeights[0] = headerHeight12HourClock;
@@ -31,9 +30,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 	        TeleoptiStyling = true;
         }
 
-        public SkillIntradayGridControl(string settingName, IToggleManager toggleManager)
+        public SkillIntradayGridControl(string settingName, ISkillPriorityProvider skillPriorityProvider)
         {
-            _presenter = new SkillIntradayGridPresenter(this, settingName);
+            _presenter = new SkillIntradayGridPresenter(this, settingName, skillPriorityProvider);
             QueryCellInfo += gridSkillDataQueryCellInfo;
             ColWidths[0] = headerWidth;
             if (!TimeHelper.CurrentCultureUsing24HourClock()) RowHeights[0] = headerHeight12HourClock;
