@@ -17,19 +17,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonRepository _persons;
 		private readonly INow _now;
-
+		private readonly IUserTimeZone _timeZone;
+		private readonly IUserCulture _culture;
+		
 		public HistoricalAdherenceViewModelBuilder(
 			IHistoricalAdherenceReadModelReader reader,
 			ICurrentScenario scenario,
 			IScheduleStorage scheduleStorage,
 			IPersonRepository persons,
-			INow now)
+			INow now, IUserTimeZone timeZone, IUserCulture culture)
 		{
 			_reader = reader;
 			_scenario = scenario;
 			_scheduleStorage = scheduleStorage;
 			_persons = persons;
 			_now = now;
+			_timeZone = timeZone;
+			_culture = culture;
 		}
 		
 		private IEnumerable<HistoricalAdherenceActivityViewModel> getCurrentSchedules(IPerson person)
@@ -55,8 +59,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				select new HistoricalAdherenceActivityViewModel
 				{
 					Color = ColorTranslator.ToHtml(layer.DisplayColor()),
-					StartTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, tz).ToString("yyyy-MM-ddTHH:mm:ss"),
-					EndTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, tz).ToString("yyyy-MM-ddTHH:mm:ss")
+					StartTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
+					EndTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss")
 				})
 				.ToArray();
 		}
@@ -75,15 +79,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				PersonId = personId,
 				AgentName = person?.Name.ToString(),
 				Schedules = schedule,
-				Now = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), tz).ToString("yyyy-MM-ddTHH:mm:ss"),
+				Now = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
 				OutOfAdherences = (result?.OutOfAdherences).EmptyIfNull().Select(y =>
 				{
 					string endTime = null;
 					if (y.EndTime.HasValue)
-						endTime = TimeZoneInfo.ConvertTimeFromUtc(y.EndTime.Value, tz).ToString("yyyy-MM-ddTHH:mm:ss");
+						endTime = TimeZoneInfo.ConvertTimeFromUtc(y.EndTime.Value, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss");
 					return new AgentOutOfAdherenceViewModel
 					{
-						StartTime = TimeZoneInfo.ConvertTimeFromUtc(y.StartTime, tz).ToString("yyyy-MM-ddTHH:mm:ss"),
+						StartTime = TimeZoneInfo.ConvertTimeFromUtc(y.StartTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
 						EndTime = endTime
 					};
 				})

@@ -204,6 +204,7 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentsInAlarmForSiteViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentsInAlarmForTeamsOnSiteViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilderUserTimeZoneTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\PhoneStateViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilderStateValuesTest.cs" />
