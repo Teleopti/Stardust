@@ -5,6 +5,7 @@ using System.Threading;
 using log4net;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -24,12 +25,14 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly IPostHttpRequest _postHttpRequest;
 		private readonly IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
 		private readonly IUpdatedBy _updatedBy;
+		private readonly IConfigReader _configReader;
 
-		public StardustSender(IPostHttpRequest postHttpRequest, IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator, IUpdatedBy updatedBy)
+		public StardustSender(IPostHttpRequest postHttpRequest, IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator, IUpdatedBy updatedBy, IConfigReader configReader)
 		{
 			_postHttpRequest = postHttpRequest;
 			_eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
 			_updatedBy = updatedBy;
+			_configReader = configReader;
 		}
 
 		public Guid Send(IEvent @event)
@@ -75,7 +78,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 											jobName, datasource));
 			}
 
-			return _postHttpRequest.Send<Guid>(ConfigurationManager.AppSettings["ManagerLocation"] + "job", mess);
+			return _postHttpRequest.Send<Guid>(_configReader.AppConfig("ManagerLocation") + _configReader.ReadValue("RouteName", "/StardustDashboard/") + "job", mess);
 		}
 	}
 
