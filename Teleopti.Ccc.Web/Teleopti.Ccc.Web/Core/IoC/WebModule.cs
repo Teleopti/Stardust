@@ -104,8 +104,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule(new MartAreaModule(_configuration));
 
 			builder.RegisterModule<NotificationModule>();
-
-			builder.RegisterType<PersonInRoleQuerier>().As<IPersonInRoleQuerier>().SingleInstance();
 			builder.RegisterType<PersonToRoleAssociation>().SingleInstance();
 
 			builder.RegisterModule(new ConfigurationSettingsReader());

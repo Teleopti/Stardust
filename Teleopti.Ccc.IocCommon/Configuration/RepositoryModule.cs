@@ -82,6 +82,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<PersonForScheduleFinder>().As<IPersonForScheduleFinder>().SingleInstance();
 			builder.RegisterType<PeopleForShiftTradeFinder>().As<IPeopleForShiftTradeFinder>().SingleInstance();
+			builder.RegisterType<PersonInRoleQuerier>().As<IPersonInRoleQuerier>().SingleInstance();
+			builder.RegisterType<SmartPersonPropertyQuerier>().As<ISmartPersonPropertyQuerier>().SingleInstance();
 		}
 
 		private bool hasCorrectCtor(Type repositoryType)

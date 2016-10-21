@@ -522,6 +522,7 @@
     <Compile Include="Areas\MyTime\Core\WeekScheduleDomainDataProvider.cs" />
     <Compile Include="Areas\Options\IoC\OptionsAreaModule.cs" />
     <Compile Include="Areas\Options\SiteOpenHourController.cs" />
+    <Compile Include="Areas\People\Controllers\ApplySmartPropertyModel.cs" />
     <Compile Include="Areas\People\Controllers\PeopleSmartWorkflowControlSetController.cs" />
     <Compile Include="Areas\People\Controllers\SmartAssignSuggestionModel.cs" />
     <Compile Include="Areas\People\Controllers\SmartAssignWorkflowControlSetModel.cs" />

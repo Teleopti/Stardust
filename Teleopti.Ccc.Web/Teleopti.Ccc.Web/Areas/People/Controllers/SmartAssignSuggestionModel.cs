@@ -11,5 +11,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		public string LastName { get; set; }
 		public string CurrentSite { get; set; }
 		public string CurrentTeam { get; set; }
+		public double Confidence { get; set; }
 	}
 }
