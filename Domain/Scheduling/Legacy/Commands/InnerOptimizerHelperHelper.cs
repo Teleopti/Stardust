@@ -11,11 +11,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		private readonly IRestrictionExtractor _restrictionExtractor;
 		private readonly PersonalSkillsProvider _personalSkillsProvider;
+		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 
-		public InnerOptimizerHelperHelper(IRestrictionExtractor restrictionExtractor, PersonalSkillsProvider personalSkillsProvider)
+		public InnerOptimizerHelperHelper(IRestrictionExtractor restrictionExtractor, PersonalSkillsProvider personalSkillsProvider, IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider)
 		{
 			_restrictionExtractor = restrictionExtractor;
 			_personalSkillsProvider = personalSkillsProvider;
+			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
 		}
 
 		public void LockDaysForDayOffOptimization(IEnumerable<IScheduleMatrixPro> matrixList, IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod)
@@ -75,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			DateOnlyPeriod selectedPeriod,
 			ISchedulingResultStateHolder stateHolder)
 		{
-			IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(_personalSkillsProvider);
+			IScheduleResultDataExtractorProvider dataExtractorProvider = _scheduleResultDataExtractorProvider;
 			IScheduleResultDataExtractor allSkillsDataExtractor = dataExtractorProvider.CreateAllSkillsDataExtractor(selectedPeriod, stateHolder, advancedPreferences);
 			return allSkillsDataExtractor;
 		}
@@ -86,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ISchedulingResultStateHolder stateHolder,
 			IList<IScheduleMatrixPro> allScheduleMatrixPros )
 		{
-			IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(_personalSkillsProvider);
+			IScheduleResultDataExtractorProvider dataExtractorProvider = _scheduleResultDataExtractorProvider;
 			IScheduleResultDataExtractor primarySkillsDataExtractor = dataExtractorProvider.CreatePrimarySkillsDataExtractor(selectedPeriod, stateHolder, advancedPreferences, allScheduleMatrixPros);
 			return primarySkillsDataExtractor;
 		}

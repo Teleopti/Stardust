@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly PersonalSkillsProvider _personalSkillsProvider;
+		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 
 		public MoveTimeOptimizerCreator(
 			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IResourceOptimization resourceOptimizationHelper,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
-			PersonalSkillsProvider personalSkillsProvider)
+			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider)
 		{
 			_scheduleMatrixContainerList = scheduleMatrixContainerList;
 			_workShiftContainerList = workShiftContainerList;
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_dayOffOptimizationPreferenceProvider = dayOffOptimizationPreferenceProvider;
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
-			_personalSkillsProvider = personalSkillsProvider;
+			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
 		}
 
 		/// <summary>
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 				IScheduleMatrixPro scheduleMatrixPro = scheduleMatrixContainer.ScheduleMatrix;
 
-				IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(_personalSkillsProvider);
+				IScheduleResultDataExtractorProvider dataExtractorProvider = _scheduleResultDataExtractorProvider;
 				IScheduleResultDataExtractor personalSkillsDataExtractor = dataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrixPro, _optimizerPreferences.Advanced, _schedulingResultStateHolder);
 
 				IPeriodValueCalculatorProvider periodValueCalculatorProvider = new PeriodValueCalculatorProvider();

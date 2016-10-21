@@ -9,13 +9,15 @@ namespace Teleopti.Ccc.Domain.Optimization
     public class DailyBoostedSkillForecastAndScheduledValueCalculator : IDailySkillForecastAndScheduledValueCalculator
     {
         private readonly Func<ISchedulingResultStateHolder> _schedulingStateHolder;
+	    private readonly ISkillPriorityProvider _skillPriorityProvider;
 
-        public DailyBoostedSkillForecastAndScheduledValueCalculator(Func<ISchedulingResultStateHolder> schedulingStateHolder)
-        {
-            _schedulingStateHolder = schedulingStateHolder;
-        }
+	    public DailyBoostedSkillForecastAndScheduledValueCalculator(Func<ISchedulingResultStateHolder> schedulingStateHolder, ISkillPriorityProvider skillPriorityProvider)
+	    {
+		    _schedulingStateHolder = schedulingStateHolder;
+		    _skillPriorityProvider = skillPriorityProvider;
+	    }
 
-        public ForecastScheduleValuePair CalculateDailyForecastAndScheduleDataForSkill(ISkill skill, DateOnly scheduleDay)
+	    public ForecastScheduleValuePair CalculateDailyForecastAndScheduleDataForSkill(ISkill skill, DateOnly scheduleDay)
         {
             ForecastScheduleValuePair result = new ForecastScheduleValuePair();
 
@@ -76,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return new DateOnlyPeriod(scheduleDay, scheduleDay).ToDateTimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
         }
 
-        private static ForecastScheduleValuePair CalculateSkillStaffPeriodForecastAndScheduledValue(ISkill skill, ISkillStaffPeriod skillStaffPeriod)
+        private ForecastScheduleValuePair CalculateSkillStaffPeriodForecastAndScheduledValue(ISkill skill, ISkillStaffPeriod skillStaffPeriod)
         {
             double forecastValue = skillStaffPeriod.FStaffTime().TotalMinutes;
             if (forecastValue == 0)
@@ -85,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return new ForecastScheduleValuePair { ForecastValue = forecastValue, ScheduleValue = scheduledValue };
         }
 
-        private static double BoostedTweakedSkillStaffPeriodValue(ISkillStaffPeriod skillStaffPeriod, ISkill skill, double forecastMinutes)
+        private double BoostedTweakedSkillStaffPeriodValue(ISkillStaffPeriod skillStaffPeriod, ISkill skill, double forecastMinutes)
         {
             if (forecastMinutes == 0)
                 return 0;
@@ -122,10 +124,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             return 0;
         }
 
-        private static double calculateTweakedDifference(ISkill skill, double absoluteDifferenceInMinutes)
+        private double calculateTweakedDifference(ISkill skill, double absoluteDifferenceInMinutes)
         {
-            double skillPriority = skill.PriorityValue;
-            double overStaffingFactor = skill.OverstaffingFactor.Value;
+            double skillPriority = _skillPriorityProvider.GetPriorityValue(skill);
+            double overStaffingFactor = _skillPriorityProvider.GetOverstaffingFactor(skill).Value;
             if (absoluteDifferenceInMinutes < 0)
                 overStaffingFactor = 1 - overStaffingFactor;
             return skillPriority * overStaffingFactor * absoluteDifferenceInMinutes;

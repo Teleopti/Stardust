@@ -13,7 +13,14 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
-    public class Skill : VersionedAggregateRootWithBusinessUnit, ISkill, IDeleteTag, IAggregateRootWithEvents
+	public interface ISkillPriority
+	{
+		int Priority { get; set; }
+		double PriorityValue { get; }
+		Percent OverstaffingFactor { get; set; }
+	}
+
+	public class Skill : VersionedAggregateRootWithBusinessUnit, ISkill, ISkillPriority, IDeleteTag, IAggregateRootWithEvents
 	{
         private string _name = string.Empty;
         private string _description = string.Empty;

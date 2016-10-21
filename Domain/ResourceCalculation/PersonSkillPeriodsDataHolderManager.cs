@@ -39,15 +39,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class PersonSkillPeriodsDataHolderManager : IPersonSkillPeriodsDataHolderManager
     {
         private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
+		private readonly ISkillPriorityProvider _skillPriorityProvider;
 
-        public PersonSkillPeriodsDataHolderManager(Func<ISchedulingResultStateHolder> schedulingResultStateHolder)
-        {
-            _schedulingResultStateHolder = schedulingResultStateHolder;
-        }
+		public PersonSkillPeriodsDataHolderManager(Func<ISchedulingResultStateHolder> schedulingResultStateHolder, ISkillPriorityProvider skillPriorityProvider)
+		{
+			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_skillPriorityProvider = skillPriorityProvider;
+		}
 
 		public IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> GetPersonSkillPeriodsDataHolderDictionary(PersonSkillDay personSkillDay)
         {
-            return _schedulingResultStateHolder().SkillStaffPeriodHolder.SkillStaffDataPerActivity(personSkillDay.Period(), personSkillDay.Skills());
+            return _schedulingResultStateHolder().SkillStaffPeriodHolder.SkillStaffDataPerActivity(personSkillDay.Period(), personSkillDay.Skills(), _skillPriorityProvider);
         }
 
 		public IDictionary<ISkill, ISkillStaffPeriodDictionary> GetPersonMaxSeatSkillSkillStaffPeriods(

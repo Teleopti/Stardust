@@ -13,20 +13,10 @@ namespace Teleopti.Interfaces.Domain
     /// /// </remarks>
     public interface ISkillStaffPeriodHolder
     {
-        /// <summary>
-        /// Skills the staff data per activity.
-        /// </summary>
-        /// <param name="onPeriod">The on period.</param>
-        /// <param name="onSkills">The on skills.</param>
-        /// <returns></returns>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2008-11-17    
-        /// /// </remarks>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> SkillStaffDataPerActivity(DateTimePeriod onPeriod, IList<ISkill> onSkills);
-        /// <summary>
+	    IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> SkillStaffDataPerActivity(
+		    DateTimePeriod onPeriod, IList<ISkill> onSkills, ISkillPriorityProvider skillPriorityProvider);
+        
+		/// <summary>
         /// Gets the skill skill staff period dictionary.
         /// </summary>
         /// <value>The skill skill staff period dictionary.</value>

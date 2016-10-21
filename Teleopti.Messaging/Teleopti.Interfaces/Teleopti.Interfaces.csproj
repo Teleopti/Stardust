@@ -168,6 +168,7 @@
     <Compile Include="Domain\IShiftTradeMaxSeatValidator.cs" />
     <Compile Include="Domain\IShiftTradePendingReasonsService.cs" />
     <Compile Include="Domain\ISiteOpenHour.cs" />
+    <Compile Include="Domain\ISkillPriorityProvider.cs" />
     <Compile Include="Domain\IUserUICulture.cs" />
     <Compile Include="Domain\PersonRequestDenyOption.cs" />
     <Compile Include="Domain\ShiftTradeScheduleChangedInDefaultScenario.cs" />

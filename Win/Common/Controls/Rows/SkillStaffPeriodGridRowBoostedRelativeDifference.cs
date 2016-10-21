@@ -11,16 +11,20 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
         private readonly ISkill _skill;
 	    private readonly DailyBoostedSkillForecastAndScheduledValueCalculator calculator;
 
-	    public SkillStaffPeriodGridRowBoostedRelativeDifference(RowManagerScheduler<SkillStaffPeriodGridRowScheduler, ISkillStaffPeriod> rowManager, string cellType, string displayMember, string rowHeaderText, ISkill skill)
-			: base(rowManager, cellType, displayMember, rowHeaderText)
-        {
-            _rowManager = rowManager;
-            _skill = skill;
+	    public SkillStaffPeriodGridRowBoostedRelativeDifference(
+		    RowManagerScheduler<SkillStaffPeriodGridRowScheduler, ISkillStaffPeriod> rowManager, string cellType,
+			    string displayMember, string rowHeaderText, ISkill skill, ISkillPriorityProvider skillPriorityProvider)
+		    : base(rowManager, cellType, displayMember, rowHeaderText)
+	    {
+		    _rowManager = rowManager;
+		    _skill = skill;
 
-			calculator = new DailyBoostedSkillForecastAndScheduledValueCalculator(() => _rowManager.SchedulerStateHolder.SchedulingResultState);
-        }
+		    calculator =
+			    new DailyBoostedSkillForecastAndScheduledValueCalculator(
+				    () => _rowManager.SchedulerStateHolder.SchedulingResultState, skillPriorityProvider);
+	    }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public override void QueryCellInfo(CellInfo cellInfo)
         {
             if (_rowManager.DataSource.Count == 0 || _rowManager.Intervals.Count == 0)

@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					_container.Resolve<IResourceOptimization>(),
 					dayOffOptimizationPreferenceProvider,
 					_container.Resolve<IDeleteAndResourceCalculateService>(),
-					_container.Resolve<PersonalSkillsProvider>());
+					_container.Resolve<ScheduleResultDataExtractorProvider>());
 
 			IList<IMoveTimeOptimizer> optimizers = creator.Create();
 			var service = new MoveTimeOptimizerContainer(optimizers, periodValueCalculator);

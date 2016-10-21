@@ -10,15 +10,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
     public class SkillStaffPeriodHolder : ISkillStaffPeriodHolder
     {
-        private ISkillSkillStaffPeriodExtendedDictionary _internalDictionary;
+	    private ISkillSkillStaffPeriodExtendedDictionary _internalDictionary;
         private readonly object Locker = new object();
 
         public SkillStaffPeriodHolder(IEnumerable<KeyValuePair<ISkill, IEnumerable<ISkillDay>>> skillDays)
         {
-            CreateInternalDictionary(skillDays);
+	        CreateInternalDictionary(skillDays);
         }
 
-        public IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> SkillStaffDataPerActivity(DateTimePeriod onPeriod, IList<ISkill> onSkills)
+	    public IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> SkillStaffDataPerActivity(DateTimePeriod onPeriod, IList<ISkill> onSkills, ISkillPriorityProvider skillPriorityProvider)
         {
             var personSkillSkillStaff = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
 
@@ -59,7 +59,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                                                                                                     minimumPersons,
                                                                                                     maximumPersons,
                                                                                                     absoluteDifferenceScheduledHeadsAndMinMaxHeads,
-                                                                                                    skillStaffPeriod.PeriodDistribution,skill.OverstaffingFactor,skill.PriorityValue);
+                                                                                                    skillStaffPeriod.PeriodDistribution, 
+																									skillPriorityProvider.GetOverstaffingFactor(skill), 
+																									skillPriorityProvider.GetPriorityValue(skill));
 
                             dataHolders.Add(skillStaffPeriod.Period.StartDateTime, dataHolder);
                         }

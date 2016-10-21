@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly PersonalSkillsProvider _personalSkillsProvider;
 		private readonly IResourceCalculateDaysDecider _resourceCalculateDaysDecider;
+		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 
 		public ClassicDaysOffOptimizationCommand(IOptimizerHelperHelper optimizerHelperHelper, 
 			IScheduleMatrixLockableBitArrayConverterEx bitArrayConverter,
@@ -47,7 +48,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			PersonalSkillsProvider personalSkillsProvider,
-			IResourceCalculateDaysDecider resourceCalculateDaysDecider)
+			IResourceCalculateDaysDecider resourceCalculateDaysDecider,
+			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider)
 		{
 			_optimizerHelperHelper = optimizerHelperHelper;
 			_bitArrayConverter = bitArrayConverter;
@@ -65,6 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_schedulerStateHolder = schedulerStateHolder;
 			_personalSkillsProvider = personalSkillsProvider;
 			_resourceCalculateDaysDecider = resourceCalculateDaysDecider;
+			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
 		}
 
 		public void Execute(
@@ -74,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
-			IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(_personalSkillsProvider);
+			IScheduleResultDataExtractorProvider dataExtractorProvider = _scheduleResultDataExtractorProvider;
 
 			ISchedulePartModifyAndRollbackService rollbackService =
 				new SchedulePartModifyAndRollbackService(

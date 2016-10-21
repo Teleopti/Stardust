@@ -102,24 +102,6 @@ namespace Teleopti.Interfaces.Domain
         TimeSpan MidnightBreakOffset { get; set; }
 
         /// <summary>
-        /// Gets or sets the priority.
-        /// </summary>
-        /// <value>The priority.</value>
-        int Priority { get; set; }
-
-        /// <summary>
-        /// Gets the priority value.
-        /// </summary>
-        /// <value>The priority value.</value>
-        double PriorityValue { get; }
-
-        /// <summary>
-        /// Gets or sets the over staffing faktor.
-        /// </summary>
-        /// <value>The over staffing faktor.</value>
-        Percent OverstaffingFactor { get; set; }
-
-        /// <summary>
         /// Adds a Workload to the Forecast collection
         /// </summary>
         /// <param name="workload"></param>
