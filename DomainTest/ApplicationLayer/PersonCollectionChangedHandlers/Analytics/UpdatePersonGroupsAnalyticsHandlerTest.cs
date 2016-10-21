@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -52,7 +53,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_person = person;
 			_person.SetId(Guid.NewGuid());
 			if (_person.PersonPeriodCollection.Any())
+			{
 				_person.PersonPeriodCollection.First().SetId(_personPeriodId);
+				var bu = new Domain.Common.BusinessUnit("Test");
+				bu.SetId(_businessUnitId);
+				_person.PersonPeriodCollection.First().Team.Site = new Site("Test");
+				_person.PersonPeriodCollection.First().Team.Site.SetBusinessUnit(bu);
+			}
+				
 			_personRepository.Has(_person);
 			if (createInAnalytics)
 			{
