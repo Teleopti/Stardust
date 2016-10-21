@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -24,7 +25,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 		private ISettingDataRepository _settingDataRepository;
 		private ICanModifyMeeting _canModifyMeeting;
 		private IIntraIntervalFinderService _intraIntervalFinderService;
-		private ISkillPriorityProvider _skillPriorityProvider;
 
 		[SetUp]
 		public void Setup()
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 			_unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
 			_canModifyMeeting = _mocks.StrictMock<ICanModifyMeeting>();
 			_intraIntervalFinderService = _mocks.StrictMock<IIntraIntervalFinderService>();
-            _target = new EditMeetingCommand(_view, _settingDataRepository, _unitOfWorkFactory, _canModifyMeeting, _intraIntervalFinderService, _skillPriorityProvider);
+            _target = new EditMeetingCommand(_view, _settingDataRepository, _unitOfWorkFactory, _canModifyMeeting, _intraIntervalFinderService, new SkillPriorityProvider());
 
 		}
 
