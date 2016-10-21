@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 				var splitted = name.Split(' ');
 				return new Name(splitted[0], splitted[1]);
 			}
-			return new Name(name, ""); //should keep same place with PersonConfigurable->SetName
+			return new Name("", name);
 		}
 	}
 }

@@ -15006,10 +15006,6 @@ These options are activated:
     <value>You do not have permission to view this page.</value>
     <comment>Error message for no permission to view modules in new web</comment>
   </data>
-  <data name="TheOtherAgentHasNoPermissionToShiftTrade" xml:space="preserve">
-    <value>The other agent has no permission to trade with you.</value>
-    <comment>Use in MyTimeWeb ShiftTrade, it is a deny reason for the case that the other agent has no permission to view the first agent in shift trade view</comment>
-  </data>
   <data name="IntradayWithShrinkage" xml:space="preserve">
     <value>Intraday With Shrinkage</value>
     <comment>Staffing validator in Workflow control set</comment>
