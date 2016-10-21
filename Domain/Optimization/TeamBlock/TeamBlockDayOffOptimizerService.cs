@@ -557,7 +557,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			bool considerWeekAfter = daysOffPreferences.ConsiderWeekAfter;
 			ILockableBitArray originalArray = _lockableBitArrayFactory.ConvertFromMatrix(considerWeekBefore, considerWeekAfter,
 			                                                                             matrix);
-			ILockableBitArray resultingArray = teamBlockDaysOffMoveFinder.TryFindMoves(matrix, originalArray, optimizationPreferences, daysOffPreferences);
+			ILockableBitArray resultingArray = teamBlockDaysOffMoveFinder.TryFindMoves(matrix, originalArray, optimizationPreferences, daysOffPreferences, _schedulerStateHolder().SchedulingResultState);
 
 			if (resultingArray.Equals(originalArray))
 				return null;

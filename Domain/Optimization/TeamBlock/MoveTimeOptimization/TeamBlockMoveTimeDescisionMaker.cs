@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 {
 	public interface ITeamBlockMoveTimeDescisionMaker
 	{
-		IList<DateOnly> Execute(IScheduleMatrixPro scheduleMatrix,IOptimizationPreferences optimizationPreferences);
+		IList<DateOnly> Execute(IScheduleMatrixPro scheduleMatrix,IOptimizationPreferences optimizationPreferences, ISchedulingResultStateHolder schedulingResultStateHolder);
 	}
 
 	public class TeamBlockMoveTimeDescisionMaker : ITeamBlockMoveTimeDescisionMaker
@@ -24,16 +24,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 
 		}
 
-		public IList<DateOnly> Execute(IScheduleMatrixPro scheduleMatrix, IOptimizationPreferences optimizationPreferences)
+		public IList<DateOnly> Execute(IScheduleMatrixPro scheduleMatrix, IOptimizationPreferences optimizationPreferences, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-			
-			return makeDecision(lockableBitArrayFactory.ConvertFromMatrix(false,false,scheduleMatrix ),scheduleMatrix  ,optimizationPreferences );
+
+			return makeDecision(lockableBitArrayFactory.ConvertFromMatrix(false, false, scheduleMatrix), scheduleMatrix, optimizationPreferences, schedulingResultStateHolder);
 		}
 
-		private IList<DateOnly> makeDecision(ILockableBitArray lockableBitArray, IScheduleMatrixPro matrix, IOptimizationPreferences optimizationPreferences)
+		private IList<DateOnly> makeDecision(ILockableBitArray lockableBitArray, IScheduleMatrixPro matrix, IOptimizationPreferences optimizationPreferences, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			IScheduleResultDataExtractor scheduleResultDataExtractor =
-				_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced);
+				_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced, schedulingResultStateHolder);
 
 			IList<DateOnly> result = new List<DateOnly>(2);
 			var values = scheduleResultDataExtractor.Values();

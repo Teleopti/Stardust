@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	{
 		ILockableBitArray TryFindMoves(IScheduleMatrixPro matrix, ILockableBitArray originalArray,
 		                                               IOptimizationPreferences optimizationPreferences,
-														IDaysOffPreferences daysOffPreferences);
+														IDaysOffPreferences daysOffPreferences, ISchedulingResultStateHolder schedulingResultStateHolder);
 	}
 
 	public class TeamBlockDaysOffMoveFinder : ITeamBlockDaysOffMoveFinder
@@ -29,11 +29,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		public ILockableBitArray TryFindMoves(IScheduleMatrixPro matrix, ILockableBitArray originalArray,
 											  IOptimizationPreferences optimizationPreferences,
-											  IDaysOffPreferences daysOffPreferences)
+											  IDaysOffPreferences daysOffPreferences, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			//should use agggregated skills
 			IScheduleResultDataExtractor scheduleResultDataExtractor =
-				_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced);
+				_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced, schedulingResultStateHolder);
 
 			// find days off to move within the common matrix period
 			IEnumerable<IDayOffDecisionMaker> decisionMakers =

@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private OptimizationPreferences _optimizerPreferences;
 		private SchedulingOptions _schedulingOptions;
 		private IScheduleResultDataExtractorProvider _dataExtractorProvider;
+		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 
 		[SetUp]
 		public void Setup()
@@ -28,7 +29,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_dataExtractorProvider = _mocks.StrictMock<IScheduleResultDataExtractorProvider>();
 			_optimizerPreferences = new OptimizationPreferences();
 			_schedulingOptions = new SchedulingOptions();
-			_target = new TeamBlockIntradayDecisionMaker(_dataExtractorProvider);
+			_schedulingResultStateHolder = MockRepository.GenerateMock<ISchedulingResultStateHolder>();
+			_target = new TeamBlockIntradayDecisionMaker(_dataExtractorProvider, () => _schedulingResultStateHolder);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -54,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			using (_mocks.Record())
 			{
 				Expect.Call(_dataExtractorProvider.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(scheduleMatrixPro1,
-				                                                                                             _schedulingOptions))
+				                                                                                             _schedulingOptions, _schedulingResultStateHolder))
 				      .Return(dataExtractor1);
 				Expect.Call(dataExtractor1.Values()).Return(new List<double?> {0.2, 0.2, 0.2});
 				Expect.Call(scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList1));
@@ -104,11 +106,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			using (_mocks.Record())
 			{
 				Expect.Call(_dataExtractorProvider.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(scheduleMatrixPro1,
-																											 _schedulingOptions))
+																											 _schedulingOptions, _schedulingResultStateHolder))
 					  .Return(dataExtractor1).Repeat.Twice();
 				Expect.Call(dataExtractor1.Values()).Return(new List<double?> { 0.2, 0.2, 0.2 }).Repeat.Twice();
 				Expect.Call(_dataExtractorProvider.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(scheduleMatrixPro2,
-																											 _schedulingOptions))
+																											 _schedulingOptions, _schedulingResultStateHolder))
 					  .Return(dataExtractor2).Repeat.Twice();
 				Expect.Call(dataExtractor2.Values()).Return(new List<double?> { 0.4, 0.4, 0.4 }).Repeat.Twice();
 				Expect.Call(scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList1)).Repeat.Twice();

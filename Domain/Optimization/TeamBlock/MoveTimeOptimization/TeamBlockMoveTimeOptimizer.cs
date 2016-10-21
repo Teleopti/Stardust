@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
 
 			double oldPeriodValue = periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
-			IList<DateOnly> daysToBeMoved = _decisionMaker.Execute(matrix, optimizerPreferences);
+			IList<DateOnly> daysToBeMoved = _decisionMaker.Execute(matrix, optimizerPreferences, schedulingResultStateHolder);
 			if (daysToBeMoved.Count == 0)
 				return false;
 

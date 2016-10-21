@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				var result = _target.TryFindMoves(_matrix, _originalArray, _optimizationPreferences, _daysOffPreferences);
+				var result = _target.TryFindMoves(_matrix, _originalArray, _optimizationPreferences, _daysOffPreferences, null);
 				Assert.IsNotNull(result);
 			}
 		}
@@ -82,15 +82,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				var result = _target.TryFindMoves(_matrix, _originalArray, _optimizationPreferences, _daysOffPreferences);
+				var result = _target.TryFindMoves(_matrix, _originalArray, _optimizationPreferences, _daysOffPreferences, null);
 				Assert.IsNotNull(result);
 			}
 		}
 
 		private void tryFindMoveMocks(bool failOnNoMoveFound)
 		{
-			Expect.Call(_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(_matrix,
-																								  _optimizationPreferences.Advanced))
+			Expect.Call(_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(_matrix, _optimizationPreferences.Advanced, null))
 					  .Return(_dataExtractor);
 			Expect.Call(_dayOffOptimizationDecisionMakerFactory.CreateDecisionMakers(_originalArray, _optimizationPreferences, _daysOffPreferences))
 				  .Return(new List<IDayOffDecisionMaker> { _dayOffDecisionMaker });

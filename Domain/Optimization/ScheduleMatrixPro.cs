@@ -47,12 +47,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		    return !_unLockedDays.ContainsKey(date);
 	    }
 
-	    [Obsolete("Will be removed, do NOT use", true)]
-        public ISchedulingResultStateHolder SchedulingStateHolder
-        {
-            get { return _stateHolder; }
-        }
-
         public IPerson Person
         {
             get { return _person; }

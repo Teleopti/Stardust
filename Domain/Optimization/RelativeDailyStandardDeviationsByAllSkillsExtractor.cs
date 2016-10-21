@@ -12,12 +12,14 @@ namespace Teleopti.Ccc.Domain.Optimization
     public class RelativeDailyStandardDeviationsByAllSkillsExtractor : IScheduleResultDataExtractor
     {
         private readonly ISchedulingOptions _schedulingOptions;
-        private readonly IScheduleMatrixPro _scheduleMatrix;
+	    private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+	    private readonly IScheduleMatrixPro _scheduleMatrix;
 
-        public RelativeDailyStandardDeviationsByAllSkillsExtractor(IScheduleMatrixPro scheduleMatrix, ISchedulingOptions schedulingOptions)
+        public RelativeDailyStandardDeviationsByAllSkillsExtractor(IScheduleMatrixPro scheduleMatrix, ISchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder)
         {
             _scheduleMatrix = scheduleMatrix;
             _schedulingOptions = schedulingOptions;
+	        _schedulingResultStateHolder = schedulingResultStateHolder;
         }
 
         public IList<double?> Values()
@@ -55,13 +57,13 @@ namespace Teleopti.Ccc.Domain.Optimization
                TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 
             IList<ISkill> allSkills = new List<ISkill>();
-            foreach (var skill in _scheduleMatrix.SchedulingStateHolder.Skills)
+            foreach (var skill in _schedulingResultStateHolder.Skills)
             {
                 if(skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
                     allSkills.Add(skill);
             }
             IList<ISkillStaffPeriod> skillStaffPeriods =
-                _scheduleMatrix.SchedulingStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(allSkills, dateTimePeriod);
+								_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(allSkills, dateTimePeriod);
            
             bool useMinPersonnel = _schedulingOptions.UseMinimumPersons;
             bool useMaxPersonnel = _schedulingOptions.UseMaximumPersons;

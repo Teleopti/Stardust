@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
 	    private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
 	    private readonly PersonalSkillsProvider _personalSkillsProvider;
+	    private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 	    private readonly IScheduleMatrixPro _scheduleMatrix;
 
 	    public RelativeDailyValueByPersonalSkillsExtractor(IScheduleMatrixPro scheduleMatrix,
@@ -28,7 +29,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		                                                       skillStaffPeriodToSkillIntervalDataMapper,
 	                                                       ISkillIntervalDataDivider skillIntervalDataDivider,
 															ISkillIntervalDataAggregator skillIntervalDataAggregator,
-															PersonalSkillsProvider personalSkillsProvider)
+															PersonalSkillsProvider personalSkillsProvider,
+															ISchedulingResultStateHolder schedulingResultStateHolder)
 	    {
 		    _scheduleMatrix = scheduleMatrix;
 		    _advancedPreferences = advancedPreferences;
@@ -36,6 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		    _skillIntervalDataDivider = skillIntervalDataDivider;
 		    _skillIntervalDataAggregator = skillIntervalDataAggregator;
 		    _personalSkillsProvider = personalSkillsProvider;
+		    _schedulingResultStateHolder = schedulingResultStateHolder;
 	    }
 
 	    public IList<double?> Values()
@@ -97,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			foreach (var personsActiveSkill in personsActiveSkills)
 			{
 				IList<ISkillStaffPeriod> personsSkillStaffPeriods =
-				_scheduleMatrix.SchedulingStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new[] { personsActiveSkill }, dateTimePeriod);
+				_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new[] { personsActiveSkill }, dateTimePeriod);
 
 				if (!personsSkillStaffPeriods.Any())
 					continue;

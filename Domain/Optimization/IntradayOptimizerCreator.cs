@@ -90,13 +90,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 				                                                                                                           _skillStaffPeriodToSkillIntervalDataMapper,
 				                                                                                                           _skillIntervalDataDivider,
 				                                                                                                           _skillIntervalDataAggregator,
-																																																									 _personalSkillsProvider);
+																																																									 _personalSkillsProvider,
+																																																									 _schedulerStateHolder().SchedulingResultState);
 				IScheduleResultDataExtractor personalSkillsDataExtractor = new RelativeDailyValueByPersonalSkillsExtractor(scheduleMatrix,
 				                                                                                                           optimizerPreferences.Advanced,
 				                                                                                                           _skillStaffPeriodToSkillIntervalDataMapper,
 				                                                                                                           _skillIntervalDataDivider,
 				                                                                                                           _skillIntervalDataAggregator,
-																																																									 _personalSkillsProvider);
+																																																									 _personalSkillsProvider,
+																																																									 _schedulerStateHolder().SchedulingResultState);
 				
 				IScheduleMatrixOriginalStateContainer workShiftStateContainer = workShiftContainerList[index];
 

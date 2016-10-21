@@ -12,12 +12,6 @@ namespace Teleopti.Interfaces.Domain
 	    bool IsDayLocked(DateOnly date);
 
         /// <summary>
-        /// Gets or sets the state holder.
-        /// </summary>
-        /// <value>The state holder.</value>
-        ISchedulingResultStateHolder SchedulingStateHolder { get;}
-
-        /// <summary>
         /// Gets or sets the person.
         /// </summary>
         /// <value>The person.</value>

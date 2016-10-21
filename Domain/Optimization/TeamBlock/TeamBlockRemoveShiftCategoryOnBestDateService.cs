@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -15,12 +16,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		
 		private readonly IScheduleDayService _scheduleDayService;
 		private readonly IScheduleMatrixValueCalculatorProFactory _scheduleMatrixValueCalculatorProFactory;
+		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 
-		public TeamBlockRemoveShiftCategoryOnBestDateService(IScheduleDayService scheduleDayService, IScheduleMatrixValueCalculatorProFactory scheduleMatrixValueCalculatorProFactory)
+		public TeamBlockRemoveShiftCategoryOnBestDateService(IScheduleDayService scheduleDayService, 
+									IScheduleMatrixValueCalculatorProFactory scheduleMatrixValueCalculatorProFactory,
+									Func<ISchedulingResultStateHolder> schedulingResultStateHolder)
 		{
 			
 			_scheduleDayService = scheduleDayService;
 			_scheduleMatrixValueCalculatorProFactory = scheduleMatrixValueCalculatorProFactory;
+			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
 		public IScheduleDayPro Execute(IShiftCategory shiftCategory, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, DateOnlyPeriod dateOnlyPeriod, IOptimizationPreferences optimizationPreferences)
@@ -30,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var min = double.MaxValue;
 			IScheduleDayPro currentDay = null;
 
-			var dayValueCalculator = _scheduleMatrixValueCalculatorProFactory.CreateScheduleMatrixValueCalculatorPro(dateOnlyPeriod.DayCollection(), optimizationPreferences, scheduleMatrixPro.SchedulingStateHolder);
+			var dayValueCalculator = _scheduleMatrixValueCalculatorProFactory.CreateScheduleMatrixValueCalculatorPro(dateOnlyPeriod.DayCollection(), optimizationPreferences, _schedulingResultStateHolder());
 
 			foreach (var scheduleDayPro in daysToWorkWith)
 			{

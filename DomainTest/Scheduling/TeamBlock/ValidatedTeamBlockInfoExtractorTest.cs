@@ -106,7 +106,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
                 Expect.Call(_matrixPro.GetScheduleDayByKey(_date)).Return(_scheduleDayPro);
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
-                Expect.Call(_matrixPro.SchedulingStateHolder).Return(_schedulingResultStateHolder);
                 Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
                 Expect.Call(_matrixPro.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleRange.ScheduledDay(_date)).Return(_scheduleDay);
@@ -132,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
                 Expect.Call(_matrixPro.GetScheduleDayByKey(_date)).Return(_scheduleDayPro);
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
-                Expect.Call(_matrixPro.SchedulingStateHolder).Return(_schedulingResultStateHolder);
+
                 Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
                 Expect.Call(_matrixPro.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleRange.ScheduledDay(_date)).Return(_scheduleDay);
@@ -159,7 +158,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
                 Expect.Call(_matrixPro.GetScheduleDayByKey(_date)).Return(_scheduleDayPro);
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
-                Expect.Call(_matrixPro.SchedulingStateHolder).Return(_schedulingResultStateHolder);
                 Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
                 Expect.Call(_matrixPro.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleRange.ScheduledDay(_date)).Return(_scheduleDay);
@@ -190,7 +188,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
 				Expect.Call(_matrixPro.GetScheduleDayByKey(_date)).Return(_scheduleDayPro);
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
-				Expect.Call(_matrixPro.SchedulingStateHolder).Return(_schedulingResultStateHolder);
 				Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
 				Expect.Call(_matrixPro.Person).Return(_person).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleRange.ScheduledDay(_date)).Return(_scheduleDay);

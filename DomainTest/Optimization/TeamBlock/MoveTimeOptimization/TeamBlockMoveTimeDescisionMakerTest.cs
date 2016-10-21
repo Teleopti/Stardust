@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			{
 				Expect.Call(_lokableBitArrayFactory.ConvertFromMatrix(false, false, _scheduleMatrix)).Return(bitArray);
 				Expect.Call(_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(_scheduleMatrix,
-					_optimizationPreferences.Advanced)).Return(_dataExtractor);
+					_optimizationPreferences.Advanced, null)).Return(_dataExtractor);
 				Expect.Call(_dataExtractor.Values()).Return(_values).Repeat.Any();
 				Expect.Call(_validateFoundMovedDaysSpecification.AreFoundDaysValid(1, 4, _scheduleMatrix)).Return(true);
 				simpleMatrixExpectations();
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			using (_mocks.Playback())
 			{
 				// day counterparts are > febr 9, 10, 11, 12
-				IList<DateOnly> result = _target.Execute(_scheduleMatrix, _optimizationPreferences);
+				IList<DateOnly> result = _target.Execute(_scheduleMatrix, _optimizationPreferences, null);
 				Assert.AreEqual(2, result.Count);
 
 				DateOnly mostUnderStaffingDay = new DateOnly(2010, 02, 9);
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			{
 				Expect.Call(_lokableBitArrayFactory.ConvertFromMatrix(false, false, _scheduleMatrix)).Return(bitArray);
 				Expect.Call(_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(_scheduleMatrix,
-					_optimizationPreferences.Advanced)).Return(_dataExtractor);
+					_optimizationPreferences.Advanced, null)).Return(_dataExtractor);
 				Expect.Call(_dataExtractor.Values()).Return(_values).Repeat.Any();
 				Expect.Call(_validateFoundMovedDaysSpecification.AreFoundDaysValid(2, 3, _scheduleMatrix)).Return(true);
 				simpleMatrixExpectations();
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			}
 
 			// day counterparts are > febr 9, 10, 11, 12
-			IList<DateOnly> result = _target.Execute(_scheduleMatrix ,_optimizationPreferences );
+			IList<DateOnly> result = _target.Execute(_scheduleMatrix ,_optimizationPreferences, null);
 			Assert.AreEqual(2, result.Count);
 
 			DateOnly mostUnderStaffingDay = new DateOnly(2010, 02, 10);

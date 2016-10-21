@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(5);
-				Expect.Call(_decisionMaker.Execute(_matrix1, _optimizationPreferences)).Return(new List<DateOnly>());
+				Expect.Call(_decisionMaker.Execute(_matrix1, _optimizationPreferences, _schedulingResultStateHolder)).Return(new List<DateOnly>());
 			}
 			using (_mock.Playback())
 			{
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			{
 				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(5);
-				Expect.Call(_decisionMaker.Execute(_matrix1, _optimizationPreferences)).Return(new List<DateOnly> { _today, _today });
+				Expect.Call(_decisionMaker.Execute(_matrix1, _optimizationPreferences, _schedulingResultStateHolder)).Return(new List<DateOnly> { _today, _today });
 
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 				commonMocks(_today,_scheduleDayPro1,_scheduleDay1,_projectionService1,_visualLayerCollection1,new TimeSpan());
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 				{
 					Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
 					Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(5);
-					Expect.Call(_decisionMaker.Execute(_matrix1, _optimizationPreferences)).Return(new List<DateOnly> { _today, _today.AddDays(1) });
+					Expect.Call(_decisionMaker.Execute(_matrix1, _optimizationPreferences, _schedulingResultStateHolder)).Return(new List<DateOnly> { _today, _today.AddDays(1) });
 
 					Expect.Call(() => _rollbackService.ClearModificationCollection());
 					commonMocks(_today, _scheduleDayPro1, _scheduleDay1, _projectionService1, _visualLayerCollection1, new TimeSpan(8));
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 						_schedulingOptions.BlockFinder(), false)).IgnoreArguments().Return(_teamBlockInfo);
 					Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
 					Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(5);
-					Expect.Call(_decisionMaker.Execute(_matrix1, _optimizationPreferences)).Return(new List<DateOnly> { _today, _today.AddDays(1) });
+					Expect.Call(_decisionMaker.Execute(_matrix1, _optimizationPreferences, _schedulingResultStateHolder)).Return(new List<DateOnly> { _today, _today.AddDays(1) });
 					Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, new DateOnly(2014, 5, 14), _schedulingOptions,
 						_rollbackService, _resourceCalulateDelayer, null, _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder))).IgnoreArguments().Return(true);
 					Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, new DateOnly(2014, 5, 15), _schedulingOptions,
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 					_schedulingOptions.BlockFinder(), false)).IgnoreArguments().Return(_teamBlockInfo);
 				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(5);
-				Expect.Call(_decisionMaker.Execute(_matrix1, _optimizationPreferences)).Return(new List<DateOnly> { _today, _today.AddDays(1) });
+				Expect.Call(_decisionMaker.Execute(_matrix1, _optimizationPreferences, _schedulingResultStateHolder)).Return(new List<DateOnly> { _today, _today.AddDays(1) });
 
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, new DateOnly(2014, 5, 14), _schedulingOptions,
 					_rollbackService, _resourceCalulateDelayer, null, _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder))).IgnoreArguments().Return(true);

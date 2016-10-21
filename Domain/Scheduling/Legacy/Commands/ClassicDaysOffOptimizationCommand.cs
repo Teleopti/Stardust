@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					matrix.EffectivePeriodDays.First().Day);
 
 				IScheduleResultDataExtractor personalSkillsDataExtractor =
-					dataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced);
+					dataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced, schedulerStateHolder.SchedulingResultState);
 				IPeriodValueCalculator localPeriodValueCalculator =
 					_optimizerHelperHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced, personalSkillsDataExtractor);
 				IDayOffOptimizerContainer optimizerContainer =
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			// create decisionmakers
 			var decisionMakers = _dayOffOptimizationDecisionMakerFactory.CreateDecisionMakers(scheduleMatrixArray, optimizerPreferences, daysOffPreferences);
-			var scheduleResultDataExtractor = dataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrix, optimizerPreferences.Advanced);
+			var scheduleResultDataExtractor = dataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrix, optimizerPreferences.Advanced, scheduleResultStateHolder());
 
 			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService =
 				new SmartDayOffBackToLegalStateService(

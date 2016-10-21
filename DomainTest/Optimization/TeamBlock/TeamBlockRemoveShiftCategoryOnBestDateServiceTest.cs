@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_matrixValueCalculatorProFactory = _mock.StrictMock<IScheduleMatrixValueCalculatorProFactory>();
 			_optimizationPreferences = new OptimizationPreferences();
 			_schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
-			_target = new TeamBlockRemoveShiftCategoryOnBestDateService(_scheduleDayService, _matrixValueCalculatorProFactory);	
+			_target = new TeamBlockRemoveShiftCategoryOnBestDateService(_scheduleDayService, _matrixValueCalculatorProFactory, () => _schedulingResultStateHolder);	
 		}
 
 		[Test]
@@ -80,7 +80,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_personSkill.Skill).Return(_skill);
 				Expect.Call(_matrixValueCalculatorProFactory.CreateScheduleMatrixValueCalculatorPro(_dateOnlyPeriod.DayCollection(), _optimizationPreferences, _schedulingResultStateHolder)).Return(_scheduleMatrixValueCalculator);
 				Expect.Call(_scheduleMatrixValueCalculator.DayValueForSkills(_dateOnly, _skills)).Return(10d);
-				Expect.Call(_scheduleMatrixPro.SchedulingStateHolder).Return(_schedulingResultStateHolder);
 
 				Expect.Call(_scheduleDayService.DeleteMainShift(new List<IScheduleDay> { _scheduleDay }, _schedulingOptions));
 			}

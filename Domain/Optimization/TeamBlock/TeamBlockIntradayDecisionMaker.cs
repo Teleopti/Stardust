@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -11,19 +12,17 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		IList<ITeamBlockInfo> Decide(IList<ITeamBlockInfo> originalTeamBlocks,
 		                                             IOptimizationPreferences optimizationPreferences,
 		                                             ISchedulingOptions schedulingOptions);
-
-		ITeamBlockInfo RecalculateTeamBlock(ITeamBlockInfo teamBlock,
-		                                                    IOptimizationPreferences optimizationPreferences,
-		                                                    ISchedulingOptions schedulingOptions);
 	}
 
 	public class TeamBlockIntradayDecisionMaker : ITeamBlockIntradayDecisionMaker
 	{
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
+		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 
-		public TeamBlockIntradayDecisionMaker(IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider)
+		public TeamBlockIntradayDecisionMaker(IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider, Func<ISchedulingResultStateHolder> schedulingResultStateHolder)
 		{
 			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
+			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
 		public IList<ITeamBlockInfo> Decide(IList<ITeamBlockInfo> originalTeamBlocks,
@@ -63,7 +62,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return shuffledList;
 		}
 		
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public ITeamBlockInfo RecalculateTeamBlock(ITeamBlockInfo teamBlock,
 		                                           IOptimizationPreferences optimizationPreferences,
 		                                           ISchedulingOptions schedulingOptions)
@@ -74,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				var scheduleResultDataExtractor =
 					_scheduleResultDataExtractorProvider.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(matrix,
-					                                                                                               schedulingOptions);
+					                                                                                               schedulingOptions, _schedulingResultStateHolder());
 				var values = scheduleResultDataExtractor.Values();
 				var periodDays = matrix.EffectivePeriodDays;
 				for (var i = 0; i < periodDays.Count; i++)

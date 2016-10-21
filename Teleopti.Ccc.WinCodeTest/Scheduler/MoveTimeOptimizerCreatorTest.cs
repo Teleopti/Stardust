@@ -92,12 +92,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_schedulingResultStateHolder.Schedules)
 					.Return(null)
 					.Repeat.Any();
-				Expect.Call(_matrix1.SchedulingStateHolder)
-					.Return(_schedulingResultStateHolder)
-					.Repeat.Any();
-				Expect.Call(_matrix2.SchedulingStateHolder)
-					.Return(_schedulingResultStateHolder)
-					.Repeat.Any();
 
 				Expect.Call(_matrix1.Person).Return(_person);
 				Expect.Call(_matrix1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>{_scheduleDayPro1}));

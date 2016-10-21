@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	        _target = new RelativeDailyValueByPersonalSkillsExtractor(_matrix, _advancedPreferences,
 	                                                                  _skillStaffPeriodToSkillIntervalDataMapper,
 	                                                                  _skillIntervalDataDivider,
-	                                                                  _skillIntervalDataAggregator, new PersonalSkillsProvider());
+	                                                                  _skillIntervalDataAggregator, new PersonalSkillsProvider(), _stateHolder);
 			_skillIntervalDatas = new List<ISkillIntervalData>();
         }
 
@@ -82,9 +82,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(new ReadOnlyCollection<IScheduleDayPro>
 						(new List<IScheduleDayPro> { _scheduleDayPro }))
 					.Repeat.Any();
-				Expect.Call(_matrix.SchedulingStateHolder)
-					.Return(_stateHolder).Repeat.Any();
-
 				Expect.Call(_scheduleDayPro.Day)
 					.Return(scheduleDay).Repeat.Any();
 				Expect.Call(_stateHolder.SkillStaffPeriodHolder)
@@ -139,9 +136,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(new ReadOnlyCollection<IScheduleDayPro>
 						(new List<IScheduleDayPro> { _scheduleDayPro }))
 					.Repeat.Any();
-				Expect.Call(_matrix.SchedulingStateHolder)
-					.Return(_stateHolder).Repeat.Any();
-
 				Expect.Call(_scheduleDayPro.Day)
 					.Return(scheduleDay).Repeat.Any();
 				Expect.Call(_stateHolder.SkillStaffPeriodHolder)
@@ -198,9 +192,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(new ReadOnlyCollection<IScheduleDayPro>
 						(new List<IScheduleDayPro> { _scheduleDayPro }))
 					.Repeat.Any();
-				Expect.Call(_matrix.SchedulingStateHolder)
-					.Return(_stateHolder).Repeat.Any();
-
 				Expect.Call(_scheduleDayPro.Day)
 					.Return(scheduleDay).Repeat.Any();
 				Expect.Call(_stateHolder.SkillStaffPeriodHolder)
@@ -255,8 +246,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(new ReadOnlyCollection<IScheduleDayPro>
 						(new List<IScheduleDayPro> { _scheduleDayPro }))
 					.Repeat.Any();
-				Expect.Call(_matrix.SchedulingStateHolder)
-					.Return(_stateHolder).Repeat.Any();
 
 				Expect.Call(_scheduleDayPro.Day)
 					.Return(scheduleDay).Repeat.Any();
@@ -317,8 +306,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(new ReadOnlyCollection<IScheduleDayPro>
 						(new List<IScheduleDayPro> { _scheduleDayPro }))
 					.Repeat.Any();
-				Expect.Call(_matrix.SchedulingStateHolder)
-					.Return(_stateHolder).Repeat.Any();
 
 				Expect.Call(_scheduleDayPro.Day)
 					.Return(scheduleDay).Repeat.Any();
@@ -369,8 +356,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(new ReadOnlyCollection<IScheduleDayPro>
 						(new List<IScheduleDayPro> { _scheduleDayPro }))
 					.Repeat.Any();
-				Expect.Call(_matrix.SchedulingStateHolder)
-					.Return(_stateHolder).Repeat.Any();
 
 				Expect.Call(_scheduleDayPro.Day)
 					.Return(scheduleDay).Repeat.Any();
