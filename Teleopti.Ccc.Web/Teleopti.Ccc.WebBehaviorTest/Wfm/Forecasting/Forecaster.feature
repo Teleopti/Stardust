@@ -1,5 +1,4 @@
 ﻿@WFM
-@ignore
 Feature: Forecaster
 	In order to create a forecast
 	As a user
