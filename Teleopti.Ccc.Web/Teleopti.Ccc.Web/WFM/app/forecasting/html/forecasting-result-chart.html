@@ -1,9 +1,7 @@
 <div class="con-row">
-	<div class="con-flex padding-reset">
-		<div tabindex=0 class="clear-button context-menu card-context  grow-out pull-right " ng-show="selectedDayCount > 0">
-			<i class="mdi mdi-block-helper" ng-click="clearSelection()">
-				<md-tooltip>{{'ClearForecastChart' | translate}}</md-tooltip>
-			</i>
+	<div class="con-flex">
+		<div class="clear-button">
+			<i class="mdi mdi-block-helper pull-right toggle-handle" ng-click="clearSelection()"><md-tooltip>{{'ClearForecastChart' | translate}}</md-tooltip></i>
 		</div>
 	</div>
 </div>
