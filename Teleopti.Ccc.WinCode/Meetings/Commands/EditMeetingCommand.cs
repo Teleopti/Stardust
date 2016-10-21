@@ -2,7 +2,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -18,19 +17,19 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
         private readonly IMeetingOverviewView _meetingOverviewView;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ICanModifyMeeting _canModifyMeeting;
-        private readonly IToggleManager _toggleManager;
 	    private readonly IIntraIntervalFinderService _intraIntervalFinderService;
+	    private readonly ISkillPriorityProvider _skillPriorityProvider;
 	    private readonly ISettingDataRepository _settingDataRepository;
 
         public EditMeetingCommand(IMeetingOverviewView meetingOverviewView, ISettingDataRepository settingDataRepository,
-            IUnitOfWorkFactory unitOfWorkFactory, ICanModifyMeeting canModifyMeeting, IToggleManager toggleManager, IIntraIntervalFinderService intraIntervalFinderService)
+            IUnitOfWorkFactory unitOfWorkFactory, ICanModifyMeeting canModifyMeeting, IIntraIntervalFinderService intraIntervalFinderService, ISkillPriorityProvider skillPriorityProvider)
         {
             _meetingOverviewView = meetingOverviewView;
             _settingDataRepository = settingDataRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
             _canModifyMeeting = canModifyMeeting;
-            _toggleManager = toggleManager;
 	        _intraIntervalFinderService = intraIntervalFinderService;
+	        _skillPriorityProvider = skillPriorityProvider;
         }
 
         public void Execute()
@@ -51,7 +50,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
                 
                 meetingViewModel = new MeetingViewModel(theMeeting, commonNameDescription);
             }
-            _meetingOverviewView.EditMeeting(meetingViewModel, _toggleManager, _intraIntervalFinderService);
+            _meetingOverviewView.EditMeeting(meetingViewModel, _intraIntervalFinderService, _skillPriorityProvider);
         }
 
         public bool CanExecute()

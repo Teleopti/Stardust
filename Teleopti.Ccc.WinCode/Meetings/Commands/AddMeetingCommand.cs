@@ -3,7 +3,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.WinCode.Meetings.Overview;
 using Teleopti.Interfaces.Domain;
@@ -21,15 +20,15 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IMeetingOverviewViewModel _model;
         private readonly ICanModifyMeeting _canModifyMeeting;
-        private readonly IToggleManager _toggleManager;
 	    private readonly IIntraIntervalFinderService _intraIntervalFinderService;
+	    private readonly ISkillPriorityProvider _skillPriorityProvider;
 	    private readonly ISettingDataRepository _settingDataRepository;
         private readonly IActivityRepository _activityRepository;
         private readonly IPersonRepository _personRepository;
 
         public AddMeetingCommand(IMeetingOverviewView meetingOverviewView, ISettingDataRepository settingDataRepository,
             IActivityRepository activityRepository, IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IMeetingOverviewViewModel model,
-            ICanModifyMeeting canModifyMeeting, IToggleManager toggleManager, IIntraIntervalFinderService intraIntervalFinderService)
+            ICanModifyMeeting canModifyMeeting, IIntraIntervalFinderService intraIntervalFinderService, ISkillPriorityProvider skillPriorityProvider)
         {
             _meetingOverviewView = meetingOverviewView;
             _activityRepository = activityRepository;
@@ -38,8 +37,8 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
             _unitOfWorkFactory = unitOfWorkFactory;
             _model = model;
             _canModifyMeeting = canModifyMeeting;
-            _toggleManager = toggleManager;
 	        _intraIntervalFinderService = intraIntervalFinderService;
+	        _skillPriorityProvider = skillPriorityProvider;
         }
 
         public void Execute()
@@ -71,7 +70,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
                 }
 
                 if (meetingViewModel != null)
-                    _meetingOverviewView.EditMeeting(meetingViewModel, _toggleManager, _intraIntervalFinderService);
+                    _meetingOverviewView.EditMeeting(meetingViewModel, _intraIntervalFinderService, _skillPriorityProvider);
             }
         }
 

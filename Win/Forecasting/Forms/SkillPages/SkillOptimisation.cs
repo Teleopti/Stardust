@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Interfaces.Domain;
@@ -20,8 +21,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
             var skill = aggregateRoot as ISkill;
             if (skill == null) throw new ArgumentNullException("aggregateRoot", "The supplied root must be of type: ISkill.");
 
-            trackBarExPriority.Value = skill.Priority;
-            trackBarExOverStaffingFactor.Value = (int)(100 * skill.OverstaffingFactor.Value);
+            trackBarExPriority.Value = ((ISkillPriority)skill).Priority;
+            trackBarExOverStaffingFactor.Value = (int)(100 * ((ISkillPriority)skill).OverstaffingFactor.Value);
         }
 
         public bool Depopulate(IAggregateRoot aggregateRoot)
@@ -29,8 +30,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
             var skill = aggregateRoot as ISkill;
             if (skill == null) throw new ArgumentNullException("aggregateRoot", "The supplied root must be of type: ISkill.");
 
-            skill.Priority = trackBarExPriority.Value;
-            skill.OverstaffingFactor = new Percent((double)trackBarExOverStaffingFactor.Value/100);
+			((ISkillPriority)skill).Priority = trackBarExPriority.Value;
+			((ISkillPriority)skill).OverstaffingFactor = new Percent((double)trackBarExOverStaffingFactor.Value/100);
 
             return true;
         }
