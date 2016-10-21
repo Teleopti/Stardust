@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				_configReader.ReadValue("RouteName", "/StardustDashboard"),
 				_configReader.ReadValue("AllowedNodeDownTimeSeconds", 60),
 				_configReader.ReadValue("CheckNewJobIntervalSeconds", 180),
-				_configReader.ReadValue("purgeJobsBatchSize", 1000),
-				_configReader.ReadValue("purgeJobsIntervalHours", 1),
+				_configReader.ReadValue("PurgeJobsBatchSize", 1000),
+				_configReader.ReadValue("PurgeJobsIntervalHours", 1),
 				_configReader.ReadValue("PurgeJobsOlderThanHours", 168),
 				_configReader.ReadValue("PurgeNodesIntervalHours", 1));
 			app.UseStardustManager(managerConfiguration, scope);

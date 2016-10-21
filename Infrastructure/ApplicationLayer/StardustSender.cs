@@ -78,7 +78,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 											jobName, datasource));
 			}
 
-			return _postHttpRequest.Send<Guid>(_configReader.AppConfig("ManagerLocation") + _configReader.ReadValue("RouteName", "/StardustDashboard/") + "job", mess);
+			var managerLocation = _configReader.AppConfig("ManagerLocation");
+			var route = _configReader.ReadValue("RouteName", "/StardustDashboard");
+			return _postHttpRequest.Send<Guid>(managerLocation.Remove(managerLocation.Length - 1) + route + "/job", mess);
 		}
 	}
 
