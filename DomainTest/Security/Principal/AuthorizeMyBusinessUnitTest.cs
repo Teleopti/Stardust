@@ -7,7 +7,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Security.Principal
 {
     [TestFixture]
-    public class AuthorizeMyBusinessUnitTest
+	[LegacyTest]
+	public class AuthorizeMyBusinessUnitTest
     {
         private IAuthorizeAvailableData target;
         private IPerson queryingPerson;

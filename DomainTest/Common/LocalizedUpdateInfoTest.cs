@@ -4,7 +4,8 @@ using Teleopti.Ccc.Domain.Common;
 namespace Teleopti.Ccc.DomainTest.Common
 {
     [TestFixture]
-    public class LocalizedUpdateInfoTest
+	[LegacyTest]
+	public class LocalizedUpdateInfoTest
     {
         private LocalizedUpdateInfo target;
 

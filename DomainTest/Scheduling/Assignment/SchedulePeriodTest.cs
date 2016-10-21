@@ -14,6 +14,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
     [TestFixture]
+	[LegacyTest]
     public class SchedulePeriodTest
     {
         private DateOnly _from;
@@ -35,8 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         private MockRepository _mocks;
         private IPersonAccountUpdater _personAccountUpdater;
 
-        [SetUp]
-        public void Setup()
+        private void setup()
         {
             _person1 = PersonFactory.CreatePerson();
             _person1.PermissionInformation.SetCulture(new CultureInfo("en-US"));
@@ -102,6 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void ShouldReturnZeroWorkTimePerDayWhenPeriodTimeOverrideAndSchedulePeriodStartsBeforePersonPeriod()
 		{
+			setup();
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetCulture(new CultureInfo("en-US"));
 			person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"))); //GMT-3
@@ -118,7 +119,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void CanCreateAndReadProperties()
         {
-            Assert.AreEqual(_from, _periodDay.DateFrom);
+			setup();
+			Assert.AreEqual(_from, _periodDay.DateFrom);
             Assert.AreEqual(_type, _periodDay.PeriodType);
             Assert.AreEqual(_number, _periodDay.Number);
             Assert.AreEqual(_avgWorkTimePerDay, _periodDay.AverageWorkTimePerDay);
@@ -132,7 +134,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void CanReturnCorrectWeekPeriod()
         {
-            var startPeriod1 = new DateOnly(2008, 12, 29);//Monday
+			setup();
+			var startPeriod1 = new DateOnly(2008, 12, 29);//Monday
             var startPeriod2 = new DateOnly(2009, 1, 5);
             var startPeriod3 = new DateOnly(2009, 1, 26);
 
@@ -156,7 +159,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void CanGetSchedulePeriodWeek()
         {
-            DateOnly startPeriod1 = new DateOnly(2008, 12, 30);//Tuesday
+			setup();
+			DateOnly startPeriod1 = new DateOnly(2008, 12, 30);//Tuesday
             ISchedulePeriod weekPeriod1 = new SchedulePeriod(startPeriod1, SchedulePeriodType.Week, 2);
             _normalPerson.AddSchedulePeriod(weekPeriod1);
 
@@ -172,7 +176,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void CanGetSchedulePeriodDay()
         {
-            DateOnly requested = new DateOnly(2008, 3, 15);
+			setup();
+			DateOnly requested = new DateOnly(2008, 3, 15);
             DateOnly expectedLocalStart = new DateOnly(2008, 3, 13);
             DateOnly expectedLocalEnd = new DateOnly(2008, 3, 22);
             DateOnlyPeriod expectedPeriod = new DateOnlyPeriod(expectedLocalStart, expectedLocalEnd);
@@ -183,7 +188,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void CanGetSchedulePeriodMonth()
         {
-            DateOnly requested = new DateOnly(2008, 3, 15);
+			setup();
+			DateOnly requested = new DateOnly(2008, 3, 15);
             DateOnly expectedLocalStart = new DateOnly(2008, 3, 3);
             DateOnly expectedLocalEnd = new DateOnly(2008, 4, 2);
             //Convert expected local from person timezone
@@ -263,13 +269,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyEmptyConstructor()
         {
-            Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(_periodDay.GetType(), true));
+			setup();
+			Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(_periodDay.GetType(), true));
         }
 
         [Test]
         public void VerifyNullOnLowerFromDate()
         {
-            DateOnly date = new DateOnly(2004, 1, 5);
+			setup();
+			DateOnly date = new DateOnly(2004, 1, 5);
             Assert.IsNull(_periodDay.GetSchedulePeriod(date));      
         }
 
@@ -283,7 +291,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyAdjustForTerminalDateInSchedulePeriod()
         {
-            DateOnly terminalDate = new DateOnly(2008, 3, 20);
+			setup();
+			DateOnly terminalDate = new DateOnly(2008, 3, 20);
             _person2.TerminatePerson(terminalDate,_personAccountUpdater);
 
             DateOnly requested = new DateOnly(2008, 3, 15);
@@ -297,7 +306,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyAdjustForTerminalDateBeforeSchedulePeriod()
         {
-            DateOnly terminalDate = new DateOnly(2008, 1, 20);
+			setup();
+			DateOnly terminalDate = new DateOnly(2008, 1, 20);
             _person2.TerminatePerson(terminalDate, _personAccountUpdater);
             DateOnly requested = new DateOnly(2008, 3, 15);
             Assert.IsFalse(_periodWeek.GetSchedulePeriod(requested) != null);    
@@ -306,7 +316,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyAdjustForTerminalDateAfterSchedulePeriod()
         {
-            DateOnly terminalDate = new DateOnly(2008, 5, 20);
+			setup();
+			DateOnly terminalDate = new DateOnly(2008, 5, 20);
             _person2.TerminatePerson(terminalDate, _personAccountUpdater);
 
             DateOnly requested = new DateOnly(2008, 3, 15);
@@ -329,7 +340,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyCanGetContract()
         {
-            IPersonPeriod personPeriod;
+			setup();
+			IPersonPeriod personPeriod;
             _person3.DeletePersonPeriod(_person3.PersonPeriodCollection.First());
             personPeriod = _periodMonth.GetPersonPeriod();
             Assert.IsNull(personPeriod);
@@ -344,7 +356,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifySeemsToGetRightPeriod()
         {
-            _contract1 = new Contract("4Hour");
+			setup();
+			_contract1 = new Contract("4Hour");
             _contract1.WorkTime = new WorkTime(new TimeSpan(4,0,0));
             
             IPersonContract personContract1 = new PersonContract(_contract1, 
@@ -389,7 +402,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyCanGetAverageWorkTimeFromContract()
         {
-            IPersonPeriod personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2007, 12, 30));
+			setup();
+			IPersonPeriod personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2007, 12, 30));
             _person3.AddPersonPeriod(personPeriod1);
 
             _periodMonth.ResetAverageWorkTimePerDay();
@@ -407,7 +421,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyCanResetAverageWorkTimePerDay()
         {
-            TimeSpan originalValue = _periodMonth.AverageWorkTimePerDay; //From contract time = 8 hours
+			setup();
+			TimeSpan originalValue = _periodMonth.AverageWorkTimePerDay; //From contract time = 8 hours
 			_periodMonth.AverageWorkTimePerDayOverride = TimeSpan.FromHours(5d);
             Assert.AreEqual(TimeSpan.FromHours(5d),_periodMonth.AverageWorkTimePerDay);
 			Assert.IsTrue(_periodMonth.IsAverageWorkTimePerDayOverride);
@@ -420,6 +435,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyAverageWorkTimePerDayWhenPeriodTimeIsOverridden()
 		{
+			setup();
 			Assert.AreEqual(TimeSpan.FromHours(8d), _periodMonth.AverageWorkTimePerDay); // original value
 			const int originalPeriodTime = 176;
 			const int workdays = 22;
@@ -438,7 +454,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyCanResetDaysOff()
         {
-            int originalValue = _periodMonth.GetDaysOff(_from); //From contract = 8
+			setup();
+			int originalValue = _periodMonth.GetDaysOff(_from); //From contract = 8
             _periodMonth.SetDaysOff(5);
 			Assert.IsTrue(_periodMonth.DaysOff.HasValue);
             Assert.AreEqual(5, _periodMonth.GetDaysOff(_from));
@@ -451,6 +468,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyCanResetPeriodTime()
 		{
+			setup();
 			_periodMonth.PeriodTime = new TimeSpan(1000);
 			Assert.IsTrue(_periodMonth.PeriodTime.HasValue);
 			_periodMonth.ResetPeriodTime();
@@ -467,26 +485,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyNumberOfDaysOffCannotBeLessThanOne()
         {
+			setup();
 			Assert.Throws<ArgumentOutOfRangeException>(() => _periodMonth.SetDaysOff(-1));
         }
 
         [Test]
         public void VerifyNumberOfDaysOffCannotBeGreaterThan999()
         {
+			setup();
 			Assert.Throws<ArgumentOutOfRangeException>(() => _periodMonth.SetDaysOff(1000));
         }
 
         [Test]
         public void VerifyNumberOfDaysOffOk()
         {
-            _periodMonth.SetDaysOff(0);
+			setup();
+			_periodMonth.SetDaysOff(0);
             _periodMonth.SetDaysOff(999);
         }
 
         [Test]
         public void VerifyIsDaysOffOverride()
         {
-            Assert.IsFalse(_periodMonth.IsDaysOffOverride);
+			setup();
+			Assert.IsFalse(_periodMonth.IsDaysOffOverride);
             _periodMonth.SetDaysOff(5);
             Assert.IsTrue(_periodMonth.IsDaysOffOverride);
             _periodMonth.ResetDaysOff();
@@ -496,7 +518,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyIsAverageWorkTimePerDayOverride()
         {
-            Assert.IsFalse(_periodMonth.IsAverageWorkTimePerDayOverride);
+			setup();
+			Assert.IsFalse(_periodMonth.IsAverageWorkTimePerDayOverride);
 			_periodMonth.AverageWorkTimePerDayOverride = TimeSpan.FromHours(6d);
             Assert.IsTrue(_periodMonth.IsAverageWorkTimePerDayOverride);
             _periodMonth.ResetAverageWorkTimePerDay();
@@ -506,7 +529,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyCanSetFromDate()
         {
-            DateOnly testDateTime = new DateOnly(DateTime.MinValue);
+			setup();
+			DateOnly testDateTime = new DateOnly(DateTime.MinValue);
             _periodMonth.DateFrom = testDateTime;
             Assert.AreEqual(testDateTime, _periodMonth.DateFrom);
         }
@@ -514,26 +538,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyCanSetPeriodType()
         {
-            _periodMonth.PeriodType = SchedulePeriodType.Week;
+			setup();
+			_periodMonth.PeriodType = SchedulePeriodType.Week;
             Assert.AreEqual(SchedulePeriodType.Week, _periodMonth.PeriodType);
         }
 
         [Test]
         public void VerifyCanSetNumber()
         {
-            _periodMonth.Number = 80;
+			setup();
+			_periodMonth.Number = 80;
             Assert.AreEqual(80, _periodMonth.Number);
         }
 
         [Test]
         public void VerifyNumberGreaterThanZero()
         {
+			setup();
 			Assert.Throws<ArgumentOutOfRangeException>(() => _periodDay.Number = 0);
         }
 
         [Test]
         public void VerifyNumberGreaterThanZeroInConstructor()
         {
+			setup();
 			Assert.Throws<ArgumentOutOfRangeException>(() =>
 			{
 				var periodException = new SchedulePeriod(new DateOnly(), SchedulePeriodType.Day, 0);
@@ -543,14 +571,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyCloneWorks()
         {
-            SchedulePeriod clonedEntity = (SchedulePeriod)_periodMonth.Clone();
+			setup();
+			SchedulePeriod clonedEntity = (SchedulePeriod)_periodMonth.Clone();
             Assert.AreNotEqual(clonedEntity, _periodMonth);
         }
 
         [Test]
         public void VerifyGetContractScheduleDaysOff()
         {
-            Assert.AreEqual(3, _periodDay.GetDaysOff(_from));
+			setup();
+			Assert.AreEqual(3, _periodDay.GetDaysOff(_from));
         }
 
         [Test]
@@ -563,6 +593,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyGetScheduleDaysOffChineseMonth()
 		{
+			setup();
 			_from = new DateOnly(2009, 01, 01);
 			Assert.AreEqual(8, _periodChineseMonth.GetDaysOff(_from));
 			_from = new DateOnly(2009, 02, 01);
@@ -603,7 +634,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void CanAddShiftCategoryLimitation()
         {
-            IShiftCategoryLimitation shiftCategoryLimitation =
+			setup();
+			IShiftCategoryLimitation shiftCategoryLimitation =
                 new ShiftCategoryLimitation(ShiftCategoryFactory.CreateShiftCategory("xx"));
             _periodMonth.AddShiftCategoryLimitation(shiftCategoryLimitation);
             Assert.AreEqual(1, _periodMonth.ShiftCategoryLimitationCollection().Count);
@@ -612,6 +644,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void CannotAddShiftCategoryLimitationWithSameCategory()
         {
+			setup();
 			Assert.Throws<ArgumentException>(() =>
 			{
 				IShiftCategoryLimitation shiftCategoryLimitation =
@@ -625,7 +658,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void CanRemoveShiftCategoryLimitation()
         {
-            IShiftCategoryLimitation shiftCategoryLimitation =
+			setup();
+			IShiftCategoryLimitation shiftCategoryLimitation =
                 new ShiftCategoryLimitation(ShiftCategoryFactory.CreateShiftCategory("xx"));
             _periodMonth.AddShiftCategoryLimitation(shiftCategoryLimitation);
             _periodMonth.RemoveShiftCategoryLimitation(shiftCategoryLimitation.ShiftCategory);
@@ -638,7 +672,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void CanClearShiftCategoryLimitation()
         {
-            IShiftCategoryLimitation shiftCategoryLimitation =
+			setup();
+			IShiftCategoryLimitation shiftCategoryLimitation =
                 new ShiftCategoryLimitation(ShiftCategoryFactory.CreateShiftCategory("xx"));
             _periodMonth.AddShiftCategoryLimitation(shiftCategoryLimitation);
             _periodMonth.ClearShiftCategoryLimitation();
@@ -648,13 +683,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyMustHavePreferences()
         {
-            _periodMonth.MustHavePreference = _mustHavePreference;
+			setup();
+			_periodMonth.MustHavePreference = _mustHavePreference;
             Assert.AreEqual(_mustHavePreference, _periodMonth.MustHavePreference);
         }
 
         [Test]
         public void VerifyMustHavePreferencesCannotBeLessThanZero()
         {
+			setup();
 			Assert.Throws<ArgumentOutOfRangeException>(() =>
 			{
 				_periodMonth.MustHavePreference = -1;
@@ -665,7 +702,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyBalanceIn()
         {
-            TimeSpan value = new TimeSpan();
+			setup();
+			TimeSpan value = new TimeSpan();
             _periodDay.BalanceIn = value;
             Assert.AreEqual(value, _periodDay.BalanceIn);
         }
@@ -673,7 +711,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyExtra()
         {
-            TimeSpan value = new TimeSpan();
+			setup();
+			TimeSpan value = new TimeSpan();
             _periodDay.Extra = value;
             Assert.AreEqual(value, _periodDay.Extra);
         }
@@ -681,7 +720,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyBalanceOut()
         {
-            TimeSpan value = new TimeSpan();
+			setup();
+			TimeSpan value = new TimeSpan();
             _periodDay.BalanceOut = value;
             Assert.AreEqual(value, _periodDay.BalanceOut);
         }
@@ -689,6 +729,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void ShouldReturnRealEndDate()
 		{
+			setup();
 			var startDate = new DateOnly(2011, 1, 1);
 			var endDateDay = new DateOnly(2011, 1, 10);
 			var endDateWeek = new DateOnly(2011, 1, 14);
@@ -705,6 +746,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void BalanceInShouldRoundToMinutes()
 		{
+			setup();
 			_periodWeek.BalanceIn = TimeSpan.FromMinutes(1.5);
 			Assert.AreEqual(TimeSpan.FromMinutes(2), _periodWeek.BalanceIn);
 
@@ -713,6 +755,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void BalanceOutShouldRoundToMinutes()
 		{
+			setup();
 			_periodWeek.BalanceOut = TimeSpan.FromMinutes(1.5);
 			Assert.AreEqual(TimeSpan.FromMinutes(2), _periodWeek.BalanceOut);
 
@@ -721,6 +764,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void ExtraShouldRoundToMinutes()
 		{
+			setup();
 			_periodWeek.Extra = TimeSpan.FromMinutes(1.5);
 			Assert.AreEqual(TimeSpan.FromMinutes(2), _periodWeek.Extra);
 

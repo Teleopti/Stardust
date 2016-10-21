@@ -15,6 +15,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
+	[LegacyTest]
 	public class MergeScheduleDayTest
 	{
 		private readonly DateTimePeriod period1 = new DateTimePeriod(new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 17, 0, 0, DateTimeKind.Utc));
@@ -101,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			authorization.Stub(x => x.IsPermitted("")).Repeat.Once().IgnoreArguments().Return(false);
 			authorization.Stub(x => x.IsPermitted("")).IgnoreArguments().Return(true);
 
-			using (new CustomAuthorizationContext(authorization))
+			using (CurrentAuthorization.ThreadlyUse(authorization))
 			{
 				destination.Merge(source, false);
 				Assert.IsTrue(destination.HasDayOff());
@@ -145,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			destination.Add(personAssignmentDest);
 			destination.PersonAssignment().SetDayOff(DayOffFactory.CreateDayOff());
 
-			using (new CustomAuthorizationContext(MockRepository.GenerateMock<IAuthorization>()))
+			using (CurrentAuthorization.ThreadlyUse(MockRepository.GenerateMock<IAuthorization>()))
 			{
 				destination.Merge(source, false);
 				Assert.IsNotNull(destination.PersonAssignment());
@@ -180,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			authorization.Stub(x => x.IsPermitted("")).Repeat.Once().IgnoreArguments().Return(true);
 			authorization.Stub(x => x.IsPermitted("")).IgnoreArguments().Return(false);
-			using (new CustomAuthorizationContext(authorization))
+			using (CurrentAuthorization.ThreadlyUse(authorization))
 			{
 				destination.Merge(source, false);
 				Assert.AreEqual(1, destination.PersonAbsenceCollection().Count);
@@ -237,7 +238,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			var authorization = MockRepository.GenerateMock<IAuthorization>();
 			authorization.Stub(x => x.IsPermitted("")).IgnoreArguments().Return(true);
-			using (new CustomAuthorizationContext(authorization))
+			using (CurrentAuthorization.ThreadlyUse(authorization))
 			{
 				destination.CreateAndAddActivity(ActivityFactory.CreateActivity("activity"), destination.Period, shiftCategory);
 				Assert.IsFalse(destination.HasDayOff());
@@ -878,7 +879,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			authorization.Stub(x => x.IsPermitted("")).Repeat.Once().IgnoreArguments().Return(false);
 			authorization.Stub(x => x.IsPermitted("")).IgnoreArguments().Return(true);
 
-			using (new CustomAuthorizationContext(authorization))
+			using (CurrentAuthorization.ThreadlyUse(authorization))
 			{
 				destination.Merge(source, false);
 				Assert.AreEqual(1, destination.PersonAbsenceCollection().Count);

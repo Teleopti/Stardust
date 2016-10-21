@@ -15,7 +15,8 @@ using Teleopti.Ccc.Domain.AgentInfo;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
     [TestFixture]
-    public class SchedulePartSignificantPartDefinitionsTest
+	[LegacyTest]
+	public class SchedulePartSignificantPartDefinitionsTest
     {
         private IScheduleDay _part;
         private DateTime _baseDateTime;

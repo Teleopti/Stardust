@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(_authorization))
+				using (CurrentAuthorization.ThreadlyUse(_authorization))
 				{
 					_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions,
 											 _groupPersonBuilderWrapper);
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(_authorization))
+				using (CurrentAuthorization.ThreadlyUse(_authorization))
 				{
 					_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions,
 											 _groupPersonBuilderWrapper);

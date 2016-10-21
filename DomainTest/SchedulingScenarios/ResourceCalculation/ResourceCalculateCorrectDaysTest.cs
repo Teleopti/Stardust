@@ -15,8 +15,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
-	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_CalculateFarAwayTimeZones_40646)]
+	[LegacyDomainTest]
 	public class ResourceCalculateCorrectDaysTest
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;

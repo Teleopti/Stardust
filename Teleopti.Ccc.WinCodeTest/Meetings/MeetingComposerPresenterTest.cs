@@ -386,9 +386,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             }
             using (_mocks.Playback())
             {
-                using (new CustomAuthorizationContext(authorization))
-                {
-                    _target.SaveMeeting();
+				using (CurrentAuthorization.ThreadlyUse(authorization))
+				{
+					_target.SaveMeeting();
                 }
             }
         }

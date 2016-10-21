@@ -23,6 +23,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture]
+	[LegacyTest]
 	public class RemovePartPersonAbsenceCommandHandlerTest
 	{
 		private SaveSchedulePartService _saveSchedulePartService;

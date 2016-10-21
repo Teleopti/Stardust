@@ -11,6 +11,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
 	[TestFixture]
+	[LegacyTest]
 	public class MinWeeklyRestRuleTest
 	{
 		private MockRepository _mocks;

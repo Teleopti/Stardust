@@ -13,7 +13,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
-	[TestFixture, DomainTest]
+	[TestFixture]
+	[LegacyDomainTest]
 	public class NonoverwritableLayerMovabilityCheckerTest : ISetup
 	{
 		public FakePersonRepository PersonRepository;

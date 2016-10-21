@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
-	[DomainTest]
+	[LegacyDomainTest]
 	public class SchedulingCascadingTest
 	{
 		public FullScheduling Target;

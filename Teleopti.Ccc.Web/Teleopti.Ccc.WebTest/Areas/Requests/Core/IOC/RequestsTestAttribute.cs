@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 			var scenario = new FakeCurrentScenario();
 			var principalAuthorization = new FullPermission();
 
-			CurrentAuthorization.GloballyUse(principalAuthorization);
+			CurrentAuthorization.DefaultTo(principalAuthorization);
 
 			system.AddModule(new WebModule(configuration, null));
 

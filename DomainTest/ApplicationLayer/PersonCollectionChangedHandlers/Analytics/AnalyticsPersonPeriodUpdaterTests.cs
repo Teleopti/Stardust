@@ -22,6 +22,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
 	[TestFixture]
+	[LegacyTest]
 	public class AnalyticsPersonPeriodUpdaterTests
 	{
 		private AnalyticsPersonPeriodUpdater _target;

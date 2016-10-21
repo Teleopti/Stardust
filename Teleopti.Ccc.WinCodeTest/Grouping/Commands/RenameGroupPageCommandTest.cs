@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Grouping;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
         [Test]
         public void ShouldReturnFalseModifyNotAllowed()
         {
-            using (new CustomAuthorizationContext(new NoPermission()))
+            using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
             {
                 Assert.That(_target.CanExecute(), Is.False);
             }

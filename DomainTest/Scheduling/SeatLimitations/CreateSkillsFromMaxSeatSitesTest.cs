@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 {
-	[DomainTest]
+	[LegacyDomainTest]
 	public class CreateSkillsFromMaxSeatSitesTest
 	{
 		public ICreateSkillsFromMaxSeatSites Target;

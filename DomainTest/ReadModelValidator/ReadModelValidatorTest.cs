@@ -19,7 +19,8 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 {
-	[TestFixture, DomainTest]
+	[TestFixture]
+	[LegacyDomainTest]
 	public class ReadModelValidatorTest : ISetup
 	{
 		public FakePersonRepository PersonRepository;

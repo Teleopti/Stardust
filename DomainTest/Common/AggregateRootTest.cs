@@ -14,7 +14,8 @@ namespace Teleopti.Ccc.DomainTest.Common
     /// Tests for AggregateRoot
     /// </summary>
     [TestFixture]
-    public class AggregateRootTest
+	[LegacyTest]
+	public class AggregateRootTest
     {
         private VersionedAggregateRootWithBusinessUnit _targetAggregateRootWithBusinessUnit;
 

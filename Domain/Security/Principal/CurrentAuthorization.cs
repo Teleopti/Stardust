@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
@@ -9,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 	public interface IAuthorizationScope
 	{
-		void OnThisThreadUse(IAuthorization principalAuthorization);
+		IDisposable OnThisThreadUse(IAuthorization authorization);
 	}
 
 	public class ThisAuthorization : ICurrentAuthorization
@@ -30,35 +32,41 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 	public class CurrentAuthorization : ICurrentAuthorization, IAuthorizationScope
 	{
 		private readonly IAuthorization _authorization;
-		private static IAuthorization _globalAuthorization;
-		private readonly ThreadLocal<IAuthorization> _threadAuthorization = new ThreadLocal<IAuthorization>();
+		private static IAuthorization _defaultAuthorization;
+		private static readonly ThreadLocal<Stack<IAuthorization>> _threadAuthorization = new ThreadLocal<Stack<IAuthorization>>(() => new Stack<IAuthorization>());
 
 		public CurrentAuthorization(IAuthorization authorization)
 		{
 			_authorization = authorization;
 		}
 
-		public static ICurrentAuthorization Make()
+		public static CurrentAuthorization Make()
 		{
 			return new CurrentAuthorization(new PrincipalAuthorization(CurrentTeleoptiPrincipal.Make()));
 		}
 
-		public static void GloballyUse(IAuthorization authorization)
+		public static void DefaultTo(IAuthorization authorization)
 		{
-			_globalAuthorization = authorization;
+			_defaultAuthorization = authorization;
+		}
+		 
+		public static IDisposable ThreadlyUse(IAuthorization authorization)
+		{
+			_threadAuthorization.Value.Push(authorization);
+			return new GenericDisposable(() => _threadAuthorization.Value.Pop());
 		}
 
-		public void OnThisThreadUse(IAuthorization principalAuthorization)
+		public IDisposable OnThisThreadUse(IAuthorization authorization)
 		{
-			_threadAuthorization.Value = principalAuthorization;
+			return ThreadlyUse(authorization);
 		}
 
 		public IAuthorization Current()
 		{
-			if (_threadAuthorization.Value != null)
-				return _threadAuthorization.Value;
-			if (_globalAuthorization != null)
-				return _globalAuthorization;
+			if (_threadAuthorization.Value.Count > 0)
+				return _threadAuthorization.Value.Peek();
+			if (_defaultAuthorization != null)
+				return _defaultAuthorization;
 			return _authorization;
 		}
 

@@ -4,6 +4,7 @@ using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
@@ -164,7 +165,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             }
             using (_mock.Playback())
             {
-                using (new CustomAuthorizationContext(new NoPermission()))
+                using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
                 {
                     Assert.Throws<FaultException>(() => _target.Handle(_setPersonAccountForPersonCommandDto));
                 }

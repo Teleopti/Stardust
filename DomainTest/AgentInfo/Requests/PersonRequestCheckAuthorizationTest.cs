@@ -2,14 +2,15 @@
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 {
     [TestFixture]
-    public class PersonRequestCheckAuthorizationTest
+	[LegacyTest]
+	public class PersonRequestCheckAuthorizationTest
     {
         private IPersonRequestCheckAuthorization target;
         private PersonRequestFactory personRequestFactory;
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         [Test]
         public void ShouldThrowWhenNoPermissionWhenVerifying()
         {
-            using(new CustomAuthorizationContext(new NoPermission()))
+            using(CurrentAuthorization.ThreadlyUse(new NoPermission()))
             {
                 Assert.Throws<PermissionException>(() => target.VerifyEditRequestPermission(personRequest));
             }

@@ -15,7 +15,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
     [TestFixture]
-    public class SwapServiceTest
+	[LegacyTest]
+	public class SwapServiceTest
     {
         private IPerson _person1;
         private IPerson _person2;

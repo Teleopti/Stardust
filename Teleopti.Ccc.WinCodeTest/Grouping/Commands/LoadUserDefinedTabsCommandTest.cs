@@ -6,6 +6,7 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -80,7 +81,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
         [Test]
         public void ShouldRemoveFromListIfNoPermission()
         {
-            using (new CustomAuthorizationContext(new NoPermission()))
+            using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
             {
                 var buId = Guid.NewGuid();
                 var stoGuid = Guid.NewGuid();

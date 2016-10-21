@@ -12,7 +12,8 @@ namespace Teleopti.Ccc.DomainTest.Common
     /// Tests for Contract class.
     /// </summary>
     [TestFixture]
-    public class ContractTest
+	[LegacyTest]
+	public class ContractTest
     {
         private IContract _testContract;
 

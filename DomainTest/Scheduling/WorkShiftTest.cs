@@ -16,7 +16,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
     /// Tests for work shift
     /// </summary>
     [TestFixture]
-    public class WorkShiftTest
+	[LegacyTest]
+	public class WorkShiftTest
     {
         private IWorkShift target;
         private ShiftCategory category;

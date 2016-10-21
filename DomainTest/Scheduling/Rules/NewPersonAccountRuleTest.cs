@@ -19,7 +19,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
     [TestFixture]
-    public class NewPersonAccountRuleTest
+	[LegacyTest]
+	public class NewPersonAccountRuleTest
     {
         private INewBusinessRule _target;
         private ISchedulingResultStateHolder _stateHolder;

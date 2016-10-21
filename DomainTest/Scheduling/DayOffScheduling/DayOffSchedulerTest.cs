@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 			using (_mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(_authorization))
+				using (CurrentAuthorization.ThreadlyUse(_authorization))
 				{
 					_target.DayOffScheduling(matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
 				}
@@ -293,7 +293,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 			using (_mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(_authorization))
+				using (CurrentAuthorization.ThreadlyUse(_authorization))
 				{
 					_target.DayOffScheduling(matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
 				}
@@ -338,7 +338,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 			using (_mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(_authorization))
+				using (CurrentAuthorization.ThreadlyUse(_authorization))
 				{
 					_target.DayScheduled += _target_DayScheduled;
 					_target.DayOffScheduling(matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
@@ -384,7 +384,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 			using (_mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(_authorization))
+				using (CurrentAuthorization.ThreadlyUse(_authorization))
 				{
 					_target.DayOffScheduling(matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
 				}

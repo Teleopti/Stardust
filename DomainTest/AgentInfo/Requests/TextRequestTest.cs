@@ -17,7 +17,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
     /// Created date: 2008-10-06
     /// </remarks>
     [TestFixture]
-    public class TextRequestTest
+	[LegacyTest]
+	public class TextRequestTest
     {
         private DateTimePeriod _period;
         private TextRequest target;

@@ -21,7 +21,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
-	[TestFixture, DomainTest]
+	[TestFixture]
+	[LegacyDomainTest]
 	public class FixNotOverwriteLayerCommandHandlerTest:ISetup
 	{
 		public FixNotOverwriteLayerCommandHandler Target;

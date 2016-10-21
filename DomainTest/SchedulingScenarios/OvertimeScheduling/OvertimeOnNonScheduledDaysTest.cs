@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 {
-	[DomainTest]
+	[LegacyDomainTest]
 	public class OvertimeOnNonScheduledDaysTest
 	{
 		public ScheduleOvertime Target;

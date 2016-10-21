@@ -15,6 +15,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture]
+	[LegacyTest]
 	public class AddFullDayAbsenceCommandHandlerTest
 	{
 		private FakeWriteSideRepository<IPerson> _personRepository;

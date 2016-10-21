@@ -21,7 +21,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {
-	[DomainTest]
+	[LegacyDomainTest]
 	public class TeamBlockScheduleCommandTest
 	{
 		public ITeamBlockScheduleCommand Target;

@@ -12,6 +12,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 {
 	[TestFixture]
+	[LegacyTest]
 	public class SameOpenHoursInTeamBlockSpecificationTest
 	{
 		private ISameOpenHoursInTeamBlockSpecification _target;

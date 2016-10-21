@@ -11,7 +11,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Forecasting
 {
     [TestFixture]
-    public class MultisiteDayTemplateTest
+	[LegacyTest]
+	public class MultisiteDayTemplateTest
     {
         private IMultisiteDayTemplate target;
         private IList<ITemplateMultisitePeriod> _multisitePeriods;

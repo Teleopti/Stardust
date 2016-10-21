@@ -20,7 +20,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
-	[DomainTest]
+	[LegacyDomainTest]
 	[TestFixture(true)]
 	[TestFixture(false)]
 	public class ResourceCalculationResultTest : IConfigureToggleManager

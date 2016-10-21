@@ -23,6 +23,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 {
 	[DomainTest]
+	[LegacyTest]
 	public class ScheduleOvertimeServiceTest
 	{
 		public IScheduleOvertimeService Target;

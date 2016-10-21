@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	/// Tests PersonAssignment
 	/// </summary>
 	[TestFixture]
+	[LegacyTest]
 	public class PersonAssignmentTest
 	{
 		private IPersonAssignment target;

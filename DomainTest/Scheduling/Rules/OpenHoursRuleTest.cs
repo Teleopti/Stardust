@@ -15,7 +15,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
     [TestFixture]
-    public class OpenHoursRuleTest
+	[LegacyTest]
+	public class OpenHoursRuleTest
     {
         private OpenHoursRule _target;
         private IScheduleDay _day;

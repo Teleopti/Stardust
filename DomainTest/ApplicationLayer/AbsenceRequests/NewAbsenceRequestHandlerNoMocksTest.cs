@@ -34,6 +34,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[TestFixture]
+	[LegacyTest]
 	public class NewAbsenceRequestHandlerNoMocksTest
 	{
 		readonly ICurrentScenario _currentScenario = new FakeCurrentScenario();

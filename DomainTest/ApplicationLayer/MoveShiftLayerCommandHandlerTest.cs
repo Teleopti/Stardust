@@ -15,6 +15,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
+	[LegacyTest]
 	public class MoveShiftLayerCommandHandlerTest
 	{
 		[Test]

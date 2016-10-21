@@ -279,6 +279,7 @@
     <Compile Include="ApplicationLayer\Skill\AnalyticsSkillUpdaterTest.cs" />
     <Compile Include="Intraday\ForecastedStaffingViewModelCreatorTest.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
+    <Compile Include="LegacyDomainTestAttribute.cs" />
     <Compile Include="ReadModelValidator\ReadModelValidatorTest.cs" />
     <Compile Include="ResourceCalculation\CalculateResourceReadModelTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationTest.cs" />
@@ -1111,7 +1112,6 @@
     <Compile Include="ResourceCalculation\StudentSchedulingServiceTest.cs" />
     <Compile Include="ResourceCalculation\PeriodDistributionServiceTest.cs" />
     <Compile Include="ResourceCalculation\PeriodDistributionTest.cs" />
-    <Compile Include="ResourceCalculation\SchedulePartModifyAndRollbackServiceTest.cs" />
     <Compile Include="ResourceCalculation\SchedulingOptionsTest.cs" />
     <Compile Include="ResourceCalculation\SchedulingResultServiceTest.cs" />
     <Compile Include="ResourceCalculation\SchedulingResultStateHolderTest.cs" />
@@ -1504,7 +1504,8 @@
     <Compile Include="Scheduling\ActivityTest.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignmentTest.cs" />
     <Compile Include="Security\RegExpSpecificationTest.cs" />
-    <Compile Include="SetUpFixtureForAssembly.cs" />
+    <Compile Include="LegacyTestAttribute.cs" />
+    <Compile Include="OneTimeSetUp.cs" />
     <Compile Include="SiteOpenHours\SiteOpenHoursPersisterTest.cs" />
     <Compile Include="Specification\AllTest.cs" />
     <Compile Include="Specification\SpecificationTest.cs" />
