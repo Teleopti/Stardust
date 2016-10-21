@@ -222,11 +222,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			base.BeforeTest();
 
 			// because DomainTest project has OneTimeSetUp that sets FullPermissions globally... 
-			if (realPermissions())
-				AuthorizationScope.OnThisThreadUse(new PrincipalAuthorization(CurrentTeleoptiPrincipal));
-			else
-				AuthorizationScope.OnThisThreadUse(new FullPermission());
-
+			_authorizationScope = realPermissions()
+				? AuthorizationScope.OnThisThreadUse(new PrincipalAuthorization(CurrentTeleoptiPrincipal))
+				: AuthorizationScope.OnThisThreadUse(new FullPermission());
 		}
 
 		protected override void AfterTest()
