@@ -17,11 +17,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new MaintenanceJobStep(jobParameters));     // BU independent
 
 			// STAGE TABLES
-			Add(new StageDateJobStep(jobParameters));                    // BU independent
-			Add(new DimDateJobStep(jobParameters));                     // BU independent
-			Add(new StageTimeZoneJobStep(jobParameters));               // BU independent
-			Add(new DimTimeZoneJobStep(jobParameters));                 // BU independent
-			Add(new StageTimeZoneBridgeJobStep(jobParameters));         // BU independent
+			AddWhenAllDisabled(new StageDateJobStep(jobParameters), Toggles.ETL_RemoveTimeZoneAndDateNightly_40870);                    // BU independent
+			AddWhenAllDisabled(new DimDateJobStep(jobParameters), Toggles.ETL_RemoveTimeZoneAndDateNightly_40870);                     // BU independent
+			AddWhenAllDisabled(new StageTimeZoneJobStep(jobParameters), Toggles.ETL_RemoveTimeZoneAndDateNightly_40870);               // BU independent
+			AddWhenAllDisabled(new DimTimeZoneJobStep(jobParameters), Toggles.ETL_RemoveTimeZoneAndDateNightly_40870);                 // BU independent
+			AddWhenAllDisabled(new StageTimeZoneBridgeJobStep(jobParameters), Toggles.ETL_RemoveTimeZoneAndDateNightly_40870);         // BU independent
 			AddWhenAllDisabled(new StageBusinessUnitJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyBusinessUnit_38932);            // BU independent
 			Add(new DimQueueJobStep(jobParameters));                    // BU independent
 			Add(new DimAcdLogOnJobStep(jobParameters));                 // BU independent
@@ -58,7 +58,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new SqlServerUpdateStatistics(jobParameters));
 
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
-			Add(new BridgeTimeZoneJobStep(jobParameters));              // BU independent
+			AddWhenAllDisabled(new BridgeTimeZoneJobStep(jobParameters), Toggles.ETL_RemoveTimeZoneAndDateNightly_40870);              // BU independent
 			AddWhenAllDisabled(new DimBusinessUnitJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyBusinessUnit_38932);
 
 			Add(new DimDayOffJobStep(jobParameters));
