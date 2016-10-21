@@ -16,15 +16,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
     {
         private MockRepository _mocks;
         private DeleteSchedulePartService _deleteService;
-        private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private IList<IScheduleDay> _list;
         private IScheduleDay _part1;
         private IScheduleDay _part2;
         private IScheduleDay _part3;
         private DeleteOption _deleteOption;
-        private IScheduleDictionary _scheduleDictionary;
-        private IPerson _person;
-        private IScheduleRange _scheduleRange1;
     	private ISchedulePartModifyAndRollbackService _rollbackService;
         private NoSchedulingProgress _schedulingProgress;
         
@@ -32,17 +28,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void Setup()
         {
             _mocks = new MockRepository();
-            _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-            _deleteService = new DeleteSchedulePartService(()=>_schedulingResultStateHolder);
+            _deleteService = new DeleteSchedulePartService();
         	_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_part1 = _mocks.StrictMock<IScheduleDay>();
 			_part2 = _mocks.StrictMock<IScheduleDay>();
 			_part3 = _mocks.StrictMock<IScheduleDay>();
             _list = new List<IScheduleDay>{_part1, _part2};
             _deleteOption = new DeleteOption();
-			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-			_person = _mocks.StrictMock<IPerson>();
-			_scheduleRange1 = _mocks.StrictMock<IScheduleRange>();
             _schedulingProgress = new NoSchedulingProgress();
         }
 
@@ -59,13 +51,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             {
                 _part3.DeleteMainShift();
                 _part3.DeleteMainShift();
-
-                Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
-                Expect.Call(_part1.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange1).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleRange1.ReFetch(_part1)).Return(_part3).Repeat.AtLeastOnce();
-                Expect.Call(_part2.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleRange1.ReFetch(_part2)).Return(_part3).Repeat.AtLeastOnce();
+                Expect.Call(_part1.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
+                Expect.Call(_part2.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
 				Expect.Call(() => _rollbackService.Modify(_part3)).Repeat.AtLeastOnce();
             }
 
@@ -84,12 +71,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				_part3.DeleteMainShiftSpecial();
 				_part3.DeleteMainShiftSpecial();
 
-				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
-				Expect.Call(_part1.Person).Return(_person).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange1).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleRange1.ReFetch(_part1)).Return(_part3).Repeat.AtLeastOnce();
-				Expect.Call(_part2.Person).Return(_person).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleRange1.ReFetch(_part2)).Return(_part3).Repeat.AtLeastOnce();
+				Expect.Call(_part1.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
+				Expect.Call(_part2.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
 				Expect.Call(() => _rollbackService.Modify(_part3)).Repeat.AtLeastOnce();
 			}
 
@@ -108,17 +91,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 _part3.DeletePersonalStuff();
                 _part3.DeletePersonalStuff();
 
-                
-                Expect.Call(_part1.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange1).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleRange1.ReFetch(_part1)).Return(_part3).Repeat.AtLeastOnce();
 
-                Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.Any();
-                Expect.Call(_part2.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleRange1.ReFetch(_part2)).Return(_part3).Repeat.AtLeastOnce();
+				Expect.Call(_part1.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
+				Expect.Call(_part2.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
 				Expect.Call(() => _rollbackService.Modify(_part3)).Repeat.AtLeastOnce();
 
-            }
+			}
 
             using (_mocks.Playback())
             {
@@ -135,14 +113,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 _part3.DeleteDayOff();
                 _part3.DeleteDayOff();
 
-                Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
-                Expect.Call(_part1.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange1).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleRange1.ReFetch(_part1)).Return(_part3).Repeat.AtLeastOnce();
-                Expect.Call(_part2.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleRange1.ReFetch(_part2)).Return(_part3).Repeat.AtLeastOnce();
+				Expect.Call(_part1.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
+				Expect.Call(_part2.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
 				Expect.Call(() => _rollbackService.Modify(_part3)).Repeat.AtLeastOnce();
-            }
+			}
 
             using (_mocks.Playback())
             {
@@ -161,15 +135,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 Expect.Call(() => _part3.DeleteFullDayAbsence(_part3)).Repeat.AtLeastOnce();
 
 
-                Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
-                Expect.Call(_part1.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange1).Repeat.AtLeastOnce();
-                Expect.Call(_part2.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleRange1.ReFetch(_part1)).Return(_part3).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleRange1.ReFetch(_part2)).Return(_part3).Repeat.AtLeastOnce();
-
-                Expect.Call(() => _rollbackService.Modify(_part3)).Repeat.AtLeastOnce();
-            }
+				Expect.Call(_part1.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
+				Expect.Call(_part2.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
+				Expect.Call(() => _rollbackService.Modify(_part3)).Repeat.AtLeastOnce();
+			}
 
             using (_mocks.Playback())
             {
@@ -187,15 +156,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 _part3.DeleteFullDayAbsence(_part3);
                 _part3.DeleteFullDayAbsence(_part3);
 
-                Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
-                Expect.Call(_part1.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange1).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleRange1.ReFetch(_part1)).Return(_part3).Repeat.AtLeastOnce();
-                Expect.Call(_part2.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleRange1.ReFetch(_part2)).Return(_part3).Repeat.AtLeastOnce();
-                LastCall.IgnoreArguments();
+				Expect.Call(_part1.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
+				Expect.Call(_part2.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
 				Expect.Call(() => _rollbackService.Modify(_part3)).Repeat.AtLeastOnce();
-            }
+			}
 
             using (_mocks.Playback())
             {
@@ -223,16 +187,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 Expect.Call(() => _part3.DeleteAbsence(false)).Repeat.AtLeastOnce();
                 Expect.Call(() => _part3.DeleteOvertime()).Repeat.AtLeastOnce();
 
-                Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
-                Expect.Call(_part1.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange1).Repeat.AtLeastOnce();
-                Expect.Call(_part2.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleRange1.ReFetch(_part1)).Return(_part3).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleRange1.ReFetch(_part2)).Return(_part3).Repeat.AtLeastOnce();
-
+				Expect.Call(_part1.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
+				Expect.Call(_part2.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
 				Expect.Call(() => _rollbackService.Modify(_part3)).Repeat.AtLeastOnce();
 
-            }
+			}
 
             using (_mocks.Playback())
             {
@@ -266,13 +225,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				Expect.Call(() => _part3.DeleteAbsence(false)).Repeat.AtLeastOnce();
 				Expect.Call(() => _part3.DeleteOvertime()).Repeat.AtLeastOnce();
 
-				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
-				Expect.Call(_part1.Person).Return(_person).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange1).Repeat.AtLeastOnce();
-				Expect.Call(_part2.Person).Return(_person).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleRange1.ReFetch(_part1)).Return(_part3).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleRange1.ReFetch(_part2)).Return(_part3).Repeat.AtLeastOnce();
-
+				Expect.Call(_part1.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
+				Expect.Call(_part2.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
 				Expect.Call(() => _rollbackService.Modify(_part3)).Repeat.AtLeastOnce();
 
 			}
@@ -295,12 +249,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _list = new List<IScheduleDay> { _part1};
             using (_mocks.Record())
             {
-                Expect.Call(_part1.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange1).Repeat.Any();
-                Expect.Call(_scheduleRange1.ReFetch(_part1)).Return(_part1).Repeat.AtLeastOnce();
+                Expect.Call(_part1.ReFetch()).Return(_part1).Repeat.AtLeastOnce();
                 Expect.Call(_part1.DeleteOvertime).Repeat.AtLeastOnce();
 
-                Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.Any();
 				Expect.Call(() => _rollbackService.Modify(_part1));
             }
 
@@ -318,10 +269,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             using (_mocks.Record())
             {
-                Expect.Call(_part1.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange1).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleRange1.ReFetch(_part1)).Return(_part1).Repeat.AtLeastOnce();
-                Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
+                Expect.Call(_part1.ReFetch()).Return(_part1).Repeat.AtLeastOnce();
                 Expect.Call(_part1.DeletePreferenceRestriction).Repeat.Once();
 				Expect.Call(() => _rollbackService.Modify(_part1));
             }
@@ -340,10 +288,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             using (_mocks.Record())
             {
-                Expect.Call(_part1.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange1).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleRange1.ReFetch(_part1)).Return(_part1).Repeat.AtLeastOnce();
-                Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
+                Expect.Call(_part1.ReFetch()).Return(_part1).Repeat.AtLeastOnce();
                 Expect.Call(_part1.DeleteStudentAvailabilityRestriction).Repeat.Once();
             	Expect.Call(() => _rollbackService.Modify(_part1));
             }
@@ -363,13 +308,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
-				Expect.Call(_part1.Person).Return(_person).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange1).Repeat.AtLeastOnce();
-				Expect.Call(_part2.Person).Return(_person).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleRange1.ReFetch(_part1)).Return(_part3).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleRange1.ReFetch(_part2)).Return(_part3).Repeat.AtLeastOnce();
-				Expect.Call(_part3.Person).Return(_person).Repeat.AtLeastOnce();
+				Expect.Call(_part1.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
+				Expect.Call(_part2.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
 				Expect.Call(() => _rollbackService.Modify(_part3, rules)).Repeat.AtLeastOnce();
 				Expect.Call(() => _rollbackService.Modify(_part2, rules));
 			}
@@ -385,13 +325,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             using (_mocks.Record())
             {
-                Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
-                Expect.Call(_part1.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange1).Repeat.AtLeastOnce();
-                Expect.Call(_part2.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleRange1.ReFetch(_part1)).Return(_part3).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleRange1.ReFetch(_part2)).Return(_part3).Repeat.AtLeastOnce();
-                Expect.Call(_part3.Person).Return(_person).Repeat.AtLeastOnce();
+                Expect.Call(_part1.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
+                Expect.Call(_part2.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
 				Expect.Call(() => _rollbackService.Modify(_part3)).Repeat.AtLeastOnce();
 				Expect.Call(() => _rollbackService.Modify(_part2));
             }

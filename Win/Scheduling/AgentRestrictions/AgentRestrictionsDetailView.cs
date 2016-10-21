@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			undoRedo.CreateBatch(string.Format(CultureInfo.CurrentCulture, Resources.UndoRedoDeleteSchedules,
 											   strippedList.Count));
 
-			var deleteService = new DeleteSchedulePartService(()=>Presenter.SchedulerState.SchedulingResultState);
+			var deleteService = new DeleteSchedulePartService();
 
 			ISchedulePartModifyAndRollbackService rollbackService =
 				new SchedulePartModifyAndRollbackService(Presenter.SchedulerState.SchedulingResultState,

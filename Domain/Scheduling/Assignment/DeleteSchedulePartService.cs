@@ -18,13 +18,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     /// </summary>
     public class DeleteSchedulePartService : IDeleteSchedulePartService
     {
-        private readonly Func<ISchedulingResultStateHolder> _scheduleResultStateHolder;
-
-        public DeleteSchedulePartService(Func<ISchedulingResultStateHolder> scheduleResultStateHolder)
-        {
-            _scheduleResultStateHolder = scheduleResultStateHolder;
-        }
-
         public IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingProgress backgroundWorker)
         {
             IList<IScheduleDay> returnList = new List<IScheduleDay>();
@@ -45,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					rollbackService.Modify(scheduleDay);
             	}
 
-                returnList.Add(_scheduleResultStateHolder().Schedules[part.Person].ReFetch(part));
+                returnList.Add(part.ReFetch());
             }
 
             return returnList;
@@ -67,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 				rollbackService.Modify(clonePart, newBusinessRuleCollection);
 
-				return _scheduleResultStateHolder().Schedules[part.Person].ReFetch(part);
+				return part.ReFetch();
 			}).Where(r => r != null).ToList();
 
 		}
@@ -90,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
     	private IScheduleDay preparePart(DeleteOption options, IScheduleDay part)
         {
-            IScheduleDay clonePart = _scheduleResultStateHolder().Schedules[part.Person].ReFetch(part);
+            IScheduleDay clonePart = part.ReFetch();
 
             if (options.MainShift)
                 clonePart.DeleteMainShift();

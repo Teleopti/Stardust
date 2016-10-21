@@ -2904,7 +2904,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var argument = (Tuple<DeleteOption, IList<IScheduleDay>>) e.Argument;
 			var list = argument.Item2;
 			_undoRedo.CreateBatch(string.Format(CultureInfo.CurrentCulture, Resources.UndoRedoDeleteSchedules, list.Count));
-			var deleteService = new DeleteSchedulePartService(() => SchedulerState.SchedulingResultState);
+			var deleteService = new DeleteSchedulePartService();
 			ISchedulePartModifyAndRollbackService rollbackService =
 				new SchedulePartModifyAndRollbackService(SchedulerState.SchedulingResultState,
 					_container.Resolve<IScheduleDayChangeCallback>(),
