@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			ForecastedStaffingProvider forecastedStaffingProvider,
 			IIntradayQueueStatisticsLoader intradayQueueStatisticsLoader,
 			IIntervalLengthFetcher intervalLengthFetcher
-            )
+			)
 		{
 			_now = now;
 			_timeZone = timeZone;
@@ -49,10 +49,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var updatedForecastedSeries = getUpdatedForecastedStaffing(
 				staffingForUsersToday,
-				actualCallsPerSkillInterval, 
+				actualCallsPerSkillInterval,
 				forecastedStaffingModel.CallsPerSkill,
-				latestStatsTime, 
-				usersNow, 
+				latestStatsTime,
+				usersNow,
 				minutesPerInterval
 			);
 
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 								.ToArray(),
 					UpdatedForecastedStaffing = updatedForecastedSeries
 								.ToArray(),
-					ActualStaffing = getActualStaffingSeries(forecastedStaffingModel.ActualStaffingPerSkill, latestStatsTime,minutesPerInterval, staffingForUsersToday)
+					ActualStaffing = getActualStaffingSeries(forecastedStaffingModel.ActualStaffingPerSkill, latestStatsTime, minutesPerInterval, staffingForUsersToday)
 								.ToArray()
 				}
 			};
@@ -92,88 +92,96 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private List<double?> getActualStaffingSeries(List<StaffingIntervalModel> actualStaffingPerSkill, DateTime? latestStatsTime, int minutesPerInterval, List<StaffingIntervalModel> staffingForUsersToday)
 		{
 			var returnValue = new List<double?>();
-			
-		    if (!latestStatsTime.HasValue || !actualStaffingPerSkill.Any())
-		        return new List<double?>();
+
+			if (!latestStatsTime.HasValue || !actualStaffingPerSkill.Any())
+				return new List<double?>();
 
 			returnValue.AddRange(actualStaffingPerSkill
 				.OrderBy(x => x.StartTime)
 				.GroupBy(y => y.StartTime)
-				.Select(s => (double?) s.Sum(a => a.Agents))
+				.Select(s => (double?)s.Sum(a => a.Agents))
 				.ToList());
 
-		    var actualStartTime = actualStaffingPerSkill.Min(x => x.StartTime);
-		    var actualEndTime = actualStaffingPerSkill.Max(x => x.StartTime).AddMinutes(minutesPerInterval);
-            var forecastStartTime = staffingForUsersToday.Min(x => x.StartTime);
+			var actualStartTime = actualStaffingPerSkill.Min(x => x.StartTime);
+			var actualEndTime = actualStaffingPerSkill.Max(x => x.StartTime).AddMinutes(minutesPerInterval);
+
+			var forecastStartTime = staffingForUsersToday.Min(x => x.StartTime);
 			var forecastEndTime = staffingForUsersToday.Max(x => x.StartTime).AddMinutes(minutesPerInterval);
 
-            for (DateTime i = forecastStartTime; i < actualStartTime; i = i.AddMinutes(minutesPerInterval))
-                returnValue.Insert(0, null);
+			for (DateTime i = forecastStartTime; i < actualStartTime; i = i.AddMinutes(minutesPerInterval))
+				returnValue.Insert(0, null);
 
-            for (DateTime i = actualEndTime; i < forecastEndTime; i = i.AddMinutes(minutesPerInterval))
-		        returnValue.Add(null);
+			for (DateTime i = actualEndTime; i < forecastEndTime; i = i.AddMinutes(minutesPerInterval))
+				returnValue.Add(null);
 
-		    return returnValue;
+
+			return returnValue;
 		}
 
 		private List<double?> getUpdatedForecastedStaffing(
-			List<StaffingIntervalModel> forecastedStaffingList, 
-			IList<SkillIntervalStatistics> actualCallsPerSkillList, 
-			Dictionary<Guid, List<SkillIntervalStatistics>> forecastedCallsPerSkillDictionary, 
-			DateTime? latestStatsTime, 
-			DateTime usersNow, 
+			List<StaffingIntervalModel> forecastedStaffingList,
+			IList<SkillIntervalStatistics> actualCallsPerSkillList,
+			Dictionary<Guid, List<SkillIntervalStatistics>> forecastedCallsPerSkillDictionary,
+			DateTime? latestStatsTime,
+			DateTime usersNow,
 			int minutesPerInterval)
 		{
 			if (!latestStatsTime.HasValue)
 				return new List<double?>();
 
-		    if (forecastedCallsPerSkillDictionary.Count(x => x.Value.Any()) == 0)
-		    {
-		        return new List<double?>();
-		    }
-		    
-            if (latestStatsTime > usersNow) // This case only for dev, test and demo
+			if (forecastedCallsPerSkillDictionary.Count(x => x.Value.Any()) == 0)
+			{
+				return new List<double?>();
+			}
+
+			if (latestStatsTime > usersNow) // This case only for dev, test and demo
 				usersNow = latestStatsTime.Value.AddMinutes(minutesPerInterval);
-			
+
 			var updatedForecastedSeries = new List<StaffingIntervalModel>();
 
 			foreach (var skillId in forecastedCallsPerSkillDictionary.Keys)
 			{
-			    List<SkillIntervalStatistics> actualStats = actualCallsPerSkillList.Where(x => x.SkillId == skillId).ToList();
+				List<SkillIntervalStatistics> actualStats = actualCallsPerSkillList.Where(x => x.SkillId == skillId).ToList();
 
-                double averageDeviation = 1;
+				double averageDeviation = 1;
 				if (actualStats.Count > 0)
-				{					
+				{
 					double callsDeviationFactor = 0;
-				    int intervalCounter = 0;
+					int intervalCounter = 0;
 					foreach (var forecastedIntervalCalls in forecastedCallsPerSkillDictionary[skillId])
 					{
 						var actualIntervalCalls =
-                            actualStats.SingleOrDefault(x => x.StartTime == forecastedIntervalCalls.StartTime);
+							actualStats.SingleOrDefault(x => x.StartTime == forecastedIntervalCalls.StartTime);
 						if (actualIntervalCalls == null)
 							continue;
 						if (Math.Abs(forecastedIntervalCalls.Calls) < 0.1)
 							continue;
 
 						intervalCounter++;
-                        callsDeviationFactor += actualIntervalCalls.Calls / forecastedIntervalCalls.Calls;
+						callsDeviationFactor += actualIntervalCalls.Calls / forecastedIntervalCalls.Calls;
 					}
-				    
+
 					averageDeviation = callsDeviationFactor / intervalCounter;
 				}
-				
-                var updatedForecastedSeriesPerSkill = forecastedStaffingList
-                    .Where(x => x.SkillId == skillId && x.StartTime >= usersNow)
-                    .Select(t => new StaffingIntervalModel
-                    {
-                        SkillId = skillId,
-                        Agents = t.Agents * averageDeviation,
-                        StartTime = t.StartTime
-                    })
-                    .OrderBy(y => y.StartTime)
-                    .ToList();
+
+
+				var updatedForecastedSeriesPerSkill = forecastedStaffingList
+					.Where(x => x.SkillId == skillId && x.StartTime >= usersNow)
+					.Select(t => new StaffingIntervalModel
+					{
+						SkillId = skillId,
+						Agents = t.Agents * averageDeviation,
+						StartTime = t.StartTime
+					})
+					.OrderBy(y => y.StartTime)
+					.ToList();
 
 				updatedForecastedSeries.AddRange(updatedForecastedSeriesPerSkill);
+			}
+
+			if (!updatedForecastedSeries.Any())
+			{
+				return new List<double?>();
 			}
 
 			var returnValue = updatedForecastedSeries
@@ -182,11 +190,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 				.Select(s => (double?)s.Sum(a => a.Agents))
 				.ToList();
 
-		    var nullStartTime = forecastedStaffingList
-		        .Min(y => y.StartTime);
+
+			var nullStartTime = forecastedStaffingList
+				.Min(y => y.StartTime);
 
 			var nullEndTime = updatedForecastedSeries
-                .Min(m => m.StartTime);
+				.Min(m => m.StartTime);
 
 			for (DateTime i = nullStartTime; i < nullEndTime; i = i.AddMinutes(minutesPerInterval))
 			{

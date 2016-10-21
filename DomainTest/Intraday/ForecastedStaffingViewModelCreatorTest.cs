@@ -7,12 +7,10 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -88,6 +86,59 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.UpdatedForecastedStaffing.First().Should().Be.EqualTo(null);
 			var expectedUpdatedForecastOnLastInterval = vm.DataSeries.ForecastedStaffing.Last() * 1.2;
 			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(expectedUpdatedForecastOnLastInterval);
+		}
+
+
+		[Test]
+		public void ShouldReturnStaffingCorrectlyWhenViewingAfterSkillIsClosed()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 45, 0, DateTimeKind.Utc);
+			var latestStatsTime = new DateTime(2016, 8, 26, 8, 30, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+
+			var scenario = fakeScenarioAndIntervalLength();
+
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30));
+			SkillRepository.Has(skill);
+
+			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
+			SkillDayRepository.Add(skillDay);
+
+			IntradayQueueStatisticsLoader.Has(getActualCallsPerSkillAndInterval(skillDay.WorkloadDayCollection.First().TaskPeriodList.ToList(), skill, 1.2d, latestStatsTime));
+
+			var vm = Target.Load(new[] { skill.Id.Value });
+
+			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.ForecastedStaffing.First().Should().Be.GreaterThan(0d);
+			vm.DataSeries.ForecastedStaffing.Last().Should().Be.GreaterThan(0d);
+			vm.DataSeries.ActualStaffing.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.ActualStaffing.First().Should().Be.GreaterThan(0d);
+			vm.DataSeries.ActualStaffing.Last().Should().Be.GreaterThan(0d);
+			vm.DataSeries.UpdatedForecastedStaffing.Length.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldReturnStaffingCorrectlyWhenViewingBeforeSkillIsOpen()
+		{
+			var userNow = new DateTime(2016, 8, 26, 7, 45, 0, DateTimeKind.Utc);
+			var latestStatsTime = new DateTime(2016, 8, 26, 7, 0, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+
+			var scenario = fakeScenarioAndIntervalLength();
+
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30));
+			SkillRepository.Has(skill);
+
+			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
+			SkillDayRepository.Add(skillDay);
+
+			IntradayQueueStatisticsLoader.Has(getActualCallsPerSkillAndInterval(skillDay.WorkloadDayCollection.First().TaskPeriodList.ToList(), skill, 1.2d, latestStatsTime));
+
+			var vm = Target.Load(new[] { skill.Id.Value });
+
+			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.UpdatedForecastedStaffing.Length.Should().Be.EqualTo(0);
+			vm.DataSeries.ActualStaffing.Length.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -459,7 +510,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.ActualStaffing.Last().Should().Be.EqualTo(null);
 		}
 
-        [Test]
+		[Test]
         public void ShouldReturnActualStaffingUpUntilLatestStatsTimeEvenWhenWeHaveStatsBeforeOpenHours()
         {
             var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
