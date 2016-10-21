@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void UpdatePersonPeriod(AnalyticsPersonPeriod personPeriod)
 		{
-			fakePersonPeriods.RemoveAll(a => a.PersonPeriodCode.Equals(personPeriod.PersonPeriodCode));
+			fakePersonPeriods.RemoveAll(a => a.PersonId.Equals(personPeriod.PersonId));
 			fakePersonPeriods.Add(personPeriod);
 		}
 

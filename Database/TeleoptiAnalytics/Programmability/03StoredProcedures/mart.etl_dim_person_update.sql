@@ -7,14 +7,13 @@ GO
 -- =============================================
 
 CREATE PROCEDURE [mart].[etl_dim_person_update]
-	(@person_code uniqueidentifier 
+	(@person_id int
 	,@valid_from_date smalldatetime 
 	,@valid_to_date smalldatetime 
 	,@valid_from_date_id int 
 	,@valid_from_interval_id int 
 	,@valid_to_date_id int 
 	,@valid_to_interval_id int 
-	,@person_period_code uniqueidentifier 
 	,@person_name nvarchar(200) 
 	,@first_name nvarchar(30) 
 	,@last_name nvarchar(30) 
@@ -57,8 +56,7 @@ CREATE PROCEDURE [mart].[etl_dim_person_update]
 AS
 BEGIN
 	UPDATE [mart].[dim_person]
-   SET [person_code] = @person_code
-      ,[valid_from_date] = @valid_from_date
+   SET [valid_from_date] = @valid_from_date
       ,[valid_to_date] =  @valid_to_date
       ,[valid_from_date_id] = @valid_from_date_id
       ,[valid_from_interval_id] = @valid_from_interval_id
@@ -103,7 +101,7 @@ BEGIN
       ,[valid_to_date_id_local] = @valid_to_date_id_local
       ,[valid_from_date_local] = @valid_from_date_local
       ,[valid_to_date_local] = @valid_to_date_local
- WHERE [person_period_code] = @person_period_code
+ WHERE [person_id] = @person_id
 END
 
 GO

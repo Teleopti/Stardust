@@ -100,6 +100,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			result.Count(a => !a.ToBeDeleted).Should().Be.EqualTo(1);
 		}
 
+		[Test]
+		public void ShouldUpdatePersonPeriod()
+		{
+			setUpData();
+			
+			var personPeriod = Target.PersonPeriod(personPeriodCode1);
+			personPeriod.Email = "fun@stuff.com";
+			Target.UpdatePersonPeriod(personPeriod);
+
+			var result = Target.PersonPeriod(personPeriodCode1);
+			result.Should().Not.Be.Null();
+			result.Email.Should().Be.EqualTo(personPeriod.Email);
+		}
+
 		private void setUpData()
 		{
 			personPeriod1 = new AnalyticsPersonPeriod

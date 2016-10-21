@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		{
 			// Given when adding person period
 			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
-			person.AddPersonPeriod(newTestPersonPeriod((new DateTime(2017, 12, 31)).AddDays(1)));
+			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2017, 12, 31).AddDays(1)));
 
 			// When handling event
 			_target.Handle(new PersonCollectionChangedEvent
@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		{
 			// Given when adding person period
 			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
-			person.AddPersonPeriod(newTestPersonPeriod((new DateTime(2015, 1, 1)).AddDays(-1)));
+			person.AddPersonPeriod(newTestPersonPeriod(new DateTime(2015, 1, 1).AddDays(-1)));
 
 			// When handling event
 			_target.Handle(new PersonCollectionChangedEvent
@@ -284,13 +284,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		{
 			// Given when adding person period
 			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
-			var r = newTestPersonPeriod((new DateTime(2015, 1, 1)).AddDays(-1));
+			var r = newTestPersonPeriod(new DateTime(2015, 1, 1).AddDays(-1));
 
 			IActivity act = new Activity("for test");
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
 			ISkill skill = new Domain.Forecasting.Skill("for test", "sdf", Color.Blue, 3, skType);
 			skill.Activity = act;
-			skill.TimeZone = (TimeZoneInfo.Local);
+			skill.TimeZone = TimeZoneInfo.Local;
 
 			r.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
 			person.AddPersonPeriod(r);
@@ -312,18 +312,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		{
 			// Given when adding person period
 			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
-			var r = newTestPersonPeriod((new DateTime(2015, 1, 1)).AddDays(-1));
+			var r = newTestPersonPeriod(new DateTime(2015, 1, 1).AddDays(-1));
 
 			IActivity act = new Activity("for test");
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
 			ISkill skill = new Domain.Forecasting.Skill("for test", "sdf", Color.Blue, 3, skType);
 			skill.SetId(fakeSkill3.SkillCode);
 			skill.Activity = act;
-			skill.TimeZone = (TimeZoneInfo.Local);
+			skill.TimeZone = TimeZoneInfo.Local;
 
 			ISkill skill2 = new Domain.Forecasting.Skill("for test2", "sdf2", Color.Blue, 3, skType);
 			skill.Activity = act;
-			skill.TimeZone = (TimeZoneInfo.Local);
+			skill.TimeZone = TimeZoneInfo.Local;
 
 			r.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
 			r.AddPersonSkill(new PersonSkill(skill2, new Percent(2)));
@@ -340,8 +340,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(1);
 			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)).Should().Be.EqualTo(1);
 
-			var skillEvent = ((AnalyticsPersonPeriodSkillsChangedEvent)
-				_eventPublisher.PublishedEvents.First(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)));
+			var skillEvent = (AnalyticsPersonPeriodSkillsChangedEvent)
+				_eventPublisher.PublishedEvents.First(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent));
 
 			skillEvent.AnalyticsActiveSkillsId.Count.Should().Be.EqualTo(1);
 			skillEvent.AnalyticsInactiveSkillsId.Count.Should().Be.EqualTo(0);

@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 						// Update
 						var updatedAnalyticsPersonPeriod = _personPeriodTransformer.Transform(person, personPeriod, out analyticsSkills);
-
+						updatedAnalyticsPersonPeriod.PersonId = existingPeriod.PersonId;
 						// Keep windows domain and username until external login information is availble from service bus
 						updatedAnalyticsPersonPeriod.WindowsUsername = existingPeriod.WindowsUsername;
 						updatedAnalyticsPersonPeriod.WindowsDomain = existingPeriod.WindowsDomain;
