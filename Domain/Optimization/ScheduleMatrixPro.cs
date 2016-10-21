@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public class ScheduleMatrixPro : IScheduleMatrixPro
     {
-	    private readonly ISchedulingResultStateHolder _stateHolder;
         private readonly IPerson _person;
         private readonly IVirtualSchedulePeriod _schedulePeriod;
 		private readonly IDictionary<DateOnly, IScheduleDayPro> _effectivePeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// <param name="schedulePeriod">The schedule period.</param>
         public ScheduleMatrixPro(ISchedulingResultStateHolder stateHolder, IFullWeekOuterWeekPeriodCreator periodCreator, IVirtualSchedulePeriod schedulePeriod)
         {
-            _stateHolder = stateHolder;
             _person = periodCreator.Person;
             _schedulePeriod = schedulePeriod;
             _activeScheduleRange = stateHolder.Schedules[_person];
@@ -35,7 +33,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public ScheduleMatrixPro(IScheduleRange activeScheduleRange, IFullWeekOuterWeekPeriodCreator periodCreator, IVirtualSchedulePeriod schedulePeriod)
 		{
-			_stateHolder = null;
 			_person = periodCreator.Person;
 			_schedulePeriod = schedulePeriod;
 			_activeScheduleRange = activeScheduleRange;
