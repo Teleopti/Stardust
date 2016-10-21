@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
     public class TeamBlockMaxSeatCheckerTest
     {
         private ITeamBlockMaxSeatChecker _target;
-        private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private ISchedulingOptions _schedulingOption;
         private MockRepository _mock;
         private DateOnly _dateOnly;
@@ -40,10 +39,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         public void Setup()
         {
             _mock = new MockRepository();
-            _schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
             _schedulingOption = new SchedulingOptions();
 	         _schedulingOption.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak;
-            _target=new TeamBlockMaxSeatChecker(()=>_schedulingResultStateHolder, new UsedSeatsFromSkillStaff());
+            _target=new TeamBlockMaxSeatChecker(new UsedSeatsFromSkillStaff());
             _dateOnly = DateOnly.Today;
             _skill1 = _mock.StrictMock<ISkill>();
             _skill2 = _mock.StrictMock<ISkill>();
@@ -99,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_team.Site).Return(_site);
 				Expect.Call(_site.MaxSeatSkill).Return(_skill1);
 			}
-			Assert.IsTrue(_target.CheckMaxSeat(_dateOnly, _schedulingOption, _teamInfo));
+			Assert.IsTrue(_target.CheckMaxSeat(_dateOnly, _schedulingOption, _teamInfo, _skillDaysPair));
 		}
 
 		[Test]
@@ -125,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_team.Site).Return(_site);
 				Expect.Call(_site.MaxSeatSkill).Return(_skill1);
 			}
-			Assert.IsTrue(_target.CheckMaxSeat(_dateOnly, _schedulingOption, _teamInfo));
+			Assert.IsTrue(_target.CheckMaxSeat(_dateOnly, _schedulingOption, _teamInfo, _skillDaysPair));
 		}
 
 		[Test]
@@ -149,14 +147,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_team.Site).Return(_site);
 				Expect.Call(_site.MaxSeatSkill).Return(_skill1);
 			}
-			Assert.IsFalse(_target.CheckMaxSeat(_dateOnly, _schedulingOption, _teamInfo));
+			Assert.IsFalse(_target.CheckMaxSeat(_dateOnly, _schedulingOption, _teamInfo, _skillDaysPair));
 		}
 
 
 
 		private void commonExpectCall()
         {
-            Expect.Call(_schedulingResultStateHolder.SkillDays).Return(_skillDaysPair);
             Expect.Call(_skill1.SkillType).Return(_skillType);
             Expect.Call(_skillType.ForecastSource).Return(ForecastSource.MaxSeatSkill);
             Expect.Call(_skill2.SkillType).Return(_skillType2);

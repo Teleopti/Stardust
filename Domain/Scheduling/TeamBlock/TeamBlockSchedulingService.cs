@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	                                                          schedulePartModifyAndRollbackService,
 	                                                         resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), new ShiftNudgeDirective(), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder)))
 		            verifyScheduledTeamBlock(selectedPersons, schedulePartModifyAndRollbackService, datePointer,
-		                                     dateOnlySkipList, teamBlockInfo, isCancelled);
+		                                     dateOnlySkipList, teamBlockInfo, isCancelled, schedulingResultStateHolder.SkillDays);
 				else
 				{
 					var progressResult = onDayScheduledFailed(new SchedulingServiceFailedEventArgs(()=>cancel=true));
@@ -138,7 +138,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
         private void verifyScheduledTeamBlock(IList<IPerson> selectedPersons,
                                               ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-                                              DateOnly datePointer, List<DateOnly> dateOnlySkipList, ITeamBlockInfo teamBlockInfo, Func<bool> isCancelled)
+                                              DateOnly datePointer, List<DateOnly> dateOnlySkipList, ITeamBlockInfo teamBlockInfo, Func<bool> isCancelled,
+																							IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)
         {
             foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(datePointer))
             {
@@ -155,7 +156,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             }
 	        foreach (var dateOnly in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
 			  {
-				  if (!_teamBlockMaxSeat.CheckMaxSeat(dateOnly, _schedulingOptions, teamBlockInfo.TeamInfo))
+				  if (!_teamBlockMaxSeat.CheckMaxSeat(dateOnly, _schedulingOptions, teamBlockInfo.TeamInfo, skillDays))
 				  {
 					  executeRollback(schedulePartModifyAndRollbackService);
 					  dateOnlySkipList.AddRange(teamBlockInfo.BlockInfo.BlockPeriod.DayCollection());

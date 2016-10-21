@@ -21,5 +21,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		{
 			return allSkillDays.Where(x => x.CurrentDate == date);
 		}
+
+		public static IEnumerable<ISkillDay> ToSkillDayEnumerable(this IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)
+		{
+			return skillDays.Values.SelectMany(s => s);
+		}
 	}
 }

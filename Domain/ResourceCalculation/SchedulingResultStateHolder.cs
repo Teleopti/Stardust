@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public IEnumerable<ISkillDay> AllSkillDays()
 		{
-			return _skillDays.Values.SelectMany(skillDays => skillDays);
+			return _skillDays.ToSkillDayEnumerable();
 		}
 
 		public void ClearAbsenceDataDuringCurrentRequestHandlingCycle()
