@@ -15,7 +15,7 @@
 							<p class="titleBlue">Created</p>
 						</div>
 						<div class="col-md-10">
-							{{vm.Job.CreatedBy}} {{vm.Job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}
+							{{vm.Job.CreatedBy}} {{vm.Job.Created | date : 'yyyy-MM-dd HH:mm:ss'}} (UTC)
 						</div>
 					</div>
 					<div class="row">
@@ -41,7 +41,7 @@
 							<p class="titleBlue">Started</p>
 						</div>
 						<div class="col-md-10">
-							{{vm.Job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}
+							{{vm.Job.Started | date : 'yyyy-MM-dd HH:mm:ss'}} (UTC)
 						</div>
 					</div>
 					<div class="row">
@@ -49,7 +49,7 @@
 							<p class="titleBlue">Ended</p>
 						</div>
 						<div class="col-md-10">
-							{{vm.Job.Ended | date : 'yyyy-MM-dd HH:mm:ss'}}
+							{{vm.Job.Ended | date : 'yyyy-MM-dd HH:mm:ss'}} (UTC)
 						</div>
 					</div>
 					<div class="row">
@@ -69,7 +69,7 @@
 					<table>
 						<thead>
 							<tr>
-								<th>Detail Created</th>
+								<th>Detail Created (UTC)</th>
 								<th>Detail</th>
 							</tr>
 						</thead>

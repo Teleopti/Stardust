@@ -54,7 +54,7 @@
 					<thead>
 					<tr>
 						<th>Url</th>
-						<th>Latest Heartbeat</th>
+						<th>Latest Heartbeat (UTC)</th>
 						<th>Working</th>
 					</tr>
 					</thead>
@@ -79,7 +79,7 @@
 					<thead>
 						<tr>
 							<th>Type</th>
-							<th>Started</th>
+							<th>Started (UTC)</th>
 							<th>Sent to</th>
 						</tr>
 					</thead>
@@ -103,15 +103,13 @@
 					<thead>
 					<tr>
 						<th>Type</th>
-						<th>Created By</th>
-						<th>Created At </th>
+						<th>Created (UTC)</th>
 					</tr>
 					</thead>
 					<tbody>
 					<tr ng-repeat="job in vm.QueuedJobs">
 						<td><a href="##StardustDashboard/queue/{{job.JobId}}">{{job.Name}}</a></td>
-						<td>{{job.CreatedBy}}</td>
-						<td>{{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+						<td>{{job.CreatedBy}} {{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 					</tr>
 					</tbody>
 				</table>

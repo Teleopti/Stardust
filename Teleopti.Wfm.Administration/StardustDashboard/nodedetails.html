@@ -15,7 +15,7 @@
 						<p class="titleBlue">Latest Heartbeat</p>
 					</div>
 					<div class="col-md-10">
-						{{vm.Node.Heartbeat | date : 'yyyy-MM-dd HH:mm:ss'}}
+						{{vm.Node.Heartbeat | date : 'yyyy-MM-dd HH:mm:ss'}} (UTC)
 					</div>
 				</div>
 				<div class="row">
@@ -37,7 +37,7 @@
 					<thead>
 					<tr>
 						<th>Type</th>
-						<th>Finished</th>
+						<th>Finished (UTC)</th>
 						<th>Total Duration</th>
 						<th>Sent to</th>
 						<th>Result</th>
