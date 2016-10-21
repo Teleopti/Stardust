@@ -658,16 +658,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(period3.PeriodDistribution).Return(periodDistribution);
                 Expect.Call(period4.PeriodDistribution).Return(periodDistribution);
                 
-                Expect.Call(skill1.OverstaffingFactor).Return(new Percent(.5)).Repeat.AtLeastOnce();
-                Expect.Call(skill1.PriorityValue).Return(1).Repeat.AtLeastOnce();
-                Expect.Call(skill2.OverstaffingFactor).Return(new Percent(.5)).Repeat.AtLeastOnce();
-                Expect.Call(skill2.PriorityValue).Return(1).Repeat.AtLeastOnce();
+                //Expect.Call(skill1.OverstaffingFactor).Return(new Percent(.5)).Repeat.AtLeastOnce();
+                //Expect.Call(skill1.PriorityValue).Return(1).Repeat.AtLeastOnce();
+                //Expect.Call(skill2.OverstaffingFactor).Return(new Percent(.5)).Repeat.AtLeastOnce();
+                //Expect.Call(skill2.PriorityValue).Return(1).Repeat.AtLeastOnce();
             }
 
             using (mocks.Playback())
             {
                 _skillStaffPeriodHolder = new SkillStaffPeriodHolder(skillDaysDictionary);
-                var ret = _skillStaffPeriodHolder.SkillStaffDataPerActivity(period, skills);
+                var ret = _skillStaffPeriodHolder.SkillStaffDataPerActivity(period, skills, new SkillPriorityProvider());
                 Assert.IsNotNull(ret);
                 var dic = ret[activity1];
 

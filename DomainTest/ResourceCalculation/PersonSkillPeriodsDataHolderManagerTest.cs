@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -18,12 +19,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> _theDictionary;
         private IPerson _person;
         private IVirtualSchedulePeriod _schedulePeriod;
+	    private ISkillPriorityProvider _skillPriorityProvider;
         
         [SetUp]
         public void Setup()
         {
             _schedulingResultStateHolder = MockRepository.GenerateMock<ISchedulingResultStateHolder>();
-            _target = new PersonSkillPeriodsDataHolderManager(()=>_schedulingResultStateHolder);
+			_skillPriorityProvider = new SkillPriorityProvider();
+            _target = new PersonSkillPeriodsDataHolderManager(()=>_schedulingResultStateHolder, _skillPriorityProvider);
 			_skillStafPeriodHolder = MockRepository.GenerateMock<ISkillStaffPeriodHolder>();
 			_schedulePeriod = MockRepository.GenerateMock<IVirtualSchedulePeriod>();
 			_theDictionary = MockRepository.GenerateMock<IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>>();
@@ -43,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 		    _schedulePeriod.Stub(x => x.Person).Return(_person);
 		    _schedulingResultStateHolder.Stub(x => x.SkillStaffPeriodHolder).Return(_skillStafPeriodHolder);
-		    _skillStafPeriodHolder.Stub(x => x.SkillStaffDataPerActivity(new DateTimePeriod(), skills)).Return(_theDictionary).IgnoreArguments();
+		    _skillStafPeriodHolder.Stub(x => x.SkillStaffDataPerActivity(new DateTimePeriod(), skills, _skillPriorityProvider)).Return(_theDictionary).IgnoreArguments();
 
 		    var personSkillDay = new PersonSkillDayCreator(new PersonalSkillsProvider()).Create(dateOnly, _schedulePeriod);
 		    var ret = _target.GetPersonSkillPeriodsDataHolderDictionary(personSkillDay);

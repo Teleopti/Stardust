@@ -1,7 +1,9 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_HideSkillPrioSliders_41312)]
 	public class SkillPriorityProvider : ISkillPriorityProvider
 	{
 		public int GetPriority(ISkill skill)

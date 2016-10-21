@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         private const string _name = "Skill - Name";
         private const string _description = "Skill - Description";
         private readonly Color _displayColor = Color.FromArgb(234);
+	    private ISkillPriorityProvider _skillPriorityProvider;
 
         /// <summary>
         /// Setup
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void Setup()
         {
             target = new Skill(_name, _description, _displayColor, 15, SkillTypeFactory.CreateSkillType());
+			_skillPriorityProvider = new SkillPriorityProvider();
         }
 
         /// <summary>
@@ -627,62 +629,62 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyPriorityAndValue()
         {
-            Assert.AreEqual(4, target.Priority);
-            Assert.AreEqual(1, target.PriorityValue);
+            Assert.AreEqual(4, _skillPriorityProvider.GetPriority(target));
+            Assert.AreEqual(1, _skillPriorityProvider.GetPriorityValue(target));
             
-            target.Priority = 1;
-            Assert.AreEqual(1, target.Priority);
-            Assert.AreEqual(.16, target.PriorityValue);
+            ((ISkillPriority)target).Priority = 1;
+            Assert.AreEqual(1, _skillPriorityProvider.GetPriority(target));
+            Assert.AreEqual(.16, _skillPriorityProvider.GetPriorityValue(target));
 
-            target.Priority = 2;
-            Assert.AreEqual(2, target.Priority);
-            Assert.AreEqual(.32, target.PriorityValue);
+			((ISkillPriority)target).Priority = 2;
+            Assert.AreEqual(2, _skillPriorityProvider.GetPriority(target));
+            Assert.AreEqual(.32, _skillPriorityProvider.GetPriorityValue(target));
 
-            target.Priority = 3;
-            Assert.AreEqual(3, target.Priority);
-            Assert.AreEqual(.64, target.PriorityValue);
+			((ISkillPriority)target).Priority = 3;
+            Assert.AreEqual(3, _skillPriorityProvider.GetPriority(target));
+            Assert.AreEqual(.64, _skillPriorityProvider.GetPriorityValue(target));
 
-            target.Priority = 5;
-            Assert.AreEqual(5, target.Priority);
-            Assert.AreEqual(4, target.PriorityValue);
+			((ISkillPriority)target).Priority = 5;
+            Assert.AreEqual(5, _skillPriorityProvider.GetPriority(target));
+            Assert.AreEqual(4, _skillPriorityProvider.GetPriorityValue(target));
 
-            target.Priority = 6;
-            Assert.AreEqual(6, target.Priority);
-            Assert.AreEqual(16, target.PriorityValue);
+			((ISkillPriority)target).Priority = 6;
+            Assert.AreEqual(6, _skillPriorityProvider.GetPriority(target));
+            Assert.AreEqual(16, _skillPriorityProvider.GetPriorityValue(target));
 
-            target.Priority = 7;
-            Assert.AreEqual(7,target.Priority);
-            Assert.AreEqual(256, target.PriorityValue);
+			((ISkillPriority)target).Priority = 7;
+            Assert.AreEqual(7, _skillPriorityProvider.GetPriority(target));
+            Assert.AreEqual(256, _skillPriorityProvider.GetPriorityValue(target));
         }
 
         [Test]
         public void VerifyPriorityMustBeBetweenOneAndSeven()
         {
-			Assert.Throws<ArgumentOutOfRangeException>(() => target.Priority = 8);
+			Assert.Throws<ArgumentOutOfRangeException>(() => ((ISkillPriority)target).Priority = 8);
         }
 
         [Test]
         public void VerifyPriorityMustBeBetweenOneAndSeven2()
         {
-			Assert.Throws<ArgumentOutOfRangeException>(() => target.Priority = 0);
+			Assert.Throws<ArgumentOutOfRangeException>(() => ((ISkillPriority)target).Priority = 0);
         }
 
         [Test]
         public void VerifyOverUnderStaff()
         {
-            Assert.AreEqual(new Percent(.50),target.OverstaffingFactor);
-            target.OverstaffingFactor = new Percent(.3);
-            Assert.AreEqual(new Percent(.30), target.OverstaffingFactor);
+            Assert.AreEqual(new Percent(.50), _skillPriorityProvider.GetOverstaffingFactor(target));
+			((ISkillPriority)target).OverstaffingFactor = new Percent(.3);
+            Assert.AreEqual(new Percent(.30), _skillPriorityProvider.GetOverstaffingFactor(target));
         }
         [Test]
         public void VerifyOverstaffToHigh()
         {
-			Assert.Throws<ArgumentOutOfRangeException>(() => target.OverstaffingFactor = new Percent(2));
+			Assert.Throws<ArgumentOutOfRangeException>(() => ((ISkillPriority)target).OverstaffingFactor = new Percent(2));
         }
         [Test]
         public void VerifyOverstaffToLow()
         {
-			Assert.Throws<ArgumentOutOfRangeException>(() => target.OverstaffingFactor = new Percent(-1));
+			Assert.Throws<ArgumentOutOfRangeException>(() => ((ISkillPriority)target).OverstaffingFactor = new Percent(-1));
         }
 
 		[Test]

@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Meetings.Commands;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
@@ -24,8 +23,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 		private IUnitOfWorkFactory _unitOfWorkFactory;
 		private ISettingDataRepository _settingDataRepository;
 		private ICanModifyMeeting _canModifyMeeting;
-	    private IToggleManager _toggleManager;
 		private IIntraIntervalFinderService _intraIntervalFinderService;
+		private ISkillPriorityProvider _skillPriorityProvider;
 
 		[SetUp]
 		public void Setup()
@@ -35,9 +34,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 			_settingDataRepository = _mocks.StrictMock<ISettingDataRepository>();
 			_unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
 			_canModifyMeeting = _mocks.StrictMock<ICanModifyMeeting>();
-            _toggleManager = _mocks.StrictMock<IToggleManager>();
 			_intraIntervalFinderService = _mocks.StrictMock<IIntraIntervalFinderService>();
-            _target = new EditMeetingCommand(_view, _settingDataRepository, _unitOfWorkFactory, _canModifyMeeting, _toggleManager, _intraIntervalFinderService);
+            _target = new EditMeetingCommand(_view, _settingDataRepository, _unitOfWorkFactory, _canModifyMeeting, _intraIntervalFinderService, _skillPriorityProvider);
 
 		}
 
@@ -79,7 +77,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 				Expect.Call(meeting.EntityClone()).Return(meeting);
 				Expect.Call(meeting.MeetingRecurrenceOption).Return(null);
 				Expect.Call(meeting.Snapshot);
-				Expect.Call(() => _view.EditMeeting(meetingViewModel, _toggleManager, _intraIntervalFinderService)).IgnoreArguments();
+				Expect.Call(() => _view.EditMeeting(meetingViewModel, _intraIntervalFinderService, null)).IgnoreArguments();
 			}
 			using (_mocks.Playback())
 			{

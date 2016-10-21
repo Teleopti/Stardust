@@ -277,6 +277,7 @@
     <Compile Include="Cascading\SkillRoutingPriorityPersisterTest.cs" />
     <Compile Include="Common\ScheduleChangedEventDetector.cs" />
     <Compile Include="ApplicationLayer\Skill\AnalyticsSkillUpdaterTest.cs" />
+    <Compile Include="Forecasting\SkillPriorityProviderTest.cs" />
     <Compile Include="Intraday\ForecastedStaffingViewModelCreatorTest.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
     <Compile Include="LegacyDomainTestAttribute.cs" />

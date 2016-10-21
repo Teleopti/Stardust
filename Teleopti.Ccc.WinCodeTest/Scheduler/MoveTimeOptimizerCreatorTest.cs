@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 												   _resourceOptimizationHelper,
 												   _dayOffOptimizationPreferenceProvider,
 													 MockRepository.GenerateStub<IDeleteAndResourceCalculateService>(),
-													 new PersonalSkillsProvider());
+													 new ScheduleResultDataExtractorProvider(new PersonalSkillsProvider(), new SkillPriorityProvider()));
 		}
 
 		[Test]

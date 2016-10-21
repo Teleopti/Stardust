@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _skillStaffPeriodHolder = _mock.StrictMock<ISkillStaffPeriodHolder>();
             _stateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
             _skillStaff = _mock.StrictMock<ISkillStaff>();
-            _target = new DailyBoostedSkillForecastAndScheduledValueCalculator(()=>_stateHolder);
+            _target = new DailyBoostedSkillForecastAndScheduledValueCalculator(()=>_stateHolder, new SkillPriorityProvider());
         }
 
         [Test]

@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 			_person.Period(new DateOnly()).PersonNonBlendSkillCollection.Add(new PersonSkill(_skill, new Percent(1)));
             _nonBlendImpactOnPeriodForProjection = _mocks.StrictMock<INonBlendSkillImpactOnPeriodForProjection>();
 			_workShiftCalculator = _mocks.StrictMock<IWorkShiftCalculator>();
-            _target = new NonBlendWorkShiftCalculator(_nonBlendImpactOnPeriodForProjection, _workShiftCalculator);
+            _target = new NonBlendWorkShiftCalculator(_nonBlendImpactOnPeriodForProjection, _workShiftCalculator, new SkillPriorityProvider());
 		}
 
 		[Test]

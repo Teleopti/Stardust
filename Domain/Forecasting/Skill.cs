@@ -6,13 +6,14 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_HideSkillPrioSliders_41312)]
 	public interface ISkillPriority
 	{
 		int Priority { get; set; }
@@ -201,6 +202,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_HideSkillPrioSliders_41312)]
         public virtual int Priority
         {
             get { return _priority; }
@@ -212,7 +214,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-        public virtual double PriorityValue
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_HideSkillPrioSliders_41312)]
+		public virtual double PriorityValue
         {
             get
             {
@@ -236,7 +239,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-        public virtual Percent OverstaffingFactor
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_HideSkillPrioSliders_41312)]
+		public virtual Percent OverstaffingFactor
         {
             get { return _overstaffingFactor; }
             set
