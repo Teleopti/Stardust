@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
@@ -417,11 +416,11 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		public void EditMeeting(IMeetingViewModel meetingViewModel, IToggleManager toggleManager, IIntraIntervalFinderService intraIntervalFinderService)
+		public void EditMeeting(IMeetingViewModel meetingViewModel, IIntraIntervalFinderService intraIntervalFinderService, ISkillPriorityProvider skillPriorityProvider)
 		{
 			var viewSchedulesPermission = isPermittedToViewSchedules();
 			var meetingComposerView = new MeetingComposerView(meetingViewModel, null, true, viewSchedulesPermission,
-															  _eventAggregator, toggleManager, _resourceOptimizationHelper);
+															  _eventAggregator, _resourceOptimizationHelper, skillPriorityProvider);
 			meetingComposerView.ShowDialog(this);
 		}
 

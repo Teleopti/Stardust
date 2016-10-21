@@ -9,7 +9,6 @@ using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -63,10 +62,11 @@ namespace Teleopti.Ccc.Win.Intraday
 		private readonly IResourceOptimizationHelperExtended _resourceOptimizationHelperExtended;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+		private readonly ISkillPriorityProvider _skillPriorityProvider;
 
 		public IntradayViewContent(IntradayPresenter presenter, IIntradayView owner, IEventAggregator eventAggregator, ISchedulerStateHolder schedulerStateHolder,
 			 IntradaySettingManager settingManager, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, IResourceOptimizationHelperExtended resourceOptimizationHelperExtended,
-			 CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IScheduleDayChangeCallback scheduleDayChangeCallback)
+			 CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IScheduleDayChangeCallback scheduleDayChangeCallback, ISkillPriorityProvider skillPriorityProvider)
 		{
 			if (presenter == null) throw new ArgumentNullException("presenter");
 			if (owner == null) throw new ArgumentNullException("owner");
@@ -78,6 +78,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
+			_skillPriorityProvider = skillPriorityProvider;
 			_presenter = presenter;
 			_schedulerStateHolder = schedulerStateHolder;
 			_owner = owner;
@@ -171,7 +172,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			_backgroundWorkerResources.RunWorkerCompleted += backgroundWorkerResourcesRunWorkerCompleted;
 			_backgroundWorkerResources.ProgressChanged += _backgroundWorkerResources_ProgressChanged;
 
-			_skillIntradayGridControl = new SkillIntradayGridControl(_settingManager.ChartSetting);
+			_skillIntradayGridControl = new SkillIntradayGridControl(_settingManager.ChartSetting, _skillPriorityProvider);
 			_skillIntradayGridControl.SelectionChanged += skillIntradayGridControlSelectionChanged;
 			InitializeIntradayViewContent();
 		}

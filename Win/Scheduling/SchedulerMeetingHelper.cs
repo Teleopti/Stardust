@@ -26,14 +26,16 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly IInitiatorIdentifier _initiatorIdentifier;
         private readonly ISchedulerStateHolder _schedulerStateHolder;
 	    private readonly IResourceOptimization _resourceOptimizationHelper;
+	    private readonly ISkillPriorityProvider _skillPriorityProvider;
 	    private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
 	    private readonly MeetingParticipantPermittedChecker _meetingParticipantPermittedChecker = new MeetingParticipantPermittedChecker();
 
-	    internal SchedulerMeetingHelper(IInitiatorIdentifier initiatorIdentifier, ISchedulerStateHolder schedulerStateHolder, IResourceOptimization resourceOptimizationHelper)
+	    internal SchedulerMeetingHelper(IInitiatorIdentifier initiatorIdentifier, ISchedulerStateHolder schedulerStateHolder, IResourceOptimization resourceOptimizationHelper, ISkillPriorityProvider skillPriorityProvider)
         {
             _initiatorIdentifier = initiatorIdentifier;
             _schedulerStateHolder = schedulerStateHolder;
 	        _resourceOptimizationHelper = resourceOptimizationHelper;
+		    _skillPriorityProvider = skillPriorityProvider;
         }
 
         internal event EventHandler<ModifyMeetingEventArgs> ModificationOccured;
@@ -181,7 +183,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
             }
 
-            using (MeetingComposerView meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulerStateHolder, editPermission, viewSchedulesPermission, new EventAggregator(), toggleManager, _resourceOptimizationHelper))
+            using (MeetingComposerView meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulerStateHolder, editPermission, viewSchedulesPermission, new EventAggregator(), _resourceOptimizationHelper, _skillPriorityProvider))
             {
 				meetingComposerView.SetInstanceId(_initiatorIdentifier.InitiatorId);
                 meetingComposerView.ModificationOccurred += meetingComposerView_ModificationOccurred;

@@ -367,7 +367,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			updateLifeTimeScopeWith2ThingsWithFullDependencyChain();
 
 			var toggleManager = _container.Resolve<IToggleManager>();
-			_skillDayGridControl = new SkillDayGridControl
+			_skillDayGridControl = new SkillDayGridControl(_container.Resolve<ISkillPriorityProvider>())
 			{
 				ContextMenu = contextMenuStripResultView.ContextMenu,
 				ToggleManager = toggleManager
@@ -419,7 +419,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 #pragma warning disable 618
 			_schedulerState.UndoRedoContainer = _undoRedo;
 #pragma warning restore 618
-			_schedulerMeetingHelper = new SchedulerMeetingHelper(_schedulerMessageBrokerHandler, _schedulerState, _container.Resolve<IResourceOptimization>());
+			_schedulerMeetingHelper = new SchedulerMeetingHelper(_schedulerMessageBrokerHandler, _schedulerState, _container.Resolve<IResourceOptimization>(), _container.Resolve<ISkillPriorityProvider>());
 			//Using the same module id when saving meeting changes to avoid getting them via MB as well
 
 			toolStripMenuItemLoggedOnUserTimeZone.Text = _schedulerState.TimeZoneInfo.DisplayName;

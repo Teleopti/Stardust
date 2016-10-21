@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public class SkillDayGridControl : SkillResultGridControlBase
     {
+		private readonly ISkillPriorityProvider _skillPriorityProvider;
 		private const int rowHeaderWidth = 200;
         private const int cellWidth = 55;
         private const string settingName = "SchedulerSkillDayGridAndChart";
@@ -28,9 +29,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
         private IList<DateOnly> _dates;
 
         //constructor
-        public SkillDayGridControl()
+        public SkillDayGridControl(ISkillPriorityProvider skillPriorityProvider)
         {
-            initializeComponent();
+	        _skillPriorityProvider = skillPriorityProvider;
+	        initializeComponent();
             initializeGrid();
             InitializeBase(settingName);
         }
@@ -177,7 +179,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 					GridRows.Add(_rowManager.AddRow(gridRow));
                 }
 
-			    gridRow = new SkillDayGridRowBoostedRelativeDifference(_rowManager, "NumericReadOnlyCell", "RelativeBoostedDifference", UserTexts.Resources.AdjustedDifference, skill);
+			    gridRow = new SkillDayGridRowBoostedRelativeDifference(_rowManager, "NumericReadOnlyCell", "RelativeBoostedDifference", UserTexts.Resources.AdjustedDifference, skill, _skillPriorityProvider);
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				GridRows.Add(_rowManager.AddRow(gridRow));
 
