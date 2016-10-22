@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
+using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Payroll.DefinitionSets;
@@ -77,7 +79,9 @@ namespace Teleopti.Ccc.Win.Shifts
 				ShouldSelectNodeOnEnter = false,
 				SelectionMode = TreeSelectionMode.MultiSelectAll,
 				BorderStyle = BorderStyle.None,
-				LeftImageList = imageList1
+				LeftImageList = imageList1,
+				HideSelection = false,
+				InactiveSelectedNodeBackground = new BrushInfo(Color.PaleTurquoise)
 			};
 			tabPageWorkShiftRule.Controls.Add(_defaultTreeView);
 			tabPageWorkShiftRule.Focus();
