@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Ok(_siteViewModelBuilder.Build());
 		}
 
-		[ReadModelUnitOfWork, HttpGet, Route("api/Sites/ForSkills")]
-		public virtual IHttpActionResult SitesForSkill(Guid[] skillIds)
+		[UnitOfWork, ReadModelUnitOfWork, HttpGet, Route("api/Sites/ForSkills")]
+		public virtual IHttpActionResult SitesForSkill([FromUri]Guid[] skillIds)
 		{
 			return Ok(_siteViewModelBuilder.ForSkills(skillIds));
 		}
@@ -60,8 +60,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Ok(_inAlarmForSites.Build());
 		}
 
-		[ReadModelUnitOfWork, HttpGet, Route("api/Sites/InAlarmCountForSkills")]
-		public virtual IHttpActionResult InAlarmCountForSkills(Guid[] skillIds)
+		[UnitOfWork, ReadModelUnitOfWork, HttpGet, Route("api/Sites/InAlarmCountForSkills")]
+		public virtual IHttpActionResult InAlarmCountForSkills([FromUri]Guid[] skillIds)
 		{
 			return Ok(_inAlarmForSites.ForSkills(skillIds));
 		}
