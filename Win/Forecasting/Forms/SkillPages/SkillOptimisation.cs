@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
@@ -8,6 +9,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 {
     //It is spelled correctly in British english according to Andreas
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Optimisation")]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_HideSkillPrioSliders_41312)]
     public partial class SkillOptimisation : BaseUserControl, IPropertyPage
     {
         public SkillOptimisation()

@@ -67,6 +67,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private Form _mainWindow;
 		private IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
 		private readonly IStatisticHelper _statisticHelper;
+		private bool _hidePriorityToggle;
 
 		public ForecasterNavigator(IStatisticHelper statisticHelper)
 		{
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			if (!DesignMode)
 			{
 				SetTexts();
-				EntityEventAggregator.EntitiesNeedsRefresh += entitiesNeedsRefresh;
+				EntityEventAggregator.EntitiesNeedsRefresh += entitiesNeedsRefresh;				
 			}
 		}
 
@@ -98,6 +99,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			toolStripMenuItemSkillsImportForecast.Visible =
 				instance.IsPermitted(
 					DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile);
+			_hidePriorityToggle = _toggleManager.IsEnabled(Toggles.ResourcePlanner_HideSkillPrioSliders_41312);
 		}
 
 		public ForecasterNavigator(PortalSettings portalSettings,
@@ -536,7 +538,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			var skillType = getInitializedSkillType(st);
 			using (var swp = new SkillWizardPages(skillType, _repositoryFactory, _unitOfWorkFactory))
 			{
-				swp.Initialize(PropertyPagesHelper.GetSkillPages(true, swp, skillType), new LazyLoadingManagerWrapper());
+				swp.Initialize(PropertyPagesHelper.GetSkillPages(true, swp, skillType, _hidePriorityToggle), new LazyLoadingManagerWrapper());
 				using (var wizard = new Wizard(swp))
 				{
 					swp.Saved += swpAfterSave;
@@ -981,7 +983,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				var skill = getInitializedSkill(skillModel);
 				using (var spp = new SkillPropertiesPages(skill, _repositoryFactory, _unitOfWorkFactory))
 				{
-					var pages = PropertyPagesHelper.GetSkillPages(false, spp);
+					var pages = PropertyPagesHelper.GetSkillPages(false, spp, _hidePriorityToggle);
 					if (skillModel.IsMultisite) PropertyPagesHelper.AddMultisiteSkillPages(pages);
 					spp.Initialize(pages, new LazyLoadingManagerWrapper());
 					using (var propertiesPages = new PropertiesPages(spp))
@@ -1155,7 +1157,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			DialogResult result;
 			using (var swp = new SkillWizardPages(skill, _repositoryFactory, _unitOfWorkFactory))
 			{
-				swp.Initialize(PropertyPagesHelper.GetSkillPages(true, swp, skillType), new LazyLoadingManagerWrapper());
+				swp.Initialize(PropertyPagesHelper.GetSkillPages(true, swp, skillType, _hidePriorityToggle), new LazyLoadingManagerWrapper());
 				using (var wizard = new Wizard(swp))
 				{
 					swp.Saved += multisiteSkillSaved;
