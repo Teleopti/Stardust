@@ -2280,14 +2280,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (e.Range == _lastGridSelection)
 				return;
 
-			if (e.Reason == GridSelectionReason.SelectRange) return;
 			if (_scheduleView == null) return;
 
 			using (PerformanceOutput.ForOperation("Changing selection in view"))
 			{
-				if (_scheduleView != null &&
-					(e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp) ||
-					e.Reason == GridSelectionReason.ArrowKey)
+				if (e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp ||
+					e.Reason == GridSelectionReason.ArrowKey || e.Reason == GridSelectionReason.SelectRange)
 				{
 					SchedulerRibbonHelper.EnableScheduleButton(toolStripSplitButtonSchedule, _scheduleView, _splitterManager,
 						_teamLeaderMode, _container.Resolve<IToggleManager>());
