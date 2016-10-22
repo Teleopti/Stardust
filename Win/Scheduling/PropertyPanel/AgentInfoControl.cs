@@ -576,12 +576,32 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             
 
             listViewPersonPeriod.Items.Add("");
-            createAndAddItem(listViewPersonPeriod, Resources.Contract, personPeriod.PersonContract.Contract.Description.Name, 2);
-            createAndAddItem(listViewPersonPeriod, Resources.ContractScheduleLower, personPeriod.PersonContract.ContractSchedule.Description.Name, 2);
-            createAndAddItem(listViewPersonPeriod, Resources.PartTimePercentageLower, personPeriod.PersonContract.PartTimePercentage.Description.Name, 2);
+
+	        string name = string.Empty;
+	        if (!((IDeleteTag) personPeriod.PersonContract.Contract).IsDeleted)
+		        name = personPeriod.PersonContract.Contract.Description.Name;
+
+			createAndAddItem(listViewPersonPeriod, Resources.Contract, name, 2);
+
+	        name = string.Empty;
+	        if (!((IDeleteTag) personPeriod.PersonContract.ContractSchedule).IsDeleted)
+		        name = personPeriod.PersonContract.ContractSchedule.Description.Name;
+
+			createAndAddItem(listViewPersonPeriod, Resources.ContractScheduleLower, name, 2);
+
+			name = string.Empty;
+	        if (!((IDeleteTag) personPeriod.PersonContract.PartTimePercentage).IsDeleted)
+		        name = personPeriod.PersonContract.PartTimePercentage.Description.Name;
+
+			createAndAddItem(listViewPersonPeriod, Resources.PartTimePercentageLower, name, 2);
+
 			createAndAddItem(listViewPersonPeriod, Resources.EmploymentType, _employmentTypeList[personPeriod.PersonContract.Contract.EmploymentType], 2);
-			if (personPeriod.RuleSetBag != null)
-				createAndAddItem(listViewPersonPeriod, Resources.RuleSetBag, personPeriod.RuleSetBag.Description.Name, 2);
+
+			name = string.Empty;
+	        if (personPeriod.RuleSetBag != null && !((IDeleteTag) personPeriod.RuleSetBag).IsDeleted)
+		        name = personPeriod.RuleSetBag.Description.Name;
+
+			createAndAddItem(listViewPersonPeriod, Resources.RuleSetBag, name, 2);
             listViewPersonPeriod.Columns[0].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
             listViewPersonPeriod.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
