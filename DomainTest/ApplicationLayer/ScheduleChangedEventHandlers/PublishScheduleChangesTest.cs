@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		[Test]
 		public void ShouldPublishScheduleChangesToConfiguredSubscribers()
 		{
+			var utcTheTime = new DateTime(2016, 3, 10, 5, 0, 0, DateTimeKind.Utc);
 			var newSchedule = new ProjectionChangedEvent
 			{
 				IsDefaultScenario = true,
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				ScheduleDays =
 					new List<ProjectionChangedEventScheduleDay>
 					{
-						new ProjectionChangedEventScheduleDay {Date = new DateTime(2016, 3, 10)}
+						new ProjectionChangedEventScheduleDay {Date = utcTheTime.ToLocalTime()}
 					}
 			};
 			var server = new FakeHttpServer();
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var subscriptions = new ScheduleChangeSubscriptions();
 			subscriptions.Add(new ScheduleChangeListener {Uri = new Uri("/",UriKind.Relative)});
 			settingsRepository.PersistSettingValue(ScheduleChangeSubscriptions.Key, subscriptions);
-			var handler = new ScheduleChangesPublisherHangfire(server, new ThisIsNow(new DateTime(2016, 3, 10, 5, 0, 0)), settingsRepository, signatureCreator);
+			var handler = new ScheduleChangesPublisherHangfire(server, new ThisIsNow(utcTheTime), settingsRepository, signatureCreator);
 			handler.Handle(newSchedule);
 
 			server.Requests.Count.Should().Be.EqualTo(1);
