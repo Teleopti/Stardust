@@ -41,24 +41,29 @@
 				$scope.siteIds = $stateParams.siteIds || [];
 				$scope.selectedItemIds = [];
 				$scope.getAdherencePercent = RtaFormatService.numberToPercent;
-				
+
 				RtaService.getSkills()
 					.then(function(skills) {
 						$scope.skillsLoaded = true;
 						$scope.skills = skills;
+						if($scope.skillId !== null) {
+							getSitesOrTeamsForSkillOrSkillArea();
+						}
 					});
 
 				RtaService.getSkillAreas()
 					.then(function(skillAreas) {
 						$scope.skillAreasLoaded = true;
 						$scope.skillAreas = skillAreas.SkillAreas;
+						if($scope.skillAreaId !== null) {
+							getSitesOrTeamsForSkillOrSkillArea();
+						}
 					});
 
 				$scope.querySearch = function(query, myArray) {
 					var results = query ? myArray.filter(createFilterFor(query)) : myArray;
 					return results;
 				};
-
 
 				function createFilterFor(query) {
 					var lowercaseQuery = angular.lowercase(query);
@@ -87,7 +92,7 @@
 				}
 
 				function getSitesOrTeamsForSkillOrSkillArea() {
-					if ($scope.siteIds.length) {
+					if ($scope.siteIds.length > 0) {
 						getTeamsForSitesAndSkillOrSkillArea()
 							.then(function(teams) {
 								$scope.teams = teams;
@@ -102,7 +107,6 @@
 					} else {
 						getSitesForSkillOrSkillArea()
 							.then(function(sites) {
-								
 								$scope.sites = sites;
 								return getAdherenceForAllSitesBySkillOrSkillArea();
 							}).then(function(siteAdherences) {
@@ -162,7 +166,18 @@
 				}
 				var polling = $interval(function() {
 					if ($scope.skillId !== null || $scope.skillAreaId !== null) {
-						getSitesOrTeamsForSkillOrSkillArea();
+						if ($scope.siteIds.length > 0 && $scope.teams !== undefined) {
+							getAdherenceForAllTeamsOnSitesBySkillOrSkillArea($scope.siteIds)
+								.then(function(teamAdherences) {
+									RtaAdherenceService.updateAdherence($scope.teams, teamAdherences);
+								});
+						}
+						else if ($scope.sites !== undefined) {
+							getAdherenceForAllSitesBySkillOrSkillArea()
+						    .then(function(siteAdherences) {
+									RtaAdherenceService.updateAdherence($scope.sites, siteAdherences);
+						});
+						}
 					}
 				}, 5000);
 
