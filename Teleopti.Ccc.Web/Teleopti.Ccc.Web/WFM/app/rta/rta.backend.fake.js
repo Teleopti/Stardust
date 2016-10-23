@@ -325,7 +325,7 @@
 			fake(/\.\.\/api\/Teams\/ForSkills(.*)/,
 				function(params) {
 					var teamsBySite = teams.filter(function(t) {
-						return params.siteIds.indexOf(t.SiteId) > -1;
+						return params.siteId.indexOf(t.SiteId) > -1;
 					});
 					var filteredSites = sitesOrTeamsForSkillOrSkillArea(teamAdherencesForSkill, 'SkillId', params.skillIds, teamsBySite);
 					return [200, filteredSites];
@@ -376,16 +376,16 @@
 					var adherenceByTeamId = {};
 					var tAdherencesForMultipleSkills = [];
 
-					var teamAdherencesBySkillId = teamAdherencesForSkill.filter(function(sa) {
-						return params.skillIds.indexOf(sa.SkillId) > -1 && sa.SiteId === params.siteId;
+					var teamAdherencesBySkillId = teamAdherencesForSkill.filter(function(ta) {
+						return params.skillIds.indexOf(ta.SkillId) > -1 && ta.SiteId === params.siteId;
 					});
 
 					if (params.skillIds.length > 1) {
-						teamAdherencesBySkillId.forEach(function(sas) {
-							if (adherenceByTeamId[sas.Id] !== undefined)
-								adherenceByTeamId[sas.Id] = adherenceByTeamId[sas.Id] + sas.OutOfAdherence;
+						teamAdherencesBySkillId.forEach(function(tas) {
+							if (adherenceByTeamId[tas.Id] !== undefined)
+								adherenceByTeamId[tas.Id] = adherenceByTeamId[tas.Id] + tas.OutOfAdherence;
 							else
-								adherenceByTeamId[sas.Id] = sas.OutOfAdherence;
+								adherenceByTeamId[tas.Id] = tas.OutOfAdherence;
 							return 0;
 						});
 
@@ -505,6 +505,11 @@
 
 			this.clearSiteAdherencesForSkill = function() {
 				siteAdherencesForSkill = [];
+				return this;
+			};
+
+			this.clearTeamAdherencesForSkill = function() {
+				teamAdherencesForSkill = [];
 				return this;
 			};
 

@@ -35,7 +35,7 @@
 				$scope.skillsLoaded = false;
 				$scope.skillAreasLoaded = false;
 
-				$scope.skillId = $stateParams.skillId || null;
+				$scope.skillId = $stateParams.skillIds || null;
 				$scope.skillAreaId = $stateParams.skillAreaId || null;
 
 				$scope.siteIds = $stateParams.siteIds || [];
@@ -143,16 +143,16 @@
 								RtaService.getAdherenceForAllSitesBySkill(getSkillIdsFromSkillArea($scope.skillAreaId));
 				}
 
-				function getAdherenceForAllTeamsOnSitesBySkillOrSkillArea(siteId) {
+				function getAdherenceForAllTeamsOnSitesBySkillOrSkillArea(siteIds) {
 					return $scope.skillId !== null ?
 						RtaService.getAdherenceForAllTeamsOnSitesBySkill({
 							skillIds: [$scope.skillId],
-							siteId: siteId
+							siteIds: siteIds
 						})
 						:
 							RtaService.getAdherenceForAllTeamsOnSitesBySkill({
 							skillIds: getSkillIdsFromSkillArea($scope.skillAreaId),
-							siteId: siteId
+							siteIds: siteIds
 						});
 				}
 

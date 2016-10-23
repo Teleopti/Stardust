@@ -79,7 +79,7 @@
 							<div class="con-flex">
 								<div class="wfm-grid">
 									<div class="grid-card site" ng-if="site.NumberOfAgents > 0" ng-repeat="site in sites">
-										<a ui-sref="rta.teams({siteId: site.Id})" class="rta-card-link">
+										<a ui-sref="rta.teams-by-skill({siteIds: site.Id, skillIds: selectedSkill.Id})" class="rta-card-link">
 											<div class="list-content"
 											ng-class="{good: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 33, warning: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 34 && getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 66, danger: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 67}" tabindex="-1">
 											<div class="wfm-checkbox">
@@ -101,6 +101,36 @@
 								</a>
 									</div>
 								</div>
+							</div>
+						</div>
+						<div class="con-row demo-outline">
+							<div class="con-flex">
+								<div class="wfm-grid">
+									<div class="grid-card team" ng-if="team.NumberOfAgents > 0" ng-repeat="team in teams">
+										<a ui-sref="rta.agents({siteId: siteId, teamId: team.Id})" class="rta-card-link">
+																									<div
+																													class="list-content"
+																													ng-class="{good: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 33, warning: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 34 && getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 66, danger: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 67}" tabindex="-1">
+																													<div class="wfm-checkbox">
+																																	<label ng-attr-name="{{team.Name}}" ng-click="$event.stopPropagation()" tabindex="-1">
+																																					<input type="checkbox" value="value" ng-checked="selectedSites.indexOf(team.Id) > -1" ng-click="toggleSelection(team.Id)" ng-model="selected" tabindex="-1"/>
+																																					<span class="wfm-checkbox-toggle"></span>
+																																					<b>
+																																									<span class="wfm-checkbox-label" ng-attr-data-max="{{team.NumberOfAgents}}" ng-attr-data-value="{{team.OutOfAdherence}}">
+																																													{{team.Name}}
+																																									</span>
+																																					</b>
+																																	</label>
+																													</br>
+																													<span class="full-padding">{{'OutOfAdherence'|translate}}:
+																																	<b>{{team.OutOfAdherence}}</b>
+																													</span>
+																									</div>
+																					</div>
+																				</a>
+									</div>
+								</div>
+
 							</div>
 						</div>
 						<div class="con-footer"></div>

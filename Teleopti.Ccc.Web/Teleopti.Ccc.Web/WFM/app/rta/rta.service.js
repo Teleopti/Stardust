@@ -207,7 +207,7 @@
 					}
 				}).query({
 					skillIds: data.skillIds,
-					siteId: data.siteId
+					siteId: data.siteIds
 				}).$promise;
 			};
 
@@ -230,7 +230,7 @@
 					}
 				}).query({
 					skillIds: data.skillIds,
-					siteIds: data.siteIds
+					siteId: data.siteIds
 				}).$promise;
 			};
 

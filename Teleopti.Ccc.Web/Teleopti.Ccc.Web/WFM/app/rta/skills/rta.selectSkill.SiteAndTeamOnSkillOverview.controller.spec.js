@@ -110,7 +110,7 @@ fdescribe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 
 	/*is it even possible to have a preselected skill in the sites by skill view*/
 	it('should display agents out of adherence in sites for preselected skill', function() {
-		stateParams.skillId = "emailGuid";
+		stateParams.skillIds = "emailGuid";
 		$fakeBackend
 			.withSite({
 				Id: "parisGuid"
@@ -261,7 +261,7 @@ fdescribe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 
 	//should include other site to test filtering it out?
 	it('should display agents out of adherence in team for preselected skill', function() {
-		stateParams.skillId = "emailGuid";
+		stateParams.skillIds = "emailGuid";
 		stateParams.siteIds = ["parisGuid"];
 		$fakeBackend
 			.withTeam({
@@ -421,7 +421,7 @@ fdescribe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 	});
 
 	it('should update adherence for site and preselected skill', function() {
-		stateParams.skillId = "phoneGuid";
+		stateParams.skillIds = "phoneGuid";
 		$fakeBackend
 			.withSite({
 				Id: "londonGuid"
@@ -489,5 +489,182 @@ fdescribe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 
 		expect(scope.sites[0].OutOfAdherence).toEqual(7);
 	});
+
+	it('should update adherence for team and selected skill', function() {
+		stateParams.siteIds = ["parisGuid"];
+		$fakeBackend
+			.withTeam({
+				Id: "parisTeamGreenGuid",
+				SiteId: "parisGuid"
+			})
+			.withTeamAdherenceForSkill({
+				SiteId: "parisGuid",
+				Id: "parisTeamGreenGuid",
+				OutOfAdherence: 5,
+				SkillId: "phoneGuid"
+			});
+
+		$controllerBuilder.createController()
+			.apply(function() {
+				scope.selectedSkillChange({
+					Id: "phoneGuid"
+				});
+			}).wait(5000)
+			.apply(function() {
+				$fakeBackend.clearTeamAdherencesForSkill()
+					.withTeamAdherenceForSkill({
+						SiteId: "parisGuid",
+						Id: "parisTeamGreenGuid",
+						OutOfAdherence: 3,
+						SkillId: "phoneGuid"
+					})
+			})
+			.wait(5000);
+
+		expect(scope.teams[0].OutOfAdherence).toEqual(3);
+	});
+
+	it('should update adherence for team and selected skill area', function() {
+		stateParams.siteIds = ["parisGuid"];
+		$fakeBackend
+		.withTeam({
+			Id: "parisTeamGreenGuid",
+			SiteId: "parisGuid"
+		})
+		.withTeamAdherenceForSkill({
+			SiteId: "parisGuid",
+			Id: "parisTeamGreenGuid",
+			OutOfAdherence: 5,
+			SkillId: "phoneGuid"
+		})
+		.withTeamAdherenceForSkill({
+			SiteId: "parisGuid",
+			Id: "parisTeamGreenGuid",
+			OutOfAdherence: 2,
+			SkillId: "emailGuid"
+		})
+		.withSkillAreas([{
+			Id: "emailAndPhoneGuid",
+			Skills: [{
+				Id: "phoneGuid"
+			}, {
+				Id: "emailGuid"
+			}]
+		}]);
+
+		$controllerBuilder.createController()
+			.apply(function() {
+				scope.selectedSkillAreaChange({
+					Id: "emailAndPhoneGuid"
+				});
+			}).wait(5000)
+			.apply(function() {
+				$fakeBackend.clearTeamAdherencesForSkill()
+				.withTeamAdherenceForSkill({
+					SiteId: "parisGuid",
+					Id: "parisTeamGreenGuid",
+					OutOfAdherence: 3,
+					SkillId: "phoneGuid"
+				})
+				.withTeamAdherenceForSkill({
+					SiteId: "parisGuid",
+					Id: "parisTeamGreenGuid",
+					OutOfAdherence: 1,
+					SkillId: "emailGuid"
+				})
+			})
+			.wait(5000);
+
+		expect(scope.teams[0].OutOfAdherence).toEqual(4);
+	});
+
+	it('should update adherence for team and preselected skill', function() {
+		stateParams.skillIds = "phoneGuid";
+		stateParams.siteIds = ["parisGuid"];
+		$fakeBackend
+			.withTeam({
+				Id: "parisTeamGreenGuid",
+				SiteId: "parisGuid"
+			})
+			.withTeamAdherenceForSkill({
+				SiteId: "parisGuid",
+				Id: "parisTeamGreenGuid",
+				OutOfAdherence: 5,
+				SkillId: "phoneGuid"
+			});
+
+		$controllerBuilder.createController()
+			.apply(function() {
+				$fakeBackend
+				.clearTeamAdherencesForSkill()
+					.withTeamAdherenceForSkill({
+						SiteId: "parisGuid",
+						Id: "parisTeamGreenGuid",
+						OutOfAdherence: 3,
+						SkillId: "phoneGuid"
+					})
+			})
+			.wait(5000);
+
+		expect(scope.teams[0].OutOfAdherence).toEqual(3);
+	});
+
+	it('should update adherence for site and preselected skill area', function() {
+		stateParams.skillAreaId = "emailAndPhoneGuid";
+		stateParams.siteIds = ["parisGuid"];
+		$fakeBackend
+			.withTeam({
+				Id: "parisTeamGreenGuid",
+				SiteId: "parisGuid"
+			})
+			.withTeamAdherenceForSkill({
+				SiteId: "parisGuid",
+				Id: "parisTeamGreenGuid",
+				OutOfAdherence: 5,
+				SkillId: "phoneGuid"
+			})
+			.withTeamAdherenceForSkill({
+				SiteId: "parisGuid",
+				Id: "parisTeamGreenGuid",
+				OutOfAdherence: 2,
+				SkillId: "emailGuid"
+			})
+			.withTeamAdherenceForSkill({
+				SiteId: "parisGuid",
+				Id: "parisTeamGreenGuid",
+				OutOfAdherence: 7,
+				SkillId: "phoneGuid"
+			})
+			.withSkillAreas([{
+				Id: "emailAndPhoneGuid",
+				Skills: [{
+					Id: "phoneGuid"
+				}, {
+					Id: "emailGuid"
+				}]
+			}]);
+
+		$controllerBuilder.createController()
+			.apply(function() {
+				$fakeBackend.clearTeamAdherencesForSkill()
+					.withTeamAdherenceForSkill({
+						SiteId: "parisGuid",
+						Id: "parisTeamGreenGuid",
+						OutOfAdherence: 3,
+						SkillId: "phoneGuid"
+					})
+					.withTeamAdherenceForSkill({
+						SiteId: "parisGuid",
+						Id: "parisTeamGreenGuid",
+						OutOfAdherence: 4,
+						SkillId: "emailGuid"
+					})
+			})
+			.wait(5000);
+
+		expect(scope.teams[0].OutOfAdherence).toEqual(7);
+	});
+
+
 
 });
