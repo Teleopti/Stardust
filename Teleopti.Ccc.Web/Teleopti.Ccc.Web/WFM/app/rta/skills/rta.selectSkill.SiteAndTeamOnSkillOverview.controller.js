@@ -87,7 +87,9 @@
 						$scope.selectedSkillArea  = null;
 						getSitesOrTeamsForSkillOrSkillArea();
 					};
-					goToParentView(skill);
+					if(skill === undefined) {
+						goToParentView();
+					};
 				}
 
 				$scope.selectedSkillAreaChange = function(skillArea) {
@@ -98,17 +100,17 @@
 						$scope.selectedSkill = null;
 						getSitesOrTeamsForSkillOrSkillArea();
 					};
-					goToParentView(skillArea);
+					if(skillArea === undefined) {
+						goToParentView();
+					};
 				}
 
 				$scope.goToOverview = function() {
 					$state.go('rta');
 				}
 
-			function goToParentView(selection) {
-					if(selection === undefined){
+			function goToParentView() {
 						$state.go('rta.select-skill');
-					}
 				};
 
 				$scope.getStateForTeams = function() {
