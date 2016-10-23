@@ -847,4 +847,29 @@ fdescribe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 		expect(scope.skillId).toEqual("phoneGuid");
 	});
 
+	// fit('should stop polling when selection is null on teams', function() {
+	// 	stateParams.skillIds = "phoneGuid";
+	// 	stateParams.siteIds = ["parisGuid"];
+	// 	$fakeBackend
+	// 		.withTeam({
+	// 			Id: "parisTeamGreenGuid",
+	// 			SiteId: "parisGuid"
+	// 		})
+	// 		.withTeamAdherenceForSkill({
+	// 			SiteId: "parisGuid",
+	// 			Id: "parisTeamGreenGuid",
+	// 			OutOfAdherence: 3,
+	// 			SkillId: "phoneGuid"
+	// 		})
+	//
+	// 		$controllerBuilder.createController()
+	// 		.apply(function() {
+	// 			scope.selectedSkillChange(undefined);
+	// 		});
+	//
+	// 	expect(scope.skillId).toEqual(null);
+	// 	expect(scope.skillAreaId).toEqual(null);
+	// });
+
+
 });

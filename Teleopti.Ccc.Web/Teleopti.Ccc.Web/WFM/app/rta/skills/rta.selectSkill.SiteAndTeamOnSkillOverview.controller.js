@@ -87,6 +87,7 @@
 						$scope.selectedSkillArea  = null;
 						getSitesOrTeamsForSkillOrSkillArea();
 					};
+					goToParentView(skill);
 				}
 
 				$scope.selectedSkillAreaChange = function(skillArea) {
@@ -97,10 +98,17 @@
 						$scope.selectedSkill = null;
 						getSitesOrTeamsForSkillOrSkillArea();
 					};
+					goToParentView(skillArea);
 				}
 
 				$scope.goToOverview = function() {
 					$state.go('rta');
+				}
+
+			function goToParentView(selection) {
+					if(selection === undefined){
+						$state.go('rta.select-skill');
+					}
 				}
 
 				function getSitesOrTeamsForSkillOrSkillArea() {
@@ -189,7 +197,7 @@
 						    .then(function(siteAdherences) {
 									RtaAdherenceService.updateAdherence($scope.sites, siteAdherences);
 						});
-						}
+					};
 					}
 				}, 5000);
 
