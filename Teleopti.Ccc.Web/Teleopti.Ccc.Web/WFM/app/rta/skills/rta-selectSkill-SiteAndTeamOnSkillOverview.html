@@ -70,7 +70,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="con-row" ng-if="selectedSkill || selectedSkillArea">
+	<div class="con-row" ng-if="skillId || skillAreaId">
 		<div class="con-flex">
 			<div class="panel material-depth-1">
 				<div class="con-row">
@@ -79,7 +79,7 @@
 							<div class="con-flex">
 								<div class="wfm-grid">
 									<div class="grid-card site" ng-if="site.NumberOfAgents > 0" ng-repeat="site in sites">
-										<a ui-sref="rta.teams-by-skill({siteIds: site.Id, skillIds: selectedSkill.Id})" class="rta-card-link">
+										<a ui-sref="{{getStateForTeams()}}" class="rta-card-link">
 											<div class="list-content"
 											ng-class="{good: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 33, warning: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 34 && getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 66, danger: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 67}" tabindex="-1">
 											<div class="wfm-checkbox">

@@ -39,7 +39,7 @@
 				$scope.skillAreaId = $stateParams.skillAreaId || null;
 
 				$scope.siteIds = $stateParams.siteIds || [];
-				$scope.selectedItemIds = [];
+
 				$scope.getAdherencePercent = RtaFormatService.numberToPercent;
 
 				RtaService.getSkills()
@@ -109,7 +109,14 @@
 					if(selection === undefined){
 						$state.go('rta.select-skill');
 					}
-				}
+				};
+
+				$scope.getStateForTeams = function() {
+					if($scope.skillId !== null) {
+						return 'rta.teams-by-skill({siteIds: site.Id, skillIds: selectedSkill.Id})';
+					}
+					return 'rta.teams-by-skillArea({siteIds: site.Id, skillAreaId: selectedSkillArea.Id})';
+				};
 
 				function getSitesOrTeamsForSkillOrSkillArea() {
 					if ($scope.siteIds.length > 0) {

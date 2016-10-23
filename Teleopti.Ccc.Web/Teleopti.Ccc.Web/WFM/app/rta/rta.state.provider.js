@@ -38,7 +38,12 @@ angular.module('wfm.rta').provider('RtaState', function() {
 				controller: rtaSelectSkillCtrl()
 			})
 			.state('rta.teams-by-skill', {
-				url: '/select-skill/?siteIds&skillIds',
+				url: '/by-skill/?siteIds&skillIds',
+				templateUrl: rtaSiteAndTeamOnSkillOverviewTemplateUrl,
+				controller: rtaSelectSkillCtrl(),
+			})
+			.state('rta.teams-by-skillArea', {
+				url: '/by-skill-area/?siteIds&skillAreaId',
 				templateUrl: rtaSiteAndTeamOnSkillOverviewTemplateUrl,
 				controller: rtaSelectSkillCtrl(),
 			})
