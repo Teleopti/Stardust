@@ -82,6 +82,9 @@
 				$scope.selectedSkillChange = function(skill) {
 					if (skill) {
 						$scope.skillId = skill.Id;
+						$scope.selectedSkill = skill;
+						$scope.skillAreaId = null;
+						$scope.selectedSkillArea  = null;
 						getSitesOrTeamsForSkillOrSkillArea();
 					};
 				}
@@ -89,6 +92,9 @@
 				$scope.selectedSkillAreaChange = function(skillArea) {
 					if (skillArea) {
 						$scope.skillAreaId = skillArea.Id;
+						$scope.selectedSkillArea = skillArea;
+						$scope.skillId = null;
+						$scope.selectedSkill = null;
 						getSitesOrTeamsForSkillOrSkillArea();
 					};
 				}

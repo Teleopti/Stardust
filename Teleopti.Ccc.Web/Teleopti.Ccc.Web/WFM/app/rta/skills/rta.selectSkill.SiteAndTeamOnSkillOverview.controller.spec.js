@@ -769,4 +769,82 @@ fdescribe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 		expect(scope.selectedSkillArea.Name).toEqual('Email and phone');
 	});
 
+	it('should not allow simoultaneous selection when new skill area', function() {
+		stateParams.skillIds = "phoneGuid";
+		$fakeBackend
+			.withSite({
+				Id: "parisGuid",
+			})
+			.withSiteAdherenceForSkill({
+				Id: "parisGuid",
+				OutOfAdherence: 5,
+				SkillId: "emailGuid"
+			})
+			.withSiteAdherenceForSkill({
+				Id: "parisGuid",
+				OutOfAdherence: 3,
+				SkillId: "phoneGuid"
+			})
+			.withSkillAreas([{
+				Id: "emailAndPhoneGuid",
+				Name: "Email and phone",
+				Skills: [{
+					Id: "phoneGuid"
+				}, {
+					Id: "emailGuid"
+				}]
+			}]);
+
+		$controllerBuilder.createController()
+			.apply(function() {
+				scope.selectedSkillAreaChange({
+					Id: "emailAndPhoneGuid"
+				});
+			});
+
+		expect(scope.selectedSkill).toEqual(null);
+		expect(scope.skillId).toEqual(null);
+		expect(scope.selectedSkillArea.Id).toEqual("emailAndPhoneGuid");
+		expect(scope.skillAreaId).toEqual("emailAndPhoneGuid");
+	});
+
+	it('should not allow simoultaneous selection when new skill', function() {
+		stateParams.skillAreaId = "emailAndPhoneGuid";
+		$fakeBackend
+			.withSite({
+				Id: "parisGuid",
+			})
+			.withSiteAdherenceForSkill({
+				Id: "parisGuid",
+				OutOfAdherence: 5,
+				SkillId: "emailGuid"
+			})
+			.withSiteAdherenceForSkill({
+				Id: "parisGuid",
+				OutOfAdherence: 3,
+				SkillId: "phoneGuid"
+			})
+			.withSkillAreas([{
+				Id: "emailAndPhoneGuid",
+				Name: "Email and phone",
+				Skills: [{
+					Id: "phoneGuid"
+				}, {
+					Id: "emailGuid"
+				}]
+			}]);
+
+		$controllerBuilder.createController()
+			.apply(function() {
+				scope.selectedSkillChange({
+					Id: "phoneGuid"
+				});
+			});
+
+		expect(scope.selectedSkillArea).toEqual(null);
+		expect(scope.skillAreaId).toEqual(null);
+		expect(scope.selectedSkill.Id).toEqual("phoneGuid");
+		expect(scope.skillId).toEqual("phoneGuid");
+	});
+
 });
