@@ -665,6 +665,108 @@ fdescribe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 		expect(scope.teams[0].OutOfAdherence).toEqual(7);
 	});
 
+	it('should have preselected skill in field for sites', function() {
+		stateParams.skillIds = "phoneGuid";
+		$fakeBackend
+			.withSite({
+				Id: "londonGuid"
+			})
+			.withSiteAdherenceForSkill({
+				Id: "londonGuid",
+				OutOfAdherence: 3,
+				SkillId: "phoneGuid"
+			})
+			.withSkill({
+				Id: "phoneGuid",
+				Name: "Phone"
+			});
 
+		$controllerBuilder.createController();
+
+		expect(scope.selectedSkill.Id).toEqual('phoneGuid');
+		expect(scope.selectedSkill.Name).toEqual('Phone');
+	});
+
+	it('should have preselected skill area in field for sites', function() {
+		stateParams.skillAreaId = "emailAndPhoneGuid";
+		$fakeBackend
+			.withSite({
+				Id: "londonGuid"
+			})
+			.withSiteAdherenceForSkill({
+				Id: "londonGuid",
+				OutOfAdherence: 3,
+				SkillId: "phoneGuid"
+			})
+			.withSkillAreas([{
+				Id: "emailAndPhoneGuid",
+				Name: "Email and phone",
+				Skills: [{
+					Id: "phoneGuid"
+				}, {
+					Id: "emailGuid"
+				}]
+			}]);
+
+		$controllerBuilder.createController();
+
+		expect(scope.selectedSkillArea.Id).toEqual('emailAndPhoneGuid');
+		expect(scope.selectedSkillArea.Name).toEqual('Email and phone');
+	});
+
+	it('should have preselected skill in field for teams', function() {
+		stateParams.skillIds = "phoneGuid";
+		stateParams.siteIds = ["parisGuid"];
+		$fakeBackend
+			.withTeam({
+				Id: "parisTeamGreenGuid",
+				SiteId: "parisGuid"
+			})
+			.withTeamAdherenceForSkill({
+				SiteId: "parisGuid",
+				Id: "parisTeamGreenGuid",
+				OutOfAdherence: 3,
+				SkillId: "phoneGuid"
+			})
+			.withSkill({
+				Id: "phoneGuid",
+				Name: "Phone"
+			});
+
+		$controllerBuilder.createController();
+
+		expect(scope.selectedSkill.Id).toEqual('phoneGuid');
+		expect(scope.selectedSkill.Name).toEqual('Phone');
+	});
+
+	it('should have preselected skill area in field for teams', function() {
+		stateParams.skillAreaId = "emailAndPhoneGuid";
+		stateParams.siteIds = ["parisGuid"];
+		$fakeBackend
+			.withTeam({
+				Id: "parisTeamGreenGuid",
+				SiteId: "parisGuid"
+			})
+			.withTeamAdherenceForSkill({
+				SiteId: "parisGuid",
+				Id: "parisTeamGreenGuid",
+				OutOfAdherence: 3,
+				SkillId: "phoneGuid"
+			})
+			.withSkillAreas([{
+				Id: "emailAndPhoneGuid",
+				Name: "Email and phone",
+				Skills: [{
+					Id: "phoneGuid"
+				}, {
+					Id: "emailGuid"
+				}]
+			}]);
+
+		$controllerBuilder.createController();
+
+		expect(scope.selectedSkillArea.Id).toEqual('emailAndPhoneGuid');
+		expect(scope.selectedSkillArea.Name).toEqual('Email and phone');
+	});
 
 });

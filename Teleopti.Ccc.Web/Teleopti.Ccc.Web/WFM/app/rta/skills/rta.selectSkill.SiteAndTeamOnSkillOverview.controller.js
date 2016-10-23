@@ -47,6 +47,9 @@
 						$scope.skillsLoaded = true;
 						$scope.skills = skills;
 						if($scope.skillId !== null) {
+							$scope.selectedSkill = skills.find(function(sk){
+								return sk.Id === $scope.skillId;
+							});
 							getSitesOrTeamsForSkillOrSkillArea();
 						}
 					});
@@ -56,6 +59,9 @@
 						$scope.skillAreasLoaded = true;
 						$scope.skillAreas = skillAreas.SkillAreas;
 						if($scope.skillAreaId !== null) {
+							$scope.selectedSkillArea = $scope.skillAreas.find(function(sa){
+								return sa.Id === $scope.skillAreaId;
+							});
 							getSitesOrTeamsForSkillOrSkillArea();
 						}
 					});
