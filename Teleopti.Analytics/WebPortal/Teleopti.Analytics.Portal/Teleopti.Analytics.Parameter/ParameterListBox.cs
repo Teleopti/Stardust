@@ -171,7 +171,7 @@ namespace Teleopti.Analytics.Parameters
 		{
 			_listBox.DataSource = MyData.Tables[0];
 			_listBox.DataBind();
-			const string delimStr = ",";
+			const string delimStr = ", ";
 			char[] delimiter = delimStr.ToCharArray();
 
 			_listBox2.Items.Clear();
