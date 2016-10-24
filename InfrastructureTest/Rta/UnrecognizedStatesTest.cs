@@ -23,6 +23,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
+	[Toggle(Toggles.RTA_BatchQueryOptimization_40169)]
+	[Toggle(Toggles.RTA_PersonOrganizationQueryOptimization_40261)]
+	[Toggle(Toggles.RTA_ScheduleQueryOptimization_40260)]
+	[Toggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262)]
+	[Toggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 	public class UnrecognizedStatesTest : ISetup
 	{
 		public IRtaStateGroupRepository StateGroupRepository;
