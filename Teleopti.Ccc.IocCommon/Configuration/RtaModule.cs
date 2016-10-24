@@ -31,22 +31,19 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IStateCodeAdder>()
 				.SingleInstance();
 
-			if (_config.Toggle(Toggles.RTA_BatchQueryOptimization_40169))
-				if (_config.Toggle(Toggles.RTA_PersonOrganizationQueryOptimization_40261))
-					if (_config.Toggle(Toggles.RTA_ScheduleQueryOptimization_40260))
-						if (_config.Toggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262))
-							builder.RegisterType<ContextLoaderWithConnectionQueryOptimizeAllTheThings>().As<IContextLoader>().ApplyAspects().SingleInstance();
-						else
-							builder.RegisterType<ContextLoaderWithScheduleOptimization>().As<IContextLoader>().ApplyAspects().SingleInstance();
+			if (_config.Toggle(Toggles.RTA_PersonOrganizationQueryOptimization_40261))
+				if (_config.Toggle(Toggles.RTA_ScheduleQueryOptimization_40260))
+					if (_config.Toggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262))
+						builder.RegisterType<ContextLoaderWithConnectionQueryOptimizeAllTheThings>().As<IContextLoader>().ApplyAspects().SingleInstance();
 					else
-						if (_config.Toggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262))
+						builder.RegisterType<ContextLoaderWithScheduleOptimization>().As<IContextLoader>().ApplyAspects().SingleInstance();
+				else
+					if (_config.Toggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262))
 						builder.RegisterType<ContextLoaderWithConnectionQueryOptimizeAllTheThings>().As<IContextLoader>().ApplyAspects().SingleInstance();
 					else
 						builder.RegisterType<ContextLoaderWithPersonOrganizationQueryOptimization>().As<IContextLoader>().ApplyAspects().SingleInstance();
-				else
-					builder.RegisterType<ContextLoaderWithBatchConnectionOptimization>().As<IContextLoader>().ApplyAspects().SingleInstance();
 			else
-				builder.RegisterType<ContextLoaderWithBatchConnectionOptimization>().As<IContextLoader>().ApplyAspects().SingleInstance();
+				builder.RegisterType<ContextLoaderWithBatchQueryOptimization>().As<IContextLoader>().ApplyAspects().SingleInstance();
 
 			if (_config.Toggle(Toggles.RTA_ScheduleQueryOptimizationFilteredCache_40260))
 				builder.RegisterType<Filtered>().As<IScheduleCacheStrategy>().SingleInstance();
