@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -27,9 +26,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
 		private readonly IResourceOptimization _resourceOptimization;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
-		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
-		private readonly ITeamBlockIntradayDecisionMaker _teamBlockIntradayDecisionMaker;
-		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly IMatrixUserLockLocker _matrixUserLockLocker;
 		private readonly IMatrixNotPermittedLocker _matrixNotPermittedLocker;
@@ -44,9 +40,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 														Func<ISchedulerStateHolder> stateHolder, //should be removed!
 														IResourceOptimization resourceOptimization,
 														ITeamBlockScheduler teamBlockScheduler,
-														ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
-														ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
-														ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 														TeamInfoFactoryFactory teamInfoFactoryFactory,
 														IMatrixUserLockLocker matrixUserLockLocker,
 														IMatrixNotPermittedLocker matrixNotPermittedLocker,
@@ -61,9 +54,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_stateHolder = stateHolder;
 			_resourceOptimization = resourceOptimization;
 			_teamBlockScheduler = teamBlockScheduler;
-			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
-			_teamBlockIntradayDecisionMaker = teamBlockIntradayDecisionMaker;
-			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_matrixUserLockLocker = matrixUserLockLocker;
 			_matrixNotPermittedLocker = matrixNotPermittedLocker;
@@ -160,90 +150,33 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		{
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			var teamBlocks = _teamBlockGenerator.Generate(allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
-			var remainingInfoList = new List<ITeamBlockInfo>(teamBlocks);
+			var remainingInfoList = teamBlocks.ToList();
 
 			while (remainingInfoList.Count > 0)
 			{
-				var teamBlocksToRemove = optimizeOneRound(selectedPeriod, optimizationPreferences,
+				optimizeOneRound(selectedPeriod,
 					schedulingOptions, remainingInfoList,
 					schedulePartModifyAndRollbackService,
 					resourceCalculateDelayer,
 					skillDays, businessRuleCollection);
-				foreach (var teamBlock in teamBlocksToRemove)
-				{
-					remainingInfoList.Remove(teamBlock);
-				}
 			}
 		}
 
-		private IEnumerable<ITeamBlockInfo> optimizeOneRound(DateOnlyPeriod selectedPeriod,
-			IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions,
-			IList<ITeamBlockInfo> allTeamBlockInfos, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+		private void optimizeOneRound(DateOnlyPeriod selectedPeriod, ISchedulingOptions schedulingOptions,
+			ICollection<ITeamBlockInfo> allTeamBlockInfos, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, INewBusinessRuleCollection businessRuleCollection)
 		{
-			var teamBlockToRemove = new List<ITeamBlockInfo>();
-
-			//var sortedTeamBlockInfos = _teamBlockIntradayDecisionMaker.Decide(allTeamBlockInfos, optimizationPreferences, schedulingOptions);
-
-			foreach (var teamBlockInfo in allTeamBlockInfos)
+			foreach (var teamBlockInfo in allTeamBlockInfos.ToList())
 			{
-				//if (!_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions))
-				//{
-				//	teamBlockToRemove.Add(teamBlockInfo);
-				//	continue;
-				//}
-
-				//schedulePartModifyAndRollbackService.ClearModificationCollection();
-
 				var firstSelectedDay = selectedPeriod.DayCollection().First();
 				var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
-				//if (_teamBlockMaxSeatChecker.CheckMaxSeat(datePoint, schedulingOptions, teamBlockInfo.TeamInfo, skillDays)) change row ~40, remove || skillPair.Key != maxSeatSkill
-				//{
-				//	teamBlockToRemove.Add(teamBlockInfo);
-				//	continue;
-				//}
-
-				//var previousTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced);
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo);
-
-
-
-
-				var success = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo, datePoint, schedulingOptions,
+				_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo, datePoint, schedulingOptions,
 					schedulePartModifyAndRollbackService,
 					resourceCalculateDelayer, skillDays.ToSkillDayEnumerable(), new ShiftNudgeDirective(), businessRuleCollection);
-				//if (!success)
-				//{
-				//	teamBlockToRemove.Add(teamBlockInfo);
-				//	_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
-				//	continue;
-				//}
 
-				//if (!_teamBlockMaxSeatChecker.CheckMaxSeat(datePoint, schedulingOptions, teamBlockInfo.TeamInfo) || !_teamBlockOptimizationLimits.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences))
-				//{
-				//	var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingIntraday + Resources.Colon + Resources.RollingBackSchedulesFor + " " + teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " + teamName,cancelAction));
-				//	teamBlockToRemove.Add(teamBlockInfo);
-				//	_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
-				//	if (progressResult.ShouldCancel)
-				//	{
-				//		cancelAction();
-				//		break;
-				//	}
-				//	continue;
-				//}
-
-				//if (!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences))
-				//{
-				//	teamBlockToRemove.Add(teamBlockInfo);
-				//	_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
-				//	continue;
-				//}
-
-
-				//var newTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced);
-				teamBlockToRemove.Add(teamBlockInfo);
+				allTeamBlockInfos.Remove(teamBlockInfo);
 			}
-			return teamBlockToRemove;
 		}
 #endregion
 
