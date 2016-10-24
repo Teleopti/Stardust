@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
-		private readonly IResourceOptimization _resourceOptimization;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly IMatrixUserLockLocker _matrixUserLockLocker;
@@ -38,7 +37,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 														IScheduleDayChangeCallback scheduleDayChangeCallback,
 														ISchedulingOptionsCreator schedulingOptionsCreator,
 														Func<ISchedulerStateHolder> stateHolder, //should be removed!
-														IResourceOptimization resourceOptimization,
 														ITeamBlockScheduler teamBlockScheduler,
 														TeamInfoFactoryFactory teamInfoFactoryFactory,
 														IMatrixUserLockLocker matrixUserLockLocker,
@@ -52,7 +50,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_stateHolder = stateHolder;
-			_resourceOptimization = resourceOptimization;
 			_teamBlockScheduler = teamBlockScheduler;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_matrixUserLockLocker = matrixUserLockLocker;
@@ -83,7 +80,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder().SchedulingResultState, //fix!
 				_scheduleDayChangeCallback,
 				tagSetter);
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimization, 1, schedulingOptions.ConsiderShortBreaks, _stateHolder().SchedulingResultState); //fix!
 			var teamInfoFactory = _teamInfoFactoryFactory.Create(schedulingOptions.GroupOnGroupPageForTeamBlockPer); //FIX - why is this needed!?
 
 			var allMatrixes = createMatrixes(schedules, 
@@ -98,7 +94,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					agentsToOptimize.ToList(),
 					optimizationPreferences,
 					rollbackService,
-					resourceCalculateDelayer,
 					maxSeatData.AllMaxSeatSkillDaysPerSkill(), //fix
 					NewBusinessRuleCollection.Minimum()); //is this enough?
 			}
@@ -139,12 +134,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 
 		#region  taken from TeamBlockIntradayOptimizationService
-		public void teamBlockIntradayOptimizationService(IList<IScheduleMatrixPro> allPersonMatrixList,
+		private void teamBlockIntradayOptimizationService(IList<IScheduleMatrixPro> allPersonMatrixList,
 			DateOnlyPeriod selectedPeriod,
 			IList<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer,
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays,
 			INewBusinessRuleCollection businessRuleCollection)
 		{
@@ -157,14 +151,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				optimizeOneRound(selectedPeriod,
 					schedulingOptions, remainingInfoList,
 					schedulePartModifyAndRollbackService,
-					resourceCalculateDelayer,
 					skillDays, businessRuleCollection);
 			}
 		}
 
 		private void optimizeOneRound(DateOnlyPeriod selectedPeriod, ISchedulingOptions schedulingOptions,
-			ICollection<ITeamBlockInfo> allTeamBlockInfos, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, INewBusinessRuleCollection businessRuleCollection)
+			ICollection<ITeamBlockInfo> allTeamBlockInfos, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, INewBusinessRuleCollection businessRuleCollection)
 		{
 			foreach (var teamBlockInfo in allTeamBlockInfos.ToList())
 			{
@@ -173,7 +165,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo);
 				_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo, datePoint, schedulingOptions,
 					schedulePartModifyAndRollbackService,
-					resourceCalculateDelayer, skillDays.ToSkillDayEnumerable(), new ShiftNudgeDirective(), businessRuleCollection);
+					new DoNothingResourceCalculateDelayer(), skillDays.ToSkillDayEnumerable(), new ShiftNudgeDirective(), businessRuleCollection);
 
 				allTeamBlockInfos.Remove(teamBlockInfo);
 			}
