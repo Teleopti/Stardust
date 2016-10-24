@@ -195,7 +195,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\DontUpdateAgentStateReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ExecuteBatchesInParallelTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ExternalLogonPersonMappingTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\NoRtaLicenseTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelActivityTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ScheduleCachingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelOutOfAdherencesTest.cs" />
