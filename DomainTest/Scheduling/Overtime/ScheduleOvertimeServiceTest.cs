@@ -218,8 +218,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				Expect.Call(() => _scheduleDay.CreateAndAddOvertime(_activity, _dateTimePeriod, null));
 				Expect.Call(_schedulePartModifyAndRollbackService.ClearModificationCollection);
 				Expect.Call(_schedulePartModifyAndRollbackService.ModifyStrictly(_scheduleDay, _scheduleTagSetter, _rules)).Return(true);
-				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null, false)).Return(true).Repeat.Twice();
-				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly.AddDays(1), null, false)).Return(true).Repeat.Twice();
+				_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null, false);
+				LastCall.Repeat.Twice();
+				_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly.AddDays(1), null, false);
+				LastCall.Repeat.Twice();
 				Expect.Call(_schedulingResultStateHolder.SkillStaffPeriodHolder).Return(_skillStaffPeriodHolder).Repeat.AtLeastOnce();
 				Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skill, _dateTimePeriod)).Return(skillStaffPeriods1).Repeat.Twice().IgnoreArguments();
 				Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skill, _dateTimePeriod)).Return(skillStaffPeriods2).Repeat.Twice().IgnoreArguments();

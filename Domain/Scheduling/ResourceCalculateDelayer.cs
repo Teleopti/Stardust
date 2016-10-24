@@ -25,10 +25,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
-		public bool CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod, bool doIntraIntervalCalculation)
+		public void CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod, bool doIntraIntervalCalculation)
 		{
 			if (_paused)
-				return false;
+				return;
 
 			if (!_lastDate.HasValue)
 				_lastDate = scheduleDateOnly;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						resourceCalculateDate(scheduleDateOnly.AddDays(1), _considerShortBreaks, doIntraIntervalCalculation);
 					}
 				}
-				return true;
+				return;
 			}
 
 			if (_counter % _calculationFrequency == 0 || scheduleDateOnly != _lastDate.Value)
@@ -55,11 +55,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				_lastDate = scheduleDateOnly;
 				_counter = 1;
 
-				return true;
+				return;
 			}
 
 			_counter++;
-			return false;
 		}
 
 		public void Pause()
