@@ -137,7 +137,7 @@ MyTimeWeb_MakeRequestsResponsiveOnMobile_40266 = DEV
 MyTimeWeb_ShiftTradeFilterSite_40374 = true
 MyTimeWeb_ShiftTradeOptimization_40792 = true
 MyTimeWeb_PreferenceForMobile_40265 = RC
-MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747 = DEV
+MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747 = RC
 
 Scheduler_AgentSkillAnalyzer_12345 = DEV
 Wfm_Use_Stardust = true
