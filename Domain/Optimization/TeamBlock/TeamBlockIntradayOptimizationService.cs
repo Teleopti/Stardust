@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -37,6 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private readonly ITeamBlockSteadyStateValidator _teamTeamBlockSteadyStateValidator;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
+		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly RestrictionOverLimitValidator _teamBlockOptimizationLimits;
 
 		public TeamBlockIntradayOptimizationService(ITeamBlockGenerator teamBlockGenerator,
@@ -49,7 +51,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
 			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
 			ITeamBlockSteadyStateValidator teamTeamBlockSteadyStateValidator,
-			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator)
+			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
+			IWorkShiftSelector workShiftSelector)
 		{
 			_teamBlockScheduler = teamBlockScheduler;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
@@ -60,6 +63,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_dailyTargetValueCalculatorForTeamBlock = dailyTargetValueCalculatorForTeamBlock;
 			_teamTeamBlockSteadyStateValidator = teamTeamBlockSteadyStateValidator;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
+			_workShiftSelector = workShiftSelector;
 			_teamBlockGenerator = teamBlockGenerator;
 			_teamBlockOptimizationLimits = teamBlockOptimizationLimits;
 		}
@@ -143,7 +147,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var firstSelectedDay = selectedPeriod.DayCollection().First();
 				var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
 			
-				var success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePoint, schedulingOptions,
+				var success = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, datePoint, schedulingOptions,
 					schedulePartModifyAndRollbackService,
 					resourceCalculateDelayer, skillDays.ToSkillDayEnumerable(), new ShiftNudgeDirective(), businessRuleCollection);
 				if (!success)

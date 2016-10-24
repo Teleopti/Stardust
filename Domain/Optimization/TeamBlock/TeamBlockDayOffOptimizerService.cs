@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -52,6 +53,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly IDayOffDecisionMaker _dayOffDecisionMaker;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+		private readonly IWorkShiftSelector _workShiftSelector;
 
 		public TeamBlockDayOffOptimizerService(
 			ILockableBitArrayFactory lockableBitArrayFactory,
@@ -73,7 +75,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IOptimizerHelperHelper optimizerHelper,
 			IDayOffDecisionMaker dayOffDecisionMaker,
-			IScheduleDayChangeCallback scheduleDayChangeCallback)
+			IScheduleDayChangeCallback scheduleDayChangeCallback,
+			IWorkShiftSelector workShiftSelector)
 		{
 			_lockableBitArrayFactory = lockableBitArrayFactory;
 			_lockableBitArrayChangesTracker = lockableBitArrayChangesTracker;
@@ -96,6 +99,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_optimizerHelper = optimizerHelper;
 			_dayOffDecisionMaker = dayOffDecisionMaker;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
+			_workShiftSelector = workShiftSelector;
 		}
 
 		public void OptimizeDaysOff(
@@ -603,7 +607,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (!_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions))
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 
-				bool success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions,
+				bool success = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions,
 					rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), new ShiftNudgeDirective(), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder));
 				if (!success)
 					return false;

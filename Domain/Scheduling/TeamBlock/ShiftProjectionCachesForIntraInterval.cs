@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -10,11 +11,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		private readonly ITeamBlockRoleModelSelector _roleModelSelector;
 		private readonly ITeamBlockSingleDayScheduler _singleDayScheduler;
+		private readonly IWorkShiftSelector _workShiftSelector;
 
-		public ShiftProjectionCachesForIntraInterval(ITeamBlockRoleModelSelector roleModelSelector, ITeamBlockSingleDayScheduler singleDayScheduler)
+		public ShiftProjectionCachesForIntraInterval(ITeamBlockRoleModelSelector roleModelSelector, 
+																								ITeamBlockSingleDayScheduler singleDayScheduler,
+																								IWorkShiftSelector workShiftSelector)
 		{
 			_roleModelSelector = roleModelSelector;
 			_singleDayScheduler = singleDayScheduler;
+			_workShiftSelector = workShiftSelector;
 		}
 
 		public IList<IWorkShiftCalculationResultHolder> Execute(
@@ -30,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (selectedTeamMembers.IsEmpty())
 				return resultList;
 
-			IShiftProjectionCache roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),
+			IShiftProjectionCache roleModelShift = _roleModelSelector.Select(_workShiftSelector,teamBlockInfo, datePointer, selectedTeamMembers.First(),
 				schedulingOptions, new EffectiveRestriction());
 
 			if (roleModelShift == null)

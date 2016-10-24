@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_teamBlockScheduler = _mocks.StrictMock<ITeamBlockScheduler>();
 			_teamBlockRestrictionAggregator = _mocks.StrictMock<ITeamBlockRestrictionAggregator>();
 		    _mainShiftOptimizeActivitySpecificationSetter = _mocks.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
-			_target = new ShiftNudgeEarlier(_teamBlockClearer, _teamBlockRestrictionAggregator, _teamBlockScheduler, _mainShiftOptimizeActivitySpecificationSetter);
+			_target = new ShiftNudgeEarlier(_teamBlockClearer, _teamBlockRestrictionAggregator, _teamBlockScheduler, _mainShiftOptimizeActivitySpecificationSetter, null);
 	        _scheduleDay = _mocks.StrictMock<IScheduleDay>();
 	        _rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_schedulingOptions = new SchedulingOptions();
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(unlocked);
 				Expect.Call(_scheduleDayPro.Day).Return(_personAssignment.Date);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _personAssignment.Date, _schedulingOptions,
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(null, _teamBlockInfo, _personAssignment.Date, _schedulingOptions,
 					_rollbackService, _resourceCalculateDelayer,
 					null,
 					new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Left), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder)))
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(unlocked);
 				Expect.Call(_scheduleDayPro.Day).Return(_personAssignment.Date);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _personAssignment.Date, _schedulingOptions,
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(null, _teamBlockInfo, _personAssignment.Date, _schedulingOptions,
 					_rollbackService, _resourceCalculateDelayer,
 					null,
 					new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Left), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder)))

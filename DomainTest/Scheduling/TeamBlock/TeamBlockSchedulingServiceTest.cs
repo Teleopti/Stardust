@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		                                             _workShiftMinMaxCalculator,
 		                                             _teamBlockMaxSeatChecker,
 													 _validatedTeamBlockExtractor,
-													 _teamMatrixChecker);
+													 _teamMatrixChecker, null);
             _date = new DateOnly(2013, 02, 22);
             
             _matrixList = new List<IScheduleMatrixPro> {_matrixPro};
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .IgnoreArguments()
 					  .Return(_teamBlockInfoMock);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfoMock, _date, _schedulingOptions,
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(null, _teamBlockInfoMock, _date, _schedulingOptions,
 					_rollbackService, _resourceCalculateDelayer, null, null, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder)))
 					.IgnoreArguments()
 					.Return(false);
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .IgnoreArguments()
 					  .Return(_teamBlockInfoMock);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfoMock, _date, _schedulingOptions,
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(null, _teamBlockInfoMock, _date, _schedulingOptions,
 					_rollbackService, _resourceCalculateDelayer, null, null, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder)))
 					.IgnoreArguments()
 					.Return(true);
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .IgnoreArguments()
 					  .Return(_teamBlockInfoMock);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfoMock, _date, _schedulingOptions,
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(null, _teamBlockInfoMock, _date, _schedulingOptions,
 					_rollbackService, _resourceCalculateDelayer, null, null, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder)))
 					.IgnoreArguments()
 					.Return(true);
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .IgnoreArguments()
 					  .Return(_teamBlockInfoMock);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfoMock, _date, _schedulingOptions,
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(null, _teamBlockInfoMock, _date, _schedulingOptions,
 					_rollbackService, _resourceCalculateDelayer, null, null, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder)))
 					.IgnoreArguments()
 					.Return(true);
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .IgnoreArguments()
 					  .Return(_teamBlockInfoMock);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfoMock, _date, _schedulingOptions,
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(null, _teamBlockInfoMock, _date, _schedulingOptions,
 					_rollbackService, _resourceCalculateDelayer, null, null, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder)))
 					.IgnoreArguments()
 					.Return(true);
@@ -353,10 +353,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .IgnoreArguments()
 					  .Return(teamBlockInfoMock2);
 				Expect.Call(() => _rollbackService.ClearModificationCollection()).Repeat.AtLeastOnce();
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfoMock, _date, _schedulingOptions,
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(null, _teamBlockInfoMock, _date, _schedulingOptions,
 					_rollbackService, _resourceCalculateDelayer,
 					null, null, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder))).IgnoreArguments().Return(false);
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfoMock2, _date, _schedulingOptions,
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(null, teamBlockInfoMock2, _date, _schedulingOptions,
 					_rollbackService, _resourceCalculateDelayer,
 					null, null, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder))).IgnoreArguments().Return(true);
 				Expect.Call(teamBlockInfoMock2.TeamInfo).Return(teamInfoMock2).Repeat.AtLeastOnce();
@@ -390,7 +390,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 						.IgnoreArguments()
 						.Return(_teamBlockInfoMock);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfoMock, _date, _schedulingOptions,
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(null, _teamBlockInfoMock, _date, _schedulingOptions,
 					_rollbackService, _resourceCalculateDelayer, null, null, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder)))
 					.IgnoreArguments()
 					.Return(true);

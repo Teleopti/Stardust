@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction()) ).Return(_shift);
+				Expect.Call(_roleModelSelector.Select(null, _teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction()) ).Return(_shift);
 				
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly,
 					_shift, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer,
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions,
+				var result = _target.ScheduleTeamBlockDay(null, _teamBlockInfo, _dateOnly, _schedulingOptions,
 					_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, Enumerable.Empty<ISkillDay>(), _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder));
 				Assert.That(result, Is.True);
 			}
@@ -93,14 +93,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction())).Return(_shift).Repeat.Twice();
+				Expect.Call(_roleModelSelector.Select(null, _teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction())).Return(_shift).Repeat.Twice();
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly,_shift, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer,null, _shiftNudgeDirective.EffectiveRestriction, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null)).Return(false).IgnoreArguments();
 				Expect.Call(()=>_teamBlockClearer.ClearTeamBlock(_schedulingOptions, _schedulePartModifyAndRollbackService,_teamBlockInfo));
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, _shift, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, null, _shiftNudgeDirective.EffectiveRestriction, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null)).Return(true).IgnoreArguments();
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions,_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, Enumerable.Empty<ISkillDay>(), _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder));
+				var result = _target.ScheduleTeamBlockDay(null, _teamBlockInfo, _dateOnly, _schedulingOptions,_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, Enumerable.Empty<ISkillDay>(), _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder));
 				Assert.That(result, Is.True);
 			}	
 		}
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction())).Return(_shift).Repeat.Twice();
+				Expect.Call(_roleModelSelector.Select(null, _teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction())).Return(_shift).Repeat.Twice();
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, _shift, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, null, _shiftNudgeDirective.EffectiveRestriction, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null)).Return(false).IgnoreArguments();
 				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _schedulePartModifyAndRollbackService, _teamBlockInfo));
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, _shift, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, null, _shiftNudgeDirective.EffectiveRestriction, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null)).Return(false).IgnoreArguments();
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, Enumerable.Empty<ISkillDay>(), _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder));
+				var result = _target.ScheduleTeamBlockDay(null, _teamBlockInfo, _dateOnly, _schedulingOptions, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, Enumerable.Empty<ISkillDay>(), _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder));
 				Assert.That(result, Is.False);
 			}
 		}
@@ -138,12 +138,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction())).Return(_shift);
+				Expect.Call(_roleModelSelector.Select(null, _teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction())).Return(_shift);
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, _shift, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, null, _shiftNudgeDirective.EffectiveRestriction, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null)).Return(false).IgnoreArguments();
 				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _schedulePartModifyAndRollbackService, _teamBlockInfo));
 				Expect.Call(_shift.TheMainShift).Return(mainShift);
 				Expect.Call(mainShift.ShiftCategory).Return(shiftCategory);
-				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction())).Return(null);
+				Expect.Call(_roleModelSelector.Select(null, _teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction())).Return(null);
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, null, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, null, _shiftNudgeDirective.EffectiveRestriction, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null)).Return(false).IgnoreArguments();
 				Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
 				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null, false)).Return(true);
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				var result = _target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, Enumerable.Empty<ISkillDay>(), _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder));
+				var result = _target.ScheduleTeamBlockDay(null, _teamBlockInfo, _dateOnly, _schedulingOptions, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, Enumerable.Empty<ISkillDay>(), _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder));
 				Assert.That(result, Is.False);	
 			}
 		}
@@ -164,12 +164,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_target.DayScheduled += targetDayScheduled;
 			using (_mocks.Record())
 			{
-				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction())).Return(null);
+				Expect.Call(_roleModelSelector.Select(null, _teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction())).Return(null);
 			}
 			using (_mocks.Playback())
 			{
 				Assert.That(_isScheduleFailed, Is.False);
-				var result = _target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions,
+				var result = _target.ScheduleTeamBlockDay(null, _teamBlockInfo, _dateOnly, _schedulingOptions,
 														  _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, Enumerable.Empty<ISkillDay>(), _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder));
 
 				Assert.That(result, Is.False);

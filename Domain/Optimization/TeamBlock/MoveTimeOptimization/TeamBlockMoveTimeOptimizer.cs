@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
 
@@ -23,12 +24,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
+		private readonly IWorkShiftSelector _workShiftSelector;
 
 		public TeamBlockMoveTimeOptimizer(ISchedulingOptionsCreator schedulingOptionsCreator,
 			ITeamBlockMoveTimeDescisionMaker decisionMaker, ITeamBlockClearer teamBlockClearer,
 			ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockScheduler teamBlockScheduler,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
-			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator)
+			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
+			IWorkShiftSelector workShiftSelector)
 		{
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_decisionMaker = decisionMaker;
@@ -37,6 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			_teamBlockScheduler = teamBlockScheduler;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
+			_workShiftSelector = workShiftSelector;
 		}
 
 		public bool OptimizeTeam(IOptimizationPreferences optimizerPreferences, ITeamInfo teamInfo, IScheduleMatrixPro matrix, ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder, IResourceCalculateDelayer resourceCalculateDelayer)
@@ -80,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			var shiftNudgeDirective = new ShiftNudgeDirective();
 			var allSkillDays = schedulingResultStateHolder.AllSkillDays();
 			schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long;
-			var success = _teamBlockScheduler.ScheduleTeamBlockDay(firstTeamBlock, firstDayDate, schedulingOptions,
+			var success = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, firstTeamBlock, firstDayDate, schedulingOptions,
 				rollbackService, resourceCalculateDelayer, allSkillDays, shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder));
 
 			if (!success)
@@ -90,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			}
 
 			schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
-			success = _teamBlockScheduler.ScheduleTeamBlockDay(secondTeamBlock, secondDayDate, schedulingOptions,
+			success = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, secondTeamBlock, secondDayDate, schedulingOptions,
 				rollbackService, resourceCalculateDelayer, allSkillDays, shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder));
 
 			if (!success)

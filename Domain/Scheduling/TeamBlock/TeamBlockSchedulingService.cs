@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -33,13 +34,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         private readonly ITeamBlockMaxSeatChecker  _teamBlockMaxSeat;
         private readonly IValidatedTeamBlockInfoExtractor  _validatedTeamBlockExtractor;
 	    private readonly ITeamMatrixChecker _teamMatrixChecker;
+	    private readonly IWorkShiftSelector _workShiftSelector;
 
 	    public TeamBlockSchedulingService
 		    (ISchedulingOptions schedulingOptions, ITeamInfoFactory teamInfoFactory, ITeamBlockScheduler teamBlockScheduler,
 			    ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			    IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, ITeamBlockMaxSeatChecker teamBlockMaxSeat,
 			    IValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor,
-			ITeamMatrixChecker teamMatrixChecker)
+			ITeamMatrixChecker teamMatrixChecker,
+			IWorkShiftSelector workShiftSelector)
 	    {
 		    _teamInfoFactory = teamInfoFactory;
 		    _teamBlockScheduler = teamBlockScheduler;
@@ -48,6 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    _teamBlockMaxSeat = teamBlockMaxSeat;
 		    _validatedTeamBlockExtractor = validatedTeamBlockExtractor;
 		    _teamMatrixChecker = teamMatrixChecker;
+		    _workShiftSelector = workShiftSelector;
 		    _schedulingOptions = schedulingOptions;
 	    }
 
@@ -121,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 if (teamBlockInfo == null) continue;
 
                 schedulePartModifyAndRollbackService.ClearModificationCollection();
-	            if (_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions,
+	            if (_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, datePointer, _schedulingOptions,
 	                                                          schedulePartModifyAndRollbackService,
 	                                                         resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), new ShiftNudgeDirective(), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder)))
 		            verifyScheduledTeamBlock(selectedPersons, schedulePartModifyAndRollbackService, datePointer,

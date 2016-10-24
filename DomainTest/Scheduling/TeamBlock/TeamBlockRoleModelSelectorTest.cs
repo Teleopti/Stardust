@@ -61,7 +61,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_maxSeatSkillAggregator = _mocks.StrictMock<IMaxSeatSkillAggregator>();
 			_firstShiftInTeamBlockFinder = _mocks.StrictMock<IFirstShiftInTeamBlockFinder>();
 			_target = new TeamBlockRoleModelSelector(_restrictionAggregator, _workShiftFilterService, _sameOpenHoursInTeamBlockSpecification,
-													 _workShiftSelector,
 													 _schedulingResultStateHolder,
 													 _activityIntervalDataCreator, 
 													 _maxSeatInformationGeneratorBasedOnIntervals, 
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Select(_teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction());
+				var result = _target.Select(_workShiftSelector, _teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction());
 
 				Assert.That(result, Is.Null);
 			}
@@ -109,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Select(_teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction());
+				var result = _target.Select(_workShiftSelector, _teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction());
 
 				Assert.That(result, Is.Null);
 			}
@@ -148,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Select(_teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction());
+				var result = _target.Select(_workShiftSelector, _teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction());
 
 				Assert.That(result, Is.EqualTo(shiftProjectionCache));
 			}
@@ -188,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Select(_teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction());
+				var result = _target.Select(_workShiftSelector, _teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction());
 
 				Assert.That(result, Is.EqualTo(shiftProjectionCache));
 			}

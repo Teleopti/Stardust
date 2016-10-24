@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamInfoFactory _teamInfoFactory;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;
+		private readonly IWorkShiftSelector _workShiftSelector;
 
 		public ScheduleOvertimeOnNonScheduleDays(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockScheduler teamBlockScheduler,
@@ -29,7 +31,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			ITeamInfoFactory teamInfoFactory,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
-			IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor)
+			IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor,
+			IWorkShiftSelector workShiftSelector)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockScheduler = teamBlockScheduler;
@@ -38,6 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamInfoFactory = teamInfoFactory;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 			_weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
+			_workShiftSelector = workShiftSelector;
 		}
 
 		public void SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences, IResourceCalculateDelayer resourceCalculateDelayer)
@@ -66,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var shiftNudgeDirective = createShiftNudgeDirective(scheduleDay, overtimePreferences);
 			var teamInfo = _teamInfoFactory.CreateTeamInfo(agent, date, _matrixListFactory.CreateMatrixListForSelection(new[] { scheduleDay }));
 			var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, date, schedulingOptions.BlockFinder(), true);
-			_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, date, schedulingOptions, rollbackService, resourceCalculateDelayer,
+			_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, date, schedulingOptions, rollbackService, resourceCalculateDelayer,
 				stateHolder.SchedulingResultState.AllSkillDays(), shiftNudgeDirective, createRules(overtimePreferences));
 		}
 

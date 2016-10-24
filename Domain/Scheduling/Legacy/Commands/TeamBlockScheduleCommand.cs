@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamMatrixChecker _teamMatrixChecker;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
+		private readonly IWorkShiftSelector _workShiftSelector;
 
 		public TeamBlockScheduleCommand(IFixedStaffSchedulingService fixedStaffSchedulingService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -51,7 +53,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			ITeamMatrixChecker teamMatrixChecker,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
-			PeriodExtractorFromScheduleParts periodExtractor)
+			PeriodExtractorFromScheduleParts periodExtractor,
+			IWorkShiftSelector workShiftSelector)
 		{
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -71,6 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamMatrixChecker = teamMatrixChecker;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 			_periodExtractor = periodExtractor;
+			_workShiftSelector = workShiftSelector;
 		}
 
 		public IWorkShiftFinderResultHolder Execute(ISchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
@@ -159,7 +163,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_workShiftMinMaxCalculator(),
 					_teamBlockMaxSeatChecker,
 					validatedTeamBlockExtractor,
-					_teamMatrixChecker);
+					_teamMatrixChecker,
+					_workShiftSelector);
 
 			return schedulingService;
 		}

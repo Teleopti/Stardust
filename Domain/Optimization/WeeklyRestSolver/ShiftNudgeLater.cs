@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
@@ -22,15 +23,17 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly ITeamBlockRestrictionAggregator _teamBlockRestrictionAggregator;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
+		private readonly IWorkShiftSelector _workShiftSelector;
 
 		public ShiftNudgeLater(ITeamBlockClearer teamBlockClearer,
 			ITeamBlockRestrictionAggregator teamBlockRestrictionAggregator, ITeamBlockScheduler teamBlockScheduler, 
-			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)
+			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter, IWorkShiftSelector workShiftSelector)
 		{
 			_teamBlockClearer = teamBlockClearer;
 			_teamBlockRestrictionAggregator = teamBlockRestrictionAggregator;
 			_teamBlockScheduler = teamBlockScheduler;
 			_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
+			_workShiftSelector = workShiftSelector;
 		}
 
 		public bool Nudge(IScheduleDay scheduleDay, ISchedulePartModifyAndRollbackService rollbackService,
@@ -78,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				effectiveRestriction.DayOffTemplate, effectiveRestriction.Absence,
 				new List<IActivityRestriction>(effectiveRestriction.ActivityRestrictionCollection));
 
-			bool result = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, shiftDate, schedulingOptions,
+			bool result = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, shiftDate, schedulingOptions,
 				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(),
 				new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Right), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder));
 			if (!result)

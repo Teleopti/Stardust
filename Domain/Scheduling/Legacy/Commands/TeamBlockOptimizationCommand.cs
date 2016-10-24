@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityD
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly DayOffOptimizationDesktopTeamBlock _dayOffOptimizationDesktopTeamBlock;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly RestrictionOverLimitValidator _restrictionOverLimitValidator;
+		private readonly IWorkShiftSelector _workShiftSelector;
 
 		public TeamBlockOptimizationCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockClearer teamBlockCleaner,
@@ -69,7 +71,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			TeamInfoFactoryFactory teamInfoFactoryFactory,
 			DayOffOptimizationDesktopTeamBlock dayOffOptimizationDesktopTeamBlock,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
-			RestrictionOverLimitValidator restrictionOverLimitValidator)
+			RestrictionOverLimitValidator restrictionOverLimitValidator, 
+			IWorkShiftSelector workShiftSelector)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
@@ -97,6 +100,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_dayOffOptimizationDesktopTeamBlock = dayOffOptimizationDesktopTeamBlock;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
+			_workShiftSelector = workShiftSelector;
 		}
 
 		public void Execute(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
@@ -265,7 +269,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_teamBlockMaxSeatChecker,
 					_dailyTargetValueCalculatorForTeamBlock,
 					_teamBlockSteadyStateValidator,
-					_teamBlockShiftCategoryLimitationValidator
+					_teamBlockShiftCategoryLimitationValidator,
+					_workShiftSelector
 					);
 
 			teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
