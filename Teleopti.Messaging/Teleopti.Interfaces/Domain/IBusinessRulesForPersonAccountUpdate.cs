@@ -2,6 +2,6 @@
 {
 	public interface IBusinessRulesForPersonalAccountUpdate
 	{
-		INewBusinessRuleCollection FromScheduleRange(IScheduleRange scheduleRange, bool disableValidation = false);
+		INewBusinessRuleCollection FromScheduleRange(IScheduleRange scheduleRange);
 	}
 }

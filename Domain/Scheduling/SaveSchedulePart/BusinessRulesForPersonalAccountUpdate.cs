@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public INewBusinessRuleCollection FromScheduleRange(IScheduleRange scheduleRange, bool disableValidation =  false)
+		public INewBusinessRuleCollection FromScheduleRange(IScheduleRange scheduleRange)
 		{
 			_schedulingResultStateHolder.Schedules = scheduleRange.Owner;
 			_schedulingResultStateHolder.PersonsInOrganization = new Collection<IPerson> { scheduleRange.Person };
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 			rules.Remove(typeof(NewPersonAccountRule));
 			//Stop this rule from hindering a save... This will make sure that we update personal accounts.
 
-			if (!disableValidation) ((IValidateScheduleRange)scheduleRange).ValidateBusinessRules(rules);
+			((IValidateScheduleRange)scheduleRange).ValidateBusinessRules(rules);
 			return rules;
 		}
 	}

@@ -161,8 +161,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					: new DateTimePeriod(TimeZoneHelper.ConvertToUtc(input.Start, userTimezone), TimeZoneHelper.ConvertToUtc(input.End, userTimezone));
 				var absenceLayer = new AbsenceLayer(abs, absPeriod);
 
-				var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(schedules[person], true);
-				var scheduleDays = schedules[person].ScheduledDayCollection(extendedPeriod);  //for multi day absence ??
+				var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(schedules[person]);
+				var scheduleDays = schedules[person].ScheduledDayCollection(extendedPeriod);
 				scheduleDays.Single(d => d.DateOnlyAsPeriod.DateOnly == period.StartDate).CreateAndAddAbsence(absenceLayer);
 				var responses = schedules.CheckBusinessRules(scheduleDays, businessRulesForPersonAccountUpdate);
 				if (responses.Any(r =>
