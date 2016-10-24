@@ -1,5 +1,5 @@
 ﻿'use strict';
-fdescribe('BusinessUnitsCtrl', function() {
+describe('BusinessUnitsCtrl', function() {
 	var $httpBackend,
 			$controller;
 

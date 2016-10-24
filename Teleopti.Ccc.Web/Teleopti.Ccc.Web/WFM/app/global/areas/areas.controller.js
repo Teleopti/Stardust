@@ -2,12 +2,12 @@
     'use strict';
 
     angular
-        .module('wfm.areas', [])
+        .module('wfm.areas', ['ngResource'])
         .controller('AreasController', AreasController);
 
-    AreasController.$inject = ['$scope', 'areasService'];
+    AreasController.$inject = ['areasService'];
 
-    function AreasController($scope, areasService) {
+    function AreasController(areasService) {
         var vm = this;
         vm.areas = [];
     		var filters = [];
