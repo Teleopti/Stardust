@@ -199,6 +199,7 @@
     <Compile Include="ApplicationLayer\Commands\IReplyCommand.cs" />
     <Compile Include="ApplicationLayer\Events\AnalyticsTimeZoneChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\TenantDayTickEvent.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\ActivityChangeChecker.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateTracer.cs" />
     <Compile Include="ApplicationLayer\Events\InitialLoadScheduleProjectionEvent.cs" />
     <Compile Include="ApplicationLayer\ReadModelInitializeHandler.cs" />
@@ -273,7 +274,6 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IMappingReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\MappingReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InputInfo.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\LicensedActivityChangeChecker.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SkillViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdater.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradePendingReasonsService.cs" />

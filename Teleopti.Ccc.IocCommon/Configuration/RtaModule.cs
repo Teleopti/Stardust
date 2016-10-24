@@ -135,20 +135,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();
 
 			builder.RegisterType<ActivityChangeChecker>().SingleInstance();
-			builder.RegisterType<LicensedActivityChangeChecker>().SingleInstance();
-			builder.RegisterType<UnlicensedActivityChangeChecker>().SingleInstance();
-			builder.Register<Func<ILicenseActivatorProvider, LicensedActivityChangeChecker, UnlicensedActivityChangeChecker, IActivityChangeChecker>>(c =>
-				(license, licensed, unlicensed) => hasRtaLicense(license) ? (IActivityChangeChecker) licensed : unlicensed);
-
+			
 			if (string.IsNullOrEmpty(_config.Args().RtaAgentStateTraceMatch))
 				builder.RegisterType<DisabledTracer>().As<IAgentStateTracer>().SingleInstance();
 			else
 				builder.RegisterType<AgentStateTracer>().As<IAgentStateTracer>().SingleInstance();
 		}
 
-		private static bool hasRtaLicense(ILicenseActivatorProvider license)
-		{
-			return license.Current().EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccRealTimeAdherence);
-		}
 	}
 }
