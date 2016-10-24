@@ -397,7 +397,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				transactions,
 				new ParallelOptions {MaxDegreeOfParallelism = strategy.ParallelTransactions},
 				sharedData => Transaction(tenant, strategy, sharedData)
-					.ForEach(exceptions.Add)
 			);
 
 			if (exceptions.Count == 1)
@@ -411,13 +410,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[TenantScope]
-		protected virtual IEnumerable<Exception> Transaction<T>(
+		protected virtual void Transaction<T>(
 			string tenant,
 			IStrategy<T> strategy,
 			Lazy<transactionData> transactionData)
 		{
-			var exceptions = new List<Exception>();
-
 			WithUnitOfWork(() =>
 			{
 				var data = transactionData.Value;
@@ -425,32 +422,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				data.agentStates.ForEach(state =>
 				{
-					try
-					{
-						strategy.Action.Invoke(new Context(
-							shared.now,
-							strategy.GetInputFor(state),
-							state.PersonId,
-							state.BusinessUnitId,
-							state.TeamId.GetValueOrDefault(),
-							state.SiteId.GetValueOrDefault(),
-							strategy.GetStored(state),
-							() => data.schedules.Single(s => s.PersonId == state.PersonId),
-							s => shared.mappings,
-							strategy.UpdateAgentState,
-							_stateMapper,
-							_appliedAdherence,
-							_appliedAlarm
-							));
-					}
-					catch (Exception e)
-					{
-						exceptions.Add(e);
-					}
+					strategy.Action.Invoke(new Context(
+						shared.now,
+						strategy.GetInputFor(state),
+						state.PersonId,
+						state.BusinessUnitId,
+						state.TeamId.GetValueOrDefault(),
+						state.SiteId.GetValueOrDefault(),
+						strategy.GetStored(state),
+						() => data.schedules.Single(s => s.PersonId == state.PersonId),
+						s => shared.mappings,
+						strategy.UpdateAgentState,
+						_stateMapper,
+						_appliedAdherence,
+						_appliedAlarm
+					));
 				});
 			});
 
-			return exceptions;
 		}
 
 	}
