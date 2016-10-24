@@ -785,7 +785,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void ShouldRaiseMainShiftCategoryReplaceEvent()
 		{
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+			var agent = new Person().WithId();
 			var layerPeriod = new DateTimePeriod(2016, 8, 9, 2016, 8, 10);
 			var assignment =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(ScenarioFactory.CreateScenarioWithId("_", true), agent,

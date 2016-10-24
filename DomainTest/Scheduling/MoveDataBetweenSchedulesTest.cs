@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -37,8 +36,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         public void VerifySimpleExport()
         {
 	        setup();
-			var person1 = new Person {Name=new Name("person1", "person1")}.InTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
-            var person2 = new Person { Name = new Name("person2", "person2") }.InTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+			var person1 = new Person {Name=new Name("person1", "person1")};
+            var person2 = new Person { Name = new Name("person2", "person2") };
             IPersonAssignment assValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("dummy1"), 
                                                                                         person1,
                                                                                         new DateTimePeriod(2000, 1, 3, 2000, 1, 4));
@@ -76,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             target =new MoveDataBetweenSchedules( nr, new DoNothingScheduleDayChangeCallBack());
 
             IPersonAssignment assValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("sdf"),
-                                                                            new Person().InTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo()),
+                                                                            new Person(),
                                                                             new DateTimePeriod(2000, 1, 3, 2000, 1, 4));
            
             IScheduleDay part = createPartWithData(assValid, new DateOnly(2000,1,3));
@@ -153,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			setup();
 			var activity = new Activity("activity") { InWorkTime = true };
 				var shiftCategory = new ShiftCategory("shiftCategory");
-				var person1 = new Person { Name = new Name("person1", "person1") }.InTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+				var person1 = new Person { Name = new Name("person1", "person1") };
 				var dateOnly = new DateOnly(new DateTime(2000, 1, 1));
 				var team = new Team();
 				var personContract = PersonContractFactory.CreateFulltimePersonContractWithWorkingWeekContractSchedule();

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public SuggestedPlanningPeriod Default()
 		{
-			var now = new DateOnly(_now.UtcDateTime());
+			var now = _now.LocalDateOnly();
 			if (_uniqueSchedulePeriods.Any() )
 			{
 				var aggregatedSchedulePeriod = _uniqueSchedulePeriods.First();

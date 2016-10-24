@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var person = Guid.NewGuid();
 
 			Database
-				.WithAgent(person, "name");
+				.WithAgent(person, "name", TimeZoneInfoFactory.UtcTimeZoneInfo());
 
 			ReadModel
 				.Has(new HistoricalAdherenceReadModel
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Now.Is("2016-10-11 09:00");
 			var person = Guid.NewGuid();
 			Database
-				.WithAgent(person, "name")
+				.WithAgent(person, "name", TimeZoneInfoFactory.UtcTimeZoneInfo())
 				.WithAssignment(person, "2016-10-11")
 				.WithActivity(null, ColorTranslator.FromHtml("#80FF80"))
 				.WithAssignedActivity("2016-10-11 09:00", "2016-10-11 17:00");
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Now.Is("2016-10-12 12:00");
 			var person = Guid.NewGuid();
 
-			Database.WithAgent(person, "nicklas");
+			Database.WithAgent(person, "nicklas", TimeZoneInfoFactory.UtcTimeZoneInfo());
 			ReadModel.Has(new HistoricalAdherenceReadModel
 			{
 				PersonId = person,

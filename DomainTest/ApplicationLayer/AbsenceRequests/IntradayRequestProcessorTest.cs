@@ -609,7 +609,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			primarySkill.SetCascadingIndex(1);
 			
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 03, 01), new[] { primarySkill });
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			person.WorkflowControlSet = workflowControlSet;
 
 			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(primarySkill.Id.GetValueOrDefault(), OpenHourStatus.WithinOpenHour);

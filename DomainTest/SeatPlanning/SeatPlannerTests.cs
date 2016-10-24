@@ -138,7 +138,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team);
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
 			var personAssignments = new List<IPersonAssignment>()
 			{
@@ -802,8 +801,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var teams = new[] { team };
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate1), team);
 			var person2 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate1), team);
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
-			person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
 			var personAssignment = addAssignment(person, startDate1, endDate1);
 			var personAssignmentPerson2 = addAssignment(person2, startDate2, endDate2);
@@ -1057,9 +1054,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				PersonFactory.CreatePersonWithPersonPeriodFromTeam (new DateOnly (startDate), team),
 				PersonFactory.CreatePersonWithPersonPeriodFromTeam (new DateOnly (startDate), team2),
 				PersonFactory.CreatePersonWithPersonPeriodFromTeam (new DateOnly (endDate), team)
-			}
-			.ForEach(person => person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo()))
-			.ToArray();
+			};
 
 			var assignmentPerson1 = addAssignment(people[0], startDate, startDate.AddHours(8));
 			var assignmentPerson2 = addAssignment(people[1], startDate, startDate.AddHours(8));

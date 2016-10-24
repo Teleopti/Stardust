@@ -182,7 +182,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	    public void Bug36032ShouldReturnCorrectPeriod()
 	    {
 			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			var schedulePeriod1 = new SchedulePeriod(new DateOnly(2009, 2, 2), SchedulePeriodType.Week, 4);
 			person.AddSchedulePeriod(schedulePeriod1);
 			var schedulePeriod2 = new SchedulePeriod(new DateOnly(2011, 2, 7), SchedulePeriodType.Week, 4);

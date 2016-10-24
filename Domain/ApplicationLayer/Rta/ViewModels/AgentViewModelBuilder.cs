@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public IEnumerable<AgentViewModel> ForSites(Guid[] siteIds)
 		{
-			var today = new DateOnly(_now.UtcDateTime());
+			var today = _now.LocalDateOnly();
 			var sites = _siteRepository.LoadAll().Where(x => siteIds.Contains(x.Id.Value));
 			var teams = new List<ITeam>();
 			sites.ForEach(x => teams.AddRange(x.TeamCollection));
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public IEnumerable<AgentViewModel> ForTeams(Guid[] teamIds)
 		{
-			var today = new DateOnly(_now.UtcDateTime());
+			var today = _now.LocalDateOnly();
 			var teams = _teamRepository.LoadAll().Where(x => teamIds.Contains(x.Id.Value));
 			var agents = new List<AgentViewModel>();
 			teams.ForEach(t =>

@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldChangeState()
 		{
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+			var agent = new Person().WithId();
 			var activity = new Activity("act").WithId();
 			var orgStart = createDateTimeUtc(6);
 			var orgEnd = createDateTimeUtc(11);
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRaiseActivityMovedEvent()
 		{
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+			var agent = new Person().WithId();
 			var activity = new Activity("act").WithId();
 			var orgStart = createDateTimeUtc(6);
 			var orgEnd = createDateTimeUtc(11);

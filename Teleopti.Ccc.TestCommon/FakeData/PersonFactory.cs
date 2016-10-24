@@ -192,8 +192,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				}
 
 			}
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-
 			return person;
 		}
 
@@ -240,4 +238,3 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
     }
 }
-

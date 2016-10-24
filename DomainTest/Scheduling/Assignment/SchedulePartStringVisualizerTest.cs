@@ -35,8 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 
             _agent = PersonFactory.CreatePersonWithPersonPeriod(person, new DateOnly(1999, 1, 1), new List<ISkill>(), new Contract("ctr"), new PartTimePercentage("ptc"));
-			_agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
-			underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();
+            underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();
             dic = new ScheduleDictionaryForTest(_scenario,
                                                 new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2010, 1, 1)),
                                                 underlyingDictionary);
