@@ -37,13 +37,23 @@ angular.module('wfm.rta').provider('RtaState', function() {
 				templateUrl: rtaSiteAndTeamOnSkillOverviewTemplateUrl,
 				controller: rtaSelectSkillCtrl()
 			})
+			.state('rta.sites-by-skill', {
+				url: '/sites-by-skill/?skillIds',
+				templateUrl: rtaSiteAndTeamOnSkillOverviewTemplateUrl,
+				controller: rtaSelectSkillCtrl(),
+			})
+			.state('rta.sites-by-skillArea', {
+				url: '/sites-by-skill-area/?skillAreaId',
+				templateUrl: rtaSiteAndTeamOnSkillOverviewTemplateUrl,
+				controller: rtaSelectSkillCtrl(),
+			})
 			.state('rta.teams-by-skill', {
-				url: '/by-skill/?siteIds&skillIds',
+				url: '/teams-by-skill/?siteIds&skillIds',
 				templateUrl: rtaSiteAndTeamOnSkillOverviewTemplateUrl,
 				controller: rtaSelectSkillCtrl(),
 			})
 			.state('rta.teams-by-skillArea', {
-				url: '/by-skill-area/?siteIds&skillAreaId',
+				url: '/teams-by-skill-area/?siteIds&skillAreaId',
 				templateUrl: rtaSiteAndTeamOnSkillOverviewTemplateUrl,
 				controller: rtaSelectSkillCtrl(),
 			})

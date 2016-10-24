@@ -85,6 +85,8 @@
 						$scope.selectedSkill = skill;
 						$scope.skillAreaId = null;
 						$scope.selectedSkillArea  = null;
+						if($scope.siteIds.length ===0 && $scope.skillId!== undefined)
+							$state.go('rta.sites-by-skill', {skillIds: $scope.skillId});
 						getSitesOrTeamsForSkillOrSkillArea();
 					};
 				}
@@ -95,6 +97,8 @@
 						$scope.selectedSkillArea = skillArea;
 						$scope.skillId = null;
 						$scope.selectedSkill = null;
+						if($scope.siteIds.length ===0 && $scope.skillAreaId!== undefined)
+							$state.go('rta.sites-by-skillArea', {skillAreaId: $scope.skillAreaId});
 						getSitesOrTeamsForSkillOrSkillArea();
 					};
 				}
@@ -103,6 +107,11 @@
 					$state.go('rta');
 				}
 
+				$scope.goToSelectSkill = function() {
+					$state.go('rta.select-skill');
+				}
+
+				
 				$scope.getStateForTeams = function() {
 					if($scope.skillId !== null) {
 						return 'rta.teams-by-skill({siteIds: site.Id, skillIds: selectedSkill.Id})';
@@ -183,6 +192,7 @@
 						return skill.Id;
 					});
 				}
+
 				var polling = $interval(function() {
 					if ($scope.skillId !== null || $scope.skillAreaId !== null) {
 						if ($scope.siteIds.length > 0 && $scope.teams !== undefined) {
@@ -199,6 +209,18 @@
 					};
 					}
 				}, 5000);
+
+				$scope.$watch('selectedSkill', function (newValue, oldValue) {
+					if (newValue !== oldValue && oldValue!= undefined && oldValue!= null && newValue==null) {
+							$scope.goToSelectSkill();
+					}
+				});
+
+				$scope.$watch('selectedSkillArea', function (newValue, oldValue) {
+					if (newValue !== oldValue && oldValue!= undefined && oldValue!= null && newValue==null) {
+							$scope.goToSelectSkill();
+					}
+				});
 
 				$scope.$on('$destroy', function() {
 					$interval.cancel(polling);
