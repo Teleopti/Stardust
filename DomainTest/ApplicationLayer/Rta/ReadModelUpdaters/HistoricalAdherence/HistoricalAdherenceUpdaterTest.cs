@@ -154,5 +154,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 
 			Persister.Read(personId).OutOfAdherences.Should().Have.Count.EqualTo(1);
 		}
+
+		[Test]
+		public void ShouldKeepDataForYesterday()
+		{
+			Now.Is("2016-10-24");
+			var personId = Guid.NewGuid();
+
+			Target.Handle(new PersonOutOfAdherenceEvent { PersonId = personId, BelongsToDate = "2016-10-22".Date(), Timestamp = "2016-10-22 06:00".Utc() });
+			Target.Handle(new PersonInAdherenceEvent { PersonId = personId, BelongsToDate = "2016-10-22".Date(), Timestamp = "2016-10-22 06:30".Utc() });
+			Target.Handle(new PersonOutOfAdherenceEvent { PersonId = personId, BelongsToDate = "2016-10-22".Date(), Timestamp = "2016-10-22 07:00".Utc() });
+			Target.Handle(new PersonInAdherenceEvent { PersonId = personId, BelongsToDate = "2016-10-22".Date(), Timestamp = "2016-10-22 07:30".Utc() });
+			Target.Handle(new PersonOutOfAdherenceEvent { PersonId = personId, BelongsToDate = "2016-10-23".Date(), Timestamp = "2016-10-23 07:00".Utc() });
+			Target.Handle(new PersonInAdherenceEvent { PersonId = personId, BelongsToDate = "2016-10-23".Date(), Timestamp = "2016-10-23 07:30".Utc() });
+
+			Target.Handle(new TenantDayTickEvent());
+
+			var result = Persister.Read(personId).OutOfAdherences.Single();
+			result.StartTime.Should().Be("2016-10-23 07:00".Utc());
+		}
 	}
 }

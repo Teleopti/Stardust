@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[ReadModelUnitOfWork]
 		public virtual void Handle(TenantDayTickEvent tenantDayTickEvent)
 		{
-			_persister.Remove(_now.UtcDateTime().Date);
+			_persister.Remove(_now.UtcDateTime().Date.AddDays(-1));
 		}
 	}
 }
