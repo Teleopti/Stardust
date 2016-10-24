@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.TestCommon
 			public DateTime CreatedAt;
 			public bool Hourly;
 			public bool Minutely;
+			public bool Daily;
 		}
 
 		private readonly IList<PublishingInfo> _publishings = new List<PublishingInfo>();
@@ -33,6 +34,22 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			_dataSource = dataSource;
 			_now = now;
+		}
+
+		public void PublishDaily(IEvent @event)
+		{
+			var dataSource = _dataSource.Current();
+			var tenant = dataSource?.DataSourceName;
+			var job = _publishings.SingleOrDefault(x => (tenant == null || x.Tenant == tenant) && @event.GetType() == x.Event.GetType());
+			if (job != null)
+				return;
+			_publishings.Add(new PublishingInfo
+			{
+				Tenant = tenant,
+				Event = @event,
+				CreatedAt = _now.UtcDateTime(),
+				Daily = true
+			});
 		}
 
 		public void PublishHourly(IEvent @event)

@@ -31,6 +31,15 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			events.SelectMany(jobsFor).ForEach(_client.Enqueue);
 		}
 
+		public void PublishDaily(IEvent @event)
+		{
+			jobsFor(@event).ForEach(j =>
+			{
+				j.Attempts = 1;
+				_client.AddOrUpdateDaily(j);
+			});
+		}
+
 		public void PublishHourly(IEvent @event)
 		{
 			jobsFor(@event).ForEach(j =>

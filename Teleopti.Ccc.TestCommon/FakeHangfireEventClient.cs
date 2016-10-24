@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -77,16 +78,22 @@ namespace Teleopti.Ccc.TestCommon
 
 		public bool HasRecurringJobs { get { return _recurringJobs.Any(); } }
 
-		public void AddOrUpdateHourly(Infrastructure.Hangfire.HangfireEventJob job2)
+		public void AddOrUpdateHourly(HangfireEventJob job2)
 		{
 			var job = recurring(job2.DisplayName, job2.RecurringId(), job2.Tenant, job2.EventTypeName(), _serializer.SerializeEvent(job2.Event), job2.HandlerTypeName);
 			job.Hourly = true;
 		}
 
-		public void AddOrUpdateMinutely(Infrastructure.Hangfire.HangfireEventJob job2)
+		public void AddOrUpdateMinutely(HangfireEventJob job2)
 		{
 			var job = recurring(job2.DisplayName, job2.RecurringId(), job2.Tenant, job2.EventTypeName(), _serializer.SerializeEvent(job2.Event), job2.HandlerTypeName);
 			job.Minutely = true;
+		}
+
+		public void AddOrUpdateDaily(HangfireEventJob job)
+		{
+			var j = recurring(job.DisplayName, job.RecurringId(), job.Tenant, job.EventTypeName(), _serializer.SerializeEvent(job.Event), job.HandlerTypeName);
+			j.Daily = true;
 		}
 
 		private JobInfo recurring(string displayName, string id, string tenant, string eventType, string serializedEvent,

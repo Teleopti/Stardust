@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		{
 			_allTenantRecurringEventPublisher.PublishMinutely(new TenantMinuteTickEvent());
 			_allTenantRecurringEventPublisher.PublishHourly(new TenantHourTickEvent());
+			_allTenantRecurringEventPublisher.PublishDaily(new TenantDayTickEvent());
 		}
 
 		public void RemovePublishingsOfRemovedTenants()
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_allTenantRecurringEventPublisher.RemoveAllPublishings();
 			_allTenantRecurringEventPublisher.PublishMinutely(new TenantMinuteTickEvent());
 			_allTenantRecurringEventPublisher.PublishHourly(new TenantHourTickEvent());
+			_allTenantRecurringEventPublisher.PublishDaily(new TenantDayTickEvent());
 
 			action.Invoke();
 

@@ -26,6 +26,11 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			throw new NotImplementedException();
 		}
 
+		public void AddOrUpdateDaily(HangfireEventJob job)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void RemoveIfExists(string id)
 		{
 			throw new NotImplementedException();

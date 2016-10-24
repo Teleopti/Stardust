@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		//void Enqueue(string displayName, string tenant, string queueName, int attempts, string eventType, string serializedEvent, string handlerType);
 		void AddOrUpdateHourly(HangfireEventJob job);
 		void AddOrUpdateMinutely(HangfireEventJob job);
+		void AddOrUpdateDaily(HangfireEventJob job);
 		void RemoveIfExists(string id);
 		IEnumerable<string> GetRecurringJobIds();
 	}

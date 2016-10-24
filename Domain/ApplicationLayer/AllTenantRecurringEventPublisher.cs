@@ -1,4 +1,3 @@
-using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.MultiTenancy;
@@ -48,6 +47,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			{
 				using (_dataSourceScope.OnThisThreadUse(new DummyDataSource(t)))
 					_publisher.PublishMinutely(@event);
+			});
+		}
+
+		public void PublishDaily(IEvent @event)
+		{
+			_tenants.Tenants().ForEach(t =>
+			{
+				using (_dataSourceScope.OnThisThreadUse(new DummyDataSource(t)))
+					_publisher.PublishDaily(@event);
 			});
 		}
 	}

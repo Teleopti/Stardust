@@ -42,6 +42,12 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			_recurringJob.Value.AddOrUpdate(job.RecurringId(), Job.FromExpression(f), Cron.Minutely());
 		}
 
+		public void AddOrUpdateDaily(HangfireEventJob job)
+		{
+			Expression<Action<HangfireEventServer>> f = x => x.Process(job.DisplayName, job);
+			_recurringJob.Value.AddOrUpdate(job.RecurringId(), Job.FromExpression(f), Cron.Daily());
+		}
+
 		public void RemoveIfExists(string id)
 		{
 			_recurringJob.Value.RemoveIfExists(id);

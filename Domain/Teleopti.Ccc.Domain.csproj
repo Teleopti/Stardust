@@ -198,6 +198,7 @@
     <Compile Include="ApplicationLayer\Commands\INonoverwritableLayerMovabilityChecker.cs" />
     <Compile Include="ApplicationLayer\Commands\IReplyCommand.cs" />
     <Compile Include="ApplicationLayer\Events\AnalyticsTimeZoneChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\TenantDayTickEvent.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateTracer.cs" />
     <Compile Include="ApplicationLayer\Events\InitialLoadScheduleProjectionEvent.cs" />
     <Compile Include="ApplicationLayer\ReadModelInitializeHandler.cs" />
