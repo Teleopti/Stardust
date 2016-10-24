@@ -42,5 +42,27 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			result.OutOfAdherences.Single().StartTime.Should().Be("2016-10-13 12:00".Utc());
 			result.OutOfAdherences.Single().EndTime.Should().Be("2016-10-13 12:15".Utc());
 		}
+
+		[Test]
+		public void ShouldDeleteOldData()
+		{
+			var personId = Guid.NewGuid();
+
+			Target.AddOut(personId, "2016-10-13 12:00".Utc());
+			Target.AddNeutral(personId, "2016-10-13 12:15".Utc());
+			Target.AddOut(personId, "2016-10-13 13:00".Utc());
+			Target.AddNeutral(personId, "2016-10-13 13:15".Utc());
+			Target.AddOut(personId, "2016-10-13 14:00".Utc());
+			Target.AddNeutral(personId, "2016-10-13 14:15".Utc());
+			Target.AddOut(personId, "2016-10-24 09:00".Utc());
+			Target.AddNeutral(personId, "2016-10-24 09:15".Utc());
+			Target.AddOut(personId, "2016-10-24 12:00".Utc());
+			Target.AddNeutral(personId, "2016-10-24 12:15".Utc());
+
+			Target.Remove("2016-10-24".Utc());
+
+			var result = Reader.Read(personId, "2016-10-01 00:00".Utc(), "2016-10-31 00:00".Utc());
+			result.OutOfAdherences.Should().Have.Count.EqualTo(2);
+		}
 	}
 }

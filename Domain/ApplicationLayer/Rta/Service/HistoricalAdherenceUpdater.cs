@@ -1,7 +1,9 @@
-﻿using Teleopti.Ccc.Domain.Aop;
+﻿using System;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -10,13 +12,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IRunOnHangfire,
 		IHandleEvent<PersonOutOfAdherenceEvent>,
 		IHandleEvent<PersonInAdherenceEvent>,
-		IHandleEvent<PersonNeutralAdherenceEvent>
+		IHandleEvent<PersonNeutralAdherenceEvent>,
+		IHandleEvent<TenantDayTickEvent>
 	{
 		private readonly IHistoricalAdherenceReadModelPersister _persister;
+		private readonly INow _now;
 
-		public HistoricalAdherenceUpdater(IHistoricalAdherenceReadModelPersister persister)
+		public HistoricalAdherenceUpdater(IHistoricalAdherenceReadModelPersister persister, INow now)
 		{
 			_persister = persister;
+			_now = now;
 		}
 
 		[ReadModelUnitOfWork]
@@ -35,6 +40,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public virtual void Handle(PersonNeutralAdherenceEvent @event)
 		{
 			_persister.AddNeutral(@event.PersonId, @event.Timestamp);
+		}
+
+		[ReadModelUnitOfWork]
+		public void Handle(TenantDayTickEvent tenantDayTickEvent)
+		{
+			_persister.Remove(_now.UtcDateTime());
 		}
 	}
 }

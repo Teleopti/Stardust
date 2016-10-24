@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		IHistoricalAdherenceReadModelReader
 
 	{
-		private readonly IList<HistoricalAdherenceInternalModel> _data = new List<HistoricalAdherenceInternalModel>();
+		private IList<HistoricalAdherenceInternalModel> _data = new List<HistoricalAdherenceInternalModel>();
 
 		public FakeHistoricalAdherenceReadModelPersister Has(HistoricalAdherenceReadModel model)
 		{
@@ -43,6 +43,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			add(personId, timestamp, HistoricalAdherenceInternalAdherence.Out);
 		}
 
+		public void Remove(DateTime until)
+		{
+			_data = _data.Where(x => x.Timestamp >= until).ToArray();
+		}
+
 		private void add(Guid personId, DateTime timestamp, HistoricalAdherenceInternalAdherence adherence)
 		{
 			_data.Add(new HistoricalAdherenceInternalModel
@@ -67,6 +72,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				.OrderBy(x => x.Timestamp)
 				.ToArray();
 			return HistoricalAdherenceReadModelReader.BuildReadModel(filteredData, personId);
+		}
+
+		public HistoricalAdherenceReadModel Read(Guid personId)
+		{
+			return HistoricalAdherenceReadModelReader.BuildReadModel(_data.OrderBy(x => x.Timestamp).ToArray(), personId);
 		}
 	}
 }

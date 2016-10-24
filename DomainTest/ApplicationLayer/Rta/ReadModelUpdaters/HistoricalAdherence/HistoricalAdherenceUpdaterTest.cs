@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 	{
 		public FakeHistoricalAdherenceReadModelPersister Persister;
 		public HistoricalAdherenceUpdater Target;
+		public MutableNow Now;
 
 		[Test]
 		public void ShouldAddOutOfAdherence()
@@ -133,6 +135,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 			var result = Persister.Read(personId, "2016-11-12".Date()).OutOfAdherences.Single();
 			result.StartTime.Should().Be("2016-11-12 06:00".Utc());
 			result.EndTime.Should().Be("2016-11-12 07:30".Utc());
+		}
+
+		[Test]
+		public void ShouldDeleteOldData()
+		{
+			Now.Is("2016-10-24");
+			var personId = Guid.NewGuid();
+
+			Target.Handle(new PersonOutOfAdherenceEvent { PersonId = personId, BelongsToDate = "2016-10-12".Date(), Timestamp = "2016-10-12 06:00".Utc() });
+			Target.Handle(new PersonInAdherenceEvent { PersonId = personId, BelongsToDate = "2016-10-12".Date(), Timestamp = "2016-10-12 06:30".Utc() });
+			Target.Handle(new PersonOutOfAdherenceEvent { PersonId = personId, BelongsToDate = "2016-10-12".Date(), Timestamp = "2016-10-12 07:00".Utc() });
+			Target.Handle(new PersonInAdherenceEvent { PersonId = personId, BelongsToDate = "2016-10-12".Date(), Timestamp = "2016-10-12 07:30".Utc() });
+			Target.Handle(new PersonOutOfAdherenceEvent { PersonId = personId, BelongsToDate = "2016-10-24".Date(), Timestamp = "2016-10-24 07:00".Utc() });
+			Target.Handle(new PersonInAdherenceEvent { PersonId = personId, BelongsToDate = "2016-10-24".Date(), Timestamp = "2016-10-24 07:30".Utc() });
+
+			Target.Handle(new TenantDayTickEvent());
+
+			Persister.Read(personId).OutOfAdherences.Should().Have.Count.EqualTo(1);
 		}
 	}
 }

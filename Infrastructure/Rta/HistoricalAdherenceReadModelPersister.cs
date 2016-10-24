@@ -28,6 +28,15 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			add(personId, timestamp, HistoricalAdherenceInternalAdherence.Out);
 		}
 
+		public void Remove(DateTime until)
+		{
+			_unitOfWork.Current()
+				.CreateSqlQuery(@"
+DELETE FROM [ReadModel].[HistoricalAdherence] WHERE Timestamp < :ts")
+				.SetParameter("ts", until)
+				.ExecuteUpdate();
+		}
+
 		private void add(Guid personId, DateTime timestamp, HistoricalAdherenceInternalAdherence adherence)
 		{
 			_unitOfWork.Current()

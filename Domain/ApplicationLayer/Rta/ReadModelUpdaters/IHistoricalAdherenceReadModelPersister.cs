@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		void AddIn(Guid personId, DateTime timestamp);
 		void AddNeutral(Guid personId, DateTime timestamp);
 		void AddOut(Guid personId, DateTime timestamp);
+		void Remove(DateTime until);
 	}
 }
