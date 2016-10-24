@@ -438,7 +438,6 @@
     <Compile Include="Rta\MappingReadModelReader.cs" />
     <Compile Include="Rta\KeyValueStorePersister.cs" />
     <Compile Include="Rta\Persisters\MappingReadModelPersister.cs" />
-    <Compile Include="Rta\MappingReader.cs" />
     <Compile Include="Rta\Persisters\SiteInAlarmReader.cs" />
     <Compile Include="Rta\Persisters\TeamInAlarmReader.cs" />
     <Compile Include="SeatManagement\PersonScheduleWithSeatBooking.cs" />

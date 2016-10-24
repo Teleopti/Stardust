@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[MultiDatabaseTest]
-	[Toggle(Toggles.RTA_RuleMappingOptimization_39812)]
 	public class SnapshotTest : ISetup
 	{
 		public DatabaseLegacy Database;

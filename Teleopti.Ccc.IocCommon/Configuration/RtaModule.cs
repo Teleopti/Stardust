@@ -27,11 +27,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RtaProcessor>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateMapper>().SingleInstance();
 			builder.RegisterType<StateStreamSynchronizer>().SingleInstance();
-
-			if (_config.Toggle(Toggles.RTA_RuleMappingOptimization_39812))
-				builder.RegisterType<EventualStateCodeAdder>().As<IStateCodeAdder>().SingleInstance();
-			else
-				builder.RegisterType<ScaleOutStateCodeAdder>().As<IStateCodeAdder>().SingleInstance();
+			builder.RegisterType<EventualStateCodeAdder>()
+				.As<IStateCodeAdder>()
+				.SingleInstance();
 
 			if (_config.Toggle(Toggles.RTA_BatchConnectionOptimization_40116))
 			{
@@ -69,10 +67,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<FromPersonAssignment>().As<IScheduleReader>().SingleInstance().ApplyAspects();
 			else
 				builder.RegisterType<FromReadModel>().As<IScheduleReader>().SingleInstance().ApplyAspects();
-			if (_config.Toggle(Toggles.RTA_RuleMappingOptimization_39812))
-				builder.RegisterType<MappingReadModelReader>().As<IMappingReader>().SingleInstance();
-			else
-				builder.RegisterType<MappingReader>().As<IMappingReader>().SingleInstance();
+			builder.RegisterType<MappingReadModelReader>().As<IMappingReader>().SingleInstance();
 
 			_config.Cache().This<TenantLoader>(b => b
 				.CacheMethod(x => x.TenantNameByKey(null))

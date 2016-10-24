@@ -19,7 +19,6 @@
 		Settings_AlertViaEmailFromSMSLink_30444,
 
 		RTA_AdherenceDetails_34267,
-		RTA_RuleMappingOptimization_39812,
 		RTA_BatchConnectionOptimization_40116,
 		RTA_BatchQueryOptimization_40169,
 		RTA_PersonOrganizationQueryOptimization_40261,

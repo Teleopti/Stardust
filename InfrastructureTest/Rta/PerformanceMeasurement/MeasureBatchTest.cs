@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 {
 	[TestFixture]
 	[InfrastructureTest]
-	[Toggle(Toggles.RTA_RuleMappingOptimization_39812)]
 	[Toggle(Toggles.RTA_BatchConnectionOptimization_40116)]
 	[Toggle(Toggles.RTA_BatchQueryOptimization_40169)]
 	[Toggle(Toggles.RTA_PersonOrganizationQueryOptimization_40261)]

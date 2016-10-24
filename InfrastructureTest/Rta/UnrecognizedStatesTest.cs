@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
-	[Toggle(Toggles.RTA_RuleMappingOptimization_39812)]
 	public class UnrecognizedStatesTest : ISetup
 	{
 		public IRtaStateGroupRepository StateGroupRepository;

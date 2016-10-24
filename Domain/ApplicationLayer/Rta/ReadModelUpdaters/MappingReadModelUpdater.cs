@@ -13,7 +13,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
-	[EnabledBy(Toggles.RTA_RuleMappingOptimization_39812)]
 	public class MappingReadModelUpdater :
 		IHandleEvent<TenantMinuteTickEvent>,
 		IHandleEvent<ActivityChangedEvent>,

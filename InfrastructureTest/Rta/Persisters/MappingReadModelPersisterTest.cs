@@ -11,7 +11,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
-	[Toggle(Toggles.RTA_RuleMappingOptimization_39812)]
 	[TestFixture]
 	[ReadModelUnitOfWorkTest]
 	public class MappingReadModelPersisterTest

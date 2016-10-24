@@ -313,7 +313,6 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodMapTests.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\SoftDeleteTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TestCaseExtensions.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\ScaleOutTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PersonAdherenceScheduleRemovedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ExceptionTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StartTime\AlarmStartTimeTest.cs" />

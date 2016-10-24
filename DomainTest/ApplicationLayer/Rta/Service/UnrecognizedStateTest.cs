@@ -3,7 +3,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
-using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
@@ -97,22 +96,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database.PersistedReadModel.StateName.Should().Be("Logged Out");
 		}
 
-		[Test]
-		[ToggleOff(Domain.FeatureFlags.Toggles.RTA_RuleMappingOptimization_39812)]
-		public void ShouldUpdateReadModelWithRuleForDefaultState3()
-		{
-			Database
-				.WithAgent("usercode")
-				.WithRule(Guid.NewGuid(), "loggedout", null, "adhering");
-
-			Target.SaveState(new StateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "unrecognized-loggedout"
-			});
-
-			Database.PersistedReadModel.RuleName.Should().Be("adhering");
-		}
 
 	}
 }

@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -20,7 +19,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[DatabaseTest]
-	[Toggle(Toggles.RTA_RuleMappingOptimization_39812)]
 	[Toggle(Toggles.ETL_SpeedUpIntradayBusinessUnit_38932)]
 	public class MappingReadModelReaderSelectionTest : ISetup
 	{
