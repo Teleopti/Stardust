@@ -26,15 +26,49 @@
 			return skillPrioAggregator.getActivitys();
 		}
 
+		// function getSkills(activity) {
+		// 	if (activity != vm.selectedActivity) {
+		// 		vm.sortedSkills = [];
+		// 	}
+		// 	if (!activity) {
+		// 		vm.skills = [];
+		// 		return;
+		// 	}
+		// 	vm.selectedActivity = activity;
+		// 	var unresolved = skillPrioAggregator.getSkillsForActivity(activity);
+		// 	console.log(unresolved);
+		// 	// skills.forEach(function (skill) {
+		// 	// 	console.log(skill);
+		// 	// });
+		// }
+
+		function matchSkillsWithActivity(skills) {
+
+			skills.forEach(function (skill) {
+				if (!skill.siblings) {
+					skill.siblings = [];
+				}
+				if (skill.ActivityGuid === vm.selectedActivity.ActivityGuid) {
+					if (skill.Priority) {
+						vm.sortedSkills.push(skill)
+					} else {
+						vm.skills.push(skill);
+					}
+				}
+			});
+
+		}
+
 		function getSkills(activity) {
-			if (activity != vm.selectedActivity) {
+			if (activity === null) {
 				vm.sortedSkills = [];
+				return;
 			}
-			if (!activity) {
-				vm.skills = [];
-			}
-			vm.selectedActivity = activity;
-			vm.skills = skillPrioAggregator.getSkillsForActivity(activity);
+			var unresolved = skillPrioAggregator.getSkills().query();
+			unresolved.$promise.then(function (data) {
+				vm.selectedActivity = activity;
+				matchSkillsWithActivity(data);
+			});
 
 		}
 
@@ -43,6 +77,7 @@
 		}
 
 		function addToUnsorted(skill) {
+			skill.Priority = null;
 			vm.skills.push(skill);
 		}
 
@@ -127,11 +162,12 @@
 		}
 
 		function save() {
-			var query = skillPrioAggregator.saveSkills().save(vm.sortedSkills);
+			var allData = vm.sortedSkills.concat(vm.skills);
+			var query = skillPrioAggregator.saveSkills().save(allData);
 			query.$promise.then(function () {
 				NoticeService.success('All changes are saved', 5000, true);
 			});
-	}
+		}
 
 		function noSortedSkills() {
 			if (vm.sortedSkills.length > 0) {

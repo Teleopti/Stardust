@@ -19,29 +19,42 @@
         function getSkills() {
             return skillPrioSkillService.getSkills();
         }
-        function saveSkills(){
+        function saveSkills() {
             return skillPrioSkillService.saveSkills();
         }
-
-        function matchSkillsForActivity(activity) {
-            if(!activity) return;
+        function getSkillsForActivity(activity) {
+             matchSkillsForActivity(activity, function(data){
+                 console.log(data);
+                 return data;
+            });
+        }
+        
+        function matchSkillsForActivity(activity,callback) {
+            if (!activity) return;
             var deferred = $q.defer();
             var aggregatedSkills = [];
             var skills = getSkills().query();
-            skills.$promise.then(function () {
+            skills.$promise.then(function(){
                 skills.forEach(function (skill) {
                     if (skill.ActivityGuid === activity.ActivityGuid) {
                         aggregatedSkills.push(skill);
                     }
                 });
-                deferred.resolve(aggregatedSkills);
             });
-            return aggregatedSkills;
+            callback(aggregatedSkills);
+            
+            // skills.$promise.then(function () {
+            //     skills.forEach(function (skill) {
+            //         if (skill.ActivityGuid === activity.ActivityGuid) {
+            //             aggregatedSkills.push(skill);
+            //         }
+            //     });
+            //     deferred.resolve(aggregatedSkills);
+            // });
+            // return aggregatedSkills;
 
         }
 
-        function getSkillsForActivity(activity) {
-            return matchSkillsForActivity(activity);
-        }
+
     }
 })();
