@@ -108,5 +108,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Target.Validate(skill, requestPeriod).Should().Be.EqualTo(OpenHourStatus.WithinOpenHour);
 		}
+
+		[Test]
+		public void ReturnWintinPeriodIfSkillIsOpenUntilMidnight()
+		{
+			var skill = SkillFactory.CreateSkill("myskill");
+			var timePeriodLarge = new TimePeriod(new TimeSpan(6, 0, 0), new TimeSpan(1,0, 0, 0));
+			var requestPeriod = new DateTimePeriod(new DateTime(2016, 09, 3, 19, 0, 0, DateTimeKind.Utc), new DateTime(2016, 09, 3, 20, 0, 0, DateTimeKind.Utc));
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, timePeriodLarge);
+			Target.Validate(skill, requestPeriod).Should().Be.EqualTo(OpenHourStatus.WithinOpenHour);
+		}
 	}
 }

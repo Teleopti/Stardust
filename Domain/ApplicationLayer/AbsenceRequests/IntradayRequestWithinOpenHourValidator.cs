@@ -14,24 +14,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			foreach (var wdt in skill.WorkloadCollection)
 			{
 				var forecastDayTemplate1 =
-					(WorkloadDayTemplate) wdt.GetTemplate(TemplateTarget.Workload, requestPeriod.StartDateTime.DayOfWeek);
+					(WorkloadDayTemplate)wdt.GetTemplate(TemplateTarget.Workload, requestPeriod.StartDateTime.DayOfWeek);
 				if (forecastDayTemplate1.OpenHourList.Any())
 				{
 					allOpenHours.AddRange(forecastDayTemplate1.OpenHourList);
 				}
 			}
-			var periodOf24 = new TimePeriod(new TimeSpan(0, 0, 0), new TimeSpan(1, 0, 0,0));
-			if(allOpenHours.Contains(periodOf24)) return OpenHourStatus.WithinOpenHour;
+			var periodOf24 = new TimePeriod(new TimeSpan(0, 0, 0), new TimeSpan(1, 0, 0, 0));
+			if (allOpenHours.Contains(periodOf24)) return OpenHourStatus.WithinOpenHour;
 			if (allOpenHours.Any())
 			{
-				var openHours = new TimePeriod(allOpenHours.Min(x=>x.StartTime),allOpenHours.Max(y=>y.EndTime));
-				var startDateTime = requestPeriod.StartDateTime.Date.Add(openHours.StartTime);
-				var localStartSpan = TimeZoneHelper.ConvertToUtc(startDateTime, skill.TimeZone).TimeOfDay;
-				var endDateTime = requestPeriod.StartDateTime.Date.Add(openHours.EndTime);
-				var localEndSpan = TimeZoneHelper.ConvertToUtc(endDateTime, skill.TimeZone).TimeOfDay;
-				var localOpenHours = new TimePeriod(localStartSpan, localEndSpan);
-				if (requestPeriod.TimePeriod(TimeZoneInfo.Utc).Intersect(localOpenHours))
-					return OpenHourStatus.WithinOpenHour;
+				foreach (var openHours in allOpenHours)
+				{
+					if (requestPeriod.TimePeriod(skill.TimeZone).Intersect(openHours))
+						return OpenHourStatus.WithinOpenHour;
+				}
 				return OpenHourStatus.OutsideOpenHour;
 			}
 			return OpenHourStatus.MissingOpenHour;
