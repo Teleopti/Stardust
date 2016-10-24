@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using log4net;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
@@ -398,23 +399,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				new ParallelOptions {MaxDegreeOfParallelism = strategy.ParallelTransactions},
 				sharedData =>
 				{
+					LogManager.GetLogger("Teleopti.TestLog").Debug("begin...");
 					try
 					{
 						Transaction(tenant, strategy, sharedData);
 					}
 					catch (DeadLockVictimException)
 					{
+						LogManager.GetLogger("Teleopti.TestLog").Debug("deadlock! retrying...");
 						try
 						{
 							Transaction(tenant, strategy, sharedData);
 						}
 						catch (Exception e)
 						{
+							LogManager.GetLogger("Teleopti.TestLog").Debug("failed again!");
 							exceptions.Add(e);
 						}
 					}
 					catch (Exception e)
 					{
+						LogManager.GetLogger("Teleopti.TestLog").Debug("failed!");
 						exceptions.Add(e);
 					}
 				}
