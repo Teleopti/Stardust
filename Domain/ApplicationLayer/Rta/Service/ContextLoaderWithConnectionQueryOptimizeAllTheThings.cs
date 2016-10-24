@@ -401,25 +401,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				sharedData =>
 				{
 					// make retry and warn logging an aspect?
-					try
+					var attempt = 1;
+					while (true)
 					{
-						Transaction(tenant, strategy, sharedData);
-					}
-					catch (DeadLockVictimException deadlock)
-					{
-						LogManager.GetLogger(typeof(ContextLoader)).Warn("Transaction deadlocked, retrying once.", deadlock);
 						try
 						{
 							Transaction(tenant, strategy, sharedData);
+							break;
+						}
+						catch (DeadLockVictimException e)
+						{
+							attempt++;
+							if (attempt > 3)
+							{
+								exceptions.Add(e);
+								break;
+							}
+							LogManager.GetLogger(typeof(ContextLoader))
+								.Warn($"Transaction deadlocked, running attempt {attempt}.", e);
 						}
 						catch (Exception e)
 						{
 							exceptions.Add(e);
+							break;
 						}
-					}
-					catch (Exception e)
-					{
-						exceptions.Add(e);
 					}
 				}
 			);
