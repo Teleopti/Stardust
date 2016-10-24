@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			{
 				var firstSelectedDay = selectedPeriod.DayCollection().First();
 				var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
-				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo);
+				_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(schedulePartModifyAndRollbackService, teamBlockInfo);
 				_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo, datePoint, schedulingOptions,
 					schedulePartModifyAndRollbackService,
 					new DoNothingResourceCalculateDelayer(), skillDays.ToSkillDayEnumerable(), new ShiftNudgeDirective(), businessRuleCollection);

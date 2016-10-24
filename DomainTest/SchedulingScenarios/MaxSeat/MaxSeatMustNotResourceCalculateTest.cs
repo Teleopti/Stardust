@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public MaxSeatOptimization Target;
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
 
-		[Test, Ignore("Should be fixed before #40939 is done")]
+		[Test]
 		public void ShouldNotResourceCalculate()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
