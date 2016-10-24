@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_stateHolder().SchedulingResultState.Schedules = schedules;
 			//////////////////
 
-			optimizationPreferences.Advanced.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak;
+		//	optimizationPreferences.Advanced.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak;
 
 			var tagSetter = new ScheduleTagSetter(new NullScheduleTag());
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder().SchedulingResultState, //fix!
