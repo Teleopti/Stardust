@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
@@ -17,14 +18,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly ITeamBlockSingleDayScheduler _teamBlockSingleDayScheduler;
+		private readonly IWorkShiftSelector _workShiftSelector;
 
 		public BackToLegalShiftWorker(ITeamBlockClearer teamBlockClearer,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
-			ITeamBlockSingleDayScheduler teamBlockSingleDayScheduler)
+			ITeamBlockSingleDayScheduler teamBlockSingleDayScheduler,
+			IWorkShiftSelector workShiftSelector)
 		{
 			_teamBlockClearer = teamBlockClearer;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 			_teamBlockSingleDayScheduler = teamBlockSingleDayScheduler;
+			_workShiftSelector = workShiftSelector;
 		}
 
 		public bool ReSchedule(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
@@ -35,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 			_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 			var date = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
 			var rules = NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder);
-			var success = _teamBlockSingleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, date, roleModelShift,
+			var success = _teamBlockSingleDayScheduler.ScheduleSingleDay(_workShiftSelector, teamBlockInfo, schedulingOptions, date, roleModelShift,
 				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), null, rules, null);
 			if (!success)
 			{

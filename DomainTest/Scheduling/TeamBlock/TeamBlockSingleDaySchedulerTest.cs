@@ -67,7 +67,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_teamBlockSchedulingCompletionChecker,
 				_proposedRestrictionAggregator,
 				_workShiftFilterService,
-				_workShiftSelector,
 				_teamScheduling,
 				_activityIntervalDataCreator, _maxSeatInformationGeneratorBasedOnIntervals, _maxSeatSkillAggregator, null);
 
@@ -94,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldBeFalseIfNoRoleModel()
 		{
-			var result = _target.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, null,
+			var result = _target.ScheduleSingleDay(_workShiftSelector, _teamBlockInfo, _schedulingOptions, _dateOnly, null,
 									  _rollbackService, _resourceCalculateDelayer, _skillDays, new EffectiveRestriction(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null);
 			Assert.That(result, Is.False);
 		}
@@ -111,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, _shift,
+				var result = _target.ScheduleSingleDay(_workShiftSelector, _teamBlockInfo, _schedulingOptions, _dateOnly, _shift,
 										  _rollbackService, _resourceCalculateDelayer, _skillDays, new EffectiveRestriction(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null);
 				Assert.That(result, Is.True);
 			}
@@ -148,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, _shift,
+				var result = _target.ScheduleSingleDay(_workShiftSelector, _teamBlockInfo, _schedulingOptions, _dateOnly, _shift,
 														_rollbackService, _resourceCalculateDelayer, _skillDays, new EffectiveRestriction(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null);
 				Assert.That(result, Is.True);
 			}
@@ -206,7 +205,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, _shift,
+				var result = _target.ScheduleSingleDay(_workShiftSelector, _teamBlockInfo, _schedulingOptions, _dateOnly, _shift,
 														_rollbackService, _resourceCalculateDelayer, _skillDays, new EffectiveRestriction(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null);
 				Assert.That(result, Is.True);
 			}
@@ -263,7 +262,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, _shift,
+				var result = _target.ScheduleSingleDay(_workShiftSelector, _teamBlockInfo, _schedulingOptions, _dateOnly, _shift,
 														_rollbackService, _resourceCalculateDelayer, _skillDays, new EffectiveRestriction(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null);
 				Assert.That(result, Is.True);
 			}
@@ -321,7 +320,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, _shift,
+				var result = _target.ScheduleSingleDay(_workShiftSelector, _teamBlockInfo, _schedulingOptions, _dateOnly, _shift,
 														_rollbackService, _resourceCalculateDelayer, _skillDays, new EffectiveRestriction(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null);
 				Assert.That(result, Is.True);
 			}

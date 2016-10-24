@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface ITeamBlockSingleDayScheduler
 	{
-		bool ScheduleSingleDay(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, DateOnly day,
+		bool ScheduleSingleDay(IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, DateOnly day,
 			IShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays,
 			IEffectiveRestriction shiftNudgeRestriction, INewBusinessRuleCollection businessRules, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled);
@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
 		private readonly IProposedRestrictionAggregator _proposedRestrictionAggregator;
 		private readonly IWorkShiftFilterService _workShiftFilterService;
-		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly ITeamScheduling _teamScheduling;
 		private readonly IActivityIntervalDataCreator _activityIntervalDataCreator;
 		private readonly IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
@@ -40,7 +39,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public TeamBlockSingleDayScheduler(ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
 			IProposedRestrictionAggregator proposedRestrictionAggregator,
 			IWorkShiftFilterService workShiftFilterService,
-			IWorkShiftSelector workShiftSelector, 
 			ITeamScheduling teamScheduling,
 			IActivityIntervalDataCreator activityIntervalDataCreator,
 			IMaxSeatInformationGeneratorBasedOnIntervals maxSeatInformationGeneratorBasedOnIntervals,
@@ -50,7 +48,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
 			_proposedRestrictionAggregator = proposedRestrictionAggregator;
 			_workShiftFilterService = workShiftFilterService;
-			_workShiftSelector = workShiftSelector;
 			_teamScheduling = teamScheduling;
 			_activityIntervalDataCreator = activityIntervalDataCreator;
 			_maxSeatInformationGeneratorBasedOnIntervals = maxSeatInformationGeneratorBasedOnIntervals;
@@ -110,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return resultList;
 		}
 
-		public bool ScheduleSingleDay(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, DateOnly day,
+		public bool ScheduleSingleDay(IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, DateOnly day,
 			IShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays,
 			IEffectiveRestriction shiftNudgeRestriction, INewBusinessRuleCollection businessRules, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled)
@@ -148,11 +145,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					if (shiftNudgeRestriction != null)
 						restriction = restriction.Combine(shiftNudgeRestriction);
 
-					bestShiftProjectionCache = filterAndSelect(teamBlockInfo, schedulingOptions, day, person, teamBlockSingleDayInfo,
+					bestShiftProjectionCache = filterAndSelect(workShiftSelector, teamBlockInfo, schedulingOptions, day, person, teamBlockSingleDayInfo,
 						restriction, allSkillDays, false);
 
 					if (bestShiftProjectionCache == null && restriction.IsRestriction)
-						bestShiftProjectionCache = filterAndSelect(teamBlockInfo, schedulingOptions, day, person, teamBlockSingleDayInfo,
+						bestShiftProjectionCache = filterAndSelect(workShiftSelector, teamBlockInfo, schedulingOptions, day, person, teamBlockSingleDayInfo,
 						restriction, allSkillDays, true);
 
 					if (bestShiftProjectionCache == null)
@@ -171,7 +168,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return _teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(teamBlockSingleDayInfo, day, selectedTeamMembers, schedulingOptions);
 		}
 
-		private IShiftProjectionCache filterAndSelect(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, DateOnly day,
+		private IShiftProjectionCache filterAndSelect(IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, DateOnly day,
 			IPerson person, TeamBlockSingleDayInfo teamBlockSingleDayInfo,
 			IEffectiveRestriction restriction, IEnumerable<ISkillDay> allSkillDays, bool useShiftsForRestrictions)
 		{
@@ -195,7 +192,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,
 				schedulingOptions.UseMaximumPersons, schedulingOptions.UserOptionMaxSeatsFeature, hasMaxSeatSkill, maxSeatInfo);
 
-			return _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData, parameters, TimeZoneGuard.Instance.TimeZone, schedulingOptions);
+			return workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData, parameters, TimeZoneGuard.Instance.TimeZone, schedulingOptions);
 		}
 	}
 }
