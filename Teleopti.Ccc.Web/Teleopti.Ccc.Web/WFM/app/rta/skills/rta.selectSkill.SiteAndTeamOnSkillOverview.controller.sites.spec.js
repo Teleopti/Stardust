@@ -1,5 +1,5 @@
 'use strict';
-xdescribe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
+describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 	var $interval,
 		$httpBackend,
 		$state,
@@ -31,6 +31,7 @@ xdescribe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 		scope = $controllerBuilder.setup('RtaSiteAndTeamOnSkillOverviewCtrl');
 
 		$fakeBackend.clear();
+		spyOn($state, 'go');
 
 	}));
 

@@ -41,7 +41,6 @@
 				$scope.siteIds = $stateParams.siteIds || [];
 
 				$scope.getAdherencePercent = RtaFormatService.numberToPercent;
-
 				RtaService.getSkills()
 					.then(function(skills) {
 						$scope.skillsLoaded = true;
@@ -85,7 +84,7 @@
 						$scope.selectedSkill = skill;
 						$scope.skillAreaId = null;
 						$scope.selectedSkillArea  = null;
-						if($scope.siteIds.length ===0 && $scope.skillId!== undefined)
+						if($scope.siteIds.length === 0 && $scope.skillId !== undefined)
 							$state.go('rta.sites-by-skill', {skillIds: $scope.skillId});
 						getSitesOrTeamsForSkillOrSkillArea();
 					};
@@ -97,7 +96,7 @@
 						$scope.selectedSkillArea = skillArea;
 						$scope.skillId = null;
 						$scope.selectedSkill = null;
-						if($scope.siteIds.length ===0 && $scope.skillAreaId!== undefined)
+						if($scope.siteIds.length === 0 && $scope.skillAreaId !== undefined)
 							$state.go('rta.sites-by-skillArea', {skillAreaId: $scope.skillAreaId});
 						getSitesOrTeamsForSkillOrSkillArea();
 					};
@@ -111,7 +110,7 @@
 					$state.go('rta.select-skill');
 				}
 
-				
+
 				$scope.getStateForTeams = function() {
 					if($scope.skillId !== null) {
 						return 'rta.teams-by-skill({siteIds: site.Id, skillIds: selectedSkill.Id})';
