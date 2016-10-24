@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Aop
 
 		public LogTimeAspect(ILogManagerWrapper logger)
 		{
-			_logger = logger.GetLogger("Teleopti.LogTime");
+			_logger = logger.GetLogger("Teleopti.TestLog");
 			_stopwatch = new Stopwatch();
 		}
 

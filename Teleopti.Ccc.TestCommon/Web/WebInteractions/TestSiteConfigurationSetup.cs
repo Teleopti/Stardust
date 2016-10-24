@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		{
 			// behavior test
 			settingsFile.UpdateFileByName("MachineKey", CryptoCreator.MachineKeyCreator.StaticMachineKeyForBehaviorTest());
-			settingsFile.UpdateFileByName("TimeLoggerConfiguration", "<logger name='Teleopti.LogTime'><level value='DEBUG'/></logger>");
+			settingsFile.UpdateFileByName("TestLogConfiguration", "<logger name='Teleopti.TestLog'><level value='DEBUG'/></logger>");
 			settingsFile.UpdateFileByName("BehaviorTestServer", "true");
 			settingsFile.UpdateFileByName("MessagesOnBoot", "false");
 			settingsFile.UpdateFileByName("HangfireDashboard", "true");

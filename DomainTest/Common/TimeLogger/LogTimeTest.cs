@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Common.TimeLogger
 		public void ShouldHaveCorrectLoggerName()
 		{
 			LogTimeTester.TestMethod();
-			LogSpy.LastLoggerName.Should().Be.EqualTo("Teleopti.LogTime");
+			LogSpy.LastLoggerName.Should().Be.EqualTo("Teleopti.TestLog");
 		}
 
 		[Test]
