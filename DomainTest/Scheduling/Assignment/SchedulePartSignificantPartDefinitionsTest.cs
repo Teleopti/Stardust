@@ -11,6 +11,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void Setup()
         {
             _baseDateTime = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            _person = new Person();
+            _person = new Person().InTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
             _scenario = new Scenario("for test");
             _mocker = new MockRepository();
             _scheduleDictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000,1,1,2002,1,1)), new PersistableScheduleDataPermissionChecker());

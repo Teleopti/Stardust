@@ -685,6 +685,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			var personPeriodDateOnly = new DateOnly(2016, 1, 1);
 			var person = PersonFactory.CreatePersonWithPersonPeriod(personPeriodDateOnly);
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			person.PersonPeriods(personPeriodDateOnly.ToDateOnlyPeriod()).FirstOrDefault().BudgetGroup = budgetGroup;
 			person.WorkflowControlSet = workflowControlSet;
 			return person;

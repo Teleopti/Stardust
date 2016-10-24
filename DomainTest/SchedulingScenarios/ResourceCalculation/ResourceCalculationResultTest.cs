@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var asses = new List<IPersonAssignment>();
 			for (var i = 0; i < scheduledAgents; i++)
 			{
-				var agent = new Person().WithId();
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 				agent.AddPeriodWithSkill(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")),  new Team { Site = new Site("_") }), skill);
 				agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
 				var ass = new PersonAssignment(agent, scenario, date);
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var date = DateOnly.Today;
 			var activity = new Activity("_") {RequiresSeat = true};
-			var agent = new Person().WithId();
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			var siteWithMaxSeats = new Site("_") {MaxSeats = 10}.WithId();
 			agent.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = siteWithMaxSeats }), Enumerable.Empty<ISkill>());
 			var ass = new PersonAssignment(agent, scenario, date);

@@ -36,18 +36,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var person = PersonFactory.CreatePerson("jobs").WithId();
 			var team = TeamFactory.CreateTeamWithId("angel");
 			var site = new Site("bla").WithId();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			site.AddTeam(team);
 			SiteRepository.Has(site);
 			PersonRepository.Has(person, team, "2015-10-21".Date());
 		
-			var agent = Target.ForSites(new[] {site.Id.Value});
+			var agent = Target.ForSites(new[] {site.Id.Value}).Single();
 
-			agent.Single().Name.Should().Be(person.Name.ToString());
-			agent.Single().PersonId.Should().Be(person.Id);
-			agent.Single().TeamId.Should().Be(team.Id.ToString());
-			agent.Single().TeamName.Should().Be("angel");
-			agent.Single().SiteId.Should().Be(site.Id.ToString());
-			agent.Single().SiteName.Should().Be("bla");
+			agent.Name.Should().Be(person.Name.ToString());
+			agent.PersonId.Should().Be(person.Id);
+			agent.TeamId.Should().Be(team.Id.ToString());
+			agent.TeamName.Should().Be("angel");
+			agent.SiteId.Should().Be(site.Id.ToString());
+			agent.SiteName.Should().Be("bla");
 		}
 
 		[Test]
@@ -57,18 +58,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var person = PersonFactory.CreatePerson("jobs").WithId();
 			var team = TeamFactory.CreateTeamWithId("angel");
 			var site = new Site("bla").WithId();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			team.Site = site;
 			TeamRepository.Has(team);
 			PersonRepository.Has(person, team, "2015-10-28".Date());
 
-			var agent = Target.ForTeams(new[] { team.Id.Value });
+			var agent = Target.ForTeams(new[] { team.Id.Value }).Single();
 
-			agent.Single().Name.Should().Be(person.Name.ToString());
-			agent.Single().PersonId.Should().Be(person.Id);
-			agent.Single().TeamId.Should().Be(team.Id.ToString());
-			agent.Single().TeamName.Should().Be("angel");
-			agent.Single().SiteId.Should().Be(site.Id.ToString());
-			agent.Single().SiteName.Should().Be("bla");
+			agent.Name.Should().Be(person.Name.ToString());
+			agent.PersonId.Should().Be(person.Id);
+			agent.TeamId.Should().Be(team.Id.ToString());
+			agent.TeamName.Should().Be("angel");
+			agent.SiteId.Should().Be(site.Id.ToString());
+			agent.SiteName.Should().Be("bla");
 		}
 
 		[Test]

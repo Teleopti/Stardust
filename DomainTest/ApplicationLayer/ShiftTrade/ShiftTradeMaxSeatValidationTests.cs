@@ -136,10 +136,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var overnightShiftTimePeriod = new DateTimePeriod(dayBeforeScheduleDate.AddHours(23), dayBeforeScheduleDate.AddHours(26).AddMinutes(1));
 
 			var personTo = createPersonWithSiteMaxSeats(1);
+			var p = _shiftTradeTestHelper.CreatePersonInTeam(personTo.MyTeam(scheduleDateOnly));
+			p.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			var peopleInSiteOne = new[]
 			{
 				personTo,
-				_shiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly))
+				p
 			};
 
 			addPersonAssignment(peopleInSiteOne[1], overnightShiftTimePeriod, _requiresSeatActivity);
@@ -403,6 +405,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			team.Site.MaxSeats = maxSeats;
 
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDate, team);
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			person.WorkflowControlSet = workControlSet;
 			_personRepository.Add(person);
 

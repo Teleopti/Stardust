@@ -482,8 +482,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_person.SetId(id ?? Guid.NewGuid());
 			_persons.Has(_person);
 
-			if (timeZone != null)
-				_person.PermissionInformation.SetDefaultTimeZone(timeZone);
+			_person.InTimeZone(timeZone ?? TimeZoneInfo.Utc);
 			if (culture != null)
 				_person.PermissionInformation.SetCulture(culture);
 			if (uiCulture != null)
