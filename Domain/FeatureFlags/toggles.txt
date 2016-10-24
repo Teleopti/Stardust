@@ -196,5 +196,6 @@ Wfm_Intraday_OptimalStaffing_40921 = RC
 Wfm_SkillPriorityRoutingGUI_39885 = DEV
 AbsenceRequest_WithOrWithoutShrinkage_41060 = RC
 LastHandlers_ToHangfire_41203 = RC
-ETL_EventbasedTimeZone_40870 = DEV
+ETL_EventbasedTimeZone_40870 = RC
+ETL_RemoveTimeZoneAndDateNightly_40870 = RC
 ResourcePlanner_HideSkillPrioSliders_41312 = DEV
