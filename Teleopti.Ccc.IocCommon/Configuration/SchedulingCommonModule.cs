@@ -565,7 +565,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftLengthValueCalculator>().As<IWorkShiftLengthValueCalculator>().InstancePerLifetimeScope();
 			builder.RegisterType<WorkShiftValueCalculator>().As<IWorkShiftValueCalculator>();
 			builder.RegisterType<EqualWorkShiftValueDecider>().As<IEqualWorkShiftValueDecider>().InstancePerLifetimeScope();
-			builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().InstancePerLifetimeScope();
+			builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().InstancePerLifetimeScope();
 			builder.RegisterType<MaxSeatsCalculationForTeamBlock>().As<IMaxSeatsCalculationForTeamBlock>().InstancePerLifetimeScope();
 			builder.RegisterType<MaxSeatSkillAggregator>().As<IMaxSeatSkillAggregator>().SingleInstance();
 			builder.RegisterType<MaxSeatInformationGeneratorBasedOnIntervals>().As<IMaxSeatInformationGeneratorBasedOnIntervals>().InstancePerLifetimeScope();

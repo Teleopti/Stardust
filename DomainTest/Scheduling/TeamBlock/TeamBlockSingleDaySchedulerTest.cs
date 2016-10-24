@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_workShiftFilterService,
 				_workShiftSelector,
 				_teamScheduling,
-				_activityIntervalDataCreator, _maxSeatInformationGeneratorBasedOnIntervals, _maxSeatSkillAggregator);
+				_activityIntervalDataCreator, _maxSeatInformationGeneratorBasedOnIntervals, _maxSeatSkillAggregator, null);
 
 			_dateOnly = new DateOnly(2013, 11, 12);
 			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("bill"), _dateOnly);

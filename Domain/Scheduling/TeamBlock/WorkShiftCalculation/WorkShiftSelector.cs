@@ -7,16 +7,20 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
+	public interface IWorkShiftSelectorForIntraInterval
+	{
+		//legacy - was part of IWorkShiftSelector before
+		IList<IWorkShiftCalculationResultHolder> SelectAllShiftProjectionCaches(IList<IShiftProjectionCache> shiftList,
+	IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary,
+	PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo);
+	}
+
 	public interface IWorkShiftSelector
 	{
         IShiftProjectionCache SelectShiftProjectionCache(IList<IShiftProjectionCache> shiftList, IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataDictionary, PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo, ISchedulingOptions schedulingOptions);
-
-		IList<IWorkShiftCalculationResultHolder> SelectAllShiftProjectionCaches(IList<IShiftProjectionCache> shiftList,
-			IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary,
-			PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo);
 	}
 
-	public class WorkShiftSelector : IWorkShiftSelector
+	public class WorkShiftSelector : IWorkShiftSelector, IWorkShiftSelectorForIntraInterval
 	{
 		private readonly IWorkShiftValueCalculator _workShiftValueCalculator;
 		private readonly IEqualWorkShiftValueDecider _equalWorkShiftValueDecider;

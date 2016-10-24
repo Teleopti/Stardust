@@ -35,7 +35,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IActivityIntervalDataCreator _activityIntervalDataCreator;
 		private readonly IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
 		private readonly IMaxSeatSkillAggregator _maxSeatSkillAggregator;
-		
+		private readonly IWorkShiftSelectorForIntraInterval _workSelectorForIntraInterval;
+
 		public TeamBlockSingleDayScheduler(ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
 			IProposedRestrictionAggregator proposedRestrictionAggregator,
 			IWorkShiftFilterService workShiftFilterService,
@@ -43,7 +44,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			ITeamScheduling teamScheduling,
 			IActivityIntervalDataCreator activityIntervalDataCreator,
 			IMaxSeatInformationGeneratorBasedOnIntervals maxSeatInformationGeneratorBasedOnIntervals,
-			IMaxSeatSkillAggregator maxSeatSkillAggregator)
+			IMaxSeatSkillAggregator maxSeatSkillAggregator,
+			IWorkShiftSelectorForIntraInterval workSelectorForIntraInterval)
 		{
 			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
 			_proposedRestrictionAggregator = proposedRestrictionAggregator;
@@ -53,6 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_activityIntervalDataCreator = activityIntervalDataCreator;
 			_maxSeatInformationGeneratorBasedOnIntervals = maxSeatInformationGeneratorBasedOnIntervals;
 			_maxSeatSkillAggregator = maxSeatSkillAggregator;
+			_workSelectorForIntraInterval = workSelectorForIntraInterval;
 		}
 
 		// TODO Move to separate class
@@ -101,7 +104,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,
 				schedulingOptions.UseMaximumPersons, schedulingOptions.UserOptionMaxSeatsFeature, hasMaxSeatSkill, maxSeatInfo);
 
-			resultList = _workShiftSelector.SelectAllShiftProjectionCaches(shifts, activityInternalData,
+			resultList = _workSelectorForIntraInterval.SelectAllShiftProjectionCaches(shifts, activityInternalData,
 				parameters, TimeZoneGuard.Instance.TimeZone);
 
 			return resultList;
