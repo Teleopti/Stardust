@@ -293,6 +293,7 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTeamBlockDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatData.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatDataFactory.cs" />
+    <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatMustNotResourceCalculateTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOptimizationTeamBlockTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOptimizationTest.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnNonScheduleDaysCascadingTest.cs" />
