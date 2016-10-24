@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IContractScheduleRepository _contractScheduleRepository;
 		private readonly ISkillTypeRepository _skillTypeRepository;
 		private readonly IActivityRepository _activityRepository;
+		private readonly IAbsenceRepository _absenceRepository;
 
 		public MultiAbsenceRequestsHandler(IPersonRequestRepository personRequestRepository,
 			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			ISkillRepository skillRepository, IMultiAbsenceRequestsUpdater multiAbsenceRequestsUpdater,
 			IContractRepository contractRepository, IPartTimePercentageRepository partTimePercentageRepository,
 			IContractScheduleRepository contractScheduleRepository, ISkillTypeRepository skillTypeRepository,
-			IActivityRepository activityRepository)
+			IActivityRepository activityRepository, IAbsenceRepository absenceRepository)
 		{
 			_personRequestRepository = personRequestRepository;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
@@ -55,6 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_contractScheduleRepository = contractScheduleRepository;
 			_skillTypeRepository = skillTypeRepository;
 			_activityRepository = activityRepository;
+			_absenceRepository = absenceRepository;
 		}
 
 		[AsSystem]
@@ -107,6 +109,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				//formally part of prereq loader
 				_contractScheduleRepository.LoadAllAggregate();
 				_activityRepository.LoadAll();
+				//got no lazy load problem if we dnt have this. but as it was part of the prereq so adding it back again
+				_absenceRepository.LoadAll();
 
 				var personRequests = _personRequestRepository.Find(@event.PersonRequestIds);
 
