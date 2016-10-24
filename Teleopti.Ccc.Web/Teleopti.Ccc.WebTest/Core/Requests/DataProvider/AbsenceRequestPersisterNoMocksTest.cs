@@ -64,23 +64,21 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			setWorkflowControlSet(usePersonAccountValidator:true);
 
-			var accountDay = new AccountDay(_today)
-			{
-				Accrued = TimeSpan.FromDays(1)
-			};
-			createPersonAbsenceAccount(_person, _absence, accountDay);
+			var personRequest = setupSimpleAbsenceRequest();
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
-			{
-				StartDate = _today,
-				EndDate = _today,
-				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
-				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
-			});
-
-			var personRequest = persist(form);
 			assertPersonRequest(personRequest, false, string.Empty);
 		}
+
+		[Test]
+		public void ShouldDenyWhenPersonHasNoWorkflowControlSet()
+		{
+			setUp();
+
+			var personRequest = setupSimpleAbsenceRequest();
+
+			assertPersonRequest(personRequest, true, Resources.RequestDenyReasonNoWorkflow);
+		}
+
 
 		[Test]
 		public void ShouldDenyExpiredRequest([Values]bool autoGrant)
@@ -89,17 +87,21 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			setWorkflowControlSet(15, autoGrant);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
-			{
-				StartDate = _today,
-				EndDate = _today,
-				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
-				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
-			});
+			var personRequest = setupSimpleAbsenceRequest();
 
-			var personRequest = persist(form);
 			assertPersonRequest(personRequest, true
 				, string.Format(Resources.RequestDenyReasonRequestExpired, personRequest.Request.Period.StartDateTime, 15));
+		}
+
+		[Test]
+		public void ShouldDenyWhenAutoDenyIsOn()
+		{
+			setUp();
+
+			setWorkflowControlSet(autoDeny: true);
+
+			var personRequest = setupSimpleAbsenceRequest();
+			assertPersonRequest(personRequest, true, "RequestDenyReasonAutodeny");
 		}
 
 		[Test]
@@ -125,25 +127,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			var personRequest = persist(form);
 			assertPersonRequest(personRequest, true, Resources.RequestDenyReasonAlreadyAbsent);
-		}
-
-		[Test]
-		public void ShouldDenyWhenAutoDenyIsOn()
-		{
-			setUp();
-
-			setWorkflowControlSet(autoDeny: true);
-
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
-			{
-				StartDate = DateOnly.Today,
-				EndDate = DateOnly.Today,
-				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
-				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
-			});
-
-			var personRequest = persist(form);
-			assertPersonRequest(personRequest, true, "RequestDenyReasonAutodeny");
 		}
 
 		[Test]
@@ -256,6 +239,27 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 			
 			_person.WorkflowControlSet = _workflowControlSet;
+		}
+
+
+		private IPersonRequest setupSimpleAbsenceRequest()
+		{
+			var accountDay = new AccountDay(_today)
+			{
+				Accrued = TimeSpan.FromDays(1)
+			};
+			createPersonAbsenceAccount(_person, _absence, accountDay);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
+			});
+
+			var personRequest = persist(form);
+			return personRequest;
 		}
 
 		private void createPersonAbsenceAccount(IPerson person, IAbsence absence, params IAccount[] accounts)

@@ -1,3 +1,4 @@
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
@@ -9,7 +10,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var person = personRequest.Person;
 			var workflowControlSet = person.WorkflowControlSet;
 			if (workflowControlSet == null)
-				return ValidatedRequest.Valid;
+				return new ValidatedRequest { IsValid = false, ValidationErrors = Resources.RequestDenyReasonNoWorkflow };
 
 			var absenceRequestOpenPeriod =
 				workflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest) personRequest.Request);
