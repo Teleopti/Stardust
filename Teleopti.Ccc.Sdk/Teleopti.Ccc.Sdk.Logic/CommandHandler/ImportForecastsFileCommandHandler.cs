@@ -27,12 +27,13 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		private readonly IToggleManager _toggleManager;
 		private readonly IJsonSerializer _jsonSerializer;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
+		private readonly IStardustSender _stardustSender;
 
 		public ImportForecastsFileCommandHandler(IMessagePopulatingServiceBusSender busSender,
 			ICurrentUnitOfWorkFactory unitOfWorkFactory,
 			IJobResultRepository jobResultRepository,
 			IPostHttpRequest postHttpRequest, IToggleManager toggleManager, IJsonSerializer jsonSerializer,
-			ICurrentBusinessUnit currentBusinessUnit)
+			ICurrentBusinessUnit currentBusinessUnit, IStardustSender stardustSender)
 		{
 			_busSender = busSender;
 			_unitOfWorkFactory = unitOfWorkFactory;
@@ -41,6 +42,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			_toggleManager = toggleManager;
 			_jsonSerializer = jsonSerializer;
 			_currentBusinessUnit = currentBusinessUnit;
+			_stardustSender = stardustSender;
 		}
 
 		public void Handle(ImportForecastsFileCommandDto command)
@@ -74,16 +76,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				};
 				if (_toggleManager.IsEnabled(Toggles.Wfm_ForecastFileImportOnStardust_37047))
 				{
-					var ser = _jsonSerializer.SerializeObject(message);
-					var jobModel = new JobRequestModel
-					{
-						Name = "Import forecast from file",
-						Serialized = ser,
-						Type = typeof(ImportForecastsFileToSkillEvent).ToString(),
-						CreatedBy = person.Id.GetValueOrDefault().ToString()
-					};
-					var mess = _jsonSerializer.SerializeObject(jobModel);
-					_postHttpRequest.Send<Guid>(ConfigurationManager.AppSettings["ManagerLocation"] + "job", mess);
+					_stardustSender.Send(message);
 				}
 				else
 					_busSender.Send(message, true);

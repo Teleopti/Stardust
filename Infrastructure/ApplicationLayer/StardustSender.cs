@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Configuration;
 using System.Globalization;
-using System.Threading;
 using log4net;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -21,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 	public class StardustSender : IStardustSender
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(StardustSender));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(StardustSender));
 		private readonly IPostHttpRequest _postHttpRequest;
 		private readonly IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
 		private readonly IUpdatedBy _updatedBy;
@@ -65,7 +63,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				CreatedBy = userName
 			};
 			var mess = JsonConvert.SerializeObject(jobModel);
-			if (Logger.IsDebugEnabled)
+			if (logger.IsDebugEnabled)
 			{
 				var datasource = "<unknown>";
 				var raptorDomainMessage = @event as ILogOnContext;
@@ -73,14 +71,13 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				{
 					datasource = raptorDomainMessage.LogOnDatasource;
 				}
-				Logger.Debug(string.Format(CultureInfo.InvariantCulture,
+				logger.Debug(string.Format(CultureInfo.InvariantCulture,
 											"Sending {0} message (Data source = {1})",
 											jobName, datasource));
 			}
 
 			var managerLocation = _configReader.AppConfig("ManagerLocation");
-			var route = _configReader.ReadValue("RouteName", "/StardustDashboard");
-			return _postHttpRequest.Send<Guid>(managerLocation.Remove(managerLocation.Length - 1) + route + "/job", mess);
+			return _postHttpRequest.Send<Guid>(managerLocation + "job", mess);
 		}
 	}
 

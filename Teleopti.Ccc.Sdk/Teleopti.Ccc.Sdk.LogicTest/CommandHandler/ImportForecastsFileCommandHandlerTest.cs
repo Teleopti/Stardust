@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		private IToggleManager _toggleManager;
 		private IJsonSerializer _jsonSer;
 		private ICurrentBusinessUnit _currentBu;
+		private IStardustSender _stardustSender;
 
 		[SetUp]
 		public void Setup()
@@ -49,8 +50,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_toggleManager = MockRepository.GenerateMock<IToggleManager>();
 			_jsonSer = MockRepository.GenerateMock<IJsonSerializer>();
 			_currentBu = MockRepository.GenerateMock<ICurrentBusinessUnit>();
+			_stardustSender = MockRepository.GenerateMock<IStardustSender>();
 			_target = new ImportForecastsFileCommandHandler(_busSender, _currentUnitOfWorkFactory, _jobResultRepository,
-				_postHttpRequest, _toggleManager, _jsonSer, _currentBu);
+				_postHttpRequest, _toggleManager, _jsonSer, _currentBu, _stardustSender);
 
 			_person = PersonFactory.CreatePerson("test");
 			_person.SetId(Guid.NewGuid());
