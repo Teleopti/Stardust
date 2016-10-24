@@ -9,6 +9,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
 using BusinessUnit = Teleopti.Ccc.TestCommon.TestData.Analytics.BusinessUnit;
@@ -52,16 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenTheBusinessUnitScopeIsUsing(string name)
 		{
 			var businessUnitConfigurable = DataMaker.Data().UserDatasOfType<BusinessUnitConfigurable>().First(x => x.Name == name);
-			var businessUnitScope = IntegrationIoCTest.Container.Resolve<IBusinessUnitScope>();
-			
-			businessUnitScope.OnThisThreadUse(businessUnitConfigurable.BusinessUnit);
-		}
-
-		[Given(@"the business unit scope is reset")]
-		public void GivenTheBusinessUnitScopeIsReset()
-		{
-			var businessUnitScope = IntegrationIoCTest.Container.Resolve<IBusinessUnitScope>();
-			businessUnitScope.OnThisThreadUse(null);
+			CurrentScopeBusinessUnit.Use(businessUnitConfigurable);
 		}
 	}
 }

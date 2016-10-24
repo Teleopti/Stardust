@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			ToggleStepDefinition.IgnoreScenarioIfDisabledByToggle();
 
 			CurrentTime.Reset();
+			CurrentScopeBusinessUnit.Reset();
 			TestControllerMethods.BeforeScenario();
 
 			TestDataSetup.RestoreCcc7Data();

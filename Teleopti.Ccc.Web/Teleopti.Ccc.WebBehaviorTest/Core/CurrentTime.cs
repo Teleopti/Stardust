@@ -4,7 +4,7 @@ using Teleopti.Ccc.WebBehaviorTest.Data;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core
 {
-	public class CurrentTime
+	public static class CurrentTime
 	{
 		private static DateTime? _currentTime;
 
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static DateTime Value()
 		{
-			return _currentTime.HasValue ? _currentTime.Value : DateTime.UtcNow;
+			return _currentTime ?? DateTime.UtcNow;
 		}
 
 		public static void Reset()

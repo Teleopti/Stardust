@@ -30,7 +30,6 @@ Scenario: See sites of a selected business unit
 	 | Field      | Value      |
 	 | Team       | Green      |
 	 | Start Date | 2014-01-21 |
-    And the business unit scope is reset
 	When I view Real time adherence sites
 	And I change to business unit 'Business Unit 1'
 	Then I should see the site 'Paris'
@@ -45,7 +44,6 @@ Scenario: See statupdates after changing business unit
 	 | Field          | Value        |
 	 | Team           | Red          |
 	 | Start Date     | 2014-01-21   |
-    And the business unit scope is reset
 	And there is a rule with 
 	| Field         | Value    |
 	| Name          | Positive |
