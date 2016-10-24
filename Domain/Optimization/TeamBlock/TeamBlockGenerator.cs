@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public interface ITeamBlockGenerator
 	{
-		IList<ITeamBlockInfo> Generate(IList<IScheduleMatrixPro> allPersonMatrixList,
+		IList<ITeamBlockInfo> Generate(IEnumerable<IScheduleMatrixPro> allPersonMatrixList,
 		                               DateOnlyPeriod selectedPeriod,
-		                               IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions);
+		                               IEnumerable<IPerson> selectedPersons, ISchedulingOptions schedulingOptions);
 	}
 
 	public class TeamBlockGenerator : ITeamBlockGenerator
@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public IList<ITeamBlockInfo> Generate(IList<IScheduleMatrixPro> allPersonMatrixList,
+		public IList<ITeamBlockInfo> Generate(IEnumerable<IScheduleMatrixPro> allPersonMatrixList,
 		                                      DateOnlyPeriod selectedPeriod,
-		                                      IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions)
+																					IEnumerable<IPerson> selectedPersons, ISchedulingOptions schedulingOptions)
 		{
 			var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
 			foreach (var selectedPerson in selectedPersons)

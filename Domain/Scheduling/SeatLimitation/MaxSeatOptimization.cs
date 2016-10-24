@@ -91,17 +91,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				teamBlockIntradayOptimizationService(
 					allMatrixes,
 					period,
-					agentsToOptimize.ToList(),
+					agentsToOptimize,
 					optimizationPreferences,
 					rollbackService,
 					maxSeatData.AllMaxSeatSkillDaysPerSkill(), //fix
 					NewBusinessRuleCollection.Minimum()); //is this enough?
 			}
-
-
 		}
 
-		private IList<IScheduleMatrixPro> createMatrixes(IScheduleDictionary scheduleDictionary, DateOnlyPeriod loadedPeriod, DateOnlyPeriod choosenPeriod, IEnumerable<IPerson> allAgents)
+		private IEnumerable<IScheduleMatrixPro> createMatrixes(IScheduleDictionary scheduleDictionary, DateOnlyPeriod loadedPeriod, DateOnlyPeriod choosenPeriod, IEnumerable<IPerson> allAgents)
 		{
 			//old: _matrixListFactory.CreateMatrixListAllForLoadedPeriod(period); - it's currently depending on stateholder though
 			//move to seperate class!
@@ -134,9 +132,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 
 		#region  taken from TeamBlockIntradayOptimizationService
-		private void teamBlockIntradayOptimizationService(IList<IScheduleMatrixPro> allPersonMatrixList,
+		private void teamBlockIntradayOptimizationService(IEnumerable<IScheduleMatrixPro> allPersonMatrixList,
 			DateOnlyPeriod selectedPeriod,
-			IList<IPerson> selectedPersons,
+			IEnumerable<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays,
