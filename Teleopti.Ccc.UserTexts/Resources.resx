@@ -14860,7 +14860,7 @@ These options are activated:
     <comment>Displayed name for schedule validation rule "MinWeekWorkTimeRule"</comment>
   </data>
   <data name="NewDayOffRuleName" xml:space="preserve">
-    <value>Shift overlaps with Day Off</value>
+    <value>Shift overlaps with day off</value>
     <comment>Displayed name for schedule validation rule "NewDayOffRule"</comment>
   </data>
   <data name="NewMaxWeekWorkTimeRuleName" xml:space="preserve">
@@ -14872,7 +14872,7 @@ These options are activated:
     <comment>Displayed name for schedule validation rule "NewNightlyRestRule"</comment>
   </data>
   <data name="NotOverwriteLayerRuleName" xml:space="preserve">
-    <value>Allow Overwriting</value>
+    <value>Overwriting of activity</value>
     <comment>Displayed name for schedule validation rule "NotOverwriteLayerRule"</comment>
   </data>
   <data name="MoveNonoverwritableActivityForTheseAgents" xml:space="preserve">

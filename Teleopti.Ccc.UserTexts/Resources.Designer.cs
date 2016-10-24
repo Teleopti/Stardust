@@ -17342,7 +17342,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shift overlaps with Day Off.
+        ///   Looks up a localized string similar to Shift overlaps with day off.
         /// </summary>
         public static string NewDayOffRuleName {
             get {
@@ -18875,7 +18875,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allow Overwriting.
+        ///   Looks up a localized string similar to Overwriting of activity.
         /// </summary>
         public static string NotOverwriteLayerRuleName {
             get {
