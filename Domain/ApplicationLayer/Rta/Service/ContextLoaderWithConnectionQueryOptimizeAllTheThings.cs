@@ -396,7 +396,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Parallel.ForEach(
 				transactions,
 				new ParallelOptions {MaxDegreeOfParallelism = strategy.ParallelTransactions},
-				sharedData => Transaction(tenant, strategy, sharedData)
+				sharedData =>
+				{
+					try
+					{
+						Transaction(tenant, strategy, sharedData);
+					}
+					catch (Exception e)
+					{
+						exceptions.Add(e);
+					}
+				}
 			);
 
 			if (exceptions.Count == 1)
