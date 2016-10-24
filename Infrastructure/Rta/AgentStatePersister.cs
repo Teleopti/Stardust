@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using Castle.Core.Internal;
 using Newtonsoft.Json;
 using NHibernate;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Infrastructure;
@@ -17,59 +20,14 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class AgentStatePersisterWithSchedules : AgentStatePersister
 	{
-		public AgentStatePersisterWithSchedules(ICurrentUnitOfWork unitOfWork, IJsonSerializer serializer) : base(unitOfWork, serializer)
+		public AgentStatePersisterWithSchedules(ICurrentUnitOfWork unitOfWork, IJsonSerializer serializer)
+			: base(unitOfWork, serializer)
 		{
 		}
 
 		public override void Update(AgentState model)
 		{
-			var scheduleSql = "";
-			if (model.Schedule != null)
-				scheduleSql = ", Schedule = :Schedule";
-			var sql = $@"
-UPDATE [dbo].[AgentState]
-SET
-	BatchId = :BatchId,
-	SourceId = :SourceId,
-	PlatformTypeId = :PlatformTypeId,
-	ReceivedTime = :ReceivedTime,
-	StateCode = :StateCode,
-	StateGroupId = :StateGroupId,
-	StateStartTime = :StateStartTime,
-	ActivityId = :ActivityId, 
-	NextActivityId = :NextActivityId,
-	NextActivityStartTime = :NextActivityStartTime, 
-	RuleId = :RuleId,
-	RuleStartTime = :RuleStartTime,
-	AlarmStartTime = :AlarmStartTime,
-	TimeWindowCheckSum = :TimeWindowCheckSum,
-	Adherence = :Adherence
-	{scheduleSql}
-WHERE
-	PersonId = :PersonId";
-			var query = _unitOfWork.Current().Session()
-				.CreateSQLQuery(sql)
-				.SetParameter("PersonId", model.PersonId)
-				.SetParameter("BatchId", model.BatchId)
-				.SetParameter("SourceId", model.SourceId)
-				.SetParameter("PlatformTypeId", model.PlatformTypeId)
-				.SetParameter("ReceivedTime", model.ReceivedTime)
-				.SetParameter("StateCode", model.StateCode)
-				.SetParameter("StateGroupId", model.StateGroupId)
-				.SetParameter("StateStartTime", model.StateStartTime)
-				.SetParameter("ActivityId", model.ActivityId)
-				.SetParameter("NextActivityId", model.NextActivityId)
-				.SetParameter("NextActivityStartTime", model.NextActivityStartTime)
-				.SetParameter("RuleId", model.RuleId)
-				.SetParameter("RuleStartTime", model.RuleStartTime)
-				.SetParameter("AlarmStartTime", model.AlarmStartTime)
-				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
-				.SetParameter("Adherence", (int?) model.Adherence);
-
-			if (model.Schedule != null)
-				query.SetParameter("Schedule", _serializer.SerializeObject(model.Schedule), NHibernateUtil.StringClob);
-
-			query.ExecuteUpdate();
+			update(model, true);
 		}
 	}
 
@@ -97,7 +55,7 @@ WHERE
 					.ExecuteUpdate();
 				return;
 			}
-			
+
 			// select with upd lock to prevent deadlock
 			var existing = _unitOfWork.Current().Session()
 				.CreateSQLQuery(SelectAgentState + "WITH (UPDLOCK) WHERE PersonId = :PersonId")
@@ -112,7 +70,8 @@ WHERE
 	PersonId = :PersonId AND
 	DataSourceIdUserCode NOT IN (:DataSourceIdUserCode)")
 				.SetParameter("PersonId", model.PersonId)
-				.SetParameterList("DataSourceIdUserCode", model.ExternalLogons.Select(x => $"{x.DataSourceId}__{x.UserCode}").ToArray())
+				.SetParameterList("DataSourceIdUserCode",
+					model.ExternalLogons.Select(x => $"{x.DataSourceId}__{x.UserCode}").ToArray())
 				.ExecuteUpdate();
 
 			_unitOfWork.Current().Session()
@@ -204,13 +163,14 @@ VALUES
 						.SetParameter("RuleStartTime", copyFrom?.RuleStartTime)
 						.SetParameter("AlarmStartTime", copyFrom?.AlarmStartTime)
 						.SetParameter("TimeWindowCheckSum", copyFrom?.TimeWindowCheckSum)
-						.SetParameter("Schedule", copyFrom?.Schedule != null ? _serializer.SerializeObject(copyFrom.Schedule) : null, NHibernateUtil.StringClob)
+						.SetParameter("Schedule", copyFrom?.Schedule != null ? _serializer.SerializeObject(copyFrom.Schedule) : null,
+							NHibernateUtil.StringClob)
 						.SetParameter("Adherence", (int?) copyFrom?.Adherence)
 						.SetParameter("DataSourceIdUserCode", e.DataSourceId + "__" + e.UserCode)
 						.ExecuteUpdate();
 				});
 		}
-		
+
 		[LogInfo]
 		public virtual void InvalidateSchedules(Guid personId, DeadLockVictim deadLockVictim)
 		{
@@ -225,16 +185,22 @@ VALUES
 		[LogInfo]
 		public virtual void Update(AgentState model)
 		{
-			_unitOfWork.Current().Session()
-				.CreateSQLQuery(@"
+			update(model, false);
+		}
+
+		protected void update(AgentState model, bool withSchedule)
+		{
+			var scheduleSql = "";
+
+			if (model.Schedule != null && withSchedule)
+				scheduleSql = ", Schedule = :Schedule";
+
+			var sql = $@"
 UPDATE [dbo].[AgentState]
 SET
 	BatchId = :BatchId,
 	SourceId = :SourceId,
 	PlatformTypeId = :PlatformTypeId,
-	BusinessUnitId = :BusinessUnitId,
-	SiteId = :SiteId,
-	TeamId = :TeamId,
 	ReceivedTime = :ReceivedTime,
 	StateCode = :StateCode,
 	StateGroupId = :StateGroupId,
@@ -247,15 +213,15 @@ SET
 	AlarmStartTime = :AlarmStartTime,
 	TimeWindowCheckSum = :TimeWindowCheckSum,
 	Adherence = :Adherence
+	{scheduleSql}
 WHERE
-	PersonId = :PersonId")
+	PersonId = :PersonId";
+			var query = _unitOfWork.Current().Session()
+				.CreateSQLQuery(sql)
 				.SetParameter("PersonId", model.PersonId)
 				.SetParameter("BatchId", model.BatchId)
 				.SetParameter("SourceId", model.SourceId)
 				.SetParameter("PlatformTypeId", model.PlatformTypeId)
-				.SetParameter("BusinessUnitId", model.BusinessUnitId)
-				.SetParameter("SiteId", model.SiteId)
-				.SetParameter("TeamId", model.TeamId)
 				.SetParameter("ReceivedTime", model.ReceivedTime)
 				.SetParameter("StateCode", model.StateCode)
 				.SetParameter("StateGroupId", model.StateGroupId)
@@ -267,8 +233,22 @@ WHERE
 				.SetParameter("RuleStartTime", model.RuleStartTime)
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)
 				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
-				.SetParameter("Adherence", (int?) model.Adherence)
-				.ExecuteUpdate();
+				.SetParameter("Adherence", (int?) model.Adherence);
+
+			if (model.Schedule != null && withSchedule)
+				query.SetParameter("Schedule", _serializer.SerializeObject(model.Schedule), NHibernateUtil.StringClob);
+
+			try
+			{
+				query.ExecuteUpdate();
+			}
+			catch (DataSourceException e)
+			{
+				var sqlDeadlockException = e.AllExceptions().FirstOrDefault(x => x.IsSqlDeadlock());
+				if (sqlDeadlockException != null)
+					throw new DeadLockVictimException("Deadlock!", sqlDeadlockException);
+				throw;
+			}
 		}
 
 		public void Delete(Guid personId, DeadLockVictim deadLockVictim)

@@ -4,6 +4,13 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
+	public class DeadLockVictimException : Exception
+	{
+		public DeadLockVictimException(string message, Exception innerException):base(message, innerException)
+		{
+		}
+	}
+
 	public enum DeadLockVictim
 	{
 		Yes,

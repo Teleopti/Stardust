@@ -402,6 +402,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					{
 						Transaction(tenant, strategy, sharedData);
 					}
+					catch (DeadLockVictimException)
+					{
+						try
+						{
+							Transaction(tenant, strategy, sharedData);
+						}
+						catch (Exception e)
+						{
+							exceptions.Add(e);
+						}
+					}
 					catch (Exception e)
 					{
 						exceptions.Add(e);
@@ -453,5 +464,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 	}
-
 }

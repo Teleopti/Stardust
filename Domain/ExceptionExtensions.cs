@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace Teleopti.Ccc.Domain
@@ -24,6 +25,11 @@ namespace Teleopti.Ccc.Domain
 				}
 			}
 			
+		}
+
+		public static bool IsSqlDeadlock(this Exception source)
+		{
+			return (source as SqlException)?.Number == 1205;
 		}
 	}
 }
