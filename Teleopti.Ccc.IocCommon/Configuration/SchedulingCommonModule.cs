@@ -531,6 +531,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamScheduling>().As<ITeamScheduling>().SingleInstance();
 			builder.RegisterType<TeamBlockSingleDayScheduler>().As<ITeamBlockSingleDayScheduler>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockScheduler>().As<ITeamBlockScheduler>().InstancePerLifetimeScope();
+			builder.RegisterType<ShiftProjectionCachesForIntraInterval>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockGenerator>().As<ITeamBlockGenerator>();
 			builder.RegisterType<MissingDayOffBestSpotDecider>().As<IMissingDayOffBestSpotDecider>();
 		}
