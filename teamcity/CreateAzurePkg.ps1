@@ -48,13 +48,10 @@ task Init {
 
 task PreReq -depends init -description "Move/Copy preparation of files" {
 	
-	TeamCity-Block  "PreReq" { 
-    
-		PrepareCopyFiles
-		CorrectingURLinHTML
-    }    
-
-	
+	Write-Output "##teamcity[blockOpened name='<PreReq>']"
+    PrepareCopyFiles
+	CorrectingURLinHTML
+	Write-Output "##teamcity[blockClosed name='<PreReq>']"
 }
 
 task CreateAzurePkg -depends Init, PreReq -description "Create Azure Package" {

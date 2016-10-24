@@ -7,6 +7,30 @@ if ($env:TEAMCITY_VERSION) {
 	$host.UI.RawUI.BufferSize = New-Object System.Management.Automation.Host.Size(8192,50)
 }
 
+function TeamCity-Message([string]$text, [string]$status = 'NORMAL', [string]$errorDetails) {
+  $messageAttributes = @{ text=$text; status=$status }
+  
+  if ($errorDetails) {
+    $messageAttributes.errorDetails = $errorDetails
+  }
+  
+	TeamCity-WriteServiceMessage 'message' $messageAttributes
+}
+
+function TeamCity-BlockOpened([string]$name, [string]$description) {
+  $messageAttributes = @{ name=$name }
+  
+  if ($description) {
+    $messageAttributes.description = $description
+  }
+  
+	TeamCity-WriteServiceMessage 'blockOpened' $messageAttributes
+}
+
+function TeamCity-BlockClosed([string]$name) {
+	TeamCity-WriteServiceMessage 'blockClosed' @{ name=$name }
+}
+
 function TeamCity-TestSuiteStarted([string]$name) {
 	TeamCity-WriteServiceMessage 'testSuiteStarted' @{ name=$name }
 }
@@ -72,6 +96,14 @@ function TeamCity-ImportFxCopResult([string]$path) {
 	TeamCity-WriteServiceMessage 'importData' @{ type='FxCop'; path=$path }
 }
 
+function TeamCity-ImportDuplicatesResult([string]$path) {
+	TeamCity-WriteServiceMessage 'importData' @{ type='DotNetDupFinder'; path=$path }
+}
+
+function TeamCity-ImportInspectionCodeResult([string]$path) {
+	TeamCity-WriteServiceMessage 'importData' @{ type='ReSharperInspectCode'; path=$path }
+}
+
 function TeamCity-ImportNUnitReport([string]$path) {
 	TeamCity-WriteServiceMessage 'importData' @{ type='nunit'; path=$path }
 }
@@ -96,16 +128,44 @@ function TeamCity-ReportBuildFinish([string]$message) {
 	TeamCity-WriteServiceMessage 'progressFinish' $message
 }
 
-function TeamCity-ReportBuildStatus([string]$status, [string]$text='') {
-	TeamCity-WriteServiceMessage 'buildStatus' @{ status=$status; text=$text }
+function TeamCity-ReportBuildStatus([string]$status=$null, [string]$text='') {
+	$messageAttributes = @{ text=$text }
+
+	if (![string]::IsNullOrEmpty($status)) {
+		$messageAttributes.status=$status
+	}
+
+	TeamCity-WriteServiceMessage 'buildStatus' $messageAttributes
+}
+
+function TeamCity-ReportBuildProblem([string]$description, [string]$identity=$null) {
+	$messageAttributes = @{ description=$description }
+
+	if (![string]::IsNullOrEmpty($identity)) {
+		$messageAttributes.identity=$identity
+	}
+
+	TeamCity-WriteServiceMessage 'buildProblem' $messageAttributes
 }
 
 function TeamCity-SetBuildNumber([string]$buildNumber) {
 	TeamCity-WriteServiceMessage 'buildNumber' $buildNumber
 }
 
+function TeamCity-SetParameter([string]$name, [string]$value) {
+	TeamCity-WriteServiceMessage 'setParameter' @{ name=$name; value=$value }
+}
+
 function TeamCity-SetBuildStatistic([string]$key, [string]$value) {
 	TeamCity-WriteServiceMessage 'buildStatisticValue' @{ key=$key; value=$value }
+}
+
+function TeamCity-EnableServiceMessages() {
+	TeamCity-WriteServiceMessage 'enableServiceMessages'
+}
+
+function TeamCity-DisableServiceMessages() {
+	TeamCity-WriteServiceMessage 'disableServiceMessages'
 }
 
 function TeamCity-CreateInfoDocument([string]$buildNumber='', [boolean]$status=$true, [string[]]$statusText=$null, [System.Collections.IDictionary]$statistics=$null) {
@@ -182,9 +242,10 @@ function TeamCity-WriteServiceMessage([string]$messageName, $messageAttributesHa
 	if ($messageAttributesHashOrSingleValue -is [hashtable]) {
 		$messageAttributesString = ($messageAttributesHashOrSingleValue.GetEnumerator() | 
 			%{ "{0}='{1}'" -f $_.Key, (escape $_.Value) }) -join ' '
-	} else {
-		$messageAttributesString = ("'{0}'" -f (escape $messageAttributesHashOrSingleValue))
+      $messageAttributesString = " $messageAttributesString"
+	} elseif ($messageAttributesHashOrSingleValue) {
+		$messageAttributesString = (" '{0}'" -f (escape $messageAttributesHashOrSingleValue))
 	}
 
-	Write-Output "##teamcity[$messageName $messageAttributesString]"
+	Write-Output "##teamcity[$messageName$messageAttributesString]"
 }
