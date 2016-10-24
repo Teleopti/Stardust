@@ -17,17 +17,20 @@ Scenario: See sites of a selected business unit
 	| Field | Value           |
 	| Name  | Business Unit 2 |
 	And there is a site 'Paris' on business unit 'Business Unit 1'
-	And there is a site 'London' on business unit 'Business Unit 2'
+	And the business unit scope is using 'Business Unit 1'
 	And there is a team named 'Red' on site 'Paris'
-	And there is a team named 'Green' on site 'London'
 	And Pierre Baldi has a person period with
 	 | Field      | Value      |
 	 | Team       | Red        |
 	 | Start Date | 2014-01-21 |
+	 And the business unit scope is using 'Business Unit 2'
+	And there is a site 'London' on business unit 'Business Unit 2'
+	And there is a team named 'Green' on site 'London'
 	And Ashley Andeen has a person period with
 	 | Field      | Value      |
 	 | Team       | Green      |
 	 | Start Date | 2014-01-21 |
+    And the business unit scope is reset
 	When I view Real time adherence sites
 	And I change to business unit 'Business Unit 1'
 	Then I should see the site 'Paris'
@@ -35,12 +38,14 @@ Scenario: See sites of a selected business unit
 Scenario: See statupdates after changing business unit
 	Given I have a role with full access
 	And there is a business unit named 'France'
+	And the business unit scope is using 'France'
 	And there is a site 'Paris' on business unit 'France'
 	And there is a team named 'Red' on site 'Paris'
 	And Pierre Baldi has a person period with
 	 | Field          | Value        |
 	 | Team           | Red          |
 	 | Start Date     | 2014-01-21   |
+    And the business unit scope is reset
 	And there is a rule with 
 	| Field         | Value    |
 	| Name          | Positive |

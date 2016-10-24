@@ -45,10 +45,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				var analyticsPersonPeriods = _analyticsPersonPeriodRepository.GetPersonPeriods(personId);
 				foreach (var personPeriod in person.PersonPeriodCollection)
 				{
-					var analyticsPersonPeriod =
-						analyticsPersonPeriods.FirstOrDefault(x => x.PersonPeriodCode == personPeriod.Id.GetValueOrDefault() && x.BusinessUnitCode == personPeriod.Team.BusinessUnitExplicit.Id.GetValueOrDefault());
+					var analyticsPersonPeriod = analyticsPersonPeriods.FirstOrDefault(x => x.PersonPeriodCode == personPeriod.Id.GetValueOrDefault());
 					if (analyticsPersonPeriod == null)
 						throw new PersonPeriodMissingInAnalyticsException(personPeriod.Id.GetValueOrDefault());
+					if (analyticsPersonPeriod.BusinessUnitCode != @event.LogOnBusinessUnitId)
+						throw new ApplicationException($"Found the PersonPeriod ({analyticsPersonPeriod.PersonPeriodCode}) in analytics but for a different Business Unit ({analyticsPersonPeriod.BusinessUnitCode}) than the event ({@event.LogOnBusinessUnitId})");
 					var groupPages = _analyticsGroupPageRepository.GetBuildInGroupPageBase(@event.LogOnBusinessUnitId).ToList();
 					var groupIds = new List<analyticsGroupForPerson>();
 

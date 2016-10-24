@@ -20,18 +20,21 @@ Scenario: Should display sites of a selected business unit
 	And there is a business unit with
 	| Field | Value           |
 	| Name  | Business Unit 2 |
+	And the business unit scope is using 'Business Unit 1'
 	And there is a site 'Paris' on business unit 'Business Unit 1'
-	And there is a site 'London' on business unit 'Business Unit 2'
 	And there is a team named 'Red' on site 'Paris'
-	And there is a team named 'Green' on site 'London'
 	And Pierre Baldi has a person period with
 	 | Field      | Value      |
 	 | Team       | Red |
 	 | Start Date | 2014-01-21 |
+	And the business unit scope is using 'Business Unit 2'
+	And there is a site 'London' on business unit 'Business Unit 2'
+	And there is a team named 'Green' on site 'London'
 	And Ashley Andeen has a person period with
 	 | Field      | Value       |
 	 | Team       | Green |
 	 | Start Date | 2014-01-21  |
+	And the business unit scope is reset
 	When I view Real time adherence overview
 	And I choose business unit 'Business Unit 1'
 	Then I should see the site 'Paris'
@@ -45,12 +48,14 @@ Scenario: Should be able to see all agents state updates of a team within a spec
 	And there is a business unit with
 	| Field | Value           |
 	| Name  | Business Unit 1 |
+	And the business unit scope is using 'Business Unit 1'
 	And there is a site 'Paris' on business unit 'Business Unit 1'
 	And there is a team named 'Red' on site 'Paris'
 	And Pierre Baldi has a person period with
 	 | Field          | Value        |
 	 | Team           | Red          |
 	 | Start Date     | 2014-01-21   |
+	And the business unit scope is reset
 	And there is an alarm with 
 	| Field         | Value           |
 	| Name          | Positive        |
