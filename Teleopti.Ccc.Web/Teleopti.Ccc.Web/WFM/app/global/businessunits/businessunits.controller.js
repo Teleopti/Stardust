@@ -19,7 +19,7 @@
 					$window.location.reload();
 				};
 
-        vm.loadBusniessUnit = function(){
+        vm.loadBusinessUnit = function(){
           BusinessUnitsService.getAllBusinessUnits().then(function(result) {
             vm.data.businessUnits = result;
             vm.show = (result.length > 1);
@@ -33,5 +33,6 @@
             }
           });
         };
+	    vm.loadBusinessUnit();
     }
 })();

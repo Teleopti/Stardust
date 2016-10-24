@@ -20,7 +20,7 @@ describe('BusinessUnitsCtrl', function() {
 	    return [200, businessunits];
   	});
 
-    vm.loadBusniessUnit();
+    vm.loadBusinessUnit();
     $httpBackend.flush();
 
     expect(vm.data.businessUnits[0].Name).toEqual('Demo');
@@ -35,7 +35,7 @@ describe('BusinessUnitsCtrl', function() {
 	    return [200, businessunits];
   	});
     vm.changeBusinessUnit(selectedBu);
-    vm.loadBusniessUnit();
+    vm.loadBusinessUnit();
     $httpBackend.flush();
 
     expect(vm.data.selectedBu.Name).toEqual('Demo Changed');

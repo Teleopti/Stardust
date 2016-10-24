@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using Common.Logging;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
@@ -28,7 +27,6 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			var currentUserPermissionInfo = _loggedOnUser.CurrentUser().PermissionInformation;
 			if (currentUserPermissionInfo.HasAccessToAllBusinessUnits())
 			{
-				LogManager.GetLogger(typeof(BusinessUnitController)).Warn("HasAccessToAllBusinessUnits");
 				var currentBusinessUnit = _buRepository.Get(_currentBusinessUnit.Current().Id.GetValueOrDefault());
 				var businessUnits = new List<BusinessUnitViewModel>
 				{
