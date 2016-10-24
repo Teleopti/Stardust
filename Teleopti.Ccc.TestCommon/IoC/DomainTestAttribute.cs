@@ -41,7 +41,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
-	[Toggle(Domain.FeatureFlags.Toggles.RTA_Optimize_39667)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_RuleMappingOptimization_39812)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_BatchConnectionOptimization_40116)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_BatchQueryOptimization_40169)]
