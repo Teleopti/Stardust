@@ -10,6 +10,7 @@
         this.getSkillsForActivity = getSkillsForActivity;
         this.getSkills = getSkills;
         this.getActivitys = getActivitys;
+        this.saveSkills = saveSkills;
         ////////////////
 
         function getActivitys() {
@@ -17,6 +18,9 @@
         }
         function getSkills() {
             return skillPrioSkillService.getSkills();
+        }
+        function saveSkills(){
+            return skillPrioSkillService.saveSkills();
         }
 
         function matchSkillsForActivity(activity) {

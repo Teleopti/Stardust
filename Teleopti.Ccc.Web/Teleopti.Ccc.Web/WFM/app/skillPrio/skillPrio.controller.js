@@ -23,10 +23,13 @@
 		////////////////
 
 		function getActivitys() {
-				return skillPrioAggregator.getActivitys();
+			return skillPrioAggregator.getActivitys();
 		}
 
 		function getSkills(activity) {
+			if (activity != vm.selectedActivity) {
+				vm.sortedSkills = [];
+			}
 			if (!activity) {
 				vm.skills = [];
 			}
@@ -124,9 +127,11 @@
 		}
 
 		function save() {
-			//skillPrioListService.save
-			NoticeService.success('All changes are saved', 5000, true);
-		}
+			var query = skillPrioAggregator.saveSkills().save(vm.sortedSkills);
+			query.$promise.then(function () {
+				NoticeService.success('All changes are saved', 5000, true);
+			});
+	}
 
 		function noSortedSkills() {
 			if (vm.sortedSkills.length > 0) {

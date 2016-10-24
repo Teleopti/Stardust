@@ -37,12 +37,13 @@
     function skillPrioService($resource) {
         var adminSkillRoutingActivity = $resource('../api/ResourcePlanner/AdminSkillRoutingActivity');
         var adminSkillRoutingPriority = $resource('../api/ResourcePlanner/AdminSkillRoutingPriority');
-        
+        var adminSkillRoutingPriorityPost = $resource('../api/ResourcePlanner/AdminSkillRoutingPriorityPost');
         ////////////////
 
         var service = {
-            getAdminSkillRoutingActivity: adminSkillRoutingActivity,
-            getAdminSkillRoutingPriority: adminSkillRoutingPriority
+            getAdminSkillRoutingActivity: adminSkillRoutingActivity, //getActivites
+            getAdminSkillRoutingPriority: adminSkillRoutingPriority, //getSkills
+            postAdminSkillRoutingPriorityPost: adminSkillRoutingPriorityPost //saveSkills
         };
 
         return service;
