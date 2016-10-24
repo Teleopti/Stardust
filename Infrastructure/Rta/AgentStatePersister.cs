@@ -246,7 +246,7 @@ WHERE
 			{
 				var sqlDeadlockException = e.AllExceptions().FirstOrDefault(x => x.IsSqlDeadlock());
 				if (sqlDeadlockException != null)
-					throw new DeadLockVictimException("Deadlock!", sqlDeadlockException);
+					throw new DeadLockVictimException("Transaction deadlocked when updating AgentState", sqlDeadlockException);
 				throw;
 			}
 		}

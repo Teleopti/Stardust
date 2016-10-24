@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using log4net;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
@@ -399,27 +400,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				new ParallelOptions {MaxDegreeOfParallelism = strategy.ParallelTransactions},
 				sharedData =>
 				{
-					LogManager.GetLogger("Teleopti.TestLog").Debug("begin...");
+					// make retry and warn logging an aspect?
 					try
 					{
 						Transaction(tenant, strategy, sharedData);
 					}
-					catch (DeadLockVictimException)
+					catch (DeadLockVictimException deadlock)
 					{
-						LogManager.GetLogger("Teleopti.TestLog").Debug("deadlock! retrying...");
+						LogManager.GetLogger(typeof(ContextLoader)).Warn("Transaction deadlocked, retrying once.", deadlock);
 						try
 						{
 							Transaction(tenant, strategy, sharedData);
 						}
 						catch (Exception e)
 						{
-							LogManager.GetLogger("Teleopti.TestLog").Debug("failed again!");
 							exceptions.Add(e);
 						}
 					}
 					catch (Exception e)
 					{
-						LogManager.GetLogger("Teleopti.TestLog").Debug("failed!");
 						exceptions.Add(e);
 					}
 				}
@@ -436,6 +435,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[TenantScope]
+		[LogInfo]
 		protected virtual void Transaction<T>(
 			string tenant,
 			IStrategy<T> strategy,
