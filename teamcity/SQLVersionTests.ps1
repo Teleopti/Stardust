@@ -54,46 +54,59 @@ task default -depends InitSetup,`
                       TeardownAndCleanup
  
 task InitSetup -description "Checking SQL Version & Edition" {
-
+	
+	Write-Output "##teamcity[blockOpened name='<InitSetup>']"
     SettingsAndPreparation
+	Write-Output "##teamcity[blockClosed name='<InitSetup>']"
 }
 
 task TeardownAndPrepare -depends InitSetup -description "Drop Database & Create logins" {
 
+	Write-Output "##teamcity[blockOpened name='<TeardownAndPrepare>']"
 	DropDatabase
 	CreateInstallAndPatchSqlLoginCommandTarget
     GrantServerRoles
-	
+	Write-Output "##teamcity[blockClosed name='<TeardownAndPrepare>']"
 }
 
 task CreateDatabase -depends InitSetup, TeardownAndPrepare -description "Create databases with Sql Admin" {
 
+	Write-Output "##teamcity[blockOpened name='<CreateDatabase>']"
     CreateDatabaseWithSQLAdmin
     RevokeServerRoles
+	Write-Output "##teamcity[blockClosed name='<CreateDatabase>']"
 }
 
 task PatchDatabase -depends InitSetup, TeardownAndPrepare, CreateDatabase -description "Patch Database With Dbo Only" {
-
+	
+	Write-Output "##teamcity[blockOpened name='<PatchDatabase>']"
     PatchDatabaseWithDboOnly
+	Write-Output "##teamcity[blockClosed name='<PatchDatabase>']"
 }
 
 task DataModifications -depends InitSetup, TeardownAndPrepare, CreateDatabase, PatchDatabase -description "Run Security Modifications" {
 
+	Write-Output "##teamcity[blockOpened name='<DataModifications>']"
     Datamodifications
+	Write-Output "##teamcity[blockClosed name='<DataModifications>']"
 }
 
 task RunTestsOnAllDB -depends InitSetup, TeardownAndPrepare, CreateDatabase, PatchDatabase, DataModifications -description "Run Tests" {
 
+	Write-Output "##teamcity[blockOpened name='<RunTestsOnAllDB>']"
     ScriptedTestsRunOnAllDBs
     AnalyticsReportsTest
+	Write-Output "##teamcity[blockClosed name='<RunTestsOnAllDB>']"
 }
 
 task TeardownAndCleanup -depends InitSetup, TeardownAndPrepare, CreateDatabase, PatchDatabase, DataModifications, RunTestsonAllDB -description "Drop logins and clean logs" {
 
+	Write-Output "##teamcity[blockOpened name='<TeardownAndCleanup>']"
     DropDatabase
     DropPatchLogin
     DropApplicationLogin
     CleanUpLog
+	Write-Output "##teamcity[blockClosed name='<TeardownAndCleanup>']"
 }
 
 function global:CheckEditionAndVersion () 

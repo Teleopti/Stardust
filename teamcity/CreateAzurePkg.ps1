@@ -49,13 +49,18 @@ task Init {
 task PreReq -depends init -description "Move/Copy preparation of files" {
 	
 	Write-Output "##teamcity[blockOpened name='<PreReq>']"
-    PrepareCopyFiles
+    
+	PrepareCopyFiles
 	CorrectingURLinHTML
+	
 	Write-Output "##teamcity[blockClosed name='<PreReq>']"
 }
 
 task CreateAzurePkg -depends Init, PreReq -description "Create Azure Package" {
-    workflow parallelAzurePackaging {
+    
+	Write-Output "##teamcity[blockOpened name='<CreateAzurePkg>']"
+	
+	workflow parallelAzurePackaging {
 		param(
 		$CSPackEXE,
 		$AzurePackagePath,
@@ -78,15 +83,19 @@ task CreateAzurePkg -depends Init, PreReq -description "Create Azure Package" {
 	}
 	
 	parallelAzurePackaging -CSPackEXE $CSPackEXE -AzurePackagePath $AzurePackagePath -AzurePackagePath_Large $AzurePackagePath_Large -WorkingDir $WorkingDir
-
+	
+	Write-Output "##teamcity[blockClosed name='<CreateAzurePkg>']"
 }
 
 task PostReq -depends Init, PreReq, CreateAzurePkg -description "PostReq steps" {
-
+	
+	Write-Output "##teamcity[blockOpened name='<PostReq>']"
+	
 	Copy-Item -Path "$WorkingDir\teamcity\Azure\Customer\" -Destination "$ToBeArtifacted" -Recurse -Force -ErrorAction Stop
 	Copy-Item -Path "$AzurePackagePath" -Destination "$ToBeArtifacted\Azure-$env:CccVersion.cspkg" -Force -ErrorAction Stop
 	Copy-Item -Path "$AzurePackagePath_Large" -Destination "$ToBeArtifacted\Azure-$env:CccVersion-Large.cspkg" -Force -ErrorAction Stop
 	
+	Write-Output "##teamcity[blockClosed name='<PostReq>']"
 }
 
 function global:PrepareCopyFiles {

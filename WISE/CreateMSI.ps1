@@ -52,21 +52,26 @@ task Init {
 
 task MountK -description "Mount working directory to K:" {
 	
+	Write-Output "##teamcity[blockOpened name='<MountK>']"
 	Invoke-Expression "Subst K: /D" -ErrorAction SilentlyContinue
     Invoke-Expression "Subst K: $MountKDirectory"
 	
 	Write-Host "Mount $MountKDirectory to K:"
+	Write-Output "##teamcity[blockClosed name='<MountK>']"
 }
 
 task PreReq -depends init -description "Move/Copy preparation of files" {
-
+	
+	Write-Output "##teamcity[blockOpened name='<PreReq>']"
 	MoveWiseFiles
     CopyDependencies
     CopyWiseArtifacts
+	Write-Output "##teamcity[blockClosed name='<PreReq>']"
 }
 
 task CompileWse -depends Init, PreReq, MountK -description "Complie all WSE files to EXE" {
     
+	Write-Output "##teamcity[blockOpened name='<CompileWse>']"
     #Locate WSE files
     $WseFiles = Get-ChildItem $SourceDir -Recurse -Include *.wse
     #Path to EXE
@@ -78,9 +83,13 @@ task CompileWse -depends Init, PreReq, MountK -description "Complie all WSE file
     Write-Output "$Command $Arg"
     & $Command $Arg | Out-Null
     }
+	Write-Output "##teamcity[blockClosed name='<CompileWse>']"
 }
 
 task CompileWsi -depends Init, PreReq, MountK -description "Complie all WSI files to MSI" {
+	
+	Write-Output "##teamcity[blockOpened name='<CompileWsi>']"
+	
 	workflow parallelWsiCompiling {
 		param(
 		$ClientWsi,
@@ -96,6 +105,7 @@ task CompileWsi -depends Init, PreReq, MountK -description "Complie all WSI file
 		}
 	}
 	parallelWsiCompiling -ClientWsi $ClientWsi -ServerWsi $ServerWsi -WsiCompiler $WsiCompiler
+	Write-Output "##teamcity[blockClosed name='<CompileWsi>']"
 }
 
 <#
@@ -117,35 +127,42 @@ task CompileWsi -depends Init, PreReq, MountK -description "Complie all WSI file
 
 task ProductVersion -depends CompileWse, CompileWsi -description "Sets the current version number in MSI" {
     
+	Write-Output "##teamcity[blockOpened name='<ProductVersion>']"
 	Set-ProductVersion "$SourceDir\Wise\ccc7_client\ccc7_client.msi" "$ProductVersion"
     Set-ProductVersion "$SourceDir\Wise\ccc7_server\ccc7_server.msi" "$ProductVersion"
+	Write-Output "##teamcity[blockClosed name='<ProductVersion>']"
 }
 
 task PostReq -depends CompileWse, CompileWsi, ProductVersion -description "Tasks that needs to be performed after MSI creation" {
 
+	Write-Output "##teamcity[blockOpened name='<PostReq>']"
     CopyFilesToOutput
-
+	Write-Output "##teamcity[blockClosed name='<PostReq>']"
 }
 
 task CHM-SDK-File -depends CompileWse, CompileWsi -description "Create chm sdk file" {
-
+	
+	Write-Output "##teamcity[blockOpened name='<CHM-SDK-File>']"
     #Add Msbuild to env path temporary
     $env:Path = $env:Path + ";C:\Program Files (x86)\MSBuild\14.0\bin\amd64"
     
     #Compile docSdkx64.shfbproj
     exec { msbuild $SdkFile /p:WorkingDirectory=$env:MountKDirectory /p:SdkHostPath=$SdkHostPath /p:OutputPath=$OutputPath }
-
+	Write-Output "##teamcity[blockClosed name='<CHM-SDK-File>']"
 }
 
 task MalewareScan -depends CompileWse, CompileWsi -description "Proves our MSI is clean" {
 
+	Write-Output "##teamcity[blockOpened name='<MalewareScan>']"
    	& $ClamWinTool --database=$ClamWindb $OutDir\ > $OutDir\MalwareScan.log	
 	#Start-Process -FilePath $ClamWinTool -ArgumentList "$OutDir\ --recursive=yes --database=$ClamWinDb --log=$OutDir\MalwareScan.log" -Wait
+	Write-Output "##teamcity[blockClosed name='<MalewareScan>']"
 }
 
 task UnMountK {
-    
+    Write-Output "##teamcity[blockOpened name='<UnMountK>']"
     Invoke-Expression "Subst K: /D" -ErrorAction Continue
+	Write-Output "##teamcity[blockClosed name='<UnMountK>']"
 }
 
 function global:Set-ProductVersion($FilePath,$ProductVersion) {
