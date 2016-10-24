@@ -20,6 +20,13 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 			var person = personRequest.Person;
 			var absenceRequest = personRequest.Request as IAbsenceRequest;
+			var absenceRequestOpenPeriod = person.WorkflowControlSet?.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)personRequest.Request);
+
+			if (absenceRequestOpenPeriod?.PersonAccountValidator is AbsenceRequestNoneValidator)
+			{
+				return ValidatedRequest.Valid;
+			}
+
 			var personAbsenceAccounts = _personAbsenceAccountProvider.Find(personRequest.Person);
 			var personAbsenceAccount = personAbsenceAccounts.Find(absenceRequest.Absence);
 			var requestPeriod = personRequest.Request.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
