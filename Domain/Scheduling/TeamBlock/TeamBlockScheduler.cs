@@ -21,13 +21,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 								IEnumerable<ISkillDay> allSkillDays,
 								ShiftNudgeDirective shiftNudgeDirective,
 								INewBusinessRuleCollection businessRules);
-
-		IList<IWorkShiftCalculationResultHolder> GetShiftProjectionCaches(
-			ITeamBlockInfo teamBlockInfo,
-			IPerson person,
-			DateOnly datePointer,
-			ISchedulingOptions schedulingOptions,
-			ISchedulingResultStateHolder schedulingResultStateHolder);
 	}
 
 	public class TeamBlockScheduler : ITeamBlockScheduler
@@ -49,32 +42,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		}
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-
-		// TODO Move to separate class
-		public IList<IWorkShiftCalculationResultHolder> GetShiftProjectionCaches(
-			ITeamBlockInfo teamBlockInfo,
-			IPerson person,
-			DateOnly datePointer,
-			ISchedulingOptions schedulingOptions,
-			ISchedulingResultStateHolder schedulingResultStateHolder)
-		{
-			IList<IWorkShiftCalculationResultHolder> resultList = new List<IWorkShiftCalculationResultHolder>();
-			var teamInfo = teamBlockInfo.TeamInfo;
-			var selectedTeamMembers = teamInfo.GroupMembers.Intersect(teamInfo.UnLockedMembers(datePointer)).ToList();
-			if (selectedTeamMembers.IsEmpty())
-				return resultList;
-			
-			IShiftProjectionCache roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),
-				schedulingOptions, new EffectiveRestriction());
-
-			if (roleModelShift == null)
-				return resultList;
-
-			resultList = _singleDayScheduler.GetShiftProjectionCaches(teamBlockInfo, schedulingOptions, datePointer,
-				roleModelShift, schedulingResultStateHolder, person);
-
-			return resultList;
-		}
 
 		public bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, 
 			DateOnly datePointer,

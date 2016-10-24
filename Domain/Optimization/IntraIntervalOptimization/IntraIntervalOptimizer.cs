@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 	{
 		private readonly ITeamInfoFactory _teamInfoFactory;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
-		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly ISkillStaffPeriodEvaluator _skillStaffPeriodEvaluator;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly IIntraIntervalIssueCalculator _intraIntervalIssueCalculator;
@@ -28,9 +27,9 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
+		private readonly ShiftProjectionCachesForIntraInterval _shiftProjectionCachesForIntraInterval;
 
 		public IntraIntervalOptimizer(ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory,
-			ITeamBlockScheduler teamBlockScheduler,
 			ISkillStaffPeriodEvaluator skillStaffPeriodEvaluator,
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
 			IIntraIntervalIssueCalculator intraIntervalIssueCalculator,
@@ -39,11 +38,11 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			ISkillDayIntraIntervalIssueExtractor skillDayIntraIntervalIssueExtractor,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
-			Func<ISchedulingResultStateHolder> schedulingResultStateHolder)
+			Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
+			ShiftProjectionCachesForIntraInterval shiftProjectionCachesForIntraInterval)
 		{
 			_teamInfoFactory = teamInfoFactory;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
-			_teamBlockScheduler = teamBlockScheduler;
 			_skillStaffPeriodEvaluator = skillStaffPeriodEvaluator;
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
 			_intraIntervalIssueCalculator = intraIntervalIssueCalculator;
@@ -53,6 +52,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_shiftProjectionCachesForIntraInterval = shiftProjectionCachesForIntraInterval;
 		}
 
 		public IIntraIntervalIssues Optimize(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences,
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			var allSkillstaffPeriodsOnDay = _skillDayIntraIntervalIssueExtractor.ExtractAll(skillDaysOnDay, skill);
 			var allSkillStaffPeriodsOnDayAfter = _skillDayIntraIntervalIssueExtractor.ExtractAll(skillDaysOnDayAfter, skill);
 
-			var listResources = _teamBlockScheduler.GetShiftProjectionCaches(teamBlock, person, dateOnly, schedulingOptions, schedulingResultStateHolder);
+			var listResources = _shiftProjectionCachesForIntraInterval.Execute(teamBlock, person, dateOnly, schedulingOptions, schedulingResultStateHolder);
 			var totalSkillStaffPeriods = allSkillstaffPeriodsOnDay.ToList();
 			totalSkillStaffPeriods.AddRange(allSkillStaffPeriodsOnDayAfter);
 			
