@@ -47,9 +47,13 @@ task Init {
 }
 
 task PreReq -depends init -description "Move/Copy preparation of files" {
+	
+	TeamCity-Block  "PreReq" { 
+    
+		PrepareCopyFiles
+		CorrectingURLinHTML
+    }    
 
-	PrepareCopyFiles
-	CorrectingURLinHTML
 	
 }
 
