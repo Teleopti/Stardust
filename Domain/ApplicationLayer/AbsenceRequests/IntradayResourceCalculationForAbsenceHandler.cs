@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -52,14 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
         public void Handle(TenantMinuteTickEvent @event)
         {
-
-			var dataSource = _currentUnitOfWorkFactory.Current().Name;
-			if (!DefinedLicenseDataFactory.HasLicense(dataSource))
-			{
-				return;
-			}
-
-			var now = _now.UtcDateTime();
+            var now = _now.UtcDateTime();
             var configuredNow = _configReader.AppConfig("FakeIntradayUtcStartDateTime");
             if (configuredNow != null)
             {

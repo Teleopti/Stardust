@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
         public FakeEventPublisher Publisher;
         public IMutateNow Now;
 	    public FakeCurrentBusinessUnit BuesinessUnitScope;
-	    public FakeCurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
         {
@@ -42,37 +40,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
             system.UseTestDouble<IntradayResourceCalculationForAbsenceHandler>().For<IHandleEvent<TenantMinuteTickEvent>>();
             system.UseTestDouble<FakeConfigReader>().For<IConfigReader>();
             system.UseTestDouble(new MutableNow("2016-03-01 10:00")).For<INow>();
-			system.UseTestDouble<FakeCurrentBusinessUnit>().For<IBusinessUnitScope>();	
+			system.UseTestDouble<FakeCurrentBusinessUnit>().For<IBusinessUnitScope>();
         }
 
-		[Test]
-		public void ShouldNotPublishEventIfLicenseIsMissing()
-		{
-			CurrentUnitOfWorkFactory.FakeUnitOfWorkFactory = new FakeUnitOfWorkFactory() { Name = "WFM" };
-			Target.Handle(new TenantMinuteTickEvent());
-			Publisher.PublishedEvents.Count().Should().Be.EqualTo(0);
-		}
-
-		[Test]
+        [Test]
         public void ShouldNotRunResourceCalculationIfItsRecentlyExecuted()
         {
             ScheduleForecastSkillReadModelRepository.LastCalculatedDate = DateTime.Now;
-			setLicense();
-	        Target.Handle(new TenantMinuteTickEvent());
+            Target.Handle(new TenantMinuteTickEvent());
             Publisher.PublishedEvents.Count().Should().Be.EqualTo(0);
         }
 
-	    private void setLicense()
-	    {
-		    CurrentUnitOfWorkFactory.FakeUnitOfWorkFactory = new FakeUnitOfWorkFactory() {Name = "WFM"};
-		    DefinedLicenseDataFactory.SetLicenseActivator("WFM", new FakeLicenseActivator());
-	    }
-
-	    [Test]
+        [Test]
         public void ShouldRunResourceCalculation()
         {
-			setLicense();
-			ScheduleForecastSkillReadModelRepository.LastCalculatedDate = new DateTime(2016, 03, 01, 8, 0, 0, DateTimeKind.Utc);
+            ScheduleForecastSkillReadModelRepository.LastCalculatedDate = new DateTime(2016, 03, 01, 8, 0, 0, DateTimeKind.Utc);
             BusinessUnitRepository.Add(BusinessUnitFactory.CreateSimpleBusinessUnit());
             IPerson person = PersonFactory.CreatePerson();
             person.SetId(SystemUser.Id);
@@ -84,8 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
         [Test]
         public void ShouldUseConfiguredFakeNowInsteadOfSystemNow()
         {
-			setLicense();
-			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-02-01 08:10");
+            ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-02-01 08:10");
             ScheduleForecastSkillReadModelRepository.LastCalculatedDate = new DateTime(2016, 03, 01, 8, 0, 0, DateTimeKind.Utc);
 			BusinessUnitRepository.Add(BusinessUnitFactory.CreateSimpleBusinessUnit());
 			IPerson person = PersonFactory.CreatePerson();
@@ -101,7 +82,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldResetTheExistingValueOfBusinessUnit()
 		{
-			setLicense();
 			BuesinessUnitScope.OnThisThreadUse(null);
 			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-02-01 08:10");
 			ScheduleForecastSkillReadModelRepository.LastCalculatedDate = new DateTime(2016, 03, 01, 8, 0, 0, DateTimeKind.Utc);
