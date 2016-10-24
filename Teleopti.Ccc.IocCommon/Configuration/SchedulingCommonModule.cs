@@ -575,6 +575,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MaxSeatBoostingFactorCalculator>().InstancePerLifetimeScope();
 			builder.RegisterType<PullTargetValueFromSkillIntervalData>().InstancePerLifetimeScope();
 			builder.RegisterType<ExtractIntervalsViolatingMaxSeat>().As<IExtractIntervalsViolatingMaxSeat>();
+			builder.RegisterType<WorkShiftSelectorForMaxSeat>().InstancePerLifetimeScope();
 		}
 
 		private void registerMaxSeatSkillCreator(ContainerBuilder builder)

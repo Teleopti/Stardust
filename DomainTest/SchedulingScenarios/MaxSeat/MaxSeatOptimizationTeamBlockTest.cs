@@ -17,22 +17,21 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 {
-	[DomainTest]
+	[LegacyDomainTest]
 	[Toggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public class MaxSeatOptimizationTeamBlockTest
 	{
 		public MaxSeatOptimization Target;
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
 
-		[Test, Ignore("40939")]
+		[Test]
 		public void ShouldChooseShiftForAllAgentsInTeam()
 		{
 			var site = new Site("_") { MaxSeats = 2 }.WithId();
 			var team = new Team { Description = new Description("_"), Site = site};
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
-
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
-			var dateOnly = DateOnly.Today;
+			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 9, 0, 60), new TimePeriodWithSegment(17, 0, 17, 0, 60), new ShiftCategory("_").WithId()));
 			var agentScheduledForAnHourData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, new Team { Site = site }, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 9, 0));

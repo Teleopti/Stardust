@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
 			var shiftsWithValue =
 				shiftList.AsParallel()
-					.Select(s => new {s, value = valueForShift(skillIntervalDataLocalDictionary, s, parameters, timeZoneInfo)});
+					.Select(s => new {s, value = ValueForShift(skillIntervalDataLocalDictionary, s, parameters, timeZoneInfo)});
 
 			if (schedulingOptions.SkipNegativeShiftValues)
 			{
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			IComparer<IWorkShiftCalculationResultHolder> comparer = new WorkShiftCalculationResultComparer();
 			var sortedList =
 				shiftList.AsParallel()
-					.Select(s => new {s, value = valueForShift(skillIntervalDataLocalDictionary, s, parameters, timeZoneInfo)})
+					.Select(s => new {s, value = ValueForShift(skillIntervalDataLocalDictionary, s, parameters, timeZoneInfo)})
 					.Where(i => i.value.HasValue)
 					.Select(
 						shiftWithValue =>
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			return value;
 		}
 
-		private double? valueForShift(IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary, IShiftProjectionCache shiftProjectionCache, PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo)
+		protected virtual double? ValueForShift(IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary, IShiftProjectionCache shiftProjectionCache, PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo)
 		{
 			double? totalForAllActivitesValue = null;
 			var actvityValue =
