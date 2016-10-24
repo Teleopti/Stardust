@@ -19,6 +19,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		private readonly IDatasourceData _datasource;
 		private readonly int _businessUnitId;
 
+		public bool SkipDatasourceUpdateDate { get; set; }
+
 		public Absence(
 			int id,
 			Guid code,
@@ -39,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		{
 			using (var table = dim_absence.CreateTable())
 			{
-				table.AddAbsence(_id, _code, _name, _displayColor.ToArgb(), _businessUnitId, _datasource.RaptorDefaultDatasourceId, false);
+				table.AddAbsence(_id, _code, _name, _displayColor.ToArgb(), _businessUnitId, _datasource.RaptorDefaultDatasourceId, false, SkipDatasourceUpdateDate);
 
 				Bulk.Insert(connection, table);
 

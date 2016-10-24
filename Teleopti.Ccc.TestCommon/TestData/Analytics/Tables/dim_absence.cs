@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 						int displayColor,
 						int businessUnitId,
 						int datasourceId,
-						bool toBeDeleted)
+						bool toBeDeleted, bool skipDatasourceUpdateDate = false)
 		{
 			var row = dataTable.NewRow();
 
@@ -96,7 +96,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["datasource_id"] = datasourceId;
 			row["insert_date"] = DateTime.Now;
 			row["update_date"] = DateTime.Now;
-			row["datasource_update_date"] = DateTime.Now;
+			if(!skipDatasourceUpdateDate)
+				row["datasource_update_date"] = DateTime.Now;
 			row["is_deleted"] = toBeDeleted;
 			row["display_color_html"] = "";
 			row["absence_shortname"] = "";

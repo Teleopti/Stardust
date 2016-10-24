@@ -131,5 +131,43 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			absenceFromDb.InWorkTimeName.Should().Be.EqualTo(analyticsAbsence.InWorkTimeName);
 			absenceFromDb.IsDeleted.Should().Be.EqualTo(analyticsAbsence.IsDeleted);
 		}
+
+		[Test]
+		public void ShouldDeleteAbsenceWithoutADatasourceUpdateDate()
+		{
+			var absenceCode = Guid.NewGuid();
+			var absence = new Absence(22, absenceCode, "Freee", Color.LightGreen, _datasource, businessUnitId)
+			{
+				SkipDatasourceUpdateDate = true
+			};
+			analyticsDataFactory.Setup(absence);
+			analyticsDataFactory.Persist();
+			WithAnalyticsUnitOfWork.Do(() => Target.Absences().Count.Should().Be.EqualTo(1));
+
+			var analyticsAbsence = new AnalyticsAbsence
+			{
+				AbsenceCode = absenceCode,
+				AbsenceName = "New Absence Name",
+				AbsenceShortName = "New Absence Short Name",
+				BusinessUnitId = businessUnitId,
+				DatasourceId = 1,
+				DatasourceUpdateDate = new DateTime(2001, 1, 1),
+				DisplayColor = 123,
+				DisplayColorHtml = "#111111",
+				InContractTime = false,
+				InContractTimeName = AnalyticsAbsence.NotInContractTimeString,
+				InPaidTime = true,
+				InPaidTimeName = AnalyticsAbsence.InPaidTimeTimeString,
+				InWorkTime = true,
+				InWorkTimeName = AnalyticsAbsence.InWorkTimeTimeString,
+				IsDeleted = true
+			};
+
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdateAbsence(analyticsAbsence));
+			WithAnalyticsUnitOfWork.Do(() => Target.Absences().Count.Should().Be.EqualTo(1));
+			var absenceFromDb = WithAnalyticsUnitOfWork.Get(() => Target.Absences()).First(a => a.AbsenceCode == absenceCode);
+			absenceFromDb.AbsenceCode.Should().Be.EqualTo(analyticsAbsence.AbsenceCode);
+			absenceFromDb.IsDeleted.Should().Be.EqualTo(analyticsAbsence.IsDeleted);
+		}
 	}
 }

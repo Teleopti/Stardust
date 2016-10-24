@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
@@ -111,7 +112,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetString(nameof(AnalyticsAbsence.InWorkTimeName), analyticsAbsence.InWorkTimeName)
 				.SetInt32(nameof(AnalyticsAbsence.BusinessUnitId), analyticsAbsence.BusinessUnitId)
 				.SetInt32(nameof(AnalyticsAbsence.DatasourceId), analyticsAbsence.DatasourceId)
-				.SetDateTime(nameof(AnalyticsAbsence.DatasourceUpdateDate), analyticsAbsence.DatasourceUpdateDate)
+				.SetDateTime(nameof(AnalyticsAbsence.DatasourceUpdateDate), analyticsAbsence.DatasourceUpdateDate==DateTime.MinValue?DateTime.UtcNow: analyticsAbsence.DatasourceUpdateDate)
 				.SetBoolean(nameof(AnalyticsAbsence.IsDeleted), analyticsAbsence.IsDeleted)
 				.SetString(nameof(AnalyticsAbsence.DisplayColorHtml), analyticsAbsence.DisplayColorHtml)
 				.SetString(nameof(AnalyticsAbsence.AbsenceShortName), analyticsAbsence.AbsenceShortName);
