@@ -242,30 +242,30 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 	it('should update adherence for team and selected skill area', function() {
 		stateParams.siteIds = ["parisGuid"];
 		$fakeBackend
-		.withTeam({
-			Id: "parisTeamGreenGuid",
-			SiteId: "parisGuid"
-		})
-		.withTeamAdherenceForSkill({
-			SiteId: "parisGuid",
-			Id: "parisTeamGreenGuid",
-			OutOfAdherence: 5,
-			SkillId: "phoneGuid"
-		})
-		.withTeamAdherenceForSkill({
-			SiteId: "parisGuid",
-			Id: "parisTeamGreenGuid",
-			OutOfAdherence: 2,
-			SkillId: "emailGuid"
-		})
-		.withSkillAreas([{
-			Id: "emailAndPhoneGuid",
-			Skills: [{
-				Id: "phoneGuid"
-			}, {
-				Id: "emailGuid"
-			}]
-		}]);
+			.withTeam({
+				Id: "parisTeamGreenGuid",
+				SiteId: "parisGuid"
+			})
+			.withTeamAdherenceForSkill({
+				SiteId: "parisGuid",
+				Id: "parisTeamGreenGuid",
+				OutOfAdherence: 5,
+				SkillId: "phoneGuid"
+			})
+			.withTeamAdherenceForSkill({
+				SiteId: "parisGuid",
+				Id: "parisTeamGreenGuid",
+				OutOfAdherence: 2,
+				SkillId: "emailGuid"
+			})
+			.withSkillAreas([{
+				Id: "emailAndPhoneGuid",
+				Skills: [{
+					Id: "phoneGuid"
+				}, {
+					Id: "emailGuid"
+				}]
+			}]);
 
 		$controllerBuilder.createController()
 			.apply(function() {
@@ -275,18 +275,18 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 			}).wait(5000)
 			.apply(function() {
 				$fakeBackend.clearTeamAdherencesForSkill()
-				.withTeamAdherenceForSkill({
-					SiteId: "parisGuid",
-					Id: "parisTeamGreenGuid",
-					OutOfAdherence: 3,
-					SkillId: "phoneGuid"
-				})
-				.withTeamAdherenceForSkill({
-					SiteId: "parisGuid",
-					Id: "parisTeamGreenGuid",
-					OutOfAdherence: 1,
-					SkillId: "emailGuid"
-				})
+					.withTeamAdherenceForSkill({
+						SiteId: "parisGuid",
+						Id: "parisTeamGreenGuid",
+						OutOfAdherence: 3,
+						SkillId: "phoneGuid"
+					})
+					.withTeamAdherenceForSkill({
+						SiteId: "parisGuid",
+						Id: "parisTeamGreenGuid",
+						OutOfAdherence: 1,
+						SkillId: "emailGuid"
+					})
 			})
 			.wait(5000);
 
@@ -311,7 +311,7 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 		$controllerBuilder.createController()
 			.apply(function() {
 				$fakeBackend
-				.clearTeamAdherencesForSkill()
+					.clearTeamAdherencesForSkill()
 					.withTeamAdherenceForSkill({
 						SiteId: "parisGuid",
 						Id: "parisTeamGreenGuid",
@@ -433,6 +433,64 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 
 		expect(scope.selectedSkillArea.Id).toEqual('emailAndPhoneGuid');
 		expect(scope.selectedSkillArea.Name).toEqual('Email and phone');
+	});
+
+	it('should have update url when changing from skill to skill area', function() {
+		stateParams.skillIds = "phoneGuid";
+		stateParams.siteIds = ["parisGuid"];
+		$fakeBackend
+			.withSkill({
+				Id: "phoneGuid",
+				Name: "Phone"
+			})
+			.withSkillAreas([{
+				Id: "emailAndPhoneGuid",
+				Name: "Email and phone",
+				Skills: [{
+					Id: "phoneGuid"
+				}, {
+					Id: "emailGuid"
+				}]
+			}]);;
+
+		$controllerBuilder.createController()
+			.apply(function() {
+				scope.selectedSkillAreaChange({
+					Id: "emailAndPhoneGuid"
+				});
+			})
+			.wait(5000);
+
+		expect($state.go).toHaveBeenCalledWith('rta.sites-by-skillArea', {skillAreaId: "emailAndPhoneGuid"});
+	});
+
+	it('should have update url when changing from skill area to skill', function() {
+		stateParams.skillAreaId = "emailAndPhoneGuid";
+		stateParams.siteIds = ["parisGuid"];
+		$fakeBackend
+			.withSkill({
+				Id: "phoneGuid",
+				Name: "Phone"
+			})
+			.withSkillAreas([{
+				Id: "emailAndPhoneGuid",
+				Name: "Email and phone",
+				Skills: [{
+					Id: "phoneGuid"
+				}, {
+					Id: "emailGuid"
+				}]
+			}]);;
+
+		$controllerBuilder.createController()
+			.apply(function() {
+				scope.selectedSkillChange({
+					Id: "phoneGuid"
+				});
+			})
+			.wait(5000);
+
+		expect($state.go).toHaveBeenCalledWith('rta.sites-by-skill', {skillIds: "phoneGuid"});
 	});
 
 });

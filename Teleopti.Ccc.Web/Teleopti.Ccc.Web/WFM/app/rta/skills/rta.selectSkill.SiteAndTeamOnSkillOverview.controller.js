@@ -82,9 +82,7 @@
 					if (skill) {
 						$scope.skillId = skill.Id;
 						$scope.selectedSkill = skill;
-						$scope.skillAreaId = null;
-						$scope.selectedSkillArea  = null;
-						if($scope.siteIds.length === 0 && $scope.skillId !== undefined)
+						if(($scope.siteIds.length === 0 && $scope.skillId !== undefined) || ($scope.siteIds.length > 0 && $scope.skillAreaId!=null))
 							$state.go('rta.sites-by-skill', {skillIds: $scope.skillId});
 						getSitesOrTeamsForSkillOrSkillArea();
 					};
@@ -94,9 +92,7 @@
 					if (skillArea) {
 						$scope.skillAreaId = skillArea.Id;
 						$scope.selectedSkillArea = skillArea;
-						$scope.skillId = null;
-						$scope.selectedSkill = null;
-						if($scope.siteIds.length === 0 && $scope.skillAreaId !== undefined)
+						if(($scope.siteIds.length === 0 && $scope.skillAreaId !== undefined) || ($scope.siteIds.length > 0 && $scope.skillId!=null))
 							$state.go('rta.sites-by-skillArea', {skillAreaId: $scope.skillAreaId});
 						getSitesOrTeamsForSkillOrSkillArea();
 					};

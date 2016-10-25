@@ -404,10 +404,7 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				});
 			});
 
-		expect(scope.selectedSkill).toEqual(null);
-		expect(scope.skillId).toEqual(null);
-		expect(scope.selectedSkillArea.Id).toEqual("emailAndPhoneGuid");
-		expect(scope.skillAreaId).toEqual("emailAndPhoneGuid");
+		expect($state.go).toHaveBeenCalledWith('rta.sites-by-skillArea', {skillAreaId: "emailAndPhoneGuid"});
 	});
 
 	it('should not allow simoultaneous selection when new skill', function() {
@@ -443,10 +440,7 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				});
 			});
 
-		expect(scope.selectedSkillArea).toEqual(null);
-		expect(scope.skillAreaId).toEqual(null);
-		expect(scope.selectedSkill.Id).toEqual("phoneGuid");
-		expect(scope.skillId).toEqual("phoneGuid");
+		expect($state.go).toHaveBeenCalledWith('rta.sites-by-skill', {skillIds: "phoneGuid"});
 	});
 
 });
