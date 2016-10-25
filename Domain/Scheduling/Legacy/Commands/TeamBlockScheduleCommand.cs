@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (groupPageType == GroupPageType.SingleAgent)
 				_groupPersonBuilderWrapper.SetSingleAgentTeam();
 			else
-				_groupPersonBuilderForOptimizationFactory.Create(schedulingOptions.GroupOnGroupPageForTeamBlockPer);
+				_groupPersonBuilderForOptimizationFactory.Create(_schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 
 			var selectedPeriod = _periodExtractor.ExtractPeriod(selectedSchedules);
 

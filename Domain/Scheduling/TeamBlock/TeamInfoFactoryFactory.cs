@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
 		}
 
-		public ITeamInfoFactory Create(GroupPageLight groupPageLight)
+		public ITeamInfoFactory Create(IScheduleDictionary scheduleDictionary, GroupPageLight groupPageLight)
 		{
 			_groupPersonBuilderWrapper.Reset();
 			if (groupPageLight.Type == GroupPageType.SingleAgent)
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			}
 			else
 			{
-				_groupPersonBuilderForOptimizationFactory.Create(groupPageLight);
+				_groupPersonBuilderForOptimizationFactory.Create(scheduleDictionary, groupPageLight);
 			}
 
 			return new TeamInfoFactory(_groupPersonBuilderWrapper);

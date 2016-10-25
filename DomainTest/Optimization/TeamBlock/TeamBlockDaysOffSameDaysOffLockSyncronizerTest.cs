@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			};
 			var allTeamInfoListOnStartDate = new List<ITeamInfo>();
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
-			GroupPersonBuilderForOptimizationFactory.Create(schedulingOptions.GroupOnGroupPageForTeamBlockPer);
+			GroupPersonBuilderForOptimizationFactory.Create(scheduleDictionary, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 			var teamInfoFactory = new TeamInfoFactory(GroupPersonBuilderWrapper);			
 			var teamInfo = teamInfoFactory.CreateTeamInfo(SchedulerStateHolder.SchedulingResultState.PersonsInOrganization, agent1, selectedPeriod, allPersonMatrixList);
 			allTeamInfoListOnStartDate.Add(teamInfo);
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			};
 			var allTeamInfoListOnStartDate = new List<ITeamInfo>();
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
-			GroupPersonBuilderForOptimizationFactory.Create(schedulingOptions.GroupOnGroupPageForTeamBlockPer);
+			GroupPersonBuilderForOptimizationFactory.Create(scheduleDictionary, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 			var teamInfoFactory = new TeamInfoFactory(GroupPersonBuilderWrapper);
 			var teamInfo = teamInfoFactory.CreateTeamInfo(SchedulerStateHolder.SchedulingResultState.PersonsInOrganization, agent1, selectedPeriod, allPersonMatrixList);
 			allTeamInfoListOnStartDate.Add(teamInfo);

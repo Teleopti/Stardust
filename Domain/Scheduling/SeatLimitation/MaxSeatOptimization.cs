@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
@@ -65,8 +64,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, scenario, allAgents);
 
 			//TODO: REMOVE! //
-			var loadedPeriod = schedules.Period.LoadedPeriod(); //FIX!
-			((SchedulerStateHolder)_stateHolder()).SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(loadedPeriod); //needed to build groups
 			_stateHolder().SchedulingResultState.Schedules = schedules;
 			//////////////////
 
@@ -75,8 +72,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				_scheduleDayChangeCallback,
 				tagSetter);
 
-			var allMatrixes = createMatrixes(schedules, 
-				loadedPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc) //FIX
+			var allMatrixes = createMatrixes(schedules,
+				schedules.Period.LoadedPeriod().ToDateOnlyPeriod(TimeZoneInfo.Utc) //FIX
 				, period, allAgents);
 
 			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills()))
@@ -138,7 +135,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			INewBusinessRuleCollection businessRuleCollection)
 		{
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
-			_groupPersonBuilderForOptimizationFactory.Create(optimizationPreferences.Extra.TeamGroupPage);
+			_groupPersonBuilderForOptimizationFactory.Create(schedules, optimizationPreferences.Extra.TeamGroupPage);
 			var teamBlocks = _teamBlockGenerator.Generate(personsInOrganization, allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
 			var remainingInfoList = teamBlocks.ToList();
 
