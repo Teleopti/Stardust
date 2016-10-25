@@ -61,14 +61,12 @@ describe("teamschedule timeLine tests", function () {
 		var target = TeamScheduleTimeLineFactory;
 
 		var today = "2015-10-26";
-		var tomorrow = moment(today).add(1, "days").startOf("days").format("YYYY-MM-DD");
 
 		var now = moment(today + " 07:35:00");
 
 		var schedules = [
 			createSchedule(today, null, [{ startHour: 12, endHour: 16 }, { startHour: 16, endHour: 20.5 }]),
-			createSchedule(today, null, [{ startHour: 7.5, endHour: 9.5 }, { startHour: 10, endHour: 16 }]),
-			createSchedule(tomorrow, 'dayoff')
+			createSchedule(today, null, [{ startHour: 7.5, endHour: 9.5 }, { startHour: 10, endHour: 16 }])
 		];
 
 		var timeLine = target.Create(schedules, now);
@@ -93,6 +91,87 @@ describe("teamschedule timeLine tests", function () {
 		expect(lastHourPoint.Position()).toEqual(100);
 	}));
 
+	it("should display end hour point within maximum view range for today's schedules", inject(function(TeamScheduleTimeLineFactory) {
+		var target = TeamScheduleTimeLineFactory;
+
+		var today = "2015-10-26";
+		var tomorrow = moment(today).add(1, "days").startOf("days").format("YYYY-MM-DD");
+
+		var now = moment(today + " 07:35:00");
+
+		var maxViewRange = {
+			startMoment: moment(today).startOf('day'),
+			endMoment: moment(today).startOf('day').add(30, 'hour')
+		};
+
+		var schedules = [
+			createSchedule(today, null, [{ startHour: 12, endHour: 16 }, { startHour: 16, endHour: 20.5 }]),
+			createSchedule(today, null, [{ startHour: 7.5, endHour: 9.5 }, { startHour: 12, endHour: 31 }])
+		];
+
+		var timeLine = target.Create(schedules, now, maxViewRange);
+
+		var expectedStart = 420;
+		var expectedEnd = 1800;
+
+		expect(timeLine.StartMinute).toEqual(expectedStart);
+		expect(timeLine.EndMinute).toEqual(expectedEnd);
+	}));
+
+	it("should display end hour point within maximum view range with tomorrow's schedules", inject(function (TeamScheduleTimeLineFactory) {
+		var target = TeamScheduleTimeLineFactory;
+
+		var today = "2015-10-26";
+		var tomorrow = moment(today).add(1, "days").startOf("days").format("YYYY-MM-DD");
+
+		var now = moment(today + " 07:35:00");
+
+		var maxViewRange = {
+			startMoment: moment(today).startOf('day'),
+			endMoment: moment(today).startOf('day').add(30, 'hour')
+		};
+
+		var schedules = [
+			createSchedule(today, null, [{ startHour: 12, endHour: 16 }, { startHour: 16, endHour: 20.5 }]),
+			createSchedule(tomorrow, null, [{ startHour: 4, endHour: 7 }, { startHour: 7, endHour: 11 }])
+		];
+
+		var timeLine = target.Create(schedules, now, maxViewRange);
+
+		var expectedStart = 660;
+		var expectedEnd = 1800;
+
+		expect(timeLine.StartMinute).toEqual(expectedStart);
+		expect(timeLine.EndMinute).toEqual(expectedEnd);
+	}));
+
+	it("should display end hour point within maximum view range with only tomorrow's schedules", inject(function (TeamScheduleTimeLineFactory) {
+		var target = TeamScheduleTimeLineFactory;
+
+		var today = "2015-10-26";
+		var tomorrow = moment(today).add(1, "days").startOf("days").format("YYYY-MM-DD");
+
+		var now = moment(today + " 07:35:00");
+
+		var maxViewRange = {
+			startMoment: moment(today).startOf('day'),
+			endMoment: moment(today).startOf('day').add(30, 'hour')
+		};
+
+		var schedules = [
+			createSchedule(tomorrow, null, [{ startHour: 4, endHour: 7 }, { startHour: 7, endHour: 11 }])
+		];
+
+		var timeLine = target.Create(schedules, now, maxViewRange);
+
+		var expectedStart = 480;
+		var expectedEnd = 1800;
+
+		expect(timeLine.StartMinute).toEqual(expectedStart);
+		expect(timeLine.EndMinute).toEqual(expectedEnd);
+	}));
+
+
 	function createSchedule(belongsToDate, dayOff, projectionInfoArray) {
 		var dateMoment = moment(belongsToDate);
 		var projections = [];
@@ -108,10 +187,9 @@ describe("teamschedule timeLine tests", function () {
 			if (dayOff == null) {
 				projectionInfoArray.forEach(function (projectionInfo) {
 
-					var dateMomentCopy = moment(dateMoment);
-
 					projections.push({
-						Start: dateMomentCopy.add(projectionInfo.startHour, 'hours').format('YYYY-MM-DD HH:mm'),
+						Start: moment(dateMoment).add(projectionInfo.startHour, 'hours').format('YYYY-MM-DD HH:mm'),
+						End: moment(dateMoment).add(projectionInfo.endHour, 'hours').format('YYYY-MM-DD HH:mm'),
 						Minutes: moment.duration(projectionInfo.endHour - projectionInfo.startHour, 'hours').asMinutes()
 					});
 				});

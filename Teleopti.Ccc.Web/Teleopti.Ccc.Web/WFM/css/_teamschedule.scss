@@ -356,6 +356,10 @@
 		& > .relative > span{
 			padding: 10px;
 		}
+
+		.notcurrentday {
+			background-color: $gray026;
+		}
 	}
 
 	.person-name-column {

@@ -189,7 +189,10 @@
 			if (!projection) projection = {};
 
 			var startTime = moment(projection.Start);
+			var endTime = moment(projection.End);
 			var startTimeMinutes = startTime.diff(timeLine.Offset, 'minutes');
+			var endTimeMinutes = endTime.diff(timeLine.Offset, 'minutes');
+			
 			var timelineStartMinute = timeLine.StartMinute;
 			var timelineEndMinute = timeLine.EndMinute;
 
@@ -199,11 +202,19 @@
 				return undefined;
 			}
 
-			var displayStartTimeMinutes = startTimeMinutes >= 0 ? startTimeMinutes : 0;
-			var start = displayStartTimeMinutes - timelineStartMinute;
+			var start = startTimeMinutes < timelineStartMinute ? 0:startTimeMinutes - timelineStartMinute ;
 			var startPosition = start * timeLine.LengthPercentPerMinute;
 
-			var lengthMinutes = startTimeMinutes < 0 ? projectionMinutes - (startTimeMinutes * -1) : projectionMinutes;
+			var lengthReduction = 0;
+			if (endTimeMinutes > timelineEndMinute) {
+				lengthReduction += endTimeMinutes - timelineEndMinute;
+			}
+			if (startTimeMinutes < timelineStartMinute) {
+				lengthReduction += timelineStartMinute - startTimeMinutes;
+			}
+
+			var lengthMinutes = projectionMinutes - lengthReduction;
+			
 			var length = lengthMinutes * timeLine.LengthPercentPerMinute;
 
 			var shiftProjectionVm = {

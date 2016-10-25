@@ -9,10 +9,15 @@ angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', ['TeamSchedul
 		};
 
 		function create(groupSchedules, queryDateMoment, useNextDayScheduleData) {
-			var schedulesInRange = groupSchedules.filter(function(schedule) {
-				return isScheduleWithinViewRange(schedule, queryDateMoment, useNextDayScheduleData);
+			var maximumViewRange = {
+				startMoment: queryDateMoment.clone().startOf('day'),
+				endMoment: queryDateMoment.clone().startOf('day').add(30, 'hour')
+			};
+
+			var schedulesInRange = groupSchedules.filter(function (schedule) {
+				return isScheduleWithinViewRange(schedule, queryDateMoment, maximumViewRange, useNextDayScheduleData);
 			});
-			var timeLine = timeLineFactory.Create(schedulesInRange, queryDateMoment);
+			var timeLine = timeLineFactory.Create(schedulesInRange, queryDateMoment, maximumViewRange);
 			return {
 				TimeLine: timeLine,
 				Schedules: createSchedulesFromGroupSchedules(schedulesInRange, timeLine)
@@ -36,12 +41,7 @@ angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', ['TeamSchedul
 			return schedules;
 		}
 
-		var maximumViewRange = {
-			startMoment: moment().startOf('day'),
-			endMoment: moment().startOf('day').add(32, 'hour')
-		};
-
-		function isScheduleWithinViewRange(schedule, queryDateMoment, useNextDayScheduleData) {
+		function isScheduleWithinViewRange(schedule, queryDateMoment, maximumViewRange, useNextDayScheduleData) {
 			var scheduleDateMoment = moment(schedule.Date);
 
 			if (scheduleDateMoment.isSame(queryDateMoment, 'day')) return true;

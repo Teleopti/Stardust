@@ -26,7 +26,10 @@
 				var timezoneAdjustedSchedules = svc.rawSchedules.map(function(schedule) {
 					return convertScheduleToTimezone(schedule, timezone);
 				});
-				svc.groupScheduleVm = groupScheduleFactory.Create(timezoneAdjustedSchedules, scheduleDateMoment);
+
+				var useNextDaySchedules = toggleSvc.WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305;
+
+				svc.groupScheduleVm = groupScheduleFactory.Create(timezoneAdjustedSchedules, scheduleDateMoment, useNextDaySchedules);
 			};
 
 			svc.recreateScheduleVm = recreateScheduleVm;
