@@ -32,11 +32,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IEnumerable<AgentState> GetStates();
 		void Update(AgentState model);
 
-		[RemoveMeWithToggle(Toggles.RTA_ScheduleQueryOptimization_40260)]
+		[RemoveMeWithToggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262)]
 		AgentState Get(Guid personId);
-		[RemoveMeWithToggle(Toggles.RTA_PersonOrganizationQueryOptimization_40261)]
+		[RemoveMeWithToggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262)]
 		IEnumerable<AgentState> GetStatesNotInSnapshot(DateTime snapshotId, string sourceId);
-		[RemoveMeWithToggle(Toggles.RTA_PersonOrganizationQueryOptimization_40261)]
+		[RemoveMeWithToggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262)]
 		IEnumerable<AgentState> Get(IEnumerable<Guid> personIds);
 
 	}
