@@ -11,17 +11,21 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 	public class UnsafePersonProviderTest
 	{
 		private IUnsafePersonProvider target;
-		private ITeleoptiPrincipal beforePrincipal;
 		private IPerson currentLoggedOnPerson;
 
 		[SetUp]
 		public void Setup()
 		{
 			target = new UnsafePersonProvider();
-			beforePrincipal = TeleoptiPrincipal.CurrentPrincipal;
 			currentLoggedOnPerson = new Person();
 			var currentPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, null), currentLoggedOnPerson);
 			Thread.CurrentPrincipal = currentPrincipal;
+		}
+
+		[TearDown]
+		public void Teardown()
+		{
+			Thread.CurrentPrincipal = null;
 		}
 
 		[Test]
@@ -31,10 +35,5 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 				.Should().Be.SameInstanceAs(currentLoggedOnPerson);
 		}
 
-		[TearDown]
-		public void Teardown()
-		{
-			Thread.CurrentPrincipal = beforePrincipal;
-		}
 	}
 }

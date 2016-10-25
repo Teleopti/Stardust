@@ -49,6 +49,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
             _now = new DateTime(2016,03,14,0,5,0);
         }
 
+		[TearDown]
+		public void Teardown()
+		{
+			Thread.CurrentPrincipal = null;
+		}
+
 		[Test]
 		public void DenyIfUnderstaffedOnAtLeastOnePrimarySkill()
 		{

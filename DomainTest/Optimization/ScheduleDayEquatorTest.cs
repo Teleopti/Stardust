@@ -30,6 +30,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _target = new ScheduleDayEquator(new EditableShiftMapper());
         }
 
+	    [TearDown]
+	    public void Teardown()
+	    {
+		    Thread.CurrentPrincipal = null;
+	    }
 	
 		#region Day Off and MainShift testcases when days has different significant parts
 

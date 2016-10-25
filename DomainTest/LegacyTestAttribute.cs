@@ -2,8 +2,6 @@ using System;
 using System.Threading;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
