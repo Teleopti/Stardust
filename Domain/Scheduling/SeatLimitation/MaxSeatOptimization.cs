@@ -91,11 +91,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			}
 		}
 
+		#region _matrixListFactory.CreateMatrixListAllForLoadedPeriod(period); - it's currently depending on stateholder though
 		private IEnumerable<IScheduleMatrixPro> createMatrixes(IScheduleDictionary scheduleDictionary, DateOnlyPeriod loadedPeriod, DateOnlyPeriod choosenPeriod, IEnumerable<IPerson> allAgents)
 		{
-			//old: _matrixListFactory.CreateMatrixListAllForLoadedPeriod(period); - it's currently depending on stateholder though
-			//move to seperate class!
-
 			var period = loadedPeriod.Inflate(10);
 			var persons = allAgents;
 			var startDate = period.StartDate;
@@ -118,9 +116,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_matrixUserLockLocker.Execute(matrixes, choosenPeriod);
 			_matrixNotPermittedLocker.Execute(matrixes);
 
-
 			return matrixes;
 		}
+		private static IScheduleMatrixPro createMatrixForPersonAndDate(IScheduleDictionary scheduleDictionary, IPerson person, DateOnly date)
+		{
+			var virtualSchedulePeriod = person.VirtualSchedulePeriod(date);
+			if (!virtualSchedulePeriod.IsValid)
+				return null;
+
+			IFullWeekOuterWeekPeriodCreator fullWeekOuterWeekPeriodCreator =
+				new FullWeekOuterWeekPeriodCreator(virtualSchedulePeriod.DateOnlyPeriod, person);
+
+			return new ScheduleMatrixPro(scheduleDictionary[person],
+				fullWeekOuterWeekPeriodCreator,
+				virtualSchedulePeriod);
+		}
+		#endregion
 
 
 		#region  taken from TeamBlockIntradayOptimizationService
@@ -165,21 +176,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			}
 		}
 #endregion
-
-
-		private static IScheduleMatrixPro createMatrixForPersonAndDate(IScheduleDictionary scheduleDictionary, IPerson person, DateOnly date)
-		{
-			//old: _matrixListFactory.CreateMatrixListAllForLoadedPeriod(period); - it's currently depending on stateholder though
-			var virtualSchedulePeriod = person.VirtualSchedulePeriod(date);
-			if (!virtualSchedulePeriod.IsValid)
-				return null;
-
-			IFullWeekOuterWeekPeriodCreator fullWeekOuterWeekPeriodCreator =
-				new FullWeekOuterWeekPeriodCreator(virtualSchedulePeriod.DateOnlyPeriod, person);
-
-			return new ScheduleMatrixPro(scheduleDictionary[person],
-				fullWeekOuterWeekPeriodCreator,
-				virtualSchedulePeriod);
-		}
 	}
 }
