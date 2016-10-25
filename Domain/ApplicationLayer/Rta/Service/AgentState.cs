@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public Guid? ActivityId { get; set; }
 		public Guid? NextActivityId { get; set; }
-		public DateTime? NextActivityStartTime { get; set; }
 
 		public Guid? RuleId { get; set; }
 		public DateTime? RuleStartTime { get; set; }

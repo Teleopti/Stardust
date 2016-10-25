@@ -101,14 +101,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public bool ShouldProcessState()
 		{
-			if (Stored == null || _schedule.Value.NewSchedules)
+			// no previous state
+			if (Stored == null)
 				return true;
-			
+
+			// new schedules loaded
+			if (_schedule.Value.NewSchedules)
+				return true;
+
 			var isSameState =
 				SnapshotId.Equals(Stored.BatchId) &&
 				Schedule.CurrentActivityId().Equals(Stored.ActivityId) &&
 				Schedule.NextActivityId().Equals(Stored.NextActivityId) &&
-				Schedule.NextActivityStartTime().Equals(Stored.NextActivityStartTime) &&
 				State.StateGroupId().Equals(Stored.StateGroupId) &&
 				Schedule.TimeWindowCheckSum().Equals(Stored.TimeWindowCheckSum)
 				;
@@ -160,7 +164,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				ActivityId = Schedule.CurrentActivityId(),
 				NextActivityId = Schedule.NextActivityId(),
-				NextActivityStartTime = Schedule.NextActivityStartTime(),
 
 				RuleId = State.RuleId(),
 				RuleStartTime = RuleStartTime,

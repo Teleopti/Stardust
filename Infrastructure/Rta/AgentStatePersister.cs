@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using Castle.Core.Internal;
 using Newtonsoft.Json;
@@ -99,7 +98,6 @@ INSERT INTO [dbo].[AgentState]
 	StateStartTime,
 	ActivityId,
 	NextActivityId,
-	NextActivityStartTime,
 	RuleId,
 	RuleStartTime,
 	AlarmStartTime,
@@ -123,7 +121,6 @@ VALUES
 	:StateStartTime,
 	:ActivityId,
 	:NextActivityId,
-	:NextActivityStartTime,
 	:RuleId,
 	:RuleStartTime,
 	:AlarmStartTime,
@@ -145,13 +142,11 @@ VALUES
 						.SetParameter("StateStartTime", copyFrom?.StateStartTime)
 						.SetParameter("ActivityId", copyFrom?.ActivityId)
 						.SetParameter("NextActivityId", copyFrom?.NextActivityId)
-						.SetParameter("NextActivityStartTime", copyFrom?.NextActivityStartTime)
 						.SetParameter("RuleId", copyFrom?.RuleId)
 						.SetParameter("RuleStartTime", copyFrom?.RuleStartTime)
 						.SetParameter("AlarmStartTime", copyFrom?.AlarmStartTime)
 						.SetParameter("TimeWindowCheckSum", copyFrom?.TimeWindowCheckSum)
-						.SetParameter("Schedule", copyFrom?.Schedule != null ? _serializer.SerializeObject(copyFrom.Schedule) : null,
-							NHibernateUtil.StringClob)
+						.SetParameter("Schedule", copyFrom?.Schedule != null ? _serializer.SerializeObject(copyFrom.Schedule) : null, NHibernateUtil.StringClob)
 						.SetParameter("Adherence", (int?) copyFrom?.Adherence)
 						.SetParameter("DataSourceIdUserCode", e.DataSourceId + "__" + e.UserCode)
 						.ExecuteUpdate();
@@ -189,7 +184,6 @@ SET
 	StateStartTime = :StateStartTime,
 	ActivityId = :ActivityId, 
 	NextActivityId = :NextActivityId,
-	NextActivityStartTime = :NextActivityStartTime, 
 	RuleId = :RuleId,
 	RuleStartTime = :RuleStartTime,
 	AlarmStartTime = :AlarmStartTime,
@@ -210,7 +204,6 @@ WHERE
 				.SetParameter("StateStartTime", model.StateStartTime)
 				.SetParameter("ActivityId", model.ActivityId)
 				.SetParameter("NextActivityId", model.NextActivityId)
-				.SetParameter("NextActivityStartTime", model.NextActivityStartTime)
 				.SetParameter("RuleId", model.RuleId)
 				.SetParameter("RuleStartTime", model.RuleStartTime)
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)

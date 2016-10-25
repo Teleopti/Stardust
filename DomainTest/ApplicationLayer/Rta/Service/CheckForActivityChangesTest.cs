@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.StoredState.NextActivityStartTime.Should().Be("2015-09-21 12:00".Utc());
+			Database.PersistedReadModel.NextActivityStartTime.Should().Be("2015-09-21 12:00".Utc());
 		}
 		
 		[Test]
