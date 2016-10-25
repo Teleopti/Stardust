@@ -112,7 +112,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var isSameState =
 				SnapshotId.Equals(Stored.BatchId) &&
 				Schedule.CurrentActivityId().Equals(Stored.ActivityId) &&
-				Schedule.NextActivityId().Equals(Stored.NextActivityId) &&
 				State.StateGroupId().Equals(Stored.StateGroupId) &&
 				Schedule.TimeWindowCheckSum().Equals(Stored.TimeWindowCheckSum)
 				;
@@ -163,7 +162,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				StateStartTime = StateStartTime,
 
 				ActivityId = Schedule.CurrentActivityId(),
-				NextActivityId = Schedule.NextActivityId(),
 
 				RuleId = State.RuleId(),
 				RuleStartTime = RuleStartTime,

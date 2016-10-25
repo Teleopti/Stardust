@@ -97,7 +97,6 @@ INSERT INTO [dbo].[AgentState]
 	StateGroupId,
 	StateStartTime,
 	ActivityId,
-	NextActivityId,
 	RuleId,
 	RuleStartTime,
 	AlarmStartTime,
@@ -120,7 +119,6 @@ VALUES
 	:StateGroupId,
 	:StateStartTime,
 	:ActivityId,
-	:NextActivityId,
 	:RuleId,
 	:RuleStartTime,
 	:AlarmStartTime,
@@ -141,7 +139,6 @@ VALUES
 						.SetParameter("StateGroupId", copyFrom?.StateGroupId)
 						.SetParameter("StateStartTime", copyFrom?.StateStartTime)
 						.SetParameter("ActivityId", copyFrom?.ActivityId)
-						.SetParameter("NextActivityId", copyFrom?.NextActivityId)
 						.SetParameter("RuleId", copyFrom?.RuleId)
 						.SetParameter("RuleStartTime", copyFrom?.RuleStartTime)
 						.SetParameter("AlarmStartTime", copyFrom?.AlarmStartTime)
@@ -183,7 +180,6 @@ SET
 	StateGroupId = :StateGroupId,
 	StateStartTime = :StateStartTime,
 	ActivityId = :ActivityId, 
-	NextActivityId = :NextActivityId,
 	RuleId = :RuleId,
 	RuleStartTime = :RuleStartTime,
 	AlarmStartTime = :AlarmStartTime,
@@ -203,7 +199,6 @@ WHERE
 				.SetParameter("StateGroupId", model.StateGroupId)
 				.SetParameter("StateStartTime", model.StateStartTime)
 				.SetParameter("ActivityId", model.ActivityId)
-				.SetParameter("NextActivityId", model.NextActivityId)
 				.SetParameter("RuleId", model.RuleId)
 				.SetParameter("RuleStartTime", model.RuleStartTime)
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)

@@ -109,16 +109,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public Guid? NextActivityId()
 		{
-			return _nextActivityInShift.Value == null ? (Guid?)null : _nextActivityInShift.Value.PayloadId;
+			return _nextActivityInShift.Value?.PayloadId;
 		}
 
 		public DateTime? NextActivityStartTime()
 		{
-			if (_nextActivityInShift.Value != null)
-				return _nextActivityInShift.Value.StartDateTime;
-			if (_currentActivity.Value != null)
-				return _currentActivity.Value.EndDateTime;
-			return null;
+			return _nextActivityInShift.Value?.StartDateTime ?? _currentActivity.Value?.EndDateTime;
 		}
 
 		public DateTime? ActivityStartTime()
