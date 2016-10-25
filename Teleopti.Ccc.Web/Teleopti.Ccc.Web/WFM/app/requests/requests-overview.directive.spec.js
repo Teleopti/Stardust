@@ -169,7 +169,6 @@
 
 			var vm = getInnerScope(targetElement).requestsOverview;
 			expect(vm.filters[0].Status).toEqual('0 5');
-			expect(getStatusFilter()['Status']).toEqual(vm.filters[0].Status);
 		});
 
 		it('should show pending shift trade request only by default', function () {
@@ -178,7 +177,6 @@
 
 			var vm = getInnerScope(targetElement).requestsOverview;
 			expect(vm.filters[0].Status).toEqual('0');
-			expect(getStatusFilter()['Status']).toEqual(vm.filters[0].Status);
 		});
 
 		it('should not call data service more than once in the first time', function() {
@@ -222,12 +220,7 @@
 			var targets = element.find('requests-table-container');
 			return angular.element(targets[0]).scope();
 		}
-
-		function getStatusFilter() {
-			return requestsFilterService.Filters.find(function(filter) {
-				return filter['Status'] != undefined;
-			});
-		}
+		
 	});
 
 	describe('requests table container directive', function () {

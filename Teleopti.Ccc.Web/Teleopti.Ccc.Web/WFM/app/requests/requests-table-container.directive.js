@@ -29,24 +29,36 @@
 		vm.shiftDetailLeft;
 		vm.shiftDetailTop;
 		vm.displayShiftDetail;
+		vm.requestFiltersMgr = new requestFilterSvc.RequestsFilter();
 
+		vm.defaultStatusesLoaded = false;
 		vm.definitionsLoadComplete = false;
 
-		vm.init = function () {
-			if (!vm.showRequestsInDefaultStatus) return;
+		vm.setDefaultStatuses = function () {
+
+			if (!vm.showRequestsInDefaultStatus || vm.defaultStatusesLoaded) {
+				return;
+			}
+
 			if (vm.filters && vm.filters.length > 0) {
 				vm.SelectedRequestStatuses = [];
 				var defaultStatusFilter = vm.filters[0].Status;
-				requestFilterSvc.SetFilter('status', defaultStatusFilter);
+				vm.requestFiltersMgr.SetFilter('status', defaultStatusFilter);
 				angular.forEach(defaultStatusFilter.split(' '), function (value) {
 					if (value.trim() !== '') {
 						vm.SelectedRequestStatuses.push({ Id: value.trim() });
 					}
 				});
+
+				vm.defaultStatusesLoaded = true;
+
 			}
 		}
 
-		vm.init();
+		if (!vm.saveGridColumnState) {
+			vm.setDefaultStatuses();
+		}
+		
 
 		function updateShiftStatusForSelectedPerson(scheduleDate) {
 			var selectedPersonIdList = vm.personIds;
@@ -174,9 +186,9 @@
 				status.Selected = false;
 			});
 			vm.SelectedRequestStatuses = [];
-
-			requestFilterSvc.ResetFilter();
-			vm.filters = requestFilterSvc.Filters;
+			
+			vm.requestFiltersMgr.ResetFilter();
+			vm.filters = vm.requestFiltersMgr.Filters;
 		};
 
 		vm.clearFilters = clearAllFilters;
@@ -197,19 +209,20 @@
 			angular.forEach(vm.SelectedAbsences, function (absence) {
 				filters += absence.Id + ' ';
 			});
-			requestFilterSvc.SetFilter('Absence', filters.trim());
+			vm.requestFiltersMgr.SetFilter('Absence', filters.trim());
 
-			vm.filters = requestFilterSvc.Filters;
+			vm.filters = vm.requestFiltersMgr.Filters;
 		};
 
 		vm.statusFilterClose = function () {
+
 			var filters = '';
 			angular.forEach(vm.SelectedRequestStatuses, function (status) {
 				filters += status.Id + ' ';
 			});
-			requestFilterSvc.SetFilter('Status', filters.trim());
+			vm.requestFiltersMgr.SetFilter('Status', filters.trim());
 
-			vm.filters = requestFilterSvc.Filters;
+			vm.filters = vm.requestFiltersMgr.Filters;
 		};
 
 
@@ -248,11 +261,11 @@
 							angular.forEach(grid.columns, function (column) {
 								var term = column.filters[0].term;
 								if (term != undefined) {
-									requestFilterSvc.SetFilter(column.colDef.displayName, term.trim());
+									vm.requestFiltersMgr.SetFilter(column.colDef.displayName, term.trim());
 								}
 							});
 
-							vm.filters = requestFilterSvc.Filters;
+							vm.filters = vm.requestFiltersMgr.Filters;
 						}, 500);
 					});
 				}
@@ -314,7 +327,7 @@
 
 		function initialiseGridStateHandling() {
 			requestGridStateService.restoreState(vm);
-
+			
 			// delay the setup of these handlers a little to let the table load
 			$timeout(function () {
 				requestGridStateService.setupGridEventHandlers($scope,vm);
@@ -384,6 +397,8 @@
 
 			if (vm.saveGridColumnState) {
 				initialiseGridStateHandling();
+				
+				vm.setDefaultStatuses();
 			}
 
 			vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);

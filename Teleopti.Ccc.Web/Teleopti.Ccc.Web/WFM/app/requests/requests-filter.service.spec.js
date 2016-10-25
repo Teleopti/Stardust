@@ -12,7 +12,7 @@
 
 		beforeEach(inject(function(_$rootScope_, _RequestsFilter_) {
 			$rootScope = _$rootScope_;
-			target = _RequestsFilter_;
+			target = new _RequestsFilter_.RequestsFilter();
 		}));
 
 		it("Should update filters on filter changed", function() {
