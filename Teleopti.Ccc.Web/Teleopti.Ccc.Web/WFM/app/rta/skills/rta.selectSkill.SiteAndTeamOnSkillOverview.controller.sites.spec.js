@@ -404,7 +404,9 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				});
 			});
 
-		expect($state.go).toHaveBeenCalledWith('rta.sites-by-skillArea', {skillAreaId: "emailAndPhoneGuid"});
+		expect($state.go).toHaveBeenCalledWith('rta.sites-by-skillArea', {
+			skillAreaId: "emailAndPhoneGuid"
+		});
 	});
 
 	it('should not allow simoultaneous selection when new skill', function() {
@@ -440,7 +442,32 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 				});
 			});
 
-		expect($state.go).toHaveBeenCalledWith('rta.sites-by-skill', {skillIds: "phoneGuid"});
+		expect($state.go).toHaveBeenCalledWith('rta.sites-by-skill', {
+			skillIds: "phoneGuid"
+		});
+	});
+
+	it('should update url when selecting skill', function() {
+		$fakeBackend
+			.withSite({
+				Id: "parisGuid",
+			})
+			.withSiteAdherenceForSkill({
+				Id: "parisGuid",
+				OutOfAdherence: 3,
+				SkillId: "phoneGuid"
+			});
+
+		$controllerBuilder.createController()
+			.apply(function() {
+				scope.selectedSkillChange({
+					Id: "emailGuid"
+				});
+			});
+
+		expect($state.go).toHaveBeenCalledWith('rta.sites-by-skill', {
+			skillIds: "emailGuid"
+		});
 	});
 
 });
