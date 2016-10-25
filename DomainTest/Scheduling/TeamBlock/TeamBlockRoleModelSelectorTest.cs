@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ISameOpenHoursInTeamBlock _sameOpenHoursInTeamBlock;
 		private IPerson _person;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private IScheduleDictionary _schedules;
 		private List<IPerson> _groupMembers;
 		private ITeamInfo _teaminfo;
 		private IActivityIntervalDataCreator _activityIntervalDataCreator;
@@ -47,7 +48,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_restrictionAggregator = _mocks.StrictMock<ITeamBlockRestrictionAggregator>();
 			_workShiftFilterService = _mocks.StrictMock<IWorkShiftFilterService>();
 			_schedulingResultStateHolder = _mocks.DynamicMock<ISchedulingResultStateHolder>();
+			_schedules= _mocks.DynamicMock<IScheduleDictionary>();
 			_schedulingResultStateHolder.Expect(x => x.AllSkillDays()).Return(_skillDays).Repeat.Any();
+			_schedulingResultStateHolder.Expect(x => x.Schedules).Return(_schedules).Repeat.Any();
 			_sameOpenHoursInTeamBlock = _mocks.StrictMock<ISameOpenHoursInTeamBlock>();
 			_workShiftSelector = _mocks.StrictMock<IWorkShiftSelector>();
 			_dateOnly = new DateOnly(2013, 4, 8);
@@ -96,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 										 new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 			using (_mocks.Record())
 			{
-				Expect.Call(_firstShiftInTeamBlockFinder.FindFirst(_teamBlockInfo, _person, _dateOnly, _schedulingResultStateHolder))
+				Expect.Call(_firstShiftInTeamBlockFinder.FindFirst(_teamBlockInfo, _person, _dateOnly, _schedules))
 					.Return(null);
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teaminfo);
 				Expect.Call(_teaminfo.GroupMembers).Return(_groupMembers);
@@ -128,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_firstShiftInTeamBlockFinder.FindFirst(_teamBlockInfo, _person, _dateOnly, _schedulingResultStateHolder))
+				Expect.Call(_firstShiftInTeamBlockFinder.FindFirst(_teamBlockInfo, _person, _dateOnly, _schedules))
 					.Return(null);
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teaminfo).Repeat.Twice();
 				Expect.Call(_teaminfo.GroupMembers).Return(_groupMembers).Repeat.Twice();
@@ -166,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_firstShiftInTeamBlockFinder.FindFirst(_teamBlockInfo, _person, _dateOnly, _schedulingResultStateHolder))
+				Expect.Call(_firstShiftInTeamBlockFinder.FindFirst(_teamBlockInfo, _person, _dateOnly, _schedules))
 					.Return(null);
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teaminfo).Repeat.Twice();
 				Expect.Call(_teaminfo.GroupMembers).Return(_groupMembers).Repeat.Twice();

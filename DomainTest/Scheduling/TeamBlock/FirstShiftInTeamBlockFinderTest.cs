@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IShiftProjectionCacheManager _shiftProjectionCacheManager;
 		private ITeamBlockInfo _teamBlockInfo;
 		private IPerson _person;
-		private ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private IScheduleDictionary _schedules;
 		private IShiftProjectionCache _shiftProjectionCache;
 		private IBlockInfo _blockInfo;
 		private IList<IPerson> _groupMembers;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_target = new FirstShiftInTeamBlockFinder(_shiftProjectionCacheManager);
 			_teamBlockInfo = _mocks.StrictMock<ITeamBlockInfo>();
 			_person = PersonFactory.CreatePerson();
-			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
+			_schedules = _mocks.StrictMock<IScheduleDictionary>();
 			_shiftProjectionCache = _mocks.StrictMock<IShiftProjectionCache>();
 			_blockInfo = new BlockInfo(new DateOnlyPeriod(2014,9,3,2014,9,3));
 			_groupMembers = new List<IPerson>{_person};
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(_groupMembers);
-				Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
+				Expect.Call(_schedules[_person]).Return(_scheduleRange);
 				Expect.Call(_scheduleRange.ScheduledDay(new DateOnly(2014, 9, 3))).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(_scheduleDay.GetEditorShift()).Return(_editableShift);
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				var result = _target.FindFirst(_teamBlockInfo, _person, new DateOnly(2014, 9, 3), _schedulingResultStateHolder);
+				var result = _target.FindFirst(_teamBlockInfo, _person, new DateOnly(2014, 9, 3), _schedules);
 				Assert.AreSame(_shiftProjectionCache, result);
 			}
 		}
@@ -77,17 +77,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(_groupMembers);
-				Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
+				Expect.Call(_schedules[_person]).Return(_scheduleRange);
 				Expect.Call(_scheduleRange.ScheduledDay(new DateOnly(2014, 9, 3))).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
 			}
 
 			using (_mocks.Playback())
 			{
-				var result = _target.FindFirst(_teamBlockInfo, _person, new DateOnly(2014, 9, 3), _schedulingResultStateHolder);
+				var result = _target.FindFirst(_teamBlockInfo, _person, new DateOnly(2014, 9, 3), _schedules);
 				Assert.IsNull(result);
 			}
 		}
-
 	}
 }

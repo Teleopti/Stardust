@@ -51,8 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (effectiveRestriction == null)
 				return null;
 
-			IShiftProjectionCache foundShiftProjectionCache = _firstShiftInTeamBlockFinder.FindFirst(teamBlockInfo, person,
-				datePointer, _schedulingResultStateHolder);
+			IShiftProjectionCache foundShiftProjectionCache = _firstShiftInTeamBlockFinder.FindFirst(teamBlockInfo, person, datePointer, _schedulingResultStateHolder.Schedules);
 			if (foundShiftProjectionCache != null &&
 			    !schedulingOptions.NotAllowedShiftCategories.Contains(foundShiftProjectionCache.TheMainShift.ShiftCategory))
 				return foundShiftProjectionCache;

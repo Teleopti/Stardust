@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 				var ruleSetBag = person.Period(date).RuleSetBag;
 
 				processedBlocks++;
-				var roleModel = _firstShiftInTeamBlockFinder.FindFirst(selectedTeamBlock, person, date, schedulingResultStateHolder);
+				var roleModel = _firstShiftInTeamBlockFinder.FindFirst(selectedTeamBlock, person, date, schedulingResultStateHolder.Schedules);
 				CancelSignal progressResult;
 				if(roleModel == null)
 				{
