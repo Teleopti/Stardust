@@ -1784,7 +1784,6 @@
     <Content Include="Areas\Start\Views\Return\Hash.cshtml" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.unsubscriber.js" />
     <Content Include="Areas\MyTime\Views\CiscoWidget\Index.cshtml" />
-    <Content Include="WFM\app\global\ui-grid\uigrid.disable-animation.directive.js" />
     <EmbeddedResource Include="tzdb2016c.nzd" />
     <Content Include="WFM\css\_navbar.scss" />
     <Content Include="WFM\css\_main.scss" />
