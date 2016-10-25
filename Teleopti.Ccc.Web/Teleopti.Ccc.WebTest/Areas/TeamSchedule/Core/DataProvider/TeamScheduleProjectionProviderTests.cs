@@ -17,7 +17,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.WebTest.Areas.Global;
-using Teleopti.Ccc.WebTest.Core.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
@@ -27,7 +26,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 	{
 		private TeamScheduleProjectionProvider target;
 		private readonly Scenario scenario = new Scenario("d");
-		private CommonAgentNameProvider _commonAgentNameProvider;
 		private FakeToggleManager _toggleManager;
 
 		[SetUp]
@@ -37,9 +35,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var projectionProvider = new ProjectionProvider();
 			var fakeGlobalSettingRepo = new FakeGlobalSettingDataRepository();
 			fakeGlobalSettingRepo.PersistSettingValue("CommonNameDescription", new CommonNameDescriptionSetting("{FirstName}{LastName}"));
-			_commonAgentNameProvider = new CommonAgentNameProvider(fakeGlobalSettingRepo);
 			_toggleManager = new FakeToggleManager();
-			target = new TeamScheduleProjectionProvider(projectionProvider, loggonUser, new FakePersonNameProvider(), _toggleManager, new ScheduleProjectionHelper(), new ProjectionSplitter(projectionProvider, new ScheduleProjectionHelper()), new FakeIanaTimeZoneProvider());
+			target = new TeamScheduleProjectionProvider(projectionProvider, loggonUser, _toggleManager, new ScheduleProjectionHelper(), new ProjectionSplitter(projectionProvider, new ScheduleProjectionHelper()), new FakeIanaTimeZoneProvider(),new FakeCommonAgentNameProvider());
 		}
 
 		[Test]
@@ -69,10 +66,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var personAbsence = scheduleDayOnePerson1.CreateAndAddAbsence(absenceLayer);
 			personAbsence.SetId(Guid.NewGuid());
 
-			var vm = target.Projection(scheduleDayOnePerson1, true, _commonAgentNameProvider.CommonAgentNameSettings);
+			var vm = target.Projection(scheduleDayOnePerson1, true);
 
 			vm.DayOff.Should().Be(null);
-			vm.Name.Should().Be("agent1");
+			vm.Name.Should().Be("agent@1");
 			vm.Projection.Count().Should().Be(4);
 			vm.IsFullDayAbsence.Should().Be(false);
 			vm.Date.Should().Be(date.ToFixedDateFormat());
@@ -123,7 +120,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
 
-			var vm = target.Projection(scheduleDayOnePerson1, true, _commonAgentNameProvider.CommonAgentNameSettings);
+			var vm = target.Projection(scheduleDayOnePerson1, true);
 
 			vm.PersonId.Should().Be(person1.Id.ToString());
 			vm.Projection.Count().Should().Be(2);
@@ -160,7 +157,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
 
-			var vm = target.Projection(scheduleDayOnePerson1, true, _commonAgentNameProvider.CommonAgentNameSettings);
+			var vm = target.Projection(scheduleDayOnePerson1, true);
 
 			vm.PersonId.Should().Be(person1.Id.ToString());
 			vm.Projection.Count().Should().Be(2);
@@ -196,7 +193,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
 
-			var vm = target.Projection(scheduleDayOnePerson1, true, _commonAgentNameProvider.CommonAgentNameSettings);
+			var vm = target.Projection(scheduleDayOnePerson1, true);
 
 			vm.PersonId.Should().Be(person1.Id.ToString());
 			vm.Projection.Count().Should().Be(3);
@@ -236,7 +233,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
 
-			var vm = target.Projection(scheduleDayOnePerson1, true, _commonAgentNameProvider.CommonAgentNameSettings);
+			var vm = target.Projection(scheduleDayOnePerson1, true);
 
 			vm.PersonId.Should().Be(person1.Id.ToString());
 			vm.Projection.Count().Should().Be(4);

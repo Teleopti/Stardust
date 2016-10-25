@@ -6,8 +6,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 {
 	public interface ITeamScheduleProjectionProvider
 	{
-		GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential, ICommonNameDescriptionSetting agentNameSetting);
+		GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential);
 		AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential);
+
+		GroupScheduleShiftViewModel MakeViewModel(IPerson person, DateOnly date, IScheduleDay scheduleDay,
+			bool canViewConfidential, bool canViewUnpublished, bool includeNote);
 
 		bool IsFullDayAbsence(IScheduleDay scheduleDay);
 		bool IsOvertimeOnDayOff(IScheduleDay scheduleDay);

@@ -75,19 +75,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			}
 
 			var peopleCanSeeConfidentialAbsencesFor = _searchProvider.GetPermittedPersonIdList(searchCriteria, dateInUserTimeZone,
-					DefinedRaptorApplicationFunctionPaths.ViewConfidential);
+					DefinedRaptorApplicationFunctionPaths.ViewConfidential).ToList();
+			var canSeeUnpublishedSchedules =
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 
-			var userTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var scheduleDays = _scheduleProvider.GetScheduleForPersons(dateInUserTimeZone, permittedPersons, true).ToArray();
-			var scheduleDaysForPreviousDay = _scheduleProvider.GetScheduleForPersons(dateInUserTimeZone.AddDays(-1), permittedPersons);
-			var previousDaysEndingToday = scheduleDaysForPreviousDay.Where(
-				scheduleDay =>
-				{
-					var personAssignment = scheduleDay?.PersonAssignment();
-					return personAssignment != null &&
-						   personAssignment.Period.EndDateTimeLocal(userTimeZone) > dateInUserTimeZone.Date;
-				}).ToLookup(p => p.Person);
+			var scheduleDayLookup = scheduleDays.ToLookup(s => s.Person);
 
+			
 			if (isOnlyAbsences)
 			{
 				permittedPersons = scheduleDays.Where(s =>
@@ -99,68 +94,40 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						: personAbsences.Any(a => a.Period.ContainsPart(personAssignment.Period));
 				}).Select(s => s.Person).ToArray();
 			}
-			
-			var canSeeUnpublishedSchedules =
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
-			var scheduleByPerson = scheduleDays.ToLookup(s => s.Person);
-			var personScheduleDaysToSort = permittedPersons.Select(s => new Tuple<IPerson, IScheduleDay>(s, scheduleByPerson[s].FirstOrDefault())).ToArray();
-			
+					
+			var personScheduleDaysToSort = permittedPersons.Select(s => new Tuple<IPerson, IScheduleDay>(s, scheduleDayLookup[s].FirstOrDefault())).ToArray();			
 			Array.Sort(personScheduleDaysToSort, new TeamScheduleComparer(canSeeUnpublishedSchedules, _permissionProvider));
 
-			var requestedPersonScheduleDayPairs = pageSize > 0
-				? personScheduleDaysToSort.Skip(pageSize * (currentPageIndex - 1)).Take(pageSize)
-				: personScheduleDaysToSort;
-			var requestedPersonScheduleDays = requestedPersonScheduleDayPairs.Select(pair => new
-			{
-				Person = pair.Item1,
-				PrimarySchedule = pair.Item2,
-				OtherSchedules = previousDaysEndingToday[pair.Item1],
-				CanViewConfidential = peopleCanSeeConfidentialAbsencesFor.Contains(pair.Item1.Id.GetValueOrDefault())
-			});
-			var nameDescriptionSetting = _commonAgentNameProvider.CommonAgentNameSettings;
-			var list = new List<GroupScheduleShiftViewModel>();
-			foreach (var personScheduleDay in requestedPersonScheduleDays)
-			{
-				var person = personScheduleDay.Person;
-				
-				if (personScheduleDay.PrimarySchedule == null)
-				{
-					list.Add(new GroupScheduleShiftViewModel
-					{
-						PersonId = person.Id.GetValueOrDefault().ToString(),
-						Name = nameDescriptionSetting.BuildCommonNameDescription(person),
-						Date = dateInUserTimeZone.Date.ToFixedDateFormat(),
-						Projection = new List<GroupScheduleProjectionViewModel>(),
-						Timezone = new TimeZoneViewModel
-						{
-							IanaId = _ianaTimeZoneProvider.WindowsToIana(person.PermissionInformation.DefaultTimeZone().Id),
-							DisplayName = person.PermissionInformation.DefaultTimeZone().DisplayName
-						}
-					});
-				}
+			var personScheduleDayPairsForCurrentPage = pageSize > 0
+				? personScheduleDaysToSort.Skip(pageSize * (currentPageIndex - 1)).Take(pageSize).ToList()
+				: personScheduleDaysToSort.ToList();
 
-				foreach (var scheduleDay in Enumerable.Repeat(personScheduleDay.PrimarySchedule,1).Concat(personScheduleDay.OtherSchedules).Where(p => p!=null))
+			var personsForCurrentPage = personScheduleDayPairsForCurrentPage.Select(pair => pair.Item1).ToList();
+
+			var previousDay = dateInUserTimeZone.AddDays(-1);
+			var scheduleDaysForPreviousDayLookup =
+				_scheduleProvider.GetScheduleForPersons(previousDay,personsForCurrentPage).ToLookup(p => p.Person);
+			var nextDay = dateInUserTimeZone.AddDays(1);
+			var scheduleDaysForNextDayLookup =
+				_scheduleProvider.GetScheduleForPersons(nextDay, personsForCurrentPage).ToLookup(p => p.Person);
+					
+			var list = new List<GroupScheduleShiftViewModel>();
+			foreach (var pair in personScheduleDayPairsForCurrentPage)
+			{
+				var person = pair.Item1;
+				var currentScheduleDay = pair.Item2;
+				var canViewConfidential = peopleCanSeeConfidentialAbsencesFor.Contains(person.Id.GetValueOrDefault());
+												
+				list.Add(_teamScheduleProjectionProvider.MakeViewModel(person, dateInUserTimeZone, currentScheduleDay, canViewConfidential, canSeeUnpublishedSchedules, true));
+				if (scheduleDaysForPreviousDayLookup.Contains(person))
 				{
-					var isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly, person);
-					var vm = isPublished || canSeeUnpublishedSchedules
-						? _teamScheduleProjectionProvider.Projection(scheduleDay, personScheduleDay.CanViewConfidential, nameDescriptionSetting)
-						: new GroupScheduleShiftViewModel
-						{
-							PersonId = person.Id.GetValueOrDefault().ToString(),
-							Name = nameDescriptionSetting.BuildCommonNameDescription(person),
-							Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat(),
-							Projection = new List<GroupScheduleProjectionViewModel>()
-						};
-					var note = scheduleDay.NoteCollection().FirstOrDefault();
-					vm.InternalNotes = note != null && scheduleDay.DateOnlyAsPeriod.DateOnly == dateInUserTimeZone
-						? note.GetScheduleNote(new NormalizeText())
-						: string.Empty;
-					vm.Timezone = new TimeZoneViewModel
-					{						
-						IanaId = _ianaTimeZoneProvider.WindowsToIana(person.PermissionInformation.DefaultTimeZone().Id),
-						DisplayName = person.PermissionInformation.DefaultTimeZone().DisplayName
-					};
-					list.Add(vm);
+					list.AddRange(scheduleDaysForPreviousDayLookup[person]
+						.Select(sd => _teamScheduleProjectionProvider.MakeViewModel(person,previousDay, sd, canViewConfidential, canSeeUnpublishedSchedules, false)));					
+				}
+				if(scheduleDaysForNextDayLookup.Contains(person))
+				{
+					list.AddRange(scheduleDaysForNextDayLookup[person]
+						.Select(sd => _teamScheduleProjectionProvider.MakeViewModel(person,nextDay,sd,canViewConfidential,canSeeUnpublishedSchedules,false)));
 				}
 			}
 
@@ -170,7 +137,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				Total = permittedPersons.Length
 			};
 		}
-
+		
 		public GroupWeekScheduleViewModel CreateWeekScheduleViewModel(
 			IDictionary<PersonFinderField, string> criteriaDictionary,
 			DateOnly dateInUserTimeZone, int pageSize, int currentPageIndex)
@@ -380,7 +347,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				{
 					var isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly, person);
 					var vm = isPublished || canSeeUnpublishedSchedules
-						? _teamScheduleProjectionProvider.Projection(scheduleDay, personScheduleDay.CanViewConfidential, nameDescriptionSetting)
+						? _teamScheduleProjectionProvider.Projection(scheduleDay, personScheduleDay.CanViewConfidential)
 						: new GroupScheduleShiftViewModel
 						{
 							PersonId = person.Id.GetValueOrDefault().ToString(),

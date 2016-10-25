@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
@@ -19,25 +20,64 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 	{
 		private readonly IProjectionProvider _projectionProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly IPersonNameProvider _personNameProvider;
+		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 		private readonly IToggleManager _toggleManager;
 		private readonly IScheduleProjectionHelper _projectionHelper;
 		private readonly IProjectionSplitter _projectionSplitter;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 
-		public TeamScheduleProjectionProvider(IProjectionProvider projectionProvider, ILoggedOnUser loggedOnUser, IPersonNameProvider personNameProvider, IToggleManager toggleManager, IScheduleProjectionHelper projectionHelper, IProjectionSplitter projectionSplitter, IIanaTimeZoneProvider ianaTimeZoneProvider)
+		public TeamScheduleProjectionProvider(IProjectionProvider projectionProvider, ILoggedOnUser loggedOnUser, IToggleManager toggleManager, IScheduleProjectionHelper projectionHelper, IProjectionSplitter projectionSplitter, IIanaTimeZoneProvider ianaTimeZoneProvider, ICommonAgentNameProvider commonAgentNameProvider)
 		{
 			_projectionProvider = projectionProvider;
-			_loggedOnUser = loggedOnUser;
-			_personNameProvider = personNameProvider;
+			_loggedOnUser = loggedOnUser;			
 			_toggleManager = toggleManager;
 			_projectionHelper = projectionHelper;
 			_projectionSplitter = projectionSplitter;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
+			_commonAgentNameProvider = commonAgentNameProvider;
 		}
 
-		public GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential, ICommonNameDescriptionSetting agentNameSetting)
+		public GroupScheduleShiftViewModel MakeViewModel(IPerson person, DateOnly date, IScheduleDay scheduleDay,
+			bool canViewConfidential, bool canViewUnpublished, bool includeNote)
 		{
+			var agentNameSetting = _commonAgentNameProvider.CommonAgentNameSettings;
+			var vm = new GroupScheduleShiftViewModel
+			{
+				PersonId = person.Id.GetValueOrDefault().ToString(),
+				Name = agentNameSetting.BuildCommonNameDescription(person),
+				Date = date.Date.ToFixedDateFormat(),
+				Projection = new List<GroupScheduleProjectionViewModel>(),				
+			};
+
+			if (scheduleDay != null)
+			{
+				var isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly,person);
+				if (isPublished || canViewUnpublished)
+				{
+					vm = Projection(scheduleDay, canViewConfidential);
+				}
+
+				if (includeNote)
+				{
+					var note = scheduleDay.NoteCollection().FirstOrDefault();
+					vm.InternalNotes = note != null
+						? note.GetScheduleNote(new NormalizeText())
+						: string.Empty;
+				}
+			}
+			
+			vm.Timezone = new TimeZoneViewModel
+			{
+				IanaId = _ianaTimeZoneProvider.WindowsToIana(person.PermissionInformation.DefaultTimeZone().Id),
+				DisplayName = person.PermissionInformation.DefaultTimeZone().DisplayName
+			};
+
+			return vm;
+		}
+
+		public GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential)
+		{
+			var agentNameSetting = _commonAgentNameProvider.CommonAgentNameSettings;
 			var projections = new List<GroupScheduleProjectionViewModel>();
 			var userTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 
@@ -71,6 +111,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				{
 					DayOffName = dayOff != null ? dayOff.Description.Name : "",
 					Start = TimeZoneInfo.ConvertTimeFromUtc(dayOffStart, userTimeZone).ToFixedDateTimeFormat(),
+					End = TimeZoneInfo.ConvertTimeFromUtc(dayOffEnd,userTimeZone).ToFixedDateTimeFormat(),
 					Minutes = (int) dayOffEnd.Subtract(dayOffStart).TotalMinutes
 				};
 			}
@@ -112,6 +153,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 								: ((IAbsence)layer.Payload).DisplayColor.ToHtml())
 							: layer.DisplayColor().ToHtml(),
 							Start = startDateTimeInUserTimeZone.ToFixedDateTimeFormat(),
+							End = startDateTimeInUserTimeZone.Add(layer.Period.ElapsedTime()).ToFixedDateTimeFormat(),
 							Minutes = (int)layer.Period.ElapsedTime().TotalMinutes,
 							IsOvertime = overtimeActivities != null
 									 && overtimeActivities.Any(overtime => overtime.Period.Contains(layer.Period))
@@ -125,10 +167,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		}
 		public AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential)
 		{
+			var agentNameSetting = _commonAgentNameProvider.CommonAgentNameSettings;
 			var ret = new AgentInTeamScheduleViewModel
 			{
 				PersonId = person.Id.GetValueOrDefault(),
-				Name = _personNameProvider.BuildNameFromSetting(person.Name),
+				Name = agentNameSetting.BuildCommonNameDescription(person),
 				IsFullDayAbsence = IsFullDayAbsence(scheduleDay)
 			};
 
@@ -244,6 +287,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				};
 			}
 			return null;
+		}
+
+		private static bool isSchedulePublished(DateOnly date,IPerson person)
+		{
+			var workflowControlSet = person.WorkflowControlSet;
+			if(workflowControlSet == null)
+				return false;
+			return workflowControlSet.SchedulePublishedToDate.HasValue &&
+				   workflowControlSet.SchedulePublishedToDate.Value >= date.Date;
 		}
 	}
 }

@@ -14,7 +14,6 @@
 				if ((!timezone) || (timezone === CurrentUserInfo.CurrentUserInfo().DefaultTimeZone)) return schedule;
 
 				var copiedSchedule = angular.copy(schedule);
-
 				
 				angular.forEach(copiedSchedule.Projection, function(p) {
 					p.Start = $filter('timezone')(p.Start, timezone);
