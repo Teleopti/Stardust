@@ -46,7 +46,7 @@ MyTimeWeb_ShowSeatBookingMonthView_39068 = true
 RTA_HideAgentsByStateGroup_40469 = true
 RTA_FasterUpdateOfScheduleChanges_40536 = true
 RTA_SiteAndTeamOnSkillOverview_40817 = DEV
-RTA_SeeAllOutOfAdherencesToday_39146 = DEV
+RTA_SeeAllOutOfAdherencesToday_39146 = RC
 
 WfmPermission_ReplaceOldPermission_34671 = true
 
