@@ -168,7 +168,7 @@
 				}).query().$promise;
 			};
 
-			this.getAdherenceForAllSitesBySkill = function (data) {
+			this.getAdherenceForSitesBySkills = function (data) {
 				return $resource('../api/Sites/InAlarmCountForSkills', {}, {
 					query: {
 						method: 'GET',
@@ -188,7 +188,7 @@
 				}).query().$promise;
 			};
 
-			this.getSitesForSkill = function (skillIds) {
+			this.getSitesForSkills = function (skillIds) {
 				return $resource('../api/Sites/ForSkills', {}, {
 					query: {
 						method: 'GET',
@@ -199,7 +199,7 @@
 				}).$promise;
 			};
 
-			this.getAdherenceForAllTeamsOnSitesBySkill = function (data) {
+			this.getAdherenceForTeamsBySkills = function (data) {
 				return $resource('../api/Teams/InAlarmCountForSkills', {}, {
 					query: {
 						method: 'GET',
@@ -222,7 +222,7 @@
 				}).$promise;
 			};
 
-			this.getTeamsForSitesAndSkill = function (data) {
+			this.getTeamsForSiteAndSkills = function (data) {
 				return $resource('../api/Teams/ForSkills', {}, {
 					query: {
 						method: 'GET',
