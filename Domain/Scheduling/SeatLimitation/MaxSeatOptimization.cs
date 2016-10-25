@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
-		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly IMatrixUserLockLocker _matrixUserLockLocker;
 		private readonly IMatrixNotPermittedLocker _matrixNotPermittedLocker;
 		private readonly ITeamBlockGenerator _teamBlockGenerator;
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly WorkShiftSelectorForMaxSeat _workShiftSelectorForMaxSeat;
+		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
 
 		public MaxSeatOptimization(MaxSeatSkillDataFactory maxSeatSkillDataFactory,
 														CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
@@ -38,12 +38,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 														ISchedulingOptionsCreator schedulingOptionsCreator,
 														Func<ISchedulerStateHolder> stateHolder, //should be removed!
 														ITeamBlockScheduler teamBlockScheduler,
-														TeamInfoFactoryFactory teamInfoFactoryFactory,
 														IMatrixUserLockLocker matrixUserLockLocker,
 														IMatrixNotPermittedLocker matrixNotPermittedLocker,
 														ITeamBlockGenerator teamBlockGenerator,
 														ITeamBlockClearer teamBlockClearer,
-														WorkShiftSelectorForMaxSeat workShiftSelectorForMaxSeat)
+														WorkShiftSelectorForMaxSeat workShiftSelectorForMaxSeat,
+														IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory)
 		{
 			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
@@ -51,19 +51,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_stateHolder = stateHolder;
 			_teamBlockScheduler = teamBlockScheduler;
-			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_matrixUserLockLocker = matrixUserLockLocker;
 			_matrixNotPermittedLocker = matrixNotPermittedLocker;
 			_teamBlockGenerator = teamBlockGenerator;
 			_teamBlockClearer = teamBlockClearer;
 			_workShiftSelectorForMaxSeat = workShiftSelectorForMaxSeat;
+			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
 		}
 
 		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IScenario scenario, IOptimizationPreferences optimizationPreferences)
 		{
 			var allAgents = schedules.Select(schedule => schedule.Key);
 			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, scenario, allAgents);
-			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 
 			//TODO: REMOVE! //
 			var loadedPeriod = schedules.Period.LoadedPeriod(); //FIX!
@@ -73,13 +72,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_stateHolder().SchedulingResultState.Schedules = schedules;
 			//////////////////
 
-		//	optimizationPreferences.Advanced.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak;
-
-			var tagSetter = new ScheduleTagSetter(new NullScheduleTag());
+			var tagSetter = new ScheduleTagSetter(new NullScheduleTag()); //fix - the tag
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder().SchedulingResultState, //fix!
 				_scheduleDayChangeCallback,
 				tagSetter);
-			var teamInfoFactory = _teamInfoFactoryFactory.Create(schedulingOptions.GroupOnGroupPageForTeamBlockPer); //FIX - why is this needed!?
 
 			var allMatrixes = createMatrixes(schedules, 
 				loadedPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc) //FIX
@@ -142,6 +138,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			INewBusinessRuleCollection businessRuleCollection)
 		{
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+			_groupPersonBuilderForOptimizationFactory.Create(optimizationPreferences.Extra.TeamGroupPage);
 			var teamBlocks = _teamBlockGenerator.Generate(allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
 			var remainingInfoList = teamBlocks.ToList();
 
