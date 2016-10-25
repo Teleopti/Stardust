@@ -4098,7 +4098,7 @@ Accounts</value>
     <comment>Clipboard New Items</comment>
   </data>
   <data name="NewPersonAccount" xml:space="preserve">
-    <value>New Person Account</value>
+    <value>New Personal Account</value>
     <comment>Clipboard New Items</comment>
   </data>
   <data name="NewPersonPeriod" xml:space="preserve">
@@ -5758,7 +5758,7 @@ Error details:
     <comment>Browse button</comment>
   </data>
   <data name="AbsenceCouldNotBeLoaded" xml:space="preserve">
-    <value>Person accounts could not be loaded. There must be at least one absence with a tracker defined in Options.</value>
+    <value>Personal accounts could not be loaded. There must be at least one absence with a tracker defined in Options.</value>
     <comment>Error message when absences cannot be loaded </comment>
   </data>
   <data name="NameAlreadyExists" xml:space="preserve">
@@ -6466,8 +6466,8 @@ Meeting</value>
     <comment>Action "Add Person" </comment>
   </data>
   <data name="FilterPersonAccounts" xml:space="preserve">
-    <value>Filter person accounts</value>
-    <comment>Filter functionality of the person accounts</comment>
+    <value>Filter personal accounts</value>
+    <comment>Filter functionality of the personal accounts</comment>
   </data>
   <data name="SchedulingDays" xml:space="preserve">
     <value>Scheduling {0} day(s)</value>
@@ -8313,7 +8313,7 @@ Period</value>
   </data>
   <data name="AbsenceSaveWasInvalid" xml:space="preserve">
     <value>DA</value>
-    <comment>One or more absences was not saved. You are not allowed to change tracker type of an absence when it is in use by a person account.</comment>
+    <comment>One or more absences was not saved. You are not allowed to change tracker type of an absence when it is in use by a personal account.</comment>
   </data>
   <data name="TrackerType" xml:space="preserve">
     <value>Tracker type</value>
@@ -9102,8 +9102,8 @@ Longterm</value>
     <comment>Created date {0}. Page {1} of {2}</comment>
   </data>
   <data name="FilterPersonAccount" xml:space="preserve">
-    <value>Filter person account</value>
-    <comment>Filter functionality of the person accounts</comment>
+    <value>Filter personal account</value>
+    <comment>Filter functionality of the personal accounts</comment>
   </data>
   <data name="SchedulingProgress" xml:space="preserve">
     <value>Scheduling: {0} days of {1} scheduled...</value>
@@ -14667,8 +14667,8 @@ These options are activated:
     <comment>Weekly rest time</comment>
   </data>
   <data name="PersonAccount" xml:space="preserve">
-    <value>Person Account</value>
-    <comment>Person Account</comment>
+    <value>Personal Account</value>
+    <comment>Personal Account</comment>
   </data>
   <data name="SkillOpeningHours" xml:space="preserve">
     <value>Skill open hours</value>
@@ -14764,7 +14764,7 @@ These options are activated:
   </data>
   <data name="Account" xml:space="preserve">
     <value>Account</value>
-    <comment>Shortened form of Person Account, used in the column heading of the Account column on the Absence Request table.</comment>
+    <comment>Shortened form of Personal Account, used in the column heading of the Account column on the Absence Request table.</comment>
   </data>
   <data name="RequestInvalidMessageLength" xml:space="preserve">
     <value>Cannot save this reply as the complete message exceeds the 2000 character limit</value>
@@ -15031,12 +15031,12 @@ These options are activated:
     <comment>{0} start time of request, {1} minimum minutes for expired threshold</comment>
   </data>
   <data name="TheFollowingAgentsPersonAccountsWillBeAffected" xml:space="preserve">
-    <value>The following agents' person accounts will be affected. </value>
-    <comment>Message to show a list of agents whose person account is affected. </comment>
+    <value>The following agents' personal accounts will be affected. </value>
+    <comment>Message to show a list of agents whose personal account is affected. </comment>
   </data>
   <data name="ThisAbsenceWillExceedPersonAccountLimits" xml:space="preserve">
-    <value>This absence will exceed person account limits. </value>
-    <comment>Message to show when an absence will exceed person account limits.</comment>
+    <value>This absence will exceed personal account limits. </value>
+    <comment>Message to show when an absence will exceed personal account limits.</comment>
   </data>
   <data name="RecipientHasNoShiftTradePermission" xml:space="preserve">
     <value>Recipient has no shift trade permission</value>

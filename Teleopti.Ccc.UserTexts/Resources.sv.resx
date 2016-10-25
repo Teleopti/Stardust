@@ -13779,4 +13779,31 @@ Dessa val är aktiverade:
   <data name="RequestDenyReasonRequestExpired" xml:space="preserve">
     <value>Din frånvaroförfrågan har avslagits automatiskt. Starttiden för förfrågan är {0}, och den måste vara minst {1} minuter senare än aktuell tid</value>
   </data>
+  <data name="OverlappedNonoverwritableActivitiesExist" xml:space="preserve">
+    <value>Det finns fortfarande överskrivna activiteter som inte får skrivas över.</value>
+  </data>
+  <data name="Full" xml:space="preserve">
+    <value>Helt</value>
+  </data>
+  <data name="MatchColon" xml:space="preserve">
+    <value>Matchning:</value>
+  </data>
+  <data name="FullOrPartial" xml:space="preserve">
+    <value>Helt eller delvis</value>
+  </data>
+  <data name="TheFollowingAgentsPersonAccountsWillBeAffected" xml:space="preserve">
+    <value>Följande agenters tidsuppföljning kommer att påverkas.</value>
+  </data>
+  <data name="ThisAbsenceWillExceedPersonAccountLimits" xml:space="preserve">
+    <value>Denna frånvaro kommer att överskrida begränsningarna i tidsuppföljningen.</value>
+  </data>
+  <data name="RecipientHasNoShiftTradePermission" xml:space="preserve">
+    <value>Mottagaren har inte rättigheter att byta skift. </value>
+  </data>
+  <data name="AgentHistoricalAdherence" xml:space="preserve">
+    <value>Historisk schemauppföljning </value>
+  </data>
+  <data name="TooManySelectedAgents" xml:space="preserve">
+    <value>Du har markerat för många agenter. Var god markera färre än 55. </value>
+  </data>
 </root>
