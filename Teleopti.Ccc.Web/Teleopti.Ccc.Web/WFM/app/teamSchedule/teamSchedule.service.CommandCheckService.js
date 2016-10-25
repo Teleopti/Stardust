@@ -1,4 +1,5 @@
 ﻿(function () {
+	'use strict';
 	angular.module('wfm.teamSchedule').service('CommandCheckService', CommandCheckService);
 
 	CommandCheckService.$inject = ['$http', '$q'];
