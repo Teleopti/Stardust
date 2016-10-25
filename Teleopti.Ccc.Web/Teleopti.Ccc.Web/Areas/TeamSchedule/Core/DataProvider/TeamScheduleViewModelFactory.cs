@@ -348,7 +348,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				{
 					var isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly, person);
 					var vm = isPublished || canSeeUnpublishedSchedules
-						? _teamScheduleProjectionProvider.Projection(scheduleDay, personScheduleDay.CanViewConfidential)
+						? _teamScheduleProjectionProvider.Projection(scheduleDay, personScheduleDay.CanViewConfidential, nameDescriptionSetting)
 						: new GroupScheduleShiftViewModel
 						{
 							PersonId = person.Id.GetValueOrDefault().ToString(),
