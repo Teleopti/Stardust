@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			Expect.Call(_scheduleDay.TimeZone).Return(TimeZoneInfo.Utc);
 			Expect.Call(() => _rollbackService.ClearModificationCollection());
 			Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
-			Expect.Call(_teamBlockRestrictionAggregator.Aggregate(_personAssignment.Date, _personAssignment.Person,
+			Expect.Call(_teamBlockRestrictionAggregator.Aggregate(null, _personAssignment.Date, _personAssignment.Person,
 				_teamBlockInfo, _schedulingOptions)).Return(effectiveRestriction);
 		}
 

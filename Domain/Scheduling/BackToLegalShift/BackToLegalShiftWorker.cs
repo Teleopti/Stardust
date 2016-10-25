@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 			var date = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
 			var rules = NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder);
 			var success = _teamBlockSingleDayScheduler.ScheduleSingleDay(_workShiftSelector, teamBlockInfo, schedulingOptions, date, roleModelShift,
-				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), null, rules, null);
+				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules, null, rules, null);
 			if (!success)
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);

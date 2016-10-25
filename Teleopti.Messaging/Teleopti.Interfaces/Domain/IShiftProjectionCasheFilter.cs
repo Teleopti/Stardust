@@ -126,7 +126,7 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="current">The current.</param>
         /// <param name="finderResult">The finder result.</param>
         /// <returns></returns>
-        IList<IShiftProjectionCache> Filter(MinMax<TimeSpan> validMinMax, IList<IShiftProjectionCache> shiftList,
+        IList<IShiftProjectionCache> Filter(IScheduleDictionary schedules, MinMax<TimeSpan> validMinMax, IList<IShiftProjectionCache> shiftList,
                                             DateOnly dateToSchedule, IScheduleRange current,
                                             IWorkShiftFinderResult finderResult);
 

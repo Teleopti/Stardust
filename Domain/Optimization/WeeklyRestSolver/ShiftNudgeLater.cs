@@ -59,10 +59,10 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 			else
 			{
-				_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo);
+				_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder));
 			}
 		
-			var effectiveRestriction = _teamBlockRestrictionAggregator.Aggregate(shiftDate, personAssignment.Person, teamBlockInfo,
+			var effectiveRestriction = _teamBlockRestrictionAggregator.Aggregate(schedulingResultStateHolder.Schedules, shiftDate, personAssignment.Person, teamBlockInfo,
 				schedulingOptions);
 			if (effectiveRestriction.StartTimeLimitation.EndTime.HasValue && effectiveRestriction.StartTimeLimitation.EndTime.Value < earliestStartTime)
 				return false;

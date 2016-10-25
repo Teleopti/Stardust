@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				}
 
 				IScheduleRange wholeRange = _resultStateHolder().Schedules[person];
-				shiftList = _shiftProjectionCacheFilter.Filter(allowedMinMax.Value, shiftList, dateOnly, wholeRange,
+				shiftList = _shiftProjectionCacheFilter.Filter(_resultStateHolder().Schedules, allowedMinMax.Value, shiftList, dateOnly, wholeRange,
 				                                                workShiftFinderResult);
 				if (shiftList.Count == 0)
 					return null;

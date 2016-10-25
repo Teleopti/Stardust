@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		bool ScheduleSingleDay(IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, DateOnly day,
 			IShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays,
+			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays, IScheduleDictionary schedules,
 			IEffectiveRestriction shiftNudgeRestriction, INewBusinessRuleCollection businessRules, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled);
 
 		IList<IWorkShiftCalculationResultHolder> GetShiftProjectionCaches(
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (restriction == null)
 				return resultList;
 
-			var shifts = _workShiftFilterService.FilterForTeamMember(day, person, teamBlockSingleDayInfo, restriction,
+			var shifts = _workShiftFilterService.FilterForTeamMember(schedulingResultStateHolder.Schedules, day, person, teamBlockSingleDayInfo, restriction,
 				schedulingOptions,
 				new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day), false);
 
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public bool ScheduleSingleDay(IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, DateOnly day,
 			IShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays,
+			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays, IScheduleDictionary schedules,
 			IEffectiveRestriction shiftNudgeRestriction, INewBusinessRuleCollection businessRules, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled)
 		{
 			var cancelMe = false;
@@ -146,11 +146,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						restriction = restriction.Combine(shiftNudgeRestriction);
 
 					bestShiftProjectionCache = filterAndSelect(workShiftSelector, teamBlockInfo, schedulingOptions, day, person, teamBlockSingleDayInfo,
-						restriction, allSkillDays, false);
+						restriction, allSkillDays, schedules, false);
 
 					if (bestShiftProjectionCache == null && restriction.IsRestriction)
 						bestShiftProjectionCache = filterAndSelect(workShiftSelector, teamBlockInfo, schedulingOptions, day, person, teamBlockSingleDayInfo,
-						restriction, allSkillDays, true);
+						restriction, allSkillDays, schedules, true);
 
 					if (bestShiftProjectionCache == null)
 						continue;
@@ -170,9 +170,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		private IShiftProjectionCache filterAndSelect(IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, DateOnly day,
 			IPerson person, TeamBlockSingleDayInfo teamBlockSingleDayInfo,
-			IEffectiveRestriction restriction, IEnumerable<ISkillDay> allSkillDays, bool useShiftsForRestrictions)
+			IEffectiveRestriction restriction, IEnumerable<ISkillDay> allSkillDays, IScheduleDictionary schedules, bool useShiftsForRestrictions)
 		{
-			var shifts = _workShiftFilterService.FilterForTeamMember(day, person, teamBlockSingleDayInfo, restriction,
+			var shifts = _workShiftFilterService.FilterForTeamMember(schedules, day, person, teamBlockSingleDayInfo, restriction,
 						schedulingOptions,
 						new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day), 
 						useShiftsForRestrictions);

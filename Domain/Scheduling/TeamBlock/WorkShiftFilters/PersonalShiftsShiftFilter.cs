@@ -8,26 +8,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface IPersonalShiftsShiftFilter
 	{
-		IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, IList<IShiftProjectionCache> shiftList,IWorkShiftFinderResult finderResult);
+		IList<IShiftProjectionCache> Filter(IScheduleDictionary scheduleDictionary, DateOnly dateOnly, IPerson person, IList<IShiftProjectionCache> shiftList,IWorkShiftFinderResult finderResult);
 	}
 	
 	public class PersonalShiftsShiftFilter : IPersonalShiftsShiftFilter
 	{
-		private readonly Func<IScheduleDayForPerson> _scheduleDayForPerson;
 		private readonly IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 
-		public PersonalShiftsShiftFilter(Func<IScheduleDayForPerson> scheduleDayForPerson, IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker)
+		public PersonalShiftsShiftFilter(IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker)
 		{
-			_scheduleDayForPerson = scheduleDayForPerson;
 			_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
 		}
 
-		public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, IList<IShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
+		public IList<IShiftProjectionCache> Filter(IScheduleDictionary scheduleDictionary, DateOnly dateOnly, IPerson person, IList<IShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
 		{
 			if (shiftList == null) return null;
 			if (shiftList.Count == 0) return shiftList;
 
-			var schedulePart = _scheduleDayForPerson().ForPerson(person, dateOnly);
+			var schedulePart = scheduleDictionary[person].ScheduledDay(dateOnly);
 			TimePeriod? period = getMaximumPeriodForPersonalShiftsAndMeetings(schedulePart);
 			if (period.HasValue)
 			{

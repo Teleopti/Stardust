@@ -9,38 +9,35 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 {
 	public interface ITeamBlockRestrictionAggregator
 	{
-		IEffectiveRestriction Aggregate(DateOnly datePointer, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache roleModel);
-		IEffectiveRestriction Aggregate(DateOnly datePointer, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions);
+		IEffectiveRestriction Aggregate(IScheduleDictionary scheduleDictionary, DateOnly datePointer, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache roleModel);
+		IEffectiveRestriction Aggregate(IScheduleDictionary scheduleDictionary, DateOnly datePointer, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions);
 	}
 
 	public class TeamBlockRestrictionAggregator : ITeamBlockRestrictionAggregator
 	{
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IAssignmentPeriodRule _nightlyRestRule;
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 
 		public TeamBlockRestrictionAggregator(
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			Func<ISchedulingResultStateHolder> schedulingResultStateHolder, 
 			IScheduleDayEquator scheduleDayEquator,
 			IAssignmentPeriodRule nightlyRestRule,
 			ITeamBlockSchedulingOptions teamBlockSchedulingOptions)
 		{
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
-			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_scheduleDayEquator = scheduleDayEquator;
 			_nightlyRestRule = nightlyRestRule;
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 		}
 
-		public IEffectiveRestriction Aggregate(DateOnly datePointer, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions)
+		public IEffectiveRestriction Aggregate(IScheduleDictionary scheduleDictionary, DateOnly datePointer, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions)
 		{
-			return Aggregate(datePointer, person, teamBlockInfo, schedulingOptions, null);
+			return Aggregate(scheduleDictionary, datePointer, person, teamBlockInfo, schedulingOptions, null);
 		}
 
-		public IEffectiveRestriction Aggregate(DateOnly datePointer, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
+		public IEffectiveRestriction Aggregate(IScheduleDictionary scheduleDictionary, DateOnly datePointer, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
 		                                       IShiftProjectionCache roleModel)
 		{
 			if (teamBlockInfo == null)
@@ -50,7 +47,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 
 			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers.ToList();
 			var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().ToList();
-			var scheduleDictionary = _schedulingResultStateHolder().Schedules;
 			var timeZone = groupMembers[0].PermissionInformation.DefaultTimeZone();
 			var matrixesForPerson = teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(person, teamBlockInfo.BlockInfo.BlockPeriod).ToList();
 

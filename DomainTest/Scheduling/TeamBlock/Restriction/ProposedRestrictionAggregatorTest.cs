@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			_person = PersonFactory.CreatePerson("Bill");
 			_shift = _mocks.StrictMock<IShiftProjectionCache>();
 			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
-			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
+			_schedulingResultStateHolder = _mocks.DynamicMock<ISchedulingResultStateHolder>();
 			_target = new ProposedRestrictionAggregator(_teamRestrictionAggregator, _blockRestrictionAggregator,
 														_teamBlockRestrictionAggregator, _teamBlockSchedulingOptions,
 														_effectiveRestrictionCreator, () => _schedulingResultStateHolder);
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamScheduling(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockScheduling(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamBlockScheduling(_schedulingOptions)).Return(true);
-				Expect.Call(_teamBlockRestrictionAggregator.Aggregate(_dateOnly, _person, _teamBlockInfo, _schedulingOptions, _shift))
+				Expect.Call(_teamBlockRestrictionAggregator.Aggregate(null, _dateOnly, _person, _teamBlockInfo, _schedulingOptions, _shift))
 				      .Return(exprectedResult);
 			}
 			using (_mocks.Playback())

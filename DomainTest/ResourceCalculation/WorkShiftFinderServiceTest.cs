@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			using (_mocks.Record())
 			{
                 Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
-			    Expect.Call(_stateHolder.Schedules).Return(dictionary);
+			    Expect.Call(_stateHolder.Schedules).Return(dictionary).Repeat.Any();
                 Expect.Call(_part.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_part.DateOnlyAsPeriod).Return(_scheduleDateOnlyPeriod).Repeat.AtLeastOnce();
 				Expect.Call(_preSchedulingStatusChecker.CheckStatus(null, null, _schedulingOptions)).Return(true).IgnoreArguments();
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_schedulePeriod.Person).Return(_person).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, _matrix, _schedulingOptions)).Return(
 					new MinMax<TimeSpan>(new TimeSpan(0, 6, 0, 0), new TimeSpan(0, 12, 0, 0)));
-				Expect.Call(_shiftProjectionCacheFilter.Filter(new MinMax<TimeSpan>(), caches, _scheduleDateOnly,
+				Expect.Call(_shiftProjectionCacheFilter.Filter(null, new MinMax<TimeSpan>(), caches, _scheduleDateOnly,
 															   range, null)).IgnoreArguments().Return(caches);
 				Expect.Call(_personSkillPeriodsDataHolderManager.GetPersonMaxSeatSkillSkillStaffPeriods(new PersonSkillDay())).Return(
 					new Dictionary<ISkill, ISkillStaffPeriodDictionary>()).IgnoreArguments();
@@ -546,7 +546,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_schedulePeriod.Person).Return(_person).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, _matrix, _schedulingOptions)).Return(
 					new MinMax<TimeSpan>(new TimeSpan(0, 6, 0, 0), new TimeSpan(0, 12, 0, 0))).Repeat.AtLeastOnce();
-				Expect.Call(_shiftProjectionCacheFilter.Filter(new MinMax<TimeSpan>(), caches, _scheduleDateOnly,
+				Expect.Call(_shiftProjectionCacheFilter.Filter(null, new MinMax<TimeSpan>(), caches, _scheduleDateOnly,
 															   range, null)).IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
 				Expect.Call(_personSkillPeriodsDataHolderManager.GetPersonMaxSeatSkillSkillStaffPeriods(new PersonSkillDay())).Return(
 					new Dictionary<ISkill, ISkillStaffPeriodDictionary>()).IgnoreArguments().Repeat.AtLeastOnce();
@@ -610,7 +610,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_schedulePeriod.Person).Return(_person).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, _matrix, _schedulingOptions)).Return(
 					new MinMax<TimeSpan>(new TimeSpan(0, 6, 0, 0), new TimeSpan(0, 12, 0, 0))).Repeat.AtLeastOnce();
-				Expect.Call(_shiftProjectionCacheFilter.Filter(new MinMax<TimeSpan>(), caches, _scheduleDateOnly,
+				Expect.Call(_shiftProjectionCacheFilter.Filter(null, new MinMax<TimeSpan>(), caches, _scheduleDateOnly,
 															   range, null)).IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
 				Expect.Call(_personSkillPeriodsDataHolderManager.GetPersonMaxSeatSkillSkillStaffPeriods(new PersonSkillDay())).Return(
 					new Dictionary<ISkill, ISkillStaffPeriodDictionary>()).IgnoreArguments().Repeat.AtLeastOnce();

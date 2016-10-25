@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_person = PersonFactory.CreatePerson("Bill");
 			_part = ScheduleDayFactory.Create(_dateOnly,_person);
 			_finderResult = new WorkShiftFinderResult(_person, new DateOnly(2009, 2, 3));
-			_target = new NotOverWritableActivitiesShiftFilter(()=> new FakeScheduleDayForPerson(_part));
+			_target = new NotOverWritableActivitiesShiftFilter();
 		}
 
 		[Test]
@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			lunch.AllowOverwrite = false;
 			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
 			var c1 = _mocks.StrictMock<IShiftProjectionCache>();
+
 			shifts.Add(c1);
 
 			_part.CreateAndAddActivity(lunch, new DateTimePeriod(currentDate.AddHours(11), currentDate.AddHours(12)), ShiftCategoryFactory.CreateShiftCategory());
@@ -51,9 +52,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 																						   currentDate.AddHours(13)));
 
 			Expect.Call(c1.MainShiftProjection).Return(new VisualLayerCollection(null, getLunchLayer(currentDate, lunch), new ProjectionPayloadMerger())).Repeat.AtLeastOnce();
-			
+			var schedules = _mocks.StrictMock<IScheduleDictionary>();
+			Expect.Call(schedules[_person].ScheduledDay(_dateOnly)).Return(_part);
+
 			_mocks.ReplayAll();
-			var retShifts = _target.Filter(_dateOnly, _person, shifts, _finderResult);
+			var retShifts = _target.Filter(schedules, _dateOnly, _person, shifts, _finderResult);
 			retShifts.Count.Should().Be.EqualTo(0);
 			_mocks.VerifyAll();
 		}
@@ -64,9 +67,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
 			var c1 = _mocks.StrictMock<IShiftProjectionCache>();
 			shifts.Add(c1);
-			
+			var schedules = _mocks.StrictMock<IScheduleDictionary>();
+			Expect.Call(schedules[_person].ScheduledDay(_dateOnly)).Return(_part);
+
+
 			_mocks.ReplayAll();
-			var retShifts = _target.Filter(_dateOnly, _person, shifts, _finderResult);
+			var retShifts = _target.Filter(schedules, _dateOnly, _person, shifts, _finderResult);
 			retShifts.Count.Should().Be.EqualTo(1);
 			_mocks.VerifyAll();
 		}
@@ -97,8 +103,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var c1 = _mocks.StrictMock<IShiftProjectionCache>();
 			shifts.Add(c1);
 			Expect.Call(c1.MainShiftProjection).Return(layerCollection1).Repeat.AtLeastOnce();
+			var schedules = _mocks.StrictMock<IScheduleDictionary>();
+			Expect.Call(schedules[_person].ScheduledDay(_dateOnly)).Return(_part);
 			_mocks.ReplayAll();
-			var retShifts = _target.Filter(_dateOnly, _person, shifts, _finderResult);
+			var retShifts = _target.Filter(schedules, _dateOnly, _person, shifts, _finderResult);
 			retShifts.Count.Should().Be.EqualTo(0);
 			_mocks.VerifyAll();
 		}
@@ -109,8 +117,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
 			var c1 = _mocks.StrictMock<IShiftProjectionCache>();
 			shifts.Add(c1);
+			var schedules = _mocks.StrictMock<IScheduleDictionary>();
+			Expect.Call(schedules[_person].ScheduledDay(_dateOnly)).Return(_part);
 			_mocks.ReplayAll();
-			var retShifts = _target.Filter(_dateOnly, _person, shifts, _finderResult);
+			var retShifts = _target.Filter(schedules, _dateOnly, _person, shifts, _finderResult);
 			retShifts.Count.Should().Be.EqualTo(1);
 			_mocks.VerifyAll();
 		}
@@ -118,16 +128,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldCheckParameters()
 		{
-			var result = _target.Filter(_dateOnly, _person, null, _finderResult);
+			var result = _target.Filter(null, _dateOnly, _person, null, _finderResult);
 			Assert.IsNull(result);
 
-			result = _target.Filter(_dateOnly, null, new List<IShiftProjectionCache>(), _finderResult);
+			result = _target.Filter(null, _dateOnly, null, new List<IShiftProjectionCache>(), _finderResult);
 			Assert.IsNull(result);
 
-			result = _target.Filter(_dateOnly, _person, new List<IShiftProjectionCache>(), null);
+			result = _target.Filter(null, _dateOnly, _person, new List<IShiftProjectionCache>(), null);
 			Assert.IsNull(result);
 
-			result = _target.Filter(_dateOnly, _person, new List<IShiftProjectionCache>(), _finderResult);
+			result = _target.Filter(null, _dateOnly, _person, new List<IShiftProjectionCache>(), _finderResult);
 			Assert.That(result.Count, Is.EqualTo(0));
 		}
 

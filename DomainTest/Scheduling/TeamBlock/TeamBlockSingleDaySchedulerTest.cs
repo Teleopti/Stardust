@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
 		private IMaxSeatSkillAggregator _maxSeatSkillAggregator;
 		private IEnumerable<ISkillDay> _skillDays;
+		private IScheduleDictionary _schedules;
 
 		[SetUp]
 		public void Setup()
@@ -55,6 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_proposedRestrictionAggregator = _mocks.StrictMock<IProposedRestrictionAggregator>();
 			_workShiftFilterService = _mocks.StrictMock<IWorkShiftFilterService>();
 			_skillDays = Enumerable.Empty<ISkillDay>();
+			_schedules = MockRepository.GenerateMock<IScheduleDictionary>();
 			_schedulingResultStateHolder = _mocks.Stub<ISchedulingResultStateHolder>();
 			_schedulingResultStateHolder.Expect(x => x.AllSkillDays()).Return(_skillDays).Repeat.Any();
 			_workShiftSelector = _mocks.StrictMock<IWorkShiftSelector>();
@@ -94,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void ShouldBeFalseIfNoRoleModel()
 		{
 			var result = _target.ScheduleSingleDay(_workShiftSelector, _teamBlockInfo, _schedulingOptions, _dateOnly, null,
-									  _rollbackService, _resourceCalculateDelayer, _skillDays, new EffectiveRestriction(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null);
+									  _rollbackService, _resourceCalculateDelayer, _skillDays, _schedules, new EffectiveRestriction(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null);
 			Assert.That(result, Is.False);
 		}
 
@@ -111,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleSingleDay(_workShiftSelector, _teamBlockInfo, _schedulingOptions, _dateOnly, _shift,
-										  _rollbackService, _resourceCalculateDelayer, _skillDays, new EffectiveRestriction(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null);
+										  _rollbackService, _resourceCalculateDelayer, _skillDays, _schedules, new EffectiveRestriction(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null);
 				Assert.That(result, Is.True);
 			}
 		}
@@ -148,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleSingleDay(_workShiftSelector, _teamBlockInfo, _schedulingOptions, _dateOnly, _shift,
-														_rollbackService, _resourceCalculateDelayer, _skillDays, new EffectiveRestriction(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null);
+														_rollbackService, _resourceCalculateDelayer, _skillDays, _schedules, new EffectiveRestriction(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null);
 				Assert.That(result, Is.True);
 			}
 		}
@@ -181,11 +183,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .Return(false);
 				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person1, _shift))
 						.Return(restriction);
-				Expect.Call(_workShiftFilterService.FilterForTeamMember(_dateOnly, _person1, _teamBlockInfo, restriction,
+				Expect.Call(_workShiftFilterService.FilterForTeamMember(_schedules, _dateOnly, _person1, _teamBlockInfo, restriction,
 																		 _schedulingOptions, finderResult, false)).Return(shifts);
 				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person2, _shift))
 						.Return(restriction);
-				Expect.Call(_workShiftFilterService.FilterForTeamMember(_dateOnly, _person2, _teamBlockInfo, restriction,
+				Expect.Call(_workShiftFilterService.FilterForTeamMember(_schedules, _dateOnly, _person2, _teamBlockInfo, restriction,
 																		 _schedulingOptions, finderResult, false)).Return(shifts);
 				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _skillDays, false))
 					.Return(activityData).Repeat.AtLeastOnce();
@@ -206,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleSingleDay(_workShiftSelector, _teamBlockInfo, _schedulingOptions, _dateOnly, _shift,
-														_rollbackService, _resourceCalculateDelayer, _skillDays, new EffectiveRestriction(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null);
+														_rollbackService, _resourceCalculateDelayer, _skillDays, _schedules, new EffectiveRestriction(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null);
 				Assert.That(result, Is.True);
 			}
 		}
@@ -239,11 +241,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .Return(false);
 				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person1, _shift))
 					  .Return(restriction);
-				Expect.Call(_workShiftFilterService.FilterForTeamMember(_dateOnly, _person1, _teamBlockInfo, restriction,
+				Expect.Call(_workShiftFilterService.FilterForTeamMember(_schedules, _dateOnly, _person1, _teamBlockInfo, restriction,
 															_schedulingOptions, finderResult, false)).Return(null);
 				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person2, _shift))
 					  .Return(restriction);
-				Expect.Call(_workShiftFilterService.FilterForTeamMember(_dateOnly, _person2, _teamBlockInfo, restriction,
+				Expect.Call(_workShiftFilterService.FilterForTeamMember(_schedules, _dateOnly, _person2, _teamBlockInfo, restriction,
 															_schedulingOptions, finderResult, false)).Return(shifts);
 				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _skillDays, false))
 					.Return(activityData).Repeat.AtLeastOnce();
@@ -263,7 +265,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleSingleDay(_workShiftSelector, _teamBlockInfo, _schedulingOptions, _dateOnly, _shift,
-														_rollbackService, _resourceCalculateDelayer, _skillDays, new EffectiveRestriction(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null);
+														_rollbackService, _resourceCalculateDelayer, _skillDays, _schedules, new EffectiveRestriction(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null);
 				Assert.That(result, Is.True);
 			}
 		}
@@ -297,11 +299,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .Return(false);
 				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person1, _shift))
 						.Return(restriction);
-				Expect.Call(_workShiftFilterService.FilterForTeamMember(_dateOnly, _person1, _teamBlockInfo, restriction,
+				Expect.Call(_workShiftFilterService.FilterForTeamMember(_schedules, _dateOnly, _person1, _teamBlockInfo, restriction,
 																		 _schedulingOptions, finderResult, false)).Return(shifts);
 				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person2, _shift))
 						.Return(restriction);
-				Expect.Call(_workShiftFilterService.FilterForTeamMember(_dateOnly, _person2, _teamBlockInfo, restriction,
+				Expect.Call(_workShiftFilterService.FilterForTeamMember(_schedules, _dateOnly, _person2, _teamBlockInfo, restriction,
 																		 _schedulingOptions, finderResult, false)).Return(shifts);
 				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _skillDays, false))
 					.Return(activityData).Repeat.AtLeastOnce();
@@ -321,7 +323,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleSingleDay(_workShiftSelector, _teamBlockInfo, _schedulingOptions, _dateOnly, _shift,
-														_rollbackService, _resourceCalculateDelayer, _skillDays, new EffectiveRestriction(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null);
+														_rollbackService, _resourceCalculateDelayer, _skillDays, _schedules, new EffectiveRestriction(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null);
 				Assert.That(result, Is.True);
 			}
 		}

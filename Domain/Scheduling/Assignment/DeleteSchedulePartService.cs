@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     {
         IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingProgress backgroundWorker);
         IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService);
+	    IEnumerable<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService, INewBusinessRuleCollection businessRuleCollection);
     }
 
     /// <summary>
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return returnList;
         }
 
-		public IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingProgress backgroundWorker, INewBusinessRuleCollection newBusinessRuleCollection)
+		public IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingProgress backgroundWorker, INewBusinessRuleCollection newBusinessRuleCollection)
 		{
 
 			InParameter.ListCannotBeEmpty("list", list);
@@ -81,7 +82,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	        return retList;
         }
 
-    	private IScheduleDay preparePart(DeleteOption options, IScheduleDay part)
+	    public IEnumerable<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService, INewBusinessRuleCollection businessRuleCollection)
+	    {
+			var deleteOption = new DeleteOption { Default = true };
+			var bgWorker = new NoSchedulingProgress();
+			IList<IScheduleDay> retList = Delete(list, deleteOption, rollbackService, bgWorker, businessRuleCollection);
+
+			return retList;
+		}
+
+	    private IScheduleDay preparePart(DeleteOption options, IScheduleDay part)
         {
             IScheduleDay clonePart = part.ReFetch();
 

@@ -347,14 +347,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         
 
-        public IList<IShiftProjectionCache> Filter(MinMax<TimeSpan> validMinMax, IList<IShiftProjectionCache> shiftList, DateOnly dateToSchedule, IScheduleRange current, IWorkShiftFinderResult finderResult)
+        public IList<IShiftProjectionCache> Filter(IScheduleDictionary schedules, MinMax<TimeSpan> validMinMax, IList<IShiftProjectionCache> shiftList, DateOnly dateToSchedule, IScheduleRange current, IWorkShiftFinderResult finderResult)
         {
             shiftList = FilterOnContractTime(validMinMax, shiftList, finderResult);
 
             shiftList = FilterOnBusinessRules(current, shiftList, dateToSchedule, finderResult);
 
-	        shiftList = _notOverWritableActivitiesShiftFilter.Filter(dateToSchedule, current.Person, shiftList,
-		        finderResult);
+	        shiftList = _notOverWritableActivitiesShiftFilter.Filter(schedules, dateToSchedule, current.Person, shiftList, finderResult);
 
 			var dayPart = current.ScheduledDay(dateToSchedule);
 	        shiftList = _personalShiftAndMeetingFilter.Filter(shiftList, dayPart, finderResult);

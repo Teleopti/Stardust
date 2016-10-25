@@ -882,7 +882,6 @@
     <Compile Include="Scheduling\TeamBlock\Restriction\SameShiftRestrictionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SameStartTimeRestrictionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamBlockEffectiveRestrcitionTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\Restriction\TeamBlockResctrictionAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamRestrictionAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ShiftCategoryLimitCounterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ShiftCategoryPeriodRemoverTest.cs" />

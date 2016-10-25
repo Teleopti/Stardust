@@ -50,8 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 																	ISchedulingOptions schedulingOptions, 
 																	IEffectiveRestriction additionalEffectiveRestriction)
 		{
-			var effectiveRestriction = _teamBlockRestrictionAggregator.Aggregate(datePointer, person, teamBlockInfo,
-				schedulingOptions);
+			var effectiveRestriction = _teamBlockRestrictionAggregator.Aggregate(schedules, datePointer, person, teamBlockInfo, schedulingOptions);
 			if (effectiveRestriction == null)
 				return null;
 
@@ -62,17 +61,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			
 			effectiveRestriction = effectiveRestriction.Combine(additionalEffectiveRestriction);
 
-			var roleModel = filterAndSelect(allSkillDays, workShiftSelector, teamBlockInfo, datePointer, schedulingOptions, effectiveRestriction, false);
+			var roleModel = filterAndSelect(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, schedulingOptions, effectiveRestriction, false);
 			if(roleModel == null && effectiveRestriction!= null && effectiveRestriction.IsRestriction)
-				roleModel = filterAndSelect(allSkillDays, workShiftSelector, teamBlockInfo, datePointer, schedulingOptions, effectiveRestriction, true);
+				roleModel = filterAndSelect(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, schedulingOptions, effectiveRestriction, true);
 
 			return roleModel;
 		}
 
-		private IShiftProjectionCache filterAndSelect(IEnumerable<ISkillDay> allSkillDays, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, bool useShiftsForRestrictions)
+		private IShiftProjectionCache filterAndSelect(IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, bool useShiftsForRestrictions)
 		{
 			var isSameOpenHoursInBlock = _sameOpenHoursInTeamBlock.Check(allSkillDays, teamBlockInfo);
-			var shifts = _workShiftFilterService.FilterForRoleModel(datePointer, teamBlockInfo, effectiveRestriction,
+			var shifts = _workShiftFilterService.FilterForRoleModel(schedules, datePointer, teamBlockInfo, effectiveRestriction,
 				schedulingOptions,
 				new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupMembers.First(), datePointer),
 				isSameOpenHoursInBlock, useShiftsForRestrictions);
