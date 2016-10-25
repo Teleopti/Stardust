@@ -926,7 +926,6 @@
     <Compile Include="Controls\DateTimePeriodControl\EditableStartTimeOfDayView.xaml.cs">
       <DependentUpon>EditableStartTimeOfDayView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DateTimePeriodControl\TimeBoxViewModel.cs" />
     <Compile Include="Controls\Editor\Views\AbsenceShortView.xaml.cs">
       <DependentUpon>AbsenceShortView.xaml</DependentUpon>
     </Compile>

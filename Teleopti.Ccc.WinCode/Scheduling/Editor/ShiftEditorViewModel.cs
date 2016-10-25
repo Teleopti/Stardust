@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
             {
 	            if (_selectedLayer == value) return;
 	            _selectedLayer = value;
-	            NotifyPropertyChanged("SelectedLayer");
+	            NotifyPropertyChanged(nameof(SelectedLayer));
             }
         }
 
@@ -317,7 +317,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
                     _category = assignement.ShiftCategory;
                     CollectionViewSource.GetDefaultView(Categories).MoveCurrentTo(_category);
                    
-                    NotifyPropertyChanged("Category"); 
+                    NotifyPropertyChanged(nameof(Category)); 
                 }
                 
                 //henrik 20100701 todo, change this to something that can handle in gui....

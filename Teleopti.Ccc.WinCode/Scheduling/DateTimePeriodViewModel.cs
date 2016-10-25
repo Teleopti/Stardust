@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 {
                     _autoUpdate = value;
                     if (AutoUpdate && !IsValid) End = Start.Add(Interval);
-                    NotifyPropertyChanged("AutoUpdate");
+                    NotifyPropertyChanged(nameof(AutoUpdate));
                 }
             }
         }
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     _dateTimePeriod = value;
                     SameDateLocal = StartDateTimeAsLocal.Date == EndDateTimeAsLocal.Date;
                     SameDateUtc = Start.Date == End.Date;
-                    NotifyPropertyChanged("DateTimePeriod");
+                    NotifyPropertyChanged(nameof(DateTimePeriod));
                 }
             }
         }
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 if (value != _minMax)
                 {
                     _minMax = value;
-                    NotifyPropertyChanged("MinMax");
+                    NotifyPropertyChanged(nameof(MinMax));
                 }
             }
         }
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             set
             {
                 SetValue(EndProperty, value);
-                NotifyPropertyChanged("End");
+                NotifyPropertyChanged(nameof(End));
             }
         }
 
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             set
             {
                 SetValue(StartProperty, value);
-                NotifyPropertyChanged("Start");
+                NotifyPropertyChanged(nameof(Start));
             }
         }
 
@@ -505,7 +505,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 if (_sameDateUtc != value)
                 {
                     _sameDateUtc = value;
-                    NotifyPropertyChanged("SameDateUtc");
+                    NotifyPropertyChanged(nameof(SameDateUtc));
                 }
             }
         }
@@ -518,7 +518,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 if (_sameDateLocal != value)
                 {
                     _sameDateLocal = value;
-                    NotifyPropertyChanged("SameDateLocal");
+                    NotifyPropertyChanged(nameof(SameDateLocal));
                 }
             }
         }
@@ -548,7 +548,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 if (_isValid != value)
                 {
                     _isValid = value;
-                    NotifyPropertyChanged("IsValid");
+                    NotifyPropertyChanged(nameof(IsValid));
                 }
             }
         }

@@ -38,17 +38,13 @@ namespace Teleopti.Ccc.WinCode.Intraday
             {
 	            if (_totalPersons == value) return;
 	            _totalPersons = value;
-	            NotifyPropertyChanged("TotalPersons");
+	            NotifyPropertyChanged(nameof(TotalPersons));
             }
         }
 
         private void NotifyPropertyChanged(string propertyName)
         {
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

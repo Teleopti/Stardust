@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.WinCode.Common.Time
                 if (value.Date != Date && !DateIsLocked)
                 {
                     _model = value.Date.Add(Time);
-                    SendPropertyChanged("Date");
-                    SendPropertyChanged("DateTime");
+                    SendPropertyChanged(nameof(Date));
+                    SendPropertyChanged(nameof(DateTime));
                 }
             }
         }
@@ -66,8 +66,8 @@ namespace Teleopti.Ccc.WinCode.Common.Time
                 if (value != Time && !TimeIsLocked)
                 {
                     _model = _model.Date.Add(value);
-                    NotifyProperty(() => Time);
-                    NotifyProperty(() => DateTime);
+                    SendPropertyChanged(nameof(Time));
+                    SendPropertyChanged(nameof(DateTime));
                 }
             }
         }
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WinCode.Common.Time
                 if(value!=DateIsLocked)
                 {
                     _dateIsLocked = value;
-                    NotifyProperty(() => DateIsLocked);
+                    SendPropertyChanged(nameof(DateIsLocked));
 
                 }
             }
@@ -94,8 +94,7 @@ namespace Teleopti.Ccc.WinCode.Common.Time
                 if (value != TimeIsLocked)
                 {
                     _timeIsLocked = value;
-                    NotifyProperty(() => TimeIsLocked);
-
+                    SendPropertyChanged(nameof(TimeIsLocked));
                 }
             }
         }

@@ -1,7 +1,5 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq.Expressions;
 using System.Windows.Threading;
 
 namespace Teleopti.Ccc.WinCode.Common.Models
@@ -30,7 +28,7 @@ namespace Teleopti.Ccc.WinCode.Common.Models
                 if (value != _state)
                 {
                     _state = value;
-                    SendPropertyChanged("State");
+                    SendPropertyChanged(nameof(State));
                 }
             }
         }
@@ -56,33 +54,9 @@ namespace Teleopti.Ccc.WinCode.Common.Models
 
         protected void SendPropertyChanged(string property)
         {
-            if (_propertyChangedEvent != null) _propertyChangedEvent(this, new PropertyChangedEventArgs(property));
+            _propertyChangedEvent?.Invoke(this, new PropertyChangedEventArgs(property));
         }
-
-        /// <summary>
-        /// Fires PropertyChanged with the propertyname
-        /// </summary>
-        /// <typeparam name="TProperty">The type of the property.</typeparam>
-        /// <param name="property">The property.</param>
-        /// <remarks>
-        /// Use: ()=>Property
-        /// Typesafe, but slower than the SendPropertyChanged
-        /// Created by: henrika
-        /// Created date: 2010-06-02
-        /// </remarks>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        protected void NotifyProperty<TProperty>(Expression<Func<TProperty>> property)
-        {
-            var lambda = (LambdaExpression)property; MemberExpression memberExpression;
-            if (lambda.Body is UnaryExpression)
-            {
-                var unaryExpression = (UnaryExpression)lambda.Body;
-                memberExpression = (MemberExpression)unaryExpression.Operand;
-            }
-            else memberExpression = (MemberExpression)lambda.Body;
-            SendPropertyChanged(memberExpression.Member.Name);
-        }
-
+		
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Conditional("Debug")]
         protected void VerifyCalledOnUIThread()
         {

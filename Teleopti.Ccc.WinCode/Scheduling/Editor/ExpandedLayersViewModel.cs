@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
                 if (value != _showLayers)
                 {
                     _showLayers = value;
-                    SendPropertyChanged("ShowLayers");
+                    SendPropertyChanged(nameof(ShowLayers));
                 }
             }
         }
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
                 if(value!=_showProjection)
                 {
                     _showProjection = value;
-                    SendPropertyChanged("ShowProjection");
+                    SendPropertyChanged(nameof(ShowProjection));
                 }
             }
         }
@@ -185,11 +185,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 
         private void SendPropertyChanged(string property)
         {
-        	var handler = PropertyChanged;
-            if(handler!=null)
-            {
-            	handler(this,new PropertyChangedEventArgs(property));
-            }
+        	PropertyChanged?.Invoke(this,new PropertyChangedEventArgs(property));
         }
 
         #endregion

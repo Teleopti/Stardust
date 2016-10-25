@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceModel;
-using System.Text;
+﻿using System.ServiceModel;
 
 namespace Teleopti.Ccc.Sdk.ClientProxies
 {
@@ -62,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.ClientProxies
             }
             set {
                 this.statusField = value;
-                this.RaisePropertyChanged("Status");
+                this.RaisePropertyChanged(nameof(Status));
             }
         }
         
@@ -74,7 +70,7 @@ namespace Teleopti.Ccc.Sdk.ClientProxies
             }
             set {
                 this.messageField = value;
-                this.RaisePropertyChanged("Message");
+                this.RaisePropertyChanged(nameof(Message));
             }
         }
         

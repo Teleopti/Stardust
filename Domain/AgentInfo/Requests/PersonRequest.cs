@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			}
 
 			_message = message;
-			notifyPropertyChanged("Message");
+			notifyPropertyChanged(nameof(Message));
 			return true;
 		}
 
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			set
 			{
 				_subject = value;
-				notifyPropertyChanged("Subject");
+				notifyPropertyChanged(nameof(Subject));
 			}
 		}
 
@@ -193,11 +193,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		private void notifyOnStatusChange()
 		{
-			notifyPropertyChanged("StatusText");
-			notifyPropertyChanged("IsNew");
-			notifyPropertyChanged("IsPending");
-			notifyPropertyChanged("IsDenied");
-			notifyPropertyChanged("IsApproved");
+			notifyPropertyChanged(nameof(StatusText));
+			notifyPropertyChanged(nameof(IsNew));
+			notifyPropertyChanged(nameof(IsPending));
+			notifyPropertyChanged(nameof(IsDenied));
+			notifyPropertyChanged(nameof(IsApproved));
 		}
 
 		public virtual void Deny(IPerson denyPerson, string denyReasonTextResourceKey,
@@ -394,11 +394,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		private void notifyPropertyChanged(string info)
 		{
-			var handler = PropertyChanged;
-			if (handler != null)
-			{
-				handler(this, new PropertyChangedEventArgs(info));
-			}
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
 			_changed = true;
 		}
 

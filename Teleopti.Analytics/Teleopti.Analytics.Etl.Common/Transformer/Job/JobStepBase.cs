@@ -118,7 +118,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			private set
 			{
 				_jobStepResult = value;
-				FirePropertyChanged("Result");
+				FirePropertyChanged(nameof(Result));
 			}
 		}
 
@@ -169,11 +169,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
 		protected void FirePropertyChanged(string propertyName)
 		{
-			var handler = PropertyChanged;
-			if (handler != null)
-			{
-				handler(this, new PropertyChangedEventArgs(propertyName));
-			}
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

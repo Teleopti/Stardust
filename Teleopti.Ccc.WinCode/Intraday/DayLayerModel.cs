@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             {
 	            if (_isPinned == value) return;
 	            _isPinned = value;
-	            notifyPropertyChanged("IsPinned");
+	            notifyPropertyChanged(nameof(IsPinned));
             }
         }
 
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             {
                 if (_colorValue == value) return;
                 _colorValue = value;
-                notifyPropertyChanged("Color");
+                notifyPropertyChanged(nameof(Color));
             }
         }
 
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             {
                 if (_alarmDescription == value) return;
                 _alarmDescription = value;
-                notifyPropertyChanged("AlarmDescription");
+                notifyPropertyChanged(nameof(AlarmDescription));
             }
         }
         public DateTime RuleStartTime
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             {
                 if (_nextActivityDescription == value) return;
                 _nextActivityDescription = value;
-                notifyPropertyChanged("NextActivityDescription");
+                notifyPropertyChanged(nameof(NextActivityDescription));
             }
         }
 
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             {
                 if (_nextActivityStartDateTime == value) return;
                 _nextActivityStartDateTime = value;
-                notifyPropertyChanged("NextActivityStartDateTime");
+                notifyPropertyChanged(nameof(NextActivityStartDateTime));
             }
         }
 
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             {
                 if (_scheduleStartDateTime == value) return;
                 _scheduleStartDateTime = value;
-                notifyPropertyChanged("ScheduleStartDateTime");
+                notifyPropertyChanged(nameof(ScheduleStartDateTime));
             }
         }
 
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             {
                 if (_currentActivityDescription == value) return;
                 _currentActivityDescription = value;
-                notifyPropertyChanged("CurrentActivityDescription");
+                notifyPropertyChanged(nameof(CurrentActivityDescription));
             }
         }
 
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             {
                 if (_currentStateDescription == value) return;
                 _currentStateDescription = value;
-                notifyPropertyChanged("CurrentStateDescription");
+                notifyPropertyChanged(nameof(CurrentStateDescription));
             }
         }
 
@@ -177,8 +177,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
             set
             {
                 _enteredCurrentState = value;
-                notifyPropertyChanged("EnteredCurrentState");
-				notifyPropertyChanged("TimeInCurrentState");
+                notifyPropertyChanged(nameof(EnteredCurrentState));
+				notifyPropertyChanged(nameof(TimeInCurrentState));
             }
         }
 
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             {
                 if (_staffingEffect.Equals(value)) return;
                 _staffingEffect = value;
-                notifyPropertyChanged("StaffingEffect");
+                notifyPropertyChanged(nameof(StaffingEffect));
             }
         }
 		
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 		    {
 			    if (_editLayer == value) return;
 			    _editLayer = value;
-				notifyPropertyChanged("EditLayer");
+				notifyPropertyChanged(nameof(EditLayer));
 		    }
 	    }
 
@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
                                         new UIPropertyMetadata(false));
 
 	    private bool _editLayer;
-	    private bool _hasAlarm=false;
+	    private bool _hasAlarm;
 
 	    public int HookedEvents()
         {
@@ -235,11 +235,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         private void notifyPropertyChanged(string propertyName)
         {
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -251,7 +247,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			{
 				if (_isInEditMode == value) return;
 				_isInEditMode = value;
-				notifyPropertyChanged("IsInEditMode");
+				notifyPropertyChanged(nameof(IsInEditMode));
 			}
 		}
 
@@ -281,7 +277,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 		    set
 		    {
 			    _hasAlarm = value;
-				notifyPropertyChanged("");
+				notifyPropertyChanged(nameof(HasAlarm));
 		    }
 	    }
 

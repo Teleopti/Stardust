@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCode.Common
 				if (_canMoveAll != value)
 				{
 					_canMoveAll = value;
-					SendPropertyChanged("CanMoveAll");
+					SendPropertyChanged(nameof(CanMoveAll));
 				}
 			}
 		}
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WinCode.Common
 				if (value != _isSelected)
 				{
 					_isSelected = value;
-					SendPropertyChanged("IsSelected");
+					SendPropertyChanged(nameof(IsSelected));
 				}
 
 			}
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.WinCode.Common
 					{
 						ParentObservingCollection.ShouldBeUpdated(this);
 					}
-					SendPropertyChanged("IsChanged");
+					SendPropertyChanged(nameof(IsChanged));
 				}
 			}
 		}
@@ -122,8 +122,8 @@ namespace Teleopti.Ccc.WinCode.Common
 				if (_period != value)
 				{
 					_period = value;
-					SendPropertyChanged("Period");
-					SendPropertyChanged("ElapsedTime");
+					SendPropertyChanged(nameof(Period));
+					SendPropertyChanged(nameof(ElapsedTime));
 				}
 			}
 		}
@@ -133,9 +133,7 @@ namespace Teleopti.Ccc.WinCode.Common
 			get
 			{
 				var vs = Layer as IVisualLayer;
-				return vs == null
-						   ? Layer.Payload.ConfidentialDisplayColor(SchedulePart.Person)
-						   : vs.DisplayColor();
+				return vs?.DisplayColor() ?? Layer.Payload.ConfidentialDisplayColor(SchedulePart.Person);
 			}
 		}
 
@@ -325,9 +323,9 @@ namespace Teleopti.Ccc.WinCode.Common
 				{
 					_payload = value;
 					IsChanged = true;
-					SendPropertyChanged("Description");
-					SendPropertyChanged("Payload");
-					SendPropertyChanged("DisplayColor");
+					SendPropertyChanged(nameof(Description));
+					SendPropertyChanged(nameof(Payload));
+					SendPropertyChanged(nameof(DisplayColor));
 				}
 			}
 		}

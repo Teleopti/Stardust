@@ -21,8 +21,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 		public void NotifyJobExecutionReady()
 		{
 			// Notify that job exectution is ready. At least the Data Source config dialog is consumer.
-			if (JobExecutionReady != null)
-				JobExecutionReady(this, new AlarmEventArgs(this));
+			JobExecutionReady?.Invoke(this, new AlarmEventArgs(this));
 		}
 
 		private JobBase() { }
@@ -43,7 +42,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			set
 			{
 				_name = value;
-				FirePropertyChanged("Name");
+				FirePropertyChanged(nameof(Name));
 			}
 			get { return _name; }
 		}
@@ -108,7 +107,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 		private void update()
 		{
 			Result.Update();
-			FirePropertyChanged("Result");
+			FirePropertyChanged(nameof(Result));
 		}
 
 		private void clearJobStepResults(bool firstRun)
@@ -124,7 +123,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 					if (jobStep.Result != null)
 					{
 						jobStep.Result.ClearResult();
-						FirePropertyChanged("Result");
+						FirePropertyChanged(nameof(Result));
 					}
 				}
 			}
@@ -146,7 +145,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			private set
 			{
 				_jobResult = value;
-				FirePropertyChanged("Result");
+				FirePropertyChanged(nameof(Result));
 			}
 		}
 
@@ -175,7 +174,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			set
 			{
 				_enabled = value;
-				FirePropertyChanged("Enabled");
+				FirePropertyChanged(nameof(Enabled));
 			}
 		}
 
@@ -187,11 +186,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
 		protected void FirePropertyChanged(string propertyName)
 		{
-			var handler = PropertyChanged;
-			if (handler != null)
-			{
-				handler(this, new PropertyChangedEventArgs(propertyName));
-			}
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
 

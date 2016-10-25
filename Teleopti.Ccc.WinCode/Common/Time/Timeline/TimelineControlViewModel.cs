@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WinCode.Common.Time.Timeline
 
         private static void HoverWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((TimelineControlViewModel)d).NotifyPropertyChanged("HoverPeriod");
+            ((TimelineControlViewModel)d).NotifyPropertyChanged(nameof(HoverPeriod));
         }
 
         public DateTimePeriod HoverPeriod
@@ -98,8 +98,8 @@ namespace Teleopti.Ccc.WinCode.Common.Time.Timeline
                 if (_hoverTime != value)
                 {
                     _hoverTime = value;
-                    NotifyPropertyChanged("HoverTime");
-                    NotifyPropertyChanged("HoverPeriod");
+                    NotifyPropertyChanged(nameof(HoverTime));
+                    NotifyPropertyChanged(nameof(HoverPeriod));
                 }
             }
         }
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.WinCode.Common.Time.Timeline
                 if (_showHoverTime != value)
                 {
                     _showHoverTime = value;
-                    NotifyPropertyChanged("ShowHoverTime");
+                    NotifyPropertyChanged(nameof(ShowHoverTime));
                 }
             }
         }
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.WinCode.Common.Time.Timeline
 		    set
 		    {
 			    _nowTimeOpacity = value;
-				NotifyPropertyChanged("NowTimeOpacity");
+				NotifyPropertyChanged(nameof(NowTimeOpacity));
 		    }
 	    }
 
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WinCode.Common.Time.Timeline
                 if (value != _selecteDateTimePeriod)
                 {
                     _selecteDateTimePeriod = value;
-                    NotifyPropertyChanged("SelectedPeriod");
+                    NotifyPropertyChanged(nameof(SelectedPeriod));
                 }
             }
         }
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.WinCode.Common.Time.Timeline
                 if (_showSelectedPeriod != value)
                 {
                     _showSelectedPeriod = value;
-                    NotifyPropertyChanged("ShowSelectedPeriod");
+                    NotifyPropertyChanged(nameof(ShowSelectedPeriod));
                 }
             }
         }
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.WinCode.Common.Time.Timeline
                 if (_showLayers != value)
                 {
                     _showLayers = value;
-                    NotifyPropertyChanged("ShowLayers");
+                    NotifyPropertyChanged(nameof(ShowLayers));
                 }
             }
         }
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.WinCode.Common.Time.Timeline
                         model.TickMarkDays.Add(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddDays(1)));
                     }
                 }
-                model.NotifyPropertyChanged("TickMarks");
+                model.NotifyPropertyChanged(nameof(TickMarks));
                 model.TimeZoom.Period = (DateTimePeriod)e.NewValue;
             }
         }

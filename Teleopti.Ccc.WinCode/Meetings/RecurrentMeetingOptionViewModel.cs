@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             set
             {
                 _recurrentMeetingOption.IncrementCount = value;
-                NotifyPropertyChanged("IncrementCount");
+                NotifyPropertyChanged(nameof(IncrementCount));
             }
         }
 

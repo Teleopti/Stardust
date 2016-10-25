@@ -76,10 +76,9 @@ namespace Teleopti.Ccc.WpfControls.FileImport.ViewModels
         {
             var info = (Encoding) selectedItem;
             preViewFile(info, out _stringBuilder);
-            FirePropertyChanged("PreviewText");
+            FirePropertyChanged(nameof(PreviewText));
         }
-
-
+		
         public event PropertyChangedEventHandler PropertyChanged;
 
         public IModel NextStep()
@@ -87,17 +86,11 @@ namespace Teleopti.Ccc.WpfControls.FileImport.ViewModels
             TimeZoneInfo timeZoneInfo = TimeZone;
             return new PreviewQueueGridViewModel(_streamPath, Separator, timeZoneInfo, _encoding);
         }
-
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
+		
         protected void FirePropertyChanged(string propertyName)
 		{
-			var handler = PropertyChanged;
-			if (handler != null)
-			{
-				handler(this, new PropertyChangedEventArgs(propertyName));
-			}
-        }
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
 
         private Encoding preViewFile(Encoding encoding, out StringBuilder text)
         {

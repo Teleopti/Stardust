@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 			}
 			set
 			{
-				TriggerNotifyPropertyChanged("Date");
+				TriggerNotifyPropertyChanged(nameof(Date));
 				if (value != null) _date = value.Date;
 			}
 		}
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 			set
 			{
 				_fulltimeEquivalentHours = value;
-				TriggerNotifyPropertyChanged("FulltimeEquivalentHours");
+				TriggerNotifyPropertyChanged(nameof(FulltimeEquivalentHours));
 				TriggerInvalidate();
 			}
 		}
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
             }
             set
             {
-                TriggerNotifyPropertyChanged("Week");
+                TriggerNotifyPropertyChanged(nameof(Week));
                 _date = new DateOnly(DateTime.Parse(value, CultureInfo.CurrentCulture)); 
             }
         }
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				if (_staffEmployed != value)
 				{
 					_staffEmployed = value;
-					TriggerNotifyPropertyChanged("StaffEmployed");
+					TriggerNotifyPropertyChanged(nameof(StaffEmployed));
 					TriggerInvalidate();
 				}
 			}
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				if (_attritionRate != value)
 				{
 					_attritionRate = value;
-					TriggerNotifyPropertyChanged("AttritionRate");
+					TriggerNotifyPropertyChanged(nameof(AttritionRate));
 					TriggerInvalidate();
 				}
 			}
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				if (_recruitment != value)
 				{
 					_recruitment = value;
-					TriggerNotifyPropertyChanged("Recruitment");
+					TriggerNotifyPropertyChanged(nameof(Recruitment));
 					TriggerInvalidate();
 				}
 			}
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				if (_grossStaff != value)
 				{
 					_grossStaff = value;
-					TriggerNotifyPropertyChanged("GrossStaff");
+					TriggerNotifyPropertyChanged(nameof(GrossStaff));
 				}
 			}
 		}
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				if (_contractors != value)
 				{
 					_contractors = value;
-					TriggerNotifyPropertyChanged("Contractors");
+					TriggerNotifyPropertyChanged(nameof(Contractors));
 					TriggerInvalidate();
 				}
 			}
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				if (_daysOffPerWeek != value)
 				{
 					_daysOffPerWeek = value;
-					TriggerNotifyPropertyChanged("DaysOffPerWeek");
+					TriggerNotifyPropertyChanged(nameof(DaysOffPerWeek));
 					TriggerInvalidate();
 				}
 			}
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
                 if (_isClosed != value)
                 {
                     _isClosed = value;
-                    TriggerNotifyPropertyChanged("IsClosed");
+                    TriggerNotifyPropertyChanged(nameof(IsClosed));
                     TriggerInvalidate();
                 }
             }
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				if (_netStaff != value)
 				{
 					_netStaff = value;
-					TriggerNotifyPropertyChanged("NetStaff");
+					TriggerNotifyPropertyChanged(nameof(NetStaff));
 				}
 			}
 		}
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				if (_netStaffFcAdj != value)
 				{
 					_netStaffFcAdj = value;
-					TriggerNotifyPropertyChanged("NetStaffFcAdj");
+					TriggerNotifyPropertyChanged(nameof(NetStaffFcAdj));
 				}
 			}
 		}
@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				if (_overtimeHours != value)
 				{
 					_overtimeHours = value;
-					TriggerNotifyPropertyChanged("OvertimeHours");
+					TriggerNotifyPropertyChanged(nameof(OvertimeHours));
 					TriggerInvalidate();
 				}
 			}
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				if (_studentsHours != value)
 				{
 					_studentsHours = value;
-					TriggerNotifyPropertyChanged("StudentsHours");
+					TriggerNotifyPropertyChanged(nameof(StudentsHours));
 					TriggerInvalidate();
 				}
 			}
@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				if (_budgetedStaff != value)
 				{
 					_budgetedStaff = value;
-					TriggerNotifyPropertyChanged("BudgetedStaff");
+					TriggerNotifyPropertyChanged(nameof(BudgetedStaff));
 				}
 			}
 		}
@@ -279,7 +279,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				if (_forecastedHours != value)
 				{
 					_forecastedHours = value;
-					TriggerNotifyPropertyChanged("ForecastedHours");
+					TriggerNotifyPropertyChanged(nameof(ForecastedHours));
 					TriggerInvalidate();
 				}
 			}
@@ -293,7 +293,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				if (_forecastedStaff != value)
 				{
 					_forecastedStaff = value;
-					TriggerNotifyPropertyChanged("ForecastedStaff");
+					TriggerNotifyPropertyChanged(nameof(ForecastedStaff));
 				}
 			}
 		}
@@ -306,7 +306,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				if (_difference != value)
 				{
 					_difference = value;
-					TriggerNotifyPropertyChanged("Difference");
+					TriggerNotifyPropertyChanged(nameof(Difference));
 				}
 			}
 		}
@@ -319,7 +319,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				if (_differencePercent != value)
 				{
 					_differencePercent = value;
-					TriggerNotifyPropertyChanged("DifferencePercent");
+					TriggerNotifyPropertyChanged(nameof(DifferencePercent));
 				}
 			}
 		}
@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
                 if (_absenceThreshold != value)
                 {
                     _absenceThreshold = value;
-                    TriggerNotifyPropertyChanged("AbsenceThreshold");
+                    TriggerNotifyPropertyChanged(nameof(AbsenceThreshold));
                     TriggerInvalidate();
                 }
             }
@@ -348,7 +348,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
                 if (_absenceExtra != value)
                 {
                     _absenceExtra = value;
-                    TriggerNotifyPropertyChanged("AbsenceExtra");
+                    TriggerNotifyPropertyChanged(nameof(AbsenceExtra));
                     TriggerInvalidate();
                 }
             }
@@ -362,7 +362,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
                 if (_absenceOverride != value)
                 {
                     _absenceOverride = value;
-                    TriggerNotifyPropertyChanged("AbsenceOverride");
+                    TriggerNotifyPropertyChanged(nameof(AbsenceOverride));
                     TriggerInvalidate();
                 }
             }
@@ -376,7 +376,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
                 if (_budgetedLeave != value)
                 {
                     _budgetedLeave = value;
-                    TriggerNotifyPropertyChanged("BudgetedLeave");
+                    TriggerNotifyPropertyChanged(nameof(BudgetedLeave));
                 }
             }
 	    }
@@ -389,7 +389,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
                 if (_budgetedSurplus != value)
                 {
                     _budgetedSurplus = value;
-                    TriggerNotifyPropertyChanged("BudgetedSurplus");
+                    TriggerNotifyPropertyChanged(nameof(BudgetedSurplus));
                 }
             }
 	    }
@@ -402,7 +402,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
                 if (_allowance != value)
                 {
                     _allowance = value;
-                    TriggerNotifyPropertyChanged("Allowance");
+                    TriggerNotifyPropertyChanged(nameof(Allowance));
                 }
             }
 	    }
@@ -415,7 +415,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
                 if (_totalAllowance != value)
                 {
                     _totalAllowance = value;
-                    TriggerNotifyPropertyChanged("TotalAllowance");
+                    TriggerNotifyPropertyChanged(nameof(TotalAllowance));
                 }
             }
 	    }

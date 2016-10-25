@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             set
             {
                 _recurrentMonthlyByWeekMeeting.DayOfWeek = value;
-                NotifyPropertyChanged("DayOfWeek");
+                NotifyPropertyChanged(nameof(DayOfWeek));
             }
         }
 
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             set
             {
                 _recurrentMonthlyByWeekMeeting.WeekOfMonth = value;
-                NotifyPropertyChanged("WeekOfMonth");
+                NotifyPropertyChanged(nameof(WeekOfMonth));
             }
         }
 

@@ -64,7 +64,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
             var connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
 	        var runningStatus = new RunningStatusRepository(connectionString);
 	        RunningStatus = runningStatus.GetRunningJob();
-            RaisePropertyChanged("RunningStatus");
+            RaisePropertyChanged(nameof(RunningStatus));
 	    }
 
 		private void SetFirstBusinessUnitAsSelected()
@@ -95,7 +95,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 			set
 			{
 				_startDate = value;
-				RaisePropertyChanged("StartDate");
+				RaisePropertyChanged(nameof(StartDate));
 			}
 		}
 
@@ -106,7 +106,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 			set
 			{
 				_endDate = value;
-				RaisePropertyChanged("EndDate");
+				RaisePropertyChanged(nameof(EndDate));
 			}
 		}
 
@@ -116,7 +116,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 	        private set
 	        {
 	            _runningInformation = value;
-	            RaisePropertyChanged("RunningStatus");
+	            RaisePropertyChanged(nameof(RunningStatus));
 	        }
 	    }
 
@@ -126,7 +126,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 			private set
 			{
 				_businessUnitCollection = value;
-				RaisePropertyChanged("BusinessUnitCollection");
+				RaisePropertyChanged(nameof(BusinessUnitCollection));
 			}
 		}
 
@@ -136,7 +136,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 			set
 			{
 				_selectedBusinessUnit = value;
-				RaisePropertyChanged("SelectedBusinessUnit");
+				RaisePropertyChanged(nameof(SelectedBusinessUnit));
 			}
 		}
 
@@ -147,7 +147,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 			set
 			{
 				_showOnlyErrors = value;
-				RaisePropertyChanged("ShowOnlyErrors");
+				RaisePropertyChanged(nameof(ShowOnlyErrors));
 			}
 		}
 
@@ -173,13 +173,9 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 
 		private void RaisePropertyChanged(string propertyName)
 		{
-			if (PropertyChanged != null)
-			{
-				PropertyChanged(
-					this,
-					new PropertyChangedEventArgs(propertyName));
-
-			}
+			PropertyChanged?.Invoke(
+				this,
+				new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }

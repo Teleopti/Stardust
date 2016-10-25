@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 if(_showDetails!=value)
                 {
                     _showDetails = value;
-                    NotifyProperty(() => ShowDetails);
+                    SendPropertyChanged(nameof(ShowDetails));
                 }
             }
         }
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 if(_canOk!=value)
                 {
                     _canOk = value;
-                    NotifyProperty(()=>CanOk);
+                    SendPropertyChanged(nameof(CanOk));
                 }
             }
         }

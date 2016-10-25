@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             set
             {
                 _recurrentMonthlyByDayMeeting.DayInMonth = value;
-                NotifyPropertyChanged("DayInMonth");
+                NotifyPropertyChanged(nameof(DayInMonth));
             }
         }
 

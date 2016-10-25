@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 {
                     _meeting.StartDate = value;
 					_meeting.EndDate = value;
-                    NotifyPropertyChanged("StartDate");
+                    NotifyPropertyChanged(nameof(StartDate));
                 }
             }
         }
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 if (_meeting.EndDate != value)
                 {
                     _meeting.EndDate = value;
-                    NotifyPropertyChanged("RecurringEndDate");
+                    NotifyPropertyChanged(nameof(RecurringEndDate));
                 }
             }
         }
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 	            if (_meeting.EndTime != value)
 	            {
 		            _meeting.EndTime = value;
-		            NotifyPropertyChanged("EndTime");
+		            NotifyPropertyChanged(nameof(EndTime));
 	            }
             }
         }
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 if (_meeting.StartTime != value)
                 {
                     _meeting.StartTime = value;
-                    NotifyPropertyChanged("StartTime");
+                    NotifyPropertyChanged(nameof(StartTime));
                 }
             }
         }
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 if (value != _meeting.MeetingDuration())
                 {
                     _meeting.EndTime = _meeting.StartTime.Add(value);
-                    NotifyPropertyChanged("MeetingDuration");
+                    NotifyPropertyChanged(nameof(MeetingDuration));
                 }
             }
         }
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 if (_meeting.GetLocation(new NoFormatting()) != value)
                 {
                     _meeting.Location = value;
-                    NotifyPropertyChanged("Location");
+                    NotifyPropertyChanged(nameof(Location));
                 }
             }
         }
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 if (_meeting.GetSubject(new NoFormatting()) != value)
                 {
                     _meeting.Subject = value;
-                    NotifyPropertyChanged("Subject");
+                    NotifyPropertyChanged(nameof(Subject));
                 }
             }
         }
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 if (_meeting.GetDescription(new NoFormatting()) != value)
                 {
                     _meeting.Description = value;
-                    NotifyPropertyChanged("Description");
+                    NotifyPropertyChanged(nameof(Description));
                 }
             }
         }
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 if (_meeting.Activity != value)
                 {
                     _meeting.Activity = value;
-                    NotifyPropertyChanged("Activity");
+                    NotifyPropertyChanged(nameof(Activity));
                 }
             }
         }
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 if (_meeting.TimeZone.Id != value.Id)
                 {
                     _meeting.TimeZone = value;
-                    NotifyPropertyChanged("TimeZone");
+                    NotifyPropertyChanged(nameof(TimeZone));
                 }
             }
         }
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             set {
                 _recurringOption = value;
                 _meeting.SetRecurrentOption(_recurringOption.RecurrentMeetingOption);
-                NotifyPropertyChanged("RecurringOption");
+                NotifyPropertyChanged(nameof(RecurringOption));
             }
         }
 
@@ -283,14 +283,14 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 }
             }
             RecreateParticipantLists();
-            NotifyPropertyChanged("Participants");
+            NotifyPropertyChanged(nameof(Participants));
         }
 
         public void RemoveParticipant(EntityContainer<IPerson> contactPersonViewModel)
         {
             _meeting.RemovePerson(contactPersonViewModel.ContainedEntity);
             RecreateParticipantLists();
-            NotifyPropertyChanged("Participants");
+            NotifyPropertyChanged(nameof(Participants));
         }
 
         public void RemoveRecurrence()
@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             _recurringOption = RecurrentMeetingOptionViewModelFactory.CreateRecurrentMeetingOptionViewModel(this,
                                                                                                             _meeting.
                                                                                                                 MeetingRecurrenceOption);
-            NotifyPropertyChanged("RecurringOption");
+            NotifyPropertyChanged(nameof(RecurringOption));
         }
 
 		public TimeSpan SlotStartTime { get; set; }

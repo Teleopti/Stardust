@@ -137,30 +137,30 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
                     _totalAllowance = _openDaysCount > 0 ? openBudgetDays.Average(b => b.TotalAllowance) : 0d;
                     _allowance = _openDaysCount > 0 ? openBudgetDays.Average(b => b.Allowance) : 0d;
 
-                    TriggerNotifyPropertyChanged("BudgetedLeave");
-                    TriggerNotifyPropertyChanged("BudgetedSurplus");
-                    TriggerNotifyPropertyChanged("AbsenceThreshold");
-                    TriggerNotifyPropertyChanged("AbsenceExtra");
-                    TriggerNotifyPropertyChanged("AbsenceOverride");
-                    TriggerNotifyPropertyChanged("TotalAllowance");
-                    TriggerNotifyPropertyChanged("Allowance");
+                    TriggerNotifyPropertyChanged(nameof(BudgetedLeave));
+                    TriggerNotifyPropertyChanged(nameof(BudgetedSurplus));
+                    TriggerNotifyPropertyChanged(nameof(AbsenceThreshold));
+                    TriggerNotifyPropertyChanged(nameof(AbsenceExtra));
+                    TriggerNotifyPropertyChanged(nameof(AbsenceOverride));
+                    TriggerNotifyPropertyChanged(nameof(TotalAllowance));
+                    TriggerNotifyPropertyChanged(nameof(Allowance));
                 }
 
-                TriggerNotifyPropertyChanged("NetStaff");
-                TriggerNotifyPropertyChanged("Recruitment");
-                TriggerNotifyPropertyChanged("DifferencePercent");
-                TriggerNotifyPropertyChanged("Difference");
-                TriggerNotifyPropertyChanged("GrossStaff");
-                TriggerNotifyPropertyChanged("StudentsHours");
-                TriggerNotifyPropertyChanged("Contractors");
-                TriggerNotifyPropertyChanged("StaffEmployed");
-                TriggerNotifyPropertyChanged("FulltimeEquivalentHours");
-                TriggerNotifyPropertyChanged("OvertimeHours");
-                TriggerNotifyPropertyChanged("DaysOfPerWeek");
-                TriggerNotifyPropertyChanged("AttritionRate");
-                TriggerNotifyPropertyChanged("NetNetStaff");
-                TriggerNotifyPropertyChanged("ForecastedHours");
-                TriggerNotifyPropertyChanged("ForecastedStaff");
+                TriggerNotifyPropertyChanged(nameof(NetStaff));
+                TriggerNotifyPropertyChanged(nameof(Recruitment));
+                TriggerNotifyPropertyChanged(nameof(DifferencePercent));
+                TriggerNotifyPropertyChanged(nameof(Difference));
+                TriggerNotifyPropertyChanged(nameof(GrossStaff));
+                TriggerNotifyPropertyChanged(nameof(StudentsHours));
+                TriggerNotifyPropertyChanged(nameof(Contractors));
+                TriggerNotifyPropertyChanged(nameof(StaffEmployed));
+                TriggerNotifyPropertyChanged(nameof(FulltimeEquivalentHours));
+                TriggerNotifyPropertyChanged(nameof(OvertimeHours));
+                TriggerNotifyPropertyChanged(nameof(DaysOffPerWeek));
+                TriggerNotifyPropertyChanged(nameof(AttritionRate));
+                TriggerNotifyPropertyChanged(nameof(NetNetStaff));
+                TriggerNotifyPropertyChanged(nameof(ForecastedHours));
+                TriggerNotifyPropertyChanged(nameof(ForecastedStaff));
                 
 			}
         }
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
                     budgetDay.FulltimeEquivalentHours = value;
                 }
                 _fulltimeEquivalentHours = value;
-                TriggerNotifyPropertyChanged("FulltimeEquivalentHours");
+                TriggerNotifyPropertyChanged(nameof(FulltimeEquivalentHours));
 
             }
         }
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				using (_budgetDayProvider.BatchUpdater())
 					_budgetDays.First().StaffEmployed = value;
                 _staffEmployed = value;
-                TriggerNotifyPropertyChanged("StaffEmployed");
+                TriggerNotifyPropertyChanged(nameof(StaffEmployed));
             }
         }
 
@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
                     budgetDay.AttritionRate = value;
                 }
                 _attritionRate = value;
-                TriggerNotifyPropertyChanged("AttritionRate");
+                TriggerNotifyPropertyChanged(nameof(AttritionRate));
             }
         }
 
@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				using (_budgetDayProvider.BatchUpdater())
 					_budgetDays.First().Recruitment = value;
             	_recruitment = value;
-                TriggerNotifyPropertyChanged("Recruitment");
+                TriggerNotifyPropertyChanged(nameof(Recruitment));
             }
         }
 
@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
             set
             {
                 _grossStaff = value;
-                TriggerNotifyPropertyChanged("GrossStaff");
+                TriggerNotifyPropertyChanged(nameof(GrossStaff));
             }
         }
 
@@ -276,7 +276,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 	                budgetDay.Contractors = budgetDay.IsClosed ? 0.0 : distributedContractors;
                 }
                 _contractors = value;
-                TriggerNotifyPropertyChanged("Contractors");
+                TriggerNotifyPropertyChanged(nameof(Contractors));
             }
         }
 
@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
                     budgetDay.DaysOffPerWeek = value;
                 }
                 _daysOffPerWeek = value;
-                TriggerNotifyPropertyChanged("DaysOffPerWeek");
+                TriggerNotifyPropertyChanged(nameof(DaysOffPerWeek));
             }
         }
 
@@ -301,7 +301,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
             set
             {
                 _netStaff = value;
-                TriggerNotifyPropertyChanged("NetStaff");
+                TriggerNotifyPropertyChanged(nameof(NetStaff));
             }
         }
 
@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
                 }
 
                 _overtimeHours = value;
-                TriggerNotifyPropertyChanged("OvertimeHours");
+                TriggerNotifyPropertyChanged(nameof(OvertimeHours));
             }
         }
 
@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 	                budgetDay.StudentsHours = budgetDay.IsClosed ? 0.0 : distributedStudents;
                 }
                 _studentsHours = value;
-                TriggerNotifyPropertyChanged("StudentsHours");
+                TriggerNotifyPropertyChanged(nameof(StudentsHours));
             }
         }
 
@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
             	_forecastedHours = value;
 				using (PerformanceOutput.ForOperation("Notify property changed for ForecastedHours"))
 				{
-					TriggerNotifyPropertyChanged("ForecastedHours");
+					TriggerNotifyPropertyChanged(nameof(ForecastedHours));
 				}
             }
         }
@@ -372,7 +372,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
             set
             {
                 _forecastedStaff = value;
-                TriggerNotifyPropertyChanged("ForecastedStaff");
+                TriggerNotifyPropertyChanged(nameof(ForecastedStaff));
             }
         }
 
@@ -382,7 +382,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
             set
             {
                 _difference = value;
-                TriggerNotifyPropertyChanged("Difference");
+                TriggerNotifyPropertyChanged(nameof(Difference));
             }
         }
 
@@ -392,7 +392,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
             set
             {
                 _differencePercent = value;
-                TriggerNotifyPropertyChanged("DifferencePercent");
+                TriggerNotifyPropertyChanged(nameof(DifferencePercent));
             }
         }
 
@@ -402,7 +402,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
             set
             {
                 _netNetStaff = value;
-                TriggerNotifyPropertyChanged("NetNetStaff");
+                TriggerNotifyPropertyChanged(nameof(NetNetStaff));
             }
         }
         public Percent AbsenceThreshold
@@ -416,7 +416,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
                         budgetDay.AbsenceThreshold = value;
                 }
                 _absenceThreshold = value;
-                TriggerNotifyPropertyChanged("AbsenceThreshold");
+                TriggerNotifyPropertyChanged(nameof(AbsenceThreshold));
             }
         }
 
@@ -431,7 +431,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
                         budgetDay.AbsenceExtra = value;
                 }
                 _absenceExtra = value;
-                TriggerNotifyPropertyChanged("AbsenceExtra");
+                TriggerNotifyPropertyChanged(nameof(AbsenceExtra));
             }
         }
 
@@ -446,7 +446,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
                         budgetDay.AbsenceOverride = value;
                 }
                 _absenceOverride = value;
-                TriggerNotifyPropertyChanged("AbsenceOverride");
+                TriggerNotifyPropertyChanged(nameof(AbsenceOverride));
             }
         }
 
@@ -456,7 +456,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
             set
             {
                 _budgetedLeave = value;
-                TriggerNotifyPropertyChanged("BudgetedLeave");
+                TriggerNotifyPropertyChanged(nameof(BudgetedLeave));
             }
         }
 
@@ -466,7 +466,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
             set
             {
                 _budgetedSurplus = value;
-                TriggerNotifyPropertyChanged("BudgetedSurplus");
+                TriggerNotifyPropertyChanged(nameof(BudgetedSurplus));
             }
         }
 
@@ -476,7 +476,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
             set
             {
                 _totalAllowance = value;
-                TriggerNotifyPropertyChanged("TotalAllowance");
+                TriggerNotifyPropertyChanged(nameof(TotalAllowance));
             }
         }
 
@@ -486,7 +486,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
             set
             {
                 _allowance = value;
-                TriggerNotifyPropertyChanged("Allowance");
+                TriggerNotifyPropertyChanged(nameof(Allowance));
             }
         }
 

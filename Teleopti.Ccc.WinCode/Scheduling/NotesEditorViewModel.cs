@@ -42,11 +42,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         private void OnPropertyChanged(string schedulerNote)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(schedulerNote));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(schedulerNote));
         }
 
         public IScheduleDay SchedulePart
@@ -61,7 +57,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             set
             {
                 _isEnabled = value;
-                OnPropertyChanged("IsEnabled");
+                OnPropertyChanged(nameof(IsEnabled));
             }
         }
 
@@ -172,7 +168,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             NotesIsAltered = true;
             ScheduleNote = string.Empty;
-            OnPropertyChanged("ScheduleNote");  
+            OnPropertyChanged(nameof(ScheduleNote));  
         }
 
         public void PublicNotesAltered()
@@ -195,7 +191,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             PublicNotesIsAltered = true;
             PublicScheduleNote = string.Empty;
-            OnPropertyChanged("PublicScheduleNote");
+            OnPropertyChanged(nameof(PublicScheduleNote));
         }
 
         public string ScheduleNote
@@ -238,8 +234,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             _originalNote = ScheduleNote;
             _publicOriginalNote = PublicScheduleNote;
-            OnPropertyChanged("ScheduleNote");
-            OnPropertyChanged("PublicScheduleNote");
+            OnPropertyChanged(nameof(ScheduleNote));
+            OnPropertyChanged(nameof(PublicScheduleNote));
         }
 
         public ICommand ChangedPublicNoteCommand

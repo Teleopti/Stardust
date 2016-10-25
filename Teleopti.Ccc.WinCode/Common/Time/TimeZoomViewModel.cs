@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.WinCode.Common.Time
 
         private static void UpdateBindingsForPanelScrollPosition(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((TimeZoomViewModel)d).NotifyPropertyChanged("PanelScrollPosition"); 
+            ((TimeZoomViewModel)d).NotifyPropertyChanged(nameof(PanelScrollPosition)); 
         }
 
         #region coerce & changed

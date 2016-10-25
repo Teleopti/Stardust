@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart
             }
             set
             {
-                NotifyPropertyChanged("Progress");
+                NotifyPropertyChanged(nameof(Progress));
                 _progress = value;
             }
         }

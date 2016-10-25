@@ -189,11 +189,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
             BindingSourceSelected.Add(item);
             BindingSourceAvailable.Remove(item);
 
-        	var handler = SelectedAdded;
-            if (handler!= null)
-            {
-                handler(listBox2, new SelectedChangedEventArgs(item.TheEntity));
-            }
+			SelectedAdded?.Invoke(listBox2, new SelectedChangedEventArgs(item.TheEntity));
         }
 
         private void DeselectItem(EntityWrapper item)
@@ -215,11 +211,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
                 if (toRemove != null)
                 BindingSourceSelected.Remove(toRemove);
             }
-        	var handler = SelectedRemoved;
-            if (handler!= null)
-            {
-                handler(listBox2, new SelectedChangedEventArgs(item.TheEntity));
-            }
+			SelectedRemoved?.Invoke(listBox2, new SelectedChangedEventArgs(item.TheEntity));
         }
 
         private void listBox2_DrawItem(object sender, DrawItemEventArgs e)

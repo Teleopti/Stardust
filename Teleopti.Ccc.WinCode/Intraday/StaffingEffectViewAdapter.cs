@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             {
 	            if (_negativeEffect.Equals(value)) return;
 	            _negativeEffect = value;
-	            NotifyPropertyChanged("NegativeEffect");
+	            NotifyPropertyChanged(nameof(NegativeEffect));
             }
         }
         private double _total;
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             {
 	            if (_total.Equals(value)) return;
 	            _total = value;
-	            NotifyPropertyChanged("Total");
+	            NotifyPropertyChanged(nameof(Total));
             }
         }
 
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             {
 	            if (_totalPercent.Equals(value)) return;
 	            _totalPercent = value;
-	            NotifyPropertyChanged("TotalPercent");
+	            NotifyPropertyChanged(nameof(TotalPercent));
             }
         }
         private double _positiveEffectPercent;
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             {
 	            if (_positiveEffectPercent.Equals(value)) return;
 	            _positiveEffectPercent = value;
-	            NotifyPropertyChanged("PositiveEffectPercent");
+	            NotifyPropertyChanged(nameof(PositiveEffectPercent));
             }
         }
 
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             {
 	            if (_negativeEffectPercent.Equals(value)) return;
 	            _negativeEffectPercent = value;
-	            NotifyPropertyChanged("NegativeEffectPercent");
+	            NotifyPropertyChanged(nameof(NegativeEffectPercent));
             }
         }
 
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             {
 	            if (_positiveEffect.Equals(value)) return;
 	            _positiveEffect = value;
-	            NotifyPropertyChanged("PositiveEffect");
+	            NotifyPropertyChanged(nameof(PositiveEffect));
             }
         }
 

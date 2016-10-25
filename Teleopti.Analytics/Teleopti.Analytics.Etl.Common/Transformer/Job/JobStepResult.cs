@@ -45,7 +45,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			set
 			{
 				_duration = value;
-				FirePropertyChanged("Duration");
+				FirePropertyChanged(nameof(Duration));
 			}
 		}
 
@@ -61,7 +61,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			set
 			{
 				_rowsAffected = value;
-				FirePropertyChanged("RowsAffected");
+				FirePropertyChanged(nameof(RowsAffected));
 			}
 		}
 
@@ -77,7 +77,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			set
 			{
 				_status = value;
-				FirePropertyChanged("Status");
+				FirePropertyChanged(nameof(Status));
 			}
 		}
 
@@ -92,7 +92,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			private set
 			{
 				_name = value;
-				FirePropertyChanged("Name");
+				FirePropertyChanged(nameof(Name));
 			}
 		}
 
@@ -159,11 +159,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
 		protected void FirePropertyChanged(string propertyName)
 		{
-			var handler = PropertyChanged;
-			if (handler != null)
-			{
-				handler(this, new PropertyChangedEventArgs(propertyName));
-			}
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

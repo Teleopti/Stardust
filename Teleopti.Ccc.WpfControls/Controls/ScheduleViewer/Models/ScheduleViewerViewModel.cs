@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.ScheduleViewer.Models
             private set
             {
                 _showSchedules = value;
-                SendPropertyChanged("ShowSchedules");
+                SendPropertyChanged(nameof(ShowSchedules));
                 foreach (ScheduleRangeViewModel v in Ranges)
                 {
                     v.ShowSchedule = ShowSchedules ? Visibility.Visible : Visibility.Collapsed;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.ScheduleViewer.Models
             private set
             {
                 _showDays = value;
-                SendPropertyChanged("ShowDays");
+                SendPropertyChanged(nameof(ShowDays));
                 foreach(ScheduleRangeViewModel v in Ranges)
                 {
                     v.ShowOverview = ShowDays ? Visibility.Visible : Visibility.Collapsed;
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.ScheduleViewer.Models
             private set
             {
                 _showDetails = value;
-                SendPropertyChanged("ShowDetails");
+                SendPropertyChanged(nameof(ShowDetails));
                 foreach (ScheduleRangeViewModel v in Ranges)
                 {
                     v.ShowDetails = ShowDetails ? Visibility.Visible : Visibility.Collapsed;

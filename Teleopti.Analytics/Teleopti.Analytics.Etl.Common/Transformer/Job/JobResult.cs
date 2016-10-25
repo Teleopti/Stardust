@@ -63,12 +63,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 
 		public void Update()
 		{
-			FirePropertyChanged("Name");
-			FirePropertyChanged("Duration");
-			FirePropertyChanged("RowsAffected");
-			FirePropertyChanged("Status");
-			FirePropertyChanged("BusinessUnitStatus");
-			FirePropertyChanged("HasError");
+			FirePropertyChanged(nameof(Name));
+			FirePropertyChanged(nameof(Duration));
+			FirePropertyChanged(nameof(RowsAffected));
+			FirePropertyChanged(nameof(Status));
+			FirePropertyChanged(nameof(BusinessUnitStatus));
+			FirePropertyChanged(nameof(HasError));
 		}
 
 		public IList<IJobStepResult> JobStepResultCollection
@@ -85,7 +85,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			set
 			{
 				_name = value;
-				FirePropertyChanged("Name");
+				FirePropertyChanged(nameof(Name));
 			}
 		}
 
@@ -98,7 +98,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			set
 			{
 				_status = value;
-				FirePropertyChanged("Status");
+				FirePropertyChanged(nameof(Status));
 			}
 		}
 
@@ -158,11 +158,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
 		protected void FirePropertyChanged(string propertyName)
 		{
-			var handler = PropertyChanged;
-			if (handler != null)
-			{
-				handler(this, new PropertyChangedEventArgs(propertyName));
-			}
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }

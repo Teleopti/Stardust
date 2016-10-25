@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 if (_isWithinSchedulePeriod != value)
                 {
                     _isWithinSchedulePeriod = value;
-                    NotifyPropertyChanged("IsWithinSchedulePeriod");
+                    NotifyPropertyChanged(nameof(IsWithinSchedulePeriod));
                 }
             }
         }
@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 if (_isSelected != value)
                 {
                     _isSelected = value;
-                    NotifyPropertyChanged("IsSelected");
+                    NotifyPropertyChanged(nameof(IsSelected));
                     new PersonRequestViewModelIsSelectedChanged(this).PublishEvent("PersonRequestViewModel",_eventAggregator);
                 }
             }
@@ -325,31 +325,27 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         private void NotifyPropertyChanged(string propertyName)
         {
-        	var handler = PropertyChanged;
-            if (handler!=null)
-            {
-            	handler(this,new PropertyChangedEventArgs(propertyName));
-            }
+        	PropertyChanged?.Invoke(this,new PropertyChangedEventArgs(propertyName));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void NotifyStatusChanged()
         {
-            NotifyPropertyChanged("StatusText");
-            NotifyPropertyChanged("IsNew");
-            NotifyPropertyChanged("IsPending");
-            NotifyPropertyChanged("IsDenied");
-            NotifyPropertyChanged("IsApproved");
-            NotifyPropertyChanged("RequestedDate");
-            NotifyPropertyChanged("Name");
-            NotifyPropertyChanged("Seniority");
-            NotifyPropertyChanged("RequestType");
-            NotifyPropertyChanged("Details");
-            NotifyPropertyChanged("Subject");
-            NotifyPropertyChanged("Message");
-            NotifyPropertyChanged("LastUpdatedDisplay");
-            NotifyPropertyChanged("Left");
+            NotifyPropertyChanged(nameof(StatusText));
+            NotifyPropertyChanged(nameof(IsNew));
+            NotifyPropertyChanged(nameof(IsPending));
+            NotifyPropertyChanged(nameof(IsDenied));
+            NotifyPropertyChanged(nameof(IsApproved));
+            NotifyPropertyChanged(nameof(RequestedDate));
+            NotifyPropertyChanged(nameof(Name));
+            NotifyPropertyChanged(nameof(Seniority));
+            NotifyPropertyChanged(nameof(RequestType));
+            NotifyPropertyChanged(nameof(Details));
+            NotifyPropertyChanged(nameof(Subject));
+            NotifyPropertyChanged(nameof(Message));
+            NotifyPropertyChanged(nameof(LastUpdatedDisplay));
+            NotifyPropertyChanged(nameof(Left));
         }
     }
 }

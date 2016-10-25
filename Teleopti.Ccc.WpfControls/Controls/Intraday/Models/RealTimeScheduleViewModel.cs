@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Models
             private set
             {
 	            _dayLayerViewModel = value;
-				notifyPropertyChanged("DayLayerViewModel");
+				notifyPropertyChanged(nameof(DayLayerViewModel));
             }
         }
 
@@ -79,11 +79,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Models
 
 		private void notifyPropertyChanged(string property)
 		{
-			var handler = PropertyChanged;
-			if (handler != null)
-			{
-				handler.Invoke(this, new PropertyChangedEventArgs(property));
-			}
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
 		}
 
 		private static void nowPeriodChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

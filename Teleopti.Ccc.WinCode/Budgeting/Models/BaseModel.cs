@@ -6,11 +6,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
     {
         protected void TriggerNotifyPropertyChanged(string propertyName)
 		{
-			var propertyChanged = PropertyChanged;
-			if (propertyChanged != null)
-			{
-				propertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
         public event PropertyChangedEventHandler PropertyChanged;

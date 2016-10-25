@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Models
             set
             {
                 _testProperty = value;
-                NotifyProperty(()=>TestProperty);
+                SendPropertyChanged(nameof(TestProperty));
             }
         }
     }

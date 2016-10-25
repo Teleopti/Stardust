@@ -59,11 +59,7 @@ namespace Teleopti.Ccc.WinCode.Common.Filter
 
         protected void SendPropertyChanged(string property)
         {
-        	var handler = PropertyChanged;
-            if (handler!= null)
-        	{
-        		handler(this, new PropertyChangedEventArgs(property));
-        	}
+        	PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
         }
     }
 
@@ -135,9 +131,9 @@ namespace Teleopti.Ccc.WinCode.Common.Filter
         {
             //This needs to be done when the filter is changed as well....
             //For now, just Notify.....
-            SendPropertyChanged("Total");
-            SendPropertyChanged("Filtered");
-            SendPropertyChanged("Shown");
+            SendPropertyChanged(nameof(Total));
+            SendPropertyChanged(nameof(Filtered));
+            SendPropertyChanged(nameof(Shown));
            
         }
         #endregion
