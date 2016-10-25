@@ -20,7 +20,11 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 			var person = personRequest.Person;
 			var absenceRequest = personRequest.Request as IAbsenceRequest;
-			var absenceRequestOpenPeriod = person.WorkflowControlSet?.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)personRequest.Request);
+			var workflowControlSet = person.WorkflowControlSet;
+			
+			var absenceRequestOpenPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)personRequest.Request);
+			var waitlistingIsEnabled = workflowControlSet.WaitlistingIsEnabled (absenceRequest);
+
 
 			if (absenceRequestOpenPeriod?.PersonAccountValidator is AbsenceRequestNoneValidator)
 			{
@@ -39,7 +43,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			{
 				if (affectedAccount.IsExceeded)
 				{
-					return new ValidatedRequest {IsValid = false, ValidationErrors = Resources.RequestDenyReasonPersonAccount};
+					return error(waitlistingIsEnabled);
 				}
 
 				var numberDays = 0;
@@ -63,7 +67,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 						numberDays = calculateDays(day, numberDays);
 						if (TimeSpan.FromDays(numberDays) > affectedAccount.Remaining)
 						{
-							return error();
+							return error(waitlistingIsEnabled);
 						}
 					}
 					else if (isAccountTime)
@@ -71,7 +75,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 						numberMinutes = calculateMinutes(personRequest, day, numberMinutes);
 						if (TimeSpan.FromMinutes(numberMinutes).TotalMinutes > affectedAccount.Remaining.TotalMinutes)
 						{
-							return error();
+							return error(waitlistingIsEnabled);
 						}
 					}
 				}
@@ -96,9 +100,11 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return numberMinutes;
 		}
 
-		private IValidatedRequest error()
+		private IValidatedRequest error(bool waitlistingIsenabled)
 		{
-			return new ValidatedRequest {IsValid = false, ValidationErrors = Resources.RequestDenyReasonPersonAccount};
+			return waitlistingIsenabled 
+				? new ValidatedRequest { IsValid = false, ValidationErrors = Resources.RequestWaitlistedReasonPersonAccount } 
+				: new ValidatedRequest {IsValid = false, ValidationErrors = Resources.RequestDenyReasonPersonAccount};
 		}
 	}
 }

@@ -163,7 +163,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			setUp();
 
-			setWorkflowControlSet(usePersonAccountValidator:true, autoGrant:autoGrant);
+			var isWaitlisted = autoGrant;
+			
+			setWorkflowControlSet(usePersonAccountValidator:true, autoGrant:autoGrant, absenceRequestWaitlistEnabled: isWaitlisted);
 
 			var accountDay = new AccountDay(_today)
 			{
@@ -180,16 +182,18 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 
 			var personRequest = persist(form);
-			var isWaitlisted = autoGrant;
-			assertPersonRequest(personRequest, true, Resources.RequestDenyReasonPersonAccount, isWaitlisted);
+
+			assertPersonRequest (personRequest, true, isWaitlisted ? Resources.RequestWaitlistedReasonPersonAccount : Resources.RequestDenyReasonPersonAccount, isWaitlisted);
 		}
 
 		[Test]
 		public void ShouldDenyWhenPersonAccountTimeIsExceeded([Values]bool autoGrant)
 		{
 			setUp();
+			
+			var isWaitlisted = autoGrant;
 
-			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: autoGrant);
+			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: autoGrant, absenceRequestWaitlistEnabled: isWaitlisted);
 
 			var accountTime1 = new AccountTime(_today)
 			{
@@ -214,8 +218,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 
 			var personRequest = persist(form);
-			var isWaitlisted = autoGrant;
-			assertPersonRequest(personRequest, true, Resources.RequestDenyReasonPersonAccount, isWaitlisted);
+			
+			assertPersonRequest(personRequest, true, isWaitlisted ? Resources.RequestWaitlistedReasonPersonAccount : Resources.RequestDenyReasonPersonAccount, isWaitlisted);
+
+
 		}
 
 		private void setUp()
@@ -249,9 +255,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		private void setWorkflowControlSet(int? absenceRequestExpiredThreshold = null, bool autoGrant = false
-			, bool usePersonAccountValidator = false, bool autoDeny = false)
+			, bool usePersonAccountValidator = false, bool autoDeny = false, bool absenceRequestWaitlistEnabled = false)
 		{
-			_workflowControlSet.AbsenceRequestWaitlistEnabled = true;
+			_workflowControlSet.AbsenceRequestWaitlistEnabled = absenceRequestWaitlistEnabled;
 			_workflowControlSet.AbsenceRequestExpiredThreshold = absenceRequestExpiredThreshold;
 			var absenceRequestProcess = autoGrant
 				? (IProcessAbsenceRequest) new GrantAbsenceRequest()
