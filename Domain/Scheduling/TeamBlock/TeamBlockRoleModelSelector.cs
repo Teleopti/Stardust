@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		private readonly ITeamBlockRestrictionAggregator _teamBlockRestrictionAggregator;
 		private readonly IWorkShiftFilterService _workShiftFilterService;
-		private readonly ISameOpenHoursInTeamBlockSpecification _sameOpenHoursInTeamBlockSpecification;
+		private readonly ISameOpenHoursInTeamBlock _sameOpenHoursInTeamBlock;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IActivityIntervalDataCreator _activityIntervalDataCreator;
 		private readonly IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public TeamBlockRoleModelSelector(ITeamBlockRestrictionAggregator teamBlockRestrictionAggregator,
 			IWorkShiftFilterService workShiftFilterService,
-			ISameOpenHoursInTeamBlockSpecification sameOpenHoursInTeamBlockSpecification,
+			ISameOpenHoursInTeamBlock sameOpenHoursInTeamBlock,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IActivityIntervalDataCreator activityIntervalDataCreator,
 			IMaxSeatInformationGeneratorBasedOnIntervals maxSeatInformationGeneratorBasedOnIntervals, 
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 			_teamBlockRestrictionAggregator = teamBlockRestrictionAggregator;
 			_workShiftFilterService = workShiftFilterService;
-			_sameOpenHoursInTeamBlockSpecification = sameOpenHoursInTeamBlockSpecification;
+			_sameOpenHoursInTeamBlock = sameOpenHoursInTeamBlock;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_activityIntervalDataCreator = activityIntervalDataCreator;
 			_maxSeatInformationGeneratorBasedOnIntervals = maxSeatInformationGeneratorBasedOnIntervals;
@@ -67,7 +68,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		private IShiftProjectionCache filterAndSelect(IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, bool useShiftsForRestrictions)
 		{
-			var isSameOpenHoursInBlock = _sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(teamBlockInfo);
+			var allSkillDays = _schedulingResultStateHolder.AllSkillDays();
+			var isSameOpenHoursInBlock = _sameOpenHoursInTeamBlock.Check(allSkillDays, teamBlockInfo);
 			var shifts = _workShiftFilterService.FilterForRoleModel(datePointer, teamBlockInfo, effectiveRestriction,
 				schedulingOptions,
 				new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupMembers.First(), datePointer),
@@ -75,7 +77,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (shifts.IsNullOrEmpty())
 				return null;
 
-			var allSkillDays = _schedulingResultStateHolder.AllSkillDays();
 			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockInfo, datePointer, allSkillDays, true);
 			var maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, datePointer, allSkillDays, TimeZoneGuard.Instance.TimeZone, true);
 			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(), new DateOnlyPeriod(datePointer, datePointer));

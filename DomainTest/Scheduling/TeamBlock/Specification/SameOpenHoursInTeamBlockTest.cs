@@ -13,12 +13,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 {
 	[TestFixture]
 	[LegacyTest]
-	public class SameOpenHoursInTeamBlockSpecificationTest
+	public class SameOpenHoursInTeamBlockTest
 	{
-		private ISameOpenHoursInTeamBlockSpecification _target;
+		private ISameOpenHoursInTeamBlock _target;
 		private MockRepository _mock;
 		private ITeamBlockInfo _teamBlockInfo;
-		private ISchedulingResultStateHolder _scheduleResultStartHolder;
 		private IOpenHourForDate _openHourForDate;
 		private ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
 		private BlockInfo _blockInfo;
@@ -29,13 +28,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 		{
 			_mock = new MockRepository();
 			_skillDays = Enumerable.Empty<ISkillDay>();
-			_scheduleResultStartHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
-			_scheduleResultStartHolder.Expect(x => x.AllSkillDays()).Return(_skillDays);
 			_openHourForDate = _mock.StrictMock<IOpenHourForDate>();
 			_createSkillIntervalDataPerDateAndActivity = _mock.StrictMock<ICreateSkillIntervalDataPerDateAndActivity>();
 			_teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
 			_blockInfo = new BlockInfo(new DateOnlyPeriod(2013, 12, 17, 2013, 12, 18));
-			_target = new SameOpenHoursInTeamBlockSpecification(_openHourForDate, _createSkillIntervalDataPerDateAndActivity, () => _scheduleResultStartHolder);
+			_target = new SameOpenHoursInTeamBlock(_openHourForDate, _createSkillIntervalDataPerDateAndActivity);
 		}
 
 		[Test]
@@ -73,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 18), intervalDataForDate2))
 					.Return(dateTimePeriodDay2.TimePeriodLocal());
 			}
-			Assert.IsFalse(_target.IsSatisfiedBy(_teamBlockInfo));
+			Assert.IsFalse(_target.Check(_skillDays, _teamBlockInfo));
 		}
 
 		[Test]
@@ -111,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 18), intervalDataForDate2))
 					.Return(dateTimePeriodDay2.TimePeriodLocal());
 			}
-			Assert.IsTrue(_target.IsSatisfiedBy(_teamBlockInfo));
+			Assert.IsTrue(_target.Check(_skillDays, _teamBlockInfo));
 		}
 
 		[Test]
@@ -149,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 18), intervalDataForDate2))
 					.Return(null);
 			}
-			Assert.IsTrue(_target.IsSatisfiedBy(_teamBlockInfo));
+			Assert.IsTrue(_target.Check(_skillDays, _teamBlockInfo));
 		}
 
 		[Test]
@@ -189,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 18), intervalDataForDate2))
 					.Return(dateTimePeriodDay2.TimePeriodLocal());
 			}
-			Assert.IsTrue(_target.IsSatisfiedBy(_teamBlockInfo));
+			Assert.IsTrue(_target.Check(_skillDays, _teamBlockInfo));
 		}
 	}
 }

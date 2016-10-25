@@ -1,34 +1,29 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
-using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
 {
-	public interface ISameOpenHoursInTeamBlockSpecification
+	public interface ISameOpenHoursInTeamBlock
 	{
-		bool IsSatisfiedBy(ITeamBlockInfo skillDays);
+		bool Check(IEnumerable<ISkillDay> allSkillDays, ITeamBlockInfo skillDays);
 	}
 
-	public class SameOpenHoursInTeamBlockSpecification : Specification<ITeamBlockInfo>,
-		ISameOpenHoursInTeamBlockSpecification
+	public class SameOpenHoursInTeamBlock : ISameOpenHoursInTeamBlock
 	{
 		private readonly IOpenHourForDate _openHourForDate;
 		private readonly ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
-		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 
-		public SameOpenHoursInTeamBlockSpecification(IOpenHourForDate openHourForDate,
-			ICreateSkillIntervalDataPerDateAndActivity createSkillIntervalDataPerDateAndActivity,
-			Func<ISchedulingResultStateHolder> schedulingResultStateHolder) //TODO: mustn't this be a func?
+		public SameOpenHoursInTeamBlock(IOpenHourForDate openHourForDate,
+			ICreateSkillIntervalDataPerDateAndActivity createSkillIntervalDataPerDateAndActivity)
 		{
 			_openHourForDate = openHourForDate;
 			_createSkillIntervalDataPerDateAndActivity = createSkillIntervalDataPerDateAndActivity;
-			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
-		public override bool IsSatisfiedBy(ITeamBlockInfo teamBlockInfo)
+		public bool Check(IEnumerable<ISkillDay> allSkillDays, ITeamBlockInfo teamBlockInfo)
 		{
-			var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo, _schedulingResultStateHolder().AllSkillDays());
+			var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo, allSkillDays);
 
 			var dates = skillIntervalDataPerDateAndActivity.Keys;
 			TimePeriod? sampleOpenHour = null;

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ITeamBlockInfo _teamBlockInfo;
 		private SchedulingOptions _schedulingOptions;
 		private IWorkShiftSelector _workShiftSelector;
-		private ISameOpenHoursInTeamBlockSpecification _sameOpenHoursInTeamBlockSpecification;
+		private ISameOpenHoursInTeamBlock _sameOpenHoursInTeamBlock;
 		private IPerson _person;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private List<IPerson> _groupMembers;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_workShiftFilterService = _mocks.StrictMock<IWorkShiftFilterService>();
 			_schedulingResultStateHolder = _mocks.DynamicMock<ISchedulingResultStateHolder>();
 			_schedulingResultStateHolder.Expect(x => x.AllSkillDays()).Return(_skillDays).Repeat.Any();
-			_sameOpenHoursInTeamBlockSpecification = _mocks.StrictMock<ISameOpenHoursInTeamBlockSpecification>();
+			_sameOpenHoursInTeamBlock = _mocks.StrictMock<ISameOpenHoursInTeamBlock>();
 			_workShiftSelector = _mocks.StrictMock<IWorkShiftSelector>();
 			_dateOnly = new DateOnly(2013, 4, 8);
 			_person = PersonFactory.CreatePerson("bill");
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_maxSeatInformationGeneratorBasedOnIntervals = _mocks.StrictMock<IMaxSeatInformationGeneratorBasedOnIntervals>();
 			_maxSeatSkillAggregator = _mocks.StrictMock<IMaxSeatSkillAggregator>();
 			_firstShiftInTeamBlockFinder = _mocks.StrictMock<IFirstShiftInTeamBlockFinder>();
-			_target = new TeamBlockRoleModelSelector(_restrictionAggregator, _workShiftFilterService, _sameOpenHoursInTeamBlockSpecification,
+			_target = new TeamBlockRoleModelSelector(_restrictionAggregator, _workShiftFilterService, _sameOpenHoursInTeamBlock,
 													 _schedulingResultStateHolder,
 													 _activityIntervalDataCreator, 
 													 _maxSeatInformationGeneratorBasedOnIntervals, 
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teaminfo);
 				Expect.Call(_teaminfo.GroupMembers).Return(_groupMembers);
 				Expect.Call(_restrictionAggregator.Aggregate(_dateOnly, _person, _teamBlockInfo, _schedulingOptions)).Return(restriction);
-				Expect.Call(_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(true);
+				Expect.Call(_sameOpenHoursInTeamBlock.Check(_skillDays, _teamBlockInfo)).Return(true);
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 																		new WorkShiftFinderResult(_person, _dateOnly), true, false))
 					  .Return(new List<IShiftProjectionCache>());
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teaminfo).Repeat.Twice();
 				Expect.Call(_teaminfo.GroupMembers).Return(_groupMembers).Repeat.Twice();
 				Expect.Call(_restrictionAggregator.Aggregate(_dateOnly, _person, _teamBlockInfo, _schedulingOptions)).Return(restriction);
-				Expect.Call(_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(true);
+				Expect.Call(_sameOpenHoursInTeamBlock.Check(_skillDays, _teamBlockInfo)).Return(true);
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 																		new WorkShiftFinderResult(_person, _dateOnly), true, false))
 					  .Return(shifts);
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teaminfo).Repeat.Twice();
 				Expect.Call(_teaminfo.GroupMembers).Return(_groupMembers).Repeat.Twice();
 				Expect.Call(_restrictionAggregator.Aggregate(_dateOnly, _person, _teamBlockInfo, _schedulingOptions)).Return(restriction);
-				Expect.Call(_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(true);
+				Expect.Call(_sameOpenHoursInTeamBlock.Check(_skillDays, _teamBlockInfo)).Return(true);
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 																		new WorkShiftFinderResult(_person, _dateOnly), true, false))
 					  .Return(shifts);
