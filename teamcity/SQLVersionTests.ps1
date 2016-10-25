@@ -307,36 +307,6 @@ function global:GrantServerRoles () {
 
 function global:CreateDatabaseWithSQLAdmin () {
     
-	workflow parallelCreateDB {
-		param(
-		$DbManagerExe,
-		$DBManagerString,
-		$MartDB,
-		$AppDB,
-		$DatabasePath
-		)
-			
-		parallel {
-			#Create Teleopti Mart DB
-			InlineScript {& $Using:$DbManagerExe "$Using:DBManagerString" `
-				"-C" `
-				"-D$Using:MartDB" `
-				"-OTeleoptiAnalytics"
-				"-F$Using:DatabasePath"
-			}
-			
-			#Create Teleopti App DB
-			InlineScript {& $Using:$DbManagerExe "$Using:DBManagerString" `
-				"-C" `
-				"-D$Using:AppDB" `
-				"-OTeleoptiCCC7" `
-				"-F$Using:DatabasePath"
-			}
-		}
-			
-	parallelCreateDB -DbManagerEXE $DbManagerExe -DBManagerString $global:DBManagerString -MartDB $MartDB -AppDB $AppDB -DatabasePath $DatabasePath
-
-	<#
     $Params = "$global:DBManagerString -C -D$MartDB -OTeleoptiAnalytics -F$DatabasePath"
     $Prms = $Params.Split(" ")
     & "$DbManagerExe" $Prms
@@ -344,18 +314,14 @@ function global:CreateDatabaseWithSQLAdmin () {
     $Params = "$global:DBManagerString -C -D$AppDB -OTeleoptiCCC7 -F$DatabasePath"
     $Prms = $Params.Split(" ")
     & "$DbManagerExe" $Prms
-	#>
-	}
-	
-	
-	if (!($SQLEdition -eq $SQLAzure)) {
 
-	$Params = "$global:DBManagerString -C -D$global:AggDB -OTeleoptiCCCAgg -F$DatabasePath"
-	$Prms = $Params.Split(" ")
-	& "$DbManagerExe" $Prms
-	}
+    if (!($SQLEdition -eq $SQLAzure)) {
+
+    $Params = "$global:DBManagerString -C -D$global:AggDB -OTeleoptiCCCAgg -F$DatabasePath"
+    $Prms = $Params.Split(" ")
+    & "$DbManagerExe" $Prms
+    }
 }
-
 
 function global:RevokeServerRoles () {
 
