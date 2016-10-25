@@ -82,12 +82,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Adherence = new AdherenceInfo(this, mappingsState);
 		}
 
-		public DateTime CurrentTime { get; private set; }
+		public DateTime CurrentTime { get; }
 
-		public Guid PersonId { get; private set; }
-		public Guid BusinessUnitId { get; private set; }
-		public Guid TeamId { get; private set; }
-		public Guid SiteId { get; private set; }
+		public Guid PersonId { get; }
+		public Guid BusinessUnitId { get; }
+		public Guid TeamId { get; }
+		public Guid SiteId { get; }
 
 		public StateMapper StateMapper { get; set; }
 		public AppliedAdherence AppliedAdherence { get; set; }
@@ -95,9 +95,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public InputInfo Input { get; set; }
 		public AgentState Stored { get; set; }
 
-		public StateRuleInfo State { get; private set; }
-		public ScheduleInfo Schedule { get; private set; }
-		public AdherenceInfo Adherence { get; private set; }
+		public StateRuleInfo State { get; }
+		public ScheduleInfo Schedule { get; }
+		public AdherenceInfo Adherence { get; }
 
 		public bool ShouldProcessState()
 		{
@@ -138,6 +138,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public bool IsAlarm => _appliedAlarm.IsAlarm(State);
 		public DateTime? AlarmStartTime => _appliedAlarm.StartTime(State, Stored, CurrentTime);
 
+		public bool CacheSchedules => _schedule.Value.CacheSchedules;
+
 		public AgentState MakeAgentState()
 		{
 			return new AgentState
@@ -168,7 +170,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				TimeWindowCheckSum = Schedule.TimeWindowCheckSum(),
 
-				Schedule = _schedule.Value.CacheSchedules ? _schedule.Value.Schedules : null
+				Schedule = _schedule.Value.Schedules
 			};
 		}
 

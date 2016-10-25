@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			state.Adherence = EventAdherence.In;
 
-			Target.Update(state);
+			Target.Update(state, false);
 
 			Target.Find(new ExternalLogon { UserCode = "usercode" }, DeadLockVictim.Yes).Single()
 				.Adherence.Should().Be(EventAdherence.In);

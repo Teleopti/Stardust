@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IEnumerable<AgentStateFound> Find(ExternalLogon externalLogon, DeadLockVictim deadLockVictim);
 		IEnumerable<AgentStateFound> Find(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim);
 		IEnumerable<AgentState> GetStates();
-		void Update(AgentState model);
+		void Update(AgentState model, bool updateSchedule);
 
 		// if sync used FindAll this can be removed
 		IEnumerable<AgentState> Get(IEnumerable<Guid> personIds);

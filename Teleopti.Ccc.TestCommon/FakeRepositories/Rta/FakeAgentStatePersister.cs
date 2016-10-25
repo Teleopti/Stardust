@@ -101,25 +101,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			}
 		}
 
-		public void Update(AgentState model)
+		public void Update(AgentState model, bool updateSchedule)
 		{
 			lock (_lock)
 				_data
 					.Where(x => x.PersonId == model.PersonId)
 					.ForEach(x =>
 					{
-						// copy to the AgentStateFound type
-						// and fill any missing data from existing row
-						var state = JsonConvert.DeserializeObject<AgentStateFound>(JsonConvert.SerializeObject(model));
-						state.DataSourceId = x.DataSourceId;
-						state.UserCode = x.UserCode;
+						var dataSourceId = x.DataSourceId;
+						var userCode = x.UserCode;
+						var schedule = x.State.Schedule;
 
-						// if there's no schedule passed in, keep existing
-						// (i know, the if statement looks totally backwards...)
-						if (state.Schedule == null)
-							state.Schedule = x.State.Schedule;
-
-						x.State = state;
+						x.State = JsonConvert.DeserializeObject<AgentStateFound>(JsonConvert.SerializeObject(model));
+						x.State.DataSourceId = dataSourceId;
+						x.State.UserCode = userCode;
+						if (!updateSchedule)
+							x.State.Schedule = schedule;
 					});
 		}
 

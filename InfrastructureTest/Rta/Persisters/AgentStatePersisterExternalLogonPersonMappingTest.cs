@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			{
 				PersonId = person,
 				StateCode = "statecode"
-			});
+			}, false);
 
 			Target.Find(new ExternalLogon {DataSourceId = 1, UserCode = "usercode1"}, DeadLockVictim.Yes).Single().StateCode.Should().Be("statecode");
 			Target.Find(new ExternalLogon {DataSourceId = 2, UserCode = "usercode2"}, DeadLockVictim.Yes).Single().StateCode.Should().Be("statecode");
@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				PersonId = person,
 				StateCode = "code",
 				ReceivedTime = "2016-09-14".Utc()
-			});
+			}, false);
 			Target.Prepare(new AgentStatePrepare
 			{
 				PersonId = person,
@@ -337,7 +337,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				PersonId = person,
 				BatchId = "2016-08-29 13:00".Utc(),
 				SourceId = "source"
-			});
+			}, false);
 
 			var logons = Target.FindForClosingSnapshot("2016-08-29 13:01".Utc(), "source", "loggedout");
 			Target.Find(logons, DeadLockVictim.Yes)

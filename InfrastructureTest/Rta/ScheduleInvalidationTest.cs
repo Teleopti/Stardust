@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					{
 						new ScheduledActivity {Name = "phone"}
 					}
-				});
+				}, true);
 			});
 			Publisher.Publish(new ProjectionChangedEvent
 			{

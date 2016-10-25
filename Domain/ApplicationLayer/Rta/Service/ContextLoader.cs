@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				_config = config;
 				_persister = persister;
 				Action = action;
-				UpdateAgentState = c => _persister.Update(c.MakeAgentState());
+				UpdateAgentState = c => _persister.Update(c.MakeAgentState(), c.CacheSchedules);
 			}
 
 			public int ParallelTransactions { get; protected set; }

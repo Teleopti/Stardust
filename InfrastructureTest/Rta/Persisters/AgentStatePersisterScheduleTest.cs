@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				{
 					expected
 				}
-			});
+			}, true);
 
 			var schedule = Target.Find(new ExternalLogon { UserCode = "user", DataSourceId = 1}, DeadLockVictim.Yes)
 				.Single().Schedule.Single();
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			{
 				PersonId = personId,
 				Schedule = schedules
-			});
+			}, true);
 			var schedule = Target.Find(new ExternalLogon { DataSourceId = 1, UserCode = "user" }, DeadLockVictim.Yes)
 				.Single().Schedule.Single();
 
@@ -131,14 +131,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			{
 				PersonId = personId,
 				Schedule = expected
-			});
+			}, true);
 
 			var schedule = Target.Find(new ExternalLogon { DataSourceId = 1, UserCode = "user" }, DeadLockVictim.Yes).Single().Schedule;
 			schedule.Should().Have.Count.EqualTo(expected.Count());
 		}
 
 		[Test]
-		public void ShouldSkipUpdateNullSchedule()
+		public void ShouldSkipUpdateSchedule()
 		{
 			var personId = Guid.NewGuid();
 			Target.Prepare(new AgentStatePrepare
@@ -156,12 +156,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 						Name = "phone",
 					}
 				}
-			});
+			}, true);
 
 			Target.Update(new AgentState
 			{
 				PersonId = personId
-			});
+			}, false);
 
 			Target.Find(new ExternalLogon { DataSourceId = 1, UserCode = "user" }, DeadLockVictim.Yes).Single()
 				.Schedule.Single().Name.Should().Be("phone");

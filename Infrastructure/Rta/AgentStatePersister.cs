@@ -170,11 +170,11 @@ VALUES
 		}
 
 		[LogInfo]
-		public virtual void Update(AgentState model)
+		public virtual void Update(AgentState model, bool updateSchedule)
 		{
 			var scheduleSql = "";
 
-			if (model.Schedule != null)
+			if (updateSchedule)
 				scheduleSql = ", Schedule = :Schedule";
 
 			var sql = $@"
@@ -217,7 +217,7 @@ WHERE
 				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
 				.SetParameter("Adherence", (int?) model.Adherence);
 
-			if (model.Schedule != null)
+			if (updateSchedule)
 				query.SetParameter("Schedule", _serializer.SerializeObject(model.Schedule), NHibernateUtil.StringClob);
 
 			try
