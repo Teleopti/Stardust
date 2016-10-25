@@ -39,6 +39,10 @@ define([
 
 			viewModel.Loading(true);
 			viewModel.SetViewOptions(options);
+			viewModel.BeforeApply(function() {
+				personsubscriptions.unsubscribePersonSchedule();
+				groupsubscriptions.unsubscribeGroupSchedule();
+			});
 			
 			var personScheduleDeferred = $.Deferred();
 			personsubscriptions.subscribePersonSchedule(

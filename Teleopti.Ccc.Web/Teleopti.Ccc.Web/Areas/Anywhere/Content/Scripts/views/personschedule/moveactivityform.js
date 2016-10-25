@@ -20,7 +20,7 @@
 	timezoneCurrent
     ) {
 
-	return function () {
+	return function (applyCallback) {
 
 		var self = this;
 
@@ -138,6 +138,7 @@
 				OldProjectionLayerLength: self.ProjectionLength(),
 				TrackedCommandInfo: { TrackId: trackId }
 			});
+			applyCallback();
 		    ajax.ajax({
 				    url: 'api/PersonScheduleCommand/MoveActivity',
 				    type: 'POST',

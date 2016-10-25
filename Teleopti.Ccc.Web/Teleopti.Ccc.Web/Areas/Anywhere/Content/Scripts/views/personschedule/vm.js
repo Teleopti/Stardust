@@ -153,15 +153,21 @@ define([
 			return false;
 		});
 
-		this.AddFullDayAbsenceForm = new addFullDayAbsenceFormViewModel();
+		this.BeforeApply = function (callback) {
+			self.beforeApplyCallback = callback;
+		}
+
+		var invokeBeforeApply = function() { if (self.beforeApplyCallback) self.beforeApplyCallback(); };
+
+		this.AddFullDayAbsenceForm = new addFullDayAbsenceFormViewModel(invokeBeforeApply);
 		this.AddingFullDayAbsence = ko.observable(false);
-		this.AddActivityForm = new addActivityFormViewModel();
+		this.AddActivityForm = new addActivityFormViewModel(invokeBeforeApply);
 		this.AddingActivity = ko.observable(false);
 		
-		this.AddIntradayAbsenceForm = new addIntradayAbsenceFormViewModel();
+		this.AddIntradayAbsenceForm = new addIntradayAbsenceFormViewModel(invokeBeforeApply);
 		this.AddingIntradayAbsence = ko.observable(false);
 
-		this.MoveActivityForm = new moveActivityFormViewModel();
+		this.MoveActivityForm = new moveActivityFormViewModel(invokeBeforeApply);
 		this.MovingActivity = ko.observable(false);
 		this.TimeZoneName = ko.observable(false);
 

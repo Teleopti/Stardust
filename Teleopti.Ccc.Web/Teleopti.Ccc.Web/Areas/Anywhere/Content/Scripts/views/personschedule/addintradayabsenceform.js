@@ -22,7 +22,7 @@ define([
 	timezoneCurrent
 	) {
 
-	return function () {
+	return function (applyCallback) {
 
 		var self = this;
 		
@@ -179,6 +179,7 @@ define([
 				PersonId: personId,
 				TrackedCommandInfo: { TrackId: trackId }
 			});
+			applyCallback();
 			ajax.ajax({
 					url: 'api/PersonScheduleCommand/AddIntradayAbsence',
 					type: 'POST',
