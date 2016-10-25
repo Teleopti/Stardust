@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -20,11 +21,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
     public class ConstructTeamBlock : IConstructTeamBlock
     {
         private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
-        private readonly ITeamInfoFactory _teamInfoFactory;
+	    private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
+	    private readonly ITeamInfoFactory _teamInfoFactory;
 
-        public ConstructTeamBlock(ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory)
+        public ConstructTeamBlock(Func<ISchedulingResultStateHolder> schedulingResultStateHolder, ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory)
         {
-            _teamInfoFactory = teamInfoFactory;
+	        _schedulingResultStateHolder = schedulingResultStateHolder;
+	        _teamInfoFactory = teamInfoFactory;
             _teamBlockInfoFactory = teamBlockInfoFactory;
         }
 
@@ -43,8 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
                 var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
                 foreach (IPerson selectedPerson in selectedPersons)
                 {
-                    ITeamInfo teamInfo = _teamInfoFactory.CreateTeamInfo(selectedPerson, selectedPeriod,
-                                                                         allPersonMatrixList);
+                    ITeamInfo teamInfo = _teamInfoFactory.CreateTeamInfo(_schedulingResultStateHolder().PersonsInOrganization, selectedPerson, selectedPeriod, allPersonMatrixList);
                     if (teamInfo != null)
                         allTeamInfoListOnStartDate.Add(teamInfo);
                 }

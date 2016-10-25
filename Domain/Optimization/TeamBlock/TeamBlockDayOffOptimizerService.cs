@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
 			foreach (var selectedPerson in selectedPersons)
 			{
-				var teamInfo = teamInfoFactory.CreateTeamInfo(selectedPerson, selectedPeriod, allPersonMatrixList);
+				var teamInfo = teamInfoFactory.CreateTeamInfo(schedulerStateHolder.SchedulingResultState.PersonsInOrganization, selectedPerson, selectedPeriod, allPersonMatrixList);
 				if(optimizationPreferences.Extra.UseTeamBlockOption && optimizationPreferences.Extra.UseTeamSameDaysOff  )
 				{
 					if (!_allTeamMembersInSelectionSpecification.IsSatifyBy(teamInfo, selectedPersons))

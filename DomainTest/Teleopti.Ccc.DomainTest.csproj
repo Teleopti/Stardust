@@ -768,7 +768,6 @@
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinderTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockGeneratorTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockIntradayDecisionMakerTest.cs" />
-    <Compile Include="Optimization\TeamBlock\TeamBlockRemoveShiftCategoryBackToLegalServiceTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockRemoveShiftCategoryOnBestDateServiceTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockRestrictionOverLimitValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockScheduleClonerTest.cs" />
@@ -783,10 +782,8 @@
     <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeEarlierTest.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ContractWeeklyRestForPersonWeekTest.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeLaterTest.cs" />
-    <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeManagerTest.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ScheduleDayIsLockedSpecificationTest.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\VerifyWeeklyRestAroundDayOffSpecificationTest.cs" />
-    <Compile Include="Optimization\WeeklyRestSolver\WeeklyRestSolverServiceTest.cs" />
     <Compile Include="Optimization\WorkShiftRuleSetExtractorForGroupOfPeopleTest.cs" />
     <Compile Include="Optimization\RelativeDailyDifferencesByAllSkillsExtractorTest.cs" />
     <Compile Include="Optimization\RuleSetBagsOfGroupOfPeopleCanHaveShortBreakTest.cs" />
@@ -1216,7 +1213,6 @@
     <Compile Include="Scheduling\TeamBlock\BlockPeriodFinderBetweenDayOffTest.cs" />
     <Compile Include="Scheduling\TeamBlock\MaxMovedDaysOverLimitValidatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockClearerTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingServiceTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateValidatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DayIntervalDataCalculatorTest.cs" />

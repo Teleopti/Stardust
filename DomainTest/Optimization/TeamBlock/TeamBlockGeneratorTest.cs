@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 			using (_mocks.Record())
 			{
-				Expect.Call(_teamInfoFactory.CreateTeamInfo(person, selectedPeriod, matrixes)).Return(teaminfo);
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(null, person, selectedPeriod, matrixes)).Return(teaminfo);
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teaminfo, dateOnly,
 																	  schedulingOptions.BlockFinder(), false)).IgnoreArguments()
 				      .Return(teamBlockInfo);
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				var expected = new List<ITeamBlockInfo> {teamBlockInfo};
 
-				var result = _target.Generate(matrixes, selectedPeriod, persons, schedulingOptions);
+				var result = _target.Generate(null, matrixes, selectedPeriod, persons, schedulingOptions);
 
 				Assert.That(result, Is.EqualTo(expected));
 			}
@@ -76,11 +76,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var schedulingOptions = new SchedulingOptions();
 			using (_mocks.Record())
 			{
-				Expect.Call(_teamInfoFactory.CreateTeamInfo(person, selectedPeriod, matrixes)).Return(null);
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(null, person, selectedPeriod, matrixes)).Return(null);
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Generate(matrixes, selectedPeriod, persons, schedulingOptions);
+				var result = _target.Generate(null, matrixes, selectedPeriod, persons, schedulingOptions);
 
 				Assert.That(result.Count, Is.EqualTo(0));
 			}
@@ -103,14 +103,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var teaminfo = new TeamInfo(group, groupMatrixList);
 			using (_mocks.Record())
 			{
-				Expect.Call(_teamInfoFactory.CreateTeamInfo(person, selectedPeriod, matrixes)).Return(teaminfo);
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(null, person, selectedPeriod, matrixes)).Return(teaminfo);
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teaminfo, dateOnly,
 																	  schedulingOptions.BlockFinder(), false)).IgnoreArguments()
 						.Return(null);
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Generate(matrixes, selectedPeriod, persons, schedulingOptions);
+				var result = _target.Generate(null, matrixes, selectedPeriod, persons, schedulingOptions);
 
 				Assert.That(result.Count, Is.EqualTo(0));
 			}

@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var selectedMatrixesForOnePerson = new List<IScheduleMatrixPro>();
 
 
-			var group = groupPersonBuilderForOptimization.ForOptimization().BuildGroup(person, scheduleDate);
+			var group = groupPersonBuilderForOptimization.ForOptimization().BuildGroup(_schedulingResultStateHolder().PersonsInOrganization, person, scheduleDate);
 
 			List<IScheduleMatrixPro> matrixesOfOneTeam;
 			restriction = getMatrixOfOneTeam(matrixListAll, schedulingOptions, group, scheduleDate, out matrixesOfOneTeam, person);

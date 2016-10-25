@@ -67,7 +67,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			//TODO: REMOVE! //
 			var loadedPeriod = schedules.Period.LoadedPeriod(); //FIX!
 			((SchedulerStateHolder)_stateHolder()).SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(loadedPeriod); //needed to build groups
-			allAgents.ForEach(x => _stateHolder().SchedulingResultState.PersonsInOrganization.Add(x)); //needed to build groups
 			allAgents.ForEach(x => _stateHolder().AllPermittedPersons.Add(x)); //needed to build groups
 			_stateHolder().SchedulingResultState.Schedules = schedules;
 			//////////////////
@@ -91,6 +90,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					rollbackService,
 					maxSeatData.AllMaxSeatSkillDaysPerSkill(), 
 					schedules,
+					allAgents,
 					NewBusinessRuleCollection.Minimum()); //is this enough?
 			}
 		}
@@ -135,11 +135,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays,
 			IScheduleDictionary schedules,
+			IEnumerable<IPerson> personsInOrganization,
 			INewBusinessRuleCollection businessRuleCollection)
 		{
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			_groupPersonBuilderForOptimizationFactory.Create(optimizationPreferences.Extra.TeamGroupPage);
-			var teamBlocks = _teamBlockGenerator.Generate(allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
+			var teamBlocks = _teamBlockGenerator.Generate(personsInOrganization, allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
 			var remainingInfoList = teamBlocks.ToList();
 
 			while (remainingInfoList.Count > 0)

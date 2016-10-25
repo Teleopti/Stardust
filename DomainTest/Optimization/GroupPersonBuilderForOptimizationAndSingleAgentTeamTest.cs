@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			var person = new Person();
 			person.SetId(Guid.Empty);
-			var result = _target.BuildGroup(person, DateOnly.MinValue);
+			var result = _target.BuildGroup(null, person, DateOnly.MinValue);
 
 			result.GroupMembers.Count().Should().Be.EqualTo(1);
 			result.GroupMembers.First().Should().Be.EqualTo(person);

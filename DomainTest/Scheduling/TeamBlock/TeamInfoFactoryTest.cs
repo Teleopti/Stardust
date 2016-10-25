@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Record())
 			{
 				Expect.Call(_groupPersonBuilderWrapper.ForOptimization()).Return(_groupPersonBuilderForOptimization);
-				Expect.Call(_groupPersonBuilderForOptimization.BuildGroup(_baseLineData.Person1, new DateOnly(2013, 2, 26))).Return(group);
+				Expect.Call(_groupPersonBuilderForOptimization.BuildGroup(null, _baseLineData.Person1, new DateOnly(2013, 2, 26))).Return(group);
 
 				Expect.Call(matrixOnOtherPerson.Person).Return(_baseLineData.Person2);
 
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				ITeamInfo result = _target.CreateTeamInfo(_baseLineData.Person1, new DateOnly(2013, 2, 26), allMatrixesInScheduler);
+				ITeamInfo result = _target.CreateTeamInfo(null, _baseLineData.Person1, new DateOnly(2013, 2, 26), allMatrixesInScheduler);
 				Assert.AreSame(matrixOnPersonAndPeriod, result.MatrixesForGroup().FirstOrDefault());
 				Assert.AreEqual(1, result.MatrixesForGroup().Count());
 			}
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Record())
 			{
 				Expect.Call(_groupPersonBuilderWrapper.ForOptimization()).Return(_groupPersonBuilderForOptimization);
-				Expect.Call(_groupPersonBuilderForOptimization.BuildGroup(_baseLineData.Person1, new DateOnly(2013, 2, 26))).Return(group);
+				Expect.Call(_groupPersonBuilderForOptimization.BuildGroup(null, _baseLineData.Person1, new DateOnly(2013, 2, 26))).Return(group);
 				Expect.Call(matrixOnOtherPerson.Person).Return(_baseLineData.Person2);
 
 				Expect.Call(matrixOnOtherPeriod.Person).Return(_baseLineData.Person1);
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				ITeamInfo result = _target.CreateTeamInfo(_baseLineData.Person1, new DateOnlyPeriod(new DateOnly(2013, 2, 26), new DateOnly(2013, 2, 27)), allMatrixesInScheduler);
+				ITeamInfo result = _target.CreateTeamInfo(null, _baseLineData.Person1, new DateOnlyPeriod(new DateOnly(2013, 2, 26), new DateOnly(2013, 2, 27)), allMatrixesInScheduler);
 				IList<IScheduleMatrixPro> matrixesForGroupMember0 = result.MatrixesForGroupMember(0).ToList();
 				Assert.AreSame(matrixOnOtherPeriod, matrixesForGroupMember0[0]);
 				Assert.AreSame(matrixOnPersonAndPeriod, matrixesForGroupMember0[1]);
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             Assert.Throws<ArgumentNullException>(
                 () =>
-                _target.CreateTeamInfo(_baseLineData.Person1,
+                _target.CreateTeamInfo(null, _baseLineData.Person1,
                                        new DateOnlyPeriod(new DateOnly(2013, 2, 26), new DateOnly(2013, 2, 27)), null));
         }
 
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             Assert.Throws<ArgumentNullException>(
                 () =>
-                _target.CreateTeamInfo(_baseLineData.Person1,new DateOnly(2013, 2, 26), null));
+                _target.CreateTeamInfo(null, _baseLineData.Person1,new DateOnly(2013, 2, 26), null));
         }
 	}
 }

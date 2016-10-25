@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			_persons = new List<IPerson>{_person};
 			_teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
 			_teamInfo = _mock.StrictMock<ITeamInfo>();
-			_target = new ConstructTeamBlock(_teamInfoFactory, _teamBlockInfoFactory);
+			_target = new ConstructTeamBlock(() => MockRepository.GenerateMock<ISchedulingResultStateHolder>(), _teamInfoFactory, _teamBlockInfoFactory);
 			_matrix1 = _mock.StrictMock<IScheduleMatrixPro>();
 			_matrix2 = _mock.StrictMock<IScheduleMatrixPro>();
 			_allPersonMatrixList = new List<IScheduleMatrixPro>{_matrix1,_matrix2};
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 		{
 			using (_mock.Record())
 			{
-				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _allPersonMatrixList)).Return(null);
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(null, _person, _dateOnlyPeriod, _allPersonMatrixList)).Return(null);
 			}
 
 			using (_mock.Playback())
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 		{
 			using (_mock.Record())
 			{
-				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _allPersonMatrixList)).Return(_teamInfo );
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(null, _person, _dateOnlyPeriod, _allPersonMatrixList)).Return(_teamInfo );
 				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>() {_person2});
 				Expect.Call(()=>_teamInfo.LockMember(_dateOnlyPeriod, _person2));
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnlyPeriod.StartDate, new BetweenDayOffBlockFinder(),
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 		{
 			using (_mock.Record())
 			{
-				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _allPersonMatrixList)).Return(_teamInfo);
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(null, _person, _dateOnlyPeriod, _allPersonMatrixList)).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>() { _person2 });
 				Expect.Call(() => _teamInfo.LockMember(_dateOnlyPeriod, _person2));
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnlyPeriod.StartDate, new BetweenDayOffBlockFinder(),
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			_groupOnGroupPageForTeamBlockPer = GroupPageLight.SingleAgentGroup(string.Empty);
 			using (_mock.Record())
 			{
-				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _allPersonMatrixList)).Return(_teamInfo);
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(null, _person, _dateOnlyPeriod, _allPersonMatrixList)).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>() { _person2 });
 				Expect.Call(() => _teamInfo.LockMember(_dateOnlyPeriod, _person2));
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnlyPeriod.StartDate, new BetweenDayOffBlockFinder(),

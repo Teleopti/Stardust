@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays,
 			IScheduleDictionary scheduleDictionary,
+			IEnumerable<IPerson> personsInOrganization,
 			INewBusinessRuleCollection businessRuleCollection);
 
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -79,13 +80,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays,
 			IScheduleDictionary scheduleDictionary,
+			IEnumerable<IPerson> personsInOrganization,
 			INewBusinessRuleCollection businessRuleCollection)
 		{
 			var cancelMe = false;
 			var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingIntraday + Resources.Colon + Resources.CollectingData,()=>cancelMe=true));
 			if (progressResult.ShouldCancel) cancelMe = true;
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
-			var teamBlocks = _teamBlockGenerator.Generate(allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
+			var teamBlocks = _teamBlockGenerator.Generate(personsInOrganization, allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
 			var remainingInfoList = new List<ITeamBlockInfo>(teamBlocks);
 
 			while (remainingInfoList.Count > 0)

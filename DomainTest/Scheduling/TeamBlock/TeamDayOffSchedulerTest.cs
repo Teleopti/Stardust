@@ -348,10 +348,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 		private void getMatrixesAndRestrictionMocks()
 		{
+			var personsInOrganization = new List<IPerson>();
 			Expect.Call(_groupPersonBuilderWrapper.ForOptimization()).Return(_groupPersonBuilderForOptimization);
-			Expect.Call(_groupPersonBuilderForOptimization.BuildGroup(_person1, new DateOnly(2013, 2, 1)))
+			Expect.Call(_groupPersonBuilderForOptimization.BuildGroup(personsInOrganization, _person1, new DateOnly(2013, 2, 1)))
 			      .Return(_group);
 			Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+			Expect.Call(_schedulingResultStateHolder.PersonsInOrganization).Return(personsInOrganization);
 			Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestrictionForSinglePerson (_person1, new DateOnly(2013, 2, 1),
 			                                                                 _schedulingOptions, _scheduleDictionary))
 			      .Return(_effectiveRestriction);

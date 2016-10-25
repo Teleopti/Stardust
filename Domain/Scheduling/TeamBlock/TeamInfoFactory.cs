@@ -9,8 +9,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface ITeamInfoFactory
 	{
-		ITeamInfo CreateTeamInfo(IPerson person, DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> allMatrixesInScheduler);
-		ITeamInfo CreateTeamInfo(IPerson person, DateOnlyPeriod period, IEnumerable<IScheduleMatrixPro> allMatrixesInScheduler);
+		ITeamInfo CreateTeamInfo(IEnumerable<IPerson> personsInOrganisation, IPerson person, DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> allMatrixesInScheduler);
+		ITeamInfo CreateTeamInfo(IEnumerable<IPerson> personsInOrganisation, IPerson person, DateOnlyPeriod period, IEnumerable<IScheduleMatrixPro> allMatrixesInScheduler);
 	}
 
 	public class TeamInfoFactory : ITeamInfoFactory
@@ -22,11 +22,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 		}
 
-		public ITeamInfo CreateTeamInfo(IPerson person, DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> allMatrixesInScheduler)
+		public ITeamInfo CreateTeamInfo(IEnumerable<IPerson> personsInOrganisation, IPerson person, DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> allMatrixesInScheduler)
 		{
 		    if (allMatrixesInScheduler == null) throw new ArgumentNullException("allMatrixesInScheduler");
 			DateOnly firstDateOfMatrix = dateOnly;
-			Group group = _groupPersonBuilderWrapper.ForOptimization().BuildGroup(person, firstDateOfMatrix);
+			Group group = _groupPersonBuilderWrapper.ForOptimization().BuildGroup(personsInOrganisation, person, firstDateOfMatrix);
 			if (!group.GroupMembers.Any()) return null;
 
 			IList<IList<IScheduleMatrixPro>> matrixesForGroup = new List<IList<IScheduleMatrixPro>>();
@@ -46,10 +46,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return new TeamInfo(group, matrixesForGroup);
 		}
 
-		public ITeamInfo CreateTeamInfo(IPerson person, DateOnlyPeriod period, IEnumerable<IScheduleMatrixPro> allMatrixesInScheduler)
+		public ITeamInfo CreateTeamInfo(IEnumerable<IPerson> personsInOrganisation, IPerson person, DateOnlyPeriod period, IEnumerable<IScheduleMatrixPro> allMatrixesInScheduler)
 		{
 		    if (allMatrixesInScheduler == null) throw new ArgumentNullException("allMatrixesInScheduler");
-		    Group group = _groupPersonBuilderWrapper.ForOptimization().BuildGroup(person, period.StartDate);
+		    Group group = _groupPersonBuilderWrapper.ForOptimization().BuildGroup(personsInOrganisation, person, period.StartDate);
 		    if (group == null) return null;
 			if (!group.GroupMembers.Any()) return null;
 

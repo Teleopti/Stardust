@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			GroupPersonBuilderForOptimizationFactory.Create(schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 			var teamInfoFactory = new TeamInfoFactory(GroupPersonBuilderWrapper);			
-			var teamInfo = teamInfoFactory.CreateTeamInfo(agent1, selectedPeriod, allPersonMatrixList);
+			var teamInfo = teamInfoFactory.CreateTeamInfo(SchedulerStateHolder.SchedulingResultState.PersonsInOrganization, agent1, selectedPeriod, allPersonMatrixList);
 			allTeamInfoListOnStartDate.Add(teamInfo);
 			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).UnlockPeriod(selectedPeriod);
 			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			GroupPersonBuilderForOptimizationFactory.Create(schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 			var teamInfoFactory = new TeamInfoFactory(GroupPersonBuilderWrapper);
-			var teamInfo = teamInfoFactory.CreateTeamInfo(agent1, selectedPeriod, allPersonMatrixList);
+			var teamInfo = teamInfoFactory.CreateTeamInfo(SchedulerStateHolder.SchedulingResultState.PersonsInOrganization, agent1, selectedPeriod, allPersonMatrixList);
 			allTeamInfoListOnStartDate.Add(teamInfo);
 			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).UnlockPeriod(selectedPeriod);
 			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));

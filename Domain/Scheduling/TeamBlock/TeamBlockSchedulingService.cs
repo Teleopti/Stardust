@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			    if (dateOnlySkipList.Contains(datePointer))
 				    continue;
 
-			    var allTeamInfoListOnStartDate = getAllTeamInfoList(allPersonMatrixList, selectedPeriod, selectedPersons);
+			    var allTeamInfoListOnStartDate = getAllTeamInfoList(schedulingResultStateHolder, allPersonMatrixList, selectedPeriod, selectedPersons);
 
 			    var checkedTeams = _teamMatrixChecker.CheckTeamList(allTeamInfoListOnStartDate, selectedPeriod);
 
@@ -176,12 +176,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                                                         _schedulingOptions);
         }
 
-        private HashSet<ITeamInfo> getAllTeamInfoList(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
+        private HashSet<ITeamInfo> getAllTeamInfoList(ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
         {
             var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
             foreach (var selectedPerson in selectedPersons)
             {
-                var teamInfo = _teamInfoFactory.CreateTeamInfo(selectedPerson, selectedPeriod, allPersonMatrixList);
+                var teamInfo = _teamInfoFactory.CreateTeamInfo(schedulingResultStateHolder.PersonsInOrganization, selectedPerson, selectedPeriod, allPersonMatrixList);
                 if (teamInfo != null)
                     allTeamInfoListOnStartDate.Add(teamInfo);
             }
