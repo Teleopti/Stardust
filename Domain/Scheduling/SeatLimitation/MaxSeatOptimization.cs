@@ -70,7 +70,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			((SchedulerStateHolder)_stateHolder()).SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(loadedPeriod); //needed to build groups
 			allAgents.ForEach(x => _stateHolder().SchedulingResultState.PersonsInOrganization.Add(x)); //needed to build groups
 			allAgents.ForEach(x => _stateHolder().AllPermittedPersons.Add(x)); //needed to build groups
-			_stateHolder().SchedulingResultState.SkillDays = maxSeatData.AllMaxSeatSkillDaysPerSkill(); //needed for SameOpenHoursInTeamBlock
 			_stateHolder().SchedulingResultState.Schedules = schedules;
 			//////////////////
 
