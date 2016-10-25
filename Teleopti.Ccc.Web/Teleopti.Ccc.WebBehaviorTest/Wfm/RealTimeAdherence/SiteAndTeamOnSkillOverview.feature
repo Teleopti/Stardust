@@ -65,12 +65,12 @@ Scenario: See how many agents with a specific skill that are in alarm for each s
 	And 'Ashley Andeen' sets her phone state to 'Ready'
 	When I view Real time adherence for skill 'Phone' for sites
 	Then I should see site 'Paris' with 1 of 1 agents in alarm
-	And I should see site 'London' with 0 of 1 agents in alarm
+	And I should see site 'London' with 0 of 2 agents in alarm
 	Given the time is '2016-10-03 08:05'
 	When 'Pierre Baldi' sets his phone state to 'Ready'
 	And 'Ashley Andeen' sets her phone state to 'Pause'
 	Then I should see site 'Paris' with 0 of 1 agents in alarm
-	And I should see site 'London' with 1 of 1 agents in alarm
+	And I should see site 'London' with 1 of 2 agents in alarm
 
 @OnlyRunIfEnabled('RTA_SiteAndTeamOnSkillOverview_40817')
 Scenario: See how many agents with a specific skill that are in alarm for each team

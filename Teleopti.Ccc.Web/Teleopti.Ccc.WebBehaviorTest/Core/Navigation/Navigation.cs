@@ -533,5 +533,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
             GoToPage("wfm/#/reports/leaderboard");
         }
 
+		public static void GotoRealTimeAdherenceForSkillForTeamsOnSite(Guid skillId, Guid buId, Guid siteId)
+		{
+			GoToPage("wfm/#/rta/teams-by-skill/?siteIds="+ siteId+"&skillIds=" + skillId);
+		}
+
+		public static void GotoRealTimeAdherenceForSkillForSites(Guid skillId)
+		{
+			
+			GoToPage("wfm/#/rta/sites-by-skill/?skillIds=" + skillId);
+		}
 	}
 }
