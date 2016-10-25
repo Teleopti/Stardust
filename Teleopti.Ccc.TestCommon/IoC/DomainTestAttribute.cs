@@ -41,7 +41,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
-	[Toggle(Domain.FeatureFlags.Toggles.RTA_ScheduleQueryOptimization_40260)]
 	//[Toggle(Domain.FeatureFlags.Toggles.RTA_ScheduleQueryOptimizationFilteredCache_40260)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]

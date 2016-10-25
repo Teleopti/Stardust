@@ -62,7 +62,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[UnitOfWork]
-		[EnabledBy(Toggles.RTA_ScheduleQueryOptimization_40260)]
 		[DisabledBy(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 		public virtual void Handle(ScheduleProjectionReadOnlyChangedEvent @event)
 		{

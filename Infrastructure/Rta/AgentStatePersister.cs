@@ -18,19 +18,6 @@ using ExternalLogon = Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.ExternalL
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
-	public class AgentStatePersisterWithSchedules : AgentStatePersister
-	{
-		public AgentStatePersisterWithSchedules(ICurrentUnitOfWork unitOfWork, IJsonSerializer serializer)
-			: base(unitOfWork, serializer)
-		{
-		}
-
-		public override void Update(AgentState model)
-		{
-			update(model, true);
-		}
-	}
-
 	public class AgentStatePersister : IAgentStatePersister
 	{
 		protected readonly ICurrentUnitOfWork _unitOfWork;
@@ -185,14 +172,9 @@ VALUES
 		[LogInfo]
 		public virtual void Update(AgentState model)
 		{
-			update(model, false);
-		}
-
-		protected void update(AgentState model, bool withSchedule)
-		{
 			var scheduleSql = "";
 
-			if (model.Schedule != null && withSchedule)
+			if (model.Schedule != null)
 				scheduleSql = ", Schedule = :Schedule";
 
 			var sql = $@"
@@ -235,7 +217,7 @@ WHERE
 				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
 				.SetParameter("Adherence", (int?) model.Adherence);
 
-			if (model.Schedule != null && withSchedule)
+			if (model.Schedule != null)
 				query.SetParameter("Schedule", _serializer.SerializeObject(model.Schedule), NHibernateUtil.StringClob);
 
 			try

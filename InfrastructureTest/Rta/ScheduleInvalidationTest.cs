@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[MultiDatabaseTest]
-	[Toggle(Toggles.RTA_ScheduleQueryOptimization_40260)]
 	public class ScheduleInvalidationTest : ISetup
 	{
 		public Database Database;

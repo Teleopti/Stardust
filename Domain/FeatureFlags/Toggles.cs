@@ -19,7 +19,6 @@
 		Settings_AlertViaEmailFromSMSLink_30444,
 
 		RTA_AdherenceDetails_34267,
-		RTA_ScheduleQueryOptimization_40260,
 		RTA_ScheduleQueryOptimizationFilteredCache_40260,
 		RTA_ConnectionQueryOptimizeAllTheThings_40262,
 		RTA_HideAgentsByStateGroup_40469,
