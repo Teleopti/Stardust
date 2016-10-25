@@ -22,12 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			return _context.AppliedAdherence.ForEvent(_context.State.Adherence(), _context.State.StaffingEffect());
 		}
-
-		public EventAdherence AdherenceForStoredState()
-		{
-			return adherenceFor(_context.Stored?.StateCode, _context.Stored.PlatformTypeId(), _context.Stored?.ActivityId);
-		}
-
+		
 		public EventAdherence AdherenceForNewStateAndPreviousActivity()
 		{
 			return adherenceFor(_context.Input.StateCode, _context.Input.ParsedPlatformTypeId(), _context.Schedule.PreviousActivity());

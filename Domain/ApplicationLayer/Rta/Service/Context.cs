@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public bool ShouldProcessState()
 		{
-			if (Stored == null || _schedule.Value.CacheSchedules)
+			if (Stored == null || _schedule.Value.NewSchedules)
 				return true;
 			
 			var isSameState =
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public bool IsAlarm => _appliedAlarm.IsAlarm(State);
 		public DateTime? AlarmStartTime => _appliedAlarm.StartTime(State, Stored, CurrentTime);
 
-		public bool CacheSchedules => _schedule.Value.CacheSchedules;
+		public bool CacheSchedules => _schedule.Value.NewSchedules;
 
 		public AgentState MakeAgentState()
 		{

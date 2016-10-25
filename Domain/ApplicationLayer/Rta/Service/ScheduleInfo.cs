@@ -36,9 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_belongsToDate = new Lazy<DateOnly?>(() =>
 			{
 				var activity = CurrentActivity() ?? activityNear(context.CurrentTime);
-				if (activity != null)
-					return activity.BelongsToDate;
-				return null;
+				return activity?.BelongsToDate;
 			});
 			_timeWindowCheckSum = new Lazy<int>(() => ActivitiesInTimeWindow().CheckSum());
 			_timeWindowActivities = new Lazy<IEnumerable<ScheduledActivity>>(() => ActivitiesInTimeWindow(_schedule.Value, context.CurrentTime));
@@ -46,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public bool ActivityChanged()
 		{
-			return _context.Schedule.CurrentActivityId() != _context.Stored?.ActivityId;
+			return _context.Stored?.ActivityId != _context.Schedule.CurrentActivityId();
 		}
 
 		public bool ShiftStarted()

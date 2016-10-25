@@ -352,7 +352,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			public Guid PersonId;
 
-			public scheduleData(IEnumerable<ScheduledActivity> schedules, bool cacheSchedules, Guid personId) : base(schedules, cacheSchedules)
+			public scheduleData(IEnumerable<ScheduledActivity> schedules, bool newSchedules, Guid personId) : base(schedules, newSchedules)
 			{
 				PersonId = personId;
 			}
