@@ -1,49 +1,46 @@
 ﻿using System.ComponentModel;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
 	public class PagingDetail : INotifyPropertyChanged
 	{
-		private Paging _paging = new Paging{Take = 20};
+		private int _skip;
+		private int _take = 20;
+		private int _totalNumberOfResults;
 
 		public int TotalNumberOfResults
 		{
-			get { return _paging.TotalCount; }
+			get { return _totalNumberOfResults; }
 			set
 			{
-				_paging = new Paging {TotalCount = value, Skip = _paging.Skip, Take = _paging.Take};
-				notifyPropertyChanged("TotalNumberOfResults");
+				_totalNumberOfResults = value;
+				notifyPropertyChanged(nameof(TotalNumberOfResults));
 			}
 		}
 
 		public int Take
 		{
-			get { return _paging.Take; }
+			get { return _take; }
 			set
 			{
-				_paging = new Paging { TotalCount = _paging.TotalCount, Skip = _paging.Skip, Take = value };
-				notifyPropertyChanged("Take");
+				_take = value;
+				notifyPropertyChanged(nameof(Take));
 			}
 		}
 
 		public int Skip
 		{
-			get { return _paging.Skip; }
+			get { return _skip; }
 			set
 			{
-				_paging = new Paging { TotalCount = _paging.TotalCount, Skip = value, Take = _paging.Take };
-				notifyPropertyChanged("Skip");
+				_skip = value;
+				notifyPropertyChanged(nameof(Skip));
 			}
 		}
 
 		private void notifyPropertyChanged(string property)
 		{
-			var handler = PropertyChanged;
-			if (handler != null)
-			{
-				handler.Invoke(this, new PropertyChangedEventArgs(property));
-			}
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
