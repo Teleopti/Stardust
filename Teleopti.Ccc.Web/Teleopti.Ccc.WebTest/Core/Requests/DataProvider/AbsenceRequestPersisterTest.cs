@@ -3,6 +3,7 @@ using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var absenceRequestSynchronousValidator = MockRepository.GenerateMock<IAbsenceRequestSynchronousValidator>();
 			absenceRequestSynchronousValidator.Stub(x => x.Validate(null)).IgnoreArguments().Return(new ValidatedRequest { IsValid = true });
 			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, new Now(), null,
-				absenceRequestSynchronousValidator, new PersonRequestAuthorizationCheckerForTest());
+				absenceRequestSynchronousValidator, new PersonRequestAuthorizationCheckerForTest(), new AbsenceRequestIntradayFilterEmpty());
 			target.Persist(form);
 
 			personRequestRepository.AssertWasCalled(x => x.Add(personRequest));
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var absenceRequestSynchronousValidator = MockRepository.GenerateMock<IAbsenceRequestSynchronousValidator>();
 			absenceRequestSynchronousValidator.Stub(x => x.Validate(null)).IgnoreArguments().Return(new ValidatedRequest { IsValid = true });
 			var target = new AbsenceRequestPersister(personRequestRepository, mapper, eventSender, currentBusinessUnitProvider, currentDataSourceProvider, now, currentUnitOfWork,
-				absenceRequestSynchronousValidator, new PersonRequestAuthorizationCheckerForTest());
+				absenceRequestSynchronousValidator, new PersonRequestAuthorizationCheckerForTest(), new AbsenceRequestIntradayFilterEmpty());
 			target.Persist(form);
 
 			currUow.Expect(c => c.AfterSuccessfulTx(() => eventSender.Publish(message)));
@@ -134,7 +135,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var absenceRequestSynchronousValidator = new AbsenceRequestSynchronousValidator(new ExpiredRequestValidator(new FakeGlobalSettingDataRepository(), new Now()),
 				new AlreadyAbsentValidator(), new FakeScheduleDataReadScheduleStorage(), new FakeCurrentScenario(), new AbsenceRequestWorkflowControlSetValidator(), absenceRequestPersonAccountValidator);
 			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now, null,
-				absenceRequestSynchronousValidator, new PersonRequestAuthorizationCheckerForTest());
+				absenceRequestSynchronousValidator, new PersonRequestAuthorizationCheckerForTest(), new AbsenceRequestIntradayFilterEmpty());
 			target.Persist(form);
 
 			personRequestRepository.AssertWasNotCalled(x => x.Add(personRequest));

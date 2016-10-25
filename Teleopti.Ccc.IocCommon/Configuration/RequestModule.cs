@@ -52,6 +52,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<AbsenceRequestCancelServiceWfmRequestsCancel37741ToggleOff>().As<IAbsenceRequestCancelService>().SingleInstance();
 			}
 
+			if (_configuration.Toggle(Toggles.AbsenceRequests_SpeedupEndToEnd_41384))
+			{
+				builder.RegisterType<AbsenceRequestIntradayFilter>().As<IAbsenceRequestIntradayFilter>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<AbsenceRequestIntradayFilterEmpty>().As<IAbsenceRequestIntradayFilter>().SingleInstance();
+			}
+
 			builder.RegisterType<AbsenceRequestStrategyProcessor>().As<IAbsenceRequestStrategyProcessor>().SingleInstance();
 			builder.RegisterType<ArrangeRequestsByProcessOrder>().As<ArrangeRequestsByProcessOrder>().SingleInstance();
 			builder.RegisterType<IntradayRequestProcessor>().As<IIntradayRequestProcessor>().SingleInstance();

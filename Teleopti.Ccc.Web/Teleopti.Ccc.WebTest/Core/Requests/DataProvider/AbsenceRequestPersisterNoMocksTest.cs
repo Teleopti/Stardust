@@ -4,6 +4,7 @@ using AutoMapper;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
@@ -324,7 +325,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 					new AlreadyAbsentValidator(), ScheduleStorage, CurrentScenario, new AbsenceRequestWorkflowControlSetValidator(), absenceRequestPersonAccountValidator);
 			var target = new AbsenceRequestPersister(PersonRequestRepository, Mapper.Engine, EventPublisher
 				, CurrentBusinessUnit, CurrentDataSource, _now, new ThisUnitOfWork(new FakeUnitOfWork())
-				, absenceRequestSynchronousValidator, new PersonRequestAuthorizationCheckerForTest());
+				, absenceRequestSynchronousValidator, new PersonRequestAuthorizationCheckerForTest(), new AbsenceRequestIntradayFilterEmpty());
 			var requestViewModel = target.Persist(form);
 			return PersonRequestRepository.Get(new Guid(requestViewModel.Id));
 		}

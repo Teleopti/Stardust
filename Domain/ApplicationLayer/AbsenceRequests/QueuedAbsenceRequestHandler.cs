@@ -1,23 +1,18 @@
 ﻿using System;
-using System.Globalization;
-using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Specification;
-using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
-	[EnabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960, Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
+	[EnabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960, Toggles.AbsenceRequests_SpeedupIntradayRequests_40754), DisabledBy(Toggles.AbsenceRequests_SpeedupEndToEnd_41384)]
 	public class QueuedAbsenceRequestFastIntradayHandler : QueuedAbsenceRequestHandlerBase, IHandleEvent<NewAbsenceRequestCreatedEvent>, IHandleEvent<RequestPersonAbsenceRemovedEvent>
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(QueuedAbsenceRequestHandler));
@@ -45,47 +40,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			if (personRequest == null)
 				return;
 
-			var startDateTime = DateTime.UtcNow;
-
-			var fakeIntradayStartUtcDateTime = _configReader.AppConfig("FakeIntradayUtcStartDateTime");
-			if (fakeIntradayStartUtcDateTime != null)
-			{
-				try
-				{
-					startDateTime = DateTime.ParseExact(fakeIntradayStartUtcDateTime, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture).Utc();
-				}
-				catch
-				{
-					logger.Warn("The app setting 'FakeIntradayStartDateTime' is not specified correctly. Format your datetime as 'yyyy-MM-dd HH:mm' ");
-				}
-			}
-
-			var intradayPeriod = new DateTimePeriod(startDateTime, startDateTime.AddHours(24));
-			
-			var validators = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest)personRequest.Request)
-				.GetSelectedValidatorList();
-
-			bool isIntradayRequest = intradayPeriod.Contains(personRequest.Request.Period.StartDateTime) && intradayPeriod.Contains(personRequest.Request.Period.EndDateTime);
-
-			if (isIntradayRequest && validators.Any(v => v is StaffingThresholdValidator))
-			{
-				_intradayRequestProcessor.Process(personRequest, startDateTime);
-			}
-			else
-			{
-				var queuedAbsenceRequest = new QueuedAbsenceRequest()
-				{
-					PersonRequest = personRequest.Id.GetValueOrDefault(),
-					Created = personRequest.CreatedOn.GetValueOrDefault(),
-					StartDateTime = personRequest.Request.Period.StartDateTime,
-					EndDateTime = personRequest.Request.Period.EndDateTime
-				};
-				_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
-			}
+			var filter = new AbsenceRequestIntradayFilter(_configReader, _intradayRequestProcessor, _queuedAbsenceRequestRepository);
+			filter.Process(personRequest);
 		}
 	}
 
-	[EnabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960), DisabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
+	[EnabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960), DisabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754, Toggles.AbsenceRequests_SpeedupEndToEnd_41384)]
 	public class QueuedAbsenceRequestHandler : QueuedAbsenceRequestHandlerBase, IHandleEvent<NewAbsenceRequestCreatedEvent>, IHandleEvent<RequestPersonAbsenceRemovedEvent>
 	{
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
@@ -118,7 +78,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	}
 
 
-	[EnabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960)]
+	[EnabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960), DisabledBy(Toggles.AbsenceRequests_SpeedupEndToEnd_41384)]
 	public class QueuedAbsenceRequestHandlerBase : INewAbsenceRequestHandler, IRunOnHangfire
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(QueuedAbsenceRequestHandler));

@@ -1,6 +1,7 @@
 using System;
 using AutoMapper;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly IAbsenceRequestSynchronousValidator _absenceRequestSynchronousValidator;
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
+		private readonly IAbsenceRequestIntradayFilter _absenceRequestIntradayFilter;
 
 		public AbsenceRequestPersister(IPersonRequestRepository personRequestRepository,
 			IMappingEngine mapper,
@@ -29,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			ICurrentBusinessUnit businessUnitProvider,
 			ICurrentDataSource currentDataSource,
 			INow now,
-			ICurrentUnitOfWork currentUnitOfWork, IAbsenceRequestSynchronousValidator absenceRequestSynchronousValidator, IPersonRequestCheckAuthorization personRequestCheckAuthorization)
+			ICurrentUnitOfWork currentUnitOfWork, IAbsenceRequestSynchronousValidator absenceRequestSynchronousValidator, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IAbsenceRequestIntradayFilter absenceRequestIntradayFilter)
 		{
 			_personRequestRepository = personRequestRepository;
 			_mapper = mapper;
@@ -40,6 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_currentUnitOfWork = currentUnitOfWork;
 			_absenceRequestSynchronousValidator = absenceRequestSynchronousValidator;
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
+			_absenceRequestIntradayFilter = absenceRequestIntradayFilter;
 		}
 
 		public RequestViewModel Persist(AbsenceRequestForm form)
@@ -75,6 +78,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 						PersonRequestDenyOption.AutoDeny | result.DenyOption.GetValueOrDefault(PersonRequestDenyOption.None));
 				}
 				_personRequestRepository.Add(personRequest);
+
+				_absenceRequestIntradayFilter.Process(personRequest);
 			}
 
 			if (_currentUnitOfWork != null && !personRequest.IsDenied)
@@ -89,6 +94,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 					UserName = personRequest.Person.Name.ToString()
 				};
 				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _publisher.Publish(message));
+				
 			}
 
 			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
