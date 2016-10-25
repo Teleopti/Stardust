@@ -4,16 +4,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class DatabaseLoader : IDatabaseLoader
 	{
-		private readonly IDatabaseReader _databaseReader;
+		private readonly IDataSourceReader _dataSourceReader;
 
-		public DatabaseLoader(IDatabaseReader databaseReader)
+		public DatabaseLoader(IDataSourceReader dataSourceReader)
 		{
-			_databaseReader = databaseReader;
+			_dataSourceReader = dataSourceReader;
 		}
 
 		public ConcurrentDictionary<string, int> Datasources()
 		{
-			return _databaseReader.Datasources();
+			return _dataSourceReader.Datasources();
 		}
 	}
 }

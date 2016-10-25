@@ -31,6 +31,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			});
 		}
 
+		public AgentState ForPersonId(Guid personId)
+		{
+			return _data
+				.Select(x => x.State)
+				.FirstOrDefault(x => x.PersonId == personId);
+		}
+
+
+
 		public void Prepare(AgentStatePrepare model, DeadLockVictim deadLockVictim)
 		{
 			lock(_lock)
@@ -129,24 +138,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				return _data
 					.Where(x => externalLogons.Any(y => y.UserCode == x.UserCode && y.DataSourceId == x.DataSourceId))
 					.Select(x => x.State)
-					.ToArray();
-		}
-
-		public AgentState Get(Guid personId)
-		{
-			lock (_lock)
-				return _data
-					.Select(x => x.State)
-					.FirstOrDefault(x => x.PersonId == personId);
-		}
-
-		public IEnumerable<AgentState> GetStatesNotInSnapshot(DateTime snapshotId, string sourceId)
-		{
-			lock (_lock)
-				return _data
-					.Select(x => x.State)
-					.Where(s => s.SourceId == sourceId && (s.BatchId < snapshotId || s.BatchId == null))
-					.GroupBy(x => x.PersonId, (guid, states) => states.First())
 					.ToArray();
 		}
 

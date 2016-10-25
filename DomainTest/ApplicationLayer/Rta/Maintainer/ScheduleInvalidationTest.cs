@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Maintainer
 				ExternalLogons = new[] { new ExternalLogon() }
 			});
 
-			Persister.Get(person).Should().Not.Be.Null();
+			Persister.ForPersonId(person).Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Maintainer
 				EndDateTime = "2016-09-27 17:00".Utc()
 			});
 
-			Persister.Get(person).Schedule.Should().Be.Null();
+			Persister.ForPersonId(person).Schedule.Should().Be.Null();
 		}
 
 		[Test]
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Maintainer
 				EndDateTime = "2016-09-27 17:00".Utc()
 			});
 
-			Persister.Get(person).Schedule.Should().Be.Null();
+			Persister.ForPersonId(person).Schedule.Should().Be.Null();
 		}
 
 		[Test]
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Maintainer
 				EndDateTime = "2016-10-31 17:00".Utc()
 			});
 
-			Persister.Get(person).Schedule.Should().Be.Null();
+			Persister.ForPersonId(person).Schedule.Should().Be.Null();
 		}
 
 		[Test]
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Maintainer
 				EndDateTime = "2016-10-31 17:00".Utc()
 			});
 
-			Persister.Get(person).Schedule.Should().Be.Null();
+			Persister.ForPersonId(person).Schedule.Should().Be.Null();
 		}
 
 		[Test]
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Maintainer
 				EndDateTime = "2016-09-24 17:00".Utc()
 			});
 
-			Persister.Get(person).Schedule.Should().Not.Be.Null();
+			Persister.ForPersonId(person).Schedule.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Maintainer
 				EndDateTime = "2016-10-31 17:00".Utc()
 			});
 
-			Persister.Get(person).Schedule.Should().Not.Be.Null();
+			Persister.ForPersonId(person).Schedule.Should().Not.Be.Null();
 		}
 
 	}

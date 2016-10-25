@@ -322,40 +322,6 @@ WHERE
 		}
 
 		[LogInfo]
-		public virtual AgentState Get(Guid personId)
-		{
-			var sql = SelectAgentState + "WITH (UPDLOCK, ROWLOCK) WHERE PersonId = :PersonId";
-			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetParameter("PersonId", personId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
-				.SetReadOnly(true)
-				.List<AgentState>()
-				.FirstOrDefault();
-		}
-
-		[LogInfo]
-		public virtual IEnumerable<AgentState> GetStatesNotInSnapshot(DateTime snapshotId, string sourceId)
-		{
-			var sql = SelectAgentState +
-					  @"WITH (UPDLOCK) WHERE 
-						SourceId = :SourceId
-						AND (
-							BatchId < :SnapshotId
-							OR 
-							BatchId IS NULL
-							)";
-			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetParameter("SnapshotId", snapshotId)
-				.SetParameter("SourceId", sourceId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof (internalAgentState)))
-				.SetReadOnly(true)
-				.List<AgentState>()
-				.GroupBy(x => x.PersonId, (guid, states) => states.First())
-				.ToArray()
-				;
-		}
-
-		[LogInfo]
 		public virtual IEnumerable<AgentState> Get(IEnumerable<Guid> personIds)
 		{
 			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE PersonId IN (:PersonIds)";

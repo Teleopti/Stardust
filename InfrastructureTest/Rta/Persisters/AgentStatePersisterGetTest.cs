@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		[Test]
 		public void ShouldGetByPersonId()
 		{
-			var state = new AgentStateForUpsert { PersonId = Guid.NewGuid() };
+			var state = new AgentStateForUpsert { PersonId = Guid.NewGuid(), UserCode = "user"};
 			Persister.Upsert(state);
 
-			var result = Persister.Get(state.PersonId);
+			var result = Persister.Find(new ExternalLogon {UserCode = "user"}, DeadLockVictim.Yes).SingleOrDefault();
 
 			result.Should().Not.Be.Null();
 		}
@@ -44,11 +44,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
-		public void ShouldGetNullCurrentActualAgentStateIfNotFound()
+		public void ShouldGetEmptyStatesIfNotFound()
 		{
-			var result = Persister.Get(Guid.NewGuid());
+			var result = Persister.Find(new ExternalLogon(), DeadLockVictim.Yes);
 
-			result.Should().Be.Null();
+			result.Should().Be.Empty();
 		}
 
 		[Test]
@@ -117,7 +117,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			};
 			Persister.Upsert(state);
 
-			Persister.GetStatesNotInSnapshot("2015-03-06 15:20".Utc(), "6")
+			var logons = Persister.FindForClosingSnapshot("2015-03-06 15:20".Utc(), "6", "loggedout");
+			Persister.Find(logons, DeadLockVictim.Yes)
 				.Single(x => x.PersonId == personId).Should().Not.Be.Null();
 		}
 
@@ -137,7 +138,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			};
 			Persister.Upsert(agentStateReadModel);
 
-			var result = Persister.GetStatesNotInSnapshot("2015-03-06 15:20".Utc(), "6")
+			var logons = Persister.FindForClosingSnapshot("2015-03-06 15:20".Utc(), "6", "loggedout");
+			var result = Persister.Find(logons, DeadLockVictim.Yes)
 				.Single(x => x.PersonId == personId);
 
 			result.BusinessUnitId.Should().Be(agentStateReadModel.BusinessUnitId);

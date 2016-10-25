@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -32,11 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IEnumerable<AgentState> GetStates();
 		void Update(AgentState model);
 
-		[RemoveMeWithToggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262)]
-		AgentState Get(Guid personId);
-		[RemoveMeWithToggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262)]
-		IEnumerable<AgentState> GetStatesNotInSnapshot(DateTime snapshotId, string sourceId);
-		[RemoveMeWithToggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262)]
+		// if sync used FindAll this can be removed
 		IEnumerable<AgentState> Get(IEnumerable<Guid> personIds);
 
 	}

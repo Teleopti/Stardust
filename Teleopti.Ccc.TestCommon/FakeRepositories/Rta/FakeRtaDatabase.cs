@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		}
 
 		public AgentState StoredState => _agentStates.GetStates().SingleOrDefault();
-		public AgentState StoredStateFor(Guid personId) => _agentStates.Get(personId);
+		public AgentState StoredStateFor(Guid personId) => _agentStates.ForPersonId(personId);
 		public AgentStateReadModel PersistedReadModel => _agentStateReadModels.Models.SingleOrDefault();
 		public IEnumerable<IRtaState> StateCodes => _stateGroups.LoadAll().Single().StateCollection;
 

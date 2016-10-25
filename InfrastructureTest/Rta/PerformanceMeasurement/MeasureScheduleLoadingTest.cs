@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.PerformanceMeasurement
 {
 	[TestFixture]
 	[InfrastructureTest]
-	[Toggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262)]
 	[Toggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 	[Explicit]
 	[Category("LongRunning")]

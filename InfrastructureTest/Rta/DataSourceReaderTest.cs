@@ -4,16 +4,15 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[AnalyticsDatabaseTest]
-	public class DatabaseReaderDatasourcesTest
+	public class DataSourceReaderTest
 	{
-		public IDatabaseReader Reader;
+		public IDataSourceReader Reader;
 		public MutableNow Now;
 		public WithAnalyticsUnitOfWork UnitOfWork;
 

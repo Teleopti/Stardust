@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				ScheduleDays = new ProjectionChangedEventScheduleDay[] { }
 			});
 
-			WithUnitOfWork.Get(() => AgentStatePersister.Get(person))
+			WithUnitOfWork.Get(() => AgentStatePersister.Find(new ExternalLogon {DataSourceId = 9, UserCode = "user"}, DeadLockVictim.Yes).Single())
 				.Schedule.Should().Be.Null();
 		}
 	}

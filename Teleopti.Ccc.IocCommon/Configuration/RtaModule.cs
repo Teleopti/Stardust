@@ -31,11 +31,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IStateCodeAdder>()
 				.SingleInstance();
 
-			if (_config.Toggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262))
-				builder.RegisterType<ContextLoaderWithConnectionQueryOptimizeAllTheThings>().As<IContextLoader>().ApplyAspects().SingleInstance();
-			else
-				builder.RegisterType<ContextLoaderWithScheduleOptimization>().As<IContextLoader>().ApplyAspects().SingleInstance();
-
+			builder.RegisterType<ContextLoader>().As<IContextLoader>().ApplyAspects().SingleInstance();
 			builder.RegisterType<ThreeDays>().As<IScheduleCacheStrategy>().SingleInstance();
 
 			_config.Cache().This<IDatabaseLoader>((c, b) => b
@@ -43,7 +39,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.CacheKey(c.Resolve<CachePerDataSource>())
 				);
 			builder.CacheByInterfaceProxy<DatabaseLoader, IDatabaseLoader>().SingleInstance();
-			builder.RegisterType<DatabaseReader>().As<IDatabaseReader>().SingleInstance();
+			builder.RegisterType<DataSourceReader>().As<IDataSourceReader>().SingleInstance();
 			if (_config.Toggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536))
 				builder.RegisterType<FromPersonAssignment>().As<IScheduleReader>().SingleInstance().ApplyAspects();
 			else

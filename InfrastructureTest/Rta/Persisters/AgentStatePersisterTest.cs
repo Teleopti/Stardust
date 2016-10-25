@@ -1,10 +1,12 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Helper;
+using ExternalLogon = Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.ExternalLogon;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
@@ -23,8 +25,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Upsert(state);
 
-			var result = Target.Get(state.PersonId);
-			result.Should().Not.Be.Null();
+			Target.Find(new ExternalLogon {UserCode = "usercode"}, DeadLockVictim.Yes).Single()
+				.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -35,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Upsert(state);
 
-			Target.Get(state.PersonId)
+			Target.Find(new ExternalLogon { UserCode = "usercode" }, DeadLockVictim.Yes).Single()
 				.BusinessUnitId.Should().Be(businessUnitId);
 		}
 
@@ -47,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Upsert(state);
 
-			Target.Get(state.PersonId)
+			Target.Find(new ExternalLogon { UserCode = "usercode" }, DeadLockVictim.Yes).Single()
 				.TeamId.Should().Be(teamId);
 		}
 
@@ -59,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Upsert(state);
 
-			Target.Get(state.PersonId)
+			Target.Find(new ExternalLogon { UserCode = "usercode" }, DeadLockVictim.Yes).Single()
 				.SiteId.Should().Be(siteId);
 		}
 
@@ -88,7 +90,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				AlarmStartTime = null,
 			});
 
-			Target.Get(personId)
+			Target.Find(new ExternalLogon { UserCode = "usercode" }, DeadLockVictim.Yes).Single()
 				.Should().Not.Be.Null();
 		}
 
@@ -99,7 +101,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Upsert(state);
 
-			Target.Get(state.PersonId)
+			Target.Find(new ExternalLogon { UserCode = "usercode" }, DeadLockVictim.Yes).Single()
 				.AlarmStartTime.Should().Be("2015-12-11 08:00".Utc());
 		}
 
@@ -110,7 +112,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Upsert(state);
 
-			Target.Get(state.PersonId)
+			Target.Find(new ExternalLogon { UserCode = "usercode" }, DeadLockVictim.Yes).Single()
 				.TimeWindowCheckSum.Should().Be(375);
 		}
 
@@ -123,7 +125,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Upsert(state);
 
-			Target.Get(state.PersonId)
+			Target.Find(new ExternalLogon { UserCode = "usercode" }, DeadLockVictim.Yes).Single()
 				.TimeWindowCheckSum.Should().Be(475);
 		}
 
@@ -134,7 +136,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Upsert(state);
 
-			Target.Get(state.PersonId)
+			Target.Find(new ExternalLogon { UserCode = "usercode" }, DeadLockVictim.Yes).Single()
 				.Adherence.Should().Be(EventAdherence.Neutral);
 		}
 
@@ -149,7 +151,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Update(state);
 
-			Target.Get(state.PersonId)
+			Target.Find(new ExternalLogon { UserCode = "usercode" }, DeadLockVictim.Yes).Single()
 				.Adherence.Should().Be(EventAdherence.In);
 		}
 
@@ -162,8 +164,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Delete(personId, DeadLockVictim.Yes);
 
-			Target.Get(personId).Should()
-				.Be.Null();
+			Target.Find(new ExternalLogon { UserCode = "usercode" }, DeadLockVictim.Yes)
+				.Should().Be.Empty();
 		}
 		
 	}

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[UnitOfWorkTest]
-	public class DatabaseReaderLoadScheduleTest
+	public class ScheduleReaderTest
 	{
 		public IScheduleReader Reader;
 		public MutableNow Now;

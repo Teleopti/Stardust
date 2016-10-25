@@ -41,7 +41,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
-	[Toggle(Domain.FeatureFlags.Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 	[Toggle(Domain.FeatureFlags.Toggles.Wfm_Requests_Check_Expired_Requests_40274)]
 	public class DomainTestAttribute : IoCTestAttribute
@@ -93,7 +92,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// Rta
 			system.AddService<FakeDataSources>();
 			system.AddService<FakeRtaDatabase>();
-			system.UseTestDouble<FakeDatabaseReader>().For<IDatabaseReader>();
+			system.UseTestDouble<FakeDataSourceReader>().For<IDataSourceReader>();
 			system.UseTestDouble<FakeMappingReader>().For<IMappingReader>();
 			system.UseTestDouble<FakeAgentStateReadModelPersister>().For<IAgentStateReadModelReader, IAgentStateReadModelPersister>();
 			system.UseTestDouble<FakeAgentStatePersister>().For<IAgentStatePersister>();

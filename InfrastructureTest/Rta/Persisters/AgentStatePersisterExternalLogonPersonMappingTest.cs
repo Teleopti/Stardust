@@ -159,7 +159,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				PersonId = person
 			}, DeadLockVictim.Yes);
 
-			Target.Get(person).Should().Be.Null();
+			Target.Find(new ExternalLogon {UserCode = "usercodeA" }, DeadLockVictim.Yes)
+				.Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
@@ -183,7 +184,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			}, DeadLockVictim.Yes);
 
-			Target.Get(person).PersonId.Should().Be(person);
+			Target.Find(new ExternalLogon { UserCode = "usercode2" }, DeadLockVictim.Yes)
+				.Single().PersonId.Should().Be(person);
 		}
 
 		[Test]
@@ -207,7 +209,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			}, DeadLockVictim.Yes);
 
-			Target.Get(new[] {person}).Single().PersonId.Should().Be(person);
+			Target.Find(new ExternalLogon {UserCode = "usercode2"}, DeadLockVictim.Yes)
+				.Single().PersonId.Should().Be(person);
 		}
 
 		[Test]
@@ -336,7 +339,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				SourceId = "source"
 			});
 
-			Target.GetStatesNotInSnapshot("2016-08-29 13:01".Utc(), "source")
+			var logons = Target.FindForClosingSnapshot("2016-08-29 13:01".Utc(), "source", "loggedout");
+			Target.Find(logons, DeadLockVictim.Yes)
 				.Single().PersonId.Should().Be(person);
 		}
 
