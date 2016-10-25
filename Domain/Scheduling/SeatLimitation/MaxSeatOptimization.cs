@@ -67,7 +67,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			//TODO: REMOVE! //
 			var loadedPeriod = schedules.Period.LoadedPeriod(); //FIX!
 			((SchedulerStateHolder)_stateHolder()).SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(loadedPeriod); //needed to build groups
-			allAgents.ForEach(x => _stateHolder().AllPermittedPersons.Add(x)); //needed to build groups
 			_stateHolder().SchedulingResultState.Schedules = schedules;
 			//////////////////
 
