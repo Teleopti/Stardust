@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
@@ -84,6 +85,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			var scheduleService = _container.Resolve<IScheduleService>();
 
+			var scheduleResultDataExtractorProvider = new ScheduleResultDataExtractorProvider(_container.Resolve<PersonalSkillsProvider>(),
+				_container.Resolve<ISkillPriorityProvider>());
+
 			IMoveTimeOptimizerCreator creator =
 				new MoveTimeOptimizerCreator(scheduleMatrixOriginalStateContainerList,
 					workShiftOriginalStateContainerList,
@@ -96,7 +100,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					_container.Resolve<IResourceOptimization>(),
 					dayOffOptimizationPreferenceProvider,
 					_container.Resolve<IDeleteAndResourceCalculateService>(),
-					_container.Resolve<ScheduleResultDataExtractorProvider>());
+					scheduleResultDataExtractorProvider);
 
 			IList<IMoveTimeOptimizer> optimizers = creator.Create();
 			var service = new MoveTimeOptimizerContainer(optimizers, periodValueCalculator);
