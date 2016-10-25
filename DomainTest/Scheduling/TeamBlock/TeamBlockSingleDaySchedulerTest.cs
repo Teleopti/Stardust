@@ -181,11 +181,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																											  _dateOnly,
 																											  new List<IPerson> { _person2 }, _schedulingOptions))
 					  .Return(false);
-				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person1, _shift))
+				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedules, _schedulingOptions, _teamBlockInfo, _dateOnly, _person1, _shift))
 						.Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_schedules, _dateOnly, _person1, _teamBlockInfo, restriction,
 																		 _schedulingOptions, finderResult, false)).Return(shifts);
-				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person2, _shift))
+				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedules, _schedulingOptions, _teamBlockInfo, _dateOnly, _person2, _shift))
 						.Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_schedules, _dateOnly, _person2, _teamBlockInfo, restriction,
 																		 _schedulingOptions, finderResult, false)).Return(shifts);
@@ -239,11 +239,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																											  _dateOnly,
 																											  new List<IPerson> { _person2 }, _schedulingOptions))
 					  .Return(false);
-				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person1, _shift))
+				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedules, _schedulingOptions, _teamBlockInfo, _dateOnly, _person1, _shift))
 					  .Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_schedules, _dateOnly, _person1, _teamBlockInfo, restriction,
 															_schedulingOptions, finderResult, false)).Return(null);
-				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person2, _shift))
+				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedules, _schedulingOptions, _teamBlockInfo, _dateOnly, _person2, _shift))
 					  .Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_schedules, _dateOnly, _person2, _teamBlockInfo, restriction,
 															_schedulingOptions, finderResult, false)).Return(shifts);
@@ -297,11 +297,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																											  _dateOnly,
 																											  new List<IPerson> { _person2 }, _schedulingOptions))
 					  .Return(false);
-				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person1, _shift))
+				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedules, _schedulingOptions, _teamBlockInfo, _dateOnly, _person1, _shift))
 						.Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_schedules, _dateOnly, _person1, _teamBlockInfo, restriction,
 																		 _schedulingOptions, finderResult, false)).Return(shifts);
-				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person2, _shift))
+				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedules, _schedulingOptions, _teamBlockInfo, _dateOnly, _person2, _shift))
 						.Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_schedules, _dateOnly, _person2, _teamBlockInfo, restriction,
 																		 _schedulingOptions, finderResult, false)).Return(shifts);

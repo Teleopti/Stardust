@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 		private IPerson _person;
 		private IShiftProjectionCache _shift;
 		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IScheduleDictionary _scheduleDictionary;
 
 		[SetUp]
@@ -40,10 +39,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			_person = PersonFactory.CreatePerson("Bill");
 			_shift = _mocks.StrictMock<IShiftProjectionCache>();
 			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
-			_schedulingResultStateHolder = _mocks.DynamicMock<ISchedulingResultStateHolder>();
 			_target = new ProposedRestrictionAggregator(_teamRestrictionAggregator, _blockRestrictionAggregator,
 														_teamBlockRestrictionAggregator, _teamBlockSchedulingOptions,
-														_effectiveRestrictionCreator, () => _schedulingResultStateHolder);
+														_effectiveRestrictionCreator);
 
 			_schedulingOptions = new SchedulingOptions();
 			_dateOnly = new DateOnly(2013, 11, 14);
@@ -70,13 +68,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamScheduling(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockScheduling(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamBlockScheduling(_schedulingOptions)).Return(false);
-				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestrictionForSinglePerson(_person, _dateOnly,
 					_schedulingOptions, _scheduleDictionary)).Return(exprectedResult);
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person, _shift);
+				var result = _target.Aggregate(_scheduleDictionary, _schedulingOptions, _teamBlockInfo, _dateOnly, _person, _shift);
 				Assert.That(result, Is.EqualTo(exprectedResult));
 			}
 		}
@@ -91,12 +88,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamScheduling(_schedulingOptions)).Return(true);
-				Expect.Call(_teamRestrictionAggregator.Aggregate(_dateOnly, _teamBlockInfo, _schedulingOptions, _shift))
+				Expect.Call(_teamRestrictionAggregator.Aggregate(_scheduleDictionary, _dateOnly, _teamBlockInfo, _schedulingOptions, _shift))
 				      .Return(exprectedResult);
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person, _shift);
+				var result = _target.Aggregate(_scheduleDictionary, _schedulingOptions, _teamBlockInfo, _dateOnly, _person, _shift);
 				Assert.That(result, Is.EqualTo(exprectedResult));
 			}
 		}
@@ -117,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person, _shift);
+				var result = _target.Aggregate(_scheduleDictionary, _schedulingOptions, _teamBlockInfo, _dateOnly, _person, _shift);
 				Assert.That(result, Is.EqualTo(exprectedResult));
 			}
 		}
@@ -134,12 +131,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamScheduling(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockScheduling(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamBlockScheduling(_schedulingOptions)).Return(true);
-				Expect.Call(_teamBlockRestrictionAggregator.Aggregate(null, _dateOnly, _person, _teamBlockInfo, _schedulingOptions, _shift))
+				Expect.Call(_teamBlockRestrictionAggregator.Aggregate(_scheduleDictionary, _dateOnly, _person, _teamBlockInfo, _schedulingOptions, _shift))
 				      .Return(exprectedResult);
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person, _shift);
+				var result = _target.Aggregate(_scheduleDictionary, _schedulingOptions, _teamBlockInfo, _dateOnly, _person, _shift);
 				Assert.That(result, Is.EqualTo(exprectedResult));
 			}
 		}

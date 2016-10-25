@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -14,7 +13,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 	public class BusinessRulesShiftFilterTest
 	{
 		private MockRepository _mocks;
-		private ISchedulingResultStateHolder _resultStateHolder;
 		private IValidDateTimePeriodShiftFilter _validDateTimePeriodShiftFilter;
 		private ILongestPeriodForAssignmentCalculator _longestPeriodForAssignmentCalculator;
 		private BusinessRulesShiftFilter _target;
@@ -27,12 +25,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			_mocks = new MockRepository();
 			_dateOnly = new DateOnly(2013, 3, 1);
-			_resultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_validDateTimePeriodShiftFilter = _mocks.StrictMock<IValidDateTimePeriodShiftFilter>();
 			_longestPeriodForAssignmentCalculator = _mocks.StrictMock<ILongestPeriodForAssignmentCalculator>();
 
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
-			_target = new BusinessRulesShiftFilter(()=>new ScheduleRangeForPerson(()=>_resultStateHolder), _validDateTimePeriodShiftFilter,
+			_target = new BusinessRulesShiftFilter(_validDateTimePeriodShiftFilter,
 			                                       _longestPeriodForAssignmentCalculator);
 		}
 		
@@ -55,15 +52,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var person1 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
 			var finderResult = new WorkShiftFinderResult(person1, new DateOnly());
 			var shiftList = getCashes();
-			var result = _target.Filter(null, shiftList, _dateOnly, finderResult);
+			var schedules = MockRepository.GenerateMock<IScheduleDictionary>();
+			var result = _target.Filter(schedules, null, shiftList, _dateOnly, finderResult);
 			Assert.IsNull(result);
-			result = _target.Filter(person1, null, _dateOnly, finderResult);
-			Assert.IsNull(result);
-
-			result = _target.Filter(person1, shiftList, _dateOnly, null);
+			result = _target.Filter(schedules, person1, null, _dateOnly, finderResult);
 			Assert.IsNull(result);
 
-			result = _target.Filter(person1, new List<IShiftProjectionCache>(), _dateOnly, finderResult);
+			result = _target.Filter(schedules, person1, shiftList, _dateOnly, null);
+			Assert.IsNull(result);
+
+			result = _target.Filter(schedules, person1, new List<IShiftProjectionCache>(), _dateOnly, finderResult);
 			Assert.That(result.Count, Is.EqualTo(0));
 		}
 

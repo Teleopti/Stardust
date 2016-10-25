@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
-		private readonly Func<ISchedulerStateHolder> _stateHolder;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly IMatrixUserLockLocker _matrixUserLockLocker;
 		private readonly IMatrixNotPermittedLocker _matrixNotPermittedLocker;
@@ -35,7 +34,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 														CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 														IScheduleDayChangeCallback scheduleDayChangeCallback,
 														ISchedulingOptionsCreator schedulingOptionsCreator,
-														Func<ISchedulerStateHolder> stateHolder, //should be removed!
 														ITeamBlockScheduler teamBlockScheduler,
 														IMatrixUserLockLocker matrixUserLockLocker,
 														IMatrixNotPermittedLocker matrixNotPermittedLocker,
@@ -48,7 +46,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
-			_stateHolder = stateHolder;
 			_teamBlockScheduler = teamBlockScheduler;
 			_matrixUserLockLocker = matrixUserLockLocker;
 			_matrixNotPermittedLocker = matrixNotPermittedLocker;
@@ -63,31 +60,36 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			var allAgents = schedules.Select(schedule => schedule.Key);
 			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, scenario, allAgents);
 
-			//TODO: REMOVE! //
-			_stateHolder().SchedulingResultState.Schedules = schedules;
-			//////////////////
-
 			var tagSetter = new ScheduleTagSetter(new NullScheduleTag()); //fix - the tag
-			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder().SchedulingResultState, //fix!
-				_scheduleDayChangeCallback,
-				tagSetter);
+			var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
 
 			var allMatrixes = createMatrixes(schedules,
 				schedules.Period.LoadedPeriod().ToDateOnlyPeriod(TimeZoneInfo.Utc) //FIX
 				, period, allAgents);
+			var businessRules = NewBusinessRuleCollection.Minimum(); //is this enough?
 
 			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills()))
 			{
-				teamBlockIntradayOptimizationService(
-					allMatrixes,
-					period,
-					agentsToOptimize,
-					optimizationPreferences,
-					rollbackService,
-					maxSeatData.AllMaxSeatSkillDaysPerSkill(), 
-					schedules,
-					allAgents,
-					NewBusinessRuleCollection.Minimum()); //is this enough?
+				//most stuff taken from TeamBlockIntradayOptimizationService
+				var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+				_groupPersonBuilderForOptimizationFactory.Create(schedules, optimizationPreferences.Extra.TeamGroupPage);
+				var teamBlocks = _teamBlockGenerator.Generate(allAgents, allMatrixes, period, agentsToOptimize, schedulingOptions);
+				var remainingInfoList = teamBlocks.ToList();
+
+				while (remainingInfoList.Count > 0)
+				{
+					foreach (var teamBlockInfo in remainingInfoList.ToList())
+					{
+						var firstSelectedDay = period.DayCollection().First();
+						var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
+						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules); //TODO: check if this is enough
+						_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo, datePoint, schedulingOptions,
+							rollbackService,
+							new DoNothingResourceCalculateDelayer(), maxSeatData.AllMaxSeatSkillDaysPerSkill().ToSkillDayEnumerable(), schedules, new ShiftNudgeDirective(), businessRules);
+
+						remainingInfoList.Remove(teamBlockInfo);
+					}
+				}
 			}
 		}
 
@@ -132,49 +134,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				virtualSchedulePeriod);
 		}
 		#endregion
-
-
-		#region  taken from TeamBlockIntradayOptimizationService
-		private void teamBlockIntradayOptimizationService(IEnumerable<IScheduleMatrixPro> allPersonMatrixList,
-			DateOnlyPeriod selectedPeriod,
-			IEnumerable<IPerson> selectedPersons,
-			IOptimizationPreferences optimizationPreferences,
-			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays,
-			IScheduleDictionary schedules,
-			IEnumerable<IPerson> personsInOrganization,
-			INewBusinessRuleCollection businessRuleCollection)
-		{
-			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
-			_groupPersonBuilderForOptimizationFactory.Create(schedules, optimizationPreferences.Extra.TeamGroupPage);
-			var teamBlocks = _teamBlockGenerator.Generate(personsInOrganization, allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
-			var remainingInfoList = teamBlocks.ToList();
-
-			while (remainingInfoList.Count > 0)
-			{
-				optimizeOneRound(selectedPeriod,
-					schedulingOptions, remainingInfoList,
-					schedulePartModifyAndRollbackService,
-					skillDays, schedules, businessRuleCollection);
-			}
-		}
-
-		private void optimizeOneRound(DateOnlyPeriod selectedPeriod, ISchedulingOptions schedulingOptions,
-			ICollection<ITeamBlockInfo> allTeamBlockInfos, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
-			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, IScheduleDictionary schedules, INewBusinessRuleCollection businessRuleCollection)
-		{
-			foreach (var teamBlockInfo in allTeamBlockInfos.ToList())
-			{
-				var firstSelectedDay = selectedPeriod.DayCollection().First();
-				var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
-				_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(schedulePartModifyAndRollbackService, teamBlockInfo, NewBusinessRuleCollection.Minimum()); //TODO: check if this is enough
-				_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo, datePoint, schedulingOptions,
-					schedulePartModifyAndRollbackService,
-					new DoNothingResourceCalculateDelayer(), skillDays.ToSkillDayEnumerable(), schedules, new ShiftNudgeDirective(), businessRuleCollection);
-
-				allTeamBlockInfos.Remove(teamBlockInfo);
-			}
-		}
-#endregion
 	}
 }

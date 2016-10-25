@@ -8,26 +8,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface IBusinessRulesShiftFilter
 	{
-		IList<IShiftProjectionCache> Filter(IPerson person, IList<IShiftProjectionCache> shiftList, DateOnly dateToCheck,
-											IWorkShiftFinderResult finderResult);
+		IList<IShiftProjectionCache> Filter(IScheduleDictionary schedules, IPerson person, IList<IShiftProjectionCache> shiftList, DateOnly dateToCheck, IWorkShiftFinderResult finderResult);
 	}
 
 	public class BusinessRulesShiftFilter : IBusinessRulesShiftFilter
 	{
-		private readonly Func<IScheduleRangeForPerson> _scheduleRangeForPerson;
 		private readonly IValidDateTimePeriodShiftFilter _validDateTimePeriodShiftFilter;
 		private readonly ILongestPeriodForAssignmentCalculator _longestPeriodForAssignmentCalculator;
 
-		public BusinessRulesShiftFilter(Func<IScheduleRangeForPerson> scheduleRangeForPerson,
-		                                IValidDateTimePeriodShiftFilter validDateTimePeriodShiftFilter,
+		public BusinessRulesShiftFilter(IValidDateTimePeriodShiftFilter validDateTimePeriodShiftFilter,
 		                                ILongestPeriodForAssignmentCalculator longestPeriodForAssignmentCalculator)
 		{
-			_scheduleRangeForPerson = scheduleRangeForPerson;
 			_validDateTimePeriodShiftFilter = validDateTimePeriodShiftFilter;
 			_longestPeriodForAssignmentCalculator = longestPeriodForAssignmentCalculator;
 		}
 
-		public IList<IShiftProjectionCache> Filter(IPerson person, IList<IShiftProjectionCache> shiftList,
+		public IList<IShiftProjectionCache> Filter(IScheduleDictionary schedules, IPerson person, IList<IShiftProjectionCache> shiftList,
 		                                           DateOnly dateToCheck, IWorkShiftFinderResult finderResult)
 		{
 			if (person == null) return null;
@@ -39,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			var approxUtc = TimeZoneHelper.ConvertToUtc(approximateTime, person.PermissionInformation.DefaultTimeZone());
 			DateTimePeriod? returnPeriod = new DateTimePeriod(approxUtc.AddDays(-2), approxUtc.AddDays(2));
 
-			var scheduleRange = _scheduleRangeForPerson().ForPerson(person);
+			var scheduleRange = schedules[person];
 			var newRulePeriod = _longestPeriodForAssignmentCalculator.PossiblePeriod(scheduleRange, dateToCheck);
 			if (!newRulePeriod.HasValue)
 			{

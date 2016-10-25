@@ -68,10 +68,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_finderResult = new WorkShiftFinderResult(_person, _dateOnly);
 			_schedules = MockRepository.GenerateMock<IScheduleDictionary>();
 			_schedules.Expect(x => x[_person].ScheduledDay(_dateOnly)).Return(new SchedulePartFactoryForDomain().CreatePart());
-			var stateHolder = new SchedulingResultStateHolder();
 			var validDateTimePeriodShiftFilter = new ValidDateTimePeriodShiftFilter(new FakeTimeZoneGuard(_timeZoneInfo));
 			_target = new WorkShiftFilterService(new ActivityRestrictionsShiftFilter(),
-				new BusinessRulesShiftFilter(() => new ScheduleRangeForPerson(()=>stateHolder), validDateTimePeriodShiftFilter,
+				new BusinessRulesShiftFilter(validDateTimePeriodShiftFilter,
 					new LongestPeriodForAssignmentCalculator()),
 				new CommonMainShiftFilter(new ScheduleDayEquator(new EditableShiftMapper())),
 				new ContractTimeShiftFilter(

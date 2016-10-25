@@ -7,6 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
+	//TODO: remove stateholder dep
     public class SchedulePartModifyAndRollbackService : ISchedulePartModifyAndRollbackService
     {
         private readonly ISchedulingResultStateHolder _stateHolder;

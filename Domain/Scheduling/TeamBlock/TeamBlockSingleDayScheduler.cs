@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (isTeamBlockScheduledForSelectedTeamMembers(new List<IPerson> { person }, day, teamBlockSingleDayInfo, schedulingOptions))
 				return resultList;
 
-			var restriction = _proposedRestrictionAggregator.Aggregate(schedulingOptions, teamBlockInfo, day, person,
+			var restriction = _proposedRestrictionAggregator.Aggregate(schedulingResultStateHolder.Schedules, schedulingOptions, teamBlockInfo, day, person,
 						roleModelShift);
 
 			if (restriction == null)
@@ -137,8 +137,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 															  schedulingOptions.GroupOnGroupPageForTeamBlockPer.Type == GroupPageType.SingleAgent);
 				if (!isSingleAgentTeamAndBlockWithSameShift || schedulingOptions.ShiftBagBackToLegal)
 				{
-					var restriction = _proposedRestrictionAggregator.Aggregate(schedulingOptions, teamBlockInfo, day, person,
-						roleModelShift);
+					var restriction = _proposedRestrictionAggregator.Aggregate(schedules, schedulingOptions, teamBlockInfo, day, person, roleModelShift);
 					if (restriction == null)
 						return false;
 

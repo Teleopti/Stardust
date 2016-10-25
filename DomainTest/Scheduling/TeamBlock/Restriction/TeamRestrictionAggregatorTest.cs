@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private MockRepository _mocks;
 		private ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
-		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private DateOnly _dateOnly;
 		private IPerson _person1;
 		private IPerson _person2;
@@ -35,11 +34,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_teamBlockSchedulingOptions = new TeamBlockSchedulingOptions();
 			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
-			_target = new TeamRestrictionAggregator(_effectiveRestrictionCreator, ()=>_schedulingResultStateHolder,
-			                                        _teamBlockSchedulingOptions);
+			_target = new TeamRestrictionAggregator(_effectiveRestrictionCreator, _teamBlockSchedulingOptions);
 			_dateOnly = new DateOnly(2013, 11, 12);
 			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("bill"), _dateOnly);
 			_person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("ball"), _dateOnly);
@@ -73,7 +70,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_group.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestriction);
@@ -81,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Aggregate(_dateOnly, _teamBlockInfo, _schedulingOptions, null);
+				var result = _target.Aggregate(scheduleDictionary, _dateOnly, _teamBlockInfo, _schedulingOptions, null);
 				Assert.That(result, Is.EqualTo(expectedResult));
 			}
 		}
@@ -109,7 +105,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_group.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestriction);
@@ -124,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Aggregate(_dateOnly, _teamBlockInfo, _schedulingOptions, null);
+				var result = _target.Aggregate(scheduleDictionary, _dateOnly, _teamBlockInfo, _schedulingOptions, null);
 				Assert.That(result, Is.EqualTo(expectedResult));
 			}
 		}
@@ -153,7 +148,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_group.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestriction);
@@ -168,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Aggregate(_dateOnly, _teamBlockInfo, _schedulingOptions, null);
+				var result = _target.Aggregate(scheduleDictionary, _dateOnly, _teamBlockInfo, _schedulingOptions, null);
 				Assert.That(result, Is.EqualTo(expectedResult));
 			}
 		}
@@ -194,7 +188,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_group.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestriction);
@@ -208,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Aggregate(_dateOnly, _teamBlockInfo, _schedulingOptions, null);
+				var result = _target.Aggregate(scheduleDictionary, _dateOnly, _teamBlockInfo, _schedulingOptions, null);
 				Assert.That(result, Is.EqualTo(expectedResult));
 			}
 		}
@@ -234,7 +227,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			
 			using (_mocks.Record())
 			{
-				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_group.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestriction);
@@ -250,7 +242,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Aggregate(_dateOnly, _teamBlockInfo, _schedulingOptions, _shift);
+				var result = _target.Aggregate(scheduleDictionary, _dateOnly, _teamBlockInfo, _schedulingOptions, _shift);
 				Assert.That(result, Is.EqualTo(expectedResult));
 			}
 		}

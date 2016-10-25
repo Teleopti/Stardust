@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 {
 	public interface IProposedRestrictionAggregator
 	{
-		IEffectiveRestriction Aggregate(ISchedulingOptions schedulingOptions, ITeamBlockInfo teamBlockInfo,
+		IEffectiveRestriction Aggregate(IScheduleDictionary schedules, ISchedulingOptions schedulingOptions, ITeamBlockInfo teamBlockInfo,
 														DateOnly dateOnly, IPerson person, IShiftProjectionCache roleModel);
 	}
 
@@ -16,37 +16,33 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 		private readonly ITeamBlockRestrictionAggregator _teamBlockRestrictionAggregator;
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 
 		public ProposedRestrictionAggregator(ITeamRestrictionAggregator teamRestrictionAggregator,
 			IBlockRestrictionAggregator blockRestrictionAggregator,
 			ITeamBlockRestrictionAggregator teamBlockRestrictionAggregator,
 			ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
-			IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			Func<ISchedulingResultStateHolder> schedulingResultStateHolder)
+			IEffectiveRestrictionCreator effectiveRestrictionCreator)
 		{
 			_teamRestrictionAggregator = teamRestrictionAggregator;
 			_blockRestrictionAggregator = blockRestrictionAggregator;
 			_teamBlockRestrictionAggregator = teamBlockRestrictionAggregator;
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
-			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
-		public IEffectiveRestriction Aggregate(ISchedulingOptions schedulingOptions, ITeamBlockInfo teamBlockInfo,
+		public IEffectiveRestriction Aggregate(IScheduleDictionary schedules, ISchedulingOptions schedulingOptions, ITeamBlockInfo teamBlockInfo,
 											   DateOnly dateOnly, IPerson person, IShiftProjectionCache roleModel)
 		{
 			if (_teamBlockSchedulingOptions.IsTeamScheduling(schedulingOptions))
-				return _teamRestrictionAggregator.Aggregate(dateOnly, teamBlockInfo, schedulingOptions, roleModel);
+				return _teamRestrictionAggregator.Aggregate(schedules, dateOnly, teamBlockInfo, schedulingOptions, roleModel);
 
 			if (_teamBlockSchedulingOptions.IsBlockScheduling(schedulingOptions))
 				return _blockRestrictionAggregator.Aggregate(person, teamBlockInfo, schedulingOptions, roleModel);
 
 			if (_teamBlockSchedulingOptions.IsTeamBlockScheduling(schedulingOptions))
-				return _teamBlockRestrictionAggregator.Aggregate(_schedulingResultStateHolder().Schedules, dateOnly, person, teamBlockInfo, schedulingOptions, roleModel);
+				return _teamBlockRestrictionAggregator.Aggregate(schedules, dateOnly, person, teamBlockInfo, schedulingOptions, roleModel);
 
-			return _effectiveRestrictionCreator.GetEffectiveRestrictionForSinglePerson(person, dateOnly, schedulingOptions,
-				_schedulingResultStateHolder().Schedules);
+			return _effectiveRestrictionCreator.GetEffectiveRestrictionForSinglePerson(person, dateOnly, schedulingOptions,schedules);
 		}
 	}
 }

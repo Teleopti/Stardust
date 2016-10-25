@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				person, matrixList, isSameOpenHoursInBlock);
 			shiftList = runPersonalShiftFilterForEachMember(schedules, shiftList, teamBlockInfo, finderResult);
 			if(schedulingOptions.UseBlock && schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.BetweenDayOff && !schedulingOptions.BlockSameShiftCategory)		
-				shiftList = _businessRulesShiftFilter.Filter(person, shiftList, dateOnly, finderResult);			
+				shiftList = _businessRulesShiftFilter.Filter(schedules, person, shiftList, dateOnly, finderResult);			
 
 			if (allowanceToUseBlackList(shiftList, schedulingOptions, effectiveRestriction))
 			{
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						person, matrixList, isSameOpenHoursInBlock);
 				shiftList = runPersonalShiftFilterForEachMember(schedules, shiftList, teamBlockInfo, finderResult);
 				if (schedulingOptions.UseBlock && schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.BetweenDayOff && !schedulingOptions.BlockSameShiftCategory)
-					shiftList = _businessRulesShiftFilter.Filter(person, shiftList, dateOnly, finderResult);		
+					shiftList = _businessRulesShiftFilter.Filter(schedules, person, shiftList, dateOnly, finderResult);		
 			}
 
 			if (shiftList == null)
@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 								 IPerson person, IList<IScheduleMatrixPro> matrixList, bool sameContractTime)
 		{		
 			shiftList = runFiltersForRoleModel(schedules, dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, person, matrixList,sameContractTime );
-			shiftList = _businessRulesShiftFilter.Filter(person, shiftList, dateOnly, finderResult);
+			shiftList = _businessRulesShiftFilter.Filter(schedules, person, shiftList, dateOnly, finderResult);
 			shiftList = _commonActivityFilter.Filter(shiftList, schedulingOptions, effectiveRestriction);
 			shiftList = _personalShiftsShiftFilter.Filter(schedules, dateOnly, person, shiftList, finderResult);
 			return shiftList;

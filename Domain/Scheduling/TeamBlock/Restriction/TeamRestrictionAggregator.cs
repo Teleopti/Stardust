@@ -8,27 +8,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 {
 	public interface ITeamRestrictionAggregator
 	{
-		IEffectiveRestriction Aggregate(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache roleModel);
+		IEffectiveRestriction Aggregate(IScheduleDictionary schedules, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache roleModel);
 	}
 
 	public class TeamRestrictionAggregator : ITeamRestrictionAggregator
 	{
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 
 		public TeamRestrictionAggregator(IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 			ITeamBlockSchedulingOptions teamBlockSchedulingOptions)
 		{
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
-			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 		}
 
-		public IEffectiveRestriction Aggregate(DateOnly dateOnly,  ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache roleModel)
+		public IEffectiveRestriction Aggregate(IScheduleDictionary schedules, DateOnly dateOnly,  ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache roleModel)
 		{
-			var scheduleDictionary = _schedulingResultStateHolder().Schedules;
 			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers.ToList();
 			var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().ToList();
 			var timeZone = groupMembers[0].PermissionInformation.DefaultTimeZone();
@@ -39,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 																			  new List<IActivityRestriction>());
 
 			effectiveRestriction = combineRestriction(new TeamBlockEffectiveRestrcition(_effectiveRestrictionCreator, groupMembers, schedulingOptions,
-																	 scheduleDictionary), dateOnly, matrixList, effectiveRestriction);
+																	 schedules), dateOnly, matrixList, effectiveRestriction);
 			
 			if (_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(schedulingOptions))
 			{
