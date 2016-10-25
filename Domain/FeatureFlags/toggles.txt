@@ -43,7 +43,6 @@ Wfm_ResourcePlanner_32892 = true
 Wfm_ChangePlanningPeriod_33043 = true
 MyTimeWeb_ShowSeatBookingMonthView_39068 = true
 
-RTA_ScheduleQueryOptimizationFilteredCache_40260 = false
 RTA_ConnectionQueryOptimizeAllTheThings_40262 = true
 RTA_HideAgentsByStateGroup_40469 = true
 RTA_FasterUpdateOfScheduleChanges_40536 = true

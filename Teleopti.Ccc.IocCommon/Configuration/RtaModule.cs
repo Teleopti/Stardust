@@ -36,10 +36,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			else
 				builder.RegisterType<ContextLoaderWithScheduleOptimization>().As<IContextLoader>().ApplyAspects().SingleInstance();
 
-			if (_config.Toggle(Toggles.RTA_ScheduleQueryOptimizationFilteredCache_40260))
-				builder.RegisterType<Filtered>().As<IScheduleCacheStrategy>().SingleInstance();
-			else
-				builder.RegisterType<ThreeDays>().As<IScheduleCacheStrategy>().SingleInstance();
+			builder.RegisterType<ThreeDays>().As<IScheduleCacheStrategy>().SingleInstance();
 
 			_config.Cache().This<IDatabaseLoader>((c, b) => b
 				.CacheMethod(x => x.Datasources())
