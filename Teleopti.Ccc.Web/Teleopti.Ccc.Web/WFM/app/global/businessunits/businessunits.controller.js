@@ -19,7 +19,7 @@
 					$window.location.reload();
 				};
 
-        vm.loadBusinessUnit = function(){
+        (vm.loadBusinessUnit = function(){
           BusinessUnitsService.getAllBusinessUnits().then(function(result) {
             vm.data.businessUnits = result;
             vm.show = (result.length > 1);
@@ -29,10 +29,8 @@
               vm.data.selectedBu = businessUnit;
             } else {
               vm.data.selectedBu = result[0];
-
             }
-          });
-        };
-	    vm.loadBusinessUnit();
+          })
+      })();
     }
 })();
