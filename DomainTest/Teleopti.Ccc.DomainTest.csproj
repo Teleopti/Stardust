@@ -271,6 +271,7 @@
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestHandlerNoMockTest.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeTestHelper.cs" />
     <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastWorkloadUpdaterTest.cs" />
+    <Compile Include="ApplicationLayer\TickEvent\TenantDayTickEventTest.cs" />
     <Compile Include="ApplicationLayer\Workload\AnalyticsWorkloadUpdaterTest.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityModelTest.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityPersisterTest.cs" />
