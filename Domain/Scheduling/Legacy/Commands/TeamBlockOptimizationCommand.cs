@@ -282,6 +282,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				schedulePartModifyAndRollbackService,
 				resourceCalculateDelayer,
 				_schedulerStateHolder().SchedulingResultState.SkillDays,
+				_schedulerStateHolder().Schedules,
 				NewBusinessRuleCollection.AllForScheduling(_schedulerStateHolder().SchedulingResultState));
 			teamBlockIntradayOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 		}

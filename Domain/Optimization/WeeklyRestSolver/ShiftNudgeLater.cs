@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				new List<IActivityRestriction>(effectiveRestriction.ActivityRestrictionCollection));
 
 			bool result = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, shiftDate, schedulingOptions,
-				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(),
+				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules,
 				new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Right), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder));
 			if (!result)
 			{

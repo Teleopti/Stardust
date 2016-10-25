@@ -94,7 +94,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					agentsToOptimize,
 					optimizationPreferences,
 					rollbackService,
-					maxSeatData.AllMaxSeatSkillDaysPerSkill(), //fix
+					maxSeatData.AllMaxSeatSkillDaysPerSkill(), 
+					schedules,
 					NewBusinessRuleCollection.Minimum()); //is this enough?
 			}
 		}
@@ -138,6 +139,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays,
+			IScheduleDictionary schedules,
 			INewBusinessRuleCollection businessRuleCollection)
 		{
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
@@ -149,12 +151,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				optimizeOneRound(selectedPeriod,
 					schedulingOptions, remainingInfoList,
 					schedulePartModifyAndRollbackService,
-					skillDays, businessRuleCollection);
+					skillDays, schedules, businessRuleCollection);
 			}
 		}
 
 		private void optimizeOneRound(DateOnlyPeriod selectedPeriod, ISchedulingOptions schedulingOptions,
-			ICollection<ITeamBlockInfo> allTeamBlockInfos, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, INewBusinessRuleCollection businessRuleCollection)
+			ICollection<ITeamBlockInfo> allTeamBlockInfos, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
+			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, IScheduleDictionary schedules, INewBusinessRuleCollection businessRuleCollection)
 		{
 			foreach (var teamBlockInfo in allTeamBlockInfos.ToList())
 			{
@@ -163,7 +166,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(schedulePartModifyAndRollbackService, teamBlockInfo);
 				_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo, datePoint, schedulingOptions,
 					schedulePartModifyAndRollbackService,
-					new DoNothingResourceCalculateDelayer(), skillDays.ToSkillDayEnumerable(), new ShiftNudgeDirective(), businessRuleCollection);
+					new DoNothingResourceCalculateDelayer(), skillDays.ToSkillDayEnumerable(), schedules, new ShiftNudgeDirective(), businessRuleCollection);
 
 				allTeamBlockInfos.Remove(teamBlockInfo);
 			}

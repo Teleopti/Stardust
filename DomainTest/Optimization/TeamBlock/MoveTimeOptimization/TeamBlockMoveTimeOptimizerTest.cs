@@ -174,9 +174,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 					Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(5);
 					Expect.Call(_decisionMaker.Execute(_matrix1, _optimizationPreferences, _schedulingResultStateHolder)).Return(new List<DateOnly> { _today, _today.AddDays(1) });
 					Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, _teamBlockInfo, new DateOnly(2014, 5, 14), _schedulingOptions,
-						_rollbackService, _resourceCalulateDelayer, null, _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder))).IgnoreArguments().Return(true);
+						_rollbackService, _resourceCalulateDelayer, null, null, _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder))).IgnoreArguments().Return(true);
 					Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, _teamBlockInfo, new DateOnly(2014, 5, 15), _schedulingOptions,
-						_rollbackService, _resourceCalulateDelayer, null, _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder))).IgnoreArguments().Return(true);
+						_rollbackService, _resourceCalulateDelayer, null, null, _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder))).IgnoreArguments().Return(true);
 					
 					commonMocks(_today, _scheduleDayPro1, _scheduleDay1, _projectionService1, _visualLayerCollection1, new TimeSpan(7));
 					commonMocks(_today.AddDays(1), _scheduleDayPro2, _scheduleDay2, _projectionService2, _visualLayerCollection2, new TimeSpan(8));
@@ -209,9 +209,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 				Expect.Call(_decisionMaker.Execute(_matrix1, _optimizationPreferences, _schedulingResultStateHolder)).Return(new List<DateOnly> { _today, _today.AddDays(1) });
 
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, _teamBlockInfo, new DateOnly(2014, 5, 14), _schedulingOptions,
-					_rollbackService, _resourceCalulateDelayer, null, _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder))).IgnoreArguments().Return(true);
+					_rollbackService, _resourceCalulateDelayer, null, null, _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder))).IgnoreArguments().Return(true);
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, _teamBlockInfo, new DateOnly(2014, 5, 15), _schedulingOptions,
-					_rollbackService, _resourceCalulateDelayer, null, _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder))).IgnoreArguments().Return(true);
+					_rollbackService, _resourceCalulateDelayer, null, null, _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder))).IgnoreArguments().Return(true);
 
 				commonMocks(_today, _scheduleDayPro1, _scheduleDay1, _projectionService1, _visualLayerCollection1, new TimeSpan(7));
 				commonMocks(_today.AddDays(1), _scheduleDayPro2, _scheduleDay2, _projectionService2, _visualLayerCollection2, new TimeSpan(8));

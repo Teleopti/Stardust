@@ -35,8 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (selectedTeamMembers.IsEmpty())
 				return resultList;
 
-			IShiftProjectionCache roleModelShift = _roleModelSelector.Select(_workShiftSelector,teamBlockInfo, datePointer, selectedTeamMembers.First(),
-				schedulingOptions, new EffectiveRestriction());
+			var roleModelShift = _roleModelSelector.Select(schedulingResultStateHolder.Schedules, schedulingResultStateHolder.AllSkillDays(), _workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(), schedulingOptions, new EffectiveRestriction());
 
 			if (roleModelShift == null)
 				return resultList;

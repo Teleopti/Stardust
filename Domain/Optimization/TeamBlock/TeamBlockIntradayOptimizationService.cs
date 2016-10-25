@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays,
+			IScheduleDictionary scheduleDictionary,
 			INewBusinessRuleCollection businessRuleCollection);
 
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -76,7 +77,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer,
-			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, 
+			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays,
+			IScheduleDictionary scheduleDictionary,
 			INewBusinessRuleCollection businessRuleCollection)
 		{
 			var cancelMe = false;
@@ -95,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					schedulingOptions, remainingInfoList,
 					schedulePartModifyAndRollbackService,
 					resourceCalculateDelayer,
-					skillDays, businessRuleCollection, ()=> { cancelMe = true; });
+					skillDays, scheduleDictionary, businessRuleCollection, ()=> { cancelMe = true; });
 				foreach (var teamBlock in teamBlocksToRemove)
 				{
 					remainingInfoList.Remove(teamBlock);
@@ -118,7 +120,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private IEnumerable<ITeamBlockInfo> optimizeOneRound(DateOnlyPeriod selectedPeriod,
 			IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions,
 			IList<ITeamBlockInfo> allTeamBlockInfos, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, INewBusinessRuleCollection businessRuleCollection, 
+			IResourceCalculateDelayer resourceCalculateDelayer, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, IScheduleDictionary scheduleDictionary, INewBusinessRuleCollection businessRuleCollection, 
 			Action cancelAction)
 		{
 			var teamBlockToRemove = new List<ITeamBlockInfo>();
@@ -149,7 +151,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			
 				var success = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, datePoint, schedulingOptions,
 					schedulePartModifyAndRollbackService,
-					resourceCalculateDelayer, skillDays.ToSkillDayEnumerable(), new ShiftNudgeDirective(), businessRuleCollection);
+					resourceCalculateDelayer, skillDays.ToSkillDayEnumerable(), scheduleDictionary, new ShiftNudgeDirective(), businessRuleCollection);
 				if (!success)
 				{
 					var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingIntraday + Resources.Colon + Resources.RollingBackSchedulesFor + " " +
