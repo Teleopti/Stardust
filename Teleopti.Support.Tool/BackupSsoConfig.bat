@@ -1,1 +1,1 @@
-Teleopti.Support.Tool -BC -MODEPLOY
+Teleopti.Support.Tool -BC

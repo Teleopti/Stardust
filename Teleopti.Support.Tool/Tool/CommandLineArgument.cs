@@ -29,8 +29,8 @@ namespace Teleopti.Support.Tool.Tool
 
 		-? or ? or -HELP or HELP, Shows this help
 		-MO[MODE] is where to put the config files values: Develop or Deploy (Develop is default)
-			-BC Backup config settings for SSO, combine with -MO ( before patching if there is custom settings)
-			-RC Restore the config settings for SSO from the backup, combine with -MO (use after patching if there is custom settings)
+			-BC Backup config settings for SSO and CSP ( before patching if there is custom settings)
+			-RC Restore the config settings for SSO and CSP from the backup, combine with -MO (use after patching if there is custom settings)
 		-TC[ALL|RC|CUSTOMER] Set ToggleMode to ALL, RC or CUSTOMER.
 		-SET [searchFor] [replaceWith] Set a setting value
 				Example: Teleopti.Support.Tool.exe -TC""ALL""";
@@ -82,7 +82,10 @@ namespace Teleopti.Support.Tool.Tool
 
 
 				if (argument.StartsWith("-BC"))
+				{
+					Mode = new ModeFile("DeployConfigFiles.txt");
 					Command = backupCommand;
+				}
 				if (argument.StartsWith("-RC"))
 					Command = restoreCommand;
 
