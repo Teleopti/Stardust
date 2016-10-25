@@ -318,15 +318,15 @@ function global:CreateDatabaseWithSQLAdmin () {
 			
 		parallel {
 			#Create Teleopti Mart DB
-			InlineScript {& $Using:$DbManagerExe "$Using:DBManagerString" `
+			InlineScript {& $Using:DbManagerExe "$Using:DBManagerString" `
 				"-C" `
 				"-D$Using:MartDB" `
-				"-OTeleoptiAnalytics"
+				"-OTeleoptiAnalytics" `
 				"-F$Using:DatabasePath"
 			}
 			
 			#Create Teleopti App DB
-			InlineScript {& $Using:$DbManagerExe "$Using:DBManagerString" `
+			InlineScript {& $Using:DbManagerExe "$Using:DBManagerString" `
 				"-C" `
 				"-D$Using:AppDB" `
 				"-OTeleoptiCCC7" `
