@@ -360,9 +360,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return Restrictions.Eq("req.class", type);
 		}
 
-		private void pagePersonRequests(ICriteria query, IPaging paging)
+		private void pagePersonRequests(ICriteria query, Paging paging)
 		{
-			if (paging == null || (paging as Paging).Equals(Paging.Nothing)) return;
+			if (paging.Equals(Paging.Empty)) return;
 			query.SetFirstResult(paging.Skip).SetMaxResults(paging.Take);
 		}
 
@@ -377,7 +377,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 			filteredRequests = filteredRequests.OrderByDescending(x => x.UpdatedOn);
 
-			return paging == null ? filteredRequests : filteredRequests.Skip(paging.Skip).Take(paging.Take);
+			return paging.Equals(Paging.Empty) ? filteredRequests : filteredRequests.Skip(paging.Skip).Take(paging.Take);
 		}
 
 		private static AbstractCriterion getShiftTradeRequestsForAgent(IPerson person)
@@ -421,7 +421,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private static void applyPagingToResults(Paging paging, ICriteria personRequests)
 		{
-			if (paging == null) return;
+			if (paging.Equals(Paging.Empty)) return;
 
 			personRequests.SetMaxResults(paging.Take);
 			personRequests.SetFirstResult(paging.Skip);

@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Eq("IsReplied", false))
 				.AddOrder(Order.Desc("UpdatedOn"));
 
-			if (paging != null)
+			if (!paging.Equals(Paging.Empty))
 			{
 				criteria
 					.SetFirstResult(paging.Skip)

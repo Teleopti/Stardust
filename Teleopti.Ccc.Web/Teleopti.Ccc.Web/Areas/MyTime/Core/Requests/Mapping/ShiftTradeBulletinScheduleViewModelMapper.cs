@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			var myScheduleDayReadModel = _shiftTradeRequestProvider.RetrieveMySchedule(data.ShiftTradeDate);
 			var possibleTradePersons = _possibleShiftTradePersonsProvider.RetrievePersons(data);
-			if (data.Paging == null || data.Paging.Take <= 0)
+			if (data.Paging.Equals(Paging.Empty) || data.Paging.Take <= 0)
 			{
 				return new ShiftTradeScheduleViewModel();
 			}

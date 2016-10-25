@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 			
 		}
 
-		public SeatBookingReportViewModel Get (SeatBookingReportCriteria criteria, Paging paging = null)
+		public SeatBookingReportViewModel Get (SeatBookingReportCriteria criteria, Paging paging = new Paging())
 		{
 			var seatBookingData = _seatBookingRepository.LoadSeatBookingsReport (criteria, paging);
 			return groupBookings (seatBookingData);

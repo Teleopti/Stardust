@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 								 where criteria.Locations.Contains(booking.Seat.Parent) &&
 									   criteria.Teams.Contains(booking.Person.MyTeam(booking.BelongsToDate))
 								 select booking);
-			if (paging != null)
+			if (!paging.Equals(Paging.Empty))
 			{
 				bookingModels = bookingModels.Take(paging.Take).Skip(paging.Skip);
 			}
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				personSchedulesWithSeatBookings.Add (personScheduleWithSeatBooking);
 			}
 			
-			return new SeatBookingReportModel()
+			return new SeatBookingReportModel
 			{
 				RecordCount = bookingModels.Count(),
 				SeatBookings = personSchedulesWithSeatBookings

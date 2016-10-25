@@ -1469,7 +1469,6 @@
     <Compile Include="Repositories\ITeamGamificationSettingRepository.cs" />
     <Compile Include="Repositories\IGamificationSettingRepository.cs" />
     <Compile Include="Repositories\IGlobalSettingDataRepository.cs" />
-    <Compile Include="Repositories\Paging.cs" />
     <Compile Include="Repositories\TimeFilterInfo.cs" />
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculator.cs" />
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManager28317.cs" />

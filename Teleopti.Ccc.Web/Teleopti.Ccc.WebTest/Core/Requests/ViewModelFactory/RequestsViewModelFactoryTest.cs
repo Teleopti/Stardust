@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			mapper.Stub(x => x.Map<IEnumerable<IPersonRequest>, IEnumerable<RequestViewModel>>(null)).Return(requests);
 
-			var result = target.CreatePagingViewModel(null);
+			var result = target.CreatePagingViewModel(new Paging());
 
 			result.Should().Be.SameInstanceAs(requests);
 		}

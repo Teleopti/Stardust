@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.ForEach(Remove);
 		}
 
-		public ISeatBookingReportModel LoadSeatBookingsReport(ISeatBookingReportCriteria criteria, Paging paging = null)
+		public ISeatBookingReportModel LoadSeatBookingsReport(ISeatBookingReportCriteria criteria, Paging paging = new Paging())
 		{
 			var scheduleAndBookingQuery = getScheduleAndBookingQuery(criteria);
 			return getBookingReportResults(scheduleAndBookingQuery, paging);
@@ -96,9 +96,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private static ISeatBookingReportModel getBookingReportResults(IQuery bookingQuery, Paging paging)
 		{
-			return paging != null
-				? getBookingReportResulsWithPaging(bookingQuery, paging)
-				: getBookingReportResultsWithoutPaging(bookingQuery);
+			return paging.Equals(Paging.Empty)
+				? getBookingReportResultsWithoutPaging(bookingQuery)
+				: getBookingReportResulsWithPaging(bookingQuery, paging);
 		}
 
 		private static SeatBookingReportModel getBookingReportResultsWithoutPaging(IQuery bookingQuery)

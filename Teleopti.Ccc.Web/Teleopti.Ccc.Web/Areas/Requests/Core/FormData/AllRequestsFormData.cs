@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.FormData
 		{
 			if (take == null || skip == null)
 			{
-				return Paging.Nothing;
+				return Paging.Empty;
 			}
 
 			return new Paging

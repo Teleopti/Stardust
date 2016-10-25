@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 
 		public TeamScheduleViewModelReworked GetViewModel(TeamScheduleViewModelData data)
 		{
-			if (data.Paging == null || data.Paging.Take <= 0)
+			if (data.Paging.Equals(Paging.Empty)|| data.Paging.Take <= 0)
 			{
 				return new TeamScheduleViewModelReworked();
 			}
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 		
 		public TeamScheduleViewModelReworked GetViewModelNoReadModel(TeamScheduleViewModelData data)
 		{
-			if (data.Paging == null || data.Paging.Take <= 0)
+			if (data.Paging.Equals(Paging.Empty) || data.Paging.Take <= 0)
 			{
 				return new TeamScheduleViewModelReworked();
 			}

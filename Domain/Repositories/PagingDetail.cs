@@ -1,17 +1,18 @@
 ﻿using System.ComponentModel;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
 	public class PagingDetail : INotifyPropertyChanged
 	{
-		private readonly Paging _paging = new Paging{Take = 20};
+		private Paging _paging = new Paging{Take = 20};
 
 		public int TotalNumberOfResults
 		{
 			get { return _paging.TotalCount; }
 			set
 			{
-				_paging.TotalCount = value;
+				_paging = new Paging {TotalCount = value, Skip = _paging.Skip, Take = _paging.Take};
 				notifyPropertyChanged("TotalNumberOfResults");
 			}
 		}
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 			get { return _paging.Take; }
 			set
 			{
-				_paging.Take = value;
+				_paging = new Paging { TotalCount = _paging.TotalCount, Skip = _paging.Skip, Take = value };
 				notifyPropertyChanged("Take");
 			}
 		}
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 			get { return _paging.Skip; }
 			set
 			{
-				_paging.Skip = value;
+				_paging = new Paging { TotalCount = _paging.TotalCount, Skip = value, Take = _paging.Take };
 				notifyPropertyChanged("Skip");
 			}
 		}

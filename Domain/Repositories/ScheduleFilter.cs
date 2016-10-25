@@ -2,7 +2,7 @@ using System;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
-	public class ScheduleFilter : IEquatable<ScheduleFilter>
+	public struct ScheduleFilter : IEquatable<ScheduleFilter>
 	{
 		public string TeamIds { get; set; }
 

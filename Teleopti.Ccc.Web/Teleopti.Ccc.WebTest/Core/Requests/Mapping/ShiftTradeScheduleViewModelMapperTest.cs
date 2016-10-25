@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var data = new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = DateOnly.Today,
-				TeamIdList = new List<Guid>() { teamId },
+				TeamIdList = new List<Guid> { teamId },
 				Paging = new Paging {Take = 1}
 			};
 			var readModel = new PersonScheduleDayReadModel();
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var data = new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = DateOnly.Today,
-				TeamIdList = new List<Guid>() { teamId },
+				TeamIdList = new List<Guid> { teamId },
 			};
 			var persons = new DatePersons
 			{
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var data = new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = DateOnly.Today,
-				TeamIdList = new List<Guid>() { teamId },
+				TeamIdList = new List<Guid> { teamId },
 				Paging = new Paging {Take = 1}
 			};
 			var persons = new DatePersons
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var data = new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = DateOnly.Today,
-				TeamIdList = new List<Guid>() { teamId },
+				TeamIdList = new List<Guid> { teamId },
 				Paging = new Paging {Take = 1},
 				TimeFilter = new TimeFilterInfo()
 			};
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var data = new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = DateOnly.Today,
-				TeamIdList = new List<Guid>(){teamId},
+				TeamIdList = new List<Guid>{teamId},
 				Paging = new Paging {Take = 1},
 				TimeFilter = new TimeFilterInfo()
 			};
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var data = new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = DateOnly.Today,
-				TeamIdList = new List<Guid>(){teamId},
+				TeamIdList = new List<Guid>{teamId},
 				Paging = new Paging {Take = 1},
 			};
 			var persons = new DatePersons {Date = data.ShiftTradeDate, Persons = new List<IPerson>()};
@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var data = new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = DateOnly.Today,
-				TeamIdList = new List<Guid>() { teamId },
+				TeamIdList = new List<Guid> { teamId },
 				Paging = new Paging {Skip = 0, Take = 1}
 			};
 			var persons = new DatePersons {Date = data.ShiftTradeDate, Persons = new[] {new Person()}};
@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var data = new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = DateOnly.Today,
-				TeamIdList = new List<Guid>() { teamId },
+				TeamIdList = new List<Guid> { teamId },
 				Paging = new Paging {Take = 1},
 				
 			};
@@ -286,7 +286,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var data = new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = DateOnly.Today,
-				TeamIdList = new List<Guid>() { teamId },
+				TeamIdList = new List<Guid> { teamId },
 				Paging = new Paging { Take = 1 }
 			};
 			var readModel = new PersonScheduleDayReadModel();
@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var data = new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = DateOnly.Today,
-				TeamIdList = new List<Guid>() { teamId },
+				TeamIdList = new List<Guid> { teamId },
 				Paging = new Paging { Take = 1 }
 			};
 			var readModel = new PersonScheduleDayReadModel();

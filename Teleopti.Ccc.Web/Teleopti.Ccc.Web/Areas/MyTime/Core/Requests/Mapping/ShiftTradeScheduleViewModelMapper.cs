@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		public ShiftTradeScheduleViewModel Map(ShiftTradeScheduleViewModelData data)
 		{
-			if (data.Paging == null || data.Paging.Take <= 0)
+			if (data.Paging.Equals(Paging.Empty) || data.Paging.Take <= 0)
 			{
 				return new ShiftTradeScheduleViewModel();
 			}
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		public ShiftTradeScheduleViewModel MapForBulletin(ShiftTradeScheduleViewModelData data)
 		{
-			if (data.Paging == null || data.Paging.Take <= 0)
+			if (data.Paging.Equals(Paging.Empty) || data.Paging.Take <= 0)
 			{
 				return new ShiftTradeScheduleViewModel();
 			}

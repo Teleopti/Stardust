@@ -34,7 +34,7 @@ namespace Teleopti.Interfaces.Domain
 		public IEnumerable<RequestType> RequestTypes;
 		public IDictionary<RequestFilterField, string> RequestFilters;
 		public IList<RequestsSortingOrder> SortingOrders;
-		public IPaging Paging;
+		public Paging Paging;
 		public bool ExcludeRequestsOnFilterPeriodEdge;
 		public bool OnlyIncludeRequestsStartingWithinPeriod;
 		public bool ExcludeInvalidShiftTradeRequest;
