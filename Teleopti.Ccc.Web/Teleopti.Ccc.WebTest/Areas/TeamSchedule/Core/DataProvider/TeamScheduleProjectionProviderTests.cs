@@ -17,6 +17,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.WebTest.Areas.Global;
+using Teleopti.Ccc.WebTest.Core.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
@@ -27,6 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 		private TeamScheduleProjectionProvider target;
 		private readonly Scenario scenario = new Scenario("d");
 		private FakeToggleManager _toggleManager;
+		private CommonAgentNameProvider _commonAgentNameProvider;
 
 		[SetUp]
 		public void SetupTeamScheduleProjectionProvider()
@@ -35,8 +37,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var projectionProvider = new ProjectionProvider();
 			var fakeGlobalSettingRepo = new FakeGlobalSettingDataRepository();
 			fakeGlobalSettingRepo.PersistSettingValue("CommonNameDescription", new CommonNameDescriptionSetting("{FirstName}{LastName}"));
+			_commonAgentNameProvider = new CommonAgentNameProvider(fakeGlobalSettingRepo);
 			_toggleManager = new FakeToggleManager();
-			target = new TeamScheduleProjectionProvider(projectionProvider, loggonUser, _toggleManager, new ScheduleProjectionHelper(), new ProjectionSplitter(projectionProvider, new ScheduleProjectionHelper()), new FakeIanaTimeZoneProvider(),new FakeCommonAgentNameProvider());
+			target = new TeamScheduleProjectionProvider(projectionProvider, loggonUser, _toggleManager, new ScheduleProjectionHelper(), new ProjectionSplitter(projectionProvider, new ScheduleProjectionHelper()), new FakeIanaTimeZoneProvider(),new FakePersonNameProvider());
 		}
 
 		[Test]
@@ -69,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var vm = target.Projection(scheduleDayOnePerson1, true);
 
 			vm.DayOff.Should().Be(null);
-			vm.Name.Should().Be("agent@1");
+			vm.Name.Should().Be("1 agent");
 			vm.Projection.Count().Should().Be(4);
 			vm.IsFullDayAbsence.Should().Be(false);
 			vm.Date.Should().Be(date.ToFixedDateFormat());

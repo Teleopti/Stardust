@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential);
 
 		GroupScheduleShiftViewModel MakeViewModel(IPerson person, DateOnly date, IScheduleDay scheduleDay,
-			bool canViewConfidential, bool canViewUnpublished, bool includeNote);
+			bool canViewConfidential, bool canViewUnpublished, bool includeNote, ICommonNameDescriptionSetting agentNameSetting);
 
 		bool IsFullDayAbsence(IScheduleDay scheduleDay);
 		bool IsOvertimeOnDayOff(IScheduleDay scheduleDay);
