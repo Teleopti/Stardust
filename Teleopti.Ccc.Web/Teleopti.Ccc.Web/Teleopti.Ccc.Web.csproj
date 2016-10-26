@@ -1383,6 +1383,8 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.note-editor.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.filter.timezone.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.filter.timezone.spec.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.service.belongsToDateDecider.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.service.belongsToDateDecider.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.scheduleNote.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.scheduleNote.spec.js" />
     <Content Include="WFM\app\skillPrio\skillprio.controller.js" />
