@@ -182,16 +182,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	    public void Bug36032ShouldReturnCorrectPeriod()
 	    {
 			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			var schedulePeriod1 = new SchedulePeriod(new DateOnly(2009, 2, 2), SchedulePeriodType.Week, 4);
 			person.AddSchedulePeriod(schedulePeriod1);
 			var schedulePeriod2 = new SchedulePeriod(new DateOnly(2011, 2, 7), SchedulePeriodType.Week, 4);
 			person.AddSchedulePeriod(schedulePeriod2);
 			var schedulePeriod3 = new SchedulePeriod(new DateOnly(2013, 2, 4), SchedulePeriodType.Week, 4);
 			person.AddSchedulePeriod(schedulePeriod3);
-
-			_timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));//GMT+1
-			_person.PermissionInformation.SetCulture(CultureInfo.CreateSpecificCulture("en-GB"));
-			_person.PermissionInformation.SetDefaultTimeZone(_timeZoneInfo);
 
 			_requestedPeriod = new DateTimePeriod(2015, 11, 30, 2015, 12, 27);
 			_target = new SchedulerRangeToLoadCalculator(_requestedPeriod);
