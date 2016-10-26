@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		{
 			var people = _personRepository.FindPeople(input.PersonIds);
 			var period = new DateOnlyPeriod(new DateOnly(input.Start), new DateOnly(input.End));
-			var extendedPeriod = period.Inflate(1);
+			var extendedPeriod = new DateOnlyPeriod(new DateOnly(input.Start).AddDays(-1), new DateOnly(input.End));
 			var scenario = _currentScenario.Current();
 			var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people,
 				new ScheduleDictionaryLoadOptions(false, false),
