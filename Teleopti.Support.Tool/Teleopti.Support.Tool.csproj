@@ -303,7 +303,7 @@
       <DependentUpon>ChangeSettings.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.config" />
-    <None Include="BackupSsoConfig.bat">
+    <None Include="BackupConfigs.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config">
@@ -348,7 +348,7 @@
     <None Include="Resources\ajax-loader.gif" />
     <None Include="Resources\accept.png" />
     <None Include="Resources\accept1.png" />
-    <None Include="RestoreSsoConfig.bat">
+    <None Include="RestoreConfigs.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Teleopti.Ccc.snk" />
