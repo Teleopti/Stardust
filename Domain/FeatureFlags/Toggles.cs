@@ -180,7 +180,8 @@
 		AbsenceRequest_WithOrWithoutShrinkage_41060,
 		LastHandlers_ToHangfire_41203,
 		ETL_EventbasedTimeZone_40870,
-		ETL_RemoveTimeZoneAndDateNightly_40870
+		ETL_RemoveTimeZoneAndDateNightly_40870,
+		Stardust_RunMultipleNodes_41224
 
 		// ReSharper restore InconsistentNaming
 	}

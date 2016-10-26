@@ -75,8 +75,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			if (toggleManager.IsEnabled(Toggles.Wfm_Use_Stardust))
 			{
-				var nodeThread = new Thread(startNode);
-				nodeThread.Start();
+				nodeStarter(toggleManager);
 			}
 
 			var useRhino = true;
@@ -188,13 +187,39 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			}
 		}
 
-		private void startNode()
+		private void nodeStarter(IToggleManager toggleManager)
+		{
+			
+			var port = _configReader.ReadValue("port", 14100);
+			if (toggleManager.IsEnabled(Toggles.Stardust_RunMultipleNodes_41224))
+			{
+				var totalNodes = _configReader.ReadValue("NumberOfNodes", Environment.ProcessorCount);
+				for (int portIndex = 1; portIndex <= totalNodes; portIndex++)
+				{
+					var nodeName = "Node" + portIndex;
+					var nodeThread = new Thread(() => startNode(port, nodeName));
+					nodeThread.Start();
+					port++;
+					// a little delay
+					Thread.Sleep(500);
+				}
+			}
+			else
+			{
+				var nodeThread = new Thread(() => startNode(port, "Node1"));
+				nodeThread.Start();
+			}
+			
+			
+		}
+
+		private void startNode(int port, string nodeName)
 		{
 			var nodeConfig = new NodeConfiguration(
 				new Uri(_configReader.AppConfig("ManagerLocation")),
 				Assembly.Load(_configReader.ReadValue("handlerAssembly", "Teleopti.Ccc.Domain")),
-				_configReader.ReadValue("port", 14100),
-				_configReader.ReadValue("nodeName", "NodeName"),
+				port,
+				nodeName,
 				_configReader.ReadValue("pingToManagerSeconds", 30)
 				);
 
