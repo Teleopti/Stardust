@@ -38,8 +38,6 @@ namespace ManagerConsoleHost
 
 		private static string WhoAmI { get; set; }
 
-		private static ManagerStarter ManagerStarter { get; set; }
-
 		public static void Main(string[] args)
 		{
 			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
@@ -102,10 +100,6 @@ namespace ManagerConsoleHost
 			                    }))
 			{
 				Logger.InfoWithLineNumber(WhoAmI + ": Started listening on port : ( " + baseAddress + " )");
-
-				ManagerStarter = new ManagerStarter();
-				ManagerStarter.Start(managerConfiguration,
-				                     container);
 
 				QuitEvent.WaitOne();
 			}

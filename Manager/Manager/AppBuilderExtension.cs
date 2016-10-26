@@ -29,6 +29,13 @@ namespace Stardust.Manager
 					inner.UseAutofacWebApi(config);
 					inner.UseWebApi(config);
 				});
+
+			var builder = new ContainerBuilder();
+			builder.RegisterModule(new ManagerModule(managerConfiguration));
+			builder.Update(lifetimeScope.ComponentRegistry);
+
+			//to start the timers etc
+			lifetimeScope.Resolve<ManagerController>();
 		}
 	}
 }
