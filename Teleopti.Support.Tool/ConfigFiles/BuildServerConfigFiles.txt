@@ -15,3 +15,4 @@
 ..\..\..\Teleopti.Ccc.Requests.PerformanceTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Ccc.Requests.PerformanceTest\bin\Debug\Teleopti.Ccc.Requests.PerformanceTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Ccc.Requests.PerformanceTest\bin\Release\Teleopti.Ccc.Requests.PerformanceTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
+..\..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\App.config,BuildArtifacts\ServiceBusHost.config

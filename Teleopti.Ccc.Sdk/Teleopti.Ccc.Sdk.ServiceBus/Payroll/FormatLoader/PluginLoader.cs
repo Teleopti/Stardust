@@ -33,13 +33,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 				{
 					Assembly.LoadFile(file);
 				}
-				foreach (string file in files)
+				foreach (var file in files)
                 {
                     var assembly = Assembly.LoadFile(file);
-                    foreach (Type type in assembly.GetTypes())
+                    foreach (var type in assembly.GetTypes())
                     {
                         if (!type.IsClass || type.IsNotPublic) continue;
-                        Type[] interfaces = type.GetInterfaces();
+                        var interfaces = type.GetInterfaces();
                         if (!interfaces.Contains(typeof(IPayrollExportProcessor))) continue;
                         var obj = Activator.CreateInstance(type);
                         var t = (IPayrollExportProcessor)obj;
@@ -73,15 +73,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 					var obj = Activator.CreateInstance(type);
 					var t = (IPayrollExportProcessor)obj;
 					var strippedfile = file.Replace(_searchPath.Path, "");
-					if (strippedfile.IndexOf("\\", StringComparison.OrdinalIgnoreCase) > 0)
-					{
-						var directory = strippedfile.Substring(0, strippedfile.IndexOf("\\", StringComparison.OrdinalIgnoreCase));
-						payrollFormats.Add(new PayrollFormatDto(t.PayrollFormat.FormatId, t.PayrollFormat.Name, directory));
-					}
-					else
-					{
-						payrollFormats.Add(new PayrollFormatDto(t.PayrollFormat.FormatId, t.PayrollFormat.Name, ""));
-					}
+					var directory = strippedfile.IndexOf("\\", StringComparison.OrdinalIgnoreCase) > 0
+						? strippedfile.Substring(0, strippedfile.IndexOf("\\", StringComparison.OrdinalIgnoreCase))
+						: "";
+					payrollFormats.Add(new PayrollFormatDto(t.PayrollFormat.FormatId, t.PayrollFormat.Name, directory));
 				}
 			}
 			AppDomain.CurrentDomain.AssemblyResolve -= _domainAssemblyResolver.Resolve;

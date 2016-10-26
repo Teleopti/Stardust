@@ -127,6 +127,7 @@
     <Compile Include="PayrollDllCopyTest.cs" />
     <Compile Include="Payroll\PayrollExportConsumerTest.cs" />
     <Compile Include="Payroll\PayrollPeopleLoaderTest.cs" />
+    <Compile Include="Payroll\PlugInLoaderTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
     <Compile Include="ShiftTrade\ShiftTradeContainerInstallerTest.cs" />
   </ItemGroup>
@@ -137,11 +138,26 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="PayrollTestDlls\Config.RelesayTeliaSonera.xml" />
+    <Content Include="PayrollTestDlls\Facet.Combinatorics.dll" />
+    <Content Include="PayrollTestDlls\FluentNHibernate.dll" />
+    <Content Include="PayrollTestDlls\ReadMe.txt" />
+    <Content Include="PayrollTestDlls\Settings.Teliasonera.xml" />
+    <Content Include="PayrollTestDlls\Teleopti.Ccc.Payroll.Base.dll" />
+    <Content Include="PayrollTestDlls\Teleopti.Ccc.Payroll.Core.Configuration.dll" />
+    <Content Include="PayrollTestDlls\Teleopti.Ccc.Payroll.Core.dll" />
+    <Content Include="PayrollTestDlls\Teleopti.Ccc.Payroll.Core.Interfaces.dll" />
+    <Content Include="PayrollTestDlls\Teleopti.Ccc.Payroll.Core.Templates.dll" />
+    <Content Include="PayrollTestDlls\Teleopti.Ccc.Payroll.Customers.ReleasyTeliaSonera.dll" />
+    <Content Include="PayrollTestDlls\Teleopti.Ccc.Payroll.dll" />
+    <Content Include="PayrollTestDlls\Teleopti.Ccc.Payroll.Systems.Hogia.RelesayTeliaSonera.dll" />
+    <Content Include="PayrollTestDlls\Teleopti.Ccc.Payroll.Systems.SAP.Teliasonera.dll" />
+    <Content Include="PayrollTestDlls\Teleopti.Ccc.Payroll.Teliasonera.dll" />
     <Content Include="testQueue.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Teleopti.Ccc.Sdk.ServiceBusTest.dll.Config">
+    <None Include="App.Config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
