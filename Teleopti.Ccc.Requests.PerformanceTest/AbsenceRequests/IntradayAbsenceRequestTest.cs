@@ -34,7 +34,14 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 		public AsSystem AsSystem;
 		public ICurrentUnitOfWork CurrentUnitOfWork;
 
-		[Test, Ignore("See if BeforeBuild is put on this test in statistics")]
+
+		[Test]
+		public void Aa()
+		{
+			//This is a very ugly way to remove buildSetupStuff from the real tests
+		}
+
+		[Test]
 		public void ShouldApproveAbsenceRequest()
 		{
 			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-15 05:00");

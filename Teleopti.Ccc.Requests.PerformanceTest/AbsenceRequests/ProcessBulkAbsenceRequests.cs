@@ -45,6 +45,12 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 		}
 
 		[Test]
+		public void Aa()
+		{
+			//This is a very ugly way to remove buildSetupStuff from the real tests
+		}
+
+		[Test]
 		public void ShouldProcessMultipleAbsenceRequests()
 		{
 			IEnumerable<Guid> personIds = new List<Guid>
