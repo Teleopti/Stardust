@@ -212,6 +212,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 				string.Format(".weekview-day[data-mytime-date='{0}'] .holiday-agents[style*='none']", date.ToString("yyyy-MM-dd")));
 		}
 
+		[Then(@"I should see an empty indication for chance of absence request on '(.*)'")]
+		public void ThenIShouldSeeAnEmptyIndicationForChanceOfAbsenceRequestOn(DateTime date)
+		{
+			Browser.Interactions.AssertNotExists(
+				string.Format(".weekview-day[data-mytime-date='{0}'] .small-circle:not([style])", date.ToString("yyyy-MM-dd")),
+				string.Format(".weekview-day[data-mytime-date='{0}'] .holiday-agents[style*='none']", date.ToString("yyyy-MM-dd")));
+		}
+
+
 		[Then(@"I should not see any indication of how many agents can go on holiday")]
 		public void ThenIShouldNotSeeAnyIndicationOfHowManyAgentsCanGoOnHoliday()
 		{
