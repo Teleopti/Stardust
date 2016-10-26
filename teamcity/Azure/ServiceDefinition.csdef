@@ -23,7 +23,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
     <Endpoints>
   		<InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="fakedress.teleopticloud.com" />
 		<InternalEndpoint name="StardustNode" protocol="http">
-			<FixedPortRange max="14100" min="14199" />
+			<FixedPortRange min="14100" max="14199" />
 		</InternalEndpoint>
     </Endpoints>
     <Imports>
