@@ -17,6 +17,7 @@
 				
 				angular.forEach(copiedSchedule.Projection, function(p) {
 					p.Start = $filter('timezone')(p.Start, timezone);
+					p.End = $filter('timezone')(p.End, timezone);
 				});
 								
 				return copiedSchedule;
