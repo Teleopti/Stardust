@@ -59,7 +59,7 @@ namespace Teleopti.Wfm.AdministrationTest
 			var databaseTasks = new DatabaseTasks(executor);
 			var databases = new[]
 			{
-				tenant + "_TeleoptiWfmApp", tenant + "_TeleoptiWfmAnalytics", tenant + "_TeleoptiWfmAgg", TestTenantDatabaseName,
+				tenant + "_TeleoptiApp", tenant + "_TeleoptiAnalytics", tenant + "_TeleoptiAgg", TestTenantDatabaseName,
 				TestTenantAnalyticsDatabaseName
 			};
 			foreach (var database in databases)
