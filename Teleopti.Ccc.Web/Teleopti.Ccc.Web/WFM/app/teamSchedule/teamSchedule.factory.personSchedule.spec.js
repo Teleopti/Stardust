@@ -40,12 +40,14 @@ describe("teamschedule person schedule tests", function () {
 					"Color": "Red",
 					"Description": "Phone",
 					"Start": queryDate + " 08:00",
+					"End": queryDate + " 10:00",
 					"Minutes": 120
 				},
 				{
 					"Color": "Yellow",
 					"Description": "Email",
 					"Start": queryDate + " 10:00",
+					"End": queryDate + " 16:00",
 					"Minutes": 360 // End = "2015-10-26 16:00"
 				}
 			],
@@ -66,6 +68,7 @@ describe("teamschedule person schedule tests", function () {
 
 	it("Can get correct dayoff schedule", inject(function () {
 		var queryDate = "2015-10-26";
+		var tomorrow = moment(queryDate).add(1, "days").format("YYYY-MM-DD");
 
 		var timeLineStart = 480;
 		var timeLineEnd = 1200;
@@ -86,6 +89,7 @@ describe("teamschedule person schedule tests", function () {
 			{
 				"DayOffName": "Day off",
 				"Start": "2015-10-26 00:00",
+				"End": tomorrow + " 00:00",
 				"Minutes": 1440
 			}
 		};
@@ -124,6 +128,7 @@ describe("teamschedule person schedule tests", function () {
 					"Color": "Red",
 					"Description": "Phone",
 					"Start": yesterday + " 20:00",
+					"End": queryDate + " 04:00",
 					"Minutes": 480 // End = "2015-10-26 04:00"
 				}
 			],
@@ -139,12 +144,14 @@ describe("teamschedule person schedule tests", function () {
 					"Color": "Red",
 					"Description": "Phone",
 					"Start": queryDate + " 15:00",
+					"End": queryDate + "16:00",
 					"Minutes": 120
 				},
 				{
 					"Color": "Yellow",
 					"Description": "Email",
 					"Start": queryDate + " 17:00",
+					"End": queryDate + " 23:00",
 					"Minutes": 360 // End = "2015-10-26 23:00"
 				}
 			],
@@ -168,6 +175,7 @@ describe("teamschedule person schedule tests", function () {
 	it("Should merge dayoff for same people", inject(function () {
 		var queryDate = "2015-10-30";
 		var yesterday = moment(queryDate).add(-1, "days").startOf("days").format("YYYY-MM-DD");
+		var tomorrow = moment(queryDate).add(1, "days").format("YYYY-MM-DD");
 
 		var timeLineStart = 1200; // 2015-10-26 20:00
 		var timeLineEnd = 2640;   // 2015-10-27 20:00
@@ -188,6 +196,7 @@ describe("teamschedule person schedule tests", function () {
 			{
 				"DayOffName": "Day off",
 				"Start": yesterday + " 00:00",
+				"End": queryDate + " 00:00",
 				"Minutes": 1440
 			}
 		};
@@ -201,6 +210,7 @@ describe("teamschedule person schedule tests", function () {
 			{
 				"DayOffName": "Shoft DayOff",
 				"Start": queryDate + " 00:00",
+				"End": tomorrow + "00:00",
 				"Minutes": 1440
 			}
 		};
@@ -220,6 +230,7 @@ describe("teamschedule person schedule tests", function () {
 
 	it("should get correct schedule start time", function() {
 		var queryDate = "2015-10-30";
+		var tomorrow = moment(queryDate).add(1, "days").format("YYYY-MM-DD");
 		var timeLineStart = 0;
 		var timeLineEnd = 1440;
 
@@ -238,6 +249,7 @@ describe("teamschedule person schedule tests", function () {
 			{
 				"DayOffName": "Day off",
 				"Start": "2015-10-30T07:00:00",
+				"End": tomorrow + "00:00",
 				"Minutes": 1440
 			}
 		};
@@ -251,6 +263,7 @@ describe("teamschedule person schedule tests", function () {
 				"Color": "#80FF80",
 				"Description": "Email",
 				"Start": '2015-10-30T07:00:00',
+				"End": '2015-10-30T15:00:00',
 				"Minutes": 480
 			}],
 			"DayOff":null
@@ -281,6 +294,7 @@ describe("teamschedule person schedule tests", function () {
 			{
 				"DayOffName": "Day off",
 				"Start": '2015-10-29T08:00:00',
+				"End": '2015-10-30T08:00:00',
 				"Minutes": 1440
 			}
 		};
@@ -294,6 +308,7 @@ describe("teamschedule person schedule tests", function () {
 				"Color": "#80FF80",
 				"Description": "Email",
 				"Start": "2015-10-30T07:00:00",
+				"End": "2015-10-30T15:00:00",
 				"Minutes": 480
 			}],
 			"DayOff":null
@@ -307,6 +322,7 @@ describe("teamschedule person schedule tests", function () {
 	it('Should get correct person activities count', function() {
 		var queryDate = "2015-10-30";
 		var yesterday = moment(queryDate).add(-1, "days").startOf("days").format("YYYY-MM-DD");
+		var tomorrow = moment(queryDate).add(1, "days").format("YYYY-MM-DD");
 		var timeLineStart = 0;
 		var timeLineEnd = 1440;
 
@@ -326,6 +342,7 @@ describe("teamschedule person schedule tests", function () {
 				"Color": "#80FF80",
 				"Description": "Email",
 				"Start": yesterday + " 19:00",
+				"End": tomorrow + " 02:00",
 				"Minutes": 480
 			}],
 			"DayOff":null
@@ -341,6 +358,7 @@ describe("teamschedule person schedule tests", function () {
 				"Color": "#80FF80",
 				"Description": "Email",
 				"Start": queryDate + " 07:00",
+				"End": queryDate + " 11:00",
 				"Minutes": 240
 			},
 			{
@@ -348,6 +366,7 @@ describe("teamschedule person schedule tests", function () {
 				"Color": "#80FF80",
 				"Description": "Email",
 				"Start": queryDate + " 11:00",
+				"End": queryDate + " 15:00",
 				"Minutes": 240
 			}],
 			"DayOff": null
@@ -381,6 +400,7 @@ describe("teamschedule person schedule tests", function () {
 				"Color": "#80FF80",
 				"Description": "Email",
 				"Start": queryDate + " 07:00",
+				"End": queryDate + " 11:00",
 				"Minutes": 240
 			},
 			{
@@ -388,6 +408,7 @@ describe("teamschedule person schedule tests", function () {
 				"Color": "#80FF80",
 				"Description": "Email",
 				"Start": queryDate + " 11:00",
+				"End": queryDate + " 07:30",
 				"Minutes": 1230
 			}],
 			"DayOff": null
@@ -419,6 +440,7 @@ describe("teamschedule person schedule tests", function () {
 				"Color": "#80FF80",
 				"Description": "Email",
 				"Start": queryDate + " 07:00",
+				"End": queryDate + " 11:00",
 				"Minutes": 240
 			},
 			{
@@ -426,6 +448,7 @@ describe("teamschedule person schedule tests", function () {
 				"Color": "#80FF80",
 				"Description": "Email",
 				"Start": queryDate + " 11:00",
+				"End": queryDate + " 15:00",
 				"Minutes": 240
 			}],
 			"DayOff": null
