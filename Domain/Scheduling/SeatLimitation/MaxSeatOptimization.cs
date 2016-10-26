@@ -59,7 +59,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 		}
 
-		//TODO: ska vi verkligen skicka in optimizationpreferences? Vi ska väl bara stödja team + GroupPageType.Hierarchy i alla fall?
 		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IScenario scenario, IOptimizationPreferences optimizationPreferences)
 		{
 			var allAgents = schedules.Select(schedule => schedule.Key);
