@@ -47,8 +47,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			InParameter.NotNull("scenario", scenario);
 			var crit = personAssignmentCriteriaLoader(period, scenario);
+			var result = new List<IPersonAssignment>();
+			const int batchSize = 40000;
+			crit.SetMaxResults(batchSize);
 			using (PerformanceOutput.ForOperation("Loading personassignments"))
-				return crit.List<IPersonAssignment>();
+			{
+				int batch = 0;
+				while (true)
+				{
+					crit.SetFirstResult(batch*batchSize);
+					var personAssignments = crit.List<IPersonAssignment>();
+					result.AddRange(personAssignments);
+					if (personAssignments.Count < batchSize)
+						break;
+
+					batch++;
+				}
+
+			}
+			return result;
 		}
 
 		public IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario, IPerson person)
@@ -73,14 +90,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private ICriteria personAssignmentCriteriaLoader(DateOnlyPeriod period, IScenario scenario)
 		{
-			var assCriteria = Session.CreateCriteria(typeof (PersonAssignment), "ass")
+			var assCriteria = Session.CreateCriteria(typeof(PersonAssignment), "ass")
 				.SetTimeout(300)
-			                         .SetFetchMode("ShiftLayers", FetchMode.Join)
-			                         .SetResultTransformer(Transformers.DistinctRootEntity);
+				.SetFetchMode("ShiftLayers", FetchMode.Join)
+				.SetResultTransformer(Transformers.DistinctRootEntity);
 			addScenarioAndFilterClauses(assCriteria, scenario, period);
 			return assCriteria;
 		}
-
+		
 		private static void addScenarioAndFilterClauses(ICriteria criteria, IScenario scenario, DateOnlyPeriod period)
 		{
 			criteria.Add(Restrictions.Eq("ass.Scenario", scenario))
