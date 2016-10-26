@@ -5,28 +5,28 @@ using System.Linq;
 
 namespace Teleopti.Support.Tool.Tool
 {
-	public class SsoConfigurationRestoreHandler : ISupportCommand
+	public class ConfigurationRestoreHandler : ISupportCommand
 	{
 		private readonly CustomSection _customSection;
-		private readonly SsoFilePathReader _ssoFilePathReader;
+		private readonly ConfigFilePathReader _configFilePathReader;
 
-		public SsoConfigurationRestoreHandler(CustomSection customSection, SsoFilePathReader ssoFilePathReader)
+		public ConfigurationRestoreHandler(CustomSection customSection, ConfigFilePathReader configFilePathReader)
 		{
 			_customSection = customSection;
-			_ssoFilePathReader = ssoFilePathReader;
+			_configFilePathReader = configFilePathReader;
 		}
 
 		public void Execute(ModeFile mode)
 		{
-			var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"SavedForSSOConfiguration");
-			var backupFile = Path.Combine(path, "SSOConfiguration.txt");
+			var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"SavedForConfiguration");
+			var backupFile = Path.Combine(path, "Configurations.txt");
 			if (!File.Exists(backupFile))
 			{
 				return;
 			}
 
-			var ssoFilePaths = _ssoFilePathReader.Read(mode);
-			if (!ssoFilePaths.IsValid())
+			var configFilePaths = _configFilePathReader.Read(mode);
+			if (!configFilePaths.IsValid())
 			{
 				return;
 			}
@@ -38,18 +38,18 @@ namespace Teleopti.Support.Tool.Tool
 				{
 					case 1:
 					case 2:
-						_customSection.WriteCustomSection(item.Key, ssoFilePaths.AuthBridgeConfig, item.Value);
+						_customSection.WriteCustomSection(item.Key, configFilePaths.AuthBridgeConfig, item.Value);
 						break;
 					case 3:
 					case 4:
 					case 5:
-						_customSection.WriteCustomSection(item.Key - 2, ssoFilePaths.ClaimPolicies, item.Value);
+						_customSection.WriteCustomSection(item.Key - 2, configFilePaths.ClaimPolicies, item.Value);
 						break;
 					case 6:
-						writeCustomRow(ssoFilePaths.WebConfig, "DefaultIdentityProvider", item.Value);
+						writeCustomRow(configFilePaths.WebConfig, "DefaultIdentityProvider", item.Value);
 						break;
 					case 7:
-						writeCustomRow(ssoFilePaths.WebConfig, "Content-Security-Policy", item.Value);
+						writeCustomRow(configFilePaths.WebConfig, "Content-Security-Policy", item.Value);
 						break;
 				}
 			}

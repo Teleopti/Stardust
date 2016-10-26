@@ -38,8 +38,8 @@ namespace Teleopti.Support.Tool.Tool
 		private void readArguments()
 		{
 			var helpCommand = new HelpWindow(_helpText);
-			var restoreCommand = new SsoConfigurationRestoreHandler(new CustomSection(), new SsoFilePathReader());
-			var backupCommand = new SsoConfigurationBackupHandler(new CustomSection(), new SsoFilePathReader());
+			var restoreCommand = new ConfigurationRestoreHandler(new CustomSection(), new ConfigFilePathReader());
+			var backupCommand = new ConfigurationBackupHandler(new CustomSection(), new ConfigFilePathReader());
 
 			var modeCommonCommand = new CompositeCommand(
 				new RefreshConfigsRunner(new RefreshConfigFile()),

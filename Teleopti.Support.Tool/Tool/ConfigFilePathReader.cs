@@ -3,11 +3,11 @@ using System.Linq;
 
 namespace Teleopti.Support.Tool.Tool
 {
-	public class SsoFilePathReader
+	public class ConfigFilePathReader
 	{
-		public SsoFilePath Read(ModeFile mode)
+		public ConfigFilePath Read(ModeFile mode)
 		{
-			var result = new SsoFilePath();
+			var result = new ConfigFilePath();
 			var file = mode.FileContents();
 			var authenticationBridgeConfig = file.FirstOrDefault(f => f.Contains("AuthenticationBridge"));
 			if (string.IsNullOrEmpty(authenticationBridgeConfig))
@@ -35,7 +35,7 @@ namespace Teleopti.Support.Tool.Tool
 		}
 	}
 
-	public class SsoFilePath
+	public class ConfigFilePath
 	{
 		public string AuthBridgeConfig { get; set; }
 		public string ClaimPolicies { get; set; }

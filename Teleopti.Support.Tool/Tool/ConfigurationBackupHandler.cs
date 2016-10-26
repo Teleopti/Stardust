@@ -4,26 +4,26 @@ using System.Linq;
 
 namespace Teleopti.Support.Tool.Tool
 {
-	public class SsoConfigurationBackupHandler : ISupportCommand
+	public class ConfigurationBackupHandler : ISupportCommand
 	{
 		private readonly CustomSection _customSection;
-		private readonly SsoFilePathReader _ssoFilePathReader;
+		private readonly ConfigFilePathReader _configFilePathReader;
 
-		public SsoConfigurationBackupHandler(CustomSection customSection, SsoFilePathReader ssoFilePathReader)
+		public ConfigurationBackupHandler(CustomSection customSection, ConfigFilePathReader configFilePathReader)
 		{
 			_customSection = customSection;
-			_ssoFilePathReader = ssoFilePathReader;
+			_configFilePathReader = configFilePathReader;
 		}
 
 		public void Execute(ModeFile mode)
 		{
-			var ssoFilePath = _ssoFilePathReader.Read(mode);
+			var ssoFilePath = _configFilePathReader.Read(mode);
 			if (!ssoFilePath.IsValid())
 			{
 				return;
 			}
 
-			var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"SavedForSSOConfiguration");
+			var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"SavedForConfiguration");
 			if (!Directory.Exists(path))
 			{
 				Directory.CreateDirectory(path);
@@ -43,7 +43,7 @@ namespace Teleopti.Support.Tool.Tool
 				}
 			}
 
-			custom.WriteToFile(Path.Combine(path,"SSOConfiguration.txt"));
+			custom.WriteToFile(Path.Combine(path,"Configurations.txt"));
 		}
 	}
 }
