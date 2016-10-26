@@ -22,7 +22,9 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
     </Certificates>
     <Endpoints>
   		<InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="fakedress.teleopticloud.com" />
-		<InternalEndpoint name="StardustNode" protocol="http" port="14100" />
+		<InternalEndpoint name="StardustNode" protocol="http">
+			<FixedPortRange max="14100" min="14199" />
+		</InternalEndpoint>
     </Endpoints>
     <Imports>
 		<Import moduleName="RemoteAccess" />
