@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				var activity = CurrentActivity() ?? activityNear(context.CurrentTime);
 				return activity?.BelongsToDate;
 			});
-			_timeWindowCheckSum = new Lazy<int>(() => ActivitiesInTimeWindow().CheckSum());
-			_timeWindowActivities = new Lazy<IEnumerable<ScheduledActivity>>(() => ActivitiesInTimeWindow(_schedule.Value, context.CurrentTime));
+			_timeWindowActivities = new Lazy<IEnumerable<ScheduledActivity>>(() => activitiesBetween(timeWindowStart(), timeWindowEnd()));
+			_timeWindowCheckSum = new Lazy<int>(() => _timeWindowActivities.Value.CheckSum());
 		}
 
 		public bool ActivityChanged()
@@ -79,12 +79,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public Guid? CurrentActivityId()
 		{
-			return _currentActivity.Value == null ? (Guid?)null : _currentActivity.Value.PayloadId;
+			return _currentActivity.Value?.PayloadId;
 		}
 
 		public string CurrentActivityName()
 		{
-			return _currentActivity.Value == null ? null : _currentActivity.Value.Name;
+			return _currentActivity.Value?.Name;
 		}
 
 		public ScheduledActivity PreviousActivity()
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public Guid? PreviousActivityId()
 		{
-			return _previousActivity.Value == null ? (Guid?)null : _previousActivity.Value.PayloadId;
+			return _previousActivity.Value?.PayloadId;
 		}
 
 		public ScheduledActivity NextActivity()
@@ -131,29 +131,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public string NextActivityName()
 		{
-			return _nextActivityInShift.Value != null ? _nextActivityInShift.Value.Name : null;
+			return _nextActivityInShift.Value?.Name;
 		}
 
-		public DateTime CurrentShiftStartTime { get { return _currentShiftStartTime.Value; } }
-		public DateTime CurrentShiftEndTime { get { return _currentShiftEndTime.Value; } }
+		public DateTime CurrentShiftStartTime => _currentShiftStartTime.Value;
+		public DateTime CurrentShiftEndTime => _currentShiftEndTime.Value;
 
-		public DateTime ShiftStartTimeForPreviousActivity { get { return _shiftStartTimeForPreviousActivity.Value; } }
-		public DateTime ShiftEndTimeForPreviousActivity { get { return _shiftEndTimeForPreviousActivity.Value; } }
+		public DateTime ShiftStartTimeForPreviousActivity => _shiftStartTimeForPreviousActivity.Value;
+		public DateTime ShiftEndTimeForPreviousActivity => _shiftEndTimeForPreviousActivity.Value;
 
-		public DateOnly? BelongsToDate { get { return _belongsToDate.Value; } }
+		public DateOnly? BelongsToDate => _belongsToDate.Value;
 
 		private DateTime startTimeOfShift(ScheduledActivity activity)
 		{
-			if (activity == null)
-				return DateTime.MinValue;
-			return activitiesThisShift(activity).Select(x => x.StartDateTime).Min();
+			return activity == null ? DateTime.MinValue : activitiesThisShift(activity).Select(x => x.StartDateTime).Min();
 		}
 
 		private DateTime endTimeOfShift(ScheduledActivity activity)
 		{
-			if (activity == null)
-				return DateTime.MinValue;
-			return activitiesThisShift(activity).Select(x => x.EndDateTime).Max();
+			return activity == null ? DateTime.MinValue : activitiesThisShift(activity).Select(x => x.EndDateTime).Max();
 		}
 
 		private IEnumerable<ScheduledActivity> activitiesThisShift(ScheduledActivity activity)
@@ -165,7 +161,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private ScheduledActivity activityForTime(DateTime time)
 		{
-			return ActivityForTime(_schedule.Value, time);
+			return _schedule.Value.FirstOrDefault(l => time >= l.StartDateTime && time < l.EndDateTime);
 		}
 
 		private ScheduledActivity nextAdjecentActivityToCurrent()
@@ -190,73 +186,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				select l
 				).FirstOrDefault();
 		}
-
-
-
-
-		public static ScheduledActivity ActivityForTime(IEnumerable<ScheduledActivity> schedule, DateTime time)
+		
+		private DateTime timeWindowStart()
 		{
-			return schedule.FirstOrDefault(l => time >= l.StartDateTime && time < l.EndDateTime);
+			return _context.CurrentTime.AddHours(-1);
 		}
 
-		public static ScheduledActivity PreviousActivity(IEnumerable<ScheduledActivity> schedule, DateTime time)
+		private DateTime timeWindowEnd()
 		{
-			return schedule.LastOrDefault(l => l.EndDateTime <= time);
+			return _context.CurrentTime.AddHours(3);
 		}
 
-		public static ScheduledActivity NextActivity(IEnumerable<ScheduledActivity> schedule, DateTime time)
+		private IEnumerable<ScheduledActivity> activitiesBetween(DateTime start, DateTime end)
 		{
-			return schedule.FirstOrDefault(l => l.StartDateTime > time);
-		}
-
-		public static IEnumerable<ScheduledActivity> ActivitiesInTimeWindow(IEnumerable<ScheduledActivity> schedule, DateTime now)
-		{
-			return ActivitiesBetween(schedule, TimeWindowStart(now), TimeWindowEnd(now));
-		}
-
-		public static DateTime TimeWindowStart(DateTime now)
-		{
-			return now.AddHours(-1);
-		}
-
-		public static DateTime TimeWindowEnd(DateTime now)
-		{
-			return now.AddHours(3);
-		}
-
-		public static IEnumerable<ScheduledActivity> ActivitiesBetween(IEnumerable<ScheduledActivity> schedule, DateTime start, DateTime end)
-		{
-			return from a in schedule
+			return from a in _schedule.Value
 				   where a.EndDateTime > start
 				   where a.StartDateTime <= end
 				   select a;
-		}
-
-		public static IEnumerable<ScheduledActivity> AllAdjecentTo(IEnumerable<ScheduledActivity> schedule, IEnumerable<ScheduledActivity> adjecentTo)
-		{
-			return adjecentTo
-				.SelectMany(activity =>
-				{
-					var result = Enumerable.Empty<ScheduledActivity>();
-
-					var before = activity;
-					while (before != null)
-					{
-						before = schedule.SingleOrDefault(x => x != before && x.EndDateTime == before.StartDateTime);
-						result = result.Concat(new[] {before});
-					}
-
-					var after = activity;
-					while (after != null)
-					{
-						after = schedule.SingleOrDefault(x => x != after && x.StartDateTime == after.EndDateTime);
-						result = result.Concat(new[] {after});
-					}
-
-					return result;
-				})
-				.Where(x => x != null)
-				.ToArray();
 		}
 
 	}
