@@ -76,7 +76,7 @@ WfmTeamSchedule_CheckPersonalAccountWhenAddingAbsence_41088 = RC
 
 WfmTeamSchedule_ShowShiftCategory_39796 = true
 WfmTeamSchedule_ModifyShiftCategory_39797 = true
-WfmTeamSchedule_MakeNewMyTeamDefault_39744 = RC
+WfmTeamSchedule_MakeNewMyTeamDefault_39744 = true
 WfmTeamSchedule_WeekView_39870 = true
 WfmTeamSchedule_MakePersonalActivityUnmerged_40252 = true
 WfmTeamSchedule_WeeklyContractTime_39871 = true
