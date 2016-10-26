@@ -15050,4 +15050,16 @@ These options are activated:
     <value>You have selected too many agents. Please select less than 55.</value>
     <comment>Notify agents friendly message when selected agents are too many.</comment>
   </data>
+  <data name="UnsupportedSkill" xml:space="preserve">
+    <value>unsupported skill</value>
+    <comment>intraday warning message</comment>
+  </data>
+  <data name="UnsupportedSkillMsg" xml:space="preserve">
+    <value>This skill is not supported</value>
+    <comment>intraday warning message</comment>
+  </data>
+  <data name="UnsupportedSkills" xml:space="preserve">
+    <value>unsupported skills</value>
+    <comment>intraday warning message</comment>
+  </data>
 </root>

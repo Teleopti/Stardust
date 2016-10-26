@@ -1,6 +1,6 @@
 a{
 	color: $text-color-standard;
-  text-decoration: underline;
+	text-decoration: underline;
 }
 
 .layout-fill {
@@ -14,8 +14,8 @@ a{
 }
 
 .wfm-table td, .wfm-table th {
-  color: $text-color-standard;
-  //this will be removed
+	color: $text-color-standard;
+	//this will be removed
 }
 
 .layout-container {
@@ -35,7 +35,7 @@ a{
 }
 
 .fab-wrapper .wfm-fab {
-    margin-top: 0;
+	margin-top: 0;
 }
 
 @media screen and (max-width:768px){
@@ -68,12 +68,12 @@ a{
 #lefttoogle > div{
 	position: fixed;
 	top: -69px;
-  z-index: 9999;
-  left: 5px;
-  background: transparent;
-  box-shadow: none;
-  color:$white;
-  font-size:250%;
+	z-index: 9999;
+	left: 5px;
+	background: transparent;
+	box-shadow: none;
+	color:$white;
+	font-size:250%;
 }
 
 .list-mark{
@@ -101,7 +101,7 @@ a{
 	margin-left: 0;
 }
 .click-modal .dialog {
-    left:25%;
+	left:25%;
 }
 
 wfm-notice{
@@ -155,11 +155,11 @@ md-option{
 }
 
 .nav-item-wrap:focus > .sidenav-header{
-  background: $gray012;
+	background: $gray012;
 }
 
 .nav-item-active > .sidenav-header{
-		background: $green-100!important;
+	background: $green-100!important;
 }
 
 md-select-menu md-option:focus:not([disabled]):not([selected]){
@@ -170,5 +170,12 @@ md-select-menu md-option:focus:not([disabled]):not([selected]){
 	visibility: hidden;
 }
 md-progress-circular{
-transform: scale(0.4)!important;
+	transform: scale(0.4)!important;
+}
+
+.chip-disabled{
+	.wfm-chip{
+		cursor: not-allowed!important;
+	}
+	color:$text-color-muted!important;
 }

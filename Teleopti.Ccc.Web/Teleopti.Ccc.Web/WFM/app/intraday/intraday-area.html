@@ -7,7 +7,7 @@
 		</div>
 		<div class="fab-wrapper" ng-if="HasPermissionToModifySkillArea">
 			<button class="skill-area-create wfm-fab grow-out material-depth-1" ng-click="configMode()">
-				<i class="mdi mdi-plus"></i> 
+				<i class="mdi mdi-plus"></i>
 				<md-tooltip>{{'CreateSkillArea'|translate}}</md-tooltip>
 			</button>
 		</div>
@@ -17,10 +17,12 @@
 		<div class="con-flex">
 			<div class="panel con-flex material-depth-1">
 				<div class="con-row">
-					<div ng-show="drillable" ng-class="{ 'shrink-in': drillable === false}" class="grow-out context-menu card-context" ng-click="openSkillAreaFromSkill()">
-						<i class="mdi mdi mdi-reply">
-							<md-tooltip>{{prevArea.Name}}</md-tooltip>
-						</i>
+					<div>
+						<div ng-show="drillable" ng-class="{ 'shrink-in': drillable === false}" class="grow-out context-menu card-context" ng-click="openSkillAreaFromSkill()">
+							<i class="mdi mdi mdi-reply">
+								<md-tooltip>{{prevArea.Name}}</md-tooltip>
+							</i>
+						</div>
 					</div>
 					<span class="con-flex">
 						<md-autocomplete id="skill-id"
@@ -33,6 +35,12 @@
 						md-min-length="0"
 						placeholder="{{'SelectSkill'|translate}}">
 						<md-item-template>
+							<i class="mdi mdi-phone" ng-if="skill.DoDisplayData">
+								<md-tooltip>{{'SkillTypeInboundTelephony' | translate}}</md-tooltip>
+							</i>
+							<i class="mdi mdi-alert" ng-if="!skill.DoDisplayData">
+								<md-tooltip>{{'UnsupportedSkill' | translate}}</md-tooltip>
+							</i>
 							<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
 						</md-item-template>
 						<md-not-found>
@@ -68,17 +76,17 @@
 			<div class="hide-on-ie con-flex split-1-2"></div>
 			<div class="line-right last-time">
 				<span ng-show="latestActualInterval && latestActualInterval !== 'undefined - undefined'">
-				<span class="cursor-pointer">
-					{{latestActualInterval}} <i class="mdi mdi-clock"></i>
-					<md-tooltip>{{'LatestActualInterval'|translate}}</md-tooltip>
+					<span class="cursor-pointer">
+						{{latestActualInterval}} <i class="mdi mdi-clock"></i>
+						<md-tooltip>{{'LatestActualInterval'|translate}}</md-tooltip>
+					</span>
 				</span>
-			</span>
-			<span ng-cloak ng-show="!latestActualInterval || latestActualInterval == 'undefined - undefined'">
-				{{'NoAvailableDataSourcesHasBeenFound'|translate}}
-			</span>
+				<span ng-cloak ng-show="!latestActualInterval || latestActualInterval == 'undefined - undefined'">
+					{{'NoAvailableDataSourcesHasBeenFound'|translate}}
+				</span>
+			</div>
 		</div>
 	</div>
-</div>
 </div>
 </div>
 
@@ -105,10 +113,16 @@
 			</div>
 			<div ng-hide="showIncluded" class="animate-show con-row">
 				<div class="con-flex">
-					<div class="unrelated-filters" ng-repeat="skill in selectedSkillArea.Skills | orderBy : Name">
-						<span class="pointer" ng-click="openSkillFromArea(skill)">
-							<span class="filter-handle"></span>
-							<span class="filter-chip">{{skill.Name}}</span>
+					<div class="wfm-chip-wrap" ng-repeat="skill in selectedSkillArea.Skills | orderBy : Name" ng-class="{'chip-disabled':!skill.DoDisplayData}">
+						<span class="wfm-chip" ng-click="openSkillFromArea(skill)">
+							<span class="chip-handle" ng-class="{'chip-warning':!skill.DoDisplayData}">
+								<i class="mdi" ng-class="{'mdi-phone':skill.DoDisplayData, 'mdi-alert':!skill.DoDisplayData}"></i>
+							</span>
+							<md-tooltip>
+								<span ng-if="skill.DoDisplayData">{{'SkillTypeInboundTelephony' | translate}}</span>
+								<span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
+							</md-tooltip>
+							<span class="chip-text">{{skill.Name}}</span>
 						</span>
 					</div>
 				</div>

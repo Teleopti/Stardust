@@ -36,7 +36,8 @@ describe('IntradayAreaCtrl', function () {
 		skills = [
 			{
 				Id: "5f15b334-22d1-4bc1-8e41-72359805d30f",
-				Name: "skill x"
+				Name: "skill x",
+				DoDisplayData: true
 			}];
 
 		skillAreas = [

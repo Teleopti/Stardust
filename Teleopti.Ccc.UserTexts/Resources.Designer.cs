@@ -31707,6 +31707,33 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to unsupported skill.
+        /// </summary>
+        public static string UnsupportedSkill {
+            get {
+                return ResourceManager.GetString("UnsupportedSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This skill is not supported.
+        /// </summary>
+        public static string UnsupportedSkillMsg {
+            get {
+                return ResourceManager.GetString("UnsupportedSkillMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to unsupported skills.
+        /// </summary>
+        public static string UnsupportedSkills {
+            get {
+                return ResourceManager.GetString("UnsupportedSkills", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Optimization step(s) {0} are not executed when team or block are selected..
         /// </summary>
         public static string UnsupportedTeamBlockOptimizationStep {
