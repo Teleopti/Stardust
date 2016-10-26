@@ -20,10 +20,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup,
 			IScenario scenario)
 		{
-			return _data.Where(d => d.ScenarioId == scenario.Id && d.StartDateTime <= period.StartDate.Date
-									&& d.EndDateTime >= period.EndDate.Date).Select(d => new PayloadWorkTime
+			return _data.Where(d => d.ScenarioId == scenario.Id && d.BelongsToDate >= period.StartDate
+									&& d.BelongsToDate <= period.EndDate).Select(d => new PayloadWorkTime
 									{
-										TotalContractTime = d.ContractTime.Ticks
+										TotalContractTime = d.ContractTime.Ticks,
+										BelongsToDate = d.BelongsToDate.Date
 									});
 		}
 

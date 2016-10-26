@@ -30,15 +30,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		public void ShouldCalculateYellowIfOneLeft()
 		{
 			var weekButNoWeek = new DateOnlyPeriod(date, date);
-			var allowanceDay1 = new AllowanceDay
-			{
-				Date = weekButNoWeek.StartDate,
-				Time = TimeSpan.FromHours(0),
-				Heads = TimeSpan.FromHours(0),
-				AllowanceHeads = 3,
-				Availability = true,
-				UseHeadCount = true
-			};
+			var allowanceDay1 = createAllowanceDay(weekButNoWeek.StartDate, 0, 0);
+			allowanceDay1.AllowanceHeads = 3;
+			allowanceDay1.UseHeadCount = true;
 
 			allowanceProvider.Stub(x => x.GetAllowanceForPeriod(weekButNoWeek)).Return(new[] {allowanceDay1});
 			absenceTimeProvider.Stub(x => x.GetAbsenceTimeForPeriod(weekButNoWeek))
@@ -56,15 +50,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		public void ShouldCalculateGreenIfManyLeft()
 		{
 			var weekButNoWeek = new DateOnlyPeriod(date, date);
-			var allowanceDay1 = new AllowanceDay
-			{
-				Date = weekButNoWeek.StartDate,
-				Time = TimeSpan.FromHours(0),
-				Heads = TimeSpan.FromHours(0),
-				AllowanceHeads = 20,
-				Availability = true,
-				UseHeadCount = true
-			};
+			var allowanceDay1 = createAllowanceDay(weekButNoWeek.StartDate, 0, 0);
+			allowanceDay1.AllowanceHeads = 20;
+			allowanceDay1.UseHeadCount = true;
 
 			allowanceProvider.Stub(x => x.GetAllowanceForPeriod(weekButNoWeek)).Return(new[] {allowanceDay1});
 			absenceTimeProvider.Stub(x => x.GetAbsenceTimeForPeriod(weekButNoWeek))
@@ -82,15 +70,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		public void ShouldCalculateRedIfNoOneLeft()
 		{
 			var weekButNoWeek = new DateOnlyPeriod(date, date);
-			var allowanceDay1 = new AllowanceDay
-			{
-				Date = weekButNoWeek.StartDate,
-				Time = TimeSpan.FromHours(0),
-				Heads = TimeSpan.FromHours(0),
-				AllowanceHeads = 2,
-				Availability = true,
-				UseHeadCount = true
-			};
+			var allowanceDay1 = createAllowanceDay(weekButNoWeek.StartDate, 0, 0);
+			allowanceDay1.AllowanceHeads = 2;
+			allowanceDay1.UseHeadCount = true;
 
 			allowanceProvider.Stub(x => x.GetAllowanceForPeriod(weekButNoWeek)).Return(new[] {allowanceDay1});
 			absenceTimeProvider.Stub(x => x.GetAbsenceTimeForPeriod(weekButNoWeek))
@@ -108,15 +90,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		public void ShouldNotCrashIfNoAllowance()
 		{
 			var weekButNoWeek = new DateOnlyPeriod(date, date);
-			var allowanceDay1 = new AllowanceDay
-			{
-				Date = weekButNoWeek.StartDate,
-				Time = TimeSpan.FromHours(0),
-				Heads = TimeSpan.FromHours(0),
-				AllowanceHeads = 0,
-				Availability = true,
-				UseHeadCount = true
-			};
+			var allowanceDay1 = createAllowanceDay(weekButNoWeek.StartDate, 0, 0);
+			allowanceDay1.UseHeadCount = true;
 
 			allowanceProvider.Stub(x => x.GetAllowanceForPeriod(weekButNoWeek)).Return(new[] {allowanceDay1});
 			absenceTimeProvider.Stub(x => x.GetAbsenceTimeForPeriod(weekButNoWeek))
@@ -134,15 +109,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		public void ShouldCalculateYellowOnBudgetGroup()
 		{
 			var weekButNoWeek = new DateOnlyPeriod(date, date);
-			var allowanceDay1 = new AllowanceDay
-			{
-				Date = weekButNoWeek.StartDate,
-				Time = TimeSpan.FromHours(24),
-				Heads = TimeSpan.FromHours(8),
-				AllowanceHeads = 0,
-				Availability = true,
-				UseHeadCount = false
-			};
+			var allowanceDay1 = createAllowanceDay(weekButNoWeek.StartDate, 24, 8);
 
 			allowanceProvider.Stub(x => x.GetAllowanceForPeriod(weekButNoWeek)).Return(new[] {allowanceDay1});
 			absenceTimeProvider.Stub(x => x.GetAbsenceTimeForPeriod(weekButNoWeek))
@@ -160,15 +127,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		public void ShouldCalculateGreenOnBudgetGroup()
 		{
 			var weekButNoWeek = new DateOnlyPeriod(date, date);
-			var allowanceDay1 = new AllowanceDay
-			{
-				Date = weekButNoWeek.StartDate,
-				Time = TimeSpan.FromHours(24),
-				Heads = TimeSpan.FromHours(8),
-				AllowanceHeads = 0,
-				Availability = true,
-				UseHeadCount = false
-			};
+			var allowanceDay1 = createAllowanceDay(weekButNoWeek.StartDate, 24, 8);
 
 			allowanceProvider.Stub(x => x.GetAllowanceForPeriod(weekButNoWeek)).Return(new[] {allowanceDay1});
 			absenceTimeProvider.Stub(x => x.GetAbsenceTimeForPeriod(weekButNoWeek))
@@ -186,15 +145,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		public void ShouldCalculateRedOnBudgetGroup()
 		{
 			var weekButNoWeek = new DateOnlyPeriod(date, date);
-			var allowanceDay1 = new AllowanceDay
-			{
-				Date = weekButNoWeek.StartDate,
-				Time = TimeSpan.FromHours(24),
-				Heads = TimeSpan.FromHours(8),
-				AllowanceHeads = 0,
-				Availability = true,
-				UseHeadCount = false
-			};
+			var allowanceDay1 = createAllowanceDay(weekButNoWeek.StartDate, 24, 8);
 
 			allowanceProvider.Stub(x => x.GetAllowanceForPeriod(weekButNoWeek)).Return(new[] {allowanceDay1});
 			absenceTimeProvider.Stub(x => x.GetAbsenceTimeForPeriod(weekButNoWeek))
@@ -206,6 +157,20 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			var ret = target.GetAbsenceRequestProbabilityForPeriod(weekButNoWeek);
 			Assert.That(ret.First().Date, Is.EqualTo(weekButNoWeek.StartDate));
 			Assert.That(ret.First().CssClass, Is.EqualTo("red"));
+		}
+
+		private IAllowanceDay createAllowanceDay(DateOnly date, int timeHours, int headHours)
+		{
+			return new AllowanceDay
+			{
+				Date = date,
+				Time = TimeSpan.FromHours(timeHours),
+				Heads = TimeSpan.FromHours(headHours),
+				AllowanceHeads = 0,
+				Availability = true,
+				UseHeadCount = false,
+				ValidateBudgetGroup = true
+			};
 		}
 	}
 }

@@ -518,17 +518,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			if (useBudgetGroupAllowanceValidator)
 			{
-				_scheduleProjectionReadOnlyPersister.AddActivity(
+				var days =
+					request.Request.Period.ToDateOnlyPeriod(request.Person.PermissionInformation.DefaultTimeZone()).DayCollection();
+				foreach (var day in days)
+				{
+					_scheduleProjectionReadOnlyPersister.AddActivity(
 					new ScheduleProjectionReadOnlyModel
 					{
-						BelongsToDate = new DateOnly(request.Request.Period.StartDateTime),
+						BelongsToDate = day,
 						PayloadId = (request.Request as IAbsenceRequest).Absence.Id.Value,
 						PersonId = request.Person.Id.Value,
 						ScenarioId = _currentScenario.Current().Id.Value,
-						StartDateTime = request.Request.Period.StartDateTime,
-						EndDateTime = request.Request.Period.EndDateTime,
+						StartDateTime = day.Date,
+						EndDateTime = day.Date,
 						ContractTime = TimeSpan.FromHours(8)
 					});
+				}
 			}
 			else
 			{

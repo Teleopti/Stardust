@@ -39,7 +39,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 					Heads = TimeSpan.Zero,
 					AllowanceHeads = .0,
 					Availability = false,
-					UseHeadCount = false
+					UseHeadCount = false,
+					ValidateBudgetGroup = false,
 				};
 
 			var budgetGroupPeriods = _extractBudgetGroupPeriods.BudgetGroupsForPeriod(person, period);
@@ -70,7 +71,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 							Heads = TimeSpan.Zero,
 							AllowanceHeads = .0,
 							Availability = true,
-							UseHeadCount = false
+							UseHeadCount = false,
+							ValidateBudgetGroup = false
 						};
 
 					var budgetDays =
@@ -91,7 +93,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 									Heads = TimeSpan.FromHours(Math.Max(budgetDay.FulltimeEquivalentHours, 0)),
 									AllowanceHeads = budgetDay.Allowance,
 									Availability = true,
-									UseHeadCount = openPeriod.StaffingThresholdValidator.GetType() == typeof (BudgetGroupHeadCountValidator)
+									UseHeadCount = openPeriod.StaffingThresholdValidator.GetType() == typeof (BudgetGroupHeadCountValidator),
+									ValidateBudgetGroup = true
 								};
 						allowanceList = allowanceList.Concat(allowanceFromBudgetDays);
 					}
@@ -110,7 +113,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 					Heads = g.Last().Heads,
 					AllowanceHeads = g.Last(o => o.Date == g.Key).AllowanceHeads,
 					Availability = g.Last(o => o.Date == g.Key).Availability,
-					UseHeadCount = g.Last(o => o.Date == g.Key).UseHeadCount
+					UseHeadCount = g.Last(o => o.Date == g.Key).UseHeadCount,
+					ValidateBudgetGroup = g.Any(o => o.ValidateBudgetGroup)
 				};
 		}
 	}

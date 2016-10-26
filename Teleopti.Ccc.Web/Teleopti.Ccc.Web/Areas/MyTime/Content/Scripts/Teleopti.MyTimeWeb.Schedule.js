@@ -439,7 +439,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.probabilityText = ko.observable(day.ProbabilityText);
 
 		self.holidayChanceText = ko.computed(function () {
-			return parent.userTexts.chanceOfGettingAbsencerequestGranted + self.probabilityText();
+			var probabilityText = self.probabilityText();
+			if (probabilityText)
+				return parent.userTexts.chanceOfGettingAbsencerequestGranted + probabilityText;
+			return probabilityText;
 		});
 		
 		self.holidayChanceColor = ko.computed(function () {

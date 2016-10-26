@@ -8,6 +8,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 {
 	public class AbsenceRequestProbabilityProvider : IAbsenceRequestProbabilityProvider
 	{
+		private static readonly string[] _cssClass = 
+		{
+			"red",
+			"yellow",
+			"green"
+		};
+
+		private static readonly string[] _texts = 
+		{
+			UserTexts.Resources.Poor,
+			UserTexts.Resources.Fair,
+			UserTexts.Resources.Good
+		};
+
 		private readonly IAllowanceProvider _allowanceProvider;
 		private readonly IAbsenceTimeProvider _absenceTimeProvider;
 		private readonly INow _now;
@@ -24,19 +38,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 
 		public List<IAbsenceRequestProbability> GetAbsenceRequestProbabilityForPeriod(DateOnlyPeriod period)
 		{
-			var cssClass = new[]
-			{
-				"red",
-				"yellow",
-				"green"
-			};
-			var texts = new[]
-			{
-				UserTexts.Resources.Poor,
-				UserTexts.Resources.Fair,
-				UserTexts.Resources.Good
-			};
-
 			var absenceTimeCollection = _absenceTimeProvider.GetAbsenceTimeForPeriod(period).ToList();
 			var allowanceCollection = _allowanceProvider.GetAllowanceForPeriod(period).ToList();
 
@@ -66,20 +67,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 					allowanceForDay = allowanceDay.AllowanceHeads;
 				}
 
-				var probabilityIndex = (allowanceDay != null && allowanceDay.UseHeadCount)
-					? getAllowanceIndexWithHeadCount(allowanceForDay, absenceHeadsForDay)
-					: getAllowanceIndex(allowanceMinutesForDay, absenceTimeForDay, fulltimeEquivalentForDay);
-
-				if (dateOnly < _now.LocalDateOnly())
+				var probabilityIndex = -1;
+				if (allowanceDay != null && allowanceDay.ValidateBudgetGroup)
 				{
-					probabilityIndex = 0;
+					probabilityIndex = allowanceDay.UseHeadCount
+						? getAllowanceIndexWithHeadCount(allowanceForDay, absenceHeadsForDay)
+						: getAllowanceIndex(allowanceMinutesForDay, absenceTimeForDay, fulltimeEquivalentForDay);
+
+					if (dateOnly < _now.LocalDateOnly())
+					{
+						probabilityIndex = 0;
+					}
 				}
 
 				ret.Add(new AbsenceRequestProbability
 				{
 					Date = dateOnly,
-					CssClass = cssClass[probabilityIndex],
-					Text = texts[probabilityIndex],
+					CssClass = probabilityIndex >= 0 ? _cssClass[probabilityIndex] : string.Empty,
+					Text = probabilityIndex >= 0 ? _texts[probabilityIndex] : string.Empty,
 					Availability = allowanceDay != null && allowanceDay.Availability
 				});
 			}

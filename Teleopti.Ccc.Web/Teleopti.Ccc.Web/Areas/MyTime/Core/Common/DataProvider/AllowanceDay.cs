@@ -11,5 +11,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		public double AllowanceHeads { get; set; }
 		public bool Availability { get; set; }
 		public bool UseHeadCount { get; set; }
+		public bool ValidateBudgetGroup { get; set; }
 	}
 }
