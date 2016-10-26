@@ -31,9 +31,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly IHashFunction _currentHashFunction;
 
 		public DatabaseController(
-			IDatabaseHelperWrapper databaseHelperWrapper, 
+			IDatabaseHelperWrapper databaseHelperWrapper,
 			ICurrentTenantSession currentTenantSession,
-			ITenantExists tenantExists, 
+			ITenantExists tenantExists,
 			ILoadAllTenants loadAllTenants,
 			ICheckPasswordStrength checkPasswordStrength,
 			PersistTenant persistTenant,
@@ -79,16 +79,18 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if (!checkCreate.Success)
 				return Json(new TenantResultModel { Message = checkCreate.Message, Success = false });
 
+			var version = _databaseHelperWrapper.Version(connectionToNewDb);
+
 			var newTenant = new Tenant(model.Tenant);
 			newTenant.DataSourceConfiguration.SetApplicationConnectionString(appConnectionString(model));
 			newTenant.DataSourceConfiguration.SetAnalyticsConnectionString(analyticsConnectionString(model));
-			newTenant.DataSourceConfiguration.SetAggregationConnectionString(aggConnectionString(model));
+			if (!version.IsAzure)
+				newTenant.DataSourceConfiguration.SetAggregationConnectionString(aggConnectionString(model));
 			_persistTenant.Persist(newTenant);
 
-			var version = _databaseHelperWrapper.Version(connectionToNewDb);
 			_databaseHelperWrapper.CreateLogin(connectionToNewDb, model.AppUser, model.AppPassword, version);
 			_databaseHelperWrapper.CreateDatabase(appDbConnectionString, DatabaseType.TeleoptiCCC7, model.AppUser, model.AppPassword, version, model.Tenant, newTenant.Id);
-			
+
 			_databaseHelperWrapper.CreateDatabase(analyticsDbConnectionString, DatabaseType.TeleoptiAnalytics, model.AppUser, model.AppPassword, version, model.Tenant, newTenant.Id);
 			_databaseHelperWrapper.CreateDatabase(createAggDbConnectionString(model), DatabaseType.TeleoptiCCCAgg, model.AppUser, model.AppPassword, version, model.Tenant, newTenant.Id);
 
@@ -196,7 +198,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}
 			catch (Exception e)
 			{
-				return new TenantResultModel { Success = false, Message = $"Can not connect to the database. {e.Message}"};
+				return new TenantResultModel { Success = false, Message = $"Can not connect to the database. {e.Message}" };
 			}
 
 			var version = _databaseHelperWrapper.Version(connectionString);
@@ -304,11 +306,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var tenant = _loadAllTenants.Tenants().FirstOrDefault(x => x.Name.Equals(model.Tenant));
 			if (tenant == null)
 			{
-				return Json(new TenantResultModel {Success = false, Message = "Can not find this Tenant in the database."});
+				return Json(new TenantResultModel { Success = false, Message = "Can not find this Tenant in the database." });
 			}
-         return Json(addSystemUserToTenant(tenant,model.FirstName, model.LastName, model.UserName, model.Password));
+			return Json(addSystemUserToTenant(tenant, model.FirstName, model.LastName, model.UserName, model.Password));
 		}
-		
+
 		[HttpPost]
 		[TenantUnitOfWork]
 		[Route("AddBusinessUnitToTenant")]
@@ -323,7 +325,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			{
 				return Json(new TenantResultModel { Success = false, Message = "The Tenant name can not be empty." });
 			}
-			
+
 			var tenant = _loadAllTenants.Tenants().FirstOrDefault(x => x.Name.Equals(model.Tenant));
 			if (tenant == null)
 			{
@@ -331,7 +333,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}
 			_createBusinessUnit.Create(tenant, model.BuName);
 
-			return Json(new TenantResultModel {Message = $"Created new Business Unit wih name: {model.BuName}", Success = true});
+			return Json(new TenantResultModel { Message = $"Created new Business Unit wih name: {model.BuName}", Success = true });
 		}
 		private TenantResultModel checkFirstUserInternal(string name, string password)
 		{
@@ -379,7 +381,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			addTheUserToTheTheTenantToo(_currentTenantSession.CurrentSession().Connection.ConnectionString,
 				tenant.DataSourceConfiguration.ApplicationConnectionString, personInfo);
-			
+
 			return new TenantResultModel { Success = true, Message = "Created new user." };
 		}
 
@@ -387,7 +389,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			var currTenant = new SqlConnectionStringBuilder(currentTenant);
 			var userTenant = new SqlConnectionStringBuilder(superUserInTenant);
-			if(currTenant.DataSource.Equals(userTenant.DataSource) && currTenant.InitialCatalog.Equals(userTenant.InitialCatalog))
+			if (currTenant.DataSource.Equals(userTenant.DataSource) && currTenant.InitialCatalog.Equals(userTenant.InitialCatalog))
 				return;
 			_databaseHelperWrapper.AddSystemUserToPersonInfo(superUserInTenant, personInfo.Id,
 				personInfo.ApplicationLogonInfo.LogonName, personInfo.ApplicationLogonInfo.LogonPassword, personInfo.TenantPassword);
