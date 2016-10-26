@@ -78,40 +78,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldInsertFactSchedule()
 		{
-			analyticsDataFactory.Setup(new Person(10, Guid.NewGuid(), Guid.NewGuid(), "Ashley", "Andeen", new DateTime(2010, 1, 1),
-										AnalyticsDate.Eternity.DateDate, 0, -2, businessUnitId, Guid.NewGuid(), _datasource, false, _timeZones.UtcTimeZoneId));
-			analyticsDataFactory.Setup(Scenario.DefaultScenarioFor(10, Guid.NewGuid()));
-
-			var actEmpty = new Activity(-1, Guid.NewGuid(), "Empty", Color.Black, _datasource, businessUnitId);
-			var act = new Activity(22, Guid.NewGuid(), "Phone", Color.LightGreen, _datasource, businessUnitId);
-
-			var absEmpty = new Absence(-1, Guid.NewGuid(), "Empty", Color.Black, _datasource, businessUnitId);
-			var abs = new Absence(22, Guid.NewGuid(), "Freee", Color.LightGreen, _datasource, businessUnitId);
-
-			var shiftLength = new ShiftLength(4, 480, _datasource);
-
-			analyticsDataFactory.Setup(act);
-			analyticsDataFactory.Setup(actEmpty);
-			analyticsDataFactory.Setup(abs);
-			analyticsDataFactory.Setup(absEmpty);
-			analyticsDataFactory.Setup(new CurrentWeekDates());
-			analyticsDataFactory.Setup(new QuarterOfAnHourInterval());
-			analyticsDataFactory.Setup(shiftLength);
-
+			insertPerson(10, new DateTime(2010, 1, 1), AnalyticsDate.Eternity.DateDate);
+			setupThingsForFactSchedule();
 			analyticsDataFactory.Persist();
+			insertFactSchedule(10, DateTime.Today.AddHours(8));
+		}
+
+		private void insertPerson(int personId, DateTime validFrom, DateTime validTo, bool toBeDeleted=false)
+		{
+			analyticsDataFactory.Setup(new Person(personId, Guid.NewGuid(), Guid.NewGuid(), "Ashley", "Andeen", validFrom, validTo, 0, -2, businessUnitId, Guid.NewGuid(), _datasource, toBeDeleted, _timeZones.UtcTimeZoneId));
+		}
+
+		private void insertFactSchedule(int personId, DateTime activityStartTime)
+		{
 			var datePart = new AnalyticsFactScheduleDate
 			{
 				ScheduleStartDateLocalId = 1,
 				ScheduleDateId = 1,
 				IntervalId = 32,
-				ActivityStartTime = DateTime.Today.AddHours(8),
+				ActivityStartTime = activityStartTime,
 				ActivityStartDateId = 1,
 				ActivityEndDateId = 1,
-				ActivityEndTime = DateTime.Today.AddHours(8).AddMinutes(15),
+				ActivityEndTime = activityStartTime.AddMinutes(15),
 				ShiftStartIntervalId = 32,
 				ShiftEndIntervalId = 68,
 				DatasourceUpdateDate = DateTime.Now,
-				ShiftStartTime = DateTime.Today.AddHours(8),
+				ShiftStartTime = activityStartTime,
 				ShiftEndTime = DateTime.Today.AddHours(17),
 				ShiftStartDateId = 1,
 				ShiftEndDateId = 1
@@ -142,7 +134,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var personPart = new AnalyticsFactSchedulePerson
 			{
 				BusinessUnitId = businessUnitId,
-				PersonId = 10
+				PersonId = personId
 			};
 			WithAnalyticsUnitOfWork.Do(() =>
 			{
@@ -158,34 +150,57 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			});
 		}
 
+		private void setupThingsForFactSchedule()
+		{
+			analyticsDataFactory.Setup(Scenario.DefaultScenarioFor(10, Guid.NewGuid()));
+			var actEmpty = new Activity(-1, Guid.NewGuid(), "Empty", Color.Black, _datasource, businessUnitId);
+			var act = new Activity(22, Guid.NewGuid(), "Phone", Color.LightGreen, _datasource, businessUnitId);
+			var absEmpty = new Absence(-1, Guid.NewGuid(), "Empty", Color.Black, _datasource, businessUnitId);
+			var abs = new Absence(22, Guid.NewGuid(), "Freee", Color.LightGreen, _datasource, businessUnitId);
+			var shiftLength = new ShiftLength(4, 480, _datasource);
+
+			analyticsDataFactory.Setup(act);
+			analyticsDataFactory.Setup(actEmpty);
+			analyticsDataFactory.Setup(abs);
+			analyticsDataFactory.Setup(absEmpty);
+			analyticsDataFactory.Setup(new CurrentWeekDates());
+			analyticsDataFactory.Setup(new QuarterOfAnHourInterval());
+			analyticsDataFactory.Setup(shiftLength);
+		}
+
 		[Test]
 		public void ShouldInsertFactScheduleDayCount()
 		{
-			analyticsDataFactory.Setup(new CurrentWeekDates());
-			analyticsDataFactory.Setup(new Person(5, Guid.NewGuid(), Guid.NewGuid(), "Ashley", "Andeen", new DateTime(2010, 1, 1),
-										AnalyticsDate.Eternity.DateDate, 0, AnalyticsDate.Eternity.DateId, businessUnitId, Guid.NewGuid(), _datasource, false, _timeZones.UtcTimeZoneId));
-			analyticsDataFactory.Setup(Scenario.DefaultScenarioFor(10, Guid.NewGuid()));
-			analyticsDataFactory.Setup(new ShiftCategory(-1, Guid.NewGuid(), "Kattegat", Color.Green, _datasource, businessUnitId));
-			analyticsDataFactory.Setup(new Absence(22, Guid.NewGuid(), "Freee", Color.LightGreen, _datasource, businessUnitId));
-			analyticsDataFactory.Setup(new DimDayOff(-1, Guid.NewGuid(), "DayOff", _datasource, businessUnitId));
+			analyticsDataFactory.Setup(new Person(5, Guid.NewGuid(), Guid.NewGuid(), "Ashley", "Andeen", new DateTime(2010, 1, 1), AnalyticsDate.Eternity.DateDate, 0, AnalyticsDate.Eternity.DateId, businessUnitId, Guid.NewGuid(), _datasource, false, _timeZones.UtcTimeZoneId));
+			setupThingsForFactScheduleDayCount();
 			analyticsDataFactory.Persist();
+			insertFactScheduleDayCount(5, 1, DateTime.Now);
+		}
 
+		private void insertFactScheduleDayCount(int personId,int shiftStartDateLocalId, DateTime startTime)
+		{
 			var dayCount = new AnalyticsFactScheduleDayCount
 			{
-				ShiftStartDateLocalId = 1,
-				PersonId = 5,
+				ShiftStartDateLocalId = shiftStartDateLocalId,
+				PersonId = personId,
 				ScenarioId = 10,
-				StartTime = DateTime.Now,
+				StartTime = startTime,
 				ShiftCategoryId = -1,
 				DayOffName = null,
 				DayOffShortName = null,
 				AbsenceId = 22,
 				BusinessUnitId = businessUnitId
 			};
-			WithAnalyticsUnitOfWork.Do(() =>
-			{
-				Target.PersistFactScheduleDayCountRow(dayCount);
-			});
+			WithAnalyticsUnitOfWork.Do(() => { Target.PersistFactScheduleDayCountRow(dayCount); });
+		}
+
+		private void setupThingsForFactScheduleDayCount()
+		{
+			analyticsDataFactory.Setup(new CurrentWeekDates());
+			analyticsDataFactory.Setup(Scenario.DefaultScenarioFor(10, Guid.NewGuid()));
+			analyticsDataFactory.Setup(new ShiftCategory(-1, Guid.NewGuid(), "Kattegat", Color.Green, _datasource, businessUnitId));
+			analyticsDataFactory.Setup(new Absence(22, Guid.NewGuid(), "Freee", Color.LightGreen, _datasource, businessUnitId));
+			analyticsDataFactory.Setup(new DimDayOff(-1, Guid.NewGuid(), "DayOff", _datasource, businessUnitId));
 		}
 
 		[Test]
@@ -204,5 +219,88 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			shiftLengthId.Should().Be.GreaterThan(0);
 		}
 
+		[Test]
+		public void ShouldUpdateFactScheduleWithUnlinkedPersonidsWhenAddNewPersonPeriod()
+		{
+			insertPerson(10, new DateTime(2015, 1, 10), new DateTime(2015, 1, 24));
+			insertPerson(11, new DateTime(2015, 1, 25), AnalyticsDate.Eternity.DateDate);
+			setupThingsForFactSchedule();
+			analyticsDataFactory.Persist();
+			insertFactSchedule(10, new DateTime(2015, 1, 20).AddHours(8));
+			insertFactSchedule(10, new DateTime(2015, 1, 26).AddHours(8));
+
+			var rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleRowCount(10));
+			rowCount.Should().Be.EqualTo(2);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleRowCount(11));
+			rowCount.Should().Be.EqualTo(0);
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdateUnlinkedPersonids(new[] { 10, 11 }));
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleRowCount(10));
+			rowCount.Should().Be.EqualTo(1);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleRowCount(11));
+			rowCount.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldUpdateFactScheduleWithUnlinkedPersonidsWhenDeleteExistingPersonPeriod()
+		{
+			insertPerson(10, new DateTime(2015, 1, 10), AnalyticsDate.Eternity.DateDate, true);
+			insertPerson(11, new DateTime(2015, 1, 5), AnalyticsDate.Eternity.DateDate);
+			setupThingsForFactSchedule();
+			analyticsDataFactory.Persist();
+			insertFactSchedule(10, new DateTime(2015, 1, 20).AddHours(8));
+			insertFactSchedule(11, new DateTime(2015, 1, 26).AddHours(8));
+
+			var rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleRowCount(10));
+			rowCount.Should().Be.EqualTo(1);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleRowCount(11));
+			rowCount.Should().Be.EqualTo(1);
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdateUnlinkedPersonids(new[] { 10, 11 }));
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleRowCount(10));
+			rowCount.Should().Be.EqualTo(0);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleRowCount(11));
+			rowCount.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldUpdateFactScheduleDayCountWithUnlinkedPersonidsWhenAddNewPersonPeriod()
+		{
+			insertPerson(10, new DateTime(2015, 1, 10), new DateTime(2015, 1, 24));
+			insertPerson(11, new DateTime(2015, 1, 25), AnalyticsDate.Eternity.DateDate);
+			setupThingsForFactScheduleDayCount();
+			analyticsDataFactory.Persist();
+			insertFactScheduleDayCount(10, 1, new DateTime(2015, 1, 20).AddHours(8));
+			insertFactScheduleDayCount(10, 2, new DateTime(2015, 1, 26).AddHours(8));
+
+			var rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDayCountRowCount(10));
+			rowCount.Should().Be.EqualTo(2);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDayCountRowCount(11));
+			rowCount.Should().Be.EqualTo(0);
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdateUnlinkedPersonids(new[] { 10, 11 }));
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDayCountRowCount(10));
+			rowCount.Should().Be.EqualTo(1);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDayCountRowCount(11));
+			rowCount.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldUpdateFactScheduleDayCountWithUnlinkedPersonidsWhenDeleteExistingPersonPeriod()
+		{
+			insertPerson(10, new DateTime(2015, 1, 10), AnalyticsDate.Eternity.DateDate, true);
+			insertPerson(11, new DateTime(2015, 1, 5), AnalyticsDate.Eternity.DateDate);
+			setupThingsForFactScheduleDayCount();
+			analyticsDataFactory.Persist();
+			insertFactScheduleDayCount(10, 1, new DateTime(2015, 1, 20).AddHours(8));
+			insertFactScheduleDayCount(11, 2, new DateTime(2015, 1, 26).AddHours(8));
+
+			var rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDayCountRowCount(10));
+			rowCount.Should().Be.EqualTo(1);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDayCountRowCount(11));
+			rowCount.Should().Be.EqualTo(1);
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdateUnlinkedPersonids(new[] { 10, 11 }));
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDayCountRowCount(10));
+			rowCount.Should().Be.EqualTo(0);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDayCountRowCount(11));
+			rowCount.Should().Be.EqualTo(2);
+		}
 	}
 }

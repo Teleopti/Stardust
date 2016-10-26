@@ -14,7 +14,32 @@ using Teleopti.Ccc.Domain.Exceptions;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
-    public class AnalyticsPersonGroupsHandler : 
+	public class AnalyticsScheduleMatchingPerson : IHandleEvent<AnalyticsPersonCollectionChangedEvent>, IRunOnHangfire
+	{
+		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsScheduleMatchingPerson));
+		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
+		private readonly IAnalyticsScheduleRepository _analyticsScheduleRepository;
+
+		public AnalyticsScheduleMatchingPerson(IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, IAnalyticsScheduleRepository analyticsScheduleRepository)
+		{
+			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
+			_analyticsScheduleRepository = analyticsScheduleRepository;
+		}
+
+		public void Handle(AnalyticsPersonCollectionChangedEvent @event)
+		{
+			logger.Debug($"Handle AnalyticsPersonCollectionChangedEvent for {@event.SerializedPeople}");
+			foreach (var personId in @event.PersonIdCollection)
+			{
+				var analyticsPersonPeriods = _analyticsPersonPeriodRepository.GetPersonPeriods(personId);
+				_analyticsScheduleRepository.UpdateUnlinkedPersonids(analyticsPersonPeriods.Select(x => x.PersonId).ToArray());
+
+
+			}
+		}
+	}
+
+	public class AnalyticsPersonGroupsHandler : 
 		IHandleEvent<AnalyticsPersonCollectionChangedEvent>,
 		IRunOnHangfire
 	{

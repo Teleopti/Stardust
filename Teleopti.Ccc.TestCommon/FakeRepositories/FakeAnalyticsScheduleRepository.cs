@@ -43,5 +43,20 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
+
+		public void UpdateUnlinkedPersonids(int[] personPeriodIds)
+		{
+			throw new NotImplementedException();
+		}
+
+		public int GetFactScheduleRowCount(int personId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public int GetFactScheduleDayCountRowCount(int personId)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

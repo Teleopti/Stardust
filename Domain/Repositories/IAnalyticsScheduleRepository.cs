@@ -16,7 +16,13 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		int ShiftLengthId(int shiftLength);
 
+
+
 		void InsertStageScheduleChangedServicebus(DateOnly date, Guid personId, Guid scenarioId, Guid businessUnitId,
 			DateTime datasourceUpdateDate);
+
+		void UpdateUnlinkedPersonids(int[] personPeriodIds);
+		int GetFactScheduleRowCount(int personId);
+		int GetFactScheduleDayCountRowCount(int personId);
 	}
 }
