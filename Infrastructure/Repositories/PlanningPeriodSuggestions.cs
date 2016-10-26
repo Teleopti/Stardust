@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public SuggestedPlanningPeriod Default()
 		{
-			var now = _now.LocalDateOnly();
+			var now = new DateOnly(_now.UtcDateTime());
 			if (_uniqueSchedulePeriods.Any() )
 			{
 				var aggregatedSchedulePeriod = _uniqueSchedulePeriods.First();
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			result.Add(new Tuple<int, SuggestedPlanningPeriod>(0,monthIsLastResort(range.StartDate.Date)));
 			result.Add(new Tuple<int, SuggestedPlanningPeriod>(0,monthIsLastResort(range.EndDate.Date)));
 			return
-				result.Where(r => r.Item2.Range.StartDate > _now.LocalDateOnly())
+				result.Where(r => r.Item2.Range.StartDate > new DateOnly(_now.UtcDateTime()))
 					.GroupBy(i => i.Item2)
 					.Select(s => new {s.Key, Score = s.Sum(v => v.Item1)})
 					.OrderByDescending(x => x.Score)
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			result.AddRange(resultingRanges);
 			return
-				result.Where(r => r.Item2.Range.StartDate > _now.LocalDateOnly())
+				result.Where(r => r.Item2.Range.StartDate > new DateOnly(_now.UtcDateTime()))
 					.GroupBy(i => i.Item2)
 					.Select(s => new { s.Key, Score = s.Sum(v => v.Item1) })
 					.OrderByDescending(x => x.Score)
