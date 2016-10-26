@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					continue;
 
 				var skillIntervalDataList =
-				_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(personsSkillStaffPeriods, scheduleDay, TimeZoneGuard.Instance.TimeZone);
+				_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(personsSkillStaffPeriods, scheduleDay, TimeZoneGuard.Instance.CurrentTimeZone());
 				var splittedSkillIntervalDataList = _skillIntervalDataDivider.SplitSkillIntervalData(skillIntervalDataList,
 																									  minResolution);
 				nestedList.Add(splittedSkillIntervalDataList);

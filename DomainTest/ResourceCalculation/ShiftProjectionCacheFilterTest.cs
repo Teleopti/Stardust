@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _rules = _mocks.StrictMock<ILongestPeriodForAssignmentCalculator>();
 	        _personalShiftAndMeetingFilter = _mocks.StrictMock<IPersonalShiftAndMeetingFilter>();
 	        _notOverWritableActivitiesShiftFilter = _mocks.StrictMock<INotOverWritableActivitiesShiftFilter>();
-			_target = new ShiftProjectionCacheFilter(_rules, _personalShiftAndMeetingFilter, _notOverWritableActivitiesShiftFilter, new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()), new TimeZoneGuardWrapper());
+			_target = new ShiftProjectionCacheFilter(_rules, _personalShiftAndMeetingFilter, _notOverWritableActivitiesShiftFilter, new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()), new TimeZoneGuard());
             _scheduleRange = _mocks.StrictMock<IScheduleRange>();
             _scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
         	_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();

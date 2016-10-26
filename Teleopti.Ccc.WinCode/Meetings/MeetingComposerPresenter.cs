@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
                 _schedulerStateHolder = new SchedulerStateHolder(_schedulerStateHolder.RequestedScenario,
                                                                  _schedulerStateHolder.RequestedPeriod,
-																 availablePersons, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())),new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
+																 availablePersons, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())),new SchedulingResultStateHolder(), new TimeZoneGuard());
                 _schedulerStateHolder.SchedulingResultState.PersonsInOrganization = new List<IPerson>(availablePersons);
 					((List<IMultiplicatorDefinitionSet>)_schedulerStateHolder.CommonStateHolder.MultiplicatorDefinitionSets).AddRange(multi);
             }
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             var requestedPeriod =
                 new DateOnlyPeriod(_model.StartDate.AddDays(-1), _model.RecurringEndDate.AddDays(2));
 			_schedulerStateHolder = new SchedulerStateHolder(_model.Meeting.Scenario, new DateOnlyPeriodAsDateTimePeriod(requestedPeriod, Model.TimeZone),
-															 new List<IPerson>(), _disableDeletedFilter, new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
+															 new List<IPerson>(), _disableDeletedFilter, new SchedulingResultStateHolder(), new TimeZoneGuard());
                                         
             var stateLoader = new SchedulerStateLoader(
                                                     _schedulerStateHolder,

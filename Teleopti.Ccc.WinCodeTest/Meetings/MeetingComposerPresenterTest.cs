@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _person,
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
-                                                                                      }, disableDeleteFilter, new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
+                                                                                      }, disableDeleteFilter, new SchedulingResultStateHolder(), new TimeZoneGuard());
             _target = new MeetingComposerPresenter(_view, _model, disableDeleteFilter, schedulerStateHolder);
             _view.SetRecurrentMeetingActive(true);
 
@@ -555,7 +555,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _person,
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
-                                                                                      }, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory())), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
+                                                                                      }, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory())), new SchedulingResultStateHolder(), new TimeZoneGuard());
 			_target = new MeetingComposerPresenterForTest(_view, _model, schedulerStateHolder, _unitOfWorkFactory,
 														  _repositoryFactory);
 			_target.TrySave();
@@ -572,7 +572,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _person,
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
-                                                                                      }, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory())), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
+                                                                                      }, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory())), new SchedulingResultStateHolder(), new TimeZoneGuard());
             _target = new MeetingComposerPresenterForTest(_view, _model, schedulerStateHolder, _unitOfWorkFactory,
                                                           _repositoryFactory);
 

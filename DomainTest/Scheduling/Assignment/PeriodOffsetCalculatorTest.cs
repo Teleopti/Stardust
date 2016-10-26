@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -225,9 +226,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 	    public void ShouldUseCurrentViewPointWhenCalculatingPeriodOffsetWithDaylightSaving()
 		{
-			var originalTimeZone = TimeZoneGuard.Instance.TimeZone;
-
-			TimeZoneGuard.Instance.TimeZone = TimeZoneInfoFactory.NewYorkTimeZoneInfo();
+			ServiceLocatorForLegacy.TimeZoneGuard = new TimeZoneGuard {TimeZone = TimeZoneInfoFactory.NewYorkTimeZoneInfo()};
 
 			_sourceDateTimePeriod = new DateTimePeriod(2016, 10, 25, 13, 2016, 10, 25, 21);
 			_targetDateTimePeriod = new DateTimePeriod(2016, 11, 1, 13, 2016, 11, 1, 21);
@@ -243,7 +242,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				offSet.Should().Be.EqualTo(TimeSpan.FromDays(7));
 			}
 
-			TimeZoneGuard.Instance.TimeZone = originalTimeZone;
+			ServiceLocatorForLegacy.TimeZoneGuard = null;
 		}
 
         [Test]

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_category.SetId(Guid.NewGuid());
 			_timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
-			_target = new ValidDateTimePeriodShiftFilter(new TimeZoneGuardWrapper());
+			_target = new ValidDateTimePeriodShiftFilter(new TimeZoneGuard());
 		}
 
 		[Test]

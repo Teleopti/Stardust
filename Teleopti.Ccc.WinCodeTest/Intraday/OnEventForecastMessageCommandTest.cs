@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			_scenario = mocks.StrictMock<IScenario>();
 			_persons = new List<IPerson> { mocks.StrictMock<IPerson>() };
-			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), _persons, mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
+			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), _persons, mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuard());
 
 			_scheduleDictionary = mocks.StrictMock<IScheduleDictionary>();
 			_unitOfWork = mocks.DynamicMock<IUnitOfWork>();

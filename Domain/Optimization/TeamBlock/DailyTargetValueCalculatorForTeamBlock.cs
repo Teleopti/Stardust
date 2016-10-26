@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			return _extractIntervalsViolatingMaxSeat.IdentifyIntervalsWithBrokenMaxSeats(teamBlockInfo,
 				_schedulingResultStateHolder(),
-				TimeZoneGuard.Instance.TimeZone, baseDatePointer);
+				TimeZoneGuard.Instance.CurrentTimeZone(), baseDatePointer);
 		}
 
 		private IDictionary<DateOnly, IList<ISkillIntervalData>> getSkillIntervalListForEachDay(IList<DateOnly> dateOnlyList,
@@ -113,14 +113,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (skill.MidnightBreakOffset != TimeSpan.Zero)
 				{
 					var missingIntervals = _locateMissingIntervalsIfMidNightBreak.GetMissingSkillStaffPeriods(currentDate, skill,
-						TimeZoneGuard.Instance.TimeZone);
+						TimeZoneGuard.Instance.CurrentTimeZone());
 					skillStaffPeriodCollection = skillStaffPeriodCollection.Concat(missingIntervals).ToList();
 					skillStaffPeriodCollection = _filterOutIntervalsAfterMidNight.Filter(skillStaffPeriodCollection, currentDate,
-						TimeZoneGuard.Instance.TimeZone);
+						TimeZoneGuard.Instance.CurrentTimeZone());
 				}
 
 				var mappedData = _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillStaffPeriodCollection,
-					currentDate, TimeZoneGuard.Instance.TimeZone);
+					currentDate, TimeZoneGuard.Instance.CurrentTimeZone());
 				mappedData = _intervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution);
 
 				if (!result.ContainsKey(currentDate))

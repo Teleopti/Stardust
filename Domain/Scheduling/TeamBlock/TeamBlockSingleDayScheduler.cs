@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			var allSkillDays = schedulingResultStateHolder.AllSkillDays();
 			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockSingleDayInfo, day, allSkillDays, false);
-			var maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, day, allSkillDays, TimeZoneGuard.Instance.TimeZone, true);
+			var maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, day, allSkillDays, TimeZoneGuard.Instance.CurrentTimeZone(), true);
 			
 
 			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(),
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				schedulingOptions.UseMaximumPersons, schedulingOptions.UserOptionMaxSeatsFeature, hasMaxSeatSkill, maxSeatInfo);
 
 			resultList = _workSelectorForIntraInterval.SelectAllShiftProjectionCaches(shifts, activityInternalData,
-				parameters, TimeZoneGuard.Instance.TimeZone);
+				parameters, TimeZoneGuard.Instance.CurrentTimeZone());
 
 			return resultList;
 		}
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		
 			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockSingleDayInfo, day, allSkillDays, false);
-			var maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, day, allSkillDays, TimeZoneGuard.Instance.TimeZone, true);
+			var maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, day, allSkillDays, TimeZoneGuard.Instance.CurrentTimeZone(), true);
 
 			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(),
 				new DateOnlyPeriod(day, day));
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,
 				schedulingOptions.UseMaximumPersons, schedulingOptions.UserOptionMaxSeatsFeature, hasMaxSeatSkill, maxSeatInfo);
 
-			return workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData, parameters, TimeZoneGuard.Instance.TimeZone, schedulingOptions);
+			return workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData, parameters, TimeZoneGuard.Instance.CurrentTimeZone(), schedulingOptions);
 		}
 	}
 }

@@ -18,6 +18,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {
 	[TestFixture]
+	[LegacyTest]
 	public class TeamBlockSingleDaySchedulerTest
 	{
 		private TeamBlockSingleDayScheduler _target;
@@ -48,8 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IEnumerable<ISkillDay> _skillDays;
 		private IScheduleDictionary _schedules;
 
-		[SetUp]
-		public void Setup()
+		public void setup()
 		{
 			_mocks = new MockRepository();
 			_teamBlockSchedulingCompletionChecker = _mocks.StrictMock<ITeamBlockSchedulingCompletionChecker>();
@@ -95,6 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldBeFalseIfNoRoleModel()
 		{
+			setup();
 			var result = _target.ScheduleSingleDay(_workShiftSelector, _teamBlockInfo, _schedulingOptions, _dateOnly, null,
 									  _rollbackService, _resourceCalculateDelayer, _skillDays, _schedules, new EffectiveRestriction(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null);
 			Assert.That(result, Is.False);
@@ -103,6 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldBeTrueIfAllSelectedPersonAreScheduled()
 		{
+			setup();
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
@@ -121,6 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldScheduleForSameShiftIfSingleAgentTeamAndBlockWithSameShift()
 		{
+			setup();
 			_schedulingOptions = new SchedulingOptions();
 			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff;
 			_schedulingOptions.UseBlock = true;
@@ -158,6 +161,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldScheduleForOptionsOtherThanSameShift()
 		{
+			setup();
 			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
 																		 new EndTimeLimitation(),
 																		 new WorkTimeLimitation(), null, null, null,
@@ -216,6 +220,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldSkipIfNotShiftCanBeAssignedToTeamMember()
 		{
+			setup();
 			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
 														new EndTimeLimitation(),
 														new WorkTimeLimitation(), null, null, null,
@@ -273,6 +278,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldScheduleWithConsideringMaxSeat()
 		{
+			setup();
 			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
 																		 new EndTimeLimitation(),
 																		 new WorkTimeLimitation(), null, null, null,

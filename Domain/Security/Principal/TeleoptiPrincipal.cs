@@ -10,10 +10,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 	{
 		private static readonly CurrentTeleoptiPrincipal currentTeleoptiPrincipal = new CurrentTeleoptiPrincipal(new ThreadPrincipalContext());
 
-		public static ITeleoptiPrincipal CurrentPrincipal { get { return currentTeleoptiPrincipal.Current(); } }
-
-
-
+		public static ITeleoptiPrincipal CurrentPrincipal => currentTeleoptiPrincipal.Current();
 
 
 		private IPerson _person;

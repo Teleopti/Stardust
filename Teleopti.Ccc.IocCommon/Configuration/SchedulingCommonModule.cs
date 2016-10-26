@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IClearReferredShiftTradeRequests>()
 				.AsSelf()
 				.InstancePerLifetimeScope();
-			builder.RegisterType<TimeZoneGuardWrapper>().As<ITimeZoneGuard>().SingleInstance();
+			builder.RegisterType<TimeZoneGuard>().As<ITimeZoneGuard>().SingleInstance();
 			builder.RegisterType<OverriddenBusinessRulesHolder>().As<IOverriddenBusinessRulesHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulingResultStateHolder>().As<ISchedulingResultStateHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulingResultStateHolderProvider>().As<ISchedulingResultStateHolderProvider>().InstancePerLifetimeScope();

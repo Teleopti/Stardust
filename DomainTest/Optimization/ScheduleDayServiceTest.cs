@@ -11,6 +11,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
     [TestFixture]
+	[LegacyTest]
     public class ScheduleDayServiceTest
     {
         private MockRepository _mocks;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_rollbackService = _mocks.DynamicMock<ISchedulePartModifyAndRollbackService>();
 			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
 			_schedulingOptions = new SchedulingOptions();
-			_target = new ScheduleDayService(_scheduleService, _deleteSchedulePartService, _resourceOptimizationHelper, _effectiveRestrictionCreator, _rollbackService, ()=> new SchedulerStateHolder(new SchedulingResultStateHolder(), new CommonStateHolder(null), new TimeZoneGuardWrapper()));
+			_target = new ScheduleDayService(_scheduleService, _deleteSchedulePartService, _resourceOptimizationHelper, _effectiveRestrictionCreator, _rollbackService, ()=> new SchedulerStateHolder(new SchedulingResultStateHolder(), new CommonStateHolder(null), new TimeZoneGuard()));
         }
 
 

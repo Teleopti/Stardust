@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[SetUp]
 		public void Setup()
 		{
-			_target = TimeZoneGuard.Instance;
+			_target = (TimeZoneGuard) TimeZoneGuard.Instance;
 		}
 
 		[Test]

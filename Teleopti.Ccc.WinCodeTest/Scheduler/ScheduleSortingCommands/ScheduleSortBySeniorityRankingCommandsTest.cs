@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
         {
             _mocks = new MockRepository();
             _resultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-			_stateHolder = new SchedulerStateHolder(_resultStateHolder, _mocks.StrictMock<ICommonStateHolder>(), new TimeZoneGuardWrapper());
+			_stateHolder = new SchedulerStateHolder(_resultStateHolder, _mocks.StrictMock<ICommonStateHolder>(), new TimeZoneGuard());
             _scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 	        _personRankCalculator = _mocks.StrictMock<IRankedPersonBasedOnStartDate>();
         }

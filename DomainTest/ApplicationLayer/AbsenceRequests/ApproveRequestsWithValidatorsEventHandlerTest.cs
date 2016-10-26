@@ -386,8 +386,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 							),
 						new FullIntervalFinder()
 						)
-					), new TimeZoneGuardWrapper(),
-				new CascadingResourceCalculationContextFactory(new CascadingPersonSkillProvider(), new TimeZoneGuardWrapper())
+					), new TimeZoneGuard(),
+				new CascadingResourceCalculationContextFactory(new CascadingPersonSkillProvider(), new TimeZoneGuard())
 				), new ShovelResources(new AddResourcesToSubSkills(), new ReducePrimarySkillResources(), new SkillGroupPerActivityProvider(), new PrimarySkillOverstaff(), new FakeTimeZoneGuard()));
 		}
 

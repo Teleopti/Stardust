@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -6,33 +7,24 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public interface ITimeZoneGuard
 	{
 		TimeZoneInfo CurrentTimeZone();
+		TimeZoneInfo TimeZone { get; set; }
 	}
-
-	public class TimeZoneGuardWrapper : ITimeZoneGuard
+	
+	public class TimeZoneGuard : ITimeZoneGuard
 	{
+		private TimeZoneInfo _timeZone;
+
+		public TimeZoneInfo TimeZone
+		{
+			get { return _timeZone ?? (_timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone); }
+			set { _timeZone = value; }
+		}
+
+		public static ITimeZoneGuard Instance => ServiceLocatorForLegacy.TimeZoneGuard;
+
 		public TimeZoneInfo CurrentTimeZone()
 		{
-			return TimeZoneGuard.Instance.TimeZone;
+			return TimeZone;
 		}
-	}
-
-	public sealed class TimeZoneGuard
-	{
-		private static readonly Lazy<TimeZoneGuard> _guard = new Lazy<TimeZoneGuard>(()=>new TimeZoneGuard());
-		
-		private TimeZoneGuard()
-		{
-			TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
-		}
-
-		public static TimeZoneGuard Instance
-		{
-			get
-			{
-				return _guard.Value;
-			}
-		}
-
-		public TimeZoneInfo TimeZone { get; set; }
 	}
 }

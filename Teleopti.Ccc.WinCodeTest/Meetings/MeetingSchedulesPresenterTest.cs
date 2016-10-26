@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _period = new DateOnlyPeriod(_startDate, _startDate.AddDays(3));
             _scenario = _mocks.StrictMock<IScenario>();
             _schedulerStateLoader = _mocks.DynamicMock<ISchedulerStateLoader>();
-			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, _timeZone), new List<IPerson> { _person }, _mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
+			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, _timeZone), new List<IPerson> { _person }, _mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuard());
 		    _schedulerStateHolder.TimeZoneInfo = _timeZone;
             _meetingSlotFinderService = _mocks.StrictMock<IMeetingSlotFinderService>();
 

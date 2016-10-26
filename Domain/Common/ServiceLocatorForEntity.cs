@@ -1,5 +1,6 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Common
 	public static class ServiceLocatorForLegacy
 	{
 		private static ICurrentAuthorization _currentAuthorization;
-		//private static IAuthorizationScope _authorizationScope;
+		private static ITimeZoneGuard _timeZoneGuard;
 
 		public static ICurrentAuthorization CurrentAuthorization
 		{
@@ -20,11 +21,11 @@ namespace Teleopti.Ccc.Domain.Common
 			set { _currentAuthorization = value; }
 		}
 
-		//public static IAuthorizationScope AuthorizationScope
-		//{
-		//	get { return _authorizationScope ?? Security.Principal.CurrentAuthorization.Make(); }
-		//	set { _authorizationScope = value; }
-		//}
+		public static ITimeZoneGuard TimeZoneGuard
+		{
+			get { return _timeZoneGuard ?? new TimeZoneGuard(); }
+			set { _timeZoneGuard = value; }
+		}
 	}
 
 	public static class ServiceLocatorForEntity

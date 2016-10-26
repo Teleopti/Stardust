@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Win.Reporting
 
 			if(endDate > startDate)
 				loadPeriod = new DateOnlyPeriod(startDate, endDate);
-			var stateHolder = new SchedulerStateHolder(model.Scenario, new DateOnlyPeriodAsDateTimePeriod(loadPeriod, timeZoneInfo), model.Persons, new DisableDeletedFilter(new ThisUnitOfWork(unitOfWork)), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
+			var stateHolder = new SchedulerStateHolder(model.Scenario, new DateOnlyPeriodAsDateTimePeriod(loadPeriod, timeZoneInfo), model.Persons, new DisableDeletedFilter(new ThisUnitOfWork(unitOfWork)), new SchedulingResultStateHolder(), new TimeZoneGuard());
 			stateHolder.CommonNameDescription.AliasFormat = commonNameDescriptionSetting.AliasFormat;
 			loadSchedules(unitOfWork, model.Persons, stateHolder);
 			

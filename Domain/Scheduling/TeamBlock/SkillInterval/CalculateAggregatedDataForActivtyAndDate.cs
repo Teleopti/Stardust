@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 				if (skill.Activity == skillActivity)
 				{
 					var skillIntervalDatas =
-						_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillStaffPeriods, skillDay.CurrentDate, TimeZoneGuard.Instance.TimeZone);
+						_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillStaffPeriods, skillDay.CurrentDate, TimeZoneGuard.Instance.CurrentTimeZone());
 					var splittedDatas = _intervalDataDivider.SplitSkillIntervalData(skillIntervalDatas, resolution);
 					var adjustedIntervalDatas = new List<ISkillIntervalData>();
 					foreach (var skillIntervalData in splittedDatas)

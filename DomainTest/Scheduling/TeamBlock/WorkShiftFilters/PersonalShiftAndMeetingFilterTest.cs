@@ -19,6 +19,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 {
 	[TestFixture]
+	[LegacyTest]
 	public class PersonalShiftAndMeetingFilterTest
 	{
 		private MockRepository _mocks;
@@ -27,11 +28,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private IPersonAssignment _personAssignment;
 		private IWorkShiftFinderResult _finderResult;
 
-		[SetUp]
-		public void Setup()
+		public void setup()
 		{
 			_mocks = new MockRepository();
-			_target = new PersonalShiftAndMeetingFilter(()=> new SchedulerStateHolder(new SchedulingResultStateHolder(), new CommonStateHolder(null), new TimeZoneGuardWrapper()));
+			_target = new PersonalShiftAndMeetingFilter(()=> new SchedulerStateHolder(new SchedulingResultStateHolder(), new CommonStateHolder(null), new TimeZoneGuard()));
 			_part = _mocks.StrictMock<IScheduleDay>();
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
 			_finderResult = new WorkShiftFinderResult(new Person(), new DateOnly(2009, 2, 3));
@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void CanGetMaximumPeriodForMeetings()
 		{
+			setup();
 			var resultPeriod = new DateTimePeriod(new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc),
 								new DateTime(2009, 2, 2, 14, 30, 0, DateTimeKind.Utc));
 
@@ -63,6 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void CanGetMaximumPeriodForPersonalShifts()
 		{
+			setup();
 			var resultPeriod = new DateTimePeriod(new DateTime(2009, 2, 2, 8, 0, 0, DateTimeKind.Utc),
 								new DateTime(2009, 2, 2, 14, 0, 0, DateTimeKind.Utc));
 
@@ -99,6 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void CanGetMaximumPeriodForPersonalShiftsAndMeetings()
 		{
+			setup();
 			var resultPeriod = new DateTimePeriod(new DateTime(2009, 2, 2, 8, 0, 0, DateTimeKind.Utc),
 								new DateTime(2009, 2, 2, 14, 30, 0, DateTimeKind.Utc));
 
@@ -132,6 +135,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void GetMaximumPeriodForPersonalShiftsAndMeetingsReturnsNullWhenEmpty()
 		{
+			setup();
 			var retList = new List<IPersonMeeting>();
 			var meetings = new ReadOnlyCollection<IPersonMeeting>(retList);
 
@@ -151,6 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldCoverMeetingAndPersonalShiftsWhenItIsPossible()
 		{
+			setup();
 			var period = new DateTimePeriod(new DateTime(2009, 2, 2, 8, 0, 0, DateTimeKind.Utc),
 											new DateTime(2009, 2, 2, 9, 30, 0, DateTimeKind.Utc));
 			var period2 = new DateTimePeriod(new DateTime(2009, 2, 2, 12, 0, 0, DateTimeKind.Utc),
@@ -200,6 +205,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldGetNoShiftWhenNoMainShiftCanCoverMeetingAndPersonalShifts()
 		{
+			setup();
 			var period = new DateTimePeriod(new DateTime(2009, 2, 2, 8, 0, 0, DateTimeKind.Utc),
 											new DateTime(2009, 2, 2, 9, 30, 0, DateTimeKind.Utc));
 			var period2 = new DateTimePeriod(new DateTime(2009, 2, 2, 12, 0, 0, DateTimeKind.Utc),

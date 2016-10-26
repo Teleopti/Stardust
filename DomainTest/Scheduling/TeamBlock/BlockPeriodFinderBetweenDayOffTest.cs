@@ -9,6 +9,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {
     [TestFixture]
+	[LegacyTest]
     public class BlockPeriodFinderBetweenDayOffTest
     {
         private MockRepository _mocks;
@@ -22,8 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IScheduleDay _scheduleDay3;
 	    private IVirtualSchedulePeriod _schedulePeriod;
 
-        [SetUp]
-        public void Setup()
+        public void setup()
         {
             _mocks = new MockRepository();
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldReturnNullIfRequestedDateIsDayOff()
 		{
+			setup();
 			using (_mocks.Record())
 			{
 				Expect.Call(_matrix.Person).Return(_person);
@@ -59,6 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldReturnNullIfRequestedDateIsContractDayOff()
 		{
+			setup();
 			using (_mocks.Record())
 			{
 				Expect.Call(_matrix.Person).Return(_person);
@@ -78,6 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldNeverTryToCheckOutsideLoadedPeriod()
 		{
+			setup();
 			//range period is 3 days
 			var rangePeriod = new DateTimePeriod(2013, 4, 1, 2013, 4, 3);
 			//matrix is 1 day
@@ -106,6 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	    [Test]
 		public void ShouldCheckMaxTenDaysOutsideCurrentMatrix()
 		{
+			setup();
 			//range period is 365 days
 			var rangePeriod = new DateTimePeriod(2013, 1, 1, 2013, 12, 31);
 			//matrix is 1 day
@@ -133,6 +137,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldReturnCorrectPeriodBetweenDaysOff()
 		{
+			setup();
 			//range period is 365 days
 			var rangePeriod = new DateTimePeriod(2013, 1, 1, 2013, 12, 31);
 			//matrix is 2 days
@@ -169,6 +174,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 	    public void ShouldUseTerminalDateAsBlockBreaker()
 	    {
+			setup();
 			//range period is 365 days
 			var rangePeriod = new DateTimePeriod(2013, 1, 1, 2013, 12, 31);
 			//matrix is 5 days
@@ -206,6 +212,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldReturnCorrectPeriodIfContractDayOff()
 		{
+			setup();
 			//range period is 365 days
 			var rangePeriod = new DateTimePeriod(2013, 1, 1, 2013, 12, 31);
 			//matrix is 5 days
@@ -245,8 +252,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         [Test]
         public void AbsenceShouldNotCountAsBlockDelimiterWithAbsence()
         {
-            //range period is 365 days
-            var rangePeriod = new DateTimePeriod(2013, 1, 1, 2013, 12, 31);
+			setup();
+			//range period is 365 days
+			var rangePeriod = new DateTimePeriod(2013, 1, 1, 2013, 12, 31);
             //matrix is 2 days
             var matrixPeriod = new DateOnlyPeriod(2013, 4, 1, 2013, 4, 2);
 
@@ -275,8 +283,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         [Test]
         public void AbsenceShouldNotCountAsBlockDelimiterWithFullDayAbsence()
         {
-            //range period is 365 days
-            var rangePeriod = new DateTimePeriod(2013, 1, 1, 2013, 12, 31);
+			setup();
+			//range period is 365 days
+			var rangePeriod = new DateTimePeriod(2013, 1, 1, 2013, 12, 31);
             //matrix is 2 days
             var matrixPeriod = new DateOnlyPeriod(2013, 4, 1, 2013, 4, 2);
 
