@@ -347,10 +347,12 @@
 		}
 
 		.label {
-			font-size: xx-small;
+			font-size: x-small;
 			height: 1.32em;
 			z-index: 11;
 			transform: translateX(-50%);
+			padding-left: 0.3em;
+			padding-right: 0.3em;
 		}
 
 		& > .relative > span{

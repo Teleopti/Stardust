@@ -112,6 +112,7 @@
 			if (end === undefined)
 				return shiftHelper.MinutesForHourOfDay(16);
 
+			//Need further discussion about how to show today's and tomorrow's schedules end
 			end = end < defaultViewRange.end ? end : defaultViewRange.end; 			
 
 			if (end % 60 === 0 && end !== defaultViewRange.end) {
@@ -155,12 +156,15 @@
 				? moment()
 				: moment(baseDate)).startOf('day').add(minutes, 'minutes');
 
-			var formattedTime = time.format('LT');
+			var isCurrentDay = minutes >=0 && minutes <= 1440; 
+			var isNextDay = minutes > 1440; 
+
+			var formattedTime = isCurrentDay ? time.format('LT') : (isNextDay ? time.format('LT') + " +1" : time.format('LT') + " -1");
 
 			var hourPointVm = {
 				TimeLabel: formattedTime,
 				IsLabelVisible: !isLabelHidden,
-				IsCurrentDay: minutes >= 0 && minutes <= 1440,
+				IsCurrentDay: isCurrentDay,
 				Position: function() {
 					var timeLineStartMinutes = minutes - start;
 					var position = timeLineStartMinutes * percentPerMinute;
