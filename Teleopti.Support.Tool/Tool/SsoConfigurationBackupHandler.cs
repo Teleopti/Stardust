@@ -34,11 +34,13 @@ namespace Teleopti.Support.Tool.Tool
 			_customSection.Read(ssoFilePath.ClaimPolicies, custom);
 
 			var config = File.ReadAllLines(ssoFilePath.WebConfig);
-			foreach (var line in config.Where(line => line.Contains("DefaultIdentityProvider")))
+			foreach (var line in config)
 			{
-				custom.AddSection();
-				custom.Add(line);
-				break;
+				if (line.Contains("DefaultIdentityProvider") || line.Contains("Content-Security-Policy"))
+				{
+					custom.AddSection();
+					custom.Add(line);
+				}
 			}
 
 			custom.WriteToFile(Path.Combine(path,"SSOConfiguration.txt"));

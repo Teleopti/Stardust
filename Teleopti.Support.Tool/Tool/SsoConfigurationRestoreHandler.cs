@@ -46,7 +46,10 @@ namespace Teleopti.Support.Tool.Tool
 						_customSection.WriteCustomSection(item.Key - 2, ssoFilePaths.ClaimPolicies, item.Value);
 						break;
 					case 6:
-						writeCustomRow(ssoFilePaths.WebConfig, item.Value);
+						writeCustomRow(ssoFilePaths.WebConfig, "DefaultIdentityProvider", item.Value);
+						break;
+					case 7:
+						writeCustomRow(ssoFilePaths.WebConfig, "Content-Security-Policy", item.Value);
 						break;
 				}
 			}
@@ -73,13 +76,14 @@ namespace Teleopti.Support.Tool.Tool
 			return dic;
 		}
 
-		private void writeCustomRow(string filePath, IEnumerable<string> towrite)
+		private void writeCustomRow(string filePath, string key, IEnumerable<string> towrite)
 		{
 			var config = File.ReadAllLines(filePath).ToList();
-			var sectionRowStart = config.Select((x, i) => new {x, i}).First(line => line.x.Contains("DefaultIdentityProvider"));
+
+			var sectionRowStart = config.Select((x, i) => new {x, i}).First(line => line.x.Contains(key));
 			config.RemoveAt(sectionRowStart.i);
-			
-			config.InsertRange(sectionRowStart.i,towrite);
+			config.InsertRange(sectionRowStart.i, towrite);
+
 			File.WriteAllLines(filePath, config);
 		}
 	}
