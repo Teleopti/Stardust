@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
         /// Represents the EmployeeNumber
         /// </summary>
         public const string EmployeeNumber = "{EmployeeNumber}";
-        private const string DefaultCommonNameDescription = "{FirstName} {LastName}";
+        private const string defaultCommonNameDescription = "{FirstName} {LastName}";
         private string _value;
 
         public CommonNameDescriptionSetting()
         {
-            _value = DefaultCommonNameDescription;
+            _value = defaultCommonNameDescription;
         }
 
         /// <summary>
@@ -71,8 +71,8 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
         /// </remarks>
         public virtual string BuildCommonNameDescription(IPerson person)
         {
-            string builded = AliasFormat;
-            builded = builded.Replace(FirstName, person.Name.FirstName);
+	        var builded = AliasFormat;
+	        builded = builded.Replace(FirstName, person.Name.FirstName);
             builded = builded.Replace(LastName, person.Name.LastName);
             builded = builded.Replace(EmployeeNumber, person.EmploymentNumber);
             return builded;
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public string BuildCommonNameDescription(ILightPerson lightPerson)
         {
-            string builded = AliasFormat;
+            var builded = AliasFormat;
             builded = builded.Replace(FirstName, lightPerson.FirstName);
             builded = builded.Replace(LastName, lightPerson.LastName);
             builded = builded.Replace(EmployeeNumber, lightPerson.EmploymentNumber);
@@ -96,5 +96,16 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 		    builded = builded.Replace(EmployeeNumber, employmentNumber);
 		    return builded;
 	    }
+
+	    public string BuildSqlUpdateForAnalytics()
+	    {
+		    var sqlConcat = $"'{AliasFormat.Replace("'", "''")}'"; // Replace to prevent sql injections
+			sqlConcat = sqlConcat.Replace(FirstName, "' + [first_name] + '");
+			sqlConcat = sqlConcat.Replace(LastName, "' + [last_name] + '");
+			sqlConcat = sqlConcat.Replace(EmployeeNumber, "' + [employment_number] + '");
+		    sqlConcat = sqlConcat.Replace("'' + ", "");
+			sqlConcat = sqlConcat.Replace(" + ''", "");
+			return $"UPDATE mart.dim_person SET person_name = {sqlConcat} WHERE person_id != -1";
+		}
     }
 }

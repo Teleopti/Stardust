@@ -66,15 +66,13 @@ namespace Teleopti.Ccc.DomainTest.SystemSetting.GlobalSetting
 		[Test]
 		public void ShouldCheckParameter()
 		{
-			IPerson person = null;
-			Assert.Throws<ArgumentNullException>(() => _target2.BuildCommonNameDescription(person));
+			Assert.Throws<ArgumentNullException>(() => _target2.BuildCommonNameDescription((IPerson) null));
 		}
 
 		[Test]
 		public void ShouldCheckParameterForCommonNameDescriptionSettingScheduleExport()
 		{
-			ILightPerson person = null;
-			Assert.Throws<ArgumentNullException>(() => _target2.BuildCommonNameDescription(person));
+			Assert.Throws<ArgumentNullException>(() => _target2.BuildCommonNameDescription((ILightPerson) null));
 		}
 
         [Test]
@@ -86,5 +84,20 @@ namespace Teleopti.Ccc.DomainTest.SystemSetting.GlobalSetting
 
             name.Should().Be("123 - John Smith");
         }
+
+	    [TestCase("{EmployeeNumber} - {FirstName} {LastName}", "UPDATE mart.dim_person SET person_name = [employment_number] + ' - ' + [first_name] + ' ' + [last_name] WHERE person_id != -1")]
+		[TestCase("{EmployeeNumber}", "UPDATE mart.dim_person SET person_name = [employment_number] WHERE person_id != -1")]
+		[TestCase("{FirstName} {LastName} #123# {EmployeeNumber}", "UPDATE mart.dim_person SET person_name = [first_name] + ' ' + [last_name] + ' #123# ' + [employment_number] WHERE person_id != -1")]
+		[TestCase("123{::][}{__ {FirstName} {LastName} #{Firstname}# ", "UPDATE mart.dim_person SET person_name = '123{::][}{__ ' + [first_name] + ' ' + [last_name] + ' #{Firstname}# ' WHERE person_id != -1")]
+		[TestCase("No names in reports", "UPDATE mart.dim_person SET person_name = 'No names in reports' WHERE person_id != -1")]
+		[TestCase("{FirstName} '; Drop Database; ", "UPDATE mart.dim_person SET person_name = [first_name] + ' ''; Drop Database; ' WHERE person_id != -1")]
+		[TestCase("{FirstName}{FirstName}", "UPDATE mart.dim_person SET person_name = [first_name] + [first_name] WHERE person_id != -1")]
+		[TestCase("", "UPDATE mart.dim_person SET person_name = '' WHERE person_id != -1")]
+		public void ShouldFormatAnalyticsSqlQuery(string format, string result)
+	    {
+			var target = new CommonNameDescriptionSetting(format);
+		    var sql = target.BuildSqlUpdateForAnalytics();
+		    sql.ToLower().Should().Be.EqualTo(result.ToLower());
+	    }
     }
 }
