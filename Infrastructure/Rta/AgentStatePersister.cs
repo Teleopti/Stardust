@@ -101,8 +101,9 @@ INSERT INTO [dbo].[AgentState]
 	RuleStartTime,
 	AlarmStartTime,
 	TimeWindowCheckSum,
-	Schedule,
 	Adherence,
+	Schedule,
+	NextCheck,
 	DataSourceIdUserCode
 )
 VALUES
@@ -123,8 +124,9 @@ VALUES
 	:RuleStartTime,
 	:AlarmStartTime,
 	:TimeWindowCheckSum,
-	:Schedule,
 	:Adherence,
+	:Schedule,
+	:NextCheck,
 	:DataSourceIdUserCode
 )")
 						.SetParameter("PersonId", model.PersonId)
@@ -143,8 +145,9 @@ VALUES
 						.SetParameter("RuleStartTime", copyFrom?.RuleStartTime)
 						.SetParameter("AlarmStartTime", copyFrom?.AlarmStartTime)
 						.SetParameter("TimeWindowCheckSum", copyFrom?.TimeWindowCheckSum)
+						.SetParameter("Adherence", (int?)copyFrom?.Adherence)
 						.SetParameter("Schedule", copyFrom?.Schedule != null ? _serializer.SerializeObject(copyFrom.Schedule) : null, NHibernateUtil.StringClob)
-						.SetParameter("Adherence", (int?) copyFrom?.Adherence)
+						.SetParameter("NextCheck", copyFrom?.NextCheck)
 						.SetParameter("DataSourceIdUserCode", e.DataSourceId + "__" + e.UserCode)
 						.ExecuteUpdate();
 				});
@@ -156,7 +159,7 @@ VALUES
 			setDeadLockPriority(deadLockVictim);
 
 			_unitOfWork.Current().Session()
-				.CreateSQLQuery("UPDATE [dbo].[AgentState] SET Schedule = NULL WHERE PersonId = :PersonId")
+				.CreateSQLQuery("UPDATE [dbo].[AgentState] SET Schedule = NULL, NextCheck = NULL WHERE PersonId = :PersonId")
 				.SetParameter("PersonId", personId)
 				.ExecuteUpdate();
 		}
@@ -167,7 +170,7 @@ VALUES
 			var scheduleSql = "";
 
 			if (updateSchedule)
-				scheduleSql = ", Schedule = :Schedule";
+				scheduleSql = "Schedule = :Schedule,";
 
 			var sql = $@"
 UPDATE [dbo].[AgentState]
@@ -184,8 +187,9 @@ SET
 	RuleStartTime = :RuleStartTime,
 	AlarmStartTime = :AlarmStartTime,
 	TimeWindowCheckSum = :TimeWindowCheckSum,
-	Adherence = :Adherence
+	Adherence = :Adherence,
 	{scheduleSql}
+	NextCheck = :NextCheck
 WHERE
 	PersonId = :PersonId";
 			var query = _unitOfWork.Current().Session()
@@ -203,7 +207,9 @@ WHERE
 				.SetParameter("RuleStartTime", model.RuleStartTime)
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)
 				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
-				.SetParameter("Adherence", (int?) model.Adherence);
+				.SetParameter("Adherence", (int?) model.Adherence)
+				.SetParameter("NextCheck", model.NextCheck)
+				;
 
 			if (updateSchedule)
 				query.SetParameter("Schedule", _serializer.SerializeObject(model.Schedule), NHibernateUtil.StringClob);
@@ -243,6 +249,26 @@ WHERE
 				.GroupBy(x => x.PersonId, (guid, states) => states.First())
 				.ToArray()
 				;
+		}
+
+		[LogInfo]
+		public virtual IEnumerable<ExternalLogon> FindForCheck(DateTime time)
+		{
+			return _unitOfWork.Current().Session().CreateSQLQuery(@"
+SELECT
+	PersonId,
+	DataSourceIdUserCode
+FROM [dbo].[AgentState] WITH (NOLOCK)
+WHERE
+	NextCheck <= :Time OR
+	NextCheck IS NULL
+")
+				.SetParameter("Time", time)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalExternalLogon)))
+				.SetReadOnly(true)
+				.List<internalExternalLogon>()
+				.GroupBy(x => x.PersonId, (guid, states) => states.First())
+				.ToArray();
 		}
 
 		[LogInfo]

@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public int? TimeWindowCheckSum { get; set; }
 
 		public IEnumerable<ScheduledActivity> Schedule { get; set; }
+		public DateTime? NextCheck { get; set; }
 
 	}
 

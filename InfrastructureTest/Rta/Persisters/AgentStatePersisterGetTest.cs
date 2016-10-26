@@ -16,18 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public IAgentStatePersister Persister;
 		public ICurrentAnalyticsUnitOfWork UnitOfWork;
 		public MutableNow Now;
-
-		[Test]
-		public void ShouldGetByPersonId()
-		{
-			var state = new AgentStateForUpsert { PersonId = Guid.NewGuid(), UserCode = "user"};
-			Persister.Upsert(state);
-
-			var result = Persister.Find(new ExternalLogon {UserCode = "user"}, DeadLockVictim.Yes).SingleOrDefault();
-
-			result.Should().Not.Be.Null();
-		}
-
+		
 		[Test]
 		public void ShouldGetByPersonIds()
 		{
@@ -41,14 +30,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var result = Persister.Get(new[] {state1.PersonId, state3.PersonId});
 			
 			result.Select(x => x.PersonId).Should().Have.SameValuesAs(state1.PersonId, state3.PersonId);
-		}
-
-		[Test]
-		public void ShouldGetEmptyStatesIfNotFound()
-		{
-			var result = Persister.Find(new ExternalLogon(), DeadLockVictim.Yes);
-
-			result.Should().Be.Empty();
 		}
 
 		[Test]
@@ -105,76 +86,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			result.StateStartTime.Should().Be(state.StateStartTime);
 		}
 		
-		[Test]
-		public void ShouldReadNullValuesWhenClosingSnapshot()
-		{
-			var personId = Guid.NewGuid();
-			var state = new AgentStateForUpsert
-			{
-				PersonId = personId,
-				ReceivedTime = "2015-03-06 15:19".Utc(),
-				SourceId = "6"
-			};
-			Persister.Upsert(state);
-
-			var logons = Persister.FindForClosingSnapshot("2015-03-06 15:20".Utc(), "6", "loggedout");
-			Persister.Find(logons, DeadLockVictim.Yes)
-				.Single(x => x.PersonId == personId).Should().Not.Be.Null();
-		}
-
-		[Test]
-		public void ShouldReadValuesWhenClosingSnapshot()
-		{
-			var personId = Guid.NewGuid();
-			var agentStateReadModel = new AgentStateForUpsert
-			{
-				BusinessUnitId = Guid.NewGuid(),
-				PersonId = personId,
-				StateCode = "phone",
-				PlatformTypeId = Guid.NewGuid(),
-				StateStartTime = "2015-03-06 15:00".Utc(),
-				ReceivedTime = "2015-03-06 15:19".Utc(),
-				SourceId = "6"
-			};
-			Persister.Upsert(agentStateReadModel);
-
-			var logons = Persister.FindForClosingSnapshot("2015-03-06 15:20".Utc(), "6", "loggedout");
-			var result = Persister.Find(logons, DeadLockVictim.Yes)
-				.Single(x => x.PersonId == personId);
-
-			result.BusinessUnitId.Should().Be(agentStateReadModel.BusinessUnitId);
-			result.StateCode.Should().Be(agentStateReadModel.StateCode);
-			result.PlatformTypeId.Should().Be(agentStateReadModel.PlatformTypeId);
-			result.StateStartTime.Should().Be(agentStateReadModel.StateStartTime);
-		}
-
-		[Test]
-		public void ShouldFetchPersonsForLogout()
-		{
-			var person1 = Guid.NewGuid();
-			var person2 = Guid.NewGuid();
-			Persister.Upsert(new AgentStateForUpsert
-			{
-				PersonId = person1,
-				ReceivedTime = "2016-09-12 13:00".Utc(),
-				SourceId = "6",
-				StateCode = Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot,
-				DataSourceId = 1,
-				UserCode = "usercode1"
-			});
-			Persister.Upsert(new AgentStateForUpsert
-			{
-				PersonId = person2,
-				ReceivedTime = "2016-09-12 13:00".Utc(),
-				SourceId = "6",
-				DataSourceId = 1,
-				UserCode = "usercode2"
-			});
-
-			var result = Persister.FindForClosingSnapshot("2016-09-12 13:01".Utc(), "6", Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
-				.Single();
-			result.DataSourceId.Should().Be(1);
-			result.UserCode.Should().Be("usercode2");
-		}
 	}
 }

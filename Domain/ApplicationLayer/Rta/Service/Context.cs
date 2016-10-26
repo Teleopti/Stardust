@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -171,7 +172,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				TimeWindowCheckSum = Schedule.TimeWindowCheckSum(),
 
-				Schedule = _schedule.Value.Schedules
+				Schedule = _schedule.Value.Schedules,
+				NextCheck = Schedule.NextCheck()
 			};
 		}
 

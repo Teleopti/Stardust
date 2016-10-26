@@ -286,6 +286,9 @@
     <Compile Include="RetryingQueueSimulator.cs" />
     <Compile Include="Rta\Persisters\AdherencePercentageReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\Persisters\AgentStatePersisterExternalLogonPersonMappingTest.cs" />
+    <Compile Include="Rta\Persisters\AgentStatePersisterFindForSnapshotTest.cs" />
+    <Compile Include="Rta\Persisters\AgentStatePersisterFindForCheckTest.cs" />
+    <Compile Include="Rta\Persisters\AgentStatePersisterFindTest.cs" />
     <Compile Include="Rta\Persisters\AgentStatePersisterScheduleTest.cs" />
     <Compile Include="Rta\Persisters\AgentStateReadModelPersisterTest.cs" />
     <Compile Include="Rta\AgentStateReadModelReaderForSkillTest.cs" />

@@ -13,19 +13,32 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
+	public class ContextLoaderWithFasterActivityCheck : ContextLoader
+	{
+		public ContextLoaderWithFasterActivityCheck(IScheduleCacheStrategy scheduleCacheStrategy, ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IScheduleReader scheduleReader, AppliedAdherence appliedAdherence, ProperAlarm appliedAlarm, IConfigReader config) : base(scheduleCacheStrategy, dataSource, databaseLoader, now, stateMapper, agentStatePersister, mappingReader, scheduleReader, appliedAdherence, appliedAlarm, config)
+		{
+		}
+
+		public override void ForActivityChanges(Action<Context> action)
+		{
+			var logons = WithUnitOfWork(() => _agentStatePersister.FindForCheck(_now.UtcDateTime()));
+			process(new activityChangesStrategy(_config, _agentStatePersister, action, logons));
+		}
+	}
+
 	public class ContextLoader : IContextLoader
 	{
 		private readonly IScheduleCacheStrategy _scheduleCacheStrategy;
 		private readonly ICurrentDataSource _dataSource;
 		private readonly IDatabaseLoader _databaseLoader;
-		private readonly INow _now;
+		protected readonly INow _now;
 		private readonly StateMapper _stateMapper;
-		private readonly IAgentStatePersister _agentStatePersister;
+		protected readonly IAgentStatePersister _agentStatePersister;
 		private readonly IMappingReader _mappingReader;
 		private readonly IScheduleReader _scheduleReader;
 		private readonly AppliedAdherence _appliedAdherence;
 		private readonly ProperAlarm _appliedAlarm;
-		private readonly IConfigReader _config;
+		protected readonly IConfigReader _config;
 
 		public ContextLoader(
 			IScheduleCacheStrategy scheduleCacheStrategy, 
@@ -65,14 +78,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action)
 		{
-			var personIds = WithUnitOfWork(() => _agentStatePersister.FindForClosingSnapshot(snapshotId, sourceId, Rta.LogOutBySnapshot));
-			process(new closingSnapshotStrategy(_config, _agentStatePersister, action, snapshotId, personIds));
+			var logons = WithUnitOfWork(() => _agentStatePersister.FindForClosingSnapshot(snapshotId, sourceId, Rta.LogOutBySnapshot));
+			process(new closingSnapshotStrategy(_config, _agentStatePersister, action, snapshotId, logons));
 		}
 
-		public void ForActivityChanges(Action<Context> action)
+		public virtual void ForActivityChanges(Action<Context> action)
 		{
-			var personIds = WithUnitOfWork(() => _agentStatePersister.FindAll());
-			process(new activityChangesStrategy(_config, _agentStatePersister, action, personIds));
+			var logons = WithUnitOfWork(() => _agentStatePersister.FindAll());
+			process(new activityChangesStrategy(_config, _agentStatePersister, action, logons));
 		}
 
 		public void ForSynchronize(Action<Context> action)
@@ -217,7 +230,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		}
 
-		private class activityChangesStrategy : baseStrategy<ExternalLogon>
+		protected class activityChangesStrategy : baseStrategy<ExternalLogon>
 		{
 			private readonly IEnumerable<ExternalLogon> _things;
 
@@ -315,7 +328,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}
 		}
 
-		private abstract class baseStrategy<T> : IStrategy<T>
+		protected abstract class baseStrategy<T> : IStrategy<T>
 		{
 			protected readonly IConfigReader _config;
 			protected readonly IAgentStatePersister _persister;
@@ -387,7 +400,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Func<AgentState> GetStored(AgentState state);
 		}
 
-		private void process<T>(IStrategy<T> strategy)
+		protected void process<T>(IStrategy<T> strategy)
 		{
 			var exceptions = new ConcurrentBag<Exception>();
 

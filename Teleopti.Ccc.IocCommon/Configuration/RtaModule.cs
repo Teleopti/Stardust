@@ -31,7 +31,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IStateCodeAdder>()
 				.SingleInstance();
 
-			builder.RegisterType<ContextLoader>().As<IContextLoader>().ApplyAspects().SingleInstance();
+			if (_config.Toggle(Toggles.RTA_FasterActivityCheck_41380))
+				builder.RegisterType<ContextLoaderWithFasterActivityCheck>().As<IContextLoader>().ApplyAspects().SingleInstance();
+			else
+				builder.RegisterType<ContextLoader>().As<IContextLoader>().ApplyAspects().SingleInstance();
 			builder.RegisterType<ThreeDays>().As<IScheduleCacheStrategy>().SingleInstance();
 
 			_config.Cache().This<IDatabaseLoader>((c, b) => b

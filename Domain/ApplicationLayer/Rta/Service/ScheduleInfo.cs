@@ -205,5 +205,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				   select a;
 		}
 
+		public DateTime? NextCheck()
+		{
+			var nextActivityStartsAt = NextActivityStartTime();
+			var activityEntersTimeWindowAt = _schedule.Value.FirstOrDefault(x => x.StartDateTime >= timeWindowEnd())?.StartDateTime.AddHours(-3);
+			Console.WriteLine($"nextActivityStartsAt:{nextActivityStartsAt}, activityEntersTimeWindowAt: {activityEntersTimeWindowAt}");
+			return new[]
+			{
+				nextActivityStartsAt,
+				activityEntersTimeWindowAt
+			}.Min();
+		}
 	}
 }

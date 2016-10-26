@@ -400,7 +400,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				.Should().Have.SameSequenceAs(new [] { person1, person2}.OrderBy(x => x));
 		}
 
-
 		[Test]
 		public void ShouldFindAllExternalLogons()
 		{

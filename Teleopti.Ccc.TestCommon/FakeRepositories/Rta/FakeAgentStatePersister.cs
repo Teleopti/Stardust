@@ -68,7 +68,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			lock (_lock)
 			{
 				var existing = _data.Where(x => x.PersonId == personId).ToArray();
-				existing.ForEach(x => x.State.Schedule = null);
+				existing.ForEach(x =>
+				{
+					x.State.Schedule = null;
+					x.State.NextCheck = null;
+				});
 			}
 		}
 
@@ -76,6 +80,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			lock (_lock)
 				return _data
+					.GroupBy(x => x.PersonId, (guid, states) => states.First())
+					.Select(x => new ExternalLogon {DataSourceId = x.DataSourceId, UserCode = x.UserCode})
+					.ToArray();
+		}
+
+		public IEnumerable<ExternalLogon> FindForCheck(DateTime time)
+		{
+			lock (_lock)
+				return _data
+					.Select(x => x.State)
+					.Where(s => s.NextCheck == null || s.NextCheck <= time)
 					.GroupBy(x => x.PersonId, (guid, states) => states.First())
 					.Select(x => new ExternalLogon {DataSourceId = x.DataSourceId, UserCode = x.UserCode})
 					.ToArray();
