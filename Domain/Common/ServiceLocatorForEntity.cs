@@ -1,5 +1,4 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public static ITimeZoneGuard TimeZoneGuard
 		{
-			get { return _timeZoneGuard ?? new TimeZoneGuard(); }
+			get { return _timeZoneGuard ?? (_timeZoneGuard = new TimeZoneGuard()); }
 			set { _timeZoneGuard = value; }
 		}
 	}

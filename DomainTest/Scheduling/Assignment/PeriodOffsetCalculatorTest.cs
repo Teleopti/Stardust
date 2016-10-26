@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 	    public void ShouldUseCurrentViewPointWhenCalculatingPeriodOffsetWithDaylightSaving()
 		{
-			ServiceLocatorForLegacy.TimeZoneGuard = new TimeZoneGuard {TimeZone = TimeZoneInfoFactory.NewYorkTimeZoneInfo()};
+			TimeZoneGuard.Instance.TimeZone = TimeZoneInfoFactory.NewYorkTimeZoneInfo();
 
 			_sourceDateTimePeriod = new DateTimePeriod(2016, 10, 25, 13, 2016, 10, 25, 21);
 			_targetDateTimePeriod = new DateTimePeriod(2016, 11, 1, 13, 2016, 11, 1, 21);
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				offSet.Should().Be.EqualTo(TimeSpan.FromDays(7));
 			}
 
-			ServiceLocatorForLegacy.TimeZoneGuard = null;
+			TimeZoneGuard.Instance.TimeZone = null;
 		}
 
         [Test]

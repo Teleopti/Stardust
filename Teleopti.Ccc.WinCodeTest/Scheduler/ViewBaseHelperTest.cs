@@ -156,7 +156,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			TimeZoneGuard.Instance.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
         }
 
-        [Test]
+		[TearDown]
+		public void Teardown()
+		{
+			TimeZoneGuard.Instance.TimeZone = null;
+		}
+
+		[Test]
         public void VerifyToolTipDayOff()
         {
 			var scheduleRange = new ScheduleRange(_dic, _param, _permissionChecker);

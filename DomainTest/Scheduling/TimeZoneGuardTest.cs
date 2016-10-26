@@ -17,6 +17,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_target = (TimeZoneGuard) TimeZoneGuard.Instance;
 		}
 
+		[TearDown]
+		public void Teardown()
+		{
+			TimeZoneGuard.Instance.TimeZone = null;
+		}
+
 		[Test]
 		public void ShoudHaveDefaultTimeZone()
 		{

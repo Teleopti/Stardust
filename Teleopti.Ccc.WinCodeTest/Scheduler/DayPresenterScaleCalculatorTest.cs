@@ -50,7 +50,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
     		_projectionService2 = _mocks.StrictMock<IProjectionService>();
         }
 
-        [Test]
+		[TearDown]
+		public void Teardown()
+		{
+			TimeZoneGuard.Instance.TimeZone = null;
+		}
+
+		[Test]
         public void ScalePeriodShouldAddOneHourToBeginningAndEnd()
         {
             var assPeriod1 = new DateTimePeriod(new DateTime(2011, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 1, 16, 0, 0, 0, DateTimeKind.Utc));
