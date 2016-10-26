@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly WorkShiftSelectorForMaxSeat _workShiftSelectorForMaxSeat;
 		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
+		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 
 		public MaxSeatOptimization(MaxSeatSkillDataFactory maxSeatSkillDataFactory,
 														CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
@@ -40,7 +42,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 														ITeamBlockGenerator teamBlockGenerator,
 														ITeamBlockClearer teamBlockClearer,
 														WorkShiftSelectorForMaxSeat workShiftSelectorForMaxSeat,
-														IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory)
+														IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
+														ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator)
 		{
 			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
@@ -53,6 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_teamBlockClearer = teamBlockClearer;
 			_workShiftSelectorForMaxSeat = workShiftSelectorForMaxSeat;
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
+			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 		}
 
 		//TODO: ska vi verkligen skicka in optimizationpreferences? Vi ska väl bara stödja team + GroupPageType.Hierarchy i alla fall?
@@ -84,9 +88,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						var firstSelectedDay = period.DayCollection().First();
 						var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules); //TODO: check if this is enough
+
 						_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo, datePoint, schedulingOptions,
 							rollbackService,
 							new DoNothingResourceCalculateDelayer(), maxSeatData.AllMaxSeatSkillDaysPerSkill().ToSkillDayEnumerable(), schedules, new ShiftNudgeDirective(), businessRules);
+
+						if(!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences)) //kolla null
+						{
+							//kolla om vi ska ändra "gamla" rollback istället
+							rollbackService.RollbackMinimumChecks(); //förmodligen fel - rullar tillbaka allt
+						} 
+
 
 						remainingInfoList.Remove(teamBlockInfo);
 					}

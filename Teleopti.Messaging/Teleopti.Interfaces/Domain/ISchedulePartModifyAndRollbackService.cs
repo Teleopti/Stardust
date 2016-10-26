@@ -18,5 +18,6 @@ namespace Teleopti.Interfaces.Domain
 	    IEnumerable<IScheduleDay> ModificationCollection { get; }
 	    void ClearModificationCollection();
 	    IEnumerable<IBusinessRuleResponse> ModifyParts(IEnumerable<IScheduleDay> scheduleParts);
+	    void RollbackMinimumChecks();
     }
 }

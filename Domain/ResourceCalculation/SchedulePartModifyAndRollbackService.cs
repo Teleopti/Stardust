@@ -52,27 +52,38 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_modificationStack.Push(schedulePart);
 			if (responses.Any())
 			{
-				rollbackLast();
+				rollbackLast(NewBusinessRuleCollection.AllForScheduling(_stateHolder));
 				return false;
 			}
 
 			return true;
 		}
+
+
+		//TEMP check if we could change old one instead
+	    public void RollbackMinimumChecks()
+	    {
+			while (_rollbackStack.Count > 0)
+			{
+				rollbackLast(NewBusinessRuleCollection.Minimum());
+			}
+		}
 	
+		//change number of business rules here?
         public void Rollback()
         {
             using (PerformanceOutput.ForOperation("SchedulePartModifyAndRollbackService performed a rollback"))
             {
                 while (_rollbackStack.Count > 0)
                 {
-                    rollbackLast();
+                    rollbackLast(NewBusinessRuleCollection.AllForScheduling(_stateHolder));
                 }
             }
         }
 
-        private void rollbackLast()
+        private void rollbackLast(INewBusinessRuleCollection businessRuleCollection)
         {
-            modifyWithNoValidation(_rollbackStack.Pop(), ScheduleModifier.UndoRedo, _scheduleTagSetter);
+            modifyWithNoValidation(_rollbackStack.Pop(), ScheduleModifier.UndoRedo, _scheduleTagSetter, businessRuleCollection);
         }
 
         public IEnumerable<IScheduleDay> ModificationCollection
