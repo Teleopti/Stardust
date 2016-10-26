@@ -12,20 +12,18 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
-	[EnabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960, Toggles.AbsenceRequests_SpeedupIntradayRequests_40754), DisabledBy(Toggles.AbsenceRequests_SpeedupEndToEnd_41384)]
-	public class QueuedAbsenceRequestFastIntradayHandler : QueuedAbsenceRequestHandlerBase, IHandleEvent<NewAbsenceRequestCreatedEvent>, IHandleEvent<RequestPersonAbsenceRemovedEvent>
+	[EnabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960, Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
+	public class QueuedAbsenceRequestFastIntradayHandler : QueuedAbsenceRequestHandlerBase, IHandleEvent<NewAbsenceRequestCreatedEvent>
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(QueuedAbsenceRequestHandler));
-
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 		private readonly IConfigReader _configReader;
 		private readonly IIntradayRequestProcessor _intradayRequestProcessor;
 
 
 		public QueuedAbsenceRequestFastIntradayHandler(IPersonRequestRepository personRequestRepository, 
-			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IAbsenceRequestCancelService absenceRequestCancelService, 
+			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, 
 			IConfigReader configReader, IIntradayRequestProcessor intradayRequestProcessor)
-			: base(personRequestRepository, queuedAbsenceRequestRepository, absenceRequestCancelService)
+			: base(personRequestRepository)
 		{
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 			_configReader = configReader;
@@ -45,14 +43,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		}
 	}
 
-	[EnabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960), DisabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754, Toggles.AbsenceRequests_SpeedupEndToEnd_41384)]
-	public class QueuedAbsenceRequestHandler : QueuedAbsenceRequestHandlerBase, IHandleEvent<NewAbsenceRequestCreatedEvent>, IHandleEvent<RequestPersonAbsenceRemovedEvent>
+	[EnabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960), DisabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
+	public class QueuedAbsenceRequestHandler : QueuedAbsenceRequestHandlerBase, IHandleEvent<NewAbsenceRequestCreatedEvent>
 	{
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 
 
-		public QueuedAbsenceRequestHandler(IPersonRequestRepository personRequestRepository, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IAbsenceRequestCancelService absenceRequestCancelService)
-			: base(personRequestRepository, queuedAbsenceRequestRepository, absenceRequestCancelService)
+		public QueuedAbsenceRequestHandler(IPersonRequestRepository personRequestRepository, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository)
+			: base(personRequestRepository)
 		{
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 		}
@@ -78,22 +76,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	}
 
 
-	[EnabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960), DisabledBy(Toggles.AbsenceRequests_SpeedupEndToEnd_41384)]
+	[EnabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960)]
 	public class QueuedAbsenceRequestHandlerBase : INewAbsenceRequestHandler, IRunOnHangfire
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(QueuedAbsenceRequestHandler));
 
 		private readonly IPersonRequestRepository _personRequestRepository;
-		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
-		private readonly IAbsenceRequestCancelService _absenceRequestCancelService;
 
 		private static readonly isNullOrNotNewSpecification personRequestSpecification = new isNullOrNotNewSpecification();
 
-		public QueuedAbsenceRequestHandlerBase(IPersonRequestRepository personRequestRepository, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IAbsenceRequestCancelService absenceRequestCancelService)
+		public QueuedAbsenceRequestHandlerBase(IPersonRequestRepository personRequestRepository)
 		{
 			_personRequestRepository = personRequestRepository;
-			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
-			_absenceRequestCancelService = absenceRequestCancelService;
 		}
 
 
@@ -131,30 +125,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			{
 				return (obj == null || !obj.IsNew);
 			}
-		}
-
-		[ImpersonateSystem, UnitOfWork]
-		public virtual void Handle(RequestPersonAbsenceRemovedEvent @event)
-		{
-			var personRequest = _personRequestRepository.Find(@event.PersonRequestId);
-			var absenceRequest = personRequest?.Request as IAbsenceRequest;
-
-			var personRequestId = Guid.Empty;
-
-			if (absenceRequest != null)
-			{
-				personRequestId = personRequest.Id.GetValueOrDefault();
-				_absenceRequestCancelService.CancelAbsenceRequest(absenceRequest);
-			}
-
-			var queuedAbsenceRequest = new QueuedAbsenceRequest()
-			{
-				PersonRequest = personRequestId,
-				Created = DateTime.UtcNow,
-				StartDateTime = @event.StartDateTime,
-				EndDateTime = @event.EndDateTime
-			};
-			_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
 		}
 
 		public void Handle(NewAbsenceRequestCreatedEvent @event)
