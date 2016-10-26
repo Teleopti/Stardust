@@ -50,24 +50,20 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var persistableScheduleDatas = scheduleData as IPersistableScheduleData[] ?? scheduleData.ToArray();
 			if (!persistableScheduleDatas.Any()) return;
 
-			var people = persistableScheduleDatas.Select(s => s.Person).Distinct().ToArray();
-			var scenarios = persistableScheduleDatas.Select(s => s.Scenario).Distinct();
+			var scenarios = persistableScheduleDatas.GroupBy(s => s.Scenario);
 			var startDateTime = DateTime.MaxValue;
 			var endDateTime = DateTime.MinValue;
 			var personIds = new HashSet<Guid>();
 			foreach (var scenario in scenarios)
 			{
-				if (scenario == null) continue;
-				foreach (var person in people)
+				if (scenario.Key == null) continue;
+				foreach (var person in scenario.GroupBy(s => s.Person))
 				{
-					var matchedItems =
-						persistableScheduleDatas.Where(s =>  s.Person.Equals(person) && s.Scenario != null && s.Scenario.Equals(scenario))
-							.ToArray();
-					if (!matchedItems.Any()) continue;
+					if (!person.Any()) continue;
 
-					startDateTime = new[] { matchedItems.Min(s => s.Period.StartDateTime), startDateTime }.Min();
-					endDateTime = new[] { matchedItems.Max(s => s.Period.EndDateTime), endDateTime }.Max();
-					personIds.Add(person.Id.Value);
+					startDateTime = new[] { person.Min(s => s.Period.StartDateTime), startDateTime }.Min();
+					endDateTime = new[] { person.Max(s => s.Period.EndDateTime), endDateTime }.Max();
+					personIds.Add(person.Key.Id.Value);
 				}
 				var initiatorId = Guid.Empty.ToString();
 				var identifier = initiatorIdentifier();
@@ -80,7 +76,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					BusinessUnitId = Subscription.IdToString(_businessUnit.Current().Id.Value),
 					StartDate = Subscription.DateToString(startDateTime),
 					EndDate = Subscription.DateToString(endDateTime),
-					DomainReferenceId = scenario.Id.Value.ToString(),
+					DomainReferenceId = scenario.Key.Id.Value.ToString(),
 					DomainUpdateType = (int)DomainUpdateType.NotApplicable,
 					DomainQualifiedType = typeof(IScheduleChangedMessage).AssemblyQualifiedName,
 					DomainType = typeof(IScheduleChangedMessage).Name,

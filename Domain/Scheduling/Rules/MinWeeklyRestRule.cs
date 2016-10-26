@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var period = person.PersonPeriods(personWeek.Week);
 			if (period.Count == 0)
 			{
-				weeklyRest = TimeSpan.FromSeconds(0);
+				weeklyRest = TimeSpan.Zero;
 				return false;
 			}
 			weeklyRest = period[0].PersonContract.Contract.WorkTimeDirective.WeeklyRest;
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message, Type type, string friendlyName)
 		{
-			var dop = new DateOnlyPeriod(dateOnly, dateOnly);
+			var dop = dateOnly.ToDateOnlyPeriod();
 			DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person,
 				dop, friendlyName)

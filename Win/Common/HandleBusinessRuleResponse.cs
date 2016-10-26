@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -20,32 +21,27 @@ namespace Teleopti.Ccc.Win.Common
 			int longestMessage = 0;
 			checkBoxApplyToAll.Checked = false;
 			listView1.Items.Clear();
-			IList<string> uniqueStrings = new List<string>();
-			foreach (IBusinessRuleResponse response in businessRulesResponse)
-			{
-				if (response.Error)
-				{
-					if (uniqueStrings.Contains(response.Person.Name + response.Message))
-						continue;
 
-					uniqueStrings.Add(response.Person.Name + response.Message);
-					if (response.Message.Length > longestMessage)
+			var items = businessRulesResponse.Where(r => r.Error).GroupBy(k => new { Name=k.Person.Name.ToString(), k.Message }).Select(
+				r =>
+				{
+					var listViewItem = new ListViewItem(r.Key.Name);
+					listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem(listViewItem,
+																			   r.Key.Message));
+					if (r.Key.Message.Length > longestMessage)
 					{
-						longestMessage = response.Message.Length;
+						longestMessage = r.Key.Message.Length;
 					}
 
-					var listViewItem = new ListViewItem(response.Person.Name.ToString());
-					listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem(listViewItem,
-																			   response.Message));
+					var firstResponse = r.First();
+					listViewItem.Tag = firstResponse;
+					return listViewItem;
+				}).ToArray();
+			listView1.Items.AddRange(items);
 
-					listViewItem.Tag = response;
-					listView1.Items.Add(listViewItem);
-				}
-			}
 			Width = (longestMessage * 5) + 130;
 			listView1.Columns[0].Width = 100;
 			listView1.Columns[1].Width = listView1.Width - 5;
-			//listView1.Width = (longestMessage * 3) + 30;
 			
 			buttonOK.Enabled = true;
 

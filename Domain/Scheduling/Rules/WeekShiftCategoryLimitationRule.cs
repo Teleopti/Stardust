@@ -43,10 +43,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         {
             var responseList = new HashSet<IBusinessRuleResponse>();
 
-            var scheduleDaysList = new List<IScheduleDay>(scheduleDays);
+            var scheduleDaysList = scheduleDays.ToArray();
             var virtualSchedulePeriods =
                 _virtualSchedulePeriodExtractor.CreateVirtualSchedulePeriodsFromScheduleDays(scheduleDaysList);
-            var personWeeks = _weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(scheduleDaysList).ToList();
+            var personWeeks = _weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(scheduleDaysList).ToArray();
             var schedulePeriods = virtualSchedulePeriods as IVirtualSchedulePeriod[] ?? virtualSchedulePeriods.ToArray();
 			
             IPerson anyPerson = null;
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		        anyPerson = schedulePeriods.First().Person;
 		        IScheduleRange currentSchedules = rangeClones[anyPerson];
 		        oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
-				oldResponseCount = oldResponses.Count();
+				oldResponseCount = oldResponses.Count;
 	        }
 
             foreach (IVirtualSchedulePeriod schedulePeriod in schedulePeriods)
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                     {
                         foreach (DateOnly day in personWeek.Week.DayCollection())
                         {
-							var period = new DateOnlyPeriod(day, day).ToDateTimePeriod(timeZone);
+							var period = day.ToDateTimePeriod(timeZone);
                             for (int i = oldResponses.Count - 1; i >= 0; i--)
                             {
                                 var response = oldResponses[i];
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 											                               shiftCategoryLimitation.ShiftCategory.Description.Name);
 											foreach (DateOnly dateOnly in datesWithCategory)
 											{
-											var dop = new DateOnlyPeriod(dateOnly, dateOnly);
+											var dop = dateOnly.ToDateOnlyPeriod();
 											DateTimePeriod period = dop.ToDateTimePeriod(timeZone);
 
 												if (!ForDelete)
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                             }
                         }
                     }
-                    var newResponseCount = responseList.Count();
+                    var newResponseCount = responseList.Count;
                     if (newResponseCount <= oldResponseCount)
                         responseList = new HashSet<IBusinessRuleResponse>();
                 }

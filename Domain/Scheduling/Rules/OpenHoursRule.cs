@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         
         private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message)
         {
-            var dop = new DateOnlyPeriod(dateOnly, dateOnly);
+            var dop = dateOnly.ToDateOnlyPeriod();
             DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
             IBusinessRuleResponse response = new BusinessRuleResponse(typeof(OpenHoursRule), message, _haltModify, IsMandatory, period, person, dop, FriendlyName) { Overridden = !_haltModify };
             return response;

@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -214,7 +213,11 @@ namespace Teleopti.Ccc.Domain.Collection
             var failedRules = new List<IBusinessRuleResponse>();
 
             //do changes
-            scheduleParts.ForEach(part => ((ScheduleRange) rangeClones[part.Person]).ModifyInternal(part));
+            scheduleParts.GroupBy(s => s.Person).ForEach(part =>
+            {
+				var range = (ScheduleRange)rangeClones[part.Key];
+	            part.ForEach(s => range.ModifyInternal(s));
+            });
 
             IEnumerable<IBusinessRuleResponse> responseList = newBusinessRules.CheckRules(rangeClones, scheduleParts);
             foreach (var response in responseList)
