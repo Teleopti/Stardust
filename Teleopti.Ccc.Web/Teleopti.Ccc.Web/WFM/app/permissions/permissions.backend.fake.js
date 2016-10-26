@@ -5,7 +5,10 @@
     .service('fakePermissionsBackend', function ($httpBackend) {
 
       var roles = [];
+      var roleInfos = [];
       var role = { DescriptionText: 'test' };
+      var applicationFunctions = [];
+      var organizationSelection = {};
 
       var paramsOf = function (url) {
         var result = {};
@@ -32,27 +35,54 @@
           });
       };
 
-      fakeGet(/\.\.\/api\/Permissions(.*)/,
+      fakeGet('../api/Permissions/Roles',
         function () {
           return [200, roles];
         });
 
-      this.showRoles = function () {
-        return roles;
+      fakeGet('../api/Permissions/ApplicationFunctions',
+        function () {
+          return [200, applicationFunctions];
+        });
+
+      fakeGet('../api/Permissions/OrganizationSelection',
+        function () {
+          return [200, organizationSelection];
+        });
+
+      fakeGet(/\.\.\/api\/Permissions\/Roles\/(.*)\/?/,
+        function(params2, method, url, data, headers, params) {
+          var id = url.substr(-36);
+          return [200, roleInfos.find(function(info) { return info.Id === id; })];
+        });
+
+
+      this.withApplicationFunction = function (applicationFunction) {
+        applicationFunctions.push(applicationFunction);
+        return this;
       };
 
-      this.editName = function(name){
-        role.DescriptionText = name;
+      this.withOrganizationSelection = function (businessUnit, dynamicOptions) {
+        organizationSelection['BusinessUnit'] = businessUnit;
+        organizationSelection['DynamicOptions'] = dynamicOptions;
+
         return this;
       }
-
-      this.clear = function () {
-        roles = [];
-      };
 
       this.withRole = function (role) {
         roles.push(role);
         return this;
+      };
+
+      this.withRoleInfo = function (roleInfo) {
+        roleInfos.push(roleInfo);
+        return this;
+      };
+
+      this.clear = function () {
+        roles = [];
+        applicationFunctions = [];
+        organizationSelection = {};
       };
 
     });

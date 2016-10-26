@@ -1,36 +1,275 @@
-<div class="con-row">
-  <div class="con-flex">
-    <form ng-submit="vm.createRole(roleName)">
-    <input type="text" name="name" ng-model="roleName">
-    <button type="submit" name="button">create</button>
-    </form>
-
-    <div ng-repeat="role in vm.roles">
-      <button type="submit" name="button2" ng-click="vm.deleteRole(role)">Delete</button>
-        
-    <p>
-      Name: {{role.Name}}
-      </br>
-      BuiltIn: {{role.BuiltIn}}
-      </br>
-      DescriptionText: {{role.DescriptionText}}
-      </br>
-      Id: {{role.Id}}
-      </br>
-      IsAnyBuiltIn: {{role.IsAnyBuiltIn}}
-      </br>
-      IsMyRole: {{role.IsMyRole}}
-      </br>
-      <form ng-submit="vm.editRole(newRoleName, role.Id)">
-      <input type="text" name="name" ng-model="newRoleName">
-      <button type="submit" name="button">Edit</button>
-      </form>
-    </br>
-    <hr>
-    </p>
-    </div>
-  </div>
-  <div class="con-flex">
-
-  </div>
+<div class="view-header with-fab with-desc">
+	<div class="view-title">
+		<h1><i class="mdi mdi-account-key"></i> First header title</h1>
+		<p>Optional description of the view goes here.</p>
+	</div>
+	<div class="fab-wrapper">
+		<button class="wfm-fab material-depth-1" ng-click="modalShown = !modalShown"><i class="mdi mdi-plus"></i>
+			<md-tooltip>Add something</md-tooltip>
+		</button>
+	</div>
 </div>
+
+<modal-dialog show='modalShown' ng-cloak>
+	<form ng-submit="vm.createRole(roleName)">
+		<h1 class="modal-title">Create role</h1>
+		<div class="modal-inner-content">
+			<div class="con-row">
+				<div class="con-flex">
+					<label for="createRole" class="input-icon">
+					<i class="mdi mdi-account-key">
+						<input type="text" id="createRole" ng-model="roleName" placeholder="Role name">
+						<md-tooltip>Name</md-tooltip>
+					</i>
+				</label>
+				</div>
+			</div>
+		</div>
+		<div class="modal-actions">
+			<aside>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-click="modalShown = !modalShown" type="submit" name="button">create</button>
+			</aside>
+		</div>
+	</form>
+</modal-dialog>
+
+<div class="con-row">
+	<div class="con-flex">
+		<div class="panel material-depth-1">
+			<div class="sub-header">
+				<h2>Panel title</h2>
+			</div>
+			<div class="con-row">
+				<div class="con-flex">
+					<label for="filter" class="input-icon">
+						<i class="mdi mdi-filter-outline">
+							<input type="text" id="filter" placeholder="filter roles...">
+							<md-tooltip>Filter</md-tooltip>
+						</i>
+					</label>
+				</div>
+			</div>
+			<div class="con-row">
+				<div class="con-flex">
+					<ul class="wfm-list">
+						<li ng-click="listSelected3 = !listSelected3" ng-repeat="role in vm.roles">
+							<span class="list-item-container" ng-click="vm.selectRole(role)">
+								{{role.Name}}
+							</span>
+							<span ng-cloak ng-show="listSelected3" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
+							<div class="wfm-leave-behind">
+								<span>
+									<i class="mdi mdi-content-copy" ng-click="vm.copyRole(role)"></i>
+									<i class="mdi mdi-pencil" ng-click="editRoleModal = !editRoleModal"></i>
+									<i class="mdi mdi-delete" ng-click="vm.deleteRole(role)"></i>
+								</span>
+							</div>
+
+							<modal-dialog show='editRoleModal' ng-cloak>
+								<form ng-submit="vm.editRole(newRoleName, role.Id)">
+									<h1 class="modal-title">Edit role</h1>
+									<div class="modal-inner-content">
+										<div class="con-row">
+											<div class="con-flex">
+												<label for="editRole" class="input-icon">
+												<i class="mdi mdi-pencil">
+													<input type="text" id="editRole" ng-model="newRoleName" placeholder="New name">
+													<md-tooltip>Name</md-tooltip>
+												</i>
+											</label>
+											</div>
+										</div>
+									</div>
+									<div class="modal-actions">
+										<aside>
+											<button class="wfm-btn wfm-btn-invis-primary" type="submit" name="button">Edit</button>
+										</aside>
+									</div>
+								</form>
+							</modal-dialog>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="con-flex split-3-1">
+		<div class="panel material-depth-1">
+			<div class="wfm-slide-tabs tabbed-panel">
+				<md-content class="md-padding">
+					<md-tabs md-dynamic-height md-border-bottom>
+						<md-tab label="Tab title1">
+							<md-content class="md-padding">
+								<div class="con-row">
+									<div class="con-flex">
+										<label for="filter1" class="input-icon">
+											<i class="mdi mdi-filter-outline">
+												<input type="text" id="filter1" placeholder="filter roles...">
+												<md-tooltip>Filter</md-tooltip>
+											</i>
+										</label>
+									</div>
+									<div class="con-flex split-1-2"></div>
+									<div class="con-flex line-right">
+										<div class="wfm-checkbox">
+											<input type="checkbox" id="check1" checked="true" />
+											<label for="check1">
+												<span class="wfm-checkbox-toggle"></span>
+												<span class="wfm-checkbox-label">Åtkomst till alla funktioner: </span>
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="con-row">
+									<div class="con-flex">
+										<form class="permission-radio-buttons">
+											<div class="wfm-radio">
+												<label>
+													<span class="wfm-radio-label permission-filter-label" translate>Show</span>
+												</label>
+											</div>
+											<div class="wfm-radio">
+												<label ng-click="unselectedFunctionsToggle = false; selectedFunctionsToggle = false">
+													<input type="radio" checked name="tree-toggle">
+													<span class="wfm-radio-toggle"></span>
+													<span class="wfm-radio-label" translate>All</span>
+												</label>
+											</div>
+											<div class="wfm-radio">
+												<label ng-click="unselectedFunctionsToggle = false">
+													<input type="radio" name="tree-toggle" ng-model="selectedFunctionsToggle" value="true">
+													<span class="wfm-radio-toggle"></span>
+													<span class="wfm-radio-label" translate>SelectedItems</span>
+												</label>
+											</div>
+											<div class="wfm-radio">
+												<label ng-click="selectedFunctionsToggle = false">
+													<input type="radio" name="tree-toggle" ng-model="unselectedFunctionsToggle" value="true">
+													<span class="wfm-radio-toggle"></span>
+													<span class="wfm-radio-label" translate>UnselectedItems</span>
+												</label>
+											</div>
+										</form>
+									</div>
+								</div>
+								<div class="con-row">
+									<div class="con-flex tree">
+										<permissions-tree functions="vm.applicationFunctions"></permissions-tree>
+									</div>
+								</div>
+							</md-content>
+						</md-tab>
+						<md-tab label="Tab title1">
+							<md-content class="md-padding">
+								<div class="con-row">
+									<div class="con-flex">
+										<label for="filter1" class="input-icon">
+											<i class="mdi mdi-filter-outline">
+												<input type="text" id="filter1" placeholder="filter roles...">
+												<md-tooltip>Filter</md-tooltip>
+											</i>
+										</label>
+									</div>
+									<div class="con-flex split-1-2"></div>
+									<div class="con-flex">
+										<md-select ng-model="model" placeholder="Pick an option">
+											<h2>Välj en övergripande rättighetsnivå</h2>
+											<md-option selected ng-value="123">ABC</md-option>
+											<md-option ng-value="321">XYZ</md-option>
+											<md-option ng-value="231">QWER</md-option>
+										</md-select>
+									</div>
+								</div>
+								<div class="con-row">
+									<div class="con-flex">
+										<form class="permission-radio-buttons">
+											<div class="wfm-radio">
+												<label>
+													<span class="wfm-radio-label permission-filter-label" translate>Show</span>
+												</label>
+											</div>
+											<div class="wfm-radio">
+												<label ng-click="unselectedFunctionsToggle = false; selectedFunctionsToggle = false">
+													<input type="radio" checked name="tree-toggle">
+													<span class="wfm-radio-toggle"></span>
+													<span class="wfm-radio-label" translate>All</span>
+												</label>
+											</div>
+											<div class="wfm-radio">
+												<label ng-click="unselectedFunctionsToggle = false">
+													<input type="radio" name="tree-toggle" ng-model="selectedFunctionsToggle" value="true">
+													<span class="wfm-radio-toggle"></span>
+													<span class="wfm-radio-label" translate>SelectedItems</span>
+												</label>
+											</div>
+											<div class="wfm-radio">
+												<label ng-click="selectedFunctionsToggle = false">
+													<input type="radio" name="tree-toggle" ng-model="unselectedFunctionsToggle" value="true">
+													<span class="wfm-radio-toggle"></span>
+													<span class="wfm-radio-label" translate>UnselectedItems</span>
+												</label>
+											</div>
+										</form>
+									</div>
+								</div>
+								<div class="con-row">
+									<div class="con-row">
+										<permissions-list bu="vm.organizationSelection.BusinessUnit"> </permissions-list>	
+									</div>	
+								</div>
+							</md-content>
+						</md-tab>
+					</md-tabs>
+				</md-content>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--
+
+<div class="con-row">
+	<div class="con-flex">
+		<h2>Roles</h2>
+		<form ng-submit="vm.createRole(roleName)">
+			<input type="text" name="name" ng-model="roleName">
+			<button type="submit" name="button">create</button>
+		</form>
+
+		<div ng-repeat="role in vm.roles">
+			<hr>
+			<button type="submit" name="button2" ng-click="vm.deleteRole(role)">Delete</button>
+			<button type="submit" name="button3" ng-click="vm.copyRole(role)">Copy</button>
+
+			<p>
+				Name: {{role.Name}}
+				</br>
+				BuiltIn: {{role.BuiltIn}}
+				</br>
+				DescriptionText: {{role.DescriptionText}}
+				</br>
+				Id: {{role.Id}}
+				</br>
+				IsAnyBuiltIn: {{role.IsAnyBuiltIn}}
+				</br>
+				IsMyRole: {{role.IsMyRole}}
+				</br>
+				<form ng-submit="vm.editRole(newRoleName, role.Id)">
+					<input type="text" name="name" ng-model="newRoleName">
+					<button type="submit" name="button">Edit</button>
+				</form>
+				</br>
+				<hr>
+			</p>
+		</div>
+	</div>
+	<div class="con-flex">
+		<h2>Functions</h2>
+		<permissions-tree functions="vm.applicationFunctions"></permissions-tree>
+	</div>
+
+	<div class="con-flex">
+		<permissions-list bu="vm.organizationSelection.BusinessUnit"> </permissions-list>
+	</div>
+</div>
+</div>-->

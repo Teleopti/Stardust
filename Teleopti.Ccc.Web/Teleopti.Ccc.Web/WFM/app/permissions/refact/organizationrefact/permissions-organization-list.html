@@ -1,0 +1,8 @@
+		<ul>
+			<li>
+                {{$ctrl.bu.Name}}
+            </li>
+			<li style="margin-left:10px;" ng-repeat="child in $ctrl.bu.ChildNodes">
+                <permissions-list bu="child"></permissions-list>
+			</li>
+		</ul>

@@ -1,0 +1,10 @@
+<div ui-tree>
+	<ol ui-tree-nodes="" ng-model="$ctrl.functions">
+		<li ng-repeat="function in $ctrl.functions" ui-tree-node ng-hide="$first">
+			<div ui-tree-handle>
+				{{function.LocalizedFunctionDescription}}
+			</div>
+			<permissions-tree functions="function.ChildFunctions"></permissions-tree>
+		</li>
+	</ol>
+</div>
