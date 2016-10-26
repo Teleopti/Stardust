@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 		public void Setup()
 		{
 			// This is really ugly
-			var packageDir = new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\packages"))
+			var packageDir = new DirectoryInfo(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\..\packages"))
 				.GetDirectories("Teleopti.Payroll.TestDlls.*").Last().FullName;
 			var pathToDlls = Path.Combine(packageDir, "PayrollTestDlls");
 			searchPath = MockRepository.GenerateMock<ISearchPath>();

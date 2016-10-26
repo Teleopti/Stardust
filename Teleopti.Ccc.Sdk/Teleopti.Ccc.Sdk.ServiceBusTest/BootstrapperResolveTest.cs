@@ -14,6 +14,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 {
 	public class BootstrapperResolveTest
 	{
+		[SetUp]
+		public void Setup()
+		{
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+		}
+
 		[Test]
 		public void ShouldResolveFromBootstrapper()
 		{
