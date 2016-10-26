@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -41,6 +42,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public IScheduleStorage ScheduleStorage;
 		public ICurrentScenario CurrentScenario;
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
+		public IToggleManager ToggleManager;
 
 		private static readonly DateTime _nowTime = new DateTime(2016, 10, 18, 8, 0, 0, DateTimeKind.Utc);
 		private INow _now = new ThisIsNow(_nowTime);
@@ -325,7 +327,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 					new AlreadyAbsentValidator(), ScheduleStorage, CurrentScenario, new AbsenceRequestWorkflowControlSetValidator(), absenceRequestPersonAccountValidator);
 			var target = new AbsenceRequestPersister(PersonRequestRepository, Mapper.Engine, EventPublisher
 				, CurrentBusinessUnit, CurrentDataSource, _now, new ThisUnitOfWork(new FakeUnitOfWork())
-				, absenceRequestSynchronousValidator, new PersonRequestAuthorizationCheckerForTest(), new AbsenceRequestIntradayFilterEmpty());
+				, absenceRequestSynchronousValidator, new PersonRequestAuthorizationCheckerForTest(), new AbsenceRequestIntradayFilterEmpty(), ToggleManager);
 			var requestViewModel = target.Persist(form);
 			return PersonRequestRepository.Get(new Guid(requestViewModel.Id));
 		}

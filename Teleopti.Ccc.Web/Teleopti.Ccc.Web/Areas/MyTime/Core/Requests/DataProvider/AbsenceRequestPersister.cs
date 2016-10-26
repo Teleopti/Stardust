@@ -1,12 +1,12 @@
 using System;
 using AutoMapper;
-using log4net;
-using Microsoft.Build.Utilities;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -27,6 +27,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 		private readonly IAbsenceRequestIntradayFilter _absenceRequestIntradayFilter;
 
+		private readonly IToggleManager _toggleManager;
+
 		public AbsenceRequestPersister(IPersonRequestRepository personRequestRepository,
 									   IMappingEngine mapper,
 									   IEventPublisher publisher,
@@ -36,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 									   ICurrentUnitOfWork currentUnitOfWork, 
 									   IAbsenceRequestSynchronousValidator absenceRequestSynchronousValidator, 
 									   IPersonRequestCheckAuthorization personRequestCheckAuthorization, 
-									   IAbsenceRequestIntradayFilter absenceRequestIntradayFilter)
+									   IAbsenceRequestIntradayFilter absenceRequestIntradayFilter, IToggleManager toggleManager)
 		{
 			_personRequestRepository = personRequestRepository;
 			_mapper = mapper;
@@ -48,6 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_absenceRequestSynchronousValidator = absenceRequestSynchronousValidator;
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 			_absenceRequestIntradayFilter = absenceRequestIntradayFilter;
+			_toggleManager = toggleManager;
 		}
 
 		public RequestViewModel Persist(AbsenceRequestForm form)
@@ -84,30 +87,33 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				}
 				_personRequestRepository.Add(personRequest);
 
-				if (result.IsValid)
+				if (!personRequest.IsDenied)
 				{
 					_absenceRequestIntradayFilter.Process(personRequest);
 				}
 
 			}
 
-			if (_currentUnitOfWork != null && !personRequest.IsDenied)
+			if (!_toggleManager.IsEnabled(Toggles.AbsenceRequests_SpeedupEndToEnd_41384))
 			{
-				var message = new NewAbsenceRequestCreatedEvent
+				if (_currentUnitOfWork != null && !personRequest.IsDenied)
 				{
-					LogOnBusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
-					LogOnDatasource = _currentDataSource.Current().DataSourceName,
-					PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
-					Timestamp = _now.UtcDateTime(),
-					JobName = "Absence Request",
-					UserName = personRequest.Person.Name.ToString()
-				};
-				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _publisher.Publish(message));
+					var message = new NewAbsenceRequestCreatedEvent
+					{
+						LogOnBusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
+						LogOnDatasource = _currentDataSource.Current().DataSourceName,
+						PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
+						Timestamp = _now.UtcDateTime(),
+						JobName = "Absence Request",
+						UserName = personRequest.Person.Name.ToString()
+					};
+					_currentUnitOfWork.Current().AfterSuccessfulTx(() => _publisher.Publish(message));
 
+				}
 			}
+			
 
 			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 		}
 	}
-}
 }
