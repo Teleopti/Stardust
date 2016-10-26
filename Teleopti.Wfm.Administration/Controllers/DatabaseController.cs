@@ -95,7 +95,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_createBusinessUnit.Create(newTenant, model.BusinessUnit);
 
 			_updateCrossDatabaseView.Execute(analyticsDbConnectionString,
-				version.IsAzure ? $"{model.Tenant}_TeleoptiWfmAnalytics" : $"{model.Tenant}_TeleoptiWfmAgg");
+				version.IsAzure ? $"{model.Tenant}_TeleoptiAnalytics" : $"{model.Tenant}_TeleoptiAgg");
 
 			addSystemUserToTenant(newTenant, "first", "user", model.FirstUser, model.FirstUserPassword);
 
@@ -127,7 +127,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			{
 				UserID = model.CreateDbUser,
 				Password = model.CreateDbPassword,
-				InitialCatalog = $"{model.Tenant}_TeleoptiWfmApp",
+				InitialCatalog = $"{model.Tenant}_TeleoptiApp",
 				IntegratedSecurity = false,
 			}.ConnectionString;
 		}
@@ -138,7 +138,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			{
 				UserID = model.CreateDbUser,
 				Password = model.CreateDbPassword,
-				InitialCatalog = $"{model.Tenant}_TeleoptiWfmAnalytics",
+				InitialCatalog = $"{model.Tenant}_TeleoptiAnalytics",
 				IntegratedSecurity = false,
 			}.ConnectionString;
 		}
@@ -149,7 +149,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			{
 				UserID = model.CreateDbUser,
 				Password = model.CreateDbPassword,
-				InitialCatalog = model.Tenant + "_TeleoptiWfmAgg",
+				InitialCatalog = model.Tenant + "_TeleoptiAgg",
 				IntegratedSecurity = false,
 			}.ConnectionString;
 		}
@@ -160,7 +160,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			{
 				UserID = model.AppUser,
 				Password = model.AppPassword,
-				InitialCatalog = $"{model.Tenant}_TeleoptiWfmApp",
+				InitialCatalog = $"{model.Tenant}_TeleoptiApp",
 				IntegratedSecurity = false,
 			}.ConnectionString;
 		}
@@ -171,7 +171,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			{
 				UserID = model.AppUser,
 				Password = model.AppPassword,
-				InitialCatalog = $"{model.Tenant}_TeleoptiWfmAnalytics",
+				InitialCatalog = $"{model.Tenant}_TeleoptiAnalytics",
 				IntegratedSecurity = false,
 			}.ConnectionString;
 		}
@@ -182,7 +182,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			{
 				UserID = model.AppUser,
 				Password = model.AppPassword,
-				InitialCatalog = $"{model.Tenant}_TeleoptiWfmAgg",
+				InitialCatalog = $"{model.Tenant}_TeleoptiAgg",
 				IntegratedSecurity = false,
 			}.ConnectionString;
 		}
