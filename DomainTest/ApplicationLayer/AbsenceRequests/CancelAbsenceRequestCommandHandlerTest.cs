@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Tracking;
+using Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.DomainTest.Common;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -77,6 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
 			system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
+			system.UseTestDouble<FakeEventHandler>().For<FakeEventHandler>();
 			var userCulture = new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture());
 			system.UseTestDouble(userCulture).For<IUserCulture>();
 
@@ -232,6 +234,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var events = personAbsence.PopAllEvents().ToList();
 
 			EventPublisher.OverwriteHandler(typeof(ScheduleChangedEvent), typeof(ScheduleChangedEventDetector));
+			EventPublisher.OverwriteHandler(typeof(RequestPersonAbsenceRemovedEvent), typeof(FakeEventHandler));
 			ScheduleChangedEventDetector.Reset();
 
 			events.ForEach(e => EventPublisher.Publish(e));
@@ -384,5 +387,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 	}
 
-		
+	public class FakeEventHandler
+	{
+		public void Handle(RequestPersonAbsenceRemovedEvent requestPersonAbsenceEvent)
+		{
+			
+		}
+	}
 }
