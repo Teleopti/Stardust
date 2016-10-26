@@ -16,7 +16,7 @@
     <div class="panel material-depth-1">
       <div class="con-row">
         <div class="con-flex">
-          <md-autocomplete id="activity" class="autocomplete-skill" md-no-cache="true" md-selected-item="vm.selectedActivity" md-select-on-match="true" md-search-text="searchActiviyText" md-selected-item-change="vm.getSkills(vm.selectedActivity)" md-items="activity in vm.activitys" md-item-text="activity.ActivityName" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
+          <md-autocomplete id="activity" class="autocomplete-skill" md-no-cache="true" md-selected-item="selectedActivity" md-select-on-match="true" md-search-text="searchActiviyText" md-selected-item-change="vm.selectActivity(selectedActivity)" md-items="activity in vm.activites" md-item-text="activity.ActivityName" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
             <md-item-template>
               <span md-highlight-text="searchActivityText" md-highlight-flags="^i">{{activity.ActivityName}}</span>
             </md-item-template>
@@ -49,10 +49,10 @@
       <div class="con-row">
         <div class="con-flex">
           <ul class="wfm-simple-list">
-            <li ng-repeat="skill in vm.skills | filter:skillFilter">
+            <li ng-repeat="skill in vm.activitySkills | filter:skillFilter">
               {{skill.SkillName}}
             </li>
-            <li ng-show="vm.skills.length === 0">
+            <li ng-show="vm.activitySkills.length === 0">
               No unsorted skills left for this activity
             </li>
           </ul>
@@ -68,7 +68,7 @@
       </div>
 
       <!-- No skill message  -->
-      <div ng-cloak class="con-row animate-show" ng-show="vm.noSortedSkills()">
+      <div ng-cloak class="con-row animate-show" ng-show="vm.noPrioritiedSkills()">
         <div class="con-flex">
           <p>Looks like you have no skills prioritised yet, pick one in this dropdown here</p>
         </div>
@@ -82,9 +82,9 @@
       </div>
 
       <!-- First autocomplete -->
-      <div class="con-row" ng-show="vm.noSortedSkills()">
+      <div class="con-row" ng-show="vm.noPrioritiedSkills()">
         <div class="con-flex">
-          <md-autocomplete md-input-id="autoCompleteOnceId" class="autocomplete-skill" md-no-cache="true" md-selected-item="vm.selectedSkill" md-autoselect = "true" md-select-on-match="true" md-search-text="searchSkillText" md-selected-item-change="vm.addSkill(skill, 1000); searchSkillText = null" md-items="skill in vm.querySkills(searchSkillText)" md-item-text="skill.SkillName" md-min-length="0 " placeholder="{{'SelectSkill'|translate}}">
+          <md-autocomplete md-input-id="autoCompleteOnceId" class="autocomplete-skill" md-no-cache="true" md-selected-item="selectedSkill" md-autoselect = "true" md-select-on-match="true" md-search-text="searchSkillText" md-selected-item-change="vm.prioritizeSkill(selectedSkill, 1000); searchSkillText = null" md-items="skill in vm.querySkills(searchSkillText)" md-item-text="skill.SkillName" md-min-length="0 " placeholder="{{'SelectSkill'|translate}}">
             <md-item-template>
               <span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.SkillName}}</span>
             </md-item-template>
@@ -95,7 +95,7 @@
         </div>
       </div>
 
-      <section ng-repeat="skill in vm.sortedSkills | orderBy:'-Priority'">
+      <section ng-repeat="skill in vm.prioritizedSkills | orderBy:'-Priority'">
 
         <!--Add above -->
         <div class="skill-devider" ng-if="skill.showAutoCompleteTop">
@@ -104,7 +104,7 @@
           </div>
           <div class="con-row">
             <div class="con-flex">
-              <md-autocomplete md-input-id="showAutoCompleteTop" class="autocomplete-skill" md-no-cache="true" md-selected-item="selectedSkill" md-autoselect="true" md-select-on-match="true" md-search-text="searchText" md-selected-item-change="vm.addSkill(skilltoBeSelected, skill.Priority+1); skill.showAutoCompleteTop = false; searchText = null" md-items="skilltoBeSelected in vm.querySkills(searchText)" md-item-text="skilltoBeSelected.SkillName" md-min-length="0"  placeholder="{{'SelectSkill'|translate}}">
+              <md-autocomplete md-input-id="showAutoCompleteTop" class="autocomplete-skill" md-no-cache="true" md-selected-item="selectedSkill" md-autoselect="true" md-select-on-match="true" md-search-text="searchText" md-selected-item-change="vm.prioritizeSkill(skilltoBeSelected, skill.Priority+1); skill.showAutoCompleteTop = false; searchText = null" md-items="skilltoBeSelected in vm.querySkills(searchText)" md-item-text="skilltoBeSelected.SkillName" md-min-length="0"  placeholder="{{'SelectSkill'|translate}}">
                 <md-item-template>
                   <span md-highlight-text="searchText" md-highlight-flags="^i">{{skilltoBeSelected.SkillName}}</span>
                 </md-item-template>
@@ -138,9 +138,9 @@
           </div>
 
           <!-- Add inside -->
-          <div class="con-row" ng-if="skill.showAutoCompleteMiddle">
+          <div class="con-row" ng-if="skill.showAutoCompleteMiddle" ng-blur="skill.showAutoCompleteMiddle = false;">
             <div class="con-flex">
-              <md-autocomplete md-input-id="showAutoCompleteMiddle" class="autocomplete-skill" md-no-cache="true" md-selected-item="selectedSkill" md-autoselect="true" md-select-on-match="true" md-search-text="searchText" md-selected-item-change="vm.addSkill(skilltoBeSelected, skill.Priority); skill.showAutoCompleteMiddle = false; searchText = null" md-items="skilltoBeSelected in vm.querySkills(searchText)" md-item-text="skilltoBeSelected.SkillName" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
+              <md-autocomplete md-input-id="showAutoCompleteMiddle" class="autocomplete-skill" md-no-cache="true" md-selected-item="selectedSkill" md-autoselect="true" md-select-on-match="true" md-search-text="searchText" md-selected-item-change="vm.prioritizeSkill(skilltoBeSelected, skill.Priority); skill.showAutoCompleteMiddle = false; searchText = null" md-items="skilltoBeSelected in vm.querySkills(searchText)" md-item-text="skilltoBeSelected.SkillName" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
                 <md-item-template>
                   <span md-highlight-text="searchText" md-highlight-flags="^i">{{skilltoBeSelected.SkillName}}</span>
                 </md-item-template>
@@ -159,7 +159,7 @@
                   <div class="list-content">
                     <h2>
                       {{skill.SkillName}}
-                      <i class="mdi mdi-close pull-right" ng-click="vm.removeSkill(skill)">
+                      <i class="mdi mdi-close pull-right" ng-click="vm.removeFromPrioritized(skill)">
                         <md-tooltip>
                           Remove prio for {{skill.SkillName}}
                         </md-tooltip>
@@ -167,10 +167,10 @@
                     </h2>
                   </div>
                 </div>
-                <div class="grid-card" ng-repeat="sibling in skill.siblings">
+                <div class="grid-card" ng-repeat="sibling in skill.sibling">
                   <div class="list-content">
                     <h2>{{sibling.SkillName}}
-                      <i class="mdi mdi-close pull-right" ng-click="vm.removeSkill(sibling)">
+                      <i class="mdi mdi-close pull-right" ng-click="vm.removeFromPrioritized(sibling)">
                         <md-tooltip>
                           Remove prio for {{sibling.SkillName}}
                         </md-tooltip>
@@ -182,14 +182,14 @@
             </div>
           </div>
         </div>
-
+		<!-- Add bellow-->
         <div class="skill-devider" ng-if="skill.showAutoCompleteBottom">
           <div class="sub-header">
             <h2>Add skill</h2>
           </div>
           <div class="con-row">
             <div class="con-flex">
-              <md-autocomplete md-input-id="showAutoCompleteBottom" class="autocomplete-skill" md-no-cache="true" md-selected-item="selectedSkill" md-autoselect="true" md-select-on-match="true" md-search-text="searchText" md-selected-item-change="vm.addSkill(skilltoBeSelected, skill.Priority-1); skill.showAutoCompleteBottom = false; searchText = null" md-items="skilltoBeSelected in vm.querySkills(searchText)" md-item-text="skilltoBeSelected.SkillName" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
+              <md-autocomplete md-input-id="showAutoCompleteBottom" class="autocomplete-skill" md-no-cache="true" md-selected-item="selectedSkill" md-autoselect="true" md-select-on-match="true" md-search-text="searchText" md-selected-item-change="skill.showAutoCompleteBottom = false;vm.prioritizeSkill(skilltoBeSelected, skill.Priority-1);  searchText = null" md-items="skilltoBeSelected in vm.querySkills(searchText)" md-item-text="skilltoBeSelected.SkillName" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
                 <md-item-template>
                   <span md-highlight-text="searchText" md-highlight-flags="^i">{{skilltoBeSelected.SkillName}}</span>
                 </md-item-template>

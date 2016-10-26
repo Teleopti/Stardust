@@ -14,7 +14,12 @@
         ////////////////
 
         function getActivitys() {
-            return skillPrioActivityService.getActivitys();
+        //     var resoloved = [];
+        //  var unresolved = skillPrioActivityService.getActivitys().query();
+        //  unresolved.$promise.then(function(data){
+        //      resoloved = data;
+        //  });
+        //  return resoloved;
         }
         function getSkills() {
             return skillPrioSkillService.getSkills();

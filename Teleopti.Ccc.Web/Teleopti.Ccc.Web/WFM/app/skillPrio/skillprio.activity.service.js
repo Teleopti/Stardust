@@ -11,7 +11,7 @@
         ////////////////
         
         function getActivitys() {
-            return skillPrioService.getAdminSkillRoutingPriority.query();
+            return skillPrioService.getAdminSkillRoutingPriority;
         }
 
     }
