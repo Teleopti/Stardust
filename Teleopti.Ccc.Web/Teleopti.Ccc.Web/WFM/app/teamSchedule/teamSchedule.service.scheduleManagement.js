@@ -19,7 +19,11 @@
 					p.Start = $filter('timezone')(p.Start, timezone);
 					p.End = $filter('timezone')(p.End, timezone);
 				});
-								
+				if (copiedSchedule.DayOff) {
+					copiedSchedule.DayOff.Start = $filter('timezone')(copiedSchedule.DayOff.Start, timezone);
+					copiedSchedule.DayOff.End = $filter('timezone')(copiedSchedule.DayOff.End, timezone);
+				}
+
 				return copiedSchedule;
 			}
 
@@ -100,8 +104,8 @@
 
 				svc.groupScheduleVm.Schedules.forEach(function (schedule) {
 					var scheduleStart = moment(schedule.ScheduleStartTime());
-					
-					if (selectedPersonIds.indexOf(schedule.PersonId) > -1 && scheduleStart < earlistStart) {						
+
+					if (selectedPersonIds.indexOf(schedule.PersonId) > -1 && scheduleStart < earlistStart) {
 						startUpdated = true;
 						earlistStart = scheduleStart;
 					}
@@ -126,8 +130,8 @@
 
 				svc.groupScheduleVm.Schedules.forEach(function (schedule) {
 					var scheduleStart = moment(schedule.ScheduleStartTime());
-								
-					if (selectedPersonIds.indexOf(schedule.PersonId) > -1 && scheduleStart > latestStart) {						
+
+					if (selectedPersonIds.indexOf(schedule.PersonId) > -1 && scheduleStart > latestStart) {
 						startUpdated = true;
 						latestStart = scheduleStart;
 					}

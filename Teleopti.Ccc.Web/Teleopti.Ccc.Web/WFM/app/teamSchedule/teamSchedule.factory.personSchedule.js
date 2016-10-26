@@ -261,8 +261,6 @@
 
 			if (otherDayOffVm != undefined) {
 				this.DayOffs.push(otherDayOffVm);
-			} else {
-				this.DayOffs = [];
 			}
 		}
 
