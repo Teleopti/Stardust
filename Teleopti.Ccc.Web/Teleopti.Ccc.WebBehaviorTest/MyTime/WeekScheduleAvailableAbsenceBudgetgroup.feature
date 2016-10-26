@@ -113,7 +113,7 @@ Scenario: Show the user a red indication when there is only a little or no allow
 	When I view my week schedule for date '2023-04-01'
 	Then I should see an 'red' indication for chance of absence request on '2023-04-01'
 
-
+@ignore
 Scenario: Show the user a red indication when there is no budgetgroup for that day
 	Given there is a budgetday
 	| Field						| Value                |
@@ -141,7 +141,7 @@ Scenario: Show the user a red indication when there is no budgetgroup for that d
 	Then I should see an 'green' indication for chance of absence request on '2023-04-03'
 	And I should see an 'red' indication for chance of absence request on '2023-04-04'
 
-
+@ignore
 Scenario: Show the user a red indication when today is outside open absence periods
 	Given the time is '2023-05-02 20:00'
 	And there is a budgetday
@@ -163,7 +163,7 @@ Scenario: Show the user a red indication when today is outside open absence peri
 	When I view my week schedule for date '2023-04-28'
 	Then I should see an 'red' indication for chance of absence request on '2023-04-28'
 
-	
+@ignore
 Scenario: Show the user a red indication when absence day is outside absence preference periods
 	Given the time is '2023-05-15 20:00'
 	And there is a budgetday
@@ -279,7 +279,8 @@ Scenario: Show the user a green indication when absence requests are auto grante
 	And I have the workflow control set 'Auto grant'
 	When I view my week schedule for date '2023-05-28'
 	Then I should see an 'green' indication for chance of absence request on '2023-05-28'
-	
+
+@ignore	
 Scenario: Show the user a red indication when absence requests are auto denied for that day
 	Given the time is '2023-05-25 20:00'
 	And there is a budgetday
