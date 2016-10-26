@@ -33,7 +33,7 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 		$fakeBackend.clear();
 
 		spyOn($state, 'go');
-
+		$fakeBackend.withToggle('RTA_SiteAndTeamOnSkillOverview_40817');
 	}));
 
 	it('should agents out of adherence in teams for selected skill', function() {

@@ -15,6 +15,7 @@ angular.module('wfm.rta').provider('RtaState', function() {
 	}
 
 	var rtaSelectSkillCtrl = function() {
+		return 'RtaSiteAndTeamOnSkillOverviewCtrl';
 		return toggles.RTA_SiteAndTeamOnSkillOverview_40817 ? 'RtaSiteAndTeamOnSkillOverviewCtrl' : 'RtaSelectSkillCtrl';
 	}
 

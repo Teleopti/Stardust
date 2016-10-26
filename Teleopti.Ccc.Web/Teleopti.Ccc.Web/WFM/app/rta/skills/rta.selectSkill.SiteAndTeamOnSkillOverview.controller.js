@@ -15,6 +15,7 @@
 			'RtaRouteService',
 			'RtaFormatService',
 			'RtaAdherenceService',
+			'Toggle',
 			function(
 				$scope,
 				$stateParams,
@@ -28,8 +29,10 @@
 				RtaService,
 				RtaRouteService,
 				RtaFormatService,
-				RtaAdherenceService
+				RtaAdherenceService,
+				toggleService
 			) {
+				toggleService.togglesLoaded.then(function() { //<<..toggle service start here!
 				$scope.skills = [];
 				$scope.skillAreas = [];
 				$scope.skillsLoaded = false;
@@ -47,7 +50,7 @@
 					.then(function(skills) {
 						$scope.skillsLoaded = true;
 						$scope.skills = skills;
-						if($scope.skillId !== null) {
+						if($scope.skillId !== null && toggleService.RTA_SiteAndTeamOnSkillOverview_40817) {
 							$scope.selectedSkill = getSelected(skills, $scope.skillId);
 							getSitesOrTeams();
 						}
@@ -57,7 +60,7 @@
 					.then(function(skillAreas) {
 						$scope.skillAreasLoaded = true;
 						$scope.skillAreas = skillAreas.SkillAreas;
-						if($scope.skillAreaId !== null) {
+						if($scope.skillAreaId !== null && toggleService.RTA_SiteAndTeamOnSkillOverview_40817) {
 							$scope.selectedSkillArea = getSelected(skillAreas.SkillAreas, $scope.skillAreaId);
 							getSitesOrTeams();
 						}
@@ -84,15 +87,27 @@
 
 				$scope.selectedSkillChange = function(skill) {
 					if (skill) {
-						$scope.skillId = skill.Id;
-						doWhenSelecting(skill, $scope.selectedSkill, "rta.teams-by-skill", goToSitesBySkill);
+						if(toggleService.RTA_SiteAndTeamOnSkillOverview_40817){
+							$scope.skillId = skill.Id;
+							doWhenSelecting(skill, $scope.selectedSkill, "rta.teams-by-skill", goToSitesBySkill);
+						}
+						else
+							$timeout(function(){
+								 $state.go('rta.agents-skill', { skillId: skill.Id });
+							});
 					};
 				};
 
 				$scope.selectedSkillAreaChange = function(skillArea) {
 					if (skillArea) {
-						$scope.skillAreaId = skillArea.Id;
-						doWhenSelecting(skillArea, $scope.selectedSkillArea, "rta.teams-by-skillArea", goToSitesBySkillArea);
+						if(toggleService.RTA_SiteAndTeamOnSkillOverview_40817){
+							$scope.skillAreaId = skillArea.Id;
+							doWhenSelecting(skillArea, $scope.selectedSkillArea, "rta.teams-by-skillArea", goToSitesBySkillArea);
+						}
+						else
+							$timeout(function(){
+								 $state.go('rta.agents-skill-area', { skillAreaId: skillArea.Id });
+							});
 					};
 				};
 
@@ -154,7 +169,7 @@
 					return $scope.skillAreaId !== null ? skillIdsFromSkillArea($scope.skillAreaId) : [$scope.skillId];
 				}
 
-				var polling = $interval(function() {
+				var polling = toggleService.RTA_SiteAndTeamOnSkillOverview_40817 ? $interval(function() {
 					if ($scope.skillId !== null || $scope.skillAreaId !== null) {
 						if ($scope.siteIds.length > 0 && $scope.teams !== undefined) {
 							getAdherenceForTeamsBySkills($scope.siteIds, $scope.skillIds)
@@ -169,7 +184,7 @@
 						});
 					};
 					}
-				}, 5000);
+				}, 5000) : {};
 
 				function getSitesForSkills(skillIds) {
 					return RtaService.getSitesForSkills(skillIds);
@@ -228,13 +243,13 @@
 				};
 
 				$scope.$watch('selectedSkill', function (newValue, oldValue) {
-					if (newValue !== oldValue && oldValue!= undefined && oldValue!= null && newValue==null) {
+					if (newValue !== oldValue && oldValue!= undefined && oldValue!= null && newValue==null && toggleService.RTA_SiteAndTeamOnSkillOverview_40817) {
 							goToSelectSkill();
 					}
 				});
 
 				$scope.$watch('selectedSkillArea', function (newValue, oldValue) {
-					if (newValue !== oldValue && oldValue!= undefined && oldValue!= null && newValue==null) {
+					if (newValue !== oldValue && oldValue!= undefined && oldValue!= null && newValue==null && toggleService.RTA_SiteAndTeamOnSkillOverview_40817) {
 							goToSelectSkill();
 					}
 				});
@@ -253,7 +268,7 @@
 						}
 					}
 				);
-
+			}); //toogle service ends here....>>
 			}
 		]);
 })();
