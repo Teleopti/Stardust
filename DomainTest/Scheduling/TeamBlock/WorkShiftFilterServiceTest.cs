@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_finderResult = new WorkShiftFinderResult(_person, _dateOnly);
 			_schedules = MockRepository.GenerateMock<IScheduleDictionary>();
 			_schedules.Expect(x => x[_person].ScheduledDay(_dateOnly)).Return(new SchedulePartFactoryForDomain().CreatePart());
-			var validDateTimePeriodShiftFilter = new ValidDateTimePeriodShiftFilter(new FakeTimeZoneGuard(_timeZoneInfo));
+			var validDateTimePeriodShiftFilter = new ValidDateTimePeriodShiftFilter(new FakeTimeZoneGuard(_timeZoneInfo), new UserCulture(CurrentTeleoptiPrincipal.Make()));
 			_target = new WorkShiftFilterService(new ActivityRestrictionsShiftFilter(),
 				new BusinessRulesShiftFilter(validDateTimePeriodShiftFilter,
 					new LongestPeriodForAssignmentCalculator()),
@@ -76,7 +77,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				new ContractTimeShiftFilter(
 					() =>
 						new WorkShiftMinMaxCalculator(new PossibleMinMaxWorkShiftLengthExtractorForTest(),
-							new SchedulePeriodTargetTimeCalculatorForTest(new MinMax<TimeSpan>(TimeSpan.FromHours(8),TimeSpan.FromHours(8))), new WorkShiftWeekMinMaxCalculator())),
+							new SchedulePeriodTargetTimeCalculatorForTest(new MinMax<TimeSpan>(TimeSpan.FromHours(8),TimeSpan.FromHours(8))), new WorkShiftWeekMinMaxCalculator()),
+					new SwedishCulture()),
 				new DisallowedShiftCategoriesShiftFilter(), new EffectiveRestrictionShiftFilter(),
 				new MainShiftOptimizeActivitiesSpecificationShiftFilter(),
 				new NotOverWritableActivitiesShiftFilter(),

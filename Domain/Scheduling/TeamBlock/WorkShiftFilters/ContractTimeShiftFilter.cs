@@ -16,10 +16,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	public class ContractTimeShiftFilter : IContractTimeShiftFilter
 	{
 		private readonly Func<IWorkShiftMinMaxCalculator> _workShiftMinMaxCalculator;
+		private readonly IUserCulture _userCulture;
 
-		public ContractTimeShiftFilter(Func<IWorkShiftMinMaxCalculator> workShiftMinMaxCalculator)
+		public ContractTimeShiftFilter(Func<IWorkShiftMinMaxCalculator> workShiftMinMaxCalculator, IUserCulture userCulture)
 		{
 			_workShiftMinMaxCalculator = workShiftMinMaxCalculator;
+			_userCulture = userCulture;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -77,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			}
 			finderResult.AddFilterResults(
 				new WorkShiftFilterResult(
-					string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
+					string.Format(_userCulture.GetCulture(),
 					              UserTexts.Resources.FilterOnContractTimeLimitationsWithParams, allowedMinMax.Value.Minimum,
 					              allowedMinMax.Value.Maximum),
 					cntBefore, workShiftsWithinMinMax.Count));

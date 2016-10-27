@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -349,7 +350,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				new SchedulePartModifyAndRollbackService(
 					SchedulerStateHolder.SchedulingResultState,
 					new SchedulerStateScheduleDayChangedCallback(
-						new ResourceCalculateDaysDeciderOld(),
+						new ResourceCalculateDaysDeciderOld(new UtcTimeZone()),
 						() => SchedulerStateHolder
 						),
 					new ScheduleTagSetter(
@@ -501,7 +502,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				new SchedulePartModifyAndRollbackService(
 					SchedulerStateHolder.SchedulingResultState,
 					new SchedulerStateScheduleDayChangedCallback(
-						new ResourceCalculateDaysDeciderOld(),
+						new ResourceCalculateDaysDeciderOld(new UtcTimeZone()),
 						() => SchedulerStateHolder
 						),
 					new ScheduleTagSetter(

@@ -14,10 +14,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	public class ValidDateTimePeriodShiftFilter : IValidDateTimePeriodShiftFilter
 	{
 		private readonly ITimeZoneGuard _timeZoneGuard;
+		private readonly IUserCulture _userCulture;
 
-		public ValidDateTimePeriodShiftFilter(ITimeZoneGuard timeZoneGuard)
+		public ValidDateTimePeriodShiftFilter(ITimeZoneGuard timeZoneGuard, IUserCulture userCulture)
 		{
 			_timeZoneGuard = timeZoneGuard;
+			_userCulture = userCulture;
 		}
 
 		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, DateTimePeriod validPeriod, IWorkShiftFinderResult finderResult)
@@ -41,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			var currentTimeZone = _timeZoneGuard.CurrentTimeZone();
 			finderResult.AddFilterResults(
 				new WorkShiftFilterResult(
-					string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
+					string.Format(_userCulture.GetCulture(),
 								  UserTexts.Resources.FilterOnPersonalPeriodLimitationsWithParams,
 								  validPeriod.StartDateTimeLocal(currentTimeZone), validPeriod.EndDateTimeLocal(currentTimeZone)), cntBefore,
 					workShiftsWithinPeriod.Count));

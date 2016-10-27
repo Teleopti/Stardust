@@ -13,6 +13,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_CalculateFarAwayTimeZones_40646)]
     public class ResourceCalculateDaysDeciderOld : IResourceCalculateDaysDecider
     {
+	    private readonly IUserTimeZone _userTimeZone;
+
+	    public ResourceCalculateDaysDeciderOld(IUserTimeZone userTimeZone)
+	    {
+		    _userTimeZone = userTimeZone;
+	    }
+
         public IEnumerable<DateOnly> DecideDates(IScheduleDay currentSchedule, IScheduleDay previousSchedule)
         {
 
@@ -62,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public bool IsNightShift(IScheduleDay scheduleDay)
         {
-            var tz = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+            var tz = _userTimeZone.TimeZone();
 	        var personAssignmentPeriod = scheduleDay.PersonAssignment().Period;
 	        var viewerStartDate = new DateOnly(personAssignmentPeriod.StartDateTimeLocal(tz));
             var viewerEndDate = new DateOnly(personAssignmentPeriod.EndDateTimeLocal(tz).AddMinutes(-1));

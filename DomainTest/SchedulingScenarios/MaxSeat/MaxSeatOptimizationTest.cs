@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 {
-	[DomainTestWithStaticDependenciesAvoidUse]
+	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	[Ignore("Turning off these for now when teamblock is used instead. Check what to keep here!")]
 	public class MaxSeatOptimizationTest

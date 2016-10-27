@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.DomainTest.ResourceCalculation;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
 			_allMatrixes = new List<IScheduleMatrixPro> {_matrix1, _matrix2};
 			_scheduleOptions = new SchedulingOptions();
-			_target = new ContractTimeShiftFilter(()=>_workShiftMinMaxCalculator);
+			_target = new ContractTimeShiftFilter(()=>_workShiftMinMaxCalculator, new SwedishCulture());
 			_dateOnly = new DateOnly(2013, 3, 1);
 			_workShift1 = _mocks.StrictMock<IWorkShift>();
 			_workShift2 = _mocks.StrictMock<IWorkShift>();
