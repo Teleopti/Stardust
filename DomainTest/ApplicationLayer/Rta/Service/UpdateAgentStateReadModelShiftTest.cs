@@ -111,6 +111,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Now.Is("2016-05-30 09:55");
 			Database
 				.WithAgent("usercode", person)
+				.WithSchedule(person, Color.Yellow, "2016-05-30 9:00", "2016-05-30 13:00")
+				.WithSchedule(person, Color.Green, "2016-05-30 13:00", "2016-05-30 14:00");
+
+			Target.CheckForActivityChanges(Database.TenantName());
+			Now.Is("2016-05-30 10:05");
+			Target.CheckForActivityChanges(Database.TenantName());
+
+			Database.PersistedReadModel.Shift.Last().Color.Should().Be(Color.Green.ToArgb());
+		}
+
+		[Test]
+		public void ShouldPersistShiftEnteringTimeWindow()
+		{
+			var person = Guid.NewGuid();
+			Now.Is("2016-05-30 09:55");
+			Database
+				.WithAgent("usercode", person)
 				.WithSchedule(person, Color.Green, "2016-05-30 13:00", "2016-05-30 14:00");
 
 			Target.CheckForActivityChanges(Database.TenantName());

@@ -10,9 +10,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly Context _context;
 		private readonly Lazy<IEnumerable<ScheduledActivity>> _schedule;
 		private readonly Lazy<ScheduledActivity> _currentActivity;
-		private readonly Lazy<ScheduledActivity> _nextActivityInShift;
-		private readonly Lazy<ScheduledActivity> _previousActivity;
 		private readonly Lazy<ScheduledActivity> _nextActivity;
+		private readonly Lazy<ScheduledActivity> _previousActivity;
 		private readonly Lazy<DateTime> _currentShiftStartTime;
 		private readonly Lazy<DateTime> _currentShiftEndTime;
 		private readonly Lazy<DateTime> _shiftStartTimeForPreviousActivity;
@@ -26,11 +25,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_context = context;
 			_schedule = schedule;
 			_currentActivity = new Lazy<ScheduledActivity>(() => activityForTime(context.CurrentTime));
-			_nextActivityInShift = new Lazy<ScheduledActivity>(nextAdjecentActivityToCurrent);
+			_nextActivity = new Lazy<ScheduledActivity>(nextActivity);
 			_currentShiftStartTime = new Lazy<DateTime>(() => startTimeOfShift(_currentActivity.Value));
 			_currentShiftEndTime = new Lazy<DateTime>(() => endTimeOfShift(_currentActivity.Value));
 			_previousActivity = new Lazy<ScheduledActivity>(() => (from l in _schedule.Value where l.EndDateTime <= context.CurrentTime select l).LastOrDefault());
-			_nextActivity = new Lazy<ScheduledActivity>(() => (from l in _schedule.Value where l.StartDateTime <= context.CurrentTime select l).FirstOrDefault());
 			_shiftStartTimeForPreviousActivity = new Lazy<DateTime>(() => startTimeOfShift(_previousActivity.Value));
 			_shiftEndTimeForPreviousActivity = new Lazy<DateTime>(() => endTimeOfShift(_previousActivity.Value));
 			_belongsToDate = new Lazy<DateOnly?>(() =>
@@ -96,25 +94,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			return _previousActivity.Value?.PayloadId;
 		}
-
+		
 		public ScheduledActivity NextActivity()
 		{
 			return _nextActivity.Value;
 		}
 
-		public ScheduledActivity NextActivityInShift()
-		{
-			return _nextActivityInShift.Value;
-		}
-
 		public Guid? NextActivityId()
 		{
-			return _nextActivityInShift.Value?.PayloadId;
+			return _nextActivity.Value?.PayloadId;
 		}
 
 		public DateTime? NextActivityStartTime()
 		{
-			return _nextActivityInShift.Value?.StartDateTime ?? _currentActivity.Value?.EndDateTime;
+			return _nextActivity.Value?.StartDateTime ?? _currentActivity.Value?.EndDateTime;
 		}
 
 		public DateTime? ActivityStartTime()
@@ -131,7 +124,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public string NextActivityName()
 		{
-			return _nextActivityInShift.Value?.Name;
+			return _nextActivity.Value?.Name;
 		}
 
 		public DateTime CurrentShiftStartTime => _currentShiftStartTime.Value;
@@ -141,6 +134,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public DateTime ShiftEndTimeForPreviousActivity => _shiftEndTimeForPreviousActivity.Value;
 
 		public DateOnly? BelongsToDate => _belongsToDate.Value;
+
+
+
 
 		private DateTime startTimeOfShift(ScheduledActivity activity)
 		{
@@ -164,7 +160,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _schedule.Value.FirstOrDefault(l => time >= l.StartDateTime && time < l.EndDateTime);
 		}
 
-		private ScheduledActivity nextAdjecentActivityToCurrent()
+		private ScheduledActivity nextActivity()
 		{
 			var nextActivity = (from l in _schedule.Value where l.StartDateTime > _context.CurrentTime select l).FirstOrDefault();
 			if (nextActivity == null)
@@ -187,14 +183,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				).FirstOrDefault();
 		}
 		
+		private readonly TimeSpan timeWindowFuture = TimeSpan.FromHours(3);
+		private readonly TimeSpan timeWindowPast = TimeSpan.FromHours(-1);
+
 		private DateTime timeWindowStart()
 		{
-			return _context.CurrentTime.AddHours(-1);
+			return _context.CurrentTime.Add(timeWindowPast);
 		}
 
 		private DateTime timeWindowEnd()
 		{
-			return _context.CurrentTime.AddHours(3);
+			return _context.CurrentTime.Add(timeWindowFuture);
 		}
 
 		private IEnumerable<ScheduledActivity> activitiesBetween(DateTime start, DateTime end)
@@ -207,11 +206,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public DateTime? NextCheck()
 		{
-			// add shift start time!!
-			var activityEntersTimeWindowAt = _schedule.Value.FirstOrDefault(x => x.StartDateTime >= timeWindowEnd())?.StartDateTime.AddHours(-3);
+			var activityEnteringTimeWindow = _schedule.Value.FirstOrDefault(x => x.StartDateTime >= timeWindowEnd());
+			var activityEntersTimeWindowAt = activityEnteringTimeWindow?.StartDateTime.Subtract(timeWindowFuture);
 			return new[]
 			{
-				NextActivityStartTime(),
+				_currentActivity.Value?.EndDateTime,
+				_nextActivity.Value?.StartDateTime,
 				activityEntersTimeWindowAt
 			}.Min();
 		}
