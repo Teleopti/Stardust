@@ -20,10 +20,39 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		}
 
 		[Test]
+		public void RunningJobsListShouldNotCrash()
+		{
+			Target.RunningJobsList();
+		}
+
+
+		[Test]
 		public void JobHistoryDetailsShouldNotCrash()
 		{
 			Target.JobHistoryDetails(Guid.NewGuid());
 		}
+
+
+		[Test]
+		public void JobQueueListShouldNotCrash()
+		{
+			Target.JobQueueList(1, 10);
+		}
+
+
+		[Test]
+		public void QueuedJobShouldNotCrash()
+		{
+			Target.QueuedJob(Guid.NewGuid());
+		}
+
+
+		[Test]
+		public void DeleteQueuedJobsShouldNotCrash()
+		{
+			Target.DeleteQueuedJobs(new[] {Guid.NewGuid()});
+		}
+		
 
 		[Test]
 		public void JobHistoryListShouldNotCrash()
@@ -41,6 +70,12 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void WorkerNodesShouldNotCrash()
 		{
 			Target.WorkerNodes();
+		}
+
+		[Test]
+		public void AliveWorkerNodesShouldNotCrash()
+		{
+			Target.AliveWorkerNodes();
 		}
 
 		[Test]
