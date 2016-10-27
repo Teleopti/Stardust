@@ -1,9 +1,10 @@
-using System;
+﻿using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -114,6 +115,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			result.Email.Should().Be.EqualTo(personPeriod.Email);
 		}
 
+		[TestCase("{EmployeeNumber} - {FirstName} {LastName}")]
+		[TestCase("{EmployeeNumber}")]
+		[TestCase("{FirstName} {LastName} #123# {EmployeeNumber}")]
+		[TestCase("123{::][}{__ {FirstName} {LastName} #{Firstname}# ")]
+		[TestCase("No names in reports")]
+		[TestCase("{FirstName} '; Drop Database; ")]
+		[TestCase("{FirstName}{FirstName}")]
+		[TestCase("")]
+		[TestCase("{FirstName}лаудем  伴年聞早 無巣目個 지에 그들을")]
+		public void UpdateNamesTest(string commonNameDescriptionSetting)
+		{
+			setUpData();
+			var commonNameDescription = new CommonNameDescriptionSetting(commonNameDescriptionSetting);
+			Target.UpdatePersonNames(commonNameDescription, BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault());
+			var correctName = commonNameDescription.BuildCommonNameDescription(personPeriod1.FirstName, personPeriod1.LastName, personPeriod1.EmploymentNumber);
+			var updatedName = Target.PersonPeriod(personPeriodCode1).PersonName;
+			updatedName.Should().Be.EqualTo(correctName);
+		}
+
 		private void setUpData()
 		{
 			personPeriod1 = new AnalyticsPersonPeriod
@@ -131,7 +151,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				Email = _personWithGuid.Email,
 				EmploymentStartDate = new DateTime(2000, 1, 1),
 				EmploymentEndDate = AnalyticsDate.Eternity.DateDate,
-				EmploymentNumber = "",
+				EmploymentNumber = "1337",
 				EmploymentTypeCode = 0,
 				EmploymentTypeName = "",
 				FirstName = _personWithGuid.Name.FirstName,
