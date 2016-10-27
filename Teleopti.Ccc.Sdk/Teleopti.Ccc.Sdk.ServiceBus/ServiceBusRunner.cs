@@ -73,11 +73,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			new ContainerConfiguration(_sharedContainer, toggleManager).Configure(null);
 			_sharedContainer.Resolve<HangfireClientStarter>().Start();
 
-			if (toggleManager.IsEnabled(Toggles.Wfm_Use_Stardust))
-			{
-				nodeStarter(toggleManager);
-			}
-
+			nodeStarter(toggleManager);
+			
 			var useRhino = true;
 
 			bool.TryParse(ConfigurationManager.AppSettings["UseRhino"], out useRhino);

@@ -120,7 +120,6 @@
 		Report_UseOpenXmlFormat_35797,
 		Scheduler_IntradayOptimization_36617,
 		Scheduler_AgentSkillAnalyzer_12345,
-		Wfm_Use_Stardust,
 		Wfm_ForecastFileImportOnStardust_37047,
 
 		WfmGlobalLayout_personalOptions_37114,

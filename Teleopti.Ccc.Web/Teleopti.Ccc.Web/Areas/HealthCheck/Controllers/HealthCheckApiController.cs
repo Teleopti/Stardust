@@ -142,9 +142,7 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		[HttpGet, UnitOfWork, Route("HealthCheck/CheckStardust")]
 		public virtual IHttpActionResult CheckStardust()
 		{
-			var id = Guid.Empty;
-			if(_toggleManager.IsEnabled(Toggles.Wfm_Use_Stardust))
-				id = _stardustSender.Send(new StardustHealthCheckEvent {JobName = "Stardust healthcheck" ,UserName = "Health Check"});
+			var id = _stardustSender.Send(new StardustHealthCheckEvent {JobName = "Stardust healthcheck", UserName = "Health Check"});
 			return Ok(id);
 		}
 

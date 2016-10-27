@@ -717,9 +717,9 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 		
 		[Test]
-		public void ShouldResolveStardustServerStartupTaskIfToggleEnabled()
+		public void ShouldResolveStardustServerStartupTask()
 		{
-			using (var container = buildContainer(Toggles.Wfm_Use_Stardust, true))
+			using (var container = buildContainer())
 			{
 				container.Resolve<IEnumerable<IBootstrapperTask>>()
 					.Select(x => x.GetType())
@@ -728,18 +728,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			}
 		}
 
-		[Test]
-		public void ShouldNotResolveStardustServerStartupTaskIfToggleDisabled()
-		{
-			using (var container = buildContainer(Toggles.Wfm_Use_Stardust, false))
-			{
-				container.Resolve<IEnumerable<IBootstrapperTask>>()
-					.Select(x => x.GetType())
-					.Should()
-					.Not
-					.Contain(typeof(StardustStartupTask));
-			}
-		}
+
 		[Test]
 		public void ShouldResolveByPassPermissionCheckerIfToggleEnabled()
 		{

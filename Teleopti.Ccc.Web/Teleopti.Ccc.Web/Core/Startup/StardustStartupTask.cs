@@ -1,12 +1,9 @@
 using System.Threading.Tasks;
 using Owin;
-using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 
 namespace Teleopti.Ccc.Web.Core.Startup
 {
-	[EnabledBy(Toggles.Wfm_Use_Stardust)]
 	[TaskPriority(100)]
 	public class StardustStartupTask : IBootstrapperTask
 	{
