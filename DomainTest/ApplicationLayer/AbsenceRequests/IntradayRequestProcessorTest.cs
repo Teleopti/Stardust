@@ -45,9 +45,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<ApprovalServiceForTest>().For<IRequestApprovalService>();
 			system.UseTestDouble<FakeIntradayRequestWithinOpenHourValidator>().For<IIntradayRequestWithinOpenHourValidator>();
-       
-            _now = new DateTime(2016,03,14,0,5,0);
-        }
+	   
+			_now = new DateTime(2016,03,14,0,5,0);
+		}
 
 		[TearDown]
 		public void Teardown()
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					SkillId =  _primarySkill1.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
 					EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
-                    ForecastWithShrinkage = 2,
+					ForecastWithShrinkage = 2,
 					StaffingLevel = 10
 				}
 			};
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				}
 			};
 			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
-            
+			
 			Target.Process(request, _now);
 
 			Assert.AreEqual(4, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
@@ -271,8 +271,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			primarySkill.SetCascadingIndex(1);
 			var cascadingSkill = SkillFactory.CreateSkillWithId("cascadingSkill");
 
-			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 03, 01), new[] { primarySkill, cascadingSkill });
-			person.WorkflowControlSet = workflowControlSet;
+			var person = createAndSetupPerson(workflowControlSet, new[] { primarySkill, cascadingSkill });
 
 			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(primarySkill.Id.GetValueOrDefault(), OpenHourStatus.WithinOpenHour);
 			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(cascadingSkill.Id.GetValueOrDefault(), OpenHourStatus.WithinOpenHour);
@@ -332,8 +331,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			primarySkill.SetCascadingIndex(1);
 			var cascadingSkill = SkillFactory.CreateSkillWithId("cascadingSkill");
 
-			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 03, 01), new[] { primarySkill, cascadingSkill });
-			person.WorkflowControlSet = workflowControlSet;
+			var person = createAndSetupPerson(workflowControlSet, new[] { primarySkill, cascadingSkill });
 
 			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(primarySkill.Id.GetValueOrDefault(), OpenHourStatus.WithinOpenHour);
 			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(cascadingSkill.Id.GetValueOrDefault(), OpenHourStatus.WithinOpenHour);
@@ -432,9 +430,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skill2 = SkillFactory.CreateSkillWithId("PrimarySkill2");
 			skill2.SetCascadingIndex(1);
 
-			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 03, 01), new[] { skill1, skill2 });
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			person.WorkflowControlSet = workflowControlSet;
+			var person = createAndSetupPerson(workflowControlSet, new[] { skill1, skill2 });
 
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
@@ -468,11 +464,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skill2 = SkillFactory.CreateSkillWithId("PrimarySkill2");
 			skill2.SetCascadingIndex(1);
 			var skill3 = SkillFactory.CreateSkillWithId("PrimarySkill2");
-			
 
-			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 03, 01), new[] { skill1, skill2,skill3 });
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			person.WorkflowControlSet = workflowControlSet;
+
+			var person = createAndSetupPerson(workflowControlSet, new[] { skill1, skill2, skill3 });
 
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
@@ -568,7 +562,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ApproveIfForecastIsZero()
 		{
-			var request = createNewRequest(true,false);
+			var request = createNewRequest(false);
 			
 			var staffingList = new List<SkillStaffingInterval>()
 			{
@@ -613,9 +607,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var workflowControlSet = createWorkFlowControlSet(absence);
 			var primarySkill = SkillFactory.CreateSkillWithId("PrimarySkill1");
 			primarySkill.SetCascadingIndex(1);
-			
-			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 03, 01), new[] { primarySkill });
-			person.WorkflowControlSet = workflowControlSet;
+
+			var person = createAndSetupPerson(workflowControlSet, new[] { primarySkill});
 
 			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(primarySkill.Id.GetValueOrDefault(), OpenHourStatus.WithinOpenHour);
 			
@@ -664,7 +657,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		}
 
-		private IPersonRequest createNewRequest(bool useWorkflowControlSet = true, bool useThresholdValidator = true)
+		private IPersonRequest createNewRequest(bool useShrinkageValidator = true)
 		{
 
 			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 05:00");
@@ -673,8 +666,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 											new DateTime(2016, 3, 14, 14, 59, 00, DateTimeKind.Utc));
 
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
-			var workflowControlSet = createWorkFlowControlSet(absence, useThresholdValidator);
-			var person = createAndSetupPerson(workflowControlSet, useWorkflowControlSet);
+			var workflowControlSet = createWorkFlowControlSet(absence, useShrinkageValidator);
+
+			_primarySkill1 = SkillFactory.CreateSkillWithId("PrimarySkill1");
+			_primarySkill1.SetCascadingIndex(1);
+			_primarySkill2 = SkillFactory.CreateSkillWithId("PrimarySkill2");
+			_primarySkill2.SetCascadingIndex(1);
+
+			var person = createAndSetupPerson(workflowControlSet, new [] {_primarySkill1, _primarySkill2});
 			
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
@@ -688,22 +687,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return request;
 		}
 
-		private IPerson createAndSetupPerson(IWorkflowControlSet workflowControlSet, bool useWorkflowControlSet)
+		private static IPerson createAndSetupPerson(IWorkflowControlSet workflowControlSet, ISkill[] skills)
 		{
-			_primarySkill1 = SkillFactory.CreateSkillWithId("PrimarySkill1");
-			_primarySkill1.SetCascadingIndex(1);
-			_primarySkill2 = SkillFactory.CreateSkillWithId("PrimarySkill2");
-			_primarySkill2.SetCascadingIndex(1);
-
-			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 03, 01), new[] {_primarySkill1, _primarySkill2});
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 03, 01), skills);
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			if(useWorkflowControlSet)
-				person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet = workflowControlSet;
 
 			return person;
 		}
 
-		private static WorkflowControlSet createWorkFlowControlSet(IAbsence absence, bool useThresholdValidator = true)
+		private static WorkflowControlSet createWorkFlowControlSet(IAbsence absence, bool useShrinkageValidator = true)
 		{
 			var workflowControlSet = new WorkflowControlSet { AbsenceRequestWaitlistEnabled = false };
 			workflowControlSet.SetId(Guid.NewGuid());
@@ -717,7 +710,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				OpenForRequestsPeriod = dateOnlyPeriod
 			};
 
-			if(useThresholdValidator)
+			if(useShrinkageValidator)
 				absenceRequestOpenPeriod.StaffingThresholdValidator = new StaffingThresholdWithShrinkageValidator();
 			else
 				absenceRequestOpenPeriod.StaffingThresholdValidator = new StaffingThresholdValidator();
