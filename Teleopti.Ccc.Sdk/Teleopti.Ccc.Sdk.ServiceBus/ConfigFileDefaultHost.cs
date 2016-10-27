@@ -19,19 +19,26 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private IStartable startable;
 		private string bootStrapperName;
 		private BusConfigurationSection hostConfiguration;
+		private readonly string _directory;
 
 		public ConfigFileDefaultHost(string fileName, AbstractBootStrapper bootStrapper)
+			: this(fileName, bootStrapper, AppDomain.CurrentDomain.BaseDirectory)
 		{
-			_bootStrapper = bootStrapper;
-			useFileBasedBusConfiguration(fileName);
 		}
 
-		private void useFileBasedBusConfiguration(string fileName)
+		public ConfigFileDefaultHost(string fileName, AbstractBootStrapper bootStrapper, string directory)
+		{
+			_directory = directory;
+			_bootStrapper = bootStrapper;
+			useFileBasedBusConfiguration(Path.Combine(_directory, fileName));
+		}
+
+		private void useFileBasedBusConfiguration(string filePath)
 		{
 			var config =
-				ConfigurationManager.OpenMappedMachineConfiguration(new ConfigurationFileMap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName))).GetSection("rhino.esb");
+				ConfigurationManager.OpenMappedMachineConfiguration(new ConfigurationFileMap(filePath)).GetSection("rhino.esb");
 			if (config == null)
-				throw new ArgumentNullException(fileName, "test");
+				throw new ApplicationException($"Unable to find section rhino.esb in file {filePath}");
 			hostConfiguration = config as BusConfigurationSection;
 		}
 
@@ -62,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		private void initializeBus(string asmName)
 		{
-			string logfile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log4net.config");
+			string logfile = Path.Combine(_directory, "log4net.config");
 
 			XmlConfigurator.ConfigureAndWatch(new FileInfo(logfile));
 

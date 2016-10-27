@@ -14,13 +14,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 {
 	public class BootstrapperResolveTest
 	{
-		[SetUp]
-		public void Setup()
-		{
-			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
-		}
-
-		[Ignore("Broken with path to log4net config on build servers, reenable asap!")]
 		[Test]
 		public void ShouldResolveFromBootstrapper()
 		{
@@ -29,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				createFakeBus(container, new Uri("dummy://test"));
 
 				new ContainerConfiguration(container, new FalseToggleManager()).Configure(null);
-				var fakeBus = new ConfigFileDefaultHost(Path.Combine(TestContext.CurrentContext.TestDirectory, "testQueue.config"), new BusBootStrapper(container));
+				var fakeBus = new ConfigFileDefaultHost("testQueue.config", new BusBootStrapper(container), TestContext.CurrentContext.TestDirectory);
 				fakeBus.Start();
 				fakeBus.Dispose();
 			}
