@@ -39,21 +39,25 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			};
 
 			var result = new List<ActionResult>();
-			foreach (var personId in input.PersonIds)
+
+			for (var i = 0; i < input.PersonIds.Length; i++)
 			{
+				var personId = input.PersonIds[i];
+				var date = input.Dates[i];
+			
 				var actionResult = new ActionResult();
 				var person = _personRepository.Get(personId);
 				actionResult.PersonId = personId;
 				actionResult.ErrorMessages = new List<string>();
 				actionResult.WarningMessages = new List<string>();
 
-				if (checkPermissionFn(permissions, input.Date, person, actionResult.ErrorMessages))
+				if (checkPermissionFn(permissions, date, person, actionResult.ErrorMessages))
 				{
 					var command = new AddActivityCommand
 					{
 						PersonId = personId,
 						ActivityId = input.ActivityId,
-						Date = input.Date,
+						Date = date,
 						StartTime = input.StartTime,
 						EndTime = input.EndTime,
 						MoveConflictLayerAllowed = input.MoveConflictLayerAllowed,
@@ -88,20 +92,23 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			};
 
 			var result = new List<ActionResult>();
-			foreach (var personId in input.PersonIds)
+			for(var i = 0;i < input.PersonIds.Length;i++)
 			{
+				var personId = input.PersonIds[i];
+				var date = input.Dates[i];
+
 				var actionResult = new ActionResult();
 				var person = _personRepository.Get(personId);
 				actionResult.PersonId = personId;
 				actionResult.ErrorMessages = new List<string>();
 
-				if (checkPermissionFn(permissions, input.Date, person, actionResult.ErrorMessages))
+				if (checkPermissionFn(permissions, date, person, actionResult.ErrorMessages))
 				{
 					var command = new AddPersonalActivityCommand
 					{
 						PersonId = personId,
 						PersonalActivityId = input.ActivityId,
-						Date = input.Date,
+						Date = date,
 						StartTime = input.StartTime,
 						EndTime = input.EndTime,
 						TrackedCommandInfo =
