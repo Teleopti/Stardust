@@ -11,9 +11,11 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Exceptions;
+using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
+	[EnabledBy(Toggles.ETL_FixScheduleForPersonPeriod_41393)]
 	public class AnalyticsScheduleMatchingPerson : IHandleEvent<AnalyticsPersonCollectionChangedEvent>, IRunOnHangfire
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsScheduleMatchingPerson));
@@ -26,15 +28,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_analyticsScheduleRepository = analyticsScheduleRepository;
 		}
 
-		public void Handle(AnalyticsPersonCollectionChangedEvent @event)
+		[AnalyticsUnitOfWork]
+		[Attempts(10)]
+		public virtual void Handle(AnalyticsPersonCollectionChangedEvent @event)
 		{
 			logger.Debug($"Handle AnalyticsPersonCollectionChangedEvent for {@event.SerializedPeople}");
 			foreach (var personId in @event.PersonIdCollection)
 			{
 				var analyticsPersonPeriods = _analyticsPersonPeriodRepository.GetPersonPeriods(personId);
 				_analyticsScheduleRepository.UpdateUnlinkedPersonids(analyticsPersonPeriods.Select(x => x.PersonId).ToArray());
-
-
 			}
 		}
 	}
