@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var nameDescriptionSetting = _commonAgentNameProvider.CommonAgentNameSettings;
 
 			var pagedPeople = pageSize > 0
-				? people.OrderBy(p => p.Name.LastName).Skip(pageSize * (currentPageIndex - 1)).Take(pageSize).ToList()
+				? people.OrderBy(p => nameDescriptionSetting.BuildCommonNameDescription(p)).Skip(pageSize * (currentPageIndex - 1)).Take(pageSize).ToList()
 				: people.ToList();
 
 			var scheduleDays = _scheduleProvider.GetScheduleForPersonsInPeriod(week.Inflate(1), pagedPeople)

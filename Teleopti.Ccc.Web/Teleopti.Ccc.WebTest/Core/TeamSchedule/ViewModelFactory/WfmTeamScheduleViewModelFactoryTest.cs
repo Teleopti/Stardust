@@ -550,52 +550,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldViewAgentOrderByLastNameInWeekView()
-		{
-			UserCulture.Is(CultureInfoFactory.CreateSwedishCulture());
-			var scheduleDate = new DateOnly(2020, 1, 1);
-			var person = PersonFactory.CreatePerson("Bill", "Mamer");
-			var person2 = PersonFactory.CreatePerson("Sherlock", "Holmes");
-			person.WithId();
-			person2.WithId();
-			PeopleSearchProvider.Add(person);
-			PeopleSearchProvider.Add(person2);
-			PersonRepository.Has(person);
-			PersonRepository.Has(person2);
-
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
-
-			var activity = ActivityFactory.CreateActivity("Phone");
-			activity.InContractTime = true;
-			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day", "blue");
-
-			var startTimeUtc = new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-			var endTimeUtc = new DateTime(2020, 1, 1, 9, 0, 0, DateTimeKind.Utc);
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(startTimeUtc, endTimeUtc), shiftCategory, scenario);
-			var pa2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person2, new DateTimePeriod(startTimeUtc, endTimeUtc), shiftCategory, scenario);
-
-			ScheduleStorage.Add(pa);
-			ScheduleStorage.Add(pa2);
-
-			var searchTerm = new Dictionary<PersonFinderField, string>
-			{
-				{PersonFinderField.FirstName, "Bill Sherlock"}
-			};
-
-			var result = Target.CreateWeekScheduleViewModel(searchTerm, scheduleDate, 20, 1);
-
-			result.Total.Should().Be(2);
-
-			var first = result.PersonWeekSchedules.First();
-
-			result.PersonWeekSchedules.First().PersonId.Should().Be(person.Id.GetValueOrDefault());
-			result.PersonWeekSchedules.First().Name.Should().Be(person.Name.ToString());
-			result.PersonWeekSchedules.Last().PersonId.Should().Be(person2.Id.GetValueOrDefault());
-			result.PersonWeekSchedules.First().Name.Should().Be(person2.Name.ToString());
-		}
-
-		[Test]
 		public void CreateViewModelForPeopleShouldReturnAgentsEvenTheyhaveNoScheduleDay()
 		{
 
