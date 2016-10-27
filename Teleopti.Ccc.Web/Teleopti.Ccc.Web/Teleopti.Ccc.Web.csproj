@@ -1368,15 +1368,12 @@
     <Content Include="WFM\app\rta\historical\rta.historical.controller.js" />
     <Content Include="WFM\app\rta\skills\rta-selectSkill-SiteAndTeamOnSkillOverview.html" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.js" />
-<<<<<<< dest
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.sites.spec.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.teams.spec.js" />
-=======
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.spec.js" />
     <Content Include="WFM\app\skillPrio\skillprio.activity.service.js" />
     <Content Include="WFM\app\skillPrio\skillprio.aggregator.service.js" />
     <Content Include="WFM\app\skillPrio\skillPrio.backend.fake.js" />
->>>>>>> source
     <Content Include="WFM\app\skillPrio\skillprio.controller.spec.js" />
     <Content Include="WFM\app\skillPrio\skillprio.service.js" />
     <Content Include="WFM\app\skillPrio\skillprio.service.spec.js" />
