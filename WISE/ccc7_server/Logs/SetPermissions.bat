@@ -60,7 +60,6 @@ ping 127.0.0.1 -n 2 >NUL
 "%TargetFolder%\RegisterEventLogSource.exe" "TeleoptiWebApps"
 "%TargetFolder%\RegisterEventLogSource.exe" "TeleoptiWebAuthApps"
 "%TargetFolder%\RegisterEventLogSource.exe" "TeleoptiAgentStateTracer"
-"%TargetFolder%\RegisterEventLogSource.exe" "TeleoptiWebBroker"
 "%TargetFolder%\RegisterEventLogSource.exe" "TeleoptiPMService"
 
 ::Set folder permissions for ConfigurationFiles
