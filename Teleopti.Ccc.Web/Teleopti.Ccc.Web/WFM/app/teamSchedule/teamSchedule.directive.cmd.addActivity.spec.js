@@ -3,7 +3,7 @@
 	var $compile,
 		$rootScope,
 		$httpBackend,
-		WFMDate,
+		utility,
 		fakeActivityService,
 		fakeScheduleManagementSvc,
 		fakePersonSelectionService,
@@ -43,11 +43,11 @@
 		});
 	});
 
-	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_, _WFMDate_) {
+	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_, _UtilityService_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		WFMDate = _WFMDate_;
+		utility = _UtilityService_;
 
 		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 	}));
@@ -260,7 +260,7 @@
 
 
 	it('should have correct default start time when no other shifts on today', function () {
-		var date = new Date(WFMDate.nowInUserTimeZone());
+		var date = new Date(utility.nowInUserTimeZone());
 		fakeScheduleManagementSvc.setLatestEndTime(null);
 		fakeScheduleManagementSvc.setLatestStartTime(null);
 
@@ -269,13 +269,13 @@
 		vm.selectedAgents = [];
 
 		var defaultStartTime = vm.getDefaultActvityStartTime();
-		var nextTick = new Date(WFMDate.getNextTickNoEarlierThanEight());
+		var nextTick = new Date(utility.getNextTickNoEarlierThanEight());
 		expect(defaultStartTime.getHours()).toBe(nextTick.getHours());
 		expect(defaultStartTime.getMinutes()).toBe(nextTick.getMinutes());
 	});
 
 	it('should have correct default start time when no other shifts on selected date which is not today', function () {
-		var today = new Date(moment(WFMDate.nowInUserTimeZone()).add(1,'day'));
+		var today = new Date(moment(utility.nowInUserTimeZone()).add(1, 'day'));
 		fakeScheduleManagementSvc.setLatestEndTime(null);
 		fakeScheduleManagementSvc.setLatestStartTime(null);
 
@@ -292,7 +292,7 @@
 	});
 
 	it('should have later default start time than previous day over night shift end', function () {
-		var date = moment(WFMDate.nowInUserTimeZone()).add(7, 'day');
+		var date = moment(utility.nowInUserTimeZone()).add(7, 'day');
 
 		fakeScheduleManagementSvc.setLatestEndTime(date.clone().hour(10).toDate());
 		fakeScheduleManagementSvc.setLatestStartTime(date.clone().hour(9).toDate());

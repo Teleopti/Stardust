@@ -1,14 +1,18 @@
 ﻿(function() {
-	angular.module("wfm.teamSchedule").service("UtilityService", UtilityService);
+	angular.module("wfm.teamSchedule").service("UtilityService", utilityService);
 
-	UtilityService.$inject = ['$locale'];
+	utilityService.$inject = ['$locale', 'WFMDate'];
 
-	function UtilityService($locale) {
+	function utilityService($locale, WFMDate) {
 
 		var self = this;
+		var tick = 15;
 
 		self.getWeekdayNames = getWeekdayNames;
 		self.getWeekdays = getWeekDays;
+		self.getNextTick = getNextTick;
+		self.getNextTickNoEarlierThanEight = getNextTickNoEarlierThanEight;
+		self.nowInUserTimeZone = WFMDate.nowInUserTimeZone;
 			
 		function getWeekdayNames() {
 			var names = $locale.DATETIME_FORMATS.DAY;
@@ -36,6 +40,25 @@
 				});
 			}			
 			return dates;			
+		}
+		
+		function getNextTick() {
+			var nowInUserTimeZoneMoment = moment(WFMDate.nowInUserTimeZone());
+
+			var minutes = Math.ceil(nowInUserTimeZoneMoment.minute() / tick) * tick;
+			var start = nowInUserTimeZoneMoment.startOf('hour').minutes(minutes);
+			return start.format();
+		}
+
+		function getNextTickNoEarlierThanEight() {
+			var nowInUserTimeZoneMoment = moment(WFMDate.nowInUserTimeZone());
+
+			var minutes = Math.ceil(nowInUserTimeZoneMoment.minute() / tick) * tick;
+			var start = nowInUserTimeZoneMoment.startOf('hour').minutes(minutes);
+
+			start.hours() < 8 && start.hours(8) && start.minutes(minutes);
+
+			return start.format();
 		}
 	}
 })();

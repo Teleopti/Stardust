@@ -3,9 +3,9 @@
 
 	angular.module('wfm.teamSchedule').directive('addActivity', addActivityDirective);
 
-	addActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService', 'CommandCheckService'];
+	addActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleManagement', 'teamScheduleNotificationService', 'CommandCheckService'];
 
-	function addActivityCtrl(activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService, CommandCheckService) {
+	function addActivityCtrl(activityService, personSelectionSvc, utility, scheduleManagementSvc, teamScheduleNotificationService, CommandCheckService) {
 		var vm = this;
 
 		vm.label = 'AddActivity';
@@ -116,8 +116,8 @@
 				defaultStart = moment(overnightEnds).add(1, 'hour').toDate();
 			}
 
-			if (moment(wFMDateSvc.nowInUserTimeZone()).format('YYYY-MM-DD') === moment(vm.selectedDate()).format('YYYY-MM-DD')) {
-				var nextTickTime = new Date(wFMDateSvc.getNextTickNoEarlierThanEight());
+			if (moment(utility.nowInUserTimeZone()).format('YYYY-MM-DD') === moment(vm.selectedDate()).format('YYYY-MM-DD')) {
+				var nextTickTime = new Date(utility.getNextTickNoEarlierThanEight());
 				if (nextTickTime > defaultStart) {
 					defaultStart = nextTickTime;
 				}

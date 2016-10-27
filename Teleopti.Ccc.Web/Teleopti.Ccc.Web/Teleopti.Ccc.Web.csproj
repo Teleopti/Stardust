@@ -1376,6 +1376,7 @@
     <Content Include="WFM\app\teamSchedule\html\noteEditor.html" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.hideStates.spec.js" />
     <Content Include="WFM\app\teamSchedule\html\timezonePicker.tpl.html" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.component.timeline.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.timezonePicker.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.cmd.moveOverlappedActivity.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.note-editor.js" />
@@ -1612,7 +1613,6 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.datepicker.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.scheduletable.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.cmd.swapShifts.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.directive.timeline.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.viewChanger.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.groupSchedule.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.personSchedule.js" />
@@ -1671,7 +1671,7 @@
     <Content Include="WFM\app\forecasting\skill.create.controller.js" />
     <Content Include="WFM\app\people\peopleSearchInput.directive.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.controller.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.service.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.service.teamSchedule.js" />
     <Content Include="WFM\app\teamSchedule\html\schedule.html" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.personAbsence.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.personSelection.js" />
@@ -1686,10 +1686,10 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.utilities.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.validateRules.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.weekViewSchedule.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.shiftHelpers.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.service.shiftHelpers.js" />
     <Content Include="WFM\app\teamSchedule\html\timeline.html" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.timeRangePicker.directive.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.timeRangePicker.directive.spec.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.directive.timeRangePicker.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.directive.timeRangePicker.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamShedule.routes.js" />
     <Content Include="WFM\app\teamSchedule\_modules.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali-ext.js" />
