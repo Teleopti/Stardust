@@ -101,6 +101,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			return FakeDictionary;
 		}
+
+		public IResourceCalculationData ExtractResourceCalculationData(DateOnlyPeriod periodDateOnly)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void DoCalculation(DateOnlyPeriod period, IResourceCalculationData resCalcData)
+		{
+			throw new NotImplementedException();
+		}
 	}
 
 }
