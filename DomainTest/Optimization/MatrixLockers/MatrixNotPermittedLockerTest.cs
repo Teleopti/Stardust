@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.MatrixLockers
 			Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(_persistableScheduleDataList);
 			Expect.Call(_persistableScheduleData.FunctionPath).Return(_function);
 			Expect.Call(_persistableScheduleData.Period).Return(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-			Expect.Call(_persistableScheduleData.Person).Return(_person);
+			Expect.Call(_persistableScheduleData.Person).Return(_person).Repeat.Any();
 		}
 	}
 
