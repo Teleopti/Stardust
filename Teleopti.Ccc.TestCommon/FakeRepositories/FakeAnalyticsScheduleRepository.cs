@@ -58,5 +58,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
+
+		public IEnumerable<DateOnly> GetFactScheduleDeviationUnlinkedDates(int[] personPeriodIds)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

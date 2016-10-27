@@ -12,6 +12,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
@@ -21,14 +22,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsScheduleMatchingPerson));
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
 		private readonly IAnalyticsScheduleRepository _analyticsScheduleRepository;
+		private readonly IScenarioRepository _scenarioRepository;
+		private readonly IBusinessUnitRepository _businessUnitRepository;
 
-		public AnalyticsScheduleMatchingPerson(IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, IAnalyticsScheduleRepository analyticsScheduleRepository)
+		public AnalyticsScheduleMatchingPerson(IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, IAnalyticsScheduleRepository analyticsScheduleRepository, IScenarioRepository scenarioRepository, IBusinessUnitRepository businessUnitRepository)
 		{
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
 			_analyticsScheduleRepository = analyticsScheduleRepository;
+			_scenarioRepository = scenarioRepository;
+			_businessUnitRepository = businessUnitRepository;
 		}
 
-		[AnalyticsUnitOfWork]
+		[ImpersonateSystem]
+		[UnitOfWork, AnalyticsUnitOfWork]
 		[Attempts(10)]
 		public virtual void Handle(AnalyticsPersonCollectionChangedEvent @event)
 		{
@@ -36,7 +42,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			foreach (var personId in @event.PersonIdCollection)
 			{
 				var analyticsPersonPeriods = _analyticsPersonPeriodRepository.GetPersonPeriods(personId);
-				_analyticsScheduleRepository.UpdateUnlinkedPersonids(analyticsPersonPeriods.Select(x => x.PersonId).ToArray());
+				var personPeriodIds = analyticsPersonPeriods.Select(x => x.PersonId).ToArray();
+				_analyticsScheduleRepository.UpdateUnlinkedPersonids(personPeriodIds);
+
+				var dates = _analyticsScheduleRepository.GetFactScheduleDeviationUnlinkedDates(personPeriodIds);
+
+				foreach (var dateOnly in dates)
+				{
+					if (dateOnly.Date < DateTime.Now.AddDays(1))
+					{
+						_analyticsScheduleRepository.InsertStageScheduleChangedServicebus(dateOnly, personId,
+							_scenarioRepository.LoadDefaultScenario(_businessUnitRepository.Get(@event.LogOnBusinessUnitId))
+								.Id.GetValueOrDefault(), @event.LogOnBusinessUnitId, DateTime.Now);
+					}
+				}
 			}
 		}
 	}

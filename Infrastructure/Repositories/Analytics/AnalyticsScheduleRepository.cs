@@ -187,11 +187,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.Session()
 				.CreateSQLQuery(
 					$@"exec mart.etl_fact_schedule_update_unlinked_personids 
-												@person_periodids=:PersonIds
-												")
-
+							@person_periodids=:PersonIds
+							")
 				.SetString("PersonIds", string.Join(",", personPeriodIds))
 				.ExecuteUpdate();
+		}
+
+		public IEnumerable<DateOnly> GetFactScheduleDeviationUnlinkedDates(int[] personPeriodIds)
+		{
+			var dates=_analyticsUnitOfWork.Current()
+				.Session()
+				.CreateSQLQuery(
+					$@"exec mart.etl_fact_schedule_deviation_unlinked_dates 
+							@person_periodids=:PersonIds
+							")
+				.SetString("PersonIds", string.Join(",", personPeriodIds))
+				.List<DateTime>();
+			return dates.Select(x => new DateOnly(x)).ToArray();
 		}
 
 		public int GetFactScheduleRowCount(int personId)

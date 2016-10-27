@@ -51,7 +51,7 @@ FROM mart.fact_schedule_day_count f
 --			from mart.fact_schedule_deviation f
 --			inner join #person p
 --			ON p.person_id = f.person_id
---			WHERE p.valid_from_date_id_local <= f.shift_startdate_local_id or p.valid_to_date_id_local > f.shift_startdate_local_id or p.to_be_deleted=1
+--			WHERE p.valid_to_date_id_local <= f.shift_startdate_local_id or p.valid_from_date_id_local > f.shift_startdate_local_id or p.to_be_deleted=1
 -- update fact schedule deviation with correct person period id
 --UPDATE mart.fact_schedule_deviation
 --SET [person_id]=p.person_id

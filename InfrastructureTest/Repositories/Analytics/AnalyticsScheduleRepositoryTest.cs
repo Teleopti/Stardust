@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 using Person = Teleopti.Ccc.TestCommon.TestData.Analytics.Person;
 using Scenario = Teleopti.Ccc.TestCommon.TestData.Analytics.Scenario;
@@ -84,9 +86,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			insertFactSchedule(10, DateTime.Today.AddHours(8));
 		}
 
-		private void insertPerson(int personId, DateTime validFrom, DateTime validTo, bool toBeDeleted=false)
+		private void insertPerson(int personId, DateTime validFrom, DateTime validTo, bool toBeDeleted = false,
+			int validateFromDateId = 0, int validateToDateId = -2)
 		{
-			analyticsDataFactory.Setup(new Person(personId, Guid.NewGuid(), Guid.NewGuid(), "Ashley", "Andeen", validFrom, validTo, 0, -2, businessUnitId, Guid.NewGuid(), _datasource, toBeDeleted, _timeZones.UtcTimeZoneId));
+			analyticsDataFactory.Setup(new Person(personId, Guid.NewGuid(), Guid.NewGuid(), "Ashley", "Andeen", validFrom,
+				validTo, validateFromDateId, validateToDateId, businessUnitId, Guid.NewGuid(), _datasource, toBeDeleted,
+				_timeZones.UtcTimeZoneId));
 		}
 
 		private void insertFactSchedule(int personId, DateTime activityStartTime)
@@ -243,12 +248,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldUpdateFactScheduleWithUnlinkedPersonidsWhenDeleteExistingPersonPeriod()
 		{
-			insertPerson(10, new DateTime(2015, 1, 10), AnalyticsDate.Eternity.DateDate, true);
 			insertPerson(11, new DateTime(2015, 1, 5), AnalyticsDate.Eternity.DateDate);
+			insertPerson(10, new DateTime(2015, 1, 10), AnalyticsDate.Eternity.DateDate, true);
 			setupThingsForFactSchedule();
 			analyticsDataFactory.Persist();
-			insertFactSchedule(10, new DateTime(2015, 1, 20).AddHours(8));
-			insertFactSchedule(11, new DateTime(2015, 1, 26).AddHours(8));
+			insertFactSchedule(10, new DateTime(2015, 1, 7).AddHours(8));
+			insertFactSchedule(11, new DateTime(2015, 1, 15).AddHours(8));
 
 			var rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleRowCount(10));
 			rowCount.Should().Be.EqualTo(1);
@@ -285,12 +290,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldUpdateFactScheduleDayCountWithUnlinkedPersonidsWhenDeleteExistingPersonPeriod()
 		{
-			insertPerson(10, new DateTime(2015, 1, 10), AnalyticsDate.Eternity.DateDate, true);
 			insertPerson(11, new DateTime(2015, 1, 5), AnalyticsDate.Eternity.DateDate);
+			insertPerson(10, new DateTime(2015, 1, 10), AnalyticsDate.Eternity.DateDate, true);
 			setupThingsForFactScheduleDayCount();
 			analyticsDataFactory.Persist();
-			insertFactScheduleDayCount(10, 1, new DateTime(2015, 1, 20).AddHours(8));
-			insertFactScheduleDayCount(11, 2, new DateTime(2015, 1, 26).AddHours(8));
+			insertFactScheduleDayCount(10, 1, new DateTime(2015, 1, 7).AddHours(8));
+			insertFactScheduleDayCount(11, 2, new DateTime(2015, 1, 15).AddHours(8));
 
 			var rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDayCountRowCount(10));
 			rowCount.Should().Be.EqualTo(1);
@@ -301,6 +306,64 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			rowCount.Should().Be.EqualTo(0);
 			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDayCountRowCount(11));
 			rowCount.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldGetFactScheduleDeviationUnlinkedDatesWhenAddNewPersonPeriod()
+		{
+			var date1 = new DateTime(2015, 1, 10);
+			var date2 = new DateTime(2015, 1, 25);
+			var specificDate1 = new SpecificDate
+			{
+				Date = new DateOnly(date1),
+				DateId = 21
+			};
+			analyticsDataFactory.Setup(specificDate1);
+			var specificDate2 = new SpecificDate
+			{
+				Date = new DateOnly(date2),
+				DateId = 22
+			};
+			analyticsDataFactory.Setup(specificDate2);
+			insertPerson(10, date1, new DateTime(2015, 1, 24));
+			insertPerson(11, date2, AnalyticsDate.Eternity.DateDate);
+			analyticsDataFactory.Setup(new FactScheduleDeviation(specificDate1.DateId, specificDate1.DateId, 1, 10, 60, 0, 0, 60, true));
+			analyticsDataFactory.Setup(new FactScheduleDeviation(specificDate2.DateId, specificDate2.DateId, 1, 10, 60, 0, 0, 60, true));
+
+			analyticsDataFactory.Persist();
+
+			var dates = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDeviationUnlinkedDates(new[] {10, 11}));
+			dates.Single().Should().Equals(specificDate2.Date);
+		}
+
+		[Test]
+		public void ShouldGetFactScheduleDeviationUnlinkedDatesWhenDeleteExistingPersonPeriod()
+		{
+			var personPeriodId1 = 10;
+			var personPeriodId2 = 11;
+			insertPerson(personPeriodId2, new DateTime(2015, 1, 5), AnalyticsDate.Eternity.DateDate, false, 0, -2);
+			insertPerson(personPeriodId1, new DateTime(2015, 1, 10), AnalyticsDate.Eternity.DateDate, true, 0, -2);
+			var specificDate1 = new SpecificDate
+			{
+				Date = new DateOnly(2015, 1, 7),
+				DateId = 21
+			};
+			analyticsDataFactory.Setup(specificDate1);
+			var specificDate2 = new SpecificDate
+			{
+				Date = new DateOnly(2015, 1, 15),
+				DateId = 22
+			};
+			analyticsDataFactory.Setup(specificDate2);
+
+			analyticsDataFactory.Setup(new FactScheduleDeviation(specificDate1.DateId, specificDate1.DateId, 1, personPeriodId1, 60, 0, 0, 60, true));
+			analyticsDataFactory.Setup(new FactScheduleDeviation(specificDate2.DateId, specificDate2.DateId, 1, personPeriodId2, 60, 0, 0, 60, true));
+
+			analyticsDataFactory.Persist();
+
+			var dates = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDeviationUnlinkedDates(new[] { personPeriodId1, personPeriodId2 }));
+			dates.Single().Should().Equals(specificDate1.Date);
+
 		}
 	}
 }
