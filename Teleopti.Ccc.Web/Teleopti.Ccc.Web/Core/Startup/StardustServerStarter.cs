@@ -1,4 +1,3 @@
-using System.Configuration;
 using Autofac;
 using Owin;
 using Stardust.Manager;
@@ -8,13 +7,11 @@ namespace Teleopti.Ccc.Web.Core.Startup
 {
 	public class StardustServerStarter
 	{
-		private readonly IComponentContext _componentContext;
 		private readonly ILifetimeScope _scope;
 		private readonly IConfigReader _configReader;
 
-		public StardustServerStarter(IComponentContext componentContext, ILifetimeScope scope, IConfigReader configReader)
+		public StardustServerStarter(ILifetimeScope scope, IConfigReader configReader)
 		{
-			_componentContext = componentContext;
 			_scope = scope;
 			_configReader = configReader;
 		}
@@ -32,7 +29,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				_configReader.ReadValue("PurgeNodesIntervalHours", 1));
 
 			app.UseStardustManager(managerConfiguration, _scope);
-			new ManagerStarter().Start(managerConfiguration, _componentContext);
 		}
 	}
 }

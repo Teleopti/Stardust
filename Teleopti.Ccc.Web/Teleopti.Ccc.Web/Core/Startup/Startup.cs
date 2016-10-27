@@ -88,16 +88,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				application.UseAutofacMiddleware(container);
 				application.UseAutofacMvc();
 				application.UseAutofacWebApi(config);
-
-				//var managerConfiguration = new ManagerConfiguration
-				//{
-				//	ConnectionString =
-				//	ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,
-				//	Route = ConfigurationManager.AppSettings["RouteName"]
-				//};
-
-
-				//new ManagerStarter().Start(managerConfiguration, container);
 			}
 
 			catch (Exception ex)
