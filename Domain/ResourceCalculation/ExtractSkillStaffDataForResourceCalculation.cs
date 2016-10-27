@@ -19,13 +19,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public ISkillSkillStaffPeriodExtendedDictionary ExtractSkillStaffPeriodDictionary(DateOnlyPeriod periodDateOnly)
 		{
+			var resCalcData = ExtractResourceCalculationData(periodDateOnly);
+			return resCalcData.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
+		}
+
+		public IResourceCalculationData ExtractResourceCalculationData(DateOnlyPeriod periodDateOnly)
+		{
 			_loaderForResourceCalculation.PreFillInformation(periodDateOnly);
 
 			var resCalcData = _loaderForResourceCalculation.ResourceCalculationData(periodDateOnly);
 			DoCalculation(periodDateOnly, resCalcData);
 
-			var skillStaffPeriodDictionary = resCalcData.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
-			return skillStaffPeriodDictionary;
+			return resCalcData;
 		}
 
 		[LogTime]
@@ -43,5 +48,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public interface IExtractSkillStaffDataForResourceCalculation
 	{
 		ISkillSkillStaffPeriodExtendedDictionary ExtractSkillStaffPeriodDictionary(DateOnlyPeriod periodDateOnly);
+		IResourceCalculationData ExtractResourceCalculationData(DateOnlyPeriod periodDateOnly);
+		void DoCalculation(DateOnlyPeriod period, IResourceCalculationData resCalcData);
 	}
 }

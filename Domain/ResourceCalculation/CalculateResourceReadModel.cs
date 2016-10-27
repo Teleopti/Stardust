@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Interfaces.Domain;
@@ -29,9 +30,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var periodDateOnly = new DateOnlyPeriod(new DateOnly(period.StartDateTime), new DateOnly(period.EndDateTime));
 			_feedback.SendProgress($"Starting Read Model update for period {period}");
 			var timeWhenResourceCalcDataLoaded = _now.UtcDateTime();
-			var skillStaffPeriodDictionary =
-				_extractSkillStaffDataForResourceCalculation.ExtractSkillStaffPeriodDictionary(periodDateOnly);
-			var models = CreateReadModel(skillStaffPeriodDictionary, period);
+			var resCalcData =
+				_extractSkillStaffDataForResourceCalculation.ExtractResourceCalculationData(periodDateOnly);
+			var models = CreateReadModel(resCalcData.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, period);
+
+			setUseShrinkage(resCalcData, period);
+			_extractSkillStaffDataForResourceCalculation.DoCalculation(periodDateOnly, resCalcData);
+
+			updateModelsAfterCalculatingWithShrinkage(models, resCalcData.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,period);
 			// to always insert one so we don't get new jobs all the time if no forecast and no schedule
 			models.Add(new SkillStaffingInterval
 			{
@@ -43,6 +49,25 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				ForecastWithShrinkage = 0
 			});
 			_scheduleForecastSkillReadModelRepository.Persist(models, timeWhenResourceCalcDataLoaded);
+		}
+
+		private void updateModelsAfterCalculatingWithShrinkage(IList<SkillStaffingInterval> models, ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodDictionary, DateTimePeriod period)
+		{
+			if (skillSkillStaffPeriodDictionary.Keys.Count > 0)
+			{
+				foreach (var skill in skillSkillStaffPeriodDictionary.Keys)
+				{
+					foreach (var skillStaffPeriod in skillSkillStaffPeriodDictionary[skill].Values)
+					{
+						if (!period.Contains(skillStaffPeriod.Period.StartDateTime))
+							continue;
+						var model =
+							models.FirstOrDefault(w => w.SkillId.Equals(skill.Id.GetValueOrDefault()) && w.StartDateTime.Equals(skillStaffPeriod.Period.StartDateTime));
+						if (model != null)
+							model.StaffingLevelWithShrinkage = skillStaffPeriod.CalculatedResource;
+					}
+				}
+			}
 		}
 
 		[LogTime]
@@ -73,6 +98,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 			return ret;
 		}
+
+		private void setUseShrinkage(IResourceCalculationData resourceCalculationData, DateTimePeriod period)
+		{
+			var periods = resourceCalculationData.SkillStaffPeriodHolder.SkillStaffPeriodList(resourceCalculationData.Skills,
+				period);
+			foreach (var skillStaffPeriod in periods)
+			{
+				skillStaffPeriod.Payload.UseShrinkage = true;
+			}
+		}
 	}
 
 	public class SkillStaffingInterval
@@ -84,9 +119,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public double StaffingLevel { get; set; }
 		public double ForecastWithShrinkage { get; set; }
 
+		public double StaffingLevelWithShrinkage { get; set; }
+
 		public double GetForecast(bool withShrinkage)
 		{
 			return withShrinkage ? ForecastWithShrinkage : Forecast;
+		}
+
+		public double GetStaffingLevel(bool withShrinkage)
+		{
+			return withShrinkage ? StaffingLevelWithShrinkage : StaffingLevel;
 		}
 
 		public TimeSpan GetTimeSpan()
