@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GlobalSettingData
 		[ImpersonateSystem]
 		[UnitOfWork]
 		[AnalyticsUnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(CommonNameDescriptionChangedEvent @event)
 		{
 			var commonNameDescription = _globalSettingDataRepository.FindValueByKey<CommonNameDescriptionSetting>(CommonNameDescriptionSetting.Key, null);

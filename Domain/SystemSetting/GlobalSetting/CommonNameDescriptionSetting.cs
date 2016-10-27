@@ -101,12 +101,12 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 
 	    public string BuildSqlUpdateForAnalytics()
 	    {
-		    var sqlConcat = $"'{AliasFormat.Replace("'", "''")}'"; // Replace to prevent sql injections
-			sqlConcat = sqlConcat.Replace(FirstName, "' + [first_name] + '");
-			sqlConcat = sqlConcat.Replace(LastName, "' + [last_name] + '");
-			sqlConcat = sqlConcat.Replace(EmployeeNumber, "' + [employment_number] + '");
-		    sqlConcat = sqlConcat.Replace("'' + ", "");
-			sqlConcat = sqlConcat.Replace(" + ''", "");
+		    var sqlConcat = $"N'{AliasFormat.Replace("'", "''")}'"; // Replace to prevent sql injections
+			sqlConcat = sqlConcat.Replace(FirstName, "' + [first_name] + N'");
+			sqlConcat = sqlConcat.Replace(LastName, "' + [last_name] + N'");
+			sqlConcat = sqlConcat.Replace(EmployeeNumber, "' + [employment_number] + N'");
+		    sqlConcat = sqlConcat.Replace("N'' + ", "");
+			sqlConcat = sqlConcat.Replace(" + N''", "");
 			return $"UPDATE mart.dim_person SET person_name = SUBSTRING({sqlConcat}, 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit";
 		}
     }
