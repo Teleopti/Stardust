@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTestWithStaticDependenciesAvoidUse]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
+	[LoggedOnAppDomain]
 	public class IntradayOptimizationCallbackDesktopTest : ISetup
 	{
 		public OptimizeIntradayIslandsDesktop Target;
