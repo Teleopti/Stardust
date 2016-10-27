@@ -13,7 +13,7 @@
 		self.normalizePersonScheduleVm = normalizePersonScheduleVm;
 
 
-		function decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray) {
+		function decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray, currentDate) {
 			var intersectedShiftDays = normalizedScheduleDataArray.filter(function(day) {
 				return day.shiftRange && timeRangeIntersect(day.shiftRange, targetTimeRange);
 			});
@@ -28,8 +28,8 @@
 				}				
 			}
 
-			var startInEmptyDays = normalizedScheduleDataArray.filter(function(day) {
-				return !day.shiftRange && timeInTimeRange(targetTimeRange.startTime, day.timeRange);
+			var startInEmptyDays = normalizedScheduleDataArray.filter(function (day) {				
+				return day.date === currentDate && !day.shiftRange;
 			});
 
 			if (startInEmptyDays.length !== 1) return null;
@@ -37,25 +37,36 @@
 		}
 
 		function normalizePersonScheduleVm(personScheduleVm, currentTimezone) {
-			var result = {
-				date: personScheduleVm.Date
-			};
+			var dates = [moment(personScheduleVm.Date).add(-1, 'day').format('YYYY-MM-DD'), personScheduleVm.Date, moment(personScheduleVm.Date).add(1, 'day').format('YYYY-MM-DD')];
 
-			var currentDayStart = moment(personScheduleVm.Date).startOf('day');
-			var currentDayEnd = moment(personScheduleVm.Date).add(24, 'hour');
-
-			result.timeRange = {
-				startTime: moment($filter('timezone')(currentDayStart.format('YYYY-MM-DD hh:mm'), currentTimezone, personScheduleVm.Timezone)),
-				endTime: moment($filter('timezone')(currentDayEnd.format('YYYY-MM-DD hh:mm'), currentTimezone, personScheduleVm.Timezone))
-			}
+			var result = dates.map(function (date) {
+				var dayStart = moment(date).startOf('day');
+				var dayEnd = moment(date).add(24, 'hour');
+				var timeRangeForDate = {
+					startTime: moment($filter('timezone')(dayStart.format('YYYY-MM-DD HH:mm'), currentTimezone, personScheduleVm.Timezone.IanaId)),
+					endTime: moment($filter('timezone')(dayEnd.format('YYYY-MM-DD HH:mm'), currentTimezone, personScheduleVm.Timezone.IanaId))
+				}
+				return {
+					date: date,
+					timeRange: timeRangeForDate,
+					shiftRange: null
+				}
+			});
 
 			if (personScheduleVm.Shifts && personScheduleVm.Shifts.length > 0) {
-				result.shiftRange = {
-					startTime: moment(personScheduleVm.ScheduleStartTime),
-					endTime: moment(personScheduleVm.ScheduleEndTime)
-				};
-			} else {
-				result.shiftRange = null;
+				angular.forEach(personScheduleVm.Shifts, function (shift) {
+					if (shift.Projections.length === 0) {
+						return;
+					}
+					var shiftStart = moment(shift.Projections[0].Start);
+					var shiftEnd = moment(shift.Projections[shift.Projections.length - 1].Start)
+						.add(shift.Projections[shift.Projections.length - 1].Minutes, 'minute');
+					var index = dates.indexOf(shift.Date);
+					result[index].shiftRange = {
+						startTime: shiftStart,
+						endTime: shiftEnd
+					};
+				});
 			}
 
 			return result;			
@@ -76,11 +87,6 @@
 			return (timeRangeA.startTime <= timeRangeB.startTime && timeRangeA.endTime >= timeRangeB.startTime) ||
 				(timeRangeB.startTime <= timeRangeA.startTime && timeRangeB.endTime >= timeRangeA.startTime);
 		}
-
-		function timeInTimeRange(time, timeRange) {
-			return timeRange.startTime <= time && time < timeRange.endTime;
-		}
-
 	}
 
 })();

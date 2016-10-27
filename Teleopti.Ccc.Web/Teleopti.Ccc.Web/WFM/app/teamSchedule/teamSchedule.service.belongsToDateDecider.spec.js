@@ -1,4 +1,4 @@
-﻿describe('belongs to date decider service tests', function() {
+﻿fdescribe('belongs to date decider service tests', function() {
 
 	var target;
 
@@ -47,7 +47,7 @@
 
 		var targetTimeRange = { startTime: moment('2016-07-02 04:00'), endTime: moment('2016-07-02 08:00') };
 
-		var result = target.decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray);
+		var result = target.decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray, '2016-07-02');
 
 		expect(result).toEqual('2016-07-02');
 
@@ -89,7 +89,7 @@
 
 		var targetTimeRange = { startTime: moment('2016-07-02 22:00'), endTime: moment('2016-07-03 04:00') };
 
-		var result = target.decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray);
+		var result = target.decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray, '2016-07-02');
 
 		expect(result).toEqual('2016-07-02');
 
@@ -134,7 +134,7 @@
 
 		var targetTimeRange = { startTime: moment('2016-07-02 04:00'), endTime: moment('2016-07-02 09:00') };
 
-		var result = target.decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray);
+		var result = target.decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray, '2016-07-02');
 
 		expect(result).toBeNull();
 
@@ -179,7 +179,7 @@
 
 		var targetTimeRange = { startTime: moment('2016-07-02 04:00'), endTime: moment('2016-07-02 05:00') };
 
-		var result = target.decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray);
+		var result = target.decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray, '2016-07-02');
 
 		expect(result).toBeNull();
 
@@ -218,7 +218,7 @@
 
 		var targetTimeRange = { startTime: moment('2016-07-02 22:00'), endTime: moment('2016-07-03 14:00') };
 
-		var result = target.decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray);
+		var result = target.decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray, '2016-07-02');
 
 		expect(result).toBeNull();
 
@@ -257,10 +257,54 @@
 
 		var targetTimeRange = { startTime: moment('2016-07-02 08:00'), endTime: moment('2016-07-02 14:00') };
 
-		var result = target.decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray);
+		var result = target.decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray, '2016-07-02');
 
 		expect(result).toBeNull();
 
+	});
+
+	it('should get normalized schedule data', function () {
+		var timezone1 = {
+			IanaId: "Asia/Shanghai",
+			DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
+		};
+		var currentTimezone = "Europe/Berlin";
+
+		var personScheduleVm = {
+			Date: '2016-07-02',
+			Timezone: timezone1,
+			Shifts: [
+			{
+				Date: '2016-07-01',
+				Projections: [],
+			},
+			{
+				Date: '2016-07-02',
+				Projections: [
+				{
+					Start: '2016-07-02 08:00',
+					End: '2016-07-02 17:00',
+					Minutes: 540
+				}]
+			}]
+		};
+
+		var result = target.normalizePersonScheduleVm(personScheduleVm, currentTimezone);
+
+		expect(result.length).toEqual(3);
+		expect(result[0].date).toEqual('2016-07-01');
+		expect(result[0].timeRange.startTime.format('YYYY-MM-DD HH:mm')).toEqual('2016-06-30 18:00');
+		expect(result[0].timeRange.endTime.format('YYYY-MM-DD HH:mm')).toEqual('2016-07-01 18:00');
+		expect(result[0].shiftRange).toBeNull();
+		expect(result[1].date).toEqual('2016-07-02');
+		expect(result[1].timeRange.startTime.format('YYYY-MM-DD HH:mm')).toEqual('2016-07-01 18:00');
+		expect(result[1].timeRange.endTime.format('YYYY-MM-DD HH:mm')).toEqual('2016-07-02 18:00');
+		expect(result[1].shiftRange.startTime.format('YYYY-MM-DD HH:mm')).toEqual('2016-07-02 08:00');
+		expect(result[1].shiftRange.endTime.format('YYYY-MM-DD HH:mm')).toEqual('2016-07-02 17:00');
+		expect(result[2].date).toEqual('2016-07-03');
+		expect(result[2].timeRange.startTime.format('YYYY-MM-DD HH:mm')).toEqual('2016-07-02 18:00');
+		expect(result[2].timeRange.endTime.format('YYYY-MM-DD HH:mm')).toEqual('2016-07-03 18:00');
+		expect(result[2].shiftRange).toBeNull();
 	});
 
 });
