@@ -390,7 +390,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			public IEnumerable<scheduleData> schedules;
 			public IEnumerable<AgentState> agentStates;
-			public Lazy<sharedData> shared;
+			public MappingsState mappings;
 		}
 
 		public interface IStrategy<T>
@@ -468,7 +468,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						return new transactionData
 						{
 							agentStates = agentStates,
-							shared = shared,
+							mappings = shared.Value.mappings,
 							schedules = schedules
 						};
 					});
@@ -478,7 +478,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Parallel.ForEach(
 				transactions,
 				new ParallelOptions {MaxDegreeOfParallelism = strategy.ParallelTransactions},
-				sharedData =>
+				data =>
 				{
 					// make retry and warn logging an aspect?
 					var attempt = 1;
@@ -486,7 +486,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					{
 						try
 						{
-							Transaction(tenant, strategy, sharedData);
+							Transaction(tenant, strategy, data);
 							break;
 						}
 						catch (DeadLockVictimException e)
@@ -529,7 +529,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			WithUnitOfWork(() =>
 			{
 				var data = transactionData.Invoke();
-				var shared = data.shared.Value;
 
 				data.agentStates.ForEach(state =>
 				{
@@ -542,7 +541,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						state.SiteId.GetValueOrDefault(),
 						strategy.GetStored(state),
 						() => data.schedules.Single(s => s.PersonId == state.PersonId),
-						s => shared.mappings,
+						s => data.mappings,
 						strategy.UpdateAgentState,
 						_stateMapper,
 						_appliedAdherence,
