@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.DomainTest.ResourceCalculation;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			_finderResult = new WorkShiftFinderResult(PersonFactory.CreatePerson("bill"), new DateOnly(2009, 2, 3));
 
-			_target = new WorkTimeLimitationShiftFilter();
+			_target = new WorkTimeLimitationShiftFilter(new SwedishCulture());
 		}
 
 		[Test]

@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				new PersonalShiftsShiftFilter(new PersonalShiftMeetingTimeChecker()),
 				new ShiftCategoryRestrictionShiftFilter(),
 				new TimeLimitsRestrictionShiftFilter(validDateTimePeriodShiftFilter, new LatestStartTimeLimitationShiftFilter(),
-					new EarliestEndTimeLimitationShiftFilter()), new WorkTimeLimitationShiftFilter(),
+					new EarliestEndTimeLimitationShiftFilter()), new WorkTimeLimitationShiftFilter(new SwedishCulture()),
 				new ShiftLengthDecider(new DesiredShiftLengthCalculator(new SchedulePeriodTargetTimeCalculator())),
 				new WorkShiftMinMaxCalculator(new PossibleMinMaxWorkShiftLengthExtractorForTest(),
 					new SchedulePeriodTargetTimeCalculatorForTest(new MinMax<TimeSpan>(TimeSpan.FromHours(8), TimeSpan.FromHours(8))), new WorkShiftWeekMinMaxCalculator()),

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -13,6 +12,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 	public class WorkTimeLimitationShiftFilter : IWorkTimeLimitationShiftFilter
 	{
+		private readonly IUserCulture _userCulture;
+
+		public WorkTimeLimitationShiftFilter(IUserCulture userCulture)
+		{
+			_userCulture = userCulture;
+		}
+
 		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult)
 		{
 			if (shiftList == null) return null;
@@ -30,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 						workShiftsWithinMinMax.Add(proj);
 				}
 				finderResult.AddFilterResults(
-				new WorkShiftFilterResult(string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, UserTexts.Resources.FilterOnWorkTimeLimitationsWithParams, restriction.WorkTimeLimitation.StartTimeString, restriction.WorkTimeLimitation.EndTimeString),
+				new WorkShiftFilterResult(string.Format(_userCulture.GetCulture(), UserTexts.Resources.FilterOnWorkTimeLimitationsWithParams, restriction.WorkTimeLimitation.StartTimeString, restriction.WorkTimeLimitation.EndTimeString),
 										  shiftList.Count, workShiftsWithinMinMax.Count));
 			}
 			else
