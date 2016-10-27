@@ -473,9 +473,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			GoToPage("wfm/#/rta");
 		}
 
-		public static void GotoRealTimeAdherenceForTeamsOnSite(Guid buId, Guid siteId)
+		public static void GotoRealTimeAdherenceForTeamsOnSite(Guid siteId)
 		{
 			GoToPage("wfm/#/rta/teams/" + siteId);
+		}
+		
+		public static void GotoRealTimeAdherenceForSkillForTeamsOnSite(Guid skillId, Guid siteId)
+		{
+			GoToPage("wfm/#/rta/teams-by-skill/?siteIds=" + siteId + "&skillIds=" + skillId);
+		}
+
+		public static void GotoRealTimeAdherenceForSkillForSites(Guid skillId)
+		{
+
+			GoToPage("wfm/#/rta/sites-by-skill/?skillIds=" + skillId);
+		}
+
+		public static void GotoRealTimeAdherenceForSkillAreaForSites(Guid skillAreaId)
+		{
+			GoToPage("wfm/#/rta/sites-by-skill-area/?skillAreaId=" + skillAreaId);
+		}
+
+		public static void GotoRealTimeAdherenceForSkillAreaForTeamsOnSite(Guid skillAreaId, Guid siteId)
+		{
+			GoToPage("wfm/#/rta/teams-by-skill-area/?siteIds=" + siteId + "&skillAreaId=" + skillAreaId);
 		}
 
 		public static void GotoRealTimeAdherenceAgentsOnTeam(Guid businessUnitId, Guid siteId, Guid teamId)
@@ -483,12 +504,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			GoToPage("wfm/#/rta/agents/" + siteId + "/" + teamId);
 		}
 
-		public static void GotoRealTimeAdherenceAllAgentsOnTeam(Guid businessUnitId, Guid siteId, Guid teamId)
+		public static void GotoRealTimeAdherenceAllAgentsOnTeam(Guid siteId, Guid teamId)
 		{
 			GoToPage("wfm/#/rta/agents/" + siteId + "/" + teamId + "?showAllAgents=true");
 		}
 
-		public static void GotoRealTimeAdherenceAgentsWithoutStateOnTeam(Guid businessUnitId, Guid siteId, Guid teamId, Guid state)
+		public static void GotoRealTimeAdherenceAgentsWithoutStateOnTeam(Guid siteId, Guid teamId, Guid state)
 		{
 			GoToPage("wfm/#/rta/agents/" + siteId + "/" + teamId + "?es=" + state);
 		}
@@ -533,25 +554,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
             GoToPage("wfm/#/reports/leaderboard");
         }
 
-		public static void GotoRealTimeAdherenceForSkillForTeamsOnSite(Guid skillId, Guid buId, Guid siteId)
-		{
-			GoToPage("wfm/#/rta/teams-by-skill/?siteIds="+ siteId+"&skillIds=" + skillId);
-		}
-
-		public static void GotoRealTimeAdherenceForSkillForSites(Guid skillId)
-		{
-			
-			GoToPage("wfm/#/rta/sites-by-skill/?skillIds=" + skillId);
-		}
-
-		public static void GotoRealTimeAdherenceForSkillAreaForSites(Guid skillAreaId)
-		{
-			GoToPage("wfm/#/rta/sites-by-skill-area/?skillAreaId=" + skillAreaId);
-		}
-
-		public static void GotoRealTimeAdherenceForSkillAreaForTeamsOnSite(Guid skillAreaId, Guid buId, Guid siteId)
-		{
-			GoToPage("wfm/#/rta/teams-by-skill-area/?siteIds=" + siteId + "&skillAreaId=" + skillAreaId);
-		}
 	}
 }

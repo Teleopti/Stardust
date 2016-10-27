@@ -414,7 +414,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view Real time adherence for skill '(.*)' for sites")]
 		public void WhenIViewRealTimeAdherenceForSkillForSites(string skill)
 		{
-			
 			TestControllerMethods.Logon();
 			Navigation.GotoRealTimeAdherenceForSkillForSites(IdForSkill(skill));
 		}
@@ -423,7 +422,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIViewRealTimeAdherenceForSkillForTeamsOnSite(string skill, string site)
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoRealTimeAdherenceForSkillForTeamsOnSite(IdForSkill(skill), buIdForSite(site), IdForSite(site));
+			Navigation.GotoRealTimeAdherenceForSkillForTeamsOnSite(IdForSkill(skill), IdForSite(site));
 		}
 
 		[When(@"I view Real time adherence for skill area '(.*)' for sites")]
@@ -437,7 +436,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIViewRealTimeAdherenceForSkillAreaForTeamsOnSite(string skillarea, string site)
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoRealTimeAdherenceForSkillAreaForTeamsOnSite(IdForSkillArea(skillarea), buIdForSite(site), IdForSite(site));
+			Navigation.GotoRealTimeAdherenceForSkillAreaForTeamsOnSite(IdForSkillArea(skillarea), IdForSite(site));
 		}
 
 
@@ -459,7 +458,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIViewRealTimeAdherenceForTeamsOnSite(string site)
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoRealTimeAdherenceForTeamsOnSite(buIdForSite(site), IdForSite(site));
+			Navigation.GotoRealTimeAdherenceForTeamsOnSite(IdForSite(site));
 		}
 
 		[When(@"I view manage adherence view for agent '(.*)'")]
@@ -628,14 +627,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIViewRealTimeAdherenceForAllAgentsOnTeam(string team)
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoRealTimeAdherenceAllAgentsOnTeam(buIdForTeam(team), SiteIdForTeam(team), IdForTeam(team));
+			Navigation.GotoRealTimeAdherenceAllAgentsOnTeam(SiteIdForTeam(team), IdForTeam(team));
 		}
 
 		[When(@"I am viewing real time adherence for agents without state '(.*)' on team '(.*)'")]
 		public void WhenIAmViewingRealTimeAdherenceWithoutStateForAgentsOnTeam(string state, string team)
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoRealTimeAdherenceAgentsWithoutStateOnTeam(buIdForTeam(team), SiteIdForTeam(team), IdForTeam(team), IdForState(state));
+			Navigation.GotoRealTimeAdherenceAgentsWithoutStateOnTeam(SiteIdForTeam(team), IdForTeam(team), IdForState(state));
 		}
 		
 		[When(@"I view real time adherence for agents with skills '(.*)'")]
