@@ -146,15 +146,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					});
 		}
 
-		public IEnumerable<AgentStateFound> Find(ExternalLogon externalLogon, DeadLockVictim deadLockVictim)
-		{
-			lock (_lock)
-				return _data
-					.Where(x => x.DataSourceId == externalLogon.DataSourceId && x.UserCode == externalLogon.UserCode)
-					.Select(x => x.State)
-					.ToArray();
-		}
-
 		public IEnumerable<AgentStateFound> Find(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim)
 		{
 			lock (_lock)

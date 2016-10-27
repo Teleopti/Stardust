@@ -291,20 +291,6 @@ WHERE
 		}
 
 		[LogInfo]
-		public virtual IEnumerable<AgentStateFound> Find(ExternalLogon externalLogon, DeadLockVictim deadLockVictim)
-		{
-			setDeadLockPriority(deadLockVictim);
-
-			var sql = SelectAgentState + "WITH (UPDLOCK, ROWLOCK) WHERE DataSourceIdUserCode = :DataSourceIdUserCode";
-			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetParameter("DataSourceIdUserCode", $"{externalLogon.DataSourceId}__{externalLogon.UserCode}")
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
-				.SetReadOnly(true)
-				.List<AgentStateFound>()
-				;
-		}
-
-		[LogInfo]
 		public virtual IEnumerable<AgentStateFound> Find(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim)
 		{
 			setDeadLockPriority(deadLockVictim);

@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IEnumerable<ExternalLogon> FindAll();
 		IEnumerable<ExternalLogonForCheck> FindForCheck();
 		IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState);
-		IEnumerable<AgentStateFound> Find(ExternalLogon externalLogon, DeadLockVictim deadLockVictim);
 		IEnumerable<AgentStateFound> Find(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim);
 		IEnumerable<AgentState> GetStates();
 		void Update(AgentState model, bool updateSchedule);
@@ -37,5 +36,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		// if sync used FindAll this can be removed
 		IEnumerable<AgentState> Get(IEnumerable<Guid> personIds);
 
+	}
+
+	public static class AgentStatePersisterExtensions
+	{
+		public static IEnumerable<AgentStateFound> Find(this IAgentStatePersister instance, ExternalLogon externalLogon, DeadLockVictim deadLockVictim)
+		{
+			return instance.Find(new[] {externalLogon}, deadLockVictim);
+		}
 	}
 }
