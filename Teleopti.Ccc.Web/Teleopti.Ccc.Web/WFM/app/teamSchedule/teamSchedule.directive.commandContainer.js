@@ -7,6 +7,7 @@
 		var vm = this;
 
 		vm.getDate = function () { return vm.date; };
+		vm.getCurrentTimezone = function () { return vm.timezone; };
 
 		vm.convertTimeToCurrentUserTimezone = function(time) {
 			return $filter('timezone')(time, null, vm.timezone);

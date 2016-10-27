@@ -49,7 +49,8 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 					PersonAbsenceCount: absences.length,
 					PersonActivityCount: activities.length,
 					SelectedAbsences: absences,
-					SelectedActivities: activities
+					SelectedActivities: activities,
+					PersonScheduleVm: personSchedule
 				};
 			} else if (!personSchedule.IsSelected && svc.personInfo[personSchedule.PersonId]) {
 				delete svc.personInfo[personSchedule.PersonId];
@@ -77,6 +78,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 					personSchedule.IsSelected = false;
 
 				if (svc.personInfo[personId]) {
+					svc.personInfo[personId].PersonScheduleVm = personSchedule;
 					svc.personInfo[personId].ScheduleEndTime = personSchedule.ScheduleEndTime();
 					svc.personInfo[personId].AllowSwap = personSchedule.AllowSwap();
 					var shiftLength = personSchedule.Shifts.length;
@@ -150,7 +152,8 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 					PersonAbsenceCount: 0,
 					PersonActivityCount: 0,
 					SelectedAbsences: [],
-					SelectedActivities: []
+					SelectedActivities: [],
+					PersonScheduleVm: personSchedule
 				};
 
 
@@ -286,7 +289,8 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 					PersonAbsenceCount: schedule.PersonAbsenceCount,
 					PersonActivityCount: schedule.PersonActivityCount,
 					SelectedAbsences: schedule.SelectedAbsences,
-					SelectedActivities: schedule.SelectedActivities
+					SelectedActivities: schedule.SelectedActivities,
+					PersonScheduleVm: schedule.PersonScheduleVm
 				});
 			}
 			return result;

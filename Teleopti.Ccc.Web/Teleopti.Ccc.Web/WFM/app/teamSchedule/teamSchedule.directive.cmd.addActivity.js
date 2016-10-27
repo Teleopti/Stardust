@@ -3,9 +3,9 @@
 
 	angular.module('wfm.teamSchedule').directive('addActivity', addActivityDirective);
 
-	addActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleManagement', 'teamScheduleNotificationService', 'CommandCheckService'];
+	addActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleManagement', 'teamScheduleNotificationService', 'CommandCheckService', 'belongsToDateDecider'];
 
-	function addActivityCtrl(activityService, personSelectionSvc, utility, scheduleManagementSvc, teamScheduleNotificationService, CommandCheckService) {
+	function addActivityCtrl(activityService, personSelectionSvc, utility, scheduleManagementSvc, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider) {
 		var vm = this;
 
 		vm.label = 'AddActivity';
@@ -22,12 +22,29 @@
 			vm.availableActivitiesLoaded = true;
 		});
 
+		function decideBelongsToDates(targetTimeRange) {			
+			return vm.selectedAgents.map(function (selectedAgent) {
+				return belongsToDateDecider.decideBelongsToDate(targetTimeRange,
+					belongsToDateDecider.normalizePersonScheduleVm(selectedAgent.PersonScheduleVm, vm.currentTimezone()),
+					moment(vm.selectedDate()).format('YYYY-MM-DD'));
+			});
+		}
+
+		function getTimeRangeMoment() {
+			return { startTime: moment(vm.timeRange.startTime), endTime: moment(vm.timeRange.endTime) };
+		}
+
 		vm.isInputValid = function () {
 			if (vm.timeRange == undefined || vm.selectedActivityId == undefined || vm.timeRange.startTime == undefined) return false;
 
-			var invalidAgents = vm.selectedAgents.filter(function (agent) { return !vm.isNewActivityAllowedForAgent(agent, vm.timeRange); });
-			vm.notAllowedNameListString = invalidAgents.map(function (x) { return x.Name; }).join(', ');
+			var belongsToDates = decideBelongsToDates(getTimeRangeMoment());			
+			var invalidAgents = [];
 
+			for (var i = 0; i < belongsToDates.length; i++) {
+				if (!belongsToDates[i]) invalidAgents.push(vm.selectedAgents[i]);
+			}
+
+			vm.notAllowedNameListString = invalidAgents.map(function (x) { return x.Name; }).join(', ');
 			return invalidAgents.length === 0;
 		};
 
@@ -79,6 +96,7 @@
 				PersonIds: vm.selectedAgents.map(function (agent) {
 					return agent.PersonId;
 				}),
+				Dates: decideBelongsToDates(getTimeRangeMoment()),
 				Date: vm.selectedDate(),
 				StartTime: vm.convertTime(moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm")),
 				EndTime: vm.convertTime(moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm")),
@@ -169,6 +187,7 @@
 				selfCtrl = ctrls[1];
 
 			scope.vm.selectedDate = containerCtrl.getDate;
+			scope.vm.currentTimezone = containerCtrl.getCurrentTimezone;
 			scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
 			scope.vm.trackId = containerCtrl.getTrackId();
 			scope.vm.getActionCb = containerCtrl.getActionCb;

@@ -14,6 +14,10 @@
 
 
 		function decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray, currentDate) {
+			console.log('targetTimeRange', targetTimeRange, 'normalizedScheduleDataArray', normalizedScheduleDataArray, 'currentDate', currentDate);
+
+
+
 			var intersectedShiftDays = normalizedScheduleDataArray.filter(function(day) {
 				return day.shiftRange && timeRangeIntersect(day.shiftRange, targetTimeRange);
 			});
@@ -29,7 +33,7 @@
 			}
 
 			var startInEmptyDays = normalizedScheduleDataArray.filter(function (day) {				
-				return day.date === currentDate && !day.shiftRange;
+				return day.date === currentDate && !day.shiftRange && targetTimeRange.startTime >= day.timeRange.startTime && targetTimeRange.startTime < day.timeRange.endTime;
 			});
 
 			if (startInEmptyDays.length !== 1) return null;
@@ -37,6 +41,7 @@
 		}
 
 		function normalizePersonScheduleVm(personScheduleVm, currentTimezone) {
+			
 			var dates = [moment(personScheduleVm.Date).add(-1, 'day').format('YYYY-MM-DD'), personScheduleVm.Date, moment(personScheduleVm.Date).add(1, 'day').format('YYYY-MM-DD')];
 
 			var result = dates.map(function (date) {
@@ -69,6 +74,7 @@
 				});
 			}
 
+			
 			return result;			
 		}
 
