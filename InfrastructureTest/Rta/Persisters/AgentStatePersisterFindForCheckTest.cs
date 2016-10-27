@@ -25,13 +25,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				ExternalLogons = new[] { new ExternalLogon { UserCode = "user" } }
 			}, DeadLockVictim.Yes);
 
-			var result = Persister.FindForCheck("2016-10-26 12:00".Utc()).SingleOrDefault();
+			var result = Persister.FindForCheck().SingleOrDefault();
 
 			result.UserCode.Should().Be("user");
+			result.NextCheck.Should().Be(null);
 		}
 
 		[Test]
-		public void ShouldFindOnTime()
+		public void ShouldFindWithTime()
 		{
 			var person = Guid.NewGuid();
 			Persister.Prepare(new AgentStatePrepare
@@ -45,33 +46,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				NextCheck = "2016-10-26 12:00".Utc()
 			}, true);
 
-			var result = Persister.FindForCheck("2016-10-26 12:00".Utc()).SingleOrDefault();
+			var result = Persister.FindForCheck().SingleOrDefault();
 
 			result.UserCode.Should().Be("user");
+			result.NextCheck.Should().Be("2016-10-26 12:00".Utc());
 		}
 
 		[Test]
-		public void ShouldFindPassedTime()
-		{
-			var person = Guid.NewGuid();
-			Persister.Prepare(new AgentStatePrepare
-			{
-				PersonId = person,
-				ExternalLogons = new[] { new ExternalLogon { UserCode = "user" } }
-			}, DeadLockVictim.Yes);
-			Persister.Update(new AgentState
-			{
-				PersonId = person,
-				NextCheck = "2016-10-26 12:00".Utc()
-			}, true);
-
-			var result = Persister.FindForCheck("2016-10-26 12:02".Utc()).SingleOrDefault();
-
-			result.UserCode.Should().Be("user");
-		}
-
-		[Test]
-		public void ShouldFindNullTime()
+		public void ShouldFindWithoutTime()
 		{
 			var person = Guid.NewGuid();
 			Persister.Prepare(new AgentStatePrepare
@@ -85,33 +67,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				NextCheck = null
 			}, true);
 
-			var result = Persister.FindForCheck("2016-10-26 12:00".Utc()).SingleOrDefault();
+			var result = Persister.FindForCheck().SingleOrDefault();
 
 			result.UserCode.Should().Be("user");
+			result.NextCheck.Should().Be(null);
 		}
 
 		[Test]
-		public void ShouldNotFindFutureCheck()
-		{
-			var person = Guid.NewGuid();
-			Persister.Prepare(new AgentStatePrepare
-			{
-				PersonId = person,
-				ExternalLogons = new[] { new ExternalLogon { UserCode = "user" } }
-			}, DeadLockVictim.Yes);
-			Persister.Update(new AgentState
-			{
-				PersonId = person,
-				NextCheck = "2016-10-26 12:01".Utc()
-			}, true);
-
-			var result = Persister.FindForCheck("2016-10-26 12:00".Utc());
-
-			result.Should().Be.Empty();
-		}
-
-		[Test]
-		public void ShouldFindAfterScheduleInvalidation()
+		public void ShouldFindNoTimeAfterScheduleInvalidation()
 		{
 			var person = Guid.NewGuid();
 			Persister.Prepare(new AgentStatePrepare
@@ -126,9 +89,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			}, true);
 			Persister.InvalidateSchedules(person, DeadLockVictim.Yes);
 
-			var result = Persister.FindForCheck("2016-10-26 12:00".Utc()).SingleOrDefault();
+			var result = Persister.FindForCheck().SingleOrDefault();
 
 			result.UserCode.Should().Be("user");
+			result.NextCheck.Should().Be(null);
 		}
 
 

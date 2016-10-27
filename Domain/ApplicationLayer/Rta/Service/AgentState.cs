@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -18,6 +17,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		public int DataSourceId { get; set; }
 		public string UserCode { get; set; }
+	}
+
+	public class ExternalLogonForCheck : ExternalLogon
+	{
+		public DateTime? NextCheck { get; set; }
 	}
 
 	public class AgentStateFound : AgentState

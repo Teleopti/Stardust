@@ -81,18 +81,25 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			lock (_lock)
 				return _data
 					.GroupBy(x => x.PersonId, (guid, states) => states.First())
-					.Select(x => new ExternalLogon {DataSourceId = x.DataSourceId, UserCode = x.UserCode})
+					.Select(x => new ExternalLogon
+					{
+						DataSourceId = x.DataSourceId,
+						UserCode = x.UserCode
+					})
 					.ToArray();
 		}
 
-		public IEnumerable<ExternalLogon> FindForCheck(DateTime time)
+		public IEnumerable<ExternalLogonForCheck> FindForCheck()
 		{
 			lock (_lock)
 				return _data
-					.Select(x => x.State)
-					.Where(s => s.NextCheck == null || s.NextCheck <= time)
 					.GroupBy(x => x.PersonId, (guid, states) => states.First())
-					.Select(x => new ExternalLogon {DataSourceId = x.DataSourceId, UserCode = x.UserCode})
+					.Select(x => new ExternalLogonForCheck
+					{
+						DataSourceId = x.DataSourceId,
+						UserCode = x.UserCode,
+						NextCheck = x.State.NextCheck
+					})
 					.ToArray();
 		}
 
@@ -103,7 +110,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					.Select(x => x.State)
 					.Where(s => s.SourceId == sourceId && (s.BatchId < snapshotId || s.BatchId == null) && s.StateCode != loggedOutState)
 					.GroupBy(x => x.PersonId, (guid, states) => states.First())
-					.Select(x => new ExternalLogon {DataSourceId = x.DataSourceId, UserCode = x.UserCode})
+					.Select(x => new ExternalLogon
+					{
+						DataSourceId = x.DataSourceId,
+						UserCode = x.UserCode
+					})
 					.ToArray();
 		}
 

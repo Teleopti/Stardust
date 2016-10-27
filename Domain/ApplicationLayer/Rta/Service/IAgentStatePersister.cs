@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		// rta service stuff
 		[RemoveMeWithToggle(Toggles.RTA_FasterActivityCheck_41380)]
 		IEnumerable<ExternalLogon> FindAll();
-		IEnumerable<ExternalLogon> FindForCheck(DateTime time);
+		IEnumerable<ExternalLogonForCheck> FindForCheck();
 		IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState);
 		IEnumerable<AgentStateFound> Find(ExternalLogon externalLogon, DeadLockVictim deadLockVictim);
 		IEnumerable<AgentStateFound> Find(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim);

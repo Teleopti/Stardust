@@ -252,21 +252,18 @@ WHERE
 		}
 
 		[LogInfo]
-		public virtual IEnumerable<ExternalLogon> FindForCheck(DateTime time)
+		public virtual IEnumerable<ExternalLogonForCheck> FindForCheck()
 		{
 			return _unitOfWork.Current().Session().CreateSQLQuery(@"
 SELECT
 	PersonId,
-	DataSourceIdUserCode
+	DataSourceIdUserCode,
+	NextCheck
 FROM [dbo].[AgentState] WITH (NOLOCK)
-WHERE
-	NextCheck <= :Time OR
-	NextCheck IS NULL
 ")
-				.SetParameter("Time", time)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalExternalLogon)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalExternalLogonForCheck)))
 				.SetReadOnly(true)
-				.List<internalExternalLogon>()
+				.List<internalExternalLogonForCheck>()
 				.GroupBy(x => x.PersonId, (guid, states) => states.First())
 				.ToArray();
 		}
@@ -357,6 +354,17 @@ WHERE
 
 		private static string SelectAgentState = @"SELECT * FROM [dbo].[AgentState] ";
 
+		private static void parse(string value, Action<Tuple<int, string>> split)
+		{
+			if (string.IsNullOrEmpty(value))
+				return;
+			var arr = value.Split('_');
+			split.Invoke(new Tuple<int, string>(
+				int.Parse(arr[0]),
+				arr[2]
+			));
+		}
+
 		private class internalAgentState : AgentStateFound
 		{
 			public new string Schedule { set
@@ -373,11 +381,28 @@ WHERE
 			{
 				set
 				{
-					if (string.IsNullOrEmpty(value))
-						return;
-					var x = value.Split('_');
-					DataSourceId = int.Parse(x[0]);
-					UserCode = x[2];
+					parse(value, x =>
+					{
+						DataSourceId = x.Item1;
+						UserCode = x.Item2;
+					});
+				}
+			}
+		}
+
+		private class internalExternalLogonForCheck : ExternalLogonForCheck
+		{
+			public Guid PersonId { get; set; }
+
+			public string DataSourceIdUserCode
+			{
+				set
+				{
+					parse(value, x =>
+					{
+						DataSourceId = x.Item1;
+						UserCode = x.Item2;
+					});
 				}
 			}
 		}
@@ -390,11 +415,11 @@ WHERE
 			{
 				set
 				{
-					if (string.IsNullOrEmpty(value))
-						return;
-					var x = value.Split('_');
-					DataSourceId = int.Parse(x[0]);
-					UserCode = x[2];
+					parse(value, x =>
+					{
+						DataSourceId = x.Item1;
+						UserCode = x.Item2;
+					});
 				}
 			}
 		}

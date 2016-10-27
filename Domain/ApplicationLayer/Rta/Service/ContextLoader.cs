@@ -21,8 +21,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public override void ForActivityChanges(Action<Context> action)
 		{
-			var logons = WithUnitOfWork(() => _agentStatePersister.FindForCheck(_now.UtcDateTime()));
-			process(new activityChangesStrategy(_config, _agentStatePersister, action, logons));
+			var time = _now.UtcDateTime();
+			var logons = WithUnitOfWork(() => _agentStatePersister.FindForCheck())
+				.Where(x => x.NextCheck == null || x.NextCheck <= time)
+				.ToArray();
+			process(new activityChangesStrategy(_config, _agentStatePersister, action, logons, time));
 		}
 	}
 
@@ -68,24 +71,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public void For(StateInputModel input, Action<Context> action)
 		{
-			process(new singleStrategy(_config, _agentStatePersister, action, _databaseLoader, input));
+			process(new singleStrategy(_config, _agentStatePersister, action, _databaseLoader, input, _now.UtcDateTime()));
 		}
 
 		public void ForBatch(BatchInputModel batch, Action<Context> action)
 		{
-			process(new batchStrategy(_config, _agentStatePersister, _databaseLoader, action, batch));
+			process(new batchStrategy(_config, _agentStatePersister, _databaseLoader, action, batch, _now.UtcDateTime()));
 		}
 
 		public void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action)
 		{
 			var logons = WithUnitOfWork(() => _agentStatePersister.FindForClosingSnapshot(snapshotId, sourceId, Rta.LogOutBySnapshot));
-			process(new closingSnapshotStrategy(_config, _agentStatePersister, action, snapshotId, logons));
+			process(new closingSnapshotStrategy(_config, _agentStatePersister, action, snapshotId, logons, _now.UtcDateTime()));
 		}
 
 		public virtual void ForActivityChanges(Action<Context> action)
 		{
 			var logons = WithUnitOfWork(() => _agentStatePersister.FindAll());
-			process(new activityChangesStrategy(_config, _agentStatePersister, action, logons));
+			process(new activityChangesStrategy(_config, _agentStatePersister, action, logons, _now.UtcDateTime()));
 		}
 
 		public void ForSynchronize(Action<Context> action)
@@ -96,7 +99,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					.Select(x => x.PersonId)
 					.ToArray()
 				);
-			process(new synchronizeStrategy(_config, _agentStatePersister, action, personIds));
+			process(new synchronizeStrategy(_config, _agentStatePersister, action, personIds, _now.UtcDateTime()));
 		}
 
 		[AllBusinessUnitsUnitOfWork]
@@ -135,7 +138,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			private readonly IDatabaseLoader _databaseLoader;
 			private readonly StateInputModel _model;
 
-			public singleStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, IDatabaseLoader databaseLoader, StateInputModel model) : base(config, persister, action)
+			public singleStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, IDatabaseLoader databaseLoader, StateInputModel model, DateTime time) : base(config, persister, action, time)
 			{
 				_databaseLoader = databaseLoader;
 				_model = model;
@@ -187,7 +190,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			private readonly IDatabaseLoader _databaseLoader;
 			private readonly BatchInputModel _batch;
 
-			public batchStrategy(IConfigReader config, IAgentStatePersister persister, IDatabaseLoader databaseLoader, Action<Context> action, BatchInputModel batch) : base(config, persister, action)
+			public batchStrategy(IConfigReader config, IAgentStatePersister persister, IDatabaseLoader databaseLoader, Action<Context> action, BatchInputModel batch, DateTime time) : base(config, persister, action, time)
 			{
 				_databaseLoader = databaseLoader;
 				_batch = batch;
@@ -203,7 +206,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<BatchStateInputModel> states, Action<Exception> addException)
 			{
 				var dataSourceId = ValidateSourceId(_databaseLoader, _batch);
-				var userCodes = states.Select(x => new ExternalLogon {DataSourceId = dataSourceId, UserCode = x.UserCode});
+				var userCodes = states.Select(x => new ExternalLogon
+				{
+					DataSourceId = dataSourceId,
+					UserCode = x.UserCode
+				});
 				var agentStates = _persister.Find(userCodes, DeadLockVictim.No);
 
 				userCodes
@@ -234,7 +241,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			private readonly IEnumerable<ExternalLogon> _things;
 
-			public activityChangesStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, IEnumerable<ExternalLogon> things) : base(config, persister, action)
+			public activityChangesStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, IEnumerable<ExternalLogon> things, DateTime time) : base(config, persister, action, time)
 			{
 				_things = things;
 				ParallelTransactions = _config.ReadValue("RtaActivityChangesParallelTransactions", 7);
@@ -262,7 +269,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			private readonly DateTime _snapshotId;
 			private readonly IEnumerable<ExternalLogon> _things;
 
-			public closingSnapshotStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, DateTime snapshotId, IEnumerable<ExternalLogon> things) : base(config, persister, action)
+			public closingSnapshotStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, DateTime snapshotId, IEnumerable<ExternalLogon> things, DateTime time) : base(config, persister, action, time)
 			{
 				_snapshotId = snapshotId;
 				_things = things;
@@ -295,7 +302,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			private readonly IEnumerable<Guid> _things;
 
-			public synchronizeStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, IEnumerable<Guid> things) : base(config, persister, action)
+			public synchronizeStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, IEnumerable<Guid> things, DateTime time) : base(config, persister, action, time)
 			{
 				_things = things;
 				ParallelTransactions = _config.ReadValue("RtaSynchronizeParallelTransactions", 1);
@@ -336,15 +343,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			protected baseStrategy(
 				IConfigReader config,
 				IAgentStatePersister persister,
-				Action<Context> action
+				Action<Context> action,
+				DateTime time
 				)
 			{
 				_config = config;
 				_persister = persister;
 				Action = action;
+				CurrentTime = time;
 				UpdateAgentState = c => _persister.Update(c.MakeAgentState(), c.CacheSchedules);
 			}
 
+			public DateTime CurrentTime { get; }
 			public int ParallelTransactions { get; protected set; }
 			public int MaxTransactionSize { get; protected set; }
 
@@ -373,7 +383,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public class sharedData
 		{
-			public DateTime now;
 			public MappingsState mappings;
 		}
 
@@ -386,6 +395,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public interface IStrategy<T>
 		{
+			DateTime CurrentTime { get; }
+
 			int ParallelTransactions { get; }
 			int MaxTransactionSize { get; }
 
@@ -418,7 +429,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				mappings.Use();
 				return new sharedData
 				{
-					now = _now.UtcDateTime(),
 					mappings = mappings
 				};
 			});
@@ -430,14 +440,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					return new Lazy<transactionData>(() =>
 					{
 						var agentStates = strategy.GetStatesFor(someThings, exceptions.Add);
-						var now = shared.Value.now;
 
 						var validated = agentStates
 							.GroupBy(x => x.PersonId, (_, states) => states.First())
 							.Select(x => new
 							{
 								state = x,
-								valid = _scheduleCacheStrategy.ValidateCached(x, now)
+								valid = _scheduleCacheStrategy.ValidateCached(x, strategy.CurrentTime)
 							})
 							.ToArray();
 						var schedules = validated
@@ -449,9 +458,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							.ToArray();
 						if (loadSchedulesFor.Any())
 						{
-							var loaded = _scheduleReader.GetCurrentSchedules(now, loadSchedulesFor);
+							var loaded = _scheduleReader.GetCurrentSchedules(strategy.CurrentTime, loadSchedulesFor);
 							var loadedSchedules = loadSchedulesFor
-								.Select(x => new scheduleData(_scheduleCacheStrategy.FilterSchedules(loaded.Where(l => l.PersonId == x.PersonId), now), true, x.PersonId));
+								.Select(x => new scheduleData(_scheduleCacheStrategy.FilterSchedules(loaded.Where(l => l.PersonId == x.PersonId), strategy.CurrentTime), true, x.PersonId));
 							schedules = schedules.Concat(loadedSchedules);
 						}
 						schedules = schedules.ToArray();
@@ -525,7 +534,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				data.agentStates.ForEach(state =>
 				{
 					strategy.Action.Invoke(new Context(
-						shared.now,
+						strategy.CurrentTime,
 						strategy.GetInputFor(state),
 						state.PersonId,
 						state.BusinessUnitId,
