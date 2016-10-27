@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -64,6 +65,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void DeleteBridgeAcdLoginPerson(int acdLoginId, int personId)
 		{
 			fakeAcdLoginPersons.RemoveAll(a => a.AcdLoginId == acdLoginId && a.PersonId == personId);
+		}
+
+		public void UpdatePersonNames(CommonNameDescriptionSetting commonNameDescriptionSetting, Guid businessUnitCode)
+		{
+			throw new NotImplementedException();
 		}
 
 		public IList<AnalyticsPersonPeriod> GetPersonPeriods(Guid personCode)

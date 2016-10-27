@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 
 		public string GetPersonName(IPerson person)
 		{
-			return _globalSettingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting())
+			return _globalSettingDataRepository.FindValueByKey(CommonNameDescriptionSetting.Key, new CommonNameDescriptionSetting())
 				.BuildCommonNameDescription(person);
 		}
 

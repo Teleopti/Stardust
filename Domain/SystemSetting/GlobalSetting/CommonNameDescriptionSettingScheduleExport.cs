@@ -5,11 +5,13 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 {
     [Serializable]
     public class CommonNameDescriptionSettingScheduleExport : SettingValue, ICommonNameDescriptionSetting
-    {
-        /// <summary>
-        /// Represents the FirstName
-        /// </summary>
-        public const string FirstName = "{FirstName}";
+	{
+		public const string Key = "CommonNameDescriptionScheduleExport";
+
+		/// <summary>
+		/// Represents the FirstName
+		/// </summary>
+		public const string FirstName = "{FirstName}";
         /// <summary>
         /// Represents the LastName
         /// </summary>

@@ -85,14 +85,15 @@ namespace Teleopti.Ccc.DomainTest.SystemSetting.GlobalSetting
             name.Should().Be("123 - John Smith");
         }
 
-	    [TestCase("{EmployeeNumber} - {FirstName} {LastName}", "UPDATE mart.dim_person SET person_name = [employment_number] + ' - ' + [first_name] + ' ' + [last_name] WHERE person_id != -1")]
-		[TestCase("{EmployeeNumber}", "UPDATE mart.dim_person SET person_name = [employment_number] WHERE person_id != -1")]
-		[TestCase("{FirstName} {LastName} #123# {EmployeeNumber}", "UPDATE mart.dim_person SET person_name = [first_name] + ' ' + [last_name] + ' #123# ' + [employment_number] WHERE person_id != -1")]
-		[TestCase("123{::][}{__ {FirstName} {LastName} #{Firstname}# ", "UPDATE mart.dim_person SET person_name = '123{::][}{__ ' + [first_name] + ' ' + [last_name] + ' #{Firstname}# ' WHERE person_id != -1")]
-		[TestCase("No names in reports", "UPDATE mart.dim_person SET person_name = 'No names in reports' WHERE person_id != -1")]
-		[TestCase("{FirstName} '; Drop Database; ", "UPDATE mart.dim_person SET person_name = [first_name] + ' ''; Drop Database; ' WHERE person_id != -1")]
-		[TestCase("{FirstName}{FirstName}", "UPDATE mart.dim_person SET person_name = [first_name] + [first_name] WHERE person_id != -1")]
-		[TestCase("", "UPDATE mart.dim_person SET person_name = '' WHERE person_id != -1")]
+	    [TestCase("{EmployeeNumber} - {FirstName} {LastName}", "UPDATE mart.dim_person SET person_name = SUBSTRING([employment_number] + ' - ' + [first_name] + ' ' + [last_name], 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit")]
+		[TestCase("{EmployeeNumber}", "UPDATE mart.dim_person SET person_name = SUBSTRING([employment_number], 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit")]
+		[TestCase("{FirstName} {LastName} #123# {EmployeeNumber}", "UPDATE mart.dim_person SET person_name = SUBSTRING([first_name] + ' ' + [last_name] + ' #123# ' + [employment_number], 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit")]
+		[TestCase("123{::][}{__ {FirstName} {LastName} #{Firstname}# ", "UPDATE mart.dim_person SET person_name = SUBSTRING('123{::][}{__ ' + [first_name] + ' ' + [last_name] + ' #{Firstname}# ', 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit")]
+		[TestCase("No names in reports", "UPDATE mart.dim_person SET person_name = SUBSTRING('No names in reports', 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit")]
+		[TestCase("{FirstName} '; Drop Database; ", "UPDATE mart.dim_person SET person_name = SUBSTRING([first_name] + ' ''; Drop Database; ', 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit")]
+		[TestCase("{FirstName}{FirstName}", "UPDATE mart.dim_person SET person_name = SUBSTRING([first_name] + [first_name], 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit")]
+		[TestCase("", "UPDATE mart.dim_person SET person_name = SUBSTRING('', 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit")]
+		[TestCase("{FirstName}лаудем  伴年聞早 無巣目個 지에 그들을", "UPDATE mart.dim_person SET person_name = SUBSTRING([first_name] + 'лаудем  伴年聞早 無巣目個 지에 그들을', 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit")]
 		public void ShouldFormatAnalyticsSqlQuery(string format, string result)
 	    {
 			var target = new CommonNameDescriptionSetting(format);

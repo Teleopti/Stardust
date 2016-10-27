@@ -13,10 +13,12 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
     [Serializable]
     public class CommonNameDescriptionSetting : SettingValue, ICommonNameDescriptionSetting
     {
-        /// <summary>
-        /// Represents the FirstName
-        /// </summary>
-        public const string FirstName = "{FirstName}";
+		public const string Key = "CommonNameDescription";
+
+		/// <summary>
+		/// Represents the FirstName
+		/// </summary>
+		public const string FirstName = "{FirstName}";
         /// <summary>
         /// Represents the LastName
         /// </summary>
@@ -105,7 +107,7 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 			sqlConcat = sqlConcat.Replace(EmployeeNumber, "' + [employment_number] + '");
 		    sqlConcat = sqlConcat.Replace("'' + ", "");
 			sqlConcat = sqlConcat.Replace(" + ''", "");
-			return $"UPDATE mart.dim_person SET person_name = {sqlConcat} WHERE person_id != -1";
+			return $"UPDATE mart.dim_person SET person_name = SUBSTRING({sqlConcat}, 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit";
 		}
     }
 }

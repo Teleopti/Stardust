@@ -4,6 +4,7 @@ using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
@@ -232,6 +233,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetInt32(nameof(acdLoginId), acdLoginId)
 				.SetInt32(nameof(personId), personId);
 			query.ExecuteUpdate();
+		}
+
+		public void UpdatePersonNames(CommonNameDescriptionSetting commonNameDescriptionSetting, Guid businessUnitCode)
+		{
+			_analyticsUnitOfWork.Current()
+				.Session()
+				.CreateSQLQuery(commonNameDescriptionSetting.BuildSqlUpdateForAnalytics())
+				.SetParameter("BusinessUnit", businessUnitCode)
+				.ExecuteUpdate();
 		}
 
 		public void UpdatePersonPeriod(AnalyticsPersonPeriod personPeriod)

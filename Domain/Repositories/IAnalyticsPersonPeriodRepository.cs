@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
@@ -19,5 +20,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IList<AnalyticsBridgeAcdLoginPerson> GetBridgeAcdLoginPersonsForAcdLoginPersons(int acdLoginId);
 		void AddBridgeAcdLoginPerson(AnalyticsBridgeAcdLoginPerson bridgeAcdLoginPerson);
 		void DeleteBridgeAcdLoginPerson(int acdLoginId, int personId);
+
+		void UpdatePersonNames(CommonNameDescriptionSetting commonNameDescriptionSetting, Guid businessUnitCode);
 	}
 }

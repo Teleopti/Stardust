@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			get
 			{
-				_commonNameDescription = _settingDataRepository.FindValueByKey("CommonNameDescription",
+				_commonNameDescription = _settingDataRepository.FindValueByKey(CommonNameDescriptionSetting.Key,
 					new CommonNameDescriptionSetting());
 				return _commonNameDescription;
 			}
