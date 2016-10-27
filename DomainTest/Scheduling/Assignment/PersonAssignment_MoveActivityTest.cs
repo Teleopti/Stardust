@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class PersonAssignment_MoveActivityTest
 	{
 		[Test]

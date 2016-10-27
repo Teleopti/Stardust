@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 {
 	[TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class IntraIntervalOptimizationServiceTest
 	{
 		private IntraIntervalOptimizationService _target;

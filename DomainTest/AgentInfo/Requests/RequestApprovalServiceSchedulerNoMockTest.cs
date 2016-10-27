@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 {
 	[TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class RequestApprovalServiceSchedulerNoMockTest
 	{
 		private IRequestApprovalService _requestApprovalService;

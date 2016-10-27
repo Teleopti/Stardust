@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
     [TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class StaffingThresholdValidatorTest
     {
         private StaffingThresholdValidator _target;

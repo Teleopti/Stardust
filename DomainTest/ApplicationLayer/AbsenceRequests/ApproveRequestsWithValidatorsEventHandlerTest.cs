@@ -33,7 +33,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class ApproveRequestsWithValidatorsEventHandlerTest
 	{
 		private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;

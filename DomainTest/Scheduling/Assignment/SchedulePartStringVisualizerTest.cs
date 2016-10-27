@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
     [TestFixture, SetCulture("sv-SE"), SetUICulture("en-US")]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
     public class SchedulePartStringVisualizerTest
     {
         private IPerson _agent;

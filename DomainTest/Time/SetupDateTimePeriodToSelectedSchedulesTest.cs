@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Time
 {
     [TestFixture]
-    [LegacyTest]
+    [TestWithStaticDependenciesAvoidUse]
     public class SetupDateTimePeriodToSelectedSchedulesTest
     {
         private SchedulePartFactoryForDomain _partFactoryForDomain;

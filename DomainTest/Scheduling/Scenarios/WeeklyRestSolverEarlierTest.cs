@@ -24,7 +24,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 {
-	[LegacyDomainTest]
+	[DomainTestWithStaticDependenciesAvoidUse]
 	public class WeeklyRestSolverEarlierTest
 	{
 		public IWeeklyRestSolverCommand Target;

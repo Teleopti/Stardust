@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
     /// Test class for Absence
     /// </summary>
     [TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class AbsenceTest
     {
         private Absence target;

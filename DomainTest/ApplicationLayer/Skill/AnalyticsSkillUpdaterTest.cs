@@ -13,7 +13,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Skill
 {
 	[TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class AnalyticsSkillUpdaterTest
 	{
 		FakeAnalyticsSkillRepository analyticsSkillRepository;

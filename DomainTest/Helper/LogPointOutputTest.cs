@@ -9,7 +9,7 @@ using Teleopti.Ccc.DomainTest.Common;
 namespace Teleopti.Ccc.DomainTest.Helper
 {
     [TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class LogPointOutputTest
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]

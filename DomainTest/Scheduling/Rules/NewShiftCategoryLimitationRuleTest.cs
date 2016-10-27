@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
-	[LegacyDomainTest]
+	[DomainTestWithStaticDependenciesAvoidUse]
 	public class NewShiftCategoryLimitationRuleTest
     {
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;

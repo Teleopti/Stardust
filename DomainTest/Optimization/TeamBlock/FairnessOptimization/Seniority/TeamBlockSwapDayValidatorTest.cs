@@ -10,7 +10,7 @@ using Rhino.Mocks;
 namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Seniority
 {
 	[TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class TeamBlockSwapDayValidatorTest
 	{
 		private IScheduleDay _scheduleDay1;

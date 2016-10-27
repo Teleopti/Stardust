@@ -20,7 +20,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 {
-	[LegacyDomainTest]
+	[DomainTestWithStaticDependenciesAvoidUse]
 	[Toggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public class MaxSeatOptimizationTeamBlockTest
 	{

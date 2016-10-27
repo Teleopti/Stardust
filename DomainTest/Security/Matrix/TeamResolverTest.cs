@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Teleopti.Ccc.DomainTest.Security.Matrix
 {
 	[TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class TeamResolverForPersonAndApplicationRoleTest
 	{
 		private TeamResolver _target;

@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SystemSetting
 {
     [TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class GlobalSettingDataTest
     {
         private GlobalSettingData target;

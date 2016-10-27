@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 {
 	[TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class ShiftTradeMaxSeatValidationTests
 	{
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
@@ -421,7 +421,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 	}
 
 	[TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class ShiftTradeMaxSeatReadModelValidationTests : ShiftTradeMaxSeatValidationTests
 	{
 		protected override bool useReadModel()

@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.Common
     /// Tests for ContractSchedule class.
     /// </summary>
     [TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class ContractScheduleTest
     {
         private ContractSchedule testContractSchedule;

@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Collection
 {
 	[TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class CachedNumberOfEachCategoryPerDateTest
 	{
 		private ICachedNumberOfEachCategoryPerDate _target;

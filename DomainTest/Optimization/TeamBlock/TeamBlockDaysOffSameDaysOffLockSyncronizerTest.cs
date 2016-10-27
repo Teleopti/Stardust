@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 {
-	[LegacyDomainTest]
+	[DomainTestWithStaticDependenciesAvoidUse]
 	public class TeamBlockDaysOffSameDaysOffLockSyncronizerTest
 	{
 		public TeamBlockDaysOffSameDaysOffLockSyncronizer Target;

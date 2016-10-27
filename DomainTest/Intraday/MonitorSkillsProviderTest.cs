@@ -10,7 +10,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Intraday
 {
 	[DomainTest]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class MonitorSkillsProviderTest
 	{
 		public MonitorSkillsProvider Target;

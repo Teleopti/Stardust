@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
     /// Tests class TimeZoneHelper
     /// </summary>
     [TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
     public class TimeZoneHelperTest
     {
         /// <summary>

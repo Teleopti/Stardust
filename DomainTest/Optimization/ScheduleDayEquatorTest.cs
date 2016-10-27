@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     /// See also ScheduleDayEquatorTest.doc document about testcases
     /// </remarks>
     [TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class ScheduleDayEquatorTest
     {
         private ScheduleDayEquator _target;

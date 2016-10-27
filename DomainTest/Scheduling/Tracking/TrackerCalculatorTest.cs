@@ -12,7 +12,7 @@ using Rhino.Mocks;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 {
     [TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class TrackerCalculatorTest
     {
         private TrackerCalculator _target;

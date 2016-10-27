@@ -9,7 +9,10 @@ using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.DomainTest
 {
-	public class LegacyTestAttribute : Attribute, ITestAction {
+	/// <summary>
+	/// If possible, use [Test] instead (or fix so that could be used by removing static dependencies in code)
+	/// </summary>
+	public class TestWithStaticDependenciesAvoidUse : Attribute, ITestAction {
 
 		public ActionTargets Targets => ActionTargets.Test;
 

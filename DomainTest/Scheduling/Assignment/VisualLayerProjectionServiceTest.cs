@@ -13,7 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
 	[TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class VisualLayerProjectionServiceTest
 	{
 		private IAbsence absence;

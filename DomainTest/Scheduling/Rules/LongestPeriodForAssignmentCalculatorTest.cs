@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
     [TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
     public class LongestPeriodForAssignmentCalculatorTest
     {
         private ILongestPeriodForAssignmentCalculator target;

@@ -16,7 +16,7 @@ using Teleopti.Ccc.TestCommon;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
     [TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class SchedulePartSignificantPartDefinitionsTest
     {
         private IScheduleDay _part;

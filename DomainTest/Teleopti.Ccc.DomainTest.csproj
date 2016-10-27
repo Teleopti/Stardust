@@ -281,7 +281,7 @@
     <Compile Include="Forecasting\SkillPriorityProviderTest.cs" />
     <Compile Include="Intraday\ForecastedStaffingViewModelCreatorTest.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
-    <Compile Include="LegacyDomainTestAttribute.cs" />
+    <Compile Include="DomainTestWithStaticDependenciesAvoidUseAttribute.cs" />
     <Compile Include="ReadModelValidator\ReadModelValidatorTest.cs" />
     <Compile Include="ResourceCalculation\CalculateResourceReadModelTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationTest.cs" />
@@ -1501,7 +1501,7 @@
     <Compile Include="Scheduling\ActivityTest.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignmentTest.cs" />
     <Compile Include="Security\RegExpSpecificationTest.cs" />
-    <Compile Include="LegacyTestAttribute.cs" />
+    <Compile Include="TestWithStaticDependenciesAvoidUse.cs" />
     <Compile Include="OneTimeSetUp.cs" />
     <Compile Include="SiteOpenHours\SiteOpenHoursPersisterTest.cs" />
     <Compile Include="Specification\AllTest.cs" />

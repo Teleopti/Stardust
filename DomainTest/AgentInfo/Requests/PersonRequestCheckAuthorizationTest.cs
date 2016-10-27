@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 {
     [TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class PersonRequestCheckAuthorizationTest
     {
         private IPersonRequestCheckAuthorization target;

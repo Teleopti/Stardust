@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture]
-	[LegacyDomainTest]
+	[DomainTestWithStaticDependenciesAvoidUse]
 	public class EditScheduleNoteCommandHandlerTest : ISetup
 	{
 		public EditScheduleNoteCommandHandler Target;

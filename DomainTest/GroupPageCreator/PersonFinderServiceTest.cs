@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 {
     [TestFixture]
-	[LegacyTest]
+	[TestWithStaticDependenciesAvoidUse]
 	public class PersonFinderServiceTest
     {
         private IList<IPerson> persons;
