@@ -196,8 +196,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			using (_resourceCalculationContextFactory.Create(_stateHolder().Schedules, _stateHolder().Skills))
 			{
-				IList<IScheduleMatrixPro> matrixListForWorkShiftAndIntradayOptimization =
-					_matrixListFactory.CreateMatrixListForSelection(selectedDays);
+				IList<IScheduleMatrixPro> matrixListForWorkShiftAndIntradayOptimization = _matrixListFactory.CreateMatrixListForSelection(_stateHolder().Schedules, selectedDays);
 
 				if (optimizerPreferences.General.OptimizationStepTimeBetweenDays)
 				{
@@ -206,7 +205,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					if (_progressEvent == null || !_progressEvent.Cancel)
 					{
 						IList<IScheduleMatrixPro> matrixListForWorkShiftOptimization =
-							_matrixListFactory.CreateMatrixListForSelection(selectedDays);
+							_matrixListFactory.CreateMatrixListForSelection(_stateHolder().Schedules, selectedDays);
 						IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForWorkShiftOptimization =
 							createMatrixContainerList(matrixListForWorkShiftOptimization);
 
@@ -222,7 +221,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				}
 
 				continuedStep = runFlexibleTime(optimizerPreferences, continuedStep, selectedPeriod, selectedDays,
-					dayOffOptimizationPreferenceProvider, _matrixListFactory.CreateMatrixListForSelection(selectedDays));
+					dayOffOptimizationPreferenceProvider, _matrixListFactory.CreateMatrixListForSelection(_stateHolder().Schedules, selectedDays));
 			}
 
 			if (optimizerPreferences.General.OptimizationStepShiftsWithinDay)
@@ -333,7 +332,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IOptimizationPreferences optimizationPreferences,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			var matrixListForFairness = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
+			var matrixListForFairness = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_stateHolder().Schedules, _stateHolder().PersonsInOrganization, selectedPeriod);
 			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForFairness, optimizationPreferences, selectedPeriod);
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(),
 				_scheduleDayChangeCallback(), tagSetter);
@@ -368,7 +367,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			var args = new ResourceOptimizerProgressEventArgs(0, 0, Resources.CollectingData);
 			_backgroundWorker.ReportProgress(1, args);
-			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
+			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _stateHolder().PersonsInOrganization, selectedPeriod);
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(),
 				tagSetter);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,

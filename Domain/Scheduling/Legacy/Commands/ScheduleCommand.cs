@@ -124,11 +124,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 						if (schedulingOptions.UseTeam)
 						{
-							allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod.Value);
+							allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.PersonsInOrganization, selectedPeriod.Value);
 						}
 
 						IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays =
-							_matrixListFactory.CreateMatrixListForSelection(selectedScheduleDays);
+							_matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, selectedScheduleDays);
 						if (matrixesOfSelectedScheduleDays.Count == 0)
 							return;
 

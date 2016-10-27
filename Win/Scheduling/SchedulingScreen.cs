@@ -3440,7 +3440,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var scheduleDays = argument.SelectedScheduleDays;
 
 			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays =
-				_container.Resolve<IMatrixListFactory>().CreateMatrixListForSelection(scheduleDays);
+				_container.Resolve<IMatrixListFactory>().CreateMatrixListForSelection(_schedulerState.Schedules, scheduleDays);
 			if (matrixesOfSelectedScheduleDays.Count == 0)
 				return;
 

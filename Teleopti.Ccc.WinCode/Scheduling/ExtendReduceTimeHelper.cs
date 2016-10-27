@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			_backgroundWorker = backgroundWorker;
 
-			IList<IScheduleMatrixPro> matrixList = _container.Resolve<IMatrixListFactory>().CreateMatrixListForSelection(selectedDays);
+			IList<IScheduleMatrixPro> matrixList = _container.Resolve<IMatrixListFactory>().CreateMatrixListForSelection(schedulingResultStateHolder.Schedules, selectedDays);
 			lockDaysForExtendReduceOptimization(matrixList, selectedPeriod);
 
 			IList<IScheduleMatrixOriginalStateContainer> originalStateListForScheduleTag = createMatrixContainerList(matrixList);

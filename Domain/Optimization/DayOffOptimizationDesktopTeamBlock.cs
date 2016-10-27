@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				ResourceCalculationContext.Fetch().PrimarySkillMode = true;
 
-				var matrixList = _matrixListFactory.CreateMatrixListForSelection(selectedDays);
+				var matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, selectedDays);
 				_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, optimizationPreferences, selectedPeriod);
 
 				_resouceOptimizationHelperExtended.ResourceCalculateAllDays(backgroundWorker, false);

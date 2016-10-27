@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var notPermittedLocker = new MatrixNotPermittedLocker(new ThisAuthorization(new FullPermission()));
 			var personListExtraxtor = new PersonListExtractorFromScheduleParts();
 			var periodExtractor = new PeriodExtractorFromScheduleParts();
-			_matrixListFactory = new MatrixListFactory(() => _schedulerStateHolder, matrixUserLocker, notPermittedLocker, personListExtraxtor, periodExtractor);
+			_matrixListFactory = new MatrixListFactory(matrixUserLocker, notPermittedLocker, personListExtraxtor, periodExtractor);
 
 			_timeZoneInfo = (TimeZoneInfo.Utc);
 

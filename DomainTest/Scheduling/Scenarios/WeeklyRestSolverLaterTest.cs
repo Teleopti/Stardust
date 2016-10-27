@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		{
 			var date = new DateOnly(2015, 09, 30);
 			var selectedPeriod = new DateOnlyPeriod(date, date);
-			var matrixlist = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
+			var matrixlist = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(SchedulerStateHolder.Schedules, SchedulerStateHolder.SchedulingResultState.PersonsInOrganization, selectedPeriod);
 
 			Target.Execute(new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences),
 				optimizationPreferences,
@@ -491,7 +491,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 
 			var selectedPeriod = new DateOnlyPeriod(2016,3,24, 2016,3,24);
-			var matrixlist = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
+			var matrixlist = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, SchedulerStateHolder.SchedulingResultState.PersonsInOrganization, selectedPeriod);
 			var dayOffPreferences = new DaysOffPreferences();
 			var dayOffOptimzationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences);
 			var optimizationPreferences = new OptimizationPreferences();

@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period);
 			var schedules = schedulerStateHolder.Schedules.SchedulesForPeriod(period, schedulerStateHolder.AllPermittedPersons.FixedStaffPeople(period)).ToArray();
 
-			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(schedules);
+			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, schedules);
 			var matrixOriginalStateContainerListForDayOffOptimization =
 				matrixListForDayOffOptimization.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
 					.Cast<IScheduleMatrixOriginalStateContainer>().ToList();

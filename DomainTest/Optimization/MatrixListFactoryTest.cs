@@ -39,12 +39,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 
 			var scheduleDay = scheduleDictionary[agent].ScheduledDay(new DateOnly(2015, 10, 12));
-			var matrixList = Target.CreateMatrixListForSelection(new List<IScheduleDay>{scheduleDay});
+			var matrixList = Target.CreateMatrixListForSelection(scheduleDictionary, new List <IScheduleDay>{scheduleDay});
 
 			matrixList.Count.Should().Not.Be.GreaterThan(1);
 
 			scheduleDay = scheduleDictionary[agent].ScheduledDay(new DateOnly(2015, 10, 25));
-			matrixList = Target.CreateMatrixListForSelection(new List<IScheduleDay> { scheduleDay });
+			matrixList = Target.CreateMatrixListForSelection(scheduleDictionary, new List <IScheduleDay> { scheduleDay });
 
 			matrixList.Count.Should().Not.Be.GreaterThan(1);
 		}
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var scheduleDictionary = new ScheduleDictionaryForTest(new Scenario("unimportant"), new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
 			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;	
 
-			var matrixList = Target.CreateMatrixListAllForLoadedPeriod(new DateOnlyPeriod(2015, 10, 12, 2015, 10, 12));
+			var matrixList = Target.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, SchedulerStateHolder.SchedulingResultState.PersonsInOrganization, new DateOnlyPeriod(2015, 10, 12, 2015, 10, 12));
 
 			matrixList.Count.Should().Be.GreaterThan(1);
 		}
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var scheduleDictionary = new ScheduleDictionaryForTest(new Scenario("unimportant"), new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
 			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 
-			var matrixList = Target.CreateMatrixListAllForLoadedPeriod(new DateOnlyPeriod(2015, 10, 12, 2015, 10, 12));
+			var matrixList = Target.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, SchedulerStateHolder.SchedulingResultState.PersonsInOrganization, new DateOnlyPeriod(2015, 10, 12, 2015, 10, 12));
 
 			matrixList[0].UnlockedDays.Count.Should().Be.EqualTo(1);
 			matrixList[0].UnlockedDays[0].Day.Should().Be.EqualTo(new DateOnly(2015, 10, 12));
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var scheduleDay2 = scheduleDictionary[agent1].ScheduledDay(new DateOnly(2016, 2, 28));
 			var scheduleDay3 = scheduleDictionary[agent2].ScheduledDay(new DateOnly(2016, 1, 4));
 			var scheduleDay4 = scheduleDictionary[agent2].ScheduledDay(new DateOnly(2016, 2, 28));
-			var matrixList = Target.CreateMatrixListForSelection(new List<IScheduleDay> { scheduleDay1, scheduleDay2, scheduleDay3, scheduleDay4});
+			var matrixList = Target.CreateMatrixListForSelection(scheduleDictionary, new List<IScheduleDay> { scheduleDay1, scheduleDay2, scheduleDay3, scheduleDay4});
 
 			matrixList.Count.Should().Be.EqualTo(3);
 			matrixList[0].Person.Should().Be.EqualTo(agent1);

@@ -100,11 +100,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var selectedPeriod = _periodExtractor.ExtractPeriod(selectedSchedules);
 
-			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(selectedSchedules);
+			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedSchedules);
 			if (matrixesOfSelectedScheduleDays.Count == 0)
 				return new WorkShiftFinderResultHolder();
 
-			var allVisibleMatrixes = selectedPeriod.HasValue ? _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod.Value) : new List<IScheduleMatrixPro>();
+			var allVisibleMatrixes = selectedPeriod.HasValue ? _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod.Value) : new List<IScheduleMatrixPro>();
 
 			_advanceDaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
 			_advanceDaysOffSchedulingService.Execute(allVisibleMatrixes, selectedPersons,

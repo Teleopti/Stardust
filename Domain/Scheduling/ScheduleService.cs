@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,19 +11,22 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
     public class ScheduleService : IScheduleService
     {
-        private readonly IWorkShiftFinderService _finderService;
+	    private readonly Func<ISchedulerStateHolder> _stateHolder;
+	    private readonly IWorkShiftFinderService _finderService;
 		private readonly IMatrixListFactory _scheduleMatrixListCreator;
         private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly Hashtable _finderResults = new Hashtable();
 
         public ScheduleService(
+					Func<ISchedulerStateHolder> stateHolder,
 			IWorkShiftFinderService finderService, 
             IMatrixListFactory scheduleMatrixListCreator,
             IShiftCategoryLimitationChecker shiftCategoryLimitationChecker, 
             IEffectiveRestrictionCreator effectiveRestrictionCreator)
         {
-            _finderService = finderService;
+	        _stateHolder = stateHolder;
+	        _finderService = finderService;
             _scheduleMatrixListCreator = scheduleMatrixListCreator;
             _shiftCategoryLimitationChecker = shiftCategoryLimitationChecker;
             _effectiveRestrictionCreator = effectiveRestrictionCreator;
@@ -104,9 +108,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 {
                     _shiftCategoryLimitationChecker.SetBlockedShiftCategories(schedulingOptions, person, scheduleDateOnly);
 
-                    IList<IScheduleMatrixPro> matrixList = _scheduleMatrixListCreator.
-                        CreateMatrixListForSelection(
-                            new List<IScheduleDay> { schedulePart });
+                    IList<IScheduleMatrixPro> matrixList = _scheduleMatrixListCreator.CreateMatrixListForSelection(_stateHolder().Schedules, new List <IScheduleDay> { schedulePart });
                     if (matrixList.Count == 0)
                         return false;
                     IScheduleMatrixPro matrix = matrixList[0];

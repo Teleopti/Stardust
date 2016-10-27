@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var args = new ResourceOptimizerProgressEventArgs(0, 0, UserTexts.Resources.CollectingData);
 			_backgroundWorker.ReportProgress(1, args);
 
-			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
+			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod);
 			if (optimizationPreferences.General.OptimizationStepDaysOff)
 			{
 				_dayOffOptimizationDesktopTeamBlock.Execute(selectedPeriod, selectedSchedules, _backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider, schedulingOptions.GroupOnGroupPageForTeamBlockPer, null, null);
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				if (optimizationPreferences.General.OptimizationStepTimeBetweenDays &&
 						!(optimizationPreferences.Extra.UseBlockSameShift && optimizationPreferences.Extra.UseTeamBlockOption))
 				{
-					var matrixesOnSelectedperiod = _matrixListFactory.CreateMatrixListForSelection(selectedSchedules);
+					var matrixesOnSelectedperiod = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedSchedules);
 					optimizeMoveTimeBetweenDays(backgroundWorker, selectedPeriod, selectedPersons, optimizationPreferences,
 						rollbackServiceWithResourceCalculation, schedulingOptions, resourceCalculateDelayer, matrixesOnSelectedperiod,
 						allMatrixes);
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						resourceCalculateDelayer, _backgroundWorker);
 				}
 
-				allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
+				allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod);
 
 				solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
 					rollbackServiceWithResourceCalculation, allMatrixes,

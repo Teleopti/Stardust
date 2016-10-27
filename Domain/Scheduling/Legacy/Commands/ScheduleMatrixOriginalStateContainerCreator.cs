@@ -15,11 +15,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_matrixListFactory = matrixListFactory;
 		}
 
-		public IList<IScheduleMatrixOriginalStateContainer> CreateScheduleMatrixOriginalStateContainers(
-			IList<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod)
+		public IList<IScheduleMatrixOriginalStateContainer> CreateScheduleMatrixOriginalStateContainers(IScheduleDictionary schedules, IEnumerable<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod)
 		{
 			IList<IScheduleMatrixOriginalStateContainer> retList = new List<IScheduleMatrixOriginalStateContainer>();
-			foreach (IScheduleMatrixPro scheduleMatrixPro in _matrixListFactory.CreateMatrixListForSelection(scheduleDays))
+			foreach (IScheduleMatrixPro scheduleMatrixPro in _matrixListFactory.CreateMatrixListForSelection(schedules, scheduleDays))
 				retList.Add(new ScheduleMatrixOriginalStateContainer(scheduleMatrixPro, _scheduleDayEquator));
 
 			return retList;

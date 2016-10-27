@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						using (PerformanceOutput.ForOperation("Finding the best shift"))
 						{
 							IScheduleMatrixPro matrix =
-								_matrixListFactory.CreateMatrixListForSelection(new List<IScheduleDay> {schedulePart})[0];
+								_matrixListFactory.CreateMatrixListForSelection(schedulePart.Owner, new List<IScheduleDay> {schedulePart})[0];
 
 							var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
 							cache = finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction);

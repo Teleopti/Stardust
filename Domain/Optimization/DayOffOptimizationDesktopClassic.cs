@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder, Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
 			var stateHolder = _schedulerStateHolder();
-			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(selectedDays);
+			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, selectedDays);
 			var matrixContainerList = createMatrixContainerList(matrixListForDayOffOptimization);
 			var matrixList = matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
 

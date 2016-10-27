@@ -8,37 +8,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class MatrixListFactory : IMatrixListFactory
 	{
-		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IMatrixUserLockLocker _matrixUserLockLocker;
 		private readonly IMatrixNotPermittedLocker _matrixNotPermittedLocker;
 		private readonly IPersonListExtractorFromScheduleParts _personExtractor;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 
-		public MatrixListFactory(Func<ISchedulerStateHolder> schedulerStateHolder,
-			IMatrixUserLockLocker matrixUserLockLocker,
+		public MatrixListFactory(IMatrixUserLockLocker matrixUserLockLocker,
 			IMatrixNotPermittedLocker matrixNotPermittedLocker, IPersonListExtractorFromScheduleParts personExtractor,
 			PeriodExtractorFromScheduleParts periodExtractor)
 		{
-			_schedulerStateHolder = schedulerStateHolder;
 			_matrixUserLockLocker = matrixUserLockLocker;
 			_matrixNotPermittedLocker = matrixNotPermittedLocker;
 			_personExtractor = personExtractor;
 			_periodExtractor = periodExtractor;
 		}
 
-		public IList<IScheduleMatrixPro> CreateMatrixListAllForLoadedPeriod(DateOnlyPeriod selectedPeriod)
+		public IList<IScheduleMatrixPro> CreateMatrixListAllForLoadedPeriod(IScheduleDictionary schedules, IEnumerable<IPerson> personsInOrganization, DateOnlyPeriod selectedPeriod)
 		{
-			var stateHolder = _schedulerStateHolder();
-			var period = stateHolder.RequestedPeriod.DateOnlyPeriod.Inflate(10);
-			var persons = stateHolder.SchedulingResultState.PersonsInOrganization;
+			var period = schedules.Period.LoadedPeriod().ToDateOnlyPeriod(TimeZoneInfo.Utc).Inflate(10); 
 			var startDate = period.StartDate;
 			var matrixes = new List<IScheduleMatrixPro>();
-			foreach (var person in persons)
+			foreach (var person in personsInOrganization)
 			{
 				var date = startDate;
 				while (date <= period.EndDate)
 				{
-					var matrix = createMatrixForPersonAndDate(person, date);
+					var matrix = createMatrixForPersonAndDate(schedules, person, date);
 					if (matrix == null)
 					{
 						date = date.AddDays(1);
@@ -55,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return matrixes;
 		}
 
-		public IList<IScheduleMatrixPro> CreateMatrixListForSelection(IEnumerable<IScheduleDay> scheduleDays)
+		public IList<IScheduleMatrixPro> CreateMatrixListForSelection(IScheduleDictionary schedules, IEnumerable<IScheduleDay> scheduleDays)
 		{
 			var matrixes = new List<IScheduleMatrixPro>();
 			var selectedPeriod = _periodExtractor.ExtractPeriod(scheduleDays);
@@ -69,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				var date = startDate;
 				while (date <= selectedPeriod.Value.EndDate)
 				{
-					var matrix = createMatrixForPersonAndDate(person, date);
+					var matrix = createMatrixForPersonAndDate(schedules, person, date);
 					if (matrix == null)
 					{
 						date = date.AddDays(1);
@@ -86,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return matrixes;
 		}
 
-		private IScheduleMatrixPro createMatrixForPersonAndDate(IPerson person, DateOnly date)
+		private static IScheduleMatrixPro createMatrixForPersonAndDate(IScheduleDictionary schedules, IPerson person, DateOnly date)
 		{
 			var virtualSchedulePeriod = person.VirtualSchedulePeriod(date);
 			if (!virtualSchedulePeriod.IsValid)
@@ -95,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IFullWeekOuterWeekPeriodCreator fullWeekOuterWeekPeriodCreator =
 				new FullWeekOuterWeekPeriodCreator(virtualSchedulePeriod.DateOnlyPeriod, person);
 
-			return new ScheduleMatrixPro(_schedulerStateHolder().SchedulingResultState,
+			return new ScheduleMatrixPro(schedules[person],
 				fullWeekOuterWeekPeriodCreator,
 				virtualSchedulePeriod);
 		}

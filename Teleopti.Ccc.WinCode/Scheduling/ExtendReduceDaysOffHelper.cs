@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			if (backgroundWorker.CancellationPending)
 				return;
 
-			IList<IScheduleMatrixPro> matrixList = _container.Resolve<IMatrixListFactory>().CreateMatrixListForSelection(selectedDays);
+			IList<IScheduleMatrixPro> matrixList = _container.Resolve<IMatrixListFactory>().CreateMatrixListForSelection(schedulerStateHolder.Schedules, selectedDays);
 			lockDaysForExtendReduceOptimization(matrixList, selectedPeriod, optimizerPreferences.Shifts.SelectedActivities);
 
 			IList<IScheduleMatrixOriginalStateContainer> originalStateListForScheduleTag = createMatrixContainerList(matrixList);

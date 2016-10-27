@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			var selectedPeriod = _periodExtractor.ExtractPeriod(selectedSchedules);
 
-			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(selectedSchedules);
+			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedSchedules);
 			if (matrixesOfSelectedScheduleDays.Count == 0)
 				return;
 
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
 			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedPersons, rollbackService, resourceCalculateDelayer,
-				selectedPeriod, _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod), backgroundWorker, dayOffOptimizationPreferenceProvider);
+				selectedPeriod, _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.PersonsInOrganization, selectedPeriod), backgroundWorker, dayOffOptimizationPreferenceProvider);
 		}
 	}
 }

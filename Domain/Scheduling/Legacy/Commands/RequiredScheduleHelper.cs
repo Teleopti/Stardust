@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_daysOffSchedulingService.DayScheduled -= onDayScheduled;
 
 				IList<IScheduleMatrixOriginalStateContainer> originalStateContainers = new List<IScheduleMatrixOriginalStateContainer>();
-				foreach (IScheduleMatrixPro scheduleMatrixPro in _matrixListFactory.CreateMatrixListForSelection(allSelectedSchedules))
+				foreach (IScheduleMatrixPro scheduleMatrixPro in _matrixListFactory.CreateMatrixListForSelection(_resultStateHolder().Schedules, allSelectedSchedules))
 					originalStateContainers.Add(new ScheduleMatrixOriginalStateContainer(scheduleMatrixPro, _scheduleDayEquator));
 
 				foreach (var scheduleMatrixOriginalStateContainer in originalStateContainers)

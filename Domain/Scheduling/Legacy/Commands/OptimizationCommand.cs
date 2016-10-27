@@ -97,8 +97,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills))
 				{
 					var scheduleMatrixOriginalStateContainers =
-						_scheduleMatrixOriginalStateContainerCreator.CreateScheduleMatrixOriginalStateContainers(selectedSchedules,
-							selectedPeriod.Value);
+						_scheduleMatrixOriginalStateContainerCreator.CreateScheduleMatrixOriginalStateContainers(schedulerStateHolder.Schedules, selectedSchedules, selectedPeriod.Value);
 					IList<IDayOffTemplate> displayList = schedulerStateHolder.CommonStateHolder.ActiveDayOffs.ToList();
 					scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers,
 						backgroundWorker, displayList[0], optimizerOriginalPreferences.SchedulingOptions,
@@ -106,10 +105,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 					_resourceOptimizationHelperExtended().ResourceCalculateMarkedDays(null,
 						optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, false);
-					IList<IScheduleMatrixPro> matrixList = _matrixListFactory.CreateMatrixListForSelection(selectedSchedules);
+					IList<IScheduleMatrixPro> matrixList = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, selectedSchedules);
 
 					var allMatrixes = optimizationPreferences.Extra.UseTeams ? 
-						_matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod.Value) : 
+						_matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.PersonsInOrganization, selectedPeriod.Value) : 
 						new List<IScheduleMatrixPro>();
 
 					scheduleOptimizerHelper.GetBackToLegalState(matrixList, schedulerStateHolder, backgroundWorker,
@@ -140,7 +139,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedSchedules, schedulingOptions,
 						dayOffOptimizationPreferenceProvider, () =>
 						{
-							var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod.Value);
+							var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.PersonsInOrganization, selectedPeriod.Value);
 							runWeeklyRestSolver(optimizationPreferences, schedulingOptions, selectedPeriod.Value, allMatrixes,
 								selectedPersons, rollbackService, resourceCalculateDelayer, backgroundWorker,
 								dayOffOptimizationPreferenceProvider);

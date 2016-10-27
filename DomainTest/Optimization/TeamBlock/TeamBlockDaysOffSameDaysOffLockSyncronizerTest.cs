@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent2);
 			SchedulerStateHolder.FilterPersons(new List<IPerson> { agent1, agent2 });
 			
-			var allPersonMatrixList = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
+			var allPersonMatrixList = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, new[] {agent1, agent2}, selectedPeriod);
 			var optimizationPreferences = new OptimizationPreferences
 			{
 				Extra =
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent2);
 			SchedulerStateHolder.FilterPersons(new List<IPerson> { agent1, agent2 });
 
-			var allPersonMatrixList = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
+			var allPersonMatrixList = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, new[] { agent1, agent2 }, selectedPeriod);
 			var optimizationPreferences = new OptimizationPreferences
 			{
 				Extra =
