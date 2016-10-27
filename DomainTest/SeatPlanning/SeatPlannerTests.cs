@@ -32,9 +32,17 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 		#region helper methods
 
+
+		private static IPerson createPersonWithPersonPeriodFromTeam(DateTime startDate, Team team)
+		{
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team);
+			((Person)person).InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			return person;
+		}
+
 		private IPersonAssignment addAssignment(IPerson person, DateTime startDate, DateTime endDate)
 		{
-			return PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
+			return PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				_currentScenario.Current(),
 				person,
 				new DateTimePeriod(startDate, endDate));
@@ -108,7 +116,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var team = addTeam("Team");
 			var teams = new[] { team };
-			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team);
+
+			var person = createPersonWithPersonPeriodFromTeam(startDate, team);
+
 			var personAssignment = addAssignment(person, startDate, endDate);
 
 			var seatMapLocation = addLocation("Location", null, new Seat("Seat One", 1));
@@ -125,6 +135,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			seatBooking.Seat.Should().Be(seatMapLocation.Seats.Single());
 		}
 
+		
+
 		[Test]
 		public void ShouldBookSeatForMutipleDays()
 		{
@@ -135,9 +147,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var team = addTeam("Team 1");
 			var teams = new[] { team };
-
-
-			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team);
+			
+			var person = createPersonWithPersonPeriodFromTeam(startDate, team);
 
 			var personAssignments = new List<IPersonAssignment>()
 			{
@@ -168,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var team = addTeam("Team");
 			var teams = new[] { team };
 
-			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team);
+			var person = createPersonWithPersonPeriodFromTeam(startDate, team);
 			var personAssignment = addAssignment(person, startDate, endDate);
 
 			var childLocations = new[]
@@ -207,9 +218,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var people = new[]
 			{
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnly, teams[1]),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnly, teams[1]),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnly, teams[0])
+				createPersonWithPersonPeriodFromTeam(startDate, teams[1]),
+				createPersonWithPersonPeriodFromTeam(startDate, teams[1]),
+				createPersonWithPersonPeriodFromTeam(startDate, teams[0])
 			};
 
 			var assignments = new[]
@@ -257,12 +268,12 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var people = new[]
 			{
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnly, teams[0]),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnly, teams[0]),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnly, teams[1]),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnly, teams[1]),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnly, teams[1]),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnly, teams[1]),
+				createPersonWithPersonPeriodFromTeam(startDate, teams[0]),
+				createPersonWithPersonPeriodFromTeam(startDate, teams[0]),
+				createPersonWithPersonPeriodFromTeam(startDate, teams[1]),
+				createPersonWithPersonPeriodFromTeam(startDate, teams[1]),
+				createPersonWithPersonPeriodFromTeam(startDate, teams[1]),
+				createPersonWithPersonPeriodFromTeam(startDate, teams[1]),
 			};
 
 			var personAssignments = new[]
@@ -333,12 +344,12 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var people = new[]
 			{
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnlyDay1, teams[0]),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnlyDay1, teams[0]),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnlyDay1, teams[1]),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnlyDay1, teams[1]),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnlyDay1, teams[1]),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnlyDay1, teams[1])
+				createPersonWithPersonPeriodFromTeam(startDateDay1, teams[0]),
+				createPersonWithPersonPeriodFromTeam(startDateDay1, teams[0]),
+				createPersonWithPersonPeriodFromTeam(startDateDay1, teams[1]),
+				createPersonWithPersonPeriodFromTeam(startDateDay1, teams[1]),
+				createPersonWithPersonPeriodFromTeam(startDateDay1, teams[1]),
+				createPersonWithPersonPeriodFromTeam(startDateDay1, teams[1]),
 			};
 
 			var assignments = new[]
@@ -413,10 +424,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var people = new[]
 			{
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team),
+				createPersonWithPersonPeriodFromTeam(startDate, team),
 				// by putting people[1] in a different team, they will not be included in the seat 
 				// planning process and should retain their existing booking.
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(endDate), addTeam("Team Other"))
+				createPersonWithPersonPeriodFromTeam(endDate, addTeam("Team Other")),
 			};
 
 			var personAssignment = addAssignment(people[0], startDate, assignmentEndDateTime);
@@ -455,8 +466,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			{
 				// by putting people[0] in a different team, they will not be included in the seat 
 				// planning process and should retain their existing booking (even though we havent created a schedule here).
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate),  addTeam("Team Other")),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team)
+					createPersonWithPersonPeriodFromTeam(startDate,  addTeam("Team Other")),
+					createPersonWithPersonPeriodFromTeam(startDate, team),
 			};
 
 			var childLocation = addLocation("ChildLocation", null, new Seat("Seat 1", 1));
@@ -492,7 +503,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date));
 			var team = addTeam("Team");
 			var teams = new[] { team };
-			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team);
+			var person = createPersonWithPersonPeriodFromTeam(date, team);
 
 			var seatMapLocation = addLocation("Location", null, new[]
 			{
@@ -532,9 +543,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var people = new[]
 			{
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team)
-			};
+				createPersonWithPersonPeriodFromTeam(date, team),
+				createPersonWithPersonPeriodFromTeam(date, team)
+		};
 
 			var assignment = addAssignment(people[0], assignmentEndDateTime.AddHours(-6), assignmentEndDateTime);
 			var seatMapLocation = addLocation("Location", null, new Seat("Seat One", 1));
@@ -572,9 +583,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var people = new[]
 			{
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team)
-			};
+				createPersonWithPersonPeriodFromTeam(date, team),
+				createPersonWithPersonPeriodFromTeam(date, team)
+		};
 
 			var assignment = addAssignment(people[0], date, date.AddHours(8));
 			var seatMapLocation = addLocation("Location", null, new Seat("Seat One", 1));
@@ -612,8 +623,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var people = new[]
 			{
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(2015, 01, 01), teams[0]),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(2015, 01, 01), teams[1]),
+				createPersonWithPersonPeriodFromTeam(new DateTime(2015, 01, 01), teams[0]),
+				createPersonWithPersonPeriodFromTeam(new DateTime(2015, 01, 01), teams[1]),
 			};
 
 			var assignments = new[]
@@ -647,9 +658,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var people = new[]
 			{
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team)
+				createPersonWithPersonPeriodFromTeam(date, team),
+				createPersonWithPersonPeriodFromTeam(date, team),
+				createPersonWithPersonPeriodFromTeam(date, team)
 			};
 
 			var assignments = new[]
@@ -702,7 +713,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var team = addTeam("Team");
 			var teams = new[] { team };
 
-			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team);
+			var person = createPersonWithPersonPeriodFromTeam (startDate, team);
 			var personAssignment = addAssignment(person, startDate, startDate.AddHours(8));
 			var personAssignment2 = addAssignment(person, endDate, endDate.AddHours(8));
 
@@ -733,7 +744,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var team = addTeam("Team");
 			var teams = new[] { team };
-			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team);
+			var person = createPersonWithPersonPeriodFromTeam(startDate, team);
 			var personAssignment = addAssignment(person, startDate, startDate.AddHours(8));
 
 			_seatPlanRepository.Add(new SeatPlan()
@@ -770,7 +781,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var team = addTeam("Team");
 			var teams = new[] { team };
-			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team);
+			var person = createPersonWithPersonPeriodFromTeam(startDate, team);
 			var personAssignment = addAssignment(person, startDate, endDate);
 
 			var locations = new[] { addLocation("Location", null, null) };
@@ -791,6 +802,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		public void ShouldPersistSeatPlanWithDifferentStatusInsidePlanningPeriod()
 		{
 			setup();
+
 			var startDate1 = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var endDate1 = new DateTime(2015, 1, 20, 8, 0, 0, DateTimeKind.Utc);
 			var startDate2 = new DateTime(2015, 1, 21, 0, 0, 0, DateTimeKind.Utc);
@@ -799,8 +811,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var team = addTeam("Team");
 			var teams = new[] { team };
-			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate1), team);
-			var person2 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate1), team);
+			var person = createPersonWithPersonPeriodFromTeam(startDate1, team);
+			var person2 = createPersonWithPersonPeriodFromTeam(startDate1, team);
 
 			var personAssignment = addAssignment(person, startDate1, endDate1);
 			var personAssignmentPerson2 = addAssignment(person2, startDate2, endDate2);
@@ -835,7 +847,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var team = addTeam("Team");
 			var teams = new[] { team };
-			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team);
+			var person = createPersonWithPersonPeriodFromTeam(startDate, team);
 			var personAssignment = addAssignment(person, startDate, endDate);
 
 			var seatMapLocation = new SeatMapLocation();
@@ -870,9 +882,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var teams = new[] { team };
 			var people = new[]
 			{
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team)
+				createPersonWithPersonPeriodFromTeam(startDate, team),
+				createPersonWithPersonPeriodFromTeam(startDate, team),
+				createPersonWithPersonPeriodFromTeam(startDate, team)
 			};
 			var assignments = new[]
 			{
@@ -924,8 +936,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var people = new[]
 			{
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(endDate), team)
+				createPersonWithPersonPeriodFromTeam(startDate, team),
+				createPersonWithPersonPeriodFromTeam(endDate, team)
 			};
 
 			var personAssignment = addAssignment(people[0], startDate, assignmentEndDateTime);
@@ -960,7 +972,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date));
 			var team = addTeam("Team");
 			var teams = new[] { team };
-			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team);
+			var person = createPersonWithPersonPeriodFromTeam (date, team);
 			var assignment = addAssignment(person, date, date.AddHours(8));
 
 			var seatMapLocation = addLocation("Location", null, new[]
@@ -998,8 +1010,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var teams = new[] { team };
 			var people = new[]
 			{
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team)
+				createPersonWithPersonPeriodFromTeam(date, team),
+				createPersonWithPersonPeriodFromTeam(date, team)
 			};
 
 			var assignment = addAssignment(people[0], date.AddHours(3), date.AddHours(10));
@@ -1051,9 +1063,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var people = new[]
 			{
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam (new DateOnly (startDate), team),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam (new DateOnly (startDate), team2),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam (new DateOnly (endDate), team)
+				createPersonWithPersonPeriodFromTeam(startDate, team),
+				createPersonWithPersonPeriodFromTeam(startDate, team2),
+				createPersonWithPersonPeriodFromTeam(endDate, team)
 			};
 
 			var assignmentPerson1 = addAssignment(people[0], startDate, startDate.AddHours(8));
@@ -1107,7 +1119,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date));
 			var team = addTeam("Team");
 			var teams = new[] { team };
-			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team);
+			var person = createPersonWithPersonPeriodFromTeam (date, team);
 			var assignment = addAssignment(person, date, date.AddHours(8));
 
 			var seatMapLocation = addLocation("Location", null, new[]
@@ -1144,7 +1156,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date));
 			var team = addTeam("Team");
 			var teams = new[] { team };
-			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team);
+			var person = createPersonWithPersonPeriodFromTeam(date, team);
 
 			var seatMapLocation = addLocation("Location", null, new[]
 			{
@@ -1174,7 +1186,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date));
 			var team = addTeam("Team");
 			var teams = new[] { team };
-			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team);
+			var person = createPersonWithPersonPeriodFromTeam(date, team);
 
 			var seatMapLocation = addLocation("Location", null, new[]
 			{
