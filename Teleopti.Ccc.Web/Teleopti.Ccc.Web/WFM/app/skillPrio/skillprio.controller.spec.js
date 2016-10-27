@@ -12,6 +12,7 @@ fdescribe('skillPrioController', function () {
 		$httpBackend = _$httpBackend_;
 		$controller = _$controller_;
 		fakeBackend = _fakeSkillPrioBackend_;
+		$httpBackend.whenGET("../ToggleHandler/AllToggles").respond(200, {});
 
 		fakeBackend.clear();
 	}));

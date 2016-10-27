@@ -5,8 +5,8 @@
 		.module('wfm.skillPrio')
 		.controller('skillPrioController', skillPrioController);
 
-	skillPrioController.$inject = ['$filter', 'NoticeService', '$translate', '$q', 'skillPrioAggregator', 'skillPrioService'];
-	function skillPrioController($filter, NoticeService, $translate, $q, skillPrioAggregator, skillPrioService) {
+	skillPrioController.$inject = ['$filter', 'Toggle', 'NoticeService', '$translate', '$q', 'skillPrioAggregator', 'skillPrioService'];
+	function skillPrioController($filter, toggleService, NoticeService, $translate, $q, skillPrioAggregator, skillPrioService) {
 		var vm = this;
 		vm.selectActivity = selectActivity;
 		vm.activites = skillPrioService.getAdminSkillRoutingActivity.query();
@@ -21,7 +21,14 @@
 		vm.queryActivitys = queryActivitys;
 		vm.displayAutoComplete = displayAutoComplete;
 		vm.save = save;
-		/////////////////////////////////
+		vm.toggledOptimization = checkToggles();
+			/////////////////////////////////Wfm_SkillPriorityRoutingGUI_39885
+			function checkToggles() {
+				toggleService.togglesLoaded.then(function () {
+					vm.toggledOptimization = toggleService.Wfm_SkillPriorityRoutingGUI_39885
+				});
+			}
+
 		function selectActivity(activity) {
 			if (!selectActivityPreCheck(activity)) return;
 			vm.selectedActivity = activity;
@@ -115,13 +122,11 @@
 			skillPreChecks(skill, priority);
 			if (skill.hasParent) {
 				var parentSkill = findDuplicateSkill(skill);
-				console.log(parentSkill);
 				parentSkill.sibling.push(skill);
 			} else {
 				vm.prioritizedSkills.push(skill);
 			}
 			removeFromActivitySkills(skill)
-			console.log(skill);
 		}
 
 		function removeSkill(arr, skill) {
@@ -148,105 +153,9 @@
 
 		}
 
-
-		//???
 		function removeFromActivitySkills(skill) {
 			removeSkill(vm.activitySkills, skill)
 		}
-		//???
-
-		// vm.selectedActivity = '';
-		// vm.sortedSkills = [];
-		// vm.activitys = skillPrioService.getAdminSkillRoutingActivity.query();
-		// vm.skills = [];
-		// vm.addSkill = addSkill;
-		// vm.removeSkill = removeSkill;
-		// vm.noSortedSkills = noSortedSkills;
-		// vm.displayAutoComplete = displayAutoComplete;
-		// vm.querySkills = querySkills;
-		// vm.save = save;
-		// vm.getSkills = getSkills;
-
-		// ////////////////
-
-
-		// function matchSkillsWithActivity(skills) {
-
-		// 	skills.forEach(function (skill) {
-		// 		if (!skill.siblings) {
-		// 			skill.siblings = [];
-		// 		}
-		// 		if (skill.ActivityGuid === vm.selectedActivity.ActivityGuid) {
-		// 			if (skill.Priority) {
-		// 				vm.sortedSkills.push(skill)
-		// 			} else {
-		// 				vm.skills.push(skill);
-		// 			}
-		// 		}
-		// 	});
-
-		// }
-
-		// function getSkills(activity) {
-		// 	if (activity === null) {
-		// 		vm.sortedSkills = [];
-		// 		vm.skills = [];
-		// 		return;
-		// 	}
-		// 	var unresolved = skillPrioAggregator.getSkills().query();
-		// 	unresolved.$promise.then(function (data) {
-		// 		vm.selectedActivity = activity;
-		// 		matchSkillsWithActivity(data);
-		// 	});
-
-		// }
-
-		// function removeFromUnsorted(skill) {
-		// 	vm.skills.splice(vm.skills.indexOf(skill), 1);
-		// }
-
-		// function addToUnsorted(skill) {
-		// 	skill.Priority = null;
-		// 	vm.skills.push(skill);
-		// }
-
-		// function removeFromSorted(skill) {
-		// 	if (skill.hasParent) {
-		// 		vm.sortedSkills.forEach(function (parent) {
-		// 			if (parent.Priority === skill.Priority) {
-		// 				skill.hasParent = false;
-		// 				parent.siblings.splice(parent.siblings.indexOf(skill), 1);
-		// 			}
-		// 		});
-		// 	} else {
-		// 		skill.siblings = [];
-		// 		skill.hasParent = false;
-		// 		vm.sortedSkills.splice(vm.sortedSkills.indexOf(skill), 1);
-		// 	}
-
-		// }
-
-		// function promoteSiblings(arr) {
-		// 	arr.forEach(function (sibling) {
-		// 		addSkill(sibling.skill, sibling.Priority, sibling.isSibling);
-		// 	});
-		// }
-
-		// function removeSkill(skill) {
-		// 	var skillRepository = [];
-		// 	if (skill.siblings.length > 0) {
-		// 		skill.siblings[0].hasParent = false;
-		// 		skill.siblings.forEach(function (sibling) {
-		// 			var temp = { skill: sibling, Priority: skill.Priority, isSibling: true };
-		// 			skillRepository.push(temp);
-		// 		});
-		// 	}
-		// 	removeFromSorted(skill);
-		// 	addToUnsorted(skill);
-		// 	if (skillRepository.length > 0) {
-		// 		promoteSiblings(skillRepository);
-		// 	}
-		// }
 
 		function querySkills(query) {
 			var results = $filter('filter')(vm.activitySkills, query);
@@ -256,26 +165,6 @@
 			var results = $filter('filter')(vm.activites, query);
 			return results;
 		}
-
-		// function addSkill(skill, prio, isSibling) {
-		// 	if (!skill || !prio) return;
-		// 	skill.Priority = prio;
-		// 	var isDuplicate = false;
-		// 	vm.sortedSkills.forEach(function (sortedSkill) {
-		// 		if (skill.Priority === sortedSkill.Priority) {
-		// 			skill.hasParent = true;
-		// 			sortedSkill.siblings.push(skill);
-		// 			isDuplicate = true;
-		// 		}
-		// 	});
-		// 	if (!isDuplicate) {
-		// 		vm.sortedSkills.push(skill);
-		// 	}
-		// 	if (!isSibling) {
-		// 		skill.siblings = [];
-		// 		removeFromUnsorted(skill);
-		// 	}
-		// }
 
 		function displayAutoComplete(skill, position) {
 			if (!skill || !position) return;
