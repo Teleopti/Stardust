@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -24,55 +22,48 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
-		private readonly IMatrixUserLockLocker _matrixUserLockLocker;
-		private readonly IMatrixNotPermittedLocker _matrixNotPermittedLocker;
 		private readonly ITeamBlockGenerator _teamBlockGenerator;
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly WorkShiftSelectorForMaxSeat _workShiftSelectorForMaxSeat;
 		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly RestrictionOverLimitValidator _restrictionOverLimitValidator;
+		private readonly IMatrixListFactory _matrixListFactory;
 
 		public MaxSeatOptimization(MaxSeatSkillDataFactory maxSeatSkillDataFactory,
 														CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 														IScheduleDayChangeCallback scheduleDayChangeCallback,
 														ISchedulingOptionsCreator schedulingOptionsCreator,
 														ITeamBlockScheduler teamBlockScheduler,
-														IMatrixUserLockLocker matrixUserLockLocker,
-														IMatrixNotPermittedLocker matrixNotPermittedLocker,
 														ITeamBlockGenerator teamBlockGenerator,
 														ITeamBlockClearer teamBlockClearer,
 														WorkShiftSelectorForMaxSeat workShiftSelectorForMaxSeat,
 														IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
 														ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
-														RestrictionOverLimitValidator restrictionOverLimitValidator)
+														RestrictionOverLimitValidator restrictionOverLimitValidator,
+														IMatrixListFactory matrixListFactory)
 		{
 			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_teamBlockScheduler = teamBlockScheduler;
-			_matrixUserLockLocker = matrixUserLockLocker;
-			_matrixNotPermittedLocker = matrixNotPermittedLocker;
 			_teamBlockGenerator = teamBlockGenerator;
 			_teamBlockClearer = teamBlockClearer;
 			_workShiftSelectorForMaxSeat = workShiftSelectorForMaxSeat;
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
+			_matrixListFactory = matrixListFactory;
 		}
 
 		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IScenario scenario, IOptimizationPreferences optimizationPreferences)
 		{
-			var allAgents = schedules.Select(schedule => schedule.Key);
+			var allAgents = schedules.Select(schedule => schedule.Key); //blir det rätt att inte ta med schemalagda agenter?
 			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, scenario, allAgents);
-
 			var tagSetter = new ScheduleTagSetter(new NullScheduleTag()); //fix - the tag
 			var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
-
-			var allMatrixes = createMatrixes(schedules,
-				schedules.Period.LoadedPeriod().ToDateOnlyPeriod(TimeZoneInfo.Utc) //FIX
-				, period, allAgents);
+			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedules, allAgents, period);
 			var businessRules = NewBusinessRuleCollection.Minimum(); //is this enough?
 
 			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills()))
@@ -107,53 +98,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 							rollbackService.RollbackMinimumChecks(); //förmodligen fel - rullar tillbaka allt
 						} 
 
-
 						remainingInfoList.Remove(teamBlockInfo);
 					}
 				}
 			}
 		}
-
-		#region _matrixListFactory.CreateMatrixListAllForLoadedPeriod(period); - it's currently depending on stateholder though
-		private IEnumerable<IScheduleMatrixPro> createMatrixes(IScheduleDictionary scheduleDictionary, DateOnlyPeriod loadedPeriod, DateOnlyPeriod choosenPeriod, IEnumerable<IPerson> allAgents)
-		{
-			var period = loadedPeriod.Inflate(10);
-			var persons = allAgents;
-			var startDate = period.StartDate;
-			var matrixes = new List<IScheduleMatrixPro>();
-			foreach (var person in persons)
-			{
-				var date = startDate;
-				while (date <= period.EndDate)
-				{
-					var matrix = createMatrixForPersonAndDate(scheduleDictionary, person, date);
-					if (matrix == null)
-					{
-						date = date.AddDays(1);
-						continue;
-					}
-					matrixes.Add(matrix);
-					date = matrix.SchedulePeriod.DateOnlyPeriod.EndDate.AddDays(1);
-				}
-			}
-			_matrixUserLockLocker.Execute(matrixes, choosenPeriod);
-			_matrixNotPermittedLocker.Execute(matrixes);
-
-			return matrixes;
-		}
-		private static IScheduleMatrixPro createMatrixForPersonAndDate(IScheduleDictionary scheduleDictionary, IPerson person, DateOnly date)
-		{
-			var virtualSchedulePeriod = person.VirtualSchedulePeriod(date);
-			if (!virtualSchedulePeriod.IsValid)
-				return null;
-
-			IFullWeekOuterWeekPeriodCreator fullWeekOuterWeekPeriodCreator =
-				new FullWeekOuterWeekPeriodCreator(virtualSchedulePeriod.DateOnlyPeriod, person);
-
-			return new ScheduleMatrixPro(scheduleDictionary[person],
-				fullWeekOuterWeekPeriodCreator,
-				virtualSchedulePeriod);
-		}
-		#endregion
 	}
 }
