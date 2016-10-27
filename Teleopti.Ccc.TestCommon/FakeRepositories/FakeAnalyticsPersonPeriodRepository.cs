@@ -69,7 +69,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void UpdatePersonNames(CommonNameDescriptionSetting commonNameDescriptionSetting, Guid businessUnitCode)
 		{
-			throw new NotImplementedException();
+			fakePersonPeriods
+				.Where(a => a.BusinessUnitCode == businessUnitCode)
+				.ForEach(a => a.PersonName = commonNameDescriptionSetting.BuildCommonNameDescription(a.FirstName, a.LastName, a.EmploymentNumber));
 		}
 
 		public IList<AnalyticsPersonPeriod> GetPersonPeriods(Guid personCode)

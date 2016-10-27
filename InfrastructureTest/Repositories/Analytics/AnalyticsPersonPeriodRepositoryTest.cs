@@ -127,6 +127,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			updatedName.Should().Be.EqualTo(correctName);
 		}
 
+		[Test]
+		public void UpdateNamesTestShouldNotUpdateOtherBusinessUnit()
+		{
+			setUpData();
+			var commonNameDescription = new CommonNameDescriptionSetting("#123 {FirstName}");
+			Target.UpdatePersonNames(commonNameDescription, Guid.NewGuid());
+			var newName = commonNameDescription.BuildCommonNameDescription(personPeriod1.FirstName, personPeriod1.LastName, personPeriod1.EmploymentNumber);
+			var personName = Target.PersonPeriod(personPeriodCode1).PersonName;
+			personName.Should().Not.Be.EqualTo(newName);
+		}
+
 		private void setUpData()
 		{
 			personPeriod1 = new AnalyticsPersonPeriod
