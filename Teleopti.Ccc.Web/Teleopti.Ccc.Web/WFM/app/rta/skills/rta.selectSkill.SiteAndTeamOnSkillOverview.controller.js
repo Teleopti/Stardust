@@ -86,29 +86,29 @@
 					};
 
 					$scope.selectedSkillChange = function (skill) {
-						if (skill) {
-							if (toggleService.RTA_SiteAndTeamOnSkillOverview_40817) {
-								$scope.skillId = skill.Id;
-								doWhenSelecting(skill, $scope.selectedSkill, "rta.teams-by-skill", goToSitesBySkill);
-							}
-							else
-								$timeout(function () {
-									$state.go('rta.agents-skill', { skillId: skill.Id });
-								});
-						};
+						if (!skill) return;
+
+						if (toggleService.RTA_SiteAndTeamOnSkillOverview_40817) {
+							$scope.skillId = skill.Id;
+							doWhenSelecting(skill, $scope.selectedSkill, "rta.teams-by-skill", goToSitesBySkill);
+						}
+						else
+							$timeout(function () {
+								$state.go('rta.agents-skill', { skillId: skill.Id });
+							});
 					};
 
 					$scope.selectedSkillAreaChange = function (skillArea) {
-						if (skillArea) {
-							if (toggleService.RTA_SiteAndTeamOnSkillOverview_40817) {
-								$scope.skillAreaId = skillArea.Id;
-								doWhenSelecting(skillArea, $scope.selectedSkillArea, "rta.teams-by-skillArea", goToSitesBySkillArea);
-							}
-							else
-								$timeout(function () {
-									$state.go('rta.agents-skill-area', { skillAreaId: skillArea.Id });
-								});
-						};
+						if (!skillArea) return
+						
+						if (toggleService.RTA_SiteAndTeamOnSkillOverview_40817) {
+							$scope.skillAreaId = skillArea.Id;
+							doWhenSelecting(skillArea, $scope.selectedSkillArea, "rta.teams-by-skillArea", goToSitesBySkillArea);
+						}
+						else
+							$timeout(function () {
+								$state.go('rta.agents-skill-area', { skillAreaId: skillArea.Id });
+							});
 					};
 
 					function doWhenSelecting(item, selected, teamsStateName, goToSites) {
@@ -255,10 +255,9 @@
 						}
 					});
 
-					function changed(newValue, oldValue){
+					function changed(newValue, oldValue) {
 						return newValue !== oldValue && oldValue != undefined && oldValue != null && newValue == null;
 					}
-
 
 					$scope.$watch(
 						function () {

@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 		{
 			return _currentUnitOfWork.Current().Session()
 				.CreateSQLQuery(@"
-					SELECT a.SiteId, COUNT(*) AS Count
+					SELECT a.SiteId, COUNT(DISTINCT a.PersonId) AS Count
 					FROM ReadModel.AgentState AS a
-
+					
 					INNER JOIN ReadModel.GroupingReadOnly AS g
 					ON a.PersonId = g.PersonId					
 					WHERE g.GroupId IN (:skillIds)
