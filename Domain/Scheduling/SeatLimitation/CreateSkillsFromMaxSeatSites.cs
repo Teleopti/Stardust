@@ -3,7 +3,6 @@ using System.Drawing;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
@@ -17,6 +16,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public class CreateSkillsFromMaxSeatSites : ICreateSkillsFromMaxSeatSites
 	{
+		private readonly IUserTimeZone _userTimeZone;
+
+		public CreateSkillsFromMaxSeatSites(IUserTimeZone userTimeZone)
+		{
+			_userTimeZone = userTimeZone;
+		}
+
         public IEnumerable<ISkill> CreateSkillList(IEnumerable<ISite> sites, int intervalLength)
 		{
 			IList<ISkill> newSkills = new List<ISkill>();
@@ -32,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 				IList<ITemplateSkillDataPeriod> templateSkillDataPeriods = new List<ITemplateSkillDataPeriod>();
                 var baseDate = SkillDayTemplate.BaseDate.Date;
-			    var timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			    var timeZone = _userTimeZone.TimeZone();
 			    newSkill.TimeZone = timeZone;
 				var numberOfIntervals = 24*60/intervalLength;
 				for (int i = 0; i < numberOfIntervals; i++)
