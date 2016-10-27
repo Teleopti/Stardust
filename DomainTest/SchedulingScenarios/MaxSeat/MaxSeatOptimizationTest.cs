@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-	public class MaxSeatOptimizationTeamBlockTest
+	public abstract class MaxSeatOptimizationTest
 	{
 		public MaxSeatOptimization Target;
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
@@ -41,15 +41,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var agentData1 = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
 			var agentData2 = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData1.Assignment, agentData2.Assignment, agentScheduledForAnHourData.Assignment });
-			var optPreferences = new OptimizationPreferences
-			{
-				Extra =
-				{
-					UseTeams = true,
-					TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy),
-					UseTeamSameStartTime = true
-				}
-			};
+			var optPreferences = CreateOptimizationPreferences();
+			optPreferences.Extra.UseTeamSameStartTime = true;
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData1.Agent, agentData2.Agent }, schedules, scenario, optPreferences);
 
@@ -74,18 +67,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var shiftCategoryLimitation = new ShiftCategoryLimitation(shiftCategory) {MaxNumberOf = 0};
 			agentData.Agent.SchedulePeriod(dateOnly).AddShiftCategoryLimitation(shiftCategoryLimitation);
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData.Assignment, agentScheduledForAnHourData.Assignment });
-			var optPreferences = new OptimizationPreferences
-			{
-				General =
-				{
-					UseShiftCategoryLimitations = true
-				},
-				Extra =
-				{
-					UseTeams = true,
-					TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy)
-				}
-			};
+			var optPreferences = CreateOptimizationPreferences();
+			optPreferences.General.UseShiftCategoryLimitations = true;
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, scenario, optPreferences);
 
@@ -111,19 +94,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var preferenceRestriction = new PreferenceRestriction { StartTimeLimitation = new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(8, 0, 0)) };
 			var preferenceDay = new PreferenceDay(agentData.Agent, dateOnly, preferenceRestriction);
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new IPersistableScheduleData[] { agentData.Assignment, agentScheduledForAnHourData.Assignment, preferenceDay });
-			var optPreferences = new OptimizationPreferences
-			{
-				General =
-				{
-					UsePreferences = true,
-					PreferencesValue = preferenceValue
-				},
-				Extra =
-				{
-					UseTeams = true,
-					TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy)
-				}
-			};
+			var optPreferences = CreateOptimizationPreferences();
+			optPreferences.General.UsePreferences = true;
+			optPreferences.General.PreferencesValue = preferenceValue;
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, scenario, optPreferences);
 
@@ -147,20 +120,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var availabilityResctriction = new AvailabilityRestriction { StartTimeLimitation = new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(8, 0, 0)) };
 			var personRestriction = new ScheduleDataRestriction(agentData.Agent, availabilityResctriction, dateOnly);
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new IScheduleData[] { agentData.Assignment, agentScheduledForAnHourData.Assignment, personRestriction });
-			
-			var optPreferences = new OptimizationPreferences
-			{
-				General =
-				{
-					UseAvailabilities = true,
-					AvailabilitiesValue = availabilityValue
-				},
-				Extra =
-				{
-					UseTeams = true,
-					TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy)
-				}
-			};
+			var optPreferences = CreateOptimizationPreferences();
+			optPreferences.General.UseAvailabilities = true;
+			optPreferences.General.AvailabilitiesValue = availabilityValue;
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, scenario, optPreferences);
 
@@ -184,20 +146,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var rotationRestriction = new RotationRestriction() { StartTimeLimitation = new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(8, 0, 0)) };
 			var personRestriction = new ScheduleDataRestriction(agentData.Agent, rotationRestriction, dateOnly);
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new IScheduleData[] { agentData.Assignment, agentScheduledForAnHourData.Assignment, personRestriction });
-			
-			var optPreferences = new OptimizationPreferences
-			{
-				General =
-				{
-					UseRotations = true,
-					RotationsValue = rotationValue
-				},
-				Extra =
-				{
-					UseTeams = true,
-					TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy)
-				}
-			};
+			var optPreferences = CreateOptimizationPreferences();
+			optPreferences.General.UseRotations = true;
+			optPreferences.General.RotationsValue = rotationValue;
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, scenario, optPreferences);
 
@@ -221,19 +172,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var studentAvailabilityRestriction = new StudentAvailabilityRestriction { StartTimeLimitation = new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(8, 0, 0)) };
 			var studentAvailabilityDay = new StudentAvailabilityDay(agentData.Agent, dateOnly, new List<IStudentAvailabilityRestriction> { studentAvailabilityRestriction });
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new IPersistableScheduleData[] { agentData.Assignment, agentScheduledForAnHourData.Assignment, studentAvailabilityDay });
-			var optPreferences = new OptimizationPreferences
-			{
-				General =
-				{
-					UseStudentAvailabilities = true,
-					StudentAvailabilitiesValue = availabilityValue
-				},
-				Extra =
-				{
-					UseTeams = true,
-					TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy)
-				}
-			};
+			var optPreferences = CreateOptimizationPreferences();
+			optPreferences.General.UseStudentAvailabilities = true;
+			optPreferences.General.StudentAvailabilitiesValue = availabilityValue;
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, scenario, optPreferences);
 
@@ -257,23 +198,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var preferenceRestriction = new PreferenceRestriction { MustHave = true, StartTimeLimitation = new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(8, 0, 0)) };
 			var preferenceDay = new PreferenceDay(agentData.Agent, dateOnly, preferenceRestriction);
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new IPersistableScheduleData[] { agentData.Assignment, agentScheduledForAnHourData.Assignment, preferenceDay });
-			var optPreferences = new OptimizationPreferences
-			{
-				General =
-				{
-					UseMustHaves = true,
-					MustHavesValue = mustHaveValue
-				},
-				Extra =
-				{
-					UseTeams = true,
-					TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy)
-				}
-			};
+			var optPreferences = CreateOptimizationPreferences();
+			optPreferences.General.UseMustHaves = true;
+			optPreferences.General.MustHavesValue = mustHaveValue;
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, scenario, optPreferences);
 
 			return schedules.SchedulesForDay(dateOnly).Count(x => x.PersonAssignment().Period.StartDateTime.TimeOfDay == TimeSpan.FromHours(9));
 		}
+
+		protected abstract OptimizationPreferences CreateOptimizationPreferences();
 	}
 }
