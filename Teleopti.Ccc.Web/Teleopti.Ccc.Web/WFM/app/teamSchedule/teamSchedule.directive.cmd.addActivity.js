@@ -79,7 +79,7 @@
 				PersonIds: vm.selectedAgents.map(function (agent) {
 					return agent.PersonId;
 				}),
-				Date: vm.selectedDate(),
+				Dates: Array(vm.selectedAgents.length).fill(vm.selectedDate()),
 				StartTime: vm.convertTime(moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm")),
 				EndTime: vm.convertTime(moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm")),
 				ActivityId: vm.selectedActivityId,
