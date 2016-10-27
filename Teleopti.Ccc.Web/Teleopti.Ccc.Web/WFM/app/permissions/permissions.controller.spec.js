@@ -207,6 +207,53 @@ xdescribe('PermissionsCtrlRefact', function () {
 		expect(vm.roles[0].Name).toEqual('Agent');
 	});
 
+	it('should be able to select a role', function () {
+		fakeBackend
+			.withRole({
+				BuiltIn: false,
+				DescriptionText: 'CarlsRoll',
+				Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+				IsAnyBuiltIn: true,
+				IsMyRole: false,
+				Name: 'CarlsRoll'
+			});
+		$httpBackend.flush();
+
+		vm.selectRole(vm.roles[0]);
+		$httpBackend.flush();
+
+		expect(vm.roles[0].IsSelected).toBe(true);
+	});
+
+	it('should deselect selcted role when selecting another role', function () {
+		fakeBackend
+			.withRole({
+				BuiltIn: false,
+				DescriptionText: 'CarlsRoll',
+				Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+				IsAnyBuiltIn: true,
+				IsMyRole: false,
+				Name: 'CarlsRoll'
+			}).withRole({
+				BuiltIn: false,
+				DescriptionText: 'CarlsRoll',
+				Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+				IsAnyBuiltIn: true,
+				IsMyRole: false,
+				Name: 'CarlsRoll'
+			});
+		$httpBackend.flush();
+
+		vm.selectRole(vm.roles[0]);
+		$httpBackend.flush();
+		vm.selectRole(vm.roles[1]);
+		$httpBackend.flush();
+
+
+		expect(vm.roles[0].IsSelected).toBe(false);
+		expect(vm.roles[1].IsSelected).toBe(true);
+	});
+
 	it('should fetch additional info for selected role', function () {
 		fakeBackend
 			.withRole({
@@ -284,9 +331,11 @@ xdescribe('PermissionsCtrlRefact', function () {
 					}
 				]
 			}).withApplicationFunction({
-				FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075'
+				FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+				ChildFunctions: []
 			}).withApplicationFunction({
-				FunctionId: '63656f9a-be16-4bb7-9012-9bde01232074'
+				FunctionId: '63656f9a-be16-4bb7-9012-9bde01232074',
+				ChildFunctions: []
 			});
 		$httpBackend.flush();
 
@@ -295,6 +344,90 @@ xdescribe('PermissionsCtrlRefact', function () {
 
 		expect(vm.applicationFunctions.find(function (fn) { return fn.FunctionId == '63656f9a-be16-4bb7-9012-9bde01232075' }).IsSelected).toEqual(true);
 		expect(vm.applicationFunctions.find(function (fn) { return fn.FunctionId == '63656f9a-be16-4bb7-9012-9bde01232074' }).IsSelected).toEqual(false);
+	});
+
+	//JAAAO DET ÄR HÄR VI JOBBAR DUMMER
+	it('should indicate all available functions for selected role', function () {
+		fakeBackend
+			.withRole({
+				BuiltIn: false,
+				DescriptionText: 'HermansRoll',
+				Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+				IsAnyBuiltIn: true,
+				IsMyRole: false,
+				Name: 'HermansRoll'
+			})
+			.withRoleInfo({
+				Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+				AvailableFunctions: [
+					{
+						Id: '63656f9a-be16-4bb7-9012-9bde01232075',
+					},
+					{
+						Id: 'f73154af-8d6d-4250-b066-d6ead56bfc16',
+					}
+				]
+			}).withApplicationFunction({
+				FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+				ChildFunctions: [{
+					FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+				}
+				]
+			});
+		$httpBackend.flush();
+
+		vm.selectRole(vm.roles[0]);
+		$httpBackend.flush();
+
+		expect(vm.applicationFunctions[0].IsSelected).toEqual(true);
+		expect(vm.applicationFunctions[0].ChildFunctions[0].IsSelected).toEqual(true);
+	});
+
+	it('should indicate all available functions for selected role but BETTER', function () {
+		fakeBackend
+			.withRole({
+				BuiltIn: false,
+				DescriptionText: 'HermansRoll',
+				Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+				IsAnyBuiltIn: true,
+				IsMyRole: false,
+				Name: 'HermansRoll'
+			})
+			.withRoleInfo({
+				Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+				AvailableFunctions: [
+					{
+						Id: '63656f9a-be16-4bb7-9012-9bde01232075'
+					},
+					{
+						Id: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+					}
+				]
+			})
+			.withApplicationFunction({
+				FunctionId: '6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7',
+				Name: 'FunctionOne',
+				ChildFunctions: []
+			})
+			.withApplicationFunction({
+				FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+				Name: 'FunctionTwo',
+				ChildFunctions: [
+					{
+						FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc'
+					},
+					{
+						FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+					}
+				]
+			});
+		$httpBackend.flush();
+
+		vm.selectRole(vm.roles[0]);
+		$httpBackend.flush();
+
+		expect(vm.applicationFunctions[1].IsSelected).toEqual(true);
+		expect(vm.applicationFunctions[1].ChildFunctions[1].IsSelected).toEqual(true);
 	});
 
 	it('should fetch organization info for selected role', function () {
