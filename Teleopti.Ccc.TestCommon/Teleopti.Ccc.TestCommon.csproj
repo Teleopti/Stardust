@@ -392,6 +392,7 @@
     <Compile Include="TestData\Analytics\Tables\dim_team.cs" />
     <Compile Include="TestData\Analytics\Tables\sys_configuration.cs" />
     <Compile Include="TestData\Analytics\Team.cs" />
+    <Compile Include="TestData\CommonNameDescriptionSettingsTestData.cs" />
     <Compile Include="TestData\Core\ILogonName.cs" />
     <Compile Include="TestData\Core\ITenantUserSetup.cs" />
     <Compile Include="TestData\FakeIntradayRequestProcessor.cs" />

@@ -4,6 +4,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SystemSetting.GlobalSetting
@@ -85,20 +86,12 @@ namespace Teleopti.Ccc.DomainTest.SystemSetting.GlobalSetting
             name.Should().Be("123 - John Smith");
         }
 
-	    [TestCase("{EmployeeNumber} - {FirstName} {LastName}", "UPDATE mart.dim_person SET person_name = SUBSTRING(ISNULL([employment_number], '') + N' - ' + ISNULL([first_name], '') + N' ' + ISNULL([last_name], ''), 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit")]
-		[TestCase("{EmployeeNumber}", "UPDATE mart.dim_person SET person_name = SUBSTRING(ISNULL([employment_number], ''), 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit")]
-		[TestCase("{FirstName} {LastName} #123# {EmployeeNumber}", "UPDATE mart.dim_person SET person_name = SUBSTRING(ISNULL([first_name], '') + N' ' + ISNULL([last_name], '') + N' #123# ' + ISNULL([employment_number], ''), 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit")]
-		[TestCase("123{::][}{__ {FirstName} {LastName} #{Firstname}# ", "UPDATE mart.dim_person SET person_name = SUBSTRING(N'123{::][}{__ ' + ISNULL([first_name], '') + N' ' + ISNULL([last_name], '') + N' #{Firstname}# ', 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit")]
-		[TestCase("No names in reports", "UPDATE mart.dim_person SET person_name = SUBSTRING(N'No names in reports', 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit")]
-		[TestCase("{FirstName} '; Drop Database; ", "UPDATE mart.dim_person SET person_name = SUBSTRING(ISNULL([first_name], '') + N' ''; Drop Database; ', 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit")]
-		[TestCase("{FirstName}{FirstName}", "UPDATE mart.dim_person SET person_name = SUBSTRING(ISNULL([first_name], '') + ISNULL([first_name], ''), 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit")]
-		[TestCase("", "UPDATE mart.dim_person SET person_name = SUBSTRING(N'', 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit")]
-		[TestCase("{FirstName}лаудем  伴年聞早 無巣目個 지에 그들을", "UPDATE mart.dim_person SET person_name = SUBSTRING(ISNULL([first_name], '') + N'лаудем  伴年聞早 無巣目個 지에 그들을', 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit")]
-		public void ShouldFormatAnalyticsSqlQuery(string format, string result)
+		[Test, TestCaseSource(typeof(CommonNameDescriptionSettingsTestData), nameof(CommonNameDescriptionSettingsTestData.TestCasesUnit))]
+		public string ShouldFormatAnalyticsSqlQuery(string format)
 	    {
 			var target = new CommonNameDescriptionSetting(format);
 		    var sql = target.BuildSqlUpdateForAnalytics();
-		    sql.ToLower().Should().Be.EqualTo(result.ToLower());
+			return sql;
 	    }
     }
 }

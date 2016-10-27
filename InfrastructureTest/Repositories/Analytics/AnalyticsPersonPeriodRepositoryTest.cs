@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
@@ -114,16 +115,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			result.Should().Not.Be.Null();
 			result.Email.Should().Be.EqualTo(personPeriod.Email);
 		}
-
-		[TestCase("{EmployeeNumber} - {FirstName} {LastName}")]
-		[TestCase("{EmployeeNumber}")]
-		[TestCase("{FirstName} {LastName} #123# {EmployeeNumber}")]
-		[TestCase("123{::][}{__ {FirstName} {LastName} #{Firstname}# ")]
-		[TestCase("No names in reports")]
-		[TestCase("{FirstName} '; Drop Database; ")]
-		[TestCase("{FirstName}{FirstName}")]
-		[TestCase("")]
-		[TestCase("{FirstName}лаудем  伴年聞早 無巣目個 지에 그들을")]
+		
+		[Test, TestCaseSource(typeof(CommonNameDescriptionSettingsTestData), nameof(CommonNameDescriptionSettingsTestData.TestCasesIntegration))]
 		public void UpdateNamesTest(string commonNameDescriptionSetting)
 		{
 			setUpData();
