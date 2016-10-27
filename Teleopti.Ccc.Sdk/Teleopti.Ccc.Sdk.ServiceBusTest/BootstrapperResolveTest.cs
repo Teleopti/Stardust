@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 {
 	public class BootstrapperResolveTest
 	{
-		[Ignore("Still not fixed")]
 		[Test]
 		public void ShouldResolveFromBootstrapper()
 		{
+			AppDomain.CurrentDomain.SetData("APPBASE", TestContext.CurrentContext.TestDirectory);
 			using (var container = new ContainerBuilder().Build())
 			{
 				createFakeBus(container, new Uri("dummy://test"));
