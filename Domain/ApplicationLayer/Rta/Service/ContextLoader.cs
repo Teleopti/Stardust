@@ -437,7 +437,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				.Batch(maxTransactionSize)
 				.Select(someThings =>
 				{
-					return new Lazy<transactionData>(() =>
+					return new Func<transactionData>(() =>
 					{
 						var agentStates = strategy.GetStatesFor(someThings, exceptions.Add);
 
@@ -524,11 +524,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		protected virtual void Transaction<T>(
 			string tenant,
 			IStrategy<T> strategy,
-			Lazy<transactionData> transactionData)
+			Func<transactionData> transactionData)
 		{
 			WithUnitOfWork(() =>
 			{
-				var data = transactionData.Value;
+				var data = transactionData.Invoke();
 				var shared = data.shared.Value;
 
 				data.agentStates.ForEach(state =>
