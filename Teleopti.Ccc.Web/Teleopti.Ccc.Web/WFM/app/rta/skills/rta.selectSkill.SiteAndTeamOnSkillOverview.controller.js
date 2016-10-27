@@ -42,6 +42,7 @@
 					$scope.siteIds = $stateParams.siteIds || [];
 					$scope.getAdherencePercent = RtaFormatService.numberToPercent;
 					$scope.isSitesOverview = $scope.siteIds.length === 0 ? true : false;
+					$scope.selectedItemIds = [];
 
 					var stateForTeamsBySkill = 'rta.teams-by-skill({siteIds: site.Id, skillIds: selectedSkill.Id})';
 					var stateForTeamsBySkillArea = 'rta.teams-by-skillArea({siteIds: site.Id, skillAreaId: selectedSkillArea.Id})';
@@ -100,7 +101,7 @@
 
 					$scope.selectedSkillAreaChange = function (skillArea) {
 						if (!skillArea) return
-						
+
 						if (toggleService.RTA_SiteAndTeamOnSkillOverview_40817) {
 							$scope.skillAreaId = skillArea.Id;
 							doWhenSelecting(skillArea, $scope.selectedSkillArea, "rta.teams-by-skillArea", goToSitesBySkillArea);
@@ -242,6 +243,20 @@
 								$scope.siteName = name;
 							});
 					};
+
+					$scope.toggleSelection = function (itemId) {
+						var index = $scope.selectedItemIds.indexOf(itemId);
+						if (index > -1) {
+							$scope.selectedItemIds.splice(index, 1);
+						} else {
+							$scope.selectedItemIds.push(itemId);
+						}
+					}
+
+					/*go to parent state for now until feature for agents is implemented*/
+					$scope.openSelected = function () {
+								goToSelectSkill();
+					}
 
 					$scope.$watch('selectedSkill', function (newValue, oldValue) {
 						if (changed(newValue, oldValue) && toggleService.RTA_SiteAndTeamOnSkillOverview_40817) {
