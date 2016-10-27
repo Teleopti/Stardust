@@ -27,6 +27,8 @@ using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Win.Reporting
 {
@@ -312,7 +314,8 @@ namespace Teleopti.Ccc.Win.Reporting
 					//get these first so they are loaded
 					rep.CreateActivityRepository(unitOfWork).LoadAll();
 					unitOfWork.Reassociate(model.Persons);
-					IScheduleDictionary dic = rep.CreateScheduleRepository(unitOfWork).FindSchedulesForPersons(
+					var dic = new ScheduleStorage(new ThisUnitOfWork(unitOfWork), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker())
+						.FindSchedulesForPersons(
 							period,
 							model.Scenario,
 							personsProvider,

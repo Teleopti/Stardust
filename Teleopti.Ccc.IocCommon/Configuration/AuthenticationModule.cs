@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ClaimSetForApplicationRole>().As<ClaimSetForApplicationRole>().InstancePerDependency();
 
 			builder.RegisterType<RepositoryFactory>().As<IRepositoryFactory>().SingleInstance();
+			builder.RegisterType<ScheduleStorageFactory>().As<IScheduleStorageFactory>().SingleInstance();
 			builder.RegisterType<AvailableBusinessUnitsProvider>().As<IAvailableBusinessUnitsProvider>().SingleInstance();
 
 			builder.Register<IPasswordPolicy>(c =>

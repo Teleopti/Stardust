@@ -1,6 +1,5 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -189,11 +188,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IMultisiteDayRepository CreateMultisiteDayRepository(IUnitOfWork unitOfWork)
 		{
 			return new MultisiteDayRepository(unitOfWork);
-		}
-
-		public IScheduleStorage CreateScheduleRepository(IUnitOfWork unitOfWork)
-		{
-			return new ScheduleStorage(new ThisUnitOfWork(unitOfWork), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker());
 		}
 
 		public IContractScheduleRepository CreateContractScheduleRepository(IUnitOfWork unitOfWork)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Win.Meetings
 
 		public MeetingComposerView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, 
 			bool editPermission, bool viewSchedulesPermission, IEventAggregator eventAggregator,
-			IResourceOptimization resourceOptimizationHelper, ISkillPriorityProvider skillPriorityProvider)
+			IResourceOptimization resourceOptimizationHelper, ISkillPriorityProvider skillPriorityProvider, IScheduleStorageFactory scheduleStorageFactory)
 			: this()
 		{
 			bool editMeetingPermission = editPermission;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			_eventAggregator = eventAggregator;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_skillPriorityProvider = skillPriorityProvider;
-			_meetingComposerPresenter = new MeetingComposerPresenter(this, meetingViewModel, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())), schedulerStateHolder);
+			_meetingComposerPresenter = new MeetingComposerPresenter(this, meetingViewModel, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())), schedulerStateHolder, scheduleStorageFactory);
 			panelContent.Enabled = editMeetingPermission;
 			ribbonControlAdv1.Enabled = editMeetingPermission;
 			toolStripButtonSchedules.Enabled = _viewSchedulesPermission;

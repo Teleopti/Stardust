@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
         private readonly IMeetingComposerView _view;
         private readonly IMeetingViewModel _model;
 	    private readonly IDisableDeletedFilter _disableDeletedFilter;
+	    private readonly IScheduleStorageFactory _scheduleStorageFactory;
 	    private readonly DateOnly _minDate = new DateOnly(DateHelper.MinSmallDateTime);
         private readonly DateOnly _maxDate = new DateOnly(DateHelper.MaxSmallDateTime);
         private Guid _instanceId = Guid.NewGuid();
@@ -37,18 +38,19 @@ namespace Teleopti.Ccc.WinCode.Meetings
         private bool _disposed;
     	private bool _trySave;
 
-    	public MeetingComposerPresenter(IMeetingComposerView view, IMeetingViewModel model, IDisableDeletedFilter disableDeletedFilter)
+    	public MeetingComposerPresenter(IMeetingComposerView view, IMeetingViewModel model, IDisableDeletedFilter disableDeletedFilter, IScheduleStorageFactory scheduleStorageFactory)
         {
             _view = view;
             _model = model;
     		_disableDeletedFilter = disableDeletedFilter;
+	        _scheduleStorageFactory = scheduleStorageFactory;
 
-    		RepositoryFactory = new RepositoryFactory();
+	        RepositoryFactory = new RepositoryFactory();
             UnitOfWorkFactory = Infrastructure.UnitOfWork.UnitOfWorkFactory.Current;
         }
 
-		public MeetingComposerPresenter(IMeetingComposerView view, IMeetingViewModel model, IDisableDeletedFilter disableDeletedFilter, ISchedulerStateHolder schedulerStateHolder)
-			: this(view, model,disableDeletedFilter)
+		public MeetingComposerPresenter(IMeetingComposerView view, IMeetingViewModel model, IDisableDeletedFilter disableDeletedFilter, ISchedulerStateHolder schedulerStateHolder, IScheduleStorageFactory scheduleStorageFactory)
+			: this(view, model,disableDeletedFilter, scheduleStorageFactory)
         {
             _schedulerStateHolder = schedulerStateHolder;
 
@@ -162,7 +164,8 @@ namespace Teleopti.Ccc.WinCode.Meetings
                                                     _schedulerStateHolder,
                                                     RepositoryFactory,
                                                     UnitOfWorkFactory,
-					                                new LazyLoadingManagerWrapper());
+					                                new LazyLoadingManagerWrapper(),
+																					_scheduleStorageFactory);
             stateLoader.LoadOrganization();
         }
 

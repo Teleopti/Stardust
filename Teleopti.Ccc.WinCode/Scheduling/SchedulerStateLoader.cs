@@ -29,20 +29,22 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly ISchedulerStateHolder _schedulerState;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly ILazyLoadingManager _lazyManager;
+		private readonly IScheduleStorageFactory _scheduleStorageFactory;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IPersonSkillProvider _personSkillProvider = new PersonSkillProvider();
 		private BackgroundWorker _backgroundWorker;
 
 		public SchedulerStateLoader(ISchedulerStateHolder stateHolder)
-			: this(stateHolder, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper())
+			: this(stateHolder, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper(), new ScheduleStorageFactory())
 		{
 		}
 
-		public SchedulerStateLoader(ISchedulerStateHolder stateHolder, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory uowFactory, ILazyLoadingManager lazyManager)
+		public SchedulerStateLoader(ISchedulerStateHolder stateHolder, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory uowFactory, ILazyLoadingManager lazyManager, IScheduleStorageFactory scheduleStorageFactory)
 			: this()
 		{
 			_unitOfWorkFactory = uowFactory;
 			_lazyManager = lazyManager;
+			_scheduleStorageFactory = scheduleStorageFactory;
 			_repositoryFactory = repositoryFactory;
 			_schedulerState = stateHolder;
 		}
@@ -223,7 +225,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			IPersonProvider personsProvider = new PersonsInOrganizationProvider(_schedulerState.SchedulingResultState.PersonsInOrganization);
 			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
-			IScheduleStorage scheduleStorage = _repositoryFactory.CreateScheduleRepository(uow);
+			IScheduleStorage scheduleStorage = _scheduleStorageFactory.Create(uow);
 
 			using (PerformanceOutput.ForOperation("Loading schedules"))
 			{

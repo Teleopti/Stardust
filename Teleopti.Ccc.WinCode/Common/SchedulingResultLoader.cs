@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.WinCode.Common
 {
@@ -27,6 +28,7 @@ namespace Teleopti.Ccc.WinCode.Common
         private readonly ISkillDayLoadHelper _skillDayLoadHelper;
         private readonly IResourceOptimization _resourceOptimizationHelper;
         private readonly LoadScheduleByPersonSpecification _loadScheduleByPersonSpecification;
+	    private readonly IScheduleStorageFactory _scheduleStorageFactory;
 	    private ILoaderDeciderResult _deciderResult;
 
 	    public ISchedulerStateHolder SchedulerState { get; private set; }
@@ -45,7 +47,8 @@ namespace Teleopti.Ccc.WinCode.Common
                                     IPeopleLoader peopleLoader,
             ISkillDayLoadHelper skillDayLoadHelper,
             IResourceOptimization resourceOptimizationHelper,
-            LoadScheduleByPersonSpecification loadScheduleByPersonSpecification)
+            LoadScheduleByPersonSpecification loadScheduleByPersonSpecification,
+						IScheduleStorageFactory scheduleStorageFactory)
         {
             SchedulerState = stateHolder;
 
@@ -57,6 +60,7 @@ namespace Teleopti.Ccc.WinCode.Common
             _skillDayLoadHelper = skillDayLoadHelper;
             _resourceOptimizationHelper = resourceOptimizationHelper;
             _loadScheduleByPersonSpecification = loadScheduleByPersonSpecification;
+	        _scheduleStorageFactory = scheduleStorageFactory;
         }
 
         public void LoadWithIntradayData(IUnitOfWork unitOfWork)
@@ -170,7 +174,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
         private void initializeSchedules(IUnitOfWork uow)
         {
-            IScheduleStorage scheduleStorage = _repositoryFactory.CreateScheduleRepository(uow);
+            var scheduleStorage = _scheduleStorageFactory.Create(uow);
 
 			var requestedPeriod = SchedulerState.RequestedPeriod.Period().ChangeEndTime(TimeSpan.FromHours(24)).ChangeStartTime(TimeSpan.FromHours(-24));
 

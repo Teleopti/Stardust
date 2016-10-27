@@ -114,17 +114,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IValidatedVolumeDayRepository CreateValidatedVolumeDayRepository(IUnitOfWork unitOfWork);
 
 		/// <summary>
-		/// Creates the schedule repository.
-		/// </summary>
-		/// <param name="unitOfWork">The unit of work.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-09-24
-		/// </remarks>
-		IScheduleStorage CreateScheduleRepository(IUnitOfWork unitOfWork);
-
-		/// <summary>
 		/// Creates the multisite day repository.
 		/// </summary>
 		/// <param name="unitOfWork">The unit of work.</param>

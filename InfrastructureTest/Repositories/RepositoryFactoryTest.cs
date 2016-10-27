@@ -158,13 +158,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void VerifyCreateScheduleRepository()
-		{
-			mocks.ReplayAll();
-			Assert.IsNotNull(new RepositoryFactory().CreateScheduleRepository(uow));
-		}
-
-		[Test]
 		public void VerifyCreateContractScheduleRepository()
 		{
 			mocks.ReplayAll();
