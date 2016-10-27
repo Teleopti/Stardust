@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<ExternalLogon> AllThings()
 			{
-				return _things;
+				return _things.OrderBy(x => x.UserCode).ToArray();
 			}
 
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogon> ids, Action<Exception> addException)
