@@ -14,11 +14,6 @@ angular.module('wfm.rta').provider('RtaState', function() {
 		return toggles.RTA_SiteAndTeamOnSkillOverview_40817 ? 'app/rta/skills/rta-selectSkill-SiteAndTeamOnSkillOverview.html' : 'app/rta/skills/rta-selectSkill.html'
 	}
 
-	var rtaSelectSkillCtrl = function() {
-		return 'RtaSiteAndTeamOnSkillOverviewCtrl';
-		return toggles.RTA_SiteAndTeamOnSkillOverview_40817 ? 'RtaSiteAndTeamOnSkillOverviewCtrl' : 'RtaSelectSkillCtrl';
-	}
-
 	this.$get = function() {
 		return function(toggleService) {
 			toggleService.togglesLoaded.then(function() {
@@ -36,27 +31,27 @@ angular.module('wfm.rta').provider('RtaState', function() {
 			.state('rta.select-skill', {
 				url: '/select-skill',
 				templateUrl: rtaSiteAndTeamOnSkillOverviewTemplateUrl,
-				controller: rtaSelectSkillCtrl()
+				controller: 'RtaSiteAndTeamOnSkillOverviewCtrl'
 			})
 			.state('rta.sites-by-skill', {
 				url: '/sites-by-skill/?skillIds',
 				templateUrl: rtaSiteAndTeamOnSkillOverviewTemplateUrl,
-				controller: rtaSelectSkillCtrl(),
+				controller: 'RtaSiteAndTeamOnSkillOverviewCtrl'
 			})
 			.state('rta.sites-by-skillArea', {
 				url: '/sites-by-skill-area/?skillAreaId',
 				templateUrl: rtaSiteAndTeamOnSkillOverviewTemplateUrl,
-				controller: rtaSelectSkillCtrl(),
+				controller: 'RtaSiteAndTeamOnSkillOverviewCtrl'
 			})
 			.state('rta.teams-by-skill', {
 				url: '/teams-by-skill/?siteIds&skillIds',
 				templateUrl: rtaSiteAndTeamOnSkillOverviewTemplateUrl,
-				controller: rtaSelectSkillCtrl(),
+				controller: 'RtaSiteAndTeamOnSkillOverviewCtrl'
 			})
 			.state('rta.teams-by-skillArea', {
 				url: '/teams-by-skill-area/?siteIds&skillAreaId',
 				templateUrl: rtaSiteAndTeamOnSkillOverviewTemplateUrl,
-				controller: rtaSelectSkillCtrl(),
+				controller: 'RtaSiteAndTeamOnSkillOverviewCtrl'
 			})
 			.state('rta.sites', {
 				templateUrl: 'app/rta/overview/rta-sites.html',

@@ -32,7 +32,7 @@ describe('RtaSelectSkillCtrl', function () {
 		$controllerBuilder = _ControllerBuilder_;
 		$timeout = _$timeout_;
 
-		scope = $controllerBuilder.setup('RtaSelectSkillCtrl');
+		scope = $controllerBuilder.setup('RtaSiteAndTeamOnSkillOverviewCtrl');
 
 		$fakeBackend.clear();
 

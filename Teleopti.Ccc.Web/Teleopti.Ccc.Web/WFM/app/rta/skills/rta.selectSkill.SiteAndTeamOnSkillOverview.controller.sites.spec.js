@@ -29,7 +29,6 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 		$timeout = _$timeout_;
 
 		scope = $controllerBuilder.setup('RtaSiteAndTeamOnSkillOverviewCtrl');
-
 		$fakeBackend.clear();
 		spyOn($state, 'go');
 		$fakeBackend.withToggle('RTA_SiteAndTeamOnSkillOverview_40817'); 
@@ -109,7 +108,6 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 		expect(scope.sites[1].OutOfAdherence).toEqual(5);
 	});
 
-	/*is it even possible to have a preselected skill in the sites by skill view*/
 	it('should display agents out of adherence in sites for preselected skill', function() {
 		stateParams.skillIds = "emailGuid";
 		$fakeBackend
@@ -129,7 +127,6 @@ describe('RtaSiteAndTeamOnSkillOverviewCtrl', function() {
 		expect(scope.sites[0].OutOfAdherence).toEqual(5);
 	});
 
-	/*is it even possible to have a preselected skill in the sites by skill area view*/
 	it('should display agents out of adherence in sites for preselected skill area', function() {
 		stateParams.skillAreaId = "emailAndPhoneGuid";
 		$fakeBackend

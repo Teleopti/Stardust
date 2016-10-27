@@ -1534,7 +1534,6 @@
     <Content Include="WFM\app\rta\details\rta.agentdetails.controller.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.breadcrumb.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.filter.spec.js" />
-    <Content Include="WFM\app\rta\skills\rta.selectSkill.controller.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.monitorBySkills.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.inalarm.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.alarmcontext.spec.js" />
