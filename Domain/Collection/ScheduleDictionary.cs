@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.Domain.Collection
 
         protected virtual IEnumerable<IBusinessRuleResponse> CheckIfCanModify(Dictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleParts, INewBusinessRuleCollection newBusinessRules)
         {
-            var failedRules = new HashSet<IBusinessRuleResponse>();
+            var failedRules = new List<IBusinessRuleResponse>();
 
             //do changes
             scheduleParts.ForEach(part => ((ScheduleRange) rangeClones[part.Person]).ModifyInternal(part));
