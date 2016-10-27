@@ -1,5 +1,4 @@
 ﻿@RTA
-@ignore
 Feature: Site And Team On SkillArea Overview
 	In order to quicker find what site or team manager to contact when skills belongs to skill area goes critical
 	As a real time analyst

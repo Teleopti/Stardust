@@ -1,5 +1,4 @@
 ﻿@RTA
-@ignore
 Feature: Site And Team On Skill Overview
 	In order to quicker find what site or team manager to contact when a skill goes critical
 	As a real time analyst
