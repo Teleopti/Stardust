@@ -158,6 +158,36 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
+		public void ShouldOnlyCountAgentOnce()
+		{
+			Now.Is("2016-10-17 08:10");
+			Database
+				.WithAgent("Ashley")
+				.WithSkill("Phone")
+				.WithSkill("Email");
+			var siteId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			var ashleyId = Database.PersonIdFor("Ashley");
+			var phoneSkillId = Database.SkillIdFor("Phone");
+			var emailSkillId = Database.SkillIdFor("Email");
+			WithUnitOfWork.Do(() =>
+			{
+				Groupings.UpdateGroupingReadModel(new[] { ashleyId });
+				StatePersister.Persist(new AgentStateReadModelForTest
+				{
+					PersonId = ashleyId,
+					SiteId = siteId,
+					TeamId = teamId,
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-10-17 08:00".Utc()
+				});
+			});
+
+			WithUnitOfWork.Get(() => Target.ReadForSkills(siteId, new[] { phoneSkillId, emailSkillId }))
+				.Single().Count.Should().Be(1);
+		}
+
+		[Test]
 		public void ShouldNotCountDeletedAgents()
 		{
 			Now.Is("2016-10-17 08:10");
@@ -196,5 +226,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			WithUnitOfWork.Get(() => Target.ReadForSkills(siteId, new[] { phoneSkillId }))
 				.Single().Count.Should().Be(1);
 		}
+
 	}
 }
