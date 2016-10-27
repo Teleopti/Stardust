@@ -54,11 +54,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		[When(@"I click add agents to seat button")]
 		public void WhenIClickAddAgentsToSeatButton()
 		{
-            Browser.Interactions.TryUntil(
-                () => Browser.Interactions.Click(".seatbooking-operations-add .add-agents"),
-                () => Browser.Interactions.IsAnyVisible(".seatbooking-operations-cancel .cancel-operation"),
-                TimeSpan.FromMilliseconds(1000));
-        }
+		    Browser.Interactions.Click(".seatbooking-operations-add .add-agents");
+		}
 
 		[Then(@"I should see people search list")]
 		public void ThenIShouldSeePeopleSearchList()
@@ -90,12 +87,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		[When(@"I select agent '(.*)' from search list")]
 		public void WhenISelectAgentFromSearchList(string agent)
 		{
-            Browser.Interactions.AssertExists("people-selection-list");
-            Browser.Interactions.AssertAnyContains("people-selection-list .ui-grid-canvas>.ui-grid-row:first-child",agent);
-			Browser.Interactions.ClickVisibleOnly("people-selection-list .ui-grid-canvas>.ui-grid-row:first-child");
-		}
+            Browser.Interactions.AssertAnyContains("people-selection-list .ui-grid-canvas>.ui-grid-row:first-child", agent);
+			Browser.Interactions.ClickVisibleOnly("people-selection-list .ui-grid-viewport:last-child .ui-grid-canvas .ui-grid-row");
+        }
 
-		[When(@"I click assign button")]
+        [When(@"I click assign button")]
 		public void WhenIClickAssignButton()
 		{
 			Browser.Interactions.Click(".seatbooking-operations-cancel .assign-agents");
