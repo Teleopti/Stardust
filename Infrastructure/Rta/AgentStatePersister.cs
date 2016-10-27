@@ -214,17 +214,7 @@ WHERE
 			if (updateSchedule)
 				query.SetParameter("Schedule", _serializer.SerializeObject(model.Schedule), NHibernateUtil.StringClob);
 
-			try
-			{
-				query.ExecuteUpdate();
-			}
-			catch (DataSourceException e)
-			{
-				var sqlDeadlockException = e.AllExceptions().FirstOrDefault(x => x.IsSqlDeadlock());
-				if (sqlDeadlockException != null)
-					throw new DeadLockVictimException("Transaction deadlocked when updating AgentState", sqlDeadlockException);
-				throw;
-			}
+			throwDeadlockVictimExceptionFor(() => query.ExecuteUpdate());
 		}
 
 		public void Delete(Guid personId, DeadLockVictim deadLockVictim)
@@ -297,12 +287,18 @@ WHERE
 
 			var dataSourceIdUserCodes = externalLogons.Select(x => $"{x.DataSourceId}__{x.UserCode}").ToArray();
 			var sql = SelectAgentState + "WITH (UPDLOCK, ROWLOCK) WHERE DataSourceIdUserCode IN (:DataSourceIdUserCodes)";
-			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetParameterList("DataSourceIdUserCodes", dataSourceIdUserCodes)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
-				.SetReadOnly(true)
-				.List<AgentStateFound>()
-				;
+
+			IEnumerable<AgentStateFound> result = null;
+			throwDeadlockVictimExceptionFor(() =>
+			{
+				result = _unitOfWork.Current().Session().CreateSQLQuery(sql)
+					.SetParameterList("DataSourceIdUserCodes", dataSourceIdUserCodes)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
+					.SetReadOnly(true)
+					.List<AgentStateFound>()
+					;
+			});
+			return result;
 		}
 
 		[LogInfo]
@@ -336,6 +332,21 @@ WHERE
 		{
 			var sql = "SET DEADLOCK_PRIORITY " + (deadLockVictim == DeadLockVictim.Yes ? "LOW" : "HIGH");
 			_unitOfWork.Current().Session().CreateSQLQuery(sql).ExecuteUpdate();
+		}
+
+		private static void throwDeadlockVictimExceptionFor(Action action)
+		{
+			try
+			{
+				action.Invoke();
+			}
+			catch (DataSourceException e)
+			{
+				var sqlDeadlockException = e.AllExceptions().FirstOrDefault(x => x.IsSqlDeadlock());
+				if (sqlDeadlockException != null)
+					throw new DeadLockVictimException("Transaction deadlocked updating AgentState", sqlDeadlockException);
+				throw;
+			}
 		}
 
 		private static string SelectAgentState = @"SELECT * FROM [dbo].[AgentState] ";
