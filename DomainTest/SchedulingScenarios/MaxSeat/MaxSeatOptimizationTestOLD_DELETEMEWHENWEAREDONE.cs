@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	[Ignore("Turning off these for now when teamblock is used instead. Check what to keep here!")]
-	public class MaxSeatOptimizationTest
+	public class MaxSeatOptimizationTestOLD_DELETEMEWHENWEAREDONE
 	{
 		public MaxSeatOptimization Target;
 

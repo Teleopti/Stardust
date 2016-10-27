@@ -296,7 +296,7 @@
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatDataFactory.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatMustNotResourceCalculateTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOptimizationTeamBlockTest.cs" />
-    <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOptimizationTest.cs" />
+    <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOptimizationTestOLD_DELETEMEWHENWEAREDONE.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnNonScheduleDaysCascadingTest.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnScheduleDaysTest.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnScheduledDaysCascadingTest.cs" />
