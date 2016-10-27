@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void ApproveIfAllChecksOk()
 		{
 			var request = createNewRequest();
-			
+
 			var staffingList = new List<SkillStaffingInterval>()
 			{
 				new SkillStaffingInterval()
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				}
 			};
 			ScheduleForecastSkillReadModelRepository.Persist( staffingList, DateTime.Now);
-
+			
 			Target.Process(request, _now);
 
 			Assert.AreEqual(2, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
@@ -343,7 +343,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
 
 			var request = new FakePersonRequest(person, new AbsenceRequest(absence, period));
-
+			request.Pending();
 			request.SetId(Guid.NewGuid());
 			request.SetCreated(new DateTime(2016, 3, 14, 0, 5, 0, DateTimeKind.Utc));
 			PersonRequestRepository.Add(request);
@@ -441,7 +441,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
 
 			var personRequest = new FakePersonRequest(person, new AbsenceRequest(absence, period));
-
+			personRequest.Pending();
 			personRequest.SetId(Guid.NewGuid());
 			personRequest.SetCreated(new DateTime(2016, 3, 14, 0, 5, 0, DateTimeKind.Utc));
 			PersonRequestRepository.Add(personRequest);
@@ -479,7 +479,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
 
 			var personRequest = new FakePersonRequest(person, new AbsenceRequest(absence, period));
-
+			personRequest.Pending();
 			personRequest.SetId(Guid.NewGuid());
 			personRequest.SetCreated(new DateTime(2016, 3, 14, 0, 5, 0, DateTimeKind.Utc));
 			PersonRequestRepository.Add(personRequest);
@@ -532,7 +532,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void ApproveIfForecastWithShrinkageIsZero()
 		{
 			var request = createNewRequest();
-
+			
 			var staffingList = new List<SkillStaffingInterval>()
 			{
 				new SkillStaffingInterval()
@@ -569,7 +569,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void ApproveIfForecastIsZero()
 		{
 			var request = createNewRequest(true,false);
-
+			
 			var staffingList = new List<SkillStaffingInterval>()
 			{
 				new SkillStaffingInterval()
@@ -684,7 +684,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(_primarySkill1.Id.GetValueOrDefault(), OpenHourStatus.WithinOpenHour);
 			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(_primarySkill2.Id.GetValueOrDefault(), OpenHourStatus.WithinOpenHour);
-
+			request.Pending();
 			return request;
 		}
 
