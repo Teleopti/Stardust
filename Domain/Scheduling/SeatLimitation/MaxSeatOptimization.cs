@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly WorkShiftSelectorForMaxSeat _workShiftSelectorForMaxSeat;
 		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
+		private readonly RestrictionOverLimitValidator _restrictionOverLimitValidator;
 
 		public MaxSeatOptimization(MaxSeatSkillDataFactory maxSeatSkillDataFactory,
 														CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
@@ -43,7 +44,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 														ITeamBlockClearer teamBlockClearer,
 														WorkShiftSelectorForMaxSeat workShiftSelectorForMaxSeat,
 														IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
-														ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator)
+														ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
+														RestrictionOverLimitValidator restrictionOverLimitValidator)
 		{
 			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
@@ -57,6 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_workShiftSelectorForMaxSeat = workShiftSelectorForMaxSeat;
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
+			_restrictionOverLimitValidator = restrictionOverLimitValidator;
 		}
 
 		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IScenario scenario, IOptimizationPreferences optimizationPreferences)
@@ -92,7 +95,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 							rollbackService,
 							new DoNothingResourceCalculateDelayer(), maxSeatData.AllMaxSeatSkillDaysPerSkill().ToSkillDayEnumerable(), schedules, new ShiftNudgeDirective(), businessRules);
 
-						if(!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences)) //kolla null
+						if (!_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences))
+						{
+							//kolla om vi ska ändra "gamla" rollback istället
+							rollbackService.RollbackMinimumChecks(); //förmodligen fel - rullar tillbaka allt	
+						}
+
+						if (!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences)) //kolla null
 						{
 							//kolla om vi ska ändra "gamla" rollback istället
 							rollbackService.RollbackMinimumChecks(); //förmodligen fel - rullar tillbaka allt
