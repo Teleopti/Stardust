@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -44,8 +46,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			skillStaffPeriodDic.Add(new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(60)), getSkillStaffPeriod(new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(60))));
 
 			skillStaffPeriodExt.Add(skill,skillStaffPeriodDic);
-			ExtractSkillStaffDataForResourceCalculation.FakeDictionary = skillStaffPeriodExt;
-
+			var fakeholder = new FakeSkillStaffPeriodHolder();
+			fakeholder.SetDictionary(skillStaffPeriodExt);
+			var  fakeResourceCalculationData = new FakeResourceCalculationData();
+			fakeResourceCalculationData.SetSkills(new List<ISkill> {skill});
+			fakeResourceCalculationData.SetSkillStaffPeriodHolder(fakeholder);
+			ExtractSkillStaffDataForResourceCalculation.FakeResourceCalculationData = fakeResourceCalculationData;
 			Target.ResourceCalculatePeriod(new DateTimePeriod(dateTime,dateTime.AddDays(1)));
 
 			var staffing = ScheduleForecastSkillReadModelRepository.GetBySkill(skill.Id.GetValueOrDefault(), dateTime, dateTime.AddMinutes(90)).ToList(); 
@@ -76,7 +82,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			skillStaffPeriodDic.Add(new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(60)), getSkillStaffPeriod(new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(60))));
 
 			skillStaffPeriodExt.Add(skill, skillStaffPeriodDic);
-			ExtractSkillStaffDataForResourceCalculation.FakeDictionary = skillStaffPeriodExt;
+			var fakeholder = new FakeSkillStaffPeriodHolder();
+			fakeholder.SetDictionary(skillStaffPeriodExt);
+			var fakeResourceCalculationData = new FakeResourceCalculationData();
+			fakeResourceCalculationData.SetSkills(new List<ISkill> { skill });
+			fakeResourceCalculationData.SetSkillStaffPeriodHolder(fakeholder);
+			ExtractSkillStaffDataForResourceCalculation.FakeResourceCalculationData = fakeResourceCalculationData;
 
 			Target.ResourceCalculatePeriod(new DateTimePeriod(dateTime, dateTime.AddDays(1)));
 
@@ -88,7 +99,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 		private ISkillStaffPeriod getSkillStaffPeriod(DateTimePeriod period)
 		{
-			return new SkillStaffPeriod(period, new Task(), new ServiceAgreement(), new StaffingCalculatorServiceFacade());
+			var skillStaffperiod = new SkillStaffPeriod(period, new Task(), new ServiceAgreement(), new StaffingCalculatorServiceFacade());
+			//skillStaffperiod.Payload = new SkillStaff(new Task(), new ServiceAgreement());
+			return skillStaffperiod;
 		}
 
 	}
@@ -96,6 +109,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	public class FakeExtractSkillStaffDataForResourceCalculation : IExtractSkillStaffDataForResourceCalculation
 	{
 		public ISkillSkillStaffPeriodExtendedDictionary FakeDictionary { get; set; }
+		public IResourceCalculationData FakeResourceCalculationData { get; set; }
 
 		public ISkillSkillStaffPeriodExtendedDictionary ExtractSkillStaffPeriodDictionary(DateOnlyPeriod periodDateOnly)
 		{
@@ -104,13 +118,88 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 		public IResourceCalculationData ExtractResourceCalculationData(DateOnlyPeriod periodDateOnly)
 		{
-			throw new NotImplementedException();
+			return FakeResourceCalculationData;
 		}
 
 		public void DoCalculation(DateOnlyPeriod period, IResourceCalculationData resCalcData)
 		{
-			throw new NotImplementedException();
+			// do nothing
 		}
 	}
 
+	public class FakeResourceCalculationData : IResourceCalculationData
+	{
+		public void SetSkills(IList<ISkill> skills )
+		{
+			Skills = skills;
+		}
+
+		public void SetSkillStaffPeriodHolder(ISkillStaffPeriodHolder skillStaffPeriodHolder)
+		{
+			SkillStaffPeriodHolder = skillStaffPeriodHolder;
+		}
+		public IScheduleDictionary Schedules { get; }
+		public bool ConsiderShortBreaks { get; }
+		public bool DoIntraIntervalCalculation { get; }
+		public IEnumerable<ISkill> Skills { get; private set; }
+		public ISkillStaffPeriodHolder SkillStaffPeriodHolder { get; private set; }
+		public IDictionary<ISkill, IEnumerable<ISkillDay>> SkillDays { get; }
+		public bool SkipResourceCalculation { get; }
+	}
+
+	public class FakeSkillStaffPeriodHolder :ISkillStaffPeriodHolder
+	{
+		public void SetDictionary(ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodDictionary)
+		{
+			SkillSkillStaffPeriodDictionary = skillSkillStaffPeriodDictionary;
+		}
+			
+		
+		public IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> SkillStaffDataPerActivity(DateTimePeriod onPeriod, IList<ISkill> onSkills,
+			ISkillPriorityProvider skillPriorityProvider)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ISkillSkillStaffPeriodExtendedDictionary SkillSkillStaffPeriodDictionary { get; private set; }
+		public IList<ISkillStaffPeriod> SkillStaffPeriodList(IEnumerable<ISkill> skills, DateTimePeriod utcPeriod)
+		{
+			var skillStaffPeriods = new List<ISkillStaffPeriod>();
+			skills.ForEach(skill =>
+			{
+				ISkillStaffPeriodDictionary content;
+				if (SkillSkillStaffPeriodDictionary.TryGetValue(skill, out content))
+				{
+					foreach (var dictionary in content)
+					{
+						if (dictionary.Key.EndDateTime <= utcPeriod.StartDateTime) continue;
+						if (dictionary.Key.StartDateTime >= utcPeriod.EndDateTime) continue;
+
+						skillStaffPeriods.Add(dictionary.Value);
+					}
+				}
+			});
+			return skillStaffPeriods;
+		}
+
+		public IList<ISkillStaffPeriod> SkillStaffPeriodList(IAggregateSkill skill, DateTimePeriod utcPeriod)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ISkillStaffPeriodDictionary SkillStaffPeriodList(IAggregateSkill skill, DateTimePeriod utcPeriod, bool forDay)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<ISkillStaffPeriod> IntersectingSkillStaffPeriodList(IEnumerable<ISkill> skills, DateTimePeriod utcPeriod)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IDictionary<ISkill, ISkillStaffPeriodDictionary> SkillStaffPeriodDictionary(IEnumerable<ISkill> skills, DateTimePeriod utcPeriod)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }
