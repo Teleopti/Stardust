@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -191,6 +192,43 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				{
 					UseRotations = true,
 					RotationsValue = rotationValue
+				},
+				Extra =
+				{
+					UseTeams = true,
+					TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy)
+				}
+			};
+
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, scenario, optPreferences);
+
+			return schedules.SchedulesForDay(dateOnly).Count(x => x.PersonAssignment().Period.StartDateTime.TimeOfDay == TimeSpan.FromHours(9));
+		}
+
+		[TestCase(1d, ExpectedResult = 0)]
+		[TestCase(0d, ExpectedResult = 1)]
+		public int ShouldConsiderHourlyAvailabilities(double availabilityValue)
+		{
+			var site = new Site("_") { MaxSeats = 1 }.WithId();
+			var team = new Team { Description = new Description("_"), Site = site };
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var dateOnly = new DateOnly(2016, 10, 25);
+			var scenario = new Scenario("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 9, 0, 60), new TimePeriodWithSegment(17, 0, 17, 0, 60), shiftCategory));
+			var agentScheduledForAnHourData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, new Team { Site = site }, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 9, 0));
+			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData.Assignment, agentScheduledForAnHourData.Assignment });
+			var studentAvailabilityRestriction = new StudentAvailabilityRestriction{ StartTimeLimitation = new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(8, 0, 0)) };
+			var studentAvailabilityDay = new StudentAvailabilityDay(agentData.Agent, dateOnly, new List<IStudentAvailabilityRestriction>() {studentAvailabilityRestriction});
+			((ScheduleRange)schedules[agentData.Agent]).Add(studentAvailabilityDay);
+			var optPreferences = new OptimizationPreferences
+			{
+				General =
+				{
+					UseStudentAvailabilities = true,
+					StudentAvailabilitiesValue = availabilityValue
 				},
 				Extra =
 				{
