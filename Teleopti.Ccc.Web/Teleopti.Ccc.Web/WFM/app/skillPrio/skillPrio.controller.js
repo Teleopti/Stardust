@@ -22,12 +22,26 @@
 		vm.displayAutoComplete = displayAutoComplete;
 		vm.save = save;
 		vm.toggledOptimization = checkToggles();
-			/////////////////////////////////Wfm_SkillPriorityRoutingGUI_39885
-			function checkToggles() {
-				toggleService.togglesLoaded.then(function () {
-					vm.toggledOptimization = toggleService.Wfm_SkillPriorityRoutingGUI_39885
-				});
+		/////////////////////////////////Wfm_SkillPriorityRoutingGUI_39885
+		function checkToggles() {
+			toggleService.togglesLoaded.then(function () {
+				vm.toggledOptimization = toggleService.Wfm_SkillPriorityRoutingGUI_39885
+				if (!toggleService.Wfm_SkillPriorityRoutingGUI_39885) {
+					document.location = "#/"
+				}
+			});
+		}
+
+		function sortBySkillName(a, b) {
+			var nameA = a.SkillName.toUpperCase(); // ignore upper and lowercase
+			var nameB = b.SkillName.toUpperCase(); // ignore upper and lowercase
+			if (nameA < nameB) {
+				return -1;
 			}
+			if (nameA > nameB) {
+				return 1;
+			}
+		}
 
 		function selectActivity(activity) {
 			if (!selectActivityPreCheck(activity)) return;
@@ -35,6 +49,7 @@
 			var allActivitySkills = vm.skills.filter(belongsToActivity);
 			vm.prioritizedSkills = unflattendDataFromServer(allActivitySkills.filter(hasPriority));
 			vm.activitySkills = allActivitySkills.filter(lacksPriority);
+			vm.activitySkills.sort(sortBySkillName);
 		}
 
 		function selectActivityPreCheck(activity) {
@@ -49,10 +64,9 @@
 
 		function unflattendDataFromServer(data) {
 			var nonFlatData = [];
+				data.sort(sortBySkillName);
 			data.forEach(function (skill) {
-				if (!skill.sibling) {
-					skill.sibling = []
-				}
+				skill.sibling = []
 				if (nonFlatData.some(function (e) {
 					return e.Priority == skill.Priority
 				})) {
