@@ -63,6 +63,6 @@ FROM mart.fact_schedule_deviation f
 		(select shift_startdate_local_id from #schedule_deviation)
 
 
-drop table #person, #schedule, #schedule_day --, #schedule_deviation
+drop table #person, #schedule, #schedule_day, #schedule_deviation
 
 END
