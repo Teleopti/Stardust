@@ -140,8 +140,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		public IList<CheckingResult> CheckPersonAccounts(CheckPersonAccountFormData input)
 		{
 			var people = _personRepository.FindPeople(input.PersonIds);
-			var period = new DateOnlyPeriod(new DateOnly(input.Start), new DateOnly(input.End));
-			var extendedPeriod = new DateOnlyPeriod(new DateOnly(input.Start).AddDays(-1), new DateOnly(input.End));
+			var extendedPeriod = new DateOnlyPeriod(new DateOnly(input.Start).AddDays(-1), new DateOnly(input.Start));
 			var scenario = _currentScenario.Current();
 			var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people,
 				new ScheduleDictionaryLoadOptions(false, false),
@@ -163,7 +162,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 				var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(schedules[person]);
 				var scheduleDays = schedules[person].ScheduledDayCollection(extendedPeriod);
-				scheduleDays.Single(d => d.DateOnlyAsPeriod.DateOnly == period.StartDate).CreateAndAddAbsence(absenceLayer);
+				scheduleDays.Single(d => d.DateOnlyAsPeriod.DateOnly == new DateOnly(input.Start)).CreateAndAddAbsence(absenceLayer);
 				var responses = schedules.CheckBusinessRules(scheduleDays, businessRulesForPersonAccountUpdate);
 				if (responses.Any(r =>
 				{
