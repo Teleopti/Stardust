@@ -427,8 +427,77 @@ xdescribe('PermissionsCtrlRefact', function () {
 		$httpBackend.flush();
 
 		expect(vm.applicationFunctions[1].IsSelected).toEqual(true);
+		expect(vm.applicationFunctions[1].ChildFunctions[0].IsSelected).toEqual(false);
 		expect(vm.applicationFunctions[1].ChildFunctions[1].IsSelected).toEqual(true);
 	});
+
+	it('should indicate all ApplicationFunctions and its ChildFunctions for selected role', function () {
+		fakeBackend
+			.withRole({
+				BuiltIn: false,
+				DescriptionText: 'HermansRoll',
+				Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+				IsAnyBuiltIn: true,
+				IsMyRole: false,
+				Name: 'HermansRoll'
+			})
+			.withRoleInfo({
+				Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+				AvailableFunctions: [
+					{
+						Id: '63656f9a-be16-4bb7-9012-9bde01232075'
+					},
+					{
+						Id: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+					},
+					{
+						Id: '52b6f3de-55e0-45b2-922e-316f8538f60c'
+					}
+				]
+			})
+			.withApplicationFunction({
+				FunctionId: '6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7',
+				Name: 'FunctionOne',
+				ChildFunctions: []
+			})
+			.withApplicationFunction({
+				FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+				Name: 'FunctionTwo',
+				ChildFunctions: [
+					{
+						FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc',
+						ChildFunctions: [
+							{
+								FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c',
+								ChildFunctions: [
+									{
+										FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc'
+									},
+									{
+										FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c'
+									}
+								]
+							},
+							{
+								FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+							}
+						]
+					},
+					{
+						FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+					}
+				]
+			});
+		$httpBackend.flush();
+
+		vm.selectRole(vm.roles[0]);
+		$httpBackend.flush();
+
+		expect(vm.applicationFunctions[1].IsSelected).toEqual(true);
+		expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].IsSelected).toEqual(true);
+		expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].ChildFunctions[1].IsSelected).toEqual(true);
+	});
+
 
 	it('should fetch organization info for selected role', function () {
 		fakeBackend.withRole({
@@ -463,7 +532,7 @@ xdescribe('PermissionsCtrlRefact', function () {
 		expect(vm.selectedRole.AvailableTeams[0].Id).toEqual('6a21c802-7a34-4917-8dfd-9b5e015ab461');
 	});
 
-	xit('should indicate available site for selected role', function () {
+	it('should indicate available site for selected role', function () {
 		var BusinessUnit = {
 			ChildNodes: [
 				{

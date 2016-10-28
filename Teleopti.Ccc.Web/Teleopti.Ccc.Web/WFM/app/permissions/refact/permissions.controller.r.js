@@ -44,30 +44,40 @@
             });
         }
 
-        function findAllMatchingFunctions(selectedRole) {
-              vm.applicationFunctions = vm.applicationFunctions.map(function (fn) {
-                    fn.IsSelected = selectedRole.AvailableFunctions.some(function (af) {
-                        return fn.FunctionId == af.Id;
-                    });
-
-                    if (fn.ChildFunctions.length > 0) {
-                        console.log(fn);
-                        fn.ChildFunctions[0].IsSelected = true;
-                    }
-                    return fn;
-                });
-        }
-    
         function selectRole(role) {
             markSelectedRole(role);
             //HELA VÄGEN JAO: SÄTT ISSELECTED BRah
 
             PermissionsServiceRefact.manage.getRoleInformation({ Id: role.Id }).$promise.then(function (data) {
                 vm.selectedRole = data;
-                findAllMatchingFunctions(vm.selectedRole);
+                //findAllMatchingFunctions(vm.selectedRole);
+
+                for (var i = 0; i < vm.selectedRole.AvailableFunctions.length; i++) {
+                  //console.log('matchId',i,vm.selectedRole.AvailableFunctions[i].Id );
+                  parseTreeJson(vm.applicationFunctions, vm.selectedRole.AvailableFunctions[i].Id);
+                }
             });
         }
-            
+
+        var parseTreeJson = function(treeNodes, matchId){
+          if (!treeNodes || !treeNodes.length) return;
+           for (var i = 0, len = treeNodes.length; i < len; i++) {
+
+                var childs = treeNodes[i].ChildFunctions;
+                //console.log('find all id', i, treeNodes[i].FunctionId);
+
+                if (treeNodes[i].FunctionId == matchId) {
+                  treeNodes[i].IsSelected = true;
+                } else if(!treeNodes[i].IsSelected) {
+                  treeNodes[i].IsSelected = false;
+                }
+                if(childs && childs.length > 0){
+                  parseTreeJson(childs,matchId);
+                }
+           }
+           //console.log('hello tree',vm.applicationFunctions);
+        };
+
         var previously = null;
         function markSelectedRole(role) {
              if (previously != null) {
@@ -76,7 +86,7 @@
             role.IsSelected = true;
             previously = role;
         }
-        
+
         function fetchData() {
             PermissionsServiceRefact.roles.query().$promise.then(function (data) {
                 vm.roles = data;
@@ -91,4 +101,3 @@
 
     }
 })();
-
