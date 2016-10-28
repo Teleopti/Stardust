@@ -3,6 +3,7 @@ using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Interfaces.Domain;
@@ -44,10 +45,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapNow()
 		{
 			var mapper = new ShiftTradePeriodViewModelMapper();
-			var now = MockRepository.GenerateMock<INow>();
-			var date = new DateTime(2001, 1, 1);
-
-			now.Stub(x => x.UtcDateTime()).Return(date);
+			var date = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Local);
+			var now = new MutableNow(date);
 
 			var result = mapper.Map(new WorkflowControlSet(), now);
 
@@ -61,16 +60,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var arabicCalendar = new UmAlQuraCalendar();
 			var mapper = new ShiftTradePeriodViewModelMapper();
-			var now = MockRepository.GenerateMock<INow>();
 			var arabicDate = new DateTime(1435, 1, 1, arabicCalendar);
-
-			now.Stub(x => x.UtcDateTime()).Return(arabicDate);
-
+			var now = new MutableNow(arabicDate);
 			var result = mapper.Map(new WorkflowControlSet(), now);
 
-			result.NowYear.Should().Be.EqualTo(arabicCalendar.GetYear(arabicDate));
-			result.NowMonth.Should().Be.EqualTo(arabicCalendar.GetMonth(arabicDate));
-			result.NowDay.Should().Be.EqualTo(arabicCalendar.GetDayOfMonth(arabicDate));
+			var localDateTime = arabicDate.ToLocalTime();
+
+			result.NowYear.Should().Be.EqualTo(arabicCalendar.GetYear(localDateTime));
+			result.NowMonth.Should().Be.EqualTo(arabicCalendar.GetMonth(localDateTime));
+			result.NowDay.Should().Be.EqualTo(arabicCalendar.GetDayOfMonth(localDateTime));
 		}
 	}
 }
