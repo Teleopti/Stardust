@@ -2052,5 +2052,37 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			CollectionAssert.AreEquivalent(waitlistRequestsIds,
 				new List<Guid>() {request1.Id.GetValueOrDefault(), request2.Id.GetValueOrDefault(), request3.Id.GetValueOrDefault(), request6.Id.GetValueOrDefault()});
 		}
+
+		[Test]
+		public void ShouldFilteredByMoreThan2100People()
+		{
+			var count = 2101;
+			var persons = new List<IPerson>(count);
+			for (int i = 0; i < count; i++)
+			{
+				persons.Add(PersonFactory.CreatePerson("person" + i));
+			}
+			PersistAndRemoveFromUnitOfWork(persons);
+
+			var absence = AbsenceFactory.CreateAbsence("Football");
+			PersistAndRemoveFromUnitOfWork(absence);
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016, 10, 28, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 10, 28, 12, 0, 0, DateTimeKind.Utc)));
+			var request = new PersonRequest(persons[0], absenceRequest);
+			request.Pending();
+			PersistAndRemoveFromUnitOfWork(request);
+
+			var filter = new RequestFilter
+			{
+				Paging = new Paging {Skip = 0, Take = 20},
+				Period = new DateTimePeriod(new DateTime(2016, 10, 28, 0, 0, 0, DateTimeKind.Utc), new DateTime(2016, 10, 29, 0, 0, 0, DateTimeKind.Utc)),
+				RequestTypes = new[] {RequestType.AbsenceRequest, RequestType.ShiftTradeRequest},
+				Persons = persons
+			};
+
+			var requests = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter);
+			requests.Count().Should().Be(1);
+			requests.FirstOrDefault().Person.Id.Should().Be(persons[0].Id);
+		}
 	}
 }

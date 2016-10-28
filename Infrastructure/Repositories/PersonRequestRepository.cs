@@ -13,6 +13,7 @@ using System.Linq;
 using NHibernate.Dialect.Function;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -217,15 +218,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (persons == null) return;
 
 			var people = persons.ToArray();
+	
+			var personIn = createPersonInCriterion("Person", people);
+			var personInShiftTradeTo = includeRequestsWithShiftTradePersonTo(people);
 
-			criteria.Add(Restrictions.Or(includeRequestsWithShiftTradePersonTo(people), Restrictions.InG("Person", people)));
+			criteria.Add(Restrictions.Or(personInShiftTradeTo, personIn));
 		}
 
 		private static AbstractCriterion includeRequestsWithShiftTradePersonTo(IPerson[] people)
 		{
 			var shiftTradeDetailsForAgentPersonTo = DetachedCriteria.For<ShiftTradeSwapDetail>()
 				.SetProjection(Projections.Property("Parent"))
-				.Add(Restrictions.InG("PersonTo", people));
+				.Add(createPersonInCriterion("PersonTo", people));
 
 			var shiftTradeRequestsForAgentPersonTo = DetachedCriteria.For<ShiftTradeRequest>()
 				.SetProjection(Projections.Property("Parent"))
@@ -817,6 +821,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 										  .SetDateTime("startDate", dateTimePeriod.StartDateTime)
 										  .SetDateTime("endDate", dateTimePeriod.EndDateTime)
 										  .List<Guid>();
+		}
+
+		private static AbstractCriterion createPersonInCriterion(string propertyName, IReadOnlyCollection<IPerson> people)
+		{
+			if (people.Count <= 2100)
+			{
+				return Restrictions.InG(propertyName, people);
+			}
+
+			return new MoreParameterInCriterion(Projections.Property(propertyName),
+				people.Select(p => p.Id.GetValueOrDefault()).ToArray());
 		}
 	}
 }
