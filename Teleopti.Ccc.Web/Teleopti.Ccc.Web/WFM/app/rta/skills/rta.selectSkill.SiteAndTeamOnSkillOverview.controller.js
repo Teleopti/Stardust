@@ -255,7 +255,14 @@
 
 					/*go to parent state for now until feature for agents is implemented*/
 					$scope.openSelected = function () {
-								goToSelectSkill();
+						var stateParamsObj = {};
+						if($scope.siteIds.length > 0 ){
+							stateParamsObj = { skillIds: getSkillIds(), siteIds: [$scope.siteIds], teamIds: $scope.selectedItemIds }
+						}else{
+							stateParamsObj = { skillIds: getSkillIds(), siteIds: $scope.selectedItemIds }
+						}
+						console.log(stateParamsObj);
+						goToSelectSkill();
 					}
 
 					$scope.$watch('selectedSkill', function (newValue, oldValue) {
