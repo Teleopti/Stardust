@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -36,13 +34,15 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 			var schedulesThatOverlap = _scheduleStorage.FindSchedulesForPersons(schedulePeriod, _currentScenario.Current(),
 				personProvider, new ScheduleDictionaryLoadOptions(false, false), personList);
-			return personList.Any(person => personScheduleCausesMaxSeatViolation
-			   (site, scheduleDayOutgoing, schedulesThatOverlap, person, scheduleDateOnlyPeriod, seatUsageOnEachIntervalDic,
-				   incomingActivitiesRequiringSeat));
+			return
+				personList.Any(
+					person => personScheduleCausesMaxSeatViolation(site, scheduleDayOutgoing, schedulesThatOverlap,
+					person, scheduleDateOnlyPeriod, seatUsageOnEachIntervalDic, incomingActivitiesRequiringSeat));
 		}
 
-		private static bool personScheduleCausesMaxSeatViolation(ISite site, IScheduleDay scheduleDayOutgoing, IScheduleDictionary schedulesThatOverlap,
-	IPerson person, DateOnlyPeriod scheduleDateOnlyPeriod, IList<ISeatUsageForInterval> seatUsageOnEachIntervalDic, IEnumerable<IVisualLayer> incomingActivitiesRequiringSeat)
+		private static bool personScheduleCausesMaxSeatViolation(ISite site, IScheduleDay scheduleDayOutgoing,
+			IScheduleDictionary schedulesThatOverlap, IPerson person, DateOnlyPeriod scheduleDateOnlyPeriod,
+			IList<ISeatUsageForInterval> seatUsageOnEachIntervalDic, IEnumerable<IVisualLayer> incomingActivitiesRequiringSeat)
 		{
 			seatUsageOnEachIntervalDic.ForEach(interval => interval.SeatUsage = 0);
 
@@ -54,10 +54,10 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 			var scheduleDayCollection = scheduleRangeForPerson
 				.ScheduledDayCollection(scheduleDateOnlyPeriod)
-				.Where(scheduleDay => !(scheduleDayMatchesScheduleDayToBeTraded(scheduleDayOutgoing, scheduleDay))).ToList();
+				.Where(scheduleDay => !scheduleDayMatchesScheduleDayToBeTraded(scheduleDayOutgoing, scheduleDay));
 
-			return activitiesOnDayAlreadyMatchOrExceedMaximumSeats(site, scheduleDayCollection, seatUsageOnEachIntervalDic, incomingActivitiesRequiringSeat);
-
+			return activitiesOnDayAlreadyMatchOrExceedMaximumSeats(site, scheduleDayCollection,
+				seatUsageOnEachIntervalDic, incomingActivitiesRequiringSeat);
 		}
 
 		private List<IPerson> getPeopleForSiteOnDate(ISite siteTo, DateOnlyPeriod dateOnlyPeriod)
@@ -76,14 +76,14 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			return scheduleDay.Person == scheduleDayOutgoing.Person && scheduleDay.Period == scheduleDayOutgoing.Period;
 		}
 
-		private static bool activitiesOnDayAlreadyMatchOrExceedMaximumSeats(ISite site, IEnumerable<IScheduleDay> scheduleDayCollection, IList<ISeatUsageForInterval> seatUsageOnEachIntervalDic
-	, IEnumerable<IVisualLayer> incomingActivitiesRequiringSeat)
+		private static bool activitiesOnDayAlreadyMatchOrExceedMaximumSeats(ISite site,
+			IEnumerable<IScheduleDay> scheduleDayCollection, IList<ISeatUsageForInterval> seatUsageOnEachIntervalDic,
+			IEnumerable<IVisualLayer> incomingActivitiesRequiringSeat)
 		{
 			var activitiesTocheck = new List<IVisualLayer>();
 
-			foreach (var activitiesRequiringSeat in scheduleDayCollection
-						.Select(getActivitiesRequiringSeat)
-						.Where(activitiesRequiringSeat => activitiesRequiringSeat != null))
+			var activities = scheduleDayCollection.Select(getActivitiesRequiringSeat);
+			foreach (var activitiesRequiringSeat in activities.Where(a => a != null))
 			{
 				activitiesTocheck.AddRange(activitiesRequiringSeat);
 			}
@@ -92,10 +92,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 			foreach (var activity in activitiesTocheck)
 			{
-				var intervalsThatContainActivity =
-					from interval in seatUsageOnEachIntervalDic.Where(interval => activity.Period.StartDateTime < interval.IntervalEnd &&
-																				  activity.Period.EndDateTime > interval.IntervalStart)
-					select interval;
+				var intervalsThatContainActivity = seatUsageOnEachIntervalDic
+					.Where(interval => activity.Period.StartDateTime < interval.IntervalEnd &&
+									   activity.Period.EndDateTime > interval.IntervalStart);
 
 				foreach (var interval in intervalsThatContainActivity)
 				{

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private FakeScheduleProjectionReadOnlyActivityProvider _scheduleProjectionReadOnlyActivityProvider;
 		private ICurrentScenario _currentScenario;
 
-		protected virtual bool useReadModel()
+		protected virtual bool UseReadModel()
 		{
 			return false;
 		}
@@ -52,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_currentScenario = new FakeCurrentScenario();
 			_shiftTradeTestHelper = new ShiftTradeTestHelper(_schedulingResultStateHolder, _scheduleStorage, _personRepository, new FakeBusinessRuleProvider(), new FakeNewBusinessRuleCollection(), _currentScenario, _scheduleProjectionReadOnlyActivityProvider);
 
-			_shiftTradeTestHelper.UseMaxSeatReadModelValidator(useReadModel());
+			_shiftTradeTestHelper.UseMaxSeatReadModelValidator(UseReadModel());
 		}
 
 		[Test]
@@ -80,14 +79,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldValidateMaxSeatsAccordingToInterval()
 		{
-
 			var scheduleDate = new DateTime(2016, 7, 25, 0, 0, 0, DateTimeKind.Utc);
 			var scheduleDateOnly = new DateOnly(scheduleDate);
 
 			var morningShiftTimePeriod = new DateTimePeriod(scheduleDate.AddHours(7), scheduleDate.AddHours(12).AddMinutes(5));
 			var afternoonShiftTimePeriodSite1 = new DateTimePeriod(scheduleDate.AddHours(13), scheduleDate.AddHours(17));
 
-			// 12:15-17:00 - Should be accepted in 15 minute interval (default  - so will have 12:00->12:14:59 12:15->12:29:59), 
+			// 12:15-17:00 - Should be accepted in 15 minute interval (default  - so will have 12:00->12:14:59 12:15->12:29:59),
 			// not in 30 minute interval (12:00 -> 12:29:59, 12:30 -> ...)
 			var afternoonShiftTimePeriodSite2 = new DateTimePeriod(scheduleDate.AddHours(12).AddMinutes(15), scheduleDate.AddHours(17));
 
@@ -96,7 +94,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			{
 				personTo,
 				_shiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly)),
-
 			};
 
 			addPersonAssignment(peopleInSiteOne[1], morningShiftTimePeriod, _requiresSeatActivity);
@@ -117,10 +114,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var personRequest30MinuteInterval = _shiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly,
 				new[] { personTo, peopleInSiteOne[1], personFrom }, scheduleDate);
 
-
 			Assert.IsTrue(personRequest15MinuteInterval.IsApproved);
 			Assert.IsTrue(personRequest30MinuteInterval.IsDenied);
-
 		}
 
 		[Test]
@@ -242,7 +237,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var personRequest = _shiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly, new[] { personTo, peopleInSiteOne[1], peopleInSiteOne[2], personFrom }, scheduleDate);
 
 			Assert.IsTrue(personRequest.IsApproved);
-
 		}
 
 		[Test]
@@ -354,7 +348,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 		private void addPersonAssignment(IPerson person, DateTimePeriod dateTimePeriod, IActivity activity = null)
 		{
-
 			var dateOnly = new DateOnly(dateTimePeriod.StartDateTime);
 
 			var personAssignment = _shiftTradeTestHelper.AddPersonAssignment(person, dateTimePeriod, activity);
@@ -389,9 +382,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			}
 
 			_scheduleStorage.Add(personAssignment);
-
 		}
-
 
 		private IPerson createPersonWithSiteMaxSeats(int maxSeats)
 		{
@@ -412,20 +403,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 		private ActivityAndDateTime createActivity(bool requiresSeat, DateTime startDateTime, DateTime endDateTime)
 		{
-			return new ActivityAndDateTime()
+			return new ActivityAndDateTime
 			{
 				Activity = requiresSeat ? _requiresSeatActivity : _doesNotRequireSeatActivity,
 				Period = new DateTimePeriod(startDateTime, endDateTime)
 			};
 		}
-
 	}
 
 	[TestFixture]
 	[TestWithStaticDependenciesAvoidUse]
 	public class ShiftTradeMaxSeatReadModelValidationTests : ShiftTradeMaxSeatValidationTests
 	{
-		protected override bool useReadModel()
+		protected override bool UseReadModel()
 		{
 			return true;
 		}

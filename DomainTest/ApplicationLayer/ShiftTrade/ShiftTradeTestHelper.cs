@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private readonly IShiftTradePendingReasonsService _shiftTradePendingReasonsService;
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 		private readonly ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulingDataForRequestWithoutResourceCalculation;
-		private readonly IScheduleProjectionReadOnlyActivityProvider _scheduleProjectionReadOnlyActivityProvider;
 		private readonly IShiftTradeMaxSeatValidator _shiftTradeMaxSeatReadModelValidator;
 		private readonly IShiftTradeMaxSeatValidator _shiftTradeMaxSeatValidator;
 		private IShiftTradeMaxSeatValidator _activeShiftTradeMaxSeatValidator;
@@ -58,10 +57,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_businessRuleProvider = businessRuleProvider;
 			_businessRuleCollection = businessRuleCollection;
 			_currentScenario = currentScenario;
-			_scheduleProjectionReadOnlyActivityProvider = scheduleProjectionReadOnlyActivityProvider;
 
 			_scheduleDifferenceSaver = new ScheduleDifferenceSaver (_scheduleStorage, CurrentUnitOfWork.Make());
-			;_shiftTradePendingReasonsService = new ShiftTradePendingReasonsService (_requestFactory, _currentScenario);
+			_shiftTradePendingReasonsService = new ShiftTradePendingReasonsService(_requestFactory, _currentScenario);
 
 			_globalSettingDataRepository = new FakeGlobalSettingDataRepository();
 			_globalSettingDataRepository.PersistSettingValue (ShiftTradeSettings.SettingsKey, new ShiftTradeSettings()
@@ -70,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				MaxSeatsValidationSegmentLength = 15
 			});
 
-			_shiftTradeMaxSeatReadModelValidator = new ShiftTradeMaxSeatReadModelValidator(_scheduleProjectionReadOnlyActivityProvider, _currentScenario);
+			_shiftTradeMaxSeatReadModelValidator = new ShiftTradeMaxSeatReadModelValidator(scheduleProjectionReadOnlyActivityProvider, _currentScenario);
 			_shiftTradeMaxSeatValidator = new ShiftTradeMaxSeatValidator (_currentScenario, _scheduleStorage, _personRepository);
 			_activeShiftTradeMaxSeatValidator = _shiftTradeMaxSeatValidator;
 
@@ -78,7 +76,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			{
 				new ShiftTradeValidatorTest.ValidatorSpecificationForTest (true, "_openShiftTradePeriodSpecification"),
 				new ShiftTradeMaxSeatsSpecification (_globalSettingDataRepository, _shiftTradeMaxSeatReadModelValidator)
-
 			};
 			_validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), shiftTradeSpecifications);
 
@@ -116,7 +113,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_activeShiftTradeMaxSeatValidator = shiftTradeMaxSeatValidator;
 		}
 
-
 		internal IPerson CreatePersonInTeam(ITeam team)
 		{
 			var workControlSet = CreateWorkFlowControlSet(true);
@@ -128,7 +124,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			return person;
 		}
-
 
 		internal IPersonRequest PrepareAndExecuteRequest(IPerson personTo, IPerson personFrom, DateOnly scheduleDateOnly, IPerson[] allPeople, DateTime scheduleDate)
 		{
@@ -193,7 +188,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 		internal void HandleRequest(AcceptShiftTradeEvent acceptShiftTradeEvent, bool toggle39473IsOff = false, IBusinessRuleProvider businessRuleProvider = null)
 		{
-
 			_target = new ShiftTradeRequestHandler(_schedulingResultStateHolder, _validator, _requestFactory,
 				_currentScenario, _personRequestRepository, _scheduleStorage, _personRepository
 				, new PersonRequestAuthorizationCheckerForTest(), _scheduleDifferenceSaver,
@@ -203,7 +197,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				toggle39473IsOff ? new ShiftTradePendingReasonsService39473ToggleOff() : _shiftTradePendingReasonsService);
 			_target.Handle(acceptShiftTradeEvent);
 		}
-
 
 		internal PersonAbsenceAccount CreatePersonAbsenceAccount(IPerson person, DateOnly scheduleDateOnly)
 		{

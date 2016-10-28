@@ -15,37 +15,28 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 		private readonly IShiftTradeMaxSeatValidator _shiftTradeMaxSeatValidator;
 		private ShiftTradeSettings _shiftTradeSettings;
 
-
 		public ShiftTradeMaxSeatsSpecification(IGlobalSettingDataRepository globalSettingDataRepository, IShiftTradeMaxSeatValidator shiftTradeMaxSeatValidator)
 		{
 			_globalSettingDataRepository = globalSettingDataRepository;
 			_shiftTradeMaxSeatValidator = shiftTradeMaxSeatValidator;
 		}
 
-		public override string DenyReason
-		{
-			get { return "ShiftTradeMaxSeatViolationDenyReason"; }
-		}
+		public override string DenyReason => "ShiftTradeMaxSeatViolationDenyReason";
 
 		public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> shiftTradeSwapDetails)
 		{
-
 			if (shiftTradeSwapDetails == null)
-				throw new ArgumentNullException("shiftTradeSwapDetails");
+				throw new ArgumentNullException(nameof(shiftTradeSwapDetails));
 
-			if (!shiftTradeSwapDetails.Any())
+			var swapDetails = shiftTradeSwapDetails.ToArray();
+			if (!swapDetails.Any())
 			{
 				return true;
 			}
 
-			_shiftTradeSettings = _globalSettingDataRepository.FindValueByKey(ShiftTradeSettings.SettingsKey, new ShiftTradeSettings());
-			if (!_shiftTradeSettings.MaxSeatsValidationEnabled)
-			{
-				return true;
-			}
-
-			return validateShiftTradeRequestByMaxSeats(shiftTradeSwapDetails.ToList());
-
+			_shiftTradeSettings = _globalSettingDataRepository.FindValueByKey(ShiftTradeSettings.SettingsKey,
+				new ShiftTradeSettings());
+			return !_shiftTradeSettings.MaxSeatsValidationEnabled || validateShiftTradeRequestByMaxSeats(swapDetails);
 		}
 
 		private bool validateShiftTradeRequestByMaxSeats(IEnumerable<IShiftTradeSwapDetail> shiftTradeSwapDetails)
@@ -55,46 +46,34 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 		private bool validateShiftTradeSwapDetail(IShiftTradeSwapDetail shiftTradeSwapDetail)
 		{
-			var personToTeam = shiftTradeSwapDetail.PersonTo.MyTeam(shiftTradeSwapDetail.DateTo);
-			var personFromTeam = shiftTradeSwapDetail.PersonFrom.MyTeam(shiftTradeSwapDetail.DateFrom);
+			var teamTo = shiftTradeSwapDetail.PersonTo.MyTeam(shiftTradeSwapDetail.DateTo);
+			var teamFrom = shiftTradeSwapDetail.PersonFrom.MyTeam(shiftTradeSwapDetail.DateFrom);
 
 			var timeZoneTo = shiftTradeSwapDetail.PersonTo.PermissionInformation.DefaultTimeZone();
 			var timeZoneFrom = shiftTradeSwapDetail.PersonFrom.PermissionInformation.DefaultTimeZone();
 
-			if (!needToValidateBasedOnTeamAndSite(personToTeam, personFromTeam))
+			if (!needToValidateBasedOnTeamAndSite(teamTo, teamFrom))
 			{
 				return true;
 			}
 
-			if (hasMaxSeatViolation(personToTeam.Site,
-									 timeZoneTo, shiftTradeSwapDetail.SchedulePartFrom, shiftTradeSwapDetail.SchedulePartTo))
+			if (hasMaxSeatViolation(teamTo.Site, timeZoneTo, shiftTradeSwapDetail.SchedulePartFrom,
+				shiftTradeSwapDetail.SchedulePartTo))
 			{
 				return false;
 			}
 
-			return !hasMaxSeatViolation(personFromTeam.Site,
-											timeZoneFrom, shiftTradeSwapDetail.SchedulePartTo, shiftTradeSwapDetail.SchedulePartFrom);
+			return
+				!hasMaxSeatViolation(teamFrom.Site, timeZoneFrom, shiftTradeSwapDetail.SchedulePartTo,
+					shiftTradeSwapDetail.SchedulePartFrom);
 		}
 
 		private static bool needToValidateBasedOnTeamAndSite(ITeam personToTeam, ITeam personFromTeam)
 		{
-			if (personToTeam == null || personFromTeam == null)
-			{
-				return false;
-			}
-
-			if (personToTeam.Site == null || personFromTeam.Site == null)
-			{
-				return false;
-			}
-
-			if (personToTeam.Site == personFromTeam.Site)
-			{
-				// if trading within the same site, we dont have a problem as the seats are already allocated.
-				return false;
-			}
-
-			return true;
+			// if trading within the same site, we dont have a problem as the seats are already allocated.
+			return personToTeam != null && personFromTeam != null
+				   && personToTeam.Site != null && personFromTeam.Site != null
+				   && personToTeam.Site != personFromTeam.Site;
 		}
 
 		private bool hasMaxSeatViolation(ISite site, TimeZoneInfo timeZoneInfo, IScheduleDay scheduleDayIncoming, IScheduleDay scheduleDayOutgoing)
@@ -108,13 +87,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			}
 
 			var seatUsageOnEachIntervalDic = createTimeSlotsToCountSeatUsage(incomingActivitiesRequiringSeat);
-			if (!seatUsageOnEachIntervalDic.Any())
-			{
-				return false;
-			}
-
-
-			return _shiftTradeMaxSeatValidator.Validate(site, scheduleDayIncoming, scheduleDayOutgoing, incomingActivitiesRequiringSeat, seatUsageOnEachIntervalDic, timeZoneInfo);
+			return seatUsageOnEachIntervalDic.Any() &&
+				   _shiftTradeMaxSeatValidator.Validate(site, scheduleDayIncoming, scheduleDayOutgoing,
+					   incomingActivitiesRequiringSeat, seatUsageOnEachIntervalDic, timeZoneInfo);
 		}
 
 		private IList<ISeatUsageForInterval> createTimeSlotsToCountSeatUsage(IEnumerable<IVisualLayer> incomingActivitiesRequiringSeats)
@@ -132,7 +107,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 				activityIntervals.ForEach(interval =>
 				{
-					seatUsageOnEachIntervalDic.Add(new SeatUsageForInterval() { IntervalStart = interval.StartDateTime, IntervalEnd = interval.EndDateTime, SeatUsage = 0 });
+					seatUsageOnEachIntervalDic.Add(new SeatUsageForInterval
+					{
+						IntervalStart = interval.StartDateTime,
+						IntervalEnd = interval.EndDateTime,
+						SeatUsage = 0
+					});
 				});
 			}
 
@@ -144,10 +124,10 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			var personAssignment = scheduleDay.PersonAssignment();
 			var projection = personAssignment?.ProjectionService().CreateProjection();
 			var activitiesRequiringSeat = projection?.Where(layer =>
-		   {
-			   var activityLayer = layer.Payload as IActivity;
-			   return activityLayer != null && activityLayer.RequiresSeat;
-		   });
+			{
+				var activityLayer = layer.Payload as IActivity;
+				return activityLayer != null && activityLayer.RequiresSeat;
+			});
 			return activitiesRequiringSeat;
 		}
 	}
