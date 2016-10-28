@@ -8,13 +8,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class AdherenceInfo
 	{
 		private readonly Context _context;
-		private readonly MappingsState _mappingsState;
+		private readonly IEnumerable<Mapping> _mappings;
 		private readonly Lazy<IEnumerable<AdherenceChange>> _adherenceChanges;
 
-		public AdherenceInfo(Context context, MappingsState mappingsState)
+		public AdherenceInfo(Context context, IEnumerable<Mapping> mappings)
 		{
 			_context = context;
-			_mappingsState = mappingsState;
+			_mappings = mappings;
 			_adherenceChanges = new Lazy<IEnumerable<AdherenceChange>>(buildAdherenceChanges);
 		}
 		
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private EventAdherence adherenceFor(string stateCode, Guid platformTypeId, Guid? activityId)
 		{
-			var rule = _context.StateMapper.RuleFor(_mappingsState, _context.BusinessUnitId, platformTypeId, stateCode, activityId);
+			var rule = _context.StateMapper.RuleFor(_mappings, _context.BusinessUnitId, platformTypeId, stateCode, activityId);
 			if (rule == null)
 				return _context.AppliedAdherence.ForEvent(null, null);
 			return _context.AppliedAdherence.ForEvent(rule.Adherence, rule.StaffingEffect);

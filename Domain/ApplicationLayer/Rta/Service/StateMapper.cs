@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_stateCodeAdder = stateCodeAdder;
 		}
 
-		public MappedRule RuleFor(MappingsState mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
+		public MappedRule RuleFor(IEnumerable<Mapping> mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
 		{
 			var match = queryRule(mappings, businessUnitId, platformTypeId, stateCode, activityId);
 			if (activityId != null && match == null)
@@ -40,9 +41,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return match;
 		}
 
-		private MappedRule queryRule(MappingsState mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
+		private MappedRule queryRule(IEnumerable<Mapping> mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
 		{
-			return (from m in mappings.Use()
+			return (from m in mappings
 				let illegal = m.StateCode == null && m.StateGroupId != Guid.Empty
 				where
 					!illegal &&
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				.SingleOrDefault();
 		}
 
-		public MappedState StateFor(MappingsState mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, string stateDescription)
+		public MappedState StateFor(IEnumerable<Mapping> mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, string stateDescription)
 		{
 			if (stateCode == null)
 				return null;
@@ -73,9 +74,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _stateCodeAdder.AddUnknownStateCode(mappings, businessUnitId, platformTypeId, stateCode, stateDescription);
 		}
 
-		private MappedState queryState(MappingsState mappings, Guid businessUnitId, Guid platformTypeId, string stateCode)
+		private MappedState queryState(IEnumerable<Mapping> mappings, Guid businessUnitId, Guid platformTypeId, string stateCode)
 		{
-			return (from m in mappings.Use()
+			return (from m in mappings
 				where
 					m.BusinessUnitId == businessUnitId &&
 					m.PlatformTypeId == platformTypeId &&

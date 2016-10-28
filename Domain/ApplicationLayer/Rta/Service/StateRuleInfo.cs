@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly Lazy<bool> _stateChanged;
 		private readonly Context _context;
 
-		public StateRuleInfo(Context context, MappingsState mappings)
+		public StateRuleInfo(Context context, IEnumerable<Mapping> mappings)
 		{
 			_context = context;
 			_mappedState = new Lazy<MappedState>(() => context.StateMapper.StateFor(mappings, context.BusinessUnitId, context.PlatformTypeId, context.StateCode, context.Input.StateDescription));

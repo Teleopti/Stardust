@@ -1,30 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class MappingsState
-	{
-		private readonly Func<IEnumerable<Mapping>> _loadMappings;
-		private IEnumerable<Mapping> _mappings;
-
-		public MappingsState(Func<IEnumerable<Mapping>> loadMappings)
-		{
-			_loadMappings = loadMappings;
-		}
-
-		public IEnumerable<Mapping> Use()
-		{
-			return _mappings ?? (_mappings = _loadMappings.Invoke());
-		}
-
-		public void Invalidate()
-		{
-			_mappings = null;
-		}
-	}
-
 	public class Context
 	{
 		private readonly Action<Context> _updateState;
@@ -41,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Guid siteId, 
 			Func<AgentState> stored, 
 			Func<ScheduleState> schedule,
-			Func<Context, MappingsState> mappings,
+			IEnumerable<Mapping> mappings,
 			Action<Context> updateState, 
 			StateMapper stateMapper,
 			AppliedAdherence appliedAdherence,
@@ -63,7 +41,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					Stored = null;
 			}
 
-			var mappingsState = mappings.Invoke(this);
 			Input = input ?? new InputInfo();
 			CurrentTime = utcNow;
 			PersonId = personId;
@@ -79,8 +56,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			var schedules = new Lazy<IEnumerable<ScheduledActivity>>(() => _schedule.Value.Schedules);
 			Schedule = new ScheduleInfo(this, schedules);
-			State = new StateRuleInfo(this, mappingsState);
-			Adherence = new AdherenceInfo(this, mappingsState);
+			State = new StateRuleInfo(this, mappings);
+			Adherence = new AdherenceInfo(this, mappings);
 		}
 
 		public DateTime CurrentTime { get; }

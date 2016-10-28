@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 
@@ -6,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IStateCodeAdder
 	{
-		MappedState AddUnknownStateCode(MappingsState mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, string stateDescription);
+		MappedState AddUnknownStateCode(IEnumerable<Mapping> mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, string stateDescription);
 	}
 	
 	public class EventualStateCodeAdder : IStateCodeAdder
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_stateGroupRepository = stateGroupRepository;
 		}
 
-		public MappedState AddUnknownStateCode(MappingsState mappings, Guid businessUnitId, Guid platformTypeId,
+		public MappedState AddUnknownStateCode(IEnumerable<Mapping> mappings, Guid businessUnitId, Guid platformTypeId,
 			string stateCode, string stateDescription)
 		{
 			var stateGroups = _stateGroupRepository.LoadAllExclusive();

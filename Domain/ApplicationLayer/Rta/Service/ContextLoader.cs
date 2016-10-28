@@ -383,14 +383,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public class sharedData
 		{
-			public MappingsState mappings;
+			public IEnumerable<Mapping> mappings;
 		}
 
 		public class transactionData
 		{
 			public IEnumerable<scheduleData> schedules;
 			public IEnumerable<AgentState> agentStates;
-			public MappingsState mappings;
+			public IEnumerable<Mapping> mappings;
 		}
 
 		public interface IStrategy<T>
@@ -423,14 +423,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (allThingsSize <= maxTransactionSize * strategy.ParallelTransactions)
 				maxTransactionSize = (int) Math.Ceiling(allThingsSize / (double) strategy.ParallelTransactions);
 
-			var shared = new Lazy<sharedData>(() =>
+			var shared = new Lazy<sharedData>(() => new sharedData
 			{
-				var mappings = new MappingsState(() => _mappingReader.Read());
-				mappings.Use();
-				return new sharedData
-				{
-					mappings = mappings
-				};
+				mappings = _mappingReader.Read()
 			});
 
 			var transactions = allThings
@@ -541,7 +536,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						state.SiteId.GetValueOrDefault(),
 						strategy.GetStored(state),
 						() => data.schedules.Single(s => s.PersonId == state.PersonId),
-						s => data.mappings,
+						data.mappings,
 						strategy.UpdateAgentState,
 						_stateMapper,
 						_appliedAdherence,
