@@ -125,7 +125,7 @@ WfmIntraday_MonitorActualvsForecasted_35176 = true
 
 MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211 = true
 MyTimeWeb_ShiftTradeBoardNoReadModel_36662 = true
-MyTimeWeb_MakeRequestsResponsiveOnMobile_40266 = DEV
+MyTimeWeb_MakeRequestsResponsiveOnMobile_40266 = RC
 MyTimeWeb_ShiftTradeFilterSite_40374 = true
 MyTimeWeb_ShiftTradeOptimization_40792 = true
 MyTimeWeb_PreferenceForMobile_40265 = RC
