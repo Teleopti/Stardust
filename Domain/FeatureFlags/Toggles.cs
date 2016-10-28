@@ -137,7 +137,6 @@
 		Stardust_MoveAbsenceRequestTo_37941,
 		ETL_SpeedUpNightlyReloadDatamart_38131,
 		ETL_SpeedUpNightlySkill_37543,
-		Wfm_MoveExportMultiSiteSkillOnStardust_38134,
 		Payroll_ToStardust_38204,
 		ETL_SpeedUpScenarioNightly_38300,
 		Scheduler_LoadWithoutRequests_38567,

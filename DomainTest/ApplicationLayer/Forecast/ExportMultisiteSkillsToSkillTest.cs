@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 	public class ExportMultisiteSkillsToSkillTest
 	{
 		private ICurrentUnitOfWork unitOfWorkFactory;
-		private ExportMultisiteSkillsToSkillEventServiceBusHandler target;
+		private ExportMultisiteSkillsToSkillEventStardustHandler target;
 		private MockRepository mocks;
 		private IJobResultRepository jobResultRepository;
 		private IJobResultFeedback jobResultFeedback;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			messageBroker = mocks.DynamicMock<IMessageBrokerComposite>();
 			_exportMultisiteSkillProcessor = mocks.DynamicMock<IExportMultisiteSkillProcessor>();
 
-			target = new ExportMultisiteSkillsToSkillEventServiceBusHandler(unitOfWorkFactory, jobResultRepository, jobResultFeedback, messageBroker,_exportMultisiteSkillProcessor);
+			target = new ExportMultisiteSkillsToSkillEventStardustHandler(unitOfWorkFactory, jobResultRepository, jobResultFeedback, messageBroker,_exportMultisiteSkillProcessor);
 		}
 
 		[Test]

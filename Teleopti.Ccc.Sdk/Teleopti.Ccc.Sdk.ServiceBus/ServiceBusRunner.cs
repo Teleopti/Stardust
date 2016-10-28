@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					nodeThread.Start();
 					port++;
 					// a little delay
-					Thread.Sleep(500);
+					Thread.Sleep(1000);
 				}
 			}
 			else
@@ -244,8 +244,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			new InitializeMessageBroker(messageBroker).Start(ConfigurationManager.AppSettings.ToDictionary());
 
 			var nodeStarter = new NodeStarter();
-			nodeStarter.Start(nodeConfig, container);
 			Nodes.Add(nodeStarter);
+			nodeStarter.Start(nodeConfig, container);
+			
 		}
 
 		public IList<NodeStarter> Nodes { get; set; }

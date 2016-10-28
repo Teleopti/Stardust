@@ -2,7 +2,6 @@
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
@@ -13,50 +12,16 @@ using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
-#pragma warning disable 618
-	[DisabledBy(Toggles.Wfm_MoveExportMultiSiteSkillOnStardust_38134)]
-	public class ExportMultisiteSkillsToSkillEventServiceBusHandler : ExportMultisiteSkillsToSkillBase, IHandleEvent<ExportMultisiteSkillsToSkillEvent>, IRunOnServiceBus
-#pragma warning restore 618
-	{
-		public ExportMultisiteSkillsToSkillEventServiceBusHandler(ICurrentUnitOfWork unitOfWork,
-			IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBrokerComposite messageBroker,
-			IExportMultisiteSkillProcessor exportMultisiteSkillProcessor)
-			: base(unitOfWork, jobResultRepository, feedback, messageBroker, exportMultisiteSkillProcessor)
-		{
-			
-		}
-
-		public virtual new void Handle(ExportMultisiteSkillsToSkillEvent message)
-		{
-			base.Handle(message);
-		}
-	}
-
-	[EnabledBy(Toggles.Wfm_MoveExportMultiSiteSkillOnStardust_38134)]
-	public class ExportMultisiteSkillsToSkillEventStardustHandler : ExportMultisiteSkillsToSkillBase, IHandleEvent<ExportMultisiteSkillsToSkillEvent>, IRunOnStardust
-	{
-		public ExportMultisiteSkillsToSkillEventStardustHandler(ICurrentUnitOfWork unitOfWork, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBrokerComposite messageBroker, IExportMultisiteSkillProcessor exportMultisiteSkillProcessor) : base(unitOfWork, jobResultRepository, feedback, messageBroker, exportMultisiteSkillProcessor)
-		{
-		}
-		
-		[AsSystem]
-		[UnitOfWork]
-		public virtual new void Handle(ExportMultisiteSkillsToSkillEvent message)
-		{
-			base.Handle(message);
-		}
-	}
-
-	public class ExportMultisiteSkillsToSkillBase
+	public class ExportMultisiteSkillsToSkillEventStardustHandler : IHandleEvent<ExportMultisiteSkillsToSkillEvent>, IRunOnStardust
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly IRepository<IJobResult> _jobResultRepository;
 		private readonly IJobResultFeedback _feedback;
 		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly IExportMultisiteSkillProcessor _exportMultisiteSkillProcessor;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(ExportMultisiteSkillsToSkillBase));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(ExportMultisiteSkillsToSkillEventStardustHandler));
 
-		public ExportMultisiteSkillsToSkillBase(ICurrentUnitOfWork unitOfWork, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBrokerComposite messageBroker, IExportMultisiteSkillProcessor exportMultisiteSkillProcessor)
+		public ExportMultisiteSkillsToSkillEventStardustHandler(ICurrentUnitOfWork unitOfWork, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBrokerComposite messageBroker, IExportMultisiteSkillProcessor exportMultisiteSkillProcessor)
 		{
 			_unitOfWork = unitOfWork;
 			_jobResultRepository = jobResultRepository;
@@ -65,8 +30,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			_exportMultisiteSkillProcessor = exportMultisiteSkillProcessor;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Handle(ExportMultisiteSkillsToSkillEvent message)
+		[AsSystem]
+		[UnitOfWork]
+		public virtual void Handle(ExportMultisiteSkillsToSkillEvent message)
 		{
 			var unitOfWork = _unitOfWork.Current();
 			{
