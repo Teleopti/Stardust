@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
@@ -10,43 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
-    [DisabledBy(Toggles.Wfm_RecalculateForecastOnHangfire_37971)]
-#pragma warning disable 618
-    public class RecalculateForecastOnSkillEventHandlerOnServiceBus : RecalculateForecastOnSkillEventHandlerBase, IHandleEvent<RecalculateForecastOnSkillCollectionEvent>, IRunOnServiceBus
-#pragma warning restore 618
-    {
-        public RecalculateForecastOnSkillEventHandlerOnServiceBus(IScenarioRepository scenarioRepository, ISkillDayRepository skillDayRepository, 
-                                                                ISkillRepository skillRepository,  IStatisticLoader statisticLoader, 
-                                                                IReforecastPercentCalculator reforecastPercentCalculator) 
-                                                                : base(scenarioRepository, skillDayRepository, skillRepository,  statisticLoader, reforecastPercentCalculator)
-        {
-        }
-
-        public void Handle(RecalculateForecastOnSkillCollectionEvent @event)
-        {
-            HandleBase(@event);
-        }
-    }
-
-    [EnabledBy(Toggles.Wfm_RecalculateForecastOnHangfire_37971)]
-    public class RecalculateForecastOnSkillEventHandlerOnHangfire : RecalculateForecastOnSkillEventHandlerBase, IHandleEvent<RecalculateForecastOnSkillCollectionEvent>, IRunOnHangfire
-    {
-        public RecalculateForecastOnSkillEventHandlerOnHangfire(IScenarioRepository scenarioRepository, ISkillDayRepository skillDayRepository,
-                                                                ISkillRepository skillRepository,IStatisticLoader statisticLoader,
-                                                                IReforecastPercentCalculator reforecastPercentCalculator)
-                                                                : base(scenarioRepository, skillDayRepository, skillRepository,  statisticLoader, reforecastPercentCalculator)
-        {
-        }
-
-        [AsSystem]
-				[UnitOfWork]
-        public virtual void Handle(RecalculateForecastOnSkillCollectionEvent @event)
-        {
-            HandleBase(@event);
-        }
-    }
-
-    public class RecalculateForecastOnSkillEventHandlerBase 
+    public class RecalculateForecastOnSkillEventHandler 
     {
         private readonly IReforecastPercentCalculator _reforecastPercentCalculator;
         private readonly IScenarioRepository _scenarioRepository;
@@ -54,8 +17,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
         private readonly ISkillRepository _skillRepository;
         private readonly IStatisticLoader _statisticLoader;
 
-	    public RecalculateForecastOnSkillEventHandlerBase(IScenarioRepository scenarioRepository, ISkillDayRepository skillDayRepository,
-                                                      ISkillRepository skillRepository, IStatisticLoader statisticLoader, IReforecastPercentCalculator reforecastPercentCalculator)
+	    public RecalculateForecastOnSkillEventHandler(
+			IScenarioRepository scenarioRepository, 
+			ISkillDayRepository skillDayRepository,                
+			ISkillRepository skillRepository, 
+			IStatisticLoader statisticLoader, 
+			IReforecastPercentCalculator reforecastPercentCalculator)
         {
             _scenarioRepository = scenarioRepository;
             _skillDayRepository = skillDayRepository;
@@ -63,8 +30,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 	        _statisticLoader = statisticLoader;
             _reforecastPercentCalculator = reforecastPercentCalculator;
         }
-        
-        public void HandleBase(RecalculateForecastOnSkillCollectionEvent @event)
+
+		[AsSystem]
+		[UnitOfWork]
+		public virtual void Handle(RecalculateForecastOnSkillCollectionEvent @event)
         {
 
                 var scenario = _scenarioRepository.Get(@event.ScenarioId);

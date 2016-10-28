@@ -144,7 +144,6 @@ ResourcePlanner_NegativeOrderIndex_39062 = true
 Wfm_DisplayOnlineHelp_39402 = RC
 
 Wfm_QuickForecastOnHangfire_35845 = true
-Wfm_RecalculateForecastOnHangfire_37971 = true
 
 ETL_SpeedUpPersonPeriodNightly_38097 = RC
 Stardust_MoveAbsenceRequestTo_37941 = RC #Will never be released as other development (batch/bulk) made it obsolete. OK to just remove toggle and code (if any).

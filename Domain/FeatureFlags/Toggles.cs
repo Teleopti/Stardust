@@ -132,7 +132,6 @@
 		Wfm_DisplayOnlineHelp_39402,
 
 		Wfm_QuickForecastOnHangfire_35845,
-		Wfm_RecalculateForecastOnHangfire_37971,
 		ETL_SpeedUpFactScheduleNightly_38019,
 		ETL_SpeedUpPersonPeriodNightly_38097,
 		Stardust_MoveAbsenceRequestTo_37941,
