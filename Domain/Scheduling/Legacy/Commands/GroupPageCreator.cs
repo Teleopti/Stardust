@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Interfaces.Domain;
@@ -17,18 +16,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_groupPageFactory = groupPageFactory;
 		}
 
-		private void createAndAddGroupPageForDate(IGroupPageDataProvider groupPageDataProvider,
+		private void createAndAddGroupPageForDate(IGroupScheduleGroupPageDataProvider groupPageDataProvider,
 			GroupPageLight selectedGrouping, DateOnly date, ConcurrentDictionary<DateOnly, IGroupPage> dic)
 		{
 			var groupPage = createGroupPageForDate(groupPageDataProvider, selectedGrouping, date, false);
 			dic.GetOrAdd(date, groupPage);
 		}
 
-		public IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping)
+		public IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupScheduleGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping)
 		{
 			return CreateGroupPagePerDate(dates, groupPageDataProvider, selectedGrouping, false);
 		}
-		public IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping, bool useAllLoadedPersons)
+		public IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupScheduleGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping, bool useAllLoadedPersons)
 		{
 			if (dates == null) throw new ArgumentNullException("dates");
 			if (groupPageDataProvider == null) throw new ArgumentNullException("groupPageDataProvider");
@@ -41,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return new GroupPagePerDate(concDic);
 		}
 
-		private IGroupPage createGroupPageForDate(IGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping, DateOnly dateOnly, bool useAllLoadedPersons)
+		private IGroupPage createGroupPageForDate(IGroupScheduleGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping, DateOnly dateOnly, bool useAllLoadedPersons)
 		{
 			IGroupPage groupPage;
 			var persons = groupPageDataProvider.PersonCollection;

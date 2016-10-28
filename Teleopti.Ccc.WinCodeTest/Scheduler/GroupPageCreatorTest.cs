@@ -14,14 +14,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private MockRepository _mocks;
 		private IGroupPageFactory _groupPageFactory;
 		private GroupPageCreator _target;
-		private IGroupPageDataProvider _groupPageDataProvider;
+		private IGroupScheduleGroupPageDataProvider _groupPageDataProvider;
         
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
 			_groupPageFactory = _mocks.DynamicMock<IGroupPageFactory>();
-			_groupPageDataProvider = _mocks.DynamicMock<IGroupPageDataProvider>();
+			_groupPageDataProvider = _mocks.DynamicMock<IGroupScheduleGroupPageDataProvider>();
 
 			_target = new GroupPageCreator(_groupPageFactory);
 		}
