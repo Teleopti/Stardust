@@ -98,19 +98,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
                         .AsSelf()
                         .InstancePerLifetimeScope()
                         .ApplyAspects();
-                }).Except<ShiftTradeRequestHandlerBus>(ct =>
-                {
-                    if (_config.Toggle(Toggles.ShiftTrade_ToHangfire_38181)) return;
-                    ct.As(
-                            typeof(IHandleEvent<NewShiftTradeRequestCreatedEvent>),
-                            typeof(IHandleEvent<AcceptShiftTradeEvent>))
-                            .AsSelf()
-                            .InstancePerLifetimeScope()
-                            .ApplyAspects();
                 })
-                .Except<ShiftTradeRequestHandlerHangfire>(ct =>
+                .Except<ShiftTradeRequestHandler>(ct =>
                 {
-                    if (!_config.Toggle(Toggles.ShiftTrade_ToHangfire_38181)) return;
                     ct.As(
                             typeof(IHandleEvent<NewShiftTradeRequestCreatedEvent>),
                             typeof(IHandleEvent<AcceptShiftTradeEvent>))

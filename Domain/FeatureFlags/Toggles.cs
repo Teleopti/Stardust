@@ -140,7 +140,6 @@
 		ETL_SpeedUpNightlyReloadDatamart_38131,
 		Wfm_MoveNewAbsenceReportOnHangfire_38203,
 		ETL_SpeedUpNightlySkill_37543,
-		ShiftTrade_ToHangfire_38181,
 		Wfm_MoveExportMultiSiteSkillOnStardust_38134,
 		Payroll_ToStardust_38204,
 		ETL_SpeedUpScenarioNightly_38300,
