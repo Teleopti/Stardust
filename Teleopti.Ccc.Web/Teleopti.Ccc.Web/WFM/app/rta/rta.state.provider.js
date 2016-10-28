@@ -14,6 +14,10 @@ angular.module('wfm.rta').provider('RtaState', function() {
 		return toggles.RTA_SiteAndTeamOnSkillOverview_40817 ? 'app/rta/skills/rta-selectSkill-SiteAndTeamOnSkillOverview.html' : 'app/rta/skills/rta-selectSkill.html'
 	}
 
+	var sitesBySkillTemplate = function(elem, attr) {
+		return toggles.RTA_SiteAndTeamOnSkillOverview_40817 ? 'app/rta/overview/rta-sites-SiteOnSkillsOverview.html' : 'app/rta/overview/rta-sites.html';
+	}
+
 	this.$get = function() {
 		return function(toggleService) {
 			toggleService.togglesLoaded.then(function() {
@@ -35,26 +39,26 @@ angular.module('wfm.rta').provider('RtaState', function() {
 			})
 			.state('rta.sites-by-skill', {
 				url: '/sites-by-skill/?skillIds',
-				templateUrl: rtaSiteAndTeamOnSkillOverviewTemplateUrl,
+				templateUrl: 'app/rta/skills/rta-sites-bySkills.html',
 				controller: 'RtaSiteAndTeamOnSkillOverviewCtrl'
 			})
 			.state('rta.sites-by-skillArea', {
 				url: '/sites-by-skill-area/?skillAreaId',
-				templateUrl: rtaSiteAndTeamOnSkillOverviewTemplateUrl,
+				templateUrl: 'app/rta/skills/rta-sites-bySkills.html',
 				controller: 'RtaSiteAndTeamOnSkillOverviewCtrl'
 			})
 			.state('rta.teams-by-skill', {
 				url: '/teams-by-skill/?siteIds&skillIds',
-				templateUrl: rtaSiteAndTeamOnSkillOverviewTemplateUrl,
+				templateUrl: 'app/rta/skills/rta-teams-bySkills.html',
 				controller: 'RtaSiteAndTeamOnSkillOverviewCtrl'
 			})
 			.state('rta.teams-by-skillArea', {
 				url: '/teams-by-skill-area/?siteIds&skillAreaId',
-				templateUrl: rtaSiteAndTeamOnSkillOverviewTemplateUrl,
+				templateUrl: 'app/rta/skills/rta-teams-bySkills.html',
 				controller: 'RtaSiteAndTeamOnSkillOverviewCtrl'
 			})
 			.state('rta.sites', {
-				templateUrl: 'app/rta/overview/rta-sites.html',
+				templateUrl: sitesBySkillTemplate,
 				controller: 'RtaOverviewCtrl',
 			})
 			.state('rta.teams', {

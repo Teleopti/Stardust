@@ -41,7 +41,6 @@
 					$scope.skillAreaId = $stateParams.skillAreaId || null;
 					$scope.siteIds = $stateParams.siteIds || [];
 					$scope.getAdherencePercent = RtaFormatService.numberToPercent;
-					$scope.isSitesOverview = $scope.siteIds.length === 0 ? true : false;
 					$scope.selectedItemIds = [];
 
 					var stateForTeamsBySkill = 'rta.teams-by-skill({siteIds: site.Id, skillIds: selectedSkill.Id})';
@@ -217,7 +216,7 @@
 						RtaRouteService.goToSites();
 					};
 
-					function goToSelectSkill() {
+					$scope.goToSelectSkill = function() {
 						RtaRouteService.goToSelectSkill();
 					};
 
@@ -231,6 +230,10 @@
 
 					$scope.urlForSelectSkill = function () {
 						return RtaRouteService.urlForSelectSkill();
+					};
+
+					$scope.urlForDashboard = function () {
+						return RtaRouteService.urlForSites();
 					};
 
 					$scope.getStateForTeams = function () {
@@ -261,19 +264,18 @@
 						}else{
 							stateParamsObj = { skillIds: getSkillIds(), siteIds: $scope.selectedItemIds }
 						}
-						console.log(stateParamsObj);
-						goToSelectSkill();
+						$scope.goToSelectSkill();
 					}
 
 					$scope.$watch('selectedSkill', function (newValue, oldValue) {
 						if (changed(newValue, oldValue) && toggleService.RTA_SiteAndTeamOnSkillOverview_40817) {
-							goToSelectSkill();
+							$scope.goToOverview();
 						}
 					});
 
 					$scope.$watch('selectedSkillArea', function (newValue, oldValue) {
 						if (changed(newValue, oldValue) && toggleService.RTA_SiteAndTeamOnSkillOverview_40817) {
-							goToSelectSkill();
+							$scope.goToOverview();
 						}
 					});
 

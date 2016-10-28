@@ -15,7 +15,8 @@
 		'RtaRouteService',
 		'RtaFormatService',
 		'RtaAdherenceService',
-		'NoticeService',		
+		'NoticeService',
+		'Toggle',
 		function (
 			$scope,
 			$stateParams,
@@ -29,12 +30,91 @@
 			RtaRouteService,
 			RtaFormatService,
 			RtaAdherenceService,
-			NoticeService
+			NoticeService,
+			toggleService
 			) {
 
 			$scope.selectedItemIds = [];
 			$scope.siteId = $stateParams.siteId || null;
 			$scope.getAdherencePercent = RtaFormatService.numberToPercent;
+
+			$scope.displaySkillOrSkillAreaFilter = false;
+
+			toggleService.togglesLoaded.then(function() {
+				$scope.displaySkillOrSkillAreaFilter = toggleService.RTA_SiteAndTeamOnSkillOverview_40817;
+				if($scope.displaySkillOrSkillAreaFilter) {
+
+					RtaService.getSkills()
+						.then(function (skills) {
+							$scope.skillsLoaded = true;
+							$scope.skills = skills;
+							if ($scope.skillId !== null) {
+								$scope.selectedSkill = getSelected(skills, $scope.skillId);
+								// getSitesOrTeams();
+							}
+						});
+
+					RtaService.getSkillAreas()
+						.then(function (skillAreas) {
+							$scope.skillAreasLoaded = true;
+							$scope.skillAreas = skillAreas.SkillAreas;
+							if ($scope.skillAreaId !== null) {
+								$scope.selectedSkillArea = getSelected(skillAreas.SkillAreas, $scope.skillAreaId);
+								// getSitesOrTeams();
+							}
+						});
+
+						function getSelected(outOf, shouldMatch) {
+							return outOf.find(function (o) {
+								return o.Id === shouldMatch;
+							})
+						};
+
+						// function getSitesOrTeams() {
+						// 	return $scope.siteIds.length > 0 ? getTeamsInfo() : getSitesInfo();
+						// }
+
+						$scope.querySearch = function (query, myArray) {
+							var results = query ? myArray.filter(createFilterFor(query)) : myArray;
+							return results;
+						};
+
+						function createFilterFor(query) {
+							var lowercaseQuery = angular.lowercase(query);
+							return function filterFn(item) {
+								var lowercaseName = angular.lowercase(item.Name);
+								return (lowercaseName.indexOf(lowercaseQuery) === 0);
+							};
+						};
+
+						$scope.selectedSkillChange = function (skill) {
+							if (!skill) return;
+								$scope.skillId = skill.Id;
+								doWhenSelecting(skill, $scope.selectedSkill, "rta.teams-by-skill", goToSitesBySkill);
+						};
+
+						$scope.selectedSkillAreaChange = function (skillArea) {
+							if (!skillArea) return
+								$scope.skillAreaId = skillArea.Id;
+								doWhenSelecting(skillArea, $scope.selectedSkillArea, "rta.teams-by-skillArea", goToSitesBySkillArea);
+						};
+
+						function doWhenSelecting(item, selected, teamsStateName, goToSites) {
+							selected = item;
+							if ($state.current.name !== teamsStateName)
+								goToSites(item.Id);
+							// getSitesOrTeams();
+						};
+
+						function goToSitesBySkill(skillId) {
+							RtaRouteService.goToSitesBySkill(skillId);
+						};
+
+						function goToSitesBySkillArea(skillAreaId) {
+							RtaRouteService.goToSitesBySkillArea(skillAreaId);
+						};
+				}
+			});
 
 			RtaOrganizationService.getSiteName($scope.siteId)
 				.then(function(name) {
