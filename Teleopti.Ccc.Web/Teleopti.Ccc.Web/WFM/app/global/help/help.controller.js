@@ -11,10 +11,7 @@
 		var vm = this;
 
 		vm.helpUrl;
-		vm.displayHelp = false;
-		if(Toggle.Wfm_DisplayOnlineHelp_39402){
-			vm.displayHelp = true;
-		}
+		vm.displayHelp = Toggle.Wfm_DisplayOnlineHelp_39402;
 
 		$rootScope.$on('$stateChangeSuccess', function(event, next, toParams) {
 			vm.helpUrl = 'https://wiki.teleopti.com/TeleoptiWFM/' + $state.current.name;

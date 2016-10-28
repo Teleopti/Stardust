@@ -83,8 +83,8 @@
 			<div ng-include="'app/global/wfm-themes/themes-menu.html'"></div>
 		</a>
 
-		<span ng-controller="HelpController as vm" ng-if="vm.displayHelp">
-			<a href="{{vm.helpUrl}}" target="_blank">
+		<span ng-controller="HelpController as vm">
+			<a href="{{vm.helpUrl}}" target="_blank" ng-if="vm.displayHelp">
 				<div class="panel-menu">
 					<div tabindex=0 class="context-menu card-context">
 						<i class="mdi mdi-help-circle"></i>
@@ -93,7 +93,6 @@
 				<md-tooltip>{{'HelpLabel'|translate}}</md-tooltip>
 			</a>
 		</span>
-
 
 		<a href="../Authentication/SignOut">
 			<div class=" panel-menu">
