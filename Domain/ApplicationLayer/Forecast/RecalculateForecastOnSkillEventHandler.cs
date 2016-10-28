@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
-    public class RecalculateForecastOnSkillEventHandler 
+    public class RecalculateForecastOnSkillEventHandler : IHandleEvent<RecalculateForecastOnSkillCollectionEvent>, IRunOnHangfire
     {
         private readonly IReforecastPercentCalculator _reforecastPercentCalculator;
         private readonly IScenarioRepository _scenarioRepository;
