@@ -54,7 +54,7 @@
 
 			var availibleProjectionsTodayAndYesterday = [];
 			schedules.forEach(function (personSchedule) {
-				if (moment(personSchedule.Date).isSameOrBefore(baseDate, 'day'))
+//				if (moment(personSchedule.Date).isSameOrBefore(baseDate, 'day'))
 					availibleProjectionsTodayAndYesterday = availibleProjectionsTodayAndYesterday.concat(personSchedule.Projection);
 			});
 
@@ -74,7 +74,7 @@
 
 			var availibleProjections = [];
 			schedules.forEach(function (personSchedule) {
-				if (moment(personSchedule.Date).isSameOrAfter(baseDate, 'day'))
+			//	if (moment(personSchedule.Date).isSameOrAfter(baseDate, 'day'))
 					availibleProjections = availibleProjections.concat(personSchedule.Projection);
 			});
 
@@ -93,7 +93,7 @@
 		function startMinutes(groupSchedule, baseDate) {
 			var start = getMinStartTimeInMinute(groupSchedule, baseDate);
 
-			if (start === undefined)
+			if (start === undefined || start >= 1440) // 1440 means 0:00 of next day, to make sure we alwayse show timelines for current day
 				return shiftHelper.MinutesForHourOfDay(8);
 										
 			start = start > defaultViewRange.start ? start : defaultViewRange.start;
@@ -109,10 +109,9 @@
 
 			var end = getMaxEndTimeInMinute(groupSchedule, baseDate);
 
-			if (end === undefined)
+			if (end === undefined || end <= 0) // 0 means 0:00 of current day, to make sure we alwayse show timelines for current day
 				return shiftHelper.MinutesForHourOfDay(16);
 
-			//Need further discussion about how to show today's and tomorrow's schedules end
 			end = end < defaultViewRange.end ? end : defaultViewRange.end; 			
 
 			if (end % 60 === 0 && end !== defaultViewRange.end) {
@@ -156,8 +155,8 @@
 				? moment()
 				: moment(baseDate)).startOf('day').add(minutes, 'minutes');
 
-			var isCurrentDay = minutes >=0 && minutes <= 1440; 
-			var isNextDay = minutes > 1440; 
+			var isCurrentDay = minutes >=0 && minutes < 1440; 
+			var isNextDay = minutes >= 1440; 
 
 			var formattedTime = isCurrentDay ? time.format('LT') : (isNextDay ? time.format('LT') + " +1" : time.format('LT') + " -1");
 

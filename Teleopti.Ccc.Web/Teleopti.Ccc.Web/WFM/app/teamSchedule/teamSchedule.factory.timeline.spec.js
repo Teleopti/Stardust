@@ -171,6 +171,42 @@ describe("teamschedule timeLine tests", function () {
 		expect(timeLine.EndMinute).toEqual(expectedEnd);
 	}));
 
+	it("should display default range with schedules that all starts after 00:00 AM tomorrow or ends before 00:00 AM today", inject(function (TeamScheduleTimeLineFactory) {
+		var target = TeamScheduleTimeLineFactory;
+
+		var today = "2015-10-26";
+		var tomorrow = moment(today).add(1, "days").startOf("days").format("YYYY-MM-DD");
+		var yesterday = moment(today).add(-1, "days").startOf("days").format("YYYY-MM-DD");
+
+		var now = moment(today + " 07:35:00");
+
+		var maxViewRange = {
+			startMoment: moment(today).startOf('day'),
+			endMoment: moment(today).startOf('day').add(30, 'hour')
+		};
+
+		var scheduleSet1 = [
+			createSchedule(tomorrow, null, [{ startHour: 4, endHour: 7 }, { startHour: 7, endHour: 11 }]),
+			
+		];
+
+		var timeLine1 = target.Create(scheduleSet1, now, maxViewRange);
+
+		expect(timeLine1.StartMinute).toEqual(480);
+		expect(timeLine1.EndMinute).toEqual(1800);
+
+		var scheduleSet2 = [
+			createSchedule(yesterday, null, [{ startHour: 20, endHour: 23 }])
+		];
+
+		var timeLine2 = target.Create(scheduleSet2, now, maxViewRange);
+
+
+		expect(timeLine2.StartMinute).toEqual(0);
+		expect(timeLine2.EndMinute).toEqual(960);
+		
+	}));
+
 
 	function createSchedule(belongsToDate, dayOff, projectionInfoArray) {
 		var dateMoment = moment(belongsToDate);
