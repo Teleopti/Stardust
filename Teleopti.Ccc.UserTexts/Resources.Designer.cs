@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Person accounts could not be loaded. There must be at least one absence with a tracker defined in Options..
+        ///   Looks up a localized string similar to Personal accounts could not be loaded. There must be at least one absence with a tracker defined in Options..
         /// </summary>
         public static string AbsenceCouldNotBeLoaded {
             get {
@@ -2299,6 +2299,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AllPermittedTeamsToMakeShiftTradeWith {
             get {
                 return ResourceManager.GetString("AllPermittedTeamsToMakeShiftTradeWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Requests.
+        /// </summary>
+        public static string AllRequests {
+            get {
+                return ResourceManager.GetString("AllRequests", resourceCulture);
             }
         }
         
@@ -7148,6 +7157,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current Requests.
+        /// </summary>
+        public static string CurrentRequests {
+            get {
+                return ResourceManager.GetString("CurrentRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom.
         /// </summary>
         public static string Custom {
@@ -10994,7 +11012,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filter person account.
+        ///   Looks up a localized string similar to Filter personal account.
         /// </summary>
         public static string FilterPersonAccount {
             get {
@@ -11003,7 +11021,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filter person accounts.
+        ///   Looks up a localized string similar to Filter personal accounts.
         /// </summary>
         public static string FilterPersonAccounts {
             get {
@@ -17513,7 +17531,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New Person Account.
+        ///   Looks up a localized string similar to New Personal Account.
         /// </summary>
         public static string NewPersonAccount {
             get {
@@ -21010,7 +21028,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Person Account.
+        ///   Looks up a localized string similar to Personal Account.
         /// </summary>
         public static string PersonAccount {
             get {
@@ -30393,7 +30411,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The following agents&apos; person accounts will be affected. .
+        ///   Looks up a localized string similar to The following agents&apos; personal accounts will be affected. .
         /// </summary>
         public static string TheFollowingAgentsPersonAccountsWillBeAffected {
             get {
@@ -30583,7 +30601,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This absence will exceed person account limits. .
+        ///   Looks up a localized string similar to This absence will exceed personal account limits. .
         /// </summary>
         public static string ThisAbsenceWillExceedPersonAccountLimits {
             get {

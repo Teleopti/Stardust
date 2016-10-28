@@ -15062,4 +15062,12 @@ These options are activated:
     <value>unsupported skills</value>
     <comment>intraday warning message</comment>
   </data>
+  <data name="AllRequests" xml:space="preserve">
+    <value>All Requests</value>
+    <comment>used in MyTime Request, one of the option that how to show requests in request list</comment>
+  </data>
+  <data name="CurrentRequests" xml:space="preserve">
+    <value>Current Requests</value>
+    <comment>used in MyTime Request, one of the option that how to show requests in request list</comment>
+  </data>
 </root>
