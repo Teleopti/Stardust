@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
                         continue;
 
                     var site = personPeriod.Team.Site;
-                    if (site.MaxSeats.HasValue)
+                    if (site?.MaxSeats != null)
                         sitesWithMaxSeats.Add(site);
 
                     currentDate = personPeriod.EndDate().AddDays(1);
