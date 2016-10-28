@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
     	private readonly IWorkShiftWorkTime _workShiftWorkTime;
     	private IPerson _selectedPerson;
         private ICollection<DateOnly> _dateOnlyList;
-        private ISchedulerStateHolder _stateHolder;
+        private readonly ISchedulerStateHolder _stateHolder;
         private bool _dateIsSelected;
         private IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
 		private readonly IDictionary<EmploymentType, string> _employmentTypeList;
@@ -59,7 +59,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         }
 
 	    public AgentInfoControl(IWorkShiftWorkTime workShiftWorkTime, ISchedulerGroupPagesProvider groupPagesProvider,
-	                            ILifetimeScope container, DateOnlyPeriod dateOnlyPeriod, DateOnlyPeriod requestedPeriod, IRestrictionExtractor restrictionExtractor)
+	                            ILifetimeScope container, DateOnlyPeriod dateOnlyPeriod, DateOnlyPeriod requestedPeriod, IRestrictionExtractor restrictionExtractor,
+															 ISchedulerStateHolder stateHolder)
 		    : this()
 	    {
 		    _workShiftWorkTime = workShiftWorkTime;
@@ -68,6 +69,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		    _dateOnlyPeriod = dateOnlyPeriod;
 		    _requestedPeriod = requestedPeriod;
 		    _restrictionExtractor = restrictionExtractor;
+		    _stateHolder = stateHolder;
 	    }
 
 	    public bool MbCacheDisabled
@@ -90,7 +92,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public void UpdateData(IDictionary<IPerson, IScheduleRange> personDictionary, 
-            ICollection<DateOnly> dateOnlyList, ISchedulerStateHolder stateHolder,
+            ICollection<DateOnly> dateOnlyList,
             IDictionary<IPerson, IPersonAccountCollection> allAccounts)
         {
             if (personDictionary.Values.Count == 0 || dateOnlyList.Count == 0)
@@ -106,7 +108,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             _dateIsSelected = true;
             _selectedPerson = personDictionary.Values.ToList()[0].Person;
             _dateOnlyList = dateOnlyList;
-            _stateHolder = stateHolder;
             _allAccounts = allAccounts;
 
             update();
