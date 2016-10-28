@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			var groupPages = _groupPageRepository.GetGroupPagesForPerson(personId);
 			foreach (var groupPage in groupPages)
 			{
-				foreach (var rootGroup in groupPage.RootGroupCollection)
+				foreach (var rootGroup in groupPage.RootGroupCollection.Where(x => x.PersonCollection.Any(y => y.Id.GetValueOrDefault() == personId)))
 				{
 					groupIds.Add(new analyticsGroupForPerson(rootGroup.Id.GetValueOrDefault(), rootGroup.Description.Name, new AnalyticsGroupPage
 					{
