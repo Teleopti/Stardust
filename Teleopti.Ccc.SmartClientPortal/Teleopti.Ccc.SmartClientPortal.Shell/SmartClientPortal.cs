@@ -232,13 +232,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			_toggleManager = _container.Resolve<IToggleManager>();
 			_webUrlHolder = _container.Resolve<WebUrlHolder>();
 			
-			splitContainer.Panel2.Controls.Remove(webControl1);
-			webControl1.WebView.Destroy();
-			webControl1.WebView.Dispose();
-			webControl1.Dispose();
-			webControl1 = null;
-			webView1 = null;
-			
 			if (!_toggleManager.IsEnabled(Toggles.WfmPermission_ReplaceOldPermission_34671))
 			{
 				wfmWebControl.Enabled = false;
