@@ -16,7 +16,6 @@ using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
@@ -78,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				SchedulerStateHolder().Schedules[agent1].ScheduledDay(firstDay.AddDays(2))
 			};
 
-			Target.Execute(new NoSchedulingProgress(), scheduleDays, SchedulerStateHolder().SchedulingResultState);
+			Target.Execute(new NoSchedulingProgress(), scheduleDays, SchedulerStateHolder().SchedulingResultState, SchedulerStateHolder().AllPermittedPersons);
 
 			var newAssignment = SchedulerStateHolder().Schedules[agent1].ScheduledDay(firstDay.AddDays(2)).PersonAssignment();
 			newAssignment.ShiftLayers.Count().Should().Be.EqualTo(2);
@@ -133,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				SchedulerStateHolder().Schedules[agent1].ScheduledDay(firstDay.AddDays(2))
 			};
 
-			Target.Execute(new NoSchedulingProgress(), scheduleDays, SchedulerStateHolder().SchedulingResultState);
+			Target.Execute(new NoSchedulingProgress(), scheduleDays, SchedulerStateHolder().SchedulingResultState, SchedulerStateHolder().AllPermittedPersons);
 
 			SchedulerStateHolder().Schedules[agent1].ScheduledDay(firstDay.AddDays(2)).PersonAssignment(true).OvertimeActivities()
 				.Should().Not.Be.Empty();
@@ -186,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var scheduleDay = SchedulerStateHolder().Schedules[agent].ScheduledDay(thirdDay);
 			var scheduleDays = new List<IScheduleDay> { scheduleDay };
 
-			Target.Execute(new NoSchedulingProgress(), scheduleDays, SchedulerStateHolder().SchedulingResultState);
+			Target.Execute(new NoSchedulingProgress(), scheduleDays, SchedulerStateHolder().SchedulingResultState, SchedulerStateHolder().AllPermittedPersons);
 
 			SchedulerStateHolder().Schedules[agent].ScheduledDay(thirdDay).
 				PersonAssignment(true).
@@ -253,7 +252,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(2));
 			var scheduleDays = new List<IScheduleDay> {scheduleDay};
 
-			Target.Execute(new NoSchedulingProgress(), scheduleDays, stateHolder.SchedulingResultState);
+			Target.Execute(new NoSchedulingProgress(), scheduleDays, stateHolder.SchedulingResultState, SchedulerStateHolder().AllPermittedPersons);
 	
 			stateHolder.Schedules[agent].ScheduledDay(thirdDay).
 				PersonAssignment(true).

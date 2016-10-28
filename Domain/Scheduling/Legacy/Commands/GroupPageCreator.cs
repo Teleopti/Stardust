@@ -16,14 +16,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_groupPageFactory = groupPageFactory;
 		}
 
-		private void createAndAddGroupPageForDate(IGroupScheduleGroupPageDataProvider groupPageDataProvider,
+		private void createAndAddGroupPageForDate(IEnumerable<IPerson> allPermittedPersons, IGroupScheduleGroupPageDataProvider groupPageDataProvider,
 			GroupPageLight selectedGrouping, DateOnly date, ConcurrentDictionary<DateOnly, IGroupPage> dic)
 		{
-			var groupPage = createGroupPageForDate(groupPageDataProvider, selectedGrouping, date);
+			var groupPage = createGroupPageForDate(allPermittedPersons, groupPageDataProvider, selectedGrouping, date);
 			dic.GetOrAdd(date, groupPage);
 		}
 
-		public IGroupPagePerDate CreateGroupPagePerDate(IEnumerable<DateOnly> dates, IGroupScheduleGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping)
+		public IGroupPagePerDate CreateGroupPagePerDate(IEnumerable<IPerson> allPermittedPersons, IEnumerable<DateOnly> dates, IGroupScheduleGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping)
 		{
 			if (dates == null) throw new ArgumentNullException("dates");
 			if (groupPageDataProvider == null) throw new ArgumentNullException("groupPageDataProvider");
@@ -31,17 +31,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var concDic = new ConcurrentDictionary<DateOnly, IGroupPage>();
 			foreach (var date in dates)
 			{
-				createAndAddGroupPageForDate(groupPageDataProvider, selectedGrouping, date, concDic);
+				createAndAddGroupPageForDate(allPermittedPersons, groupPageDataProvider, selectedGrouping, date, concDic);
 			}
 			return new GroupPagePerDate(concDic);
 		}
 
-		private IGroupPage createGroupPageForDate(IGroupScheduleGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping, DateOnly dateOnly)
+		private IGroupPage createGroupPageForDate(IEnumerable<IPerson> allPermittedPersons, IGroupScheduleGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping, DateOnly dateOnly)
 		{
 			IGroupPage groupPage;
-			var persons = groupPageDataProvider.PersonCollection;
 
-			IGroupPageOptions options = new GroupPageOptions(persons)
+			IGroupPageOptions options = new GroupPageOptions(allPermittedPersons)
 			{
 				SelectedPeriod = new DateOnlyPeriod(dateOnly, dateOnly),
 				CurrentGroupPageName = selectedGrouping.DisplayName,

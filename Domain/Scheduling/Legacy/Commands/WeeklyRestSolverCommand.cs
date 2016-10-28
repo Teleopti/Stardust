@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 		
-			var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
+			var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
 				_teamBlockSchedulingOptions);
 

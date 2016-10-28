@@ -87,8 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				selectedGroupPage = optimizationPreferences.Extra.TeamGroupPage;
 			}
 
-			var groupPersonGroupPagePerDate = _groupPageCreator.CreateGroupPagePerDate(groupPagePeriod.DayCollection(),
-				_groupScheduleGroupPageDataProvider, selectedGroupPage);
+			var groupPersonGroupPagePerDate = _groupPageCreator.CreateGroupPagePerDate(schedulerStateHolder.AllPermittedPersons, groupPagePeriod.DayCollection(), _groupScheduleGroupPageDataProvider, selectedGroupPage);
 
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 

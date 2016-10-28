@@ -3223,7 +3223,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				var command = _container.Resolve<BackToLegalShiftCommand>();
 				command.Execute(new BackgroundWorkerWrapper(_backgroundWorkerScheduling), argument.SelectedScheduleDays,
-					_schedulerState.SchedulingResultState);
+					_schedulerState.SchedulingResultState, _schedulerState.AllPermittedPersons);
 			}
 			else
 			{

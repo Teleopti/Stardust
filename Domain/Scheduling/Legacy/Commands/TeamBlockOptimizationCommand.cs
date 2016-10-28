@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.Skills))
 			{
-				var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
+				var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 				var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory, _teamBlockScheudlingOptions);
 
 				if (optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)

@@ -25,10 +25,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 		}
 
-		public void Create(IScheduleDictionary schedules, GroupPageLight groupPageLight)
+		public void Create(IEnumerable<IPerson> allPermittedPersons, IScheduleDictionary schedules, GroupPageLight groupPageLight)
 		{
 				var dates =schedules.Period.LoadedPeriod().ToDateOnlyPeriod(_currentTeleoptiPrincipal.Current().Regional.TimeZone).DayCollection();
-				_groupPagePerDateHolder().GroupPersonGroupPagePerDate = _groupPageCreator.CreateGroupPagePerDate(dates, _groupScheduleGroupPageDataProvider, groupPageLight);
+				_groupPagePerDateHolder().GroupPersonGroupPagePerDate = _groupPageCreator.CreateGroupPagePerDate(allPermittedPersons, dates, _groupScheduleGroupPageDataProvider, groupPageLight);
 		}
 	}
 

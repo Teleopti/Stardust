@@ -53,7 +53,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public void Execute(ISchedulingProgress backgroundWorker,
 			IList<IScheduleDay> selectedSchedules,
-			ISchedulingResultStateHolder schedulingResultStateHolder)
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			IEnumerable<IPerson> allPermittedPersons)
 		{
 			_backgroundWorker = backgroundWorker;
 			var optimizationPreferences = new OptimizationPreferences();
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (groupPageType == GroupPageType.SingleAgent)
 				_groupPersonBuilderWrapper.SetSingleAgentTeam();
 			else
-				_groupPersonBuilderForOptimizationFactory.Create(schedulingResultStateHolder.Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
+				_groupPersonBuilderForOptimizationFactory.Create(allPermittedPersons, schedulingResultStateHolder.Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 
 			var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);
 

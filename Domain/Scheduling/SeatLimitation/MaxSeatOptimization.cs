@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			{
 				//most stuff taken from TeamBlockIntradayOptimizationService
 				var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
-				_groupPersonBuilderForOptimizationFactory.Create(schedules, optimizationPreferences.Extra.TeamGroupPage);
+				_groupPersonBuilderForOptimizationFactory.Create(allAgents, schedules, optimizationPreferences.Extra.TeamGroupPage);
 				var teamBlocks = _teamBlockGenerator.Generate(allAgents, allMatrixes, period, agentsToOptimize, schedulingOptions);
 				var remainingInfoList = teamBlocks.ToList();
 

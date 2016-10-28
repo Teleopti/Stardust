@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
 		}
 
-		public ITeamInfoFactory Create(IScheduleDictionary scheduleDictionary, GroupPageLight groupPageLight)
+		public ITeamInfoFactory Create(IEnumerable<IPerson> allPermittedPersons, IScheduleDictionary scheduleDictionary, GroupPageLight groupPageLight)
 		{
 			_groupPersonBuilderWrapper.Reset();
 			if (groupPageLight.Type == GroupPageType.SingleAgent)
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			}
 			else
 			{
-				_groupPersonBuilderForOptimizationFactory.Create(scheduleDictionary, groupPageLight);
+				_groupPersonBuilderForOptimizationFactory.Create(allPermittedPersons, scheduleDictionary, groupPageLight);
 			}
 
 			return new TeamInfoFactory(_groupPersonBuilderWrapper);
