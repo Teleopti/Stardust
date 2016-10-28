@@ -22,11 +22,7 @@
 
 		function init(){
 			var themeToggle = Toggle.togglesLoaded.then(function() {
-				if (Toggle.WfmGlobalLayout_personalOptions_37114) {
-					return service.getTheme();
-				} else {
-					return $q.resolve({data:{Name:'classic'}});
-				}
+				return service.getTheme();
 			});
 			themeToggle.then(function(response) {
 				var theme = response.data.Name ? response.data.Name : 'classic';

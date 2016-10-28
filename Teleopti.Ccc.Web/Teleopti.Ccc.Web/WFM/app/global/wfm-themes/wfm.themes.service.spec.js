@@ -17,8 +17,7 @@
 
 		it('should get theme', function(done) {
 			inject(function (ThemeService) {
-				$httpBackend.expectGET("../ToggleHandler/AllToggles")
-					.respond(200, { WfmGlobalLayout_personalOptions_37114: true });
+				$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, '')
 
 				$httpBackend.expectGET("../api/Theme")
 					.respond(200, {

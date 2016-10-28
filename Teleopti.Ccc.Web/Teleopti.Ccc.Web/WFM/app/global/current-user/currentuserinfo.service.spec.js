@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 
 	describe('currentUserInfoService', function () {
@@ -8,13 +8,13 @@
 			module('currentUserInfoService');
 		});
 
-		beforeEach(inject(function (_$httpBackend_,_$rootScope_) {
+		beforeEach(inject(function (_$httpBackend_, _$rootScope_) {
 			$httpBackend = _$httpBackend_;
 			$rootScope = _$rootScope_;
-			$rootScope.setTheme = function(){};
+			$rootScope.setTheme = function () { };
 		}));
 
-		it('should set the current user info', inject(function(CurrentUserInfo) {
+		it('should set the current user info', inject(function (CurrentUserInfo) {
 			var data = {
 				UserName: 'Ashley', DefaultTimeZone: '',
 				Language: '', DateFormatLocale: '', NumberFormat: ''
@@ -27,7 +27,7 @@
 			expect(result.UserName).toBe('Ashley');
 		}));
 
-		it('should get the current user from the server', function(done) {
+		it('should get the current user from the server', function (done) {
 			inject(function (CurrentUserInfo) {
 				$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 				$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
@@ -58,13 +58,13 @@
 
 		it('should init the user context with toggles', function (done) {
 			inject(function (CurrentUserInfo) {
-				$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, {'WfmGlobalLayout_personalOptions_37114': true});
+				$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, { 'WfmGlobalLayout_personalOptions_37114': true });
 				$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
 				$httpBackend.expectGET("../api/BusinessUnit").respond(200, ['mock']);
 				$httpBackend.expectGET("../api/Settings/SupportEmail").respond(200, '');
-				$httpBackend.expectGET("../api/Theme").respond(200, {Name:'light'});
+				$httpBackend.expectGET("../api/Theme").respond(200, { Name: 'light' });
 
-				CurrentUserInfo.initContext().then(function() {
+				CurrentUserInfo.initContext().then(function () {
 					var result = CurrentUserInfo.isConnected();
 					expect(result).toBe(true);
 					done();
@@ -75,12 +75,13 @@
 
 		it('should init the user context without theme toggle', function (done) {
 			inject(function (CurrentUserInfo) {
-				$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, {'WfmGlobalLayout_personalOptions_37114': false});
+				$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, { 'WfmGlobalLayout_personalOptions_37114': false });
 				$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
 				$httpBackend.expectGET("../api/BusinessUnit").respond(200, ['mock']);
 				$httpBackend.expectGET("../api/Settings/SupportEmail").respond(200, '');
+				$httpBackend.expectGET("../api/Theme").respond(200, '');
 
-				CurrentUserInfo.initContext().then(function() {
+				CurrentUserInfo.initContext().then(function () {
 					var result = CurrentUserInfo.isConnected();
 					expect(result).toBe(true);
 					done();

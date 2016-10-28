@@ -1,9 +1,9 @@
-(function() {
+(function () {
 	'use strict';
 
 	angular
-	.module('wfm.themes')
-	.controller('ThemesPickerController', ThemesPickerController);
+		.module('wfm.themes')
+		.controller('ThemesPickerController', ThemesPickerController);
 
 	ThemesPickerController.$inject = ['$scope', 'Toggle', '$rootScope', 'ThemeService', '$q'];
 
@@ -12,9 +12,10 @@
 		vm.toggleTheme = toggleTheme;
 		vm.toggleOverlay = toggleOverlay;
 		vm.showOverlay = showOverlay;
+		vm.personalizeToggle = true;
 
-		loadToggles();
-		checkThemeState().then(function(result) {
+	
+		checkThemeState().then(function (result) {
 			if (result.data.Name == null) {
 				result.data.Name = "classic";
 			};
@@ -28,7 +29,7 @@
 			}
 		});
 
-		function showOverlay(){
+		function showOverlay() {
 			return overylay = true;
 		}
 
@@ -54,11 +55,7 @@
 			vm.darkTheme = !vm.darkTheme;
 		};
 
-		function loadToggles() {
-			Toggle.togglesLoaded.then(function() {
-				vm.personalizeToggle = Toggle.WfmGlobalLayout_personalOptions_37114;
-			});
-		}
+
 
 		function toggleActiveTheme() {
 			if (vm.darkTheme) {
@@ -82,13 +79,13 @@
 
 		function checkThemeState() {
 			var deferred = $q.defer();
-			ThemeService.getTheme().then(function(response) {
+			ThemeService.getTheme().then(function (response) {
 				deferred.resolve(response);
 			});
 			return deferred.promise;
 		}
 
-		function focusMenu () {
+		function focusMenu() {
 			document.getElementById("themeMenu").focus();
 		}
 	}
