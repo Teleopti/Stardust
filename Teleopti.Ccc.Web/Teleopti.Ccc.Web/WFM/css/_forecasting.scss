@@ -12,8 +12,8 @@
 
 .forecast-campaign-input{
 	height: 25px!important;
-  width: 54px;
-  margin-right: 20px;
+	width: 54px;
+	margin-right: 20px;
 }
 
 .campaign-position{
@@ -45,12 +45,12 @@
 }
 
 .workload-indicator{
-  position: absolute;
-  right: 10.2%;
+	position: absolute;
+	right: 10.2%;
 }
 
 .wfm-form .skill-service-level-seconds label {
-  display: inline-block!important;
+	display: inline-block!important;
 }
 
 .wfm-dense .wfm-checkbox {
@@ -89,7 +89,7 @@
 .c3-lines-vcampaign,
 .c3-lines-vcombo,
 .c3-lines-voverride{
- opacity: 0;
+	opacity: 0;
 }
 
 .c3-tooltip-name--vcombo > td.value,
@@ -107,25 +107,25 @@
 }
 
 .c3-circles-vcampaign > .c3-circle{
- stroke:$red-700!important;
- fill:$white!important;
+	stroke:$red-700!important;
+	fill:$white!important;
 }
 
 .c3-circles-voverride > .c3-circle{
- stroke:$purple-500!important;
- fill:$white!important;
+	stroke:$purple-500!important;
+	fill:$white!important;
 }
 
 .c3-circles-vcombo > .c3-circle{
- stroke:$gray-300!important;
- fill:$white!important;
+	stroke:$gray-300!important;
+	fill:$white!important;
 }
 
 .c3-circles-vcombo > .c3-circle,
 .c3-circles-voverride > .c3-circle,
 .c3-circles-vcampaign > .c3-circle{
 	transition: .1s all ease-in-out;
-  stroke-width: 5!important;
+	stroke-width: 5!important;
 }
 
 forecast-result-chart >.c3 > svg{
@@ -134,4 +134,10 @@ forecast-result-chart >.c3 > svg{
 
 .modify-modal-footer{
 	padding-top: $full-padding*2;
+}
+
+.queue-list{
+	.ui-grid-viewport{
+		height: 317px!important;
+	}
 }
