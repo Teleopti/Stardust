@@ -403,6 +403,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			team.Site.MaxSeats = maxSeats;
 
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDate, team);
+			((Person)person).InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			person.WorkflowControlSet = workControlSet;
 			_personRepository.Add(person);
 
