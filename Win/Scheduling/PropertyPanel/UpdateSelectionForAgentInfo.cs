@@ -106,8 +106,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 					_statusLabelTag.Text = string.Concat(tagLabel, " ", selectedTagsText);
 
 					if (agentInfo != null && showInfoPanel)
-						agentInfo.UpdateData(personDic, dateList, schedulerStateHolder,
-											  schedulerStateHolder.SchedulingResultState.AllPersonAccounts);
+						agentInfo.UpdateData(personDic, dateList, schedulerStateHolder.SchedulingResultState.AllPersonAccounts);
                 }
             }
         }
