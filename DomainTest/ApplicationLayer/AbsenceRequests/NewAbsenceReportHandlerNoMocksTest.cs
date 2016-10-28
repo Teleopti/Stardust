@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.AreEqual(24, accountDay.Remaining.TotalDays);
 		}
 
-		private NewAbsenceReportBase setupAbsenceReportConsumer()
+		private NewAbsenceReport setupAbsenceReportConsumer()
 		{
 			var requestFactory =
 				new RequestFactory(new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack()),
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var businessRules = new BusinessRulesForPersonalAccountUpdate(_personAbsenceAccountRepository,
 				_schedulingResultStateHolder);
 
-			var absenceReportConsumer = new NewAbsenceReportBase( _currentScenario,
+			var absenceReportConsumer = new NewAbsenceReport( _currentScenario,
 				new FakeSchedulingResultStateHolderProvider(_schedulingResultStateHolder), requestFactory, scheduleDictionarySaver,
 				_loadSchedulesForRequestWithoutResourceCalculation, _personRepository, businessRules);
 			return absenceReportConsumer;

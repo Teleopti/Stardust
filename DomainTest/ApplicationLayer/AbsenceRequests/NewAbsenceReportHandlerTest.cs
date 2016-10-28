@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 	[TestFixture]
 	public class NewAbsenceReportHandlerTest
 	{
-		private NewAbsenceReportBase _target;
+		private NewAbsenceReport _target;
 		private IUnitOfWork _unitOfWork;
 		private IPerson _person;
 		private readonly IScenario _scenario = new Scenario("Test");
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			MockRepository.GenerateMock<IBudgetGroupHeadCountSpecification>();
 			var businessRules = MockRepository.GenerateMock<IBusinessRulesForPersonalAccountUpdate>();
 
-			_target = new NewAbsenceReportBase( _scenarioRepository,
+			_target = new NewAbsenceReport( _scenarioRepository,
 				new FakeSchedulingResultStateHolderProvider(_schedulingResultStateHolder), _factory, _scheduleDictionarySaver,
 				_loaderWithoutResourceCalculation, _personRepository, businessRules);
 		}

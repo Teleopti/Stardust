@@ -6,7 +6,6 @@ using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -17,9 +16,10 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
-	public class NewAbsenceReportBase
+	public class NewAbsenceReport : IHandleEvent<NewAbsenceReportCreatedEvent>,
+		IRunOnHangfire
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (NewAbsenceReportBase));
+		private static readonly ILog logger = LogManager.GetLogger(typeof (NewAbsenceReport));
 
 		private readonly ICurrentScenario _scenarioRepository;
 		private readonly ISchedulingResultStateHolderProvider _schedulingResultStateHolderProvider;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IPersonRepository _personRepository;
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 
-		public NewAbsenceReportBase(ICurrentScenario scenarioRepository,
+		public NewAbsenceReport(ICurrentScenario scenarioRepository,
 			ISchedulingResultStateHolderProvider schedulingResultStateHolderProvider, IRequestFactory factory,
 			IScheduleDifferenceSaver scheduleDictionarySaver,
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation,
@@ -51,20 +51,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			{
 				loadDefaultScenario
 			};
-			if (Logger.IsInfoEnabled)
+			if (logger.IsInfoEnabled)
 			{
-				Logger.Info("New instance of consumer was created");
+				logger.Info("New instance of consumer was created");
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public void Handle(NewAbsenceReportCreatedEvent message)
+		[AsSystem]
+		[UnitOfWork]
+		public virtual void Handle(NewAbsenceReportCreatedEvent message)
 		{
 			_schedulingResultStateHolder = _schedulingResultStateHolderProvider.GiveMeANew();
 
-			if (Logger.IsDebugEnabled)
+			if (logger.IsDebugEnabled)
 			{
-				Logger.DebugFormat("Consuming message for person absence report with Id = {0}. (Message timestamp = {1})",
+				logger.DebugFormat("Consuming message for person absence report with Id = {0}. (Message timestamp = {1})",
 					message.AbsenceId, message.Timestamp);
 			}
 
@@ -88,9 +89,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 			if (person.WorkflowControlSet == null)
 			{
-				if (Logger.IsDebugEnabled)
+				if (logger.IsDebugEnabled)
 				{
-					Logger.DebugFormat(CultureInfo.CurrentCulture,
+					logger.DebugFormat(CultureInfo.CurrentCulture,
 						"No workflow control set defined for {0}, {1} (PersonId = {2}). The reported absence with Id = {3} will not be processed.",
 						person.EmploymentNumber, person.Name, person.Id, message.AbsenceId);
 				}
@@ -101,7 +102,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var absenceId = message.AbsenceId;
 				if (!allowedAbsencesForReport.Any() || !allowedAbsencesForReport.Exists(x => x.Id == absenceId))
 				{
-					Logger.InfoFormat(
+					logger.InfoFormat(
 						"No valid reportable absence found in message, nothing will be done. PersonId: {0}, Request Date: {1:yyyy-MM-dd}, Absence Id: {2}",
 						message.PersonId, message.RequestedDate, message.AbsenceId);
 				}
@@ -109,7 +110,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				{
 					var reportedAbsence =
 						allowedAbsencesForReport.Single(x => x.Id == message.AbsenceId);
-					var dateOnlyPeriod = period.ToDateOnlyPeriod(agentTimeZone);
 
 					var undoRedoContainer = new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 400);
 
@@ -126,17 +126,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 					var brokenBusinessRules = requestApprovalServiceScheduler.ApproveAbsence(reportedAbsence, period, person);
 
-					if (Logger.IsDebugEnabled)
+					if (logger.IsDebugEnabled)
 					{
 						if (brokenBusinessRules != null)
 						{
 							foreach (var brokenBusinessRule in brokenBusinessRules)
 							{
-								Logger.DebugFormat("A rule was broken: {0}", brokenBusinessRule.Message);
+								logger.DebugFormat("A rule was broken: {0}", brokenBusinessRule.Message);
 							}
 						}
 
-						Logger.Debug("Simulated approving absence successfully");
+						logger.Debug("Simulated approving absence successfully");
 					}
 				
 					var approvedPersonAbsence = requestApprovalServiceScheduler.GetApprovedPersonAbsence();
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					}
 					catch (ValidationException validationException)
 					{
-						Logger.Error("A validation error occurred. Review the error log. Processing cannot continue.",
+						logger.Error("A validation error occurred. Review the error log. Processing cannot continue.",
 							validationException);
 						clearStateHolder();
 						return;
@@ -181,9 +181,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_loadSchedulesForRequestWithoutResourceCalculation.Execute(_scenarioRepository.Current(),
 				periodForResourceCalc,
 				new List<IPerson> {person}, _schedulingResultStateHolder);
-			if (Logger.IsDebugEnabled)
+			if (logger.IsDebugEnabled)
 			{
-				Logger.DebugFormat("Loaded schedules and data needed for absence request handling. (Period = {0})",
+				logger.DebugFormat("Loaded schedules and data needed for absence request handling. (Period = {0})",
 					periodForResourceCalc);
 			}
 		}
@@ -191,61 +191,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private bool loadDefaultScenario(NewAbsenceReportCreatedEvent message)
 		{
 			var defaultScenario = _scenarioRepository.Current();
-			if (Logger.IsDebugEnabled)
+			if (logger.IsDebugEnabled)
 			{
-				Logger.DebugFormat("Using the default scenario named {0}. (Id = {1})", defaultScenario.Description,
+				logger.DebugFormat("Using the default scenario named {0}. (Id = {1})", defaultScenario.Description,
 					defaultScenario.Id);
 			}
 			return true;
 		}
 
 		private delegate bool LoadDataAction(NewAbsenceReportCreatedEvent message);
-	}
-
-	[DisabledBy(Toggles.Wfm_MoveNewAbsenceReportOnHangfire_38203)]
-#pragma warning disable 618
-	public class NewAbsenceReportServiceBusEventHandler : NewAbsenceReportBase, IHandleEvent<NewAbsenceReportCreatedEvent>,IRunOnServiceBus
-#pragma warning restore 618
-	{
-		public new void Handle(NewAbsenceReportCreatedEvent @event)
-		{
-			base.Handle(@event);
-		}
-
-		public NewAbsenceReportServiceBusEventHandler(ICurrentScenario scenarioRepository,
-			ISchedulingResultStateHolderProvider schedulingResultStateHolderProvider, IRequestFactory factory,
-			IScheduleDifferenceSaver scheduleDictionarySaver,
-			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation,
-			IPersonRepository personRepository, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
-			: base(
-				scenarioRepository, schedulingResultStateHolderProvider, factory, scheduleDictionarySaver,
-				loadSchedulesForRequestWithoutResourceCalculation, personRepository,
-				businessRulesForPersonalAccountUpdate)
-		{
-		}
-	}
-
-	[EnabledBy(Toggles.Wfm_MoveNewAbsenceReportOnHangfire_38203)]
-	public class NewAbsenceReportHangfireEventHandler : NewAbsenceReportBase, IHandleEvent<NewAbsenceReportCreatedEvent>,
-		IRunOnHangfire
-	{
-		[AsSystem]
-		[UnitOfWork]
-		public new virtual void Handle(NewAbsenceReportCreatedEvent @event)
-		{
-			base.Handle(@event);
-		}
-
-		public NewAbsenceReportHangfireEventHandler(ICurrentScenario scenarioRepository,
-			ISchedulingResultStateHolderProvider schedulingResultStateHolderProvider, IRequestFactory factory,
-			IScheduleDifferenceSaver scheduleDictionarySaver,
-			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation,
-			IPersonRepository personRepository, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
-			: base(
-				scenarioRepository, schedulingResultStateHolderProvider, factory, scheduleDictionarySaver,
-				loadSchedulesForRequestWithoutResourceCalculation, personRepository,
-				businessRulesForPersonalAccountUpdate)
-		{
-		}
 	}
 }

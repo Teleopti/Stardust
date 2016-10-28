@@ -136,7 +136,6 @@
 		ETL_SpeedUpPersonPeriodNightly_38097,
 		Stardust_MoveAbsenceRequestTo_37941,
 		ETL_SpeedUpNightlyReloadDatamart_38131,
-		Wfm_MoveNewAbsenceReportOnHangfire_38203,
 		ETL_SpeedUpNightlySkill_37543,
 		Wfm_MoveExportMultiSiteSkillOnStardust_38134,
 		Payroll_ToStardust_38204,
