@@ -23,6 +23,5 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void UpdateUnlinkedPersonids(int[] factScheduleRows);
 		int GetFactScheduleRowCount(int personId);
 		int GetFactScheduleDayCountRowCount(int personId);
-		IEnumerable<DateOnly> GetFactScheduleDeviationUnlinkedDates(int[] personPeriodIds);
 	}
 }

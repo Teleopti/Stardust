@@ -8,8 +8,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeAnalyticsScheduleRepository : IAnalyticsScheduleRepository
 	{
-		private readonly IList<IFactScheduleRow> rows = new List<IFactScheduleRow>();
-
 		public void PersistFactScheduleBatch(IList<IFactScheduleRow> factScheduleRows)
 		{
 			throw new NotImplementedException();
@@ -57,11 +55,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public int GetFactScheduleDayCountRowCount(int personId)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IEnumerable<DateOnly> GetFactScheduleDeviationUnlinkedDates(int[] personPeriodIds)
 		{
 			throw new NotImplementedException();
 		}

@@ -31,18 +31,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			{
 				var analyticsPersonPeriods = _analyticsPersonPeriodRepository.GetPersonPeriods(personId);
 				_analyticsScheduleRepository.UpdateUnlinkedPersonids(analyticsPersonPeriods.Select(x => x.PersonId).ToArray());
-
-				//var dates = _analyticsScheduleRepository.GetFactScheduleDeviationUnlinkedDates(personPeriodIds);
-
-				//foreach (var dateOnly in dates)
-				//{
-				//	if (dateOnly.Date < DateTime.Now.AddDays(1))
-				//	{
-				//		_analyticsScheduleRepository.InsertStageScheduleChangedServicebus(dateOnly, personId,
-				//			_scenarioRepository.LoadDefaultScenario(_businessUnitRepository.Get(@event.LogOnBusinessUnitId))
-				//				.Id.GetValueOrDefault(), @event.LogOnBusinessUnitId, DateTime.Now);
-				//	}
-				//}
 			}
 		}
 	}
