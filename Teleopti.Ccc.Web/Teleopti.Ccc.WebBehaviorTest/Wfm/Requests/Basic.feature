@@ -43,13 +43,13 @@ Background:
 	| End Time    | 2015-10-03 14:00 |
 	| Update Time | 2015-09-01 14:00 |
 	| Status      | Pending          |
-
+@ignore
 Scenario: Display requests	
 	When I view wfm requests
 	And I select to load requests from '2015-10-01' to '2015-10-04'
 	Then I should see a request from 'Ashley Andeen' in the list
 	And I should see a request from 'John Smith' in the list
-
+@ignore
 Scenario: Sort requests	
 	When I view wfm requests
 	And I select to load requests from '2015-10-01' to '2015-10-04'

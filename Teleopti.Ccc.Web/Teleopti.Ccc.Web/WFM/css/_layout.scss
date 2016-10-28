@@ -2,59 +2,40 @@ a{
 	color: $text-color-standard;
 	text-decoration: underline;
 }
-
 .layout-fill {
 	width: 100%;
 	min-height: 100%;
 	height: 100%;
 }
-
 .select-toggle {
 	opacity: 0;
 }
-
-.wfm-table td, .wfm-table th {
-	color: $text-color-standard;
-	//this will be removed
-}
-
 .layout-container {
 	height: 100vh;
 	max-height: 100%;
 	overflow: hidden;
 }
-
 #materialcontainer{
 	position:relative;
 	overflow: auto;
 }
-
 .container.content{
 	min-height: 92vh;
 	padding: 0;
 }
-
 .fab-wrapper .wfm-fab {
 	margin-top: 0;
 }
-
-@media screen and (max-width:768px){
-	.con-flex.split-3-1 {
-		flex-basis: auto !important;
-	}
-}
-
 .notice-item{
 	display: flex;
 }
-
 .notice-close{
 	margin-left: auto;
 }
+
 /*nav-context-menu*/
 .nav-row{
 	padding-top:5px;
-
 	.nav-inline{
 		display:inline-flex;
 	}
@@ -64,7 +45,6 @@ a{
 .fab-wrapper .wfm-fab{
 	float:right;
 }
-
 #lefttoogle > div{
 	position: fixed;
 	top: -69px;
@@ -75,7 +55,6 @@ a{
 	color:$white;
 	font-size:250%;
 }
-
 .list-mark{
 	padding:3px;
 	background:$green-100;
@@ -83,19 +62,15 @@ a{
 	text-align:center;
 	font-size:15px!important;
 }
-
 .wfm-card-unselected{
 	background: $white;
 }
-
 .sidenav.is-hidden{
 	flex-basis: 40px!important;
 }
-
 .col-md-4, .col-md-8, .col-md-12 { /* please bootstrap, don't make any assumption about padding' */
 	padding: 0;
 }
-
 .row {
 	margin-right: 0;
 	margin-left: 0;
@@ -103,44 +78,49 @@ a{
 .click-modal .dialog {
 	left:25%;
 }
-
 wfm-notice{
 	position: fixed;
 	bottom:1%;
 	right:1%;
 	left:75%;
 }
+md-progress-circular{
+	transform: scale(0.4)!important;
+}
+.nav-item-wrap:focus > .sidenav-header{
+	background: $gray012;
+}
+.nav-item-active > .sidenav-header{
+	background: $green-100!important;
+}
 
+/*Mobile view Query*/
+@media screen and (max-width:768px){
+	.con-flex.split-3-1 {
+		flex-basis: auto !important;
+	}
+	.c3 svg { font: .6em sans-serif; }
+}
+
+/*Sidenav is hidden Query*/
 @media screen and (max-width: 960px) {
 	wfm-notice{
 		left:1%;
 	}
 }
 
-//Temp move us to styleguide
-.wfm-form input{
-	margin-right: 0!important;
+/*Firefox Query*/
+@-moz-document url-prefix(){
+	.navbar .navbar-search{
+		padding: 1px;
+	}
 }
 
-.inline-select{
-	margin-top:-5px!important;
-	margin-left: 5px!important;
-}
-
-@media screen and (max-width: 768px) {
-	.c3 svg { font: .6em sans-serif; }
-}
-
+/*Internet explorer Query*/
 @media all and (-ms-high-contrast: none),
 (-ms-high-contrast: active) {
 	.navbar .navbar-search{
 		padding-left: 1px;
-	}
-}
-
-@-moz-document url-prefix(){
-	.navbar .navbar-search{
-		padding: 1px;
 	}
 }
 
@@ -150,27 +130,20 @@ wfm-notice{
 	}
 }
 
-md-option{
-	color:$text-color-standard;
+
+//Temp move us to styleguide
+
+
+
+/*moved to the styleguide - remove after bump*/
+
+.inline-select{
+	margin-top:-5px!important;
+	margin-left: 5px!important;
 }
 
-.nav-item-wrap:focus > .sidenav-header{
-	background: $gray012;
-}
-
-.nav-item-active > .sidenav-header{
-	background: $green-100!important;
-}
-
-md-select-menu md-option:focus:not([disabled]):not([selected]){
-	background-color: $gray012;
-}
-
-.hidden-visibility {
-	visibility: hidden;
-}
-md-progress-circular{
-	transform: scale(0.4)!important;
+.wfm-form input, .wfm-form select{
+	margin-right: 0!important;
 }
 
 .chip-disabled{
@@ -178,8 +151,4 @@ md-progress-circular{
 		cursor: not-allowed!important;
 	}
 	color:$text-color-muted!important;
-}
-
-.working-hours-row{
-	border-top: 1px solid $gray012;
 }

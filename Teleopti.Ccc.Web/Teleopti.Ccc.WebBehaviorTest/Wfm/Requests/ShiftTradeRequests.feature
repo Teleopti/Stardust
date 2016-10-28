@@ -86,7 +86,7 @@ Background:
 	| Activity         | Sales            |
 	| StartTime        | 2016-05-23 15:30 |
 	| EndTime          | 2016-05-23 23:30 |
-
+@ignore
 Scenario: View shift trade requests 
 	When I view wfm requests
 	And I select to go to shift trade requests view
