@@ -25,7 +25,6 @@
 		RTA_SeeAllOutOfAdherencesToday_39146,
 		RTA_FasterActivityCheck_41380,
 
-		Portal_NewLandingpage_29415,
 		Show_StaticPageOnNoInternet_29415,
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
 		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,

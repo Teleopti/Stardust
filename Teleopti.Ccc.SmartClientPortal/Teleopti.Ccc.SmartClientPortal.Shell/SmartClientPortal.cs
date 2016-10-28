@@ -231,15 +231,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			_portalSettings = _container.Resolve<PortalSettings>();
 			_toggleManager = _container.Resolve<IToggleManager>();
 			_webUrlHolder = _container.Resolve<WebUrlHolder>();
-			if (!_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415))
-			{
-				splitContainer.Panel2.Controls.Remove(webControl1);
-				webControl1.WebView.Destroy();
-				webControl1.WebView.Dispose();
-				webControl1.Dispose();
-				webControl1 = null;
-				webView1 = null;
-			}
+			
+			splitContainer.Panel2.Controls.Remove(webControl1);
+			webControl1.WebView.Destroy();
+			webControl1.WebView.Dispose();
+			webControl1.Dispose();
+			webControl1 = null;
+			webView1 = null;
+			
 			if (!_toggleManager.IsEnabled(Toggles.WfmPermission_ReplaceOldPermission_34671))
 			{
 				wfmWebControl.Enabled = false;
@@ -356,16 +355,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			toolStripStatusLabelLoggedOnUser.Text = toolStripStatusLabelLoggedOnUser.Text +
 													ApplicationTextHelper.LoggedOnUserText;
 
-			if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415))
+			if (!canAccessInternet)
 			{
-				if (!canAccessInternet)
-				{
-					goToLocalPage();
-				}
-				else
-				{
-					goToPublicPage(false);
-				}
+				goToLocalPage();
+			}
+			else
+			{
+				goToPublicPage(false);
 			}
 
 			setNotifyData(_systemChecker.IsOk());
@@ -386,8 +382,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					showMem();
 				}
 			}
-			if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415)) 
-				backStage1.Controls.Remove(backStageButtonSignCustomerWeb);
+
+			backStage1.Controls.Remove(backStageButtonSignCustomerWeb);
 
 			_container.Resolve<HangfireClientStarter>().Start();
 		}
