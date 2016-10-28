@@ -20,12 +20,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
+	//TODO: before adding more tests here remove mess with mix of repos and stateholder
 	[DomainTestWithStaticDependenciesAvoidUse]
 	public class BackToLegalShiftCommandTest
 	{
 		public BackToLegalShiftCommand Target;
 		public FakePersonRepository PersonRepository;
-		public FakeActivityRepository ActivityRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonAssignmentRepository AssignmentRepository;
@@ -42,9 +42,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var firstDay = new DateOnly(2015, 10, 12);
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
-			var phoneActivity = ActivityRepository.Has("_");
-			var otherActivity = ActivityRepository.Has("other");
-			otherActivity.RequiresSkill = false;
+			var phoneActivity = new Activity("_");
+			var otherActivity = new Activity("other") {RequiresSkill = false};
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
 			var contract = new Contract("_");
@@ -93,9 +92,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var firstDay = new DateOnly(2015, 10, 12);
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
-			var phoneActivity = ActivityRepository.Has("_");
-			var otherActivity = ActivityRepository.Has("other");
-			otherActivity.RequiresSkill = false;
+			var phoneActivity = new Activity("_");
+			var otherActivity = new Activity("other") {RequiresSkill = false};
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
@@ -147,12 +145,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var secondDay = firstDay.AddDays(1);
 			var thirdDay = firstDay.AddDays(2);
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
-			var phoneActivity = ActivityRepository.Has("_");
-			phoneActivity.AllowOverwrite = true;
-			var otherActivity = ActivityRepository.Has("other");
-			otherActivity.RequiresSkill = false;
-			var personalActivity = ActivityRepository.Has("personal");
-			personalActivity.RequiresSkill = false;
+			var phoneActivity = new Activity("_") {AllowOverwrite = true};
+			var otherActivity = new Activity("other") {RequiresSkill = false};
+			var personalActivity = new Activity("personal") {RequiresSkill = false};
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
 			var shiftCategory = new ShiftCategory("_").WithId();
@@ -202,12 +197,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var secondDay = firstDay.AddDays(1);
 			var thirdDay = firstDay.AddDays(2);
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
-			var phoneActivity = ActivityRepository.Has("_");
-			phoneActivity.AllowOverwrite = true;
-			var otherActivity = ActivityRepository.Has("other");
-			otherActivity.RequiresSkill = false;
-			var meetingActivity = ActivityRepository.Has("personal");
-			meetingActivity.RequiresSkill = false;
+			var phoneActivity = new Activity("_") {AllowOverwrite = true};
+			var otherActivity = new Activity("other") {RequiresSkill = false};
+			var meetingActivity = new Activity("personal") {RequiresSkill = false};
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
 			var shiftCategory = new ShiftCategory("_").WithId();

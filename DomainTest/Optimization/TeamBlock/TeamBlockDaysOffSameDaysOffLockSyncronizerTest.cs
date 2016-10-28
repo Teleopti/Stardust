@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
@@ -23,7 +22,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		public TeamBlockDaysOffSameDaysOffLockSyncronizer Target;
 		public IGroupPersonBuilderWrapper GroupPersonBuilderWrapper;
 		public IMatrixListFactory MatrixListFactory;
-		public SchedulerStateHolder SchedulerStateHolder;
 		public IGroupPersonBuilderForOptimizationFactory GroupPersonBuilderForOptimizationFactory;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
@@ -45,18 +43,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var agent2 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(dateOnly, sameTeam).WithId();
 			agent2.PermissionInformation.SetDefaultTimeZone(TimeZoneGuard.Instance.TimeZone);
 			agent2.AddSchedulePeriod(schedulePeriod2);
-
 			var selectedPeriod = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(2));
-			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(selectedPeriod, TimeZoneGuard.Instance.TimeZone);
-			SchedulerStateHolder.SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(SchedulerStateHolder.RequestedPeriod.Period());
-			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent1, agent2 }).VisiblePeriod);
-			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
-			SchedulerStateHolder.AllPermittedPersons.Add(agent1);
-			SchedulerStateHolder.AllPermittedPersons.Add(agent2);
-			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent1);
-			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent2);
-			SchedulerStateHolder.FilterPersons(new List<IPerson> { agent1, agent2 });
-			
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(new DateOnlyPeriodAsDateTimePeriod(selectedPeriod, TimeZoneGuard.Instance.TimeZone).Period(), new[] { agent1, agent2 }).VisiblePeriod);
 			var allPersonMatrixList = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, new[] {agent1, agent2}, selectedPeriod);
 			var optimizationPreferences = new OptimizationPreferences
 			{
@@ -70,9 +58,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			};
 			var allTeamInfoListOnStartDate = new List<ITeamInfo>();
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
-			GroupPersonBuilderForOptimizationFactory.Create(SchedulerStateHolder.AllPermittedPersons, scheduleDictionary, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
+			GroupPersonBuilderForOptimizationFactory.Create(new[] { agent1, agent2 }, scheduleDictionary, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 			var teamInfoFactory = new TeamInfoFactory(GroupPersonBuilderWrapper);			
-			var teamInfo = teamInfoFactory.CreateTeamInfo(SchedulerStateHolder.SchedulingResultState.PersonsInOrganization, agent1, selectedPeriod, allPersonMatrixList);
+			var teamInfo = teamInfoFactory.CreateTeamInfo(new[] { agent1, agent2 }, agent1, selectedPeriod, allPersonMatrixList);
 			allTeamInfoListOnStartDate.Add(teamInfo);
 			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).UnlockPeriod(selectedPeriod);
 			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
@@ -108,16 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			agent2.AddSchedulePeriod(schedulePeriod2);
 
 			var selectedPeriod = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(2));
-			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(selectedPeriod, TimeZoneGuard.Instance.TimeZone);
-			SchedulerStateHolder.SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(SchedulerStateHolder.RequestedPeriod.Period());
-			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent1, agent2 }).VisiblePeriod);
-			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
-			SchedulerStateHolder.AllPermittedPersons.Add(agent1);
-			SchedulerStateHolder.AllPermittedPersons.Add(agent2);
-			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent1);
-			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent2);
-			SchedulerStateHolder.FilterPersons(new List<IPerson> { agent1, agent2 });
-
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(new DateOnlyPeriodAsDateTimePeriod(selectedPeriod, TimeZoneGuard.Instance.TimeZone).Period(), new[] { agent1, agent2 }).VisiblePeriod);
 			var allPersonMatrixList = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, new[] { agent1, agent2 }, selectedPeriod);
 			var optimizationPreferences = new OptimizationPreferences
 			{
@@ -131,9 +110,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			};
 			var allTeamInfoListOnStartDate = new List<ITeamInfo>();
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
-			GroupPersonBuilderForOptimizationFactory.Create(SchedulerStateHolder.AllPermittedPersons, scheduleDictionary, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
+			GroupPersonBuilderForOptimizationFactory.Create(new[]{ agent1, agent2 }, scheduleDictionary, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 			var teamInfoFactory = new TeamInfoFactory(GroupPersonBuilderWrapper);
-			var teamInfo = teamInfoFactory.CreateTeamInfo(SchedulerStateHolder.SchedulingResultState.PersonsInOrganization, agent1, selectedPeriod, allPersonMatrixList);
+			var teamInfo = teamInfoFactory.CreateTeamInfo(new[] { agent1, agent2 }, agent1, selectedPeriod, allPersonMatrixList);
 			allTeamInfoListOnStartDate.Add(teamInfo);
 			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).UnlockPeriod(selectedPeriod);
 			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
