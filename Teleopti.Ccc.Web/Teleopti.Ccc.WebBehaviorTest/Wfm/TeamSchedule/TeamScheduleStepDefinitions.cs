@@ -20,8 +20,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I searched schedule with keyword '(.*)' and schedule date '(.*)'")]
 		public void WhenISearchedScheduleWithKeywordAndScheduleDate(string searchkeyword, string scheduleDate)
 		{
-			Browser.Interactions.FillWith("#simple-people-search", string.Format("\"{0}\"", searchkeyword));
-			Browser.Interactions.PressEnter("#simple-people-search");
+			Browser.Interactions.FillWith("#simple-input-search", string.Format("\"{0}\"", searchkeyword));
+			Browser.Interactions.PressEnter("#simple-input-search");
 
 			var propertyValues = new Dictionary<string, string>
 			{

@@ -7,7 +7,7 @@
 
 <div class="wfm-requests" ng-if="requests.isRequestsEnabled">
 	<div class="operation-container material-depth-1">
-		<people-search-input class="request-filter inline-block" search-options="requests.agentSearchOptions" search-callback="requests.onAgentSearchTermChanged"></people-search-input>
+		<wfm-multiple-search-input class="request-filter inline-block" search-options="requests.agentSearchOptions" search-callback="requests.onAgentSearchTermChanged"></wfm-multiple-search-input>
 
 		<date-range-picker class="request-date-range-picker" ng-model="requests.period"
 						   template-type="requests.dateRangeTemplateType"

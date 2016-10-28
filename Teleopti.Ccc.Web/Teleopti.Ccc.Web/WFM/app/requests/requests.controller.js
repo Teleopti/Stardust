@@ -50,7 +50,11 @@
 			vm.agentSearchOptions = {
 				keyword: "",
 				isAdvancedSearchEnabled: true,
-				searchKeywordChanged: false
+				searchKeywordChanged: false,
+				searchFields: [
+					'FirstName', 'LastName', 'EmploymentNumber', 'Organization', 'Role', 'Contract', 'ContractSchedule', 'ShiftBag',
+					'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
+				]
 			};
 			vm.agentSearchTerm = vm.agentSearchOptions.keyword;
 

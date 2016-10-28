@@ -9,7 +9,11 @@
 		var vm = this;
 		vm.searchOptions = {
 			keyword: angular.isDefined(params.keyword) && params.keyword !== '' ? params.keyword : '',
-			searchKeywordChanged: false
+			searchKeywordChanged: false,
+			searchFields : [
+				'FirstName', 'LastName', 'EmploymentNumber', 'Organization', 'Role', 'Contract', 'ContractSchedule', 'ShiftBag',
+				'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
+			]
 		};
 
 		vm.isLoading = false;
