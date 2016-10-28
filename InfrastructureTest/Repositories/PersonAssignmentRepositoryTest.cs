@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -163,8 +162,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             Assert.Throws<ArgumentNullException>(() => _rep.Find(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), null));
         }
-
-
+		
         [Test]
         public void CanFindAssignmentsByDatesAndScenario()
         {
@@ -195,10 +193,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(agAssInvalid);
             /////////////////////////////////////////////////////////////////////////////////
 
-            IList<IPersonAssignment> retList = new List<IPersonAssignment>(_rep.Find(searchPeriod, _dummyScenario));
+            var retList = _rep.Find(searchPeriod, _dummyScenario).ToArray();
 
             Assert.IsTrue(retList.Contains(agAssValid));
-            Assert.AreEqual(1, retList.Count);
+            Assert.AreEqual(1, retList.Length);
 						Assert.IsTrue(LazyLoadingManager.IsInitialized(retList[0].ShiftLayers));
         }
 
@@ -219,14 +217,74 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(0, _rep.Find(new DateOnlyPeriod(2000, 1, 1, 2010, 1, 1), _dummyScenario).Count);
         }
 
-        /// <summary>
-        /// Determines whether this instance [can find agent assignments by dates and scenario].
-        /// </summary>
-        /// <remarks>
-        /// Created by: Sumedah
-        /// Created date: 2008-03-07
-        /// </remarks>
-        [Test]
+		[Test]
+		public void CannotUseNullAsScenarioForChunked()
+		{
+			Assert.Throws<ArgumentNullException>(() => _rep.FindChunked(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), null));
+		}
+
+		[Test]
+		public void CanFindAssignmentsByDatesAndScenarioForChunked()
+		{
+			var notToFindScenario = new Scenario("NotToFind");
+			var searchPeriod = new DateOnlyPeriod(2007, 1, 1, 2007, 1, 2);
+
+			////////////setup////////////////////////////////////////////////////////////////
+			IPersonAssignment agAssValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				_dummyActivity,
+				_dummyAgent,
+				new DateTimePeriod(new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+								   new DateTime(2007, 1, 2, 0, 0, 0, DateTimeKind.Utc)),
+				_dummyCategory,
+				_dummyScenario);
+			agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
+			agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
+			agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
+			agAssValid.AddOvertimeActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2), _definitionSet);
+
+			IPersonAssignment agAssInvalid = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(
+				_dummyActivity,
+				_dummyAgent,
+				new DateTimePeriod(2006, 12, 31, 2007, 1, 1),
+				notToFindScenario);
+
+			PersistAndRemoveFromUnitOfWork(notToFindScenario);
+			PersistAndRemoveFromUnitOfWork(agAssValid);
+			PersistAndRemoveFromUnitOfWork(agAssInvalid);
+			/////////////////////////////////////////////////////////////////////////////////
+
+			var retList = _rep.FindChunked(searchPeriod, _dummyScenario).ToArray();
+
+			Assert.IsTrue(retList.Contains(agAssValid));
+			Assert.AreEqual(1, retList.Length);
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(retList[0].ShiftLayers));
+		}
+
+		[Test]
+		public void VerifyAssignmentsCannotBeReadForDeletedPersonForChunked()
+		{
+			IPersonAssignment agAssValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+					_dummyActivity,
+					_dummyAgent,
+					new DateTimePeriod(new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+									   new DateTime(2007, 1, 2, 0, 0, 0, DateTimeKind.Utc)),
+					_dummyCategory,
+					_dummyScenario);
+			PersistAndRemoveFromUnitOfWork(agAssValid);
+			new PersonRepository(new ThisUnitOfWork(UnitOfWork)).Remove(_dummyAgent);
+			PersistAndRemoveFromUnitOfWork(_dummyAgent);
+
+			Assert.AreEqual(0, _rep.FindChunked(new DateOnlyPeriod(2000, 1, 1, 2010, 1, 1), _dummyScenario).Count);
+		}
+
+		/// <summary>
+		/// Determines whether this instance [can find agent assignments by dates and scenario].
+		/// </summary>
+		/// <remarks>
+		/// Created by: Sumedah
+		/// Created date: 2008-03-07
+		/// </remarks>
+		[Test]
         public void CanFindAgentAssignmentsByDatesAndScenario()
         {
             var notToFindScenario = new Scenario("NotToFind");

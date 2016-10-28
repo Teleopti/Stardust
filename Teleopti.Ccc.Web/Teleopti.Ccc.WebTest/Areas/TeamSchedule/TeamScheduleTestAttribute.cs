@@ -15,9 +15,7 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.IoC;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.WebTest.Areas.Global;
-using Teleopti.Ccc.WebTest.Areas.Search;
 using Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core;
-using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -45,13 +43,13 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			var fakeActivityCommandHandler = new FakeActivityCommandHandler();
 
-			system.UseTestDouble<FakeActivityCommandHandler>(fakeActivityCommandHandler).For<IHandleCommand<AddActivityCommand>>();
-			system.UseTestDouble<FakeActivityCommandHandler>(fakeActivityCommandHandler).For<IHandleCommand<AddPersonalActivityCommand>>();
-			system.UseTestDouble<FakeActivityCommandHandler>(fakeActivityCommandHandler).For<IHandleCommand<RemoveActivityCommand>>();
-			system.UseTestDouble<FakeActivityCommandHandler>(fakeActivityCommandHandler).For<IHandleCommand<BackoutScheduleChangeCommand>>();
-			system.UseTestDouble<FakeActivityCommandHandler>(fakeActivityCommandHandler).For<IHandleCommand<ChangeShiftCategoryCommand>>();
-			system.UseTestDouble<FakeActivityCommandHandler>(fakeActivityCommandHandler).For<IHandleCommand<FixNotOverwriteLayerCommand>>();
-			system.UseTestDouble<FakeActivityCommandHandler>(fakeActivityCommandHandler).For<IHandleCommand<EditScheduleNoteCommand>>();
+			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<AddActivityCommand>>();
+			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<AddPersonalActivityCommand>>();
+			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<RemoveActivityCommand>>();
+			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<BackoutScheduleChangeCommand>>();
+			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<ChangeShiftCategoryCommand>>();
+			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<FixNotOverwriteLayerCommand>>();
+			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<EditScheduleNoteCommand>>();
 			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<MoveShiftLayerCommand>>();
 			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
 			system.UseTestDouble<FullPermission>().For<IAuthorization>();

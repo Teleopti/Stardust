@@ -14,7 +14,6 @@ using Teleopti.Interfaces.Domain;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
@@ -29,9 +28,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private ISkill _selectedSkill;
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private IRepositoryFactory _repositoryFactory;
-	    private IScheduleStorageFactory _scheduleStorageFactory;
     	private ILazyLoadingManager _lazyManager;
 	    private DateTimePeriod _period;
+	    private IScheduleStorage _scheduleStorage;
 
 	    [SetUp]
         public void Setup()
@@ -41,24 +40,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_period = _targetPeriod.ToDateTimePeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
             _unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
             _repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
-	        _scheduleStorageFactory = MockRepository.GenerateMock<IScheduleStorageFactory>();
-						_targetScenario = ScenarioFactory.CreateScenarioAggregate();
+			_scheduleStorage = MockRepository.GenerateMock<IScheduleStorage>();
+			_targetScenario = ScenarioFactory.CreateScenarioAggregate();
             _selectedSkill = SkillFactory.CreateSkill("Phone");
-			_targetStateHolder = new SchedulerStateHolder(_targetScenario, new DateOnlyPeriodAsDateTimePeriod(_targetPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople, MockRepository.GenerateMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuard());
+			_targetStateHolder = new SchedulerStateHolder(_targetScenario, new DateOnlyPeriodAsDateTimePeriod(_targetPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople, MockRepository.GenerateMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
         	_lazyManager = MockRepository.GenerateMock<ILazyLoadingManager>();
         }
-
-        [Test]
-        public void VerifyInstanceIsCreatedWithoutRepositoryFactory()
-        {
-            _targetStateLoader = new SchedulerStateLoader(_targetStateHolder);
-            Assert.IsNotNull(_targetStateLoader);
-        }
-
+		
         [Test]
         public void VerifyInstanceIsCreatedWithRepositoryFactory()
         {
-			_targetStateLoader = new SchedulerStateLoader(_targetStateHolder, _repositoryFactory, _unitOfWorkFactory, _lazyManager, _scheduleStorageFactory);
+			_targetStateLoader = new SchedulerStateLoader(_targetStateHolder, _repositoryFactory, _unitOfWorkFactory, _lazyManager, _scheduleStorage);
             Assert.IsNotNull(_targetStateLoader);
         }
 
@@ -68,13 +60,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
             var activityRepository = MockRepository.GenerateMock<IActivityRepository>();
             var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-            var scheduleRepository = MockRepository.GenerateMock<IScheduleStorage>();
             var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
             var skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();
             
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
             _repositoryFactory.Stub(x => x.CreateActivityRepository(uow)).Return(activityRepository);
-			_scheduleStorageFactory.Stub(x => x.Create(uow)).Return(scheduleRepository);
             _repositoryFactory.Stub(x => x.CreateSkillRepository(uow)).Return(skillRepository);
             _repositoryFactory.Stub(x => x.CreateMultisiteDayRepository(uow)).Return(MockRepository.GenerateMock<IMultisiteDayRepository>());
             _repositoryFactory.Stub(x => x.CreateSkillDayRepository(uow)).Return(skillDayRepository);
@@ -83,7 +73,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             skillDayRepository.Stub(x => x.FindReadOnlyRange(_targetPeriod, new List<ISkill>(), _targetScenario)).IgnoreArguments().Return(new Collection<ISkillDay>());
             scheduleDictionary.Stub(x => x.Keys).Return(new Collection<IPerson>());
 
-            _targetStateLoader = new SchedulerStateLoader(_targetStateHolder, _repositoryFactory, _unitOfWorkFactory, _lazyManager, _scheduleStorageFactory);
+            _targetStateLoader = new SchedulerStateLoader(_targetStateHolder, _repositoryFactory, _unitOfWorkFactory, _lazyManager, _scheduleStorage);
             var scheduleDateTimePeriod =
                 new ScheduleDateTimePeriod(_period);
             _targetStateLoader.LoadSchedules(scheduleDateTimePeriod);

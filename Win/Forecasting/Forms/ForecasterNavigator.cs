@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private readonly IStatisticHelper _statisticHelper;
 		private bool _hidePriorityToggle;
 
-		public ForecasterNavigator(IStatisticHelper statisticHelper)
+		protected ForecasterNavigator(IStatisticHelper statisticHelper)
 		{
 			_statisticHelper = statisticHelper;
 			InitializeComponent();

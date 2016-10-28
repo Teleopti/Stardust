@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public PersonAssignmentRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{
-
 		}
 
 		public virtual ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
@@ -43,29 +42,53 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return retList;
 		}
 
+		public ICollection<IPersonAssignment> FindChunked(DateOnlyPeriod period, IScenario scenario)
+		{
+			InParameter.NotNull("scenario", scenario);
+			var result = new List<IPersonAssignment>();
+			//const int batchSize = 100000;
+			//crit.SetMaxResults(batchSize);
+			using (PerformanceOutput.ForOperation("Loading personassignments"))
+			{
+				//int batch = 0;
+				//while (true)
+				//{
+				//	crit.SetFirstResult(batch*batchSize);
+				//	var personAssignments = crit.List<IPersonAssignment>();
+				//	result.AddRange(personAssignments);
+				//	if (personAssignments.Count == 0)
+				//		break;
+
+				//	batch++;
+				//}
+				for (var currentDate = period.StartDate; currentDate <= period.EndDate; currentDate = currentDate.AddDays(3))
+				{
+					var end = currentDate.AddDays(2);
+					if (period.EndDate < end)
+						end = period.EndDate;
+					
+					var crit = personAssignmentCriteriaLoader(new DateOnlyPeriod(currentDate,end), scenario);
+					result.AddRange(crit.List<IPersonAssignment>());
+				}
+
+				/*var loadDayByDay = period.DayCollection();
+				foreach (var dateOnly in loadDayByDay)
+				{
+					var crit = personAssignmentCriteriaLoader(dateOnly.ToDateOnlyPeriod(), scenario);
+					result.AddRange(crit.List<IPersonAssignment>());
+				}*/
+			}
+			return result;
+		}
+
 		public ICollection<IPersonAssignment> Find(DateOnlyPeriod period, IScenario scenario)
 		{
 			InParameter.NotNull("scenario", scenario);
 			var crit = personAssignmentCriteriaLoader(period, scenario);
-			var result = new List<IPersonAssignment>();
-			const int batchSize = 40000;
-			crit.SetMaxResults(batchSize);
 			using (PerformanceOutput.ForOperation("Loading personassignments"))
 			{
-				int batch = 0;
-				while (true)
-				{
-					crit.SetFirstResult(batch*batchSize);
-					var personAssignments = crit.List<IPersonAssignment>();
-					result.AddRange(personAssignments);
-					if (personAssignments.Count < batchSize)
-						break;
-
-					batch++;
-				}
-
+				return crit.List<IPersonAssignment>();
 			}
-			return result;
 		}
 
 		public IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario, IPerson person)

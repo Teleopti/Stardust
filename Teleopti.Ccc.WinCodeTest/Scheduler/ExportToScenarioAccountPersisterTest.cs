@@ -32,8 +32,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var accountDay = mock.StrictMock<IAccount>();
 			var scenario = ScenarioFactory.CreateScenario("scenario", true, false);
 			var personAbsenceAccount = new PersonAbsenceAccount(person, absence);
+			var scheduleRepository = mock.StrictMock<IScheduleStorage>();
 
-			var target = new ExportToScenarioAccountPersister(personAccountPersister);
+			var target = new ExportToScenarioAccountPersister(personAccountPersister, scheduleRepository);
 
 			using (mock.Record())
 			{
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
 				Expect.Call(accountDay.Period()).Return(new DateOnlyPeriod(dateOnly, dateOnly));
 				Expect.Call(accountDay.Parent).Return(personAbsenceAccount);
-				Expect.Call(() => accountDay.CalculateUsed(null, scenario)).IgnoreArguments();
+				Expect.Call(() => accountDay.CalculateUsed(scheduleRepository, scenario));
 				Expect.Call(() => accountDay.SetParent(personAbsenceAccount)).IgnoreArguments();
 			}
 
@@ -73,8 +74,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var accountDay = mock.StrictMock<IAccount>();
 			var scenario = ScenarioFactory.CreateScenario("scenario", true, false);
 			var personAbsenceAccount = new PersonAbsenceAccount(person, absence);
+			var scheduleRepository = mock.StrictMock<IScheduleStorage>();
 
-			var target = new ExportToScenarioAccountPersister(personAccountPersister);
+			var target = new ExportToScenarioAccountPersister(personAccountPersister,scheduleRepository);
 
 			using (mock.Record())
 			{
@@ -99,8 +101,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			var mock = new MockRepository();
 			var personAccountPersister = mock.StrictMock<IPersonAccountPersister>();
+			var scheduleRepository = mock.StrictMock<IScheduleStorage>();
 			var scenario = ScenarioFactory.CreateScenario("scenario", false, false);
-			var target = new ExportToScenarioAccountPersister(personAccountPersister);
+			var target = new ExportToScenarioAccountPersister(personAccountPersister,scheduleRepository);
 			var result = target.Persist(scenario, null, null, null, null, null);
 			Assert.IsFalse(result);	
 		}
@@ -111,12 +114,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var mock = new MockRepository();
 			var personAccountPersister = mock.StrictMock<IPersonAccountPersister>();
 			var uowFactory = mock.StrictMock<IUnitOfWorkFactory>();
+			var scheduleRepository = mock.StrictMock<IScheduleStorage>();
 			var person = new Person();
 			var persons = new List<IPerson> { person };
 			var allPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
 			var scenario = ScenarioFactory.CreateScenario("scenario", true, false);
 			
-			var target = new ExportToScenarioAccountPersister(personAccountPersister);
+			var target = new ExportToScenarioAccountPersister(personAccountPersister, scheduleRepository);
 			var result = target.Persist(scenario, uowFactory, persons, allPersonAccounts, null, null);
 			Assert.IsFalse(result);
 		}

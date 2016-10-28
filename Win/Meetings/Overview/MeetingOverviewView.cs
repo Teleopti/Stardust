@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 		private readonly MeetingsScheduleProvider _dataProvider;
 		private readonly IMeetingOverviewFilter _meetingOverviewFilter;
 		private readonly IResourceOptimization _resourceOptimizationHelper;
-		private readonly IScheduleStorageFactory _scheduleStorageFactory;
+		private readonly IScheduleStorage _scheduleStorage;
 
 		private IScheduleAppointment _selectedItem;
 		private readonly Control _nextButton;
@@ -40,13 +39,13 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 		private DateTime _clickedDate;
 
 
-		public MeetingOverviewView(IEventAggregator eventAggregator, MeetingsScheduleProvider dataProvider,IMeetingOverviewFilter meetingOverviewFilter, IResourceOptimization resourceOptimizationHelper, IScheduleStorageFactory scheduleStorageFactory)
+		public MeetingOverviewView(IEventAggregator eventAggregator, MeetingsScheduleProvider dataProvider,IMeetingOverviewFilter meetingOverviewFilter, IResourceOptimization resourceOptimizationHelper, IScheduleStorage scheduleStorage)
 		{
 			_eventAggregator = eventAggregator;
 			_dataProvider = dataProvider;
 			_meetingOverviewFilter = meetingOverviewFilter;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_scheduleStorageFactory = scheduleStorageFactory;
+			_scheduleStorage = scheduleStorage;
 
 			InitializeComponent();
 			SetTexts();
@@ -423,7 +422,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 		{
 			var viewSchedulesPermission = isPermittedToViewSchedules();
 			var meetingComposerView = new MeetingComposerView(meetingViewModel, null, true, viewSchedulesPermission,
-															  _eventAggregator, _resourceOptimizationHelper, skillPriorityProvider, _scheduleStorageFactory);
+															  _eventAggregator, _resourceOptimizationHelper, skillPriorityProvider, _scheduleStorage);
 			meetingComposerView.ShowDialog(this);
 		}
 

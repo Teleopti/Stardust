@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -17,12 +19,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    private readonly IRepositoryFactory _repositoryFactory;
 	    private readonly ICurrentUnitOfWork _currentUnitOfWork;
 	    private readonly IPersistableScheduleDataPermissionChecker _dataPermissionChecker;
+	    private readonly IToggleManager _toggleManager;
 
-	    public ScheduleStorage(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory, IPersistableScheduleDataPermissionChecker dataPermissionChecker)
+	    public ScheduleStorage(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory, IPersistableScheduleDataPermissionChecker dataPermissionChecker, IToggleManager toggleManager)
 	    {
 		    _currentUnitOfWork = currentUnitOfWork;
 					_repositoryFactory = repositoryFactory;
 		    _dataPermissionChecker = dataPermissionChecker;
+		    _toggleManager = toggleManager;
 	    }
 
 	    public void Add(IPersistableScheduleData scheduleData)
@@ -342,8 +346,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    {
 		    var uow = _currentUnitOfWork.Current();
 			addPersonAbsences(scheduleDictionary, _repositoryFactory.CreatePersonAbsenceRepository(uow).Find(longPeriod, scenario), loadDaysAfterLeft);
-			addPersonAssignments(scheduleDictionary, _repositoryFactory.CreatePersonAssignmentRepository(uow).Find(dateOnlyPeriod, scenario));
-            addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(uow).Find(longPeriod, scenario),false,new List<IPerson>());
+		    var personAssignmentRepository = _repositoryFactory.CreatePersonAssignmentRepository(uow);
+		    if (_toggleManager.IsEnabled(Toggles.PersonAssignment_UseChunkedLoading_41479))
+		    {
+				addPersonAssignments(scheduleDictionary, personAssignmentRepository.FindChunked(dateOnlyPeriod, scenario));
+			}
+		    else
+		    {
+				addPersonAssignments(scheduleDictionary, personAssignmentRepository.Find(dateOnlyPeriod, scenario));
+			}
+			addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(uow).Find(longPeriod, scenario),false,new List<IPerson>());
         }
 
         private void loadScheduleByPersons(IScenario scenario, ScheduleDictionary scheduleDictionary, DateTimePeriod longPeriod, DateOnlyPeriod longDateOnlyPeriod, IEnumerable<IPerson> persons, bool loadDaysAfterLeft)

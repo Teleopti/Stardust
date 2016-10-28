@@ -38,6 +38,7 @@ namespace Teleopti.Interfaces.Domain
 		IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario, IPerson person);
 
 		DateTime GetScheduleLoadedTime();
+		ICollection<IPersonAssignment> FindChunked(DateOnlyPeriod period, IScenario scenario);
 	}
 
 	public class PersonAssignmentKey

@@ -27,8 +27,6 @@ using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Win.Reporting
 {
@@ -304,7 +302,6 @@ namespace Teleopti.Ccc.Win.Reporting
 												  };
 			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false,
 																											 false);
-			var rep = new RepositoryFactory();
 			var data = new Dictionary<string, IList<IReportData>>();
 
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -312,10 +309,9 @@ namespace Teleopti.Ccc.Win.Reporting
 				using (unitOfWork.DisableFilter(QueryFilter.Deleted))
 				{
 					//get these first so they are loaded
-					rep.CreateActivityRepository(unitOfWork).LoadAll();
+					_componentContext.Resolve<IActivityRepository>().LoadAll();
 					unitOfWork.Reassociate(model.Persons);
-					var dic = new ScheduleStorage(new ThisUnitOfWork(unitOfWork), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker())
-						.FindSchedulesForPersons(
+					IScheduleDictionary dic = _componentContext.Resolve<IScheduleStorage>().FindSchedulesForPersons(
 							period,
 							model.Scenario,
 							personsProvider,

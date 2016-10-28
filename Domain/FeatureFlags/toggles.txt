@@ -185,6 +185,7 @@ AbsenceRequest_WithOrWithoutShrinkage_41060 = RC
 LastHandlers_ToHangfire_41203 = RC
 ETL_EventbasedTimeZone_40870 = RC
 ETL_RemoveTimeZoneAndDateNightly_40870 = RC
+PersonAssignment_UseChunkedLoading_41479 = RC
 ResourcePlanner_HideSkillPrioSliders_41312 = DEV
 AbsenceRequests_SpeedupEndToEnd_41384 = RC
 ETL_EventBasedAgentNameDescription_41432 = RC

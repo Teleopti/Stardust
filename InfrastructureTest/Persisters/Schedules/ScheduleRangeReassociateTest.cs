@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			PersistAndRemoveFromUnitOfWork(agent);
 			PersistAndRemoveFromUnitOfWork(pa);
 
-			var scheduleDic = new ScheduleStorage(CurrUnitOfWork, new RepositoryFactory(), new PersistableScheduleDataPermissionChecker()).FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(2000,1,1, 2001,1,1), scenario);
+			var scheduleDic = new ScheduleStorage(CurrUnitOfWork, new RepositoryFactory(), new PersistableScheduleDataPermissionChecker(), new FalseToggleManager()).FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(2000,1,1, 2001,1,1), scenario);
 
 			UnitOfWork.Clear();
 			scheduleDic[agent].Reassociate(UnitOfWork);

@@ -9,6 +9,7 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 
 			builder.RegisterType<ScheduleStorage>()
-				.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker))
+				.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker), typeof(IToggleManager))
 				.AsImplementedInterfaces()
 				.SingleInstance();
 			builder.RegisterType<ProjectionVersionPersister>()
@@ -94,7 +95,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			foreach (var constructorInfo in constructors)
 			{
 				var parameters = constructorInfo.GetParameters();
-				if (parameters.Count() == 1)
+				if (parameters.Length == 1)
 				{
 					if (parameters[0].ParameterType == repositoryConstructorType)
 						return true;

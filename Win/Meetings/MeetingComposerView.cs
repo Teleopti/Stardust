@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Meetings;
@@ -23,6 +21,7 @@ namespace Teleopti.Ccc.Win.Meetings
 		private readonly IEventAggregator _eventAggregator;
 		private readonly IResourceOptimization _resourceOptimizationHelper;
 		private readonly ISkillPriorityProvider _skillPriorityProvider;
+		private readonly IScheduleStorage _scheduleStorage;
 
 		public event EventHandler<ModifyMeetingEventArgs> ModificationOccurred;
 
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.Win.Meetings
 
 		public MeetingComposerView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, 
 			bool editPermission, bool viewSchedulesPermission, IEventAggregator eventAggregator,
-			IResourceOptimization resourceOptimizationHelper, ISkillPriorityProvider skillPriorityProvider, IScheduleStorageFactory scheduleStorageFactory)
+			IResourceOptimization resourceOptimizationHelper, ISkillPriorityProvider skillPriorityProvider, IScheduleStorage scheduleStorage)
 			: this()
 		{
 			bool editMeetingPermission = editPermission;
@@ -44,7 +43,8 @@ namespace Teleopti.Ccc.Win.Meetings
 			_eventAggregator = eventAggregator;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_skillPriorityProvider = skillPriorityProvider;
-			_meetingComposerPresenter = new MeetingComposerPresenter(this, meetingViewModel, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())), schedulerStateHolder, scheduleStorageFactory);
+			_scheduleStorage = scheduleStorage;
+			_meetingComposerPresenter = new MeetingComposerPresenter(this, meetingViewModel, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())), schedulerStateHolder, scheduleStorage);
 			panelContent.Enabled = editMeetingPermission;
 			ribbonControlAdv1.Enabled = editMeetingPermission;
 			toolStripButtonSchedules.Enabled = _viewSchedulesPermission;
@@ -314,13 +314,13 @@ namespace Teleopti.Ccc.Win.Meetings
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private IMeetingImpactView getImpactView()
 		{
-			return new MeetingImpactView(_meetingComposerPresenter.Model, _meetingComposerPresenter.SchedulerStateHolder, this, _resourceOptimizationHelper, _skillPriorityProvider);
+			return new MeetingImpactView(_meetingComposerPresenter.Model, _meetingComposerPresenter.SchedulerStateHolder, this, _resourceOptimizationHelper, _skillPriorityProvider, _scheduleStorage);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private IMeetingDetailView createMeetingSchedulesView(IMeetingViewModel model, ISchedulerStateHolder holder)
 		{
-			var meetingSchedulesView = new MeetingSchedulesView(model, holder, this);
+			var meetingSchedulesView = new MeetingSchedulesView(model, holder, this, _scheduleStorage);
 			return meetingSchedulesView;
 		}
 

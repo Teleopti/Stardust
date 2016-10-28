@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.WinCode.Common
 {
@@ -27,8 +26,8 @@ namespace Teleopti.Ccc.WinCode.Common
         private readonly IPeopleLoader _peopleLoader;
         private readonly ISkillDayLoadHelper _skillDayLoadHelper;
         private readonly IResourceOptimization _resourceOptimizationHelper;
-        private readonly LoadScheduleByPersonSpecification _loadScheduleByPersonSpecification;
-	    private readonly IScheduleStorageFactory _scheduleStorageFactory;
+	    private readonly IScheduleStorage _scheduleStorage;
+	    private readonly LoadScheduleByPersonSpecification _loadScheduleByPersonSpecification;
 	    private ILoaderDeciderResult _deciderResult;
 
 	    public ISchedulerStateHolder SchedulerState { get; private set; }
@@ -47,8 +46,8 @@ namespace Teleopti.Ccc.WinCode.Common
                                     IPeopleLoader peopleLoader,
             ISkillDayLoadHelper skillDayLoadHelper,
             IResourceOptimization resourceOptimizationHelper,
-            LoadScheduleByPersonSpecification loadScheduleByPersonSpecification,
-						IScheduleStorageFactory scheduleStorageFactory)
+			IScheduleStorage scheduleStorage,
+			LoadScheduleByPersonSpecification loadScheduleByPersonSpecification)
         {
             SchedulerState = stateHolder;
 
@@ -59,8 +58,8 @@ namespace Teleopti.Ccc.WinCode.Common
             _peopleLoader = peopleLoader;
             _skillDayLoadHelper = skillDayLoadHelper;
             _resourceOptimizationHelper = resourceOptimizationHelper;
-            _loadScheduleByPersonSpecification = loadScheduleByPersonSpecification;
-	        _scheduleStorageFactory = scheduleStorageFactory;
+	        _scheduleStorage = scheduleStorage;
+	        _loadScheduleByPersonSpecification = loadScheduleByPersonSpecification;
         }
 
         public void LoadWithIntradayData(IUnitOfWork unitOfWork)
@@ -79,7 +78,7 @@ namespace Teleopti.Ccc.WinCode.Common
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.LoadingSkillDataTreeDots);
             initializeSkillDays();
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.LoadingSchedulesTreeDots);
-            initializeSchedules(unitOfWork);
+            initializeSchedules();
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(
                 UserTexts.Resources.InitializingScheduleDataThreeDots);
             InitializeScheduleData();
@@ -121,7 +120,7 @@ namespace Teleopti.Ccc.WinCode.Common
             unitOfWork.Reassociate(SchedulerState.CommonStateHolder.Activities);
             unitOfWork.Reassociate(SchedulerState.CommonStateHolder.DayOffs);
             reassociatePeople(unitOfWork);
-            initializeSchedules(unitOfWork);
+            initializeSchedules();
             InitializeScheduleData();
         }
 
@@ -172,10 +171,8 @@ namespace Teleopti.Ccc.WinCode.Common
             SchedulerState.ResetFilteredPersons();
         }
 
-        private void initializeSchedules(IUnitOfWork uow)
+        private void initializeSchedules()
         {
-            var scheduleStorage = _scheduleStorageFactory.Create(uow);
-
 			var requestedPeriod = SchedulerState.RequestedPeriod.Period().ChangeEndTime(TimeSpan.FromHours(24)).ChangeStartTime(TimeSpan.FromHours(-24));
 
             IPersonProvider personsInOrganizationProvider =
@@ -186,7 +183,7 @@ namespace Teleopti.Ccc.WinCode.Common
             var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, true);
 
             var schedulePeriod = new ScheduleDateTimePeriod(requestedPeriod, SchedulerState.AllPermittedPersons);
-            SchedulerState.LoadSchedules(scheduleStorage, personsInOrganizationProvider, scheduleDictionaryLoadOptions, schedulePeriod);
+            SchedulerState.LoadSchedules(_scheduleStorage, personsInOrganizationProvider, scheduleDictionaryLoadOptions, schedulePeriod);
         }
 
         public void InitializeScheduleData()

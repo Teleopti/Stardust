@@ -114,6 +114,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return DateTime.UtcNow;
 		}
 
+		public ICollection<IPersonAssignment> FindChunked(DateOnlyPeriod period, IScenario scenario)
+		{
+			return Find(period, scenario);
+		}
+
 		public IPersonAssignment GetSingle(DateOnly dateOnly)
 		{
 			return _personAssignments.Single(pa => pa.Date == dateOnly);

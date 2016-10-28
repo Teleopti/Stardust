@@ -1,11 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Tracking;
-using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -25,10 +22,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	public class ExportToScenarioAccountPersister : IExportToScenarioAccountPersister
 	{
 		private readonly IPersonAccountPersister _personAccountPersister;
+		private readonly IScheduleStorage _scheduleRepository;
 
-		public ExportToScenarioAccountPersister(IPersonAccountPersister personAccountPersister)
+		public ExportToScenarioAccountPersister(IPersonAccountPersister personAccountPersister, IScheduleStorage scheduleRepository)
 		{
 			_personAccountPersister = personAccountPersister;
+			_scheduleRepository = scheduleRepository;
 		}
 
 		public bool Persist(IScenario exportScenario, 
@@ -43,9 +42,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			var persisted = false;
 
-			using (var uow = uowFactory.CreateAndOpenUnitOfWork())
+			using (uowFactory.CreateAndOpenUnitOfWork())
 			{
-				var service = new TraceableRefreshService(new ThisCurrentScenario(exportScenario), new ScheduleStorage(new ThisUnitOfWork(uow), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker()));
+				var service = new TraceableRefreshService(new ThisCurrentScenario(exportScenario), _scheduleRepository);
 				var refreshedPersonAbsenceAccounts = new List<IPersonAbsenceAccount>();
 				
 				foreach (var person in persons)

@@ -8,6 +8,7 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
@@ -41,7 +42,8 @@ namespace Teleopti.Ccc.Win.Meetings
 								ISchedulerStateHolder schedulerStateHolder, 
 								MeetingComposerView meetingComposerView, 
 								IResourceOptimization resourceOptimizationHelper,
-								ISkillPriorityProvider skillPriorityProvider)
+								ISkillPriorityProvider skillPriorityProvider, 
+								IScheduleStorage scheduleStorage)
 			: this()
 		{
 			_transparentMeetingMeetingControl = new TransparentMeetingMeetingControl();
@@ -55,7 +57,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			office2007OutlookTimePickerStartSlotPeriod.CreateAndBindList();
 			office2007OutlookTimePickerEndSlotPeriod.CreateAndBindList();
 
-			var stateHolderLoader = new SchedulerStateLoader(schedulerStateHolder);
+			var stateHolderLoader = new SchedulerStateLoader(schedulerStateHolder, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper(), scheduleStorage);
 			var slotCalculator = new MeetingSlotImpactCalculator(schedulerStateHolder.SchedulingResultState, new AllLayersAreInWorkTimeSpecification());
 			var slotFinder = new BestSlotForMeetingFinder(slotCalculator);
 			var decider = new PeopleAndSkillLoaderDecider(new PersonRepository(new FromFactory(() =>UnitOfWorkFactory.Current)), new PairMatrixService<Guid>(new PairDictionaryFactory<Guid>()));

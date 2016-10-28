@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.IocCommon.Toggle;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 {
@@ -378,7 +379,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             {
                 IUnitOfWorkFactory unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
                 ICurrentScenario currentScenario = _mocker.DynamicMock<ICurrentScenario>();
-	            var scheduleStorage = new ScheduleStorage(new ThisUnitOfWork(unitOfWorkFactory.CreateAndOpenUnitOfWork()), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker());
+	            var scheduleStorage = new ScheduleStorage(new ThisUnitOfWork(unitOfWorkFactory.CreateAndOpenUnitOfWork()), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker(), new FalseToggleManager());
 
 								IPersonAccountChildModel adapter1 = new PersonAccountChildModel
                     (new TraceableRefreshService(currentScenario, scheduleStorage), _collection, _account1, null, null);

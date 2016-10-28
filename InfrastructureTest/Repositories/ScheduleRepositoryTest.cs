@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -15,6 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -69,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             createRelatedRepositories();
             setupExpectationsForRelatedRepositories();
 
-            _target = new ScheduleStorage(new ThisUnitOfWork(_unitOfWork),_repositoryFactory, new PersistableScheduleDataPermissionChecker());
+            _target = new ScheduleStorage(new ThisUnitOfWork(_unitOfWork),_repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager());
 
             createBasicStuff();
             createEmptyLists();
@@ -187,7 +189,58 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(retDic[per1].ScheduledDay(new DateOnly(2000,6,1)).PersonMeetingCollection().Count == 1);
         }
 
-        private void addMeeting(IPerson person)
+		[Test]
+		public void VerifyCanLoadAllBasedOnPeriodAndScenarioWithChunkedPersonAssignmentLoading()
+		{
+			IList<IPerson> persons = new List<IPerson>();
+			IPersonProvider personsProvider = new PersonsInOrganizationProvider(_personRep, _longDateOnlyPeriod);
+			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
+
+			IScheduleDictionary retDic;
+
+			//setup fake objects
+			IPerson per1 = PersonFactory.CreatePerson("sdvfbvv").WithId();
+			IPerson per2 = PersonFactory.CreatePerson("bdfbvdfbd").WithId();
+			persons.Add(per1);
+			persons.Add(per2);
+
+			var visiblePeople = new List<IPerson>(persons);
+
+			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+			IPersonAssignment pAss1 = addPersonAssignment(per1, period);
+			IPersonAssignment pAss2 = addPersonAssignment(per2, period);
+
+			IPersonAbsence pAbs = addAbsence(per1);
+
+			addMeeting(per1);
+			addPreference(per1);
+			addNote(per1);
+			addPublicNote(per1);
+			addAgentDayScheduleTag(per1);
+
+			using (_mocks.Record())
+			{
+				expectScheduleLoadForAll(persons, visiblePeople, true);
+			}
+			using (_mocks.Playback())
+			{
+				_target = new ScheduleStorage(new ThisUnitOfWork(_unitOfWork), _repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FakeToggleManager(Toggles.PersonAssignment_UseChunkedLoading_41479));
+				retDic = _target.FindSchedulesForPersons(_schedPeriod, _scenario, personsProvider, scheduleDictionaryLoadOptions, visiblePeople);
+			}
+			Assert.AreEqual(2, retDic.Count);
+			Assert.IsTrue(retDic[per1].Contains(pAss1));
+			Assert.IsTrue(retDic[per2].Contains(pAss2));
+			Assert.IsTrue(retDic[per1].Contains(pAbs));
+			Assert.IsTrue(retDic[per1].Contains(_prefDays[0]));
+			Assert.IsTrue(retDic[per1].Contains(_notes[0]));
+			Assert.IsTrue(retDic[per1].Contains(_agentDayScheduleTags[0]));
+
+			Assert.IsNotNull(((ScheduleRange)retDic[per1]).Snapshot);
+			Assert.IsNotNull(((ScheduleRange)retDic[per2]).Snapshot);
+			Assert.IsTrue(retDic[per1].ScheduledDay(new DateOnly(2000, 6, 1)).PersonMeetingCollection().Count == 1);
+		}
+
+		private void addMeeting(IPerson person)
         {
             var activity = ActivityFactory.CreateActivity("for test");
 
@@ -497,12 +550,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(1, coll.Count);
         }
 
-        private void expectScheduleLoadForAll(IList<IPerson> persons, IList<IPerson> visiblePeople)
+        private void expectScheduleLoadForAll(IList<IPerson> persons, IList<IPerson> visiblePeople, bool useChunkedLoading = false)
         {
             Expect.Call(_absRep.Find(_longPeriod, _scenario))
                 .Return(_absences);
-						Expect.Call(_assRep.Find(_longDateOnlyPeriod, _scenario))
-                .Return(_assignments);
+	        if (useChunkedLoading)
+	        {
+		        Expect.Call(_assRep.FindChunked(_longDateOnlyPeriod, _scenario)).Return(_assignments);
+	        }
+	        else
+	        {
+				Expect.Call(_assRep.Find(_longDateOnlyPeriod, _scenario)).Return(_assignments);
+			}
             Expect.Call(_meetingRepository.Find(_longPeriod, _scenario))
                 .Return(_meetings);
             Expect.Call(_rotationRep.LoadPersonRotationsWithHierarchyData(visiblePeople, _longDateOnlyPeriod.StartDate))

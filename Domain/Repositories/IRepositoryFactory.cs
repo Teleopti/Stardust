@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// Created date: 2008-06-26
 		/// </remarks>
 		IValidatedVolumeDayRepository CreateValidatedVolumeDayRepository(IUnitOfWork unitOfWork);
-
+		
 		/// <summary>
 		/// Creates the multisite day repository.
 		/// </summary>

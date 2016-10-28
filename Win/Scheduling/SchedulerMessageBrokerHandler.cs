@@ -8,7 +8,6 @@ using log4net;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -28,6 +27,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IList<IEventMessage> _messageQueue = new List<IEventMessage>();
 		private readonly IScheduleMessageSubscriber _scheduleMessageSubscriber;
 		private readonly IJsonDeserializer _deserializer;
+		private readonly IScheduleStorage _scheduleStorage;
 
 		public Guid InitiatorId
 		{
@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			);
 			_scheduleMessageSubscriber = container.Resolve<IScheduleMessageSubscriber>();
 			_deserializer = container.Resolve<IJsonDeserializer>();
+			_scheduleStorage = container.Resolve<IScheduleStorage>();
 		}
 
 		public void Listen(DateTimePeriod period)
@@ -310,7 +311,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private IPersonRequest updateInsertOnEventRequests(IEventMessage message)
 		{
-			return _owner.SchedulerState.RequestUpdateFromBroker(new PersonRequestRepository(new FromFactory(() => UnitOfWorkFactory.Current)), message.DomainObjectId, new ScheduleStorage(new FromFactory(() => UnitOfWorkFactory.Current), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker()));
+			return _owner.SchedulerState.RequestUpdateFromBroker(new PersonRequestRepository(new FromFactory(() => UnitOfWorkFactory.Current)), message.DomainObjectId, _scheduleStorage);
 		}
 
 		private void NotifySchedulesUpdated()

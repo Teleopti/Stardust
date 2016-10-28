@@ -13,6 +13,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 																	new PersonAccountConflictResolver(
 																		uowFactory,
 																		new TraceableRefreshService(new DefaultScenarioFromRepository(new ScenarioRepository(currUnitOfWork)), 
-																		new ScheduleStorage(currUnitOfWork, new RepositoryFactory(), new PersistableScheduleDataPermissionChecker())), 
+																		new ScheduleStorage(currUnitOfWork, new RepositoryFactory(), new PersistableScheduleDataPermissionChecker(), new FalseToggleManager())), 
 																		new PersonAbsenceAccountRepository(currUnitOfWork)));
 		}
 
