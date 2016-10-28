@@ -12,21 +12,12 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
-	[TestFixture]
-	[DomainTest]
-	public class AnalyticsScheduleMatchingPersonTest
-	{
-		private AnalyticsScheduleMatchingPerson Target;
-
-	}
-
 	[TestFixture]
 	public class UpdatePersonGroupsAnalyticsHandlerTest
 	{

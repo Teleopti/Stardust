@@ -184,6 +184,7 @@
     <Compile Include="ApplicationLayer\NonoverwritableLayerMovingHelperTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\ExternalLogonTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPersonNameUpdaterTests.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsScheduleMatchingPersonTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodTransformerTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\PersonCollectionChangedEventTest.cs" />
     <Compile Include="ApplicationLayer\ReadModelInitializeHandlerTest.cs" />

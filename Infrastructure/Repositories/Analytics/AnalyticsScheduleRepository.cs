@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.ExecuteUpdate();
 		}
 
-		public void UpdateUnlinkedPersonids(int[] personPeriodIds)
+		public void UpdateUnlinkedPersonids(int[] factScheduleRows)
 		{
 			_analyticsUnitOfWork.Current()
 				.Session()
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					$@"exec mart.etl_fact_schedule_update_unlinked_personids 
 							@person_periodids=:PersonIds
 							")
-				.SetString("PersonIds", string.Join(",", personPeriodIds))
+				.SetString("PersonIds", string.Join(",", factScheduleRows))
 				.ExecuteUpdate();
 		}
 

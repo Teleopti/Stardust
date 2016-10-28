@@ -8,6 +8,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeAnalyticsScheduleRepository : IAnalyticsScheduleRepository
 	{
+		private readonly IList<IFactScheduleRow> rows = new List<IFactScheduleRow>();
+
 		public void PersistFactScheduleBatch(IList<IFactScheduleRow> factScheduleRows)
 		{
 			throw new NotImplementedException();
