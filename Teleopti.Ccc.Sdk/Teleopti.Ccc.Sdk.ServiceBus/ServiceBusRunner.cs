@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading;
@@ -9,6 +11,7 @@ using Autofac;
 using log4net;
 using log4net.Config;
 using Stardust.Node;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -52,6 +55,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			_requestAdditionalTime = requestAdditionalTime;
 			_configReader = new ConfigReader();
+			Nodes = new List<NodeStarter>();
 		}
 
 		public void Start()
@@ -128,10 +132,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			_requestAdditionalTime(60000);
 
-			if (NodeStarter != null)
+			if (Nodes.Any())
 			{
-				NodeStarter.Stop();
-				NodeStarter = null;
+				Nodes.ForEach(node =>
+				{
+					node.Stop();
+				});
+				Nodes = new List<NodeStarter>();
 			}
 			DisposeBusHosts();
 		}
@@ -236,10 +243,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var messageBroker = container.Resolve<IMessageBrokerComposite>();
 			new InitializeMessageBroker(messageBroker).Start(ConfigurationManager.AppSettings.ToDictionary());
 
-			NodeStarter = new NodeStarter();
-			NodeStarter.Start(nodeConfig, container);
+			var nodeStarter = new NodeStarter();
+			nodeStarter.Start(nodeConfig, container);
+			Nodes.Add(nodeStarter);
 		}
 
-		public NodeStarter NodeStarter { get; set; }
+		public IList<NodeStarter> Nodes { get; set; }
 	}
 }
