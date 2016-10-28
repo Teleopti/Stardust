@@ -43,6 +43,8 @@
 					$scope.getAdherencePercent = RtaFormatService.numberToPercent;
 					$scope.selectedItemIds = [];
 
+					$scope.showNewButtons = toggleService.RTA_SiteAndTeamOnSkillOverview_40817;
+
 					var stateForTeamsBySkill = 'rta.teams-by-skill({siteIds: site.Id, skillIds: selectedSkill.Id})';
 					var stateForTeamsBySkillArea = 'rta.teams-by-skillArea({siteIds: site.Id, skillAreaId: selectedSkillArea.Id})';
 

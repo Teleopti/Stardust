@@ -50,7 +50,6 @@
 							$scope.skills = skills;
 							if ($scope.skillId !== null) {
 								$scope.selectedSkill = getSelected(skills, $scope.skillId);
-								// getSitesOrTeams();
 							}
 						});
 
@@ -60,7 +59,6 @@
 							$scope.skillAreas = skillAreas.SkillAreas;
 							if ($scope.skillAreaId !== null) {
 								$scope.selectedSkillArea = getSelected(skillAreas.SkillAreas, $scope.skillAreaId);
-								// getSitesOrTeams();
 							}
 						});
 
@@ -69,10 +67,6 @@
 								return o.Id === shouldMatch;
 							})
 						};
-
-						// function getSitesOrTeams() {
-						// 	return $scope.siteIds.length > 0 ? getTeamsInfo() : getSitesInfo();
-						// }
 
 						$scope.querySearch = function (query, myArray) {
 							var results = query ? myArray.filter(createFilterFor(query)) : myArray;
@@ -103,7 +97,6 @@
 							selected = item;
 							if ($state.current.name !== teamsStateName)
 								goToSites(item.Id);
-							// getSitesOrTeams();
 						};
 
 						function goToSitesBySkill(skillId) {

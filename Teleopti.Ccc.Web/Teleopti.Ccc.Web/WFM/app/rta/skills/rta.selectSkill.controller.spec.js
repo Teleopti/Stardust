@@ -38,8 +38,6 @@ describe('RtaSelectSkillCtrl', function () {
 
 	}));
 
-	
-
 	it('should display skill', function () {
 		$fakeBackend.withSkill({
 			Name: "Channel Sales",
@@ -104,7 +102,7 @@ describe('RtaSelectSkillCtrl', function () {
 				skillId: 'f08d75b3-fdb4-484a-ae4c-9f0800e2f753'
 				});
         });
-		
+
 	});
 
 	it('should display skill areas', function () {
@@ -151,7 +149,7 @@ describe('RtaSelectSkillCtrl', function () {
 	});
 
 	it('should filter on lowercased skill area name', function () {
-		
+
 		$fakeBackend
 			.withSkillAreas([
 			{
@@ -190,7 +188,7 @@ describe('RtaSelectSkillCtrl', function () {
 			}
 			]);
 
-		
+
 		spyOn($state, 'go');
 
 		$controllerBuilder.createController()

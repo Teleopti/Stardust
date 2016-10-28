@@ -6,10 +6,16 @@
 					<i class="mdi mdi-alarm"></i> {{'RTA'|translate}}
 				</h1>
 			</div>
-			<div class="rta-top-buttons-wrapper">
+			<div class="rta-top-buttons-wrapper" ng-if="!showNewButtons">
 				<span>
 					<button class="wfm-btn wfm-btn-default" ng-click="goToOverview()">Overview</button>
 					<button class="wfm-btn wfm-btn-primary rta-default-cursor">Select Skill</button>
+				</span>
+			</div>
+			<div class="rta-top-buttons-wrapper" ng-if="showNewButtons">
+				<span>
+					<button class="wfm-btn wfm-btn-default" ng-click="goToOverview()">Dashboard</button>
+					<button class="wfm-btn wfm-btn-primary rta-default-cursor">Details</button>
 				</span>
 			</div>
 		</div>
