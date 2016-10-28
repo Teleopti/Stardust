@@ -58,5 +58,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
+
+		public int GetFactScheduleDeviationRowCount(int personId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void DeleteInvalidScheduleRows(int[] personPeriodIds)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

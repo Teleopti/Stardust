@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Analytics.Tables;
@@ -181,7 +180,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.ExecuteUpdate();
 		}
 
-		public void UpdateUnlinkedPersonids(int[] factScheduleRows)
+		public void UpdateUnlinkedPersonids(int[] personPeriodIds)
 		{
 			_analyticsUnitOfWork.Current()
 				.Session()
@@ -189,7 +188,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					$@"exec mart.etl_fact_schedule_update_unlinked_personids 
 							@person_periodids=:PersonIds
 							")
-				.SetString("PersonIds", string.Join(",", factScheduleRows))
+				.SetString("PersonIds", string.Join(",", personPeriodIds))
 				.ExecuteUpdate();
 		}
 
@@ -207,6 +206,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				$@"select count(1) from mart.fact_schedule_day_count WITH (NOLOCK) WHERE person_id =:{nameof(personId)} ")
 				.SetInt32(nameof(personId), personId)
 				.UniqueResult<int>();
+		}
+
+		public int GetFactScheduleDeviationRowCount(int personId)
+		{
+			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
+				$@"select count(1) from mart.fact_schedule_deviation WITH (NOLOCK) WHERE person_id =:{nameof(personId)} ")
+				.SetInt32(nameof(personId), personId)
+				.UniqueResult<int>();
+		}
+
+		public void DeleteInvalidScheduleRows(int[] personPeriodIds)
+		{
+			_analyticsUnitOfWork.Current()
+				.Session()
+				.CreateSQLQuery(
+					$@"exec mart.etl_delete_invalid_schedules
+						@person_periodids=:PersonIds")
+				.SetString("PersonIds", string.Join(",", personPeriodIds))
+				.ExecuteUpdate();
 		}
 
 		public IAnalyticsPersonBusinessUnit PersonAndBusinessUnit(Guid personPeriodCode)

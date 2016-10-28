@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
@@ -309,61 +308,116 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
-		public void ShouldGetFactScheduleDeviationUnlinkedDatesWhenAddNewPersonPeriod()
+		public void ShouldUpdateFactScheduleDeviationUnlinkedPersonPeriodIdsWhenAddNewPersonPeriod()
 		{
-			var date1 = new DateTime(2015, 1, 10);
-			var date2 = new DateTime(2015, 1, 25);
 			var specificDate1 = new SpecificDate
 			{
-				Date = new DateOnly(date1),
-				DateId = 21
+				Date = new DateOnly(new DateTime(2015, 1, 12)),
+				DateId = 12
 			};
-			analyticsDataFactory.Setup(specificDate1);
 			var specificDate2 = new SpecificDate
 			{
-				Date = new DateOnly(date2),
-				DateId = 22
+				Date = new DateOnly(new DateTime(2015, 1, 25)),
+				DateId = 25
 			};
+			analyticsDataFactory.Setup(specificDate1);
 			analyticsDataFactory.Setup(specificDate2);
-			insertPerson(10, date1, new DateTime(2015, 1, 24));
-			insertPerson(11, date2, AnalyticsDate.Eternity.DateDate);
-			analyticsDataFactory.Setup(new FactScheduleDeviation(specificDate1.DateId, specificDate1.DateId, 1, 10, 60, 0, 0, 60, true));
-			analyticsDataFactory.Setup(new FactScheduleDeviation(specificDate2.DateId, specificDate2.DateId, 1, 10, 60, 0, 0, 60, true));
-
+			const int personPeriod1 = 10;
+			const int personPeriod2 = 11;
+			insertPerson(personPeriod1, new DateTime(2015, 1, 5), new DateTime(2015, 1, 22), false, 5, 22);
+			insertPerson(personPeriod2, new DateTime(2015, 1, 23), AnalyticsDate.Eternity.DateDate, false, 23, -2);
+			analyticsDataFactory.Setup(new FactScheduleDeviation(specificDate1.DateId, specificDate1.DateId, 1, personPeriod1, 60, 0, 0, 60, true));
+			analyticsDataFactory.Setup(new FactScheduleDeviation(specificDate2.DateId, specificDate2.DateId, 1, personPeriod1, 60, 0, 0, 60, true));
+			analyticsDataFactory.Setup(new QuarterOfAnHourInterval());
 			analyticsDataFactory.Persist();
 
-			var dates = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDeviationUnlinkedDates(new[] {10, 11}));
-			dates.Single().Should().Equals(specificDate2.Date);
+			var rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDeviationRowCount(personPeriod1));
+			rowCount.Should().Be.EqualTo(2);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDeviationRowCount(personPeriod2));
+			rowCount.Should().Be.EqualTo(0);
+
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdateUnlinkedPersonids(new[] {personPeriod1, personPeriod2}));
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDeviationRowCount(personPeriod1));
+			rowCount.Should().Be.EqualTo(1);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDeviationRowCount(personPeriod2));
+			rowCount.Should().Be.EqualTo(1);
 		}
 
 		[Test]
-		public void ShouldGetFactScheduleDeviationUnlinkedDatesWhenDeleteExistingPersonPeriod()
+		public void ShouldUpdateFactScheduleDeviationUnlinkedPersonPeriodIdsWhenDeleteExistingPersonPeriod()
 		{
-			var personPeriodId1 = 10;
-			var personPeriodId2 = 11;
-			insertPerson(personPeriodId2, new DateTime(2015, 1, 5), AnalyticsDate.Eternity.DateDate, false, 0, -2);
-			insertPerson(personPeriodId1, new DateTime(2015, 1, 10), AnalyticsDate.Eternity.DateDate, true, 0, -2);
 			var specificDate1 = new SpecificDate
 			{
-				Date = new DateOnly(2015, 1, 7),
-				DateId = 21
+				Date = new DateOnly(new DateTime(2015, 1, 12)),
+				DateId = 12
 			};
-			analyticsDataFactory.Setup(specificDate1);
 			var specificDate2 = new SpecificDate
 			{
-				Date = new DateOnly(2015, 1, 15),
-				DateId = 22
+				Date = new DateOnly(new DateTime(2015, 1, 25)),
+				DateId = 25
 			};
+			analyticsDataFactory.Setup(specificDate1);
 			analyticsDataFactory.Setup(specificDate2);
-
-			analyticsDataFactory.Setup(new FactScheduleDeviation(specificDate1.DateId, specificDate1.DateId, 1, personPeriodId1, 60, 0, 0, 60, true));
-			analyticsDataFactory.Setup(new FactScheduleDeviation(specificDate2.DateId, specificDate2.DateId, 1, personPeriodId2, 60, 0, 0, 60, true));
+			const int personPeriod1 = 10;
+			const int personPeriod2 = 11;
+			insertPerson(personPeriod1, new DateTime(2015, 1, 5), AnalyticsDate.Eternity.DateDate, false, 5, -2);
+			insertPerson(personPeriod2, new DateTime(2015, 1, 23), AnalyticsDate.Eternity.DateDate, true, 23, -2);
+			analyticsDataFactory.Setup(new FactScheduleDeviation(specificDate1.DateId, specificDate1.DateId, 1, personPeriod1, 60, 0, 0, 60, true));
+			analyticsDataFactory.Setup(new FactScheduleDeviation(specificDate2.DateId, specificDate2.DateId, 1, personPeriod2, 60, 0, 0, 60, true));
+			analyticsDataFactory.Setup(new QuarterOfAnHourInterval());
 
 			analyticsDataFactory.Persist();
 
-			var dates = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDeviationUnlinkedDates(new[] { personPeriodId1, personPeriodId2 }));
-			dates.Single().Should().Equals(specificDate1.Date);
+			var rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDeviationRowCount(personPeriod1));
+			rowCount.Should().Be.EqualTo(1);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDeviationRowCount(personPeriod2));
+			rowCount.Should().Be.EqualTo(1);
 
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdateUnlinkedPersonids(new[] { personPeriod1, personPeriod2 }));
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDeviationRowCount(personPeriod1));
+			rowCount.Should().Be.EqualTo(2);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDeviationRowCount(personPeriod2));
+			rowCount.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldDeleteInvalidScheduleRows()
+		{
+			var dateTime1 = new DateTime(2015, 1, 23);
+			var specificDate1 = new SpecificDate
+			{
+				Date = new DateOnly(dateTime1),
+				DateId = 23
+			};
+
+			analyticsDataFactory.Setup(specificDate1);
+			const int personPeriod1 = 10;
+			insertPerson(personPeriod1, new DateTime(2015, 1, 5), new DateTime(2015, 1, 22), false, 5, 22);
+
+			analyticsDataFactory.Setup(new FactScheduleDeviation(specificDate1.DateId, specificDate1.DateId, 1, personPeriod1, 60, 0, 0, 60, true));
+			setupThingsForFactSchedule();
+			analyticsDataFactory.Setup(new ShiftCategory(-1, Guid.NewGuid(), "Kattegat", Color.Green, _datasource, businessUnitId));
+			analyticsDataFactory.Setup(new DimDayOff(-1, Guid.NewGuid(), "DayOff", _datasource, businessUnitId));
+			analyticsDataFactory.Persist();
+			insertFactSchedule(personPeriod1, dateTime1.AddHours(8));
+			insertFactScheduleDayCount(personPeriod1, 1, dateTime1.AddHours(8));
+
+
+			var rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleRowCount(personPeriod1));
+			rowCount.Should().Be.EqualTo(1);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDayCountRowCount(personPeriod1));
+			rowCount.Should().Be.EqualTo(1);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDeviationRowCount(personPeriod1));
+			rowCount.Should().Be.EqualTo(1);
+
+			WithAnalyticsUnitOfWork.Do(() => Target.DeleteInvalidScheduleRows(new []{personPeriod1}));
+
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleRowCount(personPeriod1));
+			rowCount.Should().Be.EqualTo(0);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDayCountRowCount(personPeriod1));
+			rowCount.Should().Be.EqualTo(0);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactScheduleDeviationRowCount(personPeriod1));
+			rowCount.Should().Be.EqualTo(0);
 		}
 	}
 }

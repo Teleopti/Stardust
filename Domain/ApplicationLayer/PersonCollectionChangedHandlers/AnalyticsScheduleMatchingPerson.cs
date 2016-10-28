@@ -30,7 +30,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			foreach (var personId in @event.PersonIdCollection)
 			{
 				var analyticsPersonPeriods = _analyticsPersonPeriodRepository.GetPersonPeriods(personId);
-				_analyticsScheduleRepository.UpdateUnlinkedPersonids(analyticsPersonPeriods.Select(x => x.PersonId).ToArray());
+				var personPeriodIds = analyticsPersonPeriods.Select(x => x.PersonId).ToArray();
+				_analyticsScheduleRepository.UpdateUnlinkedPersonids(personPeriodIds);
+				_analyticsScheduleRepository.DeleteInvalidScheduleRows(personPeriodIds);
 			}
 		}
 	}
