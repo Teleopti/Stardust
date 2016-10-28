@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void Create(IScheduleDictionary schedules, GroupPageLight groupPageLight)
 		{
 				var dates =schedules.Period.LoadedPeriod().ToDateOnlyPeriod(_currentTeleoptiPrincipal.Current().Regional.TimeZone).DayCollection();
-				_groupPagePerDateHolder().GroupPersonGroupPagePerDate = _groupPageCreator.CreateGroupPagePerDate(dates, _groupScheduleGroupPageDataProvider, groupPageLight, true);
+				_groupPagePerDateHolder().GroupPersonGroupPagePerDate = _groupPageCreator.CreateGroupPagePerDate(dates, _groupScheduleGroupPageDataProvider, groupPageLight);
 		}
 	}
 

@@ -19,15 +19,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private void createAndAddGroupPageForDate(IGroupScheduleGroupPageDataProvider groupPageDataProvider,
 			GroupPageLight selectedGrouping, DateOnly date, ConcurrentDictionary<DateOnly, IGroupPage> dic)
 		{
-			var groupPage = createGroupPageForDate(groupPageDataProvider, selectedGrouping, date, false);
+			var groupPage = createGroupPageForDate(groupPageDataProvider, selectedGrouping, date);
 			dic.GetOrAdd(date, groupPage);
 		}
 
-		public IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupScheduleGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping)
-		{
-			return CreateGroupPagePerDate(dates, groupPageDataProvider, selectedGrouping, false);
-		}
-		public IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupScheduleGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping, bool useAllLoadedPersons)
+		public IGroupPagePerDate CreateGroupPagePerDate(IEnumerable<DateOnly> dates, IGroupScheduleGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping)
 		{
 			if (dates == null) throw new ArgumentNullException("dates");
 			if (groupPageDataProvider == null) throw new ArgumentNullException("groupPageDataProvider");
@@ -40,12 +36,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return new GroupPagePerDate(concDic);
 		}
 
-		private IGroupPage createGroupPageForDate(IGroupScheduleGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping, DateOnly dateOnly, bool useAllLoadedPersons)
+		private IGroupPage createGroupPageForDate(IGroupScheduleGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping, DateOnly dateOnly)
 		{
 			IGroupPage groupPage;
 			var persons = groupPageDataProvider.PersonCollection;
-			if (useAllLoadedPersons)
-				persons = groupPageDataProvider.AllLoadedPersons;
 
 			IGroupPageOptions options = new GroupPageOptions(persons)
 			{
