@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text;
 using System.Xml.XPath;
@@ -6,6 +7,14 @@ namespace Teleopti.Ccc.PayrollFormatter
 {
     public class FlatFileFormatter : PayrollFormatterBase
     {
+		public FlatFileFormatter() : base()
+		{
+		}
+
+		public FlatFileFormatter(TimeZoneInfo timeZoneInfo) : base(timeZoneInfo)
+		{
+		}
+
         public override Stream Format(IXPathNavigable navigable, DocumentFormat documentFormat)
         {
             var navigator = navigable.CreateNavigator();

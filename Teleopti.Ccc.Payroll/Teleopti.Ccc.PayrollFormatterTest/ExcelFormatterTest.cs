@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Xml;
 using NUnit.Framework;
 using Teleopti.Ccc.PayrollFormatter;
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.PayrollFormatterTest
         [SetUp]
         public void Setup()
         {
-            target = new ExcelFormatter();
+            target = new ExcelFormatter(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
         }
 
         [Test]

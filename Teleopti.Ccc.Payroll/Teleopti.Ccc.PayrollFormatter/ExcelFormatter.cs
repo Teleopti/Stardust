@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text;
 using System.Xml.XPath;
@@ -6,6 +7,7 @@ namespace Teleopti.Ccc.PayrollFormatter
 {
     public class ExcelFormatter : PayrollFormatterBase
     {
+	    
         private const string workbook = "<?xml version=\"1.0\"?>\n" +
                                         "<?mso-application progid=\"Excel.Sheet\"?>\n" +
                                         "<Workbook xmlns=\"urn:schemas-microsoft-com:office:spreadsheet\"\n" +
@@ -20,9 +22,17 @@ namespace Teleopti.Ccc.PayrollFormatter
                                         "</Worksheet>" +
                                         "</Workbook>";
 
-        #region Overrides of PayrollFormatterBase
+		public ExcelFormatter() : base()
+		{
+		}
 
-        public override Stream Format(IXPathNavigable navigable, DocumentFormat documentFormat)
+		public ExcelFormatter(TimeZoneInfo timeZoneInfo) : base(timeZoneInfo)
+	    {
+	    }
+
+		#region Overrides of PayrollFormatterBase
+
+		public override Stream Format(IXPathNavigable navigable, DocumentFormat documentFormat)
         {
             var navigator = navigable.CreateNavigator();
             var documentElement = navigator.SelectSingleNode("//" + documentFormat.Element);

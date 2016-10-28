@@ -8,9 +8,18 @@ namespace Teleopti.Ccc.PayrollFormatter
 {
     public abstract class PayrollFormatterBase
     {
-        public abstract Stream Format(IXPathNavigable navigable, DocumentFormat documentFormat);
+	    private readonly TimeZoneInfo _destinationTimeZone;
+	    public abstract Stream Format(IXPathNavigable navigable, DocumentFormat documentFormat);
 
-        protected static string FormatNodeValue(ItemFormat itemFormat, string value)
+		protected PayrollFormatterBase() : this(TimeZoneInfo.Local)
+	    {
+	    }
+	    protected PayrollFormatterBase(TimeZoneInfo destinationTimeZone)
+	    {
+		    _destinationTimeZone = destinationTimeZone;
+	    }
+
+        protected string FormatNodeValue(ItemFormat itemFormat, string value)
         {
             value = applyTypeAndFormat(itemFormat, value);
             value = applyQuotes(itemFormat, value);
@@ -53,14 +62,15 @@ namespace Teleopti.Ccc.PayrollFormatter
             return value;
         }
 
-        private static string applyTypeAndFormat(ItemFormat format, string value)
+        private string applyTypeAndFormat(ItemFormat format, string value)
         {
-            if (format.XmlType.Contains("date"))
+	        if (format.XmlType.Contains("date"))
             {
                 if (value.Length > 0)
                 {
-                    var localDate = XmlConvert.ToDateTime(value, XmlDateTimeSerializationMode.Local);
-                    if (string.IsNullOrEmpty(format.Format))
+	                var dateTimeOffset = XmlConvert.ToDateTimeOffset(value);
+	                var localDate = TimeZoneInfo.ConvertTime(dateTimeOffset, _destinationTimeZone).DateTime;
+					if (string.IsNullOrEmpty(format.Format))
                         value = localDate.ToShortDateString();
                     else
                         value = string.Format(CultureInfo.InvariantCulture,
@@ -71,7 +81,8 @@ namespace Teleopti.Ccc.PayrollFormatter
 			{
 				if (value.Length > 0)
 				{
-					var localdateTime = XmlConvert.ToDateTime(value, XmlDateTimeSerializationMode.Local);
+					var dateTimeOffset = XmlConvert.ToDateTimeOffset(value);
+					var localdateTime = TimeZoneInfo.ConvertTime(dateTimeOffset, _destinationTimeZone).DateTime;
 					if (localdateTime == new DateTime())
 						return "";
 					if (string.IsNullOrEmpty(format.Format))
