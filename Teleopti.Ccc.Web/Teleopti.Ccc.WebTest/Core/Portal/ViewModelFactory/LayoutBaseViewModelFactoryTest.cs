@@ -23,11 +23,12 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[SetUp]
 		public void Setup()
 		{
+
 			_mocks = new MockRepository();
 			_cultureSpecificViewModelFactory = _mocks.DynamicMock<ICultureSpecificViewModelFactory>();
 			_datePickerGlobalizationViewModelFactory = _mocks.DynamicMock<IDatePickerGlobalizationViewModelFactory>();
 			_userTimeZone = new UtcTimeZone();
-			_target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, new Now(),_userTimeZone);
+			_target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, new Now(), _userTimeZone);
 		}
 
 		[Test]
@@ -86,7 +87,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		public void ShoulGetCorrectUserTimezoneOffsetMinute()
 		{
 			var userTimezone = new FakeUserTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
-			var time = new DateTime(2001,1,1,1,12,0,0,DateTimeKind.Utc);
+			var time = new DateTime(2001,1,1,1,12,0,0,DateTimeKind.Local);
 			var now = new MutableNow();
 			now.Is(time);
 
@@ -100,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		public void ShouldCorrectDayLightSavingTimeUserTimezonOffsetMinute()
 		{
 			var userTimezone = new FakeUserTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			var time = new DateTime(2016,1,1,1,12,0,0,DateTimeKind.Utc);
+			var time = new DateTime(2016,1,1,1,12,0,0,DateTimeKind.Local);
 			var now = new MutableNow();
 			now.Is(time);
 
