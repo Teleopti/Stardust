@@ -49,10 +49,5 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value>The skill collection.</value>
         IList<ISkill> SkillCollection { get; }
-
-		/// <summary>
-		/// 
-		/// </summary>
-		IEnumerable<IPerson> AllLoadedPersons { get; }
     }
 }

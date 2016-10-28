@@ -59,12 +59,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
-		public IEnumerable<IPerson> AllLoadedPersons
-		{
-			get { throw new NotImplementedException(); }
-		}
-
 		public IList<IActivity> ActivityCollection
 		{
 			get { return _activityCollection ?? (_activityCollection = _jobParameters.Helper.Repository.LoadActivity()); }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Repositories;
@@ -87,12 +86,6 @@ namespace Teleopti.Ccc.WinCode.Common
 				CheckLoaded();
 				return _skillCollection;
 			}
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
-		public IEnumerable<IPerson> AllLoadedPersons
-		{
-			get { throw new NotImplementedException(); }
 		}
 
 		public void SetSelectedPeriod(DateOnlyPeriod dateOnlyPeriod)
