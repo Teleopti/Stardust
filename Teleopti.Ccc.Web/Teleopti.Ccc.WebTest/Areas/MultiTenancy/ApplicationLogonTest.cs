@@ -185,13 +185,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			PasswordPolicy.MaxAttemptCount = 100;
 			PasswordPolicy.InvalidAttemptWindow = TimeSpan.FromHours(1);
 
-			Now.Is(DateTime.Now);
+			Now.Is(DateTime.UtcNow);
 			Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = RandomName.Make()});
 			Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = RandomName.Make()});
 			personInfo.ApplicationLogonInfo.InvalidAttempts.Should().Be.EqualTo(2);
 
 			//logon two hours later
-			Now.Is(DateTime.Now.AddHours(2));
+			Now.Is(DateTime.UtcNow.AddHours(2));
 			Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = RandomName.Make()});
 			personInfo.ApplicationLogonInfo.InvalidAttempts.Should().Be.EqualTo(1);
 
