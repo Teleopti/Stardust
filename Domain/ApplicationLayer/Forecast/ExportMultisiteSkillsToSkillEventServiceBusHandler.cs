@@ -12,16 +12,16 @@ using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
-	public class ExportMultisiteSkillsToSkillEventStardustHandler : IHandleEvent<ExportMultisiteSkillsToSkillEvent>, IRunOnStardust
+	public class ExportMultisiteSkillsEventHandler : IHandleEvent<ExportMultisiteSkillsToSkillEvent>, IRunOnStardust
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly IRepository<IJobResult> _jobResultRepository;
 		private readonly IJobResultFeedback _feedback;
 		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly IExportMultisiteSkillProcessor _exportMultisiteSkillProcessor;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(ExportMultisiteSkillsToSkillEventStardustHandler));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(ExportMultisiteSkillsEventHandler));
 
-		public ExportMultisiteSkillsToSkillEventStardustHandler(ICurrentUnitOfWork unitOfWork, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBrokerComposite messageBroker, IExportMultisiteSkillProcessor exportMultisiteSkillProcessor)
+		public ExportMultisiteSkillsEventHandler(ICurrentUnitOfWork unitOfWork, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBrokerComposite messageBroker, IExportMultisiteSkillProcessor exportMultisiteSkillProcessor)
 		{
 			_unitOfWork = unitOfWork;
 			_jobResultRepository = jobResultRepository;
