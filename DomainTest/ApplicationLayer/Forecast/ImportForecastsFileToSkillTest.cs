@@ -63,6 +63,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 																			 _messageBroker, _openAndSplitTargetSkill, _dataSourceState, _dataSourceScope, _personRepository, _businessUnitRep);
 		}
 
+		[OneTimeTearDown]
+		public void OneTimeTearDown()
+		{
+			_dataSourceState.SetOnThread(null);
+		}
+
 		[Test]
 		public void ShouldHandleMessageCorrectly()
 		{
