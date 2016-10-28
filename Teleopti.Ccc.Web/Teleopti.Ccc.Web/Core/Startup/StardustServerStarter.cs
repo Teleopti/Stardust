@@ -1,4 +1,5 @@
 using Autofac;
+using log4net;
 using Owin;
 using Stardust.Manager;
 using Teleopti.Ccc.Domain.Config;
@@ -9,6 +10,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 	{
 		private readonly ILifetimeScope _scope;
 		private readonly IConfigReader _configReader;
+		private static readonly ILog logger = LogManager.GetLogger(typeof(StardustServerStarter));
 
 		public StardustServerStarter(ILifetimeScope scope, IConfigReader configReader)
 		{
@@ -18,6 +20,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		public void Start(IAppBuilder app)
 		{
+			logger.Info($"StardustServerStarter.start()");
 			var managerConfiguration = new ManagerConfiguration(
 				_configReader.ConnectionString("ManagerConnectionString"),
 				_configReader.ReadValue("RouteName", "/StardustDashboard"),
