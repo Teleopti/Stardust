@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			{
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamScheduling(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockScheduling(_schedulingOptions)).Return(true);
-				Expect.Call(_blockRestrictionAggregator.Aggregate(_person, _teamBlockInfo, _schedulingOptions, _shift))
+				Expect.Call(_blockRestrictionAggregator.Aggregate(_scheduleDictionary, _person, _teamBlockInfo, _schedulingOptions, _shift))
 				      .Return(exprectedResult);
 			}
 			using (_mocks.Playback())

@@ -9,32 +9,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 {
 	public interface IBlockRestrictionAggregator
 	{
-		IEffectiveRestriction Aggregate(IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache roleModel);
+		IEffectiveRestriction Aggregate(IScheduleDictionary schedules, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache roleModel);
 	}
 	public class BlockRestrictionAggregator : IBlockRestrictionAggregator
 	{
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IAssignmentPeriodRule _nightlyRestRule;
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 
 		public BlockRestrictionAggregator(IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 			IScheduleDayEquator scheduleDayEquator,
 			IAssignmentPeriodRule nightlyRestRule,
 			ITeamBlockSchedulingOptions teamBlockSchedulingOptions)
 		{
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
-			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_scheduleDayEquator = scheduleDayEquator;
 			_nightlyRestRule = nightlyRestRule;
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 		}
 
-		public IEffectiveRestriction Aggregate(IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache roleModel)
+		public IEffectiveRestriction Aggregate(IScheduleDictionary schedules, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache roleModel)
 		{
-			var scheduleDictionary = _schedulingResultStateHolder().Schedules;
+			var scheduleDictionary = schedules;
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var matrixes = teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(person, teamBlockInfo.BlockInfo.BlockPeriod).ToList();
 			var dateOnlyList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();

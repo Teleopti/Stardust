@@ -9,11 +9,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		{
 			return new OptimizationPreferences
 			{
-				//TODO: Claes! Vad ska det defaultas till här?
 				Extra =
 				{
 					UseTeamBlockOption = true,
-					BlockTypeValue = BlockFinderType.SingleDay
+					BlockTypeValue = BlockFinderType.SchedulePeriod
 				}
 			};
 		}
