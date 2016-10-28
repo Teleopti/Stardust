@@ -74,12 +74,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					LogOnBusinessUnitId = _currentBusinessUnit.Current().Id.GetValueOrDefault()
 
 				};
-				if (_toggleManager.IsEnabled(Toggles.Wfm_ForecastFileImportOnStardust_37047))
-				{
-					_stardustSender.Send(message);
-				}
-				else
-					_busSender.Send(message, true);
+				_stardustSender.Send(message);
 			}
 			command.Result = new CommandResultDto { AffectedId = jobResultId, AffectedItems = 1 };
 		}
