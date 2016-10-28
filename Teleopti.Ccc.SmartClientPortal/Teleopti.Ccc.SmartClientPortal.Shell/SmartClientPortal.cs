@@ -879,11 +879,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			webControl1.Visible = true;
 			var executingAssembly = Assembly.GetExecutingAssembly();
-			var pageName = executingAssembly.GetManifestResourceNames().First(n => n.Contains("StaticPage"));
-			if (!_toggleManager.IsEnabled(Toggles.Show_StaticPageOnNoInternet_29415))
-			{
-				pageName = executingAssembly.GetManifestResourceNames().First(n => n.Contains("EmptyStatic"));
-			}
+			var pageName = executingAssembly.GetManifestResourceNames().First(n => n.Contains("EmptyStatic"));
 			
 			webView1.LoadHtml(GetFromResources(pageName));
 		}

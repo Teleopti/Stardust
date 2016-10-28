@@ -28,7 +28,6 @@
 ############################################################################
 
 Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = true
-Show_StaticPageOnNoInternet_29415 = false
 Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635 = true
 Settings_SetAgentDescription_23257 = true
 Settings_AlertViaEmailFromSMSLink_30444 = true

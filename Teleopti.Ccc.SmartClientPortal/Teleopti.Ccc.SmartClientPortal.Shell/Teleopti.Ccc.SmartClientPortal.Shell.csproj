@@ -307,7 +307,6 @@
     <None Include="Resources\TeleoptiWFM.ico" />
     <None Include="Resources\NotifyOK.ico" />
     <None Include="Resources\NotifyWarning.ico" />
-    <EmbeddedResource Include="StaticPage.html" />
     <EmbeddedResource Include="EmptyStatic.html" />
     <None Include="Resources\Budgets_filled_space_32x32.png" />
     <None Include="Resources\Forecasts_filled_space_32x32.png" />
@@ -334,9 +333,6 @@
     <Content Include="..\..\BuildArtifacts\Teleopti.Ccc.SmartClientPortal.Shell.ico">
       <Link>Teleopti.Ccc.SmartClientPortal.Shell.ico</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StaticPage.min.html">
-      <DependentUpon>StaticPage.html</DependentUpon>
     </Content>
     <Content Include="TeleoptiWFM.ico" />
     <None Include="packages.config">
