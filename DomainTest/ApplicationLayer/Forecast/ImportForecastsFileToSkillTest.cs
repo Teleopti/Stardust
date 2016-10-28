@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -61,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_analyzeQuery = MockRepository.GenerateMock<IForecastsAnalyzeQuery>();
 			_target = new ImportForecastsFileToSkill(_unitOfWorkFactory, _skillRepository, _jobResultRepository,
 																			 _importForecastsRepository, _contentProvider, _analyzeQuery, _feedback,
-																			 _messageBroker, _openAndSplitTargetSkill, _dataSourceState,_dataSourceScope,_personRepository,_businessUnitRep);
+																			 _messageBroker, _openAndSplitTargetSkill, _dataSourceState, _dataSourceScope, _personRepository, _businessUnitRep);
 		}
 
 		[Test]
@@ -127,95 +126,111 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_feedback.Stub(x => x.SetJobResult(_jobResult, _messageBroker));
 			_openAndSplitTargetSkill.Stub(x => x.Process(null)).IgnoreArguments();
 
-			
-			
 			_target.Handle(message);
-
 		}
 
-		//[Test]
-		//public void ShouldSendValidationErrorMessageWhenNoSkillFound()
-		//{
-		//	var jobId = Guid.NewGuid();
-		//	var skillId = Guid.NewGuid();
+		[Test]
+		public void ShouldSendValidationErrorMessageWhenNoSkillFound()
+		{
+			var jobId = Guid.NewGuid();
+			var skillId = Guid.NewGuid();
+			var message = new ImportForecastsFileToSkillEvent
+			{
+				JobId = jobId,
+				ImportMode = ImportForecastsMode.ImportWorkload,
+				TargetSkillId = skillId,
+				UploadedFileId = jobId,
+				Timestamp = DateTime.Now,
+				LogOnDatasource = "TEST",
+				OwnerPersonId = Guid.NewGuid()
+			};
+			_dataSourceScope.OnThisThreadUse("TEST");
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			var factory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var person = PersonFactory.CreatePerson(new Name("Imp", "ort"));
+			var dataSource = MockRepository.GenerateMock<IDataSource>();
+			_dataSourceState.SetOnThread(dataSource);
+			dataSource.Stub(x => x.Application).Return(factory);
+			factory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+			_personRepository.Stub(x => x.Get(message.OwnerPersonId)).Return(person);
+			_skillRepository.Stub(x => x.Get(skillId)).Return(null);
+			_jobResultRepository.Stub(x => x.Get(jobId)).Return(_jobResult);
 
-		//	var uow = MockRepository.GenerateMock<IUnitOfWork>();
-		//	_unitOfWorkFactory.Stub(x => x.Current()).Return(uow);
-		//	_skillRepository.Stub(x => x.Get(skillId)).Return(null);
-		//	_jobResultRepository.Stub(x => x.Get(jobId)).Return(_jobResult);
+			_target.Handle(message);
+		}
 
-		//	var message = new ImportForecastsFileToSkillEvent
-		//	{
-		//		JobId = jobId,
-		//		ImportMode = ImportForecastsMode.ImportWorkload,
-		//		TargetSkillId = skillId,
-		//		UploadedFileId = jobId,
-		//		Timestamp = DateTime.Now
-		//	};
-		//	_target.Handle(message);
+		[Test]
+		public void ShouldSendValidationErrorMessageWhenNoFileFound()
+		{
+			var jobId = Guid.NewGuid();
+			var skillId = Guid.NewGuid();
+			var skill = SkillFactory.CreateSkill("test skill");
+			skill.TimeZone = _timeZone;
+			var message = new ImportForecastsFileToSkillEvent
+			{
+				JobId = jobId,
+				ImportMode = ImportForecastsMode.ImportWorkload,
+				TargetSkillId = skillId,
+				UploadedFileId = jobId,
+				Timestamp = DateTime.Now,
+				LogOnDatasource = "TEST",
+				OwnerPersonId = Guid.NewGuid()
+			};
+			_dataSourceScope.OnThisThreadUse("TEST");
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			var factory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var person = PersonFactory.CreatePerson(new Name("Imp", "ort"));
+			var dataSource = MockRepository.GenerateMock<IDataSource>();
+			_dataSourceState.SetOnThread(dataSource);
+			dataSource.Stub(x => x.Application).Return(factory);
+			factory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+			_personRepository.Stub(x => x.Get(message.OwnerPersonId)).Return(person);
+			_skillRepository.Stub(x => x.Get(skillId)).Return(skill);
+			_jobResultRepository.Stub(x => x.Get(jobId)).Return(_jobResult);
+			_importForecastsRepository.Stub(x => x.Get(jobId)).Return(null);
 
-		//}
+			_target.Handle(message);
+		}
 
-		//[Test]
-		//public void ShouldSendValidationErrorMessageWhenNoFileFound()
-		//{
-		//	var jobId = Guid.NewGuid();
-		//	var skillId = Guid.NewGuid();
-		//	var skill = SkillFactory.CreateSkill("test skill");
-		//	skill.TimeZone = _timeZone;
+		[Test]
+		public void ShouldSendValidationErrorMessageWhenFileAnalysisFailed()
+		{
+			var fileContent = Encoding.UTF8.GetBytes("Insurance,20120301 12:45,20120301 13:00,17,179");
+			var jobId = Guid.NewGuid();
+			var skillId = Guid.NewGuid();
+			var skill = SkillFactory.CreateSkill("test skill");
+			skill.TimeZone = _timeZone;
+			var queryResult = MockRepository.GenerateMock<IForecastsAnalyzeQueryResult>();
+			var message = new ImportForecastsFileToSkillEvent
+			{
+				JobId = jobId,
+				ImportMode = ImportForecastsMode.ImportWorkload,
+				TargetSkillId = skillId,
+				UploadedFileId = jobId,
+				Timestamp = DateTime.Now,
+				LogOnDatasource = "TEST",
+				OwnerPersonId = Guid.NewGuid()
+			};
 
-		//	var uow = MockRepository.GenerateMock<IUnitOfWork>();
-		//	_unitOfWorkFactory.Stub(x => x.Current()).Return(uow);
-		//	_skillRepository.Stub(x => x.Get(skillId)).Return(skill);
-		//	_jobResultRepository.Stub(x => x.Get(jobId)).Return(_jobResult);
-		//	_importForecastsRepository.Stub(x => x.Get(jobId)).Return(null);
+			_dataSourceScope.OnThisThreadUse("TEST");
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			var factory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var person = PersonFactory.CreatePerson(new Name("Imp", "ort"));
+			var dataSource = MockRepository.GenerateMock<IDataSource>();
+			_dataSourceState.SetOnThread(dataSource);
+			dataSource.Stub(x => x.Application).Return(factory);
+			factory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+			_personRepository.Stub(x => x.Get(message.OwnerPersonId)).Return(person);
+			_skillRepository.Stub(x => x.Get(skillId)).Return(skill);
+			_jobResultRepository.Stub(x => x.Get(jobId)).Return(_jobResult);
+			_importForecastsRepository.Stub(x => x.Get(jobId)).Return(_forecastFile);
+			_forecastFile.Stub(x => x.FileContent).Return(fileContent);
+			_contentProvider.Stub(x => x.LoadContent(fileContent, _timeZone)).Return(new List<IForecastsRow>());
+			_analyzeQuery.Stub(x => x.Run(new List<IForecastsRow>(), skill)).Return(queryResult);
+			queryResult.Stub(x => x.Succeeded).Return(false).Repeat.Any();
+			queryResult.Stub(x => x.ErrorMessage).Return("error occured.");
 
-		//	var message = new ImportForecastsFileToSkillEvent
-		//	{
-		//		JobId = jobId,
-		//		ImportMode = ImportForecastsMode.ImportWorkload,
-		//		TargetSkillId = skillId,
-		//		UploadedFileId = jobId,
-		//		Timestamp = DateTime.Now
-		//	};
-		//	_target.Handle(message);
-
-		//}
-
-		//[Test]
-		//public void ShouldSendValidationErrorMessageWhenFileAnalysisFailed()
-		//{
-		//	var fileContent = Encoding.UTF8.GetBytes("Insurance,20120301 12:45,20120301 13:00,17,179");
-		//	var jobId = Guid.NewGuid();
-		//	var skillId = Guid.NewGuid();
-		//	var skill = SkillFactory.CreateSkill("test skill");
-		//	skill.TimeZone = _timeZone;
-		//	var queryResult = MockRepository.GenerateMock<IForecastsAnalyzeQueryResult>();
-
-		//	var uow = MockRepository.GenerateMock<IUnitOfWork>();
-		//	_unitOfWorkFactory.Stub(x => x.Current()).Return(uow);
-		//	_skillRepository.Stub(x => x.Get(skillId)).Return(skill);
-		//	_jobResultRepository.Stub(x => x.Get(jobId)).Return(_jobResult);
-		//	_importForecastsRepository.Stub(x => x.Get(jobId)).Return(_forecastFile);
-		//	_forecastFile.Stub(x => x.FileContent).Return(fileContent);
-		//	_contentProvider.Stub(x => x.LoadContent(fileContent, _timeZone)).Return(new List<IForecastsRow>());
-		//	_analyzeQuery.Stub(x => x.Run(new List<IForecastsRow>(), skill)).Return(queryResult);
-		//	queryResult.Stub(x => x.Succeeded).Return(false).Repeat.Any();
-		//	queryResult.Stub(x => x.ErrorMessage).Return("error occured.");
-
-		//	var message = new ImportForecastsFileToSkillEvent
-		//	{
-		//		JobId = jobId,
-		//		ImportMode = ImportForecastsMode.ImportWorkload,
-		//		TargetSkillId = skillId,
-		//		UploadedFileId = jobId,
-		//		Timestamp = DateTime.Now
-		//	};
-		//	_target.Handle(message);
-		//}
-
-
+			_target.Handle(message);
+		}
 	}
-
-	
 }
