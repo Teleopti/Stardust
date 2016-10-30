@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			_useScheduling = schedulingOptions.UseScheduling;
 		}
 
-		public override void AddSelectedSchedulesInColumnToList(GridRangeInfo range, int colIndex, ICollection<IScheduleDay> selectedSchedules)
+		public override void AddSelectedSchedulesInColumnToList(GridRangeInfo range, int colIndex, List<IScheduleDay> selectedSchedules)
 		{
 			if(range == null) throw new ArgumentNullException("range");
 			if(selectedSchedules == null) throw new ArgumentNullException("selectedSchedules");

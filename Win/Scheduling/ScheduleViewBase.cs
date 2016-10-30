@@ -1058,8 +1058,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         public IList<IScheduleDay> CurrentColumnSelectedSchedules()
         {
-            GridRangeInfoList rangeList = GridHelper.GetGridSelectedRanges(_grid, true);
-            IList<IScheduleDay> selectedSchedules = new List<IScheduleDay>();
+            var rangeList = GridHelper.GetGridSelectedRanges(_grid, true);
+            var selectedSchedules = new List<IScheduleDay>();
 
             foreach (GridRangeInfo range in rangeList)
             {
@@ -1074,8 +1074,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         public IList<IScheduleDay> SelectedSchedules()
         {
-            GridRangeInfoList rangeList = GridHelper.GetGridSelectedRanges(_grid, true);
-            IList<IScheduleDay> selectedSchedules = new List<IScheduleDay>();
+            var rangeList = GridHelper.GetGridSelectedRanges(_grid, true);
+            var selectedSchedules = new List<IScheduleDay>();
 
             foreach (GridRangeInfo range in rangeList)
             {
@@ -1091,10 +1091,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             return selectedSchedules;
         }
 
-		public IList<IList<IScheduleDay>> SelectedSchedulesPerEqualTwoRanges()
+		public IList<List<IScheduleDay>> SelectedSchedulesPerEqualTwoRanges()
 		{
 			var gridRangeInfoList = GridHelper.GetGridSelectedRanges(_grid, true);
-			IList<IList<IScheduleDay>> list = new List<IList<IScheduleDay>>();
+			var list = new List<List<IScheduleDay>>();
 
 			if(gridRangeInfoList.Count == 2 && GridHelper.IsRangesSameSize(gridRangeInfoList[0], gridRangeInfoList[1]))
 			{
@@ -1102,7 +1102,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					foreach (GridRangeInfo gridRangeInfo in gridRangeInfoList)
 					{
-						IList<IScheduleDay> scheduleDays = new List<IScheduleDay>();
+						var scheduleDays = new List<IScheduleDay>();
 
 						for (var i = gridRangeInfo.Left; i <= gridRangeInfo.Right; i++)
 						{
@@ -1255,38 +1255,47 @@ namespace Teleopti.Ccc.Win.Scheduling
             return AllSelectedPersons(SelectedSchedules());
         }
 
-        public virtual void AddSelectedSchedulesInColumnToList(GridRangeInfo range, int colIndex, ICollection<IScheduleDay> selectedSchedules)
-        {
-            for (int j = range.Top; j <= range.Bottom; j++)
+        public virtual void AddSelectedSchedulesInColumnToList(GridRangeInfo range, int colIndex, List<IScheduleDay> selectedSchedules)
+		{
+			if (colIndex < (int)ColumnType.StartScheduleColumns)
+				return;
+			
+			var localDate = _grid.Model[1, colIndex].Tag as DateOnly?;
+			if (!localDate.HasValue)
+				return;
+
+			var toAdd = new List<IScheduleDay>();
+			for (int j = range.Top; j <= range.Bottom; j++)
             {
-                if (j - (RowHeaders + 1) < 0)
+	            var rowExcludingHeaders = j - (RowHeaders + 1);
+	            if (rowExcludingHeaders < 0)
                     continue;
 
-                if (colIndex < (int) ColumnType.StartScheduleColumns)
-                    continue;
-
-                if (_grid.Model[1, colIndex].Tag == null)
-                    continue;
-
-                var localDate = (DateOnly)_grid.Model[1, colIndex].Tag;
                 IPerson agent = null;
-                if (j - (RowHeaders + 1) >= Presenter.SchedulerState.FilteredCombinedAgentsDictionary.Count)
-                {
-                    if (Presenter.SchedulerState.FilteredCombinedAgentsDictionary.Count > 0)
-                        agent = Presenter.SchedulerState.FilteredCombinedAgentsDictionary.ElementAt(0).Value;
-                }
-                else
-                    agent = Presenter.SchedulerState.FilteredCombinedAgentsDictionary.ElementAt(j - (RowHeaders + 1)).Value;
+	            if (rowExcludingHeaders >= Presenter.SchedulerState.FilteredCombinedAgentsDictionary.Count)
+	            {
+		            if (Presenter.SchedulerState.FilteredCombinedAgentsDictionary.Count > 0)
+			            agent = Presenter.SchedulerState.FilteredCombinedAgentsDictionary.ElementAt(0).Value;
+	            }
+	            else
+	            {
+		            agent = Presenter.SchedulerState.FilteredCombinedAgentsDictionary.ElementAt(rowExcludingHeaders).Value;
+	            }
 
-                if (agent != null)
-                {
-                    IScheduleDay schedulePart =
-                        Presenter.SchedulerState.Schedules[agent].ScheduledDay(localDate);
-                    selectedSchedules.Add(schedulePart);
-                }
-                else
-                    selectedSchedules.Clear();
+	            if (agent != null)
+	            {
+		            IScheduleDay schedulePart =
+			            Presenter.SchedulerState.Schedules[agent].ScheduledDay(localDate.Value);
+		            toAdd.Add(schedulePart);
+	            }
+	            else
+	            {
+					toAdd.Clear();
+		            selectedSchedules.Clear();
+	            }
             }
+			selectedSchedules.AddRange(toAdd);
+			toAdd.Clear();
         }
 
         /// <summary>
