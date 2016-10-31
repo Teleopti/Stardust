@@ -146,6 +146,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		private void processOrderList(IList<IPersonRequest> requests)
 		{
+			var stopwatch = new Stopwatch();
 			foreach (var personRequest in requests)
 			{
 				var absenceRequest = personRequest.Request as IAbsenceRequest;
@@ -170,22 +171,36 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				var validatorList = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
 				var processAbsenceRequest = mergedPeriod.AbsenceRequestProcess;
 
-
+				stopwatch.Restart();
 				var personAccountBalanceCalculator = getPersonAccountBalanceCalculator(affectedPersonAbsenceAccount, absenceRequest, dateOnlyPeriod);
+				stopwatch.Stop();
+				_feedback.SendProgress($"getPersonAccountBalanceCalculator took {stopwatch.Elapsed}");
 
+				stopwatch.Restart();
 				setupUndoContainersAndTakeSnapshot(undoRedoContainer, allAccounts);
+				stopwatch.Stop();
+				_feedback.SendProgress($"setupUndoContainersAndTakeSnapshot took {stopwatch.Elapsed}");
 
+				stopwatch.Restart();
 				processAbsenceRequest = checkIfPersonIsAlreadyAbsentDuringRequestPeriod(absenceRequest, processAbsenceRequest);
+				stopwatch.Stop();
+				_feedback.SendProgress($"checkIfPersonIsAlreadyAbsentDuringRequestPeriod took {stopwatch.Elapsed}");
 
 				var businessRules = NewBusinessRuleCollection.Minimum();
 
 				var requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(businessRules, currentScenario, _schedulingResultStateHolder);
 
+				
+				stopwatch.Start();
 				simulateApproveAbsence(absenceRequest, requestApprovalServiceScheduler);
+				stopwatch.Stop();
+				_feedback.SendProgress($"Simulate took {stopwatch.Elapsed}");
 
 				//Will issue a rollback for simulated schedule data
+				stopwatch.Restart();
 				processAbsenceRequest = handleInvalidSchedule(processAbsenceRequest);
-
+				stopwatch.Stop();
+				_feedback.SendProgress($"handleInvalidSchedule took {stopwatch.Elapsed}");
 
 				var requiredForProcessingAbsenceRequest = new RequiredForProcessingAbsenceRequest(
 					undoRedoContainer,
@@ -205,6 +220,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 						_budgetGroupAllowanceSpecification,
 						_budgetGroupHeadCountSpecification);
 
+				stopwatch.Restart();
 				if (_toggleManager.IsEnabled(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754))
 				{
 					using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills))
@@ -225,6 +241,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 								requiredForHandlingAbsenceRequest,
 								validatorList);
 				}
+				stopwatch.Stop();
+				_feedback.SendProgress($"processAbsenceRequest.process(..) took {stopwatch.Elapsed}");
 
 				string response = "approved or denied";
 				if (personRequest.IsApproved) response = "approved";

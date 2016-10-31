@@ -62,11 +62,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		[AsSystem]
 		public virtual void Handle(NewMultiAbsenceRequestsCreatedEvent @event)
 		{
-			_feedback.SendProgress?.Invoke($"Received {@event.PersonRequestIds.Count} Absence Requests.");
+			_feedback.SendProgress($"Received {@event.PersonRequestIds.Count} Absence Requests.");
 
 			var personRequests = checkPersonRequest(@event);
 			
-			_feedback.SendProgress?.Invoke($"Done Checking Person Requests. {personRequests.Count} will be processed.");
+			_feedback.SendProgress($"Done Checking Person Requests. {personRequests.Count} will be processed.");
 			if (!personRequests.IsNullOrEmpty())
 				_multiAbsenceRequestsUpdater.UpdateAbsenceRequest(personRequests);
 
@@ -119,14 +119,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					if (personRequestSpecification.IsSatisfiedBy(personRequest))
 					{
 						string warning = $"No person request found with the supplied Id or the request is not in pending status mode. (Id = {personRequest.Id})";
-						_feedback.SendProgress?.Invoke(warning);
+						_feedback.SendProgress(warning);
 						logger.Warn(warning);
 					}
 					else if (absenceRequestSpecification.IsSatisfiedBy((IAbsenceRequest) personRequest.Request))
 					{
 						string warning = $"The found person request is not of type absence request. (Id = {personRequest.Id})";
 						logger.Warn(warning);
-						_feedback.SendProgress?.Invoke(warning);
+						_feedback.SendProgress(warning);
 					}
 					else
 					{
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					DateTimePeriod period = new DateTimePeriod(min.Utc(), max.Utc());
 					var waitListIds = _personRequestRepository.GetWaitlistRequests(period).ToList();
 					requests.AddRange(_personRequestRepository.Find(waitListIds));
-					_feedback.SendProgress?.Invoke($"Picked up {waitListIds.Count} waitlisted requests in period {period}.");
+					_feedback.SendProgress($"Picked up {waitListIds.Count} waitlisted requests in period {period}.");
 				}
 
 				//preload some data
