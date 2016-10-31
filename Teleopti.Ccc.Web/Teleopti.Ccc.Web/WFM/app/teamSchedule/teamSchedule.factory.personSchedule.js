@@ -37,11 +37,23 @@
 			return personActivities.length;
 		};
 
+		function getProjectionTimeRange(schedule) {
+			
+			if (!schedule.Projection || schedule.Projection.length == 0) {
+				return null;
+			}
+			
+			return {
+				Start:  schedule.Projection[0].Start,
+				End: schedule.Projection[schedule.Projection.length - 1].End
+			};
+		}
+
 		function create(schedule, timeLine) {
 			if (!schedule) schedule = {};
 			var projectionVms = createProjections(schedule.Projection, timeLine);
 			var dayOffVm = createDayOffViewModel(schedule.DayOff, timeLine);
-
+			
 			var personSchedule = {
 				PersonId: schedule.PersonId,
 				Name: schedule.Name,
@@ -51,6 +63,7 @@
 					{
 						Date: schedule.Date,
 						Projections: projectionVms,
+						ProjectionTimeRange: getProjectionTimeRange(schedule), 
 						AbsenceCount: getPersonAbsencesCount,
 						ActivityCount: getPersonActivitiesCount
 					}
@@ -252,6 +265,7 @@
 				this.Shifts.push({
 					Date: otherSchedule.Date,
 					Projections: otherProjections,
+					ProjectionTimeRange: getProjectionTimeRange(otherSchedule),
 					AbsenceCount: getPersonAbsencesCount,
 					ActivityCount: getPersonActivitiesCount
 				});

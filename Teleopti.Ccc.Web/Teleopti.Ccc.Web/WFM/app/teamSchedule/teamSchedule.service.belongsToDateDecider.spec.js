@@ -277,6 +277,7 @@
 			{
 				Date: '2016-07-01',
 				Projections: [],
+				ProjectionTimeRange: null
 			},
 			{
 				Date: '2016-07-02',
@@ -285,7 +286,11 @@
 					Start: '2016-07-02 08:00',
 					End: '2016-07-02 17:00',
 					Minutes: 540
-				}]
+				}],
+				ProjectionTimeRange: {
+					Start: '2016-07-02 08:00',
+					End: '2016-07-02 17:00'
+				}
 			}]
 		};
 

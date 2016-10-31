@@ -174,7 +174,8 @@
 									 || toggleSvc.WfmTeamSchedule_ShowDayOffWarning_39801
 									 || toggleSvc.WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
 
-				ViewScheduleOnTimezoneEnabled: toggleSvc.WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925
+				ViewScheduleOnTimezoneEnabled: toggleSvc.WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925,
+				ManageScheduleForDistantTimezonesEnabled: toggleSvc.WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305
 			};
 		};
 

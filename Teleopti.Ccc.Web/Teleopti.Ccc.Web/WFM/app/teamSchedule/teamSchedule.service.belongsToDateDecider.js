@@ -13,10 +13,7 @@
 		self.normalizePersonScheduleVm = normalizePersonScheduleVm;
 
 
-		function decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray, currentDate) {
-			console.log('targetTimeRange', targetTimeRange, 'normalizedScheduleDataArray', normalizedScheduleDataArray, 'currentDate', currentDate);
-
-
+		function decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray, currentDate) {		
 
 			var intersectedShiftDays = normalizedScheduleDataArray.filter(function(day) {
 				return day.shiftRange && timeRangeIntersect(day.shiftRange, targetTimeRange);
@@ -60,12 +57,11 @@
 
 			if (personScheduleVm.Shifts && personScheduleVm.Shifts.length > 0) {
 				angular.forEach(personScheduleVm.Shifts, function (shift) {
-					if (shift.Projections.length === 0) {
+					if (!shift.ProjectionTimeRange) {
 						return;
 					}
-					var shiftStart = moment(shift.Projections[0].Start);
-					var shiftEnd = moment(shift.Projections[shift.Projections.length - 1].Start)
-						.add(shift.Projections[shift.Projections.length - 1].Minutes, 'minute');
+					var shiftStart = moment(shift.ProjectionTimeRange.Start);
+					var shiftEnd = moment(shift.ProjectionTimeRange.End);
 					var index = dates.indexOf(shift.Date);
 					result[index].shiftRange = {
 						startTime: shiftStart,

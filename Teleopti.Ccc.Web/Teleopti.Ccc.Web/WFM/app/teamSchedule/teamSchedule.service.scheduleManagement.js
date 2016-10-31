@@ -9,6 +9,16 @@
 			svc.rawSchedules = [];
 			svc.groupScheduleVm = {};
 
+			svc.findPersonScheduleVmForPersonId = findPersonScheduleVmForPersonId;
+
+			function findPersonScheduleVmForPersonId(personId) {
+				var result = svc.groupScheduleVm.Schedules.filter(function(vm) {
+					return vm.PersonId === personId;
+				});
+				if (result.length === 0) return null;
+				return result[0];
+			}
+
 			function convertScheduleToTimezone(schedule, timezone) {
 
 				if ((!timezone) || (timezone === CurrentUserInfo.CurrentUserInfo().DefaultTimeZone)) return schedule;
@@ -52,19 +62,13 @@
 				var scheduleDateStr = scheduleDateMoment.format('YYYY-MM-DD');
 				teamScheduleSvc.getSchedules(scheduleDateStr, personIdList).then(function(result) {
 
-					angular.forEach(result.Schedules, function(schedule) {
-						var personId = schedule.PersonId;
-
-						if (schedule.Date === scheduleDateStr) {
-							for (var i = 0; i < svc.rawSchedules.length; i++) {
-								if (personId === svc.rawSchedules[i].PersonId && svc.rawSchedules[i].Date === scheduleDateStr) {
-									svc.rawSchedules[i] = schedule;
-									break;
-								}
+					angular.forEach(result.Schedules, function(schedule) {						
+						for (var i = 0; i < svc.rawSchedules.length; i++) {
+							if (schedule.PersonId === svc.rawSchedules[i].PersonId && svc.rawSchedules[i].Date === schedule.Date) {
+								svc.rawSchedules[i] = schedule;
+								break;
 							}
-
 						}
-
 					});
 					svc.mergeSchedules(svc.rawSchedules, scheduleDateMoment, timezone);
 					afterLoading();
