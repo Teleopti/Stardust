@@ -12,7 +12,8 @@
 		'wfm.notice',
 		'currentUserInfoService',
         'wfm.signalR',
-        'wfm.teamSchedule'
+        'wfm.teamSchedule',
+		'wfm.multiplesearchinput'
 	]);
 
 })();

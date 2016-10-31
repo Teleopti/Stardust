@@ -1351,7 +1351,6 @@
     <Content Include="Content\signalr\jquery.signalR-2.2.0.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.0.min.js" />
     <Content Include="WFM\app\global\businessunits\businessunits.controller.spec.js" />
-    <Content Include="WFM\app\people\people.keywordFormat.directive.js" />
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
     <Content Include="WFM\app\permissions\permissions.backend.fake.js" />
     <Content Include="WFM\app\permissions\refact\functionsrefact\permissions-function-tree.html" />
@@ -1449,7 +1448,6 @@
     <Content Include="WFM\app\intraday\intraday.traffic.service.js" />
     <Content Include="WFM\app\outbound\outbound.routes.js" />
     <Content Include="WFM\app\people\people.routes.js" />
-    <Content Include="WFM\app\people\people.searchInputDirective.controller.spec.js" />
     <Content Include="WFM\app\permissions\permissions.routes.js" />
     <Content Include="WFM\app\reports\html\leaderboard.html" />
     <Content Include="WFM\app\reports\images\bronze.png" />
@@ -1672,7 +1670,6 @@
     <Content Include="WFM\app\seatManagement\seatmapobjectproperty.directive.js" />
     <Content Include="WFM\app\forecasting\skill.service.js" />
     <Content Include="WFM\app\forecasting\skill.create.controller.js" />
-    <Content Include="WFM\app\people\peopleSearchInput.directive.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.controller.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.teamSchedule.js" />
     <Content Include="WFM\app\teamSchedule\html\schedule.html" />
@@ -1813,7 +1810,6 @@
     <Content Include="WFM\app\outbound\outbound.service.notification.js" />
     <Content Include="WFM\app\outbound\outbound.service.view-utility.js" />
     <Content Include="WFM\app\outbound\_modules.js" />
-    <Content Include="WFM\app\people\people.outsideClick.directive.js" />
     <Content Include="WFM\app\people\html\importPeople.html" />
     <Content Include="WFM\app\people\_modules.js" />
     <Content Include="WFM\app\permissions\data\permissions.data.html" />
@@ -1839,7 +1835,6 @@
     <Content Include="WFM\app\seatManagement\imageloadwithpreview.directive.js" />
     <Content Include="WFM\app\seatManagement\seatmapedit.controller.js" />
     <Content Include="WFM\app\seatManagement\seatmapedit.directive.js" />
-    <Content Include="WFM\app\people\html\advancedPeopleSearch.html" />
     <Content Include="WFM\app\seatManagement\seatplaninit.directive.js" />
     <Content Include="WFM\vendor\c3\c3-angular.min.js" />
     <Content Include="WFM\vendor\c3\c3.min.css" />

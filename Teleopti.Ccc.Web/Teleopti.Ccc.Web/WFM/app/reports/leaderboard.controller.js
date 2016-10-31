@@ -16,7 +16,11 @@
 
 		vm.searchOptions = {
 			keyword: '',
-			searchKeywordChanged: false
+			searchKeywordChanged: false,
+			searchFields : [
+				'FirstName', 'LastName', 'EmploymentNumber', 'Organization', 'Role', 'Contract', 'ContractSchedule', 'ShiftBag',
+				'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
+			]
 		};
 
 		vm.selectedPeriod = {
