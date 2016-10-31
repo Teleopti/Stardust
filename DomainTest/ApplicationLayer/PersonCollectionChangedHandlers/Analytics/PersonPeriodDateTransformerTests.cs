@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
 
@@ -146,5 +147,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var res = PersonPeriodTransformer.GetValidToDateIdMaxDate(validTo, maxDate, 10);
 			Assert.AreEqual(999, res);
 		}
+
+		//[Test]
+		//[Ignore("Tills person period är fixad.")]
+		//public void PersonPeriodValidToDateEternity_Transform_ShouldNotReturnMinus3AsDateId()
+		//{
+		//	var validTo = AnalyticsDate.Eternity.DateDate;
+		//	var maxDate = new AnalyticsDate
+		//	{
+		//		DateId = -2,
+		//		DateDate = validTo
+		//	};
+		//	var res = PersonPeriodTransformer.GetValidToDateIdMaxDate(validTo, maxDate, 10);
+		//	res.Should().Not.Be.EqualTo(-3);
+		//}
 	}
 }

@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		{
 			var timeZoneId = MapTimeZoneId(timeZoneInfo.Id);
 
-			var maxDate = MapMaxDate();
+			var maxDate = _analyticsDateRepository.MaxDate();
 			var minDate = _analyticsDateRepository.MinDate().DateDate;
 
 			var validFromDate = ValidFromDate(personPeriodStartDate, timeZoneInfo, minDate);
@@ -146,13 +146,13 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			analyticsPersonPeriod.EmploymentStartDate = validFromDate; // UTC tid
 			analyticsPersonPeriod.EmploymentEndDate = validToDate; // UTC tid
 
-			analyticsPersonPeriod.ValidToDateIdMaxDate = validToDateIdMaxDate;
-			analyticsPersonPeriod.ValidToIntervalIdMaxDate = validToIntervalIdMaxDate;
+			analyticsPersonPeriod.ValidToDateIdMaxDate = validToDateIdMaxDate; // Always a real date
+			analyticsPersonPeriod.ValidToIntervalIdMaxDate = validToIntervalIdMaxDate; // Always a real date
 
-			analyticsPersonPeriod.ValidFromDateIdLocal = validFromDateIdLocal;
-			analyticsPersonPeriod.ValidToDateIdLocal = validToDateIdLocal;
-			analyticsPersonPeriod.ValidFromDateLocal = validFromDateLocal;
-			analyticsPersonPeriod.ValidToDateLocal = validToDateLocal;
+			analyticsPersonPeriod.ValidFromDateIdLocal = validFromDateIdLocal; // Always a real date
+			analyticsPersonPeriod.ValidToDateIdLocal = validToDateIdLocal; // Always a real date
+			analyticsPersonPeriod.ValidFromDateLocal = validFromDateLocal; // Always a real date
+			analyticsPersonPeriod.ValidToDateLocal = validToDateLocal; // Always a real date
 
 			return analyticsPersonPeriod;
 		}
@@ -225,11 +225,6 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		{
 			var analyticsDate = _analyticsDateRepository.Date(date);
 			return analyticsDate?.DateId ?? AnalyticsDate.NotDefined.DateId;
-		}
-
-		public IAnalyticsDate MapMaxDate()
-		{
-			return _analyticsDateRepository.MaxDate();
 		}
 
 		public int? MapTimeZoneId(string timeZoneCode)
