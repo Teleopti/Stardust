@@ -203,6 +203,7 @@
     <Compile Include="ApplicationLayer\Events\CommonNameDescriptionChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\TenantDayTickEvent.cs" />
     <Compile Include="ApplicationLayer\GlobalSettingData\AnalyticsPersonNameUpdater.cs" />
+    <Compile Include="ApplicationLayer\Events\UpdateStaffingLevelReadModelEvent.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsScheduleMatchingPerson.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateTracer.cs" />
     <Compile Include="ApplicationLayer\Events\InitialLoadScheduleProjectionEvent.cs" />

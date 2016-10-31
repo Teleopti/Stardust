@@ -3,6 +3,7 @@ using System.Threading;
 using Autofac;
 using Stardust.Node.Interfaces;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Interfaces.Infrastructure;
 

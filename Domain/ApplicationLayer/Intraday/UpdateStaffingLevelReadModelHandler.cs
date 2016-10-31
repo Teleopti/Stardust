@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.Aop;
+﻿using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
@@ -33,11 +32,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 			if (current.IsDirty())
 				current.Clear();
 		}
-	}
-
-	public class UpdateStaffingLevelReadModelEvent : EventWithInfrastructureContext
-	{
-		public DateTime EndDateTime { get; set; }
-		public DateTime StartDateTime { get; set; }
 	}
 }
