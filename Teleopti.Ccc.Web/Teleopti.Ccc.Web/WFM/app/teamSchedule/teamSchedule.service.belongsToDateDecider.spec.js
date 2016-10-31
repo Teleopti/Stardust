@@ -1,4 +1,4 @@
-﻿describe('belongs to date decider service tests', function() {
+﻿describe ('belongs to date decider service tests', function() {
 
 	var target;
 

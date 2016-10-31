@@ -5,8 +5,8 @@
 		.module('wfm.skillPrio')
 		.controller('skillPrioController', skillPrioController);
 
-	skillPrioController.$inject = ['$filter', 'Toggle', 'NoticeService', '$translate', '$q', 'skillPrioAggregator', 'skillPrioService'];
-	function skillPrioController($filter, toggleService, NoticeService, $translate, $q, skillPrioAggregator, skillPrioService) {
+	skillPrioController.$inject = ['$scope', '$filter', 'Toggle', 'NoticeService', '$translate', '$q', 'skillPrioAggregator', 'skillPrioService'];
+	function skillPrioController($scope, $filter, toggleService, NoticeService, $translate, $q, skillPrioAggregator, skillPrioService) {
 		var vm = this;
 		vm.selectActivity = selectActivity;
 		vm.activites = skillPrioService.getAdminSkillRoutingActivity.query();
@@ -44,6 +44,7 @@
 		}
 
 		function selectActivity(activity) {
+			console.log("selectActivity")
 			if (!selectActivityPreCheck(activity)) return;
 			vm.selectedActivity = activity;
 			var allActivitySkills = vm.skills.filter(belongsToActivity);
@@ -64,7 +65,7 @@
 
 		function unflattendDataFromServer(data) {
 			var nonFlatData = [];
-				data.sort(sortBySkillName);
+			data.sort(sortBySkillName);
 			data.forEach(function (skill) {
 				skill.sibling = []
 				if (nonFlatData.some(function (e) {
@@ -73,6 +74,7 @@
 					var parent = nonFlatData.find(function (e) {
 						return e.Priority == skill.Priority
 					})
+					skill.hasParent = true;
 					parent.sibling.push(skill);
 				} else {
 					nonFlatData.push(skill);
@@ -100,11 +102,14 @@
 		function skillPreChecks(skill, priority) {
 			if (!skill.Priority) {
 				skill.Priority = priority
+			} else {
+				priority = skill.Priority;
 			};
 			if (!skill.sibling) {
 				skill.sibling = []
 			};
-			if (isDuplicatePriority(priority)) {
+			if (isDuplicatePriority(skill, priority)) {
+				console.log('has parent');
 				skill.hasParent = true;
 			} else {
 				skill.hasParent = false;
@@ -112,11 +117,11 @@
 			return skill
 		}
 
-		function isDuplicatePriority(priority) {
+		function isDuplicatePriority(skill, priority) {
 			if (!priority) return;
 			var isDuplicate;
-			vm.prioritizedSkills.forEach(function (skill) {
-				if (skill.Priority === priority) {
+			vm.prioritizedSkills.forEach(function (item) {
+				if (skill !== item && item.Priority === priority) {
 					isDuplicate = true;
 				}
 			})
@@ -124,7 +129,7 @@
 		}
 
 		function findSkill(element) {
-			return element.Priority === this.Priority
+			return this !== element && element.Priority === this.Priority
 		}
 
 		function findDuplicateSkill(skill) {
@@ -138,37 +143,72 @@
 				var parentSkill = findDuplicateSkill(skill);
 				parentSkill.sibling.push(skill);
 			} else {
-				vm.prioritizedSkills.push(skill);
+				var exists = vm.prioritizedSkills.some(function (item) {
+					return item.SkillGuid === skill.SkillGuid;
+				})
+				if (!exists) {
+					vm.prioritizedSkills.push(skill);
+				}
 			}
 			removeFromActivitySkills(skill)
 		}
 
 		function removeSkill(arr, skill) {
-			arr.splice(arr.indexOf(skill), 1);
+			var found = arr.findIndex(function (item) {
+				return item.SkillGuid === skill.SkillGuid;
+			});
+			console.log(found);
+			if (found !== -1)
+				arr.splice(found, 1);
 		};
 
 		function sanitizeSkill(skill) {
 			skill.hasParent = false;
 			skill.Priority = null;
+			skill.sibling = [];
 			skill.showAutoCompleteBottom = false;
 			skill.showAutoCompleteMiddle = false;
 			skill.showAutoCompleteTop = false;
 			return skill;
 		}
 
+
+
 		function removeFromPrioritized(skill) {
+			console.log(skill);
+			var skillRepository = [];
 			if (skill.hasParent) {
 				var parentSkill = findDuplicateSkill(skill);
-				prioritizeSkill(parentSkill)
+				parentSkill.sibling = parentSkill.sibling.filter(function (sib) {
+					return sib.SkillGuid != skill.SkillGuid;
+				});
+				//prioritizeSkill(parentSkill, skill.Priority)
+				skillRepository.push(parentSkill);
 			}
-			vm.activitySkills.push(skill);
-			sanitizeSkill(skill);
-			removeSkill(vm.prioritizedSkills, skill)
-
+			if (skill.sibling.length > 0) {
+				skill.sibling.forEach(function (sib) {
+					// prioritizeSkill(sib, skill.Priority);
+					skillRepository.push(sib);
+				})
+			}
+			var sanatizedSkill = sanitizeSkill(skill);
+			addToActivitySkills(sanatizedSkill)
+			removeSkill(vm.prioritizedSkills, sanatizedSkill)
+			skillRepository.forEach(function (remainingSkill) {
+				prioritizeSkill(remainingSkill);
+			})
 		}
 
 		function removeFromActivitySkills(skill) {
+			console.log("removeFromActivitySkills")
 			removeSkill(vm.activitySkills, skill)
+		}
+		function addToActivitySkills(skill) {
+			console.log(skill)
+			console.log(vm.activitySkills)
+			vm.activitySkills = vm.activitySkills.concat(skill);
+			vm.activitySkills.sort(sortBySkillName);
+			return;
 		}
 
 		function querySkills(query) {
