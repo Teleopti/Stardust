@@ -194,12 +194,10 @@
 
 		var activityData = fakeActivityService.getAddActivityCalledWith();
 		expect(activityData).not.toBeNull();
-		expect(activityData.PersonIds.length).toEqual(vm.selectedAgents.length);
+		expect(activityData.PersonDates.length).toEqual(vm.selectedAgents.length);
 		expect(activityData.ActivityId).toEqual(vm.selectedActivityId);
 		expect(moment(activityData.StartTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.startTime).add(8, 'hours').format('YYYY-MM-DDTHH:mm:00'));
-		expect(moment(activityData.EndTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.endTime).add(8, 'hours').format('YYYY-MM-DDTHH:mm:00'));
-		expect(activityData.Dates.length).toEqual(activityData.PersonIds.length);
-		expect(activityData.Dates[0]).toEqual(vm.selectedDate());
+		expect(moment(activityData.EndTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.endTime).add(8, 'hours').format('YYYY-MM-DDTHH:mm:00'));		
 		expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
 	});
 

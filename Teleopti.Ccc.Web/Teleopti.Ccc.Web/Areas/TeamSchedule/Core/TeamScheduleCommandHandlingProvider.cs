@@ -92,10 +92,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			};
 
 			var result = new List<ActionResult>();
-			for(var i = 0;i < input.PersonIds.Length;i++)
+			foreach(var personDate in input.PersonDates)
 			{
-				var personId = input.PersonIds[i];
-				var date = input.Dates[i];
+				var personId = personDate.PersonId;
+				var date = personDate.Date;
 
 				var actionResult = new ActionResult();
 				var person = _personRepository.Get(personId);

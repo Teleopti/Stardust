@@ -51,7 +51,7 @@
 
 		function addPersonalActivity(input) {
 			var deferred = $q.defer();
-			$http.post(addPersonalActivityUrl, normalizeInput(input)).then(function (data) {
+			$http.post(addPersonalActivityUrl, input).then(function (data) {
 				deferred.resolve(data);
 			}, function (error) {
 				deferred.reject(error);
