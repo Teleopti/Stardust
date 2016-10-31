@@ -2,7 +2,7 @@
 	'use strict';
 	angular
 	.module('adminAppHttp', [])
-	.factory('httpInterceptor', function($q) {
+	.factory('httpInterceptor', function ($q) {
 
 		return {
 			// optional method

@@ -84,6 +84,7 @@
 					templateUrl: 'HangfireDashboard.html',
 					//controller: 'hangfireController'
 				});
+
 			$httpProvider.interceptors.push('httpInterceptor');
 		});
 })();

@@ -1,8 +1,9 @@
 (function () {
 	'use strict';
+
 	angular
 		.module('adminApp')
-		.controller('loginController', loginController, ['$scope', '$http', '$window', '$cookies', loginController])
+		.controller('loginController', loginController, ['$scope', '$http', '$window', '$cookies','$rootScope'])
 		.directive('menuItem', function () {
 			return {
 				scope: {
@@ -29,12 +30,14 @@
 			};
 		});
 
-	function loginController($scope, $http, $cookies) {
+	function loginController($scope, $http, $cookies, $rootScope) {
 		var tokenKey = 'accessToken';
 		var userKey = 'userToken';
 		var emailKey = 'lastEmail';
 		var idKey = 'idToken';
 		var firstUser = false;
+
+		//checked if has cookie
 		var cookie = $cookies.getObject('WfmAdminAuth');
 		var token = cookie ? cookie.tokenKey : null;
 
@@ -44,9 +47,6 @@
 		vm.Message = '';
 		vm.Id = cookie ? cookie.idKey : null;
 		vm.user = cookie ? cookie.userKey : null;
-
-
-
 
 		$scope.state = {
 			selected: 1
@@ -61,7 +61,8 @@
 			text: "Hangfire Dashboard",
 			link: "#/HangfireDashboard"
 		}];
-		$scope.message = "något som jag vill visa"; //?
+		$scope.message = "något som jag vill visa"; 
+
 		$http.get("./HasNoUser").success(function (data) {
 			firstUser = data;
 			if (firstUser) {
@@ -86,6 +87,37 @@
 			vm.Message = jqXHR.Message + ': ' + jqXHR.ExceptionMessage;
 		}
 
+		function createCookies(data) {
+			vm.user = data.userName;
+			vm.Id = data.Id;
+			vm.Message = 'Successful log in...';
+			// Cache the username token in session storage.
+			sessionStorage.setItem(emailKey, vm.loginEmail);
+			//lets do authentication in cookie
+			var today = new Date();
+			var expireDate = new Date(today.getTime() + 30 * 60000);
+			$cookies.putObject('WfmAdminAuth', { 'tokenKey': data.AccessToken, 'userKey': data.UserName, 'idKey': data.Id }, { 'expires': expireDate });
+		}
+
+		updateCookies();
+
+		function updateCookies() {
+			//catch route chnaged : console.log("location changing to:" + next);
+			$rootScope.$on("$locationChangeStart", function(event, next, current) {
+				//check cookies
+				var checkedCookie = $cookies.getObject('WfmAdminAuth');
+				if (!checkedCookie) {
+					return;
+				} else {
+					//update cookies
+					var info = $cookies.getObject('WfmAdminAuth');
+					var today = new Date();
+					var newExpireDate = new Date(today.getTime() + 30 * 60000);
+					$cookies.putObject('WfmAdminAuth', info, { 'expires': newExpireDate });
+				}
+			});
+		}
+
 		vm.login = function () {
 			vm.Id = 0;
 			$("#modal-login").toggleClass("wait");
@@ -104,19 +136,13 @@
 					//alert(data.Message);
 					vm.Message = data.Message;
 					return;
+				} else {
+					createCookies(data);
+					document.location = "#/";
+					location.reload();
+					//$('#modal-login').dialog('close');
 				}
-				vm.user = data.userName;
-				vm.Id = data.Id;
-				vm.Message = 'Successful log in...';
-				// Cache the username token in session storage.
-				sessionStorage.setItem(emailKey, vm.loginEmail);
-				//lets do authentication in cookie
-				var today = new Date();
-				var expireDate = new Date(today.getTime() + 30 * 60000);
-				$cookies.putObject('WfmAdminAuth', { 'tokenKey': data.AccessToken, 'userKey': data.UserName, 'idKey': data.Id }, {});
-				document.location = "#/";
-				location.reload();
-				$('#modal-login').dialog('close');
+
 			}).error(showError);
 		};
 
