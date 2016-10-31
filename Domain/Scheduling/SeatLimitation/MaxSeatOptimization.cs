@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly RestrictionOverLimitValidator _restrictionOverLimitValidator;
 		private readonly IMatrixListFactory _matrixListFactory;
-		private readonly IUsedSeats _usedSeats;
+		private readonly MaxSeatPeak _maxSeatPeak;
 
 		public MaxSeatOptimization(MaxSeatSkillDataFactory maxSeatSkillDataFactory,
 														CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 														ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 														RestrictionOverLimitValidator restrictionOverLimitValidator,
 														IMatrixListFactory matrixListFactory,
-														IUsedSeats usedSeats)
+														MaxSeatPeak maxSeatPeak)
 		{
 			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
 			_matrixListFactory = matrixListFactory;
-			_usedSeats = usedSeats;
+			_maxSeatPeak = maxSeatPeak;
 		}
 
 		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IScenario scenario, IOptimizationPreferences optimizationPreferences)
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					{
 						var firstSelectedDay = period.DayCollection().First();
 						var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
-						var maxPeakBefore = maxSeatPeak(datePoint, teamBlockInfo, maxSeatData.AllMaxSeatSkillDaysPerSkill());
+						var maxPeakBefore = _maxSeatPeak.Fetch(datePoint, teamBlockInfo, maxSeatData.AllMaxSeatSkillDaysPerSkill());
 
 						if (Math.Abs(maxPeakBefore) < 0.0001)
 						{
@@ -93,32 +93,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 							continue;
 						}
 
-						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules); //TODO: check if this is enough
+						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules); //TODO: fix - dont do this
 
 						if (!_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo, datePoint,
 								schedulingOptions,
 								rollbackService,
 								new DoNothingResourceCalculateDelayer(), maxSeatData.AllMaxSeatSkillDaysPerSkill().ToSkillDayEnumerable(),
-								schedules, new ShiftNudgeDirective(), businessRules))
+								schedules, new ShiftNudgeDirective(), businessRules) ||
+								!_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences) ||
+								!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) ||
+								_maxSeatPeak.Fetch(datePoint, teamBlockInfo, maxSeatData.AllMaxSeatSkillDaysPerSkill()) > maxPeakBefore)
 						{
-							rollbackService.RollbackMinimumChecks(); //förmodligen fel - rullar tillbaka allt	
-						}
-
-						if (!_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences))
-						{
-							//kolla om vi ska ändra "gamla" rollback istället
-							rollbackService.RollbackMinimumChecks(); //förmodligen fel - rullar tillbaka allt	
-						}
-
-						if (!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences)) //kolla null
-						{
-							//kolla om vi ska ändra "gamla" rollback istället
-							rollbackService.RollbackMinimumChecks(); //förmodligen fel - rullar tillbaka allt
-						}
-
-						if (maxSeatPeak(datePoint, teamBlockInfo, maxSeatData.AllMaxSeatSkillDaysPerSkill()) > maxPeakBefore) //check in shift value calc instead and return null there
-						{
-							//kolla om vi ska ändra "gamla" rollback istället
 							rollbackService.RollbackMinimumChecks(); //förmodligen fel - rullar tillbaka allt
 						}
 
@@ -126,23 +111,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					}
 				}
 			}
-		}
-
-
-		//TODO: move to seperate class
-		private double maxSeatPeak(DateOnly date, ITeamBlockInfo teamBlockInfo, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)
-		{
-			//TODO: Will only work for business hierarchy
-			var maxSeatSkill = teamBlockInfo.TeamInfo.GroupMembers.First().Period(date).Team.Site.MaxSeatSkill;
-			var retValue = 0d;
-			foreach (var skillDay in skillDays[maxSeatSkill])
-			{
-				foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
-				{
-					retValue = Math.Max(retValue, _usedSeats.Fetch(skillStaffPeriod) - skillStaffPeriod.Payload.MaxSeats);
-				}
-			}
-			return retValue;
 		}
 	}
 }

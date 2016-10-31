@@ -515,6 +515,7 @@
     <Compile Include="Scheduling\SeatLimitation\IInitMaxSeatForStateHolder.cs" />
     <Compile Include="Scheduling\SeatLimitation\InitMaxSeatForStateHolder.cs" />
     <Compile Include="Scheduling\SeatLimitation\InitMaxSeatForStateHolderOld.cs" />
+    <Compile Include="Scheduling\SeatLimitation\MaxSeatPeak.cs" />
     <Compile Include="Scheduling\SeatLimitation\MaxSeatSkillData.cs" />
     <Compile Include="Scheduling\SeatLimitation\MaxSeatSkillDataFactory.cs" />
     <Compile Include="Scheduling\SeatLimitation\SkillsFromMaxSeatSite.cs" />

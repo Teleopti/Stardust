@@ -71,6 +71,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<MaxSeatOptimization>().SingleInstance();
+			builder.RegisterType<MaxSeatPeak>().SingleInstance();
 			builder.RegisterType<SkillRoutingPriorityModel>().SingleInstance();
 			builder.RegisterType<SkillRoutingPriorityPersister>().SingleInstance();
 
