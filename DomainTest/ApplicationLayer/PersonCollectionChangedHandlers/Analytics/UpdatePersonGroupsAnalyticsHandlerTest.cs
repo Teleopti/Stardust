@@ -107,13 +107,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			return ruleSetBag;
 		}
 
-		private static IGroupPage createPersonGroup(out RootPersonGroup rootPersonGroup)
+		private static IGroupPage createPersonGroup(out RootPersonGroup rootPersonGroup, IPerson person)
 		{
 			var groupPage = new GroupPage("CustomGroup");
 			groupPage.SetId(Guid.NewGuid());
 			rootPersonGroup = new RootPersonGroup("CustomRootGroup");
 			rootPersonGroup.SetId(Guid.NewGuid());
 			groupPage.AddRootPersonGroup(rootPersonGroup);
+			rootPersonGroup.AddPerson(person);
 			return groupPage;
 		}
 
@@ -521,7 +522,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var @event = new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId };
 			@event.SetPersonIdCollection(new[] { _person.Id.GetValueOrDefault() });
 			RootPersonGroup rootPersonGroup;
-			var groupPage = createPersonGroup(out rootPersonGroup);
+			var groupPage = createPersonGroup(out rootPersonGroup, _person);
 
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase(_businessUnitId))
 				.Return(new AnalyticsGroupPage[] { });
@@ -557,7 +558,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			@event.SetPersonIdCollection(new[] { _person.Id.GetValueOrDefault() });
 
 			RootPersonGroup rootPersonGroup;
-			var groupPage = createPersonGroup(out rootPersonGroup);
+			var groupPage = createPersonGroup(out rootPersonGroup, _person);
 
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase(_businessUnitId))
 				.Return(new AnalyticsGroupPage[] { });
