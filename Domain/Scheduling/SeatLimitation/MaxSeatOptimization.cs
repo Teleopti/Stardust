@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 							rollbackService.RollbackMinimumChecks(); //förmodligen fel - rullar tillbaka allt
 						}
 
-						if (maxSeatPeak(datePoint, teamBlockInfo, maxSeatData.AllMaxSeatSkillDaysPerSkill()) > maxPeakBefore)
+						if (maxSeatPeak(datePoint, teamBlockInfo, maxSeatData.AllMaxSeatSkillDaysPerSkill()) > maxPeakBefore) //check in shift value calc instead and return null there
 						{
 							//kolla om vi ska ändra "gamla" rollback istället
 							rollbackService.RollbackMinimumChecks(); //förmodligen fel - rullar tillbaka allt
