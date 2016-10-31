@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
@@ -15,7 +16,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		private readonly IList<IPerson> _permittedPeople;
 		private readonly IList<IPerson> _peopleWithConfidentialAbsencePermission;
 		private readonly IDictionary<DateOnly, IList<IPerson>> _permittedPeopleByDate;
-		private bool _enableDateFilter;		
+		private bool _enableDateFilter;
+		private readonly IDictionary<IPerson, string> _personApplicationRoleDictionary;
+
+		const string quotePattern = "(?!\")[^\"]*?(?=\")";
 
 		public FakePeopleSearchProvider(IEnumerable<IPerson> peopleList,IEnumerable<IOptionalColumn> optionalColumns)
 		{
@@ -27,6 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 				People = peopleList.ToList(),
 				OptionalColumns = optionalColumns.ToList()
 			};
+			_personApplicationRoleDictionary = new Dictionary<IPerson, string>();
 		}
 
 		public void EnableDateFilter()
@@ -48,9 +53,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			{
 				return !_permittedPeopleByDate.ContainsKey(dateInUserTimeZone) ? new List<IPerson>() : _permittedPeopleByDate[dateInUserTimeZone].ToList();
 			}
-			return function == DefinedRaptorApplicationFunctionPaths.ViewConfidential
+			var people = function == DefinedRaptorApplicationFunctionPaths.ViewConfidential
 				? _peopleWithConfidentialAbsencePermission
 				: _permittedPeople;
+
+			if (criteriaDictionary.ContainsKey(PersonFinderField.Role))
+			{
+				var roleName = criteriaDictionary[PersonFinderField.Role];
+				roleName = Regex.Match(roleName, quotePattern).Value;
+				people =
+					people.Where(
+						p => _personApplicationRoleDictionary.ContainsKey(p) && _personApplicationRoleDictionary[p] == roleName).ToList();
+			}
+
+			return people;
 		}
 
 		public IEnumerable<IPerson> SearchPermittedPeople(PersonFinderSearchCriteria searchCriteria,
@@ -146,9 +162,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			};
 		}
 
-		public void Add(IPerson person)
+		public void Add(IPerson person, string roleDescription = null)
 		{
 			_permittedPeople.Add(person);
+			if (roleDescription != null)
+			{
+				_personApplicationRoleDictionary.Add(person, roleDescription);
+			}
 		}
 
 		public void Add(DateOnly date, IPerson person)

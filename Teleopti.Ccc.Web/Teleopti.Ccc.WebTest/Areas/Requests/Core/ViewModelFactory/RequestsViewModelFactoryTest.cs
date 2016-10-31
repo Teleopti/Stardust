@@ -9,12 +9,16 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
@@ -27,7 +31,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 {
 	[TestFixture, RequestsTest]
-	public class RequestsViewModelFactoryTest
+	public class RequestsViewModelFactoryTest : ISetup
 	{
 		public IRequestsViewModelFactory Target;
 		public IPersonRequestRepository PersonRequestRepository;
@@ -36,9 +40,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public IPersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 		public IToggleManager ToggleManager;
 		public IUserCulture UserCulture;
+		public IApplicationRoleRepository ApplicationRoleRepository;
 
 		private List<IPerson> people;
 		private readonly IAbsence absence = AbsenceFactory.CreateAbsence("absence1").WithId();
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
+		}
 
 		[Test]
 		public void ShouldGetRequests()
@@ -177,6 +187,31 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var result = Target.CreateRequestListViewModel(input);
 			result.Requests.Count().Should().Be.EqualTo(3);
 			result.TotalCount.Should().Be.EqualTo(3);
+		}
+
+		[Test]
+		public void ShouldGetRequestsByRoleDescription()
+		{
+			var roleDescription = "my role";
+			var requests = setUpRequests().ToList();
+			var fakePeopleSearchProvider = (FakePeopleSearchProvider) PeopleSearchProvider;
+			fakePeopleSearchProvider.Add(requests[0].Person, roleDescription);
+			fakePeopleSearchProvider.Add(requests[1].Person);
+			fakePeopleSearchProvider.Add(requests[2].Person);
+
+			ApplicationRoleRepository.Add(new ApplicationRole { DescriptionText = roleDescription });
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 1),
+				EndDate = new DateOnly(2015, 10, 9),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
+			};
+			input.AgentSearchTerm.Add(PersonFinderField.Role, roleDescription);
+
+			var result = Target.CreateRequestListViewModel(input);
+			result.Requests.Count().Should().Be.EqualTo(1);
+			result.TotalCount.Should().Be.EqualTo(1);
 		}
 
 		[Test]

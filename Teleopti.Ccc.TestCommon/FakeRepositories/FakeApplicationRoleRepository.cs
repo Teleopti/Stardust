@@ -57,5 +57,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _roles.Where(x => x.DescriptionText.ToLower().Contains(name.ToLower())).ToList();
 		}
+
+		public bool ExistsRoleWithDescription(string description)
+		{
+			return _roles.Any(x => x.DescriptionText.ToLower().Equals(description));
+		}
 	}
 }

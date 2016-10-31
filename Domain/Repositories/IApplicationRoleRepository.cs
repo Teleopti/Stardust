@@ -19,5 +19,8 @@ namespace Teleopti.Ccc.Domain.Repositories
         IList<IApplicationRole> LoadAllApplicationRolesSortedByName();
 
 	    IList<IApplicationRole> LoadAllRolesByDescription(string name);
+
+	    bool ExistsRoleWithDescription(string description);
+
     }
 }

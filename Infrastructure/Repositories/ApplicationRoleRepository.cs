@@ -64,5 +64,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			 return appRoles;
 	    }
+
+	    public bool ExistsRoleWithDescription(string description)
+	    {
+		    var criteria = Session.CreateCriteria(typeof(ApplicationRole));
+		    criteria.Add(Restrictions.Eq(Projections.Property<ApplicationRole>(a => a.DescriptionText), description));
+		    criteria.SetProjection(Projections.RowCount());
+		    return criteria.UniqueResult<int>() > 0;
+	    }
     }
 }
