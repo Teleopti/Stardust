@@ -178,6 +178,7 @@
     <Compile Include="CommandHandler\SetPersonAccountForPersonCommandHandler.cs" />
     <Compile Include="CommandHandler\SetPersonOptionalValuesForPersonCommandHandler.cs" />
     <Compile Include="CommandHandler\SetSchedulePeriodWorktimeOverrideCommandHandler.cs" />
+    <Compile Include="CollectionExtensions.cs" />
     <Compile Include="IServiceLevelCalculator.cs" />
     <Compile Include="IPayrollResultFactory.cs" />
     <Compile Include="IPersistPersonRequest.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="Payroll\PayrollFormatHandler.cs" />
     <Compile Include="Payroll\PayrollResultService.cs" />
     <Compile Include="QueryHandler\DateOnlyDtoExtensions.cs" />
+    <Compile Include="QueryHandler\FindExternalLogOnQueryHandler.cs" />
     <Compile Include="QueryHandler\GetAllPersonPeriodsQueryHandler.cs" />
     <Compile Include="QueryHandler\GetAllRolesQueryHandler.cs" />
     <Compile Include="QueryHandler\GetAllScheduleTagsQueryHandler.cs" />

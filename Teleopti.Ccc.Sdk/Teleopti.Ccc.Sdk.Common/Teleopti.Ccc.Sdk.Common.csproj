@@ -182,6 +182,7 @@
     <Compile Include="DataTransferObject\PersonPeriodLoadOptionDto.cs" />
     <Compile Include="DataTransferObject\PersonSkillPeriodDto.cs" />
     <Compile Include="DataTransferObject\PublicNoteDto.cs" />
+    <Compile Include="DataTransferObject\QueryDtos\FindExternalLogOnQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAllPersonPeriodsQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAllRolesQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAllScheduleTagsDto.cs" />

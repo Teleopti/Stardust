@@ -1623,6 +1623,12 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return ExecuteCommand(revokePersonRoleCommandDto);
 		}
 
+		public ICollection<ExternalLogOnDto> FindExternalLogOn(FindExternalLogOnQueryDto queryDto)
+		{
+			var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<ExternalLogOnDto>>>();
+			return invoker.Invoke(queryDto);
+		}
+
 		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public CommandResultDto ExecuteCommand(CommandDto commandDto)
 		{

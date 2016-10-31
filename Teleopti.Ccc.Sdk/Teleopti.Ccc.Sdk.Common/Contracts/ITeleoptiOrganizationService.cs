@@ -370,5 +370,13 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// <returns></returns>
 		[OperationContract]
 		CommandResultDto RevokePersonRole(RevokePersonRoleCommandDto revokePersonRoleCommandDto);
-    }
+
+		/// <summary>
+		/// Find ExternalLogOns
+		/// </summary>
+		/// <param name="queryDto">A predefined query type used.</param>
+		/// <returns>ExternalLogOns.</returns>
+		[OperationContract]
+		ICollection<ExternalLogOnDto> FindExternalLogOn(FindExternalLogOnQueryDto queryDto);
+	}
 }

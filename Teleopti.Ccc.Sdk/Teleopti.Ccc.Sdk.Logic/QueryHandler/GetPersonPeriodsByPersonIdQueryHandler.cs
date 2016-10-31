@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.ServiceModel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -29,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		public ICollection<PersonPeriodDetailDto> Handle(GetPersonPeriodsByPersonIdQueryDto query)
 		{
-			verifyNotTooMuchPeople(query.PersonIdCollection);
+			query.PersonIdCollection.VerifyCountLessThan(50, "A maximum of 50 persons is allowed. You tried to load person periods for {0}.");
 			IList<PersonPeriodDetailDto> personPeriodDto2List;
 
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -49,16 +47,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 					personPeriodDto2List = _personPeriodAssembler.DomainEntitiesToDtos(personPeriods).ToList();
 				}
 			}
-
 			return personPeriodDto2List;
-		}
-
-		private static void verifyNotTooMuchPeople(ICollection<Guid> people)
-		{
-			if (people.Count > 50)
-			{
-				throw new FaultException(string.Format(System.Globalization.CultureInfo.InvariantCulture, "A maximum of 50 persons is allowed. You tried to load person periods for {0}.", people.Count));
-			}
 		}
 	}
 }

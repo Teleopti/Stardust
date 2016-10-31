@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 			if (scenario==null)
 			{
-				throw new FaultException("No default scenario or scenario with id '"+query.ScenarioId+"' was found.");
+				throw new FaultException($"No default scenario or scenario with id '{query.ScenarioId}' was found.");
 			}
 			return scenario;
 		}

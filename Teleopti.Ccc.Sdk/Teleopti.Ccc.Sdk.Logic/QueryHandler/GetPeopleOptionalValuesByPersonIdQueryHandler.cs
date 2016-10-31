@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		public ICollection<PersonOptionalValuesDto> Handle(GetPeopleOptionalValuesByPersonIdQueryDto query)
 		{
-			verifyNotTooMuchPeople(query.PersonIdCollection);
+			query.PersonIdCollection.VerifyCountLessThan(50, "A maximum of 50 persons is allowed. You tried to load optional values for {0}.");
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				using (unitOfWork.DisableFilter(QueryFilter.Deleted))
@@ -51,14 +51,6 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 					}
 					return resultList;
 				}
-			}
-		}
-
-		private static void verifyNotTooMuchPeople(ICollection<Guid> people)
-		{
-			if (people.Count > 50)
-			{
-				throw new FaultException(string.Format(System.Globalization.CultureInfo.InvariantCulture, "A maximum of 50 persons is allowed. You tried to load optional values for {0}.", people.Count));
 			}
 		}
 
