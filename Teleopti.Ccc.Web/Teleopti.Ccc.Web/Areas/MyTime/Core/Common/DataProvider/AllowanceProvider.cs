@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		public IEnumerable<IAllowanceDay> GetAllowanceForPeriod(DateOnlyPeriod period)
 		{
 			var person = _loggedOnUser.CurrentUser();
+			var userTimezone = person.PermissionInformation.DefaultTimeZone();
 
 			var allowanceList =
 				from d in period.DayCollection()
@@ -82,8 +83,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 						var openPeriod = thePeriod;
 						var allowanceFromBudgetDays =
 							from budgetDay in budgetDays
-							where openPeriod.GetPeriod(_now.LocalDateOnly()).Contains(budgetDay.Day)
-							where openPeriod.OpenForRequestsPeriod.Contains(_now.LocalDateOnly())
+							where openPeriod.GetPeriod(new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), userTimezone))).Contains(budgetDay.Day)
+							where openPeriod.OpenForRequestsPeriod.Contains(new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), userTimezone)))
 							where openPeriod.AbsenceRequestProcess.GetType() != typeof (DenyAbsenceRequest)
 							select
 								new
