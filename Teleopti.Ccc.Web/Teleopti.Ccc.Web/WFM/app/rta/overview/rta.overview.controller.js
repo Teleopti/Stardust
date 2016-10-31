@@ -40,10 +40,13 @@
 
 			$scope.displaySkillOrSkillAreaFilter = false;
 
-			toggleService.togglesLoaded.then(function() {
-				$scope.displaySkillOrSkillAreaFilter = toggleService.RTA_SiteAndTeamOnSkillOverview_40817;
-				if($scope.displaySkillOrSkillAreaFilter) {
+			var teamsBySkillsStateName = "rta.teams-by-skill";
 
+			toggleService.togglesLoaded.then(function() {
+
+				$scope.displaySkillOrSkillAreaFilter = toggleService.RTA_SiteAndTeamOnSkillOverview_40817;
+
+				if($scope.displaySkillOrSkillAreaFilter) {
 					RtaService.getSkills()
 						.then(function (skills) {
 							$scope.skillsLoaded = true;
@@ -84,13 +87,13 @@
 						$scope.selectedSkillChange = function (skill) {
 							if (!skill) return;
 								$scope.skillId = skill.Id;
-								doWhenSelecting(skill, $scope.selectedSkill, "rta.teams-by-skill", goToSitesBySkill);
+								doWhenSelecting(skill, $scope.selectedSkill, teamsBySkillsStateName, goToSitesBySkill);
 						};
 
 						$scope.selectedSkillAreaChange = function (skillArea) {
 							if (!skillArea) return
 								$scope.skillAreaId = skillArea.Id;
-								doWhenSelecting(skillArea, $scope.selectedSkillArea, "rta.teams-by-skillArea", goToSitesBySkillArea);
+								doWhenSelecting(skillArea, $scope.selectedSkillArea, teamsBySkillsStateName, goToSitesBySkillArea);
 						};
 
 						function doWhenSelecting(item, selected, teamsStateName, goToSites) {
@@ -125,38 +128,62 @@
 
 			var polling = $interval(function () {
 				if ($scope.siteId) {
-					RtaService.getAdherenceForTeamsOnSite({
-						siteId: $scope.siteId
-					}).then(function (teamAdherence) {
-						RtaAdherenceService.updateAdherence($scope.teams, teamAdherence);
+					getAdherenceForTeamsOnSite($scope.siteId)
+					.then(function (teamAdherence) {
+							updateAdherence($scope.teams, teamAdherence);
 					});
 				} else {
-					RtaService.getAdherenceForAllSites()
+					getAdherenceForAllSites()
 						.then(function (siteAdherences) {
-							RtaAdherenceService.updateAdherence($scope.sites, siteAdherences);
+							updateAdherence($scope.sites, siteAdherences);
 						});
 				}
 			}, 5000);
 
-			if ($scope.siteId) {
-				RtaService.getTeams({
-					siteId: $scope.siteId
-				}).then(function (teams) {
+			$scope.siteId ? getTeamsInfo() : getSitesInfo();
+
+			function getTeamsInfo() {
+				getTeams($scope.siteId)
+				.then(function (teams) {
 					$scope.teams = teams;
-					return RtaService.getAdherenceForTeamsOnSite({
-						siteId: $scope.siteId
-					});
+					return getAdherenceForTeamsOnSite($scope.siteId);
 				}).then(function (teamAdherence) {
-					RtaAdherenceService.updateAdherence($scope.teams, teamAdherence);
+						updateAdherence($scope.teams, teamAdherence);
 				});
-			} else {
-				RtaService.getSites().then(function (sites) {
+			};
+
+			function getSitesInfo() {
+				getSites().then(function (sites) {
 					$scope.sites = sites;
-					return RtaService.getAdherenceForAllSites();
+					return getAdherenceForAllSites();
 				}).then(function (siteAdherences) {
-					RtaAdherenceService.updateAdherence($scope.sites, siteAdherences);
+					updateAdherence($scope.sites, siteAdherences);
 				});
 			}
+
+			function getTeams(siteId) {
+				return 	RtaService.getTeams({
+						siteId: siteId
+					});
+			};
+
+			function getSites() {
+				return RtaService.getSites();
+			}
+
+			function getAdherenceForTeamsOnSite(siteId) {
+				return RtaService.getAdherenceForTeamsOnSite({
+					siteId: siteId
+				});
+			};
+
+			function getAdherenceForAllSites() {
+					return RtaService.getAdherenceForAllSites();
+			}
+
+			function updateAdherence(level, adherence) {
+					RtaAdherenceService.updateAdherence(level, adherence);
+			};
 
 			$scope.toggleSelection = function (itemId) {
 				var index = $scope.selectedItemIds.indexOf(itemId);
@@ -167,23 +194,26 @@
 				}
 			}
 
-			$scope.openSelectedTeams = function () {
+			$scope.openSelectedItems = function () {
 				if ($scope.selectedItemIds.length > 0)
-					$state.go('rta.agents-teams', { teamIds: $scope.selectedItemIds });
-			}
+					goToAgents($scope.selectedItemIds);
+			};
 
-			$scope.openSelectedSites = function () {
-				if ($scope.selectedItemIds.length > 0)
-					$state.go('rta.agents-sites', { siteIds: $scope.selectedItemIds });
+			function goToAgents(selectedItemIds) {
+				$scope.siteId ? RtaRouteService.goToAgentsInTeams(selectedItemIds) : RtaRouteService.goToAgentsInSites(selectedItemIds);
 			};
 
 			$scope.goToSkillSelection = function () {
-				$state.go('rta.select-skill');
-			}
+				RtaRouteService.goToSelectSkill();
+			};
 
 			$scope.goBackWithUrl = function () {
 				return RtaRouteService.urlForSites();
 			};
+
+			function goToDashboard() {
+				RtaRouteService.goToSites();
+			}
 
 			$scope.$watch(
 				function () {
@@ -191,7 +221,7 @@
 				},
 				function (newValue, oldValue) {
 					if (oldValue !== undefined && newValue !== oldValue) {
-						RtaRouteService.goToSites();
+						goToDashboard();
 					}
 				}
 			);
