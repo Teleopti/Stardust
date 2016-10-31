@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
                     businessUnits.ForEach(businessUnit =>
                     {
                         _businessUnitScope.OnThisThreadUse(businessUnit);
-                        _publisher.Publish(new UpdateResourceCalculateReadModelEvent()
+                        _publisher.Publish(new UpdateStaffingLevelReadModelEvent()
                         {
                             StartDateTime = now,
                             EndDateTime = now.AddHours(24)

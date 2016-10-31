@@ -379,7 +379,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				AddEvent(() =>
 				{
-					var activityAddedEvent = new UpdateResourceCalculateReadModelEvent()
+					var activityAddedEvent = new UpdateStaffingLevelReadModelEvent()
 					{
 						InitiatorId = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id.Value,
 						StartDateTime = period.StartDateTime,

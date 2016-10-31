@@ -303,7 +303,7 @@
     <Compile Include="Infrastructure\Events\IndexMaintenanceEvent.cs" />
     <Compile Include="ApplicationLayer\Events\WorkloadChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Workload\AnalyticsWorkloadUpdater.cs" />
-    <Compile Include="ApplicationLayer\Intraday\ResourceCalculateReadModelUpdater.cs" />
+    <Compile Include="ApplicationLayer\Intraday\UpdateStaffingLevelReadModelHandler.cs" />
     <Compile Include="ApplicationLayer\Events\RequestPersonAbsenceRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilder.cs" />
@@ -453,6 +453,8 @@
     <Compile Include="Logon\ImpersonateSystem.cs" />
     <Compile Include="Logon\ImpersonateSystemAspect.cs" />
     <Compile Include="Logon\ImpersonateSystemAttribute.cs" />
+    <Compile Include="ResourceCalculation\SkillStaffingInterval.cs" />
+    <Compile Include="ResourceCalculation\StaffingIntervalChange.cs" />
     <Compile Include="Scheduling\DoNothingResourceCalculateDelayer.cs" />
     <Compile Include="Scheduling\SeatLimitation\IUsedSeats.cs" />
     <Compile Include="Scheduling\SeatLimitation\MaxSeatOptimization.cs" />
@@ -485,7 +487,7 @@
     <Compile Include="Repositories\ISeniorityWorkDayRanksRepository.cs" />
     <Compile Include="Repositories\ISiteOpenHourRepository.cs" />
     <Compile Include="Repositories\RepositoryExtensions.cs" />
-    <Compile Include="ResourceCalculation\CalculateResourceReadModel.cs" />
+    <Compile Include="ResourceCalculation\UpdateStaffingLevelReadModel.cs" />
     <Compile Include="ResourceCalculation\CascadingPersonalSkills.cs" />
     <Compile Include="ResourceCalculation\CascadingPersonSkillProvider.cs" />
     <Compile Include="ResourceCalculation\CascadingResourceCalculationContextFactory.cs" />

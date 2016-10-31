@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 		public WithUnitOfWork WithUnitOfWork;
 		public IWorkflowControlSetRepository WorkflowControlSetRepository;
 		public FakeConfigReader ConfigReader;
-		public ResourceCalculateReadModelUpdater ResourceCalculateReadModelUpdater;
+		public UpdateStaffingLevelReadModelHandler UpdateStaffingLevelReadModelHandler;
 		public IDataSourceScope DataSource;
 		public AsSystem AsSystem;
 		public ICurrentUnitOfWork CurrentUnitOfWork;

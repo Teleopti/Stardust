@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					{
 						var period = new DateTimePeriod(interval.StartDateTime.Utc(), interval.EndDateTime.Utc());
 						var intervalsInPeriod = unmergedIntervalChanges.Where(x => period.Intersect(new DateTimePeriod(x.StartDateTime.Utc(), x.EndDateTime.Utc())) && x.SkillId == interval.SkillId).ToList();
-						var sumOverstaffed = intervalsInPeriod.Sum(i => i.StaffingLevel) / interval.divideBy(shortestPeriod);
+						var sumOverstaffed = intervalsInPeriod.Sum(i => i.StaffingLevel) / interval.DivideBy(shortestPeriod);
 
 						var staffingIntervalChange = new StaffingIntervalChange()
 						{

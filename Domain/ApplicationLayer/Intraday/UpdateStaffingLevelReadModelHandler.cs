@@ -11,23 +11,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 {
 	//[EnabledBy(Toggles.Intraday_ResourceCalculateReadModel_39200)]
 	[EnabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754, Toggles.AbsenceRequests_UseMultiRequestProcessing_39960)]
-	public class ResourceCalculateReadModelUpdater : IHandleEvent<UpdateResourceCalculateReadModelEvent>, IRunOnStardust
+	public class UpdateStaffingLevelReadModelHandler : IHandleEvent<UpdateStaffingLevelReadModelEvent>, IRunOnStardust
 	{
-		private readonly CalculateResourceReadModel _calculateResourceReadModel;
+		private readonly UpdateStaffingLevelReadModel _updateStaffingLevelReadModel;
 		private readonly ICurrentUnitOfWorkFactory _currentFactory;
 
-		public ResourceCalculateReadModelUpdater(CalculateResourceReadModel calculateResourceReadModel, ICurrentUnitOfWorkFactory current)
+		public UpdateStaffingLevelReadModelHandler(UpdateStaffingLevelReadModel updateStaffingLevelReadModel, ICurrentUnitOfWorkFactory current)
 		{
-			_calculateResourceReadModel = calculateResourceReadModel;
+			_updateStaffingLevelReadModel = updateStaffingLevelReadModel;
 			_currentFactory = current;
 		}
 
 		[AsSystem]
 		[UnitOfWork]
-		public virtual void Handle(UpdateResourceCalculateReadModelEvent @event)
+		public virtual void Handle(UpdateStaffingLevelReadModelEvent @event)
 		{
 			var period = new DateTimePeriod(@event.StartDateTime, @event.EndDateTime);
-			_calculateResourceReadModel.ResourceCalculatePeriod(period);
+			_updateStaffingLevelReadModel.Update(period);
 			var current = _currentFactory.Current().CurrentUnitOfWork();
 			//an ugly solution for bug 39594
 			if (current.IsDirty())
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 		}
 	}
 
-	public class UpdateResourceCalculateReadModelEvent : EventWithInfrastructureContext
+	public class UpdateStaffingLevelReadModelEvent : EventWithInfrastructureContext
 	{
 		public DateTime EndDateTime { get; set; }
 		public DateTime StartDateTime { get; set; }

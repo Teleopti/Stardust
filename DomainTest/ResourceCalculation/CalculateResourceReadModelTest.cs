@@ -21,14 +21,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	[DomainTest]
 	public class CalculateResourceReadModelTest : ISetup
 	{
-		public CalculateResourceReadModel Target;
+		public UpdateStaffingLevelReadModel Target;
 		public FakeExtractSkillStaffDataForResourceCalculation ExtractSkillStaffDataForResourceCalculation;
 		public FakeScheduleForecastSkillReadModelRepository ScheduleForecastSkillReadModelRepository;
 		public MutableNow Now;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<CalculateResourceReadModel>().For<CalculateResourceReadModel>();
+			system.UseTestDouble<UpdateStaffingLevelReadModel>().For<UpdateStaffingLevelReadModel>();
 			system.UseTestDouble<FakeExtractSkillStaffDataForResourceCalculation>().For<IExtractSkillStaffDataForResourceCalculation>();
 			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 		}
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			fakeResourceCalculationData.SetSkills(new List<ISkill> {skill});
 			fakeResourceCalculationData.SetSkillStaffPeriodHolder(fakeholder);
 			ExtractSkillStaffDataForResourceCalculation.FakeResourceCalculationData = fakeResourceCalculationData;
-			Target.ResourceCalculatePeriod(new DateTimePeriod(dateTime,dateTime.AddDays(1)));
+			Target.Update(new DateTimePeriod(dateTime,dateTime.AddDays(1)));
 
 			var staffing = ScheduleForecastSkillReadModelRepository.GetBySkill(skill.Id.GetValueOrDefault(), dateTime, dateTime.AddMinutes(90)).ToList(); 
 			staffing.Count.Should().Be.EqualTo(3);
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			fakeResourceCalculationData.SetSkillStaffPeriodHolder(fakeholder);
 			ExtractSkillStaffDataForResourceCalculation.FakeResourceCalculationData = fakeResourceCalculationData;
 
-			Target.ResourceCalculatePeriod(new DateTimePeriod(dateTime, dateTime.AddDays(1)));
+			Target.Update(new DateTimePeriod(dateTime, dateTime.AddDays(1)));
 
 			var changes =  ScheduleForecastSkillReadModelRepository.GetReadModelChanges(new DateTimePeriod(dateTime,dateTime.AddMinutes(90)));
 			changes.ToList().Count.Should().Be.EqualTo(1);

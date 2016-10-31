@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 {
 	public class IntradayRequestPerformanceTestAttribute : IoCTestAttribute
 	{
-		public ResourceCalculateReadModelUpdater ResourceCalculateReadModelUpdater;
+		public UpdateStaffingLevelReadModelHandler UpdateStaffingLevelReadModelHandler;
 		public WithUnitOfWork WithUnitOfWork;
 		public AsSystem AsSystem;
 		public IDataSourceScope DataSource;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 			system.UseTestDouble<StardustJobFeedback>().For<IStardustJobFeedback>();
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<QueuedAbsenceRequestFastIntradayHandler>().For<QueuedAbsenceRequestFastIntradayHandler>();
-			system.UseTestDouble<ResourceCalculateReadModelUpdater>().For<IHandleEvent<UpdateResourceCalculateReadModelEvent>>();
+			system.UseTestDouble<UpdateStaffingLevelReadModelHandler>().For<IHandleEvent<UpdateStaffingLevelReadModelEvent>>();
 			system.AddService<Database>();
 			system.AddModule(new TenantServerModule(configuration));
         }

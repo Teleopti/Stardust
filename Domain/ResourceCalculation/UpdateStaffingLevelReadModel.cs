@@ -8,14 +8,14 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class CalculateResourceReadModel
+	public class UpdateStaffingLevelReadModel
 	{
 		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
 		private readonly IExtractSkillStaffDataForResourceCalculation _extractSkillStaffDataForResourceCalculation;
 		private readonly INow _now;
 		private readonly IStardustJobFeedback _feedback;
 
-		public CalculateResourceReadModel(IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository,
+		public UpdateStaffingLevelReadModel(IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository,
 			INow now, IExtractSkillStaffDataForResourceCalculation extractSkillStaffDataForResourceCalculation, IStardustJobFeedback feedback)
 		{
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 		[LogTime]
-		public virtual void ResourceCalculatePeriod(DateTimePeriod period)
+		public virtual void Update(DateTimePeriod period)
 		{
 			var periodDateOnly = new DateOnlyPeriod(new DateOnly(period.StartDateTime), new DateOnly(period.EndDateTime));
 			_feedback.SendProgress($"Starting Read Model update for period {period}");
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_scheduleForecastSkillReadModelRepository.Persist(models, timeWhenResourceCalcDataLoaded);
 		}
 
-		private void updateModelsAfterCalculatingWithShrinkage(IList<SkillStaffingInterval> models, ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodDictionary, DateTimePeriod period)
+		private static void updateModelsAfterCalculatingWithShrinkage(IList<SkillStaffingInterval> models, ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodDictionary, DateTimePeriod period)
 		{
 			if (skillSkillStaffPeriodDictionary.Keys.Count > 0)
 			{
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return ret;
 		}
 
-		private void setUseShrinkage(IResourceCalculationData resourceCalculationData, DateTimePeriod period)
+		private static void setUseShrinkage(IResourceCalculationData resourceCalculationData, DateTimePeriod period)
 		{
 			var periods = resourceCalculationData.SkillStaffPeriodHolder.SkillStaffPeriodList(resourceCalculationData.Skills,
 				period);
@@ -107,56 +107,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				skillStaffPeriod.Payload.UseShrinkage = true;
 			}
-		}
-	}
-
-	public class SkillStaffingInterval
-	{
-		public Guid SkillId { get; set; }
-		public DateTime StartDateTime { get; set; }
-		public DateTime EndDateTime { get; set; }
-		public double Forecast { get; set; }
-		public double StaffingLevel { get; set; }
-		public double ForecastWithShrinkage { get; set; }
-
-		public double StaffingLevelWithShrinkage { get; set; }
-
-		public double GetForecast(bool withShrinkage)
-		{
-			return withShrinkage ? ForecastWithShrinkage : Forecast;
-		}
-
-		public double GetStaffingLevel(bool withShrinkage)
-		{
-			return withShrinkage ? StaffingLevelWithShrinkage : StaffingLevel;
-		}
-
-		public TimeSpan GetTimeSpan()
-		{
-			return EndDateTime.Subtract(StartDateTime);
-		}
-
-		public double divideBy(TimeSpan ts)
-		{
-			return (double)GetTimeSpan().Ticks / ts.Ticks;
-		}
-	}
-
-	public class StaffingIntervalChange : IEquatable<StaffingIntervalChange>
-	{
-		public Guid SkillId { get; set; }
-		public DateTime StartDateTime { get; set; }
-		public DateTime EndDateTime { get; set; }
-		public double StaffingLevel { get; set; }
-
-
-		public bool Equals(StaffingIntervalChange other)
-		{
-			if (other == null) return false;
-			return SkillId == other.SkillId
-					&& StartDateTime == other.StartDateTime
-					&& EndDateTime == other.EndDateTime
-					&& Math.Abs(StaffingLevel - other.StaffingLevel) < 0.001;
 		}
 	}
 }

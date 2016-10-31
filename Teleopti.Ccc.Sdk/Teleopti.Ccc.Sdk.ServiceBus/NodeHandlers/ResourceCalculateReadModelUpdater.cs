@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
-	public class ResourceCalculateReadModelUpdater : IHandle<UpdateResourceCalculateReadModelEvent>
+	public class ResourceCalculateReadModelUpdater : IHandle<UpdateStaffingLevelReadModelEvent>
 	{
 		private readonly IComponentContext _componentContext;
 		private readonly IStardustJobFeedback _stardustJobFeedback;
@@ -19,10 +19,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			_stardustJobFeedback = stardustJobFeedback;
 		}
 
-		public void Handle(UpdateResourceCalculateReadModelEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress)
+		public void Handle(UpdateStaffingLevelReadModelEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress)
 		{
 			_stardustJobFeedback.SendProgress = sendProgress;
-			var theRealOne = _componentContext.Resolve<IHandleEvent<UpdateResourceCalculateReadModelEvent>>();
+			var theRealOne = _componentContext.Resolve<IHandleEvent<UpdateStaffingLevelReadModelEvent>>();
 			theRealOne.Handle(parameters);
 			_stardustJobFeedback.SendProgress = null;
 		}
