@@ -12,6 +12,22 @@
 		position: relative;
 	}
 
+	.end-ellipsis {
+		width: 10px;
+		position: absolute;
+		right: 5px;
+		top: 2px;
+		color: $gray054;
+	}
+
+	.start-ellipsis {
+		width: 10px;
+		position: absolute;
+		left: 5px;
+		top: 2px;
+		color: $gray054;
+	}
+
 	.teamschedule-header {
 		padding: 5px;
 		min-height: 56px;

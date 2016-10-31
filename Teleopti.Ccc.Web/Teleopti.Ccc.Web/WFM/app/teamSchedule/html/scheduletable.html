@@ -73,6 +73,8 @@
 						</md-tooltip>
 					</div>
 				</div>
+				<div ng-if="vm.hasHiddenScheduleAtStart(personSchedule)" class="start-ellipsis"><i class="mdi mdi-chevron-double-left white-color-text"></i></div>
+				<div ng-if="vm.hasHiddenScheduleAtEnd(personSchedule)" class="end-ellipsis"><i class="mdi mdi-chevron-double-right"></i></div>
 			</div>
 		</td>
 		<td class="right-border-empty" ng-if="::!vm.toggles.EditAndViewInternalNoteEnabled"></td>

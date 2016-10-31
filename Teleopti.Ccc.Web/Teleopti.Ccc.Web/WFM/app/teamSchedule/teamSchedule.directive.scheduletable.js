@@ -100,6 +100,29 @@
 			}
 		};
 
+		vm.hasHiddenScheduleAtStart = function (personSchedule) {
+			if (!personSchedule.Shifts) return false;
+
+			var result = false;
+			personSchedule.Shifts.forEach(function(shift) {
+				if (moment(shift.ProjectionTimeRange.Start) < moment(personSchedule.ScheduleStartTime()))
+					result = true;
+			});
+			return result;
+		};
+
+		vm.hasHiddenScheduleAtEnd = function (personSchedule) {
+			if (!personSchedule.Shifts) return false;
+
+			var result = false;
+			personSchedule.Shifts.forEach(function (shift) {				
+				if (moment(shift.ProjectionTimeRange.End) > moment(personSchedule.ScheduleEndTime()))
+					result = true;
+			});
+			return result;
+		};
+
+
 		vm.checkBusinessRulesWarningMessage = function(personId){
 			return ValidateRulesService.checkValidationForPerson(personId);
 		};
