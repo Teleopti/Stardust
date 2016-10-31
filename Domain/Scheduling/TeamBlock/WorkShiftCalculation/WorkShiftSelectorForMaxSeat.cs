@@ -25,19 +25,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 						if (intervalLevelMaxSeatInfo.IsMaxSeatReached)
 							return null;
 					}
-				}
-				
+				}	
 			}
 			
-			//foreach (var layer in shiftProjectionCache.MainShiftProjection)
-			//{
-			//	IntervalLevelMaxSeatInfo intervalLevelMaxSeatInfo;
-			//	if (parameters.MaxSeatInfoPerInterval.TryGetValue(layer.Period.StartDateTime, out intervalLevelMaxSeatInfo))
-			//	{
-			//		if (intervalLevelMaxSeatInfo.IsMaxSeatReached)
-			//			return null;
-			//	}
-			//}
 			return 1;
 		}
 	}
