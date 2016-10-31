@@ -714,8 +714,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillDay1 = createSkillDay(skill1, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
 			var skillDay2 = createSkillDay(skill2, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
 
-			var actualCalls1 = getActualCallsPerSkillAndInterval(skillDay1.WorkloadDayCollection.First().TaskPeriodList.ToList(), skill1, 1.15, latestStatsTime);
-			var actualCalls2 = getActualCallsPerSkillAndInterval(skillDay2.WorkloadDayCollection.First().TaskPeriodList.ToList(), skill2, 1.3, latestStatsTime);
+			var actualCalls1 = getActualCallsPerSkillAndInterval(skillDay1.WorkloadDayCollection.First().TaskPeriodList.ToList(), skill1, 1, latestStatsTime);
+			var actualCalls2 = getActualCallsPerSkillAndInterval(skillDay2.WorkloadDayCollection.First().TaskPeriodList.ToList(), skill2, 1, latestStatsTime);
 
 			var actualCallsTotal = new List<SkillIntervalStatistics>();
 			actualCallsTotal.AddRange(actualCalls1);
@@ -743,6 +743,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			vm.DataSeries.ActualStaffing.First().Should().Be.EqualTo(actualStaffingSkill1);
 			vm.DataSeries.ActualStaffing.Last().Should().Be.EqualTo(null);
+			vm.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(3);
+			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(3);
 		}
 
 
