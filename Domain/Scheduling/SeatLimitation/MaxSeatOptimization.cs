@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly RestrictionOverLimitValidator _restrictionOverLimitValidator;
 		private readonly IMatrixListFactory _matrixListFactory;
-		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
+		private readonly IUsedSeats _usedSeats;
 
 		public MaxSeatOptimization(MaxSeatSkillDataFactory maxSeatSkillDataFactory,
 														CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 														ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 														RestrictionOverLimitValidator restrictionOverLimitValidator,
 														IMatrixListFactory matrixListFactory,
-														ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker)
+														IUsedSeats usedSeats)
 		{
 			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
@@ -57,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
 			_matrixListFactory = matrixListFactory;
-			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
+			_usedSeats = usedSeats;
 		}
 
 		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IScenario scenario, IOptimizationPreferences optimizationPreferences)
@@ -84,11 +85,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					{
 						var firstSelectedDay = period.DayCollection().First();
 						var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
+						var maxPeakBefore = maxSeatPeak(datePoint, teamBlockInfo, maxSeatData.AllMaxSeatSkillDaysPerSkill());
 
-						if (_teamBlockMaxSeatChecker.CheckMaxSeat(datePoint,
-																new SchedulingOptions { UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak },
-																teamBlockInfo.TeamInfo,
-																maxSeatData.AllMaxSeatSkillDaysPerSkill()))
+						if (Math.Abs(maxPeakBefore) < 0.0001)
 						{
 							remainingInfoList.Remove(teamBlockInfo);
 							continue;
@@ -115,12 +114,35 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						{
 							//kolla om vi ska ändra "gamla" rollback istället
 							rollbackService.RollbackMinimumChecks(); //förmodligen fel - rullar tillbaka allt
-						} 
+						}
+
+						if (maxSeatPeak(datePoint, teamBlockInfo, maxSeatData.AllMaxSeatSkillDaysPerSkill()) > maxPeakBefore)
+						{
+							//kolla om vi ska ändra "gamla" rollback istället
+							rollbackService.RollbackMinimumChecks(); //förmodligen fel - rullar tillbaka allt
+						}
 
 						remainingInfoList.Remove(teamBlockInfo);
 					}
 				}
 			}
+		}
+
+
+		//TODO: move to seperate class
+		private double maxSeatPeak(DateOnly date, ITeamBlockInfo teamBlockInfo, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)
+		{
+			//TODO: Will only work for business hierarchy
+			var maxSeatSkill = teamBlockInfo.TeamInfo.GroupMembers.First().Period(date).Team.Site.MaxSeatSkill;
+			var retValue = 0d;
+			foreach (var skillDay in skillDays[maxSeatSkill])
+			{
+				foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
+				{
+					retValue = Math.Max(retValue, _usedSeats.Fetch(skillStaffPeriod) - skillStaffPeriod.Payload.MaxSeats);
+				}
+			}
+			return retValue;
 		}
 	}
 }

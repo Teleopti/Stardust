@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Be.EqualTo(TimeSpan.FromHours(8));
 		}
 
-		[Test, Ignore("To be fixed when we've fixed shift values (check each interval)")]
+		[Test]
 		public void ShouldChooseShiftWherePeakIsLowest()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
