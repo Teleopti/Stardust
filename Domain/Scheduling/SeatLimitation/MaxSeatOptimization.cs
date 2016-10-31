@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly RestrictionOverLimitValidator _restrictionOverLimitValidator;
 		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 
 		public MaxSeatOptimization(MaxSeatSkillDataFactory maxSeatSkillDataFactory,
 														CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
@@ -41,7 +42,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 														IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
 														ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 														RestrictionOverLimitValidator restrictionOverLimitValidator,
-														IMatrixListFactory matrixListFactory)
+														IMatrixListFactory matrixListFactory,
+														ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker)
 		{
 			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
@@ -55,6 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
 			_matrixListFactory = matrixListFactory;
+			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 		}
 
 		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IScenario scenario, IOptimizationPreferences optimizationPreferences)
@@ -68,6 +71,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills()))
 			{
+				
 				//most stuff taken from TeamBlockIntradayOptimizationService
 				var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 				_groupPersonBuilderForOptimizationFactory.Create(allAgents, schedules, optimizationPreferences.Extra.TeamGroupPage);
@@ -80,6 +84,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					{
 						var firstSelectedDay = period.DayCollection().First();
 						var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
+
+						if (_teamBlockMaxSeatChecker.CheckMaxSeat(datePoint,
+																new SchedulingOptions { UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak },
+																teamBlockInfo.TeamInfo,
+																maxSeatData.AllMaxSeatSkillDaysPerSkill()))
+						{
+							remainingInfoList.Remove(teamBlockInfo);
+							continue;
+						}
+
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules); //TODO: check if this is enough
 
 						_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo, datePoint, schedulingOptions,

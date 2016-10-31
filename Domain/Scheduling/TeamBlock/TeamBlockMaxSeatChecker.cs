@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         {
 			if (schedulingOption.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)
 			{
+				//TODO now it takes first maxSeatSkill, what if different sites
 				ISkill maxSeatSkill = null;
 				foreach (var scheduleMatrixPro in teamInfo.MatrixesForGroupAndDate(dateOnly))
 				{

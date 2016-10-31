@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				var period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(baseDate.AddMinutes(intervalLength * i), baseDate.AddMinutes(intervalLength * (i + 1)), newSkill.TimeZone);
 
 				var templateSkillDataPeriod = new TemplateSkillDataPeriod(new ServiceAgreement(), new SkillPersonData(0, 0), period);
+				templateSkillDataPeriod.MaxSeats = site.MaxSeats.Value; //TODO should be removed
 				templateSkillDataPeriods.Add(templateSkillDataPeriod);
 			}
 
@@ -43,7 +44,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			newSkill.SetTemplateAt(4, new SkillDayTemplate("fake", templateSkillDataPeriods));
 			newSkill.SetTemplateAt(5, new SkillDayTemplate("fake", templateSkillDataPeriods));
 			newSkill.SetTemplateAt(6, new SkillDayTemplate("fake", templateSkillDataPeriods));
-			
+			site.MaxSeatSkill = newSkill; //TODO should be removed
+
 			return newSkill;
 		}
 	}
