@@ -15,6 +15,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo)
 		{
 			var intervalLength = 1440/parameters.MaxSeatInfoPerInterval.Count;
+
+			var maxBoostingFactor = double.MinValue;
+
 			foreach (var layer in shiftProjectionCache.MainShiftProjection)
 			{
 				foreach (var dateTimePeriod in layer.Period.Intervals(TimeSpan.FromMinutes(intervalLength)))
@@ -23,12 +26,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 					if (parameters.MaxSeatInfoPerInterval.TryGetValue(dateTimePeriod.StartDateTime, out intervalLevelMaxSeatInfo))
 					{
 						if (intervalLevelMaxSeatInfo.IsMaxSeatReached)
-							return 1;
+						{
+							if (intervalLevelMaxSeatInfo.MaxSeatBoostingFactor > maxBoostingFactor)
+								maxBoostingFactor = intervalLevelMaxSeatInfo.MaxSeatBoostingFactor;
+						}
 					}
 				}	
 			}
 			
-			return 1;
+			return -1 * maxBoostingFactor;
 		}
 	}
 }
