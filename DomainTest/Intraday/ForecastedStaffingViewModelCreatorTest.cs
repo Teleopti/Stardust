@@ -192,6 +192,60 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(expectedUpdatedForecastOnLastInterval);
 		}
 
+
+		[Test]
+		public void ShouldReturnActualStaffingCorrectlyWhenEfficencyIsLessThan100Percent()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+
+			var scenario = fakeScenarioAndIntervalLength();
+
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30));
+
+			SkillRepository.Has(skill);
+
+			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
+			skillDay.SkillStaffPeriodCollection[0].Payload.Efficiency = new Percent(0.50);
+			skillDay.SkillStaffPeriodCollection[1].Payload.Efficiency = new Percent(0.50);
+
+			SkillDayRepository.Add(skillDay);
+
+			var efficency = skillDay.SkillStaffPeriodCollection.Select(s => s.Payload.Efficiency).First();
+
+			var actualIntervals = new List<SkillIntervalStatistics>
+			{
+				new SkillIntervalStatistics
+				{
+					SkillId = skill.Id.Value,
+					StartTime = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc),
+					Calls = 10,
+					AverageHandleTime = skillDay.WorkloadDayCollection.First().TaskPeriodList[0].TotalAverageTaskTime.TotalSeconds + 
+					skillDay.WorkloadDayCollection.First().TaskPeriodList[0].TotalAverageAfterTaskTime.TotalSeconds
+				},
+			};
+
+			IntradayQueueStatisticsLoader.Has(actualIntervals);
+
+			var vm = Target.Load(new[] { skill.Id.Value });
+
+
+			var calculatorService = new StaffingCalculatorServiceFacade();
+			var skillData = skillDay.SkillDataPeriodCollection.First().ServiceAgreement;
+			var actualStaffingwith100percentefficiency = calculatorService.AgentsUseOccupancy(
+				skillData.ServiceLevel.Percent.Value,
+				(int)skillData.ServiceLevel.Seconds,
+				actualIntervals.First().Calls,
+				actualIntervals.First().AverageHandleTime,
+				TimeSpan.FromMinutes(minutesPerInterval),
+				skillData.MinOccupancy.Value,
+				skillData.MaxOccupancy.Value,
+				1);
+
+			vm.DataSeries.ActualStaffing.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.ActualStaffing.First().Should().Be.EqualTo(actualStaffingwith100percentefficiency * 1/efficency.Value);
+		}
+
 		[Test]
 		public void ShouldSkipZeroForecastedCallIntervalsWhenCalculatingUpdatedForecast()
 		{
@@ -677,7 +731,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			{
 				skillDay.WorkloadDayCollection.First().TaskPeriodList[index].Tasks = new Random().Next(5,50);
 				skillDay.WorkloadDayCollection.First().TaskPeriodList[index].AverageTaskTime = TimeSpan.FromSeconds(120);
-				skillDay.WorkloadDayCollection.First().TaskPeriodList[index].AverageAfterTaskTime = TimeSpan.FromSeconds(200);
+				skillDay.WorkloadDayCollection.First().TaskPeriodList[index].AverageAfterTaskTime = TimeSpan.FromSeconds(200);			
 				index++;
 			}
 

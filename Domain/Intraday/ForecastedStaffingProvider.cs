@@ -112,11 +112,13 @@ namespace Teleopti.Ccc.Domain.Intraday
 		{
             
             var actualStaffingIntervals = new List<StaffingIntervalModel>();
+			double efficiencyFactor;
 
-		    foreach (var actualStatsinterval in actualStatsPerInterval)
-		    {
-                var actualStatsStartTimeUtc = TimeZoneHelper.ConvertToUtc(actualStatsinterval.StartTime, _timeZone.TimeZone());
-                var skillData =
+			foreach (var actualStatsinterval in actualStatsPerInterval)
+		    {				
+				var actualStatsStartTimeUtc = TimeZoneHelper.ConvertToUtc(actualStatsinterval.StartTime, _timeZone.TimeZone());
+			
+				var skillData =
                     skillDay.SkillDataPeriodCollection.SingleOrDefault(
                         skillDataPeriod => skillDataPeriod.Period.StartDateTime <= actualStatsStartTimeUtc &&
                                                  skillDataPeriod.Period.EndDateTime > actualStatsStartTimeUtc
@@ -125,21 +127,25 @@ namespace Teleopti.Ccc.Domain.Intraday
 		        if (skillData == null)
 		            continue;
 
-		        actualStaffingIntervals.Add(new StaffingIntervalModel()
-		        {
-		            SkillId = skillDay.Skill.Id.Value,
-		            StartTime = actualStatsinterval.StartTime,
-		            Agents = staffingCalculatorService.AgentsUseOccupancy(
-		                skillData.ServiceAgreement.ServiceLevel.Percent.Value,
-		                (int) skillData.ServiceAgreement.ServiceLevel.Seconds,
-		                actualStatsinterval.Calls,
-		                actualStatsinterval.AverageHandleTime,
-		                wantedIntervalResolution,
-		                skillData.ServiceAgreement.MinOccupancy.Value,
-		                skillData.ServiceAgreement.MaxOccupancy.Value,
-		                skillDay.Skill.MaxParallelTasks
-		            )
-		        });
+				var efficencyPerSkillInterval = skillDay.SkillStaffPeriodCollection.Where(x => x.Period.StartDateTime == actualStatsStartTimeUtc).Select(s => s.Payload.Efficiency).First();
+			    efficiencyFactor = (1/efficencyPerSkillInterval.Value);
+
+				var agents = staffingCalculatorService.AgentsUseOccupancy(
+				    skillData.ServiceAgreement.ServiceLevel.Percent.Value,
+				    (int) skillData.ServiceAgreement.ServiceLevel.Seconds,
+				    actualStatsinterval.Calls,
+				    actualStatsinterval.AverageHandleTime,
+				    wantedIntervalResolution,
+				    skillData.ServiceAgreement.MinOccupancy.Value,
+				    skillData.ServiceAgreement.MaxOccupancy.Value,
+				    skillDay.Skill.MaxParallelTasks)* efficiencyFactor;
+
+			    actualStaffingIntervals.Add(new StaffingIntervalModel()
+			    {
+				    SkillId = skillDay.Skill.Id.Value,
+				    StartTime = actualStatsinterval.StartTime,
+				    Agents = agents
+			    });
 		    }
 			
 			return actualStaffingIntervals;

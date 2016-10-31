@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			Console.WriteLine("CHECKLIST:");
 			Console.WriteLine("1. Is there forecast data for today for your skills?");
 			Console.WriteLine("");
-			Console.WriteLine("2. Have you run ETL Nightly job for today?");
+			Console.WriteLine("2. Have you run ETL 'Reload datamart' job for today?");
 			Console.WriteLine("");
 			Console.WriteLine("");
 			Console.WriteLine("Checklist fulfilled? Press any key to continue.");
