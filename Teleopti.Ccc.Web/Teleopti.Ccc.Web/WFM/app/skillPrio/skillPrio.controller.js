@@ -5,8 +5,8 @@
 		.module('wfm.skillPrio')
 		.controller('skillPrioController', skillPrioController);
 
-	skillPrioController.$inject = ['$scope', '$filter', 'Toggle', 'NoticeService', '$translate', '$q', 'skillPrioAggregator', 'skillPrioService'];
-	function skillPrioController($scope, $filter, toggleService, NoticeService, $translate, $q, skillPrioAggregator, skillPrioService) {
+	skillPrioController.$inject = [ '$filter', 'Toggle', 'NoticeService', '$translate', '$q', 'skillPrioAggregator', 'skillPrioService'];
+	function skillPrioController( $filter, toggleService, NoticeService, $translate, $q, skillPrioAggregator, skillPrioService) {
 		var vm = this;
 		vm.selectActivity = selectActivity;
 		vm.activites = skillPrioService.getAdminSkillRoutingActivity.query();
@@ -44,7 +44,6 @@
 		}
 
 		function selectActivity(activity) {
-			console.log("selectActivity")
 			if (!selectActivityPreCheck(activity)) return;
 			vm.selectedActivity = activity;
 			var allActivitySkills = vm.skills.filter(belongsToActivity);
@@ -109,7 +108,6 @@
 				skill.sibling = []
 			};
 			if (isDuplicatePriority(skill, priority)) {
-				console.log('has parent');
 				skill.hasParent = true;
 			} else {
 				skill.hasParent = false;
@@ -157,7 +155,6 @@
 			var found = arr.findIndex(function (item) {
 				return item.SkillGuid === skill.SkillGuid;
 			});
-			console.log(found);
 			if (found !== -1)
 				arr.splice(found, 1);
 		};
@@ -175,7 +172,6 @@
 
 
 		function removeFromPrioritized(skill) {
-			console.log(skill);
 			var skillRepository = [];
 			if (skill.hasParent) {
 				var parentSkill = findDuplicateSkill(skill);
@@ -200,12 +196,9 @@
 		}
 
 		function removeFromActivitySkills(skill) {
-			console.log("removeFromActivitySkills")
 			removeSkill(vm.activitySkills, skill)
 		}
 		function addToActivitySkills(skill) {
-			console.log(skill)
-			console.log(vm.activitySkills)
 			vm.activitySkills = vm.activitySkills.concat(skill);
 			vm.activitySkills.sort(sortBySkillName);
 			return;

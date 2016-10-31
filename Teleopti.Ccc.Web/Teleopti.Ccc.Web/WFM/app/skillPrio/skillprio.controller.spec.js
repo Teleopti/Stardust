@@ -1,5 +1,5 @@
 ﻿'use strict';
-describe('skillPrioController', function () {
+fdescribe('skillPrioController', function () {
 	var $httpBackend,
 		$controller,
 		fakeBackend;
@@ -218,17 +218,17 @@ describe('skillPrioController', function () {
 			});
 		var vm = $controller('skillPrioController');
 		$httpBackend.flush();
-		
+
 		expect(vm.noPrioritiedSkills()).toBe(true);
-		
+
 		vm.selectActivity(vm.activites[0]);
 		vm.prioritizeSkill(vm.activitySkills[0], 1);
 
 		expect(vm.noPrioritiedSkills()).toBe(false);
 
 	});
-		xit('should save current prioritized skills', function(){
-				fakeBackend.withActivity({
+	xit('should save current prioritized skills', function () {
+		fakeBackend.withActivity({
 			ActivityGuid: "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
 			ActivityName: "Phone"
 
@@ -248,17 +248,17 @@ describe('skillPrioController', function () {
 			});
 		var vm = $controller('skillPrioController');
 		$httpBackend.flush();
-		
+
 		expect(vm.noPrioritiedSkills()).toBe(true);
-		
+
 		vm.selectActivity(vm.activites[0]);
 		vm.prioritizeSkill(vm.activitySkills[0], 1);
 
 		vm.save()
 	});
 
-	it('should put skill with same prio as sibling', function(){
-				fakeBackend.withActivity({
+	it('should put skill with same prio as sibling', function () {
+		fakeBackend.withActivity({
 			ActivityGuid: "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
 			ActivityName: "Phone"
 
@@ -278,15 +278,15 @@ describe('skillPrioController', function () {
 			});
 		var vm = $controller('skillPrioController');
 		$httpBackend.flush();
-		
+
 		vm.selectActivity(vm.activites[0]);
 		vm.prioritizeSkill(vm.activitySkills[1], 1);
 		vm.prioritizeSkill(vm.activitySkills[0], 1);
 		expect(vm.prioritizedSkills[0].sibling.length).toBe(1);
 	});
 
-		it('should remove skill with sibling and persist sibling', function(){
-				fakeBackend.withActivity({
+	it('should remove skill with sibling and persist sibling', function () {
+		fakeBackend.withActivity({
 			ActivityGuid: "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
 			ActivityName: "Phone"
 
@@ -306,7 +306,7 @@ describe('skillPrioController', function () {
 			});
 		var vm = $controller('skillPrioController');
 		$httpBackend.flush();
-		
+
 		vm.selectActivity(vm.activites[0]);
 		vm.prioritizeSkill(vm.activitySkills[1], 1);
 		vm.prioritizeSkill(vm.activitySkills[0], 1);
@@ -315,8 +315,8 @@ describe('skillPrioController', function () {
 		expect(vm.prioritizedSkills.length).toBe(1);
 	});
 
-			it('should remove skill with multiple siblings and persist siblings', function(){
-				fakeBackend.withActivity({
+	it('should remove skill with multiple siblings and persist siblings', function () {
+		fakeBackend.withActivity({
 			ActivityGuid: "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
 			ActivityName: "Phone"
 
@@ -334,7 +334,7 @@ describe('skillPrioController', function () {
 				SkillGuid: "3f28a7b9-6e41-4ed7-a66d-b0a23ce621f5",
 				SkillName: "Radio"
 			})
-				.withSkill({
+			.withSkill({
 				ActivityGuid: "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
 				ActivityName: "Phone",
 				Priority: null,
@@ -343,7 +343,7 @@ describe('skillPrioController', function () {
 			});
 		var vm = $controller('skillPrioController');
 		$httpBackend.flush();
-		
+
 		vm.selectActivity(vm.activites[0]);
 		vm.prioritizeSkill(vm.activitySkills[2], 1);
 		vm.prioritizeSkill(vm.activitySkills[1], 1);
