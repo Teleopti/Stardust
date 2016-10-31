@@ -14,15 +14,30 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		protected override double? ValueForShift(IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary, IShiftProjectionCache shiftProjectionCache,
 			PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo)
 		{
+			var intervalLength = 1440/parameters.MaxSeatInfoPerInterval.Count;
 			foreach (var layer in shiftProjectionCache.MainShiftProjection)
 			{
-				IntervalLevelMaxSeatInfo intervalLevelMaxSeatInfo;
-				if (parameters.MaxSeatInfoPerInterval.TryGetValue(layer.Period.StartDateTime, out intervalLevelMaxSeatInfo))
+				foreach (var dateTimePeriod in layer.Period.Intervals(TimeSpan.FromMinutes(intervalLength)))
 				{
-					if (intervalLevelMaxSeatInfo.IsMaxSeatReached)
-						return null;
+					IntervalLevelMaxSeatInfo intervalLevelMaxSeatInfo;
+					if (parameters.MaxSeatInfoPerInterval.TryGetValue(dateTimePeriod.StartDateTime, out intervalLevelMaxSeatInfo))
+					{
+						if (intervalLevelMaxSeatInfo.IsMaxSeatReached)
+							return null;
+					}
 				}
+				
 			}
+			
+			//foreach (var layer in shiftProjectionCache.MainShiftProjection)
+			//{
+			//	IntervalLevelMaxSeatInfo intervalLevelMaxSeatInfo;
+			//	if (parameters.MaxSeatInfoPerInterval.TryGetValue(layer.Period.StartDateTime, out intervalLevelMaxSeatInfo))
+			//	{
+			//		if (intervalLevelMaxSeatInfo.IsMaxSeatReached)
+			//			return null;
+			//	}
+			//}
 			return 1;
 		}
 	}
