@@ -13677,7 +13677,7 @@ Dessa val är aktiverade:
     <value>Max arbetstid per vecka</value>
   </data>
   <data name="NotOverwriteLayerRuleName" xml:space="preserve">
-    <value>Icke överskrivningsbara aktiviteter</value>
+    <value>Aktiviteter överskrivna</value>
   </data>
   <data name="RequestWaitlistedReasonPersonAccount" xml:space="preserve">
     <value>Du har inte tillräckligt med tid kvar i tidsuppföljningssaldot.</value>
@@ -13805,5 +13805,11 @@ Dessa val är aktiverade:
   </data>
   <data name="TooManySelectedAgents" xml:space="preserve">
     <value>Du har markerat för många agenter. Var god markera färre än 55. </value>
+  </data>
+  <data name="AllRequests" xml:space="preserve">
+    <value>Alla förfrågningar</value>
+  </data>
+  <data name="CurrentRequests" xml:space="preserve">
+    <value>Aktuella förfrågningar</value>
   </data>
 </root>

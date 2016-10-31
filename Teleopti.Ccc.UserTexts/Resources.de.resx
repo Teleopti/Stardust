@@ -2431,7 +2431,7 @@ Ausnahme</value>
     <comment>Friday</comment>
   </data>
   <data name="From" xml:space="preserve">
-    <value>Vom</value>
+    <value>Von</value>
     <comment>From</comment>
   </data>
   <data name="FromColon" xml:space="preserve">
@@ -6123,7 +6123,7 @@ Periods</comment>
     <comment>Time zone</comment>
   </data>
   <data name="To" xml:space="preserve">
-    <value>bis</value>
+    <value>An</value>
     <comment>to</comment>
   </data>
   <data name="ToColon" xml:space="preserve">
@@ -11573,5 +11573,11 @@ Folgende Optionen und Module sind aktiviert:
   </data>
   <data name="RemoveMustHave" xml:space="preserve">
     <value>Notwendigkeit entfernen</value>
+  </data>
+  <data name="AllRequests" xml:space="preserve">
+    <value>Alle Anfragen</value>
+  </data>
+  <data name="CurrentRequests" xml:space="preserve">
+    <value>Aktuelle Anfragen</value>
   </data>
 </root>
