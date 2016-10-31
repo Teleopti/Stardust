@@ -71,8 +71,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyInitializeWhenDeletedOnClient()
         {
-            var assPer = new Person { Name = new Name("roger", "moore") };
-            var changedByPer = new Person { Name = new Name("hubba", "bubba") };
+	        var tz = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+
+						var assPer = new Person { Name = new Name("roger", "moore") }.InTimeZone(tz);
+            var changedByPer = new Person { Name = new Name("hubba", "bubba") }.InTimeZone(tz);
 
 						var ass = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("ffsdf"), assPer, new DateOnly(2000, 1, 2), new DayOffTemplate(new Description()));
             ReflectionHelper.SetUpdatedBy(ass, changedByPer);
