@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -14,13 +15,15 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
 		private readonly IIntradayQueueStatisticsLoader _intradayQueueStatisticsLoader;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
+		private readonly ISkillRepository _skillRepository;
 
 		public ForecastedStaffingViewModelCreator(
 			INow now,
 			IUserTimeZone timeZone,
 			ForecastedStaffingProvider forecastedStaffingProvider,
 			IIntradayQueueStatisticsLoader intradayQueueStatisticsLoader,
-			IIntervalLengthFetcher intervalLengthFetcher
+			IIntervalLengthFetcher intervalLengthFetcher,
+			ISkillRepository skillRepository
 			)
 		{
 			_now = now;
@@ -28,20 +31,34 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_forecastedStaffingProvider = forecastedStaffingProvider;
 			_intradayQueueStatisticsLoader = intradayQueueStatisticsLoader;
 			_intervalLengthFetcher = intervalLengthFetcher;
+			_skillRepository = skillRepository;
 		}
 
 		public IntradayStaffingViewModel Load(Guid[] skillIdList)
 		{
+
+			var skills = _skillRepository.LoadSkills(skillIdList);
+			var supportedSkillIdList = skillIdList;
+
+			foreach (var skill in skills)
+			{
+				if (!checkSupportedSkill(skill))
+				{
+					var skillToRemove = skill.Id.Value;
+					supportedSkillIdList = supportedSkillIdList.Where(val => val != skillToRemove).ToArray();
+				}
+			}
+
 			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
 			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
 			var usersToday = new DateOnly(usersNow);
-			var actualCallsPerSkillInterval = _intradayQueueStatisticsLoader.LoadActualCallPerSkillInterval(skillIdList, _timeZone.TimeZone(), usersToday);
+			var actualCallsPerSkillInterval = _intradayQueueStatisticsLoader.LoadActualCallPerSkillInterval(supportedSkillIdList, _timeZone.TimeZone(), usersToday);
 			DateTime? latestStatsTime = null;
 
 			if (actualCallsPerSkillInterval.Count > 0)
 				latestStatsTime = actualCallsPerSkillInterval.Max(d => d.StartTime);
 
-			var forecastedStaffingModel = _forecastedStaffingProvider.Load(skillIdList, latestStatsTime, minutesPerInterval, actualCallsPerSkillInterval);
+			var forecastedStaffingModel = _forecastedStaffingProvider.Load(supportedSkillIdList, latestStatsTime, minutesPerInterval, actualCallsPerSkillInterval);
 
 			var staffingForUsersToday = forecastedStaffingModel.StaffingIntervals
 												.Where(t => t.StartTime >= usersToday.Date && t.StartTime < usersToday.Date.AddDays(1))
@@ -87,6 +104,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 								.ToArray()
 				}
 			};
+		}
+
+		private bool checkSupportedSkill(ISkill skill)
+		{
+			var isMultisiteSkill = skill.GetType() == typeof(MultisiteSkill);
+
+			return !isMultisiteSkill &&
+				   skill.SkillType.Description.Name.Equals("SkillTypeInboundTelephony", StringComparison.InvariantCulture);
 		}
 
 		private List<double?> getActualStaffingSeries(List<StaffingIntervalModel> actualStaffingPerSkill, DateTime? latestStatsTime, int minutesPerInterval, List<StaffingIntervalModel> staffingForUsersToday)
