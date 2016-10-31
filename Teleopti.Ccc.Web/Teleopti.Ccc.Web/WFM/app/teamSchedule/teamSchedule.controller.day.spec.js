@@ -108,7 +108,7 @@ describe("teamschedule controller tests", function() {
 		rootScope.$digest();
 		searchScheduleCalledTimes = 0;
 
-		controller.scheduleDate = new Date("2015-10-26");
+		controller.scheduleDate = new Date("2015-10-25");
 		mockSignalRBackendServer.notifyClients([
 			{
 				"DomainReferenceId": "221B-Baker-SomeoneElse",

@@ -178,21 +178,37 @@
 		vm.isNextDay = false;
 		vm.disableNextDay = false;
 		vm.timeRange = {
-			startTime: new Date('2016-06-15T08:00:00Z'),
-			endTime: new Date('2016-06-15T16:00:00Z')
+			startTime: moment('2016-06-15 08:00').toDate(),
+			endTime:  moment('2016-06-15 16:00').toDate()
 		};
 
 		vm.selectedAgents = [
 			{
 				PersonId: 'agent1',
 				Name: 'agent1',
-				ScheduleStartTime: new Date('2016-06-15T08:00:00Z'),
-				ScheduleEndTime: new Date('2016-06-15T17:00:00Z')
+				ScheduleStartTime: null,
+				ScheduleEndTime: null,
+				PersonScheduleVm: {
+					Date: '2016-06-16',
+					Timezone: {
+						IanaId: "Asia/Hong_Kong",						
+					},
+					Shifts: [
+					]
+				}
 			}, {
 				PersonId: 'agent2',
 				Name: 'agent2',
-				ScheduleStartTime: new Date('2016-06-15T08:00:00Z'),
-				ScheduleEndTime: new Date('2016-06-15T17:00:00Z')
+				ScheduleStartTime: null,
+				ScheduleEndTime: null,
+				PersonScheduleVm: {
+					Date: '2016-06-15',
+					Timezone: {
+						IanaId: "Asia/Hong_Kong",
+					},
+					Shifts: [
+					]
+				}
 			}];
 
 		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
@@ -206,12 +222,11 @@
 
 		var activityData = fakeActivityService.getAddActivityCalledWith();
 		expect(activityData).not.toBeNull();
-		expect(activityData.PersonIds.length).toEqual(vm.selectedAgents.length);
+		expect(activityData.PersonDates.length).toEqual(vm.selectedAgents.length);
 		expect(activityData.ActivityId).toEqual(vm.selectedActivityId);
-		expect(moment(activityData.StartTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.startTime).add(8,'hours').format('YYYY-MM-DDTHH:mm:00'));
-		expect(moment(activityData.EndTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.endTime).add(8, 'hours').format('YYYY-MM-DDTHH:mm:00'));
-		expect(activityData.Dates.length).toEqual(activityData.PersonIds.length);
-		expect(activityData.Dates[0]).toEqual(vm.selectedDate());
+		expect(moment(activityData.StartTime).format('YYYY-MM-DDTHH:mm')).toEqual('2016-06-15T08:00');
+		expect(moment(activityData.EndTime).format('YYYY-MM-DDTHH:mm')).toEqual('2016-06-15T16:00');
+
 		expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
 	});
 
@@ -230,21 +245,37 @@
 		vm.isNextDay = false;
 		vm.disableNextDay = false;
 		vm.timeRange = {
-			startTime: new Date('2016-06-15T08:00:00Z'),
-			endTime: new Date('2016-06-15T16:00:00Z')
+			startTime: moment('2016-06-15 08:00').toDate(),
+			endTime: moment('2016-06-15 16:00').toDate()
 		};
 
 		vm.selectedAgents = [
 			{
 				PersonId: 'agent1',
 				Name: 'agent1',
-				ScheduleStartTime: new Date('2016-06-15T08:00:00Z'),
-				ScheduleEndTime: new Date('2016-06-15T17:00:00Z')
+				ScheduleStartTime: null,
+				ScheduleEndTime: null,
+				PersonScheduleVm: {
+					Date: '2016-06-16',
+					Timezone: {
+						IanaId: "Asia/Hong_Kong",
+					},
+					Shifts: [
+					]
+				}
 			}, {
 				PersonId: 'agent2',
 				Name: 'agent2',
-				ScheduleStartTime: new Date('2016-06-15T09:00:00Z'),
-				ScheduleEndTime: new Date('2016-06-15T17:00:00Z')
+				ScheduleStartTime: null,
+				ScheduleEndTime: null,
+				PersonScheduleVm: {
+					Date: '2016-06-15',
+					Timezone: {
+						IanaId: "Asia/Hong_Kong",
+					},
+					Shifts: [
+					]
+				}
 			}];
 
 		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
@@ -316,7 +347,7 @@
 			date = inputDate;
 
 		scope.curDate = date;
-		scope.timezone = "Etc/UTC";
+		scope.timezone = "Asia/Hong_Kong";
 		fakeActivityService.setAvailableActivities(getAvailableActivities());
 
 		var container = $compile(html)(scope);

@@ -22,11 +22,18 @@
 			vm.availableActivitiesLoaded = true;
 		});
 
-		function decideBelongsToDates(targetTimeRange) {			
+		function decidePersonBelongsToDates(targetTimeRange) {			
 			return vm.selectedAgents.map(function (selectedAgent) {
-				return belongsToDateDecider.decideBelongsToDate(targetTimeRange,
-					belongsToDateDecider.normalizePersonScheduleVm(selectedAgent.PersonScheduleVm, vm.currentTimezone()),
-					moment(vm.selectedDate()).format('YYYY-MM-DD'));
+				var belongsToDate = vm.manageScheduleForDistantTimezonesEnabled
+					? belongsToDateDecider.decideBelongsToDate(targetTimeRange,
+						belongsToDateDecider.normalizePersonScheduleVm(scheduleManagementSvc.findPersonScheduleVmForPersonId(selectedAgent.PersonId), vm.currentTimezone()),
+						moment(vm.selectedDate()).format('YYYY-MM-DD'))
+					: moment(vm.selectedDate()).format('YYYY-MM-DD');
+
+				return {
+					Date: belongsToDate,
+					PersonId: selectedAgent.PersonId
+				};
 			});
 		}
 
@@ -37,11 +44,18 @@
 		vm.isInputValid = function () {
 			if (vm.timeRange == undefined || vm.selectedActivityId == undefined || vm.timeRange.startTime == undefined) return false;
 
-			var belongsToDates = decideBelongsToDates(getTimeRangeMoment());			
+			var belongsToDates = decidePersonBelongsToDates(getTimeRangeMoment());			
 			var invalidAgents = [];
 
-			for (var i = 0; i < belongsToDates.length; i++) {
-				if (!belongsToDates[i]) invalidAgents.push(vm.selectedAgents[i]);
+			if (vm.manageScheduleForDistantTimezonesEnabled) {
+				for (var i = 0; i < belongsToDates.length; i++) {
+					if (!belongsToDates[i].Date) invalidAgents.push(vm.selectedAgents[i]);
+				}
+			} else {
+				vm.selectedAgents.filter(function(agent) { return !vm.isNewActivityAllowedForAgent(agent, vm.timeRange); })
+					.forEach(function(agent) {
+						invalidAgents.push(agent);
+					});
 			}
 
 			vm.notAllowedNameListString = invalidAgents.map(function (x) { return x.Name; }).join(', ');
@@ -65,26 +79,32 @@
 			}
 		};
 
-		var addActivity = function (requestData) {				
-			if(requestData.PersonIds.length > 0){
-				activityService.addActivity(requestData).then(function (response) {
-					if (vm.getActionCb(vm.label)) {
-						vm.getActionCb(vm.label)(vm.trackId, requestData.PersonIds);
-					}
-					teamScheduleNotificationService.reportActionResult({
-						success: 'SuccessfulMessageForAddingActivity',
-						warning: 'PartialSuccessMessageForAddingActivity'
-					}, vm.selectedAgents.map(function (x) {
-						return {
-							PersonId: x.PersonId,
-							Name: x.Name
+		var addActivity = function(requestData) {
+			var personIds = requestData.PersonDates.map(function(personDate) {
+				return personDate.PersonId;
+			});
+			if (requestData.PersonDates.length > 0) {
+				activityService.addActivity(requestData)
+					.then(function(response) {
+						if (vm.getActionCb(vm.label)) {
+							vm.getActionCb(vm.label)(vm.trackId, personIds);
 						}
-					}), response.data);
-					vm.checkingCommand = false;
-				});
-			}else{
+						teamScheduleNotificationService.reportActionResult({
+								success: 'SuccessfulMessageForAddingActivity',
+								warning: 'PartialSuccessMessageForAddingActivity'
+							},
+							vm.selectedAgents.map(function(x) {
+								return {
+									PersonId: x.PersonId,
+									Name: x.Name
+								}
+							}),
+							response.data);
+						vm.checkingCommand = false;
+					});
+			} else {
 				if (vm.getActionCb(vm.label)) {
-					vm.getActionCb(vm.label)(vm.trackId, requestData.PersonIds);
+					vm.getActionCb(vm.label)(vm.trackId, personIds);
 				}
 				vm.checkingCommand = false;
 			}
@@ -92,12 +112,9 @@
 
 		function getRequestData() {		
 			vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
+
 			return {
-				PersonIds: vm.selectedAgents.map(function (agent) {
-					return agent.PersonId;
-				}),
-				Dates: decideBelongsToDates(getTimeRangeMoment()),
-				Date: vm.selectedDate(),
+				PersonDates: decidePersonBelongsToDates(getTimeRangeMoment()),
 				StartTime: vm.convertTime(moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm")),
 				EndTime: vm.convertTime(moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm")),
 				ActivityId: vm.selectedActivityId,
@@ -192,6 +209,8 @@
 			scope.vm.trackId = containerCtrl.getTrackId();
 			scope.vm.getActionCb = containerCtrl.getActionCb;
 			scope.vm.checkCommandActivityLayerOrders = containerCtrl.hasToggle('CheckOverlappingCertainActivitiesEnabled');
+			scope.vm.manageScheduleForDistantTimezonesEnabled = containerCtrl
+				.hasToggle('ManageScheduleForDistantTimezonesEnabled');
 
 			scope.vm.timeRange = {
 				startTime: selfCtrl.getDefaultActvityStartTime(),

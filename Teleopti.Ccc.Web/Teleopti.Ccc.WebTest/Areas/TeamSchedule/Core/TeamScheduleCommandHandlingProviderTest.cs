@@ -46,10 +46,21 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var input = new AddActivityFormData
 			{
 				ActivityId = Guid.NewGuid(),
-				Dates = new[] { date, date},
 				StartTime = new DateTime(2016, 4, 16, 8, 0, 0),
 				EndTime = new DateTime(2016, 4, 16, 17, 0, 0),
-				PersonIds = new [] { person1.Id.Value, person2.Id.Value },
+				PersonDates = new []
+				{
+					new PersonDate
+					{
+						PersonId = person1.Id.Value,
+						Date = date
+					},
+					new PersonDate
+					{
+						PersonId = person2.Id.Value,
+						Date = date
+					}
+				},
 				TrackedCommandInfo = new TrackedCommandInfo()
 			};
 
@@ -74,10 +85,21 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var input = new AddActivityFormData
 			{
 				ActivityId = Guid.NewGuid(),
-				Dates = new[] { date,date },
 				StartTime = new DateTime(2016, 4, 16, 8, 0, 0),
 				EndTime = new DateTime(2016, 4, 16, 17, 0, 0),
-				PersonIds = new[] { person1.Id.Value, person2.Id.Value },
+				PersonDates = new[]
+				{
+					new PersonDate
+					{
+						PersonId = person1.Id.Value,
+						Date = date
+					},
+					new PersonDate
+					{
+						PersonId = person2.Id.Value,
+						Date = date
+					}
+				},
 				TrackedCommandInfo = new TrackedCommandInfo()
 			};
 
@@ -607,10 +629,16 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var input = new AddActivityFormData
 			{
 				ActivityId = Guid.NewGuid(),
-				Dates = new[] { date,date },
 				StartTime = new DateTime(2016,4,16,8,0,0),
 				EndTime = new DateTime(2016,4,16,17,0,0),
-				PersonIds = new[] { person.Id.Value },
+				PersonDates = new[]
+				{
+					new PersonDate
+					{
+						PersonId = person.Id.Value,
+						Date = date
+					}
+				},
 				TrackedCommandInfo = new TrackedCommandInfo()
 			};
 

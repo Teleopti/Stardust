@@ -39,9 +39,9 @@
 			return deferred.promise;
 		}
 
-		function addActivity(activity) {
+		function addActivity(input) {
 			var deferred = $q.defer();
-			$http.post(addActivityUrl, normalizeDates(activity)).then(function (data) {
+			$http.post(addActivityUrl, input).then(function (data) {
 				deferred.resolve(data);
 			}, function (error) {
 				deferred.reject(error);
@@ -49,9 +49,9 @@
 			return deferred.promise;
 		}
 
-		function addPersonalActivity(activity) {
+		function addPersonalActivity(input) {
 			var deferred = $q.defer();
-			$http.post(addPersonalActivityUrl, normalizeDates(activity)).then(function (data) {
+			$http.post(addPersonalActivityUrl, normalizeInput(input)).then(function (data) {
 				deferred.resolve(data);
 			}, function (error) {
 				deferred.reject(error);
@@ -72,14 +72,6 @@
 		function normalizeInput(input) {
 			var normalized = angular.copy(input);
 			normalized.Date = moment(input.Date).format('YYYY-MM-DD');
-			return normalized;
-		}
-
-		function normalizeDates(input) {
-			var normalized = angular.copy(input);
-			normalized.Dates = input.Dates.map(function(d) {
-				return moment(d).format('YYYY-MM-DD');
-			}); 
 			return normalized;
 		}
 

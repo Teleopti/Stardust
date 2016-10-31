@@ -303,7 +303,7 @@
 				var startDate = moment(message.StartDate.substring(1, message.StartDate.length));
 				var endDate = moment(message.EndDate.substring(1, message.EndDate.length));
 				var isScheduleDateInMessageRange =
-					viewRangeEnd.isSameOrBefore(endDate) && viewRangeStart.isSameOrAfter(startDate);					
+					viewRangeStart.isSameOrBefore(endDate) && viewRangeEnd.isSameOrAfter(startDate);
 
 				return isMessageInsidePeopleList && isScheduleDateInMessageRange;
 			}
@@ -368,6 +368,7 @@
 									 || toggleSvc.WfmTeamSchedule_ShowDayOffWarning_39801
 									 || toggleSvc.WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
 				ViewScheduleOnTimezoneEnabled: toggleSvc.WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925,
+				ManageScheduleForDistantTimezonesEnabled:  toggleSvc.WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305,
 				CheckPersonalAccountEnabled: toggleSvc.WfmTeamSchedule_CheckPersonalAccountWhenAddingAbsence_41088
 			};
 

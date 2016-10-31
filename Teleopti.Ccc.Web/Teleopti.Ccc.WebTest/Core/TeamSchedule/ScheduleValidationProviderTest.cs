@@ -402,12 +402,18 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			ScheduleStorage.Add(pa);
 			var input = new CheckActivityLayerOverlapFormData
 			{
-				PersonIds = new Guid[] { person.Id.Value },
-				Date = new DateOnly(2013, 11, 14),
+				PersonDates = new[]
+				{
+					new PersonDate
+					{
+						PersonId = person.Id.Value,
+						Date = new DateOnly(2013, 11, 14)
+					}
+				},
 				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
 				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
 				ActivityId = mainActivity.Id.GetValueOrDefault(),
-				ActivityType =ActivityType.RegularActivity
+				ActivityType = ActivityType.RegularActivity
 			};
 
 			var result = Target.GetActivityLayerOverlapCheckingResult(input);
@@ -449,8 +455,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			ScheduleStorage.Add(pa);
 			var input = new CheckActivityLayerOverlapFormData
 			{
-				PersonIds = new Guid[] { person.Id.Value },
-				Date = new DateOnly(2013, 11, 14),
+				PersonDates = new[]
+				{
+					new PersonDate
+					{
+						PersonId = person.Id.Value,
+						Date = new DateOnly(2013, 11, 14)
+					}
+				},
 				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
 				EndTime = new DateTime(2013, 11, 14, 11, 0, 0),
 				ActivityId = mainActivity.Id.GetValueOrDefault(),
@@ -489,8 +501,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			ScheduleStorage.Add(pa);
 			var input = new CheckActivityLayerOverlapFormData
 			{
-				PersonIds = new Guid[] { person.Id.Value },
-				Date = new DateOnly(2013, 11, 14),
+				PersonDates = new[]
+				{
+					new PersonDate
+					{
+						PersonId = person.Id.Value,
+						Date = new DateOnly(2013, 11, 14)
+					}
+				},
 				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
 				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
 				ActivityId = mainActivity.Id.GetValueOrDefault(),
@@ -534,8 +552,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			ScheduleStorage.Add(pa);
 			var input = new CheckActivityLayerOverlapFormData
 			{
-				PersonIds = new Guid[] { person.Id.Value },
-				Date = new DateOnly(2013, 11, 14),
+				PersonDates = new[]
+				{
+					new PersonDate
+					{
+						PersonId = person.Id.Value,
+						Date = new DateOnly(2013, 11, 14)
+					}
+				},
 				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
 				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
 				ActivityId = stickyActivity.Id.Value,
@@ -573,8 +597,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			ScheduleStorage.Add(pa);
 			var input = new CheckActivityLayerOverlapFormData
 			{
-				PersonIds = new Guid[] { person.Id.Value },
-				Date = new DateOnly(2013, 11, 14),
+				PersonDates = new[]
+				{
+					new PersonDate
+					{
+						PersonId = person.Id.Value,
+						Date = new DateOnly(2013, 11, 14)
+					}
+				},
 				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
 				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
 				ActivityId = stickyActivity.Id.Value,
@@ -615,8 +645,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			ScheduleStorage.Add(personAbsence);
 			var input = new CheckActivityLayerOverlapFormData
 			{
-				PersonIds = new Guid[] { person.Id.Value },
-				Date = new DateOnly(2013, 11, 14),
+				PersonDates = new[]
+				{
+					new PersonDate
+					{
+						PersonId = person.Id.Value,
+						Date = new DateOnly(2013, 11, 14)
+					}
+				},
 				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
 				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
 				ActivityId = stickyActivity.Id.Value,
@@ -649,8 +685,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			ScheduleStorage.Add(pa);
 			var input = new CheckActivityLayerOverlapFormData
 			{
-				PersonIds = new Guid[] { person.Id.Value },
-				Date = new DateOnly(2013, 11, 14),
+				PersonDates = new[]
+				{
+					new PersonDate
+					{
+						PersonId = person.Id.Value,
+						Date = new DateOnly(2013, 11, 14)
+					}
+				},
 				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
 				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
 				ActivityId = stickyActivity.Id.Value,
@@ -674,8 +716,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 
 			var input = new CheckActivityLayerOverlapFormData
 			{
-				PersonIds = new Guid[] { person.Id.Value },
-				Date = new DateOnly(2013, 11, 14),
+				PersonDates = new[]
+				{
+					new PersonDate
+					{
+						PersonId = person.Id.Value,
+						Date = new DateOnly(2013, 11, 14)
+					}
+				},
 				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
 				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
 				ActivityId = mainActivity.Id.Value,
@@ -716,8 +764,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			ScheduleStorage.Add(pa);
 			var input = new CheckActivityLayerOverlapFormData
 			{
-				PersonIds = new Guid[] { person.Id.Value },
-				Date = new DateOnly(2013, 11, 14),
+				PersonDates = new[]
+				{
+					new PersonDate
+					{
+						PersonId = person.Id.Value,
+						Date = new DateOnly(2013, 11, 14)
+					}
+				},
 				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
 				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
 				ActivityId = mainActivity.Id.GetValueOrDefault(),

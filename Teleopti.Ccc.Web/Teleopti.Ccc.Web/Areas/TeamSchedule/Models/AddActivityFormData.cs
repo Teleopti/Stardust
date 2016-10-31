@@ -5,12 +5,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 {
 	public class AddActivityFormData
 	{
-		public Guid[] PersonIds;
+		public PersonDate[] PersonDates;
 		public Guid ActivityId { get; set; }
-		public DateOnly[] Dates { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
 		public bool MoveConflictLayerAllowed { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
+	}
+
+	public class PersonDate
+	{
+		public Guid PersonId { get; set; }
+		public DateOnly Date { get; set; }
 	}
 }
