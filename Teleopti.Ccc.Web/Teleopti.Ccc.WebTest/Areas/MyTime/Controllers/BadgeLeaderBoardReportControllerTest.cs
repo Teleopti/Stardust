@@ -25,7 +25,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void Index_WhenUserHasPermissionForBadgeLeaderBoardReport_ShouldReturnPartialView()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IBadgeLeaderBoardReportViewModelFactory>();
-			var target = new BadgeLeaderBoardReportController(viewModelFactory, null, null, null);
+			var timezone = new FakeUserTimeZone();
+			var target = new BadgeLeaderBoardReportController(viewModelFactory, null, null, null, timezone);
 			var model = new BadgeLeaderBoardReportViewModel();
 			var option = new LeaderboardQuery
 			{
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void IndexShouldReturnPartialView()
 		{
-			var controller = new BadgeLeaderBoardReportController(null, null, null, null);
+			var controller = new BadgeLeaderBoardReportController(null, null, null, null, new FakeUserTimeZone());
 			controller.Index().Should().Be.OfType<ViewResult>();
 		}
 
@@ -159,7 +160,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				var currentLoggedOnUser = new FakeLoggedOnUser(CurrentUser(team)); 
 				var factory = new BadgeLeaderBoardReportOptionFactory(teamProvider, principalAuthorization, currentLoggedOnUser);
 
-				return new BadgeLeaderBoardReportController(null, factory, null, now);
+				return new BadgeLeaderBoardReportController(null, factory, null, now, new FakeUserTimeZone());
 			}
 
 			private static Team createTeam()

@@ -16,11 +16,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	    private readonly IBadgeLeaderBoardReportOptionFactory _viewModelFactory;
 	    private readonly IUserCulture _userCulture;
 	    private readonly INow _now;
+	    private readonly IUserTimeZone _timeZone;
 
-	    public BadgeLeaderBoardReportController(IBadgeLeaderBoardReportViewModelFactory badgeLeaderBoardReportViewModelFactory, IBadgeLeaderBoardReportOptionFactory viewModelFactory, IUserCulture userCulture, INow now)
+	    public BadgeLeaderBoardReportController(IBadgeLeaderBoardReportViewModelFactory badgeLeaderBoardReportViewModelFactory, IBadgeLeaderBoardReportOptionFactory viewModelFactory, IUserCulture userCulture, INow now, IUserTimeZone timeZone)
 	    {
 		    _userCulture = userCulture;
 		    _now = now;
+		    _timeZone = timeZone;
 		    _badgeLeaderBoardReportViewModelFactory = badgeLeaderBoardReportViewModelFactory;
 		    _viewModelFactory = viewModelFactory;
 	    }
@@ -46,9 +48,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	    [UnitOfWork]
 	    public virtual JsonResult OptionsForLeaderboard()
 	    {
+			var todayInUserTimezone = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()));
 			return
 				Json(
-					_viewModelFactory.CreateLeaderboardOptions(_now.LocalDateOnly(), DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard),
+					_viewModelFactory.CreateLeaderboardOptions(todayInUserTimezone, DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard),
 					JsonRequestBehavior.AllowGet);
 	    }
     }

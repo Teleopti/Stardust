@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		private static IPerson FakePerson()
 		{
 			var person = PersonFactory.CreatePersonWithGuid("", "");
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			person.WorkflowControlSet=new WorkflowControlSet
 				{
 					SchedulePublishedToDate = DateTime.Today.AddDays(1)
