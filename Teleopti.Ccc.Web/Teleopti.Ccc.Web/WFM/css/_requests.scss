@@ -6,6 +6,10 @@
 .wfm-requests {
     position: relative;
 
+    .wfm-checkbox-toggle{
+        position:relative;
+    }
+
     .inline-block, .wfm-date-range-picker-wrap {
         display: inline-block;
     }
