@@ -96,9 +96,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules); //TODO: check if this is enough
 
-						_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo, datePoint, schedulingOptions,
-							rollbackService,
-							new DoNothingResourceCalculateDelayer(), maxSeatData.AllMaxSeatSkillDaysPerSkill().ToSkillDayEnumerable(), schedules, new ShiftNudgeDirective(), businessRules);
+						if (!_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo, datePoint,
+								schedulingOptions,
+								rollbackService,
+								new DoNothingResourceCalculateDelayer(), maxSeatData.AllMaxSeatSkillDaysPerSkill().ToSkillDayEnumerable(),
+								schedules, new ShiftNudgeDirective(), businessRules))
+						{
+							rollbackService.RollbackMinimumChecks(); //förmodligen fel - rullar tillbaka allt	
+						}
 
 						if (!_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences))
 						{

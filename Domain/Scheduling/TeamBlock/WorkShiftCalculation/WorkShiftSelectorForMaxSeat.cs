@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				if (parameters.MaxSeatInfoPerInterval.TryGetValue(layer.Period.StartDateTime, out intervalLevelMaxSeatInfo))
 				{
 					if (intervalLevelMaxSeatInfo.IsMaxSeatReached)
-						return 1000;
+						return null;
 				}
 			}
 			return 1;
