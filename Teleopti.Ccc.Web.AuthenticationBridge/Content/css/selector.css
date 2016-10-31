@@ -53,6 +53,14 @@ body, .login-header {
     text-align: center;
 }
 
+.login-message {
+	text-align: center;
+	color: rgb(118, 118, 118);
+	position: absolute;
+    bottom: 10px;
+    right: 0;
+}
+
 
 /*.yahoo { background: url("/Content/images/yahoo.gif") no-repeat scroll center center rgb(255, 255, 255);}
 .google { background: url("/Content/images/google.png") no-repeat scroll center center rgb(255, 255, 255);}
