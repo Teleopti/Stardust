@@ -31,6 +31,17 @@ namespace Teleopti.Support.Tool.Tool
 			
 			var custom = new CustomSectionContainer();
 			_customSection.Read(ssoFilePath.AuthBridgeConfig, custom);
+			var authConfig = File.ReadAllLines(ssoFilePath.AuthBridgeConfig);
+			foreach (var line in authConfig)
+			{
+				if (line.Contains("Content-Security-Policy"))
+				{
+					custom.AddSection();
+					custom.Add(line);
+					break;
+				}
+			}
+
 			_customSection.Read(ssoFilePath.ClaimPolicies, custom);
 
 			var config = File.ReadAllLines(ssoFilePath.WebConfig);

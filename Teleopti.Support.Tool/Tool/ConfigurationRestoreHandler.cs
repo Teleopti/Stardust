@@ -41,14 +41,17 @@ namespace Teleopti.Support.Tool.Tool
 						_customSection.WriteCustomSection(item.Key, configFilePaths.AuthBridgeConfig, item.Value);
 						break;
 					case 3:
+						writeCustomRow(configFilePaths.AuthBridgeConfig, "Content-Security-Policy", item.Value);
+						break;
 					case 4:
 					case 5:
-						_customSection.WriteCustomSection(item.Key - 2, configFilePaths.ClaimPolicies, item.Value);
-						break;
 					case 6:
-						writeCustomRow(configFilePaths.WebConfig, "DefaultIdentityProvider", item.Value);
+						_customSection.WriteCustomSection(item.Key - 3, configFilePaths.ClaimPolicies, item.Value);
 						break;
 					case 7:
+						writeCustomRow(configFilePaths.WebConfig, "DefaultIdentityProvider", item.Value);
+						break;
+					case 8:
 						writeCustomRow(configFilePaths.WebConfig, "Content-Security-Policy", item.Value);
 						break;
 				}
