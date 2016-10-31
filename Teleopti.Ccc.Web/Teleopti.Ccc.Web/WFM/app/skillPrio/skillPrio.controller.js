@@ -254,6 +254,7 @@
 			var query = skillPrioAggregator.saveSkills().save(allData);
 			query.$promise.then(function () {
 				NoticeService.success('All changes are saved', 5000, true);
+				selectActivity(vm.selectedActivity);
 			});
 		};
 
