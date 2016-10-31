@@ -8,12 +8,12 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
-	public class ResourceCalculateReadModelUpdater : IHandle<UpdateStaffingLevelReadModelEvent>
+	public class UpdateStaffingLevelReadModelHandler : IHandle<UpdateStaffingLevelReadModelEvent>
 	{
 		private readonly IComponentContext _componentContext;
 		private readonly IStardustJobFeedback _stardustJobFeedback;
 
-		public ResourceCalculateReadModelUpdater(IComponentContext componentContext, IStardustJobFeedback stardustJobFeedback)
+		public UpdateStaffingLevelReadModelHandler(IComponentContext componentContext, IStardustJobFeedback stardustJobFeedback)
 		{
 			_componentContext = componentContext;
 			_stardustJobFeedback = stardustJobFeedback;

@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
                         _businessUnitScope.OnThisThreadUse(businessUnit);
                         _publisher.Publish(new UpdateStaffingLevelReadModelEvent()
                         {
-                            StartDateTime = now,
+                            StartDateTime = now.AddHours(-24),
                             EndDateTime = now.AddHours(24)
                         });
                     });
