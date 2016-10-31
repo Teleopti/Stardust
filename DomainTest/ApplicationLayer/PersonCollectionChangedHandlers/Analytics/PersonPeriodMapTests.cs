@@ -5,10 +5,8 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
@@ -23,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		private IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
 		private IAnalyticsIntervalRepository _analyticsIntervalRepository;
 		private FakeGlobalSettingDataRepository _globalSettingDataRepository;
+		private AnalyticsPersonPeriodDateFixer _analyticsPersonPeriodDateFixer;
 
 		private readonly AnalyticsSkill fakeSkill1 = new AnalyticsSkill
 		{
@@ -97,6 +96,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_globalSettingDataRepository = new FakeGlobalSettingDataRepository();
 
+			
+			_analyticsPersonPeriodDateFixer = new AnalyticsPersonPeriodDateFixer(_analyticsDateRepository, _analyticsIntervalRepository);
 			personPeriodTransformer = new PersonPeriodTransformer(fakeAnalyticsPersonPeriodRepository,
 				fakeAnalyticsSkillRepository, 
 				fakeAnalyticsBusinessUnitRepository, 
@@ -105,40 +106,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				_analyticsDateRepository, 
 				_analyticsTimeZoneRepository, 
 				_analyticsIntervalRepository,
-				_globalSettingDataRepository);
-		}
-
-
-		[Test]
-		public void NormalDate_MapDateToId_Date()
-		{
-			var date = new DateTime(2015, 01, 01);
-			var dateId = personPeriodTransformer.MapDateId(date);
-			Assert.AreEqual(0, dateId);
-		}
-
-		[Test]
-		public void BigBangDate_MapDateToId_NotDefinedDate()
-		{
-			var date = AnalyticsDate.NotDefined.DateDate;
-			var dateId = personPeriodTransformer.MapDateId(date);
-			Assert.AreEqual(AnalyticsDate.NotDefined.DateId, dateId);
-		}
-
-		[Test]
-		public void Eternity_MapDateToId_EternityDate()
-		{
-			var date = AnalyticsDate.Eternity.DateDate;
-			var dateId = personPeriodTransformer.MapDateId(date);
-			Assert.AreEqual(AnalyticsDate.Eternity.DateId, dateId);
-		}
-
-		[Test]
-		public void OutSideScopeDate_MapDateToId_NotDefinedDate()
-		{
-			var date = new DateTime(2025, 12, 31);
-			var dateId = personPeriodTransformer.MapDateId(date);
-			Assert.AreEqual(-1, dateId);
+				_globalSettingDataRepository,
+				_analyticsPersonPeriodDateFixer);
 		}
 
 		[Test]

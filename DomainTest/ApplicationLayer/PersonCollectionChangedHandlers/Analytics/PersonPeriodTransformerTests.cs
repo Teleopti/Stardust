@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				fakeAnalyticsDateRepository,
 				fakeAnalyticsTimeZoneRepository,
 				_analyticsIntervalRepository,
-				_globalSettingDataRepository);
+				_globalSettingDataRepository, new AnalyticsPersonPeriodDateFixer(fakeAnalyticsDateRepository, _analyticsIntervalRepository));
 		}
 
 		[Test]

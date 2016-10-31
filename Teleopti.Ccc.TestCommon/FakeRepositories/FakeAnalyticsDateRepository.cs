@@ -26,16 +26,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_fakeDates.Clear();
 		}
 
-		private void initDates(DateTime start, DateTime end)
+		private void initDates(DateTime start, DateTime end, int indexStart = 0)
 		{
-			_fakeDates.Add(AnalyticsDate.NotDefined);
-			_fakeDates.Add(AnalyticsDate.Eternity);
+			if (_fakeDates.All(a => a.DateId != AnalyticsDate.NotDefined.DateId)) _fakeDates.Add(AnalyticsDate.NotDefined);
+			if (_fakeDates.All(a => a.DateId != AnalyticsDate.Eternity.DateId)) _fakeDates.Add(AnalyticsDate.Eternity);
 
 			var d = start;
-			var dIndex = 0;
+			var dIndex = indexStart;
 			while (d <= end)
 			{
-				_fakeDates.Add(new AnalyticsDate { DateDate = d, DateId = dIndex});
+				_fakeDates.Add(new AnalyticsDate { DateDate = d, DateId = dIndex });
 				d = d.AddDays(1);
 				dIndex++;
 			}
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IAnalyticsDate MaxDate()
 		{
-			return _fakeDates.Last();
+			return _fakeDates.Last(a => a.DateId >= 0);
 		}
 
 		public IAnalyticsDate MinDate()
@@ -53,7 +53,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IAnalyticsDate Date(DateTime dateDate)
 		{
-			return _fakeDates.FirstOrDefault(a => new DateOnly(a.DateDate) == new DateOnly(dateDate));
+			if (dateDate < MinDate().DateDate)
+				return null;
+			return _fakeDates.FirstOrDefault(a => new DateOnly(a.DateDate) == new DateOnly(dateDate)) ?? createDates(dateDate);
+		}
+
+		private IAnalyticsDate createDates(DateTime dateDate)
+		{
+			initDates(MaxDate().DateDate.AddDays(1), dateDate, MaxDate().DateId + 1);
+			return Date(dateDate);
 		}
 
 		public IList<IAnalyticsDate> GetAllPartial()

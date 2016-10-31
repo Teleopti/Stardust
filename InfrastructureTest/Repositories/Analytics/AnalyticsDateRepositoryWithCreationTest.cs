@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
@@ -115,15 +114,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
-		public void ShouldLoadEternityAsMaxDate()
+		public void ShouldLoadMaxDateNotEternityAsMaxDate()
 		{
 			var targetDate = new DateTime(2000, 01, 05);
-			WithAnalyticsUnitOfWork.Get(() => Target.Date(targetDate));
+			var createdDate = WithAnalyticsUnitOfWork.Get(() => Target.Date(targetDate));
 			_fakeEventPublisher.Clear();
 
 			var date = WithAnalyticsUnitOfWork.Get(() => Target.MaxDate());
-			date.DateDate.Date.Should().Be.EqualTo(AnalyticsDate.Eternity.DateDate);
-			date.DateId.Should().Be.EqualTo(AnalyticsDate.Eternity.DateId);
+			date.DateDate.Date.Should().Be.EqualTo(new DateTime(2000, 01, 05));
+			date.DateId.Should().Be.EqualTo(createdDate.DateId);
+			date.DateId.Should().Not.Be.LessThan(0);
 
 			_fakeEventPublisher.PublishedEvents.Should().Be.Empty();
 		}

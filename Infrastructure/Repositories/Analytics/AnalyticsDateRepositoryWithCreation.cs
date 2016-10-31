@@ -23,11 +23,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			_analyticsConfigurationRepository = analyticsConfigurationRepository;
 		}
 
-		public new IAnalyticsDate MaxDate()
-		{
-			return AnalyticsDate.Eternity;
-		}
-
 		public new IAnalyticsDate Date(DateTime dateDate)
 		{
 			return base.Date(dateDate) ?? createDatesTo(dateDate.Date);

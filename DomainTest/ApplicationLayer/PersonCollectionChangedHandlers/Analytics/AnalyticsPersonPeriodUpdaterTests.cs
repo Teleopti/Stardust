@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				_analyticsDateRepository,
 				_analyticsTimeZoneRepository,
 				_analyticsIntervalRepository,
-				_globalSettingDataRepository);
+				_globalSettingDataRepository, new AnalyticsPersonPeriodDateFixer(_analyticsDateRepository, _analyticsIntervalRepository));
 
 			_target = new AnalyticsPersonPeriodUpdater(_personRepository, _personPeriodRepository, _eventPublisher, auow, personPeriodFilter, personPeriodTransformer);
 		}

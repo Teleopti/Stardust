@@ -316,7 +316,7 @@
     <Compile Include="Budgeting\AbsenceRequestBudgetGroupValidationHelperTest.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNewByFakeTest.cs" />
     <Compile Include="SchedulingScenarios\ApplicationLayer\IntradayOptimizationCommandHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodDateTransformerTests.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPersonPeriodDateFixerTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodMapTests.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\SoftDeleteTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TestCaseExtensions.cs" />
