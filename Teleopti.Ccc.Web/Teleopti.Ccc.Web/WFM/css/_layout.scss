@@ -130,25 +130,10 @@ md-progress-circular{
 	}
 }
 
-
 //Temp move us to styleguide
-
-
-
-/*moved to the styleguide - remove after bump*/
-
-.inline-select{
-	margin-top:-5px!important;
-	margin-left: 5px!important;
-}
-
-.wfm-form input, .wfm-form select{
-	margin-right: 0!important;
-}
-
-.chip-disabled{
-	.wfm-chip{
-		cursor: not-allowed!important;
-	}
-	color:$text-color-muted!important;
+textarea{
+	background-color: $white;
+	color:$text-color-standard;
+	resize:vertical;
+	width:100%;
 }
