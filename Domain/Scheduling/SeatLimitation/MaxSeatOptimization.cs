@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
@@ -63,48 +62,41 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IScenario scenario, IOptimizationPreferences optimizationPreferences)
 		{
-			if(optimizationPreferences.Advanced.UserOptionMaxSeatsFeature.Equals(MaxSeatsFeatureOptions.DoNotConsiderMaxSeats))
+			if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature.Equals(MaxSeatsFeatureOptions.DoNotConsiderMaxSeats))
 				return;
 			var allAgents = schedules.Select(schedule => schedule.Key);
 			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, scenario, allAgents);
 			if (!maxSeatData.MaxSeatSkillExists())
 				return;
-			var allMaxSeatSkills = maxSeatData.AllMaxSeatSkills();
-			var allMaxSeatSkillDays = maxSeatData.AllMaxSeatSkillDaysPerSkill();
-			var tagSetter = optimizationPreferences.General.ScheduleTag == null ? 
-				new ScheduleTagSetter(NullScheduleTag.Instance) : 
+			var tagSetter = optimizationPreferences.General.ScheduleTag == null ?
+				new ScheduleTagSetter(NullScheduleTag.Instance) :
 				new ScheduleTagSetter(optimizationPreferences.General.ScheduleTag);
 			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedules, allAgents, period);
 			var businessRules = NewBusinessRuleCollection.Minimum();
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			_teamInfoFactoryFactory.Create(allAgents, schedules, optimizationPreferences.Extra.TeamGroupPage);
-			var remainingInfoList = _teamBlockGenerator.Generate(allAgents, allMatrixes, period, agentsToOptimize, schedulingOptions);
+			var teamBlockInfos = _teamBlockGenerator.Generate(allAgents, allMatrixes, period, agentsToOptimize, schedulingOptions);
+			var allMaxSeatSkillDays = maxSeatData.AllMaxSeatSkillDaysPerSkill();
 
-			using (_resourceCalculationContextFactory.Create(schedules, allMaxSeatSkills))
+			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills()))
 			{
-				while (remainingInfoList.Count > 0)
+				foreach (var teamBlockInfo in teamBlockInfos)
 				{
-					foreach (var teamBlockInfo in remainingInfoList.ToList())
+					var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= period.StartDate); //what is this?
+					var maxPeakBefore = _maxSeatPeak.Fetch(datePoint, teamBlockInfo, allMaxSeatSkillDays);
+					if (maxPeakBefore > 0.01)
 					{
 						var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
-						var firstSelectedDay = period.DayCollection().First();
-						var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
-						var maxPeakBefore = _maxSeatPeak.Fetch(datePoint, teamBlockInfo, allMaxSeatSkillDays);
-						if (maxPeakBefore < 0.0001)
-						{
-							remainingInfoList.Remove(teamBlockInfo);
-							continue;
-						}
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules); //TODO: fix - don't remove everyone if not needed
-						if (!_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, 
-													teamBlockInfo, 
+						if (!_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat,
+													teamBlockInfo,
 													datePoint,
 													schedulingOptions,
 													rollbackService,
-													new DoNothingResourceCalculateDelayer(), 
+													new DoNothingResourceCalculateDelayer(),
 													allMaxSeatSkillDays.ToSkillDayEnumerable(),
-													schedules, 
-													new ShiftNudgeDirective(), 
+													schedules,
+													new ShiftNudgeDirective(),
 													businessRules) ||
 								!_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences) ||
 								!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) ||
@@ -112,8 +104,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						{
 							rollbackService.RollbackMinimumChecks();
 						}
-
-						remainingInfoList.Remove(teamBlockInfo);
 					}
 				}
 			}
