@@ -44,7 +44,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			newSkill.SetTemplateAt(4, new SkillDayTemplate("fake", templateSkillDataPeriods));
 			newSkill.SetTemplateAt(5, new SkillDayTemplate("fake", templateSkillDataPeriods));
 			newSkill.SetTemplateAt(6, new SkillDayTemplate("fake", templateSkillDataPeriods));
-			site.MaxSeatSkill = newSkill; //TODO should be removed
 
 			return newSkill;
 		}
