@@ -84,6 +84,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				{
 					foreach (var teamBlockInfo in remainingInfoList.ToList())
 					{
+						rollbackService.ClearModificationCollection();
 						var firstSelectedDay = period.DayCollection().First();
 						var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
 						var maxPeakBefore = _maxSeatPeak.Fetch(datePoint, teamBlockInfo, maxSeatData.AllMaxSeatSkillDaysPerSkill());
@@ -103,9 +104,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 								schedules, new ShiftNudgeDirective(), businessRules) ||
 								!_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences) ||
 								!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) ||
-								_maxSeatPeak.Fetch(datePoint, teamBlockInfo, maxSeatData.AllMaxSeatSkillDaysPerSkill()) > maxPeakBefore)
+								_maxSeatPeak.Fetch(datePoint, teamBlockInfo, maxSeatData.AllMaxSeatSkillDaysPerSkill()) > maxPeakBefore)	
 						{
-							rollbackService.RollbackMinimumChecks(); //förmodligen fel - rullar tillbaka allt
+							rollbackService.RollbackMinimumChecks(); //förmodligen fel - rullar tillbaka allt	
 						}
 
 						remainingInfoList.Remove(teamBlockInfo);

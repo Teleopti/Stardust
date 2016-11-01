@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.EqualTo(0);
 		}
 
-		[Test, Ignore("klagge")]
+		[Test]
 		public void ShouldNotRollbackEveryChangeIfLastOneBreakRule()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var agentWillBreakShiftCategory = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
 			var shiftCategoryLimitation = new ShiftCategoryLimitation(shiftCategory) { MaxNumberOf = 0 };
 			agentWillBreakShiftCategory.Agent.SchedulePeriod(dateOnly).AddShiftCategoryLimitation(shiftCategoryLimitation);
-			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentWillBreakShiftCategory.Assignment, agentScheduledForAnHourData.Assignment });
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentThatWillBeOptimized.Assignment, agentWillBreakShiftCategory.Assignment, agentScheduledForAnHourData.Assignment });
 			var optPreferences = CreateOptimizationPreferences();
 			optPreferences.General.UseShiftCategoryLimitations = true;
 
