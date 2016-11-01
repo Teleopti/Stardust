@@ -91,17 +91,35 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 		}
 
 		[Test]
-		[Ignore("No possibility to be green =(")]
 		public void ShouldGetLastestDateOfResourceCalculation()
 		{
 			Now.Is("2016-06-16 03:15");
-			var skillId = Guid.NewGuid();
+			
+			var bu1 = BusinessUnitFactory.CreateSimpleBusinessUnit("1");
+			
+			BusinessUnitRepository.Add(bu1);
+
+			var skillType = SkillTypeFactory.CreateSkillType();
+			SkillTypeRepository.Add(skillType);
+
+			var activity = new Activity("activty");
+			activity.SetBusinessUnit(bu1);
+			ActivityRepository.Add(activity);
+
+			var skill = new Skill("S1", "asdf", Color.AliceBlue, 15, skillType);
+			skill.Activity = activity;
+			skill.SetBusinessUnit(bu1);
+			skill.TimeZone = TimeZoneInfo.Utc;
+
+			SkillRepository.Add(skill);
+
+			CurrentUnitOfWork.Current().PersistAll();
 			var items =
 				new List<SkillStaffingInterval>()
 				{
 					new SkillStaffingInterval()
 					{
-						SkillId = skillId,
+						SkillId = skill.Id.GetValueOrDefault(),
 						StaffingLevel = 10,
 						EndDateTime = new DateTime(2016, 06, 16, 02, 15, 0, DateTimeKind.Utc),
 						Forecast = 20,
@@ -109,26 +127,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 					},
 					new SkillStaffingInterval()
 					{
-						SkillId = skillId,
+						SkillId = skill.Id.GetValueOrDefault(),
 						StaffingLevel = 10,
 						EndDateTime = new DateTime(2016, 06, 16, 0, 15, 0, DateTimeKind.Utc),
 						Forecast = 20,
 						StartDateTime = new DateTime(2016, 06, 16, 0, 0, 0, DateTimeKind.Utc)
-					},
-					new SkillStaffingInterval()
-					{
-						SkillId = skillId,
-						StaffingLevel = 10,
-						EndDateTime = new DateTime(2016, 06, 16, 3, 15, 0, DateTimeKind.Utc),
-						Forecast = 20,
-						StartDateTime = new DateTime(2016, 06, 16, 3, 0, 0, DateTimeKind.Utc)
 					}
 				};
 			Target.Persist(items, DateTime.Now);
 
 			var result = Target.GetLastCalculatedTime();
-			//result.Should().Be.EqualTo(new DateTime(2016, 06, 16, 03, 15, 0, DateTimeKind.Utc));
-			Assert.Fail();
+			result.First().Value.Should().Be.EqualTo(new DateTime(2016, 06, 16, 03, 15, 0, DateTimeKind.Utc));
+			
 		}
 
 		[Test]
