@@ -19,25 +19,32 @@
 
 		vm.isTimeRangeValid = function () {
 			return vm.isAbsenceTimeValid() || vm.isAbsenceDateValid();
-		}
+		};
 
 		vm.isAbsenceTimeValid = function () {
 			return !vm.isFullDayAbsence && (moment(vm.timeRange.endTime) >= moment(vm.timeRange.startTime));
 		};
 
+		vm.isInputValid = function() {
+			if (vm.manageScheduleForDistantTimezonesEnabled) {
+				return vm.isTimeRangeValid() && (vm.isFullDayAbsence && determineIsSameTimezone());
+			}
+			return vm.isTimeRangeValid();
+		}
+
 		vm.isAbsenceDateValid = function () {
-			return vm.isFullDayAbsence && moment(vm.timeRange.endTime).startOf('day') >= moment(vm.timeRange.startTime).startOf('day');
-		}
+			return vm.isFullDayAbsence && moment(vm.timeRange.endTime).isSameOrAfter(moment(vm.timeRange.startTime), 'day');
+		};
 
-		vm.getDefaultAbsenceStartTime = function () {
+		vm.getDefaultAbsenceStartTime = function() {
 			var curDateMoment = moment(vm.selectedDate());
-			var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
+			var personIds = vm.selectedAgents.map(function(agent) { return agent.PersonId; });
 			return scheduleManagementSvc.getEarliestStartOfSelectedSchedule(curDateMoment, personIds);
-		}
+		};
 
-		vm.getDefaultAbsenceEndTime = function () {
+		vm.getDefaultAbsenceEndTime = function() {
 			return moment(vm.getDefaultAbsenceStartTime()).add(1, 'hour').toDate();
-		}
+		};
 
 		vm.addAbsence = function() {
 			var requestData = {
@@ -65,6 +72,18 @@
 			}
 
 		};
+
+
+		function determineIsSameTimezone() {
+			var invalidAgentNameList = [];
+			vm.selectedAgents.forEach(function (agent) {
+				if (vm.getCurrentTimezone() != scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId).Timezone.IanaId) {
+					invalidAgentNameList.push(agent.Name);
+				}
+			});
+			vm.invalidAgentNameListString = invalidAgentNameList.join(', ');
+			return invalidAgentNameList.length == 0;
+		}
 
 		function addAbsence(requestData) {
 			if (requestData.PersonIds.length === 0) {
@@ -136,10 +155,13 @@
 			scope.vm.trackId = containerCtrl.getTrackId();
 			scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
 			scope.vm.getActionCb = containerCtrl.getActionCb;
+			scope.vm.getCurrentTimezone = containerCtrl.getCurrentTimezone;
 			scope.vm.isAddFullDayAbsenceAvailable = function () {
 				return containerCtrl.hasPermission('IsAddFullDayAbsenceAvailable');
 			};
 			scope.vm.checkPersonalAccountEnabled = containerCtrl.hasToggle('CheckPersonalAccountEnabled');
+			scope.vm.manageScheduleForDistantTimezonesEnabled = containerCtrl
+				.hasToggle('ManageScheduleForDistantTimezonesEnabled');
 
 			scope.vm.isAddIntradayAbsenceAvailable = function () {
 				return containerCtrl.hasPermission('IsAddIntradayAbsenceAvailable');
