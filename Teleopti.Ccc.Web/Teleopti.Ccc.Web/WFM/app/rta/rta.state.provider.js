@@ -31,7 +31,7 @@ angular.module('wfm.rta').provider('RtaState', function() {
 			.state('rta.select-skill', {
 				url: '/select-skill',
 				templateUrl: 'app/rta/skills/rta-selectSkill.html',
-				controller: 'RtaSiteAndTeamOnSkillOverviewCtrl'
+				controller: 'RtaSelectSkillCtrl'
 			})
 			.state('rta.sites-by-skill', {
 				url: '/sites-by-skill/?skillIds',
