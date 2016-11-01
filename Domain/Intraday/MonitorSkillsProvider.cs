@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -14,18 +15,32 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly INow _now;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly ISkillRepository _skillRepository;
 
-		public MonitorSkillsProvider(IIntradayMonitorDataLoader intradayMonitorDataLoader, IIntervalLengthFetcher intervalLengthFetcher, INow now, IUserTimeZone userTimeZone)
+		public MonitorSkillsProvider(IIntradayMonitorDataLoader intradayMonitorDataLoader, IIntervalLengthFetcher intervalLengthFetcher, INow now, IUserTimeZone userTimeZone, ISkillRepository skillRepository)
 		{
 			_intradayMonitorDataLoader = intradayMonitorDataLoader;
 			_intervalLengthFetcher = intervalLengthFetcher;
 			_now = now;
 			_userTimeZone = userTimeZone;
+			_skillRepository = skillRepository;
 		}
 
 		public IntradayStatisticsViewModel Load(Guid[] skillIdList)
 		{
-			var intervals = _intradayMonitorDataLoader.Load(skillIdList,
+			var skills = _skillRepository.LoadSkills(skillIdList);
+			var supportedSkillIdList = skillIdList;
+
+			foreach (var skill in skills)
+			{
+				if (!checkSupportedSkill(skill))
+				{
+					var skillToRemove = skill.Id.Value;
+					supportedSkillIdList = supportedSkillIdList.Where(val => val != skillToRemove).ToArray();
+				}
+			}
+
+			var intervals = _intradayMonitorDataLoader.Load(supportedSkillIdList,
 				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone,
 				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _userTimeZone.TimeZone())));
 			var intervalLength = _intervalLengthFetcher.IntervalLength;
@@ -119,6 +134,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 					ServiceLevel = serviceLevel.ToArray()
 				}
 			};
+		}
+
+		private bool checkSupportedSkill(ISkill skill)
+		{
+			var isMultisiteSkill = skill.GetType() == typeof(MultisiteSkill);
+
+			return !isMultisiteSkill &&
+				   skill.SkillType.Description.Name.Equals("SkillTypeInboundTelephony", StringComparison.InvariantCulture);
 		}
 	}
 }
