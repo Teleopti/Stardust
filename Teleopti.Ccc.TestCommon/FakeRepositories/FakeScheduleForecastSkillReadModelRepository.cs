@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
             throw new NotImplementedException();
         }
 
-        public DateTime GetLastCalculatedTime()
+        public IDictionary<Guid, DateTime> GetLastCalculatedTime()
         {
             return LastCalculatedDate;
         }
@@ -82,7 +82,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
             return mergedStaffingIntervals;
         }
 
-        public DateTime LastCalculatedDate { get; set; }
+	    public IDictionary<Guid, DateTime> GetLastCalculatedTime2()
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public IDictionary<Guid, DateTime> LastCalculatedDate = new Dictionary<Guid, DateTime>();
     }
 
 	internal class CustomStaffingIntervalChange

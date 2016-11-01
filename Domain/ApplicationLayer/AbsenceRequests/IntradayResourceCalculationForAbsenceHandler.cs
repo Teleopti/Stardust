@@ -64,32 +64,47 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
                     logger.Warn("The app setting 'FakeIntradayStartDateTime' is not specified correctly. Format your datetime as 'yyyy-MM-dd HH:mm' ");
                 }
             }
-            
-            using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-            {
-				var updateResourceReadModelIntervalMinutes = _requestStrategySettingsReader.GetIntSetting("UpdateResourceReadModelIntervalMinutes", 60);
 
-				var lastExecuted = _scheduleForecastSkillReadModelRepository.GetLastCalculatedTime();
-	            var currentBusinessUnit = ((ICurrentBusinessUnit) _businessUnitScope).Current();
-                if (lastExecuted.AddMinutes(updateResourceReadModelIntervalMinutes) < _now.UtcDateTime())
-                {
-                    var businessUnits = _businessUnitRepository.LoadAll();
-                    var person = _personRepository.Get(SystemUser.Id);
-                    _updatedByScope.OnThisThreadUse(person);
-					
-                    businessUnits.ForEach(businessUnit =>
-                    {
-                        _businessUnitScope.OnThisThreadUse(businessUnit);
+	        using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+	        {
+		        var updateResourceReadModelIntervalMinutes =
+			        _requestStrategySettingsReader.GetIntSetting("UpdateResourceReadModelIntervalMinutes", 60);
+
+		        var currentBusinessUnit = ((ICurrentBusinessUnit) _businessUnitScope).Current();
+		        var lastExecutedPerBu = _scheduleForecastSkillReadModelRepository.GetLastCalculatedTime();
+		        var businessUnits = _businessUnitRepository.LoadAll();
+		        var person = _personRepository.Get(SystemUser.Id);
+		        _updatedByScope.OnThisThreadUse(person);
+
+		        businessUnits.ForEach(businessUnit =>
+		        {
+			        if (lastExecutedPerBu.ContainsKey(businessUnit.Id.GetValueOrDefault()))
+			        {
+				        var lastExecuted = lastExecutedPerBu[businessUnit.Id.GetValueOrDefault()];
+				        if (lastExecuted.AddMinutes(updateResourceReadModelIntervalMinutes) < _now.UtcDateTime())
+				        {
+					        _businessUnitScope.OnThisThreadUse(businessUnit);
                         _publisher.Publish(new UpdateStaffingLevelReadModelEvent()
-                        {
+					        {
                             StartDateTime = now.AddHours(-24),
-                            EndDateTime = now.AddHours(24)
-                        });
-                    });
-                }
-				_businessUnitScope.OnThisThreadUse(currentBusinessUnit);
+						        EndDateTime = now.AddHours(24)
+					        });
+				        }
+			        }
+			        else
+			        {
+						_businessUnitScope.OnThisThreadUse(businessUnit);
+						_publisher.Publish(new UpdateResourceCalculateReadModelEvent()
+						{
+							StartDateTime = now,
+							EndDateTime = now.AddHours(24)
+						});
+					}
 
-            }
+		        });
+		        _businessUnitScope.OnThisThreadUse(currentBusinessUnit);
+
+	        }
         }
     }
 }

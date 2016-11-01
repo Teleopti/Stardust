@@ -1,13 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -21,6 +28,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 		public ISkillRepository SkillRepository;
 		public MutableNow Now;
 		public ICurrentUnitOfWork CurrentUnitOfWork;
+		public IBusinessUnitRepository BusinessUnitRepository;
+		public ISkillTypeRepository SkillTypeRepository;
+		public IActivityRepository ActivityRepository;
 
 		[Test]
 		public void ShouldPersist()
@@ -118,7 +128,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			Target.Persist(items, DateTime.Now);
 
 			var result = Target.GetLastCalculatedTime();
-			result.Should().Be.EqualTo(new DateTime(2016, 06, 16, 03, 15, 0, DateTimeKind.Utc));
+			//result.Should().Be.EqualTo(new DateTime(2016, 06, 16, 03, 15, 0, DateTimeKind.Utc));
+			Assert.Fail();
 		}
 
 		[Test]
@@ -561,7 +572,91 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			intervals.Count().Should().Be.EqualTo(0);
 		}
 
-	}
+		[Test]
+		public void ShouldGetLastExecutedPerBu()
+		{
+			Now.Is("2016-06-16 03:15");
+			var bu1 = BusinessUnitFactory.CreateSimpleBusinessUnit("1");
+			var bu2 = BusinessUnitFactory.CreateSimpleBusinessUnit("2");
+			BusinessUnitRepository.Add(bu1);
+			BusinessUnitRepository.Add(bu2);
+			
+			var skillType = SkillTypeFactory.CreateSkillType();
+			SkillTypeRepository.Add(skillType);
 
+			var activity = new Activity("activty");
+			activity.SetBusinessUnit(bu1);
+			ActivityRepository.Add(activity);
+			
+			var skill1 = new Skill("S1", "asdf", Color.AliceBlue, 15, skillType);
+			skill1.Activity = activity;
+			skill1.SetBusinessUnit(bu1);
+			skill1.TimeZone = TimeZoneInfo.Utc;
+
+			activity = new Activity("activty2");
+			activity.SetBusinessUnit(bu2);
+			ActivityRepository.Add(activity);
+			
+			var skill2 = new Skill("S2", "asdf", Color.AliceBlue, 15, skillType);
+			skill2.Activity = activity;
+			skill2.SetBusinessUnit(bu2);
+			skill2.TimeZone = TimeZoneInfo.Utc;
+
+			SkillRepository.Add(skill1);
+			SkillRepository.Add(skill2);
+
+			CurrentUnitOfWork.Current().PersistAll();
+
+
+			var items =
+				new List<SkillStaffingInterval>()
+				{
+					new SkillStaffingInterval()
+					{
+						SkillId = skill1.Id.GetValueOrDefault(),
+						StaffingLevel = 10,
+						EndDateTime = new DateTime(2016, 06, 16, 02, 15, 0, DateTimeKind.Utc),
+						Forecast = 20,
+						StartDateTime = new DateTime(2016, 06, 16, 02, 0, 0, DateTimeKind.Utc)
+					}
+				};
+			Target.Persist(items, DateTime.Now);
+			Now.Is("2016-06-16 03:16");
+			items =
+				new List<SkillStaffingInterval>()
+				{
+					new SkillStaffingInterval()
+					{
+						SkillId = skill1.Id.GetValueOrDefault(),
+						StaffingLevel = 10,
+						EndDateTime = new DateTime(2016, 06, 16, 02, 30, 0, DateTimeKind.Utc),
+						Forecast = 20,
+						StartDateTime = new DateTime(2016, 06, 16, 02, 15, 0, DateTimeKind.Utc)
+					}
+				};
+			Target.Persist(items, DateTime.Now);
+
+			Now.Is("2016-06-16 03:30");
+			items =
+				new List<SkillStaffingInterval>()
+				{
+					new SkillStaffingInterval()
+					{
+						SkillId = skill2.Id.GetValueOrDefault(),
+						StaffingLevel = 10,
+						EndDateTime = new DateTime(2016, 06, 16, 0, 15, 0, DateTimeKind.Utc),
+						Forecast = 20,
+						StartDateTime = new DateTime(2016, 06, 16, 0, 0, 0, DateTimeKind.Utc)
+					}
+				};
+			Target.Persist(items, DateTime.Now);
+
+			var result = Target.GetLastCalculatedTime();
+			result.Count.Should().Be.EqualTo(2);
+			result[bu1.Id.GetValueOrDefault()].Should().Be.EqualTo(DateTime.Parse("2016-06-16 03:16"));
+			result[bu2.Id.GetValueOrDefault()].Should().Be.EqualTo(DateTime.Parse("2016-06-16 03:30"));
+		}
+
+	}
 
 }

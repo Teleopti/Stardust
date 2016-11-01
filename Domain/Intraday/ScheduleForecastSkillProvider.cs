@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		IEnumerable<SkillStaffingInterval> GetBySkill(Guid skillId, DateTime date);
 		IEnumerable<SkillStaffingInterval> GetBySkillArea(Guid skillAreaId, DateTime date);
-		DateTime GetLastCaluclatedDateTime();
+		DateTime GetLastCaluclatedDateTime(Guid buId);
 	}
 
 	public class ScheduleForecastSkillProvider : IScheduleForecastSkillProvider
@@ -49,9 +49,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 			
 		}
 
-		public DateTime GetLastCaluclatedDateTime()
+		public DateTime GetLastCaluclatedDateTime(Guid buId)
 		{
-			return _scheduleForecastSkillReadModelRepository.GetLastCalculatedTime();
+			var lastCalculated = _scheduleForecastSkillReadModelRepository.GetLastCalculatedTime();
+			return lastCalculated.ContainsKey(buId) ? lastCalculated[buId] : DateTime.MinValue;
 		}
 		
 

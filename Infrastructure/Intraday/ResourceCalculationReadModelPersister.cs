@@ -165,16 +165,20 @@ and SkillId = :skillId")
 			return result;
 		}
 
-		public DateTime GetLastCalculatedTime()
+		public IDictionary<Guid,DateTime> GetLastCalculatedTime()
 		{
 			var result =
 				 ((NHibernateUnitOfWork)_currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
-							@"SELECT 
+							@"SELECT s.BusinessUnit,
 					max(InsertedOn) as InsertedOn
-				 FROM [ReadModel].[ScheduleForecastSkill]")
-					  .UniqueResult<DateTime?>();
+				 FROM [ReadModel].[ScheduleForecastSkill] sfs,
+				 Skill s
+				where sfs.SkillId = s.Id
+				group by s.BusinessUnit")
+				.SetResultTransformer(Transformers.AliasToBean(typeof(MaxIntervalOnBuModel)))
+					  .List<MaxIntervalOnBuModel>();
 
-			return result.GetValueOrDefault();
+			return result.ToDictionary(x => x.BusinessUnit, y => y.InsertedOn);
 		}
 
 		public void PersistChange(StaffingIntervalChange staffingIntervalChanges)
@@ -241,6 +245,14 @@ and SkillId = :skillId")
 			return string.Join(", ", parameters);
 		}
 	}
+
+
+	internal class MaxIntervalOnBuModel
+	{
+		public Guid BusinessUnit { get; set; }
+		public DateTime InsertedOn { get; set; }
+	}
+	
 
 
 }

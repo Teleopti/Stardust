@@ -4,11 +4,11 @@ using System.Web.Http;
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
@@ -20,14 +20,16 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly INow _now;
 		private readonly IConfigReader _configReader;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(StaffingLevelController));
+		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 
 		public StaffingLevelController(IEventPublisher publisher,
-			IScheduleForecastSkillProvider scheduleForecastSkillProvider, INow now, IConfigReader configReader)
+			IScheduleForecastSkillProvider scheduleForecastSkillProvider, INow now, IConfigReader configReader, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
 		{
 			_publisher = publisher;
 			_scheduleForecastSkillProvider = scheduleForecastSkillProvider;
 			_now = now;
 			_configReader = configReader;
+			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 		}
 
 		[UnitOfWork, HttpGet, Route("ForecastAndStaffingForSkill")]
@@ -73,7 +75,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[UnitOfWork, HttpGet, Route("GetLastCaluclatedDateTime")]
 		public virtual IHttpActionResult GetLastCaluclatedDateTime()
 		{
-			return Json(_scheduleForecastSkillProvider.GetLastCaluclatedDateTime());
+			var buid = ((TeleoptiIdentity) _currentTeleoptiPrincipal.Current().Identity).BusinessUnit.Id.GetValueOrDefault();
+			return Json(_scheduleForecastSkillProvider.GetLastCaluclatedDateTime(buid));
 		}
 	}
 }
