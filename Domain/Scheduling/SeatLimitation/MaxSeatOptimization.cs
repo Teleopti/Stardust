@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 								!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) ||
 								_maxSeatPeak.Fetch(datePoint, teamBlockInfo, maxSeatData.AllMaxSeatSkillDaysPerSkill()) > maxPeakBefore)	
 						{
-							rollbackService.RollbackMinimumChecks(); //förmodligen fel - rullar tillbaka allt	
+							rollbackService.RollbackMinimumChecks();
 						}
 
 						remainingInfoList.Remove(teamBlockInfo);
