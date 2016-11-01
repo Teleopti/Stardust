@@ -444,6 +444,32 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.EqualTo(0);
 		}
 
+		[Test, Ignore("40939")]
+		public void ShouldNotOptimizeAgentNotHavingTheMaxSeatSkillThatIsOverLimit()
+		{
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var siteOverLimit = new Site("_") { MaxSeats = 1 }.WithId();
+			var teamOverLimit = new Team { Description = new Description("_"), Site = siteOverLimit };
+			var siteUnderLimit = new Site("_") { MaxSeats = 10 }.WithId();
+			var teamUnderLimit = new Team { Description = new Description("_"), Site = siteUnderLimit };
+
+			var dateOnly = DateOnly.Today;
+			var scenario = new Scenario("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 9, 0, 60), new TimePeriodWithSegment(17, 0, 17, 0, 60), new ShiftCategory("_").WithId()));
+			var bag = new RuleSetBag(ruleSet);
+
+			var agentScheduledForAnHourData1 = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, teamOverLimit, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 9, 0));
+			var agentScheduledForAnHourData2 = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, teamOverLimit, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 9, 0));
+			var agentDataSiteUnderLimit = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, teamUnderLimit, bag, scenario, activity, new TimePeriod(8, 0, 16, 0));
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentDataSiteUnderLimit.Assignment, agentScheduledForAnHourData2.Assignment,agentScheduledForAnHourData1.Assignment });
+			var optPreferences = CreateOptimizationPreferences();
+
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentDataSiteUnderLimit.Agent, agentScheduledForAnHourData1.Agent }, schedules, scenario, optPreferences);
+
+			schedules[agentDataSiteUnderLimit.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay
+				.Should().Be.EqualTo(TimeSpan.FromHours(8));
+		}
+
 		protected abstract OptimizationPreferences CreateOptimizationPreferences();
 	}
 }
