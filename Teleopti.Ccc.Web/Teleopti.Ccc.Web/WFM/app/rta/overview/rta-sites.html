@@ -7,13 +7,13 @@
 		</div>
 		<div class="rta-top-buttons-wrapper">
 			<span>
-					<button class="wfm-btn wfm-btn-primary rta-default-cursor">Overview</button>
-					<button class="wfm-btn wfm-btn-default select-skill" ng-click="goToSkillSelection()">Select skill</button>
+					<button class="wfm-btn wfm-btn-primary rta-default-cursor">Dashboard</button>
+					<button class="wfm-btn wfm-btn-default select-skill" ng-click="goToSkillSelection()">Details</button>
 				</span>
 		</div>
 	</div>
 	<div class="fab-wrapper">
-		<button class="wfm-fab  material-depth-1 open" ng-cloak ng-class="{'hidden-visibility': selectedItemIds.length < 1, 'grow-out': selectedItemIds.length > 0}" ng-click="openSelectedSites()">
+		<button class="wfm-fab  material-depth-1 open" ng-cloak ng-class="{'hidden-visibility': selectedItemIds.length < 1, 'grow-out': selectedItemIds.length > 0}" ng-click="openSelectedItems()">
 			<i class="mdi mdi-arrow-right"></i>
 			<md-tooltip>{{'Open'|translate}}</md-tooltip>
 		</button>
