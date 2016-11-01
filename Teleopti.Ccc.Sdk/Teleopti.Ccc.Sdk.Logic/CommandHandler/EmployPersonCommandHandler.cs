@@ -1,9 +1,6 @@
-﻿using System.ServiceModel;
-using Teleopti.Ccc.Domain.AgentInfo;
+﻿using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Interfaces.Domain;
@@ -35,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(EmployPersonCommandDto command)
         {
-			checkIfAuthorized();
+			ValidationExtensions.VerifyCanModifyPeople();
 
             PersonPeriod personPeriod;
             using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -60,13 +57,5 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             }
 			command.Result = new CommandResultDto { AffectedId = personPeriod.Id, AffectedItems = 2 };
         }
-
-		private static void checkIfAuthorized()
-		{
-			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage))
-			{
-				throw new FaultException("You're not allowed to modify person details.");
-			}
-		}
     }
 }

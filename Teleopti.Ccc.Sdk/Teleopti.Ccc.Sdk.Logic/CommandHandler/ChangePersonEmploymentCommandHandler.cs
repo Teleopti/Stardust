@@ -6,8 +6,6 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -50,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             {
             	var startDate = new DateOnly(command.Period.StartDate.DateTime);
                 var person = _personRepository.Get(command.Person.Id.GetValueOrDefault());
-				checkIfAuthorized(person);
+				person.VerifyCanBeModifiedByCurrentUser();
 
 	            if (startDate > person.TerminalDate)
 					throw new FaultException("You cannot change person employment after his leaving date.");
@@ -79,7 +77,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var team = command.Team == null
                                ? lastPersonPeriod.Team
                                : _teamRepository.Load(command.Team.Id.GetValueOrDefault());
-                checkBusinessUnitConsistency(team.Site);
+				team.Site.ValidateBusinessUnitConsistency();
                 newPersonPeriod = new PersonPeriod(command.Period.StartDate.ToDateOnly(), 
                                                    command.PersonContract == null
                                                        ? lastPersonPeriod.PersonContract
@@ -140,7 +138,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             if (command.Team != null)
             {
 				person.ChangeTeam(_teamRepository.Get(command.Team.Id.GetValueOrDefault()), existPersonPeriod);
-                checkBusinessUnitConsistency(existPersonPeriod.Team.Site);
+				existPersonPeriod.Team.Site.ValidateBusinessUnitConsistency();
             }
             if (command.PersonContract != null)
             {
@@ -163,23 +161,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             return existPersonPeriod.Id;
         }
 
-        private void checkBusinessUnitConsistency(IBelongsToBusinessUnit belongsToBusinessUnit)
-        {
-            var currentBusinessUnit = ((TeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.GetValueOrDefault();
-            if (belongsToBusinessUnit.BusinessUnit != null && currentBusinessUnit != belongsToBusinessUnit.BusinessUnit.Id.GetValueOrDefault())
-            {
-                throw new FaultException(
-                    string.Format(
-                        "Adding references to items from a different business unit than the currently specified in the header is not allowed. (Type: {0}, Current business unit id: {1}, Attempted business unit id: {2})",
-                        belongsToBusinessUnit.GetType(), currentBusinessUnit,
-                        belongsToBusinessUnit.BusinessUnit.Id.GetValueOrDefault()));
-            }
-        }
-
+        
         private IPersonPeriod createPersonPeriod(ChangePersonEmploymentCommandDto command)
         {
             var team = _teamRepository.Load(command.Team.Id.GetValueOrDefault());
-            checkBusinessUnitConsistency(team.Site);
+			team.Site.ValidateBusinessUnitConsistency();
             var personContract = createPersonContract(command.PersonContract);
             return new PersonPeriod(command.Period.StartDate.ToDateOnly(), personContract, team);
         }
@@ -190,9 +176,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             var contractSchedule = _contractScheduleRepository.Load(personContractDto.ContractScheduleId.GetValueOrDefault());
             var contract = _contractRepository.Load(personContractDto.ContractId.GetValueOrDefault());
 
-            checkBusinessUnitConsistency(partTimePercentage);
-            checkBusinessUnitConsistency(contractSchedule);
-            checkBusinessUnitConsistency(contract);
+			partTimePercentage.ValidateBusinessUnitConsistency();
+			contractSchedule.ValidateBusinessUnitConsistency();
+			contract.ValidateBusinessUnitConsistency();
 
             return new PersonContract(contract, partTimePercentage, contractSchedule);
         }
@@ -203,7 +189,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             foreach (var personSkills in PersonSkills(commandDto))
             {
                 var skill = _skillRepository.Load(personSkills.SkillId);
-                checkBusinessUnitConsistency(skill);
+				skill.ValidateBusinessUnitConsistency();
                 person.AddSkill(new PersonSkill(skill, new Percent(personSkills.Proficiency)) {Active = personSkills.Active}, personPeriod);
             }
         }
@@ -246,13 +232,5 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		        person.AddExternalLogOn(filteredExternalLogOn,personPeriod);
 	        }
         }
-
-		private static void checkIfAuthorized(IPerson person)
-		{
-			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage,DateOnly.Today,person))
-			{
-				throw new FaultException("You're not allowed to modify person details.");
-			}
-		}
     }
 }

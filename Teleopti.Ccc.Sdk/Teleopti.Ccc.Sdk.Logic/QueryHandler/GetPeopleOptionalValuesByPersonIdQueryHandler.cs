@@ -1,10 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.ServiceModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
@@ -35,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				{
 					var resultList = new List<PersonOptionalValuesDto>();
 					var foundPeople = _personRepository.FindPeople(query.PersonIdCollection);
-					checkIfAuthorized(foundPeople,DateOnly.Today);
+					foundPeople.VerifyCanBeModifiedByCurrentUser(DateOnly.Today);
 
 					var foundColumns = _optionalColumnRepository.GetOptionalColumns<Person>();
 
@@ -50,18 +46,6 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 						resultList.Add(result);
 					}
 					return resultList;
-				}
-			}
-		}
-
-		private static void checkIfAuthorized(IEnumerable<IPerson> people, DateOnly dateOnly)
-		{
-			var authorizationInstance = PrincipalAuthorization.Current();
-			foreach (var person in people)
-			{
-				if (!authorizationInstance.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, dateOnly, person))
-				{
-					throw new FaultException(string.Format(System.Globalization.CultureInfo.InvariantCulture, "You're not allowed to work with this person ({0}).", person.Name));
 				}
 			}
 		}

@@ -2,8 +2,6 @@
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
@@ -40,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 if (foundAbsence == null) throw new FaultException("Absence does not exist.");
                 var dateFrom = command.DateFrom.ToDateOnly();
 
-                checkIfAuthorized(foundPerson, dateFrom);
+				foundPerson.VerifyCanBeModifiedByCurrentUser(dateFrom);
 
 				var accounts = _personAbsenceAccountRepository.Find(foundPerson);
                 var personAccount = accounts.Find(foundAbsence, dateFrom);
@@ -61,14 +59,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 unitOfWork.PersistAll();
             }
 			command.Result = new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
-        }
-
-        private static void checkIfAuthorized(IPerson person, DateOnly dateOnly)
-        {
-            if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, dateOnly, person))
-            {
-                throw new FaultException("You're not allowed to modify person accounts for this person.");
-            }
         }
 
         private IAccount createPersonAccount(IAbsence foundAbsence, IPersonAccountCollection accounts, DateOnly dateFrom)

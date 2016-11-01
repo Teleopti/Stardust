@@ -3,10 +3,7 @@ using System.ServiceModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
@@ -33,8 +30,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             {
                 var person = _personRepository.Get(command.PersonId);
                 if (person == null) throw new FaultException(string.Format(System.Globalization.CultureInfo.InvariantCulture, "No person was found with the given Id ({0}).", command.PersonId));
-                checkIfAuthorized(person, DateOnly.Today);
-
+				person.VerifyCanBeModifiedByCurrentUser();
                 var columns = _optionalColumnRepository.GetOptionalColumns<Person>();
 
                 foreach (var optionalValueDto in command.OptionalValueCollection)
@@ -60,18 +56,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
                 command.Result.AffectedId = command.PersonId;
                 command.Result.AffectedItems = 1;
-            }
-        }
-
-        private static void checkIfAuthorized(IPerson person, DateOnly dateOnly)
-        {
-            var authorizationInstance = PrincipalAuthorization.Current();
-            if (
-                !authorizationInstance.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, dateOnly,
-                                                   person))
-            {
-                throw new FaultException(string.Format(System.Globalization.CultureInfo.InvariantCulture,
-                                                       "You're not allowed to work with this person ({0}).", person.Name));
             }
         }
     }

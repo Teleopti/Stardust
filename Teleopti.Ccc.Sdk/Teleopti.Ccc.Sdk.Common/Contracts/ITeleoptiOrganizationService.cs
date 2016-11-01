@@ -378,5 +378,13 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// <returns>ExternalLogOns.</returns>
 		[OperationContract]
 		ICollection<ExternalLogOnDto> FindExternalLogOn(FindExternalLogOnQueryDto queryDto);
-	}
+
+		/// <summary>
+		/// Sets the external logons of a person period for a given person and date.
+		/// </summary>
+		/// <param name="setPersonExternalLogOnCommandDto"></param>
+		/// <returns></returns>
+		[OperationContract]
+	    CommandResultDto SetPersonExternalLogOn(SetPersonExternalLogOnCommandDto setPersonExternalLogOnCommandDto);
+    }
 }

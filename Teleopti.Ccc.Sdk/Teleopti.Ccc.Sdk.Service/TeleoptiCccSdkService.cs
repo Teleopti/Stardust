@@ -1629,6 +1629,11 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return invoker.Invoke(queryDto);
 		}
 
+		public CommandResultDto SetPersonExternalLogOn(SetPersonExternalLogOnCommandDto setPersonExternalLogOnCommandDto)
+		{
+			return ExecuteCommand(setPersonExternalLogOnCommandDto);
+		}
+
 		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public CommandResultDto ExecuteCommand(CommandDto commandDto)
 		{

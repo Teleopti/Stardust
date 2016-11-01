@@ -139,6 +139,7 @@
     <Compile Include="DataTransferObject\Commands\RevokePersonRoleCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\RevokeScheduleChangesListenerCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\SendPushMessageToPeopleCommandDto.cs" />
+    <Compile Include="DataTransferObject\Commands\SetPersonExternalLogOnCommand.cs" />
     <Compile Include="DataTransferObject\Commands\SetPersonOptionalValuesForPersonCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\SetSchedulePeriodWorktimeOverrideCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\WorkloadOnSkillSelectionDto.cs" />
