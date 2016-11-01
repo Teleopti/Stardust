@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.EqualTo(1);
 		}
 
-		[Test, Ignore("Claes! Jag vet inte om jag satt upp detta rätt... Sätts General.ScheduleTag i scheulern? (finns flera andra scheduletag props också)")]
+		[Test]
 		public void ShouldSetCorrectTag()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
