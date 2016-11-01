@@ -84,9 +84,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				        if (lastExecuted.AddMinutes(updateResourceReadModelIntervalMinutes) < _now.UtcDateTime())
 				        {
 					        _businessUnitScope.OnThisThreadUse(businessUnit);
-                        _publisher.Publish(new UpdateStaffingLevelReadModelEvent()
+							_publisher.Publish(new UpdateStaffingLevelReadModelEvent()
 					        {
-                            StartDateTime = now.AddHours(-24),
+								StartDateTime = now.AddHours(-24),
 						        EndDateTime = now.AddHours(24)
 					        });
 				        }
@@ -94,9 +94,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			        else
 			        {
 						_businessUnitScope.OnThisThreadUse(businessUnit);
-						_publisher.Publish(new UpdateResourceCalculateReadModelEvent()
+						_publisher.Publish(new UpdateStaffingLevelReadModelEvent()
 						{
-							StartDateTime = now,
+							StartDateTime = now.AddHours(-24),
 							EndDateTime = now.AddHours(24)
 						});
 					}

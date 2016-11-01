@@ -5,7 +5,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
@@ -66,10 +65,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
         [Test]
         public void ShouldUseConfiguredFakeNowInsteadOfSystemNow()
         {
-            ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-02-02 08:10");
-            ScheduleForecastSkillReadModelRepository.LastCalculatedDate = new DateTime(2016, 02, 02, 8, 0, 0, DateTimeKind.Utc);
+			Now.Is("2016-03-01 10:00");
+			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-02-02 08:10");
+			var businessUnit = BusinessUnitFactory.CreateWithId("bu");
 			BusinessUnitRepository.Add(businessUnit);
-			ScheduleForecastSkillReadModelRepository.LastCalculatedDate.Add(businessUnit.Id.GetValueOrDefault(), new DateTime(2016, 03, 01, 8, 0, 0, DateTimeKind.Utc));
+			ScheduleForecastSkillReadModelRepository.LastCalculatedDate.Add(businessUnit.Id.GetValueOrDefault(), new DateTime(2016, 02, 02, 8, 0, 0, DateTimeKind.Utc));
 			addPerson();
 			Target.Handle(new TenantMinuteTickEvent());
             Publisher.PublishedEvents.Count().Should().Be.EqualTo(1);
