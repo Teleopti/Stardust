@@ -5,8 +5,8 @@
 		.module('wfm.skillPrio')
 		.controller('skillPrioController', skillPrioController);
 
-	skillPrioController.$inject = [ '$filter', 'Toggle', 'NoticeService', '$translate', '$q', 'skillPrioAggregator', 'skillPrioService'];
-	function skillPrioController( $filter, toggleService, NoticeService, $translate, $q, skillPrioAggregator, skillPrioService) {
+	skillPrioController.$inject = ['$filter', 'Toggle', 'NoticeService', '$translate', '$q', 'skillPrioAggregator', 'skillPrioService'];
+	function skillPrioController($filter, toggleService, NoticeService, $translate, $q, skillPrioAggregator, skillPrioService) {
 		var vm = this;
 		vm.selectActivity = selectActivity;
 		vm.activites = skillPrioService.getAdminSkillRoutingActivity.query();
@@ -22,6 +22,7 @@
 		vm.displayAutoComplete = displayAutoComplete;
 		vm.save = save;
 		vm.toggledOptimization = checkToggles();
+		vm.ismodified = false;
 		/////////////////////////////////Wfm_SkillPriorityRoutingGUI_39885
 		function checkToggles() {
 			toggleService.togglesLoaded.then(function () {
@@ -153,6 +154,8 @@
 
 		function removeSkill(arr, skill) {
 			var found = arr.findIndex(function (item) {
+				vm.ismodified = true;
+
 				return item.SkillGuid === skill.SkillGuid;
 			});
 			if (found !== -1)
@@ -246,6 +249,8 @@
 
 			var query = skillPrioAggregator.saveSkills().save(allData);
 			query.$promise.then(function () {
+				vm.ismodified = false;
+
 				NoticeService.success('All changes are saved', 5000, true);
 				selectActivity(vm.selectedActivity);
 			});

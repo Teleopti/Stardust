@@ -4,14 +4,26 @@
 		<div class="view-title">
 			<h1><i class="mdi mdi-account"></i>Skill Priority</h1>
 			<p>Manage the way your skills are handled</p>
+			
+			<div class="wfm-chip-wrap" ng-if="vm.ismodified">
+				<span class="wfm-chip">
+			<span class="chip-handle">
+			<i class="mdi mdi-alert-circle"></i>
+			</span>
+				<span class="chip-text">You have unsave changes</span>
+				</span>
+			</div>
 		</div>
+
 		<div class="fab-wrapper">
 			<button ng-click="vm.save()" class="wfm-fab grow-out material-depth-1">
       <i class="mdi mdi-content-save"></i>
       <md-tooltip>Save Changes</md-tooltip>
     </button>
 		</div>
+
 	</div>
+
 
 	<div class="con-row selectActivityInput">
 		<div class="con-flex">
