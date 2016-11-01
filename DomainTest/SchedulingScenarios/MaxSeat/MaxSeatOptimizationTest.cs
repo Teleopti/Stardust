@@ -339,6 +339,38 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.EqualTo(0);
 		}
 
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldConsiderActivityRequireSeat(bool ruleSetOrder)
+		{
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var activityRequireNoSeat = new Activity("_") { RequiresSeat = false }.WithId();
+			var site = new Site("_") { MaxSeats = 0 }.WithId();
+			var team = new Team { Description = new Description("_"), Site = site };
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			var dateOnly = DateOnly.Today;
+			var scenario = new Scenario("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
+			var ruleSetNotRequireSeat = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityRequireNoSeat, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
+			var ruleSetBag = new RuleSetBag();
+			if (ruleSetOrder)
+			{
+				ruleSetBag.AddRuleSet(ruleSet);
+				ruleSetBag.AddRuleSet(ruleSetNotRequireSeat);
+			}
+			else
+			{
+				ruleSetBag.AddRuleSet(ruleSetNotRequireSeat);
+				ruleSetBag.AddRuleSet(ruleSet);
+			}
+			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, ruleSetBag, scenario, activity, new TimePeriod(8, 0, 16, 0));
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData.Assignment });
+
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, scenario, CreateOptimizationPreferences());
+
+			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().ShiftLayers.First().Payload.RequiresSeat.Should().Be.False();
+		}
+
 		protected abstract OptimizationPreferences CreateOptimizationPreferences();
 	}
 }

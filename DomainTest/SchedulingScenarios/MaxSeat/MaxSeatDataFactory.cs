@@ -10,12 +10,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 {
 	public static class MaxSeatDataFactory
 	{
-		public static MaxSeatData CreateAgentWithAssignment(DateOnly date, ISite site, IRuleSetBag ruleSetBag, IScenario scenario, IActivity activity, TimePeriod assignmentPeriod)
-		{
-			var team = new Team { Site = site };
-			return CreateAgentWithAssignment(date, team, ruleSetBag, scenario, activity, assignmentPeriod);
-		}
-
 		public static MaxSeatData CreateAgentWithAssignment(DateOnly date, ITeam team, IRuleSetBag ruleSetBag, IScenario scenario, IActivity activity, TimePeriod assignmentPeriod)
 		{
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);

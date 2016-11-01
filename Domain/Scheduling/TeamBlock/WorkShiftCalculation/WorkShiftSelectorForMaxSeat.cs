@@ -28,12 +28,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				var thisShiftsPeak = 0d;
 				foreach (var layer in shift.MainShiftProjection)
 				{
+					var activity = (IActivity) layer.Payload;
+					var thisShiftRequiresOneSeatExtra = activity.RequiresSeat;
+
 					foreach (var skillDay in skillDays)
 					{
 						foreach (var interval in layer.Period.Intervals(TimeSpan.FromMinutes(skillDay.Skill.DefaultResolution)))
 						{
 							var skillStaffPeriod = skillDay.SkillStaffPeriodCollection.Single(x => x.Period == interval);
 							var lackingSeatsThisInterval = _usedSeats.Fetch(skillStaffPeriod) - skillStaffPeriod.Payload.MaxSeats;
+							if (thisShiftRequiresOneSeatExtra)
+							{
+								lackingSeatsThisInterval++;
+							}
 							thisShiftsPeak = Math.Max(thisShiftsPeak, lackingSeatsThisInterval);
 						}
 					}
