@@ -45,9 +45,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			using (_mock.Record())
 			{
 				Expect.Call(_person1.PersonPeriods(_dateOnlyPeriod)).Return(person1PersonPeriodList);
-				Expect.Call(_personPeriod1.MaxSeatSkill).Return(_skill1);
+				Expect.Call(_personPeriod1.MaxSeatSkill).Return(_skill1).Repeat.Any();
 				Expect.Call(_person2.PersonPeriods(_dateOnlyPeriod)).Return(person2PersonPeriodList);
-				Expect.Call(_personPeriod2.MaxSeatSkill).Return(_skill1);
+				Expect.Call(_personPeriod2.MaxSeatSkill).Return(_skill1).Repeat.Any();
 			}
 			HashSet<ISkill> aggregatedSkills = _target.GetAggregatedSkills(_teamMembers, _dateOnlyPeriod);
 			using (_mock.Playback())

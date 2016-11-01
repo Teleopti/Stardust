@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public virtual void SetMaxSeatSkill(ISkill maxSeatSkill)
 		{
-			if(maxSeatSkill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
+			if(maxSeatSkill!=null && maxSeatSkill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
 				throw new ArgumentOutOfRangeException("personSkill", "The SkillType.ForecastSource of the Skill on the PersonSkill must be MaxSeatSkill");
 			_maxSeatSkill = maxSeatSkill;
 		}
