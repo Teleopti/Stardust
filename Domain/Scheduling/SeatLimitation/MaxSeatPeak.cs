@@ -15,16 +15,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_usedSeats = usedSeats;
 		}
 
-		public double Fetch(DateOnly date, ITeamBlockInfo teamBlockInfo, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)
+		public double Fetch(DateOnly date, MaxSeatSkillData maxSeatSkillData, ITeamBlockInfo teamBlockInfo, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)
 		{
 			//TODO: Will only work for business hierarchy
 			var maxSeatSkill = teamBlockInfo.TeamInfo.GroupMembers.First().Period(date).MaxSeatSkill;
 			var retValue = 0d;
 			foreach (var skillDay in skillDays[maxSeatSkill])
 			{
+				var maxSeats = maxSeatSkillData.MaxSeatForSkill(skillDay.Skill);
+
 				foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 				{
-					retValue = Math.Max(retValue, _usedSeats.Fetch(skillStaffPeriod) - skillStaffPeriod.Payload.MaxSeats);
+					retValue = Math.Max(retValue, _usedSeats.Fetch(skillStaffPeriod) - maxSeats);
 				}
 			}
 			return retValue;

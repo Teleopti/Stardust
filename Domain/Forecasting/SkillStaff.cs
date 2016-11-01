@@ -349,6 +349,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			set { _calculatedUsedSeats = value; }
 		}
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		public int MaxSeats
 		{
 			get { return _maxSeats; }

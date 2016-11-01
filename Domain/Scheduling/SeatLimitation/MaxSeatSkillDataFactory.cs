@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					}
 				}
 				var skillDays = createMaxSeatSkillDays(period, skill, scenario);
-				ret.Add(skill, skillDays);
+				ret.Add(skill, skillDays, site);
 			}
 			return ret;
 		}
