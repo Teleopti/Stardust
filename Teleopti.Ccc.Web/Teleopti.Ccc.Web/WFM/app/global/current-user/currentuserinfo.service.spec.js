@@ -14,12 +14,6 @@
 			$rootScope.setTheme = function () { };
 		}));
 
-		
-	afterEach(function () {
-		$httpBackend.verifyNoOutstandingExpectation();
-		$httpBackend.verifyNoOutstandingRequest();
-	});
-
 		it('should set the current user info', inject(function (CurrentUserInfo) {
 			var data = {
 				UserName: 'Ashley', DefaultTimeZone: '',
