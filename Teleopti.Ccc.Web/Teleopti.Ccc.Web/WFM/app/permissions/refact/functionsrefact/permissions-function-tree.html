@@ -1,10 +1,10 @@
-<div ui-tree>
+<div ui-tree data-drag-enabled="false">
 	<ol ui-tree-nodes="" ng-model="$ctrl.functions">
 		<li ng-repeat="function in $ctrl.functions" ui-tree-node>
-			<div ui-tree-handle ng-class="{selected: function.IsSelected}" ng-click="function.IsSelected=!function.IsSelected">
+			<div ui-tree-handle ng-class="{selected: function.IsSelected}" ng-click="$ctrl.toggleFunction(function)">
 				{{function.LocalizedFunctionDescription}}
 			</div>
-			<permissions-tree functions="function.ChildFunctions"></permissions-tree>
+			<permissions-tree functions="function.ChildFunctions" parent="$ctrl.onSelect"></permissions-tree>
 		</li>
 	</ol>
 </div>

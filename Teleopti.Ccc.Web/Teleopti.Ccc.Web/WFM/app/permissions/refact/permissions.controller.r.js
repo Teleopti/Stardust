@@ -46,41 +46,62 @@
 
         function selectRole(role) {
             markSelectedRole(role);
-            //HELA VÄGEN JAO: SÄTT ISSELECTED BRah
 
             PermissionsServiceRefact.manage.getRoleInformation({ Id: role.Id }).$promise.then(function (data) {
                 vm.selectedRole = data;
-                //findAllMatchingFunctions(vm.selectedRole);
+
+                if (vm.selectedRole.AvailableBusinessUnits) {
+                    matchOrganizationData();
+                }
 
                 for (var i = 0; i < vm.selectedRole.AvailableFunctions.length; i++) {
-                  //console.log('matchId',i,vm.selectedRole.AvailableFunctions[i].Id );
-                  parseTreeJson(vm.applicationFunctions, vm.selectedRole.AvailableFunctions[i].Id);
+                    parseTreeJson(vm.applicationFunctions, vm.selectedRole.AvailableFunctions[i].Id);
                 }
             });
         }
 
-        var parseTreeJson = function(treeNodes, matchId){
-          if (!treeNodes || !treeNodes.length) return;
-           for (var i = 0, len = treeNodes.length; i < len; i++) {
+        function matchOrganizationData() {
+            for (var i = 0; i < vm.selectedRole.AvailableBusinessUnits.length; i++) {
+                if (vm.selectedRole.AvailableBusinessUnits[i].Id == vm.organizationSelection.BusinessUnit.Id) {
+                    vm.organizationSelection.BusinessUnit.IsSelected = true;
+                    break;
+                }
+            }
+
+            if (vm.organizationSelection.BusinessUnit.ChildNodes.length > 0) {
+                for (var i = 0; i < vm.organizationSelection.BusinessUnit.ChildNodes.length; i++) {
+                    for (var j = 0; j < vm.selectedRole.AvailableSites.length; j++) {
+                        if (vm.organizationSelection.BusinessUnit.ChildNodes[i].Id == vm.selectedRole.AvailableSites[j].Id) {
+                            vm.organizationSelection.BusinessUnit.ChildNodes[i].IsSelected = false;
+                        } else {
+                            vm.organizationSelection.BusinessUnit.ChildNodes[i].IsSelected = true;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        var parseTreeJson = function (treeNodes, matchId) {
+            if (!treeNodes || !treeNodes.length) return;
+            for (var i = 0, len = treeNodes.length; i < len; i++) {
 
                 var childs = treeNodes[i].ChildFunctions;
-                //console.log('find all id', i, treeNodes[i].FunctionId);
 
                 if (treeNodes[i].FunctionId == matchId) {
-                  treeNodes[i].IsSelected = true;
-                } else if(!treeNodes[i].IsSelected) {
-                  treeNodes[i].IsSelected = false;
+                    treeNodes[i].IsSelected = true;
+                } else if (!treeNodes[i].IsSelected) {
+                    treeNodes[i].IsSelected = false;
                 }
-                if(childs && childs.length > 0){
-                  parseTreeJson(childs,matchId);
+                if (childs && childs.length > 0) {
+                    parseTreeJson(childs, matchId);
                 }
-           }
-           //console.log('hello tree',vm.applicationFunctions);
+            }
         };
 
         var previously = null;
         function markSelectedRole(role) {
-             if (previously != null) {
+            if (previously != null) {
                 previously.IsSelected = false;
             }
             role.IsSelected = true;

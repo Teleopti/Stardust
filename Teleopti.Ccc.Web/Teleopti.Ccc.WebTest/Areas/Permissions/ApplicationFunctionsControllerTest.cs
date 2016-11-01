@@ -55,5 +55,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			var result = Target.GetAllFunctions();
 			result.Should().Be.Empty();
 		}
+
+		[Test]
+		public void ShouldNotBeSelectedByDefault()
+		{
+			var functionOne = new ApplicationFunction("Code1") { Parent = null, FunctionDescription = "Test 1" };
+			ApplicationFunctionsToggleFilter.AddFakeFunction(functionOne, _ => true);
+			var result = Target.GetAllFunctions();
+			var resultFunctions = result.Single();
+			resultFunctions.IsSelected.Should().Be.False();
+		}
 	}
 }

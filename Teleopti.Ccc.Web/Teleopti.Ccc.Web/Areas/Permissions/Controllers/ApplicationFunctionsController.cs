@@ -65,5 +65,6 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 		public Guid FunctionId { get; set; }
 		public ICollection<ApplicationFunctionViewModel> ChildFunctions { get; set; }
 		public bool IsDisabled { get; set; }
+		public bool IsSelected => false;
 	}
 }
