@@ -444,7 +444,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.EqualTo(0);
 		}
 
-		[Test, Ignore("40939")]
+		[Test]
 		public void ShouldNotOptimizeAgentNotHavingTheMaxSeatSkillThatIsOverLimit()
 		{
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
@@ -452,15 +452,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var teamOverLimit = new Team { Description = new Description("_"), Site = siteOverLimit };
 			var siteUnderLimit = new Site("_") { MaxSeats = 10 }.WithId();
 			var teamUnderLimit = new Team { Description = new Description("_"), Site = siteUnderLimit };
-
-			var dateOnly = DateOnly.Today;
+			var loggedOnBu = new BusinessUnit("_");
+			loggedOnBu.AddSite(siteOverLimit);
+			loggedOnBu.AddSite(siteUnderLimit);
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(loggedOnBu);
+			var dateOnly = new DateOnly(2016, 11, 1);
 			var scenario = new Scenario("_");
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 9, 0, 60), new TimePeriodWithSegment(17, 0, 17, 0, 60), new ShiftCategory("_").WithId()));
-			var bag = new RuleSetBag(ruleSet);
-
 			var agentScheduledForAnHourData1 = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, teamOverLimit, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 9, 0));
 			var agentScheduledForAnHourData2 = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, teamOverLimit, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 9, 0));
-			var agentDataSiteUnderLimit = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, teamUnderLimit, bag, scenario, activity, new TimePeriod(8, 0, 16, 0));
+			var agentDataSiteUnderLimit = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, teamUnderLimit, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentDataSiteUnderLimit.Assignment, agentScheduledForAnHourData2.Assignment,agentScheduledForAnHourData1.Assignment });
 			var optPreferences = CreateOptimizationPreferences();
 
