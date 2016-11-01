@@ -137,9 +137,7 @@
 					pollActiveTabData($scope.activeTab);
 					$scope.prevArea = $scope.selectedItem;
 
-					for (var i = 0; i < item.Skills.length; i++){
-						item.Skills[i].DoDisplayData = $scope.skills[i].DoDisplayData;
-					}
+					checkUnsupported(item);
 				}
 				if ($scope.drillable === true && $scope.selectedItem.skills) {
 					$scope.drillable = false;
@@ -174,14 +172,18 @@
 								autocompleteSkillArea.selectedSkillArea = $scope.selectedItem;
 							}
 						}
-
-						// var skillAreaSkills = $scope.selectedSkillArea.Skills;
-						//
-						// for (var i = 0; i < skillAreaSkills.length; i++) {
-						// 	skillAreaSkills[i].DoDisplayData = $scope.skills[i].DoDisplayData;
-						// }
 					});
 				});
+			};
+
+			var checkUnsupported = function(item){
+				for ( var i = 0; i < item.Skills.length; i++ ) {
+					for ( var j = 0; j < $scope.skills.length; j++ ) {
+						if ( item.Skills[i].Id === $scope.skills[j].Id ) {
+							item.Skills[i].DoDisplayData = $scope.skills[j].DoDisplayData;
+						}
+					}
+				}
 			};
 
 			$scope.clearSkillHelper = function() {
