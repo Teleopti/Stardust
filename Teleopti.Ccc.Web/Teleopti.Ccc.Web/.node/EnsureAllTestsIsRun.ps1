@@ -1,4 +1,4 @@
-#Searching for the words fit & describe in all spec.js files under web project. 
+#Searching for the words fit & fdescribe in all spec.js files under web project. 
 #To be sure that all tests is beeing run and no one accidentally commited it
 
 $fit = gci "$env:WorkingDirectory\Teleopti.Ccc.Web\Teleopti.Ccc.Web\WFM\app\*.spec.js" -recurse | Select-String -pattern "\bfit\b" 
@@ -12,6 +12,6 @@ if ($fit.count -gt "0") {
 
 if ($describe.count -gt "0") { 
 
-    Write-Output "The word 'describe' has been found in the following file(s):`n "$describe.name""
+    Write-Output "The word 'fdescribe' has been found in the following file(s):`n "$describe.name""
     exit 1
 }
