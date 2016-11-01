@@ -11,7 +11,14 @@
 
 		self.decideBelongsToDate = decideBelongsToDate;
 		self.normalizePersonScheduleVm = normalizePersonScheduleVm;
+		self.checkTimeRangeAllowedForIntradayAbsence = checkTimeRangeAllowedForIntradayAbsence;
 
+		function checkTimeRangeAllowedForIntradayAbsence(targetTimeRange, normalizedScheduleDataArray) {
+			var intersectedShiftDays = normalizedScheduleDataArray.filter(function (day) {
+				return day.shiftRange && timeRangeIntersect(day.shiftRange, targetTimeRange);
+			});
+			return intersectedShiftDays > 0;
+		}
 
 		function decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray, currentDate) {		
 
