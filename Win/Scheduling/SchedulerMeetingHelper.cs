@@ -27,17 +27,17 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly ISchedulerStateHolder _schedulerStateHolder;
 	    private readonly IResourceOptimization _resourceOptimizationHelper;
 	    private readonly ISkillPriorityProvider _skillPriorityProvider;
-	    private readonly IScheduleStorage _scheduleStorage;
+	    private readonly IScheduleStorageFactory _scheduleStorageFactory;
 	    private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
 	    private readonly MeetingParticipantPermittedChecker _meetingParticipantPermittedChecker = new MeetingParticipantPermittedChecker();
 
-	    internal SchedulerMeetingHelper(IInitiatorIdentifier initiatorIdentifier, ISchedulerStateHolder schedulerStateHolder, IResourceOptimization resourceOptimizationHelper, ISkillPriorityProvider skillPriorityProvider, IScheduleStorage scheduleStorage)
+	    internal SchedulerMeetingHelper(IInitiatorIdentifier initiatorIdentifier, ISchedulerStateHolder schedulerStateHolder, IResourceOptimization resourceOptimizationHelper, ISkillPriorityProvider skillPriorityProvider, IScheduleStorageFactory scheduleStorageFactory)
         {
             _initiatorIdentifier = initiatorIdentifier;
             _schedulerStateHolder = schedulerStateHolder;
 	        _resourceOptimizationHelper = resourceOptimizationHelper;
 		    _skillPriorityProvider = skillPriorityProvider;
-	        _scheduleStorage = scheduleStorage;
+	        _scheduleStorageFactory = scheduleStorageFactory;
         }
 
         internal event EventHandler<ModifyMeetingEventArgs> ModificationOccured;
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
             }
 
-            using (MeetingComposerView meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulerStateHolder, editPermission, viewSchedulesPermission, new EventAggregator(), _resourceOptimizationHelper, _skillPriorityProvider, _scheduleStorage))
+            using (MeetingComposerView meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulerStateHolder, editPermission, viewSchedulesPermission, new EventAggregator(), _resourceOptimizationHelper, _skillPriorityProvider, _scheduleStorageFactory))
             {
 				meetingComposerView.SetInstanceId(_initiatorIdentifier.InitiatorId);
                 meetingComposerView.ModificationOccurred += meetingComposerView_ModificationOccurred;

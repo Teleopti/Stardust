@@ -4,12 +4,15 @@ using System.Globalization;
 using System.Linq;
 using System.Net.Mail;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.WcfService.Factory.ScheduleReporting;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {
@@ -17,13 +20,13 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
     {
         private readonly IAssembler<IPerson, PersonDto> _personAssembler;
         private readonly ICurrentScenario _scenarioRepository;
-	    private readonly IScheduleStorage _scheduleStorage;
+	    private readonly IScheduleStorageFactory _scheduleStorageFactory;
 
-	    public ScheduleMailFactory(IAssembler<IPerson, PersonDto> personAssembler, ICurrentScenario scenarioRepository, IScheduleStorage scheduleStorage)
+	    public ScheduleMailFactory(IAssembler<IPerson, PersonDto> personAssembler, ICurrentScenario scenarioRepository, IScheduleStorageFactory scheduleStorageFactory)
         {
             _personAssembler = personAssembler;
             _scenarioRepository = scenarioRepository;
-	        _scheduleStorage = scheduleStorage;
+	        _scheduleStorageFactory = scheduleStorageFactory;
         }
 
         public void SendScheduleMail(IList<PersonDto> personCollection, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneInfoId)
@@ -35,16 +38,17 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             DateOnlyPeriod datePeriod = new DateOnlyPeriod(originalDatePeriod.StartDate.AddDays(-6), originalDatePeriod.EndDate.AddDays(6));
             var period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1));
 
-            using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-	            IList<IPerson> personList = _personAssembler.DtosToDomainEntities(personCollection).ToList();
-				
-	            IScheduleDictionary scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(false, true), period, _scenarioRepository.Current());
-	            //rk don't know if I break stuff here...
-	            //scheduleDictionary.SetTimeZone(timeZone);
+                IList<IPerson> personList = _personAssembler.DtosToDomainEntities(personCollection).ToList();
 
-	            ScheduleToPdfManager pdfManager = new ScheduleToPdfManager();
-	            returnList = pdfManager.ExportIndividual(timeZone, personList, originalDatePeriod, scheduleDictionary, ScheduleReportDetail.All);
+                IScheduleStorage scheduleRep = _scheduleStorageFactory.Create(unitOfWork);
+                IScheduleDictionary scheduleDictionary = scheduleRep.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(false, true), period, _scenarioRepository.Current());
+                //rk don't know if I break stuff here...
+                //scheduleDictionary.SetTimeZone(timeZone);
+
+                ScheduleToPdfManager pdfManager = new ScheduleToPdfManager();
+                returnList = pdfManager.ExportIndividual(timeZone, personList, originalDatePeriod, scheduleDictionary, ScheduleReportDetail.All);
             }
 
             SendEmailWithAttachedSchedule(originalDatePeriod, returnList);

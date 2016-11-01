@@ -190,8 +190,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return new MultisiteDayRepository(unitOfWork);
 		}
 
-
-
 		public IContractScheduleRepository CreateContractScheduleRepository(IUnitOfWork unitOfWork)
 		{
 			return new ContractScheduleRepository(unitOfWork);

@@ -18,6 +18,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.WinCodeTest.Common
 {
@@ -28,14 +29,15 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         private IList<IPerson> _permittedPeople;
         private ISchedulerStateHolder _schedulerState;
         private IRepositoryFactory _repositoryFactory;
+	    private IScheduleStorageFactory _scheduleStorageFactory;
         private IUnitOfWork _uow;
         private ISchedulingResultLoader target;
-	    private IScheduleStorage _scheduleStorage;
 
 	    [SetUp]
         public void Setup()
         {
             _repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
+			_scheduleStorageFactory = MockRepository.GenerateMock<IScheduleStorageFactory>();
             _uow = MockRepository.GenerateMock<IUnitOfWork>();
             
             _permittedPeople = new List<IPerson> { MockRepository.GenerateMock<IPerson>() };
@@ -45,12 +47,11 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			    .IgnoreArguments()
 			    .Return(MockRepository.GenerateMock<ILoaderDeciderResult>());
 
-			_schedulerState = new SchedulerStateHolder(scenario, new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople, new DisableDeletedFilter(new ThisUnitOfWork(_uow)), new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IEnumerable<ISkillDay>>()), new TimeZoneGuardWrapper());
-			_scheduleStorage = MockRepository.GenerateMock<IScheduleStorage>();
+			_schedulerState = new SchedulerStateHolder(scenario, new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople, new DisableDeletedFilter(new ThisUnitOfWork(_uow)), new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IEnumerable<ISkillDay>>()), new TimeZoneGuard());
 
-			var skillDayLoadHelper = MockRepository.GenerateMock<ISkillDayLoadHelper>();
+		    var skillDayLoadHelper = MockRepository.GenerateMock<ISkillDayLoadHelper>();
 		    skillDayLoadHelper.Expect(x => x.LoadSchedulerSkillDays(new DateOnlyPeriod(), null, null)).IgnoreArguments().Return(new Dictionary<ISkill, IEnumerable<ISkillDay>>());
-			target = new SchedulingResultLoader(_schedulerState, _repositoryFactory, new EventAggregator(), MockRepository.GenerateMock<ILazyLoadingManager>(), peopleAndSkillLoaderDecider, MockRepository.GenerateMock<IPeopleLoader>(), skillDayLoadHelper, MockRepository.GenerateMock<IResourceOptimization>(), _scheduleStorage, MockRepository.GenerateMock<LoadScheduleByPersonSpecification>());
+			target = new SchedulingResultLoader(_schedulerState, _repositoryFactory, new EventAggregator(), MockRepository.GenerateMock<ILazyLoadingManager>(), peopleAndSkillLoaderDecider, MockRepository.GenerateMock<IPeopleLoader>(), skillDayLoadHelper, MockRepository.GenerateMock<IResourceOptimization>(), MockRepository.GenerateMock<LoadScheduleByPersonSpecification>(), _scheduleStorageFactory);
         }
 
         [Test]
@@ -192,9 +193,11 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         private IScheduleDictionary createScheduleInitializationExpectation()
         {
             var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-            var period = _schedulerState.RequestedPeriod.Period();
-			
-        	_scheduleStorage.Stub(x=>x.FindSchedulesForPersons(null, null, null, null, null)).Constraints(
+            var scheduleRepository = MockRepository.GenerateMock<IScheduleStorage>();
+        	var period = _schedulerState.RequestedPeriod.Period();
+
+			_scheduleStorageFactory.Stub(x => x.Create(_uow)).Return(scheduleRepository);
+        	scheduleRepository.Stub(x=>x.FindSchedulesForPersons(null, null, null, null, null)).Constraints(
         		Rhino.Mocks.Constraints.Is.Matching(
         			new Predicate<IScheduleDateTimePeriod>(
         				x =>

@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -28,20 +29,23 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly ISchedulerStateHolder _schedulerState;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly ILazyLoadingManager _lazyManager;
-		private readonly IScheduleStorage _scheduleStorage;
+		private readonly IScheduleStorageFactory _scheduleStorageFactory;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IPersonSkillProvider _personSkillProvider = new PersonSkillProvider();
 		private BackgroundWorker _backgroundWorker;
 		
-		public SchedulerStateLoader(ISchedulerStateHolder stateHolder, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory uowFactory, ILazyLoadingManager lazyManager, IScheduleStorage scheduleStorage)
+		public SchedulerStateLoader(ISchedulerStateHolder stateHolder, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory uowFactory, ILazyLoadingManager lazyManager, IScheduleStorageFactory scheduleStorageFactory)
+			: this()
 		{
 			_unitOfWorkFactory = uowFactory;
 			_lazyManager = lazyManager;
-			_scheduleStorage = scheduleStorage;
+			_scheduleStorageFactory = scheduleStorageFactory;
 			_repositoryFactory = repositoryFactory;
 			_schedulerState = stateHolder;
 		}
-		
+
+		protected SchedulerStateLoader() { }
+
 		public void LoadOrganization()
 		{
 			using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
@@ -216,13 +220,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			IPersonProvider personsProvider = new PersonsInOrganizationProvider(_schedulerState.SchedulingResultState.PersonsInOrganization);
 			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
-			
+			IScheduleStorage scheduleStorage = _scheduleStorageFactory.Create(uow);
+
 			using (PerformanceOutput.ForOperation("Loading schedules"))
 			{
 				uow.Reassociate(_schedulerState.SchedulingResultState.PersonsInOrganization);
 				using (uow.DisableFilter(QueryFilter.Deleted))
 					_repositoryFactory.CreateActivityRepository(uow).LoadAll();
-				_schedulerState.LoadSchedules(_scheduleStorage, personsProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod);
+				_schedulerState.LoadSchedules(scheduleStorage, personsProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod);
 			}
 		}
 

@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Common.Controls.DateSelection;
@@ -189,7 +190,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			gridControlSchedules.EndUpdate();
 		}
 
-		public MeetingSchedulesView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, INotifyComposerMeetingChanged composer, IScheduleStorage scheduleStorage)
+		public MeetingSchedulesView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, INotifyComposerMeetingChanged composer)
 			: this()
 		{
 			if (schedulerStateHolder == null) throw new ArgumentNullException("schedulerStateHolder");
@@ -200,7 +201,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			if (DesignMode) return;
 
 			monthCalendarAdvDateSelection.Culture = CultureInfo.CurrentCulture;
-			var stateHolderLoader = new SchedulerStateLoader(schedulerStateHolder, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper(), scheduleStorage);
+			var stateHolderLoader = new SchedulerStateLoader(schedulerStateHolder, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper(), new ScheduleStorageFactory(new FalseToggleManager()));
 			var meetingMover = new MeetingMover(this, meetingViewModel, schedulerStateHolder.DefaultSegmentLength, TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
 			var meetingMousePositionDecider = new MeetingMousePositionDecider(this);
 			_presenter = new MeetingSchedulesPresenter(this, meetingViewModel, schedulerStateHolder, stateHolderLoader, new MeetingSlotFinderService(), meetingMover, meetingMousePositionDecider);

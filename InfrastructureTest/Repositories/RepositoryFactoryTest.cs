@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			mocks.ReplayAll();
 			Assert.IsNotNull(new RepositoryFactory().CreateSkillRepository(uow));
 		}
-		
+
 		[Test]
 		public void VerifyCreateContractScheduleRepository()
 		{

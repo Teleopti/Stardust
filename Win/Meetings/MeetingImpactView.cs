@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Common.Controls.DateSelection;
@@ -42,8 +43,7 @@ namespace Teleopti.Ccc.Win.Meetings
 								ISchedulerStateHolder schedulerStateHolder, 
 								MeetingComposerView meetingComposerView, 
 								IResourceOptimization resourceOptimizationHelper,
-								ISkillPriorityProvider skillPriorityProvider, 
-								IScheduleStorage scheduleStorage)
+								ISkillPriorityProvider skillPriorityProvider)
 			: this()
 		{
 			_transparentMeetingMeetingControl = new TransparentMeetingMeetingControl();
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			office2007OutlookTimePickerStartSlotPeriod.CreateAndBindList();
 			office2007OutlookTimePickerEndSlotPeriod.CreateAndBindList();
 
-			var stateHolderLoader = new SchedulerStateLoader(schedulerStateHolder, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper(), scheduleStorage);
+			var stateHolderLoader = new SchedulerStateLoader(schedulerStateHolder, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper(), new ScheduleStorageFactory(new FalseToggleManager()));
 			var slotCalculator = new MeetingSlotImpactCalculator(schedulerStateHolder.SchedulingResultState, new AllLayersAreInWorkTimeSpecification());
 			var slotFinder = new BestSlotForMeetingFinder(slotCalculator);
 			var decider = new PeopleAndSkillLoaderDecider(new PersonRepository(new FromFactory(() =>UnitOfWorkFactory.Current)), new PairMatrixService<Guid>(new PairDictionaryFactory<Guid>()));
