@@ -64,11 +64,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
         }
 
         [Test]
-		  [Ignore("failed in build server, see bug 41537")]
         public void ShouldUseConfiguredFakeNowInsteadOfSystemNow()
         {
-            ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-02-01 08:10");
-            ScheduleForecastSkillReadModelRepository.LastCalculatedDate = new DateTime(2016, 03, 01, 8, 0, 0, DateTimeKind.Utc);
+            ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-02-02 08:10");
+            ScheduleForecastSkillReadModelRepository.LastCalculatedDate = new DateTime(2016, 02, 02, 8, 0, 0, DateTimeKind.Utc);
 			BusinessUnitRepository.Add(BusinessUnitFactory.CreateSimpleBusinessUnit());
 			IPerson person = PersonFactory.CreatePerson();
 			person.SetId(SystemUser.Id);
