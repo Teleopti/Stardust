@@ -1,5 +1,4 @@
-﻿using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
+﻿using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
@@ -12,11 +11,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 	    private readonly IFindSharedCalendarScheduleDays _findSharedCalendarScheduleDays;
 	    private readonly ICheckCalendarPermissionCommand _checkCalendarPermissionCommand;
 	    private readonly ICheckCalendarActiveCommand _checkCalendarActiveCommand;
-		private readonly IDataSourceScope _dataSourceScope;
 
 			public CalendarLinkGenerator(IRepositoryFactory repositoryFactory, IDataSourceForTenant dataSourceForTenant,
 		                             ICalendarTransformer transformer, IFindSharedCalendarScheduleDays findSharedCalendarScheduleDays,
-		                             ICheckCalendarPermissionCommand checkCalendarPermissionCommand, ICheckCalendarActiveCommand checkCalendarActiveCommand, IDataSourceScope dataSourceScope)
+		                             ICheckCalendarPermissionCommand checkCalendarPermissionCommand, ICheckCalendarActiveCommand checkCalendarActiveCommand)
 		{
 			_repositoryFactory = repositoryFactory;
 				_dataSourceForTenant = dataSourceForTenant;
@@ -24,29 +22,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 		    _findSharedCalendarScheduleDays = findSharedCalendarScheduleDays;
 		    _checkCalendarPermissionCommand = checkCalendarPermissionCommand;
 		    _checkCalendarActiveCommand = checkCalendarActiveCommand;
-			_dataSourceScope = dataSourceScope;
 		}
 
 		public string Generate(CalendarLinkId calendarLinkId)
 		{
 			var dataSource = _dataSourceForTenant.Tenant(calendarLinkId.DataSourceName);
 
-			using (_dataSourceScope.OnThisThreadUse (dataSource))
+			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
-				{
-					var personRepository = _repositoryFactory.CreatePersonRepository(uow);
-					var person = personRepository.Get(calendarLinkId.PersonId);
+				var personRepository = _repositoryFactory.CreatePersonRepository(uow);
+				var person = personRepository.Get(calendarLinkId.PersonId);
 
-					_checkCalendarPermissionCommand.Execute(dataSource, person, personRepository);
-					_checkCalendarActiveCommand.Execute(uow, person);
+                _checkCalendarPermissionCommand.Execute(dataSource, person, personRepository);
+				_checkCalendarActiveCommand.Execute(uow, person);
 
-					var scheduleDays = _findSharedCalendarScheduleDays.GetScheduleDays(calendarLinkId, uow, person.WorkflowControlSet.SchedulePublishedToDate);
-					return _transformer.Transform(scheduleDays);
-				}
+				var scheduleDays = _findSharedCalendarScheduleDays.GetScheduleDays(calendarLinkId, uow, person.WorkflowControlSet.SchedulePublishedToDate);
+				return _transformer.Transform(scheduleDays);
 			}
-
-			
 		}
 	}
 }
