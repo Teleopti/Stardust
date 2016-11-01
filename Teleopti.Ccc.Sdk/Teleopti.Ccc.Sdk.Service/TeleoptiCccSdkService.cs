@@ -1623,7 +1623,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return ExecuteCommand(revokePersonRoleCommandDto);
 		}
 
-		public ICollection<ExternalLogOnDto> FindExternalLogOn(FindExternalLogOnQueryDto queryDto)
+		public ICollection<ExternalLogOnDto> ExternalLogOnsByQuery(QueryDto queryDto)
 		{
 			var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<ExternalLogOnDto>>>();
 			return invoker.Invoke(queryDto);

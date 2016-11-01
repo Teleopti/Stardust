@@ -377,7 +377,7 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// <param name="queryDto">A predefined query type used.</param>
 		/// <returns>ExternalLogOns.</returns>
 		[OperationContract]
-		ICollection<ExternalLogOnDto> FindExternalLogOn(FindExternalLogOnQueryDto queryDto);
+		ICollection<ExternalLogOnDto> ExternalLogOnsByQuery(QueryDto queryDto);
 
 		/// <summary>
 		/// Sets the external logons of a person period for a given person and date.
