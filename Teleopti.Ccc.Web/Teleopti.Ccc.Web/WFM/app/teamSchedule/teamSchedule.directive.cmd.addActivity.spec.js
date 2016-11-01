@@ -139,7 +139,7 @@
 		expect(vm.isNewActivityAllowedForAgent(agent, vm.timeRange)).toBe(false);
 	});
 
-	it('should see a disabled button when anyone in selected is not allowed to add current activity', function () {
+	it('should see a disabled button when everyone in selected is not allowed to add current activity', function () {
 		var result = setUp();
 
 		var vm = result.commandControl;
@@ -147,8 +147,8 @@
 		vm.isNextDay = true;
 		vm.disableNextDay = false;
 		vm.timeRange = {
-			startTime: new Date('2016-06-16T08:00:00Z'),
-			endTime: new Date('2016-06-16T16:00:00Z')
+			startTime: new Date('2016-06-16T18:00:00Z'),
+			endTime: new Date('2016-06-16T19:00:00Z')
 		};
 
 		vm.selectedAgents = [
@@ -157,18 +157,40 @@
 				Name: 'agent1',
 				ScheduleStartTime: new Date('2016-06-15T08:00:00Z'),
 				ScheduleEndTime: new Date('2016-06-15T17:00:00Z')
-			}, {
-				PersonId: 'agent2',
-				Name: 'agent2',
-				ScheduleStartTime: '2016-06-16T08:00:00Z',
-				ScheduleEndTime: '2016-06-16T09:00:00Z'
 			}];
+
+		var timezone1 = {
+			IanaId: "Asia/Shanghai",
+			DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
+		};
+
+		fakeScheduleManagementSvc.setPersonScheduleVm('agent1', {
+			Date: '2016-06-15',
+			PersonId: 'agent1',
+			Timezone: timezone1,
+			Shifts: [			
+			{
+				Date: '2016-06-15',
+				Projections: [
+				{
+					Start: '2016-06-15 08:00',
+					End: '2016-06-15 17:00',
+					Minutes: 540
+				}],
+				ProjectionTimeRange: {
+					Start: '2016-06-15 08:00',
+					End: '2016-06-15 17:00',
+				}
+			}]
+		});	
+
+		result.scope.$apply();
 
 		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
 
 		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
 		expect(applyButton.attr('disabled')).toBe('disabled');
-		expect(vm.isInputValid()).toBe(false);
+		expect(vm.anyValidAgent()).toBe(false);
 	});
 
 	it('should call add activity when click apply with correct data', function () {
@@ -187,33 +209,33 @@
 				PersonId: 'agent1',
 				Name: 'agent1',
 				ScheduleStartTime: null,
-				ScheduleEndTime: null,
-				PersonScheduleVm: {
-					Date: '2016-06-16',
-					Timezone: {
-						IanaId: "Asia/Hong_Kong",						
-					},
-					Shifts: [
-					]
-				}
-			}, {
-				PersonId: 'agent2',
-				Name: 'agent2',
-				ScheduleStartTime: null,
-				ScheduleEndTime: null,
-				PersonScheduleVm: {
-					Date: '2016-06-15',
-					Timezone: {
-						IanaId: "Asia/Hong_Kong",
-					},
-					Shifts: [
-					]
-				}
+				ScheduleEndTime: null				
 			}];
 
 		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
 
 		fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
+
+		var timezone1 = {
+			IanaId: "Asia/Hong_Kong",
+			DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
+		};
+
+		fakeScheduleManagementSvc.setPersonScheduleVm('agent1', {
+			Date: '2016-06-15',
+			PersonId: 'agent1',
+			Timezone: timezone1,
+			Shifts: [
+			{
+				Date: '2016-06-15',
+				Projections: [
+				],
+				ProjectionTimeRange: null
+			}]
+		});
+
+		result.scope.$apply();
+
 
 		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
 		applyButton.triggerHandler('click');
@@ -254,29 +276,29 @@
 				PersonId: 'agent1',
 				Name: 'agent1',
 				ScheduleStartTime: null,
-				ScheduleEndTime: null,
-				PersonScheduleVm: {
-					Date: '2016-06-16',
-					Timezone: {
-						IanaId: "Asia/Hong_Kong",
-					},
-					Shifts: [
-					]
-				}
-			}, {
-				PersonId: 'agent2',
-				Name: 'agent2',
-				ScheduleStartTime: null,
-				ScheduleEndTime: null,
-				PersonScheduleVm: {
-					Date: '2016-06-15',
-					Timezone: {
-						IanaId: "Asia/Hong_Kong",
-					},
-					Shifts: [
-					]
-				}
+				ScheduleEndTime: null,							
 			}];
+
+		var timezone1 = {
+			IanaId: "Asia/Hong_Kong",
+			DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
+		};
+
+		fakeScheduleManagementSvc.setPersonScheduleVm('agent1', {
+			Date: '2016-06-15',
+			PersonId: 'agent1',
+			Timezone: timezone1,
+			Shifts: [
+			{
+				Date: '2016-06-15',
+				Projections: [
+				],
+				ProjectionTimeRange: null
+			}]
+		});
+
+		result.scope.$apply();
+
 
 		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
 
@@ -370,6 +392,7 @@
 	function FakeScheduleManagementService() {
 		var latestEndTime = null;
 		var latestStartTime = null;
+		var savedPersonScheduleVm = {};
 
 		this.setLatestEndTime = function (date) {
 			latestEndTime = date;
@@ -385,6 +408,14 @@
 
 		this.getLatestStartOfSelectedSchedule = function () {
 			return latestStartTime;
+		}
+
+		this.setPersonScheduleVm = function(personId, vm) {
+			savedPersonScheduleVm[personId] = vm;
+		}
+
+		this.findPersonScheduleVmForPersonId = function(personId) {
+			return savedPersonScheduleVm[personId];
 		}
 	}
 

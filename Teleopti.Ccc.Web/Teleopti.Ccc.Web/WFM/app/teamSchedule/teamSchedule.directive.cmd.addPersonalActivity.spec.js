@@ -131,7 +131,7 @@
 		expect(vm.isNewActivityAllowedForAgent(agent, vm.timeRange)).toBe(false);
 	});
 
-	it('should see a disabled button when anyone in selected is not allowed to add current activity', function () {
+	it('should see a disabled button when everyone in selected is not allowed to add current activity', function () {
 		var result = setUp();
 
 		var vm = result.commandControl;
@@ -147,18 +147,35 @@
 			{
 				PersonId: 'agent1',
 				Name: 'agent1',
-				ScheduleEndTime: '2016-06-15T17:00:00Z'
-			}, {
-				PersonId: 'agent2',
-				Name: 'agent2',
-				ScheduleEndTime: '2016-06-16T09:00:00Z'
+				ScheduleEndTime: '2016-06-15T17:00:00Z'			
 			}];
+
+		var timezone1 = {
+			IanaId: "Asia/Hong_Kong",
+			DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
+		};
+
+		fakeScheduleManagementSvc.setPersonScheduleVm('agent1', {
+			Date: '2016-06-15',
+			PersonId: 'agent1',
+			Timezone: timezone1,
+			Shifts: [
+			{
+				Date: '2016-06-15',
+				Projections: [
+				],
+				ProjectionTimeRange: null
+			}]
+		});
+
+		result.scope.$apply();
+
 
 		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
 
 		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
 		expect(applyButton.attr('disabled')).toBe('disabled');
-		expect(vm.isInputValid()).toBe(false);
+		expect(vm.anyValidAgent()).toBe(false);
 	});
 
 	it('should call add personal activity when click apply with correct data',function() {
@@ -307,6 +324,7 @@
 	function FakeScheduleManagementService() {
 		var latestEndTime = null;
 		var latestStartTime = null;
+		var savedPersonScheduleVm = {};
 
 		this.setLatestEndTime = function (date) {
 			latestEndTime = date;
@@ -322,6 +340,14 @@
 
 		this.getLatestStartOfSelectedSchedule = function () {
 			return latestStartTime;
+		}
+
+		this.setPersonScheduleVm = function (personId, vm) {
+			savedPersonScheduleVm[personId] = vm;
+		}
+
+		this.findPersonScheduleVmForPersonId = function (personId) {
+			return savedPersonScheduleVm[personId];
 		}
 	}
 
