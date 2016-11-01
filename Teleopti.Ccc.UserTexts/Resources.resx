@@ -15078,4 +15078,8 @@ These options are activated:
     <value>Organization</value>
     <comment>Organization field on advanced search</comment>
   </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+    <comment>Button name in RTA to go to sites dashboard</comment>
+  </data>
 </root>
