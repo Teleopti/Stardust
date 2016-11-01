@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
@@ -80,6 +81,27 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.EqualTo(1);
 		}
 
+		[Test, Ignore("Claes! Jag vet inte om jag satt upp detta rätt... Sätts General.ScheduleTag i scheulern? (finns flera andra scheduletag props också)")]
+		public void ShouldSetCorrectTag()
+		{
+			var site = new Site("_") { MaxSeats = 1 }.WithId();
+			var team = new Team { Description = new Description("_"), Site = site };
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var dateOnly = new DateOnly(2016, 10, 25);
+			var scenario = new Scenario("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
+			var agentDataOneHour = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(16, 0, 17, 0));
+			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(9, 0, 17, 0));
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData.Assignment, agentDataOneHour.Assignment });
+			var optPreferences = CreateOptimizationPreferences();
+			optPreferences.General.ScheduleTag = new ScheduleTag();
+
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, scenario, optPreferences);
+
+			schedules[agentData.Agent].ScheduledDay(dateOnly).ScheduleTag()
+				.Should().Be.SameInstanceAs(optPreferences.General.ScheduleTag);
+		}
 
 		[TestCase(1d, ExpectedResult = 0)]
 		[TestCase(0d, ExpectedResult = 1)]
