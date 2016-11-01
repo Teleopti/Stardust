@@ -69,11 +69,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, scenario, allAgents);
 			if (!maxSeatData.MaxSeatSkillExists())
 				return;
+			var allMaxSeatSkills = maxSeatData.AllMaxSeatSkills();
+			var allMaxSeatSkillDays = maxSeatData.AllMaxSeatSkillDaysPerSkill();
 			var tagSetter = new ScheduleTagSetter(new NullScheduleTag()); //fix - the tag
 			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedules, allAgents, period);
 			var businessRules = NewBusinessRuleCollection.Minimum(); //is this enough?
 
-			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills()))
+			using (_resourceCalculationContextFactory.Create(schedules, allMaxSeatSkills))
 			{
 				//most stuff taken from TeamBlockIntradayOptimizationService
 				var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
@@ -88,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
 						var firstSelectedDay = period.DayCollection().First();
 						var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
-						var maxPeakBefore = _maxSeatPeak.Fetch(datePoint, teamBlockInfo, maxSeatData.AllMaxSeatSkillDaysPerSkill());
+						var maxPeakBefore = _maxSeatPeak.Fetch(datePoint, teamBlockInfo, allMaxSeatSkillDays);
 
 						if (Math.Abs(maxPeakBefore) < 0.0001)
 						{
@@ -98,14 +100,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules); //TODO: fix - dont do this
 
-						if (!_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo, datePoint,
-								schedulingOptions,
-								rollbackService,
-								new DoNothingResourceCalculateDelayer(), maxSeatData.AllMaxSeatSkillDaysPerSkill().ToSkillDayEnumerable(),
-								schedules, new ShiftNudgeDirective(), businessRules) ||
+						if (!_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, 
+													teamBlockInfo, 
+													datePoint,
+													schedulingOptions,
+													rollbackService,
+													new DoNothingResourceCalculateDelayer(), 
+													allMaxSeatSkillDays.ToSkillDayEnumerable(),
+													schedules, 
+													new ShiftNudgeDirective(), 
+													businessRules) ||
 								!_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences) ||
 								!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) ||
-								_maxSeatPeak.Fetch(datePoint, teamBlockInfo, maxSeatData.AllMaxSeatSkillDaysPerSkill()) > maxPeakBefore)	
+								_maxSeatPeak.Fetch(datePoint, teamBlockInfo, allMaxSeatSkillDays) > maxPeakBefore)
 						{
 							rollbackService.RollbackMinimumChecks();
 						}

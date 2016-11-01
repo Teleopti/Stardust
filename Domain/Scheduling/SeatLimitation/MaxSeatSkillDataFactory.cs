@@ -38,14 +38,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				//
 
 				var skillDays = createMaxSeatSkillDays(period, skill, scenario);
-				ret.Add(skill, skillDays, site);
+				ret.Add(skill, skillDays);
 			}
 			return ret;
 		}
 
 		private IEnumerable<ISkillDay> createMaxSeatSkillDays(DateOnlyPeriod period, ISkill maxSeatSkill, IScenario scenario)
 		{
-			//move to seperate class
 			var skillDays = skillDaysForSkill(period, maxSeatSkill, scenario);
 			foreach (IMaxSeatSkillDay skillDay in skillDays)
 			{
