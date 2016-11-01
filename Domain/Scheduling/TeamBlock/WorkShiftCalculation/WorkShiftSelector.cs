@@ -17,30 +17,50 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
 	public interface IWorkShiftSelector
 	{
-        IShiftProjectionCache SelectShiftProjectionCache(IList<IShiftProjectionCache> shiftList, IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataDictionary, PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo, ISchedulingOptions schedulingOptions);
+		IShiftProjectionCache SelectShiftProjectionCache(DateOnly datePointer, IList<IShiftProjectionCache> shifts,
+			IEnumerable<ISkillDay> allSkillDays, ITeamBlockInfo teamBlockInfo,
+			ISchedulingOptions schedulingOptions, TimeZoneInfo timeZoneInfo, bool forRoleModel);
 	}
 
 	public class WorkShiftSelector : IWorkShiftSelector, IWorkShiftSelectorForIntraInterval
 	{
 		private readonly IWorkShiftValueCalculator _workShiftValueCalculator;
 		private readonly IEqualWorkShiftValueDecider _equalWorkShiftValueDecider;
+		private readonly IActivityIntervalDataCreator _activityIntervalDataCreator;
+		private readonly IMaxSeatSkillAggregator _maxSeatSkillAggregator;
+		private readonly IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
 
-		public WorkShiftSelector(IWorkShiftValueCalculator workShiftValueCalculator, IEqualWorkShiftValueDecider equalWorkShiftValueDecider)
+		public WorkShiftSelector(IWorkShiftValueCalculator workShiftValueCalculator, 
+												IEqualWorkShiftValueDecider equalWorkShiftValueDecider,
+												IActivityIntervalDataCreator activityIntervalDataCreator,
+												IMaxSeatSkillAggregator maxSeatSkillAggregator,
+												IMaxSeatInformationGeneratorBasedOnIntervals maxSeatInformationGeneratorBasedOnIntervals)
 		{
 			_workShiftValueCalculator = workShiftValueCalculator;
 			_equalWorkShiftValueDecider = equalWorkShiftValueDecider;
+			_activityIntervalDataCreator = activityIntervalDataCreator;
+			_maxSeatSkillAggregator = maxSeatSkillAggregator;
+			_maxSeatInformationGeneratorBasedOnIntervals = maxSeatInformationGeneratorBasedOnIntervals;
 		}
 
-		public IShiftProjectionCache SelectShiftProjectionCache(IList<IShiftProjectionCache> shiftList,
-			IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary,
-			PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo, ISchedulingOptions schedulingOptions)
+
+		public IShiftProjectionCache SelectShiftProjectionCache(DateOnly datePointer, IList<IShiftProjectionCache> shifts, IEnumerable<ISkillDay> allSkillDays,
+			 ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, TimeZoneInfo timeZoneInfo, bool forRoleModel)
 		{
+			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockInfo, datePointer, allSkillDays, forRoleModel);
+			var maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, datePointer, allSkillDays, TimeZoneGuard.Instance.CurrentTimeZone(), true);
+			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(), new DateOnlyPeriod(datePointer, datePointer));
+			var hasMaxSeatSkill = maxSeatSkills.Any();
+			var parameters = new PeriodValueCalculationParameters(schedulingOptions
+					.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,
+				schedulingOptions.UseMaximumPersons, schedulingOptions.UserOptionMaxSeatsFeature, hasMaxSeatSkill, maxSeatInfo);
+
 			double? bestShiftValue = null;
 			IShiftProjectionCache bestShift = null;
 
 			var shiftsWithValue =
-				shiftList.AsParallel()
-					.Select(s => new {s, value = ValueForShift(skillIntervalDataLocalDictionary, s, parameters, timeZoneInfo)});
+				shifts.AsParallel()
+					.Select(s => new { s, value = valueForShift(activityInternalData, s, parameters, timeZoneInfo) });
 
 			if (schedulingOptions.SkipNegativeShiftValues)
 			{
@@ -82,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			IComparer<IWorkShiftCalculationResultHolder> comparer = new WorkShiftCalculationResultComparer();
 			var sortedList =
 				shiftList.AsParallel()
-					.Select(s => new {s, value = ValueForShift(skillIntervalDataLocalDictionary, s, parameters, timeZoneInfo)})
+					.Select(s => new {s, value = valueForShift(skillIntervalDataLocalDictionary, s, parameters, timeZoneInfo)})
 					.Where(i => i.value.HasValue)
 					.Select(
 						shiftWithValue =>
@@ -99,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			return value;
 		}
 
-		protected virtual double? ValueForShift(IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary, IShiftProjectionCache shiftProjectionCache, PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo)
+		private double? valueForShift(IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary, IShiftProjectionCache shiftProjectionCache, PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo)
 		{
 			double? totalForAllActivitesValue = null;
 			var actvityValue =

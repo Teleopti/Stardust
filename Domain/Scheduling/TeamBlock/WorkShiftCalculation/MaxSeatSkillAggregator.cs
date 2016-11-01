@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public interface IMaxSeatSkillAggregator
 	{
 		HashSet<ISkill> GetAggregatedSkills(IList<IPerson> teamMembers, DateOnlyPeriod dateOnlyPeriod);

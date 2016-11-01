@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public MaxSeatOptimization Target;
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
 
-		[Test, Ignore("2 be fixed")]
+		[Test]
 		public void ShouldNotConsiderOneMissingSeatAsSameAsZeroMissingSeats()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();

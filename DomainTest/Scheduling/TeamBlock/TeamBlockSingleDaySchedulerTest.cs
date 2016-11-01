@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -10,7 +9,6 @@ using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -43,7 +41,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IActivityIntervalDataCreator _activityIntervalDataCreator;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
-		private PeriodValueCalculationParameters _periodValueCalculationParameters;
 		private IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
 		private IMaxSeatSkillAggregator _maxSeatSkillAggregator;
 		private IEnumerable<ISkillDay> _skillDays;
@@ -87,9 +84,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_selectedPersons = new List<IPerson> { _person1, _person2 };
 			_shift = _mocks.StrictMock<IShiftProjectionCache>();
 			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
-			_periodValueCalculationParameters = new PeriodValueCalculationParameters(_schedulingOptions.WorkShiftLengthHintOption,
-																		  _schedulingOptions.UseMinimumPersons,
-																		  _schedulingOptions.UseMaximumPersons, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, false, new Dictionary<DateTime, IntervalLevelMaxSeatInfo >());
 		}
 
 		[Test]
@@ -168,9 +162,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																		 new List<IActivityRestriction>());
 			var finderResult = new WorkShiftFinderResult(_person1, _dateOnly);
 			var shifts = new List<IShiftProjectionCache> { _shift };
-			var activityData = new Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>>();
-			var skillIntervalDataDic = new Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>>();
-			skillIntervalDataDic.Add(_dateOnly, new Dictionary<IActivity, IList<ISkillIntervalData>>());
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
@@ -193,10 +184,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 						.Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_schedules, _dateOnly, _person2, _teamBlockInfo, restriction,
 																		 _schedulingOptions, finderResult, false)).Return(shifts);
-				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _skillDays, false))
-					.Return(activityData).Repeat.AtLeastOnce();
-				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
-																		  _periodValueCalculationParameters, TimeZoneGuard.Instance.TimeZone, _schedulingOptions)).IgnoreArguments().Return(shifts[0]).Repeat.AtLeastOnce();
+				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(_dateOnly, shifts, _skillDays, _teamBlockInfo, _schedulingOptions, TimeZoneGuard.Instance.TimeZone, false)).IgnoreArguments().Return(shifts[0]).Repeat.AtLeastOnce();
 				
 				Expect.Call(_teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null, null)).IgnoreArguments().Return(false);
 				Expect.Call(_teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null, null)).IgnoreArguments().Return(false);
@@ -204,10 +192,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																											  _dateOnly,
 																											  _selectedPersons, _schedulingOptions))
 					  .Return(true);
-				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_teamBlockInfo.TeamInfo.GroupMembers.ToList(),
-					new DateOnlyPeriod(_dateOnly, _dateOnly))).Return(new HashSet<ISkill>()).Repeat.Twice();
-				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, _dateOnly,
-					_skillDays, TimeZoneGuard.Instance.TimeZone, true)).Return(new Dictionary<DateTime, IntervalLevelMaxSeatInfo>()).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{
@@ -227,9 +211,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 														new List<IActivityRestriction>());
 			var finderResult = new WorkShiftFinderResult(_person1, _dateOnly);
 			var shifts = new List<IShiftProjectionCache> { _shift };
-			var activityData = new Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>>();
-			var skillIntervalDataDic = new Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>>();
-			skillIntervalDataDic.Add(_dateOnly, new Dictionary<IActivity, IList<ISkillIntervalData>>());
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
@@ -252,20 +233,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_schedules, _dateOnly, _person2, _teamBlockInfo, restriction,
 															_schedulingOptions, finderResult, false)).Return(shifts);
-				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _skillDays, false))
-					.Return(activityData).Repeat.AtLeastOnce();
-				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
-																		  _periodValueCalculationParameters, TimeZoneGuard.Instance.TimeZone, _schedulingOptions)).IgnoreArguments().Return(shifts[0]).Repeat.AtLeastOnce();
+				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(_dateOnly, shifts, _skillDays, _teamBlockInfo, _schedulingOptions, TimeZoneGuard.Instance.TimeZone, false)).IgnoreArguments().Return(shifts[0]).Repeat.AtLeastOnce();
 				Expect.Call(_teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null, null)).IgnoreArguments().Return(false);
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
 																											  _selectedPersons, _schedulingOptions))
 					  .Return(true);
-				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_teamBlockInfo.TeamInfo.GroupMembers.ToList(),
-					new DateOnlyPeriod(_dateOnly, _dateOnly))).Return(new HashSet<ISkill> { SkillFactory.CreateSkill("Skill") });
-
-				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, _dateOnly,
-					_skillDays, TimeZoneGuard.Instance.TimeZone, true)).Return(new Dictionary<DateTime, IntervalLevelMaxSeatInfo>());
 			}
 			using (_mocks.Playback())
 			{
@@ -285,9 +258,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																		 new List<IActivityRestriction>());
 			var finderResult = new WorkShiftFinderResult(_person1, _dateOnly);
 			var shifts = new List<IShiftProjectionCache> { _shift };
-			var activityData = new Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>>();
-			var skillIntervalDataDic = new Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>>();
-			skillIntervalDataDic.Add(_dateOnly, new Dictionary<IActivity, IList<ISkillIntervalData>>());
 			_schedulingOptions.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak;
 			using (_mocks.Record())
 			{
@@ -311,20 +281,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 						.Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_schedules, _dateOnly, _person2, _teamBlockInfo, restriction,
 																		 _schedulingOptions, finderResult, false)).Return(shifts);
-				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _skillDays, false))
-					.Return(activityData).Repeat.AtLeastOnce();
-				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
-																		  _periodValueCalculationParameters, TimeZoneGuard.Instance.TimeZone, _schedulingOptions)).IgnoreArguments().Return(shifts[0]).Repeat.AtLeastOnce();
+				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(_dateOnly, shifts, _skillDays, _teamBlockInfo, _schedulingOptions, TimeZoneGuard.Instance.TimeZone, false)).IgnoreArguments().Return(shifts[0]).Repeat.AtLeastOnce();
 				Expect.Call(_teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null, null)).IgnoreArguments().Return(false);
 				Expect.Call(_teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null, null)).IgnoreArguments().Return(false);
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
 																											  _selectedPersons, _schedulingOptions))
 					  .Return(true);
-				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, _dateOnly,
-					_skillDays, TimeZoneGuard.Instance.TimeZone,true)).Return(new Dictionary<DateTime, IntervalLevelMaxSeatInfo>()).Repeat.Twice();
-				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_teamBlockInfo.TeamInfo.GroupMembers.ToList(),
-					new DateOnlyPeriod(_dateOnly, _dateOnly))).Return(new HashSet<ISkill>()).Repeat.Twice();
 			}
 			using (_mocks.Playback())
 			{

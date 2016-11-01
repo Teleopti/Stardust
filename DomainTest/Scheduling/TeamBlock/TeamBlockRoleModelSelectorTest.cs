@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -8,7 +7,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -33,10 +31,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IScheduleDictionary _schedules;
 		private List<IPerson> _groupMembers;
 		private ITeamInfo _teaminfo;
-		private IActivityIntervalDataCreator _activityIntervalDataCreator;
-		private PeriodValueCalculationParameters _periodValueCalculationParameters;
-		private IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
-		private IMaxSeatSkillAggregator _maxSeatSkillAggregator;
 		private IFirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
 		private IEnumerable<ISkillDay> _skillDays;
 
@@ -56,20 +50,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_teaminfo = _mocks.StrictMock<ITeamInfo>();
 			_teamBlockInfo = _mocks.StrictMock<ITeamBlockInfo>();
 			_schedulingOptions = new SchedulingOptions();
-			_activityIntervalDataCreator = _mocks.StrictMock<IActivityIntervalDataCreator>();
-			_maxSeatInformationGeneratorBasedOnIntervals = _mocks.StrictMock<IMaxSeatInformationGeneratorBasedOnIntervals>();
-			_maxSeatSkillAggregator = _mocks.StrictMock<IMaxSeatSkillAggregator>();
 			_firstShiftInTeamBlockFinder = _mocks.StrictMock<IFirstShiftInTeamBlockFinder>();
-			_target = new TeamBlockRoleModelSelector(_restrictionAggregator, _workShiftFilterService, _sameOpenHoursInTeamBlock,
-													 _activityIntervalDataCreator, 
-													 _maxSeatInformationGeneratorBasedOnIntervals, 
-													 _maxSeatSkillAggregator,
-													 _firstShiftInTeamBlockFinder);
-			_periodValueCalculationParameters = new PeriodValueCalculationParameters(
-				_schedulingOptions.WorkShiftLengthHintOption,
-				_schedulingOptions.UseMinimumPersons,
-				_schedulingOptions.UseMaximumPersons, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, false,
-				new Dictionary<DateTime, IntervalLevelMaxSeatInfo>());
+			_target = new TeamBlockRoleModelSelector(_restrictionAggregator, _workShiftFilterService, _sameOpenHoursInTeamBlock, _firstShiftInTeamBlockFinder);
 		}
 
 		[Test]
@@ -113,45 +95,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 		}
 
-		[Ignore("Reason mandatory for NUnit 3")]
-		[Test]
-		public void ShouldSelectBestShiftAsRoleModel()
-		{
-			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
-														new EndTimeLimitation(),
-														new WorkTimeLimitation(), null, null, null,
-														new List<IActivityRestriction>());
-			var shiftProjectionCache = _mocks.StrictMock<IShiftProjectionCache>();
-			var shifts = new List<IShiftProjectionCache> { shiftProjectionCache };
-			var activityData = new Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>>();
-
-			using (_mocks.Record())
-			{
-				Expect.Call(_firstShiftInTeamBlockFinder.FindFirst(_teamBlockInfo, _person, _dateOnly, _schedules))
-					.Return(null);
-				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teaminfo).Repeat.Twice();
-				Expect.Call(_teaminfo.GroupMembers).Return(_groupMembers).Repeat.Twice();
-				Expect.Call(_restrictionAggregator.Aggregate(null, _dateOnly, _person, _teamBlockInfo, _schedulingOptions)).Return(restriction);
-				Expect.Call(_sameOpenHoursInTeamBlock.Check(_skillDays, _teamBlockInfo)).Return(true);
-				Expect.Call(_workShiftFilterService.FilterForRoleModel(_schedules, _dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
-																		new WorkShiftFinderResult(_person, _dateOnly), true, false))
-					  .Return(shifts);
-				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _skillDays, true))
-					  .Return(activityData);
-				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData, _periodValueCalculationParameters
-																		  , TimeZoneGuard.Instance.TimeZone, _schedulingOptions)).IgnoreArguments()
-					  .Return(shiftProjectionCache);
-				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_groupMembers,
-					new DateOnlyPeriod(_dateOnly, _dateOnly))).Return(new HashSet<ISkill>());
-			}
-			using (_mocks.Playback())
-			{
-				var result = _target.Select(_schedules, _skillDays, _workShiftSelector, _teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction());
-
-				Assert.That(result, Is.EqualTo(shiftProjectionCache));
-			}
-		}
-
 		[Test]
 		public void ShouldSelectBestShiftAsRoleModelWithMaxSeatFeature()
 		{
@@ -161,28 +104,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 														new List<IActivityRestriction>());
 			var shiftProjectionCache = _mocks.StrictMock<IShiftProjectionCache>();
 			var shifts = new List<IShiftProjectionCache> { shiftProjectionCache };
-			var activityData = new Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>>();
-
 			using (_mocks.Record())
 			{
 				Expect.Call(_firstShiftInTeamBlockFinder.FindFirst(_teamBlockInfo, _person, _dateOnly, _schedules))
 					.Return(null);
-				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teaminfo).Repeat.Twice();
-				Expect.Call(_teaminfo.GroupMembers).Return(_groupMembers).Repeat.Twice();
+				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teaminfo).Repeat.Any();
+				Expect.Call(_teaminfo.GroupMembers).Return(_groupMembers).Repeat.Any();
 				Expect.Call(_restrictionAggregator.Aggregate(_schedules, _dateOnly, _person, _teamBlockInfo, _schedulingOptions)).Return(restriction);
 				Expect.Call(_sameOpenHoursInTeamBlock.Check(_skillDays, _teamBlockInfo)).Return(true);
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_schedules, _dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 																		new WorkShiftFinderResult(_person, _dateOnly), true, false))
 					  .Return(shifts);
-				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _skillDays, true))
-					  .Return(activityData);
-				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData, _periodValueCalculationParameters
-																		  , TimeZoneGuard.Instance.TimeZone, _schedulingOptions)).IgnoreArguments()
+				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(_dateOnly, shifts, _skillDays, _teamBlockInfo, _schedulingOptions,TimeZoneGuard.Instance.TimeZone, false)).IgnoreArguments()
 					  .Return(shiftProjectionCache);
-				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, _dateOnly,
-					_skillDays, TimeZoneGuard.Instance.TimeZone,true)).Return(new Dictionary<DateTime, IntervalLevelMaxSeatInfo>());
-				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_groupMembers,
-					new DateOnlyPeriod(_dateOnly, _dateOnly))).Return(new HashSet<ISkill> { SkillFactory.CreateSkill("Skill") });
 			}
 			using (_mocks.Playback())
 			{

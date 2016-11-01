@@ -1,40 +1,51 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
+using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
-	public class WorkShiftSelectorForMaxSeat : WorkShiftSelector
+	public class WorkShiftSelectorForMaxSeat : IWorkShiftSelector
 	{
-		public WorkShiftSelectorForMaxSeat(IWorkShiftValueCalculator workShiftValueCalculator, IEqualWorkShiftValueDecider equalWorkShiftValueDecider) : base(workShiftValueCalculator, equalWorkShiftValueDecider)
+		private readonly IUsedSeats _usedSeats;
+
+		public WorkShiftSelectorForMaxSeat(IUsedSeats usedSeats)
 		{
+			_usedSeats = usedSeats;
 		}
 
-		protected override double? ValueForShift(IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary, IShiftProjectionCache shiftProjectionCache,
-			PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo)
+		public IShiftProjectionCache SelectShiftProjectionCache(DateOnly datePointer, IList<IShiftProjectionCache> shifts, IEnumerable<ISkillDay> allSkillDays,
+			ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, TimeZoneInfo timeZoneInfo, bool forRoleModel)
 		{
-			var intervalLength = 1440/parameters.MaxSeatInfoPerInterval.Count;
+			var bestShiftValue = double.MaxValue;
+			IShiftProjectionCache ret =null;
 
-			var maxBoostingFactor = double.MinValue;
-
-			foreach (var layer in shiftProjectionCache.MainShiftProjection)
+			var skillDays = allSkillDays.FilterOnDate(datePointer);
+			foreach (var shift in shifts)
 			{
-				foreach (var dateTimePeriod in layer.Period.Intervals(TimeSpan.FromMinutes(intervalLength)))
+				var thisShiftsPeak = 0d;
+				foreach (var layer in shift.MainShiftProjection)
 				{
-					IntervalLevelMaxSeatInfo intervalLevelMaxSeatInfo;
-					if (parameters.MaxSeatInfoPerInterval.TryGetValue(dateTimePeriod.StartDateTime, out intervalLevelMaxSeatInfo))
+					foreach (var skillDay in skillDays)
 					{
-						if (intervalLevelMaxSeatInfo.IsMaxSeatReached)
+						foreach (var interval in layer.Period.Intervals(TimeSpan.FromMinutes(skillDay.Skill.DefaultResolution)))
 						{
-							if (intervalLevelMaxSeatInfo.MaxSeatBoostingFactor > maxBoostingFactor)
-								maxBoostingFactor = intervalLevelMaxSeatInfo.MaxSeatBoostingFactor;
+							var skillStaffPeriod = skillDay.SkillStaffPeriodCollection.Single(x => x.Period == interval);
+							var lackingSeatsThisInterval = _usedSeats.Fetch(skillStaffPeriod) - skillStaffPeriod.Payload.MaxSeats;
+							thisShiftsPeak = Math.Max(thisShiftsPeak, lackingSeatsThisInterval);
 						}
 					}
-				}	
+				}
+				if (thisShiftsPeak < bestShiftValue)
+				{
+					ret = shift;
+					bestShiftValue = thisShiftsPeak;
+				}
 			}
-			
-			return -1 * maxBoostingFactor;
+
+			return ret;
 		}
 	}
 }

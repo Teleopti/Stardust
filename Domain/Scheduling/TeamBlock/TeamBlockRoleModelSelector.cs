@@ -19,25 +19,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ITeamBlockRestrictionAggregator _teamBlockRestrictionAggregator;
 		private readonly IWorkShiftFilterService _workShiftFilterService;
 		private readonly ISameOpenHoursInTeamBlock _sameOpenHoursInTeamBlock;
-		private readonly IActivityIntervalDataCreator _activityIntervalDataCreator;
-		private readonly IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
-		private readonly IMaxSeatSkillAggregator  _maxSeatSkillAggregator;
 		private readonly IFirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
 
 		public TeamBlockRoleModelSelector(ITeamBlockRestrictionAggregator teamBlockRestrictionAggregator,
 			IWorkShiftFilterService workShiftFilterService,
 			ISameOpenHoursInTeamBlock sameOpenHoursInTeamBlock,
-			IActivityIntervalDataCreator activityIntervalDataCreator,
-			IMaxSeatInformationGeneratorBasedOnIntervals maxSeatInformationGeneratorBasedOnIntervals, 
-			IMaxSeatSkillAggregator maxSeatSkillAggregator,
 			IFirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder)
 		{
 			_teamBlockRestrictionAggregator = teamBlockRestrictionAggregator;
 			_workShiftFilterService = workShiftFilterService;
 			_sameOpenHoursInTeamBlock = sameOpenHoursInTeamBlock;
-			_activityIntervalDataCreator = activityIntervalDataCreator;
-			_maxSeatInformationGeneratorBasedOnIntervals = maxSeatInformationGeneratorBasedOnIntervals;
-			_maxSeatSkillAggregator = maxSeatSkillAggregator;
 			_firstShiftInTeamBlockFinder = firstShiftInTeamBlockFinder;
 		}
 
@@ -78,17 +69,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (shifts.IsNullOrEmpty())
 				return null;
 
-			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockInfo, datePointer, allSkillDays, true);
-			var maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, datePointer, allSkillDays, TimeZoneGuard.Instance.CurrentTimeZone(), true);
-			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(), new DateOnlyPeriod(datePointer, datePointer));
-			bool hasMaxSeatSkill = maxSeatSkills.Any();
-			var parameters = new PeriodValueCalculationParameters(schedulingOptions
-				.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,
-				schedulingOptions.UseMaximumPersons, schedulingOptions.UserOptionMaxSeatsFeature, hasMaxSeatSkill, maxSeatInfo);
-
-			var roleModel = workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData, parameters, TimeZoneGuard.Instance.CurrentTimeZone(), schedulingOptions);
-
-			return roleModel;
+			return workShiftSelector.SelectShiftProjectionCache(datePointer, shifts, allSkillDays, teamBlockInfo, schedulingOptions, TimeZoneGuard.Instance.CurrentTimeZone(), true);
 		}
 	}
 }

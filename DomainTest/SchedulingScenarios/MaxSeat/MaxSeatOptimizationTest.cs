@@ -284,7 +284,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		}
 
 		[Test]
-		public void ShouldChooseShiftWithLowesPeakWhenMultipleShifts()
+		public void ShouldChooseShiftWithLowestPeakWhenMultipleShifts()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
 			var team = new Team { Description = new Description("_"), Site = site };

@@ -144,11 +144,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					if (shiftNudgeRestriction != null)
 						restriction = restriction.Combine(shiftNudgeRestriction);
 
-					bestShiftProjectionCache = filterAndSelect(workShiftSelector, teamBlockInfo, schedulingOptions, day, person, teamBlockSingleDayInfo,
+					bestShiftProjectionCache = filterAndSelect(workShiftSelector, schedulingOptions, day, person, teamBlockSingleDayInfo,
 						restriction, allSkillDays, schedules, false);
 
 					if (bestShiftProjectionCache == null && restriction.IsRestriction)
-						bestShiftProjectionCache = filterAndSelect(workShiftSelector, teamBlockInfo, schedulingOptions, day, person, teamBlockSingleDayInfo,
+						bestShiftProjectionCache = filterAndSelect(workShiftSelector, schedulingOptions, day, person, teamBlockSingleDayInfo,
 						restriction, allSkillDays, schedules, true);
 
 					if (bestShiftProjectionCache == null)
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return _teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(teamBlockSingleDayInfo, day, selectedTeamMembers, schedulingOptions);
 		}
 
-		private IShiftProjectionCache filterAndSelect(IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, DateOnly day,
+		private IShiftProjectionCache filterAndSelect(IWorkShiftSelector workShiftSelector, ISchedulingOptions schedulingOptions, DateOnly day,
 			IPerson person, TeamBlockSingleDayInfo teamBlockSingleDayInfo,
 			IEffectiveRestriction restriction, IEnumerable<ISkillDay> allSkillDays, IScheduleDictionary schedules, bool useShiftsForRestrictions)
 		{
@@ -179,19 +179,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (shifts.IsNullOrEmpty())
 				return null;
 
-		
-			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockSingleDayInfo, day, allSkillDays, false);
-			var maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, day, allSkillDays, TimeZoneGuard.Instance.CurrentTimeZone(), true);
-
-			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(),
-				new DateOnlyPeriod(day, day));
-			bool hasMaxSeatSkill = maxSeatSkills.Any();
-
-			var parameters = new PeriodValueCalculationParameters(schedulingOptions
-				.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,
-				schedulingOptions.UseMaximumPersons, schedulingOptions.UserOptionMaxSeatsFeature, hasMaxSeatSkill, maxSeatInfo);
-
-			return workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData, parameters, TimeZoneGuard.Instance.CurrentTimeZone(), schedulingOptions);
+			return workShiftSelector.SelectShiftProjectionCache(day, shifts, allSkillDays, teamBlockSingleDayInfo, schedulingOptions, TimeZoneGuard.Instance.CurrentTimeZone(), false);
 		}
 	}
 }

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public interface IMaxSeatInformationGeneratorBasedOnIntervals
 	{
 		IDictionary<DateTime, IntervalLevelMaxSeatInfo> GetMaxSeatInfo(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, IEnumerable<ISkillDay> allSkillDays, TimeZoneInfo timeZone, bool considerEqualMaxAndCalSeatAsBroken);
