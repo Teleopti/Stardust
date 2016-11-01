@@ -9437,6 +9437,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Employment Number.
+        /// </summary>
+        public static string EmploymentNumber {
+            get {
+                return ResourceManager.GetString("EmploymentNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Employment type.
         /// </summary>
         public static string EmploymentType {
@@ -19763,6 +19772,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OptionWorkingDay {
             get {
                 return ResourceManager.GetString("OptionWorkingDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organization.
+        /// </summary>
+        public static string Organization {
+            get {
+                return ResourceManager.GetString("Organization", resourceCulture);
             }
         }
         

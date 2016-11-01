@@ -15070,4 +15070,12 @@ These options are activated:
     <value>Current Requests</value>
     <comment>used in MyTime Request, one of the option that how to show requests in request list</comment>
   </data>
+  <data name="EmploymentNumber" xml:space="preserve">
+    <value>Employment Number</value>
+    <comment>Employment Number field on advanced search</comment>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organization</value>
+    <comment>Organization field on advanced search</comment>
+  </data>
 </root>
