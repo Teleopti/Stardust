@@ -20,7 +20,7 @@
 					<div class="con-flex">
 						<md-autocomplete id="activity" class="autocomplete-skill" md-no-cache="true" md-selected-item="selectedActivity" md-select-on-match="true"
 							md-search-text="searchActiviyText" md-selected-item-change="vm.selectActivity(selectedActivity)" md-items="activity in vm.activites"
-							md-item-text="activity.ActivityName" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
+							md-item-text="activity.ActivityName" md-min-length="0" placeholder="Select Activity">
 							<md-item-template>
 								<span md-highlight-text="searchActivityText" md-highlight-flags="^i">{{activity.ActivityName}}</span>
 							</md-item-template>
@@ -67,8 +67,16 @@
 
 		<div class="con-flex split-3-1">
 			<div class="panel material-depth-1">
-				<div class="sub-header">
+				<div class="sub-header con-flex">
 					<h2>Sorted Skills</h2>
+				</div>
+				<div class="con-flex">
+					<label for="filter" class="input-icon">
+            <i class="mdi mdi-filter-outline">
+              <input type="text" id="filter" ng-model="activityFilter" placeholder="filter activitys...">
+              <md-tooltip>Filter Sorted skills</md-tooltip>
+            </i>
+          </label>
 				</div>
 
 				<!-- No skill message  -->
@@ -101,7 +109,7 @@
 					</div>
 				</div>
 
-				<section ng-repeat="skill in vm.prioritizedSkills | orderBy:'-Priority'">
+				<section ng-repeat="skill in vm.prioritizedSkills | orderBy:'-Priority'| filter:activityFilter">
 
 					<!--Add above -->
 					<div class="skill-devider" ng-if="skill.showAutoCompleteTop">
@@ -179,7 +187,7 @@
 											</h2>
 										</div>
 									</div>
-									<div class="grid-card" ng-repeat="sibling in skill.sibling">
+									<div class="grid-card" ng-repeat="sibling in skill.sibling | filter:activityFilter">
 										<div class="list-content">
 											<h2>{{sibling.SkillName}}
 												<i class="mdi mdi-close pull-right" ng-click="vm.removeFromPrioritized(sibling)">
