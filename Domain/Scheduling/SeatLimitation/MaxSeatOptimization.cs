@@ -76,14 +76,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				new ScheduleTagSetter(optimizationPreferences.General.ScheduleTag);
 			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedules, allAgents, period);
 			var businessRules = NewBusinessRuleCollection.Minimum();
+			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+			_teamInfoFactoryFactory.Create(allAgents, schedules, optimizationPreferences.Extra.TeamGroupPage);
+			var remainingInfoList = _teamBlockGenerator.Generate(allAgents, allMatrixes, period, agentsToOptimize, schedulingOptions);
 
 			using (_resourceCalculationContextFactory.Create(schedules, allMaxSeatSkills))
 			{
-				var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
-				var teamInfoFactory_shouldWeUseThisOne = _teamInfoFactoryFactory.Create(allAgents, schedules, optimizationPreferences.Extra.TeamGroupPage);
-				var teamBlocks = _teamBlockGenerator.Generate(allAgents, allMatrixes, period, agentsToOptimize, schedulingOptions);
-				var remainingInfoList = teamBlocks.ToList();
-
 				while (remainingInfoList.Count > 0)
 				{
 					foreach (var teamBlockInfo in remainingInfoList.ToList())
