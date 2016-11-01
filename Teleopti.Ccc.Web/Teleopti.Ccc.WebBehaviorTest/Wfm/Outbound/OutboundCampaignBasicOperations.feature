@@ -119,6 +119,7 @@ And I can see 'Campaign4' in campaign list
 And I click at campaign name tag 'Campaign4'
 Then I should see the backlog visualization of 'Campaign4'
  
+@ignore
 Scenario: Create a campaign
 When I view the outbound campaign creation page 
 And I see the new campaign form
@@ -140,6 +141,7 @@ And after the creation I will redirect to the campaign list page
 And I set the starting month for viewing period to '2015-12-30'
 Then I should see 'NewCampaign' in campaign list
 
+@ignore
 Scenario: Delete a campaign
 When I view campaign 'Campaign4'
 And I confirm to delete the campaign
@@ -147,7 +149,7 @@ And after that I am redirected to the campaign list page
 And I set the starting month for viewing period to '2015-10-01'
 Then I should not see 'Campaign4' in campaign list 
 
-
+@ignore
 Scenario: Edit a campaign
 Given there is an activity named 'NewCampaign'
 And there is a skill named 'NewCampaign' with activity 'NewCampaign'
@@ -243,6 +245,7 @@ And I see that the campaign is not done after the end date
 And I replan the campaign
 Then I should see the campaign is done after the end date
 
+@ignore
 Scenario: Manually update backlog
 Given there is an activity with
 	| Field | Value     |
