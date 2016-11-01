@@ -134,7 +134,7 @@
 		}
 	}
 
-	var keywordFormatDirective = function ($translate) {
+	var keywordFormatDirective = function ($filter) {
 		return {
 			restrict: 'A',
 			require: '?ngModel',
@@ -153,7 +153,7 @@
 					var key = items[0];
 					var value = items[1];
 					if (value) {
-						var displayKey = $translate.instant(key);
+						var displayKey = $filter('translate')(key);
 						formattedValues.push(displayKey + keyValueSeprator + value);
 					}
 				});
@@ -168,7 +168,7 @@
 	angular.module('wfm.multiplesearchinput', [])
 		.directive('wfmMultipleSearchInput', multipleSearchInputDirective)
 		.directive('outsideClick', ['$document', '$parse', outsideClickDirective])
-		.directive('keywordFormat', ['$translate', keywordFormatDirective])
+		.directive('keywordFormat', ['$filter', keywordFormatDirective])
 		.controller('multipleSearchInputCtrl', multipleSearchInputCtrl);
 
 })();
