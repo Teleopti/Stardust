@@ -65,6 +65,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		{
 			var allAgents = schedules.Select(schedule => schedule.Key); //blir det rätt att inte ta med schemalagda agenter?
 			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, scenario, allAgents);
+			if (!maxSeatData.MaxSeatSkillExists())
+				return;
 			var tagSetter = new ScheduleTagSetter(new NullScheduleTag()); //fix - the tag
 			var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
 			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedules, allAgents, period);

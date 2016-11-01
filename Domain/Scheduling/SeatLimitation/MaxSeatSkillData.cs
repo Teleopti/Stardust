@@ -51,5 +51,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			public IEnumerable<ISkillDay> SkillDays { get; }
 			public ISite Site { get; }
 		}
+
+		public bool MaxSeatSkillExists()
+		{
+			return _maxSeatSkillDataPerSkills.Any();
+		}
 	}
 }
