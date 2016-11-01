@@ -41,7 +41,18 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var agentData8to9 = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 9, 0));
 			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(10, 0, 18, 0));
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData.Assignment, agentData16to17_1.Assignment, agentData16to17_2.Assignment, agentData8to9.Assignment });
-			var optPreferences = new OptimizationPreferences { Extra = { UseTeams = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy) }};
+			var optPreferences = new OptimizationPreferences
+			{
+				Extra =
+				{
+					UseTeams = true,
+					TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy)
+				},
+				Advanced =
+				{
+					UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats
+				}
+			};
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, scenario, optPreferences);
 
