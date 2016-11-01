@@ -30,6 +30,7 @@ namespace Teleopti.Wfm.Administration.Core
 			var iocArgs = new IocArgs(new ConfigReader());
 			var toggleManager = CommonModule.ToggleManagerForIoc(iocArgs);
 			var iocConf = new IocConfiguration(iocArgs, toggleManager);
+
 			builder.RegisterModule(new TenantServerModule(iocConf));
 			builder.RegisterApiControllers(typeof(HomeController).Assembly).ApplyAspects();
 			builder.RegisterModule(new CommonModule(iocConf));
@@ -57,6 +58,10 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterType<HangfireCookie>().As<IHangfireCookie>().SingleInstance();
 			builder.Register(c => new LoadPasswordPolicyService(ConfigurationManager.AppSettings["ConfigurationFilesPath"])).SingleInstance().As<ILoadPasswordPolicyService>();
 			builder.RegisterType<PasswordPolicy>().SingleInstance().As<IPasswordPolicy>();
+			builder
+				.Register(c => new HangfireStatisticsViewModelBuilder(c.Resolve<HangfireRepository>(), ConfigurationManager.ConnectionStrings["Hangfire"].ConnectionString))
+				.SingleInstance().AsSelf();
+			builder.RegisterType<HangfireRepository>().SingleInstance();
 		
 			builder.Register(c => new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)).SingleInstance();
 

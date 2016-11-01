@@ -1,0 +1,52 @@
+﻿<section ng-controller="hangfireMonitoringController as vm">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<canvas id="statsChart"></canvas>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div>
+					<h3 class="pull-left">Types of events:</h3>
+					<button class="pull-left" ng-click="vm.getTypesOfEvents()" ng-disabled="vm.isFetching" style="margin-top: 22px; margin-left: 10px;">Refresh</button>
+				</div>
+				<table class="table table-striped">
+					<thead>
+					<tr>
+						<th>Event</th>
+						<th>Count</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat="event in vm.eventCount">
+						<td>{{event.Type}}</td>
+						<td>{{event.Count}}</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="col-md-6">
+				<h3>Oldest events:</h3>
+				<table class="table table-striped">
+					<thead>
+					<tr>
+						<th>Event</th>
+						<th>Created at</th>
+						<th>In queue for</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat="event in vm.oldestEvents">
+						<td>{{event.Type}}</td>
+						<td>{{event.CreatedAt}}</td>
+						<td>{{event.Duration}}</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</section>

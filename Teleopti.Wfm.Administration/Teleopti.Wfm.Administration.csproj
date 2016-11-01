@@ -214,6 +214,7 @@
     <Content Include="Content\images\ic_delete_black_24px.svg" />
     <Content Include="Content\images\ic_group_add_black_24px.svg" />
     <Content Include="Content\images\ic_group_black_24px.svg" />
+    <Content Include="HangfireMonitoring.html" />
     <Content Include="login.html" />
     <Content Include="menuitem.html" />
     <Content Include="Content\angular-material.min.css" />
@@ -259,10 +260,13 @@
     <Content Include="Scripts\App\addSuperUserController.js" />
     <Content Include="Scripts\App\httpInterceptor.js" />
     <Content Include="Scripts\App\tokenHeaderService.js" />
+    <Content Include="Scripts\Chart.js" />
+    <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\Hangfire\hangfireController.js" />
     <Content Include="Scripts\angular.min.js.map" />
     <Content Include="Scripts\angular-cookies.min.js.map" />
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />
+    <Content Include="Scripts\Hangfire\hangfireMonitoringController.js" />
     <Content Include="Scripts\jquery-3.1.0.js" />
     <Content Include="Scripts\jquery-3.1.0.min.js" />
     <Content Include="Scripts\jquery-3.1.0.slim.js" />
@@ -336,6 +340,8 @@
     <Compile Include="Controllers\HangfireController.cs" />
     <Compile Include="Core\CreateBusinessUnit.cs" />
     <Compile Include="Core\Hangfire\HangfireCookie.cs" />
+    <Compile Include="Core\Hangfire\HangfireStatisticsViewModelBuilder.cs" />
+    <Compile Include="Core\Hangfire\HangfireRepository.cs" />
     <Compile Include="Core\IRunWithUnitOfWork.cs" />
     <Compile Include="Core\NoCacheFilter.cs" />
     <Compile Include="Core\RtaStateGroupCreator.cs" />

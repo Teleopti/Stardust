@@ -60,6 +60,9 @@
 		}, {
 			text: "Hangfire Dashboard",
 			link: "#/HangfireDashboard"
+		}, {
+			text: "Hangfire Monitoring",
+			link: "#/HangfireMonitoring"
 		}];
 		$scope.message = "något som jag vill visa"; 
 

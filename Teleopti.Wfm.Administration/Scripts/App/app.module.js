@@ -83,6 +83,9 @@
 				.when('/HangfireDashboard', {
 					templateUrl: 'HangfireDashboard.html',
 					//controller: 'hangfireController'
+				})
+				.when('/HangfireMonitoring', {
+					templateUrl: 'HangfireMonitoring.html'
 				});
 
 			$httpProvider.interceptors.push('httpInterceptor');
