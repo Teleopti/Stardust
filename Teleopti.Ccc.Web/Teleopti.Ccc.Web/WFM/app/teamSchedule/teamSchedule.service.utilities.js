@@ -1,9 +1,9 @@
 ﻿(function() {
 	angular.module("wfm.teamSchedule").service("UtilityService", utilityService);
 
-	utilityService.$inject = ['$locale', 'WFMDate'];
+	utilityService.$inject = ['$locale', 'CurrentUserInfo'];
 
-	function utilityService($locale, WFMDate) {
+	function utilityService($locale, CurrentUserInfo) {
 
 		var self = this;
 		var tick = 15;
@@ -12,8 +12,30 @@
 		self.getWeekdays = getWeekDays;
 		self.getNextTick = getNextTick;
 		self.getNextTickNoEarlierThanEight = getNextTickNoEarlierThanEight;
-		self.nowInUserTimeZone = WFMDate.nowInUserTimeZone;
-			
+		self.nowInUserTimeZone = nowInUserTimeZone;
+		self.setNowDate = setNowDate;
+		self.now = now;
+
+
+		var nowDate = new Date();
+
+		function setNowDate(date) {
+			nowDate = date;
+		}
+
+		function now() {
+			return nowDate;
+		};
+
+		function nowMoment() {
+			return moment(nowDate);
+		}
+
+		function nowInUserTimeZone() {
+			return moment.tz(nowMoment(), CurrentUserInfo.DefaultTimeZone).format();
+		}
+
+
 		function getWeekdayNames() {
 			var names = $locale.DATETIME_FORMATS.DAY;
 			var defaultIdx = [6, 0, 1, 2, 3, 4, 5];
@@ -43,7 +65,7 @@
 		}
 		
 		function getNextTick() {
-			var nowInUserTimeZoneMoment = moment(WFMDate.nowInUserTimeZone());
+			var nowInUserTimeZoneMoment = moment(nowInUserTimeZone());
 
 			var minutes = Math.ceil(nowInUserTimeZoneMoment.minute() / tick) * tick;
 			var start = nowInUserTimeZoneMoment.startOf('hour').minutes(minutes);
@@ -51,7 +73,7 @@
 		}
 
 		function getNextTickNoEarlierThanEight() {
-			var nowInUserTimeZoneMoment = moment(WFMDate.nowInUserTimeZone());
+			var nowInUserTimeZoneMoment = moment(nowInUserTimeZone());
 
 			var minutes = Math.ceil(nowInUserTimeZoneMoment.minute() / tick) * tick;
 			var start = nowInUserTimeZoneMoment.startOf('hour').minutes(minutes);

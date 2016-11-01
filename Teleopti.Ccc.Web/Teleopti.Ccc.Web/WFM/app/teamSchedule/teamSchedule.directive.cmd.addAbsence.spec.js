@@ -22,14 +22,13 @@
 	});
 
 
-	beforeEach(inject(function(_$rootScope_, _$compile_, _$httpBackend_, _WFMDate_, _PersonSelection_) {
+	beforeEach(inject(function(_$rootScope_, _$compile_, _$httpBackend_, _PersonSelection_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		WFMDate = _WFMDate_;
 
 		PersonSelection = _PersonSelection_;
-		PersonSelection.clearPersonInfo()
+		PersonSelection.clearPersonInfo();
 		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 	}));
 

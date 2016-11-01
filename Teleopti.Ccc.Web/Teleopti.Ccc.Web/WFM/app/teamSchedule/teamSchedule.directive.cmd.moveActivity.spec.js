@@ -6,9 +6,9 @@ describe("teamschedule move activity directive tests", function () {
 		$rootScope,
 		fakeActivityService,
 		$httpBackend,
-		WFMDate,
 		fakeScheduleManagementSvc,
 		fakePersonSelectionService,
+		utility,
 		fakeMoveActivityValidator;
 
 	var mockCurrentUserInfo = {
@@ -45,11 +45,11 @@ describe("teamschedule move activity directive tests", function () {
 		});
 	});
 
-	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_, _WFMDate_) {
+	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_, UtilityService) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		WFMDate = _WFMDate_;
+		utility = UtilityService;
 
 		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 	}));
@@ -219,7 +219,7 @@ describe("teamschedule move activity directive tests", function () {
 	});
 
 	it('should have later default start time than previous day over night shift end', function () {
-		var date = moment(WFMDate.nowInUserTimeZone()).add(7, 'day');
+		var date = moment(utility.nowInUserTimeZone()).add(7, 'day');
 
 		fakeScheduleManagementSvc.setLatestEndTime(date.clone().hour(10).toDate());
 		fakeScheduleManagementSvc.setLatestStartTime(date.clone().hour(9).toDate());

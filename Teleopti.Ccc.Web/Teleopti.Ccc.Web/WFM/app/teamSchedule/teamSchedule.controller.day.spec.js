@@ -9,27 +9,17 @@ describe("teamschedule controller tests", function() {
 		personSelection,
 		scheduleMgmt;
 
-	var nowDate = new Date("2015-10-26 12:16:00");
-
 	beforeEach(function() {		
 		module('externalModules');
 		module('wfm.notice');
 		module('shortcutsService');
-		module('wfmDate');
 		module('wfm.teamSchedule');
 
 		module(function($provide) {
 			$provide.service('CurrentUserInfo', setupMockCurrentUserInfoService);
 			$provide.service('$locale', setupMockLocale);
 			$provide.service('Toggle', setupMockAllTrueToggleService);
-			$provide.service('signalRSVC', setupMockSignalRService);
-			$provide.service('WFMDate', function () {
-				return {
-					nowInUserTimeZone: function() {
-						return moment(nowDate);
-					}
-				};
-			});
+			$provide.service('signalRSVC', setupMockSignalRService);			
 		});
 	});
 

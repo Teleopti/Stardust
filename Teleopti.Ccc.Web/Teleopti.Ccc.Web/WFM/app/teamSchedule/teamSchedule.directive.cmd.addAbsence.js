@@ -3,9 +3,9 @@
 
 	angular.module('wfm.teamSchedule').directive('addAbsence', addAbsenceDirective);
 
-	addAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService', '$locale', 'CommandCheckService'];
+	addAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection',  'ScheduleManagement', 'teamScheduleNotificationService', '$locale', 'CommandCheckService'];
 
-	function addAbsenceCtrl(PersonAbsenceSvc, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService, $locale, CommandCheckService) {
+	function addAbsenceCtrl(PersonAbsenceSvc, personSelectionSvc, scheduleManagementSvc, teamScheduleNotificationService, $locale, CommandCheckService) {
 		var vm = this;
 
 		vm.label = 'AddAbsence';

@@ -1412,7 +1412,6 @@
     <Content Include="WFM\app\global\businessunits\businessunits.service.js" />
     <Content Include="WFM\app\global\businessunits\_modules.js" />
     <Content Include="WFM\app\global\current-user\currentuserinfo.service.spec.js" />
-    <Content Include="WFM\app\global\dates-service\dates.service.js" />
     <Content Include="WFM\app\global\exception-handling\exceptionhandler.js" />
     <Content Include="WFM\app\global\http\http.spec.js" />
     <Content Include="WFM\app\global\jalaali-calendar\jalaali.service.js" />
