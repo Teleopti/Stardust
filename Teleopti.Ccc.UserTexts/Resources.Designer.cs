@@ -30393,6 +30393,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The absence can not be added to.
+        /// </summary>
+        public static string TheAbsenceCanNotBeAddedTo {
+            get {
+                return ResourceManager.GetString("TheAbsenceCanNotBeAddedTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The attached Pdf-file contains your schedule for {0} to {1}..
         /// </summary>
         public static string TheAttachedFileContainsScheduleForDateParameters {

@@ -37,16 +37,16 @@
 				</label>
 			</div>
 			<p class="text-danger" ng-if="!vm.isTimeRangeValid()">{{'EndTimeMustBeGreaterOrEqualToStartTime'|translate}}</p>
-			<div ng-if="vm.invalidAgentNameListString && vm.invalidAgentNameListString.length > 0">
+			<div class="text-danger" ng-if="vm.invalidAgentNameListString && vm.invalidAgentNameListString.length > 0">
 				<i class="mdi mdi-alert-octagon"></i>
-				<span>{{'TheNewTimeIsNotAllowedFor'|translate}} {{vm.invalidAgentNameListString}}</span>
+				<span>{{'TheAbsenceCanNotBeAddedTo'|translate}} <b>{{vm.invalidAgentNameListString}}</b></span>
 			</div>
 
 		</form>
 
 		<button id="applyAbsence" class="wfm-btn form-submit"
-				ng-class="{'wfm-btn-primary': newAbsenceForm.$valid && vm.isInputValid(), 'wfm-btn-primary-disabled': !(newAbsenceForm.$valid && vm.isInputValid())}"
-				ng-disabled="newAbsenceForm.$valid && vm.isInputValid() ?'':'disabled'"
+				ng-class="{'wfm-btn-primary': newAbsenceForm.$valid && vm.isTimeRangeValid() && vm.anyValidAgent(), 'wfm-btn-primary-disabled': !(newAbsenceForm.$valid && vm.isTimeRangeValid() && vm.anyValidAgent())}"
+				ng-disabled="newAbsenceForm.$valid && vm.isTimeRangeValid() && vm.anyValidAgent() ?'':'disabled'"
 				ng-click="vm.addAbsence()">
 			{{'Apply' | translate}}
 		</button>

@@ -14,10 +14,11 @@
 		self.checkTimeRangeAllowedForIntradayAbsence = checkTimeRangeAllowedForIntradayAbsence;
 
 		function checkTimeRangeAllowedForIntradayAbsence(targetTimeRange, normalizedScheduleDataArray) {
-			var intersectedShiftDays = normalizedScheduleDataArray.filter(function (day) {
-				return day.shiftRange && timeRangeIntersect(day.shiftRange, targetTimeRange);
+			return normalizedScheduleDataArray.some(function(day) {
+				return day.shiftRange &&
+					targetTimeRange.startTime.isSameOrAfter(day.shiftRange.startTime) &&
+					targetTimeRange.endTime.isSameOrBefore(day.shiftRange.endTime);
 			});
-			return intersectedShiftDays > 0;
 		}
 
 		function decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray, currentDate) {		
