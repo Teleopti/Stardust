@@ -233,6 +233,8 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		int FillIntradayFactAgentDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
 		int FillIntradayFactAgentQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
 		int PerformIndexMaintenance(DatabaseEnum database);
+		int GetValidToDateIdLocalForEternity();
+		int GetValidToDateIdMaxDateForEternity();
 		IEnumerable<WindowsLogonInfo> GetWindowsLogonInfos();
 	}
 }

@@ -12,6 +12,8 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -42,13 +44,16 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		private ILicenseStatusUpdater _licenseStatusUpdater;
 		private readonly ILog _logger = LogManager.GetLogger(typeof(RaptorRepository));
 		private readonly IIndexMaintenanceRepository _indexMaintenanceRepository;
+		private readonly IAnalyticsPersonPeriodDateFixer _analyticsPersonPeriodDateFixer;
 
 		public RaptorRepository(
 			string dataMartConnectionString,
-			IIndexMaintenanceRepository indexMaintenanceRepository)
+			IIndexMaintenanceRepository indexMaintenanceRepository,
+			IAnalyticsPersonPeriodDateFixer analyticsPersonPeriodDateFixer)
 		{
 			_dataMartConnectionString = dataMartConnectionString;
 			_indexMaintenanceRepository = indexMaintenanceRepository;
+			_analyticsPersonPeriodDateFixer = analyticsPersonPeriodDateFixer;
 		}
 
 		public int PersistPmUser(DataTable dataTable)
@@ -375,8 +380,8 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				new SqlParameter("current_business_unit_code", currentBusinessUnit.Id.Value)
 			};
 
-			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, 
-				"mart.etl_dim_person_load", 
+			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure,
+				"mart.etl_dim_person_load",
 				parameterList,
 				_dataMartConnectionString);
 		}
@@ -947,13 +952,13 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 					string acdLogOnName = row["AcdLogOnName"] == DBNull.Value ? null : (string)row["AcdLogOnName"];
 					int acdLogOnAggId = row["AcdLogOnAggId"] == DBNull.Value ? -1 : (int)row["AcdLogOnAggId"];
 					int dsId = row["DataSourceId"] == DBNull.Value ? -1 : (short)row["DataSourceId"];
-                    string dsName = row["DataSourceName"] == DBNull.Value ? null : (string)row["DataSourceName"];
+					string dsName = row["DataSourceName"] == DBNull.Value ? null : (string)row["DataSourceName"];
 
-                    IExternalLogOn externalLogOn = new ExternalLogOn((int)row["AcdLogOnMartId"], acdLogOnAggId,
+					IExternalLogOn externalLogOn = new ExternalLogOn((int)row["AcdLogOnMartId"], acdLogOnAggId,
 																	 acdLogOnOriginalId, acdLogOnName, true);
 					externalLogOn.DataSourceId = dsId;
-                    externalLogOn.DataSourceName = dsName;
-                    externalLogOns.Add(externalLogOn);
+					externalLogOn.DataSourceName = dsName;
+					externalLogOns.Add(externalLogOn);
 				}
 			}
 
@@ -1675,6 +1680,16 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			_indexMaintenanceRepository.PerformIndexMaintenance(database);
 			return 0;
+		}
+
+		public int GetValidToDateIdLocalForEternity()
+		{
+			return _analyticsPersonPeriodDateFixer.ValidToDateIdLocal(AnalyticsDate.Eternity.DateId);
+		}
+
+		public int GetValidToDateIdMaxDateForEternity()
+		{
+			return _analyticsPersonPeriodDateFixer.GetValidToDateIdMaxDate(AnalyticsDate.Eternity.DateDate, AnalyticsDate.Eternity.DateId);
 		}
 
 		public IEnumerable<WindowsLogonInfo> GetWindowsLogonInfos()

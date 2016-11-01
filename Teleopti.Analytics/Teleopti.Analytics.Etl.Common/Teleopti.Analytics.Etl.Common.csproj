@@ -288,6 +288,7 @@
     <Compile Include="Transformer\Job\Steps\DimPersonDeleteJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DimPersonJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DimPersonTrimJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimPersonUpdateMaxDateJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DimPersonWindowsLoginJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DimQualityQuestLoadJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DimQueueJobStep.cs" />

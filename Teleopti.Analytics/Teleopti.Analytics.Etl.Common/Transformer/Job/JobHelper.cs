@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Security.Authentication;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
@@ -15,8 +16,6 @@ using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Messaging.Client;
-using Teleopti.Messaging.Client.Http;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 {
@@ -27,31 +26,34 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
 		private readonly Tenants _tenants;
 		private readonly IIndexMaintenanceRepository _indexMaintenanceRepository;
+		private readonly IAnalyticsPersonPeriodDateFixer _analyticsPersonPeriodDateFixer;
 
 		private readonly LogOnService _logonService;
 		private List<IBusinessUnit> _buList;
 		private DataSourceContainer _choosenDb;
 
-		public JobHelper(IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, Tenants tenants, IIndexMaintenanceRepository indexMaintenanceRepository,IMessageSender messageSender)
+		public JobHelper(IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, Tenants tenants, IIndexMaintenanceRepository indexMaintenanceRepository,IMessageSender messageSender, IAnalyticsPersonPeriodDateFixer analyticsPersonPeriodDateFixer)
 		{
 			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
 			_tenants = tenants;
 			_indexMaintenanceRepository = indexMaintenanceRepository;
 
 			_messageSender = messageSender;
-					
+			_analyticsPersonPeriodDateFixer = analyticsPersonPeriodDateFixer;
+
 			var application = new InitializeApplication(null);
 			application.Start(new State(), null, ConfigurationManager.AppSettings.ToDictionary());
 			var logOnOff = new LogOnOff(new AppDomainPrincipalContext(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()), new ThreadPrincipalContext()), new TeleoptiPrincipalFactory(), null);
 			_logonService = new LogOnService(logOnOff, new AvailableBusinessUnitsProvider(new RepositoryFactory()));
 		}
 
-		protected JobHelper(IRaptorRepository repository, IMessageSender messageSender, Tenants tenants, IIndexMaintenanceRepository indexMaintenanceRepository)
+		protected JobHelper(IRaptorRepository repository, IMessageSender messageSender, Tenants tenants, IIndexMaintenanceRepository indexMaintenanceRepository, IAnalyticsPersonPeriodDateFixer analyticsPersonPeriodDateFixer)
 		{
 			_repository = repository;
 			_messageSender = messageSender;
 			_tenants = tenants;
 			_indexMaintenanceRepository = indexMaintenanceRepository;
+			_analyticsPersonPeriodDateFixer = analyticsPersonPeriodDateFixer;
 		}
 
 		public IRaptorRepository Repository
@@ -99,7 +101,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 
 					//Create repository when logged in to raptor domain
 					_repository = new RaptorRepository(
-						SelectedDataSourceContainer.DataSource.Analytics.ConnectionString, _indexMaintenanceRepository);
+						SelectedDataSourceContainer.DataSource.Analytics.ConnectionString, _indexMaintenanceRepository, _analyticsPersonPeriodDateFixer);
 					return true;
 				}
 			}

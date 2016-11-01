@@ -3,17 +3,15 @@ using System.Configuration;
 using System.Globalization;
 using Autofac;
 using Teleopti.Analytics.Etl.Common;
-using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
+using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 {
@@ -45,7 +43,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 					App.Container.Resolve<IAvailableBusinessUnitsProvider>(),
 					App.Container.Resolve<Tenants>(), 
 					App.Container.Resolve<IIndexMaintenanceRepository>(),
-					App.Container.Resolve<IMessageSender>());
+					App.Container.Resolve<IMessageSender>(),
+					App.Container.Resolve<IAnalyticsPersonPeriodDateFixer>());
 
 				jobParameters.Helper = _baseConfiguration.JobHelper;
 

@@ -72,8 +72,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 
 			AddWhenAllDisabled(new DimSkillSetJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
 			AddWhenAllDisabled(new DimPersonJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-
+			AddWhenAllEnabled(new DimPersonUpdateMaxDateJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
 			AddWhenAllEnabled(new DimPersonWindowsLoginJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
+
 			AddWhenAllDisabled(new DimActivityJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyActivity_38303);
 			AddWhenAllDisabled(new DimAbsenceJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyAbsence_38301);
 			AddWhenAllDisabled(new DimScenarioJobStep(jobParameters), Toggles.ETL_SpeedUpScenarioNightly_38300);
