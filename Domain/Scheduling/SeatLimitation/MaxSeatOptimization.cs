@@ -26,11 +26,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly ITeamBlockGenerator _teamBlockGenerator;
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly WorkShiftSelectorForMaxSeat _workShiftSelectorForMaxSeat;
-		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly RestrictionOverLimitValidator _restrictionOverLimitValidator;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly MaxSeatPeak _maxSeatPeak;
+		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 
 		public MaxSeatOptimization(MaxSeatSkillDataFactory maxSeatSkillDataFactory,
 														CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
@@ -40,11 +40,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 														ITeamBlockGenerator teamBlockGenerator,
 														ITeamBlockClearer teamBlockClearer,
 														WorkShiftSelectorForMaxSeat workShiftSelectorForMaxSeat,
-														IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
 														ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 														RestrictionOverLimitValidator restrictionOverLimitValidator,
 														IMatrixListFactory matrixListFactory,
-														MaxSeatPeak maxSeatPeak)
+														MaxSeatPeak maxSeatPeak,
+														TeamInfoFactoryFactory teamInfoFactoryFactory)
 		{
 			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
@@ -54,11 +54,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_teamBlockGenerator = teamBlockGenerator;
 			_teamBlockClearer = teamBlockClearer;
 			_workShiftSelectorForMaxSeat = workShiftSelectorForMaxSeat;
-			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
 			_matrixListFactory = matrixListFactory;
 			_maxSeatPeak = maxSeatPeak;
+			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 		}
 
 		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IScenario scenario, IOptimizationPreferences optimizationPreferences)
@@ -74,10 +74,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills()))
 			{
-				
 				//most stuff taken from TeamBlockIntradayOptimizationService
 				var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
-				_groupPersonBuilderForOptimizationFactory.Create(allAgents, schedules, optimizationPreferences.Extra.TeamGroupPage);
+				var teamInfoFactory_shouldWeUseThisOne = _teamInfoFactoryFactory.Create(allAgents, schedules, optimizationPreferences.Extra.TeamGroupPage);
 				var teamBlocks = _teamBlockGenerator.Generate(allAgents, allMatrixes, period, agentsToOptimize, schedulingOptions);
 				var remainingInfoList = teamBlocks.ToList();
 
