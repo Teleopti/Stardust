@@ -68,7 +68,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			if (!maxSeatData.MaxSeatSkillExists())
 				return;
 			var tagSetter = new ScheduleTagSetter(new NullScheduleTag()); //fix - the tag
-			var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
 			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedules, allAgents, period);
 			var businessRules = NewBusinessRuleCollection.Minimum(); //is this enough?
 
@@ -84,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				{
 					foreach (var teamBlockInfo in remainingInfoList.ToList())
 					{
-						rollbackService.ClearModificationCollection();
+						var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
 						var firstSelectedDay = period.DayCollection().First();
 						var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
 						var maxPeakBefore = _maxSeatPeak.Fetch(datePoint, teamBlockInfo, maxSeatData.AllMaxSeatSkillDaysPerSkill());
