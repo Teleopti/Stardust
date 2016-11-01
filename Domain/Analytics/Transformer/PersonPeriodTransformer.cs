@@ -113,8 +113,6 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		public AnalyticsPersonPeriod FixDatesAndInterval(AnalyticsPersonPeriod analyticsPersonPeriod,
 			DateTime personPeriodStartDate, DateTime personPeriodEndDate, TimeZoneInfo timeZoneInfo)
 		{
-			
-
 			var validFromDate = _analyticsPersonPeriodDateFixer.ValidFromDate(personPeriodStartDate, timeZoneInfo);
 			var validToDate = _analyticsPersonPeriodDateFixer.ValidToDate(personPeriodEndDate, timeZoneInfo);
 
@@ -147,13 +145,13 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			analyticsPersonPeriod.EmploymentStartDate = validFromDate; // UTC tid
 			analyticsPersonPeriod.EmploymentEndDate = validToDate; // UTC tid
 
-			analyticsPersonPeriod.ValidToDateIdMaxDate = validToDateIdMaxDate; // Always a real date
-			analyticsPersonPeriod.ValidToIntervalIdMaxDate = validToIntervalIdMaxDate; // Always a real date
+			analyticsPersonPeriod.ValidToDateIdMaxDate = validToDateIdMaxDate; // Always date_id >= 0
+			analyticsPersonPeriod.ValidToIntervalIdMaxDate = validToIntervalIdMaxDate; // Always date_id >= 0
 
-			analyticsPersonPeriod.ValidFromDateIdLocal = validFromDateIdLocal; // Always a real date
-			analyticsPersonPeriod.ValidToDateIdLocal = validToDateIdLocal; // Always a real date
-			analyticsPersonPeriod.ValidFromDateLocal = validFromDateLocal; // Always a real date
-			analyticsPersonPeriod.ValidToDateLocal = validToDateLocal; // Always a real date
+			analyticsPersonPeriod.ValidFromDateIdLocal = validFromDateIdLocal; // Always date_id >= 0
+			analyticsPersonPeriod.ValidToDateIdLocal = validToDateIdLocal; // Always date_id >= 0
+			analyticsPersonPeriod.ValidFromDateLocal = validFromDateLocal; // The real date
+			analyticsPersonPeriod.ValidToDateLocal = validToDateLocal; // The real date
 
 			return analyticsPersonPeriod;
 		}

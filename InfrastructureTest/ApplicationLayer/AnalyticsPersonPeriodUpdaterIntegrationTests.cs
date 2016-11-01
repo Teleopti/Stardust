@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -14,21 +16,21 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
-using BusinessUnit = Teleopti.Ccc.TestCommon.TestData.Analytics.BusinessUnit;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 {
 	[InfrastructureTest]
 	[AnalyticsDatabaseTest]
+	[Toggle(Toggles.ETL_EventbasedDate_39562)]
 	public class AnalyticsPersonPeriodUpdaterIntegrationTests : ISetup
 	{
 		public IPersonPeriodTransformer Target;
+		public IAnalyticsDateRepository DateRepository;
 		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
 		public WithUnitOfWork WithUnitOfWork;
-		private BusinessUnit businessUnit;
+		private TestCommon.TestData.Analytics.BusinessUnit businessUnit;
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<AnalyticsDateRepositoryWithCreation>().For<IAnalyticsDateRepository>();
 		}
 
 		[SetUp]
@@ -37,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			var timeZones = new UtcAndCetTimeZones();
 			var datasource = new ExistingDatasources(timeZones);
-			businessUnit = new BusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest, datasource);
+			businessUnit = new TestCommon.TestData.Analytics.BusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest, datasource);
 			var quarterOfAnHourInterval = new QuarterOfAnHourInterval();
 
 			analyticsDataFactory.Setup(businessUnit);
@@ -49,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 		}
 
 		[Test]
-		public void Test1()
+		public void ShouldCreatePersonPeriodWithStartDate_CorrectValidToDates()
 		{
 			AnalyticsPersonPeriod result = null;
 			WithUnitOfWork.Do(() =>
@@ -70,9 +72,123 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 				});
 			});
 			result.Should().Not.Be.Null();
-			result.ValidToDateId.Should().Be.EqualTo(-2); // The person period has not an end date.
+			result.ValidToDateId.Should().Be.EqualTo(AnalyticsDate.Eternity.DateId);
 			result.ValidToDateIdMaxDate.Should().Be.GreaterThanOrEqualTo(0);
 			result.ValidToDateIdLocal.Should().Be.GreaterThanOrEqualTo(0);
 		}
+
+		[Test]
+		public void ShouldCreateTwoPersonPeriodWithStartAndEndDate_CorrectValidToDates()
+		{
+			AnalyticsPersonPeriod result1 = null;
+			AnalyticsPersonPeriod result2 = null;
+			var personPeriodStartDate = new DateTime(2010, 01, 01);
+			WithUnitOfWork.Do(() =>
+			{
+				WithAnalyticsUnitOfWork.Do(() =>
+				{
+					var team = TeamFactory.CreateSimpleTeam("Team1").WithId();
+					var site = SiteFactory.CreateSimpleSite("Site1").WithId();
+					site.AddTeam(team);
+
+					var person = PersonFactory.CreatePerson("Test Person").WithId();
+					var personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(personPeriodStartDate), team).WithId();
+					var personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(personPeriodStartDate.AddYears(1)), team).WithId();
+					person.AddPersonPeriod(personPeriod1);
+					person.AddPersonPeriod(personPeriod2);
+
+					List<AnalyticsSkill> t1;
+					List<AnalyticsSkill> t2;
+					result1 = Target.Transform(person, personPeriod1, out t1);
+					result2 = Target.Transform(person, personPeriod2, out t2);
+				});
+			});
+			result1.Should().Not.Be.Null();
+			result1.ValidToDate.Should().Be.EqualTo(personPeriodStartDate.AddYears(1));
+			result1.ValidToDateId.Should().Not.Be.EqualTo(AnalyticsDate.Eternity.DateId);
+			result1.ValidToDateIdMaxDate.Should().Be.GreaterThanOrEqualTo(0);
+			result1.ValidToDateIdLocal.Should().Be.GreaterThanOrEqualTo(0);
+
+			result2.ValidFromDate.Should().Be.EqualTo(personPeriodStartDate.AddYears(1));
+			result2.ValidToDate.Should().Be.EqualTo(AnalyticsDate.Eternity.DateDate);
+			result2.ValidToDateId.Should().Be.EqualTo(AnalyticsDate.Eternity.DateId);
+		}
+
+		[Test]
+		public void ShouldCreateOnePersonPeriodWithStartAndLeavingDateDate_CorrectValidToDates()
+		{
+			AnalyticsPersonPeriod result1 = null;
+			var personPeriodStartDate = new DateTime(2010, 01, 01);
+			var leavingDate = personPeriodStartDate.AddYears(2);
+			WithUnitOfWork.Do(() =>
+			{
+				WithAnalyticsUnitOfWork.Do(() =>
+				{
+					var team = TeamFactory.CreateSimpleTeam("Team1").WithId();
+					var site = SiteFactory.CreateSimpleSite("Site1").WithId();
+					site.AddTeam(team);
+
+					var person = PersonFactory.CreatePerson("Test Person").WithId();
+					var personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(personPeriodStartDate), team).WithId();
+					person.AddPersonPeriod(personPeriod1);
+
+					person.TerminatePerson(new DateOnly(leavingDate), new PersonAccountUpdaterDummy());
+
+					List<AnalyticsSkill> t1;
+					result1 = Target.Transform(person, personPeriod1, out t1);
+				});
+			});
+			result1.Should().Not.Be.Null();
+			result1.ValidToDate.Should().Be.EqualTo(leavingDate.AddDays(1)); // One extra day because of no laps between person periods.
+			result1.ValidToDateId.Should().Not.Be.EqualTo(AnalyticsDate.Eternity.DateId);
+			result1.ValidToDateIdMaxDate.Should().Be.EqualTo(result1.ValidToDateId);
+			result1.ValidToDateIdLocal.Should().Be.GreaterThanOrEqualTo(0);
+			result1.ValidToDateLocal.Should().Be.EqualTo(leavingDate);
+		}
+		
+		[TestCase("UTC", 0)]
+		[TestCase("Dateline Standard Time", +12)]
+		[TestCase("Tonga Standard Time", -13)]
+		public void ShouldCreatePersonPeriodWith_CorrectValidToDates(string timeZone, int hoursToGetToUtcSummerTime)
+		{
+			AnalyticsPersonPeriod result1;
+			var personPeriodStartDate = new DateTime(2010, 05, 10);
+			var leavingDate = new DateTime(2010, 08, 10);
+			var timezone = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
+			WithUnitOfWork.Do(() =>
+			{
+				WithAnalyticsUnitOfWork.Do(() =>
+				{
+					var team = TeamFactory.CreateSimpleTeam("Team1").WithId();
+					var site = SiteFactory.CreateSimpleSite("Site1").WithId();
+					site.AddTeam(team);
+
+					var person = PersonFactory.CreatePerson(new Name("Test", "Lastname"), timezone).WithId();
+					var personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(personPeriodStartDate), team).WithId();
+					person.AddPersonPeriod(personPeriod1);
+
+					person.TerminatePerson(new DateOnly(leavingDate), new PersonAccountUpdaterDummy());
+
+					List<AnalyticsSkill> t1;
+					result1 = Target.Transform(person, personPeriod1, out t1);
+
+					// Check dates
+					result1.ValidFromDateLocal.Should().Be.EqualTo(personPeriodStartDate);
+					result1.ValidToDateLocal.Should().Be.EqualTo(leavingDate);
+
+					result1.ValidFromDate.Should().Be.EqualTo(personPeriodStartDate.AddHours(hoursToGetToUtcSummerTime));
+					result1.ValidToDate.Should().Be.EqualTo(leavingDate.AddDays(1).AddHours(hoursToGetToUtcSummerTime)); // One extra day because of no laps between person periods.
+
+					// Check date ids
+					var dateList = DateRepository.GetAllPartial();
+					result1.ValidToDateId.Should().Be.EqualTo(dateList.First(d => d.DateDate.Date == result1.ValidToDate.Date).DateId);
+					result1.ValidToDateIdLocal.Should().Be.EqualTo(dateList.First(d => d.DateDate.Date == result1.ValidToDateLocal.Date).DateId);
+					result1.ValidToDateIdMaxDate.Should().Be.EqualTo(dateList.Last(d => d != AnalyticsDate.Eternity).DateId);
+					result1.ValidFromDateId.Should().Be.EqualTo(dateList.First(d => d.DateDate.Date == result1.ValidFromDate.Date).DateId);
+					result1.ValidFromDateIdLocal.Should().Be.EqualTo(dateList.First(d => d.DateDate.Date == result1.ValidFromDateLocal.Date).DateId);
+				});
+			});
+		}
 	}
 }
+
