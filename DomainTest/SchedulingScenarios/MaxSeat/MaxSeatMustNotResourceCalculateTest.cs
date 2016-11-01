@@ -43,6 +43,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 					UseTeams = true,
 					TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy),
 					UseTeamSameStartTime = true
+				},
+				Advanced =
+				{
+					UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats
 				}
 			};
 
