@@ -15102,4 +15102,8 @@ These options are activated:
     <value>Archive schedule</value>
     <comment>Archive schedule</comment>
   </data>
+  <data name="TheActivityCanNotBeAddedTo" xml:space="preserve">
+    <value>The activity can not be added to</value>
+    <comment>Warning message for invalid agents when adding (personal) activity in wfm/teams. Ex, 'The activity can not be added to John, Bill' </comment>
+  </data>
 </root>

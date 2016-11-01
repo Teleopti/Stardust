@@ -30402,6 +30402,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The activity can not be added to.
+        /// </summary>
+        public static string TheActivityCanNotBeAddedTo {
+            get {
+                return ResourceManager.GetString("TheActivityCanNotBeAddedTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The attached Pdf-file contains your schedule for {0} to {1}..
         /// </summary>
         public static string TheAttachedFileContainsScheduleForDateParameters {
