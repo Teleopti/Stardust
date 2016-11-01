@@ -23,13 +23,10 @@
 		vm.showRequestsInDefaultStatus = toggleSvc.Wfm_Requests_Default_Status_Filter_39472;
 		vm.saveGridColumnState = toggleSvc.Wfm_Requests_Save_Grid_Columns_37976;
 		vm.setFilterEnabled = setFilterEnabled;
-		vm.showShiftDetail = showShiftDetail;
 		vm.hideShiftDetail = hideShiftDetail;
 		vm.shiftDetailStyleJson = shiftDetailStyleJson;
-		vm.shiftDetailLeft;
-		vm.shiftDetailTop;
-		vm.displayShiftDetail;
 		vm.requestFiltersMgr = new requestFilterSvc.RequestsFilter();
+		vm.showShiftDetail = showShiftDetail;
 
 		vm.defaultStatusesLoaded = false;
 		vm.definitionsLoadComplete = false;
@@ -58,50 +55,12 @@
 		if (!vm.saveGridColumnState) {
 			vm.setDefaultStatuses();
 		}
-		
 
-		function updateShiftStatusForSelectedPerson(scheduleDate) {
-			var selectedPersonIdList = vm.personIds;
-			if (selectedPersonIdList.length === 0) {
-				return;
-			}
-
-			var currentDate = scheduleDate.format('YYYY-MM-DD');
-
-			teamScheduleSvc.getSchedules(currentDate, selectedPersonIdList).then(function (result) {
-				vm.schedules = groupScheduleFactory.Create(result.Schedules, scheduleDate);
-				vm.displayShiftDetail = true;
-			});
-		}
-
-		function showShiftDetail(oEvent, personFromId, personToId, scheduleDate) {
-			if (!vm.showRelevantInfo) return;
-			vm.personIds = [personFromId, personToId];
-			var normalLeftSidenavWidth = 240 + 10;
-			var miniLeftSidenavWidth = 40 + 10;
-			var shiftDetailTableWidth = 710;
-			var shiftDetailTableHeight = 145;
-			var aboveHeaderBarHeight = 160;
-			var clientWidth = document.body.clientWidth;
-			var clientHeight = document.body.clientHeight;
-
-			vm.shiftDetailTop = oEvent.pageY - aboveHeaderBarHeight;
-
-			if(document.querySelectorAll('.sidenav.is-hidden').length == 0){
-				vm.shiftDetailLeft = oEvent.pageX - normalLeftSidenavWidth - shiftDetailTableWidth/2;
-
-				if ((clientWidth - oEvent.pageX) < (shiftDetailTableWidth / 2))
-					vm.shiftDetailLeft = vm.shiftDetailLeft - (shiftDetailTableWidth / 2 - (clientWidth - oEvent.pageX));
-			}else{
-				vm.shiftDetailLeft = oEvent.pageX - miniLeftSidenavWidth - shiftDetailTableWidth/2;
-				if ((clientWidth - oEvent.pageX) < (shiftDetailTableWidth / 2))
-					vm.shiftDetailLeft = vm.shiftDetailLeft - (shiftDetailTableWidth / 2 - (clientWidth - oEvent.pageX));
-			}
-
-			if ((clientHeight - oEvent.pageY) < shiftDetailTableHeight)
-				vm.shiftDetailTop = vm.shiftDetailTop - (shiftDetailTableHeight / 2 - (clientHeight - oEvent.pageY));
-
-			updateShiftStatusForSelectedPerson(moment(scheduleDate));
+		function showShiftDetail(top, left, schedules) {
+			vm.schedules = schedules;
+			vm.shiftDetailTop = top;
+			vm.shiftDetailLeft = left;
+			vm.displayShiftDetail = true;
 		}
 
 		function hideShiftDetail() {

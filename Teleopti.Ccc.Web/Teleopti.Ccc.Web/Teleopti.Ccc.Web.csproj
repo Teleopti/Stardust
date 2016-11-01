@@ -1363,6 +1363,7 @@
     <Content Include="WFM\app\permissions\refact\permissions-refact.html" />
     <Content Include="WFM\app\permissions\refact\permissions.controller.r.js" />
     <Content Include="WFM\app\permissions\refact\permissions.service.r.js" />
+    <Content Include="WFM\app\requests\requests-shift-detail.directive.js" />
     <Content Include="WFM\app\rta\historical\rta-historical-SeeAllOutOfAdherences_39146.html" />
     <Content Include="WFM\app\rta\historical\rta.historical.controller.js" />
     <Content Include="WFM\app\rta\skills\rta-selectSkill-SiteAndTeamOnSkillOverview.html" />
