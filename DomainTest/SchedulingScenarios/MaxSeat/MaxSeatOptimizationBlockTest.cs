@@ -24,6 +24,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 					UseTeamBlockOption = true,
 					BlockTypeValue = BlockFinderType.SchedulePeriod,
 					TeamGroupPage = new GroupPageLight("_", GroupPageType.SingleAgent)
+				},
+
+				Advanced =
+				{
+					UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats
 				}
 			};
 		}

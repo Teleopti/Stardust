@@ -63,6 +63,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IScenario scenario, IOptimizationPreferences optimizationPreferences)
 		{
+			if(optimizationPreferences.Advanced.UserOptionMaxSeatsFeature.Equals(MaxSeatsFeatureOptions.DoNotConsiderMaxSeats))
+				return;
 			var allAgents = schedules.Select(schedule => schedule.Key); //blir det rätt att inte ta med schemalagda agenter?
 			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, scenario, allAgents);
 			if (!maxSeatData.MaxSeatSkillExists())
