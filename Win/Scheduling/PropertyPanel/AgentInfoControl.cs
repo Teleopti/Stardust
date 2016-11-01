@@ -565,14 +565,10 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 					createAndAddItem(listViewPersonPeriod, personSkill.Skill.Name, personSkill.SkillPercentage.ToString(), 3);
             }
 
-            if (personPeriod.PersonMaxSeatSkillCollection.Count > 0)
+            if (personPeriod.MaxSeatSkill != null)
             {
                 createAndAddItem(listViewPersonPeriod, "===================", "", 3);
-
-                foreach (IPersonSkill personSkill in personPeriod.PersonMaxSeatSkillCollection)
-                {
-                    createAndAddItem(listViewPersonPeriod, personSkill.Skill.Name, "", 3);
-                }
+                createAndAddItem(listViewPersonPeriod, personPeriod.MaxSeatSkill.Name, "", 3);
             }
             
 

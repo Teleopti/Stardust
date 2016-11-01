@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		private MockRepository _mock;
 		private IPersonPeriod _personPeriod1;
 		private IPersonPeriod _personPeriod2;
-		private IList<IPersonSkill> _skillList;
 		private ISkill _skill1;
 
 		[SetUp]
@@ -32,7 +31,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			_personPeriod1  = _mock.StrictMock<IPersonPeriod>();
 			_personPeriod2 = _mock.StrictMock<IPersonPeriod>();
 			_skill1 = SkillFactory.CreateSkill("skill1");
-			_skillList = new List<IPersonSkill> {PersonSkillFactory.CreatePersonSkill(_skill1,20)};
 		}
 
 		[Test]
@@ -47,9 +45,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			using (_mock.Record())
 			{
 				Expect.Call(_person1.PersonPeriods(_dateOnlyPeriod)).Return(person1PersonPeriodList);
-				Expect.Call(_personPeriod1.PersonMaxSeatSkillCollection).Return(_skillList);
+				Expect.Call(_personPeriod1.MaxSeatSkill).Return(_skill1);
 				Expect.Call(_person2.PersonPeriods(_dateOnlyPeriod)).Return(person2PersonPeriodList);
-				Expect.Call(_personPeriod2.PersonMaxSeatSkillCollection).Return(_skillList);
+				Expect.Call(_personPeriod2.MaxSeatSkill).Return(_skill1);
 			}
 			HashSet<ISkill> aggregatedSkills = _target.GetAggregatedSkills(_teamMembers, _dateOnlyPeriod);
 			using (_mock.Playback())

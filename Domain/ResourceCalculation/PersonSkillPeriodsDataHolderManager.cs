@@ -22,9 +22,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var skills = (from personSkill in _personalSkillsProvider.PersonSkillsBasedOnPrimarySkill(personPeriod)
 										select personSkill.Skill).ToArray();
 
-			var maxSeatSkills = (from personSkill in personPeriod.PersonMaxSeatSkillCollection
-							  where !((IDeleteTag)personSkill.Skill).IsDeleted
-							  select personSkill.Skill).ToArray();
+			var maxSeatSkills = personPeriod.MaxSeatSkill;
 
 			var nonBlendSkills = (from personSkill in personPeriod.PersonNonBlendSkillCollection
 							   where !((IDeleteTag)personSkill.Skill).IsDeleted
@@ -59,12 +57,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (site.MaxSeatSkill == null)
 				return new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
 
-			var maxSeatSkills = personSkillDay.MaxSeatSkills();
-			if (maxSeatSkills.IsEmpty())
+			var maxSeatSkill = personSkillDay.MaxSeatSkill();
+			if (maxSeatSkill == null)
 				return new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
 
 			return _schedulingResultStateHolder()
-				.SkillStaffPeriodHolder.SkillStaffPeriodDictionary(maxSeatSkills, personSkillDay.Period());
+				.SkillStaffPeriodHolder.SkillStaffPeriodDictionary(new[] {maxSeatSkill}, personSkillDay.Period());
 		}
 
 		public IDictionary<ISkill, ISkillStaffPeriodDictionary> GetPersonNonBlendSkillSkillStaffPeriods(PersonSkillDay personSkillDay)

@@ -337,13 +337,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			var mocks = new MockRepository();
 			var skill = mocks.DynamicMock<ISkill>();
 			var skillType = mocks.DynamicMock<ISkillType>();
-			var personSkill = mocks.DynamicMock<IPersonSkill>();
 
-			Expect.Call(personSkill.Skill).Return(skill);
 			Expect.Call(skill.SkillType).Return(skillType);
 			Expect.Call(skillType.ForecastSource).Return(ForecastSource.OutboundTelephony);
 			mocks.ReplayAll();
-			Assert.Throws<ArgumentOutOfRangeException>(() => _target.AddPersonMaxSeatSkill(personSkill));
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.SetMaxSeatSkill(skill));
 			mocks.VerifyAll();
 		}
 

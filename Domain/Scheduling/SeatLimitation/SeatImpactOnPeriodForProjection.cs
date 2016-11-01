@@ -72,17 +72,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 		public bool CheckPersonSkill(ISkill skill, IPerson person, DateOnly skillStaffPeriodDate)
 		{
-			IPersonPeriod personPeriod = person.Period(skillStaffPeriodDate);
-			if (personPeriod == null)
-				return false;
-
-			foreach (var personSkill in personPeriod.PersonMaxSeatSkillCollection)
-			{
-				if (personSkill.Skill.Equals(skill))
-					return true;
-			}
-
-			return false;
+			var personPeriod = person.Period(skillStaffPeriodDate);
+			return personPeriod != null && personPeriod.MaxSeatSkill.Equals(skill);
 		}
 	}
 }

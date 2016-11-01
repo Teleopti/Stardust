@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				var personPeriods = person.PersonPeriods(dateOnlyPeriod);
 				foreach (var personPeriod in personPeriods)
 				{
-					foreach (var personSkill in personPeriod.PersonMaxSeatSkillCollection)
+					if (personPeriod.MaxSeatSkill != null)
 					{
-						ret.Add(personSkill.Skill);
+						ret.Add(personPeriod.MaxSeatSkill);
 					}
 				}
 			}

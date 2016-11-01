@@ -124,9 +124,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 
 
 			IPersonPeriod personPeriod = _person1.Period(new DateOnly(2010, 1, 1));
-			IPersonSkill personSkill = personPeriod.PersonMaxSeatSkillCollection[0];
-			Assert.AreEqual(_skillLondon, personSkill.Skill);
-			personPeriod.PersonMaxSeatSkillCollection.Remove(personSkill);
+			var skill = personPeriod.MaxSeatSkill;
+			Assert.AreEqual(_skillLondon, skill);
+			personPeriod.SetMaxSeatSkill(null);
 
 
 			result = _target.CalculatePeriod(_skillStaffPeriod, _shiftList);

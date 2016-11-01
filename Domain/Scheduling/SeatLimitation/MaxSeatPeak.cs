@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		public double Fetch(DateOnly date, ITeamBlockInfo teamBlockInfo, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)
 		{
 			//TODO: Will only work for business hierarchy
-			var maxSeatSkill = teamBlockInfo.TeamInfo.GroupMembers.First().Period(date).PersonMaxSeatSkillCollection.Single().Skill;
+			var maxSeatSkill = teamBlockInfo.TeamInfo.GroupMembers.First().Period(date).MaxSeatSkill;
 			var retValue = 0d;
 			foreach (var skillDay in skillDays[maxSeatSkill])
 			{

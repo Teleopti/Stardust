@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private ITeam _team;
 		private ISet<IPersonSkill> _personSkillCollection;
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-		private readonly IList<IPersonSkill> _personMaxSeatSkillCollection  = new List<IPersonSkill>();
+		private ISkill _maxSeatSkill;
 		private ISet<IExternalLogOn> _externalLogOnCollection;
 		private DateOnly _startDate;
 		private IRuleSetBag _ruleSetBag;
@@ -168,18 +168,16 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_externalLogOnCollection.Remove(externalLogOn);
 		}
 
-		public virtual IList<IPersonSkill> PersonMaxSeatSkillCollection
+		public virtual ISkill MaxSeatSkill
 		{
-			get { return _personMaxSeatSkillCollection; }
+			get { return _maxSeatSkill; }
 		}
 
-		public virtual void AddPersonMaxSeatSkill(IPersonSkill personSkill)
+		public virtual void SetMaxSeatSkill(ISkill maxSeatSkill)
 		{
-			if (personSkill == null)
-				return;
-			if(personSkill.Skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
+			if(maxSeatSkill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
 				throw new ArgumentOutOfRangeException("personSkill", "The SkillType.ForecastSource of the Skill on the PersonSkill must be MaxSeatSkill");
-			_personMaxSeatSkillCollection.Add(personSkill);
+			_maxSeatSkill = maxSeatSkill;
 		}
 
 	    public virtual IList<IPersonSkill> PersonNonBlendSkillCollection

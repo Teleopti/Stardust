@@ -14,18 +14,20 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var personSkillCollection = PersonSkills(personPeriod).ToArray();
 
 			var skills = personSkillCollection.Where(s => s.SkillPercentage.Value > 0)
-				.Concat(personPeriod.PersonMaxSeatSkillCollection.Where(s => s.Active && s.SkillPercentage.Value > 0))
 				.Concat(personPeriod.PersonNonBlendSkillCollection.Where(s => s.Active && s.SkillPercentage.Value > 0))
 				.Select(s => s.Skill)
 				.Distinct()
-				.ToArray();
+				.ToList();
+
+			if (personPeriod.MaxSeatSkill != null)
+				skills.Add(personPeriod.MaxSeatSkill);
 
 			var skillEfficiencies =
 				personSkillCollection.Where(
 					s => s.SkillPercentage.Value > 0)
 					.Select(k => new SkillEffiencyResource(k.Skill.Id.GetValueOrDefault(), k.SkillPercentage.Value)).ToArray();
 
-			return new SkillCombination(skills, personPeriod.Period, skillEfficiencies);
+			return new SkillCombination(skills.ToArray(), personPeriod.Period, skillEfficiencies);
 		}
 
 		protected virtual IEnumerable<IPersonSkill> PersonSkills(IPersonPeriod personPeriod)

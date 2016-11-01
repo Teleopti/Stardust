@@ -33,32 +33,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 		private static void processPersonOnDate(DateOnly dateOnly, IPerson person)
 		{
-			IPersonPeriod personPeriod = person.Period(dateOnly);
-			if (personPeriod == null)
-				return;
-
-			ISkill skill = personPeriod.Team.Site.MaxSeatSkill;
-			if (skill == null)
-				return;
-
-			bool found = false;
-			foreach (var personSkill in personPeriod.PersonMaxSeatSkillCollection)
-			{
-				if(personSkill.Skill.Equals(skill))
-				{
-					found = true;
-					break;
-				}
-			}
-
-			if(!found)
-			{
-				IPersonSkill personSkill = new PersonSkill(skill, new Percent(1));
-				personPeriod.AddPersonMaxSeatSkill(personSkill);
-			}
+			var personPeriod = person.Period(dateOnly);
+			personPeriod?.SetMaxSeatSkill(personPeriod.Team.Site.MaxSeatSkill);
 		}
 	}
-
-	
-
 }

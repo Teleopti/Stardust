@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			_mocks = new MockRepository();
 			_skill = SkillFactory.CreateSiteSkill("siteSkill");
 			_person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill>());
-			_person.Period(new DateOnly()).PersonMaxSeatSkillCollection.Add(new PersonSkill(_skill, new Percent(1)));
+			_person.Period(new DateOnly()).SetMaxSeatSkill(_skill);
 			_seatImpactOnPeriodForProjection = _mocks.StrictMock<ISeatImpactOnPeriodForProjection>();
 			_target = new SeatLimitationWorkShiftCalculator2(_seatImpactOnPeriodForProjection);
 		}

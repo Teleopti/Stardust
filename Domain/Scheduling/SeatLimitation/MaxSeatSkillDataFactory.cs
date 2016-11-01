@@ -30,11 +30,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				var skill = _skillsFromMaxSeatSite.CreateMaxSeatSkill(site, 15);//TODO: why 15?
 
 				//todo: Wrong - will add maxseatskill for agents belonging to other site
-				//todo: Wrong - will add maxseatskill over and over again each time maxseatoptimization is run
 				foreach (var agent in allAgents)
 				{
-					var personSkill = new PersonSkill(skill, new Percent(1));
-					agent.Period(period.StartDate).AddPersonMaxSeatSkill(personSkill);
+					agent.Period(period.StartDate).SetMaxSeatSkill(skill);
 				}
 				//
 

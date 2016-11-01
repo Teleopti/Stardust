@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		    _person.PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
 
 		    var personPeriod = _person.Period(dateOnly);
-		    personPeriod.AddPersonMaxSeatSkill(new PersonSkill(skill, new Percent(1)));
+		    personPeriod.SetMaxSeatSkill(skill);
 		    personPeriod.Team = team;
 
 		    _schedulePeriod.Stub(x => x.Person).Return(_person);

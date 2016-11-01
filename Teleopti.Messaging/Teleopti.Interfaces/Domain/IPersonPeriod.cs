@@ -95,19 +95,15 @@ namespace Teleopti.Interfaces.Domain
 		/// Gets the person max seat skill collection.
 		/// </summary>
 		/// <value>The person max seat skill collection.</value>
-		IList<IPersonSkill> PersonMaxSeatSkillCollection { get; }
+		ISkill MaxSeatSkill { get; }
 
-		/// <summary>
-		/// Adds the person max seat skill.
-		/// </summary>
-		/// <param name="personSkill">The person skill.</param>
-		void AddPersonMaxSeatSkill(IPersonSkill personSkill);
+	    void SetMaxSeatSkill(ISkill maxSeatSkill);
 
-        /// <summary>
-        /// Gets the person non blend skill collection.
-        /// </summary>
-        /// <value>The person non blend skill collection.</value>
-        IList<IPersonSkill> PersonNonBlendSkillCollection { get; }
+				/// <summary>
+				/// Gets the person non blend skill collection.
+				/// </summary>
+				/// <value>The person non blend skill collection.</value>
+		IList<IPersonSkill> PersonNonBlendSkillCollection { get; }
 
         /// <summary>
         /// Adds the person non blend skill.

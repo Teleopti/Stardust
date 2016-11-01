@@ -38,10 +38,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 
 			_target.Process(period, persons);
 
-			Assert.AreEqual(0, _person1.Period(new DateOnly()).PersonMaxSeatSkillCollection.Count);
-			Assert.AreEqual(1, _person2.Period(new DateOnly()).PersonMaxSeatSkillCollection.Count);
-			Assert.AreEqual(_siteWithMax.MaxSeatSkill, _person2.Period(new DateOnly()).PersonMaxSeatSkillCollection[0].Skill);
-			Assert.AreEqual(new Percent(1), _person2.Period(new DateOnly()).PersonMaxSeatSkillCollection[0].SkillPercentage);
+			Assert.IsNull(_person1.Period(new DateOnly()).MaxSeatSkill);
+			Assert.IsNotNull(_person2.Period(new DateOnly()).MaxSeatSkill);
+			Assert.AreEqual(_siteWithMax.MaxSeatSkill, _person2.Period(new DateOnly()).MaxSeatSkill);
 		}
 
 		[Test]
@@ -70,9 +69,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 
 			_target.Process(period, persons);
 
-			Assert.AreEqual(1, _person2.Period(new DateOnly(2010, 1, 1)).PersonMaxSeatSkillCollection.Count);
-			Assert.AreEqual(0, _person2.Period(new DateOnly(2010, 1, 2)).PersonMaxSeatSkillCollection.Count);
-			Assert.AreEqual(1, _person2.Period(new DateOnly(2010, 1, 3)).PersonMaxSeatSkillCollection.Count);
+			Assert.IsNotNull(_person2.Period(new DateOnly(2010, 1, 1)).MaxSeatSkill);
+			Assert.IsNull(_person2.Period(new DateOnly(2010, 1, 2)).MaxSeatSkill);
+			Assert.IsNotNull(_person2.Period(new DateOnly(2010, 1, 3)).MaxSeatSkill);
 		}
 
 		
