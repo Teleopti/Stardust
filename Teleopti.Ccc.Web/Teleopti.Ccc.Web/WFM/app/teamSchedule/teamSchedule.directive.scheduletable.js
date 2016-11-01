@@ -105,7 +105,7 @@
 
 			var result = false;
 			personSchedule.Shifts.forEach(function(shift) {
-				if (moment(shift.ProjectionTimeRange.Start) < moment(personSchedule.ScheduleStartTime()))
+				if (moment(shift.ProjectionTimeRange.Start) < personSchedule.ViewRange.startMoment)
 					result = true;
 			});
 			return result;
@@ -116,7 +116,7 @@
 
 			var result = false;
 			personSchedule.Shifts.forEach(function (shift) {				
-				if (moment(shift.ProjectionTimeRange.End) > moment(personSchedule.ScheduleEndTime()))
+				if (moment(shift.ProjectionTimeRange.End) > personSchedule.ViewRange.endMoment)
 					result = true;
 			});
 			return result;

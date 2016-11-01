@@ -118,7 +118,8 @@
 					ShortName: schedule.ShiftCategory ? schedule.ShiftCategory.ShortName : null,
 					DisplayColor: schedule.ShiftCategory ? schedule.ShiftCategory.DisplayColor : null,
 					ContrastColor: schedule.ShiftCategory ? (getContrastColor(schedule.ShiftCategory.DisplayColor)) : null
-				}
+				},
+				ViewRange: timeLine.MaximumViewRange
 			}
 
 			return personSchedule;

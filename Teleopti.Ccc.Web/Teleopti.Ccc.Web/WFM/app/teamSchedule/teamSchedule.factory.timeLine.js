@@ -42,7 +42,8 @@
 				StartMinute: start,
 				EndMinute: end,
 				HourPoints: hourPoints,
-				LengthPercentPerMinute: percentPerMinute
+				LengthPercentPerMinute: percentPerMinute,
+				MaximumViewRange: maximumViewRange
 			};
 
 			return timeLineViewModel;

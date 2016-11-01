@@ -86,8 +86,8 @@
 		}
 
 		function timeRangeIntersect(timeRangeA, timeRangeB) {
-			return (timeRangeA.startTime <= timeRangeB.startTime && timeRangeA.endTime >= timeRangeB.startTime) ||
-				(timeRangeB.startTime <= timeRangeA.startTime && timeRangeB.endTime >= timeRangeA.startTime);
+			return (timeRangeA.startTime.isSameOrBefore(timeRangeB.startTime, 'minute') && timeRangeA.endTime.isSameOrAfter( timeRangeB.startTime, 'minute')) ||
+				(timeRangeB.startTime.isSameOrBefore(timeRangeA.startTime, 'minute') && timeRangeB.endTime.isSameOrAfter(timeRangeA.startTime, 'minute'));
 		}
 	}
 
