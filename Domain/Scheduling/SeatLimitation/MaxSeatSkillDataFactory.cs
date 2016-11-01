@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			{
 				var skill = _skillsFromMaxSeatSite.CreateMaxSeatSkill(site, 15);//TODO: why 15?
 
-				//todo: REMOVE ME?
+				//todo: Wrong - will add maxseatskill for agents belonging to other site
 				foreach (var agent in allAgents)
 				{
 					var personSkill = new PersonSkill(skill, new Percent(1));

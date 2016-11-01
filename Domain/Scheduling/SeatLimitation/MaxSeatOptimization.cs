@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		{
 			if(optimizationPreferences.Advanced.UserOptionMaxSeatsFeature.Equals(MaxSeatsFeatureOptions.DoNotConsiderMaxSeats))
 				return;
-			var allAgents = schedules.Select(schedule => schedule.Key); //blir det rätt att inte ta med schemalagda agenter?
+			var allAgents = schedules.Select(schedule => schedule.Key);
 			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, scenario, allAgents);
 			if (!maxSeatData.MaxSeatSkillExists())
 				return;
@@ -75,11 +75,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				new ScheduleTagSetter(NullScheduleTag.Instance) : 
 				new ScheduleTagSetter(optimizationPreferences.General.ScheduleTag);
 			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedules, allAgents, period);
-			var businessRules = NewBusinessRuleCollection.Minimum(); //is this enough?
+			var businessRules = NewBusinessRuleCollection.Minimum();
 
 			using (_resourceCalculationContextFactory.Create(schedules, allMaxSeatSkills))
 			{
-				//most stuff taken from TeamBlockIntradayOptimizationService
 				var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 				var teamInfoFactory_shouldWeUseThisOne = _teamInfoFactoryFactory.Create(allAgents, schedules, optimizationPreferences.Extra.TeamGroupPage);
 				var teamBlocks = _teamBlockGenerator.Generate(allAgents, allMatrixes, period, agentsToOptimize, schedulingOptions);
@@ -93,15 +92,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						var firstSelectedDay = period.DayCollection().First();
 						var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
 						var maxPeakBefore = _maxSeatPeak.Fetch(datePoint, teamBlockInfo, allMaxSeatSkillDays);
-
-						if (Math.Abs(maxPeakBefore) < 0.0001)
+						if (maxPeakBefore < 0.0001)
 						{
 							remainingInfoList.Remove(teamBlockInfo);
 							continue;
 						}
-
-						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules); //TODO: fix - dont do this
-
+						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules); //TODO: fix - don't remove everyone if not needed
 						if (!_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, 
 													teamBlockInfo, 
 													datePoint,
