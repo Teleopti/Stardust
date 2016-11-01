@@ -254,20 +254,38 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var input = new RemoveActivityFormData
 			{
 				TrackedCommandInfo = new TrackedCommandInfo(),
-				PersonActivities = new List<PersonActivityItem>
+				PersonActivities = new List<PersonActivityInfo>
 				{
-					new PersonActivityItem
+					new PersonActivityInfo
 					{
 						PersonId = person.Id.Value,
-						ShiftLayerIds = new List<Guid> {new Guid(), new Guid()}
+						ShiftLayers = new List<ShiftLayerDate>
+						{
+							new ShiftLayerDate
+							{
+								ShiftLayerId = Guid.NewGuid(),
+								Date = date,
+							},
+							new ShiftLayerDate
+							{
+								ShiftLayerId = Guid.NewGuid(),
+								Date = date,
+							}
+						}						
 					},
-					new PersonActivityItem
+					new PersonActivityInfo
 					{
 						PersonId = person.Id.Value,
-						ShiftLayerIds = new List<Guid> {new Guid()}
+						ShiftLayers = new List<ShiftLayerDate>
+						{
+							new ShiftLayerDate
+							{
+								ShiftLayerId = Guid.NewGuid(),
+								Date = date,
+							}
+						}
 					}
-				},
-				Date = date
+				}
 			};
 
 			ActivityCommandHandler.ResetCalledCount();
@@ -289,20 +307,38 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var input = new RemoveActivityFormData
 			{
 				TrackedCommandInfo = new TrackedCommandInfo(),
-				PersonActivities = new List<PersonActivityItem>
+				PersonActivities = new List<PersonActivityInfo>
 				{
-					new PersonActivityItem
+					new PersonActivityInfo
 					{
 						PersonId = person.Id.Value,
-						ShiftLayerIds = new List<Guid> {new Guid(), new Guid()}
+						ShiftLayers = new List<ShiftLayerDate>
+						{
+							new ShiftLayerDate
+							{
+								ShiftLayerId = Guid.NewGuid(),
+								Date = date,
+							},
+							new ShiftLayerDate
+							{
+								ShiftLayerId = Guid.NewGuid(),
+								Date = date,
+							}
+						}
 					},
-					new PersonActivityItem
+					new PersonActivityInfo
 					{
 						PersonId = person.Id.Value,
-						ShiftLayerIds = new List<Guid> {new Guid()}
+						ShiftLayers = new List<ShiftLayerDate>
+						{
+							new ShiftLayerDate
+							{
+								ShiftLayerId = Guid.NewGuid(),
+								Date = date,
+							}
+						}
 					}
-				},
-				Date = date
+				}
 			};
 
 			ActivityCommandHandler.ResetCalledCount();
@@ -618,15 +654,21 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var input = new RemoveActivityFormData
 			{
 				TrackedCommandInfo = new TrackedCommandInfo(),
-				PersonActivities = new List<PersonActivityItem>
+				PersonActivities = new List<PersonActivityInfo>
 				{				
-					new PersonActivityItem
+					new PersonActivityInfo
 					{
 						PersonId = person.Id.Value,
-						ShiftLayerIds = new List<Guid> {new Guid()}
+						ShiftLayers = new List<ShiftLayerDate>
+						{
+							new ShiftLayerDate
+							{
+								ShiftLayerId = Guid.NewGuid(),
+								Date = date,
+							}
+						}
 					}
-				},
-				Date = date
+				}
 			};
 
 			ActivityCommandHandler.ResetCalledCount();

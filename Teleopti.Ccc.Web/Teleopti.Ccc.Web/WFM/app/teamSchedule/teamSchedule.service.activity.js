@@ -77,7 +77,7 @@
 
 		function removeActivity(removeActivityForm) {			
 			var deffered = $q.defer();
-			$http.post(removeActivityUrl, normalizeInput(removeActivityForm)).then(function (result) {
+			$http.post(removeActivityUrl, removeActivityForm).then(function (result) {
 				deffered.resolve(result);
 			}, function (error) {
 				deffered.reject(error);

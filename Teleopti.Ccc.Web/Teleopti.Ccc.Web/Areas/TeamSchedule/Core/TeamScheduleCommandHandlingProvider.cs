@@ -150,15 +150,16 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				var person = _personRepository.Get(personActivity.PersonId);
 				actionResult.PersonId = personActivity.PersonId;
 				actionResult.ErrorMessages = new List<string>();
-				if (checkPermissionFn(permissions, input.Date, person, actionResult.ErrorMessages))
+				foreach(var shiftLayerDate in personActivity.ShiftLayers)
 				{
-					foreach (var shiftLayerId in personActivity.ShiftLayerIds)
+					if (checkPermissionFn(permissions, shiftLayerDate.Date, person, actionResult.ErrorMessages))
 					{
+					
 						var command = new RemoveActivityCommand
 						{
 							PersonId = personActivity.PersonId,
-							ShiftLayerId = shiftLayerId,
-							Date = input.Date,
+							ShiftLayerId = shiftLayerDate.ShiftLayerId,
+							Date = shiftLayerDate.Date,
 							TrackedCommandInfo =
 								input.TrackedCommandInfo != null
 									? input.TrackedCommandInfo
@@ -235,6 +236,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					result.Add(personError);
 					continue;
 				}
+
+
+
 				var layerToMoveTimeMap = _helper.GetCorrectNewStartForLayersForPerson(person, input.Date, personActivity.ShiftLayerIds,
 					newStartTimeInUtc);
 				if (personActivity.ShiftLayerIds.Any(x => !layerToMoveTimeMap.ContainsKey(x)))

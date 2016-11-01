@@ -4,9 +4,9 @@
 
 	angular.module('wfm.teamSchedule').directive('removeActivity', removeActivityDirective);
 
-	removeActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'teamScheduleNotificationService', '$wfmModal', 'ScenarioTestUtil'];
+	removeActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'teamScheduleNotificationService', '$wfmModal', 'ScheduleManagement', 'ScenarioTestUtil'];
 
-	function removeActivityCtrl(ActivityService, PersonSelection, notification, $wfmModal, ScenarioTestUtil) {
+	function removeActivityCtrl(ActivityService, PersonSelection, notification, $wfmModal, scheduleManagementSvc, ScenarioTestUtil) {
 		var vm = this;
 		vm.label = 'RemoveActivity';
 
@@ -16,10 +16,37 @@
 			var personProjectionsWithSelectedActivities = vm.selectedPersonProjections.filter(function (x) {
 				return (Array.isArray(x.SelectedActivities) && x.SelectedActivities.length > 0);
 			});
-			var requestData = {
-				Date: vm.selectedDate(),
-				PersonActivities: personProjectionsWithSelectedActivities.map(function (x) {
-					return { PersonId: x.PersonId, Name: x.Name, ShiftLayerIds: x.SelectedActivities };
+
+			var shiftDates = {};
+
+			vm.selectedPersonProjections.forEach(function(data) {
+				if (!Array.isArray(data.SelectedActivities) || data.SelectedActivities.length === 0) return;
+				var personScheduleVm = scheduleManagementSvc.findPersonScheduleVmForPersonId(data.PersonId);
+				if (!personScheduleVm.Shifts) return;
+				
+				personScheduleVm.Shifts.forEach(function(shift) {
+					if (!shift.Projections) return;
+					shift.Projections.forEach(function(projection) {
+						if (!projection.ShiftLayerIds) return;
+						projection.ShiftLayerIds.forEach(function(shiftId) {
+							shiftDates[shiftId] = shift.Date;
+						});
+					});
+				});
+			});
+
+			var requestData = {				
+				PersonActivities: personProjectionsWithSelectedActivities.map(function(x) {
+					return {
+						PersonId: x.PersonId,
+						Name: x.Name,
+						ShiftLayers: x.SelectedActivities.map(function(shiftLayerId) {
+							return {
+								ShiftLayerId: shiftLayerId,
+								Date: shiftDates[shiftLayerId]
+							}
+						})
+					};
 				}),
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			};
