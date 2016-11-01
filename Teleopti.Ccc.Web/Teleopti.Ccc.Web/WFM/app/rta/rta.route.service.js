@@ -13,25 +13,17 @@
 				});
 			};
 
-			this.goToAgentsInTeams = function(teamIds) {
-				$state.go('rta.agents-teams', { teamIds: teamIds });
-			};
-
-			this.goToAgentsInSites = function(siteIds) {
-				$state.go('rta.agents-sites', { siteIds: siteIds });
-			}
-
 			this.goToSelectSkill = function(){
 				$state.go('rta.select-skill');
-			};
+			}
 
 			this.goToSitesBySkill = function(skillId) {
 				$state.go('rta.sites-by-skill', {skillIds: skillId});
-			};
+			}
 
 			this.goToSitesBySkillArea = function(skillAreaId) {
 				$state.go('rta.sites-by-skillArea', {skillAreaId: skillAreaId});
-			};
+			}
 
 			this.urlForChangingSchedule = function(personId) {
 				return "#/teams/?personId=" + personId;
@@ -56,7 +48,7 @@
 			this.urlForSelectSkill = function(){
 				return '#/rta/select-skill';
 			};
-
+			
 		}
 	]);
 })();

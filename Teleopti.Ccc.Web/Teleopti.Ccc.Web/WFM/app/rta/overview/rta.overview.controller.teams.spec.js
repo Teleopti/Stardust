@@ -152,7 +152,7 @@ describe('RtaOverviewCtrl', function () {
 			.apply(function() {
 				scope.toggleSelection("2d45a50e-db48-41db-b771-a53000ef6565");
 				scope.toggleSelection("0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495");
-				scope.openSelectedItems();
+				scope.openSelectedTeams();
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.agents-teams', {
@@ -177,7 +177,7 @@ describe('RtaOverviewCtrl', function () {
 				scope.toggleSelection("2d45a50e-db48-41db-b771-a53000ef6565");
 				scope.toggleSelection("0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495");
 				scope.toggleSelection("2d45a50e-db48-41db-b771-a53000ef6565");
-				scope.openSelectedItems();
+				scope.openSelectedTeams();
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.agents-teams', {
