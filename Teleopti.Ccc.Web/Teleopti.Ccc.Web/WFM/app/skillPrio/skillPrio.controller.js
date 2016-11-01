@@ -22,6 +22,8 @@
 		vm.displayAutoComplete = displayAutoComplete;
 		vm.save = save;
 		vm.toggledOptimization = checkToggles();
+		vm.addPrioritizeSkillAbove = addPrioritizeSkillAbove;
+		vm.addPrioritizeSkillBellow = addPrioritizeSkillBellow;
 		vm.ismodified = false;
 		/////////////////////////////////Wfm_SkillPriorityRoutingGUI_39885
 		function checkToggles() {
@@ -51,6 +53,8 @@
 			vm.prioritizedSkills = unflattendDataFromServer(allActivitySkills.filter(hasPriority));
 			vm.activitySkills = allActivitySkills.filter(lacksPriority);
 			vm.activitySkills.sort(sortBySkillName);
+			console.log(vm.prioritizedSkills)
+
 		}
 
 		function selectActivityPreCheck(activity) {
@@ -137,6 +141,7 @@
 
 		function prioritizeSkill(skill, priority) {
 			if (!skill) return;
+
 			skillPreChecks(skill, priority);
 			if (skill.hasParent) {
 				var parentSkill = findDuplicateSkill(skill);
@@ -152,6 +157,45 @@
 			removeFromActivitySkills(skill)
 		}
 
+		function addPrioritizeSkillAbove(skill, priority) {
+			if (!skill) return;
+
+			var newPriority = priority + 1;
+
+			vm.prioritizedSkills.forEach(function (element) {
+				if (element.Priority > priority) {
+					console.log('element', element, 'prio', priority)
+					element.Priority++;
+					if (element.sibling.length > 0) {
+						console.log(element);
+						element.sibling.forEach(function (e) {
+							e.Priority++;
+						})
+					}
+				}
+			})
+			prioritizeSkill(skill, newPriority);
+		}
+
+		function addPrioritizeSkillBellow(skill, priority) {
+			if (!skill) return;
+
+			vm.prioritizedSkills.forEach(function (element) {
+				if (element.Priority >= priority) {
+					console.log('element', element, 'prio', priority)
+					element.Priority++;
+					if (element.sibling.length > 0) {
+						console.log(element);
+						element.sibling.forEach(function (e) {
+							e.Priority++;
+						})
+					}
+				}
+			})
+			prioritizeSkill(skill, priority);
+		}
+
+
 		function removeSkill(arr, skill) {
 			var found = arr.findIndex(function (item) {
 				vm.ismodified = true;
@@ -161,6 +205,7 @@
 			if (found !== -1)
 				arr.splice(found, 1);
 		};
+
 
 		function sanitizeSkill(skill) {
 			skill.hasParent = false;
