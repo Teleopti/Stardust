@@ -169,7 +169,6 @@ xdescribe('PermissionsCtrlRefact', function () {
 		expect(vm.roles.length).toEqual(2);
 	});
 
-
 	it('should create role', function () {
 		var name = 'rolename';
 
@@ -177,6 +176,24 @@ xdescribe('PermissionsCtrlRefact', function () {
 		$httpBackend.flush();
 
 		expect(vm.roles.length).toBe(1);
+	});
+
+	it('should close create role modal on submit', function () {
+		var name = 'rolename';
+
+		vm.createRole(name);
+		$httpBackend.flush();
+
+		expect(vm.showCreateModal).toBe(false);
+	});
+
+	it('should clear new role name on submit', function () {
+		var name = 'rolename';
+
+		vm.createRole(name);
+		$httpBackend.flush();
+
+		expect(vm.roleName).toBe('');
 	});
 
 	it('should put newly created roll on top of roles list', function () {
@@ -206,7 +223,7 @@ xdescribe('PermissionsCtrlRefact', function () {
 		expect(vm.roles[0].DescriptionText).toBe(name);
 	});
 
-	xit('should be able to edit the name of a role', function () {
+	xit('should be able to edit the name of a role', function (done) {
 		fakeBackend.withRole({
 			BuiltIn: false,
 			DescriptionText: 'Agent',
@@ -215,13 +232,30 @@ xdescribe('PermissionsCtrlRefact', function () {
 			IsMyRole: false,
 			Name: 'Agent'
 		});
-
-		vm.editRole('newRoleName', 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64');
 		$httpBackend.flush();
 
-		setTimeout(function () {
-			expect(vm.roles[0].DescriptionText).toBe('newRoleName');
-		}, 100)
+		vm.editRole('newRoleName', vm.roles[0]);
+		$httpBackend.flush();
+
+		expect(vm.roles[0].DescriptionText).toBe('newRoleName');
+		done();
+	});
+
+	it('should select edited role after name change', function () {
+		fakeBackend.withRole({
+			BuiltIn: false,
+			DescriptionText: 'Agent',
+			Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+			IsAnyBuiltIn: true,
+			IsMyRole: false,
+			Name: 'Agent'
+		});
+		$httpBackend.flush();
+
+		vm.editRole('newRoleName', vm.roles[0]);
+		$httpBackend.flush();
+
+		expect(vm.roles[0].IsSelected).toBe(true);
 	});
 
 	it('should be able to delete a roll', function () {
@@ -255,6 +289,22 @@ xdescribe('PermissionsCtrlRefact', function () {
 		vm.deleteRole(vm.roles[0]);
 
 		expect(vm.roles.length).toEqual(1);
+	});
+
+	it('should not be able to modify Built in role', function () {
+		fakeBackend.withRole({
+			BuiltIn: true,
+			DescriptionText: 'Systemadministator',
+			Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+			IsAnyBuiltIn: true,
+			IsMyRole: true,
+			Name: '_superUser'
+		});
+		$httpBackend.flush();
+
+		var result = vm.checkMyRole(vm.roles[0]);
+
+		expect(result).toEqual(false);
 	});
 
 	it('should be able to copy a role', function () {

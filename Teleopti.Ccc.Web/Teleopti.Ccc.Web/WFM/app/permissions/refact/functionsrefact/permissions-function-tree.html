@@ -1,10 +1,28 @@
 <div ui-tree data-drag-enabled="false">
 	<ol ui-tree-nodes="" ng-model="$ctrl.functions">
 		<li ng-repeat="function in $ctrl.functions" ui-tree-node>
-			<div ui-tree-handle ng-class="{selected: function.IsSelected}" ng-click="$ctrl.toggleFunction(function)">
+			<div ui-tree-handle ng-class="{selected: function.IsSelected}" ng-click="$ctrl.checkParent(function)">
 				{{function.LocalizedFunctionDescription}}
 			</div>
 			<permissions-tree functions="function.ChildFunctions" parent="$ctrl.onSelect"></permissions-tree>
+
+			<div ng-cloak class="modal-box">
+				<div ng-cloak ng-show="function.multiDeselectModal">
+					<div class="modalbg">
+						<div class="dialog-mini">
+							<div class="modal-inner-content">
+								{{'ConfirmToggleChildPermissions'|translate}}
+							</div>
+							<div class="modal-actions">
+								<aside>
+									<button ng-click="function.multiDeselectModal=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+									<button ng-click="$ctrl.toggleFunction(function); function.multiDeselectModal=false" class="wfm-btn wfm-btn-invis-primary">{{'Clear'|translate}}</button>
+								</aside>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</li>
 	</ol>
 </div>

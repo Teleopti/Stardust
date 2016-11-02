@@ -9,6 +9,8 @@
 
     function PermissionsCtrl(PermissionsServiceRefact) {
         var vm = this;
+        vm.showCreateModal;
+        vm.roleName;
 
         fetchData();
         vm.createRole = createRole;
@@ -16,16 +18,35 @@
         vm.deleteRole = deleteRole;
         vm.copyRole = copyRole;
         vm.selectRole = selectRole;
+        vm.checkMyRole  = checkMyRole;
 
         function createRole(roleName) {
             var roleData = { Description: roleName };
             PermissionsServiceRefact.roles.save(roleData).$promise.then(function (data) {
                 vm.roles.unshift(data);
             });
+            vm.showCreateModal = false;
+            vm.roleName = '';
         }
 
-        function editRole(newRoleName, id) {
-            PermissionsServiceRefact.manage.update({ Id: id, newDescription: newRoleName });
+        function editRole(newRoleName, role) {
+            PermissionsServiceRefact.manage.update({ Id: role.Id, newDescription: newRoleName }).$promise.then(function () {
+                PermissionsServiceRefact.roles.query().$promise.then(function (data) {
+                    vm.roles = data;
+                    var selected = data.find(function (r) {
+                        return r.Id === role.Id;
+                    });
+                    markSelectedRole(selected);
+                });
+            });
+        }
+
+        function checkMyRole(role){
+            if(role.IsMyRole || role.BuiltIn){
+                return false;
+            }else{
+                return true;
+            }
         }
 
         function deleteRole(role) {
@@ -56,8 +77,8 @@
                 var functions = vm.applicationFunctions;
                 while (functions != null && functions.length > 0) {
                     var next = [];
-                    functions.forEach(function(fn) {
-                        fn.IsSelected = vm.selectedRole.AvailableFunctions.some(function(afn) {
+                    functions.forEach(function (fn) {
+                        fn.IsSelected = vm.selectedRole.AvailableFunctions.some(function (afn) {
                             return fn.FunctionId === afn.Id;
                         });
                         if (fn.ChildFunctions != null) {

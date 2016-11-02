@@ -3,6 +3,7 @@ function PermissionsTreeController() {
 
   ctrl.toggleFunction = toggleFunction;
   ctrl.onSelect = onSelect;
+  ctrl.checkParent = checkParent;
 
   function toggleFunction(func) {
     func.IsSelected = !func.IsSelected;
@@ -36,6 +37,17 @@ function PermissionsTreeController() {
       if (ctrl.parent != null) {
         ctrl.parent(parent);
       }
+    }
+  }
+
+  function checkParent(func) {
+    if(func.ChildFunctions.length > 0 ){
+      if(func.IsSelected){
+        func.multiDeselectModal = true;
+      }
+    }else{
+      toggleFunction(func);
+     func.multiDeselectModal = false;
     }
   }
 

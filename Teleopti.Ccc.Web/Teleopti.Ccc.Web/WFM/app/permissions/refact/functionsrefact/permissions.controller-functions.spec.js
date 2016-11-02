@@ -44,6 +44,31 @@ xdescribe('component: permissionsTree', function () {
 		expect(vm.applicationFunctions[0].IsSelected).toEqual(true);
 	});
 
+	it('should confirm before deselecting a parent', function () {
+		fakeBackend.withApplicationFunction({
+			ChildFunctions: [{
+				ChildFunctions: [],
+				FunctionCode: 'ChildFunction',
+				FunctionDescription: 'ChildFunction',
+				FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e9',
+				IsDisabled: false,
+				LocalizedFunctionDescription: 'I am A child function',
+				IsSelected: false
+			}],
+			FunctionCode: 'Parent',
+			FunctionDescription: 'ParentFunction',
+			FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+			IsDisabled: false,
+			LocalizedFunctionDescription: 'I Am A Parent Function',
+			IsSelected: true
+		});
+		$httpBackend.flush();
+		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions});
+		ctrl.checkParent(vm.applicationFunctions[0]);
+
+		expect(vm.applicationFunctions[0].multiDeselectModal).toEqual(true);
+	});
+
 	it('should be able to deselect a function', function () {
 		fakeBackend.withApplicationFunction({
 			FunctionCode: 'Raptor',
@@ -184,4 +209,5 @@ xdescribe('component: permissionsTree', function () {
 		expect(vm.applicationFunctions[1].IsSelected).toEqual(true);
 		expect(vm.applicationFunctions[1].ChildFunctions[0].IsSelected).toEqual(true);
 	});
+
 });
