@@ -520,11 +520,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent, agent2Data.Agent }, schedules, optPreferences, 15);
 
-			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay
-				.Should().Be.EqualTo(TimeSpan.FromHours(9));
-
-			schedules[agent2Data.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay
-				.Should().Be.EqualTo(TimeSpan.FromHours(8));
+			schedules.SchedulesForDay(dateOnly)
+				.Count(x => x.PersonAssignment().Period.StartDateTime.TimeOfDay == TimeSpan.FromHours(9))
+				.Should().Be.EqualTo(1);
 		}
 
 		protected abstract OptimizationPreferences CreateOptimizationPreferences();
