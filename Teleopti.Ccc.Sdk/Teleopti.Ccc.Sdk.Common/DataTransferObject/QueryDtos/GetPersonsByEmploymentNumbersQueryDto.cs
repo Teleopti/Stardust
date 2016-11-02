@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 		/// </summary>
 		/// <value>The people's employment numbers.</value>
 		[DataMember]
-		public IEnumerable<string> EmploymentNumbers
+		public ICollection<string> EmploymentNumbers
 		{
 			get; set;
 		}

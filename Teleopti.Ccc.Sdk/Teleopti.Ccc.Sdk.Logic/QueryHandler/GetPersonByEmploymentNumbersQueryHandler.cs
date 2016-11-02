@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public ICollection<PersonDto> Handle(GetPersonsByEmploymentNumbersQueryDto query)
 		{
+			query.EmploymentNumbers.VerifyCountLessThan(50, "A maximum of 50 persons is allowed. You tried to load persons for {0}.");
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				using (unitOfWork.DisableFilter(QueryFilter.Deleted))
