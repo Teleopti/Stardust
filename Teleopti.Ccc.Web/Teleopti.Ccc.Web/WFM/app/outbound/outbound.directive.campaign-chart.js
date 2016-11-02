@@ -190,7 +190,7 @@
 						format: {}													
 					}
 				};
-				dataOption.labels.format[$scope.dictionary['Overstaff']] = function(v, id, i) {
+				dataOption.labels.format[$scope.dictionary['Overstaffing']] = function(v, id, i) {
 					if ((!determineOpenDay(i)) && determineManualBacklogDay(i)) return 'C,B';
 					else if (!determineOpenDay(i)) return 'C';
 
