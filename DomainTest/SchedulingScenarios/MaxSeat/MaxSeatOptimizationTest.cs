@@ -571,6 +571,28 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.EqualTo(1);
 		}
 
+		[Test]
+		public void ShouldNotRemoveMoreThanNecessary()
+		{
+			var site = new Site("_") { MaxSeats = 2 }.WithId();
+			var team = new Team { Description = new Description("_"), Site = site };
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var dateOnly = new DateOnly(2016, 10, 25);
+			var scenario = new Scenario("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
+			var agentDataOneHour = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
+			var agentData1 = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
+			var agentData2 = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData1.Assignment, agentData2.Assignment, agentDataOneHour.Assignment });
+			var optPreferences = CreateOptimizationPreferences();
+			optPreferences.Advanced.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak;
+
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData1.Agent, agentData2.Agent }, schedules, optPreferences, 15);
+
+			schedules.SchedulesForDay(dateOnly).Count(x => x.IsScheduled()).Should().Be.EqualTo(2);
+		}
+
 		protected abstract OptimizationPreferences CreateOptimizationPreferences();
 	}
 }

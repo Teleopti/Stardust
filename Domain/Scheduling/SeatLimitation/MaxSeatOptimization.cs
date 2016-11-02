@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature.Equals(MaxSeatsFeatureOptions.DoNotConsiderMaxSeats))
 				return;
 			var allAgents = schedules.Select(schedule => schedule.Key);
-			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, schedules.Scenario, allAgents, maxSeatIntervalLength);
+			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, schedules.Scenario, allAgents, maxSeatIntervalLength); //try to use less agents
 			if (!maxSeatData.MaxSeatSkillExists())
 				return;
 			var tagSetter = optimizationPreferences.General.ScheduleTag == null ?
@@ -105,10 +105,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 								rollbackService.RollbackMinimumChecks();
 						}
 
-						if (_maxSeatPeak.Fetch(datePoint, maxSeatData, skillDaysForTeamBlockInfo) > 0 &&
-							optimizationPreferences.Advanced.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)
+						if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)
 						{
-							_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules);
+							var overLimit = _maxSeatPeak.Fetch(datePoint, maxSeatData, skillDaysForTeamBlockInfo);
+							if (overLimit > 0)
+							{
+								var unlockedAgents = teamBlockInfo.TeamInfo.GroupMembers.Where(agentsToOptimize.Contains).ToArray();
+								var numberOfUnlockedAgents = unlockedAgents.Length;
+								var numberOfAgentsToLock = numberOfUnlockedAgents - overLimit;
+								for (var i = 0; i < numberOfAgentsToLock; i++)
+								{
+									var unlockedAgent = unlockedAgents[i];
+									teamBlockInfo.TeamInfo.LockMember(period, unlockedAgent);
+								}
+								_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules);
+							}
 						}
 					}
 				}
