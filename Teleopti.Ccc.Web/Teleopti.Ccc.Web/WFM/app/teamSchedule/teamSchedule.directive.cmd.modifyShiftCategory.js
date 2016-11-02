@@ -9,11 +9,22 @@
 		var vm = this;
 
 		vm.label = 'EditShiftCategory';
-		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
+		
 		vm.shiftCategoriesLoaded = false;
+		vm.selectedAgents = [];
+		vm.invalidAgents = [];
+		vm.init = init;
+		vm.anyValidAgent = anyValidAgent;
 
-		function getContrast50(hexcolor) {
-			return (parseInt(hexcolor, 16) > 0xffffff/2) ? 'black' : 'white';
+		function init() {
+			vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
+			vm.invalidAgents = vm.selectedAgents.filter(function(agent) {
+				return agent.Timezone.IanaId !== vm.getCurrentTimezone();
+			});
+		}
+
+		function anyValidAgent() {
+			return vm.selectedAgents.length > vm.invalidAgents.length;
 		}
 
 		function getContrastYIQ(hexcolor) {
@@ -29,16 +40,20 @@
 			if (Array.isArray(response.data)) {
 				response.data.forEach(function (shiftCat) {
 					var displayColorHex = shiftCat.DisplayColor.substring(1);
-					//shiftCat.ContrastColor = getContrast50(displayColorHex);
 					shiftCat.ContrastColor = getContrastYIQ(displayColorHex);
 				});
 			}
 			vm.shiftCategoriesLoaded = true;
 		});
 
-		vm.modifyShiftCategory = function(){
+		vm.modifyShiftCategory = function () {
+
+			var validAgents = vm.selectedAgents.filter(function(agent) {
+				return vm.invalidAgents.indexOf(agent) < 0;
+			});
+
 			var requestData = {
-				PersonIds: vm.selectedAgents.map(function(agent) {return agent.PersonId}),
+				PersonIds: validAgents.map(function (agent) { return agent.PersonId }),
 				Date: vm.selectedDate(),
 				ShiftCategoryId: vm.selectedShiftCategoryId,
 				TrackedCommandInfo: { TrackId: vm.trackId }
@@ -95,6 +110,9 @@
 		scope.vm.selectedDate = containerCtrl.getDate;
 		scope.vm.trackId = containerCtrl.getTrackId();
 		scope.vm.getActionCb = containerCtrl.getActionCb;
+		scope.vm.getCurrentTimezone = containerCtrl.getCurrentTimezone;
+
+		scope.vm.init();
 
 		scope.$on('teamSchedule.command.focus.default', function () {
 			var focusTarget = elem[0].querySelector('.focus-default');

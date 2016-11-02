@@ -11,10 +11,13 @@
 				</md-select>
 			</div>
 		</form>
-
+		<div ng-if="vm.invalidAgents.length > 0" class="text-danger">
+			<i class="mdi mdi-alert-octagon"></i>
+			<span>{{'CannotApplyChangeToAgentsInDifferentTimezone'|translate}}: <strong>{{ vm.invalidAgents | names }}</strong>.</span>
+		</div>
 		<button id="applyShiftCategory" class="wfm-btn form-submit"
-				ng-class="{'wfm-btn-primary': editShiftCategoryForm.$valid, 'wfm-btn-primary-disabled': !editShiftCategoryForm.$valid}"
-				ng-disabled="editShiftCategoryForm.$valid ?'':'disabled'"
+				ng-class="{'wfm-btn-primary': editShiftCategoryForm.$valid && vm.anyValidAgent(), 'wfm-btn-primary-disabled': !(editShiftCategoryForm.$valid && vm.anyValidAgent()  )}"
+				ng-disabled="editShiftCategoryForm.$valid && vm.anyValidAgent()?'':'disabled'"
 				ng-click="vm.modifyShiftCategory()">
 			{{'Apply' | translate}}
 		</button>

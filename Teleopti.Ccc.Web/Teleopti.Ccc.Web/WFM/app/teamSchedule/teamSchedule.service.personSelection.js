@@ -50,7 +50,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 					PersonActivityCount: activities.length,
 					SelectedAbsences: absences,
 					SelectedActivities: activities,
-					PersonScheduleVm: personSchedule
+					Timezone: personSchedule.Timezone
 				};
 			} else if (!personSchedule.IsSelected && svc.personInfo[personSchedule.PersonId]) {
 				delete svc.personInfo[personSchedule.PersonId];
@@ -78,7 +78,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 					personSchedule.IsSelected = false;
 
 				if (svc.personInfo[personId]) {
-					svc.personInfo[personId].PersonScheduleVm = personSchedule;
+					svc.personInfo[personId].Timezone = personSchedule.Timezone;
 					svc.personInfo[personId].ScheduleEndTime = personSchedule.ScheduleEndTime();
 					svc.personInfo[personId].AllowSwap = personSchedule.AllowSwap();
 					var shiftLength = personSchedule.Shifts.length;
@@ -153,7 +153,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 					PersonActivityCount: 0,
 					SelectedAbsences: [],
 					SelectedActivities: [],
-					PersonScheduleVm: personSchedule
+					Timezone: personSchedule.Timezone
 				};
 
 
@@ -290,7 +290,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 					PersonActivityCount: schedule.PersonActivityCount,
 					SelectedAbsences: schedule.SelectedAbsences,
 					SelectedActivities: schedule.SelectedActivities,
-					PersonScheduleVm: schedule.PersonScheduleVm
+					Timezone: schedule.Timezone
 				});
 			}
 			return result;

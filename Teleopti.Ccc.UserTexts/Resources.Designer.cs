@@ -5097,6 +5097,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot apply change to agent in different timezones.
+        /// </summary>
+        public static string CannotApplyChangeToAgentsInDifferentTimezone {
+            get {
+                return ResourceManager.GetString("CannotApplyChangeToAgentsInDifferentTimezone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} cannot be earlier than {1} .
         /// </summary>
         public static string CannotBeBeforeTime {

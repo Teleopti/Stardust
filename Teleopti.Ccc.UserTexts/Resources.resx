@@ -15086,4 +15086,8 @@ These options are activated:
     <value>Skill area:</value>
     <comment>skill area</comment>
 </data>
+ <data name="CannotApplyChangeToAgentsInDifferentTimezone" xml:space="preserve">
+    <value>Cannot apply change to agent in different timezones</value>
+    <comment>Alert message stating the intended changes cannot be applied to agents that have timezones different to the currently selected timezone.</comment>
+  </data>
 </root>
