@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
@@ -38,6 +39,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			return _maxSeatSkillDataPerSkills.Single(x => x.Skill.Equals(skill)).Site.MaxSeats.Value;
 		}
 
+		public IEnumerable<ISkillDay> SkillDaysFor(ITeamBlockInfo teamBlockInfo, DateOnly date)
+		{
+			return
+				_maxSeatSkillDataPerSkills.Single(
+					x => x.Site.Equals(teamBlockInfo.TeamInfo.GroupMembers.First().Period(date).Team.Site)).SkillDays;
+		}
+
 		private class maxSeatSkillDataPerSkill
 		{
 			public maxSeatSkillDataPerSkill(ISkill skill, IEnumerable<ISkillDay> skillDays, ISite site)
@@ -51,5 +59,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			public IEnumerable<ISkillDay> SkillDays { get; }
 			public ISite Site { get; }
 		}
+
 	}
 }

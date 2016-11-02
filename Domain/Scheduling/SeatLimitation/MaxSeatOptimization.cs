@@ -86,6 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					var maxPeakBefore = _maxSeatPeak.Fetch(datePoint, maxSeatData, teamBlockInfo, allMaxSeatSkillDays);
 					if (maxPeakBefore > 0.01)
 					{
+						var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint); //This won't work if not hiearchy
 						var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules); //TODO: fix - don't remove everyone if not needed
 						if (!_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat,
@@ -94,7 +95,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 													schedulingOptions,
 													rollbackService,
 													new DoNothingResourceCalculateDelayer(),
-													allMaxSeatSkillDays.ToSkillDayEnumerable(),
+													skillDaysForTeamBlockInfo,
 													schedules,
 													new ShiftNudgeDirective(),
 													businessRules) ||
