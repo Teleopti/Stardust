@@ -3,9 +3,12 @@ using NHibernate.Util;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Intraday
 {
@@ -16,6 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public MonitorSkillsProvider Target;
 		public FakeIntradayMonitorDataLoader IntradayMonitorDataLoader;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
+		public FakeSkillRepository SkillRepository;
 
 		private IncomingIntervalModel _firstInterval;
 		private IncomingIntervalModel _secondInterval;
@@ -455,6 +459,24 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			viewModel.StatisticsDataSeries.AverageSpeedOfAnswer[1].Should().Be.EqualTo(null);
 			viewModel.StatisticsDataSeries.AbandonedRate[1].Should().Be.EqualTo(null);
 			viewModel.StatisticsDataSeries.ServiceLevel[1].Should().Be.EqualTo(null);
+		}
+		[Test]
+		public void ShouldOnlyLoadDataForSupportedSkills()
+		{
+			var phoneSkill = SkillFactory.CreateSkill("phone", new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony), 15).WithId();
+			var multisiteSkill = SkillFactory.CreateMultisiteSkill("multisite", new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.MaxSeatSkill), 15).WithId();
+			var emailSkill = SkillFactory.CreateSkill("email", new SkillTypeEmail(new Description("Email"), ForecastSource.Email), 60).WithId();
+
+			SkillRepository.Has(phoneSkill);
+			SkillRepository.Has(multisiteSkill);
+			SkillRepository.Has(emailSkill);
+			IntradayMonitorDataLoader.AddInterval(_firstInterval);
+			IntervalLengthFetcher.Has(minutesPerInterval);
+
+			Target.Load(new[] { phoneSkill.Id.Value, multisiteSkill.Id.Value, emailSkill.Id.Value });
+
+			IntradayMonitorDataLoader.Skills.Count.Should().Be.EqualTo(1);
+			IntradayMonitorDataLoader.Skills.Should().Contain(phoneSkill.Id.Value);
 		}
 	}
 }

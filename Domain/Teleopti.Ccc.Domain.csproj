@@ -447,6 +447,7 @@
     <Compile Include="Intraday\ScheduleForecastSkillProvider.cs" />
     <Compile Include="Intraday\StaffingDataSeries.cs" />
     <Compile Include="Intraday\StaffingIntervalModel.cs" />
+    <Compile Include="Intraday\SupportedSkillsInIntradayProvider.cs" />
     <Compile Include="LogObject\LogObjectDetail.cs" />
     <Compile Include="Logon\FullPermissions.cs" />
     <Compile Include="Logon\FullPermissionsAspect.cs" />

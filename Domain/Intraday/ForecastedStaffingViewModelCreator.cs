@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
 		private readonly IIntradayQueueStatisticsLoader _intradayQueueStatisticsLoader;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
-		private readonly ISkillRepository _skillRepository;
+		private readonly SupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 
 		public ForecastedStaffingViewModelCreator(
 			INow now,
@@ -31,23 +31,13 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_forecastedStaffingProvider = forecastedStaffingProvider;
 			_intradayQueueStatisticsLoader = intradayQueueStatisticsLoader;
 			_intervalLengthFetcher = intervalLengthFetcher;
-			_skillRepository = skillRepository;
+			_supportedSkillsInIntradayProvider = new SupportedSkillsInIntradayProvider(skillRepository);
 		}
 
 		public IntradayStaffingViewModel Load(Guid[] skillIdList)
 		{
 
-			var skills = _skillRepository.LoadSkills(skillIdList);
-			var supportedSkillIdList = skillIdList;
-
-			foreach (var skill in skills)
-			{
-				if (!checkSupportedSkill(skill))
-				{
-					var skillToRemove = skill.Id.Value;
-					supportedSkillIdList = supportedSkillIdList.Where(val => val != skillToRemove).ToArray();
-				}
-			}
+			var supportedSkillIdList = _supportedSkillsInIntradayProvider.GetSupportedSkillIds(skillIdList);
 
 			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
 			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
@@ -104,14 +94,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 								.ToArray()
 				}
 			};
-		}
-
-		private bool checkSupportedSkill(ISkill skill)
-		{
-			var isMultisiteSkill = skill.GetType() == typeof(MultisiteSkill);
-
-			return !isMultisiteSkill &&
-				   skill.SkillType.Description.Name.Equals("SkillTypeInboundTelephony", StringComparison.InvariantCulture);
 		}
 
 		private List<double?> getActualStaffingSeries(List<StaffingIntervalModel> actualStaffingPerSkill, DateTime? latestStatsTime, int minutesPerInterval, List<StaffingIntervalModel> staffingForUsersToday)

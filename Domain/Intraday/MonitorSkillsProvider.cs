@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly INow _now;
 		private readonly IUserTimeZone _userTimeZone;
-		private readonly ISkillRepository _skillRepository;
+		private readonly SupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 
 		public MonitorSkillsProvider(IIntradayMonitorDataLoader intradayMonitorDataLoader, IIntervalLengthFetcher intervalLengthFetcher, INow now, IUserTimeZone userTimeZone, ISkillRepository skillRepository)
 		{
@@ -23,22 +23,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_intervalLengthFetcher = intervalLengthFetcher;
 			_now = now;
 			_userTimeZone = userTimeZone;
-			_skillRepository = skillRepository;
+			_supportedSkillsInIntradayProvider = new SupportedSkillsInIntradayProvider(skillRepository);
 		}
 
 		public IntradayStatisticsViewModel Load(Guid[] skillIdList)
 		{
-			var skills = _skillRepository.LoadSkills(skillIdList);
-			var supportedSkillIdList = skillIdList;
-
-			foreach (var skill in skills)
-			{
-				if (!checkSupportedSkill(skill))
-				{
-					var skillToRemove = skill.Id.Value;
-					supportedSkillIdList = supportedSkillIdList.Where(val => val != skillToRemove).ToArray();
-				}
-			}
+			var supportedSkillIdList = _supportedSkillsInIntradayProvider.GetSupportedSkillIds(skillIdList);
 
 			var intervals = _intradayMonitorDataLoader.Load(supportedSkillIdList,
 				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone,
@@ -134,14 +124,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 					ServiceLevel = serviceLevel.ToArray()
 				}
 			};
-		}
-
-		private bool checkSupportedSkill(ISkill skill)
-		{
-			var isMultisiteSkill = skill.GetType() == typeof(MultisiteSkill);
-
-			return !isMultisiteSkill &&
-				   skill.SkillType.Description.Name.Equals("SkillTypeInboundTelephony", StringComparison.InvariantCulture);
 		}
 	}
 }

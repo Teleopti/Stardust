@@ -9,10 +9,21 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	public class FakeIntradayMonitorDataLoader : IIntradayMonitorDataLoader
 	{
 		private IList<IncomingIntervalModel> _intervals;
+		private IList<Guid> _skills;
 
 		public IList<IncomingIntervalModel> Load(IList<Guid> skillList, TimeZoneInfo timeZone, DateOnly today)
 		{
+			Skills = skillList;
 			return intervals;
+		}
+
+		public IList<Guid> Skills
+		{
+			get
+			{
+				return _skills ?? new List<Guid>();
+			}
+			set { _skills = value; }
 		}
 
 		private IList<IncomingIntervalModel> intervals

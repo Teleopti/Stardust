@@ -708,21 +708,21 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var scenario = fakeScenarioAndIntervalLength();
 
 
-			var skill1 = createSkill(minutesPerInterval, "skill1", new TimePeriod(8, 0, 8, 30));
-			var skill2 = createEmailSkill(minutesPerInterval, "skill2", new TimePeriod(8, 0, 8, 30));
+			var phoneSkill = createSkill(minutesPerInterval, "skill1", new TimePeriod(8, 0, 8, 30));
+			var emailSkill = createEmailSkill(minutesPerInterval, "skill2", new TimePeriod(8, 0, 8, 30));
 
-			var skillDay1 = createSkillDay(skill1, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
-			var skillDay2 = createSkillDay(skill2, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
+			var skillDay1 = createSkillDay(phoneSkill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
+			var skillDay2 = createSkillDay(emailSkill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
 
-			var actualCalls1 = getActualCallsPerSkillAndInterval(skillDay1.WorkloadDayCollection.First().TaskPeriodList.ToList(), skill1, 1, latestStatsTime);
-			var actualCalls2 = getActualCallsPerSkillAndInterval(skillDay2.WorkloadDayCollection.First().TaskPeriodList.ToList(), skill2, 1, latestStatsTime);
+			var actualCalls1 = getActualCallsPerSkillAndInterval(skillDay1.WorkloadDayCollection.First().TaskPeriodList.ToList(), phoneSkill, 1, latestStatsTime);
+			var actualCalls2 = getActualCallsPerSkillAndInterval(skillDay2.WorkloadDayCollection.First().TaskPeriodList.ToList(), emailSkill, 1, latestStatsTime);
 
 			var actualCallsTotal = new List<SkillIntervalStatistics>();
 			actualCallsTotal.AddRange(actualCalls1);
 			actualCallsTotal.AddRange(actualCalls2);
 
-			SkillRepository.Has(skill1);
-			SkillRepository.Has(skill2);
+			SkillRepository.Has(phoneSkill);
+			SkillRepository.Has(emailSkill);
 			SkillDayRepository.Add(skillDay1);
 			SkillDayRepository.Add(skillDay2);
 			IntradayQueueStatisticsLoader.Has(actualCallsTotal);
@@ -737,9 +737,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				TimeSpan.FromMinutes(minutesPerInterval),
 				skillData1.MinOccupancy.Value,
 				skillData1.MaxOccupancy.Value,
-				skill1.MaxParallelTasks);
+				phoneSkill.MaxParallelTasks);
 
-			var vm = Target.Load(new[] { skill1.Id.Value, skill2.Id.Value });
+			var vm = Target.Load(new[] { phoneSkill.Id.Value, emailSkill.Id.Value });
 
 			vm.DataSeries.ActualStaffing.First().Should().Be.EqualTo(actualStaffingSkill1);
 			vm.DataSeries.ActualStaffing.Last().Should().Be.EqualTo(null);
