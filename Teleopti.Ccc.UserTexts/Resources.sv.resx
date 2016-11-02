@@ -13780,7 +13780,7 @@ Dessa val är aktiverade:
     <value>Din frånvaroförfrågan har avslagits automatiskt. Starttiden för förfrågan är {0}, och den måste vara minst {1} minuter senare än aktuell tid</value>
   </data>
   <data name="OverlappedNonoverwritableActivitiesExist" xml:space="preserve">
-    <value>Det finns fortfarande överskrivna activiteter som inte får skrivas över.</value>
+    <value>Det finns fortfarande överskrivna aktiviteter som inte får skrivas över.</value>
   </data>
   <data name="Full" xml:space="preserve">
     <value>Helt</value>
@@ -13811,5 +13811,29 @@ Dessa val är aktiverade:
   </data>
   <data name="CurrentRequests" xml:space="preserve">
     <value>Aktuella förfrågningar</value>
+  </data>
+  <data name="TryOutTheNewImprovedTeams" xml:space="preserve">
+    <value>Prova nya, förbättrade Teams!</value>
+  </data>
+  <data name="AbsenceRequestExpiredThreshold" xml:space="preserve">
+    <value>Minsta tid i förväg som förfrågningar måste skickas (minuter):</value>
+  </data>
+  <data name="TeamsModule" xml:space="preserve">
+    <value>Teams</value>
+  </data>
+  <data name="UnsupportedSkill" xml:space="preserve">
+    <value>Prognosmetoden stöds ej</value>
+  </data>
+  <data name="UnsupportedSkillMsg" xml:space="preserve">
+    <value>Den här kompetensens prognosmetod stöds ej.</value>
+  </data>
+  <data name="EmploymentNumber" xml:space="preserve">
+    <value>Anställningsnummer</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organisation</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Översikt</value>
   </data>
 </root>
