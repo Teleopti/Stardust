@@ -11,7 +11,7 @@ xdescribe('PermissionsCtrlRefact', function () {
 		module('wfm.permissions');
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _fakePermissionsBackend_, _$controller_,_$timeout_) {
+	beforeEach(inject(function (_$httpBackend_, _fakePermissionsBackend_, _$controller_, _$timeout_) {
 		$httpBackend = _$httpBackend_;
 		fakeBackend = _fakePermissionsBackend_;
 		$controller = _$controller_;
@@ -21,16 +21,16 @@ xdescribe('PermissionsCtrlRefact', function () {
 		vm = $controller('PermissionsCtrlRefact');
 
 		$httpBackend.whenPOST('../api/Permissions/Roles').respond(function (method, url, data, headers) {
-			return [201, {DescriptionText: 'rolename'}];
+			return [201, { DescriptionText: 'rolename' }];
 		});
 		$httpBackend.whenDELETE('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64').respond(function (method, url, data, headers) {
 			return 200;
 		});
 		$httpBackend.whenPUT('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64?newDescription=%7B%7D').respond(function (method, url, data, headers) {
-			return [200, {newDescription: 'newRoleName'}];
+			return [200, { newDescription: 'newRoleName' }];
 		});
 		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Copy').respond(function (method, url, data, headers) {
-			return [201, {Name: 'Agent'}];
+			return [201, { Name: 'Agent' }];
 		});
 
 	}));
@@ -39,15 +39,40 @@ xdescribe('PermissionsCtrlRefact', function () {
 		$httpBackend.verifyNoOutstandingExpectation();
 		$httpBackend.verifyNoOutstandingRequest();
 	});
-	
+
+	it('should get an organization selection', function () {
+		var BusinessUnit = {
+			ChildNodes: [],
+			Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
+			Name: "TeleoptiCCCDemo",
+			Type: "BusinessUnit"
+		};
+		var DynamicOptions = [
+			{
+				RangeOption: 0,
+				Name: "None"
+			}
+		];
+		fakeBackend.withOrganizationSelection(BusinessUnit, DynamicOptions);
+
+		$httpBackend.flush();
+
+		expect(vm.organizationSelection.BusinessUnit.ChildNodes).toEqual([]);
+		expect(vm.organizationSelection.BusinessUnit.Id).toEqual("928dd0bc-bf40-412e-b970-9b5e015aadea");
+		expect(vm.organizationSelection.BusinessUnit.Name).toEqual("TeleoptiCCCDemo");
+		expect(vm.organizationSelection.BusinessUnit.Type).toEqual("BusinessUnit");
+		expect(vm.organizationSelection.DynamicOptions[0].RangeOption).toEqual(0);
+		expect(vm.organizationSelection.DynamicOptions[0].Name).toEqual("None");
+	});
+
 	it('should get an application function', function () {
 		fakeBackend.withApplicationFunction({
-			ChildFunctions:[],
-            FunctionCode:'Raptor',
-            FunctionDescription:'xxOpenRaptorApplication',
-            FunctionId:'f19bb790-b000-4deb-97db-9b5e015b2e8c',
-            IsDisabled:false,
-            LocalizedFunctionDescription:'Open Teleopti WFM'
+			ChildFunctions: [],
+			FunctionCode: 'Raptor',
+			FunctionDescription: 'xxOpenRaptorApplication',
+			FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+			IsDisabled: false,
+			LocalizedFunctionDescription: 'Open Teleopti WFM'
 		});
 
 		$httpBackend.flush();
@@ -59,22 +84,22 @@ xdescribe('PermissionsCtrlRefact', function () {
 		expect(vm.applicationFunctions[0].IsDisabled).toEqual(false);
 		expect(vm.applicationFunctions[0].LocalizedFunctionDescription).toEqual('Open Teleopti WFM');
 	});
-	
+
 	it('should get application functions', function () {
 		fakeBackend.withApplicationFunction({
-			ChildFunctions:[],
-            FunctionCode:'Raptor',
-            FunctionDescription:'xxOpenRaptorApplication',
-            FunctionId:'f19bb790-b000-4deb-97db-9b5e015b2e8c',
-            IsDisabled:false,
-            LocalizedFunctionDescription:'Open Teleopti WFM'
+			ChildFunctions: [],
+			FunctionCode: 'Raptor',
+			FunctionDescription: 'xxOpenRaptorApplication',
+			FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+			IsDisabled: false,
+			LocalizedFunctionDescription: 'Open Teleopti WFM'
 		}).withApplicationFunction({
-			ChildFunctions:[],
-            FunctionCode:'Anywhere',
-            FunctionDescription:'xxAnywhere',
-            FunctionId:'7884b7dd-31ea-4e40-b004-c7ce3b5deaf3',
-            IsDisabled:false,
-            LocalizedFunctionDescription:'Open Teleopti TEM'
+			ChildFunctions: [],
+			FunctionCode: 'Anywhere',
+			FunctionDescription: 'xxAnywhere',
+			FunctionId: '7884b7dd-31ea-4e40-b004-c7ce3b5deaf3',
+			IsDisabled: false,
+			LocalizedFunctionDescription: 'Open Teleopti TEM'
 		});
 
 		$httpBackend.flush();
@@ -194,8 +219,8 @@ xdescribe('PermissionsCtrlRefact', function () {
 		vm.editRole('newRoleName', 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64');
 		$httpBackend.flush();
 
-		setTimeout(function(){
-		expect(vm.roles[0].DescriptionText).toBe('newRoleName');
+		setTimeout(function () {
+			expect(vm.roles[0].DescriptionText).toBe('newRoleName');
 		}, 100)
 	});
 
@@ -675,7 +700,7 @@ xdescribe('PermissionsCtrlRefact', function () {
 				Name: "TeleoptiCCCDemo",
 				ChildNodes: [
 					{
-						Id: 'd66f60f5-264c-4277-80eb-9b5e015ab495' 
+						Id: 'd66f60f5-264c-4277-80eb-9b5e015ab495'
 					},
 					{
 						Id: '8c2dfdc5-6f92-4fab-9a39-676b88c26a53'
