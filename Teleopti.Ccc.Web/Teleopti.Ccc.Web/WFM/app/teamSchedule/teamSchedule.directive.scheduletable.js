@@ -53,10 +53,11 @@
 			if (!vm.toggles.RemoveAbsenceEnabled && !vm.toggles.RemoveActivityEnabled)
 				return false;
 
-			var isSameDay = shift.Date === moment(viewDate).format('YYYY-MM-DD');
-
-			if (!isSameDay || currentProjection.IsOvertime || (currentProjection.ParentPersonAbsences == null && currentProjection.ShiftLayerIds == null)) {
+			if(currentProjection.IsOvertime || (currentProjection.ParentPersonAbsences == null && currentProjection.ShiftLayerIds == null)) {
 				return false;
+			}else{
+				var isSameDay = shift.Date === moment(viewDate).format('YYYY-MM-DD');
+				return vm.toggles.ManageScheduleForDistantTimezonesEnabled ? true : isSameDay;
 			}
 
 			return true;
