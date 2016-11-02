@@ -182,15 +182,19 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
 		private static PersonPeriodDto PersonPeriodDoToDto(IPersonPeriod entity)
 		{
-			PersonPeriodDto personPeriodDto = new PersonPeriodDto();
-			personPeriodDto.Period = new DateOnlyPeriodDto
+			PersonPeriodDto personPeriodDto = new PersonPeriodDto
 			{
-				StartDate = new DateOnlyDto { DateTime = entity.Period.StartDate.Date },
-				EndDate = new DateOnlyDto { DateTime = entity.Period.EndDate.Date }
+				Period = new DateOnlyPeriodDto
+				{
+					StartDate = new DateOnlyDto {DateTime = entity.Period.StartDate.Date},
+					EndDate = new DateOnlyDto {DateTime = entity.Period.EndDate.Date}
+				},
+				PersonContract = PersonContractDoToDto(entity.PersonContract),
+				Team = new TeamDto
+				{
+					Id = entity.Team.Id
+				}
 			};
-
-			personPeriodDto.PersonContract = PersonContractDoToDto(entity.PersonContract);
-
 			return personPeriodDto;
 		}
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -40,6 +41,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1));
 			period.SetParent(person);
 			person.AddPersonPeriod(period);
+			person.ChangeTeam(TeamFactory.CreateTeamWithId("team1"), period);
 
 			return person;
 		}
@@ -83,6 +85,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			Assert.AreEqual("aa",personDto.WindowsLogOnName);
 #pragma warning restore 618
 			Assert.AreEqual(((IDeleteTag)person).IsDeleted, personDto.IsDeleted);
+			Assert.AreEqual(person.PersonPeriodCollection.FirstOrDefault().Team.Id.Value, personDto.PersonPeriodCollection.FirstOrDefault().Team.Id.Value);
 		}
 
 		[Test]

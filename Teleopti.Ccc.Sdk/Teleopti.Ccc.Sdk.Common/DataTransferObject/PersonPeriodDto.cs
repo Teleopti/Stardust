@@ -40,11 +40,11 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         [DataMember]
         public PersonContractDto PersonContract { get; set; }
 
-        /// <summary>
-        /// The team for the person period.
-        /// </summary>
-        /// <remarks>This property is not populated when loading data from the SDK. Only used for creation of new person periods!</remarks>
-        [DataMember(IsRequired = false, Order = 1)]
+		/// <summary>
+		/// The team for the person period.
+		/// </summary>
+		/// <remarks>This property is set with only team id when loading data from the SDK. Only used for creation of new person periods!</remarks>
+		[DataMember(IsRequired = false, Order = 1)]
         public TeamDto Team { get; set; }
 
 		/// <summary>
