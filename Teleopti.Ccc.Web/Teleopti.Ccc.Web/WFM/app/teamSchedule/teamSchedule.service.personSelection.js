@@ -9,13 +9,13 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			svc.personInfo = {};
 		};
 
-		svc.updatePersonSelection = function (personSchedule, shiftLayerIds) {
+		svc.updatePersonSelection = function (personSchedule, shiftLayerIds, enbleAllProjectionSelection) {
 			if (personSchedule.IsSelected) {
 				var absences = [], activities = [];
 				var shiftsForCurrentDate = personSchedule.Shifts.filter(function (shift) {
 					return personSchedule.Date === shift.Date;
 				});
-				if (shiftsForCurrentDate.length > 0) {
+				if (enbleAllProjectionSelection || shiftsForCurrentDate.length > 0) {
 					var projectionsForCurrentDate = shiftsForCurrentDate[0].Projections;
 					angular.forEach(projectionsForCurrentDate, function (projection) {
 						if (projection.ParentPersonAbsences && projection.ParentPersonAbsences.length > 0) {
@@ -115,9 +115,9 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			});
 		};
 
-		svc.toggleAllPersonProjections = function (personSchedule, viewDate) {
+		svc.toggleAllPersonProjections = function (personSchedule, viewDate, enbleAllProjectionSelection) {
 			angular.forEach(personSchedule.Shifts, function (shift) {
-				if (shift.Date === moment(viewDate).format("YYYY-MM-DD")) {
+				if (enbleAllProjectionSelection || shift.Date === moment(viewDate).format("YYYY-MM-DD")) {
 					angular.forEach(shift.Projections, function (projection) {
 						if (projection.ParentPersonAbsences || (!projection.IsOvertime && projection.ShiftLayerIds)) {
 							projection.Selected = personSchedule.IsSelected;
@@ -127,12 +127,12 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			});
 		};
 
-		svc.updatePersonProjectionSelection = function (currentProjection, personSchedule) {
+		svc.updatePersonProjectionSelection = function (currentProjection, personSchedule, enbleAllProjectionSelection) {
 			var selected = currentProjection.Selected;
 			var personId = personSchedule.PersonId;
 
 			angular.forEach(personSchedule.Shifts, function (shift) {
-				if (shift.Date === personSchedule.Date) {
+				if(enbleAllProjectionSelection || shift.Date === personSchedule.Date) {
 					angular.forEach(shift.Projections, function (projection) {
 						var sameActivity = currentProjection.ShiftLayerIds && angular.equals(projection.ShiftLayerIds, currentProjection.ShiftLayerIds);
 						var sameAbsence = currentProjection.ParentPersonAbsences && angular.equals(currentProjection.ParentPersonAbsences, projection.ParentPersonAbsences);

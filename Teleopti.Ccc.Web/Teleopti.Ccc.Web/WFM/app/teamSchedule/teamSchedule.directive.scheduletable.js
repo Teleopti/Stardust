@@ -23,6 +23,7 @@
 
 	function scheduleTableController($scope, toggleSvc, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt) {
 		var vm = this;
+
 		vm.updateAllSelectionInCurrentPage = function (isAllSelected) {
 			vm.scheduleVm.Schedules.forEach(function (personSchedule) {
 				personSchedule.IsSelected = isAllSelected;
@@ -45,8 +46,8 @@
 		};
 
 		vm.updatePersonSelection = function (personSchedule) {
-			personSelectionSvc.updatePersonSelection(personSchedule);
-			personSelectionSvc.toggleAllPersonProjections(personSchedule, vm.selectedDate);
+			personSelectionSvc.updatePersonSelection(personSchedule, vm.enbleAllProjectionSelection);
+			personSelectionSvc.toggleAllPersonProjections(personSchedule, vm.selectedDate, vm.enbleAllProjectionSelection);
 		};
 
 		vm.canToggleSelection = function (currentProjection, shift, viewDate) {
@@ -66,7 +67,7 @@
 		vm.ToggleProjectionSelection = function (currentProjection, personSchedule, shift, viewDate) {
 			if (!vm.canToggleSelection(currentProjection, shift, viewDate)) return;
 			currentProjection.ToggleSelection();
-			personSelectionSvc.updatePersonProjectionSelection(currentProjection, personSchedule);
+			personSelectionSvc.updatePersonProjectionSelection(currentProjection, personSchedule, vm.enbleAllProjectionSelection);
 		};
 
 		vm.togglePerson = function (personSchedule, $event) {
@@ -201,6 +202,8 @@
 				ViewScheduleOnTimezoneEnabled: toggleSvc.WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925,
 				ManageScheduleForDistantTimezonesEnabled: toggleSvc.WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305
 			};
+
+			vm.enbleAllProjectionSelection = vm.toggles.ManageScheduleForDistantTimezonesEnabled;
 		};
 
 		vm.init();
