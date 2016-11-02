@@ -28,6 +28,29 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public MaxSeatOptimization Target;
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
 
+		[TestCase(MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)]
+		[TestCase(MaxSeatsFeatureOptions.ConsiderMaxSeats)]
+		public void HappyPath(MaxSeatsFeatureOptions maxSeatsFeatureOptions)
+		{
+			var site = new Site("_") { MaxSeats = 1 }.WithId();
+			var team = new Team { Description = new Description("_"), Site = site };
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var dateOnly = new DateOnly(2016, 10, 25);
+			var scenario = new Scenario("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
+			var agentDataOneHour = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(16, 0, 17, 0));
+			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(9, 0, 17, 0));
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData.Assignment, agentDataOneHour.Assignment });
+			var optPreferences = CreateOptimizationPreferences();
+			optPreferences.Advanced.UserOptionMaxSeatsFeature = maxSeatsFeatureOptions;
+
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, optPreferences, 15);
+
+			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay
+				.Should().Be.EqualTo(TimeSpan.FromHours(8));
+		}
+
 		[Test]
 		public void ShouldConsiderShiftCategoryLimitations()
 		{
@@ -502,7 +525,30 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.EqualTo(TimeSpan.FromHours(9));
 		}
 
-		[Test, Ignore("40939")]
+
+		[TestCase(MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, ExpectedResult = false)]
+		[TestCase(MaxSeatsFeatureOptions.ConsiderMaxSeats, ExpectedResult = true)]
+		public bool ShouldNotBreakMaxSeat(MaxSeatsFeatureOptions maxSeatsFeatureOptions)
+		{
+			var site = new Site("_") { MaxSeats = 1 }.WithId();
+			var team = new Team { Description = new Description("_"), Site = site };
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var dateOnly = new DateOnly(2016, 10, 25);
+			var scenario = new Scenario("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
+			var agentScheduledForAnHourData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, new Team { Site = site }, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 9, 0));
+			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData.Assignment, agentScheduledForAnHourData.Assignment });
+			var optPreferences = CreateOptimizationPreferences();
+			optPreferences.Advanced.UserOptionMaxSeatsFeature = maxSeatsFeatureOptions;
+
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, optPreferences, 15);
+
+			return schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment(true).ShiftLayers.Any();
+		}
+
+		[Test, Ignore("Have a discussion with Anders - what to remove stuff")]
 		public void ShouldNotMoveMoreSchedulesThanNecessary()
 		{
 			var site = new Site("_") { MaxSeats = 2 }.WithId();

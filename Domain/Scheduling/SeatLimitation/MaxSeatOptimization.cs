@@ -102,7 +102,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 								!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) ||
 								_maxSeatPeak.Fetch(datePoint, maxSeatData, skillDaysForTeamBlockInfo) > maxPeakBefore)
 						{
-							rollbackService.RollbackMinimumChecks();
+								rollbackService.RollbackMinimumChecks();
+						}
+
+						if (_maxSeatPeak.Fetch(datePoint, maxSeatData, skillDaysForTeamBlockInfo) > 0 &&
+							optimizationPreferences.Advanced.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)
+						{
+							_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules);
 						}
 					}
 				}
