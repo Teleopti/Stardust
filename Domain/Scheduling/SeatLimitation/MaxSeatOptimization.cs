@@ -76,17 +76,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			_teamInfoFactoryFactory.Create(allAgents, schedules, optimizationPreferences.Extra.TeamGroupPage);
 			var teamBlockInfos = _teamBlockGenerator.Generate(allAgents, allMatrixes, period, agentsToOptimize, schedulingOptions);
-			var allMaxSeatSkillDays = maxSeatData.AllMaxSeatSkillDaysPerSkill();
 
 			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills()))
 			{
 				foreach (var teamBlockInfo in teamBlockInfos)
 				{
 					var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= period.StartDate); //what is this?
-					var maxPeakBefore = _maxSeatPeak.Fetch(datePoint, maxSeatData, teamBlockInfo, allMaxSeatSkillDays);
+					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint); //This won't work if not hiearchy
+					var maxPeakBefore = _maxSeatPeak.Fetch(datePoint, maxSeatData, skillDaysForTeamBlockInfo);
 					if (maxPeakBefore > 0.01)
 					{
-						var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint); //This won't work if not hiearchy
 						var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules); //TODO: fix - don't remove everyone if not needed
 						if (!_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat,
@@ -101,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 													businessRules) ||
 								!_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences) ||
 								!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) ||
-								_maxSeatPeak.Fetch(datePoint, maxSeatData, teamBlockInfo, allMaxSeatSkillDays) > maxPeakBefore)
+								_maxSeatPeak.Fetch(datePoint, maxSeatData, skillDaysForTeamBlockInfo) > maxPeakBefore)
 						{
 							rollbackService.RollbackMinimumChecks();
 						}
