@@ -34,6 +34,7 @@
 		MyTimeWeb_PreferenceForMobile_40265,
 		MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747,
 		MyTimeWeb_ShowContractTime_41462,
+		MyTimeWeb_SortRequestList_40711,
 
 		Backlog_Module_23980,
 
