@@ -79,7 +79,7 @@
 		}
 
 		function fetchData() {
-			return $http.get("/Hangfire/Statistics", tokenHeaderService.getHeaders())
+			return $http.get("./Hangfire/Statistics", tokenHeaderService.getHeaders())
 				.then(function (data) {
 					if (chartLabels.length >= maxPoints)
 						chartLabels.shift();
@@ -99,7 +99,7 @@
 
 		function getTypesOfEvents() {
 			vm.isFetching = true;
-			return $http.get("/Hangfire/TypesOfEvents", tokenHeaderService.getHeaders())
+			return $http.get("./Hangfire/TypesOfEvents", tokenHeaderService.getHeaders())
 				.then(function (data) {
 					vm.eventCount = data.data.sort(byCount);
 					vm.isFetching = false;
