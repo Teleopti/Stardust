@@ -23,7 +23,7 @@
 		vm.save = save;
 		vm.toggledOptimization = checkToggles();
 		vm.addPrioritizeSkillAbove = addPrioritizeSkillAbove;
-		vm.addPrioritizeSkillBellow = addPrioritizeSkillBellow;
+		vm.addPrioritizeSkillBelow = addPrioritizeSkillBelow;
 		vm.ismodified = false;
 		/////////////////////////////////Wfm_SkillPriorityRoutingGUI_39885
 		function checkToggles() {
@@ -44,6 +44,8 @@
 			if (nameA > nameB) {
 				return 1;
 			}
+
+			return 0;
 		}
 
 		function selectActivity(activity) {
@@ -54,7 +56,6 @@
 			vm.activitySkills = allActivitySkills.filter(lacksPriority);
 			vm.activitySkills.sort(sortBySkillName);
 			console.log(vm.prioritizedSkills)
-
 		}
 
 		function selectActivityPreCheck(activity) {
@@ -68,25 +69,25 @@
 		}
 
 		function unflattendDataFromServer(data) {
-			var nonFlatData = [];
+			var skills = [];
 			data.sort(sortBySkillName);
-			data.forEach(function (skill) {
-				skill.sibling = []
-				if (nonFlatData.some(function (e) {
-					return e.Priority == skill.Priority
-				})) {
-					var parent = nonFlatData.find(function (e) {
-						return e.Priority == skill.Priority
-					})
-					skill.hasParent = true;
-					parent.sibling.push(skill);
+			data.forEach(function(item) {
+				var existing = skills.find(function(skill) {
+					return item.Priority === skill.priority;
+				});
+				if (existing != null) {
+					existing.skills.push(item);
 				} else {
-					nonFlatData.push(skill);
+					skills.push({
+						priority: item.Priority,
+						skills: [item]
+					});
 				}
-
-			})
-			return nonFlatData;
+			});
+			console.log(skills);
+			return skills;
 		}
+
 
 		function belongsToActivity(value) {
 			return value.ActivityGuid === vm.selectedActivity.ActivityGuid;
@@ -104,55 +105,55 @@
 		}
 
 		function skillPreChecks(skill, priority) {
-			if (!skill.Priority) {
-				skill.Priority = priority
-			} else {
-				priority = skill.Priority;
-			};
-			if (!skill.sibling) {
-				skill.sibling = []
-			};
-			if (isDuplicatePriority(skill, priority)) {
-				skill.hasParent = true;
-			} else {
-				skill.hasParent = false;
+			if (skill.Priority == null) {
+				skill.Priority = priority;
 			}
-			return skill
+			return skill;
 		}
 
 		function isDuplicatePriority(skill, priority) {
 			if (!priority) return;
-			var isDuplicate;
-			vm.prioritizedSkills.forEach(function (item) {
-				if (skill !== item && item.Priority === priority) {
-					isDuplicate = true;
-				}
-			})
-			return isDuplicate;
+			return vm.prioritizedSkills.some(function(item) {
+				return item.skills.indexOf(skill) === -1 && item.priority === priority;
+			});
+		}
+
+		function findParentItem(skill) {
+			return vm.prioritizedSkills.find(function(item) {
+				return item.priority === skill.Priority;
+			});
 		}
 
 		function findSkill(element) {
 			return this !== element && element.Priority === this.Priority
 		}
 
+		function flatMap(arr, lambda) {
+			return Array.prototype.concat.apply([], arr.map(lambda));
+		}
+
 		function findDuplicateSkill(skill) {
-			return vm.prioritizedSkills.find(findSkill, skill);
+			var prioritizedSkills = flatMap(vm.prioritizedSkills, function(item) {
+				return item.skills;
+			});
+			return prioritizedSkills.find(findSkill, skill);
 		}
 
 		function prioritizeSkill(skill, priority) {
 			if (!skill) return;
 
 			skillPreChecks(skill, priority);
-			if (skill.hasParent) {
-				var parentSkill = findDuplicateSkill(skill);
-				parentSkill.sibling.push(skill);
+			var parent = findParentItem(skill);
+			if (parent != null) {
+				parent.skills.push(skill);
 			} else {
-				var exists = vm.prioritizedSkills.some(function (item) {
-					return item.SkillGuid === skill.SkillGuid;
-				})
-				if (!exists) {
-					vm.prioritizedSkills.push(skill);
-				}
+				vm.prioritizedSkills.push({
+					priority: skill.Priority,
+					skills: [skill],
+					showAutoCompleteBottom: false,
+					showAutoCompleteMiddle: false,
+					showAutoCompleteTop: false
+				});
 			}
 			removeFromActivitySkills(skill)
 		}
@@ -162,85 +163,62 @@
 
 			var newPriority = priority + 1;
 
-			vm.prioritizedSkills.forEach(function (element) {
-				if (element.Priority > priority) {
-					console.log('element', element, 'prio', priority)
-					element.Priority++;
-					if (element.sibling.length > 0) {
-						console.log(element);
-						element.sibling.forEach(function (e) {
-							e.Priority++;
-						})
-					}
+			vm.prioritizedSkills.forEach(function(item) {
+				if (item.priority > priority) {
+					item.priority += 1;
+					item.skills.forEach(function(skill) {
+						skill.Priority += 1;
+					});
 				}
-			})
+			});
 			prioritizeSkill(skill, newPriority);
 		}
 
-		function addPrioritizeSkillBellow(skill, priority) {
+		function addPrioritizeSkillBelow(skill, priority) {
 			if (!skill) return;
 
-			vm.prioritizedSkills.forEach(function (element) {
-				if (element.Priority >= priority) {
-					console.log('element', element, 'prio', priority)
-					element.Priority++;
-					if (element.sibling.length > 0) {
-						console.log(element);
-						element.sibling.forEach(function (e) {
-							e.Priority++;
-						})
-					}
+			vm.prioritizedSkills.forEach(function(item) {
+				if (item.priority >= priority) {
+					item.priority += 1;
+
+					item.skills.forEach(function(skill) {
+						skill.Priority += 1;
+					});
 				}
-			})
+			});
 			prioritizeSkill(skill, priority);
 		}
 
 
 		function removeSkill(arr, skill) {
 			var found = arr.findIndex(function (item) {
-				vm.ismodified = true;
-
 				return item.SkillGuid === skill.SkillGuid;
 			});
-			if (found !== -1)
+			vm.ismodified = true;
+			if (found !== -1) {
 				arr.splice(found, 1);
+			}
 		};
 
 
 		function sanitizeSkill(skill) {
-			skill.hasParent = false;
 			skill.Priority = null;
-			skill.sibling = [];
-			skill.showAutoCompleteBottom = false;
-			skill.showAutoCompleteMiddle = false;
-			skill.showAutoCompleteTop = false;
 			return skill;
 		}
 
-
-
 		function removeFromPrioritized(skill) {
-			var skillRepository = [];
-			if (skill.hasParent) {
-				var parentSkill = findDuplicateSkill(skill);
-				parentSkill.sibling = parentSkill.sibling.filter(function (sib) {
+			var parent = findParentItem(skill);
+			if (parent != null) {
+				vm.ismodified = true;
+				parent.skills = parent.skills.filter(function(sib) {
 					return sib.SkillGuid != skill.SkillGuid;
 				});
-				//prioritizeSkill(parentSkill, skill.Priority)
-				skillRepository.push(parentSkill);
+				if (parent.skills.length === 0) {
+					vm.prioritizedSkills.splice(vm.prioritizedSkills.indexOf(parent), 1);
+				}
 			}
-			if (skill.sibling.length > 0) {
-				skill.sibling.forEach(function (sib) {
-					// prioritizeSkill(sib, skill.Priority);
-					skillRepository.push(sib);
-				})
-			}
-			var sanatizedSkill = sanitizeSkill(skill);
-			addToActivitySkills(sanatizedSkill)
-			removeSkill(vm.prioritizedSkills, sanatizedSkill)
-			skillRepository.forEach(function (remainingSkill) {
-				prioritizeSkill(remainingSkill);
-			})
+			var sanitizedSkill = sanitizeSkill(skill);
+			addToActivitySkills(sanitizedSkill);
 		}
 
 		function removeFromActivitySkills(skill) {
@@ -273,23 +251,14 @@
 			}
 		}
 
-		function flattenArr(arr) {
-			var flatArr = [];
-			arr.forEach(function (skill) {
-				if (skill.sibling.length > 0) {
-					skill.sibling.forEach(function (subskill) {
-						flatArr.push(subskill);
-					})
-				}
-				skill.sibling = [];
-				flatArr.push(skill)
-
-			})
-			return flatArr
-		};
+		function flattenPrioritized() {
+			return flatMap(vm.prioritizedSkills, function(item) {
+				return item.skills;
+			});
+		}
 
 		function save() {
-			var flatSkills = flattenArr(vm.prioritizedSkills)
+			var flatSkills = flattenPrioritized();
 			var allData = flatSkills.concat(vm.activitySkills);
 
 			var query = skillPrioAggregator.saveSkills().save(allData);
@@ -302,12 +271,7 @@
 		};
 
 		function noPrioritiedSkills() {
-			if (vm.prioritizedSkills.length > 0) {
-				return false;
-			} else {
-				return true;
-			}
+			return vm.prioritizedSkills.length <= 0;
 		}
-
 	}
 })();
