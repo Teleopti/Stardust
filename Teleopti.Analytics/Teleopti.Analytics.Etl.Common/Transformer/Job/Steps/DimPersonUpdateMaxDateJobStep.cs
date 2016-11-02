@@ -43,10 +43,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 					var sqlCommand = conn.CreateCommand();
 					sqlCommand.Transaction = sqlTransaction;
 					sqlCommand.CommandText = sqlUpdate;
-					sqlCommand.Parameters.AddWithValue("ValidToDateIdLocal",
-						_jobParameters.Helper.Repository.GetValidToDateIdLocalForEternity());
-					sqlCommand.Parameters.AddWithValue("ValidToDateIdMaxDate",
-						_jobParameters.Helper.Repository.GetValidToDateIdMaxDateForEternity());
+					sqlCommand.Parameters.AddWithValue("ValidToDateIdLocal", _jobParameters.Helper.Repository.GetValidToDateIdLocalForEternity());
+					sqlCommand.Parameters.AddWithValue("ValidToDateIdMaxDate", _jobParameters.Helper.Repository.GetValidToDateIdMaxDateForEternity());
 					sqlCommand.CommandType = CommandType.Text;
 					affectedRows = sqlCommand.ExecuteNonQuery();
 					sqlTransaction.Commit();

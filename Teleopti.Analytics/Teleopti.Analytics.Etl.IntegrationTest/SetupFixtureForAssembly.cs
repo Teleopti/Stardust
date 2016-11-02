@@ -42,16 +42,15 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			DataSourceHelper.BackupApplicationDatabase(123);
 		}
 
-		private static void DisposeUnitOfWork()
+		private static void disposeUnitOfWork()
 		{
 			TestState.UnitOfWork.Dispose();
 			TestState.UnitOfWork = null;
 		}
 
-		private static void OpenUnitOfWork()
+		private static void openUnitOfWork()
 		{
 			TestState.UnitOfWork = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork();
-
 		}
 
 		public static void BeginTest()
@@ -59,14 +58,14 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			DataSourceHelper.RestoreApplicationDatabase(123);
 			DataSourceHelper.ClearAnalyticsData();
 
-			OpenUnitOfWork();
+			openUnitOfWork();
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
 			TestState.TestDataFactory = new TestDataFactory(new ThisUnitOfWork(TestState.UnitOfWork), tenantUnitOfWorkManager, tenantUnitOfWorkManager);
 		}
 
 		public static void EndTest()
 		{
-			DisposeUnitOfWork();
+			disposeUnitOfWork();
 		}
 	}
 }

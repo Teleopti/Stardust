@@ -10,7 +10,6 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
-using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -18,34 +17,31 @@ using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Web;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
-	[TestFixture]
-	public class DimDayOffTests
+	[InfrastructureTest]
+	public class DimDayOffTests : ISetup
 	{
 		private JobParameters jobParameters;
-		private const string datasourceName = "Teleopti CCC Agg: Default log object";
-		private IUnitOfWork uow;
-		private CurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork;
 		private ExistingDatasources _datasource;
-		private readonly IAnalyticsDayOffRepository _analyticsDayOffRepository = new AnalyticsDayOffRepository(CurrentAnalyticsUnitOfWork.Make());
+		public IAnalyticsDayOffRepository AnalyticsDayOffRepository;
+		public IDayOffTemplateRepository DayOffRepository;
 
-		private readonly IDayOffTemplateRepository _dayOffRepository = new DayOffTemplateRepository(CurrentUnitOfWork.Make());
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+		}
 
 		[SetUp]
 		public void Setup()
 		{
 			SetupFixtureForAssembly.BeginTest();
-
-			ensureUnitOfWorks();
 
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			var dates = new CurrentWeekDates();
@@ -59,6 +55,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			analyticsDataFactory.Persist();
 
 			const string timeZoneId = "W. Europe Standard Time";
+			const string datasourceName = "Teleopti CCC Agg: Default log object";
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
 
 			var raptorRepository = new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, null, null);
@@ -74,16 +71,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
-
 			var dataSource = SetupFixtureForAssembly.DataSource;
 			jobParameters.Helper.SelectDataSourceContainer(dataSource.DataSourceName);
-		}
-
-		private void ensureUnitOfWorks()
-		{
-			var currentAnalyticsUnitOfWorkFactory = CurrentAnalyticsUnitOfWorkFactory.Make();
-			uow = currentAnalyticsUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
-			currentAnalyticsUnitOfWork = new CurrentAnalyticsUnitOfWork(currentAnalyticsUnitOfWorkFactory);
 		}
 
 		[TearDown]
@@ -109,10 +98,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var step = new DimDayOffJobStep(jobParameters);
 			var result = step.Run(new List<IJobStep>(), TestState.BusinessUnit, null, false);
 			result.HasError.Should().Be.False();
-			
-			using (var auow = SetupFixtureForAssembly.DataSource.Analytics.CreateAndOpenUnitOfWork())
+
+			using (SetupFixtureForAssembly.DataSource.Analytics.CreateAndOpenUnitOfWork())
 			{
-				var analyticsDayOffs = _analyticsDayOffRepository.DayOffs();
+				var analyticsDayOffs = AnalyticsDayOffRepository.DayOffs();
 				analyticsDayOffs.Count.Should().Be.EqualTo(2);
 				var analyticsDayOff = analyticsDayOffs.First(a => a.DayOffName == dayOff1.Name);
 				analyticsDayOff.BusinessUnitId.Should().Be.EqualTo(0);
@@ -130,9 +119,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var result = step.Run(new List<IJobStep>(), TestState.BusinessUnit, null, false);
 			result.HasError.Should().Be.False();
 
-			using (var auow = SetupFixtureForAssembly.DataSource.Analytics.CreateAndOpenUnitOfWork())
+			using (SetupFixtureForAssembly.DataSource.Analytics.CreateAndOpenUnitOfWork())
 			{
-				var analyticsDayOffs = _analyticsDayOffRepository.DayOffs();
+				var analyticsDayOffs = AnalyticsDayOffRepository.DayOffs();
 				analyticsDayOffs.Count.Should().Be.EqualTo(1);
 				var notDefinedRow = analyticsDayOffs.First(a => a.DayOffId == -1);
 				notDefinedRow.DayOffCode.Should().Be.EqualTo(Guid.Empty);
@@ -154,11 +143,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				ShortName = "DO"
 			};
 			Guid id;
-			using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
+			using (SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				Data.Apply(dayOff1);
 
-				id = _dayOffRepository.FindAllDayOffsSortByDescription().First().Id.GetValueOrDefault();
+				id = DayOffRepository.FindAllDayOffsSortByDescription().First().Id.GetValueOrDefault();
 
 				var analyticsDataFactory = new AnalyticsDataFactory();
 				analyticsDataFactory.Setup(new BusinessUnit(TestState.BusinessUnit, _datasource));
@@ -170,9 +159,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				result.HasError.Should().Be.False();
 			}
 
-			using (var auow = SetupFixtureForAssembly.DataSource.Analytics.CreateAndOpenUnitOfWork())
+			using (SetupFixtureForAssembly.DataSource.Analytics.CreateAndOpenUnitOfWork())
 			{
-				var analyticsDayOffs = _analyticsDayOffRepository.DayOffs();
+				var analyticsDayOffs = AnalyticsDayOffRepository.DayOffs();
 				analyticsDayOffs.Count.Should().Be.EqualTo(2);
 				var analyticsDayOff = analyticsDayOffs.First(a => a.DayOffCode == id);
 				analyticsDayOff.BusinessUnitId.Should().Be.EqualTo(0);
@@ -200,14 +189,12 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				ShortName = "DO"
 			};
 			Data.Apply(dayOff1);
-
-			ensureUnitOfWorks();
 			var result2 = step.Run(new List<IJobStep>(), TestState.BusinessUnit, null, false);
 			result2.HasError.Should().Be.False();
 
-			using (var auow = SetupFixtureForAssembly.DataSource.Analytics.CreateAndOpenUnitOfWork())
+			using (SetupFixtureForAssembly.DataSource.Analytics.CreateAndOpenUnitOfWork())
 			{
-				var analyticsDayOffs = _analyticsDayOffRepository.DayOffs();
+				var analyticsDayOffs = AnalyticsDayOffRepository.DayOffs();
 				analyticsDayOffs.Count.Should().Be.EqualTo(2);
 				var notDefinedRow = analyticsDayOffs.First(a => a.DayOffId == -1);
 				notDefinedRow.DayOffCode.Should().Be.EqualTo(Guid.Empty);

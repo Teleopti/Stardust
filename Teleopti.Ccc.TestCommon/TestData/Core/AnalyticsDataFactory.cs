@@ -3,14 +3,16 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Threading;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Core
 {
 	public class AnalyticsDataFactory
 	{
+		public ICurrentAnalyticsUnitOfWork CurrentAnalyticsUnitOfWork;
 		private readonly IList<IAnalyticsDataSetup> _analyticsSetups = new List<IAnalyticsDataSetup>();
 		private static readonly CultureInfo swedishCulture = CultureInfo.GetCultureInfo("sv-SE");
-
+		
 		public void Apply(IAnalyticsDataSetup analyticsDataSetup)
 		{
 			using (var connection = new SqlConnection(InfraTestConfigReader.AnalyticsConnectionString))
