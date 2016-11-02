@@ -10,14 +10,14 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
-	public class GetPersonByEmploymentNumbersQueryHandler :
+	public class GetPersonsByEmploymentNumbersQueryHandler :
 		IHandleQuery<GetPersonsByEmploymentNumbersQueryDto, ICollection<PersonDto>>
 	{
 		private readonly IAssembler<IPerson, PersonDto> _assembler;
 		private readonly IPersonRepository _personRepository;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-		public GetPersonByEmploymentNumbersQueryHandler(IAssembler<IPerson, PersonDto> assembler, IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
+		public GetPersonsByEmploymentNumbersQueryHandler(IAssembler<IPerson, PersonDto> assembler, IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_assembler = assembler;
 			_personRepository = personRepository;
