@@ -465,7 +465,7 @@
 						});
 						$scope.openedMaxNumberOfAgents = ($scope.filteredData.length === $scope.maxNumberOfAgents);
 						if (!$scope.notifySwitchDisabled && $scope.agents.length > $scope.maxNumberOfAgents) {
-							NoticeService.warning($translate.instant('Viewing agents out of alarm is not possible due to high number of agents. The switch is enabled for maximum ' + $scope.maxNumberOfAgents + ' agents'), null, true);
+							NoticeService.warning($translate.instant('It is possible to view maximum ' + $scope.maxNumberOfAgents + ' agents. The "In alarm" switch is enabled if the number of agents does not exceed ' + $scope.maxNumberOfAgents + '.'), null, true);
 							$scope.notifySwitchDisabled = true;
 						}
 
