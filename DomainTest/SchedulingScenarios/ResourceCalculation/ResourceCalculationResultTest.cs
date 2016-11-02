@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var ass = new PersonAssignment(agent, scenario, date);
 			ass.AddActivity(activity, new TimePeriod(9, 0, 17, 0));
 			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, Enumerable.Empty<ISkillDay>());
-			InitMaxSeatForStateHolder.Execute();
+			InitMaxSeatForStateHolder.Execute(15);
 
 			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 
@@ -131,6 +131,31 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.SkillStaffPeriodCollection.Single(x => x.Period.StartDateTime.TimeOfDay == TimeSpan.FromHours(9))
 				.Payload.CalculatedUsedSeats
 				.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldBeAbleToSetIntervalLengthOnMaxSeatSkill()
+		{
+			const int intervalLength = 10;
+			var scenario = new Scenario("_");
+			var date = DateOnly.Today;
+			var activity = new Activity("_") { RequiresSeat = true };
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			var siteWithMaxSeats = new Site("_") { MaxSeats = 10 }.WithId();
+			agent.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = siteWithMaxSeats }), Enumerable.Empty<ISkill>());
+			var ass = new PersonAssignment(agent, scenario, date);
+			ass.AddActivity(activity, new TimePeriod(9, 0, 17, 0));
+			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, Enumerable.Empty<ISkillDay>());
+			InitMaxSeatForStateHolder.Execute(intervalLength);
+
+			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+
+			SchedulerStateHolder()
+				.SchedulingResultState.SkillDays.Single()
+				.Value.Single(x => x.CurrentDate == date)
+				.SkillStaffPeriodCollection.Single(x => x.Period.StartDateTime.TimeOfDay == TimeSpan.FromHours(9))
+				.Period.EndDateTime.TimeOfDay
+				.Minutes.Should().Be.EqualTo(intervalLength);
 		}
 
 		public void Configure(FakeToggleManager toggleManager)

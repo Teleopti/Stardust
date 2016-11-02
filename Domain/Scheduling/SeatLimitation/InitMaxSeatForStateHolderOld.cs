@@ -16,12 +16,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_maxSeatSkillCreator = maxSeatSkillCreator;
 		}
 
-		public void Execute()
+		public void Execute(int intervalLength)
 		{
 			var stateHolder = _stateHolder();
 			var result = _maxSeatSkillCreator.CreateMaxSeatSkills(stateHolder.RequestedPeriod.DateOnlyPeriod,
 				stateHolder.RequestedScenario,
-				stateHolder.SchedulingResultState.PersonsInOrganization.ToList(), stateHolder.SchedulingResultState.Skills);
+				stateHolder.SchedulingResultState.PersonsInOrganization.ToList(), stateHolder.SchedulingResultState.Skills, intervalLength);
 			result.SkillsToAddToStateholder.ForEach(s => stateHolder.SchedulingResultState.AddSkills(s));
 			result.SkillDaysToAddToStateholder.ForEach(kvp => stateHolder.SchedulingResultState.SkillDays.Add(kvp));
 		}

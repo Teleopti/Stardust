@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			var skillOn15 = SkillFactory.CreateSkill("skill15",
 				new SkillTypePhone(new Description("Phone"), ForecastSource.InboundTelephony), 15);
 			var result = Target.CreateMaxSeatSkills(new DateOnlyPeriod(2016, 3, 3, 2016, 3, 3), new Scenario("hej"),
-				new List<IPerson> { personOnSite }, new List<ISkill> { skillOn15 });
+				new List<IPerson> { personOnSite }, new List<ISkill> { skillOn15 }, 15);
 
 			var skillToAdd = result.SkillsToAddToStateholder.First();
 			skillToAdd.Name.Should().Be.EqualTo(site.Description.Name);
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			var skillOn30 = SkillFactory.CreateSkill("skill30",
 				new SkillTypePhone(new Description("Phone"), ForecastSource.InboundTelephony), 30);
 			var result = Target.CreateMaxSeatSkills(new DateOnlyPeriod(2016, 3, 3, 2016, 3, 3), new Scenario("hej"),
-				new List<IPerson> {personOnSite}, new List<ISkill> {skillOn15, skillOn30});
+				new List<IPerson> {personOnSite}, new List<ISkill> {skillOn15, skillOn30}, 15);
 			var skillToAdd = result.SkillsToAddToStateholder.First();
 			skillToAdd.DefaultResolution.Should().Be.EqualTo(15);
 		}
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			var skillOn30 = SkillFactory.CreateSkill("skill30",
 				new SkillTypePhone(new Description("Phone"), ForecastSource.InboundTelephony), 30);
 			var result = Target.CreateMaxSeatSkills(new DateOnlyPeriod(2016, 3, 3, 2016, 3, 3), new Scenario("hej"),
-				new List<IPerson> { personOnSite }, new List<ISkill> { skillOn30 });
+				new List<IPerson> { personOnSite }, new List<ISkill> { skillOn30 }, 30);
 			var skillToAdd = result.SkillsToAddToStateholder.First();
 			skillToAdd.DefaultResolution.Should().Be.EqualTo(30);
 		}
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			var site = personOnSite.Period(new DateOnly(2016, 3, 3)).Team.Site;
 			site.MaxSeats = 100;
 			var result = Target.CreateMaxSeatSkills(new DateOnlyPeriod(2016, 3, 3, 2016, 3, 3), new Scenario("hej"),
-				new List<IPerson> { personOnSite }, new List<ISkill> ());
+				new List<IPerson> { personOnSite }, new List<ISkill> (), 15);
 			var skillToAdd = result.SkillsToAddToStateholder.First();
 			skillToAdd.DefaultResolution.Should().Be.EqualTo(15);
 		}
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			var site = personOnSite.Period(new DateOnly(2016, 3, 3)).Team.Site;
 			site.MaxSeats = 100;
 			var result = Target.CreateMaxSeatSkills(new DateOnlyPeriod(2016, 3, 3, 2016, 3, 3), new Scenario("hej"),
-				new List<IPerson> (), new List<ISkill>());
+				new List<IPerson> (), new List<ISkill>(), 15);
 			result.SkillsToAddToStateholder.Should().Be.Empty();
 		}
 	}

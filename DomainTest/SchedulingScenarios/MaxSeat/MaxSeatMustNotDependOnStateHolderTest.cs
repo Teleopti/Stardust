@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 			Assert.DoesNotThrow(() =>
 			{
-				Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, scenario, optPreferences);
+				Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, scenario, optPreferences, 15);
 			});
 		}
 
