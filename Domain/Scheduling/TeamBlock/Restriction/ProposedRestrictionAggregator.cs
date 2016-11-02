@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 				return _teamRestrictionAggregator.Aggregate(schedules, dateOnly, teamBlockInfo, schedulingOptions, roleModel);
 
 			if (_teamBlockSchedulingOptions.IsBlockScheduling(schedulingOptions))
-				return _blockRestrictionAggregator.Aggregate(schedules, person, teamBlockInfo, schedulingOptions, roleModel);
+				return _blockRestrictionAggregator.Aggregate(schedules, person, teamBlockInfo, schedulingOptions, roleModel, dateOnly);
 
 			if (_teamBlockSchedulingOptions.IsTeamBlockScheduling(schedulingOptions))
 				return _teamBlockRestrictionAggregator.Aggregate(schedules, dateOnly, person, teamBlockInfo, schedulingOptions, roleModel);

@@ -19,11 +19,5 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value>The index.</value>
         int Index { get; }
-
-        /// <summary>
-        /// Significants the restriction.
-        /// </summary>
-        /// <returns></returns>
-        IRotationRestriction SignificantRestriction();
     }
 }

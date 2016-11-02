@@ -33,10 +33,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
                 return -1;
             }
         }
-
-        public virtual IRotationRestriction SignificantRestriction()
-        {
-            return _restrictionCollection[0];
-        }
     }
 }

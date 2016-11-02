@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -9,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 {
 	public interface IBlockRestrictionAggregator
 	{
-		IEffectiveRestriction Aggregate(IScheduleDictionary schedules, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache roleModel);
+		IEffectiveRestriction Aggregate(IScheduleDictionary schedules, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache roleModel, DateOnly dateOnly);
 	}
 	public class BlockRestrictionAggregator : IBlockRestrictionAggregator
 	{
@@ -29,13 +28,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 		}
 
-		public IEffectiveRestriction Aggregate(IScheduleDictionary schedules, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache roleModel)
+		public IEffectiveRestriction Aggregate(IScheduleDictionary schedules, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache roleModel, DateOnly dateOnly)
 		{
 			var scheduleDictionary = schedules;
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var matrixes = teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(person, teamBlockInfo.BlockInfo.BlockPeriod).ToList();
-			var dateOnlyList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
-			if (dateOnlyList == null) return null;
 
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
 																			  new EndTimeLimitation(),
@@ -43,42 +40,42 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 																			  new List<IActivityRestriction>());
 
 			effectiveRestriction = combineRestriction(new TeamBlockEffectiveRestrcition(_effectiveRestrictionCreator, new List<IPerson>{person}, schedulingOptions,
-																	 scheduleDictionary), dateOnlyList, matrixes, effectiveRestriction);
+																	 scheduleDictionary), dateOnly, matrixes, effectiveRestriction);
 			
 			if (_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(schedulingOptions))
 			{
-				effectiveRestriction = combineRestriction(new SameStartTimeRestriction(timeZone), dateOnlyList,
+				effectiveRestriction = combineRestriction(new SameStartTimeRestriction(timeZone), dateOnly,
 													  matrixes, effectiveRestriction);
 			}
 			if (_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(schedulingOptions))
 			{
-				effectiveRestriction = combineRestriction(new SameShiftRestriction(_scheduleDayEquator), dateOnlyList, matrixes,
+				effectiveRestriction = combineRestriction(new SameShiftRestriction(_scheduleDayEquator), dateOnly, matrixes,
 													  effectiveRestriction);
 			}
 			if (_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(schedulingOptions))
 			{
-					effectiveRestriction = combineRestriction(new SameShiftCategoryRestriction(), dateOnlyList, matrixes,
+					effectiveRestriction = combineRestriction(new SameShiftCategoryRestriction(), dateOnly, matrixes,
 													  effectiveRestriction);
 			}
 		
-			effectiveRestriction = combineRestriction(new NightlyRestRestrcition(_nightlyRestRule, schedulingOptions), dateOnlyList, matrixes,
+			effectiveRestriction = combineRestriction(new NightlyRestRestrcition(_nightlyRestRule, schedulingOptions), dateOnly, matrixes,
 													  effectiveRestriction);
 
 			if (roleModel != null)
 			{
-				effectiveRestriction = combineRestriction(new ResctrictionFromRoleModelRestriction(roleModel, _teamBlockSchedulingOptions, schedulingOptions), dateOnlyList,
+				effectiveRestriction = combineRestriction(new ResctrictionFromRoleModelRestriction(roleModel, _teamBlockSchedulingOptions, schedulingOptions), dateOnly,
 						matrixes, effectiveRestriction);
 			}
 			return effectiveRestriction;
 		}
 
 		private static IEffectiveRestriction combineRestriction(IScheduleRestrictionStrategy strategy,
-																IList<DateOnly> dateOnlyList,
+																DateOnly dateOnly,
 																IList<IScheduleMatrixPro> matrixList,
 																IEffectiveRestriction effectiveRestriction)
 		{
 			if (effectiveRestriction == null) return null;
-			var restriction = strategy.ExtractRestriction(dateOnlyList, matrixList);
+			var restriction = strategy.ExtractRestriction(new List<DateOnly> {dateOnly}, matrixList);
 			return effectiveRestriction.Combine(restriction);
 		}
 	}

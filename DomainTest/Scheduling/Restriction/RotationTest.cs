@@ -67,14 +67,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
             Assert.AreEqual(7, _rotation.RotationDays.Count);
         }
 
-        
-
-        [Test]
-        public void CanReadSignificantRestriction()
-        {
-            Assert.IsNotNull(_rotation.RotationDays[10].SignificantRestriction());
-        }
-
         [Test]
         public void RotationDayRestrictionCollectionIsOne()
         {
@@ -85,45 +77,45 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
         public void CanSetShiftCategoryOnRestriction()
         {
             IShiftCategory shiftCategory = new ShiftCategory("katt");
-            Assert.IsNull(_rotation.RotationDays[10].SignificantRestriction().ShiftCategory);
-            _rotation.RotationDays[10].SignificantRestriction().ShiftCategory = shiftCategory;
-            Assert.AreEqual(_rotation.RotationDays[10].SignificantRestriction().ShiftCategory , shiftCategory);
+            Assert.IsNull(_rotation.RotationDays[10].RestrictionCollection[0].ShiftCategory);
+            _rotation.RotationDays[10].RestrictionCollection[0].ShiftCategory = shiftCategory;
+            Assert.AreEqual(_rotation.RotationDays[10].RestrictionCollection[0].ShiftCategory , shiftCategory);
         }
 
         [Test]
         public void CanSetDayOffOnRestriction()
         {
             IDayOffTemplate dayOffTemplate = new DayOffTemplate(new Description("simon template"));
-            Assert.IsNull(_rotation.RotationDays[10].SignificantRestriction().ShiftCategory);
-            _rotation.RotationDays[10].SignificantRestriction().DayOffTemplate = dayOffTemplate;
-            Assert.AreEqual(_rotation.RotationDays[10].SignificantRestriction().DayOffTemplate, dayOffTemplate);
+            Assert.IsNull(_rotation.RotationDays[10].RestrictionCollection[0].ShiftCategory);
+            _rotation.RotationDays[10].RestrictionCollection[0].DayOffTemplate = dayOffTemplate;
+            Assert.AreEqual(_rotation.RotationDays[10].RestrictionCollection[0].DayOffTemplate, dayOffTemplate);
         }
 
         [Test]
         public void CanSetStartTimeLimitationOnRestriction()
         {
             StartTimeLimitation startTimeLimitation = new StartTimeLimitation(new TimeSpan(8,15,0), null);
-            Assert.IsNull(_rotation.RotationDays[10].SignificantRestriction().StartTimeLimitation.StartTime);
-            _rotation.RotationDays[10].SignificantRestriction().StartTimeLimitation = startTimeLimitation;
-            Assert.AreEqual(_rotation.RotationDays[10].SignificantRestriction().StartTimeLimitation, startTimeLimitation);
+            Assert.IsNull(_rotation.RotationDays[10].RestrictionCollection[0].StartTimeLimitation.StartTime);
+            _rotation.RotationDays[10].RestrictionCollection[0].StartTimeLimitation = startTimeLimitation;
+            Assert.AreEqual(_rotation.RotationDays[10].RestrictionCollection[0].StartTimeLimitation, startTimeLimitation);
         }
 
         [Test]
         public void CanSetEndTimeLimitationOnRestriction()
         {
             EndTimeLimitation endTimeLimitation = new EndTimeLimitation(null,new TimeSpan(18, 45, 0));
-            Assert.IsNull(_rotation.RotationDays[10].SignificantRestriction().EndTimeLimitation.EndTime);
-            _rotation.RotationDays[10].SignificantRestriction().EndTimeLimitation = endTimeLimitation;
-            Assert.AreEqual(_rotation.RotationDays[10].SignificantRestriction().EndTimeLimitation, endTimeLimitation);
+            Assert.IsNull(_rotation.RotationDays[10].RestrictionCollection[0].EndTimeLimitation.EndTime);
+            _rotation.RotationDays[10].RestrictionCollection[0].EndTimeLimitation = endTimeLimitation;
+            Assert.AreEqual(_rotation.RotationDays[10].RestrictionCollection[0].EndTimeLimitation, endTimeLimitation);
         }
 
         [Test]
         public void CanSetWorkTimeLimitationOnRestriction()
         {
             WorkTimeLimitation workTimeLimitation = new WorkTimeLimitation(null, new TimeSpan(4, 0, 0));
-            Assert.IsNull(_rotation.RotationDays[10].SignificantRestriction().WorkTimeLimitation.EndTime);
-            _rotation.RotationDays[10].SignificantRestriction().WorkTimeLimitation = workTimeLimitation;
-            Assert.AreEqual(_rotation.RotationDays[10].SignificantRestriction().WorkTimeLimitation, workTimeLimitation);
+            Assert.IsNull(_rotation.RotationDays[10].RestrictionCollection[0].WorkTimeLimitation.EndTime);
+            _rotation.RotationDays[10].RestrictionCollection[0].WorkTimeLimitation = workTimeLimitation;
+            Assert.AreEqual(_rotation.RotationDays[10].RestrictionCollection[0].WorkTimeLimitation, workTimeLimitation);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Choosable"), Test]
