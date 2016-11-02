@@ -75,6 +75,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities, "xxModifyAvailabilities", DefinedRaptorApplicationFunctionForeignIds.ModifyAvailabilities, null);
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.PublishSchedule, "xxPublishSchedule", DefinedRaptorApplicationFunctionForeignIds.PublishSchedule, null);
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OrganizeCascadingSkills, "xxOrganizeCascadingSkills", DefinedRaptorApplicationFunctionForeignIds.OrganizeCascadingSkills, null);
+			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ArchiveSchedule, "xxArchiveSchedule", DefinedRaptorApplicationFunctionForeignIds.ArchiveSchedule, null);
 
 			// PersonAdmin
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword, "xxModifyPersonNameAndPassword", DefinedRaptorApplicationFunctionForeignIds.ModifyPersonNameAndPassword, null);
