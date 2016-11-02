@@ -8,9 +8,8 @@
 				<button class="wfm-btn wfm-btn-default" ng-click="goToOverview()">{{'Dashboard'|translate}}</button>
 				<button class="wfm-btn wfm-btn-default" ng-click="goToSelectItem()">{{'Details'|translate}}</button>
 				<span class="wfm-chip">
-					<span ng-if="skill" class="chip-text rta-default-cursor">You are now viewing <span ng-if="openedMaxNumberOfAgents"><b>top {{maxNumberOfAgents}}</b></span> agents with skill: <b>{{skillName}}</b></span>
-					<span ng-if="skillArea" class="chip-text rta-default-cursor">You are now viewing <span ng-if="openedMaxNumberOfAgents"><b>top {{maxNumberOfAgents}}</b></span> agents with skill area: <b>{{skillAreaName}}</b></span>
-					<span ng-if="!(skill || skillArea) && openedMaxNumberOfAgents" class="chip-text rta-default-cursor">You are now viewing <b>top {{maxNumberOfAgents}}</b> agents in alarm</span>
+					<span ng-if="skill" class="chip-text rta-default-cursor"><span ng-if="openedMaxNumberOfAgents"></span> {{'SkillColon'|translate}} <b>{{skillName}}</b></span>
+					<span ng-if="skillArea" class="chip-text rta-default-cursor"><span ng-if="openedMaxNumberOfAgents"></span> {{'SkillAreaColon'|translate}} <b>{{skillAreaName}}</b></span>
 				</span>
 			</span>
 		</div>

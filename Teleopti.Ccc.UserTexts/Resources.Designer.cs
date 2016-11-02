@@ -28394,6 +28394,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Skill area:.
+        /// </summary>
+        public static string SkillAreaColon {
+            get {
+                return ResourceManager.GetString("SkillAreaColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Skill:.
         /// </summary>
         public static string SkillColon {
