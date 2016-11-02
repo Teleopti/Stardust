@@ -33,6 +33,7 @@
 		MyTimeWeb_ShiftTradeOptimization_40792,
 		MyTimeWeb_PreferenceForMobile_40265,
 		MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747,
+		MyTimeWeb_ShowContractTime_41462,
 
 		Backlog_Module_23980,
 
@@ -78,7 +79,6 @@
 		WfmTeamSchedule_WeeklyContractTime_39871,
 		WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925,
 		WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305,
-
 
 		WfmTeamSchedule_MoveToBaseLicense_41039,
 
