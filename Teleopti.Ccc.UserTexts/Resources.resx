@@ -14433,7 +14433,7 @@ Check your internet connection or contact your administrator.</value>
     <comment>Success Message for Moving Activity</comment>
   </data>
   <data name="TheNewTimeIsNotAllowedFor" xml:space="preserve">
-    <value>The new time is not allowed for</value>
+    <value>The new time will not be applied for</value>
     <comment>input validation message for moving activity.</comment>
   </data>
   <data name="ScheduleIsWriteProtected" xml:space="preserve">

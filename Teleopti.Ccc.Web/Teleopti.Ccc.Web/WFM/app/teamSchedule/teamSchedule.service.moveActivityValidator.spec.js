@@ -1,10 +1,28 @@
 ﻿(function() {
 	'use strict';
 
-	describe('teamschedule move activity validator tests', function() {
+	fdescribe('teamschedule move activity validator tests', function() {
 		var target, personSelection, scheduleMgmt;
 		beforeEach(function () {
 			module("wfm.teamSchedule");
+		});
+
+		beforeEach(function() {
+			module(function($provide) {
+				$provide.service('Toggle', function () {
+					return {
+						WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305: true
+					};
+				});
+				$provide.service('CurrentUserInfo',
+					function() {
+						return {
+							CurrentUserInfo: function() {
+								return { DefaultTimeZone: 'Asia/Hong_Kong' };
+							}
+						};
+					});
+			});
 		});
 
 		beforeEach(inject(function (PersonSelection, ScheduleManagement, MoveActivityValidator) {
@@ -17,6 +35,9 @@
 			"PersonId": "221B-Baker-SomeoneElse",
 			"Name": "SomeoneElse",
 			"Date": scheduleDate,
+			"Timezone": {
+				IanaId: "Asia/Hong_Kong"
+			},
 			"Projection": [
 				{
 					"ShiftLayerIds": ["layer1"],
@@ -40,10 +61,10 @@
 			personSelection.toggleAllPersonProjections(personSchedule, scheduleDate);
 			var newStartMoment = moment("2016-05-13 2:00");
 
-			var result = target.validateMoveToTime(newStartMoment);
+			var result = target.validateMoveToTime(newStartMoment, "Asia/Hong_Kong");
 
 			expect(result).toEqual(false);
-			expect(target.getInvalidPeople().indexOf('SomeoneElse') > -1).toEqual(true);
+			expect(target.getInvalidPeopleNameList().indexOf('SomeoneElse') > -1).toEqual(true);
 		});
 
 		it('should return false when moving to time makes the schedule length longer than 36 hours', function () {
@@ -51,6 +72,9 @@
 				"PersonId": "221B-Baker-SomeoneElse",
 				"Name": "SomeoneElse",
 				"Date": scheduleDate,
+				"Timezone": {
+					IanaId: "Asia/Hong_Kong"
+				},
 				"Projection": [
 					{
 						"ShiftLayerIds": ["layer1"],
@@ -78,11 +102,160 @@
 			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[1], personSchedule);
 			var newStartMoment = moment("2016-05-13 13:00");
 
-			var result = target.validateMoveToTime(newStartMoment);
+			var result = target.validateMoveToTime(newStartMoment, "Asia/Hong_Kong");
 
 			expect(result).toEqual(false);
-			expect(target.getInvalidPeople().indexOf('SomeoneElse') > -1).toEqual(true);
+			expect(target.getInvalidPeopleNameList().indexOf('SomeoneElse') > -1).toEqual(true);
 		});
 
+		it('should return true when moving activity in previous day within shift', function () {
+			var previousDay = "2016-05-11";
+			schedule = {
+				"PersonId": "221B-Baker-SomeoneElse",
+				"Name": "SomeoneElse",
+				"Date": previousDay,
+				"Timezone": {
+					IanaId: "Asia/Hong_Kong"
+				},
+				"Projection": [
+					{
+						"ShiftLayerIds": ["layer1"],
+						"ParentPersonAbsences": null,
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": previousDay + " 22:00",
+						"Minutes": 180
+					}, {
+						"ShiftLayerIds": ["layer2"],
+						"ParentPersonAbsences": null,
+						"Color": "#80FF80",
+						"Description": "Short Break",
+						"Start": scheduleDate + " 01:00",
+						"Minutes": 60
+					}, {
+						"ShiftLayerIds": ["layer3"],
+						"ParentPersonAbsences": null,
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": scheduleDate + " 02:00",
+						"Minutes": 120
+					}
+				],
+				"IsFullDayAbsence": false,
+				"DayOff": null
+			};
+
+			scheduleMgmt.resetSchedules([schedule], moment(scheduleDate));
+			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+			personSchedule.Shifts[0].Projections[1].Selected = true;
+			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[1], personSchedule);
+			var newStartMoment = moment(scheduleDate + " 00:00");
+
+			var result = target.validateMoveToTime(newStartMoment, "Asia/Hong_Kong");
+
+			expect(result).toEqual(true);
+		});
+
+		it('should return false when moving activity in previous day out of shift', function() {
+			var previousDay = "2016-05-11";
+			schedule = {
+				"PersonId": "221B-Baker-SomeoneElse",
+				"Name": "SomeoneElse",
+				"Date": previousDay,
+				"Timezone": {
+					IanaId: "Asia/Hong_Kong"
+				},
+				"Projection": [
+					{
+						"ShiftLayerIds": ["layer1"],
+						"ParentPersonAbsences": null,
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": previousDay + " 22:00",
+						"Minutes": 180
+					}
+				],
+				"IsFullDayAbsence": false,
+				"DayOff": null
+			};
+
+			scheduleMgmt.resetSchedules([schedule], moment(scheduleDate));
+			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+			personSchedule.Shifts[0].Projections[0].Selected = true;
+			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[0], personSchedule);
+			var newStartMoment = moment(scheduleDate + " 01:00");
+
+			var result = target.validateMoveToTime(newStartMoment, "Asia/Hong_Kong");
+
+			expect(result).toEqual(false);
+		});
+
+		it('should return false when moving activity in next day out of shift', function() {
+			var nextDay = "2016-05-13";
+			schedule = {
+				"PersonId": "221B-Baker-SomeoneElse",
+				"Name": "SomeoneElse",
+				"Date": nextDay,
+				"Timezone": {
+					IanaId: "Asia/Hong_Kong"
+				},
+				"Projection": [
+					{
+						"ShiftLayerIds": ["layer1"],
+						"ParentPersonAbsences": null,
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": nextDay + " 01:00",
+						"Minutes": 180
+					}
+				],
+				"IsFullDayAbsence": false,
+				"DayOff": null
+			};
+
+			scheduleMgmt.resetSchedules([schedule], moment(scheduleDate), "Asia/Hong_Kong");
+			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+			personSchedule.Shifts[0].Projections[0].Selected = true;
+			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[0], personSchedule);
+			var newStartMoment = moment(scheduleDate + " 01:00");
+
+			var result = target.validateMoveToTime(newStartMoment, "Asia/Hong_Kong");
+
+			expect(result).toEqual(false);
+		});
+
+		it('should return true when moving activity in next day within shift', function() {
+			var nextDay = "2016-05-13";
+			schedule = {
+				"PersonId": "221B-Baker-SomeoneElse",
+				"Name": "SomeoneElse",
+				"Date": nextDay,
+				"Timezone": {
+					IanaId: "Asia/Hong_Kong"
+				},
+				"Projection": [
+					{
+						"ShiftLayerIds": ["layer1"],
+						"ParentPersonAbsences": null,
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": nextDay + " 01:00",
+						"Minutes": 180
+					}
+				],
+				"IsFullDayAbsence": false,
+				"DayOff": null
+			};
+
+			scheduleMgmt.resetSchedules([schedule], moment(scheduleDate), "Asia/Hong_Kong");
+			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+			personSchedule.Shifts[0].Projections[0].Selected = true;
+			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[0], personSchedule);
+			var newStartMoment = moment(nextDay + " 02:00");
+
+			var result = target.validateMoveToTime(newStartMoment, "Asia/Hong_Kong");
+
+			expect(result).toEqual(true);
+		});
 	});
 })()

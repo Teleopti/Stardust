@@ -1,38 +1,51 @@
 ﻿(function() {
 	'use strict';
 
-	angular.module("wfm.teamSchedule").service('MoveActivityValidator', ['PersonSelection', 'ScheduleManagement', validator]);
+	angular.module("wfm.teamSchedule").service('MoveActivityValidator', ['$filter','PersonSelection', 'ScheduleManagement', validator]);
 
-	function validator(PersonSelectionSvc, ScheduleMgmt) {
+	function validator($filter, PersonSelectionSvc, ScheduleMgmt) {
 		var MAX_SCHEDULE_LENGTH_IN_MINUTES = 36 * 60; // 36 hours
 		var invalidPeople = [];
-		this.validateMoveToTime = function (newStartMoment) {
+		this.validateMoveToTime = validateMoveToTimeForScheduleInDifferentTimezone;
 
+		function getShiftDate(personSchedule) {
+			var selectedShift = personSchedule.Shifts.filter(function (shift) {
+				var selectedProjections = shift.Projections.filter(function (layer) {
+					return layer.Selected;
+				});
+				return selectedProjections.length > 0;
+			})[0];
+			return selectedShift.Date;
+		}
+
+		function validateMoveToTimeForScheduleInDifferentTimezone(newStartMoment, currentTimezone) {
 			invalidPeople = [];
 			var selectedPersonIds = PersonSelectionSvc.getSelectedPersonIdList();
-			var schedules = ScheduleMgmt.groupScheduleVm.Schedules;
+			for (var i = 0; i < selectedPersonIds.length; i++) {
+				var personId = selectedPersonIds[i];
+				var personSchedule = ScheduleMgmt.findPersonScheduleVmForPersonId(personId);
 
-			selectedPersonIds.forEach(function(agentId) {
-				for (var i = 0; i < schedules.length; i++) {
-					if (schedules[i].PersonId === agentId) {
+				var shiftDate = getShiftDate(personSchedule);
 				
-						var newScheduleStart = getNewScheduleStartMoment(schedules[i].Date, schedules[i], newStartMoment);
-						var newScheduleEnd = getLatestScheduleEndMoment(schedules[i].Date, schedules[i], newStartMoment);
-						if (newScheduleEnd === null) continue;
-
-						var scheduleLength = newScheduleEnd.diff(newScheduleStart, 'minutes');
-
-						if (newScheduleStart.format('YYYY-MM-DD') !== schedules[i].Date || scheduleLength > MAX_SCHEDULE_LENGTH_IN_MINUTES) {
-							invalidPeople.push(schedules[i].Name);
-						}
-
-						break;
-					}
-
+				var newStartInAgentTimezone = $filter('timezone')(newStartMoment.format('YYYY-MM-DD HH:mm'),
+					personSchedule.Timezone.IanaId,
+					currentTimezone);
+				if (moment(newStartInAgentTimezone).isBefore(shiftDate, 'day')) {
+					invalidPeople.push(personSchedule);
+					continue;
 				}
-			});
+				var newShiftStart = getNewScheduleStartMoment(shiftDate, personSchedule, newStartMoment);
+				var newShiftStartInAgentTimezone = $filter('timezone')(newShiftStart,
+					personSchedule.Timezone.IanaId,
+					currentTimezone);
+				var newShiftEnd = getLatestScheduleEndMoment(shiftDate, personSchedule, newStartMoment);
+				var scheduleLength = newShiftEnd ? newShiftEnd.diff(newShiftStart, 'minutes') : 0;
+				if (moment(newShiftStartInAgentTimezone).format('YYYY-MM-DD') != shiftDate || scheduleLength > MAX_SCHEDULE_LENGTH_IN_MINUTES)
+					invalidPeople.push(personSchedule);
+			}
+
 			return invalidPeople.length === 0;
-		};
+		}
 
 		function calculateMaximumProjectionLengthInMinute(projections) {
 			if (!projections || projections.length === 0) return null;
@@ -62,7 +75,7 @@
 			if (!moments || moments.length === 0) return null;
 			var earliestM = null;
 			moments.forEach(function(m) {
-				if (earliestM === null || m < earliestM) earliestM = m;
+				if (earliestM === null || m.isBefore(earliestM)) earliestM = m;
 			});
 			return earliestM;
 		}
@@ -71,7 +84,7 @@
 			if (!moments || moments.length === 0) return null;
 			var latestM = null;
 			moments.forEach(function(m) {
-				if (latestM === null || m > latestM) latestM = m;
+				if (latestM === null || m.isAfter(latestM)) latestM = m;
 			});
 			return latestM;
 		}
@@ -98,7 +111,7 @@
 			
 			var ends =  unselected.map(function(p) {
 
-				return moment(p.Start).add(p.Minutes, 'minutes');
+				return moment(p.Start).clone().add(p.Minutes, 'minutes');
 			});
 			ends.push(newEndMoment);
 			return findLatestMoment(ends);
@@ -106,6 +119,10 @@
 
 		this.getInvalidPeople = function() {
 			return invalidPeople;
+		};
+
+		this.getInvalidPeopleNameList = function() {
+			return invalidPeople.map(function(p) { return p.Name });
 		}
 
 	}

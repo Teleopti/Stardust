@@ -30556,7 +30556,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The new time is not allowed for.
+        ///   Looks up a localized string similar to The new time will not be applied for.
         /// </summary>
         public static string TheNewTimeIsNotAllowedFor {
             get {

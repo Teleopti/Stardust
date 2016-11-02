@@ -14,6 +14,7 @@
 		vm.tabindex = angular.isDefined($attrs.tabindex) ? $attrs.tabindex : 0;
 		vm.checkingCommand = false;
 		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
+		vm.invalidAgents = [];
 
 		vm.getDefaultMoveToStartTime = function() {
 			var curDateMoment = moment(vm.selectedDate());
@@ -28,12 +29,19 @@
 			return moment(time).add(1, 'hour').toDate();
 		};
 
-		vm.isInputValid = function() {
-			return validator.validateMoveToTime(moment(vm.getMoveToStartTimeStr()));
+		vm.anyValidAgent = function() {
+			return vm.invalidAgents.length !== vm.selectedAgents.length;
+		}
+
+		vm.updateInvalidAgents = function () {
+			var currentTimezone = vm.getCurrentTimezone();
+			validator.validateMoveToTime(moment(vm.getMoveToStartTimeStr()), currentTimezone);
+			vm.invalidAgents = validator.getInvalidPeople();
+
 		};
 
 		vm.invalidPeople = function () {
-			var people = validator.getInvalidPeople().join(', ');
+			var people = validator.getInvalidPeopleNameList().join(', ');
 			return people;
 		};
 
@@ -71,17 +79,19 @@
 	    };
 
 	    function getRequestData() {
+	    	vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
+		    var invalidPersonIds = vm.invalidAgents.map(function(p) { return p.PersonId });
 
-	    	var personProjectionsWithSelectedActivities = vm.selectedAgents.filter(function (x) {
+	    	var personProjectionsWithSelectedActivities = vm.selectedAgents.filter(function(agent) {
+			    return invalidPersonIds.indexOf(agent.PersonId) < 0;
+		    }).filter(function (x) {
 	    		return (Array.isArray(x.SelectedActivities) && x.SelectedActivities.length === 1);
 	    	});
 
 			var requestData = {
 				Date: vm.selectedDate(),
 				PersonActivities: personProjectionsWithSelectedActivities.map(function (x) {
-					return { PersonId: x.PersonId, ShiftLayerIds: x.SelectedActivities.map(function(activity) {
-						return activity.shiftLayerId;
-					}) };
+					return { PersonId: x.PersonId, ShiftLayerIds: x.SelectedActivities };
 				}),
 				StartTime: vm.convertTime(vm.getMoveToStartTimeStr()),
 				TrackedCommandInfo: { TrackId: vm.trackId }
@@ -149,6 +159,7 @@
 			scope.vm.trackId = containerCtrl.getTrackId();
 			scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
 			scope.vm.getActionCb = containerCtrl.getActionCb;
+			scope.vm.getCurrentTimezone = containerCtrl.getCurrentTimezone;
 
 			scope.vm.moveToTime = selfCtrl.getDefaultMoveToStartTime();
 			scope.vm.nextDay = moment(selfCtrl.getDefaultMoveToStartTime()).format('YYYY-MM-DD') !== moment(scope.vm.selectedDate()).format('YYYY-MM-DD');
@@ -158,6 +169,14 @@
 				var focusTarget = elem[0].querySelector('.focus-default input');
 				if (focusTarget) angular.element(focusTarget).focus();
 			});
+
+			scope.$watch(function() {
+					return scope.vm.moveToTime;
+				},
+				function(newVal, oldVal) {
+					scope.vm.updateInvalidAgents();
+				},
+				true);
 
 			elem.removeAttr('tabindex');
 

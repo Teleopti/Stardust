@@ -74,12 +74,13 @@ angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', ['TeamSchedul
 						return moment(p.Start);
 					});
 
-					return startTimes.reduce(function (prev, cur) {
-							if (!prev) return cur;
-							if (cur < prev) return cur;
-							return prev;
-						})
-						.isBefore(maximumViewRange.endMoment);
+					var time = startTimes.reduce(function(prev, cur) {
+						if (!cur) return prev;
+						if (cur.isBefore(prev)) return cur;
+						return prev;
+					});
+
+					return time.isBefore(maximumViewRange.endMoment);
 				} else {
 					return false;
 				}
