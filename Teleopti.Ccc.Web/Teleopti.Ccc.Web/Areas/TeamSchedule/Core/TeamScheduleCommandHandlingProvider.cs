@@ -186,18 +186,23 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var permissions = new Dictionary<string, string>();
 
 			var result = new List<ActionResult>();
-			foreach(var personId in input.PersonIds)
+
+			var personDateGroups = input.PersonDates.GroupBy(personDate => personDate.PersonId, personDate => personDate.Date);
+
+			foreach(var dates in personDateGroups)
 			{
+				var personId = dates.Key;				
+
 				var actionResult = new ActionResult();
 				var person = _personRepository.Get(personId);
 				actionResult.PersonId = personId;
 				actionResult.ErrorMessages = new List<string>();
-				if(checkPermissionFn(permissions, input.Date,person,actionResult.ErrorMessages))
+				if(dates.All(date => checkPermissionFn(permissions, date,person,actionResult.ErrorMessages)))
 				{
 					var command = new BackoutScheduleChangeCommand
 					{
 						PersonId = personId,
-						Date = input.Date,
+						Dates = dates.ToArray(),
 						TrackedCommandInfo =
 							input.TrackedCommandInfo != null
 								? input.TrackedCommandInfo

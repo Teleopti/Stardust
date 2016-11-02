@@ -5,8 +5,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 {
 	public class BackoutScheduleChangeFormData
 	{
-		public Guid[] PersonIds;	
-		public DateOnly Date { get; set; }	
+		public PersonDate[] PersonDates;			
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 	}
 }

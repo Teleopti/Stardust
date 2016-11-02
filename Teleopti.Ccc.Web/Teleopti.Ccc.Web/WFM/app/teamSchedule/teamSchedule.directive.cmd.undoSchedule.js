@@ -3,9 +3,9 @@
 
 	angular.module('wfm.teamSchedule').directive('undoSchedule', undoScheduleDirective);
 
-	undoScheduleCtrl.$inject = ['PersonSelection', 'ActivityService', '$wfmModal', 'teamScheduleNotificationService', 'ScenarioTestUtil'];
+	undoScheduleCtrl.$inject = ['PersonSelection', 'ActivityService', '$wfmModal', 'ScheduleManagement', 'teamScheduleNotificationService', 'ScenarioTestUtil'];
 
-	function undoScheduleCtrl(PersonSelection, ActivityService, $wfmModal, notification, ScenarioTestUtil) {
+	function undoScheduleCtrl(PersonSelection, ActivityService, $wfmModal, scheduleManagementSvc, notification, ScenarioTestUtil) {
 		var vm = this;
 		vm.label = 'Undo';
 
@@ -15,12 +15,25 @@
 
 		vm.undoSchedule = function () {
 
+			var personDates = [];
+			personIds.forEach(function(personId) {
+				var personScheduleVm = scheduleManagementSvc.findPersonScheduleVmForPersonId(personId);
+				personScheduleVm.Shifts.filter(function(shift) {
+						return shift.Projections && shift.Projections.length > 0;
+					})
+					.forEach(function (shift) {
+						personDates.push({
+							PersonId: personId,
+							Date: shift.Date
+						});
+					});
+			});
+
 			var requestData = {
-				PersonIds: personIds,
-				Date: vm.selectedDate(),
+				PersonDates: personDates,
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			}
-
+			       
 			ActivityService.undoScheduleChange(requestData).then(function (reponse) {
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, personIds);

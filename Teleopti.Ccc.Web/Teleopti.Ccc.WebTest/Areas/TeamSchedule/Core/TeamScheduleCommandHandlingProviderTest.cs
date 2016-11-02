@@ -728,8 +728,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			var input = new BackoutScheduleChangeFormData
 			{			
-				Date = date,				
-				PersonIds = new[] { person.Id.Value },
+				PersonDates = new []
+				{
+					new PersonDate
+					{
+						Date = date,
+						PersonId = person.Id.Value ,
+					}
+				},												
 				TrackedCommandInfo = new TrackedCommandInfo()
 			};
 
@@ -781,8 +787,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			var input = new BackoutScheduleChangeFormData
 			{
-				Date = date,
-				PersonIds = new[] { person.Id.Value },
+				PersonDates = new[]
+				{
+					new PersonDate
+					{
+						Date = date,
+						PersonId = person.Id.Value ,
+					}
+				},
 				TrackedCommandInfo = new TrackedCommandInfo()
 			};
 

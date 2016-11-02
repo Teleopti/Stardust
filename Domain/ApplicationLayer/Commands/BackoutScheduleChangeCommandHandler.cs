@@ -37,6 +37,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_auditSettingRepository = auditSettingRepository;
 		}
 
+		
+
 		public void Handle(BackoutScheduleChangeCommand command)
 		{
 			command.ErrorMessages = new List<string>();
@@ -48,24 +50,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			var person = _personRepository.Get(command.PersonId);
-			var versions = _scheduleHistoryRepository.FindRevisions(person,command.Date,2).ToList();
 
-			if(versions.Count != 2)
+			var versionsOnDates = command.Dates.Select(date => new versionsOnDate
+			{
+				Date = date,
+				Versions = _scheduleHistoryRepository.FindRevisions(person, date, 2).ToList()
+			}).Where(vd => vd.Versions.Count == 2 && vd.Versions.First().ModifiedBy.Id == _loggedOnUser.CurrentUser().Id).ToList();
+			
+			if (versionsOnDates.Count == 0)
 			{
 				command.ErrorMessages.Add(Resources.CannotUndoScheduleChange);
 				return;
 			}
 
-			var currentVersion = versions.First();
-			var lastVersion = versions.Last();
+			var latestModifyTime = versionsOnDates.Max(vd => vd.Versions.First().ModifiedAt);
+			var targetVersionsDate = versionsOnDates.First(vd => vd.Versions.First().ModifiedAt == latestModifyTime); 
 
-			if (currentVersion.ModifiedBy.Id != _loggedOnUser.CurrentUser().Id)
-			{
-				command.ErrorMessages.Add(Resources.CannotUndoScheduleChange);
-				return;
-			}
+			var lastVersion = targetVersionsDate.Versions.Last();			
 
-			var scheduleData = _scheduleHistoryRepository.FindSchedules(lastVersion, person, command.Date).ToList();
+			var scheduleData = _scheduleHistoryRepository.FindSchedules(lastVersion, person, targetVersionsDate.Date).ToList();
 			IList<IPersonAssignment> personAssignments = new List<IPersonAssignment>();
 			IList<IPersonAbsence> personAbsences = new List<IPersonAbsence>();
 
@@ -88,9 +91,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				_aggregateRootInitializer.Initialize(personAbsences);
 			}
 
-			var scheduleDictionary = getScheduleDictionary(person, command.Date);
+			var scheduleDictionary = getScheduleDictionary(person,targetVersionsDate.Date);
 
-			var sd = toScheduleDay(getCurrentScheduleDay(scheduleDictionary, person, command.Date), scheduleData);
+			var sd = toScheduleDay(getCurrentScheduleDay(scheduleDictionary, person,targetVersionsDate.Date), scheduleData);
 
 			var errorResponses = scheduleDictionary.Modify(sd, new DoNothingScheduleDayChangeCallBack()).ToList();
 
@@ -151,6 +154,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			return currentScheduleDay;			
-		}		
+		}
+
+		private class versionsOnDate
+		{
+			public IList<IRevision> Versions;
+			public DateOnly Date;
+		}
 	}
 }

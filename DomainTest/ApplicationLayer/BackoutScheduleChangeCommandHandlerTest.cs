@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var command = new BackoutScheduleChangeCommand
 			{
 				PersonId = person.Id.Value,
-				Date = new DateOnly(2016,06,11)
+				Dates = new [] { new DateOnly(2016,06,11)}
 			};
 
 			target.Handle(command);
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var command = new BackoutScheduleChangeCommand
 			{
 				PersonId = person.Id.Value,
-				Date = new DateOnly(2016, 06, 11)
+				Dates = new[] { new DateOnly(2016,06,11) }
 			};
 
 			target.Handle(command);
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var command = new BackoutScheduleChangeCommand
 			{
 				PersonId = person.Id.Value,
-				Date = new DateOnly(2016,06,11),
+				Dates = new[] { new DateOnly(2016,06,11) },
 				TrackedCommandInfo = new TrackedCommandInfo
 				{
 					TrackId = Guid.NewGuid()
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var command = new BackoutScheduleChangeCommand
 			{
 				PersonId = person.Id.Value,
-				Date = new DateOnly(2016,06,11),
+				Dates = new[] { new DateOnly(2016,06,11) },
 				TrackedCommandInfo = new TrackedCommandInfo
 				{
 					TrackId = Guid.NewGuid()
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var command = new BackoutScheduleChangeCommand
 			{
 				PersonId = person.Id.Value,
-				Date = new DateOnly(2016,06,11),
+				Dates = new[] { new DateOnly(2016,06,11) },
 				TrackedCommandInfo = new TrackedCommandInfo
 				{
 					TrackId = Guid.NewGuid()
