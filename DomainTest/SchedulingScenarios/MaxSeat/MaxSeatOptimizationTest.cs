@@ -471,7 +471,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.EqualTo(TimeSpan.FromHours(8));
 		}
 
-		[Test, Ignore("Vad tror du Claes? Fattar man?")]
+		[Test]
 		public void ShouldNotCareAboutNotInvolvedMaxSeatSkill()
 		{
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
