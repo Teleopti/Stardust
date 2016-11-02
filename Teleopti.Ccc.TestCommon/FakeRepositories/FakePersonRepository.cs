@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPerson> FindPeopleByEmploymentNumbers(IEnumerable<string> employmentNumbers)
 		{
-			throw new NotImplementedException();
+			return _persons.Where(p => employmentNumbers.Contains(p.EmploymentNumber)).ToArray();
 		}
 
 		public int NumberOfActiveAgents()

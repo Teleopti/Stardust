@@ -1,4 +1,3 @@
-﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -13,10 +12,10 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 {
 	[TestFixture]
-	public class GetPersonByEmploymentNumberQueryHandlerTest
+	public class GetPersonsByEmploymentNumbersQueryHandlerTest
 	{
 		[Test]
-		public void ShouldGetPeopleByEmploymentNumber()
+		public void ShouldGetPeopleByEmploymentNumbers()
 		{
 			var personRepository = new FakePersonRepository();
 
@@ -29,16 +28,19 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var person = PersonFactory.CreatePerson();
 			person.EmploymentNumber = "1234";
 			personRepository.Add(person);
+			person = PersonFactory.CreatePerson();
+			person.EmploymentNumber = "2234";
+			personRepository.Add(person);
 
-			var target = new GetPersonByEmploymentNumberQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory());
+			var target = new GetPersonsByEmploymentNumbersQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory());
 
-			var result = target.Handle(new GetPersonByEmploymentNumberQueryDto
+			var result = target.Handle(new GetPersonsByEmploymentNumbersQueryDto()
 			{
-				EmploymentNumber = "1234"
+				EmploymentNumbers = new [] { "1234","2234" }
 			});
 
-			result.Count.Should().Be.EqualTo(1);
-			result.First().Name.Should().Be.EqualTo(person.Name.ToString());
+			result.Count.Should().Be.EqualTo(2);
+			result.Last().Name.Should().Be.EqualTo(person.Name.ToString());
 		}
 	}
 }

@@ -1525,6 +1525,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void ShouldFindPersonsByEmploymentNumbers()
+		{
+			IPerson person1 = PersonFactory.CreatePerson("Fname", "lname");
+			var employmentNumber1 = "987392";
+			person1.EmploymentNumber = employmentNumber1;
+			PersistAndRemoveFromUnitOfWork(person1);
+
+			IPerson person2 = PersonFactory.CreatePerson("Fname", "lname");
+			var employmentNumber2 = "987393";
+			person2.EmploymentNumber = employmentNumber2;
+			PersistAndRemoveFromUnitOfWork(person2);
+
+			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
+			IList<IPerson> personList = pr.FindPeopleByEmploymentNumbers(new [] { employmentNumber1, employmentNumber2 }).ToList();
+			Assert.AreEqual(employmentNumber1, personList[0].EmploymentNumber);
+			Assert.AreEqual(employmentNumber2, personList[1].EmploymentNumber);
+		}
+
+		[Test]
 		public void ShouldFindPeopleByEmail()
 		{
 			var person1 = PersonFactory.CreatePerson("Fname", "lname");
