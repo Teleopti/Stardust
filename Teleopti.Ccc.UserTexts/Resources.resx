@@ -15082,8 +15082,8 @@ These options are activated:
     <value>Dashboard</value>
     <comment>Button name in RTA to go to sites dashboard</comment>
   </data>
-  </data>
   <data name="SkillAreaColon" xml:space="preserve">
     <value>Skill area:</value>
     <comment>skill area</comment>
+</data>
 </root>
