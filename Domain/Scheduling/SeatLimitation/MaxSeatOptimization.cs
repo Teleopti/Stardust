@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature.Equals(MaxSeatsFeatureOptions.DoNotConsiderMaxSeats))
 				return;
 			var allAgents = schedules.Select(schedule => schedule.Key);
-			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, schedules.Scenario, allAgents, maxSeatIntervalLength); //try to use less agents
+			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, schedules.Scenario, allAgents, maxSeatIntervalLength);
 			if (!maxSeatData.MaxSeatSkillExists())
 				return;
 			var tagSetter = optimizationPreferences.General.ScheduleTag == null ?
