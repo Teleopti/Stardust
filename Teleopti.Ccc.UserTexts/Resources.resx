@@ -15051,7 +15051,7 @@ These options are activated:
     <comment>Notify agents friendly message when selected agents are too many.</comment>
   </data>
   <data name="UnsupportedSkill" xml:space="preserve">
-    <value>unsupported skill</value>
+    <value>Unsupported Skill</value>
     <comment>intraday warning message</comment>
   </data>
   <data name="UnsupportedSkillMsg" xml:space="preserve">
@@ -15059,7 +15059,7 @@ These options are activated:
     <comment>intraday warning message</comment>
   </data>
   <data name="UnsupportedSkills" xml:space="preserve">
-    <value>unsupported skills</value>
+    <value>{0} Unsupported skills</value>
     <comment>intraday warning message</comment>
   </data>
   <data name="AllRequests" xml:space="preserve">
@@ -15093,7 +15093,7 @@ These options are activated:
   <data name="SkillAreaColon" xml:space="preserve">
     <value>Skill area:</value>
     <comment>skill area</comment>
-</data>
+  </data>
  <data name="CannotApplyChangeToAgentsInDifferentTimezone" xml:space="preserve">
     <value>Cannot apply change to agent in different timezones</value>
     <comment>Alert message stating the intended changes cannot be applied to agents that have timezones different to the currently selected timezone.</comment>

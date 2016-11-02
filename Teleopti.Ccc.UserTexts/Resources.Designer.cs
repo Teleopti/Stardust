@@ -31788,7 +31788,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to unsupported skill.
+        ///   Looks up a localized string similar to Unsupported Skill.
         /// </summary>
         public static string UnsupportedSkill {
             get {
@@ -31806,7 +31806,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to unsupported skills.
+        ///   Looks up a localized string similar to {0} Unsupported skills.
         /// </summary>
         public static string UnsupportedSkills {
             get {

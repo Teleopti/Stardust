@@ -41,10 +41,7 @@
 			$scope.currentInterval = [];
 			$scope.format = intradayService.formatDateTime;
 			$scope.viewObj;
-			$scope.UnsupportedSkillsInArea = 0;
-
 			NoticeService.info(message, null, true);
-
 			toggleSvc.togglesLoaded.then(function () {
 				$scope.showOptimalStaffing = toggleSvc.Wfm_Intraday_OptimalStaffing_40921;
 			});
@@ -177,10 +174,16 @@
 			};
 
 			var checkUnsupported = function(item){
+				var unsupportedSkillsInArea = [];
+
 				for ( var i = 0; i < item.Skills.length; i++ ) {
 					for ( var j = 0; j < $scope.skills.length; j++ ) {
 						if ( item.Skills[i].Id === $scope.skills[j].Id ) {
 							item.Skills[i].DoDisplayData = $scope.skills[j].DoDisplayData;
+							if ($scope.skills[j].DoDisplayData === false) {
+								unsupportedSkillsInArea.push('');
+								$scope.skillAreaMessage = $translate.instant('UnsupportedSkills').replace('{0}', unsupportedSkillsInArea.length);
+							}
 						}
 					}
 				}
