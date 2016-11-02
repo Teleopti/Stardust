@@ -79,7 +79,9 @@ Scenario: Save forecast to scenario
 	| Field    | Value        |
 	| Workload | TheWorkload2 |
 	| Scenario | Scenario 1   |
-
+	
+#41576
+@ignore
 Scenario: Create new skill
 	Given I am viewing forecast page                                               
 	When I choose to add a new skill
