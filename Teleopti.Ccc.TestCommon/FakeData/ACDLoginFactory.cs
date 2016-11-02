@@ -17,10 +17,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             string code = "CODE";
             int loginId = 17;
             int loginAggId = 19;
-            var eL  = new ExternalLogOn(loginId,loginAggId,code,name,true){DataSourceId = 3};
-            eL.DataSourceName = "DS";
+	        var eL = new ExternalLogOn(loginId, loginAggId, code, name, true)
+	        {
+		        DataSourceId = 3,
+		        DataSourceName = "DS"
+	        };
 
-            return eL;
+	        return eL;
         }
     }
 }

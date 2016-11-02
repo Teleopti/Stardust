@@ -64,14 +64,34 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             PersistAndRemoveFromUnitOfWork(source1);
             PersistAndRemoveFromUnitOfWork(source2);
+			
 
-            IList<IExternalLogOn> logins = new ExternalLogOnRepository(UnitOfWork).LoadAll();
+			IList<IExternalLogOn> logins = new ExternalLogOnRepository(CurrUnitOfWork).LoadAll();
 
             Assert.AreEqual(2,logins.Count);
             Assert.IsTrue(logins.Contains(source1));
             Assert.IsTrue(logins.Contains(source2));
         }
 
-        
+	    [Test]
+	    public void VerifyLoadByNames()
+	    {
+			var source1 = CreateAggregateWithCorrectBusinessUnit();
+		    source1.AcdLogOnName = "abc123";
+			var source2 = CreateAggregateWithCorrectBusinessUnit();
+		    source2.AcdLogOnName = "superman";
+			var source3 = CreateAggregateWithCorrectBusinessUnit();
+		    source3.AcdLogOnName = "john doe";
+
+			PersistAndRemoveFromUnitOfWork(source1);
+			PersistAndRemoveFromUnitOfWork(source2);
+			PersistAndRemoveFromUnitOfWork(source3);
+
+			var logins = new ExternalLogOnRepository(CurrUnitOfWork).LoadByAcdLogOnNames(new[] {source1.AcdLogOnName, source2.AcdLogOnName});
+
+			Assert.AreEqual(2, logins.Count);
+			Assert.IsTrue(logins.Contains(source1));
+			Assert.IsTrue(logins.Contains(source2));
+		}
     }
 }

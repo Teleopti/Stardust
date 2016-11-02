@@ -9,9 +9,15 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 		public override ExternalLogOnDto DomainEntityToDto(IExternalLogOn entity)
 		{
 			if (entity == null)
-				throw new ArgumentNullException("entity");
+				throw new ArgumentNullException(nameof(entity));
 
-			var externalLogOnDto = new ExternalLogOnDto{AcdLogOnOriginalId = entity.AcdLogOnOriginalId, AcdLogOnName = entity.AcdLogOnName};
+			var externalLogOnDto = new ExternalLogOnDto
+			{
+				AcdLogOnOriginalId = entity.AcdLogOnOriginalId,
+				AcdLogOnName = entity.AcdLogOnName,
+				DataSourceId = entity.DataSourceId,
+				Id = entity.Id
+			};
 
 			return externalLogOnDto;
 		}

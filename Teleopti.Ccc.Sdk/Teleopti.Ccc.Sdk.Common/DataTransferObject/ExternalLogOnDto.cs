@@ -20,5 +20,11 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 		/// </summary>
 		[DataMember]
 		public string AcdLogOnName { get; set; }
+
+		/// <summary>
+		/// Gets or sets Datasource Id
+		/// </summary>
+		[DataMember(Order = 1, IsRequired = false)]
+		public int DataSourceId { get; set; }
 	}
 }

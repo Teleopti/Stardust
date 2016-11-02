@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
+using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -12,11 +12,13 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 	{
 		private readonly IExternalLogOnRepository _externalLogOnRepository;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly IAssembler<IExternalLogOn, ExternalLogOnDto> _externalLogOnAssembler;
 
-		public FindExternalLogOnQueryHandler(IExternalLogOnRepository externalLogOnRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
+		public FindExternalLogOnQueryHandler(IExternalLogOnRepository externalLogOnRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IAssembler<IExternalLogOn, ExternalLogOnDto> externalLogOnAssembler)
 		{
 			_externalLogOnRepository = externalLogOnRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
+			_externalLogOnAssembler = externalLogOnAssembler;
 		}
 
 		public ICollection<ExternalLogOnDto> Handle(FindExternalLogOnQueryDto query)
@@ -24,15 +26,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			query.ExternalLogOnCollection.VerifyCountLessThan(50, "A maximum of 50 external logons is allowed. You tried to search for {0}.");
 			using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				// Naïve approach, loads everything from database, should filter on database level instead
-				return _externalLogOnRepository.LoadAll()
-					.Where(x => query.ExternalLogOnCollection.Contains(x.AcdLogOnName))
-					.Select(x => new ExternalLogOnDto
-					{
-						Id = x.Id,
-						AcdLogOnName = x.AcdLogOnName,
-						AcdLogOnOriginalId = x.AcdLogOnOriginalId
-					}).ToList();
+				return _externalLogOnAssembler.DomainEntitiesToDtos(_externalLogOnRepository.LoadByAcdLogOnNames(query.ExternalLogOnCollection)).ToList();
 			}
 		}
 	}

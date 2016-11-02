@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
+using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -25,7 +26,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		{
 			_externalLogOnRepository = new FakeExternalLogOnRepository();
 			_unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
-			_target = new FindExternalLogOnQueryHandler(_externalLogOnRepository, _unitOfWorkFactory);
+			
+			_target = new FindExternalLogOnQueryHandler(_externalLogOnRepository, _unitOfWorkFactory, new ExternalLogOnAssembler());
 		}
 
 		[Test]
@@ -51,7 +53,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		[Test]
 		public void ShouldReturnMatches()
 		{
-			var expected = new ExternalLogOn { AcdLogOnName = "abc123", AcdLogOnOriginalId = "321abc"}.WithId(Guid.NewGuid());
+			var expected = new ExternalLogOn { AcdLogOnName = "abc123", AcdLogOnOriginalId = "321abc", DataSourceId = 1}.WithId(Guid.NewGuid());
 			_externalLogOnRepository.Add(expected);
 			var query = new FindExternalLogOnQueryDto();
 			query.ExternalLogOnCollection.Add(expected.AcdLogOnName);
@@ -61,6 +63,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			result.Should().Not.Be.Empty();
 			result.First().AcdLogOnName.Should().Be.EqualTo(expected.AcdLogOnName);
 			result.First().AcdLogOnOriginalId.Should().Be.EqualTo(expected.AcdLogOnOriginalId);
+			result.First().DataSourceId.Should().Be.EqualTo(expected.DataSourceId);
 			result.First().Id.Should().Be.EqualTo(expected.Id);
 		}
 	}

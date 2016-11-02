@@ -29,6 +29,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return externalLogOns;
 		}
 
+		public IList<IExternalLogOn> LoadByAcdLogOnNames(IEnumerable<string> externalLogOnNames)
+		{
+			var filter = externalLogOnNames.ToList();
+			return externalLogOns.Where(x => filter.Contains(x.AcdLogOnName)).ToList();
+		}
+
 		public IExternalLogOn Load(Guid id)
 		{
 			return externalLogOns.First(x => x.Id == id);

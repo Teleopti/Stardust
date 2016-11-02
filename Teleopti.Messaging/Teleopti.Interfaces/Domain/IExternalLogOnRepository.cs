@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
@@ -9,5 +11,6 @@ namespace Teleopti.Interfaces.Domain
     /// </remarks>
     public interface IExternalLogOnRepository : IRepository<IExternalLogOn>
     {
+	    IList<IExternalLogOn> LoadByAcdLogOnNames(IEnumerable<string> externalLogOnNames);
     }
 }
