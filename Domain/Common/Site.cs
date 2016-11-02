@@ -19,7 +19,8 @@ namespace Teleopti.Ccc.Domain.Common
         private Description _description;
         private bool _isDeleted;
     	private int? _maxSeats;
-    	private ISkill _maxSeatSkill;
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
+		private ISkill _maxSeatSkill;
 		private IList<ISiteOpenHour> _openHourCollection;
 
 		/// <summary>

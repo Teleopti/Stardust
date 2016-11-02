@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -15,7 +14,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private IPersonContract _personContract;
 		private ITeam _team;
 		private ISet<IPersonSkill> _personSkillCollection;
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		private ISkill _maxSeatSkill;
 		private ISet<IExternalLogOn> _externalLogOnCollection;
 		private DateOnly _startDate;
