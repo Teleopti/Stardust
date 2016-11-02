@@ -144,6 +144,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return retList;
 		}
 
+		public ICollection<IPerson> FindPeopleByEmploymentNumbers(IEnumerable<string> employmentNumbers)
+		{
+			ICollection<IPerson> retList = Session.CreateCriteria(typeof(Person), "per")
+						  .Add(Restrictions.In("EmploymentNumber", (string[])employmentNumbers.ToArray()))
+						 .SetResultTransformer(Transformers.DistinctRootEntity)
+						 .List<IPerson>();
+			return retList;
+		}
+
 		public int NumberOfActiveAgents()
 		{
 			DateTime now = DateTime.UtcNow;

@@ -195,6 +195,7 @@
     <Compile Include="DataTransferObject\QueryDtos\GetPeopleByGroupPageGroupForDateRangeQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPeopleOptionalValuesByPersonIdQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPersonByEmailQueryDto.cs" />
+    <Compile Include="DataTransferObject\QueryDtos\GetPersonsByEmploymentNumbersQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPersonByIdentityQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPersonByUserNameQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPersonPeriodsByPersonIdQueryDto.cs" />

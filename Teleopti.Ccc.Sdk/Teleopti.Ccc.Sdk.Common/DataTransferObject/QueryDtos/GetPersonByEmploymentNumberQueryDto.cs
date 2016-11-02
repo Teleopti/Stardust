@@ -2,10 +2,10 @@
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 {
-    /// <summary>
-    /// Specify a query to get a <see cref="PersonDto"/> by employment number.
-    /// </summary>
-    [DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2011/07/")]
+	/// <summary>
+	/// Specify a query to get a <see cref="PersonDto"/> by employment number.
+	/// </summary>
+	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2011/07/")]
     public class GetPersonByEmploymentNumberQueryDto : QueryDto
     {
         /// <summary>

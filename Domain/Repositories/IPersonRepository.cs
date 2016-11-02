@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// <param name="employmentNumber">The employment number.</param>
 		/// <returns></returns>
 		ICollection<IPerson> FindPeopleByEmploymentNumber(string employmentNumber);
+		ICollection<IPerson> FindPeopleByEmploymentNumbers(IEnumerable<string> employmentNumbers);
 
 		/// <summary>
 		/// Gets the number of active agents. Used for checking against license limits

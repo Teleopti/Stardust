@@ -200,6 +200,7 @@
     <Compile Include="QueryHandler\GetPeopleByGroupPageGroupForDateRangeQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPeopleOptionalValuesByPersonIdQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPersonByEmailQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetPersonByEmploymentNumbersQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPersonByIdentityQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPersonByUserNameQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPersonPeriodsByPersonIdQueryHandler.cs" />
