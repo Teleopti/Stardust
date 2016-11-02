@@ -148,6 +148,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			ICollection<IPerson> retList = Session.CreateCriteria(typeof(Person), "per")
 						  .Add(Restrictions.In("EmploymentNumber", (string[])employmentNumbers.ToArray()))
+						  .AddOrder(Order.Asc("EmploymentNumber"))
 						 .SetResultTransformer(Transformers.DistinctRootEntity)
 						 .List<IPerson>();
 			return retList;
