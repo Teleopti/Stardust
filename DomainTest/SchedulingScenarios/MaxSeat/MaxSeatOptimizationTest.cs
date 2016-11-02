@@ -518,7 +518,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentScheduledForAnHourData.Assignment, agentData.Assignment, agent2Data.Assignment });
 			var optPreferences = CreateOptimizationPreferences();
 
-			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent, agent2Data.Agent }, schedules, scenario, optPreferences, 15);
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent, agent2Data.Agent }, schedules, optPreferences, 15);
 
 			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(9));
