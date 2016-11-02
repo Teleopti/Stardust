@@ -60,12 +60,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 		}
 
-		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IScenario scenario, IOptimizationPreferences optimizationPreferences, int maxSeatIntervalLength)
+		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IOptimizationPreferences optimizationPreferences, int maxSeatIntervalLength)
 		{
 			if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature.Equals(MaxSeatsFeatureOptions.DoNotConsiderMaxSeats))
 				return;
 			var allAgents = schedules.Select(schedule => schedule.Key);
-			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, scenario, allAgents, maxSeatIntervalLength);
+			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, schedules.Scenario, allAgents, maxSeatIntervalLength);
 			if (!maxSeatData.MaxSeatSkillExists())
 				return;
 			var tagSetter = optimizationPreferences.General.ScheduleTag == null ?

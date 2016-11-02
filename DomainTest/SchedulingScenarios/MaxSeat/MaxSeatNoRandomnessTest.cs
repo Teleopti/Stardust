@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				}
 			};
 
-			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, scenario, optPreferences, 15);
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, optPreferences, 15);
 
 			schedules[agentData.Agent].ScheduledDay(dateOnly)
 				.PersonAssignment()
