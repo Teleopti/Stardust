@@ -10,12 +10,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
     {
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
         private bool _haltModify = true;
+	    private readonly string _businessRuleNoSkillsOpenErrorMessage;
 
-        public OpenHoursRule(ISchedulingResultStateHolder schedulingResultStateHolder)
+	    public OpenHoursRule(ISchedulingResultStateHolder schedulingResultStateHolder)
         {
             _schedulingResultStateHolder = schedulingResultStateHolder;
 	        FriendlyName = Resources.BusinessRuleNoSkillsOpenFriendlyName;
-
+			_businessRuleNoSkillsOpenErrorMessage = Resources.BusinessRuleNoSkillsOpenErrorMessage;
         }
 
 
@@ -99,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                         if (!found)
                         {
                             var errorMessage = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
-                                           Resources.BusinessRuleNoSkillsOpenErrorMessage,
+                                           _businessRuleNoSkillsOpenErrorMessage,
                                            layer.DisplayDescription(),
                                            layer.Period.StartDateTimeLocal(timeZone),
                                            layer.Period.EndDateTimeLocal(timeZone));

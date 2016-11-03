@@ -12,11 +12,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
     	private readonly IWorkTimeStartEndExtractor _workTimeStartEndExtractor;
     	private bool _haltModify = true;
         private readonly string _errorMessage = string.Empty;
+	    private readonly string _localizedMessage;
 
-		public NewNightlyRestRule(IWorkTimeStartEndExtractor workTimeStartEndExtractor)
+	    public NewNightlyRestRule(IWorkTimeStartEndExtractor workTimeStartEndExtractor)
 		{
 			_workTimeStartEndExtractor = workTimeStartEndExtractor;
 			FriendlyName = Resources.BusinessRuleNightlyRestRuleFriendlyName;
+			_localizedMessage = Resources.BusinessRuleNightlyRestRuleErrorMessage;
 		}
 
     	public string ErrorMessage
@@ -177,14 +179,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return response;
         }
 
-        private static string createErrorMessage(DateOnly dateOnly1, DateOnly dateOnly2, TimeSpan nightRest, TimeSpan currentRest)
+        private string createErrorMessage(DateOnly dateOnly1, DateOnly dateOnly2, TimeSpan nightRest, TimeSpan currentRest)
         {
             var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             string start = dateOnly1.ToShortDateString();
             string end = dateOnly2.ToShortDateString();
             string rest = TimeHelper.GetLongHourMinuteTimeString(currentRest, loggedOnCulture);
             string ret = string.Format(loggedOnCulture,
-                                       Resources.BusinessRuleNightlyRestRuleErrorMessage,
+                                       _localizedMessage,
                                        TimeHelper.GetLongHourMinuteTimeString(nightRest, loggedOnCulture), start, end, rest);
             return ret;
         }

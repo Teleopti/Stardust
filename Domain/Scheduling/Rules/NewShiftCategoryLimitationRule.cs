@@ -11,13 +11,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         private readonly IShiftCategoryLimitationChecker _limitationChecker;
         private readonly IVirtualSchedulePeriodExtractor _virtualSchedulePeriodExtractor;
         private bool _haltModify = true;
+	    private readonly string _localizedMessage;
 
-        public NewShiftCategoryLimitationRule(IShiftCategoryLimitationChecker limitationChecker, 
+	    public NewShiftCategoryLimitationRule(IShiftCategoryLimitationChecker limitationChecker, 
             IVirtualSchedulePeriodExtractor virtualSchedulePeriodExtractor)
         {
             _limitationChecker = limitationChecker;
             _virtualSchedulePeriodExtractor = virtualSchedulePeriodExtractor;
 	        FriendlyName = Resources.BusinessRuleShiftCategoryLimitationFriendlyName;
+	        _localizedMessage = Resources.BusinessRuleShiftCategoryLimitationErrorMessage2;
+
 
         }
 
@@ -66,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                             if (_limitationChecker.IsShiftCategoryOverPeriodLimit(shiftCategoryLimitation, period, currentSchedules, out datesWithCategory))
                             {
                                 string message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
-                                                    Resources.BusinessRuleShiftCategoryLimitationErrorMessage2,
+                                                    _localizedMessage,
                                                     shiftCategoryLimitation.ShiftCategory.Description.Name);
                                 foreach (DateOnly dateOnly in datesWithCategory)
                                 {

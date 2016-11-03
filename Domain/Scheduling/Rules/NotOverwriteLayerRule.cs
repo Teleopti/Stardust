@@ -11,6 +11,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	{
 		private readonly string _errorMessage = string.Empty;
 		private bool _haltModify = true;
+		private readonly string _businessRuleOverlappingErrorMessage3;
+
+		public NotOverwriteLayerRule()
+		{
+			FriendlyName = Resources.BusinessRuleOverlappingFriendlyName3;
+			_businessRuleOverlappingErrorMessage3 = Resources.BusinessRuleOverlappingErrorMessage3;
+		}
 
 		public string ErrorMessage
 		{
@@ -43,10 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return responseList;		
 		}
 
-		public string FriendlyName
-		{
-			get { return Resources.BusinessRuleOverlappingFriendlyName3; }
-		}
+		public string FriendlyName { get; }
 
 		private IEnumerable<IBusinessRuleResponse> checkDay(IDictionary<IPerson, IScheduleRange> rangeClones, IScheduleDay scheduleDay)
 		{
@@ -178,7 +182,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return response;
 		}
 
-		private static string createErrorMessage(OverlappingLayers overlappingLayers)
+		private string createErrorMessage(OverlappingLayers overlappingLayers)
 		{
 			var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			var loggedOnTimezone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
@@ -187,7 +191,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var layerAboveTimePeriod = overlappingLayers.LayerAbovePeriod.TimePeriod(loggedOnTimezone);
 
 			string ret = string.Format(loggedOnCulture,
-									   Resources.BusinessRuleOverlappingErrorMessage3,
+									   _businessRuleOverlappingErrorMessage3,
 									   overlappingLayers.LayerBelowName,
 									   layerBelowTimePeriod.ToShortTimeString(loggedOnCulture),
 									   overlappingLayers.LayerAboveName,

@@ -14,12 +14,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		private bool _haltModify = true;
 		private bool _forDelete;
 		private static readonly object modifiedAccountLock = new object();
+		private readonly string _businessRulePersonAccountError1;
 
 		public NewPersonAccountRule(ISchedulingResultStateHolder schedulingResultStateHolder, IDictionary<IPerson, IPersonAccountCollection> allAccounts)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_allAccounts = allAccounts;
 			FriendlyName = Resources.BusinessRulePersonAccountFriendlyName;
+			_businessRulePersonAccountError1 = Resources.BusinessRulePersonAccountError1;
 		}
 
 		public string ErrorMessage
@@ -105,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 						foreach (var scheduleDay in scheduleDaysForAccount)
 						{
 							string message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
-													Resources.BusinessRulePersonAccountError1,
+													_businessRulePersonAccountError1,
 													affectedAccount.Owner.Absence.Description.Name, affectedAccount.Period().StartDate.ToShortDateString());
 
 							if (!ForDelete)

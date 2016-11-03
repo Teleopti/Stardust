@@ -13,14 +13,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         private readonly IVirtualSchedulePeriodExtractor _virtualSchedulePeriodExtractor;
         private readonly IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;
         private bool _haltModify = true;
+	    private readonly string _localizedMessage;
 
-        public WeekShiftCategoryLimitationRule(IShiftCategoryLimitationChecker limitationChecker,
+	    public WeekShiftCategoryLimitationRule(IShiftCategoryLimitationChecker limitationChecker,
             IVirtualSchedulePeriodExtractor virtualSchedulePeriodExtractor, IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor)
         {
             _limitationChecker = limitationChecker;
             _virtualSchedulePeriodExtractor = virtualSchedulePeriodExtractor;
             _weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
 	        FriendlyName = Resources.BusinessRuleShiftCategoryLimitationFriendlyName1;
+	        _localizedMessage = Resources.BusinessRuleShiftCategoryLimitationErrorMessage;
+
 
         }
 
@@ -108,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 										if (_limitationChecker.IsShiftCategoryOverWeekLimit(shiftCategoryLimitation, schedule, personWeek.Week, out datesWithCategory))
 										{
 											string message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
-											                               Resources.BusinessRuleShiftCategoryLimitationErrorMessage,
+											                               _localizedMessage,
 											                               shiftCategoryLimitation.ShiftCategory.Description.Name);
 											foreach (DateOnly dateOnly in datesWithCategory)
 											{

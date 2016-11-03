@@ -11,11 +11,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
     {
         private bool _haltModify = true;
         private readonly IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;
+	    private readonly string _localizedMessage1;
+	    private readonly string _localizedMessage2;
 
-        public NewMaxWeekWorkTimeRule(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor)
+	    public NewMaxWeekWorkTimeRule(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor)
         {
             _weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
 	        FriendlyName = Resources.BusinessRuleMaxWeekWorkTimeFriendlyName;
+	        _localizedMessage1 = Resources.BusinessRuleMaxWeekWorkTimeErrorMessage;
+		    _localizedMessage2 = Resources.BusinessRuleNoContractErrorMessage;
+
+
 
         }
         public string ErrorMessage
@@ -57,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                     foreach (DateOnly dateOnly in personWeek.Week.DayCollection())
                     {
                         string message = string.Format(CultureInfo.CurrentCulture,
-                                                 UserTexts.Resources.BusinessRuleNoContractErrorMessage, person.Name,
+                                                 _localizedMessage2, person.Name,
                                                  dateOnly.Date.ToShortDateString());
                         IBusinessRuleResponse response = createResponse(person, dateOnly, message,
                                                                         typeof(NewMaxWeekWorkTimeRule));
@@ -75,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                         string sumWorkTimeString = DateHelper.HourMinutesString(sumWorkTime);
                         string maxTimePerWeekString = DateHelper.HourMinutesString(maxTimePerWeekMinutes);
                         string message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
-                                                UserTexts.Resources.BusinessRuleMaxWeekWorkTimeErrorMessage,
+                                                _localizedMessage1,
                                                 sumWorkTimeString,
                                                 maxTimePerWeekString);
                         foreach (DateOnly dateOnly in personWeek.Week.DayCollection())

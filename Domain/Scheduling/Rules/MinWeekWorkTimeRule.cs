@@ -10,11 +10,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
     {
         private bool _haltModify = true;
         private readonly IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;
+		private readonly string _businessRuleMinWeekWorktimeErrorMessage;
 
-        public MinWeekWorkTimeRule(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor)
+		public MinWeekWorkTimeRule(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor)
         {
             _weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
 	        FriendlyName = Resources.BusinessRuleMinWeekWorktimeFriendlyName;
+			_businessRuleMinWeekWorktimeErrorMessage = Resources.BusinessRuleMinWeekWorktimeErrorMessage;
 
         }
 
@@ -64,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
                 var sumWorkTimeString = DateHelper.HourMinutesString(sumWorkTime);
                 var minTimePerWeekString = DateHelper.HourMinutesString(minTimePerWeek.TotalMinutes);
-                var message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, UserTexts.Resources.BusinessRuleMinWeekWorktimeErrorMessage, sumWorkTimeString, minTimePerWeekString);
+                var message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, _businessRuleMinWeekWorktimeErrorMessage, sumWorkTimeString, minTimePerWeekString);
                 foreach (var dateOnly in personWeek.Week.DayCollection())
                 {
                     var response = createResponse(person, dateOnly, message, typeof(MinWeekWorkTimeRule));
