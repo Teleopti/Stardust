@@ -55,7 +55,6 @@
 			vm.prioritizedSkills = unflattendDataFromServer(allActivitySkills.filter(hasPriority));
 			vm.activitySkills = allActivitySkills.filter(lacksPriority);
 			vm.activitySkills.sort(sortBySkillName);
-			console.log(vm.prioritizedSkills);
 		}
 
 		function selectActivityPreCheck(activity) {

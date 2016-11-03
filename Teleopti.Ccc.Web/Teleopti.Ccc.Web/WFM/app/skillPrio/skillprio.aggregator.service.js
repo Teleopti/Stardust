@@ -29,11 +29,10 @@
         }
         function getSkillsForActivity(activity) {
              matchSkillsForActivity(activity, function(data){
-                 console.log(data);
                  return data;
             });
         }
-        
+
         function matchSkillsForActivity(activity,callback) {
             if (!activity) return;
             var deferred = $q.defer();
@@ -47,7 +46,7 @@
                 });
             });
             callback(aggregatedSkills);
-            
+
             // skills.$promise.then(function () {
             //     skills.forEach(function (skill) {
             //         if (skill.ActivityGuid === activity.ActivityGuid) {
