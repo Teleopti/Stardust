@@ -39,7 +39,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			fakeGlobalSettingRepo.PersistSettingValue("CommonNameDescription", new CommonNameDescriptionSetting("{FirstName}{LastName}"));
 			_commonAgentNameProvider = new CommonAgentNameProvider(fakeGlobalSettingRepo);
 			_toggleManager = new FakeToggleManager();
-			target = new TeamScheduleProjectionProvider(projectionProvider, loggonUser, _toggleManager, new ScheduleProjectionHelper(), new ProjectionSplitter(projectionProvider, new ScheduleProjectionHelper()), new FakeIanaTimeZoneProvider(),new FakePersonNameProvider());
+			target = new TeamScheduleProjectionProvider(projectionProvider, loggonUser, _toggleManager,
+				new ScheduleProjectionHelper(), new ProjectionSplitter(projectionProvider, new ScheduleProjectionHelper()),
+				new FakeIanaTimeZoneProvider(), new FakePersonNameProvider());
 		}
 
 		[Test]
@@ -89,13 +91,15 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			personAbsenceProjection.Description.Should().Be(testAbsence.Name);
 			vm.Projection.Last().Description.Should().Be(phoneActivity.Description.Name);
 
-			var expectedContactTime = getTimeSpanInMinutesFromPeriod(phoneActivityPeriod) -
-									  getTimeSpanInMinutesFromPeriod(absencePeriod);
+			var timeSpanForPhoneActivityPeriod = getTimeSpanInMinutesFromPeriod(phoneActivityPeriod);
+			var timeSpanForAbsencePeriod = getTimeSpanInMinutesFromPeriod(absencePeriod);
+			var timeSpanForLunchActivityPeriod = getTimeSpanInMinutesFromPeriod(lunchActivityPeriod);
+
+			var expectedContactTime = timeSpanForPhoneActivityPeriod - timeSpanForAbsencePeriod;
 			vm.ContractTimeMinutes.Should().Be(expectedContactTime);
 
-			var expectedWorktimeMinutes = getTimeSpanInMinutesFromPeriod(phoneActivityPeriod) -
-										  getTimeSpanInMinutesFromPeriod(lunchActivityPeriod) -
-										  getTimeSpanInMinutesFromPeriod(absencePeriod);
+			var expectedWorktimeMinutes = timeSpanForPhoneActivityPeriod - timeSpanForLunchActivityPeriod -
+										  timeSpanForAbsencePeriod;
 			vm.WorkTimeMinutes.Should().Be(expectedWorktimeMinutes);
 		}
 
@@ -122,7 +126,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			assignment1Person1.AddOvertimeActivity(overTimeActivity, overTimeActivityPeriod, def);
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
-
 			var vm = target.Projection(scheduleDayOnePerson1, true, _commonAgentNameProvider.CommonAgentNameSettings);
 
 			vm.PersonId.Should().Be(person1.Id.ToString());
@@ -147,7 +150,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var meetingActivity = ActivityFactory.CreateActivity("Meeting", Color.Red);
 			_toggleManager.Enable(Toggles.WfmTeamSchedule_MakePersonalActivityUnmerged_40252);
 
-
 			phoneActivity.InContractTime = true;
 			meetingActivity.InContractTime = true;
 			meetingActivity.InWorkTime = true;
@@ -159,7 +161,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			assignment1Person1.ShiftLayers.ForEach(l => l.WithId());
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
-
 			var vm = target.Projection(scheduleDayOnePerson1, true, _commonAgentNameProvider.CommonAgentNameSettings);
 
 			vm.PersonId.Should().Be(person1.Id.ToString());
@@ -170,6 +171,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			visualLayers[1].Description.Should().Be("Phone");
 			visualLayers[1].Minutes.Should().Be(300);
 		}
+
 		[Test]
 		public void ShouldSplitMergedPersonalActivityInProjectionWithSinglePersonalLayer()
 		{
@@ -194,7 +196,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			assignment1Person1.AddPersonalActivity(meetingActivity, personalMeetingPeriod);
 			assignment1Person1.ShiftLayers.ForEach(l => l.WithId());
 			scheduleDayOnePerson1.Add(assignment1Person1);
-
 
 			var vm = target.Projection(scheduleDayOnePerson1, true, _commonAgentNameProvider.CommonAgentNameSettings);
 
@@ -235,7 +236,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			assignment1Person1.ShiftLayers.ForEach(l => l.WithId());
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
-
 			var vm = target.Projection(scheduleDayOnePerson1, true, _commonAgentNameProvider.CommonAgentNameSettings);
 
 			vm.PersonId.Should().Be(person1.Id.ToString());
@@ -254,6 +254,110 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			visualLayers[3].Description.Should().Be("Phone");
 			visualLayers[3].Minutes.Should().Be(270);
 			visualLayers[3].ShiftLayerIds.First().Should().Be(shiftLayers[0].Id);
+		}
+
+		[Test]
+		public void ShouldMakeAgentInTeamScheduleViewModel()
+		{
+			const string firstName = "Sherlock";
+			const string lastName = "Holmes";
+
+			var baseDate = new DateTime(2015, 01, 01, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePersonWithGuid(firstName, lastName);
+
+			var assignment1Person1 = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(baseDate));
+			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(baseDate), person, scenario);
+
+			var phoneActivityStart = baseDate.AddHours(8);
+			var phoneActivityEnd = baseDate.AddHours(16);
+			var phoneActivityPeriod = new DateTimePeriod(phoneActivityStart, phoneActivityEnd);
+
+			var lunchActivityStart = baseDate.AddHours(11);
+			var lunchActivityEnd = baseDate.AddHours(12);
+			var lunchActivityPeriod = new DateTimePeriod(lunchActivityStart, lunchActivityEnd);
+
+			var absencePeriodStart = baseDate.AddHours(12);
+			var absencePeriodEnd = baseDate.AddHours(13);
+			var absencePeriod = new DateTimePeriod(absencePeriodStart, absencePeriodEnd);
+
+			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
+			phoneActivity.InContractTime = true;
+			phoneActivity.InWorkTime = true;
+			assignment1Person1.AddActivity(phoneActivity, phoneActivityPeriod);
+
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch", Color.Yellow);
+			lunchActivity.InContractTime = true;
+			lunchActivity.InWorkTime = false;
+			assignment1Person1.AddActivity(lunchActivity, lunchActivityPeriod);
+
+			scheduleDay.Add(assignment1Person1);
+
+			var testAbsence = AbsenceFactory.CreateAbsence("TestAbsence");
+			var absenceLayer = new AbsenceLayer(testAbsence, absencePeriod);
+			var personAbsence = scheduleDay.CreateAndAddAbsence(absenceLayer);
+			personAbsence.SetId(Guid.NewGuid());
+
+			var timeSpanForPhoneActivityPeriod = getTimeSpanInMinutesFromPeriod(phoneActivityPeriod);
+			var timeSpanForAbsencePeriod = getTimeSpanInMinutesFromPeriod(absencePeriod);
+			var expectedContactTime = timeSpanForPhoneActivityPeriod - timeSpanForAbsencePeriod;
+
+			var result = target.MakeScheduleReadModel(person, scheduleDay, false);
+
+			Assert.AreEqual(result.ScheduleLayers.Length, 4);
+
+			#region Check layer details
+
+			var layer = result.ScheduleLayers[0];
+			Assert.AreEqual("Phone", layer.TitleHeader);
+			Assert.AreEqual("8:00 - 11:00", layer.TitleTime);
+			Assert.AreEqual("Blue", layer.Color);
+			Assert.AreEqual(phoneActivityStart, layer.Start);
+			Assert.AreEqual(lunchActivityStart, layer.End);
+			Assert.AreEqual((int)(lunchActivityStart - phoneActivityStart).TotalMinutes, layer.LengthInMinutes);
+			Assert.AreEqual(false, layer.IsAbsenceConfidential);
+			Assert.AreEqual(false, layer.IsOvertime);
+
+			layer = result.ScheduleLayers[1];
+			Assert.AreEqual("Lunch", layer.TitleHeader);
+			Assert.AreEqual("11:00 - 12:00", layer.TitleTime);
+			Assert.AreEqual("Yellow", layer.Color);
+			Assert.AreEqual(lunchActivityStart, layer.Start);
+			Assert.AreEqual(absencePeriodStart, layer.End);
+			Assert.AreEqual((int)(absencePeriodStart - lunchActivityStart).TotalMinutes, layer.LengthInMinutes);
+			Assert.AreEqual(false, layer.IsAbsenceConfidential);
+			Assert.AreEqual(false, layer.IsOvertime);
+
+			layer = result.ScheduleLayers[2];
+			Assert.AreEqual("TestAbsence", layer.TitleHeader);
+			Assert.AreEqual("12:00 - 13:00", layer.TitleTime);
+			Assert.AreEqual("Red", layer.Color);
+			Assert.AreEqual(absencePeriodStart, layer.Start);
+			Assert.AreEqual(absencePeriodEnd, layer.End);
+			Assert.AreEqual((int)(absencePeriodEnd - absencePeriodStart).TotalMinutes, layer.LengthInMinutes);
+			Assert.AreEqual(false, layer.IsAbsenceConfidential);
+			Assert.AreEqual(false, layer.IsOvertime);
+
+			layer = result.ScheduleLayers[3];
+			Assert.AreEqual("Phone", layer.TitleHeader);
+			Assert.AreEqual("13:00 - 16:00", layer.TitleTime);
+			Assert.AreEqual("Blue", layer.Color);
+			Assert.AreEqual(absencePeriodEnd, layer.Start);
+			Assert.AreEqual(phoneActivityEnd, layer.End);
+			Assert.AreEqual((int)(phoneActivityEnd - absencePeriodEnd).TotalMinutes, layer.LengthInMinutes);
+			Assert.AreEqual(false, layer.IsAbsenceConfidential);
+			Assert.AreEqual(false, layer.IsOvertime);
+
+			#endregion Check layer details
+
+			Assert.AreEqual($"{lastName} {firstName}", result.Name);
+			Assert.AreEqual(baseDate.AddHours(8), result.StartTimeUtc);
+			Assert.AreEqual(person.Id, result.PersonId);
+			Assert.AreEqual(null, result.MinStart);
+			Assert.AreEqual(false, result.IsDayOff);
+			Assert.AreEqual(false, result.IsFullDayAbsence);
+			Assert.AreEqual(4, result.Total);
+			Assert.AreEqual(null, result.DayOffName);
+			Assert.AreEqual(expectedContactTime, result.ContractTimeInMinute);
 		}
 
 		private double getTimeSpanInMinutesFromPeriod(DateTimePeriod period)

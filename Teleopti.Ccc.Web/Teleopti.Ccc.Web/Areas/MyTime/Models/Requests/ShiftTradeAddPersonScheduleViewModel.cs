@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 			StartTimeUtc = input.StartTimeUtc;
 			Total = input.Total;
 			ShiftExchangeOfferId = null;
+			ContractTimeInMinute = input.ContractTimeInMinute;
 		}
 	}
 }

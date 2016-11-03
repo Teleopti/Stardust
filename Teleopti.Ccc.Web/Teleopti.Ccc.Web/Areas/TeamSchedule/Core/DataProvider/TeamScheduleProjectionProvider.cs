@@ -26,10 +26,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly IPersonNameProvider _personNameProvider;
 
-		public TeamScheduleProjectionProvider(IProjectionProvider projectionProvider, ILoggedOnUser loggedOnUser, IToggleManager toggleManager, IScheduleProjectionHelper projectionHelper, IProjectionSplitter projectionSplitter, IIanaTimeZoneProvider ianaTimeZoneProvider, IPersonNameProvider personNameProvider)
+		public TeamScheduleProjectionProvider(IProjectionProvider projectionProvider, ILoggedOnUser loggedOnUser,
+			IToggleManager toggleManager, IScheduleProjectionHelper projectionHelper, IProjectionSplitter projectionSplitter,
+			IIanaTimeZoneProvider ianaTimeZoneProvider, IPersonNameProvider personNameProvider)
 		{
 			_projectionProvider = projectionProvider;
-			_loggedOnUser = loggedOnUser;			
+			_loggedOnUser = loggedOnUser;
 			_toggleManager = toggleManager;
 			_projectionHelper = projectionHelper;
 			_projectionSplitter = projectionSplitter;
@@ -45,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				PersonId = person.Id.GetValueOrDefault().ToString(),
 				Name = agentNameSetting.BuildCommonNameDescription(person),
 				Date = date.Date.ToFixedDateFormat(),
-				Projection = new List<GroupScheduleProjectionViewModel>(),				
+				Projection = new List<GroupScheduleProjectionViewModel>()
 			};
 
 			if (scheduleDay != null)
@@ -64,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						: string.Empty;
 				}
 			}
-			
+
 			vm.Timezone = new TimeZoneViewModel
 			{
 				IanaId = _ianaTimeZoneProvider.WindowsToIana(person.PermissionInformation.DefaultTimeZone().Id),
@@ -132,8 +134,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							? ConfidentialPayloadValues.Description
 							: ((IAbsence) layer.Payload).Description)
 						: layer.DisplayDescription();
-					if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_MakePersonalActivityUnmerged_40252) 
-						&& _projectionHelper.GetMatchedShiftLayerIds(scheduleDay, layer).Count > 1 
+					if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_MakePersonalActivityUnmerged_40252)
+						&& _projectionHelper.GetMatchedShiftLayerIds(scheduleDay, layer).Count > 1
 						&& _projectionHelper.GetMatchedPersonalShiftLayers(scheduleDay, layer).Count > 0)
 					{
 						projections.AddRange(_projectionSplitter.SplitMergedPersonalLayers(scheduleDay, layer, userTimeZone));
@@ -157,12 +159,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 									 && overtimeActivities.Any(overtime => overtime.Period.Contains(layer.Period))
 						});
 					}
-					
 				}
 			}
 			scheduleVm.Projection = projections;
 			return scheduleVm;
 		}
+
 		public AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential)
 		{
 			var ret = new AgentInTeamScheduleViewModel
@@ -197,7 +199,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var layers = new List<TeamScheduleLayerViewModel>();
 			if (projection.HasLayers)
 			{
-
 				foreach (var layer in projection)
 				{
 					var isPayloadAbsence = layer.Payload is IAbsence;
@@ -234,6 +235,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			}
 			ret.ScheduleLayers = layers.ToArray();
 			ret.Total = layers.Count;
+
+			var visualLayers = _projectionProvider.Projection(scheduleDay);
+			ret.ContractTimeInMinute = visualLayers.ContractTime().TotalMinutes;
 			return ret;
 		}
 
@@ -270,6 +274,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			}
 			return false;
 		}
+
 		private ShiftCategoryViewModel getShiftCategoryDescription(IScheduleDay scheduleDay)
 		{
 			var significantPart = scheduleDay.SignificantPart();

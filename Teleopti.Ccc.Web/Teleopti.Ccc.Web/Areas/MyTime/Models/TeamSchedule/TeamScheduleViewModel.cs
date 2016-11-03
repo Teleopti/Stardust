@@ -23,15 +23,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 
 	public class TeamScheduleViewModelReworked
 	{
-		
-		public AgentInTeamScheduleViewModel[] AgentSchedules { get; set; }		
+		public AgentInTeamScheduleViewModel[] AgentSchedules { get; set; }
 		public TimeLineViewModelReworked[] TimeLine { get; set; }
 
 		public int TimeLineLengthInMinutes { get; set; }
 		public int PageCount { get; set; }
 		public AgentInTeamScheduleViewModel MySchedule { get; set; }
 	}
-
 
 	public class TimeLineViewModel
 	{
@@ -48,7 +46,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
 	}
-
 
 	public class AgentScheduleViewModel
 	{
@@ -69,6 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public bool IsFullDayAbsence { get; set; }
 		public int Total { get; set; }
 		public string DayOffName { get; set; }
+		public double ContractTimeInMinute { get; set; }
 	}
 
 	public class LayerViewModel
