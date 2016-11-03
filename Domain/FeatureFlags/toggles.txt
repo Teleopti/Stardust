@@ -192,4 +192,4 @@ AbsenceRequests_SpeedupEndToEnd_41384 = RC
 ETL_EventBasedAgentNameDescription_41432 = RC
 ETL_FixScheduleForPersonPeriod_41393 = DEV
 Stardust_RunMultipleNodes_41224 = RC
-MyTimeWeb_SortRequestList_40711 = true
+MyTimeWeb_SortRequestList_40711 = DEV
