@@ -36,6 +36,11 @@
       url: '/optimize/:id',
       templateUrl: 'app/resourceplanner/temp.html',
       controller: 'ResourceplannerTempCtrl'
+    }).state('resourceplanner.archiveschedule',
+    {
+    	url: '/archiveschedule',
+    	templateUrl: 'app/resourceplanner/archiveschedule.html',
+		controller: 'ResourceplannerArchiveScheduleCtrl as vm'
     })
   }
 })();

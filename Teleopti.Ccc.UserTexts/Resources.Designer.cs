@@ -2881,6 +2881,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Archive schedule.
+        /// </summary>
+        public static string ArchiveSchedule {
+            get {
+                return ResourceManager.GetString("ArchiveSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to remove {0} absences from {1} agents?.
         /// </summary>
         public static string AreYouSureToRemoveSelectedAbsence {

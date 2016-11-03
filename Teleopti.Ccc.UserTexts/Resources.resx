@@ -15098,4 +15098,8 @@ These options are activated:
     <value>Cannot apply change to agent in different timezones</value>
     <comment>Alert message stating the intended changes cannot be applied to agents that have timezones different to the currently selected timezone.</comment>
   </data>
+  <data name="ArchiveSchedule" xml:space="preserve">
+    <value>Archive schedule</value>
+    <comment>Archive schedule</comment>
+  </data>
 </root>
