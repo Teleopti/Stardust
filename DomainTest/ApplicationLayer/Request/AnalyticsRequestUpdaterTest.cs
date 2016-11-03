@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			person.SetId(Guid.NewGuid());
 			var personRequestFactory = new PersonRequestFactory
 			{
-				Request = new TextRequest(new DateTimePeriod(new DateTime(2000, 1, 2, 0, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 2, 0, 0, 0, DateTimeKind.Utc)))
+				Request = new TextRequest(new DateTimePeriod(new DateTime(1999, 1, 2, 0, 0, 0, DateTimeKind.Utc), new DateTime(1999, 1, 2, 0, 0, 0, DateTimeKind.Utc)))
 			};
 			var personRequest = (PersonRequest)personRequestFactory.CreatePersonRequest(person);
 			personRequest.SetId(Guid.NewGuid());
@@ -58,8 +58,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			{
 				PersonCode = person.Id.GetValueOrDefault(),
 				PersonId = 1,
-				ValidFromDate = new DateTime(2000, 1, 2, 0, 0, 0, DateTimeKind.Utc),
-				ValidToDate = new DateTime(2000, 1, 3, 0, 0, 0, DateTimeKind.Utc)
+				ValidFromDate = new DateTime(1999, 1, 2, 0, 0, 0, DateTimeKind.Utc),
+				ValidToDate = new DateTime(1999, 1, 3, 0, 0, 0, DateTimeKind.Utc)
 			});
 
 			Assert.Throws<DateMissingInAnalyticsException>(() => _target.Handle(new PersonRequestChangedEvent { PersonRequestId = personRequest.Id.GetValueOrDefault(), LogOnBusinessUnitId = Guid.NewGuid() }));

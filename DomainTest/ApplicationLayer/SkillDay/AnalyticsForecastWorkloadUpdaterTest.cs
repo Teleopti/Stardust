@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SkillDay
 			_analyticsDateRepository.Clear();
 			var skill = SkillFactory.CreateSkill("TestSkill");
 			var scenario = ScenarioFactory.CreateScenario("TestScenario", true, true);
-			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today, scenario);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today, scenario); 
 			skillDay.SetId(Guid.NewGuid());
 
 			foreach (var workloadDay in skillDay.WorkloadDayCollection)

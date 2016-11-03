@@ -48,12 +48,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IAnalyticsDate MinDate()
 		{
-			return _fakeDates.First(a => a.DateId >= 0);
+			return _fakeDates.FirstOrDefault(a => a.DateId >= 0);
 		}
 
 		public IAnalyticsDate Date(DateTime dateDate)
 		{
-			if (dateDate < MinDate().DateDate)
+			if (MinDate() == null || dateDate < MinDate().DateDate)
 				return null;
 			return _fakeDates.FirstOrDefault(a => new DateOnly(a.DateDate) == new DateOnly(dateDate)) ?? createDates(dateDate);
 		}
