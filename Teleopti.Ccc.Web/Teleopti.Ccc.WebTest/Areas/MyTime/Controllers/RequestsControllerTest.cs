@@ -65,10 +65,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new FakePermissionProvider(), null, null, null, null, null);
 			var model = new RequestViewModel[] { };
 			var paging = new Paging();
+			var filter = new RequestListFilter() {HideOldRequest = false, SortByUpdateDate = true};
 
-			viewModelFactory.Stub(x => x.CreatePagingViewModel(paging)).Return(model);
+			viewModelFactory.Stub(x => x.CreatePagingViewModel(paging, filter)).Return(model);
 
-			var result = target.Requests(paging, false);
+			var result = target.Requests(paging, filter);
 
 			result.Data.Should().Be.SameInstanceAs(model);
 		}
@@ -82,10 +83,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new FakePermissionProvider(), null, null, null, null, null);
 			var model = new RequestViewModel[] { };
 			var paging = new Paging();
+			var filter = new RequestListFilter() { HideOldRequest = false, SortByUpdateDate = true };
 
-			viewModelFactory.Stub(x => x.CreatePagingViewModel(paging, true)).Return(model);
+			viewModelFactory.Stub(x => x.CreatePagingViewModel(paging, filter)).Return(model);
 
-			var result = target.Requests(paging, true);
+			var result = target.Requests(paging, filter);
 
 			result.Data.Should().Be.SameInstanceAs(model);
 		}

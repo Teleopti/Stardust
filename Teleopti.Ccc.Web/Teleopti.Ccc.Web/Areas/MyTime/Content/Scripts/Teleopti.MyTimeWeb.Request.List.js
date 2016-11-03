@@ -307,7 +307,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 				data: {
 					Take: take,
 					Skip: skip,
-					hideOldRequest: self.hideOldRequests()
+					HideOldRequest: self.hideOldRequests(),
+					SortByUpdateDate: true
 				},
 				beforeSend: function () {
 				    self.isLoadingRequests(true);

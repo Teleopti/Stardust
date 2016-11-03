@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 	{
 		RequestsViewModel CreatePageViewModel();
 
-		IEnumerable<RequestViewModel> CreatePagingViewModel(Paging paging, bool hideOldRequest = false);
+		IEnumerable<RequestViewModel> CreatePagingViewModel(Paging paging, RequestListFilter filter);
 
 		RequestViewModel CreateRequestViewModel(Guid id);
 

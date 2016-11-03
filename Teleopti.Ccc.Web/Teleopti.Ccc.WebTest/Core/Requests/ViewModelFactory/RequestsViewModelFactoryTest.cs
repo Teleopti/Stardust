@@ -164,8 +164,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				null, null, null, null, null, null, null, null, null);
 			var paging = new Paging();
 			personRequestProvider.Stub(x => x.RetrieveRequestsForLoggedOnUser(paging, false)).Return(new IPersonRequest[] { });
+			var filter = new RequestListFilter() { HideOldRequest = false, SortByUpdateDate = true };
 
-			target.CreatePagingViewModel(paging);
+			target.CreatePagingViewModel(paging, filter);
 
 			personRequestProvider.AssertWasCalled(x => x.RetrieveRequestsForLoggedOnUser(paging, false));
 		}
@@ -178,8 +179,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				null, null, null, null, null, null, null, null, null);
 			var paging = new Paging();
 			personRequestProvider.Stub(x => x.RetrieveRequestsForLoggedOnUser(paging, true)).Return(new IPersonRequest[] { });
+			var filter = new RequestListFilter() { HideOldRequest = true, SortByUpdateDate = true };
 
-			var result = target.CreatePagingViewModel(paging, true);
+			var result = target.CreatePagingViewModel(paging, filter);
 
 			personRequestProvider.AssertWasCalled(x => x.RetrieveRequestsForLoggedOnUser(paging, true));
 		}
@@ -191,10 +193,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var target = new RequestsViewModelFactory(MockRepository.GenerateMock<IPersonRequestProvider>(), mapper, null, null,
 				null, null, null, null, null, null, null, null);
 			var requests = new RequestViewModel[] {};
+			var filter = new RequestListFilter() { HideOldRequest = false, SortByUpdateDate = true };
 
 			mapper.Stub(x => x.Map<IEnumerable<IPersonRequest>, IEnumerable<RequestViewModel>>(null)).Return(requests);
 
-			var result = target.CreatePagingViewModel(new Paging());
+			var result = target.CreatePagingViewModel(new Paging(), filter);
 
 			result.Should().Be.SameInstanceAs(requests);
 		}
