@@ -4,10 +4,15 @@ angular.module('wfm.rta').provider('RtaState', function() {
 
 	var toggles = {
 		RTA_HideAgentsByStateGroup_40469: false,
-		RTA_SiteAndTeamOnSkillOverview_40817: false
+		RTA_SiteAndTeamOnSkillOverview_40817: false,
+		RTA_AgentsOnOrganizationAndSkills_41586: false
 	};
 	var rtaAgentsTemplateUrl = function(elem, attr) {
-		return toggles.RTA_HideAgentsByStateGroup_40469 ? 'app/rta/agents/rta-agents-HideAgentsByStateGroup_40469.html' : 'app/rta/agents/rta-agents.html';
+		if(toggles.RTA_AgentsOnOrganizationAndSkills_41586)
+			return 'app/rta/agents/rta-agents-AgentsOnOrganizationAndSkills_41586.html';
+		if(toggles.RTA_HideAgentsByStateGroup_40469)
+			return 'app/rta/agents/rta-agents-HideAgentsByStateGroup_40469.html';
+		return 'app/rta/agents/rta-agents.html';
 	}
 
 	var sitesBySkillTemplate = function(elem, attr) {
@@ -19,6 +24,7 @@ angular.module('wfm.rta').provider('RtaState', function() {
 			toggleService.togglesLoaded.then(function() {
 				toggles.RTA_HideAgentsByStateGroup_40469 = toggleService.RTA_HideAgentsByStateGroup_40469;
 				toggles.RTA_SiteAndTeamOnSkillOverview_40817 = toggleService.RTA_SiteAndTeamOnSkillOverview_40817;
+				toggles.RTA_AgentsOnOrganizationAndSkills_41586 = toggleService.RTA_AgentsOnOrganizationAndSkills_41586;
 			});
 		};
 	};
