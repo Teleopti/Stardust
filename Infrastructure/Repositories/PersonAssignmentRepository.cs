@@ -46,37 +46,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			InParameter.NotNull("scenario", scenario);
 			var result = new List<IPersonAssignment>();
-			//const int batchSize = 100000;
-			//crit.SetMaxResults(batchSize);
+
 			using (PerformanceOutput.ForOperation("Loading personassignments"))
 			{
-				//int batch = 0;
-				//while (true)
-				//{
-				//	crit.SetFirstResult(batch*batchSize);
-				//	var personAssignments = crit.List<IPersonAssignment>();
-				//	result.AddRange(personAssignments);
-				//	if (personAssignments.Count == 0)
-				//		break;
-
-				//	batch++;
-				//}
-				for (var currentDate = period.StartDate; currentDate <= period.EndDate; currentDate = currentDate.AddDays(3))
+				for (var currentDate = period.StartDate; currentDate <= period.EndDate; currentDate = currentDate.AddDays(10))
 				{
-					var end = currentDate.AddDays(2);
+					var end = currentDate.AddDays(9);
 					if (period.EndDate < end)
 						end = period.EndDate;
 					
 					var crit = personAssignmentCriteriaLoader(new DateOnlyPeriod(currentDate,end), scenario);
 					result.AddRange(crit.List<IPersonAssignment>());
 				}
-
-				/*var loadDayByDay = period.DayCollection();
-				foreach (var dateOnly in loadDayByDay)
-				{
-					var crit = personAssignmentCriteriaLoader(dateOnly.ToDateOnlyPeriod(), scenario);
-					result.AddRange(crit.List<IPersonAssignment>());
-				}*/
 			}
 			return result;
 		}
