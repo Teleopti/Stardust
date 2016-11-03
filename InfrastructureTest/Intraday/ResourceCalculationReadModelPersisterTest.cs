@@ -666,6 +666,46 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			result[bu2.Id.GetValueOrDefault()].Should().Be.EqualTo(DateTime.Parse("2016-06-16 03:30"));
 		}
 
-	}
+		[Test]
+		public void ShouldGetIntervalsForMoreThanOneSkill()
+		{
+			Now.Is("2016-06-16 03:15");
+			var skillId = Guid.NewGuid();
+			var skillId2 = Guid.NewGuid();
+			var items =
+				new List<SkillStaffingInterval>()
+				{
+					new SkillStaffingInterval()
+					{
+						SkillId = skillId,
+						StaffingLevel = 10,
+						EndDateTime = new DateTime(2016, 06, 16, 02, 30, 0, DateTimeKind.Utc),
+						Forecast = 20,
+						StartDateTime = new DateTime(2016, 06, 16, 02, 15, 0, DateTimeKind.Utc)
+					},
+					new SkillStaffingInterval()
+					{
+						SkillId = skillId,
+						StaffingLevel = 10,
+						EndDateTime = new DateTime(2016, 06, 16, 2, 45, 0, DateTimeKind.Utc),
+						Forecast = 20,
+						StartDateTime = new DateTime(2016, 06, 16, 2, 30, 0, DateTimeKind.Utc)
+					},
+					new SkillStaffingInterval()
+					{
+						SkillId = skillId2,
+						StaffingLevel = 10,
+						EndDateTime = new DateTime(2016, 06, 16, 3, 0, 0, DateTimeKind.Utc),
+						Forecast = 20,
+						StartDateTime = new DateTime(2016, 06, 16, 2, 45, 0, DateTimeKind.Utc)
+					}
+				};
+			Target.Persist(items, DateTime.Now);
 
+			var result = Target.GetBySkills(new[] { skillId, skillId2 }, new DateTime(2016, 06, 16, 2, 20, 0, DateTimeKind.Utc),
+				new DateTime(2016, 06, 16, 2, 50, 0, DateTimeKind.Utc));
+			result.Count().Should().Be.EqualTo(3);
+		}
+
+	}
 }

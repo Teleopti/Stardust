@@ -118,15 +118,14 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			return mergedStaffingIntervals;
 		}
 
-
-		public IEnumerable<SkillStaffingInterval> GetBySkill(Guid skillId, DateTime startDateTime, DateTime endDateTime)
+		public IEnumerable<SkillStaffingInterval> GetBySkills(Guid[] guids, DateTime startDateTime, DateTime endDateTime)
 		{
 			var result = ((NHibernateUnitOfWork)_currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
 				@"SELECT 
-[SkillId], [StartDateTime], [EndDateTime], [Forecast], [StaffingLevel], [ForecastWithShrinkage], [StaffingLevelWithShrinkage] FROM [ReadModel].[ScheduleForecastSkill]
-where (( [StartDateTime] < :startDateTime  and   [EndDateTime] > :startDateTime) 
-or ( [StartDateTime] >= :startDateTime  and :endDateTime > [StartDateTime])  )
-and SkillId = :skillId")
+				[SkillId], [StartDateTime], [EndDateTime], [Forecast], [StaffingLevel], [ForecastWithShrinkage], [StaffingLevelWithShrinkage] FROM [ReadModel].[ScheduleForecastSkill]
+				where (( [StartDateTime] < :startDateTime  and   [EndDateTime] > :startDateTime) 
+				or ( [StartDateTime] >= :startDateTime  and :endDateTime > [StartDateTime])  )
+				and SkillId in ( :skillIds)")
 				.AddScalar("StartDateTime", NHibernateUtil.DateTime)
 				.AddScalar("EndDateTime", NHibernateUtil.DateTime)
 				.AddScalar("Forecast", NHibernateUtil.Double)
@@ -135,11 +134,18 @@ and SkillId = :skillId")
 				.AddScalar("SkillId", NHibernateUtil.Guid)
 				.SetDateTime("startDateTime", startDateTime)
 				.SetDateTime("endDateTime", endDateTime)
-				.SetGuid("skillId", skillId)
+				.SetParameterList("skillIds", guids.ToArray())
 				.SetResultTransformer(Transformers.AliasToBean(typeof(SkillStaffingInterval)))
 				.List<SkillStaffingInterval>();
 
 			return result;
+		
+		}
+
+
+		public IEnumerable<SkillStaffingInterval> GetBySkill(Guid skillId, DateTime startDateTime, DateTime endDateTime)
+		{
+			return GetBySkills(new[] {skillId}, startDateTime, endDateTime);
 		}
 
 		public IEnumerable<SkillStaffingInterval> GetBySkillArea(Guid id, DateTime startDateTime, DateTime endDateTime)

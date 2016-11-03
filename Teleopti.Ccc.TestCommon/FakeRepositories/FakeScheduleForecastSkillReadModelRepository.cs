@@ -82,6 +82,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
             return mergedStaffingIntervals;
         }
 
+	    public IEnumerable<SkillStaffingInterval> GetBySkills(Guid[] guids, DateTime dateTime, DateTime endDateTime)
+	    {
+		    throw new NotImplementedException();
+	    }
+
 	    public IDictionary<Guid, DateTime> GetLastCalculatedTime2()
 	    {
 		    throw new NotImplementedException();
