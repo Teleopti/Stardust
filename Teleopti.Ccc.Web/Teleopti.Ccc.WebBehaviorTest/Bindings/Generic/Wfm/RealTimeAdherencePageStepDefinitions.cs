@@ -102,8 +102,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			var secondPersonId = DataMaker.Person(secondPerson).Person.Id.Value;
 			Browser.Interactions.AssertXPathExists($@"//*[@agentid='{firstPersonId}']/following::*[@agentid='{secondPersonId}']");
 		}
-
-		[Then(@"I should see agent '(.*)'")]
+		
 		[Then(@"I should see agent status for '(.*)?'")]
 		public void ThenIShouldSeeAgentStatusFor(string name)
 		{

@@ -67,7 +67,7 @@ Scenario: See agents with a specific skill that are in alarm for a selected team
 	And 'John King' sets her phone state to 'Pause'
 	Given the time is '2016-10-03 08:15'
 	And I am viewing real time adherence for skill 'Phone' on team 'London Team 1'
-	Then I should see agent 'Pierre Baldi'
+	Then I should see agent status for 'Pierre Baldi'
 	And I should not see agent 'Ashley Andeen'
 	And I should not see agent 'John King'
 
@@ -81,5 +81,5 @@ Scenario: See agents with a specific skill that are in alarm for selected teams
 	And I am viewing real time adherence for skill 'Phone' on teams 'London Team 1, Paris Team 1'
 	Then I should not see agent 'Pierre Baldi'
 	And I should not see agent 'Ashley Andeen'
-	And I should see agent 'John King'
+	And I should see agent status for 'John King'
 	
