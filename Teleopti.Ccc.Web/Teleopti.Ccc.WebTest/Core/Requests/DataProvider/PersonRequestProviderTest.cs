@@ -12,6 +12,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -82,6 +83,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var target = new PersonRequestProvider(repository, loggedOnUser, null, new FakePermissionProvider());
 			var person = new Person();
 			var paging = new Paging();
+			var filter = new RequestListFilter() { HideOldRequest = false, SortByUpdateDate = true };
 			var personRequests = new[]
 			{
 				new PersonRequestFactory().CreatePersonRequest(),
@@ -94,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			repository.Stub(x => x.FindAllRequestsForAgentByType(person, paging, null, requestTypes.ToArray())).Return(personRequests);
 
-			Assert.That(personRequests.Length, Is.EqualTo(target.RetrieveRequestsForLoggedOnUser(paging, false).Count()));
+			Assert.That(personRequests.Length, Is.EqualTo(target.RetrieveRequestsForLoggedOnUser(paging, filter).Count()));
 			repository.AssertWasCalled(x => x.FindAllRequestsForAgentByType(person, paging, null, requestTypes.ToArray()));
 		}
 
@@ -130,10 +132,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			var earliestDateLocal = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timezone).AddDays(-10).Date;
 			var earliestDateUtc = TimeZoneInfo.ConvertTimeToUtc(earliestDateLocal, timezone);
+			var filter = new RequestListFilter() { HideOldRequest = true, SortByUpdateDate = true };
 			repository.Stub(x => x.FindAllRequestsForAgentByType(person, paging, earliestDateUtc, requestTypes.ToArray()))
 				.IgnoreArguments().Return(personRequests);
 
-			var result = target.RetrieveRequestsForLoggedOnUser(paging, true);
+			var result = target.RetrieveRequestsForLoggedOnUser(paging, filter);
 			repository.AssertWasCalled(x => x.FindAllRequestsForAgentByType(
 				Arg<IPerson>.Matches(p => p == person),
 				Arg<Paging>.Matches(p => p.Equals(paging)),
@@ -150,6 +153,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var target = new PersonRequestProvider(repository, loggedOnUser, null, new FakePermissionProvider());
 			var person = new Person();
 			var paging = new Paging{ Skip = 0, Take = 5 };
+			var filter = new RequestListFilter() { HideOldRequest = false, SortByUpdateDate = true };
 			var personRequests = new[]
 			{
 				new PersonRequestFactory().CreatePersonRequest(),
@@ -162,7 +166,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			repository.Stub(x => x.FindAllRequestsForAgentByType(person, paging, null, requestTypes.ToArray())).Return(personRequests);
 
-			Assert.That(personRequests.Length, Is.EqualTo(target.RetrieveRequestsForLoggedOnUser(paging, false).Count()));
+			Assert.That(personRequests.Length, Is.EqualTo(target.RetrieveRequestsForLoggedOnUser(paging, filter).Count()));
 			repository.AssertWasCalled(x => x.FindAllRequestsForAgentByType(person, paging, null, requestTypes.ToArray()));
 		}
 
@@ -172,11 +176,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var person = PersonFactory.CreatePerson("Bill");
 			var requestDate = new DateOnly(2015, 7, 21);
 			var shiftTradeRequest = new PersonRequestFactory().CreatePersonShiftTradeRequest(person, requestDate);
+			var filter = new RequestListFilter() {HideOldRequest = false, SortByUpdateDate = true};
 
 			((FakeLoggedOnUser)LoggedOnUser).SetFakeLoggedOnUser(person);
 			RequestRepository.Add(shiftTradeRequest);
 
-			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging {Skip = 0, Take = 5}, false).ToArray();
+			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging {Skip = 0, Take = 5}, filter).ToArray();
 
 			requestQueue.Length.Should().Be(0);
 			Assert.IsFalse(requestQueue.Any(requestFromProvider =>
@@ -189,12 +194,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var person = PersonFactory.CreatePerson("John");
 			var requestDate = DateOnly.Today;
 			var shiftTradeRequest = new PersonRequestFactory().CreatePersonShiftTradeRequest(person, requestDate);
+			var filter = new RequestListFilter() { HideOldRequest = false, SortByUpdateDate = true };
 
 			((FakeLoggedOnUser)LoggedOnUser).SetFakeLoggedOnUser(person);
 			RequestRepository.Add(shiftTradeRequest);
 			((FakePermissionProvider)PermissionProvider).PermitPerson(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, requestDate, person);
 
-			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging { Skip = 0, Take = 5 }, false).ToArray();
+			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging { Skip = 0, Take = 5 }, filter).ToArray();
 
 			requestQueue.Length.Should().Be(1);
 			Assert.IsTrue(requestQueue.Count(requestFromProvider =>
@@ -208,12 +214,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var requestDate = DateOnly.Today;
 			var shiftTradeRequest = new PersonRequestFactory().CreatePersonShiftTradeRequest(person, requestDate);
 			var textRequest = new PersonRequestFactory().CreatePersonRequest(person);
+			var filter = new RequestListFilter() { HideOldRequest = false, SortByUpdateDate = true };
 
 			((FakeLoggedOnUser)LoggedOnUser).SetFakeLoggedOnUser(person);
 			RequestRepository.Add(shiftTradeRequest);
 			RequestRepository.Add(textRequest);
 
-			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging {Skip = 0, Take = 5}, false).ToArray();
+			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging {Skip = 0, Take = 5}, filter).ToArray();
 
 			requestQueue.Length.Should().Be(1);
 			Assert.IsTrue(requestQueue.Any(requestFromProvider =>
@@ -228,6 +235,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var shiftTradeRequest = new PersonRequestFactory().CreatePersonShiftTradeRequest(person, requestDate);
 			var textRequest = new PersonRequestFactory().CreatePersonRequest(person);
 			var absence = AbsenceFactory.CreateAbsence("Sick leave");
+			var filter = new RequestListFilter() { HideOldRequest = false, SortByUpdateDate = true };
 			var period = new DateTimePeriod(
 				new DateTime(2008, 7, 10, 0, 0, 0, DateTimeKind.Utc),
 				new DateTime(2008, 7, 11, 0, 0, 0, DateTimeKind.Utc));
@@ -240,7 +248,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			RequestRepository.Add(textRequest);
 			RequestRepository.Add(request);
 
-			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging { Skip = 0, Take = 5 }, false).ToArray();
+			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging { Skip = 0, Take = 5 }, filter).ToArray();
 
 			requestQueue.Length.Should().Be(2);
 			Assert.IsTrue(requestQueue.Any(requestFromProvider =>

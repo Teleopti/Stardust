@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 		public IEnumerable<RequestViewModel> CreatePagingViewModel(Paging paging, RequestListFilter filter)
 		{
-			var requests = _personRequestProvider.RetrieveRequestsForLoggedOnUser(paging, filter.HideOldRequest);
+			var requests = _personRequestProvider.RetrieveRequestsForLoggedOnUser(paging, filter);
 			return _mapper.Map<IEnumerable<IPersonRequest>, IEnumerable<RequestViewModel>>(requests);
 		}
 

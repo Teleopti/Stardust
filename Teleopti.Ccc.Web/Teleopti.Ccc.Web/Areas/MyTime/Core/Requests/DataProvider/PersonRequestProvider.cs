@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_permissionProvider = permissionProvider;
 		}
 
-		public IEnumerable<IPersonRequest> RetrieveRequestsForLoggedOnUser(Paging paging, bool hideOldRequest)
+		public IEnumerable<IPersonRequest> RetrieveRequestsForLoggedOnUser(Paging paging, RequestListFilter filter)
 		{
 			var types = new List<RequestType>
 			{
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			}
 
 			DateTime? earliestDateUtc = null;
-			if (hideOldRequest)
+			if (filter.HideOldRequest)
 			{
 				var currentTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 				var earliestDateLocal = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, currentTimezone).AddDays(-10).Date;
