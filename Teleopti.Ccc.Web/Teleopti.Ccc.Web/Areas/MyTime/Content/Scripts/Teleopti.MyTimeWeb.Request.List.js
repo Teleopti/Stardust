@@ -135,6 +135,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.MoreToLoad = ko.observable(false);
 
 		self.isLoadingRequests = ko.observable(true);
+		self.SortByUpdateDate = ko.observable("true");
 
 		self.ShowRequests = function (data) {
 		    ko.utils.arrayForEach(data, function (item) {

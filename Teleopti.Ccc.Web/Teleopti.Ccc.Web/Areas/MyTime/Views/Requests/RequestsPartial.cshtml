@@ -95,7 +95,8 @@
 			</div>
 		</div>
 		<div id="Requests-data-binding-area">
-		    <div class="btn-group request-list-filter" data-bind="visible: !isLoadingRequests()">
+			<div class="row">
+				<div class="btn-group request-list-filter col-lg-3 col-md-4 col-sm-6" data-bind="visible: !isLoadingRequests()">
 		        <label class="btn btn-primary">
 		            <input type="radio" name="hideOldRequest" data-bind="checked: hideOldRequests" value="false"/> @Resources.AllRequests
 		        </label>
@@ -103,7 +104,19 @@
 		            <input type="radio" name="hideOldRequest" data-bind="checked: hideOldRequests" value="true"/> @Resources.CurrentRequests
 		        </label>
 		    </div>
-		    
+				
+				<!-- ko if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_SortRequestList_40711') -->
+				<div class="btn-group request-list-filter col-lg-3 col-md-4 col-sm-6" data-bind="visible: !isLoadingRequests()">
+					<label class="btn btn-primary">
+						<input type="radio" name="SortByUpdateDate" data-bind="checked: SortByUpdateDate" value="false" /> @Resources.SortByStartDate
+					</label>
+					<label class="btn btn-primary">
+						<input type="radio" name="SortByUpdateDate" data-bind="checked: SortByUpdateDate" value="true" /> @Resources.SortByUpdateDate
+					</label>
+				</div>
+				<!-- /ko -->
+			</div>
+
             <div class="alert alert-info" data-bind="visible: Requests().length == 0 && !isLoadingRequests(), hideWhenFadedOut: true" id="Requests-no-requests-found">
 				@Resources.NoRequestsFound
 			</div>

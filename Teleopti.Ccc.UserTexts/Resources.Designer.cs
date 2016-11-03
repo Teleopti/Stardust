@@ -28835,6 +28835,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sort By Start Date.
+        /// </summary>
+        public static string SortByStartDate {
+            get {
+                return ResourceManager.GetString("SortByStartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sort By Update Date.
+        /// </summary>
+        public static string SortByUpdateDate {
+            get {
+                return ResourceManager.GetString("SortByUpdateDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sort By.
         /// </summary>
         public static string SortOn {
