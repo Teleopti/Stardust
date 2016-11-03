@@ -82,8 +82,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				foreach (var teamBlockInfo in teamBlockInfos)
 				{
 					var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= period.StartDate); //what is this?
-					var skillDaysForTeamBlockInfoAndDate = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint); //This won't work if not hiearchy
-					var maxPeakBefore = _maxSeatPeak.Fetch(datePoint, maxSeatData, skillDaysForTeamBlockInfoAndDate);
+					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint); //This won't work if not hiearchy
+					var maxPeakBefore = _maxSeatPeak.Fetch(teamBlockInfo, maxSeatData, skillDaysForTeamBlockInfo);
 					if (maxPeakBefore > 0.01)
 					{
 						var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
@@ -94,20 +94,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 													schedulingOptions,
 													rollbackService,
 													new DoNothingResourceCalculateDelayer(),
-													skillDaysForTeamBlockInfoAndDate,
+													skillDaysForTeamBlockInfo,
 													schedules,
 													new ShiftNudgeDirective(),
 													businessRules) ||
 								!_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences) ||
 								!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) ||
-								_maxSeatPeak.Fetch(datePoint, maxSeatData, skillDaysForTeamBlockInfoAndDate) > maxPeakBefore)
+								_maxSeatPeak.Fetch(teamBlockInfo, maxSeatData, skillDaysForTeamBlockInfo) > maxPeakBefore)
 						{
 								rollbackService.RollbackMinimumChecks();
 						}
 
 						if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)
 						{
-							var overLimit = _maxSeatPeak.Fetch(datePoint, maxSeatData, skillDaysForTeamBlockInfoAndDate);
+							var overLimit = _maxSeatPeak.Fetch(teamBlockInfo, maxSeatData, skillDaysForTeamBlockInfo);
 							if (overLimit > 0)
 							{
 								var unlockedAgents = teamBlockInfo.TeamInfo.GroupMembers.Where(agentsToOptimize.Contains).ToArray();

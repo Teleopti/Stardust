@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
@@ -13,16 +15,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_usedSeats = usedSeats;
 		}
 
-		public double Fetch(DateOnly date, MaxSeatSkillData maxSeatSkillData, IEnumerable<ISkillDay> skillDaysToLookAt)
+		public double Fetch(ITeamBlockInfo teamBlockInfo, MaxSeatSkillData maxSeatSkillData, IEnumerable<ISkillDay> skillDaysToLookAt)
 		{
 			var retValue = 0d;
-			foreach (var skillDay in skillDaysToLookAt)
+			foreach (var dateOnly in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
 			{
-				var maxSeats = maxSeatSkillData.MaxSeatForSkill(skillDay.Skill);
-
-				foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
+				foreach (var skillDay in skillDaysToLookAt.Where(x => x.CurrentDate == dateOnly))
 				{
-					retValue = Math.Max(retValue, _usedSeats.Fetch(skillStaffPeriod) - maxSeats);
+					var maxSeats = maxSeatSkillData.MaxSeatForSkill(skillDay.Skill);
+
+					foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
+					{
+						retValue = Math.Max(retValue, _usedSeats.Fetch(skillStaffPeriod) - maxSeats);
+					}
 				}
 			}
 			return retValue;

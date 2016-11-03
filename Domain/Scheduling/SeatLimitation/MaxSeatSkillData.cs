@@ -39,12 +39,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			return _maxSeatSkillDataPerSkills.Single(x => x.Skill.Equals(skill)).Site.MaxSeats.Value;
 		}
 
-		public IEnumerable<ISkillDay> SkillDaysFor(ITeamBlockInfo teamBlockInfo, DateOnly date)
+		public IEnumerable<ISkillDay> SkillDaysFor(ITeamBlockInfo teamBlockInfo, DateOnly personPeriodDate)
 		{
 			//This won't work if not hiearchy
 			return
 				_maxSeatSkillDataPerSkills.Single(
-					x => x.Site.Equals(teamBlockInfo.TeamInfo.GroupMembers.First().Period(date).Team.Site)).SkillDays.Where(x => x.CurrentDate==date);
+					x => x.Site.Equals(teamBlockInfo.TeamInfo.GroupMembers.First().Period(personPeriodDate).Team.Site)).SkillDays;
 		}
 
 		private class maxSeatSkillDataPerSkill

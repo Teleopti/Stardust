@@ -630,7 +630,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Be.EqualTo(TimeSpan.FromHours(9));
 		}
 
-		[Test, Ignore("40939")]
+		[Test]
 		public void ShouldFixMaxSeatIfIssueIsNotOnFirstDay()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
@@ -643,14 +643,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
 			var agentDataOneHour = MaxSeatDataFactory.CreateAgentWithAssignment(period.EndDate, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(16, 0, 17, 0));
 			var agentDatas = MaxSeatDataFactory.CreateAgentWithAssignments(period, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(9, 0, 17, 0));
-
 			var assignments = new List<IPersonAssignment>();
 			foreach (var maxSeatData in agentDatas)
 			{
 				assignments.Add(maxSeatData.Assignment);
 			}
 			assignments.Add(agentDataOneHour.Assignment);
-
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, period, assignments);
 			var optPreferences = CreateOptimizationPreferences();
 
