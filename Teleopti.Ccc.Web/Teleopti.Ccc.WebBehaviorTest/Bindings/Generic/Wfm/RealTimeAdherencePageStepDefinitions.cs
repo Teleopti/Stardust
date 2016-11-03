@@ -103,6 +103,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertXPathExists($@"//*[@agentid='{firstPersonId}']/following::*[@agentid='{secondPersonId}']");
 		}
 
+		[Then(@"I should see agent '(.*)'")]
 		[Then(@"I should see agent status for '(.*)?'")]
 		public void ThenIShouldSeeAgentStatusFor(string name)
 		{

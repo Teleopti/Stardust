@@ -10,9 +10,10 @@ Background:
 	And I have a role with full access	
 	And there is an activity named 'Phone'
 	And there is a skill named 'Phone' with activity 'Phone'
+	And there is an activity named 'Email'
+	And there is a skill named 'Email' with activity 'Email'
 	And there is a site named 'London'
 	And there is a team named 'London Team 1' on site 'London'
-	And there is a team named 'London Team 2' on site 'London'
 	And there is a site named 'Paris'
 	And there is a team named 'Paris Team 1' on site 'Paris'
 	And Pierre Baldi has a person period with
@@ -27,24 +28,24 @@ Background:
 	| Skill      | Phone         |
 	And John King has a person period with
 	| Field      | Value         |
-	| Team       | London Team 2 |
+	| Team       | London Team 1 |
 	| Start Date | 2016-01-01    |
-	| Skill      | Phone         |
+	| Skill      | Email         |
 	And Pierre Baldi has a shift with
 	| Field      | Value            |
 	| Activity   | Phone            |
-	| Start time | 2016-10-03 08:00 |
-	| End time   | 2016-10-03 17:00 |
+	| Start time | 2016-11-03 08:00 |
+	| End time   | 2016-11-03 17:00 |
 	And Ashley Andeen has a shift with
 	| Field      | Value            |
 	| Activity   | Phone            |
-	| Start time | 2016-10-03 08:00 |
-	| End time   | 2016-10-03 17:00 |
+	| Start time | 2016-11-03 08:00 |
+	| End time   | 2016-11-03 17:00 |
 	And John King has a shift with
 	| Field      | Value            |
-	| Activity   | Phone            |
-	| Start time | 2016-10-03 08:00 |
-	| End time   | 2016-10-03 17:00 |
+	| Activity   | Email            |
+	| Start time | 2016-11-03 08:00 |
+	| End time   | 2016-11-03 17:00 |
 	And there is a rule with 
 	| Field       | Value        |
 	| Name        | Not adhering |
@@ -52,35 +53,33 @@ Background:
 	| Phone state | Pause        |
 	| Is alarm    | true         |
 	And there is a rule with 
-	| Field       | Value    |
-	| Name        | Adhering |
-	| Activity    | Phone    |
-	| Phone state | Ready    |
-	| Is alarm    | false    |
-
+	| Field       | Value        |
+	| Name        | Not adhering |
+	| Activity    | Email        |
+	| Phone state | Pause        |
+	| Is alarm    | true         |
 
 @OnlyRunIfEnabled('RTA_AgentsOnOrganizationAndSkills_41586')
-Scenario: See how many agents with a specific skill that are in alarm for a selected team
+Scenario: See agents with a specific skill that are in alarm for a selected team
 	Given the time is '2016-10-03 08:01'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And 'Ashley Andeen' sets her phone state to 'Pause'
 	And 'John King' sets her phone state to 'Pause'
 	Given the time is '2016-10-03 08:15'
-	And I am viewing real time adherence for skill 'Phone' on team 'Paris Team 1'
-	Then I should see agent 'Pierre Baldi' with state 'Pause'
+	And I am viewing real time adherence for skill 'Phone' on team 'London Team 1'
+	Then I should see agent 'Pierre Baldi'
 	And I should not see agent 'Ashley Andeen'
 	And I should not see agent 'John King'
 
-
 @OnlyRunIfEnabled('RTA_AgentsOnOrganizationAndSkills_41586')
-Scenario: See how many agents with a specific skill that are in alarm for selected teams
+Scenario: See agents with a specific skill that are in alarm for selected teams
 	Given the time is '2016-10-03 08:01'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And 'Ashley Andeen' sets her phone state to 'Pause'
 	And 'John King' sets her phone state to 'Pause'
 	Given the time is '2016-10-03 08:15'
-	And I am viewing real time adherence for skill 'Phone' on teams 'London Team 1, London Team 2'
+	And I am viewing real time adherence for skill 'Phone' on teams 'London Team 1, Paris Team 1'
 	Then I should not see agent 'Pierre Baldi'
-	And I should see agent 'Ashley Andeen' with state 'Pause'
-	And I should see agent 'John King' with state 'Pause'
+	And I should not see agent 'Ashley Andeen'
+	And I should see agent 'John King'
 	
