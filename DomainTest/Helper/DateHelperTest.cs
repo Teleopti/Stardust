@@ -278,6 +278,24 @@ namespace Teleopti.Ccc.DomainTest.Helper
         }
 
 		[Test]
+		public void ShouldReturnSmallDateTimeRoundedDown()
+		{
+			DateHelper.GetSmallDateTime(new DateTime(2010, 12, 12, 12, 21, 29)).Should().Be.EqualTo(new DateTime(2010, 12, 12, 12, 21, 0));
+			DateHelper.GetSmallDateTime(new DateTime(2010, 12, 12, 12, 21, 0)).Should().Be.EqualTo(new DateTime(2010, 12, 12, 12, 21, 0));
+			DateHelper.GetSmallDateTime(new DateTime(2010, 12, 12, 12, 21, 1)).Should().Be.EqualTo(new DateTime(2010, 12, 12, 12, 21, 0));
+			DateHelper.GetSmallDateTime(new DateTime(2010, 12, 12, 12, 21, 29).AddMilliseconds(998)).Should().Be.EqualTo(new DateTime(2010, 12, 12, 12, 21, 0));
+		}
+
+		[Test]
+		public void ShouldReturnSmallDateTimeRoundedUp()
+		{
+			DateHelper.GetSmallDateTime(new DateTime(2010, 12, 12, 12, 21, 29).AddMilliseconds(999)).Should().Be.EqualTo(new DateTime(2010, 12, 12, 12, 22, 0));
+			DateHelper.GetSmallDateTime(new DateTime(2010, 12, 12, 12, 21, 30)).Should().Be.EqualTo(new DateTime(2010, 12, 12, 12, 22, 0));
+			DateHelper.GetSmallDateTime(new DateTime(2010, 12, 12, 12, 21, 45)).Should().Be.EqualTo(new DateTime(2010, 12, 12, 12, 22, 0));
+			DateHelper.GetSmallDateTime(new DateTime(2010, 12, 12, 12, 21, 59)).Should().Be.EqualTo(new DateTime(2010, 12, 12, 12, 22, 0));
+		}
+
+		[Test]
 		public void ShouldBeWeekendOnFridaySaturDay()
 		{
 			var weekendDays = new Weekend { Monday = false, Tuesday = false, Wendnesday = false, Thursday = false, Friday = true, Saturday = true, Sunday = false };

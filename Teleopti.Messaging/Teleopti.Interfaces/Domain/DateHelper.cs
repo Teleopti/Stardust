@@ -12,8 +12,8 @@ namespace Teleopti.Interfaces.Domain
         static DateHelper()
         {
             var calendar = new UmAlQuraCalendar();
-             _maxSmallDateTime = calendar.MaxSupportedDateTime.Date;
-             _minSmallDateTime = calendar.MinSupportedDateTime;
+             maxSmallDateTime = calendar.MaxSupportedDateTime.Date;
+             minSmallDateTime = calendar.MinSupportedDateTime;
         }
 
 		/// <summary>
@@ -35,8 +35,8 @@ namespace Teleopti.Interfaces.Domain
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
 		public static readonly IList<int> Iso8601Cultures = new List<int> { 2068, 1044, 1053, 1031, 3079, 2055, 1030, 1035, 1036, 2057, 3082 };
 
-        private readonly static DateTime _minSmallDateTime;
-        private static readonly DateTime _maxSmallDateTime;
+        private static readonly DateTime minSmallDateTime;
+        private static readonly DateTime maxSmallDateTime;
 
 		/// <summary>
 		/// Returns quarter from month.
@@ -431,7 +431,7 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public static DateTime MinSmallDateTime
         {
-            get { return _minSmallDateTime; }
+            get { return minSmallDateTime; }
         }
 
         /// <summary>
@@ -444,13 +444,15 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public static DateTime MaxSmallDateTime
         {
-            get { return _maxSmallDateTime; }
+            get { return maxSmallDateTime; }
         }
 
-
+		// Matched to work similar to SQL small date time. https://msdn.microsoft.com/en-us/library/ms182418.aspx
 		public static DateTime GetSmallDateTime(DateTime value)
 		{
-			return new DateTime(value.Year, value.Month, value.Day, value.Hour, value.Minute, 0);
+			if (value.Second * 1000 + value.Millisecond < 29999)
+				return new DateTime(value.Year, value.Month, value.Day, value.Hour, value.Minute, 0);
+			return new DateTime(value.Year, value.Month, value.Day, value.Hour, value.Minute+1, 0);
 		}
 	}
 }

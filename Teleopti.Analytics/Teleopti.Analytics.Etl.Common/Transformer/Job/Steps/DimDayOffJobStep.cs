@@ -42,7 +42,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 				{
 					if (analyticsDayOffs.Any(a => a.DayOffCode == dayOffTemplate.Id.GetValueOrDefault() &&
 												  a.DatasourceUpdateDate == DateHelper.GetSmallDateTime(dayOffTemplate.UpdatedOn.GetValueOrDefault()) &&
-												  a.BusinessUnitId == analyticsCurrentBusinessUnit.DatasourceId))
+												  a.BusinessUnitId == analyticsCurrentBusinessUnit.BusinessUnitId))
 						continue;
 
 					changedRows++;
