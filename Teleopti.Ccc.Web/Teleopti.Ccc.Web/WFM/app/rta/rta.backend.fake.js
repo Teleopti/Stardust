@@ -89,6 +89,26 @@
 					return [200, result];
 				});
 
+			fake(/\.\.\/api\/Agents\/ForSitesAndSkills(.*)/,
+				function(params) {
+					var agentsFilteredBySkills = agentsIn(params.skillIds, function(a) {
+						return a.SkillId;
+					});
+					return [200, resourceIn(params.siteIds, function(a) {
+						return a.SiteId;
+					}, agentsFilteredBySkills)];
+				});
+
+			fake(/\.\.\/api\/Agents\/ForTeamsAndSkills(.*)/,
+				function(params) {
+					var agentsFilteredBySkills = agentsIn(params.skillIds, function(a) {
+						return a.SkillId;
+					});
+					return [200, resourceIn(params.teamIds, function(a) {
+						return a.TeamId;
+					}, agentsFilteredBySkills)];
+				});
+
 			fake(/\.\.\/api\/Agents\/ForTeams(.*)/,
 				function(params) {
 					return [200, agentsIn(params.teamIds, function(a) {
@@ -109,6 +129,12 @@
 						return a.SkillId;
 					})];
 				});
+
+			function resourceIn(collection, map, resource) {
+				return resource.filter(function(a) {
+					return collection.indexOf(map(a)) >= 0
+				});
+			};
 
 			function agentsIn(collection, map) {
 				return agents.filter(function(a) {

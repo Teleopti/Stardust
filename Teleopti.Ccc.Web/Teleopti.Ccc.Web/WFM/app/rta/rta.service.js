@@ -1,10 +1,10 @@
-(function () {
+(function() {
 	'use strict';
 
 	angular.module('wfm.rta').service('RtaService', ['RtaResourceFactory', '$q',
-		function ($resource, $q) {
+		function($resource, $q) {
 
-			this.getAgentsForSites = function (data) {
+			this.getAgentsForSites = function(data) {
 				return $resource('../api/Agents/ForSites', {}, {
 					query: {
 						method: 'GET',
@@ -15,7 +15,7 @@
 				}).$promise;
 			};
 
-			this.getSkills = function (data) {
+			this.getSkills = function(data) {
 				return $resource('../api/Skills', {}, {
 					query: {
 						method: 'GET',
@@ -24,7 +24,7 @@
 				}).query().$promise;
 			};
 
-			this.getSkillAreas = function (data) {
+			this.getSkillAreas = function(data) {
 				return $resource('../api/SkillAreas', {}, {
 					query: {
 						method: 'GET'
@@ -32,7 +32,7 @@
 				}).query().$promise;
 			};
 
-			this.getAgentsForTeams = function (data) {
+			this.getAgentsForTeams = function(data) {
 				return $resource('../api/Agents/ForTeams', {}, {
 					query: {
 						method: 'GET',
@@ -43,7 +43,7 @@
 				}).$promise;
 			};
 
-			this.getAgentsForSkills = function (data) {
+			this.getAgentsForSkills = function(data) {
 				return $resource('../api/Agents/ForSkills', {}, {
 					query: {
 						method: 'GET',
@@ -54,7 +54,31 @@
 				}).$promise;
 			};
 
-			this.getStatesForSkills = function (data) {
+			this.getAgentsForSitesAndSkills = function(data) {
+				return $resource('../api/Agents/ForSitesAndSkills', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					siteIds: data.siteIds,
+					skillIds: data.skillIds,
+				}).$promise;
+			};
+
+			this.getAgentsForTeamsAndSkills = function(data) {
+				return $resource('../api/Agents/ForTeamsAndSkills', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					teamIds: data.teamIds,
+					skillIds: data.skillIds,
+				}).$promise;
+			};
+
+			this.getStatesForSkills = function(data) {
 				return $resource('../api/Agents/GetStatesForSkills', {}, {
 					query: {
 						method: 'GET'
@@ -64,7 +88,7 @@
 				}).$promise;
 			};
 
-			this.getStatesForSites = function (data) {
+			this.getStatesForSites = function(data) {
 				return $resource('../api/Agents/GetStatesForSites', {}, {
 					query: {
 						method: 'GET'
@@ -74,7 +98,7 @@
 				}).$promise;
 			};
 
-			this.getAlarmStatesForSites = function (data) {
+			this.getAlarmStatesForSites = function(data) {
 				return $resource('../api/Agents/GetAlarmStatesForSites', {}, {
 					query: {
 						method: 'GET'
@@ -84,19 +108,20 @@
 				}).$promise;
 			};
 
-			this.getAlarmStatesForSitesExcludingStates = function (data) {
+			this.getAlarmStatesForSitesExcludingStates = function(data) {
 				return $resource('../api/Agents/GetAlarmStatesForSitesExcludingStates', {}, {
-					query: {
-						method: 'GET'
-					}
-				}).query({ ids: data.siteIds, excludedStateIds: data.excludedStateIds })
+						query: {
+							method: 'GET'
+						}
+					}).query({
+						ids: data.siteIds,
+						excludedStateIds: data.excludedStateIds
+					})
 					.$promise;
 			};
 
-			this.getAlarmStatesForSkills = function (data) {
-				return $resource('../api/Agents/GetAlarmStatesForSkills',
-					{},
-					{
+			this.getAlarmStatesForSkills = function(data) {
+				return $resource('../api/Agents/GetAlarmStatesForSkills', {}, {
 						query: {
 							method: 'GET'
 						}
@@ -107,48 +132,54 @@
 					.$promise;
 			};
 
-			this.getAlarmStatesForSkillsExcludingStates = function (data) {
-				return $resource('../api/Agents/GetAlarmStatesForSkillsExcludingStates',
-					{},
-					{
+			this.getAlarmStatesForSkillsExcludingStates = function(data) {
+				return $resource('../api/Agents/GetAlarmStatesForSkillsExcludingStates', {}, {
 						query: {
 							method: 'GET'
 						}
 					})
 					.query({
-						ids: data.skillIds, excludedStateIds: data.excludedStateIds
+						ids: data.skillIds,
+						excludedStateIds: data.excludedStateIds
 					})
 					.$promise;
 			};
 
-			this.getStatesForTeams = function (data) {
+			this.getStatesForTeams = function(data) {
 				return $resource('../api/Agents/GetStatesForTeams', {}, {
-					query: {
-						method: 'GET'
-					}
-				}).query({ ids: data.teamIds })
+						query: {
+							method: 'GET'
+						}
+					}).query({
+						ids: data.teamIds
+					})
 					.$promise;
 			};
 
-			this.getAlarmStatesForTeams = function (data) {
+			this.getAlarmStatesForTeams = function(data) {
 				return $resource('../api/Agents/GetAlarmStatesForTeams', {}, {
-					query: {
-						method: 'GET'
-					}
-				}).query({ ids: data.teamIds })
+						query: {
+							method: 'GET'
+						}
+					}).query({
+						ids: data.teamIds
+					})
 					.$promise;
 			};
 
-			this.getAlarmStatesForTeamsExcludingStates = function (data) {
+			this.getAlarmStatesForTeamsExcludingStates = function(data) {
 				return $resource('../api/Agents/GetAlarmStatesForTeamsExcludingStates', {}, {
-					query: {
-						method: 'GET'
-					}
-				}).query({ ids: data.teamIds, excludedStateIds: data.excludedStateIds })
+						query: {
+							method: 'GET'
+						}
+					}).query({
+						ids: data.teamIds,
+						excludedStateIds: data.excludedStateIds
+					})
 					.$promise;
 			};
 
-			this.getAdherenceForTeamsOnSite = function (data) {
+			this.getAdherenceForTeamsOnSite = function(data) {
 				return $resource('../api/Teams/GetOutOfAdherenceForTeamsOnSite', {}, {
 					query: {
 						method: 'GET',
@@ -159,7 +190,7 @@
 				}).$promise;
 			};
 
-			this.getAdherenceForAllSites = function (data) {
+			this.getAdherenceForAllSites = function(data) {
 				return $resource('../api/Sites/GetOutOfAdherenceForAllSites', {}, {
 					query: {
 						method: 'GET',
@@ -168,7 +199,7 @@
 				}).query().$promise;
 			};
 
-			this.getAdherenceForSitesBySkills = function (data) {
+			this.getAdherenceForSitesBySkills = function(data) {
 				return $resource('../api/Sites/InAlarmCountForSkills', {}, {
 					query: {
 						method: 'GET',
@@ -179,7 +210,7 @@
 				}).$promise;
 			};
 
-			this.getSites = function (data) {
+			this.getSites = function(data) {
 				return $resource('../api/Sites', {}, {
 					query: {
 						method: 'GET',
@@ -188,7 +219,7 @@
 				}).query().$promise;
 			};
 
-			this.getSitesForSkills = function (skillIds) {
+			this.getSitesForSkills = function(skillIds) {
 				return $resource('../api/Sites/ForSkills', {}, {
 					query: {
 						method: 'GET',
@@ -199,7 +230,7 @@
 				}).$promise;
 			};
 
-			this.getAdherenceForTeamsBySkills = function (data) {
+			this.getAdherenceForTeamsBySkills = function(data) {
 				return $resource('../api/Teams/InAlarmCountForSkills', {}, {
 					query: {
 						method: 'GET',
@@ -211,7 +242,7 @@
 				}).$promise;
 			};
 
-			this.getTeams = function (data) {
+			this.getTeams = function(data) {
 				return $resource('../api/Teams/Build', {}, {
 					query: {
 						method: 'GET',
@@ -222,7 +253,7 @@
 				}).$promise;
 			};
 
-			this.getTeamsForSiteAndSkills = function (data) {
+			this.getTeamsForSiteAndSkills = function(data) {
 				return $resource('../api/Teams/ForSkills', {}, {
 					query: {
 						method: 'GET',
@@ -234,7 +265,7 @@
 				}).$promise;
 			};
 
-			this.getSkillName = function (data) {
+			this.getSkillName = function(data) {
 				return $resource('../api/Skills/NameFor', {}, {
 					query: {
 						method: 'GET'
@@ -244,7 +275,7 @@
 				}).$promise;
 			};
 
-			this.getSkillArea = function (data) {
+			this.getSkillArea = function(data) {
 				return $resource('../api/SkillArea/For', {}, {
 					query: {
 						method: 'GET'
@@ -254,7 +285,7 @@
 				}).$promise;
 			};
 
-			this.getPhoneStates = function (data) {
+			this.getPhoneStates = function(data) {
 				return $resource('../api/PhoneState/InfoFor', {}, {
 					query: {
 						method: 'GET'
@@ -264,7 +295,7 @@
 				}).$promise;
 			};
 
-			this.forToday = function (data) {
+			this.forToday = function(data) {
 				return $resource('../api/Adherence/ForToday', {}, {
 					query: {
 						method: 'GET',
@@ -275,7 +306,7 @@
 				}).$promise;
 			};
 
-			this.getPersonDetails = function (data) {
+			this.getPersonDetails = function(data) {
 				return $resource('../api/Agents/PersonDetails', {}, {
 					query: {
 						method: 'GET',
@@ -286,7 +317,7 @@
 				}).$promise;
 			};
 
-			this.getAdherenceDetails = function (data) {
+			this.getAdherenceDetails = function(data) {
 				return $resource('../api/Adherence/ForDetails', {}, {
 					query: {
 						method: 'GET',
@@ -297,7 +328,7 @@
 				}).$promise;
 			};
 
-			this.getAgentHistoricalData = function (id) {
+			this.getAgentHistoricalData = function(id) {
 				return $resource('../api/HistoricalAdherence/For', {}, {
 					query: {
 						method: 'GET',

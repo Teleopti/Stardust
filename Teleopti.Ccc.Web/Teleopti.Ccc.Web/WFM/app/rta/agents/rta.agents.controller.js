@@ -431,7 +431,14 @@
 							.then(function () {
 								deferred.resolve(RtaService.getAgentsForSkills);
 							});
-					} else if (skillIds.length > 0) {
+					}
+					else if (skillIds.length > 0 && siteIds.length > 0) {
+						deferred.resolve(RtaService.getAgentsForSitesAndSkills);
+					}
+					else if (skillIds.length > 0 && teamIds.length > 0) {
+						deferred.resolve(RtaService.getAgentsForTeamsAndSkills);
+					}
+					else if (skillIds.length > 0) {
 						deferred.resolve(RtaService.getAgentsForSkills);
 					} else if (teamIds.length > 0) {
 						deferred.resolve(RtaService.getAgentsForTeams);
