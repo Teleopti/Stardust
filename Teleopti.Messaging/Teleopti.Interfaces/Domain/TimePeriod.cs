@@ -82,6 +82,11 @@ namespace Teleopti.Interfaces.Domain
         {
         }
 
+	    public TimePeriod(int startHour, int endHour)
+			:this(startHour, 0, endHour, 0)
+	    {
+	    }
+
         /// <summary>
         /// Tries the parse. (*LOL* Actually tries to parse a TimePeriod string.)
         /// </summary>

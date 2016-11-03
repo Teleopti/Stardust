@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using NUnit.Framework;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -15,22 +14,32 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTestWithStaticDependenciesAvoidUse]
-	public class IntradayOptimizationTeamBlockDesktopTest
+	[TestFixture(true)]
+	[TestFixture(false)]
+	public class IntradayOptimizationTeamBlockDesktopTest : IConfigureToggleManager
 	{
+		private readonly bool _resourcePlannerMaxSeatsNew40939;
 		public IOptimizationCommand Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		[RemoveMeWithToggle("Should not be necessary when toggle is on/removed", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		public IInitMaxSeatForStateHolder InitMaxSeatForStateHolder;
-		public Func<IResourceOptimizationHelperExtended> ResourceOptimization;
+		public IResourceOptimization ResourceOptimization;
+
+		public IntradayOptimizationTeamBlockDesktopTest(bool resourcePlannerMaxSeatsNew40939)
+		{
+			_resourcePlannerMaxSeatsNew40939 = resourcePlannerMaxSeatsNew40939;
+		}
 
 		[Test]
 		public void ShouldNotCrashWhenUsingKeepExistingDaysOff()
@@ -57,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
 			optimizationPreferences.General.OptimizationStepShiftsWithinDay = true;
 			optimizationPreferences.Extra.UseTeams = true;
-			var daysOffPreferences = new DaysOffPreferences {UseKeepExistingDaysOff = true};
+			var daysOffPreferences = new DaysOffPreferences { UseKeepExistingDaysOff = true };
 
 			Assert.DoesNotThrow(() =>
 			{
@@ -74,104 +83,80 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			});
 		}
 
-		[Test, Ignore("#40939 - först få detta grönt, sen köra detta både när vår toggle är på och av. sen kan vi härja liiiite säkrare")]
-		public void ShouldRespectMaxSeatWhenIntradayOptimizationIsMade()
+		[TestCase(MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, teamBlockStyle.TeamHierarchy, ExpectedResult = true)]
+		[TestCase(MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, teamBlockStyle.TeamHierarchy, ExpectedResult = false)]
+		[TestCase(MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, teamBlockStyle.TeamNonHierarchy, ExpectedResult = true)]
+		[TestCase(MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, teamBlockStyle.TeamNonHierarchy, ExpectedResult = false)]
+		[TestCase(MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, teamBlockStyle.Block, ExpectedResult = true)]
+		[TestCase(MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, teamBlockStyle.Block, ExpectedResult = false)]
+		public bool ShouldRespectMaxSeatWhenIntradayOptimizationIsMade(MaxSeatsFeatureOptions maxSeatsFeatureOptions, teamBlockStyle teamBlockStyle)
 		{
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
-			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
-			var activity = new Activity("_") { RequiresSeat = true }.WithId();
-			var dateOnly = new DateOnly(2016, 10, 25);
-			var scenario = new Scenario("_");
-			//IS THIS NECESSARY?
-			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
-			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, dateOnly, 1, new Tuple<TimePeriod, double>(new TimePeriod(16, 0, 17, 0), 2));
-			//??
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
-			var agentScheduledOneHour = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-			agentScheduledOneHour.AddPersonPeriod(new PersonPeriod(dateOnly, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team));
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team), skill);
-			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
-			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
-			var assOneHour = new PersonAssignment(agentScheduledOneHour, scenario, dateOnly);
-			assOneHour.AddActivity(activity, new TimePeriod(16, 0, 17, 0));
-			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(activity, new TimePeriod(9, 0, 17, 0));
-			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, new[] { ass, assOneHour }, skillDay);
-			var optPreferences = new OptimizationPreferences
-			{
-				Extra =
-				{
-					UseTeamBlockOption = true,
-					BlockTypeValue = BlockFinderType.SchedulePeriod,
-					TeamGroupPage = new GroupPageLight("_", GroupPageType.SingleAgent)
-				},
-				Advanced = { UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats },
-				General = {ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true}
-			};
-			InitMaxSeatForStateHolder.Execute(15);
-
-			Target.Execute(null, new NoSchedulingProgress(), stateHolder, new [] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, null, null, optPreferences, false, null, null);
-
-			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay
-				.Should().Be.EqualTo(TimeSpan.FromHours(8));
-		}
-
-		[Test, Ignore("ToRoger")]
-		public void ShouldRespectMaxSeatWhenIntradayOptimizationIsMadeX()
-		{
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
-			var site = new Site("siten").WithId();
+			var site = new Site("siten") { MaxSeats = 1 }.WithId();
 			var team = new Team { Description = new Description("_"), Site = site }.WithId();
-			var activity = new Activity("_") { RequiresSeat = false }.WithId();
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var skill = new Skill("skillet", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
-			//high demand 16-17 - should not be choosen due to maxseat
-
-
-			var demands = new[]
-			{
-				new Tuple<TimePeriod, double>(new TimePeriod(16, 0, 16, 15), 10),
-				new Tuple<TimePeriod, double>(new TimePeriod(16, 15, 16, 30), 10),
-				new Tuple<TimePeriod, double>(new TimePeriod(16, 30, 16, 45), 10),
-				new Tuple<TimePeriod, double>(new TimePeriod(16, 45, 17, 0), 10)
-			};
-			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, dateOnly, 1, demands);
+			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, dateOnly, 1, new Tuple<TimePeriod, double>(new TimePeriod(16, 17), 10));
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 9, 0, 60), new TimePeriodWithSegment(17, 0, 17, 0, 60), shiftCategory));
 			var agentScheduledOneHour = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agentScheduledOneHour.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team), skill);
-			agentScheduledOneHour.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
-			agentScheduledOneHour.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
 			var assOneHour = new PersonAssignment(agentScheduledOneHour, scenario, dateOnly);
-			assOneHour.AddActivity(activity, new TimePeriod(16, 0, 17, 0));
+			assOneHour.AddActivity(activity, new TimePeriod(16, 17));
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
-			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(), 
-															new[] { agent, agentScheduledOneHour }, 
-															new[] { ass, assOneHour},
-															new[] {skillDay, skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(1), 1)}); //TODO - seems to be needed. Must be a bug I guess?
+			ass.AddActivity(activity, new TimePeriod(8, 16));
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(),
+															new[] { agent, agentScheduledOneHour },
+															new[] { ass, assOneHour },
+															new[] { skillDay, skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(1), 1) }); //TODO - seems to be needed. Must be a bug I guess?
 			var optPreferences = new OptimizationPreferences
 			{
-				Extra = {UseTeams = true,TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy)},
-				Advanced = { UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.DoNotConsiderMaxSeats },
+				Advanced = { UserOptionMaxSeatsFeature = maxSeatsFeatureOptions },
 				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true }
 			};
+			switch (teamBlockStyle)
+			{
+				case teamBlockStyle.TeamHierarchy:
+					optPreferences.Extra.UseTeams = true;
+					optPreferences.Extra.TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy);
+					break;
+				case teamBlockStyle.TeamNonHierarchy:
+					optPreferences.Extra.UseTeams = true;
+					optPreferences.Extra.TeamGroupPage = new GroupPageLight("_", GroupPageType.RuleSetBag);
+					break;
+				case teamBlockStyle.Block:
+					optPreferences.Extra.UseTeamBlockOption = true;
+					optPreferences.Extra.BlockTypeValue = BlockFinderType.SchedulePeriod;
+					optPreferences.Extra.TeamGroupPage = new GroupPageLight("_", GroupPageType.SingleAgent);
+					break;
+			}
 
 			InitMaxSeatForStateHolder.Execute(15);
-			
-			ResourceOptimization().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+			ResourceOptimization.ResourceCalculate(dateOnly, new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 			Target.Execute(null, new NoSchedulingProgress(), stateHolder, new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, null, null, optPreferences, false, null, null);
 
-			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay.Should().Be.EqualTo(TimeSpan.FromHours(9));
+			var wasGivenNewShift = stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay == TimeSpan.FromHours(9);
+			return wasGivenNewShift;
+		}
+
+		public enum teamBlockStyle
+		{
+			TeamHierarchy,
+			TeamNonHierarchy,
+			Block
+		}
+
+		public void Configure(FakeToggleManager toggleManager)
+		{
+			if(_resourcePlannerMaxSeatsNew40939)
+				toggleManager.Enable(Toggles.ResourcePlanner_MaxSeatsNew_40939);
 		}
 	}
 }

@@ -48,11 +48,10 @@ namespace Teleopti.Ccc.TestCommon
 			var intervalDemandsDic = intervalDemands.ToDictionary(k => new DateTimePeriod(startDateTime.Add(k.Item1.StartTime), startDateTime.Add(k.Item1.EndTime)), v => v.Item2);
 			foreach (var interval in intervals)
 			{
-				double demand;
-				if (!intervalDemandsDic.TryGetValue(interval, out demand))
-				{
-					demand = defaultDemand;
-				}
+				var intervalDemandMatch = intervalDemandsDic.SingleOrDefault(x => x.Key.Contains(interval));
+				var demand = intervalDemandMatch.Key == new DateTimePeriod() ? 
+					defaultDemand : 
+					intervalDemandMatch.Value;
 				skillDataPeriods.Add(new SkillDataPeriod(ServiceAgreement.DefaultValues(), new SkillPersonData(), interval) { ManualAgents = demand });
 			}
 
