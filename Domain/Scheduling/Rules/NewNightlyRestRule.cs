@@ -161,8 +161,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
         private IBusinessRuleResponse createResponseForRemove(IPerson person, DateOnly dateOnly, DateOnlyPeriod dateOnlyPeriod)
         {
-            var dop = new DateOnlyPeriod(dateOnly, dateOnly);
-            DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+            var dop = dateOnly.ToDateOnlyPeriod();
+            var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 
             return new BusinessRuleResponse(typeof(NewNightlyRestRule), "", _haltModify, IsMandatory, period, person, dateOnlyPeriod, FriendlyName);
         }
@@ -170,10 +170,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, DateOnly dateOnly1, DateOnly dateOnly2, 
             TimeSpan nightRest, TimeSpan currentRest, ISchedule addToRange, bool overridden)
         {
-            var dop = new DateOnlyPeriod(dateOnly, dateOnly);
-            DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+            var dop = dateOnly.ToDateOnlyPeriod();
+            var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
             string errorMessage = createErrorMessage(dateOnly1, dateOnly2, nightRest, currentRest);
-            IBusinessRuleResponse response = new BusinessRuleResponse(typeof(NewNightlyRestRule), errorMessage, _haltModify, IsMandatory, period, person, new DateOnlyPeriod(dateOnly1,dateOnly2), FriendlyName)
+            var response = new BusinessRuleResponse(typeof(NewNightlyRestRule), errorMessage, _haltModify, IsMandatory, period, person, new DateOnlyPeriod(dateOnly1,dateOnly2), FriendlyName)
                                                  {Overridden = overridden};
             AddMyResponse(addToRange.BusinessRuleResponseInternalCollection, response);
             return response;

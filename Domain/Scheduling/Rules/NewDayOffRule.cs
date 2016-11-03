@@ -49,12 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		}
 
 		public bool ForDelete { get; set; }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization",
-			"CA1303:Do not pass literals as localized parameters",
-			MessageId =
-				"Teleopti.Ccc.Domain.Scheduling.Rules.NewDayOffRule.createResponse(Teleopti.Interfaces.Domain.IPerson,Teleopti.Interfaces.Domain.DateOnly,System.String)"
-			)]
+		
 		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,
 			IEnumerable<IScheduleDay> scheduleDays)
 		{
@@ -149,8 +144,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		private bool dayOffCannotBeMoved(IDayOff dayOff, DateTimePeriod assignmentBeforePeriod,
 			DateTimePeriod assignmentAfterPeriod)
 		{
-			DateTime startDayOff = dayOffStartEnd(dayOff).StartDateTime;
-			DateTime endDayOff = dayOffStartEnd(dayOff).EndDateTime;
+			var dateTimePeriod = dayOffStartEnd(dayOff);
+			var startDayOff = dateTimePeriod.StartDateTime;
+			var endDayOff = dateTimePeriod.EndDateTime;
 
 			if (DayOffConflictWithAssignmentBefore(dayOff, assignmentBeforePeriod))
 			{
@@ -227,8 +223,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message)
 		{
-			var dop = new DateOnlyPeriod(dateOnly, dateOnly);
-			DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+			var dop = dateOnly.ToDateOnlyPeriod();
+			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
 			IBusinessRuleResponse response = new BusinessRuleResponse(typeof (NewDayOffRule), message, _haltModify, IsMandatory,
 				period, person, dateOnlyPeriod, FriendlyName) {Overridden = !_haltModify};

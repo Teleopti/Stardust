@@ -20,21 +20,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	        FriendlyName = Resources.BusinessRuleMaxWeekWorkTimeFriendlyName;
 	        _localizedMessage1 = Resources.BusinessRuleMaxWeekWorkTimeErrorMessage;
 		    _localizedMessage2 = Resources.BusinessRuleNoContractErrorMessage;
-
-
-
-        }
-        public string ErrorMessage
-        {
-            get { return ""; }
         }
 
-        public bool IsMandatory
-        {
-            get { return false; }
-        }
+        public string ErrorMessage => string.Empty;
 
-        public bool HaltModify
+	    public bool IsMandatory => false;
+
+	    public bool HaltModify
         {
             get { return _haltModify; }
             set { _haltModify = value; }
@@ -50,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             foreach (PersonWeek personWeek in personWeeks)
             {
                 var person = personWeek.Person;
-                IScheduleRange currentSchedules = rangeClones[person];
+                var currentSchedules = rangeClones[person];
                 var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
                 foreach (DateOnly day in personWeek.Week.DayCollection())
                 {
@@ -106,10 +98,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             var max = double.MinValue;
             var noPeriod = true;
 
-            foreach (var dateOnly in personWeek.Week.DayCollection())
+            foreach (var period in person.PersonPeriods(personWeek.Week))
             {
-                var period = person.Period(dateOnly);
-                if(period == null) continue;
                 noPeriod = false;
                 var tmpMax = period.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek.TotalMinutes;
                 if (tmpMax > max) max = tmpMax;
@@ -139,9 +129,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
         private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message, Type type)
         {
-            var dop = new DateOnlyPeriod(dateOnly, dateOnly);
-            DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-            IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dop, FriendlyName)
+            var dop = dateOnly.ToDateOnlyPeriod();
+            var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+            var response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dop, FriendlyName)
                                                  {Overridden = !_haltModify};
             return response;
         }

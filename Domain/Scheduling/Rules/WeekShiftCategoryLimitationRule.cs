@@ -101,29 +101,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                                 // vi måste kanske gör ngt annat om en vecka ligger i 2 olika schemaperioder (kan ju ha helt olika regler)
                                 if (personWeek.Week.Intersection(scheduleDateOnlyPeriod) != null && personWeek.Person.Equals(person))
                                 {
-                                    var personSched = (from sched in rangeClones
-                                                       where sched.Key.Equals(person)
-                                                       select sched.Value).ToList();
+	                                var schedule = rangeClones[person];
 
-                                    foreach (var schedule in personSched)
-									{
-										IList<DateOnly> datesWithCategory;
-										if (_limitationChecker.IsShiftCategoryOverWeekLimit(shiftCategoryLimitation, schedule, personWeek.Week, out datesWithCategory))
-										{
-											string message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
-											                               _localizedMessage,
-											                               shiftCategoryLimitation.ShiftCategory.Description.Name);
-											foreach (DateOnly dateOnly in datesWithCategory)
-											{
-											var dop = dateOnly.ToDateOnlyPeriod();
-											DateTimePeriod period = dop.ToDateTimePeriod(timeZone);
+	                                IList<DateOnly> datesWithCategory;
+	                                if (_limitationChecker.IsShiftCategoryOverWeekLimit(shiftCategoryLimitation, schedule,
+		                                personWeek.Week, out datesWithCategory))
+	                                {
+		                                string message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
+			                                _localizedMessage,
+			                                shiftCategoryLimitation.ShiftCategory.Description.Name);
+		                                foreach (DateOnly dateOnly in datesWithCategory)
+		                                {
+			                                var dop = dateOnly.ToDateOnlyPeriod();
+			                                DateTimePeriod period = dop.ToDateTimePeriod(timeZone);
 
-												if (!ForDelete)
-                                                responseList.Add(createResponse(person, dop, period, message, typeof(WeekShiftCategoryLimitationRule)));
-                                            oldResponses.Add(createResponse(person, dop, period, message, typeof(WeekShiftCategoryLimitationRule)));
-											}
-										}
-									}
+			                                if (!ForDelete)
+				                                responseList.Add(createResponse(person, dop, period, message,
+					                                typeof(WeekShiftCategoryLimitationRule)));
+			                                oldResponses.Add(createResponse(person, dop, period, message,
+				                                typeof(WeekShiftCategoryLimitationRule)));
+		                                }
+	                                }
                                 }
                             }
                         }

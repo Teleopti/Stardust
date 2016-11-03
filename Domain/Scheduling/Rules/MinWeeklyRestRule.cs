@@ -45,12 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		}
 
 		public bool ForDelete { get; set; }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization",
-			"CA1303:Do not pass literals as localized parameters",
-			MessageId =
-				"Teleopti.Ccc.Domain.Scheduling.Rules.MinWeeklyRestRule.createResponse(Teleopti.Interfaces.Domain.IPerson,Teleopti.Interfaces.Domain.DateOnly,System.String,System.Type)"
-			)]
+		
 		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,
 			IEnumerable<IScheduleDay> scheduleDays)
 		{

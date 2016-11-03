@@ -86,11 +86,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             var min = double.MaxValue;
             var haveFullTimePersonPeriod = false;
 
-            foreach (var dateOnly in personWeek.Week.DayCollection())
+            foreach (var period in person.PersonPeriods(personWeek.Week))
             {
-                var period = person.Period(dateOnly);
-                if (period == null)
-					continue;
                 var tmpMin = period.PersonContract.Contract.WorkTimeDirective.MinTimePerWeek.TotalMinutes;
                 if (tmpMin < min)
 					min = tmpMin;
@@ -131,7 +128,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
         private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message, Type type)
         {
-            var dop = new DateOnlyPeriod(dateOnly, dateOnly);
+            var dop = dateOnly.ToDateOnlyPeriod();
             var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
             IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dop, FriendlyName) { Overridden = !_haltModify };
             return response;

@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				return responseList;
 			}
 
-			var enumerable = scheduleDays as IScheduleDay[] ?? scheduleDays.ToArray();
+			var enumerable = scheduleDays.ToLookup(s => s.Person);
 			foreach (var rangeCloneValueKey in rangeClones)
 			{
 				IPersonAccountCollection myAccounts;
@@ -64,16 +64,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 					continue;
 
 				var affectedAccounts = new HashSet<IAccount>();
-				foreach (var scheduleDay in enumerable)
+				foreach (var scheduleDay in enumerable[rangeCloneValueKey.Key])
 				{
-					if(scheduleDay.Person == rangeCloneValueKey.Key)
+					DateOnly dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
+					IEnumerable<IAccount> accounts = myAccounts.Find(dateOnly);
+					foreach (var account in accounts)
 					{
-						DateOnly dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
-						IEnumerable<IAccount> accounts =  myAccounts.Find(dateOnly);
-						foreach (var account in accounts)
-						{
-							affectedAccounts.Add(account);
-						}
+						affectedAccounts.Add(account);
 					}
 				}
 
@@ -140,7 +137,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private IBusinessRuleResponse createResponse(IPerson person, IDateOnlyAsDateTimePeriod dateOnly, string message, Type type, Guid? absenceId)
 		{
-			var dop = new DateOnlyPeriod(dateOnly.DateOnly, dateOnly.DateOnly);
+			var dop = dateOnly.DateOnly.ToDateOnlyPeriod();
 			IBusinessRuleResponse response = new BusinessRuleResponseWithAbsenceId(type, message, _haltModify, IsMandatory, dateOnly.Period(), person, dop, FriendlyName, absenceId) { Overridden = !_haltModify };
 			return response;
 		}

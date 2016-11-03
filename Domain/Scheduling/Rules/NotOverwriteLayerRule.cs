@@ -167,8 +167,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private IBusinessRuleResponse createResponse(IPerson person,DateOnly dateOnly, OverlappingLayers overlappingLayers)
 		{
-			var dop = new DateOnlyPeriod(dateOnly,dateOnly);
-			DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+			var dop = dateOnly.ToDateOnlyPeriod();
+			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			string errorMessage = createErrorMessage(overlappingLayers);
 			IBusinessRuleResponse response = new BusinessRuleResponse(
 				typeof(NotOverwriteLayerRule),

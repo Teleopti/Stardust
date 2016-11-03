@@ -18,8 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
             IPersonAssignment assBefore = null;
             IPersonAssignment assAfter = null;
-
-            //var schedules = current.ScheduledDayCollection(current.Period.ToDateOnlyPeriod(timeZone));
+			
 			var partCollection = current.ScheduledDayCollection(new DateOnlyPeriod(dateToCheck.AddDays(-3),
 																				dateToCheck.AddDays(3)));
 

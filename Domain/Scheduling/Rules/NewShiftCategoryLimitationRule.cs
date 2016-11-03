@@ -54,9 +54,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                 {
                     DateOnlyPeriod period = schedulePeriod.DateOnlyPeriod;
                     var person = schedulePeriod.Person;
-                    IScheduleRange currentSchedules = rangeClones[person];
+                    var currentSchedules = rangeClones[person];
                     var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
-                    var oldResponseCount = oldResponses.Count();
+                    var oldResponseCount = oldResponses.Count;
 					foreach (DateOnly day in period.DayCollection())
 					{
 						oldResponses.Remove(createResponse(person, day, "remove"));
@@ -94,9 +94,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 	    private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message)
         {
-            var dop = new DateOnlyPeriod(dateOnly, dateOnly);
-            DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-            IBusinessRuleResponse response = new BusinessRuleResponse(typeof(NewShiftCategoryLimitationRule), message, _haltModify, IsMandatory, period, person, dop, FriendlyName)
+            var dop = dateOnly.ToDateOnlyPeriod();
+            var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+            var response = new BusinessRuleResponse(typeof(NewShiftCategoryLimitationRule), message, _haltModify, IsMandatory, period, person, dop, FriendlyName)
                                                  {Overridden = !_haltModify};
             return response;
         }

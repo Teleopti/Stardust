@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				var person = scheduleDay.Person;
 
 				var hasNonMainShiftMeeting = isMeetingOverSchedule(scheduleDay);
-				var hasNonMainShiftActivity = isPersonalActivityOverSchedule(scheduleDay);
+				var hasNonMainShiftActivity = isPersonalActivityOverSchedule(assignment);
 				hasNonMainShiftActivity = hasNonMainShiftActivity || hasNonMainShiftMeeting || (assignment.OvertimeActivities() != null && assignment.OvertimeActivities().Any());
 
 				if (hasNonMainShiftActivity)
@@ -60,10 +60,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			get { return "xxHasNonMainShiftActivityFriendlyName"; }
 		}
 
-		private bool isPersonalActivityOverSchedule(IScheduleDay currentSchedule)
+		private bool isPersonalActivityOverSchedule(IPersonAssignment personAssignment)
 		{
-			var shiftLayers = currentSchedule.PersonAssignment().ShiftLayers;
-			var activities = currentSchedule.PersonAssignment().PersonalActivities();
+			var shiftLayers = personAssignment.ShiftLayers;
+			var activities = personAssignment.PersonalActivities();
 			if (activities != null && activities.Any(activity => isOverSchedule(activity.Period, shiftLayers)))
 			{
 				return true;
@@ -104,9 +104,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message, Type type)
 		{
-			var dop = new DateOnlyPeriod(dateOnly, dateOnly);
-			DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-			IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dop, FriendlyName) { Overridden = !_haltModify };
+			var dop = dateOnly.ToDateOnlyPeriod();
+			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+			var response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dop, FriendlyName) { Overridden = !_haltModify };
 			return response;
 		}
 	}

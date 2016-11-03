@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                 foreach (IVisualLayer layer in layerCollection.FilterLayers<IActivity>())
                 {
                     var activity = (IActivity) layer.Payload;
-                    if ((activity).RequiresSkill)
+                    if (activity.RequiresSkill)
                     {
                      IEnumerable<DateTimePeriod> openHours = createOpenHoursForAgent(period, dateOnly, person,activity );
 
