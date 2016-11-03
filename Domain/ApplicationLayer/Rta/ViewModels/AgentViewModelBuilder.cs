@@ -127,5 +127,43 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					});
 			}).ToArray();
 		}
+
+		public IEnumerable<AgentViewModel> ForSkillAndTeam(Guid[] skill, Guid[] team)
+		{
+			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
+			return skill.SelectMany(s =>
+			{
+				return _groupingReadOnlyRepository.DetailsForGroup(s, _now.LocalDateOnly())
+					.Where(x=> team.Any(t=>t==x.TeamId.Value))
+					.Select(x => new AgentViewModel
+					{
+						PersonId = x.PersonId,
+						Name = commonAgentNameSettings.BuildCommonNameDescription(x.FirstName, x.LastName, x.EmploymentNumber),
+						SiteId = x.SiteId.ToString(),
+						SiteName = _siteRepository.Load(x.SiteId.Value).Description.Name,
+						TeamId = x.TeamId.ToString(),
+						TeamName = _teamRepository.Load(x.TeamId.Value).Description.Name
+					});
+			}).ToArray();
+		}
+
+		public IEnumerable<AgentViewModel> ForSkillAndSite(Guid[] skill, Guid[] site)
+		{
+			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
+			return skill.SelectMany(s =>
+			{
+				return _groupingReadOnlyRepository.DetailsForGroup(s, _now.LocalDateOnly())
+					.Where(x => site.Any(si => si == x.SiteId.Value))
+					.Select(x => new AgentViewModel
+					{
+						PersonId = x.PersonId,
+						Name = commonAgentNameSettings.BuildCommonNameDescription(x.FirstName, x.LastName, x.EmploymentNumber),
+						SiteId = x.SiteId.ToString(),
+						SiteName = _siteRepository.Load(x.SiteId.Value).Description.Name,
+						TeamId = x.TeamId.ToString(),
+						TeamName = _teamRepository.Load(x.TeamId.Value).Description.Name
+					});
+			}).ToArray();
+		}
 	}
 }

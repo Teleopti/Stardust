@@ -107,6 +107,107 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		}
 
 		[Test]
+		public void ShouldGetAgentForSkillAndTeam()
+		{
+			var skill = Guid.NewGuid();
+			var john = Guid.NewGuid();
+			var bill = Guid.NewGuid();
+			var red = TeamFactory.CreateTeamWithId("red");
+			var green = TeamFactory.CreateTeamWithId("green");
+			var paris = new Site("paris").WithId();
+			paris.AddTeam(red);
+			paris.AddTeam(green);
+			SiteRepository.Has(paris);
+			TeamRepository.Has(red);
+			TeamRepository.Has(green);
+			CommonAgentNameProvider
+				.Has(new CommonNameDescriptionSetting { AliasFormat = "{EmployeeNumber} - {FirstName} {LastName}" });
+
+			GroupingReadOnlyRepository
+				.Has(new ReadOnlyGroupDetail
+				{
+					GroupId = skill,
+					PersonId = john,
+					SiteId = paris.Id.Value,
+					TeamId = red.Id.Value,
+					FirstName = "John",
+					LastName = "Smith",
+					EmploymentNumber = "123"
+				})
+				.Has(new ReadOnlyGroupDetail
+				{
+					GroupId = skill,
+					PersonId = bill,
+					SiteId = paris.Id.Value,
+					TeamId = green.Id.Value,
+					FirstName = "Bill",
+					LastName = "Gates",
+					EmploymentNumber = "124"
+				});
+
+			var result = Target.ForSkillAndTeam(new[] { skill }, new[] { green.Id.Value }).Single();
+
+			result.PersonId.Should().Be(bill);
+			result.SiteId.Should().Be(paris.Id.Value.ToString());
+			result.SiteName.Should().Be("paris");
+			result.TeamId.Should().Be(green.Id.Value.ToString());
+			result.TeamName.Should().Be("green");
+			result.Name.Should().Be("124 - Bill Gates");
+		}
+
+		[Test]
+		public void ShouldGetAgentForSkillAndSite()
+		{
+			var skill = Guid.NewGuid();
+			var john = Guid.NewGuid();
+			var bill = Guid.NewGuid();
+			var london = new Site("london").WithId();
+			var paris = new Site("paris").WithId();
+			var red = TeamFactory.CreateTeamWithId("red");
+			var students = TeamFactory.CreateTeamWithId("students");
+
+			london.AddTeam(students);
+			SiteRepository.Has(london);
+			paris.AddTeam(red);
+			SiteRepository.Has(paris);
+			TeamRepository.Has(students);
+			TeamRepository.Has(red);
+			CommonAgentNameProvider
+				.Has(new CommonNameDescriptionSetting { AliasFormat = "{EmployeeNumber} - {FirstName} {LastName}" });
+
+			GroupingReadOnlyRepository
+				.Has(new ReadOnlyGroupDetail
+				{
+					GroupId = skill,
+					PersonId = john,
+					SiteId = paris.Id.Value,
+					TeamId = red.Id.Value,
+					FirstName = "John",
+					LastName = "Smith",
+					EmploymentNumber = "123"
+				})
+				.Has(new ReadOnlyGroupDetail
+				{
+					GroupId = skill,
+					PersonId = bill,
+					SiteId = london.Id.Value,
+					TeamId = students.Id.Value,
+					FirstName = "Bill",
+					LastName = "Gates",
+					EmploymentNumber = "124"
+				});
+
+			var result = Target.ForSkillAndSite(new[] { skill }, new[] { london.Id.Value }).Single();
+
+			result.PersonId.Should().Be(bill);
+			result.SiteId.Should().Be(london.Id.Value.ToString());
+			result.SiteName.Should().Be("london");
+			result.TeamId.Should().Be(students.Id.Value.ToString());
+			result.TeamName.Should().Be("students");
+			result.Name.Should().Be("124 - Bill Gates");
+		}
+
+		[Test]
 		public void ShouldGetAgentForSkillArea()
 		{
 			var skill = Guid.NewGuid();
