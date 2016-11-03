@@ -18,9 +18,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			var retValue = 0d;
 			foreach (var skillDay in skillDaysToLookAt)
 			{
-				if(!skillDay.CurrentDate.Equals(date))
-					continue;
-
 				var maxSeats = maxSeatSkillData.MaxSeatForSkill(skillDay.Skill);
 
 				foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
