@@ -55,7 +55,6 @@ Background:
 	| Phone state | Ready    |
 	| Is alarm    | false    |
 
-@OnlyRunIfDisabled('RTA_SiteAndTeamOnSkillOverview_40817')
 Scenario: Monitor agents by skill
 	Given the time is '2016-06-14 08:00:00'
 	And 'Pierre Baldi' sets his phone state to 'LoggedOut'
