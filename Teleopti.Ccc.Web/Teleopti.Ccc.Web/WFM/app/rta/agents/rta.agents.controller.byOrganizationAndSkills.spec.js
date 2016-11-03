@@ -90,4 +90,120 @@ describe('RtaAgentsCtrl by organization and skills', function () {
 		expect(scope.agents.length).toEqual(1);
 	});
 
+	it('should get agent for skillArea and team', function () {
+		stateParams.skillAreaId = "emailAndPhoneGuid";
+		stateParams.teamIds = ["teamRedGuid"];
+		$fakeBackend
+		.withAgent({
+			PersonId: "BillGuid",
+			SkillId: "emailGuid",
+			TeamId: "teamGreenGuid"
+		})
+		.withAgent({
+			PersonId: "PierreGuid",
+			SkillId: "phoneGuid",
+			TeamId: "teamRedGuid"
+		})
+		.withAgent({
+			PersonId: "AshleyGuid",
+			SkillId: "emailGuid",
+			TeamId: "teamRedGuid"
+		})
+		.withAgent({
+			PersonId: "JohnGuid",
+			SkillId: "invoiceGuid",
+			TeamId: "teamRedGuid"
+		})
+		.withSkillAreas([{
+			Id: "emailAndPhoneGuid",
+			Skills: [{
+				Id: "phoneGuid"
+			}, {
+				Id: "emailGuid"
+			}]
+		}]);
+
+		$controllerBuilder.createController()
+			.apply('agentsInAlarm = false');
+
+		expect(scope.agents[0].PersonId).toEqual("PierreGuid");
+		expect(scope.agents[1].PersonId).toEqual("AshleyGuid");
+		expect(scope.agents.length).toEqual(2);
+	});
+
+	it('should get agent for skillArea and site', function () {
+		stateParams.skillAreaId = "emailAndPhoneGuid";
+		stateParams.siteIds = ["siteLondonGuid"];
+		$fakeBackend
+		.withAgent({
+			PersonId: "BillGuid",
+			SkillId: "emailGuid",
+			SiteId: "siteParisGuid"
+		})
+		.withAgent({
+			PersonId: "PierreGuid",
+			SkillId: "phoneGuid",
+			SiteId: "siteLondonGuid"
+		})
+		.withAgent({
+			PersonId: "AshleyGuid",
+			SkillId: "emailGuid",
+			SiteId: "siteLondonGuid"
+		})
+		.withAgent({
+			PersonId: "JohnGuid",
+			SkillId: "invoiceGuid",
+			SiteId: "siteLondonGuid"
+		})
+		.withSkillAreas([{
+			Id: "emailAndPhoneGuid",
+			Skills: [{
+				Id: "phoneGuid"
+			}, {
+				Id: "emailGuid"
+			}]
+		}]);
+
+		$controllerBuilder.createController()
+			.apply('agentsInAlarm = false');
+
+		expect(scope.agents[0].PersonId).toEqual("PierreGuid");
+		expect(scope.agents[1].PersonId).toEqual("AshleyGuid");
+		expect(scope.agents.length).toEqual(2);
+	});
+
+	//green with no effort :)
+	
+	it('should display states in alarm only for skill and team', function () {
+		stateParams.skillId = "emailGuid";
+		stateParams.teamIds = ["teamRedGuid"];
+		$fakeBackend
+		.withAgent({
+			PersonId: "PierreGuid",
+			SkillId: "emailGuid",
+			TeamId: "teamRedGuid"
+		})
+		.withAgent({
+			PersonId: "AshleyGuid",
+			SkillId: "emailGuid",
+			TeamId: "teamRedGuid"
+		})
+		.withState({
+			PersonId: "PierreGuid",
+			State: "Break",
+			TimeInAlarm: 0
+		})
+		.withState({
+			PersonId: "AshleyGuid",
+			State: "Break",
+			TimeInAlarm: 60
+		});
+
+		$controllerBuilder.createController()
+			.apply('agentsInAlarm = true');
+
+			expect(scope.filteredData.length).toEqual(1);
+			expect(scope.filteredData[0].State).toEqual("Break");
+	});
+
 });

@@ -429,6 +429,12 @@
 					if (skillAreaId) {
 						getSkillAreaInfo()
 							.then(function () {
+								if (teamIds.length > 0) {
+									deferred.resolve(RtaService.getAgentsForTeamsAndSkills);
+								}
+								if(siteIds.length > 0) {
+									deferred.resolve(RtaService.getAgentsForSitesAndSkills);
+								}
 								deferred.resolve(RtaService.getAgentsForSkills);
 							});
 					}
