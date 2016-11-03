@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -308,9 +309,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			#region Check layer details
 
 			var layer = result.ScheduleLayers[0];
-			Assert.AreEqual("Phone", layer.TitleHeader);
-			Assert.AreEqual("8:00 - 11:00", layer.TitleTime);
-			Assert.AreEqual("Blue", layer.Color);
+			Assert.AreEqual(phoneActivity.Name, layer.TitleHeader);
+			Assert.AreEqual(getPeriodString(phoneActivityStart, lunchActivityStart), layer.TitleTime);
+			Assert.AreEqual(phoneActivity.DisplayColor.Name, layer.Color);
 			Assert.AreEqual(phoneActivityStart, layer.Start);
 			Assert.AreEqual(lunchActivityStart, layer.End);
 			Assert.AreEqual((int)(lunchActivityStart - phoneActivityStart).TotalMinutes, layer.LengthInMinutes);
@@ -318,9 +319,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			Assert.AreEqual(false, layer.IsOvertime);
 
 			layer = result.ScheduleLayers[1];
-			Assert.AreEqual("Lunch", layer.TitleHeader);
-			Assert.AreEqual("11:00 - 12:00", layer.TitleTime);
-			Assert.AreEqual("Yellow", layer.Color);
+			Assert.AreEqual(lunchActivity.Name, layer.TitleHeader);
+			Assert.AreEqual(getPeriodString(lunchActivityStart, absencePeriodStart), layer.TitleTime);
+			Assert.AreEqual(lunchActivity.DisplayColor.Name, layer.Color);
 			Assert.AreEqual(lunchActivityStart, layer.Start);
 			Assert.AreEqual(absencePeriodStart, layer.End);
 			Assert.AreEqual((int)(absencePeriodStart - lunchActivityStart).TotalMinutes, layer.LengthInMinutes);
@@ -328,9 +329,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			Assert.AreEqual(false, layer.IsOvertime);
 
 			layer = result.ScheduleLayers[2];
-			Assert.AreEqual("TestAbsence", layer.TitleHeader);
-			Assert.AreEqual("12:00 - 13:00", layer.TitleTime);
-			Assert.AreEqual("Red", layer.Color);
+			Assert.AreEqual(testAbsence.Name, layer.TitleHeader);
+			Assert.AreEqual(getPeriodString(absencePeriodStart, absencePeriodEnd), layer.TitleTime);
+			Assert.AreEqual(testAbsence.DisplayColor.Name, layer.Color);
 			Assert.AreEqual(absencePeriodStart, layer.Start);
 			Assert.AreEqual(absencePeriodEnd, layer.End);
 			Assert.AreEqual((int)(absencePeriodEnd - absencePeriodStart).TotalMinutes, layer.LengthInMinutes);
@@ -338,9 +339,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			Assert.AreEqual(false, layer.IsOvertime);
 
 			layer = result.ScheduleLayers[3];
-			Assert.AreEqual("Phone", layer.TitleHeader);
-			Assert.AreEqual("13:00 - 16:00", layer.TitleTime);
-			Assert.AreEqual("Blue", layer.Color);
+			Assert.AreEqual(phoneActivity.Name, layer.TitleHeader);
+			Assert.AreEqual(getPeriodString(absencePeriodEnd, phoneActivityEnd), layer.TitleTime);
+			Assert.AreEqual(phoneActivity.DisplayColor.Name, layer.Color);
 			Assert.AreEqual(absencePeriodEnd, layer.Start);
 			Assert.AreEqual(phoneActivityEnd, layer.End);
 			Assert.AreEqual((int)(phoneActivityEnd - absencePeriodEnd).TotalMinutes, layer.LengthInMinutes);
@@ -363,6 +364,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 		private double getTimeSpanInMinutesFromPeriod(DateTimePeriod period)
 		{
 			return (period.EndDateTime - period.StartDateTime).TotalMinutes;
+		}
+
+		private string getPeriodString(DateTime start, DateTime end)
+		{
+			return string.Format(CultureInfo.CurrentCulture, "{0} - {1}",
+				start.ToShortTimeString(), end.ToShortTimeString());
 		}
 	}
 }
