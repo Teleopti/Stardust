@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[TestFixture(false)]
 	public class IntradayOptimizationTeamBlockDesktopTest : IConfigureToggleManager
 	{
+		[RemoveMeWithToggle("Should not be necessary when toggle is on/removed", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		private readonly bool _resourcePlannerMaxSeatsNew40939;
 		public IOptimizationCommand Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
@@ -153,6 +154,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			Block
 		}
 
+		[RemoveMeWithToggle("Should not be necessary when toggle is on/removed", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		public void Configure(FakeToggleManager toggleManager)
 		{
 			if(_resourcePlannerMaxSeatsNew40939)
