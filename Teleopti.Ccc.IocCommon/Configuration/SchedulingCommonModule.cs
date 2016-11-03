@@ -70,7 +70,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<MaxSeatOptimization>().SingleInstance();
 			builder.RegisterType<MaxSeatPeak>().SingleInstance();
 			builder.RegisterType<SkillRoutingPriorityModel>().SingleInstance();
 			builder.RegisterType<SkillRoutingPriorityPersister>().SingleInstance();
@@ -500,8 +499,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamBlockSteadyStateValidator>().As<ITeamBlockSteadyStateValidator>().InstancePerLifetimeScope();
 			builder.RegisterType<RestrictionOverLimitDecider>().As<IRestrictionOverLimitDecider>().SingleInstance();
 			builder.RegisterType<RestrictionChecker>().As<ICheckerRestriction>().SingleInstance();
-
-			builder.RegisterType<TeamBlockMaxSeatChecker>().As<ITeamBlockMaxSeatChecker>().SingleInstance();
 			builder.RegisterType<DailyTargetValueCalculatorForTeamBlock>().As<IDailyTargetValueCalculatorForTeamBlock>();
 			builder.RegisterType<MedianCalculatorForDays>().As<IMedianCalculatorForDays>().SingleInstance();
 			builder.RegisterType<TwoDaysIntervalGenerator>().As<ITwoDaysIntervalGenerator>().SingleInstance();
@@ -568,12 +565,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<EqualWorkShiftValueDecider>().As<IEqualWorkShiftValueDecider>().InstancePerLifetimeScope();
 			builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().InstancePerLifetimeScope();
 			builder.RegisterType<MaxSeatsCalculationForTeamBlock>().As<IMaxSeatsCalculationForTeamBlock>().InstancePerLifetimeScope();
-			builder.RegisterType<MaxSeatSkillAggregator>().As<IMaxSeatSkillAggregator>().SingleInstance();
 			builder.RegisterType<MaxSeatInformationGeneratorBasedOnIntervals>().As<IMaxSeatInformationGeneratorBasedOnIntervals>().InstancePerLifetimeScope();
 			builder.RegisterType<MaxSeatsSpecificationDictionaryExtractor>().As<IMaxSeatsSpecificationDictionaryExtractor>().InstancePerLifetimeScope();
-			builder.RegisterType<IsMaxSeatsReachedOnSkillStaffPeriodSpecification>().As<IIsMaxSeatsReachedOnSkillStaffPeriodSpecification>().InstancePerLifetimeScope();
 			builder.RegisterType<IntervalLevelMaxSeatInfo>();
-			builder.RegisterType<MaxSeatBoostingFactorCalculator>().InstancePerLifetimeScope();
 			builder.RegisterType<PullTargetValueFromSkillIntervalData>().InstancePerLifetimeScope();
 			builder.RegisterType<ExtractIntervalsViolatingMaxSeat>().As<IExtractIntervalsViolatingMaxSeat>();
 			builder.RegisterType<WorkShiftSelectorForMaxSeat>().InstancePerLifetimeScope();
@@ -591,11 +585,25 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<InitMaxSeatForStateHolder>().As<IInitMaxSeatForStateHolder>().InstancePerLifetimeScope();
 				builder.RegisterType<UsedSeatsFromResourceCalculationContext>().As<IUsedSeats>().SingleInstance();
+
+				builder.RegisterType<MaxSeatOptimization>().As<IMaxSeatOptimization>().AsSelf().SingleInstance();
+				builder.RegisterType<TurnOffOldMaxSeatStuffWhenToggleIsOn>()
+					.As<IMaxSeatSkillAggregator>()
+					.As<ITeamBlockMaxSeatChecker>()
+					.As<IIsMaxSeatsReachedOnSkillStaffPeriodSpecification>()
+					.As<IMaxSeatBoostingFactorCalculator>()
+					.SingleInstance();
 			}
 			else
 			{
 				builder.RegisterType<UsedSeatsFromSkillStaff>().As<IUsedSeats>().SingleInstance();
 				builder.RegisterType<InitMaxSeatForStateHolderOld>().As<IInitMaxSeatForStateHolder>().InstancePerLifetimeScope();
+
+				builder.RegisterType<MaxSeatOptimizationDoNothing>().As<IMaxSeatOptimization>().SingleInstance();
+				builder.RegisterType<MaxSeatSkillAggregator>().As<IMaxSeatSkillAggregator>().SingleInstance();
+				builder.RegisterType<TeamBlockMaxSeatChecker>().As<ITeamBlockMaxSeatChecker>().SingleInstance();
+				builder.RegisterType<IsMaxSeatsReachedOnSkillStaffPeriodSpecification>().As<IIsMaxSeatsReachedOnSkillStaffPeriodSpecification>().SingleInstance();
+				builder.RegisterType<MaxSeatBoostingFactorCalculator>().As<IMaxSeatBoostingFactorCalculator>().SingleInstance();
 			}
 			builder.RegisterType<MaxSeatSkillDataFactory>().SingleInstance();
 			builder.RegisterType<SkillsFromMaxSeatSite>().SingleInstance();

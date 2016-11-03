@@ -16,11 +16,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 	public class MaxSeatsSpecificationDictionaryExtractor : IMaxSeatsSpecificationDictionaryExtractor
 	{
 		private readonly IIsMaxSeatsReachedOnSkillStaffPeriodSpecification _isMaxSeatsReachedOnSkillStaffPeriodSpecification;
-		private readonly MaxSeatBoostingFactorCalculator _maxSeatBoostingFactorCalculator;
+		private readonly IMaxSeatBoostingFactorCalculator _maxSeatBoostingFactorCalculator;
 		private readonly IUsedSeats _usedSeats;
 
 		public MaxSeatsSpecificationDictionaryExtractor(IIsMaxSeatsReachedOnSkillStaffPeriodSpecification isMaxSeatsReachedOnSkillStaffPeriodSpecification, 
-																						MaxSeatBoostingFactorCalculator maxSeatBoostingFactorCalculator,
+																						IMaxSeatBoostingFactorCalculator maxSeatBoostingFactorCalculator,
 																						IUsedSeats usedSeats)
 		{
 			_isMaxSeatsReachedOnSkillStaffPeriodSpecification = isMaxSeatsReachedOnSkillStaffPeriodSpecification;

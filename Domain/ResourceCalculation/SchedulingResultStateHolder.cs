@@ -161,6 +161,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return _skillDays.ToSkillDayEnumerable();
 		}
 
+		public int MinimumSkillIntervalLength()
+		{
+			return Skills.Any() ? Skills.Min(s => s.DefaultResolution) : 15;
+		}
+
 		public void ClearAbsenceDataDuringCurrentRequestHandlingCycle()
 		{
 			addedAbsenceMinutesDictionary.Clear();

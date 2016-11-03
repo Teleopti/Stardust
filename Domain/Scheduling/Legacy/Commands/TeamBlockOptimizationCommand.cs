@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly RestrictionOverLimitValidator _restrictionOverLimitValidator;
 		private readonly IWorkShiftSelector _workShiftSelector;
+		private readonly IMaxSeatOptimization _maxSeatOptimization;
 
 		public TeamBlockOptimizationCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockClearer teamBlockCleaner,
@@ -72,7 +74,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			DayOffOptimizationDesktopTeamBlock dayOffOptimizationDesktopTeamBlock,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			RestrictionOverLimitValidator restrictionOverLimitValidator, 
-			IWorkShiftSelector workShiftSelector)
+			IWorkShiftSelector workShiftSelector,
+			IMaxSeatOptimization maxSeatOptimization)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
@@ -101,6 +104,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
 			_workShiftSelector = workShiftSelector;
+			_maxSeatOptimization = maxSeatOptimization;
 		}
 
 		public void Execute(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
@@ -186,6 +190,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				}
 
 				allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod);
+
+				_maxSeatOptimization.Optimize(selectedPeriod, selectedPersons, _schedulerStateHolder().Schedules, optimizationPreferences, _schedulerStateHolder().SchedulingResultState.MinimumSkillIntervalLength());
 
 				solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
 					rollbackServiceWithResourceCalculation, allMatrixes,

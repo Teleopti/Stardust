@@ -528,6 +528,7 @@
     <Compile Include="Scheduling\SeatLimitation\MaxSeatSkillData.cs" />
     <Compile Include="Scheduling\SeatLimitation\MaxSeatSkillDataFactory.cs" />
     <Compile Include="Scheduling\SeatLimitation\SkillsFromMaxSeatSite.cs" />
+    <Compile Include="Scheduling\SeatLimitation\TurnOffOldMaxSeatStuffWhenToggleIsOn.cs" />
     <Compile Include="Scheduling\SeatLimitation\UsedSeatsFromResourceCalculationContext.cs" />
     <Compile Include="Scheduling\SeatLimitation\UsedSeatsFromSkillStaff.cs" />
     <Compile Include="Scheduling\TeamBlock\AssignScheduledLayers.cs" />

@@ -4963,9 +4963,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						stateHolder.RequestedPeriod.DateOnlyPeriod.EndDate.AddDays(8)), stateHolder.SchedulingResultState.Skills,
 					stateHolder.RequestedScenario);
 
-				var skills = stateHolder.SchedulingResultState.Skills;
-				var minIntervalLength = skills.Any() ? skills.Min(s => s.DefaultResolution) : 15;
-				_container.Resolve<IInitMaxSeatForStateHolder>().Execute(minIntervalLength);
+				_container.Resolve<IInitMaxSeatForStateHolder>().Execute(stateHolder.SchedulingResultState.MinimumSkillIntervalLength());
 
 					IList<ISkillStaffPeriod> skillStaffPeriods =
 					stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(

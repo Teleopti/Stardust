@@ -1,5 +1,8 @@
-﻿namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
+﻿using Teleopti.Ccc.Domain.FeatureFlags;
+
+namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public interface IIsMaxSeatsReachedOnSkillStaffPeriodSpecification
 	{
 		bool IsSatisfiedByWithEqualCondition(double usedSeats, int maxSeats);

@@ -277,6 +277,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				throw new NotImplementedException();
 			}
 
+			public int MinimumSkillIntervalLength()
+			{
+				throw new NotImplementedException();
+			}
+
 			IScheduleDictionary ISchedulerStateHolder.Schedules
 			{
 				get { throw new NotImplementedException(); }

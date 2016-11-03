@@ -115,5 +115,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			throw new NotImplementedException();
 		}
+
+		public int MinimumSkillIntervalLength()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
