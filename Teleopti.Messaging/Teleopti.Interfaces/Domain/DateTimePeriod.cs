@@ -689,49 +689,33 @@ namespace Teleopti.Interfaces.Domain
         /// Merges a list lists of DataTimePeriods into one.
         /// </summary>
         /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke, algorithm by Tamas
-        /// Created date: 2009-01-26
-        /// </remarks>
         public static IEnumerable<DateTimePeriod> MergePeriods(IEnumerable<DateTimePeriod> periods)
         {
-	        if (!periods.Any())
+	        var sortedPeriods = periods.OrderBy(p => p.StartDateTime).ThenBy(p => p.EndDateTime).ToArray();
+	        if (!sortedPeriods.Any())
 		        return Enumerable.Empty<DateTimePeriod>();
-            var ret = new List<DateTimePeriod>();
 
-            List<DateTime> startTimes = new List<DateTime>();
-            List<DateTime> endTimes = new List<DateTime>();
+			var ret = new List<DateTimePeriod>();
+	        var sortedCount = sortedPeriods.Length;
+	        for (int i = 0; i < sortedCount; i++)
+	        {
+		        var startTime = sortedPeriods[i].StartDateTime;
+		        var endTime = sortedPeriods[i].EndDateTime;
 
-            foreach (var dateTimePeriod in periods)
-            {
-                startTimes.Add(dateTimePeriod.StartDateTime);
-                endTimes.Add(dateTimePeriod.EndDateTime);
-            }
-
-            startTimes.Sort();
-            endTimes.Sort();
-            endTimes.Insert(0, DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc));
-
-            IList<DateTime> filteredStartTimes = new List<DateTime>();
-            IList<DateTime> filteredEndTimes = new List<DateTime>();
-            filteredStartTimes.Add(startTimes[0]);
-            filteredEndTimes.Add(DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc));
-            for (int index = 1; index < startTimes.Count; index++)
-            {
-                if (startTimes[index] > endTimes[index])
-                {
-                    filteredStartTimes.Add(startTimes[index]);
-                    filteredEndTimes.Add(endTimes[index]);
-                }
-            }
-
-            filteredEndTimes.Add(endTimes[endTimes.Count - 1]);
-            filteredEndTimes.RemoveAt(0);
-
-            for (int index = 0; index < filteredEndTimes.Count; index++)
-            {
-                ret.Add(new DateTimePeriod(filteredStartTimes[index], filteredEndTimes[index], false));
-            }
+				for (; i < sortedCount; i++)
+		        {
+			        if (sortedPeriods[i].StartDateTime > endTime)
+			        {
+				        i--;
+				        break;
+			        }
+			        if (sortedPeriods[i].EndDateTime > endTime)
+			        {
+				        endTime = sortedPeriods[i].EndDateTime;
+			        }
+		        }
+				ret.Add(new DateTimePeriod(startTime,endTime,false));
+	        }
 
             return ret;
         }
