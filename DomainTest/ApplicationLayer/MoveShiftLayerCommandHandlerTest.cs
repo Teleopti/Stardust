@@ -75,7 +75,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var activity = new Activity("act").WithId();
 			var orgStart = createDateTimeUtc(6);
 			var orgEnd = createDateTimeUtc(11);
-			var userTimeZone = new UtcTimeZone();
+			var userTimeZone = UserTimeZone.Make();
+			agent.PermissionInformation.SetDefaultTimeZone(userTimeZone.TimeZone());
 			var personAss = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
 
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
@@ -114,7 +115,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var activity = new Activity("act").WithId();
 			var orgStart = createDateTimeUtc(6);
 			var orgEnd = createDateTimeUtc(11);
-			var userTimeZone = new UtcTimeZone();
+			var userTimeZone = UserTimeZone.Make();
+			agent.PermissionInformation.SetDefaultTimeZone(userTimeZone.TimeZone());
 			var personAss = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
 
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository

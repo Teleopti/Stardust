@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.DomainTest.Common;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -158,8 +159,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			dayOffTemplate.SetTargetAndFlexibility(TimeSpan.FromHours(36),TimeSpan.FromHours(6));
 			dayOffTemplate.Anchor = TimeSpan.FromHours(12.5);
 
-			var agent1 = PersonRepository.Has(new Contract("_"),new ContractSchedule("_"),new PartTimePercentage("_"),new Team { Site = new Site("site") },schedulePeriod,skill).InTimeZone(TimeZoneInfo.Local);
-			var agent2 = PersonRepository.Has(new Contract("_"),new ContractSchedule("_"),new PartTimePercentage("_"),new Team { Site = new Site("site") },schedulePeriod,skill).InTimeZone(TimeZoneInfo.Local);
+			var agent1 = PersonRepository.Has(new Contract("_"),new ContractSchedule("_"),new PartTimePercentage("_"),new Team { Site = new Site("site") },schedulePeriod,skill).InTimeZone(UserTimeZone.Make().TimeZone());
+			var agent2 = PersonRepository.Has(new Contract("_"),new ContractSchedule("_"),new PartTimePercentage("_"),new Team { Site = new Site("site") },schedulePeriod,skill).InTimeZone(UserTimeZone.Make().TimeZone());
 
 			PersonAssignmentRepository.Has(agent1,scenario,activity,shiftCategory,new DateOnlyPeriod(date,date),
 				new TimePeriod(8,0,16,0));
