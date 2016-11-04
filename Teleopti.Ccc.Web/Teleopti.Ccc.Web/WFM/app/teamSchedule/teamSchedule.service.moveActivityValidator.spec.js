@@ -108,7 +108,7 @@
 			expect(target.getInvalidPeopleNameList().indexOf('SomeoneElse') > -1).toEqual(true);
 		});
 
-		it('should return true when moving activity in previous day within shift', function () {
+		xit('should return true when moving activity in previous day within shift', function () {
 			var previousDay = "2016-05-11";
 			schedule = {
 				"PersonId": "221B-Baker-SomeoneElse",

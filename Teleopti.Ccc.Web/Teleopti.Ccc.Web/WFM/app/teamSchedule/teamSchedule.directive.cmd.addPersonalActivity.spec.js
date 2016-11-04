@@ -136,18 +136,19 @@
 
 		var vm = result.commandControl;
 
-		vm.isNextDay = true;
+		vm.isNextDay = false;
 		vm.disableNextDay = false;
 		vm.timeRange = {
-			startTime: new Date('2016-06-16T08:00:00Z'),
-			endTime: new Date('2016-06-16T16:00:00Z')
+			startTime: moment('2016-06-16 18:00:00').toDate(),
+			endTime: moment('2016-06-16 20:00:00').toDate()
 		};
+		vm.manageScheduleForDistantTimezonesEnabled = true;
 
 		vm.selectedAgents = [
 			{
 				PersonId: 'agent1',
 				Name: 'agent1',
-				ScheduleEndTime: '2016-06-15T17:00:00Z'			
+				ScheduleEndTime: moment('2016-06-16 12:00:00').toDate()
 			}];
 
 		var timezone1 = {
@@ -155,16 +156,25 @@
 			DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
 		};
 
+		fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
+
 		fakeScheduleManagementSvc.setPersonScheduleVm('agent1', {
-			Date: '2016-06-15',
+			Date: '2016-06-16',
 			PersonId: 'agent1',
 			Timezone: timezone1,
 			Shifts: [
 			{
-				Date: '2016-06-15',
+				Date: '2016-06-16',
 				Projections: [
-				],
-				ProjectionTimeRange: null
+				{
+					Start: '2016-06-16 08:00',
+					End: '2016-06-16 12:00',
+					Minutes: 600
+				}],
+				ProjectionTimeRange: {
+					Start: '2016-06-16 08:00',
+					End: '2016-06-16 12:00'
+				}
 			}]
 		});
 
@@ -176,7 +186,7 @@
 		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
 		expect(applyButton.attr('disabled')).toBe('disabled');
 		expect(vm.anyValidAgent()).toBe(false);
-	});
+	});	
 
 	it('should call add personal activity when click apply with correct data',function() {
 		var result = setUp();

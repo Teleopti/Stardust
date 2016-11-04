@@ -79,7 +79,6 @@
 	    };
 
 	    function getRequestData() {
-	    	vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 		    var invalidPersonIds = vm.invalidAgents.map(function(p) { return p.PersonId });
 
 	    	var personProjectionsWithSelectedActivities = vm.selectedAgents.filter(function(agent) {
