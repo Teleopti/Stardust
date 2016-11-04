@@ -8,7 +8,8 @@
         .controller("hangfireMonitoringController", hangfireMonitoringController, ["tokenHeaderService"]);
 
 	var timeout = 10000;
-	var maxPoints = 360;
+	var minutesToKeep = 60;
+	var maxPoints = minutesToKeep * 60 / timeout * 1000;
 
 	function hangfireMonitoringController($http, $interval, tokenHeaderService) {
 		var vm = this;
