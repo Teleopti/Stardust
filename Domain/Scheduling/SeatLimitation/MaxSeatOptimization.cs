@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					if (maxPeakBefore > 0.01)
 					{
 						var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
-						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules); //TODO: fix - don't remove everyone if not needed
+						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules);
 						if (!_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat,
 													teamBlockInfo,
 													datePoint,
