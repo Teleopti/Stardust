@@ -691,12 +691,20 @@ namespace Teleopti.Interfaces.Domain
         /// <returns></returns>
         public static IEnumerable<DateTimePeriod> MergePeriods(IEnumerable<DateTimePeriod> periods)
         {
-	        var sortedPeriods = periods.OrderBy(p => p.StartDateTime).ThenBy(p => p.EndDateTime).ToArray();
+	        var sortedPeriods = periods.ToArray();
 	        if (!sortedPeriods.Any())
 		        return Enumerable.Empty<DateTimePeriod>();
 
-			var ret = new List<DateTimePeriod>();
-	        var sortedCount = sortedPeriods.Length;
+			Array.Sort(sortedPeriods, (p1, p2) =>
+			{
+				var result = p1.StartDateTime.CompareTo(p2.StartDateTime);
+				if (result != 0) return result;
+
+				return p1.EndDateTime.CompareTo(p2.EndDateTime);
+			});
+
+			var sortedCount = sortedPeriods.Length;
+			var ret = new List<DateTimePeriod>(sortedCount);
 	        for (int i = 0; i < sortedCount; i++)
 	        {
 		        var startTime = sortedPeriods[i].StartDateTime;
