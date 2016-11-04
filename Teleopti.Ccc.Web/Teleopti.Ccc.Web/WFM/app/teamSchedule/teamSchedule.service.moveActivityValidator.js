@@ -35,7 +35,7 @@
 					continue;
 				}
 				var newShiftStart = getNewScheduleStartMoment(shiftDate, personSchedule, newStartMoment);
-				var newShiftStartInAgentTimezone = $filter('timezone')(newShiftStart,
+				var newShiftStartInAgentTimezone = $filter('timezone')(newShiftStart.format('YYYY-MM-DD HH:mm'),
 					personSchedule.Timezone.IanaId,
 					currentTimezone);
 				var newShiftEnd = getLatestScheduleEndMoment(shiftDate, personSchedule, newStartMoment);
