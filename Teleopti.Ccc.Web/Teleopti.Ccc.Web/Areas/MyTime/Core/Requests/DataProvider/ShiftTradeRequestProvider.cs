@@ -39,16 +39,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		public IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedules(DateOnly date,
 			IEnumerable<IPerson> possibleShiftTradePersons, Paging paging, string timeSortOrder = "")
 		{
-			var personIdList = from person in possibleShiftTradePersons
-				where person.Id.HasValue
-				select person.Id.Value;
-
+			var personIdList = possibleShiftTradePersons.Where(p => p.Id.HasValue).Select(p => p.Id.Value).ToList();
 			var timeFilterInfo = new TimeFilterInfo
 			{
 				IsDayOff = true,
 				IsWorkingDay = true,
 				IsEmptyDay = true
 			};
+
 			return _scheduleDayReadModelFinder.ForPersons(date, personIdList, paging, timeFilterInfo, timeSortOrder);
 		}
 
