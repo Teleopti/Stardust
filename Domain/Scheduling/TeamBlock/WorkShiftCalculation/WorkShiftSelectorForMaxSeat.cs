@@ -10,10 +10,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 	public class WorkShiftSelectorForMaxSeat : IWorkShiftSelector
 	{
 		private readonly IUsedSeats _usedSeats;
+		private readonly IsAnySkillOpen _isAnySkillOpen;
 
-		public WorkShiftSelectorForMaxSeat(IUsedSeats usedSeats)
+		public WorkShiftSelectorForMaxSeat(IUsedSeats usedSeats, IsAnySkillOpen isAnySkillOpen)
 		{
 			_usedSeats = usedSeats;
+			_isAnySkillOpen = isAnySkillOpen;
 		}
 
 		public IShiftProjectionCache SelectShiftProjectionCache(DateOnly datePointer, IList<IShiftProjectionCache> shifts, IEnumerable<ISkillDay> allSkillDays,
@@ -23,8 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			IShiftProjectionCache ret =null;
 
 			var skillDays = allSkillDays.FilterOnDate(datePointer);
-			var maxSeatSkillDays = skillDays.Where(x => x.Skill is MaxSeatSkill);
-			var normalSkillDays = skillDays.Except(maxSeatSkillDays);
+			var hasNonMaxSeatSkills = skillDays.Any(x => !(x.Skill is MaxSeatSkill));
 
 			foreach (var shift in shifts)
 			{
@@ -35,17 +36,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 					var activity = (IActivity) layer.Payload;
 					var thisShiftRequiresOneSeatExtra = activity.RequiresSeat;
 
-					if (!checkSkillIsOpen(normalSkillDays, layer))
+					if (hasNonMaxSeatSkills && !_isAnySkillOpen.Check(skillDays, layer))
 					{
 						thisShiftsPeak = double.MaxValue;
 						break;
 					}
 
-					foreach (var skillDay in maxSeatSkillDays)
+					foreach (var maxSeatSkillDay in skillDays.Where(x => x.Skill is MaxSeatSkill))
 					{
-						foreach (var interval in layer.Period.Intervals(TimeSpan.FromMinutes(skillDay.Skill.DefaultResolution)))
+						foreach (var interval in layer.Period.Intervals(TimeSpan.FromMinutes(maxSeatSkillDay.Skill.DefaultResolution)))
 						{
-							var skillStaffPeriod = skillDay.SkillStaffPeriodCollection.Single(x => x.Period == interval);
+							var skillStaffPeriod = maxSeatSkillDay.SkillStaffPeriodCollection.Single(x => x.Period == interval);
 							var occupiedSeatsThisInterval = _usedSeats.Fetch(skillStaffPeriod);
 							if (thisShiftRequiresOneSeatExtra)
 							{
@@ -63,25 +64,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			}
 
 			return ret;
-		}
-
-		//gör en klass av detta
-		private static bool checkSkillIsOpen(IEnumerable<ISkillDay> normalSkillDays, IVisualLayer layer)
-		{
-			if (!normalSkillDays.Any())
-				return true;
-
-			foreach (var skillDay in normalSkillDays)
-			{
-				if (skillDay.Skill.Activity.Equals((IActivity)layer.Payload))
-				{
-					if (skillDay.OpenHours().Any(timePeriod => timePeriod.Contains(layer.Period.TimePeriod(TimeZoneInfo.Utc))))
-					{
-						return true;
-					}	
-				}
-			}
-			return false;
 		}
 	}
 }
