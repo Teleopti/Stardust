@@ -55,13 +55,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		private IEnumerable<IBusinessRuleResponse> checkDay(IDictionary<IPerson, IScheduleRange> rangeClones, IScheduleDay scheduleDay)
 		{
 			var responsList = new List<IBusinessRuleResponse>();
-			IPerson person = scheduleDay.Person;
-			DateOnly dateToCheck = scheduleDay.DateOnlyAsPeriod.DateOnly;
-			IScheduleRange currentSchedules = rangeClones[person];
-			var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;			
-			while (oldResponses.Contains(createResponse(person, dateToCheck, "remove")))
+			var person = scheduleDay.Person;
+			var dateToCheck = scheduleDay.DateOnlyAsPeriod.DateOnly;
+			var oldResponses = rangeClones[person].BusinessRuleResponseInternalCollection;
+			var removeRuleResponse = createResponse(person, dateToCheck, "remove");
+			while (oldResponses.Contains(removeRuleResponse))
 			{
-				oldResponses.Remove(createResponse(person, dateToCheck, "remove"));
+				oldResponses.Remove(removeRuleResponse);
 			}
 
 			var overlappingLayersList = GetOverlappingLayerses(rangeClones, scheduleDay);
@@ -82,9 +82,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			if(!scheduleDay.HasProjection())
 				return new List<OverlappingLayers>();
 
-			var layers = scheduleDay.PersonAssignment(true).MainActivities().ToArray();
+			var personAssignment = scheduleDay.PersonAssignment();
+			var layers = (personAssignment?.MainActivities() ?? Enumerable.Empty<IMainShiftLayer>()).ToArray();
 			var meetings = scheduleDay.PersonMeetingCollection().ToArray();
-			var personalActivities = scheduleDay.PersonAssignment().PersonalActivities().ToArray();
+			var personalActivities = (personAssignment?.PersonalActivities() ?? Enumerable.Empty<IPersonalShiftLayer>()).ToArray();
 			return getOverlappingLayerses(layers,meetings,personalActivities);
 		}
 
