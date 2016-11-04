@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
@@ -19,23 +18,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 	public class ShiftTradeAddPersonScheduleViewModelMapperTest
 	{
 		private IPersonNameProvider _personNameProvider;
-		private IPersonRepository _personRepo;
 
 		[SetUp]
 		public void Setup()
 		{
 			var nameFormatSettingsPersisterAndProvider = MockRepository.GenerateMock<ISettingsPersisterAndProvider<NameFormatSettings>>();
-			nameFormatSettingsPersisterAndProvider.Stub(x => x.Get()).Return(new NameFormatSettings() { NameFormatId = 0 });
+			nameFormatSettingsPersisterAndProvider.Stub(x => x.Get()).Return(new NameFormatSettings { NameFormatId = 0 });
 			_personNameProvider = new PersonNameProvider(nameFormatSettingsPersisterAndProvider);
-			_personRepo = MockRepository.GenerateMock<IPersonRepository>();
 		}
 
 		[Test]
 		public void ShouldMapPersonScheduleFromReadModel()
 		{
+			const int contractTimeInMinute = 123;
 			var shift = new Shift
 			{
-				Projection = new List<SimpleLayer> {new SimpleLayer(), new SimpleLayer()}
+				Projection = new List<SimpleLayer> {new SimpleLayer(), new SimpleLayer()},
+				ContractTimeMinutes = contractTimeInMinute
 			};
 			var model = new Model
 			{
@@ -62,16 +61,17 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			result.PersonId.Should().Be.EqualTo(readModel.PersonId);
 			result.StartTimeUtc.Should().Be.EqualTo(readModel.Start);
 			result.ScheduleLayers.Should().Be.SameInstanceAs(layerViewModels);
-			result.Name.Should().Be.EqualTo(string.Format(CultureInfo.InvariantCulture, "{0} {1}", model.FirstName, model.LastName));
+			var personName = string.Format(CultureInfo.InvariantCulture, "{0} {1}", model.FirstName, model.LastName);
+			result.Name.Should().Be.EqualTo(personName);
+			result.ContractTimeInMinute.Should().Be.EqualTo(contractTimeInMinute);
 		}
 
 		[Test]
 		public void ShouldMapPersonSchedulesFromReadModels()
 		{
-
 			var shift = new Shift
 			{
-				Projection = new List<SimpleLayer> { new SimpleLayer() }
+				Projection = new List<SimpleLayer> {new SimpleLayer()}
 			};
 			var model = new Model
 			{
@@ -86,13 +86,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				Model = JsonConvert.SerializeObject(model),
 				Total = 2
 			};
-			var layerViewModels = new TeamScheduleLayerViewModel[]{};
+			var layerViewModels = new TeamScheduleLayerViewModel[] {};
 			var layerMapper = MockRepository.GenerateMock<IShiftTradeAddScheduleLayerViewModelMapper>();
 
 			layerMapper.Stub(x => x.Map(shift.Projection)).Return(layerViewModels);
 
 			var target = new ShiftTradeAddPersonScheduleViewModelMapper(layerMapper, _personNameProvider);
-			var result = target.Map(new[] { readModel, readModel });
+			var result = target.Map(new[] {readModel, readModel});
 
 			result.Count.Should().Be.EqualTo(readModel.Total);
 		}
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var shift = new Shift
 			{
-				Projection = new List<SimpleLayer> { new SimpleLayer()}
+				Projection = new List<SimpleLayer> {new SimpleLayer()}
 			};
 			var model = new Model
 			{
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				Start = DateTime.Now,
 				Model = JsonConvert.SerializeObject(model),
 				IsLastPage = false,
-				MinStart = new DateTime(2013,11,28,7,0,0)
+				MinStart = new DateTime(2013, 11, 28, 7, 0, 0)
 			};
 			var layerViewModels = new TeamScheduleLayerViewModel[] {};
 			var layerMapper = MockRepository.GenerateMock<IShiftTradeAddScheduleLayerViewModelMapper>();
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var shift = new Shift
 			{
-				Projection = new List<SimpleLayer> { new SimpleLayer() }
+				Projection = new List<SimpleLayer> {new SimpleLayer()}
 			};
 			var model = new Model
 			{
