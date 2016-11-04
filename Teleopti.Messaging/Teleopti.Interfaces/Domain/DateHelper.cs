@@ -451,8 +451,8 @@ namespace Teleopti.Interfaces.Domain
 		public static DateTime GetSmallDateTime(DateTime value)
 		{
 			if (value.Second * 1000 + value.Millisecond < 29999)
-				return new DateTime(value.Year, value.Month, value.Day, value.Hour, value.Minute, 0);
-			return new DateTime(value.Year, value.Month, value.Day, value.Hour, value.Minute+1, 0);
+				return value.AddSeconds(-value.Second).AddMilliseconds(-value.Millisecond);
+			return value.AddSeconds(-value.Second).AddMilliseconds(-value.Millisecond).AddMinutes(1);
 		}
 	}
 }
