@@ -1577,7 +1577,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     		}
     	}
 
-		public void OpenAllSkillStaffPeriods(int maxSeats)
+		public virtual void OpenAllSkillStaffPeriods(int maxSeats)
 		{
 			foreach (var skillStaffPeriod in _skillStaffPeriodCollection)
 			{
