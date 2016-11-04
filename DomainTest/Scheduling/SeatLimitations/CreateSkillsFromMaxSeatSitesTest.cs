@@ -3,8 +3,8 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 		[Test]
 		public void ShouldCreateSkillForSiteWithMaxSeatAnd15MinuteInterval()
 		{
-			var site1 = SiteFactory.CreateSimpleSite("site1");
+			var site1 = SiteFactory.CreateSimpleSite("site1").WithId();
 			site1.MaxSeats = 20;
-			var site2 = SiteFactory.CreateSimpleSite("site2");
+			var site2 = SiteFactory.CreateSimpleSite("site2").WithId();
 
 			IList<ISite> sites = new List<ISite> {site1, site2};
 
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 		[Test]
 		public void ShouldCreateSkillForSiteWithMaxSeatAnd30MinuteInterval()
 		{
-			var site1 = SiteFactory.CreateSimpleSite("site1");
+			var site1 = SiteFactory.CreateSimpleSite("site1").WithId();
 			site1.MaxSeats = 20;
 			IList<ISite> sites = new List<ISite> { site1 };
 
