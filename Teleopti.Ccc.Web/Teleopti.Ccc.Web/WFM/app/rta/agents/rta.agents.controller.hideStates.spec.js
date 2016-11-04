@@ -195,7 +195,7 @@ describe('RtaAgentsCtrl hide states', function () {
 		expect(scope.states[0].Selected).toBeFalsy();
 	});
 
-	it('should still get phone state information when deselct multiple from stateParam', function () {
+	it('should still get phone state information when deselect multiple from stateParam', function () {
 		stateParams.teamId = "teamGuid";
 		stateParams.es = ["noState", "loggedOutGuid"];
 		$fakeBackend

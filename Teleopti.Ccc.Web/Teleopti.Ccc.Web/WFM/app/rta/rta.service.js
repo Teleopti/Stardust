@@ -120,6 +120,20 @@
 					.$promise;
 			};
 
+			this.getAlarmStatesForSitesAndSkillsExcludingStates = function(data) {
+				return $resource('../api/Agents/GetAlarmStatesForSitesAndSkillsExcludingStates', {}, {
+						query: {
+							method: 'GET'
+						}
+					})
+					.query({
+						skillIds: data.skillIds,
+						siteIds: data.siteIds,
+						excludedStateIds: data.excludedStateIds
+					})
+					.$promise;
+			};
+
 			this.getAlarmStatesForSkills = function(data) {
 				return $resource('../api/Agents/GetAlarmStatesForSkills', {}, {
 						query: {
@@ -128,6 +142,20 @@
 					})
 					.query({
 						ids: data.skillIds
+					})
+					.$promise;
+			};
+
+			this.getAlarmStatesForTeamsAndSkillsExcludingStates = function(data) {
+				return $resource('../api/Agents/GetAlarmStatesForTeamsAndSkillsExcludingStates', {}, {
+						query: {
+							method: 'GET'
+						}
+					})
+					.query({
+						skillIds: data.skillIds,
+						teamIds: data.teamIds,
+						excludedStateIds: data.excludedStateIds
 					})
 					.$promise;
 			};
@@ -144,7 +172,6 @@
 					})
 					.$promise;
 			};
-
 			this.getStatesForTeams = function(data) {
 				return $resource('../api/Agents/GetStatesForTeams', {}, {
 						query: {
@@ -167,6 +194,18 @@
 					.$promise;
 			};
 
+			this.getAlarmStatesForTeamsAndSkills = function(data) {
+				return $resource('../api/Agents/GetAlarmStatesForTeamsAndSkills', {}, {
+						query: {
+							method: 'GET'
+						}
+					}).query({
+						teamIds: data.teamIds,
+						skillIds: data.skillIds
+					})
+					.$promise;
+			};
+
 			this.getAlarmStatesForTeamsExcludingStates = function(data) {
 				return $resource('../api/Agents/GetAlarmStatesForTeamsExcludingStates', {}, {
 						query: {
@@ -175,6 +214,42 @@
 					}).query({
 						ids: data.teamIds,
 						excludedStateIds: data.excludedStateIds
+					})
+					.$promise;
+			};
+
+			this.getStatesForTeamsAndSkills = function(data) {
+				return $resource('../api/Agents/GetStatesForTeamsAndSkills', {}, {
+						query: {
+							method: 'GET'
+						}
+					}).query({
+						teamIds: data.teamIds,
+						skillIds: data.skillIds,
+					})
+					.$promise;
+			};
+
+			this.getStatesForSitesAndSkills = function(data) {
+				return $resource('../api/Agents/GetStatesForSitesAndSkills', {}, {
+						query: {
+							method: 'GET'
+						}
+					}).query({
+						siteIds: data.siteIds,
+						skillIds: data.skillIds,
+					})
+					.$promise;
+			};
+
+			this.getAlarmStatesForSitesAndSkills = function(data) {
+				return $resource('../api/Agents/GetAlarmStatesForSitesAndSkills', {}, {
+						query: {
+							method: 'GET'
+						}
+					}).query({
+						siteIds: data.siteIds,
+						skillIds: data.skillIds
 					})
 					.$promise;
 			};
