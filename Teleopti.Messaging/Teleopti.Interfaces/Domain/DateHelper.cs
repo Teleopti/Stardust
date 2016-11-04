@@ -450,9 +450,11 @@ namespace Teleopti.Interfaces.Domain
 		// Matched to work similar to SQL small date time. https://msdn.microsoft.com/en-us/library/ms182418.aspx
 		public static DateTime GetSmallDateTime(DateTime value)
 		{
+			var timeOfDay = TimeSpan.FromHours(value.Hour).Add(TimeSpan.FromMinutes(value.Minute));
 			if (value.Second * 1000 + value.Millisecond < 29999)
-				return value.AddSeconds(-value.Second).AddMilliseconds(-value.Millisecond);
-			return value.AddSeconds(-value.Second).AddMilliseconds(-value.Millisecond).AddMinutes(1);
+				return value.Date.Add(timeOfDay);
+
+			return value.Date.Add(timeOfDay).AddMinutes(1);
 		}
 	}
 }
