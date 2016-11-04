@@ -66,7 +66,7 @@
 							 personAbsence:projection.ParentPersonAbsences !== null, noneSelected:vm.totalSelectedProjections() == 0 && !projection.IsOvertime,
 							 hasSelected:vm.totalSelectedProjections() != 0 && !projection.IsOvertime, selected:projection.Selected, lighterBorder: projection.UseLighterBorder, unselectable: !vm.canToggleSelection(projection, shift, vm.selectedDate),
 							 sameTypeAsLast: projection.SameTypeAsLast}"
-						 ng-click="vm.ToggleProjectionSelection(projection, personSchedule, shift, vm.selectedDate)">
+						 ng-click="vm.ToggleProjectionSelection(projection, vm.selectedDate)">
 						<md-tooltip class="multiline-tooltip layer-summary">
 							<div>{{::projection.Description}}</div>
 							<div>{{::projection.TimeSpan()}}</div>

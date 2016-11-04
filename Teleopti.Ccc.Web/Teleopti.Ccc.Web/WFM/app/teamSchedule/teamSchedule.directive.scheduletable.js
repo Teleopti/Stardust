@@ -50,22 +50,22 @@
 			personSelectionSvc.toggleAllPersonProjections(personSchedule, vm.selectedDate);
 		};
 
-		vm.canToggleSelection = function (currentProjection, shift, viewDate) {
+		vm.canToggleSelection = function (currentProjection, viewDate) {
 			if (!vm.toggles.RemoveAbsenceEnabled && !vm.toggles.RemoveActivityEnabled)
 				return false;
 
 			if(currentProjection.IsOvertime || (currentProjection.ParentPersonAbsences == null && currentProjection.ShiftLayerIds == null)) {
 				return false;
 			}else{
-				var isSameDay = shift.Date === moment(viewDate).format('YYYY-MM-DD');
+				var isSameDay = currentProjection.Parent.Date === moment(viewDate).format('YYYY-MM-DD');
 				return vm.toggles.ManageScheduleForDistantTimezonesEnabled ? true : isSameDay;
 			}
 		};
 
-		vm.ToggleProjectionSelection = function (currentProjection, personSchedule, shift, viewDate) {
-			if (!vm.canToggleSelection(currentProjection, shift, viewDate)) return;
+		vm.ToggleProjectionSelection = function (currentProjection, viewDate) {
+			if (!vm.canToggleSelection(currentProjection, viewDate)) return;
 			currentProjection.ToggleSelection();
-			personSelectionSvc.updatePersonProjectionSelection(currentProjection, personSchedule);
+			personSelectionSvc.updatePersonProjectionSelection(currentProjection);
 		};
 
 		vm.togglePerson = function (personSchedule, $event) {

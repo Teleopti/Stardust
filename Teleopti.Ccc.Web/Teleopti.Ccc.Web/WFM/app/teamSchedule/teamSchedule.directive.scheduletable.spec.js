@@ -122,7 +122,7 @@ describe('teamschedule schedule table controller tests', function () {
 		setupParent(schedule);
 		controller.scheduleVm = { Schedules: [schedule] };
 
-		controller.ToggleProjectionSelection(personAbsence2, schedule, shift, schedule.Date);
+		controller.ToggleProjectionSelection(personAbsence2, schedule.Date);
 		var selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
 		expect(selectedPersonInfoList.length).toEqual(1);
 		expect(selectedPersonInfoList[0].PersonId).toEqual(schedule.PersonId);
@@ -132,7 +132,7 @@ describe('teamschedule schedule table controller tests', function () {
 		expect(personAbsence2.Selected).toEqual(true);
 		expect(personAbsence3.Selected).toEqual(false);
 
-		controller.ToggleProjectionSelection(personAbsence1, schedule, shift, schedule.Date);
+		controller.ToggleProjectionSelection(personAbsence1, schedule.Date);
 		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
 		expect(selectedPersonInfoList[0].SelectedAbsences.length).toEqual(2);
 		expect(selectedPersonInfoList[0].SelectedActivities.length).toEqual(0);
@@ -140,7 +140,7 @@ describe('teamschedule schedule table controller tests', function () {
 		expect(personAbsence2.Selected).toEqual(true);
 		expect(personAbsence3.Selected).toEqual(true);
 
-		controller.ToggleProjectionSelection(personAbsence3, schedule, shift, schedule.Date);
+		controller.ToggleProjectionSelection(personAbsence3, schedule.Date);
 		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
 		expect(selectedPersonInfoList[0].SelectedAbsences.length).toEqual(1);
 		expect(selectedPersonInfoList[0].SelectedActivities.length).toEqual(0);
@@ -148,7 +148,7 @@ describe('teamschedule schedule table controller tests', function () {
 		expect(personAbsence2.Selected).toEqual(true);
 		expect(personAbsence3.Selected).toEqual(false);
 
-		controller.ToggleProjectionSelection(personAbsence2, schedule, shift, schedule.Date);
+		controller.ToggleProjectionSelection(personAbsence2, schedule.Date);
 		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
 		expect(selectedPersonInfoList.length).toEqual(0);
 	}));
@@ -215,7 +215,7 @@ describe('teamschedule schedule table controller tests', function () {
 		setupParent(schedule);
 		controller.scheduleVm = { Schedules: [schedule] };
 
-		controller.ToggleProjectionSelection(personActivity1, schedule, shift, schedule.Date);
+		controller.ToggleProjectionSelection(personActivity1, schedule.Date);
 		var selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
 		expect(selectedPersonInfoList.length).toEqual(1);
 		expect(selectedPersonInfoList[0].PersonId).toEqual(schedule.PersonId);
@@ -225,7 +225,7 @@ describe('teamschedule schedule table controller tests', function () {
 		expect(personActivity2.Selected).toEqual(false);
 		expect(personActivity3.Selected).toEqual(false);
 
-		controller.ToggleProjectionSelection(personActivity2, schedule, shift, schedule.Date);
+		controller.ToggleProjectionSelection(personActivity2, schedule.Date);
 		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
 		expect(selectedPersonInfoList[0].SelectedActivities.length).toEqual(2);
 		expect(selectedPersonInfoList[0].SelectedAbsences.length).toEqual(0);
@@ -233,7 +233,7 @@ describe('teamschedule schedule table controller tests', function () {
 		expect(personActivity2.Selected).toEqual(true);
 		expect(personActivity3.Selected).toEqual(false);
 
-		controller.ToggleProjectionSelection(personActivity3, schedule, shift, schedule.Date);
+		controller.ToggleProjectionSelection(personActivity3,  schedule.Date);
 		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
 		expect(selectedPersonInfoList[0].SelectedActivities.length).toEqual(3);
 		expect(selectedPersonInfoList[0].SelectedAbsences.length).toEqual(0);
@@ -241,7 +241,7 @@ describe('teamschedule schedule table controller tests', function () {
 		expect(personActivity2.Selected).toEqual(true);
 		expect(personActivity3.Selected).toEqual(true);
 
-		controller.ToggleProjectionSelection(personActivity1, schedule, shift, schedule.Date);
+		controller.ToggleProjectionSelection(personActivity1, schedule.Date);
 		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
 		expect(selectedPersonInfoList[0].SelectedActivities.length).toEqual(2);
 		expect(selectedPersonInfoList[0].SelectedAbsences.length).toEqual(0);
@@ -314,7 +314,7 @@ describe('teamschedule schedule table controller tests', function () {
 		setupParent(schedule);
 		controller.scheduleVm = { Schedules: [schedule] };
 
-		controller.ToggleProjectionSelection(personActivity1, schedule, shift, schedule.Date);
+		controller.ToggleProjectionSelection(personActivity1, schedule.Date);
 		var selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
 		expect(selectedPersonInfoList.length).toEqual(1);
 		expect(selectedPersonInfoList[0].PersonId).toEqual(schedule.PersonId);
@@ -323,21 +323,21 @@ describe('teamschedule schedule table controller tests', function () {
 		expect(personActivity2.Selected).toEqual(false);
 		expect(personActivity3.Selected).toEqual(true);
 
-		controller.ToggleProjectionSelection(personActivity2, schedule, shift, schedule.Date);
+		controller.ToggleProjectionSelection(personActivity2, schedule.Date);
 		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
 		expect(selectedPersonInfoList[0].SelectedActivities.length).toEqual(2);
 		expect(personActivity1.Selected).toEqual(true);
 		expect(personActivity2.Selected).toEqual(true);
 		expect(personActivity3.Selected).toEqual(true);
 
-		controller.ToggleProjectionSelection(personActivity3, schedule, shift, schedule.Date);
+		controller.ToggleProjectionSelection(personActivity3, schedule.Date);
 		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
 		expect(selectedPersonInfoList[0].SelectedActivities.length).toEqual(1);
 		expect(personActivity1.Selected).toEqual(false);
 		expect(personActivity2.Selected).toEqual(true);
 		expect(personActivity3.Selected).toEqual(false);
 
-		controller.ToggleProjectionSelection(personActivity2, schedule, shift, schedule.Date);
+		controller.ToggleProjectionSelection(personActivity2, schedule.Date);
 		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
 		expect(selectedPersonInfoList.length).toEqual(0);
 		expect(personActivity1.Selected).toEqual(false);
@@ -432,7 +432,7 @@ describe('teamschedule schedule table controller tests', function () {
 		controller.scheduleVm = { Schedules: [schedule] };
 		controller.selectedPersonProjections = [];
 
-		controller.ToggleProjectionSelection(personActivity1, schedule, shift, schedule.Date);
+		controller.ToggleProjectionSelection(personActivity1, schedule.Date);
 		var selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
 		expect(selectedPersonInfoList.length).toEqual(1);
 		expect(selectedPersonInfoList[0].PersonId).toEqual(schedule.PersonId);
@@ -440,7 +440,7 @@ describe('teamschedule schedule table controller tests', function () {
 		expect(personActivity1.Selected).toEqual(true);
 		expect(overtimeActivity.Selected).toEqual(false);
 
-		controller.ToggleProjectionSelection(overtimeActivity, schedule, shift, schedule.Date);
+		controller.ToggleProjectionSelection(overtimeActivity, schedule.Date);
 		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
 		expect(selectedPersonInfoList.length).toEqual(1);
 		expect(selectedPersonInfoList[0].PersonId).toEqual(schedule.PersonId);

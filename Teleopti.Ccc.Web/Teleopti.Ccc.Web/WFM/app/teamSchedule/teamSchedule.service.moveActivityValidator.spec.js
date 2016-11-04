@@ -99,7 +99,7 @@
 			scheduleMgmt.resetSchedules([schedule], moment(scheduleDate));
 			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 			personSchedule.Shifts[0].Projections[1].Selected = true;
-			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[1], personSchedule);
+			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[1]);
 			var newStartMoment = moment("2016-05-13 13:00");
 
 			var result = target.validateMoveToTime(newStartMoment, "Asia/Hong_Kong");
