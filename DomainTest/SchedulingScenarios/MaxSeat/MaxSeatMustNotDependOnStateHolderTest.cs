@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 			Assert.DoesNotThrow(() =>
 			{
-				Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, optPreferences, 15);
+				Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences);
 			});
 		}
 

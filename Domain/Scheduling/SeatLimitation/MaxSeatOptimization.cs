@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
@@ -19,13 +18,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public interface IMaxSeatOptimization
 	{
-		void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IOptimizationPreferences optimizationPreferences, int maxSeatIntervalLength);
+		void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IOptimizationPreferences optimizationPreferences);
 	}
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public class MaxSeatOptimizationDoNothing : IMaxSeatOptimization
 	{
-		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IOptimizationPreferences optimizationPreferences, int maxSeatIntervalLength)
+		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IOptimizationPreferences optimizationPreferences)
 		{
 		}
 	}
@@ -75,12 +74,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 		}
 
-		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IOptimizationPreferences optimizationPreferences, int maxSeatIntervalLength)
+		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IOptimizationPreferences optimizationPreferences)
 		{
 			if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.DoNotConsiderMaxSeats)
 				return;
 			var allAgents = schedules.Select(schedule => schedule.Key);
-			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, schedules.Scenario, allAgents, maxSeatIntervalLength);
+			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, schedules.Scenario, allAgents, allSkillDays.Any() ? allSkillDays.Min(s => s.Skill.DefaultResolution) : 15);
 			if (!maxSeatData.MaxSeatSkillExists())
 				return;
 			var tagSetter = optimizationPreferences.General.ScheduleTag == null ?
@@ -109,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 													schedulingOptions,
 													rollbackService,
 													new DoNothingResourceCalculateDelayer(),
-													skillDaysForTeamBlockInfo,
+													skillDaysForTeamBlockInfo.Union(allSkillDays),
 													schedules,
 													new ShiftNudgeDirective(),
 													businessRules) ||

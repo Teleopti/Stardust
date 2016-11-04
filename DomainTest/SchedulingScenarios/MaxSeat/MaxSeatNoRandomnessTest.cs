@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				}
 			};
 
-			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, optPreferences, 15);
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences);
 
 			schedules[agentData.Agent].ScheduledDay(dateOnly)
 				.PersonAssignment()

@@ -23,15 +23,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			IShiftProjectionCache ret =null;
 
 			var skillDays = allSkillDays.FilterOnDate(datePointer);
+			var maxSeatSkillDays = skillDays.Where(x => x.Skill is MaxSeatSkill);
+			var normalSkillDays = skillDays.Except(maxSeatSkillDays);
+
 			foreach (var shift in shifts)
 			{
 				var thisShiftsPeak = 0d;
+
 				foreach (var layer in shift.MainShiftProjection)
 				{
 					var activity = (IActivity) layer.Payload;
 					var thisShiftRequiresOneSeatExtra = activity.RequiresSeat;
 
-					foreach (var skillDay in skillDays)
+					if (!checkSkillIsOpen(normalSkillDays, layer))
+					{
+						thisShiftsPeak = double.MaxValue;
+						break;
+					}
+
+					foreach (var skillDay in maxSeatSkillDays)
 					{
 						foreach (var interval in layer.Period.Intervals(TimeSpan.FromMinutes(skillDay.Skill.DefaultResolution)))
 						{
@@ -53,6 +63,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			}
 
 			return ret;
+		}
+
+		//gör en klass av detta
+		private static bool checkSkillIsOpen(IEnumerable<ISkillDay> normalSkillDays, IVisualLayer layer)
+		{
+			if (!normalSkillDays.Any())
+				return true;
+
+			foreach (var skillDay in normalSkillDays)
+			{
+				if (skillDay.Skill.Activity.Equals((IActivity)layer.Payload))
+				{
+					//not correct
+					var open = skillDay.SkillStaffPeriodCollection.First().Period.StartDateTime;
+					var close = skillDay.SkillDataPeriodCollection.Last().Period.EndDateTime;
+
+
+					if (new DateTimePeriod(open, close).Contains(layer.Period)) 
+						return true;
+
+				}
+			}
+			return false;
 		}
 	}
 }

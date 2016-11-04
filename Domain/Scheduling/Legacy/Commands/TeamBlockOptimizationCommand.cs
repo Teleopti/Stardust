@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod);
 
-				_maxSeatOptimization.Optimize(selectedPeriod, selectedPersons, _schedulerStateHolder().Schedules, optimizationPreferences, _schedulerStateHolder().SchedulingResultState.MinimumSkillIntervalLength());
+				_maxSeatOptimization.Optimize(selectedPeriod, selectedPersons, _schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.AllSkillDays(), optimizationPreferences);
 
 				solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
 					rollbackServiceWithResourceCalculation, allMatrixes,
