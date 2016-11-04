@@ -12,11 +12,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public interface IMaxSeatSkillDay
 	{
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		void OpenAllSkillStaffPeriods();
-		void OpenAllSkillStaffPeriods(int maxSeats);
 	}
 
     /// <summary>
@@ -1578,7 +1577,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     		}
     	}
 
-		void IMaxSeatSkillDay.OpenAllSkillStaffPeriods(int maxSeats)
+		public void OpenAllSkillStaffPeriods(int maxSeats)
 		{
 			foreach (var skillStaffPeriod in _skillStaffPeriodCollection)
 			{

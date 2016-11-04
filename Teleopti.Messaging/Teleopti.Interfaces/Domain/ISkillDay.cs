@@ -311,5 +311,7 @@ namespace Teleopti.Interfaces.Domain
         ///  Created date: 2009-07-06    
         /// /// </remarks>
         ReadOnlyCollection<ISkillStaffPeriodView> SkillStaffPeriodViewCollection(TimeSpan periodLength);
+
+	    void OpenAllSkillStaffPeriods(int maxSeats);
     }
 }

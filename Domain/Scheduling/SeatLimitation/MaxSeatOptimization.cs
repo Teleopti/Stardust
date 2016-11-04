@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= period.StartDate); //what is this?
 					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint);
 					var maxPeakBefore = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);
-					if (maxPeakBefore > 0.01)
+					if (maxPeakBefore.IsPositive())
 					{
 						var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules);
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)
 						{
 							var overLimit = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);
-							if (overLimit > 0)
+							if (overLimit.IsPositive())
 							{
 								var unlockedAgents = teamBlockInfo.TeamInfo.GroupMembers.Where(agentsToOptimize.Contains).ToArray();
 								var numberOfUnlockedAgents = unlockedAgents.Length;

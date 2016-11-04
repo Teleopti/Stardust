@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private IEnumerable<ISkillDay> createMaxSeatSkillDays(DateOnlyPeriod period, MaxSeatSkill maxSeatSkill, IScenario scenario)
 		{
 			var skillDays = skillDaysForSkill(period, maxSeatSkill, scenario);
-			foreach (IMaxSeatSkillDay skillDay in skillDays)
+			foreach (var skillDay in skillDays)
 			{
 				skillDay.OpenAllSkillStaffPeriods(maxSeatSkill.MaxSeats);
 			}
