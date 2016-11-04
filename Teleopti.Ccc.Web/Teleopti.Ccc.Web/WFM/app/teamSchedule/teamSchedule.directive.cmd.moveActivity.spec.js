@@ -87,22 +87,7 @@ describe("teamschedule move activity directive tests", function () {
 		expect(applyButton.attr('disabled')).toBe('disabled');
 	});
 
-	it('should not allow to move activity if move to time is not correct', function () {
-		var vm = setUp(moment('2016-06-15').toDate()).commandControl;
-
-		vm.moveToTime = new Date('2016-06-14');
-		vm.selectedAgents = [{
-			PersonId: 'agent1',
-			Name: 'agent1',
-			ScheduleStartTime: '2016-06-15T08:00:00Z',
-			ScheduleEndTime: '2016-06-15T17:00:00Z',
-			SelectedActivities: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
-		}];
-
-		expect(vm.isInputValid()).toBe(false);
-	});
-
-	it('should see a disabled button when anyone in selected is not allowed to move activity to the given time', function () {
+	it('should see a disabled button when everyone in selected is not allowed to move activity to the given time', function () {
 		var result = setUp(moment('2016-06-15').toDate());
 
 		var vm = result.commandControl;
@@ -124,12 +109,23 @@ describe("teamschedule move activity directive tests", function () {
 				ScheduleEndTime: '2016-06-16T08:00:00Z',
 				SelectedActivities: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
 			}];
-
+		fakePersonSelectionService.setFakeSelectedPersonInfoList(vm.selectedAgents);
+		fakeMoveActivityValidator.setInvalidPeople([
+			{
+				PersonId: 'agent1',
+				Name: 'agent1'
+			},
+			{
+				PersonId: 'agent2',
+				Name: 'agent2'
+			}
+		]);
+		result.scope.$apply();
 		var applyButton = angular.element(result.container[0].querySelector(".move-activity .form-submit"));
 
 		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
 		expect(applyButton.attr('disabled')).toBe('disabled');
-		expect(vm.isInputValid()).toBe(false);
+		expect(vm.anyValidAgent()).toBe(false);
 	});
 
 	it('should call move activity when click apply with correct data', function () {
@@ -328,6 +324,10 @@ describe("teamschedule move activity directive tests", function () {
 		}
 
 		this.getInvalidPeople = function () {
+			return invalidPeople;
+		}
+
+		this.getInvalidPeopleNameList = function () {
 			return invalidPeople;
 		}
 

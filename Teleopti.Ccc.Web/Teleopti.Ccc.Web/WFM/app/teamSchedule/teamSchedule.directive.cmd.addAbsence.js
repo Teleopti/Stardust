@@ -3,14 +3,14 @@
 
 	angular.module('wfm.teamSchedule').directive('addAbsence', addAbsenceDirective);
 
-	addAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService', '$locale', 'CommandCheckService'];
+	addAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'ScheduleManagement', 'teamScheduleNotificationService', '$locale', 'CommandCheckService', 'belongsToDateDecider'];
 
-	function addAbsenceCtrl(PersonAbsenceSvc, personSelectionSvc,wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService, $locale, CommandCheckService) {
+	function addAbsenceCtrl(PersonAbsenceSvc, personSelectionSvc, scheduleManagementSvc, teamScheduleNotificationService, $locale, CommandCheckService, belongsToDateDecider) {
 		var vm = this;
 
 		vm.label = 'AddAbsence';
-
 		vm.selectedAgents = personSelectionSvc.getCheckedPersonInfoList();
+		vm.invalidAgents = [];
 
 		PersonAbsenceSvc.loadAbsences().then(function (absences) {
 			vm.availableAbsenceTypes = absences;
@@ -25,15 +25,16 @@
 			return !vm.isFullDayAbsence && (moment(vm.timeRange.endTime) >= moment(vm.timeRange.startTime));
 		};
 
-		vm.isInputValid = function() {
+		vm.updateInvalidAgents = function() {
 			if (vm.manageScheduleForDistantTimezonesEnabled) {
-				var isTimeAllowedForAgents = vm.isFullDayAbsence
-					? determineIsSameTimezone()
-					: checkIfTimeRangeAllowedForIntradayAbsence();
-				return vm.isTimeRangeValid() && isTimeAllowedForAgents;
+				if (vm.isFullDayAbsence) {
+					determineIsSameTimezoneForFullDayAbsence();
+				} else {
+					checkIfTimeRangeAllowedForIntradayAbsence();
+				}
+				return;
 			}
-			return vm.isTimeRangeValid();
-		}
+		};
 
 		vm.isAbsenceDateValid = function () {
 			return vm.isFullDayAbsence && moment(vm.timeRange.endTime).isSameOrAfter(moment(vm.timeRange.startTime), 'day');
@@ -49,58 +50,41 @@
 			return moment(vm.getDefaultAbsenceStartTime()).add(1, 'hour').toDate();
 		};
 
-		vm.addAbsence = function() {
-			var requestData = {
-				PersonIds: vm.selectedAgents.map(function(agent) { return agent.PersonId; }),
-				Date: vm.selectedDate(),
-				AbsenceId: vm.selectedAbsenceId,
-				TrackedCommandInfo: { TrackId: vm.trackId }
-			};
-			if (vm.isFullDayAbsence) {
-				requestData.Start = moment(vm.timeRange.startTime).format("YYYY-MM-DD");
-				requestData.End = moment(vm.timeRange.endTime).format("YYYY-MM-DD");
-			} else {
-				requestData.Start = vm.convertTime(moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"));
-				requestData.End = vm.convertTime(moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"));
-			}
-			requestData.IsFullDay = vm.isFullDayAbsence;
-
-			if (vm.checkPersonalAccountEnabled) {
-				CommandCheckService.checkPersonalAccounts(requestData)
-					.then(function(data) {
-						addAbsence(data);
-					});
-			} else {
-				addAbsence(requestData);
-			}
-
-		};
-
-
-		function determineIsSameTimezone() {
+		function determineIsSameTimezoneForFullDayAbsence() {
+			vm.invalidAgents = [];
 			var invalidAgentNameList = [];
 			vm.selectedAgents.forEach(function (agent) {
 				if (vm.getCurrentTimezone() != scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId).Timezone.IanaId) {
+					vm.invalidAgents.push(agent);
 					invalidAgentNameList.push(agent.Name);
 				}
 			});
 			vm.invalidAgentNameListString = invalidAgentNameList.join(', ');
-			return invalidAgentNameList.length == 0;
 		}
 
 		function checkIfTimeRangeAllowedForIntradayAbsence() {
-			var invalidAgentNameList = [];
+			vm.invalidAgents.length = 0;
+			var timeRangeMoment = {
+				startTime: moment(vm.timeRange.startTime),
+				endTime: moment(vm.timeRange.endTime)
+			}
 			vm.selectedAgents.forEach(function (agent) {
 				var personSchedule = scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId);
 				if (!belongsToDateDecider
-					.checkTimeRangeAllowedForIntradayAbsence(vm.timeRange,
+					.checkTimeRangeAllowedForIntradayAbsence(timeRangeMoment,
 						belongsToDateDecider.normalizePersonScheduleVm(personSchedule, vm.getCurrentTimezone())))
-					invalidAgentNameList.push(agent.Name);
+					vm.invalidAgents.push(agent);
 			});
-
+			var invalidAgentNameList = vm.invalidAgents.map(function(agent) {
+				return agent.Name;
+			});
 			vm.invalidAgentNameListString = invalidAgentNameList.join(', ');
-			return invalidAgentNameList.length == 0;
 		}
+
+		vm.anyValidAgent = function() {
+			return vm.invalidAgents.length !== vm.selectedAgents.length;
+		};
+
 		function addAbsence(requestData) {
 			if (requestData.PersonIds.length === 0) {
 				if (vm.getActionCb(vm.label)) {
@@ -124,10 +108,43 @@
 			});
 		}
 
-		vm.updateDateAndTimeFormat = function () {
+		vm.addAbsence = function () {
+			var invalidPersonIds = vm.invalidAgents.map(function (agent) {
+				return agent.PersonId;
+			});
+			var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; })
+				.filter(function (personId) {
+					return invalidPersonIds.indexOf(personId) < 0;
+				});
+			var requestData = {
+				PersonIds: personIds,
+				Date: vm.selectedDate(),
+				AbsenceId: vm.selectedAbsenceId,
+				TrackedCommandInfo: { TrackId: vm.trackId }
+			};
+			if (vm.isFullDayAbsence) {
+				requestData.Start = moment(vm.timeRange.startTime).format("YYYY-MM-DD");
+				requestData.End = moment(vm.timeRange.endTime).format("YYYY-MM-DD");
+			} else {
+				requestData.Start = vm.convertTime(moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"));
+				requestData.End = vm.convertTime(moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"));
+			}
+			requestData.IsFullDay = vm.isFullDayAbsence;
+
+			if (vm.checkPersonalAccountEnabled) {
+				CommandCheckService.checkPersonalAccounts(requestData)
+					.then(function (data) {
+						addAbsence(data);
+					});
+			} else {
+				addAbsence(requestData);
+			}
+		};
+
+		vm.updateDateAndTimeFormat = function() {
 			var timeFormat = $locale.DATETIME_FORMATS.shortTime;
 			vm.showMeridian = timeFormat.indexOf("h:") >= 0 || timeFormat.indexOf("h.") >= 0;
-		}
+		};
 	}
 
 
@@ -176,8 +193,7 @@
 				return containerCtrl.hasPermission('IsAddFullDayAbsenceAvailable');
 			};
 			scope.vm.checkPersonalAccountEnabled = containerCtrl.hasToggle('CheckPersonalAccountEnabled');
-			scope.vm.manageScheduleForDistantTimezonesEnabled = containerCtrl
-				.hasToggle('ManageScheduleForDistantTimezonesEnabled');
+			scope.vm.manageScheduleForDistantTimezonesEnabled = containerCtrl.hasToggle('ManageScheduleForDistantTimezonesEnabled');
 
 			scope.vm.isAddIntradayAbsenceAvailable = function () {
 				return containerCtrl.hasPermission('IsAddIntradayAbsenceAvailable');
@@ -188,14 +204,17 @@
 				endTime: selfCtrl.getDefaultAbsenceEndTime()
 			};
 
-			scope.$watch(function () { return scope.vm.isFullDayAbsence; }, function (newValue, oldValue) {
-				if (newValue) {
-					scope.vm.timeRange = {
-						startTime: selfCtrl.getDefaultAbsenceStartTime(),
-						endTime: selfCtrl.getDefaultAbsenceEndTime()
-					};
-				}
-			});
+			scope.$watch(function() {
+					var format = scope.vm.isFullDayAbsence ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm';
+					return {
+						startTime: moment(scope.vm.timeRange.startTime).format(format),
+						endTime: moment(scope.vm.timeRange.endTime).format(format)
+					}
+				},
+				function (newValue, oldValue) {
+					scope.vm.updateInvalidAgents();
+				},
+				true);
 
 			scope.vm.isFullDayAbsence = scope.vm.isAddFullDayAbsenceAvailable();
 
