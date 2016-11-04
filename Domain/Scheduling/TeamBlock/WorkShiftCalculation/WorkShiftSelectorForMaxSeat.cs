@@ -76,13 +76,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				if (skillDay.Skill.Activity.Equals((IActivity)layer.Payload))
 				{
 					//not correct
-					var open = skillDay.SkillStaffPeriodCollection.First().Period.StartDateTime;
-					var close = skillDay.SkillDataPeriodCollection.Last().Period.EndDateTime;
-
-
-					if (new DateTimePeriod(open, close).Contains(layer.Period)) 
+					if (skillDay.OpenHours().Any(timePeriod => timePeriod.Contains(layer.Period.TimePeriod(TimeZoneInfo.Utc))))
+					{
 						return true;
-
+					}	
 				}
 			}
 			return false;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
@@ -56,14 +57,15 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return workload;
 		}
 
-		public static IWorkload CreateWorkloadWithOpenHours(ISkill skill, TimePeriod openHours)
+		public static IWorkload CreateWorkloadWithOpenHours(ISkill skill, params TimePeriod[] openHours)
 		{
 			IWorkload workload = new Workload(skill);
 			workload.Description = "desc from factory";
 			workload.Name = "name from factory";
-			workload.TemplateWeekCollection.ForEach(x => x.Value.ChangeOpenHours(new List<TimePeriod>{ openHours }));
+			workload.TemplateWeekCollection.ForEach(x => x.Value.ChangeOpenHours(openHours.ToList()));
 			return workload;
 		}
+
 
 		public static IWorkload CreateWorkloadThatIsClosed(ISkill skill)
 		{
