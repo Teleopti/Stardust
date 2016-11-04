@@ -8,7 +8,7 @@
         .controller("hangfireMonitoringController", hangfireMonitoringController, ["tokenHeaderService"]);
 
 	var timeout = 10000;
-	var maxPoints = 24;
+	var maxPoints = 360;
 
 	function hangfireMonitoringController($http, $interval, tokenHeaderService) {
 		var vm = this;
@@ -17,7 +17,7 @@
 		var chartLabels = [];
 		var datasets = [
 			{
-				label: "Total",
+				label: "Enqueued",
 				fill: false,
 				lineTension: 0,
 				backgroundColor: "blue",
