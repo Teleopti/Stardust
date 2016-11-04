@@ -14,17 +14,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_maxSeatSkillDataPerSkills = new List<maxSeatSkillDataPerSkill>();
 		}
 
-		public void Add(ISkill skill, IEnumerable<ISkillDay> skillDays, ISite site)
+		public void Add(MaxSeatSkill maxSeatSkill, IEnumerable<ISkillDay> skillDays, ISite site)
 		{
-			_maxSeatSkillDataPerSkills.Add(new maxSeatSkillDataPerSkill(skill, skillDays, site));
+			_maxSeatSkillDataPerSkills.Add(new maxSeatSkillDataPerSkill(maxSeatSkill, skillDays, site));
 		}
 
-		public IEnumerable<ISkill> AllMaxSeatSkills()
+		public IEnumerable<MaxSeatSkill> AllMaxSeatSkills()
 		{
 			return _maxSeatSkillDataPerSkills.Select(x => x.Skill);
 		}
 
-		public IDictionary<ISkill, IEnumerable<ISkillDay>> AllMaxSeatSkillDaysPerSkill()
+		public IDictionary<MaxSeatSkill, IEnumerable<ISkillDay>> AllMaxSeatSkillDaysPerSkill()
 		{
 			return _maxSeatSkillDataPerSkills.ToDictionary(maxSeatSkillDataPerSkill => maxSeatSkillDataPerSkill.Skill, maxSeatSkillDataPerSkill => maxSeatSkillDataPerSkill.SkillDays);
 		}
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 		public int MaxSeatForSkill(ISkill skill)
 		{
-			return _maxSeatSkillDataPerSkills.Single(x => x.Skill.Equals(skill)).Site.MaxSeats.Value;
+			return ((MaxSeatSkill) skill).MaxSeats;
 		}
 
 		public IEnumerable<ISkillDay> SkillDaysFor(ITeamBlockInfo teamBlockInfo, DateOnly personPeriodDate)
@@ -49,14 +49,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 		private class maxSeatSkillDataPerSkill
 		{
-			public maxSeatSkillDataPerSkill(ISkill skill, IEnumerable<ISkillDay> skillDays, ISite site)
+			public maxSeatSkillDataPerSkill(MaxSeatSkill skill, IEnumerable<ISkillDay> skillDays, ISite site)
 			{
 				Skill = skill;
 				SkillDays = skillDays;
 				Site = site;
 			}
 
-			public ISkill Skill { get; }
+			public MaxSeatSkill Skill { get; }
 			public IEnumerable<ISkillDay> SkillDays { get; }
 			public ISite Site { get; }
 		}

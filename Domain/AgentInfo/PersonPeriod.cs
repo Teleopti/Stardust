@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -166,11 +167,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_externalLogOnCollection.Remove(externalLogOn);
 		}
 
+		[RemoveMeWithToggle("Change return parameter to MaxSeatSkill", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		public virtual ISkill MaxSeatSkill
 		{
 			get { return _maxSeatSkill; }
 		}
 
+		[RemoveMeWithToggle("Change inparameter to MaxSeatSkill", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		public virtual void SetMaxSeatSkill(ISkill maxSeatSkill)
 		{
 			if(maxSeatSkill!=null && maxSeatSkill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)

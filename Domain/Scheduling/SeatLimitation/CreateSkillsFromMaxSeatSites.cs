@@ -31,11 +31,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				if (!site.MaxSeats.HasValue)
 					continue;
 
-				ISkill newSkill = new Skill(site.Description.Name, "", Color.DeepPink, intervalLength,
-				                            new SkillTypePhone(new Description(), ForecastSource.MaxSeatSkill));
-
-                newSkill.SetId(site.Id);
-
+				var newSkill = new MaxSeatSkill(site, intervalLength);
+				
 				IList<ITemplateSkillDataPeriod> templateSkillDataPeriods = new List<ITemplateSkillDataPeriod>();
                 var baseDate = SkillDayTemplate.BaseDate.Date;
 			    var timeZone = _userTimeZone.TimeZone();

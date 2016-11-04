@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Minutes.Should().Be.EqualTo(intervalLength);
 		}
 
-		[Test, Ignore("Bug Cleas found - should be fixed")]
+		[Test]
 		public void ShouldBeAbleToSetMaxSeatsForGrid()
 		{
 			const int numberOfSeats = 11;

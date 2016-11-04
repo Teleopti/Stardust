@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
@@ -13,7 +14,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 {
 	public interface IMaxSeatSkillDay
 	{
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		void OpenAllSkillStaffPeriods();
+		void OpenAllSkillStaffPeriods(int maxSeats);
 	}
 
     /// <summary>
@@ -1565,10 +1568,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
             return new ReadOnlyCollection<ISkillStaffPeriodView>(views);
         }
 
-		/// <summary>
-		/// Should not be here, just temorary until I learn how to initialize a skill
-		/// </summary>
-    	void IMaxSeatSkillDay.OpenAllSkillStaffPeriods()
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
+		void IMaxSeatSkillDay.OpenAllSkillStaffPeriods()
     	{
     		foreach (var skillStaffPeriod in _skillStaffPeriodCollection)
     		{
@@ -1577,7 +1578,16 @@ namespace Teleopti.Ccc.Domain.Forecasting
     		}
     	}
 
-        public virtual DateTimePeriod Period
+		void IMaxSeatSkillDay.OpenAllSkillStaffPeriods(int maxSeats)
+		{
+			foreach (var skillStaffPeriod in _skillStaffPeriodCollection)
+			{
+				skillStaffPeriod.IsAvailable = true;
+				skillStaffPeriod.Payload.MaxSeats = maxSeats;
+			}
+		}
+
+		public virtual DateTimePeriod Period
         {
             get
             {

@@ -42,12 +42,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			return ret;
 		}
 
-		private IEnumerable<ISkillDay> createMaxSeatSkillDays(DateOnlyPeriod period, ISkill maxSeatSkill, IScenario scenario)
+		private IEnumerable<ISkillDay> createMaxSeatSkillDays(DateOnlyPeriod period, MaxSeatSkill maxSeatSkill, IScenario scenario)
 		{
 			var skillDays = skillDaysForSkill(period, maxSeatSkill, scenario);
 			foreach (IMaxSeatSkillDay skillDay in skillDays)
 			{
-				skillDay.OpenAllSkillStaffPeriods();
+				skillDay.OpenAllSkillStaffPeriods(maxSeatSkill.MaxSeats);
 			}
 			return skillDays;
 		}
