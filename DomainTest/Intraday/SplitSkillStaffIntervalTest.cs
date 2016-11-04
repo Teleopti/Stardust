@@ -60,24 +60,24 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			};
 			var result = Target.Split(staffingList, TimeSpan.FromMinutes(5));
 			result.Count.Should().Be.EqualTo(4);
-			var expectations = new List<SkillStaffingIntervalLight>()
+			var expectations = new List<SkillStaffingIntervalLightModel>()
 			{
-				new SkillStaffingIntervalLight()
+				new SkillStaffingIntervalLightModel()
 				{
 					StartDateTime = dateTimeIs(8,0),
 					EndDateTime = dateTimeIs(8,5)
 				},
-				new SkillStaffingIntervalLight()
+				new SkillStaffingIntervalLightModel()
 				{
 					StartDateTime = dateTimeIs(8,5),
 					EndDateTime = dateTimeIs(8,10)
 				},
-				new SkillStaffingIntervalLight()
+				new SkillStaffingIntervalLightModel()
 				{
 					StartDateTime = dateTimeIs(8,10),
 					EndDateTime = dateTimeIs(8,15)
 				},
-				new SkillStaffingIntervalLight()
+				new SkillStaffingIntervalLightModel()
 				{
 					StartDateTime = dateTimeIs(8,15),
 					EndDateTime = dateTimeIs(8,20)
@@ -112,32 +112,32 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var result = Target.Split(staffingList, TimeSpan.FromMinutes(10));
 			result.Count.Should().Be.EqualTo(4);
 
-			var expectations = new List<SkillStaffingIntervalLight>()
+			var expectations = new List<SkillStaffingIntervalLightModel>()
 			{
-				new SkillStaffingIntervalLight()
+				new SkillStaffingIntervalLightModel()
 				{
-					SkillId = skill1,
+					Id = skill1,
 					StartDateTime = dateTimeIs(8,0),
 					EndDateTime = dateTimeIs(8,10),
 					StaffingLevel = 16.66667
 				},
-				new SkillStaffingIntervalLight()
+				new SkillStaffingIntervalLightModel()
 				{
-					SkillId = skill1,
+					Id = skill1,
 					StartDateTime = dateTimeIs(8,10),
 					EndDateTime = dateTimeIs(8,20),
 					StaffingLevel = 16.66667
 				},
-				new SkillStaffingIntervalLight()
+				new SkillStaffingIntervalLightModel()
 				{
-					SkillId = skill1,
+					Id = skill1,
 					StartDateTime = dateTimeIs(8,20),
 					EndDateTime = dateTimeIs(8,30),
 					StaffingLevel = 16.66667
 				},
-				new SkillStaffingIntervalLight()
+				new SkillStaffingIntervalLightModel()
 				{
-					SkillId = skill2,
+					Id = skill2,
 					StartDateTime = dateTimeIs(8,0),
 					EndDateTime = dateTimeIs(8,10),
 					StaffingLevel = 10
@@ -151,4 +151,5 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			return new DateTime(2016, 11, 03, hour, minutes, 0, DateTimeKind.Utc);
 		}
 	}
+	
 }

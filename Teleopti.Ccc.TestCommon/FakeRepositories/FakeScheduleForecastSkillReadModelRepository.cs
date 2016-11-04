@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -24,10 +25,20 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
         }
 
 		public IEnumerable<SkillStaffingInterval> GetBySkill(Guid skillId, DateTime startDateTime, DateTime endDateTime)
-        {
-	       return _fakeStaffingList.Where(x => x.SkillId == skillId && 
-					((x.StartDateTime < startDateTime && x.EndDateTime > startDateTime) || (x.StartDateTime >= startDateTime && x.StartDateTime < endDateTime) ));
-        }
+		{
+			   return _fakeStaffingList.Where(x => x.SkillId == skillId && 
+			(( x.StartDateTime < startDateTime && x.EndDateTime > startDateTime) || (x.StartDateTime >= startDateTime && x.StartDateTime < endDateTime) ));
+			//var result = new List<SkillStaffingInterval>();
+			//var providedPeriod = new DateTimePeriod(startDateTime,endDateTime);
+			//foreach (var skillStaffingInterval in _fakeStaffingList.Where(x=>x.SkillId == skillId))
+			//{
+			//	var intervalPeriod = new DateTimePeriod(skillStaffingInterval.StartDateTime,skillStaffingInterval.EndDateTime);
+			//	if(intervalPeriod.Intersect(providedPeriod))
+			//		result.Add(skillStaffingInterval);
+			//}
+			//return result;
+
+		}
 
         public IEnumerable<SkillStaffingInterval> GetBySkillArea(Guid skillAreaId, DateTime startDateTime, DateTime endDateTime)
         {
@@ -82,9 +93,48 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
             return mergedStaffingIntervals;
         }
 
-	    public IEnumerable<SkillStaffingInterval> GetBySkills(Guid[] guids, DateTime dateTime, DateTime endDateTime)
+		public IEnumerable<SkillStaffingInterval> ReadMergedStaffingAndChanges(Guid[] ids, DateTimePeriod period)
+		{
+			var allIntervals = GetBySkills(ids, period.StartDateTime, period.EndDateTime).ToList();
+			var mergedStaffingIntervals = new List<SkillStaffingInterval>();
+			var allIntervalChanges = GetReadModelChanges(period);
+			foreach (var skillId in ids)
+			{
+				var skillStaffingIntervals = allIntervals.Where(x => x.SkillId == skillId);
+				var skillIntervalChanges = allIntervalChanges.Where(x => x.SkillId == skillId).ToList();
+				if (skillIntervalChanges.Any())
+				{
+					skillStaffingIntervals.ForEach(interval =>
+					{
+						var changes =
+								 skillIntervalChanges.Where(x => x.StartDateTime == interval.StartDateTime && x.EndDateTime == interval.EndDateTime).ToList();
+						if (changes.Any())
+						{
+							interval.StaffingLevel += changes.Sum((x => x.StaffingLevel));
+							interval.StaffingLevelWithShrinkage += changes.Sum((x => x.StaffingLevel));
+						}
+						mergedStaffingIntervals.Add(interval);
+					});
+				}
+				else
+				{
+					mergedStaffingIntervals.AddRange(skillStaffingIntervals.ToList());
+				}
+			}
+
+
+
+			return mergedStaffingIntervals;
+		}
+
+		public IEnumerable<SkillStaffingInterval> GetBySkills(Guid[] guids, DateTime dateTime, DateTime endDateTime)
 	    {
-		    throw new NotImplementedException();
+		    var intervals = new List<SkillStaffingInterval>();
+		    foreach (var skillId in guids)
+		    {
+				intervals.AddRange(GetBySkill(skillId,dateTime,endDateTime));
+			}
+		    return intervals;
 	    }
 
 	    public IDictionary<Guid, DateTime> GetLastCalculatedTime2()

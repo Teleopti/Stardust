@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -92,6 +93,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			}
 		}
 
+		//remove this if the old staffing UI is removed and use the overload
 		public IEnumerable<SkillStaffingInterval> ReadMergedStaffingAndChanges(Guid skillId, DateTimePeriod period)
 		{
 			var skillStaffingIntervals = GetBySkill(skillId, period.StartDateTime, period.EndDateTime).ToList();
@@ -142,10 +144,44 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 		
 		}
 
-
+		//remove this if the old staffing UI is removed
 		public IEnumerable<SkillStaffingInterval> GetBySkill(Guid skillId, DateTime startDateTime, DateTime endDateTime)
 		{
 			return GetBySkills(new[] {skillId}, startDateTime, endDateTime);
+		}
+
+		public IEnumerable<SkillStaffingInterval> ReadMergedStaffingAndChanges(Guid[] ids, DateTimePeriod period)
+		{
+			var allIntervals = GetBySkills(ids, period.StartDateTime, period.EndDateTime).ToList();
+			var mergedStaffingIntervals = new List<SkillStaffingInterval>();
+			var allIntervalChanges = GetReadModelChanges(period);
+			foreach (var skillId in ids)
+			{
+				var skillStaffingIntervals = allIntervals.Where(x => x.SkillId == skillId);
+				var skillIntervalChanges = allIntervalChanges.Where(x => x.SkillId == skillId).ToList();
+				if (skillIntervalChanges.Any())
+				{
+					skillStaffingIntervals.ForEach(interval =>
+					{
+						var changes =
+								 skillIntervalChanges.Where(x => x.StartDateTime == interval.StartDateTime && x.EndDateTime == interval.EndDateTime).ToList();
+						if (changes.Any())
+						{
+							interval.StaffingLevel += changes.Sum((x => x.StaffingLevel));
+							interval.StaffingLevelWithShrinkage += changes.Sum((x => x.StaffingLevel));
+						}
+						mergedStaffingIntervals.Add(interval);
+					});
+				}
+				else
+				{
+					mergedStaffingIntervals.AddRange(skillStaffingIntervals.ToList());
+				}
+			}
+			
+			
+			
+			return mergedStaffingIntervals;
 		}
 
 		public IEnumerable<SkillStaffingInterval> GetBySkillArea(Guid id, DateTime startDateTime, DateTime endDateTime)

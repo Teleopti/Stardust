@@ -2,16 +2,16 @@
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public struct SkillStaffingIntervalLight : IEquatable<SkillStaffingInterval>
+	public struct SkillStaffingIntervalLightModel : IEquatable<SkillStaffingIntervalLightModel>
 	{
-		public Guid SkillId { get; set; }
+		public Guid Id { get; set; }
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
 		public double StaffingLevel { get; set; }
 
-		public bool Equals(SkillStaffingInterval other)
+		public bool Equals(SkillStaffingIntervalLightModel other)
 		{
-			return SkillId == other.SkillId
+			return Id == other.Id
 				   && StartDateTime == other.StartDateTime
 				   && EndDateTime == other.EndDateTime
 				   && Math.Abs(StaffingLevel - other.StaffingLevel) < 0.001;

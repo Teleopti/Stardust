@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
@@ -39,6 +40,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<AddActivityWithResourceCalculation>().As<IPersonAssignmentAddActivity>().SingleInstance();
 			else
 				builder.RegisterType<AddActivityWithoutResourceCalculation>().As<IPersonAssignmentAddActivity>().SingleInstance();
+			builder.RegisterType<SplitSkillStaffInterval>().As<SplitSkillStaffInterval>().SingleInstance();
+			builder.RegisterType<MergeSkillStaffIntervalLightForSkillArea>().As<MergeSkillStaffIntervalLightForSkillArea>().SingleInstance();
+			builder.RegisterType<SkillStaffingIntervalProvider>().As<SkillStaffingIntervalProvider>().SingleInstance();
 		}
 	}
 }
