@@ -15,7 +15,7 @@
 		vm.notAllowedNameListString = "";
 		vm.availableActivitiesLoaded = false;
 		vm.checkingCommand = false;
-		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
+		vm.selectedAgents = personSelectionSvc.getCheckedPersonInfoList();
 		vm.invalidAgents = [];
 
 		activityService.fetchAvailableActivities().then(function (activities) {
