@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Minimum minutes before absence time that requests may be valid:.
+        ///   Looks up a localized string similar to Minimum approval time threshold (minutes prior to request start):.
         /// </summary>
         public static string AbsenceRequestExpiredThreshold {
             get {
@@ -32581,7 +32581,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validate requests based on expired threshold.
+        ///   Looks up a localized string similar to Validate by minimum approval time threshold.
         /// </summary>
         public static string ValidateRequestsBasedOnExpiration {
             get {

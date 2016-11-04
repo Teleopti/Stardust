@@ -14401,7 +14401,7 @@ Check your internet connection or contact your administrator.</value>
     <comment>Used in the workflow control set, Absence Request settings page in the Admin Client.</comment>
   </data>
   <data name="AbsenceRequestExpiredThreshold" xml:space="preserve">
-    <value>Minimum minutes before absence time that requests may be valid:</value>
+    <value>Minimum approval time threshold (minutes prior to request start):</value>
     <comment>Used in the workflow control set, Absence Request settings page in the Admin Client.</comment>
   </data>
   <data name="NoPermissionMoveAgentActivity" xml:space="preserve">
@@ -14786,11 +14786,11 @@ These options are activated:
   </data>
   <data name="ValidateRequestsBasedOnBudgetAllotment" xml:space="preserve">
     <value>Validate requests based on budget allowance</value>
-    <comment>Business rule description in request module</comment>
+    <comment>Business rule description, used when approving requests by Business rule, in the request module.</comment>
   </data>
   <data name="ValidateRequestsBasedOnIntraday" xml:space="preserve">
     <value>Validate requests based on intraday staffing check</value>
-    <comment>Business rule description in request module</comment>
+    <comment>Business rule description, used when approving requests by Business rule, in the request module.</comment>
   </data>
   <data name="NoPermissionToEditShiftCategory" xml:space="preserve">
     <value>Not permitted to edit shift category for agent(s)</value>
@@ -15011,8 +15011,8 @@ These options are activated:
     <comment>Staffing validator in Workflow control set</comment>
   </data>
   <data name="ValidateRequestsBasedOnExpiration" xml:space="preserve">
-    <value>Validate requests based on expired threshold</value>
-    <comment>Staffing validator in Workflow control set</comment>
+    <value>Validate by minimum approval time threshold</value>
+    <comment>Business rule description, used when approving requests by Business rule, in the request module.</comment>
   </data>
   <data name="StaffingInformationMissing" xml:space="preserve">
     <value>Staffing information is missing on skill {0}</value>
@@ -15094,7 +15094,7 @@ These options are activated:
     <value>Skill area:</value>
     <comment>skill area</comment>
   </data>
- <data name="CannotApplyChangeToAgentsInDifferentTimezone" xml:space="preserve">
+  <data name="CannotApplyChangeToAgentsInDifferentTimezone" xml:space="preserve">
     <value>Cannot apply change to agent in different timezones</value>
     <comment>Alert message stating the intended changes cannot be applied to agents that have timezones different to the currently selected timezone.</comment>
   </data>
