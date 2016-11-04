@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public void ThenIShouldBeAbleToApplyMyNewActivity()
 		{
 			Browser.Interactions.AssertScopeValue("#applyActivity", "newActivityForm.$valid", true);
-			Browser.Interactions.AssertScopeValue("#applyActivity", "vm.isInputValid()", true);
+			Browser.Interactions.AssertScopeValue("#applyActivity", "vm.anyValidAgent()", true);
 			Browser.Interactions.AssertExists("#applyActivity.wfm-btn-primary");
 		}
 

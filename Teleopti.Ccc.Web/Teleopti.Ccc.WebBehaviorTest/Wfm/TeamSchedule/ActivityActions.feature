@@ -44,7 +44,6 @@ Background:
 	| Contract schedule    | A contract schedule  |
 	| Part time percentage | Part time percentage |
 
-@ignore
 @OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
 Scenario: Should be able to add activity
 	When I view wfm team schedules

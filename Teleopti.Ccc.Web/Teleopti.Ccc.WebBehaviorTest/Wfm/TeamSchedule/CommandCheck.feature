@@ -57,7 +57,6 @@ Background:
 		| ThirdActivityStartTime | 2016-10-10 09:00 |
 		| ThirdActivityEndTime   | 2016-10-10 10:00 |
 
-@ignore
 @OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
 Scenario: Should show command check after adding activity on top of NOT ALLOW MEETING acitvity
 	When I view wfm team schedules
