@@ -75,7 +75,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			{
 				if (skillDay.Skill.Activity.Equals((IActivity)layer.Payload))
 				{
-					//not correct
 					if (skillDay.OpenHours().Any(timePeriod => timePeriod.Contains(layer.Period.TimePeriod(TimeZoneInfo.Utc))))
 					{
 						return true;

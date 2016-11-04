@@ -396,10 +396,12 @@ namespace Teleopti.Interfaces.Domain
             {
                 if (retList.Count != 0)
                 {
-                    if (retList[retList.Count - 1].Intersect(period))
+	                var earlierPeriod = retList[retList.Count - 1];
+
+										if (earlierPeriod.Intersect(period) || earlierPeriod.EndTime == period.StartTime)
                     {
 
-                        if (retList[retList.Count - 1].EndTime < period.EndTime) 
+                        if (earlierPeriod.EndTime < period.EndTime) 
                         {
                             TimePeriod newTimePeriod = new TimePeriod(retList[retList.Count - 1].StartTime, period.EndTime);
                             retList.Remove(retList[retList.Count - 1]);

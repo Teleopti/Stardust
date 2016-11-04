@@ -705,14 +705,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: henrika
         /// Created date: 2008-04-23
         /// </remarks>
-        public virtual ReadOnlyCollection<TimePeriod> OpenHours()
+        public virtual IEnumerable<TimePeriod> OpenHours()
         {
             var totalOpenHours =
                 from w in workloadDayOpenCollection()
                 from o in w.OpenHourList
                 select o;
 
-            return new ReadOnlyCollection<TimePeriod>(TimePeriod.Combine(totalOpenHours.ToList()));
+            return TimePeriod.Combine(totalOpenHours.ToList());
         }
 
         public virtual void SetCalculatedStaffCollection(INewSkillStaffPeriodValues newSkillStaffPeriodValues)

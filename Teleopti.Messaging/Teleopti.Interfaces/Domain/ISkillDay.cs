@@ -238,15 +238,15 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         void SplitSkillDataPeriods(IList<ISkillDataPeriod> list);
 
-        /// <summary>
-        /// Returns a ReadOnlyCollection with a projection of all  openhours for this skillday
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: henrika
-        /// Created date: 2008-04-23
-        /// </remarks>
-        ReadOnlyCollection<TimePeriod> OpenHours();
+		/// <summary>
+		/// Returns a ReadOnlyCollection with a projection of all  openhours for this skillday
+		/// </summary>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: henrika
+		/// Created date: 2008-04-23
+		/// </remarks>
+		IEnumerable<TimePeriod> OpenHours();
 
         /// <summary>
         /// Sets the calculated staff collection.
