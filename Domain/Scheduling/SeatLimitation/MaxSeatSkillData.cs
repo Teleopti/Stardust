@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -36,10 +37,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 		public IEnumerable<ISkillDay> SkillDaysFor(ITeamBlockInfo teamBlockInfo, DateOnly personPeriodDate)
 		{
-			//This won't work if not hiearchy
-			return
-				_maxSeatSkillDataPerSkills.Single(
-					x => x.Site.Equals(teamBlockInfo.TeamInfo.GroupMembers.First().Period(personPeriodDate).Team.Site)).SkillDays;
+			var skillDays = new HashSet<ISkillDay>();
+			foreach (var agent in teamBlockInfo.TeamInfo.GroupMembers)
+			{
+				var personPeriod = agent.Period(personPeriodDate);
+				var site = personPeriod.Team.Site;
+				_maxSeatSkillDataPerSkills.Single(x => x.Site.Equals(site)).SkillDays.ForEach(x => skillDays.Add(x));
+			}
+			return skillDays;
 		}
 
 		private class maxSeatSkillDataPerSkill

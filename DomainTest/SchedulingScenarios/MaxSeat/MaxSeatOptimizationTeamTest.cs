@@ -61,6 +61,29 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.EqualTo(1);
 		}
 
+		[Test]
+		public void ShouldCheckAllMembersMaxSeatPeak()
+		{
+			var siteWithSeats = new Site("_") { MaxSeats = 10 }.WithId();
+			var siteWithNoSeats = new Site("_") {MaxSeats = 1}.WithId();
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var dateOnly = new DateOnly(2016, 10, 25);
+			var scenario = new Scenario("_");
+			var ruleSetBag = new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 9, 0, 60), new TimePeriodWithSegment(17, 0, 17, 0, 60), new ShiftCategory("_").WithId()))) { Description = new Description("_")};
+			GroupScheduleGroupPageDataProvider.SetRuleSetBags_UseFromTestOnly(new[] {ruleSetBag});
+			var agentScheduledForAnHourData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, new Team {Site = siteWithNoSeats}, ruleSetBag, scenario, activity, new TimePeriod(8, 0, 9, 0));
+			var agentWithAvailableSeats = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, new Team { Site = siteWithSeats }, ruleSetBag, scenario, activity, new TimePeriod(8, 0, 16, 0));
+			var agentThatNeedsToBeMoved = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, new Team { Site = siteWithNoSeats }, ruleSetBag, scenario, activity, new TimePeriod(8, 0, 16, 0));
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentWithAvailableSeats.Assignment, agentThatNeedsToBeMoved.Assignment, agentScheduledForAnHourData.Assignment });
+			var optPreferences = CreateOptimizationPreferences();
+			optPreferences.Extra.TeamGroupPage = new GroupPageLight("_", GroupPageType.RuleSetBag);
+
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentWithAvailableSeats.Agent, agentThatNeedsToBeMoved.Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences);
+
+			schedules[agentThatNeedsToBeMoved.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay
+				.Should().Be.EqualTo(TimeSpan.FromHours(9));
+		}
+
 		protected override OptimizationPreferences CreateOptimizationPreferences()
 		{
 			return new OptimizationPreferences

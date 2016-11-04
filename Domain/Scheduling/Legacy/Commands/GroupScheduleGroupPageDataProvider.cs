@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -207,8 +208,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	    {
 		    _businessUnit = businessUnit;
 	    }
-		
-        public IBusinessUnit BusinessUnit
+
+		public void SetRuleSetBags_UseFromTestOnly(IEnumerable<IRuleSetBag> ruleSetBags)
+		{
+			_ruleSetBagCollection = ruleSetBags.ToArray();
+		}
+
+		public IBusinessUnit BusinessUnit
         {
 	        get
 			{

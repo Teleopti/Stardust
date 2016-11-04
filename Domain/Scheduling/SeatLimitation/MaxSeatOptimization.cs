@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				foreach (var teamBlockInfo in teamBlockInfos)
 				{
 					var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= period.StartDate); //what is this?
-					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint); //This won't work if not hiearchy
+					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint);
 					var maxPeakBefore = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);
 					if (maxPeakBefore > 0.01)
 					{
