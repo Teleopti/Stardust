@@ -10,13 +10,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 	{
 		public bool Check(IEnumerable<ISkillDay> skillDays, IVisualLayer layer)
 		{
-			foreach (var skillDay in skillDays.Where(x => x.Skill is MaxSeatSkill 
-																		&& x.Skill.Activity.Equals((IActivity)layer.Payload)))
+			foreach (var skillDay in skillDays)
 			{
-				if (skillDay.OpenHours().Any(timePeriod => timePeriod.Contains(layer.Period.TimePeriod(TimeZoneInfo.Utc))))
+				if (!(skillDay.Skill is MaxSeatSkill) &&
+					skillDay.Skill.Activity.Equals((IActivity)layer.Payload))
 				{
-					return true;
+					if (skillDay.OpenHours().Any(timePeriod => timePeriod.Contains(layer.Period.TimePeriod(TimeZoneInfo.Utc))))
+					{
+						return true;
+					}
 				}
+
 			}
 			return false;
 		}
