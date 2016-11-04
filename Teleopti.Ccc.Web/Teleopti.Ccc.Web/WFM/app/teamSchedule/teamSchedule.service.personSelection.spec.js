@@ -51,6 +51,10 @@ describe("teamschedule person selection tests", function() {
 		}
 	};
 
+	newSchedule1.Shifts.forEach(function(shift) {
+		shift.Parent = newSchedule1;
+	});
+
 	var schedule2 = {
 		PersonId: personId2,
 		Date: scheduleDate,
@@ -145,6 +149,6 @@ describe("teamschedule person selection tests", function() {
 		var person = selectedPerson[0];
 		expect(person.PersonId).toEqual(personId1);
 		expect(person.AllowSwap).toEqual(newSchedule1.AllowSwap());
-		expect(person.PersonAbsenceCount).toEqual(0);
+		expect(person.SelectedAbsences.length).toEqual(0);
 	}));
 });

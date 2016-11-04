@@ -266,7 +266,7 @@
 		vm.unselectAllForAllPages = function() {
 			vm.loadAllResults(function (result) {
 				var groupSchedules = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment()).Schedules;
-				personSelectionSvc.uncheckAllPersonProjectionSelection(scheduleMgmtSvc.groupScheduleVm.Schedules);
+				personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
 				personSelectionSvc.unselectAllPerson(groupSchedules);
 				vm.hasSelectedAllPeopleInEveryPage = false;
 			});

@@ -15,7 +15,7 @@
 		vm.notAllowedNameListString = "";
 		vm.availableActivitiesLoaded = false;
 		vm.checkingCommand = false;
-		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
+		vm.selectedAgents = personSelectionSvc.getCheckedPersonInfoList();
 
 		activityService.fetchAvailableActivities().then(function (activities) {
 			vm.availableActivities = activities;
@@ -110,9 +110,7 @@
 			}
 		};
 
-		function getRequestData() {		
-			vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
-
+		function getRequestData() {					
 			return {
 				PersonDates: decidePersonBelongsToDates(getTimeRangeMoment()),
 				StartTime: vm.convertTime(moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm")),

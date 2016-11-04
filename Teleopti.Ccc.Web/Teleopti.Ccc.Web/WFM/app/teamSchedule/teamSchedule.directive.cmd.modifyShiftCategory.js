@@ -17,7 +17,7 @@
 		vm.anyValidAgent = anyValidAgent;
 
 		function init() {
-			vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
+			vm.selectedAgents = personSelectionSvc.getCheckedPersonInfoList();
 			vm.invalidAgents = vm.selectedAgents.filter(function(agent) {
 				return agent.Timezone.IanaId !== vm.getCurrentTimezone();
 			});

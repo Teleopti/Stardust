@@ -46,8 +46,8 @@
 		};
 
 		vm.updatePersonSelection = function (personSchedule) {
-			personSelectionSvc.updatePersonSelection(personSchedule, vm.enbleAllProjectionSelection);
-			personSelectionSvc.toggleAllPersonProjections(personSchedule, vm.selectedDate, vm.enbleAllProjectionSelection);
+			personSelectionSvc.updatePersonSelection(personSchedule);
+			personSelectionSvc.toggleAllPersonProjections(personSchedule, vm.selectedDate);
 		};
 
 		vm.canToggleSelection = function (currentProjection, shift, viewDate) {
@@ -60,14 +60,12 @@
 				var isSameDay = shift.Date === moment(viewDate).format('YYYY-MM-DD');
 				return vm.toggles.ManageScheduleForDistantTimezonesEnabled ? true : isSameDay;
 			}
-
-			return true;
 		};
 
 		vm.ToggleProjectionSelection = function (currentProjection, personSchedule, shift, viewDate) {
 			if (!vm.canToggleSelection(currentProjection, shift, viewDate)) return;
 			currentProjection.ToggleSelection();
-			personSelectionSvc.updatePersonProjectionSelection(currentProjection, personSchedule, vm.enbleAllProjectionSelection);
+			personSelectionSvc.updatePersonProjectionSelection(currentProjection, personSchedule);
 		};
 
 		vm.togglePerson = function (personSchedule, $event) {

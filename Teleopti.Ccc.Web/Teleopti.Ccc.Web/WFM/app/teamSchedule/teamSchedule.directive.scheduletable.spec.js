@@ -119,6 +119,7 @@ describe('teamschedule schedule table controller tests', function () {
 			}
 		};
 
+		setupParent(schedule);
 		controller.scheduleVm = { Schedules: [schedule] };
 
 		controller.ToggleProjectionSelection(personAbsence2, schedule, shift, schedule.Date);
@@ -211,6 +212,7 @@ describe('teamschedule schedule table controller tests', function () {
 			}
 		};
 
+		setupParent(schedule);
 		controller.scheduleVm = { Schedules: [schedule] };
 
 		controller.ToggleProjectionSelection(personActivity1, schedule, shift, schedule.Date);
@@ -309,6 +311,7 @@ describe('teamschedule schedule table controller tests', function () {
 			}
 		};
 
+		setupParent(schedule);
 		controller.scheduleVm = { Schedules: [schedule] };
 
 		controller.ToggleProjectionSelection(personActivity1, schedule, shift, schedule.Date);
@@ -401,6 +404,7 @@ describe('teamschedule schedule table controller tests', function () {
 			"Date": "2016-02-19",
 			"Projections": allProjections
 		};
+		
 		var schedule = {
 			"PersonId": "1234",
 			"Date": "2016-02-19",
@@ -423,6 +427,7 @@ describe('teamschedule schedule table controller tests', function () {
 				return true;
 			}
 		};
+		setupParent(schedule);
 
 		controller.scheduleVm = { Schedules: [schedule] };
 		controller.selectedPersonProjections = [];
@@ -443,6 +448,21 @@ describe('teamschedule schedule table controller tests', function () {
 		expect(personActivity1.Selected).toEqual(true);
 		expect(overtimeActivity.Selected).toEqual(false);
 	});
+
+	function setupParent(schedule) {
+		if (schedule.Shifts) {
+			schedule.Shifts.forEach(function(s) {
+				s.Parent = schedule;
+
+				if (s.Projections) {
+					s.Projections.forEach(function(p) {
+						p.Parent = s;
+					});
+				}
+
+			});
+		}
+	}
 
 	function setUpController($controller) {
 		return $controller('scheduleTableCtrl', { $scope: scope, personSelectionSvc: personSelection });

@@ -10,7 +10,7 @@
 
 		vm.label = 'AddAbsence';
 
-		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
+		vm.selectedAgents = personSelectionSvc.getCheckedPersonInfoList();
 
 		PersonAbsenceSvc.loadAbsences().then(function (absences) {
 			vm.availableAbsenceTypes = absences;

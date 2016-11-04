@@ -51,64 +51,58 @@
 
 		function create(schedule, timeLine) {
 			if (!schedule) schedule = {};
-			var projectionVms = createProjections(schedule.Projection, timeLine);
-			var dayOffVm = createDayOffViewModel(schedule.DayOff, timeLine);
-			
+
 			var personSchedule = {
 				PersonId: schedule.PersonId,
 				Name: schedule.Name,
 				Date: schedule.Date,
 				Timezone: schedule.Timezone,
-				Shifts: projectionVms == undefined ? [] : [
-					{
-						Date: schedule.Date,
-						Projections: projectionVms,
-						ProjectionTimeRange: getProjectionTimeRange(schedule), 
-						AbsenceCount: getPersonAbsencesCount,
-						ActivityCount: getPersonActivitiesCount
-					}
-				],
+
 				IsFullDayAbsence: schedule.IsFullDayAbsence,
-				DayOffs: dayOffVm == undefined ? [] : [dayOffVm],
 				Merge: merge,
 				IsSelected: false,
 				AllowSwap: function() {
 					return !this.IsFullDayAbsence;
 				},
 				ContractTime: formatContractTimeMinutes(schedule.ContractTimeMinutes),
-				ScheduleStartTime: function () {
+				ScheduleStartTime: function() {
 					var start = this.Date;
-					angular.forEach(this.Shifts, function (shift) {
-						if (shift.Date === start && shift.Projections.length > 0) {
-							start = shift.Projections[0].Start;
-						}
-					});
+					angular.forEach(this.Shifts,
+						function(shift) {
+							if (shift.Date === start && shift.Projections.length > 0) {
+								start = shift.Projections[0].Start;
+							}
+						});
 					return moment(start).format("YYYY-MM-DDTHH:mm:00");
 				},
-				ScheduleEndTime: function () {
+				ScheduleEndTime: function() {
 					var scheduleDate = this.Date;
 					var end = moment(schedule.Date).endOf('day');
-					angular.forEach(this.Shifts, function (shift) {
-						if (shift.Date == scheduleDate && shift.Projections.length > 0) {
-							end = moment(shift.Projections[shift.Projections.length - 1].Start).add(shift.Projections[shift.Projections.length - 1].Minutes,'minutes');
-						}
-					});
+					angular.forEach(this.Shifts,
+						function(shift) {
+							if (shift.Date == scheduleDate && shift.Projections.length > 0) {
+								end = moment(shift.Projections[shift.Projections.length - 1].Start)
+									.add(shift.Projections[shift.Projections.length - 1].Minutes, 'minutes');
+							}
+						});
 					return end.format("YYYY-MM-DDTHH:mm:00");
 				},
-				AbsenceCount: function(){
-					var shiftsForCurrentDate = this.Shifts.filter(function (shift) {
-						return this.Date===shift.Date;
-					}, this);
-					if(shiftsForCurrentDate.length > 0) {
+				AbsenceCount: function() {
+					var shiftsForCurrentDate = this.Shifts.filter(function(shift) {
+							return this.Date === shift.Date;
+						},
+						this);
+					if (shiftsForCurrentDate.length > 0) {
 						return shiftsForCurrentDate[0].AbsenceCount();
 					}
 					return 0;
 				},
-				ActivityCount: function(){
-					var shiftsForCurrentDate = this.Shifts.filter(function (shift) {
-						return this.Date === shift.Date;
-					}, this);
-					if(shiftsForCurrentDate.length > 0) {
+				ActivityCount: function() {
+					var shiftsForCurrentDate = this.Shifts.filter(function(shift) {
+							return this.Date === shift.Date;
+						},
+						this);
+					if (shiftsForCurrentDate.length > 0) {
 						return shiftsForCurrentDate[0].ActivityCount();
 					}
 					return 0;
@@ -119,30 +113,48 @@
 					DisplayColor: schedule.ShiftCategory ? schedule.ShiftCategory.DisplayColor : null,
 					ContrastColor: schedule.ShiftCategory ? (getContrastColor(schedule.ShiftCategory.DisplayColor)) : null
 				},
-				ViewRange: timeLine.MaximumViewRange
-			}
+				ViewRange: timeLine.MaximumViewRange,
+				Shifts: [],
+				DayOffs: []
+			};
 
+			var shiftVm = {
+				Date: schedule.Date,				
+				ProjectionTimeRange: getProjectionTimeRange(schedule),
+				AbsenceCount: getPersonAbsencesCount,
+				ActivityCount: getPersonActivitiesCount,
+				Parent: personSchedule
+			};
+			var projectionVms = createProjections(schedule.Projection, timeLine, shiftVm);
+			shiftVm.Projections = projectionVms;
+
+			var dayOffVm = createDayOffViewModel(schedule.DayOff, timeLine, personSchedule);
+						
+			if (projectionVms !== undefined) personSchedule.Shifts = [shiftVm];
+			if (dayOffVm !== undefined) personSchedule.DayOffs = [dayOffVm];
+			
 			return personSchedule;
 		};
 
-		function createProjections(projections, timeLine) {
+		function createProjections(projections, timeline, shiftVm) {
 			if (projections == undefined || projections.length === 0) {
 				return undefined;
 			}
 
-			var projectionVms = projections.reduce(function (vms, proj, i, arr) {
-				var lproj = arr[i - 1] ? arr[i - 1] : null;
-				var vm = createShiftProjectionViewModel(proj, timeLine, lproj);
-				if (vm !== undefined) {
-					vms.push(vm);
-				}
-				return vms;
-			}, []);
+			var projectionVms = projections.map(function(projection) {
+				return createShiftProjectionViewModel(projection, timeline, shiftVm);
+			}).filter(function(result) {
+				return result !== undefined;
+			});
+
+			for (var i = 0; i < projectionVms.length; i ++) {
+				projectionVms[i].SameTypeAsLast = i === 0? false: projectionVms[i].Description === projectionVms[i - 1].Description;
+			}
 
 			return projectionVms;
 		}
 
-		function createDayOffViewModel(dayOff, timeLine) {
+		function createDayOffViewModel(dayOff, timeLine, personSchedule) {
 			if (dayOff == undefined) {
 				return undefined;
 			}
@@ -169,7 +181,8 @@
 			var dayOffVm = {
 				DayOffName: dayOff.DayOffName,
 				StartPosition: startPosition,
-				Length: length
+				Length: length,
+				Parent: personSchedule
 			};
 
 			return dayOffVm;
@@ -199,7 +212,7 @@
 			return (yiq >= 128) ? 'black' : 'white';
 		}
 
-		function createShiftProjectionViewModel(projection, timeLine, lproj) {
+		function createShiftProjectionViewModel(projection, timeLine, shiftVm) {
 			if (!projection) projection = {};
 
 			var startTime = moment(projection.Start);
@@ -246,7 +259,7 @@
 				},
 				Minutes: projectionMinutes,
 				UseLighterBorder: useLightColor(projection.Color),
-				SameTypeAsLast: lproj ? (lproj.Description === projection.Description) : false,
+				SameTypeAsLast: false,
 				TimeSpan: function () {
 					var start = moment(this.Start);
 					var end = moment(this.Start).add(this.Minutes, 'minute');
@@ -254,25 +267,29 @@
 						return $filter('date')(start.toDate(), 'short') + ' - ' + $filter('date')(end.toDate(), 'short');
 					}
 					return $filter('date')(start.toDate(), 'shortTime') + ' - ' + $filter('date')(end.toDate(), 'shortTime');
-				}
+				},
+				Parent: shiftVm
 			};
 
 			return shiftProjectionVm;
 		}
 
 		function merge(otherSchedule, timeLine) {
-			var otherProjections = createProjections(otherSchedule.Projection, timeLine);
+			var newShift = {
+				Date: otherSchedule.Date,
+				Projections: [],
+				ProjectionTimeRange: getProjectionTimeRange(otherSchedule),
+				AbsenceCount: getPersonAbsencesCount,
+				ActivityCount: getPersonActivitiesCount
+			};
+
+			var otherProjections = createProjections(otherSchedule.Projection, timeLine, newShift);
 			if (otherProjections != undefined) {
-				this.Shifts.push({
-					Date: otherSchedule.Date,
-					Projections: otherProjections,
-					ProjectionTimeRange: getProjectionTimeRange(otherSchedule),
-					AbsenceCount: getPersonAbsencesCount,
-					ActivityCount: getPersonActivitiesCount
-				});
+				newShift.Projections = otherProjections;
+				this.Shifts.push(newShift);
 			}
 
-			var otherDayOffVm = createDayOffViewModel(otherSchedule.DayOff, timeLine);
+			var otherDayOffVm = createDayOffViewModel(otherSchedule.DayOff, timeLine, this);
 
 			if (otherDayOffVm != undefined) {
 				this.DayOffs.push(otherDayOffVm);

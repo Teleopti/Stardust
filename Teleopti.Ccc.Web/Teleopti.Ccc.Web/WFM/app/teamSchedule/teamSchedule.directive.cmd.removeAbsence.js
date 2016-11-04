@@ -14,12 +14,14 @@
 		vm.removeAbsence = function () {
 			var personIds = vm.selectedPersonProjections.map(function (x) { return x.PersonId; });
 			var selectedPersonAbsences = vm.selectedPersonProjections.filter(function (x) {
-				return x.PersonAbsenceCount > 0;
+				return x.SelectedAbsences.length > 0;
 			});
 			var requestData = {
 				ScheduleDate: moment(vm.selectedDate()).format("YYYY-MM-DD"),
 				SelectedPersonAbsences: selectedPersonAbsences.map(function (x) {
-					return { PersonId: x.PersonId, Name: x.Name, PersonAbsenceIds: x.SelectedAbsences };
+					return { PersonId: x.PersonId, Name: x.Name, PersonAbsenceIds: x.SelectedAbsences.map(function(absence) {
+						return absence.absenceId;
+					}) };
 				}),
 				RemoveEntireCrossDayAbsence: false,
 				TrackedCommandInfo: { TrackId: vm.trackId }

@@ -16,34 +16,16 @@
 			var personProjectionsWithSelectedActivities = vm.selectedPersonProjections.filter(function (x) {
 				return (Array.isArray(x.SelectedActivities) && x.SelectedActivities.length > 0);
 			});
-
-			var shiftDates = {};
-
-			vm.selectedPersonProjections.forEach(function(data) {
-				if (!Array.isArray(data.SelectedActivities) || data.SelectedActivities.length === 0) return;
-				var personScheduleVm = scheduleManagementSvc.findPersonScheduleVmForPersonId(data.PersonId);
-				if (!personScheduleVm.Shifts) return;
-				
-				personScheduleVm.Shifts.forEach(function(shift) {
-					if (!shift.Projections) return;
-					shift.Projections.forEach(function(projection) {
-						if (!projection.ShiftLayerIds) return;
-						projection.ShiftLayerIds.forEach(function(shiftId) {
-							shiftDates[shiftId] = shift.Date;
-						});
-					});
-				});
-			});
-
+			
 			var requestData = {				
 				PersonActivities: personProjectionsWithSelectedActivities.map(function(x) {
 					return {
 						PersonId: x.PersonId,
 						Name: x.Name,
-						ShiftLayers: x.SelectedActivities.map(function(shiftLayerId) {
+						ShiftLayers: x.SelectedActivities.map(function(activity) {
 							return {
-								ShiftLayerId: shiftLayerId,
-								Date: shiftDates[shiftLayerId]
+								ShiftLayerId: activity.shiftLayerId,
+								Date: activity.date
 							}
 						})
 					};

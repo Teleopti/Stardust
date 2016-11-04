@@ -213,7 +213,7 @@
 
 		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
 
-		fakePersonSelectionService.setFakeSelectedPersonInfoList(vm.selectedAgents);
+		fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
 
 		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
 		applyButton.triggerHandler('click');
@@ -420,11 +420,11 @@
 	function FakePersonSelectionService(){
 		var fakePersonList = [];
 
-		this.setFakeSelectedPersonInfoList = function(input){
+		this.setFakeCheckedPersonInfoList = function(input){
 			fakePersonList = input;
 		}
 
-		this.getSelectedPersonInfoList = function(){
+		this.getCheckedPersonInfoList = function(){
 			return fakePersonList;
 		}
 	}

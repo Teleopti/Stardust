@@ -71,7 +71,6 @@
 	    };
 
 	    function getRequestData() {
-	    	vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 
 	    	var personProjectionsWithSelectedActivities = vm.selectedAgents.filter(function (x) {
 	    		return (Array.isArray(x.SelectedActivities) && x.SelectedActivities.length === 1);
@@ -80,7 +79,9 @@
 			var requestData = {
 				Date: vm.selectedDate(),
 				PersonActivities: personProjectionsWithSelectedActivities.map(function (x) {
-					return { PersonId: x.PersonId, ShiftLayerIds: x.SelectedActivities };
+					return { PersonId: x.PersonId, ShiftLayerIds: x.SelectedActivities.map(function(activity) {
+						return activity.shiftLayerId;
+					}) };
 				}),
 				StartTime: vm.convertTime(vm.getMoveToStartTimeStr()),
 				TrackedCommandInfo: { TrackId: vm.trackId }

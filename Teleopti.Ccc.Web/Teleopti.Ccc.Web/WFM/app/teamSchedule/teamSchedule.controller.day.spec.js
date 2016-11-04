@@ -51,7 +51,11 @@ describe("teamschedule controller tests", function() {
 		controller.scheduleDate = new Date("2015-10-26");
 		rootScope.$digest();
 		personSelection.personInfo['221B-Baker-SomeoneElse'] = {
-			SelectedActivities: ["activity1"],
+			SelectedActivities: [
+			{
+				shiftLayerId: "activity1",
+				date: "2015-10-26"
+			} ],
 			SelectedAbsences:[]
 		}
 
