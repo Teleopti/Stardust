@@ -10,6 +10,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 	{
 		public bool Check(IEnumerable<ISkillDay> skillDays, IVisualLayer layer)
 		{
+			if (!((IActivity)layer.Payload).RequiresSkill)
+				return true;
+
 			foreach (var skillDay in skillDays)
 			{
 				if (!(skillDay.Skill is MaxSeatSkill) &&
