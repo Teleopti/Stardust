@@ -13,13 +13,13 @@
 				</label>
 			</div>
 		</form>
-		<div ng-if="!vm.isInputValid()">
+		<div ng-if="vm.anyInvalidAgent()">
 			<i class="mdi mdi-alert-octagon"></i>
 			<span>{{'TheNewTimeIsNotAllowedFor'|translate}} {{vm.invalidPeople()}}.</span>
 		</div>
 		<button id="applyMoveActivity" class="wfm-btn form-submit"
-				ng-class="{ 'wfm-btn-primary': vm.isInputValid() && moveActivityForm.$valid && !vm.checkingCommand, 'wfm-btn-primary-disabled': !vm.isInputValid() || !moveActivityForm.$valid || vm.checkingCommand}"
-				ng-disabled="vm.checkingCommand || !vm.isInputValid() || !moveActivityForm.$valid"
+				ng-class="{ 'wfm-btn-primary': vm.anyValidAgent() && moveActivityForm.$valid && !vm.checkingCommand, 'wfm-btn-primary-disabled': !vm.anyValidAgent() || !moveActivityForm.$valid || vm.checkingCommand}"
+				ng-disabled="vm.checkingCommand || !vm.anyValidAgent() || !moveActivityForm.$valid"
 				ng-click="vm.moveActivity()">
 			{{'Apply' | translate}}
 		</button>

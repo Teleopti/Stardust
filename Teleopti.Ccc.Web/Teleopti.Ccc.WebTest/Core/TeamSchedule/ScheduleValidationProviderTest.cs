@@ -818,10 +818,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 					new PersonActivityItem
 					{
 						PersonId = person.Id.Value,
+						Date = new DateOnly(2013,11,14),
 						ShiftLayerIds = new List<Guid> { targetLayer.Id.Value }
 					} 
 				},
-				Date = new DateOnly(2013,11,14),
 				StartTime = new DateTime(2013,11,14,11,0,0),			
 			};
 
@@ -871,10 +871,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 					new PersonActivityItem
 					{
 						PersonId = person.Id.Value,
+						Date = new DateOnly(2013,11,14),
 						ShiftLayerIds = new List<Guid> { targetLayer.Id.Value }
 					} 
 				},
-				Date = new DateOnly(2013,11,14),
 				StartTime = new DateTime(2013,11,14,11,0,0),			
 			};
 
@@ -924,10 +924,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 					new PersonActivityItem
 					{
 						PersonId = person.Id.Value,
+						Date = new DateOnly(2013,11,14),
 						ShiftLayerIds = new List<Guid> { targetLayer.Id.Value }
 					}
 				},
-				Date = new DateOnly(2013,11,14),
 				StartTime = new DateTime(2013,11,14,11,0,0),
 			};
 
@@ -971,10 +971,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 					new PersonActivityItem
 					{
 						PersonId = person.Id.Value,
+						Date = new DateOnly(2013,11,14),
 						ShiftLayerIds = new List<Guid> { targetLayer.Id.Value }
 					}
 				},
-				Date = new DateOnly(2013,11,14),
 				StartTime = new DateTime(2013,11,14,14,0,0),
 			};
 
@@ -1019,10 +1019,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 					new PersonActivityItem
 					{
 						PersonId = person.Id.Value,
+						Date = new DateOnly(2013,11,14),
 						ShiftLayerIds = new List<Guid> { targetLayer.Id.Value }
 					}
 				},
-				Date = new DateOnly(2013,11,14),
 				StartTime = new DateTime(2013,11,14,10,0,0),
 			};
 
@@ -1067,10 +1067,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 					new PersonActivityItem
 					{
 						PersonId = person.Id.Value,
+						Date = new DateOnly(2013,11,14),
 						ShiftLayerIds = new List<Guid> { targetLayer.Id.Value }
 					}
 				},
-				Date = new DateOnly(2013,11,14),
 				StartTime = new DateTime(2013,11,14,15,0,0),
 			};
 

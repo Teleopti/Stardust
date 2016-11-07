@@ -10,6 +10,5 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 	{
 		public List<PersonActivityItem> PersonActivities { get; set; }
 		public DateTime StartTime { get; set; }
-		public DateOnly Date { get; set; }
 	}
 }

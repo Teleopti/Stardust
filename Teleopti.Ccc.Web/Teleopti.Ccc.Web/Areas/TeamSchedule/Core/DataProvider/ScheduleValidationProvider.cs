@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				var person = _personRepository.Get(personActivity.PersonId);
 
 				var newStartTimeInUtc = TimeZoneHelper.ConvertToUtc(input.StartTime, _timeZone.TimeZone());
-				var overlapLayers = _nonoverwritableLayerChecker.GetOverlappedLayersWhenMovingActivity(person, input.Date,
+				var overlapLayers = _nonoverwritableLayerChecker.GetOverlappedLayersWhenMovingActivity(person, personActivity.Date,
 					personActivity.ShiftLayerIds.ToArray(), newStartTimeInUtc);
 
 				if (overlapLayers.IsEmpty()) continue;

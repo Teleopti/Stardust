@@ -33,6 +33,10 @@
 			return vm.invalidAgents.length !== vm.selectedAgents.length;
 		}
 
+		vm.anyInvalidAgent = function () {
+			return vm.invalidAgents.length > 0;
+		};
+
 		vm.updateInvalidAgents = function () {
 			var currentTimezone = vm.getCurrentTimezone();
 			validator.validateMoveToTime(moment(vm.getMoveToStartTimeStr()), currentTimezone);
@@ -76,22 +80,40 @@
 				}
 				vm.checkingCommand = false;
 			}
-	    };
+	    }
 
 	    function getRequestData() {
 		    var invalidPersonIds = vm.invalidAgents.map(function(p) { return p.PersonId });
 
-	    	var personProjectionsWithSelectedActivities = vm.selectedAgents.filter(function(agent) {
+	    	var validAgents = vm.selectedAgents.filter(function(agent) {
 			    return invalidPersonIds.indexOf(agent.PersonId) < 0;
 		    }).filter(function (x) {
 	    		return (Array.isArray(x.SelectedActivities) && x.SelectedActivities.length === 1);
 	    	});
 
+			var personActivities = [];
+			angular.forEach(validAgents, function (agent) {
+				var selectedActivities = agent.SelectedActivities;
+				var groupedActivitiesByDate = {};
+				selectedActivities.forEach(function(a){
+					if (!groupedActivitiesByDate[a.date]) {
+						groupedActivitiesByDate[a.date] = [];
+					}
+					if(groupedActivitiesByDate[a.date].indexOf(a.shiftLayerId) === -1) {
+						groupedActivitiesByDate[a.date].push(a.shiftLayerId);
+					}
+				})
+				for (var date in groupedActivitiesByDate) {
+					personActivities.push({
+						PersonId: agent.PersonId,
+						Date: date,
+						ShiftLayerIds: groupedActivitiesByDate[date]
+					});
+				}
+			});
+
 			var requestData = {
-				Date: vm.selectedDate(),
-				PersonActivities: personProjectionsWithSelectedActivities.map(function (x) {
-					return { PersonId: x.PersonId, ShiftLayerIds: x.SelectedActivities };
-				}),
+				PersonActivities: personActivities,
 				StartTime: vm.convertTime(vm.getMoveToStartTimeStr()),
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			};
