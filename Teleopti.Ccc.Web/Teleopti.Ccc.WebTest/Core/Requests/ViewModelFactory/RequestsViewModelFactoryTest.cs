@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var target = new RequestsViewModelFactory(personRequestProvider, MockRepository.GenerateMock<IMappingEngine>(), null,
 				null, null, null, null, null, null, null, null, null);
 			var paging = new Paging();
-			var filter = new RequestListFilter() { HideOldRequest = false, SortByUpdateDate = true };
+			var filter = new RequestListFilter() { HideOldRequest = false, IsSortByUpdateDate = true };
 			personRequestProvider.Stub(x => x.RetrieveRequestsForLoggedOnUser(paging, filter)).Return(new IPersonRequest[] { });
 			
 
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var target = new RequestsViewModelFactory(personRequestProvider, MockRepository.GenerateMock<IMappingEngine>(), null,
 				null, null, null, null, null, null, null, null, null);
 			var paging = new Paging();
-			var filter = new RequestListFilter() { HideOldRequest = true, SortByUpdateDate = true };
+			var filter = new RequestListFilter() { HideOldRequest = true, IsSortByUpdateDate = true };
 			personRequestProvider.Stub(x => x.RetrieveRequestsForLoggedOnUser(paging, filter)).Return(new IPersonRequest[] { });
 			
 
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var target = new RequestsViewModelFactory(MockRepository.GenerateMock<IPersonRequestProvider>(), mapper, null, null,
 				null, null, null, null, null, null, null, null);
 			var requests = new RequestViewModel[] {};
-			var filter = new RequestListFilter() { HideOldRequest = false, SortByUpdateDate = true };
+			var filter = new RequestListFilter() { HideOldRequest = false, IsSortByUpdateDate = true };
 
 			mapper.Stub(x => x.Map<IEnumerable<IPersonRequest>, IEnumerable<RequestViewModel>>(null)).Return(requests);
 

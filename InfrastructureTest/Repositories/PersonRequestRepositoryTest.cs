@@ -1065,6 +1065,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void ShouldGetRequestsSortByStartDate()
+		{
+			var paging = new Paging { Skip = 0, Take = 5 };
+			setUpGetRequestsByTypeTests();
+
+			var requestTypes = new[] { RequestType.AbsenceRequest, RequestType.ShiftTradeRequest };
+			var result = new PersonRequestRepository(UnitOfWork).FindAllRequestsSortByRequestedDate(_person, paging,
+				null, requestTypes).ToArray();
+			result.Length.Should().Be(2);
+			result[0].Request.RequestType.Should().Be.EqualTo(RequestType.AbsenceRequest);
+			result[1].Request.RequestType.Should().Be.EqualTo(RequestType.ShiftTradeRequest);
+		}
+
+		[Test]
 		public void ShouldReturnAllRequestsInPeriod()
 		{
 			setUpGetRequestsByTypeTests();

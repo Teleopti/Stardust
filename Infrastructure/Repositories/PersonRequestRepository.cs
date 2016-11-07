@@ -370,8 +370,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			query.SetFirstResult(paging.Skip).SetMaxResults(paging.Take);
 		}
 
-		public IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging,
-			DateTime? earliestDate, params RequestType[] requestTypes)
+		private IEnumerable<IPersonRequest> filteredRequests(IPerson person, DateTime? earliestDate, params RequestType[] requestTypes)
 		{
 			var allRequests = FindAllRequestsForAgent(person);
 			var filteredRequests = allRequests.Where(x => requestTypes.Contains(x.Request.RequestType));
@@ -379,9 +378,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				filteredRequests = filteredRequests.Where(x=>x.Request.Period.StartDateTime >= earliestDate);
 			}
-			filteredRequests = filteredRequests.OrderByDescending(x => x.UpdatedOn);
 
-			return paging.Equals(Paging.Empty) ? filteredRequests : filteredRequests.Skip(paging.Skip).Take(paging.Take);
+			return filteredRequests;
+		}
+
+		public IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging, DateTime? earliestDate, params RequestType[] requestTypes)
+		{
+			var requests = filteredRequests(person, earliestDate, requestTypes).OrderByDescending(x => x.UpdatedOn);
+
+			return paging.Equals(Paging.Empty) ? requests : requests.Skip(paging.Skip).Take(paging.Take);
+		}
+
+
+		public IEnumerable<IPersonRequest> FindAllRequestsSortByRequestedDate(IPerson person, Paging paging, DateTime? earliestDate, params RequestType[] requestTypes)
+		{
+			var requests = filteredRequests(person, earliestDate, requestTypes).OrderByDescending(x => x.RequestedDate);
+
+			return paging.Equals(Paging.Empty) ? requests : requests.Skip(paging.Skip).Take(paging.Take);
 		}
 
 		private static AbstractCriterion getShiftTradeRequestsForAgent(IPerson person)

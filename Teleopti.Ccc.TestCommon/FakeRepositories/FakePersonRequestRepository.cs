@@ -130,7 +130,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging,
 			DateTime? earliestDate, params RequestType[] requestTypes)
 		{
-			return _requestRepository.Where(request => requestTypes.Contains(request.Request.RequestType));
+			return _requestRepository.Where(request => requestTypes.Contains(request.Request.RequestType)).OrderByDescending(x=>x.UpdatedOn);
+		}
+
+		public IEnumerable<IPersonRequest> FindAllRequestsSortByRequestedDate(IPerson person, Paging paging, DateTime? earliestDate,
+			params RequestType[] requestTypes)
+		{
+			return _requestRepository.Where(request => requestTypes.Contains(request.Request.RequestType)).OrderByDescending(x=>x.RequestedDate);
 		}
 
 		public IList<IPersonRequest> FindAllRequestModifiedWithinPeriodOrPending(IPerson person, DateTimePeriod period)

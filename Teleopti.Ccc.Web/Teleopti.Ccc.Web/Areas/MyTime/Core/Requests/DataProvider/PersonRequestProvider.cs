@@ -49,8 +49,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				earliestDateUtc = TimeZoneInfo.ConvertTimeToUtc(earliestDateLocal, currentTimezone);
 			}
 
-			return _repository.FindAllRequestsForAgentByType(_loggedOnUser.CurrentUser(), paging,
-				earliestDateUtc, types.ToArray());
+			if (filter.IsSortByUpdateDate)
+			{
+				return _repository.FindAllRequestsForAgentByType(_loggedOnUser.CurrentUser(), paging, earliestDateUtc, types.ToArray());
+			}
+
+			return _repository.FindAllRequestsSortByRequestedDate(_loggedOnUser.CurrentUser(), paging, earliestDateUtc, types.ToArray());
 		}
 
 		public IEnumerable<IPersonRequest> RetrieveRequestsForLoggedOnUser(DateOnlyPeriod period)

@@ -3,6 +3,6 @@
 	public class RequestListFilter
 	{
 		public bool HideOldRequest { get; set; }
-		public bool SortByUpdateDate { get; set; }
+		public bool IsSortByUpdateDate { get; set; }
 	}
 }

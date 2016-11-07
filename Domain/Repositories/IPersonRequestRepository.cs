@@ -70,7 +70,21 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// Created by: jianfeng
 		/// Created date: 2015-07-22
 		/// </remarks>
-		IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging, DateTime? earliestDate, params RequestType[] requestTypes);
+		IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging, DateTime? earliestDate, params RequestType[] requestTypes);		
+		
+		/// <summary>
+		/// Finds all specific types requests from and to a person for given page, the find result will sort by requested date.
+		/// </summary>
+		/// <param name="person">The person.</param>
+		/// <param name="paging">Paging information.</param>
+		/// <param name="earliestDate">Hide requests earlier than this date</param>
+		/// <param name="requestTypes">Paging information.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: mingdi
+		/// Created date: 2016-11-04
+		/// </remarks>
+		IEnumerable<IPersonRequest> FindAllRequestsSortByRequestedDate(IPerson person, Paging paging, DateTime? earliestDate, params RequestType[] requestTypes);
 
 		/// <summary>
 		/// Finds all requests modified within or pending.

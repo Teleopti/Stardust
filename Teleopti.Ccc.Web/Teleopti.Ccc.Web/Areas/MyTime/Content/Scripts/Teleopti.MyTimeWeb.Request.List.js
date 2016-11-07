@@ -135,7 +135,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.MoreToLoad = ko.observable(false);
 
 		self.isLoadingRequests = ko.observable(true);
-		self.SortByUpdateDate = ko.observable("true");
 
 		self.ShowRequests = function (data) {
 		    ko.utils.arrayForEach(data, function (item) {
@@ -295,6 +294,13 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	        self.LoadPage();
 		});
 
+		self.IsSortByUpdateDate = ko.observable("true");
+		self.IsSortByUpdateDate.subscribe(function() {
+			self.Requests([]);
+			self.pages = 0;
+			self.LoadPage();
+		});
+
 		self.pages = 0;
         
 		self.LoadPage = function () {
@@ -308,7 +314,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 					Take: take,
 					Skip: skip,
 					HideOldRequest: self.hideOldRequests(),
-					SortByUpdateDate: true
+					IsSortByUpdateDate: self.IsSortByUpdateDate()
 				},
 				beforeSend: function () {
 				    self.isLoadingRequests(true);
