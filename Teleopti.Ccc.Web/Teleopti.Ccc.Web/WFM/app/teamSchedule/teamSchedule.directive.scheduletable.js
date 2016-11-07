@@ -57,7 +57,7 @@
 			if(currentProjection.IsOvertime || (currentProjection.ParentPersonAbsences == null && currentProjection.ShiftLayerIds == null)) {
 				return false;
 			}else{
-				var isSameDay = currentProjection.Parent.Date === moment(viewDate).format('YYYY-MM-DD');
+				var isSameDay = currentProjection.Parent && currentProjection.Parent.Date === moment(viewDate).format('YYYY-MM-DD');
 				return vm.toggles.ManageScheduleForDistantTimezonesEnabled ? true : isSameDay;
 			}
 		};

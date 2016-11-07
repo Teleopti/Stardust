@@ -170,7 +170,6 @@ Scenario: Should not be able to remove basic activity
 	And I apply remove activity
 	Then I should see an error notice
 
-@ignore
 @OnlyRunIfEnabled('WfmTeamSchedule_MoveActivity_37744')
 Scenario: Should be able to move activity
 	Given 'John Smith' has a shift with
@@ -188,7 +187,6 @@ Scenario: Should be able to move activity
 	And I move activity to '2016-10-10 14:00' with next day being 'false'
 	Then I should see a successful notice
 
-@ignore
 @OnlyRunIfEnabled('WfmTeamSchedule_MoveActivity_37744')
 Scenario: Should be able to move basic activity
 	Given 'John Smith' has a shift with
