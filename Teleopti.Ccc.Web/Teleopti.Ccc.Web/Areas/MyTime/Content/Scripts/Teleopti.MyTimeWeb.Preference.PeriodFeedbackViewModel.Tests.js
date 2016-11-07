@@ -1,6 +1,4 @@
-﻿
-$(document).ready(function () {
-
+﻿$(document).ready(function () {
 	module("Teleopti.MyTimeWeb.Preference period feedback view model");
 
 	test("should summarize possible contract time", function () {
@@ -139,11 +137,7 @@ $(document).ready(function () {
 		viewModelDay2.Feedback(true);
 		viewModelDay2.LoadFeedback();
 
-
-
-
 		var viewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(null, [viewModelDay1, viewModelDay2], null, []);
-		console.log(viewModel);
 
 		equal(viewModel.PossibleNightRestViolations()()[0].firstDay, Teleopti.MyTimeWeb.Common.FormatDate(currentDay1));// 2016-02-04
 		equal(viewModel.PossibleNightRestViolations()()[0].sencondDay, Teleopti.MyTimeWeb.Common.FormatDate(plusOneDay1));// 2016-02-03
@@ -159,8 +153,5 @@ $(document).ready(function () {
 		equal(viewModel.PossibleNightRestViolations()()[2].sencondDay, Teleopti.MyTimeWeb.Common.FormatDate(plusOneDay2));//2016-01-27
 		equal(viewModel.PossibleNightRestViolations()()[2].hoursBetweenTwoDays, '10:00');
 		equal(viewModel.PossibleNightRestViolations()()[2].nightRestTimes, '11:00');
-
-	
 	});
-
 });

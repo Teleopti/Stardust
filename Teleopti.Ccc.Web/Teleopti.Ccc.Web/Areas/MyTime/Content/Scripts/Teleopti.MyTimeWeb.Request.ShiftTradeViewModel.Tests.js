@@ -1,8 +1,5 @@
-﻿
-$(document).ready(function () {
-
+﻿$(document).ready(function () {
 	module("Teleopti.MyTimeWeb.Request.ShiftTradeViewModel");
-
 
 	test("should show add button", function () {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
@@ -32,12 +29,55 @@ $(document).ready(function () {
 	});
 
 	test("should not show add button when loading", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) { return true; }
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		viewModel.agentChoosed({});
 		viewModel.selectedInternal(false);
 		viewModel.IsLoading(true);
 
 		equal(viewModel.isAddVisible(), false);
+	});
+
+	test("should get contract time correctly", function () {
+		var schedules = {
+			"MySchedule":
+			{
+				"ScheduleLayers": [{}],
+				"ContractTimeInMinute": 480
+			},
+			"PossibleTradeSchedules": [
+				{
+					"ScheduleLayers": [{}],
+					"ContractTimeInMinute": 425
+				}
+			],
+			"TimeLineHours": [
+				{
+					"HourText": "",
+					"StartTime": "2017-01-01 00:00:00"
+				},
+				{
+					"HourText": "07:00",
+					"StartTime": "2017-01-01 07:00:00"
+				}
+			]
+		};
+
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url === "Requests/ShiftTradeRequestSchedule") {
+					options.success(schedules);
+				}
+			}
+		};
+
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) { return true; }
+
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+		viewModel.loadSchedule("2017-01-01", "TeamId");
+
+		equal(viewModel.mySchedule().contractTime, "8:00");
+		equal(viewModel.possibleTradeSchedules()[0].contractTime, "7:05");
 	});
 
 	test("should unselect current date when remove from view model list", function() {
@@ -136,7 +176,7 @@ $(document).ready(function () {
 	test("should go to the requeted date and load team id", function() {
 		var ajax = {
 			Ajax: function(options) {
-				if (options.url == "Requests/ShiftTradeRequestMyTeam") {
+				if (options.url === "Requests/ShiftTradeRequestMyTeam") {
 					options.success(
 						"myTeamId"
 					);
@@ -156,7 +196,7 @@ $(document).ready(function () {
 	test("should go to next date", function () {
 		var ajax = {
 			Ajax: function(options) {
-				if (options.url == "Requests/ShiftTradeRequestMyTeam") {
+				if (options.url === "Requests/ShiftTradeRequestMyTeam") {
 					options.success(
 						""
 					);
@@ -178,7 +218,7 @@ $(document).ready(function () {
 	test("should go to previous date", function () {
 		var ajax = {
 			Ajax: function(options) {
-				if (options.url == "Requests/ShiftTradeRequestMyTeam") {
+				if (options.url === "Requests/ShiftTradeRequestMyTeam") {
 					options.success(
 						""
 					);
@@ -199,7 +239,7 @@ $(document).ready(function () {
 
 	test("should clean data when prepare load without Multi shifts trade Enabled", function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
-	
+
 		viewModel.isDetailVisible = function () {
 			return false;
 		}
@@ -244,7 +284,7 @@ $(document).ready(function () {
 	test("should load teams under site", function() {
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url == "Team/TeamsUnderSiteForShiftTrade") {
+				if (options.url === "Team/TeamsUnderSiteForShiftTrade") {
 					options.success(
 							[
 								{ id: "A", text: "Team A" },
@@ -269,7 +309,7 @@ $(document).ready(function () {
 	test("should load Team All", function() {
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url == "Team/TeamsForShiftTrade") {
+				if (options.url === "Team/TeamsForShiftTrade") {
 					options.success(
 							[
 								{ id: "A", text: "Team A" },
@@ -282,7 +322,7 @@ $(document).ready(function () {
 		};
 
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
-		
+
 		viewModel.loadTeams();
 
 		equal(viewModel.availableTeams().length, 4);
@@ -294,21 +334,21 @@ $(document).ready(function () {
 	test("should load no teams when no teams returned from server", function () {
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url == "Team/TeamsForShiftTrade") {
+				if (options.url === "Team/TeamsForShiftTrade") {
 					options.success([]);
 				}
 			}
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
 
-		viewModel.loadTeams();		
+		viewModel.loadTeams();
 		equal(viewModel.availableTeams().length, 0);
 	});
 
 	test("should load teams", function() {
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url == "Team/TeamsForShiftTrade") {
+				if (options.url === "Team/TeamsForShiftTrade") {
 					options.success(
 							[
 								{ id: "A", text: "Team A"},
@@ -335,7 +375,7 @@ $(document).ready(function () {
 	test("should load sites", function () {
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url == "Team/SitesForShiftTrade") {
+				if (options.url === "Team/SitesForShiftTrade") {
 					options.success(
 							[
 								{ id: "A", text: "Site A"},
@@ -346,8 +386,6 @@ $(document).ready(function () {
 				}
 			}
 		};
-
-		
 
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
 		viewModel.mySiteId("A");
@@ -365,7 +403,7 @@ $(document).ready(function () {
 		var myTeamId = "";
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url == "Requests/ShiftTradeRequestMyTeam") {
+				if (options.url === "Requests/ShiftTradeRequestMyTeam") {
 					options.success(
 							myTeamId
 					);
@@ -384,7 +422,7 @@ $(document).ready(function () {
 		var noTeam = [];
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url == "Team/TeamsForShiftTrade") {
+				if (options.url === "Team/TeamsForShiftTrade") {
 					options.success(
 							noTeam
 					);
@@ -395,7 +433,6 @@ $(document).ready(function () {
 		viewModel.selectedTeamInternal(undefined);
 		viewModel.myTeamId(undefined);
 
-
 		viewModel.loadTeams();
 
 		equal(viewModel.noAnyTeamToShow(), true);
@@ -405,7 +442,7 @@ $(document).ready(function () {
 		var myTeamId = "myTeam";
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url == "Requests/ShiftTradeRequestMyTeam") {
+				if (options.url === "Requests/ShiftTradeRequestMyTeam") {
 					options.success(
 							myTeamId
 					);
@@ -424,7 +461,7 @@ $(document).ready(function () {
 		var mySiteId = "mySite";
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url == "Requests/ShiftTradeRequestMySite") {
+				if (options.url === "Requests/ShiftTradeRequestMySite") {
 					options.success(
 							mySiteId
 					);
@@ -478,9 +515,9 @@ $(document).ready(function () {
 
 		viewModel.selectedPageIndex(2);
 		viewModel.setPagingInfo(2);
-		
+
 		equal(viewModel.pageCount(), 2);
-		equal(viewModel.selectablePages().length, 2);	
+		equal(viewModel.selectablePages().length, 2);
 	});
 
 	test("should can select page", function () {
@@ -636,8 +673,7 @@ $(document).ready(function () {
 	test("should load filter hours text and dayoff names", function () {
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url == "RequestsShiftTradeScheduleFilter/Get") {
-
+				if (options.url === "RequestsShiftTradeScheduleFilter/Get") {
 					var hourTexts = [];
 					var dayOffNames = ["DO"];
 					for (var i = 0; i <= 24; ++i) {
@@ -687,7 +723,7 @@ $(document).ready(function () {
 	test("should load team when there is a selected team", function () {
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url == "Team/TeamsUnderSiteForShiftTrade") {
+				if (options.url === "Team/TeamsUnderSiteForShiftTrade") {
 					options.success(
 							[
 								{ id: "A", text: "Team A" },

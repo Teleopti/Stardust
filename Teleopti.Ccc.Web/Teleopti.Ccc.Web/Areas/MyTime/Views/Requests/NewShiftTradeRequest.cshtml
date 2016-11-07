@@ -153,6 +153,9 @@
 					<tr>
 						<td>&nbsp;</td>
 						<td></td>
+						<!--ko if:showContractTime-->
+						<td><strong>@Resources.ContractTime</strong></td>
+						<!--/ko-->
 						<td></td>
 					</tr>
 				</thead>
@@ -203,7 +206,11 @@
 							<!--/ko-->
 						</td>
 						<!--/ko-->
-
+						<!--ko if:$data.showContractTime-->
+						<td class="shift-trade-contract-time">
+							<div data-bind="text: mySchedule().contractTime"></div>
+						</td>
+						<!--/ko-->
 						<td class="shift-trade-button-cell"></td>
 					</tr>
 				</tbody>
@@ -230,6 +237,12 @@
 							</div>
 							<!--/ko-->
 						</td>
+
+						<!--ko if:$root.showContractTime-->
+						<td class="shift-trade-contract-time">
+							<div data-bind="text: contractTime"></div>
+						</td>
+						<!--/ko-->
 
 						<td class="shift-trade-button-cell">
 							<!-- ko if: $root.isAddVisible-->
@@ -281,6 +294,9 @@
 					<tr>
 						<td>&nbsp;</td>
 						<td></td>
+						<!--ko if:$root.showContractTime-->
+						<td><strong>@Resources.ContractTime</strong></td>
+						<!--/ko-->
 						<td></td>
 					</tr>
 				</thead>
@@ -331,6 +347,11 @@
 							<!--/ko-->
 						</td>
 						<!--/ko-->
+						<!--ko if:$root.showContractTime-->
+						<td class="shift-trade-contract-time">
+							<div data-bind="text: $data.mySchedule().contractTime"></div>
+						</td>
+						<!--/ko-->
 						<td></td>
 					</tr>
 				</tbody>
@@ -357,6 +378,11 @@
 							</div>
 							<!--/ko-->
 						</td>
+						<!--ko if:$root.showContractTime-->
+						<td class="shift-trade-contract-time">
+							<div data-bind="text: $data.selectedSchedule().contractTime"></div>
+						</td>
+						<!--/ko-->
 						<td class="shift-trade-button-cell">
 							<button type="button" id="shift-trade-remove" class="btn btn-primary btn-xs" data-bind="visible: $root.isDetailVisible, click: $root.remove">
 								<i class="glyphicon glyphicon-minus"></i>

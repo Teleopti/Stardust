@@ -331,6 +331,11 @@
 	width: 114px;
 }
 
+.shift-trade-contract-time {
+	width: 50px;
+	text-align: center;
+}
+
 .shift-trade-button-cell {
 	width: 30px;
 	text-align: right;

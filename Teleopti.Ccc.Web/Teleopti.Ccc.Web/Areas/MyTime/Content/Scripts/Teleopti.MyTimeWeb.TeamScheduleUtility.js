@@ -23,7 +23,6 @@ Teleopti.MyTimeWeb.DayScheduleMixin = function () {
 		changeHandlerSuspended = false;
 	};
 
-
 	self.requestedDate = ko.observable(moment().startOf('day'));
 
 	self.setDatePickerFormat = function (format) {
@@ -44,7 +43,6 @@ Teleopti.MyTimeWeb.DayScheduleMixin = function () {
 			changeHandler(Teleopti.MyTimeWeb.Common.FormatServiceDate(self.requestedDateInternal()));
 		}
 	});
-
 
 	self.isRequestedDateValid = function (date) {
 		if (self.openPeriodStartDate() && date.diff(self.openPeriodStartDate()) < 0) {
@@ -82,11 +80,9 @@ Teleopti.MyTimeWeb.DayScheduleMixin = function () {
 	self.previousDateValid = ko.computed(function () {
 		return self.openPeriodStartDate() == null || self.requestedDate().diff(self.openPeriodStartDate()) > 0;
 	});
-
 };
 
 Teleopti.MyTimeWeb.PagingMixin = function () {
-
 	var self = this;
 	self.maxPagesVisible = 5;
 	self.pageCount = ko.observable(1);
@@ -252,12 +248,12 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 	var mapLayerViewModelForSchedule = function (personSchedule) {
 		var mappedLayers = [];
 		if (personSchedule == null) {
-			return new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, moment(), moment(), '', '', false,'', false, false, null);
+			return new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, moment(), moment(), '', '', false,'', false, false, null, "0:00");
 		}
 		var layers = personSchedule.ScheduleLayers;
 		var model;
 
-		if (layers == null || layers.length == 0) {
+		if (layers == null || layers.length === 0) {
 			model = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(
 				mappedLayers,
 				null,
@@ -268,7 +264,8 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 				personSchedule.DayOffName,
 				null,
 				personSchedule.IsFullDayAbsence,
-				null);
+				null,
+				Teleopti.MyTimeWeb.Common.FormatTimeSpan(personSchedule.ContractTimeInMinute));
 		} else {
 			var scheduleStartTime = moment(layers[0].Start);
 			var scheduleEndTime = moment(layers[layers.length - 1].End);
@@ -291,7 +288,8 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 				personSchedule.DayOffName,
 				null,
 				personSchedule.IsFullDayAbsence,
-				null
+				null,
+				Teleopti.MyTimeWeb.Common.FormatTimeSpan(personSchedule.ContractTimeInMinute)
 				);
 		}
 		return model;

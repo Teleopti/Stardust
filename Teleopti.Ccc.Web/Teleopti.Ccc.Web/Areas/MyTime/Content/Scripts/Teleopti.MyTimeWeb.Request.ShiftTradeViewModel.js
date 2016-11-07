@@ -56,14 +56,12 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.refocusToNameSearch = null;
 	self.isShiftTradeScheduleNoReadModelEnabled = ko.observable(false);
 	self.isSiteFilterEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeFilterSite_40374');
+	self.showContractTime = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShowContractTime_41462');
 	self.allTeamsId = "allTeams";
 	self.allSitesId = "allSites";
 
 	self.isDetailVisible = ko.computed(function () {
-		if (self.agentChoosed() === null) {
-			return false;
-		}
-		return true;
+	    return self.agentChoosed() !== null;
 	});
 
 	self.changeInSearchBox = function (data, event) {
@@ -146,7 +144,10 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 					var minutesSinceTimeLineStart = moment(layer.startTime).diff(scheduleStartTime, 'minutes');
 					return new Teleopti.MyTimeWeb.Request.CloneLayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart);
 				});
-				tradedScheduleModel = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, schedule.scheduleStartTime(), schedule.scheduleEndTime(), schedule.agentName, schedule.personId, schedule.isDayOff, schedule.dayOffName);
+				tradedScheduleModel = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers,
+					schedule.scheduleStartTime(), schedule.scheduleEndTime(), schedule.agentName, schedule.personId,
+					schedule.isDayOff, schedule.dayOffName, schedule.isEmptyDay, schedule.isFullDayAbsence,
+					schedule.ShiftExchangeOfferId, schedule.contractTime);
 			}
 		});
 
@@ -157,7 +158,11 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				return new Teleopti.MyTimeWeb.Request.CloneLayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart);
 			});
 		}
-		currentTrade.mySchedule = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedlayers, self.mySchedule().scheduleStartTime(), self.mySchedule().scheduleEndTime(), self.mySchedule().agentName, self.mySchedule().personId, self.mySchedule().isDayOff, self.mySchedule().dayOffName);
+		currentTrade.mySchedule = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedlayers,
+			self.mySchedule().scheduleStartTime(), self.mySchedule().scheduleEndTime(), self.mySchedule().agentName,
+			self.mySchedule().personId, self.mySchedule().isDayOff, self.mySchedule().dayOffName,
+			self.mySchedule().isEmptyDay, self.mySchedule().isFullDayAbsence,self.mySchedule().ShiftExchangeOfferId,
+			self.mySchedule().contractTime);
 		currentTrade.tradedSchedule = tradedScheduleModel;
 
 		var currentChooseView = new Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel(currentTrade, self.layerCanvasPixelWidth());
@@ -217,7 +222,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 
 	self._createMySchedule = function (myScheduleObject) {
 		var mappedlayers = [];
-		if (myScheduleObject !== null && myScheduleObject.ScheduleLayers !== null && myScheduleObject.ScheduleLayers.length > 0) {
+		if (myScheduleObject !== null && myScheduleObject !== undefined
+			&& myScheduleObject.ScheduleLayers !== null && myScheduleObject.ScheduleLayers.length > 0) {
 			var layers = myScheduleObject.ScheduleLayers;
 			var scheduleStartTime = moment(layers[0].Start);
 			var scheduleEndTime = moment(layers[layers.length - 1].End);
@@ -225,11 +231,13 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
 				return new Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute());
 			});
-			self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedlayers, scheduleStartTime, scheduleEndTime, myScheduleObject.Name, myScheduleObject.PersonId, myScheduleObject.IsDayOff, myScheduleObject.DayOffName, false, myScheduleObject.IsFullDayAbsence, null));
+			self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedlayers, scheduleStartTime, scheduleEndTime, myScheduleObject.Name, myScheduleObject.PersonId,
+				myScheduleObject.IsDayOff, myScheduleObject.DayOffName, false, myScheduleObject.IsFullDayAbsence, null, Teleopti.MyTimeWeb.Common.FormatTimeSpan(myScheduleObject.ContractTimeInMinute)));
 		} else if (myScheduleObject !== null) {
-			self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedlayers, moment(), moment(), '', '', myScheduleObject.IsDayOff, myScheduleObject.DayOffName, false, myScheduleObject.IsFullDayAbsence, null));
+			self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedlayers, moment(), moment(), '', '', myScheduleObject.IsDayOff, myScheduleObject.DayOffName,
+				false, myScheduleObject.IsFullDayAbsence, null, Teleopti.MyTimeWeb.Common.FormatTimeSpan(myScheduleObject.ContractTimeInMinute)));
 		} else {
-			self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedlayers, moment(), moment(), '', '', false));
+			self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedlayers, moment(), moment(), '', '', false, '', '0:00'));
 		}
 	};
 
@@ -247,7 +255,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 					return new Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute());
 				});
 			}
-			var model = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, scheduleStartTime, scheduleEndTime, personSchedule.Name, personSchedule.PersonId, personSchedule.IsDayOff, personSchedule.DayOffName, false, false, null);
+			var model = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, scheduleStartTime, scheduleEndTime, personSchedule.Name,
+				personSchedule.PersonId, personSchedule.IsDayOff, personSchedule.DayOffName, false, false, null, Teleopti.MyTimeWeb.Common.FormatTimeSpan(personSchedule.ContractTimeInMinute));
 			self.possibleTradeSchedules.push(model);
 			return model;
 		});
@@ -298,10 +307,11 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 
 	self.chooseAgent = function (agent) {
 		//hide or show all agents
+		var showAllAgent = agent === null;
 		$.each(self.possibleTradeSchedules(), function (index, value) {
-			value.isVisible(agent === null);
+			value.isVisible(showAllAgent);
 		});
-		if (agent !== null) {
+		if (!showAllAgent) {
 			agent.isVisible(true);
 			self.redrawLayers();
 			//rk - don't really like to put DOM stuff here...
@@ -313,11 +323,10 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		self.agentChoosed(agent);
 		self.errorMessage('');
 
-		if (agent !== null) {
-			self.add();
-		}
-		if (agent === null) {
-			self.selectedInternal(false);
+		if (showAllAgent) {
+		    self.selectedInternal(false);
+		} else {
+		    self.add();
 		}
 	};
 
