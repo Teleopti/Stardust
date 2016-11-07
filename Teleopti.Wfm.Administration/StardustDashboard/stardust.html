@@ -108,7 +108,7 @@
 					</thead>
 					<tbody>
 					<tr ng-repeat="job in vm.QueuedJobs">
-						<td><a href="##StardustDashboard/queue/{{job.JobId}}">{{job.Name}}</a></td>
+						<td><a href="#StardustDashboard/queue/{{job.JobId}}">{{job.Name}}</a></td>
 						<td>{{job.CreatedBy}} {{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 					</tr>
 					</tbody>
