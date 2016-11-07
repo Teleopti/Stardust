@@ -119,6 +119,16 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		private const string selectAgentStateInAlarm =
 			@"SELECT TOP 50 * FROM [ReadModel].AgentState WITH (NOLOCK) WHERE {0} AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC";
 
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		{
+			throw new NotImplementedException();
+		}
+		
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IEnumerable<AgentStateReadModel> LoadAlarmsForSites(IEnumerable<Guid> siteIds, IEnumerable<Guid?> excludedStateGroupIds)
 		{
 			var stateGroupIdsWithoutNull = excludedStateGroupIds.Where(x => x != null);
@@ -221,6 +231,7 @@ AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC ";
 					.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
 				);
 		}
+
 
 		public IEnumerable<AgentStateReadModel> LoadAlarmsForSkills(IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStateGroupIds)
 		{

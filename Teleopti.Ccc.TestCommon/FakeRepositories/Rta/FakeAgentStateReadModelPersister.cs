@@ -221,6 +221,36 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				select m;
 		}
 
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
+		{
+			return 
+				from model in _data.Values
+				from personSkill in _personSkills
+				from siteId in siteIds
+				from skillId in skillIds
+				where model.PersonId == personSkill.PersonId &&
+					  personSkill.SkillId == skillId &&
+					  model.SiteId == siteId &&
+					  model.AlarmStartTime <= _now.UtcDateTime()
+				orderby model.AlarmStartTime
+				select model;
+		}
+		
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		{
+			return
+				from model in _data.Values
+				from personSkill in _personSkills
+				from teamId in teamIds
+				from skillId in skillIds
+				where model.PersonId == personSkill.PersonId &&
+					  personSkill.SkillId == skillId &&
+					  model.TeamId == teamId &&
+					  model.AlarmStartTime <= _now.UtcDateTime()
+				orderby model.AlarmStartTime
+				select model;
+		}
+
 		public IEnumerable<AgentStateReadModel> LoadAlarmsForSkills(IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStateGroupIds)
 		{
 			return from sk in skillIds
