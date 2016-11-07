@@ -3210,11 +3210,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			turnOffCalculateMinMaxCacheIfNeeded(_optimizerOriginalPreferences.SchedulingOptions);
 			_optimizerOriginalPreferences.SchedulingOptions.NotAllowedShiftCategories.Clear();
 
-			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MaxSeatsNew_40939) && (_optimizerOriginalPreferences.SchedulingOptions.UseTeam || _optimizerOriginalPreferences.SchedulingOptions.UseBlock))
-			{
-				_optimizerOriginalPreferences.SchedulingOptions.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.DoNotConsiderMaxSeats;
-			}
-
 			AdvanceLoggingService.LogSchedulingInfo(_optimizerOriginalPreferences.SchedulingOptions,
 				scheduleDays.Select(x => x.Person).Distinct().Count(),
 				selectedPeriod.DayCollection().Count(),
