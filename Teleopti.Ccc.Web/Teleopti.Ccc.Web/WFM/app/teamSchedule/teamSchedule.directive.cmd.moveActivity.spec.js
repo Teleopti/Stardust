@@ -134,7 +134,10 @@ describe("teamschedule move activity directive tests", function () {
 		var result = setUp(date.toDate());
 		var vm = result.commandControl;
 
-		var selectedActivities = ['472e02c8-1a84-4064-9a3b-9b5e015ab3c6'];
+		var selectedActivities = {
+			date: '2016-06-15',
+			shiftLayerId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
+		};
 
 		fakeScheduleManagementSvc.setLatestStartTime(date.clone().hour(10).toDate());
 
@@ -143,17 +146,17 @@ describe("teamschedule move activity directive tests", function () {
 
 		vm.selectedAgents = [
 			{
-				SersonId: 'agent1',
+				PersonId: 'agent1',
 				Name: 'agent1',
 				ScheduleStartTime: '2016-06-15T08:00:00Z',
 				ScheduleEndTime: '2016-06-15T17:00:00Z',
-				SelectedActivities: selectedActivities
+				SelectedActivities: [selectedActivities]
 			}, {
 				PersonId: 'agent2',
 				Name: 'agent2',
 				ScheduleStartTime: '2016-06-15T09:00:00Z',
 				ScheduleEndTime: '2016-06-15T18:00:00Z',
-				SelectedActivities: selectedActivities
+				SelectedActivities: [selectedActivities]
 			}];
 
 		fakePersonSelectionService.setFakeSelectedPersonInfoList(vm.selectedAgents);
@@ -167,7 +170,7 @@ describe("teamschedule move activity directive tests", function () {
 		expect(activityData).not.toBeNull();
 		expect(activityData.PersonActivities.length).toEqual(vm.selectedAgents.length);
 		expect(moment(activityData.StartTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.moveToTime).add(8, 'hours').format('YYYY-MM-DDTHH:mm:00'));
-		expect(activityData.Date).toEqual(vm.selectedDate());
+		expect(activityData.PersonActivities[0].Date).toEqual(moment(vm.selectedDate()).format('YYYY-MM-DD'));
 		expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
 	});
 
