@@ -215,9 +215,8 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilderUserTimeZoneTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\PhoneStateViewModelBuilderTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilderTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilderStateValuesTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilderExcludingStateGroupsTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModel\AgentStatesViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModel\AgentStatesViewModelBuilderStateValuesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelShiftTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelSnapshotTests.cs" />

@@ -14,7 +14,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateViewModel
 {
 	[DomainTest]
 	[TestFixture]
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					SiteId = siteId2
 				});
 
-			var agentState = Target.ForSites(new[] { siteId1, siteId2 }).States.ToArray();
+			var agentState = Target.For(new ViewModelFilter {SiteIds = new[] { siteId1, siteId2 } }).States.ToArray();
 
 			agentState.First().PersonId.Should().Be(personId1);
 			agentState.Last().PersonId.Should().Be(personId2);
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			});
 			Now.Is("2015-10-22 08:30".Utc());
 
-			var agentState = Target.ForSites(new[] { siteId }).States.Single();
+			var agentState = Target.For(new ViewModelFilter {SiteIds = new[] { siteId } }).States.Single();
 
 			agentState.PersonId.Should().Be(personId);
 			agentState.State.Should().Be("state");
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			});
 			Now.Is("2015-10-22 08:30".Utc());
 
-			var agentState = Target.ForTeams(new[] { teamId }).States.Single();
+			var agentState = Target.For(new ViewModelFilter {TeamIds = new[] { teamId } }).States.Single();
 
 			agentState.PersonId.Should().Be(personId);
 			agentState.State.Should().Be("state");
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					IsRuleAlarm = false
 				});
 
-			var agentStates = Target.InAlarmForSites(new[] { siteId1, siteId2 }).States.Single();
+			var agentStates = Target.InAlarmFor(new ViewModelFilter {SiteIds = new[] { siteId1, siteId2 } }).States.Single();
 
 			agentStates.PersonId.Should().Be(personId1);
 		}
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				}
 			});
 
-			var state = Target.ForTeams(new[] { teamId }).States.Single();
+			var state = Target.For(new ViewModelFilter {TeamIds = new[] { teamId } }).States.Single();
 
 			state.Shift.Single().Color.Should().Be("#80FF80");
 			state.Shift.Single().StartTime.Should().Be("2016-05-29T12:00:00");
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			});
 			TimeZone.IsSweden();
 
-			var state = Target.ForTeams(new[] { teamId }).States.Single();
+			var state = Target.For(new ViewModelFilter { TeamIds = new[] { teamId } }).States.Single();
 
 			state.Shift.Single().StartTime.Should().Be("2016-05-29T14:00:00");
 			state.Shift.Single().EndTime.Should().Be("2016-05-29T15:00:00");
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		{
 			Now.Is("2016-05-28 12:00");
 
-			Target.ForTeams(new Guid[] { })
+			Target.For(new ViewModelFilter {TeamIds = new Guid[] { } })
 				.Time.Should().Be("2016-05-28 12:00".Utc());
 		}
 
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		{
 			Now.Is("2016-05-28 12:00");
 
-			Target.ForSites(new Guid[] { })
+			Target.For(new ViewModelFilter { SiteIds = new Guid[] { } })
 				.Time.Should().Be("2016-05-28 12:00".Utc());
 		}
 
@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Now.Is("2016-05-28 12:00");
 			TimeZone.IsSweden();
 
-			Target.ForTeams(new Guid[] { })
+			Target.For(new ViewModelFilter { TeamIds = new Guid[] { } })
 				.Time.Should().Be("2016-05-28 14:00".Utc());
 		}
 
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			});
 			Now.Is("2016-06-08 08:02".Utc());
 
-			var agentState = Target.ForTeams(new[] { teamId }).States.Single();
+			var agentState = Target.For(new ViewModelFilter {TeamIds = new[] { teamId } }).States.Single();
 
 			agentState.TimeInRule.Should().Be(120);
 		}
@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			});
 			Now.Is("2016-06-08 08:02".Utc());
 
-			var agentState = Target.ForTeams(new[] { teamId }).States.Single();
+			var agentState = Target.For(new ViewModelFilter { TeamIds = new[] { teamId } }).States.Single();
 
 			agentState.TimeInRule.Should().Be(null);
 		}
@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			});
 			Now.Is("2016-06-16 08:00");
 
-			var outOfAdherence = Target.ForTeams(new[] { teamId }).States.Single()
+			var outOfAdherence = Target.For(new ViewModelFilter { TeamIds = new[] { teamId } }).States.Single()
 				.OutOfAdherences.Single();
 
 			outOfAdherence.StartTime.Should().Be("2016-06-16T07:40:00");
@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			});
 			Now.Is("2016-06-16 08:00");
 
-			var outOfAdherence = Target.ForTeams(new[] { teamId }).States.Single()
+			var outOfAdherence = Target.For(new ViewModelFilter { TeamIds = new[] { teamId } }).States.Single()
 				.OutOfAdherences.Single();
 
 			outOfAdherence.StartTime.Should().Be("2016-06-16T07:40:00");
@@ -340,7 +340,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Now.Is("2016-06-16 12:30");
 			TimeZone.IsSweden();
 
-			var outOfAdherence = Target.ForTeams(new[] { teamId }).States.Single()
+			var outOfAdherence = Target.For(new ViewModelFilter { TeamIds = new[] { teamId } }).States.Single()
 				.OutOfAdherences.Single();
 
 			outOfAdherence.StartTime.Should().Be("2016-06-16T14:00:00");
@@ -359,7 +359,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					PersonId = person,
 				});
 
-			var agentState = Target.ForSkills(new[] { skill }).States.Single();
+			var agentState = Target.For(new ViewModelFilter {SkillIds = new[] { skill } }).States.Single();
 
 			agentState.PersonId.Should().Be(person);
 		}
@@ -378,7 +378,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.Has(new AgentStateReadModel { PersonId = person2 })
 				;
 
-			var agentState = Target.ForSkills(new[] { skill1, skill2 }).States;
+			var agentState = Target.For(new ViewModelFilter { SkillIds = new[] { skill1, skill2 } }).States;
 
 			agentState.Select(x => x.PersonId).Should().Have.SameValuesAs(person1, person2);
 		}
@@ -407,7 +407,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					AlarmStartTime = "2016-06-21 08:29".Utc()
 				});
 
-			var agentState = Target.InAlarmForSkills(new[] { skill1, skill2 }).States;
+			var agentState = Target.InAlarmFor(new ViewModelFilter {SkillIds = new[] { skill1, skill2 } }).States;
 
 			agentState.Select(x => x.PersonId).Should().Have.SameValuesAs(person1, person2);
 		}
@@ -432,12 +432,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					IsDeleted = true
 				});
 
-			Target.ForSites(new[] { site }).States.Should().Be.Empty();
-			Target.ForTeams(new[] { team }).States.Should().Be.Empty();
-			Target.ForSkills(new[] { skill }).States.Should().Be.Empty();
-			Target.InAlarmForSites(new[] { site }).States.Should().Be.Empty();
-			Target.InAlarmForTeams(new[] { team }).States.Should().Be.Empty();
-			Target.InAlarmForSkills(new[] { skill }).States.Should().Be.Empty();
+			Target.For(new ViewModelFilter {SiteIds = new[] { site } }).States.Should().Be.Empty();
+			Target.For(new ViewModelFilter {TeamIds = new[] { team } }).States.Should().Be.Empty();
+			Target.For(new ViewModelFilter {SkillIds = new[] { skill } }).States.Should().Be.Empty();
+			Target.InAlarmFor(new ViewModelFilter {SiteIds = new[] { site } }).States.Should().Be.Empty();
+			Target.InAlarmFor(new ViewModelFilter {TeamIds = new[] { team } }).States.Should().Be.Empty();
+			Target.InAlarmFor(new ViewModelFilter {SkillIds = new[] { skill } }).States.Should().Be.Empty();
 		}
 	}
 }

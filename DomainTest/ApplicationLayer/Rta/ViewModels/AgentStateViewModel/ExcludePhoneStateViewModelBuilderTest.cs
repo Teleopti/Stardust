@@ -231,5 +231,76 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				.States.Single()
 				.PersonId.Should().Be(expected);
 		}
+
+		[Test]
+		public void ShouldOrderByAlarmTime()
+		{
+			var person1 = Guid.NewGuid();
+			var person2 = Guid.NewGuid();
+			var site = Guid.NewGuid();
+			var team = Guid.NewGuid();
+			var skillId = Guid.NewGuid();
+			Now.Is("2016-11-07 08:10");
+			Database
+				.Has(new AgentStateReadModel
+				{
+					PersonId = person1,
+					SiteId = site,
+					TeamId = team,
+					StateGroupId = Guid.NewGuid(),
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-11-07 08:00".Utc()
+				})
+				.WithPersonSkill(person1, skillId)
+				.Has(new AgentStateReadModel
+				{
+					PersonId = person2,
+					SiteId = site,
+					TeamId = team,
+					StateGroupId = Guid.NewGuid(),
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-11-07 08:05".Utc()
+				})
+				.WithPersonSkill(person2, skillId)
+				;
+			
+			Target.InAlarmExcludingPhoneStatesFor(new ViewModelFilter {SiteIds = new[] {site}},
+				new Guid?[] {null}).States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] {person1, person2});
+
+			Target.InAlarmExcludingPhoneStatesFor(new ViewModelFilter {TeamIds = new[] {team}},
+				new Guid?[] {null}).States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] {person1, person2});
+
+			Target.InAlarmExcludingPhoneStatesFor(new ViewModelFilter {SkillIds = new[] {skillId}},
+				new Guid?[] {null}).States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] {person1, person2});
+
+			Target.InAlarmExcludingPhoneStatesFor(new ViewModelFilter {SiteIds = new[] {site}, SkillIds = new[] {skillId}},
+				new Guid?[] {null}).States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] {person1, person2});
+
+			Target.InAlarmExcludingPhoneStatesFor(new ViewModelFilter {TeamIds = new[] {team}, SkillIds = new[] {skillId}},
+				new Guid?[] {null}).States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] {person1, person2});
+		}
+
+
+		[Test]
+		public void ShouldGetWithStateGroupIdForSkill()
+		{
+			var person = Guid.NewGuid();
+			var skill = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.Has(new AgentStateReadModel
+				{
+					PersonId = person,
+					StateGroupId = phone,
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-09-22 08:00".Utc()
+				})
+				.WithPersonSkill(person, skill);
+			Now.Is("2016-09-22 08:10");
+
+			var agentState = Target.InAlarmFor(new ViewModelFilter { SkillIds = new[] { skill } }).States;
+
+			agentState.Single().StateId.Should().Be(phone);
+		}
 	}
 }
