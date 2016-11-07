@@ -530,10 +530,26 @@
 
 	.teamschedule-command-container {
 		height: 100%;
+	}
 
-		.command-panel-content .con-row {
-			flex-direction: row !important;
+	.command-panel-content .con-row {
+		flex-direction: row !important;
+		align-items: center;
+
+		.wfm-time-range-picker-wrap button {
+			line-height: 25px;
 		}
+	}
+
+	.command-panel-content .activity-time-range{
+		position: initial;
+	}
+
+	.command-panel-content .wfm-time-range-picker-wrap .error-msg-container{
+		left: 10px;
+		right: 10px;
+		margin-top: 30px;
+		width: auto;
 	}
 
 	.add-absence, .add-activity, .move-activity, .edit-shift-category, .command-check, .settings-panel{
@@ -660,14 +676,6 @@
 			padding: 5px;
 			width: auto;
 			display: inline-block;
-		}
-	}
-
-	.con-row {
-		align-items: center;
-
-		.wfm-time-range-picker-wrap button {
-			line-height: 25px;
 		}
 	}
 
