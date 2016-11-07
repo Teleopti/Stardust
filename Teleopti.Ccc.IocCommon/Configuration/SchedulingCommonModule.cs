@@ -564,7 +564,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftValueCalculator>().As<IWorkShiftValueCalculator>().SingleInstance();
 			builder.RegisterType<EqualWorkShiftValueDecider>().As<IEqualWorkShiftValueDecider>().InstancePerLifetimeScope();
 			builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().InstancePerLifetimeScope();
-			builder.RegisterType<MaxSeatsCalculationForTeamBlock>().As<IMaxSeatsCalculationForTeamBlock>().SingleInstance();
 			builder.RegisterType<MaxSeatInformationGeneratorBasedOnIntervals>().As<IMaxSeatInformationGeneratorBasedOnIntervals>().InstancePerLifetimeScope();
 			builder.RegisterType<MaxSeatsSpecificationDictionaryExtractor>().As<IMaxSeatsSpecificationDictionaryExtractor>().InstancePerLifetimeScope();
 			builder.RegisterType<IntervalLevelMaxSeatInfo>();
@@ -593,6 +592,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.As<ITeamBlockMaxSeatChecker>()
 					.As<IIsMaxSeatsReachedOnSkillStaffPeriodSpecification>()
 					.As<IMaxSeatBoostingFactorCalculator>()
+					.As<IMaxSeatsCalculationForTeamBlock>()
 					.SingleInstance();
 			}
 			else
@@ -605,6 +605,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<TeamBlockMaxSeatChecker>().As<ITeamBlockMaxSeatChecker>().SingleInstance();
 				builder.RegisterType<IsMaxSeatsReachedOnSkillStaffPeriodSpecification>().As<IIsMaxSeatsReachedOnSkillStaffPeriodSpecification>().SingleInstance();
 				builder.RegisterType<MaxSeatBoostingFactorCalculator>().As<IMaxSeatBoostingFactorCalculator>().SingleInstance();
+				builder.RegisterType<MaxSeatsCalculationForTeamBlock>().As<IMaxSeatsCalculationForTeamBlock>().SingleInstance();
 			}
 			builder.RegisterType<MaxSeatSkillDataFactory>().SingleInstance();
 			builder.RegisterType<SkillsFromMaxSeatSite>().SingleInstance();

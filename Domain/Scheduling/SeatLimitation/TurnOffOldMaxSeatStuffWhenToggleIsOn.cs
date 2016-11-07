@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
@@ -7,7 +8,11 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 {
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
-	public class TurnOffOldMaxSeatStuffWhenToggleIsOn : IMaxSeatSkillAggregator, ITeamBlockMaxSeatChecker, IIsMaxSeatsReachedOnSkillStaffPeriodSpecification, IMaxSeatBoostingFactorCalculator
+	public class TurnOffOldMaxSeatStuffWhenToggleIsOn : IMaxSeatSkillAggregator, 
+																									ITeamBlockMaxSeatChecker, 
+																									IIsMaxSeatsReachedOnSkillStaffPeriodSpecification, 
+																									IMaxSeatBoostingFactorCalculator,
+																									IMaxSeatsCalculationForTeamBlock
 	{
 		public HashSet<ISkill> GetAggregatedSkills(IList<IPerson> teamMembers, DateOnlyPeriod dateOnlyPeriod)
 		{
@@ -32,6 +37,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		public double GetBoostingFactor(double currentSeats, double maxSeats)
 		{
 			return 1;
+		}
+
+		public double? PeriodValue(double periodValue, MaxSeatsFeatureOptions maxSeatsFeatureOption, bool isMaxSeatsReached,
+			bool requiresSeat, double maxSeatBoostingFactor)
+		{
+			throw new NotSupportedException("Shouldn't end up here - if we do, investigate why and see what more to toggle.");
 		}
 	}
 }
