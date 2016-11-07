@@ -233,8 +233,8 @@ function PersonSelectionService(toggleSvc) {
 
 		var isBothAllowSwap = svc.personInfo[personIds[0]].AllowSwap && svc.personInfo[personIds[1]].AllowSwap;
 		var isOnlyTodaySchedules = moment(svc.personInfo[personIds[0]].ScheduleStartTime).format('YYYY-MM-DD') === moment(svc.personInfo[personIds[1]].ScheduleStartTime).format('YYYY-MM-DD');
-
-		return isBothAllowSwap && isOnlyTodaySchedules;
+		var isBothOnSameTimezone = svc.personInfo[personIds[0]].Timezone.IanaId === svc.personInfo[personIds[1]].Timezone.IanaId;		
+		return isBothAllowSwap && isOnlyTodaySchedules && isBothOnSameTimezone;
 	};
 
 	svc.getTotalSelectedPersonAndProjectionCount = function () {
