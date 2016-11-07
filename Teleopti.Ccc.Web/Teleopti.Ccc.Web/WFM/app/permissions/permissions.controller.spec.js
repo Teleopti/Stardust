@@ -816,6 +816,103 @@ xdescribe('PermissionsCtrlRefact', function () {
 		expect(vm.organizationSelection.BusinessUnit.ChildNodes[1].IsSelected).toBe(true);
 	});
 
+	it('should select all functions when toggle all function', function(){
+		fakeBackend
+			.withApplicationFunction({
+				FunctionId: '6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7',
+				Name: 'All',
+				ChildFunctions: [],
+				IsSelected: false
+			})
+			.withApplicationFunction({
+				FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+				Name: 'FunctionTwo',
+				ChildFunctions: [
+					{
+						FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc',
+						ChildFunctions: [
+							{
+								FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c',
+								ChildFunctions: [
+									{
+										FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc'
+									},
+									{
+										FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c'
+									}
+								]
+							},
+							{
+								FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+							}
+						]
+					},
+					{
+						FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+					}
+				]
+			});
+		$httpBackend.flush();
 
+		vm.toggleAllFunction();
+
+		expect(vm.applicationFunctions[0].IsSelected).toEqual(true);
+		expect(vm.applicationFunctions[1].IsSelected).toEqual(true);
+		expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].IsSelected).toEqual(true);
+		expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].ChildFunctions[1].IsSelected).toEqual(true);
+	});
+
+	it('should deselect all functions when toggle all function', function(){
+		fakeBackend
+			.withApplicationFunction({
+				FunctionId: '6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7',
+				Name: 'All',
+				ChildFunctions: [],
+				IsSelected: true
+			})
+			.withApplicationFunction({
+				FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+				Name: 'FunctionTwo',
+				IsSelected: true,
+				ChildFunctions: [
+					{
+						FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc',
+						IsSelected: true,
+						ChildFunctions: [
+							{
+								FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c',
+								IsSelected: true,
+								ChildFunctions: [
+									{
+										FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc',
+										IsSelected: true
+									},
+									{
+										FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c',
+										IsSelected: true
+									}
+								]
+							},
+							{
+								FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16',
+								IsSelected: true
+							}
+						]
+					},
+					{
+						FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16',
+						IsSelected: true
+					}
+				]
+			});
+		$httpBackend.flush();
+
+		vm.toggleAllFunction();
+
+		expect(vm.applicationFunctions[0].IsSelected).toEqual(false);
+		expect(vm.applicationFunctions[1].IsSelected).toEqual(false);
+		expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].IsSelected).toEqual(false);
+		expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].ChildFunctions[1].IsSelected).toEqual(false);
+	});
 
 });

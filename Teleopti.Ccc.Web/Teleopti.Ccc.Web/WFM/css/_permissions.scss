@@ -128,12 +128,6 @@
 	color:$text-color-muted!important;
 }
 
-.locked {
-	color: $text-color-muted!important;
-	cursor: not-allowed;
-	pointer-events:none;
-}
-
 .myRoleLock{
 	cursor: not-allowed!important;
 	pointer-events: none;
@@ -205,4 +199,14 @@
 	md-tab-content, md-tabs-content-wrapper{
 		display: inline !important;
 	}
+}
+
+.non-pointer{
+	pointer-events: none;
+}
+
+.locked {
+	color: $text-color-muted!important;
+	cursor: not-allowed;
+	pointer-events:none;
 }

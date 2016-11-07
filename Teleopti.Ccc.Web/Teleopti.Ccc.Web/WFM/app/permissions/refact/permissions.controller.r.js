@@ -20,6 +20,26 @@
         vm.selectRole = selectRole;
         vm.checkMyRole  = checkMyRole;
         vm.prepareTree = prepareTree;
+        vm.toggleAllFunction = toggleAllFunction;
+        vm.selectedOrNot = false;
+
+        function toggleAllFunction () {
+          vm.applicationFunctions[0].IsSelected = !vm.applicationFunctions[0].IsSelected;
+
+
+          var selectedOrNot = vm.applicationFunctions[0].IsSelected ? true : false;
+          vm.selectedOrNot = selectedOrNot;
+          toggleSelection(vm.applicationFunctions, selectedOrNot);
+        }
+
+        function toggleSelection(functions, selectedOrNot){
+          for (var i = 0; i < functions.length; i++) {
+            functions[i].IsSelected = selectedOrNot;
+            if(functions[i].ChildFunctions != null && functions[i].ChildFunctions.length > 0) {
+              toggleSelection(functions[i].ChildFunctions, selectedOrNot);
+            }
+          }
+        }
 
         function createRole(roleName) {
             var roleData = { Description: roleName };
