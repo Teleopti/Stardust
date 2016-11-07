@@ -216,8 +216,7 @@
 			scope.vm.trackId = containerCtrl.getTrackId();
 			scope.vm.getActionCb = containerCtrl.getActionCb;
 			scope.vm.checkCommandActivityLayerOrders = containerCtrl.hasToggle('CheckOverlappingCertainActivitiesEnabled');
-			scope.vm.manageScheduleForDistantTimezonesEnabled = true || containerCtrl
-				.hasToggle('ManageScheduleForDistantTimezonesEnabled');
+			scope.vm.manageScheduleForDistantTimezonesEnabled = containerCtrl.hasToggle('ManageScheduleForDistantTimezonesEnabled');
 
 			scope.vm.timeRange = {
 				startTime: selfCtrl.getDefaultActvityStartTime(),
