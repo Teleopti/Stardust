@@ -57,7 +57,7 @@
 								{{role.DescriptionText}}
 							</span>
 							<span ng-cloak ng-show="role.IsSelected" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
-							<div class="wfm-leave-behind" ng-if="vm.checkMyRole(role)">
+							<div class="wfm-leave-behind" ng-show="vm.checkMyRole(role)">
 								<span>
 									<i class="mdi mdi-content-copy" ng-click="vm.copyRole(role); $event.stopPropagation();"></i>
 									<i class="mdi mdi-pencil" ng-click="editRoleModal = !editRoleModal; $event.stopPropagation();"></i>
@@ -113,13 +113,13 @@
 			</div>
 		</div>
 	</div>
-	<div class="con-flex split-3-1">
+	<div class="con-flex split-3-1 permissions-tabs">
 		<div class="panel material-depth-1">
 			<div class="wfm-slide-tabs tabbed-panel">
 				<md-content class="md-padding">
 					<md-tabs md-dynamic-height md-border-bottom>
 						<md-tab label="Tab title1">
-							<md-content class="md-padding">
+							<md-content class="md-padding perm-functions">
 								<div class="con-row">
 									<div class="con-flex">
 										<label for="filter1" class="input-icon">

@@ -198,3 +198,11 @@
 		display: inline;
 	}
 }
+
+
+/*refact*/
+.permissions-tabs{
+	md-tab-content, md-tabs-content-wrapper{
+		display: inline !important;
+	}
+}
