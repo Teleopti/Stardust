@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				}
 				);
 			Now.Is("2015-10-22 08:30".Utc());
-
+			
 			var states = Target.ForTeams(new[] { teamId }).States;
 
 			states.Single().PersonId.Should().Be(personId);

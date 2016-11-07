@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Security.Policy;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				})
 				;
 
-			Target.InAlarmFor(new[] { siteId1, siteId2 }, null, null)
+			Target.InAlarmFor(new ViewModelFilter {SiteIds = new []{siteId1}})
 				.States.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1);
 		}
@@ -78,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				})
 				;
 
-			Target.InAlarmFor(null, new[] { teamId1, teamId2 }, null)
+			Target.InAlarmFor(new ViewModelFilter { TeamIds = new[] { teamId1 } })
 				.States.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1);
 		}
@@ -110,8 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				})
 				.WithPersonSkill(personId3, Guid.NewGuid())
 				;
-
-			Target.InAlarmFor(null, null, new[] { skillId1, skillId2 })
+			Target.InAlarmFor(new ViewModelFilter { SkillIds = new[] { skillId1 } })
 				.States.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1);
 		}
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
-			var skillId1 = Guid.NewGuid();
+			var skillId = Guid.NewGuid();
 			Now.Is("2016-11-07 08:05");
 			Database
 				.Has(new AgentStateReadModel
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 					SiteId = siteId,
 					AlarmStartTime = "2016-11-07 08:00".Utc()
 				})
-				.WithPersonSkill(personId1, skillId1)
+				.WithPersonSkill(personId1, skillId)
 				.Has(new AgentStateReadModel
 				{
 					PersonId = personId2,
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				.WithPersonSkill(personId2, Guid.NewGuid())
 				;
 
-			Target.InAlarmFor(new[] { siteId }, null, new[] { skillId1 })
+			Target.InAlarmFor(new ViewModelFilter {SiteIds = new[] {siteId}, SkillIds = new[] {skillId}})
 				.States.Single()
 				.PersonId.Should().Be(personId1);
 		}
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			var skillId1 = Guid.NewGuid();
+			var skillId = Guid.NewGuid();
 			Now.Is("2016-11-07 08:05");
 			Database
 				.Has(new AgentStateReadModel
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 					TeamId = teamId,
 					AlarmStartTime = "2016-11-07 08:00".Utc()
 				})
-				.WithPersonSkill(personId1, skillId1)
+				.WithPersonSkill(personId1, skillId)
 				.Has(new AgentStateReadModel
 				{
 					PersonId = personId2,
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				.WithPersonSkill(personId2, Guid.NewGuid())
 				;
 
-			Target.InAlarmFor(null, new[] { teamId }, new[] { skillId1 })
+			Target.InAlarmFor(new ViewModelFilter { TeamIds = new[] { teamId }, SkillIds = new[] { skillId } })
 				.States.Single()
 				.PersonId.Should().Be(personId1);
 		}

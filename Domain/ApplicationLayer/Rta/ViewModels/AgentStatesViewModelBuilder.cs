@@ -74,30 +74,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_agentStateReadModelReader = agentStateReadModelReader;
 		}
 		
-		public AgentStatesViewModel For(IEnumerable<Guid> sites, IEnumerable<Guid> teams, IEnumerable<Guid> skills)
+		public AgentStatesViewModel For(ViewModelFilter filter)
 		{
-			if (sites != null && skills != null)
-				return build(_agentStateReadModelReader.LoadForSitesAndSkills(sites, skills));
-			if (sites != null)
-				return build(_agentStateReadModelReader.LoadForSites(sites));
-			if (teams != null && skills != null)
-				return build(_agentStateReadModelReader.LoadForTeamsAndSkills(teams, skills));
-			if (teams != null)
-				return build(_agentStateReadModelReader.LoadForTeams(teams));
-			return build(_agentStateReadModelReader.LoadForSkills(skills));
+			if (filter.SiteIds != null && filter.SkillIds != null)
+				return build(_agentStateReadModelReader.LoadForSitesAndSkills(filter.SiteIds, filter.SkillIds));
+			if (filter.SiteIds != null)
+				return build(_agentStateReadModelReader.LoadForSites(filter.SiteIds));
+			if (filter.TeamIds != null && filter.SkillIds != null)
+				return build(_agentStateReadModelReader.LoadForTeamsAndSkills(filter.TeamIds, filter.SkillIds));
+			if (filter.TeamIds != null)
+				return build(_agentStateReadModelReader.LoadForTeams(filter.TeamIds));
+			return build(_agentStateReadModelReader.LoadForSkills(filter.SkillIds));
 		}
 		
-		public AgentStatesViewModel InAlarmFor(IEnumerable<Guid> sites, IEnumerable<Guid> teams, IEnumerable<Guid> skills)
+		public AgentStatesViewModel InAlarmFor(ViewModelFilter filter)
 		{
-			if (sites != null && skills != null)
-				return build(_agentStateReadModelReader.LoadAlarmsForSitesAndSkills(sites, skills));
-			if(sites != null)
-				return build(_agentStateReadModelReader.LoadAlarmsForSites(sites));
-			if (teams != null && skills != null)
-				return build(_agentStateReadModelReader.LoadAlarmsForTeamsAndSkills(teams, skills));
-			if (teams != null)
-				return build(_agentStateReadModelReader.LoadAlarmsForTeams(teams));
-			return build(_agentStateReadModelReader.LoadAlarmsForSkills(skills));
+			if (filter.SiteIds != null && filter.SkillIds != null)
+				return build(_agentStateReadModelReader.LoadAlarmsForSitesAndSkills(filter.SiteIds, filter.SkillIds));
+			if(filter.SiteIds != null)
+				return build(_agentStateReadModelReader.LoadAlarmsForSites(filter.SiteIds));
+			if (filter.TeamIds != null && filter.SkillIds != null)
+				return build(_agentStateReadModelReader.LoadAlarmsForTeamsAndSkills(filter.TeamIds, filter.SkillIds));
+			if (filter.TeamIds != null)
+				return build(_agentStateReadModelReader.LoadAlarmsForTeams(filter.TeamIds));
+			return build(_agentStateReadModelReader.LoadAlarmsForSkills(filter.SkillIds));
 		}
 		
 		public AgentStatesViewModel InAlarmExcludingPhoneStatesFor(ViewModelFilter filter, IEnumerable<Guid?> excludedPhoneStates)
