@@ -61,12 +61,9 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             set { _available = value; }
         }
 
-        public virtual IList<IRtaState> StateCollection
-        {
-            get { return new List<IRtaState>(_stateCollection.ToList()); }
-        }
+        public virtual IList<IRtaState> StateCollection => _stateCollection.ToList();
 
-        public virtual bool IsLogOutState
+	    public virtual bool IsLogOutState
         {
             get { return _isLogOutState; }
             set { _isLogOutState = value; }
