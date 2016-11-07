@@ -454,7 +454,6 @@
     <Compile Include="Intraday\LatestStatisticsTimeAndWorkload.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProvider.cs" />
     <Compile Include="Intraday\LatestStatitsticsTimeModel.cs" />
-    <Compile Include="Intraday\ScheduleForecastSkillProvider.cs" />
     <Compile Include="Intraday\StaffingDataSeries.cs" />
     <Compile Include="Intraday\StaffingIntervalModel.cs" />
     <Compile Include="Intraday\SupportedSkillsInIntradayProvider.cs" />

@@ -17,34 +17,21 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	public class StaffingLevelController : ApiController
 	{
 		private readonly IEventPublisher _publisher;
-		private readonly IScheduleForecastSkillProvider _scheduleForecastSkillProvider;
 		private readonly INow _now;
 		private readonly IConfigReader _configReader;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(StaffingLevelController));
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
+		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
 
-		public StaffingLevelController(IEventPublisher publisher,
-			IScheduleForecastSkillProvider scheduleForecastSkillProvider, INow now, IConfigReader configReader, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
+		public StaffingLevelController(IEventPublisher publisher, INow now, IConfigReader configReader,
+			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
+			IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository)
 		{
 			_publisher = publisher;
-			_scheduleForecastSkillProvider = scheduleForecastSkillProvider;
 			_now = now;
 			_configReader = configReader;
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
-		}
-
-		[UnitOfWork, HttpGet, Route("ForecastAndStaffingForSkill")]
-		public virtual IHttpActionResult ForecastAndStaffingForSkill(DateTime date, Guid skillId)
-		{
-			var intervals = _scheduleForecastSkillProvider.GetBySkill(skillId, date);
-			return Json(intervals);
-		}
-
-		[UnitOfWork, HttpGet, Route("ForecastAndStaffingForSkillArea")]
-		public virtual IHttpActionResult ForecastAndStaffingForSkillArea(DateTime date, Guid skillAreaId)
-		{
-			var intervals = _scheduleForecastSkillProvider.GetBySkillArea(skillAreaId, date);
-			return Json(intervals);
+			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 		}
 
 		[UnitOfWork, HttpGet, Route("TriggerResourceCalculate")]
@@ -77,7 +64,13 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult GetLastCaluclatedDateTime()
 		{
 			var buid = ((TeleoptiIdentity) _currentTeleoptiPrincipal.Current().Identity).BusinessUnit.Id.GetValueOrDefault();
-			return Json(_scheduleForecastSkillProvider.GetLastCaluclatedDateTime(buid));
+			return Json(getLastCaluclatedDateTime(buid));
+		}
+
+		private DateTime getLastCaluclatedDateTime(Guid buId)
+		{
+			var lastCalculated = _scheduleForecastSkillReadModelRepository.GetLastCalculatedTime();
+			return lastCalculated.ContainsKey(buId) ? lastCalculated[buId] : DateTime.MinValue;
 		}
 	}
 }

@@ -93,10 +93,9 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			}
 		}
 
-		//remove this if the old staffing UI is removed and use the overload
 		public IEnumerable<SkillStaffingInterval> ReadMergedStaffingAndChanges(Guid skillId, DateTimePeriod period)
 		{
-			var skillStaffingIntervals = GetBySkill(skillId, period.StartDateTime, period.EndDateTime).ToList();
+			var skillStaffingIntervals = GetBySkills(new[] { skillId}, period.StartDateTime, period.EndDateTime).ToList();
 			var mergedStaffingIntervals = new List<SkillStaffingInterval>();
 			var intervalChanges = GetReadModelChanges(period).Where(x => x.SkillId == skillId).ToList();
 			if (intervalChanges.Any())
@@ -144,10 +143,9 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 		
 		}
 
-		//remove this if the old staffing UI is removed
 		public IEnumerable<SkillStaffingInterval> GetBySkill(Guid skillId, DateTime startDateTime, DateTime endDateTime)
 		{
-			return GetBySkills(new[] {skillId}, startDateTime, endDateTime);
+			return GetBySkills(new[] { skillId }, startDateTime, endDateTime);
 		}
 
 		public IEnumerable<SkillStaffingInterval> ReadMergedStaffingAndChanges(Guid[] ids, DateTimePeriod period)
@@ -182,29 +180,6 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			
 			
 			return mergedStaffingIntervals;
-		}
-
-		public IEnumerable<SkillStaffingInterval> GetBySkillArea(Guid id, DateTime startDateTime, DateTime endDateTime)
-		{
-			var result = ((NHibernateUnitOfWork)_currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
-					 @"SELECT StartDateTime,EndDateTime,Sum(Forecast) as Forecast, Sum(StaffingLevel) as StaffingLevel, ForecastWithShrinkage
-				 FROM [ReadModel].[ScheduleForecastSkill]
-				inner join SkillAreaSkillCollection on SkillId = Skill
-				where [startDateTime] between :startDateTime and :endDateTime
-				and SkillArea = :id
-				group by  StartDateTime, EndDateTime")
-				.AddScalar("StartDateTime", NHibernateUtil.DateTime)
-				.AddScalar("EndDateTime", NHibernateUtil.DateTime)
-				.AddScalar("Forecast", NHibernateUtil.Double)
-				.AddScalar("StaffingLevel", NHibernateUtil.Double)
-					 .AddScalar("ForecastWithShrinkage", NHibernateUtil.Double)
-					 .SetDateTime("startDateTime", startDateTime)
-				.SetDateTime("endDateTime", endDateTime)
-					 .SetGuid("id", id)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(SkillStaffingInterval)))
-				.List<SkillStaffingInterval>();
-
-			return result;
 		}
 
 		public IDictionary<Guid,DateTime> GetLastCalculatedTime()
