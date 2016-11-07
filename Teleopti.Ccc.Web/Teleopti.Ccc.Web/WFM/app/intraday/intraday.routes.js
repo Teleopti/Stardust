@@ -25,12 +25,6 @@
 	            url: '/config',
 	            templateUrl: 'app/intraday/intraday-config.html',
 	            controller: 'IntradayConfigCtrl'
-	        })
-	        .state('intraday.staffing',
-	        {
-	            url: '/staffing',
-	            templateUrl: 'app/intraday/intraday-staffing.html',
-	            controller: 'IntradayStaffingCtrl'
 	        });
 	}
 })();
