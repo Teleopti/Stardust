@@ -19,6 +19,7 @@
         vm.copyRole = copyRole;
         vm.selectRole = selectRole;
         vm.checkMyRole  = checkMyRole;
+        vm.prepareTree = prepareTree;
 
         function createRole(roleName) {
             var roleData = { Description: roleName };
@@ -122,12 +123,19 @@
             previously = role;
         }
 
+        function prepareTree(appFunctions) {
+          if (appFunctions != null && appFunctions.length > 1){
+              appFunctions[1].IsOpen = true;
+          }
+        }
+
         function fetchData() {
             PermissionsServiceRefact.roles.query().$promise.then(function (data) {
                 vm.roles = data;
             });
             PermissionsServiceRefact.applicationFunctions.query().$promise.then(function (data) {
                 vm.applicationFunctions = data;
+                prepareTree(vm.applicationFunctions);
             });
             PermissionsServiceRefact.organizationSelection.get().$promise.then(function (data) {
                 vm.organizationSelection = data;

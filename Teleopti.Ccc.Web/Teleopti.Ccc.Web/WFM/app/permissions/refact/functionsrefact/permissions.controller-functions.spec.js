@@ -34,7 +34,8 @@ xdescribe('component: permissionsTree', function () {
 			FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
 			IsDisabled: false,
 			LocalizedFunctionDescription: 'Open Teleopti WFM',
-			IsSelected: false
+			IsSelected: false,
+			IsOpen: false
 		});
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
@@ -53,14 +54,16 @@ xdescribe('component: permissionsTree', function () {
 				FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e9',
 				IsDisabled: false,
 				LocalizedFunctionDescription: 'I am A child function',
-				IsSelected: false
+				IsSelected: false,
+				IsOpen: false
 			}],
 			FunctionCode: 'Parent',
 			FunctionDescription: 'ParentFunction',
 			FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
 			IsDisabled: false,
 			LocalizedFunctionDescription: 'I Am A Parent Function',
-			IsSelected: true
+			IsSelected: true,
+			IsOpen: false
 		});
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions});
@@ -76,7 +79,8 @@ xdescribe('component: permissionsTree', function () {
 			FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
 			IsDisabled: false,
 			LocalizedFunctionDescription: 'Open Teleopti WFM',
-			IsSelected: true
+			IsSelected: true,
+			IsOpen: false
 		});
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
@@ -95,14 +99,16 @@ xdescribe('component: permissionsTree', function () {
 				FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e9',
 				IsDisabled: false,
 				LocalizedFunctionDescription: 'I am A child function',
-				IsSelected: false
+				IsSelected: false,
+				IsOpen: false
 			}],
 			FunctionCode: 'Parent',
 			FunctionDescription: 'ParentFunction',
 			FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
 			IsDisabled: false,
 			LocalizedFunctionDescription: 'I Am A Parent Function',
-			IsSelected: false
+			IsSelected: false,
+			IsOpen: false
 		});
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions, parent: function () { return ctrl.onSelect.apply(null, arguments) } });
@@ -122,14 +128,16 @@ xdescribe('component: permissionsTree', function () {
 				FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e9',
 				IsDisabled: false,
 				LocalizedFunctionDescription: 'I am A child function',
-				IsSelected: false
+				IsSelected: false,
+				IsOpen: false
 			}],
 			FunctionCode: 'Parent',
 			FunctionDescription: 'ParentFunction',
 			FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
 			IsDisabled: false,
 			LocalizedFunctionDescription: 'I Am A Parent Function',
-			IsSelected: false
+			IsSelected: false,
+			IsOpen: false
 		}).withApplicationFunction({
 			ChildFunctions: [{
 				ChildFunctions: [],
@@ -138,14 +146,16 @@ xdescribe('component: permissionsTree', function () {
 				FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e0',
 				IsDisabled: false,
 				LocalizedFunctionDescription: 'I am A child function',
-				IsSelected: false
+				IsSelected: false,
+				IsOpen: false
 			}],
 			FunctionCode: 'Second Parent',
 			FunctionDescription: 'ParentFunction',
 			FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8d',
 			IsDisabled: false,
 			LocalizedFunctionDescription: 'I Am A Parent Function',
-			IsSelected: false
+			IsSelected: false,
+			IsOpen: false
 		});
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions, parent: function () { return ctrl.onSelect.apply(null, arguments) } });
@@ -166,21 +176,24 @@ xdescribe('component: permissionsTree', function () {
 					FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e0',
 					IsDisabled: false,
 					LocalizedFunctionDescription: 'I am A grandchild function',
-					IsSelected: true
+					IsSelected: true,
+					IsOpen: false
 				}],
 				FunctionCode: 'ChildFunction',
 				FunctionDescription: 'ChildFunction',
 				FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e9',
 				IsDisabled: false,
 				LocalizedFunctionDescription: 'I am A child function',
-				IsSelected: true
+				IsSelected: true,
+				IsOpen: false
 			}],
 			FunctionCode: 'Parent',
 			FunctionDescription: 'ParentFunction',
 			FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
 			IsDisabled: false,
 			LocalizedFunctionDescription: 'I Am A Parent Function',
-			IsSelected: true
+			IsSelected: true,
+			IsOpen: false
 		}).withApplicationFunction({
 			ChildFunctions: [{
 				ChildFunctions: [],
@@ -189,14 +202,16 @@ xdescribe('component: permissionsTree', function () {
 				FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e0',
 				IsDisabled: false,
 				LocalizedFunctionDescription: 'I am A child function',
-				IsSelected: true
+				IsSelected: true,
+				IsOpen: false
 			}],
 			FunctionCode: 'Second Parent',
 			FunctionDescription: 'ParentFunction',
 			FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8d',
 			IsDisabled: false,
 			LocalizedFunctionDescription: 'I Am A Parent Function',
-			IsSelected: true
+			IsSelected: true,
+			IsOpen: false
 		});
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions, parent: function () { return ctrl.onSelect.apply(null, arguments) } });

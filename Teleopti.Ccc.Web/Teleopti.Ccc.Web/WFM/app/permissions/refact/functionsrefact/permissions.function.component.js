@@ -50,7 +50,6 @@ function PermissionsTreeController() {
      func.multiDeselectModal = false;
     }
   }
-
 }
 
 angular.module('wfm.permissions').component('permissionsTree', {

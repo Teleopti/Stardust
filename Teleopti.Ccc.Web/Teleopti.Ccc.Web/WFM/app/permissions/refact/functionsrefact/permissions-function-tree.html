@@ -20,10 +20,18 @@
 				</div>
 			</div>
 
-			<div ui-tree-handle ng-class="{selected: function.IsSelected}" ng-click="$ctrl.checkParent(function)">
-				{{function.LocalizedFunctionDescription}}
+			<div class="tree-toggle-group">
+				<div class="toggle-handle" ng-class="{open: function.IsOpen}" ng-click="function.IsOpen = !function.IsOpen"><i ng-class="{hideChevron: function.ChildFunctions.length === 0}" class="mdi mdi-chevron-right"></i></div>
+				<div class="tree-handle-wrapper">
+					<div ui-tree-handle ng-class="{selected: function.IsSelected}" ng-click="$ctrl.checkParent(function)">
+						{{function.LocalizedFunctionDescription}}
+					</div>
+				</div>
 			</div>
-			<permissions-tree functions="function.ChildFunctions" parent="$ctrl.onSelect"></permissions-tree>
+
+			<div class="animate-show" ng-show="function.IsOpen">
+				<permissions-tree functions="function.ChildFunctions" parent="$ctrl.onSelect"></permissions-tree>
+			</div>
 		</li>
 	</ol>
 </div>
