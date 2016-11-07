@@ -126,6 +126,7 @@
         function prepareTree(appFunctions) {
           if (appFunctions != null && appFunctions.length > 1){
               appFunctions[1].IsOpen = true;
+              appFunctions[0].IsHidden = true;
           }
         }
 

@@ -40,7 +40,7 @@ xdescribe('PermissionsCtrlRefact', function () {
 		$httpBackend.verifyNoOutstandingRequest();
 	});
 
-	it('should allways keep top node open', function () {
+	it('should get an organization selection', function () {
 		var BusinessUnit = {
 			ChildNodes: [],
 			Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
@@ -65,7 +65,7 @@ xdescribe('PermissionsCtrlRefact', function () {
 		expect(vm.organizationSelection.DynamicOptions[0].Name).toEqual("None");
 	});
 
-	it('should get an organization selection', function () {
+	it('should allways keep top node open', function () {
 		fakeBackend.withApplicationFunction({
 			ChildFunctions: [],
 			FunctionCode: 'Raptor',
@@ -86,6 +86,31 @@ xdescribe('PermissionsCtrlRefact', function () {
 		vm.prepareTree(vm.applicationFunctions);
 
 		expect(vm.applicationFunctions[1].IsOpen).toEqual(true);
+	});
+
+	it('should remove function with the name All', function () {
+		fakeBackend.withApplicationFunction({
+			ChildFunctions: [],
+			FunctionCode: 'Raptor',
+			FunctionDescription: 'xxOpenRaptorApplication',
+			FunctionId: '8ecf6029-4f3c-409c-89db-46bd8d7d402d',
+			IsDisabled: false,
+			LocalizedFunctionDescription: 'All',
+			IsHidden: false
+		}).withApplicationFunction({
+			ChildFunctions: [],
+			FunctionCode: 'Raptor',
+			FunctionDescription: 'xxOpenRaptorApplication',
+			FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+			IsDisabled: false,
+			LocalizedFunctionDescription: 'Open Teleopti WFM',
+			IsHidden: false
+		});
+
+		$httpBackend.flush();
+		vm.prepareTree(vm.applicationFunctions);
+
+		expect(vm.applicationFunctions[0].IsHidden).toEqual(true);
 	});
 
 	it('should get an application function', function () {
