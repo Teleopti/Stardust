@@ -501,6 +501,11 @@
         .error-msg-container {
             z-index: 999;
         }
+        @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none), (-ms-accelerator:true) {
+           height:20px;
+           margin-top:10px;
+        }
+       
     }
 
     .ng-cloak {
