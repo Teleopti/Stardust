@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				StateGroupId = Guid.NewGuid()
 			});
 			
-			Target.LoadAlarmsForTeams(new[] {teamId}, new Guid?[] {loggedOut})
+			Target.LoadInAlarmExcludingPhoneStatesForTeams(new[] {teamId}, new Guid?[] {loggedOut})
 				.Single().PersonId.Should().Be(personId1);
 		}
 
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				StateGroupId = Guid.NewGuid()
 			});
 
-			Target.LoadAlarmsForSites(new[] {siteId}, new Guid?[] {loggedOut})
+			Target.LoadInAlarmExcludingPhoneStatesForSites(new[] {siteId}, new Guid?[] {loggedOut})
 				.Single().PersonId.Should().Be(personId1);
 		}
 		
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkills(new[] { skill }, new Guid?[] { loggedOut }))
+			WithUnitOfWork.Get(() => Target.LoadInAlarmExcludingPhoneStatesForSkills(new[] { skill }, new Guid?[] { loggedOut }))
 				.Single().PersonId.Should().Be(personId2);
 		}
 
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				StateGroupId = loggedOut
 			});
 
-			Target.LoadAlarmsForTeams(new[] { teamId }, new Guid?[] { loggedOut })
+			Target.LoadInAlarmExcludingPhoneStatesForTeams(new[] { teamId }, new Guid?[] { loggedOut })
 				.Single().PersonId.Should().Be(personId1);
 		}
 
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				StateGroupId = loggedOut
 			});
 
-			Target.LoadAlarmsForSites(new[] { siteId }, new Guid?[] { loggedOut })
+			Target.LoadInAlarmExcludingPhoneStatesForSites(new[] { siteId }, new Guid?[] { loggedOut })
 				.Single().PersonId.Should().Be(personId1);
 		}
 
@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkills(new[] { skill }, new Guid?[] { loggedOut }))
+			WithUnitOfWork.Get(() => Target.LoadInAlarmExcludingPhoneStatesForSkills(new[] { skill }, new Guid?[] { loggedOut }))
 				.Single().PersonId.Should().Be(personId2);
 		}
 		
@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				StateGroupId = null
 			});
 
-			Target.LoadAlarmsForTeams(new[] { teamId }, new Guid?[] { null })
+			Target.LoadInAlarmExcludingPhoneStatesForTeams(new[] { teamId }, new Guid?[] { null })
 				.Single().PersonId.Should().Be(personId1);
 		}
 
@@ -288,7 +288,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			});
 
 
-			Target.LoadAlarmsForTeams(new[] { teamId }, new Guid?[] { null, loggedOut })
+			Target.LoadInAlarmExcludingPhoneStatesForTeams(new[] { teamId }, new Guid?[] { null, loggedOut })
 				.Single().PersonId.Should().Be(personId1);
 		}
 
@@ -317,7 +317,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				StateGroupId = null
 			});
 
-			Target.LoadAlarmsForSites(new[] { siteId }, new Guid?[] { null })
+			Target.LoadInAlarmExcludingPhoneStatesForSites(new[] { siteId }, new Guid?[] { null })
 				.Single().PersonId.Should().Be(personId1);
 		}
 
@@ -357,7 +357,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			});
 
 
-			Target.LoadAlarmsForSites(new[] { siteId }, new Guid?[] { null, loggedOut })
+			Target.LoadInAlarmExcludingPhoneStatesForSites(new[] { siteId }, new Guid?[] { null, loggedOut })
 				.Single().PersonId.Should().Be(personId1);
 		}
 		
@@ -393,7 +393,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkills(new[] { skill }, new Guid?[] { null }))
+			WithUnitOfWork.Get(() => Target.LoadInAlarmExcludingPhoneStatesForSkills(new[] { skill }, new Guid?[] { null }))
 				.Single().PersonId.Should().Be(personId1);
 		}
 
@@ -440,7 +440,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkills(new[] { skill }, new Guid?[] { null, loggedOut }))
+			WithUnitOfWork.Get(() => Target.LoadInAlarmExcludingPhoneStatesForSkills(new[] { skill }, new Guid?[] { null, loggedOut }))
 				.Single().PersonId.Should().Be(personId1);
 		}
 

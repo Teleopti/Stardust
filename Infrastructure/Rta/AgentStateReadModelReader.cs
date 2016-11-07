@@ -128,8 +128,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		{
 			throw new NotImplementedException();
 		}
-
-		public IEnumerable<AgentStateReadModel> LoadAlarmsForSites(IEnumerable<Guid> siteIds, IEnumerable<Guid?> excludedStateGroupIds)
+		
+		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForSites(IEnumerable<Guid> siteIds, IEnumerable<Guid?> excludedStateGroupIds)
 		{
 			var stateGroupIdsWithoutNull = excludedStateGroupIds.Where(x => x != null);
 			if (excludedStateGroupIds.All(x => x == null))
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 						.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)));
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadAlarmsForTeams(IEnumerable<Guid> teamIds, IEnumerable<Guid?> excludedStateGroupIds)
+		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForTeams(IEnumerable<Guid> teamIds, IEnumerable<Guid?> excludedStateGroupIds)
 		{
 			var stateGroupIdsWithoutNull = excludedStateGroupIds.Where(x => x != null);
 			if (excludedStateGroupIds.All(x => x == null))
@@ -177,6 +177,18 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 					"(StateGroupId NOT IN (:excludedStateGroupIds) OR StateGroupId IS NULL) AND TeamId IN (:teamIds)"),
 					q => q.SetParameterList("teamIds", teamIds)
 						.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)));
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForSitesAndSkill(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds,
+			IEnumerable<Guid?> excludedStateGroupIds)
+		{
+			yield break;
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForTeamsAndSkill(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds,
+			IEnumerable<Guid?> excludedStateGroupIds)
+		{
+			yield break;
 		}
 
 		private IQuery createSQLQuery(string query, Func<IQuery, IQuery> func)
@@ -233,7 +245,7 @@ AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC ";
 		}
 
 
-		public IEnumerable<AgentStateReadModel> LoadAlarmsForSkills(IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStateGroupIds)
+		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForSkills(IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStateGroupIds)
 		{
 			var stateGroupIdsWithoutNull = excludedStateGroupIds.Where(x => x != null);
 			if (excludedStateGroupIds.All(x => x == null))
@@ -258,6 +270,7 @@ AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC ";
 				skillIds, 
 				q => q.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)));
 		}
+
 
 		private IQuery createSQLQueryForSkill(string query, IEnumerable<Guid> skillIds, Func<IQuery, IQuery> func)
 		{

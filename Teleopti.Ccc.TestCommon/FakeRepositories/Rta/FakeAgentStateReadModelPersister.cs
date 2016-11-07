@@ -7,19 +7,22 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
-	public class FakeAgentStateReadModelPersister : 
-		IAgentStateReadModelReader, 
+	public class FakeAgentStateReadModelPersister :
+		IAgentStateReadModelReader,
 		IAgentStateReadModelPersister
 	{
 		private readonly INow _now;
-		private readonly ConcurrentDictionary<Guid, AgentStateReadModel> _data = new ConcurrentDictionary<Guid, AgentStateReadModel>(); 
+
+		private readonly ConcurrentDictionary<Guid, AgentStateReadModel> _data =
+			new ConcurrentDictionary<Guid, AgentStateReadModel>();
+
 		private List<personSkill> _personSkills = new List<personSkill>();
 
 		public FakeAgentStateReadModelPersister(INow now)
 		{
 			_now = now;
 		}
-		
+
 		public FakeAgentStateReadModelPersister Has(AgentStateReadModel model)
 		{
 			_data.AddOrUpdate(model.PersonId, model, (g, m) => model);
@@ -48,11 +51,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public void DeleteOldRows(DateTime now)
 		{
-			var toRemove = 
+			var toRemove =
 				_data.Values
-				.Where(x => x.IsDeleted && now >= x.ExpiresAt)
-				.Select(x => x.PersonId)
-				.ToList();
+					.Where(x => x.IsDeleted && now >= x.ExpiresAt)
+					.Select(x => x.PersonId)
+					.ToList();
 
 			foreach (var personId in toRemove)
 			{
@@ -107,7 +110,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			throw new NotImplementedException();
 		}
-		
+
 		public IEnumerable<AgentStateReadModel> LoadForTeam(Guid teamId)
 		{
 			return _data.Values.Where(x => x.TeamId == teamId).ToArray();
@@ -115,115 +118,100 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds)
 		{
-			return from s in siteIds
-				from m in _data.Values
-				where s == m.SiteId
-				select m;
+			return
+				from model in _data.Values
+				from site in siteIds
+				where site == model.SiteId
+				select model;
 		}
 
 		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds)
 		{
-			return from t in teamIds
-				from m in _data.Values
-				where t == m.TeamId
-				select m;
+			return
+				from model in _data.Values
+				from team in teamIds
+				where team == model.TeamId
+				select model;
 		}
 
 		public IEnumerable<AgentStateReadModel> LoadForSkills(IEnumerable<Guid> skillIds)
 		{
-			return from s in _data.Values
-				   from p in _personSkills
-				   from sk in skillIds
-				   where s.PersonId == p.PersonId && p.SkillId == sk
-				   select s;
+			return
+				from model in _data.Values
+				from personSkill in _personSkills
+				from skill in skillIds
+				where
+					model.PersonId == personSkill.PersonId &&
+					personSkill.SkillId == skill
+				select model;
 		}
 
 		public IEnumerable<AgentStateReadModel> LoadForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
 		{
 			return
-				from state in _data.Values
+				from model in _data.Values
 				from personSkill in _personSkills
 				from skillId in skillIds
 				from siteId in siteIds
-				where state.PersonId == personSkill.PersonId &&
+				where model.PersonId == personSkill.PersonId &&
 					  personSkill.SkillId == skillId &&
-					  state.SiteId == siteId
-				select state;
+					  model.SiteId == siteId
+				select model;
 		}
 
 		public IEnumerable<AgentStateReadModel> LoadForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
 		{
 			return
-				from state in _data.Values
+				from model in _data.Values
 				from personSkill in _personSkills
 				from skillId in skillIds
 				from teamId in teamIds
-				where state.PersonId == personSkill.PersonId &&
+				where model.PersonId == personSkill.PersonId &&
 					  personSkill.SkillId == skillId &&
-					  state.TeamId == teamId
-				select state;
+					  model.TeamId == teamId
+				select model;
 		}
 
 
 		public IEnumerable<AgentStateReadModel> LoadAlarmsForSites(IEnumerable<Guid> siteIds)
 		{
-			return from s in siteIds
-				from m in _data.Values
-				where s == m.SiteId
-					  && m.AlarmStartTime <= _now.UtcDateTime()
-				orderby m.AlarmStartTime
-				select m;
-		}
-
-		public IEnumerable<AgentStateReadModel> LoadAlarmsForSites(IEnumerable<Guid> siteIds, IEnumerable<Guid?> excludedStateGroupIds)
-		{
-			return from s in siteIds
-				   from m in _data.Values
-				   from e in excludedStateGroupIds
-				   where s == m.SiteId
-						 && m.AlarmStartTime <= _now.UtcDateTime()
-						 && e != m.StateGroupId
-				   orderby m.AlarmStartTime
-				   select m;
+			return
+				from model in _data.Values
+				from site in siteIds
+				where site == model.SiteId &&
+					  model.AlarmStartTime <= _now.UtcDateTime()
+				orderby model.AlarmStartTime
+				select model;
 		}
 
 		public IEnumerable<AgentStateReadModel> LoadAlarmsForTeams(IEnumerable<Guid> teamIds)
 		{
-			return from s in teamIds
-				from m in _data.Values
-				where s == m.TeamId
-					  && m.AlarmStartTime <= _now.UtcDateTime()
-				orderby m.AlarmStartTime
-				select m;
+			return
+				from model in _data.Values
+				from team in teamIds
+				where team == model.TeamId &&
+					  model.AlarmStartTime <= _now.UtcDateTime()
+				orderby model.AlarmStartTime
+				select model;
 		}
-
-		public IEnumerable<AgentStateReadModel> LoadAlarmsForTeams(IEnumerable<Guid> teamIds, IEnumerable<Guid?> excludedStateGroupIds)
-		{
-			return from s in teamIds
-				from m in _data.Values
-				from e in excludedStateGroupIds
-				where s == m.TeamId
-					  && m.AlarmStartTime <= _now.UtcDateTime()
-					  && e != m.StateGroupId
-				orderby m.AlarmStartTime
-				select m;
-		}
-
 
 		public IEnumerable<AgentStateReadModel> LoadAlarmsForSkills(IEnumerable<Guid> skillIds)
 		{
-			return from m in _data.Values
-				from p in _personSkills
-				from sk in skillIds
-				where m.PersonId == p.PersonId && p.SkillId == sk
-					  && m.AlarmStartTime <= _now.UtcDateTime()
-				orderby m.AlarmStartTime
-				select m;
+			return
+				from model in _data.Values
+				from personSkill in _personSkills
+				from skill in skillIds
+				where model.PersonId == personSkill.PersonId &&
+					  personSkill.SkillId == skill &&
+					  model.AlarmStartTime <= _now.UtcDateTime()
+				orderby model.AlarmStartTime
+				select model;
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadAlarmsForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForSitesAndSkills(IEnumerable<Guid> siteIds,
+			IEnumerable<Guid> skillIds)
 		{
-			return 
+			return
 				from model in _data.Values
 				from personSkill in _personSkills
 				from siteId in siteIds
@@ -235,8 +223,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				orderby model.AlarmStartTime
 				select model;
 		}
-		
-		public IEnumerable<AgentStateReadModel> LoadAlarmsForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForTeamsAndSkills(IEnumerable<Guid> teamIds,
+			IEnumerable<Guid> skillIds)
 		{
 			return
 				from model in _data.Values
@@ -251,18 +240,94 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				select model;
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadAlarmsForSkills(IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStateGroupIds)
+
+		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForSites(
+			IEnumerable<Guid> siteIds,
+			IEnumerable<Guid?> excludedStateGroupIds)
 		{
-			return from sk in skillIds
-				   from m in _data.Values
-				   from e in excludedStateGroupIds
-				   from p in _personSkills
-				   where m.PersonId == p.PersonId && p.SkillId == sk
-					  && m.AlarmStartTime <= _now.UtcDateTime()
-					  && e != m.StateGroupId
-				   orderby m.AlarmStartTime
-				   select m;
+			return
+				from model in _data.Values
+				from site in siteIds
+				from excludedStateGroup in excludedStateGroupIds
+				where site == model.SiteId
+					  && model.AlarmStartTime <= _now.UtcDateTime()
+					  && excludedStateGroup != model.StateGroupId
+				orderby model.AlarmStartTime
+				select model;
 		}
+
+		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForTeams(
+			IEnumerable<Guid> teamIds,
+			IEnumerable<Guid?> excludedStateGroupIds)
+		{
+			return
+				from model in _data.Values
+				from team in teamIds
+				from excludedStateGroup in excludedStateGroupIds
+				where team == model.TeamId
+					  && model.AlarmStartTime <= _now.UtcDateTime()
+					  && excludedStateGroup != model.StateGroupId
+				orderby model.AlarmStartTime
+				select model;
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForSkills(
+			IEnumerable<Guid> skillIds,
+			IEnumerable<Guid?> excludedStateGroupIds)
+		{
+			return
+				from model in _data.Values
+				from skill in skillIds
+				from personSkill in _personSkills
+				from excludedStateGroup in excludedStateGroupIds
+				where model.PersonId == personSkill.PersonId && personSkill.SkillId == skill
+					  && model.AlarmStartTime <= _now.UtcDateTime()
+					  && excludedStateGroup != model.StateGroupId
+				orderby model.AlarmStartTime
+				select model;
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForSitesAndSkill(
+			IEnumerable<Guid> siteIds,
+			IEnumerable<Guid> skillIds,
+			IEnumerable<Guid?> excludedStateGroupIds)
+		{
+			return
+				from model in _data.Values
+				from skill in skillIds
+				from personSkill in _personSkills
+				from site in siteIds
+				from excludedStateGroup in excludedStateGroupIds
+				where model.PersonId == personSkill.PersonId &&
+					  model.SiteId == site &&
+					  personSkill.SkillId == skill &&
+					  model.AlarmStartTime <= _now.UtcDateTime() &&
+					  excludedStateGroup != model.StateGroupId
+				orderby model.AlarmStartTime
+				select model;
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForTeamsAndSkill(
+			IEnumerable<Guid> teamIds,
+			IEnumerable<Guid> skillIds,
+			IEnumerable<Guid?> excludedStateGroupIds)
+		{
+			return
+				from model in _data.Values
+				from skill in skillIds
+				from personSkill in _personSkills
+				from team in teamIds
+				from excludedStateGroup in excludedStateGroupIds
+				where model.PersonId == personSkill.PersonId &&
+					  model.TeamId == team &&
+					  personSkill.SkillId == skill &&
+					  model.AlarmStartTime <= _now.UtcDateTime() &&
+					  excludedStateGroup != model.StateGroupId
+				orderby model.AlarmStartTime
+				select model;
+		}
+
+
 
 		public FakeAgentStateReadModelPersister WithPersonSkill(Guid person, Guid skill)
 		{
@@ -272,8 +337,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		private class personSkill
 		{
-			public Guid PersonId { get;}
-			public Guid SkillId { get;}
+			public Guid PersonId { get; }
+			public Guid SkillId { get; }
 
 			public personSkill(Guid personId, Guid skillId)
 			{

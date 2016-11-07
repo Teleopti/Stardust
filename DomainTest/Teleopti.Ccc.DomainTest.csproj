@@ -169,8 +169,9 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\QueuedAbsenceRequestHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ResourceAllocatorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesInAlarmViewModelBuilderTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilderTest2.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModel\ExcludePhoneStateViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModel\InAlarmViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModel\ViewModelBuilderTest.cs" />
     <Compile Include="Intraday\MergeSkillStaffIntervalLightForSkillAreaTest.cs" />
     <Compile Include="ApplicationLayer\RemoveSelectedPersonAbsenceComandHandlerTest.cs" />
     <Compile Include="Intraday\SkillStaffingIntervalProviderTest.cs" />

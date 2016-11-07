@@ -44,6 +44,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public string EndTime { get; set; }
 	}
 
+	public class ViewModelFilter
+	{
+		public IEnumerable<Guid> SiteIds { get; set; }
+		public IEnumerable<Guid> TeamIds { get; set; }
+		public IEnumerable<Guid> SkillIds { get; set; }
+	}
+
 	public class AgentStatesViewModelBuilder
 	{
 		private readonly INow _now;
@@ -92,6 +99,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				return build(_agentStateReadModelReader.LoadAlarmsForTeams(teams));
 			return build(_agentStateReadModelReader.LoadAlarmsForSkills(skills));
 		}
+		
+		public AgentStatesViewModel InAlarmExcludingPhoneStatesFor(ViewModelFilter filter, IEnumerable<Guid?> excludedPhoneStates)
+		{
+			if (filter.SiteIds != null && filter.SkillIds != null)
+				return build(_agentStateReadModelReader.LoadInAlarmExcludingPhoneStatesForSitesAndSkill(filter.SiteIds, filter.SkillIds, excludedPhoneStates));
+			if (filter.SiteIds != null)
+				return build(_agentStateReadModelReader.LoadInAlarmExcludingPhoneStatesForSites(filter.SiteIds, excludedPhoneStates));
+			if (filter.TeamIds != null && filter.SkillIds != null)
+				return build(_agentStateReadModelReader.LoadInAlarmExcludingPhoneStatesForTeamsAndSkill(filter.TeamIds, filter.SkillIds, excludedPhoneStates));
+			if (filter.TeamIds != null)
+				return build(_agentStateReadModelReader.LoadInAlarmExcludingPhoneStatesForTeams(filter.TeamIds, excludedPhoneStates));
+			return build(_agentStateReadModelReader.LoadInAlarmExcludingPhoneStatesForSkills(filter.SkillIds, excludedPhoneStates));
+		}
 
 
 		public AgentStatesViewModel ForSites(Guid[] siteIds)
@@ -106,7 +126,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public AgentStatesViewModel InAlarmForSites(Guid[] siteIds, Guid?[] excludedStateGroupIds)
 		{
-			return build(_agentStateReadModelReader.LoadAlarmsForSites(siteIds, excludedStateGroupIds));
+			return build(_agentStateReadModelReader.LoadInAlarmExcludingPhoneStatesForSites(siteIds, excludedStateGroupIds));
 		}
 
 		public AgentStatesViewModel ForTeams(Guid[] teamIds)
@@ -121,7 +141,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public AgentStatesViewModel InAlarmForTeams(Guid[] teamIds, Guid?[] excludedStateGroupIds)
 		{
-			return build(_agentStateReadModelReader.LoadAlarmsForTeams(teamIds, excludedStateGroupIds));
+			return build(_agentStateReadModelReader.LoadInAlarmExcludingPhoneStatesForTeams(teamIds, excludedStateGroupIds));
 		}
 
 		public AgentStatesViewModel ForSkills(Guid[] skills)
@@ -136,7 +156,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public AgentStatesViewModel InAlarmForSkills(Guid[] skills, Guid?[] excludedStateGroupIds)
 		{
-			return build(_agentStateReadModelReader.LoadAlarmsForSkills(skills, excludedStateGroupIds));
+			return build(_agentStateReadModelReader.LoadInAlarmExcludingPhoneStatesForSkills(skills, excludedStateGroupIds));
 		}
 
 		private AgentStatesViewModel build(IEnumerable<AgentStateReadModel> states)
@@ -212,5 +232,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				  userTime.ToString(_culture.GetCulture().DateTimeFormat.ShortTimePattern)
 				;
 		}
+
 	}
 }
