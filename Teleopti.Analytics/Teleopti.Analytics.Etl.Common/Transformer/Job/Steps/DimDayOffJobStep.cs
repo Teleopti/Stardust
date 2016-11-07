@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
@@ -15,24 +16,26 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 {
 	public class DimDayOffJobStep : JobStepBase
 	{
-		private readonly IAnalyticsDayOffRepository _analyticsDayOffRepository;
-		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
-		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
+		private IAnalyticsDayOffRepository _analyticsDayOffRepository;
+		private IDayOffTemplateRepository _dayOffTemplateRepository;
+		private IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 
 		public DimDayOffJobStep(IJobParameters jobParameters)
 			: base(jobParameters)
 		{
-			_dayOffTemplateRepository = new DayOffTemplateRepository(CurrentUnitOfWork.Make());
-			_analyticsDayOffRepository = new AnalyticsDayOffRepository(CurrentAnalyticsUnitOfWork.Make());
-			_analyticsBusinessUnitRepository = new AnalyticsBusinessUnitRepository(CurrentAnalyticsUnitOfWork.Make());
 			Name = "dim_day_off";
 		}
 
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
-			using (JobParameters.Helper.SelectedDataSource.Application.CreateAndOpenUnitOfWork())
+			
+			using (var uow = JobParameters.Helper.SelectedDataSource.Application.CreateAndOpenUnitOfWork())
 			using (var auow = JobParameters.Helper.SelectedDataSource.Analytics.CreateAndOpenUnitOfWork())
 			{
+				_dayOffTemplateRepository = new DayOffTemplateRepository(new ThisUnitOfWork(uow));
+				var currentAnalyticsUnitOfWork = new ThisAnalyticsUnitOfWork(auow);
+				_analyticsDayOffRepository = new AnalyticsDayOffRepository(currentAnalyticsUnitOfWork);
+				_analyticsBusinessUnitRepository = new AnalyticsBusinessUnitRepository(currentAnalyticsUnitOfWork);
 				var changedRows = 0;
 				var dayOffs = _dayOffTemplateRepository.FindAllDayOffsSortByDescription();
 				var analyticsDayOffs = _analyticsDayOffRepository.DayOffs();

@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			AnalyticsUnitOfWorkFactory statFactory = null;
 			if (!string.IsNullOrEmpty(statisticConnectionString))
 			{
-				var statConfiguration = createStatisticConfiguration(statisticConnectionString);
+				var statConfiguration = createStatisticConfiguration(statisticConnectionString, tenant);
 				statConfiguration.AddResources(new []
 				{
 					"Teleopti.Ccc.Domain.Analytics.AnalyticsPermission.analytics.xml",
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return appCfg;
 		}
 
-		private Configuration createStatisticConfiguration(string connectionString)
+		private Configuration createStatisticConfiguration(string connectionString, string tenant)
 		{
 			// 2013-10-03
 			//REMOVE ME LATER!!!!!!!!!!!!!!!!/((
@@ -146,9 +146,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				.SetProperty(Environment.ConnectionString, connectionString)
 				.SetProperty(Environment.ConnectionProvider, "NHibernate.Connection.DriverConnectionProvider")
 				.SetProperty(Environment.ConnectionDriver, "NHibernate.Driver.SqlClientDriver")
-				.SetProperty(Environment.Dialect, typeof (MsSql2008Dialect).AssemblyQualifiedName)
-				.SetProperty(Environment.SessionFactoryName, AnalyticsDataSourceName)
-				.SetProperty(Environment.SqlExceptionConverter, typeof (SqlServerExceptionConverter).AssemblyQualifiedName)
+				.SetProperty(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName)
+				.SetProperty(Environment.SessionFactoryName, tenant + "_" + AnalyticsDataSourceName)
+				.SetProperty(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName)
 				;
 			_dataSourceConfigurationSetter.AddApplicationNameToConnectionString(statCfg);
 			return statCfg;

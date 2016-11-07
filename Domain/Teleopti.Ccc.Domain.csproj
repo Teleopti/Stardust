@@ -599,6 +599,7 @@
     <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolder.cs" />
     <Compile Include="UndoRedo\UndoRedoState.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSystemSettings.cs" />
+    <Compile Include="UnitOfWork\ThisAnalyticsUnitOfWork.cs" />
     <Compile Include="UnitOfWork\ThisUnitOfWork.cs" />
     <Compile Include="UnitOfWork\WithAnalyticsUnitOfWork.cs" />
     <Compile Include="ApplicationLayer\AllTenantRecurringEventPublisher.cs" />
