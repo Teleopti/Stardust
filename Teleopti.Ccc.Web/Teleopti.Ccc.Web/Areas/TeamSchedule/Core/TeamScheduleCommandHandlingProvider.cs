@@ -180,6 +180,58 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 			return result;
 		}
+		
+		public List<ActionResult> RemoveAbsence(RemovePersonAbsenceForm input)
+		{
+			var permissions = new Dictionary<string,string>
+			{
+				{  DefinedRaptorApplicationFunctionPaths.RemoveAbsence, Resources.NoPermissionRemoveAgentAbsence}
+			};
+
+			var result = new List<ActionResult>();
+
+			foreach(var selectedPersonAbsence in input.SelectedPersonAbsences)
+			{
+				var absenceDateGroups = selectedPersonAbsence.AbsenceDates.GroupBy(absenceDate => absenceDate.Date,absenceDate => absenceDate.PersonAbsenceId);
+				var person = _personRepository.Get(selectedPersonAbsence.PersonId);
+
+				foreach(var absenceGroup in absenceDateGroups)
+				{
+					var actionResult = new ActionResult();
+					var date = absenceGroup.Key;
+
+					actionResult.PersonId = selectedPersonAbsence.PersonId;
+					actionResult.ErrorMessages = new List<string>();
+
+					if(checkPermissionFn(permissions,date,person,actionResult.ErrorMessages))
+					{
+						var command = new RemoveSelectedPersonAbsenceCommand
+						{
+							PersonId = selectedPersonAbsence.PersonId,
+							PersonAbsenceIds = absenceGroup.ToArray(),
+							Date = date,
+							TrackedCommandInfo =
+								input.TrackedCommandInfo != null
+									? input.TrackedCommandInfo
+									: new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
+						};
+
+						_commandDispatcher.Execute(command);
+						if(command.ErrorMessages != null && command.ErrorMessages.Any())
+						{
+							actionResult.ErrorMessages.AddRange(command.ErrorMessages);
+						}
+					}
+
+					if(actionResult.ErrorMessages.Any())
+						result.Add(actionResult);
+				}
+
+			}
+
+			return result;
+		}
+
 
 		public List<ActionResult> BackoutScheduleChange(BackoutScheduleChangeFormData input)
 		{
@@ -450,5 +502,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		List<ActionResult> ChangeShiftCategory(ChangeShiftCategoryFormData input);
 		IList<ActionResult> MoveNonoverwritableLayers(MoveNonoverwritableLayersFormData input);
 		IList<ActionResult> EditScheduleNote(EditScheduleNoteFormData input);
+		List<ActionResult> RemoveAbsence(RemovePersonAbsenceForm input);
 	}
 }

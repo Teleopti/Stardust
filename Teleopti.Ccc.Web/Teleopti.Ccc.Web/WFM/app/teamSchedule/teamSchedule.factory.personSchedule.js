@@ -280,7 +280,8 @@
 				Projections: [],
 				ProjectionTimeRange: getProjectionTimeRange(otherSchedule),
 				AbsenceCount: getPersonAbsencesCount,
-				ActivityCount: getPersonActivitiesCount
+				ActivityCount: getPersonActivitiesCount,
+				Parent: this
 			};
 
 			var otherProjections = createProjections(otherSchedule.Projection, timeLine, newShift);

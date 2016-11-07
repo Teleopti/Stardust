@@ -1,25 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http.Results;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
-using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Interfaces.Domain;
 
@@ -34,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void Setup()
 		{
 			principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
-			target = new TeamScheduleController(null, null, null, principalAuthorization, null, null, null, null, new FakeCurrentScenario(), null);
+			target = new TeamScheduleController(null, null,  principalAuthorization, null, null, null, null);
 		}
 		[Test]
 		public void ShouldGetFullDayAbsencePermission()
@@ -142,7 +136,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
 				.Return(true);
 
-			target = new TeamScheduleController(null, loggonUser, null, principalAuthorization, null, null, null, null, new FakeCurrentScenario(), null);
+			target = new TeamScheduleController(null, loggonUser, principalAuthorization, null, null, null, null);
 
 			var form = new FullDayAbsenceForm {PersonIds = new List<Guid>(), TrackedCommandInfo = new TrackedCommandInfo()};
 			target.AddFullDayAbsence(form);
@@ -156,7 +150,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var absencePersister = MockRepository.GenerateMock<IAbsencePersister>();
 			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
 				.Return(true);
-			target = new TeamScheduleController(null, null, null, principalAuthorization, absencePersister, null, null, null, new FakeCurrentScenario(), null);
+			target = new TeamScheduleController(null, null, principalAuthorization, absencePersister, null, null, null);
 
 			var person1 = Guid.NewGuid();
 			var person2 = Guid.NewGuid();
@@ -178,7 +172,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var absencePersister = MockRepository.GenerateMock<IAbsencePersister>();
 			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
 				.Return(true);
-			target = new TeamScheduleController(null, null, null, principalAuthorization, absencePersister, null, null, null, new FakeCurrentScenario(), null);
+			target = new TeamScheduleController(null, null, principalAuthorization, absencePersister, null, null, null);
 
 			var form = new FullDayAbsenceForm
 			{
@@ -207,7 +201,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
 				.Return(true);
 
-			target = new TeamScheduleController(null, loggonUser, null, principalAuthorization, null, null, null, null, new FakeCurrentScenario(), null);
+			target = new TeamScheduleController(null, loggonUser, principalAuthorization, null, null, null, null);
 
 			var form = new IntradayAbsenceForm
 			{
@@ -227,7 +221,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var absencePersister = MockRepository.GenerateMock<IAbsencePersister>();
 			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
 				.Return(true);
-			target = new TeamScheduleController(null, null, null, principalAuthorization, absencePersister, null, null, null, new FakeCurrentScenario(), null);
+			target = new TeamScheduleController(null, null, principalAuthorization, absencePersister, null, null, null);
 
 			var person1 = Guid.NewGuid();
 			var person2 = Guid.NewGuid();
@@ -251,7 +245,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var absencePersister = MockRepository.GenerateMock<IAbsencePersister>();
 			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
 				.Return(true);
-			target = new TeamScheduleController(null, null, null, principalAuthorization, absencePersister, null, null, null, new FakeCurrentScenario(), null);
+			target = new TeamScheduleController(null, null,  principalAuthorization, absencePersister, null, null, null);
 
 			var form = new IntradayAbsenceForm
 			{
@@ -274,7 +268,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnBadRequestWhenEndTimeEarlierThanStartTime()
 		{
 			var absencePersister = MockRepository.GenerateMock<IAbsencePersister>();
-			target = new TeamScheduleController(null, null, null, null, absencePersister, null, null, null, new FakeCurrentScenario(), null);
+			target = new TeamScheduleController(null, null, null, absencePersister, null, null, null);
 
 			var form = new IntradayAbsenceForm
 			{
@@ -293,7 +287,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			const int expectedAgents = 30;
 			var agentsPerPageSettingersisterAndProvider =
 				MockRepository.GenerateMock<ISettingsPersisterAndProvider<AgentsPerPageSetting>>();
-			target = new TeamScheduleController(null, null, null, null, null, agentsPerPageSettingersisterAndProvider, null, null, new FakeCurrentScenario(), null);
+			target = new TeamScheduleController(null, null, null, null, agentsPerPageSettingersisterAndProvider, null, null);
 
 			target.UpdateAgentsPerPageSetting(expectedAgents);
 
@@ -310,7 +304,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				MockRepository.GenerateMock<ISettingsPersisterAndProvider<AgentsPerPageSetting>>();
 			agentsPerPageSettingersisterAndProvider.Stub(x => x.GetByOwner(loggonUser.CurrentUser()))
 				.Return(new AgentsPerPageSetting() {AgentsPerPage = expectedAgents});
-			target = new TeamScheduleController(null, loggonUser, null, null, null, agentsPerPageSettingersisterAndProvider, null, null, new FakeCurrentScenario(), null);
+			target = new TeamScheduleController(null, loggonUser, null, null,  agentsPerPageSettingersisterAndProvider, null, null);
 
 			var result = target.GetAgentsPerPageSetting();
 
@@ -322,7 +316,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		{
 			var loggedOnUser = new FakeLoggedOnUser();
 			var swapShiftHandler = MockRepository.GenerateMock<ISwapMainShiftForTwoPersonsCommandHandler>();
-			target = new TeamScheduleController(null, loggedOnUser, null, null, null, null, swapShiftHandler, null, new FakeCurrentScenario(), null);
+			target = new TeamScheduleController(null, loggedOnUser, null, null,  null, swapShiftHandler, null);
 
 			var command = new SwapMainShiftForTwoPersonsCommand
 			{
@@ -334,212 +328,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			target.SwapShifts(command);
 
 			swapShiftHandler.AssertWasCalled(x => x.SwapShifts(Arg<SwapMainShiftForTwoPersonsCommand>.Matches(a => a == command)));
-		}
-
-		[Test]
-		public void ShouldRemovePersonAbsences()
-		{
-			var scheduleDate = new DateTime(DateTime.Now.Date.Ticks, DateTimeKind.Unspecified);
-			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-
-			var personId1 = Guid.NewGuid();
-			var personAbsenceId1 = Guid.NewGuid();
-
-			var personId2 = Guid.NewGuid();
-			var personAbsenceId2 = Guid.NewGuid();
-			var personAbsenceId3 = Guid.NewGuid();
-
-			var personAndAbsences = new Dictionary<Guid, List<Guid>>
-			{
-				{
-					personId1,
-					new List<Guid>
-					{
-						personAbsenceId1
-					}
-				},
-				{
-					personId2,
-					new List<Guid>
-					{
-						personAbsenceId2,
-						personAbsenceId3
-					}
-				}
-			};
-			var target = setupForRemoveAbsence(scheduleDate, personAndAbsences, commandDispatcher);
-
-			var form = new RemovePersonAbsenceForm
-			{
-				ScheduleDate = scheduleDate,
-				SelectedPersonAbsences = new[]
-				{
-					new SelectedPersonAbsence
-					{
-						PersonId = personId1,
-						PersonAbsenceIds = new Guid[] {personAbsenceId1}
-					},
-					new SelectedPersonAbsence
-					{
-						PersonId = personId2,
-						PersonAbsenceIds = new Guid[] {personAbsenceId2}
-					}
-				},
-				RemoveEntireCrossDayAbsence = true,
-			};
-			target.RemoveAbsence(form);
-
-			commandDispatcher.AssertWasCalled(
-				x => x.Execute(Arg<RemovePersonAbsenceCommand>.Matches(
-					s => s.Person.Id.Value == personId1 &&
-						 s.ScheduleDate == scheduleDate &&
-						 s.PersonAbsences.Select(pa => pa.Id).Contains(personAbsenceId1))));
-
-			commandDispatcher.AssertWasCalled(
-				x => x.Execute(Arg<RemovePersonAbsenceCommand>.Matches(
-					s => s.Person.Id.Value == personId2 &&
-						 s.ScheduleDate == scheduleDate &&
-						 s.PersonAbsences.Select(pa => pa.Id).Contains(personAbsenceId2) &&
-						 !s.PersonAbsences.Select(pa => pa.Id).Contains(personAbsenceId3))));
-		}
-
-		[Test]
-		public void ShouldRemovePartOfPersonAbsences()
-		{
-			var scheduleDate = new DateTime(DateTime.Now.Date.Ticks, DateTimeKind.Unspecified);
-			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-
-			var personId1 = Guid.NewGuid();
-			var personAbsenceId1 = Guid.NewGuid();
-
-			var personId2 = Guid.NewGuid();
-			var personAbsenceId2 = Guid.NewGuid();
-			var personAbsenceId3 = Guid.NewGuid();
-
-			var personAndAbsences = new Dictionary<Guid, List<Guid>>
-			{
-				{
-					personId1,
-					new List<Guid>
-					{
-						personAbsenceId1
-					}
-				},
-				{
-					personId2,
-					new List<Guid>
-					{
-						personAbsenceId2,
-						personAbsenceId3
-					}
-				}
-			};
-			var target = setupForRemoveAbsence(scheduleDate, personAndAbsences, commandDispatcher);
-
-			var form = new RemovePersonAbsenceForm
-			{
-				ScheduleDate = scheduleDate,
-				SelectedPersonAbsences = new []
-				{
-					new SelectedPersonAbsence()
-					{
-						PersonId = personId1,
-						PersonAbsenceIds = new Guid[]
-						{
-							personAbsenceId1
-						}
-					}, 
-					new SelectedPersonAbsence()
-					{
-						PersonId = personId2,
-						PersonAbsenceIds = new Guid[]
-						{
-							personAbsenceId2
-						}
-					}, 
-				},
-				RemoveEntireCrossDayAbsence = false,
-			};
-			target.RemoveAbsence(form);
-
-			commandDispatcher.AssertWasCalled(
-				x => x.Execute(Arg<RemovePartPersonAbsenceCommand>.Matches(
-					s => s.Person.Id.Value == personId1 &&
-						 s.PersonAbsences.Select(pa => pa.Id).Contains(personAbsenceId1) &&
-						 s.ScheduleDate == scheduleDate &&
-						 s.PeriodToRemove.StartDateTime == scheduleDate.Date &&
-						 s.PeriodToRemove.EndDateTime == scheduleDate.Date.AddDays(1))));
-
-			commandDispatcher.AssertWasCalled(
-				x => x.Execute(Arg<RemovePartPersonAbsenceCommand>.Matches(
-					s => s.Person.Id.Value == personId2 &&
-						 s.PersonAbsences.Select(pa => pa.Id).Contains(personAbsenceId2) &&
-						 !s.PersonAbsences.Select(pa => pa.Id).Contains(personAbsenceId3) &&
-						 s.ScheduleDate == scheduleDate &&
-						 s.PeriodToRemove.StartDateTime == scheduleDate.Date &&
-						 s.PeriodToRemove.EndDateTime == scheduleDate.Date.AddDays(1))));
-		}
-
-		private static TeamScheduleController setupForRemoveAbsence(DateTime scheduleDate, IDictionary<Guid,
-			List<Guid>> personAndAbsences, ICommandDispatcher commandDispatcher)
-		{
-			var pricipalAuthorization = MockRepository.GenerateMock<IAuthorization>();
-			pricipalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
-				.Return(true);
-
-			var scenario = ScenarioFactory.CreateScenario("scenario", true, true);
-			var teamScheduleViewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
-			var personAbsenceRepository = new FakePersonAbsenceRepository();
-
-			var currentUser = PersonFactory.CreatePersonWithId();
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(currentUser);
-
-			foreach (var personAbsencePairs in personAndAbsences)
-			{
-				var personId = personAbsencePairs.Key;
-
-				var person = PersonFactory.CreatePerson();
-				person.SetId(personId);
-
-				var startDate = scheduleDate.ToUniversalTime();
-				var endDate = startDate.AddDays(1);
-				var dateTimePeriod = new DateTimePeriod(startDate, endDate);
-
-				foreach (var personAbsenceId in personAbsencePairs.Value)
-				{
-					var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, dateTimePeriod);
-					personAbsence.SetId(personAbsenceId);
-					personAbsenceRepository.Add(personAbsence);
-
-					var schedule = new GroupScheduleViewModel
-					{
-						Schedules = new List<GroupScheduleShiftViewModel>
-						{
-							new GroupScheduleShiftViewModel
-							{
-								Projection = new List<GroupScheduleProjectionViewModel>
-								{
-									new GroupScheduleProjectionViewModel
-									{
-										ParentPersonAbsences = new Guid[] { personAbsenceId}
-									}
-								}
-							}
-						}
-					};
-					teamScheduleViewModelFactory.Stub(
-						x => x.CreateViewModelForPeople(new[]
-						{
-							personId
-						},
-						new DateOnly(scheduleDate)))
-						.Return(schedule);
-				}
-			}
-
-			return new TeamScheduleController(teamScheduleViewModelFactory, loggedOnUser, personAbsenceRepository,
-				pricipalAuthorization, null, null, null, commandDispatcher, new FakeCurrentScenario(), null);
 		}
 	}
 }

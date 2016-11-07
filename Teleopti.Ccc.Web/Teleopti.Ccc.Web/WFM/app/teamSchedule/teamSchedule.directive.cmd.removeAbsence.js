@@ -13,17 +13,25 @@
 		vm.selectedPersonProjections = PersonSelection.getSelectedPersonInfoList();
 		vm.removeAbsence = function () {
 			var personIds = vm.selectedPersonProjections.map(function (x) { return x.PersonId; });
-			var selectedPersonAbsences = vm.selectedPersonProjections.filter(function (x) {
-				return x.SelectedAbsences.length > 0;
+			var selectedPersonAbsences = [];
+
+			vm.selectedPersonProjections.forEach(function(selection) {
+				if (!selection.SelectedAbsences || selection.SelectedAbsences.length === 0) return;
+				var absenceDates = selection.SelectedAbsences.map(function(selectedAbsence) {
+					return {
+						PersonAbsenceId: selectedAbsence.absenceId,
+						Date: selectedAbsence.date
+					};
+				});
+
+				selectedPersonAbsences.push({
+					PersonId: selection.PersonId,
+					AbsenceDates: absenceDates
+				});
 			});
+
 			var requestData = {
-				ScheduleDate: moment(vm.selectedDate()).format("YYYY-MM-DD"),
-				SelectedPersonAbsences: selectedPersonAbsences.map(function (x) {
-					return { PersonId: x.PersonId, Name: x.Name, PersonAbsenceIds: x.SelectedAbsences.map(function(absence) {
-						return absence.absenceId;
-					}) };
-				}),
-				RemoveEntireCrossDayAbsence: false,
+				SelectedPersonAbsences: selectedPersonAbsences,			
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			};
 

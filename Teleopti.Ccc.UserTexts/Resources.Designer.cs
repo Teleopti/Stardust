@@ -18470,6 +18470,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No permission to remove absence from agents..
+        /// </summary>
+        public static string NoPermissionRemoveAgentAbsence {
+            get {
+                return ResourceManager.GetString("NoPermissionRemoveAgentAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No permission to remove activities for agent(s).
         /// </summary>
         public static string NoPermissionRemoveAgentActivity {
@@ -30389,15 +30398,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string The {
             get {
                 return ResourceManager.GetString("The", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The absence can not be added to.
-        /// </summary>
-        public static string TheAbsenceCanNotBeAddedTo {
-            get {
-                return ResourceManager.GetString("TheAbsenceCanNotBeAddedTo", resourceCulture);
             }
         }
         

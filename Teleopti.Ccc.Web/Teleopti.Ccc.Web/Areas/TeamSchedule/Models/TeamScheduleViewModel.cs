@@ -64,17 +64,21 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 	}
 
 	public class RemovePersonAbsenceForm
-	{
-		public DateTime ScheduleDate { get; set; }
+	{	
 		public SelectedPersonAbsence[] SelectedPersonAbsences { get; set; }
-		public bool RemoveEntireCrossDayAbsence { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 	}
 
 	public class SelectedPersonAbsence
 	{
 		public Guid PersonId { get; set; }
-		public Guid[] PersonAbsenceIds { get; set; }
+		public AbsenceDate[] AbsenceDates { get; set; }
+	}
+
+	public class AbsenceDate
+	{
+		public Guid PersonAbsenceId { get; set; }
+		public DateOnly Date { get; set; }
 	}
 
 	public class GroupScheduleInput

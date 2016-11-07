@@ -191,6 +191,8 @@
     <Compile Include="ApplicationLayer\Commands\EditScheduleNoteCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\FixNotOverwriteLayerCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\FixNotOverwriteLayerCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\RemoveSelectedPersonAbsenceCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\RemoveSelectedPersonAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Dates\AnalyticsDateChangedHandler.cs" />
     <Compile Include="ApplicationLayer\Badge\ILogObjectDateChecker.cs" />
     <Compile Include="ApplicationLayer\Badge\LogObjectDateChecker.cs" />

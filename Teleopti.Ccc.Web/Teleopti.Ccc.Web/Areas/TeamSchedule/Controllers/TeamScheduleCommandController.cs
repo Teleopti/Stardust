@@ -70,5 +70,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		{
 			return _commandHandlingProvider.EditScheduleNote(input);
 		}
+
+		[UnitOfWork, HttpPost, Route("api/TeamSchedule/RemoveAbsence")]
+		public virtual IList<ActionResult> RemoveAbsence([FromBody] RemovePersonAbsenceForm input)
+		{
+			return _commandHandlingProvider.RemoveAbsence(input);
+		}
+
 	}
 }
