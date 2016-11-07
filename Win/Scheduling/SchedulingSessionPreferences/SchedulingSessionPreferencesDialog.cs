@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		private readonly IEnumerable<IScheduleTag> _scheduleTags;
 		private readonly string _settingValue;
 		private readonly IEnumerable<IActivity> _availableActivity;
+		private readonly bool _hideMaxSeat;
 		private SchedulingOptionsGeneralPersonalSetting _defaultGeneralSettings;
 		private SchedulingOptionsAdvancedPersonalSetting _defaultAdvancedSettings;
 		private SchedulingOptionsExtraPersonalSetting _defaultExtraSettings;
@@ -42,7 +43,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			ISchedulerGroupPagesProvider groupPagesProvider,
 			IEnumerable<IScheduleTag> scheduleTags, 
 			string settingValue, 
-			IEnumerable<IActivity> availableActivity)
+			IEnumerable<IActivity> availableActivity,
+			bool hideMaxSeat)
 			: this()
 		{
 			_schedulingOptions = schedulingOptions;
@@ -59,6 +61,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_scheduleTags = addKeepOriginalScheduleTag(scheduleTags);
 			_settingValue = settingValue;
 			_availableActivity = availableActivity;
+			_hideMaxSeat = hideMaxSeat;
 		}
 
 		private IEnumerable<IScheduleTag> addKeepOriginalScheduleTag(IEnumerable<IScheduleTag> scheduleTags)
@@ -169,6 +172,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			}
 
 			ActiveControl = schedulingSessionPreferencesTabPanel1;
+
+		
+			schedulingSessionPreferencesTabPanel1.HideMaxSeat(_hideMaxSeat);
+			
 		}
 
 		private void addToHelpContext()

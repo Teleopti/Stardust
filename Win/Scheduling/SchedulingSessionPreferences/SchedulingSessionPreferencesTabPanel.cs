@@ -97,6 +97,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			set { pnlShiftCategory.Visible = value; }
 		}
 
+		public void HideMaxSeat(bool hide)
+		{
+			checkBoxDoNotBreakMaxSeats.Visible = !hide;
+			checkBoxUseMaxSeats.Visible = !hide;
+		}
+
 		public bool UseGroupSchedulingCommonStart
 		{
 			get { return checkBoxTeamSameStartTime.Checked; }

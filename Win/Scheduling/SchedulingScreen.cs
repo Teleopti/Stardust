@@ -1113,7 +1113,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions,
 					daysOffPreferences, _schedulerState.CommonStateHolder.ActiveShiftCategories,
 					true, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, "SchedulingOptions",
-					_schedulerState.CommonStateHolder.ActiveActivities))
+					_schedulerState.CommonStateHolder.ActiveActivities, false))
 			{
 				if (options.ShowDialog(this) == DialogResult.OK)
 				{
@@ -3040,12 +3040,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 						return;
 					}
 
+					var hideMaxSeat = _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MaxSeatsNew_40939);
 					using (
 						var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions,
 							daysOffPreferences,
 							_schedulerState.CommonStateHolder.ActiveShiftCategories,
 							false, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags,
-							"SchedulingOptions", _schedulerState.CommonStateHolder.ActiveActivities))
+							"SchedulingOptions", _schedulerState.CommonStateHolder.ActiveActivities, hideMaxSeat))
 					{
 						if (options.ShowDialog(this) == DialogResult.OK)
 						{
@@ -3085,7 +3086,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions,
 						daysOffPreferences, _schedulerState.CommonStateHolder.ActiveShiftCategories,
 						false, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, "SchedulingOptionsActivities",
-						_schedulerState.CommonStateHolder.ActiveActivities))
+						_schedulerState.CommonStateHolder.ActiveActivities, false))
 				{
 					if (options.ShowDialog(this) == DialogResult.OK)
 					{
@@ -3208,6 +3209,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var selectedPeriod = new PeriodExtractorFromScheduleParts().ExtractPeriod(scheduleDays).Value;
 			turnOffCalculateMinMaxCacheIfNeeded(_optimizerOriginalPreferences.SchedulingOptions);
 			_optimizerOriginalPreferences.SchedulingOptions.NotAllowedShiftCategories.Clear();
+
+			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MaxSeatsNew_40939) && _optimizerOriginalPreferences.SchedulingOptions.UseTeam || _optimizerOriginalPreferences.SchedulingOptions.UseBlock)
+			{
+				_optimizerOriginalPreferences.SchedulingOptions.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.DoNotConsiderMaxSeats;
+			}
+
 			AdvanceLoggingService.LogSchedulingInfo(_optimizerOriginalPreferences.SchedulingOptions,
 				scheduleDays.Select(x => x.Person).Distinct().Count(),
 				selectedPeriod.DayCollection().Count(),
