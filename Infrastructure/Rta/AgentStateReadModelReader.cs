@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate;
+using Newtonsoft.Json;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -16,13 +15,11 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly INow _now;
-		private readonly IJsonDeserializer _deserializer;
 
-		public AgentStateReadModelReader(ICurrentUnitOfWork unitOfWork, INow now, IJsonDeserializer deserializer)
+		public AgentStateReadModelReader(ICurrentUnitOfWork unitOfWork, INow now)
 		{
 			_unitOfWork = unitOfWork;
 			_now = now;
-			_deserializer = deserializer;
 		}
 
 		public IEnumerable<AgentStateReadModel> Load(IEnumerable<IPerson> persons)
@@ -36,52 +33,62 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public IEnumerable<AgentStateReadModel> Load(IEnumerable<Guid> personIds)
 		{
-			var ret = new List<AgentStateReadModel>();
-			foreach (var personList in personIds.Batch(400))
-			{
-				ret.AddRange(
-					transform(_unitOfWork.Current().Session()
-						.CreateSQLQuery(string.Format(selectAgentState, "", "WITH (NOLOCK) WHERE PersonId IN(:persons)"))
-						.SetParameterList("persons", personList)
-						)
-					);
-			}
-			return ret;
+			return personIds.Batch(400).SelectMany(personIdBatch => _unitOfWork.Current().Session()
+				.CreateSQLQuery("SELECT * FROM [ReadModel].AgentState WITH (NOLOCK) WHERE PersonId IN(:persons)")
+				.SetParameterList("persons", personIdBatch)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+				.SetReadOnly(true)
+				.List<AgentStateReadModel>())
+				.ToArray();
 		}
 
 		public IEnumerable<AgentStateReadModel> LoadForTeam(Guid teamId)
 		{
-			return transform(_unitOfWork.Current().Session()
-				.CreateSQLQuery(string.Format(selectAgentState, "", "WITH (NOLOCK) WHERE TeamId = :teamId"))
-				.SetParameter("teamId", teamId)
-				);
+			return LoadForTeams(new[] {teamId});
 		}
 
 
 
 
 
-
-
-
-		private const string selectAgentState = @"SELECT {0} * FROM [ReadModel].AgentState {1}";
-
+		
 		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds)
 		{
-			var query = string.Format(selectAgentState, "", @"WITH (NOLOCK) WHERE SiteId IN (:siteIds)");
-			return transform(_unitOfWork.Current().Session()
-				.CreateSQLQuery(query)
+			return _unitOfWork.Current().Session()
+				.CreateSQLQuery("SELECT * FROM [ReadModel].AgentState WITH (NOLOCK) WHERE SiteId IN (:siteIds)")
 				.SetParameterList("siteIds", siteIds)
-				);
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+				.SetReadOnly(true)
+				.List<AgentStateReadModel>();
 		}
 
 		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds)
 		{
-			var query = string.Format(selectAgentState, "", @"WITH (NOLOCK) WHERE TeamId IN (:teamIds)");
-			return transform(_unitOfWork.Current().Session()
-				.CreateSQLQuery(query)
+			return _unitOfWork.Current().Session()
+				.CreateSQLQuery("SELECT * FROM [ReadModel].AgentState WITH (NOLOCK) WHERE TeamId IN (:teamIds)")
 				.SetParameterList("teamIds", teamIds)
-				);
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+				.SetReadOnly(true)
+				.List<AgentStateReadModel>();
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadForSkills(IEnumerable<Guid> skillIds)
+		{
+			return _unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
+SELECT DISTINCT a.*
+FROM ReadModel.AgentState AS a WITH (NOLOCK)
+INNER JOIN ReadModel.GroupingReadOnly AS g
+ON a.PersonId = g.PersonId
+WHERE PageId = :skillGroupingPageId
+AND g.GroupId IN (:skillIds)
+AND :today BETWEEN g.StartDate and g.EndDate")
+				.SetParameterList("skillIds", skillIds)
+				.SetParameter("today", _now.UtcDateTime().Date)
+				.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+				.SetReadOnly(true)
+				.List<AgentStateReadModel>();
 		}
 
 		public IEnumerable<AgentStateReadModel> LoadForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
@@ -94,216 +101,297 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			throw new NotImplementedException();
 		}
 
+
 		public IEnumerable<AgentStateReadModel> LoadAlarmsForSites(IEnumerable<Guid> siteIds)
 		{
-			var query = string.Format(selectAgentState, " TOP 50 ",
-				@"WITH (NOLOCK) WHERE SiteId IN (:siteIds) AND AlarmStarttime <= :now ORDER BY AlarmStartTime ASC");
-			return transform(_unitOfWork.Current().Session()
-				.CreateSQLQuery(query)
+			return _unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
+SELECT TOP 50 *
+FROM [ReadModel].AgentState WITH (NOLOCK)
+WHERE SiteId IN (:siteIds)
+AND AlarmStarttime <= :now
+ORDER BY AlarmStartTime ASC")
 				.SetParameterList("siteIds", siteIds)
 				.SetParameter("now", _now.UtcDateTime())
-				);
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+				.SetReadOnly(true)
+				.List<AgentStateReadModel>();
 		}
 
 		public IEnumerable<AgentStateReadModel> LoadAlarmsForTeams(IEnumerable<Guid> teamIds)
 		{
-			var query = string.Format(selectAgentState, " TOP 50 ",
-				@"WITH (NOLOCK) WHERE TeamId IN (:teamIds) AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC");
-			return transform(_unitOfWork.Current().Session()
-				.CreateSQLQuery(query)
+			return _unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
+SELECT TOP 50 *
+FROM [ReadModel].AgentState WITH (NOLOCK)
+WHERE TeamId IN (:teamIds)
+AND AlarmStarttime <= :now
+ORDER BY AlarmStartTime ASC")
 				.SetParameterList("teamIds", teamIds)
 				.SetParameter("now", _now.UtcDateTime())
-				);
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+				.SetReadOnly(true)
+				.List<AgentStateReadModel>();
 		}
 
-		private const string selectAgentStateInAlarm =
-			@"SELECT TOP 50 * FROM [ReadModel].AgentState WITH (NOLOCK) WHERE {0} AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC";
-
-		public IEnumerable<AgentStateReadModel> LoadAlarmsForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
-		{
-			throw new NotImplementedException();
-		}
-		
-		public IEnumerable<AgentStateReadModel> LoadAlarmsForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
-		{
-			throw new NotImplementedException();
-		}
-		
-		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForSites(IEnumerable<Guid> siteIds, IEnumerable<Guid?> excludedStateGroupIds)
-		{
-			var stateGroupIdsWithoutNull = excludedStateGroupIds.Where(x => x != null);
-			if (excludedStateGroupIds.All(x => x == null))
-			{
-				return transform(
-					createSQLQuery(string.Format(selectAgentStateInAlarm,
-						"StateGroupId IS NOT NULL AND SiteId IN (:siteIds)"),
-						q => q.SetParameterList("siteIds", siteIds)));
-			}
-			if (excludedStateGroupIds.Any(x => x == null))
-			{
-				return transform(
-					createSQLQuery(string.Format(selectAgentStateInAlarm,
-						"StateGroupId NOT IN (:excludedStateGroupIds) AND StateGroupId IS NOT NULL AND SiteId IN (:siteIds)"),
-						q => q.SetParameterList("siteIds", siteIds)
-							.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)));
-			}
-			return transform(
-				createSQLQuery(string.Format(selectAgentStateInAlarm,
-					"(StateGroupId NOT IN (:excludedStateGroupIds) OR StateGroupId IS NULL) AND SiteId IN (:siteIds)"),
-					q => q.SetParameterList("siteIds", siteIds)
-						.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)));
-		}
-
-		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForTeams(IEnumerable<Guid> teamIds, IEnumerable<Guid?> excludedStateGroupIds)
-		{
-			var stateGroupIdsWithoutNull = excludedStateGroupIds.Where(x => x != null);
-			if (excludedStateGroupIds.All(x => x == null))
-			{
-				return transform(
-					createSQLQuery(string.Format(selectAgentStateInAlarm,
-						"StateGroupId IS NOT NULL AND TeamId IN (:teamIds)"),
-						q => q.SetParameterList("teamIds", teamIds)));
-			}
-			if (excludedStateGroupIds.Any(x => x == null))
-			{
-				return transform(
-					createSQLQuery(string.Format(selectAgentStateInAlarm,
-						"StateGroupId NOT IN (:excludedStateGroupIds) AND StateGroupId IS NOT NULL AND TeamId IN (:teamIds)"),
-						q => q.SetParameterList("teamIds", teamIds)
-							.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)));
-			}
-			return transform(
-				createSQLQuery(string.Format(selectAgentStateInAlarm,
-					"(StateGroupId NOT IN (:excludedStateGroupIds) OR StateGroupId IS NULL) AND TeamId IN (:teamIds)"),
-					q => q.SetParameterList("teamIds", teamIds)
-						.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)));
-		}
-
-		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForSitesAndSkill(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds,
-			IEnumerable<Guid?> excludedStateGroupIds)
-		{
-			yield break;
-		}
-
-		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForTeamsAndSkill(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds,
-			IEnumerable<Guid?> excludedStateGroupIds)
-		{
-			yield break;
-		}
-
-		private IQuery createSQLQuery(string query, Func<IQuery, IQuery> func)
-		{
-			return func(_unitOfWork.Current().Session()
-				.CreateSQLQuery(query)
-				.SetParameter("now", _now.UtcDateTime()));
-		}
-
-		private const string agentsForSkillQuery = @"
-SELECT DISTINCT {0}
-	a.*
-FROM ReadModel.AgentState AS a WITH (NOLOCK)
-INNER JOIN ReadModel.GroupingReadOnly AS g
-	ON a.PersonId = g.PersonId
-WHERE PageId = :skillGroupingPageId
-AND g.GroupId IN (:skillIds)
-AND :today BETWEEN g.StartDate and g.EndDate 
-{1}";
-
-		public IEnumerable<AgentStateReadModel> LoadForSkills(IEnumerable<Guid> skillIds)
-		{
-			return transform(
-				_unitOfWork.Current().Session()
-					.CreateSQLQuery(string.Format(agentsForSkillQuery, "", ""))
-					.SetParameterList("skillIds", skillIds)
-					.SetParameter("today", _now.UtcDateTime().Date)
-					.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
-				);
-		}
-
-		private const string agentsInAlarmForSkillQuery = @"
-SELECT DISTINCT TOP 50
-	a.*
-FROM ReadModel.AgentState AS a WITH (NOLOCK)
-INNER JOIN ReadModel.GroupingReadOnly AS g
-	ON a.PersonId = g.PersonId
-WHERE PageId = :skillGroupingPageId
-AND g.GroupId IN (:skillIds)
-AND :today BETWEEN g.StartDate and g.EndDate 
-{0}
-AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC ";
 		public IEnumerable<AgentStateReadModel> LoadAlarmsForSkills(IEnumerable<Guid> skillIds)
 		{
-			var query = string.Format(agentsInAlarmForSkillQuery, "");
-			return transform(
-				_unitOfWork.Current().Session()
-					.CreateSQLQuery(query)
+			return _unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
+SELECT DISTINCT TOP 50 a.*
+FROM ReadModel.AgentState AS a WITH (NOLOCK)
+INNER JOIN ReadModel.GroupingReadOnly AS g
+ON a.PersonId = g.PersonId
+WHERE PageId = :skillGroupingPageId
+AND g.GroupId IN (:skillIds)
+AND :today BETWEEN g.StartDate and g.EndDate
+AND AlarmStartTime <= :now
+ORDER BY AlarmStartTime ASC")
+				.SetParameterList("skillIds", skillIds)
+				.SetParameter("today", _now.UtcDateTime().Date)
+				.SetParameter("now", _now.UtcDateTime())
+				.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+				.SetReadOnly(true)
+				.List<AgentStateReadModel>();
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForTeamsAndSkills(IEnumerable<Guid> teamIds,
+			IEnumerable<Guid> skillIds)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForSitesAndSkills(IEnumerable<Guid> siteIds,
+			IEnumerable<Guid> skillIds)
+		{
+			throw new NotImplementedException();
+		}
+
+
+		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForSites(IEnumerable<Guid> siteIds,
+			IEnumerable<Guid?> excludedStateGroupIds)
+		{
+			var stateGroupIdsWithoutNull = excludedStateGroupIds.Where(x => x != null);
+			if (excludedStateGroupIds.All(x => x == null))
+			{
+				return _unitOfWork.Current().Session()
+					.CreateSQLQuery(@"
+SELECT TOP 50 *
+FROM [ReadModel].AgentState WITH (NOLOCK)
+WHERE StateGroupId IS NOT NULL
+AND SiteId IN (:siteIds)
+AND AlarmStarttime <= :now
+ORDER BY AlarmStartTime ASC")
+					.SetParameterList("siteIds", siteIds)
+					.SetParameter("now", _now.UtcDateTime())
+					.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+					.SetReadOnly(true)
+					.List<AgentStateReadModel>();
+			}
+			if (excludedStateGroupIds.Any(x => x == null))
+			{
+				return _unitOfWork.Current().Session()
+					.CreateSQLQuery(@"
+SELECT TOP 50 *
+FROM [ReadModel].AgentState WITH (NOLOCK)
+WHERE StateGroupId NOT IN (:excludedStateGroupIds)
+AND StateGroupId IS NOT NULL
+AND SiteId IN (:siteIds)
+AND AlarmStarttime <= :now
+ORDER BY AlarmStartTime ASC")
+					.SetParameterList("siteIds", siteIds)
+					.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)
+					.SetParameter("now", _now.UtcDateTime())
+					.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+					.SetReadOnly(true)
+					.List<AgentStateReadModel>();
+			}
+
+			return _unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
+SELECT TOP 50 *
+FROM [ReadModel].AgentState WITH (NOLOCK)
+WHERE
+(
+	StateGroupId NOT IN (:excludedStateGroupIds)
+	OR StateGroupId IS NULL
+)
+AND SiteId IN (:siteIds)
+AND AlarmStarttime <= :now
+ORDER BY AlarmStartTime ASC")
+				.SetParameterList("siteIds", siteIds)
+				.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)
+				.SetParameter("now", _now.UtcDateTime())
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+				.SetReadOnly(true)
+				.List<AgentStateReadModel>();
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForTeams(IEnumerable<Guid> teamIds,
+			IEnumerable<Guid?> excludedStateGroupIds)
+		{
+			var stateGroupIdsWithoutNull = excludedStateGroupIds.Where(x => x != null);
+			if (excludedStateGroupIds.All(x => x == null))
+			{
+				return _unitOfWork.Current().Session()
+					.CreateSQLQuery(@"
+SELECT TOP 50 *
+FROM [ReadModel].AgentState WITH (NOLOCK)
+WHERE StateGroupId IS NOT NULL
+AND TeamId IN (:teamIds)
+AND AlarmStarttime <= :now
+ORDER BY AlarmStartTime ASC")
+					.SetParameterList("teamIds", teamIds)
+					.SetParameter("now", _now.UtcDateTime())
+					.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+					.SetReadOnly(true)
+					.List<AgentStateReadModel>();
+			}
+			if (excludedStateGroupIds.Any(x => x == null))
+			{
+				return _unitOfWork.Current().Session()
+					.CreateSQLQuery(@"
+SELECT TOP 50 *
+FROM [ReadModel].AgentState WITH (NOLOCK)
+WHERE StateGroupId NOT IN (:excludedStateGroupIds)
+AND StateGroupId IS NOT NULL
+AND TeamId IN (:teamIds)
+AND AlarmStarttime <= :now
+ORDER BY AlarmStartTime ASC")
+					.SetParameterList("teamIds", teamIds)
+					.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)
+					.SetParameter("now", _now.UtcDateTime())
+					.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+					.SetReadOnly(true)
+					.List<AgentStateReadModel>();
+			}
+
+			return _unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
+SELECT TOP 50 *
+FROM [ReadModel].AgentState WITH (NOLOCK)
+WHERE
+(
+	StateGroupId NOT IN (:excludedStateGroupIds)
+	OR StateGroupId IS NULL
+)
+AND TeamId IN (:teamIds)
+AND AlarmStarttime <= :now
+ORDER BY AlarmStartTime ASC")
+				.SetParameterList("teamIds", teamIds)
+				.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)
+				.SetParameter("now", _now.UtcDateTime())
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+				.SetReadOnly(true)
+				.List<AgentStateReadModel>();
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForSkills(IEnumerable<Guid> skillIds,
+			IEnumerable<Guid?> excludedStateGroupIds)
+		{
+			var stateGroupIdsWithoutNull = excludedStateGroupIds.Where(x => x != null);
+			if (excludedStateGroupIds.All(x => x == null))
+			{
+				return _unitOfWork.Current().Session()
+					.CreateSQLQuery(@"
+SELECT DISTINCT TOP 50 a.*
+FROM ReadModel.AgentState AS a WITH (NOLOCK)
+INNER JOIN ReadModel.GroupingReadOnly AS g
+ON a.PersonId = g.PersonId
+WHERE PageId = :skillGroupingPageId
+AND g.GroupId IN (:skillIds)
+AND :today BETWEEN g.StartDate and g.EndDate
+AND AlarmStartTime <= :now
+AND StateGroupId IS NOT NULL
+ORDER BY AlarmStartTime ASC")
 					.SetParameterList("skillIds", skillIds)
 					.SetParameter("today", _now.UtcDateTime().Date)
 					.SetParameter("now", _now.UtcDateTime())
 					.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
-				);
-		}
-
-
-		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForSkills(IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStateGroupIds)
-		{
-			var stateGroupIdsWithoutNull = excludedStateGroupIds.Where(x => x != null);
-			if (excludedStateGroupIds.All(x => x == null))
-			{
-				return transform(
-					createSQLQueryForSkill(string.Format(agentsInAlarmForSkillQuery,
-						" AND StateGroupId IS NOT NULL "),
-						skillIds, 
-						q => q));
+					.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+					.SetReadOnly(true)
+					.List<AgentStateReadModel>();
 			}
 			if (excludedStateGroupIds.Any(x => x == null))
 			{
-				return transform(
-					createSQLQueryForSkill(string.Format(agentsInAlarmForSkillQuery,
-						" AND StateGroupId NOT IN (:excludedStateGroupIds) AND StateGroupId IS NOT NULL "),
-						skillIds, 
-						q => q.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)));
+				return _unitOfWork.Current().Session()
+					.CreateSQLQuery(@"
+SELECT DISTINCT TOP 50 a.*
+FROM ReadModel.AgentState AS a WITH (NOLOCK)
+INNER JOIN ReadModel.GroupingReadOnly AS g
+ON a.PersonId = g.PersonId
+WHERE PageId = :skillGroupingPageId
+AND g.GroupId IN (:skillIds)
+AND :today BETWEEN g.StartDate and g.EndDate
+AND AlarmStartTime <= :now
+AND StateGroupId NOT IN (:excludedStateGroupIds)
+AND StateGroupId IS NOT NULL
+ORDER BY AlarmStartTime ASC")
+					.SetParameterList("skillIds", skillIds)
+					.SetParameter("today", _now.UtcDateTime().Date)
+					.SetParameter("now", _now.UtcDateTime())
+					.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)
+					.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+					.SetReadOnly(true)
+					.List<AgentStateReadModel>();
 			}
-			return transform(
-				createSQLQueryForSkill(string.Format(agentsInAlarmForSkillQuery, 
-				" AND (StateGroupId NOT IN (:excludedStateGroupIds) OR StateGroupId IS NULL) "),
-				skillIds, 
-				q => q.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)));
-		}
 
-
-		private IQuery createSQLQueryForSkill(string query, IEnumerable<Guid> skillIds, Func<IQuery, IQuery> func)
-		{
-			return func(_unitOfWork.Current().Session()
-				.CreateSQLQuery(query)
-				.SetParameter("now", _now.UtcDateTime())
+			return _unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
+SELECT DISTINCT TOP 50 a.*
+FROM ReadModel.AgentState AS a WITH (NOLOCK)
+INNER JOIN ReadModel.GroupingReadOnly AS g
+ON a.PersonId = g.PersonId
+WHERE PageId = :skillGroupingPageId
+AND g.GroupId IN (:skillIds)
+AND :today BETWEEN g.StartDate and g.EndDate
+AND AlarmStartTime <= :now
+AND
+(
+	StateGroupId NOT IN (:excludedStateGroupIds)
+	OR StateGroupId IS NULL
+)
+ORDER BY AlarmStartTime ASC")
 				.SetParameterList("skillIds", skillIds)
 				.SetParameter("today", _now.UtcDateTime().Date)
-				.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get));
-		}
-
-		private IEnumerable<AgentStateReadModel> transform(IQuery query)
-		{
-			return query
+				.SetParameter("now", _now.UtcDateTime())
+				.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)
+				.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
-				.List<internalModel>()
-				.Select(x =>
-				{
-					(x as AgentStateReadModel).Shift = _deserializer.DeserializeObject<AgentStateActivityReadModel[]>(x.Shift);
-					x.Shift = null;
-					(x as AgentStateReadModel).OutOfAdherences =
-						_deserializer.DeserializeObject<AgentStateOutOfAdherenceReadModel[]>(x.OutOfAdherences);
-					x.OutOfAdherences = null;
-					return x;
-				})
-				.ToArray();
+				.List<AgentStateReadModel>();
 		}
+
+		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForSitesAndSkill(IEnumerable<Guid> siteIds,
+			IEnumerable<Guid> skillIds,
+			IEnumerable<Guid?> excludedStateGroupIds)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForTeamsAndSkill(IEnumerable<Guid> teamIds,
+			IEnumerable<Guid> skillIds,
+			IEnumerable<Guid?> excludedStateGroupIds)
+		{
+			throw new NotImplementedException();
+		}
+
+
+
 
 		private class internalModel : AgentStateReadModel
 		{
-			public new string Shift { get; set; }
-			public new string OutOfAdherences { get; set; }
+			public new string Shift
+			{
+				set { base.Shift = value != null ? JsonConvert.DeserializeObject<AgentStateActivityReadModel[]>(value) : null; }
+			}
+
+			public new string OutOfAdherences
+			{
+				set { base.OutOfAdherences = value != null ? JsonConvert.DeserializeObject<AgentStateOutOfAdherenceReadModel[]>(value) : null; }
+			}
 		}
 	}
 
