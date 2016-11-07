@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			{
 				var person = _personRepository.Get(personActivity.PersonId);
 				var personError = new ActionResult { PersonId = person.Id.GetValueOrDefault(), ErrorMessages = new List<string>() };
-				if (!checkPermissionFn(permission, input.Date, person, personError.ErrorMessages))
+				if (!checkPermissionFn(permission, personActivity.Date, person, personError.ErrorMessages))
 				{
 					result.Add(personError);
 					continue;
@@ -244,14 +244,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 
 
-				var layerToMoveTimeMap = _helper.GetCorrectNewStartForLayersForPerson(person, input.Date, personActivity.ShiftLayerIds,
+				var layerToMoveTimeMap = _helper.GetCorrectNewStartForLayersForPerson(person, personActivity.Date, personActivity.ShiftLayerIds,
 					newStartTimeInUtc);
 				if (personActivity.ShiftLayerIds.Any(x => !layerToMoveTimeMap.ContainsKey(x)))
 				{
 					personError.ErrorMessages.Add(Resources.NoShiftsFound);
 				}
 
-				if (_helper.ValidateLayerMoveToTime(layerToMoveTimeMap, person, input.Date))
+				if (_helper.ValidateLayerMoveToTime(layerToMoveTimeMap, person, personActivity.Date))
 				{
 					layerToMoveTimeMap
 						.ForEach(
@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 								{
 									AgentId = personActivity.PersonId,
 									NewStartTimeInUtc = pl.Value,
-									ScheduleDate = input.Date,
+									ScheduleDate = personActivity.Date,
 									ShiftLayerId = pl.Key,
 									TrackedCommandInfo =
 										input.TrackedCommandInfo ??

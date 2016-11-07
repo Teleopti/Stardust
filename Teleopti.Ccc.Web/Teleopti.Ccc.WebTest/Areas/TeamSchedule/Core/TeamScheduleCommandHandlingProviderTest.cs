@@ -362,10 +362,11 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 					new PersonActivityItem
 					{
 						PersonId = person.Id.Value,
+						Date = date,
 						ShiftLayerIds = new List<Guid> {new Guid()}
 					}
 				},
-				Date = date,
+				
 				StartTime = new DateTime(2016, 4, 16, 10, 0,0)
 			};
 			ActivityCommandHandler.ResetCalledCount();
@@ -393,10 +394,11 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 					new PersonActivityItem
 					{
 						PersonId = person.Id.Value,
+						Date = date,
 						ShiftLayerIds = new List<Guid> {new Guid()}
 					}
 				},
-				Date = date,
+				
 				StartTime = new DateTime(2016, 4, 16, 10, 0,0)
 			};
 			ActivityCommandHandler.ResetCalledCount();
@@ -433,10 +435,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 					new PersonActivityItem
 					{
 						PersonId = person.Id.Value,
+						Date = date,
 						ShiftLayerIds = new List<Guid> {personAss.ShiftLayers.First().Id.Value}
 					}
 				},
-				Date = date,
 				StartTime = new DateTime(2016, 4, 16, 10, 0, 0)
 			};
 			ActivityCommandHandler.ResetCalledCount();
@@ -473,10 +475,11 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 					new PersonActivityItem
 					{
 						PersonId = person.Id.Value,
+						Date = date,
+
 						ShiftLayerIds = new List<Guid> {personAss.ShiftLayers.First().Id.Value}
 					}
 				},
-				Date = date,
 				StartTime = new DateTime(2016, 4, 17, 10, 0, 0)
 			};
 			ActivityCommandHandler.ResetCalledCount();
@@ -503,7 +506,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			personAss.AddActivity(ActivityFactory.CreateActivity("ac"), new DateTimePeriod(2016, 4, 16, 2, 2016, 4, 17, 13));
 			personAss.ShiftLayers.ForEach(x => x.WithId());
 			PersonAssignmentRepo.Add(personAss);
-			
+
 			var input = new MoveActivityFormData
 			{
 				TrackedCommandInfo = new TrackedCommandInfo(),
@@ -512,10 +515,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 					new PersonActivityItem
 					{
 						PersonId = person.Id.Value,
+						Date = date,
 						ShiftLayerIds = new List<Guid> {personAss.ShiftLayers.First().Id.Value}
 					}
 				},
-				Date = date,
 				StartTime = new DateTime(2016, 4, 17, 6, 0, 0)
 			};
 			ActivityCommandHandler.ResetCalledCount();
@@ -550,10 +553,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 					new PersonActivityItem
 					{
 						PersonId = person.Id.Value,
+						Date = date,
 						ShiftLayerIds = new List<Guid> {personAss.ShiftLayers.First().Id.Value}
 					}
 				},
-				Date = date,
 				StartTime = new DateTime(2016, 4, 16, 10, 0, 0)
 			};
 			ActivityCommandHandler.ResetCalledCount();
@@ -591,10 +594,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 					new PersonActivityItem
 					{
 						PersonId = person.Id.Value,
+						Date = date,
 						ShiftLayerIds = new List<Guid> {personAss.ShiftLayers.First().Id.Value, personAss.ShiftLayers.ToArray()[1].Id.Value, personAss.ShiftLayers.ToArray()[2].Id.Value}
 					}
 				},
-				Date = date,
 				StartTime = new DateTime(2016, 4, 16, 10, 0, 0)
 			};
 			ActivityCommandHandler.ResetCalledCount();

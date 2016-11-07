@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 	public class PersonActivityItem
 	{
 		public Guid PersonId { get; set; }
+		public DateOnly Date { get; set; }
 		public IList<Guid> ShiftLayerIds { get; set; }
 	}
 
@@ -15,7 +16,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 	{
 		public List<PersonActivityItem> PersonActivities { get; set; }
 		public DateTime StartTime { get; set; }
-		public DateOnly Date { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 	}
 }
