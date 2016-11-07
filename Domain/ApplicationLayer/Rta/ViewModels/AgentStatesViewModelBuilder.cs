@@ -66,6 +66,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_appliedAlarm = appliedAlarm;
 			_agentStateReadModelReader = agentStateReadModelReader;
 		}
+		
+		public AgentStatesViewModel For(IEnumerable<Guid> sites, IEnumerable<Guid> teams, IEnumerable<Guid> skills)
+		{
+			if (sites != null && skills != null)
+				return build(_agentStateReadModelReader.LoadForSitesAndSkills(sites, skills));
+			if (sites != null)
+				return build(_agentStateReadModelReader.LoadForSites(sites));
+			if (teams != null && skills != null)
+				return build(_agentStateReadModelReader.LoadForTeamsAndSkills(teams, skills));
+			if (teams != null)
+				return build(_agentStateReadModelReader.LoadForTeams(teams));
+			return build(_agentStateReadModelReader.LoadForSkills(skills));
+		}
+		
 
 		public AgentStatesViewModel ForSites(Guid[] siteIds)
 		{
@@ -185,5 +199,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				  userTime.ToString(_culture.GetCulture().DateTimeFormat.ShortTimePattern)
 				;
 		}
+
 	}
 }

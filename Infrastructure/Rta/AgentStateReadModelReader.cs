@@ -84,6 +84,16 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				);
 		}
 
+		public IEnumerable<AgentStateReadModel> LoadForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IEnumerable<AgentStateReadModel> LoadAlarmsForSites(IEnumerable<Guid> siteIds)
 		{
 			var query = string.Format(selectAgentState, " TOP 50 ",

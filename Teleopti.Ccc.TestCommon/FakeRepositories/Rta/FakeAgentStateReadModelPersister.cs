@@ -129,6 +129,42 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				select m;
 		}
 
+		public IEnumerable<AgentStateReadModel> LoadForSkills(IEnumerable<Guid> skillIds)
+		{
+			return from s in _data.Values
+				   from p in _personSkills
+				   from sk in skillIds
+				   where s.PersonId == p.PersonId && p.SkillId == sk
+				   select s;
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
+		{
+			return
+				from state in _data.Values
+				from personSkill in _personSkills
+				from skillId in skillIds
+				from siteId in siteIds
+				where state.PersonId == personSkill.PersonId &&
+					  personSkill.SkillId == skillId &&
+					  state.SiteId == siteId
+				select state;
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		{
+			return
+				from state in _data.Values
+				from personSkill in _personSkills
+				from skillId in skillIds
+				from teamId in teamIds
+				where state.PersonId == personSkill.PersonId &&
+					  personSkill.SkillId == skillId &&
+					  state.TeamId == teamId
+				select state;
+		}
+
+
 		public IEnumerable<AgentStateReadModel> LoadAlarmsForSites(IEnumerable<Guid> siteIds)
 		{
 			return from s in siteIds
@@ -173,14 +209,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				select m;
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadForSkills(IEnumerable<Guid> skillIds)
-		{
-			return from s in _data.Values
-				from p in _personSkills
-				from sk in skillIds
-				where s.PersonId == p.PersonId && p.SkillId == sk
-				select s;
-		}
 
 		public IEnumerable<AgentStateReadModel> LoadAlarmsForSkills(IEnumerable<Guid> skillIds)
 		{
