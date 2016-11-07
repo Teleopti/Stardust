@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -48,7 +49,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			using (var uow = uowFactory.CreateAndOpenUnitOfWork())
 			{
-				var service = new TraceableRefreshService(new ThisCurrentScenario(exportScenario), new ScheduleStorage(new ThisUnitOfWork(uow), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker(), _toggleManager));
+				var repositoryFactory = new RepositoryFactory();
+				var currentUnitOfWork = new ThisUnitOfWork(uow);
+				var service = new TraceableRefreshService(new ThisCurrentScenario(exportScenario), new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), _toggleManager, new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork)));
 				var refreshedPersonAbsenceAccounts = new List<IPersonAbsenceAccount>();
 				
 				foreach (var person in persons)

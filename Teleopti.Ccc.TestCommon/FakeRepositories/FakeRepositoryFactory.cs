@@ -30,6 +30,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly IPartTimePercentageRepository _partTimePercentageRepository;
 		private readonly IMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
 		private readonly IRuleSetBagRepository _ruleSetBagRepository;
+		private readonly INoteRepository _noteRepository;
+		private readonly IPublicNoteRepository _publicNoteRepository;
 
 		public FakeRepositoryFactory(
 			IPersonRepository personRepository,
@@ -53,8 +55,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			IPersonRotationRepository personRotationRepository,
 			IPartTimePercentageRepository partTimePercentageRepository,
 			IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository,
-			IRuleSetBagRepository ruleSetBagRepository
-      )
+			IRuleSetBagRepository ruleSetBagRepository, INoteRepository noteRepository, IPublicNoteRepository publicNoteRepository)
 		{
 			_personRepository = personRepository;
 			_businessUnitRepository = businessUnitRepository;
@@ -78,6 +79,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_partTimePercentageRepository = partTimePercentageRepository;
 			_multiplicatorDefinitionSetRepository = multiplicatorDefinitionSetRepository;
 			_ruleSetBagRepository = ruleSetBagRepository;
+			_noteRepository = noteRepository;
+			_publicNoteRepository = publicNoteRepository;
 		}
 
 		public IPersonRepository CreatePersonRepository(IUnitOfWork unitOfWork)
@@ -312,12 +315,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public INoteRepository CreateNoteRepository(IUnitOfWork unitOfWork)
 		{
-			throw new System.NotImplementedException();
+			return _noteRepository;
 		}
 
 		public IPublicNoteRepository CreatePublicNoteRepository(IUnitOfWork unitOfWork)
 		{
-			throw new System.NotImplementedException();
+			return _publicNoteRepository;
 		}
 
 		public IAgentDayScheduleTagRepository CreateAgentDayScheduleTagRepository(IUnitOfWork unitOfWork)

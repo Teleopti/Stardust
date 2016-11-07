@@ -5,6 +5,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -52,7 +53,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected virtual IScheduleRangePersister CreateTarget()
 		{
 			var currUnitOfWork = new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make());
-			var scheduleRep = new ScheduleStorage(currUnitOfWork, new RepositoryFactory(), new PersistableScheduleDataPermissionChecker(), new FalseToggleManager());
+			var repositoryFactory = new RepositoryFactory();
+			var scheduleRep = new ScheduleStorage(currUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currUnitOfWork));
 			return new ScheduleRangePersister(CurrentUnitOfWorkFactory.Make(),
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				ConflictCollector(),
@@ -76,14 +78,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		{
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				new PersonRepository(new ThisUnitOfWork(unitOfWork)).Add(Person);
+				var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
+				new PersonRepository(currentUnitOfWork).Add(Person);
 				new ActivityRepository(unitOfWork).Add(Activity);
 				new ShiftCategoryRepository(unitOfWork).Add(ShiftCategory);
 				new ScenarioRepository(unitOfWork).Add(Scenario);
 				new AbsenceRepository(unitOfWork).Add(Absence);
 				new MultiplicatorDefinitionSetRepository(unitOfWork).Add(DefinitionSet);
 				new DayOffTemplateRepository(unitOfWork).Add(DayOffTemplate);
-				var scheduleStorage = new ScheduleStorage(new ThisUnitOfWork(unitOfWork), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker(), new FalseToggleManager());
+				var repositoryFactory = new RepositoryFactory();
+				var scheduleStorage = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
 				Given().ForEach(x =>
 				{
 					scheduleStorage.Add(x);
@@ -118,7 +122,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				ReassociateDataFor(Person);
-				var rep = new ScheduleStorage(new ThisUnitOfWork(unitOfWork), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker(), new FalseToggleManager());
+				var repositoryFactory = new RepositoryFactory();
+				var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
+				var rep = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
 				var dictionary = rep.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(1800, 1, 1, 2040, 1, 1)),
 																								 Scenario,
 																								 new PersonProvider(new[] { Person }),
@@ -136,7 +142,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected virtual IScheduleRangeConflictCollector ConflictCollector()
 		{
 			var currUnitOfWork = new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make());
-			var scheduleRep = new ScheduleStorage(currUnitOfWork, new RepositoryFactory(), new PersistableScheduleDataPermissionChecker(), new FalseToggleManager());
+			var repositoryFactory = new RepositoryFactory();
+			var scheduleRep = new ScheduleStorage(currUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currUnitOfWork));
 			return new ScheduleRangeConflictCollector(scheduleRep, new PersonAssignmentRepository(currUnitOfWork), this, new LazyLoadingManagerWrapper(), new DatabaseVersion(currUnitOfWork));
 		}
 

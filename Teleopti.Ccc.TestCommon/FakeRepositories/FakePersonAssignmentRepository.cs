@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPersonAssignment Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _personAssignments.FirstOrDefault(x => x.Id == id);
 		}
 
 		public IList<IPersonAssignment> LoadAll()
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPersonAssignment LoadAggregate(Guid id)
 		{
-			throw new NotImplementedException();
+			return _personAssignments.First(x => x.Id == id);
 		}
 
 		public IPersonAssignment LoadAggregate(PersonAssignmentKey id)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -17,12 +18,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Remove(IAgentDayScheduleTag root)
 		{
-			throw new NotImplementedException();
+			agentDayScheduleTags.Remove(root);
 		}
 
 		public IAgentDayScheduleTag Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return agentDayScheduleTags.FirstOrDefault(x => x.Id == id);
 		}
 
 		public IList<IAgentDayScheduleTag> LoadAll()
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IAgentDayScheduleTag LoadAggregate(Guid id)
 		{
-			throw new NotImplementedException();
+			return agentDayScheduleTags.First(x => x.Id == id);
 		}
 
 		public IList<IAgentDayScheduleTag> Find(DateTimePeriod period, IScenario scenario)

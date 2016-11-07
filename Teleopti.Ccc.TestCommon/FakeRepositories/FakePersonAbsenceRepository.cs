@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Remove(IPersonAbsence entity)
 		{
-			throw new NotImplementedException();
+			_personAbsences.Remove(entity);
 		}
 
 		public IPersonAbsence Get(Guid id)

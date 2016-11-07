@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -17,7 +18,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IScheduleStorage Create(IUnitOfWork unitOfWork)
 		{
-			return new ScheduleStorage(new ThisUnitOfWork(unitOfWork), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker(), _toggleManager);
+			var repositoryFactory = new RepositoryFactory();
+			var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
+			return new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), _toggleManager, new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
 		}
 	}
 }

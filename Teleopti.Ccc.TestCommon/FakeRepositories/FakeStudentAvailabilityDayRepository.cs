@@ -18,17 +18,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Remove(IStudentAvailabilityDay root)
 		{
-			throw new NotImplementedException();
+			Storage.Remove(root);
 		}
 
 		public IStudentAvailabilityDay Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return Storage.FirstOrDefault(x => x.Id == id);
 		}
 
 		public IList<IStudentAvailabilityDay> LoadAll()
 		{
-			throw new NotImplementedException();
+			return Storage;
 		}
 
 		public IStudentAvailabilityDay Load(Guid id)
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IStudentAvailabilityDay LoadAggregate(Guid id)
 		{
-			throw new NotImplementedException();
+			return Storage.First(x => x.Id == id);
 		}
 
 		public IList<IStudentAvailabilityDay> Find(DateOnlyPeriod period, IEnumerable<IPerson> persons)

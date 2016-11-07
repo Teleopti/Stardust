@@ -20,68 +20,36 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    private readonly ICurrentUnitOfWork _currentUnitOfWork;
 	    private readonly IPersistableScheduleDataPermissionChecker _dataPermissionChecker;
 	    private readonly IToggleManager _toggleManager;
+	    private readonly IScheduleStorageRepositoryWrapper _scheduleStorageRepositoryWrapper;
 
-	    public ScheduleStorage(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory, IPersistableScheduleDataPermissionChecker dataPermissionChecker, IToggleManager toggleManager)
+	    public ScheduleStorage(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory, IPersistableScheduleDataPermissionChecker dataPermissionChecker, IToggleManager toggleManager, IScheduleStorageRepositoryWrapper scheduleStorageRepositoryWrapper)
 	    {
 		    _currentUnitOfWork = currentUnitOfWork;
 					_repositoryFactory = repositoryFactory;
 		    _dataPermissionChecker = dataPermissionChecker;
 		    _toggleManager = toggleManager;
+		    _scheduleStorageRepositoryWrapper = scheduleStorageRepositoryWrapper;
 	    }
 
 	    public void Add(IPersistableScheduleData scheduleData)
 	    {
-			_currentUnitOfWork.Session().SaveOrUpdate(scheduleData);
-	    }
+			_scheduleStorageRepositoryWrapper.Add(scheduleData);
+		}
 
 	    public void Remove(IPersistableScheduleData scheduleData)
 	    {
-			_currentUnitOfWork.Session().Delete(scheduleData);
+			_scheduleStorageRepositoryWrapper.Remove(scheduleData);
 	    }
 
 	    public IPersistableScheduleData Get(Type concreteType, Guid id)
         {
-            return (IPersistableScheduleData)_currentUnitOfWork.Session().Get(concreteType, id);
+			return _scheduleStorageRepositoryWrapper.Get(concreteType, id);
         }
 
 			//todo: Fixa lazy-problem utanför! inte ladda andra rötter här inne!
         public IPersistableScheduleData LoadScheduleDataAggregate(Type scheduleDataType, Guid id)
         {
-            if (typeof(IPersonAssignment).IsAssignableFrom(scheduleDataType))
-            {
-                return _repositoryFactory.CreatePersonAssignmentRepository(_currentUnitOfWork.Current()).LoadAggregate(id);
-            }
-            if (typeof(IPersonAbsence).IsAssignableFrom(scheduleDataType))
-            {
-                return _repositoryFactory.CreatePersonAbsenceRepository(_currentUnitOfWork.Current()).LoadAggregate(id);
-            }
-            if (typeof(IPreferenceDay).IsAssignableFrom(scheduleDataType))
-            {
-                return _repositoryFactory.CreatePreferenceDayRepository(_currentUnitOfWork.Current()).LoadAggregate(id);
-            }
-            if (typeof(INote).IsAssignableFrom(scheduleDataType))
-            {
-                return _repositoryFactory.CreateNoteRepository(_currentUnitOfWork.Current()).LoadAggregate(id);
-            }
-            if (typeof(IStudentAvailabilityDay).IsAssignableFrom(scheduleDataType))
-            {
-                return _repositoryFactory.CreateStudentAvailabilityDayRepository(_currentUnitOfWork.Current()).LoadAggregate(id);
-            }
-            if (typeof(IPublicNote).IsAssignableFrom(scheduleDataType))
-            {
-                return _repositoryFactory.CreatePublicNoteRepository(_currentUnitOfWork.Current()).LoadAggregate(id);
-            }
-            if(typeof(IAgentDayScheduleTag).IsAssignableFrom(scheduleDataType))
-            {
-                return _repositoryFactory.CreateAgentDayScheduleTagRepository(_currentUnitOfWork.Current()).LoadAggregate(id);
-            }
-            if(typeof(IOvertimeAvailability).IsAssignableFrom(scheduleDataType))
-            {
-                return _repositoryFactory.CreateOvertimeAvailabilityRepository(_currentUnitOfWork.Current()).LoadAggregate(id);
-            }
-            if (!typeof(IPersistableScheduleData).IsAssignableFrom(scheduleDataType))
-                throw new ArgumentException("Only IPersistableScheduleData types are allowed");
-            throw new NotImplementedException("Missing repository definition for type " + scheduleDataType);
+	        return _scheduleStorageRepositoryWrapper.LoadScheduleDataAggregate(scheduleDataType, id);
         }
 
 		public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(

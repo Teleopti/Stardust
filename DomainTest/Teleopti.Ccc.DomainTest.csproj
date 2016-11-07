@@ -280,6 +280,7 @@
     <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastWorkloadUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\TickEvent\TenantDayTickEventTest.cs" />
     <Compile Include="ApplicationLayer\Workload\AnalyticsWorkloadUpdaterTest.cs" />
+    <Compile Include="Archiving\ArchiveScheduleHandlerTest.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityModelTest.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityPersisterTest.cs" />
     <Compile Include="Common\ScheduleChangedEventDetector.cs" />
@@ -289,6 +290,7 @@
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
     <Compile Include="DomainTestWithStaticDependenciesAvoidUseAttribute.cs" />
     <Compile Include="ReadModelValidator\ReadModelValidatorTest.cs" />
+    <Compile Include="ScheduleStorageRepositoryWrapperTest.cs" />
     <Compile Include="ResourceCalculation\CalculateResourceReadModelTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCascadingDesktopTest.cs" />

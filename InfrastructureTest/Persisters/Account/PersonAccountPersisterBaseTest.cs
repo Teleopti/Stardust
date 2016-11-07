@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
@@ -54,6 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 			var uowFactory = CurrentUnitOfWorkFactory.Make();
 			var currUnitOfWork = new CurrentUnitOfWork(uowFactory);
 			var rep = new PersonAbsenceAccountRepository(currUnitOfWork);
+			var repositoryFactory = new RepositoryFactory();
 			Target = new PersonAccountPersister(uowFactory, 
 																	rep, 
 																	MockRepository.GenerateMock<IInitiatorIdentifier>(),
@@ -61,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 																	new PersonAccountConflictResolver(
 																		uowFactory,
 																		new TraceableRefreshService(new DefaultScenarioFromRepository(new ScenarioRepository(currUnitOfWork)), 
-																		new ScheduleStorage(currUnitOfWork, new RepositoryFactory(), new PersistableScheduleDataPermissionChecker(), new FalseToggleManager())), 
+																		new ScheduleStorage(currUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currUnitOfWork))), 
 																		new PersonAbsenceAccountRepository(currUnitOfWork)));
 		}
 

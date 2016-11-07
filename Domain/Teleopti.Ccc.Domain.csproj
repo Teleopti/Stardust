@@ -186,6 +186,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\RequestPersonAbsenceRemovedEventHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ResourceAllocator.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
+    <Compile Include="ApplicationLayer\Archiving\ArchiveScheduleHandler.cs" />
     <Compile Include="ApplicationLayer\AttemptsAttribute.cs" />
     <Compile Include="ApplicationLayer\Commands\EditScheduleNoteCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\EditScheduleNoteCommandHandler.cs" />
@@ -207,6 +208,7 @@
     <Compile Include="ApplicationLayer\Commands\INonoverwritableLayerMovabilityChecker.cs" />
     <Compile Include="ApplicationLayer\Commands\IReplyCommand.cs" />
     <Compile Include="ApplicationLayer\Events\AnalyticsTimeZoneChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\ArchiveScheduleEvent.cs" />
     <Compile Include="ApplicationLayer\Events\CommonNameDescriptionChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\TenantDayTickEvent.cs" />
     <Compile Include="ApplicationLayer\GlobalSettingData\AnalyticsPersonNameUpdater.cs" />
@@ -464,6 +466,8 @@
     <Compile Include="Logon\ImpersonateSystem.cs" />
     <Compile Include="Logon\ImpersonateSystemAspect.cs" />
     <Compile Include="Logon\ImpersonateSystemAttribute.cs" />
+    <Compile Include="Repositories\IScheduleStorageRepositoryWrapper.cs" />
+    <Compile Include="Repositories\ScheduleStorageRepositoryWrapper.cs" />
     <Compile Include="ResourceCalculation\SkillStaffingInterval.cs" />
     <Compile Include="ResourceCalculation\SkillStaffingIntervalLightModel.cs" />
     <Compile Include="ResourceCalculation\StaffingIntervalChange.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -8,24 +9,25 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeOvertimeAvailabilityRepository : IOvertimeAvailabilityRepository
 	{
+		private readonly IList<IOvertimeAvailability> _overtimeAvailabilities = new List<IOvertimeAvailability>();
 		public void Add(IOvertimeAvailability root)
 		{
-			throw new NotImplementedException();
+			_overtimeAvailabilities.Add(root);
 		}
 
 		public void Remove(IOvertimeAvailability root)
 		{
-			throw new NotImplementedException();
+			_overtimeAvailabilities.Remove(root);
 		}
 
 		public IOvertimeAvailability Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _overtimeAvailabilities.FirstOrDefault(x => x.Id == id);
 		}
 
 		public IList<IOvertimeAvailability> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _overtimeAvailabilities;
 		}
 
 		public IOvertimeAvailability Load(Guid id)
@@ -46,7 +48,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IOvertimeAvailability LoadAggregate(Guid id)
 		{
-			throw new NotImplementedException();
+			return _overtimeAvailabilities.First(x => x.Id == id);
 		}
 
 		public IList<IOvertimeAvailability> Find(DateOnlyPeriod period, IEnumerable<IPerson> persons)

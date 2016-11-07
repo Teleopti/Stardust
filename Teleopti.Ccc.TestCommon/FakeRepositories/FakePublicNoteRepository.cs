@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IPublicNote> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _notes;
 		}
 
 		public IPublicNote Load (Guid id)
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPublicNote LoadAggregate (Guid id)
 		{
-			throw new NotImplementedException();
+			return _notes.First(x => x.Id == id);
 		}
 
 		public IList<IPublicNote> Find (DateTimePeriod period, IScenario scenario)
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPublicNote> Find (DateOnlyPeriod dateOnlyPeriod, IEnumerable<IPerson> personCollection, IScenario scenario)
 		{
-			return new List<IPublicNote>() {Get (Guid.Empty)};
+			return _notes.Where(x => x.Scenario == scenario && x.BelongsToPeriod(dateOnlyPeriod) && personCollection.Contains(x.Person)).ToList();
 		}
 
 		public IPublicNote Find (DateOnly dateOnly, IPerson person, IScenario scenario)

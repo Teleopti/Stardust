@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPreferenceDay Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _preferensDays.FirstOrDefault(x => x.Id == id);
 		}
 
 		public IList<IPreferenceDay> LoadAll()
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPreferenceDay LoadAggregate(Guid id)
 		{
-			throw new NotImplementedException();
+			return _preferensDays.First(x => x.Id == id);
 		}
 
 		public IList<IPreferenceDay> Find(DateOnlyPeriod period, IEnumerable<IPerson> persons)

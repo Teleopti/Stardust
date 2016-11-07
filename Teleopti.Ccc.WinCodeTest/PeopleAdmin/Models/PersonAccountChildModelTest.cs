@@ -358,17 +358,23 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             IUnitOfWorkFactory unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
             ICurrentScenario scenario = _mocker.DynamicMock<ICurrentScenario>();
             var account = _acc.Find(new DateOnly(2005, 5, 2)).FirstOrDefault();
-            _targetDay =
+	        var repositoryFactory = new RepositoryFactory();
+	        var unitOfWork = unitOfWorkFactory.CreateAndOpenUnitOfWork();
+
+	        var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
+	        _targetDay =
                 new PersonAccountChildModel(
-                    new TraceableRefreshService(scenario, new ScheduleStorage(new ThisUnitOfWork(unitOfWorkFactory.CreateAndOpenUnitOfWork()), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker(), new FalseToggleManager())), _acc, account, null, null);
+                    new TraceableRefreshService(scenario, new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork))), _acc, account, null, null);
         }
 
         private void SetTargetDayWithoutAccount(IUnitOfWork unitOfWork, ICurrentScenario scenario)
         {
 			var account = _acc.Find(new DateOnly(2005, 5, 2)).FirstOrDefault();
+	        var repositoryFactory = new RepositoryFactory();
+	        var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
 	        _targetDay =
 		        new PersonAccountChildModel(
-			        new TraceableRefreshService(scenario,new ScheduleStorage(new ThisUnitOfWork(unitOfWork), new RepositoryFactory(),new PersistableScheduleDataPermissionChecker(), new FalseToggleManager())), _acc, account, null, null);
+			        new TraceableRefreshService(scenario,new ScheduleStorage(currentUnitOfWork, repositoryFactory,new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork))), _acc, account, null, null);
         }
 
         [Test]
