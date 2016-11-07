@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 				_scheduleForecastSkillReadModelRepository.ReadMergedStaffingAndChanges(
 					skillArea.Skills.Select(x => x.Id).ToArray(), period);
 			var splitedIntervals = _splitSkillStaffInterval.Split(skillIntervals.ToList(), resolution);
-			return _mergeIntervals.Merge(splitedIntervals.ToList(), resolution, id);
+			return _mergeIntervals.Merge(splitedIntervals.ToList(), id);
 		}
 	}
 }

@@ -5,11 +5,9 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Intraday
 {
@@ -43,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 					StaffingLevel = 20
 				}
 			};
-			var result = Target.Merge(staffingList, TimeSpan.FromMinutes(10), skillAreaId);
+			var result = Target.Merge(staffingList, skillAreaId);
 			result.Count.Should().Be.EqualTo(2);
 			result.First().Id.Should().Be.EqualTo(skillAreaId);
 			result.Second().Id.Should().Be.EqualTo(skillAreaId);
@@ -77,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 					StaffingLevel = 13
 				}
 			};
-			var result = Target.Merge(staffingList, TimeSpan.FromMinutes(10), skillAreaId);
+			var result = Target.Merge(staffingList, skillAreaId);
 			result.Count.Should().Be.EqualTo(2);
 			result.Should().Contain(new SkillStaffingIntervalLightModel()
 			{
