@@ -29,10 +29,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 			return dividedIntervals;
 		}
 
-		private IEnumerable<SkillStaffingIntervalLightModel> splitStaffinInterval(SkillStaffingInterval interval, TimeSpan resolution)
+		private static IEnumerable<SkillStaffingIntervalLightModel> splitStaffinInterval(SkillStaffingInterval interval, TimeSpan resolution)
 		{
 			var dividedIntervals = new List<SkillStaffingIntervalLightModel>();
-			var divisor = interval.DivideBy(resolution);
 			var startInterval = interval.StartDateTime;
 			while (startInterval < interval.EndDateTime)
 			{
@@ -41,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 					Id = interval.SkillId,
 					StartDateTime = startInterval,
 					EndDateTime = startInterval.Add(resolution),
-					StaffingLevel = Math.Round((interval.StaffingLevel / divisor), 5)
+					StaffingLevel = interval.StaffingLevel
 				});
 				startInterval = startInterval.Add(resolution);
 			}

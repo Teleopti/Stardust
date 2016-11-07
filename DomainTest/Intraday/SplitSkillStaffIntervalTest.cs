@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using NHibernate.Util;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
@@ -119,21 +117,21 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 					Id = skill1,
 					StartDateTime = dateTimeIs(8,0),
 					EndDateTime = dateTimeIs(8,10),
-					StaffingLevel = 16.66667
+					StaffingLevel = 50
 				},
 				new SkillStaffingIntervalLightModel()
 				{
 					Id = skill1,
 					StartDateTime = dateTimeIs(8,10),
 					EndDateTime = dateTimeIs(8,20),
-					StaffingLevel = 16.66667
+					StaffingLevel = 50
 				},
 				new SkillStaffingIntervalLightModel()
 				{
 					Id = skill1,
 					StartDateTime = dateTimeIs(8,20),
 					EndDateTime = dateTimeIs(8,30),
-					StaffingLevel = 16.66667
+					StaffingLevel = 50
 				},
 				new SkillStaffingIntervalLightModel()
 				{
