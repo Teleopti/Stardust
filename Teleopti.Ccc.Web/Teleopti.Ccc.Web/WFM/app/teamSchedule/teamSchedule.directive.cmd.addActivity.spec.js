@@ -143,7 +143,7 @@
 		var result = setUp();
 
 		var vm = result.commandControl;
-
+		vm.manageScheduleForDistantTimezonesEnabled = true;
 		vm.isNextDay = true;
 		vm.disableNextDay = false;
 		vm.timeRange = {
@@ -196,7 +196,7 @@
 	it('should call add activity when click apply with correct data', function () {
 		var result = setUp();
 		var vm = result.commandControl;
-
+		vm.manageScheduleForDistantTimezonesEnabled = true;
 		vm.isNextDay = false;
 		vm.disableNextDay = false;
 		vm.timeRange = {
