@@ -453,12 +453,28 @@
 			expect(vm.shiftTradeScheduleViewModels[1].length).toEqual(1);
 		});
 
-		it('should not load absences for shif trade request', function() {
+		it('should not load absences for shift trade request', function() {
 			var test = setUpTarget();
 			test.scope.shiftTradeView = true;
 			test.scope.$apply();
 			var vm = test.target.isolateScope().requestsTableContainer;
 			expect(angular.isDefined(vm.AllRequestableAbsences)).toEqual(false);
+		});
+
+		it('should display correct time for DST', function () {
+			var timeZone = 'Europe/Berlin';
+
+			var test = setUpTarget();
+			test.scope.requests = [{ Id: 1, PeriodStartTime: '2016-10-27T17:00:00', PeriodEndTime: '2016-10-27T18:00:00', CreatedTime: '2016-11-07T10:17:31', TimeZone: timeZone, UpdatedTime: '2016-11-07T10:17:31', IsFullDay: false }];
+			test.scope.$digest();
+
+			var isolatedScope = test.target.isolateScope();
+			isolatedScope.requestsTableContainer.isUsingRequestSubmitterTimeZone = true;
+			test.scope.$digest();
+
+			var request = test.scope.requests[0];
+			expect(request.FormatedPeriodStartTime()).toEqual(toDateString('2016-10-27T17:00:00', timeZone));
+			expect(request.FormatedPeriodEndTime()).toEqual(toDateString('2016-10-27T18:00:00', timeZone));
 		});
 
 		xit('should load schedules for shift trade request', function () {
