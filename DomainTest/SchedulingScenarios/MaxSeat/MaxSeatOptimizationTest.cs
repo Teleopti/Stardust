@@ -655,7 +655,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldNotMoveMoreSchedulesThanNecessary()
 		{
 			if (GetType() == typeof(MaxSeatOptimizationTeamTest))
-				Assert.Ignore("Listen with Anders");
+				Assert.Ignore("Won't probably be fixed for first version. When we know more fix or delete (=move this test to MaxSeatOptimizationBlockTest)");
 
 			var site = new Site("_") { MaxSeats = 2 }.WithId();
 			var team = new Team { Description = new Description("_"), Site = site };
@@ -703,7 +703,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		public void ShouldNotChangeDayWhereMaxSeatIsOkWhenMultipleDaysSelected()
 		{
 			if (GetType() == typeof(MaxSeatOptimizationBlockTest))
-				Assert.Ignore("Listen with Anders");
+				Assert.Ignore("Won't probably be fixed for first version. When we know more fix or delete (=move this test to MaxSeatOptimizationTeamTest)");
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
 			var team = new Team { Description = new Description("_"), Site = site };
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
