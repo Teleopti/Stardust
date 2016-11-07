@@ -3210,7 +3210,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			turnOffCalculateMinMaxCacheIfNeeded(_optimizerOriginalPreferences.SchedulingOptions);
 			_optimizerOriginalPreferences.SchedulingOptions.NotAllowedShiftCategories.Clear();
 
-			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MaxSeatsNew_40939) && _optimizerOriginalPreferences.SchedulingOptions.UseTeam || _optimizerOriginalPreferences.SchedulingOptions.UseBlock)
+			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MaxSeatsNew_40939) && (_optimizerOriginalPreferences.SchedulingOptions.UseTeam || _optimizerOriginalPreferences.SchedulingOptions.UseBlock))
 			{
 				_optimizerOriginalPreferences.SchedulingOptions.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.DoNotConsiderMaxSeats;
 			}
