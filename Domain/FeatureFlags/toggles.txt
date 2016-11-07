@@ -81,7 +81,7 @@ WfmTeamSchedule_WeekView_39870 = true
 WfmTeamSchedule_MakePersonalActivityUnmerged_40252 = true
 WfmTeamSchedule_WeeklyContractTime_39871 = true
 WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925 = true
-WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305 = dev
+WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305 = RC
 
 WfmTeamSchedule_MoveToBaseLicense_41039 = true
 
