@@ -33,7 +33,6 @@ describe('RtaAgentsCtrl by organization and skills', function () {
 
 		$fakeBackend.clear();
 
-		$fakeBackend.onlyAllowGettingStatesByCombiningOrganizationAndSkillQueries();
 
 		spyOn($state, 'go');
 	}));

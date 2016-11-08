@@ -47,7 +47,7 @@
 
 			fake(/\.\.\/api\/Agents\/For(.*)/,
 				function (params) {
-					var agents = (function () {
+					var ret = (function () {
 						if (params.siteIds != null && params.skillIds != null)
 							return agents.filter(function (a) {
 								return params.skillIds.indexOf(a.SkillId) >= 0
@@ -72,12 +72,12 @@
 							return params.skillIds.indexOf(a.SkillId) >= 0
 						});
 					})();
-					return [200, agents];
+					return [200, ret];
 				});
 
 			fake(/\.\.\/api\/Agents\/StatesFor(.*)/,
 				function (params) {
-					var states = (function () {
+					var ret = (function () {
 						if (params.siteIds != null && params.skillIds != null)
 							return statesForMultiple(params.siteIds, function (a) {
 								return a.SiteId;
@@ -104,7 +104,7 @@
 					})();
 					return [200, {
 						Time: serverTime,
-						States: states
+						States: ret
 					}];
 				});
 
@@ -128,7 +128,7 @@
 
 			fake(/\.\.\/api\/Agents\/InAlarmFor\?(.*)/,
 				function (params) {
-					var states = (function () {
+					var ret = (function () {
 						if (params.siteIds != null && params.skillIds != null)
 							return alarmStatesForMultiple(params.siteIds, function (a) {
 								return a.SiteId;
@@ -155,13 +155,13 @@
 					})();
 					return [200, {
 						Time: serverTime,
-						States: states
+						States: ret
 					}];
 				});
 
 			fake(/\.\.\/api\/Agents\/InAlarmExcludingPhoneStatesFor(.*)/,
 				function (params) {
-					var states = (function () {
+					var ret = (function () {
 						if (params.siteIds != null && params.skillIds != null)
 							return alarmStatesForMultiple(params.siteIds, function (a) {
 								return a.SiteId;
@@ -190,15 +190,15 @@
 							}).filter(function (s) {
 								return params.excludedStateIds.indexOf(s.StateId) === -1;
 							});
-						return alarmStatesFor(data.skillIds, function (a) {
+						return alarmStatesFor(params.skillIds, function (a) {
 							return a.SkillId;
 						}).filter(function (s) {
-							return data.excludedStateIds.indexOf(s.StateId) === -1;
+							return params.excludedStateIds.indexOf(s.StateId) === -1;
 						});
 					})();
 					return [200, {
 						Time: serverTime,
-						States: states
+						States: ret
 					}];
 				});
 

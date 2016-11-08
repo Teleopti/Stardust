@@ -178,9 +178,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/InAlarmExcludingPhoneStatesFor")]
-		public virtual IHttpActionResult InAlarmExcludingPhoneStatesFor([FromUri] ViewModelFilter filter, [FromUri] IEnumerable<Guid?> excludedPhoneStates)
+		public virtual IHttpActionResult InAlarmExcludingPhoneStatesFor([FromUri] ViewModelFilter filter, [FromUri] IEnumerable<Guid?> excludedStateIds)
 		{
-			return Ok(_agentStatesBuilder.InAlarmExcludingPhoneStatesFor(filter, excludedPhoneStates));
+			return Ok(_agentStatesBuilder.InAlarmExcludingPhoneStatesFor(filter, excludedStateIds));
 		}
 
 

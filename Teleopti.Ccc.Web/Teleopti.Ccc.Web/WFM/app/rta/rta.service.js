@@ -31,9 +31,7 @@
 						method: 'GET',
 						isArray: true
 					}
-				}).query({
-					siteIds: data.siteIds,
-				}).$promise;
+				}).query(data).$promise;
 			};
 
 			this.getAgentsForTeams = function(data) {
@@ -42,9 +40,7 @@
 						method: 'GET',
 						isArray: true
 					}
-				}).query({
-					teamIds: data.teamIds,
-				}).$promise;
+				}).query(data).$promise;
 			};
 
 			this.getAgentsForSkills = function(data) {
@@ -53,9 +49,7 @@
 						method: 'GET',
 						isArray: true
 					}
-				}).query({
-					skillIds: data.skillIds,
-				}).$promise;
+				}).query(data).$promise;
 			};
 
 			this.getAgentsForSitesAndSkills = function(data) {
@@ -64,10 +58,7 @@
 						method: 'GET',
 						isArray: true
 					}
-				}).query({
-					siteIds: data.siteIds,
-					skillIds: data.skillIds,
-				}).$promise;
+				}).query(data).$promise;
 			};
 
 			this.getAgentsForTeamsAndSkills = function(data) {
@@ -76,10 +67,7 @@
 						method: 'GET',
 						isArray: true
 					}
-				}).query({
-					teamIds: data.teamIds,
-					skillIds: data.skillIds,
-				}).$promise;
+				}).query(data).$promise;
 			};
 
 
@@ -90,9 +78,7 @@
 					query: {
 						method: 'GET'
 					}
-				}).query({
-					ids: data.siteIds
-				}).$promise;
+				}).query(data).$promise;
 			};
 
 			this.getStatesForTeams = function(data) {
@@ -100,9 +86,7 @@
 						query: {
 							method: 'GET'
 						}
-					}).query({
-						ids: data.teamIds
-					})
+					}).query(data)
 					.$promise;
 			};
 
@@ -111,9 +95,7 @@
 					query: {
 						method: 'GET'
 					}
-				}).query({
-					ids: data.skillIds
-				}).$promise;
+				}).query(data).$promise;
 			};
 			
 			this.getStatesForTeamsAndSkills = function(data) {
@@ -121,10 +103,7 @@
 						query: {
 							method: 'GET'
 						}
-					}).query({
-						teamIds: data.teamIds,
-						skillIds: data.skillIds,
-					})
+					}).query(data)
 					.$promise;
 			};
 
@@ -133,10 +112,7 @@
 						query: {
 							method: 'GET'
 						}
-					}).query({
-						siteIds: data.siteIds,
-						skillIds: data.skillIds,
-					})
+					}).query(data)
 					.$promise;
 			};
 
@@ -147,35 +123,7 @@
 					query: {
 						method: 'GET'
 					}
-				}).query({
-					ids: data.siteIds
-				}).$promise;
-			};
-
-			this.getAlarmStatesForSitesExcludingStates = function(data) {
-				return $resource('../api/Agents/GetAlarmStatesForSitesExcludingStates', {}, {
-						query: {
-							method: 'GET'
-						}
-					}).query({
-						ids: data.siteIds,
-						excludedStateIds: data.excludedStateIds
-					})
-					.$promise;
-			};
-
-			this.getAlarmStatesForSitesAndSkillsExcludingStates = function(data) {
-				return $resource('../api/Agents/GetAlarmStatesForSitesAndSkillsExcludingStates', {}, {
-						query: {
-							method: 'GET'
-						}
-					})
-					.query({
-						skillIds: data.skillIds,
-						siteIds: data.siteIds,
-						excludedStateIds: data.excludedStateIds
-					})
-					.$promise;
+				}).query(data).$promise;
 			};
 
 			this.getAlarmStatesForSkills = function(data) {
@@ -183,10 +131,7 @@
 						query: {
 							method: 'GET'
 						}
-					})
-					.query({
-						ids: data.skillIds
-					})
+					}).query(data)
 					.$promise;
 			};
 			
@@ -195,9 +140,7 @@
 						query: {
 							method: 'GET'
 						}
-					}).query({
-						ids: data.teamIds
-					})
+					}).query(data)
 					.$promise;
 			};
 
@@ -206,10 +149,7 @@
 						query: {
 							method: 'GET'
 						}
-					}).query({
-						teamIds: data.teamIds,
-						skillIds: data.skillIds
-					})
+					}).query(data)
 					.$promise;
 			};
 
@@ -218,50 +158,55 @@
 						query: {
 							method: 'GET'
 						}
-					}).query({
-						siteIds: data.siteIds,
-						skillIds: data.skillIds
-					})
+					}).query(data)
 					.$promise;
 			};
 
-			this.getAlarmStatesForTeamsAndSkillsExcludingStates = function(data) {
-				return $resource('../api/Agents/GetAlarmStatesForTeamsAndSkillsExcludingStates', {}, {
+
+			this.getAlarmStatesForSitesExcludingStates = function(data) {
+				return $resource('../api/Agents/InAlarmExcludingPhoneStatesFor', {}, {
 						query: {
 							method: 'GET'
 						}
-					})
-					.query({
-						skillIds: data.skillIds,
-						teamIds: data.teamIds,
-						excludedStateIds: data.excludedStateIds
-					})
+					}).query(data)
+					.$promise;
+			};
+
+			this.getAlarmStatesForSitesAndSkillsExcludingStates = function(data) {
+				return $resource('../api/Agents/InAlarmExcludingPhoneStatesFor', {}, {
+						query: {
+							method: 'GET'
+						}
+					}).query(data)
+					.$promise;
+			};
+
+
+			this.getAlarmStatesForTeamsAndSkillsExcludingStates = function(data) {
+				return $resource('../api/Agents/InAlarmExcludingPhoneStatesFor', {}, {
+						query: {
+							method: 'GET'
+						}
+					}).query(data)
 					.$promise;
 			};
 
 			this.getAlarmStatesForSkillsExcludingStates = function(data) {
-				return $resource('../api/Agents/GetAlarmStatesForSkillsExcludingStates', {}, {
+				return $resource('../api/Agents/InAlarmExcludingPhoneStatesFor', {}, {
 						query: {
 							method: 'GET'
 						}
-					})
-					.query({
-						ids: data.skillIds,
-						excludedStateIds: data.excludedStateIds
-					})
+					}).query(data)
 					.$promise;
 			};
 
 
 			this.getAlarmStatesForTeamsExcludingStates = function(data) {
-				return $resource('../api/Agents/GetAlarmStatesForTeamsExcludingStates', {}, {
+				return $resource('../api/Agents/InAlarmExcludingPhoneStatesFor', {}, {
 						query: {
 							method: 'GET'
 						}
-					}).query({
-						ids: data.teamIds,
-						excludedStateIds: data.excludedStateIds
-					})
+					}).query(data)
 					.$promise;
 			};
 
