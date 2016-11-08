@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		public void Add(IPersistableScheduleData item)
 		{
 			var repository = getRepository(item.GetType());
-			//((dynamic)repository).Add((dynamic)item);
 
 			var method = makeGenericMethod(typeof(IRepository<>), item.GetType(), nameof(IRepository<int>.Add));
 			method.Invoke(repository, new object[] { item });
@@ -55,7 +54,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		public void Remove(IPersistableScheduleData item)
 		{
 			var repository = getRepository(item.GetType());
-			//((dynamic)repository).Remove((dynamic)item);
 
 			var method = makeGenericMethod(typeof(IRepository<>), item.GetType(), nameof(IRepository<int>.Remove));
 			method.Invoke(repository, new object[] { item });
