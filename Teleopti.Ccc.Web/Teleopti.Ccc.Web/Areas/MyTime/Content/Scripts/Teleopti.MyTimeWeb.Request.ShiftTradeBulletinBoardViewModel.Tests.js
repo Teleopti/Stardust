@@ -1,5 +1,4 @@
-﻿
-$(document).ready(function () {
+﻿$(document).ready(function () {
 
 	module("Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel");
 
@@ -20,7 +19,6 @@ $(document).ready(function () {
 	});
 
 	test("should get date with format", function () {
-
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
@@ -36,6 +34,48 @@ $(document).ready(function () {
 		var result = viewModel.getFormattedDateForDisplay();
 
 		equal(result, "1995-12-25");
+	});
+
+	test("should get correct contract time", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
+
+		var schedules = {
+			"MySchedule":
+			{
+				"ScheduleLayers": [{}],
+				"ContractTimeInMinute": 480
+			},
+			"PossibleTradeSchedules": [
+				{
+					"ScheduleLayers": [{}],
+					"ContractTimeInMinute": 425
+				}
+			],
+			"TimeLineHours": [
+				{
+					"HourText": "",
+					"StartTime": "2017-01-01 00:00:00"
+				},
+				{
+					"HourText": "07:00",
+					"StartTime": "2017-01-01 07:00:00"
+				}
+			]
+		};
+
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url === "RequestsShiftTradeBulletinBoard/BulletinSchedules") {
+					options.success(schedules);
+				}
+			}
+		};
+
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel(ajax);
+		viewModel.loadBulletinSchedule("2017-01-01", ["TeamId"]);
+
+		equal(viewModel.mySchedule().contractTime, "8:00");
+		equal(viewModel.possibleTradeSchedules()[0].contractTime, "7:05");
 	});
 
 	test("should hide page view when no data", function () {

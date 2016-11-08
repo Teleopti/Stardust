@@ -1,6 +1,5 @@
 ﻿@using Teleopti.Ccc.UserTexts
 
-
 <div id="Request-shift-trade-bulletin-board" class="well well-sm displaynone">
 	<span class="bulletin-ready-loading-flag displaynone" data-bind="css: { 'is-ready-loaded': isReadyLoaded }"></span>
 	<div class="shift-trade-missing-wcs-message alert alert-warning" data-bind="visible: missingWorkflowControlSet">
@@ -79,6 +78,11 @@
 					<tr>
 						<td>&nbsp;</td>
 						<td></td>
+						<!--ko if:$root.showContractTime-->
+						<td class="shift-trade-contract-time">
+							<strong>@Resources.ContractTime</strong>
+						</td>
+						<!--/ko-->
 					</tr>
 				</thead>
 				<tbody>
@@ -128,6 +132,11 @@
 							<!--/ko-->
 						</td>
 						<!--/ko-->
+						<!--ko if:$root.showContractTime-->
+						<td class="shift-trade-contract-time">
+							<div data-bind="text: mySchedule().contractTime"></div>
+						</td>
+						<!--/ko-->
 					</tr>
 				</tbody>
 				<tbody data-bind="foreach: possibleTradeSchedules">
@@ -157,9 +166,12 @@
 								<div class="empty" data-bind="tooltip: { title: '@Resources.OptionEmptyDay', html: true, container: '.tooltipContainer'}"></div>
 							</div>
 							<!--/ko-->
-
-
 						</td>
+						<!--ko if:$root.showContractTime-->
+						<td class="shift-trade-contract-time">
+							<div data-bind="text: $data.contractTime"></div>
+						</td>
+						<!--/ko-->
 					</tr>
 				</tbody>
 			</table>
