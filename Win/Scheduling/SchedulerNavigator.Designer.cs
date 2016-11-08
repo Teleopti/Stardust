@@ -49,9 +49,9 @@
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripRefresh = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonOrganizeCascadingSkills = new System.Windows.Forms.ToolStripButton();
-			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.toolStripButtonArchiveSchedule = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonImportSchedule = new System.Windows.Forms.ToolStripButton();
+			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv1)).BeginInit();
 			this.splitContainerAdv1.Panel2.SuspendLayout();
 			this.splitContainerAdv1.SuspendLayout();
@@ -267,12 +267,6 @@
 			this.toolStripButtonOrganizeCascadingSkills.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonOrganizeCascadingSkills.Click += new System.EventHandler(this.toolStripButtonOrganizeCascadingSkillsClick);
 			// 
-			// imageList1
-			// 
-			this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-			this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
-			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-			// 
 			// toolStripButtonArchiveSchedule
 			// 
 			this.toolStripButtonArchiveSchedule.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -293,7 +287,14 @@
 			this.toolStripButtonImportSchedule.Name = "toolStripButtonImportSchedule";
 			this.toolStripButtonImportSchedule.Size = new System.Drawing.Size(115, 21);
 			this.toolStripButtonImportSchedule.Text = "xxImportSchedule";
+			this.toolStripButtonImportSchedule.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonImportSchedule.Click += new System.EventHandler(this.toolStripButtonImportScheduleClick);
+			// 
+			// imageList1
+			// 
+			this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+			this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
+			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
 			// 
 			// SchedulerNavigator
 			// 

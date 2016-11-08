@@ -12777,6 +12777,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import schedule.
+        /// </summary>
+        public static string ImportSchedule {
+            get {
+                return ResourceManager.GetString("ImportSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import Staffing.
         /// </summary>
         public static string ImportStaffing {

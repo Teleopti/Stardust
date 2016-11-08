@@ -15114,4 +15114,8 @@ These options are activated:
     <value>The absence can not be added to</value>
     <comment>Warning message of invalid agents when adding absence in wfm/teams. Example:'The absence can not be added to John, Bill'</comment>
   </data>
+  <data name="ImportSchedule" xml:space="preserve">
+    <value>Import schedule</value>
+    <comment>Import schedule</comment>
+  </data>
 </root>
