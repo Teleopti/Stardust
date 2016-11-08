@@ -45,7 +45,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnly queryDate)
 		{
-			return _details;
+			return _details
+				.Where(g => g.GroupId == groupId);
 		}
 
 		public void UpdateGroupingReadModel(ICollection<Guid> inputIds)

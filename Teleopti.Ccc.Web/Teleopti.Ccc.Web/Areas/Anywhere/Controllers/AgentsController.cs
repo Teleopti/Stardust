@@ -58,6 +58,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Ok(new PersonDetailModel(_commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(personId))));
 		}
 
+
+
 		[UnitOfWork, HttpGet, Route("api/Agents/ForSites")]
 		public virtual IHttpActionResult ForSites([FromUri]Guid[] siteIds)
 		{
@@ -85,10 +87,11 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[UnitOfWork, HttpGet, Route("api/Agents/ForSitesAndSkills")]
 		public virtual IHttpActionResult ForSitesAndSkills([FromUri] Guid[] skillIds, [FromUri] Guid[] siteIds)
 		{
-			return Ok(_agentViewModelBuilder.ForSkillAndTeam(skillIds, siteIds));
+			return Ok(_agentViewModelBuilder.ForSkillAndSite(skillIds, siteIds));
 		}
 
 		
+
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStates")]
 		public virtual IHttpActionResult GetStates(Guid teamId)
 		{
@@ -156,6 +159,11 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 
 
+		[UnitOfWork, HttpGet, Route("api/Agents/For")]
+		public virtual IHttpActionResult For([FromUri]ViewModelFilter filter)
+		{
+			return Ok(_agentViewModelBuilder.For(filter));
+		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/StatesFor")]
 		public virtual IHttpActionResult StatesFor([FromUri] ViewModelFilter filter)

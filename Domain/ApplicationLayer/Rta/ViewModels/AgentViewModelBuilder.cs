@@ -39,6 +39,50 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 			_now = now;
 		}
+		
+		public IEnumerable<AgentViewModel> ForTeam(Guid teamId)
+		{
+			var team = _teamRepository.Get(teamId);
+			var isPermitted = _permissionProvider.Current().IsPermitted(
+				DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,
+				_now.LocalDateOnly(),
+				team);
+			if (!isPermitted)
+			{
+				throw new PermissionException();
+			}
+
+			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
+
+			var today = _now.LocalDateOnly();
+			return _personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(today, today))
+					.Select(
+						x =>
+							new AgentViewModel
+							{
+								PersonId = x.Id.GetValueOrDefault(),
+								Name = commonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(x.Id.GetValueOrDefault())),
+								SiteId = team.Site.Id.ToString(),
+								SiteName = team.Site.Description.Name,
+								TeamId = team.Id.ToString(),
+								TeamName = team.Description.Name
+							}).ToArray();
+		}
+
+
+
+		public IEnumerable<AgentViewModel> For(ViewModelFilter filter)
+		{
+			if (filter.SiteIds != null && filter.SkillIds != null)
+				return ForSkillAndSite(filter.SkillIds.ToArray(), filter.SiteIds.ToArray());
+			if (filter.SiteIds != null)
+				return ForSites(filter.SiteIds.ToArray());
+			if (filter.TeamIds != null && filter.SkillIds != null)
+				return ForSkillAndTeam(filter.SkillIds.ToArray(), filter.TeamIds.ToArray());
+			if (filter.TeamIds != null)
+				return ForTeams(filter.TeamIds.ToArray());
+			return ForSkill(filter.SkillIds.ToArray());
+		}
 
 		public IEnumerable<AgentViewModel> ForSites(Guid[] siteIds)
 		{
@@ -80,42 +124,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			return agents;
 		}
 
-		public IEnumerable<AgentViewModel> ForTeam(Guid teamId)
-		{
-			var team = _teamRepository.Get(teamId);
-			var isPermitted = _permissionProvider.Current().IsPermitted(
-				DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,
-				_now.LocalDateOnly(),
-				team);
-			if (!isPermitted)
-			{
-				throw new PermissionException();
-			}
-
-			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
-
-			var today = _now.LocalDateOnly();
-			return _personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(today, today))
-					.Select(
-						x =>
-							new AgentViewModel
-							{
-								PersonId = x.Id.GetValueOrDefault(),
-								Name = commonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(x.Id.GetValueOrDefault())),
-								SiteId = team.Site.Id.ToString(),
-								SiteName = team.Site.Description.Name,
-								TeamId = team.Id.ToString(),
-								TeamName = team.Description.Name
-							}).ToArray();
-		}
-
 
 		public IEnumerable<AgentViewModel> ForSkill(Guid[] skill)
 		{
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
 			return skill.SelectMany(s =>
 			{
-				return _groupingReadOnlyRepository.DetailsForGroup(s, _now.LocalDateOnly())
+				var readOnlyGroupDetails = _groupingReadOnlyRepository.DetailsForGroup(s, _now.LocalDateOnly());
+				return readOnlyGroupDetails
 					.Select(x => new AgentViewModel
 					{
 						PersonId = x.PersonId,
@@ -125,7 +141,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						TeamId = x.TeamId.ToString(),
 						TeamName = _teamRepository.Load(x.TeamId.Value).Description.Name
 					});
-			}).ToArray();
+			})
+			.ToArray();
 		}
 
 		public IEnumerable<AgentViewModel> ForSkillAndTeam(Guid[] skill, Guid[] team)
@@ -165,5 +182,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					});
 			}).ToArray();
 		}
+
 	}
 }
