@@ -15110,4 +15110,8 @@ These options are activated:
     <value>No permission to remove absence from agents.</value>
     <comment>Error message to notify missing permission for removing absence</comment>
   </data>
+  <data name="TheAbsenceCanNotBeAddedTo" xml:space="preserve">
+    <value>The absence can not be added to</value>
+    <comment>Warning message of invalid agents when adding absence in wfm/teams. Example:'The absence can not be added to John, Bill'</comment>
+  </data>
 </root>

@@ -30402,6 +30402,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The absence can not be added to.
+        /// </summary>
+        public static string TheAbsenceCanNotBeAddedTo {
+            get {
+                return ResourceManager.GetString("TheAbsenceCanNotBeAddedTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The activity can not be added to.
         /// </summary>
         public static string TheActivityCanNotBeAddedTo {
