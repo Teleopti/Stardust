@@ -414,6 +414,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Areas\Anywhere\Controllers\AdherenceController.cs" />
+    <Compile Include="Areas\Anywhere\Controllers\AnywhereAgentsController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupScheduleController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\PhoneStateController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\SkillsController.cs" />
