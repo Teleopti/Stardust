@@ -1,4 +1,9 @@
 ﻿<div ui-view>
+	<div ng-show="vm.showProgress">
+		<md-progress-linear md-mode="determinate" ng-value="vm.progress"></md-progress-linear>
+		<div class="wfm-block material-depth-1"> {{vm.progress | number:0}}% </div>
+	</div>
+
 	<div class="view-header with-fab with-desc">
 		<div class="view-title">
 			<h1><i class="mdi mdi-calendar"></i> {{'ArchiveSchedule' | translate}}
@@ -41,7 +46,7 @@
 
 		</div>
 	</div>
-	<div>
-		Recieved: {{vm.recievedMessages}}/{{vm.totalMessages}}
-	</div>
+	<!--<div>
+		({{vm.recievedMessages}}/{{vm.totalMessages}})
+	</div>-->
 </div>

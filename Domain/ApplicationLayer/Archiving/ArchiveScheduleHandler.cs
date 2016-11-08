@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 {
@@ -20,13 +21,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 		private readonly IPersonRepository _personRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IScheduleStorage _scheduleStorage;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
-		public ArchiveScheduleHandler(ITrackingMessageSender trackingMessageSender, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IScheduleStorage scheduleStorage)
+		public ArchiveScheduleHandler(ITrackingMessageSender trackingMessageSender, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IScheduleStorage scheduleStorage, ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_trackingMessageSender = trackingMessageSender;
 			_personRepository = personRepository;
 			_scenarioRepository = scenarioRepository;
 			_scheduleStorage = scheduleStorage;
+			_currentUnitOfWork = currentUnitOfWork;
 		}
 
 		[ImpersonateSystem]
@@ -50,11 +53,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 						_scheduleStorage.Add(changedScheduleData);
 				}
 			}
-
-			_trackingMessageSender.SendTrackingMessage(@event, new TrackingMessage
+			
+			_currentUnitOfWork.Current().AfterSuccessfulTx(() =>
 			{
-				Status = TrackingMessageStatus.Success,
-				TrackId = @event.TrackingId
+				_trackingMessageSender.SendTrackingMessage(@event, new TrackingMessage
+				{
+					Status = TrackingMessageStatus.Success,
+					TrackId = @event.TrackingId
+				});
 			});
 		}
 	}

@@ -5,7 +5,10 @@
 			'ArchiveScheduleSrvc',
 			'signalRSVC',
 			'guidgenerator',
-			function (ArchiveScheduleSrvc, signalRSVC, guidgenerator) {
+			'$interval',
+			'$timeout',
+			'$scope',
+			function (ArchiveScheduleSrvc, signalRSVC, guidgenerator, $interval, $timeout, $scope) {
 				var vm = this;
 				vm.scenarios = [];
 				vm.fromScenario = null;
@@ -17,8 +20,13 @@
 				};
 				vm.totalMessages = 0;
 				vm.recievedMessages = 0;
+				vm.progress = 0;
 				var trackingId = guidgenerator.newGuid();
 
+				var updateProgress = function () {
+					if (vm.totalMessages === 0) return 0;
+					return 100 * (vm.recievedMessages / vm.totalMessages);
+				}
 				var scenariosPromise = ArchiveScheduleSrvc.scenarios.query().$promise;
 				scenariosPromise.then(function (result) {
 					vm.scenarios = result;
@@ -27,13 +35,20 @@
 				var updateStatus = function (messages) {
 					console.log(messages);
 					vm.recievedMessages += messages.length;
+					if (vm.totalMessages === vm.recievedMessages) {
+						$timeout(function() {
+							vm.showProgress = false;
+							vm.progress = 0;
+						}, 3000);
+						
+					}
+					
 				};
 
 				vm.runArchiving = function (fromScenario, toScenario, period, peopleSelection) {
-					//console.log("From", fromScenario);
-					//console.log("To", toScenario);
-					//console.log("Period", period);
-					//console.log("People", peopleSelection);
+					vm.totalMessages = 0;
+					vm.recievedMessages = 0;
+					vm.showProgress = true;
 					var archiveScheduleModel = {
 						FromScenario: fromScenario.Id,
 						ToScenario: toScenario.Id,
@@ -42,15 +57,19 @@
 						TrackId: trackingId
 					};
 					ArchiveScheduleSrvc.runArchiving.post({}, JSON.stringify(archiveScheduleModel)).$promise.then(function (result) {
-						console.log({
-							TotalMessages: result.TotalMessages
-						});
 						vm.totalMessages = result.TotalMessages;
 					});
 				};
 
-				signalRSVC.subscribeBatchMessage({ DomainType: 'TrackingMessage', DomainId: trackingId }, updateStatus, 500);
-				
+				signalRSVC.subscribeBatchMessage({ DomainType: 'TrackingMessage', DomainId: trackingId }, updateStatus, 50);
+				$interval(function () {
+					if (vm.showProgress) {
+						$scope.$apply(function() {
+							vm.progress = updateProgress();
+						});
+					}
+						
+				}, 100, 0, false);
 			}
 		]);
 })();
