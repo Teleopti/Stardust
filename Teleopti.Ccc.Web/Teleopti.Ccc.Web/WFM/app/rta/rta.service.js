@@ -4,16 +4,6 @@
 	angular.module('wfm.rta').service('RtaService', ['RtaResourceFactory', '$q',
 		function($resource, $q) {
 
-			this.getAgentsForSites = function(data) {
-				return $resource('../api/Agents/ForSites', {}, {
-					query: {
-						method: 'GET',
-						isArray: true
-					}
-				}).query({
-					siteIds: data.siteIds,
-				}).$promise;
-			};
 
 			this.getSkills = function(data) {
 				return $resource('../api/Skills', {}, {
@@ -32,8 +22,22 @@
 				}).query().$promise;
 			};
 
+
+
+
+			this.getAgentsForSites = function(data) {
+				return $resource('../api/Agents/For', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					siteIds: data.siteIds,
+				}).$promise;
+			};
+
 			this.getAgentsForTeams = function(data) {
-				return $resource('../api/Agents/ForTeams', {}, {
+				return $resource('../api/Agents/For', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
@@ -44,7 +48,7 @@
 			};
 
 			this.getAgentsForSkills = function(data) {
-				return $resource('../api/Agents/ForSkills', {}, {
+				return $resource('../api/Agents/For', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
@@ -55,7 +59,7 @@
 			};
 
 			this.getAgentsForSitesAndSkills = function(data) {
-				return $resource('../api/Agents/ForSitesAndSkills', {}, {
+				return $resource('../api/Agents/For', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
@@ -67,7 +71,7 @@
 			};
 
 			this.getAgentsForTeamsAndSkills = function(data) {
-				return $resource('../api/Agents/ForTeamsAndSkills', {}, {
+				return $resource('../api/Agents/For', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
@@ -78,18 +82,11 @@
 				}).$promise;
 			};
 
-			this.getStatesForSkills = function(data) {
-				return $resource('../api/Agents/GetStatesForSkills', {}, {
-					query: {
-						method: 'GET'
-					}
-				}).query({
-					ids: data.skillIds
-				}).$promise;
-			};
+
+
 
 			this.getStatesForSites = function(data) {
-				return $resource('../api/Agents/GetStatesForSites', {}, {
+				return $resource('../api/Agents/StatesFor', {}, {
 					query: {
 						method: 'GET'
 					}
@@ -98,8 +95,55 @@
 				}).$promise;
 			};
 
+			this.getStatesForTeams = function(data) {
+				return $resource('../api/Agents/StatesFor', {}, {
+						query: {
+							method: 'GET'
+						}
+					}).query({
+						ids: data.teamIds
+					})
+					.$promise;
+			};
+
+			this.getStatesForSkills = function(data) {
+				return $resource('../api/Agents/StatesFor', {}, {
+					query: {
+						method: 'GET'
+					}
+				}).query({
+					ids: data.skillIds
+				}).$promise;
+			};
+			
+			this.getStatesForTeamsAndSkills = function(data) {
+				return $resource('../api/Agents/StatesFor', {}, {
+						query: {
+							method: 'GET'
+						}
+					}).query({
+						teamIds: data.teamIds,
+						skillIds: data.skillIds,
+					})
+					.$promise;
+			};
+
+			this.getStatesForSitesAndSkills = function(data) {
+				return $resource('../api/Agents/StatesFor', {}, {
+						query: {
+							method: 'GET'
+						}
+					}).query({
+						siteIds: data.siteIds,
+						skillIds: data.skillIds,
+					})
+					.$promise;
+			};
+
+
+
 			this.getAlarmStatesForSites = function(data) {
-				return $resource('../api/Agents/GetAlarmStatesForSites', {}, {
+				return $resource('../api/Agents/InAlarmFor', {}, {
 					query: {
 						method: 'GET'
 					}
@@ -135,13 +179,48 @@
 			};
 
 			this.getAlarmStatesForSkills = function(data) {
-				return $resource('../api/Agents/GetAlarmStatesForSkills', {}, {
+				return $resource('../api/Agents/InAlarmFor', {}, {
 						query: {
 							method: 'GET'
 						}
 					})
 					.query({
 						ids: data.skillIds
+					})
+					.$promise;
+			};
+			
+			this.getAlarmStatesForTeams = function(data) {
+				return $resource('../api/Agents/InAlarmFor', {}, {
+						query: {
+							method: 'GET'
+						}
+					}).query({
+						ids: data.teamIds
+					})
+					.$promise;
+			};
+
+			this.getAlarmStatesForTeamsAndSkills = function(data) {
+				return $resource('../api/Agents/InAlarmFor', {}, {
+						query: {
+							method: 'GET'
+						}
+					}).query({
+						teamIds: data.teamIds,
+						skillIds: data.skillIds
+					})
+					.$promise;
+			};
+
+			this.getAlarmStatesForSitesAndSkills = function(data) {
+				return $resource('../api/Agents/InAlarmFor', {}, {
+						query: {
+							method: 'GET'
+						}
+					}).query({
+						siteIds: data.siteIds,
+						skillIds: data.skillIds
 					})
 					.$promise;
 			};
@@ -172,39 +251,7 @@
 					})
 					.$promise;
 			};
-			this.getStatesForTeams = function(data) {
-				return $resource('../api/Agents/GetStatesForTeams', {}, {
-						query: {
-							method: 'GET'
-						}
-					}).query({
-						ids: data.teamIds
-					})
-					.$promise;
-			};
 
-			this.getAlarmStatesForTeams = function(data) {
-				return $resource('../api/Agents/GetAlarmStatesForTeams', {}, {
-						query: {
-							method: 'GET'
-						}
-					}).query({
-						ids: data.teamIds
-					})
-					.$promise;
-			};
-
-			this.getAlarmStatesForTeamsAndSkills = function(data) {
-				return $resource('../api/Agents/GetAlarmStatesForTeamsAndSkills', {}, {
-						query: {
-							method: 'GET'
-						}
-					}).query({
-						teamIds: data.teamIds,
-						skillIds: data.skillIds
-					})
-					.$promise;
-			};
 
 			this.getAlarmStatesForTeamsExcludingStates = function(data) {
 				return $resource('../api/Agents/GetAlarmStatesForTeamsExcludingStates', {}, {
@@ -218,41 +265,9 @@
 					.$promise;
 			};
 
-			this.getStatesForTeamsAndSkills = function(data) {
-				return $resource('../api/Agents/GetStatesForTeamsAndSkills', {}, {
-						query: {
-							method: 'GET'
-						}
-					}).query({
-						teamIds: data.teamIds,
-						skillIds: data.skillIds,
-					})
-					.$promise;
-			};
 
-			this.getStatesForSitesAndSkills = function(data) {
-				return $resource('../api/Agents/GetStatesForSitesAndSkills', {}, {
-						query: {
-							method: 'GET'
-						}
-					}).query({
-						siteIds: data.siteIds,
-						skillIds: data.skillIds,
-					})
-					.$promise;
-			};
 
-			this.getAlarmStatesForSitesAndSkills = function(data) {
-				return $resource('../api/Agents/GetAlarmStatesForSitesAndSkills', {}, {
-						query: {
-							method: 'GET'
-						}
-					}).query({
-						siteIds: data.siteIds,
-						skillIds: data.skillIds
-					})
-					.$promise;
-			};
+
 
 			this.getAdherenceForTeamsOnSite = function(data) {
 				return $resource('../api/Teams/GetOutOfAdherenceForTeamsOnSite', {}, {
