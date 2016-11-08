@@ -194,3 +194,5 @@ ETL_EventBasedAgentNameDescription_41432 = RC
 ETL_FixScheduleForPersonPeriod_41393 = DEV
 Stardust_RunMultipleNodes_41224 = RC
 MyTimeWeb_SortRequestList_40711 = RC
+Wfm_ArchiveSchedule_41498 = DEV
+Wfm_ImportSchedule_41247 = DEV

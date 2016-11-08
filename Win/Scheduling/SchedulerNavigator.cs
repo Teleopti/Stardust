@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Microsoft.Practices.Composite;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools.Events;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
@@ -121,6 +124,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				//temporary, open organize casciding skills will be called from somewhere else
 				enableOrganizeCascadingSkills();
+
+				enableArchiveSchedule();
+				enableImportSchedule();
 
 				SetTexts();
 				view.Focus();
@@ -386,6 +392,42 @@ namespace Teleopti.Ccc.Win.Scheduling
 					}
 				}
 			}
+		}
+
+		private void enableArchiveSchedule()
+		{
+			var toggleManager = _container.Resolve<IToggleManager>();
+			var toggled = toggleManager.IsEnabled(Toggles.Wfm_ArchiveSchedule_41498);
+			var permitted = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ArchiveSchedule);
+
+			toolStripButtonArchiveSchedule.Visible = toggled && permitted;
+		}
+
+		private void toolStripButtonArchiveScheduleClick(object sender, EventArgs e)
+		{
+			openResourcePlannerInWfm("archiveschedule");
+		}
+
+		private void enableImportSchedule()
+		{
+			var toggleManager = _container.Resolve<IToggleManager>();
+			var toggled = toggleManager.IsEnabled(Toggles.Wfm_ImportSchedule_41247);
+			var permitted = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ImportSchedule);
+
+			toolStripButtonImportSchedule.Visible = toggled && permitted;
+		}
+
+		private void toolStripButtonImportScheduleClick(object sender, EventArgs e)
+		{
+			openResourcePlannerInWfm("importschedule");
+		}
+
+		private void openResourcePlannerInWfm(string what)
+		{
+			var wfmPath = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle");
+			var url = $"{wfmPath}WFM/#/resourceplanner/{what}";
+			if (url.IsAnUrl())
+				Process.Start(url);
 		}
 	}
 }
