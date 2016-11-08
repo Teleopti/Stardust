@@ -293,8 +293,8 @@
 		function isMessageNeedToBeHandled() {
 			var personIds = scheduleMgmtSvc.groupScheduleVm.Schedules.map(function (schedule) { return schedule.PersonId; });
 			var scheduleDate = vm.scheduleDateMoment();
-			var viewRangeEnd = scheduleDate.clone().add(1, 'day');
-			var viewRangeStart = scheduleDate.clone().add(-1, 'day');
+			var viewRangeStart = scheduleDate.clone().add(-1, 'day').startOf('day');
+			var viewRangeEnd = scheduleDate.clone().add(1, 'day').startOf('day');
 
 			return function (message) {
 				if (message.TrackId === vm.lastCommandTrackId) { return false; }
@@ -302,8 +302,7 @@
 				var isMessageInsidePeopleList = personIds.indexOf(message.DomainReferenceId) > -1;
 				var startDate = moment(message.StartDate.substring(1, message.StartDate.length));
 				var endDate = moment(message.EndDate.substring(1, message.EndDate.length));
-				var isScheduleDateInMessageRange =
-					viewRangeStart.isSameOrBefore(endDate) && viewRangeEnd.isSameOrAfter(startDate);
+				var isScheduleDateInMessageRange = startDate.isBetween(viewRangeStart, viewRangeEnd, 'day', '[]') && endDate.isBetween(viewRangeStart, viewRangeEnd, 'day', '[]');
 
 				return isMessageInsidePeopleList && isScheduleDateInMessageRange;
 			}
