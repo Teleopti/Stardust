@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Archiving
 		public FakePersonRepository PersonRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
 
 		[Test]
 		public void ShouldMoveOneAssignment()
@@ -33,12 +34,14 @@ namespace Teleopti.Ccc.DomainTest.Archiving
 			var person = new Person().WithId();
 			var assignment = new PersonAssignment(person, defaultScenario, period.StartDate);
 			var moveToScenario = new Scenario("target").WithId();
+			var businessUnitId = Guid.NewGuid();
 
 			ScheduleStorage.Add(assignment);
 			PersonRepository.Add(person);
 			ScenarioRepository.Add(defaultScenario);
 			ScenarioRepository.Add(moveToScenario);
-
+			BusinessUnitRepository.Add(new BusinessUnit("BU").WithId(businessUnitId));
+			
 			var @event = new ArchiveScheduleEvent
 			{
 				PersonId = person.Id.GetValueOrDefault(),
@@ -46,7 +49,8 @@ namespace Teleopti.Ccc.DomainTest.Archiving
 				FromScenario = defaultScenario.Id.GetValueOrDefault(),
 				StartDate = period.StartDate.Date,
 				ToScenario = moveToScenario.Id.GetValueOrDefault(),
-				TrackingId = trackingId
+				TrackingId = trackingId,
+				LogOnBusinessUnitId = businessUnitId
 			};
 			Target.Handle(@event);
 
