@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.Repositories;
@@ -10,6 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 {
+	[EnabledBy(Toggles.Wfm_ArchiveSchedule_41498)]
 	public class ArchiveScheduleHandler : 
 		IHandleEvent<ArchiveScheduleEvent>, 
 		IRunOnHangfire
