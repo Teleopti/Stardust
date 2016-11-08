@@ -35,8 +35,15 @@
             <span class="btn-group">
                 <button class="btn btn-primary" data-bind="click: RequestNotificationPermission">@Resources.AllowDesktopNotifications</button>
             </span>
-            <!-- /ko -->
-            @if (Model.ShareCalendarPermission)
+	        <!-- /ko -->
+			  @if (!Model.HasWorkflowControlSet)
+			  {
+				<div class="alert alert-warning">
+					@Resources.MissingWorkflowControlSet
+				</div>
+			  }
+
+	        @if (Model.ShareCalendarPermission && Model.HasWorkflowControlSet)
             {
                 <div class="btn-group">
 					<button class="btn btn-primary share-my-calendar" data-bind="css: { active: CalendarSharingActive }, click: ActivateCalendarSharing">@Resources.ShareMyCalendar</button>
