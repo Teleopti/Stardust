@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 {
 	[TestFixture]
 	[UnitOfWorkTest]
-	public class AgentStateReadModelReaderTest
+	public class ForOrganization
 	{
 		public IJsonSerializer Serializer;
 		public IAgentStateReadModelReader Target;
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				IsRuleAlarm = false
 			});
 
-			var result = Target.LoadAlarmsForTeams(new[] { teamId });
+			var result = Target.LoadInAlarmsForTeams(new[] { teamId });
 
 			result.Single().PersonId.Should().Be(personId1);
 		}
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				IsRuleAlarm = true
 			});
 
-			var result = Target.LoadAlarmsForTeams(new[] { teamId });
+			var result = Target.LoadInAlarmsForTeams(new[] { teamId });
 
 			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				IsRuleAlarm = false
 			});
 
-			var result = Target.LoadAlarmsForSites(new[] { siteId });
+			var result = Target.LoadInAlarmsForSites(new[] { siteId });
 
 			result.Single().PersonId.Should().Be(personId1);
 		}
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				StateGroupId = phoneState
 			});
 
-			Target.LoadAlarmsForSites(new[] { site })
+			Target.LoadInAlarmsForSites(new[] { site })
 				.Single().StateGroupId.Should().Be(phoneState);
 		}
 
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				IsRuleAlarm = true
 			});
 
-			var result = Target.LoadAlarmsForSites(new[] { siteId });
+			var result = Target.LoadInAlarmsForSites(new[] { siteId });
 
 			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);

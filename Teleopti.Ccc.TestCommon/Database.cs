@@ -116,7 +116,13 @@ namespace Teleopti.Ccc.TestCommon
 		[UnitOfWork]
 		public virtual Guid CurrentTeamId()
 		{
-			return team().Id.Value;
+			return team(_team).Id.Value;
+		}
+		
+		[UnitOfWork]
+		public virtual Guid TeamIdFor(string name)
+		{
+			return _teams.LoadAll().Where(x => x.Description.Name == name).Select(x => x.Id).Single().Value;
 		}
 
 		[UnitOfWork]
@@ -176,11 +182,30 @@ namespace Teleopti.Ccc.TestCommon
 			return s;
 		}
 
-		private ITeam team()
+		[UnitOfWork]
+		public virtual Database WithTeam(string name)
 		{
-			if (_team != null)
-				return _teams.LoadAll().Single(x => x.Description.Name == _team);
-			_team = RandomName.Make();
+			team(name);
+			return this;
+		}
+
+		[UnitOfWork]
+		public virtual Database WithTeam()
+		{
+			team(_team);
+			return this;
+		}
+
+		private ITeam team(string name)
+		{
+			name = name ?? RandomName.Make();
+			var existing = _teams.LoadAll().SingleOrDefault(x => x.Description.Name == _team);
+			if (existing != null)
+			{
+				_team = name;
+				return existing;
+			}
+			_team = name;
 			var s = site();
 			var t = new Team
 			{
@@ -213,7 +238,7 @@ namespace Teleopti.Ccc.TestCommon
 			person().AddPersonPeriod(
 				new PersonPeriod(date,
 				personContract,
-				team()));
+				team(_team)));
 			
 			return this;
 		}
@@ -284,7 +309,7 @@ namespace Teleopti.Ccc.TestCommon
 				partTimePercentage(),
 				contractSchedule());
 
-			var personPeriod = new PersonPeriod("2001-01-01".Date(), personContract, team());
+			var personPeriod = new PersonPeriod("2001-01-01".Date(), personContract, team(_team));
 			if (terminationDate != null)
 				person.TerminatePerson(terminationDate.Value, new PersonAccountUpdaterDummy());
 			person.AddPersonPeriod(personPeriod);

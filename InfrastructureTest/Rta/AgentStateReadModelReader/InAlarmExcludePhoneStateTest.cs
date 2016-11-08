@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 {
 	[TestFixture]
 	[UnitOfWorkTest]
-	public class AgentStateReadModelReaderExcludeStateGroupsInAlarmTest
+	public class InAlarmExcludePhoneStateTest
 	{
 		public IAgentStateReadModelPersister Persister;
 		public IGroupingReadOnlyRepository Groupings;
@@ -443,6 +443,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			WithUnitOfWork.Get(() => Target.LoadInAlarmExcludingPhoneStatesForSkills(new[] { skill }, new Guid?[] { null, loggedOut }))
 				.Single().PersonId.Should().Be(personId1);
 		}
-
 	}
 }

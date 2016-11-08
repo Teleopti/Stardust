@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 {
 	[DatabaseTest]
 	[TestFixture]
-	public class AgentStateReadModelReaderForSkillTest
+	public class ForSkill
 	{
 		public IGroupingReadOnlyRepository Groupings;
 		public Database Database;
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkills(new Guid[] { currentSkillId } ))
+			WithUnitOfWork.Get(() => Target.LoadInAlarmsForSkills(new Guid[] { currentSkillId } ))
 				.Count().Should().Be(1);
 		}
 
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkills(new[] { skill }))
+			WithUnitOfWork.Get(() => Target.LoadInAlarmsForSkills(new[] { skill }))
 				.Single().StateGroupId.Should().Be(phoneState);
 		}
 
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			});
 
 
-			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkills(new [] { skill1, skill2 } ))
+			WithUnitOfWork.Get(() => Target.LoadInAlarmsForSkills(new [] { skill1, skill2 } ))
 				.Count().Should().Be(2);
 		}
 
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			});
 
 
-			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkills(new [] { skill1, skill2 } ))
+			WithUnitOfWork.Get(() => Target.LoadInAlarmsForSkills(new [] { skill1, skill2 } ))
 				.Count().Should().Be(1);
 		}
 
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkills(new [] { currentSkillId }))
+			WithUnitOfWork.Get(() => Target.LoadInAlarmsForSkills(new [] { currentSkillId }))
 				.Count().Should().Be(1);
 		}
 
@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			var agents = WithUnitOfWork.Get(() => Target.LoadAlarmsForSkills(new Guid[] { currentSkillId }).ToArray());
+			var agents = WithUnitOfWork.Get(() => Target.LoadInAlarmsForSkills(new Guid[] { currentSkillId }).ToArray());
 			agents.First().PersonId.Should().Be(personId1);
 			agents.Last().PersonId.Should().Be(personId2);
 		}

@@ -90,14 +90,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public AgentStatesViewModel InAlarmFor(ViewModelFilter filter)
 		{
 			if (filter.SiteIds != null && filter.SkillIds != null)
-				return build(_agentStateReadModelReader.LoadAlarmsForSitesAndSkills(filter.SiteIds, filter.SkillIds));
+				return build(_agentStateReadModelReader.LoadInAlarmsForSitesAndSkills(filter.SiteIds, filter.SkillIds));
 			if(filter.SiteIds != null)
-				return build(_agentStateReadModelReader.LoadAlarmsForSites(filter.SiteIds));
+				return build(_agentStateReadModelReader.LoadInAlarmsForSites(filter.SiteIds));
 			if (filter.TeamIds != null && filter.SkillIds != null)
-				return build(_agentStateReadModelReader.LoadAlarmsForTeamsAndSkills(filter.TeamIds, filter.SkillIds));
+				return build(_agentStateReadModelReader.LoadInAlarmsForTeamsAndSkills(filter.TeamIds, filter.SkillIds));
 			if (filter.TeamIds != null)
-				return build(_agentStateReadModelReader.LoadAlarmsForTeams(filter.TeamIds));
-			return build(_agentStateReadModelReader.LoadAlarmsForSkills(filter.SkillIds));
+				return build(_agentStateReadModelReader.LoadInAlarmsForTeams(filter.TeamIds));
+			return build(_agentStateReadModelReader.LoadInAlarmsForSkills(filter.SkillIds));
 		}
 		
 		public AgentStatesViewModel InAlarmExcludingPhoneStatesFor(ViewModelFilter filter, IEnumerable<Guid?> excludedPhoneStates)
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public AgentStatesViewModel InAlarmForSites(Guid[] siteIds)
 		{
-			return build(_agentStateReadModelReader.LoadAlarmsForSites(siteIds));
+			return build(_agentStateReadModelReader.LoadInAlarmsForSites(siteIds));
 		}
 
 		public AgentStatesViewModel InAlarmForSites(Guid[] siteIds, Guid?[] excludedStateGroupIds)
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public AgentStatesViewModel InAlarmForTeams(Guid[] teamIds)
 		{
-			return build(_agentStateReadModelReader.LoadAlarmsForTeams(teamIds));
+			return build(_agentStateReadModelReader.LoadInAlarmsForTeams(teamIds));
 		}
 
 		public AgentStatesViewModel InAlarmForTeams(Guid[] teamIds, Guid?[] excludedStateGroupIds)
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public AgentStatesViewModel InAlarmForSkills(Guid[] skills)
 		{
-			return build(_agentStateReadModelReader.LoadAlarmsForSkills(skills));
+			return build(_agentStateReadModelReader.LoadInAlarmsForSkills(skills));
 		}
 
 		public AgentStatesViewModel InAlarmForSkills(Guid[] skills, Guid?[] excludedStateGroupIds)
