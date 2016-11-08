@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Util;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
@@ -144,6 +145,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var requests = target.LoadAll();
 			requests.Count.Should().Be.EqualTo(1);
 			requests.FirstOrDefault().Sent.Should().Be.EqualTo(null);
+		}
+
+		[Test]
+		public void ShouldSetSentForBulkRequests()
+		{
+			var target = new QueuedAbsenceRequestRepository(CurrUnitOfWork);
+			var guidList  = new List<Guid>();
+			for (var i = 0; i < 3000; i++)
+			{
+				guidList.Add(Guid.NewGuid());
+			}
+			target.Send(guidList, DateTime.UtcNow);
+			var requests = target.LoadAll();
+
+			requests.ForEach(request =>
+			{
+				request.Sent.Should().Not.Be.EqualTo(null);
+			});
 		}
 	}
 }

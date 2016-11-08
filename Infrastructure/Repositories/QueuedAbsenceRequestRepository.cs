@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -29,13 +30,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<IQueuedAbsenceRequest>();
 		}
 
-		public void Send(List<Guid> requestId, DateTime timeStamp)
+		public void Send(List<Guid> requestIds, DateTime timeStamp)
 		{
-			var quesryString = "UPDATE[QueuedAbsenceRequest] SET Sent = :timestamp WHERE PersonRequest in (:ids)";
-			var sqlQuery = Session.CreateSQLQuery(quesryString);
-			sqlQuery.SetDateTime("timestamp", timeStamp);
-			sqlQuery.SetParameterList("ids", requestId);
-			sqlQuery.ExecuteUpdate();
+			foreach (var batch in requestIds.Batch(1000))
+			{
+				var quesryString = "UPDATE[QueuedAbsenceRequest] SET Sent = :timestamp WHERE PersonRequest in (:ids)";
+				var sqlQuery = Session.CreateSQLQuery(quesryString);
+				sqlQuery.SetDateTime("timestamp", timeStamp);
+				sqlQuery.SetParameterList("ids", batch);
+				sqlQuery.ExecuteUpdate();
+			}
+			
 		}
 
 
