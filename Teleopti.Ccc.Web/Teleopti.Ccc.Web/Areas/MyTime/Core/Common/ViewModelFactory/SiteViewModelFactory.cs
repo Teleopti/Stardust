@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Interfaces.Domain;
@@ -21,21 +20,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 		public IEnumerable<ISelectOption> CreateSiteOptionsViewModel(DateOnly date, string applicationFunctionPath)
 		{
 			var sites = _siteProvider.GetShowListSites(date, applicationFunctionPath).ToList();
-			var businessUnits = sites
-				.Select(t => t.BusinessUnit)
-				.Distinct();
 
 			var options = new List<ISelectOption>();
-			businessUnits.ForEach(s =>
+			sites.ForEach(s =>
 			{
-				var siteOptions = from t in sites
-										where t.BusinessUnit == s
-										select new SelectOptionItem
-										{
-											id = t.Id.ToString(),
-											text = s.Description.Name + "/" + t.Description.Name
-										};
-				options.AddRange(siteOptions);
+				var siteOptions = new SelectOptionItem
+				{
+					id = s.Id.ToString(),
+					text = s.Description.Name
+				};
+				options.Add(siteOptions);
 			});
 
 			return options;

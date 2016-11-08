@@ -386,7 +386,7 @@ Scenario: Change site
 	And I view Add Shift Trade Request for date '2030-01-01'
 	And I should see a message text saying that no possible shift trades could be found
 	When I select the site filter 'Other site'
-	Then the option for site filter 'BusinessUnit/Other site' should be selected
+	Then the option for site filter 'Other site' should be selected
 	And I should see a possible schedule trade with 'OtherAgentNotInMySite'
 
 @OnlyRunIfDisabled('MyTimeWeb_ShiftTradeFilterSite_40374')

@@ -119,25 +119,30 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldReturnSiteOptionsAsJsonForShiftTradeBoard()
+		public void ShouldReturnSiteOptionsAsJsonForShiftTradeBoardWithoutBU()
 		{
-			//var siteRepository = new FakeSiteRepository();
+			var viewModelFactory = createSiteViewModelFactory("mysite");
+			var target = new TeamController(null, new Now(), viewModelFactory);
+
+			var result = target.SitesForShiftTrade(DateOnly.Today);
+			var data = result.Data as IEnumerable<ISelectOption>;
+			var selectOption = data.FirstOrDefault();
+			selectOption.text.Should().Be.EqualTo("mysite");
+		}
+
+		private ISiteViewModelFactory createSiteViewModelFactory(string siteName)
+		{
 			var businessUnit = new BusinessUnit("myBU");
-			var site = new Site("mySite");
+			var site = new Site(siteName);
 			site.SetId(Guid.NewGuid());
 			site.SetBusinessUnit(businessUnit);
-			//siteRepository.Add(site);
-
+			var identity = new TeleoptiIdentity("test", null, null, null, null);
+			var person = PersonFactory.CreatePerson();
 			var team1 = new Team();
 			team1.Site = site;
 			var teamRepository = new FakeTeamRepository(team1);
-
-			var person = PersonFactory.CreatePerson();
-			var identity = new TeleoptiIdentity("test", null, null, null, null);
-
 			var mockAuthorize = MockRepository.GenerateMock<IAuthorizeAvailableData>();
 			mockAuthorize.Stub(m => m.Check(new OrganisationMembership(), DateOnly.Today, team1)).IgnoreArguments().Return(true);
-
 			var claimSet =
 				new DefaultClaimSet(
 					new System.IdentityModel.Claims.Claim(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace +
@@ -148,19 +153,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var teleoptiPrincipal = new TeleoptiPrincipal(identity, person);
 			teleoptiPrincipal.AddClaimSet(claimSet);
-
 			var authorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(teleoptiPrincipal));
 			var permissionProvider = new PermissionProvider(authorization);
-
 			var siteProvider = new SiteProvider(permissionProvider, teamRepository);
-
 			var viewModelFactory = new SiteViewModelFactory(siteProvider);
-			var target = new TeamController(null, new Now(), viewModelFactory);
-
-			var result = target.SitesForShiftTrade(DateOnly.Today);
-			var data = result.Data as IEnumerable<ISelectOption>;
-			var selectOption = data.FirstOrDefault();
-			selectOption.text.Should().Equals("mysite");
+			return viewModelFactory;
 		}
 
 		[Test]
