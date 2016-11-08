@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 			var target = new SiteViewModelFactory(_siteProvider);
 
 			var result = target.CreateSiteOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb);
-			result.Select(t => t.text).Should().Have.SameSequenceAs("BU/mySite");
+			result.Select(t => t.text).Should().Have.SameSequenceAs("mySite");
 		}
 
 		[Test]
