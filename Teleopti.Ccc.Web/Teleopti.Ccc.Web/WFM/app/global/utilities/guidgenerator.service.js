@@ -1,8 +1,10 @@
-﻿(function(angular) {
-
+﻿(function() {
 	'use strict';
+	angular
+		.module('wfm.utilities')
+		.service('guidgenerator', guidgenerator);
 
-	angular.module('wfm.teamSchedule').service('guidgenerator', function() {
+	function guidgenerator() {
 		
 		function s4() {
 			return Math.floor((1 + Math.random()) * 0x10000)
@@ -10,10 +12,12 @@
 				.substring(1);
 		}
 
-		this.newGuid = function() {
+		var newGuid = function() {
 			return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 		};
 
-	});
-
-})(window.angular);
+		return {
+			newGuid : newGuid
+		};
+	}
+})();

@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 			_scheduleStorage = scheduleStorage;
 		}
 
+		[ImpersonateSystem]
 		[UnitOfWork]
 		public virtual void Handle(ArchiveScheduleEvent @event)
 		{

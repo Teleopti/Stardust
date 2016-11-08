@@ -1,7 +1,7 @@
 ﻿'use strict';
 (function () {
 	var myteam = angular.module('wfm.teamSchedule', [
-			'currentUserInfoService', 'wfm.pagination', 'toggleService', 'ngResource', 'wfm.notice', 'ngMaterial', 'ui.bootstrap', 'wfm.signalR', 'ui.router', 'wfm.multiplesearchinput'
+			'currentUserInfoService', 'wfm.pagination', 'toggleService', 'ngResource', 'wfm.notice', 'ngMaterial', 'ui.bootstrap', 'wfm.signalR', 'ui.router', 'wfm.multiplesearchinput', 'wfm.utilities'
 		])
 		.config([
 			'$mdThemingProvider', function($mdThemingProvider) {

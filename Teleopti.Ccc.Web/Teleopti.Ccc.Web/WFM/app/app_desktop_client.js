@@ -43,7 +43,8 @@ var wfm = angular.module('wfm', [
 	'wfm.requests',
 	'wfm.reports',
 	'wfm.themes',
-	'wfm.culturalDatepicker'
+	'wfm.culturalDatepicker',
+	'wfm.utilities'
 ]);
 
 wfm.config([

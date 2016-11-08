@@ -4,7 +4,8 @@
 		.controller('ResourceplannerArchiveScheduleCtrl', [
 			'ArchiveScheduleSrvc',
 			'signalRSVC',
-			function (ArchiveScheduleSrvc, signalRSVC) {
+			'guidgenerator',
+			function (ArchiveScheduleSrvc, signalRSVC, guidgenerator) {
 				var vm = this;
 				vm.scenarios = [];
 				vm.fromScenario = null;
@@ -16,6 +17,7 @@
 				};
 				vm.totalMessages = 0;
 				vm.recievedMessages = 0;
+				var trackingId = guidgenerator.newGuid();
 
 				var scenariosPromise = ArchiveScheduleSrvc.scenarios.query().$promise;
 				scenariosPromise.then(function (result) {
@@ -36,17 +38,18 @@
 						FromScenario: fromScenario.Id,
 						ToScenario: toScenario.Id,
 						StartDate: period.startDate,
-						EndDate: period.endDate
+						EndDate: period.endDate,
+						TrackId: trackingId
 					};
 					ArchiveScheduleSrvc.runArchiving.post({}, JSON.stringify(archiveScheduleModel)).$promise.then(function (result) {
 						console.log({
-							TrackId: result.TrackId,
 							TotalMessages: result.TotalMessages
 						});
 						vm.totalMessages = result.TotalMessages;
-						signalRSVC.subscribeBatchMessage({ DomainType: 'TrackingMessage', DomainId: result.TrackId }, updateStatus, 500);
-					});;
+					});
 				};
+
+				signalRSVC.subscribeBatchMessage({ DomainType: 'TrackingMessage', DomainId: trackingId }, updateStatus, 500);
 				
 			}
 		]);

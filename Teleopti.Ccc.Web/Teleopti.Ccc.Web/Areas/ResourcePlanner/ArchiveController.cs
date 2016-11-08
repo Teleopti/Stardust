@@ -23,8 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[Route("api/ResourcePlanner/Archiving/Run"), HttpPost, UnitOfWork]
 		public virtual IHttpActionResult RunArchiving([FromBody] ArchiveSchedulesModel model)
 		{
-			var people = _personRepository.LoadAll().Take(3).ToList();
-			var trackingId = Guid.NewGuid();
+			var people = _personRepository.LoadAll().ToList();
 			var archiveScheduleEvents = people.Select(person => new ArchiveScheduleEvent
 			{
 				StartDate = model.StartDate,
@@ -32,21 +31,19 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				FromScenario = model.FromScenario,
 				ToScenario = model.ToScenario,
 				PersonId = person.Id.GetValueOrDefault(),
-				TrackingId = trackingId
+				TrackingId = model.TrackId
 			}).Cast<IEvent>().ToArray();
 			_eventPublisher.Publish(archiveScheduleEvents);
 
 			return Ok(new ArchiveSchedulesResponse
 			{
-				TotalMessages = people.Count,
-				TrackId = trackingId
+				TotalMessages = people.Count
 			});
 		}
 	}
 
 	public class ArchiveSchedulesResponse
 	{
-		public Guid TrackId { get; set; }
 		public int TotalMessages { get; set; }
 	}
 
@@ -56,5 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public Guid ToScenario { get; set; }
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }
+		public Guid TrackId { get; set; }
+				
 	}
 }

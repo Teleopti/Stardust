@@ -1353,6 +1353,8 @@
     <Content Include="Content\signalr\jquery.signalR-2.2.0.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.0.min.js" />
     <Content Include="WFM\app\global\businessunits\businessunits.controller.spec.js" />
+    <Content Include="WFM\app\global\utilities\guidgenerator.service.js" />
+    <Content Include="WFM\app\global\utilities\_modules.js" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.archiveschedule.controller.js" />
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
     <Content Include="WFM\app\permissions\permissions.backend.fake.js" />
@@ -1631,7 +1633,6 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.filter.timerange.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.activity.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.CommandCheckService.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.service.guidgenerator.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.moveActivityValidator.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.moveActivityValidator.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.notification.spec.js" />
