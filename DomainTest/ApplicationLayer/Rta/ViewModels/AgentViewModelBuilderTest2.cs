@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -8,16 +9,18 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 {
 	[DomainTest]
 	[TestFixture]
-	public class AgentViewModelBuilderTest2
+	public class AgentViewModelBuilderTest2 : ISetup
 	{
 		public AgentViewModelBuilder Target;
 		public FakePersonRepository PersonRepository;
@@ -28,6 +31,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 		public FakeDatabase Database;
 		public MutableNow Now;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<fakeGroupingReadOnlyRepositoryImpl>().For<FakeGroupingReadOnlyRepository, IGroupingReadOnlyRepository>();
+		}
 
 		[Test]
 		public void ShouldGetAgentForSites()
@@ -243,5 +251,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			person2.TeamName.Should().Be("Angel");
 			person2.Name.Should().Be("Ashley Andeen");
 		}
+
+
+		private class fakeGroupingReadOnlyRepositoryImpl : FakeGroupingReadOnlyRepository
+		{
+			public override IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnly queryDate)
+			{
+				return base.DetailsForGroup(groupId, queryDate).Where(x => x.GroupId == groupId);
+			}
+		}
+
 	}
 }
