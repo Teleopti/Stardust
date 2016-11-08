@@ -303,8 +303,8 @@
 				var startDate = moment(message.StartDate.substring(1, message.StartDate.length));
 				var endDate = moment(message.EndDate.substring(1, message.EndDate.length));
 				var isScheduleDateInMessageRange = vm.toggles.ManageScheduleForDistantTimezonesEnabled
-						? startDate.isBetween(viewRangeStart, viewRangeEnd, 'day', '[]') && endDate.isBetween(viewRangeStart, viewRangeEnd, 'day', '[]')
-						: startDate.isSame(scheduleDate, 'day') && endDate.isSame(scheduleDate, 'day');
+						? startDate.isBetween(viewRangeStart, viewRangeEnd, 'day', '[]') || endDate.isBetween(viewRangeStart, viewRangeEnd, 'day', '[]')
+						: viewRangeStart.isSameOrBefore(endDate) && viewRangeEnd.isSameOrAfter(startDate);;
 
 				return isMessageInsidePeopleList && isScheduleDateInMessageRange;
 			}
