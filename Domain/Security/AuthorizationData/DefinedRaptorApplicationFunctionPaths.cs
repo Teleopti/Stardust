@@ -46,6 +46,7 @@
 		public const string PublishSchedule = "Raptor/Global/PublishSchedule";
 		public const string OrganizeCascadingSkills = "Raptor/Global/OrganizeCascadingSkills";
 		public const string ArchiveSchedule = "Raptor/Global/ArchiveSchedule";
+		public const string ImportSchedule = "Raptor/Global/ImportSchedule";
 
 		// PersonAdmin
 		public const string ModifyPersonNameAndPassword = "Raptor/PersonAdmin/ModifyPersonNameAndPassword";
