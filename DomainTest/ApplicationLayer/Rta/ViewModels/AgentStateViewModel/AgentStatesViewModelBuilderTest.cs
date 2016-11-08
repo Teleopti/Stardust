@@ -52,8 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 
 			var agentState = Target.For(new ViewModelFilter {SiteIds = new[] { siteId1, siteId2 } }).States.ToArray();
 
-			agentState.First().PersonId.Should().Be(personId1);
-			agentState.Last().PersonId.Should().Be(personId2);
+			agentState.Select(x => x.PersonId).Should().Have.SameValuesAs(personId1, personId2);
 		}
 
 		[Test]
