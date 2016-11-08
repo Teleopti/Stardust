@@ -1109,11 +1109,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 				return;
 
 			IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
+			var hideMaxSeat = _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MaxSeatsNew_40939);
 			using (
 				var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions,
 					daysOffPreferences, _schedulerState.CommonStateHolder.ActiveShiftCategories,
 					true, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, "SchedulingOptions",
-					_schedulerState.CommonStateHolder.ActiveActivities, false))
+					_schedulerState.CommonStateHolder.ActiveActivities, hideMaxSeat))
 			{
 				if (options.ShowDialog(this) == DialogResult.OK)
 				{
@@ -3082,11 +3083,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType = ScheduleEmploymentType.HourlyStaff;
 				_optimizerOriginalPreferences.SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Free;
 				IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
+				var hideMaxSeat = _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MaxSeatsNew_40939);
 				using (
 					var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions,
 						daysOffPreferences, _schedulerState.CommonStateHolder.ActiveShiftCategories,
 						false, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, "SchedulingOptionsActivities",
-						_schedulerState.CommonStateHolder.ActiveActivities, false))
+						_schedulerState.CommonStateHolder.ActiveActivities, hideMaxSeat))
 				{
 					if (options.ShowDialog(this) == DialogResult.OK)
 					{
