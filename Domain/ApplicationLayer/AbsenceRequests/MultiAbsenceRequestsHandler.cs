@@ -120,12 +120,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					{
 						string warning = $"No person request found with the supplied Id or the request is not in pending status mode. (Id = {personRequest.Id})";
 						_feedback.SendProgress(warning);
-						logger.Warn(warning);
 					}
 					else if (absenceRequestSpecification.IsSatisfiedBy((IAbsenceRequest) personRequest.Request))
 					{
 						string warning = $"The found person request is not of type absence request. (Id = {personRequest.Id})";
-						logger.Warn(warning);
 						_feedback.SendProgress(warning);
 					}
 					else
