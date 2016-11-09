@@ -109,11 +109,18 @@
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
 		}
 
+		function momentToYYYYMMDD(m) {
+			var YYYY = '' + m.year();
+			var MM = (m.month() + 1) < 10 ? '0' + (m.month() + 1) : '' + (m.month() + 1);
+			var DD = m.date() < 10 ? '0' + m.date() : '' + m.date();
+			return YYYY + '-' + MM + '-' + DD;
+		}
+
 		function getParamsForLoadingSchedules(options) {
 			options = options || {};
 			var params = {
 				Keyword: options.keyword || vm.searchOptions.keyword,
-				Date: options.date || moment(vm.startOfWeek).format('YYYY-MM-DD'),
+				Date: options.date || momentToYYYYMMDD(moment(vm.startOfWeek)),
 				PageSize: options.pageSize || vm.paginationOptions.pageSize,
 				CurrentPageIndex: options.currentPageIndex || vm.paginationOptions.pageNumber
 			};
