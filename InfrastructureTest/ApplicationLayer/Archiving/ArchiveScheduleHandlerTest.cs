@@ -6,54 +6,60 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Archiving;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Archiving
+namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 {
-	[DomainTest]
 	[Toggle(Toggles.Wfm_ArchiveSchedule_41498)]
+	[DatabaseTest]
 	public class ArchiveScheduleHandlerTest
 	{
-		public IScheduleStorage ScheduleStorage;
 		public ArchiveScheduleHandler Target;
-		public FakePersonRepository PersonRepository;
-		public FakeScenarioRepository ScenarioRepository;
-		public FakePersonAssignmentRepository PersonAssignmentRepository;
-		public FakeBusinessUnitRepository BusinessUnitRepository;
-		public FakeAgentDayScheduleTagRepository AgentDayScheduleTagRepository;
-		public FakeNoteRepository NoteRepository;
-		public FakePublicNoteRepository PublicNoteRepository;
-		public FakePersonAbsenceRepository PersonAbsenceRepository;
 
+		public IScheduleStorage ScheduleStorage;
+		public IPersonRepository PersonRepository;
+		public IScenarioRepository ScenarioRepository;
+		public IPersonAssignmentRepository PersonAssignmentRepository;
+		public IBusinessUnitRepository BusinessUnitRepository;
+		public IAgentDayScheduleTagRepository AgentDayScheduleTagRepository;
+		public INoteRepository NoteRepository;
+		public IPublicNoteRepository PublicNoteRepository;
+		public IPersonAbsenceRepository PersonAbsenceRepository;
+		public IScheduleTagRepository ScheduleTagRepository;
+		public IAbsenceRepository AbsenceRepository;
+		public WithUnitOfWork WithUnitOfWork;
+		
 		private Scenario _defaultScenario;
 		private Scenario _targetScenario;
 		private DateOnlyPeriod _period;
-		private Person _person;
-		private BusinessUnit _businessUnit;
+		private IPerson _person;
+		private IBusinessUnit _businessUnit;
 
 		[SetUp]
 		public void Setup()
 		{
-			_defaultScenario = new Scenario("default") { DefaultScenario = true }.WithId();
-			_targetScenario = new Scenario("target").WithId();
+			_businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
+			_defaultScenario = new Scenario("default") { DefaultScenario = true};
+			_targetScenario = new Scenario("target");
 			_period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 5);
-			_businessUnit = new BusinessUnit("BU").WithId();
-			_person = new Person().WithId();
+			_person = PersonFactory.CreatePerson("Tester Testersson");
 		}
 
 		private void addDefaultTypesToRepositories()
 		{
-			ScenarioRepository.Add(_defaultScenario);
-			ScenarioRepository.Add(_targetScenario);
-			BusinessUnitRepository.Add(_businessUnit);
-			PersonRepository.Add(_person);
+			WithUnitOfWork.Do(() =>
+			{
+				ScenarioRepository.Add(_defaultScenario);
+				ScenarioRepository.Add(_targetScenario);
+				PersonRepository.Add(_person);
+			});
 		}
 
 		[Test]
@@ -62,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Archiving
 			addDefaultTypesToRepositories();
 
 			var assignment = new PersonAssignment(_person, _defaultScenario, _period.StartDate);
-			ScheduleStorage.Add(assignment);
+			WithUnitOfWork.Do(() => ScheduleStorage.Add(assignment));
 			var @event = new ArchiveScheduleEvent
 			{
 				PersonId = _person.Id.GetValueOrDefault(),
@@ -73,24 +79,23 @@ namespace Teleopti.Ccc.DomainTest.Archiving
 				TrackingId = Guid.NewGuid(),
 				LogOnBusinessUnitId = _businessUnit.Id.GetValueOrDefault()
 			};
-			Target.Handle(@event);
+			WithUnitOfWork.Do(() => Target.Handle(@event));
 
-			var result = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person, new ScheduleDictionaryLoadOptions(true, true), _period, _targetScenario);
+			var result = WithUnitOfWork.Get(() => ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person, new ScheduleDictionaryLoadOptions(true, true), _period, _targetScenario));
 			result[_person].ScheduledDayCollection(_period).Should().Not.Be.Empty();
-			var archivedAssignment = PersonAssignmentRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(_targetScenario));
+			var archivedAssignment = WithUnitOfWork.Get(() => PersonAssignmentRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(_targetScenario)));
 			archivedAssignment.Should().Not.Be.Null();
 		}
 
 		[Test]
-		[Ignore("Will be moved to integrationtests soon, and doesn't work right now!")]
 		public void ShouldMoveOneAgentDayScheduleTag()
 		{
 			addDefaultTypesToRepositories();
 
-			var scheduleTag = new ScheduleTag {Description = "Something"};
-			scheduleTag.SetBusinessUnit(_businessUnit);
-			var agentDayScheduleTag = new AgentDayScheduleTag(_person, new DateOnly(_period.StartDate.Date+TimeSpan.FromDays(1)), _defaultScenario, scheduleTag);
-			ScheduleStorage.Add(agentDayScheduleTag);
+			var scheduleTag = new ScheduleTag { Description = "Something" };
+			WithUnitOfWork.Do(() => ScheduleTagRepository.Add(scheduleTag));
+			var agentDayScheduleTag = new AgentDayScheduleTag(_person, new DateOnly(_period.StartDate.Date + TimeSpan.FromDays(1)), _defaultScenario, scheduleTag);
+			WithUnitOfWork.Do(() => ScheduleStorage.Add(agentDayScheduleTag));
 			var @event = new ArchiveScheduleEvent
 			{
 				PersonId = _person.Id.GetValueOrDefault(),
@@ -101,11 +106,11 @@ namespace Teleopti.Ccc.DomainTest.Archiving
 				TrackingId = Guid.NewGuid(),
 				LogOnBusinessUnitId = _businessUnit.Id.GetValueOrDefault()
 			};
-			Target.Handle(@event);
+			WithUnitOfWork.Do(() => Target.Handle(@event));
 
-			var result = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person, new ScheduleDictionaryLoadOptions(true, true), _period, _targetScenario);
+			var result = WithUnitOfWork.Get(() => ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person, new ScheduleDictionaryLoadOptions(true, true), _period, _targetScenario));
 			result[_person].ScheduledDayCollection(_period).Should().Not.Be.Empty();
-			var archivedAgentDayScheduleTag = AgentDayScheduleTagRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(_targetScenario));
+			var archivedAgentDayScheduleTag = WithUnitOfWork.Get(() => AgentDayScheduleTagRepository.LoadAll().FirstOrDefault(x => x.Scenario.Id == _targetScenario.Id));
 			archivedAgentDayScheduleTag.Should().Not.Be.Null();
 		}
 
@@ -115,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Archiving
 			addDefaultTypesToRepositories();
 
 			var note = new Note(_person, _period.StartDate, _defaultScenario, "Test");
-			ScheduleStorage.Add(note);
+			WithUnitOfWork.Do(() => ScheduleStorage.Add(note));
 			var @event = new ArchiveScheduleEvent
 			{
 				PersonId = _person.Id.GetValueOrDefault(),
@@ -126,11 +131,11 @@ namespace Teleopti.Ccc.DomainTest.Archiving
 				TrackingId = Guid.NewGuid(),
 				LogOnBusinessUnitId = _businessUnit.Id.GetValueOrDefault()
 			};
-			Target.Handle(@event);
+			WithUnitOfWork.Do(() => Target.Handle(@event));
 
-			var result = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person, new ScheduleDictionaryLoadOptions(true, true), _period, _targetScenario);
+			var result = WithUnitOfWork.Get(() => ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person, new ScheduleDictionaryLoadOptions(true, true), _period, _targetScenario));
 			result[_person].ScheduledDayCollection(_period).Should().Not.Be.Empty();
-			var archivedNote = NoteRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(_targetScenario));
+			var archivedNote = WithUnitOfWork.Get(() => NoteRepository.LoadAll().FirstOrDefault(x => x.Scenario.Id == _targetScenario.Id));
 			archivedNote.Should().Not.Be.Null();
 		}
 
@@ -140,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.Archiving
 			addDefaultTypesToRepositories();
 
 			var note = new PublicNote(_person, _period.StartDate, _defaultScenario, "Test");
-			ScheduleStorage.Add(note);
+			WithUnitOfWork.Do(() => ScheduleStorage.Add(note));
 			var @event = new ArchiveScheduleEvent
 			{
 				PersonId = _person.Id.GetValueOrDefault(),
@@ -151,11 +156,11 @@ namespace Teleopti.Ccc.DomainTest.Archiving
 				TrackingId = Guid.NewGuid(),
 				LogOnBusinessUnitId = _businessUnit.Id.GetValueOrDefault()
 			};
-			Target.Handle(@event);
+			WithUnitOfWork.Do(() => Target.Handle(@event));
 
-			var result = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person, new ScheduleDictionaryLoadOptions(true, true), _period, _targetScenario);
+			var result = WithUnitOfWork.Get(() => ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person, new ScheduleDictionaryLoadOptions(true, true), _period, _targetScenario));
 			result[_person].ScheduledDayCollection(_period).Should().Not.Be.Empty();
-			var archivedNote = PublicNoteRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(_targetScenario));
+			var archivedNote = WithUnitOfWork.Get(() => PublicNoteRepository.LoadAll().FirstOrDefault(x => x.Scenario.Id == _targetScenario.Id));
 			archivedNote.Should().Not.Be.Null();
 		}
 
@@ -164,9 +169,11 @@ namespace Teleopti.Ccc.DomainTest.Archiving
 		{
 			addDefaultTypesToRepositories();
 
-			var personAbsence = new PersonAbsence(_person, _defaultScenario, new AbsenceLayer(new Absence(),
+			var absence = AbsenceFactory.CreateAbsence("gone");
+			WithUnitOfWork.Do(() => AbsenceRepository.Add(absence));
+			var personAbsence = new PersonAbsence(_person, _defaultScenario, new AbsenceLayer(absence,
 					new DateTimePeriod(_period.StartDate.Date.ToUniversalTime(), (_period.StartDate.Date + TimeSpan.FromDays(1)).ToUniversalTime())));
-			ScheduleStorage.Add(personAbsence);
+			WithUnitOfWork.Do(() => ScheduleStorage.Add(personAbsence));
 			var @event = new ArchiveScheduleEvent
 			{
 				PersonId = _person.Id.GetValueOrDefault(),
@@ -177,11 +184,11 @@ namespace Teleopti.Ccc.DomainTest.Archiving
 				TrackingId = Guid.NewGuid(),
 				LogOnBusinessUnitId = _businessUnit.Id.GetValueOrDefault()
 			};
-			Target.Handle(@event);
+			WithUnitOfWork.Do(() => Target.Handle(@event));
 
-			var result = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person, new ScheduleDictionaryLoadOptions(true, true), _period, _targetScenario);
+			var result = WithUnitOfWork.Get(() => ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person, new ScheduleDictionaryLoadOptions(true, true), _period, _targetScenario));
 			result[_person].ScheduledDayCollection(_period).Should().Not.Be.Empty();
-			var archivedPersonAbsence = PersonAbsenceRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(_targetScenario));
+			var archivedPersonAbsence = WithUnitOfWork.Get(() => PersonAbsenceRepository.LoadAll().FirstOrDefault(x => x.Scenario.Id == _targetScenario.Id));
 			archivedPersonAbsence.Should().Not.Be.Null();
 		}
 	}
