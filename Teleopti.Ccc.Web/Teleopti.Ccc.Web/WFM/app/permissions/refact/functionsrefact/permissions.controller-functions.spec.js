@@ -66,7 +66,7 @@ xdescribe('component: permissionsTree', function () {
 			IsOpen: false
 		});
 		$httpBackend.flush();
-		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions});
+		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
 		ctrl.checkParent(vm.applicationFunctions[0]);
 
 		expect(vm.applicationFunctions[0].multiDeselectModal).toEqual(true);
@@ -223,6 +223,39 @@ xdescribe('component: permissionsTree', function () {
 		expect(vm.applicationFunctions[0].ChildFunctions[0].ChildFunctions[0].IsSelected).toEqual(false);
 		expect(vm.applicationFunctions[1].IsSelected).toEqual(true);
 		expect(vm.applicationFunctions[1].ChildFunctions[0].IsSelected).toEqual(true);
+	});
+
+	xit('should save selected function for selected role', function () {
+		inject(function (permissionsDataService) {
+			fakeBackend
+				.withRole({
+					BuiltIn: false,
+					DescriptionText: 'Agent',
+					Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+					IsAnyBuiltIn: true,
+					IsMyRole: false,
+					Name: 'Agent'
+				})
+				.withRoleInfo({
+					Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+					AvailableFunctions: []
+				})
+				.withApplicationFunction({
+					FunctionCode: 'Raptor',
+					FunctionDescription: 'xxOpenRaptorApplication',
+					FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+					IsDisabled: false,
+					LocalizedFunctionDescription: 'Open Teleopti WFM',
+					IsSelected: false
+				});
+			$httpBackend.flush();
+			ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
+			spyOn(permissionsDataService, 'selectFunction');
+
+			ctrl.toggleFunction(vm.applicationFunctions[0]);
+			console.log(vm)
+			expect(permissionsDataService.selectFunction).toHaveBeenCalledWith();
+		});
 	});
 
 });

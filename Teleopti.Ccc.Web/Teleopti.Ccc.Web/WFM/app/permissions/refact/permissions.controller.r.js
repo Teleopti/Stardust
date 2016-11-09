@@ -5,9 +5,9 @@
         .module('wfm.permissions')
         .controller('PermissionsCtrlRefact', PermissionsCtrl);
 
-    PermissionsCtrl.$inject = ['PermissionsServiceRefact'];
+    PermissionsCtrl.$inject = ['PermissionsServiceRefact', 'permissionsDataService'];
 
-    function PermissionsCtrl(PermissionsServiceRefact) {
+    function PermissionsCtrl(PermissionsServiceRefact, permissionsDataService) {
         var vm = this;
         vm.showCreateModal;
         vm.roleName;
@@ -91,6 +91,7 @@
 
             PermissionsServiceRefact.manage.getRoleInformation({ Id: role.Id }).$promise.then(function (data) {
                 vm.selectedRole = data;
+                permissionsDataService.setSelectedRole(vm.selectedRole);
                 if (vm.selectedRole.AvailableBusinessUnits) {
                     matchOrganizationData();
                 }

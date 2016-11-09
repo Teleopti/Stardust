@@ -1,11 +1,19 @@
-function PermissionsTreeController() {
+function PermissionsTreeController(permissionsDataService) {
   var ctrl = this;
 
   ctrl.toggleFunction = toggleFunction;
   ctrl.onSelect = onSelect;
   ctrl.checkParent = checkParent;
-
+  var selectedFunctions = [];
+  
   function toggleFunction(func) {
+    var selectedRole = permissionsDataService.getSelectedRole();
+    selectedFunctions.push(func.FunctionId)
+
+    if (selectedRole) {
+      permissionsDataService.selectFunction(selectedRole, selectedFunctions)
+    }
+
     func.IsSelected = !func.IsSelected;
     if (!func.IsSelected) {
       var childs = func.ChildFunctions;

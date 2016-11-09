@@ -23,10 +23,13 @@
 
       //FUNCTIONS
       var applicationFunctions = $resource('../api/Permissions/ApplicationFunctions', {});
+      var postFunctions = $resource('../api/Permissions/Roles/:Id/Functions', { Id: "@Id" }, {
+				query: { method: 'POST', params: { Functions: [] }, isArray: true }
+			});
       //END OF FUNCTIONS
 
       //ORGANIZATION
-      	var organizationSelection	= $resource('../api/Permissions/OrganizationSelection', {}, {
+      var organizationSelection	= $resource('../api/Permissions/OrganizationSelection', {}, {
 				query: { method: 'GET', params: {}, isArray: false }
 			});
       //END OF ORGANIZATION
@@ -35,6 +38,7 @@
         roles: roles,
         manage: manage,
         copyRole: copyRole,
+        postFunctions: postFunctions,
         applicationFunctions: applicationFunctions,
         organizationSelection: organizationSelection
       };
