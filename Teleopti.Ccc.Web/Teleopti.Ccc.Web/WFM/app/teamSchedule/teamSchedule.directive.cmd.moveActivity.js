@@ -192,7 +192,7 @@
 			});
 
 			scope.$watch(function() {
-					return scope.vm.moveToTime;
+			    return scope.vm.getMoveToStartTimeStr();
 				},
 				function(newVal, oldVal) {
 					scope.vm.updateInvalidAgents();
