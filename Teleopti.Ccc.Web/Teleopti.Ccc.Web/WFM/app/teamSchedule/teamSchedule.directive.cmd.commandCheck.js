@@ -60,9 +60,9 @@
 			return function(requestData) {
 				if (keepAgents) return requestData;
 
-				if (requestData.PersonIds) {
-					requestData.PersonIds = requestData.PersonIds.filter(function(id) {
-						return checkFailedAgentIdList.indexOf(id) < 0;
+				if (requestData.PersonDates) {
+				    requestData.PersonDates = requestData.PersonDates.filter(function (pd) {
+						return checkFailedAgentIdList.indexOf(pd.PersonId) < 0;
 					});
 				}
 				if (requestData.PersonActivities) {
