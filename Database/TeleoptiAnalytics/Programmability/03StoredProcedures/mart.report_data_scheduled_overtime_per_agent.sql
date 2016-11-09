@@ -93,6 +93,7 @@ SELECT
 FROM mart.fact_schedule fs
 INNER JOIN mart.dim_person p
 	ON fs.person_id=p.person_id
+	AND fs.shift_startdate_local_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
 WHERE shift_startdate_local_id in (select d.date_id from mart.dim_date d where d.date_date BETWEEN  dateadd(dd, -1, @date_from) AND dateadd(dd,1,@date_to))
 AND fs.scenario_id=@scenario_id
 AND p.team_id IN (select right_id from #rights_teams)

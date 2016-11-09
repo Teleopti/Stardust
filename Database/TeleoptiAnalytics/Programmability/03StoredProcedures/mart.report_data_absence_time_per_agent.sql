@@ -98,6 +98,7 @@ SELECT
 FROM mart.fact_schedule f
 INNER JOIN mart.dim_person p
 	ON f.person_id=p.person_id
+	AND f.shift_startdate_local_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
 INNER JOIN mart.dim_date d
 	ON d.date_id = f.shift_startdate_local_id
 WHERE d.date_date BETWEEN @date_from AND @date_to

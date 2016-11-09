@@ -22,6 +22,5 @@ namespace Teleopti.Ccc.Domain.Repositories
 		int GetFactScheduleRowCount(int personId);
 		int GetFactScheduleDayCountRowCount(int personId);
 		int GetFactScheduleDeviationRowCount(int personId);
-		void DeleteInvalidScheduleRows(int[] personPeriodIds);
 	}
 }

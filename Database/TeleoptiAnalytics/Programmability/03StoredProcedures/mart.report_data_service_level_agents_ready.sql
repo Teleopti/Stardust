@@ -255,6 +255,7 @@ INNER JOIN [mart].[DimPersonLocalized](@date_from, @date_to) dpl
 	ON dpl.person_id = fs.person_id
 INNER JOIN mart.dim_person dp 
 	ON dp.person_id = dpl.person_id
+	AND fs.shift_startdate_local_id BETWEEN dp.valid_from_date_id_local AND dp.valid_to_date_id_local
 INNER JOIN mart.bridge_skillset_skill bs 
 	ON dp.skillset_id = bs.skillset_id
 	AND bs.skill_id IN (select id from #skills)

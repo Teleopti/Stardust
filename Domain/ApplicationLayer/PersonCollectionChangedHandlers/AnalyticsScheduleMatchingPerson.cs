@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				var analyticsPersonPeriods = _analyticsPersonPeriodRepository.GetPersonPeriods(personId);
 				var personPeriodIds = analyticsPersonPeriods.Select(x => x.PersonId).ToArray();
 				_analyticsScheduleRepository.UpdateUnlinkedPersonids(personPeriodIds);
-				_analyticsScheduleRepository.DeleteInvalidScheduleRows(personPeriodIds);
 			}
 		}
 	}

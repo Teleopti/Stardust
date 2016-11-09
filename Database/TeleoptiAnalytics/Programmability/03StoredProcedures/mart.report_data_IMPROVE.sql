@@ -65,7 +65,9 @@ CREATE TABLE #person_acd_subSP
 	valid_from_date_id int,
 	valid_from_interval_id int,
 	valid_to_date_id_maxDate int,
-	valid_to_interval_id_maxdate int
+	valid_to_interval_id_maxdate int,
+	valid_from_date_id_local int,
+	valid_to_date_id_local int
 	)
 			
 CREATE TABLE #pre_result(
@@ -88,6 +90,7 @@ CREATE TABLE #pre_result(
 
 CREATE TABLE #fact_schedule
 	(
+	[shift_startdate_local_id][int] NOT NULL,
 	schedule_date_id int,
 	interval_id int,
 	person_id int,
@@ -190,7 +193,9 @@ SELECT
 	valid_from_date_id =p.valid_from_date_id,
 	valid_from_interval_id =p.valid_from_interval_id,
 	valid_to_date_id_maxDate =p.valid_to_date_id_maxDate,
-	valid_to_interval_id_maxdate =p.valid_to_interval_id_maxdate
+	valid_to_interval_id_maxdate =p.valid_to_interval_id_maxdate,
+	valid_from_date_id_local=p.valid_from_date_id_local,
+	valid_to_date_id_local=p.valid_to_date_id_local
 FROM #rights_agents a
 INNER JOIN mart.dim_person p
 	on p.person_id = a.right_id
@@ -238,8 +243,9 @@ INNER JOIN mart.dim_date d
 WHERE	d.date_date	between @date_from AND @date_to
 
 --Create UTC table from: mart.fact_schedule
-INSERT INTO #fact_schedule(schedule_date_id, interval_id, person_id, scheduled_time_m, scheduled_ready_time_m, scheduled_contract_time_m, scheduled_paid_time_m)
-SELECT fs.schedule_date_id, 
+INSERT INTO #fact_schedule(shift_startdate_local_id,schedule_date_id, interval_id, person_id, scheduled_time_m, scheduled_ready_time_m, scheduled_contract_time_m, scheduled_paid_time_m)
+SELECT	fs.shift_startdate_local_id,
+		fs.schedule_date_id, 
 		fs.interval_id, 
 		fs.person_id, 
 		fs.scheduled_time_m, 
@@ -247,9 +253,12 @@ SELECT fs.schedule_date_id,
 		fs.scheduled_contract_time_m,
 		fs.scheduled_paid_time_m
 FROM mart.fact_schedule fs
+INNER JOIN #person_acd_subSP p
+	ON p.person_id=fs.person_id
+	AND fs.shift_startdate_local_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
 WHERE fs.shift_startdate_local_id between @date_from_id and @date_to_id	--we use the expanded utc (-1,+1) from above when filtering on shift_startdate_local_id
 AND fs.scenario_id=@scenario_id
-AND fs.person_id in (SELECT DISTINCT person_id from #person_acd_subSP)
+--AND fs.person_id in (SELECT DISTINCT person_id from #person_acd_subSP)
 
 --This SP will insert Adherence data into table: #pre_result_subSP
 EXEC [mart].[report_data_schedule_result_subSP]

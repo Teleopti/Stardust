@@ -80,7 +80,9 @@ CREATE TABLE #fact_schedule_subSP
 	)
 
 CREATE TABLE #person (
-	person_id int
+	person_id int,
+	valid_from_date_id_local int,
+	valid_to_date_id_local int
 	)
 
 CREATE TABLE #acd_login (
@@ -110,7 +112,7 @@ SELECT DISTINCT
 FROM #person_acd_subSP
 
 INSERT INTO #person
-SELECT DISTINCT person_id FROM #person_acd_subSP
+SELECT DISTINCT person_id, valid_from_date_id_local,valid_to_date_id_local FROM #person_acd_subSP
 
 --Create local table from: mart.fact_schedule_deviation(do a summary in case of overlapping shifts)
 INSERT INTO #fact_schedule_deviation_subSP
@@ -127,6 +129,7 @@ SELECT
 FROM mart.fact_schedule_deviation fsd
 INNER JOIN #person a
 	ON fsd.person_id = a.person_id
+	AND fsd.shift_startdate_local_id between a.valid_from_date_id_local AND a.valid_to_date_id_local
 WHERE fsd.shift_startdate_local_id BETWEEN @date_from_id -1 AND @date_to_id +1
 AND fsd.date_id BETWEEN @date_from_id AND @date_to_id	
 GROUP BY fsd.date_id,fsd.person_id,fsd.interval_id
@@ -203,9 +206,11 @@ SELECT	fs.schedule_date_id,
 		SUM(fs.scheduled_ready_time_m), 
 		SUM(fs.scheduled_contract_time_m)
 FROM mart.fact_schedule fs
+INNER JOIN #person p
+	ON fs.person_id=p.person_id 
+	AND shift_startdate_local_id between p.valid_from_date_id_local AND p.valid_to_date_id_local
 WHERE fs.shift_startdate_local_id BETWEEN  @date_from_id -1 AND @date_to_id +1
 AND fs.schedule_date_id BETWEEN @date_from_id AND @date_to_id
-AND  fs.person_id in (SELECT DISTINCT person_id from #person)
 AND fs.scenario_id = @scenario_id
 GROUP BY fs.schedule_date_id, fs.interval_id, fs.person_id
 

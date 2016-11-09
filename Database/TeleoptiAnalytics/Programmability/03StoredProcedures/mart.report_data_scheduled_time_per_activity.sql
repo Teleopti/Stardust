@@ -47,6 +47,7 @@ CREATE TABLE #result(
 	hide_time_zone bit
 )
 CREATE TABLE #fact_schedule(
+	[shift_startdate_local_id][int] NOT NULL,
 	[schedule_date_id] [int] NOT NULL,
 	[person_id] [int] NOT NULL,
 	[interval_id] [smallint] NOT NULL,
@@ -74,10 +75,11 @@ SELECT * FROM mart.SplitStringInt(@activity_set)
 
 /*Snabba upp frǾga mot fact_schedule*/
 INSERT INTO #fact_schedule
-SELECT schedule_date_id, fs.person_id, interval_id, scenario_id, activity_id, scheduled_time_m
+SELECT shift_startdate_local_id,schedule_date_id, fs.person_id, interval_id, scenario_id, activity_id, scheduled_time_m
 FROM mart.fact_schedule fs
 INNER JOIN mart.dim_person p
 	ON fs.person_id=p.person_id
+	AND shift_startdate_local_id between p.valid_from_date_id_local AND p.valid_to_date_id_local
 WHERE shift_startdate_local_id in (select d.date_id from mart.dim_date d where d.date_date BETWEEN  dateadd(dd, -1, @date_from) AND dateadd(dd,1,@date_to))
 AND fs.scenario_id=@scenario_id
 AND p.team_id IN (select right_id from #rights_teams)

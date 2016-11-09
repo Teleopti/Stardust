@@ -216,17 +216,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.UniqueResult<int>();
 		}
 
-		public void DeleteInvalidScheduleRows(int[] personPeriodIds)
-		{
-			_analyticsUnitOfWork.Current()
-				.Session()
-				.CreateSQLQuery(
-					$@"exec mart.etl_delete_invalid_schedules
-						@person_periodids=:PersonIds")
-				.SetString("PersonIds", string.Join(",", personPeriodIds))
-				.ExecuteUpdate();
-		}
-
 		public IAnalyticsPersonBusinessUnit PersonAndBusinessUnit(Guid personPeriodCode)
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(

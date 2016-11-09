@@ -50,6 +50,7 @@ CREATE TABLE #result(
 					hide_time_zone bit
 )
 CREATE TABLE #fact_schedule(
+	[shift_startdate_local_id][int] NOT NULL,
 	[schedule_date_id] [int] NOT NULL,
 	[person_id] [int] NOT NULL,
 	[interval_id] [smallint] NOT NULL,
@@ -80,9 +81,10 @@ SELECT * FROM SplitStringInt(@activity_set)
 
 
 INSERT INTO #fact_schedule
-SELECT schedule_date_id, person_id, interval_id, scenario_id, activity_id, scheduled_time_m
+SELECT shift_startdate_local_id,schedule_date_id, person_id, interval_id, scenario_id, activity_id, scheduled_time_m
 FROM mart.fact_schedule fs
-WHERE schedule_date_id IN (SELECT b.date_id FROM mart.bridge_time_zone b INNER JOIN mart.dim_date d ON b.local_date_id = d.date_id WHERE d.date_date =  @date_from AND b.time_zone_id=@time_zone_id)
+--WHERE schedule_date_id IN (SELECT b.date_id FROM mart.bridge_time_zone b INNER JOIN mart.dim_date d ON b.local_date_id = d.date_id WHERE d.date_date =  @date_from AND b.time_zone_id=@time_zone_id)
+WHERE shift_startdate_local_id in (select d.date_id from mart.dim_date d where d.date_date BETWEEN  dateadd(dd, -1, @date_from) AND dateadd(dd,1,@date_from))
 AND fs.scenario_id = @scenario_id
 
 INSERT INTO #result(interval,team_name,scheduled_agents, hide_time_zone)
@@ -93,6 +95,7 @@ SELECT	i.interval_name,
 FROM #fact_schedule fs
 INNER JOIN mart.dim_person dp 
 	ON dp.person_id= fs.person_id
+	AND shift_startdate_local_id between dp.valid_from_date_id_local AND dp.valid_to_date_id_local
 INNER JOIN mart.bridge_time_zone b
 	ON	fs.interval_id= b.interval_id
 	AND fs.schedule_date_id= b.date_id

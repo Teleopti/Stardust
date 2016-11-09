@@ -47,6 +47,7 @@ CREATE TABLE #absences(id int)
 CREATE TABLE #rights_agents (right_id int)
 CREATE TABLE #rights_teams (right_id int)
 CREATE TABLE #fact_schedule(
+	[shift_startdate_local_id][int] NOT NULL,
 	[schedule_date_id] [int] NOT NULL,
 	[person_id] [int] NOT NULL,
 	[interval_id] [smallint] NOT NULL,
@@ -103,10 +104,11 @@ SELECT * FROM mart.PermittedTeamsMultipleTeams(@person_code, @report_id, @site_i
 
 /*Snabba upp fraga mot fact_schedule*/
 INSERT INTO #fact_schedule
-SELECT schedule_date_id, person_id, interval_id, scenario_id, activity_id, absence_id, scheduled_time_m, scheduled_contract_time_m, scheduled_contract_time_absence_m, scheduled_work_time_m, scheduled_over_time_m, scheduled_paid_time_m
+SELECT shift_startdate_local_id,schedule_date_id, person_id, interval_id, scenario_id, activity_id, absence_id, scheduled_time_m, scheduled_contract_time_m, scheduled_contract_time_absence_m, scheduled_work_time_m, scheduled_over_time_m, scheduled_paid_time_m
 FROM mart.fact_schedule fs
-WHERE schedule_date_id in (select b.date_id from mart.bridge_time_zone b INNER JOIN mart.dim_date d 	
-							ON b.local_date_id = d.date_id where d.date_date BETWEEN  @date_from AND @date_to AND b.time_zone_id=@time_zone_id)
+--WHERE schedule_date_id in (select b.date_id from mart.bridge_time_zone b INNER JOIN mart.dim_date d 	
+--							ON b.local_date_id = d.date_id where d.date_date BETWEEN  @date_from AND @date_to AND b.time_zone_id=@time_zone_id)
+WHERE shift_startdate_local_id in (select d.date_id from mart.dim_date d where d.date_date BETWEEN  dateadd(dd, -1, @date_from) AND dateadd(dd,1,@date_to))
 
 /* Get all schedele time for all activites */
 INSERT #result(date_id,date,team_name,person_id,person_name,activity_absence_name,is_activity,scheduled_contract_time_m,scheduled_work_time_m,paid_time_m,scheduled_over_time_m,scheduled_absence_time_m,scheduled_time_m,hide_time_zone)
@@ -128,6 +130,7 @@ FROM
 	#fact_schedule f
 INNER JOIN mart.dim_person p
 	ON f.person_id=p.person_id
+	AND shift_startdate_local_id between p.valid_from_date_id_local AND p.valid_to_date_id_local
 INNER JOIN mart.dim_activity act
 	ON act.activity_id=f.activity_id
 INNER JOIN mart.bridge_time_zone b

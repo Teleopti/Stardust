@@ -43,6 +43,7 @@ CREATE TABLE #result(
 					hide_time_zone bit
 )
 CREATE TABLE #fact_schedule(
+	[shift_startdate_local_id][int] NOT NULL,
 	[schedule_date_id] [int] NOT NULL,
 	[person_id] [int] NOT NULL,
 	[interval_id] [smallint] NOT NULL,
@@ -81,11 +82,12 @@ IF @intervals_per_day > 0 SELECT @intervals_length_m = 1440/@intervals_per_day
 
 
 INSERT INTO #fact_schedule
-SELECT schedule_date_id, person_id, interval_id, scenario_id, activity_id, scheduled_time_m, scheduled_time_activity_m
+SELECT shift_startdate_local_id,schedule_date_id, person_id, interval_id, scenario_id, activity_id, scheduled_time_m, scheduled_time_activity_m
 FROM mart.fact_schedule fs
-WHERE schedule_date_id IN (SELECT b.date_id FROM mart.bridge_time_zone b INNER JOIN mart.dim_date d ON b.local_date_id = d.date_id 
-							WHERE d.date_date BETWEEN  @date_from AND @date_to
-							AND b.time_zone_id=@time_zone_id)
+--WHERE schedule_date_id IN (SELECT b.date_id FROM mart.bridge_time_zone b INNER JOIN mart.dim_date d ON b.local_date_id = d.date_id 
+--							WHERE d.date_date BETWEEN  @date_from AND @date_to
+--							AND b.time_zone_id=@time_zone_id)
+WHERE shift_startdate_local_id in (select d.date_id from mart.dim_date d where d.date_date BETWEEN  dateadd(dd, -1, @date_from) AND dateadd(dd,1,@date_to))
 AND fs.scenario_id = @scenario_id
 
 INSERT INTO #result(date,interval,activity_name,scheduled_time_m,scheduled_agents, hide_time_zone)
@@ -100,6 +102,7 @@ INNER JOIN mart.dim_activity da
 	ON da.activity_id= fs.activity_id --activity
 INNER JOIN mart.dim_person dp
 	ON dp.person_id= fs.person_id --person
+	AND fs.shift_startdate_local_id between dp.valid_from_date_id_local AND dp.valid_to_date_id_local
 INNER JOIN mart.bridge_time_zone b
 	ON	fs.interval_id= b.interval_id
 	AND fs.schedule_date_id= b.date_id

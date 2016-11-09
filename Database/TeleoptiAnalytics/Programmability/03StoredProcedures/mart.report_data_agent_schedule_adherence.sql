@@ -218,7 +218,9 @@ CREATE TABLE #person_id (person_id int,
 	person_code uniqueidentifier,
 	first_name nvarchar(30),
 	last_name nvarchar(30),
-	person_name	nvarchar(200)
+	person_name	nvarchar(200), 
+	valid_from_date_id_local int,
+	valid_to_date_id_local int
 )
 
 CREATE TABLE #bridge_time_zone
@@ -336,7 +338,9 @@ BEGIN --Standard Report Permisssions
 		dp.person_code,
 		dp.first_name,
 		dp.last_name,
-		dp.person_name	
+		dp.person_name,	
+		dp.valid_from_date_id_local,
+		dp.valid_to_date_id_local
 	FROM mart.dim_person dp
 	INNER JOIN #rights_teams t
 		ON dp.team_id = t.right_id
@@ -360,7 +364,9 @@ BEGIN
 	dp.person_code,
 	dp.first_name,
 	dp.last_name,
-	dp.person_name
+	dp.person_name,
+	dp.valid_from_date_id_local,
+	dp.valid_to_date_id_local
 	FROM mart.dim_person dp WHERE person_code = @agent_person_code
 END
 
@@ -380,9 +386,11 @@ SELECT
 	is_logged_in,
 	contract_time_s
 FROM mart.fact_schedule_deviation fsd
+INNER JOIN #person_id p
+	ON fsd.person_id = p.person_id
+	AND fsd.shift_startdate_local_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
 WHERE fsd.shift_startdate_local_id  between @minUtcDateId-1 AND @maxUtcDateId+1
 AND fsd.date_id between @minUtcDateId-1 AND @maxUtcDateId+1
-AND fsd.person_id IN (SELECT person_id FROM #person_id)
 
 INSERT INTO #fact_schedule_deviation(shift_startdate_local_id,shift_startdate_id,shift_startinterval_id,date_id,interval_id,person_id,deviation_schedule_ready_s,deviation_schedule_s,deviation_contract_s,ready_time_s,is_logged_in,contract_time_s)
 SELECT 
@@ -420,9 +428,11 @@ SELECT
 		scheduled_ready_time_m
 FROM 
 	mart.fact_schedule fs
+INNER JOIN #person_id p
+	ON fs.person_id = p.person_id
+	AND fs.shift_startdate_local_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
 WHERE fs.shift_startdate_local_id BETWEEN  @minUtcDateId-1 AND @maxUtcDateId+1
 AND fs.schedule_date_id between @minUtcDateId-1 AND @maxUtcDateId+1
-AND fs.person_id in(SELECT person_id FROM  #person_id)
 and fs.scenario_id=@scenario_id
 
 INSERT #fact_schedule(shift_startdate_local_id,shift_startdate_id,shift_startinterval_id,schedule_date_id,interval_id,person_id,scheduled_time_s,scheduled_ready_time_s,count_activity_per_interval)

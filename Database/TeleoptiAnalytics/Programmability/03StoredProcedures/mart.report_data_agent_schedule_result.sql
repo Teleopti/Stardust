@@ -69,7 +69,9 @@ CREATE TABLE #person_acd_subSP
 	valid_from_date_id int,
 	valid_from_interval_id int,
 	valid_to_date_id_maxDate int,
-	valid_to_interval_id_maxdate int
+	valid_to_interval_id_maxdate int,
+	valid_from_date_id_local int,
+	valid_to_date_id_local int
 	)
 
 CREATE TABLE  #rights_agents
@@ -193,7 +195,9 @@ SELECT
 	valid_from_date_id =p.valid_from_date_id,
 	valid_from_interval_id =p.valid_from_interval_id,
 	valid_to_date_id_maxDate =p.valid_to_date_id_maxDate,
-	valid_to_interval_id_maxdate =p.valid_to_interval_id_maxdate
+	valid_to_interval_id_maxdate =p.valid_to_interval_id_maxdate,
+	valid_from_date_id_local=p.valid_from_date_id_local,
+	valid_to_date_id_local=p.valid_to_date_id_local
 FROM #rights_agents a
 INNER JOIN #agents b
 	ON a.right_id = b.id
