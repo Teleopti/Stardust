@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
@@ -9,5 +10,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }
 		public Guid TrackId { get; set; }
+		public List<Guid> SelectedTeams { get; set; }
 	}
 }

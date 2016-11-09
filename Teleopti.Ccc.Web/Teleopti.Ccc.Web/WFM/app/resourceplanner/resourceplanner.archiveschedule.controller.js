@@ -11,6 +11,7 @@
 			function (ArchiveScheduleSrvc, signalRSVC, guidgenerator, $interval, $timeout, $scope) {
 				var vm = this;
 				vm.scenarios = [];
+				vm.selectedTeams = [];
 				vm.fromScenario = null;
 				vm.toScenario = null;
 				vm.dateRangeTemplateType = 'popup';
@@ -33,7 +34,6 @@
 					vm.fromScenario = result[0];
 				});
 				var updateStatus = function (messages) {
-					console.log(messages);
 					vm.recievedMessages += messages.length;
 					if (vm.totalMessages === vm.recievedMessages) {
 						$timeout(function() {
@@ -47,7 +47,7 @@
 				vm.canRunArchiving = function() {
 					return !vm.showProgress;
 				};
-				vm.runArchiving = function (fromScenario, toScenario, period, peopleSelection) {
+				vm.runArchiving = function (fromScenario, toScenario, period, teamSelection) {
 					if (!vm.canRunArchiving()) return;
 					vm.totalMessages = 0;
 					vm.recievedMessages = 0;
@@ -57,7 +57,8 @@
 						ToScenario: toScenario.Id,
 						StartDate: period.startDate,
 						EndDate: period.endDate,
-						TrackId: trackingId
+						TrackId: trackingId,
+						SelectedTeams: teamSelection
 					};
 					ArchiveScheduleSrvc.runArchiving.post({}, JSON.stringify(archiveScheduleModel)).$promise.then(function (result) {
 						vm.totalMessages = result.TotalMessages;
@@ -73,6 +74,26 @@
 					}
 						
 				}, 100, 0, false);
+
+				$scope.$on('teamSelectionChanged',
+					function(event, args) {
+						angular.forEach(args,
+							function (value, key) {
+								if (value.type === "Team") {
+									// We only care about teams
+									var itemIndex = vm.selectedTeams.indexOf(value.id);
+									if (value.selected) {
+										// It should be added to selectedTeams
+										if (itemIndex === -1)
+											vm.selectedTeams.push(value.id);
+									} else {
+										// It should be removed from selectedTeams
+										if (itemIndex !== -1)
+											vm.selectedTeams.splice(itemIndex, 1);
+									}
+								}
+							});
+					});
 			}
 		]);
 })();
