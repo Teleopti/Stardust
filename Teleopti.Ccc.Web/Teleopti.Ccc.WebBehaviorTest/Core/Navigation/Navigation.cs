@@ -554,5 +554,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
             GoToPage("wfm/#/reports/leaderboard");
         }
 
+		public static void GotoRealTimeAdherenceForSkillOnTeam(Guid teamId, Guid skillId)
+		{
+			throw new NotImplementedException();
+			//GoToPage("wfm/#/rta/teams-by-skill/?teamIds=" + teamId + "&skillIds=" + skillId);
+		}
 	}
 }

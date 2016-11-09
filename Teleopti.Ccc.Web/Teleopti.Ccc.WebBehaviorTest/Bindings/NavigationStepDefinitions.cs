@@ -250,6 +250,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			return teamId;
 		}
 
+		private Guid IdsForTeams(string teamNames)
+		{
+			string[] commaString = { "," };
+			var teamNamesArray = teamNames.Split(commaString, StringSplitOptions.RemoveEmptyEntries);
+			var teamIds = (from t in DataMaker.Data().UserDatasOfType<TeamConfigurable>()
+						  let team = t.Team
+						  from teamName in teamNamesArray
+						  where team.Description.Name.Equals(teamName)
+						  select team.Id.GetValueOrDefault()).First();
+			return teamIds;
+		}
+
 		private static Guid SiteIdForTeam(string teamName)
 		{
 			return (from t in DataMaker.Data().UserDatasOfType<TeamConfigurable>()
@@ -292,7 +304,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 				select s.Skill.Id.Value).First();
 			return skillId;
 		}
-
 
 		private Guid IdForState(string state)
 		{
@@ -459,6 +470,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoRealTimeAdherenceForTeamsOnSite(IdForSite(site));
+		}
+
+		[Given(@"I am viewing real time adherence for skill '(.*)' on teams '(.*)'")]
+		public void GivenIAmViewingRealTimeAdherenceForSkillOnTeams(string skill, string teams)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoRealTimeAdherenceForSkillOnTeam(IdsForTeams(teams), IdForSkill(skill));
+		}
+
+		[Given(@"I am viewing real time adherence for skill '(.*)' on team '(.*)'")]
+		public void GivenIAmViewingRealTimeAdherenceForSkillOnTeam(string skill, string team)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoRealTimeAdherenceForSkillOnTeam(IdForTeam(team), IdForSkill(skill));
 		}
 
 		[When(@"I view manage adherence view for agent '(.*)'")]
