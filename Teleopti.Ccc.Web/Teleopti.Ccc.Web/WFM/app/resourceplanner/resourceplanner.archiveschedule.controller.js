@@ -44,8 +44,11 @@
 					}
 					
 				};
-
+				vm.canRunArchiving = function() {
+					return !vm.showProgress;
+				};
 				vm.runArchiving = function (fromScenario, toScenario, period, peopleSelection) {
+					if (!vm.canRunArchiving()) return;
 					vm.totalMessages = 0;
 					vm.recievedMessages = 0;
 					vm.showProgress = true;

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -39,8 +40,11 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					PersonId = person.Id.GetValueOrDefault(),
 					TrackingId = model.TrackId
 				}).Cast<IEvent>().ToArray();
-				_eventPublisher.Publish(archiveScheduleEvents);
-				count = people.Count;
+				Task.Run(() =>
+				{
+					_eventPublisher.Publish(archiveScheduleEvents);
+				});
+				count = archiveScheduleEvents.Length;
 			}
 			return Ok(new ArchiveSchedulesResponse
 			{

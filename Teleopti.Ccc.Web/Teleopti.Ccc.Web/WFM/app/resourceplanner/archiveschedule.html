@@ -1,7 +1,7 @@
 ﻿<div ui-view>
 	<div ng-show="vm.showProgress">
 		<md-progress-linear md-mode="determinate" ng-value="vm.progress"></md-progress-linear>
-		<div class="wfm-block material-depth-1"> {{vm.progress | number:0}}% </div>
+		<p> {{vm.progress | number:0}}%</p>
 	</div>
 
 	<div class="view-header with-fab with-desc">
@@ -12,7 +12,7 @@
 		</div>
 
 		<div class="fab-wrapper">
-			<button id="archive-btn" class="wfm-fab material-depth-1" ng-click="vm.runArchiving(vm.fromScenario, vm.toScenario, vm.period, [])">
+			<button id="archive-btn" class="wfm-fab material-depth-1" ng-click="vm.runArchiving(vm.fromScenario, vm.toScenario, vm.period, [])" ng-disabled="!vm.canRunArchiving()">
 				<i class="mdi mdi-file-document"></i>
 				<md-tooltip>Run archiving</md-tooltip>
 			</button>
