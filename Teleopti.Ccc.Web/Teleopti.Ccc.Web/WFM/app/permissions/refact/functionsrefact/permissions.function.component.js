@@ -1,13 +1,24 @@
-function PermissionsTreeController(permissionsDataService) {
+function PermissionsTreeController(permissionsDataService, NoticeService, $translate) {
   var ctrl = this;
 
   ctrl.toggleFunction = toggleFunction;
   ctrl.onSelect = onSelect;
   ctrl.checkParent = checkParent;
   var selectedFunctions = [];
-  
+
   function toggleFunction(func) {
     var selectedRole = permissionsDataService.getSelectedRole();
+
+    if (selectedRole.BuiltIn) {
+      NoticeService.warning($translate.instant('ChangesAreDisabled'), 5000, true);
+      return;
+    }
+
+    if (selectedRole.IsMyRole) {
+      NoticeService.warning($translate.instant('CanNotModifyMyRole'), 5000, true);
+      return;
+    }
+
     selectedFunctions.push(func.FunctionId)
 
     if (selectedRole) {
@@ -49,13 +60,11 @@ function PermissionsTreeController(permissionsDataService) {
   }
 
   function checkParent(func) {
-    if(func.ChildFunctions.length > 0 ){
-      if(func.IsSelected){
+    if(func.ChildFunctions.length > 0 && func.IsSelected){
         func.multiDeselectModal = true;
-      }
     }else{
       toggleFunction(func);
-     func.multiDeselectModal = false;
+      func.multiDeselectModal = false;
     }
   }
 }

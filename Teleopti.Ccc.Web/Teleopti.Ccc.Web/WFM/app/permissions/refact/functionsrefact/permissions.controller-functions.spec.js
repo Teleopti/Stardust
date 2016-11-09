@@ -35,12 +35,50 @@ xdescribe('component: permissionsTree', function () {
 			IsDisabled: false,
 			LocalizedFunctionDescription: 'Open Teleopti WFM',
 			IsSelected: false,
-			IsOpen: false
+			IsOpen: false,
+			ChildFunctions: [{
+				ChildFunctions: [],
+				FunctionCode: 'ChildFunction',
+				FunctionDescription: 'ChildFunction',
+				FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e9',
+				IsDisabled: false,
+				LocalizedFunctionDescription: 'I am A child function',
+				IsSelected: false,
+				IsOpen: false
+			}]
 		});
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
 
 		ctrl.toggleFunction(vm.applicationFunctions[0]);
+
+		expect(vm.applicationFunctions[0].IsSelected).toEqual(true);
+	});
+
+	it('should be able to select a parent function', function () {
+		fakeBackend.withApplicationFunction({
+			FunctionCode: 'Raptor',
+			FunctionDescription: 'xxOpenRaptorApplication',
+			FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+			IsDisabled: false,
+			LocalizedFunctionDescription: 'Open Teleopti WFM',
+			IsSelected: false,
+			IsOpen: false,
+			ChildFunctions: [{
+				ChildFunctions: [],
+				FunctionCode: 'ChildFunction',
+				FunctionDescription: 'ChildFunction',
+				FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e9',
+				IsDisabled: false,
+				LocalizedFunctionDescription: 'I am A child function',
+				IsSelected: false,
+				IsOpen: false
+			}]
+		});
+		$httpBackend.flush();
+		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
+
+		ctrl.checkParent(vm.applicationFunctions[0]);
 
 		expect(vm.applicationFunctions[0].IsSelected).toEqual(true);
 	});
@@ -224,6 +262,37 @@ xdescribe('component: permissionsTree', function () {
 		expect(vm.applicationFunctions[1].IsSelected).toEqual(true);
 		expect(vm.applicationFunctions[1].ChildFunctions[0].IsSelected).toEqual(true);
 	});
+
+	it('should not be able to edit built in role or my role', function () {
+		inject(function (permissionsDataService, NoticeService) {
+			fakeBackend
+				.withRole({
+					BuiltIn: true,
+					DescriptionText: 'Admin',
+					Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+					IsAnyBuiltIn: true,
+					IsMyRole: true,
+					Name: 'Admin'
+				})
+				.withApplicationFunction({
+					FunctionCode: 'Raptor',
+					FunctionDescription: 'xxOpenRaptorApplication',
+					FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+					IsDisabled: false,
+					LocalizedFunctionDescription: 'Open Teleopti WFM',
+					IsSelected: false
+				});
+			$httpBackend.flush();
+			ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
+			spyOn(NoticeService, "warning");
+			permissionsDataService.setSelectedRole(vm.roles[0]);
+			ctrl.toggleFunction(vm.applicationFunctions[0]);
+
+			expect(vm.applicationFunctions[0].IsSelected).toEqual(false);
+			expect(NoticeService.warning).toHaveBeenCalledWith("ChangesAreDisabled", 5000, true);
+		});
+	});
+
 
 	xit('should save selected function for selected role', function () {
 		inject(function (permissionsDataService) {

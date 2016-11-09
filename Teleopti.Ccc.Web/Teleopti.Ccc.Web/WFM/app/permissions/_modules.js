@@ -1,3 +1,3 @@
 ﻿(function () {
-    angular.module('wfm.permissions', ['ngResource', 'ui.router','wfm.notice']);
+    angular.module('wfm.permissions', ['ngResource', 'ui.router','wfm.notice', 'pascalprecht.translate']);
 })();
