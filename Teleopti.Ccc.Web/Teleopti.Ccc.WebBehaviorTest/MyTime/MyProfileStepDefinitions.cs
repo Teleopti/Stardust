@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#passwordValidation", newPassword);
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#oldPassword", DefaultPassword.ThePassword);
 			Browser.Interactions.ClickUsingJQuery("#passwordButton");
+			Browser.Interactions.AssertVisibleUsingJQuery("#updated");
 		}
 
 		[When(@"I change my password in my profile with")]
