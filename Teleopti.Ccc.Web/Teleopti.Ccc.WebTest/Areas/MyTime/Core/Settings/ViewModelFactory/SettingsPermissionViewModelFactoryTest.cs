@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Settings.ViewModelFactory
 		private MockRepository mocks;
 		private IPermissionProvider _permissionProvider;
 		private ILoggedOnUser _loggedOnUser;
+		private IPerson _person;
 
 
 		[SetUp]
@@ -23,6 +24,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Settings.ViewModelFactory
 			mocks = new MockRepository();
 			_permissionProvider = mocks.Stub<IPermissionProvider>();
 			_loggedOnUser = mocks.Stub<ILoggedOnUser>();
+			_person = PersonFactory.CreatePerson();
+			_person.WorkflowControlSet = new WorkflowControlSet();
 			_target = new SettingsPermissionViewModelFactory(_permissionProvider, _loggedOnUser);
 
 		}
@@ -32,6 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Settings.ViewModelFactory
 		{
 			using (mocks.Record())
 			{
+				Expect.On(_loggedOnUser).Call(_loggedOnUser.CurrentUser()).Return(_person);
 				Expect.On(_permissionProvider).Call(_permissionProvider.HasApplicationFunctionPermission(
 					DefinedRaptorApplicationFunctionPaths.ShareCalendar)).Return(true);
 			}
@@ -47,9 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Settings.ViewModelFactory
 		{
 			using (mocks.Record())
 			{
-				var person = PersonFactory.CreatePerson();
-				person.WorkflowControlSet = new WorkflowControlSet();
-				Expect.On(_loggedOnUser).Call(_loggedOnUser.CurrentUser()).Return(person);
+				Expect.On(_loggedOnUser).Call(_loggedOnUser.CurrentUser()).Return(_person);
 			}
 			using (mocks.Playback())
 			{
