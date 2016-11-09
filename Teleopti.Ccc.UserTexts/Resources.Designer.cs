@@ -28862,7 +28862,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sort By Start Date.
+        ///   Looks up a localized string similar to Sort Start Date.
         /// </summary>
         public static string SortByStartDate {
             get {
@@ -28871,7 +28871,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sort By Update Date.
+        ///   Looks up a localized string similar to Sort Update Date.
         /// </summary>
         public static string SortByUpdateDate {
             get {

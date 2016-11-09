@@ -15083,11 +15083,11 @@ These options are activated:
     <comment>Button name in RTA to go to sites dashboard</comment>
   </data>
   <data name="SortByStartDate" xml:space="preserve">
-    <value>Sort By Start Date</value>
+    <value>Sort Start Date</value>
     <comment>use in MyTime Request, the radio button text that sort the requests by Start Date</comment>
   </data>
   <data name="SortByUpdateDate" xml:space="preserve">
-    <value>Sort By Update Date</value>
+    <value>Sort Update Date</value>
     <comment>use in MyTime Request, the radio button text that sort the requests by Update Date</comment>
   </data>
   <data name="SkillAreaColon" xml:space="preserve">
