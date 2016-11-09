@@ -15,11 +15,13 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly INow _now;
+		private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
 
-		public AgentStateReadModelReader(ICurrentUnitOfWork unitOfWork, INow now)
+		public AgentStateReadModelReader(ICurrentUnitOfWork unitOfWork, INow now, HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId)
 		{
 			_unitOfWork = unitOfWork;
 			_now = now;
+			_hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
 		}
 
 		public IEnumerable<AgentStateReadModel> Load(IEnumerable<IPerson> persons)
@@ -85,7 +87,7 @@ AND g.GroupId IN (:skillIds)
 AND :today BETWEEN g.StartDate and g.EndDate")
 				.SetParameterList("skillIds", skillIds)
 				.SetParameter("today", _now.UtcDateTime().Date)
-				.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+				.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
 				.List<AgentStateReadModel>();
@@ -106,7 +108,7 @@ AND :today BETWEEN g.StartDate and g.EndDate")
 				.SetParameterList("SiteIds", siteIds)
 				.SetParameterList("SkillIds", skillIds)
 				.SetParameter("today", _now.UtcDateTime().Date)
-				.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+				.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
 				.List<AgentStateReadModel>();
@@ -127,7 +129,7 @@ AND :today BETWEEN g.StartDate and g.EndDate")
 				.SetParameterList("TeamIds", teamIds)
 				.SetParameterList("SkillIds", skillIds)
 				.SetParameter("today", _now.UtcDateTime().Date)
-				.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+				.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
 				.List<AgentStateReadModel>();
@@ -182,7 +184,7 @@ ORDER BY AlarmStartTime ASC")
 				.SetParameterList("skillIds", skillIds)
 				.SetParameter("today", _now.UtcDateTime().Date)
 				.SetParameter("now", _now.UtcDateTime())
-				.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+				.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
 				.List<AgentStateReadModel>();
@@ -207,7 +209,7 @@ ORDER BY AlarmStartTime ASC")
 				.SetParameterList("siteIds", siteIds)
 				.SetParameter("today", _now.UtcDateTime().Date)
 				.SetParameter("now", _now.UtcDateTime())
-				.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+				.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
 				.List<AgentStateReadModel>();
@@ -232,7 +234,7 @@ ORDER BY AlarmStartTime ASC")
 				.SetParameterList("skillIds", skillIds)
 				.SetParameter("today", _now.UtcDateTime().Date)
 				.SetParameter("now", _now.UtcDateTime())
-				.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+				.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
 				.List<AgentStateReadModel>();
@@ -378,7 +380,7 @@ ORDER BY AlarmStartTime ASC")
 					.SetParameterList("skillIds", skillIds)
 					.SetParameter("today", _now.UtcDateTime().Date)
 					.SetParameter("now", _now.UtcDateTime())
-					.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+					.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 					.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 					.SetReadOnly(true)
 					.List<AgentStateReadModel>();
@@ -402,7 +404,7 @@ ORDER BY AlarmStartTime ASC")
 					.SetParameter("today", _now.UtcDateTime().Date)
 					.SetParameter("now", _now.UtcDateTime())
 					.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)
-					.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+					.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 					.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 					.SetReadOnly(true)
 					.List<AgentStateReadModel>();
@@ -428,7 +430,7 @@ ORDER BY AlarmStartTime ASC")
 				.SetParameter("today", _now.UtcDateTime().Date)
 				.SetParameter("now", _now.UtcDateTime())
 				.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)
-				.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+				.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
 				.List<AgentStateReadModel>();
@@ -458,7 +460,7 @@ ORDER BY AlarmStartTime ASC")
 					.SetParameterList("siteIds", siteIds)
 					.SetParameter("today", _now.UtcDateTime().Date)
 					.SetParameter("now", _now.UtcDateTime())
-					.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+					.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 					.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 					.SetReadOnly(true)
 					.List<AgentStateReadModel>();
@@ -484,7 +486,7 @@ ORDER BY AlarmStartTime ASC")
 					.SetParameter("today", _now.UtcDateTime().Date)
 					.SetParameter("now", _now.UtcDateTime())
 					.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)
-					.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+					.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 					.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 					.SetReadOnly(true)
 					.List<AgentStateReadModel>();
@@ -512,7 +514,7 @@ ORDER BY AlarmStartTime ASC
 				.SetParameter("today", _now.UtcDateTime().Date)
 				.SetParameter("now", _now.UtcDateTime())
 				.SetParameterList("excludedStateGroupIds", excludedStateGroupIds)
-				.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+				.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
 				.List<AgentStateReadModel>();
@@ -542,7 +544,7 @@ ORDER BY AlarmStartTime ASC")
 					.SetParameterList("teamIds", teamIds)
 					.SetParameter("today", _now.UtcDateTime().Date)
 					.SetParameter("now", _now.UtcDateTime())
-					.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+					.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 					.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 					.SetReadOnly(true)
 					.List<AgentStateReadModel>();
@@ -568,7 +570,7 @@ ORDER BY AlarmStartTime ASC")
 					.SetParameter("today", _now.UtcDateTime().Date)
 					.SetParameter("now", _now.UtcDateTime())
 					.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)
-					.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+					.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 					.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 					.SetReadOnly(true)
 					.List<AgentStateReadModel>();
@@ -596,7 +598,7 @@ ORDER BY AlarmStartTime ASC
 				.SetParameter("today", _now.UtcDateTime().Date)
 				.SetParameter("now", _now.UtcDateTime())
 				.SetParameterList("excludedStateGroupIds", excludedStateGroupIds)
-				.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+				.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
 				.List<AgentStateReadModel>();
@@ -619,8 +621,13 @@ ORDER BY AlarmStartTime ASC
 		}
 	}
 
-	public static class HardcodedSkillGroupingPageId
+	public class HardcodedSkillGroupingPageId
 	{
-		public const string Get = "4CE00B41-0722-4B36-91DD-0A3B63C545CF";
+		private const string id = "4CE00B41-0722-4B36-91DD-0A3B63C545CF";
+
+		public string Get()
+		{
+			return id;
+		}
 	}
 }

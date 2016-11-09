@@ -16,11 +16,13 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly INow _now;
+		private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
 
-		public NumberOfAgentsInTeamReader(ICurrentUnitOfWork currentUnitOfWork, INow now)
+		public NumberOfAgentsInTeamReader(ICurrentUnitOfWork currentUnitOfWork, INow now, HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
 			_now = now;
+			_hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
 		}
 
 		private const string agentsForTeams = @"
@@ -105,7 +107,7 @@ group by a.Team
 			var models = _currentUnitOfWork.Session()
 				.CreateSQLQuery(agentsForSkillQuery)
 				.SetDateTime("now", _now.UtcDateTime())
-				.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+				.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 				.SetParameterList("skillIds", skillIds)
 				.SetParameterList("teams", teamIds)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(teamViewModel)))

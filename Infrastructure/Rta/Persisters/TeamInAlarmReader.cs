@@ -13,11 +13,13 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly INow _now;
+		private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
 
-		public TeamInAlarmReader(ICurrentUnitOfWork unitOfWork, INow now)
+		public TeamInAlarmReader(ICurrentUnitOfWork unitOfWork, INow now, HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId)
 		{
 			_unitOfWork = unitOfWork;
 			_now = now;
+			_hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
 		}
 
 		public IEnumerable<TeamInAlarmModel> Read(Guid siteId)
@@ -61,7 +63,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.SetParameter("siteId", siteId)
 				.SetParameter("now", _now.UtcDateTime())
 				.SetParameterList("skillIds", skillIds)
-				.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+				.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 				.SetResultTransformer(Transformers.AliasToBean(typeof(TeamInAlarmModel)))
 				.List()
 				.Cast<TeamInAlarmModel>();

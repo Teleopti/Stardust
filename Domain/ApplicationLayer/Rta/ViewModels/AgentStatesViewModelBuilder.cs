@@ -135,45 +135,41 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		private IEnumerable<AgentStateViewModel> buildStates(IEnumerable<AgentStateReadModel> states)
 		{
-			return states
-				.Where(x => !x.IsDeleted)
-				.Select(x =>
-				{
-					var timeInAlarm = calculateTimeInAlarm(x);
-					return new AgentStateViewModel
-					{
-						PersonId = x.PersonId,
-						State = x.StateName,
-						StateId = x.StateGroupId,
-						Activity = x.Activity,
-						NextActivity = x.NextActivity,
-						NextActivityStartTime = formatTime(x.NextActivityStartTime),
-						Alarm = x.RuleName,
-						Color = _appliedAlarm.ColorTransition(x, timeInAlarm),
-						TimeInState = x.StateStartTime.HasValue ? (int) (_now.UtcDateTime() - x.StateStartTime.Value).TotalSeconds : 0,
-						TimeInAlarm = timeInAlarm,
-						TimeInRule = x.RuleStartTime.HasValue ? (int?) (_now.UtcDateTime() - x.RuleStartTime.Value).TotalSeconds : null,
-						Shift = x.Shift?.Select(y => new AgentStateActivityViewModel
-						{
-							Color = ColorTranslator.ToHtml(Color.FromArgb(y.Color)),
-							StartTime = TimeZoneHelper.ConvertFromUtc(y.StartTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
-							EndTime = TimeZoneHelper.ConvertFromUtc(y.EndTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
-							Name = y.Name
-						}),
-						OutOfAdherences = x.OutOfAdherences?.Select(y =>
-						{
-							string endTime = null;
-							if (y.EndTime.HasValue)
-								endTime = TimeZoneHelper.ConvertFromUtc(y.EndTime.Value, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss");
-							return new AgentOutOfAdherenceViewModel
-							{
-								StartTime = TimeZoneHelper.ConvertFromUtc(y.StartTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
-								EndTime = endTime
-							};
-						})
-
-					};
-				});
+			return from state in states
+				   where !state.IsDeleted
+				   let timeInAlarm = calculateTimeInAlarm(state)
+				   select new AgentStateViewModel
+				   {
+					   PersonId = state.PersonId,
+					   State = state.StateName,
+					   StateId = state.StateGroupId,
+					   Activity = state.Activity,
+					   NextActivity = state.NextActivity,
+					   NextActivityStartTime = formatTime(state.NextActivityStartTime),
+					   Alarm = state.RuleName,
+					   Color = _appliedAlarm.ColorTransition(state, timeInAlarm),
+					   TimeInState = state.StateStartTime.HasValue ? (int)(_now.UtcDateTime() - state.StateStartTime.Value).TotalSeconds : 0,
+					   TimeInAlarm = timeInAlarm,
+					   TimeInRule = state.RuleStartTime.HasValue ? (int?)(_now.UtcDateTime() - state.RuleStartTime.Value).TotalSeconds : null,
+					   Shift = state.Shift?.Select(y => new AgentStateActivityViewModel
+					   {
+						   Color = ColorTranslator.ToHtml(Color.FromArgb(y.Color)),
+						   StartTime = TimeZoneHelper.ConvertFromUtc(y.StartTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
+						   EndTime = TimeZoneHelper.ConvertFromUtc(y.EndTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
+						   Name = y.Name
+					   }),
+					   OutOfAdherences = state.OutOfAdherences?.Select(y =>
+					   {
+						   string endTime = null;
+						   if (y.EndTime.HasValue)
+							   endTime = TimeZoneHelper.ConvertFromUtc(y.EndTime.Value, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss");
+						   return new AgentOutOfAdherenceViewModel
+						   {
+							   StartTime = TimeZoneHelper.ConvertFromUtc(y.StartTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
+							   EndTime = endTime
+						   };
+					   })
+				   };
 		}
 
 		private int? calculateTimeInAlarm(AgentStateReadModel x)

@@ -13,11 +13,13 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly INow _now;
-		
-		public NumberOfAgentsInSiteReader(ICurrentUnitOfWork currentUnitOfWork, INow now)
+		private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
+
+		public NumberOfAgentsInSiteReader(ICurrentUnitOfWork currentUnitOfWork, INow now, HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
 			_now = now;
+			_hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
 		}
 
 		private const string agentsForSites = @"
@@ -98,7 +100,7 @@ group by a.Site
 				_currentUnitOfWork.Session()
 					.CreateSQLQuery(agentsForSkillQuery)
 					.SetDateTime("now", _now.UtcDateTime())
-					.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Get)
+					.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 					.SetParameterList("sites", siteIds)
 					.SetParameterList("skillIds", skillIds)
 

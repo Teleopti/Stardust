@@ -91,6 +91,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamViewModelBuilder>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsInSiteReader>().As<INumberOfAgentsInSiteReader>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();
+			builder.RegisterType<HardcodedSkillGroupingPageId>().SingleInstance();
 
 			builder.RegisterType<ActivityChangeChecker>().SingleInstance();
 			
