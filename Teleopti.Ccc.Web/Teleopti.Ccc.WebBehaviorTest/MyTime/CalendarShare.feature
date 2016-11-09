@@ -23,7 +23,7 @@ Scenario: Cannot share calendar without permission
 	Given I have the role 'No access to CalendarLink'
 	When I view my settings
 	Then I should not see 'share my calendar' in settings
-
+@ignore
 Scenario: View calendar sharing activation status
 	Given I have the role 'Access to CalendarLink'
 	And I have shared my calendar
@@ -31,12 +31,13 @@ Scenario: View calendar sharing activation status
 	Then I should see 'share my calendar' active
 	And I should see a sharing link
 
+@ignore
 Scenario: Activate calendar sharing
 	Given I have the role 'Access to CalendarLink'
 	When I view my settings
 	And I click 'share my calendar'
 	Then I should see a sharing link
-
+@ignore
 Scenario: Revoke calendar sharing
 	Given I have the role 'Access to CalendarLink'
 	And I have shared my calendar
