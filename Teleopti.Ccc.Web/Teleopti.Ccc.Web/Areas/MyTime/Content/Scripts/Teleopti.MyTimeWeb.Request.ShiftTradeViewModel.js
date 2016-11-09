@@ -462,6 +462,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		var take = self.maxShiftsPerPage;
 		var skip = (self.selectedPageIndex() - 1) * take;
 
+		var scheduleReloaded = false;
 		ajax.Ajax({
 			url: "Requests/ShiftTradeRequestSchedule",
 			dataType: "json",
@@ -488,8 +489,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				self.setPossibleTradeSchedulesRaw(date, data);
 				self._createPossibleTradeSchedules(self.possibleTradeSchedulesRaw);
 				self.keepSelectedAgentVisible();
-				// Redraw layers after data loaded
-				self.redrawLayers();
+				scheduleReloaded = true;
 			},
 			complete: function () {
 				self.IsLoading(false);
@@ -499,6 +499,10 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 					self.refocusToNameSearch();
 					self.refocusToNameSearch = null;
 					self.suppressChangeInSearchBox = false;
+				}
+				if (scheduleReloaded) {
+					// Redraw layers after data loaded
+					self.redrawLayers();
 				}
 			}
 		});
