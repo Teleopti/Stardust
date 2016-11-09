@@ -370,6 +370,11 @@ BEGIN
 	FROM mart.dim_person dp WHERE person_code = @agent_person_code
 END
 
+-- in case of -2 in valid_to_date_id_local, update the eternity date id with max date id
+UPDATE #person_id
+SET valid_to_date_id_local = (SELECT TOP 1 date_id from mart.dim_date with (nolock) ORDER BY date_id DESC) 
+WHERE valid_to_date_id_local = -2
+
 --Create UTC table from: mart.fact_schedule_deviation
 INSERT INTO #fact_schedule_deviation_raw(shift_startdate_local_id,shift_startdate_id,shift_startinterval_id,date_id,interval_id,person_id,deviation_schedule_ready_s,deviation_schedule_s,deviation_contract_s,ready_time_s,is_logged_in,contract_time_s)
 SELECT 
