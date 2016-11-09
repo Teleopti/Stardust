@@ -18,15 +18,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		{
 		}
 
-		[UnitOfWork]
 		[ImpersonateSystem]
+		[UnitOfWork]
 		public virtual void Handle(ProjectionChangedEvent @event)
 		{
 			CreateReadModel(@event);
 		}
 
-		[UnitOfWork]
 		[ImpersonateSystem]
+		[UnitOfWork]
 		public virtual void Handle(ProjectionChangedEventForScheduleDay @event)
 		{
 			CreateReadModel(@event);

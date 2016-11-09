@@ -293,6 +293,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			DateHelper.GetSmallDateTime(new DateTime(2010, 12, 12, 12, 21, 30)).Should().Be.EqualTo(new DateTime(2010, 12, 12, 12, 22, 0));
 			DateHelper.GetSmallDateTime(new DateTime(2010, 12, 12, 12, 21, 45)).Should().Be.EqualTo(new DateTime(2010, 12, 12, 12, 22, 0));
 			DateHelper.GetSmallDateTime(new DateTime(2010, 12, 12, 12, 21, 59)).Should().Be.EqualTo(new DateTime(2010, 12, 12, 12, 22, 0));
+			DateHelper.GetSmallDateTime(new DateTime(2010, 12, 12, 12, 59, 59)).Should().Be.EqualTo(new DateTime(2010, 12, 12, 13, 0, 0));
 		}
 
 		[Test]
