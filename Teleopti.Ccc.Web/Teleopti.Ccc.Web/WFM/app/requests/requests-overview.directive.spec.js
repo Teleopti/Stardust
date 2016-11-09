@@ -599,13 +599,14 @@
 			}
 		}
 
-		this.getRequestableAbsences = function () {
+		this.getRequestTypes = function () {
 			return {
 				then: function (cb) {
 					cb({
 						data: [
 							{ Id: "00", Name: "Absence0" },
-							{ Id: "01", Name: "Absence1" }
+							{ Id: "01", Name: "Absence1" },
+							{ Id: "0", Name: "Text" }
 						]
 					});
 				}

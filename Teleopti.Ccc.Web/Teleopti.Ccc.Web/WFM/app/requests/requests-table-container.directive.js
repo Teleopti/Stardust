@@ -139,7 +139,7 @@
 			angular.forEach(vm.AllRequestableAbsences, function (absence) {
 				absence.Selected = false;
 			});
-			vm.SelectedAbsences = [];
+			vm.SelectedTypes = [];
 
 			angular.forEach(vm.AllRequestStatuses, function (status) {
 				status.Selected = false;
@@ -153,22 +153,22 @@
 		vm.clearFilters = clearAllFilters;
 
 		if (!vm.shiftTradeView) {
-			requestsDataSvc.getRequestableAbsences().then(function (result) {
-				vm.AllRequestableAbsences = result.data;
-				angular.forEach(vm.AllRequestableAbsences, function (absence) {
-					absence.Selected = false;
+			requestsDataSvc.getRequestTypes().then(function (result) {
+				vm.AllRequestTypes = result.data;
+				angular.forEach(vm.AllRequestTypes, function (type) {
+					type.Selected = false;
 				});
 			});
 		}
 
 		vm.AllRequestStatuses = requestsDataSvc.getAllRequestStatuses(vm.shiftTradeView);
 
-		vm.absenceFilterClose = function () {
+		vm.typeFilterClose = function () {
 			var filters = '';
-			angular.forEach(vm.SelectedAbsences, function (absence) {
+			angular.forEach(vm.SelectedTypes, function (absence) {
 				filters += absence.Id + ' ';
 			});
-			vm.requestFiltersMgr.SetFilter('Absence', filters.trim());
+			vm.requestFiltersMgr.SetFilter('Type', filters.trim());
 
 			vm.filters = vm.requestFiltersMgr.Filters;
 		};

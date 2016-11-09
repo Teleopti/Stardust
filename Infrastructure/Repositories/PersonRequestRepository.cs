@@ -259,23 +259,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						addStatusCriteria(criteria, filter);
 						break;
 
-					case RequestFilterField.Absence:
-						var absenceFilters = filter.Value.Split(splitter).Select(x =>
-						{
-							Guid absenceId;
-							return Guid.TryParse(x.Trim(), out absenceId) ? absenceId : Guid.Empty;
-						}).Where(x => x != Guid.Empty).ToList();
-
-						if (!absenceFilters.Any()) continue;
-
-						var absenceCriterion = absenceFilters
-							.Select(x => (ICriterion) Restrictions.Eq("req.Absence.Id", x))
-							.Aggregate(Restrictions.Or);
-
-						criteria.Add(absenceCriterion);
-						criteria.Add(toRequestClassTypeConstraint(RequestType.AbsenceRequest));
-						break;
-
 					case RequestFilterField.Subject:
 						var subjectCriterion = getStringFilterCriteria(filter.Value, "personRequests.Subject");
 						if (subjectCriterion != null) criteria.Add(subjectCriterion);
@@ -286,9 +269,64 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						if (messageCriterion != null) criteria.Add(messageCriterion);
 						break;
 
+					case RequestFilterField.Type:
+						addTypeCriterion(criteria, filter);
+						break;
+
 					default:
 						continue;
 				}
+			}
+		}
+
+		private void addTypeCriterion(ICriteria criteria, KeyValuePair<RequestFilterField, string> filter)
+		{
+			var filterTextRequest = false;
+
+			var absenceFilters = filter.Value.Split(splitter).Select(x =>
+			{
+				RequestType requestType;
+				if (Enum.TryParse(x, out requestType))
+				{
+					filterTextRequest = requestType == RequestType.TextRequest;
+					return Guid.Empty;
+				}
+				Guid absenceId;
+				return Guid.TryParse(x.Trim(), out absenceId) ? absenceId : Guid.Empty;
+			}).Where(x => x != Guid.Empty).ToList();
+
+			if (!absenceFilters.Any() && !filterTextRequest) return;
+
+			var filterAbsenceRequest = absenceFilters.Any();
+			ICriterion absenceRequestCriterion = null;
+
+			if (filterAbsenceRequest)
+			{
+				var absenceCriterion = absenceFilters
+					.Select(x => (ICriterion)Restrictions.Eq("req.Absence.Id", x))
+					.Aggregate(Restrictions.Or);
+
+				absenceRequestCriterion = Restrictions.And(absenceCriterion,
+					toRequestClassTypeConstraint(RequestType.AbsenceRequest));
+
+				if (!filterTextRequest)
+				{
+					criteria.Add(absenceRequestCriterion);
+					return;
+				}
+			}
+
+			if (filterTextRequest)
+			{
+				var textRequestTypeCriterion = toRequestClassTypeConstraint(RequestType.TextRequest);
+
+				if (!filterAbsenceRequest)
+				{
+					criteria.Add(textRequestTypeCriterion);
+					return;
+				}
+
+				criteria.Add(Restrictions.Or(absenceRequestCriterion, textRequestTypeCriterion));
 			}
 		}
 

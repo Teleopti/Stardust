@@ -41,7 +41,7 @@
 
 					vm.SetFilter = function (name, filter) {
 						var nameInLowerCase = name.trim().toLowerCase();
-						var expectedFilterNames = ["status", "absence", "subject", "message"];
+						var expectedFilterNames = ["status", "subject", "message", "type"];
 
 						if (expectedFilterNames.indexOf(nameInLowerCase) > -1) {
 							var filterName = nameInLowerCase.charAt(0).toUpperCase()

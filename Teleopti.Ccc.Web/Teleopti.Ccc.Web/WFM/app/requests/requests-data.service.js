@@ -73,8 +73,11 @@
 			return $http.post(denyRequestsUrl, selectedRequestIdsAndMessage);
 		}
 
-		this.getRequestableAbsences = function () {
-			return $http.get(requestableAbsenceUrl);
+		this.getRequestTypes = function() {
+			return $http.get(requestableAbsenceUrl).then(function (result) {
+				result.data.unshift({ Id: '0', Name: 'Text', ShortName: '' });
+				return result;
+			});
 		}
 
 		this.getLastCaluclatedDateTime = function() {

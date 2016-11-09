@@ -164,8 +164,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return new PersonRequestRepository(currentUnitOfWork);
 		}
 
-		private void setUpGetRequestsByTypeTests()
+		private IList<IPersonRequest> setUpGetRequestsByTypeTests()
 		{
+			var personRequests = new List<IPersonRequest>();
+
 			var personFrom = PersonFactory.CreatePerson("personFrom");
 
 			PersistAndRemoveFromUnitOfWork(personFrom);
@@ -190,6 +192,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(textRequest);
 			PersistAndRemoveFromUnitOfWork(absenceRequest);
 			PersistAndRemoveFromUnitOfWork(offerRequest);
+
+			personRequests.AddRange(new[] {shiftTradePersonRequest, textRequest, absenceRequest, offerRequest});
+			return personRequests;
 		}
 
 		[Test]
@@ -1186,6 +1191,49 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result.Length.Should().Be(2);
 		}
 
+		[Test]
+		public void ShouldFilterRequestByTextType()
+		{
+			setUpGetRequestsByTypeTests();
+
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow),
+				RequestFilters = new Dictionary<RequestFilterField, string>
+				{
+					{RequestFilterField.Type, "0"}
+				}
+			};
+
+			int count;
+			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter, out count);
+			result.Single().Request.RequestType.Should().Be(RequestType.TextRequest);
+		}
+
+		[Test]
+		public void ShouldFilterRequestByTextAndAbsenceType()
+		{
+			var requests = setUpGetRequestsByTypeTests();
+			var absenceRequest = (AbsenceRequest)requests.Single(r => r.Request.RequestType == RequestType.AbsenceRequest).Request;
+			var absence = absenceRequest.Absence;
+
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow),
+				RequestFilters = new Dictionary<RequestFilterField, string>
+				{
+					{RequestFilterField.Type, $"0 {absence.Id}"}
+				}
+			};
+
+			int count;
+			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter, out count);
+			count.Should().Be(2);
+
+			result.Count(r=>r.Request.RequestType == RequestType.TextRequest).Should().Be(1);
+			result.Count(r => r.Request.RequestType == RequestType.AbsenceRequest).Should().Be(1);
+		}
+
 		private PersonRequest createShiftTradeRequest(DateOnly dateFrom, DateOnly dateTo, IPerson personFrom, IPerson personTo)
 		{
 			var shiftTradeSwapDetailList = new List<IShiftTradeSwapDetail>();
@@ -1877,7 +1925,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Period = new DateTimePeriod(2008, 07, 09, 2008, 07, 20),
 				RequestFilters = new Dictionary<RequestFilterField, string>
 				{
-					{RequestFilterField.Absence, $"{_absence.Id} {secondAbsence.Id}"}
+					{RequestFilterField.Type, $"{_absence.Id} {secondAbsence.Id}"}
 				}
 			};
 			int count;
@@ -1927,7 +1975,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				{
 					{RequestFilterField.Subject, "b 2"},
 					{RequestFilterField.Message, "c 3"},
-					{RequestFilterField.Absence, _absence.Id.ToString()},
+					{RequestFilterField.Type, _absence.Id.ToString()},
 					{RequestFilterField.Status, "2"} // 2: Approved
 				}
 			};

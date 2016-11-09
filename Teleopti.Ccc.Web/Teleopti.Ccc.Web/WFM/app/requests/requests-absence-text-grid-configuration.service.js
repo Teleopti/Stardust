@@ -30,10 +30,10 @@
 					headerCellClass: 'request-type-header',
 					enableSorting: false,
 					visible: true,
-					filterHeaderTemplate: '<md-select ng-repeat=\"colFilter in col.filters\" md-on-close=\"grid.appScope.absenceFilterClose()\"'
-					+ 'multiple ng-model=\"grid.appScope.SelectedAbsences\" placeholder=\"{{\'FilterColon\' | translate}} {{\'Type\' | translate}}\" aria-label=\"{{\'Type\' | translate}}\">'
-					+ '<md-option ng-repeat=\"item in grid.appScope.AllRequestableAbsences\" ng-value=\"item\">'
-					+ '<span ng-bind=\"item.Name\"></span>'
+					filterHeaderTemplate: '<md-select ng-repeat=\"colFilter in col.filters\" md-on-close=\"grid.appScope.typeFilterClose()\"'
+					+ 'multiple ng-model=\"grid.appScope.SelectedTypes\" placeholder=\"{{\'FilterColon\' | translate}} {{\'Type\' | translate}}\" aria-label=\"{{\'Type\' | translate}}\">'
+					+ '<md-option ng-repeat=\"item in grid.appScope.AllRequestTypes\" ng-value=\"item\">'
+					+ '<span>{{ item.Name | translate}}</span>'
 					+ '</md-option>'
 					+ '</md-select>'
 				},

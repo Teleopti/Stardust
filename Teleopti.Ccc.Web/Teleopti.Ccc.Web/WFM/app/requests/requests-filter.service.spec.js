@@ -25,8 +25,8 @@
 			target.SetFilter("Status", "2");
 			target.SetFilter("Status", "0 3");
 
-			target.SetFilter("Absence", "00 01");
-			target.SetFilter("Absence", "00 02 03");
+			target.SetFilter("Type", "00 01");
+			target.SetFilter("Type", "00 02 03");
 
 			target.SetFilter("ShouldBeIgnored", "Something");
 
@@ -51,9 +51,9 @@
 				} else if (criteria.hasOwnProperty("Status")) {
 					statusCriteriaCount++;
 					expect(criteria.Status).toEqual("0 3");
-				} else if (criteria.hasOwnProperty("Absence")) {
+				} else if (criteria.hasOwnProperty("Type")) {
 					absenceCriteriaCount++;
-					expect(criteria.Absence).toEqual("00 02 03");
+					expect(criteria.Type).toEqual("00 02 03");
 				} else if (criteria.hasOwnProperty("ShouldBeIgnored")) {
 					shouldIgnoredCriteriaCount++;
 				}
@@ -70,14 +70,14 @@
 			target.SetFilter("Subject", "Abc 123");
 			target.SetFilter("Message", "000");
 			target.SetFilter("Status", "0 3 9");
-			target.SetFilter("Absence", "00 01");
+			target.SetFilter("Type", "00 01");
 
 			expect(target.Filters.length).toEqual(4);
 
 			target.SetFilter("Subject", undefined);
 			target.SetFilter("Message", "");
 			target.SetFilter("Status", "");
-			target.SetFilter("Absence", undefined);
+			target.SetFilter("Type", undefined);
 
 			expect(target.Filters.length).toEqual(0);
 		});
@@ -86,14 +86,14 @@
 			target.SetFilter("Subject", "Abc 123");
 			target.SetFilter("Message", "000");
 			target.SetFilter("Status", "0 3 9");
-			target.SetFilter("Absence", "00 01");
+			target.SetFilter("Type", "00 01");
 
 			expect(target.Filters.length).toEqual(4);
 
 			target.RemoveFilter("Subject");
 			target.RemoveFilter("Message");
 			target.RemoveFilter("Status");
-			target.RemoveFilter("Absence");
+			target.RemoveFilter("Type");
 
 			expect(target.Filters.length).toEqual(0);
 		});
@@ -102,7 +102,7 @@
 			target.SetFilter("Subject", "Abc 123");
 			target.SetFilter("Message", "000");
 			target.SetFilter("Status", "0 3 9");
-			target.SetFilter("Absence", "00 01");
+			target.SetFilter("Type", "00 01");
 
 			expect(target.Filters.length).toEqual(4);
 
