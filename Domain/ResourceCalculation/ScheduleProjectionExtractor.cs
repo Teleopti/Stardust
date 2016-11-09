@@ -66,10 +66,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         void IScheduleExtractor.AddSchedulePart(IScheduleDay schedulePart)
         {
-	        using (PerformanceOutput.ForOperation("Adding schedule part"))
-	        {
-		        retList.AddScheduleDayToContainer(schedulePart, _minResolution);
-	        }
+			retList.AddScheduleDayToContainer(schedulePart, _minResolution);
         }
     }
 }
