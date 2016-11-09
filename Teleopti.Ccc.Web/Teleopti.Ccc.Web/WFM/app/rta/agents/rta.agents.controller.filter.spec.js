@@ -37,7 +37,7 @@ describe('RtaAgentsCtrl', function() {
 	}));
 
 	it('should filter agent name', function () {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 			Name: "Ashley Andeen",
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -57,7 +57,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should filter agent on state', function () {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withAgent({
 				Name: "Ashley Andeen",
@@ -144,13 +144,13 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should filter agent on activity', function () {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withAgent({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-				
+
 			})
 			.withState({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -175,13 +175,13 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should filter agent on alarm', function () {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withAgent({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-				
+
 			})
 			.withState({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -191,7 +191,7 @@ describe('RtaAgentsCtrl', function() {
 				Name: "Charley Caper",
 				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-				
+
 			})
 			.withState({
 				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
@@ -207,7 +207,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should filter agent state updates', function () {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 			Name: "Ashley Andeen",
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -231,7 +231,7 @@ describe('RtaAgentsCtrl', function() {
 
 		expect(scope.filteredData[0].State).toEqual("Ready");
 		expect(scope.filteredData[0].Name).toEqual("Ashley Andeen");
-		
+
 	});
 
 	it('should filter agent name', function () {

@@ -55,7 +55,7 @@ describe('RtaAgentsCtrl', function() {
 	}].forEach(function(example) {
 
 		it('should display time line for ' + example.time, function () {
-			stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+			stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 			$fakeBackend
 				.withTime(example.time)
 				.withAgent({
@@ -85,7 +85,7 @@ describe('RtaAgentsCtrl', function() {
 	].forEach(function (example) {
 
 		it('should position time line for ' + example.time, function () {
-			stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+			stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 			$fakeBackend
 				.withTime(example.time)
 				.withAgent({
@@ -104,7 +104,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should display scheduled activity', function () {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 
 		$fakeBackend
 			.withTime("2016-05-26T12:00:00")
@@ -134,7 +134,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should display all activities', function () {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 
 		$fakeBackend
 			.withTime("2016-05-26T09:00:00")
@@ -172,7 +172,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should display all activities', function () {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 
 		$fakeBackend
 			.withTime("2014-01-21T12:45:00")
@@ -204,7 +204,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should not display past activity before display window', function () {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withTime("2016-05-30T13:00:00")
 			.withAgent({
@@ -230,7 +230,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should not display future activities outside of display window', function () {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withTime("2016-05-30T08:00:00")
 			.withAgent({
@@ -256,7 +256,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should not display future activities outside of display window', function () {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withTime("2016-05-30T08:00:00")
 			.withAgent({
@@ -293,7 +293,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should cut activities that are larger than display window', function () {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withTime("2016-05-30T11:00:00")
 			.withAgent({
@@ -320,7 +320,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should cut activities starting before display window', function () {
-	    stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+	    stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 	    $fakeBackend
 			.withTime("2016-05-30T15:00:00")
 			.withAgent({
@@ -347,7 +347,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should produce an activity name', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withTime("2016-05-30T11:00:00")
 			.withAgent({

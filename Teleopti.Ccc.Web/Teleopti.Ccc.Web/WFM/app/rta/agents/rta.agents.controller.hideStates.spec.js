@@ -37,7 +37,7 @@ describe('RtaAgentsCtrl hide states', function () {
 	}));
 
 	it('should include state id in agent states', function () {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
@@ -58,7 +58,7 @@ describe('RtaAgentsCtrl hide states', function () {
 	});
 
 	it('should not have duplicate states', function () {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
@@ -87,7 +87,7 @@ describe('RtaAgentsCtrl hide states', function () {
 	});
 
 	it('should have empty state', function () {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
@@ -107,7 +107,7 @@ describe('RtaAgentsCtrl hide states', function () {
 	});
 
 	it('should not get information for No State (fakeBackend will throw if you do)', function () {
-		stateParams.teamId = "teamGuid";
+		stateParams.teamIds = ["teamGuid"];
 		stateParams.es = ["noState"];
 		$fakeBackend
 			.withAgent({
@@ -122,7 +122,7 @@ describe('RtaAgentsCtrl hide states', function () {
 	});
 
 	it('should order states by name', function () {
-		stateParams.teamId = "teamGuid";
+		stateParams.teamIds = ["teamGuid"];
 		$fakeBackend.withAgent({
 			PersonId: "personGuid1",
 			TeamId: "teamGuid",
@@ -152,7 +152,7 @@ describe('RtaAgentsCtrl hide states', function () {
 	});
 
 	it('should order with stateParam', function () {
-		stateParams.teamId = "teamGuid";
+		stateParams.teamIds = ["teamGuid"];
 		stateParams.es = ["guid2"];
 		$fakeBackend.withAgent({
 			PersonId: "personGuid1",
@@ -176,7 +176,7 @@ describe('RtaAgentsCtrl hide states', function () {
 	});
 
 	it('should get names for hidden states sent through stateParams', function () {
-		stateParams.teamId = "teamGuid";
+		stateParams.teamIds = ["teamGuid"];
 		stateParams.es = ["loggedOutGuid"];
 		$fakeBackend
 			.withPhoneState({
@@ -196,7 +196,7 @@ describe('RtaAgentsCtrl hide states', function () {
 	});
 
 	it('should still get phone state information when deselect multiple from stateParam', function () {
-		stateParams.teamId = "teamGuid";
+		stateParams.teamIds = ["teamGuid"];
 		stateParams.es = ["noState", "loggedOutGuid"];
 		$fakeBackend
 			.withPhoneState({
@@ -222,7 +222,7 @@ describe('RtaAgentsCtrl hide states', function () {
 
 	[{
 		name: "site",
-		type: 'siteId',
+		type: 'siteIds',
 		id: "siteGuid",
 		createAgent: function (personId) {
 			return {
@@ -232,7 +232,7 @@ describe('RtaAgentsCtrl hide states', function () {
 		}
 	}, {
 			name: "team",
-			type: 'teamId',
+			type: 'teamIds',
 			id: "teamGuid",
 			createAgent: function (personId) {
 				return {
@@ -242,7 +242,7 @@ describe('RtaAgentsCtrl hide states', function () {
 			}
 		}, {
 			name: "skill",
-			type: 'skillId',
+			type: 'skillIds',
 			id: "skillGuid",
 			createAgent: function (personId) {
 				return {
@@ -252,7 +252,7 @@ describe('RtaAgentsCtrl hide states', function () {
 			}
 		}].forEach(function (selection) {
 			it('should hide states when unselecting state for ' + selection.name, function () {
-				stateParams[selection.type] = selection.id;
+				stateParams[selection.type] = [selection.id];
 				$fakeBackend
 					.withAgent(
 					selection.createAgent("person1"))
@@ -314,7 +314,7 @@ describe('RtaAgentsCtrl hide states', function () {
 			});
 
 			it('should update url when deselecting state for ' + selection.name, function () {
-				stateParams[selection.type] = selection.id;
+				stateParams[selection.type] = [selection.id];
 				$fakeBackend
 					.withAgent(
 					selection.createAgent("person1"))
@@ -394,7 +394,7 @@ describe('RtaAgentsCtrl hide states', function () {
 			});
 
 			it('should deselect No State for ' + selection.name, function () {
-				stateParams[selection.type] = selection.id;
+				stateParams[selection.type] = [selection.id];
 				$fakeBackend
 					.withAgent(
 					selection.createAgent("person1"))
@@ -427,7 +427,7 @@ describe('RtaAgentsCtrl hide states', function () {
 			});
 
 			it('should select after deselecting No State for ' + selection.name, function () {
-				stateParams[selection.type] = selection.id;
+				stateParams[selection.type] = [selection.id];
 				stateParams.es = ["noState"];
 				$fakeBackend
 					.withAgent(

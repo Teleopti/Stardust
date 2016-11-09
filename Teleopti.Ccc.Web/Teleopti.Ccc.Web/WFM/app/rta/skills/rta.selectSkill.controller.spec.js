@@ -98,7 +98,7 @@ describe('RtaSelectSkillCtrl', function () {
 				});
 			});
 		 $timeout(function() {
-	           expect($state.go).toHaveBeenCalledWith('rta.agents-skill', {
+	           expect($state.go).toHaveBeenCalledWith('rta.agents', {
 				skillId: 'f08d75b3-fdb4-484a-ae4c-9f0800e2f753'
 				});
         });
@@ -199,7 +199,7 @@ describe('RtaSelectSkillCtrl', function () {
 			});
 
 		$timeout(function () {
-			expect($state.go).toHaveBeenCalledWith('rta.agents-skill-area', {
+			expect($state.go).toHaveBeenCalledWith('rta.agents', {
 				skillAreaId: '836cebb6-cee8-41a1-bb62-729f4b3a63f4'
 			});
 		});

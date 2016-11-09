@@ -36,7 +36,7 @@ describe('RtaAgentsCtrl', function() {
 	}));
 
 	it('should set to team', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId : "34590a63-6331-4921-bc9f-9b5e015ab495",
@@ -49,7 +49,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should set to site', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 			SiteName: "London",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
@@ -61,7 +61,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should display skill name', function () {
-		stateParams.skillId = "f08d75b3-fdb4-484a-ae4c-9f0800e2f753";
+		stateParams.skillIds = ["f08d75b3-fdb4-484a-ae4c-9f0800e2f753"];
 		$fakeBackend
 			.withSkill({
 				Name: "Phone",
@@ -128,8 +128,8 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should set team and site name', function() {
-			stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-			stateParams.siteId = "d970a45a-90ff-4111-bfe1-9b5e015ab45c";
+			stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+			stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c"];
 			$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				TeamId : "34590a63-6331-4921-bc9f-9b5e015ab495",
@@ -145,7 +145,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should hide Breadcrumb', function() {
-		stateParams.skillId = "3f15b334-22d1-4bc1-8e41-72359805d30c";
+		stateParams.skillIds = ["3f15b334-22d1-4bc1-8e41-72359805d30c"];
 		$fakeBackend.withSkills([
 			{
 				Id: "1f15b334-22d1-4bc1-8e41-72359805d30f",

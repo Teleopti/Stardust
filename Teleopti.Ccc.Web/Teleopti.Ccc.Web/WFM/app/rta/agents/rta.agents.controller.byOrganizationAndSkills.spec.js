@@ -38,7 +38,7 @@ describe('RtaAgentsCtrl by organization and skills', function () {
 	}));
 
 	it('should get agent for skill and team', function () {
-		stateParams.skillId = "emailGuid";
+		stateParams.skillIds = ["emailGuid"];
 		stateParams.teamIds = ["teamRedGuid"];
 		stateParams.showAllAgents = true;
 		$fakeBackend
@@ -65,7 +65,7 @@ describe('RtaAgentsCtrl by organization and skills', function () {
 	});
 
 	it('should get agent for skill and site', function () {
-		stateParams.skillId = "emailGuid";
+		stateParams.skillIds = ["emailGuid"];
 		stateParams.siteIds = ["siteLondonGuid"];
 		stateParams.showAllAgents = true;
 
@@ -94,7 +94,7 @@ describe('RtaAgentsCtrl by organization and skills', function () {
 	});
 
 	it('should get agent states for teams and skills', function() {
-		stateParams.skillId = "emailGuid";
+		stateParams.skillIds = ["emailGuid"];
 		stateParams.teamIds = ["teamRedGuid"];
 		stateParams.showAllAgents = true;
 		$fakeBackend
@@ -130,7 +130,7 @@ describe('RtaAgentsCtrl by organization and skills', function () {
 	});
 
 	it('should get agent states for sites and skills', function() {
-		stateParams.skillId = "emailGuid";
+		stateParams.skillIds = ["emailGuid"];
 		stateParams.siteIds = ["londonGuid"];
 		stateParams.showAllAgents = true;
 		$fakeBackend
@@ -165,7 +165,7 @@ describe('RtaAgentsCtrl by organization and skills', function () {
 	});
 
 	it('should display states in alarm for skill and team', function () {
-		stateParams.skillId = "emailGuid";
+		stateParams.skillIds = ["emailGuid"];
 		stateParams.teamIds = ["teamRedGuid"];
 		stateParams.showAllAgents = false;
 		$fakeBackend
@@ -200,7 +200,7 @@ describe('RtaAgentsCtrl by organization and skills', function () {
 	});
 
 	it('should display states in alarm for skill and site', function () {
-		stateParams.skillId = "emailGuid";
+		stateParams.skillIds = ["emailGuid"];
 		stateParams.siteIds = ["siteLondonGuid"];
 		stateParams.showAllAgents = false;
 		$fakeBackend
@@ -235,7 +235,7 @@ describe('RtaAgentsCtrl by organization and skills', function () {
 	});
 
 	it('should take excluded states as stateParam for team and skill', function () {
-			stateParams.skillId = "emailGuid";
+			stateParams.skillIds = ["emailGuid"];
 			stateParams.teamIds = ["teamRedGuid"];
 			stateParams.es = ["StateGuid1"];
 			stateParams.showAllAgents = false;
@@ -272,7 +272,7 @@ describe('RtaAgentsCtrl by organization and skills', function () {
 	});
 
 	it('should take excluded states as stateParam for site and skill', function () {
-			stateParams.skillId = "emailGuid";
+			stateParams.skillIds = ["emailGuid"];
 			stateParams.siteIds = ["siteParisGuid"];
 			stateParams.es = ["StateGuid1"];
 			stateParams.showAllAgents = false;

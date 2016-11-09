@@ -501,30 +501,36 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GotoRealTimeAdherenceAgentsOnTeam(Guid businessUnitId, Guid siteId, Guid teamId)
 		{
-			GoToPage("wfm/#/rta/agents/" + siteId + "/" + teamId);
+			GoToPage("wfm/#/rta/agents/?siteIds=" + siteId + "&teamIds=" + teamId);
 		}
 
 		public static void GotoRealTimeAdherenceAllAgentsOnTeam(Guid siteId, Guid teamId)
 		{
-			GoToPage("wfm/#/rta/agents/" + siteId + "/" + teamId + "?showAllAgents=true");
+			GoToPage("wfm/#/rta/agents/?siteIds=" + siteId + "&teamIds=" + teamId + "&showAllAgents=true");
 		}
 
 		public static void GotoRealTimeAdherenceAgentsWithoutStateOnTeam(Guid siteId, Guid teamId, Guid state)
 		{
-			GoToPage("wfm/#/rta/agents/" + siteId + "/" + teamId + "?es=" + state);
+			GoToPage("wfm/#/rta/agents/?siteIds=" + siteId + "&teamIds=" + teamId + "&es=" + state);
 		}
 
-		public static void GoToAgentDetails(Guid personId)
-		{
-			GoToPage("wfm/#/rta/agent-details/" + personId);
-		}
 		
 		public static void GotoRealTimeAdherenceAllAgentsWithSkill(Guid skillId)
 		{
-			GoToPage("wfm/#/rta/agents-skill/" + skillId);
+			GoToPage("wfm/#/rta/agents/?skillIds=" + skillId);
 		}
 
-		public static void GoToAgentHistoricalAdherence(Guid personId)
+        public static void GotoRealTimeAdherenceForSkillOnTeam(Guid teamId, Guid skillId)
+        {
+            GoToPage("wfm/#/rta/agents/?teamIds=" + teamId + "&skillIds=" + skillId);
+        }
+
+        public static void GoToAgentDetails(Guid personId)
+        {
+            GoToPage("wfm/#/rta/agent-details/" + personId);
+        }
+
+        public static void GoToAgentHistoricalAdherence(Guid personId)
 		{
 			GoToPage("wfm/#/rta/agent-historical/" + personId);
 		}
@@ -554,10 +560,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
             GoToPage("wfm/#/reports/leaderboard");
         }
 
-		public static void GotoRealTimeAdherenceForSkillOnTeam(Guid teamId, Guid skillId)
-		{
-			throw new NotImplementedException();
-			//GoToPage("wfm/#/rta/teams-by-skill/?teamIds=" + teamId + "&skillIds=" + skillId);
-		}
 	}
 }

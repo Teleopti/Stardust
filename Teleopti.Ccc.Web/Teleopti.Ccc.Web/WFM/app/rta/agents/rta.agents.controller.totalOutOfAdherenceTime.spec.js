@@ -37,7 +37,7 @@ describe('RtaAgentsCtrlTotalOutOfAdherenceTime_38702', function() {
 	}));
 
 	it('should display time in rule', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
@@ -55,7 +55,7 @@ describe('RtaAgentsCtrlTotalOutOfAdherenceTime_38702', function() {
 	});
 
 	it('should not display time in rule if not in alarm', function () {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
@@ -72,7 +72,7 @@ describe('RtaAgentsCtrlTotalOutOfAdherenceTime_38702', function() {
 	});
 
 	it('should display time bar based on rule time', function () {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
@@ -90,7 +90,7 @@ describe('RtaAgentsCtrlTotalOutOfAdherenceTime_38702', function() {
 	});
 
 	it('should not display time bar if not in alarm', function () {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"

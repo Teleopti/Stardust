@@ -39,7 +39,7 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 	}));
 
 	it('should stop polling agent states when paused', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
@@ -67,7 +67,7 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 	});
 
 	it('should restart polling when unpausing', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
@@ -90,7 +90,7 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 	});
 
 	it('should display time from when paused', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withTime('2016-06-13T16:00:00')
 			.withAgent({
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
@@ -108,7 +108,7 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 	});
 
 	it('should not display time when not paused', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withTime('2016-06-13T16:00')
 			.withAgent({
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
@@ -157,7 +157,7 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 	})
 
 	xit('should display time in notice when pausing', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withTime('2016-06-15T09:00:46')
 			.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -172,7 +172,7 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 	});
 
 	it('should not update when paused and toggling agents in alarm', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
@@ -200,7 +200,7 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 	});
 
 	it('should sort by time in alarm when paused and toggling agents in alarm', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				Name: "Asley Andeen",

@@ -13,13 +13,9 @@
 				});
 			};
 
-			this.goToAgentsInTeams = function(teamIds) {
-				$state.go('rta.agents-teams', { teamIds: teamIds });
+			this.goToAgents = function(ids) {
+				$state.go('rta.agents', ids);
 			};
-
-			this.goToAgentsInSites = function(siteIds) {
-				$state.go('rta.agents-sites', { siteIds: siteIds });
-			}
 
 			this.goToSelectSkill = function(){
 				$state.go('rta.select-skill');

@@ -203,7 +203,7 @@
 			};
 
 			function goToAgents(selectedItemIds) {
-				$scope.siteId ? RtaRouteService.goToAgentsInTeams(selectedItemIds) : RtaRouteService.goToAgentsInSites(selectedItemIds);
+				$scope.siteId ? RtaRouteService.goToAgents({teamIds: selectedItemIds}) : RtaRouteService.goToAgents({siteIds : selectedItemIds});
 				};
 
 			$scope.goToSkillSelection = function () {

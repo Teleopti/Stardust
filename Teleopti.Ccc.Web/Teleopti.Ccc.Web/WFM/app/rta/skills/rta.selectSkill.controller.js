@@ -37,7 +37,7 @@
 				$scope.selectedSkillChange = function(item) {
 					if (item) {
 						 $timeout(function(){
-							$state.go('rta.agents-skill', { skillId: item.Id });
+							$state.go('rta.agents', { skillIds: item.Id });
 						});
 					};
 
@@ -47,7 +47,7 @@
 
 					if (item) {
 						$timeout(function () {
-							$state.go('rta.agents-skill-area', { skillAreaId: item.Id });
+							$state.go('rta.agents', { skillAreaId: item.Id });
 						});
 					};
 

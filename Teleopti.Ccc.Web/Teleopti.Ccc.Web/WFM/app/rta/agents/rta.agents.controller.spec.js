@@ -37,7 +37,7 @@ describe('RtaAgentsCtrl', function() {
 	}));
 
 	it('should get agent for team', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
@@ -49,7 +49,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should get agent states', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
@@ -82,7 +82,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should update agent state', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
@@ -107,7 +107,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should set state to agent', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
@@ -136,7 +136,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should display in the same order as states received', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -166,7 +166,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should display agent without state received', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 			Name: "Ashley Andeen",
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -186,7 +186,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should go back to sites when business unit is changed', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$sessionStorage.buid = "928dd0bc-bf40-412e-b970-9b5e015aadea";
 		$fakeBackend.withAgent({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -202,7 +202,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should get adherence percentage for agent when clicked', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564"
@@ -222,7 +222,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should stop polling when page is about to destroy', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 		});

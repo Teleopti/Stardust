@@ -42,7 +42,7 @@ describe('RtaAgentsCtrl', function() {
 	}
 
 	it('should display out of adherence', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withAgent({
 				Name: "Ashley Andeen",
@@ -66,7 +66,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should display past out of adherences', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withAgent({
 				Name: "Ashley Andeen",
@@ -95,7 +95,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should display on going out of adherence', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withAgent({
 				Name: "Ashley Andeen",
@@ -119,7 +119,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should cut on going out of adherence', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withAgent({
 				Name: "Ashley Andeen",
@@ -143,7 +143,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should display on going out of adherence time', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withAgent({
 				Name: "Ashley Andeen",
@@ -166,7 +166,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should not display out of adherence time when in adherence', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withAgent({
 				Name: "Ashley Andeen",
@@ -189,7 +189,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should display when out of adherence started and ended', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withAgent({
 				Name: "Ashley Andeen",
@@ -213,7 +213,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should display when ongoing out of adherence started', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withAgent({
 				Name: "Ashley Andeen",
@@ -237,7 +237,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should not display out of adherence ending before time window', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withAgent({
 				Name: "Ashley Andeen",

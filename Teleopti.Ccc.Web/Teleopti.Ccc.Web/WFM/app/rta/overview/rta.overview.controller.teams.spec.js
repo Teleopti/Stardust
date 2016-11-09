@@ -155,7 +155,7 @@ describe('RtaOverviewCtrl', function () {
 				scope.openSelectedItems();
 			});
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents-teams', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			teamIds: ['2d45a50e-db48-41db-b771-a53000ef6565',
 				"0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"
 			]
@@ -180,7 +180,7 @@ describe('RtaOverviewCtrl', function () {
 				scope.openSelectedItems();
 			});
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents-teams', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			teamIds: ["0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"]
 		});
 	});

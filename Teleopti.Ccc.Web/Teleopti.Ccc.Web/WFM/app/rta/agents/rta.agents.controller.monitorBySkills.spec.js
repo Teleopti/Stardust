@@ -39,7 +39,7 @@ describe('RtaAgentsCtrlMonitorBySkills_39081', function () {
 	}));
 
 	it('should get agent for skill', function () {
-		stateParams.skillId = "f08d75b3-fdb4-484a-ae4c-9f0800e2f753";
+		stateParams.skillIds = ["f08d75b3-fdb4-484a-ae4c-9f0800e2f753"];
 		$fakeBackend.withAgent({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			SkillId: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
@@ -52,7 +52,7 @@ describe('RtaAgentsCtrlMonitorBySkills_39081', function () {
 	});
 
 	it('should get state for skill', function () {
-		stateParams.skillId = "f08d75b3-fdb4-484a-ae4c-9f0800e2f753";
+		stateParams.skillIds = ["f08d75b3-fdb4-484a-ae4c-9f0800e2f753"];
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				SkillId: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
@@ -69,7 +69,7 @@ describe('RtaAgentsCtrlMonitorBySkills_39081', function () {
 	});
 
 	it('should state in alarm for skill', function () {
-		stateParams.skillId = "f08d75b3-fdb4-484a-ae4c-9f0800e2f753";
+		stateParams.skillIds = ["f08d75b3-fdb4-484a-ae4c-9f0800e2f753"];
 		$fakeBackend.withAgent({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -143,7 +143,7 @@ describe('RtaAgentsCtrlMonitorBySkills_39081', function () {
 					PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 					State: "Ready"
 				});
-				
+
 		$controllerBuilder.createController()
 			.apply('agentsInAlarm = false');
 

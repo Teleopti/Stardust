@@ -20,7 +20,7 @@
 		<div class="con-flex">
 			<div class="wfm-grid">
 				<div class="grid-card team" ng-if="team.NumberOfAgents > 0" ng-repeat="team in teams">
-					<a ui-sref="rta.agents({siteId: siteId, teamId: team.Id})" class="rta-card-link">
+					<a ui-sref="rta.agents({siteIds: siteId, teamIds: team.Id})" class="rta-card-link">
 																				<div
 																								class="list-content"
 																								ng-class="{good: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 33, warning: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 34 && getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 66, danger: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 67}" tabindex="-1">

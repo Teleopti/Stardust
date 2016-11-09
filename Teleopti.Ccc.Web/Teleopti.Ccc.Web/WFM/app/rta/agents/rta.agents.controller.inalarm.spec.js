@@ -39,7 +39,7 @@ describe('RtaAgentsCtrl', function() {
 	}));
 
 	it('should display states in alarm only', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -70,7 +70,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should display states in alarm only for site', function () {
-		stateParams.siteId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.siteIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -101,7 +101,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should display nothing', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -120,7 +120,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should display states with alarm time in desc order when agentsInAlarm is turned on', function () {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -156,7 +156,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should set bool to indicate if user opened max number of agents', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 
 		for (var i = 0; i < 50; i++) {
 			$fakeBackend.withAgent({
@@ -175,7 +175,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should not set bool to indicate if user opened max number of agents', function () {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 
 		$fakeBackend.withAgent({
 			PersonId: "1",
@@ -192,7 +192,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should trigger notice when max number of agents exceeded', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 
 		for (var i = 0; i < 51; i++) {
 			$fakeBackend.withAgent({

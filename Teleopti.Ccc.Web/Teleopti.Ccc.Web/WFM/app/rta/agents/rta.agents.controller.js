@@ -39,9 +39,9 @@
 			) {
 				var selectedPersonId, lastUpdate, notice;
 				var polling = null;
-				var siteIds = $stateParams.siteIds || ($stateParams.siteId ? [$stateParams.siteId] : []);
-				var teamIds = $stateParams.teamIds || ($stateParams.teamId ? [$stateParams.teamId] : []);
-				var skillIds = ($stateParams.skillId ? [$stateParams.skillId] : []);
+				var siteIds = $stateParams.siteIds || [];
+				var teamIds = $stateParams.teamIds || [];
+				var skillIds = $stateParams.skillIds || [];
 				var skillAreaId = $stateParams.skillAreaId || undefined;
 				var excludedStatesFromUrl = function () {
 					return $stateParams.es || []
@@ -80,7 +80,7 @@
 				$scope.maxNumberOfAgents = 50;
 				$scope.isLoading = true;
 				// because angular cant handle an array of null in stateparams
-				var nullStateId = "noState"
+				var nullStateId = "noState";
 
 				$scope.$watch('pause', function () {
 					if ($scope.pause) {
@@ -436,6 +436,7 @@
 								deferred.resolve(RtaService.agentsFor);
 							});
 					} else {
+
 						deferred.resolve(RtaService.agentsFor);
 					}
 					return deferred.promise;

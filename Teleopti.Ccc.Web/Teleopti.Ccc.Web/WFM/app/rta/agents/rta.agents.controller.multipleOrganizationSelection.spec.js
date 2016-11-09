@@ -58,7 +58,7 @@ describe('RtaAgentsCtrl for sites', function () {
 		}
 	].forEach(function (selection) {
 
-		
+
 		it('should get agents for ' + selection.name, function () {
 			stateParams[selection.type] = selection.ids
 			$fakeBackend

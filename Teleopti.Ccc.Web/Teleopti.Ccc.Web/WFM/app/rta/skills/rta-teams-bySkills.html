@@ -14,7 +14,7 @@
 			</div>
 		</div>
 		<div class="fab-wrapper">
-			<button class="wfm-fab  material-depth-1 open" ng-cloak ng-class="{'hidden-visibility': selectedItemIds.length < 1, 'grow-out': selectedItemIds.length > 0}" ng-click="openSelected()">
+			<button class="wfm-fab  material-depth-1 open" ng-cloak ng-class="{'hidden-visibility': selectedItemIds.length < 1, 'grow-out': selectedItemIds.length > 0}" ng-click="openSelectedItems()">
 				<i class="mdi mdi-arrow-right"></i>
 				<md-tooltip>{{'Open'|translate}}</md-tooltip>
 			</button>
@@ -82,7 +82,7 @@
 								</div>
 								<div class="wfm-grid">
 									<div class="grid-card team" ng-if="team.NumberOfAgents > 0" ng-repeat="team in teams">
-										<a href="{{urlForDashboard()}}" class="rta-card-link">
+										<a ui-sref="{{getStateForAgents()}}" class="rta-card-link">
 																									<div
 																													class="list-content"
 																													ng-class="{good: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 33, warning: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 34 && getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 66, danger: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 67}" tabindex="-1">
