@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly MaxSeatPeak _maxSeatPeak;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
+		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 
 		public MaxSeatOptimization(MaxSeatSkillDataFactory maxSeatSkillDataFactory,
 														CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
@@ -57,7 +59,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 														RestrictionOverLimitValidator restrictionOverLimitValidator,
 														IMatrixListFactory matrixListFactory,
 														MaxSeatPeak maxSeatPeak,
-														TeamInfoFactoryFactory teamInfoFactoryFactory)
+														TeamInfoFactoryFactory teamInfoFactoryFactory,
+														IDeleteSchedulePartService deleteSchedulePartService)
 		{
 			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
@@ -72,6 +75,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_matrixListFactory = matrixListFactory;
 			_maxSeatPeak = maxSeatPeak;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
+			_deleteSchedulePartService = deleteSchedulePartService;
 		}
 
 		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IOptimizationPreferences optimizationPreferences)
@@ -121,18 +125,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 						if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)
 						{
-							var overLimit = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);
-							if (overLimit.IsPositive())
+							foreach (var date in period.DayCollection())
 							{
-								var unlockedAgents = teamBlockInfo.TeamInfo.GroupMembers.Where(agentsToOptimize.Contains).ToArray();
-								var numberOfUnlockedAgents = unlockedAgents.Length;
-								var numberOfAgentsToLock = numberOfUnlockedAgents - overLimit;
-								for (var i = 0; i < numberOfAgentsToLock; i++)
+								foreach (var scheduleMatrixPro in teamBlockInfo.MatrixesForGroupAndBlock())
 								{
-									var unlockedAgent = unlockedAgents[i];
-									teamBlockInfo.TeamInfo.LockMember(period, unlockedAgent);
+									foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
+									{
+										if (scheduleDayPro.Day.Equals(date))
+										{
+											var overLimit = _maxSeatPeak.Fetch(date, skillDaysForTeamBlockInfo);
+											if (overLimit.IsPositive())
+											{
+												var scheduleDay = scheduleDayPro.DaySchedulePart();
+									
+												if (_maxSeatPeak.IsOverMaxSeat(scheduleDay, skillDaysForTeamBlockInfo))
+												{
+													_deleteSchedulePartService.Delete(new List<IScheduleDay> { scheduleDay }, rollbackService, businessRules);
+												}
+											}
+										}
+									}
 								}
-								_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules);
 							}
 						}
 					}
