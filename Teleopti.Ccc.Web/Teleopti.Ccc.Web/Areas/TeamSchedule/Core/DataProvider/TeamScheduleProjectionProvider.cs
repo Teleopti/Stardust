@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			{
 				PersonId = person.Id.GetValueOrDefault().ToString(),
 				Name = agentNameSetting.BuildCommonNameDescription(person),
-				Date = date.Date.ToGregorianDateTimeString().Remove(10),
+				Date = date.Date.ToFixedDateFormat(),
 				Projection = new List<GroupScheduleProjectionViewModel>()
 			};
 
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			{
 				PersonId = scheduleDay.Person.Id.GetValueOrDefault().ToString(),
 				Name = agentNameSetting.BuildCommonNameDescription(scheduleDay.Person),
-				Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToGregorianDateTimeString().Remove(10),
+				Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat(),
 				IsFullDayAbsence = IsFullDayAbsence(scheduleDay),
 				ShiftCategory = getShiftCategoryDescription(scheduleDay),
 				Timezone = new TimeZoneViewModel
@@ -110,8 +110,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				scheduleVm.DayOff = new GroupScheduleDayOffViewModel
 				{
 					DayOffName = dayOff != null ? dayOff.Description.Name : "",
-					Start = TimeZoneInfo.ConvertTimeFromUtc(dayOffStart, userTimeZone).ToGregorianDateTimeString(),
-					End = TimeZoneInfo.ConvertTimeFromUtc(dayOffEnd,userTimeZone).ToGregorianDateTimeString(),
+					Start = TimeZoneInfo.ConvertTimeFromUtc(dayOffStart, userTimeZone).ToFixedDateTimeFormat(),
+					End = TimeZoneInfo.ConvertTimeFromUtc(dayOffEnd,userTimeZone).ToFixedDateTimeFormat(),
 					Minutes = (int) dayOffEnd.Subtract(dayOffStart).TotalMinutes
 				};
 			}
@@ -152,8 +152,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 								? ConfidentialPayloadValues.DisplayColorHex
 								: ((IAbsence)layer.Payload).DisplayColor.ToHtml())
 							: layer.DisplayColor().ToHtml(),
-							Start = startDateTimeInUserTimeZone.ToGregorianDateTimeString(),
-							End = startDateTimeInUserTimeZone.Add(layer.Period.ElapsedTime()).ToGregorianDateTimeString(),
+							Start = startDateTimeInUserTimeZone.ToFixedDateTimeFormat(),
+							End = startDateTimeInUserTimeZone.Add(layer.Period.ElapsedTime()).ToFixedDateTimeFormat(),
 							Minutes = (int)layer.Period.ElapsedTime().TotalMinutes,
 							IsOvertime = overtimeActivities != null
 									 && overtimeActivities.Any(overtime => overtime.Period.Contains(layer.Period))

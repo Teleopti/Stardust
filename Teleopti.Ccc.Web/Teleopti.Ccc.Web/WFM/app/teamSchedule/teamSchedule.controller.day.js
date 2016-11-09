@@ -155,20 +155,13 @@
 			vm.loadSchedules();
 		};
 
-		function momentToYYYYMMDD(m) {
-			var YYYY = '' + m.year();
-			var MM = (m.month() + 1) < 10 ? '0' + (m.month() + 1) : '' + (m.month() + 1);
-			var DD = m.date() < 10 ? '0' + m.date() : '' + m.date();
-			return YYYY + '-' + MM + '-' + DD;
-		}
-
 		function getParamsForLoadingSchedules(options) {
-			options = options || {};
+			if (options == undefined) options = {};
 			var params = {
-				keyword: options.keyword || vm.searchOptions.keyword,
-				date: options.date || momentToYYYYMMDD(vm.scheduleDateMoment()),
-				pageSize: options.pageSize || vm.paginationOptions.pageSize,
-				currentPageIndex: options.currentPageIndex || vm.paginationOptions.pageNumber,
+				keyword: options.keyword != undefined ? options.keyword : vm.searchOptions.keyword,
+				date: options.date != undefined ? options.date : vm.scheduleDateMoment().format("YYYY-MM-DD"),
+				pageSize: options.pageSize != undefined ? options.pageSize : vm.paginationOptions.pageSize,
+				currentPageIndex: options.currentPageIndex != undefined ? options.currentPageIndex : vm.paginationOptions.pageNumber,
 				isOnlyAbsences: vm.onlyLoadScheduleWithAbsence
 			};
 			return params;
