@@ -206,6 +206,11 @@ INNER JOIN mart.dim_person p
 LEFT JOIN mart.bridge_acd_login_person acd
 	ON acd.person_id = b.id
 
+-- in case of -2 in valid_to_date_id_local, update the eternity date id with max date id
+UPDATE #person_acd_subSP
+SET valid_to_date_id_local = (SELECT TOP 1 date_id from mart.dim_date with (nolock) ORDER BY date_id DESC) 
+WHERE valid_to_date_id_local = -2
+
 --This SP will insert data into #pre_result_subSP
 EXEC [mart].[report_data_schedule_result_subSP]
 	@date_from_id	= @date_from_id,
