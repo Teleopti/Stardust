@@ -28,8 +28,8 @@
 				var belongsToDate = vm.manageScheduleForDistantTimezonesEnabled
 					? belongsToDateDecider.decideBelongsToDate(targetTimeRange,
 						belongsToDateDecider.normalizePersonScheduleVm(scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId), vm.currentTimezone()),
-						moment(vm.selectedDate()).format('YYYY-MM-DD'))
-					: moment(vm.selectedDate()).format('YYYY-MM-DD');
+						vm.selectedDate())
+					: vm.selectedDate();
 
 				return {
 					Date: belongsToDate,
@@ -153,7 +153,7 @@
 				defaultStart = moment(overnightEnds).add(1, 'hour').toDate();
 			}
 
-			if (moment(utility.nowInUserTimeZone()).format('YYYY-MM-DD') === moment(vm.selectedDate()).format('YYYY-MM-DD')) {
+			if (moment(utility.nowInUserTimeZone()).format('YYYY-MM-DD') === vm.selectedDate()) {
 				var nextTickTime = new Date(utility.getNextTickNoEarlierThanEight());
 				if (nextTickTime > defaultStart) {
 					defaultStart = nextTickTime;

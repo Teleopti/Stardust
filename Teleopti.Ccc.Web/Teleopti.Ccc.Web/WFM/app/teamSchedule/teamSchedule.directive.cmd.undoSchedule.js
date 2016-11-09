@@ -18,14 +18,21 @@
 			var personDates = [];
 			personIds.forEach(function(personId) {
 				var personScheduleVm = scheduleManagementSvc.findPersonScheduleVmForPersonId(personId);
+
+				personDates.push({
+					PersonId: personId,
+					Date: vm.selectedDate()
+				});
+
 				personScheduleVm.Shifts.filter(function(shift) {
 						return shift.Projections && shift.Projections.length > 0;
 					})
 					.forEach(function (shift) {
-						personDates.push({
-							PersonId: personId,
-							Date: shift.Date
-						});
+						if (shift.Date !== vm.selectedDate())
+							personDates.push({
+								PersonId: personId,
+								Date: shift.Date
+							});
 					});
 			});
 

@@ -6,7 +6,10 @@
 	function teamscheduleCommandContainerCtrl($filter, guidgenerator, CommandCheckService) {
 		var vm = this;
 
-		vm.getDate = function () { return vm.date; };
+		vm.getDate = function () {
+			return moment(vm.date).format('YYYY-MM-DD');
+		};
+
 		vm.getCurrentTimezone = function () { return vm.timezone; };
 
 		vm.convertTimeToCurrentUserTimezone = function(time) {
