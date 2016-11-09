@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 			_now = now;
 		}
-		
+
 		public IEnumerable<AgentViewModel> ForTeam(Guid teamId)
 		{
 			var team = _teamRepository.Get(teamId);
@@ -56,17 +56,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 			var today = _now.LocalDateOnly();
 			return _personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(today, today))
-					.Select(
-						x =>
-							new AgentViewModel
-							{
-								PersonId = x.Id.GetValueOrDefault(),
-								Name = commonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(x.Id.GetValueOrDefault())),
-								SiteId = team.Site.Id.ToString(),
-								SiteName = team.Site.Description.Name,
-								TeamId = team.Id.ToString(),
-								TeamName = team.Description.Name
-							}).ToArray();
+				.Select(
+					x =>
+						new AgentViewModel
+						{
+							PersonId = x.Id.GetValueOrDefault(),
+							Name = commonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(x.Id.GetValueOrDefault())),
+							SiteId = team.Site.Id.ToString(),
+							SiteName = team.Site.Description.Name,
+							TeamId = team.Id.ToString(),
+							TeamName = team.Description.Name
+						}).ToArray();
 		}
 
 
@@ -75,11 +75,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public IEnumerable<AgentViewModel> For(ViewModelFilter filter)
 		{
 			if (filter.SiteIds != null && filter.SkillIds != null)
-				return forSkillAndSite(filter.SkillIds.ToArray(), filter.SiteIds.ToArray());
+				return forSkillAndSite(filter.SiteIds.ToArray(), filter.SkillIds.ToArray());
 			if (filter.SiteIds != null)
 				return forSites(filter.SiteIds.ToArray());
 			if (filter.TeamIds != null && filter.SkillIds != null)
-				return forSkillAndTeam(filter.SkillIds.ToArray(), filter.TeamIds.ToArray());
+				return forSkillAndTeam(filter.TeamIds.ToArray(), filter.SkillIds.ToArray());
 			if (filter.TeamIds != null)
 				return forTeams(filter.TeamIds.ToArray());
 			return forSkill(filter.SkillIds.ToArray());
@@ -88,103 +88,109 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private IEnumerable<AgentViewModel> forSites(IEnumerable<Guid> siteIds)
 		{
 			var today = new DateOnly(_now.UtcDateTime());
-			var sites = _siteRepository.LoadAll().Where(x => siteIds.Contains(x.Id.Value));
-			var teams = new List<ITeam>();
-			sites.ForEach(x => teams.AddRange(x.TeamCollection));
-			var agents = new List<AgentViewModel>();
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
-			teams.ForEach(t =>
-				agents.AddRange(
-					_personRepository.FindPeopleBelongTeam(t, new DateOnlyPeriod(today, today))
-						.Select(p => new AgentViewModel
-						{
-							Name = commonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(p.Id.GetValueOrDefault())),
-							PersonId = p.Id.Value,
-							TeamName = t.Description.Name,
-							TeamId = t.Id.Value.ToString(),
-							SiteName = t.Site.Description.Name,
-							SiteId = t.Site.Id.ToString()
-						})));
-			return agents;
+			return
+				(
+					from site in _siteRepository.LoadAll()
+					from siteId in siteIds
+					from team in site.TeamCollection
+					from person in _personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(today, today))
+					where siteId == site.Id.Value
+					select new AgentViewModel
+					{
+						Name = commonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(person.Id.GetValueOrDefault())),
+						PersonId = person.Id.Value,
+						TeamName = team.Description.Name,
+						TeamId = team.Id.Value.ToString(),
+						SiteName = site.Description.Name,
+						SiteId = site.Id.ToString()
+					}).ToArray();
 		}
 
 		private IEnumerable<AgentViewModel> forTeams(IEnumerable<Guid> teamIds)
 		{
 			var today = new DateOnly(_now.UtcDateTime());
-			var teams = _teamRepository.LoadAll().Where(x => teamIds.Contains(x.Id.Value));
-			var agents = new List<AgentViewModel>();
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
-			teams.ForEach(t =>
-				agents.AddRange(
-					_personRepository.FindPeopleBelongTeam(t, new DateOnlyPeriod(today, today)).Select(p => new AgentViewModel
+			return
+				(
+					from team in _teamRepository.LoadAll()
+					from teamId in teamIds
+					from person in _personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(today, today))
+					where teamId == team.Id.Value
+					select new AgentViewModel
 					{
-						Name = commonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(p.Id.GetValueOrDefault())),
-						PersonId = p.Id.Value,
-						TeamName = t.Description.Name,
-						TeamId = t.Id.Value.ToString(),
-						SiteName = t.Site.Description.Name,
-						SiteId = t.Site.Id.ToString()
-					})));
-			return agents;
+						Name = commonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(person.Id.GetValueOrDefault())),
+						PersonId = person.Id.Value,
+						TeamName = team.Description.Name,
+						TeamId = team.Id.Value.ToString(),
+						SiteName = team.Site.Description.Name,
+						SiteId = team.Site.Id.ToString()
+					}).ToArray();
 		}
 
-
-		private IEnumerable<AgentViewModel> forSkill(IEnumerable<Guid> skill)
+		private IEnumerable<AgentViewModel> forSkill(IEnumerable<Guid> skills)
 		{
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
-			return skill.SelectMany(s =>
-			{
-				var readOnlyGroupDetails = _groupingReadOnlyRepository.DetailsForGroup(s, _now.LocalDateOnly());
-				return readOnlyGroupDetails
-					.Select(x => new AgentViewModel
+			return
+				(
+					from skill in skills
+					from grouping in _groupingReadOnlyRepository.DetailsForGroup(skill, _now.LocalDateOnly())
+					select new AgentViewModel
 					{
-						PersonId = x.PersonId,
-						Name = commonAgentNameSettings.BuildCommonNameDescription(x.FirstName, x.LastName, x.EmploymentNumber),
-						SiteId = x.SiteId.ToString(),
-						SiteName = _siteRepository.Load(x.SiteId.Value).Description.Name,
-						TeamId = x.TeamId.ToString(),
-						TeamName = _teamRepository.Load(x.TeamId.Value).Description.Name
-					});
-			})
-			.ToArray();
+						Name =
+							commonAgentNameSettings.BuildCommonNameDescription(grouping.FirstName, grouping.LastName,
+								grouping.EmploymentNumber),
+						PersonId = grouping.PersonId,
+						SiteId = grouping.SiteId.ToString(),
+						SiteName = _siteRepository.Load(grouping.SiteId.Value).Description.Name,
+						TeamId = grouping.TeamId.ToString(),
+						TeamName = _teamRepository.Load(grouping.TeamId.Value).Description.Name
+					}).ToArray();
 		}
 
-		private IEnumerable<AgentViewModel> forSkillAndTeam(IEnumerable<Guid> skill, IEnumerable<Guid> team)
+		private IEnumerable<AgentViewModel> forSkillAndSite(IEnumerable<Guid> sites, IEnumerable<Guid> skills)
 		{
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
-			return skill.SelectMany(s =>
-			{
-				return _groupingReadOnlyRepository.DetailsForGroup(s, _now.LocalDateOnly())
-					.Where(x=> team.Any(t=>t==x.TeamId.Value))
-					.Select(x => new AgentViewModel
+			return
+				(
+					from site in sites
+					from skill in skills
+					from grouping in _groupingReadOnlyRepository.DetailsForGroup(skill, _now.LocalDateOnly())
+					where site == grouping.SiteId.Value
+					select new AgentViewModel()
 					{
-						PersonId = x.PersonId,
-						Name = commonAgentNameSettings.BuildCommonNameDescription(x.FirstName, x.LastName, x.EmploymentNumber),
-						SiteId = x.SiteId.ToString(),
-						SiteName = _siteRepository.Load(x.SiteId.Value).Description.Name,
-						TeamId = x.TeamId.ToString(),
-						TeamName = _teamRepository.Load(x.TeamId.Value).Description.Name
-					});
-			}).ToArray();
+						PersonId = grouping.PersonId,
+						Name =
+							commonAgentNameSettings.BuildCommonNameDescription(grouping.FirstName, grouping.LastName,
+								grouping.EmploymentNumber),
+						SiteId = grouping.SiteId.ToString(),
+						SiteName = _siteRepository.Load(grouping.SiteId.Value).Description.Name,
+						TeamId = grouping.TeamId.ToString(),
+						TeamName = _teamRepository.Load(grouping.TeamId.Value).Description.Name
+					}
+					).ToArray();
 		}
 
-		private IEnumerable<AgentViewModel> forSkillAndSite(IEnumerable<Guid> skill, IEnumerable<Guid> site)
+		private IEnumerable<AgentViewModel> forSkillAndTeam(IEnumerable<Guid> teams, IEnumerable<Guid> skills)
 		{
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
-			return skill.SelectMany(s =>
-			{
-				return _groupingReadOnlyRepository.DetailsForGroup(s, _now.LocalDateOnly())
-					.Where(x => site.Any(si => si == x.SiteId.Value))
-					.Select(x => new AgentViewModel
+			return
+				(
+					from skill in skills
+					from team in teams
+					from grouping in _groupingReadOnlyRepository.DetailsForGroup(skill, _now.LocalDateOnly())
+					where team == grouping.TeamId.Value
+					select new AgentViewModel
 					{
-						PersonId = x.PersonId,
-						Name = commonAgentNameSettings.BuildCommonNameDescription(x.FirstName, x.LastName, x.EmploymentNumber),
-						SiteId = x.SiteId.ToString(),
-						SiteName = _siteRepository.Load(x.SiteId.Value).Description.Name,
-						TeamId = x.TeamId.ToString(),
-						TeamName = _teamRepository.Load(x.TeamId.Value).Description.Name
-					});
-			}).ToArray();
+						Name =
+							commonAgentNameSettings.BuildCommonNameDescription(grouping.FirstName, grouping.LastName,
+								grouping.EmploymentNumber),
+						PersonId = grouping.PersonId,
+						SiteId = grouping.SiteId.ToString(),
+						SiteName = _siteRepository.Load(grouping.SiteId.Value).Description.Name,
+						TeamId = grouping.TeamId.ToString(),
+						TeamName = _teamRepository.Load(grouping.TeamId.Value).Description.Name
+					}).ToArray();
 		}
 
 	}
