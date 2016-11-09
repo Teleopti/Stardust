@@ -35,13 +35,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForTeams")]
-		public virtual IHttpActionResult GetStatesForTeams([FromUri]Query query)
+		public virtual IHttpActionResult GetStatesForTeams([FromUri] Query query)
 		{
 			return Ok(_agentStatesBuilder.ForTeams(query.Ids));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSites")]
-		public virtual IHttpActionResult GetStatesForSites([FromUri]Query query)
+		public virtual IHttpActionResult GetStatesForSites([FromUri] Query query)
 		{
 			return Ok(_agentStatesBuilder.ForSites(query.Ids));
 		}
@@ -49,19 +49,19 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStates")]
 		public virtual IHttpActionResult GetStates(Guid teamId)
 		{
-			return Ok(_agentStatesBuilder.ForTeams(new[] { teamId }).States);
+			return Ok(_agentStatesBuilder.ForTeams(new[] {teamId}).States);
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/ForTeams")]
-		public virtual IHttpActionResult ForTeams([FromUri]Guid[] teamIds)
+		public virtual IHttpActionResult ForTeams([FromUri] Guid[] teamIds)
 		{
-			return Ok(_agentViewModelBuilder.ForTeams(teamIds).ToArray());
+			return Ok(_agentViewModelBuilder.For(new ViewModelFilter {TeamIds = teamIds}).ToArray());
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/ForSites")]
-		public virtual IHttpActionResult ForSites([FromUri]Guid[] siteIds)
+		public virtual IHttpActionResult ForSites([FromUri] Guid[] siteIds)
 		{
-			return Ok(_agentViewModelBuilder.ForSites(siteIds).ToArray());
+			return Ok(_agentViewModelBuilder.For(new ViewModelFilter {SiteIds = siteIds}).ToArray());
 		}
 	}
 }

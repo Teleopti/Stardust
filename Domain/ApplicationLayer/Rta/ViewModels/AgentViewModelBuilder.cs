@@ -71,50 +71,54 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 
 
+
 		public IEnumerable<AgentViewModel> For(ViewModelFilter filter)
 		{
 			if (filter.SiteIds != null && filter.SkillIds != null)
-				return ForSkillAndSite(filter.SkillIds.ToArray(), filter.SiteIds.ToArray());
+				return forSkillAndSite(filter.SkillIds.ToArray(), filter.SiteIds.ToArray());
 			if (filter.SiteIds != null)
-				return ForSites(filter.SiteIds.ToArray());
+				return forSites(filter.SiteIds.ToArray());
 			if (filter.TeamIds != null && filter.SkillIds != null)
-				return ForSkillAndTeam(filter.SkillIds.ToArray(), filter.TeamIds.ToArray());
+				return forSkillAndTeam(filter.SkillIds.ToArray(), filter.TeamIds.ToArray());
 			if (filter.TeamIds != null)
-				return ForTeams(filter.TeamIds.ToArray());
-			return ForSkill(filter.SkillIds.ToArray());
+				return forTeams(filter.TeamIds.ToArray());
+			return forSkill(filter.SkillIds.ToArray());
 		}
 
-		public IEnumerable<AgentViewModel> ForSites(Guid[] siteIds)
+		private IEnumerable<AgentViewModel> forSites(IEnumerable<Guid> siteIds)
 		{
 			var today = new DateOnly(_now.UtcDateTime());
 			var sites = _siteRepository.LoadAll().Where(x => siteIds.Contains(x.Id.Value));
 			var teams = new List<ITeam>();
 			sites.ForEach(x => teams.AddRange(x.TeamCollection));
 			var agents = new List<AgentViewModel>();
+			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
 			teams.ForEach(t =>
 				agents.AddRange(
-					_personRepository.FindPeopleBelongTeam(t, new DateOnlyPeriod(today, today)).Select(p => new AgentViewModel
-					{
-						Name = p.Name.ToString(),
-						PersonId = p.Id.Value,
-						TeamName = t.Description.Name,
-						TeamId = t.Id.Value.ToString(),
-						SiteName = t.Site.Description.Name,
-						SiteId = t.Site.Id.ToString()
-					})));
+					_personRepository.FindPeopleBelongTeam(t, new DateOnlyPeriod(today, today))
+						.Select(p => new AgentViewModel
+						{
+							Name = commonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(p.Id.GetValueOrDefault())),
+							PersonId = p.Id.Value,
+							TeamName = t.Description.Name,
+							TeamId = t.Id.Value.ToString(),
+							SiteName = t.Site.Description.Name,
+							SiteId = t.Site.Id.ToString()
+						})));
 			return agents;
 		}
 
-		public IEnumerable<AgentViewModel> ForTeams(Guid[] teamIds)
+		private IEnumerable<AgentViewModel> forTeams(IEnumerable<Guid> teamIds)
 		{
 			var today = new DateOnly(_now.UtcDateTime());
 			var teams = _teamRepository.LoadAll().Where(x => teamIds.Contains(x.Id.Value));
 			var agents = new List<AgentViewModel>();
+			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
 			teams.ForEach(t =>
 				agents.AddRange(
 					_personRepository.FindPeopleBelongTeam(t, new DateOnlyPeriod(today, today)).Select(p => new AgentViewModel
 					{
-						Name = p.Name.ToString(),
+						Name = commonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(p.Id.GetValueOrDefault())),
 						PersonId = p.Id.Value,
 						TeamName = t.Description.Name,
 						TeamId = t.Id.Value.ToString(),
@@ -125,7 +129,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		}
 
 
-		public IEnumerable<AgentViewModel> ForSkill(Guid[] skill)
+		private IEnumerable<AgentViewModel> forSkill(IEnumerable<Guid> skill)
 		{
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
 			return skill.SelectMany(s =>
@@ -145,7 +149,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			.ToArray();
 		}
 
-		public IEnumerable<AgentViewModel> ForSkillAndTeam(Guid[] skill, Guid[] team)
+		private IEnumerable<AgentViewModel> forSkillAndTeam(IEnumerable<Guid> skill, IEnumerable<Guid> team)
 		{
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
 			return skill.SelectMany(s =>
@@ -164,7 +168,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			}).ToArray();
 		}
 
-		public IEnumerable<AgentViewModel> ForSkillAndSite(Guid[] skill, Guid[] site)
+		private IEnumerable<AgentViewModel> forSkillAndSite(IEnumerable<Guid> skill, IEnumerable<Guid> site)
 		{
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
 			return skill.SelectMany(s =>

@@ -6,6 +6,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
+	public class UnPromiscuousFakeGroupingReadOnlyRepository : FakeGroupingReadOnlyRepository
+	{
+		public override IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnly queryDate)
+		{
+			return base.DetailsForGroup(groupId, queryDate).Where(x => x.GroupId == groupId);
+		}
+	}
+
 	public class FakeGroupingReadOnlyRepository : IGroupingReadOnlyRepository
 	{
 		private ReadOnlyGroupDetail[] _details;

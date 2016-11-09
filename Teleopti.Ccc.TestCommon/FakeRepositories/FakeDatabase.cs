@@ -53,77 +53,82 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name)
 		{
-			return database.WithAgent(null, name, null, null, null, null, null);
+			return database.WithAgent(null, name, null, null, null, null, null, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name)
 		{
-			return database.WithAgent(id, name, null, null, null, null, null);
+			return database.WithAgent(id, name, null, null, null, null, null, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? personId, string name, Guid? teamId, Guid? siteid)
 		{
-			return database.WithAgent(personId, name, null, teamId, siteid, null, null);
+			return database.WithAgent(personId, name, null, teamId, siteid, null, null, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? personId, string name, Guid? teamId, Guid? siteid, Guid? businessUnitId)
 		{
-			return database.WithAgent(personId, name, null, teamId, siteid, businessUnitId, null);
+			return database.WithAgent(personId, name, null, teamId, siteid, businessUnitId, null, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name, Guid? teamId)
 		{
-			return database.WithAgent(null, name, null, teamId, null, null, null);
+			return database.WithAgent(null, name, null, teamId, null, null, null, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name, Guid? teamId, Guid? siteId)
 		{
-			return database.WithAgent(null, name, null, teamId, siteId, null, null);
+			return database.WithAgent(null, name, null, teamId, siteId, null, null, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name, Guid? teamId, Guid? siteId, Guid? businessUnitId)
 		{
-			return database.WithAgent(null, name, null, teamId, siteId, businessUnitId, null);
+			return database.WithAgent(null, name, null, teamId, siteId, businessUnitId, null, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name, string terminalDate)
 		{
-			return database.WithAgent(null, name, terminalDate, null, null, null, null);
+			return database.WithAgent(null, name, terminalDate, null, null, null, null, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name, string terminalDate, Guid? teamId)
 		{
-			return database.WithAgent(null, name, terminalDate, teamId, null, null, null);
+			return database.WithAgent(null, name, terminalDate, teamId, null, null, null, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name, string terminalDate, Guid? teamId)
 		{
-			return database.WithAgent(id, name, terminalDate, teamId, null, null, null);
+			return database.WithAgent(id, name, terminalDate, teamId, null, null, null, null);
+		}
+
+		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name, int? employeeNumber)
+		{
+			return database.WithAgent(id, name, null, null, null, null, null, employeeNumber);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name, string terminalDate)
 		{
-			return database.WithAgent(id, name, terminalDate, null, null, null, null);
+			return database.WithAgent(id, name, terminalDate, null, null, null, null, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name, TimeZoneInfo timeZone)
 		{
-			return database.WithAgent(null, name, null, null, null, null, timeZone);
+			return database.WithAgent(null, name, null, null, null, null, timeZone, null);
 		}
 		
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name, string terminalDate, TimeZoneInfo timeZone)
 		{
-			return database.WithAgent(null, name, terminalDate, null, null, null, timeZone);
+			return database.WithAgent(null, name, terminalDate, null, null, null, timeZone, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name, TimeZoneInfo timeZone)
 		{
-			return database.WithAgent(id, name, null, null, null, null, timeZone);
+			return database.WithAgent(id, name, null, null, null, null, timeZone, null);
 		}
 
-		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name, string terminalDate, Guid? teamId, Guid? siteId, Guid? businessUnitId, TimeZoneInfo timeZone)
+		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name, string terminalDate, Guid? teamId, Guid? siteId, Guid? businessUnitId, TimeZoneInfo timeZone, int? employeeNumber)
 		{
-			database.WithPerson(id, name, terminalDate, timeZone, null, null);
+			database.WithPerson(id, name, terminalDate, timeZone, null, null, employeeNumber);
 			database.WithPeriod(null, teamId, siteId, businessUnitId);
 			database.WithExternalLogon(name);
 			return database;
@@ -152,12 +157,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 		public static FakeDatabase WithPerson(this FakeDatabase database, Guid id, string name)
 		{
-			return database.WithPerson(id, name, null, null, null, null);
+			return database.WithPerson(id, name, null, null, null, null, null);
 		}
 
 		public static FakeDatabase WithPerson(this FakeDatabase database, string name)
 		{
-			return database.WithPerson(null, name, null, null, null, null);
+			return database.WithPerson(null, name, null, null, null, null, null);
 		}
 	}
 
@@ -346,7 +351,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			WithPerson(SystemUser.Id, SystemUser.Name, null,
 				TimeZoneInfo.Utc,
 				CultureInfoFactory.CreateEnglishCulture(),
-				CultureInfoFactory.CreateEnglishCulture());
+				CultureInfoFactory.CreateEnglishCulture(), null);
 			_person.PermissionInformation.AddApplicationRole(role);
 
 			WithTenant(DefaultTenantName, LegacyAuthenticationKey.TheKey);
@@ -461,7 +466,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeDatabase WithPerson(Guid? id, string name, string terminalDate, TimeZoneInfo timeZone, CultureInfo culture, CultureInfo uiCulture)
+		public FakeDatabase WithPerson(Guid? id, string name, string terminalDate, TimeZoneInfo timeZone, CultureInfo culture, CultureInfo uiCulture, int? employeeNumber)
 		{
 			var existing = _persons.LoadAll().FirstOrDefault(x => x.Id.GetValueOrDefault() == id.GetValueOrDefault());
 			if (existing != null)
@@ -480,8 +485,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 			_person = new Person {Name = setName};
 			_person.SetId(id ?? Guid.NewGuid());
+			_person.EmploymentNumber = employeeNumber?.ToString();
 			_persons.Has(_person);
-
+			
 			_person.InTimeZone(timeZone ?? TimeZoneInfo.Utc);
 			if (culture != null)
 				_person.PermissionInformation.SetCulture(culture);
@@ -596,7 +602,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			if (existingPerson != null)
 				_person = existingPerson as Person;
 			else
-				WithPerson(personId, null, null, null, null, null);
+				WithPerson(personId, null, null, null, null, null, null);
 			var existingAssignment = _personAssignments.LoadAll().SingleOrDefault(x => x.Person.Id == personId && x.Date == date.Date());
 			if (existingAssignment != null)
 				_personAssignment = existingAssignment as PersonAssignment;
@@ -701,7 +707,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 					SiteId = _site.Id.Value,
 					TeamId = _team.Id.Value,
 					FirstName = _person.Name.FirstName,
-					LastName = _person.Name.LastName
+					LastName = _person.Name.LastName,
+					EmploymentNumber = _person.EmploymentNumber
 				});
 			return this;
 		}
