@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_schedules, _dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 																		new WorkShiftFinderResult(_person, _dateOnly), true, false))
 					  .Return(shifts);
-				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(_dateOnly, shifts, _skillDays, _teamBlockInfo, _schedulingOptions,TimeZoneGuard.Instance.TimeZone, false)).IgnoreArguments()
+				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(_dateOnly, shifts, _skillDays, _teamBlockInfo, _schedulingOptions,TimeZoneGuard.Instance.TimeZone, false, null)).IgnoreArguments()
 					  .Return(shiftProjectionCache);
 			}
 			using (_mocks.Playback())

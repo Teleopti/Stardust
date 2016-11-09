@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
 	public class IsAnySkillOpen
 	{
-		public bool Check(IEnumerable<ISkillDay> skillDays, IVisualLayer layer)
+		public bool Check(IEnumerable<ISkillDay> skillDays, IVisualLayer layer, TimeZoneInfo agentTimeZoneInfo)
 		{
 			if (!((IActivity)layer.Payload).RequiresSkill)
 				return true;
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				if (!(skillDay.Skill is MaxSeatSkill) &&
 					skillDay.Skill.Activity.Equals((IActivity)layer.Payload))
 				{
-					if (skillDay.OpenHours().Any(timePeriod => timePeriod.Contains(layer.Period.TimePeriod(TimeZoneInfo.Utc))))
+					if (skillDay.OpenHours().Any(timePeriod => timePeriod.Contains(layer.Period.TimePeriod(agentTimeZoneInfo))))
 					{
 						return true;
 					}

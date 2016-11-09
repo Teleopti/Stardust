@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		}
 
 		public IShiftProjectionCache SelectShiftProjectionCache(DateOnly datePointer, IList<IShiftProjectionCache> shifts, IEnumerable<ISkillDay> allSkillDays,
-			ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, TimeZoneInfo timeZoneInfo, bool forRoleModel)
+			ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, TimeZoneInfo timeZoneInfo, bool forRoleModel, IPerson person)
 		{
 			var bestShiftValue = double.MaxValue;
 			IShiftProjectionCache ret =null;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 					var activity = (IActivity) layer.Payload;
 					var thisShiftRequiresOneSeatExtra = activity.RequiresSeat;
 
-					if (hasNonMaxSeatSkills && !_isAnySkillOpen.Check(skillDays, layer))
+					if (hasNonMaxSeatSkills && !_isAnySkillOpen.Check(skillDays, layer, person.PermissionInformation.DefaultTimeZone()))
 					{
 						thisShiftsPeak = double.MaxValue;
 						break;
