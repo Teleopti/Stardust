@@ -49,7 +49,7 @@
 				<input id="switch1" ng-model="agentsInAlarm" type="checkbox"/>
 				<label  class="rta-agents-in-alarm-switch" for="switch1" ng-if="agents.length <= maxNumberOfAgents && !isLoading">
 					<span class="wfm-switch-label">{{'InAlarm'|translate}}</span>
-					<span class="wfm-switch-toggle"></span>
+					<span class="wfm-switch-toggle" style="background:{{pause?'#E0E0E0':''}}"></span>
 				</label>
 				<span ng-if="agents.length > maxNumberOfAgents">Agents in alarm</span>
 			</div>
