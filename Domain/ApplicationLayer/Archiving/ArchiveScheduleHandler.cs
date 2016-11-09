@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
+		private readonly ScheduleDictionaryLoadOptions _scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 
 		public ArchiveScheduleHandler(ITrackingMessageSender trackingMessageSender, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IScheduleStorage scheduleStorage, ICurrentUnitOfWork currentUnitOfWork)
 		{
@@ -40,19 +42,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 			var person = _personRepository.Get(@event.PersonId);
 			var fromScenario = _scenarioRepository.Get(@event.FromScenario);
 			var toScenario = _scenarioRepository.Get(@event.ToScenario);
-			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(true, true),
-				period, fromScenario);
-			var scheduleDays = scheduleDictionary.SchedulesForPeriod(period, person);
-			foreach (var scheduleDay in scheduleDays)
-			{
-				foreach (var scheduleData in scheduleDay.PersistableScheduleDataCollection())
-				{
-					var exportableType = scheduleData as IExportToAnotherScenario;
-					var changedScheduleData = exportableType?.CloneAndChangeParameters(new ScheduleParameters(toScenario, person, period.ToDateTimePeriod(TimeZoneInfo.Utc)));
-					if (changedScheduleData != null)
-						_scheduleStorage.Add(changedScheduleData);
-				}
-			}
+
+			clearCurrentSchedules(toScenario, person, period);
+			archiveSchedules(fromScenario, toScenario, person, period);
 			
 			_currentUnitOfWork.Current().AfterSuccessfulTx(() =>
 			{
@@ -62,6 +54,47 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 					TrackId = @event.TrackingId
 				});
 			});
+		}
+
+		private void clearCurrentSchedules(IScenario toScenario, IPerson person, DateOnlyPeriod period)
+		{
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, _scheduleDictionaryLoadOptions,
+				period, toScenario);
+			var scheduleDays = scheduleDictionary.SchedulesForPeriod(period, person);
+			var changes = false;
+			foreach (var scheduleDay in scheduleDays)
+			{
+				foreach (var scheduleData in scheduleDay.PersistableScheduleDataCollection())
+				{
+					if (scheduleData is IExportToAnotherScenario)
+					{
+						var entity = _scheduleStorage.Get(scheduleData.GetType(), scheduleData.Id.Value);
+						_scheduleStorage.Remove(entity);
+						changes = true;
+					}
+				}
+			}
+			if (changes)
+				_currentUnitOfWork.Current().PersistAll();
+		}
+
+		private void archiveSchedules(IScenario fromScenario, IScenario toScenario, IPerson person, DateOnlyPeriod period)
+		{
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, _scheduleDictionaryLoadOptions,
+				period, fromScenario);
+			var scheduleDays = scheduleDictionary.SchedulesForPeriod(period, person);
+
+			foreach (var scheduleDay in scheduleDays)
+			{
+				foreach (var scheduleData in scheduleDay.PersistableScheduleDataCollection())
+				{
+					var exportableType = scheduleData as IExportToAnotherScenario;
+					var changedScheduleData = exportableType?.CloneAndChangeParameters(new ScheduleParameters(toScenario, person,
+							period.ToDateTimePeriod(TimeZoneInfo.Utc)));
+					if (changedScheduleData != null)
+						_scheduleStorage.Add(changedScheduleData);
+				}
+			}
 		}
 	}
 }
