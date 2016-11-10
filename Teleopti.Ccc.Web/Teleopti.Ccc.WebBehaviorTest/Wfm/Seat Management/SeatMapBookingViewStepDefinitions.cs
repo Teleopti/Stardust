@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		[Then(@"I should see people search list")]
 		public void ThenIShouldSeePeopleSearchList()
 		{
-			Browser.Interactions.AssertExists(".input-search");
+			Browser.Interactions.AssertExists("#advanced-search");
 			Browser.Interactions.AssertExists(".people-list");
 		}
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		[Then(@"I should not see people search list")]
 		public void ThenIShouldNotSeePeopleSearchList()
 		{
-			Browser.Interactions.AssertNotVisibleUsingJQuery(".seatmap-occupancy-detail .input-search");
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".seatmap-occupancy-detail #advanced-search");
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".seatmap-occupancy-detail .people-list");
 		}
 
