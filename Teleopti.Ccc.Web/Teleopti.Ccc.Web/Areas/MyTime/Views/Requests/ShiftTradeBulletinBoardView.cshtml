@@ -79,7 +79,7 @@
 						<td>&nbsp;</td>
 						<td></td>
 						<!--ko if:$root.showContractTime-->
-						<td class="shift-trade-contract-time">
+						<td class="hidden-xs hidden-sm shift-trade-contract-time">
 							<strong>@Resources.ContractTime</strong>
 						</td>
 						<!--/ko-->
@@ -87,7 +87,12 @@
 				</thead>
 				<tbody>
 					<tr class="shift-trade-my-schedule-row">
-						<td class="shift-trade-agent-name">@Resources.MySchedule</td>
+						<td class="shift-trade-agent-name">
+							<div data-bind="style:$root.showContractTime && {'font-weight': 'bold'}">@Resources.MySchedule</div>
+							<!--ko if:$root.showContractTime-->
+							<div class="hidden-md hidden-lg shift-trade-contract-time-mobile" data-bind="text: mySchedule().contractTime"></div>
+							<!--/ko-->
+						</td>
 						<!--ko if: Toggle36662Enabled()-->
 						<td class="shift-trade-my-schedule">
 							<!--ko if:mySchedule().isFullDayAbsence-->
@@ -133,7 +138,7 @@
 						</td>
 						<!--/ko-->
 						<!--ko if:$root.showContractTime-->
-						<td class="shift-trade-contract-time">
+						<td class="hidden-xs hidden-sm shift-trade-contract-time">
 							<div data-bind="text: mySchedule().contractTime"></div>
 						</td>
 						<!--/ko-->
@@ -141,7 +146,12 @@
 				</tbody>
 				<tbody data-bind="foreach: possibleTradeSchedules">
 					<tr id="agent-in-bulletin-board" style="display: none;" class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
-						<td class="shift-trade-agent-name agent-name-row floatleft" data-bind="text: $data.agentName==''?'(@Resources.Anonymous)':$data.agentName"></td>
+						<td class="shift-trade-agent-name agent-name-row floatleft">
+							<div data-bind="style:$root.showContractTime && {'font-weight': 'bold'}, text: $data.agentName==''?'(@Resources.Anonymous)':$data.agentName"></div>
+							<!--ko if:$root.showContractTime-->
+							<div class="hidden-md hidden-lg shift-trade-contract-time-mobile" data-bind="text: $data.contractTime"></div>
+							<!--/ko-->
+						</td>
 						<td class="shift-trade-possible-trade-schedule">
 							<div data-bind="foreach: $data.layers">
 								<!--ko if:!$parent.isDayOff-->
@@ -168,7 +178,7 @@
 							<!--/ko-->
 						</td>
 						<!--ko if:$root.showContractTime-->
-						<td class="shift-trade-contract-time">
+						<td class="hidden-xs hidden-sm shift-trade-contract-time">
 							<div data-bind="text: $data.contractTime"></div>
 						</td>
 						<!--/ko-->

@@ -155,7 +155,6 @@
 	float: left;
 	margin-right: 5px;
 	margin-top: 2px;
-	
 }
 
 .fix-margin {
@@ -336,6 +335,10 @@
 	text-align: center;
 }
 
+.shift-trade-contract-time-mobile {
+	text-align: left;
+}
+
 .shift-trade-button-cell {
 	width: 30px;
 	text-align: right;
@@ -361,7 +364,6 @@
 	display: inline;
 	margin-top: 24px;
 }
-
 
 .shift-trade-swap-detail-schedule-row {
 	height: 22px;
@@ -464,11 +466,11 @@
 }
 
 .request-date {
-	max-width: 270px;	
+	max-width: 270px;
 }
 
 .request-time {
-	max-width: 130px;	
+	max-width: 130px;
 }
 
 .request-date-container {

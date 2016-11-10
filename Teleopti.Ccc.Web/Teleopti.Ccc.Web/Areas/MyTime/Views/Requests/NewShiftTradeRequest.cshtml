@@ -123,7 +123,7 @@
 
 		<div class="col-sm-5 col-md-6 col-lg-2">
 			<div class="input-group name-search schedule-filter-component">
-				<input type="search" class="form-control" placeholder='@Resources.SearchHintForName' data-bind="value: searchNameText, disable: IsLoading, event: { change: changeInSearchBox} "/>
+				<input type="search" class="form-control" placeholder='@Resources.SearchHintForName' data-bind="value: searchNameText, disable: IsLoading, event: { change: changeInSearchBox} " />
 				<span class="input-group-addon input-group-addon-narrow">
 					<!-- ko if: IsLoading -->
 					<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
@@ -154,14 +154,21 @@
 						<td>&nbsp;</td>
 						<td></td>
 						<!--ko if:showContractTime-->
-						<td><strong>@Resources.ContractTime</strong></td>
+						<td class="hidden-xs hidden-sm">
+							<strong>@Resources.ContractTime</strong>
+						</td>
 						<!--/ko-->
 						<td></td>
 					</tr>
 				</thead>
 				<tbody>
 					<tr class="shift-trade-my-schedule-row">
-						<td class="shift-trade-agent-name">@Resources.MySchedule</td>
+						<td class="shift-trade-agent-name">
+							<div data-bind="style:showContractTime && {'font-weight': 'bold'}">@Resources.MySchedule</div>
+							<!--ko if:showContractTime-->
+							<div class="hidden-md hidden-lg shift-trade-contract-time-mobile" data-bind="text: mySchedule().contractTime"></div>
+							<!--/ko-->
+						</td>
 						<!--ko if: isShiftTradeScheduleNoReadModelEnabled()-->
 						<td class="shift-trade-my-schedule">
 							<!--ko if:mySchedule().isFullDayAbsence-->
@@ -207,7 +214,7 @@
 						</td>
 						<!--/ko-->
 						<!--ko if:$data.showContractTime-->
-						<td class="shift-trade-contract-time">
+						<td class="hidden-xs hidden-sm shift-trade-contract-time">
 							<div data-bind="text: mySchedule().contractTime"></div>
 						</td>
 						<!--/ko-->
@@ -216,7 +223,12 @@
 				</tbody>
 				<tbody data-bind="foreach: possibleTradeSchedules">
 					<tr class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
-						<td class="shift-trade-agent-name floatleft" data-bind="text: $data.agentName, tooltip: { title: $data.agentName, html: true} "></td>
+						<td class="shift-trade-agent-name floatleft">
+							<div data-bind="style:$root.showContractTime && {'font-weight': 'bold'}, text: $data.agentName, tooltip: { title: $data.agentName, html: true}">@Resources.MySchedule</div>
+							<!--ko if:$root.showContractTime-->
+							<div class="hidden-md hidden-lg shift-trade-contract-time-mobile" data-bind="text: contractTime"></div>
+							<!--/ko-->
+						</td>
 						<td class="shift-trade-possible-trade-schedule">
 							<div data-bind="foreach: $data.layers">
 								<!--ko if:!$parent.isDayOff-->
@@ -239,7 +251,7 @@
 						</td>
 
 						<!--ko if:$root.showContractTime-->
-						<td class="shift-trade-contract-time">
+						<td class="hidden-xs hidden-sm shift-trade-contract-time">
 							<div data-bind="text: contractTime"></div>
 						</td>
 						<!--/ko-->
@@ -279,7 +291,7 @@
 		<!-- ko if: isShowList-->
 		<div class="divider choose-history-divider"></div>
 		<div><strong>@Resources.MyTradeCart</strong></div>
-		<div id="choose-history-list" class="shift-trade-add-schedule" data-bind="foreach:chooseHistorys(), style:{height:tradeCartHeight()}">
+		<div id="choose-history-list" class="shift-trade-add-schedule" data-bind="foreach:chooseHistorys()">
 			<div class="trade-date" data-bind="text: $data.selectedDateInFormat"></div>
 			<div class="shift-trade-timeline">
 				<div class="relative">
@@ -295,14 +307,19 @@
 						<td>&nbsp;</td>
 						<td></td>
 						<!--ko if:$root.showContractTime-->
-						<td><strong>@Resources.ContractTime</strong></td>
+						<td class="hidden-xs hidden-sm"><strong>@Resources.ContractTime</strong></td>
 						<!--/ko-->
 						<td></td>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class="shift-trade-agent-name">@Resources.MySchedule</td>
+						<td class="shift-trade-agent-name">
+							<div data-bind="style:$root.showContractTime && {'font-weight': 'bold'}">@Resources.MySchedule</div>
+							<!--ko if:$root.showContractTime-->
+							<div class="hidden-md hidden-lg shift-trade-contract-time-mobile" data-bind="text: $data.mySchedule().contractTime"></div>
+							<!--/ko-->
+						</td>
 						<!--ko if: $root.isShiftTradeScheduleNoReadModelEnabled()-->
 						<td class="shift-trade-my-schedule">
 							<!--ko if:$data.mySchedule().isFullDayAbsence-->
@@ -348,7 +365,7 @@
 						</td>
 						<!--/ko-->
 						<!--ko if:$root.showContractTime-->
-						<td class="shift-trade-contract-time">
+						<td class="hidden-xs hidden-sm shift-trade-contract-time">
 							<div data-bind="text: $data.mySchedule().contractTime"></div>
 						</td>
 						<!--/ko-->
@@ -357,7 +374,12 @@
 				</tbody>
 				<tbody>
 					<tr data-bind="hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
-						<td class="shift-trade-agent-name floatleft" data-bind="text: $data.agentName,  tooltip: { title: $data.agentName, html: true}"></td>
+						<td class="shift-trade-agent-name floatleft">
+							<div data-bind="style:$root.showContractTime && {'font-weight': 'bold'}, text: $data.agentName, tooltip: { title: $data.agentName, html: true}"></div>
+							<!--ko if:$root.showContractTime-->
+							<div class="hidden-md hidden-lg shift-trade-contract-time-mobile" data-bind="text: $data.selectedSchedule().contractTime"></div>
+							<!--/ko-->
+						</td>
 						<td class="the-other-agent-schedule">
 							<div data-bind="foreach: $data.selectedSchedule().layers">
 								<!--ko if:!$parent.selectedSchedule().isDayOff-->
@@ -379,7 +401,7 @@
 							<!--/ko-->
 						</td>
 						<!--ko if:$root.showContractTime-->
-						<td class="shift-trade-contract-time">
+						<td class="hidden-xs hidden-sm shift-trade-contract-time">
 							<div data-bind="text: $data.selectedSchedule().contractTime"></div>
 						</td>
 						<!--/ko-->
