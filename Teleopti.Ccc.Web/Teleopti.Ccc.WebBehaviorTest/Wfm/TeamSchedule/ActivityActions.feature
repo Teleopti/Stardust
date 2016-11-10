@@ -46,17 +46,23 @@ Background:
 
 @OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
 Scenario: Should be able to add activity
+	Given 'John Smith' has a shift with
+	| Field            | Value            |
+	| Shift category   | Day              |
+	| Activity         | Phone            |
+	| StartTime        | 2016-10-10 09:00 |
+	| EndTime          | 2016-10-10 17:00 |
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
 	And I click menu item 'AddActivity' in team schedule
 	And I set new activity as
-	| Field         | Value            |
-	| Activity      | Phone            |
-	| Selected date | 2016-10-10       |
-	| Start time    | 2016-10-10 12:00 |
-	| End time      | 2016-10-10 13:00 |
+	| Field        | Value      |
+	| Activity     | Lunch      |
+	| SelectedDate | 2016-10-10 |
+	| StartTime     | 2016-10-10 12:00 |
+	| EndTime       | 2016-10-10 13:00 |
 	| Is next day   | false            |
 	Then I should be able to apply my new activity
 	When I apply my new activity
@@ -90,12 +96,12 @@ Scenario: Should be able to add personal activity
 	And I open menu in team schedule
 	And I click menu item 'AddPersonalActivity' in team schedule
 	And I set new activity as
-	| Field         | Value            |
-	| Activity      | Training         |
-	| Selected date | 2016-10-10       |
-	| Start time    | 2016-10-10 12:00 |
-	| End time      | 2016-10-10 13:00 |
-	| Is next day   | false            |
+	| Field        | Value            |
+	| Activity     | Training         |
+	| SelectedDate | 2016-10-10       |
+	| StartTime    | 2016-10-10 12:00 |
+	| EndTime      | 2016-10-10 13:00 |
+	| Is next day  | false            |
 	And I apply add personal activity
 	Then I should see a successful notice
 	

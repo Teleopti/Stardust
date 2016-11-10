@@ -68,8 +68,8 @@ Scenario: Should show command check after adding activity on top of NOT ALLOW ME
 		| Field         | Value            |
 		| Activity      | Training         |
 		| Selected date | 2016-10-10       |
-		| Start time    | 2016-10-10 12:00 |
-		| End time      | 2016-10-10 13:00 |
+		| StartTime     | 2016-10-10 12:00 |
+		| EndTime       | 2016-10-10 13:00 |
 		| Is next day   | false            |
 	Then I should be able to apply my new activity
 	When I apply my new activity
@@ -86,8 +86,8 @@ Scenario: Should show command check after adding person activity on top of NOT A
 		| Field         | Value            |
 		| Activity      | PersonActivity   |
 		| Selected date | 2016-10-10       |
-		| Start time    | 2016-10-10 12:00 |
-		| End time      | 2016-10-10 13:00 |
+		| StartTime     | 2016-10-10 12:00 |
+		| EndTime       | 2016-10-10 13:00 |
 		| Is next day   | false            |
 	And I apply add personal activity
 	Then I should be able to see command check
