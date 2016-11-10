@@ -1,5 +1,5 @@
 ﻿@RTA
-@Ignore
+
 Feature: Agents On Organization And Skills
 	In order to quicker find what site or team manager to contact when a skill goes critical
 	As a real time analyst
@@ -61,25 +61,25 @@ Background:
 
 @OnlyRunIfEnabled('RTA_AgentsOnOrganizationAndSkills_41586')
 Scenario: See agents with a specific skill that are in alarm for a selected team
-	Given the time is '2016-10-03 08:01'
+	Given the time is '2016-11-03 08:01'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And 'Ashley Andeen' sets her phone state to 'Pause'
 	And 'John King' sets her phone state to 'Pause'
-	Given the time is '2016-10-03 08:15'
+	Given the time is '2016-11-03 08:15'
 	And I am viewing real time adherence for skill 'Phone' on team 'London Team 1'
-	Then I should see agent status for 'Pierre Baldi'
-	And I should not see agent 'Ashley Andeen'
+	Then I should see agent status for 'Ashley Andeen'
+	And I should not see agent 'Pierre Baldi'
 	And I should not see agent 'John King'
 
 @OnlyRunIfEnabled('RTA_AgentsOnOrganizationAndSkills_41586')
 Scenario: See agents with a specific skill that are in alarm for selected teams
-	Given the time is '2016-10-03 08:01'
+	Given the time is '2016-11-03 08:01'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And 'Ashley Andeen' sets her phone state to 'Pause'
 	And 'John King' sets her phone state to 'Pause'
-	Given the time is '2016-10-03 08:15'
+	Given the time is '2016-11-03 08:15'
 	And I am viewing real time adherence for skill 'Phone' on teams 'London Team 1, Paris Team 1'
-	Then I should not see agent 'Pierre Baldi'
-	And I should not see agent 'Ashley Andeen'
-	And I should see agent status for 'John King'
+	Then I should see agent status for 'Pierre Baldi'
+	And I should see agent status for 'Ashley Andeen'
+	And I should not see agent 'John King'
 	

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
@@ -250,16 +251,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			return teamId;
 		}
 
-		private Guid IdsForTeams(string teamNames)
+		private IEnumerable<Guid> IdsForTeams(string teamNames)
 		{
-			string[] commaString = { "," };
-			var teamNamesArray = teamNames.Split(commaString, StringSplitOptions.RemoveEmptyEntries);
-			var teamIds = (from t in DataMaker.Data().UserDatasOfType<TeamConfigurable>()
-						  let team = t.Team
-						  from teamName in teamNamesArray
-						  where team.Description.Name.Equals(teamName)
-						  select team.Id.GetValueOrDefault()).First();
-			return teamIds;
+			var teamNamesArray = teamNames.Split(new[] {","}, StringSplitOptions.RemoveEmptyEntries);
+			return
+				(from teamName in teamNamesArray
+					select IdForTeam(teamName.Trim()))
+					.ToArray();
 		}
 
 		private static Guid SiteIdForTeam(string teamName)
@@ -476,7 +474,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void GivenIAmViewingRealTimeAdherenceForSkillOnTeams(string skill, string teams)
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoRealTimeAdherenceForSkillOnTeam(IdsForTeams(teams), IdForSkill(skill));
+			Navigation.GotoRealTimeAdherenceForSkillOnTeams(IdsForTeams(teams), IdForSkill(skill));
 		}
 
 		[Given(@"I am viewing real time adherence for skill '(.*)' on team '(.*)'")]
