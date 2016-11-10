@@ -29186,7 +29186,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Must set the start time and end time..
+        ///   Looks up a localized string similar to Invalid start or end time..
         /// </summary>
         public static string StartTimeAndEndTimeMustBeSet {
             get {

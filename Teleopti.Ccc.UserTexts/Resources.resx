@@ -13343,7 +13343,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Needed Person Hours</comment>
   </data>
   <data name="StartTimeAndEndTimeMustBeSet" xml:space="preserve">
-    <value>Must set the start time and end time.</value>
+    <value>Invalid start or end time.</value>
     <comment>Must set the start time and end time</comment>
   </data>
   <data name="CampaignCreated" xml:space="preserve">
