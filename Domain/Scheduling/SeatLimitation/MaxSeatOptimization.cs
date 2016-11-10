@@ -48,19 +48,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 
 		public MaxSeatOptimization(MaxSeatSkillDataFactory maxSeatSkillDataFactory,
-														CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
-														IScheduleDayChangeCallback scheduleDayChangeCallback,
-														ISchedulingOptionsCreator schedulingOptionsCreator,
-														ITeamBlockScheduler teamBlockScheduler,
-														ITeamBlockGenerator teamBlockGenerator,
-														ITeamBlockClearer teamBlockClearer,
-														WorkShiftSelectorForMaxSeat workShiftSelectorForMaxSeat,
-														ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
-														RestrictionOverLimitValidator restrictionOverLimitValidator,
-														IMatrixListFactory matrixListFactory,
-														MaxSeatPeak maxSeatPeak,
-														TeamInfoFactoryFactory teamInfoFactoryFactory,
-														IDeleteSchedulePartService deleteSchedulePartService)
+			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
+			IScheduleDayChangeCallback scheduleDayChangeCallback,
+			ISchedulingOptionsCreator schedulingOptionsCreator,
+			ITeamBlockScheduler teamBlockScheduler,
+			ITeamBlockGenerator teamBlockGenerator,
+			ITeamBlockClearer teamBlockClearer,
+			WorkShiftSelectorForMaxSeat workShiftSelectorForMaxSeat,
+			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
+			RestrictionOverLimitValidator restrictionOverLimitValidator,
+			IMatrixListFactory matrixListFactory,
+			MaxSeatPeak maxSeatPeak,
+			TeamInfoFactoryFactory teamInfoFactoryFactory,
+			IDeleteSchedulePartService deleteSchedulePartService)
 		{
 			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
@@ -78,17 +78,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_deleteSchedulePartService = deleteSchedulePartService;
 		}
 
-		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IOptimizationPreferences optimizationPreferences)
+		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules,
+			IEnumerable<ISkillDay> allSkillDays, IOptimizationPreferences optimizationPreferences)
 		{
 			if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.DoNotConsiderMaxSeats)
 				return;
 			var allAgents = schedules.Select(schedule => schedule.Key).ToArray();
-			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, schedules.Scenario, allAgents, allSkillDays.Any() ? allSkillDays.Min(s => s.Skill.DefaultResolution) : 15);
+			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, schedules.Scenario, allAgents,
+				allSkillDays.Any() ? allSkillDays.Min(s => s.Skill.DefaultResolution) : 15);
 			if (!maxSeatData.MaxSeatSkillExists())
 				return;
-			var tagSetter = optimizationPreferences.General.ScheduleTag == null ?
-				new ScheduleTagSetter(NullScheduleTag.Instance) :
-				new ScheduleTagSetter(optimizationPreferences.General.ScheduleTag);
+			var tagSetter = optimizationPreferences.General.ScheduleTag == null
+				? new ScheduleTagSetter(NullScheduleTag.Instance)
+				: new ScheduleTagSetter(optimizationPreferences.General.ScheduleTag);
 			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedules, allAgents, period);
 			var businessRules = NewBusinessRuleCollection.Minimum();
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
@@ -99,7 +101,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			{
 				foreach (var teamBlockInfo in teamBlockInfos)
 				{
-					var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= period.StartDate); //what is this?
+					if(!anySelectedInTeamBlockIsScheduled(teamBlockInfo))
+						continue;
+					var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= period.StartDate);//what is this?
 					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint);
 					var maxPeakBefore = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);
 					if (maxPeakBefore.IsPositive())
@@ -107,29 +111,31 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules);
 						if (!_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat,
-													teamBlockInfo,
-													datePoint,
-													schedulingOptions,
-													rollbackService,
-													new DoNothingResourceCalculateDelayer(),
-													skillDaysForTeamBlockInfo.Union(allSkillDays),
-													schedules,
-													new ShiftNudgeDirective(),
-													businessRules) ||
-								!_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences) ||
-								!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) ||
-								_maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo) > maxPeakBefore)
+								teamBlockInfo,
+								datePoint,
+								schedulingOptions,
+								rollbackService,
+								new DoNothingResourceCalculateDelayer(),
+								skillDaysForTeamBlockInfo.Union(allSkillDays),
+								schedules,
+								new ShiftNudgeDirective(),
+								businessRules) ||
+							!_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences) ||
+							!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) ||
+							_maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo) > maxPeakBefore)
 						{
-								rollbackService.RollbackMinimumChecks();
+							rollbackService.RollbackMinimumChecks();
 						}
 					}
 				}
 
 				foreach (var teamBlockInfo in teamBlockInfos)
 				{
-					var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= period.StartDate); //what is this?
+					var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= period.StartDate);
+						//what is this?
 					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint);
-					if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature != MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak) continue;
+					if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature !=
+						MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak) continue;
 					foreach (var date in period.DayCollection())
 					{
 						if (!_maxSeatPeak.Fetch(date, skillDaysForTeamBlockInfo).IsPositive()) continue;
@@ -151,6 +157,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					}
 				}
 			}
+		}
+
+		private bool anySelectedInTeamBlockIsScheduled(ITeamBlockInfo teamBlockInfo)
+		{
+			foreach (var scheduleMatrixPro in teamBlockInfo.MatrixesForGroupAndBlock())
+			{
+				foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
+				{
+					var scheduleDay = scheduleDayPro.DaySchedulePart();
+					if (teamBlockInfo.TeamInfo.UnLockedMembers(scheduleDayPro.Day).Contains(scheduleDay.Person) && scheduleDay.IsScheduled())
+						return true;	
+				}
+			}
+
+			return false;
 		}
 	}
 }
