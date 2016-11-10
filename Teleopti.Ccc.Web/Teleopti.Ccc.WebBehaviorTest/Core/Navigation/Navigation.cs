@@ -525,10 +525,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			GoToPage("wfm/#/rta/agents/?teamIds=" + teamString + "&skillIds=" + skillId);
 		}
 
+		public static void GotoRealTimeAdherenceForSkillAreaOnTeams(IEnumerable<Guid> teamIds, Guid idForSkillArea)
+		{
+			var teamString = string.Join("&teamIds=", teamIds);
+			GoToPage("wfm/#/rta/agents/?teamIds=" + teamString + "&idForSkillArea=" + idForSkillArea);
+		}
+
 		public static void GotoRealTimeAdherenceForSkillOnSites(IEnumerable<Guid> siteIds, Guid skillId)
 		{
 			var teamString = string.Join("&siteIds=", siteIds);
 			GoToPage("wfm/#/rta/agents/?siteIds=" + teamString + "&skillIds=" + skillId);
+		}
+
+		public static void GotoRealTimeAdherenceForSkillAreaOnSites(IEnumerable<Guid> siteIds, Guid skillAreaId)
+		{
+			var teamString = string.Join("&siteIds=", siteIds);
+			GoToPage("wfm/#/rta/agents/?siteIds=" + teamString + "&skillAreaId=" + skillAreaId);
 		}
 
 		public static void GoToAgentDetails(Guid personId)

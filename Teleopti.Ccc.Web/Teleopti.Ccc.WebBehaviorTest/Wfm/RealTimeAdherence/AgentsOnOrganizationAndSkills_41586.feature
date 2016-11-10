@@ -12,6 +12,7 @@ Background:
 	And there is a skill named 'Phone' with activity 'Phone'
 	And there is an activity named 'Email'
 	And there is a skill named 'Email' with activity 'Email'
+	And there is a Skill Area called 'Phone and Email skills' that monitors skills 'Phone, Email'
 	And there is a site named 'London'
 	And there is a team named 'London Team 1' on site 'London'
 	And there is a site named 'Paris'
@@ -82,4 +83,27 @@ Scenario: See agents with a specific skill that are in alarm for selected teams
 	Then I should see agent status for 'Pierre Baldi'
 	And I should see agent status for 'Ashley Andeen'
 	And I should not see agent 'John King'
-	
+
+@OnlyRunIfEnabled('RTA_AgentsOnOrganizationAndSkills_41586')
+Scenario: See agents with a specific Skill Area that are in alarm for selected sites
+	Given the time is '2016-11-03 08:01'
+	And 'Pierre Baldi' sets his phone state to 'Pause'
+	And 'Ashley Andeen' sets her phone state to 'Pause'
+	And 'John King' sets her phone state to 'Pause'
+	Given the time is '2016-11-03 08:15'
+	And I am viewing real time adherence for skill area 'Phone and Email skills' on sites 'London, Paris'
+	Then I should see agent status for 'Pierre Baldi'
+	And I should see agent status for 'Ashley Andeen'
+	And I should see agent status for 'John King'
+
+@OnlyRunIfEnabled('RTA_AgentsOnOrganizationAndSkills_41586')
+Scenario: See agents with a specific Skill Area that are in alarm for selected teams
+	Given the time is '2016-11-03 08:01'
+	And 'Pierre Baldi' sets his phone state to 'Pause'
+	And 'Ashley Andeen' sets her phone state to 'Pause'
+	And 'John King' sets her phone state to 'Pause'
+	Given the time is '2016-11-03 08:15'
+	And I am viewing real time adherence for skill area 'Phone and Email skills' on teams 'London Team 1, Paris Team 1'
+	Then I should see agent status for 'Pierre Baldi'
+	And I should see agent status for 'Ashley Andeen'
+	And I should see agent status for 'John King'

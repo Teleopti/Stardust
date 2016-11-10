@@ -489,7 +489,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GotoRealTimeAdherenceForSkillOnSites(idsForSites(sites), IdForSkill(skill));
 		}
-		
+
+		[Given(@"I am viewing real time adherence for skill area '(.*)' on sites '(.*)'")]
+		public void GivenIAmViewingRealTimeAdherenceForSkillAreaOnSites(string skillArea, string sites)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoRealTimeAdherenceForSkillAreaOnSites(idsForSites(sites), IdForSkillArea(skillArea));
+		}
+
+		[Given(@"I am viewing real time adherence for skill area '(.*)' on teams '(.*)'")]
+		public void GivenIAmViewingRealTimeAdherenceForSkillAreaOnTeams(string skillArea, string teams)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoRealTimeAdherenceForSkillAreaOnTeams(idsForTeams(teams), IdForSkillArea(skillArea));
+		}
+
+
 		[When(@"I view manage adherence view for agent '(.*)'")]
 		public void WhenIViewManageAdherenceViewForAgent(string name)
 		{
