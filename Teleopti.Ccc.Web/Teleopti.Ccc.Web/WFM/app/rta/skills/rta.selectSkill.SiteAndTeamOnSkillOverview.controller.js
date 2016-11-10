@@ -269,18 +269,16 @@
 				};
 
 				function goToAgents(selectedItemIds) {
-					console.log('sites', $scope.siteIds);
-					console.log('teams', $scope.siteIds);
-					$scope.siteIds ?
-						RtaRouteService.goToAgents({
-							skillIds: $scope.skillIds,
-							skillAreaId: $scope.skillAreaId,
-							teamIds: selectedItemIds
-						}) :
+					$scope.sites ?
 						RtaRouteService.goToAgents({
 							skillIds: $scope.skillIds,
 							skillAreaId: $scope.skillAreaId,
 							siteIds: selectedItemIds
+						}) :
+						RtaRouteService.goToAgents({
+							skillIds: $scope.skillIds,
+							skillAreaId: $scope.skillAreaId,
+							teamIds: selectedItemIds
 						});
 				};
 
