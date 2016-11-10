@@ -20,7 +20,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
         {
             var iCal = new iCalendar { ProductID = "Teleopti" };
 
-            foreach (var scheduleDay in scheduleDays)
+			iCal.AddProperty("X-PUBLISHED-TTL", "PT30M");       // Refresh Every 30 minutes
+			iCal.AddProperty("X-WR-CALNAME", iCal.ProductID);
+
+			foreach (var scheduleDay in scheduleDays)
             {
                 if (scheduleDay.Model == null) continue;
 
