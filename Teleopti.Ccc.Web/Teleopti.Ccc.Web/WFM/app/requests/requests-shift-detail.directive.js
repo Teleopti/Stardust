@@ -24,30 +24,10 @@
 		}
 
 		function getShiftDetailTopLeft(oEvent) {
-			var normalLeftSidenavWidth = 240 + 10;
-			var miniLeftSidenavWidth = 40 + 10;
-			var shiftDetailTableWidth = 710;
-			var shiftDetailTableHeight = 145;
-			var aboveHeaderBarHeight = 160;
-			var clientWidth = document.body.clientWidth;
-			var clientHeight = document.body.clientHeight;
-
-			var shiftDetailLeft = 0;
-			var shiftDetailTop = oEvent.pageY - aboveHeaderBarHeight;
-
-			if (document.querySelectorAll('.sidenav.is-hidden').length === 0) {
-				shiftDetailLeft = oEvent.pageX - normalLeftSidenavWidth - shiftDetailTableWidth / 2;
-
-				if ((clientWidth - oEvent.pageX) < (shiftDetailTableWidth / 2))
-					shiftDetailLeft = shiftDetailLeft - (shiftDetailTableWidth / 2 - (clientWidth - oEvent.pageX));
-			} else {
-				shiftDetailLeft = oEvent.pageX - miniLeftSidenavWidth - shiftDetailTableWidth / 2;
-				if ((clientWidth - oEvent.pageX) < (shiftDetailTableWidth / 2))
-					shiftDetailLeft = shiftDetailLeft - (shiftDetailTableWidth / 2 - (clientWidth - oEvent.pageX));
-			}
-
-			if ((clientHeight - oEvent.pageY) < shiftDetailTableHeight)
-				shiftDetailTop = shiftDetailTop - (shiftDetailTableHeight / 2 - (clientHeight - oEvent.pageY));
+			var shiftDetailLeft = oEvent.pageX - 5;
+			var shiftDetailTop = oEvent.pageY - 5;
+			if ((document.body.clientWidth - oEvent.pageX) < 710) shiftDetailLeft = document.body.clientWidth - 710;
+			if ((document.body.clientHeight - oEvent.pageY) < 145) shiftDetailTop = document.body.clientHeight - 145;
 
 			return { top: shiftDetailTop, left: shiftDetailLeft };
 		}

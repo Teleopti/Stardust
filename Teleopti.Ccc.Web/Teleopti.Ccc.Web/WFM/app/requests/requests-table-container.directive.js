@@ -72,7 +72,7 @@
 			return {
 				top: vm.shiftDetailTop + 'px',
 				left: vm.shiftDetailLeft + 'px',
-				position: 'absolute'
+				position: 'fixed'
 			};
 		}
 
