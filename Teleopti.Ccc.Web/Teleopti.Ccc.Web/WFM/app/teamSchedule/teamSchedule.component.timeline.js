@@ -10,20 +10,37 @@
 		},
 	});
 
-	function TimeLineCtrl() {
+	TimeLineCtrl.$inject = ['$timeout', '$document', '$window'];
+	function TimeLineCtrl($timeout, $document, $window) {
 		var ctrl = this;
 		ctrl.height = 0;
 		ctrl.$onChanges = function (changesObj) {
 			if (changesObj.scheduleCount) {
-				if (changesObj.scheduleCount.currentValue > 0) {
-					var headerHeight = 25; //angular.element($("#time-line-container"))[0].offsetHeight
-					var labelHeight = 12; //angular.element($(".label-info"))[0].offsetHeight;
-					var rowHeight = 31;
-
-					ctrl.height = rowHeight * (ctrl.scheduleCount) + headerHeight + labelHeight;
+				if (changesObj.scheduleCount.currentValue > 0) {					
+					updateRulerHeight();
 				}
 			}
 		};
+
+		ctrl.$onInit = function() {
+			updateRulerHeight();
+			angular.element($window).bind('resize', function () {
+				updateRulerHeight();				
+			});
+		};
+
+		function updateRulerHeight() {
+			$timeout(function() {
+				var height = 0;
+				var rows = angular.element($document.find('schedule-table')).find('tr');
+				angular.forEach(rows, function(r) {
+					height += r.offsetHeight;
+				});
+
+				ctrl.height = height - 5;				
+			}, 500);
+		}
+
 	}
 
 })(angular);
