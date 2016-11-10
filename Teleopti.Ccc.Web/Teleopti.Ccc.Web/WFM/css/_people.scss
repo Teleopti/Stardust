@@ -234,6 +234,22 @@
 	.pagination li.disabled a{
 		cursor:not-allowed;
 	}
+
+	wfm-multiple-search-input{
+		.advanced-input-dropdown{
+			top: 14px;
+			left: 17px;
+			width: 321px;
+		}
+
+		.advanced-input{
+			width: 316px;
+		}
+
+		.expand-advanced-input{
+			max-width:100%;
+		}
+    }
 }
 
 

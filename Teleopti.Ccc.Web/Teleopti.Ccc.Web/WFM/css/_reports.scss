@@ -1,10 +1,6 @@
 ﻿.wfm-reports {
     max-width: 100em;
 
-    #simple-people-search {
-        width: 316px;
-    }
-
     .report-filter {
         padding: 1em;
     }
@@ -37,6 +33,22 @@
                     margin: 4px 0 4px 0 !important;
                 }
             }
+        }
+    }
+
+    wfm-multiple-search-input{
+        .advanced-input-dropdown{
+            top: 14px;
+            left: 17px;
+            width: 321px;
+        }
+
+        .advanced-input{
+            width: 316px;
+        }
+
+        .expand-advanced-input{
+            max-width:100%;
         }
     }
 

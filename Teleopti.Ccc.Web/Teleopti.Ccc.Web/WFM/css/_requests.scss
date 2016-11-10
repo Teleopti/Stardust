@@ -152,10 +152,6 @@
         .input-prepend {
             width: 300px;
         }
-
-        input {
-            width: 316px;
-        }
     }
 
     .wfm-date-range-picker-wrap {
@@ -532,6 +528,27 @@
 	.split-3-1{
 		flex-basis: 70%!important
 	}
+
+    wfm-multiple-search-input{
+        .advanced-input-dropdown{
+            top: -6px;
+            left: 17px;
+            width: 321px;
+
+            .panel{
+                height:268px;
+            }
+        }
+
+        .advanced-input{
+            width: 316px;
+        }
+
+        .expand-advanced-input{
+            max-width:100%;
+        }
+
+    }
 
 	working-hours-picker{
 		.working-hours-row h2{

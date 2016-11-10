@@ -1429,10 +1429,8 @@
     <Content Include="WFM\app\global\exception-handling\exceptionhandler.js" />
     <Content Include="WFM\app\global\http\http.spec.js" />
     <Content Include="WFM\app\global\jalaali-calendar\jalaali.service.js" />
-    <Content Include="WFM\app\global\wfm-multiple-search-input\wfm-multiple-search-input.tpl.html" />
     <Content Include="WFM\app\global\notifications\notification.controller.spec.js" />
     <Content Include="WFM\app\global\signalR\signalR.service.js" />
-    <Content Include="WFM\app\global\wfm-multiple-search-input\wfm-multiple-search-input.directive.spec.js" />
     <Content Include="WFM\app\global\wfm.main.controller.js" />
     <Content Include="WFM\app\global\shortcuts\shortcuts.service.js" />
     <Content Include="WFM\app\global\shortcuts\shortcuts.service.spec.js" />
@@ -2481,7 +2479,6 @@
     <Content Include="WFM\css\_requests.scss" />
     <Content Include="WFM\css\_start.scss" />
     <Content Include="WFM\css\_reports.scss" />
-    <Content Include="WFM\app\global\wfm-multiple-search-input\wfm-multiple-search-input.directive.js" />
     <Content Include="WFM\vendor\angular-bootstrap-persian-datepicker-master\README.md" />
   </ItemGroup>
   <ItemGroup>
