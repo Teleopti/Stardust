@@ -13822,10 +13822,10 @@ Dessa val är aktiverade:
     <value>Teams</value>
   </data>
   <data name="UnsupportedSkill" xml:space="preserve">
-    <value>Prognosmetoden stöds ej</value>
+    <value>Kompetensen stöds ej</value>
   </data>
   <data name="UnsupportedSkillMsg" xml:space="preserve">
-    <value>Den här kompetensens prognosmetod stöds ej.</value>
+    <value>Den här kompetensen stöds ej</value>
   </data>
   <data name="EmploymentNumber" xml:space="preserve">
     <value>Anställningsnummer</value>
@@ -13835,5 +13835,29 @@ Dessa val är aktiverade:
   </data>
   <data name="Dashboard" xml:space="preserve">
     <value>Översikt</value>
+  </data>
+  <data name="ValidateRequestsBasedOnExpiration" xml:space="preserve">
+    <value>Validera baserat på minsta tid i förväg förfrågningar måste skickas</value>
+  </data>
+  <data name="UnsupportedSkills" xml:space="preserve">
+    <value>{0} kompetenser som ej stöds</value>
+  </data>
+  <data name="SkillAreaColon" xml:space="preserve">
+    <value>Kompetensarea: </value>
+  </data>
+  <data name="ArchiveSchedule" xml:space="preserve">
+    <value>Arkivera schema</value>
+  </data>
+  <data name="TheActivityCanNotBeAddedTo" xml:space="preserve">
+    <value>Aktiviteten kan inte läggas till för </value>
+  </data>
+  <data name="NoPermissionRemoveAgentAbsence" xml:space="preserve">
+    <value>Rättighet att ta bort frånvaro för agenter saknas.</value>
+  </data>
+  <data name="TheAbsenceCanNotBeAddedTo" xml:space="preserve">
+    <value>Frånvaro kan inte läggas till för </value>
+  </data>
+  <data name="ImportSchedule" xml:space="preserve">
+    <value>Importera schema</value>
   </data>
 </root>
