@@ -178,6 +178,57 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
+		public void BackoutShouldNotAffectAbsenceNotOnTheTargetDate()
+		{
+			var scenario = CurrentScenario.Current();
+			var person = PersonFactory.CreatePerson("aa","aa").WithId();
+			PersonRepository.Add(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			var dateTimePeriod = new DateTimePeriod(2016,6,11,8,2016,6,11,17);
+			var date = new DateOnly(2016,6,11);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,dateTimePeriod);
+
+
+			var absence = AbsenceFactory.CreateAbsence("abs").WithId();
+			AbsenceRepository.Add(absence);
+			var personAbsence = new PersonAbsence(person,scenario,new AbsenceLayer(absence,dateTimePeriod));
+			var nextDayPersonAbsence = new PersonAbsence(person, scenario,
+				new AbsenceLayer(absence, new DateTimePeriod(2016, 6, 12, 8, 2016, 6, 12, 17)));
+
+			ScheduleHistoryRepository.ClearRevision();
+			var rev = new Revision { Id = 2 };
+			rev.SetRevisionData(person);
+			var lstRev = new Revision { Id = 1 };
+			lstRev.SetRevisionData(person);
+
+			ScheduleHistoryRepository.SetRevision(rev,date,personAssignment.CreateTransient());
+			ScheduleHistoryRepository.SetRevision(lstRev,date,personAbsence.CreateTransient());
+			ScheduleHistoryRepository.SetRevision(lstRev,date,personAssignment.CreateTransient());
+
+			ScheduleStorage.Add(nextDayPersonAbsence);
+			ScheduleStorage.Add(personAssignment);
+		
+			var command = new BackoutScheduleChangeCommand
+			{
+				PersonId = person.Id.Value,
+				Dates = new[] { new DateOnly(2016,06,11) },
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					TrackId = Guid.NewGuid()
+				}
+			};
+			target.Handle(command);
+			command.ErrorMessages.Count.Should().Be.EqualTo(0);
+
+			var nextDayAsDateOnlyPeriod = new DateOnlyPeriod(2016, 6, 12, 2016, 6, 12);
+			var nextDaySchedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
+					person,new ScheduleDictionaryLoadOptions(true,true),nextDayAsDateOnlyPeriod, CurrentScenario.Current())[person]
+				.ScheduledDayCollection(nextDayAsDateOnlyPeriod).Single();
+
+			nextDaySchedule.SignificantPart().Should().Be.EqualTo(SchedulePartView.Absence);
+		}
+
+		[Test]
 		public void ShouldUpdatePersonAccountWhenBackoutSingleDayAbsence()
 		{
 			var scenario = CurrentScenario.Current();
@@ -338,6 +389,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				_e.CommandId.Should().Be.EqualTo(command.TrackedCommandInfo.TrackId);
 			}
 		}
+
 
 		private AccountDay createAccountDay(DateOnly startDate,TimeSpan balanceIn,TimeSpan accrued,TimeSpan balance)
 		{

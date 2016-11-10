@@ -111,9 +111,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				_aggregateRootInitializer.Initialize(personAbsences);
 			}
 
-			var period = findAbsencePeriod(preVersion, lastVersion, person, targetVersionsDate.Date);
+			var periodForPersonalAccountCheck = findAbsencePeriod(preVersion, lastVersion, person, targetVersionsDate.Date);
+			var datePeriod =
+				targetVersionsDate.Date.ToDateTimePeriod(_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
 
-			var scheduleDictionary = getScheduleDictionary(person, period);
+			var scheduleDictionary = getScheduleDictionary(person, periodForPersonalAccountCheck);
 
 			var sd = toScheduleDay(getCurrentScheduleDay(scheduleDictionary, person,targetVersionsDate.Date), scheduleData);
 
@@ -130,15 +132,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			var range = scheduleDictionary[person];
-			var diffs = scheduleDictionary[person].DifferenceSinceSnapshot(_differenceService);
+			var diffsForTargetDate = new DifferenceCollection<IPersistableScheduleData>();
 
-			diffs.ForEach(diff =>
+			scheduleDictionary[person].DifferenceSinceSnapshot(_differenceService).Where(diff =>
+			{
+				var originalPersonAbsence = diff.OriginalItem as IPersonAbsence;
+				return originalPersonAbsence == null || originalPersonAbsence.Period.Intersect(datePeriod);
+			}).ForEach(diff =>
+			{
+				diffsForTargetDate.Add(diff);
+			});
+
+			diffsForTargetDate.ForEach(diff =>
 			{
 				var eventHolder = diff.CurrentItem as AggregateRoot;
 				eventHolder?.NotifyCommandId(command.TrackedCommandInfo.TrackId);
 			});
 
-			_scheduleDifferenceSaver.SaveChanges(diffs,(IUnvalidatedScheduleRangeUpdate)range);			
+			_scheduleDifferenceSaver.SaveChanges(diffsForTargetDate,(IUnvalidatedScheduleRangeUpdate)range);			
 		}
 
 		private IScheduleDictionary getScheduleDictionary(IPerson person, DateOnlyPeriod period)
