@@ -2182,8 +2182,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_backgroundWorkerRunning) return;
 			disableAllExceptCancelInRibbon();
-			toolStripStatusLabelStatus.Text = string.Format(CultureInfo.CurrentCulture,
-				LanguageResourceHelper.Translate("XXValidatingPersons"), _personsToValidate.Count);
+			scheduleStatusBarUpdate(string.Format(CultureInfo.CurrentCulture,
+				LanguageResourceHelper.Translate("XXValidatingPersons"), _personsToValidate.Count));
 			_backgroundWorkerRunning = true;
 			_backgroundWorkerValidatePersons.RunWorkerAsync();
 			Application.DoEvents();
@@ -2445,11 +2445,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (Disposing)
 				return;
-			toolStripProgressBar1.PerformStep();
-			statusStrip1.Refresh();
+
+			if(e.ProgressPercentage > 0)
+				toolStripProgressBar1.PerformStep();		
 			var status = e.UserState as string;
 			if (status != null)
 				toolStripStatusLabelStatus.Text = status;
+			statusStrip1.Refresh();
 		}
 
 		private void backgroundWorkerLoadData_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -3704,8 +3706,26 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				_personsToValidate.Add(permittedPerson);
 			}
-			_schedulerState.Schedules.ValidateBusinessRulesOnPersons(_personsToValidate,
-				TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, _schedulerState.SchedulingResultState.GetRulesToRun());
+			var rulesToRun = _schedulerState.SchedulingResultState.GetRulesToRun();
+			var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+
+			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.SchedulingScreen_BatchAgentValidation_41552))
+			{
+				var resolvedTranslatedString = LanguageResourceHelper.Translate("XXValidatingPersons2");
+				var validatedCount = 0;
+				foreach (var persons in _personsToValidate.Batch(100))
+				{
+					var batchedPeople = persons as IList<IPerson> ?? persons.ToList();
+					validatedCount += batchedPeople.Count;
+					backgroundWorkerLoadData.ReportProgress(0,
+					string.Format(CultureInfo.CurrentCulture, resolvedTranslatedString, validatedCount, SchedulerState.AllPermittedPersons.Count));
+					_schedulerState.Schedules.ValidateBusinessRulesOnPersons(batchedPeople, loggedOnCulture, rulesToRun);
+				}
+			}
+			else
+			{
+				_schedulerState.Schedules.ValidateBusinessRulesOnPersons(_personsToValidate, loggedOnCulture, rulesToRun);
+			}
 			_personsToValidate.Clear();
 		}
 

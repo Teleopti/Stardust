@@ -32635,6 +32635,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  Validating {0} person(s) out of {1}.
+        /// </summary>
+        public static string ValidatingPersons2 {
+            get {
+                return ResourceManager.GetString("ValidatingPersons2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation.
         /// </summary>
         public static string Validation {

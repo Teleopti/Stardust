@@ -15118,4 +15118,8 @@ These options are activated:
     <value>Import schedule</value>
     <comment>Import schedule</comment>
   </data>
+  <data name="ValidatingPersons2" xml:space="preserve">
+    <value> Validating {0} person(s) out of {1}</value>
+    <comment>Validating {0} person(s) out of {1}</comment>
+  </data>
 </root>

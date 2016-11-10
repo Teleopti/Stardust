@@ -142,14 +142,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				//    new WorkShiftMinMaxLengthCalculatorFactory())
 			};
 
-			if(schedulingResultStateHolder.UseMinWeekWorkTime)
+			if (schedulingResultStateHolder.UseMinWeekWorkTime)
 				ret.Add(new MinWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
 
-			if(!schedulingResultStateHolder.TeamLeaderMode)
+			if (!schedulingResultStateHolder.TeamLeaderMode)
 				ret.Add(new OpenHoursRule(schedulingResultStateHolder));
-			{
-				
-			}
+
+
 			return ret;
 		}
 
