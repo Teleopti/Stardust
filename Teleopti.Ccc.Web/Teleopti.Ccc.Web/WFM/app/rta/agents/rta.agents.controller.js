@@ -58,8 +58,6 @@
 				$scope.formatDuration = RtaFormatService.formatDuration;
 				$scope.hexToRgb = RtaFormatService.formatHexToRgb;
 				$scope.agentDetailsUrl = RtaRouteService.urlForAgentDetails;
-				$scope.goBackToRootWithUrl = RtaRouteService.urlForSites;
-				$scope.goBackToTeamsWithUrl = RtaRouteService.urlForTeams(siteIds[0]);
 				$scope.agentsInAlarm = !$stateParams.showAllAgents;
 				var allGrid = RtaGridService.makeAllGrid();
 				allGrid.data = 'filteredData';
@@ -529,7 +527,12 @@
 					} else if (agentsInfo.length > 0) {
 						$scope.siteName = agentsInfo[0].SiteName;
 						$scope.teamName = agentsInfo[0].TeamName;
-						$scope.goBackToTeamsWithUrl = RtaRouteService.urlForTeams(agentsInfo[0].SiteId);
+						$scope.goBackToTeamsWithUrl = function()
+						{
+						if(skillIds.length > 0)
+							return RtaRouteService.urlForTeamsBySkills(agentsInfo[0].SiteId, skillIds[0]);
+						return RtaRouteService.urlForTeams(agentsInfo[0].SiteId);
+					};
 						$scope.showPath = true;
 					}
 				};
@@ -557,6 +560,19 @@
 				$scope.goToSelectItem = function () {
 					$state.go('rta.select-skill');
 				}
+
+
+				$scope.goBackToRootWithUrl = function(){
+					if(skillIds.length > 0)
+						return RtaRouteService.urlForSitesBySkills(skillIds[0]);
+					return RtaRouteService.urlForSites;
+				};
+
+				$scope.goBackToTeamsWithUrl = function() {
+					if(skillIds.length > 0)
+						return RtaRouteService.urlForTeamsBySkills(siteIds[0], skillIds[0]);
+					return RtaRouteService.urlForTeams(siteIds[0]);
+				};
 
 				$scope.$on('$destroy', function () {
 					cancelPolling();

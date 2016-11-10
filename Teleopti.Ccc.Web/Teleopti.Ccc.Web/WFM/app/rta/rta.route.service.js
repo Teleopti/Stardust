@@ -53,6 +53,21 @@
 				return '#/rta/select-skill';
 			};
 
+			this.urlForSitesBySkills = function(skillIds){
+				return '#/rta/sites-by-skill/?skillIds=' + skillIds;
+			};
+
+			this.urlForTeamsBySkills = function(siteIds, skillIds){
+				return '#/rta/teams-by-skill/?siteIds=' + siteIds + '&skillIds=' + skillIds;
+			};
+
+			this.urlForSitesBySkillArea = function(skillAreaId){
+				return '#/rta/sites-by-skill-area/?skillAreaId=' + skillAreaId;
+			};
+
+			this.urlForTeamsBySkillArea = function(siteIds, skillAreaId){
+				return '#/rta/teams-by-skill-area/?siteIds=' + siteIds + '&skillAreaId=' + skillAreaId;
+			};
 		}
 	]);
 })();

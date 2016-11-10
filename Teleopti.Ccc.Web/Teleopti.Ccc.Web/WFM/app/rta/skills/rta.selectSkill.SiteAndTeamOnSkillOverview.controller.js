@@ -225,9 +225,19 @@
 					return RtaRouteService.urlForSelectSkill();
 				};
 
-				$scope.urlForDashboard = function() {
-					return RtaRouteService.urlForSites();
+				$scope.goBackToRootWithUrl = function() {
+					if($scope.skillId !== null)
+					 return RtaRouteService.urlForSitesBySkills($scope.skillId);
+					return RtaRouteService.urlForSitesBySkillArea($scope.skillAreaId);
 				};
+
+				$scope.goBackToTeamsWithUrl = function()
+				{
+				if(skillIds.length > 0)
+					return RtaRouteService.urlForTeamsBySkills(agentsInfo[0].SiteId, skillIds[0]);
+				return RtaRouteService.urlForTeams(agentsInfo[0].SiteId);
+			};
+
 
 				$scope.getStateForTeams = function() {
 					return $scope.skillId !== null ? stateForTeamsBySkill : stateForTeamsBySkillArea;
@@ -259,16 +269,18 @@
 				};
 
 				function goToAgents(selectedItemIds) {
+					console.log('sites', $scope.siteIds);
+					console.log('teams', $scope.siteIds);
 					$scope.siteIds ?
 						RtaRouteService.goToAgents({
 							skillIds: $scope.skillIds,
 							skillAreaId: $scope.skillAreaId,
-							siteIds: selectedItemIds
+							teamIds: selectedItemIds
 						}) :
 						RtaRouteService.goToAgents({
 							skillIds: $scope.skillIds,
 							skillAreaId: $scope.skillAreaId,
-							teamIds: selectedItemIds
+							siteIds: selectedItemIds
 						});
 				};
 
