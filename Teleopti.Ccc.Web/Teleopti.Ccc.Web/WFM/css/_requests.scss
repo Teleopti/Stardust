@@ -10,6 +10,10 @@
         position:relative;
     }
 
+    md-tab-content{
+        transform: inherit !important;//why transform nothing? what about all the position fixed element inside
+    }
+
     .show-replay{
         display:block !important;
     }
