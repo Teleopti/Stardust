@@ -129,6 +129,9 @@
 		.gantt-task-truncated-left,.gantt-task-truncated-right{
 		    top:-2px;
 		}
+		.gantt-task-info {
+			background-color: $white;
+		}
 		.gantt-body-rows{
 		    overflow:hidden;
 		}
