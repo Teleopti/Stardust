@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			var startTime = string.Format("new Date('{0}')", values.StartTime);
 			var endTime = string.Format("new Date('{0}')", values.EndTime);
 			var timeRangeStr = string.Format("{{startTime:{0}, endTime:{1}}}", startTime, endTime);
-			var selectedDate = string.Format("function(){{return new Date('{0}');}}", values.SelectedDate);
+			var selectedDate = string.Format("function(){{return '{0}';}}", values.SelectedDate);
 			var selectedId = idForActivity(values.Activity).ToString();
 			var timeRange = new Dictionary<string, string>
 					{
