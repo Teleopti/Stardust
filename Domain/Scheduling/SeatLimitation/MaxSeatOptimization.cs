@@ -101,8 +101,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			{
 				foreach (var teamBlockInfo in teamBlockInfos)
 				{
-					if(!anySelectedInTeamBlockIsScheduled(teamBlockInfo))
-						continue;
+					if(!lockUnscheduledDaysAndReturnAnyIsScheduled(teamBlockInfo))continue;
 					var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= period.StartDate);//what is this?
 					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint);
 					var maxPeakBefore = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);
@@ -131,11 +130,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 				foreach (var teamBlockInfo in teamBlockInfos)
 				{
-					var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= period.StartDate);
-						//what is this?
+					var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= period.StartDate);//what is this?
 					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint);
-					if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature !=
-						MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak) continue;
+					if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature != MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak) continue;
 					foreach (var date in period.DayCollection())
 					{
 						if (!_maxSeatPeak.Fetch(date, skillDaysForTeamBlockInfo).IsPositive()) continue;
@@ -159,19 +156,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			}
 		}
 
-		private bool anySelectedInTeamBlockIsScheduled(ITeamBlockInfo teamBlockInfo)
+		private bool lockUnscheduledDaysAndReturnAnyIsScheduled(ITeamBlockInfo teamBlockInfo)
 		{
+			var anyIsScheduled = false;
 			foreach (var scheduleMatrixPro in teamBlockInfo.MatrixesForGroupAndBlock())
 			{
 				foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
 				{
 					var scheduleDay = scheduleDayPro.DaySchedulePart();
-					if (teamBlockInfo.TeamInfo.UnLockedMembers(scheduleDayPro.Day).Contains(scheduleDay.Person) && scheduleDay.IsScheduled())
-						return true;	
+					var dateOnly = scheduleDayPro.Day;
+					var person = scheduleDay.Person;
+
+					if (!teamBlockInfo.TeamInfo.UnLockedMembers(dateOnly).Contains(person))continue;
+					if (scheduleDay.IsScheduled()) anyIsScheduled = true;
+					else teamBlockInfo.TeamInfo.LockMember(new DateOnlyPeriod(dateOnly, dateOnly), person);	
 				}
 			}
 
-			return false;
+			return anyIsScheduled;
 		}
 	}
 }
