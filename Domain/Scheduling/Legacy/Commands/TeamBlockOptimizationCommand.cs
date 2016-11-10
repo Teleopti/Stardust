@@ -191,8 +191,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod);
 
-				_maxSeatOptimization.Optimize(selectedPeriod, selectedPersons, _schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.AllSkillDays(), optimizationPreferences);
-
 				solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
 					rollbackServiceWithResourceCalculation, allMatrixes,
 					_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences), dayOffOptimizationPreferenceProvider);
@@ -201,6 +199,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
 					rollbackServiceWithResourceCalculation, allMatrixes,
 					_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences), dayOffOptimizationPreferenceProvider);
+
+				_maxSeatOptimization.Optimize(selectedPeriod, selectedPersons, _schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.AllSkillDays(), optimizationPreferences);
 			}
 		}
 
