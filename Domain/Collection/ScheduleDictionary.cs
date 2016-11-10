@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -228,6 +229,10 @@ namespace Teleopti.Ccc.Domain.Collection
             return failedRules;
         }
 
+		public IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection)
+		{
+			return Modify(ScheduleModifier.NotApplicable,new List<IScheduleDay> { scheduleDay },newBusinessRuleCollection, new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter());
+		}
 
 		public IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay scheduleDay, IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{

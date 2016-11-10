@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 		private readonly IAuditSettingRepository _auditSettingRepository;
+		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 
-
-		public BackoutScheduleChangeCommandHandler(IScheduleHistoryRepository scheduleHistoryRepository, IPersonRepository personRepository, ILoggedOnUser loggedOnUser, IAggregateRootInitializer aggregateRootInitializer, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleDifferenceSaver scheduleDifferenceSaver, IDifferenceCollectionService<IPersistableScheduleData> differenceService, IAuditSettingRepository auditSettingRepository)
+		public BackoutScheduleChangeCommandHandler(IScheduleHistoryRepository scheduleHistoryRepository, IPersonRepository personRepository, ILoggedOnUser loggedOnUser, IAggregateRootInitializer aggregateRootInitializer, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleDifferenceSaver scheduleDifferenceSaver, IDifferenceCollectionService<IPersistableScheduleData> differenceService, IAuditSettingRepository auditSettingRepository, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
 		{
 			_scheduleHistoryRepository = scheduleHistoryRepository;
 			_personRepository = personRepository;
@@ -35,9 +35,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_scheduleDifferenceSaver = scheduleDifferenceSaver;
 			_differenceService = differenceService;
 			_auditSettingRepository = auditSettingRepository;
+			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 		}
 
-		
+
+		private DateOnlyPeriod findAbsencePeriod(IRevision prevVersion, IRevision nextVersion, IPerson person, DateOnly date)
+		{			
+			var scheduleData = new[] {prevVersion, nextVersion}.SelectMany(v => _scheduleHistoryRepository.FindSchedules(v, person, date));
+			var periods = new List<DateOnlyPeriod> {new DateOnlyPeriod(date, date)};
+			
+			foreach(var data in scheduleData)
+			{				
+				var personAbsence = data as IPersonAbsence;
+				if (personAbsence != null)
+				{
+					periods.Add( personAbsence.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()));					
+				}
+			}
+
+			return new DateOnlyPeriod( periods.Min( p => p.StartDate), periods.Max( p => p.EndDate));
+		}
+
 
 		public void Handle(BackoutScheduleChangeCommand command)
 		{
@@ -54,9 +72,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var versionsOnDates = command.Dates.Select(date => new versionsOnDate
 			{
 				Date = date,
-				Versions = _scheduleHistoryRepository.FindRevisions(person, date, 2).ToList()
+				Versions = _scheduleHistoryRepository.FindRevisions(person,date,2).ToList()
 			}).Where(vd => vd.Versions.Count == 2 && vd.Versions.First().ModifiedBy.Id == _loggedOnUser.CurrentUser().Id).ToList();
-			
+
+		
 			if (versionsOnDates.Count == 0)
 			{
 				command.ErrorMessages.Add(Resources.CannotUndoScheduleChange);
@@ -64,8 +83,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			var latestModifyTime = versionsOnDates.Max(vd => vd.Versions.First().ModifiedAt);
-			var targetVersionsDate = versionsOnDates.First(vd => vd.Versions.First().ModifiedAt == latestModifyTime); 
+			var targetVersionsDate = versionsOnDates.First(vd => vd.Versions.First().ModifiedAt == latestModifyTime);
 
+			var preVersion = targetVersionsDate.Versions.First();
 			var lastVersion = targetVersionsDate.Versions.Last();			
 
 			var scheduleData = _scheduleHistoryRepository.FindSchedules(lastVersion, person, targetVersionsDate.Date).ToList();
@@ -91,11 +111,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				_aggregateRootInitializer.Initialize(personAbsences);
 			}
 
-			var scheduleDictionary = getScheduleDictionary(person,targetVersionsDate.Date);
+			var period = findAbsencePeriod(preVersion, lastVersion, person, targetVersionsDate.Date);
+
+			var scheduleDictionary = getScheduleDictionary(person, period);
 
 			var sd = toScheduleDay(getCurrentScheduleDay(scheduleDictionary, person,targetVersionsDate.Date), scheduleData);
 
-			var errorResponses = scheduleDictionary.Modify(sd, new DoNothingScheduleDayChangeCallBack()).ToList();
+
+			var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleDictionary[person]);
+
+
+			var errorResponses = scheduleDictionary.Modify( sd , businessRulesForPersonAccountUpdate).ToList();
 
 			if (errorResponses.Count > 0)
 			{
@@ -115,12 +141,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_scheduleDifferenceSaver.SaveChanges(diffs,(IUnvalidatedScheduleRangeUpdate)range);			
 		}
 
-		private IScheduleDictionary getScheduleDictionary(IPerson person, DateOnly date)
+		private IScheduleDictionary getScheduleDictionary(IPerson person, DateOnlyPeriod period)
 		{
 			var dic = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
 				person,
 				new ScheduleDictionaryLoadOptions(true, true),
-				new DateOnlyPeriod(date, date),
+				period,
 				_currentScenario.Current());
 			((IReadOnlyScheduleDictionary) dic).MakeEditable();
 

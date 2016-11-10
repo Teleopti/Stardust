@@ -6,6 +6,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -29,6 +32,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeCurrentScenario CurrentScenario;
 		public FakeScheduleDifferenceSaver ScheduleDifferenceSaver;
 		public FakeAuditSettingRepository AuditSettingRepository;
+		public FakeWriteSideRepository<IAbsence> AbsenceRepository;
+		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 		public BackoutScheduleChangeCommandHandler target;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -41,6 +46,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.UseTestDouble<FakeAggregateRootInitializer>().For<IAggregateRootInitializer>();
 			system.UseTestDouble<FakeAuditSettingRepository>().For<IAuditSettingRepository>();
 			system.AddService<BackoutScheduleChangeCommandHandler>();
+			system.UseTestDouble<FakeWriteSideRepository<IAbsence>>().For<IProxyForId<IAbsence>>();
+			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
 		}
 
 		[Test]
@@ -92,39 +99,40 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldIndicateCannotBackoutWhenLastChangeIsFromDifferentUser()
 		{
-			var person1 = PersonFactory.CreatePerson("aa","aa").WithId();
-			var person2 = PersonFactory.CreatePerson("bb","bb").WithId();
+			var person1 = PersonFactory.CreatePerson("aa", "aa").WithId();
+			var person2 = PersonFactory.CreatePerson("bb", "bb").WithId();
 			PersonRepository.Add(person1);
 			PersonRepository.Add(person2);
 
 			LoggedOnUser.SetFakeLoggedOnUser(person2);
 			ScheduleHistoryRepository.ClearRevision();
 
-			var person = PersonFactory.CreatePerson("aa","aa").WithId();
+			var person = PersonFactory.CreatePerson("aa", "aa").WithId();
 			PersonRepository.Add(person);
 			LoggedOnUser.SetFakeLoggedOnUser(person);
-			var dateTimePeriod = new DateTimePeriod(2016,6,11,8,2016,6,11,17);
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(CurrentScenario.Current(),person,dateTimePeriod);
+			var dateTimePeriod = new DateTimePeriod(2016, 6, 11, 8, 2016, 6, 11, 17);
+			var date = new DateOnly(2016, 6, 11);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(CurrentScenario.Current(), person, dateTimePeriod);
 			ScheduleHistoryRepository.ClearRevision();
-			var rev = new Revision { Id = 2 };
+			var rev = new Revision {Id = 2};
 			rev.SetRevisionData(person1);
-			var lstRev = new Revision { Id = 1 };
+			var lstRev = new Revision {Id = 1};
 			lstRev.SetRevisionData(person1);
-			ScheduleHistoryRepository.SetRevision(rev,pa.CreateTransient());
+			ScheduleHistoryRepository.SetRevision(rev, date, pa.CreateTransient());
 			pa.SetDayOff(DayOffFactory.CreateDayOff());
-			ScheduleHistoryRepository.SetRevision(lstRev,pa.CreateTransient());
+			ScheduleHistoryRepository.SetRevision(lstRev, date, pa.CreateTransient());
 
 			var command = new BackoutScheduleChangeCommand
 			{
 				PersonId = person.Id.Value,
-				Dates = new[] { new DateOnly(2016,06,11) },
+				Dates = new[] {new DateOnly(2016, 06, 11)},
 				TrackedCommandInfo = new TrackedCommandInfo
 				{
 					TrackId = Guid.NewGuid()
 				}
 			};
 			target.Handle(command);
-		
+
 			target.Handle(command);
 
 			command.ErrorMessages.Count.Should().Be.EqualTo(1);
@@ -134,25 +142,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldBackoutToPreviousSchedule()
 		{
-			var person = PersonFactory.CreatePerson("aa","aa").WithId();
+			var person = PersonFactory.CreatePerson("aa", "aa").WithId();
 			PersonRepository.Add(person);
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			var dateTimePeriod = new DateTimePeriod(2016, 6, 11, 8, 2016, 6, 11, 17);
 			var dateOnlyPeriod = new DateOnlyPeriod(2016, 6, 11, 2016, 6, 11);
+			var date = new DateOnly(2016, 6, 11);
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(CurrentScenario.Current(), person, dateTimePeriod);
 			ScheduleHistoryRepository.ClearRevision();
-			var rev = new Revision { Id = 2 };
+			var rev = new Revision {Id = 2};
 			rev.SetRevisionData(person);
-			var lstRev = new Revision { Id = 1};
+			var lstRev = new Revision {Id = 1};
 			lstRev.SetRevisionData(person);
-			ScheduleHistoryRepository.SetRevision(rev, pa.CreateTransient());
+			ScheduleHistoryRepository.SetRevision(rev, date, pa.CreateTransient());
 			pa.SetDayOff(DayOffFactory.CreateDayOff());
-			ScheduleHistoryRepository.SetRevision(lstRev, pa.CreateTransient());
+			ScheduleHistoryRepository.SetRevision(lstRev, date, pa.CreateTransient());
 
 			var command = new BackoutScheduleChangeCommand
 			{
 				PersonId = person.Id.Value,
-				Dates = new[] { new DateOnly(2016,06,11) },
+				Dates = new[] {new DateOnly(2016, 06, 11)},
 				TrackedCommandInfo = new TrackedCommandInfo
 				{
 					TrackId = Guid.NewGuid()
@@ -162,28 +171,104 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			command.ErrorMessages.Count.Should().Be.EqualTo(0);
 
 			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
-				person, new ScheduleDictionaryLoadOptions(true, true), dateOnlyPeriod, CurrentScenario.Current())[person].ScheduledDayCollection(dateOnlyPeriod).Single();
+					person, new ScheduleDictionaryLoadOptions(true, true), dateOnlyPeriod, CurrentScenario.Current())[person]
+				.ScheduledDayCollection(dateOnlyPeriod).Single();
 
 			schedule.SignificantPart().Should().Be.EqualTo(SchedulePartView.DayOff);
-					}
+		}
 
 		[Test]
-		public void ShouldAssignCommandIdToAllEvents()
+		public void ShouldUpdatePersonAccountWhenBackoutSingleDayAbsence()
 		{
+			var scenario = CurrentScenario.Current();
+			var person = PersonFactory.CreatePerson("aa", "aa").WithId();
+			PersonRepository.Add(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			var dateTimePeriod = new DateTimePeriod(2016, 6, 11, 8, 2016, 6, 11, 17);
+			var dateOnlyPeriod = new DateOnlyPeriod(2016, 6, 11, 2016, 6, 11);
+			var date = new DateOnly(2016, 6, 11);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, dateTimePeriod);
+
+			var absence = AbsenceFactory.CreateAbsence("abs").WithId();
+			AbsenceRepository.Add(absence);
+
+			var personAbsence = new PersonAbsence(person, scenario, new AbsenceLayer(absence, dateTimePeriod));
+			ScheduleHistoryRepository.ClearRevision();
+			var rev = new Revision {Id = 2};
+			rev.SetRevisionData(person);
+			var lstRev = new Revision {Id = 1};
+			lstRev.SetRevisionData(person);
+
+			ScheduleHistoryRepository.SetRevision(rev, date, personAssignment.CreateTransient());
+			ScheduleHistoryRepository.SetRevision(lstRev, date, personAbsence.CreateTransient());
+			ScheduleHistoryRepository.SetRevision(lstRev, date, personAssignment.CreateTransient());
+
+
+			var accountDay = createAccountDay(new DateOnly(2016, 6, 1), TimeSpan.FromDays(0), TimeSpan.FromDays(3),
+				TimeSpan.FromDays(0));
+
+			var account = PersonAbsenceAccountFactory.CreatePersonAbsenceAccount(person, absence, accountDay);
+			PersonAbsenceAccountRepository.Add(account);
+
+			var command = new BackoutScheduleChangeCommand
+			{
+				PersonId = person.Id.Value,
+				Dates = new[] {new DateOnly(2016, 06, 11)},
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					TrackId = Guid.NewGuid()
+				}
+			};
+			target.Handle(command);
+			command.ErrorMessages.Count.Should().Be.EqualTo(0);
+
+			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
+					person, new ScheduleDictionaryLoadOptions(true, true), dateOnlyPeriod, CurrentScenario.Current())[person]
+				.ScheduledDayCollection(dateOnlyPeriod).Single();
+
+			schedule.SignificantPart().Should().Be.EqualTo(SchedulePartView.FullDayAbsence);
+			accountDay.LatestCalculatedBalance.Should().Be.EqualTo(TimeSpan.FromDays(1));
+		}
+
+		[Test]
+		public void ShouldUpdatePersonAccountWhenBackoutMultiDayAbsence()
+		{
+			var scenario = CurrentScenario.Current();
 			var person = PersonFactory.CreatePerson("aa","aa").WithId();
 			PersonRepository.Add(person);
 			LoggedOnUser.SetFakeLoggedOnUser(person);
-			var dateTimePeriod = new DateTimePeriod(2016,6,11,8,2016,6,11,17);
-			var dateOnlyPeriod = new DateOnlyPeriod(2016,6,11,2016,6,11);
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(CurrentScenario.Current(),person,dateTimePeriod);
+			
+			var multiDayDateTimePeriod = new DateTimePeriod(2016, 6, 11, 0, 2016, 6, 13, 0);			
+
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,new DateTimePeriod(2016,6,11,8,2016,6,11,17));
+			var nextDayPersonAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,new DateTimePeriod(2016,6,12,8,2016,6,12,17));
+
+
+			var absence = AbsenceFactory.CreateAbsence("abs").WithId();
+			AbsenceRepository.Add(absence);
+
+			var personAbsence = new PersonAbsence(person,scenario,new AbsenceLayer(absence,multiDayDateTimePeriod));
 			ScheduleHistoryRepository.ClearRevision();
 			var rev = new Revision { Id = 2 };
 			rev.SetRevisionData(person);
 			var lstRev = new Revision { Id = 1 };
 			lstRev.SetRevisionData(person);
-			ScheduleHistoryRepository.SetRevision(rev,pa.CreateTransient());
-			pa.SetDayOff(DayOffFactory.CreateDayOff());
-			ScheduleHistoryRepository.SetRevision(lstRev,pa.CreateTransient());
+
+			ScheduleHistoryRepository.SetRevision(rev, new DateOnly(2016, 6, 11), personAssignment.CreateTransient());
+			ScheduleHistoryRepository.SetRevision(rev, new DateOnly(2016,6,12),nextDayPersonAssignment.CreateTransient());
+			ScheduleHistoryRepository.SetRevision(lstRev,new DateOnly(2016,6,11),personAbsence.CreateTransient());			
+			ScheduleHistoryRepository.SetRevision(lstRev,new DateOnly(2016,6,11),personAssignment.CreateTransient());
+			ScheduleHistoryRepository.SetRevision(lstRev,new DateOnly(2016,6,12),personAbsence.CreateTransient());
+			ScheduleHistoryRepository.SetRevision(lstRev,new DateOnly(2016,6,12),nextDayPersonAssignment.CreateTransient());
+
+			ScheduleStorage.Add(nextDayPersonAssignment);
+			ScheduleStorage.Add( personAssignment);
+
+			var accountDay = createAccountDay(new DateOnly(2016,6,1),TimeSpan.FromDays(0),TimeSpan.FromDays(3),
+				TimeSpan.FromDays(0));
+
+			var account = PersonAbsenceAccountFactory.CreatePersonAbsenceAccount(person,absence,accountDay);
+			PersonAbsenceAccountRepository.Add(account);
 
 			var command = new BackoutScheduleChangeCommand
 			{
@@ -197,8 +282,51 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			target.Handle(command);
 			command.ErrorMessages.Count.Should().Be.EqualTo(0);
 
+			var schedules = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
+					person,new ScheduleDictionaryLoadOptions(true,true), new DateOnlyPeriod(2016, 6, 11, 2016, 6, 12), CurrentScenario.Current())[person];
+
+			var directlyAffectedSchedule = schedules.ScheduledDay(new DateOnly(2016, 6, 11));
+			var indirectlyAffectedSchedule = schedules.ScheduledDay(new DateOnly(2016, 6, 12));
+
+			directlyAffectedSchedule.SignificantPart().Should().Be.EqualTo(SchedulePartView.FullDayAbsence);
+			indirectlyAffectedSchedule.SignificantPart().Should().Be.EqualTo(SchedulePartView.FullDayAbsence);
+			accountDay.LatestCalculatedBalance.Should().Be.EqualTo(TimeSpan.FromDays(2));
+		}
+
+		[Test]
+		public void ShouldAssignCommandIdToAllEvents()
+		{
+			var person = PersonFactory.CreatePerson("aa", "aa").WithId();
+			PersonRepository.Add(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			var dateTimePeriod = new DateTimePeriod(2016, 6, 11, 8, 2016, 6, 11, 17);
+			var dateOnlyPeriod = new DateOnlyPeriod(2016, 6, 11, 2016, 6, 11);
+			var date = new DateOnly(2016, 6, 11);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(CurrentScenario.Current(), person, dateTimePeriod);
+			ScheduleHistoryRepository.ClearRevision();
+			var rev = new Revision {Id = 2};
+			rev.SetRevisionData(person);
+			var lstRev = new Revision {Id = 1};
+			lstRev.SetRevisionData(person);
+			ScheduleHistoryRepository.SetRevision(rev, date, pa.CreateTransient());
+			pa.SetDayOff(DayOffFactory.CreateDayOff());
+			ScheduleHistoryRepository.SetRevision(lstRev, date, pa.CreateTransient());
+
+			var command = new BackoutScheduleChangeCommand
+			{
+				PersonId = person.Id.Value,
+				Dates = new[] {new DateOnly(2016, 06, 11)},
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					TrackId = Guid.NewGuid()
+				}
+			};
+			target.Handle(command);
+			command.ErrorMessages.Count.Should().Be.EqualTo(0);
+
 			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
-				person,new ScheduleDictionaryLoadOptions(true,true),dateOnlyPeriod,CurrentScenario.Current())[person].ScheduledDayCollection(dateOnlyPeriod).Single();
+					person, new ScheduleDictionaryLoadOptions(true, true), dateOnlyPeriod, CurrentScenario.Current())[person]
+				.ScheduledDayCollection(dateOnlyPeriod).Single();
 
 
 			var events = schedule.PersonAssignment().PopAllEvents();
@@ -208,7 +336,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				var _e = e as ICommandIdentifier;
 				_e.Should().Not.Be.Null();
 				_e.CommandId.Should().Be.EqualTo(command.TrackedCommandInfo.TrackId);
-			}			
+			}
+		}
+
+		private AccountDay createAccountDay(DateOnly startDate,TimeSpan balanceIn,TimeSpan accrued,TimeSpan balance)
+		{
+			return new AccountDay(startDate)
+			{
+				BalanceIn = balanceIn,
+				Accrued = accrued,
+				Extra = TimeSpan.FromDays(0),
+				LatestCalculatedBalance = balance
+			};
 		}
 
 	}	

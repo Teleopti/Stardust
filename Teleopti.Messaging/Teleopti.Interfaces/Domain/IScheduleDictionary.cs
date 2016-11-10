@@ -97,20 +97,23 @@ namespace Teleopti.Interfaces.Domain
                                                   IScheduleTagSetter scheduleTagSetter
             );
 
-        /// <summary>
-        /// Modifies the specified modifier.
-        /// </summary>
-        /// <param name="modifier">The modifier.</param>
-        /// <param name="schedulePart">The schedule part.</param>
-        /// <param name="newBusinessRuleCollection">The new business rule collection.</param>
-        /// <param name="scheduleDayChangeCallback">The schedule day change callback.</param>
-        /// <param name="scheduleTagSetter">The schedule tag setter.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2010-04-22
-        /// </remarks>
-        IEnumerable<IBusinessRuleResponse> Modify(ScheduleModifier modifier,
+	    IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay scheduleDay,
+		    INewBusinessRuleCollection newBusinessRuleCollection);
+
+		/// <summary>
+		/// Modifies the specified modifier.
+		/// </summary>
+		/// <param name="modifier">The modifier.</param>
+		/// <param name="schedulePart">The schedule part.</param>
+		/// <param name="newBusinessRuleCollection">The new business rule collection.</param>
+		/// <param name="scheduleDayChangeCallback">The schedule day change callback.</param>
+		/// <param name="scheduleTagSetter">The schedule tag setter.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: rogerkr
+		/// Created date: 2010-04-22
+		/// </remarks>
+		IEnumerable<IBusinessRuleResponse> Modify(ScheduleModifier modifier,
                                                   IScheduleDay schedulePart,
                                                   INewBusinessRuleCollection newBusinessRuleCollection,
                                                   IScheduleDayChangeCallback scheduleDayChangeCallback,
