@@ -122,29 +122,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						{
 								rollbackService.RollbackMinimumChecks();
 						}
+					}
+				}
 
-						if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)
+				foreach (var teamBlockInfo in teamBlockInfos)
+				{
+					var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= period.StartDate); //what is this?
+					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint);
+					if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature != MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak) continue;
+					foreach (var date in period.DayCollection())
+					{
+						if (!_maxSeatPeak.Fetch(date, skillDaysForTeamBlockInfo).IsPositive()) continue;
+						foreach (var scheduleMatrixPro in teamBlockInfo.MatrixesForGroupAndBlock())
 						{
-							foreach (var date in period.DayCollection())
+							foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
 							{
-								foreach (var scheduleMatrixPro in teamBlockInfo.MatrixesForGroupAndBlock())
+								if (!scheduleDayPro.Day.Equals(date)) continue;
+								var overLimit = _maxSeatPeak.Fetch(date, skillDaysForTeamBlockInfo);
+								if (!overLimit.IsPositive()) continue;
+								var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
+								var scheduleDay = scheduleDayPro.DaySchedulePart();
+								if (_maxSeatPeak.IsOverMaxSeat(scheduleDay, skillDaysForTeamBlockInfo))
 								{
-									foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
-									{
-										if (scheduleDayPro.Day.Equals(date))
-										{
-											var overLimit = _maxSeatPeak.Fetch(date, skillDaysForTeamBlockInfo);
-											if (overLimit.IsPositive())
-											{
-												var scheduleDay = scheduleDayPro.DaySchedulePart();
-									
-												if (_maxSeatPeak.IsOverMaxSeat(scheduleDay, skillDaysForTeamBlockInfo))
-												{
-													_deleteSchedulePartService.Delete(new List<IScheduleDay> { scheduleDay }, rollbackService, businessRules);
-												}
-											}
-										}
-									}
+									_deleteSchedulePartService.Delete(new List<IScheduleDay> {scheduleDay}, rollbackService, businessRules);
 								}
 							}
 						}
