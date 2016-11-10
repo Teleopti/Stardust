@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IEnumerable<Mapping> mappings,
 			Action<Context> updateState, 
 			StateMapper stateMapper,
-			AppliedAdherence appliedAdherence,
 			ProperAlarm appliedAlarm)
 		{
 
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			BusinessUnitId = businessUnitId;
 			TeamId = teamId;
 			SiteId = siteId;
-			AppliedAdherence = appliedAdherence;
 			StateMapper = stateMapper;
 
 			_updateState = updateState ?? (c => {});
@@ -68,7 +66,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public Guid SiteId { get; }
 
 		public StateMapper StateMapper { get; set; }
-		public AppliedAdherence AppliedAdherence { get; set; }
 
 		public InputInfo Input { get; set; }
 		public AgentState Stored { get; set; }

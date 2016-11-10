@@ -750,7 +750,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\CheckForActivityChangeWebModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ControllableReadModelTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IAdherenceDetailsReadModelPersister.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\AppliedAdherence.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IInitializeble.cs" />
     <Compile Include="UnitOfWork\IReadModelTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\INotificationCreator.cs" />

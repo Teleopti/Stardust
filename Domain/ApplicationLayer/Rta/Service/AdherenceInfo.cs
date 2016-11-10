@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -10,34 +11,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly Context _context;
 		private readonly IEnumerable<Mapping> _mappings;
 		private readonly Lazy<IEnumerable<AdherenceChange>> _adherenceChanges;
+		private readonly Lazy<EventAdherence> _adherenceForStoredStateAndCurrentActivity;
+		private readonly Lazy<EventAdherence> _adherenceForNewStateAndPreviousActivity;
+		private readonly Lazy<EventAdherence> _adherenceForNewStateAndCurrentActivity;
 
 		public AdherenceInfo(Context context, IEnumerable<Mapping> mappings)
 		{
 			_context = context;
 			_mappings = mappings;
 			_adherenceChanges = new Lazy<IEnumerable<AdherenceChange>>(buildAdherenceChanges);
+			_adherenceForStoredStateAndCurrentActivity = new Lazy<EventAdherence>(() => adherenceFor(_context.Stored?.StateCode, _context.Stored.PlatformTypeId(), _context.Schedule.CurrentActivity()));
+			_adherenceForNewStateAndPreviousActivity = new Lazy<EventAdherence>(() => adherenceFor(_context.Input.StateCode, _context.Input.ParsedPlatformTypeId(), _context.Schedule.PreviousActivity()));
+			_adherenceForNewStateAndCurrentActivity = new Lazy<EventAdherence>(() => adherenceFor(_context.State.Adherence(), _context.State.StaffingEffect()));
 		}
 		
 		public EventAdherence AdherenceForNewStateAndCurrentActivity()
 		{
-			return _context.AppliedAdherence.ForEvent(_context.State.Adherence(), _context.State.StaffingEffect());
+			return _adherenceForNewStateAndCurrentActivity.Value;
 		}
-		
+
 		public EventAdherence AdherenceForNewStateAndPreviousActivity()
 		{
-			return adherenceFor(_context.Input.StateCode, _context.Input.ParsedPlatformTypeId(), _context.Schedule.PreviousActivity());
+			return _adherenceForNewStateAndPreviousActivity.Value;
 		}
-
-		public EventAdherence AdherenceForNoStateAndCurrentActivity()
-		{
-			return adherenceFor(null, Guid.Empty, _context.Schedule.CurrentActivity());
-		}
-
+		
 		public EventAdherence AdherenceForStoredStateAndCurrentActivity()
 		{
-			return adherenceFor(_context.Stored?.StateCode, _context.Stored.PlatformTypeId(), _context.Schedule.CurrentActivity());
+			return _adherenceForStoredStateAndCurrentActivity.Value;
 		}
-
+		
 		private EventAdherence adherenceFor(string stateCode, Guid platformTypeId, ScheduledActivity activity)
 		{
 			var activityId = (Guid?)null;
@@ -50,8 +52,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			var rule = _context.StateMapper.RuleFor(_mappings, _context.BusinessUnitId, platformTypeId, stateCode, activityId);
 			if (rule == null)
-				return _context.AppliedAdherence.ForEvent(null, null);
-			return _context.AppliedAdherence.ForEvent(rule.Adherence, rule.StaffingEffect);
+				return adherenceFor(null, null);
+			return adherenceFor(rule.Adherence, rule.StaffingEffect);
+		}
+
+		private static EventAdherence adherenceFor(Adherence? adherence, double? staffingEffect)
+		{
+			if (!adherence.HasValue)
+			{
+				if (!staffingEffect.HasValue)
+					return EventAdherence.Neutral;
+				if (staffingEffect.Value.Equals(0))
+					return EventAdherence.In;
+				return EventAdherence.Out;
+			}
+
+			if (adherence == Interfaces.Domain.Adherence.In)
+				return EventAdherence.In;
+			if (adherence == Interfaces.Domain.Adherence.Out)
+				return EventAdherence.Out;
+
+			return EventAdherence.Neutral;
 		}
 
 		public EventAdherence? Adherence => _adherenceChanges.Value.LastOrDefault()?.Adherence ?? _context.Stored.Adherence;

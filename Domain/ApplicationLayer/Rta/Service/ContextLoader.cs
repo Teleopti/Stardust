@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class ContextLoaderWithFasterActivityCheck : ContextLoader
 	{
-		public ContextLoaderWithFasterActivityCheck(IScheduleCacheStrategy scheduleCacheStrategy, ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IScheduleReader scheduleReader, AppliedAdherence appliedAdherence, ProperAlarm appliedAlarm, IConfigReader config) : base(scheduleCacheStrategy, dataSource, databaseLoader, now, stateMapper, agentStatePersister, mappingReader, scheduleReader, appliedAdherence, appliedAlarm, config)
+		public ContextLoaderWithFasterActivityCheck(IScheduleCacheStrategy scheduleCacheStrategy, ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IScheduleReader scheduleReader, ProperAlarm appliedAlarm, IConfigReader config) : base(scheduleCacheStrategy, dataSource, databaseLoader, now, stateMapper, agentStatePersister, mappingReader, scheduleReader, appliedAlarm, config)
 		{
 		}
 
@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		protected readonly IAgentStatePersister _agentStatePersister;
 		private readonly IMappingReader _mappingReader;
 		private readonly IScheduleReader _scheduleReader;
-		private readonly AppliedAdherence _appliedAdherence;
 		private readonly ProperAlarm _appliedAlarm;
 		protected readonly IConfigReader _config;
 
@@ -52,7 +51,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAgentStatePersister agentStatePersister, 
 			IMappingReader mappingReader, 
 			IScheduleReader scheduleReader, 
-			AppliedAdherence appliedAdherence, 
 			ProperAlarm appliedAlarm, 
 			IConfigReader config)
 		{
@@ -64,7 +62,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_agentStatePersister = agentStatePersister;
 			_mappingReader = mappingReader;
 			_scheduleReader = scheduleReader;
-			_appliedAdherence = appliedAdherence;
 			_appliedAlarm = appliedAlarm;
 			_config = config;
 		}
@@ -539,7 +536,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						data.mappings,
 						strategy.UpdateAgentState,
 						_stateMapper,
-						_appliedAdherence,
 						_appliedAlarm
 					));
 				});

@@ -83,7 +83,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ActivityEventPublisher>().SingleInstance();
 
 			builder.RegisterType<CurrentBelongsToDate>().SingleInstance();
-			builder.RegisterType<AppliedAdherence>().SingleInstance();
 
 			builder.RegisterType<ProperAlarm>().SingleInstance();
 
