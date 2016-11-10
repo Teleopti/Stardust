@@ -25,6 +25,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExists(".calendar-url");
 		}
 
+		[Then(@"I should see a warning message")]
+		public void ThenIShouldSeeAWarningMessage()
+		{
+			Browser.Interactions.AssertExists("#Setting-MissingWorkflowControlSet");
+		}
+
+
 		[Then(@"I should not see a sharing link")]
 		public void ThenIShouldNotSeeASharingLink()
 		{
