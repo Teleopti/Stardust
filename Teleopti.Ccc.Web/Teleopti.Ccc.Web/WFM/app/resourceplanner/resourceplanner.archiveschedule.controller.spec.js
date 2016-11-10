@@ -1,14 +1,16 @@
 ﻿'use strict';
 describe('ResourceplannerArchiveScheduleCtrl', function () {
 	var $q,
+		$rootScope,
 		archiveScheduleSrvc;
 
 	beforeEach(function () {
 		module('wfm.resourceplanner');
 	});
 
-	beforeEach(inject(function (_$q_) {
+	beforeEach(inject(function (_$q_, _$rootScope_) {
 		$q = _$q_;
+		$rootScope = _$rootScope_;
 		archiveScheduleSrvc = {
 			scenarios: {
 				query: function () {
@@ -26,8 +28,9 @@ describe('ResourceplannerArchiveScheduleCtrl', function () {
 	}));
 
 	it('not null', inject(function ($controller) {
+		var scope = $rootScope.$new();
 
-		$controller('ResourceplannerArchiveScheduleCtrl', { ArchiveScheduleSrvc: archiveScheduleSrvc });
+		$controller('ResourceplannerArchiveScheduleCtrl', { ArchiveScheduleSrvc: archiveScheduleSrvc, $scope: scope });
 		expect($controller).not.toBe(null);
 	}));
 });
