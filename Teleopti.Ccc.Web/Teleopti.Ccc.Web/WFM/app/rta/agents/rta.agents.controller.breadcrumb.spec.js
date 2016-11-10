@@ -162,9 +162,8 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.skillName).toEqual("skill b");
 	});
 
-	xit('should have site link when selected one team', function() {
+	it('should have site link when selected one team', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		console.log(scope.goBackToTeamsWithUrl);
 		$fakeBackend
 		.withAgent({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",

@@ -527,17 +527,12 @@
 					} else if (agentsInfo.length > 0) {
 						$scope.siteName = agentsInfo[0].SiteName;
 						$scope.teamName = agentsInfo[0].TeamName;
-						$scope.goBackToTeamsWithUrl = function()
-						{
-						if(skillIds.length > 0)
-							return RtaRouteService.urlForTeamsBySkills(agentsInfo[0].SiteId, skillIds[0]);
-						return RtaRouteService.urlForTeams(agentsInfo[0].SiteId);
-					};
+						$scope.goBackToTeamsWithUrl = skillIds.length > 0
+							? RtaRouteService.urlForTeamsBySkills(agentsInfo[0].SiteId, skillIds[0])
+							: RtaRouteService.urlForTeams(agentsInfo[0].SiteId);
 						$scope.showPath = true;
 					}
 				};
-
-
 
 				function updateUrlWithExcludedStateIds(excludedStates) {
 					$state.go($state.current.name, {
@@ -566,12 +561,6 @@
 					if(skillIds.length > 0)
 						return RtaRouteService.urlForSitesBySkills(skillIds[0]);
 					return RtaRouteService.urlForSites;
-				};
-
-				$scope.goBackToTeamsWithUrl = function() {
-					if(skillIds.length > 0)
-						return RtaRouteService.urlForTeamsBySkills(siteIds[0], skillIds[0]);
-					return RtaRouteService.urlForTeams(siteIds[0]);
 				};
 
 				$scope.$on('$destroy', function () {
