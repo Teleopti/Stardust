@@ -1358,6 +1358,7 @@
     <Content Include="WFM\app\global\businessunits\businessunits.controller.spec.js" />
     <Content Include="WFM\app\global\utilities\guidgenerator.service.js" />
     <Content Include="WFM\app\global\utilities\_modules.js" />
+    <Content Include="WFM\app\requests\requests-synchronize-header-height.directive.js" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.archiveschedule.controller.js" />
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
     <Content Include="WFM\app\permissions\permissions.backend.fake.js" />
