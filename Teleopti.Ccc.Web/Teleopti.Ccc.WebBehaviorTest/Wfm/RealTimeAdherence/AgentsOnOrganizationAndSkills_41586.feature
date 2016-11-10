@@ -60,15 +60,15 @@ Background:
 	| Is alarm    | true         |
 
 @OnlyRunIfEnabled('RTA_AgentsOnOrganizationAndSkills_41586')
-Scenario: See agents with a specific skill that are in alarm for a selected team
+Scenario: See agents with a specific skill that are in alarm for a selected sites
 	Given the time is '2016-11-03 08:01'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And 'Ashley Andeen' sets her phone state to 'Pause'
 	And 'John King' sets her phone state to 'Pause'
 	Given the time is '2016-11-03 08:15'
-	And I am viewing real time adherence for skill 'Phone' on team 'London Team 1'
-	Then I should see agent status for 'Ashley Andeen'
-	And I should not see agent 'Pierre Baldi'
+	And I am viewing real time adherence for skill 'Phone' on sites 'London, Paris'
+	Then I should see agent status for 'Pierre Baldi'
+	And I should see agent status for 'Ashley Andeen'
 	And I should not see agent 'John King'
 
 @OnlyRunIfEnabled('RTA_AgentsOnOrganizationAndSkills_41586')
