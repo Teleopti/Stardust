@@ -530,6 +530,9 @@
 						$scope.goBackToTeamsWithUrl = skillIds.length > 0
 							? RtaRouteService.urlForTeamsBySkills(agentsInfo[0].SiteId, skillIds[0])
 							: RtaRouteService.urlForTeams(agentsInfo[0].SiteId);
+						$scope.goBackToRootWithUrl = skillIds.length > 0
+							? RtaRouteService.urlForSitesBySkills(skillIds[0])
+							: RtaRouteService.urlForSites();
 						$scope.showPath = true;
 					}
 				};
@@ -555,13 +558,6 @@
 				$scope.goToSelectItem = function () {
 					$state.go('rta.select-skill');
 				}
-
-
-				$scope.goBackToRootWithUrl = function(){
-					if(skillIds.length > 0)
-						return RtaRouteService.urlForSitesBySkills(skillIds[0]);
-					return RtaRouteService.urlForSites;
-				};
 
 				$scope.$on('$destroy', function () {
 					cancelPolling();
