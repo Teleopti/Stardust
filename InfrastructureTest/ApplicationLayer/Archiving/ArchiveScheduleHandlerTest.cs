@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Archiving;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -166,6 +167,79 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			archivedAgentDayScheduleTag.Should().Not.Be.Null();
 
 			verifyTrackingMessageWasSent();
+		}
+
+		[Test]
+		public void ShouldOnlyArchiveOneDay()
+		{
+			var theDay = _period.StartDate;
+			_period = new DateOnlyPeriod(theDay, theDay);
+			addDefaultTypesToRepositories();
+
+			var theDateBeforePeriod = _period.StartDate.AddDays(-1);
+			var theDateAfterPeriod = _period.EndDate.AddDays(1);
+			var noteBefore = new Note(_person, theDateBeforePeriod, _defaultScenario, "Test Before");
+			var noteOnTheDay = new Note(_person, theDay, _defaultScenario, "Test On The Day");
+			var noteAfter = new Note(_person, theDateAfterPeriod, _defaultScenario, "Test After");
+			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteBefore));
+			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteOnTheDay));
+			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteAfter));
+
+			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
+			var archivedNotes = WithUnitOfWork.Get(() => NoteRepository.LoadAll().Where(x => x.Scenario.Id == _targetScenario.Id).ToList());
+			archivedNotes.Should().Not.Be.Null();
+			archivedNotes.Count.Should().Be.EqualTo(1);
+			archivedNotes.First().GetScheduleNote(new NoFormatting()).Should().Be.EqualTo(noteOnTheDay.GetScheduleNote(new NoFormatting()));
+		}
+
+		[Test]
+		public void ShouldOverwriteToEmpty()
+		{
+			addDefaultTypesToRepositories();
+
+			var note = new Note(_person, _period.StartDate, _targetScenario, "Test");
+			WithUnitOfWork.Do(() => ScheduleStorage.Add(note));
+
+			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
+
+			verifyCanBeFoundInScheduleStorage();
+			var archivedNote = WithUnitOfWork.Get(() => NoteRepository.LoadAll().FirstOrDefault(x => x.Scenario.Id == _targetScenario.Id));
+			archivedNote.Should().Be.Null();
+
+			verifyTrackingMessageWasSent();
+		}
+
+		[Test]
+		public void ShouldNotOverwriteNeigbhouringDates()
+		{
+			addDefaultTypesToRepositories();
+			var theDateBeforePeriod = _period.StartDate.AddDays(-1);
+			var theDateAfterPeriod = _period.EndDate.AddDays(1);
+			var noteBefore = new Note(_person, theDateBeforePeriod, _targetScenario, "Test Before");
+			var noteAfter = new Note(_person, theDateAfterPeriod, _targetScenario, "Test After");
+			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteBefore));
+			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteAfter));
+
+			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
+			var archivedNotes = WithUnitOfWork.Get(() => NoteRepository.LoadAll().Where(x => x.Scenario.Id == _targetScenario.Id));
+			archivedNotes.Count().Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldNotArchiveScheduleOutsideThePeriod()
+		{
+			addDefaultTypesToRepositories();
+			var theDateBeforePeriod = _period.StartDate.AddDays(-1);
+			var theDateAfterPeriod = _period.EndDate.AddDays(1);
+			var noteBefore = new Note(_person, theDateBeforePeriod, _defaultScenario, "Test Note Before");
+			var noteAfter = new Note(_person, theDateAfterPeriod, _defaultScenario, "Test Note After");
+			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteBefore));
+			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteAfter));
+
+			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
+			
+			var archivedNotes = WithUnitOfWork.Get(() => NoteRepository.LoadAll().Where(x => x.Scenario.Id == _targetScenario.Id));
+			archivedNotes.Should().Be.Empty();
 		}
 
 		[Test]
