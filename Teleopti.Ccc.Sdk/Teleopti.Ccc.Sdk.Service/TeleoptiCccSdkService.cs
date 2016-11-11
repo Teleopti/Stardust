@@ -15,6 +15,7 @@ using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using log4net;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		private readonly ILifetimeScope _lifetimeScope;
 		private readonly ITenantPeopleSaver _tenantPeopleSaver;
 		private readonly IChangePassword _changePassword;
+		private ICurrentBusinessUnit _currentBusinessUnit;
 		private static readonly object PayrollExportLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(TeleoptiCccSdkService));
 		private readonly IAuthenticationFactory _authenticationFactory;
@@ -61,7 +63,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			 IFactoryProvider factoryProvider,
 			 ILifetimeScope lifetimeScope,
 			ITenantPeopleSaver tenantPeopleSaver,
-			IChangePassword changePassword)
+			IChangePassword changePassword, 
+			ICurrentBusinessUnit currentBusinessUnit)
 		{
 			_authenticationFactory = authenticationFactory;
 			_payrollResultFactory = payrollResultFactory;
@@ -69,6 +72,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			_lifetimeScope = lifetimeScope;
 			_tenantPeopleSaver = tenantPeopleSaver;
 			_changePassword = changePassword;
+			_currentBusinessUnit = currentBusinessUnit;
 			Logger.Info("Creating new instance of the service.");
 		}
 

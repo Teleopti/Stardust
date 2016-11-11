@@ -903,7 +903,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			var schedule = result.Single();
 			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
-			schedule.Timezone.DisplayName.Should().Be("(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi");
+			new[] {
+				"(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi",
+				"(UTC+08:00) Beijing, Chongqing, Hong Kong SAR, Urumqi" // This is changed on new OS version, both values are correct.
+			}.Should().Contain(schedule.Timezone.DisplayName);
 			schedule.Timezone.IanaId.Should().Be("Asia/Shanghai");
 		}
 
