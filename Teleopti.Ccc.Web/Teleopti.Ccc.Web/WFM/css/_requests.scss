@@ -10,7 +10,7 @@
         position:relative;
     }
 
-    md-tab-content{
+    md-tab-content.md-active{
         transform: inherit !important;//why transform nothing? what about all the position fixed element inside
     }
 
