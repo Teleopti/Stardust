@@ -46,10 +46,10 @@
 		</div>
 		<div class="con-flex">
 			<div class="wfm-switch panel-switch line-right">
-				<input id="switch1" ng-model="agentsInAlarm" type="checkbox"/>
+				<input id="switch1" ng-model="agentsInAlarm" type="checkbox" ng-disabled="pause"/>
 				<label  class="rta-agents-in-alarm-switch" for="switch1" ng-if="agents.length <= maxNumberOfAgents && !isLoading">
 					<span class="wfm-switch-label">{{'InAlarm'|translate}}</span>
-					<span class="wfm-switch-toggle" style="background:{{pause?'#E0E0E0':''}}"></span>
+					<span class="wfm-switch-toggle" ng-class="pause ? 'rta-disabled-switch' : ''"></span>
 				</label>
 				<span ng-if="agents.length > maxNumberOfAgents">Agents in alarm</span>
 			</div>
