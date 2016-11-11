@@ -1,9 +1,35 @@
 using System;
 using System.Collections.Generic;
+using log4net;
 using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
+	public class DeadLockRetrier
+	{
+		public void RetryOnDeadlock(Action action)
+		{
+			// make retry and warn logging an aspect?
+			var attempt = 1;
+			while (true)
+			{
+				try
+				{
+					action.Invoke();
+					break;
+				}
+				catch (DeadLockVictimException e)
+				{
+					attempt++;
+					if (attempt > 3)
+						throw;
+					LogManager.GetLogger(typeof(DeadLockRetrier))
+						.Warn($"Transaction deadlocked, running attempt {attempt}.", e);
+				}
+			}
+		}
+	}
+
 	public class DeadLockVictimException : Exception
 	{
 		public DeadLockVictimException(string message, Exception innerException):base(message, innerException)

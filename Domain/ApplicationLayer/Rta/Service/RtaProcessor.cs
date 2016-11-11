@@ -65,8 +65,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 					var events = eventCollector.Publish();
 					trace.EventsPublished(events);
-
-					_agentStateReadModelUpdater.Update(context, events);
+					
+					_agentStateReadModelUpdater.Update(context, events, context.DeadLockVictim);
 				}
 				catch(Exception)
 				{

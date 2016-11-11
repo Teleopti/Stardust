@@ -5,11 +5,9 @@ using Castle.Core.Internal;
 using Newtonsoft.Json;
 using NHibernate;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Infrastructure;
@@ -19,19 +17,21 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class AgentStatePersister : IAgentStatePersister
 	{
-		protected readonly ICurrentUnitOfWork _unitOfWork;
-		protected readonly IJsonSerializer _serializer;
+		private readonly ICurrentUnitOfWork _unitOfWork;
+		private readonly IJsonSerializer _serializer;
+		private readonly DeadLockVictimThrower _deadLockVictimThrower;
 
-		public AgentStatePersister(ICurrentUnitOfWork unitOfWork, IJsonSerializer serializer)
+		public AgentStatePersister(ICurrentUnitOfWork unitOfWork, IJsonSerializer serializer, DeadLockVictimThrower deadLockVictimThrower)
 		{
 			_unitOfWork = unitOfWork;
 			_serializer = serializer;
+			_deadLockVictimThrower = deadLockVictimThrower;
 		}
 
 		[LogInfo]
 		public virtual void Prepare(AgentStatePrepare model, DeadLockVictim deadLockVictim)
 		{
-			setDeadLockPriority(deadLockVictim);
+			_deadLockVictimThrower.SetDeadLockPriority(deadLockVictim);
 
 			if (model.ExternalLogons.IsNullOrEmpty())
 			{
@@ -156,7 +156,7 @@ VALUES
 		[LogInfo]
 		public virtual void InvalidateSchedules(Guid personId, DeadLockVictim deadLockVictim)
 		{
-			setDeadLockPriority(deadLockVictim);
+		 	_deadLockVictimThrower.SetDeadLockPriority(deadLockVictim);
 
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery("UPDATE [dbo].[AgentState] SET Schedule = NULL, NextCheck = NULL WHERE PersonId = :PersonId")
@@ -214,12 +214,12 @@ WHERE
 			if (updateSchedule)
 				query.SetParameter("Schedule", _serializer.SerializeObject(model.Schedule), NHibernateUtil.StringClob);
 
-			throwDeadlockVictimExceptionFor(() => query.ExecuteUpdate());
+			_deadLockVictimThrower.ThrowOnDeadlock(() => query.ExecuteUpdate());
 		}
 
 		public void Delete(Guid personId, DeadLockVictim deadLockVictim)
 		{
-			setDeadLockPriority(deadLockVictim);
+			_deadLockVictimThrower.SetDeadLockPriority(deadLockVictim);
 
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery("DELETE [dbo].[AgentState] WHERE PersonId = :PersonId")
@@ -283,22 +283,18 @@ WHERE
 		[LogInfo]
 		public virtual IEnumerable<AgentStateFound> Find(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim)
 		{
-			setDeadLockPriority(deadLockVictim);
+			_deadLockVictimThrower.SetDeadLockPriority(deadLockVictim);
 
 			var dataSourceIdUserCodes = externalLogons.Select(x => $"{x.DataSourceId}__{x.UserCode}").ToArray();
 			var sql = SelectAgentState + "WITH (UPDLOCK, ROWLOCK) WHERE DataSourceIdUserCode IN (:DataSourceIdUserCodes)";
 
-			IEnumerable<AgentStateFound> result = null;
-			throwDeadlockVictimExceptionFor(() =>
-			{
-				result = _unitOfWork.Current().Session().CreateSQLQuery(sql)
-					.SetParameterList("DataSourceIdUserCodes", dataSourceIdUserCodes)
-					.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
-					.SetReadOnly(true)
-					.List<AgentStateFound>()
-					;
-			});
-			return result;
+			return _deadLockVictimThrower.ThrowOnDeadlock(() =>
+					_unitOfWork.Current().Session().CreateSQLQuery(sql)
+						.SetParameterList("DataSourceIdUserCodes", dataSourceIdUserCodes)
+						.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
+						.SetReadOnly(true)
+						.List<AgentStateFound>()
+			);
 		}
 
 		[LogInfo]
@@ -326,27 +322,6 @@ WHERE
 				.GroupBy(x => x.PersonId, (guid, states) => states.First())
 				.ToArray()
 				;
-		}
-
-		private void setDeadLockPriority(DeadLockVictim deadLockVictim)
-		{
-			var sql = "SET DEADLOCK_PRIORITY " + (deadLockVictim == DeadLockVictim.Yes ? "LOW" : "HIGH");
-			_unitOfWork.Current().Session().CreateSQLQuery(sql).ExecuteUpdate();
-		}
-
-		private static void throwDeadlockVictimExceptionFor(Action action)
-		{
-			try
-			{
-				action.Invoke();
-			}
-			catch (DataSourceException e)
-			{
-				var sqlDeadlockException = e.AllExceptions().FirstOrDefault(x => x.IsSqlDeadlock());
-				if (sqlDeadlockException != null)
-					throw new DeadLockVictimException("Transaction deadlocked updating AgentState", sqlDeadlockException);
-				throw;
-			}
 		}
 
 		private static string SelectAgentState = @"SELECT * FROM [dbo].[AgentState] ";

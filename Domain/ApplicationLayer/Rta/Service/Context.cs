@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public Context(
 			DateTime utcNow,
+			DeadLockVictim deadLockVictim,
 			InputInfo input, 
 			Guid personId, 
 			Guid businessUnitId, 
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			Input = input ?? new InputInfo();
 			CurrentTime = utcNow;
+			DeadLockVictim = deadLockVictim;
 			PersonId = personId;
 			BusinessUnitId = businessUnitId;
 			TeamId = teamId;
@@ -117,6 +119,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public DateTime? AlarmStartTime => _appliedAlarm.StartTime(State, Stored, CurrentTime);
 
 		public bool CacheSchedules => _schedule.Value.NewSchedules;
+		public DeadLockVictim DeadLockVictim { get; set; }
 
 		public AgentState MakeAgentState()
 		{

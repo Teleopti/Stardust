@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class ContextLoaderWithFasterActivityCheck : ContextLoader
 	{
-		public ContextLoaderWithFasterActivityCheck(IScheduleCacheStrategy scheduleCacheStrategy, ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IScheduleReader scheduleReader, ProperAlarm appliedAlarm, IConfigReader config) : base(scheduleCacheStrategy, dataSource, databaseLoader, now, stateMapper, agentStatePersister, mappingReader, scheduleReader, appliedAlarm, config)
+		public ContextLoaderWithFasterActivityCheck(IScheduleCacheStrategy scheduleCacheStrategy, ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IScheduleReader scheduleReader, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier) : base(scheduleCacheStrategy, dataSource, databaseLoader, now, stateMapper, agentStatePersister, mappingReader, scheduleReader, appliedAlarm, config, deadLockRetrier)
 		{
 		}
 
@@ -41,18 +41,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IScheduleReader _scheduleReader;
 		private readonly ProperAlarm _appliedAlarm;
 		protected readonly IConfigReader _config;
+		private readonly DeadLockRetrier _deadLockRetrier;
 
 		public ContextLoader(
-			IScheduleCacheStrategy scheduleCacheStrategy, 
-			ICurrentDataSource dataSource, 
-			IDatabaseLoader databaseLoader, 
-			INow now, 
-			StateMapper stateMapper, 
-			IAgentStatePersister agentStatePersister, 
-			IMappingReader mappingReader, 
-			IScheduleReader scheduleReader, 
-			ProperAlarm appliedAlarm, 
-			IConfigReader config)
+			IScheduleCacheStrategy scheduleCacheStrategy,
+			ICurrentDataSource dataSource,
+			IDatabaseLoader databaseLoader,
+			INow now,
+			StateMapper stateMapper,
+			IAgentStatePersister agentStatePersister,
+			IMappingReader mappingReader,
+			IScheduleReader scheduleReader,
+			ProperAlarm appliedAlarm,
+			IConfigReader config,
+			DeadLockRetrier deadLockRetrier)
 		{
 			_scheduleCacheStrategy = scheduleCacheStrategy;
 			_dataSource = dataSource;
@@ -64,6 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_scheduleReader = scheduleReader;
 			_appliedAlarm = appliedAlarm;
 			_config = config;
+			_deadLockRetrier = deadLockRetrier;
 		}
 
 		public void For(StateInputModel input, Action<Context> action)
@@ -91,11 +94,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public void ForSynchronize(Action<Context> action)
 		{
 			var personIds = WithUnitOfWork(() =>
-				_agentStatePersister.GetStates()
-					.Where(x => x.StateCode != null)
-					.Select(x => x.PersonId)
-					.ToArray()
-				);
+					_agentStatePersister.GetStates()
+						.Where(x => x.StateCode != null)
+						.Select(x => x.PersonId)
+						.ToArray()
+			);
 			process(new synchronizeStrategy(_config, _agentStatePersister, action, personIds, _now.UtcDateTime()));
 		}
 
@@ -145,7 +148,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<StateInputModel> AllThings()
 			{
-				return new[] { _model };
+				return new[] {_model};
 			}
 
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<StateInputModel> things, Action<Exception> addException)
@@ -155,7 +158,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					var dataSourceId = ValidateSourceId(_databaseLoader, _model);
 
 					var userCode = _model.UserCode;
-					var agentStates = _persister.Find(new ExternalLogon {DataSourceId = dataSourceId, UserCode = userCode}, DeadLockVictim.No);
+					var agentStates = _persister.Find(new ExternalLogon {DataSourceId = dataSourceId, UserCode = userCode}, DeadLockVictim);
 					if (agentStates.IsEmpty())
 						throw new InvalidUserCodeException($"No person found for SourceId {_model.SourceId} and UserCode {_model.UserCode}");
 
@@ -208,7 +211,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					DataSourceId = dataSourceId,
 					UserCode = x.UserCode
 				});
-				var agentStates = _persister.Find(userCodes, DeadLockVictim.No);
+				var agentStates = _persister.Find(userCodes, DeadLockVictim);
 
 				userCodes
 					.Where(x => agentStates.All(s => s.UserCode != x.UserCode))
@@ -243,6 +246,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				_things = things;
 				ParallelTransactions = _config.ReadValue("RtaActivityChangesParallelTransactions", 7);
 				MaxTransactionSize = _config.ReadValue("RtaActivityChangesMaxTransactionSize", 100);
+				DeadLockVictim = DeadLockVictim.Yes;
 			}
 
 			public override IEnumerable<ExternalLogon> AllThings()
@@ -252,7 +256,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogon> ids, Action<Exception> addException)
 			{
-				return _persister.Find(ids, DeadLockVictim.Yes);
+				return _persister.Find(ids, DeadLockVictim);
 			}
 
 			public override InputInfo GetInputFor(AgentState state)
@@ -281,7 +285,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogon> ids, Action<Exception> addException)
 			{
-				return _persister.Find(ids, DeadLockVictim.No);
+				return _persister.Find(ids, DeadLockVictim);
 			}
 
 			public override InputInfo GetInputFor(AgentState state)
@@ -342,22 +346,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				IAgentStatePersister persister,
 				Action<Context> action,
 				DateTime time
-				)
+			)
 			{
 				_config = config;
 				_persister = persister;
 				Action = action;
 				CurrentTime = time;
+				DeadLockVictim = DeadLockVictim.No;
 				UpdateAgentState = c => _persister.Update(c.MakeAgentState(), c.CacheSchedules);
 			}
 
 			public DateTime CurrentTime { get; }
+			public DeadLockVictim DeadLockVictim { get; protected set; }
 			public int ParallelTransactions { get; protected set; }
 			public int MaxTransactionSize { get; protected set; }
 
 			public abstract IEnumerable<T> AllThings();
 			public abstract IEnumerable<AgentState> GetStatesFor(IEnumerable<T> things, Action<Exception> addException);
 			public abstract InputInfo GetInputFor(AgentState state);
+
 			public virtual Func<AgentState> GetStored(AgentState state)
 			{
 				return () => state;
@@ -393,6 +400,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public interface IStrategy<T>
 		{
 			DateTime CurrentTime { get; }
+			DeadLockVictim DeadLockVictim { get; }
 
 			int ParallelTransactions { get; }
 			int MaxTransactionSize { get; }
@@ -417,8 +425,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (allThingsSize == 0)
 				return;
 			var maxTransactionSize = strategy.MaxTransactionSize;
-			if (allThingsSize <= maxTransactionSize * strategy.ParallelTransactions)
-				maxTransactionSize = (int) Math.Ceiling(allThingsSize / (double) strategy.ParallelTransactions);
+			if (allThingsSize <= maxTransactionSize*strategy.ParallelTransactions)
+				maxTransactionSize = (int) Math.Ceiling(allThingsSize/(double) strategy.ParallelTransactions);
 
 			var shared = new Lazy<sharedData>(() => new sharedData
 			{
@@ -472,31 +480,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				new ParallelOptions {MaxDegreeOfParallelism = strategy.ParallelTransactions},
 				data =>
 				{
-					// make retry and warn logging an aspect?
-					var attempt = 1;
-					while (true)
+					try
 					{
-						try
+						_deadLockRetrier.RetryOnDeadlock(() =>
 						{
 							Transaction(tenant, strategy, data);
-							break;
-						}
-						catch (DeadLockVictimException e)
-						{
-							attempt++;
-							if (attempt > 3)
-							{
-								exceptions.Add(e);
-								break;
-							}
-							LogManager.GetLogger(typeof(ContextLoader))
-								.Warn($"Transaction deadlocked, running attempt {attempt}.", e);
-						}
-						catch (Exception e)
-						{
-							exceptions.Add(e);
-							break;
-						}
+						});
+					}
+					catch (Exception e)
+					{
+						exceptions.Add(e);
 					}
 				}
 			);
@@ -526,6 +519,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					strategy.Action.Invoke(new Context(
 						strategy.CurrentTime,
+						strategy.DeadLockVictim,
 						strategy.GetInputFor(state),
 						state.PersonId,
 						state.BusinessUnitId,

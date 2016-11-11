@@ -36,6 +36,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			else
 				builder.RegisterType<ContextLoader>().As<IContextLoader>().ApplyAspects().SingleInstance();
 			builder.RegisterType<ThreeDays>().As<IScheduleCacheStrategy>().SingleInstance();
+			builder.RegisterType<DeadLockRetrier>().SingleInstance();
+			builder.RegisterType<DeadLockVictimThrower>().SingleInstance();
 
 			_config.Cache().This<IDatabaseLoader>((c, b) => b
 				.CacheMethod(x => x.Datasources())

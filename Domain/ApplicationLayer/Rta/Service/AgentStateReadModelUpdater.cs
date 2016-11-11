@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IAgentStateReadModelUpdater
 	{
-		void Update(Context context, IEnumerable<IEvent> events);
+		void Update(Context context, IEnumerable<IEvent> events, DeadLockVictim deadLockVictim);
 	}
 
 	public class AgentStateReadModelUpdater : IAgentStateReadModelUpdater
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_now = now;
 		}
 
-		public void Update(Context context, IEnumerable<IEvent> events)
+		public void Update(Context context, IEnumerable<IEvent> events, DeadLockVictim deadLockVictim)
 		{
 			var model = _persister.Load(context.PersonId) ?? new AgentStateReadModel();
 			if (model.IsDeleted) return;
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			applyEvents(model, events);
 
-			_persister.Persist(model);
+			_persister.Persist(model, deadLockVictim);
 		}
 		
 		private void applyEvents(AgentStateReadModel model, IEnumerable<IEvent> events)
