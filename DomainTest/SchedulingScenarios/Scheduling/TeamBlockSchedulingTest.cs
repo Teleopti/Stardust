@@ -288,5 +288,51 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.GetSingle(currentDay, agent)
 				.Should().Not.Be.Null();
 		}
+
+		[Test]
+		public void ShouldConsiderCorrectShiftCategoryLimitation()
+		{
+			var firstDay = new DateOnly(2015, 10, 12);
+			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("_", activity);
+			var scenario = ScenarioRepository.Has("_");
+			var team = new Team { Description = new Description("team") };
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var contract = new Contract("_");
+			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
+			var agent = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
+			var shiftCategoryA = new ShiftCategory("A").WithId();
+			var shiftCategoryB = new ShiftCategory("B").WithId();
+			var ruleSetA = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategoryA));
+			var ruleSetB = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategoryB));
+			var ruleSetBag = new RuleSetBag(ruleSetA);
+			ruleSetBag.AddRuleSet(ruleSetB);
+			agent.Period(firstDay).RuleSetBag = ruleSetBag;
+			var shiftCategoryLimitationA = new ShiftCategoryLimitation(shiftCategoryA) {MaxNumberOf = 0, Weekly = true};
+			var shiftCategoryLimitationB = new ShiftCategoryLimitation(shiftCategoryB) {MaxNumberOf = 7, Weekly = true};
+			agent.SchedulePeriod(firstDay).AddShiftCategoryLimitation(shiftCategoryLimitationA);
+			agent.SchedulePeriod(firstDay).AddShiftCategoryLimitation(shiftCategoryLimitationB);
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
+			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
+			DayOffTemplateRepository.Add(dayOffTemplate);
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			{
+				DayOffTemplate = dayOffTemplate,
+				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
+				UseTeam = true,
+				TagToUseOnScheduling = NullScheduleTag.Instance,
+				UseShiftCategoryLimitations = true
+			});
+
+			Target.DoScheduling(period);
+
+			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
+			foreach (var personAssignment in assignments)
+			{
+				if (personAssignment.AssignedWithDayOff(dayOffTemplate))continue;
+				personAssignment.ShiftCategory.Should().Be.EqualTo(shiftCategoryB);
+			}
+		}
 	}
 }

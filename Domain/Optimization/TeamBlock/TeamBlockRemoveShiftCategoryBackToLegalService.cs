@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 					foreach (var lim in schedulePeriod.ShiftCategoryLimitationCollection())
 					{
-						var isOnMax = _shiftCategoryLimitCounter.HaveMaxOfShiftCategory(limitation, teamInfo, dateOnly);
+						var isOnMax = _shiftCategoryLimitCounter.HaveMaxOfShiftCategory(lim, teamInfo, dateOnly);
 						if (isOnMax) schedulingOptions.NotAllowedShiftCategories.Add(lim.ShiftCategory);			
 					}
 
