@@ -43,7 +43,24 @@
 						endDate: moment().utc().add(1, 'months').startOf('month').toDate()
 					}
 				};
+				var validateArchivingParameters = function (fromScenario, toScenario, period, teamSelection) {
+					var validationResult = { messages: [] };
 
+					if (fromScenario == null)
+						validationResult.messages.push("You need to pick a scenario to archive from.");
+					else if(!fromScenario.DefaultScenario)
+						validationResult.messages.push("The scenario you archive from must be the default scenario.");
+					if (toScenario == null)
+						validationResult.messages.push("You need to pick a scenario to archive to.");
+					else if (toScenario.DefaultScenario)
+						validationResult.messages.push("The scenario you archive to must not be the default scenario.");
+					if (teamSelection.length === 0)
+						validationResult.messages.push("Pick atleast one team.");
+					if (moment(period.endDate).diff(period.startDate, 'days') > 65)
+						validationResult.messages.push("Pick a smaller date period.");
+					validationResult.successful = validationResult.messages.length === 0;
+					return validationResult;
+				}
 				var resetTracking = function() {
 					vm.tracking = {
 						totalMessages: 0,
@@ -91,6 +108,15 @@
 				};
 				vm.runArchiving = function(fromScenario, toScenario, period, teamSelection) {
 					if (!vm.canRunArchiving()) return;
+					var validationResult = validateArchivingParameters(fromScenario, toScenario, period, teamSelection);
+					if (!validationResult.successful) {
+						console.log(validationResult);
+						angular.forEach(validationResult.messages, function(value) {
+							NoticeService.error(value, null, true);
+						});
+						return;
+					}
+						
 					resetTracking();
 					vm.showProgress = true;
 					var archiveScheduleModel = {
