@@ -225,19 +225,9 @@
 					return RtaRouteService.urlForSelectSkill();
 				};
 
-				$scope.goBackToRootWithUrl = function() {
-					if($scope.skillId !== null)
-					 return RtaRouteService.urlForSitesBySkills($scope.skillId);
-					return RtaRouteService.urlForSitesBySkillArea($scope.skillAreaId);
-				};
-
-				$scope.goBackToTeamsWithUrl = function()
-				{
-				if(skillIds.length > 0)
-					return RtaRouteService.urlForTeamsBySkills(agentsInfo[0].SiteId, skillIds[0]);
-				return RtaRouteService.urlForTeams(agentsInfo[0].SiteId);
-			};
-
+				$scope.goBackToRootWithUrl = $scope.skillId !== null ?
+					RtaRouteService.urlForSitesBySkills($scope.skillId) :
+					RtaRouteService.urlForSitesBySkillArea($scope.skillAreaId);
 
 				$scope.getStateForTeams = function() {
 					return $scope.skillId !== null ? stateForTeamsBySkill : stateForTeamsBySkillArea;
@@ -269,17 +259,27 @@
 				};
 
 				function goToAgents(selectedItemIds) {
-					$scope.sites ?
-						RtaRouteService.goToAgents({
-							skillIds: $scope.skillIds,
-							skillAreaId: $scope.skillAreaId,
-							siteIds: selectedItemIds
-						}) :
-						RtaRouteService.goToAgents({
-							skillIds: $scope.skillIds,
-							skillAreaId: $scope.skillAreaId,
-							teamIds: selectedItemIds
-						});
+					if ($scope.selectedSkill != null) {
+						$scope.sites ?
+							RtaRouteService.goToAgents({
+								skillIds: $scope.skillIds,
+								siteIds: selectedItemIds
+							}) :
+							RtaRouteService.goToAgents({
+								skillIds: $scope.skillIds,
+								teamIds: selectedItemIds
+							});
+					} else {
+						$scope.sites ?
+							RtaRouteService.goToAgents({
+								skillAreaId: $scope.skillAreaId,
+								siteIds: selectedItemIds
+							}) :
+							RtaRouteService.goToAgents({
+								skillAreaId: $scope.skillAreaId,
+								teamIds: selectedItemIds
+							});
+					}
 				};
 
 				$scope.$watch('selectedSkill', function(newValue, oldValue) {
