@@ -1,7 +1,7 @@
 ﻿<div ui-view>
 	<div ng-show="vm.showProgress">
-		<md-progress-linear md-mode="determinate" ng-value="vm.progress"></md-progress-linear>
-		<p> {{vm.progress | number:0}}%</p>
+		<md-progress-linear md-mode="determinate" ng-value="vm.tracking.progress"></md-progress-linear>
+		<p> {{vm.tracking.progress | number:0}}%</p>
 	</div>
 
 	<div class="view-header with-fab with-desc">
@@ -11,7 +11,7 @@
 		</div>
 
 		<div class="fab-wrapper">
-			<button id="archive-btn" class="wfm-fab material-depth-1" ng-click="vm.runArchiving(vm.fromScenario, vm.toScenario, vm.period, vm.selectedTeams)" ng-disabled="!vm.canRunArchiving()">
+			<button id="archive-btn" class="wfm-fab material-depth-1" ng-click="vm.runArchiving(vm.selection.fromScenario, vm.selection.toScenario, vm.selection.period, vm.selection.teams)" ng-disabled="!vm.canRunArchiving()">
 				<i class="mdi mdi-file-document"></i>
 				<md-tooltip>Run archiving</md-tooltip>
 			</button>
@@ -22,8 +22,8 @@
 			<div class="con-flex">
 				<form>
 					<label>From Scenario:</label>
-					<md-select class="inline-select" ng-model="vm.fromScenario" placeholder="Scenario">
-						<md-option ng-repeat="scenario in vm.scenarios | filter:{DefaultScenario: true}" ng-value="scenario" ng-disabled="true">{{scenario.Name}}</md-option>
+					<md-select class="inline-select" ng-model="vm.selection.fromScenario" placeholder="Scenario">
+						<md-option ng-repeat="scenario in vm.scenarios | defaultScenario:true" ng-value="scenario" ng-disabled="true">{{scenario.Name}}</md-option>
 					</md-select>
 				</form>
 			</div>
@@ -31,15 +31,15 @@
 			<div class="con-flex">
 				<form>
 					<label>To Scenario:</label>
-					<md-select class="inline-select" ng-model="vm.toScenario" placeholder="Scenario">
-						<md-option ng-repeat="scenario in vm.scenarios | filter:{DefaultScenario: false}" ng-value="scenario">{{scenario.Name}}</md-option>
+					<md-select class="inline-select" ng-model="vm.selection.toScenario" placeholder="Scenario">
+						<md-option ng-repeat="scenario in vm.scenarios | defaultScenario:false" ng-value="scenario">{{scenario.Name}}</md-option>
 					</md-select>
 				</form>
 			</div>
 		</div>
 		<div class="con-row">
 			<div class="con-flex">
-				<date-range-picker class="request-date-range-picker" ng-model="vm.period" template-type="vm.dateRangeTemplateType">
+				<date-range-picker class="request-date-range-picker" ng-model="vm.selection.period" template-type="vm.dateRangeTemplateType">
 				</date-range-picker>
 			</div>
 		</div>

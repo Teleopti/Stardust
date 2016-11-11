@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular.module('wfm.resourceplanner').service('HierarchyService', [
-		'$q', '$filter', 'PermissionsService', function ($q, $filter, PermissionsService) {
+		'$q', '$filter', '$resource', function ($q, $filter, $resource) {
 			var dataFlat = [];
 			
 			var flatData = function (dataTab, parentNode) {
@@ -18,13 +18,18 @@
 					}
 				});
 			};
+
+			var organisationSelections = $resource('../api/ResourcePlanner/OrganizationSelection', {}, {
+				query: { method: 'GET', params: {}, isArray: false }
+			});
+
 			var hierarchyService = {};
-			hierarchyService.organization = { BusinessUnit: [{ BusinessUnit: { Sites: [] } }], DynamicOptions: [] };
+			hierarchyService.organization = { BusinessUnit: [{ BusinessUnit: { Sites: [] } }] };
 			hierarchyService.displayedData = {};
 			
 			hierarchyService.refreshOrganizationSelection = function () {
-				PermissionsService.organizationSelections.query().$promise.then(function (result) {
-					hierarchyService.organization = { BusinessUnit: [result.BusinessUnit], DynamicOptions: result.DynamicOptions };
+				organisationSelections.query().$promise.then(function (result) {
+					hierarchyService.organization = { BusinessUnit: [result.BusinessUnit] };
 					flatData(hierarchyService.organization.BusinessUnit);
 				});
 			};

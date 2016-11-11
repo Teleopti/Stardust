@@ -4,16 +4,15 @@
 	angular.module('wfm.resourceplanner').controller('HierarchyController', [
 		'$scope', '$filter', 'HierarchyService',
 			function ($scope, $filter, HierarchyService) {
-				$scope.organization = {  };
+				$scope.organization = {};
 
 				var formatNode = function (dataNode) {
 					return { id: dataNode.Id, type: dataNode.Type, name: dataNode.Name, selected: dataNode.selected };
 				}
 
-				$scope.$watch(function() { return $scope.$parent.deselectedDataNodes; },
-					function() {
+				$scope.$watch(function () { return $scope.$parent.deselectedDataNodes; },
+					function () {
 						if (!$scope.$parent.deselectedDataNodes) return;
-						//$scope.multiDeslectConfirmed();
 						$scope.$parent.deselectedDataNodes = false;
 					}
 				);
@@ -27,17 +26,7 @@
 				var uiTree = {};
 				uiTree.deselectParent = function (node) {
 					if (!node.$parentNodeScope) return;
-					var childrenOfParent = uiTree.getChildrenOfParent(node);
-					if (childrenOfParent.length > 0) {
-						var bu = $filter("filter")(childrenOfParent, { Type: "BusinessUnit" });
-						var site = $filter("filter")(childrenOfParent, { Type: "Site" });
-						//if (bu.length > 0) {
-						//	HierarchyService.deleteAvailableData($scope.selectedRole, bu[0].Type, bu[0].Id);
-						//}
-						//else if (site.length > 0) {
-						//	HierarchyService.deleteAvailableData($scope.selectedRole, site[0].Type, site[0].Id);
-						//}
-					}
+					uiTree.getChildrenOfParent(node);
 				};
 
 				uiTree.getChildrenOfParent = function (node) {
@@ -51,7 +40,7 @@
 					});
 					if (selectedChildren.length === 0) {
 						parent.$modelValue.selected = false;
-						highestLevelNode.push({ Type: parent.$modelValue.Type, Id: parent.$modelValue.Id });
+						highestLevelNode.push(formatNode(parent.$modelValue));
 					}
 					if (parent.$parentNodeScope) {
 						highestLevelNode.concat(uiTree.getChildrenOfParent(parent));
@@ -62,7 +51,9 @@
 				uiTree.toggleChildSelection = function (node, state) {
 					var children = [];
 					node.forEach(function (child) {
-						child.selected = state;
+						if (child.Choosable) {
+							child.selected = state;
+						}
 						children.push(formatNode(child));
 
 						if (child.ChildNodes.length > 0) {
@@ -87,16 +78,22 @@
 
 				$scope.toggleOrganizationSelection = function (node) {
 					var dataNode = node.$modelValue;
-					dataNode.selected = !dataNode.selected;
+					if (dataNode.Choosable) {
+						dataNode.selected = !dataNode.selected;
+					}
 					var formattedNodes = [formatNode(dataNode)];
 					var children = uiTree.toggleChildSelection(dataNode.ChildNodes, dataNode.selected);
 					formattedNodes = children.concat(formattedNodes);
 					$scope.$emit('teamSelectionChanged', formattedNodes);
+
 					if (dataNode.selected) {
 						uiTree.toggleParentSelection(node);
 					}
+					else if (dataNode.ChildNodes.length === 0) {
+						uiTree.deselectParent(node);
+					}
 				};
-				
+
 				HierarchyService.refreshOrganizationSelection();
 			}
 	]);

@@ -22,7 +22,7 @@
 <!-- Nested node template for data -->
 <script type="text/ng-template" id="nodes_bu_renderer.html">
 	<ul class="wfm-list">
-		<li ng-click="toggleOrganizationSelection(this)" ng-class="{dataHeader: node.ChildNodes.length > 0}">
+		<li ng-click="toggleOrganizationSelection(this)" ng-class="{dataHeader: node.ChildNodes.length > 0, 'non-selectable-list-item': !node.Choosable}">
 			<span class="list-item-container">
 				{{node.Name}}
 			</span>

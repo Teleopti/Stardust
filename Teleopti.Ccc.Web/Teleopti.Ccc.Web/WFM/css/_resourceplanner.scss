@@ -286,3 +286,8 @@ background-color: #cacaca;
 .hierarchy-teams {
     margin-left: 35px;
 }
+
+.non-selectable-list-item:hover{
+	background-color: inherit !important;
+	cursor: not-allowed !important;
+}
