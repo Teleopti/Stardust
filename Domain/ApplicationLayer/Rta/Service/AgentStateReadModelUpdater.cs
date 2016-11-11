@@ -22,14 +22,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_now = now;
 		}
 
-		public AgentStateReadModel LoadModel(Context context)
-		{
-			return _persister.Get(context.PersonId) ?? new AgentStateReadModel();
-		}
-
 		public void Update(Context context, IEnumerable<IEvent> events)
 		{
-			var model = LoadModel(context);
+			var model = _persister.Get(context.PersonId) ?? new AgentStateReadModel();
 			if (model.IsDeleted) return;
 
 			model.ReceivedTime = context.CurrentTime;
@@ -38,11 +33,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			model.Activity = context.Schedule.CurrentActivityName();
 			model.NextActivity = context.Schedule.NextActivityName();
 			model.NextActivityStartTime = context.Schedule.NextActivityStartTime();
-
-			model.StateCode = context.StateCode;
-			model.StateName = context.State.StateGroupName();
-			model.StateGroupId = context.State.StateGroupId();
-			model.StateStartTime = context.StateStartTime;
 
 			model.RuleName = context.State.RuleName();
 			model.RuleStartTime = context.RuleStartTime;
@@ -59,17 +49,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					StartTime = a.StartDateTime,
 					EndTime = a.EndDateTime,
 					Name = a.Name
-				});
+				}).ToArray();
 
-			BeforePersist(model, events);
+			applyEvents(model, events);
+
 			_persister.Persist(model);
 		}
-
-		public void BeforePersist(AgentStateReadModel model, IEnumerable<IEvent> events)
-		{
-			applyEvents(model, events);
-		}
-
+		
 		private void applyEvents(AgentStateReadModel model, IEnumerable<IEvent> events)
 		{
 			foreach (var @event in events)
@@ -80,11 +66,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					handle(model, @event as PersonInAdherenceEvent);
 				else if (@event is PersonNeutralAdherenceEvent)
 					handle(model, @event as PersonNeutralAdherenceEvent);
+				else if (@event is PersonStateChangedEvent)
+					handle(model, @event as PersonStateChangedEvent);
 			}
 
 			if (model.OutOfAdherences != null)
 				model.OutOfAdherences = model.OutOfAdherences
-					.Where(x => x.EndTime == null || x.EndTime > _now.UtcDateTime().AddHours(-1));
+					.Where(x => x.EndTime == null || x.EndTime > _now.UtcDateTime().AddHours(-1))
+					.ToArray()
+					;
+		}
+		
+		private static void handle(AgentStateReadModel model, PersonStateChangedEvent @event)
+		{
+			model.StateCode = @event.StateCode;
+			model.StateName = @event.StateGroupName;
+			model.StateGroupId = @event.StateGroupId;
+			model.StateStartTime = @event.Timestamp;
 		}
 
 		private static void handle(AgentStateReadModel model, PersonNeutralAdherenceEvent @event)

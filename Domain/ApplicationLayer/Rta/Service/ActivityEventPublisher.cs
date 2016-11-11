@@ -11,22 +11,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_eventPublisher = eventPublisher;
 		}
 
-		public void Publish(Context info)
+		public void Publish(Context context)
 		{
-			if (!info.Schedule.ActivityChanged())
+			if (!context.Schedule.ActivityChanged())
 				return;
 
-			var currentActivity = info.Schedule.CurrentActivity();
+			var currentActivity = context.Schedule.CurrentActivity();
 
 			if (currentActivity != null)
 			{
 				_eventPublisher.Publish(new PersonActivityStartEvent
 				{
-					BelongsToDate = info.Schedule.BelongsToDate,
-					PersonId = info.PersonId,
-					StartTime = info.Schedule.ActivityStartTime().Value,
+					BelongsToDate = context.Schedule.BelongsToDate,
+					PersonId = context.PersonId,
+					StartTime = context.Schedule.ActivityStartTime().Value,
 					Name = currentActivity.Name,
-					Adherence = info.Adherence.AdherenceForStoredStateAndCurrentActivity(),
+					Adherence = context.Adherence.AdherenceForStoredStateAndCurrentActivity(),
 				});
 			}
 

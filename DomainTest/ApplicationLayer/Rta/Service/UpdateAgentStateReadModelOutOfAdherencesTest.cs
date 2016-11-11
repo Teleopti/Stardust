@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -245,7 +246,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2016-05-30 10:00", "2016-05-30 17:00")
 				.WithRule("out", phone, -1, Adherence.Out)
-				.WithRule("ready", phone, 0, Adherence.In);
+				.WithRule("ready", phone, 0, Adherence.In)
+				.WithRule("incall", phone, 0, Adherence.In);
 
 			Now.Is("2016-05-30 10:00");
 			Target.SaveState(new StateForTest
@@ -260,7 +262,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "ready"
 			});
 			Now.Is("2016-05-30 11:15");
-			Target.CheckForActivityChanges(Database.TenantName());
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "incall"
+			});
 
 			Database.PersistedReadModel.OutOfAdherences
 				.Should().Be.Empty();
