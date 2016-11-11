@@ -122,14 +122,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleDictionary[person]);
 
-
-			var errorResponses = scheduleDictionary.Modify( sd , businessRulesForPersonAccountUpdate).ToList();
-
-			if (errorResponses.Count > 0)
-			{
-				command.ErrorMessages = errorResponses.Select(x => x.Message).ToList();
-				return;
-			}
+			scheduleDictionary.Modify( sd , businessRulesForPersonAccountUpdate).ToList();		
 
 			var range = scheduleDictionary[person];
 			var diffsForTargetDate = new DifferenceCollection<IPersistableScheduleData>();
