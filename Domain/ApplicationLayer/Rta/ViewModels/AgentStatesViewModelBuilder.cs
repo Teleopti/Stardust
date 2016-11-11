@@ -77,51 +77,51 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public AgentStatesViewModel For(ViewModelFilter filter)
 		{
 			if (filter.SiteIds != null && filter.SkillIds != null)
-				return build(_agentStateReadModelReader.LoadForSitesAndSkills(filter.SiteIds, filter.SkillIds));
+				return build(_agentStateReadModelReader.ReadForSitesAndSkills(filter.SiteIds, filter.SkillIds));
 			if (filter.SiteIds != null)
-				return build(_agentStateReadModelReader.LoadForSites(filter.SiteIds));
+				return build(_agentStateReadModelReader.ReadForSites(filter.SiteIds));
 			if (filter.TeamIds != null && filter.SkillIds != null)
-				return build(_agentStateReadModelReader.LoadForTeamsAndSkills(filter.TeamIds, filter.SkillIds));
+				return build(_agentStateReadModelReader.ReadForTeamsAndSkills(filter.TeamIds, filter.SkillIds));
 			if (filter.TeamIds != null)
-				return build(_agentStateReadModelReader.LoadForTeams(filter.TeamIds));
-			return build(_agentStateReadModelReader.LoadForSkills(filter.SkillIds));
+				return build(_agentStateReadModelReader.ReadForTeams(filter.TeamIds));
+			return build(_agentStateReadModelReader.ReadForSkills(filter.SkillIds));
 		}
 		
 		public AgentStatesViewModel InAlarmFor(ViewModelFilter filter)
 		{
 			if (filter.SiteIds != null && filter.SkillIds != null)
-				return build(_agentStateReadModelReader.LoadInAlarmsForSitesAndSkills(filter.SiteIds, filter.SkillIds));
+				return build(_agentStateReadModelReader.ReadInAlarmsForSitesAndSkills(filter.SiteIds, filter.SkillIds));
 			if(filter.SiteIds != null)
-				return build(_agentStateReadModelReader.LoadInAlarmsForSites(filter.SiteIds));
+				return build(_agentStateReadModelReader.ReadInAlarmsForSites(filter.SiteIds));
 			if (filter.TeamIds != null && filter.SkillIds != null)
-				return build(_agentStateReadModelReader.LoadInAlarmsForTeamsAndSkills(filter.TeamIds, filter.SkillIds));
+				return build(_agentStateReadModelReader.ReadInAlarmsForTeamsAndSkills(filter.TeamIds, filter.SkillIds));
 			if (filter.TeamIds != null)
-				return build(_agentStateReadModelReader.LoadInAlarmsForTeams(filter.TeamIds));
-			return build(_agentStateReadModelReader.LoadInAlarmsForSkills(filter.SkillIds));
+				return build(_agentStateReadModelReader.ReadInAlarmsForTeams(filter.TeamIds));
+			return build(_agentStateReadModelReader.ReadInAlarmsForSkills(filter.SkillIds));
 		}
 		
 		public AgentStatesViewModel InAlarmExcludingPhoneStatesFor(ViewModelFilter filter, IEnumerable<Guid?> excludedPhoneStates)
 		{
 			if (filter.SiteIds != null && filter.SkillIds != null)
-				return build(_agentStateReadModelReader.LoadInAlarmExcludingPhoneStatesForSitesAndSkill(filter.SiteIds, filter.SkillIds, excludedPhoneStates));
+				return build(_agentStateReadModelReader.ReadInAlarmExcludingPhoneStatesForSitesAndSkill(filter.SiteIds, filter.SkillIds, excludedPhoneStates));
 			if (filter.SiteIds != null)
-				return build(_agentStateReadModelReader.LoadInAlarmExcludingPhoneStatesForSites(filter.SiteIds, excludedPhoneStates));
+				return build(_agentStateReadModelReader.ReadInAlarmExcludingPhoneStatesForSites(filter.SiteIds, excludedPhoneStates));
 			if (filter.TeamIds != null && filter.SkillIds != null)
-				return build(_agentStateReadModelReader.LoadInAlarmExcludingPhoneStatesForTeamsAndSkill(filter.TeamIds, filter.SkillIds, excludedPhoneStates));
+				return build(_agentStateReadModelReader.ReadInAlarmExcludingPhoneStatesForTeamsAndSkill(filter.TeamIds, filter.SkillIds, excludedPhoneStates));
 			if (filter.TeamIds != null)
-				return build(_agentStateReadModelReader.LoadInAlarmExcludingPhoneStatesForTeams(filter.TeamIds, excludedPhoneStates));
-			return build(_agentStateReadModelReader.LoadInAlarmExcludingPhoneStatesForSkills(filter.SkillIds, excludedPhoneStates));
+				return build(_agentStateReadModelReader.ReadInAlarmExcludingPhoneStatesForTeams(filter.TeamIds, excludedPhoneStates));
+			return build(_agentStateReadModelReader.ReadInAlarmExcludingPhoneStatesForSkills(filter.SkillIds, excludedPhoneStates));
 		}
 
 
 		public AgentStatesViewModel ForSites(Guid[] siteIds)
 		{
-			return build(_agentStateReadModelReader.LoadForSites(siteIds));
+			return build(_agentStateReadModelReader.ReadForSites(siteIds));
 		}
 
 		public AgentStatesViewModel ForTeams(Guid[] teamIds)
 		{
-			return build(_agentStateReadModelReader.LoadForTeams(teamIds));
+			return build(_agentStateReadModelReader.ReadForTeams(teamIds));
 		}
 		
 		private AgentStatesViewModel build(IEnumerable<AgentStateReadModel> states)

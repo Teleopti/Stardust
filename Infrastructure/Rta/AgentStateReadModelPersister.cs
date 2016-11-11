@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				;
 		}
 
-		public AgentStateReadModel Get(Guid personId)
+		public AgentStateReadModel Load(Guid personId)
 		{
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(@"SELECT * FROM [ReadModel].[AgentState] WHERE PersonId = :PersonId")

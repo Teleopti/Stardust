@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				PersonId = personId
 			});
 
-			var result = Target.LoadForTeam(teamId);
+			var result = Target.ReadForTeam(teamId);
 
 			result.Single().PersonId.Should().Be(personId);
 		}
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			Persister.Persist(new AgentStateReadModelForTest { TeamId = teamId, PersonId = Guid.NewGuid() });
 			Persister.Persist(new AgentStateReadModelForTest { TeamId = Guid.Empty, PersonId = Guid.NewGuid() });
 
-			var result = Target.LoadForTeam(teamId);
+			var result = Target.ReadForTeam(teamId);
 
 			result.Count().Should().Be(2);
 		}
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			Persister.Persist(new AgentStateReadModelForTest { SiteId = siteId2, PersonId = Guid.NewGuid() });
 			Persister.Persist(new AgentStateReadModelForTest { SiteId = Guid.Empty, PersonId = Guid.NewGuid() });
 
-			var result = Target.LoadForSites(new[] { siteId1, siteId2 });
+			var result = Target.ReadForSites(new[] { siteId1, siteId2 });
 
 			result.Count().Should().Be(2);
 		}
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			Persister.Persist(new AgentStateReadModelForTest { TeamId = teamId2, PersonId = Guid.NewGuid() });
 			Persister.Persist(new AgentStateReadModelForTest { TeamId = Guid.Empty, PersonId = Guid.NewGuid() });
 
-			var result = Target.LoadForTeams(new[] { teamId1, teamId2 });
+			var result = Target.ReadForTeams(new[] { teamId1, teamId2 });
 
 			result.Count().Should().Be(2);
 		}
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				IsRuleAlarm = false
 			});
 
-			var result = Target.LoadInAlarmsForTeams(new[] { teamId });
+			var result = Target.ReadInAlarmsForTeams(new[] { teamId });
 
 			result.Single().PersonId.Should().Be(personId1);
 		}
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				IsRuleAlarm = true
 			});
 
-			var result = Target.LoadInAlarmsForTeams(new[] { teamId });
+			var result = Target.ReadInAlarmsForTeams(new[] { teamId });
 
 			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				IsRuleAlarm = false
 			});
 
-			var result = Target.LoadInAlarmsForSites(new[] { siteId });
+			var result = Target.ReadInAlarmsForSites(new[] { siteId });
 
 			result.Single().PersonId.Should().Be(personId1);
 		}
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				StateGroupId = phoneState
 			});
 
-			Target.LoadInAlarmsForSites(new[] { site })
+			Target.ReadInAlarmsForSites(new[] { site })
 				.Single().StateGroupId.Should().Be(phoneState);
 		}
 
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				IsRuleAlarm = true
 			});
 
-			var result = Target.LoadInAlarmsForSites(new[] { siteId });
+			var result = Target.ReadInAlarmsForSites(new[] { siteId });
 
 			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				}
 			});
 
-			var result = Target.LoadForTeam(teamId).Single();
+			var result = Target.ReadForTeam(teamId).Single();
 
 			result.Shift.Single().Color.Should().Be(Color.Green.ToArgb());
 			result.Shift.Single().StartTime.Should().Be("2016-05-30 08:00".Utc());
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				}
 			});
 
-			var outOfAdherence = Target.LoadForTeam(teamId).Single()
+			var outOfAdherence = Target.ReadForTeam(teamId).Single()
 				.OutOfAdherences.Single();
 			outOfAdherence.StartTime.Should().Be("2016-06-16 08:00".Utc());
 			outOfAdherence.EndTime.Should().Be("2016-06-16 08:10".Utc());
@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				.CreateSQLQuery("UPDATE [ReadModel].[AgentState] SET Shift = NULL, OutOfAdherences = NULL")
 				.ExecuteUpdate();
 
-			Assert.DoesNotThrow(() => Target.LoadForTeam(teamId));
+			Assert.DoesNotThrow(() => Target.ReadForTeam(teamId));
 		}
 
 	}

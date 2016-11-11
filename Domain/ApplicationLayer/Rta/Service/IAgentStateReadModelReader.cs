@@ -6,26 +6,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IAgentStateReadModelReader
     {
-        IEnumerable<AgentStateReadModel> Load(IEnumerable<IPerson> persons);
-        IEnumerable<AgentStateReadModel> Load(IEnumerable<Guid> personIds);
-	    IEnumerable<AgentStateReadModel> LoadForTeam(Guid teamId);
+        IEnumerable<AgentStateReadModel> Read(IEnumerable<IPerson> persons);
+        IEnumerable<AgentStateReadModel> Read(IEnumerable<Guid> personIds);
+	    IEnumerable<AgentStateReadModel> ReadForTeam(Guid teamId);
 
-		IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds);
-		IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds);
-		IEnumerable<AgentStateReadModel> LoadForSkills(IEnumerable<Guid> skillIds);
-		IEnumerable<AgentStateReadModel> LoadForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds);
-		IEnumerable<AgentStateReadModel> LoadForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds);
+		IEnumerable<AgentStateReadModel> ReadForSites(IEnumerable<Guid> siteIds);
+		IEnumerable<AgentStateReadModel> ReadForTeams(IEnumerable<Guid> teamIds);
+		IEnumerable<AgentStateReadModel> ReadForSkills(IEnumerable<Guid> skillIds);
+		IEnumerable<AgentStateReadModel> ReadForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds);
+		IEnumerable<AgentStateReadModel> ReadForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds);
 
-		IEnumerable<AgentStateReadModel> LoadInAlarmsForSites(IEnumerable<Guid> siteIds);
-		IEnumerable<AgentStateReadModel> LoadInAlarmsForTeams(IEnumerable<Guid> teamIds);
-		IEnumerable<AgentStateReadModel> LoadInAlarmsForSkills(IEnumerable<Guid> skillIds);
-		IEnumerable<AgentStateReadModel> LoadInAlarmsForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds);
-		IEnumerable<AgentStateReadModel> LoadInAlarmsForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds);
+		IEnumerable<AgentStateReadModel> ReadInAlarmsForSites(IEnumerable<Guid> siteIds);
+		IEnumerable<AgentStateReadModel> ReadInAlarmsForTeams(IEnumerable<Guid> teamIds);
+		IEnumerable<AgentStateReadModel> ReadInAlarmsForSkills(IEnumerable<Guid> skillIds);
+		IEnumerable<AgentStateReadModel> ReadInAlarmsForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds);
+		IEnumerable<AgentStateReadModel> ReadInAlarmsForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds);
 
-		IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForSites(IEnumerable<Guid> siteIds, IEnumerable<Guid?> excludedStateGroupIds);
-		IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForTeams(IEnumerable<Guid> teamIds, IEnumerable<Guid?> excludedStateGroupIds);
-		IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForSkills(IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStateGroupIds);
-		IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForSitesAndSkill(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStateGroupIds);
-		IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForTeamsAndSkill(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStateGroupIds);
+		IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForSites(IEnumerable<Guid> siteIds, IEnumerable<Guid?> excludedStateGroupIds);
+		IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForTeams(IEnumerable<Guid> teamIds, IEnumerable<Guid?> excludedStateGroupIds);
+		IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForSkills(IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStateGroupIds);
+		IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForSitesAndSkill(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStateGroupIds);
+		IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForTeamsAndSkill(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStateGroupIds);
 	}
 }

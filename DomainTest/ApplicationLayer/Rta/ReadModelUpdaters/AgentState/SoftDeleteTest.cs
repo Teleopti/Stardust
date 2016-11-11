@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 				Timestamp = "2016-10-04 08:30".Utc()
 			});
 			
-			Persister.Get(personId).Should().Be.Null();
+			Persister.Load(personId).Should().Be.Null();
 		}
 
 		[Test]
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 				Timestamp = "2016-10-04 08:10".Utc()
 			});
 
-			Persister.Get(personId).IsDeleted.Should().Be.False();
+			Persister.Load(personId).IsDeleted.Should().Be.False();
 		}
 
 		[Test]
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 				Timestamp = "2016-10-04 08:10".Utc()
 			});
 
-			Persister.Get(personId).Should().Not.Be.Null();
+			Persister.Load(personId).Should().Not.Be.Null();
 		}
 	}
 }

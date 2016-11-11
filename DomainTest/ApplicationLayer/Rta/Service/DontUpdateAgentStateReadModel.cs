@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "loggedOff"
 			});
 
-			Persister.Get(person).StateCode.Should().Be("phone");
+			Persister.Load(person).StateCode.Should().Be("phone");
 		}
 
 		[Test]
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "loggedOff"
 			});
 
-			Persister.Get(person).StateCode.Should().Be("phone");
+			Persister.Load(person).StateCode.Should().Be("phone");
 		}
 	}
 }

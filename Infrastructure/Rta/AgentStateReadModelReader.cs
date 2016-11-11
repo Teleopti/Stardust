@@ -24,16 +24,16 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
 		}
 
-		public IEnumerable<AgentStateReadModel> Load(IEnumerable<IPerson> persons)
+		public IEnumerable<AgentStateReadModel> Read(IEnumerable<IPerson> persons)
 		{
-			return Load(
+			return Read(
 				persons
 					.Select(person => person.Id.GetValueOrDefault())
 					.ToList()
 				);
 		}
 
-		public IEnumerable<AgentStateReadModel> Load(IEnumerable<Guid> personIds)
+		public IEnumerable<AgentStateReadModel> Read(IEnumerable<Guid> personIds)
 		{
 			return personIds.Batch(400).SelectMany(personIdBatch => _unitOfWork.Current().Session()
 				.CreateSQLQuery("SELECT * FROM [ReadModel].AgentState WITH (NOLOCK) WHERE PersonId IN(:persons)")
@@ -44,9 +44,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.ToArray();
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadForTeam(Guid teamId)
+		public IEnumerable<AgentStateReadModel> ReadForTeam(Guid teamId)
 		{
-			return LoadForTeams(new[] {teamId});
+			return ReadForTeams(new[] {teamId});
 		}
 
 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 
 		
-		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds)
+		public IEnumerable<AgentStateReadModel> ReadForSites(IEnumerable<Guid> siteIds)
 		{
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery("SELECT * FROM [ReadModel].AgentState WITH (NOLOCK) WHERE SiteId IN (:siteIds)")
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.List<AgentStateReadModel>();
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds)
+		public IEnumerable<AgentStateReadModel> ReadForTeams(IEnumerable<Guid> teamIds)
 		{
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery("SELECT * FROM [ReadModel].AgentState WITH (NOLOCK) WHERE TeamId IN (:teamIds)")
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.List<AgentStateReadModel>();
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadForSkills(IEnumerable<Guid> skillIds)
+		public IEnumerable<AgentStateReadModel> ReadForSkills(IEnumerable<Guid> skillIds)
 		{
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
@@ -93,7 +93,7 @@ AND :today BETWEEN g.StartDate and g.EndDate")
 				.List<AgentStateReadModel>();
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
+		public IEnumerable<AgentStateReadModel> ReadForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
 		{
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
@@ -114,7 +114,7 @@ AND :today BETWEEN g.StartDate and g.EndDate")
 				.List<AgentStateReadModel>();
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		public IEnumerable<AgentStateReadModel> ReadForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
 		{
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
@@ -136,7 +136,7 @@ AND :today BETWEEN g.StartDate and g.EndDate")
 		}
 
 
-		public IEnumerable<AgentStateReadModel> LoadInAlarmsForSites(IEnumerable<Guid> siteIds)
+		public IEnumerable<AgentStateReadModel> ReadInAlarmsForSites(IEnumerable<Guid> siteIds)
 		{
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
@@ -152,7 +152,7 @@ ORDER BY AlarmStartTime ASC")
 				.List<AgentStateReadModel>();
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadInAlarmsForTeams(IEnumerable<Guid> teamIds)
+		public IEnumerable<AgentStateReadModel> ReadInAlarmsForTeams(IEnumerable<Guid> teamIds)
 		{
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
@@ -168,7 +168,7 @@ ORDER BY AlarmStartTime ASC")
 				.List<AgentStateReadModel>();
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadInAlarmsForSkills(IEnumerable<Guid> skillIds)
+		public IEnumerable<AgentStateReadModel> ReadInAlarmsForSkills(IEnumerable<Guid> skillIds)
 		{
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
@@ -190,7 +190,7 @@ ORDER BY AlarmStartTime ASC")
 				.List<AgentStateReadModel>();
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadInAlarmsForSitesAndSkills(IEnumerable<Guid> siteIds,
+		public IEnumerable<AgentStateReadModel> ReadInAlarmsForSitesAndSkills(IEnumerable<Guid> siteIds,
 			IEnumerable<Guid> skillIds)
 		{
 			return _unitOfWork.Current().Session()
@@ -215,7 +215,7 @@ ORDER BY AlarmStartTime ASC")
 				.List<AgentStateReadModel>();
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadInAlarmsForTeamsAndSkills(IEnumerable<Guid> teamIds,
+		public IEnumerable<AgentStateReadModel> ReadInAlarmsForTeamsAndSkills(IEnumerable<Guid> teamIds,
 			IEnumerable<Guid> skillIds)
 		{
 			return _unitOfWork.Current().Session()
@@ -241,7 +241,7 @@ ORDER BY AlarmStartTime ASC")
 		}
 
 
-		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForSites(IEnumerable<Guid> siteIds,
+		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForSites(IEnumerable<Guid> siteIds,
 			IEnumerable<Guid?> excludedStateGroupIds)
 		{
 			var stateGroupIdsWithoutNull = excludedStateGroupIds.Where(x => x != null);
@@ -300,7 +300,7 @@ ORDER BY AlarmStartTime ASC")
 				.List<AgentStateReadModel>();
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForTeams(IEnumerable<Guid> teamIds,
+		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForTeams(IEnumerable<Guid> teamIds,
 			IEnumerable<Guid?> excludedStateGroupIds)
 		{
 			var stateGroupIdsWithoutNull = excludedStateGroupIds.Where(x => x != null);
@@ -359,7 +359,7 @@ ORDER BY AlarmStartTime ASC")
 				.List<AgentStateReadModel>();
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForSkills(IEnumerable<Guid> skillIds,
+		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForSkills(IEnumerable<Guid> skillIds,
 			IEnumerable<Guid?> excludedStateGroupIds)
 		{
 			var stateGroupIdsWithoutNull = excludedStateGroupIds.Where(x => x != null);
@@ -436,7 +436,7 @@ ORDER BY AlarmStartTime ASC")
 				.List<AgentStateReadModel>();
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForSitesAndSkill(IEnumerable<Guid> siteIds,
+		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForSitesAndSkill(IEnumerable<Guid> siteIds,
 			IEnumerable<Guid> skillIds,
 			IEnumerable<Guid?> excludedStateGroupIds)
 		{
@@ -520,7 +520,7 @@ ORDER BY AlarmStartTime ASC
 				.List<AgentStateReadModel>();
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadInAlarmExcludingPhoneStatesForTeamsAndSkill(IEnumerable<Guid> teamIds,
+		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForTeamsAndSkill(IEnumerable<Guid> teamIds,
 			IEnumerable<Guid> skillIds,
 			IEnumerable<Guid?> excludedStateGroupIds)
 		{

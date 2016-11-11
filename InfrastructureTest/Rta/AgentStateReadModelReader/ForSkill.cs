@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				StatePersister.Persist(new AgentStateReadModelForTest { PersonId = personId });
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadForSkills(new []{ currentSkillId }))
+			WithUnitOfWork.Get(() => Target.ReadForSkills(new []{ currentSkillId }))
 				.Count().Should().Be(1);
 		}
 
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			});
 
 
-			WithUnitOfWork.Get(() => Target.LoadForSkills(new []{ skill1, skill2 }))
+			WithUnitOfWork.Get(() => Target.ReadForSkills(new []{ skill1, skill2 }))
 				.Count().Should().Be(2);
 		}	
 
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			});
 
 
-			WithUnitOfWork.Get(() => Target.LoadForSkills(new []{ skill1, skill2 }))
+			WithUnitOfWork.Get(() => Target.ReadForSkills(new []{ skill1, skill2 }))
 				.Count().Should().Be(1);
 		}
 
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				StatePersister.Persist(new AgentStateReadModelForTest {PersonId = agent2});
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadForSkills(new[] { currentSkillId }))
+			WithUnitOfWork.Get(() => Target.ReadForSkills(new[] { currentSkillId }))
 				.Single().PersonId.Should().Be(agent1);
 		}
 
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				StatePersister.Persist(new AgentStateReadModelForTest { PersonId = personId });
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadForSkills(new[] { email }))
+			WithUnitOfWork.Get(() => Target.ReadForSkills(new[] { email }))
 				.Should().Be.Empty();
 		}
 
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadInAlarmsForSkills(new Guid[] { currentSkillId } ))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmsForSkills(new Guid[] { currentSkillId } ))
 				.Count().Should().Be(1);
 		}
 
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadInAlarmsForSkills(new[] { skill }))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmsForSkills(new[] { skill }))
 				.Single().StateGroupId.Should().Be(phoneState);
 		}
 
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			});
 
 
-			WithUnitOfWork.Get(() => Target.LoadInAlarmsForSkills(new [] { skill1, skill2 } ))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmsForSkills(new [] { skill1, skill2 } ))
 				.Count().Should().Be(2);
 		}
 
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			});
 
 
-			WithUnitOfWork.Get(() => Target.LoadInAlarmsForSkills(new [] { skill1, skill2 } ))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmsForSkills(new [] { skill1, skill2 } ))
 				.Count().Should().Be(1);
 		}
 
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadInAlarmsForSkills(new [] { currentSkillId }))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmsForSkills(new [] { currentSkillId }))
 				.Count().Should().Be(1);
 		}
 
@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			var agents = WithUnitOfWork.Get(() => Target.LoadInAlarmsForSkills(new Guid[] { currentSkillId }).ToArray());
+			var agents = WithUnitOfWork.Get(() => Target.ReadInAlarmsForSkills(new Guid[] { currentSkillId }).ToArray());
 			agents.First().PersonId.Should().Be(personId1);
 			agents.Last().PersonId.Should().Be(personId2);
 		}
@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			var outOfAdherence = WithUnitOfWork.Get(() => Target.LoadForSkills(new [] {currentSkillId}))
+			var outOfAdherence = WithUnitOfWork.Get(() => Target.ReadForSkills(new [] {currentSkillId}))
 				.Single().OutOfAdherences.Single();
 
 			outOfAdherence.StartTime.Should().Be("2016-06-16 08:00".Utc());

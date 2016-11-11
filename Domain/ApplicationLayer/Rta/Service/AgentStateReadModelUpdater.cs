@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public void Update(Context context, IEnumerable<IEvent> events)
 		{
-			var model = _persister.Get(context.PersonId) ?? new AgentStateReadModel();
+			var model = _persister.Load(context.PersonId) ?? new AgentStateReadModel();
 			if (model.IsDeleted) return;
 
 			model.ReceivedTime = context.CurrentTime;

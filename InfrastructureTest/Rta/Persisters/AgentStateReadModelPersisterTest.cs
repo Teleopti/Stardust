@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Persist(state);
 
-			Target.Get(state.PersonId)
+			Target.Load(state.PersonId)
 				.Should().Not.Be.Null();
 		}
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Persist(state);
 
-			Target.Get(state.PersonId)
+			Target.Load(state.PersonId)
 				.BusinessUnitId.Should().Be(businessUnitId);
 		}
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Persist(state);
 
-			Target.Get(state.PersonId)
+			Target.Load(state.PersonId)
 				.TeamId.Should().Be(teamId);
 		}
 
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Persist(state);
 
-			Target.Get(state.PersonId)
+			Target.Load(state.PersonId)
 				.SiteId.Should().Be(siteId);
 		}
 
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				RuleColor = null,
 			});
 
-			Target.Get(personId)
+			Target.Load(personId)
 				.Should().Not.Be.Null();
 		}
 
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Persist(state);
 
-			Target.Get(state.PersonId)
+			Target.Load(state.PersonId)
 				.AlarmStartTime.Should().Be("2015-12-11 08:00".Utc());
 		}
 
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Persist(state);
 
-			Target.Get(state.PersonId)
+			Target.Load(state.PersonId)
 				.IsRuleAlarm.Should().Be(true);
 		}
 
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				AlarmColor = Color.Red.ToArgb()
 			});
 
-			Target.Get(personId)
+			Target.Load(personId)
 				.AlarmColor.Should().Be(Color.Red.ToArgb());
 		}
 
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			});
 
-			var shift = Target.Get(personId).Shift.Single();
+			var shift = Target.Load(personId).Shift.Single();
 			shift.Color.Should().Be(Color.Green.ToArgb());
 			shift.StartTime.Should().Be("2016-06-01 10:00".Utc());
 			shift.EndTime.Should().Be("2016-06-01 11:00".Utc());
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			});
 
-			Target.Get(personId)
+			Target.Load(personId)
 				.Shift.Single().Color.Should().Be(Color.Green.ToArgb());
 		}
 
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				})
 			});
 
-			Target.Get(personId).Shift.Should().Have.Count.EqualTo(100);
+			Target.Load(personId).Shift.Should().Have.Count.EqualTo(100);
 		}
 
 		[Test]
@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Persist(state);
 
-			var outOfAdherence = Target.Get(state.PersonId)
+			var outOfAdherence = Target.Load(state.PersonId)
 				.OutOfAdherences.Single();
 			outOfAdherence.StartTime.Should().Be("2016-06-16 08:00".Utc());
 			outOfAdherence.EndTime.Should().Be("2016-06-16 08:10".Utc());
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			});
 
-			var outOfAdherences = Target.Get(personId).OutOfAdherences;
+			var outOfAdherences = Target.Load(personId).OutOfAdherences;
 			outOfAdherences.First().StartTime.Should().Be("2016-06-16 08:00".Utc());
 			outOfAdherences.First().EndTime.Should().Be("2016-06-16 08:10".Utc());
 			outOfAdherences.Last().StartTime.Should().Be("2016-06-16 08:20".Utc());
@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				})
 			});
 			
-			Target.Get(personId).OutOfAdherences.Should().Have.Count.EqualTo(59);
+			Target.Load(personId).OutOfAdherences.Should().Have.Count.EqualTo(59);
 		}
 
 		[Test]
@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.SetDeleted(personId, "2016-10-04 08:00".Utc());
 
-			var result = Target.Get(personId);
+			var result = Target.Load(personId);
 			result.IsDeleted.Should().Be(true);
 			result.ExpiresAt.Should().Be("2016-10-04 08:00".Utc());
 		}
@@ -325,7 +325,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.UpsertAssociation(personId, teamId, siteId, businessUnitId);
 
-			var result = Target.Get(personId);
+			var result = Target.Load(personId);
 			result.TeamId.Should().Be(teamId);
 			result.SiteId.Should().Be(siteId);
 			result.BusinessUnitId.Should().Be(businessUnitId);
@@ -341,7 +341,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.UpsertAssociation(personId, teamId, siteId, businessUnitId);
 
-			var result = Target.Get(personId);
+			var result = Target.Load(personId);
 			result.TeamId.Should().Be(teamId);
 			result.SiteId.Should().Be(siteId);
 			result.BusinessUnitId.Should().Be(businessUnitId);
@@ -356,7 +356,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			
 			Target.UpsertAssociation(personId, Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
 
-			var result = Target.Get(personId);
+			var result = Target.Load(personId);
 			result.IsDeleted.Should().Be.False();
 			result.ExpiresAt.Should().Be(null);
 		}
@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				StateGroupId = stateGroupId
 			});
 
-			Target.Get(personId).StateGroupId.Should().Be(stateGroupId);
+			Target.Load(personId).StateGroupId.Should().Be(stateGroupId);
 		}
 
 		[Test]
@@ -393,7 +393,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				StateGroupId = stateGroupId
 			});
 
-			Target.Get(personId).StateGroupId.Should().Be(stateGroupId);
+			Target.Load(personId).StateGroupId.Should().Be(stateGroupId);
 		}
 
 		[Test]
@@ -406,7 +406,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			
 			Target.DeleteOldRows("2016-10-04 08:30".Utc());
 
-			Target.Get(personId).Should().Be.Null();
+			Target.Load(personId).Should().Be.Null();
 		}
 
 		[Test]
@@ -419,7 +419,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.DeleteOldRows("2016-10-04 09:00".Utc());
 
-			Target.Get(personId).Should().Be.Null();
+			Target.Load(personId).Should().Be.Null();
 		}
 	}
 }

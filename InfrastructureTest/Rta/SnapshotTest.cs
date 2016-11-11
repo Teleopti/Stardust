@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			});
 
 
-			WithUnitOfWork.Get(() => ReadModels.Load(new[] { person.Id.Value }))
+			WithUnitOfWork.Get(() => ReadModels.Read(new[] { person.Id.Value }))
 				.SingleOrDefault()
 				.RuleName.Should().Be("OutAdherence");
 		}

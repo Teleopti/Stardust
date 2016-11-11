@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			if (@event.TeamId.HasValue)
 			{
-				var model = _persister.Get(@event.PersonId);
+				var model = _persister.Load(@event.PersonId);
 				if (model == null || expirationFor(@event) >= model.ExpiresAt.GetValueOrDefault())
 					_persister.UpsertAssociation(@event.PersonId, @event.TeamId.Value, @event.SiteId, @event.BusinessUnitId);
 			}
