@@ -465,21 +465,10 @@
 	max-width: 250px;
 }
 
-.request-date {
-	max-width: 270px;
-}
-
-.request-time {
-	max-width: 130px;
-}
-
-.request-date-container {
-	width: 54%;
-}
-
-.request-time-container {
-	width: 43%;
-	margin-top: -4px;
+@media (max-width: 768px) {
+	.p-r-0 {
+		padding-right: 0;
+	}
 }
 
 .request-list-filter {
