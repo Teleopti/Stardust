@@ -51,7 +51,7 @@
 			-ms-flex: none;
 			flex: 0 1 auto;
 		}
-		
+
 		& > *{
 			align-self: center;
 		}
@@ -127,7 +127,7 @@
 			z-index: 1000;
 			text-transform: none;
 			white-space: nowrap;
-			
+
 			li > div{
 				display: flex;
 				justify-content: space-between;
@@ -227,7 +227,7 @@
 			tbody tr:hover {
 				background: $gray012;
 			}
-			
+
 			th, td {
 				padding: 5px 0 5px 0;
 				border-bottom: none;
@@ -239,7 +239,7 @@
 				padding-right: 5px;
 				padding-left: 5px;
 				min-width: 150px;
-				
+
 				span.person-name-text{
 					float: right;
 					word-break: break-word;
@@ -317,7 +317,7 @@
 					padding: 0;
 					text-align: center;
 				}
-				
+
 				thead tr.weekview-thead th .date{
 					float: none;
 				}
@@ -349,7 +349,7 @@
 			td.weekview-td:hover{
 				border-bottom: 1px solid $blue-500;
 			}
-		
+
 			td.weekview-person-name{
 				word-break: break-word;
 				padding: 0 5px;
@@ -555,7 +555,7 @@
 		width: auto;
 	}
 
-	.add-absence, .add-activity, .move-activity, .edit-shift-category, .command-check, .settings-panel{
+	.add-absence, .add-activity, .move-activity, .edit-shift-category, .command-check, .settings-panel, .move-shift {
 		height: 100%;
 		display: -ms-flexbox;
 		display: flex;
@@ -734,7 +734,7 @@ md-tooltip.layer-summary{
 		display: inline-block;
 		line-height: 25px;
 		max-width: 600px;
-		white-space: normal;	
+		white-space: normal;
 	}
 }
 
@@ -845,15 +845,15 @@ md-tooltip.layer-summary{
 
 	}
 
-	
+
 }
 
-md-select-menu md-option:first-child:not([disabled]):focus {	
-	background: inherit;		
+md-select-menu md-option:first-child:not([disabled]):focus {
+	background: inherit;
 }
 
-md-select-menu md-option:first-child:not([disabled]):hover {	
-	background: $gray-300;		
+md-select-menu md-option:first-child:not([disabled]):hover {
+	background: $gray-300;
 }
 
 .timezone-tip {

@@ -257,5 +257,73 @@
 
 			expect(result).toEqual(true);
 		});
+
+		it('should validate move to time when moving shift to time in current date', function () {
+			var currentDate = "2016-05-13";
+			schedule = {
+				"PersonId": "221B-Baker-SomeoneElse",
+				"Name": "SomeoneElse",
+				"Date": scheduleDate,
+				"Timezone": {
+					IanaId: "Asia/Hong_Kong"
+				},
+				"Projection": [
+					{
+						"ShiftLayerIds": ["layer1"],
+						"ParentPersonAbsences": null,
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": scheduleDate + " 08:00",
+						"Minutes": 480
+					}
+				],
+				"IsFullDayAbsence": false,
+				"DayOff": null
+			};
+
+			scheduleMgmt.resetSchedules([schedule], moment(scheduleDate), "Asia/Hong_Kong");
+			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			var newStartMoment = moment(scheduleDate + " 02:00");
+
+			target.validateMoveToTimeForShift(newStartMoment, "Asia/Hong_Kong");
+
+			expect(target.getInvalidPeople().length).toEqual(0);
+		});
+
+		it('should validate move to time when moving shift to time on next date', function () {
+			var nextDay = "2016-05-13";
+			schedule = {
+				"PersonId": "221B-Baker-SomeoneElse",
+				"Name": "SomeoneElse",
+				"Date": scheduleDate,
+				"Timezone": {
+					IanaId: "Asia/Hong_Kong"
+				},
+				"Projection": [
+					{
+						"ShiftLayerIds": ["layer1"],
+						"ParentPersonAbsences": null,
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": scheduleDate + " 08:00",
+						"Minutes": 480
+					}
+				],
+				"IsFullDayAbsence": false,
+				"DayOff": null
+			};
+
+			scheduleMgmt.resetSchedules([schedule], moment(scheduleDate), "Asia/Hong_Kong");
+			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			var newStartMoment = moment(nextDay + " 02:00");
+
+			target.validateMoveToTimeForShift(newStartMoment, "Asia/Hong_Kong");
+
+			expect(target.getInvalidPeople().length).toEqual(1);
+		});
 	});
 })()

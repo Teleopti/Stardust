@@ -7,6 +7,7 @@
 		var MAX_SCHEDULE_LENGTH_IN_MINUTES = 36 * 60; // 36 hours
 		var invalidPeople = [];
 		this.validateMoveToTime = validateMoveToTimeForScheduleInDifferentTimezone;
+		this.validateMoveToTimeForShift = validateShiftsToMove;
 
 		function getShiftDate(personSchedule) {
 			var selectedShift = personSchedule.Shifts.filter(function (shift) {
@@ -18,6 +19,23 @@
 			return selectedShift.Date;
 		}
 
+		function validateShiftsToMove(newStartMoment, currentTimezone) {
+			invalidPeople = [];
+			var selectedPersonIds = PersonSelectionSvc.getSelectedPersonIdList();
+			for (var i = 0; i < selectedPersonIds.length; i++) {
+				var personId = selectedPersonIds[i];
+				var personSchedule = ScheduleMgmt.findPersonScheduleVmForPersonId(personId);
+
+				var newStartInAgentTimezone = $filter('timezone')(newStartMoment.format('YYYY-MM-DD HH:mm'),
+					personSchedule.Timezone.IanaId,
+					currentTimezone);
+				if (!moment(newStartInAgentTimezone).isSame(personSchedule.Date, 'day')) {
+					invalidPeople.push(personSchedule);
+				}
+			}
+			return invalidPeople.length === 0;
+		}
+
 		function validateMoveToTimeForScheduleInDifferentTimezone(newStartMoment, currentTimezone) {
 			invalidPeople = [];
 			var selectedPersonIds = PersonSelectionSvc.getSelectedPersonIdList();
@@ -26,7 +44,7 @@
 				var personSchedule = ScheduleMgmt.findPersonScheduleVmForPersonId(personId);
 
 				var shiftDate = getShiftDate(personSchedule);
-				
+
 				var newStartInAgentTimezone = $filter('timezone')(newStartMoment.format('YYYY-MM-DD HH:mm'),
 					personSchedule.Timezone.IanaId,
 					currentTimezone);
@@ -88,7 +106,7 @@
 			});
 			return latestM;
 		}
-		
+
 		function getNewScheduleStartMoment(scheduleDate, personSchedule, newStartMoment) {
 			var unselected = getUnselectedProjections(scheduleDate, personSchedule);
 			if (!unselected || unselected.length === 0) return newStartMoment;
@@ -108,7 +126,7 @@
 
 			var unselected = getUnselectedProjections(scheduleDate, personSchedule);
 			if (!unselected || unselected.length === 0) return newEndMoment;
-			
+
 			var ends =  unselected.map(function(p) {
 
 				return moment(p.Start).clone().add(p.Minutes, 'minutes');

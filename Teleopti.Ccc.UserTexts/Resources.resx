@@ -15126,4 +15126,8 @@ These options are activated:
     <value>Continue</value>
     <comment>Continue</comment>
   </data>
+  <data name="MoveShift" xml:space="preserve">
+    <value>Move Shift</value>
+    <comment>MoveShift command in the Teams module</comment>
+  </data>
 </root>

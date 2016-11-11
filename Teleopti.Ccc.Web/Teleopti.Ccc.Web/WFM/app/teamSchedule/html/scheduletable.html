@@ -72,6 +72,7 @@
 							<div>{{::projection.TimeSpan()}}</div>
 						</md-tooltip>
 					</div>
+					<div class="current-day-shift-flag" ng-if="shift.Date === personSchedule.Date && shift.Projections.length > 0" ng-style="{left: shift.Projections[0].StartPosition + '%'}"></div>
 				</div>
 				<div ng-if="vm.hasHiddenScheduleAtStart(personSchedule)" class="start-ellipsis"><i class="mdi mdi-chevron-double-left white-color-text"></i></div>
 				<div ng-if="vm.hasHiddenScheduleAtEnd(personSchedule)" class="end-ellipsis"><i class="mdi mdi-chevron-double-right"></i></div>

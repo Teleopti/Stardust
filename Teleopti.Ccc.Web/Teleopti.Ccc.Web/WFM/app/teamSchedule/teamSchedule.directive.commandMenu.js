@@ -72,6 +72,14 @@
 				visible: function () { return vm.canActiveMoveInvalidOverlappedActivity(); }
 			},
 			{
+				label: "MoveShift",
+				shortcut: "Alt+E",
+				keys: [[keyCodes.E], [keyCodes.ALT]],
+				action: buildAction("MoveShift", true),
+				clickable: function () { return vm.canMoveShift(); },
+				visible: function () { return vm.canActiveMoveShift(); }
+			},
+			{
 				label: "SwapShifts",
 				shortcut: "Alt+S",
 				keys: [[keyCodes.S], [keyCodes.ALT]],
@@ -135,6 +143,10 @@
 			return vm.toggles.MoveInvalidOverlappedActivityEnabled && vm.permissions.HasMoveInvalidOverlappedActivityPermission;
 		};
 
+		vm.canActiveMoveShift = function() {
+			return vm.toggles.MoveEntireShiftEnabled && vm.permissions.HasMoveActivityPermission;
+		};
+
 		vm.canActiveRemoveAbsence = function () {
 			return vm.toggles.RemoveAbsenceEnabled && vm.permissions.IsRemoveAbsenceAvailable;
 		};
@@ -164,6 +176,10 @@
 		vm.canMoveInvalidOverlappedActivity = function () {
 			var filteredRuleType = "NotOverwriteLayerRuleName";
 			return personSelectionSvc.anyAgentChecked() && checkValidationResultForSelectedPerson(personSelectionSvc.getCheckedPersonIds(), filteredRuleType) && vm.configurations.validateWarningToggle;
+		};
+
+		vm.canMoveShift = function() {
+			return personSelectionSvc.anyAgentChecked();
 		};
 
 		vm.canRemoveAbsence = function () {

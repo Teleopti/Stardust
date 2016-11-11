@@ -16649,6 +16649,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Move Shift.
+        /// </summary>
+        public static string MoveShift {
+            get {
+                return ResourceManager.GetString("MoveShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move start time one interval earlier.
         /// </summary>
         public static string MoveStartOneIntervalEarlier {
