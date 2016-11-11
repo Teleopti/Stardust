@@ -45,7 +45,7 @@ RTA_HideAgentsByStateGroup_40469 = true
 RTA_FasterUpdateOfScheduleChanges_40536 = true
 RTA_FasterActivityCheck_41380 = true
 RTA_SiteAndTeamOnSkillOverview_40817 = RC
-RTA_AgentsOnOrganizationAndSkills_41586 = DEV
+RTA_AgentsOnOrganizationAndSkills_41586 = RC
 RTA_SeeAllOutOfAdherencesToday_39146 = RC
 
 WfmPermission_ReplaceOldPermission_34671 = true
