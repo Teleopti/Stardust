@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 		{
 			var personId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModel { PersonId = personId });
+			Persister.Has(new AgentStateReadModel { PersonId = personId });
 
 			Target.Handle(new PersonAssociationChangedEvent
 			{
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 		{
 			var personId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModel { PersonId = personId });
+			Persister.Has(new AgentStateReadModel { PersonId = personId });
 
 			Target.Handle(new PersonAssociationChangedEvent
 			{
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 		{
 			var personId = Guid.NewGuid();
 			var businessUnit = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModel { PersonId = personId });
+			Persister.Has(new AgentStateReadModel { PersonId = personId });
 
 			Target.Handle(new PersonAssociationChangedEvent
 			{

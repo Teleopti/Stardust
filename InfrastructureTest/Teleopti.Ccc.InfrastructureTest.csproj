@@ -270,6 +270,7 @@
     <Compile Include="Repositories\SkillAreaRepositoryTest.cs" />
     <Compile Include="Repositories\SmartPersonPropertyQuerierTest.cs" />
     <Compile Include="Rta\AgentStateForUpsert.cs" />
+    <Compile Include="Rta\AgentStateReadModelPersisterExtensions.cs" />
     <Compile Include="Rta\AgentStateReadModelReader\ForExcludingStateGroups.cs" />
     <Compile Include="Rta\AgentStateReadModelReader\ForExcludingStateGroupsForTeamAndSkill.cs" />
     <Compile Include="Rta\AgentStateReadModelReader\ForSkill.cs" />

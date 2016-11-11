@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { personId });
-				StatePersister.Persist(new AgentStateReadModelForTest { PersonId = personId });
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest { PersonId = personId });
 			});
 
 			WithUnitOfWork.Get(() => Target.ReadForSkills(new []{ currentSkillId }))
@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {agent1, agent2});
-				StatePersister.Persist(new AgentStateReadModelForTest {PersonId = agent1});
-				StatePersister.Persist(new AgentStateReadModelForTest {PersonId = agent2});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest {PersonId = agent1});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest {PersonId = agent2});
 			});
 
 
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {agent1});
-				StatePersister.Persist(new AgentStateReadModelForTest {PersonId = agent1});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest {PersonId = agent1});
 			});
 
 
@@ -99,8 +99,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {agent1, agent2});
-				StatePersister.Persist(new AgentStateReadModelForTest {PersonId = agent1});
-				StatePersister.Persist(new AgentStateReadModelForTest {PersonId = agent2});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest {PersonId = agent1});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest {PersonId = agent2});
 			});
 
 			WithUnitOfWork.Get(() => Target.ReadForSkills(new[] { currentSkillId }))
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { personId });
-				StatePersister.Persist(new AgentStateReadModelForTest { PersonId = personId });
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest { PersonId = personId });
 			});
 
 			WithUnitOfWork.Get(() => Target.ReadForSkills(new[] { email }))
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { personId });
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = personId,
 					AlarmStartTime = "2016-06-20 12:00".Utc(),
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { person });
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = person,
 					AlarmStartTime = "2016-09-23 07:50".Utc(),
@@ -197,13 +197,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { personId1, personId2 });
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = personId1,
 					AlarmStartTime = "2016-06-20 12:00".Utc(),
 					IsRuleAlarm = true
 				});
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = personId2,
 					AlarmStartTime = "2016-06-20 12:00".Utc(),
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { personId1 });
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = personId1,
 					AlarmStartTime = "2016-06-20 12:00".Utc(),
@@ -258,13 +258,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { personId1, personId2 });
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = personId1,
 					AlarmStartTime = "2016-06-20 12:00".Utc(),
 					IsRuleAlarm = true
 				});
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = personId2
 				});
@@ -289,13 +289,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { personId1, personId2 });
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = personId1,
 					AlarmStartTime = "2016-06-20 12:00".Utc(),
 					IsRuleAlarm = true
 				});
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = personId2,
 					AlarmStartTime = "2016-06-20 12:01".Utc(),
@@ -320,7 +320,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {personId});
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = personId,
 					OutOfAdherences = new[]

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 		public void ShouldSetDeletedWhenPersonIsDeleted()
 		{
 			var personId = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModel { PersonId = personId });
+			Persister.Has(new AgentStateReadModel { PersonId = personId });
 
 			Target.Handle(new PersonDeletedEvent { PersonId = personId });
 
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 		public void ShouldSetDeletedIfPersonIsTerminated()
 		{
 			var personId = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModel { PersonId = personId });
+			Persister.Has(new AgentStateReadModel { PersonId = personId });
 
 			Target.Handle(new PersonAssociationChangedEvent
 			{
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 		public void ShouldKeepReadModelIfPersonIsInATeam()
 		{
 			var personId = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModel { PersonId = personId });
+			Persister.Has(new AgentStateReadModel { PersonId = personId });
 
 			Target.Handle(new PersonAssociationChangedEvent
 			{
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 		public void ShouldDeleteReadModelIfSoftDeletedForMoreThanThirtyMinutes()
 		{
 			var personId = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModel { PersonId = personId });
+			Persister.Has(new AgentStateReadModel { PersonId = personId });
 			Target.Handle(new PersonAssociationChangedEvent
 			{
 				PersonId = personId,
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 		public void ShouldUnDeleteReadModel()
 		{
 			var personId = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModel { PersonId = personId });
+			Persister.Has(new AgentStateReadModel { PersonId = personId });
 			Target.Handle(new PersonAssociationChangedEvent
 			{
 				PersonId = personId,

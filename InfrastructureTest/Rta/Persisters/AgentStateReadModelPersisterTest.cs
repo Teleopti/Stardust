@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var state = new AgentStateReadModelForTest();
 
-			Target.Persist(state);
+			Target.PersistWithAssociation(state);
 
 			Target.Load(state.PersonId)
 				.Should().Not.Be.Null();
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var businessUnitId = Guid.NewGuid();
 			var state = new AgentStateReadModelForTest { BusinessUnitId = businessUnitId };
 
-			Target.Persist(state);
+			Target.PersistWithAssociation(state);
 
 			Target.Load(state.PersonId)
 				.BusinessUnitId.Should().Be(businessUnitId);
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var teamId = Guid.NewGuid();
 			var state = new AgentStateReadModelForTest { TeamId = teamId };
 
-			Target.Persist(state);
+			Target.PersistWithAssociation(state);
 
 			Target.Load(state.PersonId)
 				.TeamId.Should().Be(teamId);
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var siteId = Guid.NewGuid();
 			var state = new AgentStateReadModelForTest { SiteId = siteId };
 
-			Target.Persist(state);
+			Target.PersistWithAssociation(state);
 
 			Target.Load(state.PersonId)
 				.SiteId.Should().Be(siteId);
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var personId = Guid.NewGuid();
 
-			Target.Persist(new AgentStateReadModel
+			Target.PersistWithAssociation(new AgentStateReadModel
 			{
 				PersonId = personId,
 				BusinessUnitId = Guid.NewGuid(),
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var state = new AgentStateReadModelForTest { AlarmStartTime = "2015-12-11 08:00".Utc() };
 
-			Target.Persist(state);
+			Target.PersistWithAssociation(state);
 
 			Target.Load(state.PersonId)
 				.AlarmStartTime.Should().Be("2015-12-11 08:00".Utc());
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var state = new AgentStateReadModelForTest { IsRuleAlarm = true };
 
-			Target.Persist(state);
+			Target.PersistWithAssociation(state);
 
 			Target.Load(state.PersonId)
 				.IsRuleAlarm.Should().Be(true);
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var personId = Guid.NewGuid();
 
-			Target.Persist(new AgentStateReadModelForTest
+			Target.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				AlarmColor = Color.Red.ToArgb()
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var personId = Guid.NewGuid();
 
-			Target.Persist(new AgentStateReadModelForTest
+			Target.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				Shift = new[]
@@ -165,14 +165,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var personId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			Target.Persist(
+			Target.PersistWithAssociation(
 				new AgentStateReadModelForTest
 				{
 					PersonId = personId,
 					TeamId = teamId,
 				});
 
-			Target.Persist(new AgentStateReadModelForTest
+			Target.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				TeamId = teamId,
@@ -194,14 +194,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var personId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			Target.Persist(
+			Target.PersistWithAssociation(
 				new AgentStateReadModelForTest
 				{
 					PersonId = personId,
 					TeamId = teamId,
 				});
 
-			Target.Persist(new AgentStateReadModelForTest
+			Target.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				TeamId = teamId,
@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			};
 
-			Target.Persist(state);
+			Target.PersistWithAssociation(state);
 
 			var outOfAdherence = Target.Load(state.PersonId)
 				.OutOfAdherences.Single();
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldUpdateOutOfAdherences()
 		{
 			var personId = Guid.NewGuid();
-			Target.Persist(new AgentStateReadModelForTest
+			Target.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				OutOfAdherences = new[]
@@ -256,7 +256,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			});
 
-			Target.Persist(new AgentStateReadModelForTest
+			Target.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				OutOfAdherences = new[]
@@ -286,7 +286,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var personId = Guid.NewGuid();
 
-			Target.Persist(new AgentStateReadModelForTest
+			Target.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				OutOfAdherences = Enumerable.Range(0, 59)
@@ -305,7 +305,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var personId = Guid.NewGuid();
 			var model = new AgentStateReadModelForTest { PersonId = personId };
-			Target.Persist(model);
+			Target.PersistWithAssociation(model);
 
 			Target.SetDeleted(personId, "2016-10-04 08:00".Utc());
 
@@ -321,7 +321,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var teamId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
-			Target.Persist(new AgentStateReadModelForTest { PersonId = personId });
+			Target.PersistWithAssociation(new AgentStateReadModelForTest { PersonId = personId });
 
 			Target.UpsertAssociation(personId, teamId, siteId, businessUnitId);
 
@@ -351,7 +351,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldUnSoftDeleteWhenUpdatingPersonAssociation()
 		{
 			var personId = Guid.NewGuid();
-			Target.Persist(new AgentStateReadModelForTest {PersonId = personId});
+			Target.PersistWithAssociation(new AgentStateReadModelForTest {PersonId = personId});
 			Target.SetDeleted(personId, "2016-10-05 08:00".Utc());
 			
 			Target.UpsertAssociation(personId, Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
@@ -367,7 +367,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var personId = Guid.NewGuid();
 			var stateGroupId = Guid.NewGuid();
 
-			Target.Persist(new AgentStateReadModelForTest
+			Target.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				StateGroupId = stateGroupId
@@ -381,13 +381,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var personId = Guid.NewGuid();
 			var stateGroupId = Guid.NewGuid();
-			Target.Persist(new AgentStateReadModelForTest
+			Target.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				StateGroupId = null
 			});
 
-			Target.Persist(new AgentStateReadModelForTest
+			Target.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				StateGroupId = stateGroupId
@@ -401,7 +401,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var personId = Guid.NewGuid();
 			var model = new AgentStateReadModelForTest { PersonId = personId };
-			Target.Persist(model);
+			Target.PersistWithAssociation(model);
 			Target.SetDeleted(personId, "2016-10-04 08:30".Utc());
 			
 			Target.DeleteOldRows("2016-10-04 08:30".Utc());
@@ -414,7 +414,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var personId = Guid.NewGuid();
 			var model = new AgentStateReadModelForTest { PersonId = personId };
-			Target.Persist(model);
+			Target.PersistWithAssociation(model);
 			Target.SetDeleted(personId, "2016-10-04 08:30".Utc());
 
 			Target.DeleteOldRows("2016-10-04 09:00".Utc());

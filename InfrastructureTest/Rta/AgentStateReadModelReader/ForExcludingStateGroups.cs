@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {expected});
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = expected,
 					SiteId = siteId,
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 					IsRuleAlarm = true,
 					StateGroupId = Guid.NewGuid()
 				});
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = Guid.NewGuid(),
 					SiteId = siteId,
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 					IsRuleAlarm = true,
 					StateGroupId = loggedOut
 				});
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = Guid.NewGuid(),
 					SiteId = siteId,
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 					WithUnitOfWork.Do(() =>
 					{
 						Groupings.UpdateGroupingReadModel(new[] { current });
-						StatePersister.Persist(new AgentStateReadModelForTest
+						StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 						{
 							PersonId = current,
 							SiteId = site,
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { expected });
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = expected,
 					SiteId = siteId,
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { expected, wrongSite, wrongSkill, notInAlarm });
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = expected,
 					SiteId = site,
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 					IsRuleAlarm = true,
 					StateGroupId = Guid.NewGuid()
 				});
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSite,
 					SiteId = Guid.NewGuid(),
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 					IsRuleAlarm = true,
 					StateGroupId = Guid.NewGuid()
 				});
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSkill,
 					SiteId = site,
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 					IsRuleAlarm = true,
 					StateGroupId = Guid.NewGuid()
 				});
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = notInAlarm,
 					SiteId = site,
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { personId });
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = personId,
 					SiteId = site,
@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { expected, wrongState, nullState, wrongSite });
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = expected,
 					SiteId = siteId,
@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 					IsRuleAlarm = true,
 					StateGroupId = Guid.NewGuid()
 				});
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = wrongState,
 					SiteId = siteId,
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 					IsRuleAlarm = true,
 					StateGroupId = loggedOut
 				});
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = nullState,
 					SiteId = siteId,
@@ -278,7 +278,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 					IsRuleAlarm = false,
 					StateGroupId = null
 				});
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSite,
 					SiteId = Guid.NewGuid(),
@@ -312,14 +312,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { wrongState, expected });
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = wrongState,
 					SiteId = siteId,
 					AlarmStartTime = "2016-11-07 08:00".Utc(),
 					StateGroupId = loggedOut
 				});
-				StatePersister.Persist(new AgentStateReadModelForTest
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = expected,
 					SiteId = siteId,

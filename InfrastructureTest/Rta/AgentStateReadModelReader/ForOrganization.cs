@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 		{
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModelForTest
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = personId
@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 		public void ShouldLoadAgentStatesByTeamId()
 		{
 			var teamId = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModelForTest { TeamId = teamId, PersonId = Guid.NewGuid() });
-			Persister.Persist(new AgentStateReadModelForTest { TeamId = teamId, PersonId = Guid.NewGuid() });
-			Persister.Persist(new AgentStateReadModelForTest { TeamId = Guid.Empty, PersonId = Guid.NewGuid() });
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest { TeamId = teamId, PersonId = Guid.NewGuid() });
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest { TeamId = teamId, PersonId = Guid.NewGuid() });
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest { TeamId = Guid.Empty, PersonId = Guid.NewGuid() });
 
 			var result = Target.ReadForTeam(teamId);
 
@@ -56,9 +56,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 		{
 			var siteId1 = Guid.NewGuid();
 			var siteId2 = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModelForTest { SiteId = siteId1, PersonId = Guid.NewGuid() });
-			Persister.Persist(new AgentStateReadModelForTest { SiteId = siteId2, PersonId = Guid.NewGuid() });
-			Persister.Persist(new AgentStateReadModelForTest { SiteId = Guid.Empty, PersonId = Guid.NewGuid() });
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest { SiteId = siteId1, PersonId = Guid.NewGuid() });
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest { SiteId = siteId2, PersonId = Guid.NewGuid() });
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest { SiteId = Guid.Empty, PersonId = Guid.NewGuid() });
 
 			var result = Target.ReadForSites(new[] { siteId1, siteId2 });
 
@@ -70,9 +70,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 		{
 			var teamId1 = Guid.NewGuid();
 			var teamId2 = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModelForTest { TeamId = teamId1, PersonId = Guid.NewGuid() });
-			Persister.Persist(new AgentStateReadModelForTest { TeamId = teamId2, PersonId = Guid.NewGuid() });
-			Persister.Persist(new AgentStateReadModelForTest { TeamId = Guid.Empty, PersonId = Guid.NewGuid() });
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest { TeamId = teamId1, PersonId = Guid.NewGuid() });
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest { TeamId = teamId2, PersonId = Guid.NewGuid() });
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest { TeamId = Guid.Empty, PersonId = Guid.NewGuid() });
 
 			var result = Target.ReadForTeams(new[] { teamId1, teamId2 });
 
@@ -86,21 +86,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			var teamId = Guid.NewGuid();
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModelForTest
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = personId1,
 				AlarmStartTime = "2016-06-15 12:00".Utc(),
 				IsRuleAlarm = true
 			});
-			Persister.Persist(new AgentStateReadModelForTest
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = personId2,
 				AlarmStartTime = "2016-06-15 12:01".Utc(),
 				IsRuleAlarm = true
 			});
-			Persister.Persist(new AgentStateReadModelForTest
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = Guid.NewGuid(),
@@ -120,14 +120,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			var teamId = Guid.NewGuid();
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModelForTest
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = personId1,
 				AlarmStartTime = "2016-06-15 11:30".Utc(),
 				IsRuleAlarm = true
 			});
-			Persister.Persist(new AgentStateReadModelForTest
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = personId2,
@@ -148,21 +148,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			var siteId = Guid.NewGuid();
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModelForTest
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				SiteId = siteId,
 				PersonId = personId1,
 				AlarmStartTime = "2016-06-15 12:00".Utc(),
 				IsRuleAlarm = true
 			});
-			Persister.Persist(new AgentStateReadModelForTest
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				SiteId = siteId,
 				PersonId = personId2,
 				AlarmStartTime = "2016-06-15 12:01".Utc(),
 				IsRuleAlarm = true
 			});
-			Persister.Persist(new AgentStateReadModelForTest
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				SiteId = siteId,
 				PersonId = Guid.NewGuid(),
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			var site = Guid.NewGuid();
 			var person = Guid.NewGuid();
 			var phoneState = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModelForTest
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				PersonId = person,
 				SiteId = site,
@@ -204,14 +204,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			var siteId = Guid.NewGuid();
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModelForTest
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				SiteId = siteId,
 				PersonId = personId1,
 				AlarmStartTime = "2016-06-15 11:30".Utc(),
 				IsRuleAlarm = true
 			});
-			Persister.Persist(new AgentStateReadModelForTest
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				SiteId = siteId,
 				PersonId = personId2,
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 		{
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModelForTest
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = personId,
@@ -258,7 +258,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 		public void ShouldLoadOutOfAdherences()
 		{
 			var teamId = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModelForTest
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				OutOfAdherences = new[]
@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 		{
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModelForTest
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = personId,

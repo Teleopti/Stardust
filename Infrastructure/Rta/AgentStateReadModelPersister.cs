@@ -31,10 +31,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.CreateSQLQuery(@"
 					UPDATE [ReadModel].[AgentState]
 					SET
-						PersonId = :PersonId,
-						BusinessUnitId = :BusinessUnitId,
-						SiteId = :SiteId,
-						TeamId = :TeamId,
 						ReceivedTime = :ReceivedTime,
 						Activity = :Activity,
 						NextActivity = :NextActivity, 
@@ -56,9 +52,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 						PersonId = :PersonId
 				")
 				.SetParameter("PersonId", model.PersonId)
-				.SetParameter("BusinessUnitId", model.BusinessUnitId)
-				.SetParameter("SiteId", model.SiteId)
-				.SetParameter("TeamId", model.TeamId)
 				.SetParameter("ReceivedTime", model.ReceivedTime)
 				.SetParameter("Activity", model.Activity)
 				.SetParameter("NextActivity", model.NextActivity)
