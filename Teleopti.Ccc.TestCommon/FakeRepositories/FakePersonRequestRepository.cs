@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IList<IPersonRequest> Find(List<Guid> ids)
+		public IList<IPersonRequest> Find(IEnumerable<Guid> ids)
 		{
 			return _requestRepository.Where(p => ids.Any(x => x == p.Id)).ToList();
 		}

@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 {
 	public class ArrangeRequestsByProcessOrder
 	{
-		public IList<IPersonRequest> GetRequestsSortedByDate(List<IPersonRequest> personReuqestList)
+		public IList<IPersonRequest> GetRequestsSortedByDate(IList<IPersonRequest> personReuqestList)
 		{
 			var result =
 				personReuqestList.Where(
@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 			return result.OrderBy(x => x.CreatedOn).ToList();
 		}
 
-		public IList<IPersonRequest> GetRequestsSortedBySeniority(List<IPersonRequest> personReuqestList)
+		public IList<IPersonRequest> GetRequestsSortedBySeniority(IList<IPersonRequest> personReuqestList)
 		{
 			var requestsHavingSenerioty =
 				personReuqestList.Where(

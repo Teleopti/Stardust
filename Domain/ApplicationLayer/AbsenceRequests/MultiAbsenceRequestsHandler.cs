@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 		}
 
-		private List<IPersonRequest> checkPersonRequest(NewMultiAbsenceRequestsCreatedEvent @event)
+		private List<Guid> checkPersonRequest(NewMultiAbsenceRequestsCreatedEvent @event)
 		{
 			DateTime min = DateTime.MaxValue;
 			DateTime max = DateTime.MinValue;
@@ -101,16 +101,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					}
 				}
 
-				_skillRepository.LoadAllSkills();
-				_contractRepository.LoadAll();
-				_skillTypeRepository.LoadAll();
-				_partTimePercentageRepository.LoadAll();
+				//_skillRepository.LoadAllSkills();
+				//_contractRepository.LoadAll();
+				//_skillTypeRepository.LoadAll();
+				//_partTimePercentageRepository.LoadAll();
 
-				//formally part of prereq loader
-				_contractScheduleRepository.LoadAllAggregate();
-				_activityRepository.LoadAll();
-				//got no lazy load problem if we dnt have this. but as it was part of the prereq so adding it back again
-				_absenceRepository.LoadAll();
+				////formally part of prereq loader
+				//_contractScheduleRepository.LoadAllAggregate();
+				//_activityRepository.LoadAll();
+				////got no lazy load problem if we dnt have this. but as it was part of the prereq so adding it back again
+				//_absenceRepository.LoadAll();
 
 				var personRequests = _personRequestRepository.Find(@event.PersonRequestIds);
 
@@ -148,10 +148,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					_feedback.SendProgress($"Picked up {waitListIds.Count} waitlisted requests in period {period}.");
 				}
 
-				//preload some data
-				_personRepository.FindPeople(requests.Select(x => x.Person.Id.GetValueOrDefault()));
+				////preload some data
+				//_personRepository.FindPeople(requests.Select(x => x.Person.Id.GetValueOrDefault()));
 			}
-			return requests;
+			return requests.Select(x => x.Id.GetValueOrDefault()).ToList();
 		}
 
 		private class isNullOrNotNewSpecification : Specification<IPersonRequest>

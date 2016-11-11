@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return returnPersonRequest;
 		}
 
-		public IList<IPersonRequest> Find(List<Guid> ids)
+		public IList<IPersonRequest> Find(IEnumerable<Guid> ids)
 		{
 			var returnPersonRequests = new List<IPersonRequest>();
 			foreach (var idBatch in ids.Batch(1000))

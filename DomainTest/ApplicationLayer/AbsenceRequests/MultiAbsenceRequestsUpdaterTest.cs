@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var person = createAndSetupPerson(wfcs);
 
 			var reqs = createNewRequest(absence, person);
-			Target.UpdateAbsenceRequest(reqs);
+			Target.UpdateAbsenceRequest(reqs.Select(x => x.Id.GetValueOrDefault()).ToList());
 			reqs.SingleOrDefault().DenyReason.Should().Be.EqualTo(Resources.RequestDenyReasonClosedPeriod);
 		}
 
@@ -73,8 +73,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var reqs = createNewRequest(absence, person);
 
 			createAbsence(absence, person);
-			
-			Target.UpdateAbsenceRequest(reqs);
+
+			Target.UpdateAbsenceRequest(reqs.Select(x => x.Id.GetValueOrDefault()).ToList());
 			reqs.SingleOrDefault().DenyReason.Should().Be.EqualTo(Resources.RequestDenyReasonAlreadyAbsent);
 		}
 
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var reqs = createNewRequest(absence, person);
 
-			Target.UpdateAbsenceRequest(reqs);
+			Target.UpdateAbsenceRequest(reqs.Select(x => x.Id.GetValueOrDefault()).ToList());
 			reqs.SingleOrDefault().DenyReason.Should().Be.EqualTo(Resources.RequestDenyReasonPersonAccount);
 		}
 
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var person = createAndSetupPerson(wfcs);
 			var reqs = createNewRequest(absence, person);
 
-			Target.UpdateAbsenceRequest(reqs);
+			Target.UpdateAbsenceRequest(reqs.Select(x => x.Id.GetValueOrDefault()).ToList());
 
 			var req = reqs.SingleOrDefault();
 			req.IsDenied.Should().Be.EqualTo(true);

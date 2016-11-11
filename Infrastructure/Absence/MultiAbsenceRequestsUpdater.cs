@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
@@ -49,6 +50,15 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IToggleManager _toggleManager;
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
+		private readonly IPersonRepository _personRepository;
+		private readonly ISkillRepository _skillRepository;
+		private readonly IContractRepository _contractRepository;
+		private readonly IPartTimePercentageRepository _partTimePercentageRepository;
+		private readonly IContractScheduleRepository _contractScheduleRepository;
+		private readonly ISkillTypeRepository _skillTypeRepository;
+		private readonly IActivityRepository _activityRepository;
+		private readonly IAbsenceRepository _absenceRepository;
+		private readonly IPersonRequestRepository _personRequestRepository;
 
 		public MultiAbsenceRequestsUpdater(
 			ICurrentScenario scenarioRepository,
@@ -66,7 +76,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			IStardustJobFeedback feedback, 
 			ArrangeRequestsByProcessOrder arrangeRequestsByProcessOrder, 
 			IScheduleDayChangeCallback scheduleDayChangeCallback, 
-			ISchedulingResultStateHolder schedulingResultStateHolder, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IToggleManager toggleManager, IAbsenceRequestValidatorProvider absenceRequestValidatorProvider)
+			ISchedulingResultStateHolder schedulingResultStateHolder, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IToggleManager toggleManager, IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, IPersonRepository personRepository, ISkillRepository skillRepository, IContractRepository contractRepository, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository, ISkillTypeRepository skillTypeRepository, IActivityRepository activityRepository, IAbsenceRepository absenceRepository, IPersonRequestRepository personRequestRepository)
 		{
 			_scenarioRepository = scenarioRepository;
 			_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
@@ -87,23 +97,48 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_toggleManager = toggleManager;
 			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
+			_personRepository = personRepository;
+			_skillRepository = skillRepository;
+			_contractRepository = contractRepository;
+			_partTimePercentageRepository = partTimePercentageRepository;
+			_contractScheduleRepository = contractScheduleRepository;
+			_skillTypeRepository = skillTypeRepository;
+			_activityRepository = activityRepository;
+			_absenceRepository = absenceRepository;
+			_personRequestRepository = personRequestRepository;
 		}
 
-		public void UpdateAbsenceRequest(List<IPersonRequest> personRequests)
+		public void UpdateAbsenceRequest(IList<Guid> personRequestsIds)
 		{
 			var aggregatedValidatorList = new HashSet<IAbsenceRequestValidator>();
+			IList<IPersonRequest> personRequests;
+			var stopwatch = new Stopwatch();
+
 			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
+				stopwatch.Start();
+				_skillRepository.LoadAllSkills();
+				_contractRepository.LoadAll();
+				_skillTypeRepository.LoadAll();
+				_partTimePercentageRepository.LoadAll();
+				_contractScheduleRepository.LoadAllAggregate();
+				_activityRepository.LoadAll();
+				_absenceRepository.LoadAll();
+				personRequests = _personRequestRepository.Find(personRequestsIds);
+				_personRepository.FindPeople(personRequests.Select(x => x.Person.Id.GetValueOrDefault()));
+				stopwatch.Stop();
+				_feedback.SendProgress($"Done preloading data! It took {stopwatch.Elapsed}");
+
 				foreach (var personRequest in personRequests)
 				{
 					var person = personRequest.Person;
 					if (person.WorkflowControlSet != null)
 					{
-						var mergedPeriod = person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest) personRequest.Request);
+						var mergedPeriod = person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest)personRequest.Request);
 						aggregatedValidatorList.UnionWith(mergedPeriod.GetSelectedValidatorList());
 					}
 				}
-				var stopwatch = new Stopwatch();
+			
 				stopwatch.Start();
 				loadDataForResourceCalculation(personRequests, aggregatedValidatorList);
 				stopwatch.Stop();
@@ -170,31 +205,18 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod(absenceRequest);
 				var validatorList = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
 				var processAbsenceRequest = mergedPeriod.AbsenceRequestProcess;
-
-				stopwatch.Restart();
+				
 				var personAccountBalanceCalculator = getPersonAccountBalanceCalculator(affectedPersonAbsenceAccount, absenceRequest, dateOnlyPeriod);
-				stopwatch.Stop();
-				_feedback.SendProgress($"getPersonAccountBalanceCalculator took {stopwatch.Elapsed}");
-
-				stopwatch.Restart();
+				
 				setupUndoContainersAndTakeSnapshot(undoRedoContainer, allAccounts);
-				stopwatch.Stop();
-				_feedback.SendProgress($"setupUndoContainersAndTakeSnapshot took {stopwatch.Elapsed}");
-
-				stopwatch.Restart();
+				
 				processAbsenceRequest = checkIfPersonIsAlreadyAbsentDuringRequestPeriod(absenceRequest, processAbsenceRequest);
-				stopwatch.Stop();
-				_feedback.SendProgress($"checkIfPersonIsAlreadyAbsentDuringRequestPeriod took {stopwatch.Elapsed}");
 
 				var businessRules = NewBusinessRuleCollection.Minimum();
 
 				var requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(businessRules, currentScenario, _schedulingResultStateHolder);
-
 				
-				stopwatch.Start();
 				simulateApproveAbsence(absenceRequest, requestApprovalServiceScheduler);
-				stopwatch.Stop();
-				_feedback.SendProgress($"Simulate took {stopwatch.Elapsed}");
 
 				//Will issue a rollback for simulated schedule data
 				stopwatch.Restart();
@@ -348,7 +370,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		}
 
 
-		private void loadDataForResourceCalculation(List<IPersonRequest> personRequests, IEnumerable<IAbsenceRequestValidator> validatorList)
+		private void loadDataForResourceCalculation(IList<IPersonRequest> personRequests, IEnumerable<IAbsenceRequestValidator> validatorList)
 		{
 			var shouldLoadDataForResourceCalculation = validatorList != null && validatorList.Any(v => v is StaffingThresholdValidator);
 

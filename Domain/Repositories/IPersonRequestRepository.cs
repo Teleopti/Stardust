@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// </remarks>
 		IPersonRequest Find(Guid id);
 
-		IList<IPersonRequest> Find(List<Guid> id);
+		IList<IPersonRequest> Find(IEnumerable<Guid> id);
 
 		IList<IPersonRequest> FindByStatus<T>(IPerson person, DateTime startDate, int status) where T: Request;
 
