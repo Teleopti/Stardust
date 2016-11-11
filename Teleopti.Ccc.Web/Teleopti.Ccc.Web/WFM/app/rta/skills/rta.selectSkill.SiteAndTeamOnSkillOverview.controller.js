@@ -259,27 +259,14 @@
 				};
 
 				function goToAgents(selectedItemIds) {
-					if ($scope.selectedSkill != null) {
-						$scope.sites ?
-							RtaRouteService.goToAgents({
-								skillIds: $scope.skillIds,
-								siteIds: selectedItemIds
-							}) :
-							RtaRouteService.goToAgents({
-								skillIds: $scope.skillIds,
-								teamIds: selectedItemIds
-							});
-					} else {
-						$scope.sites ?
-							RtaRouteService.goToAgents({
-								skillAreaId: $scope.skillAreaId,
-								siteIds: selectedItemIds
-							}) :
-							RtaRouteService.goToAgents({
-								skillAreaId: $scope.skillAreaId,
-								teamIds: selectedItemIds
-							});
-					}
+					var stateParamsObject = {};
+					var skillOrSkillAreaKey = $scope.selectedSkill != null ? 'skillIds' : 'skillAreaId';
+					var skillOrSkillAreaValue = $scope.selectedSkill != null ? $scope.skillIds : $scope.skillAreaId;
+					var sitesOrTeamsKey = $scope.sites ? 'siteIds' : 'teamIds';
+					var sitesOrTeamsValue = selectedItemIds;
+					stateParamsObject[skillOrSkillAreaKey] = skillOrSkillAreaValue;
+					stateParamsObject[sitesOrTeamsKey] = sitesOrTeamsValue;
+					RtaRouteService.goToAgents(stateParamsObject);
 				};
 
 				$scope.$watch('selectedSkill', function(newValue, oldValue) {
