@@ -110,6 +110,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		public void UpdateAbsenceRequest(IList<Guid> personRequestsIds)
 		{
+			if (!personRequestsIds.Any()) return;
 			var aggregatedValidatorList = new HashSet<IAbsenceRequestValidator>();
 			IList<IPersonRequest> personRequests;
 			var stopwatch = new Stopwatch();
@@ -129,6 +130,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				stopwatch.Stop();
 				_feedback.SendProgress($"Done preloading data! It took {stopwatch.Elapsed}");
 
+				
 				foreach (var personRequest in personRequests)
 				{
 					var person = personRequest.Person;

@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeScheduleStorage ScheduleStorage;
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 		public FakeToggleManager ToggleManager;
+		public FakePersonRequestRepository PersonRequestRepository;
 		public INow Now;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -43,6 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeWorkloadRepository>().For<IWorkloadRepository>();
+			system.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
 			system.UseTestDouble(new MutableNow(DateTime.UtcNow)).For<INow>();
 		}
 
@@ -159,6 +161,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest.SetId(Guid.NewGuid());
 
 			personRequest.Pending();
+
+			PersonRequestRepository.Add(personRequest);
 
 			return new List<IPersonRequest>() { personRequest };
 		}
