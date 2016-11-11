@@ -175,4 +175,21 @@ describe('RtaAgentsCtrl', function() {
 
 		expect(scope.goBackToTeamsWithUrl).toContain("44590a63-6331-4921-bc9f-9b5e015ab495");
 	});
+
+	it('should have site link when viewing agents in team by skill', function() {
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+		stateParams.skillIds = ["3d5dd51a-8713-42e9-9f33-9b5e015ab71b"];
+		$fakeBackend
+		.withAgent({
+			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+			TeamId : "34590a63-6331-4921-bc9f-9b5e015ab495",
+			SiteId : "44590a63-6331-4921-bc9f-9b5e015ab495",
+			SkillId: "3d5dd51a-8713-42e9-9f33-9b5e015ab71b"
+		});
+
+		$controllerBuilder.createController();
+
+		expect(scope.goBackToTeamsWithUrl).toContain("44590a63-6331-4921-bc9f-9b5e015ab495");
+		expect(scope.goBackToTeamsWithUrl).toContain("3d5dd51a-8713-42e9-9f33-9b5e015ab71b");
+	});
 });
