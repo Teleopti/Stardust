@@ -45,7 +45,7 @@
 						<td class="weekview-td weekview-person-name">{{person.name}}</td>
 						<td class="weekview-td" ng-repeat="day in person.days" ng-style="{background: day.color, color: day.contrastFontColor}" ng-class="{'dayoff': day.isDayOff, 'terminated': day.isTerminated}">
 							<div class="summary" title="{{day.summeryTitle}}">{{day.summeryTitle}}</div>
-							<div>{{day.summeryTimeSpan | timerange }}</div>
+							<div>{{day.summeryTimeSpan}}</div>
 						</td>
 						<td class="contract-time contract-time-column" ng-if="vm.toggles.ShowWeeklyContractTimeEnabled">{{person.contractTime}}</td>
 					</tr>

@@ -243,8 +243,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						else if(significantPart == SchedulePartView.MainShift)
 						{
 							dayScheduleViewModel.Title = personAssignment.ShiftCategory.Description.Name;
-							dayScheduleViewModel.TimeSpan = personAssignment.PeriodExcludingPersonalActivity().TimePeriod(_userTimeZone.TimeZone());
-
+							dayScheduleViewModel.Timezone = new TimeZoneViewModel
+							{
+								IanaId = _ianaTimeZoneProvider.WindowsToIana(scheduleDay.Person.PermissionInformation.DefaultTimeZone().Id),
+								DisplayName = scheduleDay.Person.PermissionInformation.DefaultTimeZone().DisplayName
+							};
+							dayScheduleViewModel.DateTimeSpan = personAssignment.PeriodExcludingPersonalActivity();
+							
 							if(personAssignment.ShiftCategory != null)
 							{
 								dayScheduleViewModel.Color =

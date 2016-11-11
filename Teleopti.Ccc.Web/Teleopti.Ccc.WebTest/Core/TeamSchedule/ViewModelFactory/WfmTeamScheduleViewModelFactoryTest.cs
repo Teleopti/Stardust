@@ -72,8 +72,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			first.DaySchedules[2].Date.Should().Be(new DateOnly(2020, 1, 1));
 			first.DaySchedules[2].Title.Should().Be("Day");
 			first.DaySchedules[2].Color.Should().Be("rgb(0,0,255)");
-			first.DaySchedules[2].TimeSpan.Should()
-				.Be(new TimePeriod(new TimeSpan(8, 0, 0), new TimeSpan(17, 0, 0)));    
+			first.DaySchedules[2].DateTimeSpan.GetValueOrDefault().Should().Be(new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)));    
 		}
 
 		[Test]
@@ -507,46 +506,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			first.PersonId.Should().Be(person.Id.GetValueOrDefault());			
 			first.ContractTimeMinutes.Should().Be.EqualTo(9*60);
-		}
-
-		[Test]
-		public void ShouldWeeklyViewReturnCorrectTimeSpanInLoggonUserTimezone()
-		{
-			UserCulture.Is(CultureInfoFactory.CreateSwedishCulture());
-			UserTimeZone.IsChina();
-			var scheduleDate = new DateOnly(2020,1,1);
-			var person = PersonFactory.CreatePerson("Sherlock","Holmes");			
-			person.WithId();
-			PeopleSearchProvider.Add(person);
-			PersonRepository.Has(person);
-
-			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
-			CurrentScenario.FakeScenario(scenario);
-
-			var activity = ActivityFactory.CreateActivity("Phone");
-			activity.InContractTime = true;
-			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day", "blue");
-
-			var startTimeUtc = new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-			var endTimeUtc = new DateTime(2020, 1, 1, 9, 0, 0, DateTimeKind.Utc);
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity,person,new DateTimePeriod(startTimeUtc,endTimeUtc), shiftCategory,scenario);
-		
-			ScheduleStorage.Add(pa);
-
-			var searchTerm = new Dictionary<PersonFinderField,string>
-			{
-				{PersonFinderField.FirstName, "Sherlock"}
-			};
-
-			var result = Target.CreateWeekScheduleViewModel(searchTerm,scheduleDate,20,1);
-
-			result.Total.Should().Be(1);
-
-			var first = result.PersonWeekSchedules.First();
-
-			first.PersonId.Should().Be(person.Id.GetValueOrDefault());
-			first.DaySchedules.Find(d => d.Date.Equals(scheduleDate)).TimeSpan.Value.StartTime.Should().Be(new TimeSpan(0, 8, 0, 0));
-			first.DaySchedules.Find(d => d.Date.Equals(scheduleDate)).TimeSpan.Value.EndTime.Should().Be(new TimeSpan(0, 17, 0, 0));
 		}
 
 		[Test]

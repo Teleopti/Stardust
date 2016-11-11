@@ -2,16 +2,16 @@
 	'use strict';
 
 	angular.module('wfm.teamSchedule').factory('PersonScheduleWeekViewCreator', PersonScheduleWeekViewCreator);
-	PersonScheduleWeekViewCreator.$inject = [];
+	PersonScheduleWeekViewCreator.$inject = ['$filter'];
 
-	function PersonScheduleWeekViewCreator() {
+	function PersonScheduleWeekViewCreator($filter) {
 		function createPersonWeekViewModel(personWeek) {
 			var days = [];
 			angular.forEach(personWeek.DaySchedules, function(day) {
 				var dayViewModel = {
 					date: day.Date,
 					summeryTitle: day.Title,
-					summeryTimeSpan: day.TimeSpan,
+					summeryTimeSpan: getTimeSpanForAgentScheduleDay(day.DateTimeSpan, day.Timezone, day.Date.Date),
 					isDayOff: day.IsDayOff,
 					isTerminated: day.IsTerminated,
 					color: day.Color,
@@ -26,6 +26,27 @@
 				contractTime: formatContractTimeMinutes(personWeek.ContractTimeMinutes)
 			}
 			return personWeekViewModel;
+		}
+
+		function getTimeSpanForAgentScheduleDay(dateTimeSpan, timezone, dateInWeek) {
+			if (!dateTimeSpan || !timezone || !dateInWeek) return '';
+
+			var startStr = moment(dateTimeSpan.StartDateTime).format("YYYY-MM-DDTHH:mm");
+			var endStr = moment(dateTimeSpan.EndDateTime).format("YYYY-MM-DDTHH:mm");
+
+			var startTimeInUserTimezoneMoment = moment($filter('timezone')(startStr, null, timezone.IanaId));
+			var endTimeInUserTimezoneMoment = moment($filter('timezone')(endStr, null, timezone.IanaId));
+
+			var displayStarStr = startTimeInUserTimezoneMoment.format('HH:mm');
+			var displayEndStr = endTimeInUserTimezoneMoment.format('HH:mm');
+
+			if (startTimeInUserTimezoneMoment.isBefore(moment(dateInWeek).startOf('day'))) {
+				displayStarStr = startTimeInUserTimezoneMoment.format('HH:mm') + '(-1) ';
+			} else if (endTimeInUserTimezoneMoment.isAfter(moment(dateInWeek).endOf('day'))) {
+				displayEndStr = startTimeInUserTimezoneMoment.format('HH:mm') + '(+1)';
+			}
+
+			return displayStarStr + '  -  ' + displayEndStr;
 		}
 
 		function rgbToHexColor(rgbcolor){
