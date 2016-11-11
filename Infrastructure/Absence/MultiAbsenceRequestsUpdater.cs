@@ -148,9 +148,21 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 				var seniority = _arrangeRequestsByProcessOrder.GetRequestsSortedBySeniority(personRequests);
 				var firstComeFirstServe = _arrangeRequestsByProcessOrder.GetRequestsSortedByDate(personRequests);
-				processOrderList(seniority);
-				processOrderList(firstComeFirstServe);
 
+				if (_toggleManager.IsEnabled(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754))
+				{
+					using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills))
+					{
+						ResourceCalculationContext.Fetch().PrimarySkillMode = true;
+						processOrderList(seniority);
+						processOrderList(firstComeFirstServe);
+					}
+				}
+				else
+				{
+					processOrderList(seniority);
+					processOrderList(firstComeFirstServe);
+				}
 			}
 			foreach (var personRequest in personRequests)
 			{
@@ -245,26 +257,11 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 						_budgetGroupHeadCountSpecification);
 
 				stopwatch.Restart();
-				if (_toggleManager.IsEnabled(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754))
-				{
-					using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills))
-					{
-						ResourceCalculationContext.Fetch().PrimarySkillMode = true;
-						
 
-						processAbsenceRequest.Process(null, absenceRequest,
-										requiredForProcessingAbsenceRequest,
-										requiredForHandlingAbsenceRequest,
-										validatorList);
-					}
-				}
-				else
-				{
-					processAbsenceRequest.Process(null, absenceRequest,
-								requiredForProcessingAbsenceRequest,
-								requiredForHandlingAbsenceRequest,
-								validatorList);
-				}
+				processAbsenceRequest.Process(null, absenceRequest,
+											  requiredForProcessingAbsenceRequest,
+											  requiredForHandlingAbsenceRequest,
+											  validatorList);
 				stopwatch.Stop();
 				_feedback.SendProgress($"processAbsenceRequest.process(..) took {stopwatch.Elapsed}");
 
