@@ -55,7 +55,7 @@ CREATE TABLE #result(
 	end_date smalldatetime,
 	date_of_request smalldatetime,
 	person_id int,
-	person_name nvarchar(100),
+	person_name nvarchar(200),
 	request_type_id int,
 	request_type_name nvarchar(50),
 	request_status_id int,
