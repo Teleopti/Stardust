@@ -59,6 +59,7 @@
 		WfmTeamSchedule_ShowContractTime_38509,
 		WfmTeamSchedule_AddPersonalActivity_37742,
 		WfmTeamSchedule_MoveInvalidOverlappedActivity_40688,
+		WfmTeamSchedule_MoveEntireShift_41632,
 		WfmTeamSchedule_ShowNightlyRestWarning_39619,
 		WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799,
 		WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800,
