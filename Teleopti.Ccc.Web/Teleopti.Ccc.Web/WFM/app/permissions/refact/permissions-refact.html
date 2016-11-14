@@ -158,8 +158,8 @@
 												</label>
 											</div>
 											<div class="wfm-radio">
-												<label ng-click="unselectedFunctionsToggle = false">
-													<input type="radio" name="tree-toggle" ng-model="selectedFunctionsToggle" value="true">
+												<label>
+													<input type="radio" name="tree-toggle"  ng-click="vm.showOnlySelectedFunctionsFilter()">
 													<span class="wfm-radio-toggle"></span>
 													<span class="wfm-radio-label" translate>SelectedItems</span>
 												</label>
@@ -176,7 +176,7 @@
 								</div>
 								<div class="con-row">
 									<div class="con-flex tree">
-										<permissions-tree functions="vm.applicationFunctions"></permissions-tree>
+										<permissions-tree functions="vm.applicationFunctions" filteredFunctions="vm.filteredApplicationFunctions"></permissions-tree>
 									</div>
 								</div>
 							</md-content>
@@ -236,7 +236,7 @@
 								</div>
 								<div class="con-row">
 									<div class="con-row">
-										<permissions-list bu="vm.organizationSelection.BusinessUnit"> </permissions-list>
+										<permissions-list org="vm.organizationSelection"> </permissions-list>
 									</div>
 								</div>
 							</md-content>

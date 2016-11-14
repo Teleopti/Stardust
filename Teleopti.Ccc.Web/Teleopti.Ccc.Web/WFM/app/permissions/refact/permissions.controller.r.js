@@ -5,9 +5,9 @@
         .module('wfm.permissions')
         .controller('PermissionsCtrlRefact', PermissionsCtrl);
 
-    PermissionsCtrl.$inject = ['PermissionsServiceRefact', 'permissionsDataService'];
+    PermissionsCtrl.$inject = ['$filter', 'PermissionsServiceRefact', 'permissionsDataService'];
 
-    function PermissionsCtrl(PermissionsServiceRefact, permissionsDataService) {
+    function PermissionsCtrl($filter, PermissionsServiceRefact, permissionsDataService) {
         var vm = this;
         vm.showCreateModal;
         vm.roleName;
@@ -21,7 +21,14 @@
         vm.checkMyRole  = checkMyRole;
         vm.prepareTree = prepareTree;
         vm.toggleAllFunction = toggleAllFunction;
+        vm.showOnlySelectedFunctionsFilter = showOnlySelectedFunctionsFilter;
         vm.selectedOrNot = false;
+
+        vm.filteredApplicationFunctions = [];
+
+        function showOnlySelectedFunctionsFilter(){
+            vm.filteredApplicationFunctions  = $filter('showOnlySelectedFunctionsFilter')(vm.applicationFunctions);
+        }
 
         function toggleAllFunction () {
           vm.applicationFunctions[0].IsSelected = !vm.applicationFunctions[0].IsSelected;

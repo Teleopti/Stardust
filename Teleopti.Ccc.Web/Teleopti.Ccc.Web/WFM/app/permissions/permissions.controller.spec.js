@@ -816,7 +816,7 @@ xdescribe('PermissionsCtrlRefact', function () {
 		expect(vm.organizationSelection.BusinessUnit.ChildNodes[1].IsSelected).toBe(true);
 	});
 
-	it('should select all functions when toggle all function', function(){
+	it('should select all functions when toggle all function', function () {
 		fakeBackend
 			.withApplicationFunction({
 				FunctionId: '6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7',
@@ -862,7 +862,7 @@ xdescribe('PermissionsCtrlRefact', function () {
 		expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].ChildFunctions[1].IsSelected).toEqual(true);
 	});
 
-	it('should deselect all functions when toggle all function', function(){
+	it('should deselect all functions when toggle all function', function () {
 		fakeBackend
 			.withApplicationFunction({
 				FunctionId: '6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7',
@@ -913,6 +913,48 @@ xdescribe('PermissionsCtrlRefact', function () {
 		expect(vm.applicationFunctions[1].IsSelected).toEqual(false);
 		expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].IsSelected).toEqual(false);
 		expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].ChildFunctions[1].IsSelected).toEqual(false);
+	});
+
+	it('should only show selected function when pressing selected filter', function () {
+		inject(function ($filter) {
+			fakeBackend
+				.withRole({
+					BuiltIn: false,
+					DescriptionText: 'HermansRoll',
+					Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+					IsAnyBuiltIn: true,
+					IsMyRole: false,
+					Name: 'HermansRoll'
+				})
+				.withRoleInfo({
+					Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+					AvailableFunctions: [
+						{
+							Id: '63656f9a-be16-4bb7-9012-9bde01232075',
+							IsSelected: true
+						}
+					]
+				})
+				.withApplicationFunction({
+					FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+					Name: 'SelectedFunction',
+					ChildFunctions: [],
+					IsSelected: true
+				})
+				.withApplicationFunction({
+					FunctionId: '9995eba9-c304-40b7-866b-5c77b3e76f8d',
+					Name: 'UnselectedFunction',
+					ChildFunctions: [],
+					IsSelected: false
+				});
+			$httpBackend.flush();
+
+			vm.selectRole(vm.roles[0]);
+			$httpBackend.flush();
+			vm.showOnlySelectedFunctionsFilter();
+
+			expect(vm.filteredApplicationFunctions.length).toEqual(1);
+		});
 	});
 
 });

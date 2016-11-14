@@ -1,27 +1,34 @@
-function PermissionsTreeController(permissionsDataService, NoticeService, $translate) {
+function PermissionsTreeController(permissionsDataService, NoticeService, $translate, $scope) {
   var ctrl = this;
 
   ctrl.toggleFunction = toggleFunction;
   ctrl.onSelect = onSelect;
   ctrl.checkParent = checkParent;
   var selectedFunctions = [];
+  // var filteredFunctions = [];
+
+  // $scope.$watchCollection('filteredFunctions', function(){
+  //   ctrl.functions = ctrl.filteredFunctions;
+  // });
+
 
   function toggleFunction(func) {
     var selectedRole = permissionsDataService.getSelectedRole();
 
-    if (selectedRole.BuiltIn) {
+    //Fixa testerna
+    if (selectedRole != null && selectedRole.BuiltIn) {
       NoticeService.warning($translate.instant('ChangesAreDisabled'), 5000, true);
       return;
     }
-
-    if (selectedRole.IsMyRole) {
+    //Fix me
+    if (selectedRole != null && selectedRole.IsMyRole) {
       NoticeService.warning($translate.instant('CanNotModifyMyRole'), 5000, true);
       return;
     }
 
     selectedFunctions.push(func.FunctionId)
-
-    if (selectedRole) {
+    //Fix me
+    if (selectedRole != null && selectedRole) {
       permissionsDataService.selectFunction(selectedRole, selectedFunctions)
     }
 
@@ -74,6 +81,7 @@ angular.module('wfm.permissions').component('permissionsTree', {
   controller: PermissionsTreeController,
   bindings: {
     functions: '=',
-    parent: '='
+    parent: '=',
+    filteredFunctions: '='
   }
 });

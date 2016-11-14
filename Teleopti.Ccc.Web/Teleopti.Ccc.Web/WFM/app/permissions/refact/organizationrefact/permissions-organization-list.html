@@ -1,8 +1,41 @@
-		<ul>
-			<li>
+<style media="screen">
+	.temp-tree-list{
+		margin-left: 10px;
+		padding:5px;
+		cursor: pointer;
+	}
+</style>
+
+<div class="temp-tree-list">
+
+	<div ng-click="$ctrl.toggleNode($ctrl.org)">
+		<i class="mdi mdi-check" ng-if="$ctrl.org.BusinessUnit.IsSelected"></i>
+		{{$ctrl.org.BusinessUnit.Name}}
+	</div>
+
+	<div class="temp-tree-list" ng-repeat="site in $ctrl.org.BusinessUnit.ChildNodes">
+		<div ng-click="$ctrl.toggleNode(site)">
+			<i class="mdi mdi-check" ng-if="site.IsSelected"></i>
+			{{site.Name}}
+		</div>
+
+		<div class="temp-tree-list" ng-repeat="team in site.ChildNodes">
+			<div ng-click="$ctrl.toggleNode(team)">
+				<i class="mdi mdi-check" ng-if="team.IsSelected"></i>
+				{{team.Name}}
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<!--
+		<ul >
+			<li ng-click="$ctrl.toggleNode($ctrl.bu)">
+				<i ng-if="$ctrl.bu.IsSelected" class="mdi mdi-check"></i>
                 {{$ctrl.bu.Name}}
             </li>
-			<li style="margin-left:10px;" ng-repeat="child in $ctrl.bu.ChildNodes">
-                <permissions-list bu="child"></permissions-list>
+			<li ng-click="$ctrl.toggleNode(child)" style="margin-left:10px;padding:20px;" class="pointer" ng-repeat="child in $ctrl.bu.ChildNodes">
+          <i ng-if="child.IsSelected" class="mdi mdi-check"></i>     <permissions-list bu="child"></permissions-list>
 			</li>
-		</ul>
+		</ul> -->
