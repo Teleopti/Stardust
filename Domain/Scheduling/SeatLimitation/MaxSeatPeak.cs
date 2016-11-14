@@ -40,13 +40,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 		public bool IsOverMaxSeat(IScheduleDay scheduleDay, IEnumerable<ISkillDay> maxSeatSkillDaysToLookAt)
 		{
-			foreach (var skillDay in maxSeatSkillDaysToLookAt.Where(x => x.CurrentDate == scheduleDay.DateOnlyAsPeriod.DateOnly))
+			foreach (var visualLayer in scheduleDay.ProjectionService().CreateProjection())
 			{
-				var maxSeats = ((MaxSeatSkill)skillDay.Skill).MaxSeats;
-
-				foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
+				var affectedDates = new HashSet<DateOnly>
 				{
-					foreach (var visualLayer in scheduleDay.ProjectionService().CreateProjection())
+					new DateOnly(visualLayer.Period.StartDateTime),
+					new DateOnly(visualLayer.Period.EndDateTime)
+				};
+				foreach (var skillDay in maxSeatSkillDaysToLookAt.Where(x => affectedDates.Contains(x.CurrentDate)))
+				{
+					var maxSeats = ((MaxSeatSkill)skillDay.Skill).MaxSeats;
+
+					foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 					{
 						if (visualLayer.Period.Intersect(skillStaffPeriod.Period))
 						{
@@ -56,6 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					}
 				}
 			}
+
 
 			return false;
 		}
