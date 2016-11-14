@@ -27,11 +27,12 @@ namespace Teleopti.Ccc.WinCode.Common.Filter
 
             foreach (var s in splitted)
             {
+	            var term = s.ToLower(info);
                 var g = (from d in _allItems
-                         where !(d.Text.ToLower(info).Contains(s.ToLower(info))
+                         where !(d.Text.ToLower(info).Contains(term)
                                  || d.SubItems.OfType<ListViewItem.ListViewSubItem>().Any(
-                                     i => i.Text.ToLower(info).Contains(s.ToLower(info))))
-                         select d).ToList();
+                                     i => i.Text.ToLower(info).Contains(term)))
+                         select d).ToArray();
 
                 foreach (var listViewItem in g)
                 {

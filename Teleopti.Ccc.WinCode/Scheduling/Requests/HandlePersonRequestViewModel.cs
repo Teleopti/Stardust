@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 	{
 		private readonly DateTimePeriod _schedulePeriod;
 		private ObservableCollection<PersonRequestViewModel> RequestViewModels { get; set; }
-		private TimeSpan _filterTimeSpan;
-		private IList<PersonRequestViewModel> _showOnlymodels = new List<PersonRequestViewModel>();
+		private readonly TimeSpan _filterTimeSpan;
+		private readonly List<PersonRequestViewModel> _showOnlymodels = new List<PersonRequestViewModel>();
 		private readonly IList<IPerson> _permittedPersons;
 		private readonly IUndoRedoContainer _undoRedoContainer;
 		private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 			lock (FilterLock)
 			{
 				RequestViewModels.Clear();
-				_showOnlymodels = new List<PersonRequestViewModel>();
+				_showOnlymodels.Clear();
 				foreach (var request in personRequests)
 				{
 					InsertPersonRequestViewModel(request, statusChecker, authorization);
@@ -134,11 +134,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 
 		public void AddPersonRequestViewModel(PersonRequestViewModel personRequestViewModel)
 		{
-
 			personRequestViewModel.ValidateIfWithinSchedulePeriod(_schedulePeriod, _permittedPersons);
 			RequestViewModels.Add(personRequestViewModel);
 			_showOnlymodels.Add(personRequestViewModel);
-         filterItems();
+			filterItems();
 		}
 
 		/// <summary>
@@ -152,13 +151,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 		public void ShowOnly(IList<PersonRequestViewModel> modelsToShow)
 		{
 			_showOnlymodels.Clear();
-			modelsToShow.ForEach(m=> _showOnlymodels.Add(m));
+			_showOnlymodels.AddRange(modelsToShow);
 			filterItems();
 		}
 
 		private void commitStatusInAddingAndEditing()
-
-
 		{
 			if (PersonRequestViewModels.IsAddingNew)
 			{
