@@ -10,8 +10,8 @@
 		this.validateMoveToTimeForShift = validateShiftsToMove;
 
 		function getShiftDate(personSchedule) {
-			var selectedShift = personSchedule.Shifts.filter(function (shift) {
-				var selectedProjections = shift.Projections.filter(function (layer) {
+			var selectedShift = personSchedule.Shifts.filter(function(shift) {
+				var selectedProjections = shift.Projections.filter(function(layer) {
 					return layer.Selected;
 				});
 				return selectedProjections.length > 0;
@@ -25,14 +25,41 @@
 			for (var i = 0; i < selectedPersonIds.length; i++) {
 				var personId = selectedPersonIds[i];
 				var personSchedule = ScheduleMgmt.findPersonScheduleVmForPersonId(personId);
+				var currentDate = personSchedule.Date;
+				var currentDateMoment = moment(currentDate);
 
 				var newStartInAgentTimezone = $filter('timezone')(newStartMoment.format('YYYY-MM-DD HH:mm'),
 					personSchedule.Timezone.IanaId,
 					currentTimezone);
-				if (!moment(newStartInAgentTimezone).isSame(personSchedule.Date, 'day')) {
+
+				if (!moment(newStartInAgentTimezone).isSame(currentDate, 'day')) {
+					invalidPeople.push(personSchedule);
+					continue;
+				}
+
+				var shifts = personSchedule.Shifts.filter(function(shift) {
+					return shift.Date === currentDate;
+				});
+
+				if (shifts.length === 0) continue;
+				var shiftForCurrentDay = shifts[0];
+				if (!shiftForCurrentDay.ProjectionTimeRange) continue;
+				var shiftLength = moment(shiftForCurrentDay.ProjectionTimeRange.End)
+					.diff(moment(shiftForCurrentDay.ProjectionTimeRange.Start), 'minute');
+				var newEndMoment = newStartMoment.add(shiftLength, 'minute');
+
+				var hasConflict = personSchedule.Shifts.some(function(shift) {
+					if (currentDateMoment.isSame(shift.Date, 'day') || !shift.ProjectionTimeRange) return;
+					return (currentDateMoment.isAfter(shift.Date, 'day') &&  newStartMoment.isSameOrBefore(shift.ProjectionTimeRange.End)) ||
+						(currentDateMoment.isBefore(shift.Date, 'day') && newEndMoment.isSameOrAfter(shift.ProjectionTimeRange.Start));
+				});
+
+				if (hasConflict) {
 					invalidPeople.push(personSchedule);
 				}
 			}
+
+
 			return invalidPeople.length === 0;
 		}
 
