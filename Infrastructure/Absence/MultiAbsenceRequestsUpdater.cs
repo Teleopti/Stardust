@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using log4net;
+using log4net.Repository.Hierarchy;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -14,6 +15,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -35,7 +37,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulesForRequestWithoutResourceCalculation;
 		private readonly IBudgetGroupHeadCountSpecification _budgetGroupHeadCountSpecification;
 		private readonly IBudgetGroupAllowanceSpecification _budgetGroupAllowanceSpecification;
-		private readonly IScheduleIsInvalidSpecification _scheduleIsInvalidSpecification;
 		private readonly IAlreadyAbsentSpecification _alreadyAbsentSpecification;
 		private readonly IResourceOptimization _resourceOptimizationHelper;
 		private readonly IPersonRequestCheckAuthorization _authorization;
@@ -67,7 +68,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation,
 			IRequestFactory requestFactory, 
 			IAlreadyAbsentSpecification alreadyAbsentSpecification,
-			IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, 
 			IPersonRequestCheckAuthorization authorization,
 			IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification,
 			IResourceOptimization resourceOptimizationHelper,
@@ -84,7 +84,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_loadSchedulesForRequestWithoutResourceCalculation = loadSchedulesForRequestWithoutResourceCalculation;
 			_requestFactory = requestFactory;
 			_alreadyAbsentSpecification = alreadyAbsentSpecification;
-			_scheduleIsInvalidSpecification = scheduleIsInvalidSpecification;
 			_authorization = authorization;
 			_budgetGroupHeadCountSpecification = budgetGroupHeadCountSpecification;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
@@ -240,7 +239,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 				//Will issue a rollback for simulated schedule data
 				stopwatch.Restart();
-				processAbsenceRequest = handleInvalidSchedule(processAbsenceRequest);
+				processAbsenceRequest = handleInvalidSchedule(processAbsenceRequest, personRequest.Person);
 				stopwatch.Stop();
 				_feedback.SendProgress($"handleInvalidSchedule took {stopwatch.Elapsed}");
 
@@ -459,17 +458,45 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				});
 		}
 
-
-		private IProcessAbsenceRequest handleInvalidSchedule(IProcessAbsenceRequest process)
+		//may be remove this whole code
+		private IProcessAbsenceRequest handleInvalidSchedule(IProcessAbsenceRequest process, IPerson person)
 		{
-			if (_scheduleIsInvalidSpecification.IsSatisfiedBy(_schedulingResultStateHolder))
+			if (process.GetType() == typeof(DenyAbsenceRequest)) return process;
+			if (satisfySchedule(person))
 			{
-				if (process.GetType() != typeof(DenyAbsenceRequest))
-				{
-					process = _pendingAbsenceRequest;
-				}
+				process = _pendingAbsenceRequest;
 			}
 			return process;
 		}
+
+		private bool satisfySchedule(IPerson person)
+		{
+			var schedulesForPerson = _schedulingResultStateHolder.Schedules.Where(x => x.Key == person);
+			try
+			{
+				foreach (KeyValuePair<IPerson, IScheduleRange> scheduleRange in schedulesForPerson)
+				{
+					var period =
+						scheduleRange.Value.Period.ToDateOnlyPeriod(
+							scheduleRange.Key.PermissionInformation.DefaultTimeZone());
+					var schedules = scheduleRange.Value.ScheduledDayCollection(period);
+					foreach (IScheduleDay scheduleDay in schedules)
+					{
+						var ass = scheduleDay.PersonAssignment();
+						if (ass != null)
+						{
+							ass.CheckRestrictions();
+						}
+					}
+
+				}
+			}
+			catch (ValidationException)
+			{
+				return true;
+			}
+			return false;
+		}
 	}
+	
 }
