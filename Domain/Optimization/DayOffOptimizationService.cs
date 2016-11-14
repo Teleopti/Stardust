@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
 			var successfulContainers = new List<IDayOffOptimizerContainer>(optimizers);
 	        var cancel = false;
-		    using (PerformanceOutput.ForOperation("Optimizing days off for " + successfulContainers.Count() + " agents"))
+		    using (PerformanceOutput.ForOperation("Optimizing days off for " + successfulContainers.Count + " agents"))
 		    {
 			    string values = " ";
 			    int loops = 0;

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
@@ -28,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			var allRequestsRaw = _queuedAbsenceRequestRepo.LoadAll();
 			var allNewRequests = new List<IQueuedAbsenceRequest>();
-			allNewRequests.AddRange(allRequestsRaw.Where(x => (x.EndDateTime.Subtract(x.StartDateTime)).Days <= 60 && x.Sent == null));
+			allNewRequests.AddRange(allRequestsRaw.Where(x => x.EndDateTime.Subtract(x.StartDateTime).TotalDays <= 60 && x.Sent == null));
 
 			//filter out requests that is not in a period that is already beeing processed
 			var processingPeriods = getProcessingPeriods(allRequestsRaw.Where(x => x.Sent != null));
@@ -58,29 +57,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		private static bool isInPeriod(IEnumerable<DateTimePeriod> processingPeriods, IQueuedAbsenceRequest request)
 		{
-			return processingPeriods.Any(period => period.ContainsPart(new DateTimePeriod(request.StartDateTime.Utc(), request.EndDateTime.Utc())));
+			var requestPeriod = new DateTimePeriod(request.StartDateTime.Utc(), request.EndDateTime.Utc());
+			return processingPeriods.Any(period => period.ContainsPart(requestPeriod));
 		}
 
 		private static List<DateTimePeriod> getProcessingPeriods(IEnumerable<IQueuedAbsenceRequest> processingRequests)
 		{
-			var groupedRequests = new ConcurrentDictionary<DateTime, List<IQueuedAbsenceRequest>>();
-			foreach (var request in processingRequests)
-			{
-				groupedRequests.AddOrUpdate(request.Sent.GetValueOrDefault(), new List<IQueuedAbsenceRequest>() { request }, (key, oldValue) =>
-				{
-					oldValue.Add(request);
-					return oldValue;
-				});
-			}
+			var groupedRequests = processingRequests.GroupBy(p => p.Sent.GetValueOrDefault());
 
 			var periods = new List<DateTimePeriod>();
-			foreach (var timeStamp in groupedRequests.Keys)
+			foreach (var timeStamp in groupedRequests)
 			{
 				var min = DateTime.MaxValue;
 				var max = DateTime.MinValue;
-
-				var requestsWithSameTimeStamp = groupedRequests[timeStamp];
-				foreach (var request in requestsWithSameTimeStamp)
+				
+				foreach (var request in timeStamp)
 				{
 					if (request.StartDateTime < min)
 						min = request.StartDateTime;
@@ -167,7 +158,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 													  IList<IQueuedAbsenceRequest> requests)
 		{
 			var requestsInPeriod = requests.Where(x => x.StartDateTime.Date >= windowPeriod.StartDate.Date &&
-													   x.StartDateTime.Date <= windowPeriod.EndDate.Date).ToList();
+													   x.StartDateTime.Date <= windowPeriod.EndDate.Date).ToArray();
 			if (!requestsInPeriod.Any()) return new List<Guid>();
 
 			var min = requestsInPeriod.Select(x => x.StartDateTime).Min();

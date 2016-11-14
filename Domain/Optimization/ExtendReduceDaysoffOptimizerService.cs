@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		    var successfulContainers = optimizers.ToList();
 		    var cancel = false;
 		    using (
-			    PerformanceOutput.ForOperation("Extending and reduces time for " + successfulContainers.Count() + " agents"))
+			    PerformanceOutput.ForOperation("Extending and reduces time for " + successfulContainers.Count + " agents"))
 		    {
 			    while (successfulContainers.Count > 0)
 			    {

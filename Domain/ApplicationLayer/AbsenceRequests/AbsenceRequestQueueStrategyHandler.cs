@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -88,14 +87,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					listOfAbsenceRequests.ForEach(absenceRequests =>
 					{
 						var sent = DateTime.UtcNow;
-
-						var multiAbsenceRequestsEvent = new NewMultiAbsenceRequestsCreatedEvent()
+						var requests = absenceRequests.ToList();
+						var multiAbsenceRequestsEvent = new NewMultiAbsenceRequestsCreatedEvent
 						{
-							PersonRequestIds = absenceRequests.ToList(),
+							PersonRequestIds = requests,
 							Sent = sent
 						};
 						_publisher.Publish(multiAbsenceRequestsEvent);	
-						_queuedAbsenceRequestRepository.Send(absenceRequests.ToList(), sent);
+						_queuedAbsenceRequestRepository.Send(requests, sent);
 						Thread.Sleep(1000); //Sleep 1 second to make unique timestamps
 					});
 
