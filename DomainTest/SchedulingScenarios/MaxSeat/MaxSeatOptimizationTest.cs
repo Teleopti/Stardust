@@ -983,8 +983,30 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, Enumerable.Empty<ISkillDay>(), CreateOptimizationPreferences());
 
 			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay
-				.Should().Be.EqualTo(TimeSpan.FromHours(8));
+				.Should().Be.EqualTo(TimeSpan.FromHours(9)); //should not have been touched
 		}
+
+		[Test, Ignore("To be fixed")]
+		public void ShouldFixMaxPeaksComingFromNightShifts()
+		{
+			var site = new Site("_") { MaxSeats = 1 }.WithId();
+			var team = new Team { Description = new Description("_"), Site = site };
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var dateOnly = new DateOnly(2016, 10, 25);
+			var scenario = new Scenario("_");
+			var agentDataOneHourAtNight = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly.AddDays(1), team, new RuleSetBag(), scenario, activity, new TimePeriod(0, 0, 1, 0));
+			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(), scenario, activity, new TimePeriod(18, 0, 26, 0));
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1)), new[] { agentData.Assignment, agentDataOneHourAtNight.Assignment });
+			var optPreferences = CreateOptimizationPreferences();
+			optPreferences.Advanced.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak;
+
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences);
+
+			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().ShiftLayers
+				.Should().Be.Empty();
+		}
+
 
 		protected abstract OptimizationPreferences CreateOptimizationPreferences();
 	}
