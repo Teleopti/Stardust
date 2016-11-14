@@ -40,6 +40,7 @@ namespace Stardust.Node.Workers
 		private readonly TrySendStatusToManagerTimer _trySendJobFaultedStatusToManagerTimer;
 		private JobQueueItemEntity _currentMessageToProcess;
 		private TrySendStatusToManagerTimer _trySendStatusToManagerTimer;
+		private bool isWorking;
 
 		public WorkerWrapper(IInvokeHandler invokeHandler,
 		                     NodeConfiguration nodeConfiguration,
@@ -63,6 +64,8 @@ namespace Stardust.Node.Workers
 			_trySendJobCanceledStatusToManagerTimer = trySendJobCanceledStatusToManagerTimer;
 			_trySendJobFaultedStatusToManagerTimer = trySendJobFaultedStatusToManagerTimer;
 			_trySendJobDetailToManagerTimer = trySendJobDetailToManagerTimer;
+
+			isWorking = false;
 
 			_trySendJobDetailToManagerTimer.Start();
 			_nodeStartUpNotificationToManagerTimer.Start();
@@ -166,6 +169,8 @@ namespace Stardust.Node.Workers
 
 		public void StartJob(JobQueueItemEntity jobQueueItemEntity)
 		{
+			if (isWorking) return;
+			isWorking = true;
 			CancellationTokenSource = new CancellationTokenSource();
 
 			_currentMessageToProcess = jobQueueItemEntity;
@@ -190,51 +195,55 @@ namespace Stardust.Node.Workers
 			//----------------------------------------------------
 
 			Task = new Task(() =>
-			{
-				_handler.Invoke(deSer,
-				                CancellationTokenSource,
-				                SendJobProgressToManager);
-			},
+			                {
+				                _handler.Invoke(deSer,
+				                                CancellationTokenSource,
+				                                SendJobProgressToManager);
+			                },
 			                CancellationTokenSource.Token);
 
 			Task.ContinueWith(t =>
-			{
-				switch (t.Status)
-				{
-					case TaskStatus.RanToCompletion:
+			                  {
+				                  switch (t.Status)
+				                  {
+					                  case TaskStatus.RanToCompletion:
 
-						SetNodeStatusTimer(_trySendJobDoneStatusToManagerTimer,
-						                   _currentMessageToProcess);
-						break;
-
-
-					case TaskStatus.Canceled:
-
-						SetNodeStatusTimer(_trySendJobCanceledStatusToManagerTimer,
-						                   _currentMessageToProcess);
-
-						break;
+						                  SetNodeStatusTimer(_trySendJobDoneStatusToManagerTimer,
+						                                     _currentMessageToProcess);
+						                  break;
 
 
-					case TaskStatus.Faulted:
-						if (faultedTimer != null)
-						{
-							faultedTimer.AggregateExceptionToSend = t.Exception;
-							faultedTimer.ErrorOccured = DateTime.UtcNow;
-						}
+					                  case TaskStatus.Canceled:
 
-						if (t.Exception != null)
-						{
-							Logger.ErrorWithLineNumber("Failed",
-							                           t.Exception);
-						}
+						                  SetNodeStatusTimer(_trySendJobCanceledStatusToManagerTimer,
+						                                     _currentMessageToProcess);
 
-						SetNodeStatusTimer(_trySendJobFaultedStatusToManagerTimer,
-						                   _currentMessageToProcess);
+						                  break;
 
-						break;
-				}
-			}, TaskContinuationOptions.LongRunning);
+
+					                  case TaskStatus.Faulted:
+						                  if (faultedTimer != null)
+						                  {
+							                  faultedTimer.AggregateExceptionToSend = t.Exception;
+							                  faultedTimer.ErrorOccured = DateTime.UtcNow;
+						                  }
+
+						                  if (t.Exception != null)
+						                  {
+							                  Logger.ErrorWithLineNumber("Failed",
+							                                             t.Exception);
+						                  }
+
+						                  SetNodeStatusTimer(_trySendJobFaultedStatusToManagerTimer,
+						                                     _currentMessageToProcess);
+
+						                  break;
+				                  }
+			                  }, TaskContinuationOptions.LongRunning)
+				.ContinueWith(t =>
+				              {
+					              isWorking = false;
+				              });
 
 			Task.Start();
 		}

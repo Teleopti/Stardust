@@ -14,21 +14,18 @@ namespace Stardust.Manager
 		private readonly Timer _checkAndAssignJob = new Timer();
 		private readonly Timer _checkHeartbeatsTimer = new Timer();
 
-		private readonly IHttpSender _httpSender;
 		private readonly IJobRepository _jobRepository;
 		private readonly ManagerConfiguration _managerConfiguration;
 		private readonly IWorkerNodeRepository _workerNodeRepository;
 
 		public JobManager(IJobRepository jobRepository,
 		                  IWorkerNodeRepository workerNodeRepository,
-		                  IHttpSender httpSender,
 		                  ManagerConfiguration managerConfiguration,
 						  JobPurgeTimer jobPurgeTimer,
 						  NodePurgeTimer nodePurgeTimer)
 		{
 			_jobRepository = jobRepository;
 			_workerNodeRepository = workerNodeRepository;
-			_httpSender = httpSender;
 			_managerConfiguration = managerConfiguration;
 
 			_checkAndAssignJob.Elapsed += AssignJobToWorkerNodes_Elapsed;
