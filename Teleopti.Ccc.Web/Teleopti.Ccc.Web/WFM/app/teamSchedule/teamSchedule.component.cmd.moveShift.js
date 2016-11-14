@@ -16,11 +16,10 @@
 		ctrl.showMeridian = /h:/.test($locale.DATETIME_FORMATS.shortTime);
 		ctrl.meridians = ctrl.showMeridian ? $locale.DATETIME_FORMATS.AMPMS : [];
 		ctrl.invalidAgents = [];
-
 		ctrl.$onInit = function () {
 			ctrl.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 			ctrl.moveToTime = getDefaultMoveToTime();
-			$scope.$watch(function() {
+			$scope.$watch(function () {
 				return getMoveToStartTimeStr();
 			}, function(n, o) {
 				updateInvalidAgents();
@@ -44,7 +43,7 @@
 		function getMoveToStartTimeStr() {
 			var dateStr = ctrl.containerCtrl.getDate();
 			var timeStr = moment(ctrl.moveToTime).format('HH:mm');
-			return dateStr + 'T' + timeStr;
+			return dateStr + ' ' + timeStr;
 		}
 
 		function updateInvalidAgents() {

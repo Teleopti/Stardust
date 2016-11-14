@@ -6,9 +6,9 @@
 			<h3>{{'StartTime' | translate}}:</h3>
 			<div uib-timepicker class="focus-default" ng-model="$ctrl.moveToTime" required show-meridian="$ctrl.showMeridian" meridians="$ctrl.meridians"></div>
 		</form>
-		<div ng-if="$ctrl.anyInvalidAgent()">
+		<div ng-if="$ctrl.anyInvalidAgent()" class="text-danger">
 			<i class="mdi mdi-alert-octagon"></i>
-			<span>{{'TheNewTimeIsNotAllowedFor'|translate}} {{$ctrl.invalidPeople()}}.</span>
+			<span>{{'TheNewTimeIsNotAllowedFor'|translate}} <strong>{{$ctrl.invalidAgents | names }}</strong>.</span>
 		</div>
 		<button id="applyMoveShift" class="wfm-btn form-submit"
 				ng-class="{ 'wfm-btn-primary': $ctrl.anyValidAgent() && moveShiftForm.$valid && !$ctrl.checkingCommand, 'wfm-btn-primary-disabled': !$ctrl.anyValidAgent() || !moveShiftForm.$valid || $ctrl.checkingCommand}"

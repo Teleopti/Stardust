@@ -46,12 +46,12 @@
 				if (!shiftForCurrentDay.ProjectionTimeRange) continue;
 				var shiftLength = moment(shiftForCurrentDay.ProjectionTimeRange.End)
 					.diff(moment(shiftForCurrentDay.ProjectionTimeRange.Start), 'minute');
-				var newEndMoment = newStartMoment.add(shiftLength, 'minute');
+				var newEndMoment = newStartMoment.clone().add(shiftLength, 'minute');
 
 				var hasConflict = personSchedule.Shifts.some(function(shift) {
-					if (currentDateMoment.isSame(shift.Date, 'day') || !shift.ProjectionTimeRange) return;
-					return (currentDateMoment.isAfter(shift.Date, 'day') &&  newStartMoment.isSameOrBefore(shift.ProjectionTimeRange.End)) ||
-						(currentDateMoment.isBefore(shift.Date, 'day') && newEndMoment.isSameOrAfter(shift.ProjectionTimeRange.Start));
+					if (currentDateMoment.isSame(shift.Date, 'day') || !shift.ProjectionTimeRange) return false;
+					return (currentDateMoment.isAfter(shift.Date, 'day') &&  newStartMoment.isSameOrBefore(moment(shift.ProjectionTimeRange.End), 'minute')) ||
+						(currentDateMoment.isBefore(shift.Date, 'day') && newEndMoment.isSameOrAfter(moment(shift.ProjectionTimeRange.Start), 'minute'));
 				});
 
 				if (hasConflict) {
@@ -162,7 +162,7 @@
 			return findLatestMoment(ends);
 		}
 
-		this.getInvalidPeople = function() {
+		this.getInvalidPeople = function () {
 			return invalidPeople;
 		};
 
