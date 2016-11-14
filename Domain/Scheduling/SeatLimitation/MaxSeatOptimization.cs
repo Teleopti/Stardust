@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 								businessRules) ||
 							!_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences) ||
 							!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) ||
-							_maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo) > maxPeakBefore)
+							_maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo) >= maxPeakBefore)
 						{
 							rollbackService.RollbackMinimumChecks();
 						}
