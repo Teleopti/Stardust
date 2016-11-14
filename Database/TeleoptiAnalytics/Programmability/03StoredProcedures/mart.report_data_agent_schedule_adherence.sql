@@ -595,7 +595,7 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval, shift_interv
 			END AS 'adherence_calc_s',
 			@selected_adherence_type,
 			@hide_time_zone,
-			2, --fake a mixed shift = white color	
+			0, --white color	
 			b1.local_interval_id
 	FROM #person_id p
 	INNER JOIN #fact_schedule_deviation fsd
@@ -706,6 +706,14 @@ SET display_color=a.display_color,activity_absence_name=activity_name
 FROM mart.dim_activity a WITH (NOLOCK)
 INNER JOIN #result r
 	ON r.activity_id=a.activity_id and r.absence_id = -1
+
+--logged in time outside shift
+UPDATE #result
+set display_color=a.display_color,activity_absence_name=a.activity_name
+from mart.dim_activity a
+inner join #result r on r.activity_id=a.activity_id
+where  count_activity_per_interval=0
+and a.activity_id=-1
 
 --If more the one activity per interval, then we display that these are multiple activities or absencens with null color
 --The name of this should not be used, use resource file instead.

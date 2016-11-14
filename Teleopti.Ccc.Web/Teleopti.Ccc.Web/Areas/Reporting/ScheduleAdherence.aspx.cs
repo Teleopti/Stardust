@@ -886,8 +886,9 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 				var intervalId = (int)row["interval_id"];
 				var activityId = (int)row["activity_id"];
 				var absenceId = (int)row["absence_id"];
-
-				if (intervalId < _timeLineStartIntervalDayBefore && dateIntervalBelongsTo.IsEarlierThan(shiftStartDate))
+                var activityAbsenceName = (string) row["activity_absence_name"];
+                
+                if (intervalId < _timeLineStartIntervalDayBefore && dateIntervalBelongsTo.IsEarlierThan(shiftStartDate))
 					_timeLineStartIntervalDayBefore = intervalId;
 
 				if (intervalId < _timeLineStartInterval && dateIntervalBelongsTo.Equals(shiftStartDate))
@@ -924,7 +925,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					{
 						StartInterval = intervalId,
 						StartIntervalCounter = ((int)row["date_interval_counter"]),
-						AbsenceOrActivityName = activityId == -1 && absenceId == -1 ? Resources.MultipleActivitiesOrAbsences : (string)row["activity_absence_name"]
+						AbsenceOrActivityName = activityId == -1 && absenceId == -1 && activityAbsenceName == "Multiple things" ? Resources.MultipleActivitiesOrAbsences : (string)row["activity_absence_name"]
 					};
 				}
 
@@ -951,7 +952,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					{
 						StartInterval = intervalId,
 						StartIntervalCounter = ((int)row["date_interval_counter"]),
-						AbsenceOrActivityName = activityId == -1 && absenceId == -1 ? Resources.MultipleActivitiesOrAbsences : (string)row["activity_absence_name"]
+						AbsenceOrActivityName = activityId == -1 && absenceId == -1 && activityAbsenceName == "Multiple things" ? Resources.MultipleActivitiesOrAbsences : (string)row["activity_absence_name"]
 					};
 				}
 
