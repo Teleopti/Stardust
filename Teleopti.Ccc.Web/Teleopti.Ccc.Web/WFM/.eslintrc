@@ -1,1 +1,6 @@
-extends: angular
+{
+    "extends": "angular",
+    "rules": {
+        "angular/window-service":0
+    }
+}
