@@ -25,6 +25,7 @@
         RTA_AgentsOnOrganizationAndSkills_41586,
         RTA_SeeAllOutOfAdherencesToday_39146,
 		RTA_FasterActivityCheck_41380,
+		RTA_QuicklyChangeAgentsSelection_40610,
 
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
 		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,
