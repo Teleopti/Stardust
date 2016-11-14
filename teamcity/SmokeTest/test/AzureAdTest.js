@@ -6,7 +6,7 @@ var MicrosoftLoginPage = require('./pages/MicrosoftLogin.page');
 describe('Azure AD', function() {
 	this.timeout(360 * 1000); // Set global timeout for this test to 6 minutes
 	
-    it('should be able to sign in with AD user using OAuth', function () {
+    xit('should be able to sign in with AD user using WsFed', function () {
 		// Given that we are showing the IdentityProviders selection page
 		MytimePage.open();
 		if (MytimePage.isCurrentPage()) {
@@ -22,7 +22,7 @@ describe('Azure AD', function() {
 		MytimePage.usernameLabel.waitForExist(60 * 1000);
     }, 2);
 	
-	it('should be able to sign in with AD user using WsFed', function () {
+	it('should be able to sign in with AD user using OAuth', function () {
 		// Given that we are showing the IdentityProviders selection page
 		MytimePage.open();
 		if (MytimePage.isCurrentPage()) {
