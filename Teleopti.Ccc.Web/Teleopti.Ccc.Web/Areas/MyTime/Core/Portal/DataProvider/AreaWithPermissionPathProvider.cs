@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IToggleManager _toggleManager;
 		private readonly ILicenseActivatorProvider _licenseActivatorProvider;
+		private readonly IApplicationFunctionsToggleFilter _applicationFunctionsToggleFilter;
 
 		private static readonly IEnumerable<AreaWithPermissionPath> wfmAreaWithPermissionPaths = new List<AreaWithPermissionPath>
 		{
@@ -35,17 +36,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.AccessToReports, () => Resources.Reports, "reports")
 		};
 
-		public AreaWithPermissionPathProvider(IPermissionProvider permissionProvider, IToggleManager toggleManager, ILicenseActivatorProvider licenseActivatorProvider)
+		public AreaWithPermissionPathProvider(IPermissionProvider permissionProvider, IToggleManager toggleManager, ILicenseActivatorProvider licenseActivatorProvider, IApplicationFunctionsToggleFilter applicationFunctionsToggleFilter)
 		{
 			_permissionProvider = permissionProvider;
 			_toggleManager = toggleManager;
 			_licenseActivatorProvider = licenseActivatorProvider;
+			_applicationFunctionsToggleFilter = applicationFunctionsToggleFilter;
 		}
 
 		public IEnumerable<AreaWithPermissionPath> GetWfmAreasWithPermissions()
 		{
+			var systemFunctions = _applicationFunctionsToggleFilter.FilteredFunctions();
 			var result = wfmAreaWithPermissionPaths
-				.Where(a => _permissionProvider.HasApplicationFunctionPermission(a.Path) && isPathEnabled(a.Path));
+				.Where(a => _permissionProvider.HasApplicationFunctionPermission(a.Path) && isPathEnabled(a.Path) 
+				&& isPathLicensed(systemFunctions, a.Path));
 
 			return result;
 		}
@@ -117,6 +121,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 
 
 			return true;
+		}
+
+		private bool isPathLicensed(AllFunctions systemFunctions, string path)
+		{
+			var systemFunction = systemFunctions.FindByFunctionPath(path);
+			return systemFunction != null && systemFunction.IsLicensed;
 		}
 	}
 }

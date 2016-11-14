@@ -9,6 +9,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.WebTest.Areas.Permissions;
 
 namespace Teleopti.Ccc.WebTest.Areas.Global
 {
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldNotGetUnpermittedModules()
 		{
 			var toggleManager = new FakeToggleManager(Toggles.Wfm_ResourcePlanner_32892);
-			var areaPathProvider = new AreaWithPermissionPathProvider(new FakeNoPermissionProvider(), toggleManager, new FakeLicenseActivatorProvider());
+			var areaPathProvider = new AreaWithPermissionPathProvider(new FakeNoPermissionProvider(), toggleManager, new FakeLicenseActivatorProvider(), new FakeApplicationFunctionsToggleFilter());
 			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
 			var target = new ApplicationController(areaPathProvider, globalSettingDataRepository);
 
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldGetEnabledModules()
 		{
 			var toggleManager = new FakeToggleManager();
-			var areaPathProvider = new AreaWithPermissionPathProvider(new FakeNoPermissionProvider(), toggleManager, new FakeLicenseActivatorProvider());
+			var areaPathProvider = new AreaWithPermissionPathProvider(new FakeNoPermissionProvider(), toggleManager, new FakeLicenseActivatorProvider(), new FakeApplicationFunctionsToggleFilter());
 			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
 			var target = new ApplicationController(areaPathProvider, globalSettingDataRepository);
 
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		{
 			var setting = new StringSetting {StringValue = "test@test.fr"};
 			var toggleManager = new FakeToggleManager();
-			var areaPathProvider = new AreaWithPermissionPathProvider(new FakeNoPermissionProvider(), toggleManager, new FakeLicenseActivatorProvider());
+			var areaPathProvider = new AreaWithPermissionPathProvider(new FakeNoPermissionProvider(), toggleManager, new FakeLicenseActivatorProvider(), new FakeApplicationFunctionsToggleFilter());
 			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
 			globalSettingDataRepository.PersistSettingValue("SupportEmailSetting", setting);
 			var target = new ApplicationController(areaPathProvider, globalSettingDataRepository);

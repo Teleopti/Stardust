@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
@@ -10,6 +11,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Core.IoC;
+using Teleopti.Ccc.WebTest.Areas.Permissions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Global
@@ -21,18 +23,24 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public IAreaWithPermissionPathProvider Target;
 		public FakePermissionProvider PermissionProvider;
 		public FakeToggleManager ToggleManager;
+		public FakeApplicationFunctionsToggleFilter ApplicationFunctionsToggleFilter;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddModule(new WebAppModule(configuration));
 			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
-			
+			system.UseTestDouble<FakeApplicationFunctionsToggleFilter>().For<IApplicationFunctionsToggleFilter>();
+
 		}
 
 		[Test]
 		public void ShouldHaveRtaAreaWhenFeatureEnabledAndPermitted()
 		{
+			ApplicationFunctionsToggleFilter
+				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview }
+			, o => true);
+
 			PermissionProvider.Enable();
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview);
 
@@ -56,6 +64,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		[Test]
 		public void ShouldHaveTeamsWhenPermittedAndFeatureEnabled()
 		{
+			ApplicationFunctionsToggleFilter
+				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.MyTeamSchedules }
+			, o => true);
+
 			PermissionProvider.Enable();
 			ToggleManager.Enable(Toggles.WfmTeamSchedule_AbsenceReporting_35995);
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
@@ -81,6 +93,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		[Test]
 		public void ShouldReturnMyTeamScheduleWhenWfmTeamsIsReleased()
 		{
+			ApplicationFunctionsToggleFilter
+				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.MyTeamSchedules }
+			, o => true);
+
 			PermissionProvider.Enable();
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 			var areas = Target.GetWfmAreasWithPermissions();
@@ -92,6 +108,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		[Test]
 		public void ShouldHaveIntradayAreaWhenFeatureEnabledAndPermitted()
 		{
+			ApplicationFunctionsToggleFilter
+				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.WebIntraday }
+			, o => true);
+
 			PermissionProvider.Enable();
 			ToggleManager.Enable(Toggles.Wfm_Intraday_38074);
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebIntraday);
@@ -126,5 +146,26 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			areas.Count().Should().Be(0);
 		}
 
+		[Test]
+		public void ShouldNotHaveAreasFromNotLicensedModules()
+		{
+			ApplicationFunctionsToggleFilter
+				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.WebRequests }
+			, o => true);
+			ApplicationFunctionsToggleFilter
+				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.SeatPlanner }
+			, o => false);
+
+			PermissionProvider.Enable();
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebRequests);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.SeatPlanner);
+
+			ToggleManager.Enable(Toggles.Wfm_Requests_Basic_35986);
+
+			var areas = Target.GetWfmAreasWithPermissions();
+
+			areas.Count().Should().Be(1);
+			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.WebRequests);
+		}
 	}
 }
