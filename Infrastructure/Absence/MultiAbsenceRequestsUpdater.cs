@@ -471,10 +471,9 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		private bool satisfySchedule(IPerson person)
 		{
-			var schedulesForPerson = _schedulingResultStateHolder.Schedules.Where(x => x.Key == person);
 			try
 			{
-				foreach (KeyValuePair<IPerson, IScheduleRange> scheduleRange in schedulesForPerson)
+				foreach (KeyValuePair<IPerson, IScheduleRange> scheduleRange in _schedulingResultStateHolder.Schedules.Where(x => x.Key == person))
 				{
 					var period =
 						scheduleRange.Value.Period.ToDateOnlyPeriod(
