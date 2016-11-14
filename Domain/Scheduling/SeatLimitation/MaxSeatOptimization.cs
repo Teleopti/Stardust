@@ -141,10 +141,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					{
 						foreach (var scheduleMatrixPro in teamBlockInfo.MatrixesForGroupAndBlock())
 						{
-							foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
+							foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays.Where(x => x.Day == date))
 							{
-								if (!scheduleDayPro.Day.Equals(date))
-									continue;
 								var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
 								var scheduleDay = scheduleDayPro.DaySchedulePart();
 								if (_maxSeatPeak.IsOverMaxSeat(scheduleDay, skillDaysForTeamBlockInfo))
@@ -158,7 +156,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			}
 		}
 
-		private bool lockUnscheduledDaysAndReturnAnyIsScheduled(ITeamBlockInfo teamBlockInfo)
+		private static bool lockUnscheduledDaysAndReturnAnyIsScheduled(ITeamBlockInfo teamBlockInfo)
 		{
 			var anyIsScheduled = false;
 			foreach (var scheduleMatrixPro in teamBlockInfo.MatrixesForGroupAndBlock())
@@ -169,9 +167,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					var dateOnly = scheduleDayPro.Day;
 					var person = scheduleDay.Person;
 
-					if (!teamBlockInfo.TeamInfo.UnLockedMembers(dateOnly).Contains(person))continue;
-					if (scheduleDay.IsScheduled()) anyIsScheduled = true;
-					else teamBlockInfo.TeamInfo.LockMember(new DateOnlyPeriod(dateOnly, dateOnly), person);	
+					if (!teamBlockInfo.TeamInfo.UnLockedMembers(dateOnly).Contains(person))
+						continue;
+					if (scheduleDay.IsScheduled())
+					{
+						anyIsScheduled = true;
+					}
+					else
+					{
+						teamBlockInfo.TeamInfo.LockMember(new DateOnlyPeriod(dateOnly, dateOnly), person);
+					}
 				}
 			}
 
