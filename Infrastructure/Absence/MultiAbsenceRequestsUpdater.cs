@@ -393,13 +393,13 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				}
 				persons.Add(personRequest.Person);
 			}
-
-			_feedback.SendProgress($"Started loading data for requests in period {totalPeriod}");
+			var totalPeriodIncludingMidnight = new DateTimePeriod(totalPeriod.StartDateTime.Date, totalPeriod.EndDateTime);
 
 			if (shouldLoadDataForResourceCalculation)
 			{
+				_feedback.SendProgress($"Started loading data for requests in period {totalPeriodIncludingMidnight}");
 				_loadSchedulingStateHolderForResourceCalculation.Execute(_scenarioRepository.Current(),
-																		 totalPeriod,
+																		 totalPeriodIncludingMidnight,
 																		 persons, _schedulingResultStateHolder);
 			}
 			else
