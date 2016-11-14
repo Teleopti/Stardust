@@ -19,7 +19,7 @@
 
 		ctrl.$onInit = function () {
 			ctrl.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
-
+			ctrl.moveToTime = getDefaultMoveToTime();
 			$scope.$watch(function() {
 				return getMoveToStartTimeStr();
 			}, function(n, o) {
@@ -37,8 +37,12 @@
 
 		ctrl.moveShift = function () {};
 
+		function getDefaultMoveToTime() {
+			return moment(ctrl.containerCtrl.getDate() + " 08:00").toDate();
+		}
+
 		function getMoveToStartTimeStr() {
-			var dateStr = (ctrl.nextDay ? moment(ctrl.containerCtrl.getDate()).add(1, 'days') : moment(ctrl.containerCtrl.getDate())).format('YYYY-MM-DD');
+			var dateStr = ctrl.containerCtrl.getDate();
 			var timeStr = moment(ctrl.moveToTime).format('HH:mm');
 			return dateStr + 'T' + timeStr;
 		}
