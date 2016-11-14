@@ -2,13 +2,10 @@
 
 angular.module("wfm.teamSchedule").service("PersonSelection", PersonSelectionService);
 
-PersonSelectionService.$inject = ['Toggle'];
-
-function PersonSelectionService(toggleSvc) {
+function PersonSelectionService() {
 	var svc = this;
 	svc.personInfo = {};
-	var enbleAllProjectionSelection = toggleSvc.WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305;
-
+	
 	svc.clearPersonInfo = function () {
 		svc.personInfo = {};
 	};
@@ -18,7 +15,9 @@ function PersonSelectionService(toggleSvc) {
 			var absences = [], activities = [];				
 			if (personSchedule.Shifts && personSchedule.Shifts.length > 0) {
 				personSchedule.Shifts.forEach(function(shift) {
-					if (! enbleAllProjectionSelection && shift.Date !== personSchedule.Date) return;
+					if (shift.Date !== personSchedule.Date) {
+						return;
+					}
 
 					if (!shift.Projections) return;
 
@@ -75,7 +74,7 @@ function PersonSelectionService(toggleSvc) {
 				svc.personInfo[personId].AllowSwap = personSchedule.AllowSwap();
 
 				personSchedule.Shifts.forEach(function(shift) {
-					if (!enbleAllProjectionSelection && shift.Date !== personSchedule.Date) {
+					if (shift.Date !== personSchedule.Date) {
 						return;
 					}
 
@@ -103,7 +102,7 @@ function PersonSelectionService(toggleSvc) {
 
 	svc.isAllProjectionSelected = function (personSchedule, viewDate) {
 		return personSchedule.Shifts.every( function (shift) {
-			if (enbleAllProjectionSelection || shift.Date === moment(viewDate).format("YYYY-MM-DD")) {
+			if (shift.Date === moment(viewDate).format("YYYY-MM-DD")) {
 				return shift.Projections.every(function(projection) {
 					if (projection.ParentPersonAbsences || (!projection.IsOvertime && projection.ShiftLayerIds)) {
 						return projection.Selected;
@@ -117,7 +116,7 @@ function PersonSelectionService(toggleSvc) {
 
 	svc.toggleAllPersonProjections = function (personSchedule, viewDate) {
 		angular.forEach(personSchedule.Shifts, function (shift) {
-			if (enbleAllProjectionSelection || shift.Date === moment(viewDate).format("YYYY-MM-DD")) {
+			if (shift.Date === moment(viewDate).format("YYYY-MM-DD") || !personSchedule.IsSelected) {
 				angular.forEach(shift.Projections, function (projection) {
 					if (projection.ParentPersonAbsences || (!projection.IsOvertime && projection.ShiftLayerIds)) {
 						projection.Selected = personSchedule.IsSelected;
@@ -132,7 +131,6 @@ function PersonSelectionService(toggleSvc) {
 		var personSchedule = currentShift.Parent;
 		var personId = personSchedule.PersonId;
 		personSchedule.IsSelected = svc.isAllProjectionSelected(personSchedule);
-
 		
 		if (currentProjection.Selected && !svc.personInfo[personId]) {
 			svc.personInfo[personId] = createDefaultPersonInfo(personSchedule);			
@@ -162,15 +160,15 @@ function PersonSelectionService(toggleSvc) {
 			}
 		}
 
-		if (personInfo.SelectedActivities.length === 0 && personInfo.SelectedAbsences.length === 0) {
-			delete svc.personInfo[personId];
-		}
-
 		if (svc.personInfo[personId]) {
 			svc.personInfo[personId].Checked = personSchedule.IsSelected;
 		}
 
 		svc.updatePersonInfo([personSchedule]);
+
+		if (personInfo.SelectedActivities.length === 0 && personInfo.SelectedAbsences.length === 0) {
+			delete svc.personInfo[personId];
+		}
 	};
 
 	svc.selectAllPerson = function (schedules) {
@@ -324,8 +322,9 @@ function addAbsence(absences, absenceId, date) {
 function deleteAbsence(absences, absenceId, date) {
 	var targetSelectedAbsence = new SelectedAbsence(absenceId, date);
 	var index = lookUpIndex(absences, targetSelectedAbsence);
-	if (index >= 0) {
+	while (index >= 0) {
 		absences.splice(index, 1);
+		index = lookUpIndex(absences, targetSelectedAbsence);
 	}
 }
 
@@ -340,7 +339,8 @@ function addActivity(activities, shiftLayerId, date) {
 function deleteActivity(activities, shiftLayerId, date) {
 	var targetSelectedActivity = new SelectedActivity(shiftLayerId, date);
 	var index = lookUpIndex(activities, targetSelectedActivity);
-	if (index >= 0) {
+	while(index >= 0) {
 		activities.splice(index, 1);
+		index = lookUpIndex(activities, targetSelectedActivity);
 	}
 }
