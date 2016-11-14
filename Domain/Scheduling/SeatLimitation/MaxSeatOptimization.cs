@@ -137,16 +137,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						continue;
 					foreach (var date in period.DayCollection())
 					{
-						if (!_maxSeatPeak.Fetch(date, skillDaysForTeamBlockInfo).IsPositive())
-							continue;
 						foreach (var scheduleMatrixPro in teamBlockInfo.MatrixesForGroupAndBlock())
 						{
 							foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
 							{
 								if (!scheduleDayPro.Day.Equals(date))
-									continue;
-								var overLimit = _maxSeatPeak.Fetch(date, skillDaysForTeamBlockInfo);
-								if (!overLimit.IsPositive())
 									continue;
 								var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
 								var scheduleDay = scheduleDayPro.DaySchedulePart();
