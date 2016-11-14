@@ -289,8 +289,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Not.Be.Null();
 		}
 
-		[Test]
-		public void ShouldConsiderCorrectShiftCategoryLimitation()
+		[TestCase("AFirst")]
+		[TestCase("BFirst")]
+		public void ShouldConsiderCorrectShiftCategoryLimitation(string shiftCategoryLimitationOrder)
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
@@ -311,8 +312,19 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			agent.Period(firstDay).RuleSetBag = ruleSetBag;
 			var shiftCategoryLimitationA = new ShiftCategoryLimitation(shiftCategoryA) {MaxNumberOf = 0, Weekly = true};
 			var shiftCategoryLimitationB = new ShiftCategoryLimitation(shiftCategoryB) {MaxNumberOf = 7, Weekly = true};
-			agent.SchedulePeriod(firstDay).AddShiftCategoryLimitation(shiftCategoryLimitationA);
-			agent.SchedulePeriod(firstDay).AddShiftCategoryLimitation(shiftCategoryLimitationB);
+
+			if (shiftCategoryLimitationOrder.Equals("AFirst"))
+			{
+				agent.SchedulePeriod(firstDay).AddShiftCategoryLimitation(shiftCategoryLimitationA);
+				agent.SchedulePeriod(firstDay).AddShiftCategoryLimitation(shiftCategoryLimitationB);
+			}
+
+			if (shiftCategoryLimitationOrder.Equals("BFirst"))
+			{
+				agent.SchedulePeriod(firstDay).AddShiftCategoryLimitation(shiftCategoryLimitationB);
+				agent.SchedulePeriod(firstDay).AddShiftCategoryLimitation(shiftCategoryLimitationA);
+			}
+			
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);

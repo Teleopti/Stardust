@@ -45,11 +45,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var isSingleAgentTeam = _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions);
 			var schedulePeriod = scheduleMatrixPro.SchedulePeriod;
 			var person = scheduleMatrixPro.Person;
-			var used = new List<IShiftCategory>();
 			
 			foreach (var limitation in schedulePeriod.ShiftCategoryLimitationCollection())
 			{
-				used.Add(limitation.ShiftCategory);
 				removedScheduleDayPros.Clear();
 
 				if (limitation.Weekly) removedScheduleDayPros.AddRange(_shiftCategoryWeekRemover.Remove(limitation, schedulingOptions, scheduleMatrixPro, optimizationPreferences));
@@ -75,10 +73,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						if (isOnMax) schedulingOptions.NotAllowedShiftCategories.Add(lim.ShiftCategory);			
 					}
 
-					foreach (var shiftCategory in used)
-					{	
-						schedulingOptions.NotAllowedShiftCategories.Add(shiftCategory);
-					}
 					var allSkillDays = schedulingResultStateHolder.AllSkillDays();
 					var success = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions, rollbackService, resourceCalculateDelayer, allSkillDays, schedulingResultStateHolder.Schedules, shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder));
 					if (success) continue;
