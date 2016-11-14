@@ -31,22 +31,19 @@
 		function getTimeSpanForAgentScheduleDay(dateTimeSpan, timezone, dateInWeek) {
 			if (!dateTimeSpan || !timezone || !dateInWeek) return '';
 
-			var startStr = moment(dateTimeSpan.StartDateTime).format("YYYY-MM-DDTHH:mm");
-			var endStr = moment(dateTimeSpan.EndDateTime).format("YYYY-MM-DDTHH:mm");
-
-			var startTimeInUserTimezoneMoment = moment($filter('timezone')(startStr, null, timezone.IanaId));
-			var endTimeInUserTimezoneMoment = moment($filter('timezone')(endStr, null, timezone.IanaId));
+			var startTimeInUserTimezoneMoment = moment($filter('timezone')(dateTimeSpan.StartDateTime, null, timezone.IanaId));
+			var endTimeInUserTimezoneMoment = moment($filter('timezone')(dateTimeSpan.EndDateTime, null, timezone.IanaId));
 
 			var displayStarStr = startTimeInUserTimezoneMoment.format('HH:mm');
 			var displayEndStr = endTimeInUserTimezoneMoment.format('HH:mm');
 
 			if (startTimeInUserTimezoneMoment.isBefore(moment(dateInWeek).startOf('day'))) {
-				displayStarStr = startTimeInUserTimezoneMoment.format('HH:mm') + '(-1) ';
+				displayStarStr = startTimeInUserTimezoneMoment.format('HH:mm') + ' (-1)';
 			} else if (endTimeInUserTimezoneMoment.isAfter(moment(dateInWeek).endOf('day'))) {
-				displayEndStr = startTimeInUserTimezoneMoment.format('HH:mm') + '(+1)';
+				displayEndStr = startTimeInUserTimezoneMoment.format('HH:mm') + ' (+1)';
 			}
 
-			return displayStarStr + '  -  ' + displayEndStr;
+			return displayStarStr + ' - ' + displayEndStr;
 		}
 
 		function rgbToHexColor(rgbcolor){
