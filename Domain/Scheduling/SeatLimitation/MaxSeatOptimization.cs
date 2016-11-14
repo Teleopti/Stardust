@@ -113,16 +113,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					{
 						var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules);
-						if (!_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat,
-								teamBlockInfo,
-								datePoint,
-								schedulingOptions,
-								rollbackService,
-								new DoNothingResourceCalculateDelayer(),
-								skillDaysForTeamBlockInfo.Union(allSkillDays),
-								schedules,
-								new ShiftNudgeDirective(),
-								businessRules) ||
+						var scheduleWasSuccess = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo,
+							datePoint, schedulingOptions, rollbackService,
+							new DoNothingResourceCalculateDelayer(), skillDaysForTeamBlockInfo.Union(allSkillDays), schedules,
+							new ShiftNudgeDirective(), businessRules);
+						if (!scheduleWasSuccess||
 							!_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences) ||
 							!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) ||
 							_maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo) >= maxPeakBefore)

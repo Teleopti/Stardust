@@ -26,18 +26,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				{
 					var maxSeats = ((MaxSeatSkill)skillDay.Skill).MaxSeats;
 
-					foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
+					if (skillDay.SkillStaffPeriodCollection.Any(skillStaffPeriod => visualLayer.Period.Intersect(skillStaffPeriod.Period) &&
+																																					_usedSeats.Fetch(skillStaffPeriod) - maxSeats > 0))
 					{
-						if (visualLayer.Period.Intersect(skillStaffPeriod.Period))
-						{
-							if (_usedSeats.Fetch(skillStaffPeriod) - maxSeats > 0)
-								return true;
-						}
+						return true;
 					}
 				}
 			}
-
-
 			return false;
 		}
 	}
