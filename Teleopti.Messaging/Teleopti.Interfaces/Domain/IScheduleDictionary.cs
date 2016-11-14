@@ -85,6 +85,7 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="newBusinessRuleCollection">The new business rule collection.</param>
 		/// <param name="scheduleDayChangeCallback">The schedule day change callback.</param>
 		/// <param name="scheduleTagSetter">The schedule tag setter.</param>
+		/// <param name="forceModify">Modify schedule regardless of rule check response.</param>
 		/// <returns></returns>
 		/// <remarks>
 		/// Created by: rogerkr
@@ -94,11 +95,12 @@ namespace Teleopti.Interfaces.Domain
                                                   IEnumerable<IScheduleDay> scheduleParts,
                                                   INewBusinessRuleCollection newBusinessRuleCollection,
                                                   IScheduleDayChangeCallback scheduleDayChangeCallback,
-                                                  IScheduleTagSetter scheduleTagSetter
-            );
+                                                  IScheduleTagSetter scheduleTagSetter,
+												  bool forceModify = false
+			);
 
 	    IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay scheduleDay,
-		    INewBusinessRuleCollection newBusinessRuleCollection);
+		    INewBusinessRuleCollection newBusinessRuleCollection, bool forceModify = false);
 
 		/// <summary>
 		/// Modifies the specified modifier.
@@ -107,7 +109,7 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="schedulePart">The schedule part.</param>
 		/// <param name="newBusinessRuleCollection">The new business rule collection.</param>
 		/// <param name="scheduleDayChangeCallback">The schedule day change callback.</param>
-		/// <param name="scheduleTagSetter">The schedule tag setter.</param>
+		/// <param name="scheduleTagSetter">The schedule tag setter.</param>		
 		/// <returns></returns>
 		/// <remarks>
 		/// Created by: rogerkr
@@ -117,8 +119,8 @@ namespace Teleopti.Interfaces.Domain
                                                   IScheduleDay schedulePart,
                                                   INewBusinessRuleCollection newBusinessRuleCollection,
                                                   IScheduleDayChangeCallback scheduleDayChangeCallback,
-                                                  IScheduleTagSetter scheduleTagSetter
-            );
+                                                  IScheduleTagSetter scheduleTagSetter												  
+			);
 
 	    IEnumerable<IBusinessRuleResponse> CheckBusinessRules(IEnumerable<IScheduleDay> scheduleParts,
 		    INewBusinessRuleCollection newBusinessRuleCollection);

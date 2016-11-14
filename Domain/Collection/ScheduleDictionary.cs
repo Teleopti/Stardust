@@ -229,9 +229,9 @@ namespace Teleopti.Ccc.Domain.Collection
             return failedRules;
         }
 
-		public IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection)
+		public IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection, bool forceModify = false)
 		{
-			return Modify(ScheduleModifier.NotApplicable,new List<IScheduleDay> { scheduleDay },newBusinessRuleCollection, new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter());
+			return Modify(ScheduleModifier.NotApplicable,new List<IScheduleDay> { scheduleDay },newBusinessRuleCollection, new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter(), forceModify);
 		}
 
 		public IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay scheduleDay, IScheduleDayChangeCallback scheduleDayChangeCallback)
@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.Domain.Collection
 		    return lstErrors;
 	    }
 
-		public IEnumerable<IBusinessRuleResponse> Modify(ScheduleModifier modifier, IEnumerable<IScheduleDay> scheduleParts, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTagSetter scheduleTagSetter)
+		public IEnumerable<IBusinessRuleResponse> Modify(ScheduleModifier modifier, IEnumerable<IScheduleDay> scheduleParts, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTagSetter scheduleTagSetter, bool forceModify = false)
         {
             var lstErrors = new List<IBusinessRuleResponse>();
 
@@ -298,7 +298,7 @@ namespace Teleopti.Ccc.Domain.Collection
                             notOverriddenErrors.Add(businessRuleResponse);
                     }
 
-                    if (notOverriddenErrors.Count == 0)
+                    if (notOverriddenErrors.Count == 0 || forceModify)
                     {
                         if (_undoRedo != null)
                         {
@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.Domain.Collection
                     }
                 }
 
-                if (notOverriddenErrors.Count == 0)
+                if (notOverriddenErrors.Count == 0 || forceModify)
                 {
                     lock (_permissionLockObject)
                     {

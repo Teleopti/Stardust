@@ -282,6 +282,59 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
+		public void ShouldBackoutEvenPersonAccountIsExceeded()
+		{
+			var scenario = CurrentScenario.Current();
+			var person = PersonFactory.CreatePerson("aa","aa").WithId();
+			PersonRepository.Add(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			var dateTimePeriod = new DateTimePeriod(2016,6,11,8,2016,6,11,17);
+			var dateOnlyPeriod = new DateOnlyPeriod(2016,6,11,2016,6,11);
+			var date = new DateOnly(2016,6,11);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,dateTimePeriod);
+
+			var absence = AbsenceFactory.CreateAbsence("abs").WithId();
+			AbsenceRepository.Add(absence);
+
+			var personAbsence = new PersonAbsence(person,scenario,new AbsenceLayer(absence,dateTimePeriod));
+			ScheduleHistoryRepository.ClearRevision();
+			var rev = new Revision { Id = 2 };
+			rev.SetRevisionData(person);
+			var lstRev = new Revision { Id = 1 };
+			lstRev.SetRevisionData(person);
+
+			ScheduleHistoryRepository.SetRevision(rev,date,personAssignment.CreateTransient());
+			ScheduleHistoryRepository.SetRevision(lstRev,date,personAbsence.CreateTransient());
+			ScheduleHistoryRepository.SetRevision(lstRev,date,personAssignment.CreateTransient());
+
+
+			var accountDay = createAccountDay(new DateOnly(2016,6,1),TimeSpan.FromDays(0),TimeSpan.FromDays(0),
+				TimeSpan.FromDays(0));
+
+			var account = PersonAbsenceAccountFactory.CreatePersonAbsenceAccount(person,absence,accountDay);
+			PersonAbsenceAccountRepository.Add(account);
+
+			var command = new BackoutScheduleChangeCommand
+			{
+				PersonId = person.Id.Value,
+				Dates = new[] { new DateOnly(2016,06,11) },
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					TrackId = Guid.NewGuid()
+				}
+			};
+			target.Handle(command);
+			command.ErrorMessages.Count.Should().Be.EqualTo(0);
+
+			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
+					person,new ScheduleDictionaryLoadOptions(true,true),dateOnlyPeriod,CurrentScenario.Current())[person]
+				.ScheduledDayCollection(dateOnlyPeriod).Single();
+
+			schedule.SignificantPart().Should().Be.EqualTo(SchedulePartView.FullDayAbsence);
+			accountDay.LatestCalculatedBalance.Should().Be.EqualTo(TimeSpan.FromDays(1));
+		}
+
+		[Test]
 		public void ShouldUpdatePersonAccountWhenBackoutMultiDayAbsence()
 		{
 			var scenario = CurrentScenario.Current();

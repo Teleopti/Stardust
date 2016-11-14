@@ -102,6 +102,19 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IEnumerable<IBusinessRuleResponse> Modify(ScheduleModifier modifier, IEnumerable<IScheduleDay> scheduleParts,
 			INewBusinessRuleCollection newBusinessRuleCollection, IScheduleDayChangeCallback scheduleDayChangeCallback,
+			IScheduleTagSetter scheduleTagSetter, bool forceModify = false)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection,
+			bool forceModify = false)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<IBusinessRuleResponse> Modify(ScheduleModifier modifier, IEnumerable<IScheduleDay> scheduleParts,
+			INewBusinessRuleCollection newBusinessRuleCollection, IScheduleDayChangeCallback scheduleDayChangeCallback,
 			IScheduleTagSetter scheduleTagSetter)
 		{
 			throw new NotImplementedException();
