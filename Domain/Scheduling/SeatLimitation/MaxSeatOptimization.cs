@@ -101,7 +101,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			{
 				foreach (var teamBlockInfo in teamBlockInfos)
 				{
-					if(!lockUnscheduledDaysAndReturnAnyIsScheduled(teamBlockInfo))continue;
+					if(!lockUnscheduledDaysAndReturnAnyIsScheduled(teamBlockInfo))
+						continue;
 					var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= period.StartDate);//what is this?
 					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint);
 					var maxPeakBefore = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);
@@ -132,17 +133,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				{
 					var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= period.StartDate);//what is this?
 					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint);
-					if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature != MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak) continue;
+					if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature != MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)
+						continue;
 					foreach (var date in period.DayCollection())
 					{
-						if (!_maxSeatPeak.Fetch(date, skillDaysForTeamBlockInfo).IsPositive()) continue;
+						if (!_maxSeatPeak.Fetch(date, skillDaysForTeamBlockInfo).IsPositive())
+							continue;
 						foreach (var scheduleMatrixPro in teamBlockInfo.MatrixesForGroupAndBlock())
 						{
 							foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
 							{
-								if (!scheduleDayPro.Day.Equals(date)) continue;
+								if (!scheduleDayPro.Day.Equals(date))
+									continue;
 								var overLimit = _maxSeatPeak.Fetch(date, skillDaysForTeamBlockInfo);
-								if (!overLimit.IsPositive()) continue;
+								if (!overLimit.IsPositive())
+									continue;
 								var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
 								var scheduleDay = scheduleDayPro.DaySchedulePart();
 								if (_maxSeatPeak.IsOverMaxSeat(scheduleDay, skillDaysForTeamBlockInfo))
