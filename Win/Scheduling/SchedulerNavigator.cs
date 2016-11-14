@@ -125,6 +125,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				//temporary, open organize casciding skills will be called from somewhere else
 				enableOrganizeCascadingSkills();
 
+				toolStripSeparator1.Visible = false;
 				enableArchiveSchedule();
 				enableImportSchedule();
 
@@ -401,6 +402,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var permitted = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ArchiveSchedule);
 
 			toolStripButtonArchiveSchedule.Visible = toggled && permitted;
+			if (toolStripButtonArchiveSchedule.Visible)
+				toolStripSeparator1.Visible = true;
 		}
 
 		private void toolStripButtonArchiveScheduleClick(object sender, EventArgs e)
@@ -415,6 +418,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var permitted = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ImportSchedule);
 
 			toolStripButtonImportSchedule.Visible = toggled && permitted;
+
+			if (toolStripButtonImportSchedule.Visible)
+				toolStripSeparator1.Visible = true;
 		}
 
 		private void toolStripButtonImportScheduleClick(object sender, EventArgs e)
