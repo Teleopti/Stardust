@@ -64,6 +64,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToWfmRequests { get; set; }
 		public bool AccessToWfmMyTeamSchedule { get; set; }
 		public bool AccessToWfmLeaderboard { get; set; }
+		public bool AccessToWfmSchedules { get; set; }
 
 		public bool AddFullDayAbsence { get; set; }
 		public bool AddIntradayAbsence { get; set; }
@@ -71,6 +72,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AddActivity { get; set; }
 		public bool MoveActivity { get; set; }
 		public bool RemoveActivity { get; set; }
+		public bool ArchiveSchedules { get; set; }
 
 		public bool QuickForecaster { get; set; }
 		public bool AccessToIntraday { get; set; }
@@ -366,6 +368,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				applicationFunctions = from f in applicationFunctions
 											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports
 											  select f;
+
+			if (!AccessToWfmSchedules)
+				applicationFunctions = from f in applicationFunctions
+									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebSchedules
+									   select f;
+
+			if (!ArchiveSchedules)
+				applicationFunctions = from f in applicationFunctions
+									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ArchiveSchedule
+									   select f;
 
 			return applicationFunctions;
 		}

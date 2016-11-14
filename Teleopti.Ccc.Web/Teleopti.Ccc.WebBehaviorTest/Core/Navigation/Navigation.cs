@@ -578,5 +578,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
             GoToPage("wfm/#/reports/leaderboard");
         }
 
+		public static void GoToWfmArchiveSchedule()
+		{
+			GoToPage("wfm/#/resourceplanner/archiveschedule");
+		}
 	}
 }

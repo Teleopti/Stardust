@@ -12,12 +12,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Name { get; set; }
 		public string BusinessUnit { get; set; }
 		public bool EnableReporting { get; set; }
+		public bool ExtraScenario { get; set; }
 
 		public IScenario Scenario;
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			Scenario = ScenarioFactory.CreateScenario(Name, true, EnableReporting);
+			Scenario = ScenarioFactory.CreateScenario(Name, !ExtraScenario, EnableReporting);
 
 			var businessUnit = new BusinessUnitRepository(currentUnitOfWork).LoadAll().Single(b => b.Name == BusinessUnit);
 			Scenario.SetBusinessUnit(businessUnit);

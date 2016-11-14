@@ -22,7 +22,7 @@
 			<div class="con-flex">
 				<form>
 					<label>From Scenario:</label>
-					<md-select class="inline-select" ng-model="vm.selection.fromScenario" placeholder="Scenario">
+					<md-select class="inline-select from-scenario-selector" ng-model="vm.selection.fromScenario" placeholder="Scenario">
 						<md-option ng-repeat="scenario in vm.scenarios | defaultScenario:true" ng-value="scenario" ng-disabled="true">{{scenario.Name}}</md-option>
 					</md-select>
 				</form>
@@ -31,7 +31,7 @@
 			<div class="con-flex">
 				<form>
 					<label>To Scenario:</label>
-					<md-select class="inline-select" ng-model="vm.selection.toScenario" placeholder="Scenario">
+					<md-select class="inline-select to-scenario-selector" ng-model="vm.selection.toScenario" placeholder="Scenario">
 						<md-option ng-repeat="scenario in vm.scenarios | defaultScenario:false" ng-value="scenario">{{scenario.Name}}</md-option>
 					</md-select>
 				</form>
@@ -39,7 +39,7 @@
 		</div>
 		<div class="con-row">
 			<div class="con-flex">
-				<date-range-picker class="request-date-range-picker" ng-model="vm.selection.period" template-type="vm.dateRangeTemplateType">
+				<date-range-picker ng-model="vm.selection.period" template-type="vm.dateRangeTemplateType">
 				</date-range-picker>
 			</div>
 		</div>
@@ -59,8 +59,8 @@
 					</div>
 					<div class="modal-actions">
 						<aside>
-							<button ng-click="vm.showConfirmModal=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
-							<button ng-click="vm.runArchiving(vm.selection.fromScenario, vm.selection.toScenario, vm.selection.period, vm.selection.teams)" class="wfm-btn wfm-btn-invis-primary">{{'Run'|translate}}</button>
+							<button id="cancel-archiving" ng-click="vm.showConfirmModal=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+							<button id="confirm-archiving" ng-click="vm.runArchiving(vm.selection.fromScenario, vm.selection.toScenario, vm.selection.period, vm.selection.teams)" class="wfm-btn wfm-btn-invis-primary">{{'Run'|translate}}</button>
 						</aside>
 					</div>
 				</div>

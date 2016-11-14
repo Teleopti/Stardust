@@ -774,5 +774,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToIntraday();
 		}
 
+		[When(@"I am viewing archive schedule page")]
+		public void GivenIViewArchiveSchedule()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToWfmArchiveSchedule();
+		}
 	}
 }

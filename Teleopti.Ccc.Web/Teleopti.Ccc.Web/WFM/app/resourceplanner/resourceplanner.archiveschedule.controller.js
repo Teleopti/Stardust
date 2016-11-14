@@ -92,7 +92,7 @@
 
 				var completedArchiving = function() {
 					if (vm.tracking.totalPeople === 0) {
-						NoticeService.info("You selection resulted in 0 people.", null, true);
+						NoticeService.info("Your selection resulted in 0 people.", null, true);
 					} else {
 						NoticeService.success("Done archiving for " + vm.tracking.totalPeople + " people.", null, true);
 					}
