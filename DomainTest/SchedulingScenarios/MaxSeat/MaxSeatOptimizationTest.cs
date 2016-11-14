@@ -793,6 +793,40 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences);
 		}
 
+		[TestCase(true)]
+		[TestCase(false)]
+		public void PeakShouldNotBe0ForNonSkillIntervals(bool ruleSet1First)
+		{
+			var site = new Site("_") { MaxSeats = 1 }.WithId();
+			var team = new Team { Description = new Description("_"), Site = site };
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var dateOnly = new DateOnly(2016, 10, 25);
+			var scenario = new Scenario("_");
+			var ruleSetBag = new RuleSetBag();
+			var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
+			var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 5, 8, 5, 60), new TimePeriodWithSegment(16, 5, 16, 5, 60), new ShiftCategory("_").WithId()));
+			if (ruleSet1First)
+			{
+				ruleSetBag.AddRuleSet(ruleSet1);
+				ruleSetBag.AddRuleSet(ruleSet2);
+			}
+			else
+			{
+				ruleSetBag.AddRuleSet(ruleSet2);
+				ruleSetBag.AddRuleSet(ruleSet1);
+			}
+			var agentDataOneHour = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(), scenario, activity, new TimePeriod(16, 0, 17, 0));
+			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, ruleSetBag, scenario, activity, new TimePeriod(10, 0, 18, 0));
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData.Assignment, agentDataOneHour.Assignment });
+			var optPreferences = CreateOptimizationPreferences();
+
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences);
+
+			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay
+				.Should().Be.EqualTo(TimeSpan.FromHours(8));
+		}
+
 		[Test]
 		public void ShouldNotOptimizeEmptyDays()
 		{

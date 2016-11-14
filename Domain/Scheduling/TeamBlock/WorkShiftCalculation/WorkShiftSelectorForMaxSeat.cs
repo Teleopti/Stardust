@@ -22,33 +22,34 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, TimeZoneInfo timeZoneInfo, bool forRoleModel, IPerson person)
 		{
 			var bestShiftValue = double.MaxValue;
-			IShiftProjectionCache ret =null;
+			IShiftProjectionCache ret = null;
 
 			var skillDays = allSkillDays.FilterOnDate(datePointer);
 			var hasNonMaxSeatSkills = skillDays.Any(x => !(x.Skill is MaxSeatSkill));
+			var maxSeatSkillDays = skillDays.Where(x => x.Skill is MaxSeatSkill).ToArray();
 
 			foreach (var shift in shifts)
 			{
 				var thisShiftsPeak = 0d;
 
-				foreach (var layer in shift.MainShiftProjection)
+				foreach (var maxSeatSkillDay in maxSeatSkillDays)
 				{
-					var activity = (IActivity) layer.Payload;
-					var thisShiftRequiresOneSeatExtra = activity.RequiresSeat;
-
-					if (hasNonMaxSeatSkills && !_isAnySkillOpen.Check(skillDays, layer, person.PermissionInformation.DefaultTimeZone()))
+					foreach (var skillStaffPeriod in maxSeatSkillDay.SkillStaffPeriodCollection)
 					{
-						thisShiftsPeak = double.MaxValue;
-						break;
-					}
-
-					foreach (var maxSeatSkillDay in skillDays.Where(x => x.Skill is MaxSeatSkill))
-					{
-						foreach (var interval in layer.Period.Intervals(TimeSpan.FromMinutes(maxSeatSkillDay.Skill.DefaultResolution)))
+						foreach (var layer in shift.MainShiftProjection)
 						{
-							var skillStaffPeriod = maxSeatSkillDay.SkillStaffPeriodCollection.SingleOrDefault(x => x.Period == interval);
-							if(skillStaffPeriod==null)
+							if (!layer.Period.Intersect(skillStaffPeriod.Period))
 								continue;
+
+							var activity = (IActivity)layer.Payload;
+							var thisShiftRequiresOneSeatExtra = activity.RequiresSeat;
+
+							if (hasNonMaxSeatSkills && !_isAnySkillOpen.Check(skillDays, layer, person.PermissionInformation.DefaultTimeZone()))
+							{
+								thisShiftsPeak = double.MaxValue;
+								break;
+							}
+
 							var occupiedSeatsThisInterval = _usedSeats.Fetch(skillStaffPeriod);
 							if (thisShiftRequiresOneSeatExtra)
 							{
@@ -58,6 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 						}
 					}
 				}
+
 				if (thisShiftsPeak < bestShiftValue)
 				{
 					ret = shift;
