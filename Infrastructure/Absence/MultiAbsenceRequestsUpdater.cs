@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly IActivityRepository _activityRepository;
 		private readonly IAbsenceRepository _absenceRepository;
 		private readonly IPersonRequestRepository _personRequestRepository;
+		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
 
 		public MultiAbsenceRequestsUpdater(
 			ICurrentScenario scenarioRepository,
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			IStardustJobFeedback feedback, 
 			ArrangeRequestsByProcessOrder arrangeRequestsByProcessOrder, 
 			IScheduleDayChangeCallback scheduleDayChangeCallback, 
-			ISchedulingResultStateHolder schedulingResultStateHolder, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IToggleManager toggleManager, IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, IPersonRepository personRepository, ISkillRepository skillRepository, IContractRepository contractRepository, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository, ISkillTypeRepository skillTypeRepository, IActivityRepository activityRepository, IAbsenceRepository absenceRepository, IPersonRequestRepository personRequestRepository)
+			ISchedulingResultStateHolder schedulingResultStateHolder, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IToggleManager toggleManager, IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, IPersonRepository personRepository, ISkillRepository skillRepository, IContractRepository contractRepository, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository, ISkillTypeRepository skillTypeRepository, IActivityRepository activityRepository, IAbsenceRepository absenceRepository, IPersonRequestRepository personRequestRepository, IDayOffTemplateRepository dayOffTemplateRepository)
 		{
 			_scenarioRepository = scenarioRepository;
 			_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
@@ -106,6 +107,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_activityRepository = activityRepository;
 			_absenceRepository = absenceRepository;
 			_personRequestRepository = personRequestRepository;
+			_dayOffTemplateRepository = dayOffTemplateRepository;
 		}
 
 		public void UpdateAbsenceRequest(IList<Guid> personRequestsIds)
@@ -125,6 +127,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				_contractScheduleRepository.LoadAllAggregate();
 				_activityRepository.LoadAll();
 				_absenceRepository.LoadAll();
+				_dayOffTemplateRepository.LoadAll();
 				personRequests = _personRequestRepository.Find(personRequestsIds);
 				_personRepository.FindPeople(personRequests.Select(x => x.Person.Id.GetValueOrDefault()));
 				stopwatch.Stop();
