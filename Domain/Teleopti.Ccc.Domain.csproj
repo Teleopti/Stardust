@@ -474,6 +474,7 @@
     <Compile Include="ResourceCalculation\StaffingIntervalChange.cs" />
     <Compile Include="Scheduling\DoNothingResourceCalculateDelayer.cs" />
     <Compile Include="Scheduling\SeatLimitation\DoubleExtensions.cs" />
+    <Compile Include="Scheduling\SeatLimitation\IsOverMaxSeat.cs" />
     <Compile Include="Scheduling\SeatLimitation\IUsedSeats.cs" />
     <Compile Include="Scheduling\SeatLimitation\MaxSeatOptimization.cs" />
     <Compile Include="Optimization\DaysOffBackToLegalState.cs" />

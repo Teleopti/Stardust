@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			var retValue = 0d;
 			foreach (var skillDay in maxSeatSkillDaysToLookAt.Where(x => x.CurrentDate == dateOnly))
 			{
-				var maxSeats = ((MaxSeatSkill)skillDay.Skill).MaxSeats;
+				var maxSeats = ((MaxSeatSkill) skillDay.Skill).MaxSeats;
 
 				foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 				{
@@ -36,34 +36,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			}
 
 			return retValue;
-		}
-
-		public bool IsOverMaxSeat(IScheduleDay scheduleDay, IEnumerable<ISkillDay> maxSeatSkillDaysToLookAt)
-		{
-			foreach (var visualLayer in scheduleDay.ProjectionService().CreateProjection())
-			{
-				var affectedDates = new HashSet<DateOnly>
-				{
-					new DateOnly(visualLayer.Period.StartDateTime),
-					new DateOnly(visualLayer.Period.EndDateTime)
-				};
-				foreach (var skillDay in maxSeatSkillDaysToLookAt.Where(x => affectedDates.Contains(x.CurrentDate)))
-				{
-					var maxSeats = ((MaxSeatSkill)skillDay.Skill).MaxSeats;
-
-					foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
-					{
-						if (visualLayer.Period.Intersect(skillStaffPeriod.Period))
-						{
-							if (_usedSeats.Fetch(skillStaffPeriod) - maxSeats > 0)
-								return true;
-						}
-					}
-				}
-			}
-
-
-			return false;
 		}
 	}
 }

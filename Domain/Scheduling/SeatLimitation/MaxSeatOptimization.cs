@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly MaxSeatPeak _maxSeatPeak;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
+		private readonly IsOverMaxSeat _isOverMaxSeat;
 
 		public MaxSeatOptimization(MaxSeatSkillDataFactory maxSeatSkillDataFactory,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
@@ -60,7 +61,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			IMatrixListFactory matrixListFactory,
 			MaxSeatPeak maxSeatPeak,
 			TeamInfoFactoryFactory teamInfoFactoryFactory,
-			IDeleteSchedulePartService deleteSchedulePartService)
+			IDeleteSchedulePartService deleteSchedulePartService,
+			IsOverMaxSeat isOverMaxSeat)
 		{
 			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
@@ -76,6 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_maxSeatPeak = maxSeatPeak;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_deleteSchedulePartService = deleteSchedulePartService;
+			_isOverMaxSeat = isOverMaxSeat;
 		}
 
 		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules,
@@ -145,7 +148,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 							{
 								var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
 								var scheduleDay = scheduleDayPro.DaySchedulePart();
-								if (_maxSeatPeak.IsOverMaxSeat(scheduleDay, skillDaysForTeamBlockInfo))
+								if (_isOverMaxSeat.Check(scheduleDay, skillDaysForTeamBlockInfo))
 								{
 									_deleteSchedulePartService.Delete(new List<IScheduleDay> {scheduleDay}, rollbackService, businessRules);
 								}
