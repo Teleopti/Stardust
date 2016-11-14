@@ -1,6 +1,6 @@
 ﻿@RTA
 @Ignore
-Feature: Monitor agents by skill, site(s) and/or team(s)
+Feature: Quickly change agent selection for skill(s), site(s) and/or team(s)
 	In order to easier find the agent to blame
 	As a real time analyst
 	I want to see what agents are doing by skills, site(s) and/or team(s)
@@ -58,7 +58,7 @@ Background:
 	| Is alarm    | false    |
 
 @OnlyRunIfEnabled('RTA_QuicklyChangeAgentsSelection_40610')
-Scenario: Monitor agents by skill, site(s) and/or team(s)
+Scenario: Quickly change agent selection for skill, team
 	Given the time is '2016-06-14 08:00:00'
 	And 'Pierre Baldi' sets his phone state to 'LoggedOut'
 	And 'Ashley Andeen' sets his phone state to 'LoggedOut'
@@ -74,3 +74,21 @@ Scenario: Monitor agents by skill, site(s) and/or team(s)
 	When the time is '2016-06-14 08:10:00'
 	Then I should see agent 'Ashley Andeen' with state 'LoggedOut'
 	And I should not see agent 'Pierre Baldi'
+
+@OnlyRunIfEnabled('RTA_QuicklyChangeAgentsSelection_40610')
+Scenario: Quickly change agent selection for skill, site
+	Given the time is '2016-06-14 08:00:00'
+	And 'Pierre Baldi' sets his phone state to 'LoggedOut'
+	And 'Ashley Andeen' sets his phone state to 'LoggedOut'
+	And 'John King' sets his phone state to 'LoggedOut'
+	When I view Real time adherence sites
+	And I click 'select skill'
+	And I select skill 'Sales'
+	Then I should see agent 'Pierre Baldi' with state 'LoggedOut'
+	And I should see agent 'Ashley Andeen' with state 'LoggedOut'
+	And I should not see agent 'John King'
+	Given the time is '2016-06-14 08:05:00'
+	Then I select organization for site 'Paris'
+	When the time is '2016-06-14 08:10:00'
+	Then I should see agent 'Ashley Andeen' with state 'LoggedOut'
+	And I should see agent 'Pierre Baldi' with state 'LoggedOut'
