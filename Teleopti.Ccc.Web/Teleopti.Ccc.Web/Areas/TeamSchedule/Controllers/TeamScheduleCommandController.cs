@@ -77,5 +77,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return _commandHandlingProvider.RemoveAbsence(input);
 		}
 
+		[UnitOfWork, HttpPost, Route("api/TeamSchedule/MoveShift")]
+		public virtual IList<ActionResult> MoveShift([FromBody] MoveShiftForm input)
+		{
+			return _commandHandlingProvider.MoveShift(input);
+		}
+
 	}
 }

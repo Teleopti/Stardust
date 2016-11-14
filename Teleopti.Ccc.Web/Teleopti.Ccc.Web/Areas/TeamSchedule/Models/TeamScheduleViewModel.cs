@@ -98,4 +98,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 	{
 		public int Agents { get; set; }
 	}
+	public class MoveShiftForm
+	{
+		public Guid[] PersonIds { get; set; }
+		public DateOnly Date { get; set; }
+		public DateTime NewShiftStart { get; set; }
+		public TrackedCommandInfo TrackedCommandInfo { get; set; }
+	}
 }

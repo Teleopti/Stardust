@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<FixNotOverwriteLayerCommand>>();
 			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<EditScheduleNoteCommand>>();
 			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<MoveShiftLayerCommand>>();
+			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<MoveShiftCommand>>();
 			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
 			system.UseTestDouble<FullPermission>().For<IAuthorization>();
 			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();

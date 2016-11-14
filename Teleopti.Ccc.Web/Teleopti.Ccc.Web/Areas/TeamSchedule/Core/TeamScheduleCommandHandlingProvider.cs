@@ -232,6 +232,48 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return result;
 		}
 
+		public IList<ActionResult> MoveShift(MoveShiftForm input)
+		{
+			var permission = new Dictionary<string, string>
+			{
+				{DefinedRaptorApplicationFunctionPaths.MoveActivity, Resources.NoPermissionMoveAgentActivity}
+			};
+			var userTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var newStartTimeInUtc = TimeZoneHelper.ConvertToUtc(input.NewShiftStart, userTimezone);
+			var result = new List<ActionResult>();
+
+			foreach (var personId in input.PersonIds)
+			{
+				var person = _personRepository.Get(personId);
+				var personError = new ActionResult { PersonId = person.Id.GetValueOrDefault(), ErrorMessages = new List<string>() };
+				if (!checkPermissionFn(permission, input.Date, person, personError.ErrorMessages))
+				{
+					result.Add(personError);
+					continue;
+				}
+
+				var command = new MoveShiftCommand
+				{
+					PersonId = personId,
+					ScheduleDate = input.Date,
+					NewStartTimeInUtc = newStartTimeInUtc,
+					TrackedCommandInfo =
+							input.TrackedCommandInfo != null
+								? input.TrackedCommandInfo
+								: new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
+				};
+				_commandDispatcher.Execute(command);
+				if (command.ErrorMessages != null && command.ErrorMessages.Any())
+				{
+					personError.ErrorMessages.AddRange(command.ErrorMessages);
+				}
+				if (personError.ErrorMessages.Any())
+					result.Add(personError);
+			}
+
+			return result;
+		}
+
 
 		public List<ActionResult> BackoutScheduleChange(BackoutScheduleChangeFormData input)
 		{
@@ -503,5 +545,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		IList<ActionResult> MoveNonoverwritableLayers(MoveNonoverwritableLayersFormData input);
 		IList<ActionResult> EditScheduleNote(EditScheduleNoteFormData input);
 		List<ActionResult> RemoveAbsence(RemovePersonAbsenceForm input);
+		IList<ActionResult> MoveShift(MoveShiftForm input);
 	}
 }

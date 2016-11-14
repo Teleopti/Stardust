@@ -871,6 +871,67 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			results.Count.Should().Be.EqualTo(1);
 		}
 
+		[Test]
+		public void ShouldInvokeMoveShiftCommandWhenHasPermission()
+		{
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			PersonRepository.Has(person);
+			var date = new DateOnly(2016, 4, 16);
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MoveActivity, person, date);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
+				new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
+			personAss.ShiftLayers.ForEach(x => x.WithId());
+			PersonAssignmentRepo.Add(personAss);
+
+			var input = new MoveShiftForm()
+			{
+				TrackedCommandInfo = new TrackedCommandInfo(),
+				PersonIds = new []{person.Id.Value},
+				Date = date,
+				NewShiftStart = new DateTime(2016, 4, 16, 10, 0, 0)
+			};
+			ActivityCommandHandler.ResetCalledCount();
+			Target.MoveShift(input);
+
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(1);
+			((MoveShiftCommand)(ActivityCommandHandler.CalledCommands.First())).NewStartTimeInUtc.Should().Be(input.NewShiftStart);
+		}
+
+		[Test]
+		public void ShouldNotInvokeMoveShiftCommandWhenHasNoPermission()
+		{
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			PersonRepository.Has(person);
+			var date = new DateOnly(2016, 4, 16);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
+				new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
+			personAss.ShiftLayers.ForEach(x => x.WithId());
+			PersonAssignmentRepo.Add(personAss);
+
+			var input = new MoveShiftForm()
+			{
+				TrackedCommandInfo = new TrackedCommandInfo(),
+				PersonIds = new []{person.Id.Value},
+				Date = date,
+				NewShiftStart = new DateTime(2016, 4, 16, 10, 0, 0)
+			};
+			ActivityCommandHandler.ResetCalledCount();
+			Target.MoveShift(input);
+
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+		}
 
 		
 	}
@@ -883,7 +944,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		IHandleCommand<BackoutScheduleChangeCommand>,
 		IHandleCommand<ChangeShiftCategoryCommand>,
 		IHandleCommand<FixNotOverwriteLayerCommand>,
-		IHandleCommand<EditScheduleNoteCommand>
+		IHandleCommand<EditScheduleNoteCommand>,
+		IHandleCommand<MoveShiftCommand>
 	{
 		private int calledCount;
 		private IList<ITrackableCommand> commands = new List<ITrackableCommand>(); 
@@ -950,6 +1012,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		public void Handle(EditScheduleNoteCommand command)
+		{
+			calledCount++;
+			commands.Add(command);
+		}
+
+		public void Handle(MoveShiftCommand command)
 		{
 			calledCount++;
 			commands.Add(command);
