@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
@@ -39,12 +39,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 		public virtual void Handle(ArchiveScheduleEvent @event)
 		{
 			var period = new DateOnlyPeriod(new DateOnly(@event.StartDate), new DateOnly(@event.EndDate));
-			var person = _personRepository.Get(@event.PersonId);
-			var fromScenario = _scenarioRepository.Get(@event.FromScenario);
-			var toScenario = _scenarioRepository.Get(@event.ToScenario);
 
-			clearCurrentSchedules(toScenario, person, period);
-			archiveSchedules(fromScenario, toScenario, person, period);
+			@event.PersonIdCollection.ForEach(p =>
+			{
+				var person = _personRepository.Get(p);
+
+				var fromScenario = _scenarioRepository.Get(@event.FromScenario);
+				var toScenario = _scenarioRepository.Get(@event.ToScenario);
+
+				clearCurrentSchedules(toScenario, person, period);
+				archiveSchedules(fromScenario, toScenario, person, period);
+			});
 			
 			_currentUnitOfWork.Current().AfterSuccessfulTx(() =>
 			{

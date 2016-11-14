@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -60,7 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					EndDate = model.EndDate,
 					FromScenario = model.FromScenario,
 					ToScenario = model.ToScenario,
-					PersonId = person.Id.GetValueOrDefault(),
+					PersonIdCollection = { person.Id.GetValueOrDefault() },
 					TrackingId = model.TrackId
 				}).Cast<IEvent>().ToArray();
 				Task.Run(() =>

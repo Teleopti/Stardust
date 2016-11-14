@@ -78,6 +78,33 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 		}
 
 		[Test]
+		public void ShouldNotMoveAnyNote()
+		{
+			addDefaultTypesToRepositories();
+			var secondPerson = PersonFactory.CreatePerson("Tester Testersson 2");
+			WithUnitOfWork.Do(() => PersonRepository.Add(secondPerson));
+
+			var assignment = new PersonAssignment(_person, _defaultScenario, _period.StartDate);
+			WithUnitOfWork.Do(() => ScheduleStorage.Add(assignment));
+			var @event = new ArchiveScheduleEvent
+			{
+				PersonIdCollection = { secondPerson.Id.GetValueOrDefault() },
+				EndDate = _period.EndDate.Date,
+				FromScenario = _defaultScenario.Id.GetValueOrDefault(),
+				StartDate = _period.StartDate.Date,
+				ToScenario = _targetScenario.Id.GetValueOrDefault(),
+				TrackingId = _trackingId,
+				LogOnBusinessUnitId = _businessUnit.Id.GetValueOrDefault()
+			};
+			WithUnitOfWork.Do(() => Target.Handle(@event));
+
+			var archivedAssignment = WithUnitOfWork.Get(() => PersonAssignmentRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(_targetScenario)));
+			archivedAssignment.Should().Be.Null();
+
+			verifyTrackingMessageWasSent();
+		}
+
+		[Test]
 		public void ShouldMoveOneAssignment()
 		{
 			addDefaultTypesToRepositories();
@@ -314,7 +341,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 		{
 			return new ArchiveScheduleEvent
 			{
-				PersonId = _person.Id.GetValueOrDefault(),
+				PersonIdCollection = { _person.Id.GetValueOrDefault() },
 				EndDate = _period.EndDate.Date,
 				FromScenario = _defaultScenario.Id.GetValueOrDefault(),
 				StartDate = _period.StartDate.Date,
