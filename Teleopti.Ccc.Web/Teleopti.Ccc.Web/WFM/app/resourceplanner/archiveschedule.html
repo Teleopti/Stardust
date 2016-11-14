@@ -7,13 +7,13 @@
 	<div class="view-header with-fab with-desc">
 		<div class="view-title">
 			<h1><i class="mdi mdi-calendar"></i> {{'ArchiveSchedule' | translate}}</h1>
-			<p translate>ArchiveSchedule</p>
+			<p translate>ArchiveScheduleDescription</p>
 		</div>
 
 		<div class="fab-wrapper">
 			<button id="archive-btn" class="wfm-fab material-depth-1" ng-click="vm.validateAndShowModal(vm.selection.fromScenario, vm.selection.toScenario, vm.selection.period, vm.selection.teams)" ng-disabled="!vm.canRunArchiving()">
 				<i class="mdi mdi-file-document"></i>
-				<md-tooltip>Run archiving</md-tooltip>
+				<md-tooltip>{{ 'RunArchiving' | translate}}</md-tooltip>
 			</button>
 		</div>
 	</div>
@@ -21,8 +21,8 @@
 		<div class="con-row">
 			<div class="con-flex">
 				<form>
-					<label>From Scenario:</label>
-					<md-select class="inline-select from-scenario-selector" ng-model="vm.selection.fromScenario" placeholder="Scenario">
+					<label>{{'FromScenarioColon' | translate}}</label>
+					<md-select class="inline-select from-scenario-selector" ng-model="vm.selection.fromScenario" placeholder="{{'Scenario' | translate}}">
 						<md-option ng-repeat="scenario in vm.scenarios | defaultScenario:true" ng-value="scenario" ng-disabled="true">{{scenario.Name}}</md-option>
 					</md-select>
 				</form>
@@ -30,8 +30,8 @@
 
 			<div class="con-flex">
 				<form>
-					<label>To Scenario:</label>
-					<md-select class="inline-select to-scenario-selector" ng-model="vm.selection.toScenario" placeholder="Scenario">
+					<label>{{'ToScenarioColon' | translate}}</label>
+					<md-select class="inline-select to-scenario-selector" ng-model="vm.selection.toScenario" placeholder="{{'Scenario' | translate}}">
 						<md-option ng-repeat="scenario in vm.scenarios | defaultScenario:false" ng-value="scenario">{{scenario.Name}}</md-option>
 					</md-select>
 				</form>
@@ -54,8 +54,8 @@
 			<div class="modalbg">
 				<div class="dialog">
 					<div class="modal-inner-content">
-						<h3>Are you sure?</h3> 
-						You are about to overwrite all existing scheduling for scenario '{{vm.selection.toScenario.Name}}' for the period {{vm.formatDate(vm.selection.period.startDate)}} - {{vm.formatDate(vm.selection.period.endDate)}} and the selected teams.
+						<h3>{{'AreYouSure' | translate}}</h3>
+						{{vm.confirmationText}}
 					</div>
 					<div class="modal-actions">
 						<aside>

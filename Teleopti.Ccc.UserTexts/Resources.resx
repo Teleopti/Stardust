@@ -15130,4 +15130,49 @@ These options are activated:
     <value>Move Shift</value>
     <comment>MoveShift command in the Teams module</comment>
   </data>
+  <data name="ArchiveScheduleDescription" xml:space="preserve">
+    <value>Archive schedule from Default scenario to another scenario, overwriting any previous scheduling in the target scenario for the given period.</value>
+  </data>
+  <data name="ArchivingConfirmationWithParameters" xml:space="preserve">
+    <value>You are about to overwrite all existing scheduling for scenario '{0}' for the period {1} - {2} and the selected teams.</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Are you sure?</value>
+  </data>
+  <data name="DoneArchivingForXPeopleDot" xml:space="preserve">
+    <value>Done archiving for {0} people.</value>
+  </data>
+  <data name="FromScenarioColon" xml:space="preserve">
+    <value>From scenario:</value>
+  </data>
+  <data name="PickASmallerDatePeriodDot" xml:space="preserve">
+    <value>Pick a smaller date period.</value>
+  </data>
+  <data name="PickAtleastOneTeamDot" xml:space="preserve">
+    <value>Pick atleast one team.</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>Run</value>
+  </data>
+  <data name="RunArchiving" xml:space="preserve">
+    <value>Run archiving</value>
+  </data>
+  <data name="TheScenarioYouArchiveFromMustBeTheDefaultScenarioDot" xml:space="preserve">
+    <value>The scenario you archive from must be the default scenario.</value>
+  </data>
+  <data name="TheScenarioYouArchiveToMustNotBeTheDefaultScenarioDot" xml:space="preserve">
+    <value>The scenario you archive to must not be the default scenario.</value>
+  </data>
+  <data name="ToScenarioColon" xml:space="preserve">
+    <value>To scenario:</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToArchiveFromDot" xml:space="preserve">
+    <value>You need to pick a scenario to archive from.</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToArchiveToDot" xml:space="preserve">
+    <value>You need to pick a scenario to archive to.</value>
+  </data>
+  <data name="YourSelectionResultedInZeroPeopleDot" xml:space="preserve">
+    <value>Your selection resulted in 0 people.</value>
+  </data>
 </root>

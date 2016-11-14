@@ -23,6 +23,7 @@
 			'$scope',
 			'NoticeService',
 			'defaultScenarioFilter',
+			'$translate',
 			function(ArchiveScheduleSrvc,
 				signalRSVC,
 				guidgenerator,
@@ -30,7 +31,8 @@
 				$timeout,
 				$scope,
 				NoticeService,
-				defaultScenarioFilter) {
+				defaultScenarioFilter,
+				$translate) {
 				var vm = this;
 				vm.scenarios = [];
 				vm.dateRangeTemplateType = 'popup';
@@ -43,9 +45,6 @@
 						endDate: moment().utc().add(1, 'months').startOf('month').toDate()
 					}
 				};
-				vm.formatDate = function(date) {
-					return moment(date).format('L');
-				};
 
 				vm.showConfirmModal = false;
 
@@ -53,17 +52,17 @@
 					var validationResult = { messages: [] };
 
 					if (fromScenario == null)
-						validationResult.messages.push("You need to pick a scenario to archive from.");
+						validationResult.messages.push($translate.instant('YouNeedToPickAScenarioToArchiveFromDot'));
 					else if(!fromScenario.DefaultScenario)
-						validationResult.messages.push("The scenario you archive from must be the default scenario.");
+						validationResult.messages.push($translate.instant('TheScenarioYouArchiveFromMustBeTheDefaultScenarioDot'));
 					if (toScenario == null)
-						validationResult.messages.push("You need to pick a scenario to archive to.");
+						validationResult.messages.push($translate.instant('YouNeedToPickAScenarioToArchiveToDot'));
 					else if (toScenario.DefaultScenario)
-						validationResult.messages.push("The scenario you archive to must not be the default scenario.");
+						validationResult.messages.push($translate.instant('TheScenarioYouArchiveToMustNotBeTheDefaultScenarioDot'));
 					if (teamSelection.length === 0)
-						validationResult.messages.push("Pick atleast one team.");
+						validationResult.messages.push($translate.instant('PickAtleastOneTeamDot'));
 					if (moment(period.endDate).diff(period.startDate, 'days') > 65)
-						validationResult.messages.push("Pick a smaller date period.");
+						validationResult.messages.push($translate.instant('PickASmallerDatePeriodDot'));
 					validationResult.successful = validationResult.messages.length === 0;
 					return validationResult;
 				}
@@ -92,16 +91,16 @@
 
 				var completedArchiving = function() {
 					if (vm.tracking.totalPeople === 0) {
-						NoticeService.info("Your selection resulted in 0 people.", null, true);
+						NoticeService.info($translate.instant('YourSelectionResultedInZeroPeopleDot'), null, true);
 					} else {
-						NoticeService.success("Done archiving for " + vm.tracking.totalPeople + " people.", null, true);
+						
+						NoticeService.success($translate.instant('DoneArchivingForXPeopleDot').replace('{0}', vm.tracking.totalPeople), null, true);
 					}
 
 					$timeout(function() {
 							vm.showProgress = false;
 							resetTracking();
-						},
-						3000);
+						}, 3000);
 				}
 				var updateStatus = function(messages) {
 					vm.tracking.recievedMessages += messages.length;
@@ -122,6 +121,10 @@
 						});
 						return;
 					}
+					vm.confirmationText = $translate.instant('ArchivingConfirmationWithParameters')
+						.replace('{0}', toScenario.Name)
+						.replace('{1}', moment(period.startDate).format('L'))
+						.replace('{2}', moment(period.endDate).format('L'));
 					vm.showConfirmModal = true;
 				};
 

@@ -2890,6 +2890,33 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Archive schedule from Default scenario to another scenario, overwriting any previous scheduling in the target scenario for the given period..
+        /// </summary>
+        public static string ArchiveScheduleDescription {
+            get {
+                return ResourceManager.GetString("ArchiveScheduleDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are about to overwrite all existing scheduling for scenario &apos;{0}&apos; for the period {1} - {2} and the selected teams..
+        /// </summary>
+        public static string ArchivingConfirmationWithParameters {
+            get {
+                return ResourceManager.GetString("ArchivingConfirmationWithParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure?.
+        /// </summary>
+        public static string AreYouSure {
+            get {
+                return ResourceManager.GetString("AreYouSure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to remove {0} absences from {1} agents?.
         /// </summary>
         public static string AreYouSureToRemoveSelectedAbsence {
@@ -8897,6 +8924,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Done archiving for {0} people..
+        /// </summary>
+        public static string DoneArchivingForXPeopleDot {
+            get {
+                return ResourceManager.GetString("DoneArchivingForXPeopleDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do not break maximum seats.
         /// </summary>
         public static string DoNotBreakMaximumSeats {
@@ -11765,6 +11801,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string FromRole {
             get {
                 return ResourceManager.GetString("FromRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to From scenario:.
+        /// </summary>
+        public static string FromScenarioColon {
+            get {
+                return ResourceManager.GetString("FromScenarioColon", resourceCulture);
             }
         }
         
@@ -21534,6 +21579,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pick a smaller date period..
+        /// </summary>
+        public static string PickASmallerDatePeriodDot {
+            get {
+                return ResourceManager.GetString("PickASmallerDatePeriodDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pick atleast one team..
+        /// </summary>
+        public static string PickAtleastOneTeamDot {
+            get {
+                return ResourceManager.GetString("PickAtleastOneTeamDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pick best meeting slot.
         /// </summary>
         public static string PickBestMeetingSlot {
@@ -24968,6 +25031,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RuleWithRatioConvertor {
             get {
                 return ResourceManager.GetString("RuleWithRatioConvertor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Run.
+        /// </summary>
+        public static string Run {
+            get {
+                return ResourceManager.GetString("Run", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Run archiving.
+        /// </summary>
+        public static string RunArchiving {
+            get {
+                return ResourceManager.GetString("RunArchiving", resourceCulture);
             }
         }
         
@@ -30682,6 +30763,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The scenario you archive from must be the default scenario..
+        /// </summary>
+        public static string TheScenarioYouArchiveFromMustBeTheDefaultScenarioDot {
+            get {
+                return ResourceManager.GetString("TheScenarioYouArchiveFromMustBeTheDefaultScenarioDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The scenario you archive to must not be the default scenario..
+        /// </summary>
+        public static string TheScenarioYouArchiveToMustNotBeTheDefaultScenarioDot {
+            get {
+                return ResourceManager.GetString("TheScenarioYouArchiveToMustNotBeTheDefaultScenarioDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The schedule has changed. This request must be accepted again..
         /// </summary>
         public static string TheScheduleHasChanged {
@@ -31209,6 +31308,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Top {
             get {
                 return ResourceManager.GetString("Top", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To scenario:.
+        /// </summary>
+        public static string ToScenarioColon {
+            get {
+                return ResourceManager.GetString("ToScenarioColon", resourceCulture);
             }
         }
         
@@ -34231,6 +34339,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You need to pick a scenario to archive from..
+        /// </summary>
+        public static string YouNeedToPickAScenarioToArchiveFromDot {
+            get {
+                return ResourceManager.GetString("YouNeedToPickAScenarioToArchiveFromDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You need to pick a scenario to archive to..
+        /// </summary>
+        public static string YouNeedToPickAScenarioToArchiveToDot {
+            get {
+                return ResourceManager.GetString("YouNeedToPickAScenarioToArchiveToDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your changes will be discarded..
         /// </summary>
         public static string YourChangesWillBeDiscarded {
@@ -34326,6 +34452,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string YourScheduleTheDATEHasChanged {
             get {
                 return ResourceManager.GetString("YourScheduleTheDATEHasChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your selection resulted in 0 people..
+        /// </summary>
+        public static string YourSelectionResultedInZeroPeopleDot {
+            get {
+                return ResourceManager.GetString("YourSelectionResultedInZeroPeopleDot", resourceCulture);
             }
         }
         
