@@ -46,7 +46,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 					{
 						foreach (var interval in layer.Period.Intervals(TimeSpan.FromMinutes(maxSeatSkillDay.Skill.DefaultResolution)))
 						{
-							var skillStaffPeriod = maxSeatSkillDay.SkillStaffPeriodCollection.Single(x => x.Period == interval);
+							var skillStaffPeriod = maxSeatSkillDay.SkillStaffPeriodCollection.SingleOrDefault(x => x.Period == interval);
+							if(skillStaffPeriod==null)
+								continue;
 							var occupiedSeatsThisInterval = _usedSeats.Fetch(skillStaffPeriod);
 							if (thisShiftRequiresOneSeatExtra)
 							{
