@@ -72,6 +72,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<MaxSeatPeak>().SingleInstance();
 			builder.RegisterType<IsOverMaxSeat>().SingleInstance();
+			builder.RegisterType<LockDaysOnTeamBlockInfos>().SingleInstance();
 			builder.RegisterType<SkillRoutingPriorityModel>().SingleInstance();
 			builder.RegisterType<SkillRoutingPriorityPersister>().SingleInstance();
 
