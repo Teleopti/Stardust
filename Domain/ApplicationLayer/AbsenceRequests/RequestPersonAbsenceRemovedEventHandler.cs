@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -13,14 +14,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IAbsenceRequestCancelService _absenceRequestCancelService;
+		private readonly IWorkflowControlSetRepository _workflowControlSetRepository;
 
 
 
-		public RequestPersonAbsenceRemovedEventHandler(IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IPersonRequestRepository personRequestRepository, IAbsenceRequestCancelService absenceRequestCancelService)
+		public RequestPersonAbsenceRemovedEventHandler(IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IPersonRequestRepository personRequestRepository, IAbsenceRequestCancelService absenceRequestCancelService, IWorkflowControlSetRepository workflowControlSetRepository)
 		{
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 			_personRequestRepository = personRequestRepository;
 			_absenceRequestCancelService = absenceRequestCancelService;
+			_workflowControlSetRepository = workflowControlSetRepository;
 		}
 
 		[ImpersonateSystem, UnitOfWork]
@@ -37,14 +40,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				_absenceRequestCancelService.CancelAbsenceRequest(absenceRequest);
 			}
 
-			var queuedAbsenceRequest = new QueuedAbsenceRequest()
+			if (_workflowControlSetRepository.LoadAll().Any(w => w.AbsenceRequestWaitlistEnabled))
 			{
-				PersonRequest = personRequestId,
-				Created = DateTime.UtcNow,
-				StartDateTime = @event.StartDateTime,
-				EndDateTime = @event.EndDateTime
-			};
-			_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
+				var queuedAbsenceRequest = new QueuedAbsenceRequest()
+				{
+					PersonRequest = personRequestId,
+					Created = DateTime.UtcNow,
+					StartDateTime = @event.StartDateTime,
+					EndDateTime = @event.EndDateTime
+				};
+				_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
+			}
+			
 		}
 	}
 }
