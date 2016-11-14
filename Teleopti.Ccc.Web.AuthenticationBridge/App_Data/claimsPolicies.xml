@@ -17,6 +17,7 @@
 	  <issuer uri="urn:AzureAd" thumbprint="" displayName="AzureAd"/>
 	  <issuer uri="urn:ADFS3" thumbprint="" displayName="ADFS3"/>
 	  <issuer uri="urn:Saml" thumbprint="" displayName="Saml"/>
+	  <issuer uri="urn:Google" thumbprint="" displayName="Google"/>
 		<!-- custom section starts here -->
 		<!--<issuer uri="urn:SalesForce" thumbprint="" displayName="SalesForce"/>-->
 		<!-- custom section ends here -->
@@ -52,6 +53,12 @@
 			</input>
 			<output type="nameidentifier" copyFrom="INPUT_VALUE"/>
 		</rule>
+    <rule assertionsMatch="any">
+      <input>
+        <claim type="nameidentifier" issuer="Google" value="*"/>
+      </input>
+      <output type="nameidentifier" copyFrom="INPUT_VALUE"/>
+    </rule>
 
 		<!-- custom section starts here -->
 		<!--<rule assertionsMatch="any">
