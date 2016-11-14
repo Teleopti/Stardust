@@ -15122,4 +15122,8 @@ These options are activated:
     <value> Validating {0} person(s) out of {1}</value>
     <comment>Validating {0} person(s) out of {1}</comment>
   </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Continue</value>
+    <comment>Continue</comment>
+  </data>
 </root>
