@@ -11,7 +11,7 @@
 		</div>
 
 		<div class="fab-wrapper">
-			<button id="archive-btn" class="wfm-fab material-depth-1" ng-click="vm.runArchiving(vm.selection.fromScenario, vm.selection.toScenario, vm.selection.period, vm.selection.teams)" ng-disabled="!vm.canRunArchiving()">
+			<button id="archive-btn" class="wfm-fab material-depth-1" ng-click="vm.validateAndShowModal(vm.selection.fromScenario, vm.selection.toScenario, vm.selection.period, vm.selection.teams)" ng-disabled="!vm.canRunArchiving()">
 				<i class="mdi mdi-file-document"></i>
 				<md-tooltip>Run archiving</md-tooltip>
 			</button>
@@ -46,6 +46,24 @@
 		<div class="con-row">
 			<div class="con-flex">
 				<div class="data-container full-padding flex-element-fill flex-column" ng-include="'app/resourceplanner/archiveschedule-businesshierarchy.html'" ng-controller="HierarchyController"></div>
+			</div>
+		</div>
+	</div>
+	<div ng-cloak class="modal-box">
+		<div ng-cloak ng-show="vm.showConfirmModal">
+			<div class="modalbg">
+				<div class="dialog">
+					<div class="modal-inner-content">
+						<h3>Are you sure?</h3> 
+						You are about to overwrite all existing scheduling for scenario '{{vm.selection.toScenario.Name}}' for the period {{vm.formatDate(vm.selection.period.startDate)}} - {{vm.formatDate(vm.selection.period.endDate)}} and the selected teams.
+					</div>
+					<div class="modal-actions">
+						<aside>
+							<button ng-click="vm.showConfirmModal=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+							<button ng-click="vm.runArchiving(vm.selection.fromScenario, vm.selection.toScenario, vm.selection.period, vm.selection.teams)" class="wfm-btn wfm-btn-invis-primary">{{'Run'|translate}}</button>
+						</aside>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

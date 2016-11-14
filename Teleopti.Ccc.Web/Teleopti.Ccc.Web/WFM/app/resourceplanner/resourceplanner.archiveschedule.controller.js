@@ -43,6 +43,12 @@
 						endDate: moment().utc().add(1, 'months').startOf('month').toDate()
 					}
 				};
+				vm.formatDate = function(date) {
+					return moment(date).format('L');
+				};
+
+				vm.showConfirmModal = false;
+
 				var validateArchivingParameters = function (fromScenario, toScenario, period, teamSelection) {
 					var validationResult = { messages: [] };
 
@@ -106,17 +112,21 @@
 				vm.canRunArchiving = function() {
 					return !vm.showProgress;
 				};
-				vm.runArchiving = function(fromScenario, toScenario, period, teamSelection) {
+
+				vm.validateAndShowModal = function (fromScenario, toScenario, period, teamSelection) {
 					if (!vm.canRunArchiving()) return;
 					var validationResult = validateArchivingParameters(fromScenario, toScenario, period, teamSelection);
 					if (!validationResult.successful) {
-						console.log(validationResult);
-						angular.forEach(validationResult.messages, function(value) {
+						angular.forEach(validationResult.messages, function (value) {
 							NoticeService.error(value, null, true);
 						});
 						return;
 					}
-						
+					vm.showConfirmModal = true;
+				};
+
+				vm.runArchiving = function (fromScenario, toScenario, period, teamSelection) {
+					vm.showConfirmModal = false;
 					resetTracking();
 					vm.showProgress = true;
 					var archiveScheduleModel = {
@@ -143,11 +153,7 @@
 								vm.tracking.progress = updateProgress();
 							});
 						}
-
-					},
-					100,
-					0,
-					false);
+					}, 100, 0, false);
 
 				$scope.$on('teamSelectionChanged',
 					function(event, args) {
