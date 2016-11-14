@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				{
 					if(!lockUnscheduledDaysAndReturnAnyIsScheduled(teamBlockInfo))
 						continue;
-					var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= period.StartDate);//what is this?
+					var datePoint = teamBlockInfo.BlockInfo.DatePoint(period);
 					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint);
 					var maxPeakBefore = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);
 					if (maxPeakBefore.IsPositive())
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 				foreach (var teamBlockInfo in teamBlockInfos)
 				{
-					var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= period.StartDate);//what is this?
+					var datePoint = teamBlockInfo.BlockInfo.DatePoint(period);
 					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint);
 
 					foreach (var date in period.DayCollection())
