@@ -769,6 +769,34 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences);
 		}
 
+		[Test, Ignore("TO BE FIXED")]
+		[TestCase(10, ExpectedResult = false)]
+		[TestCase(20, ExpectedResult = true)]
+		public bool ShouldConsiderShiftLayerWhenMatchingPartOfSkillStaffPeriod(int lengthOfActivityRequiresNoSkillInEnd)
+		{
+			//THIS BEHAVIOR MIGHT CHANGE LATER
+			var site = new Site("_") { MaxSeats = 1 }.WithId();
+			var team = new Team { Description = new Description("_"), Site = site };
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			var activityRequiresSkill = new Activity("_") { RequiresSeat = true }.WithId();
+			var activityRequiresNoSkill = new Activity("_") { RequiresSeat = false }.WithId();
+			var dateOnly = new DateOnly(2016, 10, 25);
+			var scenario = new Scenario("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityRequiresSkill, new TimePeriodWithSegment(8, 15, 8, 15, 60), new TimePeriodWithSegment(16, 15, 16, 15, 60), new ShiftCategory("_").WithId()));
+			ruleSet.AddExtender(new ActivityRelativeEndExtender(activityRequiresNoSkill, 
+				new TimePeriodWithSegment(0, lengthOfActivityRequiresNoSkillInEnd, 0, lengthOfActivityRequiresNoSkillInEnd, lengthOfActivityRequiresNoSkillInEnd), new TimePeriodWithSegment(0, 20, 0, 20, 20)));
+			var agentDataOneHour = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activityRequiresSkill, new TimePeriod(16, 0, 17, 0));
+			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activityRequiresSkill, new TimePeriod(9, 0, 17, 0));
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData.Assignment, agentDataOneHour.Assignment });
+			var optPreferences = CreateOptimizationPreferences();
+
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences);
+
+			var hasBeenOptimized = schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay != TimeSpan.FromHours(9);
+			return hasBeenOptimized;
+		}
+
+
 		[Test]
 		public void ShouldNotOptimizeEmptyDays()
 		{
