@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		private void resetGroupPageData()
 		{
 			_groupPagePerDate = _container.Resolve<IGroupPageCreator>()
-				.CreateGroupPagePerDate(_stateHolder.AllPermittedPersons, _dateOnlyPeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(),
+				.CreateGroupPagePerDate(_stateHolder.AllPermittedPersons, _stateHolder.Schedules, _dateOnlyPeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(),
 					(GroupPageLight) comboBoxAgentGrouping.SelectedItem);
 		}
 

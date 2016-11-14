@@ -60,7 +60,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			//   GroupC
 			//      Person1
 
-			var firstGrouping = _groupPageDataProvider.UserDefinedGroupings.First();
+			var firstGrouping = _groupPageDataProvider.UserDefinedGroupings(null).First();
 			IPerson person1 = firstGrouping.RootGroupCollection[0].ChildGroupCollection[0].PersonCollection[0];
 			IPerson person2 = firstGrouping.RootGroupCollection[0].PersonCollection[0];
 			IPerson person3 = firstGrouping.RootGroupCollection[1].PersonCollection[0];
@@ -70,9 +70,9 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 
 			IRootPersonGroup groupA = firstGrouping.RootGroupCollection[0];
 			IRootPersonGroup groupB = firstGrouping.RootGroupCollection[1];
-			IRootPersonGroup groupC = _groupPageDataProvider.UserDefinedGroupings.ElementAt(1).RootGroupCollection[0];
+			IRootPersonGroup groupC = _groupPageDataProvider.UserDefinedGroupings(null).ElementAt(1).RootGroupCollection[0];
 			IGroupPage groupPage1 = firstGrouping;
-			IGroupPage groupPage2 = _groupPageDataProvider.UserDefinedGroupings.ElementAt(1);
+			IGroupPage groupPage2 = _groupPageDataProvider.UserDefinedGroupings(null).ElementAt(1);
 
 			// Get the user defined group pages and compress to only one level of groups
 			var comressedUserDefinedGroupings = _target.UserDefinedGroupings;
@@ -374,61 +374,58 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			}
 		}
 
-		public IEnumerable<IGroupPage> UserDefinedGroupings
+		public IEnumerable<IGroupPage> UserDefinedGroupings(IScheduleDictionary schedules)
 		{
-			get
+			if (_userDefinedGroupings == null)
 			{
-				if (_userDefinedGroupings == null)
-				{
-					//GroupPage1
-					//   GroupA
-					//      GroupAB
-					//         GroupABC
-					//            Person4
-					//         Person1
-					//      Person2
-					//   GroupB
-					//      Person3
-					//GroupPage2
-					//   GroupC
-					//      Person1
+				//GroupPage1
+				//   GroupA
+				//      GroupAB
+				//         GroupABC
+				//            Person4
+				//         Person1
+				//      Person2
+				//   GroupB
+				//      Person3
+				//GroupPage2
+				//   GroupC
+				//      Person1
 
-					IGroupPage groupPage1 = new GroupPage("GroupPage1");
-					groupPage1.SetId(Guid.NewGuid());
-					IGroupPage groupPage2 = new GroupPage("GroupPage2");
-					groupPage2.SetId(Guid.NewGuid());
-					IRootPersonGroup groupA = new RootPersonGroup("GroupA");
-					groupA.SetId(Guid.NewGuid());
-					IRootPersonGroup groupB = new RootPersonGroup("GroupB");
-					groupB.SetId(Guid.NewGuid());
-					IRootPersonGroup groupC = new RootPersonGroup("GroupC");
-					groupC.SetId(Guid.NewGuid());
-					IChildPersonGroup groupAb = new ChildPersonGroup("GroupAB");
-					IChildPersonGroup groupAbc = new ChildPersonGroup("GroupABC");
-					IPerson person1 = PersonFactory.CreatePerson("Person1");
-					person1.SetId(Guid.NewGuid());
-					IPerson person2 = PersonFactory.CreatePerson("Person2");
-					person2.SetId(Guid.NewGuid());
-					IPerson person3 = PersonFactory.CreatePerson("Person3");
-					person3.SetId(Guid.NewGuid());
-					IPerson person4 = PersonFactory.CreatePerson("Person4");
-					person4.SetId(Guid.NewGuid());
+				IGroupPage groupPage1 = new GroupPage("GroupPage1");
+				groupPage1.SetId(Guid.NewGuid());
+				IGroupPage groupPage2 = new GroupPage("GroupPage2");
+				groupPage2.SetId(Guid.NewGuid());
+				IRootPersonGroup groupA = new RootPersonGroup("GroupA");
+				groupA.SetId(Guid.NewGuid());
+				IRootPersonGroup groupB = new RootPersonGroup("GroupB");
+				groupB.SetId(Guid.NewGuid());
+				IRootPersonGroup groupC = new RootPersonGroup("GroupC");
+				groupC.SetId(Guid.NewGuid());
+				IChildPersonGroup groupAb = new ChildPersonGroup("GroupAB");
+				IChildPersonGroup groupAbc = new ChildPersonGroup("GroupABC");
+				IPerson person1 = PersonFactory.CreatePerson("Person1");
+				person1.SetId(Guid.NewGuid());
+				IPerson person2 = PersonFactory.CreatePerson("Person2");
+				person2.SetId(Guid.NewGuid());
+				IPerson person3 = PersonFactory.CreatePerson("Person3");
+				person3.SetId(Guid.NewGuid());
+				IPerson person4 = PersonFactory.CreatePerson("Person4");
+				person4.SetId(Guid.NewGuid());
 
-					groupPage1.AddRootPersonGroup(groupA);
-					groupPage1.AddRootPersonGroup(groupB);
-					groupPage2.AddRootPersonGroup(groupC);
-					groupA.AddChildGroup(groupAb);
-					groupAb.AddChildGroup(groupAbc);
-					groupA.AddPerson(person2);
-					groupB.AddPerson(person3);
-					groupAb.AddPerson(person1);
-					groupC.AddPerson(person1);
-					groupAbc.AddPerson(person4);
+				groupPage1.AddRootPersonGroup(groupA);
+				groupPage1.AddRootPersonGroup(groupB);
+				groupPage2.AddRootPersonGroup(groupC);
+				groupA.AddChildGroup(groupAb);
+				groupAb.AddChildGroup(groupAbc);
+				groupA.AddPerson(person2);
+				groupB.AddPerson(person3);
+				groupAb.AddPerson(person1);
+				groupC.AddPerson(person1);
+				groupAbc.AddPerson(person4);
 
-					_userDefinedGroupings = new List<IGroupPage> { groupPage1, groupPage2 };
-				}
-				return _userDefinedGroupings;
+				_userDefinedGroupings = new List<IGroupPage> {groupPage1, groupPage2};
 			}
+			return _userDefinedGroupings;
 		}
 
 		public IBusinessUnit BusinessUnit

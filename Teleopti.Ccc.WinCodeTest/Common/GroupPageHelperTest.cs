@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
                 Assert.AreEqual(1, _target.PartTimePercentageCollection.Count());
                 Assert.AreEqual(1, _target.PersonCollection.Count());
                 Assert.AreEqual(1, _target.RuleSetBagCollection.Count());
-                Assert.AreEqual(0, _target.UserDefinedGroupings.Count());
+                Assert.AreEqual(0, _target.UserDefinedGroupings(null).Count());
                 Assert.AreEqual(1, _target.SkillCollection.Count());
             }
         }

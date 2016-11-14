@@ -30,14 +30,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void ShouldThrowIfDatesIsNull()
 		{
 			var grouping = new GroupPageLight();
-			Assert.Throws<ArgumentNullException>(() => _target.CreateGroupPagePerDate(null, null, _groupPageDataProvider, grouping));
+			Assert.Throws<ArgumentNullException>(() => _target.CreateGroupPagePerDate(null, null, null, _groupPageDataProvider, grouping));
 		}
 
 		[Test]
 		public void ShouldThrowIfProviderIsNull()
 		{
 			var grouping = new GroupPageLight();
-			Assert.Throws<ArgumentNullException>(() => _target.CreateGroupPagePerDate(null, new List<DateOnly>(), null, grouping));
+			Assert.Throws<ArgumentNullException>(() => _target.CreateGroupPagePerDate(null, null, new List<DateOnly>(), null, grouping));
 		}
 
 		[Test]
@@ -50,10 +50,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			gp.SetId(id);
 			var lst = new List<IGroupPage> { gp };
 
-			Expect.Call(_groupPageDataProvider.UserDefinedGroupings).Return(lst);
+			Expect.Call(_groupPageDataProvider.UserDefinedGroupings(null)).Return(lst);
 
 			_mocks.ReplayAll();
-			var res = _target.CreateGroupPagePerDate(null, new List<DateOnly> { date }, _groupPageDataProvider, grouping);
+			var res = _target.CreateGroupPagePerDate(null, null, new List<DateOnly> { date }, _groupPageDataProvider, grouping);
 			Assert.That(res.GetGroupPageByDate(date), Is.EqualTo(gp));
 			_mocks.VerifyAll();
 		}

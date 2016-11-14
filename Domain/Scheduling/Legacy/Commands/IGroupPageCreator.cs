@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public interface IGroupPageCreator
 	{
-		IGroupPagePerDate CreateGroupPagePerDate(IEnumerable<IPerson> allPermittedPersons, IEnumerable<DateOnly> dates, IGroupScheduleGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping);
+		IGroupPagePerDate CreateGroupPagePerDate(IEnumerable<IPerson> allPermittedPersons, IScheduleDictionary schedules, IEnumerable<DateOnly> dates, IGroupScheduleGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping);
 	}
 }

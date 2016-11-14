@@ -55,13 +55,10 @@ namespace Teleopti.Ccc.WinCode.Common
 			}
 		}
 
-		public IEnumerable<IGroupPage> UserDefinedGroupings
+		public IEnumerable<IGroupPage> UserDefinedGroupings(IScheduleDictionary schedules)
 		{
-			get
-			{
-				CheckLoaded();
-				return new List<IGroupPage>(_groupPageCollection);
-			}
+			CheckLoaded();
+			return new List<IGroupPage>(_groupPageCollection);
 		}
 
 		private void CheckLoaded()

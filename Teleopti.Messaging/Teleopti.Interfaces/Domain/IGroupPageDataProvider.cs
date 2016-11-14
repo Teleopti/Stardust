@@ -32,12 +32,13 @@ namespace Teleopti.Interfaces.Domain
         ///</summary>
         IEnumerable<IRuleSetBag> RuleSetBagCollection { get; }
 
-        ///<summary>
-        /// Gets the user defined groupings.
-        ///</summary>
-        IEnumerable<IGroupPage> UserDefinedGroupings { get; }
+	    /// <summary>
+	    ///  Gets the user defined groupings.
+	    /// </summary>
+	    /// <param name="schedules"></param>
+	    IEnumerable<IGroupPage> UserDefinedGroupings(IScheduleDictionary schedules);
 
-        IBusinessUnit BusinessUnit { get; }
+	    IBusinessUnit BusinessUnit { get; }
 
         ///<summary>
         /// Gets the period to base the structure on

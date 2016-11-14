@@ -121,6 +121,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();
 			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			system.UseTestDouble<FakeGroupPageRepository>().For<IGroupPageRepository>();
 			system.UseTestDouble<FakeExternalLogOnRepository>().For<IExternalLogOnRepository>();
 			system.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
 			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();

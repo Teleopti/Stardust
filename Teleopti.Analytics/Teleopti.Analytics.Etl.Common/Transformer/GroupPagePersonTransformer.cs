@@ -23,7 +23,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		{
 			get
 			{
-				IEnumerable<IGroupPage> groupings = _getGroupPageDataProvider().UserDefinedGroupings;
+				IEnumerable<IGroupPage> groupings = _getGroupPageDataProvider().UserDefinedGroupings(null);
 
 				foreach (IGroupPage groupPage in groupings)
 				{

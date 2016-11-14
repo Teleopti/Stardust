@@ -138,32 +138,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
             }
         }
 
-        public IEnumerable<IGroupPage> UserDefinedGroupings
-        {
-            get
-            {
-	            lock (_lockObject)
-	            {
-					if (_groupPageCollection == null)
-					{
-						using (var uow = maybeDisposableUnitOfWork.Create(_unitOfWorkFactory))
-						{
-							uow.Uow.Reassociate(_stateHolder().Schedules.Keys);
-							IGroupPageRepository groupPageRepository = _repositoryFactory.CreateGroupPageRepository(uow.Uow);
-							_groupPageCollection = new List<IGroupPage>(groupPageRepository.LoadAllGroupPageWhenPersonCollectionReAssociated());
-						}
-						RemoveNotLoadedPersonsFromCollection(_groupPageCollection);
-					}
-	            }
-                
-                return _groupPageCollection;
-            }
-        }
+	    public IEnumerable<IGroupPage> UserDefinedGroupings(IScheduleDictionary schedules)
+	    {
+		    lock (_lockObject)
+		    {
+			    if (_groupPageCollection == null)
+			    {
+				    using (var uow = maybeDisposableUnitOfWork.Create(_unitOfWorkFactory))
+				    {
+					    uow.Uow.Reassociate(schedules.Keys);
+					    IGroupPageRepository groupPageRepository = _repositoryFactory.CreateGroupPageRepository(uow.Uow);
+					    _groupPageCollection = new List<IGroupPage>(groupPageRepository.LoadAllGroupPageWhenPersonCollectionReAssociated());
+				    }
+				    RemoveNotLoadedPersonsFromCollection(_groupPageCollection, schedules);
+			    }
+		    }
 
-		public void RemoveNotLoadedPersonsFromCollection(IEnumerable<IGroupPage> groupPages)
+		    return _groupPageCollection;
+	    }
+
+	    public void RemoveNotLoadedPersonsFromCollection(IEnumerable<IGroupPage> groupPages, IScheduleDictionary schedules)
 		{
 			if(groupPages == null) return;
-			var keys = _stateHolder().Schedules.Keys;
+			var keys = schedules.Keys;
 			foreach (var groupPage in groupPages)
 			{
 				foreach (var rootGroupPage in groupPage.RootGroupCollection)

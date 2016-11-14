@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_repositoryFactory.Stub(x => x.CreateGroupPageRepository(_uow)).Return(repository);
 			repository.Stub(x => x.LoadAllGroupPageWhenPersonCollectionReAssociated()).Return(new List<IGroupPage>());
 
-			Assert.AreEqual(0, _target.UserDefinedGroupings.Count());
+			Assert.AreEqual(0, _target.UserDefinedGroupings(dic).Count());
 			_uow.AssertWasCalled(x => x.Reassociate(new List<IPerson>()));
 		}
 
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_resultHolder.Stub(x => x.Schedules).Return(dic);
 			dic.Stub(x => x.Keys).Return(keys);
 
-			_target.RemoveNotLoadedPersonsFromCollection(new List<IGroupPage>{groupPage});
+			_target.RemoveNotLoadedPersonsFromCollection(new List<IGroupPage>{groupPage}, dic);
 			Assert.That(rootPersonGroup.PersonCollection,Is.Empty);
 			Assert.That(childGroup.PersonCollection.Contains(person3));
 			Assert.That(childGroup.PersonCollection.Contains(person2),Is.False);

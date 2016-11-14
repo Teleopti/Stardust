@@ -209,12 +209,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			get { return _ruleSetBagCollection ?? (_ruleSetBagCollection = _jobParameters.Helper.Repository.LoadRuleSetBag()); }
 		}
 
-		public IEnumerable<IGroupPage> UserDefinedGroupings
+		public IEnumerable<IGroupPage> UserDefinedGroupings(IScheduleDictionary schedules)
 		{
-			get {
-				return _userDefinedGroupings ??
-					   (_userDefinedGroupings = _jobParameters.Helper.Repository.LoadUserDefinedGroupings());
-			}
+			return _userDefinedGroupings ??
+						 (_userDefinedGroupings = _jobParameters.Helper.Repository.LoadUserDefinedGroupings());
 		}
 
 		public IBusinessUnit BusinessUnit

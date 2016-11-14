@@ -285,8 +285,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 
 			using (_mocks.Playback())
 			{
-				Assert.IsNotNull(_target.UserDefinedGroupings);
-				Assert.AreEqual(0, _target.UserDefinedGroupings.Count());
+				Assert.IsNotNull(_target.UserDefinedGroupings(null));
+				Assert.AreEqual(0, _target.UserDefinedGroupings(null).Count());
 			}
 		}
 
