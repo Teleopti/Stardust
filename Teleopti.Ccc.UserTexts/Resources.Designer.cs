@@ -14416,6 +14416,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading Requests....
+        /// </summary>
+        public static string LoadingRequestsTreeDots {
+            get {
+                return ResourceManager.GetString("LoadingRequestsTreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading Schedules....
         /// </summary>
         public static string LoadingSchedulesTreeDots {

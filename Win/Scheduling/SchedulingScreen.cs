@@ -3580,7 +3580,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				methods.Add(new LoaderMethod(filteringPeopleAndSkills, null));
 				methods.Add(new LoaderMethod(loadSchedules, LanguageResourceHelper.Translate("XXLoadingSchedulesTreeDots")));
                 if(PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler) && _loadRequsts)
-				    methods.Add(new LoaderMethod(loadRequests, null));
+				    methods.Add(new LoaderMethod(loadRequests, LanguageResourceHelper.Translate("XXLoadingRequestsThreeDots")));
 
 				methods.Add(new LoaderMethod(loadSkillDays, LanguageResourceHelper.Translate("XXLoadingSkillDataTreeDots")));
 				methods.Add(new LoaderMethod(loadDefinitionSets, null));

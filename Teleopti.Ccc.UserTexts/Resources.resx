@@ -15175,4 +15175,8 @@ These options are activated:
   <data name="YourSelectionResultedInZeroPeopleDot" xml:space="preserve">
     <value>Your selection resulted in 0 people.</value>
   </data>
+  <data name="LoadingRequestsTreeDots" xml:space="preserve">
+    <value>Loading Requests...</value>
+    <comment>Loading Requests... when loading Scheduler</comment>
+  </data>
 </root>
