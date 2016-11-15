@@ -31,9 +31,9 @@ namespace Teleopti.Ccc.DomainTest.Cascading
 			var skillList = SkillRepository.LoadAll();
 			var skillDic = skillList.ToDictionary(s => s.Name);
 			skillDic["skill1"].CascadingIndex.HasValue.Should().Be.False();
-			skillDic["skill2"].CascadingIndex.Value.Should().Be.EqualTo(2);
-			skillDic["skill3"].CascadingIndex.Value.Should().Be.EqualTo(1);
-			skillDic["skill4"].CascadingIndex.Value.Should().Be.EqualTo(2);
+			skillDic["skill2"].CascadingIndex.Value.Should().Be.EqualTo(1);
+			skillDic["skill3"].CascadingIndex.Value.Should().Be.EqualTo(2);
+			skillDic["skill4"].CascadingIndex.Value.Should().Be.EqualTo(1);
 		}
 
 		[Test]

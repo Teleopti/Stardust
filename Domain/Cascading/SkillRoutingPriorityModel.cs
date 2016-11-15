@@ -9,11 +9,13 @@ namespace Teleopti.Ccc.Domain.Cascading
 	{
 		private readonly ISkillRepository _skillRepository;
 		private readonly IActivityRepository _activityRepository;
+		private readonly ReverseSkillRoutingPriorities _reverseSkillRoutingPriorities;
 
-		public SkillRoutingPriorityModel(ISkillRepository skillRepository, IActivityRepository activityRepository)
+		public SkillRoutingPriorityModel(ISkillRepository skillRepository, IActivityRepository activityRepository, ReverseSkillRoutingPriorities reverseSkillRoutingPriorities)
 		{
 			_skillRepository = skillRepository;
 			_activityRepository = activityRepository;
+			_reverseSkillRoutingPriorities = reverseSkillRoutingPriorities;
 		}
 
 		public List<SkillRoutingPriorityModelRow> SkillRoutingPriorityModelRows()
@@ -31,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 				skillList.Add(modelRow);
 			}
-			return skillList;
+			return _reverseSkillRoutingPriorities.ReverseList(skillList);
 		}
 
 		public List<SkillRoutingActivityRow> SkillRoutingActivites()

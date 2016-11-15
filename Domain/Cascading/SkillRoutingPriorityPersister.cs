@@ -10,14 +10,17 @@ namespace Teleopti.Ccc.Domain.Cascading
 	public class SkillRoutingPriorityPersister
 	{
 		private readonly ISkillRepository _skillRepository;
+		private readonly ReverseSkillRoutingPriorities _reverseSkillRoutingPriorities;
 
-		public SkillRoutingPriorityPersister(ISkillRepository skillRepository)
+		public SkillRoutingPriorityPersister(ISkillRepository skillRepository, ReverseSkillRoutingPriorities reverseSkillRoutingPriorities)
 		{
 			_skillRepository = skillRepository;
+			_reverseSkillRoutingPriorities = reverseSkillRoutingPriorities;
 		}
 
 		public void Persist(IEnumerable<SkillRoutingPriorityModelRow> skillRoutingPriorityModelRows)
 		{
+			skillRoutingPriorityModelRows = _reverseSkillRoutingPriorities.ReverseList(skillRoutingPriorityModelRows.ToList());
 			var skillPrioDic = new SortedDictionary<int, IList<Guid>>();
 			var skillWithoutPrioList = new List<Guid>();
 			foreach (var skillRoutingPriorityModelRow in skillRoutingPriorityModelRows)
