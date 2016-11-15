@@ -55,8 +55,7 @@
 
 			var availibleProjectionsTodayAndYesterday = [];
 			schedules.forEach(function (personSchedule) {
-//				if (moment(personSchedule.Date).isSameOrBefore(baseDate, 'day'))
-					availibleProjectionsTodayAndYesterday = availibleProjectionsTodayAndYesterday.concat(personSchedule.Projection);
+				availibleProjectionsTodayAndYesterday = availibleProjectionsTodayAndYesterday.concat(personSchedule.Projection);
 			});
 
 			if (availibleProjectionsTodayAndYesterday.length === 0) {
@@ -75,8 +74,7 @@
 
 			var availibleProjections = [];
 			schedules.forEach(function (personSchedule) {
-			//	if (moment(personSchedule.Date).isSameOrAfter(baseDate, 'day'))
-					availibleProjections = availibleProjections.concat(personSchedule.Projection);
+				availibleProjections = availibleProjections.concat(personSchedule.Projection);
 			});
 
 			if (availibleProjections.length === 0) {
