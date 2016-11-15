@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Security.Principal;
 
@@ -558,6 +557,59 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				return activityMovedEvent;
 			});
 		}
+
+		public virtual void MoveAllActivitiesAndKeepOriginalPriority(DateTime newStartTimeInUtc,
+			TrackedCommandInfo trackedCommandInfo, bool muteEvent = false)
+		{
+			var originalStartTimeInUtc = MainActivities().Min(a => a.Period.StartDateTime);			
+			var distanceToMove = newStartTimeInUtc.Subtract(originalStartTimeInUtc);
+
+			var shiftLayers = ShiftLayers.ToList();
+
+			var affectedPeriods = new List<DateTimePeriod>();
+
+			MainActivities().ForEach(shiftLayer =>
+			{
+				var newPeriod = shiftLayer.Period.MovePeriod(distanceToMove);
+				var index = shiftLayers.IndexOf(shiftLayer);
+				RemoveActivity(shiftLayer);
+				InsertActivity(shiftLayer.Payload, newPeriod, index);
+
+				affectedPeriods.Add(shiftLayer.Period.MaximumPeriod(newPeriod));
+			});
+
+			OvertimeActivities().ForEach(activity =>
+			{
+				var newPeriod = activity.Period.MovePeriod(distanceToMove);
+				var index = shiftLayers.IndexOf(activity);
+				RemoveActivity(activity);
+				InsertActivity(activity.Payload, newPeriod, index);
+
+				affectedPeriods.Add(activity.Period.MaximumPeriod(newPeriod));
+			});
+
+			if(!muteEvent)
+			{
+				AddEvent(() =>
+				{
+					var activityMovedEvent = new ActivityMovedEvent
+					{
+						PersonId = Person.Id.Value,
+						StartDateTime = affectedPeriods.Min(p => p.StartDateTime),
+						EndDateTime = affectedPeriods.Max(p=> p.EndDateTime),
+						ScenarioId = Scenario.Id.Value,
+						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+					};
+					if(trackedCommandInfo != null)
+					{
+						activityMovedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
+						activityMovedEvent.CommandId = trackedCommandInfo.TrackId;
+					}
+					return activityMovedEvent;
+				});
+			}
+		}
+
 		public virtual void MoveActivityAndKeepOriginalPriority(IShiftLayer shiftLayer, DateTime newStartTimeInUtc, TrackedCommandInfo trackedCommandInfo, bool muteEvent = false)
 		{
 			var originalOrderIndex = ShiftLayers.ToList().IndexOf(shiftLayer);
