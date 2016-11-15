@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 		void TryUntil(Action tryThis, Func<bool> until, TimeSpan waitBeforeRetry);
 		bool IsAnyVisible(string selector);
 		bool IsExists(string selector);
+		bool IsContain(string selector, string text);
 		void Click(string selector);
 		void ClickVisibleOnly(string selector);
 		void ClickContaining(string selector, string text);

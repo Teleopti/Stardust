@@ -33,6 +33,11 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 		{
 			throw new NotImplementedException();
 		}
+
+		public bool IsContain(string selector, string text)
+		{
+			throw new NotImplementedException();
+		}
 		public void Click(string selector)
 		{
 			throw new NotSupportedException(notAllowedAction);

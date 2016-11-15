@@ -84,6 +84,12 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 			return _browser.FindCss(selector, options()).Exists(options());
 		}
 
+		public bool IsContain(string selector, string text)
+		{
+			var regex = new Regex(Regex.Escape(text));
+			return _browser.FindCss(selector, regex, optionsVisibleOnly()).Exists(options());
+		}
+
 		public void Click(string selector)
 		{
 			var opts = options();

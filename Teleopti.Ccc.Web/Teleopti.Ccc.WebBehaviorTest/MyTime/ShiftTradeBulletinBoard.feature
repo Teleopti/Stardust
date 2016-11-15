@@ -207,7 +207,7 @@ Scenario: Should see the anonymous name when viewing empty day in Bulletin board
 	| EndTime       | 2030-01-01 17:00 |
 	| WishShiftType | EmptyDay         |
 	And the time is '2029-12-27'
-	When I see 'the other agent' shift on Shift Trade Bulletin Board on date '2030-01-01'
+	When I see 'anonym' shift on Shift Trade Bulletin Board on date '2030-01-01'
 	Then I should see agent name as Anonym
 	
 Scenario: Should list announced shift

@@ -67,13 +67,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
 			var script = string.Format("Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.IsRunningBehaviorTest(); return Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeBulletinBoardDate('{0}');", dateAsSwedishString);
-			var selector = owner == "my" ? ".shift-trade-my-schedule .shift-trade-layer" : "#agent-in-bulletin-board";
 			gotoShiftTradeBulletinBoardToday();
 
-			Browser.Interactions.TryUntil(
+			if (owner == "anonym")
+			{
+				Browser.Interactions.TryUntil(
 				() => Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString),
-				() => Browser.Interactions.IsAnyVisible(selector),
+				() => Browser.Interactions.IsContain("#Request-shift-trade-bulletin-board .shift-trade-agent-name", "Anonym"),
 				TimeSpan.FromMilliseconds(1000));
+			}
+			else
+			{
+				var selector = owner == "my" ? ".shift-trade-my-schedule .shift-trade-layer" : "#agent-in-bulletin-board";
+				Browser.Interactions.TryUntil(
+					() => Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString),
+					() => Browser.Interactions.IsAnyVisible(selector),
+					TimeSpan.FromMilliseconds(1000));
+			}
 		}
 
 		[Then(@"I should see a message text saying I am missing a workflow control set")]
