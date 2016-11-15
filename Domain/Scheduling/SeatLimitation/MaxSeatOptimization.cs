@@ -182,8 +182,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				{
 					var scheduleDay = scheduleDayPro.DaySchedulePart();
 					var startAffectDay = scheduleDay.PersonAssignment(true).ShiftLayers.Any(x => x.Period.StartDateTime.Date == affectDate.Date);
-					var endAffectDay = scheduleDay.PersonAssignment(true).ShiftLayers.Any(x => x.Period.EndDateTime.Date == affectDate.Date);
-					if (startAffectDay || endAffectDay)
+					if (startAffectDay)
 						return true;
 				}
 			}
