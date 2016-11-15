@@ -201,11 +201,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				for (int portIndex = 1; portIndex <= totalNodes; portIndex++)
 				{
 					var nodeName = "Node" + portIndex;
-					var nodeThread = new Thread(() => startNode(port, nodeName));
+					var localPort = port;
+					var nodeThread = new Thread(() => startNode(localPort, nodeName));
 					nodeThread.Start();
-					port++;
 					// a little delay
 					Thread.Sleep(1000);
+					port++;
 				}
 			}
 			else
