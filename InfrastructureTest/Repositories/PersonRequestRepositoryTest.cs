@@ -22,9 +22,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-	///<summary>
-	/// Tests PersonRequestRepository
-	///</summary>
 	[TestFixture]
 	[Category("BucketB")]
 	public class PersonRequestRepositoryTest : RepositoryTest<IPersonRequest>
@@ -169,23 +166,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var personRequests = new List<IPersonRequest>();
 
 			var personFrom = PersonFactory.CreatePerson("personFrom");
+			personFrom.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 
 			PersistAndRemoveFromUnitOfWork(personFrom);
-			var absence = new Absence()
+			var absence = new Absence
 			{
 				Description = new Description("test absence")
 			};
 			PersistAndRemoveFromUnitOfWork(absence);
 
-			var requestDate = DateOnly.Today;
+			var requestDate = DateOnly.Today.AddDays(-1);
 			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
 			{
 				new ShiftTradeSwapDetail(personFrom, _person, requestDate, requestDate)
 			});
 			var shiftTradePersonRequest = new PersonRequest(personFrom) {Request = shiftTradeRequest};
-			var textRequest = new PersonRequest(_person, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
+			var startDateTime = DateTime.UtcNow;
+			var textRequest = new PersonRequest(_person, new TextRequest(new DateTimePeriod(startDateTime.AddMinutes(-1), startDateTime.AddMinutes(-1))));
 			var absenceRequest = new PersonRequest(_person,
-				new AbsenceRequest(absence, new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
+				new AbsenceRequest(absence, new DateTimePeriod(startDateTime, startDateTime)));
 			var offerRequest = createShiftExchangeOffer(new DateTime(2008, 4, 1, 0, 0, 0, DateTimeKind.Utc));
 
 			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
@@ -1196,9 +1195,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			setUpGetRequestsByTypeTests();
 
+			var now = DateTime.UtcNow;
 			var filter = new RequestFilter
 			{
-				Period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow),
+				Period = new DateTimePeriod(now.AddMinutes(-1), now),
 				RequestFilters = new Dictionary<RequestFilterField, string>
 				{
 					{RequestFilterField.Type, "0"}
@@ -1217,9 +1217,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var absenceRequest = (AbsenceRequest)requests.Single(r => r.Request.RequestType == RequestType.AbsenceRequest).Request;
 			var absence = absenceRequest.Absence;
 
+			var now = DateTime.UtcNow;
 			var filter = new RequestFilter
 			{
-				Period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow),
+				Period = new DateTimePeriod(now.AddMinutes(-1), now),
 				RequestFilters = new Dictionary<RequestFilterField, string>
 				{
 					{RequestFilterField.Type, $"0 {absence.Id}"}
