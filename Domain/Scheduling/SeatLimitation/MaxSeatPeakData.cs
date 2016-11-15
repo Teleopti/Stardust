@@ -18,11 +18,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			return _datePeaks.Values.Any(value => value.IsPositive());
 		}
 
-		public bool IsNotBetterThan(MaxSeatPeakData maxPeaksBefore)
+		public bool IsNotBetterThan(IEnumerable<DateOnly> dates, MaxSeatPeakData maxPeaksBefore)
 		{
-			return _datePeaks.Any(keyValueAfter => 
-				keyValueAfter.Value.IsPositive() && 
-				keyValueAfter.Value >= maxPeaksBefore._datePeaks[keyValueAfter.Key]);
+			return _datePeaks
+				.Any(keyValueAfter => keyValueAfter.Value.IsPositive() && 
+						keyValueAfter.Value >= maxPeaksBefore._datePeaks[keyValueAfter.Key] && 
+						dates.Contains(keyValueAfter.Key));
 		}
 	}
 }

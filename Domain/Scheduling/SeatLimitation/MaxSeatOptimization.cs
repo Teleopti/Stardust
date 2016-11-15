@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 	{
 		private readonly MaxSeatSkillDataFactory _maxSeatSkillDataFactory;
 		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
-		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly ITeamBlockGenerator _teamBlockGenerator;
@@ -48,10 +47,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 		private readonly IsOverMaxSeat _isOverMaxSeat;
 		private readonly LockDaysOnTeamBlockInfos _lockDaysOnTeamBlockInfos;
+		private readonly IResourceCalculateDaysDecider _resourceCalculateDaysDecider;
 
 		public MaxSeatOptimization(MaxSeatSkillDataFactory maxSeatSkillDataFactory,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
-			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			ITeamBlockScheduler teamBlockScheduler,
 			ITeamBlockGenerator teamBlockGenerator,
@@ -64,11 +63,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			TeamInfoFactoryFactory teamInfoFactoryFactory,
 			IDeleteSchedulePartService deleteSchedulePartService,
 			IsOverMaxSeat isOverMaxSeat,
-			LockDaysOnTeamBlockInfos lockDaysOnTeamBlockInfos)
+			LockDaysOnTeamBlockInfos lockDaysOnTeamBlockInfos,
+			IResourceCalculateDaysDecider resourceCalculateDaysDecider)
 		{
 			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
-			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_teamBlockScheduler = teamBlockScheduler;
 			_teamBlockGenerator = teamBlockGenerator;
@@ -82,6 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_deleteSchedulePartService = deleteSchedulePartService;
 			_isOverMaxSeat = isOverMaxSeat;
 			_lockDaysOnTeamBlockInfos = lockDaysOnTeamBlockInfos;
+			_resourceCalculateDaysDecider = resourceCalculateDaysDecider;
 		}
 
 		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules,
@@ -114,7 +114,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					var maxPeaksBefore = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);
 					if (maxPeaksBefore.HasPeaks())
 					{
-						var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
+						var scheduleCallback = new ScheduleChangeCallbackForMaxSeatOptimization(_resourceCalculateDaysDecider);
+						var rollbackService = new SchedulePartModifyAndRollbackService(null, scheduleCallback, tagSetter);
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules);
 						var scheduleWasSuccess = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo,
 							datePoint, schedulingOptions, rollbackService,
@@ -125,7 +126,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						if (!scheduleWasSuccess||
 							!_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences) ||
 							!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) ||
-							maxPeaksAfter.IsNotBetterThan(maxPeaksBefore))
+							maxPeaksAfter.IsNotBetterThan(scheduleCallback.ModifiedDates, maxPeaksBefore))
 						{
 							rollbackService.RollbackMinimumChecks();
 						}
@@ -146,7 +147,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						{
 							foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays.Where(x => x.Day == date))
 							{
-								var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
+								var rollbackService = new SchedulePartModifyAndRollbackService(null, new ScheduleChangeCallbackForMaxSeatOptimization(_resourceCalculateDaysDecider), tagSetter);
 								var scheduleDay = scheduleDayPro.DaySchedulePart();
 								if (_isOverMaxSeat.Check(scheduleDay, skillDaysForTeamBlockInfo))
 								{
