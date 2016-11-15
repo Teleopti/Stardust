@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
@@ -78,13 +79,16 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
 			SkillDayRepository.Add(skillDay);
 
-			IntradayQueueStatisticsLoader.Has(getActualCallsPerSkillAndInterval(skillDay.WorkloadDayCollection.First().TaskPeriodList.ToList(), skill, 1.2d, latestStatsTime));
+			var actualCalls = createStatistics(skillDay, latestStatsTime);
+			IntradayQueueStatisticsLoader.Has(actualCalls);
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
+			var deviationWithReforecast = calculateAverageDeviation(actualCalls, skillDay);
+
 			vm.DataSeries.UpdatedForecastedStaffing.Length.Should().Be.EqualTo(2);
 			vm.DataSeries.UpdatedForecastedStaffing.First().Should().Be.EqualTo(null);
-			var expectedUpdatedForecastOnLastInterval = vm.DataSeries.ForecastedStaffing.Last() * 1.2;
+			var expectedUpdatedForecastOnLastInterval = vm.DataSeries.ForecastedStaffing.Last() * deviationWithReforecast;
 			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(expectedUpdatedForecastOnLastInterval);
 		}
 
@@ -104,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
 			SkillDayRepository.Add(skillDay);
 
-			IntradayQueueStatisticsLoader.Has(getActualCallsPerSkillAndInterval(skillDay.WorkloadDayCollection.First().TaskPeriodList.ToList(), skill, 1.2d, latestStatsTime));
+			IntradayQueueStatisticsLoader.Has(createStatistics(skillDay, latestStatsTime));
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -132,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
 			SkillDayRepository.Add(skillDay);
 
-			IntradayQueueStatisticsLoader.Has(getActualCallsPerSkillAndInterval(skillDay.WorkloadDayCollection.First().TaskPeriodList.ToList(), skill, 1.2d, latestStatsTime));
+			IntradayQueueStatisticsLoader.Has(createStatistics(skillDay, latestStatsTime));
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -292,25 +296,20 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			TimeZone.IsNewYork();
 			var userNow = new DateTime(2016, 8, 26, 23, 0, 0, DateTimeKind.Local);
 			var latestStatsTimeLocal = new DateTime(2016, 8, 26, 22, 30, 0, DateTimeKind.Local);
-			var latestStatsTimeUtc = TimeZoneHelper.ConvertToUtc(latestStatsTimeLocal, TimeZone.TimeZone());
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 
 			var scenario = fakeScenarioAndIntervalLength();
 
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(0, 0, 24, 0));
 			SkillRepository.Has(skill);
-
-			var taskPeriodList = forecastedTasksUpUntilLatestStatsTime(skill, scenario, userNow, latestStatsTimeUtc);
-
-			double deviationFactor = 2;
-			IntradayQueueStatisticsLoader.Has(getActualCallsPerSkillAndInterval(taskPeriodList, skill, deviationFactor,
-				latestStatsTimeUtc));
+			
+			IntradayQueueStatisticsLoader.Has(createSkillDaysYesterdayTodayTomorrow(skill, scenario, userNow, latestStatsTimeLocal));
 
 			var vm = Target.Load(new[] {skill.Id.Value});
 
 			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(96);
 			vm.DataSeries.UpdatedForecastedStaffing.Length.Should().Be.EqualTo(96);
-			vm.DataSeries.UpdatedForecastedStaffing[92].Should().Be.EqualTo(vm.DataSeries.ForecastedStaffing[92]*deviationFactor);
+			vm.DataSeries.UpdatedForecastedStaffing[92].Should().Be.GreaterThan(0d);
 			vm.DataSeries.UpdatedForecastedStaffing[91].Should().Be.EqualTo(null);
 		}
 
@@ -320,7 +319,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			TimeZone.IsAustralia();
 			var userNow = new DateTime(2016, 8, 26, 2, 0, 0, DateTimeKind.Local);
 			var latestStatsTimeLocal = new DateTime(2016, 8, 26, 1, 45, 0, DateTimeKind.Local);
-			var latestStatsTimeUtc = TimeZoneHelper.ConvertToUtc(latestStatsTimeLocal, TimeZone.TimeZone());
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 
 			var scenario = fakeScenarioAndIntervalLength();
@@ -328,18 +326,14 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(0, 0, 24, 0));
 			SkillRepository.Has(skill);
 
-			var taskPeriodList = forecastedTasksUpUntilLatestStatsTime(skill, scenario, userNow, latestStatsTimeUtc);
-
-			double deviationFactor = 2;
-			IntradayQueueStatisticsLoader.Has(getActualCallsPerSkillAndInterval(taskPeriodList, skill, deviationFactor,
-				latestStatsTimeUtc));
+			IntradayQueueStatisticsLoader.Has(createSkillDaysYesterdayTodayTomorrow(skill, scenario, userNow, latestStatsTimeLocal));
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
 			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(96);
 			vm.DataSeries.UpdatedForecastedStaffing.Length.Should().Be.EqualTo(96);
 			vm.DataSeries.UpdatedForecastedStaffing[7].Should().Be.EqualTo(null);
-			vm.DataSeries.UpdatedForecastedStaffing[8].Should().Be.EqualTo(vm.DataSeries.ForecastedStaffing[8] * deviationFactor);
+			vm.DataSeries.UpdatedForecastedStaffing[8].Should().Be.GreaterThan(0d);
 		}
 		
 		[Test]
@@ -490,7 +484,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
             vm.DataSeries.ActualStaffing.Should().Be.Empty();
         }
 
-        [Test]
+
+		[Test]
 		public void ShouldCalculateUpdatedForecastedStaffingCorrectlyForThreeSkills()
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
@@ -498,26 +493,23 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 			var scenario = fakeScenarioAndIntervalLength();
 
-			var skillWithReforecast1 = createSkill(minutesPerInterval, "skill with reforecast 1", new TimePeriod(7,45,8,15));
-			var skillWithReforecast2 = createSkill(minutesPerInterval, "skill with reforecast 2", new TimePeriod(7,45,8,15));
-			var skillWithoutReforecast = createSkill(minutesPerInterval, "skill without reforecast", new TimePeriod(8, 0, 8, 15));
+			var skillWithReforecast1 = createSkill(minutesPerInterval, "skill with reforecast 1", new TimePeriod(7, 0, 8, 15));
+			var skillWithReforecast2 = createSkill(minutesPerInterval, "skill with reforecast 2", new TimePeriod(7, 0, 8, 15));
+			var skillWithoutReforecast = createSkill(minutesPerInterval, "skill without reforecast", new TimePeriod(7, 45, 8, 15));
 
 
-			var skillDayWithReforecast1 = createSkillDay(skillWithReforecast1, scenario, Now.UtcDateTime(), new TimePeriod(7, 45, 8, 15));
-			var skillDayWithReforecast2 = createSkillDay(skillWithReforecast2, scenario, Now.UtcDateTime(), new TimePeriod(7, 45, 8, 15));
-			var skillDayWithoutReforecast = createSkillDay(skillWithoutReforecast, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 15));
+			var skillDayWithReforecast1 = createSkillDay(skillWithReforecast1, scenario, Now.UtcDateTime(), new TimePeriod(7, 0, 8, 15));
+			var skillDayWithReforecast2 = createSkillDay(skillWithReforecast2, scenario, Now.UtcDateTime(), new TimePeriod(7, 0, 8, 15));
+			var skillDayWithoutReforecast = createSkillDay(skillWithoutReforecast, scenario, Now.UtcDateTime(), new TimePeriod(7, 45, 8, 15));
 
-			var deviationWithReforecast1 = 1.25d;
-			var deviationWithReforecast2 = 1.5d;
-			var noDeviationWithoutReforecast = 1.0d;
-			var finalDeviationFactor = (deviationWithReforecast1 + deviationWithReforecast2 + noDeviationWithoutReforecast)/3;
-			
-			var actualCalls1 = getActualCallsPerSkillAndInterval(skillDayWithReforecast1.WorkloadDayCollection.First().TaskPeriodList.ToList(), skillWithReforecast1, deviationWithReforecast1, latestStatsTime);
-			var actualCalls2 = getActualCallsPerSkillAndInterval(skillDayWithReforecast2.WorkloadDayCollection.First().TaskPeriodList.ToList(), skillWithReforecast2, deviationWithReforecast2, latestStatsTime);
 
+			var actualCalls1 = createStatistics(skillDayWithReforecast1, latestStatsTime);
+			var actualCalls2 = createStatistics(skillDayWithReforecast2, latestStatsTime);			
 			var actualCallsTotal = new List<SkillIntervalStatistics>();
+
 			actualCallsTotal.AddRange(actualCalls1);
 			actualCallsTotal.AddRange(actualCalls2);
+
 
 			SkillRepository.Has(skillWithReforecast1);
 			SkillRepository.Has(skillWithReforecast2);
@@ -526,18 +518,24 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillDayRepository.Add(skillDayWithReforecast2);
 			SkillDayRepository.Add(skillDayWithoutReforecast);
 			IntradayQueueStatisticsLoader.Has(actualCallsTotal);
-			
+
+			var deviationWithReforecast1 = calculateAverageDeviation(actualCalls1, skillDayWithReforecast1);
+			var deviationWithReforecast2 = calculateAverageDeviation(actualCalls2, skillDayWithReforecast2);
+
+			var noDeviationWithoutReforecast = 1.0d;
+			var finalDeviationFactor = (deviationWithReforecast1 + deviationWithReforecast2 + noDeviationWithoutReforecast) / 3;
+
+			var expectedUpdatedStaffing =
+				Math.Round(skillDayWithoutReforecast.SkillStaffPeriodCollection.Last().FStaff +
+				skillDayWithReforecast1.SkillStaffPeriodCollection.Last().FStaff * deviationWithReforecast1 +
+				skillDayWithReforecast2.SkillStaffPeriodCollection.Last().FStaff * deviationWithReforecast2,3);
+
 			var vm = Target.Load(new[] { skillWithReforecast1.Id.Value, skillWithReforecast2.Id.Value, skillWithoutReforecast.Id.Value });
 
-			var expectedUpdatedStaffing = 
-				skillDayWithoutReforecast.SkillStaffPeriodCollection.Last().FStaff + 
-				skillDayWithReforecast1.SkillStaffPeriodCollection.Last().FStaff * deviationWithReforecast1 +
-				skillDayWithReforecast2.SkillStaffPeriodCollection.Last().FStaff * deviationWithReforecast2;
-
-			vm.DataSeries.UpdatedForecastedStaffing.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.UpdatedForecastedStaffing.Length.Should().Be.EqualTo(5);
 			vm.DataSeries.UpdatedForecastedStaffing.First().Should().Be.EqualTo(null);
-			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(expectedUpdatedStaffing);
-			expectedUpdatedStaffing.Should().Be.EqualTo(vm.DataSeries.ForecastedStaffing.Last() * finalDeviationFactor);
+			Math.Round((double)vm.DataSeries.UpdatedForecastedStaffing.Last(),3).Should().Be.EqualTo(expectedUpdatedStaffing);
+			expectedUpdatedStaffing.Should().Be.EqualTo(Math.Round(vm.DataSeries.ForecastedStaffing.Last() * finalDeviationFactor,3));
 		}
 
 		[Test]
@@ -555,7 +553,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
 			SkillDayRepository.Add(skillDay);
 
-			IntradayQueueStatisticsLoader.Has(getActualCallsPerSkillAndInterval(skillDay.WorkloadDayCollection.First().TaskPeriodList.ToList(), skill, 1.2d, latestStatsTime));
+			IntradayQueueStatisticsLoader.Has(createStatistics(skillDay, latestStatsTime));
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -657,8 +655,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillDay1 = createSkillDay(skill1, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
 			var skillDay2 = createSkillDay(skill2, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
 
-			var actualCalls1 = getActualCallsPerSkillAndInterval(skillDay1.WorkloadDayCollection.First().TaskPeriodList.ToList(), skill1, 1.15, latestStatsTime);
-			var actualCalls2 = getActualCallsPerSkillAndInterval(skillDay2.WorkloadDayCollection.First().TaskPeriodList.ToList(), skill2, 1.3, latestStatsTime);
+			var actualCalls1 = createStatistics(skillDay1, latestStatsTime);
+			var actualCalls2 = createStatistics(skillDay2, latestStatsTime);
 
 			var actualCallsTotal = new List<SkillIntervalStatistics>();
 			actualCallsTotal.AddRange(actualCalls1);
@@ -669,7 +667,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillDayRepository.Add(skillDay1);
 			SkillDayRepository.Add(skillDay2);
 			IntradayQueueStatisticsLoader.Has(actualCallsTotal);
-
 			var calculatorService = new StaffingCalculatorServiceFacade();
 			var skillData1 = skillDay1.SkillDataPeriodCollection.First().ServiceAgreement;
 			var skillData2 = skillDay2.SkillDataPeriodCollection.First().ServiceAgreement;
@@ -711,46 +708,44 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var phoneSkill = createSkill(minutesPerInterval, "skill1", new TimePeriod(8, 0, 8, 30));
 			var emailSkill = createEmailSkill(minutesPerInterval, "skill2", new TimePeriod(8, 0, 8, 30));
 
-			var skillDay1 = createSkillDay(phoneSkill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
-			var skillDay2 = createSkillDay(emailSkill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
+			var skillDayPhone = createSkillDay(phoneSkill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
+			var skillDayEmail = createSkillDay(emailSkill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
 
-			var actualCalls1 = getActualCallsPerSkillAndInterval(skillDay1.WorkloadDayCollection.First().TaskPeriodList.ToList(), phoneSkill, 1, latestStatsTime);
-			var actualCalls2 = getActualCallsPerSkillAndInterval(skillDay2.WorkloadDayCollection.First().TaskPeriodList.ToList(), emailSkill, 1, latestStatsTime);
+			var actualPhoneStats = createStatistics(skillDayPhone, latestStatsTime);
+			var actualEmailStats = createStatistics(skillDayEmail, latestStatsTime);
 
-			var actualCallsTotal = new List<SkillIntervalStatistics>();
-			actualCallsTotal.AddRange(actualCalls1);
-			actualCallsTotal.AddRange(actualCalls2);
+			var actualStatsTotal = new List<SkillIntervalStatistics>();
+			actualStatsTotal.AddRange(actualPhoneStats);
+			actualStatsTotal.AddRange(actualEmailStats);
 
 			SkillRepository.Has(phoneSkill);
 			SkillRepository.Has(emailSkill);
-			SkillDayRepository.Add(skillDay1);
-			SkillDayRepository.Add(skillDay2);
-			IntradayQueueStatisticsLoader.Has(actualCallsTotal);
+			SkillDayRepository.Add(skillDayPhone);
+			SkillDayRepository.Add(skillDayEmail);
+			IntradayQueueStatisticsLoader.Has(actualStatsTotal);
 
 			var calculatorService = new StaffingCalculatorServiceFacade();
-			var skillData1 = skillDay1.SkillDataPeriodCollection.First().ServiceAgreement;
+			var skillPhoneData = skillDayPhone.SkillDataPeriodCollection.First().ServiceAgreement;
 			var actualStaffingSkill1 = calculatorService.AgentsUseOccupancy(
-				skillData1.ServiceLevel.Percent.Value,
-				(int)skillData1.ServiceLevel.Seconds,
-				actualCalls1.First().Calls,
-				actualCalls1.First().AverageHandleTime,
+				skillPhoneData.ServiceLevel.Percent.Value,
+				(int)skillPhoneData.ServiceLevel.Seconds,
+				actualPhoneStats.First().Calls,
+				actualPhoneStats.First().AverageHandleTime,
 				TimeSpan.FromMinutes(minutesPerInterval),
-				skillData1.MinOccupancy.Value,
-				skillData1.MaxOccupancy.Value,
+				skillPhoneData.MinOccupancy.Value,
+				skillPhoneData.MaxOccupancy.Value,
 				phoneSkill.MaxParallelTasks);
 
 			var vm = Target.Load(new[] { phoneSkill.Id.Value, emailSkill.Id.Value });
 
+			var deviationWithReforecast = calculateAverageDeviation(actualPhoneStats, skillDayPhone);
+
 			vm.DataSeries.ActualStaffing.First().Should().Be.EqualTo(actualStaffingSkill1);
 			vm.DataSeries.ActualStaffing.Last().Should().Be.EqualTo(null);
 			vm.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(3);
-			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(3);
+			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(vm.DataSeries.ForecastedStaffing.Last() * deviationWithReforecast);
 		}
-
-
-
-
-
+ 
 		private Scenario fakeScenarioAndIntervalLength()
 		{
 			IntervalLengthFetcher.Has(minutesPerInterval);
@@ -789,6 +784,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 		private ISkillDay createSkillDay(ISkill skill, IScenario scenario, DateTime userNow, TimePeriod openHours)
 		{
+			var random = new Random();
 			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), 3, new Tuple<TimePeriod, double>(openHours, 3));
 			var index = 0;
 
@@ -803,50 +799,63 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			return skillDay;
 		}
 
-		private List<SkillIntervalStatistics> getActualCallsPerSkillAndInterval(List<ITemplateTaskPeriod> taskPeriodList, ISkill skill, double deviationFactor, DateTime latestStatsTimeUtc)
+		private IList<SkillIntervalStatistics> createStatistics(ISkillDay skillDay, DateTime latestStatsTime)
 		{
-			var actualCallsList = new List<SkillIntervalStatistics>();
-			foreach (var taskPeriod in taskPeriodList.Where(t => t.Period.StartDateTime <= latestStatsTimeUtc))
+			var skillStats = new List<SkillIntervalStatistics>();
+			var shiftStartTime = skillDay.SkillStaffPeriodCollection.First().Period.StartDateTime;
+			var shiftEndTime = skillDay.SkillStaffPeriodCollection.Last().Period.EndDateTime;
+			if (shiftStartTime > latestStatsTime || shiftEndTime < latestStatsTime)
 			{
-				var actualCalls = taskPeriod.Task.Tasks * deviationFactor;
-				actualCallsList.Add(new SkillIntervalStatistics
+				return skillStats;
+			}
+			var random = new Random();
+
+			for (DateTime intervalTime = shiftStartTime;
+						 intervalTime <= latestStatsTime;
+						 intervalTime = intervalTime.AddMinutes(minutesPerInterval))
+			{
+				skillStats.Add(new SkillIntervalStatistics
 				{
-					SkillId = skill.Id.Value,
-					StartTime = TimeZoneHelper.ConvertFromUtc(taskPeriod.Period.StartDateTime, TimeZone.TimeZone()),
-					Calls = actualCalls,
-					AverageHandleTime = taskPeriod.Task.AverageHandlingTaskTime.TotalSeconds
+					SkillId = skillDay.Skill.Id.Value,
+					StartTime = intervalTime,
+					Calls = random.Next(5, 50),
+					AverageHandleTime = 40d
 				});
 			}
-			return actualCallsList;
+			return skillStats;
 		}
 
-		private List<ITemplateTaskPeriod> forecastedTasksUpUntilLatestStatsTime(ISkill skill, Scenario scenario, DateTime userNow,
-			DateTime latestStatsTimeUtc)
-		{
-			var userNowStartOfDayUtc = TimeZoneHelper.ConvertToUtc(userNow.Date, TimeZone.TimeZone());
 
+		private IList<SkillIntervalStatistics> createSkillDaysYesterdayTodayTomorrow(ISkill skill, Scenario scenario, DateTime userNow, DateTime latestStatsTime)
+		{
+			var skillStats = new List<SkillIntervalStatistics>();
 			var skillYesterday = createSkillDay(skill, scenario, userNow.AddDays(-1), new TimePeriod(0, 0, 24, 0));
 			var skillToday = createSkillDay(skill, scenario, userNow, new TimePeriod(0, 0, 24, 0));
 			var skillTomorrow = createSkillDay(skill, scenario, userNow.AddDays(1), new TimePeriod(0, 0, 24, 0));
 			SkillDayRepository.Add(skillYesterday);
 			SkillDayRepository.Add(skillToday);
 			SkillDayRepository.Add(skillTomorrow);
+			skillStats.AddRange(createStatistics(skillYesterday, latestStatsTime));
+			skillStats.AddRange(createStatistics(skillToday, latestStatsTime));
+			skillStats.AddRange(createStatistics(skillTomorrow, latestStatsTime));
 
-			var taskPeriodList = new List<ITemplateTaskPeriod>();
-			taskPeriodList.AddRange(getTaskPeriods(skillYesterday, userNowStartOfDayUtc, latestStatsTimeUtc));
-			taskPeriodList.AddRange(getTaskPeriods(skillToday, userNowStartOfDayUtc, latestStatsTimeUtc));
-			taskPeriodList.AddRange(getTaskPeriods(skillTomorrow, userNowStartOfDayUtc, latestStatsTimeUtc));
-
-			return taskPeriodList;
+			return skillStats;
 		}
 
-		private IEnumerable<ITemplateTaskPeriod> getTaskPeriods(ISkillDay skillDay, DateTime userNowStartOfDayUtc, DateTime latestStatsTimeUtc)
+		private double calculateAverageDeviation(IList<SkillIntervalStatistics> actualCallsStats, ISkillDay skillDay)
 		{
-			return skillDay.WorkloadDayCollection.First().TaskPeriodList
-				.Where(
-					t =>
-						t.Period.StartDateTime >= userNowStartOfDayUtc &&
-						t.Period.EndDateTime <= latestStatsTimeUtc.AddMinutes(minutesPerInterval));
+			var listdeviationPerInterval = new List<double>();
+			foreach (var actualCallsPerInterval in actualCallsStats)
+			{
+				var actualCalls = actualCallsPerInterval.Calls;
+				var forecastedCalls = skillDay.CompleteSkillStaffPeriodCollection
+					.Where(x => x.Period.StartDateTime == actualCallsPerInterval.StartTime)
+					.Select(t => t.Payload.TaskData.Tasks).First();
+				var deviationPerInterval = actualCalls / forecastedCalls;
+				listdeviationPerInterval.Add(deviationPerInterval);
+			}
+			var alpha = 0.2d;
+			return listdeviationPerInterval.Aggregate((prev, next) => alpha * next + (1 - alpha) * prev);
 		}
 
 	}

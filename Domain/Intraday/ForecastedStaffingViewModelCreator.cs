@@ -149,11 +149,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 			foreach (var skillId in forecastedCallsPerSkillDictionary.Keys)
 			{
 				List<SkillIntervalStatistics> actualStats = actualCallsPerSkillList.Where(x => x.SkillId == skillId).ToList();
-
+				List<double> listDeviationFactorPerInterval = new List<double>();
 				double averageDeviation = 1;
 				if (actualStats.Count > 0)
 				{
-					double callsDeviationFactor = 0;
 					int intervalCounter = 0;
 					foreach (var forecastedIntervalCalls in forecastedCallsPerSkillDictionary[skillId])
 					{
@@ -165,10 +164,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 							continue;
 
 						intervalCounter++;
-						callsDeviationFactor += actualIntervalCalls.Calls / forecastedIntervalCalls.Calls;
+						listDeviationFactorPerInterval.Add(actualIntervalCalls.Calls / forecastedIntervalCalls.Calls);
 					}
-
-					averageDeviation = callsDeviationFactor / intervalCounter;
+					var alpha = 0.2d;
+					averageDeviation = listDeviationFactorPerInterval.Aggregate((current, next) => alpha * next + (1 - alpha) * current);
 				}
 
 
