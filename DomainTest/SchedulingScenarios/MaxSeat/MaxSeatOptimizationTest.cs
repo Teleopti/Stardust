@@ -986,7 +986,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.EqualTo(TimeSpan.FromHours(9)); //should not have been touched
 		}
 
-		[Ignore("40939")]
 		[TestCase(1)]
 		[TestCase(2)]
 		public void ShouldCalculateMaxPeakOnNextDay(int ruleSetOrder)
