@@ -344,7 +344,16 @@ module.exports = function (grunt) {
             global: {
                 src: [
                     'app/global/**/*.js',
-                    '!app/global/**/*.spec.js'
+                    '!app/**/*.spec.js',
+                    '!app/**/*.fake.js'
+                ]
+            },
+            dev: {
+                src: [
+                    'app/permissions/**/*js',
+                    'app/skillPrio/**/*.js',
+                    '!app/**/*.spec.js',
+                    '!app/**/*.fake.js'
                 ]
             }
         }
@@ -379,7 +388,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build', ['msbuild:build']); // build the solution
     grunt.registerTask('generateIndex', ['processhtml:dist', 'cacheBust:dist']);
     grunt.registerTask('generateIndexDev', ['processhtml:dev', 'cacheBust:dist']);
-    grunt.registerTask('eslint-beta', ['eslint:global'])
+    grunt.registerTask('eslint-beta', ['eslint:dev'])
 
     // for desktop client
     grunt.registerTask('buildForDesktop', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy:sourceMaps', 'processhtml:distForDesktop', 'cacheBust:dist']);

@@ -5,8 +5,8 @@
 		.module('wfm.skillPrio')
 		.controller('skillPrioController', skillPrioController);
 
-	skillPrioController.$inject = ['$filter', 'Toggle', 'NoticeService', '$translate', '$q', 'skillPrioAggregator', 'skillPrioService'];
-	function skillPrioController($filter, toggleService, NoticeService, $translate, $q, skillPrioAggregator, skillPrioService) {
+	skillPrioController.$inject = ['$filter', 'Toggle','$location', 'NoticeService', '$translate', '$q', 'skillPrioAggregator', 'skillPrioService'];
+	function skillPrioController($filter, toggleService,$location, NoticeService, $translate, $q, skillPrioAggregator, skillPrioService) {
 		var vm = this;
 		vm.selectActivity = selectActivity;
 		vm.activites = skillPrioService.getAdminSkillRoutingActivity.query();
@@ -31,7 +31,7 @@
 			toggleService.togglesLoaded.then(function () {
 				vm.toggledOptimization = toggleService.Wfm_SkillPriorityRoutingGUI_39885
 				if (!toggleService.Wfm_SkillPriorityRoutingGUI_39885) {
-					document.location = "#/"
+					$location.path('#/')
 				}
 			});
 		}
