@@ -118,8 +118,24 @@
 .rta-default-cursor:hover{
 	box-shadow: none;
 }
-.rta-no-pointer{
+.rta-no-pointer {
 	pointer-events: none;
+}
+.rta-option-group {
+	margin: 20px 0 0 16px;
+}
+.rta-option-group md-option {
+	margin-left: 25px;
+}
+.rta-option-group label {
+	padding: 0 !important;
+}
+.rta-md-input-container {
+	width: 100%;
+	margin: -2px 0 0 0 !important;
+}
+.rta-md-input-container label{
+	visibility: hidden;
 }
 ///////////End of rta-skills///////////////////////
 ///////////rta-agents///////////////////////
