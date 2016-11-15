@@ -10,6 +10,7 @@
 		var addPersonalActivityUrl = '../api/TeamScheduleCommand/AddPersonalActivity';
 		var removeActivityUrl = '../api/TeamScheduleCommand/RemoveActivity';
 		var moveActivityUrl = '../api/TeamScheduleCommand/MoveActivity';
+		var moveShiftUrl = '../api/TeamScheduleCommand/MoveShift';
 		var undoScheduleChangeUrl = '../api/TeamScheduleCommand/BackoutScheduleChange';
 		var moveInvalidOverlappedActivityUrl = '../api/TeamScheduleCommand/MoveNonoverwritableLayers';
 
@@ -18,8 +19,19 @@
 		this.addPersonalActivity = addPersonalActivity;
 		this.removeActivity = removeActivity;
 		this.moveActivity = moveActivity;
+		this.moveShift = moveShift;
 		this.undoScheduleChange = undoScheduleChange;
 		this.moveInvalidOverlappedActivity = moveInvalidOverlappedActivity;
+
+		function moveShift(input) {
+			return $q(function (resolve, reject) {
+				$http.post(moveShiftUrl, input).then(function(data) {
+					resolve(data);
+				}, function (err) {
+					reject(err);
+				});
+			});
+		}
 
 		function moveInvalidOverlappedActivity(input) {
 			return $q(function (resolve, reject) {
@@ -75,7 +87,7 @@
 			return normalized;
 		}
 
-		function removeActivity(removeActivityForm) {			
+		function removeActivity(removeActivityForm) {
 			var deffered = $q.defer();
 			$http.post(removeActivityUrl, removeActivityForm).then(function (result) {
 				deffered.resolve(result);

@@ -28,6 +28,11 @@
 				var currentDate = personSchedule.Date;
 				var currentDateMoment = moment(currentDate);
 
+				if (personSchedule.IsFullDayAbsence) {
+					invalidPeople.push(personSchedule);
+					continue;
+				}
+
 				var newStartInAgentTimezone = $filter('timezone')(newStartMoment.format('YYYY-MM-DD HH:mm'),
 					personSchedule.Timezone.IanaId,
 					currentTimezone);
@@ -41,9 +46,17 @@
 					return shift.Date === currentDate;
 				});
 
-				if (shifts.length === 0) continue;
+				if (shifts.length === 0) {
+					invalidPeople.push(personSchedule);
+					continue;
+				};
+
 				var shiftForCurrentDay = shifts[0];
-				if (!shiftForCurrentDay.ProjectionTimeRange) continue;
+				if (!shiftForCurrentDay.ProjectionTimeRange) {
+					invalidPeople.push(personSchedule);
+					continue;
+				}
+
 				var shiftLength = moment(shiftForCurrentDay.ProjectionTimeRange.End)
 					.diff(moment(shiftForCurrentDay.ProjectionTimeRange.Start), 'minute');
 				var newEndMoment = newStartMoment.clone().add(shiftLength, 'minute');
@@ -58,7 +71,6 @@
 					invalidPeople.push(personSchedule);
 				}
 			}
-
 
 			return invalidPeople.length === 0;
 		}

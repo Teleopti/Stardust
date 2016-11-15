@@ -2,7 +2,7 @@
 	<div class="sidenav-header">{{'MoveShift'|translate}}</div>
 	<md-content class="command-panel-content" layout-padding>
 		<form name="moveShiftForm">
-			<md-progress-linear ng-if="$ctrl.checkingCommand" md-mode="indeterminate"></md-progress-linear>
+			<md-progress-linear ng-if="$ctrl.processingCommand" md-mode="indeterminate"></md-progress-linear>
 			<h3>{{'StartTime' | translate}}:</h3>
 			<div uib-timepicker class="focus-default" ng-model="$ctrl.moveToTime" required show-meridian="$ctrl.showMeridian" meridians="$ctrl.meridians"></div>
 		</form>
@@ -12,7 +12,7 @@
 		</div>
 		<button id="applyMoveShift" class="wfm-btn form-submit"
 				ng-class="{ 'wfm-btn-primary': $ctrl.anyValidAgent() && moveShiftForm.$valid && !$ctrl.checkingCommand, 'wfm-btn-primary-disabled': !$ctrl.anyValidAgent() || !moveShiftForm.$valid || $ctrl.checkingCommand}"
-				ng-disabled="$ctrl.checkingCommand || !$ctrl.anyValidAgent() || !moveShiftForm.$valid"
+				ng-disabled="$ctrl.processingCommand || !$ctrl.anyValidAgent() || !moveShiftForm.$valid"
 				ng-click="$ctrl.moveShift()">
 			{{'Apply' | translate}}
 		</button>

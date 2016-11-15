@@ -436,5 +436,63 @@
 			expect(target.getInvalidPeople().length).toEqual(1);
 		});
 
+		it('should invalidate shift-move if it is full day absence', function () {			
+			var scheduleToday = {
+				"PersonId": "221B-Baker-SomeoneElse",
+				"Name": "SomeoneElse",
+				"Date": scheduleDate,
+				"Timezone": {
+					IanaId: "Asia/Hong_Kong"
+				},
+				"Projection": [
+					{
+						"ShiftLayerIds": ["layer1"],
+						"ParentPersonAbsences": null,
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": scheduleDate + " 08:00",
+						"Minutes": 480
+					}
+				],
+				"IsFullDayAbsence": true,
+				"DayOff": null
+			};
+
+			scheduleMgmt.resetSchedules([scheduleToday], moment(scheduleDate), "Asia/Hong_Kong");
+			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			var newStartMoment = moment(scheduleDate + " 10:00");
+
+			target.validateMoveToTimeForShift(newStartMoment, "Asia/Hong_Kong");
+
+			expect(target.getInvalidPeople().length).toEqual(1);
+		});
+
+		it('should invalidate shift-move if it is empty day', function () {
+			var scheduleToday = {
+				"PersonId": "221B-Baker-SomeoneElse",
+				"Name": "SomeoneElse",
+				"Date": scheduleDate,
+				"Timezone": {
+					IanaId: "Asia/Hong_Kong"
+				},
+				"Projection": [					
+				],
+				"IsFullDayAbsence": false,
+				"DayOff": null
+			};
+
+			scheduleMgmt.resetSchedules([scheduleToday], moment(scheduleDate), "Asia/Hong_Kong");
+			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			var newStartMoment = moment(scheduleDate + " 10:00");
+
+			target.validateMoveToTimeForShift(newStartMoment, "Asia/Hong_Kong");
+
+			expect(target.getInvalidPeople().length).toEqual(1);
+		});
+
 	});
 })()

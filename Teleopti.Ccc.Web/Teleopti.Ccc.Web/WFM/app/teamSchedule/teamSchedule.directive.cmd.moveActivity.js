@@ -95,14 +95,14 @@
 			angular.forEach(validAgents, function (agent) {
 				var selectedActivities = agent.SelectedActivities;
 				var groupedActivitiesByDate = {};
-				selectedActivities.forEach(function(a){
+				selectedActivities.forEach(function(a) {
 					if (!groupedActivitiesByDate[a.date]) {
 						groupedActivitiesByDate[a.date] = [];
 					}
-					if(groupedActivitiesByDate[a.date].indexOf(a.shiftLayerId) === -1) {
+					if (groupedActivitiesByDate[a.date].indexOf(a.shiftLayerId) === -1) {
 						groupedActivitiesByDate[a.date].push(a.shiftLayerId);
 					}
-				})
+				});
 				for (var date in groupedActivitiesByDate) {
 					personActivities.push({
 						PersonId: agent.PersonId,
