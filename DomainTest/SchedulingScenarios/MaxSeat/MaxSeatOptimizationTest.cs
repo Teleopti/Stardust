@@ -986,6 +986,44 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.EqualTo(TimeSpan.FromHours(9)); //should not have been touched
 		}
 
+		[Ignore("40939")]
+		[TestCase(1)]
+		[TestCase(2)]
+		public void ShouldCalculateMaxPeakOnNextDay(int ruleSetOrder)
+		{
+			var site = new Site("_") { MaxSeats = 1 }.WithId();
+			var team = new Team { Description = new Description("_"), Site = site };
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var dateOnly = new DateOnly(2016, 10, 25);
+			var scenario = new Scenario("_");
+			var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(18, 0, 18, 0, 60), new TimePeriodWithSegment(26, 0, 26, 0, 60), new ShiftCategory("_").WithId()));
+			var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(02, 0, 02, 0, 60), new TimePeriodWithSegment(10, 0, 10, 0, 60), new ShiftCategory("_").WithId()));
+			var ruleSetBag = new RuleSetBag();
+
+			if (ruleSetOrder.Equals(1))
+			{
+				ruleSetBag.AddRuleSet(ruleSet1);
+				ruleSetBag.AddRuleSet(ruleSet2);
+			}
+
+			if (ruleSetOrder.Equals(2))
+			{
+				ruleSetBag.AddRuleSet(ruleSet2);
+				ruleSetBag.AddRuleSet(ruleSet1);
+			}
+
+			var agentDataOneHour = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, ruleSetBag, scenario, activity, new TimePeriod(10, 0, 11, 0));
+			var agentDataOneHourAtNight = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly.AddDays(1), team, ruleSetBag, scenario, activity, new TimePeriod(0, 0, 1, 0));
+			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, r, scenario, activity, new TimePeriod(9, 0, 17, 0));
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1)), new[] { agentData.Assignment, agentDataOneHour.Assignment, agentDataOneHourAtNight.Assignment });
+
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, Enumerable.Empty<ISkillDay>(), CreateOptimizationPreferences());
+
+			schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay
+				.Should().Be.EqualTo(TimeSpan.FromHours(2)); 
+		}
+
 		[Test]
 		public void ShouldFixMaxPeaksComingFromNightShifts()
 		{
