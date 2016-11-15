@@ -73,5 +73,4 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			result.Single().OutOfAdherence.Should().Be(0);
 		}
 	}
-
 }
