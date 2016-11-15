@@ -26,10 +26,16 @@ namespace Teleopti.Ccc.Domain.Budgeting
         public BudgetCalculationResult Calculate(IBudgetDay budgetDay)
         {
             InParameter.NotNull("budgetDay", budgetDay);
-            if(budgetDay.IsClosed) return new BudgetCalculationResult();
             var budgetDayCalculations = _netStaffCalculator.CalculatedResult(budgetDay);
 	        foreach (var calculator in _calculatorList)
 		        calculator.Calculate(budgetDay, _budgetDayList, ref budgetDayCalculations);
+
+	        if (budgetDay.IsClosed)
+	        {
+					if (budgetDay.AbsenceOverride != null) return new BudgetCalculationResult() {Allowance = budgetDayCalculations.Allowance, TotalAllowance = budgetDayCalculations.TotalAllowance};
+
+					return new BudgetCalculationResult();
+	        }
 
 	        return budgetDayCalculations;
         }

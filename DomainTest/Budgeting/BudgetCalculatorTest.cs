@@ -102,7 +102,15 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
             result.Allowance.Should().Be.EqualTo(0);
         }
 
-		[Test]
+	    [Test]
+	    public void AllowanceShouldEqualAbsenceOverriteWhenDayIsClosed()
+	    {
+		    var result = _target.Calculate(_budgetDay4);
+		    result.TotalAllowance.Should().Be.EqualTo(10);
+		    result.Allowance.Should().Be.EqualTo(8);
+	    }
+
+	    [Test]
 		public void ShouldCalculateWithoutnetStaffFcAdj()
 		{
 			var result = _target.CalculateWithoutNetStaffFcAdj(_budgetDay4, 596.07024229401054d);
