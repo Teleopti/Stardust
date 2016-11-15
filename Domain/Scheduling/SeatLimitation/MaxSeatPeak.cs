@@ -15,13 +15,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_usedSeats = usedSeats;
 		}
 
-		public double Fetch(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> maxSeatSkillDaysToLookAt)
+		public MaxSeatPeakData Fetch(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> maxSeatSkillDaysToLookAt)
 		{
-			return teamBlockInfo.BlockInfo.BlockPeriod.DayCollection()
-				.Select(dateOnly => Fetch(dateOnly, maxSeatSkillDaysToLookAt)).Max();
+			var period = teamBlockInfo.BlockInfo.BlockPeriod.Inflate(1);
+			var datePeak = new Dictionary<DateOnly, double>();
+			foreach (var date in period.DayCollection())
+			{
+				datePeak[date] = fetchForDate(date, maxSeatSkillDaysToLookAt);
+			}
+			return new MaxSeatPeakData(datePeak);
 		}
 
-		public double Fetch(DateOnly dateOnly, IEnumerable<ISkillDay> maxSeatSkillDaysToLookAt)
+		private double fetchForDate(DateOnly dateOnly, IEnumerable<ISkillDay> maxSeatSkillDaysToLookAt)
 		{
 			var retValue = 0d;
 			foreach (var skillDay in maxSeatSkillDaysToLookAt.Where(x => x.CurrentDate == dateOnly))

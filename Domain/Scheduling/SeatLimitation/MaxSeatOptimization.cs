@@ -111,23 +111,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				{
 					var datePoint = teamBlockInfo.BlockInfo.DatePoint(period);
 					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint);
-					var maxPeak = double.MinValue;
-					var maxPeakDayAfter = _maxSeatPeak.Fetch(teamBlockInfo.BlockInfo.BlockPeriod.EndDate.AddDays(1), skillDaysForTeamBlockInfo);
-					var maxPeakDayBefore = double.MinValue;
-					var beforeAffected = dayUtcAffected(teamBlockInfo, datePoint, datePoint.AddDays(-1));
-					var dayAffected = dayUtcAffected(teamBlockInfo, datePoint, datePoint);
-
-					if (beforeAffected)
-					{
-						maxPeakDayBefore = _maxSeatPeak.Fetch(teamBlockInfo.BlockInfo.BlockPeriod.StartDate.AddDays(-1), skillDaysForTeamBlockInfo);
-					}
-
-					if (dayAffected)
-					{
-						maxPeak = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);
-					}
-
-					if (maxPeak.IsPositive() || maxPeakDayBefore.IsPositive())
+					var maxPeaksBefore = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);
+					if (maxPeaksBefore.HasPeaks())
 					{
 						var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules);
@@ -135,12 +120,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 							datePoint, schedulingOptions, rollbackService,
 							new DoNothingResourceCalculateDelayer(), skillDaysForTeamBlockInfo.Union(allSkillDays), schedules,
 							new ShiftNudgeDirective(), businessRules);
+						var maxPeaksAfter = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);
 
 						if (!scheduleWasSuccess||
 							!_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences) ||
 							!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) ||
-							(_maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo) >= maxPeak && dayAffected ) ||
-							_maxSeatPeak.Fetch(teamBlockInfo.BlockInfo.BlockPeriod.EndDate.AddDays(1), skillDaysForTeamBlockInfo) > maxPeakDayAfter)
+							maxPeaksAfter.IsNotBetterThan(maxPeaksBefore))
 						{
 							rollbackService.RollbackMinimumChecks();
 						}
@@ -172,22 +157,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					}
 				}
 			}
-		}
-
-		private bool dayUtcAffected(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly, DateOnly affectDate)
-		{
-			foreach (var scheduleMatrixPro in teamBlockInfo.MatrixesForGroupAndBlock())
-			{
-				foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays.Where(x => x.Day == dateOnly))
-				{
-					var scheduleDay = scheduleDayPro.DaySchedulePart();
-					var startAffectDay = scheduleDay.PersonAssignment(true).ShiftLayers.Any(x => x.Period.StartDateTime.Date == affectDate.Date);
-					if (startAffectDay)
-						return true;
-				}
-			}
-
-			return false;
 		}
 	}
 }
