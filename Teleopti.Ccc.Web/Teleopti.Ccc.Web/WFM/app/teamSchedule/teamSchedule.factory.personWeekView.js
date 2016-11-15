@@ -39,8 +39,14 @@
 
 			if (startTimeInUserTimezoneMoment.isBefore(moment(dateInWeek).startOf('day'))) {
 				displayStarStr = startTimeInUserTimezoneMoment.format('HH:mm') + ' (-1)';
-			} else if (endTimeInUserTimezoneMoment.isAfter(moment(dateInWeek).endOf('day'))) {
-				displayEndStr = startTimeInUserTimezoneMoment.format('HH:mm') + ' (+1)';
+			}else if(startTimeInUserTimezoneMoment.isAfter(moment(dateInWeek).endOf('day'))){
+				displayStarStr = startTimeInUserTimezoneMoment.format('HH:mm') + ' (+1)';
+			}
+
+			if(endTimeInUserTimezoneMoment.isBefore(moment(dateInWeek).startOf('day'))) {
+				displayEndStr = endTimeInUserTimezoneMoment.format('HH:mm') + ' (-1)';
+			}else if (endTimeInUserTimezoneMoment.isAfter(moment(dateInWeek).endOf('day'))) {
+				displayEndStr = endTimeInUserTimezoneMoment.format('HH:mm') + ' (+1)';
 			}
 
 			return displayStarStr + ' - ' + displayEndStr;
