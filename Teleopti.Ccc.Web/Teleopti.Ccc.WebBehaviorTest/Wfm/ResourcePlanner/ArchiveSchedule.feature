@@ -17,7 +17,6 @@ Scenario: Run archiving for one agent
 	| Name                      | Archive Role |
 	| Access to team            | Team 1       |
 	| Access to resourceplanner | true         |
-	| Access to WFM schedules   | true         |
 	| Archive schedules         | true         |
 	And Ashley Andeen has a person period with
 	 | Field      | Value      |

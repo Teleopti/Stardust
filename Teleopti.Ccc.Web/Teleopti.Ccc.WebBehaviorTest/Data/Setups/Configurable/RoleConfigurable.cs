@@ -369,11 +369,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports
 											  select f;
 
-			if (!AccessToWfmSchedules)
-				applicationFunctions = from f in applicationFunctions
-									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebSchedules
-									   select f;
-
 			if (!ArchiveSchedules)
 				applicationFunctions = from f in applicationFunctions
 									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ArchiveSchedule
