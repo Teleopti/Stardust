@@ -6,7 +6,9 @@
 
 	<div class="view-header with-fab with-desc">
 		<div class="view-title">
-			<h1><i class="mdi mdi-calendar"></i> {{'ArchiveSchedule' | translate}}</h1>
+			<h1>
+				<i class="mdi mdi-calendar"></i> {{'ArchiveSchedule' | translate}}
+			</h1>
 			<p translate>ArchiveScheduleDescription</p>
 		</div>
 
@@ -17,51 +19,60 @@
 			</button>
 		</div>
 	</div>
-	<div class="panel material-depth-1">
-		<div class="con-row">
-			<div class="con-flex">
-				<form>
-					<label>{{'FromScenarioColon' | translate}}</label>
-					<md-select class="inline-select from-scenario-selector" ng-model="vm.selection.fromScenario" placeholder="{{'Scenario' | translate}}">
-						<md-option ng-repeat="scenario in vm.scenarios | defaultScenario:true" ng-value="scenario" ng-disabled="true">{{scenario.Name}}</md-option>
-					</md-select>
-				</form>
-			</div>
-
-			<div class="con-flex">
-				<form>
-					<label>{{'ToScenarioColon' | translate}}</label>
-					<md-select class="inline-select to-scenario-selector" ng-model="vm.selection.toScenario" placeholder="{{'Scenario' | translate}}">
-						<md-option ng-repeat="scenario in vm.scenarios | defaultScenario:false" ng-value="scenario">{{scenario.Name}}</md-option>
-					</md-select>
-				</form>
-			</div>
-		</div>
-		<div class="con-row">
-			<div class="con-flex">
-				<date-range-picker ng-model="vm.selection.period" template-type="vm.dateRangeTemplateType">
-				</date-range-picker>
-			</div>
-		</div>
-		<div class="con-row">
-			<div class="con-flex">
-				<div class="data-container full-padding flex-element-fill flex-column" ng-include="'app/resourceplanner/archiveschedule-businesshierarchy.html'" ng-controller="HierarchyController"></div>
-			</div>
-		</div>
-	</div>
-	<div ng-cloak class="modal-box">
-		<div ng-cloak ng-show="vm.showConfirmModal">
-			<div class="modalbg">
-				<div class="dialog">
-					<div class="modal-inner-content">
-						<h3>{{'AreYouSure' | translate}}</h3>
-						{{vm.confirmationText}}
+	<div class="con-row">
+		<div class="con-flex">
+			<div class="panel material-depth-1">
+				<div class="con-row">
+					<div class="archive-schedule-period-picker">
+						<date-range-picker ng-model="vm.selection.period" template-type="vm.dateRangeTemplateType">
+						</date-range-picker>
 					</div>
-					<div class="modal-actions">
-						<aside>
-							<button id="cancel-archiving" ng-click="vm.showConfirmModal=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
-							<button id="confirm-archiving" ng-click="vm.runArchiving(vm.selection.fromScenario, vm.selection.toScenario, vm.selection.period, vm.selection.teams)" class="wfm-btn wfm-btn-invis-primary">{{'Run'|translate}}</button>
-						</aside>
+					<div class="archive-schedule-scenario-picker">
+						<span>
+							{{'FromScenarioColon' | translate}}
+							<span class="unselectable-scenario">{{vm.selection.fromScenario.Name}}</span>
+							{{'ToScenarioColon' | translate}}
+							<md-select class="inline-select to-scenario-selector" ng-model="vm.selection.toScenario" placeholder="{{'Scenario' | translate}}">
+								<md-option ng-repeat="scenario in vm.scenarios | defaultScenario:false" ng-value="scenario">{{scenario.Name}}</md-option>
+							</md-select>
+						</span>
+					</div>
+				</div>
+				<div class="con-row" ng-controller="HierarchyController">
+					<div class="data-container full-padding flex-element-fill flex-column">
+						<div class="con-row">
+							<label for="HierarchyDataFilter" class="input-prepend">
+								<i class="mdi mdi-filter-outline"></i>
+								<input type="text" id="HierarchyDataFilter" name="filterDetails" ng-model="searchData" placeholder="{{'DataFilterThreeDots' | translate}}" />
+							</label>
+						</div>
+						<div class="flex-relative-element hierarchy-tree-container">
+							<div class="tree hierarchy-tree flex-absolute-child">
+								<div ui-tree data-drag-enabled="false">
+									<ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root">
+										<li ng-repeat="node in organization.BusinessUnit | nameFilter: searchData" ui-tree-node ng-include="'app/resourceplanner/organization-tree-node.html'"></li>
+									</ol>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div ng-cloak class="modal-box">
+				<div ng-cloak ng-show="vm.showConfirmModal">
+					<div class="modalbg">
+						<div class="dialog">
+							<div class="modal-inner-content">
+								<h3>{{'AreYouSure' | translate}}</h3>
+								{{vm.confirmationText}}
+							</div>
+							<div class="modal-actions">
+								<aside>
+									<button id="cancel-archiving" ng-click="vm.showConfirmModal=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+									<button id="confirm-archiving" ng-click="vm.runArchiving(vm.selection.fromScenario, vm.selection.toScenario, vm.selection.period, vm.selection.teams)" class="wfm-btn wfm-btn-invis-primary">{{'Run'|translate}}</button>
+								</aside>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

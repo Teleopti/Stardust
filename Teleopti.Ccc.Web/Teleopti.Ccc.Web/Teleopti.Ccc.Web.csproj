@@ -1360,7 +1360,7 @@
     <Content Include="WFM\app\global\utilities\guidgenerator.service.js" />
     <Content Include="WFM\app\global\utilities\_modules.js" />
     <Content Include="WFM\app\requests\requests-synchronize-header-height.directive.js" />
-    <Content Include="WFM\app\resourceplanner\archiveschedule-businesshierarchy.html" />
+    <Content Include="WFM\app\resourceplanner\organization-tree-node.html" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.archiveschedule.hierarchy.service.js" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.archiveschedule.hierarchy.controller.js" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.archiveschedule.controller.js" />

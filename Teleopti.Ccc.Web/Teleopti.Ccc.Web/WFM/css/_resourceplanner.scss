@@ -281,7 +281,7 @@ background-color: #cacaca;
 }
 
 .hierarchy-tree-container {
-	min-height: 600px;
+	min-height: 700px;
 }
 .hierarchy-teams {
     margin-left: 35px;
@@ -290,4 +290,25 @@ background-color: #cacaca;
 .non-selectable-list-item:hover{
 	background-color: inherit !important;
 	cursor: not-allowed !important;
+}
+
+.archive-schedule-period-picker{
+	padding-right: 30px;
+}
+
+.archive-schedule-scenario-picker {
+	align-self: center;
+}
+
+.archive-schedule-scenario-picker > span{
+	display: flex;
+	padding-top: 5px;
+	select{
+		margin-left: $full-padding;
+	}
+}
+.unselectable-scenario{
+	font-weight: bold;
+	padding-right: 10px; 
+	padding-left: 3px;
 }
