@@ -10,7 +10,7 @@
 		var addPersonalActivityUrl = '../api/TeamScheduleCommand/AddPersonalActivity';
 		var removeActivityUrl = '../api/TeamScheduleCommand/RemoveActivity';
 		var moveActivityUrl = '../api/TeamScheduleCommand/MoveActivity';
-		var moveShiftUrl = '../api/TeamScheduleCommand/MoveShift';
+		var moveShiftUrl = '../api/TeamSchedule/MoveShift';
 		var undoScheduleChangeUrl = '../api/TeamScheduleCommand/BackoutScheduleChange';
 		var moveInvalidOverlappedActivityUrl = '../api/TeamScheduleCommand/MoveNonoverwritableLayers';
 

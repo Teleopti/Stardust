@@ -39,8 +39,12 @@
 		};
 
 		ctrl.moveShift = function () {
+			var invalidAgentIds = ctrl.invalidAgents.map(function(a) {
+				return a.PersonId;
+			});
+
 			var validAgents = ctrl.selectedAgents.filter(function(agent) {
-				return ctrl.invalidAgents.indexOf(agent) < 0;
+				return invalidAgentIds.indexOf(agent.PersonId) < 0;
 			});
 
 			var validAgentIds = validAgents.map(function (agent) {
@@ -50,7 +54,7 @@
 			if (validAgentIds.length > 0) {
 				var requestData = {
 					Date: ctrl.containerCtrl.getDate(),
-					NewShiftStart:ctrl.containerCtrl.convertTimeToCurrentUserTimezone(moment(ctrl.moveToTime).format('YYYY-MM-DDTHH:mm')),
+					NewShiftStart:ctrl.containerCtrl.convertTimeToCurrentUserTimezone(moment(ctrl.moveToTime).format('YYYY-MM-DD HH:mm')),
 					PersonIds: validAgentIds
 				};
 
