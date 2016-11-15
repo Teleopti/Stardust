@@ -77,7 +77,7 @@ function TeleoptiWindowsServices-Start {
 	fnServiceStart -ServiceName $EtlService
 
     if (ServiceExist($ServiceBus)) {
-        & sc.exe failure $ServiceBus reset= 0 actions= restart/60000/restart/60000/restart/60000
+        & sc.exe failure $ServiceBus reset= 0 actions= restart/60000/restart/60000/restart/60000/restart/60000/restart/60000/restart/60000
     }
 }
 
