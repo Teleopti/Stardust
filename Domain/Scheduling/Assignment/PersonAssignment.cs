@@ -561,32 +561,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual void MoveAllActivitiesAndKeepOriginalPriority(DateTime newStartTimeInUtc,
 			TrackedCommandInfo trackedCommandInfo, bool muteEvent = false)
 		{
-			var originalStartTimeInUtc = MainActivities().Min(a => a.Period.StartDateTime);			
+			var originalStartTimeInUtc = PeriodExcludingPersonalActivity().StartDateTime;			
 			var distanceToMove = newStartTimeInUtc.Subtract(originalStartTimeInUtc);
 
 			var shiftLayers = ShiftLayers.ToList();
 
 			var affectedPeriods = new List<DateTimePeriod>();
 
-			MainActivities().ForEach(shiftLayer =>
+			foreach (var shiftLayer in shiftLayers)
 			{
+				if (shiftLayer is IPersonalShiftLayer)
+					continue;
+
 				var newPeriod = shiftLayer.Period.MovePeriod(distanceToMove);
 				var index = shiftLayers.IndexOf(shiftLayer);
 				RemoveActivity(shiftLayer);
 				InsertActivity(shiftLayer.Payload, newPeriod, index);
 
 				affectedPeriods.Add(shiftLayer.Period.MaximumPeriod(newPeriod));
-			});
-
-			OvertimeActivities().ForEach(activity =>
-			{
-				var newPeriod = activity.Period.MovePeriod(distanceToMove);
-				var index = shiftLayers.IndexOf(activity);
-				RemoveActivity(activity);
-				InsertActivity(activity.Payload, newPeriod, index);
-
-				affectedPeriods.Add(activity.Period.MaximumPeriod(newPeriod));
-			});
+			}
 
 			if(!muteEvent)
 			{

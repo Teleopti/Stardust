@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
@@ -81,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			modifiedLayer.Period.EndDateTime.Should().Be(expectedStart + (orgEnd - orgStart));
 		}
 
-		[Test, Ignore("toDo")]
+		[Test]
 		public void ShouldChangeStateWithOvertimeActivity()
 		{
 			var agent = new Person().WithId();
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var overtimeAct = new Activity("overtime").WithId();
 			var orgStart = createDateTimeUtc(6);
 			var orgEnd = createDateTimeUtc(11);
-			var userTimeZone = UserTimeZone.Make();
+			var userTimeZone = new UtcTimeZone();
 			agent.PermissionInformation.SetDefaultTimeZone(userTimeZone.TimeZone());
 			var personAss = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
 			personAss.AddOvertimeActivity(overtimeAct, new DateTimePeriod(createDateTimeUtc(11),createDateTimeUtc(12)), new MultiplicatorDefinitionSet("_", MultiplicatorType.Overtime) );
@@ -121,6 +122,134 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			modifiedLayers[0].Period.StartDateTime.Should().Be(expectedStart);
 			modifiedLayers[0].Period.EndDateTime.Should().Be(expectedStart + (orgEnd - orgStart));
 			modifiedLayers[1].Payload.Should().Be(overtimeAct);
+			modifiedLayers[1].Period.StartDateTime.Should().Be(createDateTimeUtc(7));
+			modifiedLayers[1].Period.EndDateTime.Should().Be(createDateTimeUtc(8));
+		}
+
+		[Test]
+		public void ShouldNotChangeStateWithPersonalActivity()
+		{
+			var agent = new Person().WithId();
+			var activity = new Activity("act").WithId();
+			var personalActivity = new Activity("personal").WithId();
+			var orgStart = createDateTimeUtc(6);
+			var orgEnd = createDateTimeUtc(11);
+			var userTimeZone = new UtcTimeZone();
+			agent.PermissionInformation.SetDefaultTimeZone(userTimeZone.TimeZone());
+			var personAss = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
+			personAss.AddPersonalActivity(personalActivity, new DateTimePeriod(createDateTimeUtc(11),createDateTimeUtc(12)));
+
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
+			{
+				personAss
+			};
+			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
+			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
+			var personAssignment = personAssignmentRepository.Single();
+			var shiftLayers = personAssignment.ShiftLayers.ToList();
+			shiftLayers.ForEach(l => l.WithId());
+			var target = new MoveShiftCommandHandler(personRepository, personAssignmentRepository, scenario);
+
+			var cmd = new MoveShiftCommand
+			{
+				PersonId = agent.Id.Value,
+				ScheduleDate = new DateOnly(2013, 11, 14),
+				NewStartTimeInUtc = createDateTimeUtc(2),
+				TrackedCommandInfo = new TrackedCommandInfo { TrackId = Guid.NewGuid() }
+			};
+
+			target.Handle(cmd);
+
+			var expectedStart = cmd.NewStartTimeInUtc;
+			var modifiedLayers = personAssignmentRepository.Single().ShiftLayers.ToList();
+			modifiedLayers[0].Payload.Should().Be(activity);
+			modifiedLayers[0].Period.StartDateTime.Should().Be(expectedStart);
+			modifiedLayers[0].Period.EndDateTime.Should().Be(expectedStart + (orgEnd - orgStart));
+			modifiedLayers[1].Payload.Should().Be(personalActivity);
+			modifiedLayers[1].Period.StartDateTime.Should().Be(createDateTimeUtc(11));
+			modifiedLayers[1].Period.EndDateTime.Should().Be(createDateTimeUtc(12));
+		}
+
+		[Test]
+		public void ShouldTriggerOneEvent()
+		{
+			var agent = new Person().WithId();
+			var activity = new Activity("act").WithId();
+			var personalActivity = new Activity("personal").WithId();
+			var orgStart = createDateTimeUtc(6);
+			var orgEnd = createDateTimeUtc(11);
+			var userTimeZone = new UtcTimeZone();
+			agent.PermissionInformation.SetDefaultTimeZone(userTimeZone.TimeZone());
+			var personAss = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
+			personAss.AddPersonalActivity(personalActivity, new DateTimePeriod(createDateTimeUtc(11), createDateTimeUtc(12)));
+
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
+			{
+				personAss
+			};
+			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
+			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
+			var personAssignment = personAssignmentRepository.Single();
+			var shiftLayers = personAssignment.ShiftLayers.ToList();
+			shiftLayers.ForEach(l => l.WithId());
+			var target = new MoveShiftCommandHandler(personRepository, personAssignmentRepository, scenario);
+
+			var cmd = new MoveShiftCommand
+			{
+				PersonId = agent.Id.Value,
+				ScheduleDate = new DateOnly(2013, 11, 14),
+				NewStartTimeInUtc = createDateTimeUtc(2),
+				TrackedCommandInfo = new TrackedCommandInfo { TrackId = Guid.NewGuid() }
+			};
+
+			personAssignment.PopAllEvents();
+			target.Handle(cmd);
+
+			var events = personAssignmentRepository.Single().PopAllEvents();
+			events.Single().Should().Be.OfType<ActivityMovedEvent>();
+		}
+
+		[Test]
+		public void ShouldNotCountPersonalActivityWhenCalculatingNewShiftStartTime()
+		{
+			var agent = new Person().WithId();
+			var activity = new Activity("act").WithId();
+			var personalActivity = new Activity("personal").WithId();
+			var orgStart = createDateTimeUtc(8);
+			var orgEnd = createDateTimeUtc(17);
+			var userTimeZone = new UtcTimeZone();
+			agent.PermissionInformation.SetDefaultTimeZone(userTimeZone.TimeZone());
+			var personAss = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
+			personAss.AddPersonalActivity(personalActivity, new DateTimePeriod(createDateTimeUtc(7), createDateTimeUtc(8)));
+
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
+			{
+				personAss
+			};
+			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
+			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
+			var personAssignment = personAssignmentRepository.Single();
+			var shiftLayers = personAssignment.ShiftLayers.ToList();
+			shiftLayers.ForEach(l => l.WithId());
+			var target = new MoveShiftCommandHandler(personRepository, personAssignmentRepository, scenario);
+
+			var cmd = new MoveShiftCommand
+			{
+				PersonId = agent.Id.Value,
+				ScheduleDate = new DateOnly(2013, 11, 14),
+				NewStartTimeInUtc = createDateTimeUtc(10),
+				TrackedCommandInfo = new TrackedCommandInfo { TrackId = Guid.NewGuid() }
+			};
+
+			target.Handle(cmd);
+
+			var expectedStart = cmd.NewStartTimeInUtc;
+
+			var modifiedLayers = personAssignmentRepository.Single().ShiftLayers.ToList();
+			modifiedLayers[0].Payload.Should().Be(activity);
+			modifiedLayers[0].Period.StartDateTime.Should().Be(expectedStart);
+			modifiedLayers[0].Period.EndDateTime.Should().Be(expectedStart + (orgEnd - orgStart));
+			modifiedLayers[1].Payload.Should().Be(personalActivity);
 			modifiedLayers[1].Period.StartDateTime.Should().Be(createDateTimeUtc(7));
 			modifiedLayers[1].Period.EndDateTime.Should().Be(createDateTimeUtc(8));
 		}

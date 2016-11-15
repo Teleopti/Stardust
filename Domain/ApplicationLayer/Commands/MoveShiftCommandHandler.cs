@@ -39,13 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				return;
 			}
 
-			var timeDiff = command.NewStartTimeInUtc.Subtract(personAss.Period.StartDateTime);
-			var shiftLayers = personAss.ShiftLayers.ToList();
-			foreach (var shiftLayer in shiftLayers)
-			{
-				var newStart = shiftLayer.Period.StartDateTime.Add(timeDiff);
-				personAss.MoveActivityAndKeepOriginalPriority(shiftLayer, newStart, command.TrackedCommandInfo);
-			}
+			personAss.MoveAllActivitiesAndKeepOriginalPriority(command.NewStartTimeInUtc, command.TrackedCommandInfo);
 		}
 	}
 }
