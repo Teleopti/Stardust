@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 		private IEnumerable<ISkillDay> createMaxSeatSkillDays(DateOnlyPeriod period, MaxSeatSkill maxSeatSkill, IScenario scenario)
 		{
-			var periodConsideringNightShift = new DateOnlyPeriod(period.StartDate, period.EndDate.AddDays(1));
+			var periodConsideringNightShift = new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate.AddDays(1));
 			var skillDays = skillDaysForSkill(periodConsideringNightShift, maxSeatSkill, scenario);
 			foreach (var skillDay in skillDays)
 			{

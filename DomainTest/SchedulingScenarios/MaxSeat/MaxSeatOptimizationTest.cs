@@ -1045,7 +1045,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		}
 
 
-		[Test, Ignore("To Be fixed")]
+		[Test]
 		public void ShouldHandleAgentsInUtcTimeZoneYesterday()
 		{
 			var agentTimeZone = TimeZoneInfoFactory.SingaporeTimeZoneInfo();
