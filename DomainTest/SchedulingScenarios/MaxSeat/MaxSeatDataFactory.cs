@@ -13,7 +13,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 	{
 		public static MaxSeatData CreateAgentWithAssignment(DateOnly date, ITeam team, IRuleSetBag ruleSetBag, IScenario scenario, IActivity activity, TimePeriod assignmentPeriod)
 		{
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			return CreateAgentWithAssignment(date, team, ruleSetBag, scenario, activity, assignmentPeriod, TimeZoneInfo.Utc);
+		}
+
+		public static MaxSeatData CreateAgentWithAssignment(DateOnly date, ITeam team, IRuleSetBag ruleSetBag, IScenario scenario, IActivity activity, TimePeriod assignmentPeriod, TimeZoneInfo timeZoneInfo)
+		{
+			var agent = new Person().WithId().InTimeZone(timeZoneInfo);
 			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Day, 1);
 			agent.AddPersonPeriod(new PersonPeriod(date.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = ruleSetBag });
 			agent.AddSchedulePeriod(schedulePeriod);

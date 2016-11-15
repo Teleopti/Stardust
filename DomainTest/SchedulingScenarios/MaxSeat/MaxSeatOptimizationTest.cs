@@ -1046,6 +1046,27 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		}
 
 
+		[Test, Ignore("To Be fixed")]
+		public void ShouldHandleAgentsInUtcTimeZoneYesterday()
+		{
+			var agentTimeZone = TimeZoneInfoFactory.SingaporeTimeZoneInfo();
+			var site = new Site("_") { MaxSeats = 1 }.WithId();
+			var team = new Team { Description = new Description("_"), Site = site };
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var dateOnly = new DateOnly(2016, 10, 25);
+			var scenario = new Scenario("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(1, 0, 1, 0, 60), new TimePeriodWithSegment(9, 0, 9, 0, 60), new ShiftCategory("_").WithId()));
+			var agentDataOneHour = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(0, 0, 1, 0), agentTimeZone);
+			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(0, 0, 8, 0), agentTimeZone);
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData.Assignment, agentDataOneHour.Assignment });
+
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, Enumerable.Empty<ISkillDay>(), CreateOptimizationPreferences());
+
+			var agentStartTimeLocal = TimeZoneHelper.ConvertFromUtc(schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime, agentTimeZone);
+			agentStartTimeLocal.TimeOfDay.Should().Be.EqualTo(TimeSpan.FromHours(1));
+		}
+
 		protected abstract OptimizationPreferences CreateOptimizationPreferences();
 	}
 }
