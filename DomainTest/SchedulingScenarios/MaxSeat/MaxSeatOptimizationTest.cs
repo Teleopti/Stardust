@@ -965,7 +965,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Be.EqualTo(TimeSpan.FromHours(8));
 		}
 
-		[Test, Ignore("To be fixed")]
+		[Test]
 		public void ShouldCheckMaxPeaksOnNightShifts()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();

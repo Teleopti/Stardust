@@ -112,6 +112,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					var datePoint = teamBlockInfo.BlockInfo.DatePoint(period);
 					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint);
 					var maxPeakBefore = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);
+					var maxPeakDayAfterBefore = _maxSeatPeak.Fetch(teamBlockInfo.BlockInfo.BlockPeriod.EndDate.AddDays(1), skillDaysForTeamBlockInfo);
 					if (maxPeakBefore.IsPositive())
 					{
 						var rollbackService = new SchedulePartModifyAndRollbackService(null, _scheduleDayChangeCallback, tagSetter);
@@ -124,7 +125,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						if (!scheduleWasSuccess||
 							!_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences) ||
 							!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) ||
-							_maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo) >= maxPeakBefore)
+							_maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo) >= maxPeakBefore ||
+							_maxSeatPeak.Fetch(teamBlockInfo.BlockInfo.BlockPeriod.EndDate.AddDays(1), skillDaysForTeamBlockInfo) > maxPeakDayAfterBefore)
 						{
 							rollbackService.RollbackMinimumChecks();
 						}
