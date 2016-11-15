@@ -10,6 +10,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat.TestData;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 {

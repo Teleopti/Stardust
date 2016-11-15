@@ -1,6 +1,6 @@
 ﻿using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
+namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat.TestData
 {
 	public class MaxSeatData
 	{

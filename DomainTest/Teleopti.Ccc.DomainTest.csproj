@@ -302,8 +302,8 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCascadingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCascadingTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTeamBlockDesktopTest.cs" />
-    <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatData.cs" />
-    <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatDataFactory.cs" />
+    <Compile Include="SchedulingScenarios\MaxSeat\TestData\MaxSeatData.cs" />
+    <Compile Include="SchedulingScenarios\MaxSeat\TestData\MaxSeatDataFactory.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatMustNotDependOnStateHolderTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatMustNotResourceCalculateTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatNoRandomnessTest.cs" />
