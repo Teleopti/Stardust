@@ -9,6 +9,7 @@ GO
 -- =============================================
 -- EXEC [mart].[web_intraday] 'W. Europe Standard Time', '2016-06-03', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753'
 -- EXEC [mart].[web_intraday] 'W. Europe Standard Time', '2016-04-13', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753,C5FFFC8F-BCD6-47F7-9352-9F0800E39578'
+-- EXEC mart.web_intraday 'GMT Standard Time', '2016-11-01', '32411FDD-5A63-45B2-98AE-A59B00B9CDF3'
 CREATE PROCEDURE [mart].[web_intraday]
 @time_zone_code nvarchar(100),
 @today smalldatetime,
@@ -62,8 +63,10 @@ BEGIN
 	INSERT INTO #queues
 	SELECT DISTINCT qw.queue_id 
 	FROM mart.bridge_queue_workload qw
+	INNER JOIN mart.dim_workload w ON qw.workload_id = w.workload_id
 	INNER JOIN mart.dim_skill ds ON qw.skill_id = ds.skill_id
 	INNER JOIN #skills s ON ds.skill_code = s.id
+	WHERE w.is_deleted = 0
 
 	-- Forecast
 	INSERT INTO #result(interval_id, forecasted_calls, forecasted_handle_time_s)
@@ -107,8 +110,9 @@ BEGIN
 	order by date_id,
 		interval_id,
 		fq.queue_id
-	
+		
 
+		
 	-- Queue stats - update result
 	UPDATE r
 	SET 

@@ -40,6 +40,8 @@ BEGIN
 			INNER JOIN mart.dim_skill s ON qw.skill_id = s.skill_id
 		WHERE 
 			qw.workload_id <> -1
+			AND w.is_deleted = 0
+			AND s.is_deleted = 0
 
 	INSERT INTO #queues
 		SELECT DISTINCT QueueId from #result

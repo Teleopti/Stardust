@@ -52,8 +52,10 @@ BEGIN
 		ds.skill_code,
 		qw.queue_id 
 	FROM mart.bridge_queue_workload qw
+	INNER JOIN mart.dim_workload w ON qw.workload_id = w.workload_id
 	INNER JOIN mart.dim_skill ds ON qw.skill_id = ds.skill_id
 	INNER JOIN #skills s ON ds.skill_code = s.id
+	WHERE w.is_deleted = 0
 	
 	-- Prepare Queue stats
 	DECLARE @current_date_id int
