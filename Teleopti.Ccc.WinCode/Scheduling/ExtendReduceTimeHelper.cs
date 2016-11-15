@@ -71,8 +71,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IResourceOptimization resourceOptimizationHelper = _container.Resolve<IResourceOptimization>();
 			IEffectiveRestrictionCreator effectiveRestrictionCreator =
 				_container.Resolve<IEffectiveRestrictionCreator>();
-			IResourceCalculateDaysDecider resourceCalculateDaysDecider =
-				_container.Resolve<IResourceCalculateDaysDecider>();
+			IScheduleChangesAffectedDates resourceCalculateDaysDecider =
+				_container.Resolve<IScheduleChangesAffectedDates>();
 			IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx =
 				_container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
 

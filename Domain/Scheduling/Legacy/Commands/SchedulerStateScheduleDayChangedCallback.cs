@@ -7,10 +7,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
     public class SchedulerStateScheduleDayChangedCallback : IScheduleDayChangeCallback
     {
-        private readonly IResourceCalculateDaysDecider _resourceCalculateDaysDecider;
+        private readonly IScheduleChangesAffectedDates _resourceCalculateDaysDecider;
         private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 
-        public SchedulerStateScheduleDayChangedCallback(IResourceCalculateDaysDecider resourceCalculateDaysDecider, Func<ISchedulerStateHolder> schedulerStateHolder)
+        public SchedulerStateScheduleDayChangedCallback(IScheduleChangesAffectedDates resourceCalculateDaysDecider, Func<ISchedulerStateHolder> schedulerStateHolder)
         {
             _resourceCalculateDaysDecider = resourceCalculateDaysDecider;
             _schedulerStateHolder = schedulerStateHolder;

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IOptimizationPreferences _optimizerPreferences;
         private ISchedulePartModifyAndRollbackService _rollbackService;
         private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-        private IResourceCalculateDaysDecider _decider;
+        private IScheduleChangesAffectedDates _decider;
         private IScheduleMatrixOriginalStateContainer _originalStateContainerForTagChange;
         private IWorkShiftBackToLegalStateServicePro _workTimeBackToLegalStateService;
         private INightRestWhiteSpotSolverService _nightRestWhiteSpotSolverService;
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _optimizerPreferences = new OptimizationPreferences();
             _rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
             _effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
-            _decider = _mocks.StrictMock<IResourceCalculateDaysDecider>();
+            _decider = _mocks.StrictMock<IScheduleChangesAffectedDates>();
             _originalStateContainerForTagChange = _mocks.StrictMock<IScheduleMatrixOriginalStateContainer>();
             _workTimeBackToLegalStateService = _mocks.StrictMock<IWorkShiftBackToLegalStateServicePro>();
             _nightRestWhiteSpotSolverService = _mocks.StrictMock<INightRestWhiteSpotSolverService>();

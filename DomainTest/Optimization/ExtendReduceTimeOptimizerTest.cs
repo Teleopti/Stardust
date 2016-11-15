@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private ISchedulePartModifyAndRollbackService _rollbackService;
         private IDeleteSchedulePartService _deleteService;
         private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-        private IResourceCalculateDaysDecider _decider;
+        private IScheduleChangesAffectedDates _decider;
         private IScheduleMatrixOriginalStateContainer _originalStateContainerForTagChange;
 	    private IOptimizationLimits _optimizationLimits;
         private ISchedulingOptions _schedulingOptions;
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_rollbackService = _mocks.Stub<ISchedulePartModifyAndRollbackService>();
 			_deleteService = _mocks.Stub<IDeleteSchedulePartService>();
 			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
-			_decider = _mocks.StrictMock<IResourceCalculateDaysDecider>();
+			_decider = _mocks.StrictMock<IScheduleChangesAffectedDates>();
 			_originalStateContainerForTagChange = _mocks.StrictMock<IScheduleMatrixOriginalStateContainer>();
 			_optimizerPreferences = new OptimizationPreferences();
 		    _optimizationLimits = _mocks.StrictMock<IOptimizationLimits>();

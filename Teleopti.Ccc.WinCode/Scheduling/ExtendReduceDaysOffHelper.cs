@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var effectiveRestrictionCreator =
 				_container.Resolve<IEffectiveRestrictionCreator>();
 			var resourceCalculateDaysDecider =
-				_container.Resolve<IResourceCalculateDaysDecider>();
+				_container.Resolve<IScheduleChangesAffectedDates>();
 			var scheduleMatrixLockableBitArrayConverterEx =
 				_container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
 

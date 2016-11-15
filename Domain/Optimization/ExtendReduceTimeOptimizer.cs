@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IDeleteSchedulePartService _deleteService;
         private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-        private readonly IResourceCalculateDaysDecider _decider;
+        private readonly IScheduleChangesAffectedDates _decider;
         private readonly IScheduleMatrixOriginalStateContainer _originalStateContainerForTagChange;
 	    private readonly IOptimizationLimits _optimizationLimits;
         private readonly ISchedulingOptions _schedulingOptions;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IDeleteSchedulePartService deleteService,
             IResourceCalculateDelayer resourceCalculateDelayer,
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
-            IResourceCalculateDaysDecider decider,
+            IScheduleChangesAffectedDates decider,
             IScheduleMatrixOriginalStateContainer originalStateContainerForTagChange,
  			IOptimizationLimits optimizationLimits,
             ISchedulingOptions schedulingOptions,

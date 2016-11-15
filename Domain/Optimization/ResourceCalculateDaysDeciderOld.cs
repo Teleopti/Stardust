@@ -5,13 +5,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public interface IResourceCalculateDaysDecider
+	public interface IScheduleChangesAffectedDates
     {
 		IEnumerable<DateOnly> DecideDates(IScheduleDay currentSchedule, IScheduleDay previousSchedule);
     }
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_CalculateFarAwayTimeZones_40646)]
-    public class ResourceCalculateDaysDeciderOld : IResourceCalculateDaysDecider
+    public class ResourceCalculateDaysDeciderOld : IScheduleChangesAffectedDates
     {
 	    private readonly IUserTimeZone _userTimeZone;
 

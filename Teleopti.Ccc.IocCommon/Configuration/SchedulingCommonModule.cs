@@ -178,11 +178,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.InstancePerLifetimeScope();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_CalculateFarAwayTimeZones_40646))
 			{
-				builder.RegisterType<ResourceCalculateDaysDecider>().As<IResourceCalculateDaysDecider>().SingleInstance();
+				builder.RegisterType<ResourceCalculateDaysDecider>().As<IScheduleChangesAffectedDates>().SingleInstance();
 			}
 			else
 			{
-				builder.RegisterType<ResourceCalculateDaysDeciderOld>().As<IResourceCalculateDaysDecider>().SingleInstance();
+				builder.RegisterType<ResourceCalculateDaysDeciderOld>().As<IScheduleChangesAffectedDates>().SingleInstance();
 			}
 			builder.RegisterType<IsNightShift>().SingleInstance();
 			builder.RegisterType<PeopleAndSkillLoaderDecider>().As<IPeopleAndSkillLoaderDecider>().SingleInstance();

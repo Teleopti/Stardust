@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ISchedulePartModifyAndRollbackService _rollbackService;
 	    private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly IResourceCalculateDaysDecider _decider;
+		private readonly IScheduleChangesAffectedDates _decider;
 		private readonly IScheduleMatrixOriginalStateContainer _originalStateContainerForTagChange;
 		private readonly IWorkShiftBackToLegalStateServicePro _workTimeBackToLegalStateService;
 		private readonly INightRestWhiteSpotSolverService _nightRestWhiteSpotSolverService;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			IResourceCalculateDaysDecider decider,
+			IScheduleChangesAffectedDates decider,
 			IScheduleMatrixOriginalStateContainer originalStateContainerForTagChange,
 			IWorkShiftBackToLegalStateServicePro workTimeBackToLegalStateService,
 			INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService,

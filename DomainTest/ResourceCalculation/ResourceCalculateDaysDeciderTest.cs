@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	[TestWithStaticDependenciesAvoidUse]
 	public class ResourceCalculateDaysDeciderTest
     {
-        private IResourceCalculateDaysDecider _target;
+        private IScheduleChangesAffectedDates _target;
         private MockRepository _mocks;
         private IScheduleDay _dayWithNotScheduled;
         private IScheduleDay _dayWithDayOff;

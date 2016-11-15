@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class ResourceCalculateDaysDecider : IResourceCalculateDaysDecider
+	public class ResourceCalculateDaysDecider : IScheduleChangesAffectedDates
 	{
 		private readonly ITimeZoneGuard _timeZoneGuard;
 
