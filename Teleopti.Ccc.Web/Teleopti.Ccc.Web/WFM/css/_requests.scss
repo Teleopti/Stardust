@@ -10,6 +10,11 @@
         position:relative;
     }
 
+    .wfm-date-range-picker-wrap .popup-control{
+        height:inherit;
+        width:inherit;
+    }
+
     md-tab-content.md-active{
         transform: inherit !important;//why transform nothing? what about all the position fixed element inside
     }
@@ -128,10 +133,11 @@
     [id="time-zone-switch"] {
         position: relative;
     }
-
-    .panel {
+    .h-78-vh{
         height: 78vh;
-        margin-top: 2rem;
+    }
+    .m-t-2r{
+         margin-top: 2rem;
     }
 
     .filter-switch {
@@ -495,21 +501,36 @@
             overflow: visible;
         }
     }
-
+    .wfm-switch {
+        vertical-align:top;
+        margin-top:15px;
+        margin-left:10px;
+        label{
+            position:relative;
+        }
+        .wfm-switch-toggle{
+            margin:0;
+            top:0;
+        }
+    }
     .request-date-range-picker {
-        .date-range-start-date,
+        margin-top:5px;
+        .date-range-start-date{
+            margin-right:0;
+            margin-top:0;
+        }
         .date-range-end-date {
-            margin-top: 10px;
+            margin-left:0;
+            margin-top:0;
+
+        }
+        .wfm-datepicker-popup-row .con-flex{
+            padding-top: 0;
         }
         /*TODO: Fix the problem that error message was hidden; should be removed when it's fixed in StyleGuide*/
         .error-msg-container {
             z-index: 999;
         }
-        @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none), (-ms-accelerator:true) {
-           height:20px;
-           margin-top:10px;
-        }
-       
     }
 
     .ng-cloak {
@@ -534,14 +555,15 @@
 	}
 
     wfm-multiple-search-input{
+        vertical-align:top;
+        margin-top:15px;
+        .full-padding{
+            width:50%;
+        }
         .advanced-input-dropdown{
-            top: -6px;
+            top: 28px;
             left: 17px;
             width: 321px;
-
-            .panel{
-                height:268px;
-            }
         }
 
         .advanced-input{
