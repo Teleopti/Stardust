@@ -140,7 +140,7 @@ Scheduler_IntradayOptimization_36617 = true
 WfmGlobalLayout_personalOptions_37114 = true
 
 ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = false # needs to be false until we get further....
-ResourcePlanner_CascadingSkillsGUI_40018 = RC #Hold release of Cascading UI until we have a proper UI
+ResourcePlanner_CascadingSkillsGUI_40018 = false #Hold release of Cascading UI until we have a proper UI
 ResourcePlanner_CalculateFarAwayTimeZones_40646 = true
 ResourcePlanner_FilterOvertimeAvail_37113 = true
 ResourcePlanner_NegativeOrderIndex_39062 = true
@@ -185,7 +185,7 @@ ETL_EventbasedDate_39562 = true
 ReadModel_ToHangfire_39147 = true
 NewPasswordHash_40460 = true
 Wfm_Intraday_OptimalStaffing_40921 = true
-Wfm_SkillPriorityRoutingGUI_39885 = DEV
+Wfm_SkillPriorityRoutingGUI_39885 = RC
 AbsenceRequest_WithOrWithoutShrinkage_41060 = true
 LastHandlers_ToHangfire_41203 = RC
 ETL_EventbasedTimeZone_40870 = RC
