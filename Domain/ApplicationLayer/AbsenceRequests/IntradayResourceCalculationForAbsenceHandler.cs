@@ -18,7 +18,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
-    [EnabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754, Toggles.AbsenceRequests_UseMultiRequestProcessing_39960)]
+    [EnabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
     public class IntradayResourceCalculationForAbsenceHandler : IHandleEvent<TenantMinuteTickEvent>, IRunOnHangfire
     {
         private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;

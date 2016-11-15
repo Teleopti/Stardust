@@ -164,8 +164,7 @@
 
 		ETL_SpeedUpIntradayBusinessUnit_38932,
 		ETL_SpeedUpNightlyBusinessUnit_38932,
-
-		AbsenceRequests_UseMultiRequestProcessing_39960,
+		
 		AbsenceRequests_SpeedupIntradayRequests_40754,
 		AbsenceRequests_SpeedupEndToEnd_41384,
 		ETL_EventbasedDate_39562,

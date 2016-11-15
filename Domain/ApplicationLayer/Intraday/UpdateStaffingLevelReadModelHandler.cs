@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 {
-	[EnabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754, Toggles.AbsenceRequests_UseMultiRequestProcessing_39960)]
+	[EnabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
 	public class UpdateStaffingLevelReadModelHandler : IHandleEvent<UpdateStaffingLevelReadModelEvent>, IRunOnStardust
 	{
 		private readonly UpdateStaffingLevelReadModel _updateStaffingLevelReadModel;

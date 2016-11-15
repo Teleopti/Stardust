@@ -110,7 +110,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
                 })
 				.Except<MultiAbsenceRequestsHandler>(ct =>
 				{
-					if (!_config.Toggle(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960)) return;
 					ct.As(
 							typeof(IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>))
 							.AsSelf()

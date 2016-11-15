@@ -374,7 +374,6 @@
     <Compile Include="ApplicationLayer\Forecast\OpenAndSplitTargetSkillMessage.cs" />
     <Compile Include="ApplicationLayer\MultiplicatorDefinitionSetHandlers\AnalyticsOvertimeUpdater.cs" />
     <Compile Include="ApplicationLayer\Payroll\RunPayrollExportEvent.cs" />
-    <Compile Include="ApplicationLayer\PersonAbsences\RequestPersonAbsenceRemovedHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceReportEventHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\ActionErrorMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestHandler.cs" />

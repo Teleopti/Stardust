@@ -3,8 +3,6 @@ using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
@@ -145,32 +143,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		}
 
 		private delegate bool LoadDataAction(NewAbsenceRequestCreatedEvent @event);
-	}
-
-	[EnabledBy(Toggles.Stardust_MoveAbsenceRequestTo_37941), DisabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960)]
-	public class NewAbsenceRequestHandlerStardust : NewAbsenceRequestHandler, IHandleEvent<NewAbsenceRequestCreatedEvent>, IRunOnStardust
-	{
-		public NewAbsenceRequestHandlerStardust(ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentScenario scenarioRepository,
-			IPersonRequestRepository personRequestRepository, IAbsenceRequestWaitlistProcessor waitlistProcessor,
-			IAbsenceRequestProcessor absenceRequestProcessor) : base(unitOfWorkFactory, scenarioRepository, personRequestRepository, waitlistProcessor, absenceRequestProcessor)
-		{}
-
-		[AsSystem]
-		public new virtual void Handle(NewAbsenceRequestCreatedEvent @event)
-		{
-			base.Handle(@event);
-		}
-	}
-
-	[DisabledBy(Toggles.Stardust_MoveAbsenceRequestTo_37941, Toggles.AbsenceRequests_UseMultiRequestProcessing_39960)]
-#pragma warning disable 618
-	public class NewAbsenceRequestHandlerBus : NewAbsenceRequestHandler, IHandleEvent<NewAbsenceRequestCreatedEvent>, IRunOnServiceBus
-#pragma warning restore 618
-	{
-		public NewAbsenceRequestHandlerBus(ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentScenario scenarioRepository,
-			IPersonRequestRepository personRequestRepository, IAbsenceRequestWaitlistProcessor waitlistProcessor,
-			IAbsenceRequestProcessor absenceRequestProcessor) : base(unitOfWorkFactory, scenarioRepository, personRequestRepository, waitlistProcessor, absenceRequestProcessor)
-		{ }
 	}
 
 }

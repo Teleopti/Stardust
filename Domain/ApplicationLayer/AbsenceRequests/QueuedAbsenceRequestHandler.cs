@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
-	[EnabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960, Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
+	[EnabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
 	public class QueuedAbsenceRequestFastIntradayHandler : QueuedAbsenceRequestHandlerBase, IHandleEvent<NewAbsenceRequestCreatedEvent>
 	{
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		}
 	}
 
-	[EnabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960), DisabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
+	[DisabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
 	public class QueuedAbsenceRequestHandler : QueuedAbsenceRequestHandlerBase, IHandleEvent<NewAbsenceRequestCreatedEvent>
 	{
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
@@ -76,7 +76,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	}
 
 
-	[EnabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960)]
 	public class QueuedAbsenceRequestHandlerBase : INewAbsenceRequestHandler, IRunOnHangfire
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(QueuedAbsenceRequestHandler));

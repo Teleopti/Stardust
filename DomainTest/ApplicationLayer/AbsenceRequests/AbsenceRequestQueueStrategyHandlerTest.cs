@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -19,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
 	[TestFixture]
-	[Toggle(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960)]
 	public class AbsenceRequestQueueStrategyHandlerTest : ISetup
 	{
 		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
