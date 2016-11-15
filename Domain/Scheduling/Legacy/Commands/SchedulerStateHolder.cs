@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	/// </summary>
 	public class SchedulerStateHolder : ISchedulerStateHolder, IClearReferredShiftTradeRequests
 	{
-		private ISchedulingResultStateHolder _schedulingResultState;
+		private readonly ISchedulingResultStateHolder _schedulingResultState;
 		private readonly IList<IPerson> _allPermittedPersons;
 		private readonly ICollection<DateOnly> _daysToResourceCalculate = new HashSet<DateOnly>();
 		private DateTimePeriod? _loadedPeriod;
@@ -115,15 +115,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return filter;
 		}
 
-		public IScheduleDictionary Schedules
-		{
-			get { return SchedulingResultState.Schedules; }
-		}
+		public IScheduleDictionary Schedules => SchedulingResultState.Schedules;
 
-		public ICommonStateHolder CommonStateHolder
-		{
-			get { return _commonStateHolder; }
-		}
+		public ICommonStateHolder CommonStateHolder => _commonStateHolder;
 
 		/// <summary>
 		/// Gets the days to recalculate.
@@ -137,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			get
 			{
-				return _daysToResourceCalculate.OrderBy(d => d.Date).ToList();
+				return _daysToResourceCalculate.OrderBy(d => d.Date).ToArray();
 			}
 		}
 
@@ -293,10 +287,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
         public void ResetFilteredPersons()
         {
-            _filteredAgents = (from p in SchedulingResultState.PersonsInOrganization
-                                where AllPermittedPersons.Select(x => x.Id.Value).Contains(p.Id.Value)
-                                orderby CommonAgentName(p)
-                                select p).ToDictionary(p => p.Id.Value);
+	        var allPermittedPersonIds = AllPermittedPersons.Select(x => x.Id.GetValueOrDefault()).ToArray();
+	        _filteredAgents =
+		        SchedulingResultState.PersonsInOrganization.Where(p => Array.IndexOf(allPermittedPersonIds, p.Id.Value) >= 0)
+			        .OrderBy(CommonAgentName)
+			        .ToDictionary(p => p.Id.Value);
         }
 
 		public void ResetFilteredPersonsOvertimeAvailability()
@@ -313,22 +308,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public void FilterPersons(IList<IPerson> selectedPersons)
 		{
-			_filteredAgents =
-				(from p in selectedPersons orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
+			_filteredAgents = selectedPersons.OrderBy(CommonAgentName).ToDictionary(p => p.Id.Value);
 
 		}
 
 		public void FilterPersonsOvertimeAvailability(IEnumerable<IPerson> selectedPersons)
 		{
-			_filteredPersonsOvertimeAvailability =
-				(from p in selectedPersons orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
+			_filteredPersonsOvertimeAvailability = selectedPersons.OrderBy(CommonAgentName).ToDictionary(p => p.Id.Value);
 			_filterOnOvertimeAvailability = true;
 		}
 
 		public void FilterPersonsHourlyAvailability(IList<IPerson> selectedPersons)
 		{
-			_filteredPersonsHourlyAvailability =
-				(from p in selectedPersons orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
+			_filteredPersonsHourlyAvailability = selectedPersons.OrderBy(CommonAgentName).ToDictionary(p => p.Id.Value);
 			_filterOnHourlyAvailability = true;
 		}
 
@@ -343,7 +335,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					selectedPersons.Add(person.Id.Value, person);
 				}
 			}
-			_filteredAgents = (from p in selectedPersons.Values orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
+			_filteredAgents = selectedPersons.Values.OrderBy(CommonAgentName).ToDictionary(p => p.Id.Value);
 		}
 
 		public IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId, IScheduleStorage scheduleStorage)
@@ -425,20 +417,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public IUndoRedoContainer UndoRedoContainer { get; set; }
 
-		public CommonNameDescriptionSetting CommonNameDescription
-		{
-			get { return _commonNameDescription; }
-		}
+		public CommonNameDescriptionSetting CommonNameDescription => _commonNameDescription;
 
-		public CommonNameDescriptionSettingScheduleExport CommonNameDescriptionScheduleExport
-		{
-			get { return _commonNameDescriptionScheduleExport; }
-		}
+		public CommonNameDescriptionSettingScheduleExport CommonNameDescriptionScheduleExport => _commonNameDescriptionScheduleExport;
 
-		public int DefaultSegmentLength
-		{
-			get { return _defaultSegment.SegmentLength; }
-		}
+		public int DefaultSegmentLength => _defaultSegment.SegmentLength;
 
 		public bool AgentFilter()
 		{

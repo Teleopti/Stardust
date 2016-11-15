@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
@@ -38,8 +39,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			_schedulingResultLoader = mocks.DynamicMock<ISchedulingResultLoader>();
 			_unitOfWorkFactory = mocks.StrictMock<IUnitOfWorkFactory>();
 
-			_scenario = mocks.StrictMock<IScenario>();
-			_persons = new List<IPerson> { mocks.StrictMock<IPerson>() };
+			_scenario = ScenarioFactory.CreateScenarioAggregate();
+			_persons = new List<IPerson> { PersonFactory.CreatePersonWithId() };
 			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), _persons, mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuard());
 
 			_scheduleDictionary = mocks.StrictMock<IScheduleDictionary>();
