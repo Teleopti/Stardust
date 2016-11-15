@@ -138,7 +138,6 @@
 		Wfm_QuickForecastOnHangfire_35845,
 		ETL_SpeedUpFactScheduleNightly_38019,
 		ETL_SpeedUpPersonPeriodNightly_38097,
-		Stardust_MoveAbsenceRequestTo_37941,
 		ETL_SpeedUpNightlyReloadDatamart_38131,
 		ETL_SpeedUpNightlySkill_37543,
 		Payroll_ToStardust_38204,
