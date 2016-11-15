@@ -1388,6 +1388,7 @@
     <Content Include="WFM\app\rta\historical\rta.historical.controller.js" />
     <Content Include="WFM\app\rta\skills\rta-selectSkill-SiteAndTeamOnSkillOverview.html" />
     <Content Include="WFM\app\rta\skills\rta-selectSkill.QuicklyChangeAgentsSelection.html" />
+    <Content Include="WFM\app\rta\skills\rta.selectSkill.controller.QuicklyChangeAgentsSelection.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.sites.spec.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.teams.spec.js" />
