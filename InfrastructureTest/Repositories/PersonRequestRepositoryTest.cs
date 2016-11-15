@@ -1209,7 +1209,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter, out count);
 			result.Single().Request.RequestType.Should().Be(RequestType.TextRequest);
 		}
-
+		
 		[Test]
 		public void ShouldFilterRequestByTextAndAbsenceType()
 		{
@@ -1229,7 +1229,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			int count;
 			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter, out count);
-			count.Should().Be(2);
+			result.Count().Should().Be(2);
 
 			result.Count(r=>r.Request.RequestType == RequestType.TextRequest).Should().Be(1);
 			result.Count(r => r.Request.RequestType == RequestType.AbsenceRequest).Should().Be(1);
