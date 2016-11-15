@@ -95,7 +95,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					}
 					else
 					{
-						mergedIntervalChanges.Add(unmergedIntervalChanges.FirstOrDefault(x => x.SkillId == interval.SkillId && x.StartDateTime == interval.StartDateTime));
+						var change = unmergedIntervalChanges.FirstOrDefault(x => x.SkillId == interval.SkillId && x.StartDateTime == interval.StartDateTime);
+						if (change != null)
+						{
+							mergedIntervalChanges.Add(change);
+						}
 					}
 				}
 			}
