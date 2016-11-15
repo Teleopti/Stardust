@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
@@ -11,43 +10,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid FromScenario { get; set; }
 		public Guid ToScenario { get; set; }
 		public Guid TrackingId { get; set; }
+		public ICollection<Guid> PersonIds { get; }
 
-		//public Guid PersonId { get; set; }
-		private string _serializedPeople;
-
-		[NonSerialized]
-		private ICollection<Guid> _personIdCollection;
-
-		public ICollection<Guid> PersonIdCollection
+		public ArchiveScheduleEvent()
 		{
-			get
-			{
-				if (_personIdCollection != null) return _personIdCollection;
-				_personIdCollection = string.IsNullOrEmpty(_serializedPeople)
-					? new HashSet<Guid>()
-					: new HashSet<Guid>(_serializedPeople.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse));
-				return _personIdCollection;
-			}
+			PersonIds = new HashSet<Guid>();
 		}
 
-		public void SetPersonIdCollection(ICollection<Guid> personIdCollection)
+		public ArchiveScheduleEvent(params Guid[] personIds) : this()
 		{
-			if (personIdCollection != null)
-			{
-				_serializedPeople = string.Join(",", new HashSet<Guid>(personIdCollection).Select(p => p.ToString()));
-			}
-		}
-
-		public string SerializedPeople
-		{
-			get
-			{
-				return _serializedPeople;
-			}
-			set
-			{
-				_serializedPeople = value;
-			}
+			foreach(var item in personIds)
+				PersonIds.Add(item);
 		}
 	}
 }

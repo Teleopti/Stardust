@@ -40,15 +40,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 		{
 			var period = new DateOnlyPeriod(new DateOnly(@event.StartDate), new DateOnly(@event.EndDate));
 
-			@event.PersonIdCollection.ForEach(p =>
+			var fromScenario = _scenarioRepository.Get(@event.FromScenario);
+			var toScenario = _scenarioRepository.Get(@event.ToScenario);
+			var people = _personRepository.FindPeople(@event.PersonIds);
+
+			var targetScheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people, _scheduleDictionaryLoadOptions,
+				period, toScenario);
+			var sourceScheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people, _scheduleDictionaryLoadOptions,
+				period, fromScenario);
+
+			people.ForEach(person =>
 			{
-				var person = _personRepository.Get(p);
-
-				var fromScenario = _scenarioRepository.Get(@event.FromScenario);
-				var toScenario = _scenarioRepository.Get(@event.ToScenario);
-
-				clearCurrentSchedules(toScenario, person, period);
-				archiveSchedules(fromScenario, toScenario, person, period);
+				clearCurrentSchedules(targetScheduleDictionary, person, period);
+				archiveSchedules(sourceScheduleDictionary, toScenario, person, period);
 			});
 			
 			_currentUnitOfWork.Current().AfterSuccessfulTx(() =>
@@ -61,10 +65,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 			});
 		}
 
-		private void clearCurrentSchedules(IScenario toScenario, IPerson person, DateOnlyPeriod period)
+		private void clearCurrentSchedules(IScheduleDictionary scheduleDictionary, IPerson person, DateOnlyPeriod period)
 		{
-			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, _scheduleDictionaryLoadOptions,
-				period, toScenario);
 			var scheduleDays = scheduleDictionary.SchedulesForPeriod(period, person);
 			var changes = false;
 			foreach (var scheduleDay in scheduleDays)
@@ -83,10 +85,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 				_currentUnitOfWork.Current().PersistAll();
 		}
 
-		private void archiveSchedules(IScenario fromScenario, IScenario toScenario, IPerson person, DateOnlyPeriod period)
+		private void archiveSchedules(IScheduleDictionary scheduleDictionary, IScenario toScenario, IPerson person, DateOnlyPeriod period)
 		{
-			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, _scheduleDictionaryLoadOptions,
-				period, fromScenario);
 			var scheduleDays = scheduleDictionary.SchedulesForPeriod(period, person);
 
 			foreach (var scheduleDay in scheduleDays)

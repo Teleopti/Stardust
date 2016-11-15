@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -6,6 +7,7 @@ using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
@@ -41,31 +43,16 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var totalPeople = 0;
 			if (_toggleManager.IsEnabled(Toggles.Wfm_ArchiveSchedule_41498))
 			{
-				var teams = _teamRepository.FindTeams(model.SelectedTeams);
-				var people = new HashSet<IPerson>();
-				foreach (var team in teams)
-				{
-					if (!_permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.ArchiveSchedule,
-						DateOnly.Today, team))
-					{
-						throw new PermissionException("You do not have permission for all of the selected teams.");
-					}
-					people.AddRange(_personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(new DateOnly(model.StartDate), new DateOnly(model.EndDate))));
-				}
+				var people = getPeople(model);
 				totalPeople = people.Count;
-				var archiveScheduleEvents = people.Select(person => new ArchiveScheduleEvent
+				var archiveScheduleEvents = createEvents(model, people, totalPeople);
+				if (archiveScheduleEvents.Any())
 				{
-					StartDate = model.StartDate,
-					EndDate = model.EndDate,
-					FromScenario = model.FromScenario,
-					ToScenario = model.ToScenario,
-					PersonIdCollection = { person.Id.GetValueOrDefault() },
-					TrackingId = model.TrackId
-				}).Cast<IEvent>().ToArray();
-				Task.Run(() =>
-				{
-					_eventPublisher.Publish(archiveScheduleEvents);
-				});
+					Task.Run(() =>
+					{
+						_eventPublisher.Publish(archiveScheduleEvents);
+					});
+				}
 				totalMessages = archiveScheduleEvents.Length;
 			}
 			return Ok(new ArchiveSchedulesResponse
@@ -73,6 +60,41 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				TotalMessages = totalMessages,
 				TotalSelectedPeople = totalPeople
 			});
+		}
+
+		private static IEvent[] createEvents(ArchiveSchedulesModel model, HashSet<IPerson> people, int totalPeople)
+		{
+			return people
+				.Batch(getBatchSize(totalPeople))
+				.Select(
+					batchedPeople => new ArchiveScheduleEvent(batchedPeople.Select(person => person.Id.GetValueOrDefault()).ToArray())
+					{
+						StartDate = model.StartDate,
+						EndDate = model.EndDate,
+						FromScenario = model.FromScenario,
+						ToScenario = model.ToScenario,
+						TrackingId = model.TrackId
+					})
+				.Where(x => x.PersonIds.Any())
+				.Cast<IEvent>().ToArray();
+		}
+
+		private HashSet<IPerson> getPeople(ArchiveSchedulesModel model)
+		{
+			var teams = _teamRepository.FindTeams(model.SelectedTeams);
+			var people = new HashSet<IPerson>();
+			foreach (var team in teams)
+			{
+				if (!_permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.ArchiveSchedule, DateOnly.Today, team))
+					throw new PermissionException("You do not have permission for all of the selected teams.");
+				people.AddRange(_personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(new DateOnly(model.StartDate), new DateOnly(model.EndDate))));
+			}
+			return people;
+		}
+
+		private static int getBatchSize(int totalPeople)
+		{
+			return Math.Max(totalPeople/150, 5);
 		}
 	}
 }
