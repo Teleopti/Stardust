@@ -165,7 +165,6 @@
 		ETL_SpeedUpNightlyBusinessUnit_38932,
 		
 		AbsenceRequests_SpeedupIntradayRequests_40754,
-		AbsenceRequests_SpeedupEndToEnd_41384,
 		ETL_EventbasedDate_39562,
 		ReadModel_ToHangfire_39147,
 		NewPasswordHash_40460,

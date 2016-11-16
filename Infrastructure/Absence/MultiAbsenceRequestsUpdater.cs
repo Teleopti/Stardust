@@ -151,20 +151,12 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				var seniority = _arrangeRequestsByProcessOrder.GetRequestsSortedBySeniority(personRequests);
 				var firstComeFirstServe = _arrangeRequestsByProcessOrder.GetRequestsSortedByDate(personRequests);
 
-				if (_toggleManager.IsEnabled(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754))
-				{
 					stopwatch.Start();
-					using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills))
-					{
-						stopwatch.Stop();
-						_feedback.SendProgress($"Done _resourceCalculationContextFactory.Create(..)! It took {stopwatch.Elapsed}");
-						ResourceCalculationContext.Fetch().PrimarySkillMode = true;
-						processOrderList(seniority);
-						processOrderList(firstComeFirstServe);
-					}
-				}
-				else
+				using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills))
 				{
+					stopwatch.Stop();
+					_feedback.SendProgress($"Done _resourceCalculationContextFactory.Create(..)! It took {stopwatch.Elapsed}");
+					ResourceCalculationContext.Fetch().PrimarySkillMode = true;
 					processOrderList(seniority);
 					processOrderList(firstComeFirstServe);
 				}

@@ -20,7 +20,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IConfigReader _configReader;
 		private readonly IIntradayRequestProcessor _intradayRequestProcessor;
 
-		public AbsenceRequestIntradayFilter(IConfigReader configReader, IIntradayRequestProcessor intradayRequestProcessor, 
+		public AbsenceRequestIntradayFilter(IConfigReader configReader, 
+			IIntradayRequestProcessor intradayRequestProcessor, 
 			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository)
 		{
 			_configReader = configReader;
@@ -70,18 +71,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 		}
 	}
-	
-	public class AbsenceRequestIntradayFilterEmpty : IAbsenceRequestIntradayFilter
-	{
-		public void Process(IPersonRequest personRequest)
-		{
-			
-		}
-	}
-
-	public interface IAbsenceRequestIntradayFilter
-	{
-		void Process(IPersonRequest personRequest);
-	}
-
 }

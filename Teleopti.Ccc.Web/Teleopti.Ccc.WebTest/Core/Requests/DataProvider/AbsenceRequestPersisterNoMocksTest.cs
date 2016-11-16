@@ -4,13 +4,11 @@ using AutoMapper;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Tracking;
-using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
@@ -325,9 +323,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var absenceRequestSynchronousValidator =
 				new AbsenceRequestSynchronousValidator(new ExpiredRequestValidator(new FakeGlobalSettingDataRepository(), _now),
 					new AlreadyAbsentValidator(), ScheduleStorage, CurrentScenario, new AbsenceRequestWorkflowControlSetValidator(), absenceRequestPersonAccountValidator);
-			var target = new AbsenceRequestPersister(PersonRequestRepository, Mapper.Engine, EventPublisher
-				, CurrentBusinessUnit, CurrentDataSource, _now, new ThisUnitOfWork(new FakeUnitOfWork())
-				, absenceRequestSynchronousValidator, new PersonRequestAuthorizationCheckerForTest(), new AbsenceRequestIntradayFilterEmpty(), ToggleManager);
+			var target = new AbsenceRequestPersister(PersonRequestRepository, Mapper.Engine, absenceRequestSynchronousValidator, new PersonRequestAuthorizationCheckerForTest(), new FakeAbsenceRequestIntradayFilter());
 			var requestViewModel = target.Persist(form);
 			return PersonRequestRepository.Get(new Guid(requestViewModel.Id));
 		}

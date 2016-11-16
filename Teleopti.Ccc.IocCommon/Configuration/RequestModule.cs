@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CheckingPersonalAccountDaysProvider>().As< ICheckingPersonalAccountDaysProvider>().SingleInstance();
 			builder.RegisterType<RequestApprovalServiceFactory>().As<IRequestApprovalServiceFactory>().InstancePerDependency();
 		    builder.RegisterType<AbsenceRequestValidatorProvider>().As<IAbsenceRequestValidatorProvider>().SingleInstance();
+			builder.RegisterType<AbsenceRequestIntradayFilter>().As<IAbsenceRequestIntradayFilter>().SingleInstance();
 
 			//ROBTODO: remove when Wfm_Requests_Cancel_37741 is always true
 			if (_configuration.Toggle (Toggles.Wfm_Requests_Cancel_37741))
@@ -50,15 +51,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		    else
 		    {
 				builder.RegisterType<AbsenceRequestCancelServiceWfmRequestsCancel37741ToggleOff>().As<IAbsenceRequestCancelService>().SingleInstance();
-			}
-
-			if (_configuration.Toggle(Toggles.AbsenceRequests_SpeedupEndToEnd_41384))
-			{
-				builder.RegisterType<AbsenceRequestIntradayFilter>().As<IAbsenceRequestIntradayFilter>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<AbsenceRequestIntradayFilterEmpty>().As<IAbsenceRequestIntradayFilter>().SingleInstance();
 			}
 
 			builder.RegisterType<AbsenceRequestStrategyProcessor>().As<IAbsenceRequestStrategyProcessor>().SingleInstance();
