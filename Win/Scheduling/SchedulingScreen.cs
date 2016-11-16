@@ -3572,6 +3572,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				var setDeciderResult = new Action<ILoaderDeciderResult>(r => deciderResult = r);
 				var getDeciderResult = new Func<ILoaderDeciderResult>(() => deciderResult);
 
+				uow.Reassociate(_scenario);
 				methods.Add(new LoaderMethod(loadCommonStateHolder, LanguageResourceHelper.Translate("XXLoadingDataTreeDots")));
 				methods.Add(new LoaderMethod(loadSkills, null));
 				methods.Add(new LoaderMethod(loadSettings, null));
@@ -3584,7 +3585,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				methods.Add(new LoaderMethod(loadSkillDays, LanguageResourceHelper.Translate("XXLoadingSkillDataTreeDots")));
 				methods.Add(new LoaderMethod(loadDefinitionSets, null));
-				methods.Add(new LoaderMethod(loadContractSchedule, null));
 				methods.Add(new LoaderMethod(loadAccounts, null));
 				methods.Add(new LoaderMethod(loadSeniorityWorkingDays, null));
 
@@ -3793,16 +3793,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				stateHolder.SchedulingResultState.AddSkills(skill);
 			}
 		}
-
-		private static void loadContractSchedule(IUnitOfWork uow, ISchedulerStateHolder stateHolder,
-			Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
-		{
-			using (PerformanceOutput.ForOperation("Loading contract schedule"))
-			{
-				new ContractScheduleRepository(uow).LoadAllAggregate();
-			}
-		}
-
+		
 		private void loadSettings(IUnitOfWork uow, ISchedulerStateHolder stateHolder,
 			Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
 		{
