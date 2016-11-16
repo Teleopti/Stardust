@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using log4net;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -10,6 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class ApproveRequestCommandHandler : IHandleCommand<ApproveRequestCommand>
 	{
+		private static readonly ILog logger = LogManager.GetLogger(typeof(ApproveRequestCommandHandler));
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IRequestApprovalServiceFactory _requestApprovalServiceFactory;
 		private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
@@ -21,7 +25,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private IRequestApprovalService _requestApprovalService;
 
-		public ApproveRequestCommandHandler(IScheduleStorage scheduleStorage, IScheduleDifferenceSaver scheduleDictionarySaver, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IDifferenceCollectionService<IPersistableScheduleData> differenceService, IPersonRequestRepository personRequestRepository, IRequestApprovalServiceFactory requestApprovalServiceFactory, ICurrentScenario currentScenario, IWriteProtectedScheduleCommandValidator writeProtectedScheduleCommandValidator)
+		public ApproveRequestCommandHandler(IScheduleStorage scheduleStorage, IScheduleDifferenceSaver scheduleDictionarySaver,
+			IPersonRequestCheckAuthorization personRequestCheckAuthorization,
+			IDifferenceCollectionService<IPersistableScheduleData> differenceService,
+			IPersonRequestRepository personRequestRepository, IRequestApprovalServiceFactory requestApprovalServiceFactory,
+			ICurrentScenario currentScenario, IWriteProtectedScheduleCommandValidator writeProtectedScheduleCommandValidator)
 		{
 			_scheduleStorage = scheduleStorage;
 			_scheduleDictionarySaver = scheduleDictionarySaver;
@@ -70,21 +78,49 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			var scheduleDictionary = getSchedules(personRequest);
-			 _requestApprovalService = _requestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary, _currentScenario.Current(), personRequest.Person);
+			_requestApprovalService = _requestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary,
+				_currentScenario.Current(), personRequest.Person);
 
+			IList<IBusinessRuleResponse> brokenRuleResponses;
 			try
 			{
-				personRequest.Approve(_requestApprovalService, _personRequestCheckAuthorization, command.IsAutoGrant);
+				brokenRuleResponses = personRequest.Approve(_requestApprovalService, _personRequestCheckAuthorization,
+					command.IsAutoGrant);
 			}
 			catch (InvalidRequestStateTransitionException)
 			{
 				return invalidRequestState(personRequest, command);
 			}
 
+			var anyRuleBroken = brokenRuleResponses != null && brokenRuleResponses.Any();
+			var scheduleChangedWithBrokenRules = false;
 			foreach (var range in scheduleDictionary.Values)
 			{
 				var diff = range.DifferenceSinceSnapshot(_differenceService);
+
+				if (anyRuleBroken && diff.Any())
+				{
+					scheduleChangedWithBrokenRules = true;
+					logger.Warn($"Total {brokenRuleResponses.Count} business rules broken on approving the request with Id=\"{personRequest.Id}\", "
+								+ $"but the schedule from {range.Period.StartDateTime:yyyy-mm-dd} "
+								+ $"to {range.Period.EndDateTime:yyyy-mm-dd} was changed.");
+				}
+
 				_scheduleDictionarySaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate)range);
+			}
+
+			if (scheduleChangedWithBrokenRules)
+			{
+				var messageBuilder = new StringBuilder();
+				messageBuilder.AppendLine($"Total {brokenRuleResponses.Count} business rules broken:");
+
+				var index = 1;
+				foreach (var ruleResponse in brokenRuleResponses)
+				{
+					messageBuilder.AppendLine($"  {index}. [{ruleResponse.FriendlyName}] {ruleResponse.Message}");
+					index++;
+				}
+				logger.Warn(messageBuilder.ToString());
 			}
 
 			return true;
@@ -119,7 +155,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		{
 			var timePeriod = personRequest.Request.Period;
 			var dateonlyPeriod = new DateOnlyPeriod(new DateOnly(timePeriod.StartDateTime.AddDays(-1)),
-													new DateOnly(timePeriod.EndDateTime.AddDays(1)));
+				new DateOnly(timePeriod.EndDateTime.AddDays(1)));
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 				personList,
 				new ScheduleDictionaryLoadOptions(true, false),
