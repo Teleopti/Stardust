@@ -9,9 +9,9 @@
 		controller: MoveShiftCtrl
 	});
 
-	MoveShiftCtrl.$inject = ['$scope', '$locale', 'MoveActivityValidator', 'PersonSelection', 'ActivityService', 'teamScheduleNotificationService'];
+	MoveShiftCtrl.$inject = ['$scope', '$locale', '$element', 'MoveActivityValidator', 'PersonSelection', 'ActivityService', 'teamScheduleNotificationService'];
 
-	function MoveShiftCtrl($scope, $locale, validator, personSelectionSvc, activitySvc, teamScheduleNotificationService) {
+	function MoveShiftCtrl($scope, $locale, $element, validator, personSelectionSvc, activitySvc, teamScheduleNotificationService) {
 		var ctrl = this;
 		ctrl.label = 'MoveShift';
 		ctrl.processingCommand = false;
@@ -23,12 +23,43 @@
 			ctrl.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 			ctrl.moveToTime = getDefaultMoveToTime();
 			ctrl.trackId = ctrl.containerCtrl.getTrackId();
+
 			$scope.$watch(function () {
 				return getMoveToStartTimeStr();
 			}, function(n, o) {
 				updateInvalidAgents();
 			});
+
+			addTabindexAndFocus();
 		};
+
+		function addTabindexAndFocus() {
+			var tabindex = angular.isDefined($element.attr.tabindex) ? $element.attr.tabindex : '0';
+			var addTabIndexTo = function() {
+				angular.forEach(arguments, function (arg) {
+					angular.forEach(arg, function (elem) {
+						elem.setAttribute('tabIndex', tabindex);
+					});
+				});
+			};
+
+			addTabIndexTo(
+				$element[0].querySelectorAll('div[uib-timepicker]'),
+				$element[0].querySelectorAll('button#applyMoveShift')
+			);
+
+			$scope.$on('teamSchedule.command.focus.default', function () {
+				var focusTarget = $element[0].querySelector('.focus-default input');
+				if (focusTarget) angular.element(focusTarget).focus();
+			});
+
+			var inputs = $element[0].querySelectorAll('input[type=text]');
+			angular.forEach(inputs, function (input) {
+				angular.element(input).on('focus', function (event) {
+					event.target.select();
+				});
+			});
+		}
 
 		ctrl.anyInvalidAgent = function () {
 			return ctrl.invalidAgents.length > 0;
