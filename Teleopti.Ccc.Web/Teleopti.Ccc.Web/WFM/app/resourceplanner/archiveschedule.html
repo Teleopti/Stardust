@@ -23,19 +23,16 @@
 		<div class="con-flex">
 			<div class="panel material-depth-1">
 				<div class="con-row">
-					<div class="archive-schedule-period-picker">
-						<date-range-picker ng-model="vm.selection.period" template-type="vm.dateRangeTemplateType">
-						</date-range-picker>
+					<div class="con-flex inline-flex archive-schedule-period-picker">
+						<date-range-picker ng-model="vm.selection.period" template-type="vm.dateRangeTemplateType"></date-range-picker>
 					</div>
-					<div class="archive-schedule-scenario-picker">
-						<span>
-							{{'FromScenarioColon' | translate}}
-							<span class="unselectable-scenario">{{vm.selection.fromScenario.Name}}</span>
-							{{'ToScenarioColon' | translate}}
-							<md-select class="inline-select to-scenario-selector" ng-model="vm.selection.toScenario" placeholder="{{'Scenario' | translate}}">
+					<div class="con-flex inline-flex archive-schedule-scenario-picker">
+						<div layout="row" layout-align="space-between center" class="pull-right full-padding">
+							<span>{{'FromScenarioColon' | translate}} <b>{{vm.selection.fromScenario.Name}}</b> {{'ToScenarioColon' | translate}} &nbsp;</span>
+							<md-select class="inline-select to-scenario-selector pull-right" ng-model="vm.selection.toScenario" placeholder="{{'Scenario' | translate}}">
 								<md-option ng-repeat="scenario in vm.scenarios | defaultScenario:false" ng-value="scenario">{{scenario.Name}}</md-option>
 							</md-select>
-						</span>
+						</div>
 					</div>
 				</div>
 				<div class="con-row" ng-controller="HierarchyController">
