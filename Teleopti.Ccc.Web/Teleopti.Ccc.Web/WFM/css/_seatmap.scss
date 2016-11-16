@@ -392,8 +392,24 @@ people-selection-list {
 	left: 0;
 	overflow: hidden;
 
-    advance-search{
-        width: 300px;
+    wfm-multiple-search-input{
+		.advanced-input-dropdown{
+			top: 14px;
+			left: 17px;
+			width: 321px;
+		}
+
+		.advanced-input{
+			width: 316px;
+		}
+
+		.expand-advanced-input{
+			max-width:100%;
+		}
+
+		.panel{
+			position:relative;
+		}
     }
 
 
@@ -412,18 +428,8 @@ people-selection-list .panel {
     padding-left: 10px;
     box-shadow: none;
 
-
-	.people-search {
-		padding-top: 5px;
-		padding-bottom: 3px;
-	}
-
 	.col-md-4 {
 		width: 100%;
-	}
-
-	.advaned-container {
-		margin-left: 5px;
 	}
 
 	.split-3-1 {
