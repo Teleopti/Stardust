@@ -20469,6 +20469,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Moving shifts for {0} agent(s), {1} succeeded and {2} failed..
+        /// </summary>
+        public static string PartialSuccessMessageForMovingShift {
+            get {
+                return ResourceManager.GetString("PartialSuccessMessageForMovingShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Removing absences for {0} agent(s): {1} succeeded, {2} failed..
         /// </summary>
         public static string PartialSuccessMessageForRemovingAbsence {
@@ -29704,6 +29713,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SuccessfulMessageForMovingActivity {
             get {
                 return ResourceManager.GetString("SuccessfulMessageForMovingActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully moved shifts for the selected agents.
+        /// </summary>
+        public static string SuccessfulMessageForMovingShift {
+            get {
+                return ResourceManager.GetString("SuccessfulMessageForMovingShift", resourceCulture);
             }
         }
         
