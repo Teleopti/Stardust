@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private AdherenceReportSetting _adherenceReportSetting;
 		private StringSetting _supportEmailSetting;
 		private AsmAlertTime _asmAlertTime;
+		private NotificationDurationTime _notificationDuration;
 		private TimeSpanSetting _fullDayAbsenceRequestStartTimeSetting;
 		private TimeSpanSetting _fullDayAbsenceRequestEndTimeSetting;
 
@@ -64,6 +65,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				_adherenceReportSetting = new GlobalSettingDataRepository(uow).FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
 				_supportEmailSetting = new GlobalSettingDataRepository(uow).FindValueByKey("SupportEmailSetting", new StringSetting());
 				_asmAlertTime = new GlobalSettingDataRepository(uow).FindValueByKey("AsmAlertTime", new AsmAlertTime());
+				_notificationDuration = new GlobalSettingDataRepository(uow).FindValueByKey("NotificationDurationTime", new NotificationDurationTime());
 				_fullDayAbsenceRequestStartTimeSetting = new GlobalSettingDataRepository(uow).FindValueByKey("FullDayAbsenceRequestStartTime", new TimeSpanSetting(new TimeSpan(0, 0, 0)));
 				_fullDayAbsenceRequestEndTimeSetting = new GlobalSettingDataRepository(uow).FindValueByKey("FullDayAbsenceRequestEndTime", new TimeSpanSetting(new TimeSpan(23, 59, 0)));
 			}
@@ -81,6 +83,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			textBoxSuportEmail.Text = _supportEmailSetting.StringValue;
 			initIntervalLengthComboBox(_defaultSegmentSetting.SegmentLength);
 			numericUpDownAsmSetting.Value = _asmAlertTime.SecondsBeforeChange;
+			numericUpDownNotificationDurationTime.Value = _notificationDuration.DurationInSecond;
+
 
 			tsTextBoxFullDayAbsenceRequestStart.SetInitialResolution(_fullDayAbsenceRequestStartTimeSetting.TimeSpanValue);
 			tsTextBoxFullDayAbsenceRequestEnd.SetInitialResolution(_fullDayAbsenceRequestEndTimeSetting.TimeSpanValue);
@@ -140,6 +144,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				_supportEmailSetting = new GlobalSettingDataRepository(uow).PersistSettingValue(_supportEmailSetting).GetValue(new StringSetting());
 				_asmAlertTime.SecondsBeforeChange = (int)numericUpDownAsmSetting.Value;
 				_asmAlertTime = new GlobalSettingDataRepository(uow).PersistSettingValue(_asmAlertTime).GetValue(new AsmAlertTime());
+				_notificationDuration.DurationInSecond = (int)numericUpDownNotificationDurationTime.Value;
+				_notificationDuration = new GlobalSettingDataRepository(uow).PersistSettingValue(_notificationDuration).GetValue(new NotificationDurationTime());
 
 				_fullDayAbsenceRequestStartTimeSetting.TimeSpanValue = tsTextBoxFullDayAbsenceRequestStart.Value;
 				_fullDayAbsenceRequestEndTimeSetting.TimeSpanValue = tsTextBoxFullDayAbsenceRequestEnd.Value;

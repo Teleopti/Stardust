@@ -15179,4 +15179,8 @@ These options are activated:
     <value>Loading Requests...</value>
     <comment>Loading Requests... when loading Scheduler</comment>
   </data>
+  <data name="NotificationTimeToStay" xml:space="preserve">
+    <value>Notification duration (seconds)</value>
+    <comment>notification duration in system setting</comment>
+  </data>
 </root>

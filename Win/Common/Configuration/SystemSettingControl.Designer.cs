@@ -45,6 +45,8 @@
             this.numericUpDownAsmSetting = new Syncfusion.Windows.Forms.Tools.NumericUpDownExt();
             this.tsTextBoxFullDayAbsenceRequestStart = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
             this.tsTextBoxFullDayAbsenceRequestEnd = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.numericUpDownNotificationDurationTime = new Syncfusion.Windows.Forms.Tools.NumericUpDownExt();
             this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
             this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
             this.labelHeader = new System.Windows.Forms.Label();
@@ -54,6 +56,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvAdherencReportCalculation)).BeginInit();
             this.tableLayoutPanelSubHeader1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAsmSetting)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNotificationDurationTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
             this.gradientPanelHeader.SuspendLayout();
             this.tableLayoutPanelHeader.SuspendLayout();
@@ -65,9 +68,9 @@
             this.tableLayoutPanelBody.ColumnCount = 2;
             this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 46.06742F));
             this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 53.93258F));
-            this.tableLayoutPanelBody.Controls.Add(this.lblFullDayAbsenceReqEndTime, 0, 7);
-            this.tableLayoutPanelBody.Controls.Add(this.lblFullDayAbsenceReqStartTime, 0, 6);
-            this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelFullDayAbsenceSettings, 0, 5);
+            this.tableLayoutPanelBody.Controls.Add(this.lblFullDayAbsenceReqEndTime, 0, 8);
+            this.tableLayoutPanelBody.Controls.Add(this.lblFullDayAbsenceReqStartTime, 0, 7);
+            this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelFullDayAbsenceSettings, 0, 6);
             this.tableLayoutPanelBody.Controls.Add(this.textBoxSuportEmail, 1, 3);
             this.tableLayoutPanelBody.Controls.Add(this.comboBoxAdvIntervalLength, 1, 1);
             this.tableLayoutPanelBody.Controls.Add(this.comboBoxAdvAdherencReportCalculation, 1, 2);
@@ -77,13 +80,16 @@
             this.tableLayoutPanelBody.Controls.Add(this.label2, 0, 2);
             this.tableLayoutPanelBody.Controls.Add(this.labelActivityAlertSeconds, 0, 4);
             this.tableLayoutPanelBody.Controls.Add(this.numericUpDownAsmSetting, 1, 4);
-            this.tableLayoutPanelBody.Controls.Add(this.tsTextBoxFullDayAbsenceRequestStart, 1, 6);
-            this.tableLayoutPanelBody.Controls.Add(this.tsTextBoxFullDayAbsenceRequestEnd, 1, 7);
+            this.tableLayoutPanelBody.Controls.Add(this.tsTextBoxFullDayAbsenceRequestStart, 1, 7);
+            this.tableLayoutPanelBody.Controls.Add(this.tsTextBoxFullDayAbsenceRequestEnd, 1, 8);
+            this.tableLayoutPanelBody.Controls.Add(this.label3, 0, 5);
+            this.tableLayoutPanelBody.Controls.Add(this.numericUpDownNotificationDurationTime, 1, 5);
             this.tableLayoutPanelBody.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelBody.Location = new System.Drawing.Point(0, 62);
             this.tableLayoutPanelBody.Name = "tableLayoutPanelBody";
-            this.tableLayoutPanelBody.RowCount = 10;
+            this.tableLayoutPanelBody.RowCount = 11;
             this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
@@ -100,7 +106,7 @@
             // 
             this.lblFullDayAbsenceReqEndTime.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblFullDayAbsenceReqEndTime.AutoSize = true;
-            this.lblFullDayAbsenceReqEndTime.Location = new System.Drawing.Point(3, 265);
+            this.lblFullDayAbsenceReqEndTime.Location = new System.Drawing.Point(3, 300);
             this.lblFullDayAbsenceReqEndTime.Name = "lblFullDayAbsenceReqEndTime";
             this.lblFullDayAbsenceReqEndTime.Size = new System.Drawing.Size(168, 15);
             this.lblFullDayAbsenceReqEndTime.TabIndex = 69;
@@ -110,7 +116,7 @@
             // 
             this.lblFullDayAbsenceReqStartTime.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblFullDayAbsenceReqStartTime.AutoSize = true;
-            this.lblFullDayAbsenceReqStartTime.Location = new System.Drawing.Point(3, 227);
+            this.lblFullDayAbsenceReqStartTime.Location = new System.Drawing.Point(3, 262);
             this.lblFullDayAbsenceReqStartTime.Name = "lblFullDayAbsenceReqStartTime";
             this.lblFullDayAbsenceReqStartTime.Size = new System.Drawing.Size(172, 15);
             this.lblFullDayAbsenceReqStartTime.TabIndex = 68;
@@ -126,7 +132,7 @@
             this.tableLayoutPanelFullDayAbsenceSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 23F));
             this.tableLayoutPanelFullDayAbsenceSettings.Controls.Add(this.lblFullDayAbsenceSettings, 0, 0);
             this.tableLayoutPanelFullDayAbsenceSettings.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanelFullDayAbsenceSettings.Location = new System.Drawing.Point(3, 183);
+            this.tableLayoutPanelFullDayAbsenceSettings.Location = new System.Drawing.Point(3, 218);
             this.tableLayoutPanelFullDayAbsenceSettings.Name = "tableLayoutPanelFullDayAbsenceSettings";
             this.tableLayoutPanelFullDayAbsenceSettings.RowCount = 1;
             this.tableLayoutPanelFullDayAbsenceSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -283,7 +289,7 @@
             this.tsTextBoxFullDayAbsenceRequestStart.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
             this.tsTextBoxFullDayAbsenceRequestStart.AllowNegativeValues = true;
             this.tsTextBoxFullDayAbsenceRequestStart.DefaultInterpretAsMinutes = false;
-            this.tsTextBoxFullDayAbsenceRequestStart.Location = new System.Drawing.Point(249, 221);
+            this.tsTextBoxFullDayAbsenceRequestStart.Location = new System.Drawing.Point(249, 256);
             this.tsTextBoxFullDayAbsenceRequestStart.Margin = new System.Windows.Forms.Padding(3, 6, 0, 0);
             this.tsTextBoxFullDayAbsenceRequestStart.MaximumValue = System.TimeSpan.Parse("1.00:00:00");
             this.tsTextBoxFullDayAbsenceRequestStart.Name = "tsTextBoxFullDayAbsenceRequestStart";
@@ -291,14 +297,14 @@
             this.tsTextBoxFullDayAbsenceRequestStart.TabIndex = 66;
             this.tsTextBoxFullDayAbsenceRequestStart.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
             this.tsTextBoxFullDayAbsenceRequestStart.TimeSpanBoxHeight = 23;
-            this.tsTextBoxFullDayAbsenceRequestStart.TimeSpanBoxWidth = 423;
+            this.tsTextBoxFullDayAbsenceRequestStart.TimeSpanBoxWidth = 669;
             // 
             // tsTextBoxFullDayAbsenceRequestEnd
             // 
             this.tsTextBoxFullDayAbsenceRequestEnd.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
             this.tsTextBoxFullDayAbsenceRequestEnd.AllowNegativeValues = true;
             this.tsTextBoxFullDayAbsenceRequestEnd.DefaultInterpretAsMinutes = false;
-            this.tsTextBoxFullDayAbsenceRequestEnd.Location = new System.Drawing.Point(249, 261);
+            this.tsTextBoxFullDayAbsenceRequestEnd.Location = new System.Drawing.Point(249, 296);
             this.tsTextBoxFullDayAbsenceRequestEnd.Margin = new System.Windows.Forms.Padding(3, 6, 0, 0);
             this.tsTextBoxFullDayAbsenceRequestEnd.MaximumValue = System.TimeSpan.Parse("1.00:00:00");
             this.tsTextBoxFullDayAbsenceRequestEnd.Name = "tsTextBoxFullDayAbsenceRequestEnd";
@@ -306,7 +312,41 @@
             this.tsTextBoxFullDayAbsenceRequestEnd.TabIndex = 67;
             this.tsTextBoxFullDayAbsenceRequestEnd.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
             this.tsTextBoxFullDayAbsenceRequestEnd.TimeSpanBoxHeight = 23;
-            this.tsTextBoxFullDayAbsenceRequestEnd.TimeSpanBoxWidth = 423;
+            this.tsTextBoxFullDayAbsenceRequestEnd.TimeSpanBoxWidth = 669;
+            // 
+            // label3
+            // 
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(3, 190);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(143, 15);
+            this.label3.TabIndex = 70;
+            this.label3.Text = "xxNotificationTimeToStay";
+            // 
+            // numericUpDownNotificationDurationTime
+            // 
+            this.numericUpDownNotificationDurationTime.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.numericUpDownNotificationDurationTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+            this.numericUpDownNotificationDurationTime.BeforeTouchSize = new System.Drawing.Size(81, 23);
+            this.numericUpDownNotificationDurationTime.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
+            this.numericUpDownNotificationDurationTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.numericUpDownNotificationDurationTime.Location = new System.Drawing.Point(249, 186);
+            this.numericUpDownNotificationDurationTime.Maximum = new decimal(new int[] {
+            1800,
+            0,
+            0,
+            0});
+            this.numericUpDownNotificationDurationTime.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
+            this.numericUpDownNotificationDurationTime.Name = "numericUpDownNotificationDurationTime";
+            this.numericUpDownNotificationDurationTime.Size = new System.Drawing.Size(81, 23);
+            this.numericUpDownNotificationDurationTime.TabIndex = 65;
+            this.numericUpDownNotificationDurationTime.Value = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
+            this.numericUpDownNotificationDurationTime.VisualStyle = Syncfusion.Windows.Forms.VisualStyle.Metro;
             // 
             // gradientPanelHeader
             // 
@@ -371,6 +411,7 @@
             this.tableLayoutPanelSubHeader1.ResumeLayout(false);
             this.tableLayoutPanelSubHeader1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAsmSetting)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNotificationDurationTime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).EndInit();
             this.gradientPanelHeader.ResumeLayout(false);
             this.tableLayoutPanelHeader.ResumeLayout(false);
@@ -401,6 +442,7 @@
         private System.Windows.Forms.Label lblFullDayAbsenceReqStartTime;
         private Controls.TimeSpanTextBox tsTextBoxFullDayAbsenceRequestStart;
         private Controls.TimeSpanTextBox tsTextBoxFullDayAbsenceRequestEnd;
-
+        private System.Windows.Forms.Label label3;
+        private Syncfusion.Windows.Forms.Tools.NumericUpDownExt numericUpDownNotificationDurationTime;
     }
 }

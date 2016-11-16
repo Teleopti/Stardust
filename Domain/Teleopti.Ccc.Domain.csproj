@@ -609,6 +609,7 @@
     <Compile Include="Repositories\IAnalyticsBridgeGroupPagePersonRepository.cs" />
     <Compile Include="Repositories\IAnalyticsGroupPageRepository.cs" />
     <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolder.cs" />
+    <Compile Include="SystemSetting\GlobalSetting\NotificationDurationTime.cs" />
     <Compile Include="UndoRedo\UndoRedoState.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSystemSettings.cs" />
     <Compile Include="UnitOfWork\ThisAnalyticsUnitOfWork.cs" />

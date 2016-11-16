@@ -18983,6 +18983,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Notification duration (seconds).
+        /// </summary>
+        public static string NotificationTimeToStay {
+            get {
+                return ResourceManager.GetString("NotificationTimeToStay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Notification Type.
         /// </summary>
         public static string NotificationType {

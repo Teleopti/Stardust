@@ -37,7 +37,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 				dataType: 'json',
 				type: 'GET',
 				success: function(displayTime) {
-					notificationDisplayTime = displayTime;
+					notificationDisplayTime = displayTime.DurationInSecond;
 					Teleopti.MyTimeWeb.Asm.UpdateNotificationDisplayTimeSetting(displayTime);
 					notifyOptions.timeout = displayTime * 1000;
 				}
