@@ -211,6 +211,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 			if (entity.PartTimePercentage != null)
 				personContractDto.PartTimePercentageId = entity.PartTimePercentage.Id.GetValueOrDefault(Guid.Empty);
 
+			personContractDto.ContractScheduleId = entity.ContractSchedule.Id.GetValueOrDefault();
 			return personContractDto;
 		}
 	}

@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
 			var period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1));
 			period.SetParent(person);
+			period.PersonContract.ContractSchedule.SetId(Guid.NewGuid());
 			person.AddPersonPeriod(period);
 			person.ChangeTeam(TeamFactory.CreateTeamWithId("team1"), period);
 
@@ -86,6 +87,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 #pragma warning restore 618
 			Assert.AreEqual(((IDeleteTag)person).IsDeleted, personDto.IsDeleted);
 			Assert.AreEqual(person.PersonPeriodCollection.FirstOrDefault().Team.Id.Value, personDto.PersonPeriodCollection.FirstOrDefault().Team.Id.Value);
+			Assert.AreEqual(person.PersonPeriodCollection.FirstOrDefault().PersonContract.ContractSchedule.Id.Value, personDto.PersonPeriodCollection.FirstOrDefault().PersonContract.ContractScheduleId);
 		}
 
 		[Test]
