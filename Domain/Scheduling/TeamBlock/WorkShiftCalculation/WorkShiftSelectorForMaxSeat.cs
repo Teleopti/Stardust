@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			var bestShiftValue = double.MaxValue;
 			IShiftProjectionCache ret = null;
 
-			var skillDays = allSkillDays.Where(x => x.CurrentDate == datePointer || x.CurrentDate == datePointer.AddDays(1));
+			var skillDays = allSkillDays.Where(x => x.CurrentDate == datePointer || x.CurrentDate == datePointer.AddDays(-1) || x.CurrentDate == datePointer.AddDays(1));
 			var hasNonMaxSeatSkills = skillDays.Any(x => !(x.Skill is MaxSeatSkill));
 			var maxSeatSkillDays = skillDays.Where(x => x.Skill is MaxSeatSkill).ToArray();
 

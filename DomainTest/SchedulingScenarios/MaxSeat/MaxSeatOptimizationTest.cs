@@ -1089,6 +1089,43 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.EqualTo(TimeSpan.FromHours(8));
 		}
 
+		[TestCase(1)]
+		[TestCase(2)]
+		public void ShouldCalculateMaxPeakOnDayBefore(int ruleSetOrder)
+		{
+			var agentTimeZone = TimeZoneInfoFactory.SingaporeTimeZoneInfo();
+			var site = new Site("_") { MaxSeats = 1 }.WithId();
+			var team = new Team { Description = new Description("_"), Site = site };
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var dateOnly = new DateOnly(2016, 10, 25);
+			var scenario = new Scenario("_");
+			var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(1, 0, 1, 0, 60), new TimePeriodWithSegment(9, 0, 9, 0, 60), new ShiftCategory("_").WithId()));
+			var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(09, 0, 09, 0, 60), new TimePeriodWithSegment(17, 0, 17, 0, 60), new ShiftCategory("_").WithId()));
+			var ruleSetBag = new RuleSetBag();
+
+			if (ruleSetOrder.Equals(1))
+			{
+				ruleSetBag.AddRuleSet(ruleSet1);
+				ruleSetBag.AddRuleSet(ruleSet2);
+			}
+
+			if (ruleSetOrder.Equals(2))
+			{
+				ruleSetBag.AddRuleSet(ruleSet2);
+				ruleSetBag.AddRuleSet(ruleSet1);
+			}
+
+			var agentDataOneHour = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, ruleSetBag, scenario, activity, new TimePeriod(1, 0, 2, 0), agentTimeZone);
+			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, ruleSetBag, scenario, activity, new TimePeriod(0, 0, 8, 0), agentTimeZone);
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1)), new[] { agentData.Assignment, agentDataOneHour.Assignment});
+
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent }, schedules, Enumerable.Empty<ISkillDay>(), CreateOptimizationPreferences());
+
+			var agentStartTimeLocal = TimeZoneHelper.ConvertFromUtc(schedules[agentData.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime, agentTimeZone);
+			agentStartTimeLocal.TimeOfDay.Should().Be.EqualTo(TimeSpan.FromHours(9));
+		}
+
 		protected abstract OptimizationPreferences CreateOptimizationPreferences();
 	}
 }
