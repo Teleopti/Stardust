@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var rollBackService = new SchedulePartModifyAndRollbackService(
 				SchedulerStateHolder.SchedulingResultState,
 				new SchedulerStateScheduleDayChangedCallback(
-					new ResourceCalculateDaysDeciderOld(UserTimeZone.Make()),
+						new ScheduleChangesAffectedDates(new TimeZoneGuard()),
 					() => SchedulerStateHolder),
 				new ScheduleTagSetter(new NullScheduleTag()));
 
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var rollBackService = new SchedulePartModifyAndRollbackService(
 				SchedulerStateHolder.SchedulingResultState,
 				new SchedulerStateScheduleDayChangedCallback(
-					new ResourceCalculateDaysDeciderOld(UserTimeZone.Make()),
+						new ScheduleChangesAffectedDates(new TimeZoneGuard()),
 					() => SchedulerStateHolder),
 				new ScheduleTagSetter(new NullScheduleTag()));
 
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var rollBackService = new SchedulePartModifyAndRollbackService(
 				SchedulerStateHolder.SchedulingResultState,
 				new SchedulerStateScheduleDayChangedCallback(
-					new ResourceCalculateDaysDeciderOld(UserTimeZone.Make()),
+						new ScheduleChangesAffectedDates(new TimeZoneGuard()),
 					() => SchedulerStateHolder),
 				new ScheduleTagSetter(new NullScheduleTag()));
 
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var rollBackService = new SchedulePartModifyAndRollbackService(
 				SchedulerStateHolder.SchedulingResultState,
 				new SchedulerStateScheduleDayChangedCallback(
-					new ResourceCalculateDaysDeciderOld(UserTimeZone.Make()),
+						new ScheduleChangesAffectedDates(new TimeZoneGuard()),
 					() => SchedulerStateHolder),
 				new ScheduleTagSetter(new NullScheduleTag()));
 

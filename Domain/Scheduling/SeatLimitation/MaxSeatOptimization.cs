@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 		private readonly IsOverMaxSeat _isOverMaxSeat;
 		private readonly LockDaysOnTeamBlockInfos _lockDaysOnTeamBlockInfos;
-		private readonly IScheduleChangesAffectedDates _scheduleChangesAffectedDates;
+		private readonly ScheduleChangesAffectedDates _scheduleChangesAffectedDates;
 
 		public MaxSeatOptimization(MaxSeatSkillDataFactory maxSeatSkillDataFactory,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			IDeleteSchedulePartService deleteSchedulePartService,
 			IsOverMaxSeat isOverMaxSeat,
 			LockDaysOnTeamBlockInfos lockDaysOnTeamBlockInfos,
-			IScheduleChangesAffectedDates scheduleChangesAffectedDates)
+			ScheduleChangesAffectedDates scheduleChangesAffectedDates)
 		{
 			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;

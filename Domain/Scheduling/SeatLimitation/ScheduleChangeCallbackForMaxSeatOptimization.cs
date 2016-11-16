@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 {
 	public class ScheduleChangeCallbackForMaxSeatOptimization : IScheduleDayChangeCallback
 	{
-		private readonly IScheduleChangesAffectedDates _resourceCalculateDaysDecider;
+		private readonly ScheduleChangesAffectedDates _resourceCalculateDaysDecider;
 
-		public ScheduleChangeCallbackForMaxSeatOptimization(IScheduleChangesAffectedDates resourceCalculateDaysDecider)
+		public ScheduleChangeCallbackForMaxSeatOptimization(ScheduleChangesAffectedDates resourceCalculateDaysDecider)
 		{
 			_resourceCalculateDaysDecider = resourceCalculateDaysDecider;
 			ModifiedDates = new HashSet<DateOnly>();

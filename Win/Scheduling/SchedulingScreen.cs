@@ -3875,18 +3875,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (_selectedPeriod.Contains(e.ModifiedPeriod))
 					_totalScheduled++;
 
-				if (!_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CalculateFarAwayTimeZones_40646))
-				{
-					var localDate = new DateOnly(e.ModifiedPeriod.StartDateTimeLocal(_schedulerState.TimeZoneInfo));
-
-					if (e.Modifier != ScheduleModifier.Scheduler)
-					{
-						_schedulerState.MarkDateToBeRecalculated(localDate);
-						//add date after for night shifts
-						_schedulerState.MarkDateToBeRecalculated(localDate.AddDays(1));
-					}
-				}
-
 				_restrictionPersonsToReload.Add(e.ModifiedPerson);
 
 				if (e.Modifier == ScheduleModifier.UndoRedo || e.Modifier == ScheduleModifier.Request)

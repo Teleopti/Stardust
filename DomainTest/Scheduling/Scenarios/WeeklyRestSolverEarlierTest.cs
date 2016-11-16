@@ -376,7 +376,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				new SchedulePartModifyAndRollbackService(
 					SchedulerStateHolder.SchedulingResultState,
 					new SchedulerStateScheduleDayChangedCallback(
-						new ResourceCalculateDaysDeciderOld(new UtcTimeZone()),
+						new ScheduleChangesAffectedDates(new TimeZoneGuard()), 
 						() => SchedulerStateHolder
 						),
 					new ScheduleTagSetter(
@@ -534,7 +534,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				new SchedulePartModifyAndRollbackService(
 					SchedulerStateHolder.SchedulingResultState,
 					new SchedulerStateScheduleDayChangedCallback(
-						new ResourceCalculateDaysDeciderOld(new UtcTimeZone()),
+						new ScheduleChangesAffectedDates(new TimeZoneGuard()),
 						() => SchedulerStateHolder
 						),
 					new ScheduleTagSetter(

@@ -672,9 +672,7 @@
     <Compile Include="Optimization\DayOffRulesValidatorTest.cs" />
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\ExtendReduceDaysOffOptimizerServiceTest.cs" />
-    <Compile Include="Optimization\ExtendReduceDaysOffOptimizerTest.cs" />
     <Compile Include="Optimization\ExtendReduceTimeOptimizerServiceTest.cs" />
-    <Compile Include="Optimization\ExtendReduceTimeOptimizerTest.cs" />
     <Compile Include="Optimization\ExtraPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\FetchDayOffRulesModelTest.cs" />
     <Compile Include="Optimization\GeneralPreferencesPersonalSettingsTest.cs" />
@@ -938,7 +936,6 @@
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDateTest.cs" />
     <Compile Include="ResourceCalculation\OptimizerActivitiesPreferencesTest.cs" />
     <Compile Include="ResourceCalculation\PersonalShiftMeetingTimeCheckerTest.cs" />
-    <Compile Include="ResourceCalculation\ResourceCalculateDaysDeciderTest.cs" />
     <Compile Include="ResourceCalculation\RuleSetDeletedActivityCheckerTest.cs" />
     <Compile Include="ResourceCalculation\RuleSetDeletedShiftCategoryCheckerTest.cs" />
     <Compile Include="ResourceCalculation\ScheduleDayAvailableForDayOffSpecificationTest.cs" />

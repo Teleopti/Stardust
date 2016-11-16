@@ -87,7 +87,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		}
 
 		[Test]
-		[Toggle(Toggles.ResourcePlanner_CalculateFarAwayTimeZones_40646)]
 		public void ShouldMarkDayToBeRecalculated()
 		{
 			if(!_resourcePlannerMaxSeatsNew40939)
@@ -130,7 +129,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		}
 
 		[Test]
-		[Toggle(Toggles.ResourcePlanner_CalculateFarAwayTimeZones_40646)]
 		public void ShouldNotMarkDayThatIsNotChangedToBeRecalculated()
 		{
 			if (!_resourcePlannerMaxSeatsNew40939)

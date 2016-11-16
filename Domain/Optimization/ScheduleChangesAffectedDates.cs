@@ -4,11 +4,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class ResourceCalculateDaysDecider : IScheduleChangesAffectedDates
+	public class ScheduleChangesAffectedDates
 	{
 		private readonly ITimeZoneGuard _timeZoneGuard;
 
-		public ResourceCalculateDaysDecider(ITimeZoneGuard timeZoneGuard)
+		public ScheduleChangesAffectedDates(ITimeZoneGuard timeZoneGuard)
 		{
 			_timeZoneGuard = timeZoneGuard;
 		}
