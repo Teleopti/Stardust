@@ -325,13 +325,13 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldHandleSkill30MinutesIntervalLengthAndTarget15()
 		{
-			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
-			var latestStatsTime = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+			var userNow = new DateTime(2016, 8, 26, 8, 30, 0, DateTimeKind.Utc);
+			var latestStatsTime = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 
 			var scenario = fakeScenarioAndIntervalLength();
-			var skill = createSkill(30, "skill", new TimePeriod(8, 0, 8, 30));			
-			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
+			var skill = createSkill(30, "skill", new TimePeriod(8, 0, 9, 0));			
+			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 9, 0));
 			
 			var actualCalls = createStatistics(skillDay, latestStatsTime);
 
@@ -339,15 +339,18 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			IntradayQueueStatisticsLoader.Has(actualCalls);
 			SkillDayRepository.Add(skillDay);
 
+			var actualStaffing = getActualStaffing(skillDay, actualCalls);
 			var averageDeviation = calculateAverageDeviation(actualCalls, skillDay);
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
-			vm.DataSeries.Time.Length.Should().Be.EqualTo(2);
-			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(2);
-			vm.DataSeries.UpdatedForecastedStaffing.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.Time.Length.Should().Be.EqualTo(4);
+			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(4);
+			vm.DataSeries.UpdatedForecastedStaffing.Length.Should().Be.EqualTo(4);
 			vm.DataSeries.UpdatedForecastedStaffing.First().Should().Be.EqualTo(null);
 			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(vm.DataSeries.ForecastedStaffing.Last() * averageDeviation);
+			vm.DataSeries.ActualStaffing.Length.Should().Be.EqualTo(4);
+			vm.DataSeries.ActualStaffing.First().Should().Be.EqualTo(actualStaffing);
 		}
 
 		[Test]
@@ -426,8 +429,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
         {
             var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
             var latestStatsTime = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
+			fakeScenarioAndIntervalLength();
 
-            Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 
             var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30));
 
@@ -742,8 +746,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			{
 				var actualCalls = actualCallsPerInterval.Calls;
 				var forecastedCalls = skillDay.CompleteSkillStaffPeriodCollection
-					.Where(x => x.Period.StartDateTime == actualCallsPerInterval.StartTime)
-					.Select(t => t.Payload.TaskData.Tasks).First();
+					.Where(x => x.Period.StartDateTime <= actualCallsPerInterval.StartTime)
+					.Select(t => t.Payload.TaskData.Tasks)
+					.Last();
 				forecastedCalls = forecastedCalls/divisionFactor;
 				var deviationPerInterval = actualCalls / forecastedCalls;
 				listdeviationPerInterval.Add(deviationPerInterval);
