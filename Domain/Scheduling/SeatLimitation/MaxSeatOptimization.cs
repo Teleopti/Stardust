@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						}
 						else
 						{
-							maxSeatCallback?.OptimizedDates(scheduleCallback.ModifiedDates);
+							maxSeatCallback?.DatesOptimized(scheduleCallback.ModifiedDates);
 						}
 					}
 				}

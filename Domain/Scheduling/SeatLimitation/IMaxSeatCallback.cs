@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 {
 	public interface IMaxSeatCallback
 	{
-		void OptimizedDates(IEnumerable<DateOnly> dates);
+		void DatesOptimized(IEnumerable<DateOnly> dates);
 	}
 }

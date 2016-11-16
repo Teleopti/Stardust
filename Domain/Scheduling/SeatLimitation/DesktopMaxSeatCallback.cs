@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_stateHolder = stateHolder;
 		}
 
-		public void OptimizedDates(IEnumerable<DateOnly> dates)
+		public void DatesOptimized(IEnumerable<DateOnly> dates)
 		{
 			dates.ForEach(x => _stateHolder.MarkDateToBeRecalculated(x));
 		}
