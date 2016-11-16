@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
@@ -16,7 +15,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
 	public class MultiAbsenceRequestsHandler : IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>, IRunOnStardust
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(MultiAbsenceRequestsHandler));
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private static readonly isNullOrNotNewSpecification personRequestSpecification = new isNullOrNotNewSpecification();
 		private static readonly isNullSpecification absenceRequestSpecification = new isNullSpecification();
@@ -24,39 +22,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IStardustJobFeedback _feedback;
 		private readonly IWorkflowControlSetRepository _workflowControlSetRepository;
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
-		private readonly IPersonRepository _personRepository;
-		private readonly ISkillRepository _skillRepository;
 		private readonly IMultiAbsenceRequestsUpdater _multiAbsenceRequestsUpdater;
-		private readonly IContractRepository _contractRepository;
-		private readonly IPartTimePercentageRepository _partTimePercentageRepository;
-		private readonly IContractScheduleRepository _contractScheduleRepository;
-		private readonly ISkillTypeRepository _skillTypeRepository;
-		private readonly IActivityRepository _activityRepository;
-		private readonly IAbsenceRepository _absenceRepository;
 
 		public MultiAbsenceRequestsHandler(IPersonRequestRepository personRequestRepository,
 			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 			IStardustJobFeedback stardustJobFeedback, IWorkflowControlSetRepository workflowControlSetRepository,
-			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IPersonRepository personRepository,
-			ISkillRepository skillRepository, IMultiAbsenceRequestsUpdater multiAbsenceRequestsUpdater,
-			IContractRepository contractRepository, IPartTimePercentageRepository partTimePercentageRepository,
-			IContractScheduleRepository contractScheduleRepository, ISkillTypeRepository skillTypeRepository,
-			IActivityRepository activityRepository, IAbsenceRepository absenceRepository)
+			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IMultiAbsenceRequestsUpdater multiAbsenceRequestsUpdater)
 		{
 			_personRequestRepository = personRequestRepository;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_feedback = stardustJobFeedback;
 			_workflowControlSetRepository = workflowControlSetRepository;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
-			_personRepository = personRepository;
-			_skillRepository = skillRepository;
 			_multiAbsenceRequestsUpdater = multiAbsenceRequestsUpdater;
-			_contractRepository = contractRepository;
-			_partTimePercentageRepository = partTimePercentageRepository;
-			_contractScheduleRepository = contractScheduleRepository;
-			_skillTypeRepository = skillTypeRepository;
-			_activityRepository = activityRepository;
-			_absenceRepository = absenceRepository;
 		}
 
 		[AsSystem]
@@ -101,17 +79,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					}
 				}
 
-				//_skillRepository.LoadAllSkills();
-				//_contractRepository.LoadAll();
-				//_skillTypeRepository.LoadAll();
-				//_partTimePercentageRepository.LoadAll();
-
-				////formally part of prereq loader
-				//_contractScheduleRepository.LoadAllAggregate();
-				//_activityRepository.LoadAll();
-				////got no lazy load problem if we dnt have this. but as it was part of the prereq so adding it back again
-				//_absenceRepository.LoadAll();
-
 				var personRequests = _personRequestRepository.Find(@event.PersonRequestIds);
 
 				foreach (var personRequest in personRequests)
@@ -147,9 +114,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					requests.AddRange(_personRequestRepository.Find(waitListIds));
 					_feedback.SendProgress($"Picked up {waitListIds.Count} waitlisted requests in period {period}.");
 				}
-
-				////preload some data
-				//_personRepository.FindPeople(requests.Select(x => x.Person.Id.GetValueOrDefault()));
+				
 			}
 			return requests.Select(x => x.Id.GetValueOrDefault()).ToList();
 		}
