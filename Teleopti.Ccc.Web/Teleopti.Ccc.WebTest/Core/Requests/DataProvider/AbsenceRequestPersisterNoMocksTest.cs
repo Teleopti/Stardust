@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 		public IToggleManager ToggleManager;
 
-		private static readonly DateTime _nowTime = new DateTime(2016, 10, 18, 8, 0, 0, DateTimeKind.Utc);
-		private INow _now = new ThisIsNow(_nowTime);
-		private DateOnly _today = new DateOnly(_nowTime);
+		private static readonly DateTime nowTime = new DateTime(2016, 10, 18, 8, 0, 0, DateTimeKind.Utc);
+		private readonly INow _now = new ThisIsNow(nowTime);
+		private DateOnly _today = new DateOnly(nowTime);
 		private AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest _absenceRequestFormToPersonRequest;
 		private RequestsViewModelMappingProfile _requestsViewModelMappingProfile;
 		private IWorkflowControlSet _workflowControlSet;
@@ -352,12 +352,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			personRequest.IsDenied.Should().Be(isDenied);
 			personRequest.IsWaitlisted.Should().Be(isWaitlisted);
 			personRequest.DenyReason.Should().Be(denyReason);
-			publishedEventsCountShouldBe(isDenied ? 0 : 1);
 		}
 
-		private void publishedEventsCountShouldBe(int count)
-		{
-			((FakeEventPublisher)EventPublisher).PublishedEvents.Count().Should().Be(count);
-		}
+		
 	}
 }
