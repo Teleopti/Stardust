@@ -164,7 +164,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.EqualTo(TimeSpan.FromHours(7));
 		}
 
-
 		private OptimizationPreferences createOptimizationPreferences()
 		{
 			return DefaultMaxSeatOptimizationPreferences.Create(_teamBlockType);

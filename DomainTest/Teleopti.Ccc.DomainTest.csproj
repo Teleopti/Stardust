@@ -303,6 +303,7 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTeamBlockDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOpenHoursTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatRestrictionsTest.cs" />
+    <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatSurroundingDaysTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\TestData\DefaultMaxSeatOptimizationPreferences.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\TestData\MaxSeatData.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\TestData\MaxSeatDataFactory.cs" />
