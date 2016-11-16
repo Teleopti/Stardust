@@ -109,6 +109,7 @@ Scenario: be able to assign agent to selected seat
 	When I view Seat plan on "2015-01-01"
 	And I press seat map booking view button
 	And I click add agents to seat button
+	And I search people with keyword 'I'
 	And I select agent 'I' from search list
 	And I click assign button
 	Then I should see 'I' in the result of seat plan
