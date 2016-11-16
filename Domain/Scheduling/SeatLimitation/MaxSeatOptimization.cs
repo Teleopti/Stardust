@@ -127,16 +127,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 							new ShiftNudgeDirective(), businessRules);
 						var maxPeaksAfter = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);
 
-						if (!scheduleWasSuccess||
-							!_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences) ||
-							!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) ||
-							maxPeaksAfter.IsNotBetterThan(scheduleCallback.ModifiedDates, maxPeaksBefore))
+						if (scheduleWasSuccess &&
+								_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences) &&
+								_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) &&
+								!maxPeaksAfter.IsBetterThan(scheduleCallback.ModifiedDates, maxPeaksBefore))
 						{
-							rollbackService.RollbackMinimumChecks();
+							maxSeatCallback?.DatesOptimized(scheduleCallback.ModifiedDates);
 						}
 						else
 						{
-							maxSeatCallback?.DatesOptimized(scheduleCallback.ModifiedDates);
+							rollbackService.RollbackMinimumChecks();
 						}
 					}
 				}
