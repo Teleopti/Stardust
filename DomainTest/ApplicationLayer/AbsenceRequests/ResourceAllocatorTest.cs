@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		private const double totaloverstaffed1 = overstaffedPrimary + overstaffedUnsorted15 + overstaffedUnsorted30;
 		private const double totaloverstaffed2 = overstaffedPrimary + overstaffedUnsorted15 + overstaffedUnsorted30;
+		private const double totaloverstaffed3 = overstaffedUnsorted15;
 
 
 		private DateTime _now;
@@ -61,61 +62,61 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 
-        [Test]
-        public void ShouldMergeChangesWithReadModelValuesWhenAllocating()
-        {
-            var requestLength = new TimeSpan(0, 15, 0);
-            var request = createNewRequest(requestLength);
-            populateReadModel();
+		[Test]
+		public void ShouldMergeChangesWithReadModelValuesWhenAllocating()
+		{
+			var requestLength = new TimeSpan(0, 15, 0);
+			var request = createNewRequest(requestLength);
+			populateReadModel();
 
-            var startDateTime1 = request.Request.Period.StartDateTime;
-            var endDateTime1 = startDateTime1.AddMinutes(15);
+			var startDateTime1 = request.Request.Period.StartDateTime;
+			var endDateTime1 = startDateTime1.AddMinutes(15);
 
-            var startDateTime2 = endDateTime1;
-            var endDateTime2 = startDateTime2.AddMinutes(15);
+			var startDateTime2 = endDateTime1;
+			var endDateTime2 = startDateTime2.AddMinutes(15);
 
-            ScheduleForecastSkillReadModelRepository.PersistChange(
-                new StaffingIntervalChange()
-                {
-                    SkillId = _unsortedSkill15.Id.GetValueOrDefault(),
-                    StartDateTime = startDateTime1,
-                    EndDateTime = endDateTime1,
-                    StaffingLevel = -1
-                });
+			ScheduleForecastSkillReadModelRepository.PersistChange(
+				new StaffingIntervalChange()
+				{
+					SkillId = _unsortedSkill15.Id.GetValueOrDefault(),
+					StartDateTime = startDateTime1,
+					EndDateTime = endDateTime1,
+					StaffingLevel = -1
+				});
 
-            var changes = Target.AllocateResource(request, _now);
+			var changes = Target.AllocateResource(request, _now);
 
-            var expectedChanges = new List<StaffingIntervalChange>()
-            {
-               new StaffingIntervalChange()
-                {
-                    StartDateTime = startDateTime1,
-                    EndDateTime = endDateTime1,
-                    SkillId = _primarySkill.Id.GetValueOrDefault(),
-                    StaffingLevel = -overstaffedPrimary/(totaloverstaffed1-1)
-                },
-                new StaffingIntervalChange()
-                {
-                    StartDateTime = startDateTime1,
-                    EndDateTime = endDateTime1,
-                    SkillId = _unsortedSkill15.Id.GetValueOrDefault(),
-                    StaffingLevel = -(overstaffedUnsorted15 - 1)/(totaloverstaffed1-1)
-                },
-                new StaffingIntervalChange()
-                {
-                    StartDateTime = startDateTime1,
-                    EndDateTime = endDateTime2,
-                    SkillId = _unsortedSkill30.Id.GetValueOrDefault(),
-                    StaffingLevel = -overstaffedUnsorted30/((totaloverstaffed1-1)*2) 
+			var expectedChanges = new List<StaffingIntervalChange>()
+			{
+			   new StaffingIntervalChange()
+				{
+					StartDateTime = startDateTime1,
+					EndDateTime = endDateTime1,
+					SkillId = _primarySkill.Id.GetValueOrDefault(),
+					StaffingLevel = -overstaffedPrimary/(totaloverstaffed1-1)
+				},
+				new StaffingIntervalChange()
+				{
+					StartDateTime = startDateTime1,
+					EndDateTime = endDateTime1,
+					SkillId = _unsortedSkill15.Id.GetValueOrDefault(),
+					StaffingLevel = -(overstaffedUnsorted15 - 1)/(totaloverstaffed1-1)
+				},
+				new StaffingIntervalChange()
+				{
+					StartDateTime = startDateTime1,
+					EndDateTime = endDateTime2,
+					SkillId = _unsortedSkill30.Id.GetValueOrDefault(),
+					StaffingLevel = -overstaffedUnsorted30/((totaloverstaffed1-1)*2) 
 				}
-            };
+			};
 
-          //  var sum = expectedChanges.Sum(x => x.StaffingLevel) + expectedChanges.Last().StaffingLevel; //Should be -1..
-            CollectionAssert.AreEquivalent(expectedChanges, changes);
-        }
+		  //  var sum = expectedChanges.Sum(x => x.StaffingLevel) + expectedChanges.Last().StaffingLevel; //Should be -1..
+			CollectionAssert.AreEquivalent(expectedChanges, changes);
+		}
 
 
-        [Test]
+		[Test]
 		public void ShouldSplitResourceOverWholeSkillIntervalIfRequestIsNotCoveringWholeIntervalAndRequestIsLargerThanShortestInterval()
 		{
 			var requestLength = new TimeSpan(0, 20, 0);
@@ -168,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					StaffingLevel = -(overstaffedUnsorted30/(totaloverstaffed1*2) + overstaffedUnsorted30/(totaloverstaffed2*6))
 				},
 			};
-			var sum = expectedChanges.Sum(x => x.StaffingLevel) + expectedChanges.Last().StaffingLevel; //Should be -1.333..
+			//var sum = expectedChanges.Sum(x => x.StaffingLevel) + expectedChanges.Last().StaffingLevel; //Should be -1.333..
 			CollectionAssert.AreEquivalent(expectedChanges, changes);
 		}
 
@@ -262,6 +263,65 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
+		public void ShouldResourceAllocateOnIntervalsIncludingRequestStart()
+		{
+			var requestLength = new TimeSpan(0, 15, 0);
+			var offset = new TimeSpan(0, 5, 0);
+			var request = createNewRequest(requestLength, offset);
+			populateReadModel();
+
+			var startDateTime1 = request.Request.Period.StartDateTime.Add(-offset);
+			var endDateTime1 = startDateTime1.AddMinutes(15);
+
+			var startDateTime2 = endDateTime1;
+			var endDateTime2 = startDateTime2.AddMinutes(15);
+
+			var changes = Target.AllocateResource(request, _now);
+
+			var expectedChanges = new List<StaffingIntervalChange>()
+			{
+				new StaffingIntervalChange()
+				{
+					StartDateTime = startDateTime1,
+					EndDateTime = endDateTime1,
+					SkillId = _primarySkill.Id.GetValueOrDefault(),
+					StaffingLevel = -(overstaffedPrimary*2)/(totaloverstaffed1*3)
+				},
+				new StaffingIntervalChange()
+				{
+					StartDateTime = startDateTime2,
+					EndDateTime = endDateTime2,
+					SkillId = _primarySkill.Id.GetValueOrDefault(),
+					StaffingLevel = -(overstaffedPrimary)/(totaloverstaffed1*3)
+				},
+				new StaffingIntervalChange()
+				{
+					StartDateTime = startDateTime1,
+					EndDateTime = endDateTime1,
+					SkillId = _unsortedSkill15.Id.GetValueOrDefault(),
+					StaffingLevel = -(overstaffedUnsorted15*2)/(totaloverstaffed1*3)
+				},
+				new StaffingIntervalChange()
+				{
+					StartDateTime = startDateTime2,
+					EndDateTime = endDateTime2,
+					SkillId = _unsortedSkill15.Id.GetValueOrDefault(),
+					StaffingLevel = -(overstaffedUnsorted15)/(totaloverstaffed1*3)
+				},
+				new StaffingIntervalChange()
+				{
+					StartDateTime = startDateTime1,
+					EndDateTime = endDateTime2,
+					SkillId = _unsortedSkill30.Id.GetValueOrDefault(),
+					StaffingLevel = -overstaffedUnsorted30/(totaloverstaffed1*2) 
+				},
+			};
+
+			//var sum = expectedChanges.Sum(x => x.StaffingLevel) + expectedChanges.Last().StaffingLevel; //Should be -1
+			CollectionAssert.AreEquivalent(expectedChanges, changes);
+		}
+
+		[Test]
 		public void ShouldUpdateResourcesWhenApproveBySplitResourceDependentOnStaffing()
 		{
 			var requestLength = new TimeSpan(0, 30, 0);
@@ -317,6 +377,73 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		//	var sum = expectedChanges.Sum(x => x.StaffingLevel) + expectedChanges.Last().StaffingLevel; //Should be -2
 			CollectionAssert.AreEquivalent(expectedChanges, changes);
 		}
+		[Test]
+		public void ShouldOnlyUpdateResorucesOnOpenSkills()
+		{
+			var requestLength = new TimeSpan(0, 45, 0);
+			var request = createNewRequest(requestLength);
+			populateReadModel();
+
+			var startDateTime1 = request.Request.Period.StartDateTime;
+			var endDateTime1 = startDateTime1.AddMinutes(15);
+
+			var startDateTime2 = endDateTime1;
+			var endDateTime2 = startDateTime2.AddMinutes(15);
+
+			var startDateTime3 = endDateTime2;
+			var endDateTime3 = startDateTime3.AddMinutes(15);
+
+			var changes = Target.AllocateResource(request, _now);
+
+			var expectedChanges = new List<StaffingIntervalChange>()
+			{
+				new StaffingIntervalChange()
+				{
+					StartDateTime = startDateTime1,
+					EndDateTime = endDateTime1,
+					SkillId = _primarySkill.Id.GetValueOrDefault(),
+					StaffingLevel = -overstaffedPrimary/totaloverstaffed1
+				},
+				new StaffingIntervalChange()
+				{
+					StartDateTime = startDateTime2,
+					EndDateTime = endDateTime2,
+					SkillId = _primarySkill.Id.GetValueOrDefault(),
+					StaffingLevel = -overstaffedPrimary/totaloverstaffed2
+				},
+				new StaffingIntervalChange()
+				{
+					StartDateTime = startDateTime1,
+					EndDateTime = endDateTime1,
+					SkillId = _unsortedSkill15.Id.GetValueOrDefault(),
+					StaffingLevel = -overstaffedUnsorted15/totaloverstaffed1
+				},
+				new StaffingIntervalChange()
+				{
+					StartDateTime = startDateTime2,
+					EndDateTime = endDateTime2,
+					SkillId = _unsortedSkill15.Id.GetValueOrDefault(),
+					StaffingLevel = -overstaffedUnsorted15/totaloverstaffed2
+				},
+					new StaffingIntervalChange()
+				{
+					StartDateTime = startDateTime3,
+					EndDateTime = endDateTime3,
+					SkillId = _unsortedSkill15.Id.GetValueOrDefault(),
+					StaffingLevel = -overstaffedUnsorted15/totaloverstaffed3
+				},
+				new StaffingIntervalChange()
+				{
+					StartDateTime = startDateTime1,
+					EndDateTime = endDateTime2,
+					SkillId = _unsortedSkill30.Id.GetValueOrDefault(),
+					StaffingLevel = -(overstaffedUnsorted30/totaloverstaffed1 + overstaffedUnsorted30/totaloverstaffed2)/2
+				},
+			};
+			//var sum = expectedChanges.Sum(x => x.StaffingLevel) + expectedChanges.Last().StaffingLevel; //Should be -2
+			CollectionAssert.AreEquivalent(expectedChanges, changes);
+		}
+
 
 		private void populateReadModel()
 		{
@@ -325,7 +452,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var startDateTime2 = endDateTime1;
 			var endDateTime2 = startDateTime2.AddMinutes(15);
-			
+
+			var startDateTime3 = endDateTime2;
+			var endDateTime3 = startDateTime3.AddMinutes(15);
+
 
 			var resourceList = new List<SkillStaffingInterval>
 			{
@@ -367,6 +497,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				},
 				new SkillStaffingInterval()
 				{
+					SkillId = _unsortedSkill15.Id.GetValueOrDefault(),
+					StartDateTime = startDateTime3,
+					EndDateTime = endDateTime3,
+					Forecast = forecastedUnsorted15,
+					ForecastWithShrinkage = forecastedUnsorted15,
+					StaffingLevel = staffingUnsorted15
+				},
+				new SkillStaffingInterval()
+				{
 					SkillId = _unsortedSkill30.Id.GetValueOrDefault(),
 					StartDateTime = startDateTime1,
 					EndDateTime = endDateTime2,
@@ -395,6 +534,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			};
 
 			ScheduleForecastSkillReadModelRepository.Persist(resourceList, _now);
+		}
+
+		private IPersonRequest createNewRequest(TimeSpan requestLength, TimeSpan offset)
+		{
+			var period = new DateTimePeriod(_requestStart.Add(offset), _requestStart.Add(requestLength).Add(offset));
+
+			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 12:00");
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var workflowControlSet = createWorkFlowControlSet(absence);
+			var person = createAndSetupPerson(workflowControlSet);
+
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
+
+			var request = createAbsenceRequest(person, absence, period);
+
+			return request;
 		}
 
 

@@ -113,10 +113,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			if (!skillStaffingIntervals.Any())
 				return new List<DateTimePeriod>();
 
+			var start = skillStaffingIntervals.Min(x => x.StartDateTime);
+
 			var intervalWithShortestSkillInterval = skillStaffingIntervals.Aggregate((interval, nextInterval) => interval.GetTimeSpan() < nextInterval.GetTimeSpan() ? interval : nextInterval);
 			var shortestTimeSpan = intervalWithShortestSkillInterval.GetTimeSpan();
 
-			var ret = new List<DateTimePeriod>(){new DateTimePeriod(period.StartDateTime.Utc(), period.StartDateTime.Add(shortestTimeSpan).Utc())};
+			var ret = new List<DateTimePeriod>(){new DateTimePeriod(start.Utc(), start.Add(shortestTimeSpan).Utc())};
 			
 			while (ret.Last().EndDateTime < period.EndDateTime)
 			{
