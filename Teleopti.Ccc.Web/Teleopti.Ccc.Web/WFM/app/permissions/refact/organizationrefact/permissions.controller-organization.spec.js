@@ -5,6 +5,7 @@ xdescribe('component: permissionsList', function () {
   fakeBackend,
   $controller,
   $componentController,
+  permissionsDataService,
   ctrl,
   vm;
 
@@ -12,14 +13,19 @@ xdescribe('component: permissionsList', function () {
     module('wfm.permissions');
   });
 
-  beforeEach(inject(function (_$httpBackend_, _fakePermissionsBackend_, _$componentController_, _$controller_) {
+  beforeEach(inject(function (_$httpBackend_, _fakePermissionsBackend_, _$componentController_, _$controller_, _permissionsDataService_) {
     $httpBackend = _$httpBackend_;
     fakeBackend = _fakePermissionsBackend_;
     $componentController = _$componentController_;
     $controller = _$controller_;
+    permissionsDataService = _permissionsDataService_;
 
     fakeBackend.clear();
     vm = $controller('PermissionsCtrlRefact');
+
+    $httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/AvailableData').respond(function (method, url, data, headers) {
+      return 200;
+    });
   }));
 
   afterEach(function () {
@@ -35,11 +41,24 @@ xdescribe('component: permissionsList', function () {
       Type: "BusinessUnit"
     };
     var DynamicOptions = [];
-    fakeBackend.withOrganizationSelection(BusinessUnit, DynamicOptions);
+    fakeBackend.withRole({
+      BuiltIn: false,
+      DescriptionText: 'Agent',
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      IsAnyBuiltIn: true,
+      IsMyRole: false,
+      Name: 'Agent'
+    })
+    .withRoleInfo({
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      AvailableFunctions: []
+    }).withOrganizationSelection(BusinessUnit, DynamicOptions);
     $httpBackend.flush();
     ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection});
+    permissionsDataService.setSelectedRole(vm.roles[0]);
 
     ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
+    $httpBackend.flush();
 
     expect(vm.organizationSelection.BusinessUnit.IsSelected).toEqual(true);
   });
@@ -53,14 +72,119 @@ xdescribe('component: permissionsList', function () {
       IsSelected: true
     };
     var DynamicOptions = [];
-    fakeBackend.withOrganizationSelection(BusinessUnit, DynamicOptions);
+    fakeBackend.withRole({
+      BuiltIn: false,
+      DescriptionText: 'Agent',
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      IsAnyBuiltIn: true,
+      IsMyRole: false,
+      Name: 'Agent'
+    })
+    .withRoleInfo({
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      AvailableFunctions: []
+    }).withOrganizationSelection(BusinessUnit, DynamicOptions);
     $httpBackend.flush();
     ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection});
+    permissionsDataService.setSelectedRole(vm.roles[0]);
 
     ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
+    $httpBackend.flush();
 
     expect(vm.organizationSelection.BusinessUnit.IsSelected).toEqual(false);
   });
+
+  it('should select child sites and teams when selecting a BusinessUnit', function () {
+    var BusinessUnit = {
+      ChildNodes: [
+        {
+          Id: 'fe113bc0-979a-4b6c-9e7c-ef601c7e02d1',
+          Type: 'Site',
+          Name: 'Site1',
+          ChildNodes: [
+            {
+              Id: 'e6377d56-277d-4c22-97f3-b218741b2480',
+              Type: 'Team',
+              Name: 'Team1'
+            }
+          ]
+        }
+      ],
+      Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
+      Name: "TeleoptiCCCDemo",
+      Type: "BusinessUnit"
+    };
+    fakeBackend.withRole({
+      BuiltIn: false,
+      DescriptionText: 'Agent',
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      IsAnyBuiltIn: true,
+      IsMyRole: false,
+      Name: 'Agent'
+    })
+    .withRoleInfo({
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      AvailableFunctions: []
+    }).withOrganizationSelection(BusinessUnit, []);
+    $httpBackend.flush();
+    ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection});
+    permissionsDataService.setSelectedRole(vm.roles[0]);
+
+    ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
+    $httpBackend.flush();
+
+    expect(vm.organizationSelection.BusinessUnit.IsSelected).toEqual(true);
+    expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(true);
+    expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(true);
+  });
+
+  it('should deselect child sites and teams when deselecting a BusinessUnit', function () {
+    var BusinessUnit = {
+      ChildNodes: [
+        {
+          Id: 'fe113bc0-979a-4b6c-9e7c-ef601c7e02d1',
+          Type: 'Site',
+          Name: 'Site1',
+          IsSelected: true,
+          ChildNodes: [
+            {
+              Id: 'e6377d56-277d-4c22-97f3-b218741b2480',
+              Type: 'Team',
+              Name: 'Team1',
+              IsSelected: true
+            }
+          ]
+        }
+      ],
+      Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
+      Name: "TeleoptiCCCDemo",
+      Type: "BusinessUnit",
+      IsSelected: true
+    };
+    fakeBackend.withRole({
+      BuiltIn: false,
+      DescriptionText: 'Agent',
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      IsAnyBuiltIn: true,
+      IsMyRole: false,
+      Name: 'Agent'
+    })
+    .withRoleInfo({
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      AvailableFunctions: []
+    }).withOrganizationSelection(BusinessUnit, []);
+    $httpBackend.flush();
+    ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection});
+    permissionsDataService.setSelectedRole(vm.roles[0]);
+
+    ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
+    $httpBackend.flush();
+
+    expect(vm.organizationSelection.BusinessUnit.IsSelected).toEqual(false);
+    expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(false);
+    expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(false);
+  });
+
 
   it('should select businessunit when selecting site', function () {
     var BusinessUnit = {
@@ -75,11 +199,24 @@ xdescribe('component: permissionsList', function () {
       }]
     };
     var DynamicOptions = [];
-    fakeBackend.withOrganizationSelection(BusinessUnit, DynamicOptions);
+    fakeBackend.withRole({
+      BuiltIn: false,
+      DescriptionText: 'Agent',
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      IsAnyBuiltIn: true,
+      IsMyRole: false,
+      Name: 'Agent'
+    })
+    .withRoleInfo({
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      AvailableFunctions: []
+    }).withOrganizationSelection(BusinessUnit, DynamicOptions);
     $httpBackend.flush();
     ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection});
+    permissionsDataService.setSelectedRole(vm.roles[0]);
 
     ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0]);
+    $httpBackend.flush();
 
     expect(vm.organizationSelection.BusinessUnit.IsSelected).toEqual(true);
     expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(true);
@@ -102,11 +239,24 @@ xdescribe('component: permissionsList', function () {
       }]
     };
     var DynamicOptions = [];
-    fakeBackend.withOrganizationSelection(BusinessUnit, DynamicOptions);
+    fakeBackend.withRole({
+      BuiltIn: false,
+      DescriptionText: 'Agent',
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      IsAnyBuiltIn: true,
+      IsMyRole: false,
+      Name: 'Agent'
+    })
+    .withRoleInfo({
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      AvailableFunctions: []
+    }).withOrganizationSelection(BusinessUnit, DynamicOptions);
     $httpBackend.flush();
     ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection});
+    permissionsDataService.setSelectedRole(vm.roles[0]);
 
     ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0]);
+    $httpBackend.flush();
 
     expect(vm.organizationSelection.BusinessUnit.IsSelected).toEqual(true);
     expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(true);
@@ -135,11 +285,24 @@ xdescribe('component: permissionsList', function () {
       }]
     };
     var DynamicOptions = [];
-    fakeBackend.withOrganizationSelection(BusinessUnit, DynamicOptions);
+    fakeBackend.withRole({
+      BuiltIn: false,
+      DescriptionText: 'Agent',
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      IsAnyBuiltIn: true,
+      IsMyRole: false,
+      Name: 'Agent'
+    })
+    .withRoleInfo({
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      AvailableFunctions: []
+    }).withOrganizationSelection(BusinessUnit, DynamicOptions);
     $httpBackend.flush();
     ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection});
+    permissionsDataService.setSelectedRole(vm.roles[0]);
 
     ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0]);
+    $httpBackend.flush();
 
     expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(true);
     expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(true);
@@ -171,18 +334,31 @@ xdescribe('component: permissionsList', function () {
       }]
     };
     var DynamicOptions = [];
-    fakeBackend.withOrganizationSelection(BusinessUnit, DynamicOptions);
+    fakeBackend.withRole({
+      BuiltIn: false,
+      DescriptionText: 'Agent',
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      IsAnyBuiltIn: true,
+      IsMyRole: false,
+      Name: 'Agent'
+    })
+    .withRoleInfo({
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      AvailableFunctions: []
+    }).withOrganizationSelection(BusinessUnit, DynamicOptions);
     $httpBackend.flush();
     ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection});
+    permissionsDataService.setSelectedRole(vm.roles[0]);
 
     ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0]);
+    $httpBackend.flush();
 
     expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(false);
     expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(false);
     expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[1].IsSelected).toEqual(false);
   });
 
-  it('should deselect paret when no children selected', function () {
+  it('should deselect parent when no children selected', function () {
     var BusinessUnit = {
       ChildNodes: [{
         Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
@@ -207,16 +383,85 @@ xdescribe('component: permissionsList', function () {
       }]
     };
     var DynamicOptions = [];
-    fakeBackend.withOrganizationSelection(BusinessUnit, DynamicOptions);
+    fakeBackend.withRole({
+      BuiltIn: false,
+      DescriptionText: 'Agent',
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      IsAnyBuiltIn: true,
+      IsMyRole: false,
+      Name: 'Agent'
+    })
+    .withRoleInfo({
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      AvailableFunctions: []
+    }).withOrganizationSelection(BusinessUnit, DynamicOptions);
     $httpBackend.flush();
     ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection});
+    permissionsDataService.setSelectedRole(vm.roles[0]);
 
     ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0]);
     ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[1]);
+    $httpBackend.flush();
 
     expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(false);
     expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(false);
     expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[1].IsSelected).toEqual(false);
   });
+
+  //FIX ME
+  it('should save selected org data for selected role', function () {
+    inject(function (permissionsDataService) {
+      var BusinessUnit = {
+        Id: "928dd0bc-bf40-412e-b970-9b5e015aadea",
+        Name: "TeleoptiCCCDemo",
+        Type: "BusinessUnit",
+        IsSelected: true,
+        ChildNodes: [{
+          ChildNodes: [],
+          Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
+          Name: "London",
+          Type: "Site",
+          IsSelected: true
+        }]
+      };
+
+      var preparedObject = {
+        Id: '928dd0bc-bf40-412e-b970-9b5e015aadea',
+        Name: 'TeleoptiCCCDemo',
+        Type: 'BusinessUnit',
+        IsSelected: false,
+        ChildNodes: [{
+          ChildNodes: [],
+          Id: 'd970a45a-90ff-4111-bfe1-9b5e015ab45c',
+          Name: 'London',
+          Type: 'Site',
+          IsSelected: false
+        }
+      ]
+    };
+
+    fakeBackend.withRole({
+      BuiltIn: false,
+      DescriptionText: 'Agent',
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      IsAnyBuiltIn: true,
+      IsMyRole: false,
+      Name: 'Agent'
+    })
+    .withRoleInfo({
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      AvailableFunctions: []
+    })
+    .withOrganizationSelection(BusinessUnit, []);
+    $httpBackend.flush();
+    ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection });
+    spyOn(permissionsDataService, 'selectOrganization');
+    permissionsDataService.setSelectedRole(vm.roles[0]);
+
+    ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
+
+    expect(permissionsDataService.selectOrganization).toHaveBeenCalledWith(preparedObject);
+  });
+});
 
 });

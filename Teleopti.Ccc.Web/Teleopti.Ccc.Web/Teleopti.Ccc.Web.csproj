@@ -1359,6 +1359,10 @@
     <Content Include="WFM\app\global\businessunits\businessunits.controller.spec.js" />
     <Content Include="WFM\app\global\utilities\guidgenerator.service.js" />
     <Content Include="WFM\app\global\utilities\_modules.js" />
+    <Content Include="WFM\app\permissions\refact\permissions.data.service.js" />
+    <Content Include="WFM\app\permissions\refact\permissions.data.service.spec.js" />
+    <Content Include="WFM\app\permissions\refact\permissions.filter.r.js" />
+    <Content Include="WFM\app\permissions\refact\permissions.filter.r.spec.js" />
     <Content Include="WFM\app\requests\requests-synchronize-header-height.directive.js" />
     <Content Include="WFM\app\resourceplanner\organization-tree-node.html" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.archiveschedule.hierarchy.service.js" />

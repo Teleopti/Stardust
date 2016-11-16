@@ -294,7 +294,7 @@ xdescribe('component: permissionsTree', function () {
 	});
 
 
-	xit('should save selected function for selected role', function () {
+	it('should save selected function for selected role', function () {
 		inject(function (permissionsDataService) {
 			fakeBackend
 				.withRole({
@@ -320,10 +320,11 @@ xdescribe('component: permissionsTree', function () {
 			$httpBackend.flush();
 			ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
 			spyOn(permissionsDataService, 'selectFunction');
+			permissionsDataService.setSelectedRole(vm.roles[0]);
 
 			ctrl.toggleFunction(vm.applicationFunctions[0]);
-			console.log(vm)
-			expect(permissionsDataService.selectFunction).toHaveBeenCalledWith();
+
+			expect(permissionsDataService.selectFunction).toHaveBeenCalled();
 		});
 	});
 

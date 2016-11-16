@@ -32,6 +32,10 @@
       var organizationSelection	= $resource('../api/Permissions/OrganizationSelection', {}, {
 				query: { method: 'GET', params: {}, isArray: false }
 			});
+
+      var assignOrganizationSelection = $resource('../api/Permissions/Roles/:Id/AvailableData', { Id: "@Id" }, {
+        postData: { method: 'POST', params: { BusinessUnits: [], Sites: [], Teams: [], RangeOption: [] }, isArray: true }
+      });
       //END OF ORGANIZATION
 
       var service = {
@@ -40,7 +44,8 @@
         copyRole: copyRole,
         postFunctions: postFunctions,
         applicationFunctions: applicationFunctions,
-        organizationSelection: organizationSelection
+        organizationSelection: organizationSelection,
+        assignOrganizationSelection: assignOrganizationSelection
       };
 
       return service;

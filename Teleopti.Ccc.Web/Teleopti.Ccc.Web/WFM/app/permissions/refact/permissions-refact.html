@@ -1,24 +1,24 @@
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
-		<h1><i class="mdi mdi-account-key"></i> First header title</h1>
-		<p>Optional description of the view goes here.</p>
+		<h1><i class="mdi mdi-account-key"></i> {{'ManagePermissions'|translate}}</h1>
+		<p translate>ManagePermissionsIntro</p>
 	</div>
 	<div class="fab-wrapper">
 		<button class="wfm-fab material-depth-1" ng-click="vm.showCreateModal = true"><i class="mdi mdi-plus"></i>
-			<md-tooltip>Add something</md-tooltip>
+			<md-tooltip>{{'AddRole'|translate}}</md-tooltip>
 		</button>
 	</div>
 </div>
 
 <modal-dialog show='vm.showCreateModal' ng-cloak>
 	<form ng-submit="vm.createRole(vm.roleName)">
-		<h1 class="modal-title">Create role</h1>
+		<h1 class="modal-title">{{'AddRole'|translate}}</h1>
 		<div class="modal-inner-content">
 			<div class="con-row">
 				<div class="con-flex">
 					<label for="createRole" class="input-icon">
 						<i class="mdi mdi-account-key">
-							<input type="text" id="createRole" autocomplete="off" ng-model="vm.roleName" placeholder="Role name" autofocus>
+							<input type="text" id="createRole" autocomplete="off" ng-model="vm.roleName" placeholder="{{'Role'|translate}}" autofocus>
 							<md-tooltip>Name</md-tooltip>
 						</i>
 					</label>
@@ -37,14 +37,14 @@
 	<div class="con-flex">
 		<div class="panel material-depth-1">
 			<div class="sub-header">
-				<h2>Panel title</h2>
+				<h2 translate>Roles</h2>
 			</div>
 			<div class="con-row">
 				<div class="con-flex">
 					<label for="filter" class="input-icon">
 						<i class="mdi mdi-filter-outline">
-							<input type="text" id="filter" ng-model="roleFilter" placeholder="filter roles...">
-							<md-tooltip>Filter</md-tooltip>
+							<input type="text" id="filter" ng-model="roleFilter" placeholder="{{'FilterRoles'|translate}}">
+							<md-tooltip>{{'FilterRoles'|translate}}</md-tooltip>
 						</i>
 					</label>
 				</div>
@@ -59,15 +59,27 @@
 							<span ng-cloak ng-show="role.IsSelected" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
 							<div class="wfm-leave-behind" ng-show="vm.checkMyRole(role)">
 								<span>
-									<i class="mdi mdi-content-copy" ng-click="vm.copyRole(role); $event.stopPropagation();"></i>
-									<i class="mdi mdi-pencil" ng-click="editRoleModal = !editRoleModal; $event.stopPropagation();"></i>
-									<i class="mdi mdi-delete" ng-click="confirmDeleteRole=true; $event.stopPropagation();"></i>
+									<i class="mdi mdi-content-copy" ng-click="vm.copyRole(role); $event.stopPropagation();">
+										<md-tooltip>
+											{{'Copy' | translate}}
+										</md-tooltip>
+									</i>
+									<i class="mdi mdi-pencil" ng-click="editRoleModal = !editRoleModal; $event.stopPropagation();">
+										<md-tooltip>
+											{{'Edit' | translate}}
+										</md-tooltip>
+									</i>
+									<i class="mdi mdi-delete" ng-click="confirmDeleteRole=true; $event.stopPropagation();">
+										<md-tooltip ng-hide="role.IsMyRole">
+											{{'Delete' | translate}}
+										</md-tooltip>
+									</i>
 								</span>
 							</div>
 
 							<modal-dialog show='editRoleModal' ng-cloak>
 								<form ng-submit="vm.editRole(newRoleName, role)">
-									<h1 class="modal-title">Edit role</h1>
+									<h1 class="modal-title">{{'Edit' | translate}}</h1>
 									<div class="modal-inner-content">
 										<div class="con-row">
 											<div class="con-flex">
@@ -98,8 +110,8 @@
 											</div>
 											<div class="modal-actions">
 												<aside>
-													<button ng-click="confirmDeleteRole=false" class="wfm-btn wfm-btn-invis-default">Cancel</button>
-													<button ng-click="confirmDeleteRole = false; vm.deleteRole(role)" class="wfm-btn wfm-btn-invis-primary">Apply</button>
+													<button ng-click="confirmDeleteRole=false" class="wfm-btn wfm-btn-invis-default">{{'Close' | translate}}</button>
+													<button ng-click="confirmDeleteRole = false; vm.deleteRole(role)" class="wfm-btn wfm-btn-invis-primary">{{'Apply' | translate}}</button>
 												</aside>
 											</div>
 										</div>
@@ -118,13 +130,13 @@
 			<div class="wfm-slide-tabs tabbed-panel">
 				<md-content class="md-padding">
 					<md-tabs md-dynamic-height md-border-bottom>
-						<md-tab label="Tab title1">
+						<md-tab label="{{'Functions' | translate}}">
 							<md-content class="md-padding perm-functions">
 								<div class="con-row">
 									<div class="con-flex">
 										<label for="filter1" class="input-icon">
 											<i class="mdi mdi-filter-outline">
-												<input type="text" id="filter1" placeholder="filter roles...">
+												<input type="text" id="filter1" placeholder="{{'PermissionsFilterThreeDots' | translate}}">
 												<md-tooltip>Filter</md-tooltip>
 											</i>
 										</label>
@@ -181,21 +193,21 @@
 								</div>
 							</md-content>
 						</md-tab>
-						<md-tab label="Tab title1">
+						<md-tab label="{{'Data' | translate}}">
 							<md-content class="md-padding">
 								<div class="con-row">
 									<div class="con-flex">
 										<label for="filter1" class="input-icon">
 											<i class="mdi mdi-filter-outline">
-												<input type="text" id="filter1" placeholder="filter roles...">
-												<md-tooltip>Filter</md-tooltip>
+												<input type="text" id="filter1" placeholder="{{'PermissionsFilterThreeDots' | translate}}">
+												<md-tooltip>{{'Filter'|translate}}</md-tooltip>
 											</i>
 										</label>
 									</div>
 									<div class="con-flex split-1-2"></div>
 									<div class="con-flex">
 										<md-select ng-model="model" placeholder="Pick an option">
-											<h2>Välj en övergripande rättighetsnivå</h2>
+											<h2>{{'AddGlobalAuthorizationLabel'| translate}}</h2>
 											<md-option selected ng-value="123">ABC</md-option>
 											<md-option ng-value="321">XYZ</md-option>
 											<md-option ng-value="231">QWER</md-option>
