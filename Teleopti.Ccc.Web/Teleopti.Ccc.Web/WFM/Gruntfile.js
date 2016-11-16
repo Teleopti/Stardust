@@ -4,7 +4,7 @@ module.exports = function (grunt) {
         watch: {
             dev: {
                 files: ['css/*.scss', 'index.tpl.html', 'app/**/*.html', 'html/**/*.html', 'app/**/*.js'],
-                tasks: ['devDist'],
+                tasks: ['devDist', 'eslint:dev'],
                 options: {
                     spawn: false,
                 }
@@ -351,7 +351,7 @@ module.exports = function (grunt) {
             dev: {
                 src: [
                     //add your path to module here
-                    'app/permissions/refact/**/*js',
+                    '!app/permissions/refact/**/*js',
                     'app/skillPrio/**/*.js',
                     '!app/**/*.spec.js',
                     '!app/**/*.fake.js'
@@ -381,7 +381,7 @@ module.exports = function (grunt) {
     // Default task(s).
     grunt.registerTask('default', ['devDist', 'test', 'watch:dev']); // this task run the main task and then watch for file changes
     grunt.registerTask('test', ['ngtemplates', 'karma:unit']);
-    grunt.registerTask('devTest', ['ngtemplates', 'karma:dev']);
+    grunt.registerTask('devTest', ['ngtemplates','eslint:dev']);
     grunt.registerTask('devDist', ['ngtemplates', 'sass', 'concat:distJs', 'newer:concat:distCss', 'newer:concat:distDarkCss', 'newer:cssmin', 'newer:copy', 'newer:uglify:dev', 'generateIndexDev']);
     grunt.registerTask('test:continuous', ['ngtemplates', 'karma:continuous']);
     grunt.registerTask('dist', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy', 'generateIndex', 'clean:dist']); // this task should only be used by the build. It's kind of packaging for production.
