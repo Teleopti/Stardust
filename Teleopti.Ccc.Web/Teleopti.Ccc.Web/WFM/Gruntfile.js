@@ -350,7 +350,8 @@ module.exports = function (grunt) {
             },
             dev: {
                 src: [
-                    'app/permissions/**/*js',
+                    //add your path to module here
+                    'app/permissions/refact/**/*js',
                     'app/skillPrio/**/*.js',
                     '!app/**/*.spec.js',
                     '!app/**/*.fake.js'
@@ -388,7 +389,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build', ['msbuild:build']); // build the solution
     grunt.registerTask('generateIndex', ['processhtml:dist', 'cacheBust:dist']);
     grunt.registerTask('generateIndexDev', ['processhtml:dev', 'cacheBust:dist']);
-    grunt.registerTask('eslint-beta', ['eslint:dev'])
+    grunt.registerTask('eslint-beta', ['eslint']);
 
     // for desktop client
     grunt.registerTask('buildForDesktop', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy:sourceMaps', 'processhtml:distForDesktop', 'cacheBust:dist']);
