@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						if (scheduleWasSuccess &&
 								_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences) &&
 								_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) &&
-								!maxPeaksAfter.IsBetterThan(scheduleCallback.ModifiedDates, maxPeaksBefore))
+								maxPeaksAfter.IsBetterThan(maxPeaksBefore, scheduleCallback.ModifiedDates))
 						{
 							maxSeatCallback?.DatesOptimized(scheduleCallback.ModifiedDates);
 						}
