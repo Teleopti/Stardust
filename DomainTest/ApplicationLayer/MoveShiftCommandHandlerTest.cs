@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.TestCommon;
@@ -118,12 +116,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var expectedStart = cmd.NewStartTimeInUtc;
 			var modifiedLayers = personAssignmentRepository.Single().ShiftLayers.ToList();
+			
 			modifiedLayers[0].Payload.Should().Be(activity);
+			modifiedLayers[0].Should().Be.OfType<MainShiftLayer>();
 			modifiedLayers[0].Period.StartDateTime.Should().Be(expectedStart);
 			modifiedLayers[0].Period.EndDateTime.Should().Be(expectedStart + (orgEnd - orgStart));
 			modifiedLayers[1].Payload.Should().Be(overtimeAct);
 			modifiedLayers[1].Period.StartDateTime.Should().Be(createDateTimeUtc(7));
 			modifiedLayers[1].Period.EndDateTime.Should().Be(createDateTimeUtc(8));
+			modifiedLayers[1].Should().Be.OfType<OvertimeShiftLayer>();
 		}
 
 		[Test]

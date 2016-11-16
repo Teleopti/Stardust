@@ -576,7 +576,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var newPeriod = shiftLayer.Period.MovePeriod(distanceToMove);
 				var index = shiftLayers.IndexOf(shiftLayer);
 				RemoveActivity(shiftLayer);
-				InsertActivity(shiftLayer.Payload, newPeriod, index);
+
+				var overtimeLayer = shiftLayer as OvertimeShiftLayer;
+
+				if (overtimeLayer != null)
+				{
+					InsertOvertimeLayer(overtimeLayer.Payload, newPeriod, index, overtimeLayer.DefinitionSet);
+				}
+				else
+				{
+					InsertActivity(shiftLayer.Payload, newPeriod, index);
+				}
 
 				affectedPeriods.Add(shiftLayer.Period.MaximumPeriod(newPeriod));
 			}
