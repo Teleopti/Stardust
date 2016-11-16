@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
@@ -88,17 +87,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private IEnumerable<AgentViewModel> forSites(IEnumerable<Guid> siteIds)
 		{
 			var today = new DateOnly(_now.UtcDateTime());
+			var lookup = _siteRepository.LoadAll().ToLookup(s => s.Id.GetValueOrDefault());
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
 			return
 				(
-					from site in _siteRepository.LoadAll()
 					from siteId in siteIds
+					let site = lookup[siteId].First()
 					from team in site.TeamCollection
 					from person in _personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(today, today))
-					where siteId == site.Id.Value
 					select new AgentViewModel
 					{
-						Name = commonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(person.Id.GetValueOrDefault())),
+						Name = commonAgentNameSettings.BuildCommonNameDescription(person),
 						PersonId = person.Id.Value,
 						TeamName = team.Description.Name,
 						TeamId = team.Id.Value.ToString(),
@@ -113,13 +112,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
 			return
 				(
-					from team in _teamRepository.LoadAll()
-					from teamId in teamIds
+					from team in _teamRepository.FindTeams(teamIds)
 					from person in _personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(today, today))
-					where teamId == team.Id.Value
 					select new AgentViewModel
 					{
-						Name = commonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(person.Id.GetValueOrDefault())),
+						Name = commonAgentNameSettings.BuildCommonNameDescription(person),
 						PersonId = person.Id.Value,
 						TeamName = team.Description.Name,
 						TeamId = team.Id.Value.ToString(),
@@ -157,7 +154,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					from skill in skills
 					from grouping in _groupingReadOnlyRepository.DetailsForGroup(skill, _now.LocalDateOnly())
 					where site == grouping.SiteId.Value
-					select new AgentViewModel()
+					select new AgentViewModel
 					{
 						PersonId = grouping.PersonId,
 						Name =
