@@ -55,7 +55,8 @@
 				var requestData = {
 					Date: ctrl.containerCtrl.getDate(),
 					NewShiftStart:ctrl.containerCtrl.convertTimeToCurrentUserTimezone(moment(ctrl.moveToTime).format('YYYY-MM-DD HH:mm')),
-					PersonIds: validAgentIds
+					PersonIds: validAgentIds,
+					TrackedCommandInfo: { TrackId: ctrl.trackId }
 				};
 
 				ctrl.processingCommand = true;
