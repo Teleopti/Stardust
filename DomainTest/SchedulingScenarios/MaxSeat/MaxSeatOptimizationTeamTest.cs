@@ -10,12 +10,21 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat.TestData;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 {
-	public class MaxSeatOptimizationTeamTest : MaxSeatOptimizationTest
+	[DomainTest]
+	[Toggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
+	public class MaxSeatOptimizationTeamTest
 	{
+		public MaxSeatOptimization Target;
+		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
+
 		[Test]
 		public void ShouldChooseShiftForAllAgentsInTeam()
 		{
@@ -30,9 +39,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var agentData1 = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
 			var agentData2 = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData1.Assignment, agentData2.Assignment, agentScheduledForAnHourData.Assignment });
-			var optPreferences = CreateOptimizationPreferences();
 
-			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData1.Agent, agentData2.Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences);
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData1.Agent, agentData2.Agent }, schedules, Enumerable.Empty<ISkillDay>(), DefaultMaxSeatOptimizationPreferences.Create(TeamBlockType.Team));
 
 			schedules.SchedulesForDay(dateOnly)
 				.Count(x => x.PersonAssignment().Period.StartDateTime.TimeOfDay == TimeSpan.FromHours(9))
@@ -53,9 +61,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var agentData1 = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
 			var agentData2 = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, new Team { Site = site}, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData1.Assignment, agentData2.Assignment, agentScheduledForAnHourData.Assignment });
-			var optPreferences = CreateOptimizationPreferences();
 
-			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData1.Agent, agentData2.Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences);
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData1.Agent, agentData2.Agent }, schedules, Enumerable.Empty<ISkillDay>(), DefaultMaxSeatOptimizationPreferences.Create(TeamBlockType.Team));
 
 			schedules.SchedulesForDay(dateOnly)
 				.Count(x => x.PersonAssignment().Period.StartDateTime.TimeOfDay == TimeSpan.FromHours(9))
@@ -76,30 +83,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var agentWithAvailableSeats = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, new Team { Site = siteWithSeats }, ruleSetBag, scenario, activity, new TimePeriod(8, 0, 16, 0));
 			var agentThatNeedsToBeMoved = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, new Team { Site = siteWithNoSeats }, ruleSetBag, scenario, activity, new TimePeriod(8, 0, 16, 0));
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentWithAvailableSeats.Assignment, agentThatNeedsToBeMoved.Assignment, agentScheduledForAnHourData.Assignment });
-			var optPreferences = CreateOptimizationPreferences();
+			var optPreferences = DefaultMaxSeatOptimizationPreferences.Create(TeamBlockType.Team);
 			optPreferences.Extra.TeamGroupPage = new GroupPageLight("_", GroupPageType.RuleSetBag);
 
 			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentWithAvailableSeats.Agent, agentThatNeedsToBeMoved.Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences);
 
 			schedules[agentThatNeedsToBeMoved.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(9));
-		}
-
-		protected override OptimizationPreferences CreateOptimizationPreferences()
-		{
-			return new OptimizationPreferences
-			{
-				Extra =
-				{
-					UseTeams = true,
-					TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy)
-				},
-
-				Advanced =
-				{
-					UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats
-				}
-			};
 		}
 	}
 }
