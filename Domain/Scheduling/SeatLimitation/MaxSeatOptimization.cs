@@ -19,13 +19,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public interface IMaxSeatOptimization
 	{
-		void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IOptimizationPreferences optimizationPreferences);
+		void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IOptimizationPreferences optimizationPreferences, IMaxSeatCallback maxSeatCallback);
 	}
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 	public class MaxSeatOptimizationDoNothing : IMaxSeatOptimization
 	{
-		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IOptimizationPreferences optimizationPreferences)
+		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IOptimizationPreferences optimizationPreferences, IMaxSeatCallback maxSeatCallback)
 		{
 		}
 	}
@@ -84,8 +84,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_scheduleChangesAffectedDates = scheduleChangesAffectedDates;
 		}
 
-		public void Optimize(DateOnlyPeriod period, IEnumerable<IPerson> agentsToOptimize, IScheduleDictionary schedules,
-			IEnumerable<ISkillDay> allSkillDays, IOptimizationPreferences optimizationPreferences)
+		public void Optimize(DateOnlyPeriod period, 
+			IEnumerable<IPerson> agentsToOptimize, 
+			IScheduleDictionary schedules, 
+			IEnumerable<ISkillDay> allSkillDays, 
+			IOptimizationPreferences optimizationPreferences, 
+			IMaxSeatCallback maxSeatCallback)
 		{
 			if (optimizationPreferences.Advanced.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.DoNotConsiderMaxSeats)
 				return;
@@ -129,6 +133,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 							maxPeaksAfter.IsNotBetterThan(scheduleCallback.ModifiedDates, maxPeaksBefore))
 						{
 							rollbackService.RollbackMinimumChecks();
+						}
+						else
+						{
+							maxSeatCallback?.OptimizedDates(scheduleCallback.ModifiedDates);
 						}
 					}
 				}

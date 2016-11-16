@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -82,6 +84,92 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 					daysOffPreferences,
 					new FixedDayOffOptimizationPreferenceProvider(daysOffPreferences));
 			});
+		}
+
+		[Test]
+		[Toggle(Toggles.ResourcePlanner_CalculateFarAwayTimeZones_40646)]
+		public void ShouldMarkDayToBeRecalculated()
+		{
+			if(!_resourcePlannerMaxSeatsNew40939)
+				Assert.Ignore("Only interesting when MaxSeats toggle is on");
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var site = new Site("siten") { MaxSeats = 1 }.WithId();
+			var team = new Team { Description = new Description("_"), Site = site }.WithId();
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var dateOnly = new DateOnly(2016, 10, 25);
+			var scenario = new Scenario("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), shiftCategory));
+			var agentScheduledOneHour = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			agentScheduledOneHour.AddPersonPeriod(new PersonPeriod(dateOnly, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			agent.AddPersonPeriod(new PersonPeriod(dateOnly, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team));
+			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
+			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
+			var assOneHour = new PersonAssignment(agentScheduledOneHour, scenario, dateOnly);
+			assOneHour.AddActivity(activity, new TimePeriod(16, 17));
+			assOneHour.SetShiftCategory(new ShiftCategory("_"));
+			var ass = new PersonAssignment(agent, scenario, dateOnly);
+			ass.AddActivity(activity, new TimePeriod(9, 17));
+			ass.SetShiftCategory(new ShiftCategory("_"));
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(),
+															new[] { agent, agentScheduledOneHour },
+															new[] { ass, assOneHour },
+															Enumerable.Empty<ISkillDay>());
+			var optPreferences = new OptimizationPreferences
+			{
+				Advanced = {UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats},
+				General = {ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = false},
+				Extra = { UseTeams = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy) }
+			};
+
+			Target.Execute(null, new NoSchedulingProgress(), stateHolder, new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, null, null, optPreferences, false, null, null);
+
+			stateHolder.DaysToRecalculate
+				.Should().Have.SameValuesAs(dateOnly);
+		}
+
+		[Test]
+		[Toggle(Toggles.ResourcePlanner_CalculateFarAwayTimeZones_40646)]
+		public void ShouldNotMarkDayThatIsNotChangedToBeRecalculated()
+		{
+			if (!_resourcePlannerMaxSeatsNew40939)
+				Assert.Ignore("Only interesting when MaxSeats toggle is on");
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var site = new Site("siten") { MaxSeats = 1 }.WithId();
+			var team = new Team { Description = new Description("_"), Site = site }.WithId();
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var dateOnly = new DateOnly(2016, 10, 25);
+			var scenario = new Scenario("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(10, 0, 10, 0, 60), new TimePeriodWithSegment(18, 0, 18, 0, 60), shiftCategory));
+			var agentScheduledOneHour = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			agentScheduledOneHour.AddPersonPeriod(new PersonPeriod(dateOnly, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			agent.AddPersonPeriod(new PersonPeriod(dateOnly, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team));
+			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
+			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
+			var assOneHour = new PersonAssignment(agentScheduledOneHour, scenario, dateOnly);
+			assOneHour.AddActivity(activity, new TimePeriod(16, 17));
+			assOneHour.SetShiftCategory(new ShiftCategory("_"));
+			var ass = new PersonAssignment(agent, scenario, dateOnly);
+			ass.AddActivity(activity, new TimePeriod(9, 17));
+			ass.SetShiftCategory(new ShiftCategory("_"));
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(),
+															new[] { agent, agentScheduledOneHour },
+															new[] { ass, assOneHour },
+															Enumerable.Empty<ISkillDay>());
+			var optPreferences = new OptimizationPreferences
+			{
+				Advanced = { UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats },
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = false },
+				Extra = { UseTeams = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy) }
+			};
+
+			Target.Execute(null, new NoSchedulingProgress(), stateHolder, new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, null, null, optPreferences, false, null, null);
+
+			stateHolder.DaysToRecalculate
+				.Should().Be.Empty();
 		}
 
 		[TestCase(MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, teamBlockStyle.TeamHierarchy, ExpectedResult = true)]

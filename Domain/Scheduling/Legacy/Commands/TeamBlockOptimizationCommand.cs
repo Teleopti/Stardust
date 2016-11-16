@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					rollbackServiceWithResourceCalculation, allMatrixes,
 					_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences), dayOffOptimizationPreferenceProvider);
 
-				_maxSeatOptimization.Optimize(selectedPeriod, selectedPersons, _schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.AllSkillDays(), optimizationPreferences);
+				_maxSeatOptimization.Optimize(selectedPeriod, selectedPersons, _schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.AllSkillDays(), optimizationPreferences, new DesktopMaxSeatCallback(_schedulerStateHolder()));
 			}
 		}
 

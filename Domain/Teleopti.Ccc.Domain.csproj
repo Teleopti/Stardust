@@ -474,7 +474,9 @@
     <Compile Include="ResourceCalculation\SkillStaffingIntervalLightModel.cs" />
     <Compile Include="ResourceCalculation\StaffingIntervalChange.cs" />
     <Compile Include="Scheduling\DoNothingResourceCalculateDelayer.cs" />
+    <Compile Include="Scheduling\SeatLimitation\DesktopMaxSeatCallback.cs" />
     <Compile Include="Scheduling\SeatLimitation\DoubleExtensions.cs" />
+    <Compile Include="Scheduling\SeatLimitation\IMaxSeatCallback.cs" />
     <Compile Include="Scheduling\SeatLimitation\IsOverMaxSeat.cs" />
     <Compile Include="Scheduling\SeatLimitation\IUsedSeats.cs" />
     <Compile Include="Scheduling\SeatLimitation\MaxSeatOptimization.cs" />
