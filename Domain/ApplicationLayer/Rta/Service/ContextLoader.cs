@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<BatchStateInputModel> AllThings()
 			{
-				return _batch.States.OrderBy(x => x.UserCode).ToArray();
+				return _batch.States.OrderBy(x => $"{_batch.SourceId}__{x.UserCode}").ToArray();
 			}
 
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<BatchStateInputModel> states, Action<Exception> addException)
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<ExternalLogon> AllThings()
 			{
-				return _things.OrderBy(x => x.UserCode).ToArray();
+				return _things.OrderBy(x => $"{x.DataSourceId}__{x.UserCode}").ToArray();
 			}
 
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogon> ids, Action<Exception> addException)
@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<ExternalLogon> AllThings()
 			{
-				return _things.OrderBy(x => x.UserCode).ToArray();
+				return _things.OrderBy(x => $"{x.DataSourceId}__{x.UserCode}").ToArray();
 			}
 
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogon> ids, Action<Exception> addException)
