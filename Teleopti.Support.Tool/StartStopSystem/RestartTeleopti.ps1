@@ -97,7 +97,7 @@ function StopWindowsService
              do
              {
                 $arrService = Get-Service -Name $ServiceName
-                Write-Host -NoNewline "."
+                Write-Host "."
                 Start-Sleep 3
                 $bailOut--
                 if ($bailOut -eq 0)
@@ -133,7 +133,7 @@ function StopWindowsService
              do
              {
                 $arrService = Get-Service -Name $ServiceName
-                Write-Host -NoNewline "."
+                Write-Host "."
                 Start-Sleep 3
                 $bailOut--
                 if ($bailOut -eq 0)
@@ -332,7 +332,7 @@ else
    exit
    }
  
-[System.Reflection.Assembly]::LoadWithPartialName("Microsoft.Web.Administration")
+[System.Reflection.Assembly]::LoadWithPartialName("Microsoft.Web.Administration") | out-null
 [Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
 $JOB = "Teleopti.Ccc.RestartSystem"
 
