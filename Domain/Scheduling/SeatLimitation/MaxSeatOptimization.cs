@@ -113,9 +113,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			{
 				foreach (var teamBlockInfo in teamBlockInfos)
 				{
-					if(!anyUnlockedAgents(teamBlockInfo))
-						continue;
-
 					var datePoint = teamBlockInfo.BlockInfo.DatePoint(period);
 					var skillDaysForTeamBlockInfo = maxSeatData.SkillDaysFor(teamBlockInfo, datePoint);
 					var maxPeaksBefore = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);
@@ -172,34 +169,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					}
 				}
 			}
-		}
-
-		private bool anyUnlockedAgents(ITeamBlockInfo teamBlock)
-		{
-			var unlockedDates = teamBlock.BlockInfo.UnLockedDates();
-
-			foreach (var unlockedDate in unlockedDates)
-			{
-				var unlockedPersons = teamBlock.TeamInfo.UnLockedMembers(unlockedDate);
-
-				foreach (var person in unlockedPersons)
-				{
-					var matrix = teamBlock.TeamInfo.MatrixForMemberAndDate(person, unlockedDate);
-					if (matrix == null)
-						continue;
-
-					var scheduleDayPro = matrix.GetScheduleDayByKey(unlockedDate);
-					if (!matrix.UnlockedDays.Contains(scheduleDayPro))
-						continue;
-
-					var scheduleDay = scheduleDayPro.DaySchedulePart();
-					var significant = scheduleDay.SignificantPart();
-					if (significant == SchedulePartView.MainShift)
-						return true;
-				}
-			}
-
-			return false;
 		}
 	}
 }

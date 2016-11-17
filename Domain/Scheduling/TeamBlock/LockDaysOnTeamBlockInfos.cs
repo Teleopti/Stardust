@@ -9,28 +9,33 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 			foreach (var teamBlockInfo in teamBlockInfos.ToArray())
 			{
-				var anyIsScheduled = false;
-				foreach (var scheduleMatrixPro in teamBlockInfo.MatrixesForGroupAndBlock())
-				{
-					foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
-					{
-						var scheduleDay = scheduleDayPro.DaySchedulePart();
-						var dateOnly = scheduleDayPro.Day;
-						var person = scheduleDay.Person;
+				var anyScheduled = false;
+				var unlockedDates = teamBlockInfo.BlockInfo.UnLockedDates();
 
-						if (!teamBlockInfo.TeamInfo.UnLockedMembers(dateOnly).Contains(person))
-							continue;
+				foreach (var unlockedDate in unlockedDates)
+				{
+					var unlockedPersons = teamBlockInfo.TeamInfo.UnLockedMembers(unlockedDate);
+
+					foreach (var person in unlockedPersons)
+					{
+						var scheduleDay = teamBlockInfo.TeamInfo.MatrixForMemberAndDate(person, unlockedDate)
+							.GetScheduleDayByKey(unlockedDate)
+							.DaySchedulePart();
 						if (scheduleDay.IsScheduled())
 						{
-							anyIsScheduled = true;
+							anyScheduled = true;
 						}
-						else
-						{
-							teamBlockInfo.TeamInfo.LockMember(dateOnly.ToDateOnlyPeriod(), person);
-						}
+
+						//CLAES! konstigt - detta block behövs inte längre? Varför behöver vi inte längre låsa oschemalagda dagar?
+						//Om denna verkligen kan tas bort - renama filen till nåt annat
+
+						//else
+						//{
+						//	teamBlockInfo.TeamInfo.LockMember(unlockedDate.ToDateOnlyPeriod(), person);
+						//}
 					}
 				}
-				if (!anyIsScheduled)
+				if (!anyScheduled)
 				{
 					teamBlockInfos.Remove(teamBlockInfo);
 				}
