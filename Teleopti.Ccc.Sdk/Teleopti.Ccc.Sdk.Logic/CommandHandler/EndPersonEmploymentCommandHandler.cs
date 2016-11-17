@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var person = _personRepository.Load(command.PersonId);
+				person.VerifyCanBeModifiedByCurrentUser();
 				person.TerminatePerson(command.Date.ToDateOnly(), new PersonAccountUpdaterDummy());
 				uow.PersistAll();
 				command.Result = new CommandResultDto { AffectedId = person.Id.GetValueOrDefault(), AffectedItems = 1 };

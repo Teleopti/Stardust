@@ -235,12 +235,13 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="personAccountUpdater"></param>
 	    void ActivatePerson(IPersonAccountUpdater personAccountUpdater);
 
-		/// <summary>
-		/// Terminates a person
-		/// </summary>
-		/// <param name="terminalDate"></param>
-		/// <param name="personAccountUpdater"></param>
-	    void TerminatePerson(DateOnly terminalDate, IPersonAccountUpdater personAccountUpdater);
+	    /// <summary>
+	    /// Terminates a person
+	    /// </summary>
+	    /// <param name="terminalDate"></param>
+	    /// <param name="personAccountUpdater"></param>
+	    /// <param name="personLeavingUpdater"></param>
+	    void TerminatePerson(DateOnly terminalDate, IPersonAccountUpdater personAccountUpdater, IPersonLeavingUpdater personLeavingUpdater = null);
 
 		/// <summary>
 		/// Change the start date for a person period.

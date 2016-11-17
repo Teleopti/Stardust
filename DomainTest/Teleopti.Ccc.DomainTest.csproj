@@ -173,6 +173,7 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModel\ExcludePhoneStateViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModel\InAlarmViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModel\ViewModelBuilderTest.cs" />
+    <Compile Include="Common\PersonLeavingTest.cs" />
     <Compile Include="Intraday\MergeSkillStaffIntervalLightForSkillAreaTest.cs" />
     <Compile Include="ApplicationLayer\RemoveSelectedPersonAbsenceComandHandlerTest.cs" />
     <Compile Include="Intraday\SkillStaffingIntervalProviderTest.cs" />

@@ -57,9 +57,10 @@ namespace Teleopti.Ccc.Domain.Common
 			personAccountUpdater.Update(this);
 	    }
 
-		public virtual void TerminatePerson(DateOnly terminalDate, IPersonAccountUpdater personAccountUpdater)
+		public virtual void TerminatePerson(DateOnly terminalDate, IPersonAccountUpdater personAccountUpdater, IPersonLeavingUpdater personLeavingUpdater = null)
 	    {
 			terminate(terminalDate);
+			(personLeavingUpdater ?? new DummyPersonLeavingUpdater()).Execute(terminalDate,this);
 			personAccountUpdater.Update(this);
 	    }
 

@@ -49,8 +49,5 @@ namespace Teleopti.Interfaces.Domain
 	    void FullDayAbsence(IPerson person, TrackedCommandInfo trackedCommandInfo);
 
 	    void IntradayAbsence(IPerson person, TrackedCommandInfo trackedCommandInfo);
-
-
     }
-
 }

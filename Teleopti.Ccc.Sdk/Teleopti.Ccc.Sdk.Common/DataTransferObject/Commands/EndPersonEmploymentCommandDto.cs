@@ -15,11 +15,19 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 		/// <value>The person id.</value>
 		[DataMember]
 		public Guid PersonId { get; set; }
+		
 		/// <summary>
 		/// Gets or sets the mandatory terminate date
 		/// </summary>
 		/// <value>The terminate date.</value>
 		[DataMember]
 		public DateOnlyDto Date { get; set; }
+
+		/// <summary>
+		/// Gets or sets the option to clear all data related to the agent after the leaving date
+		/// </summary>
+		/// <value>The indication if the clearing of future data should be performed.</value>
+		[DataMember(Order = 1,IsRequired = false)]
+		public bool ClearAfterLeavingDate { get; set; }
 	}
 }
