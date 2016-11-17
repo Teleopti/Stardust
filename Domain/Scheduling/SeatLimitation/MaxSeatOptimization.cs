@@ -153,10 +153,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					{
 						foreach (var scheduleMatrixPro in teamBlockInfo.MatrixesForGroupAndBlock())
 						{
-							foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays.Where(x => x.Day == date))
+							foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
 							{
-								var scheduleCallback = new ScheduleChangeCallbackForMaxSeatOptimization(_scheduleChangesAffectedDates);
 								var scheduleDay = scheduleDayPro.DaySchedulePart();
+								if (scheduleDay.DateOnlyAsPeriod.DateOnly != date || !agentsToOptimize.Contains(scheduleDay.Person))
+									continue;
+								var scheduleCallback = new ScheduleChangeCallbackForMaxSeatOptimization(_scheduleChangesAffectedDates);
 								if (_isOverMaxSeat.Check(scheduleDay, skillDaysForTeamBlockInfo))
 								{
 									_deleteSchedulePartService.Delete(new [] {scheduleDay}, new SchedulePartModifyAndRollbackService(null, scheduleCallback, tagSetter), businessRules);
