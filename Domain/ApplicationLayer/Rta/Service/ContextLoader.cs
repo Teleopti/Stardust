@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
@@ -474,6 +475,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					});
 				}).ToArray();
 
+			var parentThread = Thread.CurrentThread.Name;
 			var tenant = _dataSource.CurrentName();
 			Parallel.ForEach(
 				transactions,
@@ -484,7 +486,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					{
 						_deadLockRetrier.RetryOnDeadlock(() =>
 						{
-							Transaction(tenant, strategy, data);
+							Transaction(tenant, parentThread, strategy, data);
 						});
 					}
 					catch (Exception e)
@@ -508,9 +510,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[LogInfo]
 		protected virtual void Transaction<T>(
 			string tenant,
+			string parentThread,
 			IStrategy<T> strategy,
 			Func<transactionData> transactionData)
 		{
+			if (parentThread != null && parentThread.Contains("Worker #") && Thread.CurrentThread.Name == null)
+				Thread.CurrentThread.Name = $"Worker #Transaction{Thread.CurrentThread.ManagedThreadId}";
 			WithUnitOfWork(() =>
 			{
 				var data = transactionData.Invoke();
