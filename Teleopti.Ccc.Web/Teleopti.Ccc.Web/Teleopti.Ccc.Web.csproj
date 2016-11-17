@@ -1389,13 +1389,15 @@
     <Content Include="WFM\app\resourceplanner\resourceplanner.archiveschedule.controller.spec.js" />
     <Content Include="WFM\app\rta\historical\rta-historical-SeeAllOutOfAdherences_39146.html" />
     <Content Include="WFM\app\rta\historical\rta.historical.controller.js" />
-    <Content Include="WFM\app\rta\skills\rta-selectSkill-SiteAndTeamOnSkillOverview.html" />
     <Content Include="WFM\app\rta\skills\rta-selectSkill.QuicklyChangeAgentsSelection.html" />
+    <Content Include="WFM\app\rta\skills\rta-sites-bySkills.html" />
+    <Content Include="WFM\app\rta\skills\rta-teams-bySkills.html" />
+    <Content Include="WFM\app\rta\skills\rta.selectSkill.controller.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.controller.QuicklyChangeAgentsSelection.js" />
+    <Content Include="WFM\app\rta\skills\rta.selectSkill.controller.QuicklyChangeAgentsSelection.spec.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.sites.spec.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.teams.spec.js" />
-    <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.spec.js" />
     <Content Include="WFM\app\skillPrio\skillprio.activity.service.js" />
     <Content Include="WFM\app\skillPrio\skillprio.aggregator.service.js" />
     <Content Include="WFM\app\skillPrio\skillPrio.backend.fake.js" />
@@ -1583,7 +1585,7 @@
     <Content Include="WFM\app\rta\rta.organization.service.js" />
     <Content Include="WFM\app\rta\rta.organization.service.spec.js" />
     <Content Include="WFM\app\rta\rta.route.service.spec.js" />
-    <Content Include="WFM\app\rta\skills\rta.selectSkill.controller.spec.js" />
+    <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.skillSelection.spec.js" />
     <Content Include="WFM\app\rta\overview\rta.overview.controller.sites.spec.js" />
     <Content Include="WFM\app\rta\rta.sorting.localelanguage.service.js" />
     <Content Include="WFM\app\rta\rta.state.provider.js" />
