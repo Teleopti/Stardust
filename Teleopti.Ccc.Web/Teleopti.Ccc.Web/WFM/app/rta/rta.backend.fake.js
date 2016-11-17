@@ -18,6 +18,7 @@
 			var skills = [];
 			var skillAreas = [];
 			var phoneStates = [];
+			var organizations = [];
 			var siteAdherencesForSkill = [];
 			var teamAdherencesForSkill = [];
 			var paramsOf = function (url) {
@@ -255,6 +256,11 @@
 				function () {
 					return [200, skills];
 				});
+
+				fake(/\.\.\/api\/Organization(.*)/,
+					function () {
+						return [200, organizations];
+					});
 
 
 			fake(/\.\.\/api\/Adherence\/ForToday(.*)/,
@@ -571,6 +577,11 @@
 
 			this.withPhoneState = function (phoneState) {
 				phoneStates.push(phoneState)
+				return this;
+			}
+
+			this.withOrganization = function (organization) {
+				organizations.push(organization)
 				return this;
 			}
 		});

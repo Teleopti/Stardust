@@ -22,6 +22,15 @@
 				}).query().$promise;
 			};
 
+			this.getOrganization = function (data) {
+				return $resource('../api/Organizations', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query().$promise;
+			};
+
 
 			this.agentsFor = function (data) {
 				return $resource('../api/Agents/For', {}, {

@@ -35,11 +35,11 @@
 											 placeholder="{{skillsLoaded ? 'SelectSkill' : 'LoadingSkills' | translate}}">
 								<md-item-template>
 									<span class="rta-skill-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
-								</md-item-template>
-								<md-not-found>
-									{{'RepViewerNoMoreMatches'|translate}}
-								</md-not-found>
-							</md-autocomplete>
+						</md-item-template>
+						<md-not-found>
+							{{'RepViewerNoMoreMatches'|translate}}
+						</md-not-found>
+						</md-autocomplete>
 						</span>
 						<span class="con-flex">
 							<md-autocomplete id="skill-area-id"
@@ -56,25 +56,25 @@
 											placeholder="{{skillAreasLoaded ? 'SelectSkillArea' : 'LoadingSkillAreas' | translate}}">
 								<md-item-template>
 									<span class="rta-skill-area-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skillArea.Name}}</span>
-								</md-item-template>
-								<md-not-found>
-									{{'RepViewerNoMoreMatches'|translate}}
-								</md-not-found>
-							</md-autocomplete>
+						</md-item-template>
+						<md-not-found>
+							{{'RepViewerNoMoreMatches'|translate}}
+						</md-not-found>
+						</md-autocomplete>
 						</span>
-						<span class="con-flex">
-							<md-input-container class="rta-md-input-container">
+		<span class="con-flex">
+			<md-input-container class="rta-md-input-container">
         <label>Select organization</label>
-        <md-select ng-model="selectedOrganizations.isChecked" class="rta-md-select" multiple>
+        <md-select ng-model="selectedTeams" class="rta-md-select" multiple md-on-close="goToAgents()">
           <md-optgroup ng-repeat="site in sites" class="rta-option-group">
-						<span ng-click="setSiteIsSelected(site.Id)"><i class="mdi mdi-menu-down"></i>
+						<span ng-click="selectSite(site.Id)"><i class="mdi mdi-menu-down"></i></span>
 						<md-checkbox ng-value="site.Id" ng-model="site.isChecked">{{site.Name}}</md-checkbox>
-						</span>
-            <md-option ng-if="getSiteIsSelected(site.Id)" ng-selected="site.isChecked" ng-value="team.Id" ng-repeat="team in site.Teams">{{team.Name}}</md-option>
-          </md-optgroup>
-        </md-select>
-      </md-input-container>
-						</span>
+						<md-option ng-show="isSelected(site.Id)" ng-selected="site.isChecked" ng-value="team.Id" ng-repeat="team in site.Teams">{{team.Name}}</md-option>
+						</md-optgroup>
+						<button ng-click="printOut()">I'm printing</button>
+					</md-select>
+				</md-input-container>
+			</span>
 						<div class="hide-on-ie con-flex split-1-3"></div>
 					</div>
 				</div>
