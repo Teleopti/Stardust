@@ -73,6 +73,11 @@
 </div>
 
 <div class="panel material-depth-1">
+	<div class="con-row" ng-if="sites.length === 0">
+		<div class="con-flex no-data-available">
+			{{'NoSitesFound' | translate}}
+		</div>
+	</div>
 	<div class="con-row">
 		<div class="con-flex">
 			<div class="con-row demo-outline">

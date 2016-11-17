@@ -21,11 +21,11 @@
 		</div>
 	</div>
 
-			<div class="panel material-depth-1">
+	<div class="panel material-depth-1">
+		<div class="con-row">
+			<div class="con-flex">
 				<div class="con-row">
-					<div class="con-flex">
-						<div class="con-row">
-							<span class="con-flex">
+					<span class="con-flex">
 							<md-autocomplete id="skill-id"
 											 ng-disabled="!skillsLoaded"
 											 ng-attr-skillsLoaded="{{skillsLoaded}}"
@@ -40,13 +40,13 @@
 											 placeholder="{{skillsLoaded ? 'SelectSkill' : 'LoadingSkills' | translate}}">
 								<md-item-template>
 									<span class="rta-skill-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
-							</md-item-template>
-							<md-not-found>
-								{{'RepViewerNoMoreMatches'|translate}}
-							</md-not-found>
-							</md-autocomplete>
-							</span>
-							<span class="con-flex">
+					</md-item-template>
+					<md-not-found>
+						{{'RepViewerNoMoreMatches'|translate}}
+					</md-not-found>
+					</md-autocomplete>
+					</span>
+					<span class="con-flex">
 							<md-autocomplete id="skill-area-id"
 											ng-disabled="!skillAreasLoaded"
 											ng-attr-skillAreasLoaded="{{skillAreasLoaded}}"
@@ -61,24 +61,29 @@
 											placeholder="{{skillAreasLoaded ? 'SelectSkillArea' : 'LoadingSkillAreas' | translate}}">
 								<md-item-template>
 									<span class="rta-skill-area-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skillArea.Name}}</span>
-							</md-item-template>
-							<md-not-found>
-								{{'RepViewerNoMoreMatches'|translate}}
-							</md-not-found>
-							</md-autocomplete>
-							</span>
-							<div class="hide-on-ie con-flex split-1-2"></div>
-						</div>
-					</div>
+					</md-item-template>
+					<md-not-found>
+						{{'RepViewerNoMoreMatches'|translate}}
+					</md-not-found>
+					</md-autocomplete>
+					</span>
+					<div class="hide-on-ie con-flex split-1-2"></div>
 				</div>
 			</div>
+		</div>
+	</div>
 
 	<div class="panel material-depth-1" ng-if="selectedSkill || selectedSkillArea">
-						<div class="con-row demo-outline">
-							<div class="con-flex">
-								<div class="wfm-grid">
-									<div class="grid-card site" ng-if="site.NumberOfAgents > 0" ng-repeat="site in sites">
-										<a ui-sref="{{getStateForTeams()}}" class="rta-card-link">
+		<div class="con-row" ng-if="sites.length === 0">
+			<div class="con-flex no-data-available">
+				{{'NoSitesFound' | translate}}
+			</div>
+		</div>
+		<div class="con-row demo-outline">
+			<div class="con-flex">
+				<div class="wfm-grid">
+					<div class="grid-card site" ng-if="site.NumberOfAgents > 0" ng-repeat="site in sites">
+						<a ui-sref="{{getStateForTeams()}}" class="rta-card-link">
 											<div class="list-content"
 											ng-class="{good: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 33, warning: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 34 && getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 66, danger: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 67}" tabindex="-1">
 											<div class="wfm-checkbox">
@@ -98,10 +103,10 @@
 										</div>
 									</div>
 								</a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="con-footer"></div>
 					</div>
+				</div>
+			</div>
+		</div>
+		<div class="con-footer"></div>
+	</div>
 </div>

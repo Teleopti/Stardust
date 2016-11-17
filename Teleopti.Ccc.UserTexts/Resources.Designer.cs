@@ -18821,6 +18821,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No sites for the selected skills were found.
+        /// </summary>
+        public static string NoSitesFound {
+            get {
+                return ResourceManager.GetString("NoSitesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No skill with matching properties of the current skill was found..
         /// </summary>
         public static string NoSkillMatchingPropertiesForCurrentSkillFound {

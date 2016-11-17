@@ -15191,4 +15191,8 @@ These options are activated:
     <value>Successfully moved shifts for the selected agents</value>
     <comment>Successful message for moving shift in wfm/teams</comment>
   </data>
+  <data name="NoSitesFound" xml:space="preserve">
+    <value>No sites for the selected skills were found</value>
+    <comment>Message in RTA when selecting by skill and no sites are found</comment>
+  </data>
 </root>
