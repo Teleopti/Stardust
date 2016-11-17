@@ -126,11 +126,12 @@ function PersonSelectionService() {
 		});
 	};
 
-	svc.updatePersonProjectionSelection = function (currentProjection) {
+	svc.updatePersonProjectionSelection = function (currentProjection, viewDate) {
 		var currentShift = currentProjection.Parent;
 		var personSchedule = currentShift.Parent;
 		var personId = personSchedule.PersonId;
-		personSchedule.IsSelected = svc.isAllProjectionSelected(personSchedule);
+
+		personSchedule.IsSelected = svc.isAllProjectionSelected(personSchedule, viewDate);
 		
 		if (currentProjection.Selected && !svc.personInfo[personId]) {
 			svc.personInfo[personId] = createDefaultPersonInfo(personSchedule);			

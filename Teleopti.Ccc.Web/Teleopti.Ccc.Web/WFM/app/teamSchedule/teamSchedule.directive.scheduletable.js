@@ -65,7 +65,8 @@
 		vm.ToggleProjectionSelection = function (currentProjection, viewDate) {
 			if (!vm.canToggleSelection(currentProjection, viewDate)) return;
 			currentProjection.ToggleSelection();
-			personSelectionSvc.updatePersonProjectionSelection(currentProjection);
+
+			personSelectionSvc.updatePersonProjectionSelection(currentProjection, viewDate);
 		};
 
 		vm.togglePerson = function (personSchedule, $event) {
