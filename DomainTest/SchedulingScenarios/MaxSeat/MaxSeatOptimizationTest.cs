@@ -573,32 +573,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		}
 
 		[Test]
-		public void ShouldNotMoveMoreSchedulesThanNecessary()
-		{
-			if (_teamBlockType == TeamBlockType.Team)
-				Assert.Ignore("Won't probably be fixed for first version. When we know more fix or delete");
-
-			var site = new Site("_") { MaxSeats = 2 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
-			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
-			var activity = new Activity("_") { RequiresSeat = true }.WithId();
-			var dateOnly = new DateOnly(2016, 10, 25);
-			var scenario = new Scenario("_");
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 9, 0, 60), new TimePeriodWithSegment(17, 0, 17, 0, 60), new ShiftCategory("_").WithId()));
-			var agentScheduledForAnHourData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 9, 0));
-			var agentData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
-			var agent2Data = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
-			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentScheduledForAnHourData.Assignment, agentData.Assignment, agent2Data.Assignment });
-			var optPreferences = createOptimizationPreferences();
-
-			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData.Agent, agent2Data.Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
-
-			schedules.SchedulesForDay(dateOnly)
-				.Count(x => x.PersonAssignment().Period.StartDateTime.TimeOfDay == TimeSpan.FromHours(9))
-				.Should().Be.EqualTo(1);
-		}
-
-		[Test]
 		public void ShouldNotRemoveMoreThanNecessary()
 		{
 			var site = new Site("_") { MaxSeats = 2 }.WithId();

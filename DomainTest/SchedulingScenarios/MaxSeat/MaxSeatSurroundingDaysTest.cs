@@ -34,36 +34,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		}
 
 		[Test]
-		public void ShouldNotChangeDayWhereMaxSeatIsOkWhenMultipleDaysSelected()
-		{
-			if (_teamBlockType == TeamBlockType.Block)
-				Assert.Ignore("Won't probably be fixed for first version. When we know more fix or delete");
-			var site = new Site("_") { MaxSeats = 1 }.WithId();
-			var team = new Team { Description = new Description("_"), Site = site };
-			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
-			var activity = new Activity("_") { RequiresSeat = true }.WithId();
-			var dateOnly = new DateOnly(2016, 10, 25);
-			var period = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1));
-			var scenario = new Scenario("_");
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
-			var agentDataOneHour = MaxSeatDataFactory.CreateAgentWithAssignment(period.EndDate, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(16, 0, 17, 0));
-			var agentDatas = MaxSeatDataFactory.CreateAgentWithAssignments(period, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(9, 0, 17, 0));
-
-			var assignments = agentDatas.Select(maxSeatData => maxSeatData.Assignment).ToList();
-			assignments.Add(agentDataOneHour.Assignment);
-
-			var schedules = ScheduleDictionaryCreator.WithData(scenario, period, assignments);
-			var optPreferences = createOptimizationPreferences();
-
-			Target.Optimize(period, new[] { agentDatas.First().Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
-
-			schedules[agentDatas.First().Agent].ScheduledDay(period.StartDate)
-				.PersonAssignment()
-				.Period.StartDateTime.TimeOfDay.Should()
-				.Be.EqualTo(TimeSpan.FromHours(9));
-		}
-
-		[Test]
 		public void ShouldFixMaxSeatIfIssueIsNotOnFirstDay()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
