@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						}
 
 						//CLAES! konstigt - detta block behövs inte längre? Varför behöver vi inte längre låsa oschemalagda dagar?
-						//Om denna verkligen kan tas bort - renama filen till nåt annat
+						//Om denna verkligen kan tas bort - renama filen till nåt annat då den inte längre låser scheman utan bara tar bort onödiga teamblocks
 
 						//else
 						//{
