@@ -84,12 +84,9 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
 			foreach (var budgetDay in budgetDays.OrderBy(x => x.Day))
 			{
-				if (budgetDay.IsClosed) continue;
-
 				var currentDay = budgetDay.Day;
 				var remainingAllowanceMinutes = getRemainingAllowanceMinutes(personPeriod, defaultScenario, budgetDay, currentDay);
-				var requestedAbsenceMinutes =
-					calculateRequestedMinutes(currentDay, absenceRequest.Period, scheduleRange, personPeriod).TotalMinutes;
+				var requestedAbsenceMinutes = calculateRequestedMinutes(currentDay, absenceRequest.Period, scheduleRange, personPeriod).TotalMinutes;
 				var addedBefore = schedulingResultStateHolder.AddedAbsenceMinutesDuringCurrentRequestHandlingCycle(budgetDay);
 				remainingAllowanceMinutes -= addedBefore;
 

@@ -90,7 +90,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod)).IgnoreArguments().Return(new List<IBudgetDay> { budgetDay });
 				Expect.Call(budgetDay.Allowance).Return(2d);
 				Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Times(2);
-				Expect.Call(budgetDay.IsClosed).Return(false);
 				Expect.Call(budgetDay.FulltimeEquivalentHours).Return(8d);
 				Expect.Call(_scheduleProjectionReadOnlyPersister.AbsenceTimePerBudgetGroup(_defaultDatePeriod, null, null)).IgnoreArguments().
 					 Return(usedAbsenceTime);
@@ -143,7 +142,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 					});
 				Expect.Call(budgetDay.Allowance).Return(2d);
 				Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Times(2);
-				Expect.Call(budgetDay.IsClosed).Return(false);
 				Expect.Call(budgetDay.FulltimeEquivalentHours).Return(8d);
 				Expect.Call(_scheduleProjectionReadOnlyPersister.AbsenceTimePerBudgetGroup(_defaultDatePeriod, null, null))
 					.IgnoreArguments().Return(usedAbsenceTime);
@@ -189,7 +187,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod)).IgnoreArguments().Return(new List<IBudgetDay> { budgetDay });
 				Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Times(2);
 				Expect.Call(budgetDay.Allowance).Return(2d);
-				Expect.Call(budgetDay.IsClosed).Return(false);
 				Expect.Call(budgetDay.FulltimeEquivalentHours).Return(8d);
 				Expect.Call(_scheduleProjectionReadOnlyPersister.AbsenceTimePerBudgetGroup(_defaultDatePeriod, null, null)).IgnoreArguments().
 					 Return(usedAbsenceTime);

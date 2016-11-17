@@ -67,8 +67,6 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
 			foreach (var budgetDay in budgetDays.OrderBy(x => x.Day))
 			{
-				if (budgetDay.IsClosed) continue;
-
 				var currentDay = budgetDay.Day;
 				var allowance = budgetDay.Allowance;
 				var alreadyUsedAllowance = _scheduleProjectionReadOnlyPersister.GetNumberOfAbsencesPerDayAndBudgetGroup(
