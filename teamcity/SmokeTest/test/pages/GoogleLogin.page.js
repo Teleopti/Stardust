@@ -13,10 +13,10 @@ var GoogleLoginPage = Object.create(Page, {
 	
 	signin: { value: function() {
 		console.log('Signing in using Google');
-		this.username.waitForExist(60 * 1000);
+		this.username.waitForVisible(60 * 1000);
 		this.username.setValue('demo.teleopti@gmail.com');
 		this.next.click();
-		this.password.waitForExist(60 * 1000);
+		this.password.waitForVisible(60 * 1000);
 		this.password.setValue('m8kemew0rk');
         this.signinButton.click();
     } }

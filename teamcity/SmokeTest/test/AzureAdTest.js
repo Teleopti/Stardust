@@ -8,6 +8,7 @@ describe('Azure AD', function() {
 	
 	// ignore this one for now, need to change APP ID URI in Teleopti Azure AD first, and the claim input in claim policy need to change to name instead of nameidentifier
     xit('should be able to sign in with AD user using WsFed', function () {
+		browser.deleteCookie();
 		// Given that we are showing the IdentityProviders selection page
 		MytimePage.open();
 		if (MytimePage.isCurrentPage()) {
@@ -24,6 +25,7 @@ describe('Azure AD', function() {
     }, 2);
 	
 	it('should be able to sign in with AD user using OAuth', function () {
+		browser.deleteCookie();
 		// Given that we are showing the IdentityProviders selection page
 		MytimePage.open();
 		if (MytimePage.isCurrentPage()) {

@@ -7,6 +7,7 @@ describe('Google', function() {
 	this.timeout(360 * 1000); // Set global timeout for this test to 6 minutes
 	
     it('should be able to sign in with Google user', function () {
+		browser.deleteCookie();
 		// Given that we are showing the IdentityProviders selection page
 		MytimePage.open();
 		if (MytimePage.isCurrentPage()) {

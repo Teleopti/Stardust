@@ -18,7 +18,7 @@ var OktaPage = Object.create(Page, {
 	
 	signin: { value: function() {
 		console.log('Signing in using Okta');
-		this.username.waitForExist(60 * 1000);
+		this.username.waitForVisible(60 * 1000);
 		this.username.setValue('demo@teleopti.com');
 		this.password.setValue('M8kemew0rk');
         this.signinButton.click();

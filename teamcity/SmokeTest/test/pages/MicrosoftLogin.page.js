@@ -13,10 +13,10 @@ var MicrosoftLoginPage = Object.create(Page, {
 	
 	signin: { value: function() {
 		console.log('Signing in using Teleopti Azure AD');
-		this.username.waitForExist(60 * 1000);
+		this.username.waitForVisible(60 * 1000);
 		this.username.setValue('demo@teleopti.com');
 		this.password.setValue('teleoptidemo');
-		this.password2.waitForExist(60 * 1000);
+		this.password2.waitForVisible(60 * 1000);
 		this.password2.setValue('teleoptidemo');
         this.signinButton.click();
     } }

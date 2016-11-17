@@ -5,6 +5,7 @@ var IdentityProvidersPage = require('./pages/IdentityProviders.page');
 describe('health check', function() {
 	
     it('starting healthcheck should show results', function () {
+		browser.deleteCookie();
 		// Given that we are signed in and showing the HealthCheck page
 		HealthCheckPage.open();
 		if (HealthCheckPage.isCurrentPage()) {
