@@ -26,6 +26,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			return new MaxSeatPeakData(datePeak);
 		}
 
+		public MaxSeatPeakData Fetch(IEnumerable<DateOnly> datesToConsider, IEnumerable<ISkillDay> maxSeatSkillDaysToLookAt)
+		{
+			var datePeak = new Dictionary<DateOnly, double>();
+			foreach (var date in datesToConsider)
+			{
+				datePeak[date] = fetchForDate(date, maxSeatSkillDaysToLookAt);
+			}
+			return new MaxSeatPeakData(datePeak);
+		}
+
 		private double fetchForDate(DateOnly dateOnly, IEnumerable<ISkillDay> maxSeatSkillDaysToLookAt)
 		{
 			var retValue = 0d;

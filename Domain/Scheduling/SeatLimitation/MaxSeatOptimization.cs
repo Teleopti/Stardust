@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 							datePoint, schedulingOptions, rollbackService,
 							new DoNothingResourceCalculateDelayer(), skillDaysForTeamBlockInfo.Union(allSkillDays), schedules,
 							new ShiftNudgeDirective(), businessRules);
-						var maxPeaksAfter = _maxSeatPeak.Fetch(teamBlockInfo, skillDaysForTeamBlockInfo);
+						var maxPeaksAfter = _maxSeatPeak.Fetch(scheduleCallback.ModifiedDates, skillDaysForTeamBlockInfo);
 
 						if (scheduleWasSuccess &&
 								_restrictionOverLimitValidator.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences) &&

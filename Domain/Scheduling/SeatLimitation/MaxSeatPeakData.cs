@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -20,14 +21,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 		public bool IsBetterThan(MaxSeatPeakData maxPeaksBefore, IEnumerable<DateOnly> modifiedDates)
 		{
-			foreach (var date in modifiedDates)
+			var highestPeakBefore = 0d;
+			var highestPeakCurrent = 0d;
+			foreach (var modifiedDate in modifiedDates)
 			{
-				var currentPeak = _datePeaks[date];
-				var prevPeak = maxPeaksBefore._datePeaks[date];
-				if (currentPeak.IsPositive() && currentPeak >= prevPeak)
-					return false;
+				highestPeakBefore = Math.Max(highestPeakBefore, maxPeaksBefore._datePeaks[modifiedDate]);
+				highestPeakCurrent = Math.Max(highestPeakCurrent, _datePeaks[modifiedDate]);
 			}
-			return true;
+
+			return highestPeakCurrent < highestPeakBefore;
 		}
 	}
 }
