@@ -17,13 +17,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 	    private readonly IScheduleValidationProvider _validationProvider;
 	    private readonly IShiftCategoryProvider _shiftCategoryProvider;
 	    private readonly IToggleManager _toggleManager;
+	    private readonly IMultiplicatorDefinitionSetProvider _multiplicatorDefinitionSetProvider;
 
-		public TeamScheduleDataController(IActivityProvider teamScheduleDataProvider, IScheduleValidationProvider validationProvider, IShiftCategoryProvider shiftCategoryProvider, IToggleManager toggleManager)
+		public TeamScheduleDataController(IActivityProvider teamScheduleDataProvider, IScheduleValidationProvider validationProvider, IShiftCategoryProvider shiftCategoryProvider, IToggleManager toggleManager, IMultiplicatorDefinitionSetProvider multiplicatorDefinitionSetProvider)
 		{
 			_teamScheduleDataProvider = teamScheduleDataProvider;
 			_validationProvider = validationProvider;
 			_shiftCategoryProvider = shiftCategoryProvider;
 			_toggleManager = toggleManager;
+			_multiplicatorDefinitionSetProvider = multiplicatorDefinitionSetProvider;
 		}
 
 	    [UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchActivities")]
@@ -90,6 +92,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return _validationProvider.GetAllValidationRuleTypes(ruleFlags);
 		}
 
+		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchMultiplicationDefinitionSets")]
+		public virtual IList<MultiplicatorDefinitionSetViewModel> FetchMultiplicationDefinitionSets()
+		{
+			return _multiplicatorDefinitionSetProvider.GetAll();
+		}
 
 
 		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchShiftCategories")]
