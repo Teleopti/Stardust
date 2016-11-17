@@ -167,7 +167,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 						listDeviationFactorPerInterval.Add(actualIntervalCalls.Calls / forecastedIntervalCalls.Calls);
 					}
 					var alpha = 0.2d;
-					averageDeviation = listDeviationFactorPerInterval.Aggregate((current, next) => alpha * next + (1 - alpha) * current);
+					if (listDeviationFactorPerInterval.Count != 0)
+						averageDeviation = listDeviationFactorPerInterval.Aggregate((current, next) => alpha*next + (1 - alpha)*current);
 				}
 
 
