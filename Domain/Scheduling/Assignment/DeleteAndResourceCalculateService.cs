@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
@@ -35,8 +36,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void DeleteWithResourceCalculation(IEnumerable<IScheduleDay> daysToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
-			_deleteSchedulePartService.Delete(daysToDelete, rollbackService, NewBusinessRuleCollection.Minimum());
-			resourceCalculate(daysToDelete, considerShortBreaks, doIntraIntervalCalculation);
+			if (daysToDelete.Any()) //needed because it throws lower down the stack if list is empty for some strange reason I cannot understand
+			{
+				_deleteSchedulePartService.Delete(daysToDelete, rollbackService, NewBusinessRuleCollection.Minimum());
+				resourceCalculate(daysToDelete, considerShortBreaks, doIntraIntervalCalculation);
+			}
 		}
 
 		public void DeleteWithResourceCalculation(IScheduleDay dayToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation)
