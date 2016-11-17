@@ -77,6 +77,7 @@
 				$scope.openedMaxNumberOfAgents = false;
 				$scope.maxNumberOfAgents = 50;
 				$scope.isLoading = true;
+				$scope.pollingLock = true;
 				// because angular cant handle an array of null in stateparams
 				var nullStateId = "noState";
 
@@ -110,6 +111,7 @@
 				});
 
 				(function initialize() {
+					$scope.pollingLock = false;
 					if (siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId) {
 						getAgents()
 							.then(function(fn) {
@@ -124,6 +126,7 @@
 								$scope.agents = agentsInfo;
 								$scope.$watchCollection('agents', filterData);
 								updateBreadCrumb(agentsInfo);
+								$scope.pollingLock = true;
 							})
 							.then(updateStates)
 							.then(updatePhoneStatesFromStateParams);
@@ -223,6 +226,7 @@
 					fillAgentsWithoutState();
 					buildTimeline(states);
 					$scope.isLoading = false;
+					$scope.pollingLock = true;
 				}
 
 				function fillAgentsWithState(states) {
@@ -372,13 +376,20 @@
 
 				function setupPolling() {
 					polling = $interval(function() {
-						updateStates();
+						if($scope.pollingLock){
+							$scope.pollingLock = false;
+							updateStates();
+						}
+
 					}, 5000);
 				}
 
 				function cancelPolling() {
 					if (polling != null)
+					{
 						$interval.cancel(polling);
+						$scope.pollingLock = true;
+					}
 				}
 
 				$scope.getTableHeight = function() {
