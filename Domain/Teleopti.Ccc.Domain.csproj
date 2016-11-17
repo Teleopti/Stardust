@@ -555,6 +555,7 @@
     <Compile Include="Scheduling\TeamBlock\SchedulePeriodBlockFinder.cs" />
     <Compile Include="Scheduling\TeamBlock\ShiftProjectionCachesForIntraInterval.cs" />
     <Compile Include="Scheduling\TeamBlock\SingleDayBlockFinder.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulerOld.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfoFactoryFactory.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\IsAnySkillOpen.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftSelectorForMaxSeat.cs" />

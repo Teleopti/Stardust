@@ -524,7 +524,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SplitSchedulePeriodToWeekPeriod>().As<ISplitSchedulePeriodToWeekPeriod>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamScheduling>().As<ITeamScheduling>().SingleInstance();
 			builder.RegisterType<TeamBlockSingleDayScheduler>().As<ITeamBlockSingleDayScheduler>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamBlockScheduler>().As<ITeamBlockScheduler>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftProjectionCachesForIntraInterval>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockGenerator>().As<ITeamBlockGenerator>();
 			builder.RegisterType<MissingDayOffBestSpotDecider>().As<IMissingDayOffBestSpotDecider>();
@@ -579,6 +578,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MaxSeatSkillCreator>().SingleInstance();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_MaxSeatsNew_40939))
 			{
+				builder.RegisterType<TeamBlockScheduler>().As<ITeamBlockScheduler>().InstancePerLifetimeScope();
 				builder.RegisterType<InitMaxSeatForStateHolder>().As<IInitMaxSeatForStateHolder>().InstancePerLifetimeScope();
 				builder.RegisterType<UsedSeatsFromResourceCalculationContext>().As<IUsedSeats>().SingleInstance();
 
@@ -593,6 +593,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			else
 			{
+				builder.RegisterType<TeamBlockSchedulerOld>().As<ITeamBlockScheduler>().InstancePerLifetimeScope();
 				builder.RegisterType<UsedSeatsFromSkillStaff>().As<IUsedSeats>().SingleInstance();
 				builder.RegisterType<InitMaxSeatForStateHolderOld>().As<IInitMaxSeatForStateHolder>().InstancePerLifetimeScope();
 
