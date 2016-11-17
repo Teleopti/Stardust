@@ -9,7 +9,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
-	[InfrastructureTest]
+	[DatabaseTest]
 	[TestFixture]
 	public class NumberOfAgentsInTeamReaderTest
 	{
@@ -52,6 +52,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				.Should().Be.Empty();
 		}
 
+
+
 		[Test]
 		public void ShouldLoadForSkill()
 		{
@@ -92,5 +94,84 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result[teamId].Should().Be(1);
 		}
 
+		[Test]
+		public void ShouldOnlyCountAgentOnce()
+		{
+			Database
+				.WithAgent()
+				.WithSkill("phone")
+				.WithSkill("email")
+				.UpdateGroupings();
+			var teamId = Database.CurrentTeamId();
+			var phoneId = Database.SkillIdFor("phone");
+			var emailId = Database.SkillIdFor("email");
+
+			var result = WithUnitOfWork.Get(() => Target.ForSkills(new[] { teamId }, new[] { phoneId, emailId }));
+
+			result[teamId].Should().Be(1);
+		}
+		
+		[Test]
+		public void ShouldNotCountFutureOrPastPersonPeriodForSkill()
+		{
+			Now.Is("2016-11-16");
+			Database
+				.WithPerson("ashley")
+				.WithPersonPeriod("2016-09-01")
+				.WithSkill("email")
+				.WithPersonPeriod("2016-11-01")
+				.WithSkill("phone")
+				.WithPersonPeriod("2017-01-01")
+				.WithSkill("email")
+				.UpdateGroupings()
+				;
+			var teamId = Database.CurrentTeamId();
+			var emailId = Database.SkillIdFor("email");
+
+			var result = WithUnitOfWork.Get(() => Target.ForSkills(new[] { teamId }, new[] { emailId }));
+
+			result.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldNotCountAllPersonPeriodsThatShareSkill()
+		{
+			Now.Is("2016-11-16");
+			Database
+				.WithPerson("ashley")
+				.WithPersonPeriod("2016-09-01")
+				.WithSkill("email")
+				.WithPersonPeriod("2016-11-01")
+				.WithSkill("email")
+				.WithPersonPeriod("2017-01-01")
+				.WithSkill("email")
+				.UpdateGroupings()
+				;
+			var teamId = Database.CurrentTeamId();
+			var emailId = Database.SkillIdFor("email");
+
+			var result = WithUnitOfWork.Get(() => Target.ForSkills(new[] { teamId }, new[] { emailId }));
+
+			result[teamId].Should().Be(1);
+		}
+
+
+		[Test]
+		public void ShouldNotLoadTerminatedAgentForSkill()
+		{
+			Now.Is("2016-11-16 08:00");
+			Database
+				.WithAgent()
+				.WithSkill("phone")
+				.WithTerminatedAgent("2016-11-15")
+				.WithSkill("phone")
+				.UpdateGroupings();
+			var teamId = Database.CurrentTeamId();
+			var phoneId = Database.SkillIdFor("phone");
+
+			var result = WithUnitOfWork.Get(() => Target.ForSkills(new[] { teamId }, new[] { phoneId }));
+
+			result[teamId].Should().Be(1);
+		}
 	}
 }
