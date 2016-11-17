@@ -84,6 +84,7 @@ WfmTeamSchedule_WeeklyContractTime_39871 = true
 WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925 = true
 WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305 = RC
 WfmTeamSchedule_MoveEntireShift_41632 = RC
+WfmTeamSchedule_AddOvertime_41696 = DEV
 
 WfmTeamSchedule_MoveToBaseLicense_41039 = true
 

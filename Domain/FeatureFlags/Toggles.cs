@@ -55,6 +55,7 @@
 		WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
 		WfmTeamSchedule_RemoveAbsence_36705,
 		WfmTeamSchedule_AddActivity_37541,
+		WfmTeamSchedule_AddOvertime_41696,
 		WfmTeamSchedule_RemoveActivity_37743,
 		WfmTeamSchedule_MoveActivity_37744,
 		WfmTeamSchedule_ShowContractTime_38509,
