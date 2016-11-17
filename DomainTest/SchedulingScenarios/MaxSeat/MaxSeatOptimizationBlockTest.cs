@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				.Should().Be.EqualTo(1);
 		}
 
-		[Test, Ignore("TO BE FIXED!")]
+		[Test]
 		public void ShouldNotCrashWhenBlockSameShiftCategoryIsUsedWhenOptimizationWasUnsuccesful()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
