@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			if (!success && _teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(schedulingOptions))
 			{
-				_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
+				_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules);
 				roleModelShift = _roleModelSelector.Select(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(),schedulingOptions, shiftNudgeDirective.EffectiveRestriction);		
 				success = tryScheduleBlock(workShiftSelector, teamBlockInfo, schedulingOptions, selectedBlockDays, roleModelShift, rollbackService, resourceCalculateDelayer, allSkillDays, schedules, shiftNudgeDirective, businessRules, ()=>
 				{
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 				if (!success)
 				{
-					rollbackService.Rollback();
+					rollbackService.RollbackMinimumChecks();
 
 					foreach (var selectedBlockDay in selectedBlockDays)
 					{
