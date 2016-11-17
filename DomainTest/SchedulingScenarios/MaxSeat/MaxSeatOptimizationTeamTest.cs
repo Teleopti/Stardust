@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			schedules[agentDataOneHour3.Agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.TimeOfDay.Should().Be.EqualTo(TimeSpan.FromHours(16));
 		}
 
-		[Test, Ignore("40939")]
+		[Test]
 		public void ShouldNotCrashWhenEmptyDayInMultipleDaysSelected()
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
