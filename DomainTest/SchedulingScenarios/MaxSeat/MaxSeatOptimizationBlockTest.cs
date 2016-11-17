@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -45,6 +46,35 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			schedules.SchedulesForDay(dateOnly)
 				.Count(x => x.PersonAssignment().Period.StartDateTime.TimeOfDay == TimeSpan.FromHours(9))
 				.Should().Be.EqualTo(1);
+		}
+
+		[Test, Ignore("TO BE FIXED!")]
+		public void ShouldNotCrashWhenBlockSameShiftCategoryIsUsedWhenOptimizationWasUnsuccesful()
+		{
+			var site = new Site("_") { MaxSeats = 1 }.WithId();
+			var team = new Team { Description = new Description("_"), Site = site };
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			var activity = new Activity("_") { RequiresSeat = true }.WithId();
+			var dateOnly = new DateOnly(2016, 10, 25);
+			var scenario = new Scenario("_");
+			var shiftCategoryInRuleset = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 9, 0, 60), new TimePeriodWithSegment(17, 0, 17, 0, 60), shiftCategoryInRuleset));
+			var agentScheduledForAnHourData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 9, 0));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 2);
+			agent.AddPersonPeriod(new PersonPeriod(dateOnly.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = new RuleSetBag(ruleSet) });
+			agent.AddSchedulePeriod(schedulePeriod);
+			var ass = new PersonAssignment(agent, scenario, dateOnly);
+			ass.AddActivity(activity, new TimePeriod(8, 16));
+			ass.SetShiftCategory(new ShiftCategory("_"));
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)), new[] { agentScheduledForAnHourData.Assignment, ass });
+			var optPreferences = DefaultMaxSeatOptimizationPreferences.Create(TeamBlockType.Block);
+			optPreferences.Extra.UseBlockSameShiftCategory = true;
+
+			Assert.DoesNotThrow(() =>
+			{
+				Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] {agent}, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
+			});
 		}
 	}
 }
