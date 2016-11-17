@@ -342,7 +342,7 @@
 						"Color": "#80FF80",
 						"Description": "Email",
 						"Start": scheduleDate + " 08:00",
-						"Minutes": 480
+						"Minutes": 600
 					}
 				],
 				"IsFullDayAbsence": false,
@@ -363,6 +363,61 @@
 						"Color": "#80FF80",
 						"Description": "Email",
 						"Start": nextDay + " 05:00",
+						"Minutes": 480
+					}
+				],
+				"IsFullDayAbsence": false,
+				"DayOff": null
+			};
+
+			scheduleMgmt.resetSchedules([scheduleToday, scheduleNextDay], moment(scheduleDate), "Asia/Hong_Kong");
+			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			var newStartMoment = moment(scheduleDate + " 23:00");
+
+			target.validateMoveToTimeForShift(newStartMoment, "Asia/Hong_Kong");
+
+			expect(target.getInvalidPeople().length).toEqual(1);
+		});
+
+		it('should invalidate shift-move if shift will conflict with shift of tomorrow after the move when there are shifts outside view range', function () {
+			var nextDay = "2016-05-13";
+			var scheduleToday = {
+				"PersonId": "221B-Baker-SomeoneElse",
+				"Name": "SomeoneElse",
+				"Date": scheduleDate,
+				"Timezone": {
+					IanaId: "Asia/Hong_Kong"
+				},
+				"Projection": [
+					{
+						"ShiftLayerIds": ["layer1"],
+						"ParentPersonAbsences": null,
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": scheduleDate + " 08:00",
+						"Minutes": 600
+					}
+				],
+				"IsFullDayAbsence": false,
+				"DayOff": null
+			};
+
+			var scheduleNextDay = {
+				"PersonId": "221B-Baker-SomeoneElse",
+				"Name": "SomeoneElse",
+				"Date": nextDay,
+				"Timezone": {
+					IanaId: "Asia/Hong_Kong"
+				},
+				"Projection": [
+					{
+						"ShiftLayerIds": ["layer1"],
+						"ParentPersonAbsences": null,
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": nextDay + " 08:00",
 						"Minutes": 480
 					}
 				],

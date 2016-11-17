@@ -17,14 +17,19 @@ angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', ['TeamSchedul
 			var schedulesInRange = groupSchedules.filter(function (schedule) {
 				return isScheduleWithinViewRange(schedule, queryDateMoment, maximumViewRange, useNextDayScheduleData);
 			});
+
+			var extraSchedules = groupSchedules.filter(function(schedule) {
+				return schedulesInRange.indexOf(schedule) < 0;
+			});
+
 			var timeLine = timeLineFactory.Create(schedulesInRange, queryDateMoment, maximumViewRange);
 			return {
 				TimeLine: timeLine,
-				Schedules: createSchedulesFromGroupSchedules(schedulesInRange, timeLine)
+				Schedules: createSchedulesFromGroupSchedules(schedulesInRange, timeLine, extraSchedules)		
 			};
 		}
 
-		function createSchedulesFromGroupSchedules(groupSchedules, timeLine) {
+		function createSchedulesFromGroupSchedules(groupSchedules, timeLine, extraSchedules) {
 			var existedSchedulesDictionary = {};
 			var schedules = [];
 
@@ -38,6 +43,13 @@ angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', ['TeamSchedul
 					existedPersonSchedule.Merge(schedule, timeLine);
 				}
 			});
+
+			extraSchedules.forEach(function(schedule) {
+				if(existedSchedulesDictionary[schedule.PersonId] && existedSchedulesDictionary[schedule.PersonId].MergeExtra){
+					existedSchedulesDictionary[schedule.PersonId].MergeExtra(schedule, timeLine);
+				 }
+			});
+
 			return schedules;
 		}
 

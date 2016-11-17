@@ -57,9 +57,9 @@
 				Name: schedule.Name,
 				Date: schedule.Date,
 				Timezone: schedule.Timezone,
-
 				IsFullDayAbsence: schedule.IsFullDayAbsence,
 				Merge: merge,
+				MergeExtra: mergeExtra,
 				IsSelected: false,
 				AllowSwap: function() {
 					return !this.IsFullDayAbsence;
@@ -115,7 +115,8 @@
 				},
 				ViewRange: timeLine.MaximumViewRange,
 				Shifts: [],
-				DayOffs: []
+				DayOffs: [],
+				ExtraShifts: []
 			};
 
 			var shiftVm = {
@@ -288,6 +289,29 @@
 			if (otherProjections != undefined) {
 				newShift.Projections = otherProjections;
 				this.Shifts.push(newShift);
+			}
+
+			var otherDayOffVm = createDayOffViewModel(otherSchedule.DayOff, timeLine, this);
+
+			if (otherDayOffVm != undefined) {
+				this.DayOffs.push(otherDayOffVm);
+			}
+		}
+
+		function mergeExtra(otherSchedule, timeLine) {
+			var newShift = {
+				Date: otherSchedule.Date,
+				Projections: [],
+				ProjectionTimeRange: getProjectionTimeRange(otherSchedule),
+				AbsenceCount: getPersonAbsencesCount,
+				ActivityCount: getPersonActivitiesCount,
+				Parent: this
+			};
+
+			var otherProjections = createProjections(otherSchedule.Projection, timeLine, newShift);
+			if (otherProjections != undefined) {
+				newShift.Projections = otherProjections;
+				this.ExtraShifts.push(newShift);
 			}
 
 			var otherDayOffVm = createDayOffViewModel(otherSchedule.DayOff, timeLine, this);

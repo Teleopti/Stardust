@@ -61,8 +61,9 @@
 					.diff(moment(shiftForCurrentDay.ProjectionTimeRange.Start), 'minute');
 				var newEndMoment = newStartMoment.clone().add(shiftLength, 'minute');
 
-				var hasConflict = personSchedule.Shifts.some(function(shift) {
+				var hasConflict = personSchedule.Shifts.concat(personSchedule.ExtraShifts).some(function(shift) {
 					if (currentDateMoment.isSame(shift.Date, 'day') || !shift.ProjectionTimeRange) return false;
+
 					return (currentDateMoment.isAfter(shift.Date, 'day') &&  newStartMoment.isSameOrBefore(moment(shift.ProjectionTimeRange.End), 'minute')) ||
 						(currentDateMoment.isBefore(shift.Date, 'day') && newEndMoment.isSameOrAfter(moment(shift.ProjectionTimeRange.Start), 'minute'));
 				});
