@@ -6,7 +6,7 @@ angular.module('wfm.rta').provider('RtaState', function() {
 		RTA_HideAgentsByStateGroup_40469: false,
 		RTA_SiteAndTeamOnSkillOverview_40817: false,
 		RTA_AgentsOnOrganizationAndSkills_41586: false,
-		RTA_QuicklyChangeAgentsSelection_40610: true
+		RTA_QuicklyChangeAgentsSelection_40610: false
 	};
 	var rtaAgentsTemplateUrl = function(elem, attr) {
 		if(toggles.RTA_AgentsOnOrganizationAndSkills_41586)
