@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void DeleteWithResourceCalculation(IEnumerable<IScheduleDay> daysToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
-			_deleteSchedulePartService.Delete(daysToDelete, rollbackService);
+			_deleteSchedulePartService.Delete(daysToDelete, rollbackService, NewBusinessRuleCollection.Minimum());
 			resourceCalculate(daysToDelete, considerShortBreaks, doIntraIntervalCalculation);
 		}
 
