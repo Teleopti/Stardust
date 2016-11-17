@@ -205,7 +205,7 @@ namespace ManagerTest
 			job.Satisfy(job1 => job1.Started != null);
 			job.Satisfy(job1 => job1.Ended == null);
 
-			NodeManager.RequeueJobsThatDidNotFinishedByWorkerNodeUri(new Uri(job.SentToWorkerNodeUri));
+			NodeManager.RequeueJobsThatDidNotFinishedByWorkerNodeUri(job.SentToWorkerNodeUri);
 
 			JobRepository.GetAllJobs().Count.Should().Be(0);
 			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(1);

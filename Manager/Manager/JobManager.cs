@@ -17,16 +17,18 @@ namespace Stardust.Manager
 		private readonly IJobRepository _jobRepository;
 		private readonly ManagerConfiguration _managerConfiguration;
 		private readonly IWorkerNodeRepository _workerNodeRepository;
+		private readonly NodeManager _nodeManager;
 
 		public JobManager(IJobRepository jobRepository,
 		                  IWorkerNodeRepository workerNodeRepository,
 		                  ManagerConfiguration managerConfiguration,
 						  JobPurgeTimer jobPurgeTimer,
-						  NodePurgeTimer nodePurgeTimer)
+						  NodePurgeTimer nodePurgeTimer, NodeManager nodeManager)
 		{
 			_jobRepository = jobRepository;
 			_workerNodeRepository = workerNodeRepository;
 			_managerConfiguration = managerConfiguration;
+			_nodeManager = nodeManager;
 
 			_checkAndAssignJob.Elapsed += AssignJobToWorkerNodes_Elapsed;
 			_checkAndAssignJob.Interval = _managerConfiguration.CheckNewJobIntervalSeconds*1000;
@@ -66,34 +68,15 @@ namespace Stardust.Manager
 
 		public void CheckWorkerNodesAreAlive(TimeSpan timeSpan)
 		{
-			//If two managers find the same node as dead the first one will update the status 
-			//and the second one won't find that job as "executing" and do nothing
 			var deadNodes = _workerNodeRepository.CheckNodesAreAlive(timeSpan);
 			if (!deadNodes.Any())
 			{
 				return;
 			}
 
-			var jobs = _jobRepository.GetAllExecutingJobs();
-			if (!jobs.Any())
-			{
-				return;
-			}
-
 			foreach (var node in deadNodes)
 			{
-				foreach (var job in jobs)
-				{
-					if (job.SentToWorkerNodeUri == node)
-					{
-						this.Log().ErrorWithLineNumber("Job ( id , name ) is deleted due to the node executing it died. ( " + job.JobId +
-						                               " , " + job.Name + " )");
-
-						UpdateResultForJob(job.JobId,
-						                   "Fatal Node Failure",
-						                   DateTime.UtcNow);
-					}
-				}
+				_nodeManager.RequeueJobsThatDidNotFinishedByWorkerNodeUri(node);
 			}
 		}
 

@@ -213,11 +213,9 @@ namespace Stardust.Manager
 			{
 				this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received init from Node. Node Uri : ( " + workerNodeUri + " )");
 
-				_nodeManager.RequeueJobsThatDidNotFinishedByWorkerNodeUri(workerNodeUri);
+				_nodeManager.RequeueJobsThatDidNotFinishedByWorkerNodeUri(workerNodeUri.ToString());
 
 				_nodeManager.AddWorkerNode(workerNodeUri);
-
-				_jobManager.AssignJobToWorkerNodes();
 			});
 
 			return Ok();

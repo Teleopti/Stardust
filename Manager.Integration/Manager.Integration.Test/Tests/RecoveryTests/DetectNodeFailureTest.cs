@@ -60,16 +60,15 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 			taskShutDownNode.Wait();
 			
 			waitForNodeToEndEvent.Wait(TimeSpan.FromMinutes(1));
-			//Give manager a couple of seconds to set the result to fatal
+
+			//Give manager a couple of seconds to requeue job
 			Thread.Sleep(TimeSpan.FromSeconds(2));
 
 			var jobs = checkTablesInManagerDbTimer.ManagerDbRepository.Jobs;
 
 			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.WorkerNodes.All(node => node.Alive == false), "Worker Node should not be alive.");
-			Assert.IsTrue(!checkTablesInManagerDbTimer.ManagerDbRepository.JobQueueItems.Any(),"Job queue should be empty.");
-			Assert.IsTrue(jobs.Any(), "Job should not be empty.");
-			Assert.IsTrue(jobs.Any(job => job.Result.StartsWith("Fatal Node Failure",StringComparison.InvariantCultureIgnoreCase)),
-						"All jobs shall have status of Fatal Node Failure.");
+			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.JobQueueItems.Any(),"Job should be in queue.");
+			Assert.IsTrue(!jobs.Any(), "Job should be empty.");
 
 			checkTablesInManagerDbTimer.Dispose();
 
