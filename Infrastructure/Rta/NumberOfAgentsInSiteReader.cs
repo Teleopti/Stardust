@@ -22,34 +22,17 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
 		}
 
-		private const string agentsForSites = @"
-SELECT
-	a.Site as 'SiteId',
-	count(a.Parent) as 'NumberOfAgents'
-FROM
-(
-	SELECT
-	pp.StartDate,
-	pp.Parent,
-	pp.PersonPeriod,
-	pp.BusinessUnit,
-	pp.Site,
-	pp.Team,
-	ROW_NUMBER()OVER(PARTITION BY pp.Parent ORDER BY pp.StartDate DESC) as is_current
-	FROM dbo.v_PersonPeriodTeamSiteBu pp WITH(NOEXPAND)
-	WHERE pp.StartDate <= :now 
-) a
-inner join person p on 
-a.parent = p.id
-
-WHERE a.is_current=1
-and a.Site in (:sites)
-and (p.TerminalDate is null or p.TerminalDate > :now)
-group by a.Site";
 		public IDictionary<Guid, int> FetchNumberOfAgents(IEnumerable<Guid> siteIds)
 		{
 			var models =
-				_currentUnitOfWork.Session().CreateSQLQuery(agentsForSites)
+				_currentUnitOfWork.Session().CreateSQLQuery(@"
+SELECT
+	Site as 'SiteId',
+	count(Parent) as 'NumberOfAgents'
+FROM dbo.v_PersonPeriodTeamSiteBu WITH(NOEXPAND)
+WHERE :now BETWEEN StartDate AND EndDate 
+AND Site in (:sites)
+group by Site")
 					.SetDateTime("now", _now.UtcDateTime())
 					.SetParameterList("sites", siteIds)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(siteViewModel)))
@@ -64,41 +47,25 @@ group by a.Site";
 			return initializedSites.Concat(models).ToDictionary(x => x.SiteId, y => y.NumberOfAgents);
 		}
 
-		private const string agentsForSkillQuery = @"
-SELECT
-	a.Site as 'SiteId',
-	count(a.Parent) as 'NumberOfAgents'
-FROM
-(
-	SELECT
-	pp.StartDate,
-	pp.Parent,
-	pp.PersonPeriod,
-	pp.BusinessUnit,
-	pp.Site,
-	pp.Team,
-	ROW_NUMBER()OVER(PARTITION BY pp.Parent ORDER BY pp.StartDate DESC) as is_current
-	FROM dbo.v_PersonPeriodTeamSiteBu pp WITH(NOEXPAND)
-	WHERE pp.StartDate <= :now 
-) a
-inner join person p on 
-a.parent = p.id
-
-INNER JOIN ReadModel.GroupingReadOnly AS g
-ON p.Id = g.PersonId					
-WHERE g.GroupId IN (:skillIds)
-AND g.PageId = :skillGroupingPageId
-						
-AND a.is_current=1
-and a.Site in (:sites)
-and (p.TerminalDate is null or p.TerminalDate > :now)
-group by a.Site
-";
 		public IDictionary<Guid, int> ForSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
 		{
 			var models =
 				_currentUnitOfWork.Session()
-					.CreateSQLQuery(agentsForSkillQuery)
+					.CreateSQLQuery(@"
+SELECT
+	pp.Site as 'SiteId',
+	count(DISTINCT pp.Parent) as 'NumberOfAgents'
+FROM dbo.v_PersonPeriodTeamSiteBu pp WITH(NOEXPAND)
+
+INNER JOIN ReadModel.GroupingReadOnly AS g
+ON pp.Parent = g.PersonId					
+WHERE g.GroupId IN (:skillIds)
+AND g.PageId = :skillGroupingPageId
+AND :now BETWEEN g.StartDate AND g.EndDate
+					
+AND pp.Site in (:sites)
+GROUP BY pp.Site
+")
 					.SetDateTime("now", _now.UtcDateTime())
 					.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 					.SetParameterList("sites", siteIds)

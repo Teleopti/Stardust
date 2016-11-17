@@ -227,6 +227,11 @@ namespace Teleopti.Ccc.TestCommon
 			return this;
 		}
 
+		public virtual Database WithPersonPeriod(string date)
+		{
+			return WithPersonPeriod(date.Date());
+		}
+
 		[UnitOfWork]
 		public virtual Database WithPersonPeriod(DateOnly date)
 		{
@@ -333,9 +338,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return _persons.LoadAll().Single(x => x.Name.ToString() == _person);
 		}
-
-
-
+		
 
 
 
@@ -349,7 +352,7 @@ namespace Teleopti.Ccc.TestCommon
 			var skill = withSkill(name);
 
 			var personSkill = new PersonSkill(skill, new Percent(100));
-			person().AddSkill(personSkill, person().PersonPeriodCollection.OrderBy(x => x.StartDate).First());
+			person().AddSkill(personSkill, person().PersonPeriodCollection.OrderByDescending(x => x.StartDate).First());
 			return this;
 		}
 
@@ -529,5 +532,6 @@ namespace Teleopti.Ccc.TestCommon
 			_groupings.UpdateGroupingReadModel(_persons.LoadAll().Select(x => x.Id.Value).ToArray());
 			return this;
 		}
+
 	}
 }

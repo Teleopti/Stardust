@@ -24,6 +24,7 @@ AS
 SELECT
 	pp.Id as 'PersonPeriod',
 	pp.StartDate as 'StartDate',
+	pp.EndDate as 'EndDate',
 	pp.Parent as 'Parent',
 	bu.Id as 'BusinessUnit',
 	s.Id as 'Site',
