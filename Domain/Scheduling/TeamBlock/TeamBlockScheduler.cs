@@ -62,7 +62,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var selectedTeamMembers = teamInfo.GroupMembers.Intersect(teamInfo.UnLockedMembers(datePointer)).ToList();
 			if (selectedTeamMembers.IsEmpty())
 				return true;
-			var roleModelShift = _roleModelSelector.Select(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(), schedulingOptions, shiftNudgeDirective.EffectiveRestriction);
+			IShiftProjectionCache roleModelShift = _roleModelSelector.Select(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(),
+				schedulingOptions, shiftNudgeDirective.EffectiveRestriction);
 
 			var cancelMe = false;
 			if (roleModelShift == null)
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return false;
 			}
 			var selectedBlockDays = teamBlockInfo.BlockInfo.UnLockedDates();
-			var success = tryScheduleBlock(workShiftSelector, teamBlockInfo, schedulingOptions, selectedBlockDays,
+			bool success = tryScheduleBlock(workShiftSelector, teamBlockInfo, schedulingOptions, selectedBlockDays,
 				roleModelShift, rollbackService, resourceCalculateDelayer, allSkillDays, schedules, shiftNudgeDirective, businessRules, () =>
 				{
 					cancelMe = true;
@@ -105,8 +106,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						resourceCalculateDelayer.CalculateIfNeeded(selectedBlockDay, null, false);
 					}		
 				}
-
-				schedulingOptions.NotAllowedShiftCategories.Clear();
+		
+				schedulingOptions.NotAllowedShiftCategories.Clear();	
 			}
 
 			if (!success && _teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(schedulingOptions))
@@ -139,9 +140,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (shiftNudgeDirective.Direction == ShiftNudgeDirective.NudgeDirection.Right)
 				shiftNudgeRestriction = shiftNudgeDirective.EffectiveRestriction;
 
-			for (var dayIndex = 0; dayIndex <= lastIndex; dayIndex++)
+			var cancelMe = false;
+			for (int dayIndex = 0; dayIndex <= lastIndex; dayIndex++)
 			{
 				var day = selectedBlockDays[dayIndex];
+				if (cancelMe)
+					return false;
+
 				if (shiftNudgeDirective.Direction == ShiftNudgeDirective.NudgeDirection.Left && dayIndex == lastIndex)
 					shiftNudgeRestriction = shiftNudgeDirective.EffectiveRestriction;
 
