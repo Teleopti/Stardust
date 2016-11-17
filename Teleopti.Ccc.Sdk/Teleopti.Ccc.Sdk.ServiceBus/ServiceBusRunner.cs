@@ -77,9 +77,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			new ContainerConfiguration(_sharedContainer, toggleManager).Configure(null);
 			_sharedContainer.Resolve<HangfireClientStarter>().Start();
 
-			nodeStarter(toggleManager);
-			
-			var useRhino = true;
+            var useRhino = true;
 
 			bool.TryParse(ConfigurationManager.AppSettings["UseRhino"], out useRhino);
 
@@ -112,7 +110,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				var initializePayrollFormats = new InitializePayrollFormatsToDb(container.Resolve<IPlugInLoader>(),
 					container.Resolve<DataSourceForTenantWrapper>().DataSource()());
 				initializePayrollFormats.Initialize();
-			});
+			}).ContinueWith(t =>
+			{
+                nodeStarter(toggleManager);
+            }
+            );
 		}
 
 		private static IContainer makeContainer(IToggleManager toggleManager, IContainer sharedContainer)
