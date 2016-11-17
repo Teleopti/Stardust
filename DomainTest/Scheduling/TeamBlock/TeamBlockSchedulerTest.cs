@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(null, _teamBlockInfo, _schedulingOptions, _dateOnly, _shift, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, null, null, _shiftNudgeDirective.EffectiveRestriction, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null)).Return(false).IgnoreArguments();
 				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _schedulePartModifyAndRollbackService, _teamBlockInfo));
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(null, _teamBlockInfo, _schedulingOptions, _dateOnly, _shift, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, null, null, _shiftNudgeDirective.EffectiveRestriction, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null)).Return(false).IgnoreArguments();
-				Expect.Call(()=>_schedulePartModifyAndRollbackService.Rollback());
+				Expect.Call(()=>_schedulePartModifyAndRollbackService.RollbackMinimumChecks());
 				_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null, false);
 			}
 			using (_mocks.Playback())
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(mainShift.ShiftCategory).Return(shiftCategory);
 				Expect.Call(_roleModelSelector.Select(schedules, skillDays, null, _teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction())).Return(null);
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(null, _teamBlockInfo, _schedulingOptions, _dateOnly, null, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, null, null, _shiftNudgeDirective.EffectiveRestriction, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null)).Return(false).IgnoreArguments();
-				Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
+				Expect.Call(() => _schedulePartModifyAndRollbackService.RollbackMinimumChecks());
 				_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null, false);
 
 			}
