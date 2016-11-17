@@ -415,6 +415,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 			public void MarkDateToBeRecalculated(DateOnly dateToRecalculate)
 			{
+				throw new NotImplementedException();
 			}
 
 			public string CommonAgentName(IPerson person)
