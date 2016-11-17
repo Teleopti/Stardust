@@ -155,11 +155,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						{
 							foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays.Where(x => x.Day == date))
 							{
-								var rollbackService = new SchedulePartModifyAndRollbackService(null, new ScheduleChangeCallbackForMaxSeatOptimization(_scheduleChangesAffectedDates), tagSetter);
+								var scheduleCallback = new ScheduleChangeCallbackForMaxSeatOptimization(_scheduleChangesAffectedDates);
 								var scheduleDay = scheduleDayPro.DaySchedulePart();
 								if (_isOverMaxSeat.Check(scheduleDay, skillDaysForTeamBlockInfo))
 								{
-									_deleteSchedulePartService.Delete(new List<IScheduleDay> {scheduleDay}, rollbackService, businessRules);
+									_deleteSchedulePartService.Delete(new [] {scheduleDay}, new SchedulePartModifyAndRollbackService(null, scheduleCallback, tagSetter), businessRules);
+									maxSeatCallback?.DatesOptimized(scheduleCallback.ModifiedDates);
 								}
 							}
 						}
