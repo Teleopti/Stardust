@@ -48,7 +48,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				Name = agentNameSetting.BuildCommonNameDescription(person),
 				Date = date.Date.ToGregorianDateTimeString().Remove(10),
 				Projection = new List<GroupScheduleProjectionViewModel>(),
-				MultiplicatorDefinitionSetIds = person.Period(date).PersonContract.Contract.MultiplicatorDefinitionSetCollection.Select(s => s.Id.GetValueOrDefault()).ToList()
+				MultiplicatorDefinitionSetIds =
+				(person.Period(date) != null &&
+				 person.Period(date).PersonContract.Contract.MultiplicatorDefinitionSetCollection.Count > 0)
+					? person.Period(date)
+						.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Select(s => s.Id.GetValueOrDefault())
+						.ToList()
+					: null
 			};
 
 			if (scheduleDay != null)
