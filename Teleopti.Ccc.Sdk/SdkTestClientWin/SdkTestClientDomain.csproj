@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -146,6 +146,9 @@
     <None Include="Web References\Sdk\ExtendedPreferenceTemplateDto.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
+    <None Include="Web References\Sdk\ExternalLogOnDto.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\Sdk\GroupPageDto.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -183,6 +186,9 @@
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Sdk\ScenarioDto.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Sdk\ScheduleChangesSubscriptionsDto1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Sdk\ScheduleTagDto.datasource">
@@ -330,7 +336,22 @@
     <None Include="Web References\Sdk\TeleoptiCccSdkService18.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Web References\Sdk\TeleoptiCccSdkService19.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web References\Sdk\TeleoptiCccSdkService2.xsd" />
+    <None Include="Web References\Sdk\TeleoptiCccSdkService20.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Sdk\TeleoptiCccSdkService21.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Sdk\TeleoptiCccSdkService22.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Sdk\TeleoptiCccSdkService23.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web References\Sdk\TeleoptiCccSdkService3.xsd" />
     <None Include="Web References\Sdk\TeleoptiCccSdkService4.xsd" />
     <None Include="Web References\Sdk\TeleoptiCccSdkService5.xsd" />
