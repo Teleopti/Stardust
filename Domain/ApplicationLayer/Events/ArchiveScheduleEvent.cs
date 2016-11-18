@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class ArchiveScheduleEvent : EventWithInfrastructureContext
+	public class ArchiveScheduleEvent : EventWithLogOnContext
 	{
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }

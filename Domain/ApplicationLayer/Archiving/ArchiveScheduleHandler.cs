@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -24,20 +25,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly ScheduleDictionaryLoadOptions _scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
+		private readonly IUpdatedBy _updatedBy;
 
-		public ArchiveScheduleHandler(ITrackingMessageSender trackingMessageSender, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IScheduleStorage scheduleStorage, ICurrentUnitOfWork currentUnitOfWork)
+		public ArchiveScheduleHandler(ITrackingMessageSender trackingMessageSender, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IScheduleStorage scheduleStorage, ICurrentUnitOfWork currentUnitOfWork, IUpdatedBy updatedBy)
 		{
 			_trackingMessageSender = trackingMessageSender;
 			_personRepository = personRepository;
 			_scenarioRepository = scenarioRepository;
 			_scheduleStorage = scheduleStorage;
 			_currentUnitOfWork = currentUnitOfWork;
+			_updatedBy = updatedBy;
 		}
 
 		[ImpersonateSystem]
 		[UnitOfWork]
 		public virtual void Handle(ArchiveScheduleEvent @event)
 		{
+			_currentUnitOfWork.Current().Reassociate(_updatedBy.Person());
 			var period = new DateOnlyPeriod(new DateOnly(@event.StartDate), new DateOnly(@event.EndDate));
 
 			var fromScenario = _scenarioRepository.Get(@event.FromScenario);

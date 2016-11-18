@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		public void Add(IPersistableScheduleData item)
 		{
+			if (item == null) return;
 			var repository = getRepository(item.GetType());
 
 			var method = makeGenericMethod(typeof(IRepository<>), item.GetType(), nameof(IRepository<int>.Add));
@@ -53,6 +54,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		public void Remove(IPersistableScheduleData item)
 		{
+			if (item == null) return;
 			var repository = getRepository(item.GetType());
 
 			var method = makeGenericMethod(typeof(IRepository<>), item.GetType(), nameof(IRepository<int>.Remove));
