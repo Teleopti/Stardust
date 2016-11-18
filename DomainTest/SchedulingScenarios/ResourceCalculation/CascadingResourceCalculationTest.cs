@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
 			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] {ass}, new[] {prioritizedSkillDay, nonPrioritizedSkillDay}, false, false);
 
-			using (ResourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills))
+			using (ResourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills, false))
 			{
 				Target.ResourceCalculate(dateOnly, resCalcData);
 

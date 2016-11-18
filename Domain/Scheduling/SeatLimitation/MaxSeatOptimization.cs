@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			var teamBlockInfos = _scheduledTeamBlockInfoFactory.Create(period, agentsToOptimize, schedules, allAgents, schedulingOptions);
 
-			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills()))
+			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills(), false))
 			{
 				foreach (var teamBlockInfo in teamBlockInfos)
 				{

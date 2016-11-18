@@ -11,9 +11,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    private readonly int _minResolution;
 	    private readonly ResourceCalculationDataContainer retList;
 
-	    public ScheduleProjectionExtractor(IPersonSkillProvider personSkillProvider, int minResolution)
+	    public ScheduleProjectionExtractor(IPersonSkillProvider personSkillProvider, int minResolution, bool primarySkillMode)
 	    {
-			retList = new ResourceCalculationDataContainer(personSkillProvider, minResolution);
+			retList = new ResourceCalculationDataContainer(personSkillProvider, minResolution, primarySkillMode);
 		    _minResolution = minResolution;
 	    }
 

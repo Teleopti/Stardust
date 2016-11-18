@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			if(!_schedulerStateHolder.SchedulingResultState.Skills.Any()) return;
 
 			var period = new DateOnlyPeriod(_schedulerStateHolder.DaysToRecalculate.Min().AddDays(-1), _schedulerStateHolder.DaysToRecalculate.Max());
-			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder.Schedules, _schedulerStateHolder.SchedulingResultState.Skills, period))
+			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder.Schedules, _schedulerStateHolder.SchedulingResultState.Skills, false, period))
 			{
 				_resourceOptimizationHelperExtended.ResourceCalculateMarkedDays(new BackgroundWorkerWrapper(_backgroundWorkerResources), true, true);
 			}

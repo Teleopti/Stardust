@@ -99,7 +99,7 @@ namespace Teleopti.Interfaces.Domain
 		void AddResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer);
 		void RemoveResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer);
 		IEnumerable<DateTimePeriod> IntraIntervalResources(ISkill skill, DateTimePeriod period);
-		bool PrimarySkillMode { get; set; }
+		bool PrimarySkillMode { get; }
 	}
 
 	public interface IResourceCalculationDataContainer

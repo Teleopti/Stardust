@@ -55,10 +55,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var stateHolder = _schedulerStateHolder();
 
-			using (_resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills))
+			using (_resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, true))
 			{
-				ResourceCalculationContext.Fetch().PrimarySkillMode = true;
-
 				var matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, selectedDays);
 				_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, optimizationPreferences, selectedPeriod);
 

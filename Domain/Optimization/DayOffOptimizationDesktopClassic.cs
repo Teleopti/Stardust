@@ -98,9 +98,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				validMatrixContainerList.Add(matrixContainer);
 			}
 
-			using (_resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills))
+			using (_resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, true))
 			{
-				ResourceCalculationContext.Fetch().PrimarySkillMode = true;
 				_resouceOptimizationHelperExtended.ResourceCalculateAllDays(backgroundWorker, false);
 				optimize(validMatrixContainerList, selectedPeriod, backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider);
 			}

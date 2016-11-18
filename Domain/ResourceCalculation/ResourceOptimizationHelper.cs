@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				IDisposable context = null;
 				if (!ResourceCalculationContext.InContext)
 				{
-					context = _resourceCalculationContextFactory.Create(resourceCalculationData.Schedules, resourceCalculationData.Skills, new DateOnlyPeriod(localDate.AddDays(-1), localDate.AddDays(1)));
+					context = _resourceCalculationContextFactory.Create(resourceCalculationData.Schedules, resourceCalculationData.Skills, false, new DateOnlyPeriod(localDate.AddDays(-1), localDate.AddDays(1)));
 				}
 				var relevantProjections = ResourceCalculationContext.Fetch();
 				resourceCalculateDate(resourceCalculationData, relevantProjections, localDate, resourceCalculationData.ConsiderShortBreaks);

@@ -24,8 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			var virtualSkillContext = _virtualSkillContext.Create(period);
-			var resourceContext = _resourceCalculationContext.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills);
-			ResourceCalculationContext.Fetch().PrimarySkillMode = true;
+			var resourceContext = _resourceCalculationContext.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, true);
 			return new GenericDisposable(() =>
 			{
 				resourceContext.Dispose();

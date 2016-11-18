@@ -17,24 +17,24 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_timeZoneGuard = timeZoneGuard;
 		}
 
-		public IDisposable Create(IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills)
+		public IDisposable Create(IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, bool primarySkillMode)
 		{
-			return new ResourceCalculationContext(createResources(scheduleDictionary, allSkills, null));
+			return new ResourceCalculationContext(createResources(scheduleDictionary, allSkills, primarySkillMode, null));
 		}
 
-		public IDisposable Create(IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, DateOnlyPeriod period)
+		public IDisposable Create(IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, bool primarySkillMode, DateOnlyPeriod period)
 		{
-			return new ResourceCalculationContext(createResources(scheduleDictionary, allSkills, period));
+			return new ResourceCalculationContext(createResources(scheduleDictionary, allSkills, primarySkillMode, period));
 		}
 
-		private Lazy<IResourceCalculationDataContainerWithSingleOperation> createResources(IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, DateOnlyPeriod? period)
+		private Lazy<IResourceCalculationDataContainerWithSingleOperation> createResources(IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, bool primarySkillMode, DateOnlyPeriod? period)
 		{
 			var createResources = new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() =>
 			{
 				var minutesPerInterval = allSkills.Any() ?
 					allSkills.Min(s => s.DefaultResolution) 
 					: 15;
-				var extractor = new ScheduleProjectionExtractor(_personSkillProvider, minutesPerInterval);
+				var extractor = new ScheduleProjectionExtractor(_personSkillProvider, minutesPerInterval, primarySkillMode);
 				return period.HasValue ? 
 					extractor.CreateRelevantProjectionList(scheduleDictionary, period.Value.ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone())) : 
 					extractor.CreateRelevantProjectionList(scheduleDictionary);

@@ -65,10 +65,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private ResourceCalculationDataContainer createRelevantProjectionList(IScheduleDictionary scheduleDictionary)
 		{
 			if (!_allSkills.Any())
-				return new ResourceCalculationDataContainer(_personSkillProvider, 60);
+				return new ResourceCalculationDataContainer(_personSkillProvider, 60, false);
 
 			int minutesSplit = _allSkills.Min(s => s.DefaultResolution);
-			var resources = new ResourceCalculationDataContainer(_personSkillProvider, minutesSplit);
+			var resources = new ResourceCalculationDataContainer(_personSkillProvider, minutesSplit, false);
 
 			Parallel.ForEach(scheduleDictionary.Keys, person =>
 			{

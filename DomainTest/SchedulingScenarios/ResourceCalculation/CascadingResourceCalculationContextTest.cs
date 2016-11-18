@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		[Test]
 		public void ShouldRestoreCallersContext()
 		{
-			var presentContext = new ResourceCalculationDataContainer(null, 0);
+			var presentContext = new ResourceCalculationDataContainer(null, 0, false);
 			using (new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => presentContext)))
 			{
 				Target.ResourceCalculate(DateOnly.Today, new ResourceCalculationData(new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IEnumerable<ISkillDay>>()), false, false));

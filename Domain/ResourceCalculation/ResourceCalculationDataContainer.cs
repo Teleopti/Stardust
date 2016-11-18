@@ -16,11 +16,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private readonly int _minSkillResolution;
 
-		public ResourceCalculationDataContainer(IPersonSkillProvider personSkillProvider, int minSkillResolution)
+		public ResourceCalculationDataContainer(IPersonSkillProvider personSkillProvider, int minSkillResolution, bool primarySkillMode)
 		{
 			_personSkillProvider = personSkillProvider;
 			_minSkillResolution = minSkillResolution;
-			PrimarySkillMode = false;
+			PrimarySkillMode = primarySkillMode;
 		}
 
 		public int MinSkillResolution
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return result;
 		}
 
-		public bool PrimarySkillMode { get; set; }
+		public bool PrimarySkillMode { get; }
 
 		public Tuple<double,double> SkillResources(ISkill skill, DateTimePeriod period)
 		{

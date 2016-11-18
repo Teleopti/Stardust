@@ -36,9 +36,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		[LogTime]
 		public virtual void DoCalculation(DateOnlyPeriod period, IResourceCalculationData resCalcData)
 		{
-			using (_resourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills))
+			using (_resourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills, true))
 			{
-				ResourceCalculationContext.Fetch().PrimarySkillMode = true;
 				_resourceOptimizationHelper.ResourceCalculate(period, resCalcData);
 			}
 		}

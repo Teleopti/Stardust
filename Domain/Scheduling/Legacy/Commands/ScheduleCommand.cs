@@ -79,9 +79,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var selectedPersons = selectedScheduleDays.Select(x => x.Person).Distinct().ToList();
 
-			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills))
+			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, true))
 			{
-				ResourceCalculationContext.Fetch().PrimarySkillMode = true;
 				if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
 				{
 					schedulingOptions.OnlyShiftsWhenUnderstaffed = false;

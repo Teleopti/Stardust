@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				continuedStep = true;
 			}
 
-			using (_resourceCalculationContextFactory.Create(_stateHolder().Schedules, _stateHolder().Skills))
+			using (_resourceCalculationContextFactory.Create(_stateHolder().Schedules, _stateHolder().Skills, false))
 			{
 				IList<IScheduleMatrixPro> matrixListForWorkShiftAndIntradayOptimization = _matrixListFactory.CreateMatrixListForSelection(_stateHolder().Schedules, selectedDays);
 
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				}
 			}
 
-			using (_resourceCalculationContextFactory.Create(_stateHolder().Schedules, _stateHolder().Skills))
+			using (_resourceCalculationContextFactory.Create(_stateHolder().Schedules, _stateHolder().Skills, false))
 			{
 				if (optimizerPreferences.General.OptimizationStepFairness)
 				{

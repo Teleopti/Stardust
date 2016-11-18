@@ -40,9 +40,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 										ISchedulingProgress backgroundWorker, 
 										IList<IScheduleDay> selectedSchedules)
 		{
-			using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder().Schedules, _schedulingResultStateHolder().Skills))
+			using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder().Schedules, _schedulingResultStateHolder().Skills, true))
 			{
-				ResourceCalculationContext.Fetch().PrimarySkillMode = true;
 				_fullResourceCalculation.Execute();
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, _schedulingResultStateHolder());
 				var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();

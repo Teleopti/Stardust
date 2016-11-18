@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
 	        _mocks = new MockRepository();
 		    _personSkillProvider = _mocks.DynamicMock<IPersonSkillProvider>();
-            _target = new ScheduleProjectionExtractor(_personSkillProvider, 15);
+            _target = new ScheduleProjectionExtractor(_personSkillProvider, 15, false);
         }
 
         [Test]

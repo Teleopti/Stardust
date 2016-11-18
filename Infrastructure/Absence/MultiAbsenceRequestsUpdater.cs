@@ -152,11 +152,10 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				var firstComeFirstServe = _arrangeRequestsByProcessOrder.GetRequestsSortedByDate(personRequests);
 
 					stopwatch.Start();
-				using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills))
+				using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills, true))
 				{
 					stopwatch.Stop();
 					_feedback.SendProgress($"Done _resourceCalculationContextFactory.Create(..)! It took {stopwatch.Elapsed}");
-					ResourceCalculationContext.Fetch().PrimarySkillMode = true;
 					processOrderList(seniority);
 					processOrderList(firstComeFirstServe);
 				}
