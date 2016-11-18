@@ -38,17 +38,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_extractSkillStaffDataForResourceCalculation.DoCalculation(periodDateOnly, resCalcData);
 
 			updateModelsAfterCalculatingWithShrinkage(models, resCalcData.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,period);
-			// to always insert one so we don't get new jobs all the time if no forecast and no schedule
-			models.Add(new SkillStaffingInterval
-			{
-				SkillId = Guid.Empty,
-				StartDateTime = DateTime.UtcNow,
-				EndDateTime = DateTime.UtcNow,
-				Forecast = 0,
-				StaffingLevel = 0,
-				ForecastWithShrinkage = 0
-			});
-			_scheduleForecastSkillReadModelRepository.Persist(models, timeWhenResourceCalcDataLoaded);
+
+			if (models.Any())
+				_scheduleForecastSkillReadModelRepository.Persist(models, timeWhenResourceCalcDataLoaded);
 		}
 
 		private static void updateModelsAfterCalculatingWithShrinkage(IList<SkillStaffingInterval> models, ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodDictionary, DateTimePeriod period)
