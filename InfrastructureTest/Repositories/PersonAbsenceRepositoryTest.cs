@@ -272,7 +272,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var personAbsences = new PersonAbsenceRepository(CurrUnitOfWork).Find(period.ChangeEndTime(TimeSpan.FromDays(1)), defaultScenario).ToArray();
 			var personAbsenceRetrieved = personAbsences[0];
-
+			
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(personAbsenceRetrieved.PersonRequest));
 			Assert.AreEqual(personRequest.Id, personAbsenceRetrieved.PersonRequest.Id);
 
 		}

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -50,11 +52,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			foreach (var personList in persons.Batch(400))
 			{
+				//Find all requests associated with absences
+				var people = personList.ToArray();
+				
 				retList.AddRange(Session.CreateCriteria(typeof(PersonAbsence), "abs")
 				    .Add(restrictions)
-					.Add(Restrictions.InG("Person", personList.ToArray()))
+					.Add(Restrictions.InG("Person", people))
 				    .SetResultTransformer(Transformers.DistinctRootEntity)
 				    .List<IPersonAbsence>());
+
+				Session.CreateCriteria(typeof(PersonRequest))
+					.Add(Subqueries.PropertyIn("Id",
+						DetachedCriteria.For<PersonAbsence>("abs")
+							.Add(restrictions)
+							.Add(Restrictions.InG("Person", people))
+							.Add(Restrictions.IsNotNull("PersonRequest"))
+							.SetProjection(Projections.Property("PersonRequest"))))
+				.SetFetchMode("requests", FetchMode.Join)
+				.SetFetchMode("PersonAbsences", FetchMode.Join)
+				.SetResultTransformer(Transformers.DistinctRootEntity)
+					.List();
 			}
 
 			initializeAbsences(retList);
@@ -70,11 +87,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			foreach (var personAbsenceIdList in personAbsenceIds.Batch(400))
 			{
+				var absenceIdList = personAbsenceIdList.ToArray();
 				retList.AddRange(Session.CreateCriteria(typeof(PersonAbsence), "abs")
-					.Add(Restrictions.InG("Id", personAbsenceIdList))
+					.Add(Restrictions.InG("Id", absenceIdList))
 					.Add(Restrictions.Eq("Scenario", scenario))
 					.SetResultTransformer(Transformers.DistinctRootEntity)
 					.List<IPersonAbsence>());
+
+				//Find all requests associated with absences
+				Session.CreateCriteria(typeof(PersonRequest))
+					.Add(Subqueries.PropertyIn("Id",
+						DetachedCriteria.For<PersonAbsence>("abs")
+							.Add(Restrictions.InG("Id", absenceIdList))
+							.Add(Restrictions.Eq("Scenario", scenario))
+							.Add(Restrictions.IsNotNull("PersonRequest"))
+							.SetProjection(Projections.Property("PersonRequest"))))
+					.SetFetchMode("requests", FetchMode.Join)
+				.SetFetchMode("PersonAbsences", FetchMode.Join)
+					.SetResultTransformer(Transformers.DistinctRootEntity)
+					.List();
 			}
 
 			initializeAbsences(retList);
@@ -128,10 +159,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (scenario != null)
 				restrictions.Add(Restrictions.Eq("Scenario", scenario));
 
-			ICollection<IPersonAbsence> retList = Session.CreateCriteria(typeof(PersonAbsence), "abs")
+			var retList = Session.CreateCriteria(typeof(PersonAbsence), "abs")
 						.Add(restrictions)
 						.SetResultTransformer(Transformers.DistinctRootEntity)
 						.List<IPersonAbsence>();
+
+			//Find all requests associated with absences
+			Session.CreateCriteria(typeof(PersonRequest))
+				.Add(Subqueries.PropertyIn("Id",
+					DetachedCriteria.For<PersonAbsence>("abs")
+						.Add(restrictions)
+						.Add(Restrictions.IsNotNull("PersonRequest"))
+						.SetProjection(Projections.Property("PersonRequest"))))
+				.SetFetchMode("requests", FetchMode.Join)
+				.SetFetchMode("PersonAbsences", FetchMode.Join)
+				.SetResultTransformer(Transformers.DistinctRootEntity)
+				.List();
+
 			initializeAbsences(retList);
 			return retList;
 		}
@@ -143,8 +187,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				if (!LazyLoadingManager.IsInitialized(personAbsence.Layer.Payload))
 					LazyLoadingManager.Initialize(personAbsence.Layer.Payload);
 
-				if (!LazyLoadingManager.IsInitialized(personAbsence.PersonRequest))
-					LazyLoadingManager.Initialize(personAbsence.PersonRequest);
+				/*if (!LazyLoadingManager.IsInitialized(personAbsence.PersonRequest))
+					LazyLoadingManager.Initialize(personAbsence.PersonRequest);*/
 				
 			}
 		}
