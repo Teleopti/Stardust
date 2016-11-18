@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 		public override void OnStateElection(ElectStateContext context)
 		{
-			var args = context.BackgroundJob.Job.Args;
+			var args = context.BackgroundJob.Job.Args.ToArray();
 			var jobInfo = args.OfType<HangfireEventJob>().SingleOrDefault();
 			var attempts = jobInfo?.Attempts ?? int.Parse(string.Format(_format, args));
 
