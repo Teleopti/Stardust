@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						var scheduleMatrixPro = teamBlockInfo.TeamInfo.MatrixForMemberAndDate(person, unlockedDate);
 						if (scheduleMatrixPro == null) continue;
 						var scheduleDay = scheduleMatrixPro.GetScheduleDayByKey(unlockedDate).DaySchedulePart();
-						if (scheduleDay.IsScheduled())
+						if (scheduleDay.SignificantPart() == SchedulePartView.MainShift)
 						{
 							anyScheduled = true;
 						}
