@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -314,4 +315,12 @@ namespace Teleopti.Interfaces.Domain
 
 	    void OpenAllSkillStaffPeriods(int maxSeats);
     }
+
+	public static class SkillDayExtensions
+	{
+		public static int IntervalLengthInMinutes(this IEnumerable<ISkillDay> skillDays)
+		{
+			return skillDays.Any() ? skillDays.Min(s => s.Skill.DefaultResolution) : 15;
+		}
+	}
 }
