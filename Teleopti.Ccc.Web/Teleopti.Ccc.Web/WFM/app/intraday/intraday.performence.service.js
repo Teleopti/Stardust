@@ -121,13 +121,13 @@
 								x: 'x',
 								columns: [
 									performanceData.timeSeries,
-									performanceData.serviceLevelObj.series,
-									performanceData.abandonedRateObj.series,
 									performanceData.averageSpeedOfAnswerObj.series,
+									performanceData.abandonedRateObj.series,
+									performanceData.serviceLevelObj.series,
 									performanceData.currentInterval
 								],
 								groups: [
-									['Abandoned_rate'],['ASA'],['Service_level']
+									['ASA'],['Abandoned_rate'],['Service_level']
 								],
 								order: 'desc',
 								hide: hiddenArray,

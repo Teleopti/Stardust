@@ -108,6 +108,11 @@
 									Forecasted_staffing: $translate.instant('ForecastedStaff') + ' ←',
 									Updated_forecasted_staffing: $translate.instant('ReforecastedStaff') + ' ←',
 									Actual_staffing: $translate.instant('RequiredStaff') + ' ←'
+								},
+								colors: {
+									Forecasted_staffing: '#0099FF',
+									Updated_forecasted_staffing: '#E91E63',
+									Actual_staffing: '#FB8C00'
 								}
 							},
 							axis: {
