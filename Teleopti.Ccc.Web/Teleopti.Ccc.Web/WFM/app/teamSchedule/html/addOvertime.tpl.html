@@ -28,7 +28,7 @@
 		</form>
 		<div class="text-danger" ng-if="!$ctrl.timeRangeIsValid">
 			<i class="mdi mdi-alert-octagon"></i>
-			<span>{{'InvalidTimeRangeForOvertimeActivity' | translate}}</span>
+			<span>{{'EndTimeMustBeGreaterOrEqualToStartTime' | translate}}</span>
 		</div>
 		<div class="text-danger" ng-if="$ctrl.anyInvalidAgent()">
 			<i class="mdi mdi-alert-octagon"></i>

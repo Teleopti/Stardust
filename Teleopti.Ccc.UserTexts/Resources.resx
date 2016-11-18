@@ -15195,8 +15195,16 @@ These options are activated:
     <value>No sites for the selected skills were found</value>
     <comment>Message in RTA when selecting by skill and no sites are found</comment>
   </data>
+  <data name="PartialSuccessMessageForAddingOvertime" xml:space="preserve">
+    <value>Adding an overtime activity for {0} agent(s), {1} succeeded and {2} failed.</value>
+    <comment>Partial success message for adding an overtime activity.</comment>
+  </data>
   <data name="SelectAMultiplicatorDefinitionSet" xml:space="preserve">
     <value>Select a multiplicator definition set</value>
     <comment>place holder for multiplicator definition sets select in add overtime pannel under web WFM/teams</comment>
+  </data>
+  <data name="SuccessfulMessageForAddingOvertime" xml:space="preserve">
+    <value>Successfully added an overtime activity for the selected agent(s). </value>
+    <comment>Success message for adding an overtime activity.</comment>
   </data>
 </root>

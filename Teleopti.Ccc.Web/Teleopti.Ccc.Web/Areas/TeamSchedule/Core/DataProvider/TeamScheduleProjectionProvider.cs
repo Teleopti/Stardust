@@ -87,7 +87,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		{
 			var projections = new List<GroupScheduleProjectionViewModel>();
 			var userTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-
+			var person = scheduleDay.Person;
+			var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
 			var scheduleVm = new GroupScheduleShiftViewModel
 			{
 				PersonId = scheduleDay.Person.Id.GetValueOrDefault().ToString(),
@@ -99,7 +100,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				{
 					IanaId = _ianaTimeZoneProvider.WindowsToIana(scheduleDay.Person.PermissionInformation.DefaultTimeZone().Id),
 					DisplayName = scheduleDay.Person.PermissionInformation.DefaultTimeZone().DisplayName
-				}
+				},
+				MultiplicatorDefinitionSetIds =
+				(person.Period(date) != null &&
+				 person.Period(date).PersonContract.Contract.MultiplicatorDefinitionSetCollection.Count > 0)
+					? person.Period(date)
+						.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Select(s => s.Id.GetValueOrDefault())
+						.ToList()
+					: null
 			};
 			var personAssignment = scheduleDay.PersonAssignment();
 

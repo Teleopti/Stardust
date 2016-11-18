@@ -9,9 +9,9 @@
 		controller: AddOvertimeCtrl
 	});
 
-	AddOvertimeCtrl.$inject = ['PersonSelection', 'ActivityService', 'ActivityValidator'];
+	AddOvertimeCtrl.$inject = ['PersonSelection', 'ScheduleManagement', 'ActivityService', 'ActivityValidator', 'belongsToDateDecider', 'teamScheduleNotificationService'];
 
-	function AddOvertimeCtrl(personSelectionSvc, activityService, activityValidator) {
+	function AddOvertimeCtrl(personSelectionSvc, ScheduleMgmt, activityService, activityValidator, belongsToDateDecider, teamScheduleNotificationService) {
 		var ctrl = this;
 		ctrl.label = 'AddOvertimeActivity';
 		ctrl.processingCommand = false;
@@ -63,6 +63,68 @@
 			};
 			var timezone = ctrl.containerCtrl.getCurrentTimezone();
 			ctrl.invalidAgents = activityValidator.validateInputForOvertime(timeRange, ctrl.selectedDefinitionSetId, timezone);
+		};
+
+		ctrl.addOvertime = function() {
+			var invalidAgentIds = ctrl.invalidAgents.map(function (a) {
+				return a.PersonId;
+			});
+
+			var validAgents = ctrl.selectedAgents.filter(function (agent) {
+				return invalidAgentIds.indexOf(agent.PersonId) < 0;
+			});
+
+			if (validAgents.length > 0) {
+				var timezone = ctrl.containerCtrl.getCurrentTimezone();
+				var personDates = validAgents.map(function (agent) {
+					var timeRange = {
+						startTime: moment(ctrl.fromTime),
+						endTime: moment(ctrl.toTime)
+					};
+					var personSchedule = ScheduleMgmt.findPersonScheduleVmForPersonId(agent.PersonId);
+					var normalizedScheduleVm = belongsToDateDecider.normalizePersonScheduleVm(personSchedule, timezone);
+					var belongsToDate = belongsToDateDecider.decideBelongsToDateForOvertimeActivity(timeRange, normalizedScheduleVm);
+					return {
+						PersonId: agent.PersonId,
+						Date: belongsToDate
+					}
+				});
+
+				var requestData = {
+					PersonDates: personDates,
+					ActivityId: ctrl.selectedActivityId,
+					MultiplicatorDefinitionSetId: ctrl.selectedDefinitionSetId,
+					StartDateTime: ctrl.containerCtrl.convertTimeToCurrentUserTimezone(moment(ctrl.fromTime).format('YYYY-MM-DD HH:mm')),
+					EndDateTime: ctrl.containerCtrl.convertTimeToCurrentUserTimezone(moment(ctrl.toTime).format('YYYY-MM-DD HH:mm')),
+					TrackedCommandInfo: { TrackId: ctrl.trackId }
+				};
+
+				ctrl.processingCommand = true;
+
+				activityService.addOvertimeActivity(requestData)
+					.then(function (response) {
+						if (ctrl.containerCtrl.getActionCb(ctrl.label)) {
+							ctrl.containerCtrl.getActionCb(ctrl.label)(ctrl.trackId, validAgents.map(function(a) { return a.PersonId; }));
+						}
+						teamScheduleNotificationService.reportActionResult({
+							success: 'SuccessfulMessageForAddingOvertime',
+							warning: 'PartialSuccessMessageForAddingOvertime'
+						},
+							validAgents.map(function (x) {
+								return {
+									PersonId: x.PersonId,
+									Name: x.Name
+								}
+							}),
+							response.data);
+
+						ctrl.processingCommand = false;
+					});
+			} else {
+				if (ctrl.containerCtrl.getActionCb(ctrl.label)) {
+					ctrl.containerCtrl.getActionCb(ctrl.label)(ctrl.trackId, []);
+				}
+			}
 		};
 
 		function validateTimeRange(fromTime, toTime) {

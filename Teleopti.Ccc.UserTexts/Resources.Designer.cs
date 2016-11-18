@@ -20460,6 +20460,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adding an overtime activity for {0} agent(s), {1} succeeded and {2} failed..
+        /// </summary>
+        public static string PartialSuccessMessageForAddingOvertime {
+            get {
+                return ResourceManager.GetString("PartialSuccessMessageForAddingOvertime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Changing shift categories for {0} agent(s), {1} succeeded and {2} failed..
         /// </summary>
         public static string PartialSuccessMessageForEditingShiftCategory {
@@ -29713,6 +29722,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SuccessfulMessageForAddingActivity {
             get {
                 return ResourceManager.GetString("SuccessfulMessageForAddingActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully added an overtime activity for the selected agent(s). .
+        /// </summary>
+        public static string SuccessfulMessageForAddingOvertime {
+            get {
+                return ResourceManager.GetString("SuccessfulMessageForAddingOvertime", resourceCulture);
             }
         }
         

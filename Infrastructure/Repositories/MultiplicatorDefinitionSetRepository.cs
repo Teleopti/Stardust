@@ -11,8 +11,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// MultiplicatorDefinitionSet Repository
     /// </summary>
     public class MultiplicatorDefinitionSetRepository : Repository<IMultiplicatorDefinitionSet>, 
-                                                        IMultiplicatorDefinitionSetRepository
-    {
+                                                        IMultiplicatorDefinitionSetRepository, IProxyForId<IMultiplicatorDefinitionSet>
+	{
 #pragma warning disable 618
         public MultiplicatorDefinitionSetRepository(IUnitOfWork uow) : base(uow)
 #pragma warning restore 618
