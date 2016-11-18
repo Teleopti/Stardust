@@ -2,7 +2,6 @@
 using System.Globalization;
 using log4net;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
@@ -16,11 +15,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
     {
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ScheduleDayReadModelComparer));
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public string FindSignificantChanges(ScheduleDayReadModel newReadModel, ScheduleDayReadModel existingReadModel, CultureInfo cultureInfo, DateOnly currentDate)
 		{
-			Logger.Info("newReadModel:" + (newReadModel == null ? "null" : newReadModel.ToJson()));
-			Logger.Info("existingReadModel:" + (existingReadModel == null ? "null" : existingReadModel.ToJson()));
+			if (Logger.IsInfoEnabled)
+			{
+				Logger.Info("newReadModel:" + (newReadModel == null ? "null" : newReadModel.ToJson()));
+				Logger.Info("existingReadModel:" + (existingReadModel == null ? "null" : existingReadModel.ToJson()));
+			}
 
 			string weekDayName = cultureInfo.DateTimeFormat.GetDayName(currentDate.DayOfWeek);
 
