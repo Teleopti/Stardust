@@ -137,3 +137,12 @@ textarea{
 	resize:vertical;
 	width:100%;
 }
+
+md-select-menu md-content md-option:not([disabled]):hover{
+	background: $gray012!important;
+}
+
+.md-autocomplete-suggestions-container li .highlight{
+	color:$gray087 !important;
+	font-weight: bold;
+}
