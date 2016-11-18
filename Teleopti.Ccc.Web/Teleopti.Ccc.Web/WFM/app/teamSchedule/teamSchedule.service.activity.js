@@ -13,8 +13,10 @@
 		var moveShiftUrl = '../api/TeamSchedule/MoveShift';
 		var undoScheduleChangeUrl = '../api/TeamScheduleCommand/BackoutScheduleChange';
 		var moveInvalidOverlappedActivityUrl = '../api/TeamScheduleCommand/MoveNonoverwritableLayers';
+		var getAllMultiplicatorDefinitionSetsUrl = '../api/TeamScheduleData/FetchMultiplicationDefinitionSets';
 
 		this.fetchAvailableActivities = fetchAvailableActivities;
+		this.fetchAvailableDefinitionSets = fetchAvailableDefinitionSets;
 		this.addActivity = addActivity;
 		this.addPersonalActivity = addPersonalActivity;
 		this.removeActivity = removeActivity;
@@ -105,6 +107,18 @@
 				deffered.reject(error);
 			});
 			return deffered.promise;
+		}
+
+		function fetchAvailableDefinitionSets() {
+			return $q(function(resolve, reject) {
+				$http.get(getAllMultiplicatorDefinitionSetsUrl).then
+					(function(data) {
+							resolve(data.data);
+						},
+						function(err) {
+							reject(err);
+						});
+			});
 		}
 	}
 

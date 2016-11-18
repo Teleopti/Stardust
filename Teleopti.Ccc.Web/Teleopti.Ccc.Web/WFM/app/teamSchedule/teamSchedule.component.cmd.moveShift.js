@@ -9,7 +9,7 @@
 		controller: MoveShiftCtrl
 	});
 
-	MoveShiftCtrl.$inject = ['$scope', '$locale', '$element', 'MoveActivityValidator', 'PersonSelection', 'ActivityService', 'teamScheduleNotificationService'];
+	MoveShiftCtrl.$inject = ['$scope', '$locale', '$element', 'ActivityValidator', 'PersonSelection', 'ActivityService', 'teamScheduleNotificationService'];
 
 	function MoveShiftCtrl($scope, $locale, $element, validator, personSelectionSvc, activitySvc, teamScheduleNotificationService) {
 		var ctrl = this;

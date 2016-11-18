@@ -56,6 +56,14 @@
 				visible: function () { return vm.canActiveAddPersonalActivity(); }
 			},
 			{
+				label: "AddOvertimeActivity",
+				shortcut: "Alt+O",
+				keys: [[keyCodes.O], [keyCodes.ALT]],
+				action: buildAction("AddOvertimeActivity", true),
+				clickable: function () { return vm.canAddOvertime(); },
+				visible: function () { return vm.canActiveAddOvertime(); }
+			},
+			{
 				label: "MoveActivity",
 				shortcut: "Alt+M",
 				keys: [[keyCodes.M], [keyCodes.ALT]],
@@ -65,8 +73,8 @@
 			},
 			{
 				label: "MoveInvalidOverlappedActivity",
-				shortcut: "Alt+O",
-				keys: [[keyCodes.O], [keyCodes.ALT]],
+				shortcut: "Alt+I",
+				keys: [[keyCodes.I], [keyCodes.ALT]],
 				action: buildAction("MoveInvalidOverlappedActivity", false),
 				clickable: function () { return vm.canMoveInvalidOverlappedActivity(); },
 				visible: function () { return vm.canActiveMoveInvalidOverlappedActivity(); }
@@ -135,6 +143,10 @@
 				&& (vm.permissions.IsAddFullDayAbsenceAvailable || vm.permissions.IsAddIntradayAbsenceAvailable);
 		};
 
+		vm.canActiveAddOvertime = function() {
+			return vm.toggles.AddOvertimeEnabled;
+		};
+
 		vm.canActiveMoveActivity = function () {
 			return vm.toggles.MoveActivityEnabled && vm.permissions.HasMoveActivityPermission;
 		};
@@ -179,6 +191,10 @@
 		};
 
 		vm.canMoveShift = function() {
+			return personSelectionSvc.anyAgentChecked();
+		};
+
+		vm.canAddOvertime = function() {
 			return personSelectionSvc.anyAgentChecked();
 		};
 

@@ -3,7 +3,7 @@
 
 	angular.module('wfm.teamSchedule').directive('moveActivity', moveActivityDirective);
 
-	moveActivityCtrl.$inject = ['$attrs', '$locale', '$translate', 'ActivityService', 'PersonSelection',  'ScheduleManagement', 'teamScheduleNotificationService', 'MoveActivityValidator', 'CommandCheckService'];
+	moveActivityCtrl.$inject = ['$attrs', '$locale', '$translate', 'ActivityService', 'PersonSelection',  'ScheduleManagement', 'teamScheduleNotificationService', 'ActivityValidator', 'CommandCheckService'];
 
 	function moveActivityCtrl($attrs, $locale, $translate, activityService, personSelectionSvc, scheduleManagementSvc, teamScheduleNotificationService, validator, CommandCheckService) {
 		var vm = this;

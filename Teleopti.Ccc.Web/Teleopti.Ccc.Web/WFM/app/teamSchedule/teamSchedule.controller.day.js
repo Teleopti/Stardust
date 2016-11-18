@@ -347,6 +347,7 @@
 				
 				AbsenceReportingEnabled: toggleSvc.WfmTeamSchedule_AbsenceReporting_35995,
 				AddActivityEnabled: toggleSvc.WfmTeamSchedule_AddActivity_37541,
+				AddOvertimeEnabled: toggleSvc.WfmTeamSchedule_AddOvertime_41696,
 				AddPersonalActivityEnabled: toggleSvc.WfmTeamSchedule_AddPersonalActivity_37742,
 				RemoveAbsenceEnabled: toggleSvc.WfmTeamSchedule_RemoveAbsence_36705,
 				RemoveActivityEnabled: toggleSvc.WfmTeamSchedule_RemoveActivity_37743,

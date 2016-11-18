@@ -1,0 +1,44 @@
+﻿<div class="command-panel">
+	<div class="sidenav-header">{{'AddOvertimeActivity'|translate}}</div>
+	<md-content class="command-panel-content" layout-padding>
+		<form name="newOvertimeActivityForm">
+			<h3>{{'Activity'|translate}}: </h3>
+			<div class="con-row">
+				<md-select class="activity-selector focus-default" ng-model="$ctrl.selectedActivityId" required placeholder="{{'SelectAnActivity'|translate}}" md-on-open="$ctrl.loadActivities()">
+					<md-option ng-repeat="activity in $ctrl.availableActivities | orderBy: 'Name'" ng-value="activity.Id">{{::activity.Name}}</md-option>
+				</md-select>
+			</div>
+
+			<h3>{{'MultiplicatorDefinitionSetColon'|translate}} </h3>
+			<div class="con-row">
+				<md-select class="" ng-model="$ctrl.selectedDefinitionSetId" required placeholder="{{'SelectAMultiplicatorDefinitionSet'|translate}}" md-on-open="$ctrl.loadDefinitionSets()">
+					<md-option ng-repeat="set in $ctrl.definitionSets | orderBy: 'Name'" ng-value="set.Id">{{::set.Name}}</md-option>
+				</md-select>
+			</div>
+
+			<h3>{{'From'|translate}}: </h3>
+			<div class="con-row">
+				<teams-datetime-picker datetime="$ctrl.fromTime" on-update="$ctrl.updateFromTime(datetime)"></teams-datetime-picker>
+			</div>
+
+			<h3>{{'To'|translate}}: </h3>
+			<div class="con-row">
+				<teams-datetime-picker datetime="$ctrl.toTime" on-update="$ctrl.updateToTime(datetime)"></teams-datetime-picker>
+			</div>
+		</form>
+		<div class="text-danger" ng-if="!$ctrl.timeRangeIsValid">
+			<i class="mdi mdi-alert-octagon"></i>
+			<span>{{'InvalidTimeRangeForOvertimeActivity' | translate}}</span>
+		</div>
+		<div class="text-danger" ng-if="$ctrl.notAllowedNameListString.length > 0">
+			<i class="mdi mdi-alert-octagon"></i>
+			<span>{{'TheActivityCanNotBeAddedTo'|translate}} <b>{{$ctrl.notAllowedNameListString}}</b></span>
+		</div>
+		<button id="applyOvertime" class="wfm-btn form-submit"
+				ng-class="{'wfm-btn-primary': newOvertimeActivityForm.$valid && $ctrl.timeRangeIsValid && $ctrl.anyValidAgent(), 'wfm-btn-primary-disabled': !(newOvertimeActivityForm.$valid && $ctrl.timeRangeIsValid && $ctrl.anyValidAgent())}"
+				ng-disabled="newOvertimeActivityForm.$valid && $ctrl.timeRangeIsValid && $ctrl.anyValidAgent() ?'':'disabled'"
+				ng-click="$ctrl.addOvertime()">
+			{{'Apply' | translate}}
+		</button>
+	</md-content>
+</div>

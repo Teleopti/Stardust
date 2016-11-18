@@ -1,6 +1,7 @@
 ﻿<div class="teamschedule-command-container">
 	<add-personal-activity ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'AddPersonalActivity'" tabindex="195"></add-personal-activity>
 	<add-activity ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'AddActivity'" tabindex="196"></add-activity>
+	<add-overtime ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'AddOvertimeActivity'" ></add-overtime>
 	<remove-activity ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'RemoveActivity'"></remove-activity>
 	<swap-shifts ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'SwapShifts'"></swap-shifts>
 	<add-absence ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'AddAbsence'" tabindex="200"></add-absence>

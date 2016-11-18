@@ -36,7 +36,7 @@ describe("teamschedule move activity directive tests", function () {
 			$provide.service('PersonSelection', function () {
 				return fakePersonSelectionService;
 			});
-			$provide.service('MoveActivityValidator', function () {
+			$provide.service('ActivityValidator', function () {
 				return fakeMoveActivityValidator;
 			});
 			$provide.service('CurrentUserInfo', function () {

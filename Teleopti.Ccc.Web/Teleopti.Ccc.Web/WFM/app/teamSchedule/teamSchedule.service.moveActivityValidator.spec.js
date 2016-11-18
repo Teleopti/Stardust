@@ -25,10 +25,10 @@
 			});
 		});
 
-		beforeEach(inject(function (PersonSelection, ScheduleManagement, MoveActivityValidator) {
+		beforeEach(inject(function (PersonSelection, ScheduleManagement, ActivityValidator) {
 			personSelection = PersonSelection;
 			scheduleMgmt = ScheduleManagement;
-			target = MoveActivityValidator;
+			target = ActivityValidator;
 		}));
 		var scheduleDate = "2016-05-12";
 		var schedule = {
