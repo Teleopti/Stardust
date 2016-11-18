@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using Newtonsoft.Json;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
@@ -50,6 +51,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				   && Workday == other.Workday
 				   && NotScheduled == other.NotScheduled
 				   && Label == other.Label;
+		}
+
+		public string ToJson()
+		{
+			return JsonConvert.SerializeObject(this);
 		}
 	}
 }
