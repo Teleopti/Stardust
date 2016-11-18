@@ -571,7 +571,37 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var schedule = result.Schedules.Single();
 			schedule.PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault().ToString());
 			schedule.Projection.Should().Be.Empty();
+		}
 
+		[Test]
+		public void ShouldReturnCorrectMultiplicatorDefinitionSetsInDayViewModel()
+		{
+			var scheduleDate = new DateOnly(2020,1,1);
+			var person = PersonFactory.CreatePerson("Sherlock","Holmes");
+			person.WithId();
+			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
+			CurrentScenario.FakeScenario(scenario);
+
+			var contract = ContractFactory.CreateContract("Contract");
+			contract.WithId();
+			var mds = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("mds", MultiplicatorType.Overtime).WithId();
+			contract.AddMultiplicatorDefinitionSetCollection(mds);
+
+			ITeam team = TeamFactory.CreateSimpleTeam();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010,1,1),personContract,team);
+
+			person.AddPersonPeriod(personPeriod);
+			PeopleSearchProvider.Add(person);
+			PersonRepository.Has(person);
+
+			var result = Target.CreateViewModelForPeople(new[] { person.Id.Value },scheduleDate);
+
+			result.Total.Should().Be.EqualTo(1);
+			var schedule = result.Schedules.Single();
+			schedule.PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault().ToString());
+			schedule.Projection.Should().Be.Empty();
+			schedule.MultiplicatorDefinitionSetIds.Single().Should().Be.EqualTo(mds.Id.Value);
 		}
 	}
 }
