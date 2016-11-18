@@ -68,18 +68,23 @@
 				<div>
 					<table>
 						<thead>
-							<tr>
-								<th>Detail Created (UTC)</th>
-								<th>Detail</th>
-							</tr>
+						<tr>
+							<th>Detail Created (UTC)</th>
+							<th>Detail</th>
+						</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="detail in vm.JobDetails">
-								<td>{{detail.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-								<td>{{detail.Detail}}</td>
-							</tr>
+						<tr ng-repeat="detail in vm.JobDetails | limitTo:vm.quantity">
+							<td>{{detail.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+							<td>{{detail.Detail}}</td>
+						</tr>
 						</tbody>
 					</table>
+
+
+				</div>
+				<div ng-if="vm.JobDetails.length > vm.quantity">
+					<button class="btn-primary col-md-12" ng-click="vm.quantity = vm.quantity +5">More data exists, click to display</button>
 				</div>
 			</div>
 

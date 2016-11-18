@@ -10,6 +10,9 @@
 		var vm = this;
 		vm.back = back;
 		vm.JobId = $routeParams.jobId;
+		vm.quantity = preferedLogLevel();
+		
+
 		$http.get("./Stardust/JobDetails/" + vm.JobId, tokenHeaderService.getHeaders())
 			.success(function(data) {
 				vm.JobDetails = data;
@@ -24,6 +27,10 @@
 			.error(function(xhr, ajaxOptions, thrownError) {
 				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 			});
+
+		function preferedLogLevel() {
+			return 5;
+		}
 
 		function back() {
 			window.history.back();
