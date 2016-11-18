@@ -7,9 +7,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
@@ -36,52 +34,43 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
-		private readonly ITeamBlockGenerator _teamBlockGenerator;
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly WorkShiftSelectorForMaxSeat _workShiftSelectorForMaxSeat;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly RestrictionOverLimitValidator _restrictionOverLimitValidator;
-		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly MaxSeatPeak _maxSeatPeak;
-		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 		private readonly IsOverMaxSeat _isOverMaxSeat;
-		private readonly LockDaysOnTeamBlockInfos _lockDaysOnTeamBlockInfos;
 		private readonly ScheduleChangesAffectedDates _scheduleChangesAffectedDates;
+		private readonly ScheduledTeamBlockInfoFactory _scheduledTeamBlockInfoFactory;
 
 		public MaxSeatOptimization(MaxSeatSkillDataFactory maxSeatSkillDataFactory,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			ITeamBlockScheduler teamBlockScheduler,
-			ITeamBlockGenerator teamBlockGenerator,
 			ITeamBlockClearer teamBlockClearer,
 			WorkShiftSelectorForMaxSeat workShiftSelectorForMaxSeat,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 			RestrictionOverLimitValidator restrictionOverLimitValidator,
-			IMatrixListFactory matrixListFactory,
 			MaxSeatPeak maxSeatPeak,
-			TeamInfoFactoryFactory teamInfoFactoryFactory,
 			IDeleteSchedulePartService deleteSchedulePartService,
 			IsOverMaxSeat isOverMaxSeat,
-			LockDaysOnTeamBlockInfos lockDaysOnTeamBlockInfos,
-			ScheduleChangesAffectedDates scheduleChangesAffectedDates)
+			ScheduleChangesAffectedDates scheduleChangesAffectedDates,
+			ScheduledTeamBlockInfoFactory scheduledTeamBlockInfoFactory)
 		{
 			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_teamBlockScheduler = teamBlockScheduler;
-			_teamBlockGenerator = teamBlockGenerator;
 			_teamBlockClearer = teamBlockClearer;
 			_workShiftSelectorForMaxSeat = workShiftSelectorForMaxSeat;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
-			_matrixListFactory = matrixListFactory;
 			_maxSeatPeak = maxSeatPeak;
-			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_deleteSchedulePartService = deleteSchedulePartService;
 			_isOverMaxSeat = isOverMaxSeat;
-			_lockDaysOnTeamBlockInfos = lockDaysOnTeamBlockInfos;
 			_scheduleChangesAffectedDates = scheduleChangesAffectedDates;
+			_scheduledTeamBlockInfoFactory = scheduledTeamBlockInfoFactory;
 		}
 
 		public void Optimize(DateOnlyPeriod period, 
@@ -98,13 +87,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			if (!maxSeatData.MaxSeatSkillExists())
 				return;
 			var tagSetter = optimizationPreferences.General.CreateScheduleTagSetter();
-			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedules, allAgents, period);
 			var businessRules = NewBusinessRuleCollection.Minimum();
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
-			_teamInfoFactoryFactory.Create(allAgents, schedules, optimizationPreferences.Extra.TeamGroupPage);
-			var teamBlockInfos = _teamBlockGenerator.Generate(allAgents, allMatrixes, period, agentsToOptimize, schedulingOptions);
-
-			_lockDaysOnTeamBlockInfos.LockUnscheduleDaysAndRemoveEmptyTeamBlockInfos(teamBlockInfos);
+			var teamBlockInfos = _scheduledTeamBlockInfoFactory.Create(period, agentsToOptimize, schedules, allAgents, schedulingOptions);
 
 			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills()))
 			{

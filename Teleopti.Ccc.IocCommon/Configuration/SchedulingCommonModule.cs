@@ -577,6 +577,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SchedulerSkillDayHelper>().As<ISchedulerSkillDayHelper>().SingleInstance();
 			builder.RegisterType<CreatePersonalSkillsFromMaxSeatSites>().As<ICreatePersonalSkillsFromMaxSeatSites>().SingleInstance();
 			builder.RegisterType<MaxSeatSkillCreator>().SingleInstance();
+			builder.RegisterType<ScheduledTeamBlockInfoFactory>().InstancePerLifetimeScope();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_MaxSeatsNew_40939))
 			{
 				builder.RegisterType<InitMaxSeatForStateHolder>().As<IInitMaxSeatForStateHolder>().InstancePerLifetimeScope();

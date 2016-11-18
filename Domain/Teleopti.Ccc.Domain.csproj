@@ -554,6 +554,7 @@
     <Compile Include="Scheduling\TeamBlock\BlockInfoExtensions.cs" />
     <Compile Include="Scheduling\TeamBlock\LockDaysOnTeamBlockInfos.cs" />
     <Compile Include="Scheduling\TeamBlock\ReturnPeriodBasedOnDayBlockFinder.cs" />
+    <Compile Include="Scheduling\TeamBlock\ScheduledTeamBlockInfoFactory.cs" />
     <Compile Include="Scheduling\TeamBlock\SchedulePeriodBlockFinder.cs" />
     <Compile Include="Scheduling\TeamBlock\ShiftProjectionCachesForIntraInterval.cs" />
     <Compile Include="Scheduling\TeamBlock\SingleDayBlockFinder.cs" />
