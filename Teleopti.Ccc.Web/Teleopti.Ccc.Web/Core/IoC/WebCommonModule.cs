@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		{
 			builder.RegisterType<ActivityProvider>().As<IActivityProvider>().SingleInstance();
 			builder.RegisterType<ShiftCategoryProvider>().As<IShiftCategoryProvider>().SingleInstance();
+			builder.RegisterType<MultiplicatorDefinitionSetProvider>().As<IMultiplicatorDefinitionSetProvider>().SingleInstance();
 		}
 	}
 }
