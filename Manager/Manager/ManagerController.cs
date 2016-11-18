@@ -202,22 +202,17 @@ namespace Stardust.Manager
 
 			return Ok();
 		}
-		
+
 		[HttpPost, Route(ManagerRouteConstants.NodeHasBeenInitialized)]
 		public IHttpActionResult NodeInitialized([FromBody] Uri workerNodeUri)
 		{
 			var isValidRequest = _validator.ValidateUri(workerNodeUri);
 			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
-			
-			Task.Factory.StartNew(() =>
-			{
-				this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received init from Node. Node Uri : ( " + workerNodeUri + " )");
 
-				_nodeManager.RequeueJobsThatDidNotFinishedByWorkerNodeUri(workerNodeUri.ToString());
+			this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received init from Node. Node Uri : ( " + workerNodeUri + " )");
 
-				_nodeManager.AddWorkerNode(workerNodeUri);
-			});
-
+			_nodeManager.RequeueJobsThatDidNotFinishedByWorkerNodeUri(workerNodeUri.ToString());
+			_nodeManager.AddWorkerNode(workerNodeUri);
 			return Ok();
 		}
 
