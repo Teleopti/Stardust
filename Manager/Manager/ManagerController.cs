@@ -143,7 +143,7 @@ namespace Stardust.Manager
 			{
 				var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
 
-				this.Log().ErrorWithLineNumber(WhoAmI(Request) + ": Received job failed from a Node ( jobId, Node ) : ( " +
+				this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received job failed from a Node ( jobId, Node ) : ( " +
 				                               jobFailed.JobId + ", " + workerNodeUri + " )");
 
 				var progress = new JobDetail
