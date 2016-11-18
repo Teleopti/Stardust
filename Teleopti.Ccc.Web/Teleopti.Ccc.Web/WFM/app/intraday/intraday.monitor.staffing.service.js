@@ -131,13 +131,13 @@
 								y:{
 									label: $translate.instant('Agents'),
 									tick: {
-										format: d3.format('.1f')
+										format: d3.format('.0f')
 									}
 								},
 								y2: {
 									show: true,
 									tick: {
-										format: d3.format('.1f')
+										format: d3.format('.0f')
 									}
 								}
 							},

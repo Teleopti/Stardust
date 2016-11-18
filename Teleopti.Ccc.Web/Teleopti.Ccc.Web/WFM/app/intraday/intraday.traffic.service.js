@@ -186,14 +186,14 @@
 								y: {
 									label: $translate.instant('Calls'),
 									tick: {
-										format: d3.format('.1f')
+										format: d3.format('.0f')
 									}
 								},
 								y2: {
 									label: $translate.instant('AverageHandlingTime'),
 									show: true,
 									tick: {
-										format: d3.format('.1f')
+										format: d3.format('.0f')
 									}
 								}
 							},
