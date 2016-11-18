@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 					foreach (var person in unlockedPersons)
 					{
-						var scheduleDay = teamBlockInfo.TeamInfo.MatrixForMemberAndDate(person, unlockedDate)
-							.GetScheduleDayByKey(unlockedDate)
-							.DaySchedulePart();
+						var scheduleMatrixPro = teamBlockInfo.TeamInfo.MatrixForMemberAndDate(person, unlockedDate);
+						if (scheduleMatrixPro == null) continue;
+						var scheduleDay = scheduleMatrixPro.GetScheduleDayByKey(unlockedDate).DaySchedulePart();
 						if (scheduleDay.IsScheduled())
 						{
 							anyScheduled = true;
