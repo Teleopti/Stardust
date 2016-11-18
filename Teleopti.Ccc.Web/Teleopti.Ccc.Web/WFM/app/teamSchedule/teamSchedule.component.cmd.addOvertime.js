@@ -19,12 +19,12 @@
 		ctrl.updateFromTime = function(newTime) {
 			ctrl.fromTime = newTime;
 			ctrl.timeRangeIsValid = validateTimeRange(ctrl.fromTime, ctrl.toTime);
-			validateInput();
+			ctrl.validateInput();
 		};
 		ctrl.updateToTime = function(newTime) {
 			ctrl.toTime = newTime;
 			ctrl.timeRangeIsValid = validateTimeRange(ctrl.fromTime, ctrl.toTime);
-			validateInput();
+			ctrl.validateInput();
 		}
 
 		ctrl.$onInit = function() {
@@ -49,19 +49,21 @@
 		};
 
 		ctrl.anyValidAgent = function() {
-			return true;
+			return ctrl.invalidAgents.length !== ctrl.selectedAgents.length;
 		};
 
-		function validateInput() {
-			//ctrl.selectedDefinitionSetId  allowed
+		ctrl.anyInvalidAgent = function() {
+			return ctrl.invalidAgents.length > 0;
+		};
+
+		ctrl.validateInput = function() {
 			var timeRange = {
 				startTime: moment(ctrl.fromTime),
 				endTime: moment(ctrl.toTime)
 			};
 			var timezone = ctrl.containerCtrl.getCurrentTimezone();
 			ctrl.invalidAgents = activityValidator.validateInputForOvertime(timeRange, ctrl.selectedDefinitionSetId, timezone);
-			console.log(ctrl.invalidAgents);
-		}
+		};
 
 		function validateTimeRange(fromTime, toTime) {
 			var from = moment(fromTime);

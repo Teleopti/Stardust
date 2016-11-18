@@ -116,7 +116,8 @@
 				ViewRange: timeLine.MaximumViewRange,
 				Shifts: [],
 				DayOffs: [],
-				ExtraShifts: []
+				ExtraShifts: [],
+				MultiplicatorDefinitionSetIds: schedule.MultiplicatorDefinitionSetIds
 			};
 
 			var shiftVm = {

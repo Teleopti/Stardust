@@ -14,7 +14,7 @@
 		self.checkTimeRangeAllowedForIntradayAbsence = checkTimeRangeAllowedForIntradayAbsence;
 		self.decideBelongsToDateForOvertimeActivity = decideBelongsToDateForOvertimeActivity;
 
-		function decideBelongsToDateForOvertimeActivity(targetTimeRange, normalizedScheduleDataArray, currentDate) {
+		function decideBelongsToDateForOvertimeActivity(targetTimeRange, normalizedScheduleDataArray) {
 			var intersectedShiftDays = normalizedScheduleDataArray.filter(function (day) {
 				return day.shiftRange && timeRangeIntersect(day.shiftRange, targetTimeRange);
 			});

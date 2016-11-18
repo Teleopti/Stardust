@@ -11,7 +11,7 @@
 
 			<h3>{{'MultiplicatorDefinitionSetColon'|translate}} </h3>
 			<div class="con-row">
-				<md-select class="" ng-model="$ctrl.selectedDefinitionSetId" required placeholder="{{'SelectAMultiplicatorDefinitionSet'|translate}}" md-on-open="$ctrl.loadDefinitionSets()">
+				<md-select class="" ng-model="$ctrl.selectedDefinitionSetId" ng-change="$ctrl.validateInput()" required placeholder="{{'SelectAMultiplicatorDefinitionSet'|translate}}" md-on-open="$ctrl.loadDefinitionSets()">
 					<md-option ng-repeat="set in $ctrl.definitionSets | orderBy: 'Name'" ng-value="set.Id">{{::set.Name}}</md-option>
 				</md-select>
 			</div>
@@ -30,9 +30,9 @@
 			<i class="mdi mdi-alert-octagon"></i>
 			<span>{{'InvalidTimeRangeForOvertimeActivity' | translate}}</span>
 		</div>
-		<div class="text-danger" ng-if="$ctrl.notAllowedNameListString.length > 0">
+		<div class="text-danger" ng-if="$ctrl.anyInvalidAgent()">
 			<i class="mdi mdi-alert-octagon"></i>
-			<span>{{'TheActivityCanNotBeAddedTo'|translate}} <b>{{$ctrl.notAllowedNameListString}}</b></span>
+			<span>{{'TheActivityCanNotBeAddedTo'|translate}} <strong>{{$ctrl.invalidAgents | names}}</strong></span>
 		</div>
 		<button id="applyOvertime" class="wfm-btn form-submit"
 				ng-class="{'wfm-btn-primary': newOvertimeActivityForm.$valid && $ctrl.timeRangeIsValid && $ctrl.anyValidAgent(), 'wfm-btn-primary-disabled': !(newOvertimeActivityForm.$valid && $ctrl.timeRangeIsValid && $ctrl.anyValidAgent())}"

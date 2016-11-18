@@ -17,6 +17,11 @@
 			for (var i = 0; i < selectedPersonIds.length; i++) {
 				var personId = selectedPersonIds[i];
 				var personSchedule = ScheduleMgmt.findPersonScheduleVmForPersonId(personId);
+				if (selectedDefinitionSetId && (!personSchedule.MultiplicatorDefinitionSetIds ||
+					personSchedule.MultiplicatorDefinitionSetIds.indexOf(selectedDefinitionSetId) < 0)) {
+					invalidPeople.push({ PersonId: personId, Name: personSchedule.Name });
+					continue;
+				}
 				var normalizedScheduleVm = belongsToDateDecider.normalizePersonScheduleVm(personSchedule, currentTimezone);
 				var belongsToDate = belongsToDateDecider.decideBelongsToDateForOvertimeActivity(timeRange, normalizedScheduleVm);
 				var shiftsForBelongsToDate = personSchedule.Shifts.filter(function(shift) {

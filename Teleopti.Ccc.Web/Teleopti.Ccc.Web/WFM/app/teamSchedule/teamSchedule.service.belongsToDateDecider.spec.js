@@ -312,4 +312,57 @@
 		expect(result[2].shiftRange).toBeNull();
 	});
 
+	it('should decide belongsToDate for overtime activity', function() {
+		var normalizedScheduleDataArray = [
+			{
+				date: '2016-07-01',
+				timeRange: {
+					startTime: moment('2016-07-01 00:00'),
+					endTime: moment('2016-07-02 00:00')
+				},
+				shiftRange: {
+					startTime: moment('2016-07-01 08:00'),
+					endTime: moment('2016-07-01 16:00')
+				}
+			},
+			{
+				date: '2016-07-02',
+				timeRange: {
+					startTime: moment('2016-07-02 00:00'),
+					endTime: moment('2016-07-03 00:00')
+				},
+				shiftRange: {
+					startTime: moment('2016-07-02 08:00'),
+					endTime: moment('2016-07-02 16:00')
+				}
+			},
+			{
+				date: '2016-07-03',
+				timeRange: {
+					startTime: moment('2016-07-03 00:00'),
+					endTime: moment('2016-07-04 00:00')
+				},
+				shiftRange: {
+					startTime: moment('2016-07-03 08:00'),
+					endTime: moment('2016-07-03 16:00')
+				}
+			}
+		];
+
+		var belongsToDate, timeRange;
+
+		timeRange = { startTime: moment('2016-07-01 16:00'), endTime: moment('2016-07-01 17:00') };
+		belongsToDate = target.decideBelongsToDateForOvertimeActivity(timeRange, normalizedScheduleDataArray);
+		expect(belongsToDate).toEqual('2016-07-01');
+
+		timeRange = { startTime: moment('2016-07-01 16:00'), endTime: moment('2016-07-02 08:00') };
+		belongsToDate = target.decideBelongsToDateForOvertimeActivity(timeRange, normalizedScheduleDataArray);
+		expect(belongsToDate).toEqual('2016-07-01');
+
+		timeRange = { startTime: moment('2016-07-01 17:00'), endTime: moment('2016-07-02 05:00') };
+		belongsToDate = target.decideBelongsToDateForOvertimeActivity(timeRange, normalizedScheduleDataArray);
+		expect(belongsToDate).toEqual('2016-07-01');
+
+	});
+
 });

@@ -549,5 +549,116 @@
 			expect(target.getInvalidPeople().length).toEqual(1);
 		});
 
+		it('should validate timeRange if it wont cause shift exceeding 36 hours', function() {
+			var scheduleToday = {
+				"PersonId": "221B-Baker-SomeoneElse",
+				"Name": "SomeoneElse",
+				"Date": scheduleDate,
+				"Timezone": {
+					IanaId: "Asia/Hong_Kong"
+				},
+				"Projection": [
+					{
+						"ShiftLayerIds": ["layer1"],
+						"ParentPersonAbsences": null,
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": scheduleDate + " 11:00",
+						"End": scheduleDate + " 19:00",
+						"Minutes": 480
+					}
+				],
+				"IsFullDayAbsence": false,
+				"DayOff": null
+			};
+
+			scheduleMgmt.resetSchedules([scheduleToday], moment(scheduleDate), "Asia/Hong_Kong");
+			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			var timeRange = {
+				startTime: moment(scheduleDate + " 09:00"),
+				endTime: moment(scheduleDate + " 10:00")
+			}
+
+			var invalidPeople = target.validateInputForOvertime(timeRange, null, "Asia/Hong_Kong");
+
+			expect(invalidPeople.length).toEqual(0);
+		});
+
+		it('should invalidate timeRange if it will cause shift exceeding 36 hours', function() {
+			var scheduleToday = {
+				"PersonId": "221B-Baker-SomeoneElse",
+				"Name": "SomeoneElse",
+				"Date": scheduleDate,
+				"Timezone": {
+					IanaId: "Asia/Hong_Kong"
+				},
+				"Projection": [
+					{
+						"ShiftLayerIds": ["layer1"],
+						"ParentPersonAbsences": null,
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": scheduleDate + " 23:00",
+						"End": "2016-05-13 23:00",
+						"Minutes": 1440
+					}
+				],
+				"IsFullDayAbsence": false,
+				"DayOff": null
+			};
+
+			scheduleMgmt.resetSchedules([scheduleToday], moment(scheduleDate), "Asia/Hong_Kong");
+			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			var timeRange = {
+				startTime: moment(scheduleDate + " 09:00"),
+				endTime: moment(scheduleDate + " 10:00")
+			}
+
+			var invalidPeople = target.validateInputForOvertime(timeRange, null, "Asia/Hong_Kong");
+
+			expect(invalidPeople.length).toEqual(1);
+		});
+
+		it('should invalidate if multiplicator definition set is not configured for the agent', function () {
+			var scheduleToday = {
+				"PersonId": "221B-Baker-SomeoneElse",
+				"Name": "SomeoneElse",
+				"Date": scheduleDate,
+				"Timezone": {
+					IanaId: "Asia/Hong_Kong"
+				},
+				"Projection": [
+					{
+						"ShiftLayerIds": ["layer1"],
+						"ParentPersonAbsences": null,
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": scheduleDate + " 23:00",
+						"End": "2016-05-13 23:00",
+						"Minutes": 1440
+					}
+				],
+				"IsFullDayAbsence": false,
+				"DayOff": null,
+				"MultiplicatorDefinitionSetIds": []
+			};
+
+			scheduleMgmt.resetSchedules([scheduleToday], moment(scheduleDate), "Asia/Hong_Kong");
+			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			var timeRange = {
+				startTime: moment(scheduleDate + " 09:00"),
+				endTime: moment(scheduleDate + " 10:00")
+			}
+
+			var invalidPeople = target.validateInputForOvertime(timeRange, 'anything', "Asia/Hong_Kong");
+
+			expect(invalidPeople.length).toEqual(1);
+		});
 	});
 })()
