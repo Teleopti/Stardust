@@ -26357,6 +26357,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a multiplicator definition set.
+        /// </summary>
+        public static string SelectAMultiplicatorDefinitionSet {
+            get {
+                return ResourceManager.GetString("SelectAMultiplicatorDefinitionSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select an activity.
         /// </summary>
         public static string SelectAnActivity {

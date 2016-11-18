@@ -15195,4 +15195,8 @@ These options are activated:
     <value>No sites for the selected skills were found</value>
     <comment>Message in RTA when selecting by skill and no sites are found</comment>
   </data>
+  <data name="SelectAMultiplicatorDefinitionSet" xml:space="preserve">
+    <value>Select a multiplicator definition set</value>
+    <comment>place holder for multiplicator definition sets select in add overtime pannel under web WFM/teams</comment>
+  </data>
 </root>
