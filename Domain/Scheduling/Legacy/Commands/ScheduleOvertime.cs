@@ -19,43 +19,50 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ScheduleOvertimeOnNonScheduleDays _scheduleOvertimeOnNonScheduleDays;
 		private readonly FullResourceCalculation _fullResourceCalculation;
 		private readonly IResourceOptimization _resourceOptimizationHelper;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public ScheduleOvertime(Func<ISchedulingResultStateHolder> schedulingResultStateHolder, 
 																	IScheduleOvertimeService scheduleOvertimeService,
 																	ScheduleOvertimeOnNonScheduleDays scheduleOvertimeOnNonScheduleDays,
 																	FullResourceCalculation fullResourceCalculation,
-																	IResourceOptimization resourceOptimizationHelper)
+																	IResourceOptimization resourceOptimizationHelper,
+																	CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_scheduleOvertimeService = scheduleOvertimeService;
 			_scheduleOvertimeOnNonScheduleDays = scheduleOvertimeOnNonScheduleDays;
 			_fullResourceCalculation = fullResourceCalculation;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 
 		public void Execute(IOvertimePreferences overtimePreferences, 
 										ISchedulingProgress backgroundWorker, 
 										IList<IScheduleDay> selectedSchedules)
 		{
-			_fullResourceCalculation.Execute();
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, _schedulingResultStateHolder());
-			var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
-			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
-			var cancel = false;
-			foreach (var dateOnly in selectedDates)
+			using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder().Schedules, _schedulingResultStateHolder().Skills))
 			{
-				var persons = selectedPersons.Randomize();
-				foreach (var person in persons)
+				ResourceCalculationContext.Fetch().PrimarySkillMode = true;
+				_fullResourceCalculation.Execute();
+				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, _schedulingResultStateHolder());
+				var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
+				var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
+				var cancel = false;
+				foreach (var dateOnly in selectedDates)
 				{
-					if (cancel || checkIfCancelPressed(backgroundWorker)) return;
+					var persons = selectedPersons.Randomize();
+					foreach (var person in persons)
+					{
+						if (cancel || checkIfCancelPressed(backgroundWorker)) return;
 
-					var scheduleDay = _schedulingResultStateHolder().Schedules[person].ScheduledDay(dateOnly);
-					var rules = NewBusinessRuleCollection.Minimum();
-					IScheduleTagSetter scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
-					_scheduleOvertimeService.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer, dateOnly, rules, scheduleTagSetter);
-					_scheduleOvertimeOnNonScheduleDays.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer);
-					var progressResult = onDayScheduled(backgroundWorker,new SchedulingServiceSuccessfulEventArgs(scheduleDay,()=>cancel=true));
-					if (progressResult.ShouldCancel) return;
+						var scheduleDay = _schedulingResultStateHolder().Schedules[person].ScheduledDay(dateOnly);
+						var rules = NewBusinessRuleCollection.Minimum();
+						IScheduleTagSetter scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
+						_scheduleOvertimeService.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer, dateOnly, rules, scheduleTagSetter);
+						_scheduleOvertimeOnNonScheduleDays.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer);
+						var progressResult = onDayScheduled(backgroundWorker, new SchedulingServiceSuccessfulEventArgs(scheduleDay, () => cancel = true));
+						if (progressResult.ShouldCancel) return;
+					}
 				}
 			}
 		}
