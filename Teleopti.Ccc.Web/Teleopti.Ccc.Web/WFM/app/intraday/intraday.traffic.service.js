@@ -172,7 +172,10 @@
 							},
 							axis: {
 								x: {
-									label: $translate.instant('SkillTypeTime'),
+									label: {
+										text: $translate.instant('SkillTypeTime'),
+										position: 'outer-center'
+									},
 									type: 'category',
 									tick: {
 										culling: {
@@ -184,13 +187,19 @@
 									}
 								},
 								y: {
-									label: $translate.instant('Calls'),
+									label: {
+										text: $translate.instant('Calls'),
+										position: 'outer-middle'
+									},
 									tick: {
 										format: d3.format('.0f')
 									}
 								},
 								y2: {
-									label: $translate.instant('AverageHandlingTime'),
+									label: {
+										text: $translate.instant('AverageHandlingTime'),
+										position: 'outer-middle'
+									},
 									show: true,
 									tick: {
 										format: d3.format('.0f')

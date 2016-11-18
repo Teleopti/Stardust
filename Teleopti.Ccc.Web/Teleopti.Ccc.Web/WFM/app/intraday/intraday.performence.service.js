@@ -151,7 +151,10 @@
 							},
 							axis: {
 								x : {
-									label: $translate.instant('SkillTypeTime'),
+									label: {
+										text: $translate.instant('SkillTypeTime'),
+										position: 'outer-center'
+									},
 									type: 'category',
 									tick: {
 										culling: {
@@ -162,14 +165,20 @@
 										multiline: false
 									}
 								},
-								y:{
-									label: $translate.instant('SecondShort'),
+								y: {
+									label: {
+										text: $translate.instant('SecondShort'),
+										position: 'outer-middle'
+									},
 									tick: {
 										format: d3.format('.0f')
 									}
 								},
 								y2: {
-									label: $translate.instant('%'),
+									label: {
+										text: $translate.instant('%'),
+										position: 'outer-middle'
+									},
 									show: true,
 									tick: {
 										format: d3.format('.0f')
