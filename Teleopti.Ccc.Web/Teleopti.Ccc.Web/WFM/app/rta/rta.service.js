@@ -22,13 +22,68 @@
 				}).query().$promise;
 			};
 
-			this.getOrganization = function (data) {
+
+			var fake = function () {
+				var org = [{
+					Id: 'LondonGuid',
+					Name: 'London',
+					Teams: [{
+						Id: '1',
+						Name: 'Team Preferences'
+					}, {
+						Id: '2',
+						Name: 'Team Students'
+					}]
+				}, {
+					Id: 'ParisGuid',
+					Name: 'Paris',
+					Teams: [{
+						Id: '3',
+						Name: 'Team Red'
+					}, {
+						Id: '4',
+						Name: 'Team Green'
+					}]
+				}, {
+					Id: 'StockholmGuid',
+					Name: 'Stockholm',
+					Teams: [{
+						Id: '5',
+						Name: 'Team Stockholm 1'
+					}, {
+						Id: '6',
+						Name: 'Team Stockholm 2'
+					}, {
+						Id: '7',
+						Name: 'Team Stockholm 3'
+					}, {
+						Id: '8',
+						Name: 'Team Stockholm 4'
+					}, {
+						Id: '9',
+						Name: 'Team Stockholm 5'
+					}, {
+						Id: '10',
+						Name: 'Team Stockholm 6'
+					},]
+				},];
+				var deferred = $q.defer();
+				deferred.resolve(org);
+				return deferred.promise;
+			}
+
+			var real = function (){
 				return $resource('../api/Organizations', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
 					}
 				}).query().$promise;
+			}
+
+			this.getOrganization = function (data) {
+				//return fake();
+				return real();
 			};
 
 

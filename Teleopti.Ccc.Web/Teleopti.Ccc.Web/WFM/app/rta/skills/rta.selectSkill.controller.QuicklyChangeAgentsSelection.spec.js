@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaSelectSkillQuickSelectionCtrl', function() {
+describe('RtaSelectSkillQuickSelectionCtrl', function () {
 	var $interval,
 		$httpBackend,
 		$state,
@@ -12,16 +12,16 @@ describe('RtaSelectSkillQuickSelectionCtrl', function() {
 
 	beforeEach(module('wfm.rta'));
 
-	beforeEach(function() {
-		module(function($provide) {
-			$provide.service('$stateParams', function() {
+	beforeEach(function () {
+		module(function ($provide) {
+			$provide.service('$stateParams', function () {
 				stateParams = {};
 				return stateParams;
 			});
 		});
 	});
 
-	beforeEach(inject(function(_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_, _$timeout_) {
+	beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_, _$timeout_) {
 		$interval = _$interval_;
 		$state = _$state_;
 		$sessionStorage = _$sessionStorage_;
@@ -38,7 +38,7 @@ describe('RtaSelectSkillQuickSelectionCtrl', function() {
 
 	}));
 
-	it('should get organization', function() {
+	it('should get organization', function () {
 		$fakeBackend.withOrganization(
 			{
 				Id: 'LondonGuid',
@@ -78,7 +78,7 @@ describe('RtaSelectSkillQuickSelectionCtrl', function() {
 		}]);
 	});
 
-	it('should go to agents on site', function() {
+	it('should go to agents on site', function () {
 		$fakeBackend.withOrganization(
 			{
 				Id: 'LondonGuid',
@@ -88,17 +88,17 @@ describe('RtaSelectSkillQuickSelectionCtrl', function() {
 			});
 
 		$controllerBuilder.createController()
-		.apply(function(){
-			scope.sites[0].isChecked = true;
-			scope.goToAgents();
-		});
+			.apply(function () {
+				scope.selectionChanged('LondonGuid', ['TeamGuid']);
+				scope.goToAgents();
+			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteIds: ['LondonGuid']
 		});
 	});
 
-	it('should go to agents on sites', function() {
+	it('should go to agents on sites', function () {
 		$fakeBackend.withOrganization(
 			{
 				Id: 'LondonGuid',
@@ -107,26 +107,26 @@ describe('RtaSelectSkillQuickSelectionCtrl', function() {
 				}]
 			})
 			.withOrganization(
-				{
-					Id: 'ParisGuid',
-					Teams: [{
-						Id: 'TeamParis'
-					}]
-				});
+			{
+				Id: 'ParisGuid',
+				Teams: [{
+					Id: 'TeamParis'
+				}]
+			});
 
 		$controllerBuilder.createController()
-		.apply(function(){
-			scope.sites[0].isChecked = true;
-			scope.sites[1].isChecked = true;
-			scope.goToAgents();
-		});
+			.apply(function () {
+				scope.selectionChanged('LondonGuid', ['TeamLondon']);
+				scope.selectionChanged('ParisGuid', ['TeamParis']);
+				scope.goToAgents();
+			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteIds: ['LondonGuid', 'ParisGuid']
 		});
 	});
 
-	xit('should go to agents on team', function() {
+	it('should go to agents on team', function () {
 		$fakeBackend.withOrganization(
 			{
 				Id: 'LondonGuid',
@@ -136,17 +136,162 @@ describe('RtaSelectSkillQuickSelectionCtrl', function() {
 				{
 					Id: 'LondonTeam2'
 				},
-			]
+				]
 			});
 
 		$controllerBuilder.createController()
-		.apply(function(){
-			scope.selectedTeams = ['LondonTeam1'];
-			scope.goToAgents();
-		});
+			.apply(function () {
+				scope.selectionChanged('LondonGuid', ['LondonTeam1']);
+				scope.goToAgents();
+			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			teamIds: ['LondonTeam1']
 		});
+	});
+
+	it('should go to agents on teams', function () {
+		$fakeBackend.withOrganization(
+			{
+				Id: 'LondonGuid',
+				Teams: [{
+					Id: 'LondonTeam1'
+				},
+				{
+					Id: 'LondonTeam2'
+				}]
+			})
+			.withOrganization({
+				Id: 'ParisGuid',
+				Teams: [{
+					Id: 'ParisTeam1',
+				}, {
+					Id: 'ParisTeam2',
+				}]
+			});;
+
+		$controllerBuilder.createController()
+			.apply(function () {
+				scope.selectionChanged('LondonGuid', ['LondonTeam1']);
+				scope.selectionChanged('ParisGuid', ['ParisTeam1']);
+				scope.goToAgents();
+			});
+
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+			teamIds: ['LondonTeam1', 'ParisTeam1']
+		});
+	});
+
+	it('should go to agents on site and team', function () {
+		$fakeBackend.withOrganization(
+			{
+				Id: 'LondonGuid',
+				Teams: [{
+					Id: 'LondonTeam1'
+				},
+				{
+					Id: 'LondonTeam2'
+				}]
+			})
+			.withOrganization({
+				Id: 'ParisGuid',
+				Teams: [{
+					Id: 'ParisTeam1',
+				}, {
+					Id: 'ParisTeam2',
+				}]
+			});;
+
+		$controllerBuilder.createController()
+			.apply(function () {
+				scope.selectionChanged('LondonGuid', ['LondonTeam1', 'LondonTeam2']);
+				scope.selectionChanged('ParisGuid', ['ParisTeam1']);
+				scope.goToAgents();
+			});
+
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+			siteIds: ['LondonGuid'],
+			teamIds: ['ParisTeam1']
+		});
+	});
+
+	it('should unselect team', function () {
+		$fakeBackend.withOrganization(
+			{
+				Id: 'LondonGuid',
+				Teams: [{
+					Id: 'LondonTeam1'
+				},
+				{
+					Id: 'LondonTeam2'
+				}]
+			})
+			.withOrganization({
+				Id: 'ParisGuid',
+				Teams: [{
+					Id: 'ParisTeam1',
+				}, {
+					Id: 'ParisTeam2',
+				}]
+			});;
+
+		$controllerBuilder.createController()
+			.apply(function () {
+				scope.selectionChanged('LondonGuid', ['LondonTeam1']);
+				scope.selectionChanged('ParisGuid', ['ParisTeam1']);
+				scope.selectionChanged('LondonGuid', ['LondonTeam1']);
+				scope.goToAgents();
+			});
+
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+			teamIds: ['ParisTeam1']
+		});
+	});
+
+	it('should unselect site', function () {
+		$fakeBackend.withOrganization(
+			{
+				Id: 'LondonGuid',
+				Teams: [{
+					Id: 'LondonTeam1'
+				}]
+			})
+			.withOrganization({
+				Id: 'ParisGuid',
+				Teams: [{
+					Id: 'ParisTeam1',
+				}]
+			});;
+
+		$controllerBuilder.createController()
+			.apply(function () {
+				scope.selectionChanged('LondonGuid', ['LondonTeam1']);
+				scope.selectionChanged('ParisGuid', ['ParisTeam1']);
+				scope.selectionChanged('LondonGuid', ['LondonTeam1']);
+				scope.goToAgents();
+			});
+
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+			siteIds: ['ParisGuid']
+		});
+	});
+
+	it('should not redirect when nothing is selected', function () {
+		$fakeBackend.withOrganization(
+			{
+				Id: 'LondonGuid',
+				Teams: [{
+					Id: 'LondonTeam1'
+				}]
+			});
+
+		$controllerBuilder.createController()
+			.apply(function () {
+				scope.selectionChanged('LondonGuid', ['LondonTeam1']);
+				scope.selectionChanged('LondonGuid', ['LondonTeam1']);
+				scope.goToAgents();
+			});
+
+		expect($state.go).not.toHaveBeenCalledWith('rta.agents', {});
 	});
 });

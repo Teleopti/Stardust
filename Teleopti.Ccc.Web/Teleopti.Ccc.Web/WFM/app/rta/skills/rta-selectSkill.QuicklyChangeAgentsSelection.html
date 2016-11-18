@@ -68,8 +68,8 @@
         <md-select ng-model="selectedTeams" class="rta-md-select" multiple md-on-close="goToAgents()">
           <md-optgroup ng-repeat="site in sites" class="rta-option-group">
 						<span ng-click="selectSite(site.Id)"><i class="mdi mdi-menu-down"></i></span>
-						<md-checkbox ng-value="site.Id" ng-model="site.isChecked">{{site.Name}}</md-checkbox>
-						<md-option ng-show="isSelected(site.Id)" ng-selected="site.isChecked" ng-value="team.Id" ng-repeat="team in site.Teams">{{team.Name}}</md-option>
+						<md-checkbox ng-click="selectionChanged(site.Id, site.Teams)" ng-value="site.Id" >{{site.Name}}</md-checkbox>
+						<md-option ng-click="selectionChanged(site.Id, [team.Id])" ng-show="isSelected(site.Id)" ng-selected="site.isChecked" ng-value="team.Id" ng-repeat="team in site.Teams">{{team.Name}}</md-option>
 						</md-optgroup>
 						<button ng-click="printOut()">I'm printing</button>
 					</md-select>

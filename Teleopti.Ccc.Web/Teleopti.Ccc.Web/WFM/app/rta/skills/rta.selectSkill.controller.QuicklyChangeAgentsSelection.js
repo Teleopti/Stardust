@@ -91,13 +91,6 @@
 						$scope.sites = organization;
 					});
 
-				$scope.goToAgents = function () {
-					var selectedSiteIds = $scope.sites.filter(function (site) { return site.isChecked == true; }).map(function (s) { return s.Id; });
-					$state.go('rta.agents', {
-						siteIds: selectedSiteIds
-					});
-				}
-
 				$scope.selectSite = function (siteId) {
 					selectedSiteId = $scope.isSelected(siteId) ? '' : siteId;
 				};
@@ -106,6 +99,58 @@
 					return selectedSiteId === siteId;
 				};
 
+				$scope.goToAgents = function () {
+					var obj = {};
+					var selectedSiteIds = selectedSites();
+					var selectedTeamIds = selectedTeams();
+					if (selectedSiteIds.length > 0)
+						obj['siteIds'] = selectedSiteIds;
+					if (selectedTeamIds.length > 0)
+						obj['teamIds'] = selectedTeamIds;
+					if (selectedSiteIds.length > 0 || selectedTeamIds.length > 0)
+						$state.go('rta.agents', obj);
+				}
+
+				function selectedSites() {
+					return $scope.sites.filter(function (site) { return site.isChecked == true; }).map(function (s) { return s.Id; });
+				}
+
+				function selectedTeams() {
+					return flatten(
+						$scope.sites.map(function (s) {
+							var selectedTeamIds = s.Teams.filter(function (team) {
+								return team.isChecked == true;
+							})
+								.map(function (team) {
+									return team.Id;
+								});
+							return selectedTeamIds;
+						}));
+				}
+
+				function flatten(collection) {
+					return [].concat.apply([], collection)
+				}
+
+				$scope.selectionChanged = function (siteId, teamIds) {
+					var selectedSite = $scope.sites.find(function (site) {
+						return site.Id == siteId;
+					});
+					if (selectedSite.Teams.length > teamIds.length) {
+						selectedSite.isChecked = false;
+						selectedSite.Teams.forEach(function (team) {
+							team.isChecked = teamIds.indexOf(team.Id) > -1 ? !team.isChecked : team.isChecked;
+						})
+					}
+					else
+						selectedSite.isChecked = !selectedSite.isChecked;
+				}
+
+
+
+				$scope.printOut = function () {
+					console.log($scope.selectedTeams);
+				}
 			}
 		]);
 })();
