@@ -1394,6 +1394,7 @@
     <Content Include="WFM\app\rta\skills\rta-teams-bySkills.html" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.controller.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.controller.QuicklyChangeAgentsSelection.js" />
+    <Content Include="WFM\app\rta\skills\rta.selectSkill.controller.spec.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.controller.QuicklyChangeAgentsSelection.spec.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.sites.spec.js" />
