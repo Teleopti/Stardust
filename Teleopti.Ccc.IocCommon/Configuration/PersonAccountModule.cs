@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
             builder.RegisterType<TraceableRefreshService>().As<ITraceableRefreshService>();
 			builder.RegisterType<PersonAccountUpdater>().As<IPersonAccountUpdater>();
+			builder.RegisterType<ClearPersonRelatedInformation>().As<IPersonLeavingUpdater>().SingleInstance();
 		}
 	}
 }

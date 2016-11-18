@@ -242,6 +242,7 @@
     <Compile Include="Cascading\ReverseSkillRoutingPriorities.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityModel.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityPersister.cs" />
+    <Compile Include="Common\ClearPersonRelatedInformation.cs" />
     <Compile Include="Common\IPersonLeavingUpdater.cs" />
     <Compile Include="Common\IScheduleDayProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\NonoverwritableLayerMovabilityChecker.cs" />

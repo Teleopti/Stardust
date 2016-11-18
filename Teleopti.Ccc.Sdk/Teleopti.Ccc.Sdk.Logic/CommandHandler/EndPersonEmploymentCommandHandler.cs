@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
@@ -11,11 +12,15 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private readonly IPersonLeavingUpdater _personLeavingUpdater;
+		private readonly IPersonAccountUpdater _personAccountUpdater;
 
-		public EndPersonEmploymentCommandHandler(IPersonRepository personRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+		public EndPersonEmploymentCommandHandler(IPersonRepository personRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IPersonLeavingUpdater personLeavingUpdater, IPersonAccountUpdater personAccountUpdater)
 		{
 			_personRepository = personRepository;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_personLeavingUpdater = personLeavingUpdater;
+			_personAccountUpdater = personAccountUpdater;
 		}
 
 		public void Handle(EndPersonEmploymentCommandDto command)
@@ -24,7 +29,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			{
 				var person = _personRepository.Load(command.PersonId);
 				person.VerifyCanBeModifiedByCurrentUser();
-				person.TerminatePerson(command.Date.ToDateOnly(), new PersonAccountUpdaterDummy());
+				var updater = command.ClearAfterLeavingDate ? _personLeavingUpdater : new DummyPersonLeavingUpdater();
+				person.TerminatePerson(command.Date.ToDateOnly(), _personAccountUpdater, updater);
 				uow.PersistAll();
 				command.Result = new CommandResultDto { AffectedId = person.Id.GetValueOrDefault(), AffectedItems = 1 };
 			}

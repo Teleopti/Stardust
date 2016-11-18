@@ -11,6 +11,7 @@ using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var person = new Person().WithId(endPersonEmploymentCommandDto.PersonId);
 			personRepository.Has(person);
 			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
-			var target = new EndPersonEmploymentCommandHandler(personRepository, currentUnitOfWorkFactory);
+			var target = new EndPersonEmploymentCommandHandler(personRepository, currentUnitOfWorkFactory, null, new PersonAccountUpdaterDummy());
 			
 			target.Handle(endPersonEmploymentCommandDto);
 
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var person = new Person().WithId(endPersonEmploymentCommandDto.PersonId);
 			personRepository.Has(person);
 			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
-			var target = new EndPersonEmploymentCommandHandler(personRepository, currentUnitOfWorkFactory);
+			var target = new EndPersonEmploymentCommandHandler(personRepository, currentUnitOfWorkFactory, null, new PersonAccountUpdaterDummy());
 			
 			using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
 			{
@@ -69,16 +70,51 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				ClearAfterLeavingDate = true,
 			};
 
-			var personRepository = new FakePersonRepository();
+			var scenario = ScenarioFactory.CreateScenario("Default", true, false);
 			var person = new Person().WithId(endPersonEmploymentCommandDto.PersonId);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
+				new DateTimePeriod(2015, 11, 1, 8, 2015, 11, 1, 17));
+			var personRepository = new FakePersonRepository();
 			personRepository.Has(person);
 			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
-			var target = new EndPersonEmploymentCommandHandler(personRepository, currentUnitOfWorkFactory);
+			var personAssignmentRepository = new FakePersonAssignmentRepository(personAssignment);
+			var target = new EndPersonEmploymentCommandHandler(personRepository, currentUnitOfWorkFactory,
+				new ClearPersonRelatedInformation(personAssignmentRepository, new FakeScenarioRepository(scenario),
+					new FakePersonAbsenceRepository()), new PersonAccountUpdaterDummy());
 
 			target.Handle(endPersonEmploymentCommandDto);
 
 			person.TerminalDate.Should().Be.EqualTo(endPersonEmploymentCommandDto.Date.ToDateOnly());
 			endPersonEmploymentCommandDto.Result.AffectedItems.Should().Be.EqualTo(1);
+			personAssignmentRepository.LoadAll().Should().Be.Empty();
+		}
+
+		[Test]
+		public void EndPersonEmploymentShouldNotClearEverythingAfterLeavingDateWhenOptionNotSet()
+		{
+			var endPersonEmploymentCommandDto = new EndPersonEmploymentCommandDto
+			{
+				PersonId = Guid.NewGuid(),
+				Date = new DateOnlyDto(2015, 10, 1),
+			};
+
+			var scenario = ScenarioFactory.CreateScenario("Default", true, false);
+			var person = new Person().WithId(endPersonEmploymentCommandDto.PersonId);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
+				new DateTimePeriod(2015, 11, 1, 8, 2015, 11, 1, 17));
+			var personRepository = new FakePersonRepository();
+			personRepository.Has(person);
+			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
+			var personAssignmentRepository = new FakePersonAssignmentRepository(personAssignment);
+			var target = new EndPersonEmploymentCommandHandler(personRepository, currentUnitOfWorkFactory,
+				new ClearPersonRelatedInformation(personAssignmentRepository, new FakeScenarioRepository(scenario),
+					new FakePersonAbsenceRepository()), new PersonAccountUpdaterDummy());
+
+			target.Handle(endPersonEmploymentCommandDto);
+
+			person.TerminalDate.Should().Be.EqualTo(endPersonEmploymentCommandDto.Date.ToDateOnly());
+			endPersonEmploymentCommandDto.Result.AffectedItems.Should().Be.EqualTo(1);
+			personAssignmentRepository.LoadAll().Should().Not.Be.Empty();
 		}
 	}
 }

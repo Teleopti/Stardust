@@ -37,6 +37,25 @@ namespace Teleopti.Ccc.DomainTest.Common
 				.Count.Should()
 				.Be.EqualTo(1);
 		}
+
+		[Test]
+		public void ShouldRemoveScheduleAfterLeavingDateInAllScenarios()
+		{
+			var defaultScenario = ScenarioFactory.CreateScenario("Default", true, false).WithId();
+			var scenario = ScenarioFactory.CreateScenario("High", false, false).WithId();
+			var person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("A", "B").WithId(),
+				new DateOnly(2001, 1, 1));
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, new DateTimePeriod(2001, 1, 1, 8, 2001, 1, 1, 17)).WithId());
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, new DateTimePeriod(2001, 2, 1, 8, 2001, 2, 1, 17)).WithId());
+			ScenarioRepository.Add(defaultScenario);
+			ScenarioRepository.Add(scenario);
+
+			person.TerminatePerson(new DateOnly(2001, 1, 31), new PersonAccountUpdaterDummy(), new ClearPersonRelatedInformation(PersonAssignmentRepository, ScenarioRepository, PersonAbsenceRepository));
+
+			PersonAssignmentRepository.Find(Enumerable.Repeat(person, 1), new DateOnlyPeriod(2001, 1, 1, 2001, 2, 28), scenario)
+				.Count.Should()
+				.Be.EqualTo(1);
+		}
 	}
 
 	[TestFixture]
@@ -61,6 +80,25 @@ namespace Teleopti.Ccc.DomainTest.Common
 			person.TerminatePerson(new DateOnly(2001, 1, 31), new PersonAccountUpdaterDummy(), new ClearPersonRelatedInformation(PersonAssignmentRepository, ScenarioRepository, PersonAbsenceRepository));
 
 			PersonAbsenceRepository.Find(Enumerable.Repeat(person, 1), new DateTimePeriod(2001, 1, 1, 2001, 2, 28), scenario)
+				.Count.Should()
+				.Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldRemoveAbsenceAfterLeavingDateInAllScenarios()
+		{
+			var defaultScenario = ScenarioFactory.CreateScenario("Default", true, false).WithId();
+			var otherScenario = ScenarioFactory.CreateScenario("High", false, false).WithId();
+			var person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("A", "B").WithId(),
+				new DateOnly(2001, 1, 1));
+			((IRepository<IPersonAbsence>)PersonAbsenceRepository).Add(PersonAbsenceFactory.CreatePersonAbsence(person, otherScenario, new DateTimePeriod(2001, 1, 1, 8, 2001, 1, 1, 17)).WithId());
+			((IRepository<IPersonAbsence>)PersonAbsenceRepository).Add(PersonAbsenceFactory.CreatePersonAbsence(person, otherScenario, new DateTimePeriod(2001, 2, 1, 8, 2001, 2, 1, 17)).WithId());
+			ScenarioRepository.Add(defaultScenario);
+			ScenarioRepository.Add(otherScenario);
+
+			person.TerminatePerson(new DateOnly(2001, 1, 31), new PersonAccountUpdaterDummy(), new ClearPersonRelatedInformation(PersonAssignmentRepository, ScenarioRepository, PersonAbsenceRepository));
+
+			PersonAbsenceRepository.Find(Enumerable.Repeat(person, 1), new DateTimePeriod(2001, 1, 1, 2001, 2, 28), otherScenario)
 				.Count.Should()
 				.Be.EqualTo(1);
 		}
@@ -123,46 +161,6 @@ namespace Teleopti.Ccc.DomainTest.Common
 			person.ActivatePerson(new PersonAccountUpdaterDummy());
 
 			person.PersonSchedulePeriodCollection.Count.Should().Be.EqualTo(1);
-		}
-	}
-
-	public class ClearPersonRelatedInformation : IPersonLeavingUpdater
-	{
-		private readonly IPersonAssignmentRepository _personAssignmentRepository;
-		private readonly IScenarioRepository _scenarioRepository;
-		private readonly IPersonAbsenceRepository _personAbsenceRepository;
-
-		public ClearPersonRelatedInformation(IPersonAssignmentRepository personAssignmentRepository, IScenarioRepository scenarioRepository, IPersonAbsenceRepository personAbsenceRepository)
-		{
-			_personAssignmentRepository = personAssignmentRepository;
-			_scenarioRepository = scenarioRepository;
-			_personAbsenceRepository = personAbsenceRepository;
-		}
-
-		public void Execute(DateOnly leavingDate, IPerson person)
-		{
-			var period = new DateOnlyPeriod(leavingDate.AddDays(1), DateOnly.MaxValue);
-			var dateTimePeriod = period.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-			var scenario = _scenarioRepository.LoadDefaultScenario();
-			var assignmentsToRemove = _personAssignmentRepository.Find(new[] {person}, period,
-				scenario);
-			foreach (var personAssignment in assignmentsToRemove)
-			{
-				_personAssignmentRepository.Remove(personAssignment);
-			}
-
-			var absencesToRemove = _personAbsenceRepository.Find(new[] {person},
-				dateTimePeriod, scenario);
-			foreach (var personAbsence in absencesToRemove)
-			{
-				if (personAbsence.Period.StartDateTime < dateTimePeriod.StartDateTime)
-				{
-					continue;
-				}
-				((IRepository<IPersonAbsence>)_personAbsenceRepository).Remove(personAbsence);
-			}
-
-			person.RemoveAllPeriodsAfter(leavingDate);
 		}
 	}
 }
