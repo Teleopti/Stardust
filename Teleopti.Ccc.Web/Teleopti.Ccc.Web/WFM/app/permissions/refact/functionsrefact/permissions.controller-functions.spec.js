@@ -5,6 +5,7 @@ xdescribe('component: permissionsTree', function () {
 		fakeBackend,
 		$controller,
 		$componentController,
+		permissionsDataService,
 		ctrl,
 		vm;
 
@@ -12,14 +13,16 @@ xdescribe('component: permissionsTree', function () {
 		module('wfm.permissions');
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _fakePermissionsBackend_, _$componentController_, _$controller_) {
+	beforeEach(inject(function (_$httpBackend_, _fakePermissionsBackend_, _$componentController_, _$controller_, _permissionsDataService_) {
 		$httpBackend = _$httpBackend_;
 		fakeBackend = _fakePermissionsBackend_;
 		$componentController = _$componentController_;
 		$controller = _$controller_;
+		permissionsDataService = _permissionsDataService_;
 
 		fakeBackend.clear();
 		vm = $controller('PermissionsCtrlRefact');
+
 	}));
 
 	afterEach(function () {
@@ -264,7 +267,7 @@ xdescribe('component: permissionsTree', function () {
 	});
 
 	it('should not be able to edit built in role or my role', function () {
-		inject(function (permissionsDataService, NoticeService) {
+		inject(function (NoticeService) {
 			fakeBackend
 				.withRole({
 					BuiltIn: true,
@@ -293,39 +296,105 @@ xdescribe('component: permissionsTree', function () {
 		});
 	});
 
-
 	it('should save selected function for selected role', function () {
-		inject(function (permissionsDataService) {
-			fakeBackend
-				.withRole({
-					BuiltIn: false,
-					DescriptionText: 'Agent',
-					Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-					IsAnyBuiltIn: true,
-					IsMyRole: false,
-					Name: 'Agent'
-				})
-				.withRoleInfo({
-					Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-					AvailableFunctions: []
-				})
-				.withApplicationFunction({
-					FunctionCode: 'Raptor',
-					FunctionDescription: 'xxOpenRaptorApplication',
-					FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
-					IsDisabled: false,
-					LocalizedFunctionDescription: 'Open Teleopti WFM',
-					IsSelected: false
-				});
-			$httpBackend.flush();
-			ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
-			spyOn(permissionsDataService, 'selectFunction');
-			permissionsDataService.setSelectedRole(vm.roles[0]);
+		fakeBackend
+			.withRole({
+				BuiltIn: false,
+				DescriptionText: 'Agent',
+				Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+				IsAnyBuiltIn: true,
+				IsMyRole: false,
+				Name: 'Agent'
+			})
+			.withRoleInfo({
+				Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+				AvailableFunctions: []
+			})
+			.withApplicationFunction({
+				FunctionCode: 'Raptor',
+				FunctionDescription: 'xxOpenRaptorApplication',
+				FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+				IsDisabled: false,
+				LocalizedFunctionDescription: 'Open Teleopti WFM',
+				IsSelected: false
+			});
 
-			ctrl.toggleFunction(vm.applicationFunctions[0]);
+		$httpBackend.flush();
+		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
+		spyOn(permissionsDataService, 'selectFunction');
+		permissionsDataService.setSelectedRole(vm.roles[0]);
 
-			expect(permissionsDataService.selectFunction).toHaveBeenCalled();
-		});
+		ctrl.toggleFunction(vm.applicationFunctions[0]);
+
+		expect(permissionsDataService.selectFunction).toHaveBeenCalled();
 	});
+	//FIX ME SAMMA SOM FÖR DELETE I ORG NÄR DET BARA ÄR EN
+	xit('should delete unselected function for selected role', function () {
+		fakeBackend
+			.withRole({
+				BuiltIn: false,
+				DescriptionText: 'Agent',
+				Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+				IsAnyBuiltIn: true,
+				IsMyRole: false,
+				Name: 'Agent'
+			})
+			.withRoleInfo({
+				Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+				AvailableFunctions: []
+			})
+			.withApplicationFunction({
+				FunctionCode: 'Raptor',
+				FunctionDescription: 'xxOpenRaptorApplication',
+				FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+				IsDisabled: false,
+				LocalizedFunctionDescription: 'Open Teleopti WFM',
+				IsSelected: true
+			});
+
+		$httpBackend.flush();
+		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
+		permissionsDataService.setSelectedRole(vm.roles[0]);
+
+		ctrl.toggleFunction(vm.applicationFunctions[0]);
+
+		expect(permissionsDataService.selectFunction).toHaveBeenCalled();
+	});
+
+	xit('should delete unselected function for selected role', function () {
+		fakeBackend
+			.withRole({
+				BuiltIn: false,
+				DescriptionText: 'Agent',
+				Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+				IsAnyBuiltIn: true,
+				IsMyRole: false,
+				Name: 'Agent'
+			})
+			.withRoleInfo({
+				Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+				AvailableFunctions: []
+			})
+			.withApplicationFunction({
+				FunctionCode: 'Raptor',
+				FunctionDescription: 'xxOpenRaptorApplication',
+				FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+				IsDisabled: false,
+				LocalizedFunctionDescription: 'Open Teleopti WFM',
+				IsSelected: true
+			});
+
+		$httpBackend.flush();
+		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
+		permissionsDataService.setSelectedRole(vm.roles[0]);
+
+		ctrl.toggleFunction(vm.applicationFunctions[0]);
+
+		expect(permissionsDataService.selectFunction).toHaveBeenCalled();
+	});
+
+
+
+
 
 });

@@ -4,7 +4,6 @@ function PermissionsListController(permissionsDataService) {
   ctrl.toggleNode = toggleNode;
 
   function toggleNode(node) {
-    console.log('node', node);
     toggleSelection(node);
     permissionsDataService.selectOrganization(node);
   }

@@ -18,7 +18,7 @@
         vm.deleteRole = deleteRole;
         vm.copyRole = copyRole;
         vm.selectRole = selectRole;
-        vm.checkMyRole  = checkMyRole;
+        vm.checkMyRole = checkMyRole;
         vm.prepareTree = prepareTree;
         vm.toggleAllFunction = toggleAllFunction;
         vm.showOnlySelectedFunctionsFilter = showOnlySelectedFunctionsFilter;
@@ -26,26 +26,29 @@
 
         vm.filteredApplicationFunctions = [];
 
-        function showOnlySelectedFunctionsFilter(){
-            vm.filteredApplicationFunctions  = $filter('showOnlySelectedFunctionsFilter')(vm.applicationFunctions);
+        function showOnlySelectedFunctionsFilter() {
+            vm.filteredApplicationFunctions = $filter('showOnlySelectedFunctionsFilter')(vm.applicationFunctions);
         }
 
-        function toggleAllFunction () {
-          vm.applicationFunctions[0].IsSelected = !vm.applicationFunctions[0].IsSelected;
+        function toggleAllFunction() {
+            vm.applicationFunctions[0].IsSelected = !vm.applicationFunctions[0].IsSelected;
 
+            var selectedOrNot = vm.applicationFunctions[0].IsSelected ? true : false;
+            vm.selectedOrNot = selectedOrNot;
+            toggleSelection(vm.applicationFunctions, selectedOrNot);
 
-          var selectedOrNot = vm.applicationFunctions[0].IsSelected ? true : false;
-          vm.selectedOrNot = selectedOrNot;
-          toggleSelection(vm.applicationFunctions, selectedOrNot);
-        }
-
-        function toggleSelection(functions, selectedOrNot){
-          for (var i = 0; i < functions.length; i++) {
-            functions[i].IsSelected = selectedOrNot;
-            if(functions[i].ChildFunctions != null && functions[i].ChildFunctions.length > 0) {
-              toggleSelection(functions[i].ChildFunctions, selectedOrNot);
+            if (vm.selectedRole != null) {
+                permissionsDataService.selectAllFunction(vm.selectedRole, vm.applicationFunctions, selectedOrNot);
             }
-          }
+        }
+
+        function toggleSelection(functions, selectedOrNot) {
+            for (var i = 0; i < functions.length; i++) {
+                functions[i].IsSelected = selectedOrNot;
+                if (functions[i].ChildFunctions != null && functions[i].ChildFunctions.length > 0) {
+                    toggleSelection(functions[i].ChildFunctions, selectedOrNot);
+                }
+            }
         }
 
         function createRole(roleName) {
@@ -69,10 +72,10 @@
             });
         }
 
-        function checkMyRole(role){
-            if(role.IsMyRole || role.BuiltIn){
+        function checkMyRole(role) {
+            if (role.IsMyRole || role.BuiltIn) {
                 return false;
-            }else{
+            } else {
                 return true;
             }
         }
@@ -152,10 +155,10 @@
         }
 
         function prepareTree(appFunctions) {
-          if (appFunctions != null && appFunctions.length > 1){
-              appFunctions[1].IsOpen = true;
-              appFunctions[0].IsHidden = true;
-          }
+            if (appFunctions != null && appFunctions.length > 1) {
+                appFunctions[1].IsOpen = true;
+                appFunctions[0].IsHidden = true;
+            }
         }
 
         function fetchData() {

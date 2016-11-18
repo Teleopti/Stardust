@@ -79,6 +79,20 @@
         return this;
       };
 
+      this.deleteAllAvailableOrgData = function () {
+        roleInfos[0].AvailableBusinessUnits = [];
+        roleInfos[0].AvailableSites = [];
+        roleInfos[0].AvailableTeams = [];
+      };
+
+      this.getInfoForSelecteRole = function () {
+        return roleInfos[0];
+      }
+
+      //FIXME måste ha dynamiskt argument
+      this.deleteUnselectedOrgData = function(data){
+      };
+
       this.clear = function () {
         roles = [];
         applicationFunctions = [];
