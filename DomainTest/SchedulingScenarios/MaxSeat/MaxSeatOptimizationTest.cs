@@ -557,17 +557,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
 			var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
-			var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(16, 0, 16, 0, 60), new TimePeriodWithSegment(24, 0, 24, 0, 60), new ShiftCategory("_").WithId()));
+			var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(17, 0, 17, 0, 60), new TimePeriodWithSegment(25, 0, 25, 0, 60), new ShiftCategory("_").WithId()));
 			var agentData1 = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team1, new RuleSetBag(ruleSet1), scenario, activity, new TimePeriod(8, 0, 16, 0));
 			agentData1.Assignment.Clear();
 			var agentData2 = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team1, new RuleSetBag(ruleSet2), scenario, activity, new TimePeriod(16, 0, 24, 0));
-			var agentData3 = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team1, new RuleSetBag(ruleSet2), scenario, activity, new TimePeriod(16, 0, 24, 0));
-
+			var agentData3 = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, team1, new RuleSetBag(ruleSet2), scenario, activity, new TimePeriod(16, 0, 17, 0));
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agentData1.Assignment, agentData2.Assignment, agentData3.Assignment });
 			var optPreferences = createOptimizationPreferences();
 			optPreferences.Advanced.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak;
 
-			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData1.Agent, agentData2.Agent, agentData3.Agent }, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
+			Target.Optimize(dateOnly.ToDateOnlyPeriod(), new[] { agentData1.Agent, agentData2.Agent}, schedules, Enumerable.Empty<ISkillDay>(), optPreferences, null);
 
 			schedules[agentData1.Agent].ScheduledDay(dateOnly).PersonAssignment(true).ShiftLayers.Should().Be.Empty();
 		}
