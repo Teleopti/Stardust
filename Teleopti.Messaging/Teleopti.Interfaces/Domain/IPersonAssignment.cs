@@ -50,7 +50,7 @@ namespace Teleopti.Interfaces.Domain
 		void AddPersonalActivity(IActivity activity, DateTimePeriod period, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 
 		void AddOvertimeActivity(IActivity activity, DateTimePeriod period,
-			IMultiplicatorDefinitionSet multiplicatorDefinitionSet);
+			IMultiplicatorDefinitionSet multiplicatorDefinitionSet, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 
 		IDayOff DayOff();
 		void SetDayOff(IDayOffTemplate template, bool muteEvent = false, TrackedCommandInfo trackedCommandInfo = null);

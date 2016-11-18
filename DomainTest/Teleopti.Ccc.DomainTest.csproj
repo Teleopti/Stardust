@@ -168,6 +168,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\QueuedAbsenceRequestHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ResourceAllocatorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\AddOvertimeActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\MoveShiftCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModel\ExcludePhoneStateViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModel\InAlarmViewModelBuilderTest.cs" />

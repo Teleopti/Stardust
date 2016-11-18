@@ -697,6 +697,7 @@
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\ITeamScheduleProjectionProvider.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\ProjectionSplitter.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\ScheduleValidationProvider.cs" />
+    <Compile Include="Areas\TeamSchedule\Models\AddOvertimeActivityForm.cs" />
     <Compile Include="Areas\TeamSchedule\Models\ChangeShiftCategoryFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\CheckActivityLayerOverlapFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\CheckMoveActivityLayerOverlapFormData.cs" />

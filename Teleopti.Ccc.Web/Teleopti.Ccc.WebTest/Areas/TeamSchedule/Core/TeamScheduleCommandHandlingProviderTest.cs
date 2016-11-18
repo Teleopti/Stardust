@@ -191,6 +191,43 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		[Test]
+		public void ShouldInvokeAddOvertimeActivityCommandHandler()
+		{
+			var person1 = PersonFactory.CreatePersonWithGuid("a","b");
+			var person2 = PersonFactory.CreatePersonWithGuid("c","d");
+			PersonRepository.Has(person1);
+			PersonRepository.Has(person2);
+
+			var date = new DateOnly(2016,4,16);
+
+			var input = new AddOvertimeActivityForm
+			{
+				StartDateTime = new DateTime(2016,4,16,8,0,0),
+				EndDateTime = new DateTime(2016,4,16,17,0,0),
+				PersonDates = new[]
+				{
+					new PersonDate
+					{
+						PersonId = person1.Id.Value,
+						Date = date
+					},
+					new PersonDate
+					{
+						PersonId = person2.Id.Value,
+						Date = date
+					}
+				},
+				TrackedCommandInfo = new TrackedCommandInfo()
+			};
+
+			ActivityCommandHandler.ResetCalledCount();
+
+			Target.AddOvertimeActivity(input);
+
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(2);
+		}
+
+		[Test]
 		public void ShouldNotFixOverwriteLayerWithoutPermission()
 		{
 			PermissionProvider.Enable();
@@ -938,6 +975,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 	public class FakeActivityCommandHandler : 
 		IHandleCommand<AddActivityCommand>, 
+		IHandleCommand<AddOvertimeActivityCommand>, 
 		IHandleCommand<AddPersonalActivityCommand>, 
 		IHandleCommand<RemoveActivityCommand>, 
 		IHandleCommand<MoveShiftLayerCommand>,
@@ -982,6 +1020,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		public void Handle(AddPersonalActivityCommand command)
+		{
+			calledCount++;
+			commands.Add(command);
+		}
+
+		public void Handle(AddOvertimeActivityCommand command)
 		{
 			calledCount++;
 			commands.Add(command);

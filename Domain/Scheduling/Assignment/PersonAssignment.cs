@@ -322,12 +322,35 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 		}
 
-		public virtual void AddOvertimeActivity(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet multiplicatorDefinitionSet)
+		public virtual void AddOvertimeActivity(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet multiplicatorDefinitionSet, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
 		{
 			if (period.StartDateTime.Equals(period.EndDateTime)) return;
 			var layer = new OvertimeShiftLayer(activity, period, multiplicatorDefinitionSet);
 			layer.SetParent(this);
 			_shiftLayers.Add(layer);
+
+			if(!muteEvent)
+			{
+				AddEvent(() =>
+				{
+					var activityAddedEvent = new ActivityAddedEvent
+					{
+						Date = Date.Date,
+						PersonId = Person.Id.GetValueOrDefault(),
+						ActivityId = activity.Id.GetValueOrDefault(),
+						StartDateTime = period.StartDateTime,
+						EndDateTime = period.EndDateTime,
+						ScenarioId = Scenario.Id.GetValueOrDefault(),
+						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+					};
+					if(trackedCommandInfo != null)
+					{
+						activityAddedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
+						activityAddedEvent.CommandId = trackedCommandInfo.TrackId;
+					}
+					return activityAddedEvent;
+				});
+			}
 		}
 
 		public virtual void AddActivity(IActivity activity, DateTime start, DateTime end)

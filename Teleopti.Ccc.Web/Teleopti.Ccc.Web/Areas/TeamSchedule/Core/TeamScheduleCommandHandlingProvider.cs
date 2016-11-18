@@ -130,6 +130,57 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return result;
 		}
 
+		public IList<ActionResult> AddOvertimeActivity(AddOvertimeActivityForm input)
+		{
+			var permissions = new Dictionary<string,string>
+			{
+				{  DefinedRaptorApplicationFunctionPaths.AddActivity,  Resources.NoPermissionAddAgentActivity}
+			};
+
+			var result = new List<ActionResult>();
+
+			foreach(var personDate in input.PersonDates)
+			{
+				var personId = personDate.PersonId;
+				var date = personDate.Date;
+
+				var actionResult = new ActionResult();
+				var person = _personRepository.Get(personId);
+				actionResult.PersonId = personId;
+				actionResult.ErrorMessages = new List<string>();
+
+				var userTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+				var startDateTimeUtc = TimeZoneHelper.ConvertToUtc(input.StartDateTime,userTimezone);
+				var endDateTimeUtc = TimeZoneHelper.ConvertToUtc(input.EndDateTime,userTimezone);
+
+				if(checkPermissionFn(permissions,date,person,actionResult.ErrorMessages))
+				{
+					var command = new AddOvertimeActivityCommand
+					{
+						PersonId = personId,
+						ActivityId = input.ActivityId,
+						Date = date,
+						Period = new DateTimePeriod(startDateTimeUtc,endDateTimeUtc),
+						MultiplicatorDefinitionSetId = input.MultiplicatorDefinitionSetId,
+						TrackedCommandInfo =
+							input.TrackedCommandInfo != null
+								? input.TrackedCommandInfo
+								: new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
+					};
+					_commandDispatcher.Execute(command);
+					if(command.ErrorMessages != null && command.ErrorMessages.Any())
+					{
+						actionResult.ErrorMessages.AddRange(command.ErrorMessages);
+					}
+				}
+
+				if(actionResult.ErrorMessages.Any())
+					result.Add(actionResult);
+			}
+
+			return result;
+		}
+
 		public IEnumerable<Guid> CheckWriteProtectedAgents(DateOnly date, IEnumerable<Guid> agentIds)
 		{
 			var agents = _personRepository.FindPeople(agentIds);
@@ -273,7 +324,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 			return result;
 		}
-
 
 		public List<ActionResult> BackoutScheduleChange(BackoutScheduleChangeFormData input)
 		{
@@ -546,5 +596,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		IList<ActionResult> EditScheduleNote(EditScheduleNoteFormData input);
 		List<ActionResult> RemoveAbsence(RemovePersonAbsenceForm input);
 		IList<ActionResult> MoveShift(MoveShiftForm input);
+		IList<ActionResult> AddOvertimeActivity(AddOvertimeActivityForm input);
 	}
 }

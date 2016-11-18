@@ -188,6 +188,8 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
     <Compile Include="ApplicationLayer\Archiving\ArchiveScheduleHandler.cs" />
     <Compile Include="ApplicationLayer\AttemptsAttribute.cs" />
+    <Compile Include="ApplicationLayer\Commands\AddOvertimeActivityCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\AddOvertimeActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\EditScheduleNoteCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\EditScheduleNoteCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\FixNotOverwriteLayerCommand.cs" />

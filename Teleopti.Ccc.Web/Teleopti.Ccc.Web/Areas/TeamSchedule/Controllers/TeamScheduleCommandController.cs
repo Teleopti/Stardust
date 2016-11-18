@@ -29,6 +29,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return _commandHandlingProvider.AddPersonalActivity(input);
 		}
 
+		[UnitOfWork, HttpPost, Route("api/TeamSchedule/AddOvertimeActivity")]
+		public virtual IList<ActionResult> AddOvertimeActivity([FromBody] AddOvertimeActivityForm input)
+		{
+			return _commandHandlingProvider.AddOvertimeActivity(input);
+		}
+
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/RemoveActivity")]
 		public virtual List<ActionResult> RemoveActivityCommand([FromBody]RemoveActivityFormData input)
 		{
@@ -82,6 +88,5 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		{
 			return _commandHandlingProvider.MoveShift(input);
 		}
-
 	}
 }
