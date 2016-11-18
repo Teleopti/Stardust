@@ -265,5 +265,6 @@ namespace Teleopti.Interfaces.Domain
 	    bool IsTerminated();
 	    PersonWorkDay[] AverageWorkTimes(DateOnlyPeriod period);
 	    ISiteOpenHour SiteOpenHour(DateOnly dateOnly);
+	    void RemoveAllPeriodsAfter(DateOnly date);
     }
 }

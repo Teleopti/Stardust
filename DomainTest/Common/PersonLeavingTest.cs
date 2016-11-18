@@ -104,8 +104,25 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 			person.TerminatePerson(new DateOnly(2001, 1, 31), new PersonAccountUpdaterDummy(),
 				new ClearPersonRelatedInformation(PersonAssignmentRepository, ScenarioRepository, PersonAbsenceRepository));
+			person.ActivatePerson(new PersonAccountUpdaterDummy());
 
 			person.PersonPeriodCollection.Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldRemoveSchedulePeriodStartingAfterLeavingDate()
+		{
+			var scenario = ScenarioFactory.CreateScenario("Default", true, false).WithId();
+			var person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("A", "B").WithId(),
+				new DateOnly(2001, 1, 1));
+			person.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2001, 2, 2)));
+			ScenarioRepository.Add(scenario);
+
+			person.TerminatePerson(new DateOnly(2001, 1, 31), new PersonAccountUpdaterDummy(),
+				new ClearPersonRelatedInformation(PersonAssignmentRepository, ScenarioRepository, PersonAbsenceRepository));
+			person.ActivatePerson(new PersonAccountUpdaterDummy());
+
+			person.PersonSchedulePeriodCollection.Count.Should().Be.EqualTo(1);
 		}
 	}
 
@@ -144,6 +161,8 @@ namespace Teleopti.Ccc.DomainTest.Common
 				}
 				((IRepository<IPersonAbsence>)_personAbsenceRepository).Remove(personAbsence);
 			}
+
+			person.RemoveAllPeriodsAfter(leavingDate);
 		}
 	}
 }

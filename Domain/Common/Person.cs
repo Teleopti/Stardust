@@ -413,6 +413,23 @@ namespace Teleopti.Ccc.Domain.Common
 			addPersonPeriodChangedEvent();
 		}
 
+		public virtual void RemoveAllPeriodsAfter(DateOnly date)
+		{
+			var personPeriods = _personPeriodCollection.Keys.Where(d => date < d).ToArray();
+			foreach (var personPeriod in personPeriods)
+			{
+				_personPeriodCollection.Remove(personPeriod);
+			}
+
+			var schedulePeriods = _personSchedulePeriodCollection.Keys.Where(d => date < d).ToArray();
+			foreach (var schedulePeriod in schedulePeriods)
+			{
+				_personSchedulePeriodCollection.Remove(schedulePeriod);
+			}
+
+			addPersonPeriodChangedEvent();
+		}
+
 		public virtual void RemoveAllPersonPeriods()
 		{
 			_personPeriodCollection.Clear();
