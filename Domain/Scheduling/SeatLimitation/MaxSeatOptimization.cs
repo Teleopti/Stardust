@@ -97,9 +97,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			var maxSeatData = _maxSeatSkillDataFactory.Create(period, agentsToOptimize, schedules.Scenario, allAgents, allSkillDays.IntervalLengthInMinutes());
 			if (!maxSeatData.MaxSeatSkillExists())
 				return;
-			var tagSetter = optimizationPreferences.General.ScheduleTag == null
-				? new ScheduleTagSetter(NullScheduleTag.Instance)
-				: new ScheduleTagSetter(optimizationPreferences.General.ScheduleTag);
+			var tagSetter = optimizationPreferences.General.CreateScheduleTagSetter();
 			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedules, allAgents, period);
 			var businessRules = NewBusinessRuleCollection.Minimum();
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);

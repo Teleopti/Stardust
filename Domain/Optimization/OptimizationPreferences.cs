@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -49,7 +50,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public double RotationsValue { get; set; }
 		public double AvailabilitiesValue { get; set; }
 		public double StudentAvailabilitiesValue { get; set; }
-
+		public IScheduleTagSetter CreateScheduleTagSetter()
+		{
+			return ScheduleTag == null
+				? new ScheduleTagSetter(NullScheduleTag.Instance)
+				: new ScheduleTagSetter(ScheduleTag);
+		}
 	}
 
 	public class DaysOffPreferences : IDaysOffPreferences

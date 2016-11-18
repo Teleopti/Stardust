@@ -170,6 +170,8 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value>The student availabilities value.</value>
         double StudentAvailabilitiesValue { get; set; }
+
+	    IScheduleTagSetter CreateScheduleTagSetter();
     }
 
     /// <summary>
