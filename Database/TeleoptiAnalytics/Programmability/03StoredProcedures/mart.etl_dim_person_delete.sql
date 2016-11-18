@@ -15,14 +15,18 @@ GO
 -- 2009-09-24	DJ		Clean up of deleted tables
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_person_delete]
-	
+WITH EXECUTE AS OWNER
 AS
+SET NOCOUNT ON
+CREATE TABLE #top (person_id int)
+SET NOCOUNT OFF
+INSERT #top(person_id)
+SELECT TOP(50) person_id 
+FROM mart.dim_person 
+WHERE to_be_deleted = 1
 
-create table #top (person_id int)
-
-insert into #top
-select top(10) person_id from mart.dim_person where to_be_deleted = 1
-
+IF @@ROWCOUNT=0
+	RETURN
 --------------------------------------------------------------------------
 -- Delete all fact for ToBeDeleted dimensions
 -------------------------------------------------------------------------
@@ -78,16 +82,37 @@ FROM mart.fact_agent_skill AS fact
     INNER JOIN #top AS dim
     ON fact.person_id = dim.person_id
 
-
 DELETE FROM mart.fact_hourly_availability
 FROM mart.fact_hourly_availability AS fact
     INNER JOIN #top AS dim
     ON fact.person_id = dim.person_id
 
--- dim_person
+-- Disable constraints to speed up delete
+
+ALTER TABLE [mart].[fact_schedule] NOCHECK CONSTRAINT [FK_fact_schedule_dim_person]
+ALTER TABLE [mart].[fact_schedule_deviation]  NOCHECK CONSTRAINT [FK_fact_schedule_deviation_dim_person]
+ALTER TABLE [mart].[fact_schedule_day_count] NOCHECK CONSTRAINT [FK_fact_schedule_day_count_dim_person]
+ALTER TABLE [mart].[fact_schedule_preference] NOCHECK CONSTRAINT [FK_fact_schedule_preference_dim_person]
+ALTER TABLE [mart].[fact_request] NOCHECK CONSTRAINT [FK_fact_request_dim_person]
+ALTER TABLE [mart].[fact_requested_days] NOCHECK CONSTRAINT [FK_fact_requested_days_dim_person]
+ALTER TABLE [mart].[fact_hourly_availability] NOCHECK CONSTRAINT [FK_fact_hourly_availability_dim_person]
+ALTER TABLE [mart].[fact_agent_skill] NOCHECK CONSTRAINT [FK_fact_agent_skill_dim_person]
+
+--Do the delete in dim_person
 DELETE mart.dim_person
 FROM mart.dim_person p
 INNER JOIN #top t
 ON p.person_id = t.person_id
+
+
+-- Enable constraints again
+ALTER TABLE [mart].[fact_schedule]  WITH CHECK CHECK CONSTRAINT [FK_fact_schedule_dim_person]
+ALTER TABLE [mart].[fact_schedule_deviation]  WITH CHECK CHECK CONSTRAINT [FK_fact_schedule_deviation_dim_person]
+ALTER TABLE [mart].[fact_schedule_day_count]  WITH CHECK CHECK CONSTRAINT [FK_fact_schedule_day_count_dim_person] 
+ALTER TABLE [mart].[fact_schedule_preference]   WITH CHECK CHECK CONSTRAINT [FK_fact_schedule_preference_dim_person]
+ALTER TABLE [mart].[fact_request]  WITH CHECK CHECK CONSTRAINT [FK_fact_request_dim_person]
+ALTER TABLE [mart].[fact_requested_days]  WITH CHECK CHECK CONSTRAINT[FK_fact_requested_days_dim_person]
+ALTER TABLE [mart].[fact_hourly_availability]  WITH CHECK CHECK CONSTRAINT [FK_fact_hourly_availability_dim_person]
+ALTER TABLE [mart].[fact_agent_skill] WITH CHECK CHECK CONSTRAINT [FK_fact_agent_skill_dim_person]
 
 GO
