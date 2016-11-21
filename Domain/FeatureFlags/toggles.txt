@@ -1,4 +1,5 @@
 ﻿
+
 # Note: If you change this file in production, app pool will recycle!
 #
 # How to...
@@ -46,7 +47,7 @@ RTA_FasterUpdateOfScheduleChanges_40536 = true
 RTA_FasterActivityCheck_41380 = true
 RTA_SiteAndTeamOnSkillOverview_40817 = RC
 RTA_AgentsOnOrganizationAndSkills_41586 = RC
-RTA_SeeAllOutOfAdherencesToday_39146 = RC
+RTA_SeeAllOutOfAdherencesToday_39146 = true
 RTA_QuicklyChangeAgentsSelection_40610 = DEV
 
 WfmPermission_ReplaceOldPermission_34671 = true
@@ -82,7 +83,7 @@ WfmTeamSchedule_WeekView_39870 = true
 WfmTeamSchedule_MakePersonalActivityUnmerged_40252 = true
 WfmTeamSchedule_WeeklyContractTime_39871 = true
 WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925 = true
-WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305 = RC
+WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305 = true
 WfmTeamSchedule_MoveEntireShift_41632 = RC
 WfmTeamSchedule_AddOvertime_41696 = RC
 
@@ -130,7 +131,7 @@ WfmIntraday_MonitorActualvsForecasted_35176 = true
 
 MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211 = true
 MyTimeWeb_ShiftTradeBoardNoReadModel_36662 = true
-MyTimeWeb_MakeRequestsResponsiveOnMobile_40266 = RC
+MyTimeWeb_MakeRequestsResponsiveOnMobile_40266 = true
 MyTimeWeb_ShiftTradeFilterSite_40374 = true
 MyTimeWeb_ShiftTradeOptimization_40792 = true
 MyTimeWeb_PreferenceForMobile_40265 = true
@@ -151,7 +152,7 @@ Wfm_DisplayOnlineHelp_39402 = RC
 
 Wfm_QuickForecastOnHangfire_35845 = true
 
-ETL_SpeedUpPersonPeriodNightly_38097 = RC
+ETL_SpeedUpPersonPeriodNightly_38097 = true
 ETL_SpeedUpNightlyReloadDatamart_38131 = true
 ETL_SpeedUpFactScheduleNightly_38019 = RC # not to be released until pbi 38304 and 41393 is done 
 ETL_SpeedUpScenarioNightly_38300 = false
@@ -185,12 +186,12 @@ NewPasswordHash_40460 = true
 Wfm_Intraday_OptimalStaffing_40921 = true
 Wfm_SkillPriorityRoutingGUI_39885 = RC
 AbsenceRequest_WithOrWithoutShrinkage_41060 = true
-LastHandlers_ToHangfire_41203 = RC
+LastHandlers_ToHangfire_41203 = true
 ETL_EventbasedTimeZone_40870 = RC
 ETL_RemoveTimeZoneAndDateNightly_40870 = RC
 PersonAssignment_UseChunkedLoading_41479 = RC
 ResourcePlanner_HideSkillPrioSliders_41312 = RC
-ETL_EventBasedAgentNameDescription_41432 = RC
+ETL_EventBasedAgentNameDescription_41432 = true
 ETL_FixScheduleForPersonPeriod_41393 = RC
 Stardust_RunMultipleNodes_41224 = true
 MyTimeWeb_SortRequestList_40711 = RC
