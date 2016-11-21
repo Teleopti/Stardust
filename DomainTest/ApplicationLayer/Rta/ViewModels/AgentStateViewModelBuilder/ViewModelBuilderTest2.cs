@@ -7,11 +7,11 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateViewModel
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateViewModelBuilder
 {
 	[DomainTest]
 	[TestFixture]
-	public class ViewModelBuilderTest
+	public class ViewModelBuilderTest2
 	{
 		public AgentStatesViewModelBuilder Target;
 		public FakeAgentStateReadModelPersister Database;
@@ -167,6 +167,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				.States.Single()
 				.PersonId.Should().Be(personId1);
 		}
-
 	}
 }

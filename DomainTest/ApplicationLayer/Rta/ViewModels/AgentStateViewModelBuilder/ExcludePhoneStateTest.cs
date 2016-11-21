@@ -9,11 +9,11 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateViewModel
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateViewModelBuilder
 {
 	[DomainTest]
 	[TestFixture]
-	public class ExcludePhoneStateViewModelBuilderTest
+	public class ExcludePhoneStateTest
 	{
 		public AgentStatesViewModelBuilder Target;
 		public FakeAgentStateReadModelPersister Database;
@@ -280,27 +280,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				new Guid?[] {null}).States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] {person1, person2});
 		}
 
-
-		[Test]
-		public void ShouldGetWithStateGroupIdForSkill()
-		{
-			var person = Guid.NewGuid();
-			var skill = Guid.NewGuid();
-			var phone = Guid.NewGuid();
-			Database
-				.Has(new AgentStateReadModel
-				{
-					PersonId = person,
-					StateGroupId = phone,
-					IsRuleAlarm = true,
-					AlarmStartTime = "2016-09-22 08:00".Utc()
-				})
-				.WithPersonSkill(person, skill);
-			Now.Is("2016-09-22 08:10");
-
-			var agentState = Target.InAlarmFor(new ViewModelFilter { SkillIds = new[] { skill } }).States;
-
-			agentState.Single().StateId.Should().Be(phone);
-		}
 	}
 }

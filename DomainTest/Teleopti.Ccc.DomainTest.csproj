@@ -173,9 +173,9 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsHourlyAvailabilityMatchingPersonTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPreferenceMatchingPersonTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsRequestMatchingPersonTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModel\ExcludePhoneStateViewModelBuilderTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModel\InAlarmViewModelBuilderTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModel\ViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\ExcludePhoneStateTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\InAlarmTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\ViewModelBuilderTest2.cs" />
 	<Compile Include="Common\PersonLeavingTest.cs" />
     <Compile Include="Intraday\MergeSkillStaffIntervalLightForSkillAreaTest.cs" />
     <Compile Include="ApplicationLayer\RemoveSelectedPersonAbsenceComandHandlerTest.cs" />
@@ -220,8 +220,8 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilderUserTimeZoneTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\PhoneStateViewModelBuilderTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModel\AgentStatesViewModelBuilderTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModel\AgentStatesViewModelBuilderStateValuesTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\ViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\AgentStateValuesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelShiftTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelSnapshotTests.cs" />

@@ -14,11 +14,11 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateViewModel
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateViewModelBuilder
 {
 	[DomainTest]
 	[TestFixture]
-	public class AgentStatesViewModelBuilderTest : ISetup
+	public class ViewModelBuilderTest : ISetup
 	{
 		public AgentStatesViewModelBuilder Target;
 		public FakeAgentStateReadModelPersister Database;
@@ -437,6 +437,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 			Target.InAlarmFor(new ViewModelFilter {SiteIds = new[] { site } }).States.Should().Be.Empty();
 			Target.InAlarmFor(new ViewModelFilter {TeamIds = new[] { team } }).States.Should().Be.Empty();
 			Target.InAlarmFor(new ViewModelFilter {SkillIds = new[] { skill } }).States.Should().Be.Empty();
+		}
+		
+		[Test]
+		public void ShouldGetWithStateGroupIdForSkill()
+		{
+			var person = Guid.NewGuid();
+			var skill = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.Has(new AgentStateReadModel
+				{
+					PersonId = person,
+					StateGroupId = phone,
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-09-22 08:00".Utc()
+				})
+				.WithPersonSkill(person, skill);
+			Now.Is("2016-09-22 08:10");
+
+			var agentState = Target.InAlarmFor(new ViewModelFilter { SkillIds = new[] { skill } }).States;
+
+			agentState.Single().StateId.Should().Be(phone);
 		}
 	}
 }
