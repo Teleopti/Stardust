@@ -16,6 +16,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Ccc.WebTest.Core.Common;
@@ -43,6 +44,109 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			target = new TeamScheduleProjectionProvider(projectionProvider, loggonUser, _toggleManager,
 				new ScheduleProjectionHelper(), new ProjectionSplitter(projectionProvider, new ScheduleProjectionHelper()),
 				new FakeIanaTimeZoneProvider(), new FakePersonNameProvider());
+		}
+
+		[Test]
+		public void ShouldMakeViewModelForAgent()
+		{
+
+			var date = new DateOnly(2015, 01, 01);
+			var timezoneChina = TimeZoneInfoFactory.ChinaTimeZoneInfo();
+			
+			var contract = ContractFactory.CreateContract("Contract");
+			contract.WithId();
+			var mds = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("mds", MultiplicatorType.Overtime).WithId();
+			contract.AddMultiplicatorDefinitionSetCollection(mds);
+
+			ITeam team = TeamFactory.CreateSimpleTeam();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(date, personContract, team);
+
+			var person = PersonFactory.CreatePersonWithGuid("bill", "gates");
+			person.AddPersonPeriod(personPeriod);
+			person.PermissionInformation.SetDefaultTimeZone(timezoneChina);
+
+			var scheduleDay = ScheduleDayFactory.Create(date, person, scenario);
+
+			var canViewConfidential = false;
+			var canViewUnpublished = false;
+			var includeNote = false;
+
+			var viewModel = target.MakeViewModel(person, date, scheduleDay, canViewConfidential, canViewUnpublished, includeNote,
+				_commonAgentNameProvider.CommonAgentNameSettings);
+
+			viewModel.PersonId.Should().Be.EqualTo(person.Id.Value.ToString());
+			viewModel.Name.Should().Be.EqualTo("billgates");
+			viewModel.Date.Should().Be.EqualTo(date.Date.ToGregorianDateTimeString().Remove(10));
+			viewModel.Projection.Count().Should().Be(0);
+			viewModel.MultiplicatorDefinitionSetIds.Should().Be.Equals(mds.Id.Value);
+			viewModel.InternalNotes.Should().Be.NullOrEmpty();
+			viewModel.Timezone.IanaId.Should().Be(timezoneChina.Id);
+			viewModel.Timezone.DisplayName.Should().Be(timezoneChina.DisplayName);
+		}
+
+		[Test]
+		public void ShouldNotReturnMultiplicatorDefinitionSetIdsInViewModelWhenAgentHasNoPersonPeriod()
+		{
+			var date = new DateOnly(2015, 01, 01);
+			var timezoneChina = TimeZoneInfoFactory.ChinaTimeZoneInfo();
+
+			var person = PersonFactory.CreatePersonWithGuid("bill", "gates");
+			person.PermissionInformation.SetDefaultTimeZone(timezoneChina);
+
+			var scheduleDay = ScheduleDayFactory.Create(date, person, scenario);
+
+			var canViewConfidential = false;
+			var canViewUnpublished = false;
+			var includeNote = false;
+
+			var viewModel = target.MakeViewModel(person, date, scheduleDay, canViewConfidential, canViewUnpublished, includeNote,
+				_commonAgentNameProvider.CommonAgentNameSettings);
+
+			viewModel.PersonId.Should().Be.EqualTo(person.Id.Value.ToString());
+			viewModel.Name.Should().Be.EqualTo("billgates");
+			viewModel.Date.Should().Be.EqualTo(date.Date.ToGregorianDateTimeString().Remove(10));
+			viewModel.Projection.Count().Should().Be(0);
+			viewModel.MultiplicatorDefinitionSetIds.Should().Be.Null();
+			viewModel.InternalNotes.Should().Be.NullOrEmpty();
+			viewModel.Timezone.IanaId.Should().Be(timezoneChina.Id);
+			viewModel.Timezone.DisplayName.Should().Be(timezoneChina.DisplayName);
+		}
+
+		[Test]
+		public void ShouldNotReturnMultiplicatorDefinitionSetIdsInViewModelWhenAgentsContractHasNoOvertimeMultiplicator()
+		{
+			var date = new DateOnly(2015, 01, 01);
+			var timezoneChina = TimeZoneInfoFactory.ChinaTimeZoneInfo();
+
+			var contract = ContractFactory.CreateContract("Contract");
+			contract.WithId();
+			
+			ITeam team = TeamFactory.CreateSimpleTeam();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(date, personContract, team);
+
+			var person = PersonFactory.CreatePersonWithGuid("bill", "gates");
+			person.AddPersonPeriod(personPeriod);
+			person.PermissionInformation.SetDefaultTimeZone(timezoneChina);
+
+			var scheduleDay = ScheduleDayFactory.Create(date, person, scenario);
+
+			var canViewConfidential = false;
+			var canViewUnpublished = false;
+			var includeNote = false;
+
+			var viewModel = target.MakeViewModel(person, date, scheduleDay, canViewConfidential, canViewUnpublished, includeNote,
+				_commonAgentNameProvider.CommonAgentNameSettings);
+
+			viewModel.PersonId.Should().Be.EqualTo(person.Id.Value.ToString());
+			viewModel.Name.Should().Be.EqualTo("billgates");
+			viewModel.Date.Should().Be.EqualTo(date.Date.ToGregorianDateTimeString().Remove(10));
+			viewModel.Projection.Count().Should().Be(0);
+			viewModel.MultiplicatorDefinitionSetIds.Should().Be.Null();
+			viewModel.InternalNotes.Should().Be.NullOrEmpty();
+			viewModel.Timezone.IanaId.Should().Be(timezoneChina.Id);
+			viewModel.Timezone.DisplayName.Should().Be(timezoneChina.DisplayName);
 		}
 
 		[Test]

@@ -42,6 +42,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		public GroupScheduleShiftViewModel MakeViewModel(IPerson person, DateOnly date, IScheduleDay scheduleDay,
 			bool canViewConfidential, bool canViewUnpublished, bool includeNote, ICommonNameDescriptionSetting agentNameSetting)
 		{
+			var personPeriod = person.Period(date);
+
 			var vm = new GroupScheduleShiftViewModel
 			{
 				PersonId = person.Id.GetValueOrDefault().ToString(),
@@ -49,10 +51,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				Date = date.Date.ToGregorianDateTimeString().Remove(10),
 				Projection = new List<GroupScheduleProjectionViewModel>(),
 				MultiplicatorDefinitionSetIds =
-				(person.Period(date) != null &&
-				 person.Period(date).PersonContract.Contract.MultiplicatorDefinitionSetCollection.Count > 0)
-					? person.Period(date)
-						.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Select(s => s.Id.GetValueOrDefault())
+				(personPeriod != null && personPeriod.PersonContract != null &&
+				 personPeriod.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Count > 0)
+					? personPeriod.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Select(s => s.Id.GetValueOrDefault())
 						.ToList()
 					: null
 			};
