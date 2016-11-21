@@ -154,10 +154,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		//don't use this from client. use scheduledictionary.modify instead!
 		public void ModifyInternal(IScheduleDay part)
 		{
-			var fullData = PersistableScheduleDataInternalCollection().ToList();
-			var permittedData = _permissionChecker.GetPermittedData(fullData);
+			var periodData = PersistableScheduleDataInternalCollection().Where(d => d.BelongsToPeriod(part.DateOnlyAsPeriod));
+			var permittedData = _permissionChecker.GetPermittedData(periodData);
 			permittedData
-				.Where(d => d.BelongsToPeriod(part.DateOnlyAsPeriod))
 				.ForEach(Remove);
 
 			AddRange(_permissionChecker.GetPermittedData(part.PersistableScheduleDataCollection()));
