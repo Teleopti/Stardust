@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 					ON a.PersonId = g.PersonId					
 					WHERE g.GroupId IN (:skillIds)
 					AND g.PageId = :skillGroupingPageId
+					AND :now BETWEEN g.StartDate AND g.EndDate
 
 					AND a.AlarmStartTime <= :now
 					AND a.SiteId = :siteId

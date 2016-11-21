@@ -175,6 +175,65 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			WithUnitOfWork.Get(() => Target.ReadForSkills(new[] { phoneSkillId, emailSkillId}))
 				.Single().Count.Should().Be(1);
 		}
+		
+		[Test]
+		public void ShouldNotLoadForPreviousSkill()
+		{
+			Now.Is("2016-11-21 8:10");
+			Database
+				.WithPerson("agent1")
+				.WithPersonPeriod("2016-01-01".Date())
+				.WithSkill("email")
+				.WithPersonPeriod("2016-11-20".Date())
+				.WithSkill("phone")
+				;
+			var personId = Database.CurrentPersonId();
+			var email = Database.SkillIdFor("email");
+			WithUnitOfWork.Do(() =>
+			{
+				Groupings.UpdateGroupingReadModel(new[] { personId });
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId,
+					SiteId = Guid.NewGuid(),
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-11-21 08:00".Utc()
+				});
+			});
+
+			WithUnitOfWork.Get(() => Target.ReadForSkills(new[] { email }))
+				.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldNotLoadForFutureSkill()
+		{
+			Now.Is("2016-11-21 8:10");
+			Database
+				.WithPerson("agent1")
+				.WithPersonPeriod("2016-01-01".Date())
+				.WithSkill("email")
+				.WithPersonPeriod("2017-01-01".Date())
+				.WithSkill("phone")
+				;
+			var personId = Database.CurrentPersonId();
+			var phoneId = Database.SkillIdFor("phone");
+			WithUnitOfWork.Do(() =>
+			{
+				Groupings.UpdateGroupingReadModel(new[] { personId });
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId,
+					SiteId = Guid.NewGuid(),
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-11-21 08:00".Utc()
+				});
+			});
+
+			WithUnitOfWork.Get(() => Target.ReadForSkills(new[] { phoneId }))
+				.Should().Be.Empty();
+		}
+
 
 		[Test]
 		public void ShouldNotCountDeletedAgents()

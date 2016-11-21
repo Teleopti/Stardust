@@ -131,6 +131,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 		}
 
 		[Test]
+		public void ShouldNotLoadForFutureSkill()
+		{
+			Now.Is("2016-06-20");
+			Database
+				.WithPerson("agent1")
+				.WithPersonPeriod("2016-01-01".Date())
+				.WithSkill("email")
+				.WithPersonPeriod("2017-01-01".Date())
+				.WithSkill("phone")
+				;
+			var personId = Database.CurrentPersonId();
+			var phoneId = Database.SkillIdFor("phone");
+			WithUnitOfWork.Do(() =>
+			{
+				Groupings.UpdateGroupingReadModel(new[] { personId });
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest { PersonId = personId });
+			});
+
+			WithUnitOfWork.Get(() => Target.ReadForSkills(new[] { phoneId }))
+				.Should().Be.Empty();
+		}
+
+		[Test]
 		public void ShouldLoadStatesInAlarmForSkill()
 		{
 			Now.Is("2016-06-20 12:10");
