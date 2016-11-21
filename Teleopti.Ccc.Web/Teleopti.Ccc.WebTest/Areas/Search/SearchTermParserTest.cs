@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		[Test]
 		public void ShouldParseSearchTermString()
 		{
-			const string searchTerm = "FirstName: aa bb, LastName: cc dd";
+			const string searchTerm = "FirstName: aa bb; LastName: cc dd";
 			var result = SearchTermParser.Parse(searchTerm);
 
 			Assert.AreEqual(2, result.Count());
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		[Test]
 		public void ShouldHandleMultipleSpacesAndTabs()
 		{
-			const string searchTerm = "FirstName: \taa    bb, \t LastName  \t  :   cc   \tdd  ";
+			const string searchTerm = "FirstName: \taa    bb; \t LastName  \t  :   cc   \tdd  ";
 			var result = SearchTermParser.Parse(searchTerm);
 
 			Assert.AreEqual(2, result.Count());
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		[Test]
 		public void ShouldParseSearchTermStringWithInvalidType()
 		{
-			const string searchTerm = "Firstme: aa bb, lastName: cc dd";
+			const string searchTerm = "Firstme: aa bb; lastName: cc dd";
 			var result = SearchTermParser.Parse(searchTerm);
 
 			Assert.AreEqual(1, result.Count());
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		[Test]
 		public void ShouldHandleDuplicateSearchType()
 		{
-			const string searchTerm = "Firstname: aa bb, Firstname: ee";
+			const string searchTerm = "Firstname: aa bb; Firstname: ee";
 			var result = SearchTermParser.Parse(searchTerm);
 
 			Assert.AreEqual(1, result.Count());
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		[Test]
 		public void ShouldRemoveDuplicateKeywordForDuplicateSearchType()
 		{
-			const string searchTerm = "Firstname: aa bb, Firstname: aa ee";
+			const string searchTerm = "Firstname: aa bb; Firstname: aa ee";
 			var result = SearchTermParser.Parse(searchTerm);
 
 			Assert.AreEqual(1, result.Count());
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		[Test]
 		public void ShouldHandleSearchKeywordWithQuote()
 		{
-			const string searchTerm = "Firstname: \"aa bb\"dd, Firstname: aa ee";
+			const string searchTerm = "Firstname: \"aa bb\"dd; Firstname: aa ee";
 			var result = SearchTermParser.Parse(searchTerm);
 
 			Assert.AreEqual(1, result.Count());
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		[Test]
 		public void ShouldIgnoreInvalidTerm()
 		{
-			const string invalidInput = "FirstName: aa, bb";
+			const string invalidInput = "FirstName: aa; bb";
 			var result = SearchTermParser.Parse(invalidInput);
 			Assert.AreEqual(result.Count, 1);
 

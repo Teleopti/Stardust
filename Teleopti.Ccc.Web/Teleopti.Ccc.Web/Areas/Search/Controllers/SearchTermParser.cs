@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 		{
 			const char keyValueSplitter = ':';
 			const char keywordsSplitter = ' ';
-			const char searchTermSplitter = ',';
+			const char searchTermSplitter = ';';
 
 			var parsedTerms = new Dictionary<PersonFinderField, string>();
 			if (!values.Contains(keyValueSplitter))
