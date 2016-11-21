@@ -7,47 +7,43 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
+namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[UnitOfWorkTest]
-	public class TeamInAlarmReaderTest
+	public class SiteInAlarmReaderTest
 	{
 		public IAgentStateReadModelPersister Persister;
-		public ITeamInAlarmReader Target;
+		public ISiteInAlarmReader Target;
 		public MutableNow Now;
 
 		[Test]
 		public void ShouldRead()
 		{
-			var siteId = Guid.NewGuid();
 			Now.Is("2016-08-18 08:05".Utc());
 			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				PersonId = Guid.NewGuid(),
-				SiteId = siteId,
 				AlarmStartTime = "2016-08-18 08:00".Utc()
 			});
 
-			Target.Read(siteId).Should().Have.Count.EqualTo(1);
+			Target.Read().Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldReadWithProperties()
 		{
 			var siteId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();
 			Now.Is("2016-08-18 08:05".Utc());
 			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				PersonId = Guid.NewGuid(),
 				SiteId = siteId,
-				TeamId = teamId,
 				AlarmStartTime = "2016-08-18 08:00".Utc()
 			});
 
-			var result = Target.Read(siteId).Single();
-			result.TeamId.Should().Be(teamId);
+			var result = Target.Read().Single();
+			result.SiteId.Should().Be(siteId);
 			result.Count.Should().Be(1);
 		}
 
@@ -55,24 +51,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldOnlyCountAgentsInAlarm()
 		{
 			var siteId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();
 			Now.Is("2016-08-18 08:05".Utc());
 			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				PersonId = Guid.NewGuid(),
 				SiteId = siteId,
-				TeamId = teamId,
 				AlarmStartTime = "2016-08-18 08:05".Utc()
 			});
 			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				PersonId = Guid.NewGuid(),
 				SiteId = siteId,
-				TeamId = teamId,
 				AlarmStartTime = "2016-08-18 08:06".Utc()
 			});
 
-			Target.Read(siteId).Single().Count.Should().Be(1);
+			Target.Read().Single().Count.Should().Be(1);
 		}
 
 		[Test]
@@ -80,25 +73,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var personId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();
 			Now.Is("2016-08-18 08:05".Utc());
 			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				PersonId = Guid.NewGuid(),
 				SiteId = siteId,
-				TeamId = teamId,
 				AlarmStartTime = "2016-08-18 08:05".Utc()
 			});
 			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				SiteId = siteId,
-				TeamId = teamId,
-				AlarmStartTime = "2016-08-18 08:05".Utc()
+				AlarmStartTime = "2016-08-18 08:05".Utc(),
 			});
 			Persister.SetDeleted(personId, "2016-08-18 08:05".Utc());
 
-			Target.Read(siteId).Single().Count.Should().Be(1);
+			Target.Read().Single().Count.Should().Be(1);
 		}
 	}
 }
