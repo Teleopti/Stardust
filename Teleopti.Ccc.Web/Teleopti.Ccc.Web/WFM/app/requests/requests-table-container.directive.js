@@ -190,6 +190,8 @@
 			var options = {
 				appScopeProvider: vm,
 				enableGridMenu: true,
+				enableFullRowSelection: true,
+				enableRowHeaderSelection: true,
 				enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
 				enableVerticalScrollbar: uiGridConstants.scrollbars.WHEN_NEEDED,
 				useExternalSorting: true,

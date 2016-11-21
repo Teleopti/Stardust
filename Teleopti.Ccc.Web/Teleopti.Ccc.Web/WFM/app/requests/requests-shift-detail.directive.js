@@ -20,6 +20,7 @@
 			elem.bind('click', function (oEvent) {
 				var topLeft = getShiftDetailTopLeft(oEvent);
 				updateShiftStatusForSelectedPerson(topLeft.top, topLeft.left, personIds, moment(scheduleDate), requestsTableContainerCtrl);
+				oEvent.stopPropagation();
 			});
 		}
 
