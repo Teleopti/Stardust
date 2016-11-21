@@ -266,7 +266,8 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactoryTest.cs" />
     <Compile Include="Areas\People\PeopleSmartWorkflowControlSetControllerTest.cs" />
     <Compile Include="Core\BlockOtherOriginFilterTests.cs" />
-    <Compile Include="Core\Requests\DataProvider\AbsenceRequestPersisterNoMocksTest.cs" />
+    <Compile Include="Core\Requests\DataProvider\AbsenceRequestPersisterTest.cs" />
+    <Compile Include="Core\Requests\DataProvider\FakeCommandDispatcher.cs" />
     <Compile Include="Core\Requests\DataProvider\FakeLinkProvider.cs" />
     <Compile Include="Core\Requests\DataProvider\ShiftTradeRequestPersonToPermissionValidatorTest.cs" />
     <Compile Include="Core\Startup\PublishStartupJobsTaskTest.cs" />

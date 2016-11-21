@@ -3,7 +3,6 @@ using log4net;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
@@ -15,31 +14,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	[EnabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
 	public class QueuedAbsenceRequestFastIntradayHandler : QueuedAbsenceRequestHandlerBase, IHandleEvent<NewAbsenceRequestCreatedEvent>
 	{
-		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
-		private readonly IConfigReader _configReader;
-		private readonly IIntradayRequestProcessor _intradayRequestProcessor;
+		private readonly IAbsenceRequestIntradayFilter _absenceRequestIntradayFilter;
 
 
-		public QueuedAbsenceRequestFastIntradayHandler(IPersonRequestRepository personRequestRepository, 
-			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, 
-			IConfigReader configReader, IIntradayRequestProcessor intradayRequestProcessor)
-			: base(personRequestRepository)
+		public QueuedAbsenceRequestFastIntradayHandler(IPersonRequestRepository personRequestRepository,
+			IAbsenceRequestIntradayFilter absenceRequestIntradayFilter) : base(personRequestRepository)
 		{
-			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
-			_configReader = configReader;
-			_intradayRequestProcessor = intradayRequestProcessor;
+			_absenceRequestIntradayFilter = absenceRequestIntradayFilter;
 		}
 
 		[AsSystem]
 		[UnitOfWork]
 		public new virtual void Handle(NewAbsenceRequestCreatedEvent @event)
 		{
-			IPersonRequest personRequest = CheckPersonRequest(@event.PersonRequestId);
+			var personRequest = CheckPersonRequest(@event.PersonRequestId);
 			if (personRequest == null)
 				return;
 
-			var filter = new AbsenceRequestIntradayFilter(_configReader, _intradayRequestProcessor, _queuedAbsenceRequestRepository);
-			filter.Process(personRequest);
+			_absenceRequestIntradayFilter.Process(personRequest);
 		}
 	}
 

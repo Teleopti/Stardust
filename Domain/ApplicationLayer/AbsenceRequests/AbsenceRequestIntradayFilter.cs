@@ -17,23 +17,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AbsenceRequestIntradayFilter));
 
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
+		private readonly INow _now;
 		private readonly IConfigReader _configReader;
 		private readonly IIntradayRequestProcessor _intradayRequestProcessor;
 
 		public AbsenceRequestIntradayFilter(IConfigReader configReader, 
 			IIntradayRequestProcessor intradayRequestProcessor, 
-			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository)
+			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, INow now)
 		{
 			_configReader = configReader;
 			_intradayRequestProcessor = intradayRequestProcessor;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
+			_now = now;
 		}
 
 		
 		public void Process(IPersonRequest personRequest)
 		{
 			personRequest.Pending();
-			var startDateTime = DateTime.UtcNow;
+			var startDateTime = _now.UtcDateTime();
 
 			var fakeIntradayStartUtcDateTime = _configReader.AppConfig("FakeIntradayUtcStartDateTime");
 			if (fakeIntradayStartUtcDateTime != null)
@@ -53,7 +55,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var validators = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest)personRequest.Request)
 				.GetSelectedValidatorList();
 
-			var isIntradayRequest = intradayPeriod.Contains(personRequest.Request.Period.StartDateTime) && intradayPeriod.Contains(personRequest.Request.Period.EndDateTime);
+			var isIntradayRequest = personRequest.Request.Period.ElapsedTime() <= TimeSpan.FromDays(1) && intradayPeriod.Contains(personRequest.Request.Period.EndDateTime);
 			if (isIntradayRequest && validators.Any(v => v is StaffingThresholdValidator))
 			{
 				_intradayRequestProcessor.Process(personRequest, startDateTime);

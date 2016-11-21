@@ -2,6 +2,7 @@
 using AutoMapper;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -26,7 +27,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
 	[TestFixture, RequestsTest,Toggle(Toggles.MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747), Toggle(Toggles.Wfm_Requests_Check_Expired_Requests_40274)]
-	public class AbsenceRequestPersisterNoMocksTest : ISetup
+	public class AbsenceRequestPersisterTest : ISetup
 	{
 		public IPersonRequestRepository PersonRequestRepository;
 		public IUserTimeZone UserTimeZone;
@@ -34,9 +35,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public IScheduleStorage ScheduleStorage;
 		public ICurrentScenario CurrentScenario;
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
+		public IQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
 		public IAbsenceRequestPersister Persister;
 		public AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest AbsenceRequestFormToPersonRequest;
 		public RequestsViewModelMappingProfile RequestsViewModelMappingProfile;
+		public FakeCommandDispatcher CommandDispatcher;
 
 		private static readonly DateTime nowTime = new DateTime(2016, 10, 18, 8, 0, 0, DateTimeKind.Utc);
 		private DateOnly _today = new DateOnly(nowTime);
@@ -46,7 +49,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_person = PersonFactory.CreatePerson().WithId();
+			_person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			_person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
 			_workflowControlSet = new WorkflowControlSet().WithId();
 			_person.WorkflowControlSet = _workflowControlSet;
 
@@ -55,6 +59,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			system.UseTestDouble(personRepository).For<IPersonRepository>();
 			system.UseTestDouble<FakeAbsenceRepository>().For<IAbsenceRepository>();
+			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 			system.UseTestDouble(new FakeLoggedOnUser(_person)).For<ILoggedOnUser>();
 			system.UseTestDouble(new FakeQueuedAbsenceRequestRepository()).For<IQueuedAbsenceRequestRepository>();
 			system.UseTestDouble(new FakeLinkProvider()).For<ILinkProvider>();
@@ -80,7 +85,38 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			var personRequest = setupSimpleAbsenceRequest();
 
-			assertPersonRequest(personRequest, false, string.Empty);
+			personRequest.Should().Not.Be.Null();
+			personRequest.IsDenied.Should().Be.False();
+			personRequest.DenyReason.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldHandleRequestDirectlyWhenRequestShorterThan24HoursAndEndsWithin24HourWindow()
+		{
+			Mapper.Configuration.AddProfile(new AbsenceRequestFormMappingProfile(() => AbsenceRequestFormToPersonRequest));
+			Mapper.Configuration.AddProfile(new DateTimePeriodFormMappingProfile(() => UserTimeZone));
+			Mapper.Configuration.AddProfile(RequestsViewModelMappingProfile);
+			
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				CurrentScenario.Current(), _person
+				, _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			_absence = createAbsence();
+
+			setWorkflowControlSet(usePersonAccountValidator: false);
+
+			_workflowControlSet.AbsenceRequestOpenPeriods[0].StaffingThresholdValidator = new StaffingThresholdValidator();
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(7)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
+			});
+
+			Persister.Persist(form);
+
+			QueuedAbsenceRequestRepository.LoadAll().Should().Be.Empty();
+			CommandDispatcher.LatestCommand.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -97,11 +133,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			_person.WorkflowControlSet = null;
 
 			var personRequest = setupSimpleAbsenceRequest();
-
-			assertPersonRequest(personRequest, true, Resources.RequestDenyReasonNoWorkflow);
+			
+			personRequest.Should().Not.Be(null);
+			personRequest.IsDenied.Should().Be(true);
+			personRequest.DenyReason.Should().Be(Resources.RequestDenyReasonNoWorkflow);
 		}
-
-
+		
 		[Test]
 		public void ShouldNotDenyWhenPersonHasZeroBalanceButWorkflowControlSetHasNoPersonAccountValidation()
 		{
@@ -131,8 +168,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 
 			var personRequest = Persister.Persist(form);
+			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
 
-			assertPersonRequest(PersonRequestRepository.Get(Guid.Parse(personRequest.Id)), false, string.Empty);
+			request.Should().Not.Be(null);
+			request.IsDenied.Should().Be(false);
+			request.DenyReason.Should().Be.Empty();
 		}
 		
 		[Test]
@@ -151,8 +191,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			var personRequest = setupSimpleAbsenceRequest();
 
-			assertPersonRequest(personRequest, true
-				, string.Format(Resources.RequestDenyReasonRequestExpired, personRequest.Request.Period.StartDateTime, 15));
+			personRequest.Should().Not.Be(null);
+			personRequest.IsDenied.Should().Be(true);
+			personRequest.DenyReason.Should().Be(string.Format(Resources.RequestDenyReasonRequestExpired, personRequest.Request.Period.StartDateTime, 15));
 		}
 
 		[Test]
@@ -170,7 +211,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			setWorkflowControlSet(autoDeny: true);
 
 			var personRequest = setupSimpleAbsenceRequest();
-			assertPersonRequest(personRequest, true, "RequestDenyReasonAutodeny");
+			
+			personRequest.Should().Not.Be(null);
+			personRequest.IsDenied.Should().Be(true);
+			personRequest.DenyReason.Should().Be("RequestDenyReasonAutodeny");
 		}
 
 		[Test]
@@ -202,7 +246,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 					, UserTimeZone.TimeZone()), _absence).WithId());
 
 			var personRequest = Persister.Persist(form);
-			assertPersonRequest(PersonRequestRepository.Get(Guid.Parse(personRequest.Id)), true, Resources.RequestDenyReasonAlreadyAbsent);
+			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+
+			request.Should().Not.Be(null);
+			request.IsDenied.Should().Be(true);
+			request.DenyReason.Should().Be(Resources.RequestDenyReasonAlreadyAbsent);
 		}
 
 		[Test]
@@ -236,8 +284,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 
 			var personRequest = Persister.Persist(form);
+			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
 
-			assertPersonRequest (PersonRequestRepository.Get(Guid.Parse(personRequest.Id)), true, isWaitlisted ? Resources.RequestWaitlistedReasonPersonAccount : Resources.RequestDenyReasonPersonAccount, isWaitlisted);
+			request.Should().Not.Be(null);
+			request.IsDenied.Should().Be(true);
+			request.IsWaitlisted.Should().Be(isWaitlisted);
+			request.DenyReason.Should().Be(isWaitlisted ? Resources.RequestWaitlistedReasonPersonAccount : Resources.RequestDenyReasonPersonAccount);
 		}
 
 		[Test]
@@ -279,8 +331,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 
 			var personRequest = Persister.Persist(form);
-			
-			assertPersonRequest(PersonRequestRepository.Get(Guid.Parse(personRequest.Id)), true, isWaitlisted ? Resources.RequestWaitlistedReasonPersonAccount : Resources.RequestDenyReasonPersonAccount, isWaitlisted);
+			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+
+			request.Should().Not.Be(null);
+			request.IsDenied.Should().Be(true);
+			request.IsWaitlisted.Should().Be(isWaitlisted);
+			request.DenyReason.Should().Be(isWaitlisted ? Resources.RequestWaitlistedReasonPersonAccount : Resources.RequestDenyReasonPersonAccount);
 		}
 		
 		private void setWorkflowControlSet(int? absenceRequestExpiredThreshold = null, bool autoGrant = false
@@ -357,14 +413,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var absence = AbsenceFactory.CreateAbsence("holiday").WithId();
 			AbsenceRepository.Add(absence);
 			return absence;
-		}
-
-		private void assertPersonRequest(IPersonRequest personRequest, bool isDenied, string denyReason = null, bool isWaitlisted = false)
-		{
-			personRequest.Should().Not.Be(null);
-			personRequest.IsDenied.Should().Be(isDenied);
-			personRequest.IsWaitlisted.Should().Be(isWaitlisted);
-			personRequest.DenyReason.Should().Be(denyReason);
 		}
 	}
 }
