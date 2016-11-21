@@ -22,14 +22,13 @@
 		</div>
 	</div>
 
-
 	<div class="con-row selectActivityInput">
 		<div class="con-flex">
 			<div class="panel material-depth-1">
 				<div class="con-row">
 					<div class="con-flex">
 						<md-autocomplete id="activity" class="autocomplete-skill" md-no-cache="true" md-selected-item="selectedActivity" md-select-on-match="true"
-							md-search-text="searchActiviyText" md-selected-item-change="vm.selectActivity(selectedActivity)" md-items="activity in vm.activites"
+							md-search-text="searchActivityText" md-selected-item-change="vm.selectActivity(selectedActivity)" md-items="activity in vm.queryActivities(searchActivityText)" 
 							md-item-text="activity.ActivityName" md-min-length="0" placeholder="Select Activity">
 							<md-item-template>
 								<span md-highlight-text="searchActivityText" md-highlight-flags="^i">{{activity.ActivityName}}</span>

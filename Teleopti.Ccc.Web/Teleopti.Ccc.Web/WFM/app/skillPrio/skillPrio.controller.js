@@ -18,7 +18,7 @@
 		vm.removeFromPrioritized = removeFromPrioritized;
 		vm.noPrioritiedSkills = noPrioritiedSkills;
 		vm.querySkills = querySkills;
-		vm.queryActivitys = queryActivitys;
+		vm.queryActivities = queryActivities;
 		vm.displayAutoComplete = displayAutoComplete;
 		vm.save = save;
 		vm.toggledOptimization = checkToggles();
@@ -206,7 +206,7 @@
 			var results = $filter('filter')(vm.activitySkills, query);
 			return results;
 		}
-		function queryActivitys(query) {
+		function queryActivities(query) {
 			var results = $filter('filter')(vm.activites, query);
 			return results;
 		}
