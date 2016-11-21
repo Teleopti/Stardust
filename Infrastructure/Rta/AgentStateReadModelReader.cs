@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				public AgentStateSelectionType AgentStateSelectionType { get; set; }
 				public Func<ISQLQuery, IQuery> Set { get; set; }
 			}
-			
+
 			private readonly List<selectionInfo> selections = new List<selectionInfo>();
 
 			public void AddStatement(string statement, Func<ISQLQuery, IQuery> set, AgentStateSelectionType agentStateSelectionType)
@@ -77,25 +77,27 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			{
 				if (selections.All(x => x.AgentStateSelectionType == AgentStateSelectionType.Org))
 				{
-					var orgQuery = session.CreateSQLQuery(
-						   @"SELECT DISTINCT a.* FROM [ReadModel].AgentState a WITH (NOLOCK) WHERE " + string.Join(" OR ", selections.Select(x => x.Query)));
+					var orgQuery = session.CreateSQLQuery(@"
+SELECT DISTINCT a.* FROM [ReadModel].AgentState a WITH (NOLOCK) 
+WHERE " + string.Join(" OR ", selections.Select(x => x.Query)));
 					selections.Select(x => x.Set).ForEach(f => f(orgQuery));
 					return orgQuery;
 				}
 				if (selections.All(x => x.AgentStateSelectionType == AgentStateSelectionType.Skill))
 				{
-					var skillQuery = session.CreateSQLQuery(
-						@"SELECT DISTINCT a.* FROM [ReadModel].AgentState a WITH (NOLOCK) " +
+					var skillQuery = session.CreateSQLQuery(@"
+SELECT DISTINCT a.* FROM [ReadModel].AgentState a WITH (NOLOCK) " +
 						selections.Single().Query);
 					selections.Select(x => x.Set).ForEach(f => f(skillQuery));
 					return skillQuery;
 				}
-				var query = session.CreateSQLQuery(
-					@"SELECT DISTINCT a.* FROM [ReadModel].AgentState a WITH (NOLOCK) " +
-					selections
-					.Single(x => x.AgentStateSelectionType == AgentStateSelectionType.Skill).Query
-					+ " AND " +
-					selections.Single(x => x.AgentStateSelectionType == AgentStateSelectionType.Org).Query);
+				var query = session.CreateSQLQuery(@"
+SELECT DISTINCT a.* FROM [ReadModel].AgentState a WITH (NOLOCK) " +
+												   selections.Single(x => x.AgentStateSelectionType == AgentStateSelectionType.Skill).Query
+												   + " AND " +
+												   string.Join(" OR ", selections
+													   .Where(x => x.AgentStateSelectionType == AgentStateSelectionType.Org)
+													   .Select(x => x.Query)));
 				selections.Select(x => x.Set).ForEach(f => f(query));
 				return query;
 			}
@@ -131,68 +133,13 @@ AND :today BETWEEN g.StartDate and g.EndDate",
 						AgentStateSelectionType.Skill);
 				}
 
-				var query = selection.Build(_unitOfWork.Current().Session());
-				return query
+				return selection.Build(
+					_unitOfWork.Current().Session())
 					.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 					.SetReadOnly(true)
 					.List<AgentStateReadModel>();
 			}
 		}
-
-//			if (siteIds != null && skillIds != null)
-//				return _unitOfWork.Current().Session()
-//					.CreateSQLQuery(@"
-//SELECT DISTINCT a.*
-//FROM ReadModel.AgentState AS a
-//INNER JOIN ReadModel.GroupingReadOnly AS g
-//ON a.PersonId = g.PersonId
-//WHERE a.SiteId IN (:SiteIds)
-//AND g.PageId = :skillGroupingPageId
-//AND g.GroupId IN (:SkillIds)
-//AND :today BETWEEN g.StartDate and g.EndDate")
-//					.SetParameterList("SiteIds", siteIds)
-//					.SetParameterList("SkillIds", skillIds)
-//					.SetParameter("today", _now.UtcDateTime().Date)
-//					.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
-//					.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
-//					.SetReadOnly(true)
-//					.List<AgentStateReadModel>();
-//			if (teamIds != null && skillIds != null)
-
-//				return _unitOfWork.Current().Session()
-//					.CreateSQLQuery(@"
-//SELECT DISTINCT a.*
-//FROM ReadModel.AgentState AS a
-//INNER JOIN ReadModel.GroupingReadOnly AS g
-//ON a.PersonId = g.PersonId
-//WHERE a.TeamId IN (:TeamIds)
-//AND g.PageId = :skillGroupingPageId
-//AND g.GroupId IN (:SkillIds)
-//AND :today BETWEEN g.StartDate and g.EndDate")
-//					.SetParameterList("TeamIds", teamIds)
-//					.SetParameterList("SkillIds", skillIds)
-//					.SetParameter("today", _now.UtcDateTime().Date)
-//					.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
-//					.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
-//					.SetReadOnly(true)
-//					.List<AgentStateReadModel>();
-//			return _unitOfWork.Current().Session()
-//				.CreateSQLQuery(@"
-//SELECT DISTINCT a.*
-//FROM ReadModel.AgentState AS a WITH (NOLOCK)
-//INNER JOIN ReadModel.GroupingReadOnly AS g
-//ON a.PersonId = g.PersonId
-//WHERE PageId = :skillGroupingPageId
-//AND g.GroupId IN (:skillIds)
-//AND :today BETWEEN g.StartDate and g.EndDate")
-//				.SetParameterList("skillIds", skillIds)
-//				.SetParameter("today", _now.UtcDateTime().Date)
-//				.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
-//				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
-//				.SetReadOnly(true)
-//				.List<AgentStateReadModel>();
-		
-
 
 		public IEnumerable<AgentStateReadModel> ReadForSites(IEnumerable<Guid> siteIds)
 		{

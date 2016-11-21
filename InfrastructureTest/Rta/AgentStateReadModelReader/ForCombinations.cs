@@ -45,9 +45,70 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadFor(new[] { siteId }, new[] { teamId }, null))
+			WithUnitOfWork.Get(() => Target.ReadFor(new[] {siteId}, new[] {teamId}, null))
 				.Select(x => x.PersonId)
-				.Should().Have.SameValuesAs(new []{personId1, personId2});
+				.Should().Have.SameValuesAs(new[] {personId1, personId2});
+		}
+
+		[Test]
+		public void ShouldLoadForSiteTeamAndSkill()
+		{
+			Now.Is("2016-11-07 08:00");
+			Database
+				.WithAgent("wrongSite")
+				.WithSkill("phone")
+				.WithTeam()
+				.WithAgent("wrongTeam")
+				.WithSkill("phone")
+				.WithSite()
+				.WithAgent("expectedForSite")
+				.WithSkill("phone")
+				.WithAgent("expectedForTeam")
+				.WithSkill("phone")
+				.WithAgent("wrongSkill")
+				.WithSkill("email")
+				.UpdateGroupings()
+				;
+			var expectedForSite = Database.PersonIdFor("expectedForSite");
+			var expectedForTeam = Database.PersonIdFor("expectedForTeam");
+			var wrongSkill = Database.PersonIdFor("wrongSkill");
+			var wrongSite = Database.PersonIdFor("wrongSite");
+			var wrongTeam = Database.PersonIdFor("wrongTeam");
+			var siteId = Database.CurrentSiteId();
+			var teamId = Database.CurrentSiteId();
+			var currentSkillId = Database.SkillIdFor("phone");
+			WithUnitOfWork.Do(() =>
+			{
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = expectedForSite,
+					SiteId = siteId
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = expectedForTeam,
+					TeamId = teamId
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = wrongSkill,
+					SiteId = siteId
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = wrongSite,
+					SiteId = Guid.NewGuid()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = wrongTeam,
+					TeamId = Guid.NewGuid()
+				});
+			});
+
+			WithUnitOfWork.Get(() => Target.ReadFor(new[] {siteId}, new []{teamId}, new[] {currentSkillId}))
+				.Select(x => x.PersonId)
+				.Should().Have.SameValuesAs(expectedForSite, expectedForTeam);
 		}
 	}
 }
