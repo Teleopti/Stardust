@@ -1258,6 +1258,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Overtime Activity.
+        /// </summary>
+        public static string AddOvertimeActivity {
+            get {
+                return ResourceManager.GetString("AddOvertimeActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Overtime Availability....
         /// </summary>
         public static string AddOvertimeAvailabilityThreeDots {

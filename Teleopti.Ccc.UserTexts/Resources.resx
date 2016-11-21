@@ -15207,4 +15207,8 @@ These options are activated:
     <value>Successfully added an overtime activity for the selected agent(s). </value>
     <comment>Success message for adding an overtime activity.</comment>
   </data>
+  <data name="AddOvertimeActivity" xml:space="preserve">
+    <value>Add Overtime Activity</value>
+    <comment>Name of the command adding an overtime activity</comment>
+  </data>
 </root>
