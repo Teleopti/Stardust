@@ -96,9 +96,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			var request = createNewRequest();
 
-			var staffingList = new List<SkillStaffingInterval>()
+			var staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId =  _primarySkill1.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
@@ -108,9 +108,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				}
 			};
 			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
-			staffingList = new List<SkillStaffingInterval>()
+			staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId =  _primarySkill2.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),

@@ -158,6 +158,7 @@
     <Compile Include="FakeAgentBadgeWithRankTransactionRepository.cs" />
     <Compile Include="FakeCancelSchedulingProgress.cs" />
     <Compile Include="FakeCloseSchedulingProgress.cs" />
+    <Compile Include="FakeCommandDispatcher.cs" />
     <Compile Include="FakeData\AnalyticsScenarioFactory.cs" />
     <Compile Include="FakeData\AnalyticsWorkloadFactory.cs" />
     <Compile Include="FakeData\FakeAnalyticsUnitOfWorkFactory.cs" />

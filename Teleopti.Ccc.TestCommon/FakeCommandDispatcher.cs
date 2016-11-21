@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 
-namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
+namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeCommandDispatcher : ICommandDispatcher
 	{
@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			LatestCommand = command;
 			var cmd = command as IRequestCommand;
-			if (cmd!=null) cmd.ErrorMessages = new List<string>();
+			if (cmd != null) cmd.ErrorMessages = new List<string>();
 		}
 
 		public object LatestCommand;

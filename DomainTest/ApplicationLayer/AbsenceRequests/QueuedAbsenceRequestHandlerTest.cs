@@ -3,6 +3,7 @@ using System.Reflection;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeEventPublisher EventPublisher;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakeConfigReader ConfigReader;
+		public INow Now;
 		public ApprovalServiceForTest ApprovalService;
 		public PersonRequestAuthorizationCheckerForTest PersonRequestAuthorizationChecker;
 
@@ -40,6 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			system.UseTestDouble<FakeCurrentScenario>().For<FakeCurrentScenario>();
 			system.UseTestDouble<QueuedAbsenceRequestHandler>().For<QueuedAbsenceRequestHandler>();
+			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 			system.UseTestDouble<QueuedAbsenceRequestFastIntradayHandler>().For<QueuedAbsenceRequestFastIntradayHandler>();
 			system.UseTestDouble<ApprovalServiceForTest>().For<IRequestApprovalService>();
 			system.UseTestDouble<IntradayRequestProcessor>().For<IIntradayRequestProcessor>();
@@ -60,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldNotPutRequestOnQueueIfIntradayRequestAndStaffingCheck()
 		{
-			var now = DateTime.UtcNow;
+			var now = Now.UtcDateTime();
 			var period = new DateTimePeriod(now.AddHours(2), now.AddHours(5)); 
 
 			var reqEvent = createNewRequestEvent(period, new StaffingThresholdValidator());
@@ -76,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldPutRequestOnQueueIfNotIntradayRequest()
 		{
-			var now = DateTime.UtcNow;
+			var now = Now.UtcDateTime();
 			var period = new DateTimePeriod(now.AddDays(1).AddHours(2), now.AddDays(1).AddHours(5));
 
 			var reqEvent = createNewRequestEvent(period);
@@ -92,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldPutRequestOnQueueIfNotStaffingCheck()
 		{
-			var now = DateTime.UtcNow;
+			var now = Now.UtcDateTime();
 			var period = new DateTimePeriod(now.AddDays(1).AddHours(2), now.AddDays(1).AddHours(5));
 
 			var reqEvent = createNewRequestEvent(period);
@@ -129,8 +132,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		private NewAbsenceRequestCreatedEvent createNewRequestEvent(IAbsenceRequestValidator validator)
 		{
-			return createNewRequestEvent(new DateTimePeriod(new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc),
-															new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc)), validator);
+			return createNewRequestEvent(new DateTimePeriod(Now.UtcDateTime().Date,
+															Now.UtcDateTime().Date.AddHours(13)), validator);
 		}
 
 		private NewAbsenceRequestCreatedEvent createNewRequestEvent(DateTimePeriod dateTimePeriod)
@@ -146,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var request = createAbsenceRequest(person, absence, dateTimePeriod);
 
-			var newAbsenceCreatedEvent = new NewAbsenceRequestCreatedEvent()
+			var newAbsenceCreatedEvent = new NewAbsenceRequestCreatedEvent
 			{
 				PersonRequestId = request.Id.Value
 			};
@@ -155,7 +158,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		private IPerson createAndSetupPerson(IWorkflowControlSet workflowControlSet)
 		{
-			var person = PersonFactory.CreatePersonWithId();
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2001,1,1)).WithId();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
 			PersonRepository.Add(person);
 
 			person.WorkflowControlSet = workflowControlSet;
@@ -165,12 +169,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		private static WorkflowControlSet createWorkFlowControlSet(IAbsence absence, IAbsenceRequestValidator validator)
 		{
-			var workflowControlSet = new WorkflowControlSet {AbsenceRequestWaitlistEnabled = false};
-			workflowControlSet.SetId(Guid.NewGuid());
+			var workflowControlSet = new WorkflowControlSet {AbsenceRequestWaitlistEnabled = false}.WithId();
+			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(2014, 01, 01), new DateOnly(2016, 12, 31));
 
-			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(2016, 01, 01), new DateOnly(2016, 12, 31));
-
-			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod()
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod
 			{
 				Absence = absence,
 				PersonAccountValidator = new PersonAccountBalanceValidator(),
@@ -188,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, requestDateTimePeriod)).WithId();
 			
-			personRequest.SetCreated(new DateTime(2016, 2, 20, 0, 0, 0, DateTimeKind.Utc));
+			personRequest.SetCreated(new DateTime(2014, 2, 20, 0, 0, 0, DateTimeKind.Utc));
 			PersonRequestRepository.Add(personRequest);
 
 			return personRequest;
@@ -200,7 +202,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public static void SetCreated(this PersonRequest request, DateTime timestamp)
 		{
 			var field = typeof(PersonRequest).GetProperty(nameof(request.CreatedOn),
-				BindingFlags.Instance | BindingFlags.NonPublic);
+				BindingFlags.Instance | BindingFlags.Public);
 			field.SetValue(request, timestamp);
 		}
 	}
