@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			_analyticsConfigurationRepository = analyticsConfigurationRepository;
 		}
 
-		public new IAnalyticsDate Date(DateTime dateDate)
+		public override IAnalyticsDate Date(DateTime dateDate)
 		{
 			return base.Date(dateDate) ?? createDatesTo(dateDate.Date);
 		}

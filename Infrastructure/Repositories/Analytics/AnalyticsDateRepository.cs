@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.UniqueResult<IAnalyticsDate>() ?? AnalyticsDate.NotDefined;
 		}
 
-		public IAnalyticsDate Date(DateTime dateDate)
+		public virtual IAnalyticsDate Date(DateTime dateDate)
 		{
 			if (dateDate == AnalyticsDate.Eternity.DateDate)
 				return AnalyticsDate.Eternity;

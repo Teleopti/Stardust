@@ -86,6 +86,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
+		public void ShouldHaveTheDateCached()
+		{
+			IAnalyticsDate date1 = null;
+
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				date1 = Target.Date(new DateTime(2000, 01, 05));
+			});
+			IAnalyticsDate date2 = null;
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				date2 = Target.Date(new DateTime(2000, 01, 05));
+			});
+			date1.Should().Be.SameInstanceAs(date2);
+		}
+
+		[Test]
 		public async Task ShouldHandleMultipleRequestsAtTheSameTime()
 		{
 			var tasks = new List<Task>();

@@ -173,15 +173,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<PersonPeriodTransformer>().As<IPersonPeriodTransformer>().SingleInstance();
 
-			
-
 			_config.Cache().This<IAnalyticsDateRepository>(b => b.CacheMethod(x => x.Date(new DateTime())));
 			if (_config.Toggle(Toggles.ETL_EventbasedDate_39562))
 			{
 				builder.RegisterType<AnalyticsPersonPeriodDateFixer>().As<IAnalyticsPersonPeriodDateFixer>().SingleInstance();
 				builder.RegisterType<PersonPeriodFilterForDateCreation>().As<IPersonPeriodFilter>().SingleInstance();
 				builder.CacheByInterfaceProxy<AnalyticsDateRepositoryWithCreation, IAnalyticsDateRepository>();
-				builder.RegisterType<AnalyticsDateRepositoryWithCreation>().As<IAnalyticsDateRepository>().SingleInstance();
 			}
 			else
 			{
