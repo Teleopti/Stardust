@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid ToScenario { get; set; }
 		public Guid TrackingId { get; set; }
 		public ICollection<Guid> PersonIds { get; }
+		public int TotalMessages { get; set; }
 
 		public ArchiveScheduleEvent()
 		{

@@ -47,5 +47,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _result.Take(5).ToList();
 		}
+
+		public void AddDetailAndCheckSuccess(Guid jobResultId, IJobResultDetail detail, int expectedSuccessful)
+		{
+			var jobResult = Get(jobResultId);
+			jobResult.AddDetail(detail);
+			if (jobResult.Details.Count(x => x.DetailLevel == DetailLevel.Info && x.ExceptionMessage == null) >= expectedSuccessful)
+				jobResult.FinishedOk = true;
+		}
+
+		public IJobResult FindWithNoLock(Guid jobResultId)
+		{
+			return Get(jobResultId);
+		}
 	}
 }

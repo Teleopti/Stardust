@@ -7,6 +7,7 @@ using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
@@ -25,41 +26,61 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly IToggleManager _toggleManager;
 		private readonly ITeamRepository _teamRepository;
 		private readonly IPermissionProvider _permissionProvider;
+		private readonly IJobResultRepository _jobResultRepository;
+		private readonly ILoggedOnUser _loggedOnUser;
 
-		public ArchiveController(IPersonRepository personRepository, IEventPopulatingPublisher eventPublisher, IToggleManager toggleManager, ITeamRepository teamRepository, IPermissionProvider permissionProvider)
+		public ArchiveController(IPersonRepository personRepository, IEventPopulatingPublisher eventPublisher, IToggleManager toggleManager, ITeamRepository teamRepository, IPermissionProvider permissionProvider, IJobResultRepository jobResultRepository, ILoggedOnUser loggedOnUser)
 		{
 			_personRepository = personRepository;
 			_eventPublisher = eventPublisher;
 			_toggleManager = toggleManager;
 			_teamRepository = teamRepository;
 			_permissionProvider = permissionProvider;
+			_jobResultRepository = jobResultRepository;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		[Route("api/ResourcePlanner/Archiving/Run"), HttpPost, UnitOfWork]
 		public virtual IHttpActionResult RunArchiving([FromBody] ArchiveSchedulesModel model)
 		{
-			var totalMessages = 0;
-			var totalPeople = 0;
+			var archiveSchedulesResponse = new ArchiveSchedulesResponse
+			{
+				TotalMessages = 0,
+				TotalSelectedPeople = 0
+			};
 			if (_toggleManager.IsEnabled(Toggles.Wfm_ArchiveSchedule_41498))
 			{
-				var people = getPeople(model);
-				totalPeople = people.Count;
-				var archiveScheduleEvents = people
-					.Batch(getBatchSize(totalPeople))
-					.Select(model.CreateEvent)
-					.Where(x => x.PersonIds.Any())
-					.Cast<IEvent>().ToArray();
+				var people = getPeople(model);				
+				archiveSchedulesResponse.TotalSelectedPeople = people.Count;
+				if (archiveSchedulesResponse.TotalSelectedPeople > 0)
+				{
+					var jobResult = new JobResult(JobCategory.ArchiveSchedule, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), _loggedOnUser.CurrentUser(), DateTime.UtcNow);
+					_jobResultRepository.Add(jobResult);
+					archiveSchedulesResponse.JobId = jobResult.Id;
+					model.TrackId = jobResult.Id.GetValueOrDefault();
 
-				if (archiveScheduleEvents.Any())
-					Task.Run(() => _eventPublisher.Publish(archiveScheduleEvents));
+					var archiveScheduleEvents = people
+					   .Batch(getBatchSize(archiveSchedulesResponse.TotalSelectedPeople))
+					   .Select(model.CreateEvent)
+					   .Where(x => x.PersonIds.Any())
+					   .ToList();
+					archiveScheduleEvents.ForEach(e => e.TotalMessages = archiveScheduleEvents.Count);
 
-				totalMessages = archiveScheduleEvents.Length;
+
+					Task.Run(() => _eventPublisher.Publish(archiveScheduleEvents.Cast<IEvent>().ToArray()));
+					archiveSchedulesResponse.TotalMessages = archiveScheduleEvents.Count;
+				}			
 			}
-			return Ok(new ArchiveSchedulesResponse
-			{
-				TotalMessages = totalMessages,
-				TotalSelectedPeople = totalPeople
-			});
+				return Ok(archiveSchedulesResponse);
+		}
+
+		[Route("api/ResourcePlanner/JobStatus/{jobId}"), HttpGet, UnitOfWork]
+		public virtual IHttpActionResult JobResult(Guid jobId)
+		{
+			var jobResult = _jobResultRepository.FindWithNoLock(jobId);
+			if (jobResult != null)
+				return Ok(new { Successful=jobResult.Details.Count(x => x.DetailLevel == DetailLevel.Info && x.ExceptionMessage == null)});
+			return NotFound();
 		}
 
 		private HashSet<IPerson> getPeople(ArchiveSchedulesModel model)

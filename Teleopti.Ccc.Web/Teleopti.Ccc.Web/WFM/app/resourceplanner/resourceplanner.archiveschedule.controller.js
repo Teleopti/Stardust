@@ -1,12 +1,12 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 	angular.module('wfm.resourceplanner')
 		.filter('defaultScenario',
-			function() {
-				return function(input, defaultScenario) {
+			function () {
+				return function (input, defaultScenario) {
 					var result = [];
 					angular.forEach(input,
-						function(value) {
+						function (value) {
 							if (value.DefaultScenario === defaultScenario)
 								result.push(value);
 						});
@@ -16,18 +16,14 @@
 		.controller('ResourceplannerArchiveScheduleCtrl',
 		[
 			'ArchiveScheduleSrvc',
-			'signalRSVC',
 			'guidgenerator',
-			'$interval',
 			'$timeout',
 			'$scope',
 			'NoticeService',
 			'defaultScenarioFilter',
 			'$translate',
-			function(ArchiveScheduleSrvc,
-				signalRSVC,
+			function (ArchiveScheduleSrvc,
 				guidgenerator,
-				$interval,
 				$timeout,
 				$scope,
 				NoticeService,
@@ -53,7 +49,7 @@
 
 					if (fromScenario == null)
 						validationResult.messages.push($translate.instant('YouNeedToPickAScenarioToArchiveFromDot'));
-					else if(!fromScenario.DefaultScenario)
+					else if (!fromScenario.DefaultScenario)
 						validationResult.messages.push($translate.instant('TheScenarioYouArchiveFromMustBeTheDefaultScenarioDot'));
 					if (toScenario == null)
 						validationResult.messages.push($translate.instant('YouNeedToPickAScenarioToArchiveToDot'));
@@ -66,49 +62,43 @@
 					validationResult.successful = validationResult.messages.length === 0;
 					return validationResult;
 				}
-				var resetTracking = function() {
+				var resetTracking = function () {
 					vm.tracking = {
 						totalMessages: 0,
 						recievedMessages: 0,
 						totalPeople: 0,
-						progress: 0
+						progress: 0,
+						jobId: null
 					};
 				};
 				resetTracking();
 
-				var trackingId = guidgenerator.newGuid();
-
-				var updateProgress = function() {
+				var updateProgress = function () {
 					if (vm.tracking.totalMessages === 0) return 0;
 					return 100 * (vm.tracking.recievedMessages / vm.tracking.totalMessages);
 				}
 
 				ArchiveScheduleSrvc.scenarios.query()
-					.$promise.then(function(result) {
+					.$promise.then(function (result) {
 						vm.scenarios = result;
 						vm.selection.fromScenario = defaultScenarioFilter(result, true)[0];
 					});
 
-				var completedArchiving = function() {
+				var completedArchiving = function () {
 					if (vm.tracking.totalPeople === 0) {
 						NoticeService.info($translate.instant('YourSelectionResultedInZeroPeopleDot'), null, true);
 					} else {
-						
+
 						NoticeService.success($translate.instant('DoneArchivingForXPeopleDot').replace('{0}', vm.tracking.totalPeople), null, true);
 					}
 
-					$timeout(function() {
-							vm.showProgress = false;
-							resetTracking();
-						}, 3000);
+					$timeout(function () {
+						vm.showProgress = false;
+						resetTracking();
+					}, 3000);
 				}
-				var updateStatus = function(messages) {
-					vm.tracking.recievedMessages += messages.length;
-					if (vm.tracking.totalMessages === vm.tracking.recievedMessages) {
-						completedArchiving();
-					}
-				};
-				vm.canRunArchiving = function() {
+
+				vm.canRunArchiving = function () {
 					return !vm.showProgress;
 				};
 
@@ -127,6 +117,23 @@
 						.replace('{2}', moment(period.endDate).format('L'));
 					vm.showConfirmModal = true;
 				};
+				var checkProgress = function () {
+					$timeout(function () {
+						if (vm.showProgress) {
+							ArchiveScheduleSrvc.getStatus.query({ id: vm.tracking.jobId })
+								.$promise.then(function (result) {
+									vm.tracking.recievedMessages = result.Successful;
+									vm.tracking.progress = updateProgress();
+									if (vm.tracking.totalMessages === vm.tracking.recievedMessages) {
+										completedArchiving();
+									} else {
+										checkProgress();
+									}
+								});
+						}
+					},
+						1000);
+				};
 
 				vm.runArchiving = function (fromScenario, toScenario, period, teamSelection) {
 					vm.showConfirmModal = false;
@@ -137,31 +144,22 @@
 						ToScenario: toScenario.Id,
 						StartDate: period.startDate,
 						EndDate: period.endDate,
-						TrackId: trackingId,
+						TrackId: null,
 						SelectedTeams: teamSelection
 					};
 					ArchiveScheduleSrvc.runArchiving.post({}, JSON.stringify(archiveScheduleModel))
-						.$promise.then(function(result) {
+						.$promise.then(function (result) {
 							vm.tracking.totalMessages = result.TotalMessages;
 							vm.tracking.totalPeople = result.TotalSelectedPeople;
-							if (vm.tracking.totalPeople === 0)
-								completedArchiving();
+							vm.tracking.jobId = result.JobId;
+							checkProgress();
 						});
 				};
 
-				signalRSVC.subscribeBatchMessage({ DomainType: 'TrackingMessage', DomainId: trackingId }, updateStatus, 50);
-				$interval(function() {
-						if (vm.showProgress) {
-							$scope.$apply(function() {
-								vm.tracking.progress = updateProgress();
-							});
-						}
-					}, 100, 0, false);
-
 				$scope.$on('teamSelectionChanged',
-					function(event, args) {
+					function (event, args) {
 						angular.forEach(args,
-							function(value) {
+							function (value) {
 								if (value.type === "Team") {
 									// We only care about teams
 									var itemIndex = vm.selection.teams.indexOf(value.id);

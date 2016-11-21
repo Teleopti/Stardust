@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using NHibernate;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -34,6 +37,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			pagingDetail.TotalNumberOfResults = rowCount.Value;
 
 			return result;
+		}
+
+	    public void AddDetailAndCheckSuccess(Guid jobResultId, IJobResultDetail detail, int expectedSuccessful)
+	    {
+		    var jobResult = Session.Load<IJobResult>(jobResultId, LockMode.Upgrade);
+			jobResult.AddDetail(detail);
+			if (jobResult.Details.Count(x => x.DetailLevel == DetailLevel.Info && x.ExceptionMessage == null) >= expectedSuccessful)
+				jobResult.FinishedOk = true;
+		}
+
+	    public IJobResult FindWithNoLock(Guid jobResultId)
+	    {
+			return Session.Load<IJobResult>(jobResultId, LockMode.None);
 		}
 	}
 }

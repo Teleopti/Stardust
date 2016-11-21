@@ -89,5 +89,6 @@ namespace Teleopti.Ccc.Domain.Common
         public const string MultisiteExport = "MultisiteExport";
         public const string QuickForecast = "QuickForecast";
         public const string ForecastsImport = "ForecastsImport";
+        public const string ArchiveSchedule = "ArchiveSchedule";
     }
 }
