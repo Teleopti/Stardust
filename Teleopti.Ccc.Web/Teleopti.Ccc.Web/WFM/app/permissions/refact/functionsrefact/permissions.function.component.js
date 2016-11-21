@@ -28,11 +28,13 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
 
     selectedFunctions.push(func.FunctionId)
     //Fix me
+    func.IsSelected = !func.IsSelected;
+    
     if (selectedRole != null && selectedRole) {
-      permissionsDataService.selectFunction(selectedRole, selectedFunctions)
+      permissionsDataService.selectFunction(selectedRole, selectedFunctions, func);
     }
 
-    func.IsSelected = !func.IsSelected;
+
     if (!func.IsSelected) {
       var childs = func.ChildFunctions;
       while (childs != null && childs.length > 0) {

@@ -22,6 +22,9 @@ xdescribe('component: permissionsTree', function () {
 
 		fakeBackend.clear();
 		vm = $controller('PermissionsCtrlRefact');
+		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Functions').respond(function(method, url, data, headers){
+			return 200;
+		});
 
 	}));
 
@@ -329,7 +332,7 @@ xdescribe('component: permissionsTree', function () {
 		expect(permissionsDataService.selectFunction).toHaveBeenCalled();
 	});
 	//FIX ME SAMMA SOM FÖR DELETE I ORG NÄR DET BARA ÄR EN
-	xit('should delete unselected function for selected role', function () {
+	it('should delete unselected function for selected role', function () {
 		fakeBackend
 			.withRole({
 				BuiltIn: false,
@@ -361,7 +364,7 @@ xdescribe('component: permissionsTree', function () {
 		expect(permissionsDataService.selectFunction).toHaveBeenCalled();
 	});
 
-	xit('should delete unselected function for selected role', function () {
+	it('should delete unselected function for selected role', function () {
 		fakeBackend
 			.withRole({
 				BuiltIn: false,

@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -18,9 +18,14 @@
         var selectedRole;
         var data = {};
 
-        function selectFunction(selectedRole, functions) {
-            PermissionsServiceRefact.postFunctions.query({ Id: selectedRole.Id, Functions: functions }).$promise.then(function(result) {
-            });
+        function selectFunction(selectedRole, functions, func) {
+            if (func.IsSelected) {
+                PermissionsServiceRefact.postFunctions.query({ Id: selectedRole.Id, Functions: functions }).$promise.then(function (result) {
+                });
+            } else {
+                PermissionsServiceRefact.deleteFunction.delete({ Id: selectedRole.Id, FunctionId: func.FunctionId }).$promise.then(function (result) {
+                });
+            }
         }
 
         var allFunctions = [];
@@ -38,13 +43,13 @@
             selectAllFunctionHelper(functions);
 
             if (selected) {
-                PermissionsServiceRefact.postFunctions.query({ Id: selectedRole.Id, Functions: allFunctions }).$promise.then(function(result) {
+                PermissionsServiceRefact.postFunctions.query({ Id: selectedRole.Id, Functions: allFunctions }).$promise.then(function (result) {
                     if (result != null) {
                         console.log('result post all functions', result);
                     }
                 });
             } else {
-                PermissionsServiceRefact.deleteAllFunction.delete({ Id: selectedRole.Id, FunctionId: functions[0].FunctionId, Functions: allFunctions}).$promise.then(function(result) {
+                PermissionsServiceRefact.deleteAllFunction.delete({ Id: selectedRole.Id, FunctionId: functions[0].FunctionId, Functions: allFunctions }).$promise.then(function (result) {
                     if (result != null) {
                         console.log('result delete all functions', result);
                     }
@@ -61,13 +66,13 @@
             }
             if (orgData.Type === 'BusinessUnit') {
                 if (orgData.IsSelected) {
-                    PermissionsServiceRefact.assignOrganizationSelection.postData(data).$promise.then(function(result) {
+                    PermissionsServiceRefact.assignOrganizationSelection.postData(data).$promise.then(function (result) {
                         if (result != null) {
                             console.log('assign bu data result ', result);
                         }
                     });
                 } else {
-                    PermissionsServiceRefact.deleteAllData.delete(data).$promise.then(function() {
+                    PermissionsServiceRefact.deleteAllData.delete(data).$promise.then(function () {
                         if (result != null) {
                             console.log('delete all bu data result', result);
                         }
@@ -75,14 +80,14 @@
                 }
             }
             else if (orgData.IsSelected) {
-                PermissionsServiceRefact.assignOrganizationSelection.postData(data).$promise.then(function(result) {
+                PermissionsServiceRefact.assignOrganizationSelection.postData(data).$promise.then(function (result) {
                     if (result != null) {
                         console.log('assign data result ', result);
                     }
                 });
             }
             else if (!orgData.IsSelected) {
-                PermissionsServiceRefact.deleteAvailableData.delete(selectedData).$promise.then(function() {
+                PermissionsServiceRefact.deleteAvailableData.delete(selectedData).$promise.then(function () {
                     if (result != null) {
                         console.log('delete data result', result);
                     }

@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -31,6 +31,10 @@
             delete: { method: 'POST', params: { Functions: [] }, isArray: false }
         });
 
+        var deleteFunction = $resource('../api/Permissions/Roles/:Id/Function/:FunctionId', { Id: "@Id", FunctionId: "@FunctionId" }, {
+            delete: { method: 'DELETE', params: {}, isArray: false }
+        });
+
         //END OF FUNCTIONS
 
         //ORGANIZATION
@@ -58,6 +62,7 @@
             copyRole: copyRole,
             postFunctions: postFunctions,
             deleteAllFunction: deleteAllFunction,
+            deleteFunction: deleteFunction,
             applicationFunctions: applicationFunctions,
             organizationSelection: organizationSelection,
             assignOrganizationSelection: assignOrganizationSelection,

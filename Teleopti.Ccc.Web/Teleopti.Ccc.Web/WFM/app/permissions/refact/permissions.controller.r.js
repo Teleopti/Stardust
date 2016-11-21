@@ -23,6 +23,7 @@
         vm.toggleAllFunction = toggleAllFunction;
         vm.showOnlySelectedFunctionsFilter = showOnlySelectedFunctionsFilter;
         vm.selectedOrNot = false;
+        vm.selectedRole = {};
 
         vm.filteredApplicationFunctions = [];
 
@@ -51,13 +52,25 @@
             }
         }
 
+        function refreshRoleSelection() {
+            for (var i = 0; i < vm.roles.length; i++) {
+                vm.roles[i].IsSelected = false;
+            }
+            vm.roles[0].IsSelected = true;
+        }
+
         function createRole(roleName) {
             var roleData = { Description: roleName };
             PermissionsServiceRefact.roles.save(roleData).$promise.then(function (data) {
                 vm.roles.unshift(data);
+                vm.selectedRole = data;
+                permissionsDataService.setSelectedRole(vm.selectedRole);
+                refreshRoleSelection();
+                markSelectedRole(vm.selectedRole);
             });
             vm.showCreateModal = false;
             vm.roleName = '';
+            toggleSelection(vm.applicationFunctions, false);
         }
 
         function editRole(newRoleName, role) {
@@ -88,11 +101,23 @@
             PermissionsServiceRefact.manage.deleteRole({ Id: role.Id });
             var index = vm.roles.indexOf(role);
             vm.roles.splice(index, 1);
+
+            console.log('1 ', vm.applicationFunctions)
+
+            if (role.Id === vm.selectedRole.Id){
+                 toggleSelection(vm.applicationFunctions, false);
+                console.log('2 ', vm.applicationFunctions)
+            } 
+           
         }
 
         function copyRole(role) {
             PermissionsServiceRefact.copyRole.copy({ Id: role.Id }).$promise.then(function (data) {
                 vm.roles.unshift(data);
+                vm.selectedRole = data;
+                permissionsDataService.setSelectedRole(vm.selectedRole);
+                refreshRoleSelection();
+                markSelectedRole(vm.selectedRole);
             });
         }
 
