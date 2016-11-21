@@ -2397,7 +2397,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				int colIndex = scheduleView.ViewGrid.CurrentCell.ColIndex;
 				if (colIndex < scheduleView.ViewGrid.Cols.FrozenCount)
-					colIndex = Math.Min(scheduleView.ViewGrid.ColCount, scheduleView.ViewGrid.Cols.FrozenCount++);
+					colIndex = Math.Min(scheduleView.ViewGrid.ColCount, scheduleView.ViewGrid.Cols.FrozenCount + 1);
 				return colIndex;
 			});
 
