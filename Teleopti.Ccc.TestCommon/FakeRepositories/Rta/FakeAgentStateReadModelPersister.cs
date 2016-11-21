@@ -112,6 +112,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return _data.Values.Where(x => x.TeamId == teamId).ToArray();
 		}
 
+		public IEnumerable<AgentStateReadModel> ReadFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IEnumerable<AgentStateReadModel> ReadForSites(IEnumerable<Guid> siteIds)
 		{
 			return

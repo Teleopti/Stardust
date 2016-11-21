@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest { PersonId = personId });
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadForSkills(new []{ currentSkillId }))
+			WithUnitOfWork.Get(() => Target.ReadFor(null, null, new []{ currentSkillId }))
 				.Count().Should().Be(1);
 		}
 
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			});
 
 
-			WithUnitOfWork.Get(() => Target.ReadForSkills(new []{ skill1, skill2 }))
+			WithUnitOfWork.Get(() => Target.ReadFor(null, null, new []{ skill1, skill2 }))
 				.Count().Should().Be(2);
 		}	
 
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			});
 
 
-			WithUnitOfWork.Get(() => Target.ReadForSkills(new []{ skill1, skill2 }))
+			WithUnitOfWork.Get(() => Target.ReadFor(null, null, new []{ skill1, skill2 }))
 				.Count().Should().Be(1);
 		}
 
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest {PersonId = agent2});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadForSkills(new[] { currentSkillId }))
+			WithUnitOfWork.Get(() => Target.ReadFor(null, null, new[] { currentSkillId }))
 				.Single().PersonId.Should().Be(agent1);
 		}
 
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest { PersonId = personId });
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadForSkills(new[] { email }))
+			WithUnitOfWork.Get(() => Target.ReadFor(null, null, new[] { email }))
 				.Should().Be.Empty();
 		}
 
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest { PersonId = personId });
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadForSkills(new[] { phoneId }))
+			WithUnitOfWork.Get(() => Target.ReadFor(null, null, new[] { phoneId }))
 				.Should().Be.Empty();
 		}
 
@@ -357,7 +357,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			var outOfAdherence = WithUnitOfWork.Get(() => Target.ReadForSkills(new [] {currentSkillId}))
+			var outOfAdherence = WithUnitOfWork.Get(() => Target.ReadFor(null, null, new [] {currentSkillId}))
 				.Single().OutOfAdherences.Single();
 
 			outOfAdherence.StartTime.Should().Be("2016-06-16 08:00".Utc());

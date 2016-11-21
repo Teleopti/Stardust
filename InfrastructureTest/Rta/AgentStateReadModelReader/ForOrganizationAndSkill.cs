@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadForSitesAndSkills(new[] {siteId}, new[] {currentSkillId}))
+			WithUnitOfWork.Get(() => Target.ReadFor(new[] {siteId}, null, new[] {currentSkillId}))
 				.Single().PersonId.Should().Be(expected);
 		}
 
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadForSitesAndSkills(new[] {siteId}, new[] {phone, email}))
+			WithUnitOfWork.Get(() => Target.ReadFor(new[] {siteId}, null, new[] {phone, email}))
 				.Single().PersonId.Should().Be(expected);
 		}
 
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadForTeamsAndSkills(new[] {teamId}, new[] {currentSkillId}))
+			WithUnitOfWork.Get(() => Target.ReadFor(null, new[] {teamId}, new[] {currentSkillId}))
 				.Single().PersonId.Should().Be(expected);
 		}
 
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadForTeamsAndSkills(new[] {teamId}, new[] {phone, email}))
+			WithUnitOfWork.Get(() => Target.ReadFor(null, new[] {teamId}, new[] {phone, email}))
 				.Single().PersonId.Should().Be(expected);
 		}
 
