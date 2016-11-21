@@ -280,15 +280,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
 
-			var request = new FakePersonRequest(person, new AbsenceRequest(absence, period));
+			var request = new PersonRequest(person, new AbsenceRequest(absence, period));
 
 			request.SetId(Guid.NewGuid());
 			request.SetCreated(new DateTime(2016, 3, 14, 0, 5, 0, DateTimeKind.Utc));
 			PersonRequestRepository.Add(request);
 
-			var staffingList = new List<SkillStaffingInterval>()
+			var staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = primarySkill.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 30, 0, DateTimeKind.Utc),
@@ -299,9 +299,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			};
 			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
 
-			staffingList = new List<SkillStaffingInterval>()
+			staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = cascadingSkill.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 30, 0, DateTimeKind.Utc),
@@ -340,15 +340,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
 
-			var request = new FakePersonRequest(person, new AbsenceRequest(absence, period));
+			var request = new PersonRequest(person, new AbsenceRequest(absence, period)).WithId();
 			request.Pending();
-			request.SetId(Guid.NewGuid());
 			request.SetCreated(new DateTime(2016, 3, 14, 0, 5, 0, DateTimeKind.Utc));
 			PersonRequestRepository.Add(request);
 
-			var staffingList = new List<SkillStaffingInterval>()
+			var staffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval()
+				new SkillStaffingInterval
 				{
 					SkillId = primarySkill.Id.GetValueOrDefault(),
 					StartDateTime = new DateTime(2016, 3, 14, 13, 30, 0, DateTimeKind.Utc),
@@ -436,9 +435,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
 
-			var personRequest = new FakePersonRequest(person, new AbsenceRequest(absence, period));
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, period)).WithId();
 			personRequest.Pending();
-			personRequest.SetId(Guid.NewGuid());
 			personRequest.SetCreated(new DateTime(2016, 3, 14, 0, 5, 0, DateTimeKind.Utc));
 			PersonRequestRepository.Add(personRequest);
 			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(skill1.Id.GetValueOrDefault(), OpenHourStatus.OutsideOpenHour);
@@ -472,9 +470,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
 
-			var personRequest = new FakePersonRequest(person, new AbsenceRequest(absence, period));
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, period)).WithId();
 			personRequest.Pending();
-			personRequest.SetId(Guid.NewGuid());
 			personRequest.SetCreated(new DateTime(2016, 3, 14, 0, 5, 0, DateTimeKind.Utc));
 			PersonRequestRepository.Add(personRequest);
 			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(skill1.Id.GetValueOrDefault(), OpenHourStatus.OutsideOpenHour);
@@ -616,9 +613,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
 
-			var request = new FakePersonRequest(person, new AbsenceRequest(absence, period));
-
-			request.SetId(Guid.NewGuid());
+			var request = new PersonRequest(person, new AbsenceRequest(absence, period)).WithId();
 			request.SetCreated(new DateTime(2016, 10, 17, 0, 5, 0, DateTimeKind.Utc));
 			PersonRequestRepository.Add(request);
 
@@ -722,9 +717,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		
 		private PersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod requestDateTimePeriod)
 		{
-			var personRequest = new FakePersonRequest(person, new AbsenceRequest(absence, requestDateTimePeriod));
-
-			personRequest.SetId(Guid.NewGuid());
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, requestDateTimePeriod)).WithId();
 			personRequest.SetCreated(new DateTime(2016, 3, 14, 0, 5, 0, DateTimeKind.Utc));
 			PersonRequestRepository.Add(personRequest);
 

@@ -148,23 +148,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test, Ignore("Nightmare to test due to cast between FakeScheduleRange and ScheduleRange")]
 		public void ShouldApproveIfAllIsOk()
 		{
-
 		}
-
-
+		
 		private List<IPersonRequest> createNewRequest(IAbsence absence, IPerson person)
 		{
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(CurrentScenario.Current(), person, new DateTimePeriod(DateTime.UtcNow.Date, DateTime.UtcNow.Date.AddHours(8)));
 			ScheduleStorage.Add(assignment);
 
-			var personRequest = new FakePersonRequest(person, new AbsenceRequest(absence, new DateTimePeriod(DateTime.UtcNow.Date, DateTime.UtcNow.Date.AddMinutes(10))));
-			personRequest.SetId(Guid.NewGuid());
-
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, new DateTimePeriod(DateTime.UtcNow.Date, DateTime.UtcNow.Date.AddMinutes(10)))).WithId();
+			
 			personRequest.Pending();
 
 			PersonRequestRepository.Add(personRequest);
 
-			return new List<IPersonRequest>() { personRequest };
+			return new List<IPersonRequest> { personRequest };
 		}
 
 		private IPerson createAndSetupPerson(IWorkflowControlSet wfcs)

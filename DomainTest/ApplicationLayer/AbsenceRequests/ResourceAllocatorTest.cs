@@ -614,9 +614,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		private PersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod requestDateTimePeriod)
 		{
-			var personRequest = new FakePersonRequest(person, new AbsenceRequest(absence, requestDateTimePeriod));
-
-			personRequest.SetId(Guid.NewGuid());
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, requestDateTimePeriod)).WithId();
+			
 			personRequest.SetCreated(_now);
 			PersonRequestRepository.Add(personRequest);
 

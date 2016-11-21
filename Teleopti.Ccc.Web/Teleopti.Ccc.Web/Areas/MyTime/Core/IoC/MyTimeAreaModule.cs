@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 
 		private void registerAutoMapperTypes(ContainerBuilder builder)
 		{
-			builder.Register(c => Mapper.Engine).As<IMappingEngine>();
+			builder.Register(c => Mapper.Engine).As<IMappingEngine>().SingleInstance().ExternallyOwned();
 			builder.RegisterAssemblyTypes(GetType().Assembly)
 				.AssignableTo<Profile>()
 				.SingleInstance()

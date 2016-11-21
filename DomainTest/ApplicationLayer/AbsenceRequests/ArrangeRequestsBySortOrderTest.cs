@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			person.WorkflowControlSet = wcs;
 			var period = new DateTimePeriod(new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc),
 				new DateTime(2016, 03, 2, 0, 0, 0, DateTimeKind.Utc));
-			var personReq1 = new FakePersonRequest(person, new AbsenceRequest(new Absence(), period));
+			var personReq1 = new PersonRequest(person, new AbsenceRequest(new Absence(), period));
 			personReq1.SetCreated(createdOn);
 			return personReq1;
 		}
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			};
 			var period = new DateTimePeriod(new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc),
 				new DateTime(2016, 03, 2, 0, 0, 0, DateTimeKind.Utc));
-			var personReq1 = new FakePersonRequest(person, new AbsenceRequest(new Absence(), period));
+			var personReq1 = new PersonRequest(person, new AbsenceRequest(new Absence(), period));
 			personReq1.SetCreated(createdOn);
 			return personReq1;
 		}

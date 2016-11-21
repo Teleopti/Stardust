@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -12,7 +12,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Services;
-using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
@@ -43,11 +42,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			system.UseTestDouble<QueuedAbsenceRequestHandler>().For<QueuedAbsenceRequestHandler>();
 			system.UseTestDouble<QueuedAbsenceRequestFastIntradayHandler>().For<QueuedAbsenceRequestFastIntradayHandler>();
 			system.UseTestDouble<ApprovalServiceForTest>().For<IRequestApprovalService>();
-			system.UseTestDouble<FakeIntradayRequestProcessor>().For<IIntradayRequestProcessor>();
-
+			system.UseTestDouble<IntradayRequestProcessor>().For<IIntradayRequestProcessor>();
 		}
-
-
+		
 		[Test]
 		public void ShouldPersistNewRequestInQueue()
 		{
@@ -124,10 +121,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			TargetFast.Handle(reqEvent);
 			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(0);
 		}
-
-
 		
-
 		private NewAbsenceRequestCreatedEvent createNewRequestEvent()
 		{
 			return createNewRequestEvent(new AbsenceRequestNoneValidator());
@@ -143,8 +137,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			return createNewRequestEvent(dateTimePeriod, new AbsenceRequestNoneValidator());
 		}
-
-
+		
 		private NewAbsenceRequestCreatedEvent createNewRequestEvent(DateTimePeriod dateTimePeriod, IAbsenceRequestValidator validator)
 		{
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
@@ -193,27 +186,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		
 		private PersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod requestDateTimePeriod)
 		{
-			var personRequest = new FakePersonRequest(person, new AbsenceRequest(absence, requestDateTimePeriod));
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, requestDateTimePeriod)).WithId();
 			
-			personRequest.SetId(Guid.NewGuid());
 			personRequest.SetCreated(new DateTime(2016, 2, 20, 0, 0, 0, DateTimeKind.Utc));
 			PersonRequestRepository.Add(personRequest);
 
 			return personRequest;
 		}
-
-		
 	}
 
-	public class FakePersonRequest : PersonRequest
+	public static class PersonRequestExtensions
 	{
-		public FakePersonRequest(IPerson person, IRequest request) : base(person, request)
+		public static void SetCreated(this PersonRequest request, DateTime timestamp)
 		{
-		}
-
-		public void SetCreated(DateTime created)
-		{
-			CreatedOn = created;
+			var field = typeof(PersonRequest).GetProperty(nameof(request.CreatedOn),
+				BindingFlags.Instance | BindingFlags.NonPublic);
+			field.SetValue(request, timestamp);
 		}
 	}
 }

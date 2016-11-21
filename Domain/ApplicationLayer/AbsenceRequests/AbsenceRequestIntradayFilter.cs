@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 			else
 			{
-				var queuedAbsenceRequest = new QueuedAbsenceRequest()
+				var queuedAbsenceRequest = new QueuedAbsenceRequest
 				{
 					PersonRequest = personRequest.Id.GetValueOrDefault(),
 					Created = personRequest.CreatedOn.GetValueOrDefault(),

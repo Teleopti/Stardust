@@ -267,6 +267,7 @@
     <Compile Include="Areas\People\PeopleSmartWorkflowControlSetControllerTest.cs" />
     <Compile Include="Core\BlockOtherOriginFilterTests.cs" />
     <Compile Include="Core\Requests\DataProvider\AbsenceRequestPersisterNoMocksTest.cs" />
+    <Compile Include="Core\Requests\DataProvider\FakeLinkProvider.cs" />
     <Compile Include="Core\Requests\DataProvider\ShiftTradeRequestPersonToPermissionValidatorTest.cs" />
     <Compile Include="Core\Startup\PublishStartupJobsTaskTest.cs" />
     <Compile Include="Core\TeamSchedule\ScheduleValidationProviderTest.cs" />
@@ -437,7 +438,6 @@
     <Compile Include="Core\WeekSchedule\Mapping\ScheduleViewModelFactoryTest.cs" />
     <Compile Include="Core\WeekScheduleDomainDataProviderTest.cs" />
     <Compile Include="Core\WeekSchedule\Mapping\WeekScheduleViewModelMappingTest.cs" />
-    <Compile Include="FakeAbsenceRequestIntradayFilter.cs" />
     <Compile Include="FakeSchedulePersonProvider.cs" />
     <Compile Include="Areas\Anywhere\GroupScheduleViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\GroupScheduleViewModelMapperTest.cs" />
@@ -529,7 +529,6 @@
     <Compile Include="Core\RequestContext\CurrentDataSourceTest.cs" />
     <Compile Include="Core\RequestContext\CultureProviderTest.cs" />
     <Compile Include="Core\RequestContext\SessionSpecificDataStringSerializerTest.cs" />
-    <Compile Include="Core\Requests\DataProvider\AbsenceRequestPersisterTest.cs" />
     <Compile Include="Core\Requests\Mapping\AbsenceRequestFormMappingTest.cs" />
     <Compile Include="Core\Requests\Mapping\DateTimePeriodFormMappingTest.cs" />
     <Compile Include="Core\ServiceBus\ServiceBusSenderTest.cs" />
