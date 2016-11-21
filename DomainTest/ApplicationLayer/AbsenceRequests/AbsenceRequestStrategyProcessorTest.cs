@@ -74,6 +74,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			absenceRequests.Count.Should().Be.EqualTo(1);
 		}
 
+		[Test, Ignore("Ziggy - please review this case for bug #41788!")]
+		public void ShouldNotBlockFurtherProcessingWhenSentRequestsAreStuckOnQueue()
+		{
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 11, 14, 16, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 11, 14, 23, 59, 00, DateTimeKind.Utc),
+				Created = new DateTime(2016, 11, 14, 14, 0, 0, DateTimeKind.Utc),
+				PersonRequest = Guid.NewGuid(),
+				Sent = new DateTime(2016, 11, 14, 14, 30, 0, DateTimeKind.Utc),
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 11, 20, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 11, 20, 23, 59, 00, DateTimeKind.Utc),
+				Created = new DateTime(2016, 11, 20, 4, 0, 0, DateTimeKind.Utc),
+				PersonRequest = Guid.NewGuid()
+			});
+
+			var absenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			absenceRequests.Count.Should().Be.EqualTo(1);
+		}
+
 		[Test]
 		public void ShouldFetchAllNearFutureIfOneIsOlderThan10Minutes()
 		{
