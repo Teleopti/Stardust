@@ -75,29 +75,7 @@
 			});
 
 			if (validAgents.length > 0) {
-				var timezone = ctrl.containerCtrl.getCurrentTimezone();
-				var personDates = validAgents.map(function (agent) {
-					var timeRange = {
-						startTime: moment(ctrl.fromTime),
-						endTime: moment(ctrl.toTime)
-					};
-					var personSchedule = ScheduleMgmt.findPersonScheduleVmForPersonId(agent.PersonId);
-					var normalizedScheduleVm = belongsToDateDecider.normalizePersonScheduleVm(personSchedule, timezone);
-					var belongsToDate = belongsToDateDecider.decideBelongsToDateForOvertimeActivity(timeRange, normalizedScheduleVm);
-					return {
-						PersonId: agent.PersonId,
-						Date: belongsToDate
-					}
-				});
-
-				var requestData = {
-					PersonDates: personDates,
-					ActivityId: ctrl.selectedActivityId,
-					MultiplicatorDefinitionSetId: ctrl.selectedDefinitionSetId,
-					StartDateTime: ctrl.containerCtrl.convertTimeToCurrentUserTimezone(moment(ctrl.fromTime).format('YYYY-MM-DD HH:mm')),
-					EndDateTime: ctrl.containerCtrl.convertTimeToCurrentUserTimezone(moment(ctrl.toTime).format('YYYY-MM-DD HH:mm')),
-					TrackedCommandInfo: { TrackId: ctrl.trackId }
-				};
+				var requestData = prepareRequestData(validAgents);
 
 				ctrl.processingCommand = true;
 
@@ -126,6 +104,34 @@
 				}
 			}
 		};
+
+		function prepareRequestData(validAgents) {
+			var timezone = ctrl.containerCtrl.getCurrentTimezone();
+			var personDates = validAgents.map(function (agent) {
+				var timeRange = {
+					startTime: moment(ctrl.fromTime),
+					endTime: moment(ctrl.toTime)
+				};
+				var personSchedule = ScheduleMgmt.findPersonScheduleVmForPersonId(agent.PersonId);
+				var normalizedScheduleVm = belongsToDateDecider.normalizePersonScheduleVm(personSchedule, timezone);
+				var belongsToDate = belongsToDateDecider.decideBelongsToDateForOvertimeActivity(timeRange, normalizedScheduleVm);
+				return {
+					PersonId: agent.PersonId,
+					Date: belongsToDate
+				}
+			});
+
+			var requestData = {
+				PersonDates: personDates,
+				ActivityId: ctrl.selectedActivityId,
+				MultiplicatorDefinitionSetId: ctrl.selectedDefinitionSetId,
+				StartDateTime: ctrl.containerCtrl.convertTimeToCurrentUserTimezone(moment(ctrl.fromTime).format('YYYY-MM-DD HH:mm')),
+				EndDateTime: ctrl.containerCtrl.convertTimeToCurrentUserTimezone(moment(ctrl.toTime).format('YYYY-MM-DD HH:mm')),
+				TrackedCommandInfo: { TrackId: ctrl.trackId }
+			};
+
+			return requestData;
+		}
 
 		function validateTimeRange(fromTime, toTime) {
 			var from = moment(fromTime);
