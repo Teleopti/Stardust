@@ -78,5 +78,45 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Publisher.PublishedEvents.Count().Should().Be.EqualTo(1);
 
 		}
+
+		[Test]
+		public void ShouldRemove00000RequestsForCurrentPeriod()
+		{
+			var person = new Person { Name = new Name("Reko", "kille") };
+			person.SetId(SystemUser.Id);
+			FakePersonRepository.Add(person);
+			FakeBusinessUnitRepository.Add(new Domain.Common.BusinessUnit("BU"));
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 2, 23, 59, 00, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-100),
+				Sent = null,
+				PersonRequest = Guid.NewGuid()
+			});
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 2, 23, 59, 00, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-100),
+				Sent = null,
+				PersonRequest = Guid.Empty
+			});
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 6, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 6, 23, 59, 00, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-100),
+				Sent = null,
+				PersonRequest = Guid.Empty
+			});
+
+			Target.Handle(new TenantMinuteTickEvent());
+
+			var req = QueuedAbsenceRequestRepository.LoadAll();
+			req.Count.Should().Be.EqualTo(2);
+			req.Count(x => x.PersonRequest == Guid.Empty && x.StartDateTime == new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc)).Should().Be.EqualTo(0);
+		}
 	}
 }

@@ -155,6 +155,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills, true))
 				{
 					stopwatch.Stop();
+					ResourceCalculationContext.Fetch().PrimarySkillMode = true;
 					_feedback.SendProgress($"Done _resourceCalculationContextFactory.Create(..)! It took {stopwatch.Elapsed}");
 					processOrderList(seniority);
 					processOrderList(firstComeFirstServe);
