@@ -136,12 +136,6 @@ namespace Teleopti.Interfaces.Domain
     	void TakeSnapshot();
 
     	/// <summary>
-    	/// The period used to calculate fairness
-    	/// </summary>
-    	/// <returns></returns>
-    	DateTimePeriod VisiblePeriodMinusFourWeeksPeriod();
-
-    	/// <summary>
     	/// Added to be able to view unpublished data in reports
     	/// </summary>
     	/// <param name="day"></param>
