@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
-		private readonly ScheduleDictionaryLoadOptions _scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 		private readonly IUpdatedBy _updatedBy;
+		private readonly ScheduleDictionaryLoadOptions _options = new ScheduleDictionaryLoadOptions(true, true);
 
 		public ArchiveScheduleHandler(ITrackingMessageSender trackingMessageSender, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IScheduleStorage scheduleStorage, ICurrentUnitOfWork currentUnitOfWork, IUpdatedBy updatedBy)
 		{
@@ -48,10 +48,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 			var toScenario = _scenarioRepository.Get(@event.ToScenario);
 			var people = _personRepository.FindPeople(@event.PersonIds);
 
-			var targetScheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people, _scheduleDictionaryLoadOptions,
-				period, toScenario);
-			var sourceScheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people, _scheduleDictionaryLoadOptions,
-				period, fromScenario);
+			var targetScheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people, _options, period, toScenario);
+			var sourceScheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people, _options, period, fromScenario);
 
 			people.ForEach(person =>
 			{
@@ -77,12 +75,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 			{
 				foreach (var scheduleData in scheduleDay.PersistableScheduleDataCollection())
 				{
-					if (scheduleData is IExportToAnotherScenario)
-					{
-						var entity = _scheduleStorage.Get(scheduleData.GetType(), scheduleData.Id.Value);
-						_scheduleStorage.Remove(entity);
-						changes = true;
-					}
+					if (!(scheduleData is IExportToAnotherScenario)) continue;
+					var entity = _scheduleStorage.Get(scheduleData.GetType(), scheduleData.Id.GetValueOrDefault());
+					_scheduleStorage.Remove(entity);
+					changes = true;
 				}
 			}
 			if (changes)

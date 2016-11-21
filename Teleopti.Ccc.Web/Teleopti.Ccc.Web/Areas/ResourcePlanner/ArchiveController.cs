@@ -6,7 +6,6 @@ using System.Web.Http;
 using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
@@ -45,14 +44,15 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			{
 				var people = getPeople(model);
 				totalPeople = people.Count;
-				var archiveScheduleEvents = createEvents(model, people, totalPeople);
+				var archiveScheduleEvents = people
+					.Batch(getBatchSize(totalPeople))
+					.Select(model.CreateEvent)
+					.Where(x => x.PersonIds.Any())
+					.Cast<IEvent>().ToArray();
+
 				if (archiveScheduleEvents.Any())
-				{
-					Task.Run(() =>
-					{
-						_eventPublisher.Publish(archiveScheduleEvents);
-					});
-				}
+					Task.Run(() => _eventPublisher.Publish(archiveScheduleEvents));
+
 				totalMessages = archiveScheduleEvents.Length;
 			}
 			return Ok(new ArchiveSchedulesResponse
@@ -60,23 +60,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				TotalMessages = totalMessages,
 				TotalSelectedPeople = totalPeople
 			});
-		}
-
-		private static IEvent[] createEvents(ArchiveSchedulesModel model, HashSet<IPerson> people, int totalPeople)
-		{
-			return people
-				.Batch(getBatchSize(totalPeople))
-				.Select(
-					batchedPeople => new ArchiveScheduleEvent(batchedPeople.Select(person => person.Id.GetValueOrDefault()).ToArray())
-					{
-						StartDate = model.StartDate,
-						EndDate = model.EndDate,
-						FromScenario = model.FromScenario,
-						ToScenario = model.ToScenario,
-						TrackingId = model.TrackId
-					})
-				.Where(x => x.PersonIds.Any())
-				.Cast<IEvent>().ToArray();
 		}
 
 		private HashSet<IPerson> getPeople(ArchiveSchedulesModel model)
@@ -94,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 		private static int getBatchSize(int totalPeople)
 		{
-			return Math.Max(totalPeople/150, 5);
+			return Math.Max(totalPeople / 150, 5);
 		}
 	}
 }
