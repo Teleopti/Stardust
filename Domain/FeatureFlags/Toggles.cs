@@ -22,8 +22,8 @@
 		RTA_HideAgentsByStateGroup_40469,
 		RTA_FasterUpdateOfScheduleChanges_40536,
 		RTA_SiteAndTeamOnSkillOverview_40817,
-        RTA_AgentsOnOrganizationAndSkills_41586,
-        RTA_SeeAllOutOfAdherencesToday_39146,
+		RTA_AgentsOnOrganizationAndSkills_41586,
+		RTA_SeeAllOutOfAdherencesToday_39146,
 		RTA_FasterActivityCheck_41380,
 		RTA_QuicklyChangeAgentsSelection_40610,
 
@@ -115,6 +115,7 @@
 		Wfm_Requests_Check_Max_Seats_39937,
 		Wfm_Requests_Check_Max_Seats_NoReadModel_39937,
 		Wfm_Requests_Check_Expired_Requests_40274,
+		Wfm_Requests_Configurable_BusinessRules_For_ShiftTrade_40770,
 
 		Wfm_Intraday_38074,
 
@@ -163,7 +164,7 @@
 
 		ETL_SpeedUpIntradayBusinessUnit_38932,
 		ETL_SpeedUpNightlyBusinessUnit_38932,
-		
+
 		AbsenceRequests_SpeedupIntradayRequests_40754,
 		ETL_EventbasedDate_39562,
 		ReadModel_ToHangfire_39147,
