@@ -77,49 +77,29 @@
 		};
 	}
 
-	function modifyShiftCategoryDirective(){
-		return{
+	function modifyShiftCategoryDirective() {
+		return {
 			restrict: 'E',
 			controller: modifyShiftCategoryCtrl,
 			controllerAs: 'vm',
 			bindToController: true,
 			templateUrl: 'app/teamSchedule/html/modifyShiftCategory.tpl.html',
 			require: ['^teamscheduleCommandContainer', 'modifyShiftCategory'],
-			compile: function (tElement, tAttrs) {
-				var tabindex = angular.isDefined(tAttrs.tabindex) ? tAttrs.tabindex : '0';
-				function addTabindexTo() {
-					angular.forEach(arguments, function (elements) {
-						angular.forEach(elements, function (element) {
-							element.setAttribute('tabIndex', tabindex);
-						});
-					});
-				}
-				addTabindexTo(
-					tElement[0].querySelectorAll('.shift-category-selector'),
-					tElement[0].querySelectorAll('#applyShiftCategory')
-				);
-				return linkFn;
+			link: function linkFn(scope, elem, attrs, ctrls) {
+				var containerCtrl = ctrls[0],
+					selfCtrl = ctrls[1];
+
+				scope.vm.containerCtrl = containerCtrl;
+
+				scope.vm.selectedDate = containerCtrl.getDate;
+				scope.vm.trackId = containerCtrl.getTrackId();
+				scope.vm.getActionCb = containerCtrl.getActionCb;
+				scope.vm.getCurrentTimezone = containerCtrl.getCurrentTimezone;
+
+				scope.vm.init();
 			}
 		};
 	}
 
-	function linkFn(scope, elem, attrs, ctrls){
-		var containerCtrl = ctrls[0],
-				selfCtrl = ctrls[1];
-
-		scope.vm.selectedDate = containerCtrl.getDate;
-		scope.vm.trackId = containerCtrl.getTrackId();
-		scope.vm.getActionCb = containerCtrl.getActionCb;
-		scope.vm.getCurrentTimezone = containerCtrl.getCurrentTimezone;
-
-		scope.vm.init();
-
-		scope.$on('teamSchedule.command.focus.default', function () {
-			var focusTarget = elem[0].querySelector('.focus-default');
-			if (focusTarget) angular.element(focusTarget).focus();
-		});
-
-		elem.removeAttr('tabindex');
-	}
 
 })();

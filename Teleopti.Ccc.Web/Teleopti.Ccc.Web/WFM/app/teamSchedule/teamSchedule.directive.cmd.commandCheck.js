@@ -11,33 +11,13 @@
 			bindToController: true,
 			templateUrl: 'app/teamSchedule/html/commandCheck.tpl.html',
 			require: ['^teamscheduleCommandContainer', 'commandCheck'],
-			compile: function (tElement, tAttrs) {
-				var tabindex = angular.isDefined(tAttrs.tabindex) ? tAttrs.tabindex : '0';
-				function addTabindexTo() {
-					angular.forEach(arguments, function (arg) {
-						angular.forEach(arg, function (elem) {
-							elem.setAttribute('tabIndex', tabindex);
-						});
-					});
-				}
-				addTabindexTo(
-					tElement[0].querySelectorAll('md-select.command-check-selector'),
-					tElement[0].querySelectorAll('button#applyCommandFix')
-				);
-				return postlink;
+			link: function (scope, elem, attrs, ctrls) {
+				var containerCtrl = ctrls[0];
+
+				scope.vm.currentCommandLabel = containerCtrl.activeCmd;
+				scope.vm.getDate = containerCtrl.getDate;
 			}
 		};
-	}
-
-	function postlink(scope, elem, attrs, ctrls) {
-		var containerCtrl = ctrls[0];
-
-		scope.vm.currentCommandLabel = containerCtrl.activeCmd;
-		scope.vm.getDate = containerCtrl.getDate;
-
-		var focusTarget = elem[0].querySelector('.focus-default');
-		if (focusTarget) angular.element(focusTarget).focus();
-		elem.removeAttr('tabindex');
 	}
 
 	commandCheckCtrl.$inject = ['$scope', '$translate', 'CommandCheckService', 'ScheduleManagement'];

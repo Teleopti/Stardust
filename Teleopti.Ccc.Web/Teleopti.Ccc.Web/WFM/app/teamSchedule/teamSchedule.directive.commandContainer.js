@@ -66,7 +66,8 @@
 				date: '=',
 				timezone: '=',
 				actionCallback: '&?',
-				configurations: '=?'
+				configurations: '=?',
+				onReady: '&'
 			},
 			controllerAs: 'vm',
 			bindToController: true,

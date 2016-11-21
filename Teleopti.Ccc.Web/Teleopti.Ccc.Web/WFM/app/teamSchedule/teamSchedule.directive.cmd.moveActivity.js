@@ -154,60 +154,43 @@
 			bindToController: true,
 			templateUrl: 'app/teamSchedule/html/moveActivity.tpl.html',
 			require: ['^teamscheduleCommandContainer', 'moveActivity'],
-			compile: function (tElement, tAttrs) {
-				var tabindex = angular.isDefined(tAttrs.tabindex) ? tAttrs.tabindex : '0';
-				function addTabindexTo() {
-					angular.forEach(arguments, function (arg) {
-						angular.forEach(arg, function (elem) {
-							elem.setAttribute('tabIndex', tabindex);
-						});
-					});
-				}
-				addTabindexTo(
-					tElement[0].querySelectorAll('[uib-timepicker]'),
-					tElement[0].querySelectorAll('input[type=checkbox]#mvActNextDay'),
-					tElement[0].querySelectorAll('button#applyMoveActivity')
-				);
-				return postlink;
-			},
-		}
+			link: function (scope, elem, attrs, ctrls) {
+				var containerCtrl = ctrls[0],
+					selfCtrl = ctrls[1];
 
-		function postlink(scope, elem, attrs, ctrls) {
-			var containerCtrl = ctrls[0],
-				selfCtrl = ctrls[1];
+				scope.vm.containerCtrl = containerCtrl;
 
-			scope.vm.selectedDate = containerCtrl.getDate;
-			scope.vm.trackId = containerCtrl.getTrackId();
-			scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
-			scope.vm.getActionCb = containerCtrl.getActionCb;
-			scope.vm.getCurrentTimezone = containerCtrl.getCurrentTimezone;
+				scope.vm.selectedDate = containerCtrl.getDate;
+				scope.vm.trackId = containerCtrl.getTrackId();
+				scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
+				scope.vm.getActionCb = containerCtrl.getActionCb;
+				scope.vm.getCurrentTimezone = containerCtrl.getCurrentTimezone;
 
-			scope.vm.moveToTime = selfCtrl.getDefaultMoveToStartTime();
-			scope.vm.nextDay = moment(selfCtrl.getDefaultMoveToStartTime()).format('YYYY-MM-DD') !== moment(scope.vm.selectedDate()).format('YYYY-MM-DD');
-			scope.vm.checkCommandActivityLayerOrders = containerCtrl.hasToggle('CheckOverlappingCertainActivitiesEnabled');
+				scope.vm.moveToTime = selfCtrl.getDefaultMoveToStartTime();
+				scope.vm.nextDay = moment(selfCtrl.getDefaultMoveToStartTime()).format('YYYY-MM-DD') !== moment(scope.vm.selectedDate()).format('YYYY-MM-DD');
+				scope.vm.checkCommandActivityLayerOrders = containerCtrl.hasToggle('CheckOverlappingCertainActivitiesEnabled');
 
-			scope.$on('teamSchedule.command.focus.default', function () {
-				var focusTarget = elem[0].querySelector('.focus-default input');
-				if (focusTarget) angular.element(focusTarget).focus();
-			});
-
-			scope.$watch(function() {
-			    return scope.vm.getMoveToStartTimeStr();
-				},
-				function(newVal, oldVal) {
-					scope.vm.updateInvalidAgents();
-				},
-				true);
-
-			elem.removeAttr('tabindex');
-
-			var inputs = elem[0].querySelectorAll('input[type=text]');
-			angular.forEach(inputs, function (input) {
-				angular.element(input).on('focus', function (event) {
-					event.target.select();
+				scope.$on('teamSchedule.command.focus.default', function () {
+					var focusTarget = elem[0].querySelector('.focus-default input');
+					if (focusTarget) angular.element(focusTarget).focus();
 				});
-			});
-		}
+
+				scope.$watch(function () {
+					return scope.vm.getMoveToStartTimeStr();
+				},
+					function (newVal, oldVal) {
+						scope.vm.updateInvalidAgents();
+					},
+					true);
+
+				var inputs = elem[0].querySelectorAll('input[type=text]');
+				angular.forEach(inputs, function (input) {
+					angular.element(input).on('focus', function (event) {
+						event.target.select();
+					});
+				});
+			}
+		};
 	}
 
 })();

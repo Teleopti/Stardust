@@ -188,57 +188,36 @@
 			bindToController: true,
 			templateUrl: 'app/teamSchedule/html/addActivity.tpl.html',
 			require: ['^teamscheduleCommandContainer', 'addActivity'],
-			compile: function (tElement, tAttrs) {
-				var tabindex = angular.isDefined(tAttrs.tabindex) ? tAttrs.tabindex : '0';
-				function addTabindexTo() {
-					angular.forEach(arguments, function (arg) {
-						angular.forEach(arg, function (elem) {
-							elem.setAttribute('tabIndex', tabindex);
-						});
-					});
-				}
-				addTabindexTo(
-					tElement[0].querySelectorAll('md-select.activity-selector'),
-					tElement[0].querySelectorAll('activity-time-range-picker'),
-					tElement[0].querySelectorAll('button#applyActivity')
-				);
-				return postlink;
-			},
-		};
+			link: function (scope, elem, attrs, ctrls) {
+				var containerCtrl = ctrls[0],
+					selfCtrl = ctrls[1];
 
-		function postlink(scope, elem, attrs, ctrls) {
-			var containerCtrl = ctrls[0],
-				selfCtrl = ctrls[1];
+				scope.vm.containerCtrl = containerCtrl;
 
-			scope.vm.selectedDate = containerCtrl.getDate;
-			scope.vm.currentTimezone = containerCtrl.getCurrentTimezone;
-			scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
-			scope.vm.trackId = containerCtrl.getTrackId();
-			scope.vm.getActionCb = containerCtrl.getActionCb;
-			scope.vm.checkCommandActivityLayerOrders = containerCtrl.hasToggle('CheckOverlappingCertainActivitiesEnabled');
-			scope.vm.manageScheduleForDistantTimezonesEnabled = containerCtrl.hasToggle('ManageScheduleForDistantTimezonesEnabled');
+				scope.vm.selectedDate = containerCtrl.getDate;
+				scope.vm.currentTimezone = containerCtrl.getCurrentTimezone;
+				scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
+				scope.vm.trackId = containerCtrl.getTrackId();
+				scope.vm.getActionCb = containerCtrl.getActionCb;
+				scope.vm.checkCommandActivityLayerOrders = containerCtrl.hasToggle('CheckOverlappingCertainActivitiesEnabled');
+				scope.vm.manageScheduleForDistantTimezonesEnabled = containerCtrl.hasToggle('ManageScheduleForDistantTimezonesEnabled');
 
-			scope.vm.timeRange = {
-				startTime: selfCtrl.getDefaultActvityStartTime(),
-				endTime: selfCtrl.getDefaultActvityEndTime()
-			};
-
-			scope.$watch(function () {
-				return {
-					startTime: moment(scope.vm.timeRange.startTime).format("YYYY-MM-DD HH:mm"),
-					endTime: moment(scope.vm.timeRange.endTime).format("YYYY-MM-DD HH:mm")
+				scope.vm.timeRange = {
+					startTime: selfCtrl.getDefaultActvityStartTime(),
+					endTime: selfCtrl.getDefaultActvityEndTime()
 				};
-			},
-				function (newVal) {
-					scope.vm.updateInvalidAgents();
-				}, true);
 
-			scope.$on('teamSchedule.command.focus.default', function () {
-				var focusTarget = elem[0].querySelector('.focus-default');
-				if (focusTarget) angular.element(focusTarget).focus();
-			});
+				scope.$watch(function () {
+					return {
+						startTime: moment(scope.vm.timeRange.startTime).format("YYYY-MM-DD HH:mm"),
+						endTime: moment(scope.vm.timeRange.endTime).format("YYYY-MM-DD HH:mm")
+					};
+				},
+					function (newVal) {
+						scope.vm.updateInvalidAgents();
+					}, true);
 
-			elem.removeAttr('tabindex');
-		}
+			}
+		};
 	}
 })();

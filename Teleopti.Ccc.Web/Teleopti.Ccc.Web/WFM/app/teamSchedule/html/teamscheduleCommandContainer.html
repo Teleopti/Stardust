@@ -1,15 +1,17 @@
-﻿<div class="teamschedule-command-container">
-	<add-personal-activity ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'AddPersonalActivity'" tabindex="195"></add-personal-activity>
-	<add-activity ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'AddActivity'" tabindex="196"></add-activity>
-	<add-overtime ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'AddOvertimeActivity'" ></add-overtime>
-	<remove-activity ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'RemoveActivity'"></remove-activity>
-	<swap-shifts ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'SwapShifts'"></swap-shifts>
-	<add-absence ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'AddAbsence'" tabindex="200"></add-absence>
-	<remove-absence ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'RemoveAbsence'"></remove-absence>
-	<move-activity ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'MoveActivity'" tabindex="201"></move-activity>
-	<move-shift ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'MoveShift'" tabindex="202"></move-shift>
-	<move-overlapped-activity ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'MoveInvalidOverlappedActivity'" ></move-overlapped-activity>
-	<undo-schedule ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'Undo'" tabindex="203"></undo-schedule>
-	<modify-shift-category ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'EditShiftCategory'" tabindex="204"></modify-shift-category>
-	<command-check ng-if="vm.activeCommandCheck()" tabindex="205"></command-check>
-</div>
+﻿<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="teamschedule-command-container">
+	<div class="teamschedule-command-container">
+		<add-personal-activity ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'AddPersonalActivity'"></add-personal-activity>
+		<add-activity ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'AddActivity'"></add-activity>
+		<add-overtime ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'AddOvertimeActivity'"></add-overtime>
+		<remove-activity ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'RemoveActivity'"></remove-activity>
+		<swap-shifts ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'SwapShifts'"></swap-shifts>
+		<add-absence ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'AddAbsence'"></add-absence>
+		<remove-absence ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'RemoveAbsence'"></remove-absence>
+		<move-activity ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'MoveActivity'"></move-activity>
+		<move-shift ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'MoveShift'"></move-shift>
+		<move-overlapped-activity ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'MoveInvalidOverlappedActivity'"></move-overlapped-activity>
+		<undo-schedule ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'Undo'"></undo-schedule>
+		<modify-shift-category ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'EditShiftCategory'"></modify-shift-category>
+		<command-check ng-if="vm.activeCommandCheck()"></command-check>
+	</div>
+</md-sidenav>

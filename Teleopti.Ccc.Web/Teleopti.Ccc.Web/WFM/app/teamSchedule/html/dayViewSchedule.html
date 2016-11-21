@@ -58,13 +58,11 @@
 			<schedule-table select-mode="vm.scheduleTableSelectMode" selected-date="vm.scheduleDate" show-warnings="vm.cmdConfigurations.validateWarningToggle" cmd-configurations="vm.cmdConfigurations" selected-timezone="vm.currentTimezone"/>
 		</div>
 
-		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="teamschedule-command-container">
-			<teamschedule-command-container date="vm.scheduleDate"
-											timezone="vm.currentTimezone"
-											action-callback="vm.commonCommandCallback(trackId, personIds)"
-											configurations="vm.cmdConfigurations"
-											md-sidenav-focus tabindex="100"></teamschedule-command-container>
-		</md-sidenav>
+		<teamschedule-command-container date="vm.scheduleDate"
+										timezone="vm.currentTimezone"
+										action-callback="vm.commonCommandCallback(trackId, personIds)"
+										configurations="vm.cmdConfigurations" on-ready="vm.onCommandContainerReady()">
+		</teamschedule-command-container>
 
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="teamschedule-settings-container">
 			<settings></settings>

@@ -1,6 +1,5 @@
-﻿'use strict';
-
-(function () {
+﻿(function () {
+	'use strict';
 	angular.module('wfm.teamSchedule').controller('TeamScheduleCtrl', [
 		'$scope',
 		'$q',
@@ -64,7 +63,13 @@
 		vm.triggerCommand = function (label, needToOpenSidePanel) {
 			closeSettingsSidenav();
 			$mdSidenav(commandContainerId).close().then(function () {
-				needToOpenSidePanel && openSidePanel();
+				vm.onCommandContainerReady = function () {
+					$scope.$applyAsync(function () {
+						if (needToOpenSidePanel)
+							openSidePanel();
+					});
+					return true;
+				};
 
 				$scope.$broadcast('teamSchedule.init.command', {
 					activeCmd: label

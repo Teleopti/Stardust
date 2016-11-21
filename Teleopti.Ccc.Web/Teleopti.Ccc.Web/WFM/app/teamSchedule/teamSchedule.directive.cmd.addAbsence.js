@@ -157,84 +157,57 @@
 			bindToController: true,
 			templateUrl: 'app/teamSchedule/html/addAbsence.tpl.html',
 			require: ['^teamscheduleCommandContainer', 'addAbsence'],
-			compile: function (tElement, tAttrs) {
-				var tabindex = angular.isDefined(tAttrs.tabindex) ? tAttrs.tabindex : '0';
+			link: function (scope, elem, attrs, ctrls) {
+				var containerCtrl = ctrls[0],
+					selfCtrl = ctrls[1];
 
-				function addTabindexTo() {
-					angular.forEach(arguments, function (arg) {
-						angular.forEach(arg, function (elem) {
-							elem.setAttribute('tabIndex', tabindex);
-						});
-					});
-				}
+				scope.vm.containerCtrl = containerCtrl;
 
-				addTabindexTo(
-					tElement[0].querySelectorAll('md-select.absence-selector'),
-					tElement[0].querySelectorAll('team-schedule-datepicker'),
-					tElement[0].querySelectorAll('[uib-timepicker]'),
-					tElement[0].querySelectorAll('input#is-full-day'),
-					tElement[0].querySelectorAll('button#applyAbsence')
-				);
+				scope.vm.selectedDate = containerCtrl.getDate;
+				scope.vm.trackId = containerCtrl.getTrackId();
+				scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
+				scope.vm.getActionCb = containerCtrl.getActionCb;
+				scope.vm.getCurrentTimezone = containerCtrl.getCurrentTimezone;
+				scope.vm.isAddFullDayAbsenceAvailable = function () {
+					return containerCtrl.hasPermission('IsAddFullDayAbsenceAvailable');
+				};
+				scope.vm.checkPersonalAccountEnabled = containerCtrl.hasToggle('CheckPersonalAccountEnabled');
+				scope.vm.manageScheduleForDistantTimezonesEnabled = containerCtrl.hasToggle('ManageScheduleForDistantTimezonesEnabled');
 
-				return postlink;
-			}
-		}
+				scope.vm.isAddIntradayAbsenceAvailable = function () {
+					return containerCtrl.hasPermission('IsAddIntradayAbsenceAvailable');
+				};
 
-		function postlink(scope, elem, attrs, ctrls) {
-			var containerCtrl = ctrls[0],
-				selfCtrl = ctrls[1];
+				scope.vm.timeRange = {
+					startTime: selfCtrl.getDefaultAbsenceStartTime(),
+					endTime: selfCtrl.getDefaultAbsenceEndTime()
+				};
 
-			scope.vm.selectedDate = containerCtrl.getDate;
-			scope.vm.trackId = containerCtrl.getTrackId();
-			scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
-			scope.vm.getActionCb = containerCtrl.getActionCb;
-			scope.vm.getCurrentTimezone = containerCtrl.getCurrentTimezone;
-			scope.vm.isAddFullDayAbsenceAvailable = function () {
-				return containerCtrl.hasPermission('IsAddFullDayAbsenceAvailable');
-			};
-			scope.vm.checkPersonalAccountEnabled = containerCtrl.hasToggle('CheckPersonalAccountEnabled');
-			scope.vm.manageScheduleForDistantTimezonesEnabled = containerCtrl.hasToggle('ManageScheduleForDistantTimezonesEnabled');
-
-			scope.vm.isAddIntradayAbsenceAvailable = function () {
-				return containerCtrl.hasPermission('IsAddIntradayAbsenceAvailable');
-			};
-
-			scope.vm.timeRange = {
-				startTime: selfCtrl.getDefaultAbsenceStartTime(),
-				endTime: selfCtrl.getDefaultAbsenceEndTime()
-			};
-
-			scope.$watch(function() {
+				scope.$watch(function () {
 					var format = scope.vm.isFullDayAbsence ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm';
 					return {
 						startTime: moment(scope.vm.timeRange.startTime).format(format),
 						endTime: moment(scope.vm.timeRange.endTime).format(format)
 					}
 				},
-				function (newValue, oldValue) {
-					scope.vm.updateInvalidAgents();
-				},
-				true);
+					function (newValue, oldValue) {
+						scope.vm.updateInvalidAgents();
+					},
+					true);
 
-			scope.vm.isFullDayAbsence = scope.vm.isAddFullDayAbsenceAvailable();
+				scope.vm.isFullDayAbsence = scope.vm.isAddFullDayAbsenceAvailable();
 
-			scope.$on('teamSchedule.command.focus.default', function () {
-				var focusTarget = elem[0].querySelector('.focus-default');
-				if (focusTarget) angular.element(focusTarget).focus();
-			});
+				selfCtrl.updateDateAndTimeFormat();
+				scope.$on('$localeChangeSuccess', selfCtrl.updateDateAndTimeFormat);
 
-			selfCtrl.updateDateAndTimeFormat();
-			scope.$on('$localeChangeSuccess', selfCtrl.updateDateAndTimeFormat);
+				elem.find('team-schedule-datepicker').on('focus', function (e) {
+					e.target.querySelector('input').focus();
+				});
 
-			elem.find('team-schedule-datepicker').on('focus', function (e) {
-				e.target.querySelector('input').focus();
-			});
-
-			elem.find('uib-timepicker').on('focus', function (e) {
-				e.target.querySelector('input').focus();
-			});
-
-			elem.removeAttr('tabindex');
-		}
+				elem.find('uib-timepicker').on('focus', function (e) {
+					e.target.querySelector('input').focus();
+				});
+			}
+		};
 	}
 })();

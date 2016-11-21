@@ -4,7 +4,7 @@
 		<form name="newAbsenceForm">
 			<h3>{{'Absence'|translate}}: </h3>
 			<div class="con-row">
-				<md-select class="absence-selector focus-default" ng-model="vm.selectedAbsenceId" required placeholder="{{'PickAnAbsence'|translate}}">
+				<md-select class="absence-selector" ng-model="vm.selectedAbsenceId" required placeholder="{{'PickAnAbsence'|translate}}" md-autofocus="::vm.containerCtrl.onReady()">
 					<md-option ng-repeat="absence in vm.availableAbsenceTypes | orderBy: 'Name'" ng-value="absence.Id">{{absence.Name}}</md-option>
 				</md-select>
 			</div>
