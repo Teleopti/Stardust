@@ -3,6 +3,15 @@
 		padding-top: 10px;
 	}
 
+	//temp fix for bug #40330
+	//related issue links: https://github.com/angular-ui/ui-grid/issues/4938
+	//                     https://github.com/angular-ui/ui-grid/issues/4548
+	//delete this once updated on StyleGuide
+	.ui-grid-cell.ui-grid-disable-selection.ui-grid-row-header-cell {
+		pointer-events: initial;
+	}
+
+
 	.people-panel > con-row {
 		position: relative;
 	}
