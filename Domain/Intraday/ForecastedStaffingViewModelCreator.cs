@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var endTimeLocal = usersNow.Date.AddDays(1);
 			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(startTimeLocal, _timeZone.TimeZone()),
 				TimeZoneHelper.ConvertToUtc(endTimeLocal, _timeZone.TimeZone()));
-			var scheduledStaffing = _skillStaffingIntervalProvider.StaffingForSkill(skillIdList.First(), period, TimeSpan.FromMinutes(minutesPerInterval));
+			var scheduledStaffing = _skillStaffingIntervalProvider.StaffingForSkills(skillIdList.ToArray(), period, TimeSpan.FromMinutes(minutesPerInterval));
 
 			return scheduledStaffing
 				.Select(x => new SkillStaffingIntervalLightModel()

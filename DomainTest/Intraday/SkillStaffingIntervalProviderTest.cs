@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Intraday;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -18,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 	{
 		public SkillStaffingIntervalProvider Target;
 		public IScheduleForecastSkillReadModelRepository ScheduleForecastSkillReadModelRepository;
-		public ISkillAreaRepository SkillAreaRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -28,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldFetchIntervalsForASkillWithinRange()
 		{
-			var skillId = Guid.NewGuid();
+			Guid skillId = Guid.NewGuid();
 			var period = new DateTimePeriod(dateTimeIs(8,0), dateTimeIs(8,30));
 			var resolution = TimeSpan.FromMinutes(15);
 
@@ -42,10 +40,10 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			};
 			ScheduleForecastSkillReadModelRepository.Persist(items,DateTime.Now);
 
-			var result = Target.StaffingForSkill(skillId, period, resolution);
+			var result = Target.StaffingForSkills(new[] {skillId}, period, resolution);
 			result.Count.Should().Be.EqualTo(2);
-			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 0,0), new TimeSpan( 8, 15,0), 9, skillId));
-			result.Should().Contain(lightIntervalHaving(new TimeSpan( 8, 15,0), new TimeSpan(8, 30,0), 2.8, skillId));
+			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 0,0), new TimeSpan( 8, 15,0), 9));
+			result.Should().Contain(lightIntervalHaving(new TimeSpan( 8, 15,0), new TimeSpan(8, 30,0), 2.8));
 		}
 
 		[Test]
@@ -65,14 +63,14 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			};
 			ScheduleForecastSkillReadModelRepository.Persist(items, DateTime.Now);
 
-			var result = Target.StaffingForSkill(skillId, period, resolution);
+			var result = Target.StaffingForSkills(new[] {skillId}, period, resolution);
 			result.Count.Should().Be.EqualTo(6);
-			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 0, 0), new TimeSpan(8, 5, 0), 9, skillId));
-			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 5, 0), new TimeSpan(8, 10, 0), 9, skillId));
-			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 10, 0), new TimeSpan(8, 15, 0), 9, skillId));
-			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 15, 0), new TimeSpan(8, 20, 0), 2.8, skillId));
-			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 20, 0), new TimeSpan(8, 25, 0), 2.8, skillId));
-			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 25, 0), new TimeSpan(8, 30, 0), 2.8, skillId));
+			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 0, 0), new TimeSpan(8, 5, 0), 9));
+			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 5, 0), new TimeSpan(8, 10, 0), 9));
+			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 10, 0), new TimeSpan(8, 15, 0), 9));
+			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 15, 0), new TimeSpan(8, 20, 0), 2.8));
+			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 20, 0), new TimeSpan(8, 25, 0), 2.8));
+			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 25, 0), new TimeSpan(8, 30, 0), 2.8));
 		}
 
 		[Test]
@@ -96,24 +94,19 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				StaffingLevel = 3
 			});
 
-			var result = Target.StaffingForSkill(skillId, period, resolution);
+			var result = Target.StaffingForSkills(new[] {skillId}, period, resolution);
 			result.Count.Should().Be.EqualTo(4);
-			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 0, 0), new TimeSpan(8, 10, 0), 12, skillId));
-			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 10, 0), new TimeSpan(8, 20, 0), 12, skillId));
-			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 20, 0), new TimeSpan(8, 30, 0), 2.8, skillId));
-			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 30, 0), new TimeSpan(8, 40, 0), 2.8, skillId));
+			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 0, 0), new TimeSpan(8, 10, 0), 12));
+			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 10, 0), new TimeSpan(8, 20, 0), 12));
+			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 20, 0), new TimeSpan(8, 30, 0), 2.8));
+			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 30, 0), new TimeSpan(8, 40, 0), 2.8));
 		}
 
 		[Test]
-		public void ShouldReturnIntervalsForASkillArea()
+		public void ShouldReturnIntervalsForTwoSkills()
 		{
 			var skill1 = Guid.NewGuid();
 			var skill2 = Guid.NewGuid();
-			ICollection<SkillInIntraday> skills = new List<SkillInIntraday>() {new SkillInIntraday() {Id = skill1} ,  new SkillInIntraday() { Id = skill2 } };
-			var skillArea = new SkillArea() {Name = "something", Skills = skills};
-			skillArea.SetId(Guid.NewGuid());
-			SkillAreaRepository.Add(skillArea);
-			
 			var period = new DateTimePeriod(dateTimeIs(8, 0), dateTimeIs(9, 0));
 			var resolution = TimeSpan.FromMinutes(20);
 
@@ -124,39 +117,11 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			};
 			ScheduleForecastSkillReadModelRepository.Persist(items, DateTime.Now);
 
-			var result = Target.StaffingForSkillArea(skillArea.Id.GetValueOrDefault(), period, resolution);
+			var result = Target.StaffingForSkills(new Guid[] { skill1, skill2}, period, resolution);
 
 			result.Count.Should().Be.EqualTo(2);
-			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 0, 0), new TimeSpan(8, 20, 0), 9, skillArea.Id.GetValueOrDefault()));
-			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 20, 0), new TimeSpan(8, 40, 0), 2.8, skillArea.Id.GetValueOrDefault()));
-		}
-
-		[Test]
-		public void ShouldReturnIntervalsForASkillAreaWithDifferentIntervals()
-		{
-			var skill1 = Guid.NewGuid();
-			var skill2 = Guid.NewGuid();
-			ICollection<SkillInIntraday> skills = new List<SkillInIntraday>() { new SkillInIntraday() { Id = skill1 }, new SkillInIntraday() { Id = skill2 } };
-			var skillArea = new SkillArea() { Name = "something", Skills = skills };
-			skillArea.SetId(Guid.NewGuid());
-			SkillAreaRepository.Add(skillArea);
-
-			var period = new DateTimePeriod(dateTimeIs(8, 0), dateTimeIs(9, 0));
-			var resolution = TimeSpan.FromMinutes(10);
-
-			IEnumerable<SkillStaffingInterval> items = new List<SkillStaffingInterval>()
-			{
-				intervalHaving(new TimeSpan(8,0,0),new TimeSpan(8,20,0),9,skill1 ),
-				intervalHaving(new TimeSpan(8,20,0),new TimeSpan(8,30,0),2.8,skill2 )
-			};
-			ScheduleForecastSkillReadModelRepository.Persist(items, DateTime.Now);
-
-			var result = Target.StaffingForSkillArea(skillArea.Id.GetValueOrDefault(), period, resolution);
-
-			result.Count.Should().Be.EqualTo(3);
-			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 0, 0), new TimeSpan(8, 10, 0), 9, skillArea.Id.GetValueOrDefault()));
-			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 10, 0), new TimeSpan(8, 20, 0), 9, skillArea.Id.GetValueOrDefault()));
-			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 20, 0), new TimeSpan(8, 30, 0), 2.8, skillArea.Id.GetValueOrDefault()));
+			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 0, 0), new TimeSpan(8, 20, 0), 9));
+			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 20, 0), new TimeSpan(8, 40, 0), 2.8));
 		}
 
 		[Test]
@@ -164,11 +129,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		{
 			var skill1 = Guid.NewGuid();
 			var skill2 = Guid.NewGuid();
-			ICollection<SkillInIntraday> skills = new List<SkillInIntraday>() { new SkillInIntraday() { Id = skill1 }, new SkillInIntraday() { Id = skill2 } };
-			var skillArea = new SkillArea() { Name = "something", Skills = skills };
-			skillArea.SetId(Guid.NewGuid());
-			SkillAreaRepository.Add(skillArea);
-
 			var period = new DateTimePeriod(dateTimeIs(8, 0), dateTimeIs(9, 0));
 			var resolution = TimeSpan.FromMinutes(10);
 
@@ -179,11 +139,11 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			};
 			ScheduleForecastSkillReadModelRepository.Persist(items, DateTime.Now);
 
-			var result = Target.StaffingForSkillArea(skillArea.Id.GetValueOrDefault(), period, resolution);
+			var result = Target.StaffingForSkills(new []{skill1, skill2}, period, resolution);
 
 			result.Count.Should().Be.EqualTo(2);
-			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 0, 0), new TimeSpan(8, 10, 0), 9, skillArea.Id.GetValueOrDefault()));
-			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 10, 0), new TimeSpan(8, 20, 0), 11.8, skillArea.Id.GetValueOrDefault()));
+			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 0, 0), new TimeSpan(8, 10, 0), 9));
+			result.Should().Contain(lightIntervalHaving(new TimeSpan(8, 10, 0), new TimeSpan(8, 20, 0), 11.8));
 		}
 
 		private SkillStaffingInterval intervalHaving(TimeSpan from, TimeSpan to, double staffing, Guid skillId)
@@ -198,12 +158,11 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			};
 		}
 
-		private SkillStaffingIntervalLightModel lightIntervalHaving(TimeSpan from, TimeSpan to, double staffing, Guid skillId)
+		private SkillStaffingIntervalLightModel lightIntervalHaving(TimeSpan from, TimeSpan to, double staffing)
 		{
 			var today = new DateTime(2016, 11, 03, 0, 0, 0, DateTimeKind.Utc);
 			return new SkillStaffingIntervalLightModel()
 			{
-				Id = skillId,
 				StartDateTime = today.Add(from),
 				EndDateTime = today.Add(to),
 				StaffingLevel = staffing
