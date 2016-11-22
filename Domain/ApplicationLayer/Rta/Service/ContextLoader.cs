@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -16,7 +15,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class ContextLoaderWithFasterActivityCheck : ContextLoader
 	{
-		public ContextLoaderWithFasterActivityCheck(IScheduleCacheStrategy scheduleCacheStrategy, ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IScheduleReader scheduleReader, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier) : base(scheduleCacheStrategy, dataSource, databaseLoader, now, stateMapper, agentStatePersister, mappingReader, scheduleReader, appliedAlarm, config, deadLockRetrier)
+		public ContextLoaderWithFasterActivityCheck(IScheduleCacheStrategy scheduleCacheStrategy,
+			ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper,
+			IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IScheduleReader scheduleReader,
+			ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier)
+			: base(scheduleCacheStrategy, dataSource, databaseLoader, now, stateMapper, agentStatePersister,
+				mappingReader, scheduleReader, appliedAlarm, config, deadLockRetrier)
 		{
 		}
 
@@ -130,7 +134,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				throw new InvalidSourceException("Source id is required");
 			int dataSourceId;
 			if (!databaseLoader.Datasources().TryGetValue(input.SourceId, out dataSourceId))
-				throw new InvalidSourceException($"Source id not found {input.SourceId}");
+				throw new InvalidSourceException($"Source id \"{input.SourceId}\" not found");
 			return dataSourceId;
 		}
 
@@ -235,7 +239,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					StateDescription = input.StateDescription,
 				};
 			}
-
 		}
 
 		protected class activityChangesStrategy : baseStrategy<ExternalLogon>
@@ -363,7 +366,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			public int MaxTransactionSize { get; protected set; }
 
 			public abstract IEnumerable<T> AllThings();
+
 			public abstract IEnumerable<AgentState> GetStatesFor(IEnumerable<T> things, Action<Exception> addException);
+
 			public abstract InputInfo GetInputFor(AgentState state);
 
 			public virtual Func<AgentState> GetStored(AgentState state)
@@ -407,7 +412,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			int MaxTransactionSize { get; }
 
 			IEnumerable<T> AllThings();
+
 			IEnumerable<AgentState> GetStatesFor(IEnumerable<T> things, Action<Exception> addException);
+
 			InputInfo GetInputFor(AgentState state);
 
 			Action<Context> UpdateAgentState { get; }
@@ -539,8 +546,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					));
 				});
 			});
-
 		}
-
 	}
 }
