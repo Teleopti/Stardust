@@ -390,6 +390,24 @@ xdescribe('PermissionsCtrlRefact', function () {
         expect(vm.roles.length).toEqual(0);
     });
 
+    it('should clear selected role when deleting selected role', function () {
+        fakeBackend.withRole({
+            BuiltIn: false,
+            DescriptionText: 'Agent',
+            Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+            IsAnyBuiltIn: true,
+            IsMyRole: false,
+            Name: 'Agent'
+        });
+        $httpBackend.flush();
+        vm.selectRole = vm.roles[0];
+
+        vm.deleteRole(vm.roles[0]);
+        $httpBackend.flush();
+
+        expect(vm.selectedRole.Id).not.toEqual('e7f360d3-c4b6-41fc-9b2d-9b5e015aae64');
+    });
+
     it('should unselect role functions when deleting that role', function () {
         fakeBackend.withRole({
             BuiltIn: false,
@@ -1174,7 +1192,7 @@ xdescribe('PermissionsCtrlRefact', function () {
         expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].IsSelected).toEqual(true);
         expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].ChildFunctions[1].IsSelected).toEqual(true);
     });
-    //HÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄR
+  
     it('should save all functions for role when toggle all function', function () {
         fakeBackend
             .withRole({

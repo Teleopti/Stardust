@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     angular
@@ -44,12 +44,15 @@
         }
 
         function toggleSelection(functions, selectedOrNot) {
-            for (var i = 0; i < functions.length; i++) {
-                functions[i].IsSelected = selectedOrNot;
-                if (functions[i].ChildFunctions != null && functions[i].ChildFunctions.length > 0) {
-                    toggleSelection(functions[i].ChildFunctions, selectedOrNot);
+            if (functions !== undefined) {
+                for (var i = 0; i < functions.length; i++) {
+                    functions[i].IsSelected = selectedOrNot;
+                    if (functions[i].ChildFunctions != null && functions[i].ChildFunctions.length > 0) {
+                        toggleSelection(functions[i].ChildFunctions, selectedOrNot);
+                    }
                 }
             }
+
         }
 
         function refreshRoleSelection() {
@@ -61,7 +64,7 @@
 
         function createRole(roleName) {
             var roleData = { Description: roleName };
-            PermissionsServiceRefact.roles.save(roleData).$promise.then(function (data) {
+            PermissionsServiceRefact.roles.save(roleData).$promise.then(function(data) {
                 vm.roles.unshift(data);
                 vm.selectedRole = data;
                 permissionsDataService.setSelectedRole(vm.selectedRole);
@@ -74,10 +77,10 @@
         }
 
         function editRole(newRoleName, role) {
-            PermissionsServiceRefact.manage.update({ Id: role.Id, newDescription: newRoleName }).$promise.then(function () {
-                PermissionsServiceRefact.roles.query().$promise.then(function (data) {
+            PermissionsServiceRefact.manage.update({ Id: role.Id, newDescription: newRoleName }).$promise.then(function() {
+                PermissionsServiceRefact.roles.query().$promise.then(function(data) {
                     vm.roles = data;
-                    var selected = data.find(function (r) {
+                    var selected = data.find(function(r) {
                         return r.Id === role.Id;
                     });
                     markSelectedRole(selected);
@@ -98,21 +101,23 @@
                 //Hide Delete button for built in roles
                 return;
             }
+
             PermissionsServiceRefact.manage.deleteRole({ Id: role.Id });
+            permissionsDataService.setSelectedRole(null);
             var index = vm.roles.indexOf(role);
             vm.roles.splice(index, 1);
 
             console.log('1 ', vm.applicationFunctions)
 
-            if (role.Id === vm.selectedRole.Id){
-                 toggleSelection(vm.applicationFunctions, false);
+            if (role.Id === vm.selectedRole.Id) {
+                toggleSelection(vm.applicationFunctions, false);
                 console.log('2 ', vm.applicationFunctions)
-            } 
-           
+            }
+
         }
 
         function copyRole(role) {
-            PermissionsServiceRefact.copyRole.copy({ Id: role.Id }).$promise.then(function (data) {
+            PermissionsServiceRefact.copyRole.copy({ Id: role.Id }).$promise.then(function(data) {
                 vm.roles.unshift(data);
                 vm.selectedRole = data;
                 permissionsDataService.setSelectedRole(vm.selectedRole);
@@ -124,7 +129,7 @@
         function selectRole(role) {
             markSelectedRole(role);
 
-            PermissionsServiceRefact.manage.getRoleInformation({ Id: role.Id }).$promise.then(function (data) {
+            PermissionsServiceRefact.manage.getRoleInformation({ Id: role.Id }).$promise.then(function(data) {
                 vm.selectedRole = data;
                 permissionsDataService.setSelectedRole(vm.selectedRole);
                 if (vm.selectedRole.AvailableBusinessUnits) {
@@ -134,8 +139,8 @@
                 var functions = vm.applicationFunctions;
                 while (functions != null && functions.length > 0) {
                     var next = [];
-                    functions.forEach(function (fn) {
-                        fn.IsSelected = vm.selectedRole.AvailableFunctions.some(function (afn) {
+                    functions.forEach(function(fn) {
+                        fn.IsSelected = vm.selectedRole.AvailableFunctions.some(function(afn) {
                             return fn.FunctionId === afn.Id;
                         });
                         if (fn.ChildFunctions != null) {
@@ -187,14 +192,14 @@
         }
 
         function fetchData() {
-            PermissionsServiceRefact.roles.query().$promise.then(function (data) {
+            PermissionsServiceRefact.roles.query().$promise.then(function(data) {
                 vm.roles = data;
             });
-            PermissionsServiceRefact.applicationFunctions.query().$promise.then(function (data) {
+            PermissionsServiceRefact.applicationFunctions.query().$promise.then(function(data) {
                 vm.applicationFunctions = data;
                 prepareTree(vm.applicationFunctions);
             });
-            PermissionsServiceRefact.organizationSelection.get().$promise.then(function (data) {
+            PermissionsServiceRefact.organizationSelection.get().$promise.then(function(data) {
                 vm.organizationSelection = data;
             });
         }

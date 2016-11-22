@@ -1,4 +1,4 @@
-function PermissionsTreeController(permissionsDataService, NoticeService, $translate, $scope) {
+function PermissionsTreeController(permissionsDataService, NoticeService, $translate) {
   var ctrl = this;
 
   ctrl.toggleFunction = toggleFunction;
@@ -11,9 +11,13 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
   //   ctrl.functions = ctrl.filteredFunctions;
   // });
 
-
   function toggleFunction(func) {
     var selectedRole = permissionsDataService.getSelectedRole();
+
+    if (!selectedRole){  
+      // Fixa notice här....  
+      return;
+    }
 
     //Fixa testerna
     if (selectedRole != null && selectedRole.BuiltIn) {
