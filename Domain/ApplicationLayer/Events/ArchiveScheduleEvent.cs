@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public DateTime EndDate { get; set; }
 		public Guid FromScenario { get; set; }
 		public Guid ToScenario { get; set; }
-		public Guid TrackingId { get; set; }
+		public Guid JobResultId { get; set; }
 		public ICollection<Guid> PersonIds { get; }
 		public int TotalMessages { get; set; }
 

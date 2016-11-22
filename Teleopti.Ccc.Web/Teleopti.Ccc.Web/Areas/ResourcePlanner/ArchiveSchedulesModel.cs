@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public Guid ToScenario { get; set; }
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }
-		public Guid TrackId { get; set; }
+		public Guid JobResultId { get; set; }
 		public List<Guid> SelectedTeams { get; set; }
 
 		public ArchiveScheduleEvent CreateEvent(IEnumerable<IPerson> people)
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				EndDate = EndDate,
 				FromScenario = FromScenario,
 				ToScenario = ToScenario,
-				TrackingId = TrackId
+				JobResultId = JobResultId
 			};
 		}
 	}

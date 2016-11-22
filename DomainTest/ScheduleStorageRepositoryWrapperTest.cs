@@ -155,5 +155,12 @@ namespace Teleopti.Ccc.DomainTest
 			Target.Remove(item);
 			repository.LoadAll().Count.Should().Be.EqualTo(0);
 		}
+
+		[Test]
+		public void ShouldIgnoreNullValues()
+		{
+			Assert.DoesNotThrow(() => Target.Add(null));
+			Assert.DoesNotThrow(() => Target.Remove(null));
+		}
 	}
 }

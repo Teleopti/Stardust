@@ -144,7 +144,6 @@
 						ToScenario: toScenario.Id,
 						StartDate: period.startDate,
 						EndDate: period.endDate,
-						TrackId: null,
 						SelectedTeams: teamSelection
 					};
 					ArchiveScheduleSrvc.runArchiving.post({}, JSON.stringify(archiveScheduleModel))

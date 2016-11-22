@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					var jobResult = new JobResult(JobCategory.ArchiveSchedule, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), _loggedOnUser.CurrentUser(), DateTime.UtcNow);
 					_jobResultRepository.Add(jobResult);
 					archiveSchedulesResponse.JobId = jobResult.Id;
-					model.TrackId = jobResult.Id.GetValueOrDefault();
+					model.JobResultId = jobResult.Id.GetValueOrDefault();
 
 					var archiveScheduleEvents = people
 					   .Batch(getBatchSize(archiveSchedulesResponse.TotalSelectedPeople))

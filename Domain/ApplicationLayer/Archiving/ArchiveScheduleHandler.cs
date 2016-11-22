@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 				archiveSchedules(sourceScheduleDictionary, toScenario, person, period);
 			});
 
-			_jobResultRepository.AddDetailAndCheckSuccess(@event.TrackingId, 
+			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId, 
 				new JobResultDetail(DetailLevel.Info, $"Archived schedules for {@event.PersonIds.Count} people.", DateTime.UtcNow, null), 
 				@event.TotalMessages);
 		}

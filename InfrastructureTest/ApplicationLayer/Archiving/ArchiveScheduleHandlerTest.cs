@@ -7,14 +7,12 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -40,30 +38,28 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 		public IAbsenceRepository AbsenceRepository;
 		public IShiftCategoryRepository ShiftCategoryRepository;
 		public IActivityRepository ActivityRepository;
+		public IJobResultRepository JobResultRepository;
 		public WithUnitOfWork WithUnitOfWork;
-		public FakeMessageSender MessageSender;
 
 		private Scenario _defaultScenario;
 		private Scenario _targetScenario;
 		private DateOnlyPeriod _period;
 		private IPerson _person;
 		private IBusinessUnit _businessUnit;
-		private Guid _trackingId;
-		
+		private Guid _jobResultId;
+
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
 		}
 
 		[SetUp]
 		public void Setup()
 		{
 			_businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
-			_defaultScenario = new Scenario("default") { DefaultScenario = true};
+			_defaultScenario = new Scenario("default") { DefaultScenario = true };
 			_targetScenario = new Scenario("target");
 			_period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 5);
 			_person = PersonFactory.CreatePerson("Tester Testersson");
-			_trackingId = Guid.NewGuid();
 		}
 
 		private void addDefaultTypesToRepositories()
@@ -73,7 +69,15 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 				ScenarioRepository.Add(_defaultScenario);
 				ScenarioRepository.Add(_targetScenario);
 				PersonRepository.Add(_person);
+
 			});
+
+			var jobResult = new JobResult(JobCategory.ArchiveSchedule, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), _person, DateTime.UtcNow);
+			WithUnitOfWork.Do(() =>
+			{
+				JobResultRepository.Add(jobResult);
+			});
+			_jobResultId = jobResult.Id.GetValueOrDefault();
 		}
 
 		[Test]
@@ -91,8 +95,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 				FromScenario = _defaultScenario.Id.GetValueOrDefault(),
 				StartDate = _period.StartDate.Date,
 				ToScenario = _targetScenario.Id.GetValueOrDefault(),
-				TrackingId = _trackingId,
-				LogOnBusinessUnitId = _businessUnit.Id.GetValueOrDefault()
+				JobResultId = _jobResultId,
+				LogOnBusinessUnitId = _businessUnit.Id.GetValueOrDefault(),
+				TotalMessages = 1
 			};
 			@event.PersonIds.Add(secondPerson.Id.GetValueOrDefault());
 			WithUnitOfWork.Do(() => Target.Handle(@event));
@@ -100,7 +105,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			var archivedAssignment = WithUnitOfWork.Get(() => PersonAssignmentRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(_targetScenario)));
 			archivedAssignment.Should().Be.Null();
 
-			verifyTrackingMessageWasSent();
+			verifyJobResultIsUpdated();
 		}
 
 		[Test]
@@ -117,7 +122,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			var archivedAssignment = WithUnitOfWork.Get(() => PersonAssignmentRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(_targetScenario)));
 			archivedAssignment.Should().Not.Be.Null();
 
-			verifyTrackingMessageWasSent();
+			verifyJobResultIsUpdated();
 		}
 
 		[Test]
@@ -147,7 +152,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			var archivedAssignments = WithUnitOfWork.Get(() => PersonAssignmentRepository.LoadAll().Where(x => x.Scenario.Equals(_targetScenario)).ToList());
 			archivedAssignments.Count.Should().Be.EqualTo(2);
 
-			verifyTrackingMessageWasSent();
+			verifyJobResultIsUpdated();
 		}
 
 		[Test]
@@ -158,14 +163,16 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			var assignment = new PersonAssignment(_person, _defaultScenario, _period.StartDate);
 			WithUnitOfWork.Do(() => ScheduleStorage.Add(assignment));
 
-			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
-			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
+			var archiveScheduleEvent = createArchiveEvent();
+			archiveScheduleEvent.TotalMessages = 2;
+			WithUnitOfWork.Do(() => Target.Handle(archiveScheduleEvent));
+			WithUnitOfWork.Do(() => Target.Handle(archiveScheduleEvent));
 
 			verifyCanBeFoundInScheduleStorageForTargetScenario(_person);
 			var archivedAssignment = WithUnitOfWork.Get(() => PersonAssignmentRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(_targetScenario)));
 			archivedAssignment.Should().Not.Be.Null();
 
-			verifyTrackingMessageWasSent(2);
+			verifyJobResultIsUpdated(2);
 		}
 
 		[Test]
@@ -185,7 +192,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			});
 			var assignment = new PersonAssignment(_person, _defaultScenario, _period.StartDate);
 			assignment.SetShiftCategory(newCategory);
-			
+
 			assignment.AddActivity(newActivity, new TimePeriod(8, 15));
 			WithUnitOfWork.Do(() => ScheduleStorage.Add(assignment));
 			var existingAssignment = new PersonAssignment(_person, _targetScenario, _period.StartDate);
@@ -203,7 +210,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 				archivedAssignments.First().ShiftCategory.Should().Be.EqualTo(newCategory);
 			});
 
-			verifyTrackingMessageWasSent();
+			verifyJobResultIsUpdated();
 		}
 
 		[Test]
@@ -222,7 +229,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			var archivedAgentDayScheduleTag = WithUnitOfWork.Get(() => AgentDayScheduleTagRepository.LoadAll().FirstOrDefault(x => x.Scenario.Id == _targetScenario.Id));
 			archivedAgentDayScheduleTag.Should().Not.Be.Null();
 
-			verifyTrackingMessageWasSent();
+			verifyJobResultIsUpdated();
 		}
 
 		[Test]
@@ -262,7 +269,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			var archivedNote = WithUnitOfWork.Get(() => NoteRepository.LoadAll().FirstOrDefault(x => x.Scenario.Id == _targetScenario.Id));
 			archivedNote.Should().Be.Null();
 
-			verifyTrackingMessageWasSent();
+			verifyJobResultIsUpdated();
 		}
 
 		[Test]
@@ -293,7 +300,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteAfter));
 
 			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
-			
+
 			var archivedNotes = WithUnitOfWork.Get(() => NoteRepository.LoadAll().Where(x => x.Scenario.Id == _targetScenario.Id));
 			archivedNotes.Should().Be.Empty();
 		}
@@ -312,7 +319,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			var archivedNote = WithUnitOfWork.Get(() => NoteRepository.LoadAll().FirstOrDefault(x => x.Scenario.Id == _targetScenario.Id));
 			archivedNote.Should().Not.Be.Null();
 
-			verifyTrackingMessageWasSent();
+			verifyJobResultIsUpdated();
 		}
 
 		[Test]
@@ -329,7 +336,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			var archivedNote = WithUnitOfWork.Get(() => PublicNoteRepository.LoadAll().FirstOrDefault(x => x.Scenario.Id == _targetScenario.Id));
 			archivedNote.Should().Not.Be.Null();
 
-			verifyTrackingMessageWasSent();
+			verifyJobResultIsUpdated();
 		}
 
 		[Test]
@@ -349,7 +356,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			var archivedPersonAbsence = WithUnitOfWork.Get(() => PersonAbsenceRepository.LoadAll().FirstOrDefault(x => x.Scenario.Id == _targetScenario.Id));
 			archivedPersonAbsence.Should().Not.Be.Null();
 
-			verifyTrackingMessageWasSent();
+			verifyJobResultIsUpdated();
 		}
 
 		private void verifyCanBeFoundInScheduleStorageForTargetScenario(IPerson person)
@@ -359,11 +366,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			result[person].ScheduledDayCollection(_period).Should().Not.Be.Empty();
 		}
 
-		private void verifyTrackingMessageWasSent(int times=1)
+		private void verifyJobResultIsUpdated(int numberOfDetails = 1)
 		{
-			var message = MessageSender.AllNotifications.Where(x => x.DomainType == "TrackingMessage").ToList();
-			message.Count.Should().Be.EqualTo(times);
-			message.All(x => x.DomainId == _trackingId.ToString()).Should().Be.True();
+			WithUnitOfWork.Do(() =>
+			{
+				var jobResult = JobResultRepository.Get(_jobResultId);
+				jobResult.FinishedOk.Should().Be.True();
+				jobResult.Details.Count(x => x.DetailLevel == DetailLevel.Info && x.ExceptionMessage == null).Should().Be(numberOfDetails);
+			});
 		}
 
 		private ArchiveScheduleEvent createArchiveEvent()
@@ -374,8 +384,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 				FromScenario = _defaultScenario.Id.GetValueOrDefault(),
 				StartDate = _period.StartDate.Date,
 				ToScenario = _targetScenario.Id.GetValueOrDefault(),
-				TrackingId = _trackingId,
-				LogOnBusinessUnitId = _businessUnit.Id.GetValueOrDefault()
+				JobResultId = _jobResultId,
+				LogOnBusinessUnitId = _businessUnit.Id.GetValueOrDefault(),
+				TotalMessages = 1
 			};
 		}
 	}
