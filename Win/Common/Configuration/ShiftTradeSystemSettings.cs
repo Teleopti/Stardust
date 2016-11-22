@@ -30,13 +30,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			throw new NotImplementedException();
 		}
 
-		
 		public void InitializeDialogControl()
 		{
 			SetTexts();
 			setColors();
 		}
-
 
 		private void setColors()
 		{
@@ -49,7 +47,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			lblShiftTradeMaxSeatsSettings.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 		}
-
 
 		private void initIntervalLengthComboBox(int defaultLength)
 		{
@@ -78,7 +75,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			initIntervalLengthComboBox(_shiftTradeSettings.MaxSeatsValidationSegmentLength);
 
 			checkIntervalCheckBoxEnabled();
-
 		}
 
 		private void checkIntervalCheckBoxEnabled()
@@ -91,17 +87,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			Persist();
 		}
 
-
 		public void Persist()
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				_shiftTradeSettings = new GlobalSettingDataRepository(uow).PersistSettingValue(_shiftTradeSettings).GetValue(new ShiftTradeSettings());
-			
+
 				uow.PersistAll();
 			}
 		}
-
 
 		public void Unload()
 		{
@@ -132,9 +126,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			checkIntervalCheckBoxEnabled();
 		}
 
-
 		private void cmbSegmentSizeMaxSeatValidation_SelectedIndexChanged (object sender, EventArgs e)
 		{
+			if (cmbSegmentSizeMaxSeatValidation.SelectedItem == null) return;
+
 			var selectedIntervalLengthItem = (IntervalLengthItem)cmbSegmentSizeMaxSeatValidation.SelectedItem;
 			_shiftTradeSettings.MaxSeatsValidationSegmentLength = selectedIntervalLengthItem.Minutes;
 		}
