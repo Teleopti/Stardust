@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
@@ -22,17 +23,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		private ExistingDatasources _datasource;
 		private const int businessUnitId = 12;
 		private const int personId = 10;
+		private AnalyticsDataFactory analyticsDataFactory;
+
 
 		[SetUp]
 		public void Setup()
 		{
-			var analyticsDataFactory = new AnalyticsDataFactory();
+			analyticsDataFactory = new AnalyticsDataFactory();
 			_timeZones = new UtcAndCetTimeZones();
 			_datasource = new ExistingDatasources(_timeZones);
 
-			analyticsDataFactory.Setup(new Person(personId, Guid.NewGuid(), Guid.NewGuid(), "Ashley", "Andeen", new DateTime(2010, 1, 1),
-							AnalyticsDate.Eternity.DateDate, 0, -2, businessUnitId, Guid.NewGuid(), _datasource, false, _timeZones.UtcTimeZoneId));
+		}
 
+		private void commonSetup()
+		{
+			analyticsDataFactory.Setup(new Person(personId, Guid.NewGuid(), Guid.NewGuid(), "Ashley", "Andeen",
+				new DateTime(2010, 1, 1),
+				AnalyticsDate.Eternity.DateDate, 0, -2, businessUnitId, Guid.NewGuid(), _datasource, false, _timeZones.UtcTimeZoneId));
+
+			setupForFactRequest();
+
+			analyticsDataFactory.Persist();
+		}
+
+		private void setupForFactRequest()
+		{
 			analyticsDataFactory.Setup(Scenario.DefaultScenarioFor(10, Guid.NewGuid()));
 
 			var absEmpty = new Absence(-1, Guid.NewGuid(), "Empty", Color.Black, _datasource, businessUnitId);
@@ -42,13 +57,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsDataFactory.Setup(absEmpty);
 			analyticsDataFactory.Setup(new CurrentWeekDates());
 			analyticsDataFactory.Setup(new QuarterOfAnHourInterval());
-
-			analyticsDataFactory.Persist();
 		}
 
 		[Test]
 		public void ShouldAddAndUpdateRequest()
 		{
+			commonSetup();
 			var analyticsRequest = new AnalyticsRequest
 			{
 				RequestStartDateId = 3,
@@ -86,6 +100,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldAddAndUpdateRequestedDay()
 		{
+			commonSetup();
 			var expected = new AnalyticsRequestedDay
 			{
 				RequestDateId = 3,
@@ -150,7 +165,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldDeleteRequestedDay()
 		{
-			
+			commonSetup();
 			var expected = new AnalyticsRequestedDay
 			{
 				RequestDateId = 3,
@@ -182,6 +197,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldDeleteEverythingForARequest()
 		{
+			commonSetup();
 			var analyticsRequest = new AnalyticsRequest
 			{
 				RequestStartDateId = 3,
@@ -235,6 +251,216 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var result = WithAnalyticsUnitOfWork.Get(() => Target.GetAnalyticsRequestedDays(analyticsRequest.RequestCode));
 
 			result.Should().Be.Empty();
+		}
+
+
+		private void insertPerson(int personPeriodId, DateTime validFrom, DateTime validTo, bool toBeDeleted = false, int validateFromDateId = 0, int validateToDateId = -2)
+		{
+			analyticsDataFactory.Setup(new Person(personPeriodId, Guid.NewGuid(), Guid.NewGuid(), "Ashley", "Andeen", validFrom,
+				validTo, validateFromDateId, validateToDateId, businessUnitId, Guid.NewGuid(), _datasource, toBeDeleted,
+				_timeZones.UtcTimeZoneId));
+		}
+
+		private AnalyticsRequest getTestRequest(int dateId, int personPeriodId)
+		{
+			return new AnalyticsRequest
+			{
+				RequestStartDateId = dateId,
+				RequestCode = Guid.NewGuid(),
+				RequestTypeId = 0,
+				RequestDayCount = 1,
+				RequestStatusId = 0,
+				DatasourceId = 1,
+				PersonId = personPeriodId,
+				BusinessUnitId = businessUnitId,
+				AbsenceId = -1,
+				DatasourceUpdateDate = new DateTime(2016, 06, 02, 12, 54, 00),
+				ApplicationDatetime = new DateTime(2016, 06, 02, 12, 55, 00),
+				RequestStartDate = new DateTime(2016, 06, 02),
+				RequestStartTime = new DateTime(2016, 06, 02, 13, 00, 00),
+				RequestEndDate = new DateTime(2016, 06, 02),
+				RequestEndTime = new DateTime(2016, 06, 02, 14, 00, 00),
+				RequestStartDateCount = 1,
+				RequestedTimeMinutes = 60
+			};
+		}
+
+		private AnalyticsRequestedDay getTestRequestedDay(int dateId, int personPeriodId)
+		{
+			return new AnalyticsRequestedDay
+			{
+				RequestDateId = dateId,
+				RequestCode = Guid.NewGuid(),
+				RequestTypeId = 0,
+				RequestDayCount = 1,
+				RequestStatusId = 0,
+				DatasourceId = 1,
+				PersonId = personPeriodId,
+				AbsenceId = -1,
+				DatasourceUpdateDate = new DateTime(2016, 06, 02, 12, 54, 00)
+			};
+		}
+
+		[Test]
+		public void ShouldUpdateFactRequestWithUnlinkedPersonidsWhenAddNewPersonPeriod()
+		{
+			var specificDate1 = new SpecificDate
+			{
+				Date = new DateOnly(new DateTime(2015, 1, 20)),
+				DateId = 20
+			};
+			var specificDate2 = new SpecificDate
+			{
+				Date = new DateOnly(new DateTime(2015, 1, 26)),
+				DateId = 26
+			};
+			analyticsDataFactory.Setup(specificDate1);
+			analyticsDataFactory.Setup(specificDate2);
+
+			const int personPeriod1 = 10;
+			const int personPeriod2 = 11;
+			insertPerson(personPeriod1, new DateTime(2015, 1, 10), new DateTime(2015, 1, 24), false, 10, 24);
+			insertPerson(personPeriod2, new DateTime(2015, 1, 25), AnalyticsDate.Eternity.DateDate, false, 25, -2);
+			setupForFactRequest();
+			analyticsDataFactory.Persist();
+
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				Target.AddOrUpdate(getTestRequest(specificDate1.DateId, personPeriod1));
+				Target.AddOrUpdate(getTestRequest(specificDate2.DateId, personPeriod1));
+			});
+
+			var rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactRequestRowCount(personPeriod1));
+			rowCount.Should().Be.EqualTo(2);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactRequestRowCount(personPeriod2));
+			rowCount.Should().Be.EqualTo(0);
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdateUnlinkedPersonids(new[] { 10, 11 }));
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactRequestRowCount(personPeriod1));
+			rowCount.Should().Be.EqualTo(1);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactRequestRowCount(personPeriod2));
+			rowCount.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldUpdateFactRequestDaysWithUnlinkedPersonidsWhenDeleteExistingPersonPeriod()
+		{
+			var specificDate1 = new SpecificDate
+			{
+				Date = new DateOnly(new DateTime(2015, 1, 7)),
+				DateId = 7
+			};
+			var specificDate2 = new SpecificDate
+			{
+				Date = new DateOnly(new DateTime(2015, 1, 15)),
+				DateId = 15
+			};
+			analyticsDataFactory.Setup(specificDate1);
+			analyticsDataFactory.Setup(specificDate2);
+
+			const int personPeriod1 = 10;
+			const int personPeriod2 = 11;
+			insertPerson(personPeriod2, new DateTime(2015, 1, 5), AnalyticsDate.Eternity.DateDate, false, 5, -2);
+			insertPerson(personPeriod1, new DateTime(2015, 1, 10), AnalyticsDate.Eternity.DateDate, true, 10, -2);
+			setupForFactRequest();
+			analyticsDataFactory.Persist();
+
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				Target.AddOrUpdate(getTestRequest(specificDate1.DateId, personPeriod1));
+				Target.AddOrUpdate(getTestRequest(specificDate2.DateId, personPeriod2));
+			});
+
+			var rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactRequestRowCount(personPeriod1));
+			rowCount.Should().Be.EqualTo(1);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactRequestRowCount(personPeriod2));
+			rowCount.Should().Be.EqualTo(1);
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdateUnlinkedPersonids(new[] { personPeriod1, personPeriod2 }));
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactRequestRowCount(personPeriod1));
+			rowCount.Should().Be.EqualTo(0);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactRequestRowCount(personPeriod2));
+			rowCount.Should().Be.EqualTo(2);
+		}
+
+
+		[Test]
+		public void ShouldUpdateFactRequestedDaysWithUnlinkedPersonidsWhenAddNewPersonPeriod()
+		{
+			var specificDate1 = new SpecificDate
+			{
+				Date = new DateOnly(new DateTime(2015, 1, 20)),
+				DateId = 20
+			};
+			var specificDate2 = new SpecificDate
+			{
+				Date = new DateOnly(new DateTime(2015, 1, 26)),
+				DateId = 26
+			};
+			analyticsDataFactory.Setup(specificDate1);
+			analyticsDataFactory.Setup(specificDate2);
+
+			const int personPeriod1 = 10;
+			const int personPeriod2 = 11;
+			insertPerson(personPeriod1, new DateTime(2015, 1, 10), new DateTime(2015, 1, 24), false, 10, 24);
+			insertPerson(personPeriod2, new DateTime(2015, 1, 25), AnalyticsDate.Eternity.DateDate, false, 25, -2);
+			setupForFactRequest();
+			analyticsDataFactory.Persist();
+
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				Target.AddOrUpdate(getTestRequestedDay(specificDate1.DateId, personPeriod1));
+				Target.AddOrUpdate(getTestRequestedDay(specificDate2.DateId, personPeriod1));
+			});
+
+			var rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactRequestedDaysRowCount(personPeriod1));
+			rowCount.Should().Be.EqualTo(2);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactRequestedDaysRowCount(personPeriod2));
+			rowCount.Should().Be.EqualTo(0);
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdateUnlinkedPersonids(new[] { 10, 11 }));
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactRequestedDaysRowCount(personPeriod1));
+			rowCount.Should().Be.EqualTo(1);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactRequestedDaysRowCount(personPeriod2));
+			rowCount.Should().Be.EqualTo(1);
+		}
+
+
+		[Test]
+		public void ShouldUpdateFactRequestedWithUnlinkedPersonidsWhenDeleteExistingPersonPeriod()
+		{
+			var specificDate1 = new SpecificDate
+			{
+				Date = new DateOnly(new DateTime(2015, 1, 7)),
+				DateId = 7
+			};
+			var specificDate2 = new SpecificDate
+			{
+				Date = new DateOnly(new DateTime(2015, 1, 15)),
+				DateId = 15
+			};
+			analyticsDataFactory.Setup(specificDate1);
+			analyticsDataFactory.Setup(specificDate2);
+
+			const int personPeriod1 = 10;
+			const int personPeriod2 = 11;
+			insertPerson(personPeriod2, new DateTime(2015, 1, 5), AnalyticsDate.Eternity.DateDate, false, 5, -2);
+			insertPerson(personPeriod1, new DateTime(2015, 1, 10), AnalyticsDate.Eternity.DateDate, true, 10, -2);
+			setupForFactRequest();
+			analyticsDataFactory.Persist();
+
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				Target.AddOrUpdate(getTestRequestedDay(specificDate1.DateId, personPeriod1));
+				Target.AddOrUpdate(getTestRequestedDay(specificDate2.DateId, personPeriod2));
+			});
+
+			var rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactRequestedDaysRowCount(personPeriod1));
+			rowCount.Should().Be.EqualTo(1);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactRequestedDaysRowCount(personPeriod2));
+			rowCount.Should().Be.EqualTo(1);
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdateUnlinkedPersonids(new[] { personPeriod1, personPeriod2 }));
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactRequestedDaysRowCount(personPeriod1));
+			rowCount.Should().Be.EqualTo(0);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.GetFactRequestedDaysRowCount(personPeriod2));
+			rowCount.Should().Be.EqualTo(2);
 		}
 	}
 }

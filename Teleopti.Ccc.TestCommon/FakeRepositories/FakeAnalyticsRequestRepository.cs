@@ -41,5 +41,20 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			AnalyticsRequestedDays.RemoveAll(x => x.RequestCode == requestId);
 			AnalyticsRequests.RemoveAll(x => x.RequestCode == requestId);
 		}
+
+		public void UpdateUnlinkedPersonids(int[] personPeriodIds)
+		{
+			throw new NotImplementedException();
+		}
+
+		public int GetFactRequestRowCount(int personPeriodId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public int GetFactRequestedDaysRowCount(int personPeriodId)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

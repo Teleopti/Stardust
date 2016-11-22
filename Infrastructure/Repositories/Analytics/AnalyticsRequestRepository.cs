@@ -125,5 +125,33 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetParameter(nameof(requestId), requestId)
 				.ExecuteUpdate();
 		}
+
+		public void UpdateUnlinkedPersonids(int[] personPeriodIds)
+		{
+			_currentAnalyticsUnitOfWork.Current()
+				.Session()
+				.CreateSQLQuery(
+					$@"exec mart.etl_fact_request_unlinked_personids 
+							@person_periodids=:PersonIds
+							")
+				.SetString("PersonIds", string.Join(",", personPeriodIds))
+				.ExecuteUpdate();
+		}
+
+		public int GetFactRequestRowCount(int personId)
+		{
+			return _currentAnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
+				$@"select count(1) from mart.fact_request WITH (NOLOCK) WHERE person_id =:{nameof(personId)} ")
+				.SetInt32(nameof(personId), personId)
+				.UniqueResult<int>();
+		}
+
+		public int GetFactRequestedDaysRowCount(int personId)
+		{
+			return _currentAnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
+				$@"select count(1) from mart.fact_requested_days WITH (NOLOCK) WHERE person_id =:{nameof(personId)} ")
+				.SetInt32(nameof(personId), personId)
+				.UniqueResult<int>();
+		}
 	}
 }
