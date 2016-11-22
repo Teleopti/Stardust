@@ -30,5 +30,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return fakeAnalyticsFactSchedulePreferences.Where(a => a.PersonId == personId).ToList();
 		}
+
+		public void UpdateUnlinkedPersonids(int[] personPeriodIds)
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }

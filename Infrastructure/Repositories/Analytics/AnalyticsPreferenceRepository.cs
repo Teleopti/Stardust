@@ -106,5 +106,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetReadOnly(true)
 				.List<AnalyticsFactSchedulePreference>();
 		}
+
+		public void UpdateUnlinkedPersonids(int[] personPeriodIds)
+		{
+			_analyticsUnitOfWork.Current()
+				.Session()
+				.CreateSQLQuery(
+					$@"exec mart.etl_fact_schedule_preference_update_unlinked_personids 
+							@person_periodids=:PersonIds
+							")
+				.SetString("PersonIds", string.Join(",", personPeriodIds))
+				.ExecuteUpdate();
+		}
 	}
 }

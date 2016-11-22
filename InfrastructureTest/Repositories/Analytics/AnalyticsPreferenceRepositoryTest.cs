@@ -10,6 +10,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 using Person = Teleopti.Ccc.TestCommon.TestData.Analytics.Person;
 using Scenario = Teleopti.Ccc.TestCommon.TestData.Analytics.Scenario;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
@@ -23,20 +24,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		private UtcAndCetTimeZones _timeZones;
 		private ExistingDatasources _datasource;
 		private const int businessUnitId = 12;
+		private AnalyticsDataFactory analyticsDataFactory;
+		
 
 		[SetUp]
 		public void Setup()
 		{
-			var analyticsDataFactory = new AnalyticsDataFactory();
+			analyticsDataFactory = new AnalyticsDataFactory();
 			_timeZones = new UtcAndCetTimeZones();
 			_datasource = new ExistingDatasources(_timeZones);
+		}
 
+		private void commonSetup()
+		{
 			analyticsDataFactory.Setup(new Person(10, Guid.NewGuid(), Guid.NewGuid(), "Ashley", "Andeen", new DateTime(2010, 1, 1),
 							AnalyticsDate.Eternity.DateDate, 0, -2, businessUnitId, Guid.NewGuid(), _datasource, false, _timeZones.UtcTimeZoneId));
 
 			analyticsDataFactory.Setup(new Person(20, Guid.NewGuid(), Guid.NewGuid(), "Teleopti", "Demo", new DateTime(2010, 1, 1),
 							AnalyticsDate.Eternity.DateDate, 0, -2, businessUnitId, Guid.NewGuid(), _datasource, false, _timeZones.UtcTimeZoneId));
 
+			setupForFactSchedulePreference();
+
+			analyticsDataFactory.Persist();
+		}
+
+		private void setupForFactSchedulePreference()
+		{
 			analyticsDataFactory.Setup(Scenario.DefaultScenarioFor(10, Guid.NewGuid()));
 
 			var actEmpty = new Activity(-1, Guid.NewGuid(), "Empty", Color.Black, _datasource, businessUnitId);
@@ -50,8 +63,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var emptyShiftCategory = new ShiftCategory(-1, Guid.Empty, "Not defined", Color.Aqua, _datasource, businessUnitId);
 			var shiftCategory = new ShiftCategory(12, Guid.NewGuid(), "Shift 1", Color.Aqua, _datasource, businessUnitId);
 
-
-
 			analyticsDataFactory.Setup(act);
 			analyticsDataFactory.Setup(actEmpty);
 			analyticsDataFactory.Setup(abs);
@@ -62,15 +73,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsDataFactory.Setup(emptyShiftCategory);
 			analyticsDataFactory.Setup(shiftCategory);
 
-
 			analyticsDataFactory.Setup(new DimDayOff(-1, Guid.NewGuid(), "DayOff", _datasource, businessUnitId));
-
-			analyticsDataFactory.Persist();
 		}
 
 		[Test]
 		public void ShouldAddPreference()
 		{
+			commonSetup();
 			WithAnalyticsUnitOfWork.Do(() =>
 			{
 				Target.AddPreference(new AnalyticsFactSchedulePreference
@@ -99,6 +108,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldGetPreferencesCorrectData()
 		{
+			commonSetup();
 			var expectedPreference = new AnalyticsFactSchedulePreference
 			{
 				DateId = 1,
@@ -147,6 +157,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldAddAndDeletePreferences()
 		{
+			commonSetup();
 			WithAnalyticsUnitOfWork.Do(() =>
 			{
 				Target.AddPreference(getTestPreference(1, 10));
@@ -188,6 +199,93 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				MustHaves = 0,
 				AbsenceId = -1
 			};
+		}
+
+		private void insertPerson(int personPeriodId, DateTime validFrom, DateTime validTo, bool toBeDeleted = false, int validateFromDateId = 0, int validateToDateId = -2)
+		{
+			analyticsDataFactory.Setup(new Person(personPeriodId, Guid.NewGuid(), Guid.NewGuid(), "Ashley", "Andeen", validFrom,
+				validTo, validateFromDateId, validateToDateId, businessUnitId, Guid.NewGuid(), _datasource, toBeDeleted,
+				_timeZones.UtcTimeZoneId));
+		}
+
+		[Test]
+		public void ShouldUpdateFactSchedulePreferenceWithUnlinkedPersonidsWhenAddNewPersonPeriod()
+		{
+			var specificDate1 = new SpecificDate
+			{
+				Date = new DateOnly(new DateTime(2015, 1, 20)),
+				DateId = 20
+			};
+			var specificDate2 = new SpecificDate
+			{
+				Date = new DateOnly(new DateTime(2015, 1, 26)),
+				DateId = 26
+			};
+			analyticsDataFactory.Setup(specificDate1);
+			analyticsDataFactory.Setup(specificDate2);
+
+			const int personPeriod1 = 10;
+			const int personPeriod2 = 11;
+			insertPerson(personPeriod1, new DateTime(2015, 1, 10), new DateTime(2015, 1, 24), false, 10, 24);
+			insertPerson(personPeriod2, new DateTime(2015, 1, 25), AnalyticsDate.Eternity.DateDate, false, 25, -2);
+			setupForFactSchedulePreference();
+			analyticsDataFactory.Persist();
+
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				Target.AddPreference(getTestPreference(specificDate1.DateId, personPeriod1));
+				Target.AddPreference(getTestPreference(specificDate2.DateId, personPeriod1));
+			});
+
+			var rowCount = WithAnalyticsUnitOfWork.Get(() => Target.PreferencesForPerson(personPeriod1).Count);
+			rowCount.Should().Be.EqualTo(2);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.PreferencesForPerson(personPeriod2).Count);
+			rowCount.Should().Be.EqualTo(0);
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdateUnlinkedPersonids(new[] { 10, 11 }));
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.PreferencesForPerson(personPeriod1).Count);
+			rowCount.Should().Be.EqualTo(1);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.PreferencesForPerson(personPeriod2).Count);
+			rowCount.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldUpdateFactSchedulePreferenceWithUnlinkedPersonidsWhenDeleteExistingPersonPeriod()
+		{
+			var specificDate1 = new SpecificDate
+			{
+				Date = new DateOnly(new DateTime(2015, 1, 7)),
+				DateId = 7
+			};
+			var specificDate2 = new SpecificDate
+			{
+				Date = new DateOnly(new DateTime(2015, 1, 15)),
+				DateId = 15
+			};
+			analyticsDataFactory.Setup(specificDate1);
+			analyticsDataFactory.Setup(specificDate2);
+
+			const int personPeriod1 = 10;
+			const int personPeriod2 = 11;
+			insertPerson(personPeriod2, new DateTime(2015, 1, 5), AnalyticsDate.Eternity.DateDate, false, 5, -2);
+			insertPerson(personPeriod1, new DateTime(2015, 1, 10), AnalyticsDate.Eternity.DateDate, true, 10, -2);
+			setupForFactSchedulePreference();
+			analyticsDataFactory.Persist();
+
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				Target.AddPreference(getTestPreference(specificDate1.DateId, personPeriod1));
+				Target.AddPreference(getTestPreference(specificDate2.DateId, personPeriod2));
+			});
+
+			var rowCount = WithAnalyticsUnitOfWork.Get(() => Target.PreferencesForPerson(personPeriod1).Count);
+			rowCount.Should().Be.EqualTo(1);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.PreferencesForPerson(personPeriod2).Count);
+			rowCount.Should().Be.EqualTo(1);
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdateUnlinkedPersonids(new[] { personPeriod1, personPeriod2 }));
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.PreferencesForPerson(personPeriod1).Count);
+			rowCount.Should().Be.EqualTo(0);
+			rowCount = WithAnalyticsUnitOfWork.Get(() => Target.PreferencesForPerson(personPeriod2).Count);
+			rowCount.Should().Be.EqualTo(2);
 		}
 	}
 }

@@ -221,6 +221,7 @@
     <Compile Include="ApplicationLayer\Intraday\SkillStaffingIntervalProvider.cs" />
     <Compile Include="ApplicationLayer\Intraday\SplitSkillStaffInterval.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsHourlyAvailabilityMatchingPerson.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPreferenceMatchingPerson.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsScheduleMatchingPerson.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateTracer.cs" />
     <Compile Include="ApplicationLayer\Events\InitialLoadScheduleProjectionEvent.cs" />

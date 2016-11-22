@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void AddPreference(AnalyticsFactSchedulePreference analyticsFactSchedulePreference);
 		void DeletePreferences(int dateId, int personId, int? scenarioId = null);
 		IList<AnalyticsFactSchedulePreference> PreferencesForPerson(int personId);
+		void UpdateUnlinkedPersonids(int[] personPeriodIds);
 	}
 }
