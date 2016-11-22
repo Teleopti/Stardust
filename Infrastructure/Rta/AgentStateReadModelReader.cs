@@ -50,15 +50,19 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return ReadForTeams(new[] { teamId });
 		}
 
-
+		public class Selection
+		{
+			public string Query { get; set; }
+			public IEnumerable<Func<ISQLQuery, IQuery>> ParameterFuncs { get; set; }
+		}
 
 		private class agentStateReadmodelQuery
 		{
 			private class selectionInfo
 			{
 				public string Query { get; set; }
-				public AgentStateSelectionType AgentStateSelectionType { get; set; }
 				public Func<ISQLQuery, IQuery> Set { get; set; }
+				public AgentStateSelectionType AgentStateSelectionType { get; set; }
 			}
 
 			private readonly List<selectionInfo> selections = new List<selectionInfo>();
@@ -73,35 +77,45 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				});
 			}
 
-			public ISQLQuery Build(ISession session)
+			public Selection Build()
 			{
 				if (selections.All(x => x.AgentStateSelectionType == AgentStateSelectionType.Org))
 				{
-					var orgQuery = session.CreateSQLQuery(@"
+					var orgQuery = @"
 SELECT DISTINCT a.* FROM [ReadModel].AgentState a WITH (NOLOCK) 
-WHERE " + string.Join(" OR ", selections.Select(x => x.Query)));
-					selections.Select(x => x.Set).ForEach(f => f(orgQuery));
-					return orgQuery;
+WHERE " + string.Join(" OR ", selections.Select(x => x.Query));
+					return new Selection
+					{
+						Query = orgQuery,
+						ParameterFuncs = selections.Select(x => x.Set).ToArray()
+					};
 				}
 
 				if (selections.All(x => x.AgentStateSelectionType == AgentStateSelectionType.Skill))
 				{
-					var skillQuery = session.CreateSQLQuery(@"
+					var skillQuery = @"
 SELECT DISTINCT a.* FROM [ReadModel].AgentState a WITH (NOLOCK) " +
-						selections.Single().Query);
-					selections.Select(x => x.Set).ForEach(f => f(skillQuery));
-					return skillQuery;
+						selections.Single().Query;
+					return new Selection
+					{
+						Query = skillQuery,
+						ParameterFuncs = selections.Select(x => x.Set).ToArray()
+					};
 				}
 
-				var query = session.CreateSQLQuery(@"
+				var query = @"
 SELECT DISTINCT a.* FROM [ReadModel].AgentState a WITH (NOLOCK) " +
 												   selections.Single(x => x.AgentStateSelectionType == AgentStateSelectionType.Skill).Query
 												   + " AND (" +
 												   string.Join(" OR ", selections
 													   .Where(x => x.AgentStateSelectionType == AgentStateSelectionType.Org)
-													   .Select(x => x.Query)) +")");
-				selections.Select(x => x.Set).ForEach(f => f(query));
-				return query;
+													   .Select(x => x.Query)) +")";
+				
+				return new Selection
+				{
+					Query = query,
+					ParameterFuncs = selections.Select(x => x.Set).ToArray()
+				};
 			}
 		}
 
@@ -134,8 +148,11 @@ AND :today BETWEEN g.StartDate and g.EndDate",
 						AgentStateSelectionType.Skill);
 				}
 
-				return selection.Build(
-					_unitOfWork.Current().Session())
+				var statements = selection.Build();
+				var sqlQuery = _unitOfWork.Current().Session()
+					.CreateSQLQuery(statements.Query);
+				statements.ParameterFuncs.ForEach(f => f(sqlQuery));
+				return sqlQuery
 					.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 					.SetReadOnly(true)
 					.List<AgentStateReadModel>();
