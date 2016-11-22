@@ -144,10 +144,6 @@ Teleopti.MyTimeWeb.Ajax.UI = (function ($) {
 
 	function _ajaxErrorDialog(jqXHR, textStatus, errorThrown) {
 		$('#dialog-modal').attr('title', 'Ajax error: ' + errorThrown);
-
-		// Refer to bug #41058
-		// Temporary remove the error dialog since it will cause "Uncaught TypeError: $(...).dialog is not a function" error.
-		/*
 		$('#dialog-modal').dialog({
 			width: 800,
 			height: 500,
@@ -156,9 +152,12 @@ Teleopti.MyTimeWeb.Ajax.UI = (function ($) {
 			create: function (event, ui) {
 				var responseText = jqXHR.responseText;
 				$(this).html(responseText);
+
+				var closeBtn = $('.ui-dialog-titlebar-close');
+				closeBtn.addClass('ui-state-default');
+				closeBtn.append('<span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>');
 			}
 		});
-		*/
 	}
 
 	return {

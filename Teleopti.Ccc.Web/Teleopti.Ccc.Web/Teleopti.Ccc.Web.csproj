@@ -1354,6 +1354,9 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.AbsenceRequestDetailViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewNew.js" />
+    <Content Include="Content\jqueryui\jquery.ui.dialog.js" />
+    <Content Include="Content\jqueryui\smoothness\jquery-ui.css" />
+    <Content Include="Content\jqueryui\smoothness\jquery.ui.dialog.css" />
     <Content Include="Content\jquery\jquery-1.12.4.js" />
     <Content Include="Content\jquery\jquery-1.12.4.min.js" />
     <Content Include="Content\moment-datepicker\moment-datepicker-ext.js" />
