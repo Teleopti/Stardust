@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.SingleInstance();
 			builder.RegisterType<LongestPeriodForAssignmentCalculator>()
 				.As<ILongestPeriodForAssignmentCalculator>()
-				.InstancePerLifetimeScope();
+				.SingleInstance();
 			builder.RegisterType<PersonSkillPeriodsDataHolderManager>()
 				.As<IPersonSkillPeriodsDataHolderManager>()
 				.InstancePerLifetimeScope();
