@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using log4net;
-using log4net.Repository.Hierarchy;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -28,9 +25,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 	public class MultiAbsenceRequestsUpdater : IMultiAbsenceRequestsUpdater
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(MultiAbsenceRequestsUpdater));
-
-		private readonly DenyAbsenceRequest _denyAbsenceRequest = new DenyAbsenceRequest();
-		private readonly PendingAbsenceRequest _pendingAbsenceRequest = new PendingAbsenceRequest();
 
 		private readonly ILoadSchedulingStateHolderForResourceCalculation _loadSchedulingStateHolderForResourceCalculation;
 		private readonly ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulesForRequestWithoutResourceCalculation;
@@ -213,25 +207,22 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 				var affectedPersonAbsenceAccount = allAccounts.Find(absenceRequest.Absence);
 				var currentScenario = _scenarioRepository.Current();
+				var requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(NewBusinessRuleCollection.Minimum(), currentScenario, _schedulingResultStateHolder);
 
 				var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod(absenceRequest);
 				var validatorList = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
 				var processAbsenceRequest = mergedPeriod.AbsenceRequestProcess;
-				
-				var personAccountBalanceCalculator = getPersonAccountBalanceCalculator(affectedPersonAbsenceAccount, absenceRequest, dateOnlyPeriod);
-				
-				setupUndoContainersAndTakeSnapshot(undoRedoContainer, allAccounts);
-				
-				processAbsenceRequest = checkIfPersonIsAlreadyAbsentDuringRequestPeriod(absenceRequest, processAbsenceRequest);
 
-				var businessRules = NewBusinessRuleCollection.Minimum();
+				if (processAbsenceRequest.GetType() != typeof(DenyAbsenceRequest))
+				{
+					setupUndoContainersAndTakeSnapshot(undoRedoContainer, allAccounts);
+					processAbsenceRequest = checkIfPersonIsAlreadyAbsentDuringRequestPeriod(absenceRequest, processAbsenceRequest);
 
-				var requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(businessRules, currentScenario, _schedulingResultStateHolder);
-				
-				simulateApproveAbsence(absenceRequest, requestApprovalServiceScheduler);
-
-				//Will issue a rollback for simulated schedule data
-				processAbsenceRequest = handleInvalidSchedule(processAbsenceRequest, personRequest.Person);
+					if (processAbsenceRequest.GetType() != typeof(DenyAbsenceRequest))
+					{
+						simulateApproveAbsence(absenceRequest, requestApprovalServiceScheduler);
+					}
+				}
 
 				var requiredForProcessingAbsenceRequest = new RequiredForProcessingAbsenceRequest(
 					undoRedoContainer,
@@ -243,10 +234,10 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 							if (affectedPersonAbsenceAccount != null)
 								trackAccounts(affectedPersonAbsenceAccount, dateOnlyPeriod, absenceRequest);
 						});
-
+				
 				var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(
 						_schedulingResultStateHolder,
-						personAccountBalanceCalculator,
+						getPersonAccountBalanceCalculator(affectedPersonAbsenceAccount, absenceRequest, dateOnlyPeriod),
 						_resourceOptimizationHelper,
 						_budgetGroupAllowanceSpecification,
 						_budgetGroupHeadCountSpecification);
@@ -350,13 +341,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			}
 		}
 
-		private IProcessAbsenceRequest denyAbsenceRequest(string reasonResourceKey, bool alreadyAbsence = false)
-		{
-			_denyAbsenceRequest.DenyReason = reasonResourceKey;
-			_denyAbsenceRequest.DenyOption = alreadyAbsence ? PersonRequestDenyOption.AlreadyAbsence : PersonRequestDenyOption.None;
-			return _denyAbsenceRequest;
-		}
-
 
 		private void loadDataForResourceCalculation(IList<IPersonRequest> personRequests, IEnumerable<IAbsenceRequestValidator> validatorList)
 		{
@@ -426,8 +410,11 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		{
 			if (personAlreadyAbsentDuringRequestPeriod(absenceRequest))
 			{
-				process =  denyAbsenceRequest(UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonAlreadyAbsent",
-					absenceRequest.Person.PermissionInformation.Culture()), true);
+				process = new DenyAbsenceRequest
+				{
+					DenyReason = UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonAlreadyAbsent", absenceRequest.Person.PermissionInformation.Culture()),
+					DenyOption = PersonRequestDenyOption.AlreadyAbsence
+				};
 			}
 			return process;
 		}
@@ -440,45 +427,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					AbsenceRequest = absenceRequest,
 					SchedulingResultStateHolder = _schedulingResultStateHolder
 				});
-		}
-
-		//may be remove this whole code
-		private IProcessAbsenceRequest handleInvalidSchedule(IProcessAbsenceRequest process, IPerson person)
-		{
-			if (process.GetType() == typeof(DenyAbsenceRequest)) return process;
-			if (satisfySchedule(person))
-			{
-				process = _pendingAbsenceRequest;
-			}
-			return process;
-		}
-
-		private bool satisfySchedule(IPerson person)
-		{
-			try
-			{
-				foreach (KeyValuePair<IPerson, IScheduleRange> scheduleRange in _schedulingResultStateHolder.Schedules.Where(x => x.Key == person))
-				{
-					var period =
-						scheduleRange.Value.Period.ToDateOnlyPeriod(
-							scheduleRange.Key.PermissionInformation.DefaultTimeZone());
-					var schedules = scheduleRange.Value.ScheduledDayCollection(period);
-					foreach (IScheduleDay scheduleDay in schedules)
-					{
-						var ass = scheduleDay.PersonAssignment();
-						if (ass != null)
-						{
-							ass.CheckRestrictions();
-						}
-					}
-
-				}
-			}
-			catch (ValidationException)
-			{
-				return true;
-			}
-			return false;
 		}
 	}
 	
