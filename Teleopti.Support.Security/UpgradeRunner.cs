@@ -129,10 +129,37 @@ namespace Teleopti.Support.Security
 			logToLog(e.Message, Level.Debug);
 		}
 
+		private bool personAssignmentsConverted(IDatabaseArguments commandLineArgument)
+		{
+			var numberOfNotConvertedCommand =
+				@"select COUNT(*) as cnt from dbo.PersonAssignment pa
+							where pa.[Date]=@baseDate";
+
+			using (var conn = new SqlConnection(commandLineArgument.ApplicationDbConnectionString))
+			{
+				conn.Open();
+				using (var cmd = new SqlCommand(numberOfNotConvertedCommand, conn))
+				{
+					cmd.Parameters.AddWithValue("@baseDate", PersonAssignmentDateSetter.DateOfUnconvertedSchedule.Date);
+					if ((int)cmd.ExecuteScalar() > 0)
+					{
+						return false;
+					}
+				}
+			}
+
+			logToLog("No person assignment conversion needed", Level.Debug);
+			return true;
+		}
+
 		private void setPersonAssignmentDate(IDatabaseArguments commandLineArgument)
 		{
+			if (personAssignmentsConverted(commandLineArgument))
+				return;
+
 			//expects all schedules having thedate set to 1800-1-1
-			var allPersonAndTimeZone = new FetchPersonIdAndTimeZone(commandLineArgument.ApplicationDbConnectionString).ForAllPersons();
+			var allPersonAndTimeZone =
+				new FetchPersonIdAndTimeZone(commandLineArgument.ApplicationDbConnectionString).ForAllPersons();
 			int counter = allPersonAndTimeZone.Count();
 			int i = 0;
 			logToLog("Converting schedule data for " + counter + " agents", Level.Debug);
@@ -150,8 +177,9 @@ namespace Teleopti.Support.Security
 						personAssignmentSetter.Execute(tx, personId, timeZone);
 						tx.Commit();
 					}
-					i++; ;
-					if ((i % 1000) == 0)
+					i++;
+					;
+					if ((i%1000) == 0)
 					{
 						logToLog("   agents left: " + (counter - i), Level.Debug);
 					}
