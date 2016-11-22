@@ -1,3 +1,3 @@
 ﻿(function() {
-    angular.module('wfm.skillPrio', ['ui.router', 'pascalprecht.translate', 'wfm.notice', 'toggleService']);
+    angular.module('wfm.skillPrio', ['ui.router', 'pascalprecht.translate', 'wfm.notice', 'toggleService','wfm.utilities']);
 })();
