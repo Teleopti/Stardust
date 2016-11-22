@@ -1,9 +1,9 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_fact_request_unlinked_personids]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [mart].[etl_fact_request_unlinked_personids]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_fact_request_update_unlinked_personids]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [mart].[etl_fact_request_update_unlinked_personids]
 GO
 
--- example: exec [mart].[etl_fact_request_unlinked_personids] '275,276,548,549'
-CREATE PROCEDURE [mart].[etl_fact_request_unlinked_personids]
+-- example: exec [mart].[etl_fact_request_update_unlinked_personids] '275,276,548,549'
+CREATE PROCEDURE [mart].[etl_fact_request_update_unlinked_personids]
 @person_periodids nvarchar(max)
 AS
 BEGIN

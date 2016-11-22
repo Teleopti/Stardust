@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			_currentAnalyticsUnitOfWork.Current()
 				.Session()
 				.CreateSQLQuery(
-					$@"exec mart.etl_fact_request_unlinked_personids 
+					$@"exec mart.etl_fact_request_update_unlinked_personids 
 							@person_periodids=:PersonIds
 							")
 				.SetString("PersonIds", string.Join(",", personPeriodIds))
