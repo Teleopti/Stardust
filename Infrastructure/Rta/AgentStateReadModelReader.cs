@@ -83,6 +83,7 @@ WHERE " + string.Join(" OR ", selections.Select(x => x.Query)));
 					selections.Select(x => x.Set).ForEach(f => f(orgQuery));
 					return orgQuery;
 				}
+
 				if (selections.All(x => x.AgentStateSelectionType == AgentStateSelectionType.Skill))
 				{
 					var skillQuery = session.CreateSQLQuery(@"
@@ -91,13 +92,14 @@ SELECT DISTINCT a.* FROM [ReadModel].AgentState a WITH (NOLOCK) " +
 					selections.Select(x => x.Set).ForEach(f => f(skillQuery));
 					return skillQuery;
 				}
+
 				var query = session.CreateSQLQuery(@"
 SELECT DISTINCT a.* FROM [ReadModel].AgentState a WITH (NOLOCK) " +
 												   selections.Single(x => x.AgentStateSelectionType == AgentStateSelectionType.Skill).Query
-												   + " AND " +
+												   + " AND (" +
 												   string.Join(" OR ", selections
 													   .Where(x => x.AgentStateSelectionType == AgentStateSelectionType.Org)
-													   .Select(x => x.Query)));
+													   .Select(x => x.Query)) +")");
 				selections.Select(x => x.Set).ForEach(f => f(query));
 				return query;
 			}
@@ -109,8 +111,7 @@ SELECT DISTINCT a.* FROM [ReadModel].AgentState a WITH (NOLOCK) " +
 			Org = 1
 		}
 
-		public IEnumerable<AgentStateReadModel> ReadFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds,
-			IEnumerable<Guid> skillIds)
+		public IEnumerable<AgentStateReadModel> ReadFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
 		{
 			{
 				var selection = new agentStateReadmodelQuery();
@@ -123,7 +124,7 @@ SELECT DISTINCT a.* FROM [ReadModel].AgentState a WITH (NOLOCK) " +
 					selection.AddStatement(@"
 INNER JOIN ReadModel.GroupingReadOnly AS g
 ON a.PersonId = g.PersonId
-WHERE g.PageId = :skillGroupingPageId
+WHERE g.PageId = :skillGroupingPageId	
 AND g.GroupId IN (:SkillIds)
 AND :today BETWEEN g.StartDate and g.EndDate",
 						s => s

@@ -55,10 +55,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 		{
 			Now.Is("2016-11-07 08:00");
 			Database
-				.WithAgent("wrongSite")
+				.WithAgent("wrongTeam")
 				.WithSkill("phone")
 				.WithTeam()
-				.WithAgent("wrongTeam")
+				.WithAgent("wrongSite")
 				.WithSkill("phone")
 				.WithSite()
 				.WithAgent("expectedForSite")
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 			var wrongTeam = Database.PersonIdFor("wrongTeam");
 			var siteId = Database.CurrentSiteId();
 			var teamId = Database.CurrentSiteId();
-			var currentSkillId = Database.SkillIdFor("phone");
+			var phoneId = Database.SkillIdFor("phone");
 			WithUnitOfWork.Do(() =>
 			{
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
@@ -92,7 +92,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSkill,
-					SiteId = siteId
+					SiteId = siteId,
+					TeamId = teamId
 				});
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
 				{
@@ -106,7 +107,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadFor(new[] {siteId}, new []{teamId}, new[] {currentSkillId}))
+			WithUnitOfWork.Get(() => Target.ReadFor(new[] {siteId}, new []{teamId}, new[] {phoneId}))
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(expectedForSite, expectedForTeam);
 		}
