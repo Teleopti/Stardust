@@ -5,7 +5,7 @@ namespace Teleopti.Interfaces.Domain
 {
 	public interface IProcessAbsenceRequest
 	{
-		void Process(IPerson processingPerson, IAbsenceRequest absenceRequest,
+		void Process(IAbsenceRequest absenceRequest,
 			RequiredForProcessingAbsenceRequest requiredForProcessingAbsenceRequest,
 			RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest,
 			IEnumerable<IAbsenceRequestValidator> absenceRequestValidatorList);

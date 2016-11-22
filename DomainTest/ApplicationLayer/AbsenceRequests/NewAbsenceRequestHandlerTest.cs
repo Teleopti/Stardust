@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				x => x.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person }, _schedulingResultStateHolder));
 			processAbsenceRequest.AssertWasCalled(
 				x =>
-				x.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(),
+				x.Process(_absenceRequest, new RequiredForProcessingAbsenceRequest(),
 						  new RequiredForHandlingAbsenceRequest(), validatorList), o => o.IgnoreArguments());
 		}
 
@@ -465,7 +465,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				x => x.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person }, _schedulingResultStateHolder));
 			processAbsenceRequest.AssertWasCalled(
 				x =>
-				x.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(),
+				x.Process(_absenceRequest, new RequiredForProcessingAbsenceRequest(),
 						  new RequiredForHandlingAbsenceRequest(), validatorList), o => o.IgnoreArguments());
 		}
 
@@ -514,7 +514,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			_target.Handle(_message);
 			_unitOfWork.AssertWasCalled(x => x.PersistAll());
-			processAbsenceRequest.AssertWasCalled(x => x.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(), new RequiredForHandlingAbsenceRequest(), validatorList), o => o.IgnoreArguments());
+			processAbsenceRequest.AssertWasCalled(x => x.Process(_absenceRequest, new RequiredForProcessingAbsenceRequest(), new RequiredForHandlingAbsenceRequest(), validatorList), o => o.IgnoreArguments());
 			_loaderWithoutResourceCalculation.AssertWasCalled(x => x.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person }, _schedulingResultStateHolder));
 		}
 

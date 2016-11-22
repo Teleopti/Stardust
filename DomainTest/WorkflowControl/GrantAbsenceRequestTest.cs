@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             Assert.IsTrue(_personRequest.IsNew);
 
-            _target.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(null,_requestApprovalService,_authorization), handling, _validators);
+            _target.Process(_absenceRequest, new RequiredForProcessingAbsenceRequest(null,_requestApprovalService,_authorization), handling, _validators);
 
             Assert.IsTrue(_personRequest.IsDenied);
         }
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _mocks.ReplayAll();
             Assert.IsTrue(_personRequest.IsNew);
 
-            _target.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(undoRedoContainer,_requestApprovalService,_authorization), handling, _validators);
+            _target.Process(_absenceRequest, new RequiredForProcessingAbsenceRequest(undoRedoContainer,_requestApprovalService,_authorization), handling, _validators);
 
             Assert.IsTrue(_personRequest.IsDenied);
             _mocks.VerifyAll();
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         public void VerifyRequestApprovalServiceIsSet()
         {
             var handling = new RequiredForHandlingAbsenceRequest();
-           Assert.Throws<ArgumentNullException>(() => _target.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(null, null, _authorization), handling, _validators));
+           Assert.Throws<ArgumentNullException>(() => _target.Process(_absenceRequest, new RequiredForProcessingAbsenceRequest(null, null, _authorization), handling, _validators));
         }
 
         [Test]
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             Assert.IsTrue(_personRequest.IsNew);
 
-            _target.Process(null, _absenceRequest,new RequiredForProcessingAbsenceRequest(null,_requestApprovalService,_authorization), handling, _validators);
+            _target.Process(_absenceRequest,new RequiredForProcessingAbsenceRequest(null,_requestApprovalService,_authorization), handling, _validators);
 
             Assert.IsTrue(_personRequest.IsApproved);
         }
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _mocks.ReplayAll();
             Assert.IsTrue(_personRequest.IsNew);
 
-            _target.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(undoRedoContainer,_requestApprovalService,_authorization), handling, _validators);
+            _target.Process(_absenceRequest, new RequiredForProcessingAbsenceRequest(undoRedoContainer,_requestApprovalService,_authorization), handling, _validators);
 
             Assert.IsTrue(_personRequest.IsApproved);
             _mocks.VerifyAll();
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _mocks.ReplayAll();
             Assert.IsTrue(_personRequest.IsNew);
 
-            _target.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(undoRedoContainer, _requestApprovalService, _authorization), handling, _validators);
+            _target.Process(_absenceRequest, new RequiredForProcessingAbsenceRequest(undoRedoContainer, _requestApprovalService, _authorization), handling, _validators);
 
             Assert.IsFalse(_personRequest.IsApproved);
             _mocks.VerifyAll();
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			_mocks.ReplayAll();
 
 			var afterCallback = false;
-			_target.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(undoRedoContainer, _requestApprovalService, _authorization,
+			_target.Process(_absenceRequest, new RequiredForProcessingAbsenceRequest(undoRedoContainer, _requestApprovalService, _authorization,
 			                                                                               () =>
 				                                                                               { afterCallback = true; }), handling, _validators);
 

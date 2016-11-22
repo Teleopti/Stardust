@@ -15,13 +15,13 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return new PendingAbsenceRequest();
 		}
 
-		public override void Process(IPerson processingPerson, IAbsenceRequest absenceRequest,
+		public override void Process(IAbsenceRequest absenceRequest,
 			RequiredForProcessingAbsenceRequest requiredForProcessingAbsenceRequest,
 			RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest,
 			IEnumerable<IAbsenceRequestValidator> absenceRequestValidatorList)
 		{
 			if (
-				!CheckValidatorList(processingPerson, absenceRequest, requiredForProcessingAbsenceRequest,
+				!CheckValidatorList(absenceRequest, requiredForProcessingAbsenceRequest,
 					requiredForHandlingAbsenceRequest, absenceRequestValidatorList)) return;
 
 			UndoAll(requiredForProcessingAbsenceRequest.UndoRedoContainer);

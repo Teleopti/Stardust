@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		public abstract string DisplayText { get; }
 		public abstract IProcessAbsenceRequest CreateInstance();
 
-		protected bool CheckValidatorList(IPerson processingPerson, IAbsenceRequest absenceRequest,
+		protected bool CheckValidatorList(IAbsenceRequest absenceRequest,
 			RequiredForProcessingAbsenceRequest requiredForProcessingAbsenceRequest,
 			RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest,
 			IEnumerable<IAbsenceRequestValidator> absenceRequestValidatorList)
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 						DenyReason = validatedRequest.ValidationErrors,
 						DenyOption = validatedRequest.DenyOption
 					};
-					denyAbsenceRequest.Process(processingPerson, absenceRequest, requiredForProcessingAbsenceRequest,
+					denyAbsenceRequest.Process(absenceRequest, requiredForProcessingAbsenceRequest,
 						requiredForHandlingAbsenceRequest, null);
 					return false;
 				}
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			undoRedoContainer?.UndoAll();
 		}
 
-		public abstract void Process(IPerson processingPerson, IAbsenceRequest absenceRequest,
+		public abstract void Process(IAbsenceRequest absenceRequest,
 			RequiredForProcessingAbsenceRequest requiredForProcessingAbsenceRequest,
 			RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest,
 			IEnumerable<IAbsenceRequestValidator> absenceRequestValidatorList);

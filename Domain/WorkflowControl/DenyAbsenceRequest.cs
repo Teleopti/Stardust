@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return new DenyAbsenceRequest { DenyReason = DenyReason };
 		}
 
-		public override void Process(IPerson processingPerson, IAbsenceRequest absenceRequest,
+		public override void Process(IAbsenceRequest absenceRequest,
 			RequiredForProcessingAbsenceRequest requiredForProcessingAbsenceRequest,
 			RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest,
 			IEnumerable<IAbsenceRequestValidator> absenceRequestValidatorList)
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			UndoAll(requiredForProcessingAbsenceRequest.UndoRedoContainer);
 			var personRequest = (IPersonRequest) absenceRequest.Parent;
 			var denyOption = PersonRequestDenyOption.AutoDeny | DenyOption.GetValueOrDefault(PersonRequestDenyOption.None);
-			personRequest.Deny(processingPerson, DenyReason, requiredForProcessingAbsenceRequest.Authorization, denyOption);
+			personRequest.Deny(absenceRequest.Person, DenyReason, requiredForProcessingAbsenceRequest.Authorization, denyOption);
 		}
 
 		public override bool Equals(object obj)

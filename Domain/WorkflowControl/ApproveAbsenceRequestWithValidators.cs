@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(ApproveAbsenceRequestWithValidators));
 
-		public override void Process(IPerson processingPerson, IAbsenceRequest absenceRequest,
+		public override void Process(IAbsenceRequest absenceRequest,
 			RequiredForProcessingAbsenceRequest requiredForProcessingAbsenceRequest,
 			RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest,
 			IEnumerable<IAbsenceRequestValidator> absenceRequestValidatorList)

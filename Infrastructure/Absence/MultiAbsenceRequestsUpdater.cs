@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 				stopwatch.Restart();
 
-				processAbsenceRequest.Process(null, absenceRequest,
+				processAbsenceRequest.Process(absenceRequest,
 											  requiredForProcessingAbsenceRequest,
 											  requiredForHandlingAbsenceRequest,
 											  validatorList);

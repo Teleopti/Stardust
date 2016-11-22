@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					_process.GetType());
 			}
 
-			_process.Process(null, absenceRequest,
+			_process.Process(absenceRequest,
 				requiredForProcessingAbsenceRequest,
 				requiredForHandlingAbsenceRequest,
 				validatorList);
