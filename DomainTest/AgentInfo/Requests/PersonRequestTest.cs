@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		[Test]
 		public void VerifyChangedIsSetCorrect()
 		{
-			_target.Deny(null, null, _authorization);
+			_target.Deny(null, _authorization);
 			Assert.IsTrue(_target.Changed);
 			_target.Persisted();
 			Assert.IsFalse(_target.Changed);
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		[Test]
 		public void VerifyMessageCannotBeChangedWhenDenied()
 		{
-			_target.Deny(null, null, _authorization);
+			_target.Deny(null, _authorization);
 			_target.Persisted();
 
 			Assert.Throws<InvalidOperationException>(() => _target.TrySetMessage(_message));
@@ -190,14 +190,14 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			_target.Pending();
 			Assert.IsFalse(_target.IsNew);
 
-			_target.Deny(null, "DeniedDueToRain", _authorization);
+			_target.Deny( "DeniedDueToRain", _authorization);
 			Assert.IsTrue(_target.IsDenied);
 			Assert.IsFalse(_target.IsAutoDenied);
 
 			Assert.AreEqual("DeniedDueToRain", _target.DenyReason);
 
 			_target.ForcePending();
-			_target.Deny(null, null, _authorization);
+			_target.Deny(null, _authorization);
 			Assert.AreEqual(string.Empty, _target.DenyReason);
 		}
 
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		{
 			Assert.IsTrue(_target.IsNew);
 
-			_target.Deny(null, "DeniedDueToRain", _authorization, PersonRequestDenyOption.AutoDeny);
+			_target.Deny( "DeniedDueToRain", _authorization, null, PersonRequestDenyOption.AutoDeny);
 			Assert.IsTrue(_target.IsDenied);
 			Assert.IsTrue(_target.IsAutoDenied);
 
@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		{
 			IPerson person = PersonFactory.CreatePerson("Kalle", "kula");
 			IPersonRequest personRequest = new PersonRequest(person);
-			personRequest.Deny(null, null, _authorization);
+			personRequest.Deny(null, _authorization);
 
 			Assert.IsTrue(personRequest.IsDenied);
 			personRequest.Pending();
@@ -322,7 +322,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			_mocks.ReplayAll();
 
 			_target.Request = request1;
-			_target.Deny(null, null, _authorization);
+			_target.Deny( null, _authorization);
 
 			_mocks.VerifyAll();
 		}
@@ -472,7 +472,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		public void VerifyIsEditable()
 		{
 			Assert.IsTrue(_target.IsEditable);
-			_target.Deny(null, null, _authorization);
+			_target.Deny(null, _authorization);
 			_target.Persisted();
 			Assert.IsFalse(_target.IsEditable);
 		}
@@ -695,14 +695,14 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		{
 			_target.Pending();
 			_target.Persisted();
-			_target.Deny(null, null, _authorization);
+			_target.Deny( null, _authorization);
 			_target.SendChangeOverMessageBroker().Should().Be.EqualTo(true);
 		}
 
 		[Test]
 		public void SendChangeOverMessageBroker_NewToAutoDenied_ReturnTrue()
 		{
-			_target.Deny(null, null, _authorization);
+			_target.Deny(null, _authorization);
 			_target.SendChangeOverMessageBroker().Should().Be.EqualTo(true);
 		}
 
@@ -755,7 +755,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			_target.Request = shiftTradeRequest;
 			_target.Pending();
 			_target.Persisted();
-			_target.Deny(null, null, _authorization);
+			_target.Deny(null, _authorization);
 			_target.SendChangeOverMessageBroker().Should().Be.EqualTo(false);
 		}
 
@@ -770,7 +770,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			shiftTradeRequest.SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts, _authorization);
 			_target.Request = shiftTradeRequest;
 			_target.Pending();
-			_target.Deny(null, null, _authorization);
+			_target.Deny( null, _authorization);
 			_target.Persisted();
 			_target.SendChangeOverMessageBroker().Should().Be.EqualTo(true);
 		}
@@ -780,7 +780,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		{
 			setupShiftTrade();
 			_target.Pending();
-			_target.Deny(null, null, _authorization);
+			_target.Deny(null, _authorization);
 			_target.Persisted();
 			_target.SendChangeOverMessageBroker().Should().Be.EqualTo(true);
 		}
@@ -818,10 +818,10 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 				new DateTime(2016, 12, 12, 00, 00, 00, DateTimeKind.Utc), absence, new GrantAbsenceRequest(), true);
 			waitlistedPersonRequest.Request = new AbsenceRequest(absence, new DateTimePeriod(2016, 9, 6, 2016, 9, 6));
 			waitlistedPersonRequest.ForcePending();
-			waitlistedPersonRequest.Deny(null, null, _authorization, PersonRequestDenyOption.AutoDeny);
+			waitlistedPersonRequest.Deny( null, _authorization,null, PersonRequestDenyOption.AutoDeny);
 			waitlistedPersonRequest.IsWaitlisted.Should().Be(true);
 
-			waitlistedPersonRequest.Deny(null, null, _authorization, PersonRequestDenyOption.AutoDeny | PersonRequestDenyOption.AlreadyAbsence);
+			waitlistedPersonRequest.Deny( null, _authorization, null, PersonRequestDenyOption.AutoDeny | PersonRequestDenyOption.AlreadyAbsence);
 			waitlistedPersonRequest.IsDenied.Should().Be(true);
 			waitlistedPersonRequest.IsWaitlisted.Should().Be(false);
 		}
@@ -837,7 +837,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 				new DateTime(2016, 12, 12, 00, 00, 00, DateTimeKind.Utc), absence, new GrantAbsenceRequest(), true);
 			waitlistedPersonRequest.Request = new AbsenceRequest(absence, new DateTimePeriod(2016, 9, 6, 2016, 9, 6));
 			waitlistedPersonRequest.ForcePending();
-			waitlistedPersonRequest.Deny(null, null, _authorization, PersonRequestDenyOption.AutoDeny | PersonRequestDenyOption.RequestExpired);
+			waitlistedPersonRequest.Deny(null, _authorization, null,PersonRequestDenyOption.AutoDeny | PersonRequestDenyOption.RequestExpired);
 			waitlistedPersonRequest.IsDenied.Should().Be(true);
 			waitlistedPersonRequest.IsWaitlisted.Should().Be(false);
 		}
@@ -853,10 +853,10 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 				new DateTime(2016, 12, 12, 00, 00, 00, DateTimeKind.Utc), absence, new GrantAbsenceRequest(), true);
 			waitlistedPersonRequest.Request = new AbsenceRequest(absence, new DateTimePeriod(2016, 9, 6, 2016, 9, 6));
 			waitlistedPersonRequest.ForcePending();
-			waitlistedPersonRequest.Deny(null, null, _authorization, PersonRequestDenyOption.AutoDeny);
+			waitlistedPersonRequest.Deny(null, _authorization, null, PersonRequestDenyOption.AutoDeny);
 			waitlistedPersonRequest.IsWaitlisted.Should().Be(true);
 
-			waitlistedPersonRequest.Deny(null, null, _authorization, PersonRequestDenyOption.AutoDeny | PersonRequestDenyOption.RequestExpired);
+			waitlistedPersonRequest.Deny( null, _authorization, null, PersonRequestDenyOption.AutoDeny | PersonRequestDenyOption.RequestExpired);
 			waitlistedPersonRequest.IsDenied.Should().Be(true);
 			waitlistedPersonRequest.IsWaitlisted.Should().Be(false);
 		}
@@ -878,7 +878,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 				new DateTime(2015, 12, 12, 00, 00, 00, DateTimeKind.Utc),
 				new DateTime(2016, 12, 12, 00, 00, 00, DateTimeKind.Utc), absence, new GrantAbsenceRequest(), waitlistingEnabled);
 
-			personRequest.Deny(null, null, _authorization);
+			personRequest.Deny( null, _authorization);
 
 			personRequest.Approve(new ApprovalServiceForTest(), _authorization, true);
 			return personRequest;

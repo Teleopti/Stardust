@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			}
 			else if (!validationResult.Value)
 			{
-				personRequest.Deny(null, validationResult.DenyReason, _authorization);
+				personRequest.Deny(validationResult.DenyReason, _authorization);
 			}
 
 			clearStateHolder();
@@ -302,7 +302,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 				var involvedPeople = shiftTradeRequest.InvolvedPeople();
 				//To avoid notifications to the second part in the trade that the trade was denied.
 				var fakeDenier = involvedPeople.FirstOrDefault(p => !p.Equals(shiftTradeRequest.Person));
-				personRequest.Deny(fakeDenier, validationResult.DenyReason, _authorization);
+				personRequest.Deny(validationResult.DenyReason, _authorization, fakeDenier);
 				logger.InfoFormat("Shift Trade is denied, Reason: {0}", validationResult.DenyReason);
 			}
 		}

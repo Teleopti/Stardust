@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 
 			var result = target.Deny(shiftTradeId, "");
 
-			personRequest.AssertWasCalled(s => s.Deny(loggedOnPerson, "RequestDenyReasonOtherPart", personRequestCheckAuthorization));
+			personRequest.AssertWasCalled(s => s.Deny("RequestDenyReasonOtherPart", personRequestCheckAuthorization, loggedOnPerson));
 			result.Should().Be.SameInstanceAs(requestViewModel);
 		}
 

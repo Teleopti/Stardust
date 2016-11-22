@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var request = new PersonRequest(new Person());
 			request.SetId(Guid.NewGuid());
 			request.Pending();
-			request.Deny(null, null, MockRepository.GenerateMock<IPersonRequestCheckAuthorization>());
+			request.Deny(null, MockRepository.GenerateMock<IPersonRequestCheckAuthorization>());
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
 			result.Link.Methods.Should().Not.Contain("DELETE");
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var request = new PersonRequest(new Person());
 			request.SetId(Guid.NewGuid());
 			request.Pending();
-			request.Deny(null, null, MockRepository.GenerateMock<IPersonRequestCheckAuthorization>());
+			request.Deny(null, MockRepository.GenerateMock<IPersonRequestCheckAuthorization>());
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
 			result.Link.Methods.Should().Not.Contain("PUT");
@@ -403,7 +403,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapDenyReason()
 		{
 			var request = new PersonRequest(new Person(), new AbsenceRequest(new Absence(), new DateTimePeriod()));
-			request.Deny(null, "RequestDenyReasonNoWorkflow", new PersonRequestAuthorizationCheckerForTest());
+			request.Deny("RequestDenyReasonNoWorkflow", new PersonRequestAuthorizationCheckerForTest());
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
@@ -415,7 +415,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var denyReason = "You must work at 2011-09-23.";
 			var request = new PersonRequest(new Person(), new AbsenceRequest(new Absence(), new DateTimePeriod()));
-			request.Deny(null, denyReason, new PersonRequestAuthorizationCheckerForTest());
+			request.Deny( denyReason, new PersonRequestAuthorizationCheckerForTest());
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
@@ -715,7 +715,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			Assert.That(result.IsApproved, Is.False);
 
 			personRequest.ForcePending();
-			personRequest.Deny(null, "MyDenyReason", new PersonRequestAuthorizationCheckerForTest());
+			personRequest.Deny("MyDenyReason", new PersonRequestAuthorizationCheckerForTest());
 			result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 
 			Assert.That(personRequest.IsDenied, Is.True);
@@ -810,7 +810,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			workflowControlSet.Stub(x => x.WaitlistingIsEnabled(absenceRequest)).Return(true);
 			person.WorkflowControlSet = workflowControlSet;
 
-			request.Deny(null, null, MockRepository.GenerateMock<IPersonRequestCheckAuthorization>(), PersonRequestDenyOption.AutoDeny);
+			request.Deny(null, MockRepository.GenerateMock<IPersonRequestCheckAuthorization>(), null, PersonRequestDenyOption.AutoDeny);
 
 			return Mapper.Map<IPersonRequest, RequestViewModel>(request);
 		}

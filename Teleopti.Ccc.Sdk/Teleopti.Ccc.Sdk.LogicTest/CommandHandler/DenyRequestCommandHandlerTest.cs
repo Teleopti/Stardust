@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
                 Expect.Call(_personRequestRepository.Get(_denyRequestCommandDto.PersonRequestId)).Return(request);
-                Expect.Call(() => request.Deny(null, "Test", _authorization)).IgnoreArguments();
+                Expect.Call(() => request.Deny("Test", _authorization)).IgnoreArguments();
                 Expect.Call(() => unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
             }
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
                 Expect.Call(_personRequestRepository.Get(_denyRequestCommandDto.PersonRequestId)).Return(request);
-                Expect.Call(() => request.Deny(null, "Test", _authorization)).IgnoreArguments().Throw(new InvalidRequestStateTransitionException());
+                Expect.Call(() => request.Deny("Test", _authorization)).IgnoreArguments().Throw(new InvalidRequestStateTransitionException());
                 Expect.Call(() => unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
             }

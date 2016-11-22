@@ -268,7 +268,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var accept = getAcceptShiftTrade();
 
 			personRequest.Pending();
-			personRequest.Deny(null, "DenyReason", new PersonRequestAuthorizationCheckerForTest());
+			personRequest.Deny("DenyReason", new PersonRequestAuthorizationCheckerForTest());
 			personRequestRepository.Stub(x => x.Get(accept.PersonRequestId)).Return(personRequest);
 
 			target.Handle(accept);
@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var shiftTradeRequestCreated = getNewShiftTradeRequestCreated();
 
 			personRequest.Pending();
-			personRequest.Deny(null, "DenyReason", new PersonRequestAuthorizationCheckerForTest());
+			personRequest.Deny("DenyReason", new PersonRequestAuthorizationCheckerForTest());
 			personRequestRepository.Stub(x => x.Get(shiftTradeRequestCreated.PersonRequestId)).Return(personRequest);
 
 			target.Handle(shiftTradeRequestCreated);

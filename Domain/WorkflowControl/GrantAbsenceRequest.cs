@@ -6,12 +6,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 {
 	public class GrantAbsenceRequest : ProcessAbsenceRequest
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(GrantAbsenceRequest));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(GrantAbsenceRequest));
 
-		public override string DisplayText
-		{
-			get { return UserTexts.Resources.Yes; }
-		}
+		public override string DisplayText => UserTexts.Resources.Yes;
 
 		public override IProcessAbsenceRequest CreateInstance()
 		{
@@ -37,8 +34,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				requiredForProcessingAbsenceRequest.Authorization);
 			foreach (IBusinessRuleResponse ruleResponse in result)
 			{
-				if (Logger.IsWarnEnabled)
-					Logger.WarnFormat("At least one validation rule failed, the schedule cannot be changed. The error was: {0}",
+				if (logger.IsWarnEnabled)
+					logger.WarnFormat("At least one validation rule failed, the schedule cannot be changed. The error was: {0}",
 						ruleResponse.Message);
 			}
 		}

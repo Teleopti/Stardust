@@ -296,7 +296,7 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 
 			if (isAutoDenied)
 			{
-				personRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());
+				personRequest.Deny( "Work Hard!", new PersonRequestAuthorizationCheckerForTest());
 			}
 
 			_personRequestRepository.Add(personRequest);

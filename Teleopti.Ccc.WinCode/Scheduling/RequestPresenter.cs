@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public void Execute()
         {
-            Model.PersonRequest.Deny(null, DenyReasonResourceKey,_authorization);
+            Model.PersonRequest.Deny(DenyReasonResourceKey,_authorization);
             _callback.CommitUndo();
         }
 

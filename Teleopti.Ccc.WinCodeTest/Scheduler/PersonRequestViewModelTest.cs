@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             PropertyChangedListener listener = new PropertyChangedListener();
             listener.ListenTo(_personRequestViewModel);
             Assert.IsFalse(_personRequestViewModel.IsDenied);
-            _personRequestViewModel.PersonRequest.Deny(null, denyReason, new PersonRequestAuthorizationCheckerForTest());
+            _personRequestViewModel.PersonRequest.Deny(denyReason, new PersonRequestAuthorizationCheckerForTest());
             Assert.IsTrue(_personRequestViewModel.IsDenied);
             Assert.AreEqual(denyReason, _personRequestViewModel.PersonRequest.DenyReason);
             Assert.IsTrue(listener.HasFired("StatusText"));

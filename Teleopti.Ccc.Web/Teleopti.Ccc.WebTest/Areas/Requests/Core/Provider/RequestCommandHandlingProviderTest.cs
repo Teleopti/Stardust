@@ -535,7 +535,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 
 			if (isAutoDenied)
 			{
-				personRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());
+				personRequest.Deny("Work Hard!", new PersonRequestAuthorizationCheckerForTest());
 			}
 
 			PersonRequestRepository.Add(personRequest);

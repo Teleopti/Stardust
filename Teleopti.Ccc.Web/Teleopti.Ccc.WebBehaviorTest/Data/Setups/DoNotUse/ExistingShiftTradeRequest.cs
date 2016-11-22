@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 
 			if (AutoDenied)
 			{
-				PersonRequest.Deny(sender, "denyReason", new PersonRequestAuthorizationCheckerForTest());
+				PersonRequest.Deny("denyReason", new PersonRequestAuthorizationCheckerForTest(), sender);
 			}
 			if (HasBeenReferred)
 			{

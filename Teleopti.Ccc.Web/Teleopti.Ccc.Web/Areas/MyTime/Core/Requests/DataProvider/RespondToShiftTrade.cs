@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				return new RequestViewModel();
 			}
 			personRequest.TrySetMessage(message);
-			personRequest.Deny(_loggedOnUser.CurrentUser(), "RequestDenyReasonOtherPart", _personRequestCheckAuthorization);
+			personRequest.Deny("RequestDenyReasonOtherPart", _personRequestCheckAuthorization, _loggedOnUser.CurrentUser());
 
 			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 		}

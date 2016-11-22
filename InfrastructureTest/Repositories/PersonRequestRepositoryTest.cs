@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var shiftExchangeOfferPersonRequest = createShiftExchangeOffer(startDate);
 			var shiftExchangeOfferPersonRequest2 = createShiftExchangeOffer(startDate2);
 
-			shiftExchangeOfferPersonRequest2.Deny(null, "bla", new PersonRequestCheckAuthorization());
+			shiftExchangeOfferPersonRequest2.Deny("bla", new PersonRequestCheckAuthorization());
 
 			PersistAndRemoveFromUnitOfWork(shiftExchangeOfferPersonRequest);
 			PersistAndRemoveFromUnitOfWork(shiftExchangeOfferPersonRequest2);
@@ -351,7 +351,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				});
 
 			IPersonRequest personRequestWithShiftTrade = new PersonRequest(personFrom);
-			personRequestWithShiftTrade.Deny(personFrom, string.Empty, new PersonRequestAuthorizationCheckerForTest());
+			personRequestWithShiftTrade.Deny(string.Empty, new PersonRequestAuthorizationCheckerForTest(), personFrom);
 			Assert.IsTrue(personRequestWithShiftTrade.IsAutoDenied); //!!!
 
 			personRequestWithShiftTrade.Request = shiftTradeRequest;
@@ -494,8 +494,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			pendingShiftTradePersonRequest.Pending();
 			pendingPersonRequest.Pending();
 			//Set the status:
-			shiftTradePersonRequest.Deny(personTo, null, new PersonRequestAuthorizationCheckerForTest());
-			personRequest.Deny(personTo, null, new PersonRequestAuthorizationCheckerForTest());
+			shiftTradePersonRequest.Deny( null, new PersonRequestAuthorizationCheckerForTest(), personTo);
+			personRequest.Deny( null, new PersonRequestAuthorizationCheckerForTest(), personTo);
 			Assert.IsTrue(pendingPersonRequest.IsPending);
 			Assert.IsTrue(pendingShiftTradePersonRequest.IsPending);
 
@@ -545,13 +545,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPersonRequest deniedShiftTradePersonRequest = new PersonRequest(personFrom);
 			deniedShiftTradePersonRequest.Request = shiftTradeRequest2;
 			deniedShiftTradePersonRequest.Pending();
-			deniedShiftTradePersonRequest.Deny(personFrom, null, new PersonRequestAuthorizationCheckerForTest());
+			deniedShiftTradePersonRequest.Deny(null, new PersonRequestAuthorizationCheckerForTest(), personFrom);
 			Assert.IsFalse(deniedShiftTradePersonRequest.IsAutoDenied);
 			Assert.IsTrue(deniedShiftTradePersonRequest.IsDenied);
 
 			IPersonRequest autoDeniedShiftTradePersonRequest = new PersonRequest(personFrom);
 			autoDeniedShiftTradePersonRequest.Request = shiftTradeRequest;
-			autoDeniedShiftTradePersonRequest.Deny(personFrom, null, new PersonRequestAuthorizationCheckerForTest());
+			autoDeniedShiftTradePersonRequest.Deny(null, new PersonRequestAuthorizationCheckerForTest(), personFrom);
 			Assert.IsTrue(autoDeniedShiftTradePersonRequest.IsAutoDenied);
 			Assert.IsTrue(autoDeniedShiftTradePersonRequest.IsDenied);
 
@@ -717,7 +717,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			textRequestDenied.Request =
 				new TextRequest(new DateTimePeriod(new DateTime(2008, 7, 17, 0, 0, 0, DateTimeKind.Utc),
 					new DateTime(2008, 7, 18, 0, 0, 0, DateTimeKind.Utc)));
-			textRequestDenied.Deny(null, null, new PersonRequestAuthorizationCheckerForTest());
+			textRequestDenied.Deny( null, new PersonRequestAuthorizationCheckerForTest());
 
 			IPersonRequest pendingShiftTradePersonRequest = new PersonRequest(personTo);
 
@@ -728,8 +728,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			pendingShiftTradePersonRequest.Request = shiftTradeRequest2;
 			pendingShiftTradePersonRequest.Pending();
 			//Set the status:
-			shiftTradePersonRequest.Deny(null, null, new PersonRequestAuthorizationCheckerForTest());
-			personRequest.Deny(null, null, new PersonRequestAuthorizationCheckerForTest());
+			shiftTradePersonRequest.Deny(null, new PersonRequestAuthorizationCheckerForTest());
+			personRequest.Deny( null, new PersonRequestAuthorizationCheckerForTest());
 			Assert.IsTrue(pendingPersonRequest.IsPending, "Must be pending");
 			Assert.IsTrue(pendingShiftTradePersonRequest.IsPending, "Must be pending");
 
@@ -840,7 +840,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			request1.Request = new AbsenceRequest(_absence, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 			PersistAndRemoveFromUnitOfWork(_absence);
 			PersistAndRemoveFromUnitOfWork(request1);
-			request1.Deny(null, "ResourceKey", new PersonRequestAuthorizationCheckerForTest());
+			request1.Deny("ResourceKey", new PersonRequestAuthorizationCheckerForTest());
 			UnitOfWork.PersistAll();
 
 			IList list = Session.CreateCriteria(typeof (PushMessageDialogue)).List();
@@ -864,7 +864,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var rep = new PersonRequestRepository(UnitOfWork);
 			var request = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(request);
-			request.Deny(_person, "something", new PersonRequestAuthorizationCheckerForTest());
+			request.Deny( "something", new PersonRequestAuthorizationCheckerForTest(), _person);
 
 			Assert.Throws<DataSourceException>(() =>
 				rep.Remove(request));
@@ -1611,12 +1611,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var request2 = createAbsenceRequestAndBusinessUnit(secondAbsence);
 			var request3 = createAbsenceRequestAndBusinessUnit(thirdAbsence);
 
-			request1.Deny(null, "Work harder", authChecker);
+			request1.Deny( "Work harder", authChecker);
 			request2.Approve(new ApprovalServiceForTest(), authChecker);
 
 			request3.SetNew();
 
-			request3.Deny(null, "Work harder", authChecker, PersonRequestDenyOption.AutoDeny);
+			request3.Deny( "Work harder", authChecker, null, PersonRequestDenyOption.AutoDeny);
 
 			PersistAndRemoveFromUnitOfWork(request1);
 			PersistAndRemoveFromUnitOfWork(request2);
@@ -2079,33 +2079,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			IPersonRequest request1 = new PersonRequest(waitlistedPerson, absenceRequest1);
 			request1.Pending();
-			request1.Deny(request1.Person, "waitlisted", new PersonRequestCheckAuthorization(), PersonRequestDenyOption.AutoDeny);
+			request1.Deny( "waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request1);
 
 
 			IPersonRequest request2 = new PersonRequest(waitlistedPerson, absenceRequest2);
 			request2.Pending();
-			request2.Deny(request1.Person, "waitlisted",  new PersonRequestCheckAuthorization(), PersonRequestDenyOption.AutoDeny);
+			request2.Deny( "waitlisted",  new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request2);
 
 			IPersonRequest request3 = new PersonRequest(waitlistedPerson, absenceRequest3);
 			request3.Pending();
-			request3.Deny(request1.Person, "waitlisted", new PersonRequestCheckAuthorization(), PersonRequestDenyOption.AutoDeny);
+			request3.Deny( "waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request3);
 
 			IPersonRequest request4 = new PersonRequest(person2, absenceRequest4);
 			request4.Pending();
-			request4.Deny(request1.Person, "Not waitlisted", new PersonRequestCheckAuthorization(), PersonRequestDenyOption.AutoDeny);
+			request4.Deny( "Not waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request4);
 
 			IPersonRequest request5 = new PersonRequest(waitlistedPerson, absenceRequest5);
 			request5.Pending();
-			request5.Deny(request1.Person, "waitlisted", new PersonRequestCheckAuthorization(), PersonRequestDenyOption.AutoDeny);
+			request5.Deny( "waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request5);
 
 			IPersonRequest request6 = new PersonRequest(waitlistedPerson, absenceRequest6);
 			request6.Pending();
-			request6.Deny(request1.Person, "waitlisted", new PersonRequestCheckAuthorization(), PersonRequestDenyOption.AutoDeny);
+			request6.Deny( "waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request6);
 
 			

@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			UndoAll(requiredForProcessingAbsenceRequest.UndoRedoContainer);
 			var personRequest = (IPersonRequest) absenceRequest.Parent;
 			var denyOption = PersonRequestDenyOption.AutoDeny | DenyOption.GetValueOrDefault(PersonRequestDenyOption.None);
-			personRequest.Deny(absenceRequest.Person, DenyReason, requiredForProcessingAbsenceRequest.Authorization, denyOption);
+			personRequest.Deny(DenyReason, requiredForProcessingAbsenceRequest.Authorization, absenceRequest.Person, denyOption);
 		}
 
 		public override bool Equals(object obj)

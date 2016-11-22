@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (Status == "AutoDenied")
 			{
-				personRequest.Deny (null, null, new PersonRequestAuthorizationCheckerForTest(), PersonRequestDenyOption.AutoDeny);
+				personRequest.Deny (null, new PersonRequestAuthorizationCheckerForTest(), null, PersonRequestDenyOption.AutoDeny);
 			}
 
 			if (Status == "Pending")

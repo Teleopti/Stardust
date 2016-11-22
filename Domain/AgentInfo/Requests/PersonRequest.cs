@@ -200,8 +200,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			notifyPropertyChanged(nameof(IsApproved));
 		}
 
-		public virtual void Deny(IPerson denyPerson, string denyReasonTextResourceKey,
-			IPersonRequestCheckAuthorization authorization, PersonRequestDenyOption personRequestDenyOption = PersonRequestDenyOption.None)
+		public virtual void Deny(string denyReasonTextResourceKey,
+			IPersonRequestCheckAuthorization authorization, IPerson denyPerson = null, PersonRequestDenyOption personRequestDenyOption = PersonRequestDenyOption.None)
 		{
 			_personRequestDenyOption = personRequestDenyOption;
 			authorization.VerifyEditRequestPermission(this);

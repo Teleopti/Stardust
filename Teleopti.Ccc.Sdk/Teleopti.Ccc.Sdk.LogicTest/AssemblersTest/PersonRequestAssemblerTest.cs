@@ -609,7 +609,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
 			AbsenceRequest absenceRequest = new AbsenceRequest(absence, new DateTimePeriod());
 			IPersonRequest personRequest = new PersonRequest(person, absenceRequest);
-			personRequest.Deny(person, string.Empty, new PersonRequestAuthorizationCheckerForTest());
+			personRequest.Deny(string.Empty, new PersonRequestAuthorizationCheckerForTest(), person);
 			Assert.IsTrue(personRequest.IsAutoDenied);
 			
 			PersonRequestDto personRequestDtoInReturn = target.DomainEntityToDto(personRequest);

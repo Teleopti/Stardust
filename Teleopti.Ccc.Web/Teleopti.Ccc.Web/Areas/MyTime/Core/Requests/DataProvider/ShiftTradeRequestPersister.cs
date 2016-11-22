@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				_shiftTradeRequestPermissionValidator.IsSatisfied(personRequest.Request as IShiftTradeRequest);
 			if (!permissionSatisfied)
 			{
-				personRequest.Deny(null, Resources.RecipientHasNoShiftTradePermission, _personRequestCheckAuthorization);
+				personRequest.Deny( Resources.RecipientHasNoShiftTradePermission, _personRequestCheckAuthorization);
 			}
 
 			var requestViewModel = _autoMapper.Map<IPersonRequest, RequestViewModel>(personRequest);

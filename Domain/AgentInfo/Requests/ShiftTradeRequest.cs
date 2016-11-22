@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             switch (shiftTradeStatus)
             {
                 case ShiftTradeStatus.NotValid:
-                    ((IPersonRequest) Parent).Deny(null,null,authorization);
+                    ((IPersonRequest) Parent).Deny(null,authorization);
                     break;
                 case ShiftTradeStatus.Referred:
                     ((IPersonRequest) Parent).ForcePending();

@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			setup();
 			_personRequest = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime), false);
-			_personRequest.Deny(null, "test", new PersonRequestAuthorizationCheckerForTest(), PersonRequestDenyOption.AutoDeny);
+			_personRequest.Deny("test", new PersonRequestAuthorizationCheckerForTest(), null, PersonRequestDenyOption.AutoDeny);
 			_event.PersonRequestIdList = new Guid[] { _personRequest.Id.GetValueOrDefault() };
 			setBudgetAndAllowance(_person, 1, 2);
 			_target.Handle(_event);

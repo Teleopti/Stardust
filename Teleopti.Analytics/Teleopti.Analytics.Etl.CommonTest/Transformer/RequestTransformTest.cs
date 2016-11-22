@@ -40,7 +40,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			IPersonRequest personRequest2 = new PersonRequest(person2);
 			personRequest2.Request = new AbsenceRequest(AbsenceFactory.CreateAbsenceCollection().ElementAt(0), new DateTimePeriod(2012, 01, 28, 2012, 01, 28));
 			personRequest2.SetId(Guid.NewGuid());
-			personRequest2.Deny(person2, "test", new PersonRequestAuthorizationCheckerForTest());
+			personRequest2.Deny("test", new PersonRequestAuthorizationCheckerForTest(), person2);
 			RaptorTransformerHelper.SetUpdatedOn(personRequest2, DateTime.UtcNow);
 			_personRequestList = new List<IPersonRequest>() { personRequest2 };
 			_target = new RequestTransformer();
@@ -150,7 +150,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			IPersonRequest personRequest = new PersonRequest(person);
 			personRequest.Request = new AbsenceRequest(absence, new DateTimePeriod(startDate, startDate.AddHours (8)));
 			personRequest.SetId(Guid.NewGuid());
-			personRequest.Deny(null, "Work Harder", new PersonRequestAuthorizationCheckerForTest());
+			personRequest.Deny( "Work Harder", new PersonRequestAuthorizationCheckerForTest());
 
 			RaptorTransformerHelper.SetUpdatedOn(personRequest, DateTime.UtcNow);
 

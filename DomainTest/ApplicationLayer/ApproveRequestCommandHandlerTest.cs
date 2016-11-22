@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			addAssignment(person, absenceDateTimePeriod);
 
 			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
-			personRequest.Deny(null, "test", new PersonRequestAuthorizationCheckerConfigurable());
+			personRequest.Deny("test", new PersonRequestAuthorizationCheckerConfigurable());
 
 			var command = new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value };
 			_approveRequestCommandHandler.Handle(command);

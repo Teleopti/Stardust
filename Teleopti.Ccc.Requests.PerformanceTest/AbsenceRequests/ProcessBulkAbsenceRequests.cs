@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 				//Add a request to waitlist
 				waitListedRequest = createAbsenceRequest(persons.FirstOrDefault(x => x.Name.ToString().Contains("Sara")), absence, new DateTimePeriod(new DateTime(2016, 3, 10, 8, 0, 0, DateTimeKind.Utc),
 																										   new DateTime(2016, 3, 10, 18, 0, 0, DateTimeKind.Utc)));
-				waitListedRequest.Deny(waitListedRequest.Person, "Deny Monster says: DENY!", new PersonRequestAuthorizationCheckerForTest(), PersonRequestDenyOption.AutoDeny);
+				waitListedRequest.Deny("Deny Monster says: DENY!", new PersonRequestAuthorizationCheckerForTest(), waitListedRequest.Person, PersonRequestDenyOption.AutoDeny);
 				PersonRequestRepository.Add(waitListedRequest);
 				personReqs.Add(waitListedRequest);
 

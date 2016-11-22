@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				Request = absenceRequest
 			};
 
-			personRequest.Deny (null,"work harder", new PersonRequestAuthorizationCheckerForTest());
+			personRequest.Deny ("work harder", new PersonRequestAuthorizationCheckerForTest());
 
 			absenceRequest.SetId(Guid.NewGuid());
 			absenceRequest.Parent.SetId(Guid.NewGuid());

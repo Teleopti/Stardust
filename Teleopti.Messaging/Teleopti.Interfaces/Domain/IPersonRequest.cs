@@ -159,7 +159,7 @@ namespace Teleopti.Interfaces.Domain
 	    /// <param name="denyPerson">The deny person.</param>
 	    /// <param name="denyReasonTextResourceKey">The deny reason text resource key.</param>
 	    /// <param name="authorization"></param>
-	    void Deny(IPerson denyPerson, string denyReasonTextResourceKey, IPersonRequestCheckAuthorization authorization, PersonRequestDenyOption personRequestDenyOption = PersonRequestDenyOption.None);
+	    void Deny(string denyReasonTextResourceKey, IPersonRequestCheckAuthorization authorization, IPerson denyPerson = null, PersonRequestDenyOption personRequestDenyOption = PersonRequestDenyOption.None);
 
         /// <summary>
         /// Answers the specified message.

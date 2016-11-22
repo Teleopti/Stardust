@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 personRequest = _personRequestRepository.Get(command.PersonRequestId);
                 try
                 {
-                    personRequest.Deny(null, "RequestDenyReasonSupervisor",
+                    personRequest.Deny("RequestDenyReasonSupervisor",
                                        _authorization);
                 }
                 catch (InvalidRequestStateTransitionException e)

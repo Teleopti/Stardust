@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			using (mocks.Playback())
 			{
 				Assert.IsTrue(_target.IsNew);
-				_target.Deny(null, null, _authorization);
+				_target.Deny(null, _authorization);
 				Assert.IsTrue(_target.IsDenied);
 			}
 		}
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			{
 				_target.Pending();
 				Assert.IsTrue(_target.IsPending);
-				_target.Deny(null, null, _authorization);
+				_target.Deny(null, _authorization);
 				Assert.IsTrue(_target.IsDenied);
 			}
 		}
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 					Assert.IsTrue(_target.IsPending);
 					_target.Approve(new ApprovalServiceForTest(), _authorization);
 					Assert.IsTrue(_target.IsApproved);
-					_target.Deny(null, null, _authorization);
+					_target.Deny(null, _authorization);
 				}
 			});
 

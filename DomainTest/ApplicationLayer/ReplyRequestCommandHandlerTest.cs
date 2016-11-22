@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldHandleExceptionWhenReplyToAutoDeniedRequest()
 		{
 			var autoDeniedPersonRequest = new PersonRequestFactory().CreateNewPersonRequest().WithId();
-			autoDeniedPersonRequest.Deny(null, null, new PersonRequestAuthorizationCheckerForTest());
+			autoDeniedPersonRequest.Deny(null, new PersonRequestAuthorizationCheckerForTest());
 			autoDeniedPersonRequest.Persisted();
 			_personRequestRepositoryNoMock.Add(autoDeniedPersonRequest);
 			var command = new ReplyRequestCommand
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldHandleExceptionWhenReplyToDeniedRequest()
 		{
 			var deniedPersonRequest = new PersonRequestFactory().CreatePersonRequest().WithId();
-			deniedPersonRequest.Deny(null, null, new PersonRequestAuthorizationCheckerForTest());
+			deniedPersonRequest.Deny(null, new PersonRequestAuthorizationCheckerForTest());
 			deniedPersonRequest.Persisted();
 			_personRequestRepositoryNoMock.Add(deniedPersonRequest);
 			var command = new ReplyRequestCommand

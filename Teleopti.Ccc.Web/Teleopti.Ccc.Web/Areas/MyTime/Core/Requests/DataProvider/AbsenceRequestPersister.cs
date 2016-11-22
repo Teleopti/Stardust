@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				var result = _absenceRequestSynchronousValidator.Validate(personRequest);
 				if (!result.IsValid)
 				{
-					personRequest.Deny(null, result.ValidationErrors, _personRequestCheckAuthorization,
+					personRequest.Deny(result.ValidationErrors, _personRequestCheckAuthorization, null,
 									   PersonRequestDenyOption.AutoDeny | result.DenyOption.GetValueOrDefault(PersonRequestDenyOption.None));
 				}
 				_personRequestRepository.Add(personRequest);

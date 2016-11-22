@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 			y = new PersonRequestViewModel(personRequestY,
 			                               _checker, _personAccount, _eventAgg, _info);
 
-			personRequestX.Deny(new Person(), "", authorization);
+			personRequestX.Deny("", authorization);
 			personRequestY.ForcePending();
 			personRequestY.Approve(new ApprovalServiceForTest(), authorization);
 
