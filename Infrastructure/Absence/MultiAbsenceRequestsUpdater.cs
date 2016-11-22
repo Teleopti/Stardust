@@ -19,7 +19,6 @@ using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -49,7 +48,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly ArrangeRequestsByProcessOrder _arrangeRequestsByProcessOrder;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
-		private readonly IToggleManager _toggleManager;
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
 		private readonly IPersonRepository _personRepository;
 		private readonly ISkillRepository _skillRepository;
@@ -77,7 +75,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			IStardustJobFeedback feedback, 
 			ArrangeRequestsByProcessOrder arrangeRequestsByProcessOrder, 
 			IScheduleDayChangeCallback scheduleDayChangeCallback, 
-			ISchedulingResultStateHolder schedulingResultStateHolder, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IToggleManager toggleManager, IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, IPersonRepository personRepository, ISkillRepository skillRepository, IContractRepository contractRepository, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository, ISkillTypeRepository skillTypeRepository, IActivityRepository activityRepository, IAbsenceRepository absenceRepository, IPersonRequestRepository personRequestRepository, IDayOffTemplateRepository dayOffTemplateRepository)
+			ISchedulingResultStateHolder schedulingResultStateHolder, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, IPersonRepository personRepository, ISkillRepository skillRepository, IContractRepository contractRepository, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository, ISkillTypeRepository skillTypeRepository, IActivityRepository activityRepository, IAbsenceRepository absenceRepository, IPersonRequestRepository personRequestRepository, IDayOffTemplateRepository dayOffTemplateRepository)
 		{
 			_scenarioRepository = scenarioRepository;
 			_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
@@ -95,7 +93,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
-			_toggleManager = toggleManager;
 			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
 			_personRepository = personRepository;
 			_skillRepository = skillRepository;
@@ -119,20 +116,13 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				stopwatch.Start();
-				_skillRepository.LoadAllSkills();
-				_contractRepository.LoadAll();
-				_skillTypeRepository.LoadAll();
-				_partTimePercentageRepository.LoadAll();
-				_contractScheduleRepository.LoadAllAggregate();
-				_activityRepository.LoadAll();
-				_absenceRepository.LoadAll();
-				_dayOffTemplateRepository.LoadAll();
+				preloadData();
 				personRequests = _personRequestRepository.Find(personRequestsIds);
 				_personRepository.FindPeople(personRequests.Select(x => x.Person.Id.GetValueOrDefault()));
 				stopwatch.Stop();
 				_feedback.SendProgress($"Done preloading data! It took {stopwatch.Elapsed}");
 
-				
+
 				foreach (var personRequest in personRequests)
 				{
 					var person = personRequest.Person;
@@ -187,6 +177,18 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				}
 				_feedback.SendProgress($"Persisted request {personRequest.Id}.");
 			}
+		}
+
+		private void preloadData()
+		{
+			_skillRepository.LoadAllSkills();
+			_contractRepository.LoadAll();
+			_skillTypeRepository.LoadAll();
+			_partTimePercentageRepository.LoadAll();
+			_contractScheduleRepository.LoadAllAggregate();
+			_activityRepository.LoadAll();
+			_absenceRepository.LoadAll();
+			_dayOffTemplateRepository.LoadAll();
 		}
 
 		private void processOrderList(IList<IPersonRequest> requests)
@@ -250,7 +252,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 						_budgetGroupHeadCountSpecification);
 
 				stopwatch.Restart();
-
 				processAbsenceRequest.Process(absenceRequest,
 											  requiredForProcessingAbsenceRequest,
 											  requiredForHandlingAbsenceRequest,
