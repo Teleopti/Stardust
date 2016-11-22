@@ -23,5 +23,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			Delete(analyticsHourlyAvailability.PersonId, analyticsHourlyAvailability.DateId, analyticsHourlyAvailability.ScenarioId);
 			AnalyticsHourlyAvailabilities.Add(analyticsHourlyAvailability);
 		}
+
+		public void UpdateUnlinkedPersonids(int[] personPeriodIds)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public int GetFactHourlyAvailabilityRowCount(int personPeriodId)
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }

@@ -93,24 +93,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				_timeZones.UtcTimeZoneId));
 		}
 
-		private void insertFactSchedule(int personId, DateTime activityStartTime,int ShiftStartDateLocalId=1)
+		private void insertFactSchedule(int personId, DateTime activityStartTime,int shiftStartDateLocalId=1)
 		{
 			var datePart = new AnalyticsFactScheduleDate
 			{
-				ScheduleStartDateLocalId = ShiftStartDateLocalId,
-				ScheduleDateId = ShiftStartDateLocalId,
+				ScheduleStartDateLocalId = shiftStartDateLocalId,
+				ScheduleDateId = shiftStartDateLocalId,
 				IntervalId = 32,
 				ActivityStartTime = activityStartTime,
-				ActivityStartDateId = ShiftStartDateLocalId,
-				ActivityEndDateId = ShiftStartDateLocalId,
+				ActivityStartDateId = shiftStartDateLocalId,
+				ActivityEndDateId = shiftStartDateLocalId,
 				ActivityEndTime = activityStartTime.AddMinutes(15),
 				ShiftStartIntervalId = 32,
 				ShiftEndIntervalId = 68,
 				DatasourceUpdateDate = DateTime.Now,
 				ShiftStartTime = activityStartTime,
 				ShiftEndTime = DateTime.Today.AddHours(17),
-				ShiftStartDateId = ShiftStartDateLocalId,
-				ShiftEndDateId = ShiftStartDateLocalId
+				ShiftStartDateId = shiftStartDateLocalId,
+				ShiftEndDateId = shiftStartDateLocalId
             };
 			var timePart = new AnalyticsFactScheduleTime
 			{

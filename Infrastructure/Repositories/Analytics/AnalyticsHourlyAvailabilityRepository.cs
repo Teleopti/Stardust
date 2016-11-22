@@ -50,5 +50,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			.SetParameter(nameof(analyticsHourlyAvailability.BusinessUnitId), analyticsHourlyAvailability.BusinessUnitId)
 			.ExecuteUpdate();
 		}
+
+		public void UpdateUnlinkedPersonids(int[] personPeriodIds)
+		{
+			_currentAnalyticsUnitOfWork.Current()
+				.Session()
+				.CreateSQLQuery(
+					$@"exec mart.etl_fact_hourly_availability_update_unlinked_personids 
+							@person_periodids=:PersonIds
+							")
+				.SetString("PersonIds", string.Join(",", personPeriodIds))
+				.ExecuteUpdate();
+		}
+
+		public int GetFactHourlyAvailabilityRowCount(int personId)
+		{
+			return _currentAnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
+				$@"select count(1) from mart.fact_hourly_availability WITH (NOLOCK) WHERE person_id =:{nameof(personId)} ")
+				.SetInt32(nameof(personId), personId)
+				.UniqueResult<int>();
+		}
 	}
 }
