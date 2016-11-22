@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest,
 			IEnumerable<IAbsenceRequestValidator> absenceRequestValidatorList)
 		{
-			UndoAll(requiredForProcessingAbsenceRequest);
+			UndoAll(requiredForProcessingAbsenceRequest.UndoRedoContainer);
 			var personRequest = (IPersonRequest) absenceRequest.Parent;
 			var denyOption = PersonRequestDenyOption.AutoDeny | DenyOption.GetValueOrDefault(PersonRequestDenyOption.None);
 			personRequest.Deny(processingPerson, DenyReason, requiredForProcessingAbsenceRequest.Authorization, denyOption);

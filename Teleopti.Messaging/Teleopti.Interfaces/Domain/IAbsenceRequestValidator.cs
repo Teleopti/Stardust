@@ -1,58 +1,37 @@
 namespace Teleopti.Interfaces.Domain
 {
-    public interface IAbsenceRequestValidator
-    {
+	public interface IAbsenceRequestValidator
+	{
 
-        string InvalidReason { get; }
+		string InvalidReason { get; }
 
-        string DisplayText { get; }
+		string DisplayText { get; }
 
 
-        IValidatedRequest Validate(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest);
+		IValidatedRequest Validate(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest);
 
-        IAbsenceRequestValidator CreateInstance();
-    }
+		IAbsenceRequestValidator CreateInstance();
+	}
 
-    public struct RequiredForHandlingAbsenceRequest
-    {
-        private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-        private readonly IPersonAccountBalanceCalculator _personAccountBalanceCalculator;
-        private readonly IBudgetGroupAllowanceSpecification _budgetGroupAllowanceSpecification;
-        private readonly IBudgetGroupHeadCountSpecification _budgetGroupHeadCountSpecification;
-        private readonly IResourceOptimization _resourceOptimizationHelper;
+	public struct RequiredForHandlingAbsenceRequest
+	{
+		public RequiredForHandlingAbsenceRequest(ISchedulingResultStateHolder schedulingResultStateHolder, IPersonAccountBalanceCalculator personAccountBalanceCalculator, IResourceOptimization resourceOptimizationHelper, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification = null)
+		{
+			ResourceOptimizationHelper = resourceOptimizationHelper;
+			BudgetGroupAllowanceSpecification = budgetGroupAllowanceSpecification;
+			BudgetGroupHeadCountSpecification = budgetGroupHeadCountSpecification;
+			SchedulingResultStateHolder = schedulingResultStateHolder;
+			PersonAccountBalanceCalculator = personAccountBalanceCalculator;
+		}
 
-        public RequiredForHandlingAbsenceRequest(ISchedulingResultStateHolder schedulingResultStateHolder, IPersonAccountBalanceCalculator personAccountBalanceCalculator, IResourceOptimization resourceOptimizationHelper, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification = null)
-        {
-            _resourceOptimizationHelper = resourceOptimizationHelper;
-            _budgetGroupAllowanceSpecification = budgetGroupAllowanceSpecification;
-            _budgetGroupHeadCountSpecification = budgetGroupHeadCountSpecification;
-            _schedulingResultStateHolder = schedulingResultStateHolder;
-            _personAccountBalanceCalculator = personAccountBalanceCalculator;
-        }
+		public ISchedulingResultStateHolder SchedulingResultStateHolder { get; }
 
-        public ISchedulingResultStateHolder SchedulingResultStateHolder
-        {
-            get { return _schedulingResultStateHolder; }
-        }
+		public IPersonAccountBalanceCalculator PersonAccountBalanceCalculator { get; }
 
-        public IPersonAccountBalanceCalculator PersonAccountBalanceCalculator
-        {
-            get { return _personAccountBalanceCalculator; }
-        }
+		public IBudgetGroupAllowanceSpecification BudgetGroupAllowanceSpecification { get; }
 
-        public IBudgetGroupAllowanceSpecification BudgetGroupAllowanceSpecification
-        {
-            get { return _budgetGroupAllowanceSpecification; }
-        }
+		public IResourceOptimization ResourceOptimizationHelper { get; }
 
-        public IResourceOptimization ResourceOptimizationHelper
-        {
-            get { return _resourceOptimizationHelper; }
-        }
-
-        public IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification
-        {
-            get { return _budgetGroupHeadCountSpecification; }
-        }
-    }
+		public IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification { get; }
+	}
 }

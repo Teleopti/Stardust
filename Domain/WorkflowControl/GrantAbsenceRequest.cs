@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				!CheckValidatorList(processingPerson, absenceRequest, requiredForProcessingAbsenceRequest,
 					requiredForHandlingAbsenceRequest, absenceRequestValidatorList)) return;
 
-			UndoAll(requiredForProcessingAbsenceRequest);
+			UndoAll(requiredForProcessingAbsenceRequest.UndoRedoContainer);
 			requiredForProcessingAbsenceRequest.AfterUndoCallback();
 
 			IPersonRequest personRequest = (IPersonRequest)absenceRequest.Parent;

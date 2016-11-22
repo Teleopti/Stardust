@@ -181,9 +181,9 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				}
 				if (count >= 3)
 				{
-					string errorMessage = $"Optimistic lock when persisting request ({personRequest.Id.GetValueOrDefault()})! Number of retries: {count}";
-					logger.Error(errorMessage);
-					_feedback.SendProgress(errorMessage);
+					string message = $"Optimistic lock when persisting request ({personRequest.Id.GetValueOrDefault()})! Number of retries: {count}";
+					logger.Warn(message);
+					_feedback.SendProgress(message);
 				}
 				_feedback.SendProgress($"Persisted request {personRequest.Id}.");
 			}
@@ -229,10 +229,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				simulateApproveAbsence(absenceRequest, requestApprovalServiceScheduler);
 
 				//Will issue a rollback for simulated schedule data
-				stopwatch.Restart();
 				processAbsenceRequest = handleInvalidSchedule(processAbsenceRequest, personRequest.Person);
-				stopwatch.Stop();
-				_feedback.SendProgress($"handleInvalidSchedule took {stopwatch.Elapsed}");
 
 				var requiredForProcessingAbsenceRequest = new RequiredForProcessingAbsenceRequest(
 					undoRedoContainer,
@@ -260,11 +257,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 											  validatorList);
 				stopwatch.Stop();
 				_feedback.SendProgress($"processAbsenceRequest.process(..) took {stopwatch.Elapsed}");
-
-				string response = "approved or denied";
-				if (personRequest.IsApproved) response = "approved";
-				if (personRequest.IsDenied) response = "denied";
-				_feedback.SendProgress($"PreProcessed request {personRequest.Id} ({personRequest.Person.Name}, {personRequest.Request.Period}). Request will be {response}!");
 			}
 		}
 

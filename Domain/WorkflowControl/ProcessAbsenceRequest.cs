@@ -33,12 +33,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return true;
 		}
 
-		protected void UndoAll(RequiredForProcessingAbsenceRequest requiredForProcessingAbsenceRequest)
+		protected void UndoAll(IUndoRedoContainer undoRedoContainer)
 		{
-			if (requiredForProcessingAbsenceRequest.UndoRedoContainer != null)
-			{
-				requiredForProcessingAbsenceRequest.UndoRedoContainer.UndoAll();
-			}
+			undoRedoContainer?.UndoAll();
 		}
 
 		public abstract void Process(IPerson processingPerson, IAbsenceRequest absenceRequest,
