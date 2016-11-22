@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public PersonAvailabilityRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{
-
 		}
 
 		public IEnumerable<IPersonAvailability> LoadPersonAvailabilityWithHierarchyData(IEnumerable<IPerson> persons, DateOnly startDate)
@@ -30,10 +29,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var rep2 = new AvailabilityRepository(UnitOfWork);
 			rep2.LoadAvailabilitiesWithHierarchyData(persons,startDate);
 
-			return LoadForPersons(persons);
+			return loadForPersons(persons);
 		}
 
-		private IEnumerable<IPersonAvailability> LoadForPersons(IEnumerable<IPerson> persons)
+		private IEnumerable<IPersonAvailability> loadForPersons(IEnumerable<IPerson> persons)
 		{
 		    var personAvailabilites = new List<IPersonAvailability>();
 		    foreach (var personBatch in persons.Batch(400))

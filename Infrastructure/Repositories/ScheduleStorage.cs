@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					    _repositoryFactory.CreateOvertimeAvailabilityRepository(uow).Find(longDateOnlyPeriod, visiblePersons));
 				    if (!scheduleDictionaryLoadOptions.LoadOnlyPreferensesAndHourlyAvailability)
 				    {
-					    addPersonAvailabilities(longDateOnlyPeriod, scheduleDictionary, personsInOrganization);
+					    addPersonAvailabilities(longDateOnlyPeriod, scheduleDictionary, visiblePersons);
 					    addPersonRotations(longDateOnlyPeriod, scheduleDictionary, visiblePersons);
 				    }
 			    }
