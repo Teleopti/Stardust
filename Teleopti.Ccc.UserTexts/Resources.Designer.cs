@@ -23793,6 +23793,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The requested period is too long.
+        /// </summary>
+        public static string RequestedPeriodIsTooLong {
+            get {
+                return ResourceManager.GetString("RequestedPeriodIsTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Request.
         /// </summary>
         public static string RequestForm {

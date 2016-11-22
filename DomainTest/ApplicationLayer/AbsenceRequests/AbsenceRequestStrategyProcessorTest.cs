@@ -3,9 +3,12 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -24,10 +27,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private int _windowSize;
 		private DateOnlyPeriod _initialPeriod;
 		private DateTime _now;
+		public FakeConfigReader ConfigReader;
+		public FakeCommandDispatcher CommandDispatcher;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<AbsenceRequestStrategyProcessor>().For<IAbsenceRequestStrategyProcessor>();
+			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 			_windowSize = 3;
 			_now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
 			_pastThreshold = _now;
@@ -447,6 +453,82 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			absenceRequests.Count.Should().Be.EqualTo(1);
 			absenceRequests.First().Count().Should().Be.EqualTo(1);
 			absenceRequests.First().First().Should().Be.EqualTo(id);
+		}
+
+		[Test]
+		public void ShouldIgnoreRequestThatAreLongerThanMaximumDays()
+		{
+			ConfigReader.FakeSetting("MaximumDayLengthForAbsenceRequest", "20");
+			var id = Guid.NewGuid();
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 4, 2, 23, 59, 00, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-13),
+				PersonRequest = id
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 5, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 5, 23, 59, 00, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-12),
+				PersonRequest = Guid.NewGuid()
+			});
+
+			var absenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			absenceRequests.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldDenyAbsenceThatAreLongerThanConfiguredDays()
+		{
+			ConfigReader.FakeSetting("MaximumDayLengthForAbsenceRequest", "20");
+			var id = Guid.NewGuid();
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 4, 2, 23, 59, 00, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-13),
+				PersonRequest = id
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 5, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 5, 23, 59, 00, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-12),
+				PersonRequest = Guid.NewGuid()
+			});
+
+			Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			CommandDispatcher.Command.Count.Should().Be.EqualTo(1);
+			((DenyRequestCommand) CommandDispatcher.Command.FirstOrDefault()).PersonRequestId.Should().Be.EqualTo(id);
+		}
+
+		[Test]
+		public void ShouldRemoveAbsenceThatAreLongerThanConfiguredDays()
+		{
+			ConfigReader.FakeSetting("MaximumDayLengthForAbsenceRequest", "20");
+			var id = Guid.NewGuid();
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 4, 2, 23, 59, 00, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-13),
+				PersonRequest = id
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 5, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 5, 23, 59, 00, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-12),
+				PersonRequest = Guid.NewGuid()
+			});
+
+			Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			QueuedAbsenceRequestRepository.LoadAll().Count().Should().Be.EqualTo(1);
 		}
 	}
 }

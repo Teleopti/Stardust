@@ -15211,4 +15211,8 @@ These options are activated:
     <value>Add Overtime Activity</value>
     <comment>Name of the command adding an overtime activity</comment>
   </data>
+  <data name="RequestedPeriodIsTooLong" xml:space="preserve">
+    <value>The requested period is too long</value>
+    <comment>When the absence request period is too long</comment>
+  </data>
 </root>
