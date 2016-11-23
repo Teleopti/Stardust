@@ -77,7 +77,7 @@ BEGIN
 		SELECT Person.Id, FirstName, LastName, EmploymentNumber,Team, Parent, [Contract], [ContractSchedule], 
 		PartTimePercentage, RuleSetBag, pp.Id, pp.Note
 		FROM PersonPeriod pp
-		INNER JOIN Person ON pp.Parent = Person.Id AND Person.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
+		INNER JOIN Person with (nolock) ON pp.Parent = Person.Id AND Person.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
 		and ISNULL(TerminalDate, '2100-01-01') >= @ondate
 
 	--declare
@@ -173,7 +173,7 @@ BEGIN
 		SELECT DISTINCT pp.Id, Team.Id, Site.Id, Site.BusinessUnit , p.Note,  
 		pp.FirstName, pp.LastName, pp.EmploymentNumber  
 		FROM  #TempPersonPeriodWithEndDate pp
-		INNER JOIN Person p on pp.Parent = p.Id
+		INNER JOIN Person p with (nolock) on pp.Parent = p.Id
 		INNER JOIN Team ON Team.Id = pp.Team
 		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
 		AND p.Note <> ''
