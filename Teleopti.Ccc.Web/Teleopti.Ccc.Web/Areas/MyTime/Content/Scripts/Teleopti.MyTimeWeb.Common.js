@@ -270,6 +270,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 				modal: true,
 				create: function (event, ui) {
 					var responseText = msg.Message;
+					console.log("Ajax Error msg: " + responseText);
 					$(this).html(responseText);
 
 					var closeBtn = $('.ui-dialog-titlebar-close');
