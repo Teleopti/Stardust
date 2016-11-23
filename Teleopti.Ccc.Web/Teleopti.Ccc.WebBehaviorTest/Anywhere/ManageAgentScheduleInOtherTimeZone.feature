@@ -50,7 +50,7 @@ Scenario: Timeline for agent in other time zone
 	| End time   | 16:00 |
 	And I should see the agent's time line with
 	| Field      | Value     |
-	| Time zone  | UTC+03:00 |
+	| Time zone  | UTC+02:00 |
 	| Start time | 09:00     |
 	| End time   | 17:00     |
 
@@ -270,7 +270,7 @@ Scenario: Absence to remove is also displayed in other time zone
 	| End time   | 2013-11-18 22:59 |
 	And I should see absence in other time zone with
 	| Field      | Value            |
-	| Time zone  | UTC+03:00        |
+	| Time zone  | UTC+02:00        |
 	| Start time | 2013-11-18 00:00 |
 	| End time   | 2013-11-18 23:59 |
 
