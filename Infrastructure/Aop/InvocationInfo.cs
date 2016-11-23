@@ -39,19 +39,18 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			_invocation.SetArgumentValue(index, value);
 		}
 
-		public object[] Arguments => _invocation.Arguments;
-		public Type[] GenericArguments => _invocation.GenericArguments;
-		public object InvocationTarget => _invocation.InvocationTarget;
-		public MethodInfo Method => _invocation.Method;
-		public MethodInfo MethodInvocationTarget => _invocation.MethodInvocationTarget;
-		public object Proxy => _invocation.Proxy;
-
+		public object[] Arguments { get { return _invocation.Arguments; } }
+		public Type[] GenericArguments { get { return _invocation.GenericArguments; } }
+		public object InvocationTarget { get { return _invocation.InvocationTarget; } }
+		public MethodInfo Method { get { return _invocation.Method; } }
+		public MethodInfo MethodInvocationTarget { get { return _invocation.MethodInvocationTarget; } }
+		public object Proxy { get { return _invocation.Proxy; } }
 		public object ReturnValue
 		{
 			get { return _invocation.ReturnValue; }
 			set { _invocation.ReturnValue = value; }
 		}
 
-		public Type TargetType => _invocation.TargetType;
+		public Type TargetType { get { return _invocation.TargetType; } }
 	}
 }
