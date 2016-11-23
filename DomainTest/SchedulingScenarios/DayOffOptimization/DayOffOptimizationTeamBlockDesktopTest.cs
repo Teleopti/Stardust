@@ -156,12 +156,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var skill1 = new Skill("_", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity1 }.WithId();
 			var skill2 = new Skill("_", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity2 }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill1);
-			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill2);
-			foreach (var workload in skill2.WorkloadCollection)
-			{
-				workload.TemplateWeekCollection[0].Close();
-				workload.TemplateWeekCollection[6].Close();
-			}
+			WorkloadFactory.CreateWorkloadWithFullOpenHoursDuringWeekdays(skill2);
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity1, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));

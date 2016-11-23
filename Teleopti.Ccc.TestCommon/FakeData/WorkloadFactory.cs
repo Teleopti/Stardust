@@ -45,13 +45,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			var workload = CreateWorkload(skill);
 			for (var i = 0; i < workload.TemplateWeekCollection.Count; i++)
 			{
-				if (i < 5)
+				if (i == 0 || i == 6)
 				{
-					workload.TemplateWeekCollection[i].MakeOpen24Hours();
+					workload.TemplateWeekCollection[i].Close();
 				}
 				else
 				{
-					workload.TemplateWeekCollection[i].Close();
+					workload.TemplateWeekCollection[i].MakeOpen24Hours();
 				}
 			}
 			return workload;
