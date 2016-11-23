@@ -154,6 +154,7 @@
     <Compile Include="Aop\ValidationTest.cs" />
     <Compile Include="ApplicationLayer\AnalyticsPersonPeriodUpdaterIntegrationTests.cs" />
     <Compile Include="ApplicationLayer\Archiving\ArchiveScheduleHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\Archiving\SplitTestCase.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireSerializeEventPublishingTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireTestAttribute.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireEventProcessorTest.cs" />

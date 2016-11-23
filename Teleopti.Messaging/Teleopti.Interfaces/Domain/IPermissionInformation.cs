@@ -146,7 +146,7 @@ namespace Teleopti.Interfaces.Domain
         void RemoveApplicationRole(IApplicationRole role);
 
         /// <summary>
-        /// Gets the default time zone.
+        /// Sets the default time zone.
         /// </summary>
         /// <value>The default time zone.</value>
         /// <remarks>

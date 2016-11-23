@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			}
 			catch (InvalidOperationException e)
 			{
+				Console.WriteLine(e.ToString());
 				throw new InconclusiveException("The test failed randomly, now randomly ignore instead. Follow up if it fails again.", e);
 			}
 		}
@@ -65,6 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			}
 			catch (InvalidOperationException e)
 			{
+				Console.WriteLine(e.ToString());
 				throw new InconclusiveException("The test failed randomly, now randomly ignore instead. Follow up if it fails again.", e);
 			}
 		}
