@@ -298,13 +298,10 @@ WHERE
 		}
 
 		[LogInfo]
-		public virtual IEnumerable<AgentState> Get(IEnumerable<Guid> personIds, DeadLockVictim deadLockVictim)
+		public virtual IEnumerable<AgentState> GetStates()
 		{
-			_deadLockVictimThrower.SetDeadLockPriority(deadLockVictim);
-
-			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE PersonId IN (:PersonIds)";
+			var sql = SelectAgentState + "WITH (TABLOCK, UPDLOCK)";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetParameterList("PersonIds", personIds)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
 				.SetReadOnly(true)
 				.List<AgentState>()
@@ -314,10 +311,11 @@ WHERE
 		}
 
 		[LogInfo]
-		public virtual IEnumerable<AgentState> GetStates()
+		public virtual IEnumerable<AgentState> Get(IEnumerable<Guid> personIds)
 		{
-			var sql = SelectAgentState + "WITH (TABLOCK, UPDLOCK)";
+			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE PersonId IN (:PersonIds)";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
+				.SetParameterList("PersonIds", personIds)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
 				.SetReadOnly(true)
 				.List<AgentState>()
@@ -366,6 +364,8 @@ WHERE
 
 		private class internalExternalLogonForCheck : ExternalLogonForCheck
 		{
+			public Guid PersonId { get; set; }
+
 			public string DataSourceIdUserCode
 			{
 				set

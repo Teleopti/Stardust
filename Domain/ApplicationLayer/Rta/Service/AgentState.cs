@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class ExternalLogonForCheck : ExternalLogon
 	{
-		public Guid PersonId { get; set; }
 		public DateTime? NextCheck { get; set; }
 	}
 

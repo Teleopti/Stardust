@@ -56,9 +56,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IEnumerable<ExternalLogonForCheck> FindForCheck();
 		IEnumerable<ExternalLogon> FindForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState);
 		IEnumerable<AgentStateFound> Find(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim);
-		IEnumerable<AgentState> Get(IEnumerable<Guid> personIds, DeadLockVictim deadLockVictim);
 		IEnumerable<AgentState> GetStates();
 		void Update(AgentState model, bool updateSchedule);
+
+		// if sync used FindAll this can be removed
+		IEnumerable<AgentState> Get(IEnumerable<Guid> personIds);
+
 	}
 
 	public static class AgentStatePersisterExtensions

@@ -96,7 +96,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					.GroupBy(x => x.PersonId, (guid, states) => states.First())
 					.Select(x => new ExternalLogonForCheck
 					{
-						PersonId = x.PersonId,
 						DataSourceId = x.DataSourceId,
 						UserCode = x.UserCode,
 						NextCheck = x.State.NextCheck
@@ -156,7 +155,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					.ToArray();
 		}
 
-		public IEnumerable<AgentState> Get(IEnumerable<Guid> personIds, DeadLockVictim deadLockVictim)
+		public IEnumerable<AgentState> Get(IEnumerable<Guid> personIds)
 		{
 			lock (_lock)
 				return _data

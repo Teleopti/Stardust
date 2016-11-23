@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			var result = Persister.FindForCheck().SingleOrDefault();
 
-			result.PersonId.Should().Be(person);
 			result.UserCode.Should().Be("user");
 			result.NextCheck.Should().Be(null);
 		}

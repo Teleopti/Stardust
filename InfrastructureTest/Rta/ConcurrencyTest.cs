@@ -1,26 +1,22 @@
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[MultiDatabaseTest]
 	[Toggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
-	[Toggle(Toggles.RTA_FasterActivityCheck_41380)]
 	[Explicit]
 	[Category("LongRunning")]
 	public class ConcurrencyTest : ISetup
@@ -35,8 +31,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public WithReadModelUnitOfWork WithReadModelUnitOfWork;
 		public WithUnitOfWork UnitOfWork;
 		public RetryingQueueSimulator QueueSimulator;
-		public IPersonRepository Persons;
-		public INow Now;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -59,18 +53,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					.WithStateGroup(x)
 					.WithStateCode(x);
 			});
-			var sharingUsers = Enumerable.Range(0, 500).Select(x => $"user{x}sharing").ToArray();
-			sharingUsers.ForEach(x =>
-			{
-				Database
-					.WithAgent(x)
-					.WithExternalLogon(sharingUsers.RandomizeBetter().First())
-					;
-			});
-			var uniqueUsers = Enumerable.Range(0, 500).Select(x => $"user{x}unique").ToArray();
-			uniqueUsers.ForEach(x => Database.WithAgent(x));
+			var userCodes = Enumerable.Range(0, 2000).Select(x => $"user{x}").ToArray();
+			userCodes.ForEach(x => Database.WithAgent(x));
 			Database.PublishRecurringEvents();
-			var personids = UnitOfWork.Get(() => Persons.LoadAll().Select(x => x.Id.Value).ToArray());
 
 			var done = false;
 			// agent state maintainer
@@ -85,15 +70,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					QueueSimulator.ProcessAsync(() =>
 					{
 						Database.PublishRecurringEvents();
-					});
-					QueueSimulator.ProcessAsync(() =>
-					{
-						personids.ForEach(x => Publisher.Publish(new ScheduleChangedEvent
-						{
-							PersonId = x,
-							StartDateTime = Now.UtcDateTime().Date.AddDays(-2),
-							EndDateTime = Now.UtcDateTime().Date.AddDays(2)
-						}));
 					});
 					QueueSimulator.WaitForAll();
 				}
@@ -114,7 +90,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					.Select(_ => new BatchForTest
 					{
 						SourceId = "sourceId",
-						States = uniqueUsers
+						States = userCodes
 							.Randomize()
 							.Take(500)
 							.Select(y => new BatchStateForTest
