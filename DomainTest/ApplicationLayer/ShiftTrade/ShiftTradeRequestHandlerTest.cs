@@ -50,8 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				new ScheduleRange(schedulingResultState.Schedules, new ScheduleParameters(scenario, toPerson, new DateTimePeriod()),
 					permissionChecker));
 			loader = MockRepository.GenerateMock<ILoadSchedulesForRequestWithoutResourceCalculation>();
-			new FakeMessageBrokerComposite();
-			businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
+			businessRuleProvider = new FakeBusinessRuleProvider();
 			newBusinessRuleCollection = new FakeNewBusinessRuleCollection();
 			shiftTradePendingReasonsService = new ShiftTradePendingReasonsService(requestFactory, scenarioRepository);
 
@@ -116,7 +115,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			scenario = new Scenario("Default");
 		}
 
-		
 		private static NewShiftTradeRequestCreatedEvent getNewShiftTradeRequestCreated()
 		{
 			var nstrc = new NewShiftTradeRequestCreatedEvent
@@ -172,9 +170,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				.Return(approvalService);
 			approvalService.Stub(x => x.ApproveShiftTrade(shiftTradeRequest)).Return(new List<IBusinessRuleResponse>());
 			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
-			businessRuleProvider.Stub(x => x.GetAllBusinessRules(null))
-				.IgnoreArguments()
-				.Return(newBusinessRuleCollection);
+			((FakeBusinessRuleProvider)businessRuleProvider).SetBusinessRules(newBusinessRuleCollection);
 			target.Handle(accept);
 			Assert.AreEqual(false, personRequest.IsNew);
 			Assert.AreEqual(false, personRequest.IsPending);
@@ -183,7 +179,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			Assert.AreEqual(ShiftTradeStatus.OkByBothParts,
 				shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
 			Assert.AreEqual(accept.Message, personRequest.GetMessage(new NoFormatting()));
-			ruleCollection.Item(typeof (NewPersonAccountRule)).HaltModify.Should().Be.False();
 			statusChecker.AssertWasCalled(x => x.Check(shiftTradeRequest), o => o.Repeat.Twice());
 			scheduleDictionarySaver.AssertWasCalled(x => x.SaveChanges(null, null), o => o.IgnoreArguments());
 			loader.AssertWasCalled(x => x.Execute(scenario, new DateTimePeriod(), null, schedulingResultState),
@@ -215,9 +210,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			((FakeNewBusinessRuleCollection) newBusinessRuleCollection).SetRuleResponse(rules);
 			newBusinessRuleCollection.Add(new NewPersonAccountRule(null, null));
 
-			businessRuleProvider.Stub(x => x.GetAllBusinessRules(null))
-				.IgnoreArguments()
-				.Return(newBusinessRuleCollection);
+			((FakeBusinessRuleProvider)businessRuleProvider).SetBusinessRules(newBusinessRuleCollection);
 			target.Handle(accept);
 			Assert.AreEqual(false, personRequest.IsNew);
 			Assert.AreEqual(false, personRequest.IsPending);
@@ -326,9 +319,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			((FakeNewBusinessRuleCollection) newBusinessRuleCollection).SetRuleResponse(rules);
 			newBusinessRuleCollection.Add(new NewPersonAccountRule(null, null));
 
-			businessRuleProvider.Stub(x => x.GetAllBusinessRules(null))
-				.IgnoreArguments()
-				.Return(newBusinessRuleCollection);
+			((FakeBusinessRuleProvider)businessRuleProvider).SetBusinessRules(newBusinessRuleCollection);
 			target.Handle(accept);
 			Assert.AreEqual(false, personRequest.IsNew);
 			Assert.AreEqual(true, personRequest.IsPending);
@@ -341,6 +332,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				.Should().Be.EqualTo("I want to trade!\r\nViolation of a Business Rule:\r\n"
 									 + ruleMessage1 + "\r\n" + ruleMessage2 + "\r\n");
 		}
-		
 	}
 }

@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public INewBusinessRuleCollection GetBusinessRulesForShiftTradeRequest(
 			ISchedulingResultStateHolder schedulingResultStateHolder, bool enableSiteOpenHoursRule)
 		{
-			throw new System.NotImplementedException();
+			return _businessRuleCollection;
 		}
 	}
 }

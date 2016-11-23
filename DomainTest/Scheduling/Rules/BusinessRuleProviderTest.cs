@@ -17,14 +17,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 			Assert.AreEqual(rules.Count, 12);
 
-			Assert.IsTrue(rules.Count(x => x.GetType() == typeof(NewPersonAccountRule)) == 1);
-			Assert.IsTrue(rules.Count(x => x.GetType() == typeof(OpenHoursRule)) == 1);
-			Assert.IsTrue(rules.Count(x => x.GetType() == typeof(NonMainShiftActivityRule)) == 1);
-			Assert.IsTrue(rules.Count(x => x.GetType() == typeof(SiteOpenHoursRule)) == 1);
+			Assert.IsTrue(rules.Item(typeof(NewPersonAccountRule)) != null);
+			Assert.IsTrue(rules.Item(typeof(OpenHoursRule)) != null);
+			Assert.IsTrue(rules.Item(typeof(NonMainShiftActivityRule)) != null);
+			Assert.IsTrue(rules.Item(typeof(SiteOpenHoursRule)) != null);
 
-			var removedRules = rules.Where(r => r.GetType() == typeof(NewPersonAccountRule)
-												|| r.GetType() == typeof(OpenHoursRule));
-			Assert.IsTrue(removedRules.All(r => r.IsMandatory || !r.HaltModify));
+			Assert.IsTrue(new[]
+			{
+				rules.Item(typeof(NewPersonAccountRule)),
+				rules.Item(typeof(OpenHoursRule))
+			}.All(r => r.IsMandatory || !r.HaltModify));
 		}
 	}
 }
