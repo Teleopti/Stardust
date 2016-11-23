@@ -143,7 +143,7 @@ Teleopti.MyTimeWeb.Ajax.UI = (function ($) {
 	}
 
 	function _ajaxErrorDialog(jqXHR, textStatus, errorThrown) {
-		$('#dialog-modal').attr('title', 'Ajax error: ' + errorThrown);
+		$('#dialog-modal').attr('title', errorThrown);
 		$('#dialog-modal').dialog({
 			width: 800,
 			height: 500,
