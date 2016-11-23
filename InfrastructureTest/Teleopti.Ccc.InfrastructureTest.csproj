@@ -272,6 +272,10 @@
     <Compile Include="Repositories\SmartPersonPropertyQuerierTest.cs" />
     <Compile Include="Rta\AgentStateForUpsert.cs" />
     <Compile Include="Rta\AgentStateReadModelPersisterExtensions.cs" />
+    <Compile Include="Rta\AgentStateReadModelReader\Consolidated\ForCombinations.cs" />
+    <Compile Include="Rta\AgentStateReadModelReader\Consolidated\ForOrganization.cs" />
+    <Compile Include="Rta\AgentStateReadModelReader\Consolidated\ForOrganizationAndSkill.cs" />
+    <Compile Include="Rta\AgentStateReadModelReader\Consolidated\ForSkill.cs" />
     <Compile Include="Rta\AgentStateReadModelReader\ForCombinations.cs" />
     <Compile Include="Rta\AgentStateReadModelReader\ForExcludingStateGroups.cs" />
     <Compile Include="Rta\AgentStateReadModelReader\ForExcludingStateGroupsForTeamAndSkill.cs" />
