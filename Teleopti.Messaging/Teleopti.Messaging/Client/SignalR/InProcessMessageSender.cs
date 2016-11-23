@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
@@ -16,12 +17,12 @@ namespace Teleopti.Messaging.Client.SignalR
 
 		public void Send(Message message)
 		{
-			_messageBrokerServer.NotifyClients(message);
+			Task.Run(() => _messageBrokerServer.NotifyClients(message));
 		}
 
 		public void SendMultiple(IEnumerable<Message> messages)
 		{
-			_messageBrokerServer.NotifyClientsMultiple(messages);
+			Task.Run(() => _messageBrokerServer.NotifyClientsMultiple(messages));
 		}
 	}
 }
