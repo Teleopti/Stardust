@@ -433,19 +433,17 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 		{
 			var tableRow = makeTableRow(personModel);
 
-
-			var tableCellList = new List<TableCell>();
+            var previousIntervalId = personModel.FirstIntervalId - 1;
+            var tableCellList = new List<TableCell>();
 			if (personModel.LoggedInOnTheDayBefore)
 			{
 				tableCellList.AddRange(fillWithBlankCells(_timeLineStartIntervalDayBefore, personModel.FirstIntervalId));
-			}
+            }
 			else
 			{
 				tableCellList.AddRange(fillWithBlankCells(_timeLineStartIntervalDayBefore, _intervalsPerDay));
 				tableCellList.AddRange(fillWithBlankCells(_timeLineStartInterval, personModel.FirstIntervalId));
-			}
-
-			var previousIntervalId = personModel.FirstIntervalId;
+            }
 
 			setTeamTotals(personModel);
 
@@ -585,7 +583,8 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "nbsp"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Analytics.Portal.Reports.Ccc.report_agent_schedule_adherence.MakeTableCell(System.String,System.Web.UI.WebControls.HorizontalAlign,System.Web.UI.WebControls.VerticalAlign,System.String)")]
 		private List<TableCell> fillWithBlankCells(int startInterval, int endInterval)
 		{
-			var tableCellList = new List<TableCell>();
+            if (startInterval > endInterval) { startInterval = startInterval - _intervalsPerDay; }
+            var tableCellList = new List<TableCell>();
 			for (var interval = startInterval; interval < endInterval; interval++)
 			{
 				var tableCell = makeTableCell("&nbsp;", HorizontalAlign.Center, VerticalAlign.Middle, "");
