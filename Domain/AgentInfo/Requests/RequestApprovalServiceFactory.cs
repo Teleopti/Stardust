@@ -12,12 +12,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 		private readonly ICheckingPersonalAccountDaysProvider _checkingPersonalAccountDaysProvider;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 
-		public RequestApprovalServiceFactory(ISwapAndModifyService swapAndModifyService, IGlobalSettingDataRepository globalSettingDataRepository, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider, IScheduleDayChangeCallback scheduleDayChangeCallback)
+		public RequestApprovalServiceFactory(ISwapAndModifyService swapAndModifyService, IGlobalSettingDataRepository globalSettingDataRepository, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider, IScheduleDayChangeCallback scheduleDayChangeCallback, IPersonRequestCheckAuthorization personRequestCheckAuthorization)
 		{
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_checkingPersonalAccountDaysProvider = checkingPersonalAccountDaysProvider;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
+			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 			_swapAndModifyService = swapAndModifyService;
 			_globalSettingDataRepository = globalSettingDataRepository;
 		}
@@ -34,7 +36,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				businessRules,
 				_scheduleDayChangeCallback,
 				_globalSettingDataRepository,
-				_checkingPersonalAccountDaysProvider);
+				_checkingPersonalAccountDaysProvider,
+				_personRequestCheckAuthorization);
 		}
 	}
 }

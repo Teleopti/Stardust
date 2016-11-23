@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		{
 			return new RequestApprovalServiceScheduler(schedulingResultStateHolder.Schedules,
 				scenario, _swapAndModifyService, allNewRules, _scheduleDayChangeCallback,
-				_globalSettingDataRepository, _checkingPersonalAccountDaysProvider);
+				_globalSettingDataRepository, _checkingPersonalAccountDaysProvider, _personRequestCheckAuthorization);
 		}
 
 		public IShiftTradeRequestStatusChecker GetShiftTradeRequestStatusChecker(ISchedulingResultStateHolder schedulingResultStateHolder)

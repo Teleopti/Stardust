@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IEnumerable<IBusinessRuleResponse> CheckRules(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
 		{
-			return _rules;
+			return _rules ?? new IBusinessRuleResponse[] {};
 		}
 
 		public void SetRuleResponse(IEnumerable<IBusinessRuleResponse> rules)

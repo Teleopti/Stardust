@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 				scheduleDictionary,
 				_currentScenario.Current(),
 				_swapAndModifyService,
-				NewBusinessRuleCollection.Minimum(), new DoNothingScheduleDayChangeCallBack(), new FakeGlobalSettingDataRepository(), null);
+				NewBusinessRuleCollection.Minimum(), new DoNothingScheduleDayChangeCallBack(), new FakeGlobalSettingDataRepository(), null, null);
 
 			personRequest.Pending();
 			personRequest.Approve(requestApprovalServiceScheduler, new PersonRequestAuthorizationCheckerForTest());

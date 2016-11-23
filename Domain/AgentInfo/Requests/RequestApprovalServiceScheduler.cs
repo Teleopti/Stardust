@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly IGlobalSettingDataRepository _globalSettingsDataRepository;
 		private readonly ICheckingPersonalAccountDaysProvider _checkingPersonalAccountDaysProvider;
+		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 
 		private IPersonAbsence _approvedPersonAbsence;
 
@@ -28,7 +30,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			INewBusinessRuleCollection newBusinessRules,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			IGlobalSettingDataRepository globalSettingsDataRepository,
-			ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider)
+			ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider, IPersonRequestCheckAuthorization personRequestCheckAuthorization)
 		{
 			_scenario = scenario;
 			_swapAndModifyService = swapAndModifyService;
@@ -37,6 +39,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_globalSettingsDataRepository = globalSettingsDataRepository;
 			_checkingPersonalAccountDaysProvider = checkingPersonalAccountDaysProvider;
+			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 		}
 
 		public IEnumerable<IBusinessRuleResponse> ApproveAbsence(IAbsence absence, DateTimePeriod period, IPerson person, IPersonRequest personRequest =  null)
@@ -92,6 +95,17 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		}
 		public IEnumerable<IBusinessRuleResponse> ApproveShiftTrade(IShiftTradeRequest shiftTradeRequest)
 		{
+			var shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerWithSchedule(_scheduleDictionary, _personRequestCheckAuthorization);
+			var shiftTradeStatus = shiftTradeRequest.GetShiftTradeStatus(shiftTradeRequestStatusChecker);
+			if (shiftTradeStatus == ShiftTradeStatus.Referred)
+			{
+				var person = shiftTradeRequest.PersonFrom;
+				return new []
+				{
+					new BusinessRuleResponse(null, Resources.TheScheduleHasChanged, true, true, shiftTradeRequest.Period
+						, person, shiftTradeRequest.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()), string.Empty)
+				};
+			}
 			return _swapAndModifyService.SwapShiftTradeSwapDetails(shiftTradeRequest.ShiftTradeSwapDetails,
 																  _scheduleDictionary,
 																   _newBusinessRules, new ScheduleTagSetter(NullScheduleTag.Instance));

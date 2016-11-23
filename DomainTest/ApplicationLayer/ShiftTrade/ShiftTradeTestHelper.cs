@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		{
 			var approvalService = new RequestApprovalServiceScheduler(scheduleDictionary, _currentScenario.Current(),
 				new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack()), newBusinessRules ?? _businessRuleCollection,
-				new DoNothingScheduleDayChangeCallBack(), new FakeGlobalSettingDataRepository(), null);
+				new DoNothingScheduleDayChangeCallBack(), new FakeGlobalSettingDataRepository(), null, null);
 
 			_requestFactory.setRequestApprovalService(approvalService);
 		}

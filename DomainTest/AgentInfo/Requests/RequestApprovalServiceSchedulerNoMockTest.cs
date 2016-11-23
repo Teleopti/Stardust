@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -11,6 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
@@ -51,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var absence = new Absence();
 			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
 
-			setScheduleDictionary(person, absenceDateTimePeriod);
+			setScheduleDictionary(absenceDateTimePeriod, person);
 
 			var accountDay1 = createAccountDay(new DateOnly(2015, 12, 1));
 			var accountDay2 = createAccountDay(new DateOnly(2016, 08, 18));
@@ -76,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var lieuAbsence = AbsenceFactory.CreateAbsence("lieu");
 			var personRequest = createAbsenceRequest(person, holidayAbsence, absenceDateTimePeriod);
 
-			setScheduleDictionary(person, absenceDateTimePeriod);
+			setScheduleDictionary(absenceDateTimePeriod, person);
 
 			var holidayAccountDay1 = createAccountDay(new DateOnly(2015, 12, 1));
 			var holidayAccountDay2 = createAccountDay(new DateOnly(2016, 08, 18));
@@ -98,7 +100,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		[Test]
 		public void ShouldUpdateAllPersonalAccountsWhenMultipleAbsencesAreApproved()
 		{
-			
 			var person = PersonFactory.CreatePersonWithId();
 			var absence = new Absence();
 
@@ -108,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var absence2DateTimePeriod = new DateTimePeriod(2016, 08, 23, 00, 2016, 08, 23, 23);
 			var personRequest2 = createAbsenceRequest(person, absence, absence2DateTimePeriod);
 
-			setScheduleDictionary(person, new DateTimePeriod(2016, 08, 17, 00, 2016, 08, 23, 23));
+			setScheduleDictionary(new DateTimePeriod(2016, 08, 17, 00, 2016, 08, 23, 23), person);
 
 			var accountDay1 = createAccountDay(new DateOnly(2015, 12, 1));
 			var accountDay2 = createAccountDay(new DateOnly(2016, 08, 18));
@@ -126,18 +127,70 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			Assert.AreEqual(22, accountDay2.Remaining.TotalDays);
 		}
 
-
-		private void setScheduleDictionary(IPerson person, DateTimePeriod absenceDateTimePeriod)
+		[Test]
+		public void ShouldApproveOnlyOneRequestOfMultipleShiftTradeRequetsFromSamePersonInSameDay()
 		{
-			var timeZone = person.PermissionInformation.DefaultTimeZone();
+			var personFrom = PersonFactory.CreatePersonWithId();
+			var personTo1 = PersonFactory.CreatePersonWithId();
+			var personTo2 = PersonFactory.CreatePersonWithId();
+			var personTo3 = PersonFactory.CreatePersonWithId();
+
+			setScheduleDictionary(new DateTimePeriod(2016, 11, 23, 8, 2016, 11, 23, 17), personFrom);
+			setScheduleDictionary(new DateTimePeriod(2016, 11, 23, 7, 2016, 11, 23, 16), personTo1, personTo2, personTo3);
+
+			var requestDate = new DateOnly(2016, 11, 23);
+			var shiftTradeRequest1 = createPersonShiftTradeRequest(personFrom, personTo1, requestDate);
+			var shiftTradeRequest2 = createPersonShiftTradeRequest(personFrom, personTo2, requestDate);
+			var shiftTradeRequest3 = createPersonShiftTradeRequest(personFrom, personTo3, requestDate);
+
+			_newBusinessRules = new FakeNewBusinessRuleCollection();
+
+			setRequestApprovalService();
+			_requestApprovalService.ApproveShiftTrade((IShiftTradeRequest)shiftTradeRequest1.Request);
+			_requestApprovalService.ApproveShiftTrade((IShiftTradeRequest)shiftTradeRequest2.Request);
+			_requestApprovalService.ApproveShiftTrade((IShiftTradeRequest)shiftTradeRequest3.Request);
+
+			assertShiftTradeRequestStatus(shiftTradeRequest1, ShiftTradeStatus.OkByBothParts);
+
+			assertShiftTradeRequestStatus(shiftTradeRequest2, ShiftTradeStatus.Referred);
+			assertShiftTradeRequestStatus(shiftTradeRequest3, ShiftTradeStatus.Referred);
+		}
+
+		private void assertShiftTradeRequestStatus(IPersonRequest request, ShiftTradeStatus shiftTradeStatus)
+		{
+			var requestStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
+			var shiftTradeRequest = request.Request as IShiftTradeRequest;
+			shiftTradeRequest.GetShiftTradeStatus(requestStatusChecker).Should().Be(shiftTradeStatus);
+		}
+
+		private void setScheduleDictionary(DateTimePeriod dateTimePeriod, params IPerson[] persons)
+		{
 			var scheduleDatas = new List<IScheduleData>();
-			var dateOnlyPeriods = absenceDateTimePeriod.ToDateOnlyPeriod(timeZone).DayCollection();
-			foreach (var dateOnlyPeriod in dateOnlyPeriods)
+			foreach (var person in persons)
 			{
-				scheduleDatas.Add(addAssignment(person, dateOnlyPeriod.ToDateTimePeriod(new TimePeriod(0, 0, 23, 0), timeZone)));
+				var timeZone = person.PermissionInformation.DefaultTimeZone();
+				var dateOnlyPeriods = dateTimePeriod.ToDateOnlyPeriod(timeZone).DayCollection();
+				foreach (var dateOnlyPeriod in dateOnlyPeriods)
+				{
+					scheduleDatas.Add(addAssignment(person, dateOnlyPeriod.ToDateTimePeriod(new TimePeriod(0, 0, 23, 0), timeZone)));
+				}
 			}
-			_scheduleDictionary = ScheduleDictionaryForTest.WithScheduleData(person, _scenario, absenceDateTimePeriod,
-				scheduleDatas.ToArray());
+			_scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(_scenario, dateTimePeriod, scheduleDatas.ToArray());
+		}
+
+		private IPersonRequest createPersonShiftTradeRequest(IPerson personFrom, IPerson personTo, DateOnly requestDate)
+		{
+			var request = new PersonRequestFactory().CreatePersonShiftTradeRequest(personFrom, personTo, requestDate);
+			var shiftTradeRequest = request.Request as IShiftTradeRequest;
+			shiftTradeRequest.SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts, null);
+			foreach (var shiftTradeSwapDetail in shiftTradeRequest.ShiftTradeSwapDetails)
+			{
+				shiftTradeSwapDetail.SchedulePartFrom = _scheduleDictionary[personFrom].ScheduledDay(requestDate);
+				shiftTradeSwapDetail.SchedulePartTo = _scheduleDictionary[personTo].ScheduledDay(requestDate);
+				shiftTradeSwapDetail.ChecksumFrom = new ShiftTradeChecksumCalculator(shiftTradeSwapDetail.SchedulePartFrom).CalculateChecksum();
+				shiftTradeSwapDetail.ChecksumTo = new ShiftTradeChecksumCalculator(shiftTradeSwapDetail.SchedulePartTo).CalculateChecksum();
+			}
+			return request;
 		}
 
 		private void setBusinessRules(IPerson person, PersonAbsenceAccount account)
@@ -182,17 +235,17 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			};
 		}
 
-		private IPersonAssignment addAssignment(IPerson person, DateTimePeriod absenceDateTimePeriod)
+		private IPersonAssignment addAssignment(IPerson person, DateTimePeriod dateTimePeriod)
 		{
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, person,
-				absenceDateTimePeriod);
+				dateTimePeriod);
 			return assignment;
 		}
 
 		private void setRequestApprovalService()
 		{
 			_requestApprovalService = new RequestApprovalServiceScheduler(_scheduleDictionary, _scenario, _swapAndModifyService,
-				_newBusinessRules, _scheduleDayChangeCallback, _globalSettingsDataRepository, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository));
+				_newBusinessRules, _scheduleDayChangeCallback, _globalSettingsDataRepository, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), null);
 		}
 	}
 }

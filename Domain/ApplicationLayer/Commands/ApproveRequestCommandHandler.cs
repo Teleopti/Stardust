@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				logger.Warn(messageBuilder.ToString());
 			}
 
-			return true;
+			return !anyRuleBroken;
 		}
 
 		private static bool invalidRequestState(IPersonRequest personRequest, ApproveRequestCommand command)
