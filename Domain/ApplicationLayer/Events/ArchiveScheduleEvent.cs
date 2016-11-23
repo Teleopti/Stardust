@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
 	public class ArchiveScheduleEvent : EventWithLogOnContext
 	{
-		public DateTime StartDate { get; set; }
-		public DateTime EndDate { get; set; }
+		public DateOnly StartDate { get; set; }
+		public DateOnly EndDate { get; set; }
 		public Guid FromScenario { get; set; }
 		public Guid ToScenario { get; set; }
 		public Guid JobResultId { get; set; }

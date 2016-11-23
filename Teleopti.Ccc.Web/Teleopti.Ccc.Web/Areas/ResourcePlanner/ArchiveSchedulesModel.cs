@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			return new ArchiveScheduleEvent(people.Select(person => person.Id.GetValueOrDefault()).ToArray())
 			{
-				StartDate = StartDate,
-				EndDate = EndDate,
+				StartDate = new DateOnly(StartDate),
+				EndDate = new DateOnly(EndDate),
 				FromScenario = FromScenario,
 				ToScenario = ToScenario,
 				JobResultId = JobResultId

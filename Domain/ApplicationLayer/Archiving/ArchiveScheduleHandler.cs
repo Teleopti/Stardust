@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -42,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 		public virtual void Handle(ArchiveScheduleEvent @event)
 		{
 			_currentUnitOfWork.Current().Reassociate(_updatedBy.Person());
-			var period = new DateOnlyPeriod(new DateOnly(@event.StartDate), new DateOnly(@event.EndDate));
+			var period = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
 
 			var fromScenario = _scenarioRepository.Get(@event.FromScenario);
 			var toScenario = _scenarioRepository.Get(@event.ToScenario);
