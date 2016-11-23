@@ -62,7 +62,7 @@
 						</md-not-found>
 						</md-autocomplete>
 						</span>
-		<span class="con-flex">
+		<span class="con-flex" ng-if="showOrgSelection">
 			<md-input-container class="rta-md-input-container">
         <label>Select organization</label>
         <md-select ng-model="selectedTeams" class="rta-md-select" multiple md-on-close="goToAgents()">
