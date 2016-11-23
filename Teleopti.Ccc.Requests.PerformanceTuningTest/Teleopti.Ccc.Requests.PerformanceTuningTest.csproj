@@ -62,6 +62,28 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
+      <Project>{add1bcdc-cfbb-4632-8fb5-4ff3bd04f666}</Project>
+      <Name>Teleopti.Ccc.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
+      <Project>{aa4a5374-77af-44f0-85c1-6cabc6701352}</Project>
+      <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
+      <Project>{db42d973-9889-4d51-9fc5-be66aa7f117c}</Project>
+      <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
+      <Project>{68a028b6-864c-4969-8830-9c3c6bd56a98}</Project>
+      <Name>Teleopti.Ccc.TestCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
+      <Project>{8d2565f2-7c44-45b7-96ad-2cd900e033a1}</Project>
+      <Name>Teleopti.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>if not exist "$(ProjectDir)app.config" copy "$(ProjectDir)..\BuildArtifacts\Teleopti.Ccc.TestCommon.App.config" "$(ProjectDir)app.config"</PreBuildEvent>
