@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					var personPeriod = agent.Period(period.StartDate);
 					if (personPeriod != null && personPeriod.Team.Site.Equals(site))
 					{
-						agent.Period(period.StartDate).SetMaxSeatSkill(skill);
+						personPeriod.SetMaxSeatSkill(skill);
 					}
 				}
 				var skillDays = createMaxSeatSkillDays(period, skill, scenario);
