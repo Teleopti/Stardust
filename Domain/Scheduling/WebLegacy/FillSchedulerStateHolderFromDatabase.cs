@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -20,32 +19,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
-		private readonly ICurrentTeleoptiPrincipal _principal;
-		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IPersonRepository _personRepository;
 		private readonly ISkillRepository _skillRepository;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public FillSchedulerStateHolderFromDatabase(PersonalSkillsProvider personalSkillsProvider,
 					IScenarioRepository scenarioRepository,
 					ISkillDayLoadHelper skillDayLoadHelper,
 					IScheduleStorage scheduleStorage,
 					IPersonAbsenceAccountRepository personAbsenceAccountRepository,
-					ICurrentTeleoptiPrincipal principal,
-					ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 					IRepositoryFactory repositoryFactory,
 					IPersonRepository personRepository,
-					ISkillRepository skillRepository) : base(personalSkillsProvider)
+					ISkillRepository skillRepository,
+					ICurrentUnitOfWork currentUnitOfWork,
+					IUserTimeZone userTimeZone) : base(personalSkillsProvider)
 		{
 			_scenarioRepository = scenarioRepository;
 			_skillDayLoadHelper = skillDayLoadHelper;
 			_scheduleStorage = scheduleStorage;
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
-			_principal = principal;
-			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_repositoryFactory = repositoryFactory;
 			_personRepository = personRepository;
 			_skillRepository = skillRepository;
+			_currentUnitOfWork = currentUnitOfWork;
+			_userTimeZone = userTimeZone;
 		}
 
 		protected override IScenario FetchScenario()
@@ -69,8 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
-			var timeZone = _principal.Current().Regional.TimeZone;
-			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
+			var dateTimePeriod = period.ToDateTimePeriod(_userTimeZone.TimeZone());
 			schedulerStateHolderTo.SetRequestedScenario(scenario);
 			var personProvider = new PersonsInOrganizationProvider(agents) {DoLoadByPerson = true }; //TODO: this is experimental
 			schedulerStateHolderTo.LoadSchedules(_scheduleStorage, personProvider,
@@ -80,14 +78,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		protected override void PreFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
 		{
-			schedulerStateHolderTo.LoadCommonState(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(), _repositoryFactory);
+			schedulerStateHolderTo.LoadCommonState(_currentUnitOfWork.Current(), _repositoryFactory);
 			_skillRepository.FindAllWithSkillDays(period); //perf hack to prevent working with skill proxies when doing calculation
 		}
 
 		protected override void PostFill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
-			var timeZone = _principal.Current().Regional.TimeZone;
-			schedulerStateHolderTo.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, timeZone);
+			schedulerStateHolderTo.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, _userTimeZone.TimeZone());
 			schedulerStateHolderTo.SchedulingResultState.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(agents);
 		}
 	}
