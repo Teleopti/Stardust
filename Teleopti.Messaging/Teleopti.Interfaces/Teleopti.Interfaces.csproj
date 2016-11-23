@@ -140,6 +140,7 @@
     <Compile Include="Domain\IExpiredRequestValidator.cs" />
     <Compile Include="Domain\IOverrideTask.cs" />
     <Compile Include="Domain\IPersonLeavingUpdater.cs" />
+    <Compile Include="Domain\IShiftTradeBusinessRuleConfig.cs" />
     <Compile Include="Domain\Paging.cs" />
     <Compile Include="Domain\IPermissionProvider.cs" />
     <Compile Include="Domain\IProjectionVersionPersister.cs" />
@@ -173,6 +174,7 @@
     <Compile Include="Domain\ISkillPriorityProvider.cs" />
     <Compile Include="Domain\IUserUICulture.cs" />
     <Compile Include="Domain\PersonRequestDenyOption.cs" />
+    <Compile Include="Domain\RequestHandleOption.cs" />
     <Compile Include="Domain\ShiftTradeScheduleChangedInDefaultScenario.cs" />
     <Compile Include="Domain\IShiftTradeSwapScheduleDetailsMapper.cs" />
     <Compile Include="Domain\ISkillTypeProvider.cs" />

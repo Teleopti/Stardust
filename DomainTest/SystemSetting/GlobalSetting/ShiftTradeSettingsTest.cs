@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SystemSetting.GlobalSetting
 {
@@ -24,21 +25,21 @@ namespace Teleopti.Ccc.DomainTest.SystemSetting.GlobalSetting
 						FriendlyName = "Data Part Of Agent Day Rule",
 						BusinessRuleType = typeof(DataPartOfAgentDay).FullName,
 						Enabled = true,
-						HandleTypeOnBroken = RequestHandleType.AutoDeny
+						HandleOptionOnFailed = RequestHandleOption.AutoDeny
 					},
 					new ShiftTradeBusinessRuleConfig
 					{
 						FriendlyName = "Min Weekly Rest Rule",
 						BusinessRuleType = typeof(MinWeeklyRestRule).FullName,
 						Enabled = true,
-						HandleTypeOnBroken = RequestHandleType.SetToPending
+						HandleOptionOnFailed = RequestHandleOption.Pending
 					},
 					new ShiftTradeBusinessRuleConfig
 					{
 						FriendlyName = "Min Week Work Time Rule",
 						BusinessRuleType = typeof(MinWeekWorkTimeRule).FullName,
 						Enabled = false,
-						HandleTypeOnBroken = RequestHandleType.SetToPending
+						HandleOptionOnFailed = RequestHandleOption.Pending
 					}
 				}
 			};
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.SystemSetting.GlobalSetting
 				Assert.AreEqual(originalRuleConfig.FriendlyName, deserializedRuleConfig.FriendlyName);
 				Assert.AreEqual(originalRuleConfig.BusinessRuleType, deserializedRuleConfig.BusinessRuleType);
 				Assert.AreEqual(originalRuleConfig.Enabled, deserializedRuleConfig.Enabled);
-				Assert.AreEqual(originalRuleConfig.HandleTypeOnBroken, deserializedRuleConfig.HandleTypeOnBroken);
+				Assert.AreEqual(originalRuleConfig.HandleOptionOnFailed, deserializedRuleConfig.HandleOptionOnFailed);
 			}
 		}
 	}

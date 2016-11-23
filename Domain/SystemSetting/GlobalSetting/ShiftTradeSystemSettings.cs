@@ -1,15 +1,10 @@
 using System;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 {
-	public enum RequestHandleType
-	{
-		AutoDeny = 0,
-		SetToPending = 1
-	}
-
 	[Serializable]
-	public class ShiftTradeBusinessRuleConfig
+	public class ShiftTradeBusinessRuleConfig : IShiftTradeBusinessRuleConfig
 	{
 		// Full name of business rule class, use string since Type could not be serialized
 		public string BusinessRuleType { get; set; }
@@ -17,7 +12,7 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 		public string FriendlyName { get; set; }
 
 		public bool Enabled { get; set; }
-		public RequestHandleType HandleTypeOnBroken { get; set; }
+		public RequestHandleOption HandleOptionOnFailed { get; set; }
 	}
 
 	[Serializable]
