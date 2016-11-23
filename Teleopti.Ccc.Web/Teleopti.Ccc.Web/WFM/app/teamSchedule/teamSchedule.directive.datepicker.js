@@ -1,7 +1,7 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.teamSchedule').directive('teamScheduleDatepicker', [teamScheduleDatePicker]);
+	angular.module('wfm.teamSchedule').directive('teamScheduleDatepicker', teamScheduleDatePicker);
 
 	function teamScheduleDatePicker() {
 		return {
@@ -15,28 +15,13 @@
 			controller: ['$timeout', teamScheduleDatePickerCtrl],
 			controllerAs: 'vm',
 			bindToController: true,
-			compile: function (tElement, tAttrs) {
-				var tabindex = angular.isDefined(tAttrs.tabindex) ? tAttrs.tabindex : '0';
-				function addTabindexTo() {
-					angular.forEach(arguments, function (arg) {
-						angular.forEach(arg, function (elem) {
-							elem.setAttribute('tabIndex', tabindex);
-						});
-					});
-				}
-				addTabindexTo(
-					tElement[0].querySelectorAll('input'),
-					tElement[0].querySelectorAll('button')
-				);
-				return function postLink(scope, element) {
-					scope.$watch(function () {
-						return scope.vm.selectedDate && scope.vm.selectedDate.toDateString();
-					}, function () {
-						if (scope.vm.selectedDate != null && !isNaN(scope.vm.selectedDate.getTime()) && scope.vm.selectedDate.getTime() > 0)
-							scope.vm.shortDateFormat = moment(scope.vm.selectedDate).format('YYYY-MM-DD');
-					});
-					element.removeAttr('tabindex');
-				};
+			link: function (scope, element) {
+				scope.$watch(function () {
+					return scope.vm.selectedDate && scope.vm.selectedDate.toDateString();
+				}, function () {
+					if (scope.vm.selectedDate != null && !isNaN(scope.vm.selectedDate.getTime()) && scope.vm.selectedDate.getTime() > 0)
+						scope.vm.shortDateFormat = moment(scope.vm.selectedDate).format('YYYY-MM-DD');
+				});
 			}
 		};
 	}
