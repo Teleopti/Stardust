@@ -17,9 +17,11 @@ angular.module('wfm.rta').provider('RtaState', function () {
 	}
 
 var selectSkillTemplate = function (elem, attr) {
-		return toggles.RTA_QuicklyChangeAgentsSelection_40610
-			? 'app/rta/skills/rta-selectSkill.QuicklyChangeAgentsSelection.html'
-			: 'app/rta/skills/rta-selectSkill.html';
+	return 'app/rta/agents/rta-agents-RTA_QuicklyChangeAgentsSelection_40610.html';
+		// return toggles.RTA_QuicklyChangeAgentsSelection_40610
+		// 	//? 'app/rta/skills/rta-selectSkill.QuicklyChangeAgentsSelection.html'
+		// 	? 'app/rta/agents/rta-agents-RTA_QuicklyChangeAgentsSelection_40610.html'
+		// 	: 'app/rta/skills/rta-selectSkill.html';
 	}
 
 	var sitesBySkillTemplate = function (elem, attr) {
@@ -43,9 +45,23 @@ var selectSkillTemplate = function (elem, attr) {
 			templateUrl: 'app/rta/rta.html'
 		})
 			.state('rta.select-skill', {
-				url: '/select-skill',
+				url: '/select-skill/?siteIds&teamIds&skillIds&skillAreaId&showAllAgents&es',
 				templateUrl: selectSkillTemplate,
-				controller: 'RtaSelectSkillQuickSelectionCtrl'
+				controller: 'RtaAgentsCtrl',//'RtaSelectSkillQuickSelectionCtrl',
+				params: {
+					siteIds: {
+						array: true
+					},
+					teamIds: {
+						array: true
+					},
+					skillIds: {
+						array: true
+					},
+					es: {
+						array: true
+					}
+				}
 			})
 			.state('rta.sites-by-skill', {
 				url: '/sites-by-skill/?skillIds',

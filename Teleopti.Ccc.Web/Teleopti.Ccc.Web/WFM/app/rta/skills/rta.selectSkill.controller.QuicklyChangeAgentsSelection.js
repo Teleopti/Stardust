@@ -72,7 +72,6 @@
 				}
 
 				$scope.selectedSkillAreaChange = function (item) {
-
 					if (item) {
 						$timeout(function () {
 							$state.go('rta.agents', {
@@ -89,7 +88,7 @@
 				RtaService.getOrganization()
 					.then(function (organization) {
 						$scope.sites = organization;
-					});
+				});
 
 				$scope.selectSite = function (siteId) {
 					selectedSiteId = $scope.isSelected(siteId) ? '' : siteId;

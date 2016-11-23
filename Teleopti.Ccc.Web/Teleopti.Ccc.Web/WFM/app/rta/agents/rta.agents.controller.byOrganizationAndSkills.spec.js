@@ -64,7 +64,7 @@ describe('RtaAgentsCtrl by organization and skills', function () {
 		expect(scope.agents.length).toEqual(1);
 	});
 
-	it('should get agent for skill and site', function () {
+it('should get agent for skill and site', function () {
 		stateParams.skillIds = ["emailGuid"];
 		stateParams.siteIds = ["siteLondonGuid"];
 		stateParams.showAllAgents = true;

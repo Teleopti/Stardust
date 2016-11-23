@@ -20,6 +20,7 @@
 			'FakeTimeService',
 			'Toggle',
 			'NoticeService',
+			'$timeout',
 			function($scope,
 				$filter,
 				$state,
@@ -35,7 +36,8 @@
 				RtaRouteService,
 				FakeTimeService,
 				toggleService,
-				NoticeService
+				NoticeService,
+				$timeout
 			) {
 				var selectedPersonId, lastUpdate, notice;
 				var polling = null;
@@ -80,6 +82,168 @@
 				$scope.pollingLock = true;
 				// because angular cant handle an array of null in stateparams
 				var nullStateId = "noState";
+
+				// select skill dependency
+				$scope.skills = [];
+				$scope.skillAreas = [];
+				$scope.skillsLoaded = false;
+				$scope.skillAreasLoaded = false;
+				toggleService.togglesLoaded.then(function() {
+					$scope.showOrgSelection = toggleService.RTA_QuicklyChangeAgentsSelection_40610;
+
+				});
+
+				function stateGoToAgents(selection) {
+					var stateName = $scope.showOrgSelection ? 'rta.select-skill' : 'rta.agents';
+					var options = $scope.showOrgSelection ? {
+						reload: true,
+						notify: true
+					} : {};
+					$state.go(stateName, selection);
+				}
+
+				RtaService.getSkills()
+					.then(function(skills) {
+						$scope.skillsLoaded = true;
+						$scope.skills = skills;
+					});
+
+				RtaService.getSkillAreas()
+					.then(function(skillAreas) {
+						$scope.skillAreasLoaded = true;
+						$scope.skillAreas = skillAreas.SkillAreas;
+					});
+
+				$scope.querySearch = function(query, myArray) {
+					var results = query ? myArray.filter(createFilterFor(query)) : myArray;
+					return results;
+				};
+
+				function createFilterFor(query) {
+					var lowercaseQuery = angular.lowercase(query);
+					return function filterFn(item) {
+						var lowercaseName = angular.lowercase(item.Name);
+						return (lowercaseName.indexOf(lowercaseQuery) === 0);
+					};
+				};
+
+				$scope.selectedSkillChange = function(item) {
+					if (item) {
+						$timeout(function() {
+							stateGoToAgents({
+								skillIds: item.Id
+							});
+						});
+					};
+
+				}
+
+				$scope.selectedSkillAreaChange = function(item) {
+					if (item) {
+						$timeout(function() {
+							stateGoToAgents({
+								skillAreaId: item.Id
+							});
+						});
+					};
+				}
+
+				//org selection
+				var selectedSiteId;
+				//var selectedSiteId = {};
+				RtaService.getOrganization()
+					.then(function(organization) {
+						$scope.sites = organization;
+						keepSelectionForOrganization();
+					});
+
+				$scope.selectSite = function(siteId) {
+					selectedSiteId = $scope.isSelectedSite(siteId) ? '' : siteId;
+				};
+
+				$scope.isSelectedSite = function(siteId) {
+					return selectedSiteId === siteId;
+				};
+
+				$scope.goToAgents = function() {
+					var selection = {};
+					var selectedSiteIds = $scope.selectedSites();
+					var selectedTeamIds = $scope.selectedTeams();
+					if (selectedSiteIds.length > 0) {
+						selection['siteIds'] = selectedSiteIds;
+						//selection['teamIds'] = [];
+					}
+					if (selectedTeamIds.length > 0) {
+						selection['teamIds'] = selectedTeamIds;
+						//selection['siteIds'] = [];
+					}
+					if (selectedSiteIds.length > 0 || selectedTeamIds.length > 0)
+						stateGoToAgents(selection);
+				}
+
+				function keepSelectionForOrganization() {
+					if(!$scope.showOrgSelection)
+						return;
+					siteIds.forEach(function(sid) {
+						var theSite = $scope.sites.find(function(site) {
+							return site.Id == sid;
+						});
+						theSite.isChecked = true;
+						if(theSite)
+							theSite.Teams.forEach(function(team){
+								team.isChecked = true;
+						});
+					});
+
+					if(teamIds.length > 0)
+						$scope.sites.forEach(function(site) {
+							site.Teams.forEach(function(team) {
+								if (team.Id.indexOf(teamIds) > -1)
+									team.isChecked = true;
+							});
+						});
+				}
+
+				$scope.selectedSites = function () {
+					return $scope.sites.filter(function(site) {
+						return site.isChecked == true;
+					}).map(function(s) {
+						return s.Id;
+					});
+				}
+
+				$scope.selectedTeams = function() {
+					return flatten(
+						$scope.sites.map(function(s) {
+							var selectedTeamIds = s.Teams.filter(function(team) {
+									return team.isChecked == true;
+								})
+								.map(function(team) {
+									return team.Id;
+								});
+							return selectedTeamIds;
+						}));
+				}
+
+				function flatten(collection) {
+					return [].concat.apply([], collection)
+				}
+
+				$scope.selectionChanged = function(siteId, teamIds) {
+					var selectedSite = $scope.sites.find(function(site) {
+						return site.Id == siteId;
+					});
+					if (selectedSite.Teams.length > teamIds.length) {
+						selectedSite.isChecked = false;
+						selectedSite.Teams.forEach(function(team) {
+							team.isChecked = teamIds.indexOf(team.Id) > -1 ? !team.isChecked : team.isChecked;
+						})
+					} else
+						selectedSite.isChecked = !selectedSite.isChecked;
+				}
+				// org selection ends here
+
+
 
 				$scope.$watch('pause', function() {
 					if ($scope.pause) {
@@ -376,7 +540,7 @@
 
 				function setupPolling() {
 					polling = $interval(function() {
-						if($scope.pollingLock){
+						if ($scope.pollingLock) {
 							$scope.pollingLock = false;
 							updateStates();
 						}
@@ -385,8 +549,7 @@
 				}
 
 				function cancelPolling() {
-					if (polling != null)
-					{
+					if (polling != null) {
 						$interval.cancel(polling);
 						$scope.pollingLock = true;
 					}
@@ -557,11 +720,11 @@
 				};
 
 				function urlForTeamsInBreadcrumbs(agentsInfo) {
-						if (skillAreaId != null)
-							return RtaRouteService.urlForTeamsBySkillArea(agentsInfo[0].SiteId, skillAreaId);
-						if (skillIds.length > 0)
-							return RtaRouteService.urlForTeamsBySkills(agentsInfo[0].SiteId, skillIds[0]);
-						return RtaRouteService.urlForTeams(agentsInfo[0].SiteId);
+					if (skillAreaId != null)
+						return RtaRouteService.urlForTeamsBySkillArea(agentsInfo[0].SiteId, skillAreaId);
+					if (skillIds.length > 0)
+						return RtaRouteService.urlForTeamsBySkills(agentsInfo[0].SiteId, skillIds[0]);
+					return RtaRouteService.urlForTeams(agentsInfo[0].SiteId);
 				}
 
 				function urlForRootInBreadcrumbs(agentsInfo) {
