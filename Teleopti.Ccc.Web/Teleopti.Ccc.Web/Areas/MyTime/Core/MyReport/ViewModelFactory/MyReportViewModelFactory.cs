@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MyReport;
@@ -16,11 +17,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory
 	    private readonly IQueueMetricsForDayQuery _queueMetricsForDayQuery;
 	    private readonly IQueueMetricsMapper _queueMetricsMapper;
 		private readonly IPermissionProvider _permissionProvider;
+		private readonly ILoggedOnUser _loggedOnUser;
 
 	    public MyReportViewModelFactory(IDailyMetricsForDayQuery dailyMetricsRepository,
 	        IDetailedAdherenceForDayQuery detailedAdherenceRepository, IDailyMetricsMapper dailyMetricsMapper,
 	        IDetailedAdherenceMapper detailedAdherenceMapper,IQueueMetricsForDayQuery queueMetricsForDayQuery,
-			IQueueMetricsMapper queueMetricsMapper, IPermissionProvider permissionProvider)
+			IQueueMetricsMapper queueMetricsMapper, IPermissionProvider permissionProvider, ILoggedOnUser loggedOnUser)
 	    {
 	        _dailyMetricsRepository = dailyMetricsRepository;
 	        _detailedAdherenceRepository = detailedAdherenceRepository;
@@ -29,6 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory
 	        _queueMetricsForDayQuery = queueMetricsForDayQuery;
 	        _queueMetricsMapper = queueMetricsMapper;
 		    _permissionProvider = permissionProvider;
+		    _loggedOnUser = loggedOnUser;
 	    }
 
 	    public DailyMetricsViewModel CreateDailyMetricsViewModel(DateOnly dateOnly)
@@ -40,8 +43,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory
 
 		public DetailedAdherenceViewModel CreateDetailedAherenceViewModel(DateOnly dateOnly)
 		{
-			var data = _detailedAdherenceRepository.Execute(dateOnly);
-			return _detailedAdherenceMapper.Map(data);
+			var detailData = new List<DetailedAdherenceForDayResult>();
+			if (_permissionProvider.IsPersonSchedulePublished(dateOnly, _loggedOnUser.CurrentUser())
+				|| _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
+			{
+				detailData = _detailedAdherenceRepository.Execute(dateOnly).ToList();
+			}
+
+			return _detailedAdherenceMapper.Map(detailData);
 		}
 
         public ICollection<QueueMetricsViewModel> CreateQueueMetricsViewModel(DateOnly dateOnly)

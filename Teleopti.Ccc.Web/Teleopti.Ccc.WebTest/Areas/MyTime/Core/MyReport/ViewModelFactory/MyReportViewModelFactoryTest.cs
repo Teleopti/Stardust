@@ -1,8 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.WebReports;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MyReport;
@@ -13,42 +20,77 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.ViewModelFactory
 	[TestFixture]
 	public class MyReportViewModelFactoryTest
 	{
-		[Test]
-		public void ShouldReturnDailyMetricsViewModel()
+		private FakeLoggedOnUser _loggedOnUser;
+		private IDetailedAdherenceForDayQuery _adherenceForDayQuery;
+		private IDetailedAdherenceMapper _detailedAdherenceMapper;
+		private MyReportViewModelFactory _target;
+
+		[SetUp]
+
+		public void Setup()
 		{
-			var mapper = MockRepository.GenerateMock<IDailyMetricsMapper>();
-			var dailyMetricsForDayQuery = MockRepository.GenerateMock<IDailyMetricsForDayQuery>();
-			var target = new MyReportViewModelFactory(dailyMetricsForDayQuery, null, mapper, null, null, null, null);
-			var dataModel = new DailyMetricsForDayResult();
-			var viewModel = new DailyMetricsViewModel();
-			var date = DateOnly.Today;
+			_loggedOnUser = new FakeLoggedOnUser();
 
-			dailyMetricsForDayQuery.Stub(x => x.Execute(date)).Return(dataModel);
-			mapper.Stub(x => x.Map(dataModel)).Return(viewModel);
-
-			var result = target.CreateDailyMetricsViewModel(date);
-
-			result.Should().Be.SameInstanceAs(viewModel);
+			var userCulture = new FakeUserCulture();
+			userCulture.IsSwedish();
+			_detailedAdherenceMapper =   new DetailedAdherenceMapper(userCulture);
+			_adherenceForDayQuery = MockRepository.GenerateMock<IDetailedAdherenceForDayQuery>();
 		}
 
 		[Test]
-		public void ShouldReturnDetailedAdherenceViewModel()
+		public void ShouldViewPublishedDetailAdherence()
 		{
-			var mapper = MockRepository.GenerateMock<IDetailedAdherenceMapper>();
-			var detailedAdherenceForDayQuery = MockRepository.GenerateMock<IDetailedAdherenceForDayQuery>();
-			var target = new MyReportViewModelFactory(null,detailedAdherenceForDayQuery,null, mapper, null, null, null);
-			var dataModel = new List<DetailedAdherenceForDayResult>();
-			var viewModel = new DetailedAdherenceViewModel();
-			var date = DateOnly.Today;
+			var date = new DateOnly(2016, 01, 01);
+			_loggedOnUser.CurrentUser().Name = new Name("Loggon", "User");
 
-			detailedAdherenceForDayQuery.Stub(x => x.Execute(date)).Return(dataModel);
-			mapper.Stub(x => x.Map(dataModel)).Return(viewModel);
+			var dataModels = new List<DetailedAdherenceForDayResult>();
+			dataModels.Add(new DetailedAdherenceForDayResult());
+
+			_adherenceForDayQuery.Stub(x => x.Execute(date)).Return(dataModels);
+
+			var target = new MyReportViewModelFactory(null, _adherenceForDayQuery, null, _detailedAdherenceMapper, null, null, new FakePermissionProvider(false), _loggedOnUser);
 
 			var result = target.CreateDetailedAherenceViewModel(date);
 
-			result.Should().Be.SameInstanceAs(viewModel);
+			result.Should().Be.OfType<DetailedAdherenceViewModel>();
+			result.DataAvailable.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotViewUnpublishedDetailAdherence()
+		{
+			var date = new DateOnly(2016,01,01);
+			_loggedOnUser.CurrentUser().Name = new Name("Unpublish", "loggonUser");
+
+			var dataModels = new List<DetailedAdherenceForDayResult>();
+			dataModels.Add(new DetailedAdherenceForDayResult());
+
+			_adherenceForDayQuery.Stub(x => x.Execute(date)).Return(dataModels);
+
+			var target = new MyReportViewModelFactory(null, _adherenceForDayQuery, null, _detailedAdherenceMapper, null, null, new FakePermissionProvider(false), _loggedOnUser);
+
+			var result = target.CreateDetailedAherenceViewModel(date);
+
+			result.DataAvailable.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldViewUnpublishedDetailAdherenceWhenUserCanViewUnpublishedSchedule()
+		{
+			var date = new DateOnly(2016, 01, 01);
+			_loggedOnUser.CurrentUser().Name = new Name("Unpublish", "loggonUser");
+
+			var dataModels = new List<DetailedAdherenceForDayResult>();
+			dataModels.Add(new DetailedAdherenceForDayResult());
+
+			_adherenceForDayQuery.Stub(x => x.Execute(date)).Return(dataModels);
+
+			var target = new MyReportViewModelFactory(null, _adherenceForDayQuery, null, _detailedAdherenceMapper, null, null, new FakePermissionProvider(), _loggedOnUser);
+
+			var result = target.CreateDetailedAherenceViewModel(date);
+
+			result.Should().Be.OfType<DetailedAdherenceViewModel>();
+			result.DataAvailable.Should().Be.True();
 		}
 	}
-
-	
 }
