@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
@@ -119,16 +117,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var req = QueuedAbsenceRequestRepository.LoadAll();
 			req.Count.Should().Be.EqualTo(2);
 			req.Count(x => x.PersonRequest == Guid.Empty && x.StartDateTime == new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc)).Should().Be.EqualTo(0);
-		}
-	}
-
-
-	public class FakeCommandDispatcher : ICommandDispatcher
-	{
-		public List<object> Command = new List<object>();
-		public void Execute(object command)
-		{
-			Command.Add( command);
 		}
 	}
 }

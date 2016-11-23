@@ -502,8 +502,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			});
 
 			Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
-			CommandDispatcher.Command.Count.Should().Be.EqualTo(1);
-			((DenyRequestCommand) CommandDispatcher.Command.FirstOrDefault()).PersonRequestId.Should().Be.EqualTo(id);
+			((DenyRequestCommand) CommandDispatcher.LatestCommand).PersonRequestId.Should().Be.EqualTo(id);
 		}
 
 		[Test]
