@@ -133,5 +133,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 			DateOnly shiftTradeDate);
 
 		IList<Guid> GetWaitlistRequests(DateTimePeriod dateTimePeriod);
+
+	    IList<IPersonRequest> FindPersonRequestWithinPeriod(DateTimePeriod period);
 	}
 }

@@ -191,7 +191,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public long CountAllEntities()
+	    public IList<IPersonRequest> FindPersonRequestWithinPeriod(DateTimePeriod period)
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    public long CountAllEntities()
 		{
 			throw new NotImplementedException();
 		}
