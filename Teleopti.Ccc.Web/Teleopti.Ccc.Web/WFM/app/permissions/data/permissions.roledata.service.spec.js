@@ -121,6 +121,7 @@
 				scope.$digest();
 
 				expect(RoleDataService.organization.BusinessUnit[0].selected).toBe(true);
+				expect(RoleDataService.organization.BusinessUnit[0].semiSelected).toBe(false);
 				expect(RoleDataService.organization.BusinessUnit[0].ChildNodes[0].selected).toBe(true);
 			});
 		});

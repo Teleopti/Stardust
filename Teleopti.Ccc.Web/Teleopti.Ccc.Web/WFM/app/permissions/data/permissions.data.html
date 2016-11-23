@@ -61,13 +61,14 @@
 
 
 		<!-- Nested node template for data -->
-		<script type="text/ng-template" id="nodes_bu_renderer.html">
+<script type="text/ng-template" id="nodes_bu_renderer.html">
   <ul class="wfm-list">
     <li ng-click="launchDeselectConfirmModal(this)" ng-class="{dataHeader: node.ChildNodes.length > 0}">
       <span class="list-item-container">
         {{node.Name}}
       </span>
-      <span ng-cloak ng-show="node.selected" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
+      <span ng-cloak ng-show="node.selected" class="grow-out list-check"><b class="mdi mdi-check"></b></span>
+		<span ng-cloak ng-show="node.semiSelected" class="grow-out list-check"><b class="mdi mdi-semicheck"></b>wee</span>
     </li>
   </ul>
 
