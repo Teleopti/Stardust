@@ -3,5 +3,8 @@
 	public interface IBusinessRuleProvider
 	{
 		INewBusinessRuleCollection GetAllBusinessRules(ISchedulingResultStateHolder schedulingResultStateHolder);
+
+		INewBusinessRuleCollection GetBusinessRulesForShiftTradeRequest(
+			ISchedulingResultStateHolder schedulingResultStateHolder, bool enableSiteOpenHoursRule);
 	}
 }

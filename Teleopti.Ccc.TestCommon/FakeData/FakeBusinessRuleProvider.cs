@@ -10,9 +10,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			_businessRuleCollection = businessRuleCollection;
 		}
+
 		public INewBusinessRuleCollection GetAllBusinessRules(ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			return _businessRuleCollection;
+		}
+
+		public INewBusinessRuleCollection GetBusinessRulesForShiftTradeRequest(
+			ISchedulingResultStateHolder schedulingResultStateHolder, bool enableSiteOpenHoursRule)
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }

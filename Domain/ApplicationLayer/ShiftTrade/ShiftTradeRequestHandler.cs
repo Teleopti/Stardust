@@ -21,7 +21,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 {
-	public class ShiftTradeRequestHandler : 
+	public class ShiftTradeRequestHandler :
 		IHandleEvent<NewShiftTradeRequestCreatedEvent>,
 		IHandleEvent<AcceptShiftTradeEvent>,
 		IRunOnHangfire
@@ -80,6 +80,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 
 			logger.Info("New instance of Shift Trade saga was created");
 		}
+
 		[AsSystem, UnitOfWork]
 		public virtual void Handle(NewShiftTradeRequestCreatedEvent @event)
 		{
@@ -199,7 +200,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		}
 
 		private IList<IBusinessRuleResponse> autoApproveShiftTrade(IPersonRequest personRequest,
-																   IRequestApprovalService approvalService)
+			IRequestApprovalService approvalService)
 		{
 			logger.DebugFormat("Approving ShiftTrade: {0}", personRequest.GetSubject(new NormalizeText()));
 			var brokenBusinessRules = personRequest.Approve(approvalService, _authorization, true);
@@ -224,22 +225,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		}
 
 		private void handleBrokenBusinessRules(ICollection<IBusinessRuleResponse> brokenBusinessResponses,
-											   IPersonRequest personRequest)
+			IPersonRequest personRequest)
 		{
 			if (brokenBusinessResponses.Count <= 0) return;
 
 			var culture = personRequest.Person.PermissionInformation.UICulture();
 			var sb = new StringBuilder(personRequest.GetMessage(new NormalizeText()));
 			sb.AppendLine();
-			sb.Append(UserTexts.Resources.ResourceManager.GetString("ViolationOfABusinessRule",
-																	culture)).Append(":").AppendLine();
+			sb.AppendLine($"{UserTexts.Resources.ResourceManager.GetString("ViolationOfABusinessRule", culture)}:");
 			foreach (var brokenBusinessRuleMessage in brokenBusinessResponses.Select(m => m.Message).Distinct())
 			{
 				sb.AppendLine(brokenBusinessRuleMessage);
 				if (logger.IsWarnEnabled)
 				{
-					logger.WarnFormat("The following @event is from a broken rule: {0}",
-									  brokenBusinessRuleMessage);
+					logger.WarnFormat("The following @event is from a broken rule: {0}", brokenBusinessRuleMessage);
 				}
 			}
 
@@ -257,18 +256,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 
 		private INewBusinessRuleCollection getAllNewBusinessRules(CultureInfo cultureInfo, AcceptShiftTradeEvent @event)
 		{
-			var rules = _businessRuleProvider.GetAllBusinessRules(_schedulingResultStateHolder);
-			rules.Remove(typeof(NewPersonAccountRule));
-			rules.Remove(typeof(OpenHoursRule));
-			rules.Add(new NonMainShiftActivityRule());
-			if (@event.UseSiteOpenHoursRule)
-				rules.Add(new SiteOpenHoursRule(new SiteOpenHoursSpecification()));
+			var rules = _businessRuleProvider.GetBusinessRulesForShiftTradeRequest(_schedulingResultStateHolder,
+				@event.UseSiteOpenHoursRule);
 			rules.SetUICulture(cultureInfo);
+
 			return rules;
 		}
 
 		private ShiftTradeStatus getShiftTradeStatus(IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker,
-													 IShiftTradeRequest shiftTradeRequest)
+			IShiftTradeRequest shiftTradeRequest)
 		{
 			return shiftTradeRequest.GetShiftTradeStatus(shiftTradeRequestStatusChecker);
 		}
