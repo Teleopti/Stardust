@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using NHibernate.Criterion;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
@@ -19,7 +17,6 @@ using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
@@ -145,6 +142,66 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			};
 
 			Target.Execute(period, stateHolder.Schedules.SchedulesForPeriod(period, agents.ToArray()), new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), groupPageLight, () => new WorkShiftFinderResultHolder(), (o, args) => { });
+		}
+
+		[Test]
+		public void ShouldNotPlaceShiftsOnClosedDaysWhenUsingSameShift()
+		{
+			var firstDay = new DateOnly(2015, 10, 12); //mon
+			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var activity1 = new Activity("1").WithId();
+			var activity2 = new Activity("2").WithId();
+			activity1.RequiresSkill = true;
+			activity2.RequiresSkill = true;
+			var skill1 = new Skill("_", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity1 }.WithId();
+			var skill2 = new Skill("_", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity2 }.WithId();
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill1);
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill2);
+			foreach (var workload in skill2.WorkloadCollection)
+			{
+				workload.TemplateWeekCollection[0].Close();
+				workload.TemplateWeekCollection[6].Close();
+			}
+			var scenario = new Scenario("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity1, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			ruleSet.AddExtender(new ActivityAbsoluteStartExtender(activity2, new TimePeriodWithSegment(1, 0, 1, 0, 15), new TimePeriodWithSegment(10, 0, 10, 0, 15)));
+			var ruleSetBag = new RuleSetBag{ Description = new Description("_") };
+			ruleSetBag.AddRuleSet(ruleSet);
+			var team = new Team { Site = new Site("_") };	
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
+			schedulePeriod.SetDaysOff(2);
+			var personPeriod = new PersonPeriod(firstDay.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = ruleSetBag };
+			agent.AddPeriodWithSkills(personPeriod, new[] {skill1, skill2});
+			agent.AddSchedulePeriod(schedulePeriod);	
+			var skillDays1 = skill1.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 10, 10, 10, 10, 100, 100);
+			var skillDays2 = skill2.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 10, 10, 10, 10, 10, 0, 0, 10);
+			var asses = new List<IPersonAssignment>();
+			var dayOffTemplate = new DayOffTemplate();
+			for (var i = 0; i < 7; i++)
+			{
+				var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(i));
+				ass.AddActivity(activity2, new TimePeriod(8, 0, 16, 0));
+				ass.SetShiftCategory(shiftCategory);
+				asses.Add(ass);
+				if (i == 5 || i == 6)
+				{
+					ass.SetDayOff(dayOffTemplate); //saturday/sunday
+				}
+			}		
+			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new [] {agent}, asses, skillDays1.Union(skillDays2));
+			var optPrefs = new OptimizationPreferences
+			{
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepDaysOff = true },
+				Extra = { UseBlockSameShift = true, UseTeamBlockOption = true, BlockTypeValue = BlockFinderType.BetweenDayOff}
+			};
+			var groupPageLight = new GroupPageLight("_", GroupPageType.SingleAgent);
+
+			Target.Execute(period, stateHolder.Schedules.SchedulesForPeriod(period, agent), new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), groupPageLight, () => new WorkShiftFinderResultHolder(), (o, args) => { });
+
+			stateHolder.Schedules[agent].ScheduledDay(skillDays1[5].CurrentDate).PersonAssignment().AssignedWithDayOff(dayOffTemplate).Should().Be.True();
+			stateHolder.Schedules[agent].ScheduledDay(skillDays1[6].CurrentDate).PersonAssignment().AssignedWithDayOff(dayOffTemplate).Should().Be.True();
 		}
 
 		[Test]

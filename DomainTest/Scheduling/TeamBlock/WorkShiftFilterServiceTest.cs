@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Specification;
@@ -96,7 +97,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					new RuleSetDeletedShiftCategoryChecker(),
 					new RuleSetProjectionEntityService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate())),
 					new WorkShiftFromEditableShift()), new RuleSetPersonalSkillsActivityFilter(new RuleSetSkillActivityChecker(), new PersonalSkillsProvider()),
-				new DisallowedShiftProjectionCashesFilter(), new ActivityRequiresSkillProjectionFilter(new PersonalSkillsProvider()));
+				new DisallowedShiftProjectionCashesFilter(), new ActivityRequiresSkillProjectionFilter(new PersonalSkillsProvider()),
+				new OpenHoursFilter(new IsAnySkillOpen()));
 			
 			_group = new Group(new List<IPerson>{_person}, "Hej");
 			_matrixList = new List<IScheduleMatrixPro> { _matrix };
@@ -112,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var dateOnly = new DateOnly(2012, 12, 12);
 
 			var retShift = _target.FilterForRoleModel(_schedules, dateOnly, _teamBlockInfo, null,
-			                              _schedulingOptions, _finderResult, true, false);
+			                              _schedulingOptions, _finderResult, true, false, new List<ISkillDay>());
 			Assert.IsNull(retShift);
 		}
 
@@ -122,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var dateOnly = new DateOnly(2012, 12, 12);
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 			var retShift = _target.FilterForRoleModel(_schedules, dateOnly, null, effectiveRestriction,
-			                              _schedulingOptions, _finderResult, true, false);
+			                              _schedulingOptions, _finderResult, true, false, new List<ISkillDay>());
 			Assert.IsNull(retShift);
 		}
 
@@ -138,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 			var retShift = _target.FilterForRoleModel(_schedules, dateOnly, teamBlockInfo, effectiveRestriction,
-										  _schedulingOptions, _finderResult, true, false);
+										  _schedulingOptions, _finderResult, true, false, new List<ISkillDay>());
 			Assert.IsNull(retShift);
 		}
 	
@@ -148,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var dateOnly = new DateOnly(2012, 12, 12);
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 			var retShift = _target.FilterForRoleModel(_schedules, dateOnly, _teamBlockInfo, effectiveRestriction,
-			                              _schedulingOptions, _finderResult, true, false);
+			                              _schedulingOptions, _finderResult, true, false, new List<ISkillDay>());
 			Assert.IsNull(retShift);
 		}
 
@@ -169,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_person.Period(_dateOnly).RuleSetBag = ruleSetBag;
 
 			var retShift = _target.FilterForRoleModel(_schedules, _dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions,
-				_finderResult, true, false);
+				_finderResult, true, false, new List<ISkillDay>());
 			Assert.IsNotNull(retShift);
 		}
 
@@ -198,7 +200,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_person.Period(_dateOnly).RuleSetBag = ruleSetBag;
 
 			var retShift = _target.FilterForRoleModel(_schedules, _dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions,
-				_finderResult, true, false);
+				_finderResult, true, false, new List<ISkillDay>());
 			Assert.IsNull(retShift);
 		}
 
@@ -219,7 +221,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_person.Period(_dateOnly).RuleSetBag = ruleSetBag;
 
 			var retShift = _target.FilterForRoleModel(_schedules, _dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions,
-				_finderResult, true, false);
+				_finderResult, true, false, new List<ISkillDay>());
 			Assert.IsNull(retShift);
 		}
 
@@ -240,7 +242,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_person.Period(_dateOnly).RuleSetBag = ruleSetBag;
 
 			var retShift = _target.FilterForRoleModel(_schedules, _dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions,
-				_finderResult, true, false);
+				_finderResult, true, false, new List<ISkillDay>());
 			Assert.IsNull(retShift);
 		}
 
@@ -265,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			ruleSetBag.AddRuleSet(workShiftRuleSet);
 			_person.Period(_dateOnly).RuleSetBag = ruleSetBag;
 
-			var result = _target.FilterForRoleModel(_schedules, _dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true, false);
+			var result = _target.FilterForRoleModel(_schedules, _dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true, false, new List<ISkillDay>());
 			result.Should().Be.Null();
 		}
 
@@ -290,7 +292,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			ruleSetBag.AddRuleSet(workShiftRuleSet);
 			_person.Period(_dateOnly).RuleSetBag = ruleSetBag;
 
-			var result = _target.FilterForRoleModel(_schedules, _dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true, false);
+			var result = _target.FilterForRoleModel(_schedules, _dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true, false, new List<ISkillDay>());
 			result.Should().Not.Be.Null();
 		}
 	}

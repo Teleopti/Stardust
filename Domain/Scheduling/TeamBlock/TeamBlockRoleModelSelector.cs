@@ -65,7 +65,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var shifts = _workShiftFilterService.FilterForRoleModel(schedules, datePointer, teamBlockInfo, effectiveRestriction,
 				schedulingOptions,
 				new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupMembers.First(), datePointer),
-				isSameOpenHoursInBlock, useShiftsForRestrictions);
+				isSameOpenHoursInBlock, useShiftsForRestrictions, allSkillDays);
+
 			if (shifts.IsNullOrEmpty())
 				return null;
 

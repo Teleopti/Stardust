@@ -648,7 +648,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OutboundCampaignRepository>().As<IOutboundCampaignRepository>().SingleInstance();
 
 			builder.RegisterType<OutboundScheduledResourcesProvider>().As<IOutboundScheduledResourcesProvider>().SingleInstance();
-
+			builder.RegisterType<OpenHoursFilter>().SingleInstance();
 		}
 
 		private static void registerForJobs(ContainerBuilder builder)
