@@ -30,9 +30,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var logons = WithUnitOfWork(() => _agentStatePersister.FindForCheck())
 				.Where(x => x.NextCheck == null || x.NextCheck <= time)
 				.ToArray();
-			process(new activityChangesStrategy(_config, _agentStatePersister, action, logons, time));
+			process(new activityChangesStrategyWithoutDeadlock(_config, _agentStatePersister, action, logons, time));
 		}
+
 	}
+
+
+
 
 	public class ContextLoader : IContextLoader
 	{
@@ -241,6 +245,34 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}
 		}
 
+		protected class activityChangesStrategyWithoutDeadlock : baseStrategy<ExternalLogonForCheck>
+		{
+			private readonly IEnumerable<ExternalLogonForCheck> _things;
+
+			public activityChangesStrategyWithoutDeadlock(IConfigReader config, IAgentStatePersister persister, Action<Context> action, IEnumerable<ExternalLogonForCheck> things, DateTime time) : base(config, persister, action, time)
+			{
+				_things = things;
+				ParallelTransactions = _config.ReadValue("RtaActivityChangesParallelTransactions", 7);
+				MaxTransactionSize = _config.ReadValue("RtaActivityChangesMaxTransactionSize", 100);
+				DeadLockVictim = DeadLockVictim.Yes;
+			}
+
+			public override IEnumerable<ExternalLogonForCheck> AllThings()
+			{
+				return _things.OrderBy(x => $"{x.DataSourceId}__{x.UserCode}").ToArray();
+			}
+
+			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogonForCheck> ids, Action<Exception> addException)
+			{
+				return _persister.Get(ids.Select(x => x.PersonId).ToArray(), DeadLockVictim);
+			}
+
+			public override InputInfo GetInputFor(AgentState state)
+			{
+				return null;
+			}
+		}
+
 		protected class activityChangesStrategy : baseStrategy<ExternalLogon>
 		{
 			private readonly IEnumerable<ExternalLogon> _things;
@@ -322,7 +354,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<Guid> ids, Action<Exception> addException)
 			{
-				return _persister.Get(ids);
+				return _persister.Get(ids, DeadLockVictim.Yes);
 			}
 
 			public override InputInfo GetInputFor(AgentState state)

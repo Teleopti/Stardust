@@ -235,47 +235,8 @@ namespace Teleopti.Ccc.TestCommon
 		[UnitOfWork]
 		public virtual Database WithPersonPeriod(DateOnly date)
 		{
-			var personContract = new PersonContract(
-				contract(),
-				partTimePercentage(),
-				contractSchedule());
-
-			person().AddPersonPeriod(
-				new PersonPeriod(date,
-				personContract,
-				team(_team)));
-			
+			withPeriod(person(), date);
 			return this;
-		}
-
-		private IContractSchedule contractSchedule()
-		{
-			if (_contractSchedule != null)
-				return _contractSchedules.LoadAll().Single(x => x.Description.Name == _contractSchedule);
-			_contractSchedule = RandomName.Make();
-			var c = new ContractSchedule(_contractSchedule);
-			_contractSchedules.Add(c);
-			return c;
-		}
-
-		private IPartTimePercentage partTimePercentage()
-		{
-			if (_partTimePercentage != null)
-				return _partTimePercentages.LoadAll().Single(x => x.Description.Name == _partTimePercentage);
-			_partTimePercentage = RandomName.Make();
-			var p = new PartTimePercentage(_partTimePercentage);
-			_partTimePercentages.Add(p);
-			return p;
-		}
-
-		private IContract contract()
-		{
-			if (_contract != null)
-				return _contracts.LoadAll().Single(x => x.Description.Name == _contract);
-			_contract = RandomName.Make();
-			var c = new Contract(_contract);
-			_contracts.Add(c);
-			return c;
 		}
 
 		[UnitOfWork]
@@ -309,16 +270,34 @@ namespace Teleopti.Ccc.TestCommon
 			_person = person.Name.ToString();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 
-			var personContract = new PersonContract(
-				contract(),
-				partTimePercentage(),
-				contractSchedule());
-
-			var personPeriod = new PersonPeriod("2001-01-01".Date(), personContract, team(_team));
+			var personPeriod = withPeriod(person, "2001-01-01".Date());
 			if (terminationDate != null)
 				person.TerminatePerson(terminationDate.Value, new PersonAccountUpdaterDummy());
-			person.AddPersonPeriod(personPeriod);
 
+			withExternalLogon(name, person, personPeriod);
+
+			_persons.Add(person);
+
+			return this;
+		}
+
+		private PersonPeriod withPeriod(IPerson person, DateOnly date)
+		{
+			var personContract = new PersonContract(contract(), partTimePercentage(), contractSchedule());
+			var personPeriod = new PersonPeriod(date, personContract, team(_team));
+			person.AddPersonPeriod(personPeriod);
+			return personPeriod;
+		}
+
+		[UnitOfWork]
+		public virtual Database WithExternalLogon(string name)
+		{
+			var person = this.person();
+			return withExternalLogon(name, person, person.PersonPeriodCollection.Single());
+		}
+
+		private Database withExternalLogon(string name, IPerson person, IPersonPeriod personPeriod)
+		{
 			var exteralLogOn = new ExternalLogOn
 			{
 				//AcdLogOnName = name, // is not used?
@@ -328,9 +307,6 @@ namespace Teleopti.Ccc.TestCommon
 			};
 			_externalLogOns.Add(exteralLogOn);
 			person.AddExternalLogOn(exteralLogOn, personPeriod);
-
-			_persons.Add(person);
-
 			return this;
 		}
 
@@ -338,7 +314,37 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return _persons.LoadAll().Single(x => x.Name.ToString() == _person);
 		}
-		
+
+		private IContractSchedule contractSchedule()
+		{
+			if (_contractSchedule != null)
+				return _contractSchedules.LoadAll().Single(x => x.Description.Name == _contractSchedule);
+			_contractSchedule = RandomName.Make();
+			var c = new ContractSchedule(_contractSchedule);
+			_contractSchedules.Add(c);
+			return c;
+		}
+
+		private IPartTimePercentage partTimePercentage()
+		{
+			if (_partTimePercentage != null)
+				return _partTimePercentages.LoadAll().Single(x => x.Description.Name == _partTimePercentage);
+			_partTimePercentage = RandomName.Make();
+			var p = new PartTimePercentage(_partTimePercentage);
+			_partTimePercentages.Add(p);
+			return p;
+		}
+
+		private IContract contract()
+		{
+			if (_contract != null)
+				return _contracts.LoadAll().Single(x => x.Description.Name == _contract);
+			_contract = RandomName.Make();
+			var c = new Contract(_contract);
+			_contracts.Add(c);
+			return c;
+		}
+
 
 
 
