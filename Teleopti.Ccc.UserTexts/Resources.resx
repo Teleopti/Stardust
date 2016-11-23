@@ -9154,8 +9154,8 @@ Longterm</value>
     <comment>Difference in percent</comment>
   </data>
   <data name="ForecastedStaff" xml:space="preserve">
-    <value>Forecasted Staff</value>
-    <comment>Forecasted Staff</comment>
+    <value>Forecasted agents</value>
+    <comment>Forecasted agents</comment>
   </data>
   <data name="FulltimeEquivalentHoursPerDay" xml:space="preserve">
     <value>FTE h/day</value>
@@ -14944,8 +14944,8 @@ These options are activated:
     <comment>use in MyTime shift trade site selector, when user choose this, it will show all of the agents in permitted sites</comment>
   </data>
   <data name="ReforecastedStaff" xml:space="preserve">
-    <value>Reforecasted Staff</value>
-    <comment>Reforecasted staff in web intraday</comment>
+    <value>Reforecasted agents</value>
+    <comment>Reforecasted agents in web intraday</comment>
   </data>
   <data name="ShiftTradeMaxSeatViolationDenyReason" xml:space="preserve">
     <value>The shift trade request has been denied as there are not enough available seats.</value>
@@ -15023,8 +15023,8 @@ These options are activated:
     <comment>name for WFM  Teams Module</comment>
   </data>
   <data name="RequiredStaff" xml:space="preserve">
-    <value>Required Staff</value>
-    <comment>Required Staff in web intraday</comment>
+    <value>Required agents</value>
+    <comment>Required agents in web intraday</comment>
   </data>
   <data name="RequestDenyReasonRequestExpired" xml:space="preserve">
     <value>Your absence request has been denied automatically. The start time of this request is {0}, it must be at least {1} minutes later than current time</value>

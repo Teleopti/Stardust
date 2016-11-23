@@ -181,7 +181,8 @@
 		PersonAssignment_UseChunkedLoading_41479,
 		Wfm_ArchiveSchedule_41498,
 		Wfm_ImportSchedule_41247,
-		SchedulingScreen_BatchAgentValidation_41552
+		SchedulingScreen_BatchAgentValidation_41552,
+		Wfm_Intraday_ScheduledStaffing_41476
 
 		// ReSharper restore InconsistentNaming
 	}

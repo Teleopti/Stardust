@@ -198,3 +198,4 @@ MyTimeWeb_SortRequestList_40711 = RC
 Wfm_ArchiveSchedule_41498 = DEV
 Wfm_ImportSchedule_41247 = DEV
 SchedulingScreen_BatchAgentValidation_41552 = RC
+Wfm_Intraday_ScheduledStaffing_41476 = RC

@@ -11544,7 +11544,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Forecasted Staff.
+        ///   Looks up a localized string similar to Forecasted agents.
         /// </summary>
         public static string ForecastedStaff {
             get {
@@ -22963,7 +22963,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reforecasted Staff.
+        ///   Looks up a localized string similar to Reforecasted agents.
         /// </summary>
         public static string ReforecastedStaff {
             get {
@@ -24108,7 +24108,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Required Staff.
+        ///   Looks up a localized string similar to Required agents.
         /// </summary>
         public static string RequiredStaff {
             get {

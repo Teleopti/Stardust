@@ -14,16 +14,18 @@
 				hasMonitorData: false,
 				timeSeries: [],
 				actualStaffingSeries: [],
-				currentInterval: []
+				currentInterval: [],
+				scheduledStaffing: []
 			};
 
 			var hiddenArray = [];
 
-			service.setStaffingData = function (result, showOptimalStaffing) {
+			service.setStaffingData = function (result, showOptimalStaffing, showScheduledStaffing) {
 				staffingData.timeSeries = [];
 				staffingData.forecastedStaffing.series = [];
 				staffingData.forecastedStaffing.updatedSeries = [];
 				staffingData.actualStaffingSeries = [];
+				staffingData.scheduledStaffing = [];
 
 				staffingData.forecastedStaffing.series = result.DataSeries.ForecastedStaffing;
 				staffingData.forecastedStaffing.updatedSeries = result.DataSeries.UpdatedForecastedStaffing;
@@ -31,6 +33,9 @@
 				if (showOptimalStaffing)
 					staffingData.actualStaffingSeries = result.DataSeries.ActualStaffing;
 
+				if (showScheduledStaffing)
+					staffingData.scheduledStaffing = result.DataSeries.ScheduledStaffing;
+					
 				angular.forEach(result.DataSeries.Time, function (value, key) {
 					this.push($filter('date')(value, 'shortTime'));
 				}, staffingData.timeSeries);
@@ -42,6 +47,7 @@
 				staffingData.forecastedStaffing.series.splice(0, 0, 'Forecasted_staffing');
 				staffingData.forecastedStaffing.updatedSeries.splice(0, 0, 'Updated_forecasted_staffing');
 				staffingData.actualStaffingSeries.splice(0, 0, 'Actual_staffing');
+				staffingData.scheduledStaffing.splice(0, 0, 'Scheduled_staffing');
 
 				staffingData.hasMonitorData = true;
 
@@ -62,26 +68,26 @@
 				return staffingData;
 			}
 
-			service.pollSkillData = function (selectedItem, showOptimalStaffing) {
+			service.pollSkillData = function (selectedItem, showOptimalStaffing, showScheduledStaffing) {
 				intradayService.getSkillStaffingData.query(
 					{
 						id: selectedItem.Id
 					})
 					.$promise.then(function (result) {
-						return service.setStaffingData(result, showOptimalStaffing);
+						return service.setStaffingData(result, showOptimalStaffing, showScheduledStaffing);
 					},
 					function (error) {
 						staffingData.hasMonitorData = false;
 					});
 			};
 
-			service.pollSkillAreaData = function (selectedItem, showOptimalStaffing) {
+			service.pollSkillAreaData = function (selectedItem, showOptimalStaffing, showScheduledStaffing) {
 				intradayService.getSkillAreaStaffingData.query(
 					{
 						id: selectedItem.Id
 					})
 					.$promise.then(function (result) {
-						return service.setStaffingData(result, showOptimalStaffing);
+						return service.setStaffingData(result, showOptimalStaffing, showScheduledStaffing);
 					},
 					function (error) {
 						staffingData.hasMonitorData = false;
@@ -97,23 +103,26 @@
 								staffingData.timeSeries,
 								staffingData.forecastedStaffing.series,
 								staffingData.forecastedStaffing.updatedSeries,
-								staffingData.actualStaffingSeries
+								staffingData.actualStaffingSeries,
+								staffingData.scheduledStaffing
 							],
 							type: 'line',
 							groups: [
-								['Forecasted_staffing'], ['Updated_forecasted_staffing'], ['Actual_staffing']
+								['Forecasted_staffing'], ['Updated_forecasted_staffing'], ['Actual_staffing'], ['Scheduled_staffing']
 							],
 							order: 'asc',
 							hide: hiddenArray,
 							names: {
 								Forecasted_staffing: $translate.instant('ForecastedStaff') + ' ←',
 								Updated_forecasted_staffing: $translate.instant('ReforecastedStaff') + ' ←',
-								Actual_staffing: $translate.instant('RequiredStaff') + ' ←'
+								Actual_staffing: $translate.instant('RequiredStaff') + ' ←',
+								Scheduled_staffing: $translate.instant('ScheduledStaff') + ' ←'
 								},
 								colors: {
 									Forecasted_staffing: '#0099FF',
 									Updated_forecasted_staffing: '#E91E63',
-									Actual_staffing: '#FB8C00'
+									Actual_staffing: '#FB8C00',
+									Scheduled_staffing: '#F488C8'
 							}
 						},
 						axis: {

@@ -44,6 +44,7 @@
 			NoticeService.info(message, null, true);
 			toggleSvc.togglesLoaded.then(function () {
 				$scope.showOptimalStaffing = toggleSvc.Wfm_Intraday_OptimalStaffing_40921;
+				$scope.showScheduledStaffing = toggleSvc.Wfm_Intraday_ScheduledStaffing_41476;
 			});
 
 
@@ -244,10 +245,10 @@
 
 				if ($scope.selectedItem !== null && $scope.selectedItem !== undefined) {
 					if ($scope.selectedItem.Skills) {
-						services[activeTab].pollSkillAreaData($scope.selectedItem, $scope.showOptimalStaffing);
+						services[activeTab].pollSkillAreaData($scope.selectedItem, $scope.showOptimalStaffing, $scope.showScheduledStaffing);
 						var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
 					} else {
-						services[activeTab].pollSkillData($scope.selectedItem, $scope.showOptimalStaffing);
+						services[activeTab].pollSkillData($scope.selectedItem, $scope.showOptimalStaffing, $scope.showScheduledStaffing);
 						var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
 					}
 					$scope.viewObj = services[activeTab].getData();

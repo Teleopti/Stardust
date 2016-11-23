@@ -23,6 +23,7 @@ describe('IntradayAreaCtrl', function () {
 				function() {
 					return {
 						Wfm_Intraday_OptimalStaffing_40921: true,
+						Wfm_Intraday_ScheduledStaffing_41476: true,
 						togglesLoaded: {
 							then: function(cb) { cb(); }
 						}
@@ -100,7 +101,8 @@ describe('IntradayAreaCtrl', function () {
 				ForecastedStaffing: [1, 2, 3],
 				UpdatedForecastedStaffing: [2, 3, 4],
 				ActualStaffing: [2, 3, 4],
-				Time: ["2016-08-30T00:00:00", "2016-08-30T00:15:00"]
+				Time: ["2016-08-30T00:00:00", "2016-08-30T00:15:00"],
+				ScheduledStaffing: [1, 2, 3]
 			}
 		};
 	});
@@ -334,6 +336,30 @@ describe('IntradayAreaCtrl', function () {
 		$httpBackend.flush();
 
 		expect(scope.viewObj.actualStaffingSeries.length).toEqual(1);
+	});
+
+	it('should show scheduled staffing when toggle is enabled', function () {
+		createController(false);
+		scope.activeTab = 2;
+
+		scope.showScheduledStaffing = true;
+
+		scope.selectedSkillAreaChange(scope.skillAreas[0]);
+		$httpBackend.flush();
+
+		expect(scope.viewObj.scheduledStaffing.length).toBeGreaterThan(3);
+	});
+
+	it('should not show scheduled staffing when toggle is disabled', function () {
+		createController(false);
+		scope.activeTab = 2;
+
+		scope.showScheduledStaffing = false;
+
+		scope.selectedSkillAreaChange(scope.skillAreas[0]);
+		$httpBackend.flush();
+
+		expect(scope.viewObj.scheduledStaffing.length).toEqual(1);
 	});
 
 });
