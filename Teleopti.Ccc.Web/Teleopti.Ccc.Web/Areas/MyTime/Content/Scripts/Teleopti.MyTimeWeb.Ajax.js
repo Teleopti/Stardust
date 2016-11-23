@@ -151,7 +151,6 @@ Teleopti.MyTimeWeb.Ajax.UI = (function ($) {
 			modal: true,
 			create: function (event, ui) {
 				var responseText = jqXHR.responseText;
-				console.log("Ajax Error text: " + responseText);
 				$(this).html(responseText);
 
 				var closeBtn = $('.ui-dialog-titlebar-close');
