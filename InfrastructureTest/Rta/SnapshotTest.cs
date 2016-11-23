@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public WithUnitOfWork WithUnitOfWork;
 		public IPersonRepository Persons;
 		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
-		public IAgentStateReadModelReader ReadModels;
+		public IAgentStateReadModelLegacyReader ReadModels;
 		public ConfigurableSyncEventPublisher Publisher;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

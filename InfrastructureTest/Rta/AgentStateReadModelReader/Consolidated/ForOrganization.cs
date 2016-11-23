@@ -5,8 +5,10 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -14,6 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader.Consolid
 {
 	[TestFixture]
 	[UnitOfWorkTest]
+	[Toggle(Toggles.RTA_QuicklyChangeAgentsSelection_40610)]
 	public class ForOrganization
 	{
 		public IJsonSerializer Serializer;
@@ -79,180 +82,180 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader.Consolid
 			result.Count().Should().Be(2);
 		}
 
-		[Test]
-		public void ShouldLoadStatesInAlarmOnly()
-		{
-			Now.Is("2016-06-15 12:00");
-			var teamId = Guid.NewGuid();
-			var personId1 = Guid.NewGuid();
-			var personId2 = Guid.NewGuid();
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
-			{
-				TeamId = teamId,
-				PersonId = personId1,
-				AlarmStartTime = "2016-06-15 12:00".Utc(),
-				IsRuleAlarm = true
-			});
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
-			{
-				TeamId = teamId,
-				PersonId = personId2,
-				AlarmStartTime = "2016-06-15 12:01".Utc(),
-				IsRuleAlarm = true
-			});
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
-			{
-				TeamId = teamId,
-				PersonId = Guid.NewGuid(),
-				AlarmStartTime = null,
-				IsRuleAlarm = false
-			});
+		//[Test]
+		//public void ShouldLoadStatesInAlarmOnly()
+		//{
+		//	Now.Is("2016-06-15 12:00");
+		//	var teamId = Guid.NewGuid();
+		//	var personId1 = Guid.NewGuid();
+		//	var personId2 = Guid.NewGuid();
+		//	Persister.PersistWithAssociation(new AgentStateReadModelForTest
+		//	{
+		//		TeamId = teamId,
+		//		PersonId = personId1,
+		//		AlarmStartTime = "2016-06-15 12:00".Utc(),
+		//		IsRuleAlarm = true
+		//	});
+		//	Persister.PersistWithAssociation(new AgentStateReadModelForTest
+		//	{
+		//		TeamId = teamId,
+		//		PersonId = personId2,
+		//		AlarmStartTime = "2016-06-15 12:01".Utc(),
+		//		IsRuleAlarm = true
+		//	});
+		//	Persister.PersistWithAssociation(new AgentStateReadModelForTest
+		//	{
+		//		TeamId = teamId,
+		//		PersonId = Guid.NewGuid(),
+		//		AlarmStartTime = null,
+		//		IsRuleAlarm = false
+		//	});
 
-			var result = Target.ReadInAlarmsForTeams(new[] { teamId });
+		//	var result = Target.ReadInAlarmsForTeams(new[] { teamId });
 
-			result.Single().PersonId.Should().Be(personId1);
-		}
+		//	result.Single().PersonId.Should().Be(personId1);
+		//}
 
-		[Test]
-		public void ShouldLoadStatesOrderByLongestAlarmTimeFirst()
-		{
-			Now.Is("2016-06-15 12:00");
-			var teamId = Guid.NewGuid();
-			var personId1 = Guid.NewGuid();
-			var personId2 = Guid.NewGuid();
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
-			{
-				TeamId = teamId,
-				PersonId = personId1,
-				AlarmStartTime = "2016-06-15 11:30".Utc(),
-				IsRuleAlarm = true
-			});
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
-			{
-				TeamId = teamId,
-				PersonId = personId2,
-				AlarmStartTime = "2016-06-15 11:00".Utc(),
-				IsRuleAlarm = true
-			});
+		//[Test]
+		//public void ShouldLoadStatesOrderByLongestAlarmTimeFirst()
+		//{
+		//	Now.Is("2016-06-15 12:00");
+		//	var teamId = Guid.NewGuid();
+		//	var personId1 = Guid.NewGuid();
+		//	var personId2 = Guid.NewGuid();
+		//	Persister.PersistWithAssociation(new AgentStateReadModelForTest
+		//	{
+		//		TeamId = teamId,
+		//		PersonId = personId1,
+		//		AlarmStartTime = "2016-06-15 11:30".Utc(),
+		//		IsRuleAlarm = true
+		//	});
+		//	Persister.PersistWithAssociation(new AgentStateReadModelForTest
+		//	{
+		//		TeamId = teamId,
+		//		PersonId = personId2,
+		//		AlarmStartTime = "2016-06-15 11:00".Utc(),
+		//		IsRuleAlarm = true
+		//	});
 
-			var result = Target.ReadInAlarmsForTeams(new[] { teamId });
+		//	var result = Target.ReadInAlarmsForTeams(new[] { teamId });
 
-			result.First().PersonId.Should().Be(personId2);
-			result.Last().PersonId.Should().Be(personId1);
-		}
+		//	result.First().PersonId.Should().Be(personId2);
+		//	result.Last().PersonId.Should().Be(personId1);
+		//}
 
-		[Test]
-		public void ShouldLoadStatesInAlarmOnlyForSites()
-		{
-			Now.Is("2016-06-15 12:00");
-			var siteId = Guid.NewGuid();
-			var personId1 = Guid.NewGuid();
-			var personId2 = Guid.NewGuid();
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
-			{
-				SiteId = siteId,
-				PersonId = personId1,
-				AlarmStartTime = "2016-06-15 12:00".Utc(),
-				IsRuleAlarm = true
-			});
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
-			{
-				SiteId = siteId,
-				PersonId = personId2,
-				AlarmStartTime = "2016-06-15 12:01".Utc(),
-				IsRuleAlarm = true
-			});
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
-			{
-				SiteId = siteId,
-				PersonId = Guid.NewGuid(),
-				AlarmStartTime = null,
-				IsRuleAlarm = false
-			});
+		//[Test]
+		//public void ShouldLoadStatesInAlarmOnlyForSites()
+		//{
+		//	Now.Is("2016-06-15 12:00");
+		//	var siteId = Guid.NewGuid();
+		//	var personId1 = Guid.NewGuid();
+		//	var personId2 = Guid.NewGuid();
+		//	Persister.PersistWithAssociation(new AgentStateReadModelForTest
+		//	{
+		//		SiteId = siteId,
+		//		PersonId = personId1,
+		//		AlarmStartTime = "2016-06-15 12:00".Utc(),
+		//		IsRuleAlarm = true
+		//	});
+		//	Persister.PersistWithAssociation(new AgentStateReadModelForTest
+		//	{
+		//		SiteId = siteId,
+		//		PersonId = personId2,
+		//		AlarmStartTime = "2016-06-15 12:01".Utc(),
+		//		IsRuleAlarm = true
+		//	});
+		//	Persister.PersistWithAssociation(new AgentStateReadModelForTest
+		//	{
+		//		SiteId = siteId,
+		//		PersonId = Guid.NewGuid(),
+		//		AlarmStartTime = null,
+		//		IsRuleAlarm = false
+		//	});
 
-			var result = Target.ReadInAlarmsForSites(new[] { siteId });
+		//	var result = Target.ReadInAlarmsForSites(new[] { siteId });
 
-			result.Single().PersonId.Should().Be(personId1);
-		}
+		//	result.Single().PersonId.Should().Be(personId1);
+		//}
 
 
 		
-		[Test]
-		public void ShouldLoadWithStateGroupId()
-		{
-			Now.Is("2016-06-15 12:00");
-			var site = Guid.NewGuid();
-			var person = Guid.NewGuid();
-			var phoneState = Guid.NewGuid();
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
-			{
-				PersonId = person,
-				SiteId = site,
-				AlarmStartTime = "2016-06-15 12:00".Utc(),
-				IsRuleAlarm = true,
-				StateGroupId = phoneState
-			});
+		//[Test]
+		//public void ShouldLoadWithStateGroupId()
+		//{
+		//	Now.Is("2016-06-15 12:00");
+		//	var site = Guid.NewGuid();
+		//	var person = Guid.NewGuid();
+		//	var phoneState = Guid.NewGuid();
+		//	Persister.PersistWithAssociation(new AgentStateReadModelForTest
+		//	{
+		//		PersonId = person,
+		//		SiteId = site,
+		//		AlarmStartTime = "2016-06-15 12:00".Utc(),
+		//		IsRuleAlarm = true,
+		//		StateGroupId = phoneState
+		//	});
 
-			Target.ReadInAlarmsForSites(new[] { site })
-				.Single().StateGroupId.Should().Be(phoneState);
-		}
+		//	Target.ReadInAlarmsForSites(new[] { site })
+		//		.Single().StateGroupId.Should().Be(phoneState);
+		//}
 
-		[Test]
-		public void ShouldLoadStatesOrderByLongestAlarmTimeFirstForSites()
-		{
-			Now.Is("2016-06-15 12:00");
-			var siteId = Guid.NewGuid();
-			var personId1 = Guid.NewGuid();
-			var personId2 = Guid.NewGuid();
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
-			{
-				SiteId = siteId,
-				PersonId = personId1,
-				AlarmStartTime = "2016-06-15 11:30".Utc(),
-				IsRuleAlarm = true
-			});
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
-			{
-				SiteId = siteId,
-				PersonId = personId2,
-				AlarmStartTime = "2016-06-15 11:00".Utc(),
-				IsRuleAlarm = true
-			});
+		//[Test]
+		//public void ShouldLoadStatesOrderByLongestAlarmTimeFirstForSites()
+		//{
+		//	Now.Is("2016-06-15 12:00");
+		//	var siteId = Guid.NewGuid();
+		//	var personId1 = Guid.NewGuid();
+		//	var personId2 = Guid.NewGuid();
+		//	Persister.PersistWithAssociation(new AgentStateReadModelForTest
+		//	{
+		//		SiteId = siteId,
+		//		PersonId = personId1,
+		//		AlarmStartTime = "2016-06-15 11:30".Utc(),
+		//		IsRuleAlarm = true
+		//	});
+		//	Persister.PersistWithAssociation(new AgentStateReadModelForTest
+		//	{
+		//		SiteId = siteId,
+		//		PersonId = personId2,
+		//		AlarmStartTime = "2016-06-15 11:00".Utc(),
+		//		IsRuleAlarm = true
+		//	});
 
-			var result = Target.ReadInAlarmsForSites(new[] { siteId });
+		//	var result = Target.ReadInAlarmsForSites(new[] { siteId });
 
-			result.First().PersonId.Should().Be(personId2);
-			result.Last().PersonId.Should().Be(personId1);
-		}
+		//	result.First().PersonId.Should().Be(personId2);
+		//	result.Last().PersonId.Should().Be(personId1);
+		//}
 
-		[Test]
-		public void ShouldLoadScheduleForTeam()
-		{
-			var teamId = Guid.NewGuid();
-			var personId = Guid.NewGuid();
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
-			{
-				TeamId = teamId,
-				PersonId = personId,
-				Shift = new[]
-				{
-					new AgentStateActivityReadModel
-					{
-						Color = Color.Green.ToArgb(),
-						StartTime = "2016-05-30 08:00".Utc(),
-						EndTime = "2016-05-30 09:00".Utc(),
-						Name = "Phone"
-					}
-				}
-			});
+		//[Test]
+		//public void ShouldLoadScheduleForTeam()
+		//{
+		//	var teamId = Guid.NewGuid();
+		//	var personId = Guid.NewGuid();
+		//	Persister.PersistWithAssociation(new AgentStateReadModelForTest
+		//	{
+		//		TeamId = teamId,
+		//		PersonId = personId,
+		//		Shift = new[]
+		//		{
+		//			new AgentStateActivityReadModel
+		//			{
+		//				Color = Color.Green.ToArgb(),
+		//				StartTime = "2016-05-30 08:00".Utc(),
+		//				EndTime = "2016-05-30 09:00".Utc(),
+		//				Name = "Phone"
+		//			}
+		//		}
+		//	});
 
-			var result = Target.ReadFor(null, new []{ teamId }, null).Single();
+		//	var result = Target.ReadFor(null, new []{ teamId }, null).Single();
 
-			result.Shift.Single().Color.Should().Be(Color.Green.ToArgb());
-			result.Shift.Single().StartTime.Should().Be("2016-05-30 08:00".Utc());
-			result.Shift.Single().EndTime.Should().Be("2016-05-30 09:00".Utc());
-			result.Shift.Single().Name.Should().Be("Phone");
-		}
+		//	result.Shift.Single().Color.Should().Be(Color.Green.ToArgb());
+		//	result.Shift.Single().StartTime.Should().Be("2016-05-30 08:00".Utc());
+		//	result.Shift.Single().EndTime.Should().Be("2016-05-30 09:00".Utc());
+		//	result.Shift.Single().Name.Should().Be("Phone");
+		//}
 
 		[Test]
 		public void ShouldLoadOutOfAdherences()

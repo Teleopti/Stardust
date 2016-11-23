@@ -8,8 +8,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeAgentStateReadModelPersister :
-		IAgentStateReadModelReader,
-		IAgentStateReadModelPersister
+		IAgentStateReadModelLegacyReader,
+		IAgentStateReadModelPersister,
+		IAgentStateReadModelReader
 	{
 		private readonly INow _now;
 
@@ -114,7 +115,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public IEnumerable<AgentStateReadModel> ReadFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
 		{
-			throw new NotImplementedException();
+			if (siteIds != null && skillIds != null)
+				return ReadForSitesAndSkills(siteIds, skillIds);
+			if (siteIds != null )
+				return ReadForSites(siteIds);
+			if (teamIds != null && skillIds != null)
+				return ReadForTeamsAndSkills(teamIds, skillIds);
+			if (teamIds != null)
+				return ReadForTeams(teamIds);
+			return ReadForSkills(skillIds);
 		}
 
 		public IEnumerable<AgentStateReadModel> ReadForSites(IEnumerable<Guid> siteIds)

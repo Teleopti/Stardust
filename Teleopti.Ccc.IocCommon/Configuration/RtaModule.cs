@@ -57,7 +57,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				);
 			builder.CacheByClassProxy<TenantLoader>().ApplyAspects().SingleInstance();
 
-			builder.RegisterType<AgentStateReadModelReader>().As<IAgentStateReadModelReader>().SingleInstance().ApplyAspects();
+			if (_config.Toggle(Toggles.RTA_QuicklyChangeAgentsSelection_40610))
+				builder.RegisterType<AgentStateReadModelReader>().As<IAgentStateReadModelReader>().SingleInstance().ApplyAspects();
+			else
+				builder.RegisterType<AgentStateReadModelLegacyReader>().As<IAgentStateReadModelReader>().SingleInstance().ApplyAspects();
+			builder.RegisterType<AgentStateReadModelLegacyReader>().As<IAgentStateReadModelLegacyReader>().SingleInstance().ApplyAspects();
+
 
 			builder.RegisterType<KeyValueStorePersister>().As<IKeyValueStorePersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStatePersister>().As<IAgentStatePersister>().SingleInstance().ApplyAspects();

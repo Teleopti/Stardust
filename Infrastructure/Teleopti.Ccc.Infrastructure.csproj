@@ -437,6 +437,7 @@
     <Compile Include="Repositories\SmartPersonPropertyQuerier.cs" />
     <Compile Include="Rta\AgentStatePersister.cs" />
     <Compile Include="Rta\AgentStateReadModelQueryBuilder.cs" />
+    <Compile Include="Rta\AgentStateReadModelReader.cs" />
     <Compile Include="Rta\DeadLockVictimThrower.cs" />
     <Compile Include="Rta\HistoricalAdherenceReadModelPersister.cs" />
     <Compile Include="Rta\HistoricalAdherenceReadModelReader.cs" />
@@ -477,7 +478,7 @@
     <Compile Include="Rta\DataSourceReader.cs" />
     <Compile Include="Rta\AgentStateReadModelPersister.cs" />
     <Compile Include="Foundation\IConnectionStrings.cs" />
-    <Compile Include="Rta\AgentStateReadModelReader.cs" />
+    <Compile Include="Rta\AgentStateReadModelLegacyReader.cs" />
     <Compile Include="Rta\SqlDataReaderExtensions.cs" />
     <Compile Include="SystemCheck\CheckMessageBrokerMailBox.cs" />
     <Compile Include="Toggle\ApplicationFunctionsToggleFilter.cs" />

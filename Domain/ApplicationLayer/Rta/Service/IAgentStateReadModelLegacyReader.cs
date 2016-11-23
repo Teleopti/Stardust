@@ -1,18 +1,20 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IAgentStateReadModelReader
+	{
+		IEnumerable<AgentStateReadModel> ReadFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds);
+	}
+
+	public interface IAgentStateReadModelLegacyReader
     {
         IEnumerable<AgentStateReadModel> Read(IEnumerable<IPerson> persons);
         IEnumerable<AgentStateReadModel> Read(IEnumerable<Guid> personIds);
 	    IEnumerable<AgentStateReadModel> ReadForTeam(Guid teamId);
 		
-		IEnumerable<AgentStateReadModel> ReadFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds);
-
 		IEnumerable<AgentStateReadModel> ReadForSites(IEnumerable<Guid> siteIds);
 		IEnumerable<AgentStateReadModel> ReadForTeams(IEnumerable<Guid> teamIds);
 		IEnumerable<AgentStateReadModel> ReadForSkills(IEnumerable<Guid> skillIds);

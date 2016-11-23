@@ -57,14 +57,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly IUserTimeZone _timeZone;
 		private readonly IUserCulture _culture;
 		private readonly ProperAlarm _appliedAlarm;
-		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
+		private readonly IAgentStateReadModelLegacyReader _agentStateReadModelReader;
+		private readonly IAgentStateReadModelReader _reader;
 
 		public AgentStatesViewModelBuilder(
 			INow now,
 			IUserTimeZone timeZone,
 			IUserCulture culture,
 			ProperAlarm appliedAlarm,
-			IAgentStateReadModelReader agentStateReadModelReader
+			IAgentStateReadModelLegacyReader agentStateReadModelReader,
+			IAgentStateReadModelReader reader
 			)
 		{
 			_now = now;
@@ -72,19 +74,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_culture = culture;
 			_appliedAlarm = appliedAlarm;
 			_agentStateReadModelReader = agentStateReadModelReader;
+			_reader = reader;
 		}
 		
 		public AgentStatesViewModel For(ViewModelFilter filter)
 		{
-			if (filter.SiteIds != null && filter.SkillIds != null)
-				return build(_agentStateReadModelReader.ReadForSitesAndSkills(filter.SiteIds, filter.SkillIds));
-			if (filter.SiteIds != null)
-				return build(_agentStateReadModelReader.ReadForSites(filter.SiteIds));
-			if (filter.TeamIds != null && filter.SkillIds != null)
-				return build(_agentStateReadModelReader.ReadForTeamsAndSkills(filter.TeamIds, filter.SkillIds));
-			if (filter.TeamIds != null)
-				return build(_agentStateReadModelReader.ReadForTeams(filter.TeamIds));
-			return build(_agentStateReadModelReader.ReadForSkills(filter.SkillIds));
+			return build(_reader.ReadFor(filter.SiteIds, filter.TeamIds, filter.SkillIds));
 		}
 		
 		public AgentStatesViewModel InAlarmFor(ViewModelFilter filter)

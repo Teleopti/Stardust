@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 		public IAgentStateReadModelPersister StatePersister;
 		public MutableNow Now;
 		public WithUnitOfWork WithUnitOfWork;
-		public IAgentStateReadModelReader Target;
+		public IAgentStateReadModelLegacyReader Target;
 
 		[Test]
 		public void ShouldLoad()

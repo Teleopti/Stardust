@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 	public class ForOrganization
 	{
 		public IJsonSerializer Serializer;
-		public IAgentStateReadModelReader Target;
+		public IAgentStateReadModelLegacyReader Target;
 		public IAgentStateReadModelPersister Persister;
 		public MutableNow Now;
 		public ICurrentUnitOfWork UnitOfWork;

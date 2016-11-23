@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new System.NotImplementedException();
 		}
 
-		public IAgentStateReadModelReader CreateRtaRepository()
+		public IAgentStateReadModelLegacyReader CreateRtaRepository()
 		{
 			throw new System.NotImplementedException();
 		}

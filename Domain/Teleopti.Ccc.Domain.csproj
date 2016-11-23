@@ -1539,7 +1539,7 @@
     <Compile Include="ResourceCalculation\WorkShiftCalculatorsManager.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderService.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IDataSourceReader.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\IAgentStateReadModelReader.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\IAgentStateReadModelLegacyReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ScheduledActivity.cs" />
     <Compile Include="Scheduling\Assignment\DayOffMaxFlexCalculator.cs" />
     <Compile Include="Scheduling\BackToLegalShift\BackToLegalShiftService.cs" />
