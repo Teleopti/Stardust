@@ -73,7 +73,7 @@
 			}
 
 			var real = function (){
-				return $resource('../api/Organizations', {}, {
+				return $resource('../api/Organization', {}, {
 					query: {
 						method: 'GET',
 						isArray: true

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
@@ -28,6 +29,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		public virtual IHttpActionResult Index()
 		{
 			return Ok(_siteViewModelBuilder.Build());
+		}
+
+		[UnitOfWork, HttpGet, Route("api/Organization")]
+		public virtual IHttpActionResult GetOrganization()
+		{
+			return Ok(_siteViewModelBuilder.ForOrganization());
 		}
 
 		[UnitOfWork, ReadModelUnitOfWork, HttpGet, Route("api/Sites/ForSkills")]

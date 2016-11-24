@@ -88,5 +88,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 							.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _now.LocalDateOnly(), s))
 				.OrderBy(x => x.Description.Name, StringComparer.Create(_uiCulture.GetUiCulture(), false));
 		}
+
+		public IEnumerable<OrganizationSiteViewModel> ForOrganization()
+		{
+			var sites = allPermittedSites();
+			return from site in sites
+				select new OrganizationSiteViewModel
+				{
+					Id = site.Id.Value,
+					Name = site.Description.Name,
+					Teams = site.TeamCollection.Select(
+						team => new OrganizationTeamViewModel
+						{
+							Id = team.Id.Value,
+							Name = team.Description.Name
+						})
+				};
+		}
+	}
+
+	public class OrganizationSiteViewModel
+	{
+		public Guid Id { get; set; }
+		public string Name { get; set; }
+		public IEnumerable<OrganizationTeamViewModel> Teams;
+	}
+
+	public class OrganizationTeamViewModel
+	{
+		public Guid Id { get; set; }
+		public string Name { get; set; }
 	}
 }
