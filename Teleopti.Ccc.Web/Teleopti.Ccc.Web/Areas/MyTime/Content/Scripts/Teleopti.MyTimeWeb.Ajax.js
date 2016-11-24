@@ -151,7 +151,12 @@ Teleopti.MyTimeWeb.Ajax.UI = (function ($) {
 			modal: true,
 			create: function (event, ui) {
 				var responseText = jqXHR.responseText;
-				$(this).html(responseText);
+				try {
+					var message = $.parseJSON(responseText);
+					$(this).html(message);
+				} catch (e) {
+					$(this).html(responseText);
+				}
 
 				var closeBtn = $('.ui-dialog-titlebar-close');
 				closeBtn.addClass('ui-state-default');
