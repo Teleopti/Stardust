@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		{
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				var repository = new RtaStateGroupRepository(uow);
+				var repository = new RtaStateGroupRepository(new ThisUnitOfWork(uow));
 				return repository.LoadAllCompleteGraph();
 			}
 		}
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		{
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				var stateGroupRepository = new RtaStateGroupRepository(uow);
+				var stateGroupRepository = new RtaStateGroupRepository(new ThisUnitOfWork(uow));
 				var alarmMappingRepository = new RtaMapRepository(uow);
 				foreach (var removedGroup in removedGroups.Where(x => x.Id.HasValue))
 				{

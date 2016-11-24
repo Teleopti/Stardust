@@ -19,8 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_stateGroupRepository = stateGroupRepository;
 		}
 
-		public MappedState AddUnknownStateCode(IEnumerable<Mapping> mappings, Guid businessUnitId, Guid platformTypeId,
-			string stateCode, string stateDescription)
+		public MappedState AddUnknownStateCode(IEnumerable<Mapping> mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, string stateDescription)
 		{
 			var stateGroups = _stateGroupRepository.LoadAllExclusive();
 
@@ -48,7 +47,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			if (defaultStateGroup != null)
 			{
-				defaultStateGroup.AddState(stateDescription ?? stateCode, stateCode, platformTypeId);
+
+				// locking here only for domain testing
+				// because threads in domain share the same instance of the aggregate
+				// and we dont want locks in the aggregate
+				lock (defaultStateGroup)
+					defaultStateGroup.AddState(stateDescription ?? stateCode, stateCode, platformTypeId);
+
 				return new MappedState
 				{
 					StateGroupId = defaultStateGroup.Id.Value,

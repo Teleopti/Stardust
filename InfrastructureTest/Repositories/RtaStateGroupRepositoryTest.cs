@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var stateGroup = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(stateGroup);
 
-            var result = new RtaStateGroupRepository(UnitOfWork).LoadAllCompleteGraph();
+            var result = new RtaStateGroupRepository(new ThisUnitOfWork(UnitOfWork)).LoadAllCompleteGraph();
             Assert.AreEqual(1,result.Count);
             Assert.IsTrue(LazyLoadingManager.IsInitialized(result[0].StateCollection));
         }
@@ -101,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldHardDelete()
 		{
 			var stateGroup = new RtaStateGroup("group 1", false, true);
-			var target = new RtaStateGroupRepository(UnitOfWork);
+			var target = new RtaStateGroupRepository(new ThisUnitOfWork(UnitOfWork));
 			target.Add(stateGroup);
 			UnitOfWork.PersistAll();
 
