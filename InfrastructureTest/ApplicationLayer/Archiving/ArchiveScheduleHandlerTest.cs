@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Archiving;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
@@ -19,6 +20,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 {
+	[Category("BucketB")]
 	[Toggle(Toggles.Wfm_ArchiveSchedule_41498)]
 	[DatabaseTest]
 	public class ArchiveScheduleHandlerTest : ISetup
@@ -254,16 +256,133 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			archivedNotes.Count.Should().Be.EqualTo(1);
 			archivedNotes.First().GetScheduleNote(new NoFormatting()).Should().Be.EqualTo(noteOnTheDay.GetScheduleNote(new NoFormatting()));
 		}
-		
+
+		private static readonly TargetAbsenceSplitTestCase[] targetAbsenceSplitTestCases =
+		{
+			new TargetAbsenceSplitTestCase
+			{
+				AbsenceStartLocal = new DateTime(2016, 1, 3),
+				AbsenceEndLocal = new DateTime(2016, 1, 4, 12, 0, 0),
+				ArchiveStart = new DateOnly(2016, 1, 4),
+				ArchiveEnd = new DateOnly(2016, 1, 6),
+				Asserts = (testCase, defaultAbsences, targetAbsences) =>
+				{
+					targetAbsences.Count.Should().Be.EqualTo(1);
+					targetAbsences.First().Layer.Period.StartDateTime.Should().Be.EqualTo(testCase.AbsenceStartLocal);
+					targetAbsences.First().Layer.Period.EndDateTime.Should().Be.EqualTo(testCase.ArchiveStart.Date.AddMinutes(-1));
+				}
+			},
+			new TargetAbsenceSplitTestCase
+			{
+				AbsenceStartLocal = new DateTime(2016, 1, 6, 12, 0, 0),
+				AbsenceEndLocal = new DateTime(2016, 1, 7, 23, 59, 0),
+				ArchiveStart = new DateOnly(2016, 1, 4),
+				ArchiveEnd = new DateOnly(2016, 1, 6),
+				Asserts = (testCase, defaultAbsences, targetAbsences) =>
+				{
+					targetAbsences.Count.Should().Be.EqualTo(1);
+					targetAbsences.First().Layer.Period.StartDateTime.Should().Be.EqualTo(testCase.ArchiveEnd.Date.AddDays(1));
+					targetAbsences.First().Layer.Period.EndDateTime.Should().Be.EqualTo(testCase.AbsenceEndLocal);
+				}
+			},
+			new TargetAbsenceSplitTestCase
+			{
+				AbsenceStartLocal = new DateTime(2016, 1, 3),
+				AbsenceEndLocal = new DateTime(2016, 1, 7, 23, 59, 0),
+				ArchiveStart = new DateOnly(2016, 1, 4),
+				ArchiveEnd = new DateOnly(2016, 1, 6),
+				Asserts = (testCase, defaultAbsences, targetAbsences) =>
+				{
+					targetAbsences.Count.Should().Be.EqualTo(2);
+					targetAbsences.First().Layer.Period.StartDateTime.Should().Be.EqualTo(testCase.AbsenceStartLocal);
+					targetAbsences.First().Layer.Period.EndDateTime.Should().Be.EqualTo(testCase.ArchiveStart.Date.AddMinutes(-1));
+
+					targetAbsences.Second().Layer.Period.StartDateTime.Should().Be.EqualTo(testCase.ArchiveEnd.Date.AddDays(1));
+					targetAbsences.Second().Layer.Period.EndDateTime.Should().Be.EqualTo(testCase.AbsenceEndLocal);
+				}
+			},
+			new TargetAbsenceSplitTestCase
+			{
+				AbsenceStartLocal = new DateTime(2016, 1, 4),
+				AbsenceEndLocal = new DateTime(2016, 1, 6, 23, 59, 0),
+				ArchiveStart = new DateOnly(2016, 1, 4),
+				ArchiveEnd = new DateOnly(2016, 1, 6),
+				Asserts = (testCase, defaultAbsences, targetAbsences) =>
+				{
+					targetAbsences.Count.Should().Be.EqualTo(0);
+				}
+			},
+			new TargetAbsenceSplitTestCase
+			{
+				AbsenceStartLocal = new DateTime(2016, 1, 3),
+				AbsenceEndLocal = new DateTime(2016, 1, 3, 23, 59, 0),
+				ArchiveStart = new DateOnly(2016, 1, 4),
+				ArchiveEnd = new DateOnly(2016, 1, 6),
+				Asserts = (testCase, defaultAbsences, targetAbsences) =>
+				{
+					targetAbsences.Count.Should().Be.EqualTo(1);
+					targetAbsences.First().Layer.Period.StartDateTime.Should().Be.EqualTo(testCase.AbsenceStartLocal);
+					targetAbsences.First().Layer.Period.EndDateTime.Should().Be.EqualTo(testCase.AbsenceEndLocal);
+				}
+			},
+			new TargetAbsenceSplitTestCase
+			{
+				AbsenceStartLocal = new DateTime(2016, 1, 7),
+				AbsenceEndLocal = new DateTime(2016, 1, 7, 23, 59, 0),
+				ArchiveStart = new DateOnly(2016, 1, 4),
+				ArchiveEnd = new DateOnly(2016, 1, 6),
+				Asserts = (testCase, defaultAbsences, targetAbsences) =>
+				{
+					targetAbsences.Count.Should().Be.EqualTo(1);
+					targetAbsences.First().Layer.Period.StartDateTime.Should().Be.EqualTo(testCase.AbsenceStartLocal);
+					targetAbsences.First().Layer.Period.EndDateTime.Should().Be.EqualTo(testCase.AbsenceEndLocal);
+				}
+			}
+		};
+
+		[Ignore("Until Erik fixed them in handler")]
+		[Test]
+		public void ShouldSplitTargetAbsenceCorrectly([ValueSource(nameof(targetAbsenceSplitTestCases))] TargetAbsenceSplitTestCase testCase)
+		{
+			testCase.AbsenceStartLocal = DateTime.SpecifyKind(testCase.AbsenceStartLocal, DateTimeKind.Utc);
+			testCase.AbsenceEndLocal = DateTime.SpecifyKind(testCase.AbsenceEndLocal, DateTimeKind.Utc);
+			_person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+
+			addDefaultTypesToRepositories();
+			_archivePeriod = new DateOnlyPeriod(testCase.ArchiveStart, testCase.ArchiveEnd);
+
+			// Given Absence
+			var absence = AbsenceFactory.CreateAbsence("gone");
+			WithUnitOfWork.Do(() => AbsenceRepository.Add(absence));
+
+			// Given Person absence in target scenario
+			var personAbsence = new PersonAbsence(_person, _targetScenario, new AbsenceLayer(absence, new DateTimePeriod(testCase.AbsenceStartLocal.ToUniversalTime(), testCase.AbsenceEndLocal.ToUniversalTime())));
+			WithUnitOfWork.Do(() => ScheduleStorage.Add(personAbsence));
+
+			// When calling handler
+			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
+
+			// Then there should be a splitted absence in target instead where empty for the archived period
+			var defaultPersonAbsences = WithUnitOfWork.Get(() => PersonAbsenceRepository.LoadAll().Where(x => x.Scenario.Id == _defaultScenario.Id)).ToList();
+			defaultPersonAbsences.Should().Not.Be.Null();
+			defaultPersonAbsences.Count.Should().Be.EqualTo(0);
+
+			var archivedPersonAbsences = WithUnitOfWork.Get(() => PersonAbsenceRepository.LoadAll().Where(x => x.Scenario.Id == _targetScenario.Id))
+				.OrderBy(a => a.Layer.Period.StartDateTime).ToList();
+			archivedPersonAbsences.Should().Not.Be.Null();
+
+			testCase.Asserts(testCase, defaultPersonAbsences, archivedPersonAbsences);
+		}
+
 		[Test, Combinatorial]
-		public void ShouldSplitAbsenceCorrectly([ValueSource(nameof(splitTestCases))] SplitTestCase testCase, [ValueSource(nameof(agentTimeZones))] TimeZoneInfo timeZoneInfo)
+		public void ShouldSplitAbsenceCorrectly([ValueSource(nameof(sourceAbsenceSplitTestCases))] SourceAbsenceSplitTestCase testCase, [ValueSource(nameof(agentTimeZones))] TimeZoneInfo timeZoneInfo)
 		{
 			testCase.Setup(timeZoneInfo);
 			Console.WriteLine(testCase);
 
 			_person.PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
 			addDefaultTypesToRepositories();
-			
+
 			// Given Absence
 			_archivePeriod = new DateOnlyPeriod(testCase.ArchiveStart, testCase.ArchiveEnd);
 			var absence = AbsenceFactory.CreateAbsence("gone");
@@ -295,12 +414,12 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 				Console.WriteLine($"Absence in target  [{archivePersonAbsence.Id}]: {SplitTestCase.DateTimePeriodInTimeZoneToString(archivePersonAbsence.Period, timeZoneInfo)}");
 			}
 
-			if (testCase.ExpectedOutcome == SplitTestCase.Expectations.NothingArchived)
+			if (testCase.ExpectedOutcome == SourceAbsenceSplitTestCase.Expectations.NothingArchived)
 			{
 				archivedPersonAbsences.Count.Should().Be.EqualTo(0);
 			}
 
-			if (testCase.ExpectedOutcome == SplitTestCase.Expectations.OneArchived)
+			if (testCase.ExpectedOutcome == SourceAbsenceSplitTestCase.Expectations.OneArchived)
 			{
 				archivedPersonAbsences.Count.Should().Be.EqualTo(1);
 				TimeZoneInfo.ConvertTime(archivedPersonAbsences.First().Period.StartDateTime, timeZoneInfo).Should().Be.EqualTo(testCase.ExpectedStart());
@@ -315,70 +434,70 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			TimeZoneInfoFactory.DenverTimeZoneInfo()
 		};
 
-		private static readonly SplitTestCase[] splitTestCases = {
-			new SplitTestCase
+		private static readonly SourceAbsenceSplitTestCase[] sourceAbsenceSplitTestCases = {
+			new SourceAbsenceSplitTestCase
 			{
 				AbsenceStartLocal = new DateTime(2016, 1, 2, 10, 0, 0),
 				AbsenceEndLocal =   new DateTime(2016, 1, 2, 12, 0, 0),
 				ArchiveStart = new DateOnly(2016, 1, 1),
 				ArchiveEnd =   new DateOnly(2016, 1, 6),
-				ExpectedOutcome = SplitTestCase.Expectations.OneArchived
+				ExpectedOutcome = SourceAbsenceSplitTestCase.Expectations.OneArchived
 			},
-			new SplitTestCase
+			new SourceAbsenceSplitTestCase
 			{
 				AbsenceStartLocal = new DateTime(2016, 1, 1),
 				AbsenceEndLocal =   new DateTime(2016, 1, 10),
 				ArchiveStart = new DateOnly(2016, 1, 4),
 				ArchiveEnd =   new DateOnly(2016, 1, 6),
-				ExpectedOutcome = SplitTestCase.Expectations.OneArchived
+				ExpectedOutcome = SourceAbsenceSplitTestCase.Expectations.OneArchived
 			},
-			new SplitTestCase
+			new SourceAbsenceSplitTestCase
 			{
 				AbsenceStartLocal = new DateTime(2016, 1, 1),
 				AbsenceEndLocal =   new DateTime(2016, 1, 2),
 				ArchiveStart = new DateOnly(2016, 1, 4),
 				ArchiveEnd =   new DateOnly(2016, 1, 6),
-				ExpectedOutcome = SplitTestCase.Expectations.NothingArchived
+				ExpectedOutcome = SourceAbsenceSplitTestCase.Expectations.NothingArchived
 			},
-			new SplitTestCase
+			new SourceAbsenceSplitTestCase
 			{
 				AbsenceStartLocal = new DateTime(2016, 1, 6),
 				AbsenceEndLocal =   new DateTime(2016, 1, 10),
 				ArchiveStart = new DateOnly(2016, 1, 4),
 				ArchiveEnd =   new DateOnly(2016, 1, 4),
-				ExpectedOutcome = SplitTestCase.Expectations.NothingArchived
+				ExpectedOutcome = SourceAbsenceSplitTestCase.Expectations.NothingArchived
 			},
-			new SplitTestCase
+			new SourceAbsenceSplitTestCase
 			{
 				AbsenceStartLocal = new DateTime(2016, 1, 10, 10, 0, 0),
 				AbsenceEndLocal =   new DateTime(2016, 1, 11, 10, 0, 0),
 				ArchiveStart = new DateOnly(2016, 1, 1),
 				ArchiveEnd =   new DateOnly(2016, 1, 10),
-				ExpectedOutcome = SplitTestCase.Expectations.OneArchived
+				ExpectedOutcome = SourceAbsenceSplitTestCase.Expectations.OneArchived
 			},
-			new SplitTestCase
+			new SourceAbsenceSplitTestCase
 			{
 				AbsenceStartLocal = new DateTime(2016, 1, 6, 10, 0, 0),
 				AbsenceEndLocal =   new DateTime(2016, 1, 11, 10, 0, 0),
 				ArchiveStart = new DateOnly(2016, 1, 10),
 				ArchiveEnd =   new DateOnly(2016, 1, 12),
-				ExpectedOutcome = SplitTestCase.Expectations.OneArchived
+				ExpectedOutcome = SourceAbsenceSplitTestCase.Expectations.OneArchived
 			},
-			new SplitTestCase
+			new SourceAbsenceSplitTestCase
 			{
 				AbsenceStartLocal = new DateTime(2016, 1, 13, 0, 0, 0),
 				AbsenceEndLocal =   new DateTime(2016, 1, 14, 0, 0, 0),
 				ArchiveStart = new DateOnly(2016, 1, 10),
 				ArchiveEnd =   new DateOnly(2016, 1, 12),
-				ExpectedOutcome = SplitTestCase.Expectations.NothingArchived
+				ExpectedOutcome = SourceAbsenceSplitTestCase.Expectations.NothingArchived
 			},
-			new SplitTestCase
+			new SourceAbsenceSplitTestCase
 			{
 				AbsenceStartLocal = new DateTime(2016, 1, 8, 0, 0, 0),
 				AbsenceEndLocal =   new DateTime(2016, 1, 10, 0, 0, 0),
 				ArchiveStart = new DateOnly(2016, 1, 10),
 				ArchiveEnd =   new DateOnly(2016, 1, 12),
-				ExpectedOutcome = SplitTestCase.Expectations.NothingArchived
+				ExpectedOutcome = SourceAbsenceSplitTestCase.Expectations.NothingArchived
 			}
 		};
 
