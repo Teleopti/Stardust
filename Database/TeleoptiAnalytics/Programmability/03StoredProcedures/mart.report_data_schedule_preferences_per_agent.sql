@@ -97,6 +97,7 @@ INNER JOIN mart.dim_preference_type dpt
 	ON dpt.preference_type_id=f.preference_type_id
 INNER JOIN mart.dim_person p
 	ON f.person_id=p.person_id
+	AND f.date_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
 INNER JOIN mart.dim_shift_category sc
 	ON sc.shift_category_id=f.shift_category_id
 INNER JOIN mart.dim_date d 
@@ -132,6 +133,7 @@ INNER JOIN mart.dim_preference_type dpt
 	ON dpt.preference_type_id=f.preference_type_id
 INNER JOIN mart.dim_person p
 	ON f.person_id=p.person_id
+	AND f.date_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
 INNER JOIN mart.dim_day_off ddo
 	ON ddo.day_off_id=f.day_off_id
 INNER JOIN mart.dim_date d 
@@ -167,6 +169,7 @@ INNER JOIN mart.dim_preference_type dpt
 	ON dpt.preference_type_id=f.preference_type_id
 INNER JOIN mart.dim_person p
 	ON f.person_id=p.person_id
+	AND f.date_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
 INNER JOIN mart.dim_absence ab
 	ON ab.absence_id=f.absence_id
 INNER JOIN mart.dim_date d 
@@ -202,6 +205,7 @@ INNER JOIN mart.dim_preference_type dpt
 	ON dpt.preference_type_id=f.preference_type_id
 INNER JOIN mart.dim_person p
 	ON f.person_id=p.person_id
+	AND f.date_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
 INNER JOIN mart.dim_date d 
 	ON f.date_id = d.date_id
 LEFT JOIN

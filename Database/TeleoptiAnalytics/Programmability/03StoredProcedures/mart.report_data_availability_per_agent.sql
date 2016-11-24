@@ -46,6 +46,7 @@ SELECT	p.person_code as 'PersonCode',
 FROM mart.fact_hourly_availability f
 INNER JOIN mart.dim_person p
 	ON f.person_id=p.person_id
+	AND f.date_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
 INNER JOIN mart.dim_date d 
 	ON f.date_id = d.date_id
 WHERE d.date_date BETWEEN @date_from AND @date_to
