@@ -90,6 +90,12 @@
 				$scope.skillAreasLoaded = false;
 				toggleService.togglesLoaded.then(function() {
 					$scope.showOrgSelection = toggleService.RTA_QuicklyChangeAgentsSelection_40610;
+					if($scope.showOrgSelection)
+						RtaService.getOrganization()
+							.then(function(organization) {
+								$scope.sites = organization;
+								keepSelectionForOrganization();
+						});
 
 				});
 
@@ -151,11 +157,7 @@
 				//org selection
 				var selectedSiteId;
 				//var selectedSiteId = {};
-				RtaService.getOrganization()
-					.then(function(organization) {
-						$scope.sites = organization;
-						keepSelectionForOrganization();
-					});
+
 
 				$scope.selectSite = function(siteId) {
 					selectedSiteId = $scope.isSelectedSite(siteId) ? '' : siteId;
