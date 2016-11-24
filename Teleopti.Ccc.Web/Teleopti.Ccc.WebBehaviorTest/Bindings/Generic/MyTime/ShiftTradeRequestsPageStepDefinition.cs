@@ -62,28 +62,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 				TimeSpan.FromMilliseconds(1000));
 		}
 
+		private static bool theGauntlet(string owner)
+		{
+			if (owner == "anonym")
+				return Browser.Interactions.IsContain("#Request-shift-trade-bulletin-board .shift-trade-agent-name", "Anonym");
+			if (owner == "my")
+				return Browser.Interactions.IsAnyVisible(".shift-trade-my-schedule .shift-trade-layer");
+
+			return Browser.Interactions.IsAnyVisible("#agent-in-bulletin-board");
+
+		}
+
 		[When(@"I see '(.*)' shift on Shift Trade Bulletin Board on date '(.*)'")]
 		public void WhenISeeWhoseShiftOnDate(string owner, DateTime date)
 		{
 			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
 			var script = string.Format("Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.IsRunningBehaviorTest(); return Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeBulletinBoardDate('{0}');", dateAsSwedishString);
+
 			gotoShiftTradeBulletinBoardToday();
 
-			if (owner == "anonym")
-			{
-				Browser.Interactions.TryUntil(
+			Browser.Interactions.TryUntil(
 				() => Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString),
-				() => Browser.Interactions.IsContain("#Request-shift-trade-bulletin-board .shift-trade-agent-name", "Anonym"),
+				() => theGauntlet(owner),
 				TimeSpan.FromMilliseconds(1000));
-			}
-			else
-			{
-				var selector = owner == "my" ? ".shift-trade-my-schedule .shift-trade-layer" : "#agent-in-bulletin-board";
-				Browser.Interactions.TryUntil(
-					() => Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString),
-					() => Browser.Interactions.IsAnyVisible(selector),
-					TimeSpan.FromMilliseconds(1000));
-			}
 		}
 
 		[Then(@"I should see a message text saying I am missing a workflow control set")]

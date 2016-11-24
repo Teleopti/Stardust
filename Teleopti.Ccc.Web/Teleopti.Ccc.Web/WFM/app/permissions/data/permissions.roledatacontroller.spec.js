@@ -61,8 +61,7 @@ describe('DataController', function () {
 		expect(node.$modelValue.selected).toBe(false);
 	}));
 
-
-	it('should simeselect all parents when it has both selected children and unselected children', inject(function ($controller) {
+	it('should semiselect parents who has both selected and unselected children', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('RoleDataController', { $scope: scope, RoleDataService: mockRoleDataService, Roles: mockRoles });
 		scope.selectedRole = "1";
@@ -72,13 +71,14 @@ describe('DataController', function () {
 		scope.$digest();
 
 		expect(targetNode.$modelValue.selected).toBe(true);
+		expect(targetNode.$modelValue.semiSelected).toBe(false);
 		expect(targetNode.$parentNodeScope.$modelValue.selected).toBe(false);
 		expect(targetNode.$parentNodeScope.$modelValue.semiSelected).toBe(true);
 		expect(targetNode.$parentNodeScope.$parentNodeScope.$modelValue.selected).toBe(false);
 		expect(targetNode.$parentNodeScope.$parentNodeScope.$modelValue.semiSelected).toBe(true);
 	}));
 
-	it('should select all parent when its children are all selected', inject(function ($controller) {
+	it('should select parents whose children are all selected', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('RoleDataController', { $scope: scope, RoleDataService: mockRoleDataService, Roles: mockRoles });
 		scope.selectedRole = "1";
@@ -88,13 +88,14 @@ describe('DataController', function () {
 		scope.$digest();
 
 		expect(targetNode.$modelValue.selected).toBe(true);
+		expect(targetNode.$modelValue.semiSelected).toBe(false);
 		expect(targetNode.$parentNodeScope.$modelValue.selected).toBe(true);
 		expect(targetNode.$parentNodeScope.$modelValue.semiSelected).toBe(false);
 		expect(targetNode.$parentNodeScope.$parentNodeScope.$modelValue.selected).toBe(true);
 		expect(targetNode.$parentNodeScope.$parentNodeScope.$modelValue.semiSelected).toBe(false);
 	}));
 
-	it('should unselect parent when its children are all unselected', inject(function ($controller) {
+	it('should unselect parents whose children are all unselected', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('RoleDataController', { $scope: scope, RoleDataService: mockRoleDataService, Roles: mockRoles });
 		scope.selectedRole = "1";
@@ -104,6 +105,7 @@ describe('DataController', function () {
 		scope.$digest();
 
 		expect(targetNode.$modelValue.selected).toBe(false);
+		expect(targetNode.$modelValue.semiSelected).toBe(false);
 		expect(targetNode.$parentNodeScope.$modelValue.selected).toBe(false);
 		expect(targetNode.$parentNodeScope.$modelValue.semiSelected).toBe(false);
 		expect(targetNode.$parentNodeScope.$parentNodeScope.$modelValue.selected).toBe(false);
@@ -125,11 +127,13 @@ describe('DataController', function () {
 			if (node.childNodes().length > 0) {
 				node.childNodes().forEach(function (child) {
 					expect(child.$modelValue.selected).toBe(true);
+					expect(child.$modelValue.semiSelected).toBe(false);
 					checkChildren(child);
 				});
 			}
 		}
 	}));
+
 	it('should same unselect all children', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('RoleDataController', { $scope: scope, RoleDataService: mockRoleDataService, Roles: mockRoles });
@@ -145,13 +149,14 @@ describe('DataController', function () {
 			if (node.childNodes().length > 0) {
 				node.childNodes().forEach(function (child) {
 					expect(child.$modelValue.selected).toBe(false);
+					expect(child.$modelValue.semiSelected).toBe(false);
 					checkChildren(child);
 				});
 			}
 		}
 	}));
 
-	it('should save its parents when all is selected', inject(function ($controller) {
+	it('should save itself and parents whose children are all selected', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('RoleDataController', { $scope: scope, RoleDataService: mockRoleDataService, Roles: mockRoles });
 		scope.selectedRole = "1";
@@ -167,7 +172,7 @@ describe('DataController', function () {
 		expect(mockRoleDataService.assignOrganizationSelection).toHaveBeenCalledWith('1', expectedObject);
 	}));
 
-	it('should only save itself when its parent has unselected children', inject(function ($controller) {
+	it('should only save itself when it has unselected siblings', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('RoleDataController', { $scope: scope, RoleDataService: mockRoleDataService, Roles: mockRoles });
 		scope.selectedRole = "1";
@@ -215,7 +220,7 @@ describe('DataController', function () {
 		expect(mockRoleDataService.deleteAllNodes).toHaveBeenCalledWith('1', expectedObject);
 	}));
 
-	it('should only delete itself when its parent has selected children', inject(function ($controller) {
+	it('should only delete itself when it has unselected siblings', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('RoleDataController', { $scope: scope, RoleDataService: mockRoleDataService, Roles: mockRoles });
 		scope.selectedRole = "1";
@@ -230,8 +235,6 @@ describe('DataController', function () {
 
 		expect(mockRoleDataService.deleteAllNodes).toHaveBeenCalledWith('1', expectedObject);
 	}));
-
-	
 
 	it('should trigger the watch', inject(function ($controller) {
 		var scope = $rootScope.$new();
@@ -284,7 +287,6 @@ describe('DataController', function () {
 		}
 		site.$parentNodeScope = bu;
 		var targetNode;
-		if (!shouldPrepareChildren) shouldPrepareChildren = false;
 		if (shouldPrepareChildren) {
 			targetNode = {
 				$modelValue: bu.$modelValue,

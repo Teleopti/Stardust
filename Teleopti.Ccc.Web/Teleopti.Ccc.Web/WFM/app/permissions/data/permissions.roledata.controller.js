@@ -98,7 +98,7 @@
 							var shouldUnselect = children.nodeCount === children.unselectedCount;
 
 							if (shouldSemiSelect) {
-								if (parent.$modelValue.semiSelected !== true) {
+								if (!parent.$modelValue.semiSelected) {
 									parent.$modelValue.selected = false;
 									parent.$modelValue.semiSelected = true;
 									if (!node.$modelValue.selected) {
@@ -136,23 +136,24 @@
 					cb(result);
 				};
 
+				function handleSelectionResult(result) {
+					if (result.nodes.length > 0) {
+						var formatedNodes = [];
+						result.nodes.forEach(function (node) {
+							formatedNodes.push({ id: node.$modelValue.Id, type: node.$modelValue.Type });
+						});
+
+						if (result.toSave) {
+							RoleDataService.assignOrganizationSelection($scope.selectedRole, formatedNodes);
+						} else {
+							RoleDataService.deleteAllNodes($scope.selectedRole, formatedNodes);
+						}
+					}
+				}
+
 				$scope.toggleOrganizationSelection = function (node) {
 					if (Roles.selectedRole.BuiltIn) return;
-					uiTree.selectNodes(node,
-						function (result) {
-							if (result.nodes.length > 0) {
-								var formatedNodes = [];
-								result.nodes.forEach(function (node) {
-									formatedNodes.push({ id: node.$modelValue.Id, type: node.$modelValue.Type });
-								});
-
-								if (result.toSave) {
-									RoleDataService.assignOrganizationSelection($scope.selectedRole, formatedNodes);
-								} else {
-									RoleDataService.deleteAllNodes($scope.selectedRole, formatedNodes);
-								}
-							}
-						});
+					uiTree.selectNodes(node, handleSelectionResult);
 				}
 
 				$scope.changeOption = function (option) {
