@@ -246,4 +246,22 @@ $(document).ready(function () {
 
 
 	});
+
+	test("Should set teleopti time correctly with daylight saving time in south hemisphere...", function () {
+		// We test in Brazil's timezone with DST. Notice that the end time is actually before the start time, meaning the end of the DST from the previous year....
+		var options = {
+			UserTimezoneOffsetMinute: -180,
+			HasDayLightSaving: 'True',
+			DayLightSavingStart: "2016-10-16T05:00:00Z",
+			DayLightSavingEnd: "2016-02-21T06:00:00Z",
+			DayLightSavingAdjustmentInMinute: 60
+		};
+
+		var getTeleoptiTime = common.SetupTeleoptiTime(options);
+
+		var currentUtcTime = new Date('2016-10-26T08:30:00Z');
+
+		equal(getTeleoptiTime(currentUtcTime).toGMTString(), new Date('2016-10-26T06:30:00Z').toGMTString());
+
+	});
 });

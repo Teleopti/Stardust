@@ -128,6 +128,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 	};
 
 	function _setupTeleoptiTime(options) {
+	
 		return function(currentUtcTime) {
 			var timezoneOffsetInMinute = options.UserTimezoneOffsetMinute * 60000;
 			var currentTime, currentUtcExpressedInLocalTime;
@@ -142,11 +143,19 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 			var offset = timezoneOffsetInMinute;
 			
 			var hasDayLightSavingStr = options.HasDayLightSaving;
-			if (hasDayLightSavingStr.toLowerCase() === 'true') {				
-				if (currentTime >= new Date(options.DayLightSavingStart)
-					&& currentTime <= new Date(options.DayLightSavingEnd)) {
-					offset += options.DayLightSavingAdjustmentInMinute * 60000;					
-				}
+			if (hasDayLightSavingStr.toLowerCase() === 'true') {
+				var dlsStart = new Date(options.DayLightSavingStart);
+				var dlsEnd = new Date(options.DayLightSavingEnd);
+
+				if (dlsStart < dlsEnd) {
+					if (currentTime >= dlsStart && currentTime <= dlsEnd) {
+						offset += options.DayLightSavingAdjustmentInMinute * 60000;
+					}
+				} else {
+					if (currentTime >= dlsStart || currentTime <= dlsEnd) {
+						offset += options.DayLightSavingAdjustmentInMinute * 60000;
+					}
+				}				
 			}
 
 			var currentUserTime = new Date(currentUtcExpressedInLocalTime.getTime() + offset);
