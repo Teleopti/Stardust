@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 					{
 						var absencePeriod = absence.Period;
 						var shouldChange = false;
-						if (!archivePeriod.Contains(absencePeriod.StartDateTime) && !archivePeriod.Contains(absencePeriod.EndDateTime))
+						if (absencePeriod.StartDateTime > archivePeriod.EndDateTime || absencePeriod.EndDateTime < archivePeriod.StartDateTime)
 							continue;
 						if (absencePeriod.StartDateTime < archivePeriod.StartDateTime)
 						{
