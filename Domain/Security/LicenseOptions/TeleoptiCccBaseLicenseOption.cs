@@ -102,6 +102,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				DefinedRaptorApplicationFunctionPaths.RemoveAbsence,
 				DefinedRaptorApplicationFunctionPaths.AddActivity,
 				DefinedRaptorApplicationFunctionPaths.AddPersonalActivity,
+				DefinedRaptorApplicationFunctionPaths.AddOvertimeActivity,
 				DefinedRaptorApplicationFunctionPaths.MoveActivity,
 				DefinedRaptorApplicationFunctionPaths.RemoveActivity,
 				DefinedRaptorApplicationFunctionPaths.SwapShifts,

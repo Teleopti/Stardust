@@ -18542,6 +18542,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No permission to add overtime activity for agent {0}..
+        /// </summary>
+        public static string NoPermissionAddOvertimeActivity {
+            get {
+                return ResourceManager.GetString("NoPermissionAddOvertimeActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No permission to add personal activity for agent {0}..
         /// </summary>
         public static string NoPermissionAddPersonalActivity {

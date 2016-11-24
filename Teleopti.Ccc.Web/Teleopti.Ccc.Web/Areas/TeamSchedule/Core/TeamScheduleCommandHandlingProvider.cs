@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		{
 			var permissions = new Dictionary<string,string>
 			{
-				{  DefinedRaptorApplicationFunctionPaths.AddActivity,  Resources.NoPermissionAddAgentActivity}
+				{  DefinedRaptorApplicationFunctionPaths.AddOvertimeActivity,  Resources.NoPermissionAddOvertimeActivity}
 			};
 
 			var result = new List<ActionResult>();

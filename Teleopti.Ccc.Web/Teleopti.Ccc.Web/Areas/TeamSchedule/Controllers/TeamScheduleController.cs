@@ -63,6 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				IsModifyScheduleAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifySchedule),
 				HasAddingActivityPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddActivity),
 				HasAddingPersonalActivityPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPersonalActivity),
+				HasAddingOvertimeActivityPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddOvertimeActivity),
 				HasRemoveActivityPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveActivity),
 				HasMoveActivityPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MoveActivity),
 				HasMoveInvalidOverlappedActivityPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity),

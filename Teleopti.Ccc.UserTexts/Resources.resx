@@ -15215,4 +15215,8 @@ These options are activated:
     <value>The requested period is too long</value>
     <comment>When the absence request period is too long</comment>
   </data>
+  <data name="NoPermissionAddOvertimeActivity" xml:space="preserve">
+    <value>No permission to add overtime activity for agent {0}.</value>
+    <comment>Error message to notify missing permission for moving activity</comment>
+  </data>
 </root>

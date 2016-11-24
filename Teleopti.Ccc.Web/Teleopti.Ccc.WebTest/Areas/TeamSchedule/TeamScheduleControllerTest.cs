@@ -91,6 +91,18 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		}
 
 		[Test]
+		public void ShouldGetAddingOvertimeActivityPermission()
+		{
+			const bool expectedResult = true;
+			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddOvertimeActivity))
+				.Return(expectedResult);
+
+			var result = target.GetPermissions();
+
+			result.Content.HasAddingOvertimeActivityPermission.Should().Be.EqualTo(expectedResult);
+		}
+
+		[Test]
 		public void ShouldGetRemoveActivityPermission()
 		{
 			const bool expectedResult = true;
