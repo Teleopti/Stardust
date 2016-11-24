@@ -28,7 +28,7 @@
 					return shift.Date === belongsToDate;
 				});
 
-				var start, end, duration;
+				var start, end, durationInMinutes;
 				if (shiftsForBelongsToDate.length > 0 && shiftsForBelongsToDate[0].ProjectionTimeRange) {
 					start = moment(shiftsForBelongsToDate[0].ProjectionTimeRange.Start);
 					end = moment(shiftsForBelongsToDate[0].ProjectionTimeRange.End);
@@ -38,12 +38,14 @@
 					if (timeRange.endTime.isAfter(end)) {
 						end = timeRange.endTime;
 					}
-					duration = end.diff(start, 'minutes');
-					if (duration > MAX_SCHEDULE_LENGTH_IN_MINUTES) {
-						invalidPeople.push({PersonId: personId, Name: personSchedule.Name});
-					}
+					durationInMinutes = end.diff(start, 'minutes');
+				}else{
+					durationInMinutes = timeRange.endTime.diff(timeRange.startTime,'minute');
 				}
 
+				if (durationInMinutes > MAX_SCHEDULE_LENGTH_IN_MINUTES) {
+					invalidPeople.push({PersonId: personId, Name: personSchedule.Name});
+				}
 			}
 
 			return invalidPeople;

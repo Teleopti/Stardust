@@ -51,6 +51,24 @@
 			"DayOff": null
 		};
 
+		it('should return invalide people when overtime activity input time is greater than 36h', function() {
+			scheduleMgmt.resetSchedules([schedule], moment(scheduleDate));
+			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			personSelection.toggleAllPersonProjections(personSchedule, scheduleDate);
+			var timeRange = {
+				startTime: moment("2016-05-01 2:00"),
+				endTime: moment("2016-05-08 2:00")
+			};
+
+			var result = target.validateInputForOvertime(timeRange, "selected_definition_set_id","person_id");
+
+			expect(result.length).toEqual(1);
+			//expect(target.getInvalidPeopleNameList().indexOf('SomeoneElse') > -1).toEqual(true);
+		});
+
 		it('should return false when moving to time changes the schedule start date', function() {
 			
 			scheduleMgmt.resetSchedules([schedule], moment(scheduleDate));
