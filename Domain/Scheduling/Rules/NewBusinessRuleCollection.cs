@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	public class NewBusinessRuleCollection : Collection<INewBusinessRule>, INewBusinessRuleCollection
 	{
 		#region Mapping between BusinessRule and BusinessRuleFlags
+
 		private static readonly Dictionary<Type, BusinessRuleFlags> ruleAndFlagMapping
 			= new Dictionary<Type, BusinessRuleFlags>
 			{
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				}
 			};
 
-		private readonly static Dictionary<BusinessRuleFlags, string> flagAndRuleDescriptionMapping
+		private static readonly Dictionary<BusinessRuleFlags, string> flagAndRuleDescriptionMapping
 			= new Dictionary<BusinessRuleFlags, string>
 			{
 				{
@@ -96,9 +97,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 					BusinessRuleFlags.SiteOpenHoursRule, "SiteOpeningHours"
 				}
 			};
-		#endregion
+
+		#endregion Mapping between BusinessRule and BusinessRuleFlags
 
 		private CultureInfo _culture = Thread.CurrentThread.CurrentUICulture;
+
 		private NewBusinessRuleCollection()
 		{
 			//put mandatory here
@@ -109,7 +112,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			return new NewBusinessRuleCollection();
 		}
-
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static INewBusinessRuleCollection All(ISchedulingResultStateHolder schedulingResultStateHolder)
@@ -148,14 +150,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			if (!schedulingResultStateHolder.TeamLeaderMode)
 				ret.Add(new OpenHoursRule(schedulingResultStateHolder));
 
-
 			return ret;
 		}
 
 		public static IEnumerable<string> GetRuleDescriptionsFromFlag(BusinessRuleFlags businessRuleFlags)
 		{
 			return (from kp in flagAndRuleDescriptionMapping
-					where businessRuleFlags.HasFlag(kp.Key)
+				where businessRuleFlags.HasFlag(kp.Key)
 				select kp.Value).ToList();
 		}
 
@@ -178,7 +179,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			{
 				foreach (var rule in this)
 				{
-					IEnumerable<IBusinessRuleResponse> retList = rule.Validate(rangeClones, scheduleDays);
+					var retList = rule.Validate(rangeClones, scheduleDays);
 					responseList.AddRange(retList);
 				}
 			}
@@ -190,11 +191,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			for (var i = Count - 1; i >= 0; i--)
 			{
 				var bu = this[i];
-
 				if (businessRuleResponseToOverride.TypeOfRule != bu.GetType()) continue;
 
-				if(!bu.IsMandatory)
-					bu.HaltModify = false;
+				if (!bu.IsMandatory) bu.HaltModify = false;
 
 				return;
 			}
@@ -205,14 +204,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			for (var i = Count - 1; i >= 0; i--)
 			{
 				var bu = this[i];
+				if (businessRuleType != bu.GetType()) continue;
 
-				if (businessRuleType.Equals(bu.GetType()))
-				{
-					if (!bu.IsMandatory)
-						bu.HaltModify = false;
+				// Does it means that mandatory rules will never be removed?
+				if (!bu.IsMandatory) bu.HaltModify = false;
 
-					return;
-				}
+				return;
 			}
 		}
 
@@ -221,8 +218,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			for (var i = Count - 1; i >= 0; i--)
 			{
 				var bu = this[i];
-
-				if (businessRuleType.Equals(bu.GetType()))
+				if (businessRuleType == bu.GetType())
 				{
 					return bu;
 				}
@@ -258,10 +254,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		public static INewBusinessRuleCollection AllForDelete(ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-
 			var ret = All(schedulingResultStateHolder);
 
-			foreach (INewBusinessRule rule in ret)
+			foreach (var rule in ret)
 			{
 				rule.HaltModify = false;
 			}
@@ -272,14 +267,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static INewBusinessRuleCollection AllForScheduling(ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-			INewBusinessRuleCollection ret;
-			if(schedulingResultStateHolder.UseValidation)
-				ret = All(schedulingResultStateHolder);
-			else
-			{
-				ret = MinimumAndPersonAccount(schedulingResultStateHolder);
-			}
-			foreach (INewBusinessRule rule in ret)
+			var ret = schedulingResultStateHolder.UseValidation
+				? All(schedulingResultStateHolder)
+				: MinimumAndPersonAccount(schedulingResultStateHolder);
+			foreach (var rule in ret)
 			{
 				rule.HaltModify = false;
 			}
@@ -288,12 +279,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		public static INewBusinessRuleCollection MinimumAndPersonAccount(ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-			if (schedulingResultStateHolder == null)
-				return null;
+			if (schedulingResultStateHolder == null) return null;
 			var ret = new NewBusinessRuleCollection
-						  {
-							  new NewPersonAccountRule(schedulingResultStateHolder, schedulingResultStateHolder.AllPersonAccounts)
-						  };
+			{
+				new NewPersonAccountRule(schedulingResultStateHolder, schedulingResultStateHolder.AllPersonAccounts)
+			};
 			return ret;
 		}
 

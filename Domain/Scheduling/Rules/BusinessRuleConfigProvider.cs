@@ -25,7 +25,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			var allRules = _businessRuleProvider.GetBusinessRulesForShiftTradeRequest(_schedulingResultStateHolder, true);
 
-			var result = allRules.Select(x => new ShiftTradeBusinessRuleConfig
+			// Rules "removed" from NewBusinessRuleCollection will not be actual removed,
+			// Only the "HaltModify" flag will be set to false if not IsMandatory
+			var result = allRules.Where(x=> x.IsMandatory || x.HaltModify)
+				.Select(x => new ShiftTradeBusinessRuleConfig
 			{
 				BusinessRuleType = x.GetType().FullName,
 				FriendlyName = x.FriendlyName,

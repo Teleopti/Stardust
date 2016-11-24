@@ -16,8 +16,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldReturnCorrectDefaultBusinessRulesConfig()
 		{
+			var ruleToRemove1 = typeof(NewPersonAccountRule);
+			var ruleToRemove2 = typeof(OpenHoursRule);
+
 			var stateHolder = new FakeSchedulingResultStateHolder();
 			var businessRules = NewBusinessRuleCollection.All(new SchedulingResultStateHolder());
+			businessRules.Remove(ruleToRemove1);
+			businessRules.Remove(ruleToRemove2);
+
 			var businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
 			businessRuleProvider.Stub(x => x.GetBusinessRulesForShiftTradeRequest(stateHolder, true))
 				.IgnoreArguments().Return(businessRules);
@@ -32,9 +38,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var target = new BusinessRuleConfigProvider(businessRuleProvider, specifications, stateHolder);
 			var result = target.GetDefaultConfigForShiftTradeRequest().ToList();
 
-			Assert.AreEqual(businessRules.Count + specifications.Count, result.Count);
+			Assert.AreEqual(businessRules.Count + specifications.Count - 2, result.Count);
+			Assert.IsNull(result.FirstOrDefault(x => x.BusinessRuleType == ruleToRemove1.FullName));
+			Assert.IsNull(result.FirstOrDefault(x => x.BusinessRuleType == ruleToRemove2.FullName));
 
-			foreach (var rule in businessRules)
+			foreach (var rule in businessRules.Where(x=>x.GetType() != ruleToRemove1 && x.GetType() != ruleToRemove2))
 			{
 				var config = result.FirstOrDefault(x => x.BusinessRuleType == rule.GetType().FullName);
 				Assert.IsNotNull(config);
