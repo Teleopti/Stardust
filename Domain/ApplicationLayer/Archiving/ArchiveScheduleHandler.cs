@@ -54,8 +54,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 
 			people.ForEach(person =>
 			{
-				clearCurrentSchedules(targetScheduleDictionary, person, period);
-				archiveSchedules(sourceScheduleDictionary, toScenario, person, period);
+				var timeZone = person.PermissionInformation.DefaultTimeZone();
+				var archivePeriod = new DateTimePeriod(timeZone.SafeConvertTimeToUtc(period.StartDate.Date), timeZone.SafeConvertTimeToUtc(period.EndDate.Date).AddHours(23).AddMinutes(59));
+
+				clearCurrentSchedules(targetScheduleDictionary, person, period, archivePeriod);
+				archiveSchedules(sourceScheduleDictionary, toScenario, person, period, archivePeriod);
 			});
 
 			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId, 
@@ -63,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 				@event.TotalMessages);
 		}
 
-		private void clearCurrentSchedules(IScheduleDictionary scheduleDictionary, IPerson person, DateOnlyPeriod period)
+		private void clearCurrentSchedules(IScheduleDictionary scheduleDictionary, IPerson person, DateOnlyPeriod period, DateTimePeriod archivePeriod)
 		{
 			var scheduleDays = scheduleDictionary.SchedulesForPeriod(period, person);
 			var changes = false;
@@ -73,6 +76,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 				{
 					if (!(scheduleData is IExportToAnotherScenario)) continue;
 					var entity = _scheduleStorage.Get(scheduleData.GetType(), scheduleData.Id.GetValueOrDefault());
+					var absence = entity as PersonAbsence;
+					if (absence != null)
+					{
+						if (absence.Period.StartDateTime > archivePeriod.EndDateTime || absence.Period.EndDateTime < archivePeriod.StartDateTime)
+							continue;
+
+						if (absence.Period.StartDateTime < archivePeriod.StartDateTime)
+						{
+							// add the part before archivePeriod.Start
+							var newLayer = new AbsenceLayer(absence.Layer.Payload, new DateTimePeriod(absence.Period.StartDateTime, archivePeriod.StartDateTime.AddMinutes(-1)));
+							IPersonAbsence personAbsence = new PersonAbsence(absence.Person, absence.Scenario, newLayer, absence.PersonRequest);
+							_scheduleStorage.Add(personAbsence);
+
+						}
+						if (absence.Period.EndDateTime > archivePeriod.EndDateTime)
+						{
+							// add the part after archivePeriod.End
+							var newLayer = new AbsenceLayer(absence.Layer.Payload, new DateTimePeriod(archivePeriod.EndDateTime.AddMinutes(1), absence.Period.EndDateTime));
+							IPersonAbsence personAbsence = new PersonAbsence(absence.Person, absence.Scenario, newLayer, absence.PersonRequest);
+							_scheduleStorage.Add(personAbsence);
+						}
+
+					}
 					_scheduleStorage.Remove(entity);
 					changes = true;
 				}
@@ -81,7 +107,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 				_currentUnitOfWork.Current().PersistAll();
 		}
 
-		private void archiveSchedules(IScheduleDictionary scheduleDictionary, IScenario toScenario, IPerson person, DateOnlyPeriod period)
+		private void archiveSchedules(IScheduleDictionary scheduleDictionary, IScenario toScenario, IPerson person, DateOnlyPeriod period, DateTimePeriod archivePeriod)
 		{
 			var scheduleDays = scheduleDictionary.SchedulesForPeriod(period, person);
 			var added = new HashSet<Guid>();
@@ -91,8 +117,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 				foreach (var scheduleData in scheduleDay.PersistableScheduleDataCollection())
 				{
 					var exportableType = scheduleData as IExportToAnotherScenario;
-					var timeZone = person.PermissionInformation.DefaultTimeZone();
-					var archivePeriod = new DateTimePeriod(timeZone.SafeConvertTimeToUtc(period.StartDate.Date), timeZone.SafeConvertTimeToUtc(period.EndDate.Date).AddHours(23).AddMinutes(59));
 					var changedScheduleData = exportableType?.CloneAndChangeParameters(new ScheduleParameters(toScenario, person,
 							archivePeriod));
 					var absence = changedScheduleData as PersonAbsence;

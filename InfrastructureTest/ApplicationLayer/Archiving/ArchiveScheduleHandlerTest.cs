@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			new TargetAbsenceSplitTestCase
 			{
 				AbsenceStartLocal = new DateTime(2016, 1, 3),
-				AbsenceEndLocal = new DateTime(2016, 1, 4, 12, 0, 0),
+				AbsenceEndLocal = new DateTime(2016, 1, 6, 23, 59, 0),
 				ArchiveStart = new DateOnly(2016, 1, 4),
 				ArchiveEnd = new DateOnly(2016, 1, 6),
 				Asserts = (testCase, defaultAbsences, targetAbsences) =>
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			},
 			new TargetAbsenceSplitTestCase
 			{
-				AbsenceStartLocal = new DateTime(2016, 1, 6, 12, 0, 0),
+				AbsenceStartLocal = new DateTime(2016, 1, 4),
 				AbsenceEndLocal = new DateTime(2016, 1, 7, 23, 59, 0),
 				ArchiveStart = new DateOnly(2016, 1, 4),
 				ArchiveEnd = new DateOnly(2016, 1, 6),
@@ -340,7 +340,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			}
 		};
 
-		[Ignore("Until Erik fixed them in handler")]
+		//[Ignore("Until Erik fixed them in handler")]
 		[Test]
 		public void ShouldSplitTargetAbsenceCorrectly([ValueSource(nameof(targetAbsenceSplitTestCases))] TargetAbsenceSplitTestCase testCase)
 		{
