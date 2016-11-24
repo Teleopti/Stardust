@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
@@ -111,6 +112,42 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader.Consolid
 			WithUnitOfWork.Get(() => Target.ReadFor(new[] {siteId}, new []{teamId}, new[] {phoneId}))
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(expectedForSite, expectedForTeam);
+		}
+
+
+		[Test]
+		public void ShouldInAlarmLoadForSiteAndTeam()
+		{
+			Now.Is("2016-11-24 08:10");
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			WithUnitOfWork.Do(() =>
+			{
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId1,
+					SiteId = siteId,
+					AlarmStartTime = "2016-11-24 08:00".Utc()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId2,
+					TeamId = teamId,
+					AlarmStartTime = "2016-11-24 08:00".Utc()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = Guid.NewGuid(),
+					TeamId = Guid.NewGuid(),
+					AlarmStartTime = "2016-11-24 08:00".Utc()
+				});
+			});
+
+			WithUnitOfWork.Get(() => Target.ReadFor(new[] { siteId }, new[] { teamId }, null))
+				.Select(x => x.PersonId)
+				.Should().Have.SameValuesAs(new[] { personId1, personId2 });
 		}
 	}
 }

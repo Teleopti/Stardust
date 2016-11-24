@@ -56,16 +56,28 @@ AND :today BETWEEN g.StartDate and g.EndDate",
 			});
 		}
 
+		private bool inAlarm;
+		public void InAlarm()
+		{
+			inAlarm = true;
+		}
+
 		public Selection Build()
 		{
-			var builder = new StringBuilder("SELECT DISTINCT a.* FROM [ReadModel].AgentState a WITH (NOLOCK) ");
+			var builder = new StringBuilder("SELECT DISTINCT TOP 50 a.* FROM [ReadModel].AgentState a WITH (NOLOCK) ");
 			if (selections.All(x => x.Type == Type.Skill))
-				builder.Append(selections.Single().Query); 
+			{
+				builder.Append(selections.Single().Query);
+			} 
 			else if (selections.All(x => x.Type == Type.Org))
+			{
 				builder
-					.Append(" WHERE ")
-					.Append(string.Join(" OR ", selections.Select(x => x.Query)));
+					.Append(" WHERE ( ")
+					.Append(string.Join(" OR ", selections.Select(x => x.Query)))
+					.Append(") ");
+			}
 			else
+			{
 				builder
 					.Append(selections.Single(x => x.Type == Type.Skill).Query)
 					.Append(" AND (")
@@ -73,7 +85,15 @@ AND :today BETWEEN g.StartDate and g.EndDate",
 						.Where(x => x.Type == Type.Org)
 						.Select(x => x.Query)))
 					.Append(")");
-
+				
+			}
+			if (inAlarm)
+			{
+				builder.Append(@" AND 
+			AlarmStartTime <= :now 
+			ORDER BY AlarmStartTime ASC");
+				selections.Add(new selectionInfo { Set = s => s.SetParameter("now", _now.UtcDateTime()) });
+			}
 			return new Selection
 			{
 				Query = builder.ToString(),
@@ -91,8 +111,10 @@ AND :today BETWEEN g.StartDate and g.EndDate",
 		public enum Type
 		{
 			Skill = 0,
-			Org = 1
+			Org = 1,
+			Alarm
 		}
+
 	}
 
 	public class Selection

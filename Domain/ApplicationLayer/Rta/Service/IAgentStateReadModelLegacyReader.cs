@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public interface IAgentStateReadModelReader
 	{
 		IEnumerable<AgentStateReadModel> ReadFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds);
+		IEnumerable<AgentStateReadModel> ReadInAlarmsFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds);
 	}
 
 	public interface IAgentStateReadModelLegacyReader
@@ -21,11 +22,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IEnumerable<AgentStateReadModel> ReadForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds);
 		IEnumerable<AgentStateReadModel> ReadForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds);
 
-		IEnumerable<AgentStateReadModel> ReadInAlarmsForSites(IEnumerable<Guid> siteIds);
-		IEnumerable<AgentStateReadModel> ReadInAlarmsForTeams(IEnumerable<Guid> teamIds);
-		IEnumerable<AgentStateReadModel> ReadInAlarmsForSkills(IEnumerable<Guid> skillIds);
-		IEnumerable<AgentStateReadModel> ReadInAlarmsForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds);
-		IEnumerable<AgentStateReadModel> ReadInAlarmsForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds);
+		IEnumerable<AgentStateReadModel> ReadInAlarmForSites(IEnumerable<Guid> siteIds);
+		IEnumerable<AgentStateReadModel> ReadInAlarmForTeams(IEnumerable<Guid> teamIds);
+		IEnumerable<AgentStateReadModel> ReadInAlarmForSkills(IEnumerable<Guid> skillIds);
+		IEnumerable<AgentStateReadModel> ReadInAlarmForSitesAndSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds);
+		IEnumerable<AgentStateReadModel> ReadInAlarmForTeamsAndSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds);
 
 		IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForSites(IEnumerable<Guid> siteIds, IEnumerable<Guid?> excludedStateGroupIds);
 		IEnumerable<AgentStateReadModel> ReadInAlarmExcludingPhoneStatesForTeams(IEnumerable<Guid> teamIds, IEnumerable<Guid?> excludedStateGroupIds);

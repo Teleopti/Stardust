@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly IUserTimeZone _timeZone;
 		private readonly IUserCulture _culture;
 		private readonly ProperAlarm _appliedAlarm;
-		private readonly IAgentStateReadModelLegacyReader _agentStateReadModelReader;
+		private readonly IAgentStateReadModelLegacyReader _legacyReader;
 		private readonly IAgentStateReadModelReader _reader;
 
 		public AgentStatesViewModelBuilder(
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			IUserTimeZone timeZone,
 			IUserCulture culture,
 			ProperAlarm appliedAlarm,
-			IAgentStateReadModelLegacyReader agentStateReadModelReader,
+			IAgentStateReadModelLegacyReader legacyReader,
 			IAgentStateReadModelReader reader
 			)
 		{
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_timeZone = timeZone;
 			_culture = culture;
 			_appliedAlarm = appliedAlarm;
-			_agentStateReadModelReader = agentStateReadModelReader;
+			_legacyReader = legacyReader;
 			_reader = reader;
 		}
 		
@@ -84,39 +84,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		
 		public AgentStatesViewModel InAlarmFor(ViewModelFilter filter)
 		{
-			if (filter.SiteIds != null && filter.SkillIds != null)
-				return build(_agentStateReadModelReader.ReadInAlarmsForSitesAndSkills(filter.SiteIds, filter.SkillIds));
-			if(filter.SiteIds != null)
-				return build(_agentStateReadModelReader.ReadInAlarmsForSites(filter.SiteIds));
-			if (filter.TeamIds != null && filter.SkillIds != null)
-				return build(_agentStateReadModelReader.ReadInAlarmsForTeamsAndSkills(filter.TeamIds, filter.SkillIds));
-			if (filter.TeamIds != null)
-				return build(_agentStateReadModelReader.ReadInAlarmsForTeams(filter.TeamIds));
-			return build(_agentStateReadModelReader.ReadInAlarmsForSkills(filter.SkillIds));
+			return build(_reader.ReadInAlarmsFor(filter.SiteIds, filter.TeamIds, filter.SkillIds));
 		}
 		
 		public AgentStatesViewModel InAlarmExcludingPhoneStatesFor(ViewModelFilter filter, IEnumerable<Guid?> excludedPhoneStates)
 		{
 			if (filter.SiteIds != null && filter.SkillIds != null)
-				return build(_agentStateReadModelReader.ReadInAlarmExcludingPhoneStatesForSitesAndSkill(filter.SiteIds, filter.SkillIds, excludedPhoneStates));
+				return build(_legacyReader.ReadInAlarmExcludingPhoneStatesForSitesAndSkill(filter.SiteIds, filter.SkillIds, excludedPhoneStates));
 			if (filter.SiteIds != null)
-				return build(_agentStateReadModelReader.ReadInAlarmExcludingPhoneStatesForSites(filter.SiteIds, excludedPhoneStates));
+				return build(_legacyReader.ReadInAlarmExcludingPhoneStatesForSites(filter.SiteIds, excludedPhoneStates));
 			if (filter.TeamIds != null && filter.SkillIds != null)
-				return build(_agentStateReadModelReader.ReadInAlarmExcludingPhoneStatesForTeamsAndSkill(filter.TeamIds, filter.SkillIds, excludedPhoneStates));
+				return build(_legacyReader.ReadInAlarmExcludingPhoneStatesForTeamsAndSkill(filter.TeamIds, filter.SkillIds, excludedPhoneStates));
 			if (filter.TeamIds != null)
-				return build(_agentStateReadModelReader.ReadInAlarmExcludingPhoneStatesForTeams(filter.TeamIds, excludedPhoneStates));
-			return build(_agentStateReadModelReader.ReadInAlarmExcludingPhoneStatesForSkills(filter.SkillIds, excludedPhoneStates));
+				return build(_legacyReader.ReadInAlarmExcludingPhoneStatesForTeams(filter.TeamIds, excludedPhoneStates));
+			return build(_legacyReader.ReadInAlarmExcludingPhoneStatesForSkills(filter.SkillIds, excludedPhoneStates));
 		}
 
 
 		public AgentStatesViewModel ForSites(Guid[] siteIds)
 		{
-			return build(_agentStateReadModelReader.ReadForSites(siteIds));
+			return build(_legacyReader.ReadForSites(siteIds));
 		}
 
 		public AgentStatesViewModel ForTeams(Guid[] teamIds)
 		{
-			return build(_agentStateReadModelReader.ReadForTeams(teamIds));
+			return build(_legacyReader.ReadForTeams(teamIds));
 		}
 		
 		private AgentStatesViewModel build(IEnumerable<AgentStateReadModel> states)

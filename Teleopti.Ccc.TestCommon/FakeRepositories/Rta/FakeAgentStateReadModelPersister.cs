@@ -126,6 +126,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return ReadForSkills(skillIds);
 		}
 
+		public IEnumerable<AgentStateReadModel> ReadInAlarmsFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		{
+			if (siteIds != null && skillIds != null)
+				return ReadInAlarmForSitesAndSkills(siteIds, skillIds);
+			if (siteIds != null)
+				return ReadInAlarmForSites(siteIds);
+			if (teamIds != null && skillIds != null)
+				return ReadInAlarmForTeamsAndSkills(teamIds, skillIds);
+			if (teamIds != null)
+				return ReadInAlarmForTeams(teamIds);
+			return ReadInAlarmForSkills(skillIds);
+		}
+
 		public IEnumerable<AgentStateReadModel> ReadForSites(IEnumerable<Guid> siteIds)
 		{
 			return
@@ -183,7 +196,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		}
 
 
-		public IEnumerable<AgentStateReadModel> ReadInAlarmsForSites(IEnumerable<Guid> siteIds)
+		public IEnumerable<AgentStateReadModel> ReadInAlarmForSites(IEnumerable<Guid> siteIds)
 		{
 			return
 				from model in _data.Values
@@ -194,7 +207,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				select model;
 		}
 
-		public IEnumerable<AgentStateReadModel> ReadInAlarmsForTeams(IEnumerable<Guid> teamIds)
+		public IEnumerable<AgentStateReadModel> ReadInAlarmForTeams(IEnumerable<Guid> teamIds)
 		{
 			return
 				from model in _data.Values
@@ -205,7 +218,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				select model;
 		}
 
-		public IEnumerable<AgentStateReadModel> ReadInAlarmsForSkills(IEnumerable<Guid> skillIds)
+		public IEnumerable<AgentStateReadModel> ReadInAlarmForSkills(IEnumerable<Guid> skillIds)
 		{
 			return
 				from model in _data.Values
@@ -218,7 +231,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				select model;
 		}
 
-		public IEnumerable<AgentStateReadModel> ReadInAlarmsForSitesAndSkills(IEnumerable<Guid> siteIds,
+		public IEnumerable<AgentStateReadModel> ReadInAlarmForSitesAndSkills(IEnumerable<Guid> siteIds,
 			IEnumerable<Guid> skillIds)
 		{
 			return
@@ -234,7 +247,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				select model;
 		}
 
-		public IEnumerable<AgentStateReadModel> ReadInAlarmsForTeamsAndSkills(IEnumerable<Guid> teamIds,
+		public IEnumerable<AgentStateReadModel> ReadInAlarmForTeamsAndSkills(IEnumerable<Guid> teamIds,
 			IEnumerable<Guid> skillIds)
 		{
 			return

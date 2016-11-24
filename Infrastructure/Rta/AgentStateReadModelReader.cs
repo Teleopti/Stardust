@@ -40,6 +40,28 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetReadOnly(true)
 				.List<AgentStateReadModel>();
 		}
+
+		public IEnumerable<AgentStateReadModel> ReadInAlarmsFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		{
+			var queryBuilder = new AgentStateReadModelQueryBuilder(_now);
+			queryBuilder.InAlarm();
+			if (siteIds != null)
+				queryBuilder.InSites(siteIds);
+			if (teamIds != null)
+				queryBuilder.InTeams(teamIds);
+			if (skillIds != null)
+				queryBuilder.WithSkills(skillIds);
+
+			var builder = queryBuilder.Build();
+			var sqlQuery = _unitOfWork.Current().Session()
+				.CreateSQLQuery(builder.Query);
+			builder.ParameterFuncs.ForEach(f => f(sqlQuery));
+			return sqlQuery
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+				.SetReadOnly(true)
+				.List<AgentStateReadModel>();
+		}
+
 		private class internalModel : AgentStateReadModel
 		{
 			public new string Shift

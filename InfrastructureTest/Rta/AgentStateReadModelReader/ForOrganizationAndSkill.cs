@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmsForSitesAndSkills(new[] {site}, new[] {currentSkillId}))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmForSitesAndSkills(new[] {site}, new[] {currentSkillId}))
 				.Single().PersonId.Should().Be(expected);
 		}
 
@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			var skillId = Database.SkillIdFor("phone");
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmsForSitesAndSkills(new[] {site}, new[] {skillId}))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmForSitesAndSkills(new[] {site}, new[] {skillId}))
 				.Select(x => x.PersonId).Distinct()
 				.Should().Have.Count.EqualTo(50);
 		}
@@ -306,7 +306,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmsForTeamsAndSkills(new[] {team}, new[] {currentSkillId}))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmForTeamsAndSkills(new[] {team}, new[] {currentSkillId}))
 				.Single().PersonId.Should().Be(expected);
 		}
 
@@ -340,7 +340,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			var skillId = Database.SkillIdFor("phone");
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmsForTeamsAndSkills(new[] {teamId}, new[] {skillId}))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmForTeamsAndSkills(new[] {teamId}, new[] {skillId}))
 				.Select(x => x.PersonId).Distinct()
 				.Should().Have.Count.EqualTo(50);
 		}
@@ -371,7 +371,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmsForTeamsAndSkills(new[] {teamId}, new[] {phone, email}))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmForTeamsAndSkills(new[] {teamId}, new[] {phone, email}))
 				.Single().PersonId.Should().Be(expected);
 		}
 		
@@ -411,7 +411,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmsForTeamsAndSkills(new[] {teamA, teamB}, new[] {currentSkillId}))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmForTeamsAndSkills(new[] {teamA, teamB}, new[] {currentSkillId}))
 				.Should().Have.Count.EqualTo(2);
 		}
 	}
