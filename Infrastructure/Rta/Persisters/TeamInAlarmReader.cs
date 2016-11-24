@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
 					SELECT TeamId, COUNT(*) AS Count
-					FROM ReadModel.AgentState
+					FROM ReadModel.AgentState WITH(NOLOCK)
 					WHERE AlarmStartTime <= :now
 					AND SiteId = :siteId
 					AND (IsDeleted != 1
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
 					SELECT a.TeamId, COUNT(DISTINCT a.PersonId) AS Count
-					FROM ReadModel.AgentState  AS a
+					FROM ReadModel.AgentState  AS a WITH(NOLOCK)
 					
 					INNER JOIN ReadModel.GroupingReadOnly AS g
 					ON a.PersonId = g.PersonId					
