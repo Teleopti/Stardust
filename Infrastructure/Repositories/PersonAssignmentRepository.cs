@@ -41,27 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return retList;
 		}
-
-		public ICollection<IPersonAssignment> FindChunked(DateOnlyPeriod period, IScenario scenario)
-		{
-			InParameter.NotNull("scenario", scenario);
-			var result = new List<IPersonAssignment>();
-
-			using (PerformanceOutput.ForOperation("Loading personassignments"))
-			{
-				for (var currentDate = period.StartDate; currentDate <= period.EndDate; currentDate = currentDate.AddDays(10))
-				{
-					var end = currentDate.AddDays(9);
-					if (period.EndDate < end)
-						end = period.EndDate;
-					
-					var crit = personAssignmentCriteriaLoader(new DateOnlyPeriod(currentDate,end), scenario);
-					result.AddRange(crit.List<IPersonAssignment>());
-				}
-			}
-			return result;
-		}
-
+		
 		public ICollection<IPersonAssignment> Find(DateOnlyPeriod period, IScenario scenario)
 		{
 			InParameter.NotNull("scenario", scenario);

@@ -310,23 +310,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		    return scheduleDictionary;
 	    }
 
-	    private void loadScheduleForAll(IScenario scenario, ScheduleDictionary scheduleDictionary, DateTimePeriod longPeriod, DateOnlyPeriod dateOnlyPeriod, bool loadDaysAfterLeft)
+	    private void loadScheduleForAll(IScenario scenario, ScheduleDictionary scheduleDictionary,
+		    DateTimePeriod longPeriod, DateOnlyPeriod dateOnlyPeriod, bool loadDaysAfterLeft)
 	    {
 		    var uow = _currentUnitOfWork.Current();
-			addPersonAbsences(scheduleDictionary, _repositoryFactory.CreatePersonAbsenceRepository(uow).Find(longPeriod, scenario), loadDaysAfterLeft);
+		    addPersonAbsences(scheduleDictionary,
+			    _repositoryFactory.CreatePersonAbsenceRepository(uow).Find(longPeriod, scenario), loadDaysAfterLeft);
 		    var personAssignmentRepository = _repositoryFactory.CreatePersonAssignmentRepository(uow);
-		    if (_toggleManager.IsEnabled(Toggles.PersonAssignment_UseChunkedLoading_41479))
-		    {
-				addPersonAssignments(scheduleDictionary, personAssignmentRepository.FindChunked(dateOnlyPeriod, scenario));
-			}
-		    else
-		    {
-				addPersonAssignments(scheduleDictionary, personAssignmentRepository.Find(dateOnlyPeriod, scenario));
-			}
-			addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(uow).Find(longPeriod, scenario),false,new List<IPerson>());
-        }
+		    addPersonAssignments(scheduleDictionary, personAssignmentRepository.Find(dateOnlyPeriod, scenario));
+		    addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(uow).Find(longPeriod, scenario),
+			    false, new List<IPerson>());
+	    }
 
-        private void loadScheduleByPersons(IScenario scenario, ScheduleDictionary scheduleDictionary, DateTimePeriod longPeriod, DateOnlyPeriod longDateOnlyPeriod, IEnumerable<IPerson> persons, bool loadDaysAfterLeft)
+	    private void loadScheduleByPersons(IScenario scenario, ScheduleDictionary scheduleDictionary, DateTimePeriod longPeriod, DateOnlyPeriod longDateOnlyPeriod, IEnumerable<IPerson> persons, bool loadDaysAfterLeft)
         {
 	        var uow = _currentUnitOfWork.Current();
 			addPersonAbsences(scheduleDictionary, _repositoryFactory.CreatePersonAbsenceRepository(uow).Find(persons, longPeriod, scenario), loadDaysAfterLeft);

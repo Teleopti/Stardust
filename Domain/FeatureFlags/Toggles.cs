@@ -178,7 +178,6 @@
 		Stardust_RunMultipleNodes_41224,
 		ETL_EventBasedAgentNameDescription_41432,
 		ETL_FixScheduleForPersonPeriod_41393,
-		PersonAssignment_UseChunkedLoading_41479,
 		Wfm_ArchiveSchedule_41498,
 		Wfm_ImportSchedule_41247,
 		SchedulingScreen_BatchAgentValidation_41552,
