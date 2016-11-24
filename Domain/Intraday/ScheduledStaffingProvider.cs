@@ -43,9 +43,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 				.ToList();
 		}
 
-		public double?[] DataSeries(IList<SkillStaffingIntervalLightModel> scheduledStaffing, List<DateTime> timeSeries)
+		public double?[] DataSeries(IList<SkillStaffingIntervalLightModel> scheduledStaffing, DateTime[] timeSeries)
 		{
-			if (timeSeries.Count() == scheduledStaffing.Count())
+			if (timeSeries.Length == scheduledStaffing.Count)
 				return scheduledStaffing.Select(x => (double?)x.StaffingLevel).ToArray();
 
 			List<double?> scheduledStaffingList = new List<double?>();

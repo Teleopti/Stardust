@@ -109,12 +109,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 				.ToList();
 		}
 
-		public List<double?> DataSeries(IList<StaffingIntervalModel> requiredStaffingPerSkill, DateTime? latestStatsTime, int minutesPerInterval, List<DateTime> timeSeries)
+		public double?[] DataSeries(IList<StaffingIntervalModel> requiredStaffingPerSkill, DateTime? latestStatsTime, int minutesPerInterval, DateTime[] timeSeries)
 		{
 			var returnValue = new List<double?>();
 
 			if (!latestStatsTime.HasValue || !requiredStaffingPerSkill.Any())
-				return new List<double?>();
+				return new double?[] {};
 
 			returnValue.AddRange(requiredStaffingPerSkill
 				.OrderBy(x => x.StartTime)
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				returnValue.Add(null);
 
 
-			return returnValue;
+			return returnValue.ToArray();
 		}
 
 	}

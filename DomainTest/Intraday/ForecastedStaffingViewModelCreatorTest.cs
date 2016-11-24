@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 	public class ForecastedStaffingViewModelCreatorTest : ISetup
 	{
 		public ForecastedStaffingViewModelCreator Target;
-		public ForecastedStaffingProvider ForecastedStaffingProvider;
+		public ForecastedCallsProvider ForecastedCallsProvider;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeSkillDayRepository SkillDayRepository;

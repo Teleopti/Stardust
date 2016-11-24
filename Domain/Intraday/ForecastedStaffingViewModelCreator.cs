@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
-		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
+		private readonly ForecastedCallsProvider _forecastedCallsProvider;
 		private readonly RequiredStaffingProvider _requiredStaffingProvider;
 		private readonly IIntradayQueueStatisticsLoader _intradayQueueStatisticsLoader;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
@@ -23,23 +23,27 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly SupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
+		private readonly TimeSeriesProvider _timeSeriesProvider;
+		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
 
 		public ForecastedStaffingViewModelCreator(
 			INow now,
 			IUserTimeZone timeZone,
-			ForecastedStaffingProvider forecastedStaffingProvider,
+			ForecastedCallsProvider forecastedCallsProvider,
 			RequiredStaffingProvider requiredStaffingProvider,
 			IIntradayQueueStatisticsLoader intradayQueueStatisticsLoader,
 			IIntervalLengthFetcher intervalLengthFetcher,
 			ISkillRepository skillRepository,
 			ISkillDayRepository skillDayRepository,
 			IScenarioRepository scenarioRepository,
-			ScheduledStaffingProvider scheduledStaffingProvider
+			ScheduledStaffingProvider scheduledStaffingProvider,
+			TimeSeriesProvider timeSeriesProvider,
+			ForecastedStaffingProvider forecastedStaffingProvider
 			)
 		{
 			_now = now;
 			_timeZone = timeZone;
-			_forecastedStaffingProvider = forecastedStaffingProvider;
+			_forecastedCallsProvider = forecastedCallsProvider;
 			_requiredStaffingProvider = requiredStaffingProvider;
 			_intradayQueueStatisticsLoader = intradayQueueStatisticsLoader;
 			_intervalLengthFetcher = intervalLengthFetcher;
@@ -47,6 +51,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_skillDayRepository = skillDayRepository;
 			_scenarioRepository = scenarioRepository;
 			_scheduledStaffingProvider = scheduledStaffingProvider;
+			_timeSeriesProvider = timeSeriesProvider;
+			_forecastedStaffingProvider = forecastedStaffingProvider;
 			_supportedSkillsInIntradayProvider = new SupportedSkillsInIntradayProvider(skillRepository);
 		}
 
@@ -65,47 +71,30 @@ namespace Teleopti.Ccc.Domain.Intraday
 			if (actualCallsPerSkillInterval.Count > 0)
 				latestStatsTime = actualCallsPerSkillInterval.Max(d => d.StartTime);
 
-			var forecastedStaffingModel = _forecastedStaffingProvider.Load(skills, skillDays, latestStatsTime, minutesPerInterval);
+			var forecastedCallsModel = _forecastedCallsProvider.Load(skills, skillDays, latestStatsTime, minutesPerInterval);
 
 			var scheduledStaffing = _scheduledStaffingProvider.StaffingPerSkill(skills, minutesPerInterval);
 
-			var forecastedStaffing = forecastedStaffingModel.StaffingIntervals
-												.Where(t => t.StartTime >= usersToday.Date && t.StartTime < usersToday.Date.AddDays(1))
-												.ToList();
+			var forecastedStaffing = _forecastedStaffingProvider.StaffingPerSkill(skills, skillDays, minutesPerInterval);
 
-			var timeSeries = getTimeSeries(forecastedStaffing, scheduledStaffing, minutesPerInterval);
+			var timeSeries = _timeSeriesProvider.DataSeries(forecastedStaffing, scheduledStaffing, minutesPerInterval);
 
 			var updatedForecastedSeries = getUpdatedForecastedStaffing(
 				forecastedStaffing,
 				actualCallsPerSkillInterval,
-				forecastedStaffingModel.CallsPerSkill,
+				forecastedCallsModel.CallsPerSkill,
 				latestStatsTime,
 				usersNow,
 				minutesPerInterval,
 				timeSeries
 			);
 			
-			forecastedStaffing = forecastedStaffing
-				.GroupBy(g => g.StartTime)
-				.Select(s =>
-				{
-					var staffingIntervalModel = s.First();
-					return new StaffingIntervalModel
-					{
-						SkillId = staffingIntervalModel.SkillId,
-						StartTime = staffingIntervalModel.StartTime,
-						Agents = s.Sum(a => a.Agents)
-					};
-				})
-				.OrderBy(o => o.StartTime)
-				.ToList();
-
-			IList<StaffingIntervalModel> requiredStaffing = _requiredStaffingProvider.Load(actualCallsPerSkillInterval, 
+			var requiredStaffingPerSkill = _requiredStaffingProvider.Load(actualCallsPerSkillInterval, 
 				skills, 
 				skillDays,
 				forecastedStaffing, 
 				TimeSpan.FromMinutes(minutesPerInterval),
-				forecastedStaffingModel.SkillDayStatsRange);
+				forecastedCallsModel.SkillDayStatsRange);
 
 
 									
@@ -113,67 +102,23 @@ namespace Teleopti.Ccc.Domain.Intraday
 			{
 				DataSeries = new StaffingDataSeries
 				{
-					Time = timeSeries
-								.ToArray(),
-					ForecastedStaffing = getForecastedStaffingSeries(forecastedStaffing,timeSeries),
-					UpdatedForecastedStaffing = updatedForecastedSeries
-								.ToArray(),
-					ActualStaffing = _requiredStaffingProvider.DataSeries(requiredStaffing, latestStatsTime, minutesPerInterval, timeSeries)
-								.ToArray(),
+					Time = timeSeries,
+					ForecastedStaffing = _forecastedStaffingProvider.DataSeries(forecastedStaffing,timeSeries),
+					UpdatedForecastedStaffing = updatedForecastedSeries.ToArray(),
+					ActualStaffing = _requiredStaffingProvider.DataSeries(requiredStaffingPerSkill, latestStatsTime, minutesPerInterval, timeSeries),
 					ScheduledStaffing = _scheduledStaffingProvider.DataSeries(scheduledStaffing, timeSeries)
 				}
 			};
 		}
 
 
-		private double?[] getForecastedStaffingSeries(List<StaffingIntervalModel> forecastedStaffing, List<DateTime> timeSeries)
-		{
-			if (timeSeries.Count() == forecastedStaffing.Count())
-				return forecastedStaffing.Select(x => (double?)x.Agents).ToArray();
-
-			List<double?> forecastedStaffingList = new List<double?>();
-			foreach (var intervalStart in timeSeries)
-			{
-				var forecastedStaffingInterval = forecastedStaffing.FirstOrDefault(x => x.StartTime == intervalStart);
-				forecastedStaffingList.Add(forecastedStaffingInterval?.Agents);
-			}
-			return forecastedStaffingList.ToArray();
-		}
-
-		private List<DateTime> getTimeSeries(List<StaffingIntervalModel> staffingForUsersToday, IList<SkillStaffingIntervalLightModel> scheduledStaffing, int minutesPerInterval)
-		{
-			var min1 = DateTime.MaxValue;
-			var min2 = DateTime.MaxValue;
-			var max1 = DateTime.MinValue;
-			var max2 = DateTime.MinValue;
-			if (staffingForUsersToday.Any())
-			{
-				min1 = staffingForUsersToday.Min(x => x.StartTime);
-				max1 = staffingForUsersToday.Max(x => x.StartTime);
-			}
-
-			if (scheduledStaffing.Any())
-			{
-				min2 = scheduledStaffing.Min(x => x.StartDateTime);
-				max2 = scheduledStaffing.Max(x => x.StartDateTime);
-			}
-
-			var theMinTime = min1 > min2 ? min2 : min1;
-			var theMaxTime = max1 > max2 ? max1 : max2;
-
-			var timeSeries = new List<DateTime>();
-
-			for (DateTime time = theMinTime; time <= theMaxTime; time = time.AddMinutes(minutesPerInterval))
-			{
-				timeSeries.Add(time);
-			}
-
-			return timeSeries;
-		}
-
-		
-		
-		private List<double?> getUpdatedForecastedStaffing(List<StaffingIntervalModel> forecastedStaffingList, IList<SkillIntervalStatistics> actualCallsPerSkillList, Dictionary<Guid, List<SkillIntervalStatistics>> forecastedCallsPerSkillDictionary, DateTime? latestStatsTime, DateTime usersNow, int minutesPerInterval, List<DateTime> timeSeries)
+		private List<double?> getUpdatedForecastedStaffing(IList<StaffingIntervalModel> forecastedStaffingList, 
+			IList<SkillIntervalStatistics> actualCallsPerSkillList, 
+			Dictionary<Guid, List<SkillIntervalStatistics>> forecastedCallsPerSkillDictionary, 
+			DateTime? latestStatsTime, 
+			DateTime usersNow, 
+			int minutesPerInterval, 
+			DateTime[] timeSeries)
 		{
 			if (!latestStatsTime.HasValue)
 				return new List<double?>();
