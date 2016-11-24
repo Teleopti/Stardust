@@ -37,8 +37,8 @@
 					fromScenario: null,
 					toScenario: null,
 					period: {
-						startDate: moment().utc().startOf('month').toDate(),
-						endDate: moment().utc().add(1, 'months').startOf('month').toDate()
+						startDate: moment().utc().add(1, 'months').startOf('month').toDate(),
+						endDate: moment().utc().add(2, 'months').startOf('month').toDate()
 					}
 				};
 
@@ -59,6 +59,8 @@
 						validationResult.messages.push($translate.instant('PickAtleastOneTeamDot'));
 					if (moment(period.endDate).diff(period.startDate, 'days') > 65)
 						validationResult.messages.push($translate.instant('PickASmallerDatePeriodDot'));
+					if (moment(period.startDate).diff(moment(), 'days') < 1)
+						validationResult.messages.push($translate.instant('YouNeedToSelectADateInTheFutureDot'));
 					validationResult.successful = validationResult.messages.length === 0;
 					return validationResult;
 				}

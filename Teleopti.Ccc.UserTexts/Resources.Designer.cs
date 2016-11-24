@@ -34474,6 +34474,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You need to select a date in the future..
+        /// </summary>
+        public static string YouNeedToSelectADateInTheFutureDot {
+            get {
+                return ResourceManager.GetString("YouNeedToSelectADateInTheFutureDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your changes will be discarded..
         /// </summary>
         public static string YourChangesWillBeDiscarded {

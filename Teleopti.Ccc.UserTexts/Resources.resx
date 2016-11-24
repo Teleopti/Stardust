@@ -15223,6 +15223,10 @@ These options are activated:
     <value>Level</value>
     <comment>Level</comment>
   </data>
+  <data name="YouNeedToSelectADateInTheFutureDot" xml:space="preserve">
+    <value>You need to select a date in the future.</value>
+  </data>
+  
   <data name="Primary" xml:space="preserve">
     <value>Primary</value>
     <comment>Primary</comment>
