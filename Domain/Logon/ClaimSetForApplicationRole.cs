@@ -33,10 +33,6 @@ namespace Teleopti.Ccc.Domain.Logon
 
 			if (role.AvailableData != null)
 			{
-				claims.Add(new Claim(string.Concat(
-					TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/AvailableData"),
-				                     new AuthorizeExternalAvailableData(role.AvailableData), Rights.PossessProperty));
-
 				IAuthorizeAvailableData authorizeAvailableData = null;
 				switch (role.AvailableData.AvailableDataRange)
 				{
@@ -63,6 +59,9 @@ namespace Teleopti.Ccc.Domain.Logon
 							string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
 							              "/AvailableData"), authorizeAvailableData, Rights.PossessProperty));
 				}
+				claims.Add(new Claim(string.Concat(
+						TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/AvailableData"),
+					new AuthorizeExternalAvailableData(role.AvailableData), Rights.PossessProperty));
 			}
 
         	return new DefaultClaimSet(ClaimSet.System,claims);
