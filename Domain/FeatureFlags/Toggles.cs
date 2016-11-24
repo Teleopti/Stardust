@@ -124,6 +124,7 @@
 		Report_UseOpenXmlFormat_35797,
 		Scheduler_IntradayOptimization_36617,
 		Scheduler_AgentSkillAnalyzer_12345,
+		Scheduler_ShowSkillPrioLevels_41980,
 
 		WfmGlobalLayout_personalOptions_37114,
 

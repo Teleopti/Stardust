@@ -140,6 +140,7 @@ MyTimeWeb_ShowContractTime_41462 = RC
 
 Scheduler_AgentSkillAnalyzer_12345 = DEV
 Scheduler_IntradayOptimization_36617 = true
+Scheduler_ShowSkillPrioLevels_41980 = RC
 WfmGlobalLayout_personalOptions_37114 = true
 
 ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = false # needs to be false until we get further....

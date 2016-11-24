@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
@@ -16,6 +17,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
@@ -558,23 +560,74 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
             createAndAddItem(listViewPersonPeriod, Resources.Period, period.DateString, 1);
             createAndAddItem(listViewPersonPeriod, Resources.Team, personPeriod.Team.SiteAndTeam, 2);
-            createAndAddItem(listViewPersonPeriod, Resources.PersonSkills, "", 2);
-            foreach (IPersonSkill personSkill in personPeriod.PersonSkillCollection.OrderBy(ps => ps.Skill.Name))
-            {
-				if(personSkill.Active && !((IDeleteTag)personSkill.Skill).IsDeleted)
-					createAndAddItem(listViewPersonPeriod, personSkill.Skill.Name, personSkill.SkillPercentage.ToString(), 3);
-            }
+            createAndAddItem(listViewPersonPeriod, Resources.PersonSkills, "", 1);
 
-            if (personPeriod.MaxSeatSkill != null)
-            {
-                createAndAddItem(listViewPersonPeriod, "===================", "", 3);
-                createAndAddItem(listViewPersonPeriod, personPeriod.MaxSeatSkill.Name, "", 3);
-            }
+	        if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_ShowSkillPrioLevels_41980))
+	        {
+		        var sortedDic = new SortedDictionary<int, IList<IPersonSkill>>();
+
+		        var livingSkills =
+			        personPeriod.PersonSkillCollection.Where(
+				        personSkill => personSkill.Active && !((IDeleteTag) personSkill.Skill).IsDeleted).ToList();
+		        var primaryLevel =
+			        livingSkills.Where(personSkill => personSkill.Skill.IsCascading())
+				        .Min(personSkill => personSkill.Skill.CascadingIndex.Value);
+
+		        foreach (var personSkill in livingSkills)
+		        {
+			        var skillPrioIndex = personSkill.Skill.CascadingIndex.GetValueOrDefault(primaryLevel);
+			        IList<IPersonSkill> skillList;
+			        if (!sortedDic.TryGetValue(skillPrioIndex, out skillList))
+			        {
+				        sortedDic.Add(skillPrioIndex, new List<IPersonSkill> {personSkill});
+			        }
+			        else
+			        {
+				        skillList.Add(personSkill);
+			        }
+		        }
+
+		        var personalIndex = 0;
+		        var levelString = Resources.Level;
+				foreach (var keyValuePair in sortedDic)
+		        {
+			        personalIndex++;
+			        string level = levelString + " " + personalIndex;
+			        if (personalIndex == 1)
+				        level = Resources.Primary;
+
+			        createAndAddItem(listViewPersonPeriod, level, "", 2);
+			        foreach (IPersonSkill personSkill in keyValuePair.Value.OrderBy(ps => ps.Skill.Name))
+			        {
+				        createAndAddItem(listViewPersonPeriod, personSkill.Skill.Name, personSkill.SkillPercentage.ToString(), 3);
+			        }
+		        }
+
+		        if (personPeriod.MaxSeatSkill != null)
+		        {
+			        createAndAddItem(listViewPersonPeriod, Resources.MaxSeats, "", 1);
+			        createAndAddItem(listViewPersonPeriod, personPeriod.MaxSeatSkill.Name, "", 2);
+		        }
+	        }
+	        else
+	        {
+				createAndAddItem(listViewPersonPeriod, Resources.PersonSkills, "", 2);
+				foreach (IPersonSkill personSkill in personPeriod.PersonSkillCollection.OrderBy(ps => ps.Skill.Name))
+				{
+					if (personSkill.Active && !((IDeleteTag)personSkill.Skill).IsDeleted)
+						createAndAddItem(listViewPersonPeriod, personSkill.Skill.Name, personSkill.SkillPercentage.ToString(), 3);
+				}
+
+				if (personPeriod.MaxSeatSkill != null)
+				{
+					createAndAddItem(listViewPersonPeriod, "===================", "", 3);
+					createAndAddItem(listViewPersonPeriod, personPeriod.MaxSeatSkill.Name, "", 3);
+				}
+			}
             
+			listViewPersonPeriod.Items.Add("");
 
-            listViewPersonPeriod.Items.Add("");
-
-	        string name = string.Empty;
+			string name = string.Empty;
 	        if (!((IDeleteTag) personPeriod.PersonContract.Contract).IsDeleted)
 		        name = personPeriod.PersonContract.Contract.Description.Name;
 

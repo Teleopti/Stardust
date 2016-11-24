@@ -14263,6 +14263,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Level.
+        /// </summary>
+        public static string Level {
+            get {
+                return ResourceManager.GetString("Level", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to License Agreement.
         /// </summary>
         public static string LicenseAgreement {
@@ -22225,6 +22234,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PreviousSavedOvertimeAvailabilityColon {
             get {
                 return ResourceManager.GetString("PreviousSavedOvertimeAvailabilityColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Primary.
+        /// </summary>
+        public static string Primary {
+            get {
+                return ResourceManager.GetString("Primary", resourceCulture);
             }
         }
         

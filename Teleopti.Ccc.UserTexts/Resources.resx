@@ -15219,4 +15219,12 @@ These options are activated:
     <value>No permission to add overtime activity for agent {0}.</value>
     <comment>Error message to notify missing permission for moving activity</comment>
   </data>
+  <data name="Level" xml:space="preserve">
+    <value>Level</value>
+    <comment>Level</comment>
+  </data>
+  <data name="Primary" xml:space="preserve">
+    <value>Primary</value>
+    <comment>Primary</comment>
+  </data>
 </root>
