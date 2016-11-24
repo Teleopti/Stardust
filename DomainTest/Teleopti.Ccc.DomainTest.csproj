@@ -176,7 +176,7 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\ExcludePhoneStateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\InAlarmTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\ViewModelBuilderTest2.cs" />
-	<Compile Include="Common\PersonLeavingTest.cs" />
+    <Compile Include="Common\PersonLeavingTest.cs" />
     <Compile Include="Intraday\MergeSkillStaffIntervalLightForSkillAreaTest.cs" />
     <Compile Include="ApplicationLayer\RemoveSelectedPersonAbsenceComandHandlerTest.cs" />
     <Compile Include="Intraday\SkillStaffingIntervalProviderTest.cs" />
@@ -377,6 +377,7 @@
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnNonScheduledDaysTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\GuessResourceCalculationHasBeenMadeTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculateCorrectDaysTest.cs" />
+    <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationContextPeriodTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationResultTest.cs" />
     <Compile Include="SchedulingScenarios\ScheduleDictionaryCreator.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\BackToLegalShiftCommandTest.cs" />

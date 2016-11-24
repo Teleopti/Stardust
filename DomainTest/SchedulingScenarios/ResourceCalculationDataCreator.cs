@@ -14,15 +14,21 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 											bool considerShortbreaks,
 											bool doIntraIntervalCalculation)
 		{
-			var skillDaysDic =  new Dictionary<ISkill, IEnumerable<ISkillDay>>();
-			foreach (var skillDay in skillDays)
-			{
-				skillDaysDic[skillDay.Skill] = new List<ISkillDay> { skillDay };
-			}
+			return WithData(scenario, date.ToDateOnlyPeriod(), persistableScheduleData, skillDays, considerShortbreaks, doIntraIntervalCalculation);
+		}
+
+		public static IResourceCalculationData WithData(IScenario scenario,
+									DateOnlyPeriod period,
+									IEnumerable<IPersistableScheduleData> persistableScheduleData,
+									IEnumerable<ISkillDay> skillDays,
+									bool considerShortbreaks,
+									bool doIntraIntervalCalculation)
+		{
+			var skillDaysDic = skillDays.GroupBy(x => x.Skill).ToDictionary(k=> k.Key, v => v.AsEnumerable());
 
 			return new ResourceCalculationData(
-				ScheduleDictionaryCreator.WithData(scenario, new DateOnlyPeriod(date, date), persistableScheduleData),
-				skillDays.Select(x => x.Skill).Distinct(), skillDaysDic, considerShortbreaks, doIntraIntervalCalculation);
+				ScheduleDictionaryCreator.WithData(scenario, period, persistableScheduleData),
+				skillDaysDic.Keys, skillDaysDic, considerShortbreaks, doIntraIntervalCalculation);
 		}
 	}
 }
