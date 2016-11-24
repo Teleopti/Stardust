@@ -427,7 +427,8 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 			
 			var tableCellList = new List<TableCell>();
-			if (personModel.LoggedInOnTheDayBefore)
+            var previousIntervalId = personModel.FirstIntervalId - 1;
+            if (personModel.LoggedInOnTheDayBefore)
 			{
 				tableCellList.AddRange(fillWithBlankCells(_timeLineStartIntervalDayBefore, personModel.FirstIntervalId));
 			}
@@ -437,8 +438,6 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 				tableCellList.AddRange(fillWithBlankCells(_timeLineStartInterval, personModel.FirstIntervalId));
 			}
 			
-			var previousIntervalId = personModel.FirstIntervalId;
-
 			SetTeamTotals(personModel);
 
 			data.ForEach(m => ProcessCellData(m, ref previousIntervalId, tableCellList, personModel));
@@ -584,7 +583,8 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		private List<TableCell> fillWithBlankCells(int startInterval, int endInterval)
 		{
 			var tableCellList = new List<TableCell>();
-			for (var interval = startInterval; interval < endInterval; interval++)
+            if (startInterval > endInterval) { startInterval = startInterval - _intervalsPerDay; }
+            for (var interval = startInterval; interval < endInterval; interval++)
 			{
 				var tableCell = MakeTableCell("&nbsp;", HorizontalAlign.Center, VerticalAlign.Middle, "");
 
