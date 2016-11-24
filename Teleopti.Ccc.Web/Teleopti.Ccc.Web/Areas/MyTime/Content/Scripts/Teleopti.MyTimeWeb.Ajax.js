@@ -153,7 +153,10 @@ Teleopti.MyTimeWeb.Ajax.UI = (function ($) {
 				var responseText = jqXHR.responseText;
 				try {
 					var message = $.parseJSON(responseText);
-					$(this).html(message);
+					if (message.Message) $(this).html(message.Message);
+					else {
+						$(this).html(responseText);
+					}
 				} catch (e) {
 					$(this).html(responseText);
 				}
