@@ -53,7 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PerformaceTuningTest.cs" />
+    <Compile Include="PerformanceTuningTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

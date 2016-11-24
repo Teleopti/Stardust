@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
 	[TestFixture]
-	public class PerformaceTuningTest
+	public class PerformanceTuningTest
     {
         public IAbsenceRepository AbsenceRepository;
         public AsSystem AsSystem;
