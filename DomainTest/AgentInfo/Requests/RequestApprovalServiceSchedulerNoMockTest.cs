@@ -135,8 +135,10 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var personTo2 = PersonFactory.CreatePersonWithId();
 			var personTo3 = PersonFactory.CreatePersonWithId();
 
-			setScheduleDictionary(new DateTimePeriod(2016, 11, 23, 8, 2016, 11, 23, 17), personFrom);
-			setScheduleDictionary(new DateTimePeriod(2016, 11, 23, 7, 2016, 11, 23, 16), personTo1, personTo2, personTo3);
+			var scheduleDatas = createScheduleDatas(new DateOnlyPeriod(2016, 11, 23, 2016, 11, 23), new TimePeriod(8, 17), personFrom).ToList();
+			scheduleDatas.AddRange(createScheduleDatas(new DateOnlyPeriod(2016, 11, 23, 2016, 11, 23), new TimePeriod(7, 18), personTo1,
+				personTo2, personTo3));
+			_scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(_scenario, new DateTimePeriod(2016, 11, 23, 7, 2016, 11, 23, 18), scheduleDatas.ToArray());
 
 			var requestDate = new DateOnly(2016, 11, 23);
 			var shiftTradeRequest1 = createPersonShiftTradeRequest(personFrom, personTo1, requestDate);
@@ -151,6 +153,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			_requestApprovalService.ApproveShiftTrade((IShiftTradeRequest)shiftTradeRequest3.Request);
 
 			assertShiftTradeRequestStatus(shiftTradeRequest1, ShiftTradeStatus.OkByBothParts);
+			assertScheduleSwaped(shiftTradeRequest1);
 
 			assertShiftTradeRequestStatus(shiftTradeRequest2, ShiftTradeStatus.Referred);
 			assertShiftTradeRequestStatus(shiftTradeRequest3, ShiftTradeStatus.Referred);
@@ -161,6 +164,27 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var requestStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
 			var shiftTradeRequest = request.Request as IShiftTradeRequest;
 			shiftTradeRequest.GetShiftTradeStatus(requestStatusChecker).Should().Be(shiftTradeStatus);
+		}
+
+		private void assertScheduleSwaped(IPersonRequest request)
+		{
+			var shiftTradeRequest = request.Request as IShiftTradeRequest;
+			var shiftTradeSwapDetails = shiftTradeRequest.ShiftTradeSwapDetails;
+			foreach (var shiftTradeSwapDetail in shiftTradeSwapDetails)
+			{
+				shiftTradeSwapDetail.SchedulePartFrom.PersonAssignment().ShiftLayers.Single().Payload.Id.Should()
+					.Be(
+						_scheduleDictionary[shiftTradeRequest.PersonTo].ScheduledDay(shiftTradeSwapDetail.DateFrom)
+							.PersonAssignment()
+							.ShiftLayers.Single()
+							.Payload.Id);
+				shiftTradeSwapDetail.SchedulePartTo.PersonAssignment().ShiftLayers.Single().Payload.Id.Should()
+					.Be(
+						_scheduleDictionary[shiftTradeRequest.PersonFrom].ScheduledDay(shiftTradeSwapDetail.DateFrom)
+							.PersonAssignment()
+							.ShiftLayers.First()
+							.Payload.Id);
+			}
 		}
 
 		private void setScheduleDictionary(DateTimePeriod dateTimePeriod, params IPerson[] persons)
@@ -176,6 +200,21 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 				}
 			}
 			_scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(_scenario, dateTimePeriod, scheduleDatas.ToArray());
+		}
+
+		private IList<IScheduleData> createScheduleDatas(DateOnlyPeriod dateOnlyPeriod, TimePeriod timePeriod, params IPerson[] persons)
+		{
+			var scheduleDatas = new List<IScheduleData>();
+			foreach (var person in persons)
+			{
+				var timeZone = person.PermissionInformation.DefaultTimeZone();
+				var dateOnlys = dateOnlyPeriod.DayCollection();
+				foreach (var dateOnly in dateOnlys)
+				{
+					scheduleDatas.Add(addAssignment(person, dateOnly.ToDateTimePeriod(timePeriod, timeZone)));
+				}
+			}
+			return scheduleDatas;
 		}
 
 		private IPersonRequest createPersonShiftTradeRequest(IPerson personFrom, IPerson personTo, DateOnly requestDate)
