@@ -14,7 +14,7 @@
 				<wfm-multiple-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"></wfm-multiple-search-input>
 			</span>
 
-			<span class="datepicker-container">
+			<span class="datepicker-container" ng-click="$event.stopPropagation()">
 				<team-schedule-datepicker selected-date="vm.scheduleDate" status="vm.showDatePicker" on-date-change="vm.onScheduleDateChanged()"></team-schedule-datepicker>
 			</span>
 

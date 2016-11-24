@@ -66,7 +66,7 @@
 			var result = target.validateInputForOvertime(timeRange, "selected_definition_set_id","person_id");
 
 			expect(result.length).toEqual(1);
-			//expect(target.getInvalidPeopleNameList().indexOf('SomeoneElse') > -1).toEqual(true);
+			expect(result[0].PersonId.indexOf('SomeoneElse') > -1).toEqual(true);
 		});
 
 		it('should return false when moving to time changes the schedule start date', function() {
