@@ -108,5 +108,35 @@ namespace Teleopti.Ccc.Domain.Intraday
 				.Where(x => x.StartTime >= rangeStartLocal && x.StartTime < rangeEndLocal)
 				.ToList();
 		}
+
+		public List<double?> DataSeries(IList<StaffingIntervalModel> requiredStaffingPerSkill, DateTime? latestStatsTime, int minutesPerInterval, List<DateTime> timeSeries)
+		{
+			var returnValue = new List<double?>();
+
+			if (!latestStatsTime.HasValue || !requiredStaffingPerSkill.Any())
+				return new List<double?>();
+
+			returnValue.AddRange(requiredStaffingPerSkill
+				.OrderBy(x => x.StartTime)
+				.GroupBy(y => y.StartTime)
+				.Select(s => (double?)s.Sum(a => a.Agents))
+				.ToList());
+
+			var actualStartTime = requiredStaffingPerSkill.Min(x => x.StartTime);
+			var actualEndTime = requiredStaffingPerSkill.Max(x => x.StartTime).AddMinutes(minutesPerInterval);
+
+			var nullStart = timeSeries.Min();
+			var nullEnd = timeSeries.Max().AddMinutes(minutesPerInterval);
+
+			for (DateTime i = nullStart; i < actualStartTime; i = i.AddMinutes(minutesPerInterval))
+				returnValue.Insert(0, null);
+
+			for (DateTime i = actualEndTime; i < nullEnd; i = i.AddMinutes(minutesPerInterval))
+				returnValue.Add(null);
+
+
+			return returnValue;
+		}
+
 	}
 }

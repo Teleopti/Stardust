@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ForecastedStaffingViewModelCreator>().SingleInstance();
 			builder.RegisterType<ForecastedStaffingProvider>().SingleInstance();
 			builder.RegisterType<RequiredStaffingProvider>().SingleInstance();
+			builder.RegisterType<ScheduledStaffingProvider>().SingleInstance();
 			builder.RegisterType<FetchSkillInIntraday>().SingleInstance();
 			builder.RegisterType<FetchSkillArea>().SingleInstance();
 			builder.RegisterType<CreateSkillArea>().SingleInstance();

@@ -89,12 +89,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 			};
 		}
 
-		private IEnumerable<ITemplateTaskPeriod> getTaskPeriods(ISkillDay skillDay, int minutesPerInterval, DateTime? latestStatisticsTimeUtc, DateTime utcDateTime)
+		private IEnumerable<ITemplateTaskPeriod> getTaskPeriods(ISkillDay skillDay, int minutesPerInterval, DateTime? latestStatisticsTimeUtc, DateTime usersNowStartOfDayUtc)
 		{
 			var taskPeriods = new List<ITemplateTaskPeriod>();
 			foreach (var workloadDay in skillDay.WorkloadDayCollection)
 			{
-				taskPeriods.AddRange(taskPeriodsUpUntilNow(workloadDay.TaskPeriodList, minutesPerInterval, skillDay.Skill.DefaultResolution, latestStatisticsTimeUtc, utcDateTime));
+				taskPeriods.AddRange(taskPeriodsUpUntilNow(workloadDay.TaskPeriodList, minutesPerInterval, skillDay.Skill.DefaultResolution, latestStatisticsTimeUtc, usersNowStartOfDayUtc));
 			}
 			return taskPeriods;
 		}
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			int targetMinutesPerInterval, 
 			int skillMinutesPerInterval, 
 			DateTime? latestStatisticsTimeUtc,
-			DateTime? usersNowUtc)
+			DateTime? usersNowStartOfDayUtc)
 		{
 			var returnList = new List<ITemplateTaskPeriod>();
 			var periodLength = TimeSpan.FromMinutes(targetMinutesPerInterval);
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				}
 				return returnList
 					.Where(t =>
-						t.Period.StartDateTime >= usersNowUtc.Value &&
+						t.Period.StartDateTime >= usersNowStartOfDayUtc.Value &&
 						t.Period.EndDateTime <= latestStatisticsTimeUtc.Value.AddMinutes(targetMinutesPerInterval)
 					)
                     .ToList();
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			return templateTaskPeriodCollection
 				.Where(t => 
-					t.Period.StartDateTime >= usersNowUtc.Value && 
+					t.Period.StartDateTime >= usersNowStartOfDayUtc.Value && 
 					t.Period.EndDateTime <= latestStatisticsTimeUtc.Value.AddMinutes(targetMinutesPerInterval)
 				)
                 .ToList();
