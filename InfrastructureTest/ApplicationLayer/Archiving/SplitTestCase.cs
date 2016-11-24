@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 
 		public DateTime ExpectedEnd()
 		{
-			var agentArchiveEnd = TimeZoneInfo.ConvertTime(TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(ArchiveEnd.Date, DateTimeKind.Unspecified), _timeZoneInfo), _timeZoneInfo).AddDays(1);
+			var agentArchiveEnd = TimeZoneInfo.ConvertTime(TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(ArchiveEnd.Date, DateTimeKind.Unspecified), _timeZoneInfo), _timeZoneInfo).AddHours(23).AddMinutes(59);
 			return agentArchiveEnd < AbsenceEndLocal ? agentArchiveEnd : AbsenceEndLocal;
 		}
 

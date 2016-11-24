@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 		}
 
 		[Test]
-		public void ShouldNotMoveAnyNote()
+		public void ShouldNotArchiveForOtherPerson()
 		{
 			addDefaultTypesToRepositories();
 			var secondPerson = PersonFactory.CreatePerson("Tester Testersson 2");
@@ -255,7 +255,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			archivedNotes.First().GetScheduleNote(new NoFormatting()).Should().Be.EqualTo(noteOnTheDay.GetScheduleNote(new NoFormatting()));
 		}
 		
-		[Ignore("Until Erik fixed them in handler")]
 		[Test, Combinatorial]
 		public void ShouldSplitAbsenceCorrectly([ValueSource(nameof(splitTestCases))] SplitTestCase testCase, [ValueSource(nameof(agentTimeZones))] TimeZoneInfo timeZoneInfo)
 		{
@@ -364,6 +363,22 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 				ArchiveStart = new DateOnly(2016, 1, 10),
 				ArchiveEnd =   new DateOnly(2016, 1, 12),
 				ExpectedOutcome = SplitTestCase.Expectations.OneArchived
+			},
+			new SplitTestCase
+			{
+				AbsenceStartLocal = new DateTime(2016, 1, 13, 0, 0, 0),
+				AbsenceEndLocal =   new DateTime(2016, 1, 14, 0, 0, 0),
+				ArchiveStart = new DateOnly(2016, 1, 10),
+				ArchiveEnd =   new DateOnly(2016, 1, 12),
+				ExpectedOutcome = SplitTestCase.Expectations.NothingArchived
+			},
+			new SplitTestCase
+			{
+				AbsenceStartLocal = new DateTime(2016, 1, 8, 0, 0, 0),
+				AbsenceEndLocal =   new DateTime(2016, 1, 10, 0, 0, 0),
+				ArchiveStart = new DateOnly(2016, 1, 10),
+				ArchiveEnd =   new DateOnly(2016, 1, 12),
+				ExpectedOutcome = SplitTestCase.Expectations.NothingArchived
 			}
 		};
 
