@@ -135,6 +135,7 @@
     <Compile Include="Domain\IApplicationData.cs" />
     <Compile Include="Domain\IBlockFinder.cs" />
     <Compile Include="Domain\IBlockInfo.cs" />
+    <Compile Include="Domain\IBusinessRuleConfigProvider.cs" />
     <Compile Include="Domain\IBusinessRuleProvider.cs" />
     <Compile Include="Domain\ICheckingPersonalAccountDaysProvider.cs" />
     <Compile Include="Domain\IExpiredRequestValidator.cs" />
