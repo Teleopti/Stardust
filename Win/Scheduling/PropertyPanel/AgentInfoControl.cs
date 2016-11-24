@@ -569,9 +569,14 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		        var livingSkills =
 			        personPeriod.PersonSkillCollection.Where(
 				        personSkill => personSkill.Active && !((IDeleteTag) personSkill.Skill).IsDeleted).ToList();
-		        var primaryLevel =
-			        livingSkills.Where(personSkill => personSkill.Skill.IsCascading())
-				        .Min(personSkill => personSkill.Skill.CascadingIndex.Value);
+				var primaryLevel = 1;
+				if (livingSkills.Any())
+				{
+					var livingCascadingSkills = livingSkills.Where(personSkill => personSkill.Skill.IsCascading()).ToList();
+				
+					if(livingCascadingSkills.Any())
+						primaryLevel = livingCascadingSkills.Min(personSkill => personSkill.Skill.CascadingIndex.Value);
+				}
 
 		        foreach (var personSkill in livingSkills)
 		        {
