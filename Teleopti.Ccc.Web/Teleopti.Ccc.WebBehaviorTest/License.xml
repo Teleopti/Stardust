@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <License>
   <CustomerName>Teleopti_RD</CustomerName>
-  <ExpirationDate>2016-09-30T12:58:06</ExpirationDate>
+  <ExpirationDate>2018-11-22T22:41:37</ExpirationDate>
   <ExpirationGracePeriod>P0D</ExpirationGracePeriod>
   <MaxActiveAgents>15000</MaxActiveAgents>
   <MaxActiveAgentsGrace>0</MaxActiveAgentsGrace>
@@ -33,9 +33,9 @@
           <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
         </Transforms>
         <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <DigestValue>yJG/JnPVqrUrd2LLhDeULtIJ+9c=</DigestValue>
+        <DigestValue>WJeaLMIyCdFEALM/l0540+d/iIc=</DigestValue>
       </Reference>
     </SignedInfo>
-    <SignatureValue>AwDkvgsVpu12Q3L1c6QVMld9lUBZMqMFJB7f+u7jBsfGDdoE40lMWvqGiJ2HUDz2C1AcmTrVNMn0Mp7ee1T7I7MXUfjR3OVjTidSLimyac8Oe5wJ0w/YwvKyE1WhleSjx4DdpH6BJP9sITQ3vy59H9G0XL6H2VT3gUEJxAWn4dI=</SignatureValue>
+    <SignatureValue>jO3YK1sRSDR4DnfOFUnhwp2BVi/11xU8nCA9M3Um2gcL6HCSs3JJe4pVa0nBg/pQxJf5PhQJv3gph5BKZF0DCMjmzRiy43IayKzbPiM7oPXTddthH7C3MD8XL/Anw7X75Uq/77SVa6bTRzzbguk/xNlyA6jr7Whsmc067jm8R2k=</SignatureValue>
   </Signature>
 </License>
