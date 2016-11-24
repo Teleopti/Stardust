@@ -246,7 +246,7 @@
     <Compile Include="Cascading\ReverseSkillRoutingPriorities.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityModel.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityPersister.cs" />
-	<Compile Include="Common\ClearPersonRelatedInformation.cs" />
+    <Compile Include="Common\ClearPersonRelatedInformation.cs" />
     <Compile Include="Common\IPersonLeavingUpdater.cs" />
     <Compile Include="Common\IScheduleDayProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\NonoverwritableLayerMovabilityChecker.cs" />
@@ -573,6 +573,7 @@
     <Compile Include="Scheduling\WebLegacy\ResourceCalculateRangeToLoadCalculator.cs" />
     <Compile Include="Security\Authentication\LoggedOnUserIsPerson.cs" />
     <Compile Include="Security\PermissionProvider.cs" />
+    <Compile Include="Security\Principal\AuthorizeNone.cs" />
     <Compile Include="Security\Principal\CurrentAuthorization.cs" />
     <Compile Include="Security\Principal\IUpdatedBy.cs" />
     <Compile Include="Security\Principal\IUpdatedByScope.cs" />

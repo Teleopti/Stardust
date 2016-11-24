@@ -11,12 +11,20 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		private readonly IEnumerable<Guid> _availableSites;
 		private readonly IEnumerable<Guid> _availableBusinessUnits;
 
-        public AuthorizeExternalAvailableData(IAvailableData availableData)
+        private AuthorizeExternalAvailableData(IAvailableData availableData)
         {
             _availableTeams = availableData.AvailableTeams.Select(t => t.Id.GetValueOrDefault()).ToList();
             _availableSites = availableData.AvailableSites.Select(s => s.Id.GetValueOrDefault()).ToList();
             _availableBusinessUnits = availableData.AvailableBusinessUnits.Select(b => b.Id.GetValueOrDefault()).ToList();
         }
+
+	    public static IAuthorizeAvailableData Create(IAvailableData availableData)
+	    {
+		    return availableData.AvailableTeams.Any() || availableData.AvailableSites.Any() ||
+							 availableData.AvailableBusinessUnits.Any()
+			    ? (IAuthorizeAvailableData) new AuthorizeExternalAvailableData(availableData)
+			    : new AuthorizeNone();
+	    }
 
         public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IPerson person)
         {

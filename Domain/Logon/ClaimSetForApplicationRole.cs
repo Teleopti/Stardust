@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Logon
 				}
 				claims.Add(new Claim(string.Concat(
 						TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/AvailableData"),
-					new AuthorizeExternalAvailableData(role.AvailableData), Rights.PossessProperty));
+					AuthorizeExternalAvailableData.Create(role.AvailableData), Rights.PossessProperty));
 			}
 
         	return new DefaultClaimSet(ClaimSet.System,claims);

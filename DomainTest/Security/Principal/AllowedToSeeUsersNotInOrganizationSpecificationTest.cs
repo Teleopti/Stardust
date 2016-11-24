@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         {
             var availableData = new AvailableData();
             availableData.AddAvailableBusinessUnit(((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit);
-            var claimSet = PrepareClaimSet(new AuthorizeExternalAvailableData(availableData));
+            var claimSet = PrepareClaimSet(AuthorizeExternalAvailableData.Create(availableData));
             target.IsSatisfiedBy(new[] { claimSet }).Should().Be.True();
         }
 
