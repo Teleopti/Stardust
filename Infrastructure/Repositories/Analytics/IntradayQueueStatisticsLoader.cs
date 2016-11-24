@@ -14,12 +14,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
 	public class IntradayQueueStatisticsLoader : IIntradayQueueStatisticsLoader
 	{
-		public IList<SkillIntervalStatistics> LoadActualCallPerSkillInterval(IList<Guid> skillIdList, TimeZoneInfo timeZone, DateOnly today)
+		public IList<SkillIntervalStatistics> LoadActualCallPerSkillInterval(IList<ISkill> skills, TimeZoneInfo timeZone, DateOnly today)
 		{
+			var skillIdArray = skills.Select(x => x.Id.Value.ToString()).ToArray();
 
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
-				var skillListString = String.Join(",", skillIdList.Select(id => id.ToString()).ToArray());
+				var skillIdString = String.Join(",", skillIdArray);
 
 			    var callsPerSkillInterval =
 			        uow.Session()
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			            .AddScalar("AverageHandleTime", NHibernateUtil.Double)
 			            .SetString("TimeZone", timeZone.Id)
 			            .SetString("Today", today.ToShortDateString(CultureInfo.InvariantCulture))
-			            .SetString("SkillList", skillListString)
+			            .SetString("SkillList", skillIdString)
 			            .SetResultTransformer(Transformers.AliasToBean(typeof(SkillIntervalStatistics)))
 			            .List<SkillIntervalStatistics>();
 

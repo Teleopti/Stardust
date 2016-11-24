@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
@@ -15,20 +16,20 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_skillRepository = skillRepository;
 		}
 
-		public Guid[] GetSupportedSkillIds(Guid[] skillIdList)
+		public IList<ISkill> GetSupportedSkills(Guid[] skillIdList)
 		{
 			var skills = _skillRepository.LoadSkills(skillIdList);
+			var supportedSkills = new List<ISkill>();
 			var supportedSkillIdList = skillIdList;
 
 			foreach (var skill in skills)
 			{
-				if (!checkSupportedSkill(skill))
+				if (checkSupportedSkill(skill))
 				{
-					var skillToRemove = skill.Id.Value;
-					supportedSkillIdList = supportedSkillIdList.Where(val => val != skillToRemove).ToArray();
+					supportedSkills.Add(skill);
 				}
 			}
-			return supportedSkillIdList;
+			return supportedSkills;
 		}
 
 		public bool checkSupportedSkill(ISkill skill)

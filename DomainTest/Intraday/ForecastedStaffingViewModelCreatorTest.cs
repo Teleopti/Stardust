@@ -649,23 +649,24 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		{
 			TimeZone.IsSweden();
 			fakeScenarioAndIntervalLength();
-			var skillId = Guid.NewGuid();			
+			var skill = createSkill(minutesPerInterval, "skill1", new TimePeriod(8, 0, 8, 30));			
 			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 
 			var scheduledStaffingList = new List<SkillStaffingInterval>()
 			{
 				new SkillStaffingInterval() {
-					SkillId = skillId,
+					SkillId = skill.Id.Value,
 					StartDateTime = userNow,
 					EndDateTime = userNow.AddMinutes(minutesPerInterval),
 					StaffingLevel = 5.7d
 				}
 			};
 
+			SkillRepository.Has(skill);
 			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
 
-			var vm = Target.Load(new[] { skillId });
+			var vm = Target.Load(new[] { skill.Id.Value });
 
 			vm.DataSeries.Time.Length.Should().Be.EqualTo(1);
 			vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(scheduledStaffingList.First().StartDateTime, TimeZone.TimeZone()));
@@ -886,7 +887,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		private ISkillDay createSkillDay(ISkill skill, IScenario scenario, DateTime userNow, TimePeriod openHours)
 		{
 			var random = new Random();
-			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), 3, new Tuple<TimePeriod, double>(openHours, 3));
+			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), 3, new Tuple<TimePeriod, double>(openHours, 3)).WithId();
 			var index = 0;
 
 			for (TimeSpan intervalStart = openHours.StartTime; intervalStart < openHours.EndTime; intervalStart = intervalStart.Add(TimeSpan.FromMinutes(skill.DefaultResolution)))

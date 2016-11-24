@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	{
 		private IList<SkillIntervalStatistics> _latestStatisticsTimeAndWorkload = new List<SkillIntervalStatistics>();
 
-		public IList<SkillIntervalStatistics> LoadActualCallPerSkillInterval(IList<Guid> skillList, TimeZoneInfo timeZone, DateOnly today)
+		public IList<SkillIntervalStatistics> LoadActualCallPerSkillInterval(IList<ISkill> skillList, TimeZoneInfo timeZone, DateOnly today)
 		{
 			return _latestStatisticsTimeAndWorkload;
 		}
