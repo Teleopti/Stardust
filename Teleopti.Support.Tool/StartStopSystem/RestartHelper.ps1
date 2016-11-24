@@ -1,4 +1,64 @@
+function WaitForUrl
+{
+	param
+	(
+		$Url,
+		$cred
+ 	)
 
+	$isOk = Check-HttpStatus -url $Url -credentials $cred
+	$bailOut = 200
+
+	while ($isOk -eq $false)
+	{ 
+		sleep 3
+		$isOk = Check-HttpStatus -url $Url -credentials $cred
+		Write-Host '.'
+		$bailOut--
+		if ($bailOut -eq 0)	{ break }
+	}
+}
+
+function Check-HttpStatus {     
+	param(
+	[string] $url,
+    [System.Net.NetworkCredential]$credentials = $null
+	)
+
+	[net.httpWebRequest] $req = [net.webRequest]::create($url)
+    $req.Credentials = $credentials;
+	$req.Method = "GET"
+    Write-Host 'Check-HttpStatus: ' $url
+	[net.httpWebResponse] $res = $req.getResponse()
+	Write-Host 'Response Code:' $res.StatusCode
+    $ret = $res.StatusCode -eq "200"
+    $res.Close()
+    return $ret
+}
+
+function BaseUrl-get {
+    param([bool]$IsAzure)
+    if ($IsAzure) {
+        $DataSourceName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.DataSourceName")
+        $BaseUrl = "https://" + $DataSourceName +".teleopticloud.com/"
+    }
+    else
+    {
+         $BaseUrl = fnDnsAlias-Get
+         $BaseUrl = $BaseUrl + "TeleoptiWFM/"
+    }
+	return $BaseUrl
+}
+
+function fnDnsAlias-Get {
+     if ("${Env:ProgramFiles(x86)}") {
+         $DNS_ALIAS = (Get-Item HKLM:\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC\InstallationSettings).GetValue("DNS_ALIAS")
+         }
+     else {
+        $DNS_ALIAS = (Get-Item HKLM:\SOFTWARE\Teleopti\TeleoptiCCC\InstallationSettings).GetValue("DNS_ALIAS")
+        }
+    Return $DNS_ALIAS
+}
 
 function StopWindowsService
 {
@@ -117,6 +177,17 @@ function StopTeleoptiServer
 	StopWindowsService -ServiceName "W3SVC"
 }
 
+function GetCredentials
+{
+	$username = "tfsintegration"
+	$domain = "toptinet"
+	$password = "m8kemew0rk"
+	$secstr = New-Object -TypeName System.Security.SecureString
+	$password.ToCharArray() | ForEach-Object {$secstr.AppendChar($_)}
+	$AdminCredentials = new-object -typename System.Management.Automation.PSCredential -argumentlist $domain\$username, $secstr
+	return $AdminCredentials
+}
+
 function StartTeleoptiServer
 {
 	param
@@ -128,5 +199,11 @@ function StartTeleoptiServer
 	Invoke-Expression -Command:"iisreset /START"
 	AppPools-Start $isAzure
 	TeleoptiWindowsServices-Start
+
+	$BaseUrl = BaseUrl-get $isAzure
+	Write-Host "Waiting for web services to start..."
+	$Url = $BaseURL + "web/StardustDashboard/ping"
+	$cred = GetCredentials
+	WaitForUrl $Url $cred
 }
 

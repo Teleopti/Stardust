@@ -29,29 +29,6 @@ function Test-Administrator
 	return ($myWindowsPrincipal.IsInRole($adminRole))
 }
 
-function BaseUrl-get {
-    param([bool]$IsAzure)
-    if ($IsAzure) {
-        $DataSourceName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.DataSourceName")
-        $BaseUrl = "https://" + $DataSourceName +".teleopticloud.com/"
-    }
-    else
-    {
-         $BaseUrl = fnDnsAlias-Get
-         $BaseUrl = $BaseUrl + "TeleoptiWFM/"
-    }
-	return $BaseUrl
-}
-
-function fnDnsAlias-Get {
-     if ("${Env:ProgramFiles(x86)}") {
-         $DNS_ALIAS = (Get-Item HKLM:\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC\InstallationSettings).GetValue("DNS_ALIAS")
-         }
-     else {
-        $DNS_ALIAS = (Get-Item HKLM:\SOFTWARE\Teleopti\TeleoptiCCC\InstallationSettings).GetValue("DNS_ALIAS")
-        }
-    Return $DNS_ALIAS
-}
 function fnIsAzure {
     try
     {
@@ -67,30 +44,7 @@ function fnIsAzure {
 
 
   
-function IIS-Restart {
-	Invoke-Expression -Command:"iisreset /STOP"
-	StopWindowsService -ServiceName "W3SVC"
-	StartWindowsService -ServiceName "W3SVC"
-	Invoke-Expression -Command:"iisreset /START"
-}
-
-function AppPools-Start {
-    param([bool]$IsAzure)
-    if (!$IsAzure) {
-		$appcmd="$env:windir\system32\inetsrv\AppCmd.exe"
-        
-		try
-		{
-			&$appcmd list apppool /state:Stopped /name:"$=*Teleopti*" /xml | &$appcmd Set apppool /autoStart:true /in
-			&$appcmd list apppool /state:Stopped /name:"$=*Teleopti*" /xml | &$appcmd start apppool /in
-		}
-		Catch {
-			$err=$Error[0]
-			Write-host "$err"
-		}
-	}
-}
-
+# Not used ? /Henry
 function TeleoptiWebSites-HttpGet([string]$BaseUrl)
 {
     $AuthenticationBridge = "AuthenticationBridge"
@@ -223,13 +177,10 @@ Try
 
     $isAzure = fnIsAzure
     RemoveAppOfflinePage $isAzure
-	$BaseUrl = BaseUrl-get $isAzure
-	TeleoptiWindowsServices-Stop
-	IIS-Restart
-	write-host "sleep 5 seconds for IIS to restart ..."
-	Start-Sleep -Seconds 5    
-	AppPools-Start $isAzure
-	TeleoptiWindowsServices-Start
+	
+	StopTeleoptiServer
+	StartTeleoptiServer $isAzure
+
 }
 
 Catch [Exception]
