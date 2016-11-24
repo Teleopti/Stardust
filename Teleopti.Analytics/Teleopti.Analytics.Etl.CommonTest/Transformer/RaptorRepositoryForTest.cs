@@ -796,6 +796,11 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			throw new NotImplementedException();
 		}
 
+		public void FillJobIntradaySettingsMart()
+		{
+			throw new NotImplementedException();
+		}
+
 		public DateTime GetMaxDateInDimDate(bool isInitial = false)
 		{
 			return new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Unspecified);
