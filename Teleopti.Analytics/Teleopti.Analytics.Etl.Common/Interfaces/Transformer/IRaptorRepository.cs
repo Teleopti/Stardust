@@ -236,5 +236,6 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		int GetValidToDateIdLocalForEternity();
 		int GetValidToDateIdMaxDateForEternity();
 		IEnumerable<WindowsLogonInfo> GetWindowsLogonInfos();
+		void FillJobIntradaySettingsMart();
 	}
 }

@@ -7,7 +7,6 @@ GO
 -- Description:	Inserts none existing BU into [mart].[etl_job_intraday_settings]
 -- =============================================
 CREATE PROCEDURE [mart].[etl_job_intraday_settings_load_deviation]
-@business_unit_code uniqueidentifier
 AS
 
 --deviation
