@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -104,6 +106,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public TreeFamily TreeFamily()
 		{
 			return new TreeFamily(Resources.SystemSettings);
+		}
+
+		public bool CheckPermission()
+		{
+			return PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequests);
 		}
 
 		public string TreeNode()

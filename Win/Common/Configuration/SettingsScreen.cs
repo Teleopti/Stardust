@@ -265,6 +265,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 				//Check for application permission
 				if (!treeFamily.CheckPermission()) continue;
+				var shiftTradeSetting = item as ShiftTradeSystemSettings;
+				if (shiftTradeSetting != null && !shiftTradeSetting.CheckPermission()) continue;
 
 				var parent = getTreeNode(treeFamily.UserText);
 				if (parent == null)
