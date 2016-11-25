@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			if (_toggleManager.IsEnabled (Toggles.Wfm_Requests_Check_Max_Seats_39937))
 			{
-				allSupportedPages.Add (new ShiftTradeSystemSettings());
+				allSupportedPages.Add (new ShiftTradeSystemSettings(_toggleManager));
 			}
 
 			return allSupportedPages;

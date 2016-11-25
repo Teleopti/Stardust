@@ -35,6 +35,6 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 			set { _maxSeatsValidationSegmentLength = value; }
 		}
 
-		public ShiftTradeBusinessRuleConfig[] BusinessRuleConfigs { get; set; }
+		public IShiftTradeBusinessRuleConfig[] BusinessRuleConfigs { get; set; }
 	}
 }

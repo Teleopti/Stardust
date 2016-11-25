@@ -24216,6 +24216,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset Rules.
+        /// </summary>
+        public static string ResetRules {
+            get {
+                return ResourceManager.GetString("ResetRules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset selection.
         /// </summary>
         public static string ResetSelection {
@@ -27059,6 +27068,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send to Administrator.
+        /// </summary>
+        public static string SendToAdministrator {
+            get {
+                return ResourceManager.GetString("SendToAdministrator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Send to Back.
         /// </summary>
         public static string SendToBack {
@@ -28003,6 +28021,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShiftTradeRequestSettings {
             get {
                 return ResourceManager.GetString("ShiftTradeRequestSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validating Rules.
+        /// </summary>
+        public static string ShiftTradeRequestValidatingRules {
+            get {
+                return ResourceManager.GetString("ShiftTradeRequestValidatingRules", resourceCulture);
             }
         }
         
@@ -33621,6 +33648,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WFMReleaseNotificationWithoutOldModuleLink {
             get {
                 return ResourceManager.GetString("WFMReleaseNotificationWithoutOldModuleLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When Validation Fails.
+        /// </summary>
+        public static string WhenValidationFails {
+            get {
+                return ResourceManager.GetString("WhenValidationFails", resourceCulture);
             }
         }
         

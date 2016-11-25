@@ -15231,4 +15231,20 @@ These options are activated:
     <value>Primary</value>
     <comment>Primary</comment>
   </data>
+  <data name="SendToAdministrator" xml:space="preserve">
+    <value>Send to Administrator</value>
+    <comment>one handling option for failed business rules when validating shift trade request</comment>
+  </data>
+  <data name="WhenValidationFails" xml:space="preserve">
+    <value>When Validation Fails</value>
+    <comment>column header for handling option in shift trade rule setting grid</comment>
+  </data>
+  <data name="ResetRules" xml:space="preserve">
+    <value>Reset Rules</value>
+    <comment>button text of reset button for resetting rules</comment>
+  </data>
+  <data name="ShiftTradeRequestValidatingRules" xml:space="preserve">
+    <value>Validating Rules</value>
+    <comment>header text of shift trade rule setting grid</comment>
+  </data>
 </root>

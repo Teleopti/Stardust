@@ -1,14 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Win.Common.Configuration.Columns;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.WinCode.Settings;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -17,9 +25,22 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 	public partial class ShiftTradeSystemSettings : BaseUserControl, ISettingPage
 	{
 		private ShiftTradeSettings _shiftTradeSettings;
+		private SFGridColumnGridHelper<ShiftTradeBusinessRuleConfigView> _gridColumnHelper;
+		private BusinessRuleConfigProvider _businessRuleConfigProvider;
+		private readonly IToggleManager _toggleManager;
+		private static readonly Dictionary<RequestHandleOption, ShiftTradeRequestHandleOptionView> _shiftTradeRequestHandleOptionViews
+			= new Dictionary<RequestHandleOption, ShiftTradeRequestHandleOptionView>()
+			{
+				{RequestHandleOption.AutoDeny, new ShiftTradeRequestHandleOptionView(RequestHandleOption.AutoDeny, Resources.Deny)},
+				{
+					RequestHandleOption.Pending,
+					new ShiftTradeRequestHandleOptionView(RequestHandleOption.Pending, Resources.SendToAdministrator)
+				}
+			};
 
-		public ShiftTradeSystemSettings()
+		public ShiftTradeSystemSettings(IToggleManager toggleManager)
 		{
+			_toggleManager = toggleManager;
 			InitializeComponent();
 		}
 
@@ -48,6 +69,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			lblShiftTradeMaxSeatsSettings.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+
+			shifTradeBusinessRuleSubHeader.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			lblShiftTradeBusinessRuleSettingHeader.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 		}
 
 		private void initIntervalLengthComboBox(int defaultLength)
@@ -77,6 +101,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			initIntervalLengthComboBox(_shiftTradeSettings.MaxSeatsValidationSegmentLength);
 
 			checkIntervalCheckBoxEnabled();
+
+			configBusinessRuleSettingGrid();
 		}
 
 		private void checkIntervalCheckBoxEnabled()
@@ -127,6 +153,59 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			get { return ViewType.SystemSetting; }
 		}
 
+		private void configBusinessRuleSettingGrid()
+		{
+			if (!_toggleManager.IsEnabled(Toggles.Wfm_Requests_Configurable_BusinessRules_For_ShiftTrade_40770))
+			{
+				shiftTradeBusinessRuleSettingPanel.Visible = false;
+				return;
+			}
+
+			var handleOptionColumn =
+				new SFGridDropDownColumn<ShiftTradeBusinessRuleConfigView, ShiftTradeRequestHandleOptionView>("HandleOptionOnFailed",
+					Resources.WhenValidationFails, _shiftTradeRequestHandleOptionViews.Values.ToList(), "Description", typeof(ShiftTradeRequestHandleOptionView));
+			var gridColumns = new List<SFGridColumnBase<ShiftTradeBusinessRuleConfigView>>
+			{
+				new SFGridRowHeaderColumn<ShiftTradeBusinessRuleConfigView>(string.Empty),
+				new SFGridReadOnlyTextColumn<ShiftTradeBusinessRuleConfigView>("Name", 300, Resources.Name),
+				new SFGridCheckBoxColumn<ShiftTradeBusinessRuleConfigView>("Enabled", Resources.Enabled),
+				handleOptionColumn
+			};
+
+			var businessRuleConfigViews = getShiftTradeBusinessRuleConfigViews().ToList();
+			businessRuleSettingGrid.RowCount = businessRuleConfigViews.Count;
+			businessRuleSettingGrid.Height = businessRuleSettingGrid.RowCount * 20;
+
+			_gridColumnHelper = new SFGridColumnGridHelper<ShiftTradeBusinessRuleConfigView>(businessRuleSettingGrid,
+							   new ReadOnlyCollection<SFGridColumnBase<ShiftTradeBusinessRuleConfigView>>(gridColumns),
+							   businessRuleConfigViews, false)
+			{ AllowExtendedCopyPaste = true };
+		}
+
+		private IEnumerable<ShiftTradeBusinessRuleConfigView> getShiftTradeBusinessRuleConfigViews()
+		{
+			if (_shiftTradeSettings.BusinessRuleConfigs == null)
+			{
+				initializeBusinessRuleConfigProvider();
+				_shiftTradeSettings.BusinessRuleConfigs =
+					_businessRuleConfigProvider.GetDefaultConfigForShiftTradeRequest().ToArray();
+			}
+
+			var businessRuleConfigViews = _shiftTradeSettings.BusinessRuleConfigs.Select
+				(b =>
+					new ShiftTradeBusinessRuleConfigView(b)
+					{
+						HandleOptionOnFailed = _shiftTradeRequestHandleOptionViews[b.HandleOptionOnFailed]
+					});
+			return businessRuleConfigViews;
+		}
+
+		private void initializeBusinessRuleConfigProvider()
+		{
+			_businessRuleConfigProvider = new BusinessRuleConfigProvider(new BusinessRuleProvider(),
+				new IShiftTradeSpecification[] { }, new SchedulingResultStateHolder());
+		}
+
 		private void chkEnableMaxSeats_CheckedChanged(object sender, EventArgs e)
 		{
 			_shiftTradeSettings.MaxSeatsValidationEnabled = chkEnableMaxSeats.Checked;
@@ -139,6 +218,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			var selectedIntervalLengthItem = (IntervalLengthItem)cmbSegmentSizeMaxSeatValidation.SelectedItem;
 			_shiftTradeSettings.MaxSeatsValidationSegmentLength = selectedIntervalLengthItem.Minutes;
+		}
+
+		private void buttonResetRule_Click(object sender, EventArgs e)
+		{
+			_shiftTradeSettings.BusinessRuleConfigs = null;
+			var shiftTradeBusinessRuleConfigViews = getShiftTradeBusinessRuleConfigViews();
+			_gridColumnHelper.SetSourceList(shiftTradeBusinessRuleConfigViews.ToList());
 		}
 	}
 }
