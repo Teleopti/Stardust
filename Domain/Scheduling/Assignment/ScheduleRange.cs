@@ -60,8 +60,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public void ExtractAllScheduleData(IScheduleExtractor extractor, DateTimePeriod period)
 		{
 			var zone = Person.PermissionInformation.DefaultTimeZone();
-			var days = period.ToDateOnlyPeriod(zone).DayCollection();
-			days.Add(days.First().AddDays(-1));
+			var days = period.ToDateOnlyPeriod(zone).Inflate(1).DayCollection();
 			foreach (var day in days)
 			{
 				var dayAndPeriod = new DateOnlyAsDateTimePeriod(day, zone);
