@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			//Claes & Roger: we don't know if intrainterval calc needs to be done. We keep this as before
 			if(!_schedulerStateHolder.SchedulingResultState.Skills.Any()) return;
 
-			var period = new DateOnlyPeriod(_schedulerStateHolder.DaysToRecalculate.Min().AddDays(-1), _schedulerStateHolder.DaysToRecalculate.Max());
+			var period = new DateOnlyPeriod(_schedulerStateHolder.DaysToRecalculate.Min(), _schedulerStateHolder.DaysToRecalculate.Max());
 			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder.Schedules, _schedulerStateHolder.SchedulingResultState.Skills, false, period))
 			{
 				_resourceOptimizationHelperExtended.ResourceCalculateMarkedDays(new BackgroundWorkerWrapper(_backgroundWorkerResources), true, true);
