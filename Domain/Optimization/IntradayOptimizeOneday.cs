@@ -149,12 +149,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 					return false;
 				}
 				resourceCalculateDelayer.CalculateIfNeeded(day, schedDay.PersonAssignment().Period, false);
+
+				if (!_workShiftOriginalStateContainer.WorkShiftChanged(day))
+				{
+					_rollbackService.Modify(_workShiftOriginalStateContainer.OldPeriodDaysState[day], new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+				}
 			}
 
-			if (!_workShiftOriginalStateContainer.WorkShiftChanged(day))
-			{
-				_rollbackService.Modify(_workShiftOriginalStateContainer.OldPeriodDaysState[day], new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
-			}
 
 			return true;
 		}
