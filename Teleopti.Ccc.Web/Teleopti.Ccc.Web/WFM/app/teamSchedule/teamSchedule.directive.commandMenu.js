@@ -144,7 +144,7 @@
 		};
 
 		vm.canActiveAddOvertime = function() {
-			return vm.toggles.AddOvertimeEnabled || vm.permissions.HasAddingOvertimeActivityPermission;
+			return vm.toggles.AddOvertimeEnabled && vm.permissions.HasAddingOvertimeActivityPermission;
 		};
 
 		vm.canActiveMoveActivity = function () {
