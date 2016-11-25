@@ -139,18 +139,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 			schedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;
 
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder);
-
-			if (!_scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, effectiveRestriction, resourceCalculateDelayer, _rollbackService))
+			var schedDay = scheduleDay.DaySchedulePart();
+			if (!schedDay.IsScheduled())
 			{
-				var days = _rollbackService.ModificationCollection.ToList();
-				_rollbackService.Rollback();
-				foreach (var schedDay in days)
+				if (!_scheduleService.SchedulePersonOnDay(schedDay, schedulingOptions, effectiveRestriction, new DoNothingResourceCalculateDelayer(), _rollbackService))
 				{
-					var dateOnly = schedDay.DateOnlyAsPeriod.DateOnly;
-					resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
+					_rollbackService.Rollback();
+					lockDay(day);
+					return false;
 				}
-				lockDay(day);
-				return false;
+				resourceCalculateDelayer.CalculateIfNeeded(day, schedDay.PersonAssignment().Period, false);
 			}
 
 			if (!_workShiftOriginalStateContainer.WorkShiftChanged(day))
