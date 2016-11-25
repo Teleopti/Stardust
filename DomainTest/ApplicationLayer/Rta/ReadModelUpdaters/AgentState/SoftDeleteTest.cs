@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using ExternalLogon = Teleopti.Ccc.Domain.ApplicationLayer.Events.ExternalLogon;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentState
 {
@@ -45,6 +46,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 		}
 
 		[Test]
+		public void ShouldSetDeletedIfPersonIsNotConnectedToExternalLogon()
+		{
+			var personId = Guid.NewGuid();
+			Persister.Has(new AgentStateReadModel { PersonId = personId });
+
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				PersonId = personId,
+				TeamId = Guid.NewGuid(),
+				ExternalLogons = null
+			});
+
+			Persister.Models.Single().IsDeleted.Should().Be(true);
+		}
+
+		[Test]
 		public void ShouldKeepReadModelIfPersonIsInATeam()
 		{
 			var personId = Guid.NewGuid();
@@ -53,10 +70,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 			Target.Handle(new PersonAssociationChangedEvent
 			{
 				PersonId = personId,
-				TeamId = Guid.Empty
+				TeamId = Guid.NewGuid(),
+				ExternalLogons = new[] { new ExternalLogon() }
 			});
 
 			Persister.Models.Single().PersonId.Should().Be(personId);
+			Persister.Models.Single().IsDeleted.Should().Be(false);
 		}
 
 		[Test]
@@ -98,7 +117,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 			{
 				PersonId = personId,
 				TeamId = Guid.NewGuid(),
-				Timestamp = "2016-10-04 08:10".Utc()
+				Timestamp = "2016-10-04 08:10".Utc(),
+				ExternalLogons = new[] { new ExternalLogon() }
 			});
 
 			Persister.Load(personId).IsDeleted.Should().Be.False();
@@ -113,7 +133,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 			{
 				PersonId = personId,
 				TeamId = Guid.NewGuid(),
-				Timestamp = "2016-10-04 08:10".Utc()
+				Timestamp = "2016-10-04 08:10".Utc(),
+				ExternalLogons = new[] { new ExternalLogon() }
 			});
 
 			Persister.Load(personId).Should().Not.Be.Null();

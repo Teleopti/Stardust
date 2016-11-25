@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using ExternalLogon = Teleopti.Ccc.Domain.ApplicationLayer.Events.ExternalLogon;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentState
 {
@@ -25,7 +26,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 			Target.Handle(new PersonAssociationChangedEvent
 			{
 				PersonId = personId,
-				TeamId = teamId
+				TeamId = teamId,
+				ExternalLogons = new[] { new ExternalLogon() }
 			});
 
 			Persister.Models.Single().TeamId.Should().Be(teamId);
@@ -42,7 +44,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 			{
 				PersonId = personId,
 				TeamId = Guid.NewGuid(),
-				SiteId = siteId
+				SiteId = siteId,
+				ExternalLogons = new[] { new ExternalLogon() }
 			});
 
 			Persister.Models.Single().SiteId.Should().Be(siteId);
@@ -60,7 +63,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 				PersonId = personId,
 				TeamId = Guid.NewGuid(),
 				SiteId = Guid.NewGuid(),
-				BusinessUnitId = businessUnit
+				BusinessUnitId = businessUnit,
+				ExternalLogons = new[] { new ExternalLogon() }
 			});
 
 			Persister.Models.Single().BusinessUnitId.Should().Be(businessUnit);

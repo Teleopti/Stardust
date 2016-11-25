@@ -1,6 +1,7 @@
 using System;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -30,15 +31,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_persister.DeleteOldRows(_now.UtcDateTime());
 
-			if (@event.TeamId.HasValue)
+			if (!@event.TeamId.HasValue)
 			{
-				var model = _persister.Load(@event.PersonId);
-				if (model == null || expirationFor(@event) >= model.ExpiresAt.GetValueOrDefault())
-					_persister.UpsertAssociation(@event.PersonId, @event.TeamId.Value, @event.SiteId, @event.BusinessUnitId);
-			}
-			
-			else
 				_persister.SetDeleted(@event.PersonId, expirationFor(@event));
+				return;
+			}
+			if (@event.ExternalLogons.IsNullOrEmpty())
+			{
+				_persister.SetDeleted(@event.PersonId, expirationFor(@event));
+				return;
+			}
+			var model = _persister.Load(@event.PersonId);
+			if (model == null || expirationFor(@event) >= model.ExpiresAt.GetValueOrDefault())
+				_persister.UpsertAssociation(@event.PersonId, @event.TeamId.Value, @event.SiteId, @event.BusinessUnitId);
 		}
 
 		private static DateTime expirationFor(IEvent @event)
