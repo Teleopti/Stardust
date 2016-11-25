@@ -14,23 +14,14 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
-	[TestFixture]
+	[RequestPerformanceTest]
 	public class PerformanceTuningTest
     {
-        public IAbsenceRepository AbsenceRepository;
         public AsSystem AsSystem;
         public IDataSourceScope DataSource;
-        public IPersonRepository PersonRepository;
         public IPersonRequestRepository PersonRequestRepository;
         public MultiAbsenceRequestsHandler Target;
         public WithUnitOfWork WithUnitOfWork;
-        public IWorkflowControlSetRepository WorkflowControlSetRepository;
-        public IBudgetGroupRepository BudgetGroupRepository;
-        public IBudgetDayRepository BudgetDayRepository;
-        public IScenarioRepository ScenarioRepository;
-        public IBusinessUnitRepository BusinessUnitRepository;
-        public IQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
-        public ICurrentUnitOfWork CurrentUnitOfWork;
 
         [Test]
 	    public void ThisIsADummyTest()
@@ -66,8 +57,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
                 Target.Handle(newMultiAbsenceRequestsCreatedEvent);
 
             });
-
         }
-
     }
 }
