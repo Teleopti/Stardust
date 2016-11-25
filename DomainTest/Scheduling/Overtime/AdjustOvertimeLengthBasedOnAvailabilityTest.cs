@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			_shiftEndingTime = new DateTime(2014, 03, 06, 0, 30, 0, DateTimeKind.Utc);
 			_dateTimePeriod = new DateTimePeriod(_shiftStartTime, _shiftEndingTime);
 
-			var overtimeLayerLength = TimeSpan.FromHours(2);
+			var overtimeLayerLength = TimeSpan.FromHours(1);
 			var overtimePeriod = new DateTimePeriod(_shiftEndingTime, _shiftEndingTime.Add(overtimeLayerLength));
 			var overtimeAvailabilityPeriod = new DateTimePeriod(new DateTime(2014, 03, 06, 0, 0, 0, DateTimeKind.Utc), new DateTime(2014, 03, 06, 1, 0, 0, DateTimeKind.Utc));
 			var expected = new DateTimePeriod(new DateTime(2014, 03, 06, 0, 30, 0, DateTimeKind.Utc), new DateTime(2014, 03, 06, 1, 0, 0, DateTimeKind.Utc));
