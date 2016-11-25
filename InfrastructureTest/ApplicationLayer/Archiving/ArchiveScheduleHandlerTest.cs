@@ -64,24 +64,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			_person = PersonFactory.CreatePerson("Tester Testersson");
 		}
 
-		private void addDefaultTypesToRepositories()
-		{
-			WithUnitOfWork.Do(() =>
-			{
-				ScenarioRepository.Add(_defaultScenario);
-				ScenarioRepository.Add(_targetScenario);
-				PersonRepository.Add(_person);
-
-			});
-
-			var jobResult = new JobResult(JobCategory.ArchiveSchedule, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), _person, DateTime.UtcNow);
-			WithUnitOfWork.Do(() =>
-			{
-				JobResultRepository.Add(jobResult);
-			});
-			_jobResultId = jobResult.Id.GetValueOrDefault();
-		}
-
 		[Test]
 		public void ShouldNotArchiveForOtherPerson()
 		{
@@ -106,23 +88,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 
 			var archivedAssignment = WithUnitOfWork.Get(() => PersonAssignmentRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(_targetScenario)));
 			archivedAssignment.Should().Be.Null();
-
-			verifyJobResultIsUpdated();
-		}
-
-		[Test]
-		public void ShouldMoveOneAssignment()
-		{
-			addDefaultTypesToRepositories();
-
-			var assignment = new PersonAssignment(_person, _defaultScenario, _archivePeriod.StartDate);
-			WithUnitOfWork.Do(() => ScheduleStorage.Add(assignment));
-
-			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
-
-			verifyCanBeFoundInScheduleStorageForTargetScenario(_person);
-			var archivedAssignment = WithUnitOfWork.Get(() => PersonAssignmentRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(_targetScenario)));
-			archivedAssignment.Should().Not.Be.Null();
 
 			verifyJobResultIsUpdated();
 		}
@@ -216,20 +181,16 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 		}
 
 		[Test]
-		public void ShouldMoveOneAgentDayScheduleTag()
+		public void ShouldMoveOneOfType([ValueSource(nameof(moveTypeTestCases))] MoveTestCase testCase)
 		{
 			addDefaultTypesToRepositories();
-
-			var scheduleTag = new ScheduleTag { Description = "Something" };
-			WithUnitOfWork.Do(() => ScheduleTagRepository.Add(scheduleTag));
-			var agentDayScheduleTag = new AgentDayScheduleTag(_person, new DateOnly(_archivePeriod.StartDate.Date + TimeSpan.FromDays(1)), _defaultScenario, scheduleTag);
-			WithUnitOfWork.Do(() => ScheduleStorage.Add(agentDayScheduleTag));
+			testCase.CreateTypeInDefaultScenario(this, _person, _archivePeriod, _defaultScenario);
 
 			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
 
 			verifyCanBeFoundInScheduleStorageForTargetScenario(_person);
-			var archivedAgentDayScheduleTag = WithUnitOfWork.Get(() => AgentDayScheduleTagRepository.LoadAll().FirstOrDefault(x => x.Scenario.Id == _targetScenario.Id));
-			archivedAgentDayScheduleTag.Should().Not.Be.Null();
+
+			testCase.VerifyExistsInTargetScenario(this, _targetScenario);
 
 			verifyJobResultIsUpdated();
 		}
@@ -257,90 +218,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			archivedNotes.First().GetScheduleNote(new NoFormatting()).Should().Be.EqualTo(noteOnTheDay.GetScheduleNote(new NoFormatting()));
 		}
 
-		private static readonly TargetAbsenceSplitTestCase[] targetAbsenceSplitTestCases =
-		{
-			new TargetAbsenceSplitTestCase
-			{
-				AbsenceStartLocal = new DateTime(2016, 1, 3),
-				AbsenceEndLocal = new DateTime(2016, 1, 6, 23, 59, 0),
-				ArchiveStart = new DateOnly(2016, 1, 4),
-				ArchiveEnd = new DateOnly(2016, 1, 6),
-				Asserts = (testCase, defaultAbsences, targetAbsences) =>
-				{
-					targetAbsences.Count.Should().Be.EqualTo(1);
-					targetAbsences.First().Layer.Period.StartDateTime.Should().Be.EqualTo(testCase.AbsenceStartLocal);
-					targetAbsences.First().Layer.Period.EndDateTime.Should().Be.EqualTo(testCase.ArchiveStart.Date.AddMinutes(-1));
-				}
-			},
-			new TargetAbsenceSplitTestCase
-			{
-				AbsenceStartLocal = new DateTime(2016, 1, 4),
-				AbsenceEndLocal = new DateTime(2016, 1, 7, 23, 59, 0),
-				ArchiveStart = new DateOnly(2016, 1, 4),
-				ArchiveEnd = new DateOnly(2016, 1, 6),
-				Asserts = (testCase, defaultAbsences, targetAbsences) =>
-				{
-					targetAbsences.Count.Should().Be.EqualTo(1);
-					targetAbsences.First().Layer.Period.StartDateTime.Should().Be.EqualTo(testCase.ArchiveEnd.Date.AddDays(1));
-					targetAbsences.First().Layer.Period.EndDateTime.Should().Be.EqualTo(testCase.AbsenceEndLocal);
-				}
-			},
-			new TargetAbsenceSplitTestCase
-			{
-				AbsenceStartLocal = new DateTime(2016, 1, 3),
-				AbsenceEndLocal = new DateTime(2016, 1, 7, 23, 59, 0),
-				ArchiveStart = new DateOnly(2016, 1, 4),
-				ArchiveEnd = new DateOnly(2016, 1, 6),
-				Asserts = (testCase, defaultAbsences, targetAbsences) =>
-				{
-					targetAbsences.Count.Should().Be.EqualTo(2);
-					targetAbsences.First().Layer.Period.StartDateTime.Should().Be.EqualTo(testCase.AbsenceStartLocal);
-					targetAbsences.First().Layer.Period.EndDateTime.Should().Be.EqualTo(testCase.ArchiveStart.Date.AddMinutes(-1));
-
-					targetAbsences.Second().Layer.Period.StartDateTime.Should().Be.EqualTo(testCase.ArchiveEnd.Date.AddDays(1));
-					targetAbsences.Second().Layer.Period.EndDateTime.Should().Be.EqualTo(testCase.AbsenceEndLocal);
-				}
-			},
-			new TargetAbsenceSplitTestCase
-			{
-				AbsenceStartLocal = new DateTime(2016, 1, 4),
-				AbsenceEndLocal = new DateTime(2016, 1, 6, 23, 59, 0),
-				ArchiveStart = new DateOnly(2016, 1, 4),
-				ArchiveEnd = new DateOnly(2016, 1, 6),
-				Asserts = (testCase, defaultAbsences, targetAbsences) =>
-				{
-					targetAbsences.Count.Should().Be.EqualTo(0);
-				}
-			},
-			new TargetAbsenceSplitTestCase
-			{
-				AbsenceStartLocal = new DateTime(2016, 1, 3),
-				AbsenceEndLocal = new DateTime(2016, 1, 3, 23, 59, 0),
-				ArchiveStart = new DateOnly(2016, 1, 4),
-				ArchiveEnd = new DateOnly(2016, 1, 6),
-				Asserts = (testCase, defaultAbsences, targetAbsences) =>
-				{
-					targetAbsences.Count.Should().Be.EqualTo(1);
-					targetAbsences.First().Layer.Period.StartDateTime.Should().Be.EqualTo(testCase.AbsenceStartLocal);
-					targetAbsences.First().Layer.Period.EndDateTime.Should().Be.EqualTo(testCase.AbsenceEndLocal);
-				}
-			},
-			new TargetAbsenceSplitTestCase
-			{
-				AbsenceStartLocal = new DateTime(2016, 1, 7),
-				AbsenceEndLocal = new DateTime(2016, 1, 7, 23, 59, 0),
-				ArchiveStart = new DateOnly(2016, 1, 4),
-				ArchiveEnd = new DateOnly(2016, 1, 6),
-				Asserts = (testCase, defaultAbsences, targetAbsences) =>
-				{
-					targetAbsences.Count.Should().Be.EqualTo(1);
-					targetAbsences.First().Layer.Period.StartDateTime.Should().Be.EqualTo(testCase.AbsenceStartLocal);
-					targetAbsences.First().Layer.Period.EndDateTime.Should().Be.EqualTo(testCase.AbsenceEndLocal);
-				}
-			}
-		};
-
-		//[Ignore("Until Erik fixed them in handler")]
 		[Test]
 		public void ShouldSplitTargetAbsenceCorrectly([ValueSource(nameof(targetAbsenceSplitTestCases))] TargetAbsenceSplitTestCase testCase)
 		{
@@ -427,6 +304,246 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			}
 		}
 
+		[Test]
+		public void ShouldOverwriteToEmpty()
+		{
+			addDefaultTypesToRepositories();
+
+			var note = new Note(_person, _archivePeriod.StartDate, _targetScenario, "Test");
+			WithUnitOfWork.Do(() => ScheduleStorage.Add(note));
+
+			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
+
+			verifyCanBeFoundInScheduleStorageForTargetScenario(_person);
+			var archivedNote = WithUnitOfWork.Get(() => NoteRepository.LoadAll().FirstOrDefault(x => x.Scenario.Id == _targetScenario.Id));
+			archivedNote.Should().Be.Null();
+
+			verifyJobResultIsUpdated();
+		}
+
+		[Test]
+		public void ShouldNotOverwriteNeighbouringDates()
+		{
+			addDefaultTypesToRepositories();
+			var theDateBeforePeriod = _archivePeriod.StartDate.AddDays(-1);
+			var theDateAfterPeriod = _archivePeriod.EndDate.AddDays(1);
+			var noteBefore = new Note(_person, theDateBeforePeriod, _targetScenario, "Test Before");
+			var noteAfter = new Note(_person, theDateAfterPeriod, _targetScenario, "Test After");
+			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteBefore));
+			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteAfter));
+
+			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
+			var archivedNotes = WithUnitOfWork.Get(() => NoteRepository.LoadAll().Where(x => x.Scenario.Id == _targetScenario.Id));
+			archivedNotes.Count().Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldNotArchiveScheduleOutsideThePeriod()
+		{
+			addDefaultTypesToRepositories();
+			var theDateBeforePeriod = _archivePeriod.StartDate.AddDays(-1);
+			var theDateAfterPeriod = _archivePeriod.EndDate.AddDays(1);
+			var noteBefore = new Note(_person, theDateBeforePeriod, _defaultScenario, "Test Note Before");
+			var noteAfter = new Note(_person, theDateAfterPeriod, _defaultScenario, "Test Note After");
+			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteBefore));
+			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteAfter));
+
+			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
+
+			var archivedNotes = WithUnitOfWork.Get(() => NoteRepository.LoadAll().Where(x => x.Scenario.Id == _targetScenario.Id));
+			archivedNotes.Should().Be.Empty();
+		}
+
+		private void verifyCanBeFoundInScheduleStorageForTargetScenario(IPerson person)
+		{
+			var result = WithUnitOfWork.Get(() => ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(true, true),
+							_archivePeriod, _targetScenario));
+			result[person].ScheduledDayCollection(_archivePeriod).Should().Not.Be.Empty();
+		}
+
+		private void verifyJobResultIsUpdated(int numberOfDetails = 1)
+		{
+			WithUnitOfWork.Do(() =>
+			{
+				var jobResult = JobResultRepository.Get(_jobResultId);
+				jobResult.FinishedOk.Should().Be.True();
+				jobResult.Details.Count(x => x.DetailLevel == DetailLevel.Info && x.ExceptionMessage == null).Should().Be(numberOfDetails);
+			});
+		}
+
+		private ArchiveScheduleEvent createArchiveEvent()
+		{
+			return new ArchiveScheduleEvent(_person.Id.GetValueOrDefault())
+			{
+				EndDate = _archivePeriod.EndDate,
+				FromScenario = _defaultScenario.Id.GetValueOrDefault(),
+				StartDate = _archivePeriod.StartDate,
+				ToScenario = _targetScenario.Id.GetValueOrDefault(),
+				JobResultId = _jobResultId,
+				LogOnBusinessUnitId = _businessUnit.Id.GetValueOrDefault(),
+				TotalMessages = 1
+			};
+		}
+
+		private void addDefaultTypesToRepositories()
+		{
+			WithUnitOfWork.Do(() =>
+			{
+				ScenarioRepository.Add(_defaultScenario);
+				ScenarioRepository.Add(_targetScenario);
+				PersonRepository.Add(_person);
+			});
+
+			var jobResult = new JobResult(JobCategory.ArchiveSchedule, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), _person, DateTime.UtcNow);
+			WithUnitOfWork.Do(() =>
+			{
+				JobResultRepository.Add(jobResult);
+			});
+			_jobResultId = jobResult.Id.GetValueOrDefault();
+		}
+
+		private static readonly MoveTestCase[] moveTypeTestCases =
+		{
+			new MoveTestCase
+			{
+				Type = nameof(AgentDayScheduleTag),
+				CreateTypeInDefaultScenario = (testClass, person, archivePeriod, defaultScenario) =>
+				{
+					var scheduleTag = new ScheduleTag { Description = "Something" };
+					testClass.WithUnitOfWork.Do(() => testClass.ScheduleTagRepository.Add(scheduleTag));
+					var agentDayScheduleTag = new AgentDayScheduleTag(person, new DateOnly(archivePeriod.StartDate.Date + TimeSpan.FromDays(1)), defaultScenario, scheduleTag);
+					testClass.WithUnitOfWork.Do(() => testClass.ScheduleStorage.Add(agentDayScheduleTag));
+				},
+				LoadMethod = (testClass, targetScenario) => testClass.AgentDayScheduleTagRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(targetScenario))
+			},
+			new MoveTestCase
+			{
+				Type = nameof(PersonAssignment),
+				CreateTypeInDefaultScenario = (testClass, person, archivePeriod, defaultScenario) =>
+				{
+					var assignment = new PersonAssignment(person, defaultScenario, archivePeriod.StartDate);
+					testClass.WithUnitOfWork.Do(() => testClass.ScheduleStorage.Add(assignment));
+				},
+				LoadMethod = (testClass, targetScenario) => testClass.PersonAssignmentRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(targetScenario))
+			},
+			new MoveTestCase
+			{
+				Type = nameof(PublicNote),
+				CreateTypeInDefaultScenario = (testClass, person, archivePeriod, defaultScenario) =>
+				{
+					var note = new PublicNote(person, archivePeriod.StartDate, defaultScenario, "Test");
+					testClass.WithUnitOfWork.Do(() => testClass.ScheduleStorage.Add(note));
+				},
+				LoadMethod = (testClass, targetScenario) => testClass.PublicNoteRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(targetScenario))
+			},
+			new MoveTestCase
+			{
+				Type = nameof(PersonAbsence),
+				CreateTypeInDefaultScenario = (testClass, person, archivePeriod, defaultScenario) =>
+				{
+					var absence = AbsenceFactory.CreateAbsence("gone");
+					testClass.WithUnitOfWork.Do(() => testClass.AbsenceRepository.Add(absence));
+					var personAbsence = new PersonAbsence(person, defaultScenario, new AbsenceLayer(absence,
+							new DateTimePeriod(archivePeriod.StartDate.Date.ToUniversalTime(), (archivePeriod.StartDate.Date + TimeSpan.FromDays(1)).ToUniversalTime())));
+					testClass.WithUnitOfWork.Do(() => testClass.ScheduleStorage.Add(personAbsence));
+				},
+				LoadMethod = (testClass, targetScenario) => testClass.PersonAbsenceRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(targetScenario))
+			},
+			new MoveTestCase
+			{
+				Type = nameof(Note),
+				CreateTypeInDefaultScenario = (testClass, person, archivePeriod, defaultScenario) =>
+				{
+					var note = new Note(person, archivePeriod.StartDate, defaultScenario, "Test");
+					testClass.WithUnitOfWork.Do(() => testClass.ScheduleStorage.Add(note));
+				},
+				LoadMethod = (testClass, targetScenario) => testClass.NoteRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(targetScenario))
+			}
+		};
+
+		private static readonly TargetAbsenceSplitTestCase[] targetAbsenceSplitTestCases =
+		{
+			new TargetAbsenceSplitTestCase
+			{
+				AbsenceStartLocal = new DateTime(2016, 1, 3),
+				AbsenceEndLocal = new DateTime(2016, 1, 6, 23, 59, 0),
+				ArchiveStart = new DateOnly(2016, 1, 4),
+				ArchiveEnd = new DateOnly(2016, 1, 6),
+				Asserts = (testCase, defaultAbsences, targetAbsences) =>
+				{
+					targetAbsences.Count.Should().Be.EqualTo(1);
+					targetAbsences.First().Layer.Period.StartDateTime.Should().Be.EqualTo(testCase.AbsenceStartLocal);
+					targetAbsences.First().Layer.Period.EndDateTime.Should().Be.EqualTo(testCase.ArchiveStart.Date.AddMinutes(-1));
+				}
+			},
+			new TargetAbsenceSplitTestCase
+			{
+				AbsenceStartLocal = new DateTime(2016, 1, 4),
+				AbsenceEndLocal = new DateTime(2016, 1, 7, 23, 59, 0),
+				ArchiveStart = new DateOnly(2016, 1, 4),
+				ArchiveEnd = new DateOnly(2016, 1, 6),
+				Asserts = (testCase, defaultAbsences, targetAbsences) =>
+				{
+					targetAbsences.Count.Should().Be.EqualTo(1);
+					targetAbsences.First().Layer.Period.StartDateTime.Should().Be.EqualTo(testCase.ArchiveEnd.Date.AddDays(1));
+					targetAbsences.First().Layer.Period.EndDateTime.Should().Be.EqualTo(testCase.AbsenceEndLocal);
+				}
+			},
+			new TargetAbsenceSplitTestCase
+			{
+				AbsenceStartLocal = new DateTime(2016, 1, 3),
+				AbsenceEndLocal = new DateTime(2016, 1, 7, 23, 59, 0),
+				ArchiveStart = new DateOnly(2016, 1, 4),
+				ArchiveEnd = new DateOnly(2016, 1, 6),
+				Asserts = (testCase, defaultAbsences, targetAbsences) =>
+				{
+					targetAbsences.Count.Should().Be.EqualTo(2);
+					targetAbsences.First().Layer.Period.StartDateTime.Should().Be.EqualTo(testCase.AbsenceStartLocal);
+					targetAbsences.First().Layer.Period.EndDateTime.Should().Be.EqualTo(testCase.ArchiveStart.Date.AddMinutes(-1));
+
+					targetAbsences.Second().Layer.Period.StartDateTime.Should().Be.EqualTo(testCase.ArchiveEnd.Date.AddDays(1));
+					targetAbsences.Second().Layer.Period.EndDateTime.Should().Be.EqualTo(testCase.AbsenceEndLocal);
+				}
+			},
+			new TargetAbsenceSplitTestCase
+			{
+				AbsenceStartLocal = new DateTime(2016, 1, 4),
+				AbsenceEndLocal = new DateTime(2016, 1, 6, 23, 59, 0),
+				ArchiveStart = new DateOnly(2016, 1, 4),
+				ArchiveEnd = new DateOnly(2016, 1, 6),
+				Asserts = (testCase, defaultAbsences, targetAbsences) =>
+				{
+					targetAbsences.Count.Should().Be.EqualTo(0);
+				}
+			},
+			new TargetAbsenceSplitTestCase
+			{
+				AbsenceStartLocal = new DateTime(2016, 1, 3),
+				AbsenceEndLocal = new DateTime(2016, 1, 3, 23, 59, 0),
+				ArchiveStart = new DateOnly(2016, 1, 4),
+				ArchiveEnd = new DateOnly(2016, 1, 6),
+				Asserts = (testCase, defaultAbsences, targetAbsences) =>
+				{
+					targetAbsences.Count.Should().Be.EqualTo(1);
+					targetAbsences.First().Layer.Period.StartDateTime.Should().Be.EqualTo(testCase.AbsenceStartLocal);
+					targetAbsences.First().Layer.Period.EndDateTime.Should().Be.EqualTo(testCase.AbsenceEndLocal);
+				}
+			},
+			new TargetAbsenceSplitTestCase
+			{
+				AbsenceStartLocal = new DateTime(2016, 1, 7),
+				AbsenceEndLocal = new DateTime(2016, 1, 7, 23, 59, 0),
+				ArchiveStart = new DateOnly(2016, 1, 4),
+				ArchiveEnd = new DateOnly(2016, 1, 6),
+				Asserts = (testCase, defaultAbsences, targetAbsences) =>
+				{
+					targetAbsences.Count.Should().Be.EqualTo(1);
+					targetAbsences.First().Layer.Period.StartDateTime.Should().Be.EqualTo(testCase.AbsenceStartLocal);
+					targetAbsences.First().Layer.Period.EndDateTime.Should().Be.EqualTo(testCase.AbsenceEndLocal);
+				}
+			}
+		};
+
 		private static readonly TimeZoneInfo[] agentTimeZones =
 		{
 			TimeZoneInfoFactory.UtcTimeZoneInfo(),
@@ -500,140 +617,5 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 				ExpectedOutcome = SourceAbsenceSplitTestCase.Expectations.NothingArchived
 			}
 		};
-
-		[Test]
-		public void ShouldOverwriteToEmpty()
-		{
-			addDefaultTypesToRepositories();
-
-			var note = new Note(_person, _archivePeriod.StartDate, _targetScenario, "Test");
-			WithUnitOfWork.Do(() => ScheduleStorage.Add(note));
-
-			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
-
-			verifyCanBeFoundInScheduleStorageForTargetScenario(_person);
-			var archivedNote = WithUnitOfWork.Get(() => NoteRepository.LoadAll().FirstOrDefault(x => x.Scenario.Id == _targetScenario.Id));
-			archivedNote.Should().Be.Null();
-
-			verifyJobResultIsUpdated();
-		}
-
-		[Test]
-		public void ShouldNotOverwriteNeighbouringDates()
-		{
-			addDefaultTypesToRepositories();
-			var theDateBeforePeriod = _archivePeriod.StartDate.AddDays(-1);
-			var theDateAfterPeriod = _archivePeriod.EndDate.AddDays(1);
-			var noteBefore = new Note(_person, theDateBeforePeriod, _targetScenario, "Test Before");
-			var noteAfter = new Note(_person, theDateAfterPeriod, _targetScenario, "Test After");
-			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteBefore));
-			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteAfter));
-
-			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
-			var archivedNotes = WithUnitOfWork.Get(() => NoteRepository.LoadAll().Where(x => x.Scenario.Id == _targetScenario.Id));
-			archivedNotes.Count().Should().Be.EqualTo(2);
-		}
-
-		[Test]
-		public void ShouldNotArchiveScheduleOutsideThePeriod()
-		{
-			addDefaultTypesToRepositories();
-			var theDateBeforePeriod = _archivePeriod.StartDate.AddDays(-1);
-			var theDateAfterPeriod = _archivePeriod.EndDate.AddDays(1);
-			var noteBefore = new Note(_person, theDateBeforePeriod, _defaultScenario, "Test Note Before");
-			var noteAfter = new Note(_person, theDateAfterPeriod, _defaultScenario, "Test Note After");
-			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteBefore));
-			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteAfter));
-
-			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
-
-			var archivedNotes = WithUnitOfWork.Get(() => NoteRepository.LoadAll().Where(x => x.Scenario.Id == _targetScenario.Id));
-			archivedNotes.Should().Be.Empty();
-		}
-
-		[Test]
-		public void ShouldMoveOneNote()
-		{
-			addDefaultTypesToRepositories();
-
-			var note = new Note(_person, _archivePeriod.StartDate, _defaultScenario, "Test");
-			WithUnitOfWork.Do(() => ScheduleStorage.Add(note));
-
-			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
-
-			verifyCanBeFoundInScheduleStorageForTargetScenario(_person);
-			var archivedNote = WithUnitOfWork.Get(() => NoteRepository.LoadAll().FirstOrDefault(x => x.Scenario.Id == _targetScenario.Id));
-			archivedNote.Should().Not.Be.Null();
-
-			verifyJobResultIsUpdated();
-		}
-
-		[Test]
-		public void ShouldMoveOnePublicNote()
-		{
-			addDefaultTypesToRepositories();
-
-			var note = new PublicNote(_person, _archivePeriod.StartDate, _defaultScenario, "Test");
-			WithUnitOfWork.Do(() => ScheduleStorage.Add(note));
-
-			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
-
-			verifyCanBeFoundInScheduleStorageForTargetScenario(_person);
-			var archivedNote = WithUnitOfWork.Get(() => PublicNoteRepository.LoadAll().FirstOrDefault(x => x.Scenario.Id == _targetScenario.Id));
-			archivedNote.Should().Not.Be.Null();
-
-			verifyJobResultIsUpdated();
-		}
-
-		[Test]
-		public void ShouldMoveOneAbsence()
-		{
-			addDefaultTypesToRepositories();
-
-			var absence = AbsenceFactory.CreateAbsence("gone");
-			WithUnitOfWork.Do(() => AbsenceRepository.Add(absence));
-			var personAbsence = new PersonAbsence(_person, _defaultScenario, new AbsenceLayer(absence,
-					new DateTimePeriod(_archivePeriod.StartDate.Date.ToUniversalTime(), (_archivePeriod.StartDate.Date + TimeSpan.FromDays(1)).ToUniversalTime())));
-			WithUnitOfWork.Do(() => ScheduleStorage.Add(personAbsence));
-
-			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
-
-			verifyCanBeFoundInScheduleStorageForTargetScenario(_person);
-			var archivedPersonAbsence = WithUnitOfWork.Get(() => PersonAbsenceRepository.LoadAll().FirstOrDefault(x => x.Scenario.Id == _targetScenario.Id));
-			archivedPersonAbsence.Should().Not.Be.Null();
-
-			verifyJobResultIsUpdated();
-		}
-
-		private void verifyCanBeFoundInScheduleStorageForTargetScenario(IPerson person)
-		{
-			var result = WithUnitOfWork.Get(() => ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(true, true),
-							_archivePeriod, _targetScenario));
-			result[person].ScheduledDayCollection(_archivePeriod).Should().Not.Be.Empty();
-		}
-
-		private void verifyJobResultIsUpdated(int numberOfDetails = 1)
-		{
-			WithUnitOfWork.Do(() =>
-			{
-				var jobResult = JobResultRepository.Get(_jobResultId);
-				jobResult.FinishedOk.Should().Be.True();
-				jobResult.Details.Count(x => x.DetailLevel == DetailLevel.Info && x.ExceptionMessage == null).Should().Be(numberOfDetails);
-			});
-		}
-
-		private ArchiveScheduleEvent createArchiveEvent()
-		{
-			return new ArchiveScheduleEvent(_person.Id.GetValueOrDefault())
-			{
-				EndDate = _archivePeriod.EndDate,
-				FromScenario = _defaultScenario.Id.GetValueOrDefault(),
-				StartDate = _archivePeriod.StartDate,
-				ToScenario = _targetScenario.Id.GetValueOrDefault(),
-				JobResultId = _jobResultId,
-				LogOnBusinessUnitId = _businessUnit.Id.GetValueOrDefault(),
-				TotalMessages = 1
-			};
-		}
 	}
 }
