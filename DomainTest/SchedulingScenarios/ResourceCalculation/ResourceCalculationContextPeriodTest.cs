@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
-	[DomainTest, Ignore("Fix this so we can remove all this [add extra day before and after period sent to contextfactory]")]
+	[DomainTest]
 	public class ResourceCalculationContextPeriodTest
 	{
 		public CascadingResourceCalculationContextFactory ResourceCalculationContextFactory;
@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		public void ShouldBeEnoughToPassInActualPeriod(
 			[Values("Mountain Standard Time", "UTC", "Singapore Standard Time")] string myTimeZone,
 			[Values("Mountain Standard Time", "UTC", "Singapore Standard Time")] string agentTimeZone,
-			[Values(0, 23)] int shiftStart,
-			[Values(-1, 0, 1)] int shiftDayFromToday
+			[Values(-1, 0, 1)] int shiftDayFromToday,
+			[Values(0, 23)] int shiftStart
 			) 
 		{
 			var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(myTimeZone);
