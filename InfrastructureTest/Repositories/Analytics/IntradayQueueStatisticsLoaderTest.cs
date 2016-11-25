@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
@@ -15,7 +17,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		public void ShouldCheckThatStoredProcedureExists()
 		{
 			var target = new IntradayQueueStatisticsLoader();
-			var actualWorkloadInSecondsPerSkillInterval = target.LoadActualCallPerSkillInterval(new Guid[] { Guid.NewGuid() }, TimeZoneInfo.Utc, DateOnly.Today);
+			var skill = SkillFactory.CreateSkillWithId("skill"); 
+			var actualWorkloadInSecondsPerSkillInterval = target.LoadActualCallPerSkillInterval(new List<ISkill>() { skill }, TimeZoneInfo.Utc, DateOnly.Today);
 
 			actualWorkloadInSecondsPerSkillInterval.Count.Should().Be.EqualTo(0);
 		}
