@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			Person = PersonFactory.CreatePerson("Tester Testersson");
 		}
 
-		[Ignore("Not implemented yet.")]
 		[Test]
 		public void ShouldMoveOneOfType([ValueSource(nameof(moveTypeTestCases))] MoveTestCase<ImportScheduleHandlerTest> testCase)
 		{
