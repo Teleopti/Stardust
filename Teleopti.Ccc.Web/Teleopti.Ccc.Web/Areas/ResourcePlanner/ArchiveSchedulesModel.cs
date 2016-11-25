@@ -15,9 +15,21 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public Guid JobResultId { get; set; }
 		public List<Guid> SelectedTeams { get; set; }
 
-		public ArchiveScheduleEvent CreateEvent(IEnumerable<IPerson> people)
+		public ArchiveScheduleEvent CreateArchiveEvent(IEnumerable<IPerson> people)
 		{
 			return new ArchiveScheduleEvent(people.Select(person => person.Id.GetValueOrDefault()).ToArray())
+			{
+				StartDate = new DateOnly(StartDate),
+				EndDate = new DateOnly(EndDate),
+				FromScenario = FromScenario,
+				ToScenario = ToScenario,
+				JobResultId = JobResultId
+			};
+		}
+
+		public ImportScheduleEvent CreateImportEvent(IEnumerable<IPerson> people)
+		{
+			return new ImportScheduleEvent(people.Select(person => person.Id.GetValueOrDefault()).ToArray())
 			{
 				StartDate = new DateOnly(StartDate),
 				EndDate = new DateOnly(EndDate),

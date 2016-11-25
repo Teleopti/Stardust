@@ -40,6 +40,39 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_loggedOnUser = loggedOnUser;
 		}
 
+		[Route("api/ResourcePlanner/Importing/Run"), HttpPost, UnitOfWork]
+		public virtual IHttpActionResult RunImporting([FromBody] ArchiveSchedulesModel model)
+		{
+			var archiveSchedulesResponse = new ArchiveSchedulesResponse
+			{
+				TotalMessages = 0,
+				TotalSelectedPeople = 0
+			};
+			if (_toggleManager.IsEnabled(Toggles.Wfm_ImportSchedule_41247))
+			{
+				var people = getPeople(model);
+				archiveSchedulesResponse.TotalSelectedPeople = people.Count;
+				if (archiveSchedulesResponse.TotalSelectedPeople > 0)
+				{
+					var jobResult = new JobResult(JobCategory.ImportSchedule, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), _loggedOnUser.CurrentUser(), DateTime.UtcNow);
+					_jobResultRepository.Add(jobResult);
+					archiveSchedulesResponse.JobId = jobResult.Id;
+					model.JobResultId = jobResult.Id.GetValueOrDefault();
+
+					var importScheduleEvents = people
+					   .Batch(getBatchSize(archiveSchedulesResponse.TotalSelectedPeople))
+					   .Select(model.CreateImportEvent)
+					   .Where(x => x.PersonIds.Any())
+					   .ToList();
+					importScheduleEvents.ForEach(e => e.TotalMessages = importScheduleEvents.Count);
+
+					Task.Run(() => _eventPublisher.Publish(importScheduleEvents.Cast<IEvent>().ToArray()));
+					archiveSchedulesResponse.TotalMessages = importScheduleEvents.Count;
+				}
+			}
+			return Ok(archiveSchedulesResponse);
+		}
+
 		[Route("api/ResourcePlanner/Archiving/Run"), HttpPost, UnitOfWork]
 		public virtual IHttpActionResult RunArchiving([FromBody] ArchiveSchedulesModel model)
 		{
@@ -50,7 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			};
 			if (_toggleManager.IsEnabled(Toggles.Wfm_ArchiveSchedule_41498))
 			{
-				var people = getPeople(model);				
+				var people = getPeople(model);
 				archiveSchedulesResponse.TotalSelectedPeople = people.Count;
 				if (archiveSchedulesResponse.TotalSelectedPeople > 0)
 				{
@@ -60,18 +93,17 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					model.JobResultId = jobResult.Id.GetValueOrDefault();
 
 					var archiveScheduleEvents = people
-					   .Batch(getBatchSize(archiveSchedulesResponse.TotalSelectedPeople))
-					   .Select(model.CreateEvent)
-					   .Where(x => x.PersonIds.Any())
-					   .ToList();
+						.Batch(getBatchSize(archiveSchedulesResponse.TotalSelectedPeople))
+						.Select(model.CreateArchiveEvent)
+						.Where(x => x.PersonIds.Any())
+						.ToList();
 					archiveScheduleEvents.ForEach(e => e.TotalMessages = archiveScheduleEvents.Count);
-
 
 					Task.Run(() => _eventPublisher.Publish(archiveScheduleEvents.Cast<IEvent>().ToArray()));
 					archiveSchedulesResponse.TotalMessages = archiveScheduleEvents.Count;
-				}			
+				}
 			}
-				return Ok(archiveSchedulesResponse);
+			return Ok(archiveSchedulesResponse);
 		}
 
 		[Route("api/ResourcePlanner/JobStatus/{jobId}"), HttpGet, UnitOfWork]
