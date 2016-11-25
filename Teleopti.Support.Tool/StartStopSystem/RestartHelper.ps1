@@ -1,3 +1,17 @@
+
+function ServiceExist{
+    param($ServiceName)
+    if (Get-Service $ServiceName -ErrorAction SilentlyContinue)
+    {
+        return $true
+    }
+    else
+    {
+        return $false
+    }
+}
+
+
 function WaitForUrl
 {
 	param
