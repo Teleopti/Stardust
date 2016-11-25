@@ -36,7 +36,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		[LogTime]
 		public virtual void DoCalculation(DateOnlyPeriod period, IResourceCalculationData resCalcData)
 		{
+#pragma warning disable 618
 			using (_resourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills, true))
+#pragma warning restore 618
 			{
 				_resourceOptimizationHelper.ResourceCalculate(period, resCalcData);
 			}

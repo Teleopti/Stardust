@@ -79,7 +79,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var selectedPersons = selectedScheduleDays.Select(x => x.Person).Distinct().ToList();
 
+#pragma warning disable 618
 			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, true))
+#pragma warning restore 618
 			{
 				if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
 				{

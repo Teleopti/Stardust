@@ -194,7 +194,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				continuedStep = true;
 			}
 
+#pragma warning disable 618
 			using (_resourceCalculationContextFactory.Create(_stateHolder().Schedules, _stateHolder().Skills, false))
+#pragma warning restore 618
 			{
 				IList<IScheduleMatrixPro> matrixListForWorkShiftAndIntradayOptimization = _matrixListFactory.CreateMatrixListForSelection(_stateHolder().Schedules, selectedDays);
 
@@ -239,7 +241,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				}
 			}
 
+#pragma warning disable 618
 			using (_resourceCalculationContextFactory.Create(_stateHolder().Schedules, _stateHolder().Skills, false))
+#pragma warning restore 618
 			{
 				if (optimizerPreferences.General.OptimizationStepFairness)
 				{

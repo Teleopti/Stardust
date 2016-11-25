@@ -98,7 +98,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 				validMatrixContainerList.Add(matrixContainer);
 			}
 
+#pragma warning disable 618
 			using (_resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, true))
+#pragma warning restore 618
 			{
 				_resouceOptimizationHelperExtended.ResourceCalculateAllDays(backgroundWorker, false);
 				optimize(validMatrixContainerList, selectedPeriod, backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider);

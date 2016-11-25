@@ -91,7 +91,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			var teamBlockInfos = _scheduledTeamBlockInfoFactory.Create(period, agentsToOptimize, schedules, allAgents, schedulingOptions);
 
+#pragma warning disable 618
 			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills(), false))
+#pragma warning restore 618
 			{
 				foreach (var teamBlockInfo in teamBlockInfos)
 				{

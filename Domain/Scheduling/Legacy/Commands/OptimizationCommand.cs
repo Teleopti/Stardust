@@ -93,7 +93,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			if (optimizationMethodBackToLegalState)
 			{
+#pragma warning disable 618
 				using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, false))
+#pragma warning restore 618
 				{
 					var scheduleMatrixOriginalStateContainers =
 						_scheduleMatrixOriginalStateContainerCreator.CreateScheduleMatrixOriginalStateContainers(schedulerStateHolder.Schedules, selectedSchedules, selectedPeriod.Value);

@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_timeZoneGuard = timeZoneGuard;
 		}
 
+		[Obsolete("Don't use this one. Always specify a period for performance reasons.")]
 		public IDisposable Create(IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, bool primarySkillMode)
 		{
 			return new ResourceCalculationContext(createResources(scheduleDictionary, allSkills, primarySkillMode, null));

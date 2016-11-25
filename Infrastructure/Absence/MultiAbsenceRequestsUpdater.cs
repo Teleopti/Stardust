@@ -136,7 +136,9 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				var firstComeFirstServe = _arrangeRequestsByProcessOrder.GetRequestsSortedByDate(personRequests);
 
 					stopwatch.Start();
+#pragma warning disable 618
 				using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills, true))
+#pragma warning restore 618
 				{
 					stopwatch.Stop();
 					_feedback.SendProgress($"Done _resourceCalculationContextFactory.Create(..)! It took {stopwatch.Elapsed}");
