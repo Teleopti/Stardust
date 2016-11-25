@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Archiving;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
@@ -42,6 +43,35 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			VerifyCanBeFoundInScheduleStorageForTargetScenario(Person);
 
 			testCase.VerifyExistsInTargetScenario(WithUnitOfWork, this, TargetScenario);
+
+			VerifyJobResultIsUpdated();
+		}
+
+		[Test]
+		public void ShouldNotOverwriteAShiftInTargetScenarioWhenSourceIsEmpty()
+		{
+			AddDefaultTypesToRepositories();
+
+			var oldCategory = new ShiftCategory("Existing");
+			var oldActivity = new Activity("Existing");
+			var assignment = new PersonAssignment(Person, TargetScenario, Period.StartDate);
+			assignment.SetShiftCategory(oldCategory);
+			assignment.AddActivity(oldActivity, new TimePeriod(8, 15));
+			WithUnitOfWork.Do(() =>
+			{
+				ShiftCategoryRepository.Add(oldCategory);
+				ActivityRepository.Add(oldActivity);
+				ScheduleStorage.Add(assignment);
+			});
+
+			WithUnitOfWork.Do(() => Target.Handle(createImportEvent()));
+
+			WithUnitOfWork.Do(() =>
+			{
+				var result = PersonAssignmentRepository.LoadAll().FirstOrDefault(x => x.BelongsToScenario(TargetScenario));
+				result.Should().Not.Be.Null();
+				result.Should().Be.EqualTo(assignment);
+			});
 
 			VerifyJobResultIsUpdated();
 		}
