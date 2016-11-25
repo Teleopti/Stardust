@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	{
 		public DateTime EndDateTime { get; set; }
 		public DateTime StartDateTime { get; set; }
+		public bool RequestedFromWeb { get; set; }
 	}
 }

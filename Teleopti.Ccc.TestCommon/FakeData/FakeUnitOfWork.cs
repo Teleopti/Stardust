@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public bool IsDirty()
 		{
-			throw new NotImplementedException();
+			return false;
 		}
 
 		public IEnumerable<IRootChangeInfo> PersistAll()

@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	    private readonly List<SkillStaffingInterval> _fakeStaffingList  = new List<SkillStaffingInterval>();
 		private List<CustomStaffingIntervalChange> _readModelChanges = new List<CustomStaffingIntervalChange>();
 		public DateTime UtcNow = DateTime.UtcNow;
+	    public bool UpdateReadModelDateTimeWasCalled { get; set; }
 
 		public void Persist(IEnumerable<SkillStaffingInterval> items, DateTime timeWhenResourceCalcDataLoaded)
 		{
@@ -137,9 +138,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		    return intervals;
 	    }
 
-	    public IDictionary<Guid, DateTime> GetLastCalculatedTime2()
+	    public void UpdateInsertedDateTime(Guid eventLogOnBusinessUnitId)
 	    {
-		    throw new NotImplementedException();
+		    UpdateReadModelDateTimeWasCalled = true;
 	    }
 
 	    public IDictionary<Guid, DateTime> LastCalculatedDate = new Dictionary<Guid, DateTime>();
