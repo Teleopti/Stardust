@@ -2,12 +2,12 @@
 
 xdescribe('component: permissionsTree', function () {
 	var $httpBackend,
-		fakeBackend,
-		$controller,
-		$componentController,
-		permissionsDataService,
-		ctrl,
-		vm;
+	fakeBackend,
+	$controller,
+	$componentController,
+	permissionsDataService,
+	ctrl,
+	vm;
 
 	beforeEach(function () {
 		module('wfm.permissions');
@@ -40,33 +40,33 @@ xdescribe('component: permissionsTree', function () {
 
 	it('should be able to select a function', function () {
 		fakeBackend
-			.withRole({
-				BuiltIn: false,
-				DescriptionText: 'Agent',
-				Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-				IsAnyBuiltIn: false,
-				IsMyRole: false,
-				Name: 'Agent'
-			})
-			.withApplicationFunction({
-				FunctionCode: 'Raptor',
-				FunctionDescription: 'xxOpenRaptorApplication',
-				FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+		.withRole({
+			BuiltIn: false,
+			DescriptionText: 'Agent',
+			Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+			IsAnyBuiltIn: false,
+			IsMyRole: false,
+			Name: 'Agent'
+		})
+		.withApplicationFunction({
+			FunctionCode: 'Raptor',
+			FunctionDescription: 'xxOpenRaptorApplication',
+			FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+			IsDisabled: false,
+			LocalizedFunctionDescription: 'Open Teleopti WFM',
+			IsSelected: false,
+			IsOpen: false,
+			ChildFunctions: [{
+				ChildFunctions: [],
+				FunctionCode: 'ChildFunction',
+				FunctionDescription: 'ChildFunction',
+				FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e9',
 				IsDisabled: false,
-				LocalizedFunctionDescription: 'Open Teleopti WFM',
+				LocalizedFunctionDescription: 'I am A child function',
 				IsSelected: false,
-				IsOpen: false,
-				ChildFunctions: [{
-					ChildFunctions: [],
-					FunctionCode: 'ChildFunction',
-					FunctionDescription: 'ChildFunction',
-					FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e9',
-					IsDisabled: false,
-					LocalizedFunctionDescription: 'I am A child function',
-					IsSelected: false,
-					IsOpen: false
-				}]
-			});
+				IsOpen: false
+			}]
+		});
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
 		permissionsDataService.setSelectedRole(vm.roles[0]);
@@ -79,34 +79,34 @@ xdescribe('component: permissionsTree', function () {
 
 	it('should not be able to select a function without a selected role', function () {
 		fakeBackend
-			.withRole({
-				BuiltIn: true,
-				DescriptionText: 'Admin',
-				Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-				IsAnyBuiltIn: true,
-				IsMyRole: true,
-				IsSelected: false,
-				Name: 'Admin'
-			})
-			.withApplicationFunction({
-				FunctionCode: 'Raptor',
-				FunctionDescription: 'xxOpenRaptorApplication',
-				FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+		.withRole({
+			BuiltIn: true,
+			DescriptionText: 'Admin',
+			Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+			IsAnyBuiltIn: true,
+			IsMyRole: true,
+			IsSelected: false,
+			Name: 'Admin'
+		})
+		.withApplicationFunction({
+			FunctionCode: 'Raptor',
+			FunctionDescription: 'xxOpenRaptorApplication',
+			FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+			IsDisabled: false,
+			LocalizedFunctionDescription: 'Open Teleopti WFM',
+			IsSelected: false,
+			IsOpen: false,
+			ChildFunctions: [{
+				ChildFunctions: [],
+				FunctionCode: 'ChildFunction',
+				FunctionDescription: 'ChildFunction',
+				FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e9',
 				IsDisabled: false,
-				LocalizedFunctionDescription: 'Open Teleopti WFM',
+				LocalizedFunctionDescription: 'I am A child function',
 				IsSelected: false,
-				IsOpen: false,
-				ChildFunctions: [{
-					ChildFunctions: [],
-					FunctionCode: 'ChildFunction',
-					FunctionDescription: 'ChildFunction',
-					FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e9',
-					IsDisabled: false,
-					LocalizedFunctionDescription: 'I am A child function',
-					IsSelected: false,
-					IsOpen: false
-				}]
-			});
+				IsOpen: false
+			}]
+		});
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
 
@@ -117,33 +117,33 @@ xdescribe('component: permissionsTree', function () {
 
 	it('should be able to select a parent function', function () {
 		fakeBackend
-			.withApplicationFunction({
-				FunctionCode: 'Raptor',
-				FunctionDescription: 'xxOpenRaptorApplication',
-				FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+		.withApplicationFunction({
+			FunctionCode: 'Raptor',
+			FunctionDescription: 'xxOpenRaptorApplication',
+			FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+			IsDisabled: false,
+			LocalizedFunctionDescription: 'Open Teleopti WFM',
+			IsSelected: false,
+			IsOpen: false,
+			ChildFunctions: [{
+				ChildFunctions: [],
+				FunctionCode: 'ChildFunction',
+				FunctionDescription: 'ChildFunction',
+				FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e9',
 				IsDisabled: false,
-				LocalizedFunctionDescription: 'Open Teleopti WFM',
+				LocalizedFunctionDescription: 'I am A child function',
 				IsSelected: false,
-				IsOpen: false,
-				ChildFunctions: [{
-					ChildFunctions: [],
-					FunctionCode: 'ChildFunction',
-					FunctionDescription: 'ChildFunction',
-					FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e9',
-					IsDisabled: false,
-					LocalizedFunctionDescription: 'I am A child function',
-					IsSelected: false,
-					IsOpen: false
-				}]
-			})
-			.withRole({
-				BuiltIn: false,
-				DescriptionText: 'Agent',
-				Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-				IsAnyBuiltIn: false,
-				IsMyRole: false,
-				Name: 'Agent'
-			});
+				IsOpen: false
+			}]
+		})
+		.withRole({
+			BuiltIn: false,
+			DescriptionText: 'Agent',
+			Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+			IsAnyBuiltIn: false,
+			IsMyRole: false,
+			Name: 'Agent'
+		});
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
 		permissionsDataService.setSelectedRole(vm.roles[0]);
@@ -183,23 +183,23 @@ xdescribe('component: permissionsTree', function () {
 
 	it('should be able to deselect a function', function () {
 		fakeBackend
-			.withApplicationFunction({
-				FunctionCode: 'Raptor',
-				FunctionDescription: 'xxOpenRaptorApplication',
-				FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
-				IsDisabled: false,
-				LocalizedFunctionDescription: 'Open Teleopti WFM',
-				IsSelected: true,
-				IsOpen: false
-			})
-			.withRole({
-				BuiltIn: false,
-				DescriptionText: 'Agent',
-				Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-				IsAnyBuiltIn: false,
-				IsMyRole: false,
-				Name: 'Agent'
-			});
+		.withApplicationFunction({
+			FunctionCode: 'Raptor',
+			FunctionDescription: 'xxOpenRaptorApplication',
+			FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+			IsDisabled: false,
+			LocalizedFunctionDescription: 'Open Teleopti WFM',
+			IsSelected: true,
+			IsOpen: false
+		})
+		.withRole({
+			BuiltIn: false,
+			DescriptionText: 'Agent',
+			Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+			IsAnyBuiltIn: false,
+			IsMyRole: false,
+			Name: 'Agent'
+		});
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
 		permissionsDataService.setSelectedRole(vm.roles[0]);
@@ -212,33 +212,33 @@ xdescribe('component: permissionsTree', function () {
 
 	it('should select parent function when selecting a child for that parent', function () {
 		fakeBackend
-			.withApplicationFunction({
-				ChildFunctions: [{
-					ChildFunctions: [],
-					FunctionCode: 'ChildFunction',
-					FunctionDescription: 'ChildFunction',
-					FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e9',
-					IsDisabled: false,
-					LocalizedFunctionDescription: 'I am A child function',
-					IsSelected: false,
-					IsOpen: false
-				}],
-				FunctionCode: 'Parent',
-				FunctionDescription: 'ParentFunction',
-				FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+		.withApplicationFunction({
+			ChildFunctions: [{
+				ChildFunctions: [],
+				FunctionCode: 'ChildFunction',
+				FunctionDescription: 'ChildFunction',
+				FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e9',
 				IsDisabled: false,
-				LocalizedFunctionDescription: 'I Am A Parent Function',
+				LocalizedFunctionDescription: 'I am A child function',
 				IsSelected: false,
 				IsOpen: false
-			})
-			.withRole({
-				BuiltIn: false,
-				DescriptionText: 'Agent',
-				Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-				IsAnyBuiltIn: false,
-				IsMyRole: false,
-				Name: 'Agent'
-			});;
+			}],
+			FunctionCode: 'Parent',
+			FunctionDescription: 'ParentFunction',
+			FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+			IsDisabled: false,
+			LocalizedFunctionDescription: 'I Am A Parent Function',
+			IsSelected: false,
+			IsOpen: false
+		})
+		.withRole({
+			BuiltIn: false,
+			DescriptionText: 'Agent',
+			Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+			IsAnyBuiltIn: false,
+			IsMyRole: false,
+			Name: 'Agent'
+		});;
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions, parent: function () { return ctrl.onSelect.apply(null, arguments) } });
 		permissionsDataService.setSelectedRole(vm.roles[0]);
@@ -297,8 +297,58 @@ xdescribe('component: permissionsTree', function () {
 		expect(vm.applicationFunctions[1].ChildFunctions[0].IsSelected).toEqual(false);
 	});
 
-	it('should deselect matching children when deselecting parent', function () {
+	it('should not unselect other parents when selecting child for one parent', function(){
 		fakeBackend
+		.withApplicationFunction({
+			FunctionCode: 'Parent',
+			FunctionDescription: 'ParentFunction',
+			FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8c',
+			IsDisabled: false,
+			LocalizedFunctionDescription: 'I Am A Parent Function',
+			IsSelected: true,
+			IsOpen: false,
+			ChildFunctions: [{
+				ChildFunctions: [],
+				FunctionCode: 'ChildFunction',
+				FunctionDescription: 'ChildFunction',
+				FunctionId: '5ad43bfa-7842-4cca-ae9e-8d03ddc789e9',
+				IsDisabled: false,
+				LocalizedFunctionDescription: 'I am A child function',
+				IsSelected: false,
+				IsOpen: false
+			}]})
+			.withApplicationFunction({
+				FunctionCode: 'Second Parent',
+				FunctionDescription: 'ParentFunction',
+				FunctionId: 'f19bb790-b000-4deb-97db-9b5e015b2e8d',
+				IsDisabled: false,
+				LocalizedFunctionDescription: 'I Am A Parent Function',
+				IsSelected: true,
+				IsOpen: false,
+				ChildFunctions: []
+			})
+			.withRole({
+				BuiltIn: false,
+				DescriptionText: 'Agent',
+				Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+				IsAnyBuiltIn: false,
+				IsMyRole: false,
+				Name: 'Agent'
+			});
+			$httpBackend.flush();
+			ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions, parent: function () { return ctrl.onSelect.apply(null, arguments) } });
+			permissionsDataService.setSelectedRole(vm.roles[0]);
+
+			ctrl.toggleFunction(vm.applicationFunctions[0].ChildFunctions[0]);
+			$httpBackend.flush();
+
+			expect(vm.applicationFunctions[0].IsSelected).toEqual(true);
+			expect(vm.applicationFunctions[0].ChildFunctions[0].IsSelected).toEqual(true);
+			expect(vm.applicationFunctions[1].IsSelected).toEqual(true);
+		});
+
+		it('should deselect matching children when deselecting parent', function () {
+			fakeBackend
 			.withApplicationFunction({
 				ChildFunctions: [{
 					ChildFunctions: [{
@@ -353,23 +403,23 @@ xdescribe('component: permissionsTree', function () {
 				IsMyRole: false,
 				Name: 'Agent'
 			});
-		$httpBackend.flush();
-		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions, parent: function () { return ctrl.onSelect.apply(null, arguments) } });
-		permissionsDataService.setSelectedRole(vm.roles[0]);
+			$httpBackend.flush();
+			ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions, parent: function () { return ctrl.onSelect.apply(null, arguments) } });
+			permissionsDataService.setSelectedRole(vm.roles[0]);
 
-		ctrl.toggleFunction(vm.applicationFunctions[0]);
-		$httpBackend.flush();
+			ctrl.toggleFunction(vm.applicationFunctions[0]);
+			$httpBackend.flush();
 
-		expect(vm.applicationFunctions[0].IsSelected).toEqual(false);
-		expect(vm.applicationFunctions[0].ChildFunctions[0].IsSelected).toEqual(false);
-		expect(vm.applicationFunctions[0].ChildFunctions[0].ChildFunctions[0].IsSelected).toEqual(false);
-		expect(vm.applicationFunctions[1].IsSelected).toEqual(true);
-		expect(vm.applicationFunctions[1].ChildFunctions[0].IsSelected).toEqual(true);
-	});
+			expect(vm.applicationFunctions[0].IsSelected).toEqual(false);
+			expect(vm.applicationFunctions[0].ChildFunctions[0].IsSelected).toEqual(false);
+			expect(vm.applicationFunctions[0].ChildFunctions[0].ChildFunctions[0].IsSelected).toEqual(false);
+			expect(vm.applicationFunctions[1].IsSelected).toEqual(true);
+			expect(vm.applicationFunctions[1].ChildFunctions[0].IsSelected).toEqual(true);
+		});
 
-	it('should not be able to edit built in role or my role', function () {
-		inject(function (NoticeService) {
-			fakeBackend
+		it('should not be able to edit built in role or my role', function () {
+			inject(function (NoticeService) {
+				fakeBackend
 				.withRole({
 					BuiltIn: true,
 					DescriptionText: 'Admin',
@@ -386,19 +436,19 @@ xdescribe('component: permissionsTree', function () {
 					LocalizedFunctionDescription: 'Open Teleopti WFM',
 					IsSelected: false
 				});
-			$httpBackend.flush();
-			ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
-			spyOn(NoticeService, "warning");
-			permissionsDataService.setSelectedRole(vm.roles[0]);
-			ctrl.toggleFunction(vm.applicationFunctions[0]);
+				$httpBackend.flush();
+				ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
+				spyOn(NoticeService, "warning");
+				permissionsDataService.setSelectedRole(vm.roles[0]);
+				ctrl.toggleFunction(vm.applicationFunctions[0]);
 
-			expect(vm.applicationFunctions[0].IsSelected).toEqual(false);
-			expect(NoticeService.warning).toHaveBeenCalledWith("ChangesAreDisabled", 5000, true);
+				expect(vm.applicationFunctions[0].IsSelected).toEqual(false);
+				expect(NoticeService.warning).toHaveBeenCalledWith("ChangesAreDisabled", 5000, true);
+			});
 		});
-	});
 
-	it('should save selected function for selected role', function () {
-		fakeBackend
+		it('should save selected function for selected role', function () {
+			fakeBackend
 			.withRole({
 				BuiltIn: false,
 				DescriptionText: 'Agent',
@@ -419,18 +469,18 @@ xdescribe('component: permissionsTree', function () {
 				LocalizedFunctionDescription: 'Open Teleopti WFM',
 				IsSelected: false
 			});
-		$httpBackend.flush();
-		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
-		spyOn(permissionsDataService, 'selectFunction');
-		permissionsDataService.setSelectedRole(vm.roles[0]);
+			$httpBackend.flush();
+			ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
+			spyOn(permissionsDataService, 'selectFunction');
+			permissionsDataService.setSelectedRole(vm.roles[0]);
 
-		ctrl.toggleFunction(vm.applicationFunctions[0]);
+			ctrl.toggleFunction(vm.applicationFunctions[0]);
 
-		expect(permissionsDataService.selectFunction).toHaveBeenCalled();
-	});
+			expect(permissionsDataService.selectFunction).toHaveBeenCalled();
+		});
 
-	it('should delete unselected function for selected role', function () {
-		fakeBackend
+		it('should delete unselected function for selected role', function () {
+			fakeBackend
 			.withRole({
 				BuiltIn: false,
 				DescriptionText: 'Agent',
@@ -451,14 +501,14 @@ xdescribe('component: permissionsTree', function () {
 				LocalizedFunctionDescription: 'Open Teleopti WFM',
 				IsSelected: true
 			});
-		$httpBackend.flush();
-		ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
-		permissionsDataService.setSelectedRole(vm.roles[0]);
-		spyOn(permissionsDataService, 'selectFunction')
+			$httpBackend.flush();
+			ctrl = $componentController('permissionsTree', null, { functions: vm.applicationFunctions });
+			permissionsDataService.setSelectedRole(vm.roles[0]);
+			spyOn(permissionsDataService, 'selectFunction')
 
-		ctrl.toggleFunction(vm.applicationFunctions[0]);
+			ctrl.toggleFunction(vm.applicationFunctions[0]);
 
-		expect(permissionsDataService.selectFunction).toHaveBeenCalled();
+			expect(permissionsDataService.selectFunction).toHaveBeenCalled();
+		});
+
 	});
-
-});

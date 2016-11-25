@@ -1,41 +1,43 @@
-<style media="screen">
-	.temp-tree-list{
-		margin-left: 10px;
-		padding:5px;
-		cursor: pointer;
-	}
-</style>
+<ul class="wfm-list">
+	<li ng-click="confirmModal1=true">
+		<span class="list-item-container">
+			{{$ctrl.org.BusinessUnit.Name}}
+		</span>
+		<span ng-cloak ng-show="$ctrl.org.BusinessUnit.IsSelected" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
+	</li>
+</ul>
 
-<div class="temp-tree-list">
-
-	<div ng-click="$ctrl.toggleNode($ctrl.org.BusinessUnit)">
-		<i class="mdi mdi-check" ng-if="$ctrl.org.BusinessUnit.IsSelected"></i>
-		{{$ctrl.org.BusinessUnit.Name}}
-	</div>
-
-	<div class="temp-tree-list" ng-repeat="site in $ctrl.org.BusinessUnit.ChildNodes">
-		<div ng-click="$ctrl.toggleNode(site)">
-			<i class="mdi mdi-check" ng-if="site.IsSelected"></i>
-			{{site.Name}}
-		</div>
-
-		<div class="temp-tree-list" ng-repeat="team in site.ChildNodes">
-			<div ng-click="$ctrl.toggleNode(team)">
-				<i class="mdi mdi-check" ng-if="team.IsSelected"></i>
-				{{team.Name}}
+<div ng-cloak class="modal-box">
+	<div ng-cloak ng-show="confirmModal1">
+		<div class="modalbg">
+			<div class="dialog-mini">
+				<div class="modal-inner-content">
+					{{'ConfirmToggleAllPermissions'|translate}}
+				</div>
+				<div class="modal-actions">
+					<aside>
+						<button ng-click="confirmModal1=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+						<button ng-click="$ctrl.toggleNode($ctrl.org.BusinessUnit);confirmModal1=false" class="wfm-btn wfm-btn-invis-primary">{{'ToggleAll'|translate}}</button>
+					</aside>
+				</div>
 			</div>
 		</div>
-
 	</div>
 </div>
 
-<!--
-		<ul >
-			<li ng-click="$ctrl.toggleNode($ctrl.bu)">
-				<i ng-if="$ctrl.bu.IsSelected" class="mdi mdi-check"></i>
-                {{$ctrl.bu.Name}}
-            </li>
-			<li ng-click="$ctrl.toggleNode(child)" style="margin-left:10px;padding:20px;" class="pointer" ng-repeat="child in $ctrl.bu.ChildNodes">
-          <i ng-if="child.IsSelected" class="mdi mdi-check"></i>     <permissions-list bu="child"></permissions-list>
-			</li>
-		</ul> -->
+<ul class="wfm-list">
+	<span ng-repeat="site in $ctrl.org.BusinessUnit.ChildNodes">
+		<li ng-click="$ctrl.toggleNode(site)" style="margin-left:30px;">
+			<span class="list-item-container">
+				{{site.Name}}
+			</span>
+			<span ng-cloak ng-show="site.IsSelected" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
+		</li>
+		<li ng-repeat="team in site.ChildNodes" ng-click="$ctrl.toggleNode(team)" style="margin-left:60px;">
+			<span class="list-item-container">
+				{{team.Name}}
+			</span>
+			<span ng-cloak ng-show="team.IsSelected" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
+		</li>
+	</span>
+</ul>

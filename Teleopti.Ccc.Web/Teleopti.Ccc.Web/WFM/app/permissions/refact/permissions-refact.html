@@ -163,24 +163,24 @@
 												</label>
 											</div>
 											<div class="wfm-radio">
-												<label ng-click="unselectedFunctionsToggle = false; selectedFunctionsToggle = false">
-													<input type="radio" checked name="tree-toggle">
+												<label>
+													<input type="radio" checked name="tree-toggle" ng-click="vm.allFunctionsFilter()">
 													<span class="wfm-radio-toggle"></span>
 													<span class="wfm-radio-label" translate>All</span>
 												</label>
 											</div>
 											<div class="wfm-radio">
 												<label>
-													<input type="radio" name="tree-toggle"  ng-click="vm.showOnlySelectedFunctionsFilter()">
+													<input type="radio" name="tree-toggle" ng-click="vm.unSelectedFunctionsFilter()">
 													<span class="wfm-radio-toggle"></span>
-													<span class="wfm-radio-label" translate>SelectedItems</span>
+													<span class="wfm-radio-label" translate>UnselectedItems</span>
 												</label>
 											</div>
 											<div class="wfm-radio">
-												<label ng-click="selectedFunctionsToggle = false">
-													<input type="radio" name="tree-toggle" ng-model="unselectedFunctionsToggle" value="true">
+												<label>
+													<input type="radio" name="tree-toggle" ng-click="vm.selectedFunctionsFilter()" value="true">
 													<span class="wfm-radio-toggle"></span>
-													<span class="wfm-radio-label" translate>UnselectedItems</span>
+													<span class="wfm-radio-label" translate>SelectedItems</span>
 												</label>
 											</div>
 										</form>
@@ -188,7 +188,7 @@
 								</div>
 								<div class="con-row">
 									<div class="con-flex tree">
-										<permissions-tree functions="vm.applicationFunctions" filteredFunctions="vm.filteredApplicationFunctions"></permissions-tree>
+										<permissions-tree functions="vm.componentFunctions"></permissions-tree>
 									</div>
 								</div>
 							</md-content>
@@ -247,7 +247,7 @@
 									</div>
 								</div>
 								<div class="con-row">
-									<div class="con-row">
+									<div class="con-flex">
 										<permissions-list org="vm.organizationSelection"> </permissions-list>
 									</div>
 								</div>

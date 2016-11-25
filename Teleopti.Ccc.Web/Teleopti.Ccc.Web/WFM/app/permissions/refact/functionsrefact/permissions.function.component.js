@@ -14,8 +14,8 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
   function toggleFunction(func) {
     var selectedRole = permissionsDataService.getSelectedRole();
 
-    if (!selectedRole){  
-      // Fixa notice här....  
+    if (!selectedRole){
+      // Fixa notice här....
       return;
     }
 
@@ -33,7 +33,7 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
     selectedFunctions.push(func.FunctionId)
     //Fix me
     func.IsSelected = !func.IsSelected;
-    
+
     if (selectedRole != null && selectedRole) {
       permissionsDataService.selectFunction(selectedRole, selectedFunctions, func);
     }
@@ -64,8 +64,7 @@ function PermissionsTreeController(permissionsDataService, NoticeService, $trans
 
     if (parent != null) {
       parent.IsSelected = true;
-      ctrl.functions.filter(function (fn) { return fn !== parent }).forEach(function (fn) { fn.IsSelected = false });
-
+      ctrl.functions.filter(function (fn) { return fn !== parent });
       if (ctrl.parent != null) {
         ctrl.parent(parent);
       }
@@ -87,7 +86,6 @@ angular.module('wfm.permissions').component('permissionsTree', {
   controller: PermissionsTreeController,
   bindings: {
     functions: '=',
-    parent: '=',
-    filteredFunctions: '='
+    parent: '='
   }
 });
