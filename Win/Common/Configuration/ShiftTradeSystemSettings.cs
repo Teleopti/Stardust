@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				initializeBusinessRuleConfigProvider();
 				_shiftTradeSettings.BusinessRuleConfigs =
-					_businessRuleConfigProvider.GetDefaultConfigForShiftTradeRequest().ToArray();
+					_businessRuleConfigProvider.GetDefaultConfigForShiftTradeRequest().Select(s=>(ShiftTradeBusinessRuleConfig)s).ToArray();
 			}
 
 			var businessRuleConfigViews = _shiftTradeSettings.BusinessRuleConfigs.Select
