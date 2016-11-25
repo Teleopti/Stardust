@@ -208,7 +208,11 @@
 
 				$scope.selectedSites = function () {
 					return $scope.sites.filter(function(site) {
-						return site.isChecked == true;
+						var selectedTeams = site.Teams.filter(function(team){
+							return team.isChecked == true;
+						});
+	
+						return site.isChecked == true && ((selectedTeams.length === site.Teams.length) || selectedTeams.length == 0) ;
 					}).map(function(s) {
 						return s.Id;
 					});
@@ -223,8 +227,12 @@
 								.map(function(team) {
 									return team.Id;
 								});
+
+							if(s.Teams.length == selectedTeamIds.length)
+								selectedTeamIds =[];
 							return selectedTeamIds;
-						}));
+						})
+					);
 				}
 
 				function flatten(collection) {
@@ -242,6 +250,14 @@
 						})
 					} else
 						selectedSite.isChecked = !selectedSite.isChecked;
+
+					var anyTeamSelected = selectedSite.Teams.find(function(team){
+						return team.isChecked == true;
+					});
+
+					if(anyTeamSelected) {
+						selectedSite.isChecked = true;
+					}
 				}
 				// org selection ends here
 

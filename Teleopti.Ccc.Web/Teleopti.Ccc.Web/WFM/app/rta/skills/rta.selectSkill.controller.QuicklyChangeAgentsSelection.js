@@ -144,12 +144,6 @@
 					else
 						selectedSite.isChecked = !selectedSite.isChecked;
 				}
-
-
-
-				$scope.printOut = function () {
-					console.log($scope.selectedTeams);
-				}
 			}
 		]);
 })();
