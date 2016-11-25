@@ -32,6 +32,7 @@ Scenario: Run archiving for one agent
 	And I confirm to run archiving
 	Then I should get a success message
 
+@ignore
 @OnlyRunIfEnabled('Wfm_ImportSchedule_41247')
 Scenario: Run importing for one agent
 	Given there is a scenario
