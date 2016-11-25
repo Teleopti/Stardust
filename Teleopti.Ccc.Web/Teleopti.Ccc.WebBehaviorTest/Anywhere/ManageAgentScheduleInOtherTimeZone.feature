@@ -54,7 +54,6 @@ Scenario: Timeline for agent in other time zone
 	| Start time | 09:00     |
 	| End time   | 17:00     |
 
-@ignore
 Scenario: Timeline for agent in the same time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
