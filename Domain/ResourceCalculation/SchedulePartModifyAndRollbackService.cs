@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
         private readonly IScheduleTagSetter _scheduleTagSetter;
         private readonly FixedCapacityStack<IScheduleDay> _rollbackStack = new FixedCapacityStack<IScheduleDay>(5000);
-        private readonly FixedCapacityStack<IScheduleDay> _modificationStack = new FixedCapacityStack<IScheduleDay>(5000);
 
         public SchedulePartModifyAndRollbackService(ISchedulingResultStateHolder stateHolder, IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTagSetter scheduleTagSetter)
         {
@@ -33,7 +32,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var partToSave = schedulePart.ReFetch();
 			modifyWithNoValidation(schedulePart, ScheduleModifier.Scheduler, _scheduleTagSetter, newBusinessRuleCollection);
 			_rollbackStack.Push(partToSave);
-			_modificationStack.Push(schedulePart);
 		}
 
 		public void Modify(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter)
@@ -41,7 +39,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var partToSave = schedulePart.ReFetch();
 			modifyWithNoValidation(schedulePart, ScheduleModifier.Scheduler, scheduleTagSetter);
             _rollbackStack.Push(partToSave);
-            _modificationStack.Push(schedulePart);
         }
 
 		public bool ModifyStrictly(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter, INewBusinessRuleCollection newBusinessRuleCollection)
@@ -49,7 +46,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var partToSave = schedulePart.ReFetch();
 			var responses = modifyWithNoValidation(schedulePart, ScheduleModifier.Scheduler, scheduleTagSetter, newBusinessRuleCollection);
 			_rollbackStack.Push(partToSave);
-			_modificationStack.Push(schedulePart);
 			if (responses.Any())
 			{
 				rollbackLast(NewBusinessRuleCollection.AllForScheduling(_stateHolder));
@@ -97,7 +93,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public void ClearModificationCollection()
         {
             _rollbackStack.Clear();
-            _modificationStack.Clear();
         }
 
 		public IEnumerable<IBusinessRuleResponse> ModifyParts(IEnumerable<IScheduleDay> scheduleDays)
@@ -107,7 +102,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				var partToSave = scheduleDay.ReFetch();
 				_rollbackStack.Push(partToSave);
-				_modificationStack.Push(scheduleDay);
 			}
 
 			return _stateHolder.Schedules.Modify(ScheduleModifier.Scheduler, scheduleParts,
