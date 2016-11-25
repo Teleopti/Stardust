@@ -582,5 +582,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage("wfm/#/resourceplanner/archiveschedule");
 		}
+
+		public static void GoToWfmImportSchedule()
+		{
+			GoToPage("wfm/#/resourceplanner/importschedule");
+		}
 	}
 }

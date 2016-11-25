@@ -780,5 +780,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GoToWfmArchiveSchedule();
 		}
+
+		[When(@"I am viewing import schedule page")]
+		public void WhenIAmViewingImportSchedulePage()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToWfmImportSchedule();
+		}
 	}
 }

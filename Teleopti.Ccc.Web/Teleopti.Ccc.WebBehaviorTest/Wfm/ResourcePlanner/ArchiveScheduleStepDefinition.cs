@@ -22,6 +22,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 			Browser.Interactions.ClickContaining("md-option", scenario);
 		}
 
+		[When(@"I select '(.*)' as from scenario")]
+		public void WhenISelectAsFromScenario(string scenario)
+		{
+			Browser.Interactions.Click(".from-scenario-selector");
+			Browser.Interactions.ClickContaining("md-option", scenario);
+		}
+
 		[When(@"I select the team '(.*)'")]
 		public void WhenISelectTheTeam(string team)
 		{
@@ -38,20 +45,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 			Browser.Interactions.ClickUsingJQuery("date-range-picker .popup-control");
 		}
 
-
 		[When(@"I run archiving")]
+		[When(@"I run importing")]
         public void WhenIRunArchiving()
-        {
+		{
 			Browser.Interactions.Click("#archive-btn");
 		}
-        
-        [When(@"I confirm to run archiving")]
+
+		[When(@"I confirm to run archiving")]
+		[When(@"I confirm to run importing")]
         public void WhenIConfirmToRunArchiving()
-        {
+		{
 			Browser.Interactions.Click("#confirm-archiving");
         }
-        
-        [Then(@"I should get a success message")]
+
+		[Then(@"I should get a success message")]
         public void ThenIShouldGetASuccessMessage()
         {
             Browser.Interactions.AssertExists(".notice-success");
