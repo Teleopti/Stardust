@@ -39,13 +39,13 @@
     }).state('resourceplanner.archiveschedule',
     {
     	url: '/archiveschedule',
-    	templateUrl: 'app/resourceplanner/archiveschedule.html',
-		controller: 'ResourceplannerArchiveScheduleCtrl as vm'
+    	templateUrl: 'app/resourceplanner/manageschedule.html',
+		controller: 'ResourceplannerManageScheduleCtrl as vm'
     }).state('resourceplanner.importschedule',
     {
     	url: '/importschedule',
-    	templateUrl: 'app/resourceplanner/archiveschedule.html',
-    	controller: 'ResourceplannerArchiveScheduleCtrl as vm',
+    	templateUrl: 'app/resourceplanner/manageschedule.html',
+    	controller: 'ResourceplannerManageScheduleCtrl as vm',
     	params: {
     		isImportSchedule: true
     	}

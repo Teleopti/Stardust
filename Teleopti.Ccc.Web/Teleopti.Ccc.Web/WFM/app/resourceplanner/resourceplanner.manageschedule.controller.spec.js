@@ -1,8 +1,8 @@
 ﻿'use strict';
-describe('ResourceplannerArchiveScheduleCtrl', function () {
+describe('ResourceplannerManageScheduleCtrl', function () {
 	var $q,
 		$rootScope,
-		archiveScheduleSrvc;
+		manageScheduleSrvc;
 
 	beforeEach(function () {
 		module('wfm.resourceplanner');
@@ -11,7 +11,7 @@ describe('ResourceplannerArchiveScheduleCtrl', function () {
 	beforeEach(inject(function (_$q_, _$rootScope_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
-		archiveScheduleSrvc = {
+		manageScheduleSrvc = {
 			scenarios: {
 				query: function () {
 					var queryDeferred = $q.defer();
@@ -30,7 +30,7 @@ describe('ResourceplannerArchiveScheduleCtrl', function () {
 	it('not null', inject(function ($controller) {
 		var scope = $rootScope.$new();
 
-		$controller('ResourceplannerArchiveScheduleCtrl', { ArchiveScheduleSrvc: archiveScheduleSrvc, $scope: scope });
+		$controller('ResourceplannerManageScheduleCtrl', { ManageScheduleSrvc: manageScheduleSrvc, $scope: scope });
 		expect($controller).not.toBe(null);
 	}));
 });

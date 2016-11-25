@@ -49,14 +49,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		[When(@"I run importing")]
         public void WhenIRunArchiving()
 		{
-			Browser.Interactions.Click("#archive-btn");
+			Browser.Interactions.Click("#manage-btn");
 		}
 
 		[When(@"I confirm to run archiving")]
 		[When(@"I confirm to run importing")]
         public void WhenIConfirmToRunArchiving()
 		{
-			Browser.Interactions.Click("#confirm-archiving");
+			Browser.Interactions.Click("#confirm-managing");
         }
 
 		[Then(@"I should get a success message")]

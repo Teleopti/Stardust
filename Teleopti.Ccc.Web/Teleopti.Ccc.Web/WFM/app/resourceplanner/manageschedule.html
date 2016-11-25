@@ -13,7 +13,7 @@
 		</div>
 
 		<div class="fab-wrapper">
-			<button id="archive-btn" class="wfm-fab material-depth-1" ng-click="vm.validateAndShowModal(vm.selection.fromScenario, vm.selection.toScenario, vm.selection.period, vm.selection.teams)" ng-disabled="!vm.canRunArchiving()">
+			<button id="manage-btn" class="wfm-fab material-depth-1" ng-click="vm.validateAndShowModal(vm.selection.fromScenario, vm.selection.toScenario, vm.selection.period, vm.selection.teams)" ng-disabled="!vm.canRunManaging()">
 				<i class="mdi mdi-file-document"></i>
 				<md-tooltip>{{ 'Run' + vm.ArchivingOrImporting | translate}}</md-tooltip>
 			</button>
@@ -23,10 +23,10 @@
 		<div class="con-flex">
 			<div class="panel material-depth-1">
 				<div class="con-row">
-					<div class="con-flex inline-flex archive-schedule-period-picker">
+					<div class="con-flex inline-flex manage-schedule-period-picker">
 						<date-range-picker ng-model="vm.selection.period" template-type="vm.dateRangeTemplateType"></date-range-picker>
 					</div>
-					<div class="con-flex inline-flex archive-schedule-scenario-picker">
+					<div class="con-flex inline-flex manage-schedule-scenario-picker">
 						<div layout="row" layout-align="space-between center" class="pull-right full-padding" ng-if="!vm.isImportSchedule">
 							<span style="margin-right: 20px">{{'FromScenarioColon' | translate}} <b>{{vm.selection.fromScenario.Name}}</b></span>
 							<span>{{'ToScenarioColon' | translate}}</span>
@@ -73,8 +73,8 @@
 							</div>
 							<div class="modal-actions">
 								<aside>
-									<button id="cancel-archiving" ng-click="vm.showConfirmModal=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
-									<button id="confirm-archiving" ng-click="vm.runArchiving(vm.selection.fromScenario, vm.selection.toScenario, vm.selection.period, vm.selection.teams)" class="wfm-btn wfm-btn-invis-primary">{{'Run'|translate}}</button>
+									<button id="cancel-managing" ng-click="vm.showConfirmModal=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+									<button id="confirm-managing" ng-click="vm.runManaging(vm.selection.fromScenario, vm.selection.toScenario, vm.selection.period, vm.selection.teams)" class="wfm-btn wfm-btn-invis-primary">{{'Run'|translate}}</button>
 								</aside>
 							</div>
 						</div>

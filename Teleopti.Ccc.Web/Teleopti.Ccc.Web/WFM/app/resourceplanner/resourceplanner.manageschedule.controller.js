@@ -13,9 +13,9 @@
 					return result;
 				};
 			})
-		.controller('ResourceplannerArchiveScheduleCtrl',
+		.controller('ResourceplannerManageScheduleCtrl',
 		[
-			'ArchiveScheduleSrvc',
+			'ManageScheduleSrvc',
 			'guidgenerator',
 			'$timeout',
 			'$scope',
@@ -23,7 +23,7 @@
 			'defaultScenarioFilter',
 			'$translate',
 			'$stateParams',
-			function (ArchiveScheduleSrvc,
+			function (ManageScheduleSrvc,
 				guidgenerator,
 				$timeout,
 				$scope,
@@ -50,7 +50,7 @@
 
 				vm.showConfirmModal = false;
 
-				var validateArchivingParameters = function (fromScenario, toScenario, period, teamSelection) {
+				var validateManagingParameters = function (fromScenario, toScenario, period, teamSelection) {
 					var validationResult = { messages: [] };
 
 					if (fromScenario == null)
@@ -90,7 +90,7 @@
 					return 100 * (vm.tracking.recievedMessages / vm.tracking.totalMessages);
 				}
 
-				ArchiveScheduleSrvc.scenarios.query()
+				ManageScheduleSrvc.scenarios.query()
 					.$promise.then(function (result) {
 						vm.scenarios = result;
 						if (vm.isImportSchedule)
@@ -99,7 +99,7 @@
 							vm.selection.fromScenario = defaultScenarioFilter(result, true)[0];
 					});
 
-				var completedArchiving = function () {
+				var completedManaging = function () {
 					if (vm.tracking.totalPeople === 0) {
 						NoticeService.info($translate.instant('YourSelectionResultedInZeroPeopleDot'), null, true);
 					} else {
@@ -112,13 +112,13 @@
 					}, 3000);
 				}
 
-				vm.canRunArchiving = function () {
+				vm.canRunManaging = function () {
 					return !vm.showProgress;
 				};
 
 				vm.validateAndShowModal = function (fromScenario, toScenario, period, teamSelection) {
-					if (!vm.canRunArchiving()) return;
-					var validationResult = validateArchivingParameters(fromScenario, toScenario, period, teamSelection);
+					if (!vm.canRunManaging()) return;
+					var validationResult = validateManagingParameters(fromScenario, toScenario, period, teamSelection);
 					if (!validationResult.successful) {
 						angular.forEach(validationResult.messages, function (value) {
 							NoticeService.error(value, null, true);
@@ -132,35 +132,35 @@
 					vm.showConfirmModal = true;
 				};
 				var checkProgress = function () {
-					$timeout(function () {
-						if (vm.showProgress) {
-							ArchiveScheduleSrvc.getStatus.query({ id: vm.tracking.jobId })
-								.$promise.then(function (result) {
-									vm.tracking.recievedMessages = result.Successful;
-									vm.tracking.progress = updateProgress();
-									if (vm.tracking.totalMessages === vm.tracking.recievedMessages) {
-										completedArchiving();
-									} else {
-										checkProgress();
-									}
-								});
-						}
-					},
+					$timeout(function() {
+							if (vm.showProgress) {
+								ManageScheduleSrvc.getStatus.query({ id: vm.tracking.jobId })
+									.$promise.then(function(result) {
+										vm.tracking.recievedMessages = result.Successful;
+										vm.tracking.progress = updateProgress();
+										if (vm.tracking.totalMessages === vm.tracking.recievedMessages) {
+											completedManaging();
+										} else {
+											checkProgress();
+										}
+									});
+							}
+						},
 						1000);
 				};
 
-				vm.runArchiving = function (fromScenario, toScenario, period, teamSelection) {
+				vm.runManaging = function (fromScenario, toScenario, period, teamSelection) {
 					vm.showConfirmModal = false;
 					resetTracking();
 					vm.showProgress = true;
-					var archiveScheduleModel = {
+					var manageScheduleModel = {
 						FromScenario: fromScenario.Id,
 						ToScenario: toScenario.Id,
 						StartDate: period.startDate,
 						EndDate: period.endDate,
 						SelectedTeams: teamSelection
 					};
-					(vm.isImportSchedule ? ArchiveScheduleSrvc.runImporting : ArchiveScheduleSrvc.runArchiving).post({}, JSON.stringify(archiveScheduleModel))
+					(vm.isImportSchedule ? ManageScheduleSrvc.runImporting : ManageScheduleSrvc.runArchiving).post({}, JSON.stringify(manageScheduleModel))
 						.$promise.then(function (result) {
 							vm.tracking.totalMessages = result.TotalMessages;
 							vm.tracking.totalPeople = result.TotalSelectedPeople;
