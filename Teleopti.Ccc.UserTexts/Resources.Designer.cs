@@ -8942,6 +8942,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Done importing for {0} people..
+        /// </summary>
+        public static string DoneImportingForXPeopleDot {
+            get {
+                return ResourceManager.GetString("DoneImportingForXPeopleDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do not break maximum seats.
         /// </summary>
         public static string DoNotBreakMaximumSeats {
@@ -12831,6 +12840,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are about to merge some existing scheduling for scenario &apos;{0}&apos; for the period {1} - {2} and the selected teams..
+        /// </summary>
+        public static string ImportingConfirmationWithParameters {
+            get {
+                return ResourceManager.GetString("ImportingConfirmationWithParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import Queue From File.
         /// </summary>
         public static string ImportQueueFromFile {
@@ -12845,6 +12863,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ImportSchedule {
             get {
                 return ResourceManager.GetString("ImportSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import schedule from another scenario to default scenario, merge some previous scheduling in the target scenario for the given period..
+        /// </summary>
+        public static string ImportScheduleDescription {
+            get {
+                return ResourceManager.GetString("ImportScheduleDescription", resourceCulture);
             }
         }
         
@@ -25161,6 +25188,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Run importing.
+        /// </summary>
+        public static string RunImporting {
+            get {
+                return ResourceManager.GetString("RunImporting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Running background job....
         /// </summary>
         public static string RunningBackgroundJob {
@@ -34506,6 +34542,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string YouNeedToPickAScenarioToArchiveToDot {
             get {
                 return ResourceManager.GetString("YouNeedToPickAScenarioToArchiveToDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You need to pick a scenario to import from..
+        /// </summary>
+        public static string YouNeedToPickAScenarioToImportFromDot {
+            get {
+                return ResourceManager.GetString("YouNeedToPickAScenarioToImportFromDot", resourceCulture);
             }
         }
         

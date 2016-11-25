@@ -15226,10 +15226,28 @@ These options are activated:
   <data name="YouNeedToSelectADateInTheFutureDot" xml:space="preserve">
     <value>You need to select a date in the future.</value>
   </data>
-  
   <data name="Primary" xml:space="preserve">
     <value>Primary</value>
     <comment>Primary</comment>
+  </data>
+  <data name="DoneImportingForXPeopleDot" xml:space="preserve">
+    <value>Done importing for {0} people.</value>
+    <comment>Done importing for {0} people.</comment>
+  </data>
+  <data name="ImportingConfirmationWithParameters" xml:space="preserve">
+    <value>You are about to merge some existing scheduling for scenario '{0}' for the period {1} - {2} and the selected teams.</value>
+  </data>
+  <data name="ImportScheduleDescription" xml:space="preserve">
+    <value>Import schedule from another scenario to default scenario, merge some previous scheduling in the target scenario for the given period.</value>
+    <comment>Import schedule from another scenario to default scenario, merge some previous scheduling in the target scenario for the given period.</comment>
+  </data>
+  <data name="RunImporting" xml:space="preserve">
+    <value>Run importing</value>
+    <comment>Run importing</comment>
+  </data>
+  <data name="YouNeedToPickAScenarioToImportFromDot" xml:space="preserve">
+    <value>You need to pick a scenario to import from.</value>
+    <comment>You need to pick a scenario to import from.</comment>
   </data>
   <data name="SendToAdministrator" xml:space="preserve">
     <value>Send to Administrator</value>

@@ -54,13 +54,13 @@
 					var validationResult = { messages: [] };
 
 					if (fromScenario == null)
-						validationResult.messages.push($translate.instant('YouNeedToPickAScenarioTo' + ArchiveOrImport + 'FromDot'));
+						validationResult.messages.push($translate.instant('YouNeedToPickAScenarioTo' + vm.ArchiveOrImport + 'FromDot'));
 					else if (!vm.isImportSchedule && !fromScenario.DefaultScenario)
 						validationResult.messages.push($translate.instant('TheScenarioYouArchiveFromMustBeTheDefaultScenarioDot'));
 					else if (vm.isImportSchedule && fromScenario.DefaultScenario)
 						validationResult.messages.push($translate.instant('TheScenarioYouImportFromMustNotBeTheDefaultScenarioDot'));
 					if (toScenario == null)
-						validationResult.messages.push($translate.instant('YouNeedToPickAScenarioTo' + ArchiveOrImport + 'ToDot'));
+						validationResult.messages.push($translate.instant('YouNeedToPickAScenarioTo' + vm.ArchiveOrImport + 'ToDot'));
 					else if (!vm.isImportSchedule && toScenario.DefaultScenario)
 						validationResult.messages.push($translate.instant('TheScenarioYouArchiveToMustNotBeTheDefaultScenarioDot'));
 					else if (vm.isImportSchedule && !toScenario.DefaultScenario)
