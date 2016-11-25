@@ -1003,12 +1003,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ShiftTradeRequests.feature</DependentUpon>
     </Compile>
-    <Compile Include="Wfm\ResourcePlanner\ArchiveSchedule.feature.cs">
+    <Compile Include="Wfm\ResourcePlanner\ManageSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ArchiveSchedule.feature</DependentUpon>
+      <DependentUpon>ManageSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="Wfm\ResourcePlanner\ArchiveScheduleStepDefinition.cs" />
+    <Compile Include="Wfm\ResourcePlanner\ManageScheduleStepDefinition.cs" />
     <Compile Include="Wfm\Seat Management\SeatMap.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1548,9 +1548,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ShiftTradeRequests.feature.cs</LastGenOutput>
     </None>
-    <None Include="Wfm\ResourcePlanner\ArchiveSchedule.feature">
+    <None Include="Wfm\ResourcePlanner\ManageSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ArchiveSchedule.feature.cs</LastGenOutput>
+      <LastGenOutput>ManageSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\Seat Management\SeatMap.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

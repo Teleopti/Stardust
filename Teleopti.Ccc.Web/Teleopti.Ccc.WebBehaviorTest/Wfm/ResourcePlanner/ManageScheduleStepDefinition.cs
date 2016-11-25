@@ -7,7 +7,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 {
     [Binding]
-    public class ArchiveScheduleStepDefinition
+    public class ManageScheduleStepDefinition
     {
 		[When(@"I wait (.*) seconds to allow tracking to be setup")]
 		public void WhenIWaitSeconds(int seconds)

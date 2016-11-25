@@ -1,5 +1,5 @@
 ﻿@WFM
-Feature: ArchiveSchedule
+Feature: ManageSchedule
 	As a resource planner
 	I want to be able to archive schedules from default scenario to another scenario
 	I want to be able to import schedules from another scenario to default scenario
