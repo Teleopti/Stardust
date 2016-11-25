@@ -135,29 +135,30 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		private bool tryScheduleDay(DateOnly day, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, WorkShiftLengthHintOption workShiftLengthHintOption)
 		{
-			IScheduleDayPro scheduleDay = _matrix.FullWeeksPeriodDictionary[day];
+			var scheduleDay = _matrix.FullWeeksPeriodDictionary[day];
 			schedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;
 
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder);
 			var schedDay = scheduleDay.DaySchedulePart();
-			if (!schedDay.IsScheduled())
+			if (schedDay.IsScheduled())
+				return true;
+
+			if (_scheduleService.SchedulePersonOnDay(schedDay, schedulingOptions, effectiveRestriction, new DoNothingResourceCalculateDelayer(), _rollbackService))
 			{
-				if (!_scheduleService.SchedulePersonOnDay(schedDay, schedulingOptions, effectiveRestriction, new DoNothingResourceCalculateDelayer(), _rollbackService))
-				{
-					_rollbackService.Rollback();
-					lockDay(day);
-					return false;
-				}
 				resourceCalculateDelayer.CalculateIfNeeded(day, schedDay.PersonAssignment().Period, false);
 
 				if (!_workShiftOriginalStateContainer.WorkShiftChanged(day))
 				{
+					//Roger & Claes: Need to res calc we guess but keep old behavior...
+					//Is this needed at all?
 					_rollbackService.Modify(_workShiftOriginalStateContainer.OldPeriodDaysState[day], new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
 				}
+
+				return true;
 			}
-
-
-			return true;
+			_rollbackService.Rollback();
+			lockDay(day);
+			return false;
 		}
 
 		private bool daysOverMax()
