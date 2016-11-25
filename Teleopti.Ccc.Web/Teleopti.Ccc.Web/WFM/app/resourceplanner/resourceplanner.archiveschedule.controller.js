@@ -22,14 +22,20 @@
 			'NoticeService',
 			'defaultScenarioFilter',
 			'$translate',
+			'$stateParams',
 			function (ArchiveScheduleSrvc,
 				guidgenerator,
 				$timeout,
 				$scope,
 				NoticeService,
 				defaultScenarioFilter,
-				$translate) {
+				$translate,
+				$stateParams) {
 				var vm = this;
+				vm.isImportSchedule = $stateParams.isImportSchedule;
+				vm.ArchiveScheduleOrImportSchedule = !vm.isImportSchedule ? 'ArchiveSchedule' : 'ImportSchedule';
+				vm.ArchivingOrImporting = !vm.isImportSchedule ? 'Archiving' : 'Importing';
+				vm.ArchiveOrImport = !vm.isImportSchedule ? 'Archive' : 'Import';
 				vm.scenarios = [];
 				vm.dateRangeTemplateType = 'popup';
 				vm.selection = {
@@ -48,13 +54,17 @@
 					var validationResult = { messages: [] };
 
 					if (fromScenario == null)
-						validationResult.messages.push($translate.instant('YouNeedToPickAScenarioToArchiveFromDot'));
-					else if (!fromScenario.DefaultScenario)
+						validationResult.messages.push($translate.instant('YouNeedToPickAScenarioTo' + ArchiveOrImport + 'FromDot'));
+					else if (!vm.isImportSchedule && !fromScenario.DefaultScenario)
 						validationResult.messages.push($translate.instant('TheScenarioYouArchiveFromMustBeTheDefaultScenarioDot'));
+					else if (vm.isImportSchedule && fromScenario.DefaultScenario)
+						validationResult.messages.push($translate.instant('TheScenarioYouImportFromMustNotBeTheDefaultScenarioDot'));
 					if (toScenario == null)
-						validationResult.messages.push($translate.instant('YouNeedToPickAScenarioToArchiveToDot'));
-					else if (toScenario.DefaultScenario)
+						validationResult.messages.push($translate.instant('YouNeedToPickAScenarioTo' + ArchiveOrImport + 'ToDot'));
+					else if (!vm.isImportSchedule && toScenario.DefaultScenario)
 						validationResult.messages.push($translate.instant('TheScenarioYouArchiveToMustNotBeTheDefaultScenarioDot'));
+					else if (vm.isImportSchedule && !toScenario.DefaultScenario)
+						validationResult.messages.push($translate.instant('TheScenarioYouImportToMustBeTheDefaultScenarioDot'));
 					if (teamSelection.length === 0)
 						validationResult.messages.push($translate.instant('PickAtleastOneTeamDot'));
 					if (moment(period.endDate).diff(period.startDate, 'days') > 65)
@@ -83,15 +93,17 @@
 				ArchiveScheduleSrvc.scenarios.query()
 					.$promise.then(function (result) {
 						vm.scenarios = result;
-						vm.selection.fromScenario = defaultScenarioFilter(result, true)[0];
+						if (vm.isImportSchedule)
+							vm.selection.toScenario = defaultScenarioFilter(result, true)[0];
+						else
+							vm.selection.fromScenario = defaultScenarioFilter(result, true)[0];
 					});
 
 				var completedArchiving = function () {
 					if (vm.tracking.totalPeople === 0) {
 						NoticeService.info($translate.instant('YourSelectionResultedInZeroPeopleDot'), null, true);
 					} else {
-
-						NoticeService.success($translate.instant('DoneArchivingForXPeopleDot').replace('{0}', vm.tracking.totalPeople), null, true);
+						NoticeService.success($translate.instant('Done' + vm.ArchivingOrImporting + 'ForXPeopleDot').replace('{0}', vm.tracking.totalPeople), null, true);
 					}
 
 					$timeout(function () {
@@ -113,7 +125,7 @@
 						});
 						return;
 					}
-					vm.confirmationText = $translate.instant('ArchivingConfirmationWithParameters')
+					vm.confirmationText = $translate.instant(vm.ArchivingOrImporting + 'ConfirmationWithParameters')
 						.replace('{0}', toScenario.Name)
 						.replace('{1}', moment(period.startDate).format('L'))
 						.replace('{2}', moment(period.endDate).format('L'));
@@ -148,7 +160,7 @@
 						EndDate: period.endDate,
 						SelectedTeams: teamSelection
 					};
-					ArchiveScheduleSrvc.runArchiving.post({}, JSON.stringify(archiveScheduleModel))
+					(vm.isImportSchedule ? ArchiveScheduleSrvc.runImporting : ArchiveScheduleSrvc.runArchiving).post({}, JSON.stringify(archiveScheduleModel))
 						.$promise.then(function (result) {
 							vm.tracking.totalMessages = result.TotalMessages;
 							vm.tracking.totalPeople = result.TotalSelectedPeople;

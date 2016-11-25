@@ -41,6 +41,14 @@
     	url: '/archiveschedule',
     	templateUrl: 'app/resourceplanner/archiveschedule.html',
 		controller: 'ResourceplannerArchiveScheduleCtrl as vm'
-    })
+    }).state('resourceplanner.importschedule',
+    {
+    	url: '/importschedule',
+    	templateUrl: 'app/resourceplanner/archiveschedule.html',
+    	controller: 'ResourceplannerArchiveScheduleCtrl as vm',
+    	params: {
+    		isImportSchedule: true
+    	}
+    });
   }
 })();

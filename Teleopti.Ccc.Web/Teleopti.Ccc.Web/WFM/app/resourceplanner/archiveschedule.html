@@ -7,15 +7,15 @@
 	<div class="view-header with-fab with-desc">
 		<div class="view-title">
 			<h1>
-				<i class="mdi mdi-calendar"></i> {{'ArchiveSchedule' | translate}}
+				<i class="mdi mdi-calendar"></i> {{ vm.ArchiveScheduleOrImportSchedule | translate}}
 			</h1>
-			<p translate>ArchiveScheduleDescription</p>
+			<p> {{ vm.ArchiveScheduleOrImportSchedule + 'Description' | translate}}</p>
 		</div>
 
 		<div class="fab-wrapper">
 			<button id="archive-btn" class="wfm-fab material-depth-1" ng-click="vm.validateAndShowModal(vm.selection.fromScenario, vm.selection.toScenario, vm.selection.period, vm.selection.teams)" ng-disabled="!vm.canRunArchiving()">
 				<i class="mdi mdi-file-document"></i>
-				<md-tooltip>{{ 'RunArchiving' | translate}}</md-tooltip>
+				<md-tooltip>{{ 'Run' + vm.ArchivingOrImporting | translate}}</md-tooltip>
 			</button>
 		</div>
 	</div>
@@ -27,11 +27,19 @@
 						<date-range-picker ng-model="vm.selection.period" template-type="vm.dateRangeTemplateType"></date-range-picker>
 					</div>
 					<div class="con-flex inline-flex archive-schedule-scenario-picker">
-						<div layout="row" layout-align="space-between center" class="pull-right full-padding">
-							<span>{{'FromScenarioColon' | translate}} <b>{{vm.selection.fromScenario.Name}}</b> {{'ToScenarioColon' | translate}} &nbsp;</span>
+						<div layout="row" layout-align="space-between center" class="pull-right full-padding" ng-if="!vm.isImportSchedule">
+							<span style="margin-right: 20px">{{'FromScenarioColon' | translate}} <b>{{vm.selection.fromScenario.Name}}</b></span>
+							<span>{{'ToScenarioColon' | translate}}</span>
 							<md-select class="inline-select to-scenario-selector pull-right" ng-model="vm.selection.toScenario" placeholder="{{'Scenario' | translate}}">
 								<md-option ng-repeat="scenario in vm.scenarios | defaultScenario:false" ng-value="scenario">{{scenario.Name}}</md-option>
 							</md-select>
+						</div>
+						<div layout="row" layout-align="space-between center" class="pull-right full-padding" ng-if="vm.isImportSchedule">
+							<span>{{'FromScenarioColon' | translate}}</span>
+							<md-select class="inline-select to-scenario-selector pull-right" ng-model="vm.selection.fromScenario" placeholder="{{'Scenario' | translate}}">
+								<md-option ng-repeat="scenario in vm.scenarios | defaultScenario:false" ng-value="scenario">{{scenario.Name}}</md-option>
+							</md-select>
+							<span style="margin-left: 20px">{{'ToScenarioColon' | translate}} <b>{{vm.selection.toScenario.Name}}</b> </span>
 						</div>
 					</div>
 				</div>

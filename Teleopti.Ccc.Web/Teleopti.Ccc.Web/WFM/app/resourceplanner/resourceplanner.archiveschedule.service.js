@@ -10,6 +10,10 @@
 				post: { method: 'POST', params: {}, isArray: false }
 			});
 
+			this.runImporting = $resource('../api/ResourcePlanner/Importing/Run', {}, {
+				post: { method: 'POST', params: {}, isArray: false }
+			});
+
 			this.getStatus = $resource('../api/ResourcePlanner/JobStatus/:id', { id: "@id" },
 			{
 				query: { method: 'GET', params: {}, isArray: false }
