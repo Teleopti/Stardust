@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Auditing;
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeWriteSideRepository<IAbsence> AbsenceRepository;
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 		public BackoutScheduleChangeCommandHandler target;
+		public FakeEventPublisher EventPublisher;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -48,6 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.AddService<BackoutScheduleChangeCommandHandler>();
 			system.UseTestDouble<FakeWriteSideRepository<IAbsence>>().For<IProxyForId<IAbsence>>();
 			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
+			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
 		[Test]
@@ -398,13 +401,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
-		public void ShouldAssignCommandIdToAllEvents()
+		public void ShouldRaiseEventWithCorrectPeriod()
 		{
 			var person = PersonFactory.CreatePerson("aa", "aa").WithId();
 			PersonRepository.Add(person);
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			var dateTimePeriod = new DateTimePeriod(2016, 6, 11, 8, 2016, 6, 11, 17);
-			var dateOnlyPeriod = new DateOnlyPeriod(2016, 6, 11, 2016, 6, 11);
 			var date = new DateOnly(2016, 6, 11);
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(CurrentScenario.Current(), person, dateTimePeriod);
 			ScheduleHistoryRepository.ClearRevision();
@@ -415,6 +417,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ScheduleHistoryRepository.SetRevision(rev, date, pa.CreateTransient());
 			pa.SetDayOff(DayOffFactory.CreateDayOff());
 			ScheduleHistoryRepository.SetRevision(lstRev, date, pa.CreateTransient());
+			pa.PopAllEvents();
 
 			var command = new BackoutScheduleChangeCommand
 			{
@@ -428,19 +431,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			target.Handle(command);
 			command.ErrorMessages.Count.Should().Be.EqualTo(0);
 
-			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
-					person, new ScheduleDictionaryLoadOptions(true, true), dateOnlyPeriod, CurrentScenario.Current())[person]
-				.ScheduledDayCollection(dateOnlyPeriod).Single();
-
-
-			var events = schedule.PersonAssignment().PopAllEvents();
-
-			foreach (var e in events)
-			{
-				var _e = e as ICommandIdentifier;
-				_e.Should().Not.Be.Null();
-				_e.CommandId.Should().Be.EqualTo(command.TrackedCommandInfo.TrackId);
-			}
+			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(1);
+			var myEvent =
+			EventPublisher.PublishedEvents.First() as ScheduleBackoutEvent;
+			myEvent.StartDateTime.Should().Be.EqualTo(new DateTime(2016, 6, 11, 0, 0, 0, DateTimeKind.Utc));
+			myEvent.EndDateTime.Should().Be.EqualTo(new DateTime(2016, 6, 11, 0, 0, 0, DateTimeKind.Utc));
+			myEvent.CommandId.Should().Be.EqualTo(command.TrackedCommandInfo.TrackId);
+			myEvent.PersonId.Should().Be.EqualTo(person.Id);
 		}
 
 

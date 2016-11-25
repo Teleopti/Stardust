@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
@@ -23,8 +24,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 		private readonly IAuditSettingRepository _auditSettingRepository;
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
+		private readonly IEventPublisher _eventPublisher;
+		private readonly ICurrentDataSource _currentDataSource;
 
-		public BackoutScheduleChangeCommandHandler(IScheduleHistoryRepository scheduleHistoryRepository, IPersonRepository personRepository, ILoggedOnUser loggedOnUser, IAggregateRootInitializer aggregateRootInitializer, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleDifferenceSaver scheduleDifferenceSaver, IDifferenceCollectionService<IPersistableScheduleData> differenceService, IAuditSettingRepository auditSettingRepository, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
+		public BackoutScheduleChangeCommandHandler(IScheduleHistoryRepository scheduleHistoryRepository, IPersonRepository personRepository, ILoggedOnUser loggedOnUser, IAggregateRootInitializer aggregateRootInitializer, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleDifferenceSaver scheduleDifferenceSaver, IDifferenceCollectionService<IPersistableScheduleData> differenceService, IAuditSettingRepository auditSettingRepository, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IEventPublisher eventPublisher, ICurrentDataSource currentDataSource)
 		{
 			_scheduleHistoryRepository = scheduleHistoryRepository;
 			_personRepository = personRepository;
@@ -36,6 +39,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_differenceService = differenceService;
 			_auditSettingRepository = auditSettingRepository;
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
+			_eventPublisher = eventPublisher;
+			_currentDataSource = currentDataSource;
 		}
 
 
@@ -142,7 +147,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				eventHolder?.NotifyCommandId(command.TrackedCommandInfo.TrackId);
 			});
 
-			_scheduleDifferenceSaver.SaveChanges(diffsForTargetDate,(IUnvalidatedScheduleRangeUpdate)range);			
+			
+			_scheduleDifferenceSaver.SaveChanges(diffsForTargetDate,(IUnvalidatedScheduleRangeUpdate)range);
+
+			var affectedData = diffsForTargetDate.Select(x => x.OriginalItem).Where(d => d != null).Concat(diffsForTargetDate.Select(x => x.CurrentItem).Where(d => d != null));
+
+			_eventPublisher.Publish(new ScheduleBackoutEvent
+			{
+				PersonId = command.PersonId,
+				ScenarioId = _currentScenario.Current().Id.GetValueOrDefault(),
+				StartDateTime = affectedData.Min(s => s.Period.StartDateTime),
+				EndDateTime = affectedData.Max(s => s.Period.EndDateTime),
+				InitiatorId = command.TrackedCommandInfo.OperatedPersonId,
+				CommandId = command.TrackedCommandInfo.TrackId,
+				LogOnBusinessUnitId = _currentScenario.Current().BusinessUnit.Id.Value,
+				LogOnDatasource = _currentDataSource.Current().DataSourceName
+			});
 		}
 
 		private IScheduleDictionary getScheduleDictionary(IPerson person, DateOnlyPeriod period)
@@ -168,14 +188,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			currentScheduleDay.ReFetch();
 			currentScheduleDay.Clear<IPersonAbsence>();
 			var resultingAss = currentScheduleDay.PersonAssignment(true);
-			resultingAss.Clear();
+			resultingAss.Clear(true);
 
 			foreach(var scheduleData in data)
 			{
 				var newAss = scheduleData as IPersonAssignment;
 				if(newAss != null)
 				{
-					resultingAss.FillWithDataFrom(newAss);
+					resultingAss.FillWithDataFrom(newAss, true);
 				}
 				else
 				{

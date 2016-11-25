@@ -35,19 +35,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 		}
 		
-		public virtual void Clear()
+		public virtual void Clear(bool muteEvent = false)
 		{
 			ClearMainActivities();
 			ClearOvertimeActivities();
 			ClearPersonalActivities();
 			SetDayOff(null, true);
-			AddEvent(() => new DayUnscheduledEvent
+			if (!muteEvent)
 			{
-				Date = Date.Date,
-				PersonId = Person.Id.Value,
-				ScenarioId = Scenario.Id.Value,
-				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
-			});
+				AddEvent(() => new DayUnscheduledEvent
+				{
+					Date = Date.Date,
+					PersonId = Person.Id.Value,
+					ScenarioId = Scenario.Id.Value,
+					LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+				});
+			}
+			
 		}
 
 		public virtual DateOnly Date { get; protected set; }
@@ -714,9 +718,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}			
 		}
 
-		public virtual void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination, TrackedCommandInfo trackedCommandInfo = null)
+		public virtual void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination, bool muteEvent = false, TrackedCommandInfo trackedCommandInfo = null)
 		{
-			dayOffDestination.SetDayOff(_dayOffTemplate, false, trackedCommandInfo);
+			dayOffDestination.SetDayOff(_dayOffTemplate, muteEvent, trackedCommandInfo);
 		}
 
 		public virtual bool AssignedWithDayOff(IDayOffTemplate template)
@@ -726,22 +730,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return _dayOffTemplate.Equals(template);
 		}
 
-		public virtual void FillWithDataFrom(IPersonAssignment personAssignmentSource)
+		public virtual void FillWithDataFrom(IPersonAssignment personAssignmentSource, bool muteEvent = false)
 		{
-			Clear();
-			personAssignmentSource.SetThisAssignmentsDayOffOn(this);
+			Clear(true);
+			personAssignmentSource.SetThisAssignmentsDayOffOn(this, muteEvent);
 			SetShiftCategory(personAssignmentSource.ShiftCategory);
 			foreach (var mainLayer in personAssignmentSource.MainActivities())
 			{
-				AddActivity(mainLayer.Payload, mainLayer.Period);
+				AddActivity(mainLayer.Payload, mainLayer.Period, muteEvent);
 			}
 			foreach (var personalLayer in personAssignmentSource.PersonalActivities())
 			{
-				AddPersonalActivity(personalLayer.Payload, personalLayer.Period);
+				AddPersonalActivity(personalLayer.Payload, personalLayer.Period, muteEvent);
 			}
 			foreach (var overtimeLayer in personAssignmentSource.OvertimeActivities())
 			{
-				AddOvertimeActivity(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet);
+				AddOvertimeActivity(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet, muteEvent);
 			}
 		}
 

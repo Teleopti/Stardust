@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				}
 			}
 
-			sourceAssignment.SetThisAssignmentsDayOffOn(targetAssignment,trackedCommandInfo);
+			sourceAssignment.SetThisAssignmentsDayOffOn(targetAssignment,false, trackedCommandInfo);
 
 			targetAssignment.SetShiftCategory(sourceAssignment.ShiftCategory);
 

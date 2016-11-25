@@ -33,7 +33,7 @@ namespace Teleopti.Interfaces.Domain
 
 		void ClearOvertimeActivities(bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 
-		void Clear();
+		void Clear(bool muteEvent = false);
 
 		/// <summary>
 		/// The date
@@ -54,9 +54,9 @@ namespace Teleopti.Interfaces.Domain
 
 		IDayOff DayOff();
 		void SetDayOff(IDayOffTemplate template, bool muteEvent = false, TrackedCommandInfo trackedCommandInfo = null);
-		void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination,TrackedCommandInfo trackedCommandInfo = null);
+		void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination, bool muteEvent = false, TrackedCommandInfo trackedCommandInfo = null);
 		bool AssignedWithDayOff(IDayOffTemplate template);
-		void FillWithDataFrom(IPersonAssignment newAss);
+		void FillWithDataFrom(IPersonAssignment personAssignmentSource, bool muteEvent = false);
 		void AddActivity(IActivity activity, DateTimePeriod period, bool muteEvent = false);
 		void AddActivity(IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo, bool triggerResourceCalcualtion = false, bool muteEvent = false);
 		void SetShiftCategory(IShiftCategory shiftCategory, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);

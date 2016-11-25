@@ -215,6 +215,7 @@
     <Compile Include="ApplicationLayer\Events\AnalyticsTimeZoneChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ArchiveScheduleEvent.cs" />
     <Compile Include="ApplicationLayer\Events\CommonNameDescriptionChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\ScheduleBackoutEvent.cs" />
     <Compile Include="ApplicationLayer\Events\TenantDayTickEvent.cs" />
     <Compile Include="ApplicationLayer\GlobalSettingData\AnalyticsPersonNameUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\UpdateStaffingLevelReadModelEvent.cs" />

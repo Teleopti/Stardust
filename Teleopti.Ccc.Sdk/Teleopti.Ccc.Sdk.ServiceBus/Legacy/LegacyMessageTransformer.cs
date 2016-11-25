@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 		ConsumerOf<PersonAbsenceModifiedEvent>,
 		ConsumerOf<DayOffAddedEvent>,
 		ConsumerOf<DayUnscheduledEvent>,
-		ConsumerOf<PersonAssignmentLayerRemovedEvent>
+		ConsumerOf<PersonAssignmentLayerRemovedEvent>,
+		ConsumerOf<ScheduleBackoutEvent>
 	{
 		private readonly IEventPublisher _publisher;
 
@@ -195,5 +196,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 			});
 		}
 
+		public void Consume(ScheduleBackoutEvent message)
+		{
+			_publisher.Publish(message);
+		}
 	}
 }
