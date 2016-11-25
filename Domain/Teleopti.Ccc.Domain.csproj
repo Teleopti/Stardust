@@ -458,6 +458,7 @@
     <Compile Include="Infrastructure\Events\CleanFailedQueue.cs" />
     <Compile Include="Infrastructure\IIndexMaintenanceRepository.cs" />
     <Compile Include="Infrastructure\IndexMaintenanceStardustHandler.cs" />
+    <Compile Include="Intraday\ForecastedCallsModel.cs" />
     <Compile Include="Intraday\ForecastedCallsProvider.cs" />
     <Compile Include="Intraday\ForecastedStaffingProvider.cs" />
     <Compile Include="Intraday\ForecastedStaffingViewModelCreator.cs" />
@@ -471,9 +472,11 @@
     <Compile Include="Intraday\ReforecastedStaffingProvider.cs" />
     <Compile Include="Intraday\RequiredStaffingProvider.cs" />
     <Compile Include="Intraday\ScheduledStaffingProvider.cs" />
+    <Compile Include="Intraday\SkillDayStatsRange.cs" />
     <Compile Include="Intraday\StaffingDataSeries.cs" />
     <Compile Include="Intraday\StaffingIntervalModel.cs" />
     <Compile Include="Intraday\SupportedSkillsInIntradayProvider.cs" />
+    <Compile Include="Intraday\TaskPeriodsProvider.cs" />
     <Compile Include="Intraday\TimeSeriesProvider.cs" />
     <Compile Include="LogObject\LogObjectDetail.cs" />
     <Compile Include="Logon\FullPermissions.cs" />

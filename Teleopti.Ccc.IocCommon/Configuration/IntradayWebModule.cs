@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ForecastedStaffingProvider>().SingleInstance();
 			builder.RegisterType<ReforecastedStaffingProvider>().SingleInstance();
 			builder.RegisterType<SupportedSkillsInIntradayProvider>().SingleInstance();
+			builder.RegisterType<TaskPeriodsProvider>().SingleInstance();
 			builder.RegisterType<FetchSkillInIntraday>().SingleInstance();
 			builder.RegisterType<FetchSkillArea>().SingleInstance();
 			builder.RegisterType<CreateSkillArea>().SingleInstance();

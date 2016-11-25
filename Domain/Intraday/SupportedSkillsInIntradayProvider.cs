@@ -20,14 +20,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 		{
 			var skills = _skillRepository.LoadSkills(skillIdList);
 			var supportedSkills = new List<ISkill>();
-			var supportedSkillIdList = skillIdList;
 
 			foreach (var skill in skills)
 			{
 				if (checkSupportedSkill(skill))
-				{
 					supportedSkills.Add(skill);
-				}
 			}
 			return supportedSkills;
 		}

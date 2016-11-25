@@ -48,8 +48,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var staffingCalculatorService = new StaffingCalculatorServiceFacade();
 			var actualStaffingIntervals = new List<StaffingIntervalModel>();
 
-			double efficiencyFactor;
-
 			foreach (var actualInterval in skillDayStats)
 			{
 				var actualStatsStartTimeUtc = TimeZoneHelper.ConvertToUtc(actualInterval.StartTime, _timeZone.TimeZone());
@@ -67,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 					.Where(x => x.Period.StartDateTime <= actualStatsStartTimeUtc && x.Period.EndDateTime > actualStatsStartTimeUtc)
 					.Select(s => s.Payload.Efficiency)
 					.First();
-				efficiencyFactor = (1/efficencyPerSkillInterval.Value);
+				var efficiencyFactor = (1/efficencyPerSkillInterval.Value);
 
 				var agents = staffingCalculatorService.AgentsUseOccupancy(
 								 skillData.ServiceAgreement.ServiceLevel.Percent.Value,
