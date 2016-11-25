@@ -5,24 +5,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 {
-	public class MoveTestCase
-	{
-		public Action<ArchiveScheduleHandlerTest, IPerson, DateOnlyPeriod, IScenario> CreateTypeInDefaultScenario;
-		public Func<ArchiveScheduleHandlerTest, IScenario, IPersistableScheduleData> LoadMethod { get; set; }
-		public string Type;
-
-		public void VerifyExistsInTargetScenario(ArchiveScheduleHandlerTest testClass, IScenario targetScenario)
-		{
-			var archivedInstance = testClass.WithUnitOfWork.Get(() => LoadMethod(testClass, targetScenario));
-			archivedInstance.Should().Not.Be.Null();
-		}
-
-		public override string ToString()
-		{
-			return Type;
-		}
-	}
-
 	public class SplitTestCase
 	{
 		public DateTime AbsenceStartUtc;

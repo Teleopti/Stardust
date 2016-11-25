@@ -155,6 +155,8 @@
     <Compile Include="ApplicationLayer\AnalyticsPersonPeriodUpdaterIntegrationTests.cs" />
     <Compile Include="ApplicationLayer\Archiving\ArchiveScheduleHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Archiving\ImportScheduleHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\Archiving\MoveTestCase.cs" />
+    <Compile Include="ApplicationLayer\Archiving\ScheduleManagementTestBase.cs" />
     <Compile Include="ApplicationLayer\Archiving\SourceAbsenceSplitTestCase.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireSerializeEventPublishingTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireTestAttribute.cs" />
