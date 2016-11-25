@@ -135,30 +135,30 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		private bool tryScheduleDay(DateOnly day, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, WorkShiftLengthHintOption workShiftLengthHintOption)
 		{
-			var scheduleDay = _matrix.FullWeeksPeriodDictionary[day];
+			IScheduleDayPro scheduleDay = _matrix.FullWeeksPeriodDictionary[day];
 			schedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;
 
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder);
-			var schedDay = scheduleDay.DaySchedulePart();
-			if (schedDay.IsScheduled())
-				return true;
 
-			if (_scheduleService.SchedulePersonOnDay(schedDay, schedulingOptions, effectiveRestriction, new DoNothingResourceCalculateDelayer(), _rollbackService))
+			if (!_scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, effectiveRestriction, resourceCalculateDelayer, _rollbackService))
 			{
-				resourceCalculateDelayer.CalculateIfNeeded(day, schedDay.PersonAssignment().Period, false);
-
-				if (!_workShiftOriginalStateContainer.WorkShiftChanged(day))
+				var days = _rollbackService.ModificationCollection.ToList();
+				_rollbackService.Rollback();
+				foreach (var schedDay in days)
 				{
-					//Roger & Claes: Need to res calc we guess but keep old behavior...
-					//Is this needed at all?
-					_rollbackService.Modify(_workShiftOriginalStateContainer.OldPeriodDaysState[day], new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+					var dateOnly = schedDay.DateOnlyAsPeriod.DateOnly;
+					resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
 				}
-
-				return true;
+				lockDay(day);
+				return false;
 			}
-			_rollbackService.Rollback();
-			lockDay(day);
-			return false;
+
+			if (!_workShiftOriginalStateContainer.WorkShiftChanged(day))
+			{
+				_rollbackService.Modify(_workShiftOriginalStateContainer.OldPeriodDaysState[day], new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+			}
+
+			return true;
 		}
 
 		private bool daysOverMax()
