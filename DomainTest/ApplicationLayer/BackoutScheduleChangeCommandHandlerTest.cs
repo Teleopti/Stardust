@@ -434,8 +434,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(1);
 			var myEvent =
 			EventPublisher.PublishedEvents.First() as ScheduleBackoutEvent;
-			myEvent.StartDateTime.Should().Be.EqualTo(new DateTime(2016, 6, 11, 0, 0, 0, DateTimeKind.Utc));
-			myEvent.EndDateTime.Should().Be.EqualTo(new DateTime(2016, 6, 11, 0, 0, 0, DateTimeKind.Utc));
+			myEvent.StartDateTime.Should().Be.EqualTo(pa.Period.StartDateTime);
+			myEvent.EndDateTime.Should().Be.EqualTo(pa.Period.EndDateTime);
 			myEvent.CommandId.Should().Be.EqualTo(command.TrackedCommandInfo.TrackId);
 			myEvent.PersonId.Should().Be.EqualTo(person.Id);
 		}
