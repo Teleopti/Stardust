@@ -35,12 +35,12 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 		public IJobResultRepository JobResultRepository;
 		public WithUnitOfWork WithUnitOfWork;
 
-		private Scenario _defaultScenario;
-		private Scenario _targetScenario;
-		private DateOnlyPeriod _archivePeriod;
-		private IPerson _person;
-		private IBusinessUnit _businessUnit;
-		private Guid _jobResultId;
+		//private Scenario _defaultScenario;
+		//private Scenario _targetScenario;
+		//private DateOnlyPeriod _archivePeriod;
+		//private IPerson _person;
+		//private IBusinessUnit _businessUnit;
+		//private Guid _jobResultId;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
