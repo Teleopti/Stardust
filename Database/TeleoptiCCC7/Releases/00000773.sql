@@ -1,0 +1,8 @@
+
+ALTER INDEX IX_AgentState_PersonId ON dbo.AgentState
+	REBUILD WITH (FILLFACTOR = 50, PAD_INDEX = ON);
+GO
+ALTER INDEX PK_AgentState ON dbo.AgentState
+	REBUILD WITH (FILLFACTOR = 50, PAD_INDEX = ON);
+GO
+
