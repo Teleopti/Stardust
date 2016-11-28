@@ -365,4 +365,46 @@
 
 	});
 
+	it('should decide belongsToDate for overtime activity with effect from timezone', function () {
+		var normalizedScheduleDataArray = [
+			{
+				date: '2016-07-01',
+				timeRange: {
+					startTime: moment('2016-07-01 08:00'),
+					endTime: moment('2016-07-02 08:00')
+				},
+				shiftRange: {
+					startTime: moment('2016-07-01 12:00'),
+					endTime: moment('2016-07-01 20:00')
+				}
+			},
+			{
+				date: '2016-07-02',
+				timeRange: {
+					startTime: moment('2016-07-02 08:00'),
+					endTime: moment('2016-07-03 08:00')
+				},
+				shiftRange: {
+					startTime: moment('2016-07-02 12:00'),
+					endTime: moment('2016-07-02 20:00')
+				}
+			},
+			{
+				date: '2016-07-03',
+				timeRange: {
+					startTime: moment('2016-07-03 08:00'),
+					endTime: moment('2016-07-04 08:00')
+				},
+				shiftRange: {
+					startTime: moment('2016-07-03 12:00'),
+					endTime: moment('2016-07-03 20:00')
+				}
+			}
+		];
+		var timeRange = { startTime: moment('2016-07-02 4:00'), endTime: moment('2016-07-02 8:00') };
+		var belongsToDate = target.decideBelongsToDateForOvertimeActivity(timeRange, normalizedScheduleDataArray);
+		expect(belongsToDate).toEqual('2016-07-01');		
+
+	});
+
 });

@@ -21,7 +21,13 @@
 
 			if (intersectedShiftDays.length > 0) return intersectedShiftDays[0].date;
 
-			return targetTimeRange.startTime.format("YYYY-MM-DD");
+			var matchedDates = normalizedScheduleDataArray.filter(function(d) {
+				return d.timeRange.startTime <= targetTimeRange.startTime && targetTimeRange.startTime < d.timeRange.endTime;
+			}).map(function(d) {
+				return d.date;
+			});
+
+			return matchedDates[0];
 		}
 
 		function checkTimeRangeAllowedForIntradayAbsence(targetTimeRange, normalizedScheduleDataArray) {
