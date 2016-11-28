@@ -157,6 +157,7 @@
 		vm.resetSchedulePage = function () {
 			vm.paginationOptions.pageNumber = 1;
 			vm.hasSelectedAllPeopleInEveryPage = false;
+			vm.scheduleFullyLoaded = false;
 			vm.loadSchedules();
 		};
 

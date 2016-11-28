@@ -70,7 +70,8 @@ Scenario: Can swap shifts when selected 2 agents' schedule
 	| StartTime        | 2016-10-10 10:00 |
 	| EndTime          | 2016-10-10 17:00 |
 	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'Team green'
 	And I selected agent 'John Smith'
 	And I selected agent 'Bill Gates'
 	And I open menu in team schedule
@@ -90,7 +91,8 @@ Scenario: Could not do shift swap when no permission
 	| Start time | 2016-10-10 08:00 |
 	| End time   | 2016-10-10 17:00 |
 	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I searched schedule with keyword 'Team green'
+	And I set schedule date to '2016-10-10'
 	And I selected agent 'John Smith'
 	And I selected agent 'Bill Gates'
 	And I open menu in team schedule
@@ -100,7 +102,8 @@ Scenario: Schedule with full day absence is not allowed to swap
 	Given 'John Smith' has a full day absence named 'Vacation' on '2016-10-10'	
 	And 'Bill Gates' has a full day absence named 'Illness' on '2016-10-10'
 	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'Team green'
 	And I selected agent 'John Smith'
 	And I selected agent 'Bill Gates'
 	And I open menu in team schedule
@@ -120,7 +123,8 @@ Scenario: Schedule with overnight shift from yesterday is not allowed to swap
 	| StartTime        | 2016-10-10 08:00 |
 	| EndTime          | 2016-10-10 17:00 |
 	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I set schedule date to '2016-10-10'	
+	And I searched schedule with keyword 'Team green'
 	And I selected agent 'John Smith'
 	And I selected agent 'Bill Gates'
 	And I open menu in team schedule

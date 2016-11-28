@@ -17,21 +17,35 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 	[Binding]
 	public sealed class TeamScheduleStepDefinitions
 	{
-		[When(@"I searched schedule with keyword '(.*)' and schedule date '(.*)'")]
-		public void WhenISearchedScheduleWithKeywordAndScheduleDate(string searchkeyword, string scheduleDate)
+		[When(@"I set schedule date to '(.*)'")]
+		public void WhenISetScheduleDateTo(string scheduleDate)
 		{
-			Browser.Interactions.FillWith("#advanced-search", string.Format("\"{0}\"", searchkeyword));
-			Browser.Interactions.PressEnter("#advanced-search");
-
 			var propertyValues = new Dictionary<string, string>
 			{
 				{"vm.scheduleDate", string.Format("new Date('{0}')", scheduleDate)}
 			};
 
-			Browser.Interactions.SetScopeValues(".team-schedule", propertyValues);
-			Browser.Interactions.AssertScopeValue(".team-schedule", "vm.scheduleDateMoment().format('YYYY-MM-DD')", scheduleDate);
-			Browser.Interactions.InvokeScopeAction(".team-schedule", "vm.onScheduleDateChanged");
-			Browser.Interactions.InvokeServiceAction(".team-schedule", "ScenarioTestUtil", "inScenarioTest");
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
+				() =>
+				{
+					Browser.Interactions.SetScopeValues(".team-schedule", propertyValues);
+					Browser.Interactions.AssertScopeValue(".team-schedule", "vm.scheduleDateMoment().format('YYYY-MM-DD')",
+						scheduleDate);
+					Browser.Interactions.InvokeScopeAction(".team-schedule", "vm.onScheduleDateChanged");
+					Browser.Interactions.InvokeServiceAction(".team-schedule", "ScenarioTestUtil", "inScenarioTest");
+				}
+			);
+		}
+
+		[When(@"I searched schedule with keyword '(.*)'")]
+		public void WhenISearchedScheduleWithKeyword(string keyword)
+		{
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
+				() =>
+				{
+					Browser.Interactions.FillWith("input.advanced-input", string.Format("\"{0}\"", keyword));
+					Browser.Interactions.PressEnter("input.advanced-input");
+				});
 		}
 
 		[When(@"I should see schedule with absence '(.*)' for '(.*)' displayed")]
@@ -296,6 +310,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		{
 			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true, () =>
 			{
+				Browser.Interactions.AssertExists("td.shift-category-cell");
 				Browser.Interactions.Click("td.shift-category-cell");
 			});
 		}

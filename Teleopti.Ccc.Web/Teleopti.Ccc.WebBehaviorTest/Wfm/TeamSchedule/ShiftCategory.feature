@@ -54,7 +54,8 @@ Scenario: Show shift category
 @OnlyRunIfEnabled('WfmTeamSchedule_ModifyShiftCategory_39797')
 Scenario: Should be able to change shift category via label
 	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-10-09'
+	And I set schedule date to '2016-10-09'
+	And I searched schedule with keyword 'Team green'
 	And I click on a shift category label
 	And I set shift category as 'Night'
 	And I apply the new shift category
@@ -63,7 +64,8 @@ Scenario: Should be able to change shift category via label
 @OnlyRunIfEnabled('WfmTeamSchedule_ModifyShiftCategory_39797')
 Scenario: Should be able to change shift category via command menu
 	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-10-09'
+	And I set schedule date to '2016-10-09'
+	And I searched schedule with keyword 'Team green'
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
 	And I click menu item 'EditShiftCategory' in team schedule

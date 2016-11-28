@@ -44,15 +44,17 @@ Given I am american
 
 Scenario: Should be able to see enable menu
 	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I searched schedule with keyword 'Team green'
+	And I set schedule date to '2016-10-10'
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
 	Then I should see 'Undo' menu is enabled
-@ignore
+
 @OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
 Scenario: Should be able to undo schedule change
 	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I searched schedule with keyword 'Team green'
+	And I set schedule date to '2016-10-10'
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
 	And I click menu item 'AddActivity' in team schedule

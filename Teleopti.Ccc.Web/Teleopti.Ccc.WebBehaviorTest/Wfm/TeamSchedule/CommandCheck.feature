@@ -60,7 +60,8 @@ Background:
 @OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
 Scenario: Should show command check after adding activity on top of NOT ALLOW MEETING acitvity
 	When I view wfm team schedules
-	And I searched schedule with keyword 'John' and schedule date '2016-10-10'
+	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'John'
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
 	And I click menu item 'AddActivity' in team schedule
@@ -78,7 +79,8 @@ Scenario: Should show command check after adding activity on top of NOT ALLOW ME
 @OnlyRunIfEnabled('WfmTeamSchedule_AddPersonalActivity_37742')
 Scenario: Should show command check after adding person activity on top of NOT ALLOW MEETING acitvity
 	When I view wfm team schedules
-	And I searched schedule with keyword 'John' and schedule date '2016-10-10'
+	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'John'
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
 	And I click menu item 'AddPersonalActivity' in team schedule
@@ -95,7 +97,8 @@ Scenario: Should show command check after adding person activity on top of NOT A
 @OnlyRunIfEnabled('WfmTeamSchedule_MoveActivity_37744')
 Scenario: Should show command check after moving activity on top of NOT ALLOW MEETING acitvity
 	When I view wfm team schedules
-	And I searched schedule with keyword 'John' and schedule date '2016-10-10'
+	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'John'
 	And I selected activity 'Training'
 	And I move activity to '2016-10-10 12:00' with next day being 'false'
 	Then I should be able to see command check

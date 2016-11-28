@@ -32,5 +32,6 @@ Background:
 
 Scenario: Should be able to see contract time
 	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-01-01'
+	And I set schedule date to '2016-01-01'
+	And I searched schedule with keyword 'Team green'
 	Then I should see contract time of '10:00'

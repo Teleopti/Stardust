@@ -81,7 +81,8 @@ Scenario: Could delete absences for an agent
 		| Start time | 2016-10-10 10:00 |
 		| End time   | 2016-10-10 11:00 |
 	When I view wfm team schedules
-	And I searched schedule with keyword 'John' and schedule date '2016-10-10'
+	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'John'
 	Then I should see schedule with absence 'Vacation' for 'John Smith' displayed
 	When I selected agent 'John Smith'
 	And I open menu in team schedule
@@ -96,7 +97,8 @@ Scenario: Absence deletion should only be enabled when when absence selected
 		| Start time | 2016-10-10 10:00 |
 		| End time   | 2016-10-10 11:00 |
 	When I view wfm team schedules
-	And I searched schedule with keyword 'John' and schedule date '2016-10-10'
+	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'John'
 	And I should see schedule with absence 'Vacation' for 'John Smith' displayed
 	And I open menu in team schedule
 	Then I should see 'RemoveAbsence' menu item is disabled
@@ -105,7 +107,8 @@ Scenario: Full day absence should be able to delete
 	Given 'John Smith' has a full day absence named 'Vacation' on '2016-10-10'	
 	And 'Bill Gates' has a full day absence named 'Illness' on '2016-10-10'
 	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'Team green'
 	And I selected agent 'John Smith'
 	And I selected agent 'Bill Gates'
 	And I open menu in team schedule
@@ -124,7 +127,8 @@ Scenario: Could delete absences for multiple agents
 		| Start time | 2016-10-10 10:00 |
 		| End time   | 2016-10-10 11:00 |
 	When I view wfm team schedules
-	And I searched schedule with keyword 'green' and schedule date '2016-10-10'
+	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'green'
 	Then I should see schedule with absence 'Vacation' for 'John Smith' displayed
 	When I selected agent 'John Smith'
 	And I selected agent 'Bill Gates'

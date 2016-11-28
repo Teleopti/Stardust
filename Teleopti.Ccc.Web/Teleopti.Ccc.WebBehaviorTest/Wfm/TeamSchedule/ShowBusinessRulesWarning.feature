@@ -47,14 +47,16 @@ Background:
 @OnlyRunIfDisabled('WfmTeamSchedule_FilterValidationWarnings_40110')
 Scenario: Should be able to see business rule warnings
 	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'Team green'
 	And I switch on show warnings toggle
 	Then I should see business rule warning
 
 @OnlyRunIfEnabled('WfmTeamSchedule_FilterValidationWarnings_40110')
 Scenario: Should see no warnings if the validation rule type is not set to be viewable
 	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'Team green'
 	And I switch on show warnings toggle
 	And I open teamschedule setting panel
 	And I choose not to view 'NewNightlyRestRuleName' validation result
@@ -63,7 +65,8 @@ Scenario: Should see no warnings if the validation rule type is not set to be vi
 @OnlyRunIfEnabled('WfmTeamSchedule_FilterValidationWarnings_40110')
 Scenario: Should see the warnings if the validation rule type is set to be viewable
 	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'Team green'
 	And I switch on show warnings toggle
 	And I open teamschedule setting panel
 	And I choose to view 'NewNightlyRestRuleName' validation result
