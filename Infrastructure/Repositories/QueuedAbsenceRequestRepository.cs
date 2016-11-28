@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public QueuedAbsenceRequestRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{
-
 		}
 
 		public IList<IQueuedAbsenceRequest> Find(DateTimePeriod period)
@@ -40,10 +39,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				sqlQuery.SetParameterList("ids", batch);
 				sqlQuery.ExecuteUpdate();
 			}
-			
 		}
-
-
+		
 		public void Remove(DateTime sentTimeStamp)
 		{
 			if (sentTimeStamp.Year < 1800 || sentTimeStamp.Year > 9999) //bug 40907 sometimes looks like we get wrong timestamp
@@ -61,6 +58,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			sqlQuery.SetDateTime("timeStamp", DateTime.UtcNow.AddMinutes(-minutes));
 			sqlQuery.ExecuteUpdate();
 		}
-
 	}
 }

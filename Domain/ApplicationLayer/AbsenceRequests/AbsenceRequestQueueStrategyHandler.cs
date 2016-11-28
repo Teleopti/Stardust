@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -82,9 +80,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					var listOfAbsenceRequests = _absenceRequestStrategyProcessor.Get(nearFutureThresholdTime, farFutureThresholdTime, pastThresholdTime, initialPeriod, windowSize);
 					if (!listOfAbsenceRequests.Any()) return;
 
+					var sent = _now.UtcDateTime();
 					listOfAbsenceRequests.ForEach(absenceRequests =>
 					{
-						var sent = DateTime.UtcNow;
 						var requests = absenceRequests.ToList();
 						var multiAbsenceRequestsEvent = new NewMultiAbsenceRequestsCreatedEvent
 						{
@@ -93,12 +91,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						};
 						_publisher.Publish(multiAbsenceRequestsEvent);	
 						_queuedAbsenceRequestRepository.Send(requests, sent);
-						Thread.Sleep(1000); //Sleep 1 second to make unique timestamps
+
+						sent = sent.AddSeconds(1);
 					});
 
 					uow.PersistAll();
 				}
-
 			});
 			_businessUnitScope.OnThisThreadUse(initialBu);
 		}
