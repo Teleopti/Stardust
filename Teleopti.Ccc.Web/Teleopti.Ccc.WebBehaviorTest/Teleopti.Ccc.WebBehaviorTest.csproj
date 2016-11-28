@@ -1053,11 +1053,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ShowBusinessRulesWarning.feature</DependentUpon>
     </Compile>
-    <Compile Include="Wfm\TeamSchedule\ShowContractTime.feature.cs">
-      <DependentUpon>ShowContractTime.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Wfm\TeamSchedule\ActivityActions.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1583,10 +1578,6 @@
     <None Include="Wfm\TeamSchedule\ShowBusinessRulesWarning.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ShowBusinessRulesWarning.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\TeamSchedule\ShowContractTime.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ShowContractTime.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\TeamSchedule\ActivityActions.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

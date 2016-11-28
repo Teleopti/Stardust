@@ -379,7 +379,6 @@ describe("teamschedule person schedule tests", function () {
 
 	it('Should get correct formatted contact time', function() {
 		var queryDate = "2015-10-30";
-		var yesterday = moment(queryDate).add(-1, "days").startOf("days").format("YYYY-MM-DD");
 		var timeLineStart = 0;
 		var timeLineEnd = 1440;
 
@@ -419,7 +418,6 @@ describe("teamschedule person schedule tests", function () {
 
 	it('Should get correct formatted contact time when it is greater than 24 hours', function() {
 		var queryDate = "2015-10-30";
-		var yesterday = moment(queryDate).add(-1, "days").startOf("days").format("YYYY-MM-DD");
 		var timeLineStart = 0;
 		var timeLineEnd = 1440;
 
