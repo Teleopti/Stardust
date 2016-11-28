@@ -92,7 +92,7 @@
 	<div class="con-flex">
 		<div class="panel material-depth-1">
 			<div class="sub-header">
-				<h2 class="skill-list-header"><b>{{ selectedSkillArea.Name }}</b>: {{selectedSkillArea.Skills.length}} {{'PersonSkill'|translate}} ({{skillAreaMessage}})</h2>
+				<h2 class="skill-list-header"><b>{{ selectedSkillArea.Name }}</b>: {{selectedSkillArea.Skills.length}} {{'PersonSkill'|translate}} <span ng-if="skillAreaMessage">({{skillAreaMessage}})</span></h2>
 				<div class="head-actions panel-menu">
 					<div tabindex=0 class="context-menu card-context">
 						<i class="skill-area-options mdi mdi-dots-vertical"></i>
@@ -111,14 +111,14 @@
 			</div>
 			<div ng-hide="showIncluded" class="animate-show con-row">
 				<div class="con-flex">
-					<div class="wfm-chip-wrap" ng-repeat="skill in selectedSkillArea.Skills | orderBy : Name" ng-class="{'chip-disabled':!skill.DoDisplayData}">
+					<div class="wfm-chip-wrap" ng-repeat="skill in selectedSkillArea.Skills | orderBy : Name" ng-class="{'chip-disabled':skill.DoDisplayData === false}">
 						<span class="wfm-chip" ng-click="openSkillFromArea(skill)">
-							<span class="chip-handle" ng-class="{'chip-warning':!skill.DoDisplayData}">
-								<i class="mdi" ng-class="{'mdi-phone':skill.DoDisplayData, 'mdi-alert':!skill.DoDisplayData}"></i>
+							<span class="chip-handle" ng-class="{'chip-warning':skill.DoDisplayData === false}">
+								<i class="mdi" ng-class="{'mdi-phone':skill.DoDisplayData === undefined, 'mdi-alert':skill.DoDisplayData === false}"></i>
 							</span>
 							<md-tooltip>
-								<span ng-if="skill.DoDisplayData">{{'SkillTypeInboundTelephony' | translate}}</span>
-								<span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
+								<span ng-if="skill.DoDisplayData === undefined">{{'SkillTypeInboundTelephony' | translate}}</span>
+								<span ng-if="skill.DoDisplayData === false">{{'UnsupportedSkill' | translate}}</span>
 							</md-tooltip>
 							<span class="chip-text">{{skill.Name}}</span>
 						</span>

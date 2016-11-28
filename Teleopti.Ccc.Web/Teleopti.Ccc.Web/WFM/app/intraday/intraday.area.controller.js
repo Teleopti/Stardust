@@ -134,7 +134,7 @@
 					$scope.skillAreaSelected(item);
 					pollActiveTabData($scope.activeTab);
 					$scope.prevArea = $scope.selectedItem;
-
+					item.UnsupportedSkills = [];
 					checkUnsupported(item);
 				}
 				if ($scope.drillable === true && $scope.selectedItem.skills) {
@@ -175,18 +175,18 @@
 			};
 
 			var checkUnsupported = function(item){
-				var unsupportedSkillsInArea = [];
-
-				for ( var i = 0; i < item.Skills.length; i++ ) {
-					for ( var j = 0; j < $scope.skills.length; j++ ) {
-						if ( item.Skills[i].Id === $scope.skills[j].Id ) {
-							item.Skills[i].DoDisplayData = $scope.skills[j].DoDisplayData;
-							if ($scope.skills[j].DoDisplayData === false) {
-								unsupportedSkillsInArea.push('');
-								$scope.skillAreaMessage = $translate.instant('UnsupportedSkills').replace('{0}', unsupportedSkillsInArea.length);
-							}
+				for (var i = 0; i < item.Skills.length; i++) {
+					for (var j = 0; j < $scope.skills.length; j++) {
+						if (item.Skills[i].Id === $scope.skills[j].Id && $scope.skills[j].DoDisplayData === false) {
+							item.UnsupportedSkills.push($scope.skills[j])
+							item.Skills[i].DoDisplayData = false;
 						}
 					}
+				}
+				if (item.UnsupportedSkills.length > 0) {
+					$scope.skillAreaMessage = $translate.instant('UnsupportedSkills').replace('{0}', item.UnsupportedSkills.length);
+				} else{
+					$scope.skillAreaMessage = "";
 				}
 			};
 
