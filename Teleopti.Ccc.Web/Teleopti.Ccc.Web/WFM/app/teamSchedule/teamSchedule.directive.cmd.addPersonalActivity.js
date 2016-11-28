@@ -183,7 +183,7 @@
 			bindToController: true,
 			templateUrl: 'app/teamSchedule/html/addPersonalActivity.tpl.html',
 			require: ['^teamscheduleCommandContainer', 'addPersonalActivity'],
-			link: function (scope, elem, attrs, ctrls) {
+			link: function(scope, elem, attrs, ctrls) {
 				var containerCtrl = ctrls[0],
 					selfCtrl = ctrls[1];
 
@@ -193,7 +193,8 @@
 				scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
 				scope.vm.getActionCb = containerCtrl.getActionCb;
 				scope.vm.checkCommandActivityLayerOrders = containerCtrl.hasToggle('CheckOverlappingCertainActivitiesEnabled');
-				scope.vm.manageScheduleForDistantTimezonesEnabled = containerCtrl.hasToggle('ManageScheduleForDistantTimezonesEnabled');
+				scope.vm.manageScheduleForDistantTimezonesEnabled = containerCtrl
+					.hasToggle('ManageScheduleForDistantTimezonesEnabled');
 
 				scope.vm.timeRange = {
 					startTime: selfCtrl.getDefaultActvityStartTime(),
@@ -202,15 +203,20 @@
 
 				scope.vm.containerCtrl = containerCtrl;
 
-				scope.$watch(function () {
-					return {
-						startTime: moment(scope.vm.timeRange.startTime).format("YYYY-MM-DD HH:mm"),
-						endTime: moment(scope.vm.timeRange.endTime).format("YYYY-MM-DD HH:mm")
-					};
-				},
-					function (newVal) {
-						scope.vm.updateInvalidAgents();
-					}, true);
+				scope.$watch(function() {
+						if (!scope.vm.timeRange) return null;
+
+						return {
+							startTime: moment(scope.vm.timeRange.startTime).format("YYYY-MM-DD HH:mm"),
+							endTime: moment(scope.vm.timeRange.endTime).format("YYYY-MM-DD HH:mm")
+						};
+					},
+					function(newVal) {
+						if (newVal) {
+							scope.vm.updateInvalidAgents();
+						}
+					},
+					true);
 
 			}
 		};
