@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (isPeriodWorse)
 			{
 				_rollbackService.Rollback();
-				_resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
+				_resourceCalculateDelayer.CalculateIfNeeded(dateOnly, originalShift.ProjectionService().CreateProjection().Period(), false);
 				lockDay(dateOnly);
 				return true;
 			}
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (_optimizationLimits.HasOverLimitExceeded(lastOverLimitCounts, _matrix) || daysOverMax())
 			{
 				_rollbackService.Rollback();
-				_resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
+				_resourceCalculateDelayer.CalculateIfNeeded(dateOnly, originalShift.ProjectionService().CreateProjection().Period(), false);
 				lockDay(dateOnly);
 				return false;
 			}
