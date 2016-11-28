@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Castle.Core.Internal;
 using NHibernate;
 using Teleopti.Interfaces.Domain;
 
@@ -62,8 +63,15 @@ AND :today BETWEEN g.StartDate and g.EndDate",
 			inAlarm = true;
 		}
 
+		private IEnumerable<Guid?> excluded;
+		public void Exclude(IEnumerable<Guid?> excludedStates)
+		{
+			excluded = excludedStates;
+		}
+
 		public Selection Build()
 		{
+			var setFuncs = new List<Func<ISQLQuery, IQuery>>();
 			var builder = new StringBuilder("SELECT DISTINCT TOP 50 a.* FROM [ReadModel].AgentState a WITH (NOLOCK) ");
 			if (selections.All(x => x.Type == Type.Skill))
 			{
@@ -85,19 +93,37 @@ AND :today BETWEEN g.StartDate and g.EndDate",
 						.Where(x => x.Type == Type.Org)
 						.Select(x => x.Query)))
 					.Append(")");
-				
+
+			}
+			if (!excluded.IsNullOrEmpty())
+			{
+				builder
+					.Append(" AND ")
+					.Append("(");
+				if (excluded.Any(x => x.HasValue))
+				{
+					builder.Append("StateGroupId NOT IN(:excludedStateGroupIds) ");
+					setFuncs.Add(s => s.SetParameterList("excludedStateGroupIds", excluded.Where(x => x.HasValue)));
+					if (excluded.All(x => x.HasValue))
+						builder.Append("OR StateGroupId IS NULL ");
+				}
+				if (excluded.All(x => !x.HasValue))
+					builder.Append("StateGroupId IS NOT NULL ");
+				builder.Append(")");
+
 			}
 			if (inAlarm)
 			{
 				builder.Append(@" AND 
 			AlarmStartTime <= :now 
-			ORDER BY AlarmStartTime ASC");
-				selections.Add(new selectionInfo { Set = s => s.SetParameter("now", _now.UtcDateTime()) });
+			ORDER BY AlarmStartTime ASC ");
+				setFuncs.Add(s => s.SetParameter("now", _now.UtcDateTime()));
 			}
+
 			return new Selection
 			{
 				Query = builder.ToString(),
-				ParameterFuncs = selections.Select(x => x.Set).ToArray()
+				ParameterFuncs = setFuncs.Concat(selections.Select(x => x.Set)).ToArray()
 			};
 		}
 

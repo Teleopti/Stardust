@@ -75,6 +75,19 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return ReadInAlarmForSkills(skillIds);
 		}
 
+		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingStatesFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStates)
+		{
+			if (siteIds != null && skillIds != null)
+				return ReadInAlarmExcludingPhoneStatesForSitesAndSkill(siteIds, skillIds, excludedStates);
+			if (siteIds != null)
+				return ReadInAlarmExcludingPhoneStatesForSites(siteIds, excludedStates);
+			if (teamIds != null && skillIds != null)
+				return ReadInAlarmExcludingPhoneStatesForTeamsAndSkill(teamIds, skillIds, excludedStates);
+			if (teamIds != null)
+				return ReadInAlarmExcludingPhoneStatesForTeams(teamIds, excludedStates);
+			return ReadInAlarmExcludingPhoneStatesForSkills(skillIds, excludedStates);
+		}
+
 		public IEnumerable<AgentStateReadModel> ReadForSites(IEnumerable<Guid> siteIds)
 		{
 			return _unitOfWork.Current().Session()

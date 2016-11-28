@@ -34,6 +34,14 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return build(queryBuilder, siteIds, teamIds, skillIds);
 		}
 
+		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingStatesFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStates)
+		{
+			var queryBuilder = new AgentStateReadModelQueryBuilder(_now);
+			queryBuilder.InAlarm();
+			queryBuilder.Exclude(excludedStates);
+			return build(queryBuilder, siteIds, teamIds, skillIds);
+		}
+
 		private IEnumerable<AgentStateReadModel> build(AgentStateReadModelQueryBuilder queryBuilder, IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds,
 			IEnumerable<Guid> skillIds)
 		{

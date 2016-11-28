@@ -139,6 +139,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return ReadInAlarmForSkills(skillIds);
 		}
 
+		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingStatesFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStates)
+		{
+			yield break;
+		}
+
 		public IEnumerable<AgentStateReadModel> ReadForSites(IEnumerable<Guid> siteIds)
 		{
 			return
