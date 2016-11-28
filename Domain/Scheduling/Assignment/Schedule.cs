@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private readonly IScheduleDictionary _owner;
         private readonly IScheduleParameters _parameters;
         private List<IScheduleData> _scheduleDataCollection;
-
 		
         private readonly object lockObject = new object();
 		

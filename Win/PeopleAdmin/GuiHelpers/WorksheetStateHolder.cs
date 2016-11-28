@@ -295,12 +295,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 		public void GetChildPersonPeriods(int index, FilteredPeopleHolder filteredPeopleHolder)
 		{
-			IPerson filteredPerson = filteredPeopleHolder.PersonPeriodGridViewCollection[index].Parent;
+			var personPeriodGridView = filteredPeopleHolder.PersonPeriodGridViewCollection[index];
+			var filteredPerson = personPeriodGridView.Parent;
 
-			bool canBold = filteredPeopleHolder.PersonPeriodGridViewCollection[index].CanBold;
-			IPersonPeriod currentPersonPeriod = filteredPeopleHolder.PersonPeriodGridViewCollection[index].Period;
+			var canBold = personPeriodGridView.CanBold;
+			var currentPersonPeriod = personPeriodGridView.Period;
 
-			IList<IPersonPeriod> personPeriodCollection = new List<IPersonPeriod>(filteredPerson.PersonPeriodCollection);
+			var personPeriodCollection = new List<IPersonPeriod>(filteredPerson.PersonPeriodCollection);
 
 			_personPeriodGridViewChildCollection = new List<PersonPeriodChildModel>();
 			CurrentChildName = filteredPeopleHolder.CommonNameDescription.BuildCommonNameDescription(filteredPerson); //.Name.ToString();
@@ -327,11 +328,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		public void GetChildPersonPeriods(int index, FilteredPeopleHolder filteredPeopleHolder,
 			 ReadOnlyCollection<PersonPeriodChildModel> cachedPersonPeriodChildCollection)
 		{
-			IPerson filteredPerson = filteredPeopleHolder.PersonPeriodGridViewCollection[index].Parent;
-			bool canBold = filteredPeopleHolder.PersonPeriodGridViewCollection[index].CanBold;
-			IPersonPeriod currentPersonPeriod = filteredPeopleHolder.PersonPeriodGridViewCollection[index].Period;
+			var personPeriodGridView = filteredPeopleHolder.PersonPeriodGridViewCollection[index];
+			var filteredPerson = personPeriodGridView.Parent;
+			var canBold = personPeriodGridView.CanBold;
+			var currentPersonPeriod = personPeriodGridView.Period;
 
-			IList<IPersonPeriod> personPeriodCollection = new List<IPersonPeriod>(filteredPerson.PersonPeriodCollection);
+			var personPeriodCollection = new List<IPersonPeriod>(filteredPerson.PersonPeriodCollection);
 
 			_personPeriodGridViewChildCollection = new List<PersonPeriodChildModel>();
 			CurrentChildName = filteredPeopleHolder.CommonNameDescription.BuildCommonNameDescription(filteredPerson); //.Name.ToString();
@@ -373,9 +375,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		public IPersonPeriod AddPersonPeriod(int rowIndex, Collection<PersonPeriodModel>
 			 personPeriodGridViewCollection, FilteredPeopleHolder filteredPeopleHolder)
 		{
-			IPerson personFiltered = personPeriodGridViewCollection[rowIndex].Parent;
-			IPersonPeriod personPeriod = getSamplePersonPeriod(filteredPeopleHolder,
-				 personPeriodGridViewCollection[rowIndex].Period, personFiltered);
+			var personPeriodGridView = personPeriodGridViewCollection[rowIndex];
+			var personFiltered = personPeriodGridView.Parent;
+			var personPeriod = getSamplePersonPeriod(filteredPeopleHolder, personPeriodGridView.Period, personFiltered);
 
 			if (personPeriod != null)
 			{
@@ -578,13 +580,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 		public void GetChildSchedulePeriods(int index, Collection<SchedulePeriodModel> schedulePeriodGridViewCollection, CommonNameDescriptionSetting commonNameDescription)
 		{
-			IList<ISchedulePeriod> schedulePeriodCollection = schedulePeriodGridViewCollection[index].Parent.PersonSchedulePeriodCollection;
+			var schedulePeriodGridView = schedulePeriodGridViewCollection[index];
+			var schedulePeriodCollection = schedulePeriodGridView.Parent.PersonSchedulePeriodCollection;
 
-			bool canBold = schedulePeriodGridViewCollection[index].CanBold;
-			ISchedulePeriod currentSchedulePeriod = schedulePeriodGridViewCollection[index].SchedulePeriod;
+			var canBold = schedulePeriodGridView.CanBold;
+			var currentSchedulePeriod = schedulePeriodGridView.SchedulePeriod;
 
 			_schedulePeriodGridViewChildCollection = new List<SchedulePeriodChildModel>();
-			CurrentChildName = commonNameDescription.BuildCommonNameDescription(schedulePeriodGridViewCollection[index].Parent);
+			CurrentChildName = commonNameDescription.BuildCommonNameDescription(schedulePeriodGridView.Parent);
 
 			foreach (ISchedulePeriod schedulePeriod in schedulePeriodCollection)
 			{
@@ -596,7 +599,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 					model.CanBold = true;
 				}
 
-				model.FullName = commonNameDescription.BuildCommonNameDescription(schedulePeriodGridViewCollection[index].Parent);
+				model.FullName = commonNameDescription.BuildCommonNameDescription(schedulePeriodGridView.Parent);
 				_schedulePeriodGridViewChildCollection.Add(model);
 			}
 		}
@@ -604,13 +607,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		public void GetChildSchedulePeriods(int index, Collection<SchedulePeriodModel> schedulePeriodGridViewCollection,
 			 ReadOnlyCollection<SchedulePeriodChildModel> cachedSchedulePeriodChildCollection, CommonNameDescriptionSetting commonNameDescription)
 		{
-			IList<ISchedulePeriod> schedulePeriodCollection = schedulePeriodGridViewCollection[index].Parent.PersonSchedulePeriodCollection;
+			var schedulePeriodGridView = schedulePeriodGridViewCollection[index];
+			var schedulePeriodCollection = schedulePeriodGridView.Parent.PersonSchedulePeriodCollection;
 
-			bool canBold = schedulePeriodGridViewCollection[index].CanBold;
-			ISchedulePeriod currentSchedulePeriod = schedulePeriodGridViewCollection[index].SchedulePeriod;
+			var canBold = schedulePeriodGridView.CanBold;
+			var currentSchedulePeriod = schedulePeriodGridView.SchedulePeriod;
 
 			_schedulePeriodGridViewChildCollection = new List<SchedulePeriodChildModel>();
-			CurrentChildName = commonNameDescription.BuildCommonNameDescription(schedulePeriodGridViewCollection[index].Parent);
+			CurrentChildName = commonNameDescription.BuildCommonNameDescription(schedulePeriodGridView.Parent);
 
 			foreach (ISchedulePeriod schedulePeriod in schedulePeriodCollection)
 			{
@@ -638,7 +642,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 					}
 				}
 
-				model.FullName = schedulePeriodGridViewCollection[index].Parent.Name.ToString();
+				model.FullName = schedulePeriodGridView.Parent.Name.ToString();
 
 				_schedulePeriodGridViewChildCollection.Add(model);
 			}
@@ -756,7 +760,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			//there is no PersonRotation associated with the person
 			if (selectedItem != null)
 			{
-				CurrentRotationChildName = filteredPeopleHolder.ParentPersonRotationCollection[rowIndex].Person.Name.ToString();
+				CurrentRotationChildName = selectedItem.Person.Name.ToString();
 
 				_childrenPersonRotationCollection =
 					 filteredPeopleHolder.AllPersonRotationCollection.Where(a => a.Person.Equals(selectedItem.Person)).ToList();
@@ -802,7 +806,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			//there is no PersonRotation associated with the person
 			if (selectedItem != null)
 			{
-				CurrentRotationChildName = filteredPeopleHolder.ParentPersonAvailabilityCollection[rowIndex].Person.Name.ToString();
+				CurrentRotationChildName = selectedItem.Person.Name.ToString();
 
 				_childrenPersonAvailabilityCollection =
 					 filteredPeopleHolder.AllPersonAvailabilityCollection.Where(a => a.Person.Equals(selectedItem.Person)).ToList();
@@ -956,9 +960,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			}
 			return null;
 		}
-
-
-
+		
 		public ReadOnlyCollection<IPersonAccountChildModel> PersonAccountChildGridData
 		{
 			get
@@ -970,8 +972,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 				return new ReadOnlyCollection<IPersonAccountChildModel>(_personaccountGridViewChildCollection);
 			}
 		}
-
-
+		
 		public ReadOnlyCollection<IPersonAccountChildModel> PersonAccountChildGridDataWhenAndChild
 		{
 			get
@@ -985,17 +986,16 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		public void GetChildPersonAccounts(int index,
 							 FilteredPeopleHolder filteredPeopleHolder)
 		{
-
-
-			Collection<IPersonAccountModel> personAccountGridViewAdaptorCollection =
+			var personAccountGridViewAdaptorCollection =
 				filteredPeopleHolder.PersonAccountModelCollection;
-			IPerson personFiltered = personAccountGridViewAdaptorCollection[index].Parent.Person;
+			var personAccountGridViewAdaptor = personAccountGridViewAdaptorCollection[index];
+			var personFiltered = personAccountGridViewAdaptor.Parent.Person;
 
-			IDictionary<IPerson, IPersonAccountCollection> allAccounts = filteredPeopleHolder.AllAccounts;
+			var allAccounts = filteredPeopleHolder.AllAccounts;
 			var personAcccountCollection = allAccounts[personFiltered];
 
-			bool canBold = personAccountGridViewAdaptorCollection[index].CanBold;
-			IAccount currentAccount = personAccountGridViewAdaptorCollection[index].CurrentAccount;
+			var canBold = personAccountGridViewAdaptor.CanBold;
+			var currentAccount = personAccountGridViewAdaptor.CurrentAccount;
 
 			_personaccountGridViewChildCollection = new List<IPersonAccountChildModel>();
 			CommonNameDescriptionSetting commonNameDescription = filteredPeopleHolder.CommonNameDescription;
@@ -1003,7 +1003,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 			foreach (var account in personAcccountCollection.AllPersonAccounts())
 			{
-				var adapter = new PersonAccountChildModel(filteredPeopleHolder.RefreshService, allAccounts[personFiltered], account,
+				var adapter = new PersonAccountChildModel(filteredPeopleHolder.RefreshService, personAcccountCollection, account,
 																		commonNameDescription,
 																		new FilteredPeopleAccountUpdater(filteredPeopleHolder, UnitOfWorkFactory.Current));
 				if (adapter.ContainedEntity != null && ((account == currentAccount) && canBold) ||
@@ -1025,13 +1025,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 			Collection<IPersonAccountModel> personAccountGridViewAdaptorCollection =
 				filteredPeopleHolder.PersonAccountModelCollection;
-			IPerson personFiltered = personAccountGridViewAdaptorCollection[index].Parent.Person;
+			var personAccountGridViewAdaptor = personAccountGridViewAdaptorCollection[index];
+			IPerson personFiltered = personAccountGridViewAdaptor.Parent.Person;
 
 			IDictionary<IPerson, IPersonAccountCollection> allAccounts = filteredPeopleHolder.AllAccounts;
 			var accountCollection = allAccounts[personFiltered];
 
-			bool canBold = personAccountGridViewAdaptorCollection[index].CanBold;
-			IAccount currentAccount = personAccountGridViewAdaptorCollection[index].CurrentAccount;
+			bool canBold = personAccountGridViewAdaptor.CanBold;
+			IAccount currentAccount = personAccountGridViewAdaptor.CurrentAccount;
 
 			_personaccountGridViewChildCollection = new List<IPersonAccountChildModel>();
 
@@ -1040,7 +1041,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 			foreach (var account in accountCollection.AllPersonAccounts())
 			{
-				var adapter = new PersonAccountChildModel(filteredPeopleHolder.RefreshService, allAccounts[personFiltered], account, commonNameDescription, new FilteredPeopleAccountUpdater(filteredPeopleHolder, UnitOfWorkFactory.Current));
+				var adapter = new PersonAccountChildModel(filteredPeopleHolder.RefreshService, accountCollection, account, commonNameDescription, new FilteredPeopleAccountUpdater(filteredPeopleHolder, UnitOfWorkFactory.Current));
 				handleCanBold(cachedCollection, canBold, currentAccount, account, adapter);
 				_personaccountGridViewChildCollection.Add(adapter);
 			}
