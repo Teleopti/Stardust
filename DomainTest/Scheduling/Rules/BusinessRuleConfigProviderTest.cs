@@ -35,10 +35,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				new ShiftTradeMeetingSpecification()
 			};
 
-			var target = new BusinessRuleConfigProvider(businessRuleProvider, specifications, stateHolder);
+			var lightSpecifications = new List<IShiftTradeLightSpecification>
+			{
+				new ShiftTradeSkillSpecification()
+			};
+
+			var target = new BusinessRuleConfigProvider(businessRuleProvider, specifications, lightSpecifications, stateHolder);
 			var result = target.GetDefaultConfigForShiftTradeRequest().ToList();
 
-			Assert.AreEqual(businessRules.Count + specifications.Count - 2, result.Count);
+			Assert.AreEqual(businessRules.Count + specifications.Count + lightSpecifications.Count - 2, result.Count);
 			Assert.IsNull(result.FirstOrDefault(x => x.BusinessRuleType == ruleToRemove1.FullName));
 			Assert.IsNull(result.FirstOrDefault(x => x.BusinessRuleType == ruleToRemove2.FullName));
 
@@ -57,6 +62,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Assert.IsNotNull(config);
 				// TODO: Set friendly name for specifications
 				//Assert.IsTrue(string.CompareOrdinal(config.FriendlyName, specification.FriendlyName) == 0);
+				Assert.IsTrue(config.Enabled);
+				Assert.IsTrue(config.HandleOptionOnFailed == RequestHandleOption.AutoDeny);
+			}
+
+			foreach (var liteSpecification in lightSpecifications)
+			{
+				var config = result.FirstOrDefault(x => x.BusinessRuleType == liteSpecification.GetType().FullName);
+				Assert.IsNotNull(config);
+				// TODO: Set friendly name for specifications
+				//Assert.IsTrue(string.CompareOrdinal(config.FriendlyName, liteSpecification.FriendlyName) == 0);
 				Assert.IsTrue(config.Enabled);
 				Assert.IsTrue(config.HandleOptionOnFailed == RequestHandleOption.AutoDeny);
 			}
