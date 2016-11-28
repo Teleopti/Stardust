@@ -33,38 +33,56 @@
 
 		vm.currentDateString = vm.shortDateFormat;
 		vm.step = parseInt(vm.step) || 1;
+		vm.dateInputValid = true;
 
 		vm.afterDateChangeDatePicker = function () {
 			vm.toggleCalendar();
 			vm.onDateChange && $timeout(function () { vm.onDateChange({ date: vm.selectedDate }) });
 		};
 
-		vm.afterDateChangeInput = function (currentDateStr) {
-			if (currentDateStr != vm.currentDateString) {
-				vm.currentDateString = currentDateStr;
-				var currentDay = new Date(currentDateStr);
+		vm.onDateInputChange = function (currentDateStr) {
 
-				if (!isNaN(currentDay.getTime()) && currentDay.getTime() > 0) {
-					vm.selectedDate = new Date(currentDateStr);
-					vm.onDateChange && $timeout(function () { vm.onDateChange({ date: vm.selectedDate }) });
-				} else {
-					vm.isInputDateValid = false;
-				}
+			if (!testDateStringFormat(currentDateStr)) {
+				vm.dateInputValid = false;
+				return;
 			}
+
+			var newDateObj = new Date(currentDateStr);
+
+			if (!isNaN(newDateObj.getTime()) && newDateObj.getTime() > 0) {
+				newDateObj.setHours(vm.selectedDate.getHours());
+				newDateObj.setMinutes(vm.selectedDate.getMinutes());
+				vm.dateInputValid = true;
+				vm.currentDateString = currentDateStr;
+				vm.selectedDate = newDateObj;
+				vm.onDateChange && $timeout(function () { vm.onDateChange({ date: vm.selectedDate }) });
+			} else {
+				vm.dateInputValid = false;
+			}
+
 		};
 
 		vm.gotoPreviousDate = function () {
 			var currentDate = moment(vm.selectedDate).add(-(vm.step), "day").toDate();
-			vm.afterDateChangeInput(currentDate);
+			vm.onDateInputChange(currentDate);
 		};
 
 		vm.gotoNextDate = function () {
 			var currentDate = moment(vm.selectedDate).add(vm.step, "day").toDate();
-			vm.afterDateChangeInput(currentDate);
+			vm.onDateInputChange(currentDate);
 		};
 
 		vm.toggleCalendar = function () {
 			vm.isCalendarOpened = !vm.isCalendarOpened;
 		};
+
+		function testDateStringFormat(dateStr) {
+			if (typeof dateStr !== 'string') {
+				return false;
+			}
+			var format = /^(\d{4})-(\d{2})-(\d{2})$/;
+			var m = dateStr.match(format);
+			return (!!m);
+		}
 	}
 })();

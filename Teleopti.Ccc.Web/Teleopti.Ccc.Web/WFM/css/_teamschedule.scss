@@ -157,6 +157,10 @@
 			#teamschedule-datepicker-input {
 				text-align: center;
 				width: 90px;
+
+				&.ng-invalid {
+					border-bottom-color: $orange-600;
+				}
 			}
 
 			.wfm-datepicker-wrap {

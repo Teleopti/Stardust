@@ -3,8 +3,8 @@
 		<i class="mdi mdi-chevron-double-left"></i>
 	</button>
 
-	<input type="text" id="teamschedule-datepicker-input" class="pointer" ng-model="vm.shortDateFormat"
-		   ng-change="vm.afterDateChangeInput(vm.shortDateFormat)" />
+	<input type="text" id="teamschedule-datepicker-input" class="pointer" ng-class="{ 'ng-invalid': !vm.dateInputValid }" ng-model="vm.shortDateFormat" ng-model-options="{ updateOn: 'blur' }" placeholder="YYYY-MM-DD"
+		   ng-change="vm.onDateInputChange(vm.shortDateFormat)" />
 
 	<div class="wfm-datepicker-wrap" ng-if="vm.isCalendarOpened">
 		<div class="sub-header" ng-if="false">
