@@ -8,5 +8,6 @@ describe('IDP initiated SSO', function() {
 		OktaPage.open();
 		OktaPage.signin();
 		MytimePage.usernameLabel.waitForExist(60 * 1000);
+		MytimePage.signout();
     }, 2);
 });

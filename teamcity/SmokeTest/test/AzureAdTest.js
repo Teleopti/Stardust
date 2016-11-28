@@ -22,6 +22,7 @@ describe('Azure AD', function() {
 		IdentityProvidersPage.IdentityServerProvider.click();
 		MicrosoftLoginPage.signin();
 		MytimePage.usernameLabel.waitForExist(60 * 1000);
+		MytimePage.signout();
     }, 2);
 	
 	it('should be able to sign in with AD user using OAuth', function () {
@@ -39,5 +40,6 @@ describe('Azure AD', function() {
 		IdentityProvidersPage.azureadProvider.click();
 		MicrosoftLoginPage.signin();
 		MytimePage.usernameLabel.waitForExist(60 * 1000);
+		MytimePage.signout();
     }, 2);
 });

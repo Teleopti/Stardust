@@ -21,5 +21,6 @@ describe('Google', function() {
 		IdentityProvidersPage.googleProvider.click();
 		GoogleLoginPage.signin();
 		MytimePage.usernameLabel.waitForExist(60 * 1000);
+		MytimePage.signout();
     }, 2);
 });
