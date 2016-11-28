@@ -362,7 +362,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_mainWindow = ownerWindow;
 
 			_container = componentContext.Resolve<ILifetimeScope>().BeginLifetimeScope();
-			_undoRedo = new UndoRedoContainer(_container.Resolve<IScheduleDayChangeCallback>(), 500);
+			_undoRedo = new UndoRedoWithScheduleCallbackContainer(_container.Resolve<IScheduleDayChangeCallback>(), 500);
 			_schedulerMessageBrokerHandler = new SchedulerMessageBrokerHandler(this, _container);
 			updateLifeTimeScopeWith2ThingsWithFullDependencyChain();
 

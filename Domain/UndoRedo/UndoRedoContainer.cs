@@ -6,14 +6,12 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 {
 	public class UndoRedoContainer : IUndoRedoContainer
 	{
-		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly FixedCapacityStack<IMemento> _redoStack;
 		private readonly FixedCapacityStack<IMemento> _undoStack;
 		private BatchMemento _batchMemento;
 
-		public UndoRedoContainer(IScheduleDayChangeCallback scheduleDayChangeCallback, int containerSize)
+		public UndoRedoContainer(int containerSize)
 		{
-			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_undoStack = new FixedCapacityStack<IMemento>(containerSize);
 			_redoStack = new FixedCapacityStack<IMemento>(containerSize);
 		}
@@ -24,12 +22,12 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 
 		public bool CanRedo()
 		{
-			return (_redoStack.Count > 0);
+			return _redoStack.Count > 0;
 		}
 
 		public bool CanUndo()
 		{
-			return (_undoStack.Count > 0);
+			return _undoStack.Count > 0;
 		}
 
 		public void Clear()
@@ -65,7 +63,7 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 			}
 		}
 
-		public bool Undo()
+		public virtual bool Undo()
 		{
 			if (_batchMemento != null)
 				throw new InvalidOperationException("Current batch memento '" + _batchMemento.Description + "' wasn't ended.");
@@ -73,19 +71,16 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 			var undoStackHasValue = CanUndo();
 			if (undoStackHasValue)
 			{
-				using (UndoRedoState.Create(_scheduleDayChangeCallback))
-				{
-					InUndoRedo = true;
-					var graph = _undoStack.Pop();
-					_redoStack.Push(graph.Restore());
-					fireChanged();
-					InUndoRedo = false;
-				}
+				InUndoRedo = true;
+				var graph = _undoStack.Pop();
+				_redoStack.Push(graph.Restore());
+				fireChanged();
+				InUndoRedo = false;
 			}
 			return undoStackHasValue;
 		}
 
-		public bool Redo()
+		public virtual bool Redo()
 		{
 			if (_batchMemento != null)
 				throw new InvalidOperationException("Current batch memento '" + _batchMemento.Description + "' wasn't ended.");
@@ -93,14 +88,11 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 			var redoStackHasValue = CanRedo();
 			if (redoStackHasValue)
 			{
-				using (UndoRedoState.Create(_scheduleDayChangeCallback))
-				{
-					InUndoRedo = true;
-					var graph = _redoStack.Pop();
-					_undoStack.Push(graph.Restore());
-					fireChanged();
-					InUndoRedo = false;
-				}
+				InUndoRedo = true;
+				var graph = _redoStack.Pop();
+				_undoStack.Push(graph.Restore());
+				fireChanged();
+				InUndoRedo = false;
 			}
 			return redoStackHasValue;
 		}
