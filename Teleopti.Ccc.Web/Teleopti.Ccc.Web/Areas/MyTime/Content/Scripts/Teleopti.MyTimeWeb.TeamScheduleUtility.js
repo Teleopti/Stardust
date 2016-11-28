@@ -623,14 +623,17 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 		return (self.filteredEndTimesText().length != 0 || self.isDayoffFiltered() == true || (self.timeSortOrder() == 'end asc') || (self.timeSortOrder() == 'end desc'));
 	});
 
-	self.changeInSearchBox = function (data, event) {
-		var $target = $(event.target);
+	self.changeInSearchBox = function () {
+		var $target = $('#teamschedule-name-search-form input');
 		self.refocusToNameSearch.callable = function () { $target.focus(); };
 		if (changeHandler != null && !changeHandlerSuspended) {
 			changeHandler();
 		}
 	};
 
+	self.submitSearchForm = function(){
+		$('#teamschedule-name-search-form').submit();
+	};
 };
 
 Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function (ajax, endpoints) {
