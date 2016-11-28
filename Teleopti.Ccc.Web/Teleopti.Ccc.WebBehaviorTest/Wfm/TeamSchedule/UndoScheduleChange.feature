@@ -50,6 +50,7 @@ Scenario: Should be able to see enable menu
 	And I open menu in team schedule
 	Then I should see 'Undo' menu is enabled
 
+@ignore
 @OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
 Scenario: Should be able to undo schedule change
 	When I view wfm team schedules
