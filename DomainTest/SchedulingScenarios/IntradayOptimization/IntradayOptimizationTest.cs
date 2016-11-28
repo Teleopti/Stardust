@@ -207,7 +207,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			Target.Execute(planningPeriod.Id.Value);
 			
 			var skillDays = SkillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(dateOnly.AddDays(1), dateOnly.AddDays(1)), new List<ISkill> { skill }, scenario);
-			skillDays.First().SkillStaffPeriodCollection.First().Should().Not.Be.EqualTo(0);
+			skillDays.First().SkillStaffPeriodCollection.First().CalculatedResource
+				.Should().Be.EqualTo(1);
 		}
 
 		[Test]
