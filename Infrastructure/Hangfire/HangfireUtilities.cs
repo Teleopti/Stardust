@@ -151,7 +151,12 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 				// booom!
 				if (failedCount > 0)
+				{
+					var firstFailue = _monitoring.FailedJobs(0, 1).FirstOrDefault();
+					if (firstFailue.Value?.ExceptionDetails != null)
+						throw new Exception($"Hangfire job has failed! {Environment.NewLine}First failed job exception: {firstFailue.Value.ExceptionDetails}");
 					throw new Exception("Hangfire job has failed!");
+				}
 
 				// requeue any scheduled retries if queue is empty
 				if (enqueuedCount == 0 && scheduledCount > 0)
