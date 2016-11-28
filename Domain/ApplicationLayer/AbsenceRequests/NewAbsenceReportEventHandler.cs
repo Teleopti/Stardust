@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					var reportedAbsence =
 						allowedAbsencesForReport.Single(x => x.Id == message.AbsenceId);
 
-					var undoRedoContainer = new UndoRedoContainer(400);
+					var undoRedoContainer = new UndoRedoContainer();
 
 					loadDataForResourceCalculation(period, person);
 

@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			assPrevious.AddActivity(activity, new TimePeriod(10, 0, 11, 0));
 			assPrevious.SetShiftCategory(new ShiftCategory("_"));
 			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date.AddWeeks(-1), date.AddWeeks(1)), new[] { agent }, new[] { assPrevious }, Enumerable.Empty<ISkillDay>());
-			var undoRedoContainer = new UndoRedoWithScheduleCallbackContainer(ScheduleDayChangeCallback, 10);
+			var undoRedoContainer = new UndoRedoWithScheduleCallbackContainer(ScheduleDayChangeCallback);
 			stateHolder.Schedules.SetUndoRedoContainer(undoRedoContainer);
 
 			var schedule = stateHolder.Schedules[agent].ScheduledDay(date);
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			assPrevious.AddActivity(activity, new TimePeriod(10, 0, 11, 0));
 			assPrevious.SetShiftCategory(new ShiftCategory("_"));
 			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date.AddWeeks(-1), date.AddWeeks(1)), new[] { agent }, new[] { assPrevious }, Enumerable.Empty<ISkillDay>());
-			var undoRedoContainer = new UndoRedoWithScheduleCallbackContainer(ScheduleDayChangeCallback, 10);
+			var undoRedoContainer = new UndoRedoWithScheduleCallbackContainer(ScheduleDayChangeCallback);
 			stateHolder.Schedules.SetUndoRedoContainer(undoRedoContainer);
 
 			var schedule = stateHolder.Schedules[agent].ScheduledDay(date);

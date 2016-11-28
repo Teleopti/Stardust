@@ -1,19 +1,19 @@
 using System;
-using Teleopti.Ccc.Domain.Collection;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.UndoRedo
 {
 	public class UndoRedoContainer : IUndoRedoContainer
 	{
-		private readonly FixedCapacityStack<IMemento> _redoStack;
-		private readonly FixedCapacityStack<IMemento> _undoStack;
+		private readonly Stack<IMemento> _redoStack;
+		private readonly Stack<IMemento> _undoStack;
 		private BatchMemento _batchMemento;
 
-		public UndoRedoContainer(int containerSize)
+		public UndoRedoContainer()
 		{
-			_undoStack = new FixedCapacityStack<IMemento>(containerSize);
-			_redoStack = new FixedCapacityStack<IMemento>(containerSize);
+			_undoStack = new Stack<IMemento>();
+			_redoStack = new Stack<IMemento>();
 		}
 
 		public event EventHandler ChangedHandler;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 
 		public void UndoAll()
 		{
-			while (_undoStack.Peek() != null)
+			while (_undoStack.Count > 0)
 			{
 				Undo();
 			}
@@ -128,10 +128,7 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 
 		private void fireChanged()
 		{
-			if (ChangedHandler != null)
-			{
-				ChangedHandler(this, new EventArgs());
-			}
+			ChangedHandler?.Invoke(this, new EventArgs());
 		}
 
 		private void saveStateInternal(IMemento memento)

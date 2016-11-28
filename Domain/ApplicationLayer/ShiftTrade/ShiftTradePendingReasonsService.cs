@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 
 		public void SimulateApproveAndSetBusinessRuleResponsesOnFail(IShiftTradeRequest shiftTradeRequest, INewBusinessRuleCollection allNewRules, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-			var undoRedoContainer = new UndoRedoContainer(400);
+			var undoRedoContainer = new UndoRedoContainer();
 			setupUndo (undoRedoContainer, schedulingResultStateHolder);
 
 			var requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(allNewRules, _scenarioRepository.Current(), schedulingResultStateHolder);

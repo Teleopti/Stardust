@@ -6,8 +6,7 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 	{
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
-		public UndoRedoWithScheduleCallbackContainer(IScheduleDayChangeCallback scheduleDayChangeCallback, int containerSize)
-			: base(containerSize)
+		public UndoRedoWithScheduleCallbackContainer(IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}

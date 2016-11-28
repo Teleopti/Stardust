@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			
 			var dictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2014, 3, 22, 2014, 4, 4));
 			dictionary.UsePermissions(false);
-			dictionary.SetUndoRedoContainer(new UndoRedoContainer(500));
+			dictionary.SetUndoRedoContainer(new UndoRedoContainer());
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
 				new DateTimePeriod(2014, 3, 25, 8, 2014, 3, 25, 22), shiftCategory, scenario);
 			assignment.AddActivity(lunch,new DateTimePeriod(2014,3,25,13,2014,3,25,14));
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			var dictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2014, 3, 22, 2014, 4, 4));
 			dictionary.UsePermissions(false);
-			dictionary.SetUndoRedoContainer(new UndoRedoContainer(500));
+			dictionary.SetUndoRedoContainer(new UndoRedoContainer());
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
 				new DateTimePeriod(2014, 3, 25, 8, 2014, 3, 25, 22), shiftCategory, scenario);
 			assignment.AddActivity(lunch, new DateTimePeriod(2014, 3, 25, 13, 2014, 3, 25, 14));

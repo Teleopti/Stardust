@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.UndoRedo
 		[SetUp]
 		public void Setup()
 		{
-			target = new UndoRedoContainer(10);
+			target = new UndoRedoContainer();
 			changedEventFired = false;
 			target.ChangedHandler+=OnChanged;
 		}
@@ -25,46 +25,6 @@ namespace Teleopti.Ccc.DomainTest.UndoRedo
 		{
 			target.ChangedHandler -= OnChanged;
 		}
-
-		[Test]
-		public void VerifyContainerSize()
-		{
-				target = new UndoRedoContainer(1);
-		    var mem = new dummy("1");
-		    target.SaveState(mem);
-		    mem.state = "2";
-				target.SaveState(mem);
-		    mem.state = "3";
-
-		    target.Undo();
-		    mem.state.Should().Be.EqualTo("2");
-            target.CanUndo().Should().Be.False();
-		}
-
-		[Test]
-		public void VerifyExceededContainerSizeWorks()
-		{
-			//Probably unnecessarly test because this is already tested in FixedCapacityTest
-			target = new UndoRedoContainer(2);
-			var mem = new dummy("1");
-			target.SaveState(mem);
-			mem.state = "2";
-			target.SaveState(mem);
-			mem.state = "3";
-			target.SaveState(mem);
-			mem.state = "4";
-
-			target.Undo().Should().Be.True();
-			mem.state.Should()
-				.Be.EqualTo("3");
-			target.Undo().Should().Be.True();
-			mem.state.Should()
-				.Be.EqualTo("2");
-			target.Undo().Should().Be.False();
-			mem.state.Should()
-				.Be.EqualTo("2");
-		}
-
 
 		[Test]
 		public void VerifyCanUndoWorks()

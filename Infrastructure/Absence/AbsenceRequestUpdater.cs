@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			var agentTimeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
 			var dateOnlyPeriod = absenceRequest.Period.ToDateOnlyPeriod(agentTimeZone);
 
-			var undoRedoContainer = new UndoRedoContainer(400);
+			var undoRedoContainer = new UndoRedoContainer();
 
 			var workflowControlSet = absenceRequest.Person.WorkflowControlSet;
 			if (workflowControlSet == null)
