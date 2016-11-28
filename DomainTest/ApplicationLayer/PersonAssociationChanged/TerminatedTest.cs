@@ -129,7 +129,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 
 			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Should().Not.Be.Empty();
 		}
-		
+
+		[Test]
+		public void ShouldPublishWhenTerminationDateOccursOnDst()
+		{
+			Now.Is("2016-03-21 00:00");
+			Data
+				.WithAgent("Pierre", "2016-03-20",  TimeZoneInfoFactory.IranTimeZoneInfo());
+			
+			Target.Handle(new TenantHourTickEvent());
+
+			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Should().Not.Be.Empty();
+		}
+
+		[Test]
+		public void ShouldPublishWhenTerminationDateOccursOnDst2()
+		{
+			Now.Is("2016-03-22 00:00");
+			Data
+				.WithAgent("Pierre", "2016-03-21", TimeZoneInfoFactory.IranTimeZoneInfo());
+
+			Target.Handle(new TenantHourTickEvent());
+
+			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Should().Not.Be.Empty();
+		}
 	}
 
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using NodaTime;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -191,9 +192,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		private static DateTime terminationTime(DateOnly? terminationDate, TimeZoneInfo timeZone)
 		{
-			return terminationDate.HasValue
-				? TimeZoneInfo.ConvertTimeToUtc(terminationDate.Value.Date.AddDays(1), timeZone)
-				: DateTime.MaxValue;
+			if (!terminationDate.HasValue)
+				return DateTime.MaxValue;
+			return LocalDateTime.FromDateTime(terminationDate.Value.Date)
+				.PlusDays(1)
+				.InZoneLeniently(DateTimeZoneProviders.Bcl[timeZone.Id])
+				.ToDateTimeUtc();
 		}
 
 		public void Handle(PersonTeamChangedEvent @event)

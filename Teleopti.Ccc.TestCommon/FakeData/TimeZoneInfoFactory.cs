@@ -94,5 +94,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	    {
 			return TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time");
 		}
+
+	    public static TimeZoneInfo IranTimeZoneInfo()
+	    {
+		    return TimeZoneInfo.FindSystemTimeZoneById("Iran Standard Time");
+	    }
     }
 }
