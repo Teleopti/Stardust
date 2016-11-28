@@ -521,7 +521,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					});
 				}).ToArray();
 
-			var parentThread = Thread.CurrentThread.Name;
+			var parentThreadName = Thread.CurrentThread.Name;
 			var tenant = _dataSource.CurrentName();
 			Parallel.ForEach(
 				transactions,
@@ -530,9 +530,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					try
 					{
+						if (Thread.CurrentThread.Name == null)
+							Thread.CurrentThread.Name = $"{parentThreadName} #{Thread.CurrentThread.ManagedThreadId}"; 
 						_deadLockRetrier.RetryOnDeadlock(() =>
 						{
-							Transaction(tenant, parentThread, strategy, data);
+							Transaction(tenant, strategy, data);
 						});
 					}
 					catch (Exception e)
@@ -556,12 +558,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[LogInfo]
 		protected virtual void Transaction<T>(
 			string tenant,
-			string parentThread,
 			IStrategy<T> strategy,
 			Func<transactionData> transactionData)
 		{
-			if (parentThread != null && parentThread.Contains("Worker #") && Thread.CurrentThread.Name == null)
-				Thread.CurrentThread.Name = $"Worker #Transaction{Thread.CurrentThread.ManagedThreadId}";
 			WithUnitOfWork(() =>
 			{
 				var data = transactionData.Invoke();
