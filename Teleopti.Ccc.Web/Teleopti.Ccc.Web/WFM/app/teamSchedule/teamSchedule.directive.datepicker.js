@@ -63,12 +63,12 @@
 		};
 
 		vm.gotoPreviousDate = function () {
-			var currentDate = moment(vm.selectedDate).add(-(vm.step), "day").toDate();
+			var currentDate = moment(vm.selectedDate).add(-(vm.step), 'day').format('YYYY-MM-DD');
 			vm.onDateInputChange(currentDate);
 		};
 
 		vm.gotoNextDate = function () {
-			var currentDate = moment(vm.selectedDate).add(vm.step, "day").toDate();
+			var currentDate = moment(vm.selectedDate).add(vm.step, 'day').format('YYYY-MM-DD');
 			vm.onDateInputChange(currentDate);
 		};
 
