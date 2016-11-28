@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
@@ -21,11 +23,11 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 		public const string SettingsKey = "ShiftTradeSettings";
 
 		private int _maxSeatsValidationSegmentLength = 15;
-		private bool _maxSeatsValidationEnabled = false;
+		private bool _maxSeatsValidationEnabled;
 
 		public bool MaxSeatsValidationEnabled
 		{
-			get { return _maxSeatsValidationEnabled; }
+			get { return _maxSeatsValidationEnabled || isEnabledInBusinessRuleConfigs(); }
 			set { _maxSeatsValidationEnabled = value; }
 		}
 
@@ -36,5 +38,16 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 		}
 
 		public ShiftTradeBusinessRuleConfig[] BusinessRuleConfigs { get; set; }
+
+		private bool isEnabledInBusinessRuleConfigs()
+		{
+			if (BusinessRuleConfigs == null || !BusinessRuleConfigs.Any())
+				return false;
+
+			var shiftTradeMaxSeatsSpecificationRule
+				= BusinessRuleConfigs.FirstOrDefault(b => b.BusinessRuleType == typeof(ShiftTradeMaxSeatsSpecification).FullName);
+
+			return shiftTradeMaxSeatsSpecificationRule != null && shiftTradeMaxSeatsSpecificationRule.Enabled;
+		}
 	}
 }

@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -96,17 +97,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				_shiftTradeSettings = new GlobalSettingDataRepository(uow).FindValueByKey(ShiftTradeSettings.SettingsKey, new ShiftTradeSettings());
 			}
 
-			chkEnableMaxSeats.Checked = _shiftTradeSettings.MaxSeatsValidationEnabled;
 			initIntervalLengthComboBox(_shiftTradeSettings.MaxSeatsValidationSegmentLength);
 
-			checkIntervalCheckBoxEnabled();
-
 			configBusinessRuleSettingGrid();
-		}
-
-		private void checkIntervalCheckBoxEnabled()
-		{
-			cmbSegmentSizeMaxSeatValidation.Enabled = chkEnableMaxSeats.Checked;
 		}
 
 		public void SaveChanges()
@@ -116,6 +109,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void Persist()
 		{
+			var shiftTradeMaxSeatsSpecificationRuleConfig = _shiftTradeSettings.BusinessRuleConfigs.FirstOrDefault(
+				b => b.BusinessRuleType == typeof(ShiftTradeMaxSeatsSpecification).FullName);
+			if (shiftTradeMaxSeatsSpecificationRuleConfig != null)
+			{
+				_shiftTradeSettings.MaxSeatsValidationEnabled = shiftTradeMaxSeatsSpecificationRuleConfig.Enabled;
+			}
+
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				_shiftTradeSettings = new GlobalSettingDataRepository(uow).PersistSettingValue(_shiftTradeSettings).GetValue(new ShiftTradeSettings());
@@ -154,26 +154,26 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void configBusinessRuleSettingGrid()
 		{
-			if (!_toggleManager.IsEnabled(Toggles.Wfm_Requests_Configurable_BusinessRules_For_ShiftTrade_40770))
-			{
-				shiftTradeBusinessRuleSettingPanel.Visible = false;
-				return;
-			}
-
-			var handleOptionColumn =
-				new SFGridDropDownColumn<ShiftTradeBusinessRuleConfigView, ShiftTradeRequestHandleOptionView>("HandleOptionOnFailed",
-					Resources.WhenValidationFails, _shiftTradeRequestHandleOptionViews.Values.ToList(), "Description", typeof(ShiftTradeRequestHandleOptionView));
 			var gridColumns = new List<SFGridColumnBase<ShiftTradeBusinessRuleConfigView>>
 			{
 				new SFGridRowHeaderColumn<ShiftTradeBusinessRuleConfigView>(string.Empty),
 				new SFGridReadOnlyTextColumn<ShiftTradeBusinessRuleConfigView>("Name", 300, Resources.Name),
-				new SFGridCheckBoxColumn<ShiftTradeBusinessRuleConfigView>("Enabled", Resources.Enabled),
-				handleOptionColumn
+				new SFGridCheckBoxColumn<ShiftTradeBusinessRuleConfigView>("Enabled", Resources.Enabled)
 			};
+
+			if (isBusinessRuleConfigurable())
+			{
+				var handleOptionColumn =
+					new SFGridDropDownColumn<ShiftTradeBusinessRuleConfigView, ShiftTradeRequestHandleOptionView>(
+						"HandleOptionOnFailed",
+						Resources.WhenValidationFails, _shiftTradeRequestHandleOptionViews.Values.ToList(), "Description",
+						typeof(ShiftTradeRequestHandleOptionView));
+				gridColumns.Add(handleOptionColumn);
+			}
 
 			var businessRuleConfigViews = getShiftTradeBusinessRuleConfigViews().ToList();
 			businessRuleSettingGrid.RowCount = businessRuleConfigViews.Count;
-			businessRuleSettingGrid.Height = businessRuleSettingGrid.RowCount * 20;
+			businessRuleSettingGrid.Height = (businessRuleSettingGrid.RowCount + 1) * 20;
 
 			_gridColumnHelper = new SFGridColumnGridHelper<ShiftTradeBusinessRuleConfigView>(businessRuleSettingGrid,
 							   new ReadOnlyCollection<SFGridColumnBase<ShiftTradeBusinessRuleConfigView>>(gridColumns),
@@ -183,12 +183,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private IEnumerable<ShiftTradeBusinessRuleConfigView> getShiftTradeBusinessRuleConfigViews()
 		{
-			if (_shiftTradeSettings.BusinessRuleConfigs == null)
-			{
-				_shiftTradeSettings.BusinessRuleConfigs =
-					_businessRuleConfigProvider.GetDefaultConfigForShiftTradeRequest().Select(s=>(ShiftTradeBusinessRuleConfig)s).ToArray();
-			}
-
+			loadBusinessRuleConfigs();
+	
 			var businessRuleConfigViews = _shiftTradeSettings.BusinessRuleConfigs.Select
 				(b =>
 					new ShiftTradeBusinessRuleConfigView(b)
@@ -198,10 +194,33 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return businessRuleConfigViews;
 		}
 
-		private void chkEnableMaxSeats_CheckedChanged(object sender, EventArgs e)
+		private void loadBusinessRuleConfigs()
 		{
-			_shiftTradeSettings.MaxSeatsValidationEnabled = chkEnableMaxSeats.Checked;
-			checkIntervalCheckBoxEnabled();
+			var defaultConfigs = _businessRuleConfigProvider.GetDefaultConfigForShiftTradeRequest()
+				.Select(s => (ShiftTradeBusinessRuleConfig) s);
+			if (!isBusinessRuleConfigurable())
+			{
+				defaultConfigs = defaultConfigs.Where(c => c.BusinessRuleType == typeof(ShiftTradeMaxSeatsSpecification).FullName)
+					.Select(c =>
+					{
+						c.Enabled = _shiftTradeSettings.MaxSeatsValidationEnabled;
+						return c;
+					});
+			}
+
+			if (_shiftTradeSettings.BusinessRuleConfigs == null)
+				_shiftTradeSettings.BusinessRuleConfigs = new ShiftTradeBusinessRuleConfig[] {};
+
+			var businessRuleConfigList = new List<ShiftTradeBusinessRuleConfig>(_shiftTradeSettings.BusinessRuleConfigs);
+			foreach (var defaultConfig in defaultConfigs)
+			{
+				if (_shiftTradeSettings.BusinessRuleConfigs.All(b => b.BusinessRuleType != defaultConfig.BusinessRuleType))
+				{
+					businessRuleConfigList.Add(defaultConfig);
+				}
+			}
+
+			_shiftTradeSettings.BusinessRuleConfigs = businessRuleConfigList.ToArray();
 		}
 
 		private void cmbSegmentSizeMaxSeatValidation_SelectedIndexChanged (object sender, EventArgs e)
@@ -217,6 +236,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_shiftTradeSettings.BusinessRuleConfigs = null;
 			var shiftTradeBusinessRuleConfigViews = getShiftTradeBusinessRuleConfigViews();
 			_gridColumnHelper.SetSourceList(shiftTradeBusinessRuleConfigViews.ToList());
+		}
+
+		private bool isBusinessRuleConfigurable()
+		{
+			return _toggleManager.IsEnabled(Toggles.Wfm_Requests_Configurable_BusinessRules_For_ShiftTrade_40770);
 		}
 	}
 }

@@ -31,30 +31,31 @@
 			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
 			this.labelHeader = new System.Windows.Forms.Label();
+			this.settingPanelContainer = new System.Windows.Forms.TableLayoutPanel();
+			this.shiftTradeBusinessRuleSettingPanel = new System.Windows.Forms.TableLayoutPanel();
+			this.shifTradeBusinessRuleSubHeader = new System.Windows.Forms.TableLayoutPanel();
+			this.lblShiftTradeBusinessRuleSettingHeader = new System.Windows.Forms.Label();
+			this.businessRuleSettingGrid = new Syncfusion.Windows.Forms.Grid.GridControl();
+			this.buttonResetRule = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.tableLayoutPanelBody = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelSubHeader1 = new System.Windows.Forms.TableLayoutPanel();
 			this.lblShiftTradeMaxSeatsSettings = new System.Windows.Forms.Label();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.autoLabel1 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.cmbSegmentSizeMaxSeatValidation = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-			this.chkEnableMaxSeats = new System.Windows.Forms.CheckBox();
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
-			this.shiftTradeBusinessRuleSettingPanel = new System.Windows.Forms.TableLayoutPanel();
-			this.shifTradeBusinessRuleSubHeader = new System.Windows.Forms.TableLayoutPanel();
-			this.lblShiftTradeBusinessRuleSettingHeader = new System.Windows.Forms.Label();
-			this.businessRuleSettingGrid = new Syncfusion.Windows.Forms.Grid.GridControl();
-			this.buttonResetRule = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelHeader.SuspendLayout();
+			this.settingPanelContainer.SuspendLayout();
+			this.shiftTradeBusinessRuleSettingPanel.SuspendLayout();
+			this.shifTradeBusinessRuleSubHeader.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.businessRuleSettingGrid)).BeginInit();
 			this.tableLayoutPanelBody.SuspendLayout();
 			this.tableLayoutPanelSubHeader1.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.cmbSegmentSizeMaxSeatValidation)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
 			this.gradientPanelHeader.SuspendLayout();
-			this.shiftTradeBusinessRuleSettingPanel.SuspendLayout();
-			this.shifTradeBusinessRuleSubHeader.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.businessRuleSettingGrid)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanelHeader
@@ -86,121 +87,20 @@
 			this.labelHeader.TabIndex = 0;
 			this.labelHeader.Text = "xxShiftTradeRequestSettings";
 			// 
-			// tableLayoutPanelBody
+			// settingPanelContainer
 			// 
-			this.tableLayoutPanelBody.ColumnCount = 1;
-			this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader1, 0, 0);
-			this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanel3, 0, 1);
-			this.tableLayoutPanelBody.Dock = System.Windows.Forms.DockStyle.Top;
-			this.tableLayoutPanelBody.Location = new System.Drawing.Point(0, 62);
-			this.tableLayoutPanelBody.Name = "tableLayoutPanelBody";
-			this.tableLayoutPanelBody.RowCount = 3;
-			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 69F));
-			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelBody.Size = new System.Drawing.Size(612, 117);
-			this.tableLayoutPanelBody.TabIndex = 57;
-			// 
-			// tableLayoutPanelSubHeader1
-			// 
-			this.tableLayoutPanelSubHeader1.BackColor = System.Drawing.Color.LightSteelBlue;
-			this.tableLayoutPanelSubHeader1.ColumnCount = 3;
-			this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelSubHeader1.Controls.Add(this.lblShiftTradeMaxSeatsSettings, 0, 0);
-			this.tableLayoutPanelSubHeader1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelSubHeader1.Location = new System.Drawing.Point(3, 3);
-			this.tableLayoutPanelSubHeader1.Name = "tableLayoutPanelSubHeader1";
-			this.tableLayoutPanelSubHeader1.RowCount = 1;
-			this.tableLayoutPanelSubHeader1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelSubHeader1.Size = new System.Drawing.Size(606, 34);
-			this.tableLayoutPanelSubHeader1.TabIndex = 0;
-			// 
-			// lblShiftTradeMaxSeatsSettings
-			// 
-			this.lblShiftTradeMaxSeatsSettings.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblShiftTradeMaxSeatsSettings.AutoSize = true;
-			this.lblShiftTradeMaxSeatsSettings.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblShiftTradeMaxSeatsSettings.ForeColor = System.Drawing.Color.GhostWhite;
-			this.lblShiftTradeMaxSeatsSettings.Location = new System.Drawing.Point(3, 7);
-			this.lblShiftTradeMaxSeatsSettings.Name = "lblShiftTradeMaxSeatsSettings";
-			this.lblShiftTradeMaxSeatsSettings.Padding = new System.Windows.Forms.Padding(0, 0, 0, 3);
-			this.lblShiftTradeMaxSeatsSettings.Size = new System.Drawing.Size(255, 20);
-			this.lblShiftTradeMaxSeatsSettings.TabIndex = 0;
-			this.lblShiftTradeMaxSeatsSettings.Text = "xxShiftTradeRequestMaxSeatsValidation";
-			this.lblShiftTradeMaxSeatsSettings.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// tableLayoutPanel3
-			// 
-			this.tableLayoutPanel3.BackColor = System.Drawing.Color.Transparent;
-			this.tableLayoutPanel3.ColumnCount = 2;
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 335F));
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Controls.Add(this.autoLabel1, 0, 1);
-			this.tableLayoutPanel3.Controls.Add(this.cmbSegmentSizeMaxSeatValidation, 1, 1);
-			this.tableLayoutPanel3.Controls.Add(this.chkEnableMaxSeats, 0, 0);
-			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 40);
-			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
-			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-			this.tableLayoutPanel3.RowCount = 2;
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(612, 69);
-			this.tableLayoutPanel3.TabIndex = 1;
-			// 
-			// autoLabel1
-			// 
-			this.autoLabel1.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.autoLabel1.Location = new System.Drawing.Point(3, 43);
-			this.autoLabel1.Name = "autoLabel1";
-			this.autoLabel1.Size = new System.Drawing.Size(229, 13);
-			this.autoLabel1.TabIndex = 9;
-			this.autoLabel1.Text = "xxShiftTradeRequestMaxSeatValidationInterval";
-			this.autoLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// cmbSegmentSizeMaxSeatValidation
-			// 
-			this.cmbSegmentSizeMaxSeatValidation.AllowNewText = false;
-			this.cmbSegmentSizeMaxSeatValidation.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.cmbSegmentSizeMaxSeatValidation.BackColor = System.Drawing.Color.White;
-			this.cmbSegmentSizeMaxSeatValidation.BeforeTouchSize = new System.Drawing.Size(98, 21);
-			this.cmbSegmentSizeMaxSeatValidation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cmbSegmentSizeMaxSeatValidation.Location = new System.Drawing.Point(338, 39);
-			this.cmbSegmentSizeMaxSeatValidation.Name = "cmbSegmentSizeMaxSeatValidation";
-			this.cmbSegmentSizeMaxSeatValidation.NumberOnly = true;
-			this.cmbSegmentSizeMaxSeatValidation.Size = new System.Drawing.Size(98, 21);
-			this.cmbSegmentSizeMaxSeatValidation.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
-			this.cmbSegmentSizeMaxSeatValidation.TabIndex = 10;
-			this.cmbSegmentSizeMaxSeatValidation.SelectedIndexChanged += new System.EventHandler(this.cmbSegmentSizeMaxSeatValidation_SelectedIndexChanged);
-			// 
-			// chkEnableMaxSeats
-			// 
-			this.chkEnableMaxSeats.AutoSize = true;
-			this.chkEnableMaxSeats.Location = new System.Drawing.Point(3, 3);
-			this.chkEnableMaxSeats.Name = "chkEnableMaxSeats";
-			this.chkEnableMaxSeats.Padding = new System.Windows.Forms.Padding(3, 5, 0, 0);
-			this.chkEnableMaxSeats.Size = new System.Drawing.Size(254, 22);
-			this.chkEnableMaxSeats.TabIndex = 11;
-			this.chkEnableMaxSeats.Text = "xxEnableShiftTradeRequestMaxSeatsValidation";
-			this.chkEnableMaxSeats.UseVisualStyleBackColor = true;
-			this.chkEnableMaxSeats.CheckedChanged += new System.EventHandler(this.chkEnableMaxSeats_CheckedChanged);
-			// 
-			// gradientPanelHeader
-			// 
-			this.gradientPanelHeader.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.gradientPanelHeader.BackColor = System.Drawing.SystemColors.ActiveCaption;
-			this.gradientPanelHeader.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
-			this.gradientPanelHeader.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.gradientPanelHeader.Controls.Add(this.tableLayoutPanelHeader);
-			this.gradientPanelHeader.Dock = System.Windows.Forms.DockStyle.Top;
-			this.gradientPanelHeader.Location = new System.Drawing.Point(0, 0);
-			this.gradientPanelHeader.Name = "gradientPanelHeader";
-			this.gradientPanelHeader.Padding = new System.Windows.Forms.Padding(12);
-			this.gradientPanelHeader.Size = new System.Drawing.Size(612, 62);
-			this.gradientPanelHeader.TabIndex = 56;
+			this.settingPanelContainer.ColumnCount = 1;
+			this.settingPanelContainer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.settingPanelContainer.Controls.Add(this.shiftTradeBusinessRuleSettingPanel, 0, 0);
+			this.settingPanelContainer.Controls.Add(this.tableLayoutPanelBody, 0, 1);
+			this.settingPanelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.settingPanelContainer.Location = new System.Drawing.Point(0, 62);
+			this.settingPanelContainer.Name = "settingPanelContainer";
+			this.settingPanelContainer.RowCount = 2;
+			this.settingPanelContainer.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.settingPanelContainer.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.settingPanelContainer.Size = new System.Drawing.Size(612, 238);
+			this.settingPanelContainer.TabIndex = 0;
 			// 
 			// shiftTradeBusinessRuleSettingPanel
 			// 
@@ -211,14 +111,14 @@
 			this.shiftTradeBusinessRuleSettingPanel.Controls.Add(this.businessRuleSettingGrid, 0, 1);
 			this.shiftTradeBusinessRuleSettingPanel.Controls.Add(this.buttonResetRule, 0, 2);
 			this.shiftTradeBusinessRuleSettingPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.shiftTradeBusinessRuleSettingPanel.Location = new System.Drawing.Point(0, 179);
+			this.shiftTradeBusinessRuleSettingPanel.Location = new System.Drawing.Point(3, 3);
 			this.shiftTradeBusinessRuleSettingPanel.Name = "shiftTradeBusinessRuleSettingPanel";
 			this.shiftTradeBusinessRuleSettingPanel.RowCount = 4;
 			this.shiftTradeBusinessRuleSettingPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.shiftTradeBusinessRuleSettingPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.shiftTradeBusinessRuleSettingPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.shiftTradeBusinessRuleSettingPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.shiftTradeBusinessRuleSettingPanel.Size = new System.Drawing.Size(612, 198);
+			this.shiftTradeBusinessRuleSettingPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 0F));
+			this.shiftTradeBusinessRuleSettingPanel.Size = new System.Drawing.Size(606, 110);
 			this.shiftTradeBusinessRuleSettingPanel.TabIndex = 58;
 			// 
 			// shifTradeBusinessRuleSubHeader
@@ -234,7 +134,7 @@
 			this.shifTradeBusinessRuleSubHeader.Name = "shifTradeBusinessRuleSubHeader";
 			this.shifTradeBusinessRuleSubHeader.RowCount = 1;
 			this.shifTradeBusinessRuleSubHeader.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.shifTradeBusinessRuleSubHeader.Size = new System.Drawing.Size(606, 34);
+			this.shifTradeBusinessRuleSubHeader.Size = new System.Drawing.Size(600, 34);
 			this.shifTradeBusinessRuleSubHeader.TabIndex = 0;
 			// 
 			// lblShiftTradeBusinessRuleSettingHeader
@@ -276,7 +176,7 @@
 			this.businessRuleSettingGrid.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
 			this.businessRuleSettingGrid.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.businessRuleSettingGrid.Size = new System.Drawing.Size(606, 24);
+			this.businessRuleSettingGrid.Size = new System.Drawing.Size(600, 24);
 			this.businessRuleSettingGrid.SmartSizeBox = false;
 			this.businessRuleSettingGrid.TabIndex = 27;
 			this.businessRuleSettingGrid.Text = "gridControl1";
@@ -288,20 +188,122 @@
 			this.buttonResetRule.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonResetRule.AutoSize = true;
 			this.buttonResetRule.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonResetRule.BeforeTouchSize = new System.Drawing.Size(123, 27);
+			this.buttonResetRule.BeforeTouchSize = new System.Drawing.Size(119, 27);
 			this.buttonResetRule.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.buttonResetRule.Dock = System.Windows.Forms.DockStyle.Right;
 			this.buttonResetRule.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.buttonResetRule.ForeColor = System.Drawing.Color.White;
 			this.buttonResetRule.IsBackStageButton = false;
-			this.buttonResetRule.Location = new System.Drawing.Point(479, 73);
+			this.buttonResetRule.Location = new System.Drawing.Point(477, 73);
 			this.buttonResetRule.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.buttonResetRule.Name = "buttonResetRule";
-			this.buttonResetRule.Size = new System.Drawing.Size(123, 27);
+			this.buttonResetRule.Size = new System.Drawing.Size(119, 27);
 			this.buttonResetRule.TabIndex = 4;
 			this.buttonResetRule.Text = "xxResetRules";
 			this.buttonResetRule.UseVisualStyle = true;
 			this.buttonResetRule.Click += new System.EventHandler(this.buttonResetRule_Click);
+			// 
+			// tableLayoutPanelBody
+			// 
+			this.tableLayoutPanelBody.ColumnCount = 1;
+			this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader1, 0, 0);
+			this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanel3, 0, 1);
+			this.tableLayoutPanelBody.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanelBody.Location = new System.Drawing.Point(3, 119);
+			this.tableLayoutPanelBody.Name = "tableLayoutPanelBody";
+			this.tableLayoutPanelBody.RowCount = 3;
+			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 69F));
+			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanelBody.Size = new System.Drawing.Size(606, 117);
+			this.tableLayoutPanelBody.TabIndex = 57;
+			// 
+			// tableLayoutPanelSubHeader1
+			// 
+			this.tableLayoutPanelSubHeader1.BackColor = System.Drawing.Color.LightSteelBlue;
+			this.tableLayoutPanelSubHeader1.ColumnCount = 3;
+			this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelSubHeader1.Controls.Add(this.lblShiftTradeMaxSeatsSettings, 0, 0);
+			this.tableLayoutPanelSubHeader1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanelSubHeader1.Location = new System.Drawing.Point(3, 3);
+			this.tableLayoutPanelSubHeader1.Name = "tableLayoutPanelSubHeader1";
+			this.tableLayoutPanelSubHeader1.RowCount = 1;
+			this.tableLayoutPanelSubHeader1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanelSubHeader1.Size = new System.Drawing.Size(600, 34);
+			this.tableLayoutPanelSubHeader1.TabIndex = 0;
+			// 
+			// lblShiftTradeMaxSeatsSettings
+			// 
+			this.lblShiftTradeMaxSeatsSettings.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblShiftTradeMaxSeatsSettings.AutoSize = true;
+			this.lblShiftTradeMaxSeatsSettings.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblShiftTradeMaxSeatsSettings.ForeColor = System.Drawing.Color.GhostWhite;
+			this.lblShiftTradeMaxSeatsSettings.Location = new System.Drawing.Point(3, 7);
+			this.lblShiftTradeMaxSeatsSettings.Name = "lblShiftTradeMaxSeatsSettings";
+			this.lblShiftTradeMaxSeatsSettings.Padding = new System.Windows.Forms.Padding(0, 0, 0, 3);
+			this.lblShiftTradeMaxSeatsSettings.Size = new System.Drawing.Size(255, 20);
+			this.lblShiftTradeMaxSeatsSettings.TabIndex = 0;
+			this.lblShiftTradeMaxSeatsSettings.Text = "xxShiftTradeRequestMaxSeatsValidation";
+			this.lblShiftTradeMaxSeatsSettings.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// tableLayoutPanel3
+			// 
+			this.tableLayoutPanel3.BackColor = System.Drawing.Color.Transparent;
+			this.tableLayoutPanel3.ColumnCount = 2;
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 335F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Controls.Add(this.autoLabel1, 0, 0);
+			this.tableLayoutPanel3.Controls.Add(this.cmbSegmentSizeMaxSeatValidation, 1, 0);
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 40);
+			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+			this.tableLayoutPanel3.RowCount = 1;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(606, 30);
+			this.tableLayoutPanel3.TabIndex = 1;
+			// 
+			// autoLabel1
+			// 
+			this.autoLabel1.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.autoLabel1.Location = new System.Drawing.Point(3, 8);
+			this.autoLabel1.Name = "autoLabel1";
+			this.autoLabel1.Size = new System.Drawing.Size(229, 13);
+			this.autoLabel1.TabIndex = 9;
+			this.autoLabel1.Text = "xxShiftTradeRequestMaxSeatValidationInterval";
+			this.autoLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// cmbSegmentSizeMaxSeatValidation
+			// 
+			this.cmbSegmentSizeMaxSeatValidation.AllowNewText = false;
+			this.cmbSegmentSizeMaxSeatValidation.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.cmbSegmentSizeMaxSeatValidation.BackColor = System.Drawing.Color.White;
+			this.cmbSegmentSizeMaxSeatValidation.BeforeTouchSize = new System.Drawing.Size(98, 21);
+			this.cmbSegmentSizeMaxSeatValidation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbSegmentSizeMaxSeatValidation.Location = new System.Drawing.Point(338, 4);
+			this.cmbSegmentSizeMaxSeatValidation.Name = "cmbSegmentSizeMaxSeatValidation";
+			this.cmbSegmentSizeMaxSeatValidation.NumberOnly = true;
+			this.cmbSegmentSizeMaxSeatValidation.Size = new System.Drawing.Size(98, 21);
+			this.cmbSegmentSizeMaxSeatValidation.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
+			this.cmbSegmentSizeMaxSeatValidation.TabIndex = 10;
+			this.cmbSegmentSizeMaxSeatValidation.SelectedIndexChanged += new System.EventHandler(this.cmbSegmentSizeMaxSeatValidation_SelectedIndexChanged);
+			// 
+			// gradientPanelHeader
+			// 
+			this.gradientPanelHeader.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.gradientPanelHeader.BackColor = System.Drawing.SystemColors.ActiveCaption;
+			this.gradientPanelHeader.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
+			this.gradientPanelHeader.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.gradientPanelHeader.Controls.Add(this.tableLayoutPanelHeader);
+			this.gradientPanelHeader.Dock = System.Windows.Forms.DockStyle.Top;
+			this.gradientPanelHeader.Location = new System.Drawing.Point(0, 0);
+			this.gradientPanelHeader.Name = "gradientPanelHeader";
+			this.gradientPanelHeader.Padding = new System.Windows.Forms.Padding(12);
+			this.gradientPanelHeader.Size = new System.Drawing.Size(612, 62);
+			this.gradientPanelHeader.TabIndex = 56;
 			// 
 			// tableLayoutPanel4
 			// 
@@ -324,13 +326,19 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.shiftTradeBusinessRuleSettingPanel);
-			this.Controls.Add(this.tableLayoutPanelBody);
+			this.Controls.Add(this.settingPanelContainer);
 			this.Controls.Add(this.gradientPanelHeader);
 			this.Name = "ShiftTradeSystemSettings";
 			this.Size = new System.Drawing.Size(612, 300);
 			this.tableLayoutPanelHeader.ResumeLayout(false);
 			this.tableLayoutPanelHeader.PerformLayout();
+			this.settingPanelContainer.ResumeLayout(false);
+			this.settingPanelContainer.PerformLayout();
+			this.shiftTradeBusinessRuleSettingPanel.ResumeLayout(false);
+			this.shiftTradeBusinessRuleSettingPanel.PerformLayout();
+			this.shifTradeBusinessRuleSubHeader.ResumeLayout(false);
+			this.shifTradeBusinessRuleSubHeader.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.businessRuleSettingGrid)).EndInit();
 			this.tableLayoutPanelBody.ResumeLayout(false);
 			this.tableLayoutPanelSubHeader1.ResumeLayout(false);
 			this.tableLayoutPanelSubHeader1.PerformLayout();
@@ -339,13 +347,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.cmbSegmentSizeMaxSeatValidation)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).EndInit();
 			this.gradientPanelHeader.ResumeLayout(false);
-			this.shiftTradeBusinessRuleSettingPanel.ResumeLayout(false);
-			this.shiftTradeBusinessRuleSettingPanel.PerformLayout();
-			this.shifTradeBusinessRuleSubHeader.ResumeLayout(false);
-			this.shifTradeBusinessRuleSubHeader.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.businessRuleSettingGrid)).EndInit();
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 
@@ -353,6 +355,7 @@
 
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelHeader;
 		private System.Windows.Forms.Label labelHeader;
+		private System.Windows.Forms.TableLayoutPanel settingPanelContainer;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelBody;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSubHeader1;
 		private System.Windows.Forms.Label lblShiftTradeMaxSeatsSettings;
@@ -360,7 +363,6 @@
 		private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanelHeader;
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel1;
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv cmbSegmentSizeMaxSeatValidation;
-		private System.Windows.Forms.CheckBox chkEnableMaxSeats;
 		private System.Windows.Forms.TableLayoutPanel shiftTradeBusinessRuleSettingPanel;
 		private System.Windows.Forms.TableLayoutPanel shifTradeBusinessRuleSubHeader;
 		private System.Windows.Forms.Label lblShiftTradeBusinessRuleSettingHeader;
