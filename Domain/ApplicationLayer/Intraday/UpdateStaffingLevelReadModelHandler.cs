@@ -18,14 +18,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 		private readonly ICurrentUnitOfWorkFactory _currentFactory;
 		private readonly INow _now;
 		private readonly IRequestStrategySettingsReader _requestStrategySettingsReader;
+		private readonly IStardustJobFeedback _feedback;
 
-		public UpdateStaffingLevelReadModelHandler(IUpdateStaffingLevelReadModel updateStaffingLevelReadModel, ICurrentUnitOfWorkFactory current, INow now, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, IRequestStrategySettingsReader requestStrategySettingsReader)
+		public UpdateStaffingLevelReadModelHandler(IUpdateStaffingLevelReadModel updateStaffingLevelReadModel, ICurrentUnitOfWorkFactory current, INow now, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, IRequestStrategySettingsReader requestStrategySettingsReader, IStardustJobFeedback feedback)
 		{
 			_updateStaffingLevelReadModel = updateStaffingLevelReadModel;
 			_currentFactory = current;
 			_now = now;
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 			_requestStrategySettingsReader = requestStrategySettingsReader;
+			_feedback = feedback;
 		}
 
 		[AsSystem]
@@ -45,6 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 					var now = _now.UtcDateTime();
 					if (lastCalculateDateTime.AddMinutes(updateResourceReadModelIntervalMinutes) >= now)
 					{
+						_feedback.SendProgress($"The job was recently executed at {lastCalculateDateTime}");
 						return;
 					}
 					_scheduleForecastSkillReadModelRepository.UpdateInsertedDateTime(@event.LogOnBusinessUnitId);
