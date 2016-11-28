@@ -257,7 +257,7 @@
 					return [200, skills];
 				});
 
-				fake(/\.\.\/api\/Organization(.*)/,
+				fake(/\.\.\/api\/Sites\/Organization(.*)/,
 					function () {
 						return [200, organizations];
 					});

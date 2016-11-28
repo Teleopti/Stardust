@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public IEnumerable<OrganizationSiteViewModel> ForOrganization()
 		{
 			var sites = allPermittedSites();
-			return from site in sites
+			var org = from site in sites
 				select new OrganizationSiteViewModel
 				{
 					Id = site.Id.Value,
@@ -102,8 +102,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						{
 							Id = team.Id.Value,
 							Name = team.Description.Name
-						})
+						}).ToArray()
 				};
+			return org.ToArray();
 		}
 	}
 
