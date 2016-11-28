@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				<IShiftTradePendingReasonsService, ShiftTradePendingReasonsService,
 					ShiftTradePendingReasonsService39473ToggleOff>(builder,
 						Toggles.Wfm_Requests_Show_Pending_Reasons_39473);
+			builder.RegisterType<BusinessRuleConfigProvider>().As<IBusinessRuleConfigProvider>().SingleInstance();
 		}
 
 	    private void registerType<T, TToggleOn, TToggleOff>(ContainerBuilder builder, Toggles toggle)

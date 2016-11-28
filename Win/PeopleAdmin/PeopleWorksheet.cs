@@ -57,7 +57,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
         private readonly bool _readOnly;
         private ILifetimeScope _container;
         private IToggleManager _toggleManager;
-        private Form _mainWindow;
+		private readonly IBusinessRuleConfigProvider _businessRuleConfigProvider;
+		private Form _mainWindow;
         private DateNavigateControl _dateNavigatePeriods;
 	    private static int _numberOfOpened = 0;
 
@@ -93,8 +94,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             _tabControlPeopleAdmin = tabControlPeopleAdmin;
             _filteredPeopleHolder.TabControlPeopleAdmin = _tabControlPeopleAdmin;
 
-            _gridConstructor = new GridConstructor(filteredPeopleHolder, _toggleManager);
-            _panelConstructor = new GridConstructor(filteredPeopleHolder, _toggleManager);
+			_businessRuleConfigProvider = componentContext.Resolve<IBusinessRuleConfigProvider>();
+			_gridConstructor = new GridConstructor(filteredPeopleHolder, _toggleManager, _businessRuleConfigProvider);
+            _panelConstructor = new GridConstructor(filteredPeopleHolder, _toggleManager, _businessRuleConfigProvider);
             _domainFinder = new PeopleDomainFinder(filteredPeopleHolder);
             shiftCategoryLimitationView.SetState(filteredPeopleHolder, _gridConstructor);
 
@@ -770,7 +772,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             _filteredPeopleHolder = filteredPeopleHolder;
             _filteredPeopleHolder.TabControlPeopleAdmin = _tabControlPeopleAdmin;
 
-            _gridConstructor = new GridConstructor(filteredPeopleHolder, _toggleManager);
+            _gridConstructor = new GridConstructor(filteredPeopleHolder, _toggleManager, _businessRuleConfigProvider);
 
             _panelConstructor.GridViewChanged -= panelConstructorGridViewChanged;
             _panelConstructor.View.ClearView();
@@ -812,7 +814,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             //löjligt men...
             _gridConstructor.View.SetSelectedPersons(_gridConstructor.View.GetSelectedPersons());
 
-            _panelConstructor = new GridConstructor(filteredPeopleHolder, _toggleManager);
+            _panelConstructor = new GridConstructor(filteredPeopleHolder, _toggleManager, _businessRuleConfigProvider);
             _panelConstructor.GridViewChanged += panelConstructorGridViewChanged;
             _panelConstructor.BuildGridView(panelViewType);
 
@@ -1698,7 +1700,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             var toggleManager = _container.Resolve<IToggleManager>();
             try
             {
-                var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(toggleManager)));
+                var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(toggleManager, _container.Resolve<IBusinessRuleConfigProvider>())));
                 settings.Show();
             }
             catch (DataSourceException ex)

@@ -927,7 +927,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			try
 			{
-				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager)));
+				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager, _container.Resolve<IBusinessRuleConfigProvider>())));
 				settings.Show();
 				settings.BringToFront();
 			}

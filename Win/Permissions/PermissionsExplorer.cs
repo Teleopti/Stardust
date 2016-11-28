@@ -2295,7 +2295,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			var toggleManager = _container.Resolve<IToggleManager>();
 			try
 			{
-				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(toggleManager)));
+				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(toggleManager, _container.Resolve<IBusinessRuleConfigProvider>())));
 				settings.Show();
 			}
 			catch (DataSourceException ex)

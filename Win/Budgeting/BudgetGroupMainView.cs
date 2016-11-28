@@ -43,14 +43,16 @@ namespace Teleopti.Ccc.Win.Budgeting
 		private bool _dayHasSelectedCell;
 		private bool _weekHasSelectedCell;
 		private bool _monthHasSelectedCell;
+		private readonly IBusinessRuleConfigProvider _businessRuleConfigProvider;
 
-		public BudgetGroupMainView(IBudgetGroupTabView budgetGroupTabView, IEventAggregatorLocator eventAggregatorLocator, IGracefulDataSourceExceptionHandler dataSourceExceptionHandler, IBudgetPermissionService budgetPermissionService, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IToggleManager toggleManager)
+		public BudgetGroupMainView(IBudgetGroupTabView budgetGroupTabView, IEventAggregatorLocator eventAggregatorLocator, IGracefulDataSourceExceptionHandler dataSourceExceptionHandler, IBudgetPermissionService budgetPermissionService, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IToggleManager toggleManager, IBusinessRuleConfigProvider businessRuleConfigProvider)
 		{
 			_dataSourceExceptionHandler = dataSourceExceptionHandler;
 			_budgetPermissionService = budgetPermissionService;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_repositoryFactory = repositoryFactory;
 			_toggleManager = toggleManager;
+			_businessRuleConfigProvider = businessRuleConfigProvider;
 			_localEventAggregator = eventAggregatorLocator.LocalAggregator();
 			_globalEventAggregator = eventAggregatorLocator.GlobalAggregator();
 			InitializeComponent();
@@ -514,7 +516,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 		{
 			try
 			{
-				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager)));
+				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager, _businessRuleConfigProvider)));
 				settings.Show();
 			}
 			catch (DataSourceException ex)

@@ -81,6 +81,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private bool _forceClose;
 		private Form _mainWindow;
 		private readonly IStatisticHelper _statisticHelper;
+		private readonly IBusinessRuleConfigProvider _businessRuleConfigProvider;
 
 		#region Private
 
@@ -904,9 +905,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			if (_gridChartManager != null) _gridChartManager.ReloadChart();
 		}
 
-		protected Forecaster(IStatisticHelper statisticHelper)
+		protected Forecaster(IStatisticHelper statisticHelper, IBusinessRuleConfigProvider businessRuleConfigProvider)
 		{
 			_statisticHelper = statisticHelper;
+			_businessRuleConfigProvider = businessRuleConfigProvider;
 			InitializeComponent();
 			if (!DesignMode)
 			{
@@ -931,8 +933,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			setGridZoomLevel(TemplateTarget.Skill, _currentForecasterSettings.WorkingIntervalSkill);
 		}
 
-		public Forecaster(ISkill skill, DateOnlyPeriod dateTimePeriod, IScenario scenario, bool longterm, IToggleManager toggleManager, Form mainWindow, IStatisticHelper statisticHelper)
-			: this(  statisticHelper)
+		public Forecaster(ISkill skill, DateOnlyPeriod dateTimePeriod, IScenario scenario, bool longterm, IToggleManager toggleManager, Form mainWindow, IStatisticHelper statisticHelper, IBusinessRuleConfigProvider businessRuleConfigProvider)
+			: this(  statisticHelper, businessRuleConfigProvider)
 		{
 			_toggleManager = toggleManager;
 			_dateTimePeriod = dateTimePeriod;
@@ -2167,7 +2169,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		{
 			try
 			{
-				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager)));
+				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager, _businessRuleConfigProvider)));
 				settings.Show();
 			}
 			catch (DataSourceException ex)
@@ -2406,7 +2408,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		{
 			try
 			{
-				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager)));
+				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager, _businessRuleConfigProvider)));
 				settings.Show();
 			}
 			catch (DataSourceException ex)

@@ -16,6 +16,7 @@ using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Ccc.Win.Common.Controls.Columns;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using System.Collections.Generic;
+using Autofac;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.Views
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 	{
 		public RotationBaseGridView(GridControl grid, FilteredPeopleHolder filteredPeopleHolder,
 		                            IList<TAdapterParent> parentAdapterCollection, ViewType viewType,
-		                            IToggleManager toggleManager)
+		                            IToggleManager toggleManager, IBusinessRuleConfigProvider businessRuleConfigProvider)
 			: base(grid, filteredPeopleHolder)
 		{
 			Init();
@@ -40,6 +41,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			grid.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
 			_viewType = viewType;
 			_toggleManager = toggleManager;
+			_businessRuleConfigProvider = businessRuleConfigProvider;
 			_parentAdapterCollection = parentAdapterCollection;
 		}
 
@@ -99,6 +101,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		// View Type 
 		private ViewType _viewType;
 		private readonly IToggleManager _toggleManager;
+		private readonly IBusinessRuleConfigProvider _businessRuleConfigProvider;
 
 		internal override ViewType Type
 		{
@@ -361,7 +364,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 			if (selectedEntity != null)
 			{
-				var screen = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager)), selectedEntity);
+				var screen = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager, _businessRuleConfigProvider)), selectedEntity);
 				screen.Show();
 			}
 		}

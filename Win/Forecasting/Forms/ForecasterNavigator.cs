@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private readonly IJobHistoryViewFactory _jobHistoryViewFactory;
 		private readonly IImportForecastViewFactory _importForecastViewFactory;
 		private readonly IToggleManager _toggleManager;
+		private readonly IBusinessRuleConfigProvider _businessRuleConfigProvider;
 		private readonly IMessagePopulatingServiceBusSender _messageSender;
 		private readonly IEventPublisher _publisher;
 		private readonly IRepositoryFactory _repositoryFactory;
@@ -69,9 +70,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private readonly IStatisticHelper _statisticHelper;
 		private bool _hidePriorityToggle;
 
-		protected ForecasterNavigator(IStatisticHelper statisticHelper)
+		protected ForecasterNavigator(IStatisticHelper statisticHelper, IBusinessRuleConfigProvider businessRuleConfigProvider)
 		{
 			_statisticHelper = statisticHelper;
+			_businessRuleConfigProvider = businessRuleConfigProvider;
 			InitializeComponent();
 			var license = DefinedLicenseDataFactory.GetLicenseActivator(UnitOfWorkFactory.Current.Name);
 			if (license.EnabledLicenseSchemaName == DefinedLicenseSchemaCodes.TeleoptiWFMForecastsSchema)
@@ -110,8 +112,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			IToggleManager toggleManager,
 			IMessagePopulatingServiceBusSender messageSender,
 			IEventPublisher publisher,
-			IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator, IStatisticHelper statisticHelper)
-			: this(statisticHelper)
+			IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator, IStatisticHelper statisticHelper, IBusinessRuleConfigProvider businessRuleConfigProvider)
+			: this(statisticHelper, businessRuleConfigProvider)
 		{
 			_jobHistoryViewFactory = jobHistoryViewFactory;
 			_importForecastViewFactory = importForecastViewFactory;
@@ -1060,7 +1062,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private void startForecaster(DateOnlyPeriod selectedPeriod, IScenario scenario, ISkill skill)
 		{
 			Cursor = Cursors.WaitCursor;
-			var forecaster = new Forecaster(skill, selectedPeriod, scenario, true, _toggleManager, _mainWindow,_statisticHelper);
+			var forecaster = new Forecaster(skill, selectedPeriod, scenario, true, _toggleManager, _mainWindow,_statisticHelper, _businessRuleConfigProvider);
 			forecaster.Show();
 			Cursor = Cursors.Default;
 		}

@@ -150,10 +150,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 	public class OptionsSettingPagesProvider : ISettingPagesProvider
 	{
 		private readonly IToggleManager _toggleManager;
+		private readonly IBusinessRuleConfigProvider _businessRuleConfigProvider;
 
-		public OptionsSettingPagesProvider(IToggleManager toggleManager)
+		public OptionsSettingPagesProvider(IToggleManager toggleManager, IBusinessRuleConfigProvider businessRuleConfigProvider)
 		{
 			_toggleManager = toggleManager;
+			_businessRuleConfigProvider = businessRuleConfigProvider;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -208,7 +210,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			if (_toggleManager.IsEnabled (Toggles.Wfm_Requests_Check_Max_Seats_39937))
 			{
-				allSupportedPages.Add (new ShiftTradeSystemSettings(_toggleManager));
+				allSupportedPages.Add (new ShiftTradeSystemSettings(_toggleManager, _businessRuleConfigProvider));
 			}
 
 			return allSupportedPages;

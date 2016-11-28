@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -26,7 +24,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 	{
 		private ShiftTradeSettings _shiftTradeSettings;
 		private SFGridColumnGridHelper<ShiftTradeBusinessRuleConfigView> _gridColumnHelper;
-		private BusinessRuleConfigProvider _businessRuleConfigProvider;
+		private readonly IBusinessRuleConfigProvider _businessRuleConfigProvider;
 		private readonly IToggleManager _toggleManager;
 		private static readonly Dictionary<RequestHandleOption, ShiftTradeRequestHandleOptionView> _shiftTradeRequestHandleOptionViews
 			= new Dictionary<RequestHandleOption, ShiftTradeRequestHandleOptionView>()
@@ -38,9 +36,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				}
 			};
 
-		public ShiftTradeSystemSettings(IToggleManager toggleManager)
+		public ShiftTradeSystemSettings(IToggleManager toggleManager, IBusinessRuleConfigProvider businessRuleConfigProvider)
 		{
 			_toggleManager = toggleManager;
+			_businessRuleConfigProvider = businessRuleConfigProvider;
 			InitializeComponent();
 		}
 
@@ -186,7 +185,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			if (_shiftTradeSettings.BusinessRuleConfigs == null)
 			{
-				initializeBusinessRuleConfigProvider();
 				_shiftTradeSettings.BusinessRuleConfigs =
 					_businessRuleConfigProvider.GetDefaultConfigForShiftTradeRequest().Select(s=>(ShiftTradeBusinessRuleConfig)s).ToArray();
 			}
@@ -198,12 +196,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 						HandleOptionOnFailed = _shiftTradeRequestHandleOptionViews[b.HandleOptionOnFailed]
 					});
 			return businessRuleConfigViews;
-		}
-
-		private void initializeBusinessRuleConfigProvider()
-		{
-			_businessRuleConfigProvider = new BusinessRuleConfigProvider(new BusinessRuleProvider(),
-				new IShiftTradeSpecification[] { }, new SchedulingResultStateHolder());
 		}
 
 		private void chkEnableMaxSeats_CheckedChanged(object sender, EventArgs e)

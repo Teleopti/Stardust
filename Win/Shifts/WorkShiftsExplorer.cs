@@ -33,13 +33,15 @@ namespace Teleopti.Ccc.Win.Shifts
 		private readonly IEventAggregator _eventAggregator;
 		private readonly IToggleManager _toggleManager;
 		private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
-		
+		private readonly IBusinessRuleConfigProvider _businessRuleConfigProvider;
+
 		private bool ruleSetBagCopyClicked, ruleSetCopyClicked;
 
-		public WorkShiftsExplorer(IEventAggregator eventAggregator, IToggleManager toggleManager)
+		public WorkShiftsExplorer(IEventAggregator eventAggregator, IToggleManager toggleManager, IBusinessRuleConfigProvider businessRuleConfigProvider)
 		{
 			_eventAggregator = eventAggregator;
 			_toggleManager = toggleManager;
+			_businessRuleConfigProvider = businessRuleConfigProvider;
 			InitializeComponent();
 			if (!DesignMode)
 			{
@@ -602,7 +604,7 @@ namespace Teleopti.Ccc.Win.Shifts
 		{
 			try
 			{
-				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager)));
+				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager, _businessRuleConfigProvider)));
 				settings.Show();
 			}
 			catch (DataSourceException ex)

@@ -32,11 +32,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 	{
 		private FilteredPeopleHolder _filteredPeopleHolder;
 		private IToggleManager _toggleManager;
+		private readonly IBusinessRuleConfigProvider _businessRuleConfigProvider;
 
-		public GridConstructor(FilteredPeopleHolder filteredPeopleHolder, IToggleManager toggleManager)
+		public GridConstructor(FilteredPeopleHolder filteredPeopleHolder, IToggleManager toggleManager, IBusinessRuleConfigProvider businessRuleConfigProvider)
 		{
 			_filteredPeopleHolder = filteredPeopleHolder;
 			_toggleManager = toggleManager;
+			_businessRuleConfigProvider = businessRuleConfigProvider;
 			_readOnly =
 				 !PrincipalAuthorization.Current().IsPermitted(
 					  DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
@@ -133,13 +135,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				case ViewType.PersonRotationView:
 					view = new RotationBaseGridView<PersonRotationModelParent,
 						 PersonRotationModelChild, IPersonRotation, IRotation>(new GridControl(), _filteredPeopleHolder,
-						 _filteredPeopleHolder.PersonRotationParentAdapterCollection, ViewType.PersonRotationView, _toggleManager);
+						 _filteredPeopleHolder.PersonRotationParentAdapterCollection, ViewType.PersonRotationView, _toggleManager, _businessRuleConfigProvider);
 					break;
 
 				case ViewType.PersonAvailabilityView:
 					view = new RotationBaseGridView<PersonAvailabilityModelParent,
 						 PersonAvailabilityModelChild, IPersonAvailability, IAvailabilityRotation>(new GridControl(), _filteredPeopleHolder,
-						 _filteredPeopleHolder.PersonAvailabilityParentAdapterCollection, ViewType.PersonAvailabilityView, _toggleManager);
+						 _filteredPeopleHolder.PersonAvailabilityParentAdapterCollection, ViewType.PersonAvailabilityView, _toggleManager, _businessRuleConfigProvider);
 					break;
 
 				case ViewType.ExternalLogOnView:
