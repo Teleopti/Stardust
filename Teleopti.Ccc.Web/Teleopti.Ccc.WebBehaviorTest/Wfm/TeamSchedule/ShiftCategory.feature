@@ -48,7 +48,8 @@ And there is a shift category with
 
 Scenario: Show shift category
 	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-10-09'
+	And I set schedule date to '2016-10-09'
+	And I searched schedule with keyword 'Team green'
 	Then I should see a shift category named 'DY'
 
 @OnlyRunIfEnabled('WfmTeamSchedule_ModifyShiftCategory_39797')
