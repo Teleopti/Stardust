@@ -71,9 +71,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
 					var now = _now.UtcDateTime();
-					var nearFutureThresholdTime = _now.UtcDateTime().AddMinutes(-absenceReqNearFutureTime);
-					var farFutureThresholdTime = _now.UtcDateTime().AddMinutes(-absenceReqFarFutureTime);
-					var pastThresholdTime = _now.UtcDateTime();
+					var nearFutureThresholdTime = now.AddMinutes(-absenceReqNearFutureTime);
+					var farFutureThresholdTime = now.AddMinutes(-absenceReqFarFutureTime);
+					var pastThresholdTime = now;
 
 					//include yesterday to deal with timezones
 					var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(windowSize)));
