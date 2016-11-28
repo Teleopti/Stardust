@@ -29,16 +29,18 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public IEnumerable<AgentStateReadModel> ReadInAlarmFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
 		{
-			var queryBuilder = new AgentStateReadModelQueryBuilder(_now);
-			queryBuilder.InAlarm();
+			var queryBuilder =
+				new AgentStateReadModelQueryBuilder(_now)
+					.InAlarm();
 			return build(queryBuilder, siteIds, teamIds, skillIds);
 		}
 
 		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingStatesFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStates)
 		{
-			var queryBuilder = new AgentStateReadModelQueryBuilder(_now);
-			queryBuilder.InAlarm();
-			queryBuilder.Exclude(excludedStates);
+			var queryBuilder =
+				new AgentStateReadModelQueryBuilder(_now)
+					.InAlarm()
+					.Exclude(excludedStates);
 			return build(queryBuilder, siteIds, teamIds, skillIds);
 		}
 

@@ -8,7 +8,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
-
 	public class AgentStateReadModelQueryBuilder
 	{
 		private readonly List<selectionInfo> selections = new List<selectionInfo>();
@@ -58,15 +57,17 @@ AND :today BETWEEN g.StartDate and g.EndDate",
 		}
 
 		private bool inAlarm;
-		public void InAlarm()
+		public AgentStateReadModelQueryBuilder InAlarm()
 		{
 			inAlarm = true;
+			return this;
 		}
 
 		private IEnumerable<Guid?> excluded;
-		public void Exclude(IEnumerable<Guid?> excludedStates)
+		public AgentStateReadModelQueryBuilder Exclude(IEnumerable<Guid?> excludedStates)
 		{
 			excluded = excludedStates;
+			return this;
 		}
 
 		public Selection Build()
