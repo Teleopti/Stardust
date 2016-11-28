@@ -88,6 +88,7 @@
 				$scope.skillAreas = [];
 				$scope.skillsLoaded = false;
 				$scope.skillAreasLoaded = false;
+				$scope.teams = [];
 				toggleService.togglesLoaded.then(function() {
 					$scope.showOrgSelection = toggleService.RTA_QuicklyChangeAgentsSelection_40610;
 					if($scope.showOrgSelection)
@@ -211,8 +212,8 @@
 						var selectedTeams = site.Teams.filter(function(team){
 							return team.isChecked == true;
 						});
-	
-						return site.isChecked == true && ((selectedTeams.length === site.Teams.length) || selectedTeams.length == 0) ;
+
+						return site.isChecked == true && ((selectedTeams.length === site.Teams.length) || selectedTeams.length == 0);
 					}).map(function(s) {
 						return s.Id;
 					});
@@ -239,29 +240,37 @@
 					return [].concat.apply([], collection)
 				}
 
-				$scope.selectionChanged = function(siteId, teamIds) {
+				$scope.selectionChanged = function(siteId, teamId) {
 					var selectedSite = $scope.sites.find(function(site) {
 						return site.Id == siteId;
 					});
-					if (selectedSite.Teams.length > teamIds.length) {
+
+							var selectedTeam = selectedSite.Teams.find(function(team) {
+								return team.Id === teamId;
+							});
+
+							selectedTeam.isChecked = !selectedTeam.isChecked;
+
+							var teamsSelected = selectedSite.Teams.filter(function(team) {
+								return team.isChecked === true;
+							});
+
 						selectedSite.isChecked = false;
-						selectedSite.Teams.forEach(function(team) {
-							team.isChecked = teamIds.indexOf(team.Id) > -1 ? !team.isChecked : team.isChecked;
-						})
-					} else
-						selectedSite.isChecked = !selectedSite.isChecked;
 
-					var anyTeamSelected = selectedSite.Teams.find(function(team){
-						return team.isChecked == true;
-					});
-
-					if(anyTeamSelected) {
-						selectedSite.isChecked = true;
-					}
+						if(teamsSelected.length === selectedSite.Teams.length)
+							selectedSite.isChecked = true;
 				}
 				// org selection ends here
 
+				$scope.updateAllTeams = function(siteId) {
+					 var selectedSite = $scope.sites.find(function(site) {
+						 return site.Id === siteId;
+					 });
+					 selectedSite.Teams.forEach(function(team) {
+					 	team.isChecked = selectedSite.isChecked;
+					 });
 
+				}
 
 				$scope.$watch('pause', function() {
 					if ($scope.pause) {

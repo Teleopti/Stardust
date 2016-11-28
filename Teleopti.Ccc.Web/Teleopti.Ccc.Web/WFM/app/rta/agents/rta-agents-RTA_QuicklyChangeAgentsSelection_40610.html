@@ -77,11 +77,11 @@
 					<span class="con-flex" ng-if="showOrgSelection">
 						<md-input-container class="rta-md-input-container">
 							<label>Select organization</label>
-							<md-select ng-model="selectedTeams" class="rta-md-select" multiple md-on-close="goToAgents()">
+							<md-select ng-model="teams" class="rta-md-select" multiple md-on-close="goToAgents()">
 								<md-optgroup ng-repeat="site in sites" class="rta-option-group">
 									<span ng-click="selectSite(site.Id)"><i class="mdi mdi-menu-down"></i></span>
-									<md-checkbox ng-click="selectionChanged(site.Id, site.Teams)" ng-checked="site.isChecked" ng-value="site.Id">{{site.Name}}</md-checkbox>
-									<md-option ng-click="selectionChanged(site.Id, [team.Id])" ng-show="isSelectedSite(site.Id)" ng-selected="site.isChecked" ng-value="team.Id" ng-repeat="team in site.Teams">{{team.Name}}</md-option>
+									<md-checkbox ng-model="site.isChecked" ng-value="site.Id" ng-change="updateAllTeams(site.Id)">{{site.Name}}</md-checkbox>
+									<md-option ng-click="selectionChanged(site.Id, team.Id)" ng-show="isSelectedSite(site.Id)" ng-selected="site.isChecked" ng-value="team.Id" ng-repeat="team in site.Teams">{{team.Name}}</md-option>
 								</md-optgroup>
 							</md-select>
 						</md-input-container>
