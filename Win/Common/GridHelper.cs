@@ -508,29 +508,29 @@ namespace Teleopti.Ccc.Win.Common
             }
             return changedPeople;
         }
-
-
+		
         //lock selection
         public static void GridlockWriteProtected(ISchedulerStateHolder stateHolder, IGridlockManager lockManager)
         {
             lockManager.ClearWriteProtected();
-            foreach (var range in stateHolder.Schedules)
-            {
-				var writeProtectUntil = range.Key.PersonWriteProtection.WriteProtectedUntil();
+	        foreach (var person in stateHolder.FilteredCombinedAgentsDictionary)
+	        {
+				var writeProtectUntil = person.Value.PersonWriteProtection.WriteProtectedUntil();
 				if (writeProtectUntil.HasValue)
 				{
-					var timeZone = range.Key.PermissionInformation.DefaultTimeZone();
-					var period = range.Value.Period.ToDateOnlyPeriod(timeZone);
+					var timeZone = person.Value.PermissionInformation.DefaultTimeZone();
+					var period = stateHolder.Schedules[person.Value].Period.ToDateOnlyPeriod(timeZone);
 					foreach (var date in period.DayCollection())
 					{
 						if (writeProtectUntil.Value >= date)
 						{
-							lockManager.AddLock(range.Key, date, LockType.WriteProtected);
+							lockManager.AddLock(person.Value, date, LockType.WriteProtected);
 						}
 					}
-                }
-            }
-        }
+				}
+			}
+		}
+
         //lock selection
         public static void GridlockSelection(GridControl grid, IGridlockManager lockManager)
         {

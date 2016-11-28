@@ -2480,8 +2480,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			SuspendLayout();
 			setupContextMenuAvailTimeZones();
-
-
+			
 			zoom(ZoomLevel.PeriodView);
 			DateOnly dateOnly = SchedulerState.RequestedPeriod.DateOnlyPeriod.StartDate;
 			_scheduleView.SetSelectedDateLocal(dateOnly);
@@ -2514,8 +2513,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 													  LanguageResourceHelper.Translate("XXLoadedColon") +
 													  " " + _schedulerState.SchedulingResultState.PersonsInOrganization.Count;
 			toolStripStatusLabelNumberOfAgents.Visible = true;
-
-
+			
 			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler) && _loadRequsts)
 			{
 				using (PerformanceOutput.ForOperation("Creating new RequestView"))
@@ -2546,7 +2544,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var sortCommand = sortCommandMapper.GetCommandFromSetting(schedulerSortCommandSetting);
 			_scheduleView.Sort(sortCommand);
 
-			GridHelper.GridlockWriteProtected(_schedulerState, LockManager);
 			drawSkillGrid();
 			reloadChart();
 			setupRequestPresenter();
@@ -3661,6 +3658,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_schedulerState.FilteredCombinedAgentsDictionary.Values.Count == 0)
 				_schedulerState.ResetFilteredPersons();
 			schedulerSplitters1.RefreshTabInfoPanels(_schedulerState.FilteredCombinedAgentsDictionary.Values);
+
+			GridHelper.GridlockWriteProtected(_schedulerState, LockManager);
 
 			_lastSaved = DateTime.Now;
 		}

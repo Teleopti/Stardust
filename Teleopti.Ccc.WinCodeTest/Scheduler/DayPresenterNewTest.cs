@@ -142,7 +142,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 ClipHandler<IScheduleDay> clipHandler, SchedulePartFilter schedulePartFilter, IDayPresenterScaleCalculator scaleCalculator)
                 : base(view, schedulerState, lockManager, clipHandler, schedulePartFilter, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), scaleCalculator, NullScheduleTag.Instance)
             {
-                
             }
 
             internal void CreateDayHeaderTest(GridQueryCellInfoEventArgs e)
