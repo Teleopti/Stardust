@@ -2546,7 +2546,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var sortCommand = sortCommandMapper.GetCommandFromSetting(schedulerSortCommandSetting);
 			_scheduleView.Sort(sortCommand);
 
-			GridHelper.GridlockWriteProtected(_grid, LockManager);
+			GridHelper.GridlockWriteProtected(_schedulerState, LockManager);
 			drawSkillGrid();
 			reloadChart();
 			setupRequestPresenter();
@@ -4484,7 +4484,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_scheduleView.Sort(_scheduleView.Presenter.SortCommand);
 
 					_grid.Refresh();
-					GridHelper.GridlockWriteProtected(_grid, LockManager);
+					GridHelper.GridlockWriteProtected(_schedulerState, LockManager);
 					_grid.Refresh();
 				}
 				if (_requestView != null)
@@ -5978,7 +5978,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Cursor = Cursors.WaitCursor;
 			var removeCommand = new WriteProtectionRemoveCommand(_scheduleView.SelectedSchedules(), _modifiedWriteProtections);
 			removeCommand.Execute();
-			GridHelper.GridlockWriteProtected(_grid, LockManager);
+			GridHelper.GridlockWriteProtected(_schedulerState, LockManager);
 			Refresh();
 			RefreshSelection();
 			Cursor = Cursors.Default;
@@ -5989,7 +5989,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection))
 				return;
 			GridHelper.WriteProtectPersonSchedule(_grid).ForEach(_modifiedWriteProtections.Add);
-			GridHelper.GridlockWriteProtected(_grid, LockManager);
+			GridHelper.GridlockWriteProtected(_schedulerState, LockManager);
 			_grid.Refresh();
 			enableSave();
 		}
@@ -6732,7 +6732,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_scheduleView.Sort(_scheduleView.Presenter.SortCommand);
 
 				_grid.Refresh();
-				GridHelper.GridlockWriteProtected(_grid, LockManager);
+				GridHelper.GridlockWriteProtected(_schedulerState, LockManager);
 				_scheduleView.ResizeGridColumnsToFit();
 				_grid.Refresh();
 			}

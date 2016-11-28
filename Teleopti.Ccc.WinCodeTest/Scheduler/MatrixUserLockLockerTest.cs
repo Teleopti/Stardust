@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _scheduleDays = new List<IScheduleDay> {_scheduleDay1};
             _dateOnly = new DateOnly(2011, 1, 1);
             _effectiveDays = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>{_scheduleDayPro1});
-            _gridLock = new Gridlock(_person, _dateOnly, LockType.Normal, new DateTimePeriod(2011, 1, 1, 2011, 1, 1));
+            _gridLock = new Gridlock(_person, _dateOnly, LockType.Normal);
             _gridlockDictionary = new GridlockDictionary();
             _gridlockDictionary.Add("key", _gridLock);
             _gridlockManager = _mockRepository.StrictMock<IGridlockManager>();

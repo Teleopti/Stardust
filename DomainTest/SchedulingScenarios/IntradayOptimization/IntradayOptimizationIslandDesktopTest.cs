@@ -755,7 +755,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 17, 0));
 				ass.SetShiftCategory(new ShiftCategory("_").WithId());
 				asses.Add(ass);
-				LockManager().AddLock(agent, dateOnly, LockType.Normal, new DateTimePeriod()); 
+				LockManager().AddLock(agent, dateOnly, LockType.Normal); 
 			}
 			SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), asses.Select(x => x.Person), asses, skillDays);
 

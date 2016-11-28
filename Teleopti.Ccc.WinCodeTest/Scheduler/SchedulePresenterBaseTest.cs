@@ -559,7 +559,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_viewBase.TheGrid).Return(_grid);
 
             _mocks.ReplayAll();
-            _gridlockManager.AddLock(person, _date, LockType.Normal, schedulePart.DateOnlyAsPeriod.Period());
+            _gridlockManager.AddLock(person, _date, LockType.Normal);
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
             Assert.IsTrue(_target.ModifySchedulePart(new List<IScheduleDay> { schedulePart }));
             _mocks.VerifyAll();

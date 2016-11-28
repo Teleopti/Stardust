@@ -511,18 +511,23 @@ namespace Teleopti.Ccc.Win.Common
 
 
         //lock selection
-        public static void GridlockWriteProtected(GridControl grid, IGridlockManager lockManager)
+        public static void GridlockWriteProtected(ISchedulerStateHolder stateHolder, IGridlockManager lockManager)
         {
-            var clipHandler = new ClipHandler<ExtractedSchedule>();
-            GridCopyAll(grid, clipHandler, true);
             lockManager.ClearWriteProtected();
-            foreach (Clip<ExtractedSchedule> clip in clipHandler.ClipList)
+            foreach (var range in stateHolder.Schedules)
             {
-				var writeProtectUntil = clip.ClipValue.Person.PersonWriteProtection.WriteProtectedUntil();
-				var period = clip.ClipValue.Period.ToDateOnlyPeriod(clip.ClipValue.Person.PermissionInformation.DefaultTimeZone());
-                if (writeProtectUntil.HasValue && writeProtectUntil.Value >= period.EndDate)
-                {
-                    lockManager.AddLock(clip.ClipValue, LockType.WriteProtected);
+				var writeProtectUntil = range.Key.PersonWriteProtection.WriteProtectedUntil();
+				if (writeProtectUntil.HasValue)
+				{
+					var timeZone = range.Key.PermissionInformation.DefaultTimeZone();
+					var period = range.Value.Period.ToDateOnlyPeriod(timeZone);
+					foreach (var date in period.DayCollection())
+					{
+						if (writeProtectUntil.Value >= date)
+						{
+							lockManager.AddLock(range.Key, date, LockType.WriteProtected);
+						}
+					}
                 }
             }
         }

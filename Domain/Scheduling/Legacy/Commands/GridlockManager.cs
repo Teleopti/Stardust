@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
             get { return _gridlocks; }
         }
 		
-        public void AddLock(IPerson person, DateOnly dateOnly, LockType lockType, DateTimePeriod period)
+        public void AddLock(IPerson person, DateOnly dateOnly, LockType lockType)
         {
             string key = GetPersonDateKey(person, dateOnly);
 
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				personDateLocks = new GridlockDictionary();
                 _gridlocks.Add(key,personDateLocks);
             }
-            Gridlock gridlock = new Gridlock(person, dateOnly, lockType, period);
+            Gridlock gridlock = new Gridlock(person, dateOnly, lockType);
             if (!personDateLocks.ContainsKey(gridlock.Key))
             {
                 personDateLocks.Add(gridlock.Key, gridlock);
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         public void AddLock(IScheduleDay schedulePart, LockType lockType)
         {
             DateOnly dateOnly = schedulePart.DateOnlyAsPeriod.DateOnly;
-            AddLock(schedulePart.Person, dateOnly, lockType, schedulePart.Period);
+            AddLock(schedulePart.Person, dateOnly, lockType);
         }
 
         public void AddLock(IList<IScheduleDay> schedules, LockType lockType)
@@ -61,10 +61,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
                 {
                     if (pair.Value.LockType == lockType)
                     {
-                        keyToRemove = pair.Key; 
+                        keyToRemove = pair.Key;
+	                    break;
                     }
                 }
-                if (!String.IsNullOrEmpty(keyToRemove))
+                if (!string.IsNullOrEmpty(keyToRemove))
                 {
                     gridlocks.Remove(keyToRemove);
                 }
@@ -72,13 +73,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
                     GridlocksDictionary.Remove(GetPersonDateKey(person, dateOnly));
             }
         }
-		
-				public void RemoveLock(IScheduleDay schedulePart)
-        {
-            RemoveLock(schedulePart.Person, new DateOnly(schedulePart.Period.StartDateTimeLocal(schedulePart.TimeZone)));//, schedulePart.Period);
-        }
-		
-        public void RemoveLock(IList<IScheduleDay> schedules)
+
+	    public void RemoveLock(IScheduleDay schedulePart)
+	    {
+		    RemoveLock(schedulePart.Person, new DateOnly(schedulePart.Period.StartDateTimeLocal(schedulePart.TimeZone)));
+	    }
+
+	    public void RemoveLock(IList<IScheduleDay> schedules)
         {
             foreach (IScheduleDay schedule in schedules)
             {
@@ -86,14 +87,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
             }
         }
 		
-        public bool HasLocks
-        {
-            get {
-                return _gridlocks.Count > 0;
-            }
-        }
-		
-        public GridlockDictionary Gridlocks(IPerson person, DateOnly dateOnly)
+        public bool HasLocks => _gridlocks.Count > 0;
+
+	    public GridlockDictionary Gridlocks(IPerson person, DateOnly dateOnly)
         {
             string dummyKey = GetPersonDateKey(person, dateOnly);
 

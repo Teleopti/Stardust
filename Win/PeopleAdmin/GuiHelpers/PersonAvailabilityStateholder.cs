@@ -13,11 +13,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
     /// <summary>
     /// The stateholder implementation related to person availability
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
     class PersonAvailabilityStateholder : IRotationStateHolder
     {
-        #region Fields - Instance Member
-
         /// <summary>
         /// The filtered people stateholder 
         /// </summary>
@@ -42,12 +39,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         /// Readonly collection to hold children person rotations
         /// </summary>
         private IList<IPersonAvailability> _childrenPersonAvailabilityCollection = new List<IPersonAvailability>();
-
-        #endregion
-
-        #region Properties - Instance Member
-
-        
+		
         /// <summary>
         /// To hold the state-holder that was passed in from the constructor
         /// </summary>
@@ -55,28 +47,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         {
             get { return _worksheetStateholder; }
         }
+		
+        public PersonAvailabilityRepository AvailabilityRepository => _paRepository ??
+																	  (_paRepository = new PersonAvailabilityRepository(FilteredStateHolder.GetUnitOfWork));
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public PersonAvailabilityRepository AvailabilityRepository
-        {
-            get
-            {
-                if (_paRepository == null)
-                    _paRepository = new PersonAvailabilityRepository(FilteredStateHolder.GetUnitOfWork);
-
-                return _paRepository;
-            }
-        }
-
-        #endregion
-
-        #region Methods - Instance Members
-
-        #region Methods - Instance Members - Constructor
-
-        /// <summary>
+	    /// <summary>
         /// Sets the stateholders
         /// </summary>
         /// <param name="filteredPeopleHolder">An instance of <see cref="FilteredPeopleHolder"/></param>
@@ -86,11 +61,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             _filteredPeopleHolder = filteredPeopleHolder;
             _worksheetStateholder = worksheetStateHolder;
         }
-
-        #endregion
-
-        #region Methods - Instance Members - PersonAvailabilityStateholder Members(IRotationStateHolder)
-
+		
         /// <summary>
         /// Adds a person rotation to the specified parent row
         /// </summary>
@@ -100,10 +71,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             IPerson selectedPerson = FilteredStateHolder.PersonAvailabilityParentAdapterCollection[parentRowIndex].Person;
             int rowIndex;
             
-            IList<IPersonAvailability> selectedList =
-                FilteredStateHolder.ParentPersonAvailabilityCollection.Where(p => p.Person.Id == selectedPerson.Id).ToList();
-            if(selectedList.Count > 0)
-                rowIndex = FilteredStateHolder.ParentPersonAvailabilityCollection.IndexOf(selectedList[0]);
+            var selectedItem =
+                FilteredStateHolder.ParentPersonAvailabilityCollection.FirstOrDefault(p => p.Person.Id == selectedPerson.Id);
+            if(selectedItem != null)
+                rowIndex = FilteredStateHolder.ParentPersonAvailabilityCollection.IndexOf(selectedItem);
             else return;
 
             IPersonAvailability personRotation = WorksheetStateHolder.GetSamplePersonAvailability(selectedPerson);
@@ -145,9 +116,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                     else
                         FilteredStateHolder.DeleteNewPersonAvailability(pAvail);
                 }
-
-               
-                
             }
         }
 
@@ -181,11 +149,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
                 DeleteNewPersonAvailability(availabilityToBeRemoved);
             }
-
-            
         }
-
-
+		
         /// <summary>
         /// Deletes the new person availability.
         /// </summary>
@@ -207,8 +172,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                 }
             }
         }
-
-
+		
         /// <summary>
         /// Deletes person from the specified parent row 
         /// </summary>
@@ -218,7 +182,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             IPerson person = FilteredStateHolder.PersonAvailabilityParentAdapterCollection[parentRowIndex].Person;
             int rowIndex =
                 FilteredStateHolder.ParentPersonAvailabilityCollection.
-                IndexOf(FilteredStateHolder.ParentPersonAvailabilityCollection.Where(p => p.Person.Id == person.Id).FirstOrDefault())
+                IndexOf(FilteredStateHolder.ParentPersonAvailabilityCollection.FirstOrDefault(p => p.Person.Id == person.Id))
             ;
 
             //lets load the _childPersonRotationCollection as it is to be used in some other methods
@@ -299,13 +263,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         /// <param name="parentRowIndex">The parent row index</param>
         public void GetChildPersonRotations(int parentRowIndex)
         {
-            IPerson person = FilteredStateHolder.PersonAvailabilityParentAdapterCollection[parentRowIndex].Person;
-
-            bool canBold = FilteredStateHolder.PersonAvailabilityParentAdapterCollection[parentRowIndex].CanBold;
-
-            IList<IPersonAvailability> selectedList =
-               FilteredStateHolder.ParentPersonAvailabilityCollection.Where(p => p.Person.Id == person.Id).ToList();
-            IPersonAvailability selectedItem = selectedList[0];
+	        var parent = FilteredStateHolder.PersonAvailabilityParentAdapterCollection[parentRowIndex];
+	        var person = parent.Person;
+            var canBold = parent.CanBold;
+			
+            var selectedItem = FilteredStateHolder.ParentPersonAvailabilityCollection.First(p => p.Person.Id == person.Id);
 
             //the selected item can be null from the _parentPersonRotationCollection in instances where 
             //there is no PersonRotation associated with the person
@@ -379,13 +341,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         /// </remarks>
         public void GetChildPersonRotations(int rowIndex, GridControl grid)
         {
-            IPerson person = FilteredStateHolder.PersonAvailabilityParentAdapterCollection[rowIndex].Person;
-
-            bool canBold = FilteredStateHolder.PersonAvailabilityParentAdapterCollection[rowIndex].CanBold;
-
-            IList<IPersonAvailability> selectedList =
-               FilteredStateHolder.ParentPersonAvailabilityCollection.Where(p => p.Person.Id == person.Id).ToList();
-            IPersonAvailability selectedItem = selectedList[0];
+	        var parent = FilteredStateHolder.PersonAvailabilityParentAdapterCollection[rowIndex];
+	        var person = parent.Person;
+            var canBold = parent.CanBold;
+			
+            IPersonAvailability selectedItem = FilteredStateHolder.ParentPersonAvailabilityCollection.First(p => p.Person.Id == person.Id);
 
             ReadOnlyCollection<PersonAvailabilityModelChild> cachedCollection = grid.Tag as
                 ReadOnlyCollection<PersonAvailabilityModelChild>;
@@ -469,17 +429,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         /// <param name="parentRowIndex">The parent rown index</param>
         public void GetParentPersonRotationWhenAddedOrUpdated(int parentRowIndex)
         {
-            IPerson person = FilteredStateHolder.PersonAvailabilityParentAdapterCollection[parentRowIndex].Person;
-
-            bool canBold = FilteredStateHolder.PersonAvailabilityParentAdapterCollection[parentRowIndex].CanBold;
-            GridControl grid = FilteredStateHolder.PersonAvailabilityParentAdapterCollection[parentRowIndex].GridControl;
-
-            
-
-            IList<IPersonAvailability> selectList =
-                FilteredStateHolder.ParentPersonAvailabilityCollection.Where(p => p.Person.Id == person.Id).ToList();
-            IPersonAvailability selectedPersonRotation = (selectList.Count > 0) ? selectList[0] : null;
-
+	        var parent = FilteredStateHolder.PersonAvailabilityParentAdapterCollection[parentRowIndex];
+	        var person = parent.Person;
+            var canBold = parent.CanBold;
+            var grid = parent.GridControl;
+			
+            var selectedPersonRotation = FilteredStateHolder.ParentPersonAvailabilityCollection.FirstOrDefault(p => p.Person.Id == person.Id);
             if (selectedPersonRotation == null) return;
 
             int rowIndex = FilteredStateHolder.ParentPersonAvailabilityCollection.IndexOf(selectedPersonRotation);
@@ -542,11 +497,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         /// <param name="rowIndex"></param>
         public void GetParentPersonRotationWhenDeleted(int parentRowIndex)
         {
-            IPerson person = FilteredStateHolder.PersonAvailabilityParentAdapterCollection[parentRowIndex].Person;
+            var person = FilteredStateHolder.PersonAvailabilityParentAdapterCollection[parentRowIndex].Person;
             int rowIndex =
                 FilteredStateHolder.ParentPersonAvailabilityCollection.
-                IndexOf(FilteredStateHolder.ParentPersonAvailabilityCollection.Where(p => p.Person.Id == person.Id).FirstOrDefault())
-            ;
+                IndexOf(FilteredStateHolder.ParentPersonAvailabilityCollection.FirstOrDefault(p => p.Person.Id == person.Id));
 
             IPersonAvailability selectedPersonRotation = FilteredStateHolder.ParentPersonAvailabilityCollection[rowIndex];
             PersonAvailabilityModelParent personAvailabilityAdapterParent;
@@ -630,10 +584,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                 if (gridRangeInfo.Top <= 0)
                     return null;
 
-                if (!_filteredPeopleHolder.PersonAvailabilityParentAdapterCollection[selectedIndex - 1].ExpandState)
+	            var parentAdapter = _filteredPeopleHolder.PersonAvailabilityParentAdapterCollection[selectedIndex - 1];
+	            if (!parentAdapter.ExpandState)
                 {
                     // get Parent rotation now
-                    availability = _filteredPeopleHolder.PersonAvailabilityParentAdapterCollection[selectedIndex - 1].CurrentRotation;
+                    availability = parentAdapter.CurrentRotation;
                 }
                 else
                 {
@@ -662,9 +617,5 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			get { return _filteredPeopleHolder; }
 			set { _filteredPeopleHolder = value; }
     	}
-
-    	#endregion
-
-        #endregion
     }
 }

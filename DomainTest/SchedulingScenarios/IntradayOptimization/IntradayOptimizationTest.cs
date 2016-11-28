@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 					skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)))
 				});
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
-			LockManager().AddLock(agent, dateOnly, LockType.Normal, new DateTimePeriod()); //why is period needed?
+			LockManager().AddLock(agent, dateOnly, LockType.Normal); //why is period needed?
 
 			Target.Execute(planningPeriod.Id.Value);
 

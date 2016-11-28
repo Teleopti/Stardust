@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                       SchedulePartFilter.None, _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, _scaleCalculator, NullScheduleTag.Instance);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+        [Test]
         public void VerifyCreateDayHeader()
         {
             target = new DayPresenterNewTestClass(viewBase, schedulerState, gridlockManager, clipHandlerSchedulePart,
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(6, target.ColCount);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        [Test]
         public void VerifyQueryCellInfo()
         {
             IPerson person = PersonFactory.CreatePerson();
@@ -113,9 +113,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(scheduleDay1.FullAccess).Return(true).Repeat.AtLeastOnce();
                 Expect.Call(scheduleDay1.Person).Return(person).Repeat.AtLeastOnce();
                 Expect.Call(scheduleDay1.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 1), person.PermissionInformation.DefaultTimeZone())).Repeat.AtLeastOnce();
-                Expect.Call(scheduleDay1.Period).Return(
-                    new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 1),
-                                                 person.PermissionInformation.DefaultTimeZone()).Period());
                 Expect.Call(scheduleDay1.PersonAssignment()).Return(ass2).Repeat.AtLeastOnce();
                 Expect.Call(scheduleDay1.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
                 Expect.Call(scheduleDay1.BusinessRuleResponseCollection).Return(new List<IBusinessRuleResponse>());

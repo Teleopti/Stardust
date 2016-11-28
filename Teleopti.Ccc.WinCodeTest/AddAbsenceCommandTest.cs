@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WinCodeTest
 		{
 			var dateOnly = new DateOnly(2012, 07, 16);
 			var gridLockManager = new GridlockManager();
-			gridLockManager.AddLock(_person, dateOnly, LockType.Normal, _period);
+			gridLockManager.AddLock(_person, dateOnly, LockType.Normal);
 
 			var period = new DateTimePeriod(_date.AddHours(1), _date.AddHours(22));
 
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.WinCodeTest
 		{
 			var dateOnly = new DateOnly(2012, 07, 16);
 			var gridLockManager = new GridlockManager();
-			gridLockManager.AddLock(_person, dateOnly, LockType.WriteProtected, _period);
+			gridLockManager.AddLock(_person, dateOnly, LockType.WriteProtected);
 
 			var period = new DateTimePeriod(_date.AddHours(1), _date.AddHours(22));
 
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.WinCodeTest
 		{
 			var dateOnly = new DateOnly(2012, 07, 16);
 			var gridLockManager = new GridlockManager();
-			gridLockManager.AddLock(_person, dateOnly, LockType.WriteProtected, _period);
+			gridLockManager.AddLock(_person, dateOnly, LockType.WriteProtected);
 
 			var period = new DateTimePeriod(_date.AddHours(1), _date.AddHours(22));
 			var schedulePart2 = MockRepository.GenerateMock<IScheduleDay>();

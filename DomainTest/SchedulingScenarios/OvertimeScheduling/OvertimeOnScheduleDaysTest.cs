@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				SkillActivity = phoneActivity
 			};
 
-			LockManager.AddLock(agent, dateOnly,LockType.Normal, new DateTimePeriod());
+			LockManager.AddLock(agent, dateOnly,LockType.Normal);
 
 			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
 			

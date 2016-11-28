@@ -18,8 +18,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             _person = new Person();
             _date = new DateOnly(2006, 1, 1);
-            DateTimePeriod period = new DateTimePeriod(2006,1,1,2006,1,2);
-            _gridlock = new Gridlock(_person, _date, LockType.Authorization,period);
+            _gridlock = new Gridlock(_person, _date, LockType.Authorization);
         }
 
         [Test]
@@ -36,7 +35,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(LockType.Authorization, _gridlock.LockType);
             Assert.AreEqual(_person.GetHashCode().ToString(CultureInfo.InvariantCulture) + "|" +
 								_date.GetHashCode().ToString(CultureInfo.InvariantCulture) + "|" + LockType.Authorization, _gridlock.Key);
-			Assert.AreEqual(new DateTimePeriod(2006, 1, 1, 2006, 1, 2), _gridlock.Period);
         }
     }
 }

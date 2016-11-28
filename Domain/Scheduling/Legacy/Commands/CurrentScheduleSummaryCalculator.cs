@@ -16,13 +16,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var contractTime = TimeSpan.Zero;
 			var numberOfDaysOff = 0;
 			
-			foreach (var dateOnly in period.DayCollection())
+			foreach (var scheduleDay in scheduleRange.ScheduledDayCollection(period))
 			{
-				if (!person.IsAgent(dateOnly))
+				if (!person.IsAgent(scheduleDay.DateOnlyAsPeriod.DateOnly))
 					continue;
-
-				var scheduleDay = scheduleRange.ScheduledDay(dateOnly);
-
+				
 				var significantPart = scheduleDay.SignificantPartForDisplay();
 				if (significantPart == SchedulePartView.ContractDayOff || significantPart == SchedulePartView.DayOff)
 				{

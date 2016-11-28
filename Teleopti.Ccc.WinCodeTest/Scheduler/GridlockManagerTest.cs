@@ -46,41 +46,32 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void CanAddLock()
         {
-            //eventFired = false;
-
             DateOnly date = new DateOnly(2006, 1, 2);
-            _gridlockManager.AddLock(_person, date, LockType.Normal, _schedulePart1.Period);
+            _gridlockManager.AddLock(_person, date, LockType.Normal);
             _gridlockManager.AddLock(_schedulePart2, LockType.Normal);
             _gridlockManager.AddLock(_schedules, LockType.Normal);
             Assert.AreEqual(3, _gridlockManager.GridlocksDictionary.Count);
-
-            //Assert.IsTrue(eventFired);
         }
 
         [Test]
         public void CanRemoveLock()
         {
-            //eventFired = false;
-
             DateOnly date = new DateOnly(2006, 1, 2);
-            _gridlockManager.AddLock(_person, date, LockType.Normal, _schedulePart1.Period);
+            _gridlockManager.AddLock(_person, date, LockType.Normal);
             _gridlockManager.AddLock(_schedulePart2, LockType.Normal);
             _gridlockManager.AddLock(_schedules, LockType.Normal);
             Assert.AreEqual(3, _gridlockManager.GridlocksDictionary.Count);
 
-            _gridlockManager.RemoveLock(_person, date);//, _schedulePart1.Period);
+            _gridlockManager.RemoveLock(_person, date);
             _gridlockManager.RemoveLock(_schedulePart2);
             _gridlockManager.RemoveLock(_schedules);
-            Assert.IsFalse(_gridlockManager.HasLocks);
 
-            //Assert.IsTrue(eventFired);
-            
+            Assert.IsFalse(_gridlockManager.HasLocks);
         }
 
         [Test]
         public void CanGetLock()
         {
-            //_gridlockManager.AddLock(_scheduleRange);
             _gridlockManager.AddLock(_schedulePart1, LockType.Normal);
             Assert.IsNotNull(_gridlockManager.Gridlocks(_schedulePart1));
         }
@@ -108,7 +99,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void CanClearAllLocks()
         {
-            //_gridlockManager.AddLock(_scheduleRange);
             _gridlockManager.AddLock(_schedulePart1, LockType.Normal);
             Assert.IsTrue(_gridlockManager.HasLocks);
             _gridlockManager.Clear();
