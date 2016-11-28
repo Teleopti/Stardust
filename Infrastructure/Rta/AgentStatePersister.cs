@@ -244,16 +244,11 @@ WHERE
 		[LogInfo]
 		public virtual IEnumerable<ExternalLogonForCheck> FindForCheck()
 		{
-			return _unitOfWork.Current().Session().CreateSQLQuery(@"
-SELECT
-	PersonId,
-	DataSourceIdUserCode,
-	NextCheck
-FROM [dbo].[AgentState] WITH (NOLOCK)
-")
+			var sql = "SELECT PersonId, DataSourceIdUserCode, NextCheck FROM [dbo].[AgentState] WITH (NOLOCK)";
+			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalExternalLogonForCheck)))
 				.SetReadOnly(true)
-				.List<internalExternalLogonForCheck>()
+				.List<ExternalLogonForCheck>()
 				.GroupBy(x => x.PersonId, (guid, states) => states.First())
 				.ToArray();
 		}
@@ -266,16 +261,15 @@ SELECT
 	PersonId,
 	DataSourceIdUserCode
 FROM [dbo].[AgentState] WITH (NOLOCK)
-WHERE
-	SourceId = :SourceId AND 
-	(BatchId < :SnapshotId OR BatchId IS NULL) AND
-	(StateCode <> :State OR StateCode IS NULL)")
+WHERE SourceId = :SourceId
+AND (BatchId < :SnapshotId OR BatchId IS NULL)
+AND (StateCode <> :State OR StateCode IS NULL)")
 				.SetParameter("SourceId", sourceId)
 				.SetParameter("SnapshotId", snapshotId)
 				.SetParameter("State", loggedOutState)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalExternalLogon)))
 				.SetReadOnly(true)
-				.List<internalExternalLogon>()
+				.List<ExternalLogon>()
 				.GroupBy(x => x.PersonId, (guid, states) => states.First())
 				.ToArray();
 		}
@@ -381,8 +375,6 @@ WHERE
 
 		private class internalExternalLogon : ExternalLogon
 		{
-			public Guid PersonId { get; set; }
-
 			public string DataSourceIdUserCode
 			{
 				set

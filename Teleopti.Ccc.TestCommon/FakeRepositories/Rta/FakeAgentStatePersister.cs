@@ -84,7 +84,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					.Select(x => new ExternalLogon
 					{
 						DataSourceId = x.DataSourceId,
-						UserCode = x.UserCode
+						UserCode = x.UserCode,
+						PersonId = x.PersonId
 					})
 					.ToArray();
 		}
@@ -114,7 +115,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					.Select(x => new ExternalLogon
 					{
 						DataSourceId = x.DataSourceId,
-						UserCode = x.UserCode
+						UserCode = x.UserCode,
+						PersonId = x.PersonId
 					})
 					.ToArray();
 		}

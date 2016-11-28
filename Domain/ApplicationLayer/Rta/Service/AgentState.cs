@@ -17,12 +17,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		public int DataSourceId { get; set; }
 		public string UserCode { get; set; }
+		public Guid PersonId { get; set; }
 	}
 
 	public class ExternalLogonForCheck : ExternalLogon
 	{
-		public Guid PersonId { get; set; }
 		public DateTime? NextCheck { get; set; }
+	}
+
+	public class ExternalLogonForSynchronize : ExternalLogon
+	{
+		public string StateCode { get; set; }
 	}
 
 	public class AgentStateFound : AgentState
