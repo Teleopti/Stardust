@@ -1,7 +1,8 @@
-using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
 
@@ -20,7 +21,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
-		private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
 		private readonly IScheduleMatrixPro _matrix;
 		private readonly IIntradayOptimizeOneDayCallback _intradayOptimizeOneDayCallback;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
-			IResourceCalculateDelayer resourceCalculateDelayer,
 			IScheduleMatrixPro matrix,
 			IIntradayOptimizeOneDayCallback intradayOptimizeOneDayCallback,
 			ISchedulingResultStateHolder schedulingResultStateHolder)
@@ -52,7 +51,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
-			_resourceCalculateDelayer = resourceCalculateDelayer;
 			_matrix = matrix;
 			_intradayOptimizeOneDayCallback = intradayOptimizeOneDayCallback;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
@@ -78,7 +76,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var originalShift = _workShiftOriginalStateContainer.OldPeriodDaysState[dateOnly].GetEditorShift();
 			if (originalShift == null) return false;
 
+
 			_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(schedulingOptions, _optimizerPreferences, originalShift, dateOnly);
+			var undoResCalcChanges = new UndoRedoContainer();
+			foreach (var skillDay in _schedulingResultStateHolder.SkillDaysOnDateOnly(new[] { dateOnly.AddDays(-1), dateOnly, dateOnly.AddDays(1)}))
+			{
+				skillDay.SkillStaffPeriodCollection.ForEach(x => undoResCalcChanges.SaveState(x.Payload));
+			}
 
 			_rollbackService.ClearModificationCollection();
 
@@ -91,7 +95,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(scheduleDay, _rollbackService, schedulingOptions.ConsiderShortBreaks, false);
 
 			if (!tryScheduleDay(dateOnly, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.AverageWorkTime))
+			{
+				undoResCalcChanges.UndoAll();
 				return true;
+			}
 
 			// Step: Check that there are no white spots
 
@@ -104,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (isPeriodWorse)
 			{
 				_rollbackService.Rollback();
-				_resourceCalculateDelayer.CalculateIfNeeded(dateOnly, originalShift.ProjectionService().CreateProjection().Period(), false);
+				undoResCalcChanges.UndoAll();
 				lockDay(dateOnly);
 				return true;
 			}
@@ -112,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (_optimizationLimits.HasOverLimitExceeded(lastOverLimitCounts, _matrix) || daysOverMax())
 			{
 				_rollbackService.Rollback();
-				_resourceCalculateDelayer.CalculateIfNeeded(dateOnly, originalShift.ProjectionService().CreateProjection().Period(), false);
+				undoResCalcChanges.UndoAll();
 				lockDay(dateOnly);
 				return false;
 			}
@@ -142,13 +149,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			if (!_scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, effectiveRestriction, resourceCalculateDelayer, _rollbackService))
 			{
-				var days = _rollbackService.ModificationCollection.ToList();
 				_rollbackService.Rollback();
-				foreach (var schedDay in days)
-				{
-					var dateOnly = schedDay.DateOnlyAsPeriod.DateOnly;
-					resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
-				}
 				lockDay(day);
 				return false;
 			}

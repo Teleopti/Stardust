@@ -7,7 +7,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: robink
     /// Created date: 2008-09-18
     /// </remarks>
-    public interface ISkillStaff
+    public interface ISkillStaff : IOriginator<ISkillStaff>
     {
         /// <summary>
         /// Resets this instance.

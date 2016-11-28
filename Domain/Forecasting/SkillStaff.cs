@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
@@ -357,5 +358,16 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		}
 
 	    public int? NoneBlendDemand { get; set; }
+		public void Restore(ISkillStaff previousState)
+		{
+			_calculatedResource = previousState.CalculatedResource;
+		}
+
+		public IMemento CreateMemento()
+		{
+			var copy = new SkillStaff(_taskData, _serviceAgreementData);
+			copy._calculatedResource = _calculatedResource;
+			return new Memento<ISkillStaff>(this, copy);
+		}
 	}
 }

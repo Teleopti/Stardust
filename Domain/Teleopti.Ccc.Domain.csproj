@@ -505,7 +505,7 @@
     <Compile Include="Scheduling\SeatLimitation\IUsedSeats.cs" />
     <Compile Include="Scheduling\SeatLimitation\MaxSeatOptimization.cs" />
     <Compile Include="Optimization\DaysOffBackToLegalState.cs" />
-    <Compile Include="Optimization\IsNightShift.cs" />
+    <Compile Include="Optimization\AffectedDates.cs" />
     <Compile Include="Optimization\OptimizerHelperHelper.cs" />
     <Compile Include="Optimization\ScheduleChangesAffectedDates.cs" />
     <Compile Include="Optimization\ScheduleBlankSpots.cs" />

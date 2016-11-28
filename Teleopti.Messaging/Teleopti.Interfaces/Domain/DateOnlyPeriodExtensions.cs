@@ -22,5 +22,10 @@ namespace Teleopti.Interfaces.Domain
 		{
 			return new DateOnlyPeriod(period.StartDate.AddDays(-days), period.EndDate.AddDays(days));
 		}
+
+		public static DateOnlyPeriod Extend(this DateOnlyPeriod period, int days)
+		{
+			return new DateOnlyPeriod(period.StartDate, period.EndDate.AddDays(1));
+		}
 	}
 }

@@ -1,25 +1,31 @@
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class IsNightShift
+	public class AffectedDates
 	{
 		private readonly ITimeZoneGuard _timeZoneGuard;
 
-		public IsNightShift(ITimeZoneGuard timeZoneGuard)
+		public AffectedDates(ITimeZoneGuard timeZoneGuard)
 		{
 			_timeZoneGuard = timeZoneGuard;
 		}
 
-		public bool InEndUserTimeZone(IScheduleDay scheduleDay)
+		public IEnumerable<DateOnly> For(IScheduleDay scheduleDay)
 		{
 			var tz = _timeZoneGuard.CurrentTimeZone();
 			var personAssignmentPeriod = scheduleDay.PersonAssignment(true).Period;
 			var viewerStartDate = new DateOnly(personAssignmentPeriod.StartDateTimeLocal(tz));
 			var viewerEndDate = new DateOnly(personAssignmentPeriod.EndDateTimeLocal(tz).AddMinutes(-1));
 
-			return viewerStartDate != viewerEndDate;
+			var ret = new List<DateOnly> {viewerStartDate};
+			if (viewerStartDate != viewerEndDate)
+			{
+				ret.Add(viewerEndDate);
+			}
+			return ret;
 		}
 	}
 }

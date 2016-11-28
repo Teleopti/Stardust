@@ -19,19 +19,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 		private readonly IResourceOptimization _resourceOptimizationHelper;
 		private readonly IResourceCalculateAfterDeleteDecider _resourceCalculateAfterDeleteDecider;
-		private readonly IsNightShift _isNightShift;
+		private readonly AffectedDates _affectedDates;
 
 		public DeleteAndResourceCalculateService(Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 																					IDeleteSchedulePartService deleteSchedulePartService, 
 																					IResourceOptimization resourceOptimizationHelper,
 																					IResourceCalculateAfterDeleteDecider resourceCalculateAfterDeleteDecider,
-																					IsNightShift isNightShift)
+																					AffectedDates affectedDates)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_deleteSchedulePartService = deleteSchedulePartService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_resourceCalculateAfterDeleteDecider = resourceCalculateAfterDeleteDecider;
-			_isNightShift = isNightShift;
+			_affectedDates = affectedDates;
 		}
 
 		public void DeleteWithResourceCalculation(IEnumerable<IScheduleDay> daysToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation)
@@ -50,11 +50,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (_resourceCalculateAfterDeleteDecider.DoCalculation(dayToDelete.Person, dayToDelete.DateOnlyAsPeriod.DateOnly))
 			{
 				var resCalcData = _schedulingResultStateHolder().ToResourceOptimizationData(considerShortBreaks, doIntraIntervalCalculation);
-				var date = dayToDelete.DateOnlyAsPeriod.DateOnly;
-				_resourceOptimizationHelper.ResourceCalculate(date, resCalcData);
-				if (_isNightShift.InEndUserTimeZone(dayToDelete))
+				foreach (var date in _affectedDates.For(dayToDelete))
 				{
-					_resourceOptimizationHelper.ResourceCalculate(date.AddDays(1), resCalcData);
+					_resourceOptimizationHelper.ResourceCalculate(date, resCalcData);
 				}
 			}
 		}

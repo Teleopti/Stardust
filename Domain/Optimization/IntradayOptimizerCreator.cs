@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -113,14 +112,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 				ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
 				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 
-				var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
-				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulerStateHolder().SchedulingResultState);
-
 				var optimizer = new IntradayOptimizer2(personalSkillsDataExtractor, _decisionMaker,  scheduleMatrix,
 					new IntradayOptimizeOneday(dailyValueCalculator, _scheduleService, optimizerPreferences, rollbackService,
 						_resourceOptimizationHelper,
 						_effectiveRestrictionCreator, optimizationLimits, workShiftStateContainer, schedulingOptionsCreator,
-						mainShiftOptimizeActivitySpecificationSetter, _deleteAndResourceCalculateService, resourceCalculateDelayer,
+						mainShiftOptimizeActivitySpecificationSetter, _deleteAndResourceCalculateService, 
 						scheduleMatrix, _intradayOptimizeOneDayCallback, _schedulerStateHolder().SchedulingResultState));
 
 				result.Add(optimizer);

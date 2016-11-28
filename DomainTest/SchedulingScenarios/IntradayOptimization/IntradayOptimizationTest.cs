@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -151,38 +152,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		}
 
 		[Test]
-		public void ShouldNotCalculateDayAfterIfTodayIsNotANightShift()
-		{
-			var phoneActivity = ActivityFactory.CreateActivity("phone");
-			var skill = SkillRepository.Has("skill", phoneActivity);
-			var dateOnly = new DateOnly(2015, 10, 12);
-			var scenario = ScenarioRepository.Has("some name");
-			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
-			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
-			var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
-			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(17, 15, 17, 15, 15), shiftCategory));
-			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
-			var planningPeriod = PlanningPeriodRepository.Has(dateOnly.AddDays(-6), 1);
-			SkillDayRepository.Has(new List<ISkillDay>
-				{
-					skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360))),
-					skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly.AddDays(1), TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)))
-				});
-			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
-			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly.AddDays(1), new TimePeriod(8, 0, 17, 0));
-
-			Target.Execute(planningPeriod.Id.Value);
-
-			var skillDays = SkillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(dateOnly.AddDays(1), dateOnly.AddDays(1)), new List<ISkill> {skill}, scenario);
-			var skillStaffPeriods = skillDays.First().SkillStaffPeriodCollection;
-			foreach (var skillStaffPeriod in skillStaffPeriods)
-			{
-				skillStaffPeriod.CalculatedResource.Should().Be.EqualTo(0d);
-			}
-		}
-
-		[Test]
 		public void ShouldCalculateDayAfterIfTodayIsANightShift()
 		{
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
@@ -209,6 +178,36 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skillDays = SkillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(dateOnly.AddDays(1), dateOnly.AddDays(1)), new List<ISkill> { skill }, scenario);
 			skillDays.First().SkillStaffPeriodCollection.First().CalculatedResource
 				.Should().Be.EqualTo(1);
+		}
+
+
+		[Test]
+		public void ShouldCalculateDayBeforeDueToTimeZone()
+		{
+			var phoneActivity = ActivityFactory.CreateActivity("phone");
+			var skill = SkillRepository.Has("skill", phoneActivity);
+			var dateOnly = new DateOnly(2015, 10, 12);
+			var scenario = ScenarioRepository.Has("some name");
+			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
+			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
+			var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(17, 15, 17, 15, 15), shiftCategory));
+			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill).InTimeZone(TimeZoneInfoFactory.SingaporeTimeZoneInfo());
+			var planningPeriod = PlanningPeriodRepository.Has(dateOnly.AddDays(-6), 1);
+			SkillDayRepository.Has(new List<ISkillDay>
+			{
+				skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(-1), 1), //här hamnar ursprungsassignment
+				skill.CreateSkillDayWithDemand(scenario, dateOnly, 1),
+				skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(1), 1)
+			});
+			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(0, 0, 9, 0)); //ska börja tidigt! för att få rött
+
+			Target.Execute(planningPeriod.Id.Value);
+
+			var skillDays = SkillDayRepository.FindReadOnlyRange(dateOnly.AddDays(-1).ToDateOnlyPeriod(), new List<ISkill> { skill }, scenario);
+			skillDays.First().SkillStaffPeriodCollection.Any(x => x.CalculatedResource == 1)
+				.Should().Be.True();
 		}
 
 		[Test]

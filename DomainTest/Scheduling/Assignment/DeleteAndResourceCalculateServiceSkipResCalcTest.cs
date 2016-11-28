@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			skillGroupInfo.Expect(x => x.DoCalculation(agent, date)).Return(true);
 			var stateHolder = new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IEnumerable<ISkillDay>>());
 
-			var target = new DeleteAndResourceCalculateService(() => stateHolder, MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, skillGroupInfo, new IsNightShift(new FakeTimeZoneGuard()));
+			var target = new DeleteAndResourceCalculateService(() => stateHolder, MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, skillGroupInfo, new AffectedDates(new FakeTimeZoneGuard()));
 			target.DeleteWithResourceCalculation(scheduleDay, null, false, false);
 
 			resourceOptHelper.AssertWasCalled(x => x.ResourceCalculate(date, new ResourceCalculationData(stateHolder, false, false)), options => options.IgnoreArguments());
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			skillGroupInfo.Expect(x => x.DoCalculation(agent, date)).Return(false);
 			var stateHolder = new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IEnumerable<ISkillDay>>());
 
-			var target = new DeleteAndResourceCalculateService(() => stateHolder, MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, skillGroupInfo, new IsNightShift(new FakeTimeZoneGuard()));
+			var target = new DeleteAndResourceCalculateService(() => stateHolder, MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, skillGroupInfo, new AffectedDates(new FakeTimeZoneGuard()));
 			target.DeleteWithResourceCalculation(scheduleDay, null, false, false);
 
 			resourceOptHelper.AssertWasNotCalled(x => x.ResourceCalculate(date, new ResourceCalculationData(stateHolder, false, false)), options => options.IgnoreArguments());
