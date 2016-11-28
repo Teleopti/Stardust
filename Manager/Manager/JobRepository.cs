@@ -437,7 +437,7 @@ namespace Stardust.Manager
 							{
 								deleteJobByJobIdCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 							}
-							sqlTransaction.Commit();
+							Retry(sqlTransaction.Commit);
 						}
 					}
 				}
@@ -489,7 +489,7 @@ namespace Stardust.Manager
 									deleteFromJobDefinitionsCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 								}
 
-								sqlTransaction.Commit();
+								Retry(sqlTransaction.Commit);
 							}
 							else
 							{
@@ -564,7 +564,7 @@ namespace Stardust.Manager
 							{
 								deleteJobQueueItemCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 							}
-							sqlTransaction.Commit();
+							Retry(sqlTransaction.Commit);
 							using (var insertIntoJobDetailsCommand = _createSqlCommandHelper.CreateInsertIntoJobDetailCommand(jobQueueItem.JobId, "Job Started", DateTime.UtcNow, sqlConnection))
 							{
 								insertIntoJobDetailsCommand.ExecuteNonQueryWithRetry(_retryPolicy);
@@ -671,5 +671,44 @@ namespace Stardust.Manager
 			}
 			return count == 1;
 		}
+
+		private void Retry(Action action, int numerOfTries = 10)
+ 		{		
+ 			var count = numerOfTries;		
+ 			var delay = TimeSpan.FromSeconds(1);		
+ 			while (true)		
+ 			{		
+ 				try		
+ 				{		
+ 					action();		
+ 					return;		
+ 				}		
+ 		
+ 				catch (SqlException e)		
+ 				{		
+ 					--count;		
+ 					if (count <= 0)		
+ 					{		
+ 						throw;		
+ 					}			
+					if (e.Number == -2)		
+ 					{		
+ 						this.Log().Debug("Time out will retry.");		
+ 					}		
+ 					else		
+ 					{		
+ 						if (e.Number == 1205)		
+ 						{		
+ 							this.Log().Debug("Deadlock will retry.");		
+ 						}		
+ 						else		
+ 						{		
+ 							throw;		
+ 						}		
+ 					}		
+ 					Thread.Sleep(delay);		
+ 				}		
+ 			}		
+ 		}
 	}
 }
