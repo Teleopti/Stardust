@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			writer.Upsert(new AgentStateForUpsert { PersonId = personId1 });
 			writer.Upsert(new AgentStateForUpsert { PersonId = personId2 });
 
-			var result = Persister.GetStates();
+			var result = Persister.FindForSynchronize();
 
 			result.Where(x => x.PersonId == personId1).Should().Have.Count.EqualTo(1);
 			result.Where(x => x.PersonId == personId2).Should().Have.Count.EqualTo(1);
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			};
 			writer.Upsert(state);
 
-			var result = Persister.GetStates().Single();
+			var result = Persister.FindForSynchronize().Single();
 
 			result.PersonId.Should().Be(state.PersonId);
 			result.BusinessUnitId.Should().Be(state.BusinessUnitId);

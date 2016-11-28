@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			[UnitOfWork]
 			public virtual void AddOneToAll()
 			{
-				var all = _persister.GetStates();
+				var all = _persister.FindForSynchronize();
 				Thread.Sleep(TimeSpan.FromMilliseconds(100 * all.Count()));
 				addOneTo(all);
 			}

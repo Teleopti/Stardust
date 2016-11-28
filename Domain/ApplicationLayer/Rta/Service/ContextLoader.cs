@@ -102,13 +102,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public void ForSynchronize(Action<Context> action)
 		{
-			var personIds = WithUnitOfWork(() =>
-					_agentStatePersister.GetStates()
+			var logons = WithUnitOfWork(() =>
+					_agentStatePersister.FindForSynchronize()
 						.Where(x => x.StateCode != null)
-						.Select(x => x.PersonId)
+						.Select(x => new ExternalLogon
+						{
+							DataSourceId = x.DataSourceId,
+							UserCode = x.UserCode,
+							PersonId = x.PersonId
+						})
 						.ToArray()
 			);
-			process(new synchronizeStrategy(_config, _agentStatePersister, action, personIds, _now.UtcDateTime()));
+			process(new synchronizeStrategy(_config, _agentStatePersister, action, logons, _now.UtcDateTime()));
 		}
 
 		[AllBusinessUnitsUnitOfWork]
@@ -335,11 +340,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}
 		}
 
-		private class synchronizeStrategy : baseStrategy<Guid>
+		private class synchronizeStrategy : baseStrategy<ExternalLogon>
 		{
-			private readonly IEnumerable<Guid> _things;
+			private readonly IEnumerable<ExternalLogon> _things;
 
-			public synchronizeStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, IEnumerable<Guid> things, DateTime time) : base(config, persister, action, time)
+			public synchronizeStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, IEnumerable<ExternalLogon> things, DateTime time) : base(config, persister, action, time)
 			{
 				_things = things;
 				ParallelTransactions = _config.ReadValue("RtaSynchronizeParallelTransactions", 1);
@@ -347,14 +352,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				UpdateAgentState = null;
 			}
 
-			public override IEnumerable<Guid> AllThings()
+			public override IEnumerable<ExternalLogon> AllThings()
 			{
-				return _things;
+				return _things.OrderBy(x => $"{x.DataSourceId}__{x.UserCode}");
 			}
 
-			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<Guid> ids, Action<Exception> addException)
+			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogon> ids, Action<Exception> addException)
 			{
-				return _persister.Get(ids, DeadLockVictim.Yes);
+				return _persister.Get(ids.Select(x => x.PersonId).ToArray(), DeadLockVictim.Yes);
 			}
 
 			public override InputInfo GetInputFor(AgentState state)

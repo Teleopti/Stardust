@@ -308,19 +308,19 @@ AND (StateCode <> :State OR StateCode IS NULL)")
 		}
 
 		[LogInfo]
-		public virtual IEnumerable<AgentState> GetStates()
+		public virtual IEnumerable<AgentStateFound> FindForSynchronize()
 		{
 			var sql = SelectAgentState + "WITH (TABLOCK, UPDLOCK)";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
 				.SetReadOnly(true)
-				.List<AgentState>()
+				.List<AgentStateFound>()
 				.GroupBy(x => x.PersonId, (guid, states) => states.First())
 				.ToArray()
 				;
 		}
 
-		private static string SelectAgentState = @"SELECT * FROM [dbo].[AgentState] ";
+		private static string SelectAgentState = "SELECT * FROM [dbo].[AgentState] ";
 
 		private static void parse(string value, Action<Tuple<int, string>> split)
 		{

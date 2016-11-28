@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			}, DeadLockVictim.Yes);
 
-			Target.GetStates().Single().PersonId.Should().Be(person);
+			Target.FindForSynchronize().Single().PersonId.Should().Be(person);
 		}
 
 		[Test]
