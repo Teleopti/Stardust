@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), TestFixture]
+    [TestFixture]
     public class StudentSchedulingServiceTest
     {
         private StudentSchedulingService _studentSchedulingService;
@@ -58,15 +58,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsNotNull(_studentSchedulingService);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        [Test]
         public void VerifyTheSchedulingCycle()
         {
             var start = new DateTime(2009, 2, 2, 0, 0, 0, DateTimeKind.Utc);
             var date11 = new DateOnly(2009, 2, 2);
             var date12 = new DateOnly(2009, 2, 3);
             IList<DateOnly> dateOnlys = new List<DateOnly> { date11, date12 };
-
-			var schedules = _mocks.StrictMock<IScheduleDictionary>();
+			
             var skillDay1 = _mocks.StrictMock<ISkillDay>();
             var skillDay2 = _mocks.StrictMock<ISkillDay>();
 
@@ -166,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        [Test]
         public void VerifyFindAllPersonsExcludesStudentsWithEnoughHours()
         {
             var dateOnly = new DateOnly(2009, 2, 2);
@@ -210,8 +209,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(schedules[person]).Return(range1);
                 Expect.Call(schedules[person2]).Return(range2);
 
-                Expect.Call(range1.ScheduledDay(dateOnly)).IgnoreArguments().Return(part5);
-                Expect.Call(range2.ScheduledDay(dateOnly)).IgnoreArguments().Return(part6);
+                Expect.Call(range1.ScheduledDayCollection(dateOnly.ToDateOnlyPeriod())).Return(new [] {part5});
+                Expect.Call(range2.ScheduledDayCollection(dateOnly.ToDateOnlyPeriod())).Return(new[] { part6});
 
                 Expect.Call(part5.ProjectionService()).Return(projectionService1);
                 Expect.Call(part6.ProjectionService()).Return(projectionService2);
@@ -247,7 +246,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsNotNull(person);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        [Test]
         public void VerifyCanCancelTheSchedulingCycle()
         {
             var start = new DateTime(2009, 2, 1, 23, 0, 0, DateTimeKind.Utc);
@@ -259,8 +258,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var skillDay2 = _mocks.StrictMock<ISkillDay>();
 
             IList<ISkillDay> lst = new List<ISkillDay> { skillDay1, skillDay2 };
-
-	        var schedules = _mocks.StrictMock<IScheduleDictionary>();
+			
             var part1 = _mocks.StrictMock<IScheduleDay>();
             var part2 = _mocks.StrictMock<IScheduleDay>();
             var person = _mocks.StrictMock<IPerson>();
@@ -488,7 +486,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             using (_mocks.Record())
             {
-
                 Expect.Call(_schedulingResultStateHolder.Skills).Return(new ISkill[]{});
             }
 
@@ -503,9 +500,5 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 result.Should().Be(false);
             }
         }
-
-
     }
-
-    
 }

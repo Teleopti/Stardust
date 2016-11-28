@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Common
 		public IList<OverlappedLayer> GetOverlappedLayersWhenAddingActivity(IPerson person, DateOnly belongsToDate, IActivity activity, DateTimePeriod periodInUtc)
 		{
 			var scenario = _currentScenario.Current();
-			var schedulePeriod = (new DateOnlyPeriod(belongsToDate, belongsToDate)).Inflate(1);
+			var schedulePeriod = belongsToDate.ToDateOnlyPeriod().Inflate(1);
 			var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
 					schedulePeriod,
 					scenario);
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Common
 			Guid[] layerIdsToMove, DateTime newStartTime)
 		{
 			var scenario = _currentScenario.Current();
-			var schedulePeriod = (new DateOnlyPeriod(belongsToDate, belongsToDate)).Inflate(1);
+			var schedulePeriod = belongsToDate.ToDateOnlyPeriod().Inflate(1);
 			var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
 					schedulePeriod,
 					scenario);

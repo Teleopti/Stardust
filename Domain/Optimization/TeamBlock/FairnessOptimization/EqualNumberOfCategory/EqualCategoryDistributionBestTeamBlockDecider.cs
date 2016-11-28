@@ -59,10 +59,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			var teamBlockInfoGroupMembers = teamBlockInfo.TeamInfo.GroupMembers.ToList();
 			for (int i = 0; i < teamBlockInfoGroupMembers.Count(); i++)
 			{
-				foreach (var dateOnly in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
+				var person = teamBlockInfoGroupMembers[i];
+				foreach (var day in scheduleDictionary[person].ScheduledDayCollection(teamBlockInfo.BlockInfo.BlockPeriod))
 				{
-					var person = teamBlockInfoGroupMembers[i];
-					var day = scheduleDictionary[person].ScheduledDay(dateOnly);
 					if (day.SignificantPartForDisplay() != SchedulePartView.MainShift)
 						continue;
 

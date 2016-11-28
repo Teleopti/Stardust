@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public IScheduleDictionary GetScheduleDictionary(DateOnly date, IPerson person, ScheduleDictionaryLoadOptions loadOptions = null)
 		{
-			var period = new DateOnlyPeriod(date, date).Inflate(1);
+			var period = date.ToDateOnlyPeriod().Inflate(1);
 			var scheduleDicLoadOption = loadOptions ?? new ScheduleDictionaryLoadOptions(false, false);
 			var dictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				scheduleDicLoadOption,

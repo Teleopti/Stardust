@@ -212,9 +212,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     {
                         DateOnlyPeriod dateOnlyPeriod = virtualSchedulePeriod.DateOnlyPeriod;
 
-                        foreach (var localDate in dateOnlyPeriod.DayCollection())
+                        foreach (var schedulePart in _schedulingResultStateHolder.Schedules[person].ScheduledDayCollection(dateOnlyPeriod))
                         {
-                            IScheduleDay schedulePart = _schedulingResultStateHolder.Schedules[person].ScheduledDay(localDate);
                             IProjectionService projSvc = schedulePart.ProjectionService();
                             IVisualLayerCollection res = projSvc.CreateProjection();
                             scheduledSoFar = scheduledSoFar.Add(res.ContractTime());

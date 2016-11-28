@@ -130,15 +130,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			if (agentAdherenceList.Any())
 			{
 				var personIdList = agentAdherenceList.Keys;
-				var personsList = _personRepository.FindPeople(personIdList);
-				var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(personsList,
+				var personsList = _personRepository.FindPeople(personIdList).ToDictionary(p => p.Id.GetValueOrDefault());
+				var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(personsList.Values,
 					new ScheduleDictionaryLoadOptions(true, false), new DateOnlyPeriod(date, date),
 					_scenarioRepository.LoadDefaultScenario());
 
 				var idListOfPersonShouldGetBadge = new List<Guid>();
 				foreach (var personId in personIdList)
 				{
-					if (personList.All(x => x.Id != personId))
+					IPerson person;
+					if (!personsList.TryGetValue(personId, out person))
 					{
 						if (logger.IsDebugEnabled)
 						{
@@ -149,7 +150,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 						continue;
 					}
 
-					var person = personsList.First(x => x.Id == personId);
 					var scheduleDay = schedules[person].ScheduledDay(date);
 					var isFullDayAbsence = scheduleDay.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence;
 

@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-
 namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory
 {
 	[TestFixture]
@@ -63,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				Expect.Call(_teamInfo.GroupMembers).Return(groupMembers2);
 				Expect.Call(_possibleTeamBlock.BlockInfo).Return(new BlockInfo(new DateOnlyPeriod(2013, 12, 3, 2013, 12, 3)));
 				Expect.Call(_scheduleDictionary[person2]).Return(_range);
-				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 12, 3))).Return(_day);
+				Expect.Call(_range.ScheduledDayCollection(new DateOnlyPeriod(2013, 12, 3, 2013, 12, 3))).Return(new [] { _day});
 				Expect.Call(_day.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
 				Expect.Call(_day.PersonAssignment()).Return(personAssignment);
 			}
