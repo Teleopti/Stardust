@@ -168,18 +168,20 @@
 			var startTime = moment(dayOff.Start);
 			var startTimeMinutes = startTime.diff(timeLine.Offset, 'minutes');
 
-			if (startTimeMinutes > timelineEndMinute) {
+			var endTime = moment(dayOff.End);
+			var endTimeMinutes = endTime.diff(timeLine.Offset, 'minutes');
+
+			if (startTimeMinutes > timelineEndMinute || endTimeMinutes < timelineStartMinute) {
 				return undefined;
 			}
 
 			var displayStart = startTimeMinutes < timelineStartMinute ? timelineStartMinute : startTimeMinutes;
 			var start = displayStart - timelineStartMinute;
 			var startPosition = start * lengthPercentPerMinute;
-
-			var displayEnd = startTimeMinutes + dayOff.Minutes;
-			displayEnd = displayEnd <= timelineEndMinute ? displayEnd : timelineEndMinute;
+			
+			var displayEnd = endTimeMinutes <= timelineEndMinute ? endTimeMinutes : timelineEndMinute;
 			var length = (displayEnd - displayStart) * lengthPercentPerMinute;
-
+			
 			var dayOffVm = {
 				DayOffName: dayOff.DayOffName,
 				StartPosition: startPosition,
