@@ -170,6 +170,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 						typeof(ShiftTradeRequestHandleOptionView));
 				gridColumns.Add(handleOptionColumn);
 			}
+			else
+			{
+				buttonResetRule.Visible = false;
+			}
 
 			var businessRuleConfigViews = getShiftTradeBusinessRuleConfigViews().ToList();
 			businessRuleSettingGrid.RowCount = businessRuleConfigViews.Count;
@@ -204,6 +208,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 					.Select(c =>
 					{
 						c.Enabled = _shiftTradeSettings.MaxSeatsValidationEnabled;
+						c.FriendlyName = Resources.ShiftTradeRequestMaxSeatsValidation;
 						return c;
 					});
 			}
