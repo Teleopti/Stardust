@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public IEnumerable<AgentStateReadModel> ReadFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
 		{
 			var queryBuilder = new AgentStateReadModelQueryBuilder(_now);
-			return build(queryBuilder, siteIds, teamIds, skillIds);
+			return load(queryBuilder, siteIds, teamIds, skillIds);
 		}
 
 		public IEnumerable<AgentStateReadModel> ReadInAlarmFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			var queryBuilder =
 				new AgentStateReadModelQueryBuilder(_now)
 					.InAlarm();
-			return build(queryBuilder, siteIds, teamIds, skillIds);
+			return load(queryBuilder, siteIds, teamIds, skillIds);
 		}
 
 		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingStatesFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStates)
@@ -41,10 +41,10 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				new AgentStateReadModelQueryBuilder(_now)
 					.InAlarm()
 					.Exclude(excludedStates);
-			return build(queryBuilder, siteIds, teamIds, skillIds);
+			return load(queryBuilder, siteIds, teamIds, skillIds);
 		}
 
-		private IEnumerable<AgentStateReadModel> build(AgentStateReadModelQueryBuilder queryBuilder, IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds,
+		private IEnumerable<AgentStateReadModel> load(AgentStateReadModelQueryBuilder queryBuilder, IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds,
 			IEnumerable<Guid> skillIds)
 		{
 			if (siteIds != null)
