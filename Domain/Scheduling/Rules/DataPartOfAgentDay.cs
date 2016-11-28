@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			HaltModify = true;
 			ForDelete = true;
 			FriendlyName = Resources.NotAllowedMoveOfAssignmentToOtherDate;
+			Description = Resources.DescriptionOfDataPartOfAgentDay;
 		}
 
 		public string ErrorMessage { get; private set; }
@@ -46,5 +47,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		}
 
 		public string FriendlyName { get; }
+		public string Description { get; }
 	}
 }

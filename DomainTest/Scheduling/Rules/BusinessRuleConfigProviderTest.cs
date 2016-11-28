@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			{
 				var config = result.FirstOrDefault(x => x.BusinessRuleType == rule.GetType().FullName);
 				Assert.IsNotNull(config);
-				Assert.IsTrue(string.CompareOrdinal(config.FriendlyName, rule.FriendlyName) == 0);
+				Assert.IsTrue(string.CompareOrdinal(config.FriendlyName, rule.Description) == 0);
 				Assert.IsTrue(config.Enabled);
 				Assert.IsTrue(config.HandleOptionOnFailed == RequestHandleOption.Pending);
 			}

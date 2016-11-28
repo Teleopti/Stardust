@@ -49,16 +49,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 						dateOnly.Date.ToShortDateString());
 					ret.Add(createResponse(scheduleDay.Person, dateOnly, message, typeof (NonMainShiftActivityRule)));
 				}
-				
 			}
 
 			return ret;
 		}
 
-		public string FriendlyName
-		{
-			get { return "xxHasNonMainShiftActivityFriendlyName"; }
-		}
+		public string FriendlyName => Resources.HasNonMainShiftActivityErrorMessage;
+		public string Description => Resources.DescriptionOfNonMainShiftActivityRule;
 
 		private bool isPersonalActivityOverSchedule(IPersonAssignment personAssignment)
 		{

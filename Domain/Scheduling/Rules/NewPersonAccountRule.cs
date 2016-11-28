@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_allAccounts = allAccounts;
 			FriendlyName = Resources.BusinessRulePersonAccountFriendlyName;
+			Description = Resources.DescriptionOfNewPersonAccountRule;
 			_businessRulePersonAccountError1 = Resources.BusinessRulePersonAccountError1;
 		}
 
@@ -113,10 +114,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 									typeof(NewPersonAccountRule), affectedAccount.Owner.Absence.Id);
 								responseList.Add(response);
 							}
-								
 						}
 					}
-					
 				}
 				foreach (var businessRuleResponse in responseList)
 				{
@@ -129,6 +128,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		}
 
 		public string FriendlyName { get; }
+		public string Description { get; }
 
 		private bool otherScenarioThanDefault()
 		{
@@ -141,17 +141,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			IBusinessRuleResponse response = new BusinessRuleResponseWithAbsenceId(type, message, _haltModify, IsMandatory, dateOnly.Period(), person, dop, FriendlyName, absenceId) { Overridden = !_haltModify };
 			return response;
 		}
-
-
 	}
 
 	public class BusinessRuleResponseWithAbsenceId : BusinessRuleResponse
 	{
 		public Guid? AbsenceId { get; set; }
+
 		public BusinessRuleResponseWithAbsenceId(Type typeOfRule, string message, bool error, bool mandatory, DateTimePeriod period, IPerson person, DateOnlyPeriod dateOnlyPeriod, string friendlyName, Guid? absenceId) : base(typeOfRule, message, error, mandatory, period, person, dateOnlyPeriod, friendlyName)
 		{
 			AbsenceId = absenceId;
 		}
 	}
-
 }

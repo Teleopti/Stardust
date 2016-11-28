@@ -15265,4 +15265,56 @@ These options are activated:
     <value>Validating Rules</value>
     <comment>header text of shift trade rule setting grid</comment>
   </data>
+  <data name="DescriptionOfDataPartOfAgentDay" xml:space="preserve">
+    <value>Will move a work shift to another day</value>
+    <comment>Friendly description of DataPartOfAgentDay to show in shift trade system setting</comment>
+  </data>
+  <data name="DescriptionOfNewShiftCategoryLimitationRule" xml:space="preserve">
+    <value>Shift category limitation for period</value>
+    <comment>Friendly description of NewShiftCategoryLimitationRule to show in shift trade system setting</comment>
+  </data>
+  <data name="DescriptionOfWeekShiftCategoryLimitationRule" xml:space="preserve">
+    <value>Shift category limitation for week</value>
+    <comment>Friendly description of WeekShiftCategoryLimitationRule to show in shift trade system setting</comment>
+  </data>
+  <data name="DescriptionOfNewNightlyRestRule" xml:space="preserve">
+    <value>Nightly rest</value>
+    <comment>Friendly description of NewNightlyRestRule to show in shift trade system setting</comment>
+  </data>
+  <data name="DescriptionOfNewMaxWeekWorkTimeRule" xml:space="preserve">
+    <value>Maximum weekly work time</value>
+    <comment>Friendly description of NewMaxWeekWorkTimeRule to show in shift trade system setting</comment>
+  </data>
+  <data name="DescriptionOfMinWeeklyRestRule" xml:space="preserve">
+    <value>Minimum weekly rest</value>
+    <comment>Friendly description of MinWeeklyRestRule to show in shift trade system setting</comment>
+  </data>
+  <data name="DescriptionOfMinWeekWorkTimeRule" xml:space="preserve">
+    <value>Minimum weekly work time</value>
+    <comment>Friendly description of MinWeekWorkTimeRule to show in shift trade system setting</comment>
+  </data>
+  <data name="DescriptionOfNewDayOffRule" xml:space="preserve">
+    <value>Day off conflict with activity</value>
+    <comment>Friendly description of NewDayOffRule to show in shift trade system setting</comment>
+  </data>
+  <data name="DescriptionOfNotOverwriteLayerRule" xml:space="preserve">
+    <value>Non-overwritable activity in shift</value>
+    <comment>Friendly description of NotOverwriteLayerRule to show in shift trade system setting</comment>
+  </data>
+  <data name="DescriptionOfNonMainShiftActivityRule" xml:space="preserve">
+    <value>Meeting, Person activity or Overtime activity in shift</value>
+    <comment>Friendly description of NonMainShiftActivityRule to show in shift trade system setting</comment>
+  </data>
+  <data name="DescriptionOfNewPersonAccountRule" xml:space="preserve">
+    <value>Person account</value>
+    <comment>Friendly description of NewPersonAccountRule to show in shift trade system setting</comment>
+  </data>
+  <data name="DescriptionOfSiteOpenHoursRule" xml:space="preserve">
+    <value>Site open hours</value>
+    <comment>Friendly description of SiteOpenHoursRule to show in shift trade system setting</comment>
+  </data>
+  <data name="DescriptionOfOpenHoursRule" xml:space="preserve">
+    <value>Skill open hours</value>
+    <comment>Friendly description of OpenHoursRule to show in shift trade system setting</comment>
+  </data>
 </root>

@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Assert.AreEqual(rule.IsMandatory, collectionContainsType(targetSmall, rule.GetType()));
 			}
 		}
-		
+
 		[Test]
 		public void VerifyRemoveBusinessRuleResponse()
 		{
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			}
 			return false;
 		}
-	
+
 		private class dummyRule : INewBusinessRule
 		{
 			private readonly bool _mandatory;
@@ -284,6 +284,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			}
 
 			public string FriendlyName { get; }
+			public string Description => "Description of dummyRule";
 		}
 	}
 }

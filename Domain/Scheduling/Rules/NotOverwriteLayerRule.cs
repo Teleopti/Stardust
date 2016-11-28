@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		public NotOverwriteLayerRule()
 		{
 			FriendlyName = Resources.BusinessRuleOverlappingFriendlyName3;
+			Description = Resources.DescriptionOfNotOverwriteLayerRule;
 			_businessRuleOverlappingErrorMessage3 = Resources.BusinessRuleOverlappingErrorMessage3;
 		}
 
@@ -23,7 +24,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			get { return _errorMessage; }
 		}
-
 
 		public bool IsMandatory
 		{
@@ -47,10 +47,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				responseList.AddRange(checkDay(rangeClones, scheduleDay));
 			}
 
-			return responseList;		
+			return responseList;
 		}
 
 		public string FriendlyName { get; }
+		public string Description { get; }
 
 		private IEnumerable<IBusinessRuleResponse> checkDay(IDictionary<IPerson, IScheduleRange> rangeClones, IScheduleDay scheduleDay)
 		{
@@ -75,7 +76,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return responsList;
 		}
 
-
 		public IList<OverlappingLayers> GetOverlappingLayerses(IDictionary<IPerson, IScheduleRange> rangeClones,
 			IScheduleDay scheduleDay)
 		{
@@ -88,7 +88,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var personalActivities = (personAssignment?.PersonalActivities() ?? Enumerable.Empty<IPersonalShiftLayer>()).ToArray();
 			return getOverlappingLayerses(layers,meetings,personalActivities);
 		}
-
 
 		private IList<OverlappingLayers> getOverlappingLayerses(IMainShiftLayer[] layers, IPersonMeeting[] meetings, IPersonalShiftLayer[] personalShiftLayers )
 		{
@@ -179,7 +178,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				period,
 				person,
 				dop,
-				FriendlyName) {Overridden = !_haltModify};			
+				FriendlyName) {Overridden = !_haltModify};
 			return response;
 		}
 
@@ -200,7 +199,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return ret;
 		}
 
-
 		public class OverlappingLayers
 		{
 			public Guid LayerBelowId { get; set; }
@@ -210,6 +208,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			public string LayerAboveName { get; set; }
 			public DateTimePeriod LayerAbovePeriod { get; set; }
 		}
-
 	}
 }

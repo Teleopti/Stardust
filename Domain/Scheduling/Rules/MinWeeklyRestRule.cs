@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			_weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
 			_personWeekViolatingWeeklyRestSpecification = personWeekViolatingWeeklyRestSpecification;
-			FriendlyName = string.Empty;
+			FriendlyName = Resources.MinWeeklyRestRuleName;
+			Description = Resources.DescriptionOfMinWeeklyRestRule;
 			_businessRuleNoContractErrorMessage = Resources.BusinessRuleNoContractErrorMessage;
 			_businessRuleWeeklyRestErrorMessage = Resources.BusinessRuleWeeklyRestErrorMessage;
 			_businessRuleWeeklyRestFriendlyName = Resources.BusinessRuleWeeklyRestFriendlyName;
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		}
 
 		public bool ForDelete { get; set; }
-		
+
 		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,
 			IEnumerable<IScheduleDay> scheduleDays)
 		{
@@ -101,6 +102,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		}
 
 		public string FriendlyName { get; }
+		public string Description { get; }
 
 		private static bool setWeeklyRest(out TimeSpan weeklyRest, PersonWeek personWeek)
 		{

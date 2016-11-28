@@ -8654,6 +8654,123 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Will move a work shift to another day.
+        /// </summary>
+        public static string DescriptionOfDataPartOfAgentDay {
+            get {
+                return ResourceManager.GetString("DescriptionOfDataPartOfAgentDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum weekly rest.
+        /// </summary>
+        public static string DescriptionOfMinWeeklyRestRule {
+            get {
+                return ResourceManager.GetString("DescriptionOfMinWeeklyRestRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum weekly work time.
+        /// </summary>
+        public static string DescriptionOfMinWeekWorkTimeRule {
+            get {
+                return ResourceManager.GetString("DescriptionOfMinWeekWorkTimeRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Day off conflict with activity.
+        /// </summary>
+        public static string DescriptionOfNewDayOffRule {
+            get {
+                return ResourceManager.GetString("DescriptionOfNewDayOffRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum weekly work time.
+        /// </summary>
+        public static string DescriptionOfNewMaxWeekWorkTimeRule {
+            get {
+                return ResourceManager.GetString("DescriptionOfNewMaxWeekWorkTimeRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nightly rest.
+        /// </summary>
+        public static string DescriptionOfNewNightlyRestRule {
+            get {
+                return ResourceManager.GetString("DescriptionOfNewNightlyRestRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Person account.
+        /// </summary>
+        public static string DescriptionOfNewPersonAccountRule {
+            get {
+                return ResourceManager.GetString("DescriptionOfNewPersonAccountRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shift category limitation for period.
+        /// </summary>
+        public static string DescriptionOfNewShiftCategoryLimitationRule {
+            get {
+                return ResourceManager.GetString("DescriptionOfNewShiftCategoryLimitationRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Meeting, Person activity or Overtime activity in shift.
+        /// </summary>
+        public static string DescriptionOfNonMainShiftActivityRule {
+            get {
+                return ResourceManager.GetString("DescriptionOfNonMainShiftActivityRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Non-overwritable activity in shift.
+        /// </summary>
+        public static string DescriptionOfNotOverwriteLayerRule {
+            get {
+                return ResourceManager.GetString("DescriptionOfNotOverwriteLayerRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill open hours.
+        /// </summary>
+        public static string DescriptionOfOpenHoursRule {
+            get {
+                return ResourceManager.GetString("DescriptionOfOpenHoursRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Site open hours.
+        /// </summary>
+        public static string DescriptionOfSiteOpenHoursRule {
+            get {
+                return ResourceManager.GetString("DescriptionOfSiteOpenHoursRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shift category limitation for week.
+        /// </summary>
+        public static string DescriptionOfWeekShiftCategoryLimitationRule {
+            get {
+                return ResourceManager.GetString("DescriptionOfWeekShiftCategoryLimitationRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Description test.
         /// </summary>
         public static string DescriptionTest {

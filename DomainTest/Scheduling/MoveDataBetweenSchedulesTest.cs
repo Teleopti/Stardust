@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 	        setup();
 			var person1 = new Person {Name=new Name("person1", "person1")}.InTimeZone(TimeZoneInfo.Utc);
             var person2 = new Person { Name = new Name("person2", "person2") }.InTimeZone(TimeZoneInfo.Utc);
-            IPersonAssignment assValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("dummy1"), 
+            IPersonAssignment assValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("dummy1"),
                                                                                         person1,
                                                                                         new DateTimePeriod(2000, 1, 3, 2000, 1, 4));
             IPersonAssignment assNonValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("dummy2"),
@@ -50,8 +50,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             putScheduleDataToDic(PersonAssignmentFactory.CreateAssignmentWithMainShift(destination.Scenario, person1, new DateTimePeriod(2000, 1, 3, 2000, 1, 4)));
             IScheduleDay part1 = createPartWithData(assValid, new DateOnly(2000,1,3));
             IScheduleDay part2 = createPartWithData(assNonValid, new DateOnly(2000,1,2));
-            
-            target.CopySchedulePartsToAnotherDictionary(destination, new List<IScheduleDay> { part1, part2 });                
+
+            target.CopySchedulePartsToAnotherDictionary(destination, new List<IScheduleDay> { part1, part2 });
 
             Assert.AreEqual(3, destination.Count); //tre snubbar
             var pers1Data = destination[person1].ScheduledDay(new DateOnly(2000,1,3)).PersistableScheduleDataCollection();
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             IPersonAssignment assValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("sdf"),
                                                                             new Person().InTimeZone(TimeZoneInfo.Utc),
                                                                             new DateTimePeriod(2000, 1, 3, 2000, 1, 4));
-           
+
             IScheduleDay part = createPartWithData(assValid, new DateOnly(2000,1,3));
             var res = target.CopySchedulePartsToAnotherDictionary(destination, new List<IScheduleDay> { part });
             Assert.AreEqual(1, res.Count());
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var schedulePart = createPartWithData(personAssignment, new DateOnly(2000, 1, 3));
 			target.CopySchedulePartsToAnotherDictionary(destination, new List<IScheduleDay> { schedulePart });
 			var scheduleDay = destination[person].ScheduledDay(new DateOnly(2000, 1, 3));
-			
+
 			Assert.AreEqual(2, scheduleDay.PersistableScheduleDataCollection().Count());
 			Assert.AreEqual(1, scheduleDay.PersistableScheduleDataCollection().OfType<PersonAssignment>().Count());
 			Assert.AreEqual(1, scheduleDay.PersistableScheduleDataCollection().OfType<PersonAbsence>().Count());
@@ -144,8 +144,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				assResult.Id.Should().Be.EqualTo(orgAss.Id.Value);
 				assResult.ShiftLayers.Count().Should().Be.EqualTo(1);
 			}
-
-
 
 			[Test]
 			public void ShouldConsiderAllExportedDaysWhenValidatingNightlyRest()
@@ -212,7 +210,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		//	destinationPersonAbsence.AbsenceRequest.Should().Be.Null();
 		//}
 
-
 		private static IScheduleDay createPartWithData(IScheduleData data, DateOnly dateOnly)
         {
             IScenario scenario = data.Scenario;
@@ -229,10 +226,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             ((ScheduleRange)destination[data.Person]).Add(data);
         }
 
-        
         private class NewFailingRule : INewBusinessRule
         {
-
 	        public string ErrorMessage
             {
                 get { return "hotta brudar från djursholm"; }
@@ -269,7 +264,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 	        {
 		        get { return "tjillevippen"; }
 	        }
-        }
-    }
 
+			public string Description => "Description of NewFailingRule";
+		}
+    }
 }

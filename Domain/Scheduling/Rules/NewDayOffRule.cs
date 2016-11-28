@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			_workTimeStartEndExtractor = workTimeStartEndExtractor;
 			FriendlyName = Resources.BusinessRuleDayOffFriendlyName;
+			Description = Resources.DescriptionOfNewDayOffRule;
 			_businessRuleDayOffErrorMessage1 = Resources.BusinessRuleDayOffErrorMessage1;
 			_businessRuleDayOffErrorMessage2 = Resources.BusinessRuleDayOffErrorMessage2;
 			_businessRuleDayOffErrorMessage4 = Resources.BusinessRuleDayOffErrorMessage4;
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		}
 
 		public bool ForDelete { get; set; }
-		
+
 		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,
 			IEnumerable<IScheduleDay> scheduleDays)
 		{
@@ -70,20 +71,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				{
 					oldResponses.Remove(createResponse(scheduleDay.Key, checkDay.Date, "remove"));
 					var dayOff = checkDay.DayOff;
-					if (dayOff != null)
-					{					
-						DateTimePeriod layerAfterPeriod = periodOfLayerAfter(dayOff, schedules);
-						DateTimePeriod layerBeforePeriod = periodOfLayerBefore(dayOff, schedules);
+					if (dayOff == null) continue;
 
-						if (DayOffDoesConflictWithActivity(dayOff, layerBeforePeriod, layerAfterPeriod))
-						{
-							IBusinessRuleResponse response = createResponse(scheduleDay.Key, checkDay.Date, ErrorMessage);
-							ErrorMessage = "";
-							if (!ForDelete)
-								responseList.Add(response);
-							oldResponses.Add(response);
-						}
-					}
+					var layerAfterPeriod = periodOfLayerAfter(dayOff, schedules);
+					var layerBeforePeriod = periodOfLayerBefore(dayOff, schedules);
+
+					if (!DayOffDoesConflictWithActivity(dayOff, layerBeforePeriod, layerAfterPeriod)) continue;
+					var response = createResponse(scheduleDay.Key, checkDay.Date, ErrorMessage);
+					ErrorMessage = "";
+					if (!ForDelete)
+						responseList.Add(response);
+					oldResponses.Add(response);
 				}
 			}
 
@@ -91,6 +89,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		}
 
 		public string FriendlyName { get; }
+		public string Description { get; }
 
 		private dayForValidation convert(IScheduleDay scheduleDay)
 		{
@@ -156,7 +155,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				// flexibility does not allow the move
 				if (dayOff.Boundary.EndDateTime < endDayOff.Add(conflictTime))
 				{
-
 					ErrorMessage = string.Format(_loggedOnCulture, _businessRuleDayOffErrorMessage2 + ErrorMessage,
 						day);
 					return true;
@@ -164,7 +162,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				// if the flexibility allows it and we don't get a conflict at the end it can be moved
 				return false;
 			}
-
 			else
 			{
 				string day = dayOff.Anchor.Date.ToString("d", _loggedOnCulture);
@@ -189,7 +186,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			{
 				return false;
 			}
-			// if the StartDateTimeOfAssignment is too late just return false   
+			// if the StartDateTimeOfAssignment is too late just return false
 			if (periodOfAssignment.StartDateTime > dayOff.Anchor)
 			{
 				return false;

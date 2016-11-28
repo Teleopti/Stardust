@@ -6,99 +6,98 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
 {
-    public class NewShiftCategoryLimitationRule : INewBusinessRule
-    {
-        private readonly IShiftCategoryLimitationChecker _limitationChecker;
-        private readonly IVirtualSchedulePeriodExtractor _virtualSchedulePeriodExtractor;
-        private bool _haltModify = true;
-	    private readonly string _localizedMessage;
+	public class NewShiftCategoryLimitationRule : INewBusinessRule
+	{
+		private readonly IShiftCategoryLimitationChecker _limitationChecker;
+		private readonly IVirtualSchedulePeriodExtractor _virtualSchedulePeriodExtractor;
+		private bool _haltModify = true;
+		private readonly string _localizedMessage;
 
-	    public NewShiftCategoryLimitationRule(IShiftCategoryLimitationChecker limitationChecker, 
-            IVirtualSchedulePeriodExtractor virtualSchedulePeriodExtractor)
-        {
-            _limitationChecker = limitationChecker;
-            _virtualSchedulePeriodExtractor = virtualSchedulePeriodExtractor;
-	        FriendlyName = Resources.BusinessRuleShiftCategoryLimitationFriendlyName;
-	        _localizedMessage = Resources.BusinessRuleShiftCategoryLimitationErrorMessage2;
-
-
-        }
+		public NewShiftCategoryLimitationRule(IShiftCategoryLimitationChecker limitationChecker,
+			IVirtualSchedulePeriodExtractor virtualSchedulePeriodExtractor)
+		{
+			_limitationChecker = limitationChecker;
+			_virtualSchedulePeriodExtractor = virtualSchedulePeriodExtractor;
+			FriendlyName = Resources.BusinessRuleShiftCategoryLimitationFriendlyName;
+			Description = Resources.DescriptionOfNewShiftCategoryLimitationRule;
+			_localizedMessage = Resources.BusinessRuleShiftCategoryLimitationErrorMessage2;
+		}
 
 		public string ErrorMessage { get { return ""; } }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        public bool IsMandatory
-        {
-            get { return false; }
-        }
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+		public bool IsMandatory
+		{
+			get { return false; }
+		}
 
-        public bool HaltModify
-        {
-            get { return _haltModify; }
-            set { _haltModify = value; }
-        }
+		public bool HaltModify
+		{
+			get { return _haltModify; }
+			set { _haltModify = value; }
+		}
 
-        public bool ForDelete { get; set; }
+		public bool ForDelete { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Scheduling.Rules.NewShiftCategoryLimitationRule.createResponse(Teleopti.Interfaces.Domain.IPerson,Teleopti.Interfaces.Domain.DateOnly,System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
-        {
-            var responseList = new HashSet<IBusinessRuleResponse>();
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Scheduling.Rules.NewShiftCategoryLimitationRule.createResponse(Teleopti.Interfaces.Domain.IPerson,Teleopti.Interfaces.Domain.DateOnly,System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
+		{
+			var responseList = new HashSet<IBusinessRuleResponse>();
 
-            var virtualSchedulePeriods =
-                _virtualSchedulePeriodExtractor.CreateVirtualSchedulePeriodsFromScheduleDays(scheduleDays);
+			var virtualSchedulePeriods =
+				_virtualSchedulePeriodExtractor.CreateVirtualSchedulePeriodsFromScheduleDays(scheduleDays);
 
-            foreach (IVirtualSchedulePeriod schedulePeriod in virtualSchedulePeriods)
-            {
-                if (schedulePeriod.IsValid)
-                {
-                    DateOnlyPeriod period = schedulePeriod.DateOnlyPeriod;
-                    var person = schedulePeriod.Person;
-                    var currentSchedules = rangeClones[person];
-                    var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
-                    var oldResponseCount = oldResponses.Count;
+			foreach (IVirtualSchedulePeriod schedulePeriod in virtualSchedulePeriods)
+			{
+				if (schedulePeriod.IsValid)
+				{
+					DateOnlyPeriod period = schedulePeriod.DateOnlyPeriod;
+					var person = schedulePeriod.Person;
+					var currentSchedules = rangeClones[person];
+					var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
+					var oldResponseCount = oldResponses.Count;
 					foreach (DateOnly day in period.DayCollection())
 					{
 						oldResponses.Remove(createResponse(person, day, "remove"));
 					}
 					foreach (var shiftCategoryLimitation in schedulePeriod.ShiftCategoryLimitationCollection())
-                    {
-                        if (!shiftCategoryLimitation.Weekly)
-                        {
+					{
+						if (!shiftCategoryLimitation.Weekly)
+						{
 							IList<DateOnly> datesWithCategory;
-                            if (_limitationChecker.IsShiftCategoryOverPeriodLimit(shiftCategoryLimitation, period, currentSchedules, out datesWithCategory))
-                            {
-                                string message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
-                                                    _localizedMessage,
-                                                    shiftCategoryLimitation.ShiftCategory.Description.Name);
-                                foreach (DateOnly dateOnly in datesWithCategory)
-                                {
-                                    if (!ForDelete)
-                                        responseList.Add(createResponse(schedulePeriod.Person, dateOnly, message));
-                                    oldResponses.Add(createResponse(schedulePeriod.Person, dateOnly, message));
-                                }
-                                
-                            }
-                        }
-                    }
-                    var newResponseCount = responseList.Count();
-                    if (newResponseCount <= oldResponseCount)
-                        responseList = new HashSet<IBusinessRuleResponse>();
-                }
-            }
+							if (_limitationChecker.IsShiftCategoryOverPeriodLimit(shiftCategoryLimitation, period, currentSchedules, out datesWithCategory))
+							{
+								string message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
+									_localizedMessage, shiftCategoryLimitation.ShiftCategory.Description.Name);
+								foreach (DateOnly dateOnly in datesWithCategory)
+								{
+									if (!ForDelete)
+										responseList.Add(createResponse(schedulePeriod.Person, dateOnly, message));
+									oldResponses.Add(createResponse(schedulePeriod.Person, dateOnly, message));
+								}
+							}
+						}
+					}
+					var newResponseCount = responseList.Count();
+					if (newResponseCount <= oldResponseCount)
+						responseList = new HashSet<IBusinessRuleResponse>();
+				}
+			}
 
-            return responseList;
-        }
+			return responseList;
+		}
 
-	    public string FriendlyName { get; }
+		public string FriendlyName { get; }
+		public string Description { get; }
 
-	    private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message)
-        {
-            var dop = dateOnly.ToDateOnlyPeriod();
-            var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-            var response = new BusinessRuleResponse(typeof(NewShiftCategoryLimitationRule), message, _haltModify, IsMandatory, period, person, dop, FriendlyName)
-                                                 {Overridden = !_haltModify};
-            return response;
-        }
-    }
+		private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message)
+		{
+			var dop = dateOnly.ToDateOnlyPeriod();
+			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+			var response = new BusinessRuleResponse(typeof(NewShiftCategoryLimitationRule), message, _haltModify, IsMandatory,
+					period, person, dop, FriendlyName)
+				{Overridden = !_haltModify};
+			return response;
+		}
+	}
 }

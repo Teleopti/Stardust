@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 					.Select(x => new ShiftTradeBusinessRuleConfig
 					{
 						BusinessRuleType = x.GetType().FullName,
-						FriendlyName = x.FriendlyName,
+						FriendlyName = x.Description,
 						Enabled = true,
 						HandleOptionOnFailed = RequestHandleOption.Pending
 					}));

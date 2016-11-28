@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			_siteOpenHoursSpecification = siteOpenHoursSpecification;
 			FriendlyName = Resources.BusinessRuleNoSiteOpenHourFriendlyName;
+			Description = Resources.DescriptionOfSiteOpenHoursRule;
 		}
 
 		private bool _haltModify = true;
@@ -52,6 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		}
 
 		public string FriendlyName { get; }
+		public string Description { get; }
 
 		private IBusinessRuleResponse checkScheduleDay(IDictionary<IPerson, IScheduleRange> rangeClones, IScheduleDay scheduleDay)
 		{
