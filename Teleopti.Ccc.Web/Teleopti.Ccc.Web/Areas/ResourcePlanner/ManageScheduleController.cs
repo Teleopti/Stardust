@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			{
 				if (!_permissionProvider.HasTeamPermission(requiredPermission, DateOnly.Today, team))
 					throw new PermissionException("You do not have permission for all of the selected teams.");
-				people.AddRange(_personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(new DateOnly(model.StartDate), new DateOnly(model.EndDate))));
+				people.AddRange(_personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(model.StartDate, model.EndDate)));
 			}
 			return people;
 		}

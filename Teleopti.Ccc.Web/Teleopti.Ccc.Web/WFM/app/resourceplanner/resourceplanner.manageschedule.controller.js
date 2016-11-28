@@ -165,7 +165,10 @@
 							vm.tracking.totalMessages = result.TotalMessages;
 							vm.tracking.totalPeople = result.TotalSelectedPeople;
 							vm.tracking.jobId = result.JobId;
-							checkProgress();
+							if (vm.tracking.jobId != undefined)
+								checkProgress();
+							else
+								completedManaging();
 						});
 				};
 

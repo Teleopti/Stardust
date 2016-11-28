@@ -11,8 +11,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	{
 		public Guid FromScenario { get; set; }
 		public Guid ToScenario { get; set; }
-		public DateTime StartDate { get; set; }
-		public DateTime EndDate { get; set; }
+		public DateOnly StartDate { get; set; }
+		public DateOnly EndDate { get; set; }
 		public Guid JobResultId { get; set; }
 		public List<Guid> SelectedTeams { get; set; }
 
@@ -20,8 +20,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			var @event = new T
 			{
-				StartDate = new DateOnly(StartDate),
-				EndDate = new DateOnly(EndDate),
+				StartDate = StartDate,
+				EndDate = EndDate,
 				FromScenario = FromScenario,
 				ToScenario = ToScenario,
 				JobResultId = JobResultId
