@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return ReadForSkills(skillIds);
 		}
 
-		public IEnumerable<AgentStateReadModel> ReadInAlarmsFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		public IEnumerable<AgentStateReadModel> ReadInAlarmFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
 		{
 			if (siteIds != null && skillIds != null)
 				return ReadInAlarmForSitesAndSkills(siteIds, skillIds);

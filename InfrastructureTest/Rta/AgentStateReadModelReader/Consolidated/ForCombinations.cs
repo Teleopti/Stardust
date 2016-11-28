@@ -147,7 +147,84 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader.Consolid
 
 			WithUnitOfWork.Get(() => Target.ReadFor(new[] { siteId }, new[] { teamId }, null))
 				.Select(x => x.PersonId)
-				.Should().Have.SameValuesAs(new[] { personId1, personId2 });
+				.Should().Have.SameValuesAs(personId1, personId2);
+		}
+
+
+		[Test]
+		public void ShouldLoadInAlarmForSiteTeamAndSkill()
+		{
+			Now.Is("2016-11-28 08:10");
+			Database
+				.WithAgent("wrongSite")
+				.WithSkill("phone")
+				.WithSite()
+				.WithAgent("wrongTeam")
+				.WithSkill("phone")
+				.WithTeam()
+				.WithAgent("notInAlarm")
+				.WithSkill("phone")
+				.WithAgent("expectedForSite")
+				.WithSkill("phone")
+				.WithAgent("expectedForTeam")
+				.WithSkill("phone")
+				.WithAgent("wrongSkill")
+				.WithSkill("email")
+				.UpdateGroupings()
+				;
+			var expectedForSite = Database.PersonIdFor("expectedForSite");
+			var expectedForTeam = Database.PersonIdFor("expectedForTeam");
+			var notInAlarm = Database.PersonIdFor("notInAlarm");
+			var wrongSkill = Database.PersonIdFor("wrongSkill");
+			var wrongSite = Database.PersonIdFor("wrongSite");
+			var wrongTeam = Database.PersonIdFor("wrongTeam");
+			var siteId = Database.CurrentSiteId();
+			var teamId = Database.CurrentSiteId();
+			var phoneId = Database.SkillIdFor("phone");
+			WithUnitOfWork.Do(() =>
+			{
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = expectedForSite,
+					SiteId = siteId,
+					AlarmStartTime = "2016-11-24 08:00".Utc()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = expectedForTeam,
+					TeamId = teamId,
+					AlarmStartTime = "2016-11-24 08:00".Utc()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = notInAlarm,
+					SiteId = siteId,
+					TeamId = teamId
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = wrongSkill,
+					SiteId = siteId,
+					TeamId = teamId,
+					AlarmStartTime = "2016-11-24 08:00".Utc()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = wrongSite,
+					SiteId = Guid.NewGuid(),
+					AlarmStartTime = "2016-11-24 08:00".Utc()
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = wrongTeam,
+					TeamId = Guid.NewGuid(),
+					AlarmStartTime = "2016-11-24 08:00".Utc()
+				});
+			});
+
+			WithUnitOfWork.Get(() => Target.ReadInAlarmFor(new[] { siteId }, new[] { teamId }, new[] { phoneId }))
+				.Select(x => x.PersonId)
+				.Should().Have.SameValuesAs(expectedForSite, expectedForTeam);
 		}
 	}
 }

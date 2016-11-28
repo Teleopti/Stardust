@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public interface IAgentStateReadModelReader
 	{
 		IEnumerable<AgentStateReadModel> ReadFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds);
-		IEnumerable<AgentStateReadModel> ReadInAlarmsFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds);
+		IEnumerable<AgentStateReadModel> ReadInAlarmFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds);
 	}
 
 	public interface IAgentStateReadModelLegacyReader

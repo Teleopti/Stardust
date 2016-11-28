@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader.Consolid
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmsFor(null, null, new Guid[] { currentSkillId }))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmFor(null, null, new Guid[] { currentSkillId }))
 				.Count().Should().Be(1);
 		}
 
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader.Consolid
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmsFor(null, null, new[] { skill }))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmFor(null, null, new[] { skill }))
 				.Single().StateGroupId.Should().Be(phoneState);
 		}
 
@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader.Consolid
 			});
 
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmsFor(null, null, new[] { skill1, skill2 }))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmFor(null, null, new[] { skill1, skill2 }))
 				.Count().Should().Be(2);
 		}
 
@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader.Consolid
 			});
 
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmsFor(null, null, new[] { skill1, skill2 }))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmFor(null, null, new[] { skill1, skill2 }))
 				.Count().Should().Be(1);
 		}
 
@@ -296,7 +296,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader.Consolid
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmsFor(null, null, new[] { currentSkillId }))
+			WithUnitOfWork.Get(() => Target.ReadInAlarmFor(null, null, new[] { currentSkillId }))
 				.Count().Should().Be(1);
 		}
 
@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader.Consolid
 				});
 			});
 
-			var agents = WithUnitOfWork.Get(() => Target.ReadInAlarmsFor(null, null, new Guid[] { currentSkillId }).ToArray());
+			var agents = WithUnitOfWork.Get(() => Target.ReadInAlarmFor(null, null, new Guid[] { currentSkillId }).ToArray());
 			agents.First().PersonId.Should().Be(personId1);
 			agents.Last().PersonId.Should().Be(personId2);
 		}

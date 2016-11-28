@@ -24,27 +24,19 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public IEnumerable<AgentStateReadModel> ReadFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
 		{
 			var queryBuilder = new AgentStateReadModelQueryBuilder(_now);
-			if (siteIds != null)
-				queryBuilder.InSites(siteIds);
-			if (teamIds != null)
-				queryBuilder.InTeams(teamIds);
-			if (skillIds != null)
-				queryBuilder.WithSkills(skillIds);
-
-			var builder = queryBuilder.Build();
-			var sqlQuery = _unitOfWork.Current().Session()
-				.CreateSQLQuery(builder.Query);
-			builder.ParameterFuncs.ForEach(f => f(sqlQuery));
-			return sqlQuery
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
-				.SetReadOnly(true)
-				.List<AgentStateReadModel>();
+			return build(queryBuilder, siteIds, teamIds, skillIds);
 		}
 
-		public IEnumerable<AgentStateReadModel> ReadInAlarmsFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		public IEnumerable<AgentStateReadModel> ReadInAlarmFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
 		{
 			var queryBuilder = new AgentStateReadModelQueryBuilder(_now);
 			queryBuilder.InAlarm();
+			return build(queryBuilder, siteIds, teamIds, skillIds);
+		}
+
+		private IEnumerable<AgentStateReadModel> build(AgentStateReadModelQueryBuilder queryBuilder, IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds,
+			IEnumerable<Guid> skillIds)
+		{
 			if (siteIds != null)
 				queryBuilder.InSites(siteIds);
 			if (teamIds != null)
@@ -60,6 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
 				.List<AgentStateReadModel>();
+
 		}
 
 		private class internalModel : AgentStateReadModel

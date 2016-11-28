@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader.Consolid
 				IsRuleAlarm = false
 			});
 
-			var result = Target.ReadInAlarmsFor(null, new[] { teamId }, null);
+			var result = Target.ReadInAlarmFor(null, new[] { teamId }, null);
 
 			result.Single().PersonId.Should().Be(personId1);
 		}
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader.Consolid
 				IsRuleAlarm = true
 			});
 
-			var result = Target.ReadInAlarmsFor(null, new[] { teamId }, null);
+			var result = Target.ReadInAlarmFor(null, new[] { teamId }, null);
 
 			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);
@@ -173,13 +173,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader.Consolid
 				IsRuleAlarm = false
 			});
 
-			var result = Target.ReadInAlarmsFor(new[] { siteId }, null, null);
+			var result = Target.ReadInAlarmFor(new[] { siteId }, null, null);
 
 			result.Single().PersonId.Should().Be(personId1);
 		}
-
-
-
+		
 		[Test]
 		public void ShouldLoadWithStateGroupId()
 		{
@@ -196,7 +194,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader.Consolid
 				StateGroupId = phoneState
 			});
 
-			Target.ReadInAlarmsFor(new[] { site }, null, null)
+			Target.ReadInAlarmFor(new[] { site }, null, null)
 				.Single().StateGroupId.Should().Be(phoneState);
 		}
 
@@ -222,7 +220,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader.Consolid
 				IsRuleAlarm = true
 			});
 
-			var result = Target.ReadInAlarmsFor(new[] { siteId }, null, null);
+			var result = Target.ReadInAlarmFor(new[] { siteId }, null, null);
 
 			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);
