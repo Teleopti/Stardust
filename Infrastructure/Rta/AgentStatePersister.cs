@@ -275,6 +275,19 @@ AND (StateCode <> :State OR StateCode IS NULL)")
 		}
 
 		[LogInfo]
+		public virtual IEnumerable<AgentStateFound> FindForSynchronize()
+		{
+			var sql = SelectAgentState + "WITH (TABLOCK, UPDLOCK)";
+			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
+				.SetReadOnly(true)
+				.List<AgentStateFound>()
+				.GroupBy(x => x.PersonId, (guid, states) => states.First())
+				.ToArray()
+				;
+		}
+
+		[LogInfo]
 		public virtual IEnumerable<AgentStateFound> Find(IEnumerable<ExternalLogon> externalLogons, DeadLockVictim deadLockVictim)
 		{
 			_deadLockVictimThrower.SetDeadLockPriority(deadLockVictim);
@@ -302,19 +315,6 @@ AND (StateCode <> :State OR StateCode IS NULL)")
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
 				.SetReadOnly(true)
 				.List<AgentState>()
-				.GroupBy(x => x.PersonId, (guid, states) => states.First())
-				.ToArray()
-				;
-		}
-
-		[LogInfo]
-		public virtual IEnumerable<AgentStateFound> FindForSynchronize()
-		{
-			var sql = SelectAgentState + "WITH (TABLOCK, UPDLOCK)";
-			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
-				.SetReadOnly(true)
-				.List<AgentStateFound>()
 				.GroupBy(x => x.PersonId, (guid, states) => states.First())
 				.ToArray()
 				;
