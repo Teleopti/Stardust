@@ -84,6 +84,7 @@
 		WfmTeamSchedule_WeeklyContractTime_39871,
 		WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925,
 		WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305,
+		WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260,
 
 		WfmTeamSchedule_MoveToBaseLicense_41039,
 
