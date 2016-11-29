@@ -40,6 +40,7 @@ AS
 SET NOCOUNT ON
 
 CREATE TABLE #fact_schedule(
+	[shift_startdate_local_id] [int] NOT NULL,
 	[schedule_date_id] [int] NOT NULL,
 	[person_id] [int] NOT NULL,
 	[interval_id] [smallint] NOT NULL,
@@ -82,8 +83,9 @@ INSERT INTO #overtime
 SELECT * FROM mart.SplitStringInt(@overtime_set)
 
 /*Snabba upp fraga mot fact_schedule*/
-INSERT INTO #fact_schedule
-SELECT
+INSERT INTO #fact_schedule(shift_startdate_local_id,schedule_date_id,person_id,interval_id,scenario_id,scheduled_over_time_m,overtime_id)
+SELECT 
+[shift_startdate_local_id],
 	[schedule_date_id],
 	p.person_id,
 	[interval_id],
@@ -93,7 +95,6 @@ SELECT
 FROM mart.fact_schedule fs
 INNER JOIN mart.dim_person p
 	ON fs.person_id=p.person_id
-	AND fs.shift_startdate_local_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
 WHERE shift_startdate_local_id in (select d.date_id from mart.dim_date d where d.date_date BETWEEN  dateadd(dd, -1, @date_from) AND dateadd(dd,1,@date_to))
 AND fs.scenario_id=@scenario_id
 AND p.team_id IN (select right_id from #rights_teams)
@@ -112,6 +113,7 @@ FROM
 	#fact_schedule f
 INNER JOIN mart.dim_person p
 	ON f.person_id=p.person_id
+	AND f.shift_startdate_local_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
 INNER JOIN mart.dim_overtime ot
 	ON ot.overtime_id=f.overtime_id
 INNER JOIN mart.bridge_time_zone b
