@@ -110,7 +110,8 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return new DatabaseHelper(
 				InfraTestConfigReader.ConnectionString,
-				DatabaseType.TeleoptiCCC7
+				DatabaseType.TeleoptiCCC7,
+				new DbManagerLog4Net("DbManager.Application")
 				);
 		}
 
@@ -118,7 +119,8 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return new DatabaseHelper(
 				InfraTestConfigReader.AggConnectionString,
-				DatabaseType.TeleoptiCCCAgg
+				DatabaseType.TeleoptiCCCAgg,
+				new DbManagerLog4Net("DbManager.Agg")
 				);
 		}
 
@@ -126,7 +128,8 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return new DatabaseHelper(
 				InfraTestConfigReader.AnalyticsConnectionString,
-				DatabaseType.TeleoptiAnalytics
+				DatabaseType.TeleoptiAnalytics,
+				new DbManagerLog4Net("DbManager.Analytics")
 				);
 		}
 

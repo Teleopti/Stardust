@@ -11,15 +11,21 @@ namespace Teleopti.Ccc.DBManager.Library
 		private readonly ExecuteSql _usingMaster;
 		private readonly ExecuteSql _usingDatabase;
 
-		public DatabaseHelper(string connectionString, DatabaseType databaseType)
+		public DatabaseHelper(string connectionString, DatabaseType databaseType, IUpgradeLog log)
 		{
 			ConnectionString = connectionString;
 			DatabaseName = new SqlConnectionStringBuilder(connectionString).InitialCatalog;
 			DatabaseType = databaseType;
-			Logger = new NullLog();
+			Logger = log;
 
 			_usingMaster = new ExecuteSql(() => openConnection(true), Logger);
 			_usingDatabase = new ExecuteSql(() => openConnection(), Logger);
+
+		}
+
+		public DatabaseHelper(string connectionString, DatabaseType databaseType)
+			: this(connectionString, databaseType, new NullLog())
+		{
 		}
 
 		public IUpgradeLog Logger { set; get; }
