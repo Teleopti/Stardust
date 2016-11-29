@@ -1,7 +1,6 @@
-﻿'use strict';
+﻿(function () {
+	'use strict';
 
-(function () {
-	
 	angular.module('wfm.teamSchedule').factory('TeamScheduleTimeLineFactory', ['ShiftHelper', TeamScheduleTimeLineFactory]);
 
 	function TeamScheduleTimeLineFactory(shiftHelper) {
@@ -159,19 +158,15 @@
 
 			var formattedTime = isCurrentDay ? time.format('LT') : (isNextDay ? time.format('LT') + " +1" : time.format('LT') + " -1");
 
-			var hourPointVm = {
-				TimeLabel: formattedTime,
-				IsLabelVisible: !isLabelHidden,
-				IsCurrentDay: isCurrentDay,
-				Position: function() {
-					var timeLineStartMinutes = minutes - start;
-					var position = timeLineStartMinutes * percentPerMinute;
-					return position;
-				}
+			this.TimeLabel = formattedTime;
+			this.IsLabelVisible = !isLabelHidden;
+			this.IsCurrentDay = isCurrentDay;
+			this.Position = function () {
+				var timeLineStartMinutes = minutes - start;
+				var position = timeLineStartMinutes * percentPerMinute;
+				return position;
 			};
-			
-			return hourPointVm;
-		};
+		}
 
 		return timeLineFactory;
 	}
