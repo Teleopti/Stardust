@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -31,10 +32,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			= new Dictionary<RequestHandleOption, ShiftTradeRequestHandleOptionView>()
 			{
 				{RequestHandleOption.AutoDeny, new ShiftTradeRequestHandleOptionView(RequestHandleOption.AutoDeny, Resources.Deny)},
-				{
-					RequestHandleOption.Pending,
-					new ShiftTradeRequestHandleOptionView(RequestHandleOption.Pending, Resources.SendToAdministrator)
-				}
+				{RequestHandleOption.Pending, new ShiftTradeRequestHandleOptionView(RequestHandleOption.Pending, Resources.SendToAdministrator)}
 			};
 
 		public ShiftTradeSystemSettings(IToggleManager toggleManager, IBusinessRuleConfigProvider businessRuleConfigProvider)
@@ -178,11 +176,26 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			var businessRuleConfigViews = getShiftTradeBusinessRuleConfigViews().ToList();
 			businessRuleSettingGrid.RowCount = businessRuleConfigViews.Count;
 			businessRuleSettingGrid.Height = (businessRuleSettingGrid.RowCount + 1) * 20;
+			businessRuleSettingGrid.QueryCellInfo += businessRuleSettingGridQueryCellInfo;
 
 			_gridColumnHelper = new SFGridColumnGridHelper<ShiftTradeBusinessRuleConfigView>(businessRuleSettingGrid,
 							   new ReadOnlyCollection<SFGridColumnBase<ShiftTradeBusinessRuleConfigView>>(gridColumns),
 							   businessRuleConfigViews, false)
 			{ AllowExtendedCopyPaste = true };
+		}
+
+		private void businessRuleSettingGridQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
+		{
+			if (e.ColIndex != 3)
+				return;
+
+			var ruleName = businessRuleSettingGrid[e.RowIndex, 1].CellValue.ToString();
+			var ruleConfig = _shiftTradeSettings.BusinessRuleConfigs.FirstOrDefault(c => c.FriendlyName == ruleName);
+			if (ruleConfig == null)
+				return;
+
+			e.Style.Enabled = ruleConfig.Enabled;
+			e.Handled = true;
 		}
 
 		private IEnumerable<ShiftTradeBusinessRuleConfigView> getShiftTradeBusinessRuleConfigViews()
