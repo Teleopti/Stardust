@@ -117,6 +117,7 @@
 		Wfm_Requests_Check_Max_Seats_NoReadModel_39937,
 		Wfm_Requests_Check_Expired_Requests_40274,
 		Wfm_Requests_Configurable_BusinessRules_For_ShiftTrade_40770,
+		Wfm_Requests_ApprovingModifyRequests_41930,
 
 		Wfm_Intraday_38074,
 
