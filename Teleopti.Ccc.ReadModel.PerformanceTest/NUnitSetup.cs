@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 		{
 			while (true)
 			{
-				logger.Debug($"Hangfire has {hangfireUtilities.NumberOfScheduledJobs()} schedules jobs and {hangfireUtilities.NumberOfFailedJobs()} jobs failed.");
+				logger.Debug($"Hangfire is processing {hangfireUtilities.NumberOfProcessingJobs()} jobs, {hangfireUtilities.NumberOfScheduledJobs()} are scheduled and {hangfireUtilities.NumberOfFailedJobs()} jobs has failed.");
 				foreach (var queueName in Queues.OrderOfPriority())
 				{
 					logger.Debug($"{hangfireUtilities.NumberOfJobsInQueue(queueName)} jobs in queue '{queueName}'");
