@@ -32,7 +32,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.SingleInstance();
 
 			if (_config.Toggle(Toggles.RTA_FasterActivityCheck_41380))
-				builder.RegisterType<ContextLoaderWithFasterActivityCheck>().As<IContextLoader>().ApplyAspects().SingleInstance();
+				if (_config.Toggle(Toggles.RTA_SpreadTransactionLocksStrategy_41823))
+					builder.RegisterType<ContextLoaderWithSpreadTransactionLockStrategy>().As<IContextLoader>().ApplyAspects().SingleInstance();
+				else
+					builder.RegisterType<ContextLoaderWithFasterActivityCheck>().As<IContextLoader>().ApplyAspects().SingleInstance();
 			else
 				builder.RegisterType<ContextLoader>().As<IContextLoader>().ApplyAspects().SingleInstance();
 			builder.RegisterType<ThreeDays>().As<IScheduleCacheStrategy>().SingleInstance();

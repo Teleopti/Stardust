@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	[MultiDatabaseTest]
 	[Toggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 	[Toggle(Toggles.RTA_FasterActivityCheck_41380)]
+	[Toggle(Toggles.RTA_SpreadTransactionLocksStrategy_41823)]
 	[Explicit]
 	[Category("LongRunning")]
 	public class ConcurrencyTest : ISetup

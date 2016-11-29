@@ -13,6 +13,51 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
+	public class ContextLoaderWithSpreadTransactionLockStrategy : ContextLoaderWithFasterActivityCheck
+	{
+		public ContextLoaderWithSpreadTransactionLockStrategy(IScheduleCacheStrategy scheduleCacheStrategy,
+			ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper,
+			IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IScheduleReader scheduleReader,
+			ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier)
+			: base(scheduleCacheStrategy, dataSource, databaseLoader, now, stateMapper, agentStatePersister,
+				mappingReader, scheduleReader, appliedAlarm, config, deadLockRetrier)
+		{
+		}
+
+		protected override void ProcessTransactions<T>(string tenant, IStrategy<T> strategy, IEnumerable<Func<transactionData>> transactions, ConcurrentBag<Exception> exceptions)
+		{
+			var parentThreadName = Thread.CurrentThread.Name;
+
+			var taskTransactionCount = Math.Max(2, transactions.Count()/strategy.ParallelTransactions);
+
+			var tasks = transactions
+				.Batch(taskTransactionCount)
+				.Select(transactionBatch =>
+				{
+					return Task.Factory.StartNew(() =>
+					{
+						if (Thread.CurrentThread.Name == null)
+							Thread.CurrentThread.Name = $"{parentThreadName} #{Thread.CurrentThread.ManagedThreadId}";
+						transactionBatch.ForEach(transactionData =>
+						{
+							try
+							{
+								_deadLockRetrier.RetryOnDeadlock(() => Transaction(tenant, strategy, transactionData));
+							}
+							catch (Exception e)
+							{
+								exceptions.Add(e);
+							}
+						});
+					});
+				})
+				.ToArray();
+
+			Task.WaitAll(tasks);
+		}
+		
+	}
+
 	public class ContextLoaderWithFasterActivityCheck : ContextLoader
 	{
 		public ContextLoaderWithFasterActivityCheck(IScheduleCacheStrategy scheduleCacheStrategy,
@@ -50,7 +95,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IScheduleReader _scheduleReader;
 		private readonly ProperAlarm _appliedAlarm;
 		protected readonly IConfigReader _config;
-		private readonly DeadLockRetrier _deadLockRetrier;
+		protected readonly DeadLockRetrier _deadLockRetrier;
 
 		public ContextLoader(
 			IScheduleCacheStrategy scheduleCacheStrategy,
@@ -160,7 +205,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				MaxTransactionSize = 1;
 			}
 
-			public override IEnumerable<StateInputModel> AllThings()
+			public override IEnumerable<StateInputModel> AllItems()
 			{
 				return new[] {_model};
 			}
@@ -212,7 +257,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				MaxTransactionSize = _config.ReadValue("RtaBatchMaxTransactionSize", 100);
 			}
 
-			public override IEnumerable<BatchStateInputModel> AllThings()
+			public override IEnumerable<BatchStateInputModel> AllItems()
 			{
 				return _batch.States.OrderBy(x => x.UserCode).ToArray();
 			}
@@ -264,7 +309,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				DeadLockVictim = DeadLockVictim.Yes;
 			}
 
-			public override IEnumerable<ExternalLogonForCheck> AllThings()
+			public override IEnumerable<ExternalLogonForCheck> AllItems()
 			{
 				return _things.OrderBy(x => x.NormalizedString()).ToArray();
 			}
@@ -292,7 +337,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				DeadLockVictim = DeadLockVictim.Yes;
 			}
 
-			public override IEnumerable<ExternalLogon> AllThings()
+			public override IEnumerable<ExternalLogon> AllItems()
 			{
 				return _things.OrderBy(x => x.NormalizedString()).ToArray();
 			}
@@ -321,7 +366,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				MaxTransactionSize = _config.ReadValue("RtaCloseSnapshotMaxTransactionSize", 1000);
 			}
 
-			public override IEnumerable<ExternalLogon> AllThings()
+			public override IEnumerable<ExternalLogon> AllItems()
 			{
 				return _things.OrderBy(x => x.NormalizedString()).ToArray();
 			}
@@ -354,7 +399,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				UpdateAgentState = null;
 			}
 
-			public override IEnumerable<ExternalLogon> AllThings()
+			public override IEnumerable<ExternalLogon> AllItems()
 			{
 				return _things.OrderBy(x => x.NormalizedString()).ToArray();
 			}
@@ -404,7 +449,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			public int ParallelTransactions { get; protected set; }
 			public int MaxTransactionSize { get; protected set; }
 
-			public abstract IEnumerable<T> AllThings();
+			public abstract IEnumerable<T> AllItems();
 
 			public abstract IEnumerable<AgentState> GetStatesFor(IEnumerable<T> things, Action<Exception> addException);
 
@@ -450,7 +495,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			int ParallelTransactions { get; }
 			int MaxTransactionSize { get; }
 
-			IEnumerable<T> AllThings();
+			IEnumerable<T> AllItems();
 
 			IEnumerable<AgentState> GetStatesFor(IEnumerable<T> things, Action<Exception> addException);
 
@@ -467,82 +512,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			var exceptions = new ConcurrentBag<Exception>();
 
-			var allThings = strategy.AllThings();
-			var allThingsSize = allThings.Count();
-			if (allThingsSize == 0)
+			var items = strategy.AllItems();
+			var itemsCount = items.Count();
+			if (itemsCount == 0)
 				return;
-			var maxTransactionSize = strategy.MaxTransactionSize;
-			if (allThingsSize <= maxTransactionSize*strategy.ParallelTransactions)
-				maxTransactionSize = (int) Math.Ceiling(allThingsSize/(double) strategy.ParallelTransactions);
 
-			var shared = new Lazy<sharedData>(() => new sharedData
-			{
-				mappings = _mappingReader.Read()
-			});
+			var transactionSize = calculateTransactionSize(strategy.MaxTransactionSize, strategy.ParallelTransactions, itemsCount);
 
-			var transactions = allThings
-				.Batch(maxTransactionSize)
-				.Select(someThings =>
-				{
-					return new Func<transactionData>(() =>
-					{
-						var agentStates = strategy.GetStatesFor(someThings, exceptions.Add);
+			var shared = new Lazy<sharedData>(loadSharedData);
+			var transactions = items
+				.Batch(transactionSize)
+				.Select(some => new Func<transactionData>(() => loadTransactionData(strategy, some, exceptions, shared)))
+				.ToArray();
 
-						var validated = agentStates
-							.GroupBy(x => x.PersonId, (_, states) => states.First())
-							.Select(x => new
-							{
-								state = x,
-								valid = _scheduleCacheStrategy.ValidateCached(x, strategy.CurrentTime)
-							})
-							.ToArray();
-						var schedules = validated
-							.Where(x => x.valid)
-							.Select(x => new scheduleData(x.state.Schedule, false, x.state.PersonId));
-						var loadSchedulesFor = validated
-							.Where(x => !x.valid)
-							.Select(x => new PersonBusinessUnit {BusinessUnitId = x.state.BusinessUnitId, PersonId = x.state.PersonId})
-							.ToArray();
-						if (loadSchedulesFor.Any())
-						{
-							var loaded = _scheduleReader.GetCurrentSchedules(strategy.CurrentTime, loadSchedulesFor);
-							var loadedSchedules = loadSchedulesFor
-								.Select(x => new scheduleData(_scheduleCacheStrategy.FilterSchedules(loaded.Where(l => l.PersonId == x.PersonId), strategy.CurrentTime), true, x.PersonId));
-							schedules = schedules.Concat(loadedSchedules);
-						}
-						schedules = schedules.ToArray();
-
-						return new transactionData
-						{
-							agentStates = agentStates,
-							mappings = shared.Value.mappings,
-							schedules = schedules
-						};
-					});
-				}).ToArray();
-
-			var parentThreadName = Thread.CurrentThread.Name;
-			var tenant = _dataSource.CurrentName();
-			Parallel.ForEach(
-				transactions,
-				new ParallelOptions {MaxDegreeOfParallelism = strategy.ParallelTransactions},
-				data =>
-				{
-					try
-					{
-						if (Thread.CurrentThread.Name == null)
-							Thread.CurrentThread.Name = $"{parentThreadName} #{Thread.CurrentThread.ManagedThreadId}"; 
-						_deadLockRetrier.RetryOnDeadlock(() =>
-						{
-							Transaction(tenant, strategy, data);
-						});
-					}
-					catch (Exception e)
-					{
-						exceptions.Add(e);
-					}
-				}
-			);
+			ProcessTransactions(_dataSource.CurrentName(), strategy, transactions, exceptions);
 
 			if (exceptions.Count == 1)
 			{
@@ -552,6 +535,79 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}
 			if (exceptions.Any())
 				throw new System.AggregateException(exceptions);
+		}
+
+		private static int calculateTransactionSize(int maxTransactionSize, int parallelTransactions, int thingsCount)
+		{
+			if (thingsCount <= maxTransactionSize* parallelTransactions)
+				maxTransactionSize = (int) Math.Ceiling(thingsCount/(double)parallelTransactions);
+			return maxTransactionSize;
+		}
+
+		private sharedData loadSharedData()
+		{
+			return new sharedData
+			{
+				mappings = _mappingReader.Read()
+			};
+		}
+
+		private transactionData loadTransactionData<T>(IStrategy<T> strategy, IEnumerable<T> items, ConcurrentBag<Exception> exceptions, Lazy<sharedData> shared)
+		{
+			var agentStates = strategy.GetStatesFor(items, exceptions.Add);
+
+			var validated = agentStates
+				.GroupBy(x => x.PersonId, (_, states) => states.First())
+				.Select(x => new
+				{
+					state = x,
+					valid = _scheduleCacheStrategy.ValidateCached(x, strategy.CurrentTime)
+				})
+				.ToArray();
+			var schedules = validated
+				.Where(x => x.valid)
+				.Select(x => new scheduleData(x.state.Schedule, false, x.state.PersonId));
+			var loadSchedulesFor = validated
+				.Where(x => !x.valid)
+				.Select(x => new PersonBusinessUnit { BusinessUnitId = x.state.BusinessUnitId, PersonId = x.state.PersonId })
+				.ToArray();
+			if (loadSchedulesFor.Any())
+			{
+				var loaded = _scheduleReader.GetCurrentSchedules(strategy.CurrentTime, loadSchedulesFor);
+				var loadedSchedules = loadSchedulesFor
+					.Select(x => new scheduleData(_scheduleCacheStrategy.FilterSchedules(loaded.Where(l => l.PersonId == x.PersonId), strategy.CurrentTime), true, x.PersonId));
+				schedules = schedules.Concat(loadedSchedules);
+			}
+			schedules = schedules.ToArray();
+
+			return new transactionData
+			{
+				agentStates = agentStates,
+				mappings = shared.Value.mappings,
+				schedules = schedules
+			};
+		}
+
+		protected virtual void ProcessTransactions<T>(string tenant, IStrategy<T> strategy, IEnumerable<Func<transactionData>> transactions, ConcurrentBag<Exception> exceptions)
+		{
+			var parentThreadName = Thread.CurrentThread.Name;
+			Parallel.ForEach(
+				transactions,
+				new ParallelOptions { MaxDegreeOfParallelism = strategy.ParallelTransactions },
+				data =>
+				{
+					try
+					{
+						if (Thread.CurrentThread.Name == null)
+							Thread.CurrentThread.Name = $"{parentThreadName} #{Thread.CurrentThread.ManagedThreadId}";
+						_deadLockRetrier.RetryOnDeadlock(() => Transaction(tenant, strategy, data));
+					}
+					catch (Exception e)
+					{
+						exceptions.Add(e);
+					}
+				}
+			);
 		}
 
 		[TenantScope]
