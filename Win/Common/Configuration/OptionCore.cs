@@ -208,10 +208,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 
 
-			if (_toggleManager.IsEnabled(Toggles.Wfm_Requests_Check_Max_Seats_39937)
-				|| _toggleManager.IsEnabled(Toggles.Wfm_Requests_Configurable_BusinessRules_For_ShiftTrade_40770))
+			if (_toggleManager.IsEnabled (Toggles.Wfm_Requests_Check_Max_Seats_39937))
 			{
-				allSupportedPages.Add(new ShiftTradeSystemSettings(_toggleManager, _businessRuleConfigProvider));
+				allSupportedPages.Add (new ShiftTradeSystemSettings(_toggleManager, _businessRuleConfigProvider));
 			}
 
 			return allSupportedPages;
