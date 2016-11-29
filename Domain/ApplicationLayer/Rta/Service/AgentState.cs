@@ -18,6 +18,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public int DataSourceId { get; set; }
 		public string UserCode { get; set; }
 		public Guid PersonId { get; set; }
+
+		public string NormalizedString()
+		{
+			return $"{DataSourceId}__{UserCode}";
+		}
 	}
 
 	public class ExternalLogonForCheck : ExternalLogon

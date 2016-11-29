@@ -220,11 +220,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<BatchStateInputModel> states, Action<Exception> addException)
 			{
 				var dataSourceId = ValidateSourceId(_databaseLoader, _batch);
-				var userCodes = states.Select(x => new ExternalLogon
-				{
-					DataSourceId = dataSourceId,
-					UserCode = x.UserCode
-				});
+				var userCodes = states
+					.Select(x => new ExternalLogon
+					{
+						DataSourceId = dataSourceId,
+						UserCode = x.UserCode
+					})
+					.ToArray();
 				var agentStates = _persister.Find(userCodes, DeadLockVictim);
 
 				userCodes
@@ -264,7 +266,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<ExternalLogonForCheck> AllThings()
 			{
-				return sortExternalLogons(_things);
+				return _things.OrderBy(x => x.NormalizedString()).ToArray();
 			}
 
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogonForCheck> ids, Action<Exception> addException)
@@ -292,7 +294,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<ExternalLogon> AllThings()
 			{
-				return sortExternalLogons(_things);
+				return _things.OrderBy(x => x.NormalizedString()).ToArray();
 			}
 
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogon> ids, Action<Exception> addException)
@@ -321,7 +323,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<ExternalLogon> AllThings()
 			{
-				return sortExternalLogons(_things);
+				return _things.OrderBy(x => x.NormalizedString()).ToArray();
 			}
 
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogon> ids, Action<Exception> addException)
@@ -354,7 +356,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<ExternalLogon> AllThings()
 			{
-				return sortExternalLogons(_things);
+				return _things.OrderBy(x => x.NormalizedString()).ToArray();
 			}
 
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogon> ids, Action<Exception> addException)
@@ -416,11 +418,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			public Action<Context> UpdateAgentState { get; protected set; }
 
 			public Action<Context> Action { get; }
-		}
-
-		private static IEnumerable<T> sortExternalLogons<T>(IEnumerable<T> externalLogons) where T : ExternalLogon
-		{
-			return externalLogons.OrderBy(ex => ex.DataSourceId).ThenBy(ex => ex.UserCode).ToArray();
 		}
 
 		public class scheduleData : ScheduleState

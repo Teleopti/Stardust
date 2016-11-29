@@ -53,12 +53,10 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
 DELETE FROM [dbo].[AgentState]
-WHERE
-	PersonId = :PersonId AND
-	DataSourceIdUserCode NOT IN (:DataSourceIdUserCode)")
+WHERE PersonId = :PersonId
+AND DataSourceIdUserCode NOT IN (:DataSourceIdUserCode)")
 				.SetParameter("PersonId", model.PersonId)
-				.SetParameterList("DataSourceIdUserCode",
-					model.ExternalLogons.Select(x => $"{x.DataSourceId}__{x.UserCode}").ToArray())
+				.SetParameterList("DataSourceIdUserCode", model.ExternalLogons.Select(x => x.NormalizedString()).ToArray())
 				.ExecuteUpdate();
 
 			_unitOfWork.Current().Session()
@@ -149,7 +147,7 @@ VALUES
 						.SetParameter("Adherence", (int?)copyFrom?.Adherence)
 						.SetParameter("Schedule", copyFrom?.Schedule != null ? _serializer.SerializeObject(copyFrom.Schedule) : null, NHibernateUtil.StringClob)
 						.SetParameter("NextCheck", copyFrom?.NextCheck)
-						.SetParameter("DataSourceIdUserCode", e.DataSourceId + "__" + e.UserCode)
+						.SetParameter("DataSourceIdUserCode", e.NormalizedString())
 						.ExecuteUpdate();
 				});
 		}
@@ -293,7 +291,7 @@ AND (StateCode <> :State OR StateCode IS NULL)")
 		{
 			_deadLockVictimThrower.SetDeadLockPriority(deadLockVictim);
 
-			var dataSourceIdUserCodes = externalLogons.Select(x => $"{x.DataSourceId}__{x.UserCode}").ToArray();
+			var dataSourceIdUserCodes = externalLogons.Select(x => x.NormalizedString()).ToArray();
 			var sql = SelectAgentState + "WITH (UPDLOCK, ROWLOCK) WHERE DataSourceIdUserCode IN (:DataSourceIdUserCodes)";
 
 			return _deadLockVictimThrower.ThrowOnDeadlock(() =>
