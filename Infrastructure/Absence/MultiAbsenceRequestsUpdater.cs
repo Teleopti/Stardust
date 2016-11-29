@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				stopwatch.Start();
+				stopwatch.Restart();
 				preloadData();
 				personRequests = _personRequestRepository.Find(personRequestsIds);
 				_personRepository.FindPeople(personRequests.Select(x => x.Person.Id.GetValueOrDefault()));
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					}
 				}
 			
-				stopwatch.Start();
+				stopwatch.Restart();
 				loadDataForResourceCalculation(personRequests, aggregatedValidatorList);
 				stopwatch.Stop();
 				_feedback.SendProgress($"Done loading data for resource calculation! It took {stopwatch.Elapsed}");
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				var seniority = _arrangeRequestsByProcessOrder.GetRequestsSortedBySeniority(personRequests);
 				var firstComeFirstServe = _arrangeRequestsByProcessOrder.GetRequestsSortedByDate(personRequests);
 
-					stopwatch.Start();
+				stopwatch.Restart();
 #pragma warning disable 618
 				using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills, true))
 #pragma warning restore 618
