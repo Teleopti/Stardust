@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 					EndDateTime = TimeZoneHelper.ConvertFromUtc(x.EndDateTime, _timeZone.TimeZone()),
 					StaffingLevel = x.StaffingLevel
 				})
+				.OrderBy(o => o.StartDateTime)
 				.ToList();
 		}
 
