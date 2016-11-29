@@ -8,6 +8,7 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Infrastructure;
@@ -326,19 +327,19 @@ AND (StateCode <> :State OR StateCode IS NULL)")
 		{
 			if (string.IsNullOrEmpty(value))
 				return;
-			var arr = value.Split('_');
+			var arr = value.Split("__");
 			split.Invoke(new Tuple<int, string>(
 				int.Parse(arr[0]),
-				arr[2]
+				arr[1]
 			));
 		}
 
 		private class internalAgentState : AgentStateFound
 		{
-			public new string Schedule { set
+			public new string Schedule
 			{
-				base.Schedule = value != null ? JsonConvert.DeserializeObject<IEnumerable<ScheduledActivity>>(value) : null;
-			} }
+				set { base.Schedule = value != null ? JsonConvert.DeserializeObject<IEnumerable<ScheduledActivity>>(value) : null; }
+			}
 
 			public new int? Adherence
 			{

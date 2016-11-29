@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<BatchStateInputModel> AllThings()
 			{
-				return _batch.States.OrderBy(x => $"{_batch.SourceId}__{x.UserCode}").ToArray();
+				return _batch.States.OrderBy(x => x.UserCode).ToArray();
 			}
 
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<BatchStateInputModel> states, Action<Exception> addException)
@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<ExternalLogonForCheck> AllThings()
 			{
-				return _things.OrderBy(x => $"{x.DataSourceId}__{x.UserCode}").ToArray();
+				return sortExternalLogons(_things);
 			}
 
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogonForCheck> ids, Action<Exception> addException)
@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<ExternalLogon> AllThings()
 			{
-				return _things.OrderBy(x => $"{x.DataSourceId}__{x.UserCode}").ToArray();
+				return sortExternalLogons(_things);
 			}
 
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogon> ids, Action<Exception> addException)
@@ -321,7 +321,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<ExternalLogon> AllThings()
 			{
-				return _things.OrderBy(x => $"{x.DataSourceId}__{x.UserCode}").ToArray();
+				return sortExternalLogons(_things);
 			}
 
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogon> ids, Action<Exception> addException)
@@ -354,7 +354,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<ExternalLogon> AllThings()
 			{
-				return _things.OrderBy(x => $"{x.DataSourceId}__{x.UserCode}");
+				return sortExternalLogons(_things);
 			}
 
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<ExternalLogon> ids, Action<Exception> addException)
@@ -416,6 +416,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			public Action<Context> UpdateAgentState { get; protected set; }
 
 			public Action<Context> Action { get; }
+		}
+
+		private static IEnumerable<T> sortExternalLogons<T>(IEnumerable<T> externalLogons) where T : ExternalLogon
+		{
+			return externalLogons.OrderBy(ex => ex.DataSourceId).ThenBy(ex => ex.UserCode).ToArray();
 		}
 
 		public class scheduleData : ScheduleState
