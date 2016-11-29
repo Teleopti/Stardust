@@ -52,81 +52,9 @@
 		function create(schedule, timeLine) {
 			if (!schedule) schedule = {};
 
-			var personSchedule = {
-				PersonId: schedule.PersonId,
-				Name: schedule.Name,
-				Date: schedule.Date,
-				Timezone: schedule.Timezone,
-				IsFullDayAbsence: schedule.IsFullDayAbsence,
-				Merge: merge,
-				MergeExtra: mergeExtra,
-				IsSelected: false,
-				AllowSwap: function() {
-					return !this.IsFullDayAbsence;
-				},
-				ContractTime: formatContractTimeMinutes(schedule.ContractTimeMinutes),
-				ScheduleStartTime: function() {
-					var start = this.Date;
-					angular.forEach(this.Shifts,
-						function(shift) {
-							if (shift.Date === start && shift.Projections.length > 0) {
-								start = shift.Projections[0].Start;
-							}
-						});
-					return moment(start).format("YYYY-MM-DDTHH:mm:00");
-				},
-				ScheduleEndTime: function() {
-					var scheduleDate = this.Date;
-					var end = moment(schedule.Date).endOf('day');
-					angular.forEach(this.Shifts,
-						function(shift) {
-							if (shift.Date == scheduleDate && shift.Projections.length > 0) {
-								end = moment(shift.Projections[shift.Projections.length - 1].Start)
-									.add(shift.Projections[shift.Projections.length - 1].Minutes, 'minutes');
-							}
-						});
-					return end.format("YYYY-MM-DDTHH:mm:00");
-				},
-				AbsenceCount: function() {
-					var shiftsForCurrentDate = this.Shifts.filter(function(shift) {
-							return this.Date === shift.Date;
-						},
-						this);
-					if (shiftsForCurrentDate.length > 0) {
-						return shiftsForCurrentDate[0].AbsenceCount();
-					}
-					return 0;
-				},
-				ActivityCount: function() {
-					var shiftsForCurrentDate = this.Shifts.filter(function(shift) {
-							return this.Date === shift.Date;
-						},
-						this);
-					if (shiftsForCurrentDate.length > 0) {
-						return shiftsForCurrentDate[0].ActivityCount();
-					}
-					return 0;
-				},
-				ShiftCategory: {
-					Name: schedule.ShiftCategory ? schedule.ShiftCategory.Name : null,
-					ShortName: schedule.ShiftCategory ? schedule.ShiftCategory.ShortName : null,
-					DisplayColor: schedule.ShiftCategory ? schedule.ShiftCategory.DisplayColor : null,
-					ContrastColor: schedule.ShiftCategory ? (getContrastColor(schedule.ShiftCategory.DisplayColor)) : null
-				},
-				ViewRange: timeLine.MaximumViewRange,
-				Shifts: [],
-				DayOffs: [],
-				ExtraShifts: [],
-				MultiplicatorDefinitionSetIds: schedule.MultiplicatorDefinitionSetIds
-			};
+			var personSchedule = new PersonSchedule(schedule, timeLine);
 
-			var shiftVm = {
-				Date: schedule.Date,				
-				ProjectionTimeRange: getProjectionTimeRange(schedule),
-				AbsenceCount: getPersonAbsencesCount,
-				ActivityCount: getPersonActivitiesCount,
-				Parent: personSchedule
-			};
+			var shiftVm = new ShiftViewModel(schedule, personSchedule, timeLine);
 			var projectionVms = createProjections(schedule.Projection, timeLine, shiftVm);
 			shiftVm.Projections = projectionVms;
 
@@ -136,7 +64,7 @@
 			if (dayOffVm !== undefined) personSchedule.DayOffs = [dayOffVm];
 			
 			return personSchedule;
-		};
+		}
 
 		function createProjections(projections, timeline, shiftVm) {
 			if (projections == undefined || projections.length === 0) {
@@ -181,14 +109,8 @@
 			
 			var displayEnd = endTimeMinutes <= timelineEndMinute ? endTimeMinutes : timelineEndMinute;
 			var length = (displayEnd - displayStart) * lengthPercentPerMinute;
-			
-			var dayOffVm = {
-				DayOffName: dayOff.DayOffName,
-				StartPosition: startPosition,
-				Length: length,
-				Parent: personSchedule
-			};
 
+			var dayOffVm = new DayOffViewModel(dayOff.DayOffName, startPosition, length, personSchedule);
 			return dayOffVm;
 		}
 
@@ -248,32 +170,7 @@
 			
 			var length = lengthMinutes * timeLine.LengthPercentPerMinute;
 
-			var shiftProjectionVm = {
-				ParentPersonAbsences: projection.ParentPersonAbsences,
-				ShiftLayerIds: projection.ShiftLayerIds,
-				StartPosition: startPosition,
-				Length: length,
-				IsOvertime: projection.IsOvertime,
-				Color: projection.Color,
-				Description: projection.Description,
-				Start: projection.Start,
-				Selected: false,
-				ToggleSelection: function () {
-					this.Selected = !this.Selected;
-				},
-				Minutes: projectionMinutes,
-				UseLighterBorder: useLightColor(projection.Color),
-				SameTypeAsLast: false,
-				TimeSpan: function () {
-					var start = moment(this.Start);
-					var end = moment(this.Start).add(this.Minutes, 'minute');
-					if (!start.isSame(end, 'day')) {
-						return $filter('date')(start.toDate(), 'short') + ' - ' + $filter('date')(end.toDate(), 'short');
-					}
-					return $filter('date')(start.toDate(), 'shortTime') + ' - ' + $filter('date')(end.toDate(), 'shortTime');
-				},
-				Parent: shiftVm
-			};
+			var shiftProjectionVm = new ProjectionViewModel(projection, shiftVm, length, startPosition);
 
 			return shiftProjectionVm;
 		}
@@ -326,6 +223,130 @@
 
 		function formatContractTimeMinutes(minutes) {
 			return Math.floor(minutes / 60) + ':' + (minutes % 60 === 0 ? '00':minutes%60);
+		}
+
+		function PersonSchedule(schedule, timeLine) {
+			this.ContractTime = formatContractTimeMinutes(schedule.ContractTimeMinutes);
+			this.Date = schedule.Date;
+			this.DayOffs = [];
+			this.ExtraShifts = [];
+			this.IsFullDayAbsence = schedule.IsFullDayAbsence;
+			this.MultiplicatorDefinitionSetIds = schedule.MultiplicatorDefinitionSetIds;
+			this.Name = schedule.Name;
+			this.PersonId = schedule.PersonId;
+			if (schedule.ShiftCategory)
+				this.ShiftCategory = new ShiftCategory(schedule.ShiftCategory);
+			this.Shifts = [];
+			this.Timezone = schedule.Timezone;
+			this.ViewRange = timeLine.MaximumViewRange;
+		}
+
+		PersonSchedule.prototype.AbsenceCount = function () {
+			var shiftsOnCurrentDate = this.Shifts.filter(function (shift) {
+				return this.Date === shift.Date;
+			}, this);
+			if (shiftsOnCurrentDate.length > 0) {
+				return shiftsOnCurrentDate[0].AbsenceCount();
+			}
+			return 0;
+		};
+
+		PersonSchedule.prototype.ActivityCount = function () {
+			var shiftsOnCurrentDate = this.Shifts.filter(function (shift) {
+				return this.Date === shift.Date;
+			}, this);
+			if (shiftsOnCurrentDate.length > 0) {
+				return shiftsOnCurrentDate[0].ActivityCount();
+			}
+			return 0;
+		};
+
+		PersonSchedule.prototype.AllowSwap = function () {
+			return !this.IsFullDayAbsence;
+		};
+
+		PersonSchedule.prototype.IsSelected = false;
+
+		PersonSchedule.prototype.Merge = merge;
+
+		PersonSchedule.prototype.MergeExtra = mergeExtra;
+
+		PersonSchedule.prototype.ScheduleEndTime = function () {
+			var scheduleDate = this.Date;
+			var end = moment(scheduleDate).endOf('day');
+			for (var i = 0; i < this.Shifts.length; i++) {
+				if (this.Shifts[i].Date === scheduleDate && this.Shifts[i].Projections.length > 0) {
+					end = moment(this.Shifts[i].Projections[this.Shifts[i].Projections.length - 1].Start)
+						.add(this.Shifts[i].Projections[this.Shifts[i].Projections.length - 1].Minutes, 'minutes');
+				}
+			}
+			return end.format('YYYY-MM-DDTHH:mm:00');
+		};
+
+		PersonSchedule.prototype.ScheduleStartTime = function () {
+			var start = this.Date;
+			for (var i = 0; i < this.Shifts.length; i++) {
+				if (this.Shifts[i].Date === start && this.Shifts[i].Projections.length > 0) {
+					start = this.Shifts[i].Projections[0].Start;
+				}
+			}
+			return moment(start).format('YYYY-MM-DDTHH:mm:00');
+		};
+
+		function ShiftViewModel(schedule, personSchedule, timeLine) {
+			this.Date = schedule.Date;
+			this.Parent = personSchedule;
+			this.Projections = [];
+			this.ProjectionTimeRange = getProjectionTimeRange(schedule);
+		}
+
+		ShiftViewModel.prototype.AbsenceCount = getPersonAbsencesCount;
+
+		ShiftViewModel.prototype.ActivityCount = getPersonActivitiesCount;
+
+		function ProjectionViewModel(projection, shiftVm, length, startPosition) {
+			this.Color = projection.Color;
+			this.Description = projection.Description;
+			this.IsOvertime = projection.IsOvertime;
+			this.Length = length;
+			this.Minutes = projection.Minutes;
+			this.Parent = shiftVm;
+			this.ParentPersonAbsences = projection.ParentPersonAbsences;
+			this.ShiftLayerIds = projection.ShiftLayerIds;
+			this.Start = projection.Start;
+			this.StartPosition = startPosition;
+			this.UseLighterBorder = useLightColor(projection.Color);
+		}
+
+		ProjectionViewModel.prototype.SameTypeAsLast = false;
+
+		ProjectionViewModel.prototype.Selected = false;
+
+		ProjectionViewModel.prototype.TimeSpan = function () {
+			var start = moment(this.Start);
+			var end = moment(this.Start).add(this.Minutes, 'minute');
+			if (!start.isSame(end, 'day')) {
+				return $filter('date')(start.toDate(), 'short') + ' - ' + $filter('date')(end.toDate(), 'short');
+			}
+			return $filter('date')(start.toDate(), 'shortTime') + ' - ' + $filter('date')(end.toDate(), 'shortTime');
+		};
+
+		ProjectionViewModel.prototype.ToggleSelection = function () {
+			this.Selected = !this.Selected;
+		};
+
+		function DayOffViewModel(name, startPosition, length, parent) {
+			this.DayOffName = name;
+			this.StartPosition = startPosition;
+			this.Length = length;
+			this.Parent = parent;
+		}
+
+		function ShiftCategory(shiftCategory) {
+			this.Name = shiftCategory.Name || null;
+			this.ShortName = shiftCategory.ShortName || null;
+			this.DisplayColor = shiftCategory.DisplayColor || null;
+			this.ContrastColor = getContrastColor(this.DisplayColor);
 		}
 
 		return personScheduleFactory;
