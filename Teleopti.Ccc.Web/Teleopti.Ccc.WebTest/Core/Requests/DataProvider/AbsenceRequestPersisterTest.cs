@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AbsenceWaitlisting;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -11,6 +14,7 @@ using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -35,11 +39,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public IScheduleStorage ScheduleStorage;
 		public ICurrentScenario CurrentScenario;
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
-		public IQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
+		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
 		public IAbsenceRequestPersister Persister;
 		public AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest AbsenceRequestFormToPersonRequest;
 		public RequestsViewModelMappingProfile RequestsViewModelMappingProfile;
 		public FakeCommandDispatcher CommandDispatcher;
+		public FakeToggleManager ToggleManager;
 
 		private static readonly DateTime nowTime = new DateTime(2016, 10, 18, 8, 0, 0, DateTimeKind.Utc);
 		private DateOnly _today = new DateOnly(nowTime);
@@ -338,7 +343,138 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			request.IsWaitlisted.Should().Be(isWaitlisted);
 			request.DenyReason.Should().Be(isWaitlisted ? Resources.RequestWaitlistedReasonPersonAccount : Resources.RequestDenyReasonPersonAccount);
 		}
-		
+
+		[Test]
+		public void ShouldUpdatePeriodForQueuedRequest()
+		{
+			ToggleManager.Enable(Toggles.Wfm_Requests_ApprovingModifyRequests_41930);
+			Mapper.Configuration.AddProfile(new AbsenceRequestFormMappingProfile(() => AbsenceRequestFormToPersonRequest));
+			Mapper.Configuration.AddProfile(new DateTimePeriodFormMappingProfile(() => UserTimeZone));
+			Mapper.Configuration.AddProfile(RequestsViewModelMappingProfile);
+			_absence = createAbsence();
+			var newPersonRequest = setupSimpleAbsenceRequest();
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest()
+			{
+				PersonRequest = newPersonRequest.Id.GetValueOrDefault(),
+				StartDateTime = newPersonRequest.Request.Period.StartDateTime,
+				EndDateTime = newPersonRequest.Request.Period.EndDateTime
+			});
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today.AddDays(1),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(23)),
+				EndTime = new TimeOfDay(TimeSpan.FromMinutes(21))
+			});
+			form.EntityId = newPersonRequest.Id.GetValueOrDefault();
+			Persister.Persist(form);
+
+			var queuedRequest = QueuedAbsenceRequestRepository.LoadAll().FirstOrDefault();
+			queuedRequest.StartDateTime.Should().Be.EqualTo(_today.Date.Add(TimeSpan.FromHours(23)));
+			queuedRequest.EndDateTime.Should().Be.EqualTo(_today.Date.AddDays(1).Add(TimeSpan.FromMinutes(21)));
+		}
+
+		[Test]
+		public void ShouldNotUpdatePeriodForQueuedRequestIfToggleIsDisabled()
+		{
+			ToggleManager.Disable(Toggles.Wfm_Requests_ApprovingModifyRequests_41930);
+			Mapper.Configuration.AddProfile(new AbsenceRequestFormMappingProfile(() => AbsenceRequestFormToPersonRequest));
+			Mapper.Configuration.AddProfile(new DateTimePeriodFormMappingProfile(() => UserTimeZone));
+			Mapper.Configuration.AddProfile(RequestsViewModelMappingProfile);
+			_absence = createAbsence();
+			var newPersonRequest = setupSimpleAbsenceRequest();
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest()
+			{
+				PersonRequest = newPersonRequest.Id.GetValueOrDefault(),
+				StartDateTime = newPersonRequest.Request.Period.StartDateTime,
+				EndDateTime = newPersonRequest.Request.Period.EndDateTime
+			});
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today.AddDays(1),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(23)),
+				EndTime = new TimeOfDay(TimeSpan.FromMinutes(21))
+			});
+			form.EntityId = newPersonRequest.Id.GetValueOrDefault();
+			Persister.Persist(form);
+
+			var queuedRequest = QueuedAbsenceRequestRepository.LoadAll().FirstOrDefault();
+			queuedRequest.StartDateTime.Should().Be.EqualTo(_today.Date.Add(TimeSpan.FromHours(8)));
+			queuedRequest.EndDateTime.Should().Be.EqualTo(_today.Date.Add(TimeSpan.FromHours(17)));
+		}
+
+		[Test]
+		public void ShouldNotUpdateQueuedRequestPeriodIfItsSameAsRequest()
+		{
+			ToggleManager.Enable(Toggles.Wfm_Requests_ApprovingModifyRequests_41930);
+			Mapper.Configuration.AddProfile(new AbsenceRequestFormMappingProfile(() => AbsenceRequestFormToPersonRequest));
+			Mapper.Configuration.AddProfile(new DateTimePeriodFormMappingProfile(() => UserTimeZone));
+			Mapper.Configuration.AddProfile(RequestsViewModelMappingProfile);
+			_absence = createAbsence();
+			var newPersonRequest = setupSimpleAbsenceRequest();
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest()
+			{
+				PersonRequest = newPersonRequest.Id.GetValueOrDefault(),
+				StartDateTime = newPersonRequest.Request.Period.StartDateTime,
+				EndDateTime = newPersonRequest.Request.Period.EndDateTime
+			});
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
+			});
+			form.EntityId = newPersonRequest.Id.GetValueOrDefault();
+			Persister.Persist(form);
+
+			var queuedRequest = QueuedAbsenceRequestRepository.LoadAll().FirstOrDefault();
+			queuedRequest.StartDateTime.Should().Be.EqualTo(_today.Date.Add(TimeSpan.FromHours(8)));
+			queuedRequest.EndDateTime.Should().Be.EqualTo(_today.Date.Add(TimeSpan.FromHours(17)));
+			QueuedAbsenceRequestRepository.UpdateRequestPeriodWasCalled.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldThrowInvalidOperationIfQueuedRequestIsSent()
+		{
+			Assert.Throws<InvalidOperationException>(tryPersist);
+		}
+
+		private void tryPersist()
+		{
+			ToggleManager.Enable(Toggles.Wfm_Requests_ApprovingModifyRequests_41930);
+			Mapper.Configuration.AddProfile(new AbsenceRequestFormMappingProfile(() => AbsenceRequestFormToPersonRequest));
+			Mapper.Configuration.AddProfile(new DateTimePeriodFormMappingProfile(() => UserTimeZone));
+			Mapper.Configuration.AddProfile(RequestsViewModelMappingProfile);
+			_absence = createAbsence();
+			var newPersonRequest = setupSimpleAbsenceRequest();
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest()
+			{
+				PersonRequest = newPersonRequest.Id.GetValueOrDefault(),
+				StartDateTime = newPersonRequest.Request.Period.StartDateTime,
+				EndDateTime = newPersonRequest.Request.Period.EndDateTime,
+				Sent = DateTime.Now
+			});
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today.AddDays(1),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(23)),
+				EndTime = new TimeOfDay(TimeSpan.FromMinutes(21))
+			});
+			form.EntityId = newPersonRequest.Id.GetValueOrDefault();
+			Persister.Persist(form);
+		}
+
 		private void setWorkflowControlSet(int? absenceRequestExpiredThreshold = null, bool autoGrant = false
 			, bool usePersonAccountValidator = false, bool autoDeny = false, bool absenceRequestWaitlistEnabled = false)
 		{
@@ -411,6 +547,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private IAbsence createAbsence()
 		{
 			var absence = AbsenceFactory.CreateAbsence("holiday").WithId();
+			absence.Description = new Description("hliday");
 			AbsenceRepository.Add(absence);
 			return absence;
 		}

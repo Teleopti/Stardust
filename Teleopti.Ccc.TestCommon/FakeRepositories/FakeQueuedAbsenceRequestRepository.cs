@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IUnitOfWork UnitOfWork { get; }
+		public bool UpdateRequestPeriodWasCalled { get; set; }
 
 		public IQueuedAbsenceRequest Get(Guid personRequestId)
 		{
@@ -85,6 +86,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				if (request.Sent != null && request.Sent.GetValueOrDefault() < DateTime.UtcNow.AddMinutes(-minutes))
 					request.Sent = null;
 			}
+		}
+
+		public int UpdateRequestPeriod(Guid id, DateTimePeriod period)
+		{
+			
+			var queuedReq = _queuedRequests.FirstOrDefault(x => x.PersonRequest == id);
+			if (queuedReq.Sent.HasValue)
+				return 0;
+			queuedReq.StartDateTime = period.StartDateTime;
+			queuedReq.EndDateTime = period.EndDateTime;
+			return 1;
 		}
 	}
 }

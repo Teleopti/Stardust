@@ -58,5 +58,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			sqlQuery.SetDateTime("timeStamp", DateTime.UtcNow.AddMinutes(-minutes));
 			sqlQuery.ExecuteUpdate();
 		}
+
+		public int UpdateRequestPeriod(Guid id, DateTimePeriod period)
+		{
+			var hql = @"update [dbo].[QueuedAbsenceRequest] set StartDateTime = :startDateTime,
+																EndDateTime = :endDateTime
+						where [Sent] is null and PersonRequest = :id" ;
+			var sqlQuery = Session.CreateSQLQuery(hql);
+			sqlQuery.SetDateTime("startDateTime",period.StartDateTime);
+			sqlQuery.SetDateTime("endDateTime", period.EndDateTime);
+			sqlQuery.SetGuid("id", id);
+			return sqlQuery.ExecuteUpdate();
+		}
 	}
 }

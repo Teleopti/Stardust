@@ -10,5 +10,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void Remove(DateTime sent);
 		void Send(List<Guid> requestIds, DateTime timeStamp);
 		void CheckAndUpdateSent(int minutes);
+		int UpdateRequestPeriod(Guid id, DateTimePeriod period);
 	}
 }

@@ -164,5 +164,66 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				request.Sent.Should().Not.Be.EqualTo(null);
 			});
 		}
+
+		[Test]
+		public void ShouldUpdatePeriodIfNotSent()
+		{
+			var startDateTime = new DateTime(2008, 7, 10, 10, 0, 0, DateTimeKind.Utc);
+			var endDateTime = new DateTime(2008, 7, 14, 9, 0, 0, DateTimeKind.Utc);
+			var period = new DateTimePeriod(startDateTime,endDateTime);
+			var personRequest = new PersonRequest(_person);
+			var absenceRequest = new AbsenceRequest(_absence ?? _absence, period);
+			personRequest.Request = absenceRequest;
+			personRequest.Pending();
+
+			PersistAndRemoveFromUnitOfWork(personRequest);
+
+			var queued = new QueuedAbsenceRequest
+			{
+				PersonRequest = personRequest.Id.GetValueOrDefault(),
+				StartDateTime = absenceRequest.Period.StartDateTime,
+				EndDateTime = absenceRequest.Period.EndDateTime,
+				Created = personRequest.CreatedOn.GetValueOrDefault()
+			};
+			PersistAndRemoveFromUnitOfWork(queued);
+
+			var target = new QueuedAbsenceRequestRepository(CurrUnitOfWork);
+			var updatedRows = target.UpdateRequestPeriod(queued.PersonRequest, new DateTimePeriod(startDateTime.AddHours(1),endDateTime.AddHours(1)));
+			updatedRows.Should().Be.EqualTo(1);
+			var queuedRequest = target.LoadAll().FirstOrDefault();
+			queuedRequest.StartDateTime.Should().Be.EqualTo(startDateTime.AddHours(1));
+			queuedRequest.EndDateTime.Should().Be.EqualTo(endDateTime.AddHours(1));
+		}
+
+		[Test]
+		public void ShouldNotUpdatePeriodIfSent()
+		{
+			var startDateTime = new DateTime(2008, 7, 10, 10, 0, 0, DateTimeKind.Utc);
+			var endDateTime = new DateTime(2008, 7, 14, 9, 0, 0, DateTimeKind.Utc);
+			var period = new DateTimePeriod(startDateTime, endDateTime);
+			var personRequest = new PersonRequest(_person);
+			var absenceRequest = new AbsenceRequest(_absence ?? _absence, period);
+			personRequest.Request = absenceRequest;
+			personRequest.Pending();
+
+			PersistAndRemoveFromUnitOfWork(personRequest);
+
+			var queued = new QueuedAbsenceRequest
+			{
+				PersonRequest = personRequest.Id.GetValueOrDefault(),
+				StartDateTime = absenceRequest.Period.StartDateTime,
+				EndDateTime = absenceRequest.Period.EndDateTime,
+				Created = personRequest.CreatedOn.GetValueOrDefault(),
+				Sent = DateTime.Now
+			};
+			PersistAndRemoveFromUnitOfWork(queued);
+
+			var target = new QueuedAbsenceRequestRepository(CurrUnitOfWork);
+			var updatedRows =  target.UpdateRequestPeriod(queued.PersonRequest, new DateTimePeriod(startDateTime.AddHours(1), endDateTime.AddHours(1)));
+			updatedRows.Should().Be.EqualTo(0);
+			var queuedRequest = target.LoadAll().FirstOrDefault();
+			queuedRequest.StartDateTime.Should().Be.EqualTo(startDateTime);
+			queuedRequest.EndDateTime.Should().Be.EqualTo(endDateTime);
+		}
 	}
 }
