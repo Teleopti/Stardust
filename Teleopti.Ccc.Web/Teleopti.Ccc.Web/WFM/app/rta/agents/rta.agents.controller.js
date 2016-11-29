@@ -88,7 +88,7 @@
 				$scope.skillAreas = [];
 				$scope.skillsLoaded = false;
 				$scope.skillAreasLoaded = false;
-				$scope.teams = [];
+				$scope.selectedTeams = [];
 				toggleService.togglesLoaded.then(function() {
 					$scope.showOrgSelection = toggleService.RTA_QuicklyChangeAgentsSelection_40610;
 					if($scope.showOrgSelection)
@@ -169,9 +169,10 @@
 				};
 
 				$scope.goToAgents = function() {
+
 					var selection = {};
 					var selectedSiteIds = $scope.selectedSites();
-					var selectedTeamIds = $scope.selectedTeams();
+					var selectedTeamIds = $scope.selectedTeams;
 					if (selectedSiteIds.length > 0) {
 						selection['siteIds'] = selectedSiteIds;
 						//selection['teamIds'] = [];
@@ -219,58 +220,67 @@
 					});
 				}
 
-				$scope.selectedTeams = function() {
-					return flatten(
-						$scope.sites.map(function(s) {
-							var selectedTeamIds = s.Teams.filter(function(team) {
-									return team.isChecked == true;
-								})
-								.map(function(team) {
-									return team.Id;
-								});
-
-							if(s.Teams.length == selectedTeamIds.length)
-								selectedTeamIds =[];
-							return selectedTeamIds;
-						})
-					);
+				$scope.updateTeams = function() {
+					$scope.sites.forEach(function(site){
+						var selectedTeam = site.Teams.find(function(team){
+							return $scope.teamsSelected.indexOf(team.Id) > -1;
+						});
+							selectedTeam.isChecked = selectedTeam ? true : false;
+					});
 				}
+
+				$scope.updateAllTeams = function(siteId) {
+					var selectedSite = $scope.sites.find(function(site){
+						return site.Id = siteId;
+					});
+
+					selectedSite.Teams.forEach(function(team){
+						team.isChecked = selectedSite.isChecked;
+					});
+				}
+
+				// $scope.selectedTeams = function() {
+				// 	return flatten(
+				// 		$scope.sites.map(function(s) {
+				// 			var selectedTeamIds = s.Teams.filter(function(team) {
+				// 					return team.isChecked == true;
+				// 				})
+				// 				.map(function(team) {
+				// 					return team.Id;
+				// 				});
+				//
+				// 			if(s.Teams.length == selectedTeamIds.length)
+				// 				selectedTeamIds =[];
+				// 			return selectedTeamIds;
+				// 		})
+				// 	);
+				// }
 
 				function flatten(collection) {
 					return [].concat.apply([], collection)
 				}
 
-				$scope.selectionChanged = function(siteId, teamId) {
-					var selectedSite = $scope.sites.find(function(site) {
-						return site.Id == siteId;
-					});
-
-							var selectedTeam = selectedSite.Teams.find(function(team) {
-								return team.Id === teamId;
-							});
-
-							selectedTeam.isChecked = !selectedTeam.isChecked;
-
-							var teamsSelected = selectedSite.Teams.filter(function(team) {
-								return team.isChecked === true;
-							});
-
-						selectedSite.isChecked = false;
-
-						if(teamsSelected.length === selectedSite.Teams.length)
-							selectedSite.isChecked = true;
-				}
+				// $scope.selectionChanged = function(siteId, teamId) {
+				// 	var selectedSite = $scope.sites.find(function(site) {
+				// 		return site.Id == siteId;
+				// 	});
+				//
+				// 			var selectedTeam = selectedSite.Teams.find(function(team) {
+				// 				return team.Id === teamId;
+				// 			});
+				//
+				// 			selectedTeam.isChecked = !selectedTeam.isChecked;
+				//
+				// 			var teamsSelected = selectedSite.Teams.filter(function(team) {
+				// 				return team.isChecked === true;
+				// 			});
+				//
+				// 		selectedSite.isChecked = false;
+				//
+				// 		if(teamsSelected.length === selectedSite.Teams.length)
+				// 			selectedSite.isChecked = true;
+				// }
 				// org selection ends here
-
-				$scope.updateAllTeams = function(siteId) {
-					 var selectedSite = $scope.sites.find(function(site) {
-						 return site.Id === siteId;
-					 });
-					 selectedSite.Teams.forEach(function(team) {
-					 	team.isChecked = selectedSite.isChecked;
-					 });
-
-				}
 
 				$scope.$watch('pause', function() {
 					if ($scope.pause) {
@@ -298,6 +308,31 @@
 								return b.TimeInAlarm - a.TimeInAlarm;
 							});
 						}
+					}
+				});
+
+				$scope.setSiteToChecked = function() {
+					$scope.sites.forEach(function(site){
+						site.Teams.forEach(function(team){
+								team.isChecked = $scope.teamsSelected.indexOf(team.Id) > -1;
+						});
+
+						var checkedTeam = site.Teams.filter(function(team){
+							return team.isChecked === true;
+						});
+						if(checkedTeam.length === site.Teams.length) {
+							site.isChecked = true;
+						}
+						else if(checkedTeam.length === 0) {
+							site.isChecked = false;
+						}
+
+					});
+				};
+
+				$scope.$watch('teamsSelected', function(newValue, oldValue) {
+					if (newValue !== oldValue) {
+						$scope.setSiteToChecked();
 					}
 				});
 
