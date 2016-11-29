@@ -111,14 +111,14 @@
 			</div>
 			<div ng-hide="showIncluded" class="animate-show con-row">
 				<div class="con-flex">
-					<div class="wfm-chip-wrap" ng-repeat="skill in selectedSkillArea.Skills | orderBy : Name" ng-class="{'chip-disabled':skill.DoDisplayData === false}">
+					<div class="wfm-chip-wrap" ng-repeat="skill in selectedSkillArea.Skills | orderBy : Name" ng-class="{'chip-disabled':!skill.DoDisplayData}">
 						<span class="wfm-chip" ng-click="openSkillFromArea(skill)">
-							<span class="chip-handle" ng-class="{'chip-warning':skill.DoDisplayData === false}">
-								<i class="mdi" ng-class="{'mdi-phone':skill.DoDisplayData === undefined, 'mdi-alert':skill.DoDisplayData === false}"></i>
+							<span class="chip-handle" ng-class="{'chip-warning':!skill.DoDisplayData}">
+								<i class="mdi" ng-class="{'mdi-phone':skill.DoDisplayData, 'mdi-alert':!skill.DoDisplayData}"></i>
 							</span>
 							<md-tooltip>
-								<span ng-if="skill.DoDisplayData === undefined">{{'SkillTypeInboundTelephony' | translate}}</span>
-								<span ng-if="skill.DoDisplayData === false">{{'UnsupportedSkill' | translate}}</span>
+								<span ng-if="skill.DoDisplayData">{{'SkillTypeInboundTelephony' | translate}}</span>
+								<span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
 							</md-tooltip>
 							<span class="chip-text">{{skill.Name}}</span>
 						</span>

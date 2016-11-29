@@ -181,6 +181,9 @@
 							item.UnsupportedSkills.push($scope.skills[j])
 							item.Skills[i].DoDisplayData = false;
 						}
+						else if(item.Skills[i].Id === $scope.skills[j].Id && $scope.skills[j].DoDisplayData === true){
+							item.Skills[i].DoDisplayData = true;
+						}
 					}
 				}
 				if (item.UnsupportedSkills.length > 0) {
