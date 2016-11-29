@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -27,23 +25,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
 			businessRuleProvider.Stub(x => x.GetBusinessRulesForShiftTradeRequest(stateHolder, true))
 				.IgnoreArguments().Return(businessRules);
-
-			var specifications = new List<IShiftTradeSpecification>
-			{
-				new ShiftTradeAbsenceSpecification(),
-				new ShiftTradeDateSpecification(),
-				new ShiftTradeMeetingSpecification()
-			};
-
-			var lightSpecifications = new List<IShiftTradeLightSpecification>
-			{
-				new ShiftTradeSkillSpecification()
-			};
-
-			var target = new BusinessRuleConfigProvider(businessRuleProvider, specifications, lightSpecifications, stateHolder);
+			
+			var target = new BusinessRuleConfigProvider(businessRuleProvider, stateHolder);
 			var result = target.GetDefaultConfigForShiftTradeRequest().ToList();
 
-			Assert.AreEqual(businessRules.Count + specifications.Count + lightSpecifications.Count - 2, result.Count);
+			Assert.AreEqual(businessRules.Count - 2, result.Count);
 			Assert.IsNull(result.FirstOrDefault(x => x.BusinessRuleType == ruleToRemove1.FullName));
 			Assert.IsNull(result.FirstOrDefault(x => x.BusinessRuleType == ruleToRemove2.FullName));
 
@@ -54,26 +40,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Assert.IsTrue(string.CompareOrdinal(config.FriendlyName, rule.Description) == 0);
 				Assert.IsTrue(config.Enabled);
 				Assert.IsTrue(config.HandleOptionOnFailed == RequestHandleOption.Pending);
-			}
-
-			foreach (var specification in specifications)
-			{
-				var config = result.FirstOrDefault(x => x.BusinessRuleType == specification.GetType().FullName);
-				Assert.IsNotNull(config);
-				// TODO: Set friendly name for specifications
-				//Assert.IsTrue(string.CompareOrdinal(config.FriendlyName, specification.FriendlyName) == 0);
-				Assert.IsTrue(config.Enabled);
-				Assert.IsTrue(config.HandleOptionOnFailed == RequestHandleOption.AutoDeny);
-			}
-
-			foreach (var liteSpecification in lightSpecifications)
-			{
-				var config = result.FirstOrDefault(x => x.BusinessRuleType == liteSpecification.GetType().FullName);
-				Assert.IsNotNull(config);
-				// TODO: Set friendly name for specifications
-				//Assert.IsTrue(string.CompareOrdinal(config.FriendlyName, liteSpecification.FriendlyName) == 0);
-				Assert.IsTrue(config.Enabled);
-				Assert.IsTrue(config.HandleOptionOnFailed == RequestHandleOption.AutoDeny);
 			}
 		}
 	}
