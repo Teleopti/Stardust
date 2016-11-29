@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -16,7 +17,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 {
 	[EnabledBy(Toggles.Wfm_ImportSchedule_41247)]
-	public class ImportScheduleHandler :
+	public class ImportScheduleHandler : ScheduleManagementHandlerBase,
 		IHandleEvent<ImportScheduleEvent>,
 		IRunOnHangfire
 	{
@@ -57,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 				var timeZone = person.PermissionInformation.DefaultTimeZone();
 				var importPeriod = new DateTimePeriod(timeZone.SafeConvertTimeToUtc(period.StartDate.Date), timeZone.SafeConvertTimeToUtc(period.EndDate.Date).AddHours(23).AddMinutes(59));
 
-				importSchedules(sourceScheduleDictionary, toScenario, person, period, importPeriod);
+				importSchedules(sourceScheduleDictionary, targetScheduleDictionary, toScenario, person, period, importPeriod);
 			});
 
 			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId,
@@ -65,9 +66,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 				@event.TotalMessages);
 		}
 
-		private void importSchedules(IScheduleDictionary scheduleDictionary, IScenario toScenario, IPerson person, DateOnlyPeriod period, DateTimePeriod importPeriod)
+		private void importSchedules(IScheduleDictionary sourceScheduleDictionary, IScheduleDictionary targetScheduleDictionary, IScenario toScenario, IPerson person, DateOnlyPeriod period, DateTimePeriod importPeriod)
 		{
-			var scheduleDays = scheduleDictionary.SchedulesForPeriod(period, person);
+			var scheduleDays = sourceScheduleDictionary.SchedulesForPeriod(period, person);
 			var added = new HashSet<Guid>();
 
 			foreach (var scheduleDay in scheduleDays)
@@ -77,26 +78,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 					var exportableType = scheduleData as IExportToAnotherScenario;
 					var changedScheduleData = exportableType?.CloneAndChangeParameters(new ScheduleParameters(toScenario, person,
 							importPeriod));
+					if (changedScheduleData is PersonAssignment)
+					{
+						foreach (var targetAssignment in GetTargetSchedulesForDay(targetScheduleDictionary, period, person, scheduleDay.DateOnlyAsPeriod.DateOnly).OfType<PersonAssignment>())
+						{
+							var entity = _scheduleStorage.Get(targetAssignment.GetType(), targetAssignment.Id.GetValueOrDefault());
+							_scheduleStorage.Remove(entity);
+							_currentUnitOfWork.Current().PersistAll();
+						}
+
+					}
 					var absence = changedScheduleData as PersonAbsence;
 					if (absence != null)
 					{
-						var absencePeriod = absence.Period;
-						var shouldChange = false;
-						if (absencePeriod.StartDateTime > importPeriod.EndDateTime || absencePeriod.EndDateTime < importPeriod.StartDateTime)
-							continue;
-						if (absencePeriod.StartDateTime < importPeriod.StartDateTime)
-						{
-							absencePeriod = absencePeriod.ChangeStartTime(importPeriod.StartDateTime - absencePeriod.StartDateTime);
-							shouldChange = true;
-						}
-						if (absencePeriod.EndDateTime > importPeriod.EndDateTime)
-						{
-							absencePeriod = absencePeriod.ChangeEndTime(importPeriod.EndDateTime - absencePeriod.EndDateTime);
-							shouldChange = true;
-						}
+						if (HandleAbsenceSplits(importPeriod, absence)) continue;
 
-						if (shouldChange)
-							absence.ModifyPersonAbsencePeriod(absencePeriod, null);
+						foreach (var targetAbsence in GetTargetSchedulesForDay(targetScheduleDictionary, period, person, scheduleDay.DateOnlyAsPeriod.DateOnly)
+									.OfType<PersonAbsence>())
+						{
+							var merged = targetAbsence.Merge(absence);
+							if (merged != null)
+							{
+								var entity = _scheduleStorage.Get(targetAbsence.GetType(), targetAbsence.Id.GetValueOrDefault());
+								_scheduleStorage.Remove(entity);
+								_currentUnitOfWork.Current().PersistAll();
+								_scheduleStorage.Add(merged);
+								added.Add(scheduleData.Id.GetValueOrDefault());
+							}
+
+						}
 					}
 					if (changedScheduleData != null && !added.Contains(scheduleData.Id.GetValueOrDefault()))
 					{
@@ -107,5 +117,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 				}
 			}
 		}
+
+		
 	}
 }

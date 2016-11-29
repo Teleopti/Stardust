@@ -193,6 +193,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
     <Compile Include="ApplicationLayer\Archiving\ArchiveScheduleHandler.cs" />
     <Compile Include="ApplicationLayer\Archiving\ImportScheduleHandler.cs" />
+    <Compile Include="ApplicationLayer\Archiving\ScheduleManagementHandlerBase.cs" />
     <Compile Include="ApplicationLayer\AttemptsAttribute.cs" />
     <Compile Include="ApplicationLayer\Commands\AddOvertimeActivityCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddOvertimeActivityCommandHandler.cs" />

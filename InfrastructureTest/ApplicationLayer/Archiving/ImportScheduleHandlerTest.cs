@@ -52,15 +52,15 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 		{
 			AddDefaultTypesToRepositories();
 
-			var oldCategory = new ShiftCategory("Existing");
-			var oldActivity = new Activity("Existing");
+			var category = new ShiftCategory("Existing");
+			var activity = new Activity("Existing");
 			var assignment = new PersonAssignment(Person, TargetScenario, Period.StartDate);
-			assignment.SetShiftCategory(oldCategory);
-			assignment.AddActivity(oldActivity, new TimePeriod(8, 15));
+			assignment.SetShiftCategory(category);
+			assignment.AddActivity(activity, new TimePeriod(8, 15));
 			WithUnitOfWork.Do(() =>
 			{
-				ShiftCategoryRepository.Add(oldCategory);
-				ActivityRepository.Add(oldActivity);
+				ShiftCategoryRepository.Add(category);
+				ActivityRepository.Add(activity);
 				ScheduleStorage.Add(assignment);
 			});
 
@@ -68,9 +68,160 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 
 			WithUnitOfWork.Do(() =>
 			{
-				var result = PersonAssignmentRepository.LoadAll().FirstOrDefault(x => x.BelongsToScenario(TargetScenario));
+				var result = PersonAssignmentRepository.LoadAll().SingleOrDefault(x => x.BelongsToScenario(TargetScenario));
 				result.Should().Not.Be.Null();
 				result.Should().Be.EqualTo(assignment);
+			});
+
+			VerifyJobResultIsUpdated();
+		}
+
+		[Test]
+		public void ShouldOverwriteAShiftInTargetScenarioWhenSourceHasOtherShift()
+		{
+			AddDefaultTypesToRepositories();
+
+			var existingCategory = new ShiftCategory("Existing");
+			var existingActivity = new Activity("Existing");
+			var existingAssignment = new PersonAssignment(Person, TargetScenario, Period.StartDate);
+			existingAssignment.SetShiftCategory(existingCategory);
+			existingAssignment.AddActivity(existingActivity, new TimePeriod(8, 15));
+
+			var newCategory = new ShiftCategory("Existing");
+			var newActivity = new Activity("Existing");
+			var newAssignment = new PersonAssignment(Person, SourceScenario, Period.StartDate);
+			newAssignment.SetShiftCategory(newCategory);
+			newAssignment.AddActivity(newActivity, new TimePeriod(8, 15));
+
+			WithUnitOfWork.Do(() =>
+			{
+				ShiftCategoryRepository.Add(existingCategory);
+				ActivityRepository.Add(existingActivity);
+				ScheduleStorage.Add(existingAssignment);
+
+				ShiftCategoryRepository.Add(newCategory);
+				ActivityRepository.Add(newActivity);
+				ScheduleStorage.Add(newAssignment);
+			});
+
+			WithUnitOfWork.Do(() => Target.Handle(createImportEvent()));
+
+			WithUnitOfWork.Do(() =>
+			{
+				var result = PersonAssignmentRepository.LoadAll().SingleOrDefault(x => x.BelongsToScenario(TargetScenario));
+				result.Should().Not.Be.Null();
+			});
+
+			VerifyJobResultIsUpdated();
+		}
+
+		[Test]
+		public void ShouldMergeAShiftInTargetScenarioWhenSourceHasAbsence()
+		{
+			AddDefaultTypesToRepositories();
+
+			var existingCategory = new ShiftCategory("Existing");
+			var existingActivity = new Activity("Existing");
+			var existingAssignment = new PersonAssignment(Person, TargetScenario, Period.StartDate);
+			existingAssignment.SetShiftCategory(existingCategory);
+			existingAssignment.AddActivity(existingActivity, new TimePeriod(8, 15));
+
+			var newAbsence = AbsenceFactory.CreateAbsence("gone");
+			var personAbsence = new PersonAbsence(Person, SourceScenario, new AbsenceLayer(newAbsence,
+					new DateTimePeriod(Period.StartDate.Date.ToUniversalTime(), (Period.StartDate.Date + TimeSpan.FromDays(1)).ToUniversalTime())));
+
+			WithUnitOfWork.Do(() =>
+			{
+				ShiftCategoryRepository.Add(existingCategory);
+				ActivityRepository.Add(existingActivity);
+				ScheduleStorage.Add(existingAssignment);
+
+				AbsenceRepository.Add(newAbsence);
+				ScheduleStorage.Add(personAbsence);
+			});
+
+			WithUnitOfWork.Do(() => Target.Handle(createImportEvent()));
+
+			WithUnitOfWork.Do(() =>
+			{
+				var assignment = PersonAssignmentRepository.LoadAll().SingleOrDefault(x => x.BelongsToScenario(TargetScenario));
+				assignment.Should().Not.Be.Null();
+				assignment.Should().Be.EqualTo(existingAssignment);
+
+				var absence = PersonAbsenceRepository.LoadAll().SingleOrDefault(x => x.BelongsToScenario(TargetScenario));
+				absence.Should().Not.Be.Null();
+			});
+
+			VerifyJobResultIsUpdated();
+		}
+
+		[Test]
+		public void ShouldMergeAnAbsenceInTargetScenarioWhenSourceHasAssignment()
+		{
+			AddDefaultTypesToRepositories();
+
+			var newCategory = new ShiftCategory("Existing");
+			var newActivity = new Activity("Existing");
+			var newAssignment = new PersonAssignment(Person, SourceScenario, Period.StartDate);
+			newAssignment.SetShiftCategory(newCategory);
+			newAssignment.AddActivity(newActivity, new TimePeriod(8, 15));
+
+			var existingAbsence = AbsenceFactory.CreateAbsence("gone");
+			var personAbsence = new PersonAbsence(Person, TargetScenario, new AbsenceLayer(existingAbsence,
+					new DateTimePeriod(Period.StartDate.Date.ToUniversalTime(), (Period.StartDate.Date + TimeSpan.FromDays(1)).ToUniversalTime())));
+
+			WithUnitOfWork.Do(() =>
+			{
+				ShiftCategoryRepository.Add(newCategory);
+				ActivityRepository.Add(newActivity);
+				ScheduleStorage.Add(newAssignment);
+
+				AbsenceRepository.Add(existingAbsence);
+				ScheduleStorage.Add(personAbsence);
+			});
+
+			WithUnitOfWork.Do(() => Target.Handle(createImportEvent()));
+
+			WithUnitOfWork.Do(() =>
+			{
+				var assignment = PersonAssignmentRepository.LoadAll().SingleOrDefault(x => x.BelongsToScenario(TargetScenario));
+				assignment.Should().Not.Be.Null();
+
+				var absence = PersonAbsenceRepository.LoadAll().SingleOrDefault(x => x.BelongsToScenario(TargetScenario));
+				absence.Should().Not.Be.Null();
+				absence.Should().Be.EqualTo(personAbsence);
+			});
+
+			VerifyJobResultIsUpdated();
+		}
+
+		[Test]
+		[Ignore("Currently overwrites with same data.")]
+		public void ShouldIgnoreTheSameAbsenceAsExistingInTarget()
+		{
+			AddDefaultTypesToRepositories();
+
+			var existingAbsence = AbsenceFactory.CreateAbsence("gone");
+			var existingPersonAbsence = new PersonAbsence(Person, TargetScenario, new AbsenceLayer(existingAbsence,
+					new DateTimePeriod(Period.StartDate.Date.ToUniversalTime(), (Period.StartDate.Date + TimeSpan.FromDays(1)).ToUniversalTime())));
+			var newPersonAbsence = new PersonAbsence(Person, SourceScenario, new AbsenceLayer(existingAbsence,
+					new DateTimePeriod(Period.StartDate.Date.ToUniversalTime(), (Period.StartDate.Date + TimeSpan.FromDays(1)).ToUniversalTime())));
+
+
+			WithUnitOfWork.Do(() =>
+			{
+				AbsenceRepository.Add(existingAbsence);
+				ScheduleStorage.Add(existingPersonAbsence);
+				ScheduleStorage.Add(newPersonAbsence);
+			});
+
+			WithUnitOfWork.Do(() => Target.Handle(createImportEvent()));
+
+			WithUnitOfWork.Do(() =>
+			{
+				var absence = PersonAbsenceRepository.LoadAll().SingleOrDefault(x => x.BelongsToScenario(TargetScenario));
+				absence.Should().Not.Be.Null();
+				absence.Should().Be.EqualTo(existingPersonAbsence);
 			});
 
 			VerifyJobResultIsUpdated();

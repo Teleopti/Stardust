@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 {
 	[EnabledBy(Toggles.Wfm_ArchiveSchedule_41498)]
-	public class ArchiveScheduleHandler : 
+	public class ArchiveScheduleHandler : ScheduleManagementHandlerBase,
 		IHandleEvent<ArchiveScheduleEvent>, 
 		IRunOnHangfire
 	{
@@ -122,23 +122,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 					var absence = changedScheduleData as PersonAbsence;
 					if (absence != null)
 					{
-						var absencePeriod = absence.Period;
-						var shouldChange = false;
-						if (absencePeriod.StartDateTime > archivePeriod.EndDateTime || absencePeriod.EndDateTime < archivePeriod.StartDateTime)
-							continue;
-						if (absencePeriod.StartDateTime < archivePeriod.StartDateTime)
-						{
-							absencePeriod = absencePeriod.ChangeStartTime(archivePeriod.StartDateTime - absencePeriod.StartDateTime);
-							shouldChange = true;
-						}
-						if (absencePeriod.EndDateTime > archivePeriod.EndDateTime)
-						{
-							absencePeriod = absencePeriod.ChangeEndTime(archivePeriod.EndDateTime - absencePeriod.EndDateTime);
-							shouldChange = true;
-						}
-							
-						if (shouldChange)
-							absence.ModifyPersonAbsencePeriod(absencePeriod, null);
+						if (HandleAbsenceSplits(archivePeriod, absence)) continue;
 					}
 					if (changedScheduleData != null && !added.Contains(scheduleData.Id.GetValueOrDefault()))
 					{
