@@ -308,15 +308,18 @@ AND (StateCode <> :State OR StateCode IS NULL)")
 		{
 			_deadLockVictimThrower.SetDeadLockPriority(deadLockVictim);
 
-			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE PersonId IN (:PersonIds)";
-			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetParameterList("PersonIds", personIds)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
-				.SetReadOnly(true)
-				.List<AgentState>()
-				.GroupBy(x => x.PersonId, (guid, states) => states.First())
-				.ToArray()
-				;
+			return _deadLockVictimThrower.ThrowOnDeadlock(() =>
+			{
+				var sql = SelectAgentState + "WITH (UPDLOCK) WHERE PersonId IN (:PersonIds)";
+				return _unitOfWork.Current().Session().CreateSQLQuery(sql)
+					.SetParameterList("PersonIds", personIds)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
+					.SetReadOnly(true)
+					.List<AgentState>()
+					.GroupBy(x => x.PersonId, (guid, states) => states.First())
+					.ToArray()
+					;
+			});
 		}
 
 		private static string SelectAgentState = "SELECT * FROM [dbo].[AgentState] ";
