@@ -171,7 +171,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					logger.Warn(message);
 					_feedback.SendProgress(message);
 				}
-				_feedback.SendProgress($"Persisted request {personRequest.Id}.");
 			}
 		}
 
@@ -256,6 +255,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		private void sendRequestCommand(IPersonRequest personRequest)
 		{
+			var stopwatch = new Stopwatch();
 			if (personRequest.IsApproved || personRequest.IsDenied)
 			{
 				IRequestCommand command;
@@ -281,8 +281,9 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 						DenyOption = denyOption
 					};
 				}
+				stopwatch.Restart();
 				_commandDispatcher.Execute(command);
-
+				stopwatch.Stop();
 				if (command.ErrorMessages.Count > 0)
 				{
 					logger.Warn(command.ErrorMessages);
@@ -298,7 +299,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 						response = "approved";
 					if (command.GetType() == typeof(DenyRequestCommand))
 						response = "denied";
-					_feedback.SendProgress($"Request {personRequest.Id.GetValueOrDefault()} was succesfully {response}!");
+					_feedback.SendProgress($"Request {personRequest.Id.GetValueOrDefault()} was succesfully {response}! Execute command took {stopwatch.Elapsed}");
 				}
 			}
 		}
