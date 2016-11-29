@@ -156,8 +156,8 @@
 					var manageScheduleModel = {
 						FromScenario: fromScenario.Id,
 						ToScenario: toScenario.Id,
-						StartDate: period.startDate,
-						EndDate: period.endDate,
+						StartDate: moment(period.startDate).format('YYYY-MM-DD'),
+						EndDate: moment(period.endDate).format('YYYY-MM-DD'),
 						SelectedTeams: teamSelection
 					};
 					(vm.isImportSchedule ? ManageScheduleSrvc.runImporting : ManageScheduleSrvc.runArchiving).post({}, JSON.stringify(manageScheduleModel))
