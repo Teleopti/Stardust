@@ -88,7 +88,7 @@
 				$scope.skillAreas = [];
 				$scope.skillsLoaded = false;
 				$scope.skillAreasLoaded = false;
-				$scope.selectedTeams = [];
+				$scope.teamsSelected = [];
 				toggleService.togglesLoaded.then(function() {
 					$scope.showOrgSelection = toggleService.RTA_QuicklyChangeAgentsSelection_40610;
 					if($scope.showOrgSelection)
@@ -169,10 +169,9 @@
 				};
 
 				$scope.goToAgents = function() {
-
 					var selection = {};
 					var selectedSiteIds = $scope.selectedSites();
-					var selectedTeamIds = $scope.selectedTeams;
+					var selectedTeamIds = $scope.teamsSelected;
 					if (selectedSiteIds.length > 0) {
 						selection['siteIds'] = selectedSiteIds;
 						//selection['teamIds'] = [];
@@ -214,7 +213,19 @@
 							return team.isChecked == true;
 						});
 
-						return site.isChecked == true && ((selectedTeams.length === site.Teams.length) || selectedTeams.length == 0);
+						var siteIdToBePassed = site.isChecked == true && ((selectedTeams.length === site.Teams.length) || selectedTeams.length == 0);
+						if(siteIdToBePassed) {
+							site.Teams.forEach(function(team){
+								var index = $scope.teamsSelected.indexOf(team.Id);
+								if (index > -1) {
+									$scope.teamsSelected.splice(index, 1);
+								}
+							});
+						}
+						if(site.isChecked == true && !((selectedTeams.length === site.Teams.length) || selectedTeams.length == 0)) {
+							siteIdToBePassed = false;
+						}
+						return siteIdToBePassed;
 					}).map(function(s) {
 						return s.Id;
 					});
@@ -823,7 +834,6 @@
 					showResizer: true,
 					showPopupButton: true
 				};
-
 			}
 		]);
 })();
