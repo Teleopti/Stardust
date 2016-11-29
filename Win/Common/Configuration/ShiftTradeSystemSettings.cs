@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				{RequestHandleOption.AutoDeny, new ShiftTradeRequestHandleOptionView(RequestHandleOption.AutoDeny, Resources.Deny)},
 				{RequestHandleOption.Pending, new ShiftTradeRequestHandleOptionView(RequestHandleOption.Pending, Resources.SendToAdministrator)}
 			};
+		private IList<ShiftTradeBusinessRuleConfigView> _businessRuleConfigViews;
 
 		public ShiftTradeSystemSettings(IToggleManager toggleManager, IBusinessRuleConfigProvider businessRuleConfigProvider)
 		{
@@ -169,14 +170,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				handleOptionColumn
 			};
 
-			var businessRuleConfigViews = getShiftTradeBusinessRuleConfigViews().ToList();
-			businessRuleSettingGrid.RowCount = businessRuleConfigViews.Count;
+			_businessRuleConfigViews = getShiftTradeBusinessRuleConfigViews().ToList();
+			businessRuleSettingGrid.RowCount = _businessRuleConfigViews.Count;
 			businessRuleSettingGrid.Height = businessRuleSettingGrid.RowCount * 20;
+			businessRuleSettingGrid.CheckBoxClick += businessRuleSettingGridCheckBoxClick;
 			businessRuleSettingGrid.QueryCellInfo += businessRuleSettingGridQueryCellInfo;
 
 			_gridColumnHelper = new SFGridColumnGridHelper<ShiftTradeBusinessRuleConfigView>(businessRuleSettingGrid,
 							   new ReadOnlyCollection<SFGridColumnBase<ShiftTradeBusinessRuleConfigView>>(gridColumns),
-							   businessRuleConfigViews, false)
+							   _businessRuleConfigViews, false)
 			{ AllowExtendedCopyPaste = true };
 		}
 
@@ -186,30 +188,73 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				return;
 
 			var ruleName = businessRuleSettingGrid[e.RowIndex, 1].CellValue.ToString();
-			var ruleConfig = _shiftTradeSettings.BusinessRuleConfigs.FirstOrDefault(c => c.FriendlyName == ruleName);
+			var ruleConfig = _businessRuleConfigViews.FirstOrDefault(c => c.Name == ruleName);
 			if (ruleConfig == null)
 				return;
 
 			e.Style.Enabled = ruleConfig.Enabled;
-			e.Handled = true;
+		}
+
+		private void businessRuleSettingGridCheckBoxClick(object sender, GridCellClickEventArgs e)
+		{
+			if (e.ColIndex != 2)
+				return;
+
+			var oldValue = false;
+			if (!bool.TryParse(businessRuleSettingGrid[e.RowIndex, e.ColIndex].CellValue.ToString(), out oldValue))
+				return;
+
+			var ruleName = businessRuleSettingGrid[e.RowIndex, 1].CellValue.ToString();
+			var ruleConfig = _businessRuleConfigViews.FirstOrDefault(c => c.Name == ruleName);
+			if (ruleConfig == null)
+				return;
+
+			if (oldValue)
+			{
+				ruleConfig.HandleOptionOnFailed = null;
+			}
+			else
+			{
+				var defaultBusinessRuleConfigs = getDefaultBusinessRuleConfigs();
+				var defaultHandleOption = defaultBusinessRuleConfigs.FirstOrDefault(f => f.FriendlyName == ruleName)?
+					.HandleOptionOnFailed.GetValueOrDefault(RequestHandleOption.Pending);
+				ruleConfig.HandleOptionOnFailed = _shiftTradeRequestHandleOptionViews[defaultHandleOption.Value];
+			}
+			businessRuleSettingGrid.RefreshRange(GridRangeInfo.Cell(e.RowIndex, e.ColIndex + 1));
 		}
 
 		private IEnumerable<ShiftTradeBusinessRuleConfigView> getShiftTradeBusinessRuleConfigViews()
 		{
-			if (_shiftTradeSettings.BusinessRuleConfigs == null)
-			{
-				_shiftTradeSettings.BusinessRuleConfigs =
-					_businessRuleConfigProvider.GetDefaultConfigForShiftTradeRequest().Select(s=>(ShiftTradeBusinessRuleConfig)s).ToArray();
-			}
+			loadBusinessRuleConfigs();
 
 			var businessRuleConfigViews = _shiftTradeSettings.BusinessRuleConfigs.Select
 				(b =>
 					new ShiftTradeBusinessRuleConfigView(b)
 					{
-						HandleOptionOnFailed = _shiftTradeRequestHandleOptionViews[b.HandleOptionOnFailed]
+						HandleOptionOnFailed = b.Enabled ? _shiftTradeRequestHandleOptionViews[b.HandleOptionOnFailed.Value] : null
 					});
 			return businessRuleConfigViews;
 		}
+
+		private void loadBusinessRuleConfigs()
+		{
+			var defaultBusinessRuleConfigs = getDefaultBusinessRuleConfigs();
+
+			if (_shiftTradeSettings.BusinessRuleConfigs == null)
+				_shiftTradeSettings.BusinessRuleConfigs = new ShiftTradeBusinessRuleConfig[] { };
+
+			var businessRuleConfigList = new List<ShiftTradeBusinessRuleConfig>(_shiftTradeSettings.BusinessRuleConfigs);
+			foreach (var defaultConfig in defaultBusinessRuleConfigs)
+			{
+				if (_shiftTradeSettings.BusinessRuleConfigs.All(b => b.BusinessRuleType != defaultConfig.BusinessRuleType))
+				{
+					businessRuleConfigList.Add(defaultConfig);
+				}
+			}
+
+			_shiftTradeSettings.BusinessRuleConfigs = businessRuleConfigList.ToArray();
+		}
+
 
 		private void chkEnableMaxSeats_CheckedChanged(object sender, EventArgs e)
 		{
@@ -228,8 +273,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void buttonResetRule_Click(object sender, EventArgs e)
 		{
 			_shiftTradeSettings.BusinessRuleConfigs = null;
-			var shiftTradeBusinessRuleConfigViews = getShiftTradeBusinessRuleConfigViews();
-			_gridColumnHelper.SetSourceList(shiftTradeBusinessRuleConfigViews.ToList());
+			_businessRuleConfigViews = getShiftTradeBusinessRuleConfigViews().ToList();
+			_gridColumnHelper.SetSourceList(_businessRuleConfigViews);
+		}
+
+		private IEnumerable<ShiftTradeBusinessRuleConfig> getDefaultBusinessRuleConfigs()
+		{
+			return _businessRuleConfigProvider.GetDefaultConfigForShiftTradeRequest()
+				.Select(s => (ShiftTradeBusinessRuleConfig) s);
 		}
 	}
 }

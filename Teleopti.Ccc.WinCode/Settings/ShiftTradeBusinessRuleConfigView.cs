@@ -30,7 +30,15 @@ namespace Teleopti.Ccc.WinCode.Settings
 			set
 			{
 				_shiftTradeRequestHandleOptionView = value;
-				_shiftTradeBusinessRuleConfig.HandleOptionOnFailed = value.RequestHandleOption;
+				if (value != null)
+				{
+					_shiftTradeBusinessRuleConfig.HandleOptionOnFailed = value.RequestHandleOption;
+				}
+				else
+				{
+					_shiftTradeBusinessRuleConfig.HandleOptionOnFailed = null;
+				}
+				
 			}
 		}
 	}

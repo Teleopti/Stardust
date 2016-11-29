@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 		public string FriendlyName { get; set; }
 
 		public bool Enabled { get; set; }
-		public RequestHandleOption HandleOptionOnFailed { get; set; }
+		public RequestHandleOption? HandleOptionOnFailed { get; set; }
 	}
 
 	[Serializable]

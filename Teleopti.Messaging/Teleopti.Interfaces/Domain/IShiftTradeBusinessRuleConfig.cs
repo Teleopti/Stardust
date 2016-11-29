@@ -8,6 +8,6 @@ namespace Teleopti.Interfaces.Domain
 
 		bool Enabled { get; set; }
 
-		RequestHandleOption HandleOptionOnFailed { get; set; }
+		RequestHandleOption? HandleOptionOnFailed { get; set; }
 	}
 }
