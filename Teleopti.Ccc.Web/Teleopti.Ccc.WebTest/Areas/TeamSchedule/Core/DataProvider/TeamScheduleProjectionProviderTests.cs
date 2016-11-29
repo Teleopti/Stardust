@@ -242,6 +242,71 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 		}
 
 		[Test]
+		public void ShouldProjectionStillBeOvertimeWhenAddingASecondSameTypeOvertimeActivityWithAnOvertimeActivityNeighboringOutsideShift()
+		{
+			IMultiplicatorDefinitionSet def = new MultiplicatorDefinitionSet("foo", MultiplicatorType.Overtime);
+
+			var date = new DateTime(2015, 01, 01, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePersonWithGuid("agent", "1");
+			var assignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(date));
+
+			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(date), person, scenario);
+			var phoneActivityPeriod = new DateTimePeriod(date.AddHours(8), date.AddHours(15));
+			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
+
+			var overTimeActivityPeriod = new DateTimePeriod(date.AddHours(15), date.AddHours(16));
+			var overTimeActivityPeriod2 = new DateTimePeriod(date.AddHours(16), date.AddHours(17));
+			var overTimeActivity = ActivityFactory.CreateActivity("Chat", Color.Red);
+
+			assignment.AddActivity(phoneActivity, phoneActivityPeriod);
+			assignment.AddOvertimeActivity(overTimeActivity, overTimeActivityPeriod, def);
+			assignment.AddOvertimeActivity(overTimeActivity, overTimeActivityPeriod2, def);
+
+			scheduleDay.Add(assignment);
+
+			var vm = target.Projection(scheduleDay, true, _commonAgentNameProvider.CommonAgentNameSettings);
+
+			vm.PersonId.Should().Be(person.Id.ToString());
+			vm.Projection.Count().Should().Be(2);
+			vm.Projection.First().Description.Should().Be(phoneActivity.Description.Name);
+			vm.Projection.Last().Description.Should().Be(overTimeActivity.Description.Name);
+			vm.Projection.Last().IsOvertime.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldProjectionStillBeOvertimeWhenAddingASecondSameTypeOvertimeActivityWithAnOvertimeActivityNeighboringWithinShift()
+		{
+			IMultiplicatorDefinitionSet def = new MultiplicatorDefinitionSet("foo", MultiplicatorType.Overtime);
+
+			var date = new DateTime(2015, 01, 01, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePersonWithGuid("agent", "1");
+			var assignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(date));
+
+			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(date), person, scenario);
+			var phoneActivityPeriod = new DateTimePeriod(date.AddHours(8), date.AddHours(15));
+			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
+
+			var overTimeActivityPeriod = new DateTimePeriod(date.AddHours(11), date.AddHours(12));
+			var overTimeActivityPeriod2 = new DateTimePeriod(date.AddHours(12), date.AddHours(13));
+			var overTimeActivity = ActivityFactory.CreateActivity("Lunch", Color.Red);
+
+			assignment.AddActivity(phoneActivity, phoneActivityPeriod);
+			assignment.AddOvertimeActivity(overTimeActivity, overTimeActivityPeriod, def);
+			assignment.AddOvertimeActivity(overTimeActivity, overTimeActivityPeriod2, def);
+
+			scheduleDay.Add(assignment);
+
+			var vm = target.Projection(scheduleDay, true, _commonAgentNameProvider.CommonAgentNameSettings);
+
+			vm.PersonId.Should().Be(person.Id.ToString());
+			vm.Projection.Count().Should().Be(3);
+			vm.Projection.First().Description.Should().Be(phoneActivity.Description.Name);
+			vm.Projection.Second().Description.Should().Be(overTimeActivity.Description.Name);
+			vm.Projection.Second().IsOvertime.Should().Be.True();
+			vm.Projection.Last().Description.Should().Be(phoneActivity.Description.Name);
+		}
+
+		[Test]
 		public void ShouldNotSplitMergedMainShiftLayer()
 		{
 			var date = new DateTime(2015, 01, 01, 0, 0, 0, DateTimeKind.Utc);

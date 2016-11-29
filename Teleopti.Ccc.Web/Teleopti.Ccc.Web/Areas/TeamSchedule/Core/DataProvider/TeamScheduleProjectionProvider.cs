@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							End = startDateTimeInUserTimeZone.Add(layer.Period.ElapsedTime()).ToGregorianDateTimeString().Replace("T", " ").Remove(16),
 							Minutes = (int)layer.Period.ElapsedTime().TotalMinutes,
 							IsOvertime = overtimeActivities != null
-									 && overtimeActivities.Any(overtime => overtime.Period.Contains(layer.Period))
+									 && overtimeActivities.Any(overtime => layer.Period.Contains(overtime.Period))
 						});
 					}
 				}
