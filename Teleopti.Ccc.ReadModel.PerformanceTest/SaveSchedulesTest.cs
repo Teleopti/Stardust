@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using log4net;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -15,6 +17,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.ReadModel.PerformanceTest
 {
@@ -37,6 +40,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 		public IScenarioRepository Scenarios;
 		public IActivityRepository Activities;
 		public IPersonAssignmentRepository Assignments;
+		private static readonly ILog logger = LogManager.GetLogger("Teleopti.TestLog");
 
 		[Test]
 		public void MeasurePerformance()
@@ -44,20 +48,22 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			Guid businessUnitId;
 			const string logOnDatasource = "TestData";
 			using (DataSource.OnThisThreadUse(logOnDatasource))
-				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
+				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.GetValueOrDefault();
 			Impersonate.Impersonate(logOnDatasource, businessUnitId);
 
 			Now.Is("2016-06-01".Utc());
 			Http.Get($"/Test/SetCurrentTime?ticks={Now.UtcDateTime().Ticks}");
 			var dates = Enumerable.Range(1, Configuration.NumberOfDays)
-				.Select(i => new DateOnly(Now.UtcDateTime().AddDays(i)));
+				.Select(i => new DateOnly(Now.UtcDateTime().AddDays(i))).ToList();
 
-			WithUnitOfWork.Do(() =>
+				WithUnitOfWork.Do(() =>
 			{
 				var scenario = Scenarios.LoadDefaultScenario();
 				var persons = Persons.LoadAll()
 					.Where(p => p.Period(new DateOnly(Now.UtcDateTime())) != null) // UserThatCreatesTestData has no period
 					.ToList();
+
+				logger.Debug($"Creating data for {persons.Count} people for {dates.Count} dates.");
 
 				var phone = Activities.LoadAll().Single(x => x.Name == "Phone");
 				persons.ForEach(person =>
@@ -72,9 +78,18 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 					});
 				});
 			});
+			logger.Debug($"Done creating data waiting for the process to finish.");
 
+			var hangfireQueueLogCancellationToken = new CancellationTokenSource();
+			Task.Run(() =>
+			{
+				NUnitSetup.LogHangfireQueues(Hangfire);
+			}, hangfireQueueLogCancellationToken.Token);
 			Hangfire.WaitForQueue();
+			hangfireQueueLogCancellationToken.Cancel();
 		}
+		
+
 	}
 	
 }

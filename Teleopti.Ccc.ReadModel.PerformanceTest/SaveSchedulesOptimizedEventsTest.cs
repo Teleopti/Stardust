@@ -1,5 +1,8 @@
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using log4net;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -40,6 +43,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 		public IActivityRepository Activities;
 		public IScheduleStorage Schedules;
 		public IScheduleDictionaryPersister Persister;
+		private static readonly ILog logger = LogManager.GetLogger("Teleopti.TestLog");
 
 		[Test]
 		public void MeasurePerformance()
@@ -47,7 +51,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			Guid businessUnitId;
 			const string logOnDatasource = "TestData";
 			using (DataSource.OnThisThreadUse(logOnDatasource))
-				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
+				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.GetValueOrDefault();
 			AsSystem.Logon(logOnDatasource, businessUnitId);
 
 			Now.Is("2016-06-01".Utc());
@@ -73,6 +77,8 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 				schedules.TakeSnapshot();
 				var phone = Activities.LoadAll().Single(x => x.Name == "Phone");
 
+				logger.Debug($"Creating data for {persons.Count} people for {dates.Length} dates.");
+
 				persons.ForEach(person =>
 				{
 					dates.ForEach(date =>
@@ -89,9 +95,16 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			});
 
 			Persister.Persist(schedules);
-			
+
+			var hangfireQueueLogCancellationToken = new CancellationTokenSource();
+			Task.Run(() =>
+			{
+				NUnitSetup.LogHangfireQueues(Hangfire);
+			}, hangfireQueueLogCancellationToken.Token);
 			Hangfire.WaitForQueue();
+			hangfireQueueLogCancellationToken.Cancel();
 		}
+		
 	}
 	
 }

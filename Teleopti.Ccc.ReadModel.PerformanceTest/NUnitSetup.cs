@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using Autofac;
+using log4net;
 using log4net.Config;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -8,6 +11,7 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Aop;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -16,6 +20,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.ReadModel.PerformanceTest
 {
@@ -109,5 +114,19 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			Toggles.ETL_SpeedUpIntradayBusinessUnit_38932,
 			Toggles.ETL_EventbasedDate_39562,
 		};
+
+		private static readonly ILog logger = LogManager.GetLogger("Teleopti.TestLog");
+		public static void LogHangfireQueues(HangfireUtilities hangfireUtilities)
+		{
+			while (true)
+			{
+				logger.Debug($"Hangfire has {hangfireUtilities.NumberOfScheduledJobs()} schedules jobs and {hangfireUtilities.NumberOfFailedJobs()} jobs failed.");
+				foreach (var queueName in Queues.OrderOfPriority())
+				{
+					logger.Debug($"{hangfireUtilities.NumberOfJobsInQueue(queueName)} jobs in queue '{queueName}'");
+				}
+				Thread.Sleep(TimeSpan.FromSeconds(60));
+			}
+		}
 	}
 }

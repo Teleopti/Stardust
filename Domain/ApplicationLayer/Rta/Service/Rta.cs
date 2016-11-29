@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -86,9 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			var now = _now.UtcDateTime();
 			return new DateTimePeriod(@event.StartDateTime, @event.EndDateTime)
-				.Intersect(new DateTimePeriod(
-					DateTime.SpecifyKind(now.AddDays(-2), DateTimeKind.Utc), 
-					DateTime.SpecifyKind(now.AddDays(2), DateTimeKind.Utc)));
+				.Intersect(new DateTimePeriod(now.AddDays(-2), now.AddDays(2)));
 		}
 	}
 

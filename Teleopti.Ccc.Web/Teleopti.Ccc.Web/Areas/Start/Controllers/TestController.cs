@@ -205,10 +205,11 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			if (time != null)
 				_mutateNow.Is(time.Utc());
 			else
-				_mutateNow.Is(new DateTime(ticks));
+				_mutateNow.Is(DateTime.SpecifyKind(new DateTime(ticks), DateTimeKind.Utc));
 
 			TouchRta();
 			TriggerRecurringJobs();
+
 
 			return View("Message", new TestMessageViewModel
 			{
