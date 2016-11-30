@@ -19,7 +19,7 @@
 				scope.$watch(function () {
 					return scope.vm.selectedDate && scope.vm.selectedDate.toDateString();
 				}, function () {
-					if (scope.vm.selectedDate != null && !isNaN(scope.vm.selectedDate.getTime()) && scope.vm.selectedDate.getTime() > 0)
+					if (scope.vm.selectedDate && isValidDate(scope.vm.selectedDate))
 						scope.vm.shortDateFormat = moment(scope.vm.selectedDate).format('YYYY-MM-DD');
 				});
 			}
@@ -31,9 +31,7 @@
 
 		vm.shortDateFormat = moment(vm.selectedDate).format('YYYY-MM-DD');
 
-		vm.currentDateString = vm.shortDateFormat;
 		vm.step = parseInt(vm.step) || 1;
-		vm.dateInputValid = true;
 
 		vm.afterDateChangeDatePicker = function () {
 			vm.toggleCalendar();
@@ -42,23 +40,20 @@
 
 		vm.onDateInputChange = function (currentDateStr) {
 
-			if (!testDateStringFormat(currentDateStr)) {
-				vm.dateInputValid = false;
+			if (!currentDateStr) {
 				return;
 			}
 
 			var newDateObj = new Date(currentDateStr);
 
-			if (!isNaN(newDateObj.getTime()) && newDateObj.getTime() > 0) {
-				newDateObj.setHours(vm.selectedDate.getHours());
-				newDateObj.setMinutes(vm.selectedDate.getMinutes());
-				vm.dateInputValid = true;
-				vm.currentDateString = currentDateStr;
-				vm.selectedDate = newDateObj;
-				vm.onDateChange && $timeout(function () { vm.onDateChange({ date: vm.selectedDate }) });
-			} else {
-				vm.dateInputValid = false;
+			if (!isValidDate(newDateObj)) {
+				return;
 			}
+
+			newDateObj.setHours(vm.selectedDate.getHours());
+			newDateObj.setMinutes(vm.selectedDate.getMinutes());
+			vm.selectedDate = newDateObj;
+			vm.onDateChange && $timeout(function () { vm.onDateChange({ date: vm.selectedDate }) });
 
 		};
 
@@ -76,13 +71,34 @@
 			vm.isCalendarOpened = !vm.isCalendarOpened;
 		};
 
-		function testDateStringFormat(dateStr) {
-			if (typeof dateStr !== 'string') {
-				return false;
-			}
-			var format = /^(\d{4})-(\d{2})-(\d{2})$/;
-			var m = dateStr.match(format);
-			return (!!m);
-		}
 	}
+
+	angular.module('wfm.teamSchedule').directive('teamsShortDate', function () {
+		return {
+			restrict: 'A',
+			require: 'ngModel',
+			link: function (scope, element) {
+				var ngModelCtrl = element.controller('ngModel');
+
+				ngModelCtrl.$validators.validFormat = function (modelValue, viewValue) {
+					var value = modelValue || viewValue;
+					return testDateStringFormat(value);
+				};
+			}
+		};
+	});
+
+	function testDateStringFormat(dateStr) {
+		if (typeof dateStr !== 'string') {
+			return false;
+		}
+		var format = /^(\d{4})-(\d{2})-(\d{2})$/;
+		var m = dateStr.match(format);
+		return (!!m);
+	}
+
+	function isValidDate(dateObj) {
+		return (!isNaN(dateObj.getTime()) && dateObj.getTime() > 0);
+	}
+
 })();
