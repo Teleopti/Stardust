@@ -14,8 +14,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldReturnCorrectDefaultBusinessRulesConfig()
 		{
-			var ruleToRemove1 = typeof(NewPersonAccountRule);
-			var ruleToRemove2 = typeof(OpenHoursRule);
+			var unconfiguraableRules = new[]
+			{
+				typeof(DataPartOfAgentDay),
+				typeof(NewPersonAccountRule),
+				typeof(OpenHoursRule)
+			};
+
+			var ruleToRemove1 = typeof(MinWeeklyRestRule);
+			var ruleToRemove2 = typeof(MinWeekWorkTimeRule);
 
 			var stateHolder = new FakeSchedulingResultStateHolder();
 			var businessRules = NewBusinessRuleCollection.All(new SchedulingResultStateHolder());
@@ -25,15 +32,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
 			businessRuleProvider.Stub(x => x.GetBusinessRulesForShiftTradeRequest(stateHolder, true))
 				.IgnoreArguments().Return(businessRules);
-			
+
+			var configurableRules = businessRules.Where(x => !unconfiguraableRules.Contains(x.GetType())
+					 && x.GetType() != ruleToRemove1 && x.GetType() != ruleToRemove2).ToArray();
+
 			var target = new BusinessRuleConfigProvider(businessRuleProvider, stateHolder);
 			var result = target.GetDefaultConfigForShiftTradeRequest().ToList();
 
-			Assert.AreEqual(businessRules.Count - 2, result.Count);
+			Assert.AreEqual(configurableRules.Length, result.Count);
 			Assert.IsNull(result.FirstOrDefault(x => x.BusinessRuleType == ruleToRemove1.FullName));
 			Assert.IsNull(result.FirstOrDefault(x => x.BusinessRuleType == ruleToRemove2.FullName));
 
-			foreach (var rule in businessRules.Where(x=>x.GetType() != ruleToRemove1 && x.GetType() != ruleToRemove2))
+			// Should not contins unconfigurable rules
+			Assert.IsNull(result.FirstOrDefault(x => x.BusinessRuleType == typeof(DataPartOfAgentDay).FullName));
+			Assert.IsNull(result.FirstOrDefault(x => x.BusinessRuleType == typeof(NewPersonAccountRule).FullName));
+			Assert.IsNull(result.FirstOrDefault(x => x.BusinessRuleType == typeof(OpenHoursRule).FullName));
+
+			foreach (var rule in configurableRules)
 			{
 				var config = result.FirstOrDefault(x => x.BusinessRuleType == rule.GetType().FullName);
 				Assert.IsNotNull(config);

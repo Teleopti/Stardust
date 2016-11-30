@@ -19,6 +19,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		public IEnumerable<IShiftTradeBusinessRuleConfig> GetDefaultConfigForShiftTradeRequest()
 		{
+			var unconfiguraableRules = new[]
+			{
+				typeof(DataPartOfAgentDay),
+				typeof(NewPersonAccountRule),
+				typeof(OpenHoursRule)
+			};
+
 			var result = new List<IShiftTradeBusinessRuleConfig>();
 
 			var allRules = _businessRuleProvider.GetBusinessRulesForShiftTradeRequest(_schedulingResultStateHolder, true);
@@ -26,14 +33,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			{
 				// Rules "removed" from NewBusinessRuleCollection will not be actual removed,
 				// Only the "HaltModify" flag will be set to false if not IsMandatory
-				result.AddRange(allRules.Where(x => x.IsMandatory || x.HaltModify)
-					.Select(x => new ShiftTradeBusinessRuleConfig
-					{
-						BusinessRuleType = x.GetType().FullName,
-						FriendlyName = x.Description,
-						Enabled = true,
-						HandleOptionOnFailed = RequestHandleOption.Pending
-					}));
+				var configurableRules =
+					allRules.Where(x => !unconfiguraableRules.Contains(x.GetType()) && (x.IsMandatory || x.HaltModify));
+				result.AddRange(configurableRules.Select(x => new ShiftTradeBusinessRuleConfig
+				{
+					BusinessRuleType = x.GetType().FullName,
+					FriendlyName = x.Description,
+					Enabled = true,
+					HandleOptionOnFailed = RequestHandleOption.Pending
+				}));
 			}
 
 			return result;
