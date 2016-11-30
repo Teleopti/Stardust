@@ -98,9 +98,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 			else
 			{
-				var allowedAbsencesForReport = person.WorkflowControlSet.AllowedAbsencesForReport.ToList();
 				var absenceId = message.AbsenceId;
-				if (!allowedAbsencesForReport.Any() || !allowedAbsencesForReport.Exists(x => x.Id == absenceId))
+				var reportedAbsence = person.WorkflowControlSet.AllowedAbsencesForReport.FirstOrDefault(a => a.Id == absenceId);
+				if (reportedAbsence == null)
 				{
 					logger.InfoFormat(
 						"No valid reportable absence found in message, nothing will be done. PersonId: {0}, Request Date: {1:yyyy-MM-dd}, Absence Id: {2}",
@@ -108,10 +108,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				}
 				else
 				{
-					var reportedAbsence =
-						allowedAbsencesForReport.Single(x => x.Id == message.AbsenceId);
-
+<<<<<<< local
 					var undoRedoContainer = new UndoRedoContainer();
+=======
+					var undoRedoContainer = new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 400);
+>>>>>>> other
 
 					loadDataForResourceCalculation(period, person);
 

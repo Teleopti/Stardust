@@ -75,15 +75,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 			if (unmergedIntervalChanges.Any())
 			{
+				var lookup = unmergedIntervalChanges.ToLookup(i => i.SkillId);
 				foreach (var interval in staffingIntervals)
 				{
 					if (interval.GetTimeSpan() > shortestPeriod)
 					{
 						var period = new DateTimePeriod(interval.StartDateTime.Utc(), interval.EndDateTime.Utc());
-						var intervalsInPeriod = unmergedIntervalChanges.Where(x => period.Intersect(new DateTimePeriod(x.StartDateTime.Utc(), x.EndDateTime.Utc())) && x.SkillId == interval.SkillId).ToList();
+						var intervalsInPeriod = lookup[interval.SkillId].Where(x => period.Intersect(new DateTimePeriod(x.StartDateTime.Utc(), x.EndDateTime.Utc()))).ToArray();
 						var sumOverstaffed = intervalsInPeriod.Sum(i => i.StaffingLevel) / interval.DivideBy(shortestPeriod);
 
-						var staffingIntervalChange = new StaffingIntervalChange()
+						var staffingIntervalChange = new StaffingIntervalChange
 						{
 							StartDateTime = interval.StartDateTime,
 							EndDateTime = interval.EndDateTime,
@@ -95,7 +96,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					}
 					else
 					{
-						var change = unmergedIntervalChanges.FirstOrDefault(x => x.SkillId == interval.SkillId && x.StartDateTime == interval.StartDateTime);
+						var change = lookup[interval.SkillId].FirstOrDefault(x => x.StartDateTime == interval.StartDateTime);
 						if (change != null)
 						{
 							mergedIntervalChanges.Add(change);

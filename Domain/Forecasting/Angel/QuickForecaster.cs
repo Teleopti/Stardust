@@ -25,11 +25,12 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		public void ForecastWorkloadsWithinSkill(ISkill skill, ForecastWorkloadInput[] workloads, DateOnlyPeriod futurePeriod, IScenario scenario)
 		{
 			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, skill, scenario);
+			var workloadLookup = workloads.ToDictionary(w => w.WorkloadId);
 
 			foreach (var workload in skill.WorkloadCollection)
 			{
-				var workloadInput = workloads.SingleOrDefault(x => x.WorkloadId == workload.Id.Value);
-				if (workloadInput != null)
+				ForecastWorkloadInput workloadInput;
+				if (workloadLookup.TryGetValue(workload.Id.Value, out workloadInput))
 				{
 					var forecastMethodId = workloadInput.ForecastMethodId;
 					if (forecastMethodId == ForecastMethodType.None)
