@@ -2,11 +2,57 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using Castle.Core.Internal;
+using Common.Logging;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
+    public class RtaToolController : ApiController
+    {
+        private readonly IAgentStatePersister _persister;
+        private readonly IPersonRepository _persons;
+        private readonly IRtaStateGroupRepository _stateGroups;
+
+        public RtaToolController(IAgentStatePersister persister, IPersonRepository persons, IRtaStateGroupRepository stateGroups)
+        {
+            _persister = persister;
+            _persons = persons;
+            _stateGroups = stateGroups;
+        }
+
+        [UnitOfWork, HttpGet, Route("RtaTool/Agents/For")]
+        public virtual IHttpActionResult GetAgents()
+        {
+            var external = _persister.FindAll();
+            var persons = _persons.FindPeople(external.Select(x => x.PersonId));
+            return Ok((from e in external
+                from p in persons
+                where p.Id == e.PersonId
+                select new
+                {
+                    Name = p.Name.FirstName + " " + p.Name.LastName,
+                    e.UserCode
+                }).ToArray());
+        }
+
+        [UnitOfWork, HttpGet, Route("RtaTool/PhoneStates/For")]
+        public virtual IHttpActionResult GetPhoneStates()
+        {
+            return Ok(_stateGroups.LoadAllCompleteGraph()
+                .Where(x => !x.StateCollection.IsNullOrEmpty())
+                .Select(x => new
+                {
+                    Name = x.Name,
+                    State = x.StateCollection.First().StateCode
+                }).ToArray());
+        }
+    }
+
+
 	public class StateController : ApiController
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
@@ -21,7 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		{
 			try
 			{
-				_rta.SaveState(
+                _rta.SaveState(
 					new StateInputModel
 					{
 						AuthenticationKey = input.AuthenticationKey,

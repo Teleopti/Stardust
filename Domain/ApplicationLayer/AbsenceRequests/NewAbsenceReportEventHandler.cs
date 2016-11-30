@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				else
 				{
 					var undoRedoContainer = new UndoRedoContainer();
-					loadDataForResourceCalculation(period, person);
+                    loadDataForResourceCalculation(period, person);
 
 					_schedulingResultStateHolder.Schedules.TakeSnapshot();
 					_schedulingResultStateHolder.Schedules.SetUndoRedoContainer(undoRedoContainer);

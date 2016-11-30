@@ -1,0 +1,33 @@
+<div>
+	<section ui-view>
+		<div class="view-header with-fab with-desc" style="margin-top:20px;">
+			<div class="view-title" style="width:96%">
+				<div class="rta-title-wrapper">
+					<h1><i class="mdi mdi-alarm"></i>Rta Tool</h1>
+				</div>
+				<div class="rta-top-buttons-wrapper">
+					<span ng-repeat="state in stateCodes"><button ng-click="sendBatches(state)" class="wfm-btn wfm-btn-primary" style="margin-bottom: 20px; width: 120px;">{{state}}</button> </span>
+				</div>
+				<div class="pull-right">
+					<div class="con-flex" ng-if="!pause" style="margin-top:10px">
+						<span class="h4">Random states</span>
+					</div>
+					<md-slider flex md-discrete min="5" max="60" step="5" ng-model="sendInterval.time" ng-hide="!pause" ng-disabled="!pause" aria-label="slider"></md-slider>
+				</div>
+			</div>
+			<div class="fab-wrapper pull-right" style="width:4%">
+				<button class="wfm-fab material-depth-1" ng-click="togglePause()">
+    			<i ng-class="{'mdi mdi-play': pause, 'mdi mdi-pause': !pause}"></i>
+    			<md-tooltip>Send random states</md-tooltip>
+    		</button>
+			</div>
+		</div>
+<div class="panel material-depth-1">
+		<div class="con-row">
+			<div class="con-flex agent-table-wrapper" style="margin-top:4px; margin-left:3px;">
+				<div ui-grid="gridOptions" ui-grid-selection class="grid"></div>
+			</div>
+		</div>
+	</section>
+</div>
+</div>
