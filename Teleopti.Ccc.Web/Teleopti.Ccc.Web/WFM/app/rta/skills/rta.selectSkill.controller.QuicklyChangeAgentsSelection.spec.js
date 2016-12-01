@@ -149,7 +149,7 @@ describe('RtaAgentsCtrl', function() {
 			.apply(function() {
 				scope.sites[0].isChecked = true;
 				scope.updateAllTeams(scope.sites[0].Id);
-				scope.teamsSelected = ['TeamGuid'];
+				//scope.teamsSelected = ['TeamGuid'];
 				scope.goToAgents();
 			});
 
@@ -158,7 +158,7 @@ describe('RtaAgentsCtrl', function() {
 		});
 	});
 
-	xit('should go to agents on sites', function() {
+	it('should go to agents on sites', function() {
 		$fakeBackend.withOrganization({
 				Id: 'LondonGuid',
 				Teams: [{

@@ -242,7 +242,7 @@
 
 				$scope.updateAllTeams = function(siteId) {
 					var selectedSite = $scope.sites.find(function(site){
-						return site.Id = siteId;
+						return site.Id === siteId;
 					});
 
 					selectedSite.Teams.forEach(function(team){
