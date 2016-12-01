@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			_businessRuleConfigViews = getShiftTradeBusinessRuleConfigViews().ToList();
 			businessRuleSettingGrid.RowCount = _businessRuleConfigViews.Count;
-			businessRuleSettingGrid.Height = businessRuleSettingGrid.RowCount * 20;
+			businessRuleSettingGrid.Height = businessRuleSettingGrid.RowCount * 25;
 			businessRuleSettingGrid.CheckBoxClick += businessRuleSettingGridCheckBoxClick;
 			businessRuleSettingGrid.QueryCellInfo += businessRuleSettingGridQueryCellInfo;
 
