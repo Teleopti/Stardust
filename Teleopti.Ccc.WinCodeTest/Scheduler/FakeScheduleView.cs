@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		public IHandleBusinessRuleResponse HandleBusinessRuleResponse { get { return _handleBusinessRuleResponse; } }
-		public void InvalidateSelectedRows(IEnumerable<IScheduleDay> schedules)
+		public void InvalidateSelectedRow(IScheduleDay schedulePart)
 		{
 		}
 

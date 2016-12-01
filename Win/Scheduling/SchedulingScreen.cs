@@ -1636,8 +1636,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripMenuItemNotifyAgentClick(object sender, EventArgs e)
 		{
 			var builder = new StringBuilder();
-			var selectedPersons = _scheduleView.AllSelectedPersons();
-			var agents = _scheduleView.AllSelectedPersons() as IList<IPerson> ?? selectedPersons.ToList();
+			var agents = _scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()).ToArray();
 
 			foreach (var agent in agents)
 			{
@@ -2269,9 +2268,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 					SikuliHelper.ShowTaskDoneView(this);
 			}
 
-			if(_schedulerState.FilteredCombinedAgentsDictionary.Values.Count == 0)
+			var agentsDictionary = _schedulerState.FilteredCombinedAgentsDictionary;
+			if (agentsDictionary.Count == 0)
+			{
 				_schedulerState.ResetFilteredPersons();
-			schedulerSplitters1.RefreshTabInfoPanels(_schedulerState.FilteredCombinedAgentsDictionary.Values);
+				agentsDictionary = _schedulerState.FilteredCombinedAgentsDictionary;
+			}
+			schedulerSplitters1.RefreshTabInfoPanels(agentsDictionary.Values);
 		}
 
 		private GridRangeInfo _lastGridSelection;
@@ -2281,14 +2284,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (e.Range == _lastGridSelection)
 				return;
 
-			if (e.Reason == GridSelectionReason.SelectRange) return;
+			//if (e.Reason == GridSelectionReason.SelectRange) return;
 			if (_scheduleView == null) return;
 
 			using (PerformanceOutput.ForOperation("Changing selection in view"))
 			{
 				if (_scheduleView != null &&
 					(e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp) ||
-					e.Reason == GridSelectionReason.ArrowKey)
+					e.Reason == GridSelectionReason.ArrowKey || e.Reason == GridSelectionReason.SelectRange)
 				{
 					SchedulerRibbonHelper.EnableScheduleButton(toolStripSplitButtonSchedule, _scheduleView, _splitterManager,
 						_teamLeaderMode, _container.Resolve<IToggleManager>());
@@ -2353,7 +2356,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			using (PerformanceOutput.ForOperation("Updating shift editor"))
 			{
                 toolStripStatusLabelNumberOfAgents.Text = LanguageResourceHelper.Translate("XXSelectedAgentsColon") + " " +
-                                                      _scheduleView.AllSelectedPersons().Count() + " " + 
+                                                      _scheduleView.NumberOfSelectedPersons() + " " + 
                                                       LanguageResourceHelper.Translate("XXAgentsColon") + " " +
                                                       _schedulerState.FilteredCombinedAgentsDictionary.Count + " " +
                                                       LanguageResourceHelper.Translate("XXLoadedColon") +
@@ -3655,9 +3658,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 				break;
 			}
 
-			if (_schedulerState.FilteredCombinedAgentsDictionary.Values.Count == 0)
+			var agentsDictionary = _schedulerState.FilteredCombinedAgentsDictionary;
+			if (agentsDictionary.Count == 0)
+			{
 				_schedulerState.ResetFilteredPersons();
-			schedulerSplitters1.RefreshTabInfoPanels(_schedulerState.FilteredCombinedAgentsDictionary.Values);
+				agentsDictionary = _schedulerState.FilteredCombinedAgentsDictionary;
+			}
+			schedulerSplitters1.RefreshTabInfoPanels(agentsDictionary.Values);
 
 			GridHelper.GridlockWriteProtected(_schedulerState, LockManager);
 
@@ -3891,7 +3898,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					}
 					if (e.Modifier != ScheduleModifier.MessageBroker)
 						enableSave();
-					if (_scheduleView != null && _scheduleView.SelectedSchedules().Count == 1)
+					if (_scheduleView != null && _scheduleView.HasOneScheduleDaySelected())
 						updateShiftEditor();
 				}
 			}
@@ -4487,7 +4494,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_grid.Refresh();
 				}
 				if (_requestView != null)
-					_requestView.FilterPersons(_schedulerState.FilteredCombinedAgentsDictionary.Select(kvp => kvp.Key));
+					_requestView.FilterPersons(_schedulerState.FilteredCombinedAgentsDictionary.Keys);
 				drawSkillGrid();
 			}
 		}
@@ -4768,7 +4775,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					exportToScenarioAccountPersister,
 					exportToScenarioAbsenceFinder,
 					SchedulerState.SchedulingResultState.AllPersonAccounts,
-					_scheduleView.AllSelectedDates()))
+					_scheduleView.AllSelectedDates(selectedSchedules)))
 			{
 				exportForm.ShowDialog(this);
 			}
@@ -6736,7 +6743,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_grid.Refresh();
 			}
 			if (_requestView != null)
-				_requestView.FilterPersons(_schedulerState.FilteredCombinedAgentsDictionary.Select(kvp => kvp.Key));
+				_requestView.FilterPersons(_schedulerState.FilteredCombinedAgentsDictionary.Keys);
 			drawSkillGrid();
 
 			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredCombinedAgentsDictionary.Values);
@@ -6775,15 +6782,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				downItem.Checked = (TimeZoneGuard.Instance.TimeZone.Equals(downItem.Tag));
 			}
+			var selectedSchedules = _scheduleView.SelectedSchedules();
 			if (_scheduleView != null && _scheduleView.HelpId == "AgentRestrictionsDetailView")
 			{
-				prepareAgentRestrictionView(null, _scheduleView, new List<IPerson>(_scheduleView.AllSelectedPersons()));
+				prepareAgentRestrictionView(null, _scheduleView, new List<IPerson>(_scheduleView.AllSelectedPersons(selectedSchedules)));
 			}
 			displayTimeZoneInfo();
 			_scheduleView.SetSelectedDateLocal(_dateNavigateControl.SelectedDate);
 			_grid.Invalidate();
 			_grid.Refresh();
-			updateSelectionInfo(_scheduleView.SelectedSchedules());
+			updateSelectionInfo(selectedSchedules);
 			updateShiftEditor();
 			drawSkillGrid();
 			reloadChart();
@@ -6805,7 +6813,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_backgroundWorkerOvertimeScheduling.IsBusy) return;
 			if (_scheduleView == null) return;
-			if (_scheduleView.AllSelectedDates().Count == 0) return;
+			if (!_scheduleView.HasSelectedSchedules()) return;
 
 			IList<IRuleSetBag> ruleSetBags;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -6834,7 +6842,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 								resolution = skillResolutionProvider.MinimumResolution(skills);
 							}
 						}
-
 					}
 
 					using (var options = new OvertimePreferencesDialog(_schedulerState.CommonStateHolder.ActiveScheduleTags,

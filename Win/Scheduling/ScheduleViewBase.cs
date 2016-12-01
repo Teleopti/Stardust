@@ -867,7 +867,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                             if (!Presenter.ClipHandlerSchedule.IsInCutMode)
                                 OnPasteCompleted();
 
-                            InvalidateSelectedRows(new List<IScheduleDay> { Presenter.ClipHandlerSchedule.ClipList[0].ClipValue });
+                            InvalidateSelectedRow(Presenter.ClipHandlerSchedule.ClipList[0].ClipValue);
                         }
                         catch (DayOffOutsideScheduleException dayOffOutside)
                         {
@@ -962,10 +962,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         public void OnPasteCompleted()
         {
-            // Copy to a temporary variable to be thread-safe.
-            EventHandler<EventArgs> temp = ViewPasteCompleted;
-            if (temp != null)
-                temp(this, EventArgs.Empty);
+            ViewPasteCompleted?.Invoke(this, EventArgs.Empty);
         }
 
         public void ValidatePersons(IEnumerable<IPerson> listPersons)
@@ -975,15 +972,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 																					Presenter.SchedulerState.SchedulingResultState.GetRulesToRun());
         }
 
-        public  virtual void InvalidateSelectedRows(IEnumerable<IScheduleDay> schedules)
-        {
-            foreach (IScheduleDay schedulePart in schedules)
-            {
-                _grid.InvalidateRange(GridRangeInfo.Row(GetRowForAgent(schedulePart.Person)));
-            }
-        }
+	    public virtual void InvalidateSelectedRow(IScheduleDay schedulePart)
+	    {
+		    _grid.InvalidateRange(GridRangeInfo.Row(GetRowForAgent(schedulePart.Person)));
+	    }
 
-        public int CalculateColHeadersWidth()
+	    public int CalculateColHeadersWidth()
         {
             int width = 0;
 
@@ -1001,8 +995,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
 				TheGrid.CurrentCell.MoveTo(TheGrid.CurrentCell.RowIndex, column);
             	TheGrid.CurrentCell.ScrollInView(GridScrollCurrentCellReason.MoveTo);
-            }
-                
+            }  
         }
 
         public virtual DateOnly SelectedDateLocal()
@@ -1072,7 +1065,32 @@ namespace Teleopti.Ccc.Win.Scheduling
             return selectedSchedules;
         }
 
-        public IList<IScheduleDay> SelectedSchedules()
+	    public bool HasOneScheduleDaySelected()
+	    {
+		    var rangeList = GridHelper.GetGridSelectedRanges(_grid, true);
+		    foreach (GridRangeInfo range in rangeList)
+		    {
+			    if (!range.IsCells) continue;
+			    return range.Height == 1 && range.Width == 1;
+		    }
+		    return false;
+	    }
+
+	    public bool HasSelectedSchedules()
+	    {
+		    var rangeList = GridHelper.GetGridSelectedRanges(_grid, true);
+		    foreach (GridRangeInfo range in rangeList)
+		    {
+			    if (!range.IsCells) continue;
+			    if (range.Height > 0 && range.Width > 0)
+			    {
+				    return true;
+			    }
+		    }
+		    return false;
+	    }
+
+	    public IList<IScheduleDay> SelectedSchedules()
         {
             var rangeList = GridHelper.GetGridSelectedRanges(_grid, true);
             var selectedSchedules = new List<IScheduleDay>();
@@ -1249,11 +1267,18 @@ namespace Teleopti.Ccc.Win.Scheduling
             var extractor = new PersonListExtractorFromScheduleParts();
 			return extractor.ExtractPersons(selectedSchedules);
         }
-
-        public virtual IEnumerable<IPerson> AllSelectedPersons()
-        {
-            return AllSelectedPersons(SelectedSchedules());
-        }
+		
+	    public int NumberOfSelectedPersons()
+	    {
+		    var selectedRows = new HashSet<int>();
+			GridRangeInfoList rangeList = GridHelper.GetGridSelectedRanges(_grid, true);
+		    foreach (GridRangeInfo gridRangeInfo in rangeList)
+		    {
+				if (!gridRangeInfo.IsCells) continue;
+			    Enumerable.Range(gridRangeInfo.Top, gridRangeInfo.Height).ForEach(r => selectedRows.Add(r));
+		    }
+		    return selectedRows.Count;
+	    }
 
         public virtual void AddSelectedSchedulesInColumnToList(GridRangeInfo range, int colIndex, List<IScheduleDay> selectedSchedules)
 		{
@@ -1264,6 +1289,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!localDate.HasValue)
 				return;
 
+			var agentCount = Presenter.SchedulerState.FilteredCombinedAgentsDictionary.Count;
+			var persons = Presenter.SchedulerState.FilteredCombinedAgentsDictionary.Values.ToArray();
 			var toAdd = new List<IScheduleDay>();
 			for (int j = range.Top; j <= range.Bottom; j++)
             {
@@ -1272,14 +1299,16 @@ namespace Teleopti.Ccc.Win.Scheduling
                     continue;
 
                 IPerson agent = null;
-	            if (rowExcludingHeaders >= Presenter.SchedulerState.FilteredCombinedAgentsDictionary.Count)
+	            if (rowExcludingHeaders >= agentCount)
 	            {
-		            if (Presenter.SchedulerState.FilteredCombinedAgentsDictionary.Count > 0)
-			            agent = Presenter.SchedulerState.FilteredCombinedAgentsDictionary.ElementAt(0).Value;
+		            if (agentCount > 0)
+		            {
+			            agent = persons[0];
+		            }
 	            }
 	            else
 	            {
-		            agent = Presenter.SchedulerState.FilteredCombinedAgentsDictionary.ElementAt(rowExcludingHeaders).Value;
+		            agent = persons[rowExcludingHeaders];
 	            }
 
 	            if (agent != null)

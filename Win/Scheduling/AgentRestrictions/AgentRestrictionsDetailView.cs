@@ -176,20 +176,15 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			return Presenter.SelectedPeriod.DateOnlyPeriod.StartDate;
 		}
 
-		public override void InvalidateSelectedRows(IEnumerable<IScheduleDay> schedules)
+		public override void InvalidateSelectedRow(IScheduleDay schedulePart)
 		{
-			if(schedules == null) throw new ArgumentNullException("schedules");
+			if (schedulePart == null) throw new ArgumentNullException(nameof(schedulePart));
 
-			var personsToReload = new HashSet<IPerson>();
-			foreach (IScheduleDay schedulePart in schedules)
+			Point point = GetCellPositionForAgentDay(schedulePart.Person, schedulePart.DateOnlyAsPeriod.DateOnly);
+
+			if (point.X != -1 && point.Y != -1)
 			{
-				personsToReload.Add(schedulePart.Person);
-				Point point = GetCellPositionForAgentDay(schedulePart.Person, schedulePart.DateOnlyAsPeriod.DateOnly);
-
-				if (point.X != -1 && point.Y != -1)
-				{
-					TheGrid.InvalidateRange(GridRangeInfo.Row(point.X));
-				}
+				TheGrid.InvalidateRange(GridRangeInfo.Row(point.X));
 			}
 		}
 
@@ -301,7 +296,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 				OnPasteCompleted();
 
-				InvalidateSelectedRows(new List<IScheduleDay> { Presenter.ClipHandlerSchedule.ClipList[0].ClipValue });
+				InvalidateSelectedRow(Presenter.ClipHandlerSchedule.ClipList[0].ClipValue);
 			}
 		}
 	}

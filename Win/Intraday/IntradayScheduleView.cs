@@ -103,15 +103,12 @@ namespace Teleopti.Ccc.Win.Intraday
 			return new List<DateOnly>();
 	    }
 
-	    public void InvalidateSelectedRows(IEnumerable<IScheduleDay> schedules)
-        {
-            foreach (IScheduleDay schedulePart in schedules)
-            {
-                RefreshRangeForAgentPeriod(schedulePart.Person,new DateTimePeriod());
-            }
-        }
-       
-        /// <summary>
+	    public void InvalidateSelectedRow(IScheduleDay schedulePart)
+	    {
+		    RefreshRangeForAgentPeriod(schedulePart.Person, new DateTimePeriod());
+	    }
+
+	    /// <summary>
         /// Gets a list with selected schedules for current column
         /// </summary>
         /// <returns></returns>

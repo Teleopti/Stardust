@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         bool IsRightToLeft { get; }
         bool IsOverviewColumnsHidden { get; }
         IHandleBusinessRuleResponse HandleBusinessRuleResponse { get; }
-        void InvalidateSelectedRows(IEnumerable<IScheduleDay> schedules);
+        void InvalidateSelectedRow(IScheduleDay schedulePart);
         void OnPasteCompleted();
         GridControl TheGrid { get; }
 		
