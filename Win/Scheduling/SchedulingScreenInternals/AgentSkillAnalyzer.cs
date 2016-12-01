@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;

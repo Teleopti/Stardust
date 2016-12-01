@@ -1,5 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.Islands;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {

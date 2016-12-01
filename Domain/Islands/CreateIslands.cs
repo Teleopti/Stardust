@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.DayOffPlanning
+namespace Teleopti.Ccc.Domain.Islands
 {
 	public class CreateIslands
 	{
