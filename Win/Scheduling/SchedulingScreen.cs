@@ -2284,14 +2284,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (e.Range == _lastGridSelection)
 				return;
 
-			//if (e.Reason == GridSelectionReason.SelectRange) return;
+			if (e.Reason == GridSelectionReason.SelectRange) return;
 			if (_scheduleView == null) return;
 
 			using (PerformanceOutput.ForOperation("Changing selection in view"))
 			{
 				if (_scheduleView != null &&
 					(e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp) ||
-					e.Reason == GridSelectionReason.ArrowKey || e.Reason == GridSelectionReason.SelectRange)
+					e.Reason == GridSelectionReason.ArrowKey)
 				{
 					SchedulerRibbonHelper.EnableScheduleButton(toolStripSplitButtonSchedule, _scheduleView, _splitterManager,
 						_teamLeaderMode, _container.Resolve<IToggleManager>());
@@ -6742,8 +6742,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_scheduleView.ResizeGridColumnsToFit();
 				_grid.Refresh();
 			}
-			if (_requestView != null)
-				_requestView.FilterPersons(_schedulerState.FilteredCombinedAgentsDictionary.Keys);
+			_requestView?.FilterPersons(_schedulerState.FilteredCombinedAgentsDictionary.Keys);
 			drawSkillGrid();
 
 			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredCombinedAgentsDictionary.Values);
