@@ -40,13 +40,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var result = target.GetDefaultConfigForShiftTradeRequest().ToList();
 
 			Assert.AreEqual(configurableRules.Length, result.Count);
-			Assert.IsNull(result.FirstOrDefault(x => x.BusinessRuleType == ruleToRemove1.FullName));
-			Assert.IsNull(result.FirstOrDefault(x => x.BusinessRuleType == ruleToRemove2.FullName));
 
-			// Should not contins unconfigurable rules
-			Assert.IsNull(result.FirstOrDefault(x => x.BusinessRuleType == typeof(DataPartOfAgentDay).FullName));
-			Assert.IsNull(result.FirstOrDefault(x => x.BusinessRuleType == typeof(NewPersonAccountRule).FullName));
-			Assert.IsNull(result.FirstOrDefault(x => x.BusinessRuleType == typeof(OpenHoursRule).FullName));
+			// Should not contins unconfigurable rules and removed rules
+			var rulesShouldNotExists = unconfiguraableRules.Select(x => x.FullName).ToList();
+			rulesShouldNotExists.Add(ruleToRemove1.FullName);
+			rulesShouldNotExists.Add(ruleToRemove2.FullName);
+			Assert.IsTrue(result.All(x => !rulesShouldNotExists.Contains(x.BusinessRuleType)));
 
 			foreach (var rule in configurableRules)
 			{
