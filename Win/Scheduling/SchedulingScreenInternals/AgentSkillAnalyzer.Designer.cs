@@ -44,7 +44,7 @@
 			this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItemRemoveSkill = new System.Windows.Forms.ToolStripMenuItem();
-			this.listView3 = new System.Windows.Forms.ListView();
+			this.listViewAgents = new System.Windows.Forms.ListView();
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -165,6 +165,7 @@
 			this.listViewSkillInSkillGroup.TabIndex = 1;
 			this.listViewSkillInSkillGroup.UseCompatibleStateImageBehavior = false;
 			this.listViewSkillInSkillGroup.View = System.Windows.Forms.View.Details;
+			this.listViewSkillInSkillGroup.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewSkillInSkillGroupColumnClick);
 			// 
 			// columnHeaderSkills
 			// 
@@ -213,23 +214,24 @@
 			this.toolStripMenuItemRemoveSkill.Name = "toolStripMenuItemRemoveSkill";
 			this.toolStripMenuItemRemoveSkill.Size = new System.Drawing.Size(204, 22);
 			this.toolStripMenuItemRemoveSkill.Text = "Remove skill from group";
-			this.toolStripMenuItemRemoveSkill.Click += new System.EventHandler(this.toolStripMenuItemRemoveSkill_Click);
+			this.toolStripMenuItemRemoveSkill.Click += new System.EventHandler(this.toolStripMenuItemRemoveSkillClick);
 			// 
-			// listView3
+			// listViewAgents
 			// 
-			this.listView3.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+			this.listViewAgents.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
-			this.listView3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.listView3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			this.listView3.FullRowSelect = true;
-			this.listView3.HideSelection = false;
-			this.listView3.Location = new System.Drawing.Point(841, 3);
-			this.listView3.MultiSelect = false;
-			this.listView3.Name = "listView3";
-			this.listView3.Size = new System.Drawing.Size(274, 503);
-			this.listView3.TabIndex = 2;
-			this.listView3.UseCompatibleStateImageBehavior = false;
-			this.listView3.View = System.Windows.Forms.View.Details;
+			this.listViewAgents.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.listViewAgents.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+			this.listViewAgents.FullRowSelect = true;
+			this.listViewAgents.HideSelection = false;
+			this.listViewAgents.Location = new System.Drawing.Point(841, 3);
+			this.listViewAgents.MultiSelect = false;
+			this.listViewAgents.Name = "listViewAgents";
+			this.listViewAgents.Size = new System.Drawing.Size(274, 503);
+			this.listViewAgents.TabIndex = 2;
+			this.listViewAgents.UseCompatibleStateImageBehavior = false;
+			this.listViewAgents.View = System.Windows.Forms.View.Details;
+			this.listViewAgents.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewAgentsColumnClick);
 			// 
 			// columnHeader1
 			// 
@@ -243,7 +245,7 @@
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
 			this.tableLayoutPanel1.Controls.Add(this.listViewAllVirtualGroups, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.listView3, 2, 0);
+			this.tableLayoutPanel1.Controls.Add(this.listViewAgents, 2, 0);
 			this.tableLayoutPanel1.Controls.Add(this.listViewSkillInSkillGroup, 1, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
@@ -310,6 +312,7 @@
 			this.listViewSkillGroupsForSkill.TabIndex = 5;
 			this.listViewSkillGroupsForSkill.UseCompatibleStateImageBehavior = false;
 			this.listViewSkillGroupsForSkill.View = System.Windows.Forms.View.Details;
+			this.listViewSkillGroupsForSkill.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewSkillGroupsForSkillColumnClick);
 			// 
 			// columnHeader30
 			// 
@@ -405,6 +408,7 @@
 			this.listViewSkillViewAgents.TabIndex = 4;
 			this.listViewSkillViewAgents.UseCompatibleStateImageBehavior = false;
 			this.listViewSkillViewAgents.View = System.Windows.Forms.View.Details;
+			this.listViewSkillViewAgents.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewSkillViewAgentsColumnClick);
 			// 
 			// columnHeader15
 			// 
@@ -472,6 +476,7 @@
 			this.listViewIslandsSkillsOnGroup.TabIndex = 3;
 			this.listViewIslandsSkillsOnGroup.UseCompatibleStateImageBehavior = false;
 			this.listViewIslandsSkillsOnGroup.View = System.Windows.Forms.View.Details;
+			this.listViewIslandsSkillsOnGroup.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewIslandsSkillsOnGroupColumnClick);
 			// 
 			// columnHeader22
 			// 
@@ -526,7 +531,7 @@
 			this.listViewIslands.TabIndex = 2;
 			this.listViewIslands.UseCompatibleStateImageBehavior = false;
 			this.listViewIslands.View = System.Windows.Forms.View.Details;
-			this.listViewIslands.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewIslands_ColumnClick);
+			this.listViewIslands.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewIslandsColumnClick);
 			this.listViewIslands.SelectedIndexChanged += new System.EventHandler(this.listViewIslandsSelectedIndexChanged);
 			// 
 			// columnHeader19
@@ -569,7 +574,7 @@
 			this.listViewGroupsInIsland.TabIndex = 1;
 			this.listViewGroupsInIsland.UseCompatibleStateImageBehavior = false;
 			this.listViewGroupsInIsland.View = System.Windows.Forms.View.Details;
-			this.listViewGroupsInIsland.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewGroupsInIsland_ColumnClick);
+			this.listViewGroupsInIsland.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewGroupsInIslandColumnClick);
 			this.listViewGroupsInIsland.SelectedIndexChanged += new System.EventHandler(this.listViewGroupsInIslandSelectedIndexChanged);
 			// 
 			// columnHeader16
@@ -709,7 +714,7 @@
 		private System.Windows.Forms.ColumnHeader columnHeaderNumberOfAgents;
 		private System.Windows.Forms.ListView listViewSkillInSkillGroup;
 		private System.Windows.Forms.ColumnHeader columnHeaderSkills;
-		private System.Windows.Forms.ListView listView3;
+		private System.Windows.Forms.ListView listViewAgents;
 		private System.Windows.Forms.ColumnHeader columnHeader1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.ColumnHeader columnHeader2;

@@ -56,6 +56,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			listViewIslands.ListViewItemSorter = new listViewItemComparer(0, SortOrder.Ascending);
 			listViewSkillGroupsForSkill.ListViewItemSorter = new listViewItemComparer(0, SortOrder.Ascending);
 			listViewAllVirtualGroups.ListViewItemSorter = new listViewItemComparer(0, SortOrder.Ascending);
+			listViewIslandsSkillsOnGroup.ListViewItemSorter = new listViewItemComparer(0, SortOrder.Ascending);
+			listViewSkillInSkillGroup.ListViewItemSorter = new listViewItemComparer(0, SortOrder.Ascending);
+			listViewAgents.ListViewItemSorter = new listViewItemComparer(0, SortOrder.Ascending);
+			listViewSkillViewAgents.ListViewItemSorter = new listViewItemComparer(0, SortOrder.Ascending);
 		}
 
 		void dtpDateValueChanged(object sender, EventArgs e)
@@ -205,9 +209,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 		}
 
 		private void listViewAllVirtualGroupsSelectedIndexChanged(object sender, EventArgs e)
-		{			
+		{
+			listViewSkillInSkillGroup.SuspendLayout();
+			listViewAgents.SuspendLayout();
 			listViewSkillInSkillGroup.Items.Clear();			
-			listView3.Items.Clear();
+			listViewAgents.Items.Clear();
 			if (listViewAllVirtualGroups.SelectedItems.Count == 0)
 				return;
 
@@ -216,18 +222,17 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			if (key == null)
 				return;
 
-			listViewSkillInSkillGroup.SuspendLayout();
-			listView3.SuspendLayout();
-
 			fillSkillListView(key, listViewSkillInSkillGroup);
 
 			foreach (var person in _skillGroupsCreatorResult.GetPersonsForSkillGroupKey(key))
 			{
-				listView3.Items.Add(person.Name.ToString());
+				listViewAgents.Items.Add(person.Name.ToString());
 			}
 
+			listViewSkillInSkillGroup.Sort();			
+			listViewAgents.Sort();
 			listViewSkillInSkillGroup.ResumeLayout();
-			listView3.ResumeLayout();
+			listViewAgents.ResumeLayout();
 
 			Refresh();
 		}
@@ -293,7 +298,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 		private void sortListView(object sender, ColumnClickEventArgs e)
 		{
-			var listView = sender as ListView; 
+			var listView = sender as ListView;
+			if (listView == null)
+				return;
 
 			if (((listViewItemComparer) listView.ListViewItemSorter).Column == e.Column)
 			{
@@ -358,6 +365,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 				listViewSkillViewAgents.Items.Add(person.Name.ToString());
 			}
 
+			listViewSkillViewAgents.Sort();
 			listViewSkillViewAgents.ResumeLayout();
 		}
 
@@ -367,14 +375,14 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 				return;
 
 			var island = listViewIslands.SelectedItems[0].Tag as OldIsland;
+			if (island == null)
+				return;
 
 			listViewGroupsInIsland.Items.Clear();
 			listViewGroupsInIsland.SuspendLayout();
 
-			int groupNumber = 0;
 			foreach (var key in island.GroupKeys)
 			{
-				groupNumber++;
 				var splitted = key.Split("|".ToCharArray());
 				int loadedSkills = 0;
 				int notLoadedSkills = 0;
@@ -417,7 +425,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			listViewIslandsSkillsOnGroup.SuspendLayout();
 
 			fillSkillListView(key, listViewIslandsSkillsOnGroup);
-			
+
+			listViewIslandsSkillsOnGroup.Sort();
 			listViewIslandsSkillsOnGroup.ResumeLayout();
 		}
 
@@ -524,7 +533,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 		}
 
-		private void toolStripMenuItemRemoveSkill_Click(object sender, EventArgs e)
+		private void toolStripMenuItemRemoveSkillClick(object sender, EventArgs e)
 		{
 			var selectedGroupKey = string.Empty;
 			var selectedSkillKey = string.Empty;
@@ -562,17 +571,42 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			sortListView(sender, e);
 		}
 
-		private void listViewGroupsInIsland_ColumnClick(object sender, ColumnClickEventArgs e)
+		private void listViewGroupsInIslandColumnClick(object sender, ColumnClickEventArgs e)
 		{
 			sortListView(sender, e);
 		}
 
-		private void listViewIslands_ColumnClick(object sender, ColumnClickEventArgs e)
+		private void listViewIslandsColumnClick(object sender, ColumnClickEventArgs e)
 		{
 			sortListView(sender, e);
 		}
 
 		private void listViewAllVirtualGroupsColumnClick(object sender, ColumnClickEventArgs e)
+		{
+			sortListView(sender, e);
+		}
+
+		private void listViewIslandsSkillsOnGroupColumnClick(object sender, ColumnClickEventArgs e)
+		{
+			sortListView(sender, e);
+		}
+
+		private void listViewSkillInSkillGroupColumnClick(object sender, ColumnClickEventArgs e)
+		{
+			sortListView(sender, e);
+		}
+
+		private void listViewAgentsColumnClick(object sender, ColumnClickEventArgs e)
+		{
+			sortListView(sender, e);
+		}
+
+		private void listViewSkillGroupsForSkillColumnClick(object sender, ColumnClickEventArgs e)
+		{
+			sortListView(sender, e);
+		}
+
+		private void listViewSkillViewAgentsColumnClick(object sender, ColumnClickEventArgs e)
 		{
 			sortListView(sender, e);
 		}
