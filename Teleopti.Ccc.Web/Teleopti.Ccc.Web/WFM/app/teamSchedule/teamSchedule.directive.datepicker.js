@@ -35,6 +35,7 @@
 
 		vm.afterDateChangeDatePicker = function () {
 			vm.toggleCalendar();
+			vm.shortDateFormat = moment(vm.selectedDate).format('YYYY-MM-DD');
 			vm.onDateChange && $timeout(function () { vm.onDateChange({ date: vm.selectedDate }) });
 		};
 
