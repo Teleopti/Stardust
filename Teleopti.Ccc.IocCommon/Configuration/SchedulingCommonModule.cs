@@ -162,6 +162,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<CreateIslandsOld>().As<ICreateIslands>().SingleInstance();
 			}
 			builder.RegisterType<CreateSkillGroups>().SingleInstance();
+			builder.RegisterType<ReduceIslandsLimits>().SingleInstance();
 			builder.RegisterType<SeatLimitationWorkShiftCalculator2>()
 				.As<ISeatLimitationWorkShiftCalculator2>()
 				.SingleInstance();
