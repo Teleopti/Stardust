@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaAgentsCtrl', function() {
+fdescribe('RtaAgentsCtrl', function() {
 	var $interval,
 		$httpBackend,
 		$state,
@@ -81,16 +81,14 @@ describe('RtaAgentsCtrl', function() {
 			Id: 'LondonGuid',
 			Teams: [{
 				Id: 'LondonTeam1'
-			},
-			{
+			}, {
 				Id: 'LondonTeam2'
 			}]
 		});
 
 		$controllerBuilder.createController()
 			.apply(function() {
-				scope.sites[0].isChecked = true;
-				scope.updateAllTeams(scope.sites[0].Id);
+				scope.forTest_selectSite(scope.sites[0]);
 			});
 
 		expect(scope.sites[0].Teams[0].isChecked).toBe(true);
@@ -102,18 +100,15 @@ describe('RtaAgentsCtrl', function() {
 			Id: 'LondonGuid',
 			Teams: [{
 				Id: 'LondonTeam1'
-			},
-			{
+			}, {
 				Id: 'LondonTeam2'
 			}]
 		});
 
 		$controllerBuilder.createController()
 			.apply(function() {
-				scope.sites[0].isChecked = true;
-				scope.updateAllTeams(scope.sites[0].Id);
-				scope.sites[0].isChecked = false;
-				scope.updateAllTeams(scope.sites[0].Id);
+				scope.forTest_selectSite(scope.sites[0]);
+				scope.forTest_selectSite(scope.sites[0]);
 			});
 
 		expect(scope.sites[0].Teams[0].isChecked).toBe(false);
@@ -130,8 +125,7 @@ describe('RtaAgentsCtrl', function() {
 
 		$controllerBuilder.createController()
 			.apply(function() {
-				scope.sites[0].isChecked = true;
-				scope.updateAllTeams(scope.sites[0].Id);
+				scope.forTest_selectSite(scope.sites[0]);
 			});
 
 		expect(scope.sites[0].Teams[0].isChecked).toBe(true);
@@ -147,9 +141,7 @@ describe('RtaAgentsCtrl', function() {
 
 		$controllerBuilder.createController()
 			.apply(function() {
-				scope.sites[0].isChecked = true;
-				scope.updateAllTeams(scope.sites[0].Id);
-				//scope.teamsSelected = ['TeamGuid'];
+				scope.forTest_selectSite(scope.sites[0]);
 				scope.goToAgents();
 			});
 
@@ -174,10 +166,8 @@ describe('RtaAgentsCtrl', function() {
 
 		$controllerBuilder.createController()
 			.apply(function() {
-				scope.sites[0].isChecked = true;
-				scope.updateAllTeams(scope.sites[0].Id);
-				scope.sites[1].isChecked = true;
-				scope.updateAllTeams(scope.sites[1].Id);
+				scope.forTest_selectSite(scope.sites[0]);
+				scope.forTest_selectSite(scope.sites[1]);
 				scope.goToAgents();
 			});
 
@@ -256,8 +246,7 @@ describe('RtaAgentsCtrl', function() {
 
 		$controllerBuilder.createController()
 			.apply(function() {
-				scope.sites[0].isChecked = true;
-				scope.updateAllTeams(scope.sites[0].Id);
+				scope.forTest_selectSite(scope.sites[0]);
 				scope.teamsSelected = ['ParisTeam1'];
 				scope.goToAgents();
 			});
@@ -268,7 +257,7 @@ describe('RtaAgentsCtrl', function() {
 		});
 	});
 
-	it('should unselect team', function() {
+	it('should go to agents when unselecting team', function() {
 		$fakeBackend.withOrganization({
 				Id: 'LondonGuid',
 				Teams: [{
@@ -288,7 +277,6 @@ describe('RtaAgentsCtrl', function() {
 
 		$controllerBuilder.createController()
 			.apply(function() {
-				scope.teamsSelected = ['LondonTeam1'];
 				scope.teamsSelected = ['LondonTeam1', 'ParisTeam1'];
 				scope.teamsSelected = ['ParisTeam1'];
 				scope.goToAgents();
@@ -299,7 +287,7 @@ describe('RtaAgentsCtrl', function() {
 		});
 	});
 
-	it('should unselect site', function() {
+	it('should go to agents when unselecting site', function() {
 		$fakeBackend.withOrganization({
 				Id: 'LondonGuid',
 				Teams: [{
@@ -315,12 +303,9 @@ describe('RtaAgentsCtrl', function() {
 
 		$controllerBuilder.createController()
 			.apply(function() {
-				scope.sites[0].isChecked = true;
-				scope.updateAllTeams(scope.sites[0].Id);
-				scope.sites[1].isChecked = true;
-				scope.updateAllTeams(scope.sites[1].Id);
-				scope.sites[0].isChecked = false;
-				scope.updateAllTeams(scope.sites[0].Id);
+				scope.forTest_selectSite(scope.sites[0]);
+				scope.forTest_selectSite(scope.sites[1]);
+				scope.forTest_selectSite(scope.sites[0]);
 				scope.goToAgents();
 			});
 
@@ -336,24 +321,21 @@ describe('RtaAgentsCtrl', function() {
 				Id: 'ParisGuid',
 				Teams: [{
 					Id: 'ParisTeam1',
-				},
-				{
+				}, {
 					Id: 'ParisTeam2',
-				}
-			]
+				}]
 			});;
 
 		$controllerBuilder.createController()
 			.apply(function() {
-				scope.sites[0].isChecked = false;
-				scope.updateAllTeams(scope.sites[0].Id);
+				scope.forTest_selectSite(scope.sites[0]);
 			});
 
 		expect(scope.sites[0].isChecked).toBe(false);
 	});
 
 
-	it('should not redirect when nothing is selected', function() {
+	it('should not redirect when selection has not changed', function() {
 		$fakeBackend.withOrganization({
 			Id: 'LondonGuid',
 			Teams: [{
@@ -363,10 +345,8 @@ describe('RtaAgentsCtrl', function() {
 
 		$controllerBuilder.createController()
 			.apply(function() {
-				scope.sites[0].isChecked = true;
-				scope.updateAllTeams(scope.sites[0].Id);
-				scope.sites[0].isChecked = false;
-				scope.updateAllTeams(scope.sites[0].Id);
+				scope.forTest_selectSite(scope.sites[0]);
+				scope.forTest_selectSite(scope.sites[0]);
 				scope.goToAgents();
 			});
 
@@ -379,43 +359,37 @@ describe('RtaAgentsCtrl', function() {
 			Id: 'ParisGuid',
 			Teams: [{
 				Id: 'ParisTeam1',
-			},
-			{
+			}, {
 				Id: 'ParisTeam2',
 			}]
 		});
 
 		$controllerBuilder.createController();
+
 		expect(scope.selectedSites()).toEqual(['ParisGuid']);
-		expect(scope.sites.length).toEqual(1);
-		expect(scope.sites[0].Id).toEqual('ParisGuid');
 		expect(scope.sites[0].isChecked).toEqual(true);
-		expect(scope.sites[0].Teams.length).toEqual(2);
 		expect(scope.sites[0].Teams[0].isChecked).toEqual(true);
 		expect(scope.sites[0].Teams[1].isChecked).toEqual(true);
 	});
 
-	it('should select sites and teams when one site was preselected', function() {
+	it('should select site and team when one site was preselected and team is unselected', function() {
 		stateParams.siteIds = ['ParisGuid'];
 		$fakeBackend
 			.withOrganization({
 				Id: 'ParisGuid',
 				Teams: [{
 					Id: 'ParisTeam1',
-				},
-				{
+				}, {
 					Id: 'ParisTeam2',
 				}]
 			});
 
 		$controllerBuilder.createController()
-		.apply(function() {
-			scope.teamsSelected = ['ParisTeam2'];
-		});
-		expect(scope.sites.length).toEqual(1);
-		expect(scope.sites[0].Id).toEqual('ParisGuid');
+			.apply(function() {
+				scope.teamsSelected = ['ParisTeam2'];
+			});
+
 		expect(scope.sites[0].isChecked).toEqual(true);
-		expect(scope.sites[0].Teams.length).toEqual(2);
 		expect(scope.sites[0].Teams[0].isChecked).toEqual(false);
 		expect(scope.sites[0].Teams[1].isChecked).toEqual(true);
 	});
@@ -436,17 +410,16 @@ describe('RtaAgentsCtrl', function() {
 			});
 
 		$controllerBuilder.createController()
-		.apply(function() {
-			scope.sites[0].isChecked = true;
-			scope.updateAllTeams(scope.sites[0].Id);
-			scope.goToAgents();
-		});
+			.apply(function() {
+				scope.forTest_selectSite(scope.sites[0]);
+				scope.goToAgents();
+			});
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
-			siteIds: ['LondonGuid','ParisGuid']
+			siteIds: ['LondonGuid', 'ParisGuid']
 		});
 	});
 
-	xit('should go to agents when selecting new site and deselcting part of teams in the old one', function() {
+	xit('should go to agents when selecting new site and deselecting some teams in the old one', function() {
 		stateParams.siteIds = ['ParisGuid'];
 		$fakeBackend.withOrganization({
 				Id: 'LondonGuid',
@@ -458,19 +431,17 @@ describe('RtaAgentsCtrl', function() {
 				Id: 'ParisGuid',
 				Teams: [{
 					Id: 'ParisTeam1',
-				},
-				{
+				}, {
 					Id: 'ParisTeam2',
 				}]
 			});
 
 		$controllerBuilder.createController()
-		.apply(function() {
-			scope.sites[0].isChecked = true;
-			scope.updateAllTeams(scope.sites[0].Id);
-			scope.teamsSelected = ['ParisTeam2'];
-			scope.goToAgents();
-		});
+			.apply(function() {
+				scope.forTest_selectSite(scope.sites[0]);
+				scope.teamsSelected = ['LondonTeam1', 'ParisTeam2'];
+				scope.goToAgents();
+			});
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
 			siteIds: ['LondonGuid'],
 			teamIds: ['ParisTeam2']
@@ -478,21 +449,20 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should select site when all teams are selected', function() {
-			$fakeBackend
+		$fakeBackend
 			.withOrganization({
 				Id: 'ParisGuid',
 				Teams: [{
 					Id: 'ParisTeam1',
-				},
-				{
+				}, {
 					Id: 'ParisTeam2',
 				}]
 			});
 
 		$controllerBuilder.createController()
-		.apply(function() {
-			scope.teamsSelected = ['ParisTeam1', 'ParisTeam2'];
-		});
+			.apply(function() {
+				scope.teamsSelected = ['ParisTeam1', 'ParisTeam2'];
+			});
 		expect(scope.sites[0].isChecked).toEqual(true);
 	});
 
@@ -517,42 +487,41 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should unselect site when all teams are unselected', function() {
-			$fakeBackend
+		$fakeBackend
 			.withOrganization({
 				Id: 'ParisGuid',
 				Teams: [{
 					Id: 'ParisTeam1',
-				},
-				{
+				}, {
 					Id: 'ParisTeam2',
 				}]
 			});
 
 		$controllerBuilder.createController()
-		.apply(function() {
-			scope.teamsSelected = ['ParisTeam1', 'ParisTeam2'];
-			scope.teamsSelected = [];
-		});
+			.apply(function() {
+				scope.teamsSelected = ['ParisTeam1', 'ParisTeam2'];
+				scope.teamsSelected = [];
+			});
 		expect(scope.sites[0].isChecked).toEqual(false);
 	});
 
-	xit('should go to agents on site when all teams are selected', function() {
-			$fakeBackend
+	fit('should go to agents on site when all teams are selected', function() {
+		$fakeBackend
 			.withOrganization({
 				Id: 'ParisGuid',
 				Teams: [{
 					Id: 'ParisTeam1',
-				},
-				{
+				}, {
 					Id: 'ParisTeam2',
 				}]
 			});
 
 		$controllerBuilder.createController()
-		.apply(function() {
-			scope.teamsSelected = ['ParisTeam1', 'ParisTeam2'];
-			scope.goToAgents();
-		});
+			.apply(function() {
+				scope.teamsSelected = ['ParisTeam1', 'ParisTeam2'];
+				scope.goToAgents();
+			});
+
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
 			siteIds: ['ParisGuid']
 		});

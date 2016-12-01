@@ -171,6 +171,7 @@
 				$scope.goToAgents = function() {
 					var selection = {};
 					var selectedSiteIds = $scope.selectedSites();
+					console.log(selectedSiteIds);
 					var selectedTeamIds = $scope.teamsSelected;
 					if (selectedSiteIds.length > 0) {
 						selection['siteIds'] = selectedSiteIds;
@@ -240,58 +241,16 @@
 					});
 				}
 
-				$scope.updateAllTeams = function(siteId) {
-					var selectedSite = $scope.sites.find(function(site){
-						return site.Id === siteId;
+				$scope.forTest_selectSite = function(site) {
+					site.isChecked = !site.isChecked;
+					var selectedSite = $scope.sites.find(function(s){
+						return s.Id === site.Id;
 					});
 
 					selectedSite.Teams.forEach(function(team){
 						team.isChecked = selectedSite.isChecked;
 					});
 				}
-
-				// $scope.selectedTeams = function() {
-				// 	return flatten(
-				// 		$scope.sites.map(function(s) {
-				// 			var selectedTeamIds = s.Teams.filter(function(team) {
-				// 					return team.isChecked == true;
-				// 				})
-				// 				.map(function(team) {
-				// 					return team.Id;
-				// 				});
-				//
-				// 			if(s.Teams.length == selectedTeamIds.length)
-				// 				selectedTeamIds =[];
-				// 			return selectedTeamIds;
-				// 		})
-				// 	);
-				// }
-
-				function flatten(collection) {
-					return [].concat.apply([], collection)
-				}
-
-				// $scope.selectionChanged = function(siteId, teamId) {
-				// 	var selectedSite = $scope.sites.find(function(site) {
-				// 		return site.Id == siteId;
-				// 	});
-				//
-				// 			var selectedTeam = selectedSite.Teams.find(function(team) {
-				// 				return team.Id === teamId;
-				// 			});
-				//
-				// 			selectedTeam.isChecked = !selectedTeam.isChecked;
-				//
-				// 			var teamsSelected = selectedSite.Teams.filter(function(team) {
-				// 				return team.isChecked === true;
-				// 			});
-				//
-				// 		selectedSite.isChecked = false;
-				//
-				// 		if(teamsSelected.length === selectedSite.Teams.length)
-				// 			selectedSite.isChecked = true;
-				// }
-				// org selection ends here
 
 				$scope.$watch('pause', function() {
 					if ($scope.pause) {
@@ -328,13 +287,13 @@
 								team.isChecked = $scope.teamsSelected.indexOf(team.Id) > -1;
 						});
 
-						var checkedTeam = site.Teams.filter(function(team){
+						var checkedTeams = site.Teams.filter(function(team){
 							return team.isChecked === true;
 						});
-						if(checkedTeam.length === site.Teams.length) {
+						if(checkedTeams.length === site.Teams.length) {
 							site.isChecked = true;
 						}
-						else if(checkedTeam.length === 0) {
+						else if(checkedTeams.length === 0) {
 							site.isChecked = false;
 						}
 
