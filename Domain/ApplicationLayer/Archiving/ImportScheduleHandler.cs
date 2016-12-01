@@ -57,13 +57,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 			{
 				var timeZone = person.PermissionInformation.DefaultTimeZone();
 				var importPeriod = new DateTimePeriod(timeZone.SafeConvertTimeToUtc(period.StartDate.Date), timeZone.SafeConvertTimeToUtc(period.EndDate.Date).AddHours(23).AddMinutes(59));
-
+				clearSchedules(targetScheduleDictionary, person, period, importPeriod);
 				importSchedules(sourceScheduleDictionary, targetScheduleDictionary, toScenario, person, period, importPeriod);
 			});
 
 			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId,
 				new JobResultDetail(DetailLevel.Info, $"Imported schedules for {@event.PersonIds.Count} people.", DateTime.UtcNow, null),
 				@event.TotalMessages);
+		}
+
+		private void clearSchedules(IScheduleDictionary scheduleDictionary, IPerson person, DateOnlyPeriod period, DateTimePeriod importPeriod)
+		{
+			var scheduleDays = scheduleDictionary.SchedulesForPeriod(period, person);
+			var changes = false;
+			foreach (var scheduleDay in scheduleDays)
+			{
+				foreach (var scheduleData in scheduleDay.PersistableScheduleDataCollection())
+				{
+					if (!(scheduleData is IExportToAnotherScenario) || scheduleData is PersonAbsence) continue;
+					_scheduleStorage.Remove(_scheduleStorage.Get(scheduleData.GetType(), scheduleData.Id.GetValueOrDefault()));
+					changes = true;
+				}
+			}
+			if (changes)
+				_currentUnitOfWork.Current().PersistAll();
 		}
 
 		private void importSchedules(IScheduleDictionary sourceScheduleDictionary, IScheduleDictionary targetScheduleDictionary, IScenario toScenario, IPerson person, DateOnlyPeriod period, DateTimePeriod importPeriod)
@@ -78,16 +95,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 					var exportableType = scheduleData as IExportToAnotherScenario;
 					var changedScheduleData = exportableType?.CloneAndChangeParameters(new ScheduleParameters(toScenario, person,
 							importPeriod));
-					if (changedScheduleData is PersonAssignment)
-					{
-						foreach (var targetAssignment in GetTargetSchedulesForDay(targetScheduleDictionary, period, person, scheduleDay.DateOnlyAsPeriod.DateOnly).OfType<PersonAssignment>())
-						{
-							var entity = _scheduleStorage.Get(targetAssignment.GetType(), targetAssignment.Id.GetValueOrDefault());
-							_scheduleStorage.Remove(entity);
-							_currentUnitOfWork.Current().PersistAll();
-						}
-
-					}
 					var absence = changedScheduleData as PersonAbsence;
 					if (absence != null)
 					{
@@ -96,16 +103,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 						foreach (var targetAbsence in GetTargetSchedulesForDay(targetScheduleDictionary, period, person, scheduleDay.DateOnlyAsPeriod.DateOnly)
 									.OfType<PersonAbsence>())
 						{
-							var merged = targetAbsence.Merge(absence);
-							if (merged != null)
+							if (absence.Period == targetAbsence.Period && absence.Layer.Payload.Id == targetAbsence.Layer.Payload.Id)
 							{
-								var entity = _scheduleStorage.Get(targetAbsence.GetType(), targetAbsence.Id.GetValueOrDefault());
-								_scheduleStorage.Remove(entity);
-								_currentUnitOfWork.Current().PersistAll();
-								_scheduleStorage.Add(merged);
+								// already exists, don't save it
 								added.Add(scheduleData.Id.GetValueOrDefault());
 							}
-
 						}
 					}
 					if (changedScheduleData != null && !added.Contains(scheduleData.Id.GetValueOrDefault()))

@@ -28,7 +28,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 			}
 
 			if (shouldChange)
+			{
+				var old = absence.LastChange;
 				absence.ModifyPersonAbsencePeriod(absencePeriod, null);
+				absence.LastChange = old;
+			}
+				
 			return false;
 		}
 

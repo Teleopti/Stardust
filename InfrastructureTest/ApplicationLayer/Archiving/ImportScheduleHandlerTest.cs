@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 		public void ShouldMoveOneOfType([ValueSource(nameof(moveTypeTestCases))] MoveTestCase<ImportScheduleHandlerTest> testCase)
 		{
 			AddDefaultTypesToRepositories();
-			testCase.CreateTypeInSourceScenario(WithUnitOfWork, this, Person, Period, SourceScenario);
+			testCase.CreateTypeInSourceScenario(WithUnitOfWork, this, Person, Period, SourceScenario, TargetScenario);
 
 			WithUnitOfWork.Do(() => Target.Handle(createImportEvent()));
 
@@ -48,7 +48,22 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 		}
 
 		[Test]
-		public void ShouldNotOverwriteAShiftInTargetScenarioWhenSourceIsEmpty()
+		public void ShouldOverwriteEachOverwriteable([ValueSource(nameof(overwriteTestCases))] MoveTestCase<ImportScheduleHandlerTest> testCase)
+		{
+			AddDefaultTypesToRepositories();
+			testCase.CreateTypeInSourceScenario(WithUnitOfWork, this, Person, Period, SourceScenario, TargetScenario);
+
+			WithUnitOfWork.Do(() => Target.Handle(createImportEvent()));
+
+			VerifyCanBeFoundInScheduleStorageForTargetScenario(Person);
+
+			testCase.VerifyExistsInTargetScenario(WithUnitOfWork, this, TargetScenario);
+
+			VerifyJobResultIsUpdated();
+		}
+
+		[Test]
+		public void ShouldOverwriteAShiftInTargetScenarioWhenSourceIsEmpty()
 		{
 			AddDefaultTypesToRepositories();
 
@@ -69,8 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			WithUnitOfWork.Do(() =>
 			{
 				var result = PersonAssignmentRepository.LoadAll().SingleOrDefault(x => x.BelongsToScenario(TargetScenario));
-				result.Should().Not.Be.Null();
-				result.Should().Be.EqualTo(assignment);
+				result.Should().Be.Null();
 			});
 
 			VerifyJobResultIsUpdated();
@@ -116,46 +130,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 		}
 
 		[Test]
-		public void ShouldMergeAShiftInTargetScenarioWhenSourceHasAbsence()
-		{
-			AddDefaultTypesToRepositories();
-
-			var existingCategory = new ShiftCategory("Existing");
-			var existingActivity = new Activity("Existing");
-			var existingAssignment = new PersonAssignment(Person, TargetScenario, Period.StartDate);
-			existingAssignment.SetShiftCategory(existingCategory);
-			existingAssignment.AddActivity(existingActivity, new TimePeriod(8, 15));
-
-			var newAbsence = AbsenceFactory.CreateAbsence("gone");
-			var personAbsence = new PersonAbsence(Person, SourceScenario, new AbsenceLayer(newAbsence,
-					new DateTimePeriod(Period.StartDate.Date.ToUniversalTime(), (Period.StartDate.Date + TimeSpan.FromDays(1)).ToUniversalTime())));
-
-			WithUnitOfWork.Do(() =>
-			{
-				ShiftCategoryRepository.Add(existingCategory);
-				ActivityRepository.Add(existingActivity);
-				ScheduleStorage.Add(existingAssignment);
-
-				AbsenceRepository.Add(newAbsence);
-				ScheduleStorage.Add(personAbsence);
-			});
-
-			WithUnitOfWork.Do(() => Target.Handle(createImportEvent()));
-
-			WithUnitOfWork.Do(() =>
-			{
-				var assignment = PersonAssignmentRepository.LoadAll().SingleOrDefault(x => x.BelongsToScenario(TargetScenario));
-				assignment.Should().Not.Be.Null();
-				assignment.Should().Be.EqualTo(existingAssignment);
-
-				var absence = PersonAbsenceRepository.LoadAll().SingleOrDefault(x => x.BelongsToScenario(TargetScenario));
-				absence.Should().Not.Be.Null();
-			});
-
-			VerifyJobResultIsUpdated();
-		}
-
-		[Test]
 		public void ShouldMergeAnAbsenceInTargetScenarioWhenSourceHasAssignment()
 		{
 			AddDefaultTypesToRepositories();
@@ -195,17 +169,21 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			VerifyJobResultIsUpdated();
 		}
 
+		private static DateTime makeUtc(DateTime date)
+		{
+			return DateTime.SpecifyKind(date, DateTimeKind.Utc);
+		}
+
 		[Test]
-		[Ignore("Currently overwrites with same data.")]
 		public void ShouldIgnoreTheSameAbsenceAsExistingInTarget()
 		{
 			AddDefaultTypesToRepositories();
 
 			var existingAbsence = AbsenceFactory.CreateAbsence("gone");
 			var existingPersonAbsence = new PersonAbsence(Person, TargetScenario, new AbsenceLayer(existingAbsence,
-					new DateTimePeriod(Period.StartDate.Date.ToUniversalTime(), (Period.StartDate.Date + TimeSpan.FromDays(1)).ToUniversalTime())));
+					new DateTimePeriod(makeUtc(Period.StartDate.Date), makeUtc(Period.StartDate.Date + TimeSpan.FromDays(1)))));
 			var newPersonAbsence = new PersonAbsence(Person, SourceScenario, new AbsenceLayer(existingAbsence,
-					new DateTimePeriod(Period.StartDate.Date.ToUniversalTime(), (Period.StartDate.Date + TimeSpan.FromDays(1)).ToUniversalTime())));
+					new DateTimePeriod(makeUtc(Period.StartDate.Date), makeUtc(Period.StartDate.Date + TimeSpan.FromDays(1)))));
 
 
 			WithUnitOfWork.Do(() =>
@@ -227,6 +205,71 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			VerifyJobResultIsUpdated();
 		}
 
+		[Test]
+		public void ShouldAddAnAbsenceOfDifferentType()
+		{
+			AddDefaultTypesToRepositories();
+
+			var existingAbsence = AbsenceFactory.CreateAbsence("gone");
+			var newAbsence = AbsenceFactory.CreateAbsence("sick");
+			var existingPersonAbsence = new PersonAbsence(Person, TargetScenario, new AbsenceLayer(existingAbsence,
+					new DateTimePeriod(Period.StartDate.Date.ToUniversalTime(), (Period.StartDate.Date + TimeSpan.FromDays(1)).ToUniversalTime())));
+			var newPersonAbsence = new PersonAbsence(Person, SourceScenario, new AbsenceLayer(newAbsence,
+					new DateTimePeriod(Period.StartDate.Date.ToUniversalTime(), (Period.StartDate.Date + TimeSpan.FromDays(1)).ToUniversalTime())));
+
+
+			WithUnitOfWork.Do(() =>
+			{
+				AbsenceRepository.Add(existingAbsence);
+				AbsenceRepository.Add(newAbsence);
+				ScheduleStorage.Add(existingPersonAbsence);
+				ScheduleStorage.Add(newPersonAbsence);
+			});
+
+			WithUnitOfWork.Do(() => Target.Handle(createImportEvent()));
+
+			WithUnitOfWork.Do(() =>
+			{
+				var absences = PersonAbsenceRepository.LoadAll().Where(x => x.BelongsToScenario(TargetScenario)).ToList();
+				absences.Count.Should().Be.EqualTo(2);
+				absences.Any(x => x.Layer.Payload.Name == existingAbsence.Name).Should().Be.True();
+				absences.Any(x => x.Layer.Payload.Name == newAbsence.Name).Should().Be.True();
+			});
+
+			VerifyJobResultIsUpdated();
+		}
+
+		[Test]
+		public void ShouldAddAnAbsenceWithDifferentPeriod()
+		{
+			AddDefaultTypesToRepositories();
+
+			var existingAbsence = AbsenceFactory.CreateAbsence("gone");
+			var existingPersonAbsence = new PersonAbsence(Person, TargetScenario, new AbsenceLayer(existingAbsence,
+					new DateTimePeriod(makeUtc(Period.StartDate.Date), makeUtc(Period.StartDate.Date + TimeSpan.FromDays(1)))));
+			var newPersonAbsence = new PersonAbsence(Person, SourceScenario, new AbsenceLayer(existingAbsence,
+					new DateTimePeriod(makeUtc(Period.StartDate.Date+TimeSpan.FromHours(1)), makeUtc(Period.StartDate.Date + TimeSpan.FromHours(2)))));
+
+			WithUnitOfWork.Do(() =>
+			{
+				AbsenceRepository.Add(existingAbsence);
+				ScheduleStorage.Add(existingPersonAbsence);
+				ScheduleStorage.Add(newPersonAbsence);
+			});
+
+			WithUnitOfWork.Do(() => Target.Handle(createImportEvent()));
+
+			WithUnitOfWork.Do(() =>
+			{
+				var absences = PersonAbsenceRepository.LoadAll().Where(x => x.BelongsToScenario(TargetScenario)).ToList();
+				absences.Count.Should().Be.EqualTo(2);
+				absences.Any(x => x.Period == existingPersonAbsence.Period).Should().Be.True();
+				absences.Any(x => x.Period == newPersonAbsence.Period).Should().Be.True();
+			});
+
+			VerifyJobResultIsUpdated();
+		}
+
 		private ImportScheduleEvent createImportEvent(IPerson person = null)
 		{
 			return new ImportScheduleEvent((person ?? Person).Id.GetValueOrDefault())
@@ -241,11 +284,53 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			};
 		}
 
+		private static readonly MoveTestCase<ImportScheduleHandlerTest>[] overwriteTestCases =
+		{
+			new MoveTestCase<ImportScheduleHandlerTest>(nameof(AgentDayScheduleTag))
+			{
+				CreateType = (testClass, person, period, sourceScenario, targetScenario) =>
+				{
+					var scheduleTag = new ScheduleTag { Description = "Something" };
+					testClass.ScheduleTagRepository.Add(scheduleTag);
+					testClass.ScheduleStorage.Add(new AgentDayScheduleTag(person, new DateOnly(period.StartDate.Date + TimeSpan.FromDays(1)), sourceScenario, scheduleTag));
+					testClass.ScheduleStorage.Add(new AgentDayScheduleTag(person, new DateOnly(period.StartDate.Date + TimeSpan.FromDays(1)), targetScenario, scheduleTag));
+				},
+				LoadMethod = (testClass, targetScenario) => testClass.AgentDayScheduleTagRepository.LoadAll().SingleOrDefault(x => x.Scenario.Equals(targetScenario))
+			},
+			new MoveTestCase<ImportScheduleHandlerTest>(nameof(PersonAssignment))
+			{
+				CreateType = (testClass, person, period, sourceScenario, targetScenario) =>
+				{
+					testClass.ScheduleStorage.Add(new PersonAssignment(person, sourceScenario, period.StartDate));
+					testClass.ScheduleStorage.Add(new PersonAssignment(person, targetScenario, period.StartDate));
+				},
+				LoadMethod = (testClass, targetScenario) => testClass.PersonAssignmentRepository.LoadAll().SingleOrDefault(x => x.Scenario.Equals(targetScenario))
+			},
+			new MoveTestCase<ImportScheduleHandlerTest>(nameof(PublicNote))
+			{
+				CreateType = (testClass, person, period, sourceScenario, targetScenario) =>
+				{
+					testClass.ScheduleStorage.Add(new PublicNote(person, period.StartDate, sourceScenario, "Test"));
+					testClass.ScheduleStorage.Add(new PublicNote(person, period.StartDate, targetScenario, "Test"));
+				},
+				LoadMethod = (testClass, targetScenario) => testClass.PublicNoteRepository.LoadAll().SingleOrDefault(x => x.Scenario.Equals(targetScenario))
+			},
+			new MoveTestCase<ImportScheduleHandlerTest>(nameof(Note))
+			{
+				CreateType = (testClass, person, period, sourceScenario, targetScenario) =>
+				{
+					testClass.ScheduleStorage.Add(new Note(person, period.StartDate, sourceScenario, "Test"));
+					testClass.ScheduleStorage.Add(new Note(person, period.StartDate, targetScenario, "Test"));
+				},
+				LoadMethod = (testClass, targetScenario) => testClass.NoteRepository.LoadAll().SingleOrDefault(x => x.Scenario.Equals(targetScenario))
+			}
+		};
+
 		private static readonly MoveTestCase<ImportScheduleHandlerTest>[] moveTypeTestCases =
 		{
 			new MoveTestCase<ImportScheduleHandlerTest>(nameof(AgentDayScheduleTag))
 			{
-				CreateType = (testClass, person, period, sourceScenario) =>
+				CreateType = (testClass, person, period, sourceScenario, targetScenario) =>
 				{
 					var scheduleTag = new ScheduleTag { Description = "Something" };
 					testClass.ScheduleTagRepository.Add(scheduleTag);
@@ -256,17 +341,17 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			},
 			new MoveTestCase<ImportScheduleHandlerTest>(nameof(PersonAssignment))
 			{
-				CreateType = (testClass, person, period, sourceScenario) => testClass.ScheduleStorage.Add(new PersonAssignment(person, sourceScenario, period.StartDate)),
+				CreateType = (testClass, person, period, sourceScenario, targetScenario) => testClass.ScheduleStorage.Add(new PersonAssignment(person, sourceScenario, period.StartDate)),
 				LoadMethod = (testClass, targetScenario) => testClass.PersonAssignmentRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(targetScenario))
 			},
 			new MoveTestCase<ImportScheduleHandlerTest>(nameof(PublicNote))
 			{
-				CreateType = (testClass, person, period, sourceScenario) => testClass.ScheduleStorage.Add( new PublicNote(person, period.StartDate, sourceScenario, "Test")),
+				CreateType = (testClass, person, period, sourceScenario, targetScenario) => testClass.ScheduleStorage.Add( new PublicNote(person, period.StartDate, sourceScenario, "Test")),
 				LoadMethod = (testClass, targetScenario) => testClass.PublicNoteRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(targetScenario))
 			},
 			new MoveTestCase<ImportScheduleHandlerTest>(nameof(PersonAbsence))
 			{
-				CreateType = (testClass, person, period, sourceScenario) =>
+				CreateType = (testClass, person, period, sourceScenario, targetScenario) =>
 				{
 					var absence = AbsenceFactory.CreateAbsence("gone");
 					testClass.AbsenceRepository.Add(absence);
@@ -278,7 +363,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			},
 			new MoveTestCase<ImportScheduleHandlerTest>(nameof(Note))
 			{
-				CreateType = (testClass, person, period, sourceScenario) => testClass.ScheduleStorage.Add(new Note(person, period.StartDate, sourceScenario, "Test")),
+				CreateType = (testClass, person, period, sourceScenario, targetScenario) => testClass.ScheduleStorage.Add(new Note(person, period.StartDate, sourceScenario, "Test")),
 				LoadMethod = (testClass, targetScenario) => testClass.NoteRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(targetScenario))
 			}
 		};

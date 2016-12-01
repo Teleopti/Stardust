@@ -13,13 +13,13 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 		{
 			_type = type;
 		}
-		public Action<T, IPerson, DateOnlyPeriod, IScenario> CreateType;
+		public Action<T, IPerson, DateOnlyPeriod, IScenario, IScenario> CreateType;
 
-		public void CreateTypeInSourceScenario(WithUnitOfWork withUnitOfWork, T testClass, IPerson person, DateOnlyPeriod period, IScenario sourceScenario)
+		public void CreateTypeInSourceScenario(WithUnitOfWork withUnitOfWork, T testClass, IPerson person, DateOnlyPeriod period, IScenario sourceScenario, IScenario targetScenario)
 		{
 			withUnitOfWork.Do(() =>
 			{
-				CreateType(testClass, person, period, sourceScenario);
+				CreateType(testClass, person, period, sourceScenario, targetScenario);
 			});
 		}
 		public Func<T, IScenario, IPersistableScheduleData> LoadMethod { get; set; }

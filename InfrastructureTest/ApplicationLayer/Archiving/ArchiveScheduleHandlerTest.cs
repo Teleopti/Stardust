@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 		public void ShouldMoveOneOfType([ValueSource(nameof(moveTypeTestCases))] MoveTestCase<ArchiveScheduleHandlerTest> testCase)
 		{
 			AddDefaultTypesToRepositories();
-			testCase.CreateTypeInSourceScenario(WithUnitOfWork, this, Person, Period, SourceScenario);
+			testCase.CreateTypeInSourceScenario(WithUnitOfWork, this, Person, Period, SourceScenario, TargetScenario);
 
 			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
 
@@ -332,7 +332,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 		{
 			new MoveTestCase<ArchiveScheduleHandlerTest>(nameof(AgentDayScheduleTag))
 			{
-				CreateType = (testClass, person, period, sourceScenario) =>
+				CreateType = (testClass, person, period, sourceScenario, targetScenario) =>
 				{
 					var scheduleTag = new ScheduleTag { Description = "Something" };
 					testClass.ScheduleTagRepository.Add(scheduleTag);
@@ -343,17 +343,17 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			},
 			new MoveTestCase<ArchiveScheduleHandlerTest>(nameof(PersonAssignment))
 			{
-				CreateType = (testClass, person, period, sourceScenario) => testClass.ScheduleStorage.Add(new PersonAssignment(person, sourceScenario, period.StartDate)),
+				CreateType = (testClass, person, period, sourceScenario, targetScenario) => testClass.ScheduleStorage.Add(new PersonAssignment(person, sourceScenario, period.StartDate)),
 				LoadMethod = (testClass, targetScenario) => testClass.PersonAssignmentRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(targetScenario))
 			},
 			new MoveTestCase<ArchiveScheduleHandlerTest>(nameof(PublicNote))
 			{
-				CreateType = (testClass, person, period, sourceScenario) => testClass.ScheduleStorage.Add( new PublicNote(person, period.StartDate, sourceScenario, "Test")),
+				CreateType = (testClass, person, period, sourceScenario, targetScenario) => testClass.ScheduleStorage.Add( new PublicNote(person, period.StartDate, sourceScenario, "Test")),
 				LoadMethod = (testClass, targetScenario) => testClass.PublicNoteRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(targetScenario))
 			},
 			new MoveTestCase<ArchiveScheduleHandlerTest>(nameof(PersonAbsence))
 			{
-				CreateType = (testClass, person, period, sourceScenario) =>
+				CreateType = (testClass, person, period, sourceScenario, targetScenario) =>
 				{
 					var absence = AbsenceFactory.CreateAbsence("gone");
 					testClass.AbsenceRepository.Add(absence);
@@ -365,7 +365,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			},
 			new MoveTestCase<ArchiveScheduleHandlerTest>(nameof(Note))
 			{
-				CreateType = (testClass, person, period, sourceScenario) => testClass.ScheduleStorage.Add(new Note(person, period.StartDate, sourceScenario, "Test")),
+				CreateType = (testClass, person, period, sourceScenario, targetScenario) => testClass.ScheduleStorage.Add(new Note(person, period.StartDate, sourceScenario, "Test")),
 				LoadMethod = (testClass, targetScenario) => testClass.NoteRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(targetScenario))
 			}
 		};
