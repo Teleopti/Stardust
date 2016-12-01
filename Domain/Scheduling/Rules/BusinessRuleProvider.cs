@@ -14,8 +14,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			bool enableSiteOpenHoursRule)
 		{
 			var rules = NewBusinessRuleCollection.All(schedulingResultStateHolder);
-			rules.Remove(typeof(NewPersonAccountRule));
-			rules.Remove(typeof(OpenHoursRule));
+			rules.DoNotHaltModify(typeof(NewPersonAccountRule));
+			rules.DoNotHaltModify(typeof(OpenHoursRule));
 			rules.Add(new NonMainShiftActivityRule());
 			if (enableSiteOpenHoursRule)
 				rules.Add(new SiteOpenHoursRule(new SiteOpenHoursSpecification()));

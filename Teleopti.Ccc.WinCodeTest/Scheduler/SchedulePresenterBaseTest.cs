@@ -536,7 +536,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
             var businessRuleResponse = _mocks.StrictMock<IBusinessRuleResponse>();
             var allRules = NewBusinessRuleCollection.All(_schedulerState.SchedulingResultState);
-            allRules.Remove(typeof(NightlyRestRule));
+            allRules.DoNotHaltModify(typeof(NightlyRestRule));
 
             Expect.Call(businessRuleResponse.Overridden = true);
             Expect.Call(businessRuleResponse.TypeOfRule).Return(typeof(NightlyRestRule)).Repeat.AtLeastOnce();

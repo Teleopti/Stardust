@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return responseList;
 		}
 
-		public void Remove(IBusinessRuleResponse businessRuleResponseToOverride)
+		public void DoNotHaltModify(IBusinessRuleResponse businessRuleResponseToOverride)
 		{
 			for (var i = Count - 1; i >= 0; i--)
 			{
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			}
 		}
 
-		public void Remove(Type businessRuleType)
+		public void DoNotHaltModify(Type businessRuleType)
 		{
 			for (var i = Count - 1; i >= 0; i--)
 			{

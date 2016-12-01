@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				return ruleRepsonsesOnDay;
 
 			// if no response on day just override them and try again
-			ruleRepsonses.ToList().ForEach(newBusinessRuleCollection.Remove);
+			ruleRepsonses.ToList().ForEach(newBusinessRuleCollection.DoNotHaltModify);
 
 			ruleRepsonses = scheduleDictionary.Modify(ScheduleModifier.Scheduler, modifiedParts, newBusinessRuleCollection, _scheduleDayChangeCallback, scheduleTagSetter);
 			

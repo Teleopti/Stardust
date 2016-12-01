@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 		    foreach (var businessRuleResponse in brokenRules)
 		    {
-			    bussinesRuleCollection.Remove(businessRuleResponse);
+			    bussinesRuleCollection.DoNotHaltModify(businessRuleResponse);
 		    }
 
 			stateHolder.Schedules.Modify(ScheduleModifier.Scheduler, scheduleDayToModify, bussinesRuleCollection,

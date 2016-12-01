@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				lstBusinessRuleResponseToOverride.AddRange(handleBusinessRules.Handle(lstBusinessRuleResponse, lstBusinessRuleResponseToOverride));
 				if (lstBusinessRuleResponseToOverride.Any())
 				{
-					lstBusinessRuleResponseToOverride.ForEach(newRules.Remove);
+					lstBusinessRuleResponseToOverride.ForEach(newRules.DoNotHaltModify);
                     lstBusinessRuleResponse = swapAndModifyServiceNew.Swap(personList[0], personList[1], dates, getLockedDates(dates,personList ), _schedulerState.Schedules, newRules, new ScheduleTagSetter(_defaultScheduleTag));
 					lstBusinessRuleResponseToOverride = new List<IBusinessRuleResponse>();
 					foreach (var response in lstBusinessRuleResponse)

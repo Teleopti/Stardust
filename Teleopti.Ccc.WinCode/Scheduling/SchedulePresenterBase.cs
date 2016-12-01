@@ -637,7 +637,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             foreach (var overriddenBusinessRule in _overriddenBusinessRulesHolder.OverriddenRules)
             {
-                rulesToRun.Remove(overriddenBusinessRule.TypeOfRule);
+                rulesToRun.DoNotHaltModify(overriddenBusinessRule.TypeOfRule);
             }
             var lstBusinessRuleResponseToOverride = new List<IBusinessRuleResponse>();
             var lstBusinessRuleResponse = _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, scheduleParts, rulesToRun, _scheduleDayChangeCallback, new ScheduleTagSetter(scheduleTag)).ToArray();
@@ -649,7 +649,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             // try again with overriden
             if (lstBusinessRuleResponseToOverride.Count > 0)
             {
-                lstBusinessRuleResponseToOverride.ForEach(rulesToRun.Remove);
+                lstBusinessRuleResponseToOverride.ForEach(rulesToRun.DoNotHaltModify);
                 lstBusinessRuleResponse = _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, scheduleParts, rulesToRun, _scheduleDayChangeCallback, new ScheduleTagSetter(scheduleTag)).ToArray();
                 lstBusinessRuleResponseToOverride = new List<IBusinessRuleResponse>();
                 foreach (var response in lstBusinessRuleResponse)

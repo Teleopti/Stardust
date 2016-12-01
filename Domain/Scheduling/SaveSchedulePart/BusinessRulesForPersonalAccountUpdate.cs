@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 				_personAbsenceAccountRepository.FindByUsers(_schedulingResultStateHolder.PersonsInOrganization);
 
 			var rules = NewBusinessRuleCollection.MinimumAndPersonAccount(_schedulingResultStateHolder);
-			rules.Remove(typeof(NewPersonAccountRule));
+			rules.DoNotHaltModify(typeof(NewPersonAccountRule));
 			//Stop this rule from hindering a save... This will make sure that we update personal accounts.
 
 			((IValidateScheduleRange)scheduleRange).ValidateBusinessRules(rules);

@@ -20,12 +20,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			_rules = rules;
 		}
 
-		public void Remove(IBusinessRuleResponse businessRuleResponseToOverride)
+		public void DoNotHaltModify(IBusinessRuleResponse businessRuleResponseToOverride)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Remove(Type businessRuleType)
+		public void DoNotHaltModify(Type businessRuleType)
 		{
 			foreach (var bu in this)
 			{

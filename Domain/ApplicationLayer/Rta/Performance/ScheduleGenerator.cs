@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 			_schedulingResultStateHolder.PersonsInOrganization = new Collection<IPerson> { scheduleRange.Person };
 			_schedulingResultStateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(_schedulingResultStateHolder.PersonsInOrganization);
 			var rules = NewBusinessRuleCollection.MinimumAndPersonAccount(_schedulingResultStateHolder);
-			rules.Remove(typeof(NewPersonAccountRule));
+			rules.DoNotHaltModify(typeof(NewPersonAccountRule));
 			
 			((IValidateScheduleRange)scheduleRange).ValidateBusinessRules(rules);
 

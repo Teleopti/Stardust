@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 			var stateHolder = new FakeSchedulingResultStateHolder();
 			var businessRules = NewBusinessRuleCollection.All(new SchedulingResultStateHolder());
-			businessRules.Remove(ruleToRemove1);
-			businessRules.Remove(ruleToRemove2);
+			businessRules.DoNotHaltModify(ruleToRemove1);
+			businessRules.DoNotHaltModify(ruleToRemove2);
 
 			var businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
 			businessRuleProvider.Stub(x => x.GetBusinessRulesForShiftTradeRequest(stateHolder, true))

@@ -308,7 +308,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             // try again with overriden
             if (lstBusinessRuleResponseToOverride.Count > 0)
             {
-                lstBusinessRuleResponseToOverride.ForEach(_newBusinessRules.Remove);
+                lstBusinessRuleResponseToOverride.ForEach(_newBusinessRules.DoNotHaltModify);
                 lstBusinessRuleResponse = Approve( _newBusinessRules);
                 lstBusinessRuleResponseToOverride = new List<IBusinessRuleResponse>();
                 foreach (var response in lstBusinessRuleResponse)
