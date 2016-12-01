@@ -300,6 +300,7 @@
     <Compile Include="ScheduleStorageRepositoryWrapperTest.cs" />
     <Compile Include="ResourceCalculation\CalculateResourceReadModelTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationTest.cs" />
+    <Compile Include="SchedulingScenarios\ApplicationLayer\IntradayOptimizationCommandHandlerIncreaseIslandsTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCascadingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationTeamBlockDesktopTest.cs" />

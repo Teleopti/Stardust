@@ -2,7 +2,6 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
@@ -12,10 +11,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 	public class IntradayOptimizationCommandHandler
 	{
 		private readonly IEventPublisher _eventPublisher;
-		private readonly CreateIslands _createIslands;
+		private readonly ICreateIslands _createIslands;
 		private readonly IGridlockManager _gridLockManager;
 
-		public IntradayOptimizationCommandHandler(IEventPublisher eventPublisher, CreateIslands createIslands, IGridlockManager gridLockManager)
+		public IntradayOptimizationCommandHandler(IEventPublisher eventPublisher, ICreateIslands createIslands, IGridlockManager gridLockManager)
 		{
 			_eventPublisher = eventPublisher;
 			_createIslands = createIslands;

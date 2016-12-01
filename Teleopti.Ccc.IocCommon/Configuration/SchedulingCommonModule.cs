@@ -152,7 +152,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<NightRestWhiteSpotSolverServiceFactory>().As<INightRestWhiteSpotSolverServiceFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<VirtualSkillGroupsCreator>().SingleInstance();
 			builder.RegisterType<SkillGroupIslandsAnalyzer>().SingleInstance();
-			builder.RegisterType<CreateIslands>().SingleInstance();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_SplitBigIslands_42049))
+			{
+				builder.RegisterType<CreateIslands>().As<ICreateIslands>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<CreateIslandsOld>().As<ICreateIslands>().SingleInstance();
+			}
 
 			builder.RegisterType<SeatLimitationWorkShiftCalculator2>()
 				.As<ISeatLimitationWorkShiftCalculator2>()
