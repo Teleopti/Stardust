@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.DayOffPlanning
+namespace Teleopti.Ccc.Domain.Islands.Legacy
 {
 	public class SkillGroupReducer
 	{

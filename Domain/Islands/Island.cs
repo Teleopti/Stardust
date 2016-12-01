@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Islands
 			_skillGroups = skillGroups;
 		}
 
-		public IEnumerable<IPerson> PersonsInIsland()
+		public IEnumerable<IPerson> AgentsInIsland()
 		{
 			return _skillGroups.SelectMany(x => x.Agents);
 		}

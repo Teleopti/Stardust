@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Islands.Legacy;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands
@@ -54,8 +55,7 @@ namespace Teleopti.Ccc.Domain.Islands
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_SplitBigIslands_42049)]
 	public interface IIsland
 	{
-		//TODO: rename
-		IEnumerable<IPerson> PersonsInIsland();
+		IEnumerable<IPerson> AgentsInIsland();
 	}
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_SplitBigIslands_42049)]

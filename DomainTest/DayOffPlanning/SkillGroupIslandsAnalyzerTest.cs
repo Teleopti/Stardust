@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Islands;
+using Teleopti.Ccc.Domain.Islands.Legacy;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -158,12 +159,12 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			var result = _target.FindIslands(skillGroups);
 
 			result.Count.Should().Be.EqualTo(2);
-			result[0].PersonsInIsland().Count().Should().Be.EqualTo(1);
-			result[0].PersonsInIsland().Should().Contain(p2);
+			result[0].AgentsInIsland().Count().Should().Be.EqualTo(1);
+			result[0].AgentsInIsland().Should().Contain(p2);
 
-			result[1].PersonsInIsland().Count().Should().Be.EqualTo(2);
-			result[1].PersonsInIsland().Should().Contain(p1);
-			result[1].PersonsInIsland().Should().Contain(p3);
+			result[1].AgentsInIsland().Count().Should().Be.EqualTo(2);
+			result[1].AgentsInIsland().Should().Contain(p1);
+			result[1].AgentsInIsland().Should().Contain(p3);
 		}
 	}
 }

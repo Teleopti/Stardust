@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Islands
+namespace Teleopti.Ccc.Domain.Islands.Legacy
 {
 	public class VirtualSkillGroupsCreator
 	{

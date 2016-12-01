@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Islands
+namespace Teleopti.Ccc.Domain.Islands.Legacy
 {
 	public class SkillGroupIslandsAnalyzer
 	{
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Islands
 				get { return _groupKeys; }
 			}
 
-			public IEnumerable<IPerson> PersonsInIsland()
+			public IEnumerable<IPerson> AgentsInIsland()
 			{
 				var result = new List<IPerson>();
 				foreach (var groupKey in _groupKeys)
