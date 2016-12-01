@@ -350,7 +350,7 @@ describe('RtaAgentsCtrl', function() {
 				scope.teamsSelected = ['ParisTeam1'];
 			});
 
-		expect(scope.sites[0].isChecked).toBe(true);
+		expect(scope.sites[0].isChecked).not.toBe(true);
 		expect(scope.sites[0].Teams[0].isChecked).toBe(true);
 		expect(scope.sites[0].Teams[1].isChecked).toBe(false);
 	});
@@ -410,7 +410,31 @@ describe('RtaAgentsCtrl', function() {
 				scope.teamsSelected = ['ParisTeam2'];
 			});
 
-		expect(scope.sites[0].isChecked).toEqual(true);
+		expect(scope.sites[0].isChecked).not.toEqual(true);
+		expect(scope.sites[0].Teams[0].isChecked).toEqual(false);
+		expect(scope.sites[0].Teams[1].isChecked).toEqual(true);
+	});
+
+	it('should unselect site and team', function() {
+		$fakeBackend
+			.withOrganization({
+				Id: 'ParisGuid',
+				Teams: [{
+					Id: 'ParisTeam1',
+				}, {
+					Id: 'ParisTeam2',
+				}]
+			});
+
+		$controllerBuilder.createController()
+			.apply(function() {
+				scope.forTest_selectSite(scope.sites[0]);
+			})
+			.apply(function(){
+				scope.teamsSelected = ['ParisTeam2'];
+			});
+
+		expect(scope.sites[0].isChecked).toEqual(false);
 		expect(scope.sites[0].Teams[0].isChecked).toEqual(false);
 		expect(scope.sites[0].Teams[1].isChecked).toEqual(true);
 	});
@@ -489,7 +513,7 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.sites[0].isChecked).toEqual(true);
 	});
 
-	it('should select site when any team is selected', function() {
+	it('should not select site when some teams are selected', function() {
 		$fakeBackend.withOrganization({
 			Id: 'LondonGuid',
 			Teams: [{
@@ -506,7 +530,7 @@ describe('RtaAgentsCtrl', function() {
 
 		expect(scope.sites[0].Teams[0].isChecked).toBe(true);
 		expect(scope.sites[0].Teams[1].isChecked).not.toBe(true);
-		expect(scope.sites[0].isChecked).toBe(true);
+		expect(scope.sites[0].isChecked).not.toBe(true);
 	});
 
 	it('should unselect site when all teams are unselected', function() {

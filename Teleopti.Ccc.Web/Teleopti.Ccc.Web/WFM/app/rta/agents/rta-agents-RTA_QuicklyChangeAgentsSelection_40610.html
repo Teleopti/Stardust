@@ -81,7 +81,7 @@
 								<md-optgroup ng-repeat="site in sites" class="rta-option-group">
 									<span ng-click="selectSite(site.Id)"><i class="mdi mdi-menu-down"></i></span>
 									<md-checkbox ng-model="site.isChecked" ng-value="site.Id">{{site.Name}}</md-checkbox>
-									<md-option ng-show="isSelectedSite(site.Id)" ng-selected="site.isChecked" ng-value="team.Id" ng-repeat="team in site.Teams">{{team.Name}}</md-option>
+									<md-option ng-show="isSelectedSite(site.Id)" ng-selected="teamChecked(site,team.Id)" ng-value="team.Id" ng-repeat="team in site.Teams">{{team.Name}}</md-option>
 								</md-optgroup>
 							</md-select>
 						</md-input-container>

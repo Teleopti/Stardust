@@ -234,6 +234,10 @@
 					});
 				}
 
+				$scope.teamChecked = function(site,teamId){
+					return site.isChecked || $scope.teamsSelected.indexOf(teamId) > -1;
+				}
+
 				$scope.updateTeams = function() {
 					$scope.sites.forEach(function(site) {
 						var selectedTeam = site.Teams.find(function(team) {
@@ -291,7 +295,7 @@
 						var checkedTeams = site.Teams.filter(function(team) {
 							return team.isChecked;
 						});
-						site.isChecked = checkedTeams.length > 0;
+						site.isChecked = checkedTeams.length === site.Teams.length;
 					});
 				};
 
