@@ -91,11 +91,11 @@
 				$scope.teamsSelected = [];
 				toggleService.togglesLoaded.then(function() {
 					$scope.showOrgSelection = toggleService.RTA_QuicklyChangeAgentsSelection_40610;
-					if($scope.showOrgSelection)
+					if ($scope.showOrgSelection)
 						RtaService.getOrganization()
-							.then(function(organization) {
-								$scope.sites = organization;
-								keepSelectionForOrganization();
+						.then(function(organization) {
+							$scope.sites = organization;
+							keepSelectionForOrganization();
 						});
 
 				});
@@ -168,38 +168,36 @@
 					return selectedSiteId === siteId;
 				};
 
+
 				$scope.goToAgents = function() {
 					var selection = {};
 					var selectedSiteIds = $scope.selectedSites();
-					console.log(selectedSiteIds);
 					var selectedTeamIds = $scope.teamsSelected;
 					if (selectedSiteIds.length > 0) {
 						selection['siteIds'] = selectedSiteIds;
-						//selection['teamIds'] = [];
 					}
 					if (selectedTeamIds.length > 0) {
 						selection['teamIds'] = selectedTeamIds;
-						//selection['siteIds'] = [];
 					}
 					if (selectedSiteIds.length > 0 || selectedTeamIds.length > 0)
 						stateGoToAgents(selection);
 				}
 
 				function keepSelectionForOrganization() {
-					if(!$scope.showOrgSelection)
+					if (!$scope.showOrgSelection)
 						return;
 					siteIds.forEach(function(sid) {
 						var theSite = $scope.sites.find(function(site) {
 							return site.Id == sid;
 						});
 						theSite.isChecked = true;
-						if(theSite)
-							theSite.Teams.forEach(function(team){
+						if (theSite)
+							theSite.Teams.forEach(function(team) {
 								team.isChecked = true;
-						});
+							});
 					});
 
-					if(teamIds.length > 0)
+					if (teamIds.length > 0)
 						$scope.sites.forEach(function(site) {
 							site.Teams.forEach(function(team) {
 								if (team.Id.indexOf(teamIds) > -1)
@@ -208,46 +206,50 @@
 						});
 				}
 
-				$scope.selectedSites = function () {
-					return $scope.sites.filter(function(site) {
-						var selectedTeams = site.Teams.filter(function(team){
-							return team.isChecked == true;
-						});
-
-						var siteIdToBePassed = site.isChecked == true && ((selectedTeams.length === site.Teams.length) || selectedTeams.length == 0);
-						if(siteIdToBePassed) {
-							site.Teams.forEach(function(team){
-								var index = $scope.teamsSelected.indexOf(team.Id);
-								if (index > -1) {
-									$scope.teamsSelected.splice(index, 1);
-								}
+				$scope.selectedSites = function() {
+					return $scope.sites
+						.filter(function(site) {
+							var selectedTeams = site.Teams.filter(function(team) {
+								return team.isChecked == true ;
 							});
+							var noTeamsSelected = selectedTeams.length === 0
+							var allTeamsSelected = selectedTeams.length == site.Teams.length;
+							if (noTeamsSelected)
+								return false;
+
+							if (site.isChecked && allTeamsSelected)
+								unselectTeamsInSite(site)
+							return site.isChecked && allTeamsSelected;
+						}).map(function(s) {
+							return s.Id;
+						});
+				}
+
+				function unselectTeamsInSite(site) {
+					site.Teams.forEach(function(team) {
+						var index = $scope.teamsSelected.indexOf(team.Id);
+						if (index > -1) {
+							$scope.teamsSelected.splice(index, 1);
 						}
-						if(site.isChecked == true && !((selectedTeams.length === site.Teams.length) || selectedTeams.length == 0)) {
-							siteIdToBePassed = false;
-						}
-						return siteIdToBePassed;
-					}).map(function(s) {
-						return s.Id;
 					});
 				}
 
 				$scope.updateTeams = function() {
-					$scope.sites.forEach(function(site){
-						var selectedTeam = site.Teams.find(function(team){
+					$scope.sites.forEach(function(site) {
+						var selectedTeam = site.Teams.find(function(team) {
 							return $scope.teamsSelected.indexOf(team.Id) > -1;
 						});
-							selectedTeam.isChecked = selectedTeam ? true : false;
+						selectedTeam.isChecked = selectedTeam ? true : false;
 					});
 				}
 
 				$scope.forTest_selectSite = function(site) {
 					site.isChecked = !site.isChecked;
-					var selectedSite = $scope.sites.find(function(s){
+					var selectedSite = $scope.sites.find(function(s) {
 						return s.Id === site.Id;
 					});
 
-					selectedSite.Teams.forEach(function(team){
+					selectedSite.Teams.forEach(function(team) {
 						team.isChecked = selectedSite.isChecked;
 					});
 				}
@@ -281,28 +283,21 @@
 					}
 				});
 
-				$scope.setSiteToChecked = function() {
-					$scope.sites.forEach(function(site){
-						site.Teams.forEach(function(team){
-								team.isChecked = $scope.teamsSelected.indexOf(team.Id) > -1;
+				$scope.updateSite = function() {
+					$scope.sites.forEach(function(site) {
+						site.Teams.forEach(function(team) {
+							team.isChecked = $scope.teamsSelected.indexOf(team.Id) > -1;
 						});
-
-						var checkedTeams = site.Teams.filter(function(team){
-							return team.isChecked === true;
+						var checkedTeams = site.Teams.filter(function(team) {
+							return team.isChecked;
 						});
-						if(checkedTeams.length === site.Teams.length) {
-							site.isChecked = true;
-						}
-						else if(checkedTeams.length === 0) {
-							site.isChecked = false;
-						}
-
+						site.isChecked = checkedTeams.length > 0;
 					});
 				};
 
 				$scope.$watch('teamsSelected', function(newValue, oldValue) {
 					if (newValue !== oldValue) {
-						$scope.setSiteToChecked();
+						$scope.updateSite();
 					}
 				});
 
