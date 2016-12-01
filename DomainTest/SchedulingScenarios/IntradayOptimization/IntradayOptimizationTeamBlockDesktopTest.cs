@@ -26,12 +26,15 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTestWithStaticDependenciesAvoidUse]
-	[TestFixture(true)]
-	[TestFixture(false)]
+	[TestFixture(true, true)]
+	[TestFixture(false, true)]
+	[TestFixture(true, false)]
+	[TestFixture(false, false)]
 	public class IntradayOptimizationTeamBlockDesktopTest : IConfigureToggleManager
 	{
 		[RemoveMeWithToggle("Should not be necessary when toggle is on/removed", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		private readonly bool _resourcePlannerMaxSeatsNew40939;
+		private readonly bool _resourcePlannerSplitBigIslands42049;
 		public IOptimizationCommand Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
@@ -39,9 +42,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public IInitMaxSeatForStateHolder InitMaxSeatForStateHolder;
 		public IResourceOptimization ResourceOptimization;
 
-		public IntradayOptimizationTeamBlockDesktopTest(bool resourcePlannerMaxSeatsNew40939)
+		public IntradayOptimizationTeamBlockDesktopTest(bool resourcePlannerMaxSeatsNew40939, bool resourcePlannerSplitBigIslands42049)
 		{
 			_resourcePlannerMaxSeatsNew40939 = resourcePlannerMaxSeatsNew40939;
+			_resourcePlannerSplitBigIslands42049 = resourcePlannerSplitBigIslands42049;
 		}
 
 		[Test]
@@ -324,6 +328,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		{
 			if(_resourcePlannerMaxSeatsNew40939)
 				toggleManager.Enable(Toggles.ResourcePlanner_MaxSeatsNew_40939);
+			if(_resourcePlannerSplitBigIslands42049)
+				toggleManager.Enable(Toggles.ResourcePlanner_SplitBigIslands_42049);
 		}
 	}
 }

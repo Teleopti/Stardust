@@ -5,14 +5,15 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -24,8 +25,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[DomainTestWithStaticDependenciesAvoidUse]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	public class IntradayOptimizationTest
+	[TestFixture(true)]
+	[TestFixture(false)]
+	public class IntradayOptimizationTest : IConfigureToggleManager
 	{
+		private readonly bool _resourcePlannerSplitBigIslands42049;
 		public FakeSkillRepository SkillRepository;
 		public FakePersonRepository PersonRepository;
 		public FakeSkillDayRepository SkillDayRepository;
@@ -36,6 +40,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public IScheduleStorage ScheduleStorage;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public Func<IGridlockManager> LockManager;
+
+		public IntradayOptimizationTest(bool resourcePlannerSplitBigIslands42049)
+		{
+			_resourcePlannerSplitBigIslands42049 = resourcePlannerSplitBigIslands42049;
+		}
 
 		[Test]
 		public void ShouldUseShiftThatCoverHigherDemand()
@@ -286,6 +295,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent.PermissionInformation.DefaultTimeZone());
 			PersonAssignmentRepository.GetSingle(dateOnly).Period
 				.Should().Be.EqualTo(new DateTimePeriod(dateTime.AddHours(8), dateTime.AddHours(17)));
+		}
+
+		public void Configure(FakeToggleManager toggleManager)
+		{
+			if (_resourcePlannerSplitBigIslands42049)
+				toggleManager.Enable(Toggles.ResourcePlanner_SplitBigIslands_42049);
 		}
 	}
 }

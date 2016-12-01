@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -20,8 +21,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[DomainTestWithStaticDependenciesAvoidUse]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	public class IntradayOptimizationCascadingTest
+	[TestFixture(true)]
+	[TestFixture(false)]
+	public class IntradayOptimizationCascadingTest : IConfigureToggleManager
 	{
+		private readonly bool _resourcePlannerSplitBigIslands42049;
 		public FakeSkillRepository SkillRepository;
 		public FakePersonRepository PersonRepository;
 		public FakeSkillDayRepository SkillDayRepository;
@@ -29,6 +33,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public IntradayOptimizationFromWeb Target;
+
+		public IntradayOptimizationCascadingTest(bool resourcePlannerSplitBigIslands42049)
+		{
+			_resourcePlannerSplitBigIslands42049 = resourcePlannerSplitBigIslands42049;
+		}
 
 		[Test]
 		public void ShouldOnlyConsiderPrimarySkillDuringOptimization()
@@ -95,6 +104,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			PersonAssignmentRepository.GetSingle(dateOnly, agentA).Period
 					.Should().Be.EqualTo(dateOnly.ToDateTimePeriod(new TimePeriod(7, 45, 16, 45), agentA.PermissionInformation.DefaultTimeZone()));
+		}
+
+		public void Configure(FakeToggleManager toggleManager)
+		{
+			if (_resourcePlannerSplitBigIslands42049)
+				toggleManager.Enable(Toggles.ResourcePlanner_SplitBigIslands_42049);
 		}
 	}
 }

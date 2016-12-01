@@ -5,12 +5,14 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -22,8 +24,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[DomainTestWithStaticDependenciesAvoidUse]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	public class IntradayOptimizationIslandTests : ISetup
+	[TestFixture(true)]
+	[TestFixture(false)]
+	public class IntradayOptimizationIslandTests : ISetup, IConfigureToggleManager
 	{
+		private readonly bool _resourcePlannerSplitBigIslands42049;
 		public IntradayOptimizationFromWeb Target;
 		public FakeSkillRepository SkillRepository;
 		public FakeScenarioRepository ScenarioRepository;
@@ -31,6 +36,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepositorySimulateNewUnitOfWork SkillDayRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
+
+		public IntradayOptimizationIslandTests(bool resourcePlannerSplitBigIslands42049)
+		{
+			_resourcePlannerSplitBigIslands42049 = resourcePlannerSplitBigIslands42049;
+		}
 		
 		[Test]
 		public void ShouldWorkCompleteWayWithMultipleIslands()
@@ -70,6 +80,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeSkillDayRepositorySimulateNewUnitOfWork>().For<ISkillDayRepository>();
+		}
+
+		public void Configure(FakeToggleManager toggleManager)
+		{
+			if (_resourcePlannerSplitBigIslands42049)
+				toggleManager.Enable(Toggles.ResourcePlanner_SplitBigIslands_42049);
 		}
 	}
 }
