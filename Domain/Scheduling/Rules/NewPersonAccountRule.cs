@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	public class NewPersonAccountRule : INewBusinessRule
 	{
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		//private readonly ISchedulingResultStateHolder _schedules;
 		private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
 		private bool _haltModify = true;
 		private bool _forDelete;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_allAccounts = allAccounts;
+			//_schedules = schedules;
 			FriendlyName = Resources.BusinessRulePersonAccountFriendlyName;
 			Description = Resources.DescriptionOfNewPersonAccountRule;
 			_businessRulePersonAccountError1 = Resources.BusinessRulePersonAccountError1;
@@ -52,7 +54,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			var responseList = new List<IBusinessRuleResponse>();
 
-			if (otherScenarioThanDefault())
+			var firstOrDefault = rangeClones.Values.FirstOrDefault();
+			if (firstOrDefault == null || !firstOrDefault.Scenario.DefaultScenario)
 			{
 				return responseList;
 			}
@@ -90,8 +93,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 					if (lastRemaining != affectedAccount.Remaining)
 					{
+						if (_schedulingResultStateHolder.Schedules == null)
+							_schedulingResultStateHolder.Schedules = rangeClones.Values.FirstOrDefault().Owner;
 						//Tell someone this account is dirty
-						lock (modifiedAccountLock)
+						lock (modifiedAccountLock) { }
 							_schedulingResultStateHolder.Schedules.ModifiedPersonAccounts.Add((IPersonAbsenceAccount) affectedAccount.Root());
 					}
 
@@ -130,10 +135,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		public string FriendlyName { get; }
 		public string Description { get; }
 
-		private bool otherScenarioThanDefault()
-		{
-			return !_schedulingResultStateHolder.Schedules.Scenario.DefaultScenario;
-		}
 
 		private IBusinessRuleResponse createResponse(IPerson person, IDateOnlyAsDateTimePeriod dateOnly, string message, Type type, Guid? absenceId)
 		{

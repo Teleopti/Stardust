@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		{
 			setup();
 			_state = new SchedulingResultStateHolder();
-			var miniAndPa = NewBusinessRuleCollection.MinimumAndPersonAccount(_state);
+			var miniAndPa = NewBusinessRuleCollection.MinimumAndPersonAccount(_state, _state.AllPersonAccounts);
 			Assert.That(miniAndPa.Count, Is.EqualTo(NewBusinessRuleCollection.Minimum().Count + 1));
 			Assert.That(collectionContainsType(miniAndPa, typeof(NewPersonAccountRule)));
 		}

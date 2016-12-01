@@ -106,13 +106,15 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			var aggregatedValidatorList = new HashSet<IAbsenceRequestValidator>();
 			IList<IPersonRequest> personRequests;
 			var stopwatch = new Stopwatch();
+			IScenario currentScenario;
 
-			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				stopwatch.Restart();
 				preloadData();
 				personRequests = _personRequestRepository.Find(personRequestsIds);
 				_personRepository.FindPeople(personRequests.Select(x => x.Person.Id.GetValueOrDefault()));
+				currentScenario = _scenarioRepository.Current();
 				stopwatch.Stop();
 				_feedback.SendProgress($"Done preloading data! It took {stopwatch.Elapsed}");
 
@@ -122,16 +124,16 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					var person = personRequest.Person;
 					if (person.WorkflowControlSet != null)
 					{
-						var mergedPeriod = person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest)personRequest.Request);
+						var mergedPeriod = person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest) personRequest.Request);
 						aggregatedValidatorList.UnionWith(mergedPeriod.GetSelectedValidatorList());
 					}
 				}
-			
+
 				stopwatch.Restart();
 				loadDataForResourceCalculation(personRequests, aggregatedValidatorList);
 				stopwatch.Stop();
 				_feedback.SendProgress($"Done loading data for resource calculation! It took {stopwatch.Elapsed}");
-
+				//}
 				var seniority = _arrangeRequestsByProcessOrder.GetRequestsSortedBySeniority(personRequests);
 				var firstComeFirstServe = _arrangeRequestsByProcessOrder.GetRequestsSortedByDate(personRequests);
 
@@ -142,35 +144,41 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				{
 					stopwatch.Stop();
 					_feedback.SendProgress($"Done _resourceCalculationContextFactory.Create(..)! It took {stopwatch.Elapsed}");
-					processOrderList(seniority);
-					processOrderList(firstComeFirstServe);
+					processOrderList(seniority, currentScenario);
+					processOrderList(firstComeFirstServe, currentScenario);
 				}
+
 			}
 			foreach (var personRequest in personRequests)
 			{
-				var count = 0;
-				while (count < 3)
+				sendCommandWithRetries(personRequest);
+			}
+		}
+
+		private void sendCommandWithRetries(IPersonRequest personRequest)
+		{
+			var count = 0;
+			while (count < 3)
+			{
+				try
 				{
-					try
+					using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 					{
-						using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-						{
-							sendRequestCommand(personRequest);
-							uow.PersistAll();
-							break;
-						}
-					}
-					catch (OptimisticLockException)
-					{
-						count++;
+						sendRequestCommand(personRequest);
+						uow.PersistAll();
+						break;
 					}
 				}
-				if (count >= 3)
+				catch (OptimisticLockException)
 				{
-					string message = $"Optimistic lock when persisting request ({personRequest.Id.GetValueOrDefault()})! Number of retries: {count}";
-					logger.Warn(message);
-					_feedback.SendProgress(message);
+					count++;
 				}
+			}
+			if (count >= 3)
+			{
+				string message = $"Optimistic lock when persisting request ({personRequest.Id.GetValueOrDefault()})! Number of retries: {count}";
+				logger.Warn(message);
+				_feedback.SendProgress(message);
 			}
 		}
 
@@ -186,7 +194,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_dayOffTemplateRepository.LoadAll();
 		}
 
-		private void processOrderList(IList<IPersonRequest> requests)
+		private void processOrderList(IList<IPersonRequest> requests, IScenario currentScenario)
 		{
 			var stopwatch = new Stopwatch();
 			foreach (var personRequest in requests)
@@ -207,7 +215,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					allAccounts = new PersonAccountCollection(absenceRequest.Person);
 
 				var affectedPersonAbsenceAccount = allAccounts.Find(absenceRequest.Absence);
-				var currentScenario = _scenarioRepository.Current();
 				var requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(NewBusinessRuleCollection.Minimum(), currentScenario, _schedulingResultStateHolder);
 
 				var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod(absenceRequest);
@@ -250,6 +257,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 											  validatorList);
 				stopwatch.Stop();
 				_feedback.SendProgress($"processAbsenceRequest.process(..) took {stopwatch.Elapsed}");
+				//sendCommandWithRetries(personRequest);
 			}
 		}
 

@@ -234,12 +234,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 		private void setBusinessRules(IPerson person, PersonAbsenceAccount account)
 		{
-			_schedulingResultStateHolder.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>
+			_schedulingResultStateHolder.Schedules = _scheduleDictionary;
+			_newBusinessRules = NewBusinessRuleCollection.MinimumAndPersonAccount(_schedulingResultStateHolder, new Dictionary<IPerson, IPersonAccountCollection>
 			{
 				{person, new PersonAccountCollection(person) {account}}
-			};
-			_schedulingResultStateHolder.Schedules = _scheduleDictionary;
-			_newBusinessRules = NewBusinessRuleCollection.MinimumAndPersonAccount(_schedulingResultStateHolder);
+			});
 		}
 
 		private PersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod dateTimePeriod)

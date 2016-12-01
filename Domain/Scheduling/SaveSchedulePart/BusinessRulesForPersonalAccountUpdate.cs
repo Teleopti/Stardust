@@ -17,22 +17,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public INewBusinessRuleCollection FromScheduleRange(IScheduleRange scheduleRange)
 		{
-			_schedulingResultStateHolder.Schedules = scheduleRange.Owner;
-			_schedulingResultStateHolder.PersonsInOrganization = new Collection<IPerson> { scheduleRange.Person };
-			_schedulingResultStateHolder.AllPersonAccounts =
-				_personAbsenceAccountRepository.FindByUsers(_schedulingResultStateHolder.PersonsInOrganization);
-
-			var rules = NewBusinessRuleCollection.MinimumAndPersonAccount(_schedulingResultStateHolder);
+			var personAccounts = _personAbsenceAccountRepository.FindByUsers(new Collection<IPerson> {scheduleRange.Person});
+			var rules = NewBusinessRuleCollection.MinimumAndPersonAccount(_schedulingResultStateHolder, personAccounts);
 			rules.DoNotHaltModify(typeof(NewPersonAccountRule));
-			//Stop this rule from hindering a save... This will make sure that we update personal accounts.
-
-			((IValidateScheduleRange)scheduleRange).ValidateBusinessRules(rules);
+			((IValidateScheduleRange) scheduleRange).ValidateBusinessRules(rules);
 			return rules;
 		}
 	}
-
-	
 }

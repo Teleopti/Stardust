@@ -369,7 +369,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 						account.CalculateUsed(scheduleStorage, Schedules.Scenario);
 						var range = (IValidateScheduleRange) Schedules[person];
-						range.ValidateBusinessRules(NewBusinessRuleCollection.MinimumAndPersonAccount(SchedulingResultState));
+						range.ValidateBusinessRules(NewBusinessRuleCollection.MinimumAndPersonAccount(SchedulingResultState, SchedulingResultState.AllPersonAccounts));
 					}
 				}
 			}

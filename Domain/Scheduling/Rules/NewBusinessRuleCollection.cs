@@ -269,7 +269,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			var ret = schedulingResultStateHolder.UseValidation
 				? All(schedulingResultStateHolder)
-				: MinimumAndPersonAccount(schedulingResultStateHolder);
+				: MinimumAndPersonAccount(schedulingResultStateHolder, schedulingResultStateHolder.AllPersonAccounts);
 			foreach (var rule in ret)
 			{
 				rule.HaltModify = false;
@@ -277,12 +277,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return ret;
 		}
 
-		public static INewBusinessRuleCollection MinimumAndPersonAccount(ISchedulingResultStateHolder schedulingResultStateHolder)
+		public static INewBusinessRuleCollection MinimumAndPersonAccount(ISchedulingResultStateHolder schedulingResultStateHolder, IDictionary<IPerson, IPersonAccountCollection> personAccounts)
 		{
 			if (schedulingResultStateHolder == null) return null;
 			var ret = new NewBusinessRuleCollection
 			{
-				new NewPersonAccountRule(schedulingResultStateHolder, schedulingResultStateHolder.AllPersonAccounts)
+				new NewPersonAccountRule(schedulingResultStateHolder, personAccounts)
 			};
 			return ret;
 		}

@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					if (!Presenter.ModifySchedulePart(modifiedList))
                     {
                         var scheduleRange = (IValidateScheduleRange) SchedulerStateHolder.Schedules[selectedPerson];
-                        scheduleRange.ValidateBusinessRules(NewBusinessRuleCollection.MinimumAndPersonAccount(SchedulerStateHolder.SchedulingResultState));
+                        scheduleRange.ValidateBusinessRules(NewBusinessRuleCollection.MinimumAndPersonAccount(SchedulerStateHolder.SchedulingResultState, SchedulerStateHolder.SchedulingResultState.AllPersonAccounts));
                         return;
                     }
 				}

@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				return rules;
 			}
 
-			return NewBusinessRuleCollection.MinimumAndPersonAccount(this);
+			return NewBusinessRuleCollection.MinimumAndPersonAccount(this, AllPersonAccounts);
 		}
 	}
 }
