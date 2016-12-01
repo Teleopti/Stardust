@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 		private readonly IDictionary<ISkill, IEnumerable<ISkillDay>> _skillDays;
 		private readonly DateOnlyPeriod _datePeriod;
 		private VirtualSkillGroupsCreatorResult _skillGroupsCreatorResult;
-		private IList<Island> _islandList;
+		private IList<OldIsland> _islandList;
 		private IDictionary<ISkill,TimeSpan> _skillDayForecastForSkills = new Dictionary<ISkill, TimeSpan>();
 		private TimeSpan _totalForecastedForDate;
 		private readonly TimeFormatter _timeFormatter = new TimeFormatter(new ThisCulture(CultureInfo.CurrentCulture));
@@ -365,7 +365,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			if (listViewIslands.SelectedItems.Count == 0)
 				return;
 
-			var island = listViewIslands.SelectedItems[0].Tag as Island;
+			var island = listViewIslands.SelectedItems[0].Tag as OldIsland;
 
 			listViewGroupsInIsland.Items.Clear();
 			listViewGroupsInIsland.SuspendLayout();

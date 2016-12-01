@@ -7,14 +7,14 @@ namespace Teleopti.Ccc.Domain.Islands
 {
 	public class SkillGroupIslandsAnalyzer
 	{
-		public IList<Island> FindIslands(VirtualSkillGroupsCreatorResult skillGroups)
+		public IList<OldIsland> FindIslands(VirtualSkillGroupsCreatorResult skillGroups)
 		{
-			var islands = new List<Island>();
+			var islands = new List<OldIsland>();
 			var keys = skillGroups.GetKeys();
 			foreach (var key in keys)
 			{
 				var splittedSkillKeys = key.Split("|".ToCharArray());
-				islands.Add(new Island(splittedSkillKeys, new List<string> {key}, skillGroups));
+				islands.Add(new OldIsland(splittedSkillKeys, new List<string> {key}, skillGroups));
 			}
 
 			var islandPair = checkIfJoinIslands(islands);
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Islands
 			return islands;
 		}
 
-		private static Tuple<Island, Island> checkIfJoinIslands(IEnumerable<Island> islands)
+		private static Tuple<OldIsland, OldIsland> checkIfJoinIslands(IEnumerable<OldIsland> islands)
 		{
 			foreach (var island in islands)
 			{
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Islands
 					{
 						if (island.SkillGuidStrings.Contains(skillGuidString))
 						{
-							return new Tuple<Island, Island>(island, island1);
+							return new Tuple<OldIsland, OldIsland>(island, island1);
 						}
 					}
 				}
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Islands
 			return null;
 		}
 
-		private static Island joinIslands(Island island1, Island island2,
+		private static OldIsland joinIslands(OldIsland island1, OldIsland island2,
 			VirtualSkillGroupsCreatorResult skillGroupsCreatorResult)
 		{
 			var combinedGuidStrings = new List<string>(island1.SkillGuidStrings);
@@ -62,17 +62,17 @@ namespace Teleopti.Ccc.Domain.Islands
 			var combinedGroupKeys = new List<string>(island1.GroupKeys);
 			combinedGroupKeys.AddRange(island2.GroupKeys);
 
-			return new Island(combinedGuidStrings, combinedGroupKeys, skillGroupsCreatorResult);
+			return new OldIsland(combinedGuidStrings, combinedGroupKeys, skillGroupsCreatorResult);
 		}
 	}
 
-	public class Island
+	public class OldIsland : IIsland
 		{
 			private readonly HashSet<string> _skillGuidStrings;
 			private readonly IList<string> _groupKeys;
 			private readonly VirtualSkillGroupsCreatorResult _skillGroupsCreatorResult;
 
-			public Island(IEnumerable<string> skillGuidStrings, IList<string> groupKeys, VirtualSkillGroupsCreatorResult skillGroupsCreatorResult)
+			public OldIsland(IEnumerable<string> skillGuidStrings, IList<string> groupKeys, VirtualSkillGroupsCreatorResult skillGroupsCreatorResult)
 			{
 				_skillGuidStrings = new HashSet<string>(skillGuidStrings);
 				_groupKeys = groupKeys;
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Islands
 				get { return _groupKeys; }
 			}
 
-			public IList<IPerson> PersonsInIsland()
+			public IEnumerable<IPerson> PersonsInIsland()
 			{
 				var result = new List<IPerson>();
 				foreach (var groupKey in _groupKeys)

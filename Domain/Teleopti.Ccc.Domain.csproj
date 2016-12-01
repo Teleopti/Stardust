@@ -484,6 +484,10 @@
     <Compile Include="Intraday\SupportedSkillsInIntradayProvider.cs" />
     <Compile Include="Intraday\TaskPeriodsProvider.cs" />
     <Compile Include="Intraday\TimeSeriesProvider.cs" />
+    <Compile Include="Islands\CreateSkillGroups.cs" />
+    <Compile Include="Islands\Island.cs" />
+    <Compile Include="Islands\SkillGroup.cs" />
+    <Compile Include="Islands\SkillGroupComparerForIslands.cs" />
     <Compile Include="LogObject\LogObjectDetail.cs" />
     <Compile Include="Logon\FullPermissions.cs" />
     <Compile Include="Logon\FullPermissionsAspect.cs" />

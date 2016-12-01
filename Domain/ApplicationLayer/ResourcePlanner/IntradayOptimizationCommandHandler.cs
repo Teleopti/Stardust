@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		}
 
 		[UnitOfWork]
-		protected virtual IEnumerable<Island> CreateIslands(DateOnlyPeriod period, IntradayOptimizationCommand command)
+		protected virtual IEnumerable<IIsland> CreateIslands(DateOnlyPeriod period, IntradayOptimizationCommand command)
 		{
 			using (CommandScope.Create(command))
 			{
