@@ -8,8 +8,10 @@
   function stateConfig($stateProvider) {
     $stateProvider.state('resourceplanner', {
       url: '/resourceplanner',
-      templateUrl: 'app/resourceplanner/resourceplanner.html',
-      controller: 'ResourcePlannerCtrl'
+      templateUrl: 'app/resourceplanner/resourceplanner.html'
+    }).state('resourceplanner.overview', {
+    	templateUrl: 'app/resourceplanner/planningperiods-overview.html',
+    	controller: 'ResourcePlannerCtrl'
     }).state('resourceplanner.filter', {
       params: {
         filterId: {},
