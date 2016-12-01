@@ -306,6 +306,50 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			vm.Projection.Last().Description.Should().Be(phoneActivity.Description.Name);
 		}
 
+
+		[Test]
+		public void ShouldProjectionStillBeOvertimeWhenAddingAIntersectingPersonalActivityOutsideShift()
+		{
+			IMultiplicatorDefinitionSet def = new MultiplicatorDefinitionSet("foo", MultiplicatorType.Overtime);
+
+			_toggleManager.Enable(Toggles.WfmTeamSchedule_MakePersonalActivityUnmerged_40252);
+
+			var date = new DateTime(2015, 01, 01, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePersonWithGuid("agent", "1");
+			var assignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(date));
+
+			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(date), person, scenario);
+			var phoneActivityPeriod = new DateTimePeriod(date.AddHours(8), date.AddHours(17));
+			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
+
+			var overTimeActivityPeriod = new DateTimePeriod(date.AddHours(15), date.AddHours(16));
+			var overTimeActivity = ActivityFactory.CreateActivity("Chat", Color.Red);
+
+			var peronalActivityPeriod = new DateTimePeriod(date.AddHours(15).AddMinutes(30), date.AddHours(17));
+			var personalActivity = ActivityFactory.CreateActivity("Chat", Color.Red);
+
+			assignment.AddActivity(phoneActivity, phoneActivityPeriod);
+			assignment.AddOvertimeActivity(overTimeActivity, overTimeActivityPeriod, def);
+			assignment.AddPersonalActivity(personalActivity, peronalActivityPeriod);
+
+			scheduleDay.Add(assignment);
+
+			var vm = target.Projection(scheduleDay, true, _commonAgentNameProvider.CommonAgentNameSettings);
+
+			vm.PersonId.Should().Be(person.Id.ToString());
+
+			var projections = vm.Projection.ToArray();
+
+			projections.Length.Should().Be(3);
+			projections[0].Description.Should().Be(phoneActivity.Description.Name);
+			projections[1].Description.Should().Be(overTimeActivity.Description.Name);
+			projections[1].IsOvertime.Should().Be.True();
+			projections[2].Start.Should().Be("2015-01-01 15:30");
+			projections[2].End.Should().Be("2015-01-01 17:00");
+			projections[2].IsOvertime.Should().Be.False();
+		}
+
+
 		[Test]
 		public void ShouldNotSplitMergedMainShiftLayer()
 		{
@@ -373,10 +417,18 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			vm.Projection.Count().Should().Be(3);
 			var visualLayers = vm.Projection.ToArray();
 			visualLayers[0].Description.Should().Be("Meeting");
+			visualLayers[0].Start.Should().Be("2015-01-01 08:00");
+			visualLayers[0].End.Should().Be("2015-01-01 08:30");
 			visualLayers[0].Minutes.Should().Be(30);
+
 			visualLayers[1].Description.Should().Be("Meeting");
+			visualLayers[1].Start.Should().Be("2015-01-01 08:30");
+			visualLayers[1].End.Should().Be("2015-01-01 10:00");
 			visualLayers[1].Minutes.Should().Be(90);
+
 			visualLayers[2].Description.Should().Be("Phone");
+			visualLayers[2].Start.Should().Be("2015-01-01 10:00");
+			visualLayers[2].End.Should().Be("2015-01-01 15:00");
 			visualLayers[2].Minutes.Should().Be(300);
 		}
 
@@ -413,15 +465,26 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var visualLayers = vm.Projection.ToArray();
 			var shiftLayers = assignment1Person1.ShiftLayers.ToArray();
 			visualLayers[0].Description.Should().Be("Meeting");
+			visualLayers[0].Start.Should().Be("2015-01-01 08:00");
+			visualLayers[0].End.Should().Be("2015-01-01 09:00");
 			visualLayers[0].Minutes.Should().Be(60);
 			visualLayers[0].ShiftLayerIds.First().Should().Be(shiftLayers[1].Id);
+
 			visualLayers[1].Description.Should().Be("Meeting");
+			visualLayers[1].Start.Should().Be("2015-01-01 09:00");
+			visualLayers[1].End.Should().Be("2015-01-01 09:30");
 			visualLayers[1].Minutes.Should().Be(30);
 			visualLayers[1].ShiftLayerIds.First().Should().Be(shiftLayers[2].Id);
+
 			visualLayers[2].Description.Should().Be("Meeting");
+			visualLayers[2].Start.Should().Be("2015-01-01 09:30");
+			visualLayers[2].End.Should().Be("2015-01-01 10:30");
 			visualLayers[2].Minutes.Should().Be(60);
 			visualLayers[2].ShiftLayerIds.First().Should().Be(shiftLayers[3].Id);
+
 			visualLayers[3].Description.Should().Be("Phone");
+			visualLayers[3].Start.Should().Be("2015-01-01 10:30");
+			visualLayers[3].End.Should().Be("2015-01-01 15:00");
 			visualLayers[3].Minutes.Should().Be(270);
 			visualLayers[3].ShiftLayerIds.First().Should().Be(shiftLayers[0].Id);
 		}

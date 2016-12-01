@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					Description = layer.DisplayDescription().Name,
 					Color = layer.DisplayColor().ToHtml(),
 					Start = TimeZoneInfo.ConvertTimeFromUtc(l.Period.StartDateTime, userTimeZone).ToFixedDateTimeFormat(),
+					End = TimeZoneInfo.ConvertTimeFromUtc(l.Period.EndDateTime, userTimeZone).ToFixedDateTimeFormat(),
 					Minutes = (int)l.Period.ElapsedTime().TotalMinutes
 				});
 			});
