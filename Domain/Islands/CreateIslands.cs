@@ -13,7 +13,8 @@ namespace Teleopti.Ccc.Domain.Islands
 		private readonly IPeopleInOrganization _peopleInOrganization;
 
 		public CreateIslands(CreateSkillGroups createSkillGroups,
-												IPeopleInOrganization peopleInOrganization)
+												IPeopleInOrganization peopleInOrganization,
+												ReduceIslandsLimits reduceIslandsLimits)
 		{
 			_createSkillGroups = createSkillGroups;
 			_peopleInOrganization = peopleInOrganization;
@@ -24,7 +25,12 @@ namespace Teleopti.Ccc.Domain.Islands
 			var skillGroups = _createSkillGroups.Create(_peopleInOrganization.Agents(period), period.StartDate);
 			var groupedSkillGroups = skillGroups.GroupBy(x => x, (group, groups) => groups, new SkillGroupComparerForIslands());
 
-			return groupedSkillGroups.Select(skillGroupsInIsland => new Island(skillGroupsInIsland)).ToArray();
+			var ret = new List<IIsland>();
+			foreach (var skillGroupInIsland in groupedSkillGroups)
+			{
+				ret.Add(new Island(skillGroupInIsland));
+			}
+			return ret;
 		}
 	}
 

@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -22,14 +23,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 		public IntradayOptimizationCommandHandler Target;
 		public FakeEventPublisher EventPublisher;
 		public FakePersonRepository PersonRepository;
+		public ReduceIslandsLimits ReduceIslandsLimits;
 
 		[Test, Ignore("Anderstestet")]
 		public void ShouldMakeTwoIslandsByMakingAgentsSingleSkilledIfOtherSkillgroupIsBigEnough()
 		{
+			ReduceIslandsLimits.SetMinimumNumberOfAgentsInIsland_UseOnlyFromTest(5);
 			var skillA = new Skill();
 			var skillB = new Skill();
-			var skillAagents = Enumerable.Repeat(new Person().KnowsSkill(skillA), 4000);
-			var skillABagents = Enumerable.Repeat(new Person().KnowsSkill(skillA, skillB), 900);
+			var skillAagents = Enumerable.Repeat(new Person().KnowsSkill(skillA), 40);
+			var skillABagents = Enumerable.Repeat(new Person().KnowsSkill(skillA, skillB), 9);
 			skillAagents.Union(skillABagents).ForEach(PersonRepository.Has);
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
@@ -37,7 +40,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count()
 				.Should().Be.EqualTo(2);
 		}
-
-		//tänk på enbart primäry skills
 	}
 }
