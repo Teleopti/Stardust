@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AgentSkillAnalyzer));
 			this.listViewAllVirtualGroups = new System.Windows.Forms.ListView();
 			this.columnHeaderVirtualGroup = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -41,6 +42,8 @@
 			this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.toolStripMenuItemRemoveSkill = new System.Windows.Forms.ToolStripMenuItem();
 			this.listView3 = new System.Windows.Forms.ListView();
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -88,6 +91,7 @@
 			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonSuggestAction = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod = new System.Windows.Forms.ToolStripButton();
+			this.contextMenuStrip1.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
@@ -149,6 +153,7 @@
             this.columnHeader7,
             this.columnHeader3,
             this.columnHeader4});
+			this.listViewSkillInSkillGroup.ContextMenuStrip = this.contextMenuStrip1;
 			this.listViewSkillInSkillGroup.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewSkillInSkillGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
 			this.listViewSkillInSkillGroup.FullRowSelect = true;
@@ -195,6 +200,20 @@
 			// columnHeader4
 			// 
 			this.columnHeader4.Text = "Activity";
+			// 
+			// contextMenuStrip1
+			// 
+			this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemRemoveSkill});
+			this.contextMenuStrip1.Name = "contextMenuStrip1";
+			this.contextMenuStrip1.Size = new System.Drawing.Size(205, 26);
+			// 
+			// toolStripMenuItemRemoveSkill
+			// 
+			this.toolStripMenuItemRemoveSkill.Name = "toolStripMenuItemRemoveSkill";
+			this.toolStripMenuItemRemoveSkill.Size = new System.Drawing.Size(204, 22);
+			this.toolStripMenuItemRemoveSkill.Text = "Remove skill from group";
+			this.toolStripMenuItemRemoveSkill.Click += new System.EventHandler(this.toolStripMenuItemRemoveSkill_Click);
 			// 
 			// listView3
 			// 
@@ -441,6 +460,7 @@
             this.columnHeader26,
             this.columnHeader27,
             this.columnHeader28});
+			this.listViewIslandsSkillsOnGroup.ContextMenuStrip = this.contextMenuStrip1;
 			this.listViewIslandsSkillsOnGroup.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewIslandsSkillsOnGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
 			this.listViewIslandsSkillsOnGroup.FullRowSelect = true;
@@ -506,6 +526,7 @@
 			this.listViewIslands.TabIndex = 2;
 			this.listViewIslands.UseCompatibleStateImageBehavior = false;
 			this.listViewIslands.View = System.Windows.Forms.View.Details;
+			this.listViewIslands.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewIslands_ColumnClick);
 			this.listViewIslands.SelectedIndexChanged += new System.EventHandler(this.listViewIslandsSelectedIndexChanged);
 			// 
 			// columnHeader19
@@ -548,6 +569,7 @@
 			this.listViewGroupsInIsland.TabIndex = 1;
 			this.listViewGroupsInIsland.UseCompatibleStateImageBehavior = false;
 			this.listViewGroupsInIsland.View = System.Windows.Forms.View.Details;
+			this.listViewGroupsInIsland.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewGroupsInIsland_ColumnClick);
 			this.listViewGroupsInIsland.SelectedIndexChanged += new System.EventHandler(this.listViewGroupsInIslandSelectedIndexChanged);
 			// 
 			// columnHeader16
@@ -607,7 +629,7 @@
             this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod});
 			this.toolStripMain.Location = new System.Drawing.Point(3, 0);
 			this.toolStripMain.Name = "toolStripMain";
-			this.toolStripMain.Size = new System.Drawing.Size(686, 25);
+			this.toolStripMain.Size = new System.Drawing.Size(655, 25);
 			this.toolStripMain.TabIndex = 0;
 			// 
 			// toolStripButtonRemoveNotLoadedSkills
@@ -658,6 +680,7 @@
 			this.Controls.Add(this.toolStripContainer1);
 			this.Name = "AgentSkillAnalyzer";
 			this.Text = "Agent Skill Analyzer";
+			this.contextMenuStrip1.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage2.ResumeLayout(false);
@@ -739,5 +762,7 @@
 		private System.Windows.Forms.ToolStripButton toolStripButton1;
 		private System.Windows.Forms.ToolStripButton toolStripButtonSuggestAction;
 		private System.Windows.Forms.ToolStripButton toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemRemoveSkill;
 	}
 }
