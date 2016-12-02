@@ -113,11 +113,8 @@
 					.then(function(skills) {
 						$scope.skillsLoaded = true;
 						$scope.skills = skills;
-						//if ($scope.skillId !== null) {
-
 						if (skillIds.length > 0 && skillAreaId == null)
 							$scope.selectedSkill = getSelected(skills, skillIds[0]);
-						//}
 					});
 
 					RtaService.getSkillAreas()
@@ -164,10 +161,7 @@
 						});
 				}
 
-				//org selection
 				var selectedSiteId;
-				//var selectedSiteId = {};
-
 
 				$scope.selectSite = function(siteId) {
 					selectedSiteId = $scope.isSelectedSite(siteId) ? '' : siteId;
@@ -188,9 +182,7 @@
 					if (selectedTeamIds.length > 0) {
 						selection['teamIds'] = selectedTeamIds;
 					}
-					//if (selectedSiteIds.length > 0 || selectedTeamIds.length > 0)
 					stateGoToAgents(selection);
-
 				}
 
 				function keepSelectionForOrganization() {
@@ -226,7 +218,6 @@
 							var allTeamsSelected = selectedTeams.length == site.Teams.length;
 							if (noTeamsSelected)
 								return false;
-
 							if (site.isChecked && allTeamsSelected)
 								unselectTeamsInSite(site)
 							return site.isChecked && allTeamsSelected;
@@ -245,16 +236,16 @@
 				}
 
 				$scope.teamChecked = function(site, team) {
-					var seletedTeamsChecked = site.Teams.filter(function(t) {
+					var selectedTeamsChecked = site.Teams.filter(function(t) {
 						return t.isChecked;
 					});
-					var isAllTeamsCheckedForSite = seletedTeamsChecked.length === site.Teams.length;
+					var isAllTeamsCheckedForSite = selectedTeamsChecked.length === site.Teams.length;
+					site.isMarked = selectedTeamsChecked.length > 0 && !isAllTeamsCheckedForSite && !site.isChecked ? true : false;
 					if (site.isChecked)
 						return true;
 					if (isAllTeamsCheckedForSite)
 						return false;
 					return team.isChecked;
-					//return site.isChecked || ($scope.teamsSelected.indexOf(team.Id) > -1 && !team.isChecked);
 				}
 
 				$scope.updateTeams = function() {
