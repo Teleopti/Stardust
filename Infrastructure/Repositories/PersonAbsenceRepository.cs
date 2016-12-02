@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public PersonAbsenceRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{
-
 		}
 		
 		/// <summary>
@@ -68,9 +67,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							.Add(Restrictions.InG("Person", people))
 							.Add(Restrictions.IsNotNull("PersonRequest"))
 							.SetProjection(Projections.Property("PersonRequest"))))
-				.SetFetchMode("requests", FetchMode.Join)
 				.SetFetchMode("PersonAbsences", FetchMode.Join)
-				.SetResultTransformer(Transformers.DistinctRootEntity)
 					.List();
 			}
 
@@ -102,9 +99,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							.Add(Restrictions.Eq("Scenario", scenario))
 							.Add(Restrictions.IsNotNull("PersonRequest"))
 							.SetProjection(Projections.Property("PersonRequest"))))
-					.SetFetchMode("requests", FetchMode.Join)
-				.SetFetchMode("PersonAbsences", FetchMode.Join)
-					.SetResultTransformer(Transformers.DistinctRootEntity)
+					.SetFetchMode("PersonAbsences", FetchMode.Join)
 					.List();
 			}
 
@@ -171,9 +166,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						.Add(restrictions)
 						.Add(Restrictions.IsNotNull("PersonRequest"))
 						.SetProjection(Projections.Property("PersonRequest"))))
-				.SetFetchMode("requests", FetchMode.Join)
 				.SetFetchMode("PersonAbsences", FetchMode.Join)
-				.SetResultTransformer(Transformers.DistinctRootEntity)
 				.List();
 
 			initializeAbsences(retList);
@@ -186,10 +179,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				if (!LazyLoadingManager.IsInitialized(personAbsence.Layer.Payload))
 					LazyLoadingManager.Initialize(personAbsence.Layer.Payload);
-
-				/*if (!LazyLoadingManager.IsInitialized(personAbsence.PersonRequest))
-					LazyLoadingManager.Initialize(personAbsence.PersonRequest);*/
-				
 			}
 		}
 
