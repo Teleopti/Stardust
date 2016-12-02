@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Islands
 					return skillGroup.Agents.Count();
 				}
 			}
-			return 0;
+			return int.MaxValue;
 		}
 
 		public IEnumerator<SkillGroup> GetEnumerator()
