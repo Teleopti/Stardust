@@ -61,9 +61,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 			var skillA = SkillFactory.CreateSkill("A").WithId();
 			var skillB = SkillFactory.CreateSkill("B").WithId();
 			var skillC = SkillFactory.CreateSkill("C").WithId();
-			var skillAagents = Enumerable.Repeat(new Person().KnowsSkill(skillA), 12);
-			var skillABagents = Enumerable.Repeat(new Person().KnowsSkill(skillA, skillB), 3);
-			var skillACagents = Enumerable.Repeat(new Person().KnowsSkill(skillA, skillC), 3);
+			var skillAagents = Enumerable.Repeat(new Person().KnowsSkill(skillA), 20);
+			var skillABagents = Enumerable.Repeat(new Person().KnowsSkill(skillA, skillB), 5);
+			var skillACagents = Enumerable.Repeat(new Person().KnowsSkill(skillA, skillC), 5);
 
 			foreach (var skillAagent in skillAagents)
 			{
