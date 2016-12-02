@@ -1,8 +1,7 @@
 using System;
-using Teleopti.Ccc.Domain.Islands.Legacy;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Scheduling.Assignment
+namespace Teleopti.Ccc.Domain.Islands.Legacy
 {
 	public class VirtualSkillContext
 	{

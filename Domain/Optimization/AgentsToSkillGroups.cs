@@ -1,22 +1,21 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Islands.Legacy;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class AgentsToSkillGroups
 	{
-		private readonly VirtualSkillGroupsResultProvider _virtualSkillGroupsResultProvider;
+		private readonly ISkillGroupInfoProvider _skillGroupInfoProvider;
 
-		public AgentsToSkillGroups(VirtualSkillGroupsResultProvider virtualSkillGroupsResultProvider)
+		public AgentsToSkillGroups(ISkillGroupInfoProvider skillGroupInfoProvider)
 		{
-			_virtualSkillGroupsResultProvider = virtualSkillGroupsResultProvider;
+			_skillGroupInfoProvider = skillGroupInfoProvider;
 		}
 
 		public IEnumerable<IEnumerable<IPerson>> ToSkillGroups()
 		{
-			return _virtualSkillGroupsResultProvider.Fetch().AgentsGroupedBySkillGroup();
+			return _skillGroupInfoProvider.Fetch().AgentsGroupedBySkillGroup();
 		}
 	}
 }

@@ -147,7 +147,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleDayForPerson>().As<IScheduleDayForPerson>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleRangeForPerson>().As<IScheduleRangeForPerson>().InstancePerLifetimeScope();
 			builder.RegisterType<PreSchedulingStatusChecker>().As<IPreSchedulingStatusChecker>().InstancePerLifetimeScope();
-			builder.RegisterType<VirtualSkillGroupsResultProvider>().SingleInstance();
 			builder.RegisterType<VirtualSkillContext>().InstancePerLifetimeScope();
 			builder.RegisterType<IntradayOptimizationContext>().InstancePerLifetimeScope();
 			builder.RegisterType<NightRestWhiteSpotSolverServiceFactory>().As<INightRestWhiteSpotSolverServiceFactory>().InstancePerLifetimeScope();
@@ -156,10 +155,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Toggle(Toggles.ResourcePlanner_SplitBigIslands_42049))
 			{
 				builder.RegisterType<CreateIslands>().As<ICreateIslands>().SingleInstance();
+				builder.RegisterType<VirtualSkillGroupsResultProvider>().As<ISkillGroupInfoProvider>().SingleInstance();
 			}
 			else
 			{
 				builder.RegisterType<CreateIslandsOld>().As<ICreateIslands>().SingleInstance();
+				builder.RegisterType<VirtualSkillGroupsResultProvider>().As<ISkillGroupInfoProvider>().SingleInstance();
 			}
 			builder.RegisterType<CreateSkillGroups>().SingleInstance();
 			builder.RegisterType<ReduceIslandsLimits>().SingleInstance();

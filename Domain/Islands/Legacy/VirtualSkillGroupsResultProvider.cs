@@ -1,9 +1,8 @@
 using System;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 
 namespace Teleopti.Ccc.Domain.Islands.Legacy
 {
-	public class VirtualSkillGroupsResultProvider
+	public class VirtualSkillGroupsResultProvider : ISkillGroupInfoProvider
 	{
 		public ISkillGroupInfo Fetch()
 		{
