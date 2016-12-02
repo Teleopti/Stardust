@@ -11,7 +11,9 @@ namespace Teleopti.Ccc.Domain.Islands
 
 		public SkillGroups(IEnumerable<SkillGroup> skillGroups)
 		{
-			_skillGroups = skillGroups;
+			var skillGroupsTemp = skillGroups.ToList();
+			skillGroupsTemp.Sort(new SortSkillGroupBySize());
+			_skillGroups = skillGroupsTemp;
 		}
 
 		public IEnumerable<IEnumerable<IPerson>> AgentsGroupedBySkillGroup()
