@@ -234,8 +234,17 @@
 					});
 				}
 
-				$scope.teamChecked = function(site,teamId){
-					return site.isChecked || $scope.teamsSelected.indexOf(teamId) > -1;
+				$scope.teamChecked = function(site,team){
+					var seletedTeamsChecked = site.Teams.filter(function(t){
+						return t.isChecked;
+					});
+					var isAllTeamsCheckedForSite = seletedTeamsChecked.length === site.Teams.length;
+					if(site.isChecked)
+						return true;
+					if(isAllTeamsCheckedForSite)
+						return false;
+					return team.isChecked;
+					//return site.isChecked || ($scope.teamsSelected.indexOf(team.Id) > -1 && !team.isChecked);
 				}
 
 				$scope.updateTeams = function() {

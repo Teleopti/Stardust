@@ -111,8 +111,8 @@ describe('RtaAgentsCtrl', function() {
 				scope.forTest_selectSite(scope.sites[0]);
 			});
 
-		expect(scope.sites[0].Teams[0].isChecked).toBe(false);
-		expect(scope.sites[0].Teams[1].isChecked).toBe(false);
+		expect(scope.teamChecked(scope.sites[0], scope.sites[0].Teams[0])).toBe(false);
+		expect(scope.teamChecked(scope.sites[0], scope.sites[0].Teams[1])).toBe(false);
 	});
 
 	it('should select team when selecting site', function() {
@@ -129,6 +129,28 @@ describe('RtaAgentsCtrl', function() {
 			});
 
 		expect(scope.sites[0].Teams[0].isChecked).toBe(true);
+	});
+
+	it('should only unselect one team when a site was selected', function() {
+		$fakeBackend.withOrganization({
+			Id: 'LondonGuid',
+			Teams: [{
+				Id: 'LondonTeam1'
+			}, {
+				Id: 'LondonTeam2'
+			}, ]
+		});
+
+		$controllerBuilder.createController()
+			.apply(function() {
+				scope.forTest_selectSite(scope.sites[0]);
+			})
+			.apply(function() {
+				scope.teamsSelected = ['LondonTeam1'];
+			});
+
+		expect(scope.teamChecked(scope.sites[0], scope.sites[0].Teams[0])).toBe(true);
+		expect(scope.teamChecked(scope.sites[0], scope.sites[0].Teams[1])).toBe(false);
 	});
 
 	it('should go to agents on site', function() {
@@ -306,6 +328,8 @@ describe('RtaAgentsCtrl', function() {
 				scope.forTest_selectSite(scope.sites[0]);
 				scope.forTest_selectSite(scope.sites[1]);
 				scope.forTest_selectSite(scope.sites[0]);
+			})
+			.apply(function(){
 				scope.goToAgents();
 			});
 
