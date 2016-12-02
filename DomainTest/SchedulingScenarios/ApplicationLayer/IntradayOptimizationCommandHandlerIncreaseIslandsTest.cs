@@ -1,13 +1,16 @@
-﻿using System.Linq;
+﻿using System.Drawing;
+using System.Linq;
 using NHibernate.Util;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -25,20 +28,30 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 		public FakePersonRepository PersonRepository;
 		public ReduceIslandsLimits ReduceIslandsLimits;
 
-		[Test, Ignore("Anderstestet")]
-		public void ShouldMakeTwoIslandsByMakingAgentsSingleSkilledIfOtherSkillgroupIsBigEnough()
+		[TestCase(40, 9, ExpectedResult = 2)]
+		[TestCase(1, 1, ExpectedResult = 1)]
+		public int ShouldMakeTwoIslandsByMakingAgentsSingleSkilledIfOtherSkillgroupIsBigEnough(int agentsSkillA, int agentsSkillB)
 		{
 			ReduceIslandsLimits.SetMinimumNumberOfAgentsInIsland_UseOnlyFromTest(5);
-			var skillA = new Skill();
-			var skillB = new Skill();
-			var skillAagents = Enumerable.Repeat(new Person().KnowsSkill(skillA), 40);
-			var skillABagents = Enumerable.Repeat(new Person().KnowsSkill(skillA, skillB), 9);
-			skillAagents.Union(skillABagents).ForEach(PersonRepository.Has);
+			var skillA = SkillFactory.CreateSkill("A").WithId();
+			var skillB = SkillFactory.CreateSkill("B").WithId();
+			var skillAagents = Enumerable.Repeat(new Person().KnowsSkill(skillA), agentsSkillA);
+			var skillABagents = Enumerable.Repeat(new Person().KnowsSkill(skillA, skillB), agentsSkillB);
+			//skillAagents.Union(skillABagents).ForEach(PersonRepository.Has); //<- blir knas med union här. Mystiskt säger Roger!
+
+			foreach (var skillAagent in skillAagents)
+			{
+				PersonRepository.Has(skillAagent);
+			}
+
+			foreach (var skillABagent in skillABagents)
+			{
+				PersonRepository.Has(skillABagent);
+			}
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
-			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count()
-				.Should().Be.EqualTo(2);
+			return EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count();
 		}
 	}
 }

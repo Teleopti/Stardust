@@ -25,12 +25,39 @@ namespace Teleopti.Ccc.Domain.Islands
 				if (personPeriod == null)
 					continue;
 				var agentsSkills = _personalSkillsProvider.PersonSkills(personPeriod).Select(x => x.Skill).ToList();
-				if (!skillGroups.ContainsKey(agentsSkills))
-					skillGroups[agentsSkills] = new List<IPerson>();
-				skillGroups[agentsSkills].Add(agent);  
+
+				var key = containsKey(skillGroups, agentsSkills);
+				if ( key == null)
+				{
+					skillGroups.Add(agentsSkills, new List<IPerson> {agent});
+				}
+				else
+				{
+					skillGroups[key].Add(agent);
+				}
+				
 			}
 
 			return skillGroups.Select(keyValue => new SkillGroup(keyValue.Key, keyValue.Value)).ToList();
+		}
+
+		private ICollection<ISkill> containsKey(Dictionary<ICollection<ISkill>, ICollection<IPerson>> skillGroups, IList<ISkill> skills)
+		{
+			foreach (var skillGroupsKey in skillGroups.Keys)
+			{
+				if (skillGroupsKey.Count != skills.Count)
+					return null;
+
+				foreach (var skill in skillGroupsKey)
+				{
+					if (!skills.Contains(skill))
+						return null;
+				}
+
+				return skillGroupsKey;
+			}
+
+			return null;
 		}
 	}
 }

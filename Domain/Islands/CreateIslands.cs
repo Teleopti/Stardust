@@ -24,6 +24,8 @@ namespace Teleopti.Ccc.Domain.Islands
 		{
 			var skillGroups = _createSkillGroups.Create(_peopleInOrganization.Agents(period), period.StartDate);
 			var groupedSkillGroups = skillGroups.GroupBy(x => x, (group, groups) => groups, new SkillGroupComparerForIslands());
+			reduceSkillGroups(groupedSkillGroups);
+			
 
 			var ret = new List<IIsland>();
 			foreach (var skillGroupInIsland in groupedSkillGroups)
@@ -31,6 +33,28 @@ namespace Teleopti.Ccc.Domain.Islands
 				ret.Add(new Island(skillGroupInIsland));
 			}
 			return ret;
+		}
+
+		private void reduceSkillGroups(IEnumerable<IEnumerable<SkillGroup>> groupedSkillGroups)
+		{
+			foreach (var groupedSkillGroup in groupedSkillGroups)
+			{
+				foreach (var skillGroup in groupedSkillGroup)
+				{
+					foreach (var skillGroupSkill in skillGroup.Skills.Reverse())
+					{
+						foreach (var otherSkillGroup in groupedSkillGroup)
+						{
+							if (otherSkillGroup == skillGroup) continue;
+							if (!otherSkillGroup.Skills.Contains(skillGroupSkill)) continue;
+							if (skillGroup.Skills.Count > 1 && skillGroup.Agents.Count() * 4 < otherSkillGroup.Agents.Count())
+							{
+								skillGroup.Skills.Remove(skillGroupSkill);
+							}
+						}
+					}
+				}
+			}	
 		}
 	}
 
