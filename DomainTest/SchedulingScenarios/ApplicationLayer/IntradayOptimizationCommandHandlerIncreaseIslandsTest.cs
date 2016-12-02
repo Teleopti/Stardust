@@ -84,5 +84,32 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 
 			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count().Should().Be(2);
 		}
+
+
+		[Ignore("42049")]
+		[TestCase(40, 9, ExpectedResult = 2)]
+		[TestCase(40, 2, ExpectedResult = 1)]
+		public int ShouldNotReduceSkillGroupsWhenAgentsInIslandIsBelowMinimumAgents(int agentsSkillA, int agentsSkillB)
+		{
+			ReduceIslandsLimits.SetMinimumNumberOfAgentsInIsland_UseOnlyFromTest(45);
+			var skillA = SkillFactory.CreateSkill("A").WithId();
+			var skillB = SkillFactory.CreateSkill("B").WithId();
+			var skillAagents = Enumerable.Repeat(new Person().KnowsSkill(skillA), agentsSkillA);
+			var skillABagents = Enumerable.Repeat(new Person().KnowsSkill(skillA, skillB), agentsSkillB);
+			
+			foreach (var skillAagent in skillAagents)
+			{
+				PersonRepository.Has(skillAagent);
+			}
+
+			foreach (var skillABagent in skillABagents)
+			{
+				PersonRepository.Has(skillABagent);
+			}
+
+			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
+
+			return EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count();
+		}
 	}
 }
