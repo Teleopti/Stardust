@@ -5,8 +5,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands
 {
-	//TODO: Should be used when creating skillgroups/islands!
-
 	public class SkillGroups : ISkillGroupInfo, IEnumerable<SkillGroup>
 	{
 		private readonly IEnumerable<SkillGroup> _skillGroups;
