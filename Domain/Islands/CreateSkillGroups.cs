@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Islands
 		public SkillGroups Create(IEnumerable<IPerson> agents, DateOnly date)
 		{
 			//We need to include the concept skillgroup here! not needed yet -> only when islands are run and there we still use old behavior
-			var skillGroups = new Dictionary<ICollection<ISkill>, ICollection<IPerson>>();
+			var skillGroups = new Dictionary<ICollection<ISkill>, ICollection<IPerson>>(new SameSkillGroupSkillsComparer());
 
 			foreach (var agent in agents)
 			{
@@ -26,38 +26,36 @@ namespace Teleopti.Ccc.Domain.Islands
 					continue;
 				var agentsSkills = _personalSkillsProvider.PersonSkills(personPeriod).Select(x => x.Skill).ToList();
 
-				var key = containsKey(skillGroups, agentsSkills);
-				if ( key == null)
+				if (!skillGroups.ContainsKey(agentsSkills))
 				{
 					skillGroups.Add(agentsSkills, new List<IPerson> {agent});
 				}
 				else
 				{
-					skillGroups[key].Add(agent);
+					skillGroups[agentsSkills].Add(agent);
 				}
 				
 			}
 
 			return new SkillGroups(skillGroups.Select(keyValue => new SkillGroup(keyValue.Key, keyValue.Value)).ToList());
 		}
+	}
 
-		private ICollection<ISkill> containsKey(Dictionary<ICollection<ISkill>, ICollection<IPerson>> skillGroups, IList<ISkill> skills)
+	public class SameSkillGroupSkillsComparer : IEqualityComparer<ICollection<ISkill>>
+	{
+		public bool Equals(ICollection<ISkill> x, ICollection<ISkill> y)
 		{
-			foreach (var skillGroupsKey in skillGroups.Keys)
+			foreach (var skill in x)
 			{
-				if (skillGroupsKey.Count != skills.Count)
-					return null;
-
-				foreach (var skill in skillGroupsKey)
-				{
-					if (!skills.Contains(skill))
-						return null;
-				}
-
-				return skillGroupsKey;
+				if (!y.Contains(skill))
+					return false;
 			}
+			return true;
+		}
 
-			return null;
+		public int GetHashCode(ICollection<ISkill> obj)
+		{
+			return obj.Count;
 		}
 	}
 }

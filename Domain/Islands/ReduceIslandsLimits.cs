@@ -9,11 +9,12 @@
 		}
 
 		public int MinimumNumberOfAgentsInIsland { get; private set; }
-		public int MinimumFactorOfAgentsInOtherSkillGroup { get; }
+		public int MinimumFactorOfAgentsInOtherSkillGroup { get; private set; }
 
-		public void SetMinimumNumberOfAgentsInIsland_UseOnlyFromTest(int limit)
+		public void SetValues_UseOnlyFromTest(int minAgentsInIsland, int minFactorOfAgentsInOtherSkillGroup)
 		{
-			MinimumNumberOfAgentsInIsland = limit;
+			MinimumNumberOfAgentsInIsland = minAgentsInIsland;
+			MinimumFactorOfAgentsInOtherSkillGroup = minFactorOfAgentsInOtherSkillGroup;
 		}
 	}
 }
