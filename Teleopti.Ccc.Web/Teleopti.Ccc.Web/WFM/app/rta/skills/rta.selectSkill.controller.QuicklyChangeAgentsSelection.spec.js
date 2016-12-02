@@ -329,7 +329,7 @@ describe('RtaAgentsCtrl', function() {
 				scope.forTest_selectSite(scope.sites[1]);
 				scope.forTest_selectSite(scope.sites[0]);
 			})
-			.apply(function(){
+			.apply(function() {
 				scope.goToAgents();
 			});
 
@@ -392,10 +392,10 @@ describe('RtaAgentsCtrl', function() {
 			.apply(function() {
 				scope.forTest_selectSite(scope.sites[0]);
 			})
-			.apply(function(){
+			.apply(function() {
 				scope.forTest_selectSite(scope.sites[0]);
 			})
-			.apply(function(){
+			.apply(function() {
 				scope.goToAgents();
 			});
 
@@ -458,7 +458,7 @@ describe('RtaAgentsCtrl', function() {
 			.apply(function() {
 				scope.forTest_selectSite(scope.sites[0]);
 			})
-			.apply(function(){
+			.apply(function() {
 				scope.teamsSelected = ['ParisTeam2'];
 			});
 
@@ -495,11 +495,11 @@ describe('RtaAgentsCtrl', function() {
 	it('should select site and teams when in site in stateParams', function() {
 		stateParams.siteIds = ['LondonGuid'];
 		$fakeBackend.withOrganization({
-				Id: 'LondonGuid',
-				Teams: [{
-					Id: 'LondonTeam1'
-				}]
-			});
+			Id: 'LondonGuid',
+			Teams: [{
+				Id: 'LondonTeam1'
+			}]
+		});
 
 		$controllerBuilder.createController();
 
@@ -510,11 +510,11 @@ describe('RtaAgentsCtrl', function() {
 	it('should select team when team in stateParams', function() {
 		stateParams.teamIds = ['LondonTeam1'];
 		$fakeBackend.withOrganization({
-				Id: 'LondonGuid',
-				Teams: [{
-					Id: 'LondonTeam1'
-				}]
-			});
+			Id: 'LondonGuid',
+			Teams: [{
+				Id: 'LondonTeam1'
+			}]
+		});
 
 		$controllerBuilder.createController();
 
@@ -625,7 +625,7 @@ describe('RtaAgentsCtrl', function() {
 			.apply(function() {
 				scope.teamsSelected = ['ParisTeam1', 'ParisTeam2'];
 			})
-			.apply(function(){
+			.apply(function() {
 				scope.goToAgents();
 			});
 
@@ -693,4 +693,93 @@ describe('RtaAgentsCtrl', function() {
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {});
 	});
+
+	it('should go to agents with skill', function() {
+		$fakeBackend.withSkill({
+			Id: "phoneSkillGuid"
+		})
+
+		$controllerBuilder.createController()
+			.apply(function() {
+				scope.selectedSkillChange({
+					Id: "phoneSkillGuid"
+				});
+			});;
+
+		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+			skillIds: 'phoneSkillGuid',
+			skillAreaId: undefined
+		});
+	});
+
+	it('should go to agents with skillArea', function() {
+		$fakeBackend.withSkillAreas([{
+			Id: "phoneAndEmailGuid"
+		}]);
+
+		$controllerBuilder.createController()
+			.apply(function() {
+				scope.selectedSkillAreaChange({
+					Id: "phoneAndEmailGuid"
+				});
+			});
+
+		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+			skillAreaId: 'phoneAndEmailGuid',
+			skillIds: []
+		});
+	});
+
+	it('should keep skill in selection', function() {
+		stateParams.skillIds = ["phoneSkillGuid"];
+		$fakeBackend.withSkill({
+			Id: "phoneSkillGuid"
+		})
+
+		$controllerBuilder.createController();
+
+		expect(scope.selectedSkill.Id).toBe("phoneSkillGuid");
+	});
+
+	it('should keep skillArea in selection', function() {
+		stateParams.skillAreaId = "phoneAndEmailGuid";
+		$fakeBackend.withSkillAreas([{
+			Id: "phoneAndEmailGuid"
+		}])
+
+		$controllerBuilder.createController();
+
+		expect(scope.selectedSkillArea.Id).toBe("phoneAndEmailGuid");
+	});
+
+	it('should go to agents by skillArea and clear skill from stateParams', function() {
+		stateParams.skillIds = ["phoneSkillGuid"];
+		$fakeBackend
+		.withSkill({
+			Id: "phoneSkillGuid"
+		})
+		.withSkillAreas([{
+			Id: "phoneAndEmailGuid",
+			Skills: [{
+				Id: "phoneSkillGuid"
+			},
+			{
+				Id: "emailSkillGuid"
+			},
+		]
+		}])
+
+		$controllerBuilder.createController()
+		.apply(function() {
+			scope.selectedSkillAreaChange({
+				Id: "phoneAndEmailGuid"
+			});
+
+			expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+				skillAreaId: 'phoneAndEmailGuid',
+				skillIds: []
+			});
+	});
+});
+
 });

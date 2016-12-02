@@ -113,13 +113,26 @@
 					.then(function(skills) {
 						$scope.skillsLoaded = true;
 						$scope.skills = skills;
+						//if ($scope.skillId !== null) {
+
+						if (skillIds.length > 0 && skillAreaId == null)
+							$scope.selectedSkill = getSelected(skills, skillIds[0]);
+						//}
 					});
 
-				RtaService.getSkillAreas()
-					.then(function(skillAreas) {
-						$scope.skillAreasLoaded = true;
-						$scope.skillAreas = skillAreas.SkillAreas;
-					});
+					RtaService.getSkillAreas()
+						.then(function(skillAreas) {
+							$scope.skillAreasLoaded = true;
+							$scope.skillAreas = skillAreas.SkillAreas;
+							if (skillAreaId != null && skillIds.length == 0)
+								$scope.selectedSkillArea = getSelected($scope.skillAreas, skillAreaId);
+						});
+
+				function getSelected(outOf, shouldMatch) {
+					return outOf.find(function(o) {
+						return o.Id === shouldMatch;
+					})
+				};
 
 				$scope.querySearch = function(query, myArray) {
 					var results = query ? myArray.filter(createFilterFor(query)) : myArray;
@@ -134,25 +147,21 @@
 					};
 				};
 
-				$scope.selectedSkillChange = function(item) {
-					if (item) {
-						$timeout(function() {
-							stateGoToAgents({
-								skillIds: item.Id
-							});
-						});
-					};
-
+				$scope.selectedSkillChange = function(skill) {
+					if (!skill) return;
+					$scope.skillId = skill.Id;
+					stateGoToAgents({
+						skillIds: skill.Id,
+						skillAreaId: undefined
+					});
 				}
 
-				$scope.selectedSkillAreaChange = function(item) {
-					if (item) {
-						$timeout(function() {
-							stateGoToAgents({
-								skillAreaId: item.Id
-							});
+				$scope.selectedSkillAreaChange = function(skillArea) {
+					if (!skillArea) return;
+						stateGoToAgents({
+							skillAreaId: skillArea.Id,
+							skillIds: []
 						});
-					};
 				}
 
 				//org selection
@@ -180,7 +189,7 @@
 						selection['teamIds'] = selectedTeamIds;
 					}
 					//if (selectedSiteIds.length > 0 || selectedTeamIds.length > 0)
-						stateGoToAgents(selection);
+					stateGoToAgents(selection);
 
 				}
 
@@ -211,7 +220,7 @@
 					return $scope.sites
 						.filter(function(site) {
 							var selectedTeams = site.Teams.filter(function(team) {
-								return team.isChecked == true ;
+								return team.isChecked == true;
 							});
 							var noTeamsSelected = selectedTeams.length === 0
 							var allTeamsSelected = selectedTeams.length == site.Teams.length;
@@ -235,14 +244,14 @@
 					});
 				}
 
-				$scope.teamChecked = function(site,team){
-					var seletedTeamsChecked = site.Teams.filter(function(t){
+				$scope.teamChecked = function(site, team) {
+					var seletedTeamsChecked = site.Teams.filter(function(t) {
 						return t.isChecked;
 					});
 					var isAllTeamsCheckedForSite = seletedTeamsChecked.length === site.Teams.length;
-					if(site.isChecked)
+					if (site.isChecked)
 						return true;
-					if(isAllTeamsCheckedForSite)
+					if (isAllTeamsCheckedForSite)
 						return false;
 					return team.isChecked;
 					//return site.isChecked || ($scope.teamsSelected.indexOf(team.Id) > -1 && !team.isChecked);
@@ -347,6 +356,7 @@
 							siteIds: siteIds,
 							teamIds: teamIds,
 							skillIds: skillIds,
+							skillAreaId: skillAreaId,
 							excludedStateIds: excludedStates.map(function(s) {
 								return s === nullStateId ? null : s;
 							})
