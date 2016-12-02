@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Interfaces.Domain;
@@ -65,21 +64,8 @@ namespace Teleopti.Ccc.Domain.Islands
 						if (agentsInSkillGroup *_reduceIslandsLimits.MinimumFactorOfAgentsInOtherSkillGroup >= numberOfAgentsKnowingSkill[skillGroupSkill])
 							continue;
 
-						skillGroup.Skills.Remove(skillGroupSkill);
+						skillGroup.Skills.Remove(skillGroupSkill); //TODO! : förlorar förmodligen lite agenter här - kolla
 						numberOfAgentsKnowingSkill[skillGroupSkill] -= agentsInSkillGroup;
-
-						//foreach (var otherSkillGroup in skillGroupsOnIsland)
-						//{
-
-
-						//	if (otherSkillGroup == skillGroup) continue;
-						//	if (!otherSkillGroup.Skills.Contains(skillGroupSkill)) continue;
-						//	//if (skillGroup.Skills.Count > 1)
-						//	{
-						//		skillGroup.Skills.Remove(skillGroupSkill);
-						//		numberOfAgentsKnowingSkill[skillGroupSkill] -= agentsInSkillGroup;
-						//	}
-						//}
 					}
 				}
 			}	
