@@ -1,13 +1,10 @@
-﻿using System.Drawing;
-using System.Linq;
-using NHibernate.Util;
+﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -30,24 +27,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 
 		[TestCase(40, 9, ExpectedResult = 2)]
 		[TestCase(1, 1, ExpectedResult = 1)]
-		public int ShouldMakeTwoIslandsByMakingAgentsSingleSkilledIfOtherSkillgroupIsBigEnough(int agentsSkillA, int agentsSkillB)
+		public int ShouldMakeTwoIslandsByMakingAgentsSingleSkilledIfOtherSkillgroupIsBigEnough(int agentsSkillA, int agentsSkillAB)
 		{
 			ReduceIslandsLimits.SetMinimumNumberOfAgentsInIsland_UseOnlyFromTest(5);
 			var skillA = SkillFactory.CreateSkill("A").WithId();
 			var skillB = SkillFactory.CreateSkill("B").WithId();
-			var skillAagents = Enumerable.Repeat(new Person().KnowsSkill(skillA), agentsSkillA);
-			var skillABagents = Enumerable.Repeat(new Person().KnowsSkill(skillA, skillB), agentsSkillB);
-			//skillAagents.Union(skillABagents).ForEach(PersonRepository.Has); //<- blir knas med union här. Mystiskt säger Roger!
-
-			foreach (var skillAagent in skillAagents)
-			{
-				PersonRepository.Has(skillAagent);
-			}
-
-			foreach (var skillABagent in skillABagents)
-			{
-				PersonRepository.Has(skillABagent);
-			}
+			var skillAagents = Enumerable.Range(0, agentsSkillA).Select(x => new Person().KnowsSkill(skillA));
+			var skillABagents = Enumerable.Range(0, agentsSkillAB).Select(x => new Person().KnowsSkill(skillA, skillB));
+			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
