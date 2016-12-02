@@ -73,5 +73,22 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 
 			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count().Should().Be(2);
 		}
+
+		[Test, Ignore("42049, not finished")]
+		public void ShouldReduceBiggestSkillGroupsFirst()
+		{
+			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 5);
+			var skillA = SkillFactory.CreateSkill("A").WithId();
+			var skillB = SkillFactory.CreateSkill("B").WithId();
+			var skillC = SkillFactory.CreateSkill("C").WithId();
+			var skillAagents = Enumerable.Range(0, 41).Select(x => new Person().KnowsSkill(skillA));
+			var skillABagents = Enumerable.Range(0, 7).Select(x => new Person().KnowsSkill(skillA, skillB));
+			var skillACagents = Enumerable.Range(0, 8).Select(x => new Person().KnowsSkill(skillA, skillC));
+			skillAagents.Union(skillABagents).Union(skillACagents).ForEach(x => PersonRepository.Has(x));
+
+			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
+
+			var events = EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>();
+		}
 	}
 }
