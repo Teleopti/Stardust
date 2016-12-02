@@ -1,26 +1,35 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Islands;
-using Teleopti.Ccc.Domain.Islands.Legacy;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
 	[DomainTest]
-	public class VirtualSkillGroupsKeepStateTest
+	[TestFixture(true)]
+	[TestFixture(false)]
+	public class VirtualSkillGroupsKeepStateTest : IConfigureToggleManager
 	{
-		public VirtualSkillGroupsResultProvider Target;
-		public VirtualSkillContext Context;
+		private readonly bool _resourcePlannerSplitBigIslands42049;
+		public ISkillGroupInfoProvider Target;
+		public ISkillGroupContext Context;
+
+		public VirtualSkillGroupsKeepStateTest(bool resourcePlannerSplitBigIslands42049)
+		{
+			_resourcePlannerSplitBigIslands42049 = resourcePlannerSplitBigIslands42049;
+		}
 
 		[Test]
 		public void ShouldKeepResultInternally()
 		{
-			using (Context.Create(new DateOnlyPeriod()))
+			using (Context.Create(Enumerable.Empty<IPerson>(), new DateOnlyPeriod()))
 			{
 				Target.Fetch()
 					.Should().Be.SameInstanceAs(Target.Fetch());
@@ -36,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var uniqueResults = new ConcurrentDictionary<ISkillGroupInfo, byte>();
 			Parallel.For(0, numberOfThreads, i =>
 			{
-				using (Context.Create(period))
+				using (Context.Create(Enumerable.Empty<IPerson>(), period))
 				{
 					uniqueResults.GetOrAdd(Target.Fetch(), result => 0);
 				}
@@ -54,15 +63,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void CannotCreateNestedContexts()
 		{
-			using (Context.Create(new DateOnlyPeriod(2000,1,1,2000,1,2)))
+			using (Context.Create(Enumerable.Empty<IPerson>(), new DateOnlyPeriod(2000,1,1,2000,1,2)))
 			{
 				Assert.Throws<NotSupportedException>(() =>
 				{
-					using (Context.Create(new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2)))
+					using (Context.Create(Enumerable.Empty<IPerson>(), new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2)))
 					{
 					}
 				});
 			}
+		}
+
+		public void Configure(FakeToggleManager toggleManager)
+		{
+			if(_resourcePlannerSplitBigIslands42049)
+				toggleManager.Enable(Toggles.ResourcePlanner_SplitBigIslands_42049);
 		}
 	}
 }

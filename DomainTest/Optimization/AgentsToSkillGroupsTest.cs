@@ -4,11 +4,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Islands.Legacy;
+using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -17,11 +18,18 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
 	[DomainTest]
-	public class AgentsToSkillGroupsTest : ISetup
+	[TestFixture(true)]
+	[TestFixture(false)]
+	public class AgentsToSkillGroupsTest : ISetup, IConfigureToggleManager
 	{
+		private readonly bool _resourcePlannerSplitBigIslands42049;
 		public AgentsToSkillGroups Target;
-		public VirtualSkillContext Context;
-		public FakeSchedulingResultStateHolder SchedulingResultStateHolder;
+		public ISkillGroupContext Context;
+
+		public AgentsToSkillGroupsTest(bool resourcePlannerSplitBigIslands42049)
+		{
+			_resourcePlannerSplitBigIslands42049 = resourcePlannerSplitBigIslands42049;
+		}
 
 		[Test]
 		public void ShouldSplitTwoAgentsWithDifferentSkillsIntoTwoGroups()
@@ -33,9 +41,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			agent2.AddPersonPeriod(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()));
 			agent1.AddSkill(new Skill("_", "_", Color.Empty, 1, new SkillTypePhone(new Description(), ForecastSource.OutboundTelephony) ).WithId(), date);
 			agent2.AddSkill(new Skill("_", "_", Color.Empty, 1, new SkillTypePhone(new Description(), ForecastSource.OutboundTelephony) ).WithId(), date);
-			SchedulingResultStateHolder.PersonsInOrganization = new[] { agent1, agent2 };
 
-			using (Context.Create(new DateOnlyPeriod(date, date)))
+			using (Context.Create(new[] { agent1, agent2 }, new DateOnlyPeriod(date, date)))
 			{
 				var result = Target.ToSkillGroups();
 				result.Count().Should().Be.EqualTo(2);
@@ -55,9 +62,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var skill = new Skill("_", "_", Color.Empty, 1, new SkillTypePhone(new Description(), ForecastSource.OutboundTelephony)).WithId();
 			agent1.AddSkill(skill, date);
 			agent2.AddSkill(skill, date);
-			SchedulingResultStateHolder.PersonsInOrganization = new[] { agent1, agent2 };
 
-			using (Context.Create(new DateOnlyPeriod(date, date)))
+			using (Context.Create(new[] { agent1, agent2 }, new DateOnlyPeriod(date, date)))
 			{
 				Target.ToSkillGroups().Single()
 					.Should().Have.SameValuesAs(agent1, agent2);
@@ -67,6 +73,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeSchedulingResultStateHolder>().For<ISchedulingResultStateHolder>();
+		}
+
+		public void Configure(FakeToggleManager toggleManager)
+		{
+			if (_resourcePlannerSplitBigIslands42049)
+				toggleManager.Enable(Toggles.ResourcePlanner_SplitBigIslands_42049);
 		}
 	}
 }

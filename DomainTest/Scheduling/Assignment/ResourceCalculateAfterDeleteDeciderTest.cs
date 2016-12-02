@@ -4,10 +4,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Islands.Legacy;
+using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -16,12 +18,19 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
 	[DomainTest]
-	public class ResourceCalculateAfterDeleteDeciderTest : ISetup
+	[TestFixture(true)]
+	[TestFixture(false)]
+	public class ResourceCalculateAfterDeleteDeciderTest : ISetup, IConfigureToggleManager
 	{
+		private readonly bool _resourcePlannerSplitBigIslands42049;
 		public IResourceCalculateAfterDeleteDecider Target;
-		public FakeSchedulingResultStateHolder SchedulingResultStateHolder;
 		public LimitForNoResourceCalculation LimitForNoResourceCalculation;
-		public VirtualSkillContext Context;
+		public ISkillGroupContext Context;
+
+		public ResourceCalculateAfterDeleteDeciderTest(bool resourcePlannerSplitBigIslands42049)
+		{
+			_resourcePlannerSplitBigIslands42049 = resourcePlannerSplitBigIslands42049;
+		}
 
 		[Test]
 		public void ShouldAlwaysDoCalculationIfNoOtherAgentHasSameSkills()
@@ -31,9 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			period.AddPersonSkill(new PersonSkill(new Skill("_", "", Color.Empty, 1, new SkillTypePhone(new Description("_"), ForecastSource.OutboundTelephony)).WithId(), new Percent()));
 			me.AddPersonPeriod(period);
 
-			SchedulingResultStateHolder.PersonsInOrganization = new[] { me };
-
-			using (Context.Create(new DateOnlyPeriod( new DateOnly(2000, 1, 1), new DateOnly(2000, 1, 1))))
+			using (Context.Create(new[] { me }, new DateOnlyPeriod( new DateOnly(2000, 1, 1), new DateOnly(2000, 1, 1))))
 			{
 				Target.DoCalculation(me, new DateOnly(2000, 1, 1))
 					.Should().Be.True();
@@ -53,9 +60,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var skill = new Skill("_", "", Color.Empty, 1, new SkillTypePhone(new Description("_"), ForecastSource.OutboundTelephony)).WithId();
 			agent1.AddSkill(skill, date);
 			agent2.AddSkill(skill, date);
-			SchedulingResultStateHolder.PersonsInOrganization = new[] { agent1, agent2 };
 
-			using (Context.Create(new DateOnlyPeriod(date, date)))
+			using (Context.Create(new[] { agent1, agent2 }, new DateOnlyPeriod(date, date)))
 			{
 				Target.DoCalculation(agent1, date)
 					.Should().Be.False();
@@ -70,17 +76,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var date = new DateOnly(2000, 1, 1);
 			var agent1 = new Person();
 			var agent2 = new Person();
-			
 			agent1.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()));
 			agent2.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()));
-			
 			var skill = new Skill("_", "", Color.Empty, 1, new SkillTypePhone(new Description("_"), ForecastSource.OutboundTelephony)).WithId();
 			agent1.AddSkill(skill, date);
 			agent2.AddSkill(skill, date);
 			
-			SchedulingResultStateHolder.PersonsInOrganization = new[] { agent1, agent2};
-
-			using (Context.Create(new DateOnlyPeriod(date, date)))
+			using (Context.Create(new[] { agent1, agent2 }, new DateOnlyPeriod(date, date)))
 			{
 				Target.DoCalculation(agent2, date)
 					.Should().Be.True();
@@ -100,9 +102,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var skill = new Skill("_", "", Color.Empty, 1, new SkillTypePhone(new Description("_"), ForecastSource.OutboundTelephony)).WithId();
 			agent1.AddSkill(skill, date);
 			agent2.AddSkill(skill, date);
-			SchedulingResultStateHolder.PersonsInOrganization = new[] { agent1, agent2 };
 
-			using (Context.Create(new DateOnlyPeriod(date, date)))
+			using (Context.Create(new[] { agent1, agent2 }, new DateOnlyPeriod(date, date)))
 			{
 				Target.DoCalculation(agent1, date)
 					.Should().Be.False();
@@ -122,9 +123,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var skill = new Skill("_", "", Color.Empty, 1, new SkillTypePhone(new Description("_"), ForecastSource.OutboundTelephony)).WithId();
 			agent1.AddSkill(skill, date);
 			agent2.AddSkill(skill, date);
-			SchedulingResultStateHolder.PersonsInOrganization = new[] { agent1, agent2 };
 
-			using (Context.Create(new DateOnlyPeriod(date, date)))
+			using (Context.Create(new[] { agent1, agent2 }, new DateOnlyPeriod(date, date)))
 			{
 				Target.DoCalculation(agent1, date)
 					.Should().Be.True();
@@ -145,14 +145,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			otherAgent2.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()));
 			var commonSkill = new Skill("_", "", Color.Empty, 1, new SkillTypePhone(new Description("_"), ForecastSource.OutboundTelephony)).WithId();
 			var myExtraSkill = new Skill("_", "", Color.Empty, 1, new SkillTypePhone(new Description("_"), ForecastSource.OutboundTelephony)).WithId();
-
 			me.AddSkill(commonSkill, date);
 			me.AddSkill(myExtraSkill, date);
 			otherAgent1.AddSkill(commonSkill, date);
 			otherAgent2.AddSkill(commonSkill, date);
-			SchedulingResultStateHolder.PersonsInOrganization = new[] { me, otherAgent1, otherAgent2 };
 
-			using (Context.Create(new DateOnlyPeriod(date, date)))
+			using (Context.Create(new[] { me, otherAgent1, otherAgent2 }, new DateOnlyPeriod(date, date)))
 			{
 				Target.DoCalculation(me, date)
 					.Should().Be.True();
@@ -175,9 +173,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			agent1.AddSkill(skill, date);
 			agent2.AddSkill(skill, date);
 			agent2.AddSkill(deletedSkill, date);
-			SchedulingResultStateHolder.PersonsInOrganization = new[] { agent1, agent2 };
 
-			using (Context.Create(new DateOnlyPeriod(date, date)))
+			using (Context.Create(new[] { agent1, agent2 }, new DateOnlyPeriod(date, date)))
 			{
 				Target.DoCalculation(agent1, date)
 					.Should().Be.False();
@@ -201,9 +198,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			agent2.AddSkill(skill, date);
 			agent2.AddSkill(inActiveSkill, date);
 			((PersonSkill)agent2.Period(date).PersonSkillCollection.Last()).Active = false;
-			SchedulingResultStateHolder.PersonsInOrganization = new[] { agent1, agent2 };
 
-			using (Context.Create(new DateOnlyPeriod(date, date)))
+			using (Context.Create(new[] { agent1, agent2 }, new DateOnlyPeriod(date, date)))
 			{
 				Target.DoCalculation(agent1, date)
 					.Should().Be.False();
@@ -217,9 +213,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var person = new Person();
 			person.AddPersonPeriod(new PersonPeriod(date.AddDays(10), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()));
 
-			SchedulingResultStateHolder.PersonsInOrganization = new[] { person };
-
-			using (Context.Create(new DateOnlyPeriod(date, date)))
+			using (Context.Create(new[] { person }, new DateOnlyPeriod(date, date)))
 			{
 				Target.DoCalculation(person, date)
 					.Should().Be.False();
@@ -234,9 +228,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			me.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()));
 			var skill = new Skill("_", "", Color.Empty, 1, new SkillTypePhone(new Description("_"), ForecastSource.OutboundTelephony)).WithId();
 			me.AddSkill(skill, date);
-			SchedulingResultStateHolder.PersonsInOrganization = new[] { me, new Person(), new Person(), new Person(), new Person() };
 
-			using (Context.Create(new DateOnlyPeriod(date, date)))
+			using (Context.Create(new[] { me, new Person(), new Person(), new Person(), new Person() }, new DateOnlyPeriod(date, date)))
 			{
 				Target.DoCalculation(me, date)
 					.Should().Be.True();
@@ -248,6 +241,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeSchedulingResultStateHolder>().For<ISchedulingResultStateHolder>();
+		}
+
+		public void Configure(FakeToggleManager toggleManager)
+		{
+			if (_resourcePlannerSplitBigIslands42049)
+				toggleManager.Enable(Toggles.ResourcePlanner_SplitBigIslands_42049);
 		}
 	}
 }
