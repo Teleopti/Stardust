@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Islands
 			if (current == null)
 				throw new NotSupportedException("SkillGroups not in context.");
 
-			return new SkillGroups(current); //TODO!
+			return current;
 		}
 	}
 }

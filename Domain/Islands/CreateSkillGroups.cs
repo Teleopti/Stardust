@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Islands
 			_personalSkillsProvider = personalSkillsProvider;
 		}
 
-		public IEnumerable<SkillGroup> Create(IEnumerable<IPerson> agents, DateOnly date)
+		public SkillGroups Create(IEnumerable<IPerson> agents, DateOnly date)
 		{
 			//We need to include the concept skillgroup here! not needed yet -> only when islands are run and there we still use old behavior
 			var skillGroups = new Dictionary<ICollection<ISkill>, ICollection<IPerson>>();
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Islands
 				
 			}
 
-			return skillGroups.Select(keyValue => new SkillGroup(keyValue.Key, keyValue.Value)).ToList();
+			return new SkillGroups(skillGroups.Select(keyValue => new SkillGroup(keyValue.Key, keyValue.Value)).ToList());
 		}
 
 		private ICollection<ISkill> containsKey(Dictionary<ICollection<ISkill>, ICollection<IPerson>> skillGroups, IList<ISkill> skills)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -6,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Islands
 {
 	//TODO: Should be used when creating skillgroups/islands!
 
-	public class SkillGroups : ISkillGroupInfo
+	public class SkillGroups : ISkillGroupInfo, IEnumerable<SkillGroup>
 	{
 		private readonly IEnumerable<SkillGroup> _skillGroups;
 
@@ -30,6 +31,16 @@ namespace Teleopti.Ccc.Domain.Islands
 				}
 			}
 			return 0;
+		}
+
+		public IEnumerator<SkillGroup> GetEnumerator()
+		{
+			return _skillGroups.GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
 		}
 	}
 }

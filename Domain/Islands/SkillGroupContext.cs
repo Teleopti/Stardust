@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands
@@ -16,9 +15,9 @@ namespace Teleopti.Ccc.Domain.Islands
 		}
 
 		[ThreadStatic]
-		private static IEnumerable<SkillGroup> _skillGroups;
+		private static SkillGroups _skillGroups;
 
-		public static IEnumerable<SkillGroup> SkillGroups => _skillGroups;
+		public static SkillGroups SkillGroups => _skillGroups;
 
 		public IDisposable Create(DateOnlyPeriod period)
 		{
