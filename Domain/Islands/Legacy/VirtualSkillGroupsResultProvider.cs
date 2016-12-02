@@ -1,7 +1,9 @@
 using System;
+using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.Islands.Legacy
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_SplitBigIslands_42049)]
 	public class VirtualSkillGroupsResultProvider : ISkillGroupInfoProvider
 	{
 		public ISkillGroupInfo Fetch()

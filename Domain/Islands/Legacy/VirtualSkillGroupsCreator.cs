@@ -1,16 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands.Legacy
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_SplitBigIslands_42049)]
 	public interface IVirtualSkillGroupsCreator
 	{
 		VirtualSkillGroupsCreatorResult GroupOnDate(DateOnly dateOnly, IEnumerable<IPerson> personList);
 	}
 
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_SplitBigIslands_42049)]
 	public class VirtualSkillGroupsCreator : IVirtualSkillGroupsCreator
 	{
 		private readonly PersonalSkillsProvider _personalSkillsProvider;

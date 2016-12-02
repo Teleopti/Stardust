@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands.Legacy
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_SplitBigIslands_42049)]
 	public class SkillGroupReducer
 	{
 		public class SkillGroupReducerResult

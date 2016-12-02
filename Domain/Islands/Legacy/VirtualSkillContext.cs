@@ -1,8 +1,10 @@
 using System;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands.Legacy
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_SplitBigIslands_42049)]
 	public class VirtualSkillContext : ISkillGroupContext
 	{
 		private readonly Func<ISchedulingResultStateHolder> _scheduleResultStateHolder;
