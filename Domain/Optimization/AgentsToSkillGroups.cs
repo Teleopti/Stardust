@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public IEnumerable<IEnumerable<IPerson>> ToSkillGroups()
 		{
-			return _virtualSkillGroupsResultProvider.Fetch().GetSkillGroupTree();
+			return _virtualSkillGroupsResultProvider.Fetch().AgentsGroupedBySkillGroup();
 		}
 	}
 }

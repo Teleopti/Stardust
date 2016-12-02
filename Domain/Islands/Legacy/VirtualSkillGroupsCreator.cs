@@ -117,12 +117,12 @@ namespace Teleopti.Ccc.Domain.Islands.Legacy
 			return personList;
 		}
 
-		public IEnumerable<IEnumerable<IPerson>> GetSkillGroupTree()
+		public IEnumerable<IEnumerable<IPerson>> AgentsGroupedBySkillGroup()
 		{
 			return GetKeys().Select(GetPersonsForSkillGroupKey);
 		}
 
-		public int GetNumberOfAgentsInSkillGroupFromPerson(IPerson person)
+		public int NumberOfAgentsInSameSkillGroup(IPerson person)
 		{
 			string key;
 			return _personSkillGroupDic.TryGetValue(person, out key) ?

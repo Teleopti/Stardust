@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public bool DoCalculation(IPerson agent, DateOnly date)
 		{
 			var skillGroupResult = _virtualSkillGroupsResultProvider.Fetch();
-			return skillGroupResult.GetNumberOfAgentsInSkillGroupFromPerson(agent) < _limitForNoResourceCalculation.NumberOfAgents;
+			return skillGroupResult.NumberOfAgentsInSameSkillGroup(agent) < _limitForNoResourceCalculation.NumberOfAgents;
 		}
 	}
 }
