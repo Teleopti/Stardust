@@ -3,7 +3,7 @@
 	<div class="view-header with-fab with-desc">
 		<div class="view-title">
 			<h1><i class="mdi mdi-compass-outline"></i> {{'Intraday'|translate}}</h1>
-			<p class="con-flex">{{'IntradayIntroText'|translate}}</p>
+			<p class="con-flex">{{'IntradayIntroText'|translate}}</p> asdjh aslkjdhl ajshdl kjs
 		</div>
 		<div class="fab-wrapper" ng-if="HasPermissionToModifySkillArea">
 			<button class="skill-area-create wfm-fab grow-out material-depth-1" ng-click="configMode()">
@@ -72,16 +72,15 @@
 				</i>
 			</span>
 			<div class="hide-on-ie con-flex split-1-2"></div>
-			<div class="line-right last-time">
+			<div class="line-right last-time cursor-pointer">
 				<span ng-show="latestActualInterval && latestActualInterval !== 'undefined - undefined'">
-					<span class="cursor-pointer">
-						{{latestActualInterval}} <i class="mdi mdi-clock"></i>
-						<md-tooltip>{{'LatestActualInterval'|translate}}</md-tooltip>
-					</span>
+						{{latestActualInterval}}
 				</span>
 				<span ng-cloak ng-show="!latestActualInterval || latestActualInterval == 'undefined - undefined'">
-					{{'NoAvailableDataSourcesHasBeenFound'|translate}}
+					--:-- - --:--
 				</span>
+				<i class="mdi mdi-clock"></i>
+				<md-tooltip>{{'LatestActualInterval'|translate}}</md-tooltip>
 			</div>
 		</div>
 	</div>

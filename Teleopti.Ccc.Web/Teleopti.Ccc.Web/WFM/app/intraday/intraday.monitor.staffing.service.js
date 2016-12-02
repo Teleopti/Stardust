@@ -35,7 +35,7 @@
 
 				if (showScheduledStaffing)
 					staffingData.scheduledStaffing = result.DataSeries.ScheduledStaffing;
-					
+
 				angular.forEach(result.DataSeries.Time, function (value, key) {
 					this.push($filter('date')(value, 'shortTime'));
 				}, staffingData.timeSeries);
@@ -153,7 +153,7 @@
 						y2: {
 							show: true,
 							tick: {
-										format: d3.format('.0f')
+										format: d3.format('.1f')
 							}
 						}
 					},

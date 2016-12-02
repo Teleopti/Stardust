@@ -192,7 +192,7 @@
 										position: 'outer-middle'
 									},
 									tick: {
-										format: d3.format('.0f')
+										format: d3.format('.1f')
 									}
 								},
 								y2: {
@@ -202,7 +202,7 @@
 									},
 									show: true,
 									tick: {
-										format: d3.format('.0f')
+										format: d3.format('.1f')
 									}
 								}
 							},
