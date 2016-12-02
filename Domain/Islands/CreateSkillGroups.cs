@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Islands
 
 		public SkillGroups Create(IEnumerable<IPerson> agents, DateOnly date)
 		{
-			var skillGroups = new Dictionary<ICollection<ISkill>, ICollection<IPerson>>(new sameSkillGroupSkillsComparer());
+			var skillGroups = new Dictionary<ICollection<ISkill>, ICollection<IPerson>>(new SameSkillGroupSkillsComparer());
 
 			foreach (var agent in agents)
 			{
@@ -27,29 +27,18 @@ namespace Teleopti.Ccc.Domain.Islands
 
 				if (!skillGroups.ContainsKey(agentsSkills))
 				{
-					skillGroups.Add(agentsSkills, new List<IPerson> {agent});
+					skillGroups.Add(agentsSkills, new List<IPerson> { agent });
 				}
 				else
 				{
 					skillGroups[agentsSkills].Add(agent);
 				}
-				
+
 			}
 
-			return new SkillGroups(skillGroups.Select(keyValue => new SkillGroup(keyValue.Key, keyValue.Value)).ToList());
-		}
-
-		private class sameSkillGroupSkillsComparer : IEqualityComparer<ICollection<ISkill>>
-		{
-			public bool Equals(ICollection<ISkill> x, ICollection<ISkill> y)
-			{
-				return x.All(y.Contains);
-			}
-
-			public int GetHashCode(ICollection<ISkill> obj)
-			{
-				return obj.Count;
-			}
+			var skillGroupsTemp = skillGroups.Select(keyValue => new SkillGroup(keyValue.Key, keyValue.Value)).ToList();
+			skillGroupsTemp.Sort(new SortSkillGroupBySize());
+			return new SkillGroups(skillGroupsTemp);
 		}
 	}
 }
