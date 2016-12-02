@@ -16,8 +16,7 @@ namespace Teleopti.Ccc.Domain.Islands
 
 		public SkillGroups Create(IEnumerable<IPerson> agents, DateOnly date)
 		{
-			//We need to include the concept skillgroup here! not needed yet -> only when islands are run and there we still use old behavior
-			var skillGroups = new Dictionary<ICollection<ISkill>, ICollection<IPerson>>(new SameSkillGroupSkillsComparer());
+			var skillGroups = new Dictionary<ICollection<ISkill>, ICollection<IPerson>>(new sameSkillGroupSkillsComparer());
 
 			foreach (var agent in agents)
 			{
@@ -39,23 +38,18 @@ namespace Teleopti.Ccc.Domain.Islands
 
 			return new SkillGroups(skillGroups.Select(keyValue => new SkillGroup(keyValue.Key, keyValue.Value)).ToList());
 		}
-	}
 
-	public class SameSkillGroupSkillsComparer : IEqualityComparer<ICollection<ISkill>>
-	{
-		public bool Equals(ICollection<ISkill> x, ICollection<ISkill> y)
+		private class sameSkillGroupSkillsComparer : IEqualityComparer<ICollection<ISkill>>
 		{
-			foreach (var skill in x)
+			public bool Equals(ICollection<ISkill> x, ICollection<ISkill> y)
 			{
-				if (!y.Contains(skill))
-					return false;
+				return x.All(y.Contains);
 			}
-			return true;
-		}
 
-		public int GetHashCode(ICollection<ISkill> obj)
-		{
-			return obj.Count;
+			public int GetHashCode(ICollection<ISkill> obj)
+			{
+				return obj.Count;
+			}
 		}
 	}
 }
