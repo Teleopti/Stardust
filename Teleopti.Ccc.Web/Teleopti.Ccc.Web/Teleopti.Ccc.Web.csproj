@@ -472,6 +472,7 @@
     <Compile Include="Areas\Global\WfmAreaRegistration.cs" />
     <Compile Include="Areas\Global\UserController.cs" />
     <Compile Include="Areas\HealthCheck\Controllers\HealthCheckApiController.cs" />
+    <Compile Include="Areas\Intraday\IntradayMonitorPerformanceController.cs" />
     <Compile Include="Areas\Intraday\IntradayMonitorStaffingController.cs" />
     <Compile Include="Areas\Intraday\IntradayMonitorStatisticsController.cs" />
     <Compile Include="Areas\Intraday\IntradayController.cs" />

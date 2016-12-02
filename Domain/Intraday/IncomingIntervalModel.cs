@@ -1,7 +1,10 @@
+using System;
+
 namespace Teleopti.Ccc.Domain.Intraday
 {
 	public class IncomingIntervalModel
 	{
+		public DateTime IntervalDate { get; set; }
 		public int IntervalId { get; set; }
 		public double ForecastedCalls { get; set; }
 		public double ForecastedHandleTime { get; set; }

@@ -181,6 +181,7 @@
     <Compile Include="Common\PersonLeavingTest.cs" />
     <Compile Include="Intraday\MergeSkillStaffIntervalLightForSkillAreaTest.cs" />
     <Compile Include="ApplicationLayer\RemoveSelectedPersonAbsenceComandHandlerTest.cs" />
+    <Compile Include="Intraday\MonitorPerformanceProviderTest.cs" />
     <Compile Include="Intraday\SkillStaffingIntervalProviderTest.cs" />
     <Compile Include="Intraday\SplitSkillStaffIntervalTest.cs" />
     <Compile Include="ApplicationLayer\ApproveBatchRequestsCommandHandlerTest.cs" />

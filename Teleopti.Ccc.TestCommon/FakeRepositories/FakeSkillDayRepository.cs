@@ -51,7 +51,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IUnitOfWork UnitOfWork { get; private set; }
 		public ICollection<ISkillDay> FindRange(DateOnlyPeriod period, ISkill skill, IScenario scenario)
 		{
-			throw new NotImplementedException();
+			return _skillDays
+				.Where(skillDayInDb =>
+						skillDayInDb.Scenario.Equals(scenario) &&
+						period.Contains(skillDayInDb.CurrentDate) &&
+						skill == skillDayInDb.Skill)
+				.ToList();
 		}
 
 		public ICollection<ISkillDay> GetAllSkillDays(DateOnlyPeriod period, ICollection<ISkillDay> skillDays, ISkill skill, IScenario scenario,

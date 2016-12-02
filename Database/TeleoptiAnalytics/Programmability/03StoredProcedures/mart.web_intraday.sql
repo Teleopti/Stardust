@@ -38,6 +38,7 @@ BEGIN
 	speed_of_answer decimal (19,0))
 
 	CREATE TABLE #result(
+	[date] smalldatetime,
 	interval_id smallint,
 	forecasted_calls decimal(28,4), 
 	forecasted_handle_time_s decimal(28,4), 
@@ -69,8 +70,9 @@ BEGIN
 	WHERE w.is_deleted = 0
 
 	-- Forecast
-	INSERT INTO #result(interval_id, forecasted_calls, forecasted_handle_time_s)
+	INSERT INTO #result([date], interval_id, forecasted_calls, forecasted_handle_time_s)
 	SELECT 
+		d.date_date,
 		i.interval_id,
 		SUM(ISNULL(fw.forecasted_calls, 0)),
 		SUM(ISNULL(fw.forecasted_handling_time_s, 0))
@@ -149,6 +151,7 @@ BEGIN
 
 	-- Return data by interval
 	SELECT
+		[date] AS IntervalDate,
 		interval_id AS IntervalId,
 		forecasted_calls AS ForecastedCalls,
 		forecasted_handle_time_s AS ForecastedHandleTime,

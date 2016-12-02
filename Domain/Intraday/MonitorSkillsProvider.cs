@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -42,6 +41,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var offeredCallsSeries = new List<double?>();
 			var averageHandleTimeSeries = new List<double?>();
 			var latestQueueStatsIntervalId = -1;
+			var latestQueueStatsIntervalDate = DateTime.MinValue;
 			var averageSpeedOfAnswer = new List<double?>();
 			var abandonedRate = new List<double?>();
 			var serviceLevel = new List<double?>();
@@ -55,14 +55,18 @@ namespace Teleopti.Ccc.Domain.Intraday
 				summary.AnsweredCallsWithinSL += interval.AnsweredCallsWithinSL ?? 0;
 				summary.AbandonedCalls += interval.AbandonedCalls ?? 0;
 
-				timeSeries.Add(DateTime.MinValue.AddMinutes(interval.IntervalId * intervalLength));
+				timeSeries.Add(interval.IntervalDate.AddMinutes(interval.IntervalId * intervalLength));
 				forecastedCallsSeries.Add(interval.ForecastedCalls);
 				forecastedAverageHandleTimeSeries.Add(interval.ForecastedAverageHandleTime);
 				offeredCallsSeries.Add(interval.OfferedCalls);
 				averageHandleTimeSeries.Add(interval.OfferedCalls.HasValue ? interval.AverageHandleTime : null);
 
 				if (interval.OfferedCalls.HasValue)
+				{
 					latestQueueStatsIntervalId = interval.IntervalId;
+					latestQueueStatsIntervalDate = interval.IntervalDate;
+				}
+					
 				averageSpeedOfAnswer.Add(interval.SpeedOfAnswer.HasValue ? interval.SpeedOfAnswer / interval.AnsweredCalls : null);
 				abandonedRate.Add(interval.AbandonedCalls.HasValue ? interval.AbandonedRate * 100 : null);
 				serviceLevel.Add(interval.AnsweredCallsWithinSL.HasValue ? interval.ServiceLevel * 100 : null);
@@ -107,10 +111,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 			{
 				LatestActualIntervalStart = latestQueueStatsIntervalId == -1
 					? null
-					: (DateTime?) DateTime.MinValue.AddMinutes(latestQueueStatsIntervalId*intervalLength),
+					: (DateTime?) latestQueueStatsIntervalDate.AddMinutes(latestQueueStatsIntervalId*intervalLength),
 				LatestActualIntervalEnd = latestQueueStatsIntervalId == -1
 					? null
-					: (DateTime?) DateTime.MinValue.AddMinutes(latestQueueStatsIntervalId*intervalLength + intervalLength),
+					: (DateTime?)latestQueueStatsIntervalDate.AddMinutes(latestQueueStatsIntervalId*intervalLength + intervalLength),
 				StatisticsSummary = summary,
 				StatisticsDataSeries = new IntradayStatisticsDataSeries
 				{

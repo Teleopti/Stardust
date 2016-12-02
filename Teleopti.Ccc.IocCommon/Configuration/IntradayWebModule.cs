@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayMonitorDataLoader>().As<IIntradayMonitorDataLoader>().SingleInstance();
 			builder.RegisterType<LatestStatisticsIntervalIdLoader>().As<ILatestStatisticsIntervalIdLoader>().SingleInstance();
 			builder.RegisterType<MonitorSkillsProvider>().SingleInstance();
+			builder.RegisterType<MonitorPerformanceProvider>().SingleInstance();
 			builder.RegisterType<LatestStatisticsTimeProvider>().SingleInstance();
 			builder.RegisterType<ScheduleForecastSkillReadModelRepository>().As<IScheduleForecastSkillReadModelRepository>().SingleInstance();
 			builder.RegisterType<IntradayQueueStatisticsLoader>().As<IIntradayQueueStatisticsLoader>().SingleInstance();

@@ -60,7 +60,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 				{
 					SkillId = skill.Id.Value,
 					StartTime = TimeZoneHelper.ConvertFromUtc(x.Period.StartDateTime, _timeZone.TimeZone()),
-					Calls = x.TotalTasks
+					Calls = x.TotalTasks,
+					AverageHandleTime = x.AverageTaskTime.TotalSeconds + x.AverageAfterTaskTime.TotalSeconds
 				})
 				.ToList();
 
@@ -70,7 +71,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 				{
 					SkillId = skill.Id.Value,
 					StartTime = s.First().StartTime,
-					Calls = s.Sum(c => c.Calls)
+					Calls = s.Sum(c => c.Calls),
+					AverageHandleTime = s.Sum(a => a.AverageHandleTime)
 				})
 				.OrderBy(g => g.StartTime)
 				.ToList();

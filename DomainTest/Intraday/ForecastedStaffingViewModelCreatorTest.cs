@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
-			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserCulture>();
 		}
 
 		[Test]

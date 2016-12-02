@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		{
 			_firstInterval = new IncomingIntervalModel()
 			{
+				IntervalDate = new DateTime(2016, 12, 02),
 				IntervalId = 32,
 				ForecastedCalls = 12,
 				ForecastedHandleTime = 120,
@@ -45,6 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			};
 			_secondInterval = new IncomingIntervalModel()
 			{
+				IntervalDate = new DateTime(2016, 12, 02),
 				IntervalId = 33,
 				ForecastedCalls = 16,
 				ForecastedHandleTime = 150,
@@ -65,6 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		{
 			var thirdInterval = new IncomingIntervalModel()
 			{
+				IntervalDate = new DateTime(2016, 12, 02),
 				IntervalId = 34,
 				ForecastedCalls = 15,
 				ForecastedHandleTime = 140,
@@ -103,8 +106,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
 			viewModel.StatisticsDataSeries.Time.Length.Should().Be.EqualTo(2);
-			viewModel.StatisticsDataSeries.Time.First().Should().Be.EqualTo(DateTime.MinValue.AddMinutes(_firstInterval.IntervalId * minutesPerInterval));
-			viewModel.StatisticsDataSeries.Time.Second().Should().Be.EqualTo(DateTime.MinValue.AddMinutes(_secondInterval.IntervalId * minutesPerInterval));
+			viewModel.StatisticsDataSeries.Time.First().Should().Be.EqualTo(_firstInterval.IntervalDate.AddMinutes(_firstInterval.IntervalId * minutesPerInterval));
+			viewModel.StatisticsDataSeries.Time.Second().Should().Be.EqualTo(_firstInterval.IntervalDate.AddMinutes(_secondInterval.IntervalId * minutesPerInterval));
 		}
 
 		[Test]
@@ -168,6 +171,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		{
 			var thirdInterval = new IncomingIntervalModel()
 			{
+				IntervalDate = new DateTime(2016, 12, 02),
 				IntervalId = 34,
 				ForecastedCalls = 12,
 				ForecastedHandleTime = 140,
@@ -193,6 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		{
 			var thirdInterval = new IncomingIntervalModel()
 			{
+				IntervalDate = new DateTime(2016, 12, 02),
 				IntervalId = 34,
 				ForecastedCalls = 12,
 				ForecastedHandleTime = 140,
@@ -227,8 +232,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
 			viewModel.StatisticsDataSeries.AverageHandleTime.Length.Should().Be.EqualTo(2);
-			viewModel.LatestActualIntervalStart.Should().Be.EqualTo(DateTime.MinValue.AddMinutes(_firstInterval.IntervalId * minutesPerInterval));
-			viewModel.LatestActualIntervalEnd.Should().Be.EqualTo(DateTime.MinValue.AddMinutes((_firstInterval.IntervalId + 1) * minutesPerInterval));
+			viewModel.LatestActualIntervalStart.Should().Be.EqualTo(_firstInterval.IntervalDate.AddMinutes(_firstInterval.IntervalId * minutesPerInterval));
+			viewModel.LatestActualIntervalEnd.Should().Be.EqualTo(_firstInterval.IntervalDate.AddMinutes((_firstInterval.IntervalId + 1) * minutesPerInterval));
 		}
 
 		[Test]
@@ -437,6 +442,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		{
 			var thirdInterval = new IncomingIntervalModel()
 			{
+				IntervalDate = new DateTime(2016, 12, 02),
 				IntervalId = 34,
 				ForecastedCalls = 12,
 				ForecastedHandleTime = 140,

@@ -470,6 +470,7 @@
     <Compile Include="Intraday\ForecastedStaffingProvider.cs" />
     <Compile Include="Intraday\ForecastedStaffingViewModelCreator.cs" />
     <Compile Include="Intraday\IJobStartTimeRepository.cs" />
+    <Compile Include="Intraday\IntradayPerformanceDataSeries.cs" />
     <Compile Include="Intraday\IntradayStaffingViewModel.cs" />
     <Compile Include="Intraday\IntradayStatisticsDataSeries.cs" />
     <Compile Include="Intraday\IntradayStatisticsSummary.cs" />
@@ -477,6 +478,7 @@
     <Compile Include="Intraday\LatestStatisticsTimeAndWorkload.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProvider.cs" />
     <Compile Include="Intraday\LatestStatitsticsTimeModel.cs" />
+    <Compile Include="Intraday\MonitorPerformanceProvider.cs" />
     <Compile Include="Intraday\ReforecastedStaffingProvider.cs" />
     <Compile Include="Intraday\RequiredStaffingProvider.cs" />
     <Compile Include="Intraday\ScheduledStaffingProvider.cs" />
