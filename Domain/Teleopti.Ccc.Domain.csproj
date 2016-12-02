@@ -493,6 +493,8 @@
     <Compile Include="Islands\SkillGroup.cs" />
     <Compile Include="Islands\SkillGroupComparerForIslands.cs" />
     <Compile Include="Islands\SkillGroupContext.cs" />
+    <Compile Include="Islands\SkillGroupInfoProvider.cs" />
+    <Compile Include="Islands\SkillGroups.cs" />
     <Compile Include="LogObject\LogObjectDetail.cs" />
     <Compile Include="Logon\FullPermissions.cs" />
     <Compile Include="Logon\FullPermissionsAspect.cs" />

@@ -154,8 +154,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Toggle(Toggles.ResourcePlanner_SplitBigIslands_42049))
 			{
 				builder.RegisterType<CreateIslands>().As<ICreateIslands>().SingleInstance();
-				builder.RegisterType<VirtualSkillGroupsResultProvider>().As<ISkillGroupInfoProvider>().SingleInstance();
-				builder.RegisterType<SkillGroupContext>().As<ISkillGroupContext>().InstancePerLifetimeScope());
+				builder.RegisterType<SkillGroupInfoProvider>().As<ISkillGroupInfoProvider>().SingleInstance();
+				builder.RegisterType<SkillGroupContext>().As<ISkillGroupContext>().InstancePerLifetimeScope();
 			}
 			else
 			{
