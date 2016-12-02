@@ -5,9 +5,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 		public int ShouldRemoveSkillFromSkillGroupIfOtherSkillgroupIsBigEnough(int agentsSkillA, int agentsSkillAB)
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 5);
-			var skillA = SkillFactory.CreateSkill("A").WithId();
-			var skillB = SkillFactory.CreateSkill("B").WithId();
+			var skillA = new Skill("A");
+			var skillB = new Skill("B");
 			var skillAagents = Enumerable.Range(0, agentsSkillA).Select(x => new Person().KnowsSkill(skillA));
 			var skillABagents = Enumerable.Range(0, agentsSkillAB).Select(x => new Person().KnowsSkill(skillA, skillB));
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
@@ -46,8 +46,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 		public int ShouldNotRemoveSkillFromSkillGroupIfIslandIsNotBigEnough(int agentsSkillA, int agentsSkillAB)
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(7, 4);
-			var skillA = SkillFactory.CreateSkill("A").WithId();
-			var skillB = SkillFactory.CreateSkill("B").WithId();
+			var skillA = new Skill("A");
+			var skillB = new Skill("B");
 			var skillAagents = Enumerable.Range(0, agentsSkillA).Select(x => new Person().KnowsSkill(skillA));
 			var skillABagents = Enumerable.Range(0, agentsSkillAB).Select(x => new Person().KnowsSkill(skillA, skillB));
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
@@ -61,9 +61,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 		public void ShouldConsiderAlreadyReducedSkillGroupsWhenReducingSkillGroup()
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 4);
-			var skillA = SkillFactory.CreateSkill("A").WithId();
-			var skillB = SkillFactory.CreateSkill("B").WithId();
-			var skillC = SkillFactory.CreateSkill("C").WithId();
+			var skillA = new Skill("A");
+			var skillB = new Skill("B");
+			var skillC = new Skill("C");
 			var skillAagents21 = Enumerable.Range(0, 11).Select(x => new Person().KnowsSkill(skillA));
 			var skillABagents5 = Enumerable.Range(0, 5).Select(x => new Person().KnowsSkill(skillA, skillB));
 			var skillACagents5 = Enumerable.Range(0, 5).Select(x => new Person().KnowsSkill(skillA, skillC));
@@ -78,9 +78,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 		public void ShouldReduceBiggestSkillGroupFirst()
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 5);
-			var skillA = SkillFactory.CreateSkill("A").WithId();
-			var skillB = SkillFactory.CreateSkill("B").WithId();
-			var skillC = SkillFactory.CreateSkill("C").WithId();
+			var skillA = new Skill("A");
+			var skillB = new Skill("B");
+			var skillC = new Skill("C");
 			var skillAagents = Enumerable.Range(0, 26).Select(x => new Person().KnowsSkill(skillA).WithId());
 			var skillABagents = Enumerable.Range(0, 7).Select(x => new Person().KnowsSkill(skillA, skillB).WithId());
 			var skillACagents = Enumerable.Range(0, 8).Select(x => new Person().KnowsSkill(skillA, skillC).WithId());

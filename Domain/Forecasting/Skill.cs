@@ -47,6 +47,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
         }
 
+		public Skill(string name)
+		{
+			ChangeName(name);
+		}
+
         /// <summary>
         /// Constructor
         /// </summary>
