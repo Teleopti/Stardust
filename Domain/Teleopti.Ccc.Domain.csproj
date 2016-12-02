@@ -485,6 +485,7 @@
     <Compile Include="Intraday\TaskPeriodsProvider.cs" />
     <Compile Include="Intraday\TimeSeriesProvider.cs" />
     <Compile Include="Islands\CreateSkillGroups.cs" />
+    <Compile Include="Islands\ISkillGroupInfo.cs" />
     <Compile Include="Islands\Island.cs" />
     <Compile Include="Islands\ReduceIslandsLimits.cs" />
     <Compile Include="Islands\SkillGroup.cs" />
@@ -1210,7 +1211,7 @@
     <Compile Include="Scheduling\Assignment\LimitForNoResourceCalculation.cs" />
     <Compile Include="Scheduling\Assignment\ResourceCalculateAfterDeleteDecider.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSkillContext.cs" />
-    <Compile Include="Scheduling\Assignment\VirtualSkillGroupsResultProvider.cs" />
+    <Compile Include="Islands\Legacy\VirtualSkillGroupsResultProvider.cs" />
     <Compile Include="Scheduling\DayOffBusinessRuleValidation.cs" />
     <Compile Include="Scheduling\FullScheduling.cs" />
     <Compile Include="Scheduling\IScheduleDictionaryPersister.cs" />

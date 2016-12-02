@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Islands.Legacy;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -34,12 +33,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var period = new DateOnlyPeriod(2000, 1, 1, 2001, 1,1);
 			const int numberOfThreads = 10;
 
-			var uniqueResults = new ConcurrentDictionary<VirtualSkillGroupsCreatorResult, byte>();
+			var uniqueResults = new ConcurrentDictionary<ISkillGroupInfo, byte>();
 			Parallel.For(0, numberOfThreads, i =>
 			{
 				using (Context.Create(period))
 				{
-					uniqueResults.GetOrAdd(Target.Fetch(), result => { return 0; });
+					uniqueResults.GetOrAdd(Target.Fetch(), result => 0);
 				}
 			});
 

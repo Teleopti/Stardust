@@ -1,13 +1,11 @@
 using System;
-using Teleopti.Ccc.Domain.DayOffPlanning;
-using Teleopti.Ccc.Domain.Islands;
-using Teleopti.Ccc.Domain.Islands.Legacy;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 
-namespace Teleopti.Ccc.Domain.Scheduling.Assignment
+namespace Teleopti.Ccc.Domain.Islands.Legacy
 {
 	public class VirtualSkillGroupsResultProvider
 	{
-		public VirtualSkillGroupsCreatorResult Fetch()
+		public ISkillGroupInfo Fetch()
 		{
 			var current = VirtualSkillContext.VirtualSkillGroupResult;
 			if (current == null)

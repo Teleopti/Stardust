@@ -1,6 +1,4 @@
 using System;
-using Teleopti.Ccc.Domain.DayOffPlanning;
-using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Islands.Legacy;
 using Teleopti.Interfaces.Domain;
 

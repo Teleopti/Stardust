@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Islands.Legacy
 		}
 	}
 
-	public class VirtualSkillGroupsCreatorResult
+	public class VirtualSkillGroupsCreatorResult : ISkillGroupInfo
 	{
 		private readonly IDictionary<string, IList<IPerson>> _skillGroupKeyPersonListDic = new Dictionary<string, IList<IPerson>>();
 		private readonly IDictionary<string, IList<IPerson>> _skillKeyPersonListDic = new Dictionary<string, IList<IPerson>>();
