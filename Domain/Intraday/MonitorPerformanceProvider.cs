@@ -52,26 +52,46 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var skills = _skillRepository.LoadSkills(skillIdList);
-			var skillDay = _skillDayRepository.FindRange(new DateOnlyPeriod(usersToday, usersToday), skills.First(), scenario).First();
-			var queueStatistics = _monitorSkillsProvider.Load(new Guid[] {skills.First().Id.Value});
+			var skillDay = _skillDayRepository.FindRange(new DateOnlyPeriod(usersToday, usersToday), skills.First(), scenario).FirstOrDefault();
+			var queueStatistics = _monitorSkillsProvider.Load(new[] {skills.First().Id.Value});
+
+			var eslDataSeries = getEsl(skills, skillDay, queueStatistics, minutesPerInterval);
+
+			return new IntradayPerformanceDataSeries()
+			{
+				EstimatedServiceLevels = fillWithNullsAtEnd(eslDataSeries, queueStatistics),
+				AverageSpeedOfAnswer = queueStatistics.StatisticsDataSeries.AverageSpeedOfAnswer,
+				AbandonedRate = queueStatistics.StatisticsDataSeries.AbandonedRate,
+				ServiceLevel = queueStatistics.StatisticsDataSeries.ServiceLevel
+			};
+		}
+
+		private IList<double?> getEsl(ICollection<ISkill> skills, ISkillDay skillDay, IntradayStatisticsViewModel queueStatistics,
+			int minutesPerInterval)
+		{
+			var eslDataSeries = new List<double?>();
+			if (skillDay == null)
+				return eslDataSeries;
+
 			var forecastedCalls = _forecastedCallsProvider.Load(new List<ISkill>() {skills.First()},
 				new List<ISkillDay>() {skillDay}, queueStatistics.LatestActualIntervalStart, minutesPerInterval);
 
-			var forecastedStaffing = _forecastedStaffingProvider.StaffingPerSkill(new List<ISkill>() {skills.First()}, 
-				new List<ISkillDay>() {skillDay}, 
+			var forecastedStaffing = _forecastedStaffingProvider.StaffingPerSkill(new List<ISkill>() {skills.First()},
+				new List<ISkillDay>() {skillDay}, minutesPerInterval);
+			forecastedStaffing = forecastedStaffing.Where(x => x.StartTime <= queueStatistics.LatestActualIntervalStart).ToList();
+
+			var scheduledStaffing = _scheduledStaffingProvider.StaffingPerSkill(new List<ISkill>() {skills.First()},
 				minutesPerInterval);
-			
-			var scheduledStaffing = _scheduledStaffingProvider.StaffingPerSkill(new List<ISkill>() { skills.First() }, minutesPerInterval);
 			var serviceCalculatorService = new StaffingCalculatorServiceFacade();
-			var eslDataSeries = new List<double?>();
 
 			foreach (var interval in forecastedStaffing)
-			{				
-				var scheduledStaffingInterval = scheduledStaffing.SingleOrDefault(x => x.StartDateTime == interval.StartTime).StaffingLevel;
+			{
+				var scheduledStaffingInterval =
+					scheduledStaffing.SingleOrDefault(x => x.StartDateTime == interval.StartTime).StaffingLevel;
 				var skillData =
 					skillDay.SkillDataPeriodCollection.SingleOrDefault(
 						skillDataPeriod => skillDataPeriod.Period.StartDateTime <= interval.StartTime &&
-										   skillDataPeriod.Period.EndDateTime > interval.StartTime
+												 skillDataPeriod.Period.EndDateTime > interval.StartTime
 					);
 				var task = forecastedCalls.CallsPerSkill.First().Value.First(x => x.StartTime == interval.StartTime);
 				var esl = serviceCalculatorService.ServiceLevelAchievedOcc(scheduledStaffingInterval,
@@ -82,7 +102,16 @@ namespace Teleopti.Ccc.Domain.Intraday
 				eslDataSeries.Add(esl);
 			}
 
-			return new IntradayPerformanceDataSeries() {EstimatedServiceLevels = eslDataSeries.ToArray()};
+			return eslDataSeries;
+		}
+
+		private double?[] fillWithNullsAtEnd(IList<double?> eslDataSeries, IntradayStatisticsViewModel queueStatistics)
+		{
+			var nullCount = queueStatistics.StatisticsDataSeries.Time.Length - eslDataSeries.Count;
+			for (int interval = 0; interval < nullCount; interval++)
+				eslDataSeries.Add(null);
+
+			return eslDataSeries.ToArray();
 		}
 	}
 }

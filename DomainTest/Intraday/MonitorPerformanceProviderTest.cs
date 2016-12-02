@@ -55,15 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 15));
 			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 15));
 
-			var scheduledStaffingList = new List<SkillStaffingInterval>()
-			{
-				new SkillStaffingInterval() {
-					SkillId = skill.Id.Value,
-					StartDateTime = userNow,
-					EndDateTime = userNow.AddMinutes(minutesPerInterval),
-					StaffingLevel = 6d
-				}
-			};
+			var scheduledStaffingList = createScheduledStaffing(skillDay, latestStatsTime);
 
 			IntradayMonitorDataLoader.AddInterval(new IncomingIntervalModel()
 			{
@@ -80,6 +72,114 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			result.EstimatedServiceLevels.Length.Should().Be.EqualTo(1);
 			result.EstimatedServiceLevels.First().Should().Be.GreaterThan(0d);
+		}
+
+		[Test]
+		public void ShouldReturnStatisticsForOneSkill()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			var latestStatsTime = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+
+			fakeScenarioAndIntervalLength();
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 15));
+
+			IntradayMonitorDataLoader.AddInterval(new IncomingIntervalModel()
+			{
+				IntervalDate = latestStatsTime.Date,
+				IntervalId = new IntervalBase(latestStatsTime, (60 / minutesPerInterval) * 24).Id,
+				AverageSpeedOfAnswer = 10,
+				AbandonedRate = 0.2d,
+				ServiceLevel = 0.8d
+			});
+
+			SkillRepository.Has(skill);
+
+			var result = Target.Load(new Guid[] { skill.Id.Value });
+
+			result.AverageSpeedOfAnswer.Length.Should().Be.EqualTo(1);
+			result.AbandonedRate.Length.Should().Be.EqualTo(1);
+			result.ServiceLevel.Length.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldReturnEslUpUntilLatestStatsTime()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			var latestStatsTime = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+
+			var scenario = fakeScenarioAndIntervalLength();
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30));
+			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
+
+			var scheduledStaffingList = createScheduledStaffing(skillDay, latestStatsTime);
+
+			IntradayMonitorDataLoader.AddInterval(new IncomingIntervalModel()
+			{
+				IntervalDate = latestStatsTime.Date,
+				IntervalId = new IntervalBase(latestStatsTime, (60 / minutesPerInterval) * 24).Id,
+				OfferedCalls = 22,
+				ForecastedCalls = 20
+			});
+			IntradayMonitorDataLoader.AddInterval(new IncomingIntervalModel()
+			{
+				IntervalDate = latestStatsTime.Date,
+				IntervalId = new IntervalBase(latestStatsTime.AddMinutes(minutesPerInterval), (60 / minutesPerInterval) * 24).Id,
+				ForecastedCalls = 21
+			});
+
+			SkillRepository.Has(skill);
+			SkillDayRepository.Add(skillDay);
+			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
+
+			var result = Target.Load(new Guid[] { skill.Id.Value });
+
+			result.EstimatedServiceLevels.Length.Should().Be.EqualTo(2);
+			result.EstimatedServiceLevels.First().Should().Be.GreaterThan(0d);
+			result.EstimatedServiceLevels.Last().Should().Be.EqualTo(null);
+		}
+
+		[Test]
+		public void ShouldReturnZeroEslWhenNoSchedule()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			var latestStatsTime = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+
+			var scenario = fakeScenarioAndIntervalLength();
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 15));
+			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 15));
+
+			IntradayMonitorDataLoader.AddInterval(new IncomingIntervalModel()
+			{
+				IntervalDate = latestStatsTime.Date,
+				IntervalId = new IntervalBase(latestStatsTime, (60 / minutesPerInterval) * 24).Id,
+				OfferedCalls = 22
+			});
+
+			SkillRepository.Has(skill);
+			SkillDayRepository.Add(skillDay);
+
+			var result = Target.Load(new Guid[] { skill.Id.Value });
+
+			result.EstimatedServiceLevels.Length.Should().Be.EqualTo(1);
+			result.EstimatedServiceLevels.First().Should().Be.EqualTo(0d);
+		}
+
+		[Test]
+		public void ShouldReturnNoEslWhenNoForecast()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+
+			fakeScenarioAndIntervalLength();
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 15));
+			SkillRepository.Has(skill);
+
+			var result = Target.Load(new Guid[] { skill.Id.Value });
+
+			result.EstimatedServiceLevels.Should().Be.Empty();
 		}
 
 
