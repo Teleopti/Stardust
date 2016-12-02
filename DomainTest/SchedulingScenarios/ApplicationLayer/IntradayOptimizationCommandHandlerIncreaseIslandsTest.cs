@@ -48,24 +48,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 			var skillA = SkillFactory.CreateSkill("A").WithId();
 			var skillB = SkillFactory.CreateSkill("B").WithId();
 			var skillC = SkillFactory.CreateSkill("C").WithId();
-			var skillAagents = Enumerable.Repeat(new Person().KnowsSkill(skillA), 20);
-			var skillABagents = Enumerable.Repeat(new Person().KnowsSkill(skillA, skillB), 5);
-			var skillACagents = Enumerable.Repeat(new Person().KnowsSkill(skillA, skillC), 5);
-
-			foreach (var skillAagent in skillAagents)
-			{
-				PersonRepository.Has(skillAagent);
-			}
-
-			foreach (var skillABagent in skillABagents)
-			{
-				PersonRepository.Has(skillABagent);
-			}
-
-			foreach (var skillACagent in skillACagents)
-			{
-				PersonRepository.Has(skillACagent);
-			}
+			var skillAagents = Enumerable.Range(0, 20).Select(x => new Person().KnowsSkill(skillA));
+			var skillABagents = Enumerable.Range(0, 5).Select(x => new Person().KnowsSkill(skillA, skillB));
+			var skillACagents = Enumerable.Range(0, 5).Select(x => new Person().KnowsSkill(skillA, skillC));
+			skillAagents.Union(skillABagents).Union(skillACagents).ForEach(x => PersonRepository.Has(x));
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
@@ -76,23 +62,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 		[Ignore("42049")]
 		[TestCase(40, 9, ExpectedResult = 2)]
 		[TestCase(40, 2, ExpectedResult = 1)]
-		public int ShouldNotReduceSkillGroupsWhenAgentsInIslandIsBelowMinimumAgents(int agentsSkillA, int agentsSkillB)
+		public int ShouldNotReduceSkillGroupsWhenAgentsInIslandIsBelowMinimumAgents(int agentsSkillA, int agentsSkillAB)
 		{
 			ReduceIslandsLimits.SetMinimumNumberOfAgentsInIsland_UseOnlyFromTest(45);
 			var skillA = SkillFactory.CreateSkill("A").WithId();
 			var skillB = SkillFactory.CreateSkill("B").WithId();
-			var skillAagents = Enumerable.Repeat(new Person().KnowsSkill(skillA), agentsSkillA);
-			var skillABagents = Enumerable.Repeat(new Person().KnowsSkill(skillA, skillB), agentsSkillB);
-			
-			foreach (var skillAagent in skillAagents)
-			{
-				PersonRepository.Has(skillAagent);
-			}
-
-			foreach (var skillABagent in skillABagents)
-			{
-				PersonRepository.Has(skillABagent);
-			}
+			var skillAagents = Enumerable.Range(0, agentsSkillA).Select(x => new Person().KnowsSkill(skillA));
+			var skillABagents = Enumerable.Range(0, agentsSkillAB).Select(x => new Person().KnowsSkill(skillA, skillB));
+			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
