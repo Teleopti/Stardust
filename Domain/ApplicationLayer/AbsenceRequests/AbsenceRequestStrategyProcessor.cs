@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
@@ -18,13 +19,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	{
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepo;
 		private readonly DenyLongQueuedAbsenceRequests _denyLongQueuedAbsenceRequests;
+		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IConfigReader _configReader;
+		private readonly IFilterRequestsWithDifferentVersion _filterRequestsWithDifferentVersion;
 
-		public AbsenceRequestStrategyProcessor(IQueuedAbsenceRequestRepository queuedAbsenceRequestRepo, DenyLongQueuedAbsenceRequests denyLongQueuedAbsenceRequests, IConfigReader configReader)
+		public AbsenceRequestStrategyProcessor(IQueuedAbsenceRequestRepository queuedAbsenceRequestRepo, DenyLongQueuedAbsenceRequests denyLongQueuedAbsenceRequests, IConfigReader configReader, IPersonRequestRepository personRequestRepository, IFilterRequestsWithDifferentVersion filterRequestsWithDifferentVersion)
 		{
 			_queuedAbsenceRequestRepo = queuedAbsenceRequestRepo;
 			_denyLongQueuedAbsenceRequests = denyLongQueuedAbsenceRequests;
 			_configReader = configReader;
+			_personRequestRepository = personRequestRepository;
+			_filterRequestsWithDifferentVersion = filterRequestsWithDifferentVersion;
 		}
 
 		public IList<IEnumerable<Guid>> Get(DateTime nearFutureThresholdTime, DateTime farFutureThresholdTime, DateTime pastThresholdTime,
@@ -32,6 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			var maxDaysForAbsenceRequest = _configReader.ReadValue("MaximumDayLengthForAbsenceRequest", 60);
 			var allRequestsRaw = _queuedAbsenceRequestRepo.LoadAll();
+			var requestVersions = getRequestVersions(allRequestsRaw);
 			var longRequests = new List<IQueuedAbsenceRequest>(); 
 			longRequests.AddRange(allRequestsRaw.Where(x => x.EndDateTime.Subtract(x.StartDateTime).TotalDays >= maxDaysForAbsenceRequest));
 			if (longRequests.Any())
@@ -52,16 +58,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var nearFutureRequestIds = getNearFutureRequestIds(nearFutureThresholdTime, initialPeriod, futureRequests);
 
 			if (nearFutureRequestIds.Any())
+			{
+				nearFutureRequestIds =  _filterRequestsWithDifferentVersion.Filter(requestVersions, nearFutureRequestIds);
 				return nearFutureRequestIds;
+			}
+				
 
 			var farFutureRequests = getFarFutureRequests(notConflictingRequests, initialPeriod);
 			var farFutureRequestIds = getFarFutureRequestIds(farFutureThresholdTime, initialPeriod, farFutureRequests, windowSize);
 			if (farFutureRequestIds.Any())
+			{
+				farFutureRequestIds =  _filterRequestsWithDifferentVersion.Filter(requestVersions, farFutureRequestIds);
 				return farFutureRequestIds;
+			}
+				
 
 			var pastRequests = getPastRequests(notConflictingRequests, initialPeriod);
 			var pastRequestIds = getPastRequestIds(pastThresholdTime, initialPeriod, pastRequests, windowSize);
+			pastRequestIds = _filterRequestsWithDifferentVersion.Filter(requestVersions, pastRequestIds);
 			return pastRequestIds;
+		}
+
+		private IDictionary<Guid,int> getRequestVersions(IList<IQueuedAbsenceRequest> allRequestsRaw)
+		{
+			var personRequests =_personRequestRepository.Find(allRequestsRaw.Select(x=>x.PersonRequest));
+			return personRequests.ToDictionary(x => x.Id.GetValueOrDefault(), x => ((PersonRequest) x).Version.GetValueOrDefault());
 		}
 
 		private static List<IQueuedAbsenceRequest> getNotConflictingRequests(IEnumerable<IQueuedAbsenceRequest> allNewRequests, IReadOnlyCollection<DateTimePeriod> processingPeriods)
