@@ -1,5 +1,5 @@
 using System;
-using Teleopti.Ccc.Domain.Islands.Legacy;
+using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
@@ -9,11 +9,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	public class IntradayOptimizationContext
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly VirtualSkillContext _virtualSkillContext;
+		private readonly ISkillGroupContext _virtualSkillContext;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContext;
 
-		public IntradayOptimizationContext(Func<ISchedulerStateHolder> schedulerStateHolder, 
-				VirtualSkillContext virtualSkillContext,
+		public IntradayOptimizationContext(Func<ISchedulerStateHolder> schedulerStateHolder,
+				ISkillGroupContext virtualSkillContext,
 				CascadingResourceCalculationContextFactory resourceCalculationContext)
 		{
 			_schedulerStateHolder = schedulerStateHolder;

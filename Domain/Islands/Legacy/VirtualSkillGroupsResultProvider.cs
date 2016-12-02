@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Islands.Legacy
 		{
 			var current = VirtualSkillContext.VirtualSkillGroupResult;
 			if (current == null)
-				throw new NotSupportedException("VirtualSkillGroupResult not in context.");
+				throw new NotSupportedException("SkillGroups not in context.");
 
 			return current;
 		}

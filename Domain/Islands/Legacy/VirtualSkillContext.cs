@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands.Legacy
 {
-	public class VirtualSkillContext
+	public class VirtualSkillContext : ISkillGroupContext
 	{
 		private readonly Func<ISchedulingResultStateHolder> _scheduleResultStateHolder;
 		private readonly VirtualSkillGroupsCreator _virtualSkillGroupsCreator;
