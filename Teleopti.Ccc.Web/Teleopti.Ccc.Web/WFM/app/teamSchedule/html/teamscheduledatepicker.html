@@ -7,9 +7,6 @@
 		   ng-change="vm.onDateInputChange(vm.shortDateFormat)" />
 
 	<div class="wfm-datepicker-wrap" ng-if="vm.isCalendarOpened">
-		<div class="sub-header" ng-if="false">
-			From/to:
-		</div>
 		<div uib-datepicker ng-model="vm.selectedDate" class="wfm-datepicker" ng-change="vm.afterDateChangeDatePicker()"></div>
 	</div>
 
