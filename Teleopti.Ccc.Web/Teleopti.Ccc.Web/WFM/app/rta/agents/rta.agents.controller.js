@@ -179,8 +179,9 @@
 					if (selectedTeamIds.length > 0) {
 						selection['teamIds'] = selectedTeamIds;
 					}
-					if (selectedSiteIds.length > 0 || selectedTeamIds.length > 0)
+					//if (selectedSiteIds.length > 0 || selectedTeamIds.length > 0)
 						stateGoToAgents(selection);
+
 				}
 
 				function keepSelectionForOrganization() {
