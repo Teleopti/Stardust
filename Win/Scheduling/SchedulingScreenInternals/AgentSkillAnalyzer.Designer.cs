@@ -91,6 +91,8 @@
 			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonSuggestAction = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButtonReduceAnders = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButtonReduceMicke = new System.Windows.Forms.ToolStripButton();
 			this.contextMenuStrip1.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
@@ -631,10 +633,12 @@
             this.toolStripButtonRemoveNotLoadedSkills,
             this.toolStripButton1,
             this.toolStripButtonSuggestAction,
-            this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod});
+            this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod,
+            this.toolStripButtonReduceAnders,
+            this.toolStripButtonReduceMicke});
 			this.toolStripMain.Location = new System.Drawing.Point(3, 0);
 			this.toolStripMain.Name = "toolStripMain";
-			this.toolStripMain.Size = new System.Drawing.Size(655, 25);
+			this.toolStripMain.Size = new System.Drawing.Size(833, 25);
 			this.toolStripMain.TabIndex = 0;
 			// 
 			// toolStripButtonRemoveNotLoadedSkills
@@ -676,6 +680,26 @@
 			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.Size = new System.Drawing.Size(275, 22);
 			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.Text = "Find agents with skillgroup changes during period";
 			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.Click += new System.EventHandler(this.toolStripButtonFindAgentsThatHaveChangedSkillGroupDuringPeriodClick);
+			// 
+			// toolStripButtonReduceAnders
+			// 
+			this.toolStripButtonReduceAnders.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButtonReduceAnders.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonReduceAnders.Image")));
+			this.toolStripButtonReduceAnders.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonReduceAnders.Name = "toolStripButtonReduceAnders";
+			this.toolStripButtonReduceAnders.Size = new System.Drawing.Size(77, 22);
+			this.toolStripButtonReduceAnders.Text = "Reduce desc";
+			this.toolStripButtonReduceAnders.Click += new System.EventHandler(this.toolStripButtonReduceAnders_Click);
+			// 
+			// toolStripButtonReduceMicke
+			// 
+			this.toolStripButtonReduceMicke.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButtonReduceMicke.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonReduceMicke.Image")));
+			this.toolStripButtonReduceMicke.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonReduceMicke.Name = "toolStripButtonReduceMicke";
+			this.toolStripButtonReduceMicke.Size = new System.Drawing.Size(70, 22);
+			this.toolStripButtonReduceMicke.Text = "Reduce asc";
+			this.toolStripButtonReduceMicke.Click += new System.EventHandler(this.toolStripButtonReduceMicke_Click);
 			// 
 			// AgentSkillAnalyzer
 			// 
@@ -769,5 +793,7 @@
 		private System.Windows.Forms.ToolStripButton toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemRemoveSkill;
+		private System.Windows.Forms.ToolStripButton toolStripButtonReduceAnders;
+		private System.Windows.Forms.ToolStripButton toolStripButtonReduceMicke;
 	}
 }

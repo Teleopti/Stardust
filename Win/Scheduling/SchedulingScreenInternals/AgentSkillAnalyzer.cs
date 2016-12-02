@@ -530,7 +530,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			{
 				x.ShowDialog(this);
 			}
-
 		}
 
 		private void toolStripMenuItemRemoveSkillClick(object sender, EventArgs e)
@@ -562,8 +561,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 				if (personSkill.Any())
 					((IPersonSkillModify)personSkill.First()).Active = false;
 			}
-
-			LoadData();
 		}
 
 		private void listViewSkillViewSkillsColumnClick(object sender, ColumnClickEventArgs e)
@@ -609,6 +606,56 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 		private void listViewSkillViewAgentsColumnClick(object sender, ColumnClickEventArgs e)
 		{
 			sortListView(sender, e);
+		}
+
+		private void toolStripButtonReduceAnders_Click(object sender, EventArgs e)
+		{
+			reduce(true);
+		}
+
+		private void toolStripButtonReduceMicke_Click(object sender, EventArgs e)
+		{
+			reduce(false);
+		}
+
+		private void reduce(bool desc)
+		{
+			SuspendLayout();
+			var agentsAffected = new HashSet<IPerson>();
+			var currentIslandsCount = _islandList.Count;
+			while (true)
+			{
+				if (_islandList.Count > currentIslandsCount)
+				{
+					ResumeLayout(true);
+					Refresh();
+					currentIslandsCount = _islandList.Count;
+					SuspendLayout();
+				}
+				OldIsland largestIsland = null;
+				var maxAgents = 0;
+				foreach (var island in _islandList)
+				{
+					var agentCount = island.AgentsInIsland().Count();
+					if (agentCount > maxAgents)
+					{
+						largestIsland = island;
+						maxAgents = agentCount;
+					}
+				}
+				if (maxAgents < 500)
+					break;
+
+				var reducer = new AgentSkillReducer();
+				var affectedPersons = reducer.ReduceOne(largestIsland, _skillGroupsCreatorResult, _loadedSkillList, _date, desc).ToList();
+				if (!affectedPersons.Any())
+					break;
+
+				agentsAffected.UnionWith(affectedPersons);
+				LoadData();
+			}
+			ResumeLayout(true);
+			MessageBox.Show(agentsAffected.Count + " agents affected", "Done!");
 		}
 	}
 }

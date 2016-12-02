@@ -804,6 +804,7 @@
     <Compile Include="Scheduling\SchedulingScreenInternals\AgentSkillAnalyzer.Designer.cs">
       <DependentUpon>AgentSkillAnalyzer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\SchedulingScreenInternals\AgentSkillReducer.cs" />
     <Compile Include="Scheduling\SchedulingScreenInternals\PersonsThatChangedPersonSkillsDuringPeriodFinderView.cs">
       <SubType>Form</SubType>
     </Compile>
