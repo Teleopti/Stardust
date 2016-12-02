@@ -69,6 +69,24 @@
 			expect(result[0].PersonId.indexOf('SomeoneElse') > -1).toEqual(true);
 		});
 
+		it('should return invalide people when overtime activity input start time is ealier than start of belongsToDate', function() {
+			scheduleMgmt.resetSchedules([schedule], moment(scheduleDate));
+			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			personSelection.toggleAllPersonProjections(personSchedule, scheduleDate);
+			var timeRange = {
+				startTime: moment("2016-05-11 23:00"),
+				endTime: moment("2016-05-12 09:00")
+			};
+
+			var result = target.validateInputForOvertime(timeRange, "selected_definition_set_id","person_id");
+
+			expect(result.length).toEqual(1);
+			expect(result[0].PersonId.indexOf('SomeoneElse') > -1).toEqual(true);
+		});
+
 		it('should return false when moving to time changes the schedule start date', function() {
 			
 			scheduleMgmt.resetSchedules([schedule], moment(scheduleDate));

@@ -39,6 +39,12 @@
 						end = timeRange.endTime;
 					}
 					durationInMinutes = end.diff(start, 'minutes');
+
+					if(timeRange.startTime.isBefore(belongsToDate,'day'))
+					{
+						invalidPeople.push({PersonId: personId, Name: personSchedule.Name});
+						continue;
+					}
 				}else{
 					durationInMinutes = timeRange.endTime.diff(timeRange.startTime,'minute');
 				}
