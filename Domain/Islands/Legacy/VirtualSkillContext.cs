@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Domain.Islands.Legacy
 	public class VirtualSkillContext : ISkillGroupContext
 	{
 		private readonly Func<ISchedulingResultStateHolder> _scheduleResultStateHolder;
-		private readonly VirtualSkillGroupsCreator _virtualSkillGroupsCreator;
+		private readonly IVirtualSkillGroupsCreator _virtualSkillGroupsCreator;
 
-		public VirtualSkillContext(Func<ISchedulingResultStateHolder> scheduleResultStateHolder, VirtualSkillGroupsCreator virtualSkillGroupsCreator)
+		public VirtualSkillContext(Func<ISchedulingResultStateHolder> scheduleResultStateHolder, IVirtualSkillGroupsCreator virtualSkillGroupsCreator)
 		{
 			_scheduleResultStateHolder = scheduleResultStateHolder;
 			_virtualSkillGroupsCreator = virtualSkillGroupsCreator;

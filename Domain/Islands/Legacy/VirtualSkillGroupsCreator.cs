@@ -6,7 +6,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands.Legacy
 {
-	public class VirtualSkillGroupsCreator
+	public interface IVirtualSkillGroupsCreator
+	{
+		VirtualSkillGroupsCreatorResult GroupOnDate(DateOnly dateOnly, IEnumerable<IPerson> personList);
+	}
+
+	public class VirtualSkillGroupsCreator : IVirtualSkillGroupsCreator
 	{
 		private readonly PersonalSkillsProvider _personalSkillsProvider;
 
@@ -128,6 +133,14 @@ namespace Teleopti.Ccc.Domain.Islands.Legacy
 			return _personSkillGroupDic.TryGetValue(person, out key) ?
 				GetPersonsForSkillGroupKey(key).Count() : 
 				int.MaxValue;
+		}
+	}
+
+	public class VirtualSkillGroupsCreatorThatThrows : IVirtualSkillGroupsCreator
+	{
+		public VirtualSkillGroupsCreatorResult GroupOnDate(DateOnly dateOnly, IEnumerable<IPerson> personList)
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }

@@ -62,11 +62,11 @@ namespace Teleopti.Ccc.Domain.Islands
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_SplitBigIslands_42049)]
 	public class CreateIslandsOld : ICreateIslands
 	{
-		private readonly VirtualSkillGroupsCreator _virtualSkillGroupsCreator;
+		private readonly IVirtualSkillGroupsCreator _virtualSkillGroupsCreator;
 		private readonly SkillGroupIslandsAnalyzer _skillGroupIslandsAnalyzer;
 		private readonly IPeopleInOrganization _peopleInOrganization;
 
-		public CreateIslandsOld(VirtualSkillGroupsCreator virtualSkillGroupsCreator,
+		public CreateIslandsOld(IVirtualSkillGroupsCreator virtualSkillGroupsCreator,
 												SkillGroupIslandsAnalyzer skillGroupIslandsAnalyzer,
 												IPeopleInOrganization peopleInOrganization)
 		{
