@@ -63,7 +63,7 @@ select
 	is_utc = 0
 from mart.v_log_object_detail lod
 inner join mart.sys_datasource ds
-	on ds.log_object_id = lod.log_object_id
+	on ds.log_object_id = lod.log_object_id and lod.detail_id in (1,2) 
 inner join mart.etl_job_intraday_settings_type t
 	on t.detail_id = lod.detail_id
 WHERE NOT EXISTS (SELECT * FROM mart.etl_job_intraday_settings dd where dd.datasource_id = ds.datasource_id and dd.detail_id = lod.detail_id)
