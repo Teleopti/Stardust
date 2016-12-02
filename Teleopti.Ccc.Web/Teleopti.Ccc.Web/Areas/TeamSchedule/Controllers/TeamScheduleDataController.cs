@@ -4,35 +4,39 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 {
-    public class TeamScheduleDataController : ApiController
-    {
-	    private readonly IActivityProvider _teamScheduleDataProvider;
-	    private readonly IScheduleValidationProvider _validationProvider;
-	    private readonly IShiftCategoryProvider _shiftCategoryProvider;
-	    private readonly IToggleManager _toggleManager;
-	    private readonly IMultiplicatorDefinitionSetProvider _multiplicatorDefinitionSetProvider;
+	public class TeamScheduleDataController : ApiController
+	{
+		private readonly IActivityProvider _teamScheduleDataProvider;
+		private readonly IScheduleValidationProvider _validationProvider;
+		private readonly IShiftCategoryProvider _shiftCategoryProvider;
+		private readonly IToggleManager _toggleManager;
+		private readonly IMultiplicatorDefinitionSetProvider _multiplicatorDefinitionSetProvider;
+		private readonly ITeamsProvider _teamProvider;
 
-		public TeamScheduleDataController(IActivityProvider teamScheduleDataProvider, IScheduleValidationProvider validationProvider, IShiftCategoryProvider shiftCategoryProvider, IToggleManager toggleManager, IMultiplicatorDefinitionSetProvider multiplicatorDefinitionSetProvider)
+		public TeamScheduleDataController(IActivityProvider teamScheduleDataProvider, IScheduleValidationProvider validationProvider, IShiftCategoryProvider shiftCategoryProvider, IToggleManager toggleManager, IMultiplicatorDefinitionSetProvider multiplicatorDefinitionSetProvider, ITeamsProvider teamProvider)
 		{
 			_teamScheduleDataProvider = teamScheduleDataProvider;
 			_validationProvider = validationProvider;
 			_shiftCategoryProvider = shiftCategoryProvider;
 			_toggleManager = toggleManager;
 			_multiplicatorDefinitionSetProvider = multiplicatorDefinitionSetProvider;
+			_teamProvider = teamProvider;
 		}
 
-	    [UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchActivities")]
-	    public virtual IList<ActivityViewModel> FetchActivities()
-	    {
-		    return _teamScheduleDataProvider.GetAll();
-	    }
+		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchActivities")]
+		public virtual IList<ActivityViewModel> FetchActivities()
+		{
+			return _teamScheduleDataProvider.GetAll();
+		}
 
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleData/FetchRuleValidationResult")]
 		public virtual IList<BusinessRuleValidationResult> FetchRuleValidationResult([FromBody]FetchRuleValidationResultFormData input)
@@ -100,10 +104,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 
 
 		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchShiftCategories")]
-	    public virtual IList<ShiftCategoryViewModel> FetchShiftCategories()
-	    {
-		    return _shiftCategoryProvider.GetAll();
-	    }
+		public virtual IList<ShiftCategoryViewModel> FetchShiftCategories()
+		{
+			return _shiftCategoryProvider.GetAll();
+		}
 
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleData/CheckOverlapppingCertainActivities")]
 		public virtual IList<ActivityLayerOverlapCheckingResult> CheckOverlapppingCertainActivities(CheckActivityLayerOverlapFormData input)
@@ -121,6 +125,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		public virtual IList<ActivityLayerOverlapCheckingResult> CheckMoveActivityOverlapppingCertainActivities(CheckMoveActivityLayerOverlapFormData input)
 		{
 			return _validationProvider.GetMoveActivityLayerOverlapCheckingResult(input);
+		}
+
+		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchPermittedTeamHierachy")]
+		public virtual BusinessUnitWithSitesViewModel FetchPermittedTeamHierachy(DateOnly date)
+		{
+			return _teamProvider.GetPermittedTeamHierachy(date);
 		}
 
 	}

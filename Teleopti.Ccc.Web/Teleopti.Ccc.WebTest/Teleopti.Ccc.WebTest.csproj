@@ -431,6 +431,7 @@
     <Compile Include="Core\Startup\RegisterGlobalApiFiltersTaskTest.cs" />
     <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelReworkedFactoryTest.cs" />
     <Compile Include="Core\TeamSchedule\ViewModelFactory\WfmTeamScheduleViewModelFactoryTest.cs" />
+    <Compile Include="Core\TeamsProviderTest.cs" />
     <Compile Include="Core\TranslatedTextsTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProviderNoMockTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProviderTest.cs" />

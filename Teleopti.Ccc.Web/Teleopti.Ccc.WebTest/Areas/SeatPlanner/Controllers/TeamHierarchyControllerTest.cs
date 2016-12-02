@@ -9,8 +9,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers;
-using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 
 			siteRepository.Stub(x => x.LoadAll()).Return(new List<ISite>(){site});
 			
-			ITeamsProvider teamsProvider = new TeamsProvider(siteRepository, businessUnitRepository, currentBusinessUnit);
+			ITeamsProvider teamsProvider = new TeamsProvider(siteRepository, currentBusinessUnit, new Global.FakePermissionProvider());
 			target = new TeamHierarchyController(teamsProvider);
 			
 			var result = target.Get() as dynamic;

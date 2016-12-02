@@ -764,8 +764,8 @@
     <Compile Include="Areas\MultiTenancy\Core\PersonInfoMapper.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\TeamHierarchyController.cs" />
     <Compile Include="Areas\SeatPlanner\Core\IOC\SeatPlannerAreaModule.cs" />
-    <Compile Include="Areas\SeatPlanner\Core\Providers\ITeamsProvider.cs" />
-    <Compile Include="Areas\SeatPlanner\Core\Providers\TeamsProvider.cs" />
+    <Compile Include="Core\ITeamsProvider.cs" />
+    <Compile Include="Core\TeamsProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\SiteViewModel.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\SiteViewModelWithTeams.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\TeamViewModel.cs" />

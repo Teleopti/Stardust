@@ -9,6 +9,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 	{
 		private readonly Dictionary<string, DateOnly?> _applicationFunctions = new Dictionary<string, DateOnly?>();
 		private readonly IList<PersonPermissionData> _personPermissionDatas = new List<PersonPermissionData>();
+		private readonly IList<SitePermissionData> _sitePermissionData = new List<SitePermissionData>();
+		private readonly IList<TeamPermissionData> _teamPermissionData = new List<TeamPermissionData>();
 		private DateOnly? _schedulePublishedToDate;
 		private bool enabled;
 
@@ -28,12 +30,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 		public bool HasTeamPermission(string applicationFunctionPath, DateOnly date, ITeam team)
 		{
-			throw new NotImplementedException();
+			if (!enabled) return true;
+			return
+				_teamPermissionData.Any(
+					x => x.ApplicationFunctionPath == applicationFunctionPath && x.Date == date && x.Team == team);
 		}
 
 		public bool HasSitePermission(string applicationfunctionpath, DateOnly today, ISite site)
 		{
-			throw new NotImplementedException();
+			if (!enabled) return true;
+			return
+				_sitePermissionData.Any(
+					x => x.ApplicationFunctionPath == applicationfunctionpath && x.Date == today && x.Site == site);
 		}
 
 		public bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date,
@@ -87,6 +95,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		{
 			_schedulePublishedToDate = date;
 		}
+
+		public void PermitSite(string applicationFunction, ISite site, DateOnly date)
+		{
+			_sitePermissionData.Add(new SitePermissionData(applicationFunction, date, site));
+		}
+
+		public void PermitTeam(string applicationFunction, ITeam team, DateOnly date)
+		{
+			_teamPermissionData.Add(new TeamPermissionData(applicationFunction, date, team));
+		}
 	}
 
 	class PersonPermissionData
@@ -100,6 +118,33 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			ApplicationFunctionPath = applicationFunctionPath;
 			Date = date;
 			Person = person;
+		}
+	}
+
+	class SitePermissionData
+	{
+		public string ApplicationFunctionPath;
+		public DateOnly Date;
+		public ISite Site;
+
+		public SitePermissionData(string applicationFunctionPath, DateOnly date, ISite site)
+		{
+			ApplicationFunctionPath = applicationFunctionPath;
+			Date = date;
+			Site = site;
+		}
+	}
+	class TeamPermissionData
+	{
+		public string ApplicationFunctionPath;
+		public DateOnly Date;
+		public ITeam Team;
+
+		public TeamPermissionData(string applicationFunctionPath, DateOnly date, ITeam team)
+		{
+			ApplicationFunctionPath = applicationFunctionPath;
+			Date = date;
+			Team = team;
 		}
 	}
 }

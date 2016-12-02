@@ -2,22 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
+namespace Teleopti.Ccc.Web.Core
 {
 	public class TeamsProvider : ITeamsProvider
 	{
 		private readonly ISiteRepository _siteRepository;
-		private readonly IBusinessUnitRepository _businessUnitRepository;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
+		private readonly IPermissionProvider _permissionProvider;
 
-		public TeamsProvider(ISiteRepository siteRepository, IBusinessUnitRepository businessUnitRepository, ICurrentBusinessUnit currentBusinessUnit)
+		public TeamsProvider(ISiteRepository siteRepository, ICurrentBusinessUnit currentBusinessUnit, IPermissionProvider permissionProvider)
 		{
 			_siteRepository = siteRepository;
-			_businessUnitRepository = businessUnitRepository;
 			_currentBusinessUnit = currentBusinessUnit;
+			_permissionProvider = permissionProvider;
 		}
 
 		public IEnumerable<TeamViewModel> Get(string siteId)
@@ -40,7 +41,6 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 
 		public BusinessUnitWithSitesViewModel GetTeamHierarchy()
 		{
-			var currentBusinessUnit = _businessUnitRepository.Get(_currentBusinessUnit.Current().Id.GetValueOrDefault());
 			var sites = _siteRepository.LoadAll().OrderBy (site => site.Description.Name);
 			var siteViewModels = new List<SiteViewModelWithTeams>();
 
@@ -59,11 +59,53 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 
 			return new BusinessUnitWithSitesViewModel()
 			{
+				Id = _currentBusinessUnit.Current().Id ?? Guid.Empty,
+				Name = _currentBusinessUnit.Current().Name,
+				Children = siteViewModels
+			};
+
+		}
+
+		public BusinessUnitWithSitesViewModel GetPermittedTeamHierachy(DateOnly date)
+		{
+			var currentBusinessUnit = _currentBusinessUnit.Current();
+			var sites = _siteRepository.LoadAll().OrderBy(site => site.Description.Name);
+			var siteViewModels = new List<SiteViewModelWithTeams>();
+
+			foreach (var site in sites)
+			{
+				var siteViewModel = new SiteViewModelWithTeams()
+				{
+					Id = site.Id.ToString(),
+					Name = site.Description.Name,
+					Children = new List<TeamViewModel>()
+				};
+				var teams = site.SortedTeamCollection.Where(t => t.IsChoosable);
+				foreach (var team in teams)
+				{
+					if (_permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule, date, team))
+					{
+						siteViewModel.Children.Add(new TeamViewModel
+						{
+							Id = team.Id.Value.ToString(),
+							Name = team.Description.Name
+						});
+					}
+
+				}
+				if (siteViewModel.Children.Any())
+				{
+					siteViewModels.Add(siteViewModel);
+				}
+
+			}
+
+			return new BusinessUnitWithSitesViewModel()
+			{
 				Id = currentBusinessUnit.Id ?? Guid.Empty,
 				Name = currentBusinessUnit.Name,
 				Children = siteViewModels
 			};
-
 		}
 	}
 }
