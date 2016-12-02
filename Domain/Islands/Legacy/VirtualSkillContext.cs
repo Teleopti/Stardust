@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
@@ -7,12 +8,10 @@ namespace Teleopti.Ccc.Domain.Islands.Legacy
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_SplitBigIslands_42049)]
 	public class VirtualSkillContext : ISkillGroupContext
 	{
-		private readonly Func<ISchedulingResultStateHolder> _scheduleResultStateHolder;
 		private readonly IVirtualSkillGroupsCreator _virtualSkillGroupsCreator;
 
-		public VirtualSkillContext(Func<ISchedulingResultStateHolder> scheduleResultStateHolder, IVirtualSkillGroupsCreator virtualSkillGroupsCreator)
+		public VirtualSkillContext(IVirtualSkillGroupsCreator virtualSkillGroupsCreator)
 		{
-			_scheduleResultStateHolder = scheduleResultStateHolder;
 			_virtualSkillGroupsCreator = virtualSkillGroupsCreator;
 		}
 
@@ -24,11 +23,11 @@ namespace Teleopti.Ccc.Domain.Islands.Legacy
 			get { return _virtualSkillGroupResult; }
 		}
 
-		public IDisposable Create(DateOnlyPeriod period)
+		public IDisposable Create(IEnumerable<IPerson> personsInOrganization, DateOnlyPeriod period)
 		{
 			if (_virtualSkillGroupResult != null)
 				throw new NotSupportedException("Nested virtualSkillGroupResult context.");
-			_virtualSkillGroupResult = _virtualSkillGroupsCreator.GroupOnDate(period.StartDate, _scheduleResultStateHolder().PersonsInOrganization);
+			_virtualSkillGroupResult = _virtualSkillGroupsCreator.GroupOnDate(period.StartDate, personsInOrganization);
 			return new GenericDisposable(() => { _virtualSkillGroupResult = null; });
 		}
 	}

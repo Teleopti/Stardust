@@ -1,16 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands
 {
 	public class SkillGroupContext : ISkillGroupContext
 	{
-		private readonly Func<ISchedulingResultStateHolder> _scheduleResultStateHolder;
 		private readonly CreateSkillGroups _createSkillGroups;
 
-		public SkillGroupContext(Func<ISchedulingResultStateHolder> scheduleResultStateHolder, CreateSkillGroups createSkillGroups)
+		public SkillGroupContext(CreateSkillGroups createSkillGroups)
 		{
-			_scheduleResultStateHolder = scheduleResultStateHolder;
 			_createSkillGroups = createSkillGroups;
 		}
 
@@ -19,11 +18,11 @@ namespace Teleopti.Ccc.Domain.Islands
 
 		public static SkillGroups SkillGroups => _skillGroups;
 
-		public IDisposable Create(DateOnlyPeriod period)
+		public IDisposable Create(IEnumerable<IPerson> personsInOrganization, DateOnlyPeriod period)
 		{
 			if (_skillGroups != null)
 				throw new NotSupportedException("Nested virtualSkillGroupResult context.");
-			_skillGroups = _createSkillGroups.Create(_scheduleResultStateHolder().PersonsInOrganization, period.StartDate);
+			_skillGroups = _createSkillGroups.Create(personsInOrganization, period.StartDate);
 			return new GenericDisposable(() => { _skillGroups = null; });
 		}
 	}

@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<CreateIslands>().As<ICreateIslands>().SingleInstance();
 				builder.RegisterType<SkillGroupInfoProvider>().As<ISkillGroupInfoProvider>().SingleInstance();
-				builder.RegisterType<SkillGroupContext>().As<ISkillGroupContext>().InstancePerLifetimeScope();
+				builder.RegisterType<SkillGroupContext>().As<ISkillGroupContext>().SingleInstance();
 				builder.RegisterType<VirtualSkillGroupsCreatorThatThrows>().As<IVirtualSkillGroupsCreator>().SingleInstance();
 			}
 			else
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<CreateIslandsOld>().As<ICreateIslands>().SingleInstance();
 				builder.RegisterType<VirtualSkillGroupsCreator>().As<IVirtualSkillGroupsCreator>().SingleInstance();
 				builder.RegisterType<VirtualSkillGroupsResultProvider>().As<ISkillGroupInfoProvider>().SingleInstance();
-				builder.RegisterType<VirtualSkillContext>().As<ISkillGroupContext>().InstancePerLifetimeScope();
+				builder.RegisterType<VirtualSkillContext>().As<ISkillGroupContext>().SingleInstance();
 			}
 			builder.RegisterType<CreateSkillGroups>().SingleInstance();
 			builder.RegisterType<ReduceIslandsLimits>().SingleInstance();
