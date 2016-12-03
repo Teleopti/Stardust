@@ -442,17 +442,27 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 					LazyLoadingManager.Initialize(skill.SkillType);
 				}
 			}
+			
+			calculate();
+			drawLists();		
+		}
+
+		private void drawLists()
+		{
+			drawVirtualGroupList(null, listViewAllVirtualGroups);
+			drawSkillList();
+			drawIslandList();
+		}
+
+		private void calculate()
+		{
 			_skillDayForecastForSkills = new Dictionary<ISkill, TimeSpan>();
 			_totalForecastedForDate = TimeSpan.Zero;
-			
 			var creator = new VirtualSkillGroupsCreator(new PersonalSkillsProvider());
 			_skillGroupsCreatorResult = creator.GroupOnDate(_date, _personList);
 			createSkillDayForSkillsDic();
-			drawVirtualGroupList(null, listViewAllVirtualGroups);
 			var skillGroupIslandsAnalyzer = new SkillGroupIslandsAnalyzer();
 			_islandList = skillGroupIslandsAnalyzer.FindIslands(_skillGroupsCreatorResult);
-			drawSkillList();		
-			drawIslandList();
 		}
 
 		private void toolStripButtonSuggestAction_Click(object sender, EventArgs e)
@@ -620,17 +630,15 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 		private void reduce(bool desc)
 		{
-			SuspendLayout();
+			
 			var agentsAffected = new HashSet<IPerson>();
 			var currentIslandsCount = _islandList.Count;
 			while (true)
 			{
 				if (_islandList.Count > currentIslandsCount)
-				{
-					ResumeLayout(true);
-					Refresh();
+				{				
 					currentIslandsCount = _islandList.Count;
-					SuspendLayout();
+					drawLists();				
 				}
 				OldIsland largestIsland = null;
 				var maxAgents = 0;
@@ -652,9 +660,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 					break;
 
 				agentsAffected.UnionWith(affectedPersons);
-				LoadData();
+				calculate();
 			}
-			ResumeLayout(true);
+			drawLists();
 			MessageBox.Show(agentsAffected.Count + " agents affected", "Done!");
 		}
 	}
