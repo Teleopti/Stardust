@@ -464,31 +464,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			_islandList = skillGroupIslandsAnalyzer.FindIslands(_skillGroupsCreatorResult);
 		}
 
-		private void toolStripButtonSuggestAction_Click(object sender, EventArgs e)
-		{
-			var results = new SkillGroupReducer().SuggestAction(_skillGroupsCreatorResult, _allSkills);
-			var resultForm = new SkillGroupReducerSuggestions();
-			resultForm.LoadData(results,_skillGroupsCreatorResult,_loadedSkillList);
-			resultForm.Show(this);
-		}
-
-		private void toolStripButton1_Click(object sender, EventArgs e)
-		{
-			var results = new SkillGroupReducer().SuggestAction(_skillGroupsCreatorResult, _allSkills);
-			foreach (var skillGroupReducerResult in results)
-			{
-				foreach (var person in _skillGroupsCreatorResult.GetPersonsForSkillGroupKey(skillGroupReducerResult.RemoveFromGroupKey))
-				{
-					Guid guid;
-					if (!Guid.TryParse(skillGroupReducerResult.SkillGuidStringToRemove, out guid))
-						continue;
-
-					inactivatePersonalSkillFor(person, guid.ToString());				
-				}
-			}
-			LoadData();
-		}
-
 		private void toolStripButtonRemoveNotLoadedSkillsClick(object sender, EventArgs e)
 		{
 			foreach (var key in _skillGroupsCreatorResult.GetKeys())

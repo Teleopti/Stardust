@@ -88,8 +88,6 @@
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripMain = new System.Windows.Forms.ToolStrip();
 			this.toolStripButtonRemoveNotLoadedSkills = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonSuggestAction = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonReduceAnders = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonReduceMicke = new System.Windows.Forms.ToolStripButton();
@@ -632,15 +630,13 @@
 			this.toolStripMain.Dock = System.Windows.Forms.DockStyle.None;
 			this.toolStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonRemoveNotLoadedSkills,
-            this.toolStripButton1,
-            this.toolStripButtonSuggestAction,
             this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod,
             this.toolStripButtonReduceAnders,
             this.toolStripButtonReduceMicke,
             this.toolStripButtonResetReduced});
 			this.toolStripMain.Location = new System.Drawing.Point(3, 0);
 			this.toolStripMain.Name = "toolStripMain";
-			this.toolStripMain.Size = new System.Drawing.Size(918, 25);
+			this.toolStripMain.Size = new System.Drawing.Size(692, 25);
 			this.toolStripMain.TabIndex = 0;
 			// 
 			// toolStripButtonRemoveNotLoadedSkills
@@ -652,26 +648,6 @@
 			this.toolStripButtonRemoveNotLoadedSkills.Size = new System.Drawing.Size(142, 22);
 			this.toolStripButtonRemoveNotLoadedSkills.Text = "Remove not loaded skills";
 			this.toolStripButtonRemoveNotLoadedSkills.Click += new System.EventHandler(this.toolStripButtonRemoveNotLoadedSkillsClick);
-			// 
-			// toolStripButton1
-			// 
-			this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButton1.Name = "toolStripButton1";
-			this.toolStripButton1.Size = new System.Drawing.Size(108, 22);
-			this.toolStripButton1.Text = "Apply suggestions";
-			this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
-			// 
-			// toolStripButtonSuggestAction
-			// 
-			this.toolStripButtonSuggestAction.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButtonSuggestAction.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSuggestAction.Image")));
-			this.toolStripButtonSuggestAction.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonSuggestAction.Name = "toolStripButtonSuggestAction";
-			this.toolStripButtonSuggestAction.Size = new System.Drawing.Size(118, 22);
-			this.toolStripButtonSuggestAction.Text = "Preview suggestions";
-			this.toolStripButtonSuggestAction.Click += new System.EventHandler(this.toolStripButtonSuggestAction_Click);
 			// 
 			// toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod
 			// 
@@ -800,8 +776,6 @@
 		private System.Windows.Forms.ColumnHeader columnHeader31;
 		private System.Windows.Forms.ColumnHeader columnHeader32;
 		private System.Windows.Forms.ToolStripButton toolStripButtonRemoveNotLoadedSkills;
-		private System.Windows.Forms.ToolStripButton toolStripButton1;
-		private System.Windows.Forms.ToolStripButton toolStripButtonSuggestAction;
 		private System.Windows.Forms.ToolStripButton toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemRemoveSkill;

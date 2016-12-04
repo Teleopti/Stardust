@@ -353,7 +353,6 @@
     <Compile Include="Common\TimeLogger\LogTimeTest.cs" />
     <Compile Include="Common\TimeLogger\LogTimeTester.cs" />
     <Compile Include="DayOffPlanning\SkillGroupIslandsAnalyzerTest.cs" />
-    <Compile Include="DayOffPlanning\SkillGroupReducerTest.cs" />
     <Compile Include="DayOffPlanning\VirtualSkillGroupsCreatorTest.cs" />
     <Compile Include="Forecasting\OverrideTaskTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherenceDetails\DeletedTest.cs" />
