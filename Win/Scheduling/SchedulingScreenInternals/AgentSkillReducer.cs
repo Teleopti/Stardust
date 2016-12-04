@@ -9,7 +9,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 	public class AgentSkillReducer
 	{
 		private const int sizeFactor = 4;
-		public IEnumerable<IPerson> ReduceOne(OldIsland island, VirtualSkillGroupsCreatorResult skillGroupsCreatorResult, IList<ISkill> loadedSkillList, DateOnly date, bool desc)
+
+		public IEnumerable<IPerson> ReduceOne(OldIsland island, VirtualSkillGroupsCreatorResult skillGroupsCreatorResult,
+			IList<ISkill> loadedSkillList, DateOnly date, bool desc, IList<IPersonSkill> modifiedPersonSkills)
 		{
 			var orderedList = sortGroups(island, skillGroupsCreatorResult, desc);
 			foreach (var keyCount in orderedList)
@@ -17,7 +19,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 				var selectedSkillKey = skillToRemove(skillGroupsCreatorResult, keyCount, loadedSkillList);
 				if (selectedSkillKey != null)
 				{
-					var result = removeSkillFromGroup(skillGroupsCreatorResult, keyCount.Key, selectedSkillKey, loadedSkillList, date);
+					var result = removeSkillFromGroup(skillGroupsCreatorResult, keyCount.Key, selectedSkillKey, loadedSkillList, date, modifiedPersonSkills);
 					return result;
 				}
 			}
@@ -25,7 +27,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			return Enumerable.Empty<IPerson>();
 		}
 
-		private IEnumerable<IPerson> removeSkillFromGroup(VirtualSkillGroupsCreatorResult skillGroupsCreatorResult, string selectedGroupKey, string selectedSkillKey, IList<ISkill> loadedSkillList, DateOnly date)
+		private IEnumerable<IPerson> removeSkillFromGroup(VirtualSkillGroupsCreatorResult skillGroupsCreatorResult, string selectedGroupKey, string selectedSkillKey, IList<ISkill> loadedSkillList, DateOnly date, IList<IPersonSkill> modifiedPersonSkills)
 		{
 			var result = new List<IPerson>();
 			foreach (var person in skillGroupsCreatorResult.GetPersonsForSkillGroupKey(selectedGroupKey))
@@ -39,11 +41,13 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 					continue;
 
 				var period = person.Period(date);
-				var personSkill = period.PersonSkillCollection.Where(ps => ps.Skill == skill).ToList();
-				if (personSkill.Any())
+				var personSkills = period.PersonSkillCollection.Where(ps => ps.Skill.Equals(skill)).ToList();
+				if (personSkills.Any())
 				{
-					((IPersonSkillModify)personSkill.First()).Active = false;
+					var personSkill = personSkills.First();
+					((IPersonSkillModify) personSkill).Active = false;
 					result.Add(person);
+					modifiedPersonSkills.Add(personSkill);
 				}
 			}
 

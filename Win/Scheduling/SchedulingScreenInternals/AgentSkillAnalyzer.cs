@@ -6,8 +6,6 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.DayOffPlanning;
-using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Islands.Legacy;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -32,6 +30,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 		private readonly TimeFormatter _timeFormatter = new TimeFormatter(new ThisCulture(CultureInfo.CurrentCulture));
 		private IList<ISkill> _allSkills;
 		private readonly DateTimePicker _dtpDate;
+		private readonly IList<IPersonSkill> _modifiedPersonSkills = new List<IPersonSkill>(); 
 
 		public AgentSkillAnalyzer()
 		{
@@ -484,13 +483,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 					if (!Guid.TryParse(skillGroupReducerResult.SkillGuidStringToRemove, out guid))
 						continue;
 
-					var skill = _loadedSkillList.FirstOrDefault(s => s.Id == guid);
-					if (skill == null)
-						continue;
-					var period = person.Period(_date);
-					var personSkill = period.PersonSkillCollection.Where(ps => ps.Skill == skill).ToList();
-					if (personSkill.Any())
-						((IPersonSkillModify)personSkill.First()).Active = false;
+					inactivatePersonalSkillFor(person, guid.ToString());				
 				}
 			}
 			LoadData();
@@ -517,10 +510,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 						foreach (var person in _skillGroupsCreatorResult.GetPersonsForSkillGroupKey(key))
 						{
-							var period = person.Period(_date);
-							var personSkill = period.PersonSkillCollection.Where(ps => ps.Skill.Equals(skill)).ToList();
-							if (personSkill.Any())
-								((IPersonSkillModify)personSkill.First()).Active = false;
+							inactivatePersonalSkillFor(person, guidString);
 						}
 					}
 				}
@@ -559,63 +549,30 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 			foreach (var person in _skillGroupsCreatorResult.GetPersonsForSkillGroupKey(selectedGroupKey))
 			{
-				Guid guid;
-				if (!Guid.TryParse(selectedSkillKey, out guid))
-					continue;
-
-				var skill = _loadedSkillList.FirstOrDefault(s => s.Id == guid);
-				if (skill == null)
-					continue;
-				var period = person.Period(_date);
-				var personSkill = period.PersonSkillCollection.Where(ps => ps.Skill == skill).ToList();
-				if (personSkill.Any())
-					((IPersonSkillModify)personSkill.First()).Active = false;
+				inactivatePersonalSkillFor(person, selectedSkillKey);
 			}
+			calculate();
+			drawLists();
 		}
 
-		private void listViewSkillViewSkillsColumnClick(object sender, ColumnClickEventArgs e)
+		private void inactivatePersonalSkillFor(IPerson person, string selectedSkillKey)
 		{
-			sortListView(sender, e);
-		}
+			Guid guid;
+			if (!Guid.TryParse(selectedSkillKey, out guid))
+				return;
 
-		private void listViewGroupsInIslandColumnClick(object sender, ColumnClickEventArgs e)
-		{
-			sortListView(sender, e);
-		}
+			var skill = _allSkills.FirstOrDefault(s => s.Id == guid);
+			if (skill == null)
+				return;
 
-		private void listViewIslandsColumnClick(object sender, ColumnClickEventArgs e)
-		{
-			sortListView(sender, e);
-		}
-
-		private void listViewAllVirtualGroupsColumnClick(object sender, ColumnClickEventArgs e)
-		{
-			sortListView(sender, e);
-		}
-
-		private void listViewIslandsSkillsOnGroupColumnClick(object sender, ColumnClickEventArgs e)
-		{
-			sortListView(sender, e);
-		}
-
-		private void listViewSkillInSkillGroupColumnClick(object sender, ColumnClickEventArgs e)
-		{
-			sortListView(sender, e);
-		}
-
-		private void listViewAgentsColumnClick(object sender, ColumnClickEventArgs e)
-		{
-			sortListView(sender, e);
-		}
-
-		private void listViewSkillGroupsForSkillColumnClick(object sender, ColumnClickEventArgs e)
-		{
-			sortListView(sender, e);
-		}
-
-		private void listViewSkillViewAgentsColumnClick(object sender, ColumnClickEventArgs e)
-		{
-			sortListView(sender, e);
+			var period = person.Period(_date);
+			var personSkills = period.PersonSkillCollection.Where(ps => ps.Skill.Equals(skill)).ToList();
+			if (personSkills.Any())
+			{
+				var personSkill = personSkills.First();
+				((IPersonSkillModify)personSkill).Active = false;
+				_modifiedPersonSkills.Add(personSkill);
+			}
 		}
 
 		private void toolStripButtonReduceAnders_Click(object sender, EventArgs e)
@@ -629,8 +586,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 		}
 
 		private void reduce(bool desc)
-		{
-			
+		{		
 			var agentsAffected = new HashSet<IPerson>();
 			var currentIslandsCount = _islandList.Count;
 			while (true)
@@ -655,7 +611,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 					break;
 
 				var reducer = new AgentSkillReducer();
-				var affectedPersons = reducer.ReduceOne(largestIsland, _skillGroupsCreatorResult, _loadedSkillList, _date, desc).ToList();
+				var affectedPersons = reducer.ReduceOne(largestIsland, _skillGroupsCreatorResult, _loadedSkillList, _date, desc, _modifiedPersonSkills).ToList();
 				if (!affectedPersons.Any())
 					break;
 
@@ -664,6 +620,17 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			}
 			drawLists();
 			MessageBox.Show(agentsAffected.Count + " agents affected", "Done!");
+		}
+
+		private void toolStripButtonResetReducedClick(object sender, EventArgs e)
+		{
+			foreach (var modifiedPersonSkill in _modifiedPersonSkills)
+			{
+				((IPersonSkillModify)modifiedPersonSkill).Active = true;
+			}
+			_modifiedPersonSkills.Clear();
+			calculate();
+			drawLists();
 		}
 	}
 }

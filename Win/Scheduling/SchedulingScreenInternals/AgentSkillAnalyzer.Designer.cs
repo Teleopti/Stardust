@@ -93,6 +93,7 @@
 			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonReduceAnders = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonReduceMicke = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButtonResetReduced = new System.Windows.Forms.ToolStripButton();
 			this.contextMenuStrip1.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
@@ -125,7 +126,7 @@
 			this.listViewAllVirtualGroups.TabIndex = 0;
 			this.listViewAllVirtualGroups.UseCompatibleStateImageBehavior = false;
 			this.listViewAllVirtualGroups.View = System.Windows.Forms.View.Details;
-			this.listViewAllVirtualGroups.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewAllVirtualGroupsColumnClick);
+			this.listViewAllVirtualGroups.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.sortListView);
 			this.listViewAllVirtualGroups.SelectedIndexChanged += new System.EventHandler(this.listViewAllVirtualGroupsSelectedIndexChanged);
 			// 
 			// columnHeaderVirtualGroup
@@ -167,7 +168,7 @@
 			this.listViewSkillInSkillGroup.TabIndex = 1;
 			this.listViewSkillInSkillGroup.UseCompatibleStateImageBehavior = false;
 			this.listViewSkillInSkillGroup.View = System.Windows.Forms.View.Details;
-			this.listViewSkillInSkillGroup.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewSkillInSkillGroupColumnClick);
+			this.listViewSkillInSkillGroup.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.sortListView);
 			// 
 			// columnHeaderSkills
 			// 
@@ -233,7 +234,7 @@
 			this.listViewAgents.TabIndex = 2;
 			this.listViewAgents.UseCompatibleStateImageBehavior = false;
 			this.listViewAgents.View = System.Windows.Forms.View.Details;
-			this.listViewAgents.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewAgentsColumnClick);
+			this.listViewAgents.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.sortListView);
 			// 
 			// columnHeader1
 			// 
@@ -314,7 +315,7 @@
 			this.listViewSkillGroupsForSkill.TabIndex = 5;
 			this.listViewSkillGroupsForSkill.UseCompatibleStateImageBehavior = false;
 			this.listViewSkillGroupsForSkill.View = System.Windows.Forms.View.Details;
-			this.listViewSkillGroupsForSkill.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewSkillGroupsForSkillColumnClick);
+			this.listViewSkillGroupsForSkill.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.sortListView);
 			// 
 			// columnHeader30
 			// 
@@ -354,7 +355,7 @@
 			this.listViewSkillViewSkills.TabIndex = 2;
 			this.listViewSkillViewSkills.UseCompatibleStateImageBehavior = false;
 			this.listViewSkillViewSkills.View = System.Windows.Forms.View.Details;
-			this.listViewSkillViewSkills.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewSkillViewSkillsColumnClick);
+			this.listViewSkillViewSkills.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.sortListView);
 			this.listViewSkillViewSkills.SelectedIndexChanged += new System.EventHandler(this.listViewSkillViewSkillsSelectedIndexChanged);
 			// 
 			// columnHeader8
@@ -410,7 +411,7 @@
 			this.listViewSkillViewAgents.TabIndex = 4;
 			this.listViewSkillViewAgents.UseCompatibleStateImageBehavior = false;
 			this.listViewSkillViewAgents.View = System.Windows.Forms.View.Details;
-			this.listViewSkillViewAgents.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewSkillViewAgentsColumnClick);
+			this.listViewSkillViewAgents.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.sortListView);
 			// 
 			// columnHeader15
 			// 
@@ -478,7 +479,7 @@
 			this.listViewIslandsSkillsOnGroup.TabIndex = 3;
 			this.listViewIslandsSkillsOnGroup.UseCompatibleStateImageBehavior = false;
 			this.listViewIslandsSkillsOnGroup.View = System.Windows.Forms.View.Details;
-			this.listViewIslandsSkillsOnGroup.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewIslandsSkillsOnGroupColumnClick);
+			this.listViewIslandsSkillsOnGroup.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.sortListView);
 			// 
 			// columnHeader22
 			// 
@@ -533,7 +534,7 @@
 			this.listViewIslands.TabIndex = 2;
 			this.listViewIslands.UseCompatibleStateImageBehavior = false;
 			this.listViewIslands.View = System.Windows.Forms.View.Details;
-			this.listViewIslands.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewIslandsColumnClick);
+			this.listViewIslands.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.sortListView);
 			this.listViewIslands.SelectedIndexChanged += new System.EventHandler(this.listViewIslandsSelectedIndexChanged);
 			// 
 			// columnHeader19
@@ -576,7 +577,7 @@
 			this.listViewGroupsInIsland.TabIndex = 1;
 			this.listViewGroupsInIsland.UseCompatibleStateImageBehavior = false;
 			this.listViewGroupsInIsland.View = System.Windows.Forms.View.Details;
-			this.listViewGroupsInIsland.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewGroupsInIslandColumnClick);
+			this.listViewGroupsInIsland.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.sortListView);
 			this.listViewGroupsInIsland.SelectedIndexChanged += new System.EventHandler(this.listViewGroupsInIslandSelectedIndexChanged);
 			// 
 			// columnHeader16
@@ -635,10 +636,11 @@
             this.toolStripButtonSuggestAction,
             this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod,
             this.toolStripButtonReduceAnders,
-            this.toolStripButtonReduceMicke});
+            this.toolStripButtonReduceMicke,
+            this.toolStripButtonResetReduced});
 			this.toolStripMain.Location = new System.Drawing.Point(3, 0);
 			this.toolStripMain.Name = "toolStripMain";
-			this.toolStripMain.Size = new System.Drawing.Size(833, 25);
+			this.toolStripMain.Size = new System.Drawing.Size(918, 25);
 			this.toolStripMain.TabIndex = 0;
 			// 
 			// toolStripButtonRemoveNotLoadedSkills
@@ -700,6 +702,16 @@
 			this.toolStripButtonReduceMicke.Size = new System.Drawing.Size(70, 22);
 			this.toolStripButtonReduceMicke.Text = "Reduce asc";
 			this.toolStripButtonReduceMicke.Click += new System.EventHandler(this.toolStripButtonReduceMicke_Click);
+			// 
+			// toolStripButtonResetReduced
+			// 
+			this.toolStripButtonResetReduced.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButtonResetReduced.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonResetReduced.Image")));
+			this.toolStripButtonResetReduced.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonResetReduced.Name = "toolStripButtonResetReduced";
+			this.toolStripButtonResetReduced.Size = new System.Drawing.Size(85, 22);
+			this.toolStripButtonResetReduced.Text = "Reset reduced";
+			this.toolStripButtonResetReduced.Click += new System.EventHandler(this.toolStripButtonResetReducedClick);
 			// 
 			// AgentSkillAnalyzer
 			// 
@@ -795,5 +807,6 @@
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemRemoveSkill;
 		private System.Windows.Forms.ToolStripButton toolStripButtonReduceAnders;
 		private System.Windows.Forms.ToolStripButton toolStripButtonReduceMicke;
+		private System.Windows.Forms.ToolStripButton toolStripButtonResetReduced;
 	}
 }
