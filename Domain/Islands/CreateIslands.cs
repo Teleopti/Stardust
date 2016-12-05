@@ -39,9 +39,9 @@ namespace Teleopti.Ccc.Domain.Islands
 					continue;
 				foreach (var skillGroup in skillGroupsOnIsland)
 				{
+					var agentsInSkillGroup = skillGroup.Agents.Count();
 					foreach (var skillGroupSkill in skillGroup.Skills.Reverse())
 					{
-						var agentsInSkillGroup = skillGroup.Agents.Count();
 						if (agentsInSkillGroup *_reduceIslandsLimits.MinimumFactorOfAgentsInOtherSkillGroup >= noAgentsKnowingSkill[skillGroupSkill])
 							continue;
 
@@ -62,13 +62,14 @@ namespace Teleopti.Ccc.Domain.Islands
 			{
 				foreach (var skillGroup in skillGroupsOnIsland)
 				{
+					var count = skillGroup.Agents.Count();
 					foreach (var skill in skillGroup.Skills)
 					{
 						if (!numberOfAgentsKnowingSkill.ContainsKey(skill))
 						{
 							numberOfAgentsKnowingSkill[skill] = 0;
 						}
-						numberOfAgentsKnowingSkill[skill] += skillGroup.Agents.Count();
+						numberOfAgentsKnowingSkill[skill] += count;
 					}
 				}
 			}

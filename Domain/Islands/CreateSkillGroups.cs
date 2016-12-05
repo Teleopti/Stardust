@@ -25,9 +25,10 @@ namespace Teleopti.Ccc.Domain.Islands
 					continue;
 				var agentsSkills = _personalSkillsProvider.PersonSkills(personPeriod).Select(x => x.Skill).ToList();
 
-				if (skillGroups.ContainsKey(agentsSkills))
+				ICollection<IPerson> list;
+				if (skillGroups.TryGetValue(agentsSkills, out list))
 				{
-					skillGroups[agentsSkills].Add(agent);
+					list.Add(agent);
 				}
 				else
 				{
