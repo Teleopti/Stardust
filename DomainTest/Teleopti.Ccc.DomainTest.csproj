@@ -297,6 +297,7 @@
     <Compile Include="Intraday\ForecastedStaffingViewModelCreatorTest.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
     <Compile Include="DomainTestWithStaticDependenciesAvoidUseAttribute.cs" />
+    <Compile Include="Islands\IslandModelFactoryTest.cs" />
     <Compile Include="ReadModelValidator\ReadModelValidatorTest.cs" />
     <Compile Include="ScheduleStorageRepositoryWrapperTest.cs" />
     <Compile Include="ResourceCalculation\CalculateResourceReadModelTest.cs" />

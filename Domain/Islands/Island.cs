@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Islands.ClientModel;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands
@@ -31,6 +33,22 @@ namespace Teleopti.Ccc.Domain.Islands
 						ret.Add(skillGroupSkill.Id.Value);
 					}
 				}
+			}
+			return ret;
+		}
+
+		public IslandModel CreateClientModel()
+		{
+			var ret = new IslandModel();
+			foreach (var skillGroup in _skillGroups)
+			{
+				var skillGroupModel = new SkillGroupModel();
+				foreach (var skill in skillGroup.Skills)
+				{
+					skillGroupModel.Skills.Add(new SkillModel {Name = skill.Name});
+				}
+				skillGroupModel.NumberOfAgentsOnSkillGroup = skillGroup.Agents.Count();
+				ret.SkillGroups.Add(skillGroupModel);
 			}
 			return ret;
 		}

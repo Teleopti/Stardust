@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Islands;
+using Teleopti.Ccc.Domain.Islands.ClientModel;
 using Teleopti.Ccc.Domain.Islands.Legacy;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
@@ -153,10 +154,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<NumberOfAgentsKnowingSkill>().SingleInstance();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_SplitBigIslands_42049))
 			{
-				builder.RegisterType<CreateIslands>().As<ICreateIslands>().SingleInstance();
+				builder.RegisterType<CreateIslands>().AsSelf().As<ICreateIslands>().SingleInstance();
 				builder.RegisterType<SkillGroupInfoProvider>().As<ISkillGroupInfoProvider>().SingleInstance();
 				builder.RegisterType<SkillGroupContext>().As<ISkillGroupContext>().SingleInstance();
 				builder.RegisterType<VirtualSkillGroupsCreatorThatThrows>().As<IVirtualSkillGroupsCreator>().SingleInstance();
+				builder.RegisterType<IslandModelFactory>().SingleInstance();
 			}
 			else
 			{

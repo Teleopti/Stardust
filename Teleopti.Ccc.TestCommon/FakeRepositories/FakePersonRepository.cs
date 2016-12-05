@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -55,6 +56,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public Person Has(IContract contract, ISchedulePeriod schedulePeriod, params ISkill[] skills)
 		{
 			return Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("_") }, schedulePeriod, skills);
+		}
+
+		public Person Has(params ISkill[] skills)
+		{
+			return Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("_") }, new SchedulePeriod(DateOnly.MinValue, SchedulePeriodType.Day, 1), skills);
 		}
 
 		public Person Has(IContract contract, ISchedulePeriod schedulePeriod, IWorkShiftRuleSet ruleSet, params ISkill[] skills)

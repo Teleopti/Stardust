@@ -486,6 +486,8 @@
     <Compile Include="Intraday\SupportedSkillsInIntradayProvider.cs" />
     <Compile Include="Intraday\TaskPeriodsProvider.cs" />
     <Compile Include="Intraday\TimeSeriesProvider.cs" />
+    <Compile Include="Islands\ClientModel\IslandModel.cs" />
+    <Compile Include="Islands\ClientModel\IslandModelFactory.cs" />
     <Compile Include="Islands\CreateSkillGroups.cs" />
     <Compile Include="Islands\ICreateIslands.cs" />
     <Compile Include="Islands\IIsland.cs" />
