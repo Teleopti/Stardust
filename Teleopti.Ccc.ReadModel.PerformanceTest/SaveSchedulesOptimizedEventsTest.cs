@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			var hangfireQueueLogCancellationToken = new CancellationTokenSource();
 			Task.Run(() =>
 			{
-				NUnitSetup.LogHangfireQueues(Hangfire);
+				NUnitSetup.LogHangfireQueues(TestLog, Hangfire);
 			}, hangfireQueueLogCancellationToken.Token);
 			Hangfire.WaitForQueue();
 			hangfireQueueLogCancellationToken.Cancel();
