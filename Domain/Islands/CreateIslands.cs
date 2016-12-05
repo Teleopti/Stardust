@@ -23,15 +23,14 @@ namespace Teleopti.Ccc.Domain.Islands
 		public IEnumerable<IIsland> Create(DateOnlyPeriod period)
 		{
 			var skillGroups = _createSkillGroups.Create(_peopleInOrganization.Agents(period), period.StartDate);
+			var noAgentsKnowingSkill = numberOfAgentsKnowingSkill(skillGroups);
 			var groupedSkillGroups = skillGroups.GroupBy(x => x, (group, groups) => groups, new SkillGroupComparerForIslands());
-			reduceSkillGroups(groupedSkillGroups);
+			reduceSkillGroups(groupedSkillGroups, noAgentsKnowingSkill);
 			return groupedSkillGroups.Select(skillGroupInIsland => new Island(skillGroupInIsland)).ToList();
 		}
 
-		private void reduceSkillGroups(IEnumerable<IEnumerable<SkillGroup>> groupedSkillGroups)
+		private void reduceSkillGroups(IEnumerable<IEnumerable<SkillGroup>> groupedSkillGroups, IDictionary<ISkill, int> noAgentsKnowingSkill)
 		{
-			var noAgentsKnowingSkill = numberOfAgentsKnowingSkill(groupedSkillGroups);
-
 			foreach (var skillGroupsOnIsland in groupedSkillGroups)
 			{
 				var numberOfAgentsInIsland = skillGroupsOnIsland.Sum(x => x.Agents.Count());
@@ -55,22 +54,19 @@ namespace Teleopti.Ccc.Domain.Islands
 			}
 		}
 
-		private static Dictionary<ISkill, int> numberOfAgentsKnowingSkill(IEnumerable<IEnumerable<SkillGroup>> groupedSkillGroups)
+		private static IDictionary<ISkill, int> numberOfAgentsKnowingSkill(IEnumerable<SkillGroup> skillGroups)
 		{
 			var numberOfAgentsKnowingSkill = new Dictionary<ISkill, int>();
-			foreach (var skillGroupsOnIsland in groupedSkillGroups)
+			foreach (var skillGroup in skillGroups)
 			{
-				foreach (var skillGroup in skillGroupsOnIsland)
+				var count = skillGroup.Agents.Count();
+				foreach (var skill in skillGroup.Skills)
 				{
-					var count = skillGroup.Agents.Count();
-					foreach (var skill in skillGroup.Skills)
+					if (!numberOfAgentsKnowingSkill.ContainsKey(skill))
 					{
-						if (!numberOfAgentsKnowingSkill.ContainsKey(skill))
-						{
-							numberOfAgentsKnowingSkill[skill] = 0;
-						}
-						numberOfAgentsKnowingSkill[skill] += count;
+						numberOfAgentsKnowingSkill[skill] = 0;
 					}
+					numberOfAgentsKnowingSkill[skill] += count;
 				}
 			}
 			return numberOfAgentsKnowingSkill;
