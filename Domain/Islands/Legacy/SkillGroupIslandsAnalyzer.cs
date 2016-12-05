@@ -102,5 +102,10 @@ namespace Teleopti.Ccc.Domain.Islands.Legacy
 
 				return result;
 			}
+
+			public IEnumerable<Guid> SkillIds()
+			{
+				return SkillGuidStrings.Select(Guid.Parse);
+			}
 		}
 	}

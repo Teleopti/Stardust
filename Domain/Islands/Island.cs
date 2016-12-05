@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -16,6 +17,11 @@ namespace Teleopti.Ccc.Domain.Islands
 		public IEnumerable<IPerson> AgentsInIsland()
 		{
 			return _skillGroups.SelectMany(x => x.Agents);
+		}
+
+		public IEnumerable<Guid> SkillIds()
+		{
+			return _skillGroups.SelectMany(x => x.Skills).Select(x => x.Id.Value);
 		}
 	}
 }

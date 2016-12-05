@@ -14,5 +14,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		public IEnumerable<Guid> AgentsToOptimize { get; set; }
 		public Guid CommandId { get; set; }
 		public IEnumerable<LockInfo> UserLocks { get; set; }
+		public IEnumerable<Guid> Skills { get; set; }
 	}
 }

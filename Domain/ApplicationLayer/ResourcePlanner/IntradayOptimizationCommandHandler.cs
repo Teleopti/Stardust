@@ -42,7 +42,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 						AgentsInIsland = agentsInIsland.Select(x => x.Id.Value),
 						AgentsToOptimize = agentsToOptimize.Select(x => x.Id.Value),
 						CommandId = command.CommandId,
-						UserLocks = _gridLockManager.LockInfos()
+						UserLocks = _gridLockManager.LockInfos(),
+						Skills = island.SkillIds()
 					});
 				}
 			}

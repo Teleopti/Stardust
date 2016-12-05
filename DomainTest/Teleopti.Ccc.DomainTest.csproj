@@ -308,6 +308,7 @@
     <Compile Include="SchedulingScenarios\DoubleExtensionsInCascadingTestScenarios.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCascadingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCascadingTest.cs" />
+    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationIncreaseIslandsTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTeamBlockDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOpenHoursTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOptimizationBlockTest.cs" />

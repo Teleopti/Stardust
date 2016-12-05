@@ -38,16 +38,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			using (CommandScope.Create(@event))
 			{
-				DoOptimization(@event.Period, @event.AgentsInIsland, @event.AgentsToOptimize, @event.UserLocks, @event.RunResolveWeeklyRestRule);
+				DoOptimization(@event.Period, @event.AgentsInIsland, @event.AgentsToOptimize, @event.UserLocks, @event.Skills, @event.RunResolveWeeklyRestRule);
 				_synchronizeIntradayOptimizationResult.Synchronize(_schedulerStateHolder().Schedules, @event.Period);
 			}
 		}
 
 		[UnitOfWork]
-		protected virtual void DoOptimization(DateOnlyPeriod period, IEnumerable<Guid> agentsInIsland, IEnumerable<Guid> agentsToOptimize, IEnumerable<LockInfo> locks, bool runResolveWeeklyRestRule)
+		protected virtual void DoOptimization(DateOnlyPeriod period, 
+							IEnumerable<Guid> agentsInIsland, 
+							IEnumerable<Guid> agentsToOptimize, 
+							IEnumerable<LockInfo> locks, 
+							IEnumerable<Guid> onlyUseSkills,
+							bool runResolveWeeklyRestRule)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
-			_fillSchedulerStateHolder.Fill(schedulerStateHolder, agentsInIsland, _gridlockManager, locks, period);
+			_fillSchedulerStateHolder.Fill(schedulerStateHolder, agentsInIsland, _gridlockManager, locks, period, onlyUseSkills);
 			_intradayOptimization.Execute(period, schedulerStateHolder.AllPermittedPersons.Filter(agentsToOptimize), runResolveWeeklyRestRule);
 		}
 	}

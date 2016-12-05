@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
 	public interface IFillSchedulerStateHolder
 	{
-		void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentsInIsland, IGridlockManager gridLockManager, IEnumerable<LockInfo> locks, DateOnlyPeriod period);
+		void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentsInIsland, IGridlockManager gridLockManager, IEnumerable<LockInfo> locks, DateOnlyPeriod period, IEnumerable<Guid> onlyUseSkills = null);
 	}
 }

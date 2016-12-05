@@ -18,13 +18,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		}
 
 		[TestLogTime]
-		public virtual void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentsInIsland, IGridlockManager gridLockManager, IEnumerable<LockInfo> locks, DateOnlyPeriod period)
+		public virtual void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentsInIsland, IGridlockManager gridLockManager, IEnumerable<LockInfo> locks, DateOnlyPeriod period, IEnumerable<Guid> onlyUseSkills = null)
 		{
 			PreFill(schedulerStateHolderTo, period);
 			var scenario = FetchScenario();
 			FillAgents(schedulerStateHolderTo, agentsInIsland, period);
 			removeUnwantedAgents(schedulerStateHolderTo, agentsInIsland);
-			var skills = skillsToUse(schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization, period);
+			var skills = skillsToUse(schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization, period, onlyUseSkills);
 			FillSkillDays(schedulerStateHolderTo, scenario, skills, period);
 			removeUnwantedSkillDays(schedulerStateHolderTo, skills);
 			FillSchedules(schedulerStateHolderTo, scenario, schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization, period);
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			}
 		}
 
-		private IEnumerable<ISkill> skillsToUse(IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		private IEnumerable<ISkill> skillsToUse(IEnumerable<IPerson> agents, DateOnlyPeriod period, IEnumerable<Guid> onlyUseSkills)
 		{
 			var agentSkills = new HashSet<ISkill>();
 			foreach (var agent in agents)
@@ -59,7 +59,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					//TODO: This will probably be wrong if we want to to shovel inside islands in upcoming PBIs
 					foreach (var skill in _personalSkillsProvider.PersonSkills(personPeriod).Select(x => x.Skill))
 					{
-						agentSkills.Add(skill);
+						if (onlyUseSkills==null || onlyUseSkills.Contains(skill.Id.Value))
+						{
+							agentSkills.Add(skill);
+						}
 					}
 				}
 			}
