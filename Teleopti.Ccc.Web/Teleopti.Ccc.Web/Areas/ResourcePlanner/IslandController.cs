@@ -1,24 +1,23 @@
 ﻿using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Islands;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.Islands.ClientModel;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
 	public class IslandController : ApiController
 	{
-		private readonly ICreateIslands _createIslands;
+		private readonly IslandModelFactory _islandModelFactory;
 
-		public IslandController(ICreateIslands createIslands)
+		public IslandController(IslandModelFactory islandModelFactory)
 		{
-			_createIslands = createIslands;
+			_islandModelFactory = islandModelFactory;
 		}
 
 		[UnitOfWork]
 		[HttpGet, Route("api/ResourcePlanner/Islands")]
 		public virtual IHttpActionResult Islands()
 		{
-			return Json(_createIslands.Create(DateOnly.Today.ToDateOnlyPeriod()));
+			return Json(_islandModelFactory.Create());
 		}
 	}
 }
