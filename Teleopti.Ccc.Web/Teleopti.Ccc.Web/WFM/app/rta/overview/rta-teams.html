@@ -1,8 +1,17 @@
-<div class="view-header with-fab">
+<div>
+<div class="view-header with-fab with-desc">
 	<div class="view-title">
-		<h1>
-												<i class="mdi mdi-alarm"></i>
-												{{'Teams'|translate}}</h1>
+		<div class="rta-title-wrapper">
+			<h1>
+				<i class="mdi mdi-alarm"></i> {{'RTA'|translate}}
+			</h1>
+		</div>
+		<div class="rta-top-buttons-wrapper">
+			<span>
+				<button class="wfm-btn wfm-btn-default" ng-click="goToDashboard()">{{'Dashboard'|translate}}</button>
+				<button class="wfm-btn wfm-btn-default" ng-click="goToSkillSelection()">{{'Details'|translate}}</button>
+			</span>
+		</div>
 	</div>
 	<div class="fab-wrapper">
 		<button class="wfm-fab  material-depth-1 open" ng-cloak ng-class="{'hidden-visibility': selectedItemIds.length < 1, 'grow-out': selectedItemIds.length > 0}" ng-click="openSelectedItems()">
@@ -46,4 +55,5 @@
 
 		</div>
 	</div>
+</div>
 </div>

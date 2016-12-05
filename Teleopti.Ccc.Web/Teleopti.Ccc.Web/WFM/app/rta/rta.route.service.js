@@ -18,7 +18,7 @@
 			};
 
 			this.goToSelectSkill = function(){
-				$state.go('rta.select-skill');
+				$state.go('rta.select-skill', {skillIds: [], skillAreaId: [], siteIds: [], teamIds: []});
 			};
 
 			this.goToSitesBySkill = function(skillId) {

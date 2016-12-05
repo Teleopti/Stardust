@@ -214,11 +214,7 @@
 				return RtaRouteService.urlForSites();
 			};
 
-			function goToDashboard() {
-				RtaRouteService.goToSites();
-			}
-
-			function goToDashboard() {
+			$scope.goToDashboard = function() {
 				RtaRouteService.goToSites();
 			}
 
@@ -228,7 +224,7 @@
 				},
 				function (newValue, oldValue) {
 					if (oldValue !== undefined && newValue !== oldValue) {
-						goToDashboard();
+						$scope.goToDashboard();
 					}
 				}
 			);

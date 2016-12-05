@@ -204,7 +204,7 @@
 					RtaAdherenceService.updateAdherence(item, adh);
 				};
 
-				$scope.goToOverview = function () {
+				$scope.goToDashboard = function () {
 					RtaRouteService.goToSites();
 				};
 
@@ -270,13 +270,13 @@
 
 				$scope.$watch('selectedSkill', function (newValue, oldValue) {
 					if (changed(newValue, oldValue) && toggleService.RTA_SiteAndTeamOnSkillOverview_40817) {
-						$scope.goToOverview();
+						$scope.goToDashboard();
 					}
 				});
 
 				$scope.$watch('selectedSkillArea', function (newValue, oldValue) {
 					if (changed(newValue, oldValue) && toggleService.RTA_SiteAndTeamOnSkillOverview_40817) {
-						$scope.goToOverview();
+						$scope.goToDashboard();
 					}
 				});
 

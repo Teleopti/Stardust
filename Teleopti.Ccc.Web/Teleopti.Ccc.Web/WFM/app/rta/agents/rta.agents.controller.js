@@ -783,11 +783,11 @@
 				};
 
 				$scope.goToOverview = function() {
-					$state.go('rta');
+					RtaRouteService.goToSites();
 				}
 
 				$scope.goToSelectItem = function() {
-					$state.go('rta.select-skill');
+					RtaRouteService.goToSelectSkill();
 				}
 
 				$scope.$on('$destroy', function() {
