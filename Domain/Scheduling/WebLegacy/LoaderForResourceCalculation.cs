@@ -61,13 +61,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			return  new ResourceCalculationData(schedules,skills,skillDays,true, true);
 		}
 
-		[LogTime]
+		[TestLogTime]
 		protected virtual IDictionary<ISkill, IEnumerable<ISkillDay>> SkillDays(DateOnlyPeriod period, ICollection<ISkill> skills  )
 		{
 			return _skillDayLoadHelper.LoadSchedulerSkillDays(period, skills, _scenario);
 		}
 
-		[LogTime]
+		[TestLogTime]
 		protected virtual  IScheduleDictionary Schedules( DateOnlyPeriod period)
 		{
 			var timeZone = _principal.Current().Regional.TimeZone;
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			PreFill(period);
 		}
 
-		[LogTime]
+		[TestLogTime]
 		protected virtual void PreFill(DateOnlyPeriod period)
 		{
 			_scenario = _scenarioRepository.LoadDefaultScenario();

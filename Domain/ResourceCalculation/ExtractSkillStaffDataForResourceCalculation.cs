@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return resCalcData;
 		}
 
-		[LogTime]
+		[TestLogTime]
 		public virtual void DoCalculation(DateOnlyPeriod period, IResourceCalculationData resCalcData)
 		{
 #pragma warning disable 618

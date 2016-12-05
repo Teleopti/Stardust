@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Aop
 			system.AddService<Service>();
 			var fakeLogger = new LogSpy();
 			system.UseTestDouble(fakeLogger).For<ILog>();
-			system.UseTestDouble(new FakeLogManagerWrapper(fakeLogger)).For<ILogManagerWrapper>();
+			system.UseTestDouble(new FakeLogManager(fakeLogger)).For<ILogManager>();
 		}
 
 		public LogSpy Logger;

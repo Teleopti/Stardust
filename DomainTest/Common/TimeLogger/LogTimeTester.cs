@@ -4,12 +4,12 @@ namespace Teleopti.Ccc.DomainTest.Common.TimeLogger
 {
 	public class LogTimeTester
 	{
-		[LogTime]
+		[TestLogTime]
 		public virtual void TestMethod()
 		{
 		}
 
-		[LogTime]
+		[TestLogTime]
 		public virtual void TestMethodThatThrows()
 		{
 			throw new System.NotImplementedException();

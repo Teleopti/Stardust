@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 
-		[LogTime]
+		[TestLogTime]
 		public virtual void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences,
 			ISchedulingProgress backgroundWorker,
 			IList<IScheduleDay> selectedScheduleDays,
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 
-		[LogTime]
+		[TestLogTime]
 		protected virtual void ExecuteWeeklyRestSolverCommand(ISchedulingOptions schedulingOptions,
 															IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons,
 															DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays,

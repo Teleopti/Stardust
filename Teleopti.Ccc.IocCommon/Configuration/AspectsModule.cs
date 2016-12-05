@@ -10,8 +10,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<AspectInterceptor>().SingleInstance();
 			builder.RegisterType<LogInfoAspect>().SingleInstance();
-			builder.RegisterType<LogManagerWrapper>().As<ILogManagerWrapper>().SingleInstance();
-			builder.RegisterType<LogTimeAspect>().InstancePerDependency();
+			builder.RegisterType<LogManagerWrapper>().As<ILogManager>().SingleInstance();
+
+			builder.RegisterType<TestLog>().SingleInstance();
+			builder.RegisterType<TestLogTimeAspect>().InstancePerDependency();
 		}
 	}
 }

@@ -3,11 +3,11 @@ using Teleopti.Ccc.Domain.Aop;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
-	public class FakeLogManagerWrapper : ILogManagerWrapper
+	public class FakeLogManager : ILogManager
 	{
 		private readonly LogSpy _logger;
 
-		public FakeLogManagerWrapper(ILog logger)
+		public FakeLogManager(ILog logger)
 		{
 			_logger = (LogSpy)logger;
 		}

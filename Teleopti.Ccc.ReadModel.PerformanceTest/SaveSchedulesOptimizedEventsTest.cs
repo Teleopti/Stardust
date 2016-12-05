@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 		public IActivityRepository Activities;
 		public IScheduleStorage Schedules;
 		public IScheduleDictionaryPersister Persister;
-		private static readonly ILog logger = LogManager.GetLogger("Teleopti.TestLog");
+		public TestLog TestLog;
 
 		[Test]
 		public void MeasurePerformance()
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 				schedules.TakeSnapshot();
 				var phone = Activities.LoadAll().Single(x => x.Name == "Phone");
 
-				logger.Debug($"Creating data for {persons.Count} people for {dates.Length} dates.");
+				TestLog.Debug($"Creating data for {persons.Count} people for {dates.Length} dates.");
 
 				persons.ForEach(person =>
 				{

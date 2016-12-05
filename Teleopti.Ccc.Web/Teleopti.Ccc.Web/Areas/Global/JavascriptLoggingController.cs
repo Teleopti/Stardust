@@ -5,18 +5,18 @@ namespace Teleopti.Ccc.Web.Areas.Global
 {
 	public class JavascriptLoggingController : ApiController
 	{
-		private readonly ILogManagerWrapper _logManagerWrapper;
+		private readonly ILogManager _logManager;
 		private const string logOutput = "{0} on url {1} at line {2}. The parent url is {3} and the user agent is {4}.";
 
-		public JavascriptLoggingController(ILogManagerWrapper logManagerWrapper)
+		public JavascriptLoggingController(ILogManager logManager)
 		{
-			_logManagerWrapper = logManagerWrapper;
+			_logManager = logManager;
 		}
 
 		[HttpPost, Route("api/Logging/LogError")]
 		public void LogError(JavascriptLog javascriptLog)
 		{
-			_logManagerWrapper.GetLogger("Teleopti.Javascript")
+			_logManager.GetLogger("Teleopti.Javascript")
 				.Warn(string.Format(logOutput, javascriptLog.Message, javascriptLog.Url, javascriptLog.LineNumber, javascriptLog.ParentUrl, javascriptLog.UserAgent));
 		}
 	}

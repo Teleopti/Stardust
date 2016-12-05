@@ -1,0 +1,19 @@
+using log4net;
+
+namespace Teleopti.Ccc.Domain.Aop
+{
+	public class TestLog
+	{
+		private readonly ILog _log;
+
+		public TestLog(ILogManager logManager)
+		{
+			_log = logManager.GetLogger("Teleopti.TestLog");
+		}
+
+		public void Debug(string message)
+		{
+			_log.Debug(message);
+		}
+	}
+}

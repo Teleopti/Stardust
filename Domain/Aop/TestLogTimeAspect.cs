@@ -1,29 +1,23 @@
 using System;
 using System.Diagnostics;
-using log4net;
 using Teleopti.Ccc.Domain.Aop.Core;
 
 namespace Teleopti.Ccc.Domain.Aop
 {
-	public class LogTimeAspect : IAspect
+	public class TestLogTimeAspect : IAspect
 	{
 		private readonly Stopwatch _stopwatch;
-		private readonly ILog _logger;
+		private readonly TestLog _log;
 
-		public static ILog TestLogLogger(ILogManagerWrapper logger)
+		public TestLogTimeAspect(TestLog log)
 		{
-			return logger.GetLogger("Teleopti.TestLog");
-		}
-
-		public LogTimeAspect(ILogManagerWrapper logger)
-		{
-			_logger = TestLogLogger(logger);
+			_log = log;
 			_stopwatch = new Stopwatch();
 		}
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
-			_logger.Debug($"{invocation.Method.DeclaringType}.{invocation.Method.Name}");
+			_log.Debug($"{invocation.Method.DeclaringType}.{invocation.Method.Name}");
 			_stopwatch.Start();
 		}
 
@@ -33,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Aop
 			var message = $@"{invocation.Method.DeclaringType}./{invocation.Method.Name}: {_stopwatch.Elapsed:hh\:mm\:ss}";
 			if (exception != null)
 				message += " (exception occured during execution)";
-			_logger.Debug(message);
+			_log.Debug(message);
 		}
 	}
 }

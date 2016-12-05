@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
 	public class TestController : Controller
 	{
-		private readonly ILogManagerWrapper _logManager;
+		private readonly TestLog _log;
 		private readonly IMutateNow _mutateNow;
 		private readonly INow _now;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
 
 		public TestController(
-			ILogManagerWrapper logManager,
+			TestLog log,
 			IMutateNow mutateNow,
 			INow now,
 			ISessionSpecificDataProvider sessionSpecificDataProvider,
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			TenantTickEventPublisher tenantTickEventPublisher,
 			Domain.ApplicationLayer.Rta.Service.Rta rta)
 		{
-			_logManager = logManager;
+			_log = log;
 			_mutateNow = mutateNow;
 			_now = now;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		public ViewResult BeforeScenario(string name, bool enableMyTimeMessageBroker, string defaultProvider = null, bool usePasswordPolicy = false)
 		{
-			LogTimeAspect.TestLogLogger(_logManager).Debug($"Before scenario: {name}");
+			_log.Debug($"Before scenario: {name}");
 
 			_sessionSpecificDataProvider.RemoveCookie();
 			_formsAuthentication.SignOut();
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			});
 		}
 
-		[LogTime]
+		[TestLogTime]
 		public virtual ViewResult SetCurrentTime(long ticks, string time)
 		{
 			if (time != null)
@@ -224,13 +224,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			});
 		}
 
-		[LogTime]
+		[TestLogTime]
 		protected virtual void TouchRta()
 		{
 			_rta.Touch("TestData");
 		}
 
-		[LogTime]
+		[TestLogTime]
 		protected virtual void TriggerRecurringJobs()
 		{
 			_tenantTickEventPublisher.WithPublishingsForTest(() =>

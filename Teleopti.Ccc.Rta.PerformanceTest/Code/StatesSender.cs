@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			_http = http;
 		}
 
-		[LogTime]
+		[TestLogTime]
 		public virtual void Send()
 		{
 			states().ForEach(stateChange =>

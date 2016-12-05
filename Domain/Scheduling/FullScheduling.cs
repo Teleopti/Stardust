@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return CreateResult(period);
 		}
 
-		[LogTime]
+		[TestLogTime]
 		[UnitOfWork]
 		protected virtual SchedulingResultModel CreateResult(DateOnlyPeriod period)
 		{
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			};
 		}
 
-		[LogTime]
+		[TestLogTime]
 		[UnitOfWork]
 		protected virtual void SetupAndSchedule(DateOnlyPeriod period)
 		{

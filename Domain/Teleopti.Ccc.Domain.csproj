@@ -162,7 +162,7 @@
     <Compile Include="Aop\Core\AspectAttribute.cs" />
     <Compile Include="Aop\Core\IInvocationInfo.cs" />
     <Compile Include="Aop\IAnalyticsUnitOfWorkAspect.cs" />
-    <Compile Include="Aop\ILogManagerWrapper.cs" />
+    <Compile Include="Aop\ILogManager.cs" />
     <Compile Include="Aop\IMessageBrokerUnitOfWorkAspect.cs" />
     <Compile Include="Aop\LogInfoAspect.cs" />
     <Compile Include="Aop\LogInfoAttribute.cs" />
@@ -172,6 +172,7 @@
     <Compile Include="Aop\LogManagerWrapper.cs" />
     <Compile Include="Aop\MessageBrokerUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\ReadOnlyUnitOfWorkAttribute.cs" />
+    <Compile Include="Aop\TestLog.cs" />
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestStrategyProcessor.cs" />
@@ -942,8 +943,8 @@
     <Compile Include="Common\IDataSourceScope.cs" />
     <Compile Include="Common\IBusinessUnitForRequest.cs" />
     <Compile Include="ApplicationLayer\Events\PersonPeriodChangedEvent.cs" />
-    <Compile Include="Aop\LogTimeAspect.cs" />
-    <Compile Include="Aop\LogTimeAttribute.cs" />
+    <Compile Include="Aop\TestLogTimeAspect.cs" />
+    <Compile Include="Aop\TestLogTimeAttribute.cs" />
     <Compile Include="Common\PersonAccountUpdater.cs" />
     <Compile Include="Common\PersonAccountUpdaterDummy.cs" />
     <Compile Include="Common\CurrentDataSource.cs" />

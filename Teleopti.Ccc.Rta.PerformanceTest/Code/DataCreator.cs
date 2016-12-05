@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			_currentTenantSession = currentTenantSession;
 		}
 
-		[LogTime]
+		[TestLogTime]
 		[UnitOfWork]
 		public virtual void Create()
 		{

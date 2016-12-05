@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[LogInfo]
-		[LogTime]
+		[TestLogTime]
 		[TenantScope]
 		public virtual void Touch(string tenant)
 		{

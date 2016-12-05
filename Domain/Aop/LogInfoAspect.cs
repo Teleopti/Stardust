@@ -8,16 +8,16 @@ namespace Teleopti.Ccc.Domain.Aop
 {
 	public class LogInfoAspect : IAspect
 	{
-		private readonly ILogManagerWrapper _logManagerWrapper;
+		private readonly ILogManager _logManager;
 
-		public LogInfoAspect(ILogManagerWrapper logManagerWrapper)
+		public LogInfoAspect(ILogManager logManager)
 		{
-			_logManagerWrapper = logManagerWrapper;
+			_logManager = logManager;
 		}
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
-			var logger = _logManagerWrapper.GetLogger(invocation.TargetType.ToString());
+			var logger = _logManager.GetLogger(invocation.TargetType.ToString());
 			if (!logger.IsInfoEnabled)
 				return;
 			logger.Info($"{invocation.Method.Name}({string.Join(", ", getParametersAndArguments(invocation))})");
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Aop
 		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 		{
 			var type = invocation.TargetType;
-			var logger = _logManagerWrapper.GetLogger(type.ToString());
+			var logger = _logManager.GetLogger(type.ToString());
 			if (!logger.IsInfoEnabled)
 				return;
 			if (invocation.Method.ReturnType == typeof(void))

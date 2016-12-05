@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			_fakeEventPublisher.PublishedEvents.OfType<AnalyticsDatesChangedEvent>().SingleOrDefault().Should().Not.Be.Null();
 		}
 
-		[LogTime]
+		[TestLogTime]
 		[Test]
 		public void ShouldCreateManyMissingDatesWhenLoading()
 		{

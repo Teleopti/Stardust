@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			_dataSource = dataSource;
 		}
 
-		[LogTime]
+		[TestLogTime]
 		public virtual void WaitForAll()
 		{
 			var timeWhenLastStateWasSent = _sender.SentSates().Max(x => x.Time);

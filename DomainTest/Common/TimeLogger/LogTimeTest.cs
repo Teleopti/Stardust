@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Common.TimeLogger
 			system.AddService<LogTimeTester>();
 			var fakeLogger = new LogSpy();
 			system.UseTestDouble(fakeLogger).For<ILog>();
-			system.UseTestDouble(new FakeLogManagerWrapper(fakeLogger)).For<ILogManagerWrapper>();
+			system.UseTestDouble(new FakeLogManager(fakeLogger)).For<ILogManager>();
 		}
 
 		[Test]
@@ -77,9 +77,9 @@ namespace Teleopti.Ccc.DomainTest.Common.TimeLogger
 		[Test]
 		public void ShouldHaveLowestOrderOfThemAll()
 		{
-			var orderOfLogTime = new LogTimeAttribute().Order;
-			foreach (var attrType in typeof(LogTimeAttribute).Assembly.GetTypes()
-				.Where(t => t.IsSubclassOf(typeof(AspectAttribute)) && t != typeof(LogTimeAttribute)))
+			var orderOfLogTime = new TestLogTimeAttribute().Order;
+			foreach (var attrType in typeof(TestLogTimeAttribute).Assembly.GetTypes()
+				.Where(t => t.IsSubclassOf(typeof(AspectAttribute)) && t != typeof(TestLogTimeAttribute)))
 			{
 				var attr = (AspectAttribute)Activator.CreateInstance(attrType);
 				if(attr.Order<=orderOfLogTime)

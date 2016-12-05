@@ -6,6 +6,7 @@ using Autofac;
 using log4net;
 using log4net.Config;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -64,7 +65,6 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			defaultDataCreator = container.Resolve<DefaultDataCreator>();
 			dataCreator = container.Resolve<DataCreator>();
 			analyticsDatabase = container.Resolve<AnalyticsDatabase>();
-			
 
 			var dataHash = defaultDataCreator.HashValue ^ TestConfiguration.HashValue;
 			var path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "ReadModel");
@@ -115,15 +115,14 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			Toggles.ETL_EventbasedDate_39562,
 		};
 
-		private static readonly ILog logger = LogManager.GetLogger("Teleopti.TestLog");
-		public static void LogHangfireQueues(HangfireUtilities hangfireUtilities)
+		public static void LogHangfireQueues(TestLog testLog, HangfireUtilities hangfireUtilities)
 		{
 			while (true)
 			{
-				logger.Debug($"Hangfire is processing {hangfireUtilities.NumberOfProcessingJobs()} jobs, {hangfireUtilities.NumberOfScheduledJobs()} are scheduled and {hangfireUtilities.NumberOfFailedJobs()} jobs has failed.");
+				testLog.Debug($"Hangfire is processing {hangfireUtilities.NumberOfProcessingJobs()} jobs, {hangfireUtilities.NumberOfScheduledJobs()} are scheduled and {hangfireUtilities.NumberOfFailedJobs()} jobs has failed.");
 				foreach (var queueName in Queues.OrderOfPriority())
 				{
-					logger.Debug($"{hangfireUtilities.NumberOfJobsInQueue(queueName)} jobs in queue '{queueName}'");
+					testLog.Debug($"{hangfireUtilities.NumberOfJobsInQueue(queueName)} jobs in queue '{queueName}'");
 				}
 				Thread.Sleep(TimeSpan.FromSeconds(60));
 			}

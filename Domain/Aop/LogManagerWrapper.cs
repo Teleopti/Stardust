@@ -2,7 +2,7 @@ using log4net;
 
 namespace Teleopti.Ccc.Domain.Aop
 {
-	public class LogManagerWrapper : ILogManagerWrapper
+	public class LogManagerWrapper : ILogManager
 	{
 		public ILog GetLogger(string loggerName)
 		{

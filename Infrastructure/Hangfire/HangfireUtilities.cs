@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			expiredFailed.ForEach(j => _backgroundJobs.Delete(j.Key));
 		}
 
-		[LogTime]
+		[TestLogTime]
 		public virtual void WaitForQueue()
 		{
 			while (true)

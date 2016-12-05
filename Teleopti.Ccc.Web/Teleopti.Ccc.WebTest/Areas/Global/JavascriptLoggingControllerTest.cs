@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldNotCrashIfAnyDefaultValueIsUsed()
 		{
 			var logSpy = new LogSpy();
-			var target = new JavascriptLoggingController(new FakeLogManagerWrapper(logSpy));
+			var target = new JavascriptLoggingController(new FakeLogManager(logSpy));
 
 			target.LogError(new JavascriptLog());
 
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldLogMessage()
 		{
 			var logSpy = new LogSpy();
-			var target = new JavascriptLoggingController(new FakeLogManagerWrapper(logSpy));
+			var target = new JavascriptLoggingController(new FakeLogManager(logSpy));
 			var content = new JavascriptLog {Message = RandomName.Make()};
 
 			target.LogError(content);
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldLogLineNumber()
 		{
 			var logSpy = new LogSpy();
-			var target = new JavascriptLoggingController(new FakeLogManagerWrapper(logSpy));
+			var target = new JavascriptLoggingController(new FakeLogManager(logSpy));
 			var content = new JavascriptLog { LineNumber = new Random().Next() };
 
 			target.LogError(content);
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldLogParentUrl()
 		{
 			var logSpy = new LogSpy();
-			var target = new JavascriptLoggingController(new FakeLogManagerWrapper(logSpy));
+			var target = new JavascriptLoggingController(new FakeLogManager(logSpy));
 			var content = new JavascriptLog { ParentUrl = RandomName.Make() };
 
 			target.LogError(content);
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldLogUrl()
 		{
 			var logSpy = new LogSpy();
-			var target = new JavascriptLoggingController(new FakeLogManagerWrapper(logSpy));
+			var target = new JavascriptLoggingController(new FakeLogManager(logSpy));
 			var content = new JavascriptLog { Url = RandomName.Make() };
 
 			target.LogError(content);
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldLogUserAgent()
 		{
 			var logSpy = new LogSpy();
-			var target = new JavascriptLoggingController(new FakeLogManagerWrapper(logSpy));
+			var target = new JavascriptLoggingController(new FakeLogManager(logSpy));
 			var content = new JavascriptLog { Url = RandomName.Make() };
 
 			target.LogError(content);
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldLogToTeleoptiJavascript()
 		{
 			var logSpy = new LogSpy();
-			var target = new JavascriptLoggingController(new FakeLogManagerWrapper(logSpy));
+			var target = new JavascriptLoggingController(new FakeLogManager(logSpy));
 
 			target.LogError(new JavascriptLog());
 
