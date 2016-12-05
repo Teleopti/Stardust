@@ -148,9 +148,10 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				}
 				var scheduledCount = _monitoring.ScheduledCount();
 				var failedCount = _monitoring.FailedCount();
+				var processingCount = _monitoring.ProcessingCount();
 
 				// all is well
-				if (enqueuedCount + fetchedCount + scheduledCount + failedCount == 0)
+				if (enqueuedCount + fetchedCount + scheduledCount + failedCount + processingCount == 0)
 					break;
 
 				// booom!
