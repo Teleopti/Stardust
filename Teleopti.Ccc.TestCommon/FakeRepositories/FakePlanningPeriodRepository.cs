@@ -31,23 +31,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			AddExecuted = true;
 		}
 
-		public IPlanningPeriod HasOneDayPeriod(DateOnly date)
-		{
-			var planningPeriod =
-	new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(date.Date), new[]
-	{
-					new AggregatedSchedulePeriod
-					{
-						DateFrom = date.Date,
-						Number = 1,
-						PeriodType = SchedulePeriodType.Day
-					}
-	}));
-			planningPeriod.SetId(Guid.NewGuid());
-			_planningPeriods.Add(planningPeriod);
-			return planningPeriod;
-		}
-
 		public IPlanningPeriod Has(DateOnly start, int numberOfWeeks)
 		{
 			var planningPeriod =

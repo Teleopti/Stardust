@@ -83,12 +83,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		{
 			var date = new DateOnly(2015, 10, 12);
 			var scenario = ScenarioRepository.Has("some name");
-			var activityAB = ActivityFactory.CreateActivity("AB");
-			var activityC = ActivityFactory.CreateActivity("C");
+			var activityAB = new Activity("AB").WithId();
+			var activityC = new Activity("C").WithId();
 			var skillA = SkillRepository.Has("skillA", activityAB);
 			var skillB = SkillRepository.Has("skillB", activityAB);
 			var skillC = SkillRepository.Has("skillC", activityC);
-			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Day, 1);
+			var schedulePeriod = new SchedulePeriod(date.AddWeeks(-1), SchedulePeriodType.Day, 1);
 			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
 			var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
 			var shiftCategory = new ShiftCategory("_").WithId();
@@ -97,10 +97,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var ruleSetBag = new RuleSetBag(ruleSetAB);
 			ruleSetBag.AddRuleSet(ruleSetC);
 			var agentA = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSetBag, skillA);
-			var agentABC = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSetBag, skillA);
-			var planningPeriod = PlanningPeriodRepository.HasOneDayPeriod(date.AddDays(-1)); //period was wrong, ugly fix here
-			PersonAssignmentRepository.Has(agentA, scenario, new Activity("X"), shiftCategory, date, new TimePeriod(8, 0, 16, 0));
-			PersonAssignmentRepository.Has(agentABC, scenario, new Activity("X"), shiftCategory, date, new TimePeriod(8, 0, 16, 0));
+			var agentABC = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSetBag, skillA, skillB, skillC);
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			PersonAssignmentRepository.Has(agentA, scenario, activityAB, shiftCategory, date, new TimePeriod(8, 15, 16, 15));
+			PersonAssignmentRepository.Has(agentABC, scenario, activityAB, shiftCategory, date, new TimePeriod(8, 15, 16, 15));
 			SkillDayRepository.Has(new List<Func<ISkillDay>>
 			{
 				() => skillA.CreateSkillDayWithDemand(scenario, date, 100),
@@ -110,8 +110,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(planningPeriod.Id.Value);
 
-			PersonAssignmentRepository.GetSingle(date, agentABC).ShiftLayers.Single().Payload
-				.Should().Be.EqualTo(activityC);
+			var shiftLayer = PersonAssignmentRepository.GetSingle(date, agentABC).ShiftLayers.Single();
+			shiftLayer.Period.StartDateTime.TimeOfDay.Should().Be.EqualTo(TimeSpan.FromHours(8));
+			shiftLayer.Payload.Should().Be.EqualTo(activityC);
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
