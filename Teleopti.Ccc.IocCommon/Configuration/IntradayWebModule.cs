@@ -50,7 +50,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			else
 				builder.RegisterType<AddActivityWithoutResourceCalculation>().As<IPersonAssignmentAddActivity>().SingleInstance();
 			builder.RegisterType<SplitSkillStaffInterval>().As<SplitSkillStaffInterval>().SingleInstance();
-			builder.RegisterType<MergeSkillStaffIntervalLightForSkillArea>().As<MergeSkillStaffIntervalLightForSkillArea>().SingleInstance();
 			builder.RegisterType<SkillStaffingIntervalProvider>().As<SkillStaffingIntervalProvider>().SingleInstance();
 			builder.RegisterType<JobStartTimeRepository>().As<IJobStartTimeRepository>().SingleInstance();
 		}

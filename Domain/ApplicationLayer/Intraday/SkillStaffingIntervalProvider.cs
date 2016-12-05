@@ -11,20 +11,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 	{
 		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
 		private readonly SplitSkillStaffInterval _splitSkillStaffInterval;
-		private readonly MergeSkillStaffIntervalLightForSkillArea _mergeIntervals;
 
-		public SkillStaffingIntervalProvider(IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, SplitSkillStaffInterval splitSkillStaffInterval, MergeSkillStaffIntervalLightForSkillArea mergeIntervals)
+		public SkillStaffingIntervalProvider(IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, SplitSkillStaffInterval splitSkillStaffInterval)
 		{
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 			_splitSkillStaffInterval = splitSkillStaffInterval;
-			_mergeIntervals = mergeIntervals;
 		}
 
 		public IList<SkillStaffingIntervalLightModel> StaffingForSkills(Guid[] skillIdList, DateTimePeriod period, TimeSpan resolution)
 		{
 			var skillIntervals = _scheduleForecastSkillReadModelRepository.ReadMergedStaffingAndChanges(skillIdList, period);
-			var splitedIntervals = _splitSkillStaffInterval.Split(skillIntervals.ToList(), resolution);
-			return _mergeIntervals.Merge(splitedIntervals.ToList());
+			var splittedIntervals = _splitSkillStaffInterval.Split(skillIntervals.ToList(), resolution);
+			return splittedIntervals
+				.Where(x => x.StartDateTime >= period.StartDateTime && x.EndDateTime <= period.EndDateTime)
+				.ToList();
 		}
 	}
 }

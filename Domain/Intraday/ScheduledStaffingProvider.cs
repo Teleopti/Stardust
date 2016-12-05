@@ -46,19 +46,31 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 		public double?[] DataSeries(IList<SkillStaffingIntervalLightModel> scheduledStaffing, DateTime[] timeSeries)
 		{
-			if (timeSeries.Length == scheduledStaffing.Count)
-				return scheduledStaffing.Select(x => (double?)x.StaffingLevel).ToArray();
+			var staffingIntervals = scheduledStaffing
+				.GroupBy(x => x.StartDateTime)
+				.Select(s => new StaffingStartInterval
+				{
+					StartTime = s.Key,
+					StaffingLevel = s.Sum(a => a.StaffingLevel)
+				})
+				.ToList();
+
+			if (timeSeries.Length == staffingIntervals.Count)
+				return staffingIntervals.Select(x => (double?)x.StaffingLevel).ToArray();
 
 			List<double?> scheduledStaffingList = new List<double?>();
 			foreach (var intervalStart in timeSeries)
 			{
-				var scheduledStaffingInterval = scheduledStaffing.FirstOrDefault(x => x.StartDateTime == intervalStart);
-				scheduledStaffingList.Add(
-					scheduledStaffingInterval.Equals(new SkillStaffingIntervalLightModel())
-					? null
-					: (double?)scheduledStaffingInterval.StaffingLevel);
+				var scheduledStaffingInterval = staffingIntervals.FirstOrDefault(x => x.StartTime == intervalStart);
+				scheduledStaffingList.Add(scheduledStaffingInterval?.StaffingLevel);
 			}
 			return scheduledStaffingList.ToArray();
+		}
+
+		private class StaffingStartInterval
+		{
+			public DateTime StartTime { get; set; }
+			public double StaffingLevel { get; set; }
 		}
 	}
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
@@ -684,6 +683,44 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(scheduledStaffingList.First().StartDateTime, TimeZone.TimeZone()));
 			vm.DataSeries.ScheduledStaffing.Length.Should().Be.EqualTo(1);
 			vm.DataSeries.ScheduledStaffing.First().Should().Be.EqualTo(scheduledStaffingList.First().StaffingLevel);
+		}
+
+		[Test]
+		public void ShouldReturnScheduledStaffingForTwoSkills()
+		{
+			TimeZone.IsSweden();
+			fakeScenarioAndIntervalLength();
+			var skill1 = createSkill(minutesPerInterval, "skill1", new TimePeriod(8, 0, 8, 30));
+			var skill2 = createSkill(minutesPerInterval, "skill2", new TimePeriod(8, 0, 8, 30));
+			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+
+			var scheduledStaffingList = new List<SkillStaffingInterval>()
+			{
+				new SkillStaffingInterval() {
+					SkillId = skill1.Id.Value,
+					StartDateTime = userNow,
+					EndDateTime = userNow.AddMinutes(minutesPerInterval),
+					StaffingLevel = 5.7d
+				},
+				new SkillStaffingInterval() {
+					SkillId = skill2.Id.Value,
+					StartDateTime = userNow,
+					EndDateTime = userNow.AddMinutes(minutesPerInterval),
+					StaffingLevel = 7.7d
+				}
+			};
+
+			SkillRepository.Has(skill1);
+			SkillRepository.Has(skill2);
+			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
+
+			var vm = Target.Load(new[] { skill1.Id.Value, skill2.Id.Value });
+
+			vm.DataSeries.Time.Length.Should().Be.EqualTo(1);
+			vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(scheduledStaffingList.First().StartDateTime, TimeZone.TimeZone()));
+			vm.DataSeries.ScheduledStaffing.Length.Should().Be.EqualTo(1);
+			vm.DataSeries.ScheduledStaffing.First().Should().Be.EqualTo(scheduledStaffingList.First().StaffingLevel + scheduledStaffingList.Last().StaffingLevel);
 		}
 
 		[Test]

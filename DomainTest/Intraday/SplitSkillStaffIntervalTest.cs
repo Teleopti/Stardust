@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		public void ReturnSplitedIntervals()
+		public void ReturnSplittedIntervals()
 		{
 			var staffingList = new List<SkillStaffingInterval>()
 			{

@@ -226,7 +226,6 @@
     <Compile Include="ApplicationLayer\Events\TenantDayTickEvent.cs" />
     <Compile Include="ApplicationLayer\GlobalSettingData\AnalyticsPersonNameUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\UpdateStaffingLevelReadModelEvent.cs" />
-    <Compile Include="ApplicationLayer\Intraday\MergeSkillStaffIntervalLightForSkillArea.cs" />
     <Compile Include="ApplicationLayer\Intraday\SkillStaffingIntervalProvider.cs" />
     <Compile Include="ApplicationLayer\Intraday\SplitSkillStaffInterval.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsHourlyAvailabilityMatchingPerson.cs" />
