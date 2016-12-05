@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Islands;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -92,6 +93,21 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 
 			events.Count().Should().Be.EqualTo(2);
 			events.Any(x => x.AgentsInIsland.Count() == 8).Should().Be.True();
+		}
+
+		[Test, Ignore("42049")]
+		public void ShouldNotRemoveSkillIfActivityCompositionChangesInSkillGroup()
+		{
+			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 4);
+			var skillA = new Skill("A") {Activity = new Activity("A")};
+			var skillB = new Skill("B") {Activity = new Activity("B")};
+			var skillAagents = Enumerable.Range(0, 16).Select(x => new Person().KnowsSkill(skillA));
+			var skillABagents = Enumerable.Range(0, 5).Select(x => new Person().KnowsSkill(skillA, skillB));
+			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
+
+			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
+
+			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count().Should().Be(1);
 		}
 	}
 }
