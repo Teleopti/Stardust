@@ -168,7 +168,8 @@ describe('RtaAgentsCtrl', function() {
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
-			siteIds: ['LondonGuid']
+			siteIds: ['LondonGuid'],
+			teamIds: []
 		});
 	});
 
@@ -194,7 +195,8 @@ describe('RtaAgentsCtrl', function() {
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
-			siteIds: ['LondonGuid', 'ParisGuid']
+			siteIds: ['LondonGuid', 'ParisGuid'],
+			teamIds: []
 		});
 	});
 
@@ -215,6 +217,7 @@ describe('RtaAgentsCtrl', function() {
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+			siteIds: [],
 			teamIds: ['LondonTeam1']
 		});
 	});
@@ -244,6 +247,7 @@ describe('RtaAgentsCtrl', function() {
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+			siteIds: [],
 			teamIds: ['LondonTeam1', 'ParisTeam1']
 		});
 	});
@@ -305,6 +309,7 @@ describe('RtaAgentsCtrl', function() {
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+			siteIds: [],
 			teamIds: ['ParisTeam1']
 		});
 	});
@@ -334,7 +339,8 @@ describe('RtaAgentsCtrl', function() {
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
-			siteIds: ['ParisGuid']
+			siteIds: ['ParisGuid'],
+			teamIds: []
 		});
 	});
 
@@ -399,7 +405,7 @@ describe('RtaAgentsCtrl', function() {
 				scope.goToAgents();
 			});
 
-		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {});
+		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {siteIds: [], teamIds: []});
 	});
 
 	it('should select site and teams when preexisting selection for site', function() {
@@ -489,7 +495,8 @@ describe('RtaAgentsCtrl', function() {
 				scope.goToAgents();
 			});
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
-			siteIds: ['LondonGuid', 'ParisGuid']
+			siteIds: ['LondonGuid', 'ParisGuid'],
+			teamIds: []
 		});
 	});
 
@@ -686,7 +693,34 @@ describe('RtaAgentsCtrl', function() {
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
-			siteIds: ['ParisGuid']
+			siteIds: ['ParisGuid'],
+			teamIds: []
+		});
+	});
+
+	it('should go to agents on team when site was selected', function() {
+		stateParams.siteIds = ['ParisGuid'];
+		$fakeBackend
+			.withOrganization({
+				Id: 'ParisGuid',
+				Teams: [{
+					Id: 'ParisTeam1',
+				}, {
+					Id: 'ParisTeam2',
+				}]
+			});
+
+		$controllerBuilder.createController()
+			.apply(function() {
+				scope.teamsSelected = ['ParisTeam1'];
+			})
+			.apply(function() {
+				scope.goToAgents();
+			});
+
+		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
+			siteIds: [],
+			teamIds: ['ParisTeam1']
 		});
 	});
 
@@ -717,7 +751,7 @@ describe('RtaAgentsCtrl', function() {
 				scope.goToAgents();
 			});
 
-		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {});
+		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {siteIds: [], teamIds: []});
 	});
 
 	it('should redirect to initial state after unselecting all', function() {
@@ -747,7 +781,7 @@ describe('RtaAgentsCtrl', function() {
 				scope.goToAgents();
 			});
 
-		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {});
+		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {siteIds: [], teamIds: []});
 	});
 
 	it('should go to agents with skill', function() {

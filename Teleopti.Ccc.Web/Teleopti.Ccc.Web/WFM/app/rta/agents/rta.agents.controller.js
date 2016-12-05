@@ -177,12 +177,8 @@
 					var selection = {};
 					var selectedSiteIds = $scope.selectedSites();
 					var selectedTeamIds = $scope.teamsSelected;
-					if (selectedSiteIds.length > 0) {
-						selection['siteIds'] = selectedSiteIds;
-					}
-					if (selectedTeamIds.length > 0) {
-						selection['teamIds'] = selectedTeamIds;
-					}
+					selection['siteIds'] = selectedSiteIds;
+					selection['teamIds'] = selectedTeamIds;
 					stateGoToAgents(selection);
 				}
 
