@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Islands
 				foreach (var skillGroup in skillGroupsOnIsland)
 				{
 					var agentsInSkillGroup = skillGroup.Agents.Count();
-					foreach (var skillGroupSkill in skillGroup.Skills.Reverse())
+					foreach (var skillGroupSkill in skillGroup.Skills.ToArray())
 					{
 						if (agentsInSkillGroup *_reduceIslandsLimits.MinimumFactorOfAgentsInOtherSkillGroup >= noAgentsKnowingSkill[skillGroupSkill])
 							continue;
