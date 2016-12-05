@@ -10,20 +10,23 @@ namespace Teleopti.Ccc.Domain.Islands
 		private readonly CreateSkillGroups _createSkillGroups;
 		private readonly IPeopleInOrganization _peopleInOrganization;
 		private readonly ReduceIslandsLimits _reduceIslandsLimits;
+		private readonly NumberOfAgentsKnowingSkill _numberOfAgentsKnowingSkill;
 
 		public CreateIslands(CreateSkillGroups createSkillGroups,
 												IPeopleInOrganization peopleInOrganization,
-												ReduceIslandsLimits reduceIslandsLimits)
+												ReduceIslandsLimits reduceIslandsLimits,
+												NumberOfAgentsKnowingSkill numberOfAgentsKnowingSkill)
 		{
 			_createSkillGroups = createSkillGroups;
 			_peopleInOrganization = peopleInOrganization;
 			_reduceIslandsLimits = reduceIslandsLimits;
+			_numberOfAgentsKnowingSkill = numberOfAgentsKnowingSkill;
 		}
 
 		public IEnumerable<IIsland> Create(DateOnlyPeriod period)
 		{
 			var skillGroups = _createSkillGroups.Create(_peopleInOrganization.Agents(period), period.StartDate);
-			var noAgentsKnowingSkill = numberOfAgentsKnowingSkill(skillGroups);
+			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(skillGroups);
 			var groupedSkillGroups = skillGroups.GroupBy(x => x, (group, groups) => groups, new SkillGroupComparerForIslands());
 			reduceSkillGroups(groupedSkillGroups, noAgentsKnowingSkill);
 			return groupedSkillGroups.Select(skillGroupInIsland => new Island(skillGroupInIsland)).ToList();
@@ -47,29 +50,11 @@ namespace Teleopti.Ccc.Domain.Islands
 						if (skillGroup.Skills.Count(x => x.Activity == null || x.Activity.Equals(skillGroupSkill.Activity)) < 2)
 							continue; 
 
-						skillGroup.Skills.Remove(skillGroupSkill); //TODO! : förlorar förmodligen lite agenter här - kolla
+						skillGroup.Skills.Remove(skillGroupSkill); 
 						noAgentsKnowingSkill[skillGroupSkill] -= agentsInSkillGroup;
 					}
 				}
 			}
-		}
-
-		private static IDictionary<ISkill, int> numberOfAgentsKnowingSkill(IEnumerable<SkillGroup> skillGroups)
-		{
-			var numberOfAgentsKnowingSkill = new Dictionary<ISkill, int>();
-			foreach (var skillGroup in skillGroups)
-			{
-				var count = skillGroup.Agents.Count();
-				foreach (var skill in skillGroup.Skills)
-				{
-					if (!numberOfAgentsKnowingSkill.ContainsKey(skill))
-					{
-						numberOfAgentsKnowingSkill[skill] = 0;
-					}
-					numberOfAgentsKnowingSkill[skill] += count;
-				}
-			}
-			return numberOfAgentsKnowingSkill;
 		}
 	}
 }

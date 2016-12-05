@@ -150,6 +150,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayOptimizationContext>().InstancePerLifetimeScope();
 			builder.RegisterType<NightRestWhiteSpotSolverServiceFactory>().As<INightRestWhiteSpotSolverServiceFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<SkillGroupIslandsAnalyzer>().SingleInstance();
+			builder.RegisterType<NumberOfAgentsKnowingSkill>().SingleInstance();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_SplitBigIslands_42049))
 			{
 				builder.RegisterType<CreateIslands>().As<ICreateIslands>().SingleInstance();
