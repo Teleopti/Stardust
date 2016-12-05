@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -24,11 +25,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly INow _now;
 		private readonly IUpdatedByScope _updatedByScope;
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
+		private readonly IPersonRequestRepository _personRequestRepository;
+		private readonly IFilterRequestsWithDifferentVersion _filterRequestsWithDifferentVersion;
 
 		public AbsenceRequestQueueStrategyHandler(IAbsenceRequestStrategyProcessor absenceRequestStrategyProcessor,
 												  IEventPublisher publisher, INow now,
 												  IRequestStrategySettingsReader requestStrategySettingsReader, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
-												  IBusinessUnitRepository businessUnitRepository, IBusinessUnitScope businessUnitScope, IPersonRepository personRepository, IUpdatedByScope updatedByScope, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository)
+												  IBusinessUnitRepository businessUnitRepository, IBusinessUnitScope businessUnitScope, IPersonRepository personRepository, IUpdatedByScope updatedByScope, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IPersonRequestRepository personRequestRepository, IFilterRequestsWithDifferentVersion filterRequestsWithDifferentVersion)
 		{
 			_absenceRequestStrategyProcessor = absenceRequestStrategyProcessor;
 			_requestStrategySettingsReader = requestStrategySettingsReader;
@@ -38,6 +41,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_personRepository = personRepository;
 			_updatedByScope = updatedByScope;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
+			_personRequestRepository = personRequestRepository;
+			_filterRequestsWithDifferentVersion = filterRequestsWithDifferentVersion;
 			_publisher = publisher;
 			_now = now;
 		}
@@ -48,6 +53,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			int windowSize;
 			int absenceReqNearFutureTime;
 			int absenceReqFarFutureTime;
+			IList<IEnumerable<Guid>> listOfAbsenceRequests = new List<IEnumerable<Guid>>();
+			IDictionary<Guid, int> reqWithVersion = new Dictionary<Guid, int>();
 
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -68,7 +75,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			businessUnits.ForEach(businessUnit =>
 			{
 				_businessUnitScope.OnThisThreadUse(businessUnit);
-				using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				
+				using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
 					var now = _now.UtcDateTime();
 					var nearFutureThresholdTime = now.AddMinutes(-absenceReqNearFutureTime);
@@ -77,8 +85,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 					//include yesterday to deal with timezones
 					var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(windowSize)));
-					var listOfAbsenceRequests = _absenceRequestStrategyProcessor.Get(nearFutureThresholdTime, farFutureThresholdTime, pastThresholdTime, initialPeriod, windowSize);
+					reqWithVersion = getRequestWithVersion(_queuedAbsenceRequestRepository.LoadAll().Select(x=>x.PersonRequest).ToList());
+					listOfAbsenceRequests = _absenceRequestStrategyProcessor.Get(nearFutureThresholdTime, farFutureThresholdTime,
+						pastThresholdTime, initialPeriod, windowSize);
+
+				}
+				using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				{
 					if (!listOfAbsenceRequests.Any()) return;
+
+					listOfAbsenceRequests = _filterRequestsWithDifferentVersion.Filter(reqWithVersion, listOfAbsenceRequests);
 
 					var sent = _now.UtcDateTime();
 					listOfAbsenceRequests.ForEach(absenceRequests =>
@@ -89,7 +105,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 							PersonRequestIds = requests,
 							Sent = sent
 						};
-						_publisher.Publish(multiAbsenceRequestsEvent);	
+						_publisher.Publish(multiAbsenceRequestsEvent);
 						_queuedAbsenceRequestRepository.Send(requests, sent);
 
 						sent = sent.AddSeconds(1);
@@ -97,8 +113,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 					uow.PersistAll();
 				}
+					
+				
 			});
 			_businessUnitScope.OnThisThreadUse(initialBu);
+		}
+
+		private IDictionary<Guid, int> getRequestWithVersion(IEnumerable<Guid> reqIds)
+		{
+			var personRequests = _personRequestRepository.Find(reqIds);
+			return personRequests.ToDictionary(x => x.Id.GetValueOrDefault(), x => ((PersonRequest)x).Version.GetValueOrDefault());
 		}
 	}
 }

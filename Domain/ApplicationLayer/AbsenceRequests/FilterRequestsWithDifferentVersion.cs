@@ -10,19 +10,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	public class FilterRequestsWithDifferentVersion : IFilterRequestsWithDifferentVersion
 	{
 		private readonly IPersonRequestRepository _personRequestRepository;
-		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
-		public FilterRequestsWithDifferentVersion(IPersonRequestRepository personRequestRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+		public FilterRequestsWithDifferentVersion(IPersonRequestRepository personRequestRepository)
 		{
 			_personRequestRepository = personRequestRepository;
-			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
 		public IList<IEnumerable<Guid>> Filter(IDictionary<Guid, int> reqVersions, IList<IEnumerable<Guid>> potentialBulk)
 		{
 			var result = new List<IEnumerable<Guid>>();
-			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-			{
+			
 				var latestPersonRequests = _personRequestRepository.Find(reqVersions.Keys);
 				var dirtyRequests = latestPersonRequests.Where(x =>
 				{
@@ -43,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				}
 
 				return result;
-			}
+			
 		}
 	}
 
