@@ -20,15 +20,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_persons.Add(person);
 		}
 
-		public Person Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team, ISchedulePeriod schedulePeriod, IWorkShiftRuleSet ruleSet, params ISkill[] skills)
+		public Person Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team, ISchedulePeriod schedulePeriod, IRuleSetBag ruleSetBag, params ISkill[] skills)
 		{
 			var ppDate = new DateOnly(1950, 1, 1);
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-			var period = new PersonPeriod(ppDate, new PersonContract(contract, partTimePercentage, contractSchedule), team);
-			if (ruleSet != null)
+			var period = new PersonPeriod(ppDate, new PersonContract(contract, partTimePercentage, contractSchedule), team)
 			{
-				period.RuleSetBag = new RuleSetBag(ruleSet);
-			}
+				RuleSetBag = ruleSetBag
+			};
 			agent.AddPersonPeriod(period);
 			if (schedulePeriod != null)
 			{
@@ -42,10 +41,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return agent;
 		}
 
+		public Person Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team, ISchedulePeriod schedulePeriod, IWorkShiftRuleSet ruleSet, params ISkill[] skills)
+		{
+			return Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, new RuleSetBag(ruleSet), skills);
+		}
+
 
 		public Person Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team, ISchedulePeriod schedulePeriod, params ISkill[] skills)
 		{
-			return Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, null, skills);
+			return Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, (IRuleSetBag)null, skills);
 		}
 
 		public Person Has(IContract contract, ISchedulePeriod schedulePeriod, params ISkill[] skills)

@@ -31,17 +31,35 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			AddExecuted = true;
 		}
 
+		public IPlanningPeriod HasOneDayPeriod(DateOnly date)
+		{
+			var planningPeriod =
+	new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(date.Date), new[]
+	{
+					new AggregatedSchedulePeriod
+					{
+						DateFrom = date.Date,
+						Number = 1,
+						PeriodType = SchedulePeriodType.Day
+					}
+	}));
+			planningPeriod.SetId(Guid.NewGuid());
+			_planningPeriods.Add(planningPeriod);
+			return planningPeriod;
+		}
+
 		public IPlanningPeriod Has(DateOnly start, int numberOfWeeks)
 		{
-			var planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(start.Date.AddDays(-7 * numberOfWeeks)), new[]
-			{
-				new AggregatedSchedulePeriod
+			var planningPeriod =
+				new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(start.Date.AddDays(-7*numberOfWeeks)), new[]
 				{
-					DateFrom = start.Date,
-					Number = numberOfWeeks,
-					PeriodType = SchedulePeriodType.Week
-				}
-			}));
+					new AggregatedSchedulePeriod
+					{
+						DateFrom = start.Date,
+						Number = numberOfWeeks,
+						PeriodType = SchedulePeriodType.Week
+					}
+				}));
 			planningPeriod.SetId(Guid.NewGuid());
 			_planningPeriods.Add(planningPeriod);
 			return planningPeriod;
@@ -86,7 +104,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void CustomData(PlanningPeriod planinnPeriod, PlanningPeriodSuggestions planningPeriodSuggestions)
 		{
-			if(planinnPeriod != null)
+			if (planinnPeriod != null)
 				_planningPeriods.Add(planinnPeriod);
 			_planningPeriodSuggestions = planningPeriodSuggestions;
 		}

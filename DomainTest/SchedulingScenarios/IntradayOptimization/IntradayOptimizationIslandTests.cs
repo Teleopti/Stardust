@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -75,6 +76,41 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var dateTime2 = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent2.PermissionInformation.DefaultTimeZone());
 			PersonAssignmentRepository.GetSingle(dateOnly, agent2).Period
 				.Should().Be.EqualTo(new DateTimePeriod(dateTime2.AddHours(8).AddMinutes(15), dateTime2.AddHours(17).AddMinutes(15)));
+		}
+
+		[Test, Ignore("to be fixed")]
+		public void ShouldNotUseSkillsThatWereRemovedDuringIslandCreation()
+		{
+			var date = new DateOnly(2015, 10, 12);
+			var scenario = ScenarioRepository.Has("some name");
+			var activityAB = ActivityFactory.CreateActivity("AB");
+			var activityC = ActivityFactory.CreateActivity("C");
+			var skillA = SkillRepository.Has("skillA", activityAB);
+			var skillB = SkillRepository.Has("skillB", activityAB);
+			var skillC = SkillRepository.Has("skillC", activityC);
+			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Day, 1);
+//			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
+//			var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
+			var ruleSetAB = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityAB, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
+			var ruleSetC = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityC, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
+			var ruleSetBag = new RuleSetBag(ruleSetAB);
+			ruleSetBag.AddRuleSet(ruleSetC);
+			var agentA = PersonRepository.Has(new Contract("contract"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSetBag, skillA);
+			var agentABC = PersonRepository.Has(new Contract("contract"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSetBag, skillA);
+			var planningPeriod = PlanningPeriodRepository.HasOneDayPeriod(date);
+			PersonAssignmentRepository.Has(agentA, scenario, new Activity("X"), new ShiftCategory("_").WithId(), date, new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.Has(agentABC, scenario, new Activity("X"), new ShiftCategory("_").WithId(), date, new TimePeriod(8, 0, 16, 0));
+			SkillDayRepository.Has(new List<Func<ISkillDay>>
+			{
+				() => skillA.CreateSkillDayWithDemand(scenario, date, 100),
+				() => skillB.CreateSkillDayWithDemand(scenario, date, 1),
+				() => skillC.CreateSkillDayWithDemand(scenario, date, 10)
+			});
+
+			Target.Execute(planningPeriod.Id.Value);
+
+			PersonAssignmentRepository.GetSingle(date, agentABC).ShiftLayers.Single().Payload
+				.Should().Be.EqualTo(activityC);
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
