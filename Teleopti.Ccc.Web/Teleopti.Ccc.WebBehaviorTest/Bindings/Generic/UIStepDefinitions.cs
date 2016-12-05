@@ -30,6 +30,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Browser.Interactions.ClickContaining("." + cssClass.Name, text);
 		}
 
+
+		[Then(@"I choose '(.*)'")]
+		[Then(@"I select site '(.*)'")]
+		[Then(@"I select team '(.*)'")]
+		public void ThenIDo(string elemId)
+		{
+			Browser.Interactions.AssertExists("#" + elemId);
+			Browser.Interactions.Click("#" + elemId);
+		}
+
+		[Then(@"I collapse site '(.*)'")]
+		public void ThenICollapse(string elemId)
+		{
+			Browser.Interactions.AssertExists("#col-" + elemId);
+			Browser.Interactions.Click("#col-" + elemId);
+		}
+
+		[Then(@"I am done with my selection")]
+		public void ThenIAmDoneWithMySelection()
+		{
+			Browser.Interactions.Click("body");
+		}
+
+		
 		// I should see the message 'an error message'
 		// I should see the error message 'an error message'
 		// *NOT* I should see the preference Late on '2012-06-20'

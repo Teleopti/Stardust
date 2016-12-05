@@ -70,7 +70,10 @@ Scenario: Quickly change agent selection for skill, team
 	And I should see agent 'Ashley Andeen' with state 'LoggedOut'
 	And I should not see agent 'John King'
 	Given the time is '2016-06-14 08:05:00'
-	Then I click organization and select team 'Red'
+	Then I choose 'organization' 
+	Then I collapse site 'Paris'
+	Then I select team 'Red'
+	Then I am done with my selection
 	When the time is '2016-06-14 08:10:00'
 	Then I should see agent 'Ashley Andeen' with state 'LoggedOut'
 	And I should not see agent 'Pierre Baldi'
@@ -88,7 +91,9 @@ Scenario: Quickly change agent selection for skill, site
 	And I should see agent 'Ashley Andeen' with state 'LoggedOut'
 	And I should not see agent 'John King'
 	Given the time is '2016-06-14 08:05:00'
-	Then I click organization and select site 'Paris'
+	Then I choose 'organization' 
+	Then I select site 'Paris'
+	Then I am done with my selection
 	When the time is '2016-06-14 08:10:00'
 	Then I should see agent 'Ashley Andeen' with state 'LoggedOut'
 	And I should see agent 'Pierre Baldi' with state 'LoggedOut'

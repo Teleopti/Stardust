@@ -27,6 +27,7 @@
 	</div>
 </div>
 
+<div class="con-flex" style="padding-bottom:0">
 	<div class="panel material-depth-1">
 		<div class="con-row">
 			<div class="con-flex">
@@ -74,13 +75,13 @@
 					</md-autocomplete>
 					</span>
 					<span class="con-flex" ng-show="showOrgSelection">
-						<md-input-container class="rta-md-input-container">
+						<md-input-container class="rta-md-input-container" id="organization">
 							<label>Select organization</label>
 							<md-select ng-model="teamsSelected" class="rta-md-select" multiple md-on-close="goToAgents()">
 								<md-optgroup ng-repeat="site in sites" class="rta-option-group">
-									<span ng-click="selectSite(site.Id)"><i class="mdi mdi-menu-down"></i></span>
+									<span ng-click="selectSite(site.Id)"><i class="mdi mdi-menu-down" id="col-{{site.Name}}"></i></span>
 									<md-checkbox ng-model="site.isChecked" ng-value="site.Id" ng-class="site.isMarked ? 'rta-marked-checkbox' : ''">{{site.Name}}</md-checkbox>
-									<md-option ng-show="isSelectedSite(site.Id)" ng-selected="teamChecked(site,team)" ng-value="team.Id" ng-repeat="team in site.Teams">{{team.Name}}</md-option>
+									<md-option id="{{team.Name}}"ng-show="isSelectedSite(site.Id)" ng-selected="teamChecked(site,team)" ng-value="team.Id" ng-repeat="team in site.Teams">{{team.Name}}</md-option>
 								</md-optgroup>
 							</md-select>
 						</md-input-container>
