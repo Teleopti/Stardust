@@ -89,6 +89,7 @@
 				$scope.skillsLoaded = false;
 				$scope.skillAreasLoaded = false;
 				$scope.teamsSelected = [];
+				var enableWatchOnTeam = false;
 				toggleService.togglesLoaded.then(function() {
 					$scope.showOrgSelection = toggleService.RTA_QuicklyChangeAgentsSelection_40610;
 					if ($scope.showOrgSelection)
@@ -188,19 +189,26 @@
 				function keepSelectionForOrganization() {
 					if (!$scope.showOrgSelection)
 						return;
+
+					selectSiteAndTeamsUnder();
+
+					if (teamIds.length > 0)
+						$scope.teamsSelected = teamIds;
+					enableWatchOnTeam = true;
+				}
+
+				function selectSiteAndTeamsUnder() {
+					if(siteIds.length === 0)
+						return;
 					siteIds.forEach(function(sid) {
 						var theSite = $scope.sites.find(function(site) {
 							return site.Id == sid;
 						});
 						theSite.isChecked = true;
-						if (theSite)
-							theSite.Teams.forEach(function(team) {
-								team.isChecked = true;
-							});
+						theSite.Teams.forEach(function(team) {
+							team.isChecked = true;
+						});
 					});
-
-					if (teamIds.length > 0)
-						$scope.teamsSelected = teamIds;
 				}
 
 				$scope.selectedSites = function() {
@@ -214,7 +222,7 @@
 							if (noTeamsSelected)
 								return false;
 							if (site.isChecked && allTeamsSelected)
-								unselectTeamsInSite(site)
+								unselectTeamsInSite(site);
 							return site.isChecked && allTeamsSelected;
 						}).map(function(s) {
 							return s.Id;
@@ -241,15 +249,6 @@
 					if (isAllTeamsCheckedForSite)
 						return false;
 					return team.isChecked;
-				}
-
-				$scope.updateTeams = function() {
-					$scope.sites.forEach(function(site) {
-						var selectedTeam = site.Teams.find(function(team) {
-							return $scope.teamsSelected.indexOf(team.Id) > -1;
-						});
-						selectedTeam.isChecked = selectedTeam ? true : false;
-					});
 				}
 
 				$scope.forTest_selectSite = function(site) {
@@ -300,13 +299,22 @@
 						var checkedTeams = site.Teams.filter(function(team) {
 							return team.isChecked;
 						});
-						site.isChecked = checkedTeams.length === site.Teams.length;
+
+						if(checkedTeams.length > 0) {
+							site.isChecked = checkedTeams.length === site.Teams.length;
+						}
+						else if(siteIds.indexOf(site.Id) > -1){
+							site.isChecked = true;
+						}
+						else {
+							site.isChecked = false;
+						}
 					});
 				};
 
 				$scope.$watch('teamsSelected', function(newValue, oldValue) {
-					if (newValue !== oldValue) {
-						$scope.updateSite();
+					if (newValue !== oldValue && enableWatchOnTeam) {
+					$scope.updateSite();
 					}
 				});
 

@@ -415,13 +415,12 @@ describe('RtaAgentsCtrl', function() {
 
 		$controllerBuilder.createController();
 
-		expect(scope.selectedSites()).toEqual(['ParisGuid']);
 		expect(scope.sites[0].isChecked).toEqual(true);
-		expect(scope.sites[0].Teams[0].isChecked).toEqual(true);
-		expect(scope.sites[0].Teams[1].isChecked).toEqual(true);
+		expect(scope.teamChecked(scope.sites[0], scope.sites[0].Teams[0])).toEqual(true);
+		expect(scope.teamChecked(scope.sites[0], scope.sites[0].Teams[1])).toEqual(true);
 	});
 
-	it('should select site and team when one site was preselected and team is unselected', function() {
+	it('should unselect site when preselected and team is unselected', function() {
 		stateParams.siteIds = ['ParisGuid'];
 		$fakeBackend
 			.withOrganization({
@@ -485,6 +484,8 @@ describe('RtaAgentsCtrl', function() {
 		$controllerBuilder.createController()
 			.apply(function() {
 				scope.forTest_selectSite(scope.sites[0]);
+			})
+			.apply(function(){
 				scope.goToAgents();
 			});
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
@@ -541,12 +542,38 @@ describe('RtaAgentsCtrl', function() {
 		]
 		});
 
-		$controllerBuilder.createController().wait(1000);
+		$controllerBuilder.createController();
 
 		expect(scope.sites[0].isChecked).not.toBe(true);
 		expect(scope.sites[0].Teams[0].isChecked).toBe(true);
 		expect(scope.sites[0].Teams[1].isChecked).toBe(true);
 
+	});
+
+	it('should select site and team when in stateParams', function() {
+		stateParams.siteIds = ['LondonGuid'];
+		stateParams.teamIds = ['ParisTeam1']
+		$fakeBackend.withOrganization({
+			Id: 'LondonGuid',
+			Teams: [{
+				Id: 'LondonTeam1'
+			}
+		]})
+		.withOrganization({
+			Id: 'ParisGuid',
+			Teams: [{
+				Id: 'ParisTeam1',
+			}, {
+				Id: 'ParisTeam2',
+			}]
+		});;
+
+		$controllerBuilder.createController();
+
+		expect(scope.sites[0].isChecked).toBe(true);
+		expect(scope.teamChecked(scope.sites[0], scope.sites[0].Teams[0])).toBe(true);
+		expect(scope.sites[1].isChecked).not.toBe(true);
+		expect(scope.sites[1].Teams[0].isChecked).toBe(true);
 	});
 
 	it('should go to agents when selecting new site and deselecting some teams in the old one', function() {
@@ -631,7 +658,9 @@ describe('RtaAgentsCtrl', function() {
 
 		$controllerBuilder.createController()
 			.apply(function() {
-				scope.teamsSelected = ['ParisTeam1', 'ParisTeam2'];
+				scope.forTest_selectSite(scope.sites[0]);
+			})
+			.apply(function(){
 				scope.teamsSelected = [];
 			});
 		expect(scope.sites[0].isChecked).toEqual(false);
@@ -661,7 +690,7 @@ describe('RtaAgentsCtrl', function() {
 		});
 	});
 
-	it('should redirect to initial stateafter unselecting all', function() {
+	it('should redirect to initial state after unselecting all', function() {
 		stateParams.siteIds = ['LondonGuid'];
 		stateParams.teamIds = ['ParisTeam2'];
 		$fakeBackend.withOrganization({
