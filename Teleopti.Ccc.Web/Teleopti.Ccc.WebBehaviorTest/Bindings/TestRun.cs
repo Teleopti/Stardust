@@ -62,8 +62,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			log.Info(TestContext.CurrentContext.Result.Outcome.Status);
 			Browser.Interactions.GoTo("about:blank");
 			DataMaker.AfterScenario();
+			LocalSystem.Hangfire.WaitForQueue();
 
-			handleScenarioException();
+			if (ScenarioContext.Current.TestError != null)
+				Console.WriteLine($"\r\nTest Scenario \"{ScenarioContext.Current.ScenarioInfo.Title}\" failed, please check the error message.");
 
 			log.Debug($"Finished scenario {ScenarioContext.Current.ScenarioInfo.Title}");
 		}
@@ -85,11 +87,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			log.Debug("Finished test run");
 		}
-
-		private static void handleScenarioException()
-		{
-			if (ScenarioContext.Current.TestError == null) return;
-			Console.WriteLine($"\r\nTest Scenario \"{ScenarioContext.Current.ScenarioInfo.Title}\" failed, please check the error message.");
-		}
+		
 	}
 }

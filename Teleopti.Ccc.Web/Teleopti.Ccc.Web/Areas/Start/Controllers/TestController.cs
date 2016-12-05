@@ -101,10 +101,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_loadPasswordPolicyService.Path = Path.Combine(_physicalApplicationPath.Get(), usePasswordPolicy ? "." : _settings.ConfigurationFilesPath());
 
 			UserDataFactory.EnableMyTimeMessageBroker = enableMyTimeMessageBroker;
-
-			_hangfire.CancelQueue();
-			_hangfire.WaitForQueue();
-
+			
 			clearAllConnectionPools();
 
 			return View("Message", new TestMessageViewModel

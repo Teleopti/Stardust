@@ -43,13 +43,13 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		public void CleanQueue()
 		{
 			foreach (var queueName in Queues.OrderOfPriority())
-				DeleteJobs(() => _monitoring.EnqueuedJobs(queueName, 0, 10).Select(x => x.Key), WorkerIteration);
-			DeleteJobs(() => _monitoring.ScheduledJobs(0, 10).Select(x => x.Key), null);
-			DeleteJobs(() => _monitoring.FailedJobs(0, 10).Select(x => x.Key), null);
-			DeleteJobs(() => _monitoring.SucceededJobs(0, 10).Select(x => x.Key), null);
+				deleteJobs(() => _monitoring.EnqueuedJobs(queueName, 0, 10).Select(x => x.Key), WorkerIteration);
+			deleteJobs(() => _monitoring.ScheduledJobs(0, 10).Select(x => x.Key), null);
+			deleteJobs(() => _monitoring.FailedJobs(0, 10).Select(x => x.Key), null);
+			deleteJobs(() => _monitoring.SucceededJobs(0, 10).Select(x => x.Key), null);
 		}
 
-		private void DeleteJobs(Func<IEnumerable<string>> ids, Action afterDelete)
+		private void deleteJobs(Func<IEnumerable<string>> ids, Action afterDelete)
 		{
 			var jobs = ids.Invoke();
 			while (jobs.Any())
@@ -147,21 +147,11 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 					fetchedCount += _monitoring.FetchedCount(queueName);
 				}
 				var scheduledCount = _monitoring.ScheduledCount();
-				var failedCount = _monitoring.FailedCount();
 				var processingCount = _monitoring.ProcessingCount();
 
 				// all is well
-				if (enqueuedCount + fetchedCount + scheduledCount + failedCount + processingCount == 0)
+				if (enqueuedCount + fetchedCount + scheduledCount + processingCount == 0)
 					break;
-
-				// booom!
-				if (failedCount > 0)
-				{
-					var firstFailue = _monitoring.FailedJobs(0, 1).FirstOrDefault();
-					if (firstFailue.Value?.ExceptionDetails != null)
-						throw new Exception($"Hangfire job has failed! {Environment.NewLine}First failed job exception: {firstFailue.Value.ExceptionDetails}");
-					throw new Exception("Hangfire job has failed!");
-				}
 
 				// requeue any scheduled retries if queue is empty
 				if (enqueuedCount == 0 && scheduledCount > 0)
@@ -169,6 +159,16 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 				Thread.Sleep(20);
 			}
+
+			if (_monitoring.FailedCount() <= 0) return;
+
+			// booom!
+			var exceptions = (
+				from j in _monitoring.FailedJobs(0, 10)
+				select new Exception($"Hangfire job failure: {j.Value.ExceptionDetails}")
+			).ToArray();
+			deleteJobs(() => _monitoring.FailedJobs(0, 1000).Select(x => x.Key), null);
+			throw new AggregateException("Hangfire job has failed!", exceptions);
 		}
 
 		public void RequeueScheduledJobs()
