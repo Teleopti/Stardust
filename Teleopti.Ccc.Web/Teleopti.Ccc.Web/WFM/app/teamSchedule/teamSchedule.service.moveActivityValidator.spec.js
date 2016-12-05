@@ -1,8 +1,9 @@
 ﻿(function() {
 	'use strict';
 
-	describe('teamschedule move activity validator tests', function() {
+	describe('teamschedule move activity validator tests: ', function() {
 		var target, personSelection, scheduleMgmt;
+		var defaultUserTimeZone = 'Asia/Hong_Kong';  //UTC+8
 		beforeEach(function () {
 			module("wfm.teamSchedule");
 		});
@@ -18,7 +19,7 @@
 					function() {
 						return {
 							CurrentUserInfo: function() {
-								return { DefaultTimeZone: 'Asia/Hong_Kong' };
+								return { DefaultTimeZone: defaultUserTimeZone };
 							}
 						};
 					});
@@ -44,15 +45,21 @@
 					"Color": "#80FF80",
 					"Description": "Email",
 					"Start": scheduleDate + " 07:00",
-					"Minutes": 480
+					"Minutes": 480,
+					"End": scheduleDate + " 15:00",
 				}
 			],
 			"IsFullDayAbsence": false,
 			"DayOff": null
 		};
+		var definitionSetId = 'selected_definition_set_id';
+
 
 		it('should return invalide people when overtime activity input time is greater than 36h', function() {
-			scheduleMgmt.resetSchedules([schedule], moment(scheduleDate));
+			var localSchedule = JSON.parse(JSON.stringify(schedule));
+			localSchedule.MultiplicatorDefinitionSetIds = [definitionSetId];
+
+			scheduleMgmt.resetSchedules([localSchedule], moment(scheduleDate));
 			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 
 			personSchedule.IsSelected = true;
@@ -63,32 +70,82 @@
 				endTime: moment("2016-05-08 2:00")
 			};
 
-			var result = target.validateInputForOvertime(timeRange, "selected_definition_set_id","person_id");
+			var result = target.validateInputForOvertime(timeRange, definitionSetId, defaultUserTimeZone);
 
 			expect(result.length).toEqual(1);
 			expect(result[0].PersonId.indexOf('SomeoneElse') > -1).toEqual(true);
 		});
 
-		it('should return invalide people when overtime activity input start time is ealier than start of belongsToDate', function() {
-			scheduleMgmt.resetSchedules([schedule], moment(scheduleDate));
+		it('should return invalide people when overtime activity input start time is ealier than start of belongsToDate' +
+			'\n\t\tin condition of the overtime activity overlaps agents belongsToDate\'s shifts', function() {
+			var localSchedule = JSON.parse(JSON.stringify(schedule));
+			localSchedule.MultiplicatorDefinitionSetIds = [definitionSetId];
+
+			scheduleMgmt.resetSchedules([localSchedule], moment(scheduleDate));
 			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 
 			personSchedule.IsSelected = true;
 			personSelection.updatePersonSelection(personSchedule);
 			personSelection.toggleAllPersonProjections(personSchedule, scheduleDate);
 			var timeRange = {
-				startTime: moment("2016-05-11 23:00"),
-				endTime: moment("2016-05-12 09:00")
+				startTime: moment("2016-05-11 23:00"), //ensure this start time is earlier than 12:00AM of belongsToDate
+				endTime: moment("2016-05-12 09:00")    //ensure this end time will make overtime overlapping with agent's belongsToDate shift
 			};
 
-			var result = target.validateInputForOvertime(timeRange, "selected_definition_set_id","person_id");
+			var result = target.validateInputForOvertime(timeRange, definitionSetId, defaultUserTimeZone);
 
 			expect(result.length).toEqual(1);
 			expect(result[0].PersonId.indexOf('SomeoneElse') > -1).toEqual(true);
 		});
 
+		it('should return invalide people when overtime activity input start time is ealier than start of belongsToDate in agent\'s timezone '+
+			'\n\t\tin condition of the overtime activity overlaps agents belongsToDate\'s shifts', function() {
+			var localSchedule = JSON.parse(JSON.stringify(schedule));
+			localSchedule.MultiplicatorDefinitionSetIds = [definitionSetId];
+
+			localSchedule.Timezone.IanaId = "America/Chicago";  //UTC-6
+
+			scheduleMgmt.resetSchedules([localSchedule], moment(scheduleDate));
+			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			personSelection.toggleAllPersonProjections(personSchedule, scheduleDate);
+			var timeRange = {
+				startTime: moment("2016-05-12 10:00"), //ensure this start time is earlier than 12:00AM of belongsToDate in agent's timezone
+				endTime: moment("2016-05-12 16:00")    //ensure this end time will make overtime overlapping with agent's belongsToDate shift
+			};
+
+			var result = target.validateInputForOvertime(timeRange, definitionSetId, defaultUserTimeZone);
+
+			expect(result.length).toEqual(1);
+			expect(result[0].PersonId.indexOf('SomeoneElse') > -1).toEqual(true);
+		});
+
+		it('should NOT return invalide people when overtime activity input start time is later than start of belongsToDate in agent\'s timezone '+
+			'\n\t\t in condition of the overtime activity overlaps agents\' belongsToDate shifts', function() {
+			var localSchedule = JSON.parse(JSON.stringify(schedule));
+			localSchedule.MultiplicatorDefinitionSetIds = [definitionSetId];
+
+			localSchedule.Timezone.IanaId = "America/Chicago";  //UTC-6
+
+			scheduleMgmt.resetSchedules([localSchedule], moment(scheduleDate));
+			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			personSelection.toggleAllPersonProjections(personSchedule, scheduleDate);
+			var timeRange = {
+				startTime: moment("2016-05-12 15:00"),  //ensure this start time is later than 12:00AM of belongsToDate in agent's timezone
+				endTime: moment("2016-05-12 16:10")     //ensure this end time will make overtime overlapping with agent's belongsToDate shift
+			};
+
+			var result = target.validateInputForOvertime(timeRange, definitionSetId, defaultUserTimeZone);
+
+			expect(result.length).toEqual(0);
+		});
+
 		it('should return false when moving to time changes the schedule start date', function() {
-			
 			scheduleMgmt.resetSchedules([schedule], moment(scheduleDate));
 			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 
@@ -97,7 +154,7 @@
 			personSelection.toggleAllPersonProjections(personSchedule, scheduleDate);
 			var newStartMoment = moment("2016-05-13 2:00");
 
-			var result = target.validateMoveToTime(newStartMoment, "Asia/Hong_Kong");
+			var result = target.validateMoveToTime(newStartMoment, defaultUserTimeZone);
 
 			expect(result).toEqual(false);
 			expect(target.getInvalidPeopleNameList().indexOf('SomeoneElse') > -1).toEqual(true);

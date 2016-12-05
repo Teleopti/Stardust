@@ -40,7 +40,8 @@
 					}
 					durationInMinutes = end.diff(start, 'minutes');
 
-					if(timeRange.startTime.isBefore(belongsToDate,'day'))
+					if(moment($filter('timezone')(timeRange.startTime.format('YYYY-MM-DD HH:mm'), personSchedule.Timezone.IanaId, currentTimezone))
+						.isBefore(belongsToDate,'day'))
 					{
 						invalidPeople.push({PersonId: personId, Name: personSchedule.Name});
 						continue;
