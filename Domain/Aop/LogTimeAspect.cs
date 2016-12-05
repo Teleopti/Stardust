@@ -10,9 +10,14 @@ namespace Teleopti.Ccc.Domain.Aop
 		private readonly Stopwatch _stopwatch;
 		private readonly ILog _logger;
 
+		public static ILog TestLogLogger(ILogManagerWrapper logger)
+		{
+			return logger.GetLogger("Teleopti.TestLog");
+		}
+
 		public LogTimeAspect(ILogManagerWrapper logger)
 		{
-			_logger = logger.GetLogger("Teleopti.TestLog");
+			_logger = TestLogLogger(logger);
 			_stopwatch = new Stopwatch();
 		}
 

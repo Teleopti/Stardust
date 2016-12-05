@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
 	public class TestController : Controller
 	{
+		private readonly ILogManagerWrapper _logManager;
 		private readonly IMutateNow _mutateNow;
 		private readonly INow _now;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
@@ -48,6 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
 
 		public TestController(
+			ILogManagerWrapper logManager,
 			IMutateNow mutateNow,
 			INow now,
 			ISessionSpecificDataProvider sessionSpecificDataProvider,
@@ -65,6 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			TenantTickEventPublisher tenantTickEventPublisher,
 			Domain.ApplicationLayer.Rta.Service.Rta rta)
 		{
+			_logManager = logManager;
 			_mutateNow = mutateNow;
 			_now = now;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
@@ -83,8 +87,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_rta = rta;
 		}
 
-		public ViewResult BeforeScenario(bool enableMyTimeMessageBroker, string defaultProvider = null, bool usePasswordPolicy = false)
+		public ViewResult BeforeScenario(string name, bool enableMyTimeMessageBroker, string defaultProvider = null, bool usePasswordPolicy = false)
 		{
+			LogTimeAspect.TestLogLogger(_logManager).Debug($"Before scenario: {name}");
+
 			_sessionSpecificDataProvider.RemoveCookie();
 			_formsAuthentication.SignOut();
 

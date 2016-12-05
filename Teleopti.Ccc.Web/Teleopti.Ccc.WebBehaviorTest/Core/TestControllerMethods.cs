@@ -56,8 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			var usePolicy = FeatureContext.Current.FeatureInfo.Tags.Contains("PasswordPolicy");
 
 			// use a scenario tag here for enableMyTimeMessageBroker if required
-			Navigation.Navigation.GoToPage(string.Format(CultureInfo.InvariantCulture,
-				"Test/BeforeScenario?enableMyTimeMessageBroker={0}&defaultProvider={1}&usePasswordPolicy={2}", useBroker, defaultProvider, usePolicy));
+			Navigation.Navigation.GoToPage($"Test/BeforeScenario?name={ScenarioContext.Current.ScenarioInfo.Title}&enableMyTimeMessageBroker={useBroker}&defaultProvider={defaultProvider}&usePasswordPolicy={usePolicy}");
 		}
 
 		/// <summary>
