@@ -28,6 +28,7 @@
 		vm.scheduleDate = $stateParams.selectedDate ? $stateParams.selectedDate : new Date();
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.availableTimezones = [];
+		vm.availableGroups = [];
 		vm.currentTimezone;
 	
 		vm.toggleForSelectAgentsPerPageEnabled = false;
@@ -385,7 +386,8 @@
 									 || toggleSvc.WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
 				ViewScheduleOnTimezoneEnabled: toggleSvc.WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925,
 				ManageScheduleForDistantTimezonesEnabled:  toggleSvc.WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305,
-				CheckPersonalAccountEnabled: toggleSvc.WfmTeamSchedule_CheckPersonalAccountWhenAddingAbsence_41088
+				CheckPersonalAccountEnabled: toggleSvc.WfmTeamSchedule_CheckPersonalAccountWhenAddingAbsence_41088,
+				DisplayScheduleOnBusinessHierachyEnabled: toggleSvc.WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260
 			};
 
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
@@ -406,6 +408,7 @@
 										|| vm.toggles.SwapShiftEnabled
 										|| vm.toggles.ModifyShiftCategoryEnabled;
 			vm.resetSchedulePage();
+
 			
 			var template = $translate.instant('WFMReleaseNotification');
 			var moduleName = $translate.instant('Teams');
@@ -423,7 +426,13 @@
 
 			teamScheduleSvc.PromiseForGetAgentsPerPageSetting(function (result) {
 				result.Agents > 0 && (vm.paginationOptions.pageSize = result.Agents);
-			})
+			}),
+
+			teamScheduleSvc.getAvalableHierachy(vm.scheduleDateMoment().format("YYYY-MM-DD"))
+				.then(function (response) {
+					var data = response.data;
+					vm.availableGroups = data.Children;
+				})
 		]).then(vm.init);
 	};
 }());

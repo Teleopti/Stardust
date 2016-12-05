@@ -1,0 +1,21 @@
+﻿<div layout="row">
+    <md-input-container>
+        <label>Organization</label>
+        <md-select ng-model="$ctrl.selectedGroups" ng-change="$ctrl.onSelectionChanged()"
+                   md-on-close="clearSearchTerm()"
+                   data-md-container-class="selectdemoSelectHeader"
+                   multiple>
+            <!--<md-select-header class="demo-select-header">
+                <input ng-model="searchTerm"
+                       type="search"
+                       placeholder="Search for a team.."
+                       class="demo-header-searchbox md-text">
+            </md-select-header>-->
+	        <md-optgroup ng-repeat="site in $ctrl.groupList">
+				<md-checkbox ng-checked="$ctrl.isSiteChecked(site.teams)" ng-click="$ctrl.toggleSite(site.teams)" ng-value="site.id">{{site.name}}</md-checkbox>
+		        <md-option ng-value="team.id" ng-repeat="team in site.teams |
+              filter:searchTerm">{{team.name}}</md-option>
+	        </md-optgroup>
+        </md-select>
+    </md-input-container>
+</div>

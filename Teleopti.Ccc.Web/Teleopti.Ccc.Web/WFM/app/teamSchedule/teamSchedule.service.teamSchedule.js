@@ -5,6 +5,9 @@
 		"$resource", "$q", '$http', function($resource, $q, $http) {
 
 			var service = this;
+			var getTeamsHierachyUrl = '../api/TeamScheduleData/FetchPermittedTeamHierachy';
+
+			service.getAvalableHierachy = getAvalableHierachy;
 
 			service.searchSchedules = $resource("../api/TeamSchedule/SearchSchedules", {
 				keyword: "@keyword",
@@ -81,6 +84,19 @@
 					});
 				});
 			};
+
+			function getAvalableHierachy(dateStr) {
+				var input = getTeamsHierachyUrl + "?date=" + dateStr;
+				return $q(function(resolve, reject) {
+					$http.get(input)
+						.then(function(data) {
+								resolve(data);
+							},
+							function(err) {
+								reject(err);
+							});
+				});
+			}
 		}
 	]);
 })();

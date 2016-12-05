@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			system.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
 		}
 		[Test]
-		public void ReturnPermittedTeamsHierachy()
+		public void ShouldReturnPermittedTeamsHierachy()
 		{
 			var date = new DateOnly(2016, 11, 29);
 			var bu = BusinessUnitFactory.CreateWithId("_");

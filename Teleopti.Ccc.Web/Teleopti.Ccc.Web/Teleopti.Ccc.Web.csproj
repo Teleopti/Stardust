@@ -1412,6 +1412,7 @@
     <Content Include="WFM\app\skillPrio\skillprio.service.spec.js" />
     <Content Include="WFM\app\skillPrio\skillprio.skill.service.js" />
     <Content Include="WFM\app\teamSchedule\html\addOvertime.tpl.html" />
+    <Content Include="WFM\app\teamSchedule\html\organizationPicker.tpl.html" />
     <Content Include="WFM\app\teamSchedule\html\teamsDatetimePicker.tpl.html" />
     <Content Include="WFM\app\teamSchedule\html\moveShift.tpl.html" />
     <Content Include="WFM\app\teamSchedule\html\noteEditor.html" />
@@ -1421,6 +1422,7 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.cmd.moveShift.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.teamsDatetimePicker.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.timeline.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.component.organizationPicker.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.timezonePicker.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.cmd.moveOverlappedActivity.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.note-editor.js" />
