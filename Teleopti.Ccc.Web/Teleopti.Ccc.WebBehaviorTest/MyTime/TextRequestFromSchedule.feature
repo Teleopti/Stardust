@@ -26,7 +26,8 @@ Scenario: Open add text request form from day summary
 	Then I should see the add text request form
 	
 Scenario: Add text request from week schedule view
-	Given I have the role 'Full access to mytime'
+	Given I am an agent
+	And I have the role 'Full access to mytime'
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day symbol area for date '2013-10-03'
 	And I click on the Text Request Tab

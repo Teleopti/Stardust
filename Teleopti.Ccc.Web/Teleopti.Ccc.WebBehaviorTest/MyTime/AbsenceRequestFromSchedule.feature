@@ -18,6 +18,7 @@ Background:
 	| Color       | Red      |
 	| Requestable | True     |
 	| TrackerType | Day      |
+	
 
 Scenario: Open add absence request form from day summary
 	Given I have the role 'Full access to mytime'
@@ -27,7 +28,8 @@ Scenario: Open add absence request form from day summary
 	Then I should see the add absence request form
 
 Scenario: Add absence request from week schedule view
-	Given I have the role 'Full access to mytime'
+	Given I am an agent
+	And I have the role 'Full access to mytime'
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day symbol area for date '2013-10-03'
 	And I click to add a new absence request
