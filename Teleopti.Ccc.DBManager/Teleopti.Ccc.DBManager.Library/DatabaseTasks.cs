@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'{databaseName}')
 				BEGIN
 					ALTER DATABASE [{databaseName}] SET ONLINE
-					DROP DATABASE {databaseName}
+					DROP DATABASE [{databaseName}]
 				END
 			", 300);
 		}
