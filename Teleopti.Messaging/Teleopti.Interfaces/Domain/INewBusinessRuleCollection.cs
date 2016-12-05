@@ -4,18 +4,22 @@ using System.Globalization;
 
 namespace Teleopti.Interfaces.Domain
 {
-    public interface INewBusinessRuleCollection : ICollection<INewBusinessRule>
-    {
-        IEnumerable<IBusinessRuleResponse> CheckRules(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays);
+	public interface INewBusinessRuleCollection : ICollection<INewBusinessRule>
+	{
+		IEnumerable<IBusinessRuleResponse> CheckRules(IDictionary<IPerson, IScheduleRange> rangeClones,
+			IEnumerable<IScheduleDay> scheduleDays);
 
-        void DoNotHaltModify(IBusinessRuleResponse businessRuleResponseToOverride);
+		IEnumerable<IBusinessRuleResponse> CheckRules(IDictionary<IPerson, IScheduleRange> rangeClones,
+			IEnumerable<IScheduleDay> scheduleDays, IEnumerable<IShiftTradeBusinessRuleConfig> ruleConfigs);
 
-        void DoNotHaltModify(Type businessRuleType);
+		void DoNotHaltModify(IBusinessRuleResponse businessRuleResponseToOverride);
 
-        INewBusinessRule Item(Type businessRuleType);
+		void DoNotHaltModify(Type businessRuleType);
 
-        void SetUICulture(CultureInfo cultureInfo);
+		INewBusinessRule Item(Type businessRuleType);
 
-        CultureInfo UICulture { get; }
-    }
+		void SetUICulture(CultureInfo cultureInfo);
+
+		CultureInfo UICulture { get; }
+	}
 }

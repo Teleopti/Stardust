@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 			Assert.AreEqual(configurableRules.Length, result.Count);
 
-			// Should not contins unconfigurable rules and removed rules
+			// Should not contain any unconfigurable rules and removed rules
 			var rulesShouldNotExists = unconfiguraableRules.Select(x => x.FullName).ToList();
 			rulesShouldNotExists.Add(ruleToRemove1.FullName);
 			rulesShouldNotExists.Add(ruleToRemove2.FullName);

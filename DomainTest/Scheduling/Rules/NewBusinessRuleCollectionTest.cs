@@ -11,11 +11,10 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		{
 			setup();
 			//rk: kolla istället vilka IBusiness rules-typer som finns i domain... orkar inte just nu
-			INewBusinessRule rule = _target.Item(typeof(NewShiftCategoryLimitationRule));
+			var rule = _target.Item(typeof(NewShiftCategoryLimitationRule));
 			Assert.AreEqual(totalNumberOfRules, _target.Count);
 			Assert.IsTrue(rule.HaltModify);
 		}
@@ -69,9 +68,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 			var rules = new List<Type>
 			{
-				typeof (NewMaxWeekWorkTimeRule),
-				typeof (MinWeekWorkTimeRule),
-				typeof (DataPartOfAgentDay)
+				typeof(NewMaxWeekWorkTimeRule),
+				typeof(MinWeekWorkTimeRule),
+				typeof(DataPartOfAgentDay)
 			};
 
 			var flag = NewBusinessRuleCollection.GetFlagFromRules(rules);
@@ -83,14 +82,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		{
 			setup();
 			_target.SetUICulture(CultureInfo.GetCultureInfo(1053));
-			Assert.AreEqual("sv-SE",_target.UICulture.Name);
+			Assert.AreEqual("sv-SE", _target.UICulture.Name);
 		}
 
 		[Test]
 		public void VerifyMinimum()
 		{
 			setup();
-			INewBusinessRuleCollection targetSmall = NewBusinessRuleCollection.Minimum();
+			var targetSmall = NewBusinessRuleCollection.Minimum();
 			foreach (var rule in _target)
 			{
 				Assert.AreEqual(rule.IsMandatory, collectionContainsType(targetSmall, rule.GetType()));
@@ -101,9 +100,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void VerifyRemoveBusinessRuleResponse()
 		{
 			setup();
-			INewBusinessRule rule = _target.Item(typeof(NewShiftCategoryLimitationRule));
+			var rule = _target.Item(typeof(NewShiftCategoryLimitationRule));
 			var dateOnlyPeriod = new DateOnlyPeriod();
-			_target.DoNotHaltModify(new BusinessRuleResponse(typeof(NewShiftCategoryLimitationRule), "d", false, false, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), new Person(), dateOnlyPeriod, "tjillevippen"));
+			_target.DoNotHaltModify(new BusinessRuleResponse(typeof(NewShiftCategoryLimitationRule), "d", false, false,
+				new DateTimePeriod(2000, 1, 1, 2000, 1, 2), new Person(), dateOnlyPeriod, "tjillevippen"));
 			Assert.AreEqual(totalNumberOfRules, _target.Count);
 			Assert.IsFalse(rule.HaltModify);
 		}
@@ -112,16 +112,78 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void RemovingMandatoryRuleShouldResultDoingNothing()
 		{
 			setup();
-			_target.Add(new dummyRule(true));
-			_target.DoNotHaltModify(typeof(dummyRule));
+			_target.Add(new dummyRuleFirst(true));
+			_target.DoNotHaltModify(typeof(dummyRuleFirst));
 			Assert.AreEqual(totalNumberOfRules + 1, _target.Count);
+		}
+
+		[Test]
+		public void ShouldNotValidateRulesDisabledInConfiguration()
+		{
+			setup();
+
+			var dummyRule1 = new dummyRuleFirst(true);
+			var dummyRule2 = new dummyRuleSecond(true);
+
+			_target.Add(dummyRule1);
+			_target.Add(dummyRule2);
+
+			var configurations = new List<IShiftTradeBusinessRuleConfig>
+			{
+				new ShiftTradeBusinessRuleConfig
+				{
+					BusinessRuleType = dummyRule1.GetType().FullName,
+					Enabled = false
+				},
+				new ShiftTradeBusinessRuleConfig
+				{
+					BusinessRuleType = dummyRule2.GetType().FullName,
+					Enabled = true
+				}
+			};
+			_target.CheckRules(new Dictionary<IPerson, IScheduleRange>(), new List<IScheduleDay>(), configurations);
+			Assert.AreEqual(dummyRule1.Checked, false);
+			Assert.AreEqual(dummyRule2.Checked, true);
+		}
+
+		[Test]
+		public void OverriddenOfCheckResultShouldSetCorrectlyBasedOnConfiguration()
+		{
+			setup();
+
+			var dummyRule1 = new dummyRuleFirst(true);
+			var dummyRule2 = new dummyRuleSecond(true);
+			_target.Add(dummyRule1);
+			_target.Add(dummyRule2);
+
+			var configurations = new List<IShiftTradeBusinessRuleConfig>
+			{
+				new ShiftTradeBusinessRuleConfig
+				{
+					BusinessRuleType = dummyRule1.GetType().FullName,
+					Enabled = true,
+					HandleOptionOnFailed = RequestHandleOption.Pending
+				},
+				new ShiftTradeBusinessRuleConfig
+				{
+					BusinessRuleType = dummyRule2.GetType().FullName,
+					Enabled = true,
+					HandleOptionOnFailed = RequestHandleOption.AutoDeny
+				}
+			};
+			var result = _target.CheckRules(new Dictionary<IPerson, IScheduleRange>(), new List<IScheduleDay>(), configurations)
+				.ToList();
+			Assert.IsTrue(dummyRule1.Checked);
+			Assert.IsTrue(dummyRule2.Checked);
+			Assert.IsTrue(result.Where(r => r.TypeOfRule == dummyRule1.GetType()).All(r => r.Overridden == true));
+			Assert.IsTrue(result.Where(r => r.TypeOfRule == dummyRule2.GetType()).All(r => r.Overridden == false));
 		}
 
 		[Test]
 		public void VerifyClearKeepsMandatory()
 		{
 			setup();
-			_target.Add(new dummyRule(true));
+			_target.Add(new dummyRuleFirst(true));
 			_target.Clear();
 			Assert.AreEqual(totalNumberOfRules + 1, _target.Count);
 		}
@@ -131,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		{
 			setup();
 			var rulesForDelete = NewBusinessRuleCollection.AllForDelete(new SchedulingResultStateHolder());
-			foreach (INewBusinessRule rule in rulesForDelete)
+			foreach (var rule in rulesForDelete)
 			{
 				if (rule is DataPartOfAgentDay)
 					Assert.IsTrue(rule.ForDelete);
@@ -154,23 +216,27 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void AllForSchedulingShouldConsiderUseValidation()
 		{
 			setup();
-			_state = new SchedulingResultStateHolder();
-			_state.UseValidation = true;
+			_state = new SchedulingResultStateHolder
+			{
+				UseValidation = true
+			};
 			var allForScheduling = NewBusinessRuleCollection.AllForScheduling(_state);
 			Assert.AreEqual(totalNumberOfRules, allForScheduling.Count);
 			_state.UseValidation = false;
 			allForScheduling = NewBusinessRuleCollection.AllForScheduling(_state);
 			Assert.AreEqual(NewBusinessRuleCollection.Minimum().Count + 1, allForScheduling.Count);
-			Assert.IsFalse((collectionContainsType(allForScheduling, typeof(MinWeekWorkTimeRule))));
+			Assert.IsFalse(collectionContainsType(allForScheduling, typeof(MinWeekWorkTimeRule)));
 		}
 
 		[Test]
 		public void ShouldConsiderUseMinWorktimePerWeek()
 		{
 			setup();
-			_state = new SchedulingResultStateHolder();
-			_state.UseMinWeekWorkTime = true;
-			_state.UseValidation = true;
+			_state = new SchedulingResultStateHolder
+			{
+				UseMinWeekWorkTime = true,
+				UseValidation = true
+			};
 			var allForScheduling = NewBusinessRuleCollection.AllForScheduling(_state);
 			Assert.AreEqual(totalNumberOfRules + 1, allForScheduling.Count);
 			Assert.IsTrue(collectionContainsType(allForScheduling, typeof(MinWeekWorkTimeRule)));
@@ -207,8 +273,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		{
 			setup();
 			var scenario = new Scenario("_");
-			var phoneActivity = new Activity("_") { AllowOverwrite = true };
-			var lunch = new Activity("_") { AllowOverwrite = false };
+			var phoneActivity = new Activity("_") {AllowOverwrite = true};
+			var lunch = new Activity("_") {AllowOverwrite = false};
 			var dateOnly = new DateOnly(2016, 05, 23);
 			var shiftCategory1 = new ShiftCategory("_").WithId();
 
@@ -223,10 +289,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			ass1.SetShiftCategory(shiftCategory1);
 
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)),
-				new[] { agent }, new[] { ass1 }, Enumerable.Empty<ISkillDay>());
+				new[] {agent}, new[] {ass1}, Enumerable.Empty<ISkillDay>());
 
 			var bussinesRuleCollection = NewBusinessRuleCollection.All(stateHolder.SchedulingResultState);
-			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> { agent }, CultureInfo.InvariantCulture, bussinesRuleCollection);
+			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> {agent}, CultureInfo.InvariantCulture,
+				bussinesRuleCollection);
 
 			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
 			scheduleDay.BusinessRuleResponseCollection.Count.Should().Be.EqualTo(0);
@@ -242,33 +309,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 		private static bool collectionContainsType(IEnumerable<INewBusinessRule> businessRuleCollection, Type type)
 		{
-			foreach (var rule in businessRuleCollection)
-			{
-				if (rule.GetType().Equals(type))
-					return true;
-			}
-			return false;
+			return businessRuleCollection.Any(rule => rule.GetType() == type);
 		}
 
-		private class dummyRule : INewBusinessRule
+		private class dummyRuleFirst : INewBusinessRule
 		{
-			private readonly bool _mandatory;
-
-			public dummyRule(bool mandatory)
+			public dummyRuleFirst(bool mandatory)
 			{
-				_mandatory = mandatory;
+				IsMandatory = mandatory;
 				FriendlyName = string.Empty;
 			}
 
-			public string ErrorMessage
-			{
-				get { return string.Empty; }
-			}
+			public string ErrorMessage => string.Empty;
 
-			public bool IsMandatory
-			{
-				get { return _mandatory; }
-			}
+			public bool IsMandatory { get; }
 
 			public bool HaltModify { get; set; }
 
@@ -278,13 +332,58 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				set { throw new NotImplementedException(); }
 			}
 
-			public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
+			public bool Checked { get; private set; }
+
+			public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,
+				IEnumerable<IScheduleDay> scheduleDays)
 			{
-				throw new NotImplementedException();
+				Checked = true;
+				return new List<IBusinessRuleResponse>
+				{
+					new BusinessRuleResponse(typeof(dummyRuleFirst), "Check Result of dummyRuleSecond", true,
+						IsMandatory, new DateTimePeriod(), new Person(), new DateOnlyPeriod(), FriendlyName)
+				};
 			}
 
 			public string FriendlyName { get; }
-			public string Description => "Description of dummyRule";
+			public string Description => "Description of dummyRuleFirst";
+		}
+
+		private class dummyRuleSecond : INewBusinessRule
+		{
+			public dummyRuleSecond(bool mandatory)
+			{
+				IsMandatory = mandatory;
+				FriendlyName = string.Empty;
+			}
+
+			public string ErrorMessage => string.Empty;
+
+			public bool IsMandatory { get; }
+
+			public bool HaltModify { get; set; }
+
+			public bool ForDelete
+			{
+				get { throw new NotImplementedException(); }
+				set { throw new NotImplementedException(); }
+			}
+
+			public bool Checked { get; private set; }
+
+			public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,
+				IEnumerable<IScheduleDay> scheduleDays)
+			{
+				Checked = true;
+				return new List<IBusinessRuleResponse>
+				{
+					new BusinessRuleResponse(typeof(dummyRuleSecond), "Check Result of dummyRuleSecond", true,
+						IsMandatory, new DateTimePeriod(), new Person(), new DateOnlyPeriod(), FriendlyName)
+				};
+			}
+
+			public string FriendlyName { get; }
+			public string Description => "Description of dummyRuleSecond";
 		}
 	}
 }

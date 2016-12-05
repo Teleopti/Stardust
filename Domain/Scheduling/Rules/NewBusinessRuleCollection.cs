@@ -172,18 +172,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return result;
 		}
 
-		public IEnumerable<IBusinessRuleResponse> CheckRules(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
+		public IEnumerable<IBusinessRuleResponse> CheckRules(IDictionary<IPerson, IScheduleRange> rangeClones,
+			IEnumerable<IScheduleDay> scheduleDays)
 		{
-			var responseList = new List<IBusinessRuleResponse>();
-			using (new UICultureContext(_culture))
-			{
-				foreach (var rule in this)
-				{
-					var retList = rule.Validate(rangeClones, scheduleDays);
-					responseList.AddRange(retList);
-				}
-			}
-			return responseList;
+			return checkRules(rangeClones, scheduleDays, null);
+		}
+
+		public IEnumerable<IBusinessRuleResponse> CheckRules(IDictionary<IPerson, IScheduleRange> rangeClones,
+			IEnumerable<IScheduleDay> scheduleDays, IEnumerable<IShiftTradeBusinessRuleConfig> ruleConfigs)
+		{
+			return checkRules(rangeClones, scheduleDays, ruleConfigs.ToList());
 		}
 
 		public void DoNotHaltModify(IBusinessRuleResponse businessRuleResponseToOverride)
@@ -299,6 +297,46 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		public static INewBusinessRuleCollection New()
 		{
 			return new NewBusinessRuleCollection();
+		}
+
+		private IEnumerable<IBusinessRuleResponse> checkRules(IDictionary<IPerson, IScheduleRange> rangeClones,
+			IEnumerable<IScheduleDay> scheduleDays, IList<IShiftTradeBusinessRuleConfig> ruleConfigs)
+		{
+			var responseList = new List<IBusinessRuleResponse>();
+			using (new UICultureContext(_culture))
+			{
+				var ruleConfigDictionary = new Dictionary<INewBusinessRule, IShiftTradeBusinessRuleConfig>();
+				var enabledRules = ruleConfigs != null && ruleConfigs.Any()
+					? this.Where(r =>
+					{
+						var ruleConfig = ruleConfigs.FirstOrDefault(c => c.BusinessRuleType == r.GetType().FullName);
+						if (ruleConfig != null && ruleConfig.Enabled)
+						{
+							ruleConfigDictionary.Add(r, ruleConfig);
+						}
+						return ruleConfig == null || ruleConfig.Enabled;
+					})
+					: this;
+
+				foreach (var rule in enabledRules)
+				{
+					var retList = rule.Validate(rangeClones, scheduleDays);
+					if (ruleConfigDictionary.ContainsKey(rule))
+					{
+						var config = ruleConfigDictionary[rule];
+						foreach (var response in retList)
+						{
+							if (config.HandleOptionOnFailed != null)
+							{
+								// TODO: How to set rule response based on configuration? is this correct?
+								response.Overridden = config.HandleOptionOnFailed.Value != RequestHandleOption.AutoDeny;
+							}
+						}
+					}
+					responseList.AddRange(retList);
+				}
+			}
+			return responseList;
 		}
 	}
 }
