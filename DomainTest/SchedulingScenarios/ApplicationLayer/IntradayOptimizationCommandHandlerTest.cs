@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -238,6 +239,22 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 
 			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single().CommandId
 				.Should().Be.EqualTo(command.CommandId);
+		}
+
+
+		[Test]
+		public void NoDuplicateSkillsInEventWhenMultipleSkillgroupsContainsSameSkill()
+		{
+			var skillA = new Skill("A").WithId();
+			var skillB = new Skill("B").WithId();
+			var agentsA = Enumerable.Range(0, 10).Select(x => new Person().KnowsSkill(skillA));
+			var agentsAB = Enumerable.Range(0, 10).Select(x => new Person().KnowsSkill(skillA, skillB));
+			agentsA.Union(agentsAB).ForEach(x => PersonRepository.Has(x));
+
+			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
+
+			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single().Skills.Count()
+				.Should().Be.EqualTo(2);
 		}
 
 		public void Configure(FakeToggleManager toggleManager)
