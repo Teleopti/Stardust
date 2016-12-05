@@ -22,15 +22,16 @@ namespace Teleopti.Ccc.Domain.Islands
 		public IEnumerable<Guid> SkillIds()
 		{
 			var ret = new HashSet<Guid>();
-
 			foreach (var skillGroup in _skillGroups)
 			{
 				foreach (var skillGroupSkill in skillGroup.Skills)
 				{
-					ret.Add(skillGroupSkill.Id.Value);
+					if (skillGroupSkill.Id.HasValue)
+					{
+						ret.Add(skillGroupSkill.Id.Value);
+					}
 				}
 			}
-
 			return ret;
 		}
 	}
