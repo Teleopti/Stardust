@@ -59,9 +59,7 @@ angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', ['TeamSchedul
 			if (scheduleDateMoment.isSame(queryDateMoment, 'day')) return true;
 
 			if (scheduleDateMoment.isBefore(queryDateMoment, 'day')) {
-				if (schedule.DayOff) {
-					return moment(schedule.DayOff.End).isAfter(maximumViewRange.startMoment);
-				} else if (schedule.Projection.length > 0) {
+				if (schedule.Projection.length > 0) {
 					var endTimes = schedule.Projection.map(function (p) {
 						return moment(p.End);
 					});
@@ -69,8 +67,9 @@ angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', ['TeamSchedul
 							if (!prev) return cur;
 							if (prev < cur) return cur;
 							return prev;
-						})
-						.isAfter(maximumViewRange.startMoment);
+						}).isAfter(maximumViewRange.startMoment);
+				} else if (schedule.DayOff) {
+					return moment(schedule.DayOff.End).isAfter(maximumViewRange.startMoment);
 				} else {
 					return false;
 				}
