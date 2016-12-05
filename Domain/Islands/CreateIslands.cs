@@ -45,6 +45,9 @@ namespace Teleopti.Ccc.Domain.Islands
 						if (agentsInSkillGroup *_reduceIslandsLimits.MinimumFactorOfAgentsInOtherSkillGroup >= noAgentsKnowingSkill[skillGroupSkill])
 							continue;
 
+						if (skillGroup.Skills.Count(x => x.Activity == null || x.Activity.Equals(skillGroupSkill.Activity)) < 2)
+							continue; 
+
 						skillGroup.Skills.Remove(skillGroupSkill); //TODO! : förlorar förmodligen lite agenter här - kolla
 						noAgentsKnowingSkill[skillGroupSkill] -= agentsInSkillGroup;
 					}
