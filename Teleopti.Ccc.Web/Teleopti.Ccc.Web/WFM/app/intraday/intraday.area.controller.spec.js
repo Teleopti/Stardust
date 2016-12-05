@@ -10,9 +10,11 @@ describe('IntradayAreaCtrl', function () {
 
 	var skillAreas = [];
 	var skills = [];
+	var unsupportedSkills = [];
 	var skillAreaInfo;
 	var trafficAndPerformanceData;
 	var staffingData;
+	var emptyStaffingData;
 	var timeData;
 
 	beforeEach(function() {
@@ -41,6 +43,13 @@ describe('IntradayAreaCtrl', function () {
 				DoDisplayData: true
 			}];
 
+		unsupportedSkills = [
+			{
+				Id: "63b0ac3d-06b5-42d7-bb0a-d7b2fd272196",
+				Name: "Unsupported skill1",
+				DoDisplayData: false
+			}];
+
 		skillAreas = [
 			{
 				Id: "fa9b5393-ef48-40d1-b7cc-09e797589f81",
@@ -51,7 +60,14 @@ describe('IntradayAreaCtrl', function () {
 				Id: "836cebb6-cee8-41a1-bb62-729f4b3a63f4",
 				Name: "my skill area 2",
 				Skills: skills
-			}];
+			},
+			{
+				Id: "3f43f39b-f01b-47e7-b59f-35fc09fd5e41",
+				Name: "my unsupported skill area 1",
+				Skills: unsupportedSkills,
+				UnsupportedSkills: unsupportedSkills
+			}
+		];
 
 		skillAreaInfo = {
 			HasPermissionToModifySkillArea: true,
@@ -105,6 +121,10 @@ describe('IntradayAreaCtrl', function () {
 				ScheduledStaffing: [1, 2, 3]
 			}
 		};
+
+		emptyStaffingData = {
+			DataSeries: null
+		};
 	});
 
 	beforeEach(inject(function (_$httpBackend_, _$controller_, _$rootScope_, _$filter_, _$translate_, _$interval_, _NoticeService_) {
@@ -149,12 +169,22 @@ describe('IntradayAreaCtrl', function () {
 			return [200, staffingData];
 		});
 
+		$httpBackend.whenGET("../api/intraday/monitorskillareastaffing/3f43f39b-f01b-47e7-b59f-35fc09fd5e41")
+		.respond(function () {
+			return [200, emptyStaffingData];
+		});
+
 		$httpBackend.whenGET("../api/intraday/lateststatisticstimeforskill/5f15b334-22d1-4bc1-8e41-72359805d30f")
 		.respond(function () {
 			return [200, timeData];
 		});
 
 		$httpBackend.whenGET("../api/intraday/lateststatisticstimeforskillarea/fa9b5393-ef48-40d1-b7cc-09e797589f81")
+		.respond(function () {
+			return [200, timeData];
+		});
+
+		$httpBackend.whenGET("../api/intraday/lateststatisticstimeforskillarea/3f43f39b-f01b-47e7-b59f-35fc09fd5e41")
 		.respond(function () {
 			return [200, timeData];
 		});
@@ -203,10 +233,10 @@ describe('IntradayAreaCtrl', function () {
 
 		scope.deleteSkillArea(scope.skillAreas[1]);
 
-		expect(scope.skillAreas.length).toEqual(2);
+		expect(scope.skillAreas.length).toEqual(3);
 		$httpBackend.flush();
 		expect(scope.selectedItem).toEqual(null);
-		expect(scope.skillAreas.length).toEqual(1);
+		expect(scope.skillAreas.length).toEqual(2);
 	});
 
 	it('should monitor first skill if no skill areas', function () {
@@ -312,6 +342,16 @@ describe('IntradayAreaCtrl', function () {
 		$httpBackend.flush();
 
 		expect(scope.viewObj.forecastedStaffing.series.length).toBeGreaterThan(3);
+	});
+
+	it('should return no staffing when no supported skills in skill area', function () {
+		createController(false);
+		scope.activeTab = 2;
+
+		scope.selectedSkillAreaChange(scope.skillAreas[2]);
+		$httpBackend.flush();
+
+		expect(scope.viewObj.forecastedStaffing.series.length).toEqual(0);
 	});
 
 	it('should show optimal staffing when toggle is enabled', function () {

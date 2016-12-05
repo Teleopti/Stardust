@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -130,6 +131,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<SkillStaffingInterval> GetBySkills(Guid[] guids, DateTime dateTime, DateTime endDateTime)
 	    {
+			if (!guids.Any())
+				throw new QueryException("SkillIdList Parameter Empty");
 		    var intervals = new List<SkillStaffingInterval>();
 		    foreach (var skillId in guids)
 		    {

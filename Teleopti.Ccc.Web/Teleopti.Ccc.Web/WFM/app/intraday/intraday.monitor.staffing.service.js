@@ -27,6 +27,8 @@
 				staffingData.actualStaffingSeries = [];
 				staffingData.scheduledStaffing = [];
 
+				if (result.DataSeries == null)
+					return staffingData;
 				staffingData.forecastedStaffing.series = result.DataSeries.ForecastedStaffing;
 				staffingData.forecastedStaffing.updatedSeries = result.DataSeries.UpdatedForecastedStaffing;
 

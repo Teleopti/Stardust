@@ -178,7 +178,7 @@
 				for (var i = 0; i < item.Skills.length; i++) {
 					for (var j = 0; j < $scope.skills.length; j++) {
 						if (item.Skills[i].Id === $scope.skills[j].Id && $scope.skills[j].DoDisplayData === false) {
-							item.UnsupportedSkills.push($scope.skills[j])
+							item.UnsupportedSkills.push($scope.skills[j]);
 							item.Skills[i].DoDisplayData = false;
 						}
 						else if(item.Skills[i].Id === $scope.skills[j].Id && $scope.skills[j].DoDisplayData === true){
@@ -248,6 +248,7 @@
 
 				if ($scope.selectedItem !== null && $scope.selectedItem !== undefined) {
 					if ($scope.selectedItem.Skills) {
+						console.log();
 						services[activeTab].pollSkillAreaData($scope.selectedItem, $scope.showOptimalStaffing, $scope.showScheduledStaffing);
 						var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
 					} else {

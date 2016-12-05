@@ -124,6 +124,19 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
+		public void ShouldReturnNoStaffingWhenNoSupportedSkill()
+		{
+			fakeScenarioAndIntervalLength();
+
+			var skill = createEmailSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30));
+			SkillRepository.Has(skill);
+
+			var vm = Target.Load(new Guid[] { skill.Id.Value });
+
+			vm.DataSeries.Should().Be.EqualTo(null);
+		}
+
+		[Test]
 		public void ShouldReturnStaffingCorrectlyWhenViewingBeforeSkillIsOpen()
 		{
 			var userNow = new DateTime(2016, 8, 26, 7, 45, 0, DateTimeKind.Utc);
