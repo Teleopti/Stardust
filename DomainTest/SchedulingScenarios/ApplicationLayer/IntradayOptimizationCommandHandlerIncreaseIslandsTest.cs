@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 			events.Any(x => x.AgentsInIsland.Count() == 8).Should().Be.True();
 		}
 
-		[Test, Ignore("42049")]
+		[Test]
 		public void ShouldNotRemoveSkillIfActivityCompositionChangesInSkillGroup()
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 4);
