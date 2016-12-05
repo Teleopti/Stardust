@@ -56,7 +56,7 @@ namespace Teleopti.Wfm.AdministrationTest
 				executor.Execute(conn => dropLogin(appUser, conn));
 			}
 
-			var databaseTasks = new DatabaseTasks(executor);
+			var databaseTasks = new DatabaseTasks(executor, null);
 			var databases = new[]
 			{
 				tenant + "_TeleoptiApp", tenant + "_TeleoptiAnalytics", tenant + "_TeleoptiAgg", TestTenantDatabaseName,

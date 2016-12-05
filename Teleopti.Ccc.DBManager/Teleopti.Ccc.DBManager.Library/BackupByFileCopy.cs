@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			_usingMaster = usingMaster;
 		}
 
-		public string DatabaseName { get; private set; }
+		public string DatabaseName { get; }
 		
 		public Backup Backup(string name)
 		{
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			SqlConnection.ClearAllPools();
 
-			var state = new DatabaseTasks(_usingMaster);
+			var state = new DatabaseTasks(_usingMaster, _usingDatabase);
 			state.SetOffline(DatabaseName);
 			return new GenericDisposable(()=>state.SetOnline(DatabaseName));
 		}

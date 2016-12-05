@@ -57,11 +57,12 @@ namespace Teleopti.Ccc.DBManager.Library
 		public int ExecuteScalar(string sql, int timeout = 30, IDictionary<string, object> parameters = null)
 		{
 			parameters = parameters ?? new Dictionary<string, object>();
-			int result = 0;
-			handleWithRetry(sql, s =>
+			var result = 0;
+
+			handleWithRetry(() => sql, () =>
 			{
 				var regex = new Regex("^GO", RegexOptions.IgnoreCase | RegexOptions.Multiline);
-				var allScripts = regex.Split(s);
+				var allScripts = regex.Split(sql);
 				var statements = allScripts.Where(x => !string.IsNullOrWhiteSpace(x));
 				using (var connection = _openConnection())
 				{
@@ -95,29 +96,42 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public void ExecuteTransactionlessNonQuery(string sql, int timeout = 30)
 		{
-			handleWithRetry(sql, s =>
+			string logSql = null;
+
+			handleWithRetry(() => logSql, () =>
 			{
+				var regex = new Regex(@"^\s*GO\s*$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+				var allScripts = regex.Split(sql);
+				var statements = allScripts.Where(x => !string.IsNullOrWhiteSpace(x));
+
 				using (var connection = _openConnection())
 				{
-					using (var command = connection.CreateCommand())
+					foreach (var statement in statements)
 					{
-						command.CommandType = CommandType.Text;
-						command.CommandTimeout = timeout;
-						command.CommandText = s;
-						command.ExecuteNonQuery();
+						logSql = statement;
+						using (var command = connection.CreateCommand())
+						{
+							command.CommandType = CommandType.Text;
+							command.CommandTimeout = timeout;
+							command.CommandText = statement;
+							command.ExecuteNonQuery();
+						}
 					}
+
 				}
 			});
 		}
-
+		
 		public void ExecuteNonQuery(string sql, int timeout = 30, IDictionary<string, object> parameters = null)
 		{
-			handleWithRetry(sql, s =>
+			parameters = parameters ?? new Dictionary<string, object>();
+			string logSql = null;
+
+			handleWithRetry(() => logSql, () =>
 			{
-				parameters = parameters ?? new Dictionary<string, object>();
 
 				var regex = new Regex("^GO", RegexOptions.IgnoreCase | RegexOptions.Multiline);
-				var allScripts = regex.Split(s);
+				var allScripts = regex.Split(sql);
 				var statements = allScripts.Where(x => !string.IsNullOrWhiteSpace(x));
 
 				using (var connection = _openConnection())
@@ -131,6 +145,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 							foreach (var statement in statements)
 							{
+								logSql = statement;
 								command.Parameters.Clear();
 								foreach (var parameter in parameters)
 								{
@@ -151,14 +166,11 @@ namespace Teleopti.Ccc.DBManager.Library
 			});
 		}
 
-		private void handleWithRetry(string sql, Action<string> action)
+		private void handleWithRetry(Func<string> logSql, Action action)
 		{
 			try
 			{
-				_retryPolicy.ExecuteAction(() =>
-				{
-					action.Invoke(sql);
-				});
+				_retryPolicy.ExecuteAction(action);
 			}
 			catch (Exception exception)
 			{
@@ -166,11 +178,11 @@ namespace Teleopti.Ccc.DBManager.Library
 				SqlException sqlException;
 				if ((sqlException = exception as SqlException) != null)
 				{
-					message = string.Format("{0}{1}Error numbers: {2}", message, Environment.NewLine, string.Join(", ", sqlException.Errors.OfType<SqlError>().Select(e => e.Number)));
+					message = $"{message}{Environment.NewLine}Error numbers: {string.Join(", ", sqlException.Errors.OfType<SqlError>().Select(e => e.Number))}";
 				}
 
 				_upgradeLog.Write(message, "ERROR");
-				_upgradeLog.Write("Failing script: " + sql, "ERROR");
+				_upgradeLog.Write("Failing script: " + logSql.Invoke(), "ERROR");
 
 				throw;
 			}

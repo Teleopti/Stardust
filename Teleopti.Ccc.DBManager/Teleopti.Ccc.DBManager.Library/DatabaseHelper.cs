@@ -192,22 +192,16 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		private void dropIfExists()
 		{
-			var tasks = new DatabaseTasks(_usingMaster);
-			if (!tasks.Exists(DatabaseName)) return;
-
-			tasks.SetOnline(DatabaseName); // if dropping a database that is offline, the file on disk will remain!
-			_usingMaster.ExecuteTransactionlessNonQuery(
-				string.Format("ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;", DatabaseName), 300);
-			tasks.Drop(DatabaseName);
+			if (!Tasks().Exists(DatabaseName)) return;
+			Tasks().KillConnections(DatabaseName);
+			Tasks().Drop(DatabaseName);
 		}
 
 		private SqlConnection openConnection(bool masterDb = false)
 		{
 			var connectionStringBuilder = new SqlConnectionStringBuilder(ConnectionString);
 			if (masterDb)
-			{
 				connectionStringBuilder.InitialCatalog = MasterDatabaseName;
-			}
 			var conn = new SqlConnection(connectionStringBuilder.ConnectionString);
 			conn.Open();
 			return conn;
@@ -230,7 +224,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public DatabaseTasks Tasks()
 		{
-			return new DatabaseTasks(_usingMaster);
+			return new DatabaseTasks(_usingMaster, _usingDatabase);
 		}
 	}
 }

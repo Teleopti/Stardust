@@ -39,25 +39,10 @@ namespace Teleopti.Ccc.DBManager.Library
 			var localSource = Path.Combine(sqlBackupPath(), fileName);
 			File.Copy(source, localSource, true);
 
-			// http://stackoverflow.com/questions/7197574/script-to-kill-all-connections-to-a-database-more-than-restricted-user-rollback
-			// kill all connections and drop the database
-			// alter database (like below) does not always work, because rollback does not always succeed or times out
-			// ALTER DATABASE {0} SET SINGLE_USER WITH ROLLBACK IMMEDIATE
-			var sql = string.Format(@"
-				
-				DECLARE @kill varchar(8000) = '';
-				SELECT @kill = @kill + 'kill ' + CONVERT(varchar(5), spid) + ';'
-				FROM master..sysprocesses 
-				WHERE dbid = db_id('{0}')
-				EXEC(@kill);
-				
-				IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'{0}')
-					DROP DATABASE {0}
-				
-				RESTORE DATABASE {0} FROM DISK = '{1}' WITH REPLACE
-
-				", _databaseName, localSource);
-			_usingMaster.Execute(sql);
+			var tasks = new DatabaseTasks(_usingMaster, null);
+			tasks.KillConnections(_databaseName);
+			tasks.Drop(_databaseName);
+			_usingMaster.Execute($@"RESTORE DATABASE {_databaseName} FROM DISK = '{localSource}' WITH REPLACE");
 
 			File.Delete(localSource);
 			return true;

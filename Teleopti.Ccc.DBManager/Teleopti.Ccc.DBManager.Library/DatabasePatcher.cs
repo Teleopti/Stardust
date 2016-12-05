@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				}
 
 				//Does the db exist?
-				var databaseExists = new DatabaseTasks(masterExecuteSql);
+				var databaseExists = new DatabaseTasks(masterExecuteSql, null);
 				if (databaseExists.Exists(commandLineArgument.DatabaseName))
 				{
 					//Try create or re-create login
