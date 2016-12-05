@@ -301,7 +301,7 @@
     <Compile Include="ScheduleStorageRepositoryWrapperTest.cs" />
     <Compile Include="ResourceCalculation\CalculateResourceReadModelTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationTest.cs" />
-    <Compile Include="SchedulingScenarios\ApplicationLayer\IntradayOptimizationCommandHandlerIncreaseIslandsTest.cs" />
+    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCommandHandlerIncreaseIslandsTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCascadingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationTeamBlockDesktopTest.cs" />
@@ -336,7 +336,7 @@
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestHandlerTest.cs" />
     <Compile Include="Budgeting\AbsenceRequestBudgetGroupValidationHelperTest.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNewByFakeTest.cs" />
-    <Compile Include="SchedulingScenarios\ApplicationLayer\IntradayOptimizationCommandHandlerTest.cs" />
+    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPersonPeriodDateFixerTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodMapTests.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\SoftDeleteTest.cs" />
