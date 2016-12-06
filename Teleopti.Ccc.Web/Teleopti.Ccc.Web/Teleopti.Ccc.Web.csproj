@@ -1420,6 +1420,7 @@
     <Content Include="WFM\app\teamSchedule\html\timezonePicker.tpl.html" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.cmd.addOvertime.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.cmd.moveShift.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.component.organizationPicker .spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.teamsDatetimePicker.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.timeline.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.organizationPicker.js" />
