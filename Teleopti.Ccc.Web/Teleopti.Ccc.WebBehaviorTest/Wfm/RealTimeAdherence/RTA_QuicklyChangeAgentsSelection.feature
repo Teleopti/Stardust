@@ -64,6 +64,7 @@ Scenario: Quickly change agent selection for skill, site and team
          And 'Pierre Baldi' sets his phone state to 'LoggedOut'
          And 'Ashley Andeen' sets his phone state to 'LoggedOut'
          And 'John King' sets his phone state to 'LoggedOut'
+		 Given the time is '2016-06-14 08:05:00'
 		 Given I am viewing real time adherence for sites 'London' and teams 'ParisTeam1' with skill 'Sales'
          Then I should see agent 'Pierre Baldi' with state 'LoggedOut'
          And I should see agent 'Ashley Andeen' with state 'LoggedOut'

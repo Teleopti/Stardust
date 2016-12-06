@@ -208,5 +208,67 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			person2.TeamName.Should().Be("Angel");
 			person2.Name.Should().Be("Ashley Andeen");
 		}
+
+		[Test]
+		public void ShouldGetAgentForSkillSiteAndTeam()
+		{
+			var paris = Guid.NewGuid();
+			var parisTeam = Guid.NewGuid();
+			var london = Guid.NewGuid();
+			var londonTeam1 = Guid.NewGuid();
+			var londonTeam2 = Guid.NewGuid();
+			var support = Guid.NewGuid();
+			var sales = Guid.NewGuid();
+			var johnSmith = Guid.NewGuid();
+			var billGates = Guid.NewGuid();
+			var pierreBaldi = Guid.NewGuid();
+			var ashleyAndeen = Guid.NewGuid();
+			Now.Is("2016-11-09".Utc());
+			Database
+				.WithSite(paris, "paris")
+				.WithTeam(parisTeam, "parisTeam")
+				.WithAgent(johnSmith, "John Smith", 123)
+				.WithSkill(support)
+				.InSkillGroupPage()
+
+				.WithSite(london, "london")
+				.WithTeam(londonTeam1, "londonTeam1")
+				.WithAgent(billGates, "Bill Gates", 124)
+				.WithSkill(support)
+				.InSkillGroupPage()
+
+
+				.WithSite(london, "london")
+				.WithTeam(londonTeam1, "londonTeam1")
+				.WithAgent(pierreBaldi, "Pierre Baldi", 125)
+				.WithSkill(sales)
+				.InSkillGroupPage()
+
+				.WithTeam(londonTeam2, "londonTeam2")
+				.WithAgent(ashleyAndeen, "Ashley Andeen", 126)
+				.WithSkill(support)
+				.InSkillGroupPage()
+				.WithAgentNameDisplayedAs("{EmployeeNumber} - {FirstName} {LastName}")
+				;
+
+			var result = Target.For(new ViewModelFilter { SiteIds = new[] { paris }, TeamIds = new [] {londonTeam1}, SkillIds = new[] { support } });
+
+			var johnSmithModel = result.Single(x => x.PersonId == johnSmith);
+			johnSmithModel.SiteId.Should().Be(paris.ToString());
+			johnSmithModel.SiteName.Should().Be("paris");
+			johnSmithModel.TeamId.Should().Be(parisTeam.ToString());
+			johnSmithModel.TeamName.Should().Be("parisTeam");
+			johnSmithModel.Name.Should().Be("123 - John Smith");
+
+			var billGatesModel = result.Single(x => x.PersonId == billGates);
+			billGatesModel.SiteId.Should().Be(london.ToString());
+			billGatesModel.SiteName.Should().Be("london");
+			billGatesModel.TeamId.Should().Be(londonTeam1.ToString());
+			billGatesModel.TeamName.Should().Be("londonTeam1");
+			billGatesModel.Name.Should().Be("124 - Bill Gates");
+
+			result.Select(x => x.PersonId).Should().Not.Contain(ashleyAndeen);
+			result.Select(x => x.PersonId).Should().Not.Contain(pierreBaldi);
+		}
 	}
 }

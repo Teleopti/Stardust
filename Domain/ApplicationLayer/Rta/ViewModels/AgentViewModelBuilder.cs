@@ -73,6 +73,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public IEnumerable<AgentViewModel> For(ViewModelFilter filter)
 		{
+			if (filter.SiteIds != null && filter.TeamIds != null && filter.SkillIds != null)
+				return forSkillSiteTeam(filter.SiteIds.ToArray(), filter.TeamIds.ToArray(), filter.SkillIds.ToArray());
 			if (filter.SiteIds != null && filter.SkillIds != null)
 				return forSkillAndSite(filter.SiteIds.ToArray(), filter.SkillIds.ToArray());
 			if (filter.SiteIds != null)
@@ -188,6 +190,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						TeamId = grouping.TeamId.ToString(),
 						TeamName = _teamRepository.Load(grouping.TeamId.Value).Description.Name
 					}).ToArray();
+		}
+
+		private IEnumerable<AgentViewModel> forSkillSiteTeam(IEnumerable<Guid> sites, IEnumerable<Guid> teams, IEnumerable<Guid> skills)
+		{
+			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
+			return
+				(
+					from site in sites
+					from team in teams
+					from skill in skills
+					from grouping in _groupingReadOnlyRepository.DetailsForGroup(skill, _now.LocalDateOnly())
+					where site == grouping.SiteId.Value ||
+						  team == grouping.TeamId.Value
+					select new AgentViewModel
+					{
+						PersonId = grouping.PersonId,
+						Name =
+							commonAgentNameSettings.BuildCommonNameDescription(grouping.FirstName, grouping.LastName,
+								grouping.EmploymentNumber),
+						SiteId = grouping.SiteId.ToString(),
+						SiteName = _siteRepository.Load(grouping.SiteId.Value).Description.Name,
+						TeamId = grouping.TeamId.ToString(),
+						TeamName = _teamRepository.Load(grouping.TeamId.Value).Description.Name
+					}
+					).ToArray();
 		}
 
 	}
