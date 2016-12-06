@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Interfaces.Domain;
 
@@ -29,12 +30,13 @@ namespace Teleopti.Ccc.Domain.Islands
 			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(skillGroups);
 			while (true)
 			{
-				var skillGroupsInIsland = skillGroups.Select(skillGroup => new List<SkillGroup> { skillGroup }).ToList();
-				while(moveSkillGroupToCorrectIsland(skillGroupsInIsland)) {}
+				var skillGroupsInIslands = skillGroups.Select(skillGroup => new List<SkillGroup> { skillGroup }).ToList();
+				while(moveSkillGroupToCorrectIsland(skillGroupsInIslands)) {}
+				skillGroupsInIslands.Where(x => x.Count == 0).ToArray().ForEach(x => skillGroupsInIslands.Remove(x));
 
-				if (!_reduceSkillGroups.Execute(skillGroupsInIsland, noAgentsKnowingSkill))
+				if (!_reduceSkillGroups.Execute(skillGroupsInIslands, noAgentsKnowingSkill))
 				{
-					return skillGroupsInIsland.Where(x => x.Count > 0).Select(skillGroupInIsland => new Island(skillGroupInIsland, noAgentsKnowingSkill)).ToList();
+					return skillGroupsInIslands.Select(skillGroupInIsland => new Island(skillGroupInIsland, noAgentsKnowingSkill)).ToList();
 				}
 			}
 		}
