@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Islands
 				.Should().Be.EqualTo(3);
 		}
 
-		[Test, Ignore("To be fixed")]
+		[Test]
 		public void ShouldCountNumberOfAgentsOnSkill()
 		{
 			var skill1 = new Skill("1");

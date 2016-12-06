@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.DayOffPlanning;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands
@@ -37,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Islands
 
 
 			reduceSkillGroups(skillGroupInIslandsEmptyRemoved, noAgentsKnowingSkill);
-			return skillGroupInIslandsEmptyRemoved.Select(skillGroupInIsland => new Island(skillGroupInIsland)).ToList();
+			return skillGroupInIslandsEmptyRemoved.Select(skillGroupInIsland => new Island(skillGroupInIsland, noAgentsKnowingSkill)).ToList();
 		}
 
 		private static void moveSkillGroupToCorrectIsland(IList<List<SkillGroup>> skillGroupInIslands)

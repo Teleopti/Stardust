@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Islands.ClientModel;
 using Teleopti.Interfaces.Domain;
 
@@ -10,10 +9,12 @@ namespace Teleopti.Ccc.Domain.Islands
 	public class Island : IIsland
 	{
 		private readonly IEnumerable<SkillGroup> _skillGroups;
+		private readonly IDictionary<ISkill, int> _noAgentsKnowingSkill;
 
-		public Island(IEnumerable<SkillGroup> skillGroups)
+		public Island(IEnumerable<SkillGroup> skillGroups, IDictionary<ISkill, int> noAgentsKnowingSkill)
 		{
 			_skillGroups = skillGroups;
+			_noAgentsKnowingSkill = noAgentsKnowingSkill;
 		}
 
 		public IEnumerable<IPerson> AgentsInIsland()
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Islands
 				var skillGroupModel = new SkillGroupModel();
 				foreach (var skill in skillGroup.Skills)
 				{
-					skillGroupModel.Skills.Add(new SkillModel {Name = skill.Name});
+					skillGroupModel.Skills.Add(new SkillModel {Name = skill.Name, NumberOfAgentsOnSkill = _noAgentsKnowingSkill[skill]});
 				}
 				skillGroupModel.NumberOfAgentsOnSkillGroup = skillGroup.Agents.Count();
 				ret.SkillGroups.Add(skillGroupModel);
