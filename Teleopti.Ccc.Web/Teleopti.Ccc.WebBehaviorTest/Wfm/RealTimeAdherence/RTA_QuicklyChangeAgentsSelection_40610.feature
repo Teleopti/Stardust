@@ -1,5 +1,5 @@
 ﻿@RTA
-@Ignore
+
 Feature: Quickly change agent selection for skill(s), site(s) and/or team(s)
 	In order to easier find the agent to blame
 	As a real time analyst
