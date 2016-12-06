@@ -42,10 +42,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public IEnumerable<AgentViewModel> ForTeam(Guid teamId)
 		{
 			var team = _teamRepository.Get(teamId);
-			var isPermitted = _permissionProvider.Current().IsPermitted(
-				DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,
-				_now.LocalDateOnly(),
-				team);
+			var today = _now.LocalDateOnly();
+			var isPermitted =
+				_permissionProvider.Current()
+					.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, today, team);
 			if (!isPermitted)
 			{
 				throw new PermissionException();
@@ -53,24 +53,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
 
-			var today = _now.LocalDateOnly();
 			return _personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(today, today))
 				.Select(
 					x =>
 						new AgentViewModel
 						{
 							PersonId = x.Id.GetValueOrDefault(),
-							Name = commonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(x.Id.GetValueOrDefault())),
+							Name = commonAgentNameSettings.BuildCommonNameDescription(x),
 							SiteId = team.Site.Id.ToString(),
 							SiteName = team.Site.Description.Name,
 							TeamId = team.Id.ToString(),
 							TeamName = team.Description.Name
 						}).ToArray();
 		}
-
-
-
-
+		
 		public IEnumerable<AgentViewModel> For(ViewModelFilter filter)
 		{
 			if (filter.SiteIds != null && filter.TeamIds != null && filter.SkillIds != null)
@@ -88,7 +84,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		private IEnumerable<AgentViewModel> forSites(IEnumerable<Guid> siteIds)
 		{
-			var today = new DateOnly(_now.UtcDateTime());
+			var today = _now.LocalDateOnly();
 			var lookup = _siteRepository.LoadAll().ToLookup(s => s.Id.GetValueOrDefault());
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
 			return
@@ -110,7 +106,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		private IEnumerable<AgentViewModel> forTeams(IEnumerable<Guid> teamIds)
 		{
-			var today = new DateOnly(_now.UtcDateTime());
+			var today = _now.LocalDateOnly();
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
 			return
 				(
@@ -130,10 +126,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private IEnumerable<AgentViewModel> forSkill(IEnumerable<Guid> skills)
 		{
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
+			var today = _now.LocalDateOnly();
 			return
 				(
 					from skill in skills
-					from grouping in _groupingReadOnlyRepository.DetailsForGroup(skill, _now.LocalDateOnly())
+					from grouping in _groupingReadOnlyRepository.DetailsForGroup(skill, today)
 					select new AgentViewModel
 					{
 						Name =
@@ -150,12 +147,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private IEnumerable<AgentViewModel> forSkillAndSite(IEnumerable<Guid> sites, IEnumerable<Guid> skills)
 		{
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
+			var today = _now.LocalDateOnly();
 			return
 				(
-					from site in sites
 					from skill in skills
-					from grouping in _groupingReadOnlyRepository.DetailsForGroup(skill, _now.LocalDateOnly())
-					where site == grouping.SiteId.Value
+					from grouping in _groupingReadOnlyRepository.DetailsForGroup(skill, today)
+					where sites.Contains(grouping.SiteId.Value)
 					select new AgentViewModel
 					{
 						PersonId = grouping.PersonId,
@@ -172,13 +169,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		private IEnumerable<AgentViewModel> forSkillAndTeam(IEnumerable<Guid> teams, IEnumerable<Guid> skills)
 		{
+			var today = _now.LocalDateOnly();
+			var currentTeams = _teamRepository.FindTeams(teams).ToLookup(t => t.Id.GetValueOrDefault(), v => v.Description.Name);
+			var allSites = _siteRepository.LoadAll().ToLookup(t => t.Id.GetValueOrDefault(), v => v.Description.Name);
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
 			return
 				(
 					from skill in skills
-					from team in teams
-					from grouping in _groupingReadOnlyRepository.DetailsForGroup(skill, _now.LocalDateOnly())
-					where team == grouping.TeamId.Value
+					from grouping in _groupingReadOnlyRepository.DetailsForGroup(skill, today)
+					where teams.Contains(grouping.TeamId.Value)
 					select new AgentViewModel
 					{
 						Name =
@@ -186,36 +185,42 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 								grouping.EmploymentNumber),
 						PersonId = grouping.PersonId,
 						SiteId = grouping.SiteId.ToString(),
-						SiteName = _siteRepository.Load(grouping.SiteId.Value).Description.Name,
+						SiteName = allSites[grouping.SiteId.Value].FirstOrDefault(),
 						TeamId = grouping.TeamId.ToString(),
-						TeamName = _teamRepository.Load(grouping.TeamId.Value).Description.Name
+						TeamName = currentTeams[grouping.TeamId.Value].FirstOrDefault()
 					}).ToArray();
 		}
 
 		private IEnumerable<AgentViewModel> forSkillSiteTeam(IEnumerable<Guid> sites, IEnumerable<Guid> teams, IEnumerable<Guid> skills)
 		{
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
-			return
-				(
-					from site in sites
-					from team in teams
-					from skill in skills
-					from grouping in _groupingReadOnlyRepository.DetailsForGroup(skill, _now.LocalDateOnly())
-					where site == grouping.SiteId.Value ||
-						  team == grouping.TeamId.Value
-					select new AgentViewModel
-					{
-						PersonId = grouping.PersonId,
-						Name =
-							commonAgentNameSettings.BuildCommonNameDescription(grouping.FirstName, grouping.LastName,
-								grouping.EmploymentNumber),
-						SiteId = grouping.SiteId.ToString(),
-						SiteName = _siteRepository.Load(grouping.SiteId.Value).Description.Name,
-						TeamId = grouping.TeamId.ToString(),
-						TeamName = _teamRepository.Load(grouping.TeamId.Value).Description.Name
-					}
-					).ToArray();
-		}
+			var today = _now.LocalDateOnly();
+			IEnumerable<ITeam> relevantTeams = _teamRepository.FindTeams(teams);
+			foreach (var site in sites)
+			{
+				relevantTeams = relevantTeams.Concat(_teamRepository.FindTeamsForSite(site));
+			}
+			var currentTeams = relevantTeams.ToLookup(t => t.Id.GetValueOrDefault(), v => v.Description.Name);
 
+			var allSites = _siteRepository.LoadAll().ToLookup(t => t.Id.GetValueOrDefault(), v => v.Description.Name);
+			return
+			(
+				from skill in skills
+				from grouping in _groupingReadOnlyRepository.DetailsForGroup(skill, today)
+				where sites.Contains(grouping.SiteId.Value) ||
+					  teams.Contains(grouping.TeamId.Value)
+				select new AgentViewModel
+				{
+					PersonId = grouping.PersonId,
+					Name =
+						commonAgentNameSettings.BuildCommonNameDescription(grouping.FirstName, grouping.LastName,
+							grouping.EmploymentNumber),
+					SiteId = grouping.SiteId.ToString(),
+					SiteName = allSites[grouping.SiteId.Value].FirstOrDefault(),
+					TeamId = grouping.TeamId.ToString(),
+					TeamName = currentTeams[grouping.TeamId.Value].FirstOrDefault()
+				}
+			).ToArray();
+		}
 	}
 }
