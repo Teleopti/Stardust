@@ -19,7 +19,7 @@
 
 		ctrl.$onInit = $onInit;
 		ctrl.$onChanges = $onChanges;
-		ctrl.onSelectionChanged = onSelectionChanged;
+		ctrl.onSelectionDone = onSelectionDone;
 		ctrl.shortDisplayNameOfTheSelected = shortDisplayNameOfTheSelected;
 		ctrl.isSiteChecked = isSiteChecked;
 		ctrl.toggleSite = toggleSite;
@@ -27,7 +27,7 @@
 		function $onInit() {
 			populateGroupList();
 			ctrl.selectedGroups = [];
-		    onSelectionChanged();
+			onSelectionDone();
 		}
 
 		function $onChanges(changesObj) {
@@ -83,8 +83,6 @@
 					}
 				});
 			}
-			
-			ctrl.onPick({ groups: ctrl.selectedGroups });
 		}
 
 		function isSiteChecked(teams) {
@@ -99,7 +97,7 @@
 			return isChecked;
 		}
 
-		function onSelectionChanged() {
+		function onSelectionDone() {
 			ctrl.onPick({ groups: ctrl.selectedGroups });
 		}
 	}
