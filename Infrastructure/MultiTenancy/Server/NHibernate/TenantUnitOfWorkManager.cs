@@ -9,10 +9,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 {
 	public class TenantUnitOfWorkManager : ITenantUnitOfWork, ICurrentTenantSession, IDisposable
 	{
-		private readonly ISessionFactory _sessionFactory;
+		private readonly Lazy<ISessionFactory> _sessionFactory;
 		private readonly TenantSessionContext _context;
 
-		private TenantUnitOfWorkManager(TenantSessionContext context, ISessionFactory sessionFactory)
+		private TenantUnitOfWorkManager(TenantSessionContext context, Lazy<ISessionFactory> sessionFactory)
 		{
 			_context = context;
 			_sessionFactory = sessionFactory;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 
 			return new TenantUnitOfWorkManager(
 				new TenantSessionContext(connectionString),
-				cfg.BuildSessionFactory()
+				new Lazy<ISessionFactory>(() => cfg.BuildSessionFactory())
 				);
 		}
 
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 			if (HasCurrentSession())
 				return new GenericDisposable(() => {});
 
-			var session = _sessionFactory.OpenSession();
+			var session = _sessionFactory.Value.OpenSession();
 			session.BeginTransaction();
 			_context.Set(session);
 			return new GenericDisposable(CommitAndDisposeCurrent);
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 			if (_sessionFactory == null) return;
 			//to end just current transaction doesn't make sense in real code, but makes testing easier
 			CancelAndDisposeCurrent();
-			_sessionFactory.Dispose();
+			_sessionFactory.Value.Dispose();
 		}
 		
 	}

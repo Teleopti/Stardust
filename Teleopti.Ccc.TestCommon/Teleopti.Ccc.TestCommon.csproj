@@ -325,6 +325,7 @@
     <Compile Include="FakeData\FakeCurrentAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="FakeRepositories\Rta\FakeMappingReader.cs" />
     <Compile Include="IoC\InfrastructureTestAttribute.cs" />
+    <Compile Include="IoC\IntegrationIoCTest.cs" />
     <Compile Include="IoC\IoCTestService.cs" />
     <Compile Include="IoC\ISetupConfiguration.cs" />
     <Compile Include="IoC\ISystem.cs" />
