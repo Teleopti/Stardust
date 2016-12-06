@@ -9,18 +9,18 @@ namespace Teleopti.Ccc.Domain.Islands
 	{
 		private readonly CreateSkillGroups _createSkillGroups;
 		private readonly IPeopleInOrganization _peopleInOrganization;
-		private readonly ReduceIslandsLimits _reduceIslandsLimits;
 		private readonly NumberOfAgentsKnowingSkill _numberOfAgentsKnowingSkill;
+		private readonly ReduceSkillGroups _reduceSkillGroups;
 
 		public CreateIslands(CreateSkillGroups createSkillGroups,
 												IPeopleInOrganization peopleInOrganization,
-												ReduceIslandsLimits reduceIslandsLimits,
-												NumberOfAgentsKnowingSkill numberOfAgentsKnowingSkill)
+												NumberOfAgentsKnowingSkill numberOfAgentsKnowingSkill,
+												ReduceSkillGroups reduceSkillGroups)
 		{
 			_createSkillGroups = createSkillGroups;
 			_peopleInOrganization = peopleInOrganization;
-			_reduceIslandsLimits = reduceIslandsLimits;
 			_numberOfAgentsKnowingSkill = numberOfAgentsKnowingSkill;
+			_reduceSkillGroups = reduceSkillGroups;
 		}
 
 		public IEnumerable<IIsland> Create(DateOnlyPeriod period)
@@ -29,20 +29,20 @@ namespace Teleopti.Ccc.Domain.Islands
 
 			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(skillGroups);
 			IEnumerable<List<SkillGroup>> skillGroupsInIsland = null;
-			var reducing = true;
-			while (reducing)
+			var keepOnReducing = true;
+			while (keepOnReducing)
 			{
 				var skillGroupsInSeperateIslands = skillGroups.Select(skillGroup => new List<SkillGroup> { skillGroup }).ToList();
 				moveSkillGroupToCorrectIsland(skillGroupsInSeperateIslands);
 				skillGroupsInIsland = skillGroupsInSeperateIslands.Where(x => x.Count > 0);
 
-				reducing = reduceSkillGroups(skillGroupsInIsland, noAgentsKnowingSkill);
+				keepOnReducing = _reduceSkillGroups.Execute(skillGroupsInIsland, noAgentsKnowingSkill);
 			}
 
 			return skillGroupsInIsland.Select(skillGroupInIsland => new Island(skillGroupInIsland, noAgentsKnowingSkill)).ToList();
 		}
 
-		private static void moveSkillGroupToCorrectIsland(IList<List<SkillGroup>> skillGroupInIslands)
+		private static void moveSkillGroupToCorrectIsland(IEnumerable<ICollection<SkillGroup>> skillGroupInIslands)
 		{
 			foreach (var skillGroupInIsland in skillGroupInIslands)
 			{
@@ -62,33 +62,6 @@ namespace Teleopti.Ccc.Domain.Islands
 					}
 				}
 			}
-		}
-
-		private bool reduceSkillGroups(IEnumerable<IEnumerable<SkillGroup>> groupedSkillGroups, IDictionary<ISkill, int> noAgentsKnowingSkill)
-		{
-			foreach (var skillGroupsOnIsland in groupedSkillGroups)
-			{
-				var numberOfAgentsInIsland = skillGroupsOnIsland.Sum(x => x.Agents.Count());
-				if (numberOfAgentsInIsland < _reduceIslandsLimits.MinimumNumberOfAgentsInIsland)
-					continue;
-				var skillGroupsOnIslandAndNumberOfAgents = skillGroupsOnIsland.Select(x => new {x.Skills, NumberOfAgents = x.Agents.Count()}).OrderByDescending(x => x.NumberOfAgents);
-				foreach (var skillGroupAndNumberOfAgents in skillGroupsOnIslandAndNumberOfAgents)
-				{
-					foreach (var skillGroupSkill in skillGroupAndNumberOfAgents.Skills.ToArray())
-					{
-						if (skillGroupAndNumberOfAgents.NumberOfAgents * _reduceIslandsLimits.MinimumFactorOfAgentsInOtherSkillGroup >= noAgentsKnowingSkill[skillGroupSkill])
-							continue;
-
-						if (skillGroupAndNumberOfAgents.Skills.Count(x => x.Activity == null || x.Activity.Equals(skillGroupSkill.Activity)) < 2)
-							continue;
-
-						skillGroupAndNumberOfAgents.Skills.Remove(skillGroupSkill);
-						noAgentsKnowingSkill[skillGroupSkill] -= skillGroupAndNumberOfAgents.NumberOfAgents;
-						return true;
-					}
-				}
-			}
-			return false;
 		}
 	}
 }
