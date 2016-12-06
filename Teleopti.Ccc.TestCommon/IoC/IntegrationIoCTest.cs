@@ -3,6 +3,7 @@ using Autofac;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			var args = new IocArgs(new ConfigReader())
 			{
 				AllEventPublishingsAsSync = true,
-				FeatureToggle = "FeatureFlags/toggles.txt"
+				FeatureToggle = TestSiteConfigurationSetup.URL.ToString()
 			};
 			var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args));
 

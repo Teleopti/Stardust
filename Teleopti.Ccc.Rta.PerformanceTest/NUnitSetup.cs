@@ -64,6 +64,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 
 			HangfireClientStarter.Start();
 
+			TestSiteConfigurationSetup.RecycleApplication();
 			TestSiteConfigurationSetup.StartApplicationSync();
 
 			Guid businessUnitId;

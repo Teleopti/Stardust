@@ -19,8 +19,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		public Task Execute(IAppBuilder application)
 		{
 			logger.Info($"StardustStartupTask.Execute()");
-			_starter.Start(application);
-			return null;
+			return Task.Run(() => _starter.Start(application));
 		}
 	}
 }

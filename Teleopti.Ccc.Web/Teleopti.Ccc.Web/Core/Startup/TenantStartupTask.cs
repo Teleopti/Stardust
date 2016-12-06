@@ -21,13 +21,11 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		public Task Execute(IAppBuilder application)
 		{
-			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			return Task.Run(() =>
 			{
-				var tenantConnString = ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString;
-				_checker.CheckEm(tenantConnString);
-			}
-			
-			return null;
+				using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+					_checker.CheckEm(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+			});
 		}
 	}
 }
