@@ -292,19 +292,12 @@
 						site.Teams.forEach(function(team) {
 							team.isChecked = $scope.teamsSelected.indexOf(team.Id) > -1;
 						});
+
 						var checkedTeams = site.Teams.filter(function(team) {
 							return team.isChecked;
 						});
-
-						if(checkedTeams.length > 0) {
+						if(checkedTeams.length > 0)
 							site.isChecked = checkedTeams.length === site.Teams.length;
-						}
-						else if(siteIds.indexOf(site.Id) > -1){
-							site.isChecked = true;
-						}
-						else {
-							site.isChecked = false;
-						}
 					});
 				};
 
