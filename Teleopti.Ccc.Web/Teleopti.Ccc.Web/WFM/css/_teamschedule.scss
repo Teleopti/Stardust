@@ -1,4 +1,5 @@
-﻿.team-schedule {
+﻿//TeamSchedule module
+.team-schedule {
 	background-color: $white;
 	border-right: 1px solid $white;
 	overflow: hidden;
@@ -9,11 +10,9 @@
 	input {
 		background-color: transparent;
 	}
-
 	.relative {
 		position: relative;
 	}
-
 	.start-ellipsis, .end-ellipsis {
 		position: absolute;
 		top: 2px;
@@ -21,354 +20,16 @@
 		width: 0;
 		height: 0;
 
-		.mdi:before{
-			font-size: 14px!important;
+		.mdi:before {
+			font-size: 14px !important;
 		}
 	}
-
 	.start-ellipsis {
 		left: 5px;
 	}
-
 	.end-ellipsis {
 		right: 19px;
 	}
-
-	.teamschedule-header {
-		padding: 5px;
-		min-height: 56px;
-		border-bottom: 1px solid $gray026;
-
-		display: -ms-flexbox;
-		display: flex;
-		flex-direction: row;
-
-		-ms-flex-wrap: wrap;
-		flex-wrap: wrap;
-
-		-ms-flex-pack: justify;
-		justify-content: space-between;
-
-		& > div {
-			-ms-flex: none;
-			flex: 0 1 auto;
-		}
-
-		& > *{
-			align-self: center;
-			height: 100%;
-		}
-
-		.leftside-part {
-			display: flex;
-			flex-direction: row;
-			flex-wrap: wrap;
-			justify-content: flex-start;
-			height: 100%;
- 		}
-
-		.people-search-container {
-			display: inline-block;
-			margin: 10px 10px 10px 0;
-
-			.advanced-input-dropdown{
-				top:14px;
-				left:17px;
-				width:321px;
-			}
-
-			.advanced-input {
-				width: 200px;
-			}
-
-			wfm-multiple-search-input .expand-advanced-input{
-				width: 200px!important;
-			}
-
-			.expand-advanced-input{
-				max-width:100%;
-			}
-		}
-
-		.rightside-part{
-			display: flex;
-			flex-wrap: wrap;
-			flex-direction: row;
-			justify-content: flex-start;
-		}
-
-		timezone-picker{
-			margin: 0 10px;
-
-			.md-select-value{
-				min-height: initial;
-			}
-		}
-
-		.wfm-switch {
-			display: inline-block;
-			margin: 10px;
-			padding: 0 60px 0 0;
-			text-align: right;
-
-			.wfm-switch-toggle {
-				right: 0;
-				top: 0;
-			}
-		}
-
-		.settings-container{
-			margin: 10px 20px;
-			display: inline-block;
-
-			i{
-				vertical-align: middle;
-				transform: scale(0.85);
-			}
-		}
-
-		.teamschedule-command {
-			text-align: right;
-		}
-
-		.context-menu .context-menu-left {
-			z-index: 1000;
-			text-transform: none;
-			white-space: nowrap;
-
-			li > div{
-				display: flex;
-				justify-content: space-between;
-
-				span:nth-child(1){
-					margin-right: 5px;
-				}
-			}
-		}
-		.view-navigator-container .wfm-btn{
-			padding: 5px;
-
-		}
-	}
-
-	team-schedule-datepicker {
-		display: inline-block;
-		vertical-align: top;
-		white-space: nowrap;
-		text-align: center;
-		width: auto;
-
-		> span {
-			display: inline-block;
-			position: relative;
-
-			#teamschedule-datepicker-input {
-				text-align: center;
-				width: 90px;
-
-				&.ng-invalid {
-					border-bottom-color: $orange-600;
-				}
-			}
-
-			.wfm-datepicker-wrap {
-				position: absolute;
-				top: 40px;
-				left: 0;
-				z-index: 100;
-			}
-
-			& > button.toggle-datepicker {
-				margin-left: 10px;
-			}
-
-			& > button.wfm-btn-invis-primary:focus {
-				background-color: transparent;
-			}
-
-			& > button.wfm-btn-invis-primary:focus {
-				i {
-					color: $green-300;
-				}
-			}
-		}
-	}
-
-	.con-row.teamschedule-body {
-		align-items: flex-start;
-		position: relative;
-		display: block !important;
-		overflow: hidden;
-	}
-
-	.big-table-wrapper {
-		position: relative;
-		overflow: hidden;
-		overflow-x: auto;
-		min-height: 500px;
-		width: 100%;
-		height: 100%;
-
-		table {
-			margin-bottom: 0;
-
-			tbody {
-				height: 100%;
-				display: block;
-				max-height: 62vh;
-				min-height: 500px;
-				min-width: 680px;
-				overflow-y: scroll;
-				border-top: 1px solid $gray012;
-			}
-
-			thead, tbody tr {
-				display: table;
-				width: 100%;
-				table-layout: fixed;
-			}
-
-			thead{
-				width: calc( 100% - 1.2em + 1px );
-			}
-
-			tbody tr:last-child{
-				border-bottom: 1px solid #DDDDDD;
-			}
-
-			tbody tr:hover {
-				background: $gray012;
-			}
-
-			th, td {
-				padding: 5px 0 5px 0;
-				border-bottom: none;
-			}
-
-			th.person-name-column, td.person-name-column {
-				width: 20%;
-				white-space: nowrap;
-				padding-right: 5px;
-				padding-left: 5px;
-				min-width: 150px;
-
-				span.person-name-text{
-					float: right;
-					word-break: break-word;
-					white-space: normal;
-				}
-			}
-
-			th.right-border-empty, td.right-border-empty {
-				width: 2%;
-			}
-
-			th.contract-time-header, td.contract-time-column {
-				width: 10%;
-				padding: 5px;
-				min-width: 150px;
-				font-weight: 400;
-				text-align: center;
-				white-space: nowrap;
-			}
-
-			td.contract-time-column{
-				border-left: 1px solid $gray012;
-			}
-
-			th.schedule-note-column{
-				width: 2%;
-			}
-
-			td.schedule-note-column {
-				width: 2%;
-				cursor: pointer;
-				text-align: center;
-
-				.mdi:before {
-					font-size: 14px !important;
-				}
-
-				.noComment{
-					color:$gray026 ;
-				}
-			}
-
-			th.shift-category-cell-header, td.shift-category-cell {
-				width: 30px;
-			}
-
-			td.shift-category-cell{
-				text-align: center;
-				border-left: 1px solid $gray012;
-
-				& > span{
-					display: inline-block;
-					width: 20px;
-				}
-			}
-
-			//Week view table
-			thead tr.weekview-thead{
-				th{
-					font-weight: bold;
-					padding: 0 10px;
-					word-break: normal;
-					white-space: normal;
-					border-left: 1px solid $gray012;
-					border-right: 1px solid $gray012;
-				}
-
-				th .date {
-					float: right;
-				}
-			}
-
-			@media(max-width: 768px){
-				thead tr.weekview-thead th{
-					padding: 0;
-					text-align: center;
-				}
-
-				thead tr.weekview-thead th .date{
-					float: none;
-				}
-			}
-
-			tr.weekview-tr{
-				height: 60px;
-				border-bottom: 1px solid #DDDDDD;
-			}
-
-			td.weekview-td{
-				padding: 0;
-				border-left: 1px solid $gray012;
-				border-right: 1px solid $gray012;
-				text-align: center;
-				cursor: default;
-
-				.summary {
-					overflow: hidden;
-					text-overflow: ellipsis;
-				}
-			}
-
-			td.weekview-td.terminated{
-				opacity: 0.3;
-				text-decoration: line-through;
-			}
-
-			td.weekview-td:hover{
-				border-bottom: 1px solid $blue-500;
-			}
-
-			td.weekview-person-name{
-				word-break: break-word;
-				padding: 0 5px;
-			}
-		}
-	}
-
 	.time-line {
 		min-width: 300px;
 
@@ -377,7 +38,6 @@
 			width: 1px;
 			background-color: $gray012;
 		}
-
 		.label {
 			font-size: x-small;
 			height: 1.32em;
@@ -386,117 +46,95 @@
 			padding-left: 0.3em;
 			padding-right: 0.3em;
 		}
-
-		& > .relative > span{
+		& > .relative > span {
 			padding: 10px;
 		}
-
 		.notcurrentday {
 			background-color: $gray026;
 		}
 	}
-
 	.person-name-column {
-		label{
+		label {
 			position: relative;
 		}
-
 		.wfm-checkbox-toggle:after {
 			width: 15px;
 			height: 15px;
 			font-size: 11px;
 			top: 1px;
 		}
-
 		.wfm-checkbox {
 			display: inline-block;
 			padding: 0;
 			width: auto;
 		}
-
 		.validate-warning, .schedule-note {
 			float: right;
 		}
-
 		.schedule-note .mdi-comment-outline:before {
-			font-size:13px !important
+			font-size: 13px !important
 		}
-
-		.validate-warning md-progress-circular{
+		.validate-warning md-progress-circular {
 			display: inline-block;
 		}
 	}
-
 	.shift {
 		.layer {
 			height: 22px;
 			text-align: center;
 		}
-
 		.layer.sameTypeAsLast {
 			border-left-style: solid;
 			border-left-width: 1px;
 		}
-
 		.layer.hasSelected {
 			opacity: 0.4;
 		}
-
 		.layer.noneSelected {
 			opacity: 1;
 		}
-
 		.layer.selected {
 			opacity: 1;
 			border: 1px dashed #795548;
 		}
-
 		.layer.lighterBorder {
 			border-color: #00ffff;
 		}
-
 		.layer:first-of-type {
 			-webkit-border-radius: 4px 0px 0px 4px;
 			-moz-border-radius: 4px 0px 0px 4px;
 			border-radius: 4px 0px 0px 4px;
 		}
-
 		.layer:last-of-type {
 			-webkit-border-radius: 0px 4px 4px 0px;
 			-moz-border-radius: 0px 4px 4px 0px;
 			border-radius: 0px 4px 4px 0px;
 		}
-
 		.layer:only-child {
 			-webkit-border-radius: 4px 4px 4px 4px;
 			-moz-border-radius: 4px 4px 4px 4px;
 			border-radius: 4px 4px 4px 4px;
 		}
 	}
-
 	.overtimeLight {
 		background-size: 11px 11px;
-		background-image: linear-gradient(45deg,transparent,transparent 4px,rgba(255,255,255,.8) 6px,transparent 10px,transparent);
+		background-image: linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, .8) 6px, transparent 10px, transparent);
 	}
-
 	.overtimeDark {
 		background-size: 11px 11px;
-		background-image: linear-gradient(45deg,transparent,transparent 4px,rgba(0,0,0,.5) 6px,transparent 10px,transparent);
+		background-image: linear-gradient(45deg, transparent, transparent 4px, rgba(0, 0, 0, .5) 6px, transparent 10px, transparent);
 	}
-
 	.dayoff {
 		text-align: center;
 		top: -5px;
 		height: 30px;
 		padding: 7px;
 		background-size: 11px 11px;
-		background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0,0,0,0.2) 8px, transparent 8px, transparent );
+		background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0, 0, 0, 0.2) 8px, transparent 8px, transparent);
 	}
-
 	.absolute {
 		position: absolute;
 	}
-
 	.uib-timepicker {
 		height: 48px;
 
@@ -505,183 +143,32 @@
 			padding-bottom: 2px;
 			text-align: center;
 		}
-
 		button {
 			min-width: 30px;
 		}
 	}
-
 	ul li.item[disabled] {
 		opacity: .4;
 		cursor: not-allowed;
 	}
-
 	.wfm-btn-sm {
 		padding: 5px;
 		margin-left: 0;
 		margin-right: 0;
 	}
-
 	.page-size-selector {
 		display: inline-block;
 		text-align: left;
 		margin: .8rem 2rem .8rem 0;
 	}
-
-	@media(max-width: 768px){
-		.pagination li{
+	@media(max-width:768px) {
+		.pagination li {
 			padding: 8px;
 		}
 	}
-
-	md-sidenav {
-		min-width: 360px;
-		box-shadow: none;
-	}
-
-	teamschedule-command-container{
-		height: 100%;
-	}
-
-	.teamschedule-command-container {
-		height: 100%;
-	}
-
-	.command-panel-content .con-row {
-		flex-direction: row !important;
-		align-items: center;
-
-		.wfm-time-range-picker-wrap button {
-			line-height: 25px;
-		}
-	}
-
-	.command-panel-content .activity-time-range{
-		position: initial;
-	}
-
-	.command-panel-content .wfm-time-range-picker-wrap .error-msg-container{
-		left: 10px;
-		right: 10px;
-		margin-top: 30px;
-		width: auto;
-	}
-
-	.command-panel, .add-absence, .add-activity, .move-activity, .edit-shift-category, .command-check, .settings-panel, .move-shift {
-		height: 100%;
-		display: -ms-flexbox;
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-start;
-
-		md-progress-linear{
-			width: auto;
-			margin: -16px;
-		}
-
-		.sidenav-header{
-			height: 41px;
-		}
-
-		md-content {
-			display: -ms-flexbox;
-			display: flex;
-			flex-grow: 1;
-			flex-direction: column;
-			justify-content: space-between;
-			max-height: 100%;
-		}
-
-		md-select{
-			width: 100%;
-			min-height: 40px;
-		}
-	}
-
-	.add-activity i.mdi-alert-octagon{
-		vertical-align: middle;
-	}
-
-	.command-check {
-		.warning-header{
-			background: $orange-500;
-		}
-
-		.command-info {
-			padding-bottom:0;
-			padding-top:0;
-
-			.mdi-alert{
-				color: $orange-500;
-			}
-
-			& > p{
-				margin: 0;
-			}
-		}
-
-		md-select{
-			margin: 10px 0;
-		}
-
-		span.md-select-icon{
-			margin-right: -7px;
-		}
-
-		.agent-list{
-			position: relative;
-			overflow: auto;
-			flex-grow: 1;
-
-			.wfm-checkbox-toggle:after {
-				width: 16px;
-				height: 16px;
-				font-size: 12px;
-				top: 50%;
-				transform: translateY(-50%);
-			}
-
-			.wfm-checkbox input[type=checkbox]:checked ~ .wfm-checkbox-toggle:after, {
-				background-color: $orange-500;
-			}
-
-			.wfm-checkbox label {
-				position: relative;
-			}
-
-			ul {
-				margin-left: 20px;
-				list-style-type: disc;
-			}
-
-			ul li, .wfm-checkbox-label{
-				white-space: normal;
-			}
-
-			ul li{
-				padding: 5px 0;
-			}
-		}
-	}
-
-	.settings-panel .sidenav-header{
-		background: $blue-500;
-		color: $white;
-		font-weight: 600;
-	}
-
-	md-content button.wfm-btn {
-		min-height: 40px;
-
-		&:focus {
-			background-color: #007ACC;
-		}
-	}
-
 	.modal-box .wfm-simple-list {
 		max-height: 430px;
 	}
-
 	.con-footer.teamschedule-footer {
 		border-top: 1px solid $gray026;
 
@@ -693,201 +180,149 @@
 			display: inline-block;
 		}
 	}
-
 	.hidden-for-test {
 		display: none;
 	}
-
 	.selectable {
 		cursor: pointer;
 	}
-
 	.unselectable {
 		cursor: not-allowed !important;
 	}
-
-	note-editor textarea{
+	note-editor textarea {
 		width: 100%;
 		min-height: 200px;
 	}
 }
+//Header
+.teamschedule-header {
+	padding: 5px;
+	min-height: 56px;
+	border-bottom: 1px solid $gray026;
+	display: -ms-flexbox;
+	display: flex;
+	flex-direction: row;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+	-ms-flex-pack: justify;
+	justify-content: space-between;
 
-.team-schedule-command-confirm-dialog {
-	.row {
-		.wfm-btn-default {
-			margin-right: 20px;
-		}
+	& > div {
+		-ms-flex: none;
+		flex: 0 1 auto;
 	}
-
-	button:focus {
-		outline: 1px dashed $gray054;
+	& > * {
+		align-self: center;
+		height: 100%;
 	}
-}
-
-.multiline-tooltip .md-content {
-	height: auto;
-
-	@media(max-width: 1200px){
-		span {
-			display: inline-block;
-			line-height: 25px;
-			max-width: 500px;
-			white-space: normal;
-		}
-	}
-}
-
-md-tooltip.layer-summary{
-	text-align:center;
-}
-
-.multiline-tooltip.max-width-600 .md-content {
-	span {
-		display: inline-block;
-		line-height: 25px;
-		max-width: 600px;
-		white-space: normal;
-	}
-}
-
-.multiline-tooltip.margin-top-22{
-	margin-top: -22px;
-}
-
-.warning-icon {
-	color: $orange-600;
-}
-
-.shiftcat-shortname, .shiftcat-fullname {
-	display: table-cell;
-}
-
-.shiftcat-shortname {
-	width: 2em;
-	white-space: nowrap;
-	padding: 0 2px;
-	text-align: center;
-	border-radius: 2px;
-}
-
-.shiftcat-fullname {
-	padding-left: 0.5em;
-	max-width: 18em;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-}
-
-.view-changer-wrapper {
-	padding: .6em 0;
-	margin: 0 1em;
-
-	.view-changer {
-		display: -ms-flexbox;
+	.leftside-part {
 		display: flex;
 		flex-direction: row;
-		flex-wrap: nowrap;
-		border: 1px solid $gray026;
-		border-radius: 2px;
-		height: 24px;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		height: 100%;
+	}
+	.people-search-container {
+		display: inline-block;
+		margin: 10px 10px 10px 0;
 
-		.view-option {
-			-ms-flex: 1 1;
-			flex: 1 1;
-			display: -ms-flex;
-			display: flex;
-			-ms-flex-pack: center;
-			justify-content: center;
-			min-width: 4em;
-
-			&:hover {
-				color: $blue-500;
-			}
-
-			&:active {
-				border: 1px solid $blue-500 !important;
-			}
-
-			& + .view-option {
-				// border-left-color: rgba(0, 0, 0, .12);
-			}
-
-			label {
-				margin: 0;
-				flex-basis: 100%;
-				display: -ms-flex !important;
-				display: flex !important;
-			}
-
-			.view-option-radio {
-				display: none;
-				position: absolute;
-			}
-
-			.view-name {
-				text-transform: uppercase;
-				-webkit-user-select: none;
-				user-select: none;
-				padding: 0 .6em;
-
-				-ms-flex: 1 1 100%;
-				flex: 1 1 100%;
-				-ms-flex-item-align: stretch;
-				align-self: stretch;
-
-				display: -ms-flex;
-				display: flex;
-				-ms-flex-pack: center;
-				justify-content: center;
-				-ms-flex-align: center;
-				align-items: center;
-				cursor: pointer;
-			}
-
-			.view-option-radio:checked + .view-name {
-				background-color: rgba(0, 0, 0, .12);
-				box-shadow: inset 0 2px 5px 0 rgba(0,0,0,.26);
-			}
-
-			.view-option-radio:focus + .view-name {
-				border: 1px solid $blue-500 !important;
-			}
-
+		.advanced-input-dropdown {
+			top: 14px;
+			left: 17px;
+			width: 321px;
 		}
+		.advanced-input {
+			width: 200px;
+		}
+		wfm-multiple-search-input .expand-advanced-input {
+			width: 200px !important;
+		}
+		.expand-advanced-input {
+			max-width: 100%;
+		}
+	}
+	.rightside-part {
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+		justify-content: flex-start;
+	}
+	timezone-picker {
+		margin: 0 10px;
 
+		.md-select-value {
+			min-height: initial;
+		}
+	}
+	.wfm-switch {
+		display: inline-block;
+		margin: 10px;
+		padding: 0 60px 0 0;
+		text-align: right;
+
+		.wfm-switch-toggle {
+			right: 0;
+			top: 0;
+		}
+	}
+	.settings-container {
+		margin: 10px 20px;
+		display: inline-block;
+
+		i {
+			vertical-align: middle;
+			transform: scale(0.85);
+		}
+	}
+	.teamschedule-command {
+		text-align: right;
+	}
+	.context-menu .context-menu-left {
+		z-index: 1000;
+		text-transform: none;
+		white-space: nowrap;
+
+		li > div {
+			display: flex;
+			justify-content: space-between;
+
+			span:nth-child(1) {
+				margin-right: 5px;
+			}
+		}
+	}
+	.view-navigator-container .wfm-btn {
+		padding: 5px;
 	}
 }
-
-.organization-picker-container{
+.organization-picker-container {
 	display: inline-block;
 	margin: 6px 10px 14px 0;
 
-
-	md-input-container{
+	md-input-container {
 		margin: 0;
 		padding: 0;
 		padding-bottom: 2px;
 		min-width: 200px;
 
-		label{
-			display: none!important;
+		label {
+			display: none !important;
 		}
 	}
-
-	.md-select-value{
+	.md-select-value {
 		align-items: flex-end;
 	}
 }
-
 .organization-picker {
-	min-width: 200px!important;
-	margin-left: 2em; //remove this after ngMaterial updated
+	min-width: 200px !important;
+	margin-left: 2em;
+
+	//remove this after ngMaterial updated
 
 	md-select-menu, md-content._md {
 		max-height: 600px;
 		width: 100%;
 	}
-
 	md-content._md {
 		padding: 0.5em 0;
 	}
@@ -930,7 +365,7 @@ md-tooltip.layer-summary{
 			}
 		}
 		& > md-checkbox:hover {
-			background-color: rgba(0, 0, 0, .06)!important;
+			background-color: rgba(0, 0, 0, .06) !important;
 		}
 		& > md-option {
 			margin-left: 0.6em;
@@ -942,15 +377,449 @@ md-tooltip.layer-summary{
 		}
 	}
 }
+team-schedule-datepicker {
+	display: inline-block;
+	vertical-align: top;
+	white-space: nowrap;
+	text-align: center;
+	width: auto;
 
+	> span {
+		display: inline-block;
+		position: relative;
+
+		#teamschedule-datepicker-input {
+			text-align: center;
+			width: 90px;
+
+			&.ng-invalid {
+				border-bottom-color: $orange-600;
+			}
+		}
+		.wfm-datepicker-wrap {
+			position: absolute;
+			top: 40px;
+			left: 0;
+			z-index: 100;
+		}
+		& > button.toggle-datepicker {
+			margin-left: 10px;
+		}
+		& > button.wfm-btn-invis-primary:focus {
+			background-color: transparent;
+		}
+		& > button.wfm-btn-invis-primary:focus {
+			i {
+				color: $green-300;
+			}
+		}
+	}
+}
+.view-changer-wrapper {
+	padding: .6em 0;
+	margin: 0 1em;
+
+	.view-changer {
+		display: -ms-flexbox;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		border: 1px solid $gray026;
+		border-radius: 2px;
+		height: 24px;
+
+		.view-option {
+			-ms-flex: 1 1;
+			flex: 1 1;
+			display: -ms-flex;
+			display: flex;
+			-ms-flex-pack: center;
+			justify-content: center;
+			min-width: 4em;
+
+			&:hover {
+				color: $blue-500;
+			}
+			&:active {
+				border: 1px solid $blue-500 !important;
+			}
+			& + .view-option {
+				// border-left-color: rgba(0, 0, 0, .12);
+			}
+			label {
+				margin: 0;
+				flex-basis: 100%;
+				display: -ms-flex !important;
+				display: flex !important;
+			}
+			.view-option-radio {
+				display: none;
+				position: absolute;
+			}
+			.view-name {
+				text-transform: uppercase;
+				-webkit-user-select: none;
+				user-select: none;
+				padding: 0 .6em;
+				-ms-flex: 1 1 100%;
+				flex: 1 1 100%;
+				-ms-flex-item-align: stretch;
+				align-self: stretch;
+				display: -ms-flex;
+				display: flex;
+				-ms-flex-pack: center;
+				justify-content: center;
+				-ms-flex-align: center;
+				align-items: center;
+				cursor: pointer;
+			}
+			.view-option-radio:checked + .view-name {
+				background-color: rgba(0, 0, 0, .12);
+				box-shadow: inset 0 2px 5px 0 rgba(0, 0, 0, .26);
+			}
+			.view-option-radio:focus + .view-name {
+				border: 1px solid $blue-500 !important;
+			}
+		}
+	}
+}
+//Table Body
+.con-row.teamschedule-body {
+	align-items: flex-start;
+	position: relative;
+	display: block !important;
+	overflow: hidden;
+}
+.teamschedule-body .big-table-wrapper {
+	position: relative;
+	overflow: hidden;
+	overflow-x: auto;
+	min-height: 500px;
+	width: 100%;
+	height: 100%;
+
+	table {
+		margin-bottom: 0;
+
+		tbody {
+			height: 100%;
+			display: block;
+			max-height: 62vh;
+			min-height: 500px;
+			min-width: 680px;
+			overflow-y: scroll;
+			border-top: 1px solid $gray012;
+		}
+		thead, tbody tr {
+			display: table;
+			width: 100%;
+			table-layout: fixed;
+		}
+		thead {
+			width: calc(100% - 1.2em + 1px);
+		}
+		tbody tr:last-child {
+			border-bottom: 1px solid #DDDDDD;
+		}
+		tbody tr:hover {
+			background: $gray012;
+		}
+		th, td {
+			padding: 5px 0 5px 0;
+			border-bottom: none;
+		}
+		th.person-name-column, td.person-name-column {
+			width: 20%;
+			white-space: nowrap;
+			padding-right: 5px;
+			padding-left: 5px;
+			min-width: 150px;
+
+			span.person-name-text {
+				float: right;
+				word-break: break-word;
+				white-space: normal;
+			}
+		}
+		th.right-border-empty, td.right-border-empty {
+			width: 2%;
+		}
+		th.contract-time-header, td.contract-time-column {
+			width: 10%;
+			padding: 5px;
+			min-width: 150px;
+			font-weight: 400;
+			text-align: center;
+			white-space: nowrap;
+		}
+		td.contract-time-column {
+			border-left: 1px solid $gray012;
+		}
+		th.schedule-note-column {
+			width: 2%;
+		}
+		td.schedule-note-column {
+			width: 2%;
+			cursor: pointer;
+			text-align: center;
+
+			.mdi:before {
+				font-size: 14px !important;
+			}
+			.noComment {
+				color: $gray026;
+			}
+		}
+		th.shift-category-cell-header, td.shift-category-cell {
+			width: 30px;
+		}
+		td.shift-category-cell {
+			text-align: center;
+			border-left: 1px solid $gray012;
+
+			& > span {
+				display: inline-block;
+				width: 20px;
+			}
+		}
+		//Week view table
+		thead tr.weekview-thead {
+			th {
+				font-weight: bold;
+				padding: 0 10px;
+				word-break: normal;
+				white-space: normal;
+				border-left: 1px solid $gray012;
+				border-right: 1px solid $gray012;
+			}
+			th .date {
+				float: right;
+			}
+		}
+		@media(max-width:768px) {
+			thead tr.weekview-thead th {
+				padding: 0;
+				text-align: center;
+			}
+			thead tr.weekview-thead th .date {
+				float: none;
+			}
+		}
+		tr.weekview-tr {
+			height: 60px;
+			border-bottom: 1px solid #DDDDDD;
+		}
+		td.weekview-td {
+			padding: 0;
+			border-left: 1px solid $gray012;
+			border-right: 1px solid $gray012;
+			text-align: center;
+			cursor: default;
+
+			.summary {
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}
+		td.weekview-td.terminated {
+			opacity: 0.3;
+			text-decoration: line-through;
+		}
+		td.weekview-td:hover {
+			border-bottom: 1px solid $blue-500;
+		}
+		td.weekview-person-name {
+			word-break: break-word;
+			padding: 0 5px;
+		}
+	}
+}
+//TeamSchedule Command Panels
+teamschedule-command-container {
+	height: 100%;
+
+	md-sidenav {
+		min-width: 360px;
+		box-shadow: none;
+	}
+}
+.teamschedule-command-container {
+	height: 100%;
+}
+.command-panel-content .con-row {
+	flex-direction: row !important;
+	align-items: center;
+
+	.wfm-time-range-picker-wrap button {
+		line-height: 25px;
+	}
+}
+.command-panel-content .activity-time-range {
+	position: initial;
+}
+.command-panel-content .wfm-time-range-picker-wrap .error-msg-container {
+	left: 10px;
+	right: 10px;
+	margin-top: 30px;
+	width: auto;
+}
+.command-panel, .add-absence, .add-activity, .move-activity, .edit-shift-category, .command-check, .settings-panel, .move-shift {
+	height: 100%;
+	display: -ms-flexbox;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+
+	md-progress-linear {
+		width: auto;
+		margin: -16px;
+	}
+	.sidenav-header {
+		height: 41px;
+	}
+	md-content {
+		display: -ms-flexbox;
+		display: flex;
+		flex-grow: 1;
+		flex-direction: column;
+		justify-content: space-between;
+		max-height: 100%;
+	}
+	md-select {
+		width: 100%;
+		min-height: 40px;
+	}
+	md-content button.wfm-btn {
+		min-height: 40px;
+
+		&:focus {
+			background-color: #007ACC;
+		}
+	}
+}
+.add-activity i.mdi-alert-octagon {
+	vertical-align: middle;
+}
+.settings-panel .sidenav-header {
+	background: $blue-500;
+	color: $white;
+	font-weight: 600;
+}
+.command-check {
+	.warning-header {
+		background: $orange-500;
+	}
+	.command-info {
+		padding-bottom: 0;
+		padding-top: 0;
+
+		.mdi-alert {
+			color: $orange-500;
+		}
+		& > p {
+			margin: 0;
+		}
+	}
+	md-select {
+		margin: 10px 0;
+	}
+	span.md-select-icon {
+		margin-right: -7px;
+	}
+	.agent-list {
+		position: relative;
+		overflow: auto;
+		flex-grow: 1;
+
+		.wfm-checkbox-toggle:after {
+			width: 16px;
+			height: 16px;
+			font-size: 12px;
+			top: 50%;
+			transform: translateY(-50%);
+		}
+		.wfm-checkbox input[type=checkbox]:checked ~ .wfm-checkbox-toggle:after {
+			background-color: $orange-500;
+		}
+		.wfm-checkbox label {
+			position: relative;
+		}
+		ul {
+			margin-left: 20px;
+			list-style-type: disc;
+		}
+		ul li, .wfm-checkbox-label {
+			white-space: normal;
+		}
+		ul li {
+			padding: 5px 0;
+		}
+	}
+}
+//TeamSchedule Modal box
+.team-schedule-command-confirm-dialog {
+	.row {
+		.wfm-btn-default {
+			margin-right: 20px;
+		}
+	}
+	button:focus {
+		outline: 1px dashed $gray054;
+	}
+}
+.multiline-tooltip .md-content {
+	height: auto;
+
+	@media(max-width:1200px) {
+		span {
+			display: inline-block;
+			line-height: 25px;
+			max-width: 500px;
+			white-space: normal;
+		}
+	}
+}
+//Tooltips and helping classes
+md-tooltip.layer-summary {
+	text-align: center;
+}
+.multiline-tooltip.max-width-600 .md-content {
+	span {
+		display: inline-block;
+		line-height: 25px;
+		max-width: 600px;
+		white-space: normal;
+	}
+}
+.multiline-tooltip.margin-top-22 {
+	margin-top: -22px;
+}
+.warning-icon {
+	color: $orange-600;
+}
+.shiftcat-shortname, .shiftcat-fullname {
+	display: table-cell;
+}
+.shiftcat-shortname {
+	width: 2em;
+	white-space: nowrap;
+	padding: 0 2px;
+	text-align: center;
+	border-radius: 2px;
+}
+.shiftcat-fullname {
+	padding-left: 0.5em;
+	max-width: 18em;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
 md-select-menu md-option:first-child:not([disabled]):focus {
 	background: inherit;
 }
-
 md-select-menu md-option:first-child:not([disabled]):hover {
 	background: $gray-300;
 }
-
 .timezone-tip {
 	.mdi:before {
 		font-size: 12px !important;
