@@ -1,5 +1,4 @@
 ﻿<md-input-container>
-	<label>{{OrganizationPicker}}</label>
 	<md-select ng-model="$ctrl.selectedTeamIds" md-on-close="$ctrl.onSelectionDone()" md-selected-text="$ctrl.formatSelectedDisplayName()" data-md-container-class="organization-picker" multiple>
 		<md-select-header class="picker-select-header">
 			<input ng-model="$ctrl.searchTerm" type="search" placeholder="{{'SearchAnOrganization' | translate}}" class="picker-searchbox md-text" ng-keydown="$event.stopPropagation()">

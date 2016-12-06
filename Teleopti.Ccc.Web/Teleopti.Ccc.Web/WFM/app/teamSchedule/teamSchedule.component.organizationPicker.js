@@ -15,7 +15,7 @@
 
 	function organizationPickerCtrl($scope) {
 		var ctrl = this;
-		ctrl.currentSite = undefined;
+		var currentSite = undefined;
 
 		ctrl.$onInit = function() {
 			populateGroupList();
@@ -82,7 +82,7 @@
 		}
 
 		ctrl.setCurrentSiteValue = function(site) {
-			ctrl.currentSite = site;
+			currentSite = site;
 		};
 
 		$scope.$watchCollection(function() {
@@ -93,20 +93,19 @@
 		});
 
 		function updateGroupSelection() {
-			if (!ctrl.currentSite) return;
-			if (ctrl.currentSite.teams.every(function(team) {
+			if (!currentSite) return;
+			if (currentSite.teams.every(function(team) {
 					return ctrl.selectedTeamIds.indexOf(team.id) > -1;
 				}))
-				ctrl.currentSite.isChecked = true;
+				currentSite.isChecked = true;
 			else
-				ctrl.currentSite.isChecked = false;
+				currentSite.isChecked = false;
 		}
-
 
 		ctrl.onSelectionDone = function() {
 			ctrl.searchTerm = '';
-
 			//load the schedule data
+			ctrl.onPick({ groups: ctrl.selectedTeamIds });
 		};
 	}
 })();

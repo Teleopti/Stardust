@@ -86,15 +86,13 @@
 		var ctrl = $componentController('organizationPicker', null, bindings);
 		ctrl.$onInit();
 
-		ctrl.selectedGroups = ['team1'];
-		var displayName = ctrl.shortDisplayNameOfTheSelected();
+		ctrl.selectedTeamIds = ['team1'];
+		var displayName = ctrl.formatSelectedDisplayName();
 		expect(displayName).toEqual("team1");
 
-		ctrl.selectedGroups = ['team1','team2'];
-		displayName = ctrl.shortDisplayNameOfTheSelected();
+		ctrl.selectedTeamIds = ['team1','team2'];
+		displayName = ctrl.formatSelectedDisplayName();
 		expect(displayName).toEqual("2 teams selected");
-
-
 	}));
 
 	it("Should trigger onPick when selection done", function () {
@@ -133,7 +131,7 @@
 		var ctrl = $componentController('organizationPicker', null, bindings);
 		ctrl.$onInit();
 
-		ctrl.selectedGroups = ['team1', 'team2'];
+		ctrl.selectedTeamIds = ['team1', 'team2'];
 		ctrl.onSelectionDone();
 		expect(selectedTeams.length).toEqual(2);
 	});
