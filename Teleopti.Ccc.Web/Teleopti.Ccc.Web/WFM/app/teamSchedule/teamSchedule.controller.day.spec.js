@@ -284,6 +284,12 @@ describe("teamschedule controller tests", function() {
 				return { $promise: queryDeferred.promise };
 			}
 		};
+
+		teamScheduleService.getAvalableHierachy = function(date) {
+			return {
+				then: function (){}
+			}
+		}
 	};
 
 	function setupMockLocale() {
