@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands.ClientModel
@@ -15,12 +16,8 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 		public IEnumerable<IslandModel> Create()
 		{
 			var islands = _createIslands.Create(DateOnly.Today.ToDateOnlyPeriod());
-			var ret = new List<IslandModel>();
-			foreach (Island island in islands)
-			{
-				ret.Add(island.CreateClientModel());
-			}
-			return ret;
+			return from Island island in islands
+						 select island.CreateClientModel();
 		}
 	}
 }

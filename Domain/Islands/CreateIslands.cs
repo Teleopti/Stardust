@@ -26,20 +26,17 @@ namespace Teleopti.Ccc.Domain.Islands
 		public IEnumerable<IIsland> Create(DateOnlyPeriod period)
 		{
 			var skillGroups = _createSkillGroups.Create(_peopleInOrganization.Agents(period), period.StartDate);
-
 			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(skillGroups);
-			IEnumerable<List<SkillGroup>> skillGroupsInIsland = null;
-			var keepOnReducing = true;
-			while (keepOnReducing)
+			while (true)
 			{
-				var skillGroupsInSeperateIslands = skillGroups.Select(skillGroup => new List<SkillGroup> { skillGroup }).ToList();
-				moveSkillGroupToCorrectIsland(skillGroupsInSeperateIslands);
-				skillGroupsInIsland = skillGroupsInSeperateIslands.Where(x => x.Count > 0);
+				var skillGroupsInIsland = skillGroups.Select(skillGroup => new List<SkillGroup> { skillGroup }).ToList();
+				moveSkillGroupToCorrectIsland(skillGroupsInIsland);
 
-				keepOnReducing = _reduceSkillGroups.Execute(skillGroupsInIsland, noAgentsKnowingSkill);
+				if (!_reduceSkillGroups.Execute(skillGroupsInIsland, noAgentsKnowingSkill))
+				{
+					return skillGroupsInIsland.Where(x => x.Count > 0).Select(skillGroupInIsland => new Island(skillGroupInIsland, noAgentsKnowingSkill)).ToList();
+				}
 			}
-
-			return skillGroupsInIsland.Select(skillGroupInIsland => new Island(skillGroupInIsland, noAgentsKnowingSkill)).ToList();
 		}
 
 		private static void moveSkillGroupToCorrectIsland(IEnumerable<ICollection<SkillGroup>> skillGroupInIslands)
@@ -51,13 +48,13 @@ namespace Teleopti.Ccc.Domain.Islands
 					var allOtherIslands = skillGroupInIslands.Except(new[] { skillGroupInIsland });
 					foreach (var otherIsland in allOtherIslands)
 					{
-						foreach (var otherSkillGroup in otherIsland.ToArray())
+						foreach (var otherSkillGroup in otherIsland)
 						{
 							if (otherSkillGroup.Skills.Intersect(skillGroup.Skills).Any())
 							{
 								otherIsland.Add(skillGroup);
 								skillGroupInIsland.Remove(skillGroup);
-								moveSkillGroupToCorrectIsland(skillGroupInIslands.ToArray());
+								moveSkillGroupToCorrectIsland(skillGroupInIslands);
 								return;
 							}
 						}
