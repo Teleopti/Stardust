@@ -57,6 +57,8 @@ namespace Teleopti.Ccc.Domain.Islands
 							{
 								otherIsland.Add(skillGroup);
 								skillGroupInIsland.Remove(skillGroup);
+								moveSkillGroupToCorrectIsland(skillGroupInIslands.ToArray());
+								return;
 							}
 						}
 					}

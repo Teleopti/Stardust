@@ -257,6 +257,22 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				.Should().Be.EqualTo(2);
 		}
 
+		[Test]
+		public void ShouldNotCreateDuplicatesOfAgents()
+		{
+			var skill1 = new Skill("1");
+			var skill2 = new Skill("2");
+			PersonRepository.Has(skill1, skill2);
+			PersonRepository.Has(skill2);
+			PersonRepository.Has(skill1);
+
+			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
+
+			var theEvent = EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single();
+			theEvent.AgentsInIsland.Count().Should().Be.EqualTo(3);
+			theEvent.AgentsToOptimize.Count().Should().Be.EqualTo(3);
+		}
+
 		public void Configure(FakeToggleManager toggleManager)
 		{
 			if (_resourcePlannerSplitBigIslands42049)
