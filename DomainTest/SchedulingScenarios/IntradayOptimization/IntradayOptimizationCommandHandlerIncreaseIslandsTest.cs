@@ -174,5 +174,29 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 			});
 		}
+
+		[Test, Ignore("Donot think Anders want it this way")]
+		public void ShouldNotCreateMoreIslandsThanNecessary()
+		{
+			ReduceIslandsLimits.SetValues_UseOnlyFromTest(8, 2);
+			var skillA = new Skill("A").WithId();
+			var skillB = new Skill("B").WithId();
+			var skillC = new Skill("C").WithId();
+			var skillD = new Skill("D").WithId();
+			var skillE = new Skill("E").WithId();
+			var skillF = new Skill("F").WithId();
+			var skillABCagents = Enumerable.Range(0, 2).Select(x => new Person().KnowsSkill(skillA, skillB, skillC).WithId());
+			var skillCEagents = Enumerable.Range(0, 5).Select(x => new Person().KnowsSkill(skillC, skillE).WithId());
+			var skillCDagents = Enumerable.Range(0, 1).Select(x => new Person().KnowsSkill(skillC, skillD).WithId());
+			var skillFEagents = Enumerable.Range(0, 1).Select(x => new Person().KnowsSkill(skillF, skillE).WithId());
+			skillABCagents.Union(skillCEagents).Union(skillCDagents).Union(skillFEagents).ForEach(x => PersonRepository.Has(x));
+
+			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
+
+			var events = EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>();
+			events.Count().Should().Be.EqualTo(2); //now also creating two unnecessary islands with one agent in each
+			events.Any(x => x.AgentsInIsland.Count() == 7).Should().Be.True();
+			events.Any(x => x.AgentsInIsland.Count() == 2).Should().Be.True();
+		}
 	}
 }
