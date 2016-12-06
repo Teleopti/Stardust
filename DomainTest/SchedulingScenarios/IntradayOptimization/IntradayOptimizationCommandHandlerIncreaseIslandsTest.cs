@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			});
 		}
 
-		[Test, Ignore("Donot think Anders want it this way")]
+		[Test]
 		public void ShouldNotCreateMoreIslandsThanNecessary()
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(8, 2);
