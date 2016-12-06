@@ -26,10 +26,10 @@ namespace Teleopti.Ccc.Domain.Islands
 		public IEnumerable<IIsland> Create(DateOnlyPeriod period)
 		{
 			var skillGroups = _createSkillGroups.Create(_peopleInOrganization.Agents(period), period.StartDate);
-			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(skillGroups);
 			var groupedSkillGroups = skillGroups.GroupBy(x => x, (group, groups) => groups, new SkillGroupComparerForIslands());
+			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(skillGroups);
 			reduceSkillGroups(groupedSkillGroups, noAgentsKnowingSkill);
-			return groupedSkillGroups.Select(skillGroupInIsland => new Island(skillGroupInIsland)).ToList();
+			return groupedSkillGroups.Select(skillGroupInIsland => new Island(skillGroupInIsland, noAgentsKnowingSkill)).ToList();
 		}
 
 		private void reduceSkillGroups(IEnumerable<IEnumerable<SkillGroup>> groupedSkillGroups, IDictionary<ISkill, int> noAgentsKnowingSkill)
