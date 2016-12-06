@@ -29,8 +29,7 @@ if ($Job_status.result -eq "SUCCESS") { Write-Host "Jenkins deploy successfully 
 
 else { 
 Write-Host "Jenkins deploy failed! Check http://$ServerURL/job/$ServerName-AutoDeploy for more information!"
-$ErrorMessage = $_
-Write-Host "##teamcity[buildProblem description='$ErrorMessage']"
-Write-Error -Message $ErrorMessage
+$ErrorMessage = $Error[0].Exception.Message
+Write-Host $( '##teamcity[message text=''{0}'']' -f $ErrorMessage ) 
 exit 1
 }
