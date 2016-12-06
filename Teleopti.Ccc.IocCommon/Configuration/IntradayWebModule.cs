@@ -1,4 +1,6 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -49,6 +51,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SplitSkillStaffInterval>().As<SplitSkillStaffInterval>().SingleInstance();
 			builder.RegisterType<MergeSkillStaffIntervalLightForSkillArea>().As<MergeSkillStaffIntervalLightForSkillArea>().SingleInstance();
 			builder.RegisterType<SkillStaffingIntervalProvider>().As<SkillStaffingIntervalProvider>().SingleInstance();
+			builder.RegisterType<JobStartTimeRepository>().As<IJobStartTimeRepository>().SingleInstance();
 		}
 	}
+
+	
 }
