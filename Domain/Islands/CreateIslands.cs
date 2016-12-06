@@ -26,35 +26,69 @@ namespace Teleopti.Ccc.Domain.Islands
 		public IEnumerable<IIsland> Create(DateOnlyPeriod period)
 		{
 			var skillGroups = _createSkillGroups.Create(_peopleInOrganization.Agents(period), period.StartDate);
-			var groupedSkillGroups = skillGroups.GroupBy(x => x, (group, groups) => groups, new SkillGroupComparerForIslands());
+
 			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(skillGroups);
-			reduceSkillGroups(groupedSkillGroups, noAgentsKnowingSkill);
-			return groupedSkillGroups.Select(skillGroupInIsland => new Island(skillGroupInIsland, noAgentsKnowingSkill)).ToList();
+			IEnumerable<List<SkillGroup>> skillGroupsInIsland = null;
+			var reducing = true;
+			while (reducing)
+			{
+				var skillGroupsInSeperateIslands = skillGroups.Select(skillGroup => new List<SkillGroup> { skillGroup }).ToList();
+				moveSkillGroupToCorrectIsland(skillGroupsInSeperateIslands);
+				skillGroupsInIsland = skillGroupsInSeperateIslands.Where(x => x.Count > 0);
+
+				reducing = reduceSkillGroups(skillGroupsInIsland, noAgentsKnowingSkill);
+			}
+
+			return skillGroupsInIsland.Select(skillGroupInIsland => new Island(skillGroupInIsland, noAgentsKnowingSkill)).ToList();
 		}
 
-		private void reduceSkillGroups(IEnumerable<IEnumerable<SkillGroup>> groupedSkillGroups, IDictionary<ISkill, int> noAgentsKnowingSkill)
+		private static void moveSkillGroupToCorrectIsland(IList<List<SkillGroup>> skillGroupInIslands)
+		{
+			foreach (var skillGroupInIsland in skillGroupInIslands)
+			{
+				foreach (var skillGroup in skillGroupInIsland.ToList())
+				{
+					var allOtherIslands = skillGroupInIslands.Except(new[] { skillGroupInIsland });
+					foreach (var otherIsland in allOtherIslands)
+					{
+						foreach (var otherSkillGroup in otherIsland.ToArray())
+						{
+							if (otherSkillGroup.Skills.Intersect(skillGroup.Skills).Any())
+							{
+								otherIsland.Add(skillGroup);
+								skillGroupInIsland.Remove(skillGroup);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		private bool reduceSkillGroups(IEnumerable<IEnumerable<SkillGroup>> groupedSkillGroups, IDictionary<ISkill, int> noAgentsKnowingSkill)
 		{
 			foreach (var skillGroupsOnIsland in groupedSkillGroups)
 			{
 				var numberOfAgentsInIsland = skillGroupsOnIsland.Sum(x => x.Agents.Count());
 				if (numberOfAgentsInIsland < _reduceIslandsLimits.MinimumNumberOfAgentsInIsland)
 					continue;
-				foreach (var skillGroup in skillGroupsOnIsland)
+				foreach (var skillGroup in skillGroupsOnIsland.OrderByDescending(x => x.Agents.Count())) //TODO; gör inte två gånger
 				{
 					var agentsInSkillGroup = skillGroup.Agents.Count();
 					foreach (var skillGroupSkill in skillGroup.Skills.ToArray())
 					{
-						if (agentsInSkillGroup *_reduceIslandsLimits.MinimumFactorOfAgentsInOtherSkillGroup >= noAgentsKnowingSkill[skillGroupSkill])
+						if (agentsInSkillGroup * _reduceIslandsLimits.MinimumFactorOfAgentsInOtherSkillGroup >= noAgentsKnowingSkill[skillGroupSkill])
 							continue;
 
 						if (skillGroup.Skills.Count(x => x.Activity == null || x.Activity.Equals(skillGroupSkill.Activity)) < 2)
-							continue; 
+							continue;
 
-						skillGroup.Skills.Remove(skillGroupSkill); 
+						skillGroup.Skills.Remove(skillGroupSkill);
 						noAgentsKnowingSkill[skillGroupSkill] -= agentsInSkillGroup;
+						return true;
 					}
 				}
 			}
+			return false;
 		}
 	}
 }

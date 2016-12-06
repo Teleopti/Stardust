@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count().Should().Be(1);
 		}
 
-		[Test, Ignore("To be fixed")]
+		[Test]
 		public void ShouldNotCreateSeperateIslandsOfDifferentSkillsIfAnotherHaveThemBoth()
 		{
 			var skill1 = new Skill("1");
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count().Should().Be(1);
 		}
 
-		[Test, Ignore("To be fixed")]
+		[Test]
 		public void ShouldNotCreateSeperateIslandsOfDifferentSkillsIfAnotherHaveThemBothMultiple()
 		{
 			var skill1 = new Skill("1");
