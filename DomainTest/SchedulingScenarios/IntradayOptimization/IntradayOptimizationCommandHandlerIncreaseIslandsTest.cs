@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
@@ -157,6 +158,21 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
 			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count().Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldNotCauseStackOverflowExceptionDueToTooManyRecursiveCalls()
+		{
+			var skill = new Skill("shared");
+			PersonRepository.Has(new Person().KnowsSkill(skill));
+			for (var i = 0; i < 200; i++)
+			{
+				PersonRepository.Has(new Person().KnowsSkill(skill, new Skill(i.ToString())));
+			}
+			Assert.DoesNotThrow(() =>
+			{
+				Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
+			});
 		}
 	}
 }

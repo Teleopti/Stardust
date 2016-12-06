@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Islands
 			while (true)
 			{
 				var skillGroupsInIsland = skillGroups.Select(skillGroup => new List<SkillGroup> { skillGroup }).ToList();
-				moveSkillGroupToCorrectIsland(skillGroupsInIsland);
+				while(moveSkillGroupToCorrectIsland(skillGroupsInIsland)) {}
 
 				if (!_reduceSkillGroups.Execute(skillGroupsInIsland, noAgentsKnowingSkill))
 				{
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Islands
 			}
 		}
 
-		private static void moveSkillGroupToCorrectIsland(IEnumerable<ICollection<SkillGroup>> skillGroupInIslands)
+		private static bool moveSkillGroupToCorrectIsland(IEnumerable<ICollection<SkillGroup>> skillGroupInIslands)
 		{
 			foreach (var skillGroupInIsland in skillGroupInIslands)
 			{
@@ -54,13 +54,13 @@ namespace Teleopti.Ccc.Domain.Islands
 							{
 								otherIsland.Add(skillGroup);
 								skillGroupInIsland.Remove(skillGroup);
-								moveSkillGroupToCorrectIsland(skillGroupInIslands);
-								return;
+								return true;
 							}
 						}
 					}
 				}
 			}
+			return false;
 		}
 	}
 }
