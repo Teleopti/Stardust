@@ -142,32 +142,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			return result;
 		
 		}
-
-		public void UpdateInsertedDateTime(Guid eventLogOnBusinessUnitId)
-		{
-			var connectionString = _currentUnitOfWorkFactory.Current().ConnectionString;
-
-
-			using (var connection = new SqlConnection(connectionString))
-			{
-				connection.Open();
-				using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
-				{
-					var updateReadModelCommand = new SqlCommand();
-					updateReadModelCommand.CommandText =@"update [ReadModel].[ScheduleForecastSkill]
-								set InsertedOn = @insertedOn
-							where SkillId in (select id from Skill where BusinessUnit = @bu)";
-					updateReadModelCommand.Connection = connection;
-					updateReadModelCommand.Transaction = transaction;
-					updateReadModelCommand.Parameters.AddWithValue("@insertedOn", _now.UtcDateTime());
-					updateReadModelCommand.Parameters.AddWithValue("@bu", eventLogOnBusinessUnitId);
-					updateReadModelCommand.ExecuteNonQuery();
-
-					transaction.Commit();
-				}
-			}
-		}
-
+		
 		public IEnumerable<SkillStaffingInterval> GetBySkill(Guid skillId, DateTime startDateTime, DateTime endDateTime)
 		{
 			return GetBySkills(new[] { skillId }, startDateTime, endDateTime);

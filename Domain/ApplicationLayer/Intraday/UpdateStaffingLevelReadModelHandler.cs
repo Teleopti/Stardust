@@ -14,20 +14,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 	public class UpdateStaffingLevelReadModelHandler : IHandleEvent<UpdateStaffingLevelReadModelEvent>, IRunOnStardust
 	{
 		private readonly IUpdateStaffingLevelReadModel _updateStaffingLevelReadModel;
-		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
 		private readonly ICurrentUnitOfWorkFactory _currentFactory;
 		private readonly INow _now;
 		private readonly IRequestStrategySettingsReader _requestStrategySettingsReader;
 		private readonly IStardustJobFeedback _feedback;
+		private readonly IJobStartTimeRepository _jobStartTimeRepository;
 
-		public UpdateStaffingLevelReadModelHandler(IUpdateStaffingLevelReadModel updateStaffingLevelReadModel, ICurrentUnitOfWorkFactory current, INow now, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, IRequestStrategySettingsReader requestStrategySettingsReader, IStardustJobFeedback feedback)
+		public UpdateStaffingLevelReadModelHandler(IUpdateStaffingLevelReadModel updateStaffingLevelReadModel, ICurrentUnitOfWorkFactory current, INow now, IRequestStrategySettingsReader requestStrategySettingsReader, IStardustJobFeedback feedback, IJobStartTimeRepository jobStartTimeRepository)
 		{
 			_updateStaffingLevelReadModel = updateStaffingLevelReadModel;
 			_currentFactory = current;
 			_now = now;
-			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 			_requestStrategySettingsReader = requestStrategySettingsReader;
 			_feedback = feedback;
+			_jobStartTimeRepository = jobStartTimeRepository;
 		}
 
 		[AsSystem]
@@ -35,10 +35,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 		public virtual void Handle(UpdateStaffingLevelReadModelEvent @event)
 		{
 			if (@event.RequestedFromWeb)
-				_scheduleForecastSkillReadModelRepository.UpdateInsertedDateTime(@event.LogOnBusinessUnitId);
+				_jobStartTimeRepository.Persist(@event.LogOnBusinessUnitId, _now.UtcDateTime());
 			else
 			{
-				var lastCalculatedDates = _scheduleForecastSkillReadModelRepository.GetLastCalculatedTime();
+				var lastCalculatedDates = _jobStartTimeRepository.LoadAll();
 				if (lastCalculatedDates.ContainsKey(@event.LogOnBusinessUnitId))
 				{
 					var updateResourceReadModelIntervalMinutes =
@@ -49,9 +49,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 					{
 						_feedback.SendProgress($"The job was recently executed at {lastCalculateDateTime}");
 						return;
-					}
-					_scheduleForecastSkillReadModelRepository.UpdateInsertedDateTime(@event.LogOnBusinessUnitId);
+					}					
 				}
+				_jobStartTimeRepository.Persist(@event.LogOnBusinessUnitId, _now.UtcDateTime());
 			}
 			var period = new DateTimePeriod(@event.StartDateTime, @event.EndDateTime);
 			_updateStaffingLevelReadModel.Update(period);

@@ -4,17 +4,12 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Intraday
 {
-	public interface IJobStartTimeRepository
-	{
-		void Persist(Guid buId, DateTime datetime);
-		IDictionary<Guid, DateTime> LoadAll();
-	}
-
 	public class JobStartTimeRepository : IJobStartTimeRepository
 	{
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;

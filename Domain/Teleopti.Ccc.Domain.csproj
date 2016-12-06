@@ -470,6 +470,7 @@
     <Compile Include="Intraday\ForecastedCallsProvider.cs" />
     <Compile Include="Intraday\ForecastedStaffingProvider.cs" />
     <Compile Include="Intraday\ForecastedStaffingViewModelCreator.cs" />
+    <Compile Include="Intraday\IJobStartTimeRepository.cs" />
     <Compile Include="Intraday\IntradayStaffingViewModel.cs" />
     <Compile Include="Intraday\IntradayStatisticsDataSeries.cs" />
     <Compile Include="Intraday\IntradayStatisticsSummary.cs" />

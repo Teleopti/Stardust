@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	    private readonly List<SkillStaffingInterval> _fakeStaffingList  = new List<SkillStaffingInterval>();
 		private List<CustomStaffingIntervalChange> _readModelChanges = new List<CustomStaffingIntervalChange>();
 		public DateTime UtcNow = DateTime.UtcNow;
-	    public bool UpdateReadModelDateTimeWasCalled { get; set; }
 
 		public void Persist(IEnumerable<SkillStaffingInterval> items, DateTime timeWhenResourceCalcDataLoaded)
 		{
@@ -30,15 +29,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			   return _fakeStaffingList.Where(x => x.SkillId == skillId && 
 			(( x.StartDateTime < startDateTime && x.EndDateTime > startDateTime) || (x.StartDateTime >= startDateTime && x.StartDateTime < endDateTime) ));
-			//var result = new List<SkillStaffingInterval>();
-			//var providedPeriod = new DateTimePeriod(startDateTime,endDateTime);
-			//foreach (var skillStaffingInterval in _fakeStaffingList.Where(x=>x.SkillId == skillId))
-			//{
-			//	var intervalPeriod = new DateTimePeriod(skillStaffingInterval.StartDateTime,skillStaffingInterval.EndDateTime);
-			//	if(intervalPeriod.Intersect(providedPeriod))
-			//		result.Add(skillStaffingInterval);
-			//}
-			//return result;
 
 		}
 
@@ -141,10 +131,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		    return intervals;
 	    }
 
-	    public void UpdateInsertedDateTime(Guid eventLogOnBusinessUnitId)
-	    {
-		    UpdateReadModelDateTimeWasCalled = true;
-	    }
+	    //public void UpdateInsertedDateTime(Guid eventLogOnBusinessUnitId)
+	    //{
+		   // UpdateReadModelDateTimeWasCalled = true;
+	    //}
 
 	    public IDictionary<Guid, DateTime> LastCalculatedDate = new Dictionary<Guid, DateTime>();
     }

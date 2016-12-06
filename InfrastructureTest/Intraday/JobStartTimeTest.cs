@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Infrastructure.Intraday;
 
 namespace Teleopti.Ccc.InfrastructureTest.Intraday
