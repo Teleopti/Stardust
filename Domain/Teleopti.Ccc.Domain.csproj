@@ -500,7 +500,6 @@
     <Compile Include="Islands\ReduceIslandsLimits.cs" />
     <Compile Include="Islands\SameSkillGroupSkillsComparer.cs" />
     <Compile Include="Islands\SkillGroup.cs" />
-    <Compile Include="Islands\SkillGroupComparerForIslands.cs" />
     <Compile Include="Islands\SkillGroupContext.cs" />
     <Compile Include="Islands\SkillGroupInfoProvider.cs" />
     <Compile Include="Islands\SkillGroups.cs" />

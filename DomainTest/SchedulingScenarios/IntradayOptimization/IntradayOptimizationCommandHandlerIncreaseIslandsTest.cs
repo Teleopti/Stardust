@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count().Should().Be(1);
 		}
 
-		[Test, Ignore("To be fixed")]
+		[Test]
 		public void ShouldNotCreateSeperateIslandsOfDifferentSkillsIfAnotherHaveThemBoth()
 		{
 			var skill1 = new Skill("1");
@@ -135,6 +135,24 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			PersonRepository.Has(skill1, skill2);
 			PersonRepository.Has(skill2);
 			PersonRepository.Has(skill1);
+
+			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
+
+			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count().Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldNotCreateSeperateIslandsOfDifferentSkillsIfAnotherHaveThemBothMultiple()
+		{
+			var skill1 = new Skill("1");
+			var skill2 = new Skill("2");
+			var skill3 = new Skill("3");
+			var skill4 = new Skill("4");
+			var skill5 = new Skill("5");
+			var skill6 = new Skill("6");
+			PersonRepository.Has(skill1, skill2, skill3);
+			PersonRepository.Has(skill4, skill5, skill6);
+			PersonRepository.Has(skill3, skill4);
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
