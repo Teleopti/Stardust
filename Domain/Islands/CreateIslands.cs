@@ -27,41 +27,10 @@ namespace Teleopti.Ccc.Domain.Islands
 		{
 			var skillGroups = _createSkillGroups.Create(_peopleInOrganization.Agents(period), period.StartDate);
 			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(skillGroups);
-			
-			var skillGroupInIslands = skillGroups.Select(skillGroup => new List<SkillGroup> {skillGroup}).ToList();
-			moveSkillGroupToCorrectIsland(skillGroupInIslands);
-			var skillGroupInIslandsEmptyRemoved = skillGroupInIslands.Where(x => x.Count > 0);
-
-
-			reduceSkillGroups(skillGroupInIslandsEmptyRemoved, noAgentsKnowingSkill);
-			return skillGroupInIslandsEmptyRemoved.Select(skillGroupInIsland => new Island(skillGroupInIsland, noAgentsKnowingSkill)).ToList();
+			var groupedSkillGroups = skillGroups.GroupBy(x => x, (group, groups) => groups, new SkillGroupComparerForIslands());
+			reduceSkillGroups(groupedSkillGroups, noAgentsKnowingSkill);
+			return groupedSkillGroups.Select(skillGroupInIsland => new Island(skillGroupInIsland)).ToList();
 		}
-
-		private static void moveSkillGroupToCorrectIsland(IList<List<SkillGroup>> skillGroupInIslands)
-		{
-			foreach (var skillGroupInIsland in skillGroupInIslands)
-			{
-				foreach (var skillGroup in skillGroupInIsland.ToList())
-				{
-					var allOtherIslands = skillGroupInIslands.Except(new[] {  skillGroupInIsland });
-					foreach (var otherIsland in allOtherIslands)
-					{
-						foreach (var otherSkillGroup in otherIsland.ToArray())
-						{
-							if (otherSkillGroup.Skills.Intersect(skillGroup.Skills).Any())
-							{
-								otherIsland.Add(skillGroup);
-								skillGroupInIsland.Remove(skillGroup);
-							}
-						}
-					}
-				}
-			}
-		}
-
-
-		
-
 
 		private void reduceSkillGroups(IEnumerable<IEnumerable<SkillGroup>> groupedSkillGroups, IDictionary<ISkill, int> noAgentsKnowingSkill)
 		{
