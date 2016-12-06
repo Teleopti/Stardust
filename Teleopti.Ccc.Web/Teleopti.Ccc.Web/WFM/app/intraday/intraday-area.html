@@ -128,6 +128,7 @@
 	</div>
 </div>
 
+							{{viewObj}}
 <div class="con-row" ng-show="selectedSkill.Name || selectedSkillArea.Name">
 	<div class="con-flex">
 		<div class="panel material-depth-1" >
@@ -135,7 +136,7 @@
 				<md-content class="md-padding">
 					<md-tabs md-dynamic-height md-selected="activeTab">
 						<md-tab label="{{'IncomingTraffic'|translate}}" ng-click="pollActiveTabDataHelper(activeTab)">
-							<md-content ng-cloak class="md-padding" ng-show="viewObj.timeSeries.length > 2 && viewObj.forecastedCallsObj.series[1]">
+							<md-content ng-cloak class="md-padding" ng-show="viewObj.timeSeries.length > 2 && viewObj.forecastedCallsObj.max > 0">
 								<div class="con-row">
 									<div class="con-flex">
 										<div class="wfm-chart intraday-chart" id="trafficChart"></div>
