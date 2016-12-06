@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
 			var events = EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>();
-			events.Count().Should().Be.EqualTo(2); //now also creating two unnecessary islands with one agent in each
+			events.Count().Should().Be.EqualTo(2);
 			events.Any(x => x.AgentsInIsland.Count() == 7).Should().Be.True();
 			events.Any(x => x.AgentsInIsland.Count() == 2).Should().Be.True();
 		}
