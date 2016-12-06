@@ -50,7 +50,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: micke
         /// Created date: 2008-09-04
         /// </remarks>
-        IList<IScheduleDay> SwapAssignments(IScheduleDictionary schedules);
+        IList<IScheduleDay> SwapAssignments(IScheduleDictionary schedules, bool ignoreAssignmentPermission);
 
         ///// <summary>
         ///// Swaps the days off if permitted.

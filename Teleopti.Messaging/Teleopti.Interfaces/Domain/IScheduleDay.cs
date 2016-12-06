@@ -121,7 +121,8 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="source">The source.</param>
 		/// <param name="isDelete">if set to <c>true</c> [delete].</param>
 		/// <param name="ignoreTimeZoneChanges">if set to <c>true</c> calculate with time changes.</param>
-		void Merge(IScheduleDay source, bool isDelete, bool ignoreTimeZoneChanges);
+		/// <param name="ignoreAssignmentPermission">if set to <c>true</c> when team leader has approve shift trade permission, ignore this modify assignment permission.</param>
+		void Merge(IScheduleDay source, bool isDelete, bool ignoreTimeZoneChanges, bool ignoreAssignmentPermission = false);
 
 		#endregion
 

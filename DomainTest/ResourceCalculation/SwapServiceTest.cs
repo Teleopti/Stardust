@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 _mocks.BackToRecord(_dic);
                 Expect.Call(_dic[null]).IgnoreArguments().Return(_range).Repeat.AtLeastOnce();
             }
-            IList<IScheduleDay> retList = service.SwapAssignments(_dictionary);
+            IList<IScheduleDay> retList = service.SwapAssignments(_dictionary, false);
 
             Assert.AreEqual("kalle", retList[0].Person.Name.LastName);
         }
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 _mocks.BackToRecord(_dic);
                 Expect.Call(_dic[null]).IgnoreArguments().Return(_range).Repeat.AtLeastOnce();
             }
-            IList<IScheduleDay> retList = service.SwapAssignments(_dictionary);
+            IList<IScheduleDay> retList = service.SwapAssignments(_dictionary, false);
 
             Assert.AreEqual("kalle", retList[0].Person.Name.LastName);
 						Assert.AreEqual(0, retList[0].PersonAssignment().MainActivities().Count());
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			
 			dic.AddPersonAssignment(scheduleDay1.PersonAssignment());
 			dic.AddPersonAssignment(scheduleDay2.PersonAssignment());
-			IList<IScheduleDay> swapped = target.SwapAssignments(dic);
+			IList<IScheduleDay> swapped = target.SwapAssignments(dic, false);
 
 			verifyAllSchedulesStartAtTheSameUtcTime(swapped);
 
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _list = new List<IScheduleDay>();
             SwapService service = new SwapService();
             service.Init(_list);
-			Assert.Throws<ConstraintException>(() => service.SwapAssignments(_dictionary));
+			Assert.Throws<ConstraintException>(() => service.SwapAssignments(_dictionary, false));
         }
         
         private void SetupForAssignmentSwap()

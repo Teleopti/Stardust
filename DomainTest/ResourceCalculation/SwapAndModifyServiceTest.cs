@@ -126,8 +126,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_range2.ScheduledDay(_dates[1])).Return(_p2D2);
                 _swapService.Init(null);
                 LastCall.IgnoreArguments().Repeat.AtLeastOnce();
-                Expect.Call(_swapService.SwapAssignments(_dictionary)).Return(new List<IScheduleDay> {_p1D1,_p2D1});
-                Expect.Call(_swapService.SwapAssignments(_dictionary)).Return(new List<IScheduleDay> { _p1D2, _p2D2 });
+                Expect.Call(_swapService.SwapAssignments(_dictionary, false)).Return(new List<IScheduleDay> {_p1D1,_p2D1});
+                Expect.Call(_swapService.SwapAssignments(_dictionary, false)).Return(new List<IScheduleDay> { _p1D2, _p2D2 });
                 Expect.Call(_dictionary.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay>(), null, _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance))).IgnoreArguments().Return(new List<IBusinessRuleResponse>());
             }
             using (_mocks.Playback())
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_range2.ScheduledDay(_dates[0])).Return(_p2D1);
                 _swapService.Init(null);
                 LastCall.IgnoreArguments().Repeat.AtLeastOnce();
-                Expect.Call(_swapService.SwapAssignments(_dictionary)).Return(new List<IScheduleDay> { _p1D1, _p2D1 });
+                Expect.Call(_swapService.SwapAssignments(_dictionary, false)).Return(new List<IScheduleDay> { _p1D1, _p2D1 });
                 Expect.Call(_dictionary.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay>(), null, _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance))).
                     IgnoreArguments().Return(new List<IBusinessRuleResponse>{response1,response2});
                 Expect.Call(response1.Overridden).Return(true);
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_dictionary[_person2]).Return(_range1);
                 Expect.Call(_range1.ScheduledDay(date2)).Return(_p1D1);
                 Expect.Call(()=>_swapService.Init(null)).IgnoreArguments();
-                Expect.Call(_swapService.SwapAssignments(_dictionary)).Return(new List<IScheduleDay> { _p1D1, _p2D1 });
+                Expect.Call(_swapService.SwapAssignments(_dictionary, true)).Return(new List<IScheduleDay> { _p1D1, _p2D1 });
                 //detail2
                 Expect.Call(_dictionary[_person2]).Return(_range2);
                 Expect.Call(_range2.ScheduledDay(date1)).Return(_p1D1);
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_range1.ScheduledDay(date2)).Return(_p1D1);
 
                 Expect.Call(()=>_swapService.Init(null)).IgnoreArguments();
-                Expect.Call(_swapService.SwapAssignments(_dictionary)).Return(new List<IScheduleDay> { _p1D1, _p2D1 });
+                Expect.Call(_swapService.SwapAssignments(_dictionary, true)).Return(new List<IScheduleDay> { _p1D1, _p2D1 });
 
                 Expect.Call(ruleResponse1.Overridden).Return(true);
                 Expect.Call(ruleResponse2.Overridden).Return(false);
@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			using (_mocks.Record())
 			{
 				Expect.Call(() => _swapService.Init(null)).IgnoreArguments().Repeat.Times(numberOfshiftTradeSwapDetails);
-				Expect.Call(_swapService.SwapAssignments(_dictionary)).Return(new List<IScheduleDay> { _p1D1, _p1D2 }).Repeat.Times(numberOfshiftTradeSwapDetails);
+				Expect.Call(_swapService.SwapAssignments(_dictionary, true)).Return(new List<IScheduleDay> { _p1D1, _p1D2 }).Repeat.Times(numberOfshiftTradeSwapDetails);
 
 				Expect.Call(_dictionary.Modify(ScheduleModifier.Scheduler, scheduleDays, null, null, null)).IgnoreArguments()
 					.Return(lista);

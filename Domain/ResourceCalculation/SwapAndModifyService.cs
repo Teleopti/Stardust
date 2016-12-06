@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 IScheduleDay part1 = scheduleDictionary[detail.PersonFrom].ScheduledDay(detail.DateFrom);
                 IScheduleDay part2 = scheduleDictionary[detail.PersonTo].ScheduledDay(detail.DateTo);
                 IList<IScheduleDay> selectedSchedules = new List<IScheduleDay> { part1, part2 };
-                modifiedParts.AddRange(swapParts(scheduleDictionary, selectedSchedules));
+                modifiedParts.AddRange(swapParts(scheduleDictionary, selectedSchedules, true));
             }
 
 			var ruleRepsonses = scheduleDictionary.Modify(ScheduleModifier.Scheduler, modifiedParts, newBusinessRuleCollection, _scheduleDayChangeCallback, scheduleTagSetter);
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 IScheduleDay part1 = scheduleDictionary[person1].ScheduledDay(dateOnly);
                 IScheduleDay part2 = scheduleDictionary[person2].ScheduledDay(dateOnly);
                 IList<IScheduleDay> selectedSchedules = new List<IScheduleDay> {part1, part2};
-                modifiedParts.AddRange(swapParts(scheduleDictionary, selectedSchedules));
+                modifiedParts.AddRange(swapParts(scheduleDictionary, selectedSchedules, false));
 
 								var ass1 = part1.PersonAssignment();
 								if (ass1 != null)
@@ -98,10 +98,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return responses.Where(r => !r.Overridden).ToList();
         }
 
-        private IEnumerable<IScheduleDay> swapParts(IScheduleDictionary scheduleDictionary, IList<IScheduleDay> selectedSchedules)
+        private IEnumerable<IScheduleDay> swapParts(IScheduleDictionary scheduleDictionary, IList<IScheduleDay> selectedSchedules, bool ignoreAssignmentPermission)
         {
             _swapService.Init(selectedSchedules);
-            return _swapService.SwapAssignments(scheduleDictionary);
+            return _swapService.SwapAssignments(scheduleDictionary, ignoreAssignmentPermission);
         }
     }
 }

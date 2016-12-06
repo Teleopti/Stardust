@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return true;
         }
 
-        public IList<IScheduleDay> SwapAssignments(IScheduleDictionary schedules)
+        public IList<IScheduleDay> SwapAssignments(IScheduleDictionary schedules, bool ignoreAssignmentPermission)
         {
             if(!CanSwapAssignments())
                 throw new ConstraintException("Can not swap assignments");
@@ -62,8 +62,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				}
 				else
 				{
-					_selectedSchedules[0].Merge(schedulePart1, false, true);
-					_selectedSchedules[1].Merge(schedulePart2, false, true);
+					_selectedSchedules[0].Merge(schedulePart1, false, true, ignoreAssignmentPermission);
+					_selectedSchedules[1].Merge(schedulePart2, false, true, ignoreAssignmentPermission);
 				}
             }
             retList.AddRange(_selectedSchedules);

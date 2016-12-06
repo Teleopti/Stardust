@@ -245,14 +245,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			Merge(source, isDelete, false);
 		}
 
-		public void Merge(IScheduleDay source, bool isDelete, bool ignoreTimeZoneChanges)
+		public void Merge(IScheduleDay source, bool isDelete, bool ignoreTimeZoneChanges, bool ignoreAssignmentPermission = false)
 		{
 			SchedulePartView view = source.SignificantPartForDisplay();
 
 			switch (view)
 			{
 				case SchedulePartView.DayOff:
-					if (isDelete) DeleteDayOff(); else mergeDayOff(source, true); break;
+					if (isDelete) DeleteDayOff(); else mergeDayOff(source, true, ignoreAssignmentPermission); break;
 
 				case SchedulePartView.ContractDayOff:
 					if (isDelete) DeleteFullDayAbsence(source); else mergeFullDayAbsence(source);
@@ -345,10 +345,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					}
 		}
 
-		private void mergeDayOff(IScheduleDay source, bool deleteAbsence)
+		private void mergeDayOff(IScheduleDay source, bool deleteAbsence, bool ignoreAssignmentPermission)
 		{
 			var authorization = PrincipalAuthorization.Current();
-			if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
+			if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment) && !ignoreAssignmentPermission)
 				return;
 
 			if (!PersonAbsenceCollection().IsEmpty() && !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
