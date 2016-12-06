@@ -17,6 +17,11 @@ angular.module('wfm.rta').provider('RtaState', function () {
 			return 'app/rta/agents/rta-agents-HideAgentsByStateGroup_40469.html';
 		return 'app/rta/agents/rta-agents.html';
 	}
+	var rtaSkillTemplateUrl = function (elem, attr) {
+		if(toggles.RTA_QuicklyChangeAgentsSelection_40610)
+			return 'app/rta/agents/rta-agents-RTA_QuicklyChangeAgentsSelection_40610.html';
+		return 'app/rta/skills/rta-selectSkill.html'
+	}
 
 	var sitesBySkillTemplate = function (elem, attr) {
 		return toggles.RTA_SiteAndTeamOnSkillOverview_40817 ? 'app/rta/overview/rta-sites-SiteOnSkillsOverview.html' : 'app/rta/overview/rta-sites.html';
@@ -40,7 +45,7 @@ angular.module('wfm.rta').provider('RtaState', function () {
 		})
 			.state('rta.select-skill', {
 				url: '/select-skill/?siteIds&teamIds&skillIds&skillAreaId&showAllAgents&es',
-				templateUrl: rtaAgentsTemplateUrl,
+				templateUrl: rtaSkillTemplateUrl,
 				controller: 'RtaAgentsCtrl',//'RtaSelectSkillQuickSelectionCtrl',
 				params: {
 					siteIds: {
