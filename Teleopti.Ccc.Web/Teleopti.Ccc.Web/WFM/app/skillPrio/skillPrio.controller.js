@@ -115,7 +115,9 @@
 
 
         function prioritizeSkill(skill, priority) {
-            if (!skill) return;
+          console.log('skill', skill);
+
+            if (!skill || skill == null) return;
 
             skillPreChecks(skill, priority);
             var parent = findParentItem(skill);
@@ -128,7 +130,7 @@
                     skills: [skill]
                 });
             }
-            removeFromActivitySkills(skill)
+            removeFromActivitySkills(skill);
         }
 
         function addPrioritizeSkillAbove(skill, priority) {
@@ -190,6 +192,8 @@
             }
             var sanitizedSkill = sanitizeSkill(skill);
             addToActivitySkills(sanitizedSkill);
+
+            vm.firstSearchSkillText = null;
         }
 
         function removeFromActivitySkills(skill) {
