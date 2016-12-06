@@ -62,9 +62,7 @@ Scenario: Monitor agents by skill area
 	And 'Ashley Andeen' sets his phone state to 'LoggedOut'
 	And 'Pierre Baldi' sets his phone state to 'LoggedOut'
 	And 'John King' sets his phone state to 'LoggedOut'
-	When I view Real time adherence sites
-	And I click 'select skill'
-	And I select skill area 'Phone skills'	
+	And  I am viewing real time adherence for skill area 'Phone skills' on sites 'Paris'
 	Then I should see agent 'Pierre Baldi' with state 'LoggedOut'
 	And I should see agent 'Ashley Andeen' with state 'LoggedOut'
 	And I should not see agent 'John King'
