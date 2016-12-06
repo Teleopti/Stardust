@@ -9,24 +9,26 @@ Background:
          And I have a role with full access        
          And there is an activity named 'Phone'
          And there is a skill named 'Sales' with activity 'Phone'
-         And there is a skill named 'Email' with activity 'Phone'
+         And there is a skill named 'Support' with activity 'Phone'
+         And there is a site named 'London'
+         And there is a team named 'LondonTeam' on site 'London'
          And there is a site named 'Paris'
-         And there is a team named 'Red' on site 'Paris'
-         And there is a team named 'Green' on site 'Paris'
+         And there is a team named 'ParisTeam1' on site 'Paris'
+         And there is a team named 'ParisTeam2' on site 'Paris'
          And Pierre Baldi has a person period with
           | Field      | Value      |
-          | Team       | Green      |
-          | Start Date | 2016-06-14 |
+          | Team       | ParisTeam1 |
+          | Start Date | 2016-01-01 |
           | Skill      | Sales      |
          And John King has a person period with
           | Field      | Value      |
-          | Team       | Red        |
-          | Start Date | 2016-06-14 |
-          | Skill      | Email      |
+          | Team       | ParisTeam2 |
+          | Start Date | 2016-06-01 |
+          | Skill      | Support    |
          And Ashley Andeen has a person period with
           | Field      | Value      |
-          | Team       | Red        |
-          | Start Date | 2016-06-14 |
+          | Team       | LondonTeam |
+          | Start Date | 2016-06-01 |
           | Skill      | Sales      |
          And Pierre Baldi has a shift with
          | Field      | Value            |
@@ -57,42 +59,12 @@ Background:
          | Is alarm    | false    |
 
 @OnlyRunIfEnabled('RTA_QuicklyChangeAgentsSelection_40610')
-Scenario: Quickly change agent selection for skill, team
+Scenario: Quickly change agent selection for skill, site and team
          Given the time is '2016-06-14 08:00:00'
          And 'Pierre Baldi' sets his phone state to 'LoggedOut'
          And 'Ashley Andeen' sets his phone state to 'LoggedOut'
          And 'John King' sets his phone state to 'LoggedOut'
-         When I view Real time adherence sites
-         And I click 'select skill'
-         And I select skill 'Sales'
+		 Given I am viewing real time adherence for sites 'London' and teams 'ParisTeam1' with skill 'Sales'
          Then I should see agent 'Pierre Baldi' with state 'LoggedOut'
          And I should see agent 'Ashley Andeen' with state 'LoggedOut'
          And I should not see agent 'John King'
-         Given the time is '2016-06-14 08:05:00'
-         Then I choose 'organization' 
-         Then I collapse site 'Paris'
-         Then I select team 'Red'
-         Then I am done with my selection
-         When the time is '2016-06-14 08:10:00'
-         Then I should see agent 'Ashley Andeen' with state 'LoggedOut'
-         And I should not see agent 'Pierre Baldi'
-
-@OnlyRunIfEnabled('RTA_QuicklyChangeAgentsSelection_40610')
-Scenario: Quickly change agent selection for skill, site
-         Given the time is '2016-06-14 08:00:00'
-         And 'Pierre Baldi' sets his phone state to 'LoggedOut'
-         And 'Ashley Andeen' sets his phone state to 'LoggedOut'
-         And 'John King' sets his phone state to 'LoggedOut'
-         When I view Real time adherence sites
-         And I click 'select skill'
-         And I select skill 'Sales'
-         Then I should see agent 'Pierre Baldi' with state 'LoggedOut'
-         And I should see agent 'Ashley Andeen' with state 'LoggedOut'
-         And I should not see agent 'John King'
-         Given the time is '2016-06-14 08:05:00'
-         Then I choose 'organization' 
-         Then I select site 'Paris'
-         Then I am done with my selection
-         When the time is '2016-06-14 08:10:00'
-         Then I should see agent 'Ashley Andeen' with state 'LoggedOut'
-         And I should see agent 'Pierre Baldi' with state 'LoggedOut'

@@ -533,14 +533,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GotoRealTimeAdherenceForSkillOnSites(IEnumerable<Guid> siteIds, Guid skillId)
 		{
-			var teamString = string.Join("&siteIds=", siteIds);
-			GoToPage("wfm/#/rta/agents/?siteIds=" + teamString + "&skillIds=" + skillId);
+			var sites = string.Join("&siteIds=", siteIds);
+			GoToPage("wfm/#/rta/agents/?siteIds=" + sites + "&skillIds=" + skillId);
 		}
 
 		public static void GotoRealTimeAdherenceForSkillAreaOnSites(IEnumerable<Guid> siteIds, Guid skillAreaId)
 		{
-			var teamString = string.Join("&siteIds=", siteIds);
-			GoToPage("wfm/#/rta/agents/?siteIds=" + teamString + "&skillAreaId=" + skillAreaId);
+			var sites = string.Join("&siteIds=", siteIds);
+			GoToPage("wfm/#/rta/agents/?siteIds=" + sites + "&skillAreaId=" + skillAreaId);
+		}
+
+
+		public static void GotoRealTimeAdherenceForSkillOnSitesAndTeams(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, Guid skillId)
+		{
+			var sites = string.Join("&siteIds=", siteIds);
+			var teams = string.Join("&teamIds=", teamIds);
+			GoToPage("wfm/#/rta/agents/?siteIds=" + sites + "&teamIds=" + teams + "&skillIds=" + skillId);
 		}
 
 		public static void GoToAgentDetails(Guid personId)
