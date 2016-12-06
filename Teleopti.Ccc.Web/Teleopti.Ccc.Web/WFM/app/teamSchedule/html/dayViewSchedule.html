@@ -8,49 +8,47 @@
 </div>
 
 <div class="team-schedule panel wfm-block material-depth-1" ng-click="vm.showDatePicker && (vm.showDatePicker = false)">
-	<div class="teamschedule-header">
-		<organization-picker ng-if="vm.toggles.DisplayScheduleOnBusinessHierachyEnabled" available-groups="vm.availableGroups">
+	<div class="teamschedule-header" layout="row">
+		<organization-picker ng-if="vm.toggles.DisplayScheduleOnBusinessHierachyEnabled" available-groups="vm.availableGroups" class="organization-picker-container">
 		</organization-picker>
-		<div layout="row">
-			<div class="leftside-part">
-				<span class="people-search-container" ng-if="vm.searchEnabled">
-					<wfm-multiple-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"></wfm-multiple-search-input>
-				</span>
+		<div class="leftside-part">
+			<span class="people-search-container" ng-if="vm.searchEnabled">
+				<wfm-multiple-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"></wfm-multiple-search-input>
+			</span>
 
-				<span class="datepicker-container" ng-click="$event.stopPropagation()">
-					<team-schedule-datepicker selected-date="vm.scheduleDate" status="vm.showDatePicker" on-date-change="vm.onScheduleDateChanged()"></team-schedule-datepicker>
-				</span>
+			<span class="datepicker-container" ng-click="$event.stopPropagation()">
+				<team-schedule-datepicker selected-date="vm.scheduleDate" status="vm.showDatePicker" on-date-change="vm.onScheduleDateChanged()"></team-schedule-datepicker>
+			</span>
 
-				<view-changer ng-if="vm.toggles.WeekViewEnabled && vm.searchEnabled" selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword"></view-changer>
+			<view-changer ng-if="vm.toggles.WeekViewEnabled && vm.searchEnabled" selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword"></view-changer>
+		</div>
+
+		<timezone-picker available-timezones="vm.availableTimezones" on-pick="vm.changeTimezone(timezone)" ng-if="vm.toggles.ViewScheduleOnTimezoneEnabled"></timezone-picker>
+
+		<div class="warning-container" ng-if="vm.toggles.ShowValidationWarnings">
+			<div id="show-warnings" class="wfm-switch">
+				<input type="checkbox" id="validateWarning" ng-model="vm.cmdConfigurations.validateWarningToggle" ng-change="vm.checkValidationWarningForCurrentPage()"/>
+				<label for="validateWarning">
+					<span class="wfm-switch-label" translate>ShowWarnings</span>
+					<span class="wfm-switch-toggle"></span>
+				</label>
+			</div>
+		</div>
+
+		<div class="rightside-part">
+			<div class="wfm-switch" ng-if="vm.toggles.RemoveAbsenceEnabled && vm.searchEnabled">
+				<input type="checkbox" id="switchAbsence" ng-model="vm.onlyLoadScheduleWithAbsence" ng-change="vm.toggleShowAbsenceOnly()"/>
+				<label for="switchAbsence">
+					<span class="wfm-switch-label" translate>ShowOnlyAbsence</span>
+					<span class="wfm-switch-toggle"></span>
+				</label>
 			</div>
 
-			<timezone-picker available-timezones="vm.availableTimezones" on-pick="vm.changeTimezone(timezone)" ng-if="vm.toggles.ViewScheduleOnTimezoneEnabled"></timezone-picker>
+			<span class="settings-container cursor-pointer" ng-if="vm.toggles.ShowValidationWarnings && vm.toggles.FilterValidationWarningsEnabled" ng-click="vm.openSettingsPanel()">
+				<i class="mdi mdi-settings"></i>
+			</span>
 
-			<div class="warning-container" ng-if="vm.toggles.ShowValidationWarnings">
-				<div id="show-warnings" class="wfm-switch">
-					<input type="checkbox" id="validateWarning" ng-model="vm.cmdConfigurations.validateWarningToggle" ng-change="vm.checkValidationWarningForCurrentPage()"/>
-					<label for="validateWarning">
-						<span class="wfm-switch-label" translate>ShowWarnings</span>
-						<span class="wfm-switch-toggle"></span>
-					</label>
-				</div>
-			</div>
-
-			<div class="rightside-part">
-				<div class="wfm-switch" ng-if="vm.toggles.RemoveAbsenceEnabled && vm.searchEnabled">
-					<input type="checkbox" id="switchAbsence" ng-model="vm.onlyLoadScheduleWithAbsence" ng-change="vm.toggleShowAbsenceOnly()"/>
-					<label for="switchAbsence">
-						<span class="wfm-switch-label" translate>ShowOnlyAbsence</span>
-						<span class="wfm-switch-toggle"></span>
-					</label>
-				</div>
-
-				<span class="settings-container cursor-pointer" ng-if="vm.toggles.ShowValidationWarnings && vm.toggles.FilterValidationWarningsEnabled" ng-click="vm.openSettingsPanel()">
-					<i class="mdi mdi-settings"></i>
-				</span>
-
-				<teamschedule-command-menu class="teamschedule-command" ng-if="vm.permissionsAndTogglesLoaded" configurations="vm.cmdConfigurations" trigger-command="vm.triggerCommand(label, needToOpenSidePanel)"></teamschedule-command-menu>
-			</div>
+			<teamschedule-command-menu class="teamschedule-command" ng-if="vm.permissionsAndTogglesLoaded" configurations="vm.cmdConfigurations" trigger-command="vm.triggerCommand(label, needToOpenSidePanel)"></teamschedule-command-menu>
 		</div>
 	</div>
 	<div class="con-row teamschedule-body">

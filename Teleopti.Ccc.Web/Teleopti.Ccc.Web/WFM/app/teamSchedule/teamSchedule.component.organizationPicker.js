@@ -1,9 +1,8 @@
-﻿(function () {
+﻿(function() {
 	'use strict';
 
 	angular.module("wfm.teamSchedule")
-		.component('organizationPicker',
-		{
+		.component('organizationPicker', {
 			templateUrl: 'app/teamSchedule/html/organizationPicker.tpl.html',
 			controller: organizationPickerCtrl,
 			bindings: {
@@ -12,35 +11,32 @@
 			}
 		});
 
-	organizationPickerCtrl.$inject = [];
+	organizationPickerCtrl.$inject = ['$scope'];
 
-	function organizationPickerCtrl() {
+	function organizationPickerCtrl($scope) {
 		var ctrl = this;
+		ctrl.currentSite = undefined;
 
-		ctrl.$onInit = $onInit;
-		ctrl.$onChanges = $onChanges;
-		ctrl.onSelectionDone = onSelectionDone;
-		ctrl.shortDisplayNameOfTheSelected = shortDisplayNameOfTheSelected;
-		ctrl.isSiteChecked = isSiteChecked;
-		ctrl.toggleSite = toggleSite;
-
-		function $onInit() {
+		ctrl.$onInit = function() {
 			populateGroupList();
-			ctrl.selectedGroups = [];
-			onSelectionDone();
-		}
+			ctrl.selectedTeamIds = [];
+			ctrl.onSelectionDone();
+		};
 
-		function $onChanges(changesObj) {
+		ctrl.$onChanges = function(changesObj) {
 			if (!changesObj.availableGroups || changesObj.availableGroups.length === 0) return;
 			populateGroupList();
-
-		}
-
+		};
 
 		function populateGroupList() {
 			ctrl.groupList = [];
-			ctrl.availableGroups.forEach(function (g) {
-				var site = { id: g.Id, name: g.Name, teams: [], isChecked: false};
+			ctrl.availableGroups.forEach(function(g) {
+				var site = {
+					id: g.Id,
+					name: g.Name,
+					teams: [],
+					isChecked: false
+				};
 				g.Children.forEach(function(t) {
 					site.teams.push({
 						id: t.Id,
@@ -51,55 +47,66 @@
 			});
 		}
 
-		function shortDisplayNameOfTheSelected() {
-			if (!ctrl.selectedGroups) return '';
-			if (ctrl.selectedGroups.length > 1)
-				return ctrl.selectedGroups.length + " teams selected";
+		ctrl.formatSelectedDisplayName = function() {
+			if (!ctrl.selectedTeamIds) return '';
+			if (ctrl.selectedTeamIds.length > 1)
+				return ctrl.selectedTeamIds.length + " teams selected";
 			for (var i = 0; i < ctrl.groupList.length; i++) {
 				var teams = ctrl.groupList[i].teams
 				for (var j = 0; j < teams.length; j++) {
-					if (ctrl.selectedGroups[0] === teams[j].id) {
+					if (ctrl.selectedTeamIds[0] === teams[j].id) {
 						return teams[j].name;
 					}
 				}
 			}
 			return '';
+		};
+
+		ctrl.updateSiteCheck = function(site) {
+			if (site)
+				toggleSiteSelection(site);
+		};
+
+		function toggleSiteSelection(site) {
+			var checked = site.isChecked,
+				index, teamId;
+
+			site.teams.forEach(function(team) {
+				teamId = team.id;
+				index = ctrl.selectedTeamIds.indexOf(teamId);
+				if (checked && index === -1)
+					ctrl.selectedTeamIds.push(teamId);
+				if (!checked && index > -1)
+					ctrl.selectedTeamIds.splice(index, 1);
+			});
 		}
 
-		function toggleSite(teams) {
-			if (!teams) return;
-			var previousSiteStatus = isSiteChecked(teams);
-			var currentStatus = !previousSiteStatus;
-			if (currentStatus) {
-				teams.forEach(function(t) {
-					if (ctrl.selectedGroups.indexOf(t.id) < 0) {
-						ctrl.selectedGroups.push(t.id);
-					}
-				});
-			} else {
-				teams.forEach(function (t) {
-					if (ctrl.selectedGroups.indexOf(t.id) != -1) {
-						ctrl.selectedGroups.splice(ctrl.selectedGroups.indexOf(t.id), 1);
-					}
-				});
-			}
+		ctrl.setCurrentSiteValue = function(site) {
+			ctrl.currentSite = site;
+		};
+
+		$scope.$watchCollection(function() {
+			return ctrl.selectedTeamIds;
+		}, function(newValue, oldValue, scope) {
+			if (newValue)
+				updateGroupSelection();
+		});
+
+		function updateGroupSelection() {
+			if (!ctrl.currentSite) return;
+			if (ctrl.currentSite.teams.every(function(team) {
+					return ctrl.selectedTeamIds.indexOf(team.id) > -1;
+				}))
+				ctrl.currentSite.isChecked = true;
+			else
+				ctrl.currentSite.isChecked = false;
 		}
 
-		function isSiteChecked(teams) {
-			if (!teams) return false;
-			var isChecked = true;
-			for (var i = 0; i < teams.length; i++) {
-				if (ctrl.selectedGroups.indexOf(teams[i].id) < 0) {
-					isChecked = false;
-					break;
-				}
-			}
-			return isChecked;
-		}
 
-		function onSelectionDone() {
-			ctrl.onPick({ groups: ctrl.selectedGroups });
-		}
+		ctrl.onSelectionDone = function() {
+			ctrl.searchTerm = '';
+
+			//load the schedule data
+		};
 	}
-
 })();

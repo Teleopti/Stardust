@@ -3,6 +3,8 @@
 	border-right: 1px solid $white;
 	overflow: hidden;
 	padding: 0;
+	padding-bottom: 0;
+	margin-bottom: 0;
 
 	input {
 		background-color: transparent;
@@ -54,6 +56,7 @@
 
 		& > *{
 			align-self: center;
+			height: 100%;
 		}
 
 		.leftside-part {
@@ -61,7 +64,8 @@
 			flex-direction: row;
 			flex-wrap: wrap;
 			justify-content: flex-start;
-		}
+			height: 100%;
+ 		}
 
 		.people-search-container {
 			display: inline-block;
@@ -74,7 +78,11 @@
 			}
 
 			.advanced-input {
-				width: 316px;
+				width: 200px;
+			}
+
+			wfm-multiple-search-input .expand-advanced-input{
+				width: 200px!important;
 			}
 
 			.expand-advanced-input{
@@ -848,8 +856,91 @@ md-tooltip.layer-summary{
 		}
 
 	}
+}
+
+.organization-picker-container{
+	display: inline-block;
+	margin: 6px 10px 14px 0;
 
 
+	md-input-container{
+		margin: 0;
+		padding: 0;
+		padding-bottom: 2px;
+		min-width: 200px;
+
+		label{
+			display: none!important;
+		}
+	}
+
+	.md-select-value{
+		align-items: flex-end;
+	}
+}
+
+.organization-picker {
+	min-width: 200px!important;
+	margin-left: 2em; //remove this after ngMaterial updated
+
+	md-select-menu, md-content._md {
+		max-height: 600px;
+		width: 100%;
+	}
+
+	md-content._md {
+		padding: 0.5em 0;
+	}
+	label {
+		display: none !important;
+	}
+	.picker-select-header {
+		box-shadow: 0 1px 0 0 $gray012, 0 0 0 0 $gray012, 0 0 0 0 $gray012;
+		margin: 0 0.5em;
+		height: 30px;
+		cursor: pointer;
+		position: relative;
+		display: flex;
+		align-items: center;
+		width: auto;
+	}
+	.picker-searchbox {
+		border: none;
+		outline: none;
+		height: 100%;
+		width: 100%;
+		padding: 0;
+	}
+	md-optgroup {
+		padding: 0.5em 0;
+		border-bottom: 1px solid $gray012;
+
+		& > md-checkbox {
+			width: 100%;
+			padding: 5px 0;
+			margin: 0;
+			font-weight: bold;
+			color: $gray054;
+
+			& > .md-label {
+				margin-left: 40px;
+			}
+			& > div.md-container {
+				left: 10px;
+			}
+		}
+		& > md-checkbox:hover {
+			background-color: rgba(0, 0, 0, .06)!important;
+		}
+		& > md-option {
+			margin-left: 0.6em;
+			color: $gray087;
+
+			& > md-container {
+				margin-left: 10px;
+			}
+		}
+	}
 }
 
 md-select-menu md-option:first-child:not([disabled]):focus {
