@@ -1,7 +1,8 @@
 ﻿<div layout="row">
     <md-input-container>
         <label>Organization</label>
-        <md-select ng-model="$ctrl.selectedGroups" ng-change="$ctrl.onSelectionChanged()"
+	    <md-select ng-model="$ctrl.selectedGroups" ng-change="$ctrl.onSelectionChanged()"
+				   md-selected-text="$ctrl.shortDisplayNameOfTheSelected()"
                    md-on-close="clearSearchTerm()"
                    data-md-container-class="selectdemoSelectHeader"
                    multiple>

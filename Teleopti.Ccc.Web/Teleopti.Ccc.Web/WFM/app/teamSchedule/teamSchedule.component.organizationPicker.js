@@ -52,9 +52,18 @@
 		}
 
 		function shortDisplayNameOfTheSelected() {
-			if (ctrl.selectedGroups && ctrl.selectedGroups.length > 1)
-				return ctrl.selectedGroups.length + "groups selected";
-			return "to do";
+			if (!ctrl.selectedGroups) return '';
+			if (ctrl.selectedGroups.length > 1)
+				return ctrl.selectedGroups.length + " teams selected";
+			for (var i = 0; i < ctrl.groupList.length; i++) {
+				var teams = ctrl.groupList[i].teams
+				for (var j = 0; j < teams.length; j++) {
+					if (ctrl.selectedGroups[0] === teams[j].id) {
+						return teams[j].name;
+					}
+				}
+			}
+			return '';
 		}
 
 		function toggleSite(teams) {
@@ -91,7 +100,7 @@
 		}
 
 		function onSelectionChanged() {
-			console.log("2222", ctrl.selectedGroups);
+			ctrl.onPick({ groups: ctrl.selectedGroups });
 		}
 	}
 
