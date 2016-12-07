@@ -7,6 +7,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class DeadLockRetrier
 	{
+		private readonly int _totalRetries = 3;
+
 		public void RetryOnDeadlock(Action action)
 		{
 			// make retry and warn logging an aspect?
@@ -21,10 +23,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				catch (DeadLockVictimException e)
 				{
 					attempt++;
-					if (attempt > 3)
+					if (attempt > _totalRetries)
 						throw;
 					LogManager.GetLogger(typeof(DeadLockRetrier))
-						.Warn($"Transaction deadlocked, running attempt {attempt}.", e);
+						.Warn($"Transaction deadlocked, running attempt {attempt} of {_totalRetries}.", e);
 				}
 			}
 		}
