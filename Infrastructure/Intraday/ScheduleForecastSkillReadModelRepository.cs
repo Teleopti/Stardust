@@ -199,12 +199,9 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 		{
 			var result =
 				 ((NHibernateUnitOfWork)_currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
-							@"SELECT s.BusinessUnit,
-					max(InsertedOn) as InsertedOn
-				 FROM [ReadModel].[ScheduleForecastSkill] sfs,
-				 Skill s
-				where sfs.SkillId = s.Id
-				group by s.BusinessUnit")
+							@"select s.BusinessUnit, min(insertedon) as InsertedOn from ReadModel.ScheduleForecastSkill sfs, Skill s
+							where sfs.SkillId = s.Id
+						group by s.BusinessUnit")
 				.SetResultTransformer(Transformers.AliasToBean(typeof(MaxIntervalOnBuModel)))
 					  .List<MaxIntervalOnBuModel>();
 

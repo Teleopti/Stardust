@@ -124,21 +124,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 						EndDateTime = new DateTime(2016, 06, 16, 02, 15, 0, DateTimeKind.Utc),
 						Forecast = 20,
 						StartDateTime = new DateTime(2016, 06, 16, 02, 0, 0, DateTimeKind.Utc)
-					},
-					new SkillStaffingInterval()
-					{
-						SkillId = skill.Id.GetValueOrDefault(),
-						StaffingLevel = 10,
-						EndDateTime = new DateTime(2016, 06, 16, 0, 15, 0, DateTimeKind.Utc),
-						Forecast = 20,
-						StartDateTime = new DateTime(2016, 06, 16, 0, 0, 0, DateTimeKind.Utc)
 					}
 				};
 			Target.Persist(items, DateTime.Now);
-
 			var result = Target.GetLastCalculatedTime();
 			result.First().Value.Should().Be.EqualTo(new DateTime(2016, 06, 16, 03, 15, 0, DateTimeKind.Utc));
-			
 		}
 
 		[Test]
@@ -160,7 +150,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 					}
 				};
 			Target.Persist(items, DateTime.Now);
-
 			var result = Target.GetBySkill(skillId, new DateTime(2016, 06, 16, 0, 0, 0), new DateTime(2016, 06, 16, 23, 59, 59));
 			result.First().ForecastWithShrinkage.Should().Be.EqualTo(25);
 
@@ -630,20 +619,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 					}
 				};
 			Target.Persist(items, DateTime.Now);
-			Now.Is("2016-06-16 03:16");
-			items =
-				new List<SkillStaffingInterval>()
-				{
-					new SkillStaffingInterval()
-					{
-						SkillId = skill1.Id.GetValueOrDefault(),
-						StaffingLevel = 10,
-						EndDateTime = new DateTime(2016, 06, 16, 02, 30, 0, DateTimeKind.Utc),
-						Forecast = 20,
-						StartDateTime = new DateTime(2016, 06, 16, 02, 15, 0, DateTimeKind.Utc)
-					}
-				};
-			Target.Persist(items, DateTime.Now);
 
 			Now.Is("2016-06-16 03:30");
 			items =
@@ -662,7 +637,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 
 			var result = Target.GetLastCalculatedTime();
 			result.Count.Should().Be.EqualTo(2);
-			result[bu1.Id.GetValueOrDefault()].Should().Be.EqualTo(DateTime.Parse("2016-06-16 03:16"));
+			result[bu1.Id.GetValueOrDefault()].Should().Be.EqualTo(DateTime.Parse("2016-06-16 03:15"));
 			result[bu2.Id.GetValueOrDefault()].Should().Be.EqualTo(DateTime.Parse("2016-06-16 03:30"));
 		}
 
@@ -782,5 +757,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 				new DateTime(2016, 06, 17, 02, 15, 0, DateTimeKind.Utc)).ToList();
 			result.Count.Should().Be.EqualTo(1);
 		}
+	
 	}
 }

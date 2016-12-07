@@ -5,7 +5,6 @@ using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Intraday;
@@ -21,17 +20,16 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly IConfigReader _configReader;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(StaffingLevelController));
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
-		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
+		private readonly IJobStartTimeRepository _jobStartTimeRepository;
 
 		public StaffingLevelController(IEventPublisher publisher, INow now, IConfigReader configReader,
-			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
-			IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository)
+			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IJobStartTimeRepository jobStartTimeRepository)
 		{
 			_publisher = publisher;
 			_now = now;
 			_configReader = configReader;
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
-			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
+			_jobStartTimeRepository = jobStartTimeRepository;
 		}
 
 		[UnitOfWork, HttpGet, Route("TriggerResourceCalculate")]
@@ -70,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 		private DateTime getLastCaluclatedDateTime(Guid buId)
 		{
-			var lastCalculated = _scheduleForecastSkillReadModelRepository.GetLastCalculatedTime();
+			var lastCalculated = _jobStartTimeRepository.LoadAll();
 			return lastCalculated.ContainsKey(buId) ? lastCalculated[buId] : DateTime.MinValue;
 		}
 	}

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using log4net;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -13,7 +13,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
-	[EnabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
 	public class IntradayRequestProcessor : IIntradayRequestProcessor
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(IntradayRequestProcessor));
@@ -22,18 +21,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
 		private readonly ResourceAllocator _resourceAllocator;
 		private readonly IIntradayRequestWithinOpenHourValidator _intradayRequestWithinOpenHourValidator;
+		private readonly IScheduleForecastSkillReadModelValidator _scheduleForecastSkillReadModelValidator;
 
 		public IntradayRequestProcessor(ICommandDispatcher commandDispatcher, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, ResourceAllocator resourceAllocator, 
-			IIntradayRequestWithinOpenHourValidator intradayRequestWithinOpenHourValidator)
+			IIntradayRequestWithinOpenHourValidator intradayRequestWithinOpenHourValidator, IScheduleForecastSkillReadModelValidator scheduleForecastSkillReadModelValidator)
 		{
 			_commandDispatcher = commandDispatcher;
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 			_resourceAllocator = resourceAllocator;
 			_intradayRequestWithinOpenHourValidator = intradayRequestWithinOpenHourValidator;
+			_scheduleForecastSkillReadModelValidator = scheduleForecastSkillReadModelValidator;
 		}
 
 		public void Process(IPersonRequest personRequest, DateTime startTime)
 		{
+			if (!_scheduleForecastSkillReadModelValidator.Validate(((PersonRequest)personRequest).BusinessUnit.Id.GetValueOrDefault()))
+			{
+				sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
+				return;
+			}
 			var cascadingPersonSkills = personRequest.Person.Period(new DateOnly(startTime)).CascadingSkills();
 			var lowestIndex = cascadingPersonSkills.Min(x => x.Skill.CascadingIndex);
 			var periods =

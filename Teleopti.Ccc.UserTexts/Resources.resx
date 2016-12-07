@@ -15321,4 +15321,7 @@ These options are activated:
     <value>Search an organization</value>
     <comment>Placeholder text for organization picker search box in WFM/Teams</comment>
   </data>
+  <data name="DenyDueToTechnicalProblems" xml:space="preserve">
+    <value>The staffing information is not updated in the system. Please contact system administrator.</value>
+  </data>
 </root>

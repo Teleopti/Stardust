@@ -8618,6 +8618,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The staffing information is not updated in the system. Please contact system administrator..
+        /// </summary>
+        public static string DenyDueToTechnicalProblems {
+            get {
+                return ResourceManager.GetString("DenyDueToTechnicalProblems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deny Reason.
         /// </summary>
         public static string DenyReason {
