@@ -12,11 +12,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {
-	[Toggle(Toggles.Mailbox_Optimization_41900)]
-	public class MailboxRepository2Test : MailboxRepositoryTest
-	{
-	}
-
 	[TestFixture]
 	[MessageBrokerUnitOfWorkTest]
 	public class MailboxRepositoryTest
