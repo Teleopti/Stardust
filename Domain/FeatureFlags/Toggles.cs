@@ -50,44 +50,52 @@
 		Wfm_ChangePlanningPeriod_33043,
 		WfmPermission_ReplaceOldPermission_34671,
 		WfmIntraday_MonitorActualvsForecasted_35176,
-		WfmTeamSchedule_AbsenceReporting_35995,
+
+		
 		WfmTeamSchedule_SetAgentsPerPage_36230,
-		WfmTeamSchedule_SwapShifts_36231,
 		WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
-		WfmTeamSchedule_RemoveAbsence_36705,
+		WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260,
+		
+		WfmTeamSchedule_AbsenceReporting_35995,
 		WfmTeamSchedule_AddActivity_37541,
-		WfmTeamSchedule_AddOvertime_41696,
-		WfmTeamSchedule_RemoveActivity_37743,
-		WfmTeamSchedule_MoveActivity_37744,
-		WfmTeamSchedule_ShowContractTime_38509,
 		WfmTeamSchedule_AddPersonalActivity_37742,
+		WfmTeamSchedule_AddOvertime_41696,
+		WfmTeamSchedule_MoveActivity_37744,
 		WfmTeamSchedule_MoveInvalidOverlappedActivity_40688,
 		WfmTeamSchedule_MoveEntireShift_41632,
+		WfmTeamSchedule_SwapShifts_36231,
+		WfmTeamSchedule_RemoveAbsence_36705,
+		WfmTeamSchedule_RemoveActivity_37743,
+		WfmTeamSchedule_RevertToPreviousSchedule_39002,
+		
+		WfmTeamSchedule_ShowShiftCategory_39796,
+		WfmTeamSchedule_ModifyShiftCategory_39797,
+		WfmTeamSchedule_ShowContractTime_38509,
+		WfmTeamSchedule_EditAndDisplayInternalNotes_40671,
+		
+		WfmTeamSchedule_WeekView_39870,
+		WfmTeamSchedule_WeeklyContractTime_39871,
+		
 		WfmTeamSchedule_ShowNightlyRestWarning_39619,
 		WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799,
 		WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800,
 		WfmTeamSchedule_ShowDayOffWarning_39801,
-		WfmTeamSchedule_FilterValidationWarnings_40110,
-
-		WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938,
 		WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
+		WfmTeamSchedule_FilterValidationWarnings_40110,
+		
+		WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938,
 		WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279,
-		WfmTeamSchedule_EditAndDisplayInternalNotes_40671,
 		WfmTeamSchedule_CheckPersonalAccountWhenAddingAbsence_41088,
-
-		WebByPassDefaultPermissionCheck_37984,
-		WfmTeamSchedule_RevertToPreviousSchedule_39002,
-		WfmTeamSchedule_ShowShiftCategory_39796,
-		WfmTeamSchedule_ModifyShiftCategory_39797,
-		WfmTeamSchedule_MakeNewMyTeamDefault_39744,
-		WfmTeamSchedule_WeekView_39870,
+		
 		WfmTeamSchedule_MakePersonalActivityUnmerged_40252,
-		WfmTeamSchedule_WeeklyContractTime_39871,
 		WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925,
 		WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305,
-		WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260,
-
+		
 		WfmTeamSchedule_MoveToBaseLicense_41039,
+		WfmTeamSchedule_MakeNewMyTeamDefault_39744,
+
+
+		WebByPassDefaultPermissionCheck_37984,
 
 		WfmReportPortal_Basic_38825,
 		WfmReportPortal_LeaderBoard_39440,

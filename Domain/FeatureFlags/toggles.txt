@@ -53,18 +53,31 @@ RTA_SpreadTransactionLocksStrategy_41823 = true
 
 WfmPermission_ReplaceOldPermission_34671 = true
 
-WfmTeamSchedule_AbsenceReporting_35995 = true
+
 WfmTeamSchedule_SetAgentsPerPage_36230 = true
-WfmTeamSchedule_SwapShifts_36231 = true
 WfmTeamSchedule_SeeScheduleChangesByOthers_36303 = true
-WfmTeamSchedule_RemoveAbsence_36705 = true
+WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260 = DEV
+
+WfmTeamSchedule_AbsenceReporting_35995 = true
 WfmTeamSchedule_AddActivity_37541 = true
 WfmTeamSchedule_AddPersonalActivity_37742 = true
-WfmTeamSchedule_MoveInvalidOverlappedActivity_40688 = true
-WfmTeamSchedule_RemoveActivity_37743 = true
+WfmTeamSchedule_AddOvertime_41696 = RC
 WfmTeamSchedule_MoveActivity_37744 = true
-WfmTeamSchedule_ShowContractTime_38509 = true
+WfmTeamSchedule_MoveInvalidOverlappedActivity_40688 = true
+WfmTeamSchedule_MoveEntireShift_41632 = RC
+WfmTeamSchedule_SwapShifts_36231 = true
+WfmTeamSchedule_RemoveAbsence_36705 = true
+WfmTeamSchedule_RemoveActivity_37743 = true
 WfmTeamSchedule_RevertToPreviousSchedule_39002 = true
+
+WfmTeamSchedule_ShowShiftCategory_39796 = true
+WfmTeamSchedule_ModifyShiftCategory_39797 = true
+WfmTeamSchedule_ShowContractTime_38509 = true
+WfmTeamSchedule_EditAndDisplayInternalNotes_40671 = true
+
+WfmTeamSchedule_WeekView_39870 = true
+WfmTeamSchedule_WeeklyContractTime_39871 = true
+
 WfmTeamSchedule_ShowNightlyRestWarning_39619 = true
 WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799 = true
 WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800 = true
@@ -74,21 +87,15 @@ WfmTeamSchedule_FilterValidationWarnings_40110 = true
 WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938 = true
 WfmTeamSchedule_ShowOverwrittenLayerWarning_40109 = true
 WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279 = true
-WfmTeamSchedule_EditAndDisplayInternalNotes_40671 = true
 WfmTeamSchedule_CheckPersonalAccountWhenAddingAbsence_41088 = true
 
-WfmTeamSchedule_ShowShiftCategory_39796 = true
-WfmTeamSchedule_ModifyShiftCategory_39797 = true
-WfmTeamSchedule_MakeNewMyTeamDefault_39744 = true
-WfmTeamSchedule_WeekView_39870 = true
 WfmTeamSchedule_MakePersonalActivityUnmerged_40252 = true
-WfmTeamSchedule_WeeklyContractTime_39871 = true
 WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925 = true
 WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305 = true
-WfmTeamSchedule_MoveEntireShift_41632 = RC
-WfmTeamSchedule_AddOvertime_41696 = RC
 
 WfmTeamSchedule_MoveToBaseLicense_41039 = true
+WfmTeamSchedule_MakeNewMyTeamDefault_39744 = true
+
 
 WfmReportPortal_Basic_38825 = true
 WfmReportPortal_LeaderBoard_39440 = true
@@ -202,5 +209,4 @@ Wfm_ArchiveSchedule_41498 = RC
 Wfm_ImportSchedule_41247 = DEV
 SchedulingScreen_BatchAgentValidation_41552 = RC
 Wfm_Intraday_ScheduledStaffing_41476 = RC
-WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260 = DEV
 Mailbox_Optimization_41900 = DEV
