@@ -3,11 +3,16 @@
 	<label>{{'Organization' | translate}}</label>
 		<md-select ng-model="$ctrl.selectedTeamIds" md-on-close="$ctrl.onSelectionDone()" md-selected-text="$ctrl.formatSelectedDisplayName()" data-md-container-class="organization-picker" multiple>
 			<md-select-header class="picker-select-header">
-				<input ng-model="$ctrl.searchTerm" type="search" placeholder="{{'SearchAnOrganization' | translate}}" class="picker-searchbox md-text" ng-keydown="$event.stopPropagation()">
+				<input ng-model="$ctrl.searchTerm" type="search" placeholder="{{'SearchAnOrganization' | translate}}" class="picker-searchbox md-text" ng-keydown="$ctrl.onSearchOrganization($event)">
 			</md-select-header>
-			<md-optgroup ng-repeat="site in $ctrl.groupList | filter:$ctrl.searchTerm">
-				<md-checkbox ng-model="site.isChecked" ng-change="$ctrl.updateSiteCheck(site)" ng-style="{'background-color': site.isChecked ? '#c2e085':'initial'}"> {{site.name}} </md-checkbox>
-				<md-option ng-value="team.id" ng-click="$ctrl.setCurrentSiteValue(site)" ng-repeat="team in site.teams | filter:$ctrl.searchTerm">{{team.name}}</md-option>
+			<md-optgroup ng-repeat="site in $ctrl.groupList | filter: $ctrl.searchTerm">
+				<div class="group-header pointer">
+					<md-checkbox ng-model="site.isChecked" ng-change="$ctrl.updateSiteCheck(site)" ng-style="{'background-color': site.isChecked ? '#c2e085':'transparent'}" ng-disabled="site.teams.length == 0" ng-class="$ctrl.partialTeamsSelected(site) ? 'partial-selected':''"> {{site.name}} </md-checkbox>
+					<span class="dropdown-icon" ng-hide="site.teams.length == 0" ng-click="$ctrl.showTeamListOfSite(site, $event)">
+						<i class="mdi" ng-class="site.expanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i>
+					</span>
+				</div>
+				<md-option ng-if="site.expanded" ng-value="team.id" ng-click="$ctrl.setCurrentSiteValue(site)" ng-repeat="team in site.teams | filter: $ctrl.processSearchTermFilter(site)">{{team.name}}</md-option>
 			</md-optgroup>
 		</md-select>
 	 </md-input-container>

@@ -35,7 +35,8 @@
 					id: g.Id,
 					name: g.Name,
 					teams: [],
-					isChecked: false
+					isChecked: false,
+					expanded: false
 				};
 				g.Children.forEach(function(t) {
 					site.teams.push({
@@ -61,6 +62,20 @@
 			}
 			return $translate.instant('Organization');
 		};
+		
+		ctrl.processSearchTermFilter = function(site) {
+			if(site && ctrl.searchTerm.length > 0) {
+				if(site.name.toLowerCase().indexOf(ctrl.searchTerm.toLowerCase()) > -1) {
+					return '';
+				}
+				return ctrl.searchTerm;
+			}
+		};
+
+		ctrl.showTeamListOfSite = function(site, event){
+			site.expanded = !site.expanded;
+			event.stopPropagation();
+		};
 
 		ctrl.updateSiteCheck = function(site) {
 			if (site)
@@ -80,6 +95,12 @@
 					ctrl.selectedTeamIds.splice(index, 1);
 			});
 		}
+
+		ctrl.partialTeamsSelected = function(site){
+			return site && site.teams.some(function(team){
+				return ctrl.selectedTeamIds.indexOf(team.id) > -1;
+			});
+		};
 
 		ctrl.setCurrentSiteValue = function(site) {
 			currentSite = site;
@@ -102,8 +123,19 @@
 				currentSite.isChecked = false;
 		}
 
+		ctrl.onSearchOrganization = function($event){
+			$event.stopPropagation();
+		};
+
 		ctrl.onSelectionDone = function() {
 			ctrl.searchTerm = '';
+
+			if(ctrl.groupList.length > 0){
+				ctrl.groupList.forEach(function(s){
+					s.expanded = false;
+				});
+			}
+
 			//load the schedule data
 			ctrl.onPick({
 				groups: ctrl.selectedTeamIds

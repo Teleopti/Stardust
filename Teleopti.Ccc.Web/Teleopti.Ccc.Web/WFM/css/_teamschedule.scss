@@ -315,13 +315,14 @@
 }
 .organization-picker {
 	min-width: 200px !important;
-	margin-left: 2em;
+	margin: 0 0 0 -0.5em;
 
 	md-select-menu, md-content._md {
-		max-height: 600px;
 		width: 100%;
+		max-height: 600px;
 	}
 	md-content._md {
+		overflow-y: scroll;
 		padding: 0.5em 0;
 	}
 	label {
@@ -345,28 +346,48 @@
 		padding: 0;
 	}
 	md-optgroup {
-		padding: 0.5em 0;
 		border-bottom: 1px solid $gray012;
 
-		& > md-checkbox {
+		.group-header {
 			width: 100%;
-			padding: 5px 0;
-			margin: 0;
-			font-weight: bold;
-			color: $gray054;
+			position: relative;
 
-			& > .md-label {
-				margin-left: 40px;
+			& > md-checkbox {
+				margin: 0;
+				width: 100%;
+				padding: 5px 0;
+				font-weight: bold;
+				color: $gray054;
+
+				.md-label {
+					margin-left: 35px;
+				}
 			}
-			& > div.md-container {
-				left: 10px;
+			& > md-checkbox:hover {
+				background-color: rgba(0, 0, 0, .06) !important;
+			}
+			.partial-selected .md-icon {
+				background-color: #09F;
+				border-color: #09F;
+			}
+			span.dropdown-icon {
+				position: absolute;
+				right: 0.5em;
+				top: 0.5em;
 			}
 		}
-		& > md-checkbox:hover {
-			background-color: rgba(0, 0, 0, .06) !important;
+		div.md-container {
+			left: 10px;
+			transform: scale(0.8, 0.8) translateY(-66%) !important;
+
+			.md-icon {
+			}
 		}
-		& > md-option {
-			margin-left: 0.6em;
+		md-option.md-checkbox-enabled {
+			padding-left: 35px;
+		}
+		md-option {
+			margin-left: 1em;
 			color: $gray087;
 
 			& > md-container {
