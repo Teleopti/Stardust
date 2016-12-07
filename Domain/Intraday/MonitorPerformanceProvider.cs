@@ -70,9 +70,17 @@ namespace Teleopti.Ccc.Domain.Intraday
 				{
 					AbandonRate = queueStatistics.StatisticsSummary.AbandonRate,
 					AverageSpeedOfAnswer = queueStatistics.StatisticsSummary.AverageSpeedOfAnswer,
-					ServiceLevel = queueStatistics.StatisticsSummary.ServiceLevel
+					ServiceLevel = queueStatistics.StatisticsSummary.ServiceLevel,
+					EstimatedServiceLevel = getEslSummary(eslIntervals)
 				}
 			};
+		}
+
+		private double getEslSummary(IList<EslInterval> eslIntervals)
+		{
+			var sumOfForecastedCalls = eslIntervals.Sum(x => x.ForecastedCalls);
+			var sumOfAnsweredCallsWithinSL = eslIntervals.Sum(x => x.AnsweredCallsWithinServiceLevel);
+			return sumOfAnsweredCallsWithinSL/sumOfForecastedCalls;
 		}
 
 		private IList<EslInterval> getEsl(IList<ISkill> skills, ICollection<ISkillDay> skillDays, IntradayStatisticsViewModel queueStatistics,

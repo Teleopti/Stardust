@@ -5,5 +5,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 		public double AverageSpeedOfAnswer { get; set; }
 		public double ServiceLevel { get; set; }
 		public double AbandonRate { get; set; }
+		public double EstimatedServiceLevel { get; set; }
 	}
 }
