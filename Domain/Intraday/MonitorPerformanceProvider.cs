@@ -62,15 +62,15 @@ namespace Teleopti.Ccc.Domain.Intraday
 				DataSeries = new IntradayPerformanceDataSeries
 				{
 					EstimatedServiceLevels = eslDataSeries(eslIntervals, queueStatistics),
-					AverageSpeedOfAnswer = queueStatistics.StatisticsDataSeries.AverageSpeedOfAnswer,
-					AbandonedRate = queueStatistics.StatisticsDataSeries.AbandonedRate,
-					ServiceLevel = queueStatistics.StatisticsDataSeries.ServiceLevel
+					AverageSpeedOfAnswer = queueStatistics.IncomingDataSeries.AverageSpeedOfAnswer,
+					AbandonedRate = queueStatistics.IncomingDataSeries.AbandonedRate,
+					ServiceLevel = queueStatistics.IncomingDataSeries.ServiceLevel
 				},
 				Summary = new IntradayPerformanceSummary
 				{
-					AbandonRate = queueStatistics.StatisticsSummary.AbandonRate,
-					AverageSpeedOfAnswer = queueStatistics.StatisticsSummary.AverageSpeedOfAnswer,
-					ServiceLevel = queueStatistics.StatisticsSummary.ServiceLevel,
+					AbandonRate = queueStatistics.IncomingSummary.AbandonRate,
+					AverageSpeedOfAnswer = queueStatistics.IncomingSummary.AverageSpeedOfAnswer,
+					ServiceLevel = queueStatistics.IncomingSummary.ServiceLevel,
 					EstimatedServiceLevel = getEslSummary(eslIntervals)
 				}
 			};
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return sumOfAnsweredCallsWithinSL/sumOfForecastedCalls;
 		}
 
-		private IList<EslInterval> getEsl(IList<ISkill> skills, ICollection<ISkillDay> skillDays, IntradayStatisticsViewModel queueStatistics,
+		private IList<EslInterval> getEsl(IList<ISkill> skills, ICollection<ISkillDay> skillDays, IntradayIncomingViewModel queueStatistics,
 			int minutesPerInterval)
 		{
 			var eslIntervals = new List<EslInterval>();
@@ -147,12 +147,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 				.ToList();
 		}
 
-		private double?[] eslDataSeries(IList<EslInterval> eslIntervals, IntradayStatisticsViewModel queueStatistics)
+		private double?[] eslDataSeries(IList<EslInterval> eslIntervals, IntradayIncomingViewModel queueIncoming)
 		{
 			var dataSeries = eslIntervals
 				.Select(x => (double?) x.Esl)
 				.ToList();
-			var nullCount = queueStatistics.StatisticsDataSeries.Time.Length - dataSeries.Count;
+			var nullCount = queueIncoming.IncomingDataSeries.Time.Length - dataSeries.Count;
 			for (int interval = 0; interval < nullCount; interval++)
 				dataSeries.Add(null);
 

@@ -2,7 +2,7 @@ using System;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
-	public class IntradayStatisticsDataSeries
+	public class IntradayIncomingDataSeries
 	{
 		public double? [] AverageSpeedOfAnswer;
 		public DateTime[] Time { get; set; }

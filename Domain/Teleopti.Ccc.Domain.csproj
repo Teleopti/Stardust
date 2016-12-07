@@ -474,8 +474,8 @@
     <Compile Include="Intraday\IntradayPerformanceSummary.cs" />
     <Compile Include="Intraday\IntradayPerformanceViewModel.cs" />
     <Compile Include="Intraday\IntradayStaffingViewModel.cs" />
-    <Compile Include="Intraday\IntradayStatisticsDataSeries.cs" />
-    <Compile Include="Intraday\IntradayStatisticsSummary.cs" />
+    <Compile Include="Intraday\IntradayIncomingDataSeries.cs" />
+    <Compile Include="Intraday\IntradayIncomingSummary.cs" />
     <Compile Include="Intraday\IScheduleForecastSkillReadModelRepository.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeAndWorkload.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProvider.cs" />
@@ -775,7 +775,7 @@
     <Compile Include="Security\SignatureCreator.cs" />
     <Compile Include="Common\ServiceLocatorForEntity.cs" />
     <Compile Include="Islands\CreateIslands.cs" />
-    <Compile Include="Intraday\IntradayStatisticsViewModel.cs" />
+    <Compile Include="Intraday\IntradayIncomingViewModel.cs" />
     <Compile Include="Intraday\MonitorSkillsProvider.cs" />
     <Compile Include="Logon\Aspects\TenantScopeAspect.cs" />
     <Compile Include="Logon\Aspects\TenantScopeAttribute.cs" />

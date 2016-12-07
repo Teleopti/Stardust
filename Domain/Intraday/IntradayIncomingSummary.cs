@@ -1,6 +1,6 @@
 namespace Teleopti.Ccc.Domain.Intraday
 {
-	public class IntradayStatisticsSummary
+	public class IntradayIncomingSummary
 	{
 		public double ForecastedCalls { get; set; }
 		public double ForecastedAverageHandleTime { get; set; }
