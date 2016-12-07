@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Islands
 				{
 					foreach (var skillGroupSkill in skillGroupAndNumberOfAgents.SkillGroup.Skills.ToArray())
 					{
-						if (skillGroupAndNumberOfAgents.NumberOfAgentsOnSkillGroup * _reduceIslandsLimits.MinimumFactorOfAgentsInOtherSkillGroup >= noAgentsKnowingSkill[skillGroupSkill])
+						if (skillGroupAndNumberOfAgents.NumberOfAgentsOnSkillGroup * _reduceIslandsLimits.MinimumFactorOfAgentsInOtherSkillGroup(numberOfAgentsInIsland) >= noAgentsKnowingSkill[skillGroupSkill])
 							continue;
 
 						if (skillGroupAndNumberOfAgents.SkillGroup.Skills.Count(x => x.Activity == null || x.Activity.Equals(skillGroupSkill.Activity)) < 2)

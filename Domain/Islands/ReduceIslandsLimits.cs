@@ -5,23 +5,37 @@ namespace Teleopti.Ccc.Domain.Islands
 {
 	public class ReduceIslandsLimits
 	{
+		private readonly List<IslandLimits> _islandLimits;
+
 		public ReduceIslandsLimits()
 		{
-			_values = new List<IslandLimits>();
+			_islandLimits = new List<IslandLimits>();
 			SetValues_UseOnlyFromTest(500, 4);
 		}
 
-		public int MinimumNumberOfAgentsInIsland => _values.First().MinAgentsInIsland;
+		public int MinimumNumberOfAgentsInIsland => _islandLimits.First().MinAgentsInIsland;
 
-		public int MinimumFactorOfAgentsInOtherSkillGroup => _values.First().MinFactorOfAgentsInOtherSkillGroup;
+		public int MinimumFactorOfAgentsInOtherSkillGroup(int numberOfAgentsInIsland)
+		{
+			var last = 0;
+			foreach (var islandLimit in _islandLimits)
+			{
+				if (numberOfAgentsInIsland > islandLimit.MinAgentsInIsland)
+				{
+					last = islandLimit.MinFactorOfAgentsInOtherSkillGroup;
+				}
+				else
+				{
+					break;
+				}
+			}
+			return last;
+		}
 
-		private readonly List<IslandLimits> _values;
-
-		//TODO: byt namn
 		public void SetValues_UseOnlyFromTest(int minAgentsInIsland, int minFactorOfAgentsInOtherSkillGroup)
 		{
-			_values.Add(new IslandLimits(minAgentsInIsland, minFactorOfAgentsInOtherSkillGroup));
-			_values.Sort();
+			_islandLimits.Add(new IslandLimits(minAgentsInIsland, minFactorOfAgentsInOtherSkillGroup));
+			_islandLimits.Sort();
 		}
 	}
 }

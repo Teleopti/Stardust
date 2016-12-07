@@ -235,5 +235,23 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count()
 				.Should().Be.EqualTo(2);
 		}
+
+		[Test]
+		public void ShouldSplitIslandBecauseCaringAboutTheMaxLimit()
+		{
+			ReduceIslandsLimits.SetValues_UseOnlyFromTest(1, 10);
+			ReduceIslandsLimits.SetValues_UseOnlyFromTest(2, 2);
+
+			var skillA = new Skill("A");
+			var skillB = new Skill("B");
+			var skillAagents = Enumerable.Range(0, 4).Select(x => new Person().KnowsSkill(skillA));
+			var skillABagents = Enumerable.Range(0, 1).Select(x => new Person().KnowsSkill(skillA, skillB));
+			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
+
+			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
+
+			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count()
+				.Should().Be.EqualTo(2);
+		}
 	}
 }
