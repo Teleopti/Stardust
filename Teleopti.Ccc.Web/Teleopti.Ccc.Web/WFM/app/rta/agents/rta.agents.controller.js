@@ -190,10 +190,6 @@
 
 					if (teamIds.length > 0)
 						$scope.teamsSelected = teamIds;
-					setTimeout(function(){
-						//enableWatchOnTeam = true;
-					},0);
-					console.log('Watch is enable');
 					enableWatchOnTeam = true;
 				}
 
@@ -263,7 +259,6 @@
 				}
 
 				$scope.forTest_selectTeam = function(teams) {
-					console.log(teams);
 					setTimeout(function(){
 						$scope.teamsSelected = teams;
 					}, 1000);
@@ -298,24 +293,29 @@
 					}
 				});
 
-				$scope.updateSite = function() {
+				$scope.updateSite = function(oldTeamsSelected) {
 					$scope.sites.forEach(function(site) {
+						var anyChangeForThatSite = false;
 						site.Teams.forEach(function(team) {
 							team.isChecked = $scope.teamsSelected.indexOf(team.Id) > -1;
+							var teamChanged = ($scope.teamsSelected.indexOf(team.Id) > -1 !== oldTeamsSelected.indexOf(team.Id) > -1);
+							if(oldTeamsSelected.length > 0 && teamChanged){
+								anyChangeForThatSite = true;
+							}
 						});
 
 						var checkedTeams = site.Teams.filter(function(team) {
 							return team.isChecked;
 						});
-						//if(checkedTeams.length > 0)
-							site.isChecked = checkedTeams.length === site.Teams.length;
+
+						if(checkedTeams.length > 0 || anyChangeForThatSite)
+								site.isChecked = checkedTeams.length === site.Teams.length;
 					});
 				};
 
 				$scope.$watch('teamsSelected', function(newValue, oldValue) {
-					if (newValue.length !== oldValue.length && enableWatchOnTeam) {
-						console.log(oldValue, newValue);
-					$scope.updateSite();
+					if (JSON.stringify(newValue) !== JSON.stringify(oldValue) && enableWatchOnTeam) {
+						$scope.updateSite(oldValue);
 					}
 				});
 
