@@ -497,6 +497,7 @@
     <Compile Include="Islands\ISkillGroupInfo.cs" />
     <Compile Include="Islands\ISkillGroupInfoProvider.cs" />
     <Compile Include="Islands\Island.cs" />
+    <Compile Include="Islands\IslandLimits.cs" />
     <Compile Include="Islands\Legacy\CreateIslandsOld.cs" />
     <Compile Include="Islands\NumberOfAgentsKnowingSkill.cs" />
     <Compile Include="Islands\ReduceIslandsLimits.cs" />
