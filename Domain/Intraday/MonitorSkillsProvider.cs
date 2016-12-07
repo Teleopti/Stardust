@@ -16,13 +16,13 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly SupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 
-		public MonitorSkillsProvider(IIntradayMonitorDataLoader intradayMonitorDataLoader, IIntervalLengthFetcher intervalLengthFetcher, INow now, IUserTimeZone userTimeZone, ISkillRepository skillRepository)
+		public MonitorSkillsProvider(IIntradayMonitorDataLoader intradayMonitorDataLoader, IIntervalLengthFetcher intervalLengthFetcher, INow now, IUserTimeZone userTimeZone, SupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider)
 		{
 			_intradayMonitorDataLoader = intradayMonitorDataLoader;
 			_intervalLengthFetcher = intervalLengthFetcher;
 			_now = now;
 			_userTimeZone = userTimeZone;
-			_supportedSkillsInIntradayProvider = new SupportedSkillsInIntradayProvider(skillRepository);
+			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 		}
 
 		public IntradayStatisticsViewModel Load(Guid[] skillIdList)

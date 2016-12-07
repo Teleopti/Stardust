@@ -11,10 +11,6 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.DomainTest.ResourceCalculation;
-using Teleopti.Ccc.Infrastructure.Intraday;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -38,10 +34,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		const int minutesPerInterval = 15;
 		public FakeIntradayMonitorDataLoader IntradayMonitorDataLoader;
+		private StaffingCalculatorServiceFacade _staffingCalculatorService;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			_staffingCalculatorService = new StaffingCalculatorServiceFacade();
 		}
 
 		[Test]
@@ -70,8 +68,19 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var result = Target.Load(new Guid[] {skill.Id.Value});
 
+			var esl =_staffingCalculatorService.ServiceLevelAchievedOcc(
+				scheduledStaffingList.First().StaffingLevel,
+				skillDay.SkillDataPeriodCollection.First().ServiceAgreement.ServiceLevel.Seconds,
+				skillDay.WorkloadDayCollection.First().TaskPeriodList.First().Tasks,
+				skillDay.WorkloadDayCollection.First().TaskPeriodList.First().TotalAverageTaskTime.TotalSeconds +
+				skillDay.WorkloadDayCollection.First().TaskPeriodList.First().TotalAverageAfterTaskTime.TotalSeconds,
+				TimeSpan.FromMinutes(minutesPerInterval),
+				skillDay.SkillDataPeriodCollection.First().ServiceAgreement.ServiceLevel.Percent.Value,
+				skillDay.SkillStaffPeriodCollection.First().FStaff,
+				1);
+
 			result.EstimatedServiceLevels.Length.Should().Be.EqualTo(1);
-			result.EstimatedServiceLevels.First().Should().Be.GreaterThan(0d);
+			result.EstimatedServiceLevels.First().Should().Be.EqualTo(esl);
 		}
 
 		[Test]
@@ -182,6 +191,85 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			result.EstimatedServiceLevels.Should().Be.Empty();
 		}
 
+		[Test]
+		public void ShouldReturnEslForTwoSkills()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			var latestStatsTime = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+
+			var scenario = fakeScenarioAndIntervalLength();
+			var skill1 = createSkill(minutesPerInterval, "skill1", new TimePeriod(8, 0, 8, 15));
+			var skill2 = createSkill(minutesPerInterval, "skill2", new TimePeriod(8, 0, 8, 15));
+			var skillDay1 = createSkillDay(skill1, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 15));
+			var skillDay2 = createSkillDay(skill2, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 15));
+			var scheduledStaffingList1 = createScheduledStaffing(skillDay1, latestStatsTime);
+			var scheduledStaffingList2 = createScheduledStaffing(skillDay2, latestStatsTime);
+
+			SkillRepository.Has(skill1);
+			SkillRepository.Has(skill2);
+			SkillDayRepository.Add(skillDay1);
+			SkillDayRepository.Add(skillDay2);
+			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList1, DateTime.MinValue);
+			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList2, DateTime.MinValue);
+			IntradayMonitorDataLoader.AddInterval(new IncomingIntervalModel()
+			{
+				IntervalDate = latestStatsTime.Date,
+				IntervalId = new IntervalBase(latestStatsTime, (60 / minutesPerInterval) * 24).Id,
+				OfferedCalls = 22
+			});
+
+			var result = Target.Load(new Guid[] {skill1.Id.Value, skill2.Id.Value});
+
+			var forecastedCallsSkill1 = skillDay1.WorkloadDayCollection.First().TaskPeriodList.First().Tasks;
+			var forecastedCallsSkill2 = skillDay2.WorkloadDayCollection.First().TaskPeriodList.First().Tasks;
+
+			var eslSkill1 = calculateEsl(scheduledStaffingList1, skillDay1, forecastedCallsSkill1);
+			var eslSkill2 = calculateEsl(scheduledStaffingList2, skillDay2, forecastedCallsSkill2);
+			
+			var answeredWithinServiceLevelSkill1 = forecastedCallsSkill1*eslSkill1;
+			var answeredWithinServiceLevelSkill2 = forecastedCallsSkill2*eslSkill2;
+
+			var expectedEslSummary = (answeredWithinServiceLevelSkill1 + answeredWithinServiceLevelSkill2)/
+											 (forecastedCallsSkill1 + forecastedCallsSkill2);
+
+			result.EstimatedServiceLevels.Length.Should().Be.EqualTo(1);
+			Math.Round(result.EstimatedServiceLevels.First().Value, 5).Should().Be.EqualTo(Math.Round(expectedEslSummary, 5));
+		}
+
+		[Test]
+		public void ShouldReturnEmptyViewModelWhenOnlyUnsupportedSkills()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+
+			fakeScenarioAndIntervalLength();
+			var skill = createEmailSkill(minutesPerInterval, "email_skill", new TimePeriod(8, 0, 8, 15));
+			
+			SkillRepository.Has(skill);
+
+			var result = Target.Load(new Guid[] { skill.Id.Value });
+
+			result.AbandonedRate.Should().Be.Empty();
+			result.ServiceLevel.Should().Be.Empty();
+			result.AverageSpeedOfAnswer.Should().Be.Empty();
+			result.EstimatedServiceLevels.Should().Be.Empty();
+		}
+
+
+		private double calculateEsl(IList<SkillStaffingInterval> scheduledStaffingList, ISkillDay skillDay, double forecastedCallsSkill)
+		{
+			return _staffingCalculatorService.ServiceLevelAchievedOcc(
+				scheduledStaffingList.First().StaffingLevel,
+				skillDay.SkillDataPeriodCollection.First().ServiceAgreement.ServiceLevel.Seconds,
+				forecastedCallsSkill,
+				skillDay.WorkloadDayCollection.First().TaskPeriodList.First().TotalAverageTaskTime.TotalSeconds +
+				skillDay.WorkloadDayCollection.First().TaskPeriodList.First().TotalAverageAfterTaskTime.TotalSeconds,
+				TimeSpan.FromMinutes(minutesPerInterval),
+				skillDay.SkillDataPeriodCollection.First().ServiceAgreement.ServiceLevel.Percent.Value,
+				skillDay.SkillStaffPeriodCollection.First().FStaff,
+				1);
+		}
 
 		private IList<SkillStaffingInterval> createScheduledStaffing(ISkillDay skillDay, DateTime latestStatsTime)
 		{
@@ -203,7 +291,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 					SkillId = skillDay.Skill.Id.Value,
 					StartDateTime = TimeZoneHelper.ConvertFromUtc(intervalTime, TimeZone.TimeZone()),
 					EndDateTime = TimeZoneHelper.ConvertFromUtc(intervalTime, TimeZone.TimeZone()).AddMinutes(minutesPerInterval),
-					StaffingLevel = random.Next(5,50)
+					StaffingLevel = 18 * random.Next(100,130) / 100d
 				});
 			}
 			return scheduledStats;
@@ -223,17 +311,32 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			return skill;
 		}
 
+		private ISkill createEmailSkill(int intervalLength, string skillName, TimePeriod openHours)
+		{
+			var activity = new Activity("activity_" + skillName).WithId();
+			var skill =
+				new Skill(skillName, skillName, Color.Empty, intervalLength, new SkillTypeEmail(new Description("SkillTypeEmail"), ForecastSource.InboundTelephony))
+				{
+					Activity = activity,
+					TimeZone = TimeZoneInfo.Utc
+				}.WithId();
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours);
+
+			return skill;
+		}
+
 		private ISkillDay createSkillDay(ISkill skill, IScenario scenario, DateTime userNow, TimePeriod openHours)
 		{
 			var random = new Random();
-			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), 3, new Tuple<TimePeriod, double>(openHours, 3)).WithId();
+			var agents = 19 * random.Next(100, 130)/100d;
+			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), agents, new Tuple<TimePeriod, double>(openHours, agents)).WithId();
 			var index = 0;
 
 			for (TimeSpan intervalStart = openHours.StartTime; intervalStart < openHours.EndTime; intervalStart = intervalStart.Add(TimeSpan.FromMinutes(skill.DefaultResolution)))
 			{
-				skillDay.WorkloadDayCollection.First().TaskPeriodList[index].Tasks = random.Next(5, 50);
+				skillDay.WorkloadDayCollection.First().TaskPeriodList[index].Tasks = random.Next(195,210);
 				skillDay.WorkloadDayCollection.First().TaskPeriodList[index].AverageTaskTime = TimeSpan.FromSeconds(120);
-				skillDay.WorkloadDayCollection.First().TaskPeriodList[index].AverageAfterTaskTime = TimeSpan.FromSeconds(200);
+				skillDay.WorkloadDayCollection.First().TaskPeriodList[index].AverageAfterTaskTime = TimeSpan.FromSeconds(140);
 				index++;
 			}
 

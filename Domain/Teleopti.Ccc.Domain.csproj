@@ -464,6 +464,7 @@
     <Compile Include="Infrastructure\Events\CleanFailedQueue.cs" />
     <Compile Include="Infrastructure\IIndexMaintenanceRepository.cs" />
     <Compile Include="Infrastructure\IndexMaintenanceStardustHandler.cs" />
+    <Compile Include="Intraday\EslInterval.cs" />
     <Compile Include="Intraday\ForecastedCallsModel.cs" />
     <Compile Include="Intraday\ForecastedCallsProvider.cs" />
     <Compile Include="Intraday\ForecastedStaffingProvider.cs" />
