@@ -20,30 +20,30 @@ namespace Teleopti.Ccc.DBManager.Library
 				Convert.ToBoolean(_usingMaster.ExecuteScalar("SELECT database_id FROM sys.databases WHERE Name = @databaseName",
 					parameters: new Dictionary<string, object> { { "@databaseName", databaseName } }));
 		}
-
+		
 		// http://stackoverflow.com/questions/7197574/script-to-kill-all-connections-to-a-database-more-than-restricted-user-rollback
 		// kill all connections and drop the database
 		// alter database (like below) does not always work, because rollback does not always succeed or times out
 		// ALTER DATABASE {0} SET SINGLE_USER WITH ROLLBACK IMMEDIATE
-		public void KillConnections(string databaseName)
+		public void Drop(string databaseName)
 		{
 			_usingMaster.ExecuteTransactionlessNonQuery($@"
+				
 				DECLARE @kill varchar(8000) = '';
 				SELECT @kill = @kill + 'kill ' + CONVERT(varchar(5), spid) + ';'
 				FROM master..sysprocesses 
 				WHERE dbid = db_id('{databaseName}')
 				EXEC(@kill);
-			", 300);
-		}
-
-		public void Drop(string databaseName)
-		{
-			_usingMaster.ExecuteTransactionlessNonQuery($@"
+				GO
+				
 				IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'{databaseName}')
-				BEGIN
 					ALTER DATABASE [{databaseName}] SET ONLINE
+				GO
+
+				IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'{databaseName}')
 					DROP DATABASE [{databaseName}]
-				END
+				GO
+
 			", 300);
 		}
 

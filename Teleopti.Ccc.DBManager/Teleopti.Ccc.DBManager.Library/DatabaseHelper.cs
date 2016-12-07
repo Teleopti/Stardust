@@ -193,7 +193,6 @@ namespace Teleopti.Ccc.DBManager.Library
 		private void dropIfExists()
 		{
 			if (!Tasks().Exists(DatabaseName)) return;
-			Tasks().KillConnections(DatabaseName);
 			Tasks().Drop(DatabaseName);
 		}
 

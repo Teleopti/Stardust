@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.DBManager.Library
 			File.Copy(source, localSource, true);
 
 			var tasks = new DatabaseTasks(_usingMaster, null);
-			tasks.KillConnections(_databaseName);
 			tasks.Drop(_databaseName);
 			_usingMaster.Execute($@"RESTORE DATABASE {_databaseName} FROM DISK = '{localSource}' WITH REPLACE");
 
