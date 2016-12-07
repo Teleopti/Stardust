@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Islands
 				var skillGroupsInIslands = skillGroups.Select(skillGroup => new List<SkillGroup> { skillGroup }).ToList();
 				while (moveSkillGroupToCorrectIsland(skillGroupsInIslands))
 				{
-					removeEmptySkillGroups(skillGroupsInIslands);
+					removeEmptyIslands(skillGroupsInIslands);
 				}
 
 				if (!_reduceSkillGroups.Execute(skillGroupsInIslands, noAgentsKnowingSkill))
@@ -43,18 +43,18 @@ namespace Teleopti.Ccc.Domain.Islands
 			}
 		}
 
-		private static void removeEmptySkillGroups(ICollection<List<SkillGroup>> skillGroupsInIslands)
+		private static void removeEmptyIslands(ICollection<List<SkillGroup>> skillGroupsInIslands)
 		{
 			skillGroupsInIslands.Where(x => x.Count == 0).ToArray().ForEach(x => skillGroupsInIslands.Remove(x));
 		}
 
-		private static bool moveSkillGroupToCorrectIsland(IEnumerable<ICollection<SkillGroup>> skillGroupInIslands)
+		private static bool moveSkillGroupToCorrectIsland(IEnumerable<ICollection<SkillGroup>> skillGroupsInIslands)
 		{
-			foreach (var skillGroupInIsland in skillGroupInIslands)
+			foreach (var skillGroupInIsland in skillGroupsInIslands)
 			{
 				foreach (var skillGroup in skillGroupInIsland.ToList())
 				{
-					var allOtherIslands = skillGroupInIslands.Except(new[] { skillGroupInIsland });
+					var allOtherIslands = skillGroupsInIslands.Except(new[] { skillGroupInIsland });
 					foreach (var otherIsland in allOtherIslands)
 					{
 						foreach (var otherSkillGroup in otherIsland)
