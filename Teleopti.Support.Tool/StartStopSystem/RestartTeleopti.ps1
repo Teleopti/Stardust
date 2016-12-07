@@ -189,7 +189,3 @@ Catch [Exception]
 	Write-EventLog -LogName Application -Source $JOB -EventID 1 -EntryType Error -Message "$ErrorMessage"
 	Throw "Script failed, Check Windows event log for details"
 }
-Finally
-{
-	Write-Host "done"
-}
