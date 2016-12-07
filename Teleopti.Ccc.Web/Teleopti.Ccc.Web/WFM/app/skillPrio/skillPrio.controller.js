@@ -115,7 +115,6 @@
 
 
         function prioritizeSkill(skill, priority) {
-          console.log('skill', skill);
 
             if (!skill || skill == null) return;
 

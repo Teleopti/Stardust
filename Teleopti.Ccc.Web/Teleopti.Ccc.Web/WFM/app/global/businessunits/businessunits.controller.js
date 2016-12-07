@@ -3,11 +3,11 @@
 
     angular
         .module('wfm.businessunits')
-        .controller('BusinessUnitsCtrl', BusinessUnitsCtrl);
+        .controller('BusinessUnitsController', BusinessUnitsController);
 
-    BusinessUnitsCtrl.$inject = [ '$filter', '$window', 'BusinessUnitsService'];
+    BusinessUnitsController.$inject = [ '$filter', '$window', 'BusinessUnitsService'];
 
-    function BusinessUnitsCtrl($filter,  $window, BusinessUnitsService) {
+    function BusinessUnitsController($filter,  $window, BusinessUnitsService) {
         var vm = this;
 				vm.show = false;
 				vm.data = {

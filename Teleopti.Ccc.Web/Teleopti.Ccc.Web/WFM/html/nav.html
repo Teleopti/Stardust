@@ -3,7 +3,7 @@
 		<span class="brand" ui-sref="main">Teleopti WFM </span>
 
 		<div class="navbar-left">
-			<span ng-controller="BusinessUnitsCtrl as businessunit">
+			<span ng-controller="BusinessUnitsController as businessunit">
 				<span ng-if="businessunit.show">
 					<md-select class="bu-select" name="business-unit-select" id="business-unit-select" ng-change="businessunit.changeBusinessUnit(businessunit.data.selectedBu)" ng-model="businessunit.data.selectedBu" placeholder="{{businessunit.data.selectedBu.Name}}">
 						<!--<md-tooltip>{{'BusinessUnit' |translate}}</md-tooltip>-->
@@ -61,7 +61,7 @@
 								<div class="notification-list">
 									<h4>{{'Notifications'|translate}}
 									</h4>
-									<div ng-controller="NotificationsCtrl as vm">
+									<div ng-controller="NotificationsController as vm">
 										<ul class="notification-list wfm-simple-list">
 											<li ng-repeat="alarm in vm.notificationResult">
 												<i class="mdi mdi-alert-circle"></i>

@@ -1,5 +1,5 @@
 ﻿'use strict';
-describe('BusinessUnitsCtrl', function() {
+describe('BusinessUnitsController', function() {
 	var $httpBackend,
 			$controller;
 
@@ -14,7 +14,7 @@ describe('BusinessUnitsCtrl', function() {
 
   it('should get one businessunit without selected businessunit', inject(function(){
     var businessunits = [{Id:"928dd0bc-bf40-412e-b970-9b5e015aadea", Name:"Demo"}];
-    var vm = $controller('BusinessUnitsCtrl');
+    var vm = $controller('BusinessUnitsController');
     $httpBackend.whenGET('../api/BusinessUnit').respond(function(method,url,data)
 		{
 	    return [200, businessunits];
@@ -29,7 +29,7 @@ describe('BusinessUnitsCtrl', function() {
   it('should change businessUnit by selected businessUnit', inject(function($window){
     var businessunits = [{Id:"928dd0bc-bf40-412e-b970-9b5e015aadea",Name:"Demo"},{Id:"928dd0bc-h24k-412e-jgl4-ahej542lzjej",Name:"Demo Changed"}];
     var selectedBu = {Id:"928dd0bc-h24k-412e-jgl4-ahej542lzjej",Name:"Demo Changed"};
-    var vm = $controller('BusinessUnitsCtrl');
+    var vm = $controller('BusinessUnitsController');
     $httpBackend.whenGET('../api/BusinessUnit').respond(function(method,url,data)
 		{
 	    return [200, businessunits];

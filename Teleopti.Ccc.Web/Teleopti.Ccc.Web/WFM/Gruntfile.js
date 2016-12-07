@@ -345,7 +345,8 @@ module.exports = function (grunt) {
                 src: [
                     'app/global/**/*.js',
                     '!app/**/*.spec.js',
-                    '!app/**/*.fake.js'
+                    '!app/**/*.fake.js',
+                    '!app/global/i18n/*.js'
                 ]
             },
             dev: {
@@ -375,7 +376,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-processhtml');
     grunt.loadNpmTasks('grunt-newer');
     grunt.loadNpmTasks('grunt-eslint');
-
 
 
     // Default task(s).

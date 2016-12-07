@@ -3,11 +3,11 @@
 
     angular
         .module('wfm.notifications', ['restNotificationService'])
-        .controller('NotificationsCtrl', NotificationsCtrl);
+        .controller('NotificationsController', NotificationsController);
 
-    NotificationsCtrl.$inject = ['$scope','NotificationsSvrc'];
+    NotificationsController.$inject = ['$scope','NotificationsSvrc'];
 
-    function NotificationsCtrl($scope, NotificationsSvrc) {
+    function NotificationsController($scope, NotificationsSvrc) {
         var vm = this;
 
 				vm.notificationResult = [];

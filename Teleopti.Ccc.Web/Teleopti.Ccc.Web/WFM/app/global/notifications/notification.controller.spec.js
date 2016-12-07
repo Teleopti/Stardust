@@ -1,5 +1,5 @@
 ﻿'use strict';
-describe('NotificationsCtrl', function () {
+describe('NotificationsController', function () {
 	var $q,
 	    $rootScope,
 	    $httpBackend;
@@ -29,14 +29,14 @@ describe('NotificationsCtrl', function () {
 
 	xit('not null', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		var vm = $controller('NotificationsCtrl', { $scope: scope, NotificationsSvrc: mockNotificationService });
+		var vm = $controller('NotificationsController', { $scope: scope, NotificationsSvrc: mockNotificationService });
 		expect($controller).not.toBe(null);
 	}));
 
 	xit('contains atleast 5 notifications', inject( function ($controller) {
 		var scope = $rootScope.$new();
 
-		var vm = $controller('NotificationsCtrl', { $scope: scope, NotificationsSvrc: mockNotificationService });
+		var vm = $controller('NotificationsController', { $scope: scope, NotificationsSvrc: mockNotificationService });
 		scope.$digest();
 		expect(vm.notificationResult.length).toEqual(5);
 	}));

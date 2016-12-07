@@ -14,7 +14,7 @@
                     if (this == null) {
                         throw new TypeError('Array.prototype.findIndex called on null or undefined');
                     }
-                    if (typeof predicate !== 'function') {
+                    if (!angular.isFunction(predicate)) { //typeof predicate !== 'function'
                         throw new TypeError('predicate must be a function');
                     }
                     var list = Object(this);

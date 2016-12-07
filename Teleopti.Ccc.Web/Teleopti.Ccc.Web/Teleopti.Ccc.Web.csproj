@@ -1459,7 +1459,6 @@
     <Content Include="WFM\app\global\current-user\currentuserinfo.service.spec.js" />
     <Content Include="WFM\app\global\exception-handling\exceptionhandler.js" />
     <Content Include="WFM\app\global\http\http.spec.js" />
-    <Content Include="WFM\app\global\jalaali-calendar\jalaali.service.js" />
     <Content Include="WFM\app\global\notifications\notification.controller.spec.js" />
     <Content Include="WFM\app\global\signalR\signalR.service.js" />
     <Content Include="WFM\app\global\wfm.main.controller.js" />
@@ -1472,8 +1471,6 @@
     <Content Include="WFM\app\global\wfm-themes\_modules.js" />
     <Content Include="WFM\app\global\i18n\wfm.i18n.service.spec.js" />
     <Content Include="WFM\app\global\shortcuts\wfm.shortcuts.service.js" />
-    <Content Include="WFM\app\global\wfmrightpanel\wfmrightpanel.directive.js" />
-    <Content Include="WFM\app\global\wfmrightpanel\wfmrightpanel.html" />
     <Content Include="WFM\app\intraday\intraday-area.html" />
     <Content Include="WFM\app\intraday\intraday-staffing.html" />
     <Content Include="WFM\app\intraday\intraday.area.controller.js" />
