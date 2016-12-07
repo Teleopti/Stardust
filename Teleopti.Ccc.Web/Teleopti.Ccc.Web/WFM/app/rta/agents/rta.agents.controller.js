@@ -190,6 +190,10 @@
 
 					if (teamIds.length > 0)
 						$scope.teamsSelected = teamIds;
+					setTimeout(function(){
+						//enableWatchOnTeam = true;
+					},0);
+					console.log('Watch is enable');
 					enableWatchOnTeam = true;
 				}
 
@@ -258,6 +262,13 @@
 					});
 				}
 
+				$scope.forTest_selectTeam = function(teams) {
+					console.log(teams);
+					setTimeout(function(){
+						$scope.teamsSelected = teams;
+					}, 1000);
+				}
+
 				$scope.$watch('pause', function() {
 					if ($scope.pause) {
 						$scope.pausedAt = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
@@ -296,13 +307,14 @@
 						var checkedTeams = site.Teams.filter(function(team) {
 							return team.isChecked;
 						});
-						if(checkedTeams.length > 0)
+						//if(checkedTeams.length > 0)
 							site.isChecked = checkedTeams.length === site.Teams.length;
 					});
 				};
 
 				$scope.$watch('teamsSelected', function(newValue, oldValue) {
-					if (newValue !== oldValue && enableWatchOnTeam) {
+					if (newValue.length !== oldValue.length && enableWatchOnTeam) {
+						console.log(oldValue, newValue);
 					$scope.updateSite();
 					}
 				});

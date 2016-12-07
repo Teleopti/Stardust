@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaAgentsCtrl', function() {
+fdescribe('RtaAgentsCtrl', function() {
 	var $interval,
 		$httpBackend,
 		$state,
@@ -115,7 +115,7 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.teamChecked(scope.sites[0], scope.sites[0].Teams[1])).toBe(false);
 	});
 
-	it('should unselect site when unselecting all teams and site was in stateParams', function() {
+	fit('should unselect site when unselecting all teams and site was in stateParams', function() {
 		stateParams.siteIds = ['LondonGuid'];
 		$fakeBackend.withOrganization({
 			Id: 'LondonGuid',
@@ -128,10 +128,9 @@ describe('RtaAgentsCtrl', function() {
 
 		$controllerBuilder.createController()
 			.apply(function() {
-				scope.teamsSelected = [];
+				scope.forTest_selectTeam([]);
 			});
-
-		expect(scope.updateSite()).not.toBe(true);
+		expect(scope.sites[0].isChecked).toBe(false);
 	});
 
 	it('should select team when selecting site', function() {
@@ -690,7 +689,7 @@ describe('RtaAgentsCtrl', function() {
 				scope.teamsSelected = [];
 			});
 
-			expect(scope.updateSite()).not.toBe(true);
+			expect(scope.sites[0].isChecked).toBe(false);
 	});
 
 	it('should go to agents on site when all teams are selected', function() {
@@ -774,34 +773,24 @@ describe('RtaAgentsCtrl', function() {
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {siteIds: [], teamIds: []});
 	});
 
-	it('should redirect to initial state after unselecting all', function() {
-		stateParams.siteIds = ['LondonGuid'];
-		stateParams.teamIds = ['ParisTeam2'];
+
+	it('should unselect site when the only team under it is unselected', function() {
 		$fakeBackend.withOrganization({
 				Id: 'LondonGuid',
 				Teams: [{
 					Id: 'LondonTeam1'
 				}]
-			})
-			.withOrganization({
-				Id: 'ParisGuid',
-				Teams: [{
-					Id: 'ParisTeam1',
-				}, {
-					Id: 'ParisTeam2',
-				}]
 			});
 
 		$controllerBuilder.createController()
-			.apply(function() {
-				scope.teamsSelected = [];
-				scope.forTest_selectSite(scope.sites[0]);
+			.apply(function(){
+				scope.forTest_selectSite(scope.sites[0])
 			})
 			.apply(function() {
-				scope.goToAgents();
+				scope.teamsSelected = [];
 			});
 
-		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {siteIds: [], teamIds: []});
+		expect(scope.sites[0].isChecked).toBe(false);
 	});
 
 	it('should go to agents with skill', function() {
