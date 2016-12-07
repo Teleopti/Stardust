@@ -7,14 +7,13 @@ using System.Text;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Specification;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -50,6 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IShiftTradePendingReasonsService _shiftTradePendingReasonsService;
+		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 		private readonly IShiftTradeValidator _validator;
 
 		public ShiftTradeRequestHandler(
@@ -61,8 +61,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			IPersonRequestCheckAuthorization personRequestCheckAuthorization,
 			IScheduleDifferenceSaver scheduleDictionarySaver,
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation,
-			IDifferenceCollectionService<IPersistableScheduleData> differenceService, IBusinessRuleProvider businessRuleProvider,
-			IShiftTradePendingReasonsService shiftTradePendingReasonsService)
+			IDifferenceCollectionService<IPersistableScheduleData> differenceService,
+			IBusinessRuleProvider businessRuleProvider,
+			IShiftTradePendingReasonsService shiftTradePendingReasonsService,
+			IGlobalSettingDataRepository globalSettingDataRepository)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_validator = validator;
@@ -77,6 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			_differenceService = differenceService;
 			_businessRuleProvider = businessRuleProvider;
 			_shiftTradePendingReasonsService = shiftTradePendingReasonsService;
+			_globalSettingDataRepository = globalSettingDataRepository;
 
 			logger.Info("New instance of Shift Trade saga was created");
 		}
@@ -115,7 +118,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		public virtual void Handle(AcceptShiftTradeEvent @event)
 		{
 			logger.DebugFormat("Consuming @event for person request with Id = {0}. (@event timestamp = {1})",
-							   @event.PersonRequestId, @event.Timestamp);
+				@event.PersonRequestId, @event.Timestamp);
 
 			logger.DebugFormat("Loading PersonRequest = {0}", @event.PersonRequestId);
 			var personRequest = loadPersonRequest(@event.PersonRequestId);
@@ -159,20 +162,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 					setUpdatedMessage(@event, personRequest);
 
 					_schedulingResultStateHolder.UseMinWeekWorkTime = @event.UseMinWeekWorkTime;
-					var allNewRules = getAllNewBusinessRules(personRequest.Person.PermissionInformation.UICulture(), @event);
-					var approvalService = _requestFactory.GetRequestApprovalService(allNewRules, scenario, _schedulingResultStateHolder);
+					var allEnabledRules = getAllEnabledBusinessRules(personRequest.Person.PermissionInformation.UICulture(), @event);
+
+					var approvalService = _requestFactory.GetRequestApprovalService(allEnabledRules, scenario,
+						_schedulingResultStateHolder);
 
 					personRequest.Pending();
 
 					if (shouldShiftTradeBeAutoGranted.IsSatisfiedBy(shiftTradeRequest))
 					{
-						var brokenBusinessRules = autoApproveShiftTrade(personRequest, approvalService);
-						_shiftTradePendingReasonsService.SetBrokenBusinessRulesFieldOnPersonRequest(brokenBusinessRules, personRequest);
+						var ruleResponses = autoApproveShiftTrade(personRequest, approvalService);
+
+						var shouldDeny = _businessRuleProvider.ShouldDeny(allEnabledRules, ruleResponses);
+						if (shouldDeny)
+						{
+							personRequest.Deny(ruleResponses.First().Message, _authorization);
+						}
+
+						_shiftTradePendingReasonsService.SetBrokenBusinessRulesFieldOnPersonRequest(ruleResponses, personRequest);
 					}
 					else
 					{
-						_shiftTradePendingReasonsService.SimulateApproveAndSetBusinessRuleResponsesOnFail(shiftTradeRequest, allNewRules,
-																										  _schedulingResultStateHolder);
+						_shiftTradePendingReasonsService.SimulateApproveAndSetBusinessRuleResponsesOnFail(shiftTradeRequest,
+							allEnabledRules,
+							_schedulingResultStateHolder);
 					}
 				}
 				catch (ShiftTradeRequestStatusException exception)
@@ -254,9 +267,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			_schedulingResultStateHolder.PersonsInOrganization = null;
 		}
 
-		private INewBusinessRuleCollection getAllNewBusinessRules(CultureInfo cultureInfo, AcceptShiftTradeEvent @event)
+		private INewBusinessRuleCollection getAllEnabledBusinessRules(CultureInfo cultureInfo, AcceptShiftTradeEvent @event)
 		{
-			var rules = _businessRuleProvider.GetBusinessRulesForShiftTradeRequest(_schedulingResultStateHolder,
+			var rules = _businessRuleProvider.GetAllEnabledBusinessRulesForShiftTradeRequest(_schedulingResultStateHolder,
 				@event.UseSiteOpenHoursRule);
 			rules.SetUICulture(cultureInfo);
 

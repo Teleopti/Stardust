@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			return businessRuleCollection.Any(rule => rule.GetType() == type);
 		}
 
-		private class dummyRuleFirst : INewBusinessRule
+		public class dummyRuleFirst : INewBusinessRule
 		{
 			public dummyRuleFirst(bool mandatory)
 			{
@@ -349,7 +349,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			public string Description => "Description of dummyRuleFirst";
 		}
 
-		private class dummyRuleSecond : INewBusinessRule
+		public class dummyRuleSecond : INewBusinessRule
 		{
 			public dummyRuleSecond(bool mandatory)
 			{

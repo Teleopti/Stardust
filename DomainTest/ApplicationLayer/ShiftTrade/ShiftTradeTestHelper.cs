@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				_loadSchedulingDataForRequestWithoutResourceCalculation,
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				businessRuleProvider ?? _businessRuleProvider,
-				toggle39473IsOff ? new ShiftTradePendingReasonsService39473ToggleOff() : _shiftTradePendingReasonsService);
+				toggle39473IsOff ? new ShiftTradePendingReasonsService39473ToggleOff() : _shiftTradePendingReasonsService, null);
 			_target.Handle(acceptShiftTradeEvent);
 		}
 

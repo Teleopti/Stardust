@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Interfaces.Domain
+﻿using System.Collections.Generic;
+
+namespace Teleopti.Interfaces.Domain
 {
 	public interface IBusinessRuleProvider
 	{
@@ -6,5 +8,10 @@
 
 		INewBusinessRuleCollection GetBusinessRulesForShiftTradeRequest(
 			ISchedulingResultStateHolder schedulingResultStateHolder, bool enableSiteOpenHoursRule);
+
+		INewBusinessRuleCollection GetAllEnabledBusinessRulesForShiftTradeRequest(ISchedulingResultStateHolder schedulingResultStateHolder,
+			bool enableSiteOpenHoursRule);
+
+		bool ShouldDeny(INewBusinessRuleCollection enabledRules, IList<IBusinessRuleResponse> ruleResponses);
 	}
 }

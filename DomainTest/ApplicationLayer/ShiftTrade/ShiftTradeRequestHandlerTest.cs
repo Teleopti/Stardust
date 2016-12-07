@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -53,11 +54,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			businessRuleProvider = new FakeBusinessRuleProvider();
 			newBusinessRuleCollection = new FakeNewBusinessRuleCollection();
 			shiftTradePendingReasonsService = new ShiftTradePendingReasonsService(requestFactory, scenarioRepository);
+			_globalSettingDataRepository = new FakeGlobalSettingDataRepository();
 
-			target = new ShiftTradeRequestHandler(schedulingResultState, validator, requestFactory,
-				scenarioRepository, personRequestRepository, scheduleStorage,
-				personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
-				loader, differenceCollectionService, businessRuleProvider, shiftTradePendingReasonsService);
+			target = new ShiftTradeRequestHandler(schedulingResultState, validator, requestFactory, scenarioRepository,
+				personRequestRepository, scheduleStorage, personRepository, personRequestCheckAuthorization,
+				scheduleDictionarySaver, loader, differenceCollectionService, businessRuleProvider,
+				shiftTradePendingReasonsService, _globalSettingDataRepository);
 		}
 
 		private ShiftTradeRequestHandler target;
@@ -79,6 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private IBusinessRuleProvider businessRuleProvider;
 		private INewBusinessRuleCollection newBusinessRuleCollection;
 		private IShiftTradePendingReasonsService shiftTradePendingReasonsService;
+		private IGlobalSettingDataRepository _globalSettingDataRepository;
 
 		private void createRepositories()
 		{
@@ -324,6 +327,59 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			Assert.AreEqual(false, personRequest.IsNew);
 			Assert.AreEqual(true, personRequest.IsPending);
 			Assert.AreEqual(false, personRequest.IsApproved);
+			Assert.AreEqual(BusinessRuleFlags.NewMaxWeekWorkTimeRule | BusinessRuleFlags.NewShiftCategoryLimitationRule,
+				personRequest.BrokenBusinessRules);
+			Assert.AreEqual(ShiftTradeStatus.OkByBothParts,
+				shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
+			personRequest.GetMessage(new NoFormatting())
+				.Should().Be.EqualTo("I want to trade!\r\nViolation of a Business Rule:\r\n"
+									 + ruleMessage1 + "\r\n" + ruleMessage2 + "\r\n");
+		}
+
+		[Test]
+		public void ShouldDenyWhenBusinessRulesFail()
+		{
+			const string ruleMessage1 = "aja baja!";
+			const string ruleMessage2 = "Another rule broken!";
+			var accept = getAcceptShiftTrade();
+
+			var approvalService = MockRepository.GenerateMock<IRequestApprovalService>();
+			var statusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
+
+			var rule1 = MockRepository.GenerateMock<IBusinessRuleResponse>();
+			rule1.Stub(x => x.Message).Return(ruleMessage1);
+			rule1.Stub(x => x.TypeOfRule).Return(typeof (NewMaxWeekWorkTimeRule));
+			var rule2 = MockRepository.GenerateMock<IBusinessRuleResponse>();
+			rule2.Stub(x => x.Message).Return(ruleMessage2);
+			rule2.Stub(x => x.TypeOfRule).Return(typeof (NewShiftCategoryLimitationRule));
+
+			var shiftTradeRequest = (IShiftTradeRequest) personRequest.Request;
+			validator.Stub(x => x.Validate(shiftTradeRequest)).Return(new ShiftTradeRequestValidationResult(true));
+			personRepository.Stub(x => x.Get(accept.AcceptingPersonId)).Return(toPerson);
+			approvalService.Stub(x => x.ApproveShiftTrade(shiftTradeRequest))
+				.Return(new List<IBusinessRuleResponse> {rule1, rule1, rule2});
+			requestFactory.Stub(x => x.GetRequestApprovalService(null, scenario, schedulingResultState))
+				.IgnoreArguments().Return(approvalService);
+			personRequestRepository.Stub(x => x.Get(accept.PersonRequestId)).Return(personRequest);
+			scenarioRepository.Stub(x => x.Current()).Return(scenario);
+			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
+			var ruleResponse1 = new BusinessRuleResponse(typeof (NewMaxWeekWorkTimeRule), "no go", false, false,
+				new DateTimePeriod(), PersonFactory.CreatePersonWithId(),
+				new DateOnlyPeriod(new DateOnly(2008, 12, 22), new DateOnly(2008, 12, 25)), "tjillevippen");
+			var ruleResponse2 = new BusinessRuleResponse(typeof (NewShiftCategoryLimitationRule), "no go", false, false,
+				new DateTimePeriod(), PersonFactory.CreatePersonWithId(),
+				new DateOnlyPeriod(new DateOnly(2008, 12, 22), new DateOnly(2008, 12, 25)), "tjillevippen");
+			var rules = new List<IBusinessRuleResponse> {ruleResponse1, ruleResponse2};
+			((FakeNewBusinessRuleCollection) newBusinessRuleCollection).SetRuleResponse(rules);
+			newBusinessRuleCollection.Add(new NewPersonAccountRule(null, null));
+
+			((FakeBusinessRuleProvider)businessRuleProvider).SetBusinessRules(newBusinessRuleCollection);
+			((FakeBusinessRuleProvider)businessRuleProvider).SetShouldDeny(true);
+			target.Handle(accept);
+			Assert.AreEqual(false, personRequest.IsNew);
+			Assert.AreEqual(false, personRequest.IsPending);
+			Assert.AreEqual(false, personRequest.IsApproved);
+			Assert.AreEqual(true, personRequest.IsDenied);
 			Assert.AreEqual(BusinessRuleFlags.NewMaxWeekWorkTimeRule | BusinessRuleFlags.NewShiftCategoryLimitationRule,
 				personRequest.BrokenBusinessRules);
 			Assert.AreEqual(ShiftTradeStatus.OkByBothParts,
