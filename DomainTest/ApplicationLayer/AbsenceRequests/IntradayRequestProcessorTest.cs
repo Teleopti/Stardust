@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public MutableNow Now;
 		public FakeRequestStrategySettingsReader RequestStrategySettingsReader;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
-
+		public FakeCurrentBusinessUnit CurrentBusinessUnit;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			system.UseTestDouble<FakeRequestStrategySettingsReader>().For<IRequestStrategySettingsReader>();
 			system.UseTestDouble<ScheduleForecastSkillReadModelValidator>().For<IScheduleForecastSkillReadModelValidator>();
+			system.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
 
 			_now = new DateTime(2016, 03, 14, 0, 5, 0);
 		}
@@ -275,6 +276,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void DenyIfUnderstaffedOnNonCascadingSkills()
 		{
+			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("a"));
 			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 05:00");
 
 			var period = new DateTimePeriod(new DateTime(2016, 3, 14, 13, 30, 0, DateTimeKind.Utc),
@@ -337,6 +339,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ApproveIfOverstaffedOnNonCascadingSkill()
 		{
+			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("a"));
 			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 05:00");
 
 			var period = new DateTimePeriod(new DateTime(2016, 3, 14, 13, 30, 0, DateTimeKind.Utc),
@@ -436,6 +439,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ApproveIfAllSkillAreClosedOrMissingOpenHours()
 		{
+			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("a"));
 			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 05:00");
 
 			var period = new DateTimePeriod(new DateTime(2016, 3, 14, 12, 0, 0, DateTimeKind.Utc),
@@ -471,6 +475,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ApproveOnIntervalsEvenIfSomeSkillsAreClosed()
 		{
+			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("a"));
 			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 05:00");
 
 			var period = new DateTimePeriod(new DateTime(2016, 3, 14, 12, 0, 0, DateTimeKind.Utc),
@@ -620,7 +625,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void DenyIfRequestIsOvernightWithProperDenyReason()
 		{
-
+			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("a"));
 			var period = new DateTimePeriod(new DateTime(2016, 10, 17, 21, 15, 0, DateTimeKind.Utc),
 				new DateTime(2016, 10, 17, 22, 15, 00, DateTimeKind.Utc));
 
@@ -683,7 +688,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var request = createNewRequest();
 			
 			ScheduleForecastSkillReadModelRepository.LastCalculatedDate.Add(((PersonRequest)request).BusinessUnit.Id.GetValueOrDefault(), new DateTime(2016,12, 07, 10, 0, 0, DateTimeKind.Utc));
-
+			CurrentBusinessUnit.FakeBusinessUnit(((PersonRequest)request).BusinessUnit);
 			Now.Is("2016-12-07 12:45");
 
 			Target.Process(request, _now);
@@ -757,6 +762,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(_primarySkill2.Id.GetValueOrDefault(),
 				OpenHourStatus.WithinOpenHour);
 			request.Pending();
+			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("a"));
 			return request;
 		}
 
@@ -798,10 +804,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, requestDateTimePeriod)).WithId();
 			personRequest.SetCreated(new DateTime(2016, 3, 14, 0, 5, 0, DateTimeKind.Utc));
 			PersonRequestRepository.Add(personRequest);
-			var bu1 = BusinessUnitFactory.CreateWithId("B1");
-			BusinessUnitRepository.Add(bu1);
-			personRequest.SetBusinessUnit(bu1);
-
 			return personRequest;
 		}
 

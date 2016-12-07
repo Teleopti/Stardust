@@ -22,20 +22,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly ResourceAllocator _resourceAllocator;
 		private readonly IIntradayRequestWithinOpenHourValidator _intradayRequestWithinOpenHourValidator;
 		private readonly IScheduleForecastSkillReadModelValidator _scheduleForecastSkillReadModelValidator;
+		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
 		public IntradayRequestProcessor(ICommandDispatcher commandDispatcher, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, ResourceAllocator resourceAllocator, 
-			IIntradayRequestWithinOpenHourValidator intradayRequestWithinOpenHourValidator, IScheduleForecastSkillReadModelValidator scheduleForecastSkillReadModelValidator)
+			IIntradayRequestWithinOpenHourValidator intradayRequestWithinOpenHourValidator, IScheduleForecastSkillReadModelValidator scheduleForecastSkillReadModelValidator, ICurrentBusinessUnit currentBusinessUnit)
 		{
 			_commandDispatcher = commandDispatcher;
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 			_resourceAllocator = resourceAllocator;
 			_intradayRequestWithinOpenHourValidator = intradayRequestWithinOpenHourValidator;
 			_scheduleForecastSkillReadModelValidator = scheduleForecastSkillReadModelValidator;
+			_currentBusinessUnit = currentBusinessUnit;
 		}
 
 		public void Process(IPersonRequest personRequest, DateTime startTime)
 		{
-			if (!_scheduleForecastSkillReadModelValidator.Validate(((PersonRequest)personRequest).BusinessUnit.Id.GetValueOrDefault()))
+			if (!_scheduleForecastSkillReadModelValidator.Validate(_currentBusinessUnit.Current().Id.GetValueOrDefault()))
 			{
 				sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
 				return;

@@ -13,6 +13,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Services;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public INow Now;
 		public ApprovalServiceForTest ApprovalService;
 		public PersonRequestAuthorizationCheckerForTest PersonRequestAuthorizationChecker;
+		public FakeCurrentBusinessUnit CurrentBusinessUnit;
 
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -46,6 +48,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			system.UseTestDouble<QueuedAbsenceRequestFastIntradayHandler>().For<QueuedAbsenceRequestFastIntradayHandler>();
 			system.UseTestDouble<ApprovalServiceForTest>().For<IRequestApprovalService>();
 			system.UseTestDouble<IntradayRequestProcessor>().For<IIntradayRequestProcessor>();
+			system.UseTestDouble<ScheduleForecastSkillReadModelValidator>().For<IScheduleForecastSkillReadModelValidator>();
+			system.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
 		}
 		
 		[Test]
@@ -63,6 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldNotPutRequestOnQueueIfIntradayRequestAndStaffingCheck()
 		{
+			
 			var now = Now.UtcDateTime();
 			var period = new DateTimePeriod(now.AddHours(2), now.AddHours(5)); 
 
@@ -70,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			IBusinessUnit businessUnit = BusinessUnitFactory.CreateWithId("something");
 			reqEvent.LogOnBusinessUnitId = businessUnit.Id.Value;
 			BusinessUnitRepository.Add(businessUnit);
-			
+			CurrentBusinessUnit.FakeBusinessUnit(businessUnit);
 
 			TargetFast.Handle(reqEvent);
 			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(0);
@@ -118,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			IBusinessUnit businessUnit = BusinessUnitFactory.CreateWithId("something");
 			reqEvent.LogOnBusinessUnitId = businessUnit.Id.Value;
 			BusinessUnitRepository.Add(businessUnit);
-
+			CurrentBusinessUnit.FakeBusinessUnit(businessUnit);
 			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 08:00");
 
 			TargetFast.Handle(reqEvent);
@@ -189,7 +194,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private PersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod requestDateTimePeriod)
 		{
 			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, requestDateTimePeriod)).WithId();
-			
+			personRequest.SetBusinessUnit(BusinessUnitFactory.CreateWithId("temp"));
 			personRequest.SetCreated(new DateTime(2014, 2, 20, 0, 0, 0, DateTimeKind.Utc));
 			PersonRequestRepository.Add(personRequest);
 

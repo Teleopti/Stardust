@@ -19,6 +19,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private IWorkflowControlSet _workflowControlSet;
 		private IAbsence _absence;
 		private IPerson _person;
+		public FakeCurrentBusinessUnit CurrentBusinessUnit;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -71,6 +73,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			system.UseTestDouble(new ThisIsNow(nowTime)).For<INow>();
 			system.UseTestDouble<AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest>().For<AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest> ();
 			system.UseTestDouble<RequestsViewModelMappingProfile>().For<RequestsViewModelMappingProfile> ();
+			system.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit> ();
 
 		}
 
@@ -98,6 +101,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldHandleRequestDirectlyWhenRequestShorterThan24HoursAndEndsWithin24HourWindow()
 		{
+			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("a"));
 			Mapper.Configuration.AddProfile(new AbsenceRequestFormMappingProfile(() => AbsenceRequestFormToPersonRequest));
 			Mapper.Configuration.AddProfile(new DateTimePeriodFormMappingProfile(() => UserTimeZone));
 			Mapper.Configuration.AddProfile(RequestsViewModelMappingProfile);
@@ -548,6 +552,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			var absence = AbsenceFactory.CreateAbsence("holiday").WithId();
 			absence.Description = new Description("hliday");
+			absence.SetBusinessUnit(BusinessUnitFactory.CreateWithId("temp"));
 			AbsenceRepository.Add(absence);
 			return absence;
 		}
