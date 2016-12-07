@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
-using Teleopti.Ccc.Domain.Tracking;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.IocCommon;
@@ -24,7 +26,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
-	[DomainTest]
+	[DomainTestWithStaticDependenciesAvoidUse]
 	[TestFixture, SetCulture("en-US")]
 	public class MultiAbsenceRequestsUpdaterTest : ISetup
 	{
@@ -36,6 +38,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 		public FakeToggleManager ToggleManager;
 		public FakePersonRequestRepository PersonRequestRepository;
+		public FakePersonRepository PersonRepository;
+		public FakeActivityRepository ActivityRepository;
+		public FakeSkillRepository SkillRepository;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public FakeLoggedOnUser LoggedOnUser;
+		public FakeSkillDayRepository SkillDayRepository;
+		public FullScheduling Scheduling;
 		public INow Now;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -45,6 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeWorkloadRepository>().For<IWorkloadRepository>();
 			system.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
+			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble(new MutableNow(DateTime.UtcNow)).For<INow>();
 		}
 
@@ -80,35 +90,64 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			reqs.SingleOrDefault().DenyReason.Should().Be.EqualTo(Resources.RequestDenyReasonAlreadyAbsent);
 		}
 
-
-
-		[Test, Ignore("Nightmare to test due to cast between FakeScheduleRange and ScheduleRange")]
-		public void ShouldDenyIfNotEnoughPersonalAccount()
+		[Test, Ignore("Can't run with Fake repos")]
+		public void ShouldDenySecondRequestIfFirstWasApprovedAndCausedStaffingToBeOnTheEdge()
 		{
-			ScenarioRepository.Add(CurrentScenario.Current());
-			var absence = AbsenceFactory.CreateAbsence("Holiday");
-			absence.Tracker = Tracker.CreateDayTracker();
 
-			var wfcs = createWorkFlowControlSet(absence, new PersonAccountBalanceValidator(), new StaffingThresholdValidator());
+			var firstDay = new DateOnly(2015, 10, 12);
+			var activity = ActivityRepository.Has("activity");
+			var skill = SkillRepository.Has("skill", activity);
 
-			var person = createAndSetupPerson(wfcs);
-
-			var personAccount = new PersonAbsenceAccount(person, absence);
-
-			personAccount.Add(new AccountDay(new DateOnly(DateTime.Today))
+			var scenario = ScenarioRepository.Has("some name");
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var contract = new Contract("_")
 			{
-				BalanceIn = TimeSpan.Zero,
-				BalanceOut = TimeSpan.Zero,
-				Accrued = TimeSpan.Zero,
-				Extra = TimeSpan.Zero
-			});
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
+			};
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var workflowControlSet = new WorkflowControlSet { AbsenceRequestWaitlistEnabled = false };
+			workflowControlSet.SetId(Guid.NewGuid());
 
-			PersonAbsenceAccountRepository.Add(personAccount);
+			var dateOnlyPeriod = firstDay.ToDateOnlyPeriod().Inflate(1);
 
-			var reqs = createNewRequest(absence, person);
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				Period = dateOnlyPeriod,
+				OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(DateTime.UtcNow), new DateOnly(DateTime.UtcNow.AddDays(1))),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			};
+
+			workflowControlSet.InsertPeriod(absenceRequestOpenPeriod, 0);
+			
+			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
+			agent.WorkflowControlSet = workflowControlSet;
+		
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
+				1,
+				1)
+				);
+
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(CurrentScenario.Current(), agent, firstDay.ToDateTimePeriod(agent.PermissionInformation.DefaultTimeZone()));
+			ScheduleStorage.Add(assignment);
+
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, firstDay.ToDateTimePeriod(agent.PermissionInformation.DefaultTimeZone()))).WithId();
+
+			personRequest.Pending();
+
+			PersonRequestRepository.Add(personRequest);
+
+			LoggedOnUser.SetFakeLoggedOnUser(agent);
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, agent);
+
+			var reqs = new List<IPersonRequest>() {personRequest};
 
 			Target.UpdateAbsenceRequest(reqs.Select(x => x.Id.GetValueOrDefault()).ToList());
-			reqs.SingleOrDefault().DenyReason.Should().Be.EqualTo(Resources.RequestDenyReasonPersonAccount);
+
+			reqs.First().IsApproved.Should().Be.True();
 		}
 
 		[Test]
@@ -133,22 +172,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			req.DenyReason.Should().Be.EqualTo(string.Format(Resources.RequestDenyReasonRequestExpired, req.Request.Period.StartDateTime, 15));
 		}
 
-		[Test, Ignore("Nightmare to test due to cast between FakeScheduleRange and ScheduleRange")]
-		public void ShouldDenyIfInvalidSchedule()
-		{
-			
-		}
-
-		[Test, Ignore("Nightmare to test due to cast between FakeScheduleRange and ScheduleRange")]
-		public void ShouldDenyIfUnderstaffed()
-		{
-
-		}
-
-		[Test, Ignore("Nightmare to test due to cast between FakeScheduleRange and ScheduleRange")]
-		public void ShouldApproveIfAllIsOk()
-		{
-		}
 		
 		private List<IPersonRequest> createNewRequest(IAbsence absence, IPerson person)
 		{

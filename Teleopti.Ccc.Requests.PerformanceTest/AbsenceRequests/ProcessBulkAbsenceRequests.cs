@@ -7,6 +7,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 		public IDataSourceScope DataSource;
 		public IPersonRepository PersonRepository;
 		public IPersonRequestRepository PersonRequestRepository;
-		public IProcessMultipleAbsenceRequest Target;
+		public MultiAbsenceRequestsHandler Target;
 		public WithUnitOfWork WithUnitOfWork;
 		public IWorkflowControlSetRepository WorkflowControlSetRepository;
 		public IBudgetGroupRepository BudgetGroupRepository;
@@ -130,7 +131,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 				};
 				//queueRequests(absenceRequestIds);
 
-				Target.Process(newMultiAbsenceRequestsCreatedEvent);
+				Target.Handle(newMultiAbsenceRequestsCreatedEvent);
 
 			});
 
@@ -271,7 +272,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 					Sent = DateTime.UtcNow
 				};
 
-				Target.Process(newMultiAbsenceRequestsCreatedEvent);
+				Target.Handle(newMultiAbsenceRequestsCreatedEvent);
 			});
 
 			var expectedStatuses = new Dictionary<Guid, int>();
@@ -377,7 +378,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 					Sent = DateTime.UtcNow
 				};
 
-				Target.Process(newMultiAbsenceRequestsCreatedEvent);
+				Target.Handle(newMultiAbsenceRequestsCreatedEvent);
 			});
 
 			var cntApproved = 0;
@@ -470,7 +471,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 					Sent = DateTime.UtcNow
 				};
 
-				Target.Process(newMultiAbsenceRequestsCreatedEvent);
+				Target.Handle(newMultiAbsenceRequestsCreatedEvent);
 			});
 
 			var cntApproved = 0;
@@ -558,7 +559,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 					Sent = DateTime.UtcNow
 				};
 
-				Target.Process(newMultiAbsenceRequestsCreatedEvent);
+				Target.Handle(newMultiAbsenceRequestsCreatedEvent);
 			});
 
 			var cntApproved = 0;
