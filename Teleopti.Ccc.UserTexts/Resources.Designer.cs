@@ -26206,6 +26206,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search an organization.
+        /// </summary>
+        public static string SearchAnOrganization {
+            get {
+                return ResourceManager.GetString("SearchAnOrganization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search:.
         /// </summary>
         public static string Searchcl {

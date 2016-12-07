@@ -11,11 +11,11 @@
 			}
 		});
 
-	organizationPickerCtrl.$inject = ['$scope'];
+	organizationPickerCtrl.$inject = ['$scope', '$translate'];
 
-	function organizationPickerCtrl($scope) {
-		var ctrl = this;
-		var currentSite = undefined;
+	function organizationPickerCtrl($scope, $translate) {
+		var ctrl = this,
+			currentSite;
 
 		ctrl.$onInit = function() {
 			populateGroupList();
@@ -59,7 +59,7 @@
 					}
 				}
 			}
-			return '';
+			return $translate.instant('Organization');
 		};
 
 		ctrl.updateSiteCheck = function(site) {
@@ -105,7 +105,9 @@
 		ctrl.onSelectionDone = function() {
 			ctrl.searchTerm = '';
 			//load the schedule data
-			ctrl.onPick({ groups: ctrl.selectedTeamIds });
+			ctrl.onPick({
+				groups: ctrl.selectedTeamIds
+			});
 		};
 	}
 })();

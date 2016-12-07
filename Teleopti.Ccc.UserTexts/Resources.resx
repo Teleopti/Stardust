@@ -15317,4 +15317,8 @@ These options are activated:
     <value>Skill open hours</value>
     <comment>Friendly description of OpenHoursRule to show in shift trade system setting</comment>
   </data>
+  <data name="SearchAnOrganization" xml:space="preserve">
+    <value>Search an organization</value>
+    <comment>Placeholder text for organization picker search box in WFM/Teams</comment>
+  </data>
 </root>
