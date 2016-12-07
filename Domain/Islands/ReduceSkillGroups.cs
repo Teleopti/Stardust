@@ -20,19 +20,19 @@ namespace Teleopti.Ccc.Domain.Islands
 				var numberOfAgentsInIsland = skillGroupsOnIsland.Sum(x => x.Agents.Count());
 				if (numberOfAgentsInIsland < _reduceIslandsLimits.MinimumNumberOfAgentsInIsland)
 					continue;
-				var skillGroupsOnIslandAndNumberOfAgents = skillGroupsOnIsland.Select(x => new { x.Skills, NumberOfAgents = x.Agents.Count() }).OrderByDescending(x => x.NumberOfAgents);
+				var skillGroupsOnIslandAndNumberOfAgents = skillGroupsOnIsland.Select(x => new { SkillGroup = x, NumberOfAgentsOnSkillGroup = x.Agents.Count() }).OrderByDescending(x => x.NumberOfAgentsOnSkillGroup);
 				foreach (var skillGroupAndNumberOfAgents in skillGroupsOnIslandAndNumberOfAgents)
 				{
-					foreach (var skillGroupSkill in skillGroupAndNumberOfAgents.Skills.ToArray())
+					foreach (var skillGroupSkill in skillGroupAndNumberOfAgents.SkillGroup.Skills.ToArray())
 					{
-						if (skillGroupAndNumberOfAgents.NumberOfAgents * _reduceIslandsLimits.MinimumFactorOfAgentsInOtherSkillGroup >= noAgentsKnowingSkill[skillGroupSkill])
+						if (skillGroupAndNumberOfAgents.NumberOfAgentsOnSkillGroup * _reduceIslandsLimits.MinimumFactorOfAgentsInOtherSkillGroup >= noAgentsKnowingSkill[skillGroupSkill])
 							continue;
 
-						if (skillGroupAndNumberOfAgents.Skills.Count(x => x.Activity == null || x.Activity.Equals(skillGroupSkill.Activity)) < 2)
+						if (skillGroupAndNumberOfAgents.SkillGroup.Skills.Count(x => x.Activity == null || x.Activity.Equals(skillGroupSkill.Activity)) < 2)
 							continue;
 
-						skillGroupAndNumberOfAgents.Skills.Remove(skillGroupSkill);
-						noAgentsKnowingSkill[skillGroupSkill] -= skillGroupAndNumberOfAgents.NumberOfAgents;
+						skillGroupAndNumberOfAgents.SkillGroup.RemoveSkill(skillGroupSkill);
+						noAgentsKnowingSkill[skillGroupSkill] -= skillGroupAndNumberOfAgents.NumberOfAgentsOnSkillGroup;
 						return true;
 					}
 				}
