@@ -61,7 +61,14 @@ namespace Teleopti.Ccc.Domain.Islands
 						{
 							if (otherSkillGroup.Skills.Intersect(skillGroup.Skills).Any())
 							{
-								otherIsland.Add(skillGroup);
+								if (skillGroup.HasSameSkillsAs(otherSkillGroup))
+								{
+									skillGroup.Agents.ForEach(x => otherSkillGroup.Agents.Add(x));
+								}
+								else
+								{
+									otherIsland.Add(skillGroup);
+								}
 								skillGroupInIsland.Remove(skillGroup);
 								return true;
 							}

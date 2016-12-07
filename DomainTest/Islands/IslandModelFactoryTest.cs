@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Islands
 				.Should().Be.EqualTo(2);
 		}
 
-		[Test, Ignore("To be fixed")]
+		[Test]
 		public void ShouldNotLeaveDuplicateSkillgroupsAfterReducing()
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 2);
