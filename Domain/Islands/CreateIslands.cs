@@ -26,12 +26,12 @@ namespace Teleopti.Ccc.Domain.Islands
 
 		public IEnumerable<IIsland> Create(DateOnlyPeriod period)
 		{
-			var skillGroups = _createSkillGroups.Create(_peopleInOrganization.Agents(period), period.StartDate);
-			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(skillGroups);
+			var allSkillGroups = new List<SkillGroup>(_createSkillGroups.Create(_peopleInOrganization.Agents(period), period.StartDate));
+			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(allSkillGroups);
 			while (true)
 			{
-				var skillGroupsInIslands = skillGroups.Select(skillGroup => new List<SkillGroup> { skillGroup }).ToList();
-				while (moveSkillGroupToCorrectIsland(skillGroupsInIslands))
+				var skillGroupsInIslands = allSkillGroups.Select(skillGroup => new List<SkillGroup> { skillGroup }).ToList();
+				while (moveSkillGroupToCorrectIsland(allSkillGroups, skillGroupsInIslands))
 				{
 					removeEmptyIslands(skillGroupsInIslands);
 				}
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Islands
 			skillGroupsInIslands.Where(x => x.Count == 0).ToArray().ForEach(x => skillGroupsInIslands.Remove(x));
 		}
 
-		private static bool moveSkillGroupToCorrectIsland(IEnumerable<ICollection<SkillGroup>> skillGroupsInIslands)
+		private static bool moveSkillGroupToCorrectIsland(ICollection<SkillGroup> allSkillGroups, IEnumerable<ICollection<SkillGroup>> skillGroupsInIslands)
 		{
 			foreach (var skillGroupInIsland in skillGroupsInIslands)
 			{
@@ -64,6 +64,7 @@ namespace Teleopti.Ccc.Domain.Islands
 								if (skillGroup.HasSameSkillsAs(otherSkillGroup))
 								{
 									otherSkillGroup.AddAgentsFrom(skillGroup);
+									allSkillGroups.Remove(skillGroup);
 								}
 								else
 								{
