@@ -5,9 +5,10 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 {
 	public interface IMailboxRepository
 	{
-		void Persist(Mailbox mailbox);
+		void Add(Mailbox mailbox);
 		Mailbox Load(Guid id);
-		IEnumerable<Mailbox> Load(string[] routes);
+		IEnumerable<Message> PopMessages(Guid id, DateTime? expiredAt);
+		void AddMessage(Message message);
 		void Purge();
 	}
 }

@@ -32,81 +32,100 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 			_now = now;
 		}
 
-		public void Persist(Mailbox model)
+		public void Add(Mailbox model)
 		{
-			_unitOfWork.Current().CreateSqlQuery(
-				"MERGE INTO [msg].Mailbox AS T " +
-				"USING (" +
-				"	VALUES " +
-				"	(" +
-				"		:Id, " +
-				"		:Route, " +
-				"		:Notifications" +
-				"	)" +
-				") AS S (" +
-				"		Id, " +
-				"		Route, " +
-				"		Notifications" +
-				"	) " +
-				"ON " +
-				"	T.Id = S.Id AND " +
-				"	T.Route = S.Route " +
-				"WHEN NOT MATCHED THEN " +
-				"	INSERT " +
-				"	(" +
-				"		Id," +
-				"		Route," +
-				"		Notifications, " +
-				"		ExpiresAt " +
-				"	) VALUES (" +
-				"		S.Id," +
-				"		S.Route," +
-				"		S.Notifications, " +
-				"		:ExpiresAt " +
-				"	) " +
-				"WHEN MATCHED THEN " +
-				"	UPDATE SET" +
-				"		Notifications = S.Notifications," +
-				"		ExpiresAt = :ExpiresAt" +
-				";")
-				.SetGuid("Id", model.Id)
-				.SetString("Route", model.Route)
-				.SetParameter("Notifications", _serializer.SerializeObject(model.Messages), NHibernateUtil.StringClob)
-				.SetParameter("ExpiresAt", model.ExpiresAt.NullIfMinValue())
-				.ExecuteUpdate();
+			persist(model, Enumerable.Empty<Message>());
 		}
 
 		public Mailbox Load(Guid id)
 		{
 			return load(id, null).SingleOrDefault();
 		}
-		
-		public IEnumerable<Mailbox> Load(string[] routes)
+
+		public IEnumerable<Message> PopMessages(Guid id, DateTime? expiredAt)
 		{
-			return load(null, routes);
+			var mailbox = load(id, null).Single();
+			var messages = mailbox.Notifications;
+			if (messages.Any() || expiredAt.HasValue)
+			{
+				mailbox.ExpiresAt = expiredAt ?? mailbox.ExpiresAt;
+				persist(mailbox, Enumerable.Empty<Message>());
+			}
+			return messages;
 		}
 
-		private IEnumerable<Mailbox> load(Guid? id, string[] routes)
+		public void AddMessage(Message message)
+		{
+			load(null, message.Routes())
+				.ForEach(mailbox => persist(mailbox, mailbox.Notifications.Append(message).ToArray()));
+		}
+
+		private void persist(Mailbox model, IEnumerable<Message> notifications)
+		{
+			_unitOfWork.Current().CreateSqlQuery(
+					"MERGE INTO [msg].Mailbox AS T " +
+					"USING (" +
+					"	VALUES " +
+					"	(" +
+					"		:Id, " +
+					"		:Route, " +
+					"		:Notifications" +
+					"	)" +
+					") AS S (" +
+					"		Id, " +
+					"		Route, " +
+					"		Notifications" +
+					"	) " +
+					"ON " +
+					"	T.Id = S.Id AND " +
+					"	T.Route = S.Route " +
+					"WHEN NOT MATCHED THEN " +
+					"	INSERT " +
+					"	(" +
+					"		Id," +
+					"		Route," +
+					"		Notifications, " +
+					"		ExpiresAt " +
+					"	) VALUES (" +
+					"		S.Id," +
+					"		S.Route," +
+					"		S.Notifications, " +
+					"		:ExpiresAt " +
+					"	) " +
+					"WHEN MATCHED THEN " +
+					"	UPDATE SET" +
+					"		Notifications = S.Notifications," +
+					"		ExpiresAt = :ExpiresAt" +
+					";")
+				.SetGuid("Id", model.Id)
+				.SetString("Route", model.Route)
+				.SetParameter("Notifications", _serializer.SerializeObject(notifications), NHibernateUtil.StringClob)
+				.SetParameter("ExpiresAt", model.ExpiresAt.NullIfMinValue())
+				.ExecuteUpdate();
+		}
+
+		private IEnumerable<mailboxWithNotifications> load(Guid? id, string[] routes)
 		{
 			var where = "Id =:Id";
 			if (routes != null)
 				where = "Route IN (:Routes)";
 
-			var sql = string.Format(
-				"SELECT " +
-				"	Id," +
-				"	Route," +
-				"	Notifications AS NotificationsJson, " +
-				"	ExpiresAt " +
-				"FROM [msg].Mailbox WHERE" +
-				"	{0} ", where);
+			var sql =
+					"SELECT " +
+					"	Id," +
+					"	Route," +
+					"	Notifications AS NotificationsJson, " +
+					"	ExpiresAt " +
+					"FROM [msg].Mailbox WHERE" +
+					$"	{where} "
+				;
 
 			var query = _unitOfWork.Current().CreateSqlQuery(sql)
 				.AddScalar("Id", NHibernateUtil.Guid)
 				.AddScalar("Route", NHibernateUtil.String)
 				.AddScalar("NotificationsJson", NHibernateUtil.StringClob)
 				.AddScalar("ExpiresAt", NHibernateUtil.DateTime)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(getModel)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(mailboxWithNotifications)))
 				;
 
 			if (routes != null)
@@ -114,20 +133,21 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 			else
 				query.SetGuid("Id", id.Value);
 
-			var result = query.List<getModel>();
+			var result = query.List<mailboxWithNotifications>();
 			result.ForEach(m => m.ParseJson(_deserializer));
 			return result;
 		}
 
-		private class getModel : Mailbox
+		private class mailboxWithNotifications : Mailbox
 		{
+			public IEnumerable<Message> Notifications { get; set; }
+			public string NotificationsJson { get; set; }
+
 			public void ParseJson(IJsonDeserializer deserializer)
 			{
-				_messages = deserializer.DeserializeObject<List<Message>>(NotificationsJson);
+				Notifications = deserializer.DeserializeObject<List<Message>>(NotificationsJson);
 				NotificationsJson = null;
 			}
-
-			public string NotificationsJson { private get; set; }
 		}
 
 		public void Purge()

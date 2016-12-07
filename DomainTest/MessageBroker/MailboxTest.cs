@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 
 			Server.NotifyClients(notification);
 
-			Mailboxes.Data.Single().PopAllMessages().Single().Routes().Should().Have.SameValuesAs(notification.Routes());
+			Mailboxes.Data.Single().Messages.Single().Routes().Should().Have.SameValuesAs(notification.Routes());
 		}
 
 		[Test]
@@ -87,8 +87,8 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 
 			Server.NotifyClients(notification);
 
-			Mailboxes.Data.Single(x => x.Id.Equals(mailbox1Id)).PopAllMessages().Should().Be.Empty();
-			Mailboxes.Data.Single(x => x.Id.Equals(mailbox2Id)).PopAllMessages().Single().Routes().Should().Have.SameValuesAs(notification.Routes());
+			Mailboxes.Data.Single(x => x.Id.Equals(mailbox1Id)).Messages.Should().Be.Empty();
+			Mailboxes.Data.Single(x => x.Id.Equals(mailbox2Id)).Messages.Single().Routes().Should().Have.SameValuesAs(notification.Routes());
 		}
 
 		[Test]
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 			Server.NotifyClients(notification);
 			Server.NotifyClients(notification);
 
-			Mailboxes.Data.Single().PopAllMessages().Should().Have.Count.EqualTo(2);
+			Mailboxes.Data.Single().Messages.Should().Have.Count.EqualTo(2);
 		}
 	}
 }

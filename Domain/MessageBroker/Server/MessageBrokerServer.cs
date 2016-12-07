@@ -66,30 +66,25 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 		[MessageBrokerUnitOfWork]
 		public virtual IEnumerable<Message> PopMessages(string route, string mailboxId)
 		{
-			var mailbox = _mailboxRepository.Load(Guid.Parse(mailboxId));
+			var mailboxIdGuid = Guid.Parse(mailboxId);
+			var mailbox = _mailboxRepository.Load(mailboxIdGuid);
 			if (mailbox == null)
 			{
-				_mailboxRepository.Persist(new Mailbox
+				_mailboxRepository.Add(new Mailbox
 				{
 					Route = route,
-					Id = Guid.Parse(mailboxId),
+					Id = mailboxIdGuid,
 					ExpiresAt = _now.UtcDateTime().Add(_expirationInterval)
 				});
 				return Enumerable.Empty<Message>();
 			}
 
-			var messages = mailbox.PopAllMessages();
 			var updateExpirationAt = mailbox.ExpiresAt.Subtract(new TimeSpan(_expirationInterval.Ticks / 2));
+			var updateExpiration = _now.UtcDateTime() >= updateExpirationAt;
 
-			var update = _now.UtcDateTime() >= updateExpirationAt || messages.Any();
-
-            if (update)
-			{
-				mailbox.ExpiresAt = _now.UtcDateTime().Add(_expirationInterval);
-				_mailboxRepository.Persist(mailbox);
-			}
-
-			return messages;
+            return updateExpiration ? 
+				_mailboxRepository.PopMessages(mailboxIdGuid, _now.UtcDateTime().Add(_expirationInterval)) : 
+				_mailboxRepository.PopMessages(mailboxIdGuid, null);
 		}
 
 		[MessageBrokerUnitOfWork]
@@ -104,12 +99,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 
 			purgeSometimes();
 
-			_mailboxRepository.Load(routes)
-				.ForEach(mailbox =>
-				{
-					mailbox.AddMessage(message);
-					_mailboxRepository.Persist(mailbox);
-				});
+			_mailboxRepository.AddMessage(message);
 
 			foreach (var route in routes)
 			{

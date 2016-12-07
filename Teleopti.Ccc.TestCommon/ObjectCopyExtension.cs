@@ -10,5 +10,13 @@ namespace Teleopti.Ccc.TestCommon
 				return default(T);
 			return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(instance));
 		}
+
+		public static TTarget CopyBySerialization<TSource, TTarget>(this TSource instance)
+		{
+			if (instance == null)
+				return default(TTarget);
+			return JsonConvert.DeserializeObject<TTarget>(JsonConvert.SerializeObject(instance));
+		}
+
 	}
 }
