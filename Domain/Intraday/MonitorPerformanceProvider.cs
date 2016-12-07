@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_forecastedCallsProvider = forecastedCallsProvider;
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 		}
-		public IntradayPerformanceDataSeries Load(Guid[] skillIdList)
+		public IntradayPerformanceViewModel Load(Guid[] skillIdList)
 		{
 			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
 			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
@@ -57,12 +57,21 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var eslIntervals = getEsl(skills, skillDays, queueStatistics, minutesPerInterval);
 
-			return new IntradayPerformanceDataSeries()
+			return new IntradayPerformanceViewModel
 			{
-				EstimatedServiceLevels = eslDataSeries(eslIntervals, queueStatistics),
-				AverageSpeedOfAnswer = queueStatistics.StatisticsDataSeries.AverageSpeedOfAnswer,
-				AbandonedRate = queueStatistics.StatisticsDataSeries.AbandonedRate,
-				ServiceLevel = queueStatistics.StatisticsDataSeries.ServiceLevel
+				DataSeries = new IntradayPerformanceDataSeries
+				{
+					EstimatedServiceLevels = eslDataSeries(eslIntervals, queueStatistics),
+					AverageSpeedOfAnswer = queueStatistics.StatisticsDataSeries.AverageSpeedOfAnswer,
+					AbandonedRate = queueStatistics.StatisticsDataSeries.AbandonedRate,
+					ServiceLevel = queueStatistics.StatisticsDataSeries.ServiceLevel
+				},
+				Summary = new IntradayPerformanceSummary
+				{
+					AbandonRate = queueStatistics.StatisticsSummary.AbandonRate,
+					AverageSpeedOfAnswer = queueStatistics.StatisticsSummary.AverageSpeedOfAnswer,
+					ServiceLevel = queueStatistics.StatisticsSummary.ServiceLevel
+				}
 			};
 		}
 

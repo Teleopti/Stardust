@@ -471,6 +471,8 @@
     <Compile Include="Intraday\ForecastedStaffingViewModelCreator.cs" />
     <Compile Include="Intraday\IJobStartTimeRepository.cs" />
     <Compile Include="Intraday\IntradayPerformanceDataSeries.cs" />
+    <Compile Include="Intraday\IntradayPerformanceSummary.cs" />
+    <Compile Include="Intraday\IntradayPerformanceViewModel.cs" />
     <Compile Include="Intraday\IntradayStaffingViewModel.cs" />
     <Compile Include="Intraday\IntradayStatisticsDataSeries.cs" />
     <Compile Include="Intraday\IntradayStatisticsSummary.cs" />

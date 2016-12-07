@@ -79,8 +79,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				skillDay.SkillStaffPeriodCollection.First().FStaff,
 				1);
 
-			result.EstimatedServiceLevels.Length.Should().Be.EqualTo(1);
-			result.EstimatedServiceLevels.First().Should().Be.EqualTo(esl);
+			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(1);
+			Math.Round(result.DataSeries.EstimatedServiceLevels.First().Value, 5).Should().Be.EqualTo(Math.Round(esl, 5));
 		}
 
 		[Test]
@@ -97,7 +97,11 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			{
 				IntervalDate = latestStatsTime.Date,
 				IntervalId = new IntervalBase(latestStatsTime, (60 / minutesPerInterval) * 24).Id,
-				AverageSpeedOfAnswer = 10,
+				OfferedCalls = 20,
+				AnsweredCalls = 16,
+				AnsweredCallsWithinSL = 16,
+				SpeedOfAnswer = 10,
+				AbandonedCalls = 4,
 				AbandonedRate = 0.2d,
 				ServiceLevel = 0.8d
 			});
@@ -106,9 +110,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var result = Target.Load(new Guid[] { skill.Id.Value });
 
-			result.AverageSpeedOfAnswer.Length.Should().Be.EqualTo(1);
-			result.AbandonedRate.Length.Should().Be.EqualTo(1);
-			result.ServiceLevel.Length.Should().Be.EqualTo(1);
+			result.DataSeries.AverageSpeedOfAnswer.Length.Should().Be.EqualTo(1);
+			result.DataSeries.AbandonedRate.Length.Should().Be.EqualTo(1);
+			result.DataSeries.ServiceLevel.Length.Should().Be.EqualTo(1);
+			result.Summary.ServiceLevel.Should().Be.GreaterThan(0);
+			result.Summary.AverageSpeedOfAnswer.Should().Be.GreaterThan(0);
+			result.Summary.AbandonRate.Should().Be.GreaterThan(0);
 		}
 
 		[Test]
@@ -144,9 +151,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var result = Target.Load(new Guid[] { skill.Id.Value });
 
-			result.EstimatedServiceLevels.Length.Should().Be.EqualTo(2);
-			result.EstimatedServiceLevels.First().Should().Be.GreaterThan(0d);
-			result.EstimatedServiceLevels.Last().Should().Be.EqualTo(null);
+			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(2);
+			result.DataSeries.EstimatedServiceLevels.First().Should().Be.GreaterThan(0d);
+			result.DataSeries.EstimatedServiceLevels.Last().Should().Be.EqualTo(null);
 		}
 
 		[Test]
@@ -172,8 +179,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var result = Target.Load(new Guid[] { skill.Id.Value });
 
-			result.EstimatedServiceLevels.Length.Should().Be.EqualTo(1);
-			result.EstimatedServiceLevels.First().Should().Be.EqualTo(0d);
+			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(1);
+			result.DataSeries.EstimatedServiceLevels.First().Should().Be.EqualTo(0d);
 		}
 
 		[Test]
@@ -188,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var result = Target.Load(new Guid[] { skill.Id.Value });
 
-			result.EstimatedServiceLevels.Should().Be.Empty();
+			result.DataSeries.EstimatedServiceLevels.Should().Be.Empty();
 		}
 
 		[Test]
@@ -233,8 +240,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var expectedEslSummary = (answeredWithinServiceLevelSkill1 + answeredWithinServiceLevelSkill2)/
 											 (forecastedCallsSkill1 + forecastedCallsSkill2);
 
-			result.EstimatedServiceLevels.Length.Should().Be.EqualTo(1);
-			Math.Round(result.EstimatedServiceLevels.First().Value, 5).Should().Be.EqualTo(Math.Round(expectedEslSummary, 5));
+			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(1);
+			Math.Round(result.DataSeries.EstimatedServiceLevels.First().Value, 5).Should().Be.EqualTo(Math.Round(expectedEslSummary, 5));
 		}
 
 		[Test]
@@ -250,10 +257,10 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var result = Target.Load(new Guid[] { skill.Id.Value });
 
-			result.AbandonedRate.Should().Be.Empty();
-			result.ServiceLevel.Should().Be.Empty();
-			result.AverageSpeedOfAnswer.Should().Be.Empty();
-			result.EstimatedServiceLevels.Should().Be.Empty();
+			result.DataSeries.AbandonedRate.Should().Be.Empty();
+			result.DataSeries.ServiceLevel.Should().Be.Empty();
+			result.DataSeries.AverageSpeedOfAnswer.Should().Be.Empty();
+			result.DataSeries.EstimatedServiceLevels.Should().Be.Empty();
 		}
 
 
