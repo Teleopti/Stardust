@@ -1,9 +1,13 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Islands.ClientModel;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -15,6 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Islands
 	{
 		public IslandModelFactory IslandModelFactory;
 		public FakePersonRepository PersonRepository;
+		public ReduceIslandsLimits ReduceIslandsLimits;
 
 		[Test]
 		public void ShouldCreateIslands()
@@ -85,6 +90,22 @@ namespace Teleopti.Ccc.DomainTest.Islands
 
 			model.Single().SkillGroups.Single(x => x.Skills.Count==2).Skills.First().NumberOfAgentsOnSkill
 				.Should().Be.EqualTo(2);
+		}
+
+		[Test, Ignore("To be fixed")]
+		public void ShouldNotLeaveDuplicateSkillgroupsAfterReducing()
+		{
+			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 2);
+			var skillA = new Skill("A");
+			var skillB = new Skill("B");
+			var skillAagents = Enumerable.Range(0, 3).Select(x => new Person().KnowsSkill(skillA));
+			var skillABagents = Enumerable.Range(0, 1).Select(x => new Person().KnowsSkill(skillA, skillB));
+			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
+			PersonRepository.Has(new Person().KnowsSkill(skillB));
+
+			var model = IslandModelFactory.Create();
+			model.All(x => x.SkillGroups.Count==1) //two islands with one skillgroup each
+				.Should().Be.True();
 		}
 	}
 }
