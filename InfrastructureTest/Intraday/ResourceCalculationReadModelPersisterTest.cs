@@ -706,5 +706,81 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 				new DateTime(2016, 06, 16, 2, 50, 0, DateTimeKind.Utc));
 			result.Count().Should().Be.EqualTo(3);
 		}
+
+		[Test]
+		public void ShouldPurgIfSkillIsDeleted()
+		{
+			Now.Is("2016-06-16 03:15");
+			var bu1 = BusinessUnitFactory.CreateSimpleBusinessUnit("1");
+			var bu2 = BusinessUnitFactory.CreateSimpleBusinessUnit("2");
+			BusinessUnitRepository.Add(bu1);
+			BusinessUnitRepository.Add(bu2);
+
+			var skillType = SkillTypeFactory.CreateSkillType();
+			SkillTypeRepository.Add(skillType);
+
+			var activity = new Activity("activty");
+			activity.SetBusinessUnit(bu1);
+			ActivityRepository.Add(activity);
+
+			var skill1 = new Skill("S1", "asdf", Color.AliceBlue, 15, skillType);
+			skill1.Activity = activity;
+			skill1.SetBusinessUnit(bu1);
+			skill1.TimeZone = TimeZoneInfo.Utc;
+			skill1.SetDeleted();
+
+			activity = new Activity("activty2");
+			activity.SetBusinessUnit(bu2);
+			ActivityRepository.Add(activity);
+
+			var skill2 = new Skill("S2", "asdf", Color.AliceBlue, 15, skillType);
+			skill2.Activity = activity;
+			skill2.SetBusinessUnit(bu2);
+			skill2.TimeZone = TimeZoneInfo.Utc;
+
+			SkillRepository.Add(skill1);
+			SkillRepository.Add(skill2);
+
+			CurrentUnitOfWork.Current().PersistAll();
+
+
+			var items =
+				new List<SkillStaffingInterval>()
+				{
+					new SkillStaffingInterval()
+					{
+						SkillId = skill1.Id.GetValueOrDefault(),
+						StaffingLevel = 10,
+						EndDateTime = new DateTime(2016, 06, 16, 02, 15, 0, DateTimeKind.Utc),
+						Forecast = 20,
+						StartDateTime = new DateTime(2016, 06, 16, 02, 0, 0, DateTimeKind.Utc)
+					},
+					new SkillStaffingInterval()
+					{
+						SkillId = skill1.Id.GetValueOrDefault(),
+						StaffingLevel = 10,
+						EndDateTime = new DateTime(2016, 06, 16, 02, 30, 0, DateTimeKind.Utc),
+						Forecast = 20,
+						StartDateTime = new DateTime(2016, 06, 16, 02, 15, 0, DateTimeKind.Utc)
+					},
+					new SkillStaffingInterval()
+					{
+						SkillId = skill2.Id.GetValueOrDefault(),
+						StaffingLevel = 10,
+						EndDateTime = new DateTime(2016, 06, 16, 0, 15, 0, DateTimeKind.Utc),
+						Forecast = 20,
+						StartDateTime = new DateTime(2016, 06, 16, 0, 0, 0, DateTimeKind.Utc)
+					}
+				};
+			Target.Persist(items, DateTime.Now);
+			
+			 Target.Purge();
+			var result = Target.GetBySkill(skill1.Id.GetValueOrDefault(), new DateTime(2016, 06, 15, 02, 15, 0, DateTimeKind.Utc),
+				new DateTime(2016, 06, 17, 02, 15, 0, DateTimeKind.Utc)).ToList();
+			result.Count.Should().Be.EqualTo(0);
+			result = Target.GetBySkill(skill2.Id.GetValueOrDefault(), new DateTime(2016, 06, 15, 02, 15, 0, DateTimeKind.Utc),
+				new DateTime(2016, 06, 17, 02, 15, 0, DateTimeKind.Utc)).ToList();
+			result.Count.Should().Be.EqualTo(1);
+		}
 	}
 }

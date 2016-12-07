@@ -132,22 +132,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			JobStartTimeRepository.Records.Keys.Should().Contain(buID);
 			JobStartTimeRepository.Records.Values.Should().Contain(date);
 		}
-
-		//[Test]
-		//public void ShouldUpdateStartFromForBu()
-		//{
-		//	var date = new DateTime(2016, 10, 03, 10, 10, 0, DateTimeKind.Utc);
-		//	Now.Is(date);
-		//	var buID = Guid.NewGuid();
-		//	Target.Handle(new UpdateStaffingLevelReadModelEvent()
-		//	{
-		//		StartDateTime = new DateTime(2016, 10, 03, 10, 0, 0, DateTimeKind.Utc),
-		//		EndDateTime = new DateTime(2016, 10, 03, 12, 0, 0, DateTimeKind.Utc),
-		//		LogOnBusinessUnitId = buID
-		//	});
-		//	JobStartTimeRepository.Records.Keys.Should().Contain(buID);
-		//	JobStartTimeRepository.Records.Values.Should().Contain(date);
-		//}
 	}
 
 	public class FakeJobStartTimeRepository : IJobStartTimeRepository

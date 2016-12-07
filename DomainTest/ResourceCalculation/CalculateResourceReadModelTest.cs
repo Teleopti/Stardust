@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -59,6 +58,27 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		[Test]
+		public void ShouldCallPurge()
+		{
+			ISkillSkillStaffPeriodExtendedDictionary skillStaffPeriodExt = new SkillSkillStaffPeriodExtendedDictionary();
+			ISkill skill = SkillFactory.CreateSkillWithId("skill1");
+
+			ISkillStaffPeriodDictionary skillStaffPeriodDic = new SkillStaffPeriodDictionary(skill);
+			var dateTime = new DateTime(2016, 10, 03, 11, 0, 0, DateTimeKind.Utc);
+			skillStaffPeriodDic.Add(new DateTimePeriod(dateTime, dateTime.AddMinutes(15)), getSkillStaffPeriod(new DateTimePeriod(dateTime, dateTime.AddMinutes(15))));
+
+			skillStaffPeriodExt.Add(skill, skillStaffPeriodDic);
+			var fakeholder = new FakeSkillStaffPeriodHolder();
+			fakeholder.SetDictionary(skillStaffPeriodExt);
+			var fakeResourceCalculationData = new FakeResourceCalculationData();
+			fakeResourceCalculationData.SetSkills(new List<ISkill> { skill });
+			fakeResourceCalculationData.SetSkillStaffPeriodHolder(fakeholder);
+			ExtractSkillStaffDataForResourceCalculation.FakeResourceCalculationData = fakeResourceCalculationData;
+			Target.Update(new DateTimePeriod(dateTime, dateTime.AddDays(1)));
+			ScheduleForecastSkillReadModelRepository.PurgeWasCalled.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldPurgeChangesOlderThanTimeWhenDataWasLoaded()
 		{
 			ScheduleForecastSkillReadModelRepository.UtcNow = new DateTime(2016, 10, 03, 11, 15, 0, DateTimeKind.Utc);
@@ -100,7 +120,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private ISkillStaffPeriod getSkillStaffPeriod(DateTimePeriod period)
 		{
 			var skillStaffperiod = new SkillStaffPeriod(period, new Task(), new ServiceAgreement(), new StaffingCalculatorServiceFacade());
-			//skillStaffperiod.Payload = new SkillStaff(new Task(), new ServiceAgreement());
 			return skillStaffperiod;
 		}
 

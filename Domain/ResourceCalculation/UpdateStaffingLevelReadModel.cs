@@ -44,6 +44,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			if (models.Any())
 				_scheduleForecastSkillReadModelRepository.Persist(models, timeWhenResourceCalcDataLoaded);
+
+			_scheduleForecastSkillReadModelRepository.Purge();
 		}
 
 		private static void updateModelsAfterCalculatingWithShrinkage(IList<SkillStaffingInterval> models,

@@ -131,10 +131,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		    return intervals;
 	    }
 
-	    //public void UpdateInsertedDateTime(Guid eventLogOnBusinessUnitId)
-	    //{
-		   // UpdateReadModelDateTimeWasCalled = true;
-	    //}
+	    public void Purge()
+	    {
+		    PurgeWasCalled = true;
+	    }
+
+	    public bool PurgeWasCalled { get; set; }
 
 	    public IDictionary<Guid, DateTime> LastCalculatedDate = new Dictionary<Guid, DateTime>();
     }

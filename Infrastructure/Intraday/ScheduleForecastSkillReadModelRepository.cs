@@ -142,7 +142,20 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			return result;
 		
 		}
-		
+
+		public void Purge()
+		{
+			var connectionString = _currentUnitOfWorkFactory.Current().ConnectionString;
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				var sqlCommand =
+					new SqlCommand(
+						@"delete from ReadModel.ScheduleForecastSkill where SkillId in (select id from skill where IsDeleted = 1)", connection);
+				sqlCommand.ExecuteNonQuery();
+			}
+		}
+
 		public IEnumerable<SkillStaffingInterval> GetBySkill(Guid skillId, DateTime startDateTime, DateTime endDateTime)
 		{
 			return GetBySkills(new[] { skillId }, startDateTime, endDateTime);

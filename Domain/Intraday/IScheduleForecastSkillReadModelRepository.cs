@@ -15,5 +15,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 	    IEnumerable<SkillStaffingInterval> ReadMergedStaffingAndChanges(Guid skillId, DateTimePeriod period);
 	    IEnumerable<SkillStaffingInterval> ReadMergedStaffingAndChanges(Guid[] ids, DateTimePeriod period);
 		IEnumerable<SkillStaffingInterval> GetBySkills(Guid[] guids, DateTime dateTime, DateTime endDateTime);
+		void Purge();
 	}
 }
