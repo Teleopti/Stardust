@@ -158,7 +158,7 @@ ResourcePlanner_CascadingSkillsGUI_40018 = false #Hold release of Cascading UI u
 ResourcePlanner_FilterOvertimeAvail_37113 = true
 ResourcePlanner_NegativeOrderIndex_39062 = true
 ResourcePlanner_MaxSeatsNew_40939 = RC #prototype, not to be released for now
-ResourcePlanner_SplitBigIslands_42049 = false 
+ResourcePlanner_SplitBigIslands_42049 = DEV 
 
 Wfm_DisplayOnlineHelp_39402 = RC
 
