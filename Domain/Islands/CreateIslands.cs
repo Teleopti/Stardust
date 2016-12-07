@@ -31,14 +31,21 @@ namespace Teleopti.Ccc.Domain.Islands
 			while (true)
 			{
 				var skillGroupsInIslands = skillGroups.Select(skillGroup => new List<SkillGroup> { skillGroup }).ToList();
-				while(moveSkillGroupToCorrectIsland(skillGroupsInIslands)) {}
-				skillGroupsInIslands.Where(x => x.Count == 0).ToArray().ForEach(x => skillGroupsInIslands.Remove(x));
+				while (moveSkillGroupToCorrectIsland(skillGroupsInIslands))
+				{
+					removeEmptySkillGroups(skillGroupsInIslands);
+				}
 
 				if (!_reduceSkillGroups.Execute(skillGroupsInIslands, noAgentsKnowingSkill))
 				{
 					return skillGroupsInIslands.Select(skillGroupInIsland => new Island(skillGroupInIsland, noAgentsKnowingSkill)).ToList();
 				}
 			}
+		}
+
+		private static void removeEmptySkillGroups(ICollection<List<SkillGroup>> skillGroupsInIslands)
+		{
+			skillGroupsInIslands.Where(x => x.Count == 0).ToArray().ForEach(x => skillGroupsInIslands.Remove(x));
 		}
 
 		private static bool moveSkillGroupToCorrectIsland(IEnumerable<ICollection<SkillGroup>> skillGroupInIslands)
