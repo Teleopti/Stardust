@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			result.Count(x => x.GetType() == typeof(NewMaxWeekWorkTimeRule)).Should().Be.EqualTo(0);
 			result.Count.Should().Be.EqualTo(count-1);
 		}
+
 		[Test]
 		public void ShouldDenyWhenRuleConfigsHasAnyAutoDeny()
 		{
@@ -107,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		private static List<IBusinessRuleResponse> createBusinessRuleResponses()
 		{
 			var ruleResponses = new List<IBusinessRuleResponse>();
-			var response = new BusinessRuleResponse(typeof(NewBusinessRuleCollectionTest.dummyRuleFirst), "no go", false, false,
+			var response = new BusinessRuleResponse(typeof(NewBusinessRuleCollectionTest.dummyRule), "no go", false, false,
 				new DateTimePeriod(), PersonFactory.CreatePersonWithId(),
 				new DateOnlyPeriod(new DateOnly(2008, 12, 22), new DateOnly(2008, 12, 25)), "tjillevippen");
 			ruleResponses.Add(response);
@@ -117,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		private static INewBusinessRuleCollection createBusinessRuleCollection()
 		{
 			var ruleCollection = NewBusinessRuleCollection.Minimum();
-			ruleCollection.Add(new NewBusinessRuleCollectionTest.dummyRuleFirst(true));
+			ruleCollection.Add(new NewBusinessRuleCollectionTest.dummyRule(true));
 			return ruleCollection;
 		}
 
@@ -156,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				{
 					new ShiftTradeBusinessRuleConfig()
 					{
-						BusinessRuleType = typeof(NewBusinessRuleCollectionTest.dummyRuleFirst).FullName,
+						BusinessRuleType = typeof(NewBusinessRuleCollectionTest.dummyRule).FullName,
 						Enabled = true,
 						HandleOptionOnFailed = option
 					}

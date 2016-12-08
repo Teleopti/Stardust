@@ -15,11 +15,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return _rules ?? new IBusinessRuleResponse[] {};
 		}
 
-		public IEnumerable<IBusinessRuleResponse> CheckRules(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays, IEnumerable<IShiftTradeBusinessRuleConfig> ruleConfigs)
-		{
-			throw new NotImplementedException();
-		}
-
 		public void SetRuleResponse(IEnumerable<IBusinessRuleResponse> rules)
 		{
 			_rules = rules;
@@ -59,6 +54,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public void SetUICulture(CultureInfo cultureInfo)
 		{
+
 		}
 
 		public CultureInfo UICulture { get; }

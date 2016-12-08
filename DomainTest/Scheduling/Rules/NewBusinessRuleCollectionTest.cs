@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -112,78 +111,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void RemovingMandatoryRuleShouldResultDoingNothing()
 		{
 			setup();
-			_target.Add(new dummyRuleFirst(true));
-			_target.DoNotHaltModify(typeof(dummyRuleFirst));
+			_target.Add(new dummyRule(true));
+			_target.DoNotHaltModify(typeof(dummyRule));
 			Assert.AreEqual(totalNumberOfRules + 1, _target.Count);
-		}
-
-		[Test]
-		public void ShouldNotValidateRulesDisabledInConfiguration()
-		{
-			setup();
-
-			var dummyRule1 = new dummyRuleFirst(true);
-			var dummyRule2 = new dummyRuleSecond(true);
-
-			_target.Add(dummyRule1);
-			_target.Add(dummyRule2);
-
-			var configurations = new List<IShiftTradeBusinessRuleConfig>
-			{
-				new ShiftTradeBusinessRuleConfig
-				{
-					BusinessRuleType = dummyRule1.GetType().FullName,
-					Enabled = false
-				},
-				new ShiftTradeBusinessRuleConfig
-				{
-					BusinessRuleType = dummyRule2.GetType().FullName,
-					Enabled = true
-				}
-			};
-			_target.CheckRules(new Dictionary<IPerson, IScheduleRange>(), new List<IScheduleDay>(), configurations);
-			Assert.AreEqual(dummyRule1.Checked, false);
-			Assert.AreEqual(dummyRule2.Checked, true);
-		}
-
-		[Test]
-		public void OverriddenOfCheckResultShouldSetCorrectlyBasedOnConfiguration()
-		{
-			setup();
-
-			var dummyRule1 = new dummyRuleFirst(true);
-			var dummyRule2 = new dummyRuleSecond(true);
-			_target.Add(dummyRule1);
-			_target.Add(dummyRule2);
-
-			var configurations = new List<IShiftTradeBusinessRuleConfig>
-			{
-				new ShiftTradeBusinessRuleConfig
-				{
-					BusinessRuleType = dummyRule1.GetType().FullName,
-					Enabled = true,
-					HandleOptionOnFailed = RequestHandleOption.Pending
-				},
-				new ShiftTradeBusinessRuleConfig
-				{
-					BusinessRuleType = dummyRule2.GetType().FullName,
-					Enabled = true,
-					HandleOptionOnFailed = RequestHandleOption.AutoDeny
-				}
-			};
-			var result = _target.CheckRules(new Dictionary<IPerson, IScheduleRange>(), new List<IScheduleDay>(), configurations)
-				.ToList();
-			Assert.IsTrue(dummyRule1.Checked);
-			Assert.IsTrue(dummyRule2.Checked);
-			Assert.IsTrue(result.Where(r => r.TypeOfRule == dummyRule1.GetType()).All(r => r.Overridden == true));
-			Assert.IsTrue(result.Where(r => r.TypeOfRule == dummyRule2.GetType()).All(r => r.Overridden == false));
 		}
 
 		[Test]
 		public void VerifyClearKeepsMandatory()
 		{
 			setup();
-			_target.Add(new dummyRuleFirst(true));
+			_target.Add(new dummyRule(true));
 			_target.Clear();
 			Assert.AreEqual(totalNumberOfRules + 1, _target.Count);
 		}
@@ -312,9 +249,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			return businessRuleCollection.Any(rule => rule.GetType() == type);
 		}
 
-		public class dummyRuleFirst : INewBusinessRule
+		public class dummyRule : INewBusinessRule
 		{
-			public dummyRuleFirst(bool mandatory)
+			public dummyRule(bool mandatory)
 			{
 				IsMandatory = mandatory;
 				FriendlyName = string.Empty;
@@ -340,50 +277,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Checked = true;
 				return new List<IBusinessRuleResponse>
 				{
-					new BusinessRuleResponse(typeof(dummyRuleFirst), "Check Result of dummyRuleSecond", true,
+					new BusinessRuleResponse(typeof(dummyRule), "Check Result of dummyRule", true,
 						IsMandatory, new DateTimePeriod(), new Person(), new DateOnlyPeriod(), FriendlyName)
 				};
 			}
 
 			public string FriendlyName { get; }
-			public string Description => "Description of dummyRuleFirst";
-		}
-
-		public class dummyRuleSecond : INewBusinessRule
-		{
-			public dummyRuleSecond(bool mandatory)
-			{
-				IsMandatory = mandatory;
-				FriendlyName = string.Empty;
-			}
-
-			public string ErrorMessage => string.Empty;
-
-			public bool IsMandatory { get; }
-
-			public bool HaltModify { get; set; }
-
-			public bool ForDelete
-			{
-				get { throw new NotImplementedException(); }
-				set { throw new NotImplementedException(); }
-			}
-
-			public bool Checked { get; private set; }
-
-			public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,
-				IEnumerable<IScheduleDay> scheduleDays)
-			{
-				Checked = true;
-				return new List<IBusinessRuleResponse>
-				{
-					new BusinessRuleResponse(typeof(dummyRuleSecond), "Check Result of dummyRuleSecond", true,
-						IsMandatory, new DateTimePeriod(), new Person(), new DateOnlyPeriod(), FriendlyName)
-				};
-			}
-
-			public string FriendlyName { get; }
-			public string Description => "Description of dummyRuleSecond";
+			public string Description => "Description of dummyRule";
 		}
 	}
 }
