@@ -18,6 +18,7 @@
 			currentSite,
 			logonUserTeamId;
 
+		ctrl.groupList = [];
 		ctrl.selectedTeamIds = [];
 
 		ctrl.$onInit = function() {
@@ -27,11 +28,12 @@
 		};
 
 		ctrl.$onChanges = function(changesObj) {
-			if (!changesObj.availableGroups || !changesObj.availableGroups.sites) return;
+			if (!changesObj.availableGroups || !changesObj.availableGroups.sites || changesObj.availableGroups.sites.length == 0) return;
 			populateGroupList();
 		};
 
 		function populateGroupList() {
+			if(!ctrl.availableGroups.sites || ctrl.availableGroups.sites.length == 0) return;
 			ctrl.groupList = [];
 			logonUserTeamId = ctrl.availableGroups.logonUserTeamId;
 

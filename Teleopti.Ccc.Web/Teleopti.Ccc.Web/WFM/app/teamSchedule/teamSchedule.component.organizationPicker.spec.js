@@ -15,34 +15,29 @@
 
 	it("should populate hierachy list", inject(function () {
 		var bindings = {
-			availableGroups: [
+			availableGroups: {
+				sites:[ {
+					Id:'site1', Name:'site1', Children:[ {
+						Id: 'team1', Name:'team1'
+					}
+					]
+				},
 				{
-					Id: 'site1',
-					Name: 'site1',
-					Children: [
-						{
-							Id: 'team1',
-							Name: 'team1'
-						}
+					Id:"site2", Name:'site2', Children:[ {
+						Id: 'team2', Name:'team2'
+					},
+					{
+						Id: 'team3', Name:'team3'
+					}
 					]
-				}, {
-					Id: "site2",
-					Name: 'site2',
-					Children: [
-						{
-							Id: 'team2',
-							Name: 'team2'
-						},
-						{
-							Id: 'team3',
-							Name: 'team3'
-						}
-					]
-
 				}
-			],
-			onPick: function() {}
+				],
+				logonUserTeamId: 'logonUserTeamId'
+			},
+
+			onPick:function() {}
 		};
+
 		var ctrl = $componentController('organizationPicker', null, bindings);
 		ctrl.$onInit();
 
@@ -55,34 +50,29 @@
 
 	it("should extract the right abbreviation of the selected time zone ", inject(function () {
 		var bindings = {
-			availableGroups: [
+			availableGroups: {
+				sites:[ {
+					Id:'site1', Name:'site1', Children:[ {
+						Id: 'team1', Name:'team1'
+					}
+					]
+				},
 				{
-					Id: 'site1',
-					Name: 'site1',
-					Children: [
-						{
-							Id: 'team1',
-							Name: 'team1'
-						}
+					Id:"site2", Name:'site2', Children:[ {
+						Id: 'team2', Name:'team2'
+					},
+					{
+						Id: 'team3', Name:'team3'
+					}
 					]
-				}, {
-					Id: "site2",
-					Name: 'site2',
-					Children: [
-						{
-							Id: 'team2',
-							Name: 'team2'
-						},
-						{
-							Id: 'team3',
-							Name: 'team3'
-						}
-					]
-
 				}
-			],
-			onPick: function () { }
+				],
+				logonUserTeamId: 'logonUserTeamId'
+			},
+
+			onPick:function() {}
 		};
+
 		var ctrl = $componentController('organizationPicker', null, bindings);
 		ctrl.$onInit();
 
