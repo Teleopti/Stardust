@@ -133,21 +133,21 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				loadDataForResourceCalculation(personRequests, aggregatedValidatorList);
 				stopwatch.Stop();
 				_feedback.SendProgress($"Done loading data for resource calculation! It took {stopwatch.Elapsed}");
-			}
-			var seniority = _arrangeRequestsByProcessOrder.GetRequestsSortedBySeniority(personRequests);
-			var firstComeFirstServe = _arrangeRequestsByProcessOrder.GetRequestsSortedByDate(personRequests);
 
-			stopwatch.Restart();
+				var seniority = _arrangeRequestsByProcessOrder.GetRequestsSortedBySeniority(personRequests);
+				var firstComeFirstServe = _arrangeRequestsByProcessOrder.GetRequestsSortedByDate(personRequests);
+
+				stopwatch.Restart();
 #pragma warning disable 618
-			using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills, true))
+				using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills, true))
 #pragma warning restore 618
-			{
-				stopwatch.Stop();
-				_feedback.SendProgress($"Done _resourceCalculationContextFactory.Create(..)! It took {stopwatch.Elapsed}");
-				processOrderList(seniority, currentScenario);
-				processOrderList(firstComeFirstServe, currentScenario);
+				{
+					stopwatch.Stop();
+					_feedback.SendProgress($"Done _resourceCalculationContextFactory.Create(..)! It took {stopwatch.Elapsed}");
+					processOrderList(seniority, currentScenario);
+					processOrderList(firstComeFirstServe, currentScenario);
+				}
 			}
-
 
 			foreach (var personRequest in personRequests)
 			{
