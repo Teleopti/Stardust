@@ -5,6 +5,7 @@ using log4net;
 using NHibernate;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Secrets.Licensing;
@@ -31,6 +32,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			ISession session,
 			ICurrentTransactionHooks transactionHooks)
 		{
+			if (context.Get() != null)
+				throw new NestedAnalyticsUnitOfWorkException();
 			_context = context;
 			_context.Set(this);
 			_session = session;

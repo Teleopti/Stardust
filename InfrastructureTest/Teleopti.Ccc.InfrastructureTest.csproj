@@ -322,6 +322,7 @@
     <Compile Include="Rta\WithUnitOfWorkWithRecurringEvents.cs" />
     <Compile Include="UnitOfWorkTestAttribute.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryHasCurrentUnitOfWorkTest.cs" />
+    <Compile Include="UnitOfWork\AnalyticsUnitOfWorkTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\FatClientOptimizationEventPublishingTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\PersonAbsenceEventPublishingTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ScheduleChangedMessageDictionaryPersisterTest.cs" />

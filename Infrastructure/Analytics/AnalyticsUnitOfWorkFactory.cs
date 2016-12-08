@@ -36,15 +36,10 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 
 		public IUnitOfWork CurrentUnitOfWork()
 		{
-			var unitOfWork = _context.Get();
-			// maybe better to return null..
-			// but mimic nhibernate session context for now
-			if (unitOfWork == null)
-				throw new HibernateException("No session bound to the current context");
-			return unitOfWork;
+			return _context.Get();
 		}
 
-		public string ConnectionString { get; private set; }
+		public string ConnectionString { get; }
 		
 		public IUnitOfWork CreateAndOpenUnitOfWork()
 		{
