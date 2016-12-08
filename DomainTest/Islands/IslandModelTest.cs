@@ -116,5 +116,18 @@ namespace Teleopti.Ccc.DomainTest.Islands
 			model.AfterReducing.NumberOfAgentsOnAllIsland.Should().Be.EqualTo(3);
 			model.BeforeReducing.NumberOfAgentsOnAllIsland.Should().Be.EqualTo(3);
 		}
+
+		[Test]
+		public void ShouldSetTimeToGenerateIslands()
+		{
+			var skill = new Skill("_");
+			PersonRepository.Has(skill);
+
+			var model = IslandModelFactory.Create();
+
+			//not really asserting any "real" value - just here as info for us devs
+			model.AfterReducing.TimeToGenerateInSeconds.Should().Be.GreaterThanOrEqualTo(1);
+			model.AfterReducing.TimeToGenerateInSeconds.Should().Be.GreaterThanOrEqualTo(1);
+		}
 	}
 }

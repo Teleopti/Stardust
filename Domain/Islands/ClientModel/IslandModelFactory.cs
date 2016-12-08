@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands.ClientModel
@@ -37,10 +39,12 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 
 		private IslandsModel createIslandsModel(IReduceSkillGroups reduceSkillGroups, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
-			var islands = _createIslands.Create(reduceSkillGroups, agents, period);
+			IEnumerable<IIsland> islands=null;
+			var timeToGenerate = MeasureTime.Do(() => islands = _createIslands.Create(reduceSkillGroups, agents, period));
 			var islandsModel = new IslandsModel
 			{
-				Islands = from Island island in islands select island.CreateClientModel()
+				Islands = from Island island in islands select island.CreateClientModel(),
+				TimeToGenerateInSeconds = (int) Math.Ceiling(timeToGenerate.TotalSeconds)
 			};
 			islandsModel.NumberOfAgentsOnAllIsland = islandsModel.Islands.Sum(x => x.NumberOfAgentsOnIsland);
 			return islandsModel;
