@@ -46,8 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			BusinessUnitRepository.Add(businessUnit);
 			Target.Handle(removedEvent);
 
-			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(1);
-			QueuedAbsenceRequestRepository.LoadAll().FirstOrDefault().PersonRequest.Should().Be.EqualTo(removedEvent.PersonRequestId);
+			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(1);			
 		}
 
 		[Test]
@@ -90,8 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			request.Approve(ApprovalService, PersonRequestAuthorizationChecker);
 			request.Cancel(PersonRequestAuthorizationChecker);
 			var requestPersonAbsenceRemovedEvent = new RequestPersonAbsenceRemovedEvent()
-			{
-				PersonRequestId = request.Id.GetValueOrDefault(),
+			{				
 				StartDateTime = period.StartDateTime,
 				EndDateTime = period.EndDateTime
 			};
