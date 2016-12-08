@@ -147,6 +147,22 @@ namespace Teleopti.Ccc.DomainTest.Islands
 		}
 
 		[Test]
+		public void ShouldOrderByNumberOfAgentsOnIsland()
+		{
+			var skill1 = new Skill("1");
+			var skill2 = new Skill("2");
+			PersonRepository.Has(skill1);
+			PersonRepository.Has(skill2);
+			PersonRepository.Has(skill2);
+
+			var model = IslandModelFactory.Create();
+
+			model.AfterReducing.Islands.First().NumberOfAgentsOnIsland.Should().Be.EqualTo(2);
+			model.BeforeReducing.Islands.First().NumberOfAgentsOnIsland.Should().Be.EqualTo(2);
+		}
+
+
+		[Test]
 		public void ShouldCountNumberOfAgentsOnAllIslands()
 		{
 			var skill1 = new Skill("1");

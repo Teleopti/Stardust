@@ -16,10 +16,15 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 		public int TimeToGenerateInSeconds { get; set; }
 	}
 
-	public class IslandModel
+	public class IslandModel : IComparable<IslandModel>
 	{
 		public IEnumerable<SkillGroupModel> SkillGroups { get; set; }
 		public int NumberOfAgentsOnIsland { get; set; }
+
+		public int CompareTo(IslandModel other)
+		{
+			return other.NumberOfAgentsOnIsland - NumberOfAgentsOnIsland;
+		}
 	}
 
 	public class SkillGroupModel : IComparable<SkillGroupModel>

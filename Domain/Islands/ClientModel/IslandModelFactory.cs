@@ -41,9 +41,11 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 		{
 			IEnumerable<IIsland> islands=null;
 			var timeToGenerate = MeasureTime.Do(() => islands = _createIslands.Create(reduceSkillGroups, agents, period));
+			var islandModels = (from Island island in islands select island.CreateClientModel()).ToList();
+			islandModels.Sort();
 			var islandsModel = new IslandsModel
 			{
-				Islands = from Island island in islands select island.CreateClientModel(),
+				Islands = islandModels,
 				TimeToGenerateInSeconds = (int) Math.Ceiling(timeToGenerate.TotalSeconds)
 			};
 			islandsModel.NumberOfAgentsOnAllIsland = islandsModel.Islands.Sum(x => x.NumberOfAgentsOnIsland);
