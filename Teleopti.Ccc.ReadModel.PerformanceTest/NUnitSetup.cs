@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			dataCreator = container.Resolve<DataCreator>();
 			analyticsDatabase = container.Resolve<AnalyticsDatabase>();
 
-			var dataHash = defaultDataCreator.HashValue ^ TestConfiguration.HashValue;
+			var dataHash = DefaultDataCreator.HashValue ^ TestConfiguration.HashValue;
 			var path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "ReadModel");
 
 			var haveDatabases =
