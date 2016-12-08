@@ -15324,4 +15324,8 @@ These options are activated:
   <data name="DenyDueToTechnicalProblems" xml:space="preserve">
     <value>The staffing information is not updated in the system. Please contact system administrator.</value>
   </data>
+  <data name="SearchASiteOrTeam" xml:space="preserve">
+    <value>Search a site or team</value>
+    <comment>Placeholder for the organization multiselect in RTA</comment>
+  </data>
 </root>

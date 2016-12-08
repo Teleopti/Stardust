@@ -121,8 +121,19 @@
 .rta-no-pointer {
 	pointer-events: none;
 }
-.rta-option-group {
-	margin: 8px 0 8px 16px;
+.rta-option-group, .demo-select-header {
+	margin: 0px 16px 8px 16px;
+}
+.rta-options-search-input {
+	outline: 0;
+	padding-bottom: 10px;
+	padding-top: 10px;
+	border: 0;
+	height: 100%;
+  width: 86%;
+}
+.rta-option-group, .demo-select-header {
+	border-bottom: 1px solid rgba(0,0,0,.06);
 }
 .rta-option-group md-option {
 	margin-left: 26px;
@@ -143,9 +154,15 @@
 .rta-md-input-container label{
 	visibility: hidden;
 }
-.rta-option-group md-checkbox.rta-marked-checkbox .md-icon {
-	background-color: $blue-100;
+.rta-multiple-selection-panel .md-icon-left {
+	padding-left: 0;
 }
+.rta-option-group md-checkbox.rta-marked-checkbox .md-icon {
+	background-color: $blue-500;
+}
+// .rta-md-select md-select-header {
+// 	border-bottom: 1px solid rgba(0,0,0,.06);
+// }
 ///////////End of rta-skills///////////////////////
 ///////////rta-agents///////////////////////
 .agent-row {

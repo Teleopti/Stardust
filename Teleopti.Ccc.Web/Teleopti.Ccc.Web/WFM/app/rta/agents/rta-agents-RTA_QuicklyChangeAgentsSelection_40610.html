@@ -70,16 +70,20 @@
 					</md-not-found>
 					</md-autocomplete>
 					</span>
-					<span class="con-flex" ng-show="showOrgSelection">
+					<span class="con-flex rta-multiple-selection-panel" ng-show="showOrgSelection">
 						<md-input-container class="rta-md-input-container" id="organization">
 							<label>Select organization</label>
 							<md-select ng-model="teamsSelected" class="rta-md-select" multiple md-on-close="goToAgents()">
-									<md-select-header class="demo-select-header">
+								<div class="demo-select-header">
+									<md-select-header>
+										<i class="mdi mdi-magnify"></i>
             				<input ng-model="searchTerm"
 		                   type="search"
-		                   placeholder="Search a site or team"
-		                   class="picker-searchbox md-text rta-option-group" style="border: none; outline: 0; padding: 0;">
+		                   placeholder="{{'SearchASiteOrTeam' | translate}}"
+											 ng-keydown="onSearchOrganization($event)"
+		                   class="picker-searchbox md-text rta-options-search-input">
           				</md-select-header>
+								</div>
 								<md-optgroup ng-repeat="site in sites | filter:searchTerm" class="rta-option-group">
 									<span ng-click="expandSite(site.Id)"><i class="mdi mdi-menu-down" id="col-{{site.Name}}"></i></span>
 					<md-checkbox id="{{site.Name}}" ng-model="site.isChecked" ng-value="site.Id" ng-class="site.isMarked ? 'rta-marked-checkbox' : ''">{{site.Name}}</md-checkbox>

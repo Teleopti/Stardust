@@ -26224,6 +26224,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search a site or team.
+        /// </summary>
+        public static string SearchASiteOrTeam {
+            get {
+                return ResourceManager.GetString("SearchASiteOrTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search:.
         /// </summary>
         public static string Searchcl {

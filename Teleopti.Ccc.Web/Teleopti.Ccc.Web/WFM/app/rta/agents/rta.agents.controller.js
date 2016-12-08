@@ -809,6 +809,10 @@
 					showResizer: true,
 					showPopupButton: true
 				};
+
+				$scope.onSearchOrganization = function($event){
+					$event.stopPropagation();
+				};
 			}
 		]);
 })();
