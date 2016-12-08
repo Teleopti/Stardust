@@ -27,7 +27,7 @@
 		};
 
 		ctrl.$onChanges = function(changesObj) {
-			if (!changesObj.availableGroups || !changesObj.availableGroups.sites === 0) return;
+			if (!changesObj.availableGroups || !changesObj.availableGroups.sites) return;
 			populateGroupList();
 		};
 
