@@ -74,39 +74,29 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			Math.Round(result.DataSeries.EstimatedServiceLevels.First().Value, 5).Should().Be.EqualTo(Math.Round(esl, 5));
 		}
 
-		[Test, Ignore("temp")]
-		public void ShouldReturnEslForAustraliaTimezone()
+		[Test]
+		public void ShouldReturnEslForNewZealandTimezone()
 		{
-			//TimeZone.IsAustralia();
+			TimeZone.IsNewZealand();
 			var userNow = new DateTime(2016, 8, 26, 6, 0, 0, DateTimeKind.Local);
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 			var latestStatsTimeLocal = new DateTime(2016, 8, 26, 5, 45, 0, DateTimeKind.Local);
-			var latestStatsTimeUtc = TimeZoneHelper.ConvertToUtc(latestStatsTimeLocal, TimeZone.TimeZone());
 
-			var scenario = fakeScenarioAndIntervalLength();
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(0, 0, 24, 0));
-			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(0, 0, 24, 0));
-
-			var scheduledStaffingList = createScheduledStaffing(skillDay, latestStatsTimeUtc);
+			createSkillDaysYesterdayTodayTomorrow(skill, userNow, latestStatsTimeLocal);
 
 			createStatistics(latestStatsTimeLocal.Date, latestStatsTimeLocal.Date.AddDays(1), latestStatsTimeLocal);
-			
+
 			SkillRepository.Has(skill);
-			SkillDayRepository.Add(skillDay);
-			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
 
 			var result = Target.Load(new Guid[] { skill.Id.Value });
 
-			var latestStatsIntervalPosition = new IntervalBase(latestStatsTimeLocal, (60/minutesPerInterval)*24).Id;
-			var eslFirst = calculateEsl(scheduledStaffingList, skillDay, skillDay.WorkloadDayCollection.First().TaskPeriodList.First().Tasks, 0);
-			var eslLast = calculateEsl(scheduledStaffingList, skillDay,
-				skillDay.WorkloadDayCollection.First().TaskPeriodList[latestStatsIntervalPosition].Tasks, latestStatsIntervalPosition);
-
 			result.DataSeries.Time.Length.Should().Be.EqualTo(96);
 			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(96);
-			
-			result.DataSeries.EstimatedServiceLevels.First().Should().Be.EqualTo(eslFirst);
-			result.DataSeries.EstimatedServiceLevels[latestStatsIntervalPosition].Should().Be.EqualTo(eslLast);
+
+			var latestStatsIntervalPosition = new IntervalBase(latestStatsTimeLocal, (60 / minutesPerInterval) * 24).Id;
+			result.DataSeries.EstimatedServiceLevels.First().Should().Be.GreaterThan(0);
+			result.DataSeries.EstimatedServiceLevels[latestStatsIntervalPosition].Should().Be.GreaterThan(0);
 			result.DataSeries.EstimatedServiceLevels[latestStatsIntervalPosition + 1].Should().Be.EqualTo(null);
 		}
 
@@ -406,7 +396,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			return skill;
 		}
-
+		
 		private ISkillDay createSkillDay(ISkill skill, IScenario scenario, DateTime userNow, TimePeriod openHours)
 		{
 			var random = new Random();
@@ -425,6 +415,24 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			return skillDay;
 		}
 
+		private void createSkillDaysYesterdayTodayTomorrow(ISkill skill, DateTime userNow, DateTime latestStatsTimeLocal)
+		{
+			var latestStatsTimeUtc = TimeZoneHelper.ConvertToUtc(latestStatsTimeLocal, TimeZone.TimeZone());
+			var scenario = fakeScenarioAndIntervalLength();
+
+			var skillYesterday = createSkillDay(skill, scenario, userNow.AddDays(-1), new TimePeriod(0, 0, 24, 0));
+			var skillToday = createSkillDay(skill, scenario, userNow, new TimePeriod(0, 0, 24, 0));
+			var skillTomorrow = createSkillDay(skill, scenario, userNow.AddDays(1), new TimePeriod(0, 0, 24, 0));
+
+			SkillDayRepository.Add(skillYesterday);
+			SkillDayRepository.Add(skillToday);
+			SkillDayRepository.Add(skillTomorrow);
+
+			ScheduleForecastSkillReadModelRepository.Persist(createScheduledStaffing(skillYesterday, latestStatsTimeUtc), DateTime.MinValue);
+			ScheduleForecastSkillReadModelRepository.Persist(createScheduledStaffing(skillToday, latestStatsTimeUtc), DateTime.MinValue);
+			ScheduleForecastSkillReadModelRepository.Persist(createScheduledStaffing(skillTomorrow, latestStatsTimeUtc), DateTime.MinValue);
+		}
+
 		private Scenario fakeScenarioAndIntervalLength()
 		{
 			IntervalLengthFetcher.Has(minutesPerInterval);
@@ -435,14 +443,14 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 		private void createStatistics(DateTime startTime, DateTime endTime, DateTime latestStatsTime)
 		{
-			for (DateTime currentTime = startTime; currentTime <= endTime; currentTime = currentTime.AddMinutes(minutesPerInterval))
+			for (DateTime currentTime = startTime; currentTime < endTime; currentTime = currentTime.AddMinutes(minutesPerInterval))
 			{
 				var shouldHaveStats = currentTime <= latestStatsTime;
 				IntradayMonitorDataLoader.AddInterval(new IncomingIntervalModel()
 				{
 					IntervalDate = currentTime.Date,
 					IntervalId = new IntervalBase(currentTime, (60 / minutesPerInterval) * 24).Id,
-					OfferedCalls = shouldHaveStats ? 22 : 0,
+					OfferedCalls = shouldHaveStats ? (double?)22d : null,
 					ForecastedCalls = 20
 				});
 			}

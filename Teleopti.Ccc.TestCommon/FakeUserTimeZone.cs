@@ -52,5 +52,10 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			Is(TimeZoneInfoFactory.AustralianTimeZoneInfo());
 		}
+
+		public void IsNewZealand()
+		{
+			Is(TimeZoneInfoFactory.NewZealandTimeZoneInfo());
+		}
 	}
 }

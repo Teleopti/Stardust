@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var skills = _supportedSkillsInIntradayProvider.GetSupportedSkills(skillIdList);
-			var skillDays = _skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(usersToday, usersToday), skills, scenario);
+			var skillDays = _skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(usersToday.AddDays(-1), usersToday.AddDays(1)), skills, scenario);
 			var queueStatistics = _monitorSkillsProvider.Load(skillIdList);
 
 			var eslIntervals = getEsl(skills, skillDays, queueStatistics, minutesPerInterval);
@@ -108,15 +108,27 @@ namespace Teleopti.Ccc.Domain.Intraday
 					.Where(s => s.SkillId == skill.Id.Value).ToList();
 				foreach (var interval in skillForecastedStaffing)
 				{
+					var intervalStartTimeUtc = TimeZoneHelper.ConvertToUtc(interval.StartTime, _timeZone.TimeZone());
 					var scheduledStaffingInterval = scheduledStaffing
 						.SingleOrDefault(x => x.Id == interval.SkillId && x.StartDateTime == interval.StartTime).StaffingLevel;
-					var skillDay = skillDays
-						.SingleOrDefault(x => x.Skill.Id.Value == skill.Id.Value);
-					var skillData = skillDay.SkillDataPeriodCollection
+					var skillDaysForSkill = skillDays
+						.Where(x => x.Skill.Id.Value == skill.Id.Value);
+
+					ISkillDataPeriod skillData = null;
+					foreach (var skillDay in skillDaysForSkill)
+					{
+						skillData = skillDay.SkillDataPeriodCollection
 						.SingleOrDefault(
-							skillDataPeriod => skillDataPeriod.Period.StartDateTime <= interval.StartTime &&
-													 skillDataPeriod.Period.EndDateTime > interval.StartTime
+							skillDataPeriod => skillDataPeriod.Period.StartDateTime <= intervalStartTimeUtc &&
+													 skillDataPeriod.Period.EndDateTime > intervalStartTimeUtc
 						);
+						if (skillData != null)
+							break;
+					}
+
+					if (skillData == null)
+						continue;
+
 					var task = forecastedCalls.CallsPerSkill[skill.Id.Value].FirstOrDefault(x => x.StartTime == interval.StartTime);
 					var esl = serviceCalculatorService.ServiceLevelAchievedOcc(
 						scheduledStaffingInterval,

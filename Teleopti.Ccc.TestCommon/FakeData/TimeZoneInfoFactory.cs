@@ -70,6 +70,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time");
 		}
 
+		public static TimeZoneInfo NewZealandTimeZoneInfo()
+		{
+			return TimeZoneInfo.FindSystemTimeZoneById("New Zealand Standard Time");
+		}
+
 		public static TimeZoneInfo IstanbulTimeZoneInfo()
 		{
 			return TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
