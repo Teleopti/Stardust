@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 		}
 
 		public ICollection<SkillGroupModel> SkillGroups { get; set; }
+		public int NumberOfAgentsOnIsland { get; set; }
 	}
 
 	public class SkillGroupModel

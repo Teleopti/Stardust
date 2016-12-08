@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.Domain.Islands
 				skillGroupModel.NumberOfAgentsOnSkillGroup = skillGroup.Agents.Count();
 				ret.SkillGroups.Add(skillGroupModel);
 			}
+			ret.NumberOfAgentsOnIsland = ret.SkillGroups.Sum(x => x.NumberOfAgentsOnSkillGroup);
 			return ret;
 		}
 	}

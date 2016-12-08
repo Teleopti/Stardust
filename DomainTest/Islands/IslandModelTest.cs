@@ -86,5 +86,20 @@ namespace Teleopti.Ccc.DomainTest.Islands
 			model.AfterReducing.Single().SkillGroups.Single(x => x.Skills.Count==2).Skills.First().NumberOfAgentsOnSkill.Should().Be.EqualTo(2);
 			model.BeforeReducing.Single().SkillGroups.Single(x => x.Skills.Count==2).Skills.First().NumberOfAgentsOnSkill.Should().Be.EqualTo(2);
 		}
+
+		[Test]
+		public void ShouldCountNumberOfAgentsOnIsland()
+		{
+			var skill1 = new Skill("1");
+			var skill2 = new Skill("2");
+			PersonRepository.Has(skill1);
+			PersonRepository.Has(skill2);
+			PersonRepository.Has(skill2);
+
+			var model = IslandModelFactory.Create();
+
+			model.AfterReducing.Select(island => island.NumberOfAgentsOnIsland).Should().Have.SameValuesAs(1, 2);
+			model.BeforeReducing.Select(island => island.NumberOfAgentsOnIsland).Should().Have.SameValuesAs(1, 2);
+		}
 	}
 }
