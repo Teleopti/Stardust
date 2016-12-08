@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 			return @lock($"{ProxyUtil.GetUnproxiedType(lockObject).Name}{guid}");
 		}
 
-		
+
 
 		public void TryLockForTypeOf(object lockObject, Action action)
 		{
@@ -67,13 +67,27 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 		{
 			var connection = new SqlConnection(connectionString());
 			connection.Open();
-			var @lock = _monitor.Enter(name, timeout(), connection);
-			return new GenericDisposable(() =>
+			try
 			{
-				@lock.Dispose();
-				connection.Close();
+				var @lock = _monitor.Enter(name, timeout(), connection);
+				return new GenericDisposable(() =>
+				{
+					try
+					{
+						@lock.Dispose();
+						connection.Close();
+					}
+					finally
+					{
+						connection.Dispose();
+					}
+				});
+			}
+			catch (Exception)
+			{
 				connection.Dispose();
-			});
+				throw;
+			}
 		}
 
 		private string connectionString()
