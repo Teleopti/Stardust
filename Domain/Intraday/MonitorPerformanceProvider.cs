@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			{
 				DataSeries = new IntradayPerformanceDataSeries
 				{
+					Time = queueStatistics.IncomingDataSeries.Time,
 					EstimatedServiceLevels = eslDataSeries(eslIntervals, queueStatistics),
 					AverageSpeedOfAnswer = queueStatistics.IncomingDataSeries.AverageSpeedOfAnswer,
 					AbandonedRate = queueStatistics.IncomingDataSeries.AbandonedRate,

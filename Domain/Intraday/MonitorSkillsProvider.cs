@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var supportedSkills = _supportedSkillsInIntradayProvider.GetSupportedSkills(skillIdList);
 
 			var intervals = _intradayMonitorDataLoader.Load(supportedSkills.Select(x => x.Id.Value).ToArray(),
-				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone,
+				_userTimeZone.TimeZone(),
 				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _userTimeZone.TimeZone())));
 			var intervalLength = _intervalLengthFetcher.IntervalLength;
 
