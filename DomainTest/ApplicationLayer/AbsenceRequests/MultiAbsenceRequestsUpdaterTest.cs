@@ -6,14 +6,19 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Absence;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
@@ -45,6 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FullScheduling Scheduling;
+		public IAuthorizationScope AuthorizationScope;
 		public INow Now;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -55,6 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			system.UseTestDouble<FakeWorkloadRepository>().For<IWorkloadRepository>();
 			system.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			system.UseTestDouble<CurrentAuthorization>().For<IAuthorizationScope>();
 			system.UseTestDouble(new MutableNow(DateTime.UtcNow)).For<INow>();
 		}
 
@@ -90,22 +97,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			reqs.SingleOrDefault().DenyReason.Should().Be.EqualTo(Resources.RequestDenyReasonAlreadyAbsent);
 		}
 
-		[Test, Ignore("Can't run with Fake repos")]
+		[Test]
+		//[Ignore("Can't run with Fake repos")]
 		public void ShouldDenySecondRequestIfFirstWasApprovedAndCausedStaffingToBeOnTheEdge()
 		{
-
+			//AuthorizationScope.OnThisThreadUse(new FullPermission());
+			//CurrentAuthorization.DefaultTo(new FullPermission());
 			var firstDay = new DateOnly(2015, 10, 12);
-			var activity = ActivityRepository.Has("activity");
-			var skill = SkillRepository.Has("skill", activity);
+			var activity = ActivityRepository.Has("activityName");
+			var skill = SkillRepository.Has("skillName", activity);
 
-			var scenario = ScenarioRepository.Has("some name");
+			var scenario = ScenarioRepository.Has("scnearioName");
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var contract = new Contract("_")
 			{
 				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
 			};
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
-			var workflowControlSet = new WorkflowControlSet { AbsenceRequestWaitlistEnabled = false };
+			var workflowControlSet = new WorkflowControlSet {AbsenceRequestWaitlistEnabled = false};
 			workflowControlSet.SetId(Guid.NewGuid());
 
 			var dateOnlyPeriod = firstDay.ToDateOnlyPeriod().Inflate(1);
@@ -121,34 +130,49 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			};
 
 			workflowControlSet.InsertPeriod(absenceRequestOpenPeriod, 0);
-			
-			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
-			agent.WorkflowControlSet = workflowControlSet;
-		
-			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				1,
-				1)
-				);
 
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(CurrentScenario.Current(), agent, firstDay.ToDateTimePeriod(agent.PermissionInformation.DefaultTimeZone()));
+			var contractSchedule = new ContractSchedule("_");
+			var partTimePercentage = new PartTimePercentage("_");
+			var team = new Team {Site = new Site("site")};
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
+			var category = new ShiftCategory("shiftCategory");
+
+			var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team , schedulePeriod, skill);
+			var agent2 = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, skill);
+			agent.WorkflowControlSet = workflowControlSet;
+			agent2.WorkflowControlSet = workflowControlSet;
+
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
+																					2,
+																					2)
+			);
+
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, firstDay.ToDateTimePeriod(agent.PermissionInformation.DefaultTimeZone()), category, CurrentScenario.Current());
+			var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent2, firstDay.ToDateTimePeriod(agent.PermissionInformation.DefaultTimeZone()), category, CurrentScenario.Current());
 			ScheduleStorage.Add(assignment);
+			ScheduleStorage.Add(assignment2);
 
 			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, firstDay.ToDateTimePeriod(agent.PermissionInformation.DefaultTimeZone()))).WithId();
+			var personRequest2 = new PersonRequest(agent2, new AbsenceRequest(absence, firstDay.ToDateTimePeriod(agent.PermissionInformation.DefaultTimeZone()))).WithId();
 
 			personRequest.Pending();
-
+			personRequest2.Pending();
 			PersonRequestRepository.Add(personRequest);
+			PersonRequestRepository.Add(personRequest2);
 
 			LoggedOnUser.SetFakeLoggedOnUser(agent);
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, agent);
 
-			var reqs = new List<IPersonRequest>() {personRequest};
+			var reqs = new List<IPersonRequest>() {personRequest, personRequest2};
 
 			Target.UpdateAbsenceRequest(reqs.Select(x => x.Id.GetValueOrDefault()).ToList());
 
+			
 			reqs.First().IsApproved.Should().Be.True();
+			reqs.Second().IsApproved.Should().Be.False();
 		}
+
 
 		[Test]
 		public void ShouldDenyExpiredRequestWithWaitlistingEnabled()
