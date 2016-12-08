@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 
 		private void tryLock(string name, Action action)
 		{
-			using (var connection = new SqlConnection(_connectionStrings.Application()))
+			using (var connection = new SqlConnection(connectionString()))
 			{
 				connection.Open();
 				if (_monitor.TryEnter(name, TimeSpan.Zero, connection))
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 
 		private IDisposable @lock(string name)
 		{
-			var connection = new SqlConnection(_connectionStrings.Application());
+			var connection = new SqlConnection(connectionString());
 			connection.Open();
 			var @lock = _monitor.Enter(name, timeout(), connection);
 			return new GenericDisposable(() =>
@@ -74,6 +74,14 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 				connection.Close();
 				connection.Dispose();
 			});
+		}
+
+		private string connectionString()
+		{
+			return new SqlConnectionStringBuilder(_connectionStrings.Application())
+			{
+				ApplicationName = "Teleopti.DistributedLock"
+			}.ConnectionString;
 		}
 
 		private TimeSpan timeout()
