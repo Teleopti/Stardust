@@ -21,6 +21,7 @@
 			'Toggle',
 			'NoticeService',
 			'$timeout',
+			'$element',
 			function($scope,
 				$filter,
 				$state,
@@ -37,7 +38,8 @@
 				FakeTimeService,
 				toggleService,
 				NoticeService,
-				$timeout
+				$timeout,
+				$element
 			) {
 				var selectedPersonId, lastUpdate, notice;
 				var polling = null;
@@ -90,6 +92,7 @@
 				$scope.skillAreasLoaded = false;
 				$scope.teamsSelected = [];
 				var enableWatchOnTeam = false;
+				$scope.searchTerm;
 				toggleService.togglesLoaded.then(function() {
 					$scope.showOrgSelection = toggleService.RTA_QuicklyChangeAgentsSelection_40610;
 					if ($scope.showOrgSelection)
@@ -106,7 +109,7 @@
 						reload: true,
 						notify: true
 					} : {};
-					$state.go(stateName, selection, options);
+					$state.go(stateName, selection);
 				}
 
 				RtaService.getSkills()
@@ -805,6 +808,10 @@
 					showResizer: true,
 					showPopupButton: true
 				};
+
+				$element.find('input').on('keydown', function(ev) {
+				 ev.stopPropagation();
+		 		});
 			}
 		]);
 })();
