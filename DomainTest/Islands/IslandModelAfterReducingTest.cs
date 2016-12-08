@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Islands
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_SplitBigIslands_42049)]
-	public class IslandModelFactoryTest
+	public class IslandModelAfterReducingTest
 	{
 		public IslandModelFactory IslandModelFactory;
 		public FakePersonRepository PersonRepository;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Islands
 
 			var model = IslandModelFactory.Create();
 
-			model.Count()
+			model.AfterReducing.Count()
 				.Should().Be.EqualTo(2);
 		}
 
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Islands
 
 			var model = IslandModelFactory.Create();
 
-			model.Single().SkillGroups.Count()
+			model.AfterReducing.Single().SkillGroups.Count()
 				.Should().Be.EqualTo(2);
 		}
 
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Islands
 
 			var model = IslandModelFactory.Create();
 
-			model.Single().SkillGroups.Single().Skills.Select(x => x.Name)
+			model.AfterReducing.Single().SkillGroups.Single().Skills.Select(x => x.Name)
 				.Should().Have.SameValuesAs("1", "2");
 		}
 
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Islands
 
 			var model = IslandModelFactory.Create();
 
-			model.Single().SkillGroups.Single().NumberOfAgentsOnSkillGroup
+			model.AfterReducing.Single().SkillGroups.Single().NumberOfAgentsOnSkillGroup
 				.Should().Be.EqualTo(3);
 		}
 
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Islands
 
 			var model = IslandModelFactory.Create();
 
-			model.Single().SkillGroups.Single(x => x.Skills.Count==2).Skills.First().NumberOfAgentsOnSkill
+			model.AfterReducing.Single().SkillGroups.Single(x => x.Skills.Count==2).Skills.First().NumberOfAgentsOnSkill
 				.Should().Be.EqualTo(2);
 		}
 
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Islands
 			PersonRepository.Has(new Person().KnowsSkill(skillB));
 
 			var model = IslandModelFactory.Create();
-			model.All(x => x.SkillGroups.Count == 1) //two islands with one skillgroup each
+			model.AfterReducing.All(x => x.SkillGroups.Count == 1) //two islands with one skillgroup each
 				.Should().Be.True();
 		}
 	}
