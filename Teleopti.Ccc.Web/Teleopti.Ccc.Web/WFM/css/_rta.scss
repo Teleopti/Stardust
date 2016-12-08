@@ -136,7 +136,7 @@
 	border-bottom: 1px solid rgba(0,0,0,.06);
 }
 .rta-option-group md-option {
-	margin-left: 26px;
+	margin-left: 30px;
 }
 .rta-option-group label {
 	padding: 0 !important;
@@ -144,8 +144,11 @@
 .rta-option-group md-checkbox {
 	margin-bottom: 8px;
 }
-.rta-option-group md-checkbox.md-checked .md-icon, .md-checkbox-enabled[selected] .md-icon {
+.rta-option-group md-checkbox.md-checked .md-icon, .md-checkbox-enabled[selected] .md-icon, .rta-option-group md-checkbox.rta-marked-checkbox .md-icon {
 	background-color: $blue-500;
+}
+.rta-option-group md-checkbox.rta-marked-checkbox .md-icon {
+	border: none !important;
 }
 .rta-md-input-container {
 	width: 100%;
@@ -157,18 +160,11 @@
 .rta-multiple-selection-panel .md-icon-left {
 	padding-left: 0;
 }
-.rta-option-group md-checkbox.rta-marked-checkbox .md-icon {
-	background-color: $blue-500;
-}
-// .rta-md-select md-select-header {
-// 	border-bottom: 1px solid rgba(0,0,0,.06);
-// }
 ///////////End of rta-skills///////////////////////
 ///////////rta-agents///////////////////////
 .agent-row {
 	cursor: pointer;
 }
-
 .testclass {
 	margin-bottom: 50px;
 }

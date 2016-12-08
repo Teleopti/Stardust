@@ -39,7 +39,7 @@
 				NoticeService,
 				$timeout
 			) {
-				var selectedPersonId, lastUpdate, notice;
+				var selectedPersonId, lastUpdate, notice, selectedSiteId;;
 				var polling = null;
 				var siteIds = $stateParams.siteIds || [];
 				var teamIds = $stateParams.teamIds || [];
@@ -164,8 +164,6 @@
 							skillIds: []
 						});
 				}
-
-				var selectedSiteId;
 
 				$scope.expandSite = function(siteId) {
 					selectedSiteId = $scope.isSiteToBeExpanded(siteId) ? '' : siteId;
