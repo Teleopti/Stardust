@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.Islands.ClientModel
 {
@@ -17,16 +18,11 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 
 	public class IslandModel
 	{
-		public IslandModel()
-		{
-			SkillGroups = new List<SkillGroupModel>();
-		}
-
-		public ICollection<SkillGroupModel> SkillGroups { get; set; }
+		public IEnumerable<SkillGroupModel> SkillGroups { get; set; }
 		public int NumberOfAgentsOnIsland { get; set; }
 	}
 
-	public class SkillGroupModel
+	public class SkillGroupModel : IComparable<SkillGroupModel>
 	{
 		public SkillGroupModel()
 		{
@@ -35,6 +31,11 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 
 		public ICollection<SkillModel> Skills { get; set; }
 		public int NumberOfAgentsOnSkillGroup { get; set; }
+
+		public int CompareTo(SkillGroupModel other)
+		{
+			return other.NumberOfAgentsOnSkillGroup - NumberOfAgentsOnSkillGroup;
+		}
 	}
 
 	public class SkillModel

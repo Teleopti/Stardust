@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Islands
 			PersonRepository.Has(new Person().KnowsSkill(skillB));
 
 			var model = IslandModelFactory.Create();
-			model.AfterReducing.Islands.All(x => x.SkillGroups.Count == 1) //two islands with one skillgroup each
+			model.AfterReducing.Islands.All(x => x.SkillGroups.Count() == 1) //two islands with one skillgroup each
 				.Should().Be.True();
 		}
 	}

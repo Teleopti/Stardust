@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Domain.Islands
 		public IslandModel CreateClientModel()
 		{
 			var ret = new IslandModel();
+			var skillGroupModels = new List<SkillGroupModel>();
 			foreach (var skillGroup in _skillGroups)
 			{
 				var skillGroupModel = new SkillGroupModel();
@@ -54,8 +55,10 @@ namespace Teleopti.Ccc.Domain.Islands
 					});
 				}
 				skillGroupModel.NumberOfAgentsOnSkillGroup = skillGroup.Agents.Count();
-				ret.SkillGroups.Add(skillGroupModel);
+				skillGroupModels.Add(skillGroupModel);
 			}
+			skillGroupModels.Sort();
+			ret.SkillGroups = skillGroupModels;
 			ret.NumberOfAgentsOnIsland = ret.SkillGroups.Sum(x => x.NumberOfAgentsOnSkillGroup);
 			return ret;
 		}
