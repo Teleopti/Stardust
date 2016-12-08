@@ -54,8 +54,14 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 
 		public void Dispose()
 		{
-			_transaction.Dispose();
-			_session.Dispose();
+			try
+			{
+				_transaction.Dispose();
+			}
+			finally 
+			{
+				_session.Dispose();
+			}
 		}
 	}
 
