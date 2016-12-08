@@ -5,10 +5,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Analytics
 {
-	public class NestedAnalyticsUnitOfWorkException : Exception
-	{
-	}
-
 	public class AnalyticsUnitOfWorkAspect : IAnalyticsUnitOfWorkAspect
 	{
 		private readonly ICurrentAnalyticsUnitOfWorkFactory _currentUnitOfWorkFactory;

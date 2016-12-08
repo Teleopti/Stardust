@@ -5,7 +5,6 @@ using log4net;
 using NHibernate;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Secrets.Licensing;
@@ -14,6 +13,10 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
+	public class NestedAnalyticsUnitOfWorkException : Exception
+	{
+	}
+
 	public class AnalyticsUnitOfWork : IUnitOfWork
 	{
 		private readonly ILog _logger = LogManager.GetLogger(typeof(AnalyticsUnitOfWork));
