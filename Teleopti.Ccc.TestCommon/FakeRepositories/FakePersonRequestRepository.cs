@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -11,20 +10,32 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakePersonRequestRepository : IPersonRequestRepository
+	public class FakePersonRequestRepositoryWithClone : FakePersonRequestRepository
 	{
-		private readonly IList<IPersonRequest> _requestRepository = new List<IPersonRequest>();
 
-		public void Add(IPersonRequest entity)
+		public override void Add(IPersonRequest entity)
 		{
 			if (!entity.Id.HasValue)
 			{
 				entity.SetId(Guid.NewGuid());
 			}
-			//var clone = (PersonRequest) entity.Clone();
-			//clone.SetId(entity.Id);
-			//_requestRepository.Add(clone);
-			_requestRepository.Add(entity);
+			var clone = (PersonRequest)entity.Clone();
+			clone.SetId(entity.Id);
+			RequestRepository.Add(clone);
+		}
+	}
+
+	public class FakePersonRequestRepository : IPersonRequestRepository
+	{
+		public readonly IList<IPersonRequest> RequestRepository = new List<IPersonRequest>();
+
+		public virtual void Add(IPersonRequest entity)
+		{
+			if (!entity.Id.HasValue)
+			{
+				entity.SetId(Guid.NewGuid());
+			}
+			RequestRepository.Add(entity);
 		}
 
 		public void Remove(IPersonRequest entity)
@@ -34,12 +45,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPersonRequest Get(Guid id)
 		{
-			return _requestRepository.FirstOrDefault(x => x.Id == id);
+			return RequestRepository.FirstOrDefault(x => x.Id == id);
 		}
 
 		public IList<IPersonRequest> LoadAll()
 		{
-			return _requestRepository;
+			return RequestRepository;
 		}
 
 		public IPersonRequest Load(Guid id)
@@ -56,7 +67,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IPersonRequest> Find(IEnumerable<Guid> ids)
 		{
-			return _requestRepository.Where(p => ids.Any(x => x == p.Id)).ToList();
+			return RequestRepository.Where(p => ids.Any(x => x == p.Id)).ToList();
 		}
 
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person)
@@ -71,7 +82,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period)
 		{
-			return _requestRepository;
+			return RequestRepository;
 		}
 
 		public IEnumerable<IPersonRequest> FindAllRequests(RequestFilter filter)
@@ -86,14 +97,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 			if (filter.ExcludeRequestsOnFilterPeriodEdge)
 			{
-				requests = (from request in _requestRepository
+				requests = (from request in RequestRepository
 							where request.Request.Period.EndDateTime > filter.Period.StartDateTime &&
 								  request.Request.Period.StartDateTime < filter.Period.EndDateTime
 							select request);
 			}
 			else
 			{
-				requests = _requestRepository.Where(request => filter.Period.ContainsPart(request.Request.Period));
+				requests = RequestRepository.Where(request => filter.Period.ContainsPart(request.Request.Period));
 			}
 
 			if (filter.OnlyIncludeRequestsStartingWithinPeriod)
@@ -133,13 +144,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging,
 			DateTime? earliestDate, params RequestType[] requestTypes)
 		{
-			return _requestRepository.Where(request => requestTypes.Contains(request.Request.RequestType)).OrderByDescending(x=>x.UpdatedOn);
+			return RequestRepository.Where(request => requestTypes.Contains(request.Request.RequestType)).OrderByDescending(x=>x.UpdatedOn);
 		}
 
 		public IEnumerable<IPersonRequest> FindAllRequestsSortByRequestedDate(IPerson person, Paging paging, DateTime? earliestDate,
 			params RequestType[] requestTypes)
 		{
-			return _requestRepository.Where(request => requestTypes.Contains(request.Request.RequestType)).OrderByDescending(x=>x.RequestedDate);
+			return RequestRepository.Where(request => requestTypes.Contains(request.Request.RequestType)).OrderByDescending(x=>x.RequestedDate);
 		}
 
 		public IList<IPersonRequest> FindAllRequestModifiedWithinPeriodOrPending(IPerson person, DateTimePeriod period)
@@ -160,7 +171,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPersonRequest Find(Guid id)
 		{
-			return _requestRepository.FirstOrDefault(x => x.Id == id);
+			return RequestRepository.FirstOrDefault(x => x.Id == id);
 		}
 
 		public IList<IPersonRequest> FindByStatus<T>(IPerson person, DateTime startDate, int status) where T : Request
@@ -170,7 +181,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPersonRequest FindPersonRequestByRequestId(Guid value)
 		{
-			return _requestRepository.FirstOrDefault(x => x.Request.Id.GetValueOrDefault() == value);
+			return RequestRepository.FirstOrDefault(x => x.Request.Id.GetValueOrDefault() == value);
 		}
 
 		public IList<IShiftExchangeOffer> FindOfferByStatus(IPerson person, DateOnly date, ShiftExchangeOfferStatus status)
@@ -181,7 +192,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IEnumerable<IShiftExchangeOffer> FindShiftExchangeOffersForBulletin(IEnumerable<IPerson> personList,
 			DateOnly shiftTradeDate)
 		{
-			var result = _requestRepository.Where(request => request.Request.RequestType == RequestType.ShiftExchangeOffer
+			var result = RequestRepository.Where(request => request.Request.RequestType == RequestType.ShiftExchangeOffer
 															 && request.RequestedDate.Date == shiftTradeDate.Date
 															 && personList.Contains(request.Person) && request.IsPending)
 				.Select(pr => (IShiftExchangeOffer)pr.Request)
@@ -206,7 +217,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IPersonRequest> FindAllRequestsExceptOffer(IPerson person, Paging paging)
 		{
-			return _requestRepository.Where(request => request.Request.RequestType != RequestType.ShiftExchangeOffer
+			return RequestRepository.Where(request => request.Request.RequestType != RequestType.ShiftExchangeOffer
 													   && request.Person.Id.GetValueOrDefault() == person.Id.GetValueOrDefault())
 				.ToList();
 		}
