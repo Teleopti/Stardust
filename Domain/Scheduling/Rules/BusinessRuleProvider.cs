@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	public class ConfigurableBusinessRuleProvider : BusinessRuleProvider
 	{
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
+
 		public ConfigurableBusinessRuleProvider(IGlobalSettingDataRepository globalSettingDataRepository)
 		{
 			_globalSettingDataRepository = globalSettingDataRepository;
@@ -81,11 +82,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var ruleConfigs = shiftTradeSetting.BusinessRuleConfigs;
 			if (ruleConfigs == null || !ruleConfigs.Any()) return false;
 
-			foreach (var rule in enabledRules)
+			var brokenRules = enabledRules.Where(rule => ruleResponses.Any(r => r.TypeOfRule == rule.GetType())).ToList();
+			if (!brokenRules.Any()) return false;
+
+			foreach (var rule in brokenRules)
 			{
 				var config = ruleConfigs.FirstOrDefault(c => c.BusinessRuleType == rule.GetType().FullName);
-				var handleOption = config?.HandleOptionOnFailed;
-				if (handleOption != null && handleOption.Value == RequestHandleOption.AutoDeny) return true;
+				if (config?.HandleOptionOnFailed != null && config.HandleOptionOnFailed.Value == RequestHandleOption.AutoDeny)
+				{
+					return true;
+				}
 			}
 			return false;
 		}

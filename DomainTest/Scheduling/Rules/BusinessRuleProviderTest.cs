@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		{
 			setDummyRuleHanleOption(RequestHandleOption.AutoDeny);
 			var ruleCollection = createBusinessRuleCollection();
-			var ruleResponses = createBusinessRuleResponses();
+			var ruleResponses = createBusinessRuleResponses(typeof(DummyRule));
 
 			var target = new ConfigurableBusinessRuleProvider(_globalSettingDataRepository);
 			var result = target.ShouldDeny(ruleCollection, ruleResponses);
@@ -78,7 +78,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		{
 			setDummyRuleHanleOption(RequestHandleOption.Pending);
 			var ruleCollection = createBusinessRuleCollection();
-			var ruleResponses = createBusinessRuleResponses();
+			var ruleResponses = createBusinessRuleResponses(typeof(DummyRule));
+
+			var target = new ConfigurableBusinessRuleProvider(_globalSettingDataRepository);
+			var result = target.ShouldDeny(ruleCollection, ruleResponses);
+
+			result.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldNotDenyWhenRuleNotFailed()
+		{
+			setDummyRuleHanleOption(RequestHandleOption.AutoDeny);
+			var ruleCollection = createBusinessRuleCollection();
+			var ruleResponses = createBusinessRuleResponses(typeof(AnotherDummyRule));
 
 			var target = new ConfigurableBusinessRuleProvider(_globalSettingDataRepository);
 			var result = target.ShouldDeny(ruleCollection, ruleResponses);
@@ -90,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void ShouldNotDenyWhenNoRuleConfig()
 		{
 			var ruleCollection = createBusinessRuleCollection();
-			var ruleResponses = createBusinessRuleResponses();
+			var ruleResponses = createBusinessRuleResponses(typeof(DummyRule));
 
 			var target = new ConfigurableBusinessRuleProvider(new FakeGlobalSettingDataRepository());
 			var result = target.ShouldDeny(ruleCollection, ruleResponses);
@@ -110,10 +123,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			result.Should().Be.False();
 		}
 
-		private static List<IBusinessRuleResponse> createBusinessRuleResponses()
+		private static List<IBusinessRuleResponse> createBusinessRuleResponses(Type ruleType)
 		{
 			var ruleResponses = new List<IBusinessRuleResponse>();
-			var response = new BusinessRuleResponse(typeof(DummyRule), "no go", false, false,
+			var response = new BusinessRuleResponse(ruleType, "no go", false, false,
 				new DateTimePeriod(), PersonFactory.CreatePersonWithId(),
 				new DateOnlyPeriod(new DateOnly(2008, 12, 22), new DateOnly(2008, 12, 25)), "tjillevippen");
 			ruleResponses.Add(response);
@@ -124,6 +137,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		{
 			var ruleCollection = NewBusinessRuleCollection.Minimum();
 			ruleCollection.Add(new DummyRule(true));
+			ruleCollection.Add(new AnotherDummyRule(false));
 			return ruleCollection;
 		}
 
@@ -155,6 +169,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 						BusinessRuleType = typeof(DummyRule).FullName,
 						Enabled = true,
 						HandleOptionOnFailed = option
+					},
+					new ShiftTradeBusinessRuleConfig
+					{
+						BusinessRuleType = typeof(AnotherDummyRule).FullName,
+						Enabled = true,
+						HandleOptionOnFailed = RequestHandleOption.Pending
 					}
 				}
 			};
