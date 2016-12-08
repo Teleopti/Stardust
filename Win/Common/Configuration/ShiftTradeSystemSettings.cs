@@ -6,7 +6,6 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -27,12 +26,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private SFGridColumnGridHelper<ShiftTradeBusinessRuleConfigView> _gridColumnHelper;
 		private readonly IBusinessRuleConfigProvider _businessRuleConfigProvider;
 		private readonly IToggleManager _toggleManager;
+
 		private static readonly Dictionary<RequestHandleOption, ShiftTradeRequestHandleOptionView> _shiftTradeRequestHandleOptionViews
 			= new Dictionary<RequestHandleOption, ShiftTradeRequestHandleOptionView>()
 			{
 				{RequestHandleOption.AutoDeny, new ShiftTradeRequestHandleOptionView(RequestHandleOption.AutoDeny, Resources.Deny)},
 				{RequestHandleOption.Pending, new ShiftTradeRequestHandleOptionView(RequestHandleOption.Pending, Resources.SendToAdministrator)}
 			};
+
 		private IList<ShiftTradeBusinessRuleConfigView> _businessRuleConfigViews;
 
 		public ShiftTradeSystemSettings(IToggleManager toggleManager, IBusinessRuleConfigProvider businessRuleConfigProvider)
@@ -238,23 +239,25 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void loadBusinessRuleConfigs()
 		{
-			var defaultBusinessRuleConfigs = getDefaultBusinessRuleConfigs();
+			var defaultBusinessRuleConfigs = getDefaultBusinessRuleConfigs().ToList();
 
 			if (_shiftTradeSettings.BusinessRuleConfigs == null)
 				_shiftTradeSettings.BusinessRuleConfigs = new ShiftTradeBusinessRuleConfig[] { };
 
-			var businessRuleConfigList = new List<ShiftTradeBusinessRuleConfig>(_shiftTradeSettings.BusinessRuleConfigs);
-			foreach (var defaultConfig in defaultBusinessRuleConfigs)
+			var businessRuleConfigList = _shiftTradeSettings.BusinessRuleConfigs.ToList();
+
+			foreach (var existingConfig in businessRuleConfigList)
 			{
-				if (_shiftTradeSettings.BusinessRuleConfigs.All(b => b.BusinessRuleType != defaultConfig.BusinessRuleType))
-				{
-					businessRuleConfigList.Add(defaultConfig);
-				}
+				var businessRuleType = existingConfig.BusinessRuleType;
+				if (defaultBusinessRuleConfigs.All(c => c.BusinessRuleType != businessRuleType)) continue;
+
+				var defaultConfig = defaultBusinessRuleConfigs.First(c => c.BusinessRuleType == businessRuleType);
+				defaultConfig.Enabled = existingConfig.Enabled;
+				defaultConfig.HandleOptionOnFailed = existingConfig.HandleOptionOnFailed;
 			}
 
-			_shiftTradeSettings.BusinessRuleConfigs = businessRuleConfigList.ToArray();
+			_shiftTradeSettings.BusinessRuleConfigs = defaultBusinessRuleConfigs.ToArray();
 		}
-
 
 		private void chkEnableMaxSeats_CheckedChanged(object sender, EventArgs e)
 		{
