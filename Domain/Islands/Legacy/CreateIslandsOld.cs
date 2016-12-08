@@ -10,20 +10,17 @@ namespace Teleopti.Ccc.Domain.Islands.Legacy
 	{
 		private readonly IVirtualSkillGroupsCreator _virtualSkillGroupsCreator;
 		private readonly SkillGroupIslandsAnalyzer _skillGroupIslandsAnalyzer;
-		private readonly IPeopleInOrganization _peopleInOrganization;
 
 		public CreateIslandsOld(IVirtualSkillGroupsCreator virtualSkillGroupsCreator,
-												SkillGroupIslandsAnalyzer skillGroupIslandsAnalyzer,
-												IPeopleInOrganization peopleInOrganization)
+												SkillGroupIslandsAnalyzer skillGroupIslandsAnalyzer)
 		{
 			_virtualSkillGroupsCreator = virtualSkillGroupsCreator;
 			_skillGroupIslandsAnalyzer = skillGroupIslandsAnalyzer;
-			_peopleInOrganization = peopleInOrganization;
 		}
 
-		public IEnumerable<IIsland> Create(IReduceSkillGroups reduceSkillGroups, DateOnlyPeriod period)
+		public IEnumerable<IIsland> Create(IReduceSkillGroups reduceSkillGroups, IEnumerable<IPerson> peopleInOrganization, DateOnlyPeriod period)
 		{
-			var skillGroupsCreatorResult = _virtualSkillGroupsCreator.GroupOnDate(period.StartDate, _peopleInOrganization.Agents(period));
+			var skillGroupsCreatorResult = _virtualSkillGroupsCreator.GroupOnDate(period.StartDate, peopleInOrganization);
 			return _skillGroupIslandsAnalyzer.FindIslands(skillGroupsCreatorResult);
 		}
 	}

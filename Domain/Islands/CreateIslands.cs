@@ -9,21 +9,17 @@ namespace Teleopti.Ccc.Domain.Islands
 	public class CreateIslands : ICreateIslands
 	{
 		private readonly CreateSkillGroups _createSkillGroups;
-		private readonly IPeopleInOrganization _peopleInOrganization;
 		private readonly NumberOfAgentsKnowingSkill _numberOfAgentsKnowingSkill;
 
-		public CreateIslands(CreateSkillGroups createSkillGroups,
-												IPeopleInOrganization peopleInOrganization,
-												NumberOfAgentsKnowingSkill numberOfAgentsKnowingSkill)
+		public CreateIslands(CreateSkillGroups createSkillGroups, NumberOfAgentsKnowingSkill numberOfAgentsKnowingSkill)
 		{
 			_createSkillGroups = createSkillGroups;
-			_peopleInOrganization = peopleInOrganization;
 			_numberOfAgentsKnowingSkill = numberOfAgentsKnowingSkill;
 		}
 
-		public IEnumerable<IIsland> Create(IReduceSkillGroups reduceSkillGroups, DateOnlyPeriod period)
+		public IEnumerable<IIsland> Create(IReduceSkillGroups reduceSkillGroups, IEnumerable<IPerson> peopleInOrganization, DateOnlyPeriod period)
 		{
-			var allSkillGroups = new List<SkillGroup>(_createSkillGroups.Create(_peopleInOrganization.Agents(period), period.StartDate));
+			var allSkillGroups = new List<SkillGroup>(_createSkillGroups.Create(peopleInOrganization, period.StartDate));
 			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(allSkillGroups);
 			while (true)
 			{

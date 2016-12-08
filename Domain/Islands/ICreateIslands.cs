@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Domain.Islands
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_SplitBigIslands_42049)]
 	public interface ICreateIslands
 	{
-		IEnumerable<IIsland> Create(IReduceSkillGroups reduceSkillGroups, DateOnlyPeriod period);
+		IEnumerable<IIsland> Create(IReduceSkillGroups reduceSkillGroups, IEnumerable<IPerson> peopleInOrganization, DateOnlyPeriod period);
 	}
 }

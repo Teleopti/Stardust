@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
@@ -14,13 +15,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		private readonly ICreateIslands _createIslands;
 		private readonly IGridlockManager _gridLockManager;
 		private readonly ReduceSkillGroups _reduceSkillGroups;
+		private readonly IPeopleInOrganization _peopleInOrganization;
 
-		public IntradayOptimizationCommandHandler(IEventPublisher eventPublisher, ICreateIslands createIslands, IGridlockManager gridLockManager, ReduceSkillGroups reduceSkillGroups)
+		public IntradayOptimizationCommandHandler(IEventPublisher eventPublisher, 
+												ICreateIslands createIslands, 
+												IGridlockManager gridLockManager, 
+												ReduceSkillGroups reduceSkillGroups,
+												IPeopleInOrganization peopleInOrganization)
 		{
 			_eventPublisher = eventPublisher;
 			_createIslands = createIslands;
 			_gridLockManager = gridLockManager;
 			_reduceSkillGroups = reduceSkillGroups;
+			_peopleInOrganization = peopleInOrganization;
 		}
 
 		public void Execute(IntradayOptimizationCommand command)
@@ -57,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		{
 			using (CommandScope.Create(command))
 			{
-				return _createIslands.Create(_reduceSkillGroups, period);
+				return _createIslands.Create(_reduceSkillGroups, _peopleInOrganization.Agents(period), period);
 			}
 		}
 	}
