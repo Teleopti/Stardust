@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Common
 	{
 		private readonly ICurrentIdentity _identity;
 		private readonly IBusinessUnitIdForRequest _businessUnitIdForRequest;
-		private readonly ICurrentUnitOfWork _unitOfWork;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWork;
 		private readonly IBusinessUnitRepository _businessUnitRepository;
 		private readonly ThreadLocal<IBusinessUnit> _threadBusinessUnit = new ThreadLocal<IBusinessUnit>();
 
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Common
 		public CurrentBusinessUnit(
 			ICurrentIdentity identity, 
 			IBusinessUnitIdForRequest businessUnitIdForRequest,
-			ICurrentUnitOfWork unitOfWork,
+			ICurrentUnitOfWorkFactory unitOfWork,
 			IBusinessUnitRepository businessUnitRepository)
 		{
 			_identity = identity;
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			if (_unitOfWork == null || _businessUnitIdForRequest == null || _businessUnitRepository == null)
 				return null;
-			if (!_unitOfWork.HasCurrent())
+			if (!_unitOfWork.Current()?.HasCurrentUnitOfWork() ?? false)
 				return null;
 			var buid = _businessUnitIdForRequest.Get();
 			if (!buid.HasValue)
