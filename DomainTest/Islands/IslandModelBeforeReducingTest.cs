@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Islands
 			PersonRepository.Has(new Person().KnowsSkill(skillA, skillB));
 
 			var model = IslandModelFactory.Create();
-			model.BeforeReducing.Count()
+			model.BeforeReducing.Islands.Count()
 				.Should().Be.EqualTo(1);
 		}
 	}

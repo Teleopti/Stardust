@@ -30,12 +30,12 @@ namespace Teleopti.Ccc.DomainTest.Islands
 			var skillA = new Skill("A");
 			var skillB = new Skill("B");
 			Enumerable.Range(0, 3).Select(x => new Person().KnowsSkill(skillA))
-				.ForEach(x => PersonRepository.Has((IPerson) x));
+				.ForEach(x => PersonRepository.Has(x));
 			PersonRepository.Has(new Person().KnowsSkill(skillA, skillB));
 			PersonRepository.Has(new Person().KnowsSkill(skillB));
 
 			var model = IslandModelFactory.Create();
-			model.AfterReducing.All(x => x.SkillGroups.Count == 1) //two islands with one skillgroup each
+			model.AfterReducing.Islands.All(x => x.SkillGroups.Count == 1) //two islands with one skillgroup each
 				.Should().Be.True();
 		}
 	}

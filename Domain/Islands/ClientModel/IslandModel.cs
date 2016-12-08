@@ -4,8 +4,14 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 {
 	public class IslandTopModel
 	{
-		public IEnumerable<IslandModel> AfterReducing { get; set; }
-		public IEnumerable<IslandModel> BeforeReducing { get; set; }
+		public IslandsModel AfterReducing { get; set; }
+		public IslandsModel BeforeReducing { get; set; }
+	}
+
+	public class IslandsModel
+	{
+		public IEnumerable<IslandModel> Islands { get; set; }
+		public int NumberOfAgentsOnAllIsland { get; set; }
 	}
 
 	public class IslandModel
