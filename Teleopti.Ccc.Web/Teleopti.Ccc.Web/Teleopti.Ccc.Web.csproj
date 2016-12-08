@@ -1364,6 +1364,9 @@
     <Content Include="Content\signalr\jquery.signalR-2.2.0.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.0.min.js" />
     <Content Include="WFM\app\global\businessunits\businessunits.controller.spec.js" />
+    <Content Include="WFM\app\global\current-user\authentication-requests.service.js" />
+    <Content Include="WFM\app\global\current-user\settings.service.js" />
+    <Content Include="WFM\app\global\current-user\_modules.js" />
     <Content Include="WFM\app\global\utilities\guidgenerator.service.js" />
     <Content Include="WFM\app\global\utilities\_modules.js" />
     <Content Include="WFM\app\permissions\refact\permissions.data.service.js" />
