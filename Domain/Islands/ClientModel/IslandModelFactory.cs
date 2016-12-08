@@ -6,19 +6,23 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 	public class IslandModelFactory
 	{
 		private readonly CreateIslands _createIslands;
+		private readonly ReduceSkillGroups _reduceSkillGroups;
 
-		public IslandModelFactory(CreateIslands createIslands)
+		public IslandModelFactory(CreateIslands createIslands, ReduceSkillGroups reduceSkillGroups)
 		{
 			_createIslands = createIslands;
+			_reduceSkillGroups = reduceSkillGroups;
 		}
 
 		public IslandTopModel Create()
 		{
-			var islands = _createIslands.Create(DateOnly.Today.ToDateOnlyPeriod());
-			var islandTopModel = new IslandTopModel();
-
-			islandTopModel.AfterReducing = from Island island in islands select island.CreateClientModel();
-			islandTopModel.BeforeReducing = islandTopModel.AfterReducing;
+			var islandsBefore = _createIslands.Create(new ReduceNoSkillGroups(), DateOnly.Today.ToDateOnlyPeriod());
+			var islandsAfter = _createIslands.Create(_reduceSkillGroups, DateOnly.Today.ToDateOnlyPeriod());
+			var islandTopModel = new IslandTopModel
+			{
+				AfterReducing = from Island island in islandsAfter select island.CreateClientModel(),
+				BeforeReducing = from Island island in islandsBefore select island.CreateClientModel()
+			};
 
 			return islandTopModel;
 

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Islands.Legacy
 			_peopleInOrganization = peopleInOrganization;
 		}
 
-		public IEnumerable<IIsland> Create(DateOnlyPeriod period)
+		public IEnumerable<IIsland> Create(IReduceSkillGroups reduceSkillGroups, DateOnlyPeriod period)
 		{
 			var skillGroupsCreatorResult = _virtualSkillGroupsCreator.GroupOnDate(period.StartDate, _peopleInOrganization.Agents(period));
 			return _skillGroupIslandsAnalyzer.FindIslands(skillGroupsCreatorResult);

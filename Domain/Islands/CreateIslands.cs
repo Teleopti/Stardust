@@ -11,20 +11,17 @@ namespace Teleopti.Ccc.Domain.Islands
 		private readonly CreateSkillGroups _createSkillGroups;
 		private readonly IPeopleInOrganization _peopleInOrganization;
 		private readonly NumberOfAgentsKnowingSkill _numberOfAgentsKnowingSkill;
-		private readonly ReduceSkillGroups _reduceSkillGroups;
 
 		public CreateIslands(CreateSkillGroups createSkillGroups,
 												IPeopleInOrganization peopleInOrganization,
-												NumberOfAgentsKnowingSkill numberOfAgentsKnowingSkill,
-												ReduceSkillGroups reduceSkillGroups)
+												NumberOfAgentsKnowingSkill numberOfAgentsKnowingSkill)
 		{
 			_createSkillGroups = createSkillGroups;
 			_peopleInOrganization = peopleInOrganization;
 			_numberOfAgentsKnowingSkill = numberOfAgentsKnowingSkill;
-			_reduceSkillGroups = reduceSkillGroups;
 		}
 
-		public IEnumerable<IIsland> Create(DateOnlyPeriod period)
+		public IEnumerable<IIsland> Create(IReduceSkillGroups reduceSkillGroups, DateOnlyPeriod period)
 		{
 			var allSkillGroups = new List<SkillGroup>(_createSkillGroups.Create(_peopleInOrganization.Agents(period), period.StartDate));
 			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(allSkillGroups);
@@ -36,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Islands
 					removeEmptyIslands(skillGroupsInIslands);
 				}
 
-				if (!_reduceSkillGroups.Execute(skillGroupsInIslands, noAgentsKnowingSkill))
+				if (!reduceSkillGroups.Execute(skillGroupsInIslands, noAgentsKnowingSkill))
 				{
 					return skillGroupsInIslands.Select(skillGroupInIsland => new Island(skillGroupInIsland, noAgentsKnowingSkill)).ToList();
 				}

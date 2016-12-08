@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Islands
 		public FakePersonRepository PersonRepository;
 		public ReduceIslandsLimits ReduceIslandsLimits;
 
-		[Test, Ignore("Should be fixed")]
+		[Test]
 		public void ShouldNotReduce()
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 2);

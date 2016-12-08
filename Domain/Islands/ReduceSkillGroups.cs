@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands
 {
-	public class ReduceSkillGroups
+	public class ReduceSkillGroups : IReduceSkillGroups
 	{
 		private readonly ReduceIslandsLimits _reduceIslandsLimits;
 
