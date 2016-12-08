@@ -41,5 +41,6 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 	{
 		public string Name { get; set; }
 		public int NumberOfAgentsOnSkill { get; set; }
+		public string ActivityName { get; set; }
 	}
 }

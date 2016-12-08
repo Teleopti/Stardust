@@ -4,8 +4,10 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Islands.ClientModel;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.DomainTest.Islands
 {
@@ -55,6 +57,19 @@ namespace Teleopti.Ccc.DomainTest.Islands
 
 			model.AfterReducing.Islands.Single().SkillGroups.Single().Skills.Select(x => x.Name).Should().Have.SameValuesAs("1", "2");
 			model.BeforeReducing.Islands.Single().SkillGroups.Single().Skills.Select(x => x.Name).Should().Have.SameValuesAs("1", "2");
+		}
+
+		[Test]
+		public void ShouldSetActivityNameOnSkill()
+		{
+			var activityName = RandomName.Make();
+			var skill = new Skill {Activity = new Activity(activityName)};
+
+			PersonRepository.Has(skill);
+
+			var model = IslandModelFactory.Create();
+			model.BeforeReducing.Islands.Single().SkillGroups.Single().Skills.Single().ActivityName.Should().Be.EqualTo(activityName);
+			model.AfterReducing.Islands.Single().SkillGroups.Single().Skills.Single().ActivityName.Should().Be.EqualTo(activityName);
 		}
 
 		[Test]
