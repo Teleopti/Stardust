@@ -253,6 +253,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(1, retList.Count);
         }
 
+		[Test]
+		public void CanFindExactPersonAbsence()
+		{			
+
+			var period1 = new DateTimePeriod(2000,1,1, 8,2000,1,1, 16);
+			var period2 = new DateTimePeriod(2000,1,1,9,2000,1,1,14);
+			var layer1 = new AbsenceLayer(absenceSick,period1);
+			var layer2 = new AbsenceLayer(absenceSick,period2);
+			PersonAbsence personAbsence1 = new PersonAbsence(agent,defaultScenario,layer1);
+			PersonAbsence personAbsence2 = new PersonAbsence(agent,defaultScenario,layer2);
+			PersistAndRemoveFromUnitOfWork(personAbsence1);
+			PersistAndRemoveFromUnitOfWork(personAbsence2);
+
+			ICollection<IPersonAbsence> retList = new PersonAbsenceRepository(CurrUnitOfWork).FindExact(agent, period1, absenceSick, defaultScenario);
+			verifyRelatedObjectsAreEagerlyLoaded(retList);
+			retList.Single().Period.Should().Be.EqualTo(period1);
+		}
+
 
 		[Test]
 		public void CanFindRequestThatCreatedTheAbsence()

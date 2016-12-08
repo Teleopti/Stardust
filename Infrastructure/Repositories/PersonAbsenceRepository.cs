@@ -76,6 +76,22 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		}
 
+		public ICollection<IPersonAbsence> FindExact(IPerson person, DateTimePeriod period, IAbsence absence,
+			IScenario scenario)
+		{
+			var retList = Session.CreateCriteria(typeof(PersonAbsence))				
+				.Add(Restrictions.Eq("Layer.Period.period.Minimum",period.StartDateTime))
+				.Add(Restrictions.Eq("Layer.Period.period.Maximum",period.EndDateTime))
+				.Add(Restrictions.Eq("Scenario",scenario))
+				.Add(Restrictions.Eq("Layer.Payload", absence))
+				.Add(Restrictions.Eq("Person",person))
+				.List<IPersonAbsence>();
+
+			initializeAbsences(retList);
+			return retList;
+		}
+
+
 		public ICollection<IPersonAbsence> Find(IEnumerable<Guid> personAbsenceIds, IScenario scenario)
 		{
 			InParameter.NotNull("personAbsenceIds", personAbsenceIds);

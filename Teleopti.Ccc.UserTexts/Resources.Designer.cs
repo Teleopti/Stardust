@@ -6778,7 +6778,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The absence request for {0} on {1} could not be cancelled as no related absence was found..
+        ///   Looks up a localized string similar to The absence request for {0} on {1} could not be cancelled as the related absence can not be found or has been modified..
         /// </summary>
         public static string CouldNotCancelRequestNoAbsence {
             get {
@@ -6787,7 +6787,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The absence request for {0} from {1} - {2} could not be cancelled as no related absence was found..
+        ///   Looks up a localized string similar to The absence request for {0} from {1} - {2} could not be cancelled as the related absence can not be found or has been modified..
         /// </summary>
         public static string CouldNotCancelRequestNoAbsenceMultiDay {
             get {

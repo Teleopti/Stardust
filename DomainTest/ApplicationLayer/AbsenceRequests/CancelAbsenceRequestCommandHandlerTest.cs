@@ -15,8 +15,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
-using Teleopti.Ccc.Domain.Tracking;
-using Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.DomainTest.Common;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -142,6 +140,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				cancelRequestCommand.ErrorMessages[0]);
 		}
 
+		[Test]
+		public void ShouldFailGracefullyWhenAttemptingToCancelRequestWhereAbsenceHasBeenModified()
+		{
+			commonSetup();
+
+			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016,03,01,08, 2016,03,01, 14);
+			var absenceRequest = createApprovedAbsenceRequest(absence,dateTimePeriodOfAbsenceRequest,person);
+			var personRequest = absenceRequest.Parent as PersonRequest;
+
+			createPersonAbsence(absence,new DateTimePeriod(2016,03,01, 09, 2016,03,01,13 ),person,personRequest);
+
+			var cancelRequestCommand = new CancelAbsenceRequestCommand()
+			{
+				PersonRequestId = personRequest.Id.GetValueOrDefault()
+			};
+
+			Target.Handle(cancelRequestCommand);
+
+			Assert.AreEqual(1,cancelRequestCommand.ErrorMessages.Count);
+			Assert.AreEqual(string.Format(Resources.CouldNotCancelRequestNoAbsence,
+				CommonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person),
+				absenceRequest.Period.StartDateTimeLocal(LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).Date.ToString("d",UserCulture.GetCulture())),
+				cancelRequestCommand.ErrorMessages[0]);
+		}
+
 
 		[Test]
 		public void ShouldFailGracefullyWhenAttemptingToCancelRequestWhereAbsenceRequestHasNotBeenAccepted()
@@ -169,9 +192,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 
-
-
 		[Test]
+		[Ignore("PBI #41943 No longer support unmatched periods when cancelling request")]
 		public void CancellingARequestWithMultipleAbsencesShouldUpdatePersonAccount()
 		{
 			commonSetup();
@@ -188,6 +210,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
+		[Ignore("PBI #41943 No longer support unmatched periods when cancelling request")]
 		public void ShouldCancelAcceptedRequestAndDeleteMultipleRelatedAbsences()
 		{
 			commonSetup();

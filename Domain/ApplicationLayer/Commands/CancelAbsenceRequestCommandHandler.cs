@@ -17,12 +17,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IWriteProtectedScheduleCommandValidator _writeProtectedScheduleCommandValidator;
 		private readonly ICancelAbsenceRequestCommandValidator _cancelAbsenceRequestCommandValidator;
+		private readonly IGlobalSettingDataRepository _globalSettingsDataRepository;
 
 		public CancelAbsenceRequestCommandHandler(IPersonRequestRepository personRequestRepository,
 			IPersonAbsenceRepository personAbsenceRepository, IPersonAbsenceRemover personAbsenceRemover,
 			IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
 			IWriteProtectedScheduleCommandValidator writeProtectedScheduleCommandValidator,
-			ICancelAbsenceRequestCommandValidator cancelAbsenceRequestCommandValidator)
+			ICancelAbsenceRequestCommandValidator cancelAbsenceRequestCommandValidator, IGlobalSettingDataRepository globalSettingsDataRepository)
 		{
 			_personRequestRepository = personRequestRepository;
 			_personAbsenceRepository = personAbsenceRepository;
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_currentScenario = currentScenario;
 			_writeProtectedScheduleCommandValidator = writeProtectedScheduleCommandValidator;
 			_cancelAbsenceRequestCommandValidator = cancelAbsenceRequestCommandValidator;
+			_globalSettingsDataRepository = globalSettingsDataRepository;
 		}
 
 		public void Handle(CancelAbsenceRequestCommand command)
@@ -63,7 +65,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				return false;
 			}
 
-			var personAbsences = _personAbsenceRepository.Find(personRequest, _currentScenario.Current());
+			var person = personRequest.Person;
+			var period = personRequest.Request.Period;
+			var timezone = personRequest.Request.Person.PermissionInformation.DefaultTimeZone();
+			var periodStartDate = new DateOnly(period.StartDateTimeLocal(timezone));
+			var periodEndDate = new DateOnly(period.EndDateTimeLocal(timezone));
+
+			var dayScheduleForAbsenceReqStart = getScheduleDay(person,periodStartDate);
+			var dayScheduleForAbsenceReqEnd = getScheduleDay(person,periodEndDate);
+
+			var adjustedPeriod = FullDayAbsenceRequestPeriodUtil.AdjustFullDayAbsencePeriodIfRequired(
+				period, person,dayScheduleForAbsenceReqStart,dayScheduleForAbsenceReqEnd,_globalSettingsDataRepository);
+						
+			var personAbsences = _personAbsenceRepository.FindExact(person, adjustedPeriod, absenceRequest.Absence, _currentScenario.Current());
 
 			if (!_cancelAbsenceRequestCommandValidator.ValidateCommand(personRequest, command, absenceRequest, personAbsences))
 			{
@@ -71,8 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			try
-			{
-				var person = personRequest.Person;
+			{				
 				var startDate = personAbsences.Min(pa => pa.Period.StartDateTime);
 				var endDate = personAbsences.Max(pa => pa.Period.EndDateTime);
 				var scheduleRange = getScheduleRange(person, startDate, endDate);
@@ -97,6 +110,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			return false;
+		}
+
+
+		private IScheduleDay getScheduleDay(IPerson person, DateOnly date)
+		{
+			var dictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new [] {person},
+				new ScheduleDictionaryLoadOptions(false, false),
+				new DateOnlyPeriod(date, date),
+				_currentScenario.Current());
+
+			return dictionary[person].ScheduledDay(date);
 		}
 
 		private IScheduleRange getScheduleRange(IPerson person, DateTime startDate, DateTime endDate)

@@ -56,5 +56,8 @@ namespace Teleopti.Interfaces.Domain
 		ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence = null);
 
 		IList<IPersonAbsence> Find (IPersonRequest personRequest, IScenario scenario);
+
+		ICollection<IPersonAbsence> FindExact(IPerson person, DateTimePeriod period, IAbsence absence,
+			IScenario scenario);
 	}
 }

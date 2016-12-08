@@ -14314,7 +14314,7 @@ Check your internet connection or contact your administrator.</value>
     <comment>Fail Message for Removing Activity</comment>
   </data>
   <data name="CouldNotCancelRequestNoAbsence" xml:space="preserve">
-    <value>The absence request for {0} on {1} could not be cancelled as no related absence was found.</value>
+    <value>The absence request for {0} on {1} could not be cancelled as the related absence can not be found or has been modified.</value>
     <comment>Used to display an error message to the user when they have attempted to cancel an absence request where, for whatever reason, a related absence can not be located. Parameters are {0} Person {1} Date.</comment>
   </data>
   <data name="PartialSuccessMessageForRemovingActivity" xml:space="preserve">
@@ -14322,7 +14322,7 @@ Check your internet connection or contact your administrator.</value>
     <comment>Partial success message for removing activity</comment>
   </data>
   <data name="CouldNotCancelRequestNoAbsenceMultiDay" xml:space="preserve">
-    <value>The absence request for {0} from {1} - {2} could not be cancelled as no related absence was found.</value>
+    <value>The absence request for {0} from {1} - {2} could not be cancelled as the related absence can not be found or has been modified.</value>
     <comment>Used to display an error message to the user when they have attempted to cancel an absence request where, for whatever reason, a related absence can not be located. Parameters are {0} Person {1} Start Date/Time (2) End Date/Time</comment>
   </data>
   <data name="AddAbsenceFailed" xml:space="preserve">
