@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 	        public bool HasCurrentUnitOfWork()
 	        {
-		        throw new NotImplementedException();
+		        return false;
 	        }
 
 	        public IAuditSetter AuditSetting
