@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 			var islandsModel = new IslandsModel
 			{
 				Islands = islandModels,
-				TimeToGenerateInSeconds = (int) Math.Ceiling(timeToGenerate.TotalSeconds)
+				TimeToGenerateInMs = (int) Math.Ceiling(timeToGenerate.TotalMilliseconds)
 			};
 			islandsModel.NumberOfAgentsOnAllIsland = islandsModel.Islands.Sum(x => x.NumberOfAgentsOnIsland);
 			return islandsModel;

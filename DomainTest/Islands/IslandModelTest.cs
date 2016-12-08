@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -186,8 +187,8 @@ namespace Teleopti.Ccc.DomainTest.Islands
 			var model = IslandModelFactory.Create();
 
 			//not really asserting any "real" value - just here as info for us devs
-			model.AfterReducing.TimeToGenerateInSeconds.Should().Be.GreaterThanOrEqualTo(1);
-			model.AfterReducing.TimeToGenerateInSeconds.Should().Be.GreaterThanOrEqualTo(1);
+			model.AfterReducing.TimeToGenerateInMs.Should().Be.GreaterThan(0);
+			model.BeforeReducing.TimeToGenerateInMs.Should().Be.GreaterThan(0);
 		}
 	}
 }
