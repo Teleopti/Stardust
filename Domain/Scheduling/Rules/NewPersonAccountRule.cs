@@ -10,8 +10,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	public class NewPersonAccountRule : INewBusinessRule
 	{
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+
 		//private readonly ISchedulingResultStateHolder _schedules;
 		private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
+
 		private bool _haltModify = true;
 		private bool _forDelete;
 		private static readonly object modifiedAccountLock = new object();
@@ -42,6 +44,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			get { return _haltModify; }
 			set { _haltModify = value; }
 		}
+
+		public bool Configurable => false;
 
 		public bool ForDelete
 		{
@@ -134,7 +138,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		public string FriendlyName { get; }
 		public string Description { get; }
-
 
 		private IBusinessRuleResponse createResponse(IPerson person, IDateOnlyAsDateTimePeriod dateOnly, string message, Type type, Guid? absenceId)
 		{

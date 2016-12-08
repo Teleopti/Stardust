@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		public string ErrorMessage { get; private set; }
 		public bool IsMandatory { get; private set; }
 		public bool HaltModify { get; set; }
+		public bool Configurable => false;
 		public bool ForDelete { get; set; }
 
 		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)

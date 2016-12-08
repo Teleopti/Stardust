@@ -28,6 +28,11 @@ namespace Teleopti.Interfaces.Domain
 		bool HaltModify { get; set; }
 
 		/// <summary>
+		/// Indicate if this rule is configurable for administrator
+		/// </summary>
+		bool Configurable { get; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether the rule is runned when deleting.
 		/// </summary>
 		/// <value><c>true</c> if [for delete]; otherwise, <c>false</c>.</value>

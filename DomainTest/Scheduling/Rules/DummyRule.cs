@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public bool IsMandatory { get; }
 
 		public bool HaltModify { get; set; }
+		public bool Configurable => true;
 
 		public bool ForDelete
 		{

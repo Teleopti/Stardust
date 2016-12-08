@@ -244,6 +244,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                 set { throw new NotImplementedException(); }
             }
 
+            public bool Configurable => true;
+
             public bool ForDelete
             {
                 get { throw new NotImplementedException(); }

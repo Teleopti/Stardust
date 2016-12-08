@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -14,15 +16,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldReturnCorrectDefaultBusinessRulesConfig()
 		{
-			var unconfiguraableRules = new[]
-			{
-				typeof(DataPartOfAgentDay),
-				typeof(NewPersonAccountRule),
-				typeof(OpenHoursRule)
-			};
-
 			var ruleToRemove1 = typeof(MinWeeklyRestRule);
 			var ruleToRemove2 = typeof(MinWeekWorkTimeRule);
+
+			var rulesToRemove = new List<Type> {ruleToRemove1, ruleToRemove2};
 
 			var stateHolder = new FakeSchedulingResultStateHolder();
 			var businessRules = NewBusinessRuleCollection.All(new SchedulingResultStateHolder());
@@ -33,8 +30,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			businessRuleProvider.Stub(x => x.GetBusinessRulesForShiftTradeRequest(stateHolder, true))
 				.IgnoreArguments().Return(businessRules);
 
-			var configurableRules = businessRules.Where(x => !unconfiguraableRules.Contains(x.GetType())
-					 && x.GetType() != ruleToRemove1 && x.GetType() != ruleToRemove2).ToArray();
+			var configurableRules = businessRules.Where(x => x.Configurable && (x.IsMandatory || x.HaltModify)
+															 && !rulesToRemove.Contains(x.GetType())).ToArray();
 
 			var target = new BusinessRuleConfigProvider(businessRuleProvider, stateHolder);
 			var result = target.GetDefaultConfigForShiftTradeRequest().ToList();
@@ -42,9 +39,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			Assert.AreEqual(configurableRules.Length, result.Count);
 
 			// Should not contins unconfigurable rules and removed rules
-			var rulesShouldNotExists = unconfiguraableRules.Select(x => x.FullName).ToList();
-			rulesShouldNotExists.Add(ruleToRemove1.FullName);
-			rulesShouldNotExists.Add(ruleToRemove2.FullName);
+			var rulesShouldNotExists = businessRules
+				.Where(r => !r.Configurable || (!r.IsMandatory && !r.HaltModify))
+				.Select(r => r.GetType().FullName).ToList();
+			rulesShouldNotExists.AddRange(rulesToRemove.Select(r => r.FullName));
+
 			Assert.IsTrue(result.All(x => !rulesShouldNotExists.Contains(x.BusinessRuleType)));
 
 			foreach (var rule in configurableRules)

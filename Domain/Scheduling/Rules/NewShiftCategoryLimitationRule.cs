@@ -37,6 +37,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			set { _haltModify = value; }
 		}
 
+		public bool Configurable => true;
+
 		public bool ForDelete { get; set; }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Scheduling.Rules.NewShiftCategoryLimitationRule.createResponse(Teleopti.Interfaces.Domain.IPerson,Teleopti.Interfaces.Domain.DateOnly,System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]

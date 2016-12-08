@@ -49,6 +49,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			set { _haltModify = value; }
 		}
 
+		public bool Configurable => true;
+
 		public bool ForDelete { get; set; }
 
 		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,
