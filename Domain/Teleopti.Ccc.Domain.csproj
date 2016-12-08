@@ -947,9 +947,8 @@
     <Compile Include="Common\AgentBadgeWithRank.cs" />
     <Compile Include="Common\AgentBadgeWithRankTransaction.cs" />
     <Compile Include="Common\CommonAgentNameProvider.cs" />
-    <Compile Include="Common\NoBusinessUnitForRequest.cs" />
     <Compile Include="Common\IDataSourceScope.cs" />
-    <Compile Include="Common\IBusinessUnitForRequest.cs" />
+    <Compile Include="Common\IBusinessUnitIdForRequest.cs" />
     <Compile Include="ApplicationLayer\Events\PersonPeriodChangedEvent.cs" />
     <Compile Include="Aop\TestLogTimeAspect.cs" />
     <Compile Include="Aop\TestLogTimeAttribute.cs" />

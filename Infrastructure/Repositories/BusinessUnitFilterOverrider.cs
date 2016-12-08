@@ -20,11 +20,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public IDisposable OverrideWith(Guid buId)
         {
             _unitOfWork.Current().DisableFilter(QueryFilter.BusinessUnit);
-            _unitOfWork.Session().EnableFilter("businessUnitFilter").SetParameter("businessUnitParameter", buId);
+            _unitOfWork.Session().EnableFilter(QueryFilter.BusinessUnit.Name).SetParameter("businessUnitParameter", buId);
             return new GenericDisposable(() =>
             {
                 _unitOfWork.Current().DisableFilter(QueryFilter.BusinessUnit);
-                _unitOfWork.Session().EnableFilter("businessUnitFilter").SetParameter("businessUnitParameter", _identity.Current().BusinessUnit.Id.Value);
+                _unitOfWork.Session().EnableFilter(QueryFilter.BusinessUnit.Name).SetParameter("businessUnitParameter", _identity.Current().BusinessUnit.Id.Value);
             });
         }
     }

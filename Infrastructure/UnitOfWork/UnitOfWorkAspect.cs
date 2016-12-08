@@ -1,7 +1,8 @@
 using System;
-using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Aop.Core;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Infrastructure;
@@ -12,68 +13,57 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	{
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IBusinessUnitFilterOverrider _overrider;
-		private readonly ICurrentHttpContext _context;
+		private readonly IBusinessUnitIdForRequest _businessUnitIdForRequest;
 		private IUnitOfWork _unitOfWork;
 		private IDisposable _businessUnitOverrideScope;
 
-		public UnitOfWorkAspect(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IBusinessUnitFilterOverrider overrider, ICurrentHttpContext context)
+		public UnitOfWorkAspect(
+			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
+			IBusinessUnitFilterOverrider overrider, 
+			IBusinessUnitIdForRequest businessUnitIdForRequest)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_overrider = overrider;
-			_context = context;
+			_businessUnitIdForRequest = businessUnitIdForRequest;
 		}
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
 			_unitOfWork = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
-			_businessUnitOverrideScope = overrideBusinessUnitFilter();
+			try
+			{
+				var id = _businessUnitIdForRequest.Get();
+				if (id.HasValue)
+					_businessUnitOverrideScope = _overrider.OverrideWith(id.Value);
+			}
+			catch (Exception)
+			{
+				_unitOfWork.Dispose();
+				throw;
+			}
 		}
 
 		public virtual void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 		{
 			try
 			{
-				persistWhenNoExpcetion(exception);
+				if (exception != null) return;
+				_unitOfWork.PersistAll();
 			}
 			finally
 			{
-				diposeBusinessUnitFilterOverride();
-				_unitOfWork.Dispose();
+				try
+				{
+					_businessUnitOverrideScope?.Dispose();
+					_businessUnitOverrideScope = null;
+				}
+				finally
+				{
+					_unitOfWork.Dispose();
+				}
 			}
 		}
-
-		private void persistWhenNoExpcetion(Exception exception)
-		{
-			if (exception != null) return;
-
-			_unitOfWork.PersistAll();
-		}
-
-		private IDisposable overrideBusinessUnitFilter()
-		{
-			var id = BusinessUnitIdForRequest(_context);
-			return id.HasValue ? _overrider.OverrideWith(id.Value) : new GenericDisposable(()=>{});
-		}
-
-		public static Guid? BusinessUnitIdForRequest(ICurrentHttpContext context)
-		{
-			if (context.Current() == null) return null;
-			var buId = string.Empty;
-			var queryString = context.Current().Request.QueryString;
-			if (queryString != null)
-				buId = queryString["BusinessUnitId"];
-			var headers = context.Current().Request.Headers;
-			if (headers != null)
-				buId = headers["X-Business-Unit-Filter"] ?? buId;
-			if (string.IsNullOrEmpty(buId)) return null;
-			return Guid.Parse(buId);
-		}
-
-		private void diposeBusinessUnitFilterOverride()
-		{
-			_businessUnitOverrideScope.Dispose();
-			_businessUnitOverrideScope = null;
-		}
+		
 	}
 
 }

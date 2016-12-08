@@ -5,7 +5,9 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -29,6 +31,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 		public TheServiceImpl TheService;
 		public MutableFakeCurrentHttpContext HttpContext;
+		public ICurrentUnitOfWork UnitOfWork;
+		public ICurrentIdentity Identity;
 		public IPersonRepository PersonRepository;
 		public IBusinessUnitRepository BusinessUnitRepository;
 		public ISiteRepository SiteRepository;
@@ -124,7 +128,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			});
 
 			IEnumerable<ISite> sites = null;
-			var queryStringParams = new NameValueCollection { { "BusinessUnitId", businessUnit2.Id.Value.ToString() } };
+			var queryStringParams = new NameValueCollection {{"BusinessUnitId", businessUnit2.Id.Value.ToString()}};
 			HttpContext.SetContext(new FakeHttpContext(null, null, null, queryStringParams, null, null));
 			TheService.Does(uow =>
 			{
@@ -152,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			});
 
 			IEnumerable<ISite> sites = null;
-			var headers = new NameValueCollection { { "X-Business-Unit-Filter", businessUnit2.Id.Value.ToString() } };
+			var headers = new NameValueCollection {{"X-Business-Unit-Filter", businessUnit2.Id.Value.ToString()}};
 			HttpContext.SetContext(new FakeHttpContext(null, null, null, null, null, null, null, headers));
 			TheService.Does(uow =>
 			{
@@ -163,10 +167,48 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		}
 
 		[Test]
-		[Ignore("Reason mandatory for NUnit 3")]
+		[Ignore("Implemented but not tested")]
 		public void ShouldFilterOnBusinessUnitFromHttpHeaderOverQueryString()
 		{
 			Assert.Fail();
+		}
+
+		[Test]
+		public void ShouldNotLeakUnitOfWorkAndConnectionOnInvalidBusinessUnit()
+		{
+			var headers = new NameValueCollection {{"X-Business-Unit-Filter", "invalid value"}};
+			HttpContext.SetContext(new FakeHttpContext(null, null, null, null, null, null, null, headers));
+
+			Assert.Throws<FormatException>(() =>
+			{
+				TheService.Does(x =>
+				{
+				});
+			});
+
+			UnitOfWork.HasCurrent().Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldNotLeakUnitOfWorkAndConnectionOnResettingToInvalidBusinessUnit()
+		{
+			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit();
+			TheService.Does(uow =>
+			{
+				BusinessUnitRepository.Add(businessUnit);
+			});
+			var headers = new NameValueCollection { { "X-Business-Unit-Filter", businessUnit.Id.ToString() } };
+			HttpContext.SetContext(new FakeHttpContext(null, null, null, null, null, null, null, headers));
+
+			Assert.Throws<NullReferenceException>(() =>
+			{
+				TheService.Does(x =>
+				{
+					(Identity.Current() as TeleoptiIdentity).BusinessUnit = null;
+				});
+			});
+
+			UnitOfWork.HasCurrent().Should().Be.False();
 		}
 
 	}

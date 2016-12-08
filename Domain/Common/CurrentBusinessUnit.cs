@@ -1,25 +1,35 @@
 using System.Threading;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Common
 {
 	public class CurrentBusinessUnit : ICurrentBusinessUnit, IBusinessUnitScope
 	{
 		private readonly ICurrentIdentity _identity;
-		private readonly IBusinessUnitForRequest _businessUnitForRequest;
+		private readonly IBusinessUnitIdForRequest _businessUnitIdForRequest;
+		private readonly ICurrentUnitOfWork _unitOfWork;
+		private readonly IBusinessUnitRepository _businessUnitRepository;
 		private readonly ThreadLocal<IBusinessUnit> _threadBusinessUnit = new ThreadLocal<IBusinessUnit>();
 
 		public static ICurrentBusinessUnit Make()
 		{
 			var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()));
-			return new CurrentBusinessUnit(identity, new NoBusinessUnitForRequest());
+			return new CurrentBusinessUnit(identity, null, null, null);
 		}
 
-		public CurrentBusinessUnit(ICurrentIdentity identity, IBusinessUnitForRequest businessUnitForRequest)
+		public CurrentBusinessUnit(
+			ICurrentIdentity identity, 
+			IBusinessUnitIdForRequest businessUnitIdForRequest,
+			ICurrentUnitOfWork unitOfWork,
+			IBusinessUnitRepository businessUnitRepository)
 		{
 			_identity = identity;
-			_businessUnitForRequest = businessUnitForRequest;
+			_businessUnitIdForRequest = businessUnitIdForRequest;
+			_unitOfWork = unitOfWork;
+			_businessUnitRepository = businessUnitRepository;
 		}
 
 		public IBusinessUnit Current()
@@ -27,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Common
 			if (_threadBusinessUnit.Value != null)
 				return _threadBusinessUnit.Value;
 
-			var businessUnit = _businessUnitForRequest.TryGetBusinessUnit();
+			var businessUnit = businessUnitForRequest();
 			if (businessUnit != null)
 				return businessUnit;
 
@@ -39,5 +49,18 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			_threadBusinessUnit.Value = businessUnit;
 		}
+
+		private IBusinessUnit businessUnitForRequest()
+		{
+			if (_unitOfWork == null || _businessUnitIdForRequest == null || _businessUnitRepository == null)
+				return null;
+			if (!_unitOfWork.HasCurrent())
+				return null;
+			var buid = _businessUnitIdForRequest.Get();
+			if (!buid.HasValue)
+				return null;
+			return _businessUnitRepository.Load(buid.Value);
+		}
+
 	}
 }

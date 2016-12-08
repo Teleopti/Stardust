@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<ICurrentBusinessUnit>()
 				.As<IBusinessUnitScope>()
 				.SingleInstance();
-			builder.RegisterType<NoBusinessUnitForRequest>().As<IBusinessUnitForRequest>().SingleInstance();
+			builder.RegisterType<BusinessUnitIdIdForRequest>().As<IBusinessUnitIdForRequest>().SingleInstance();
 
 			builder.RegisterType<CurrentInitiatorIdentifier>()
 				.As<ICurrentInitiatorIdentifier>()
