@@ -21,7 +21,6 @@
 			'Toggle',
 			'NoticeService',
 			'$timeout',
-			'$element',
 			function($scope,
 				$filter,
 				$state,
@@ -38,8 +37,7 @@
 				FakeTimeService,
 				toggleService,
 				NoticeService,
-				$timeout,
-				$element
+				$timeout
 			) {
 				var selectedPersonId, lastUpdate, notice;
 				var polling = null;
@@ -148,6 +146,7 @@
 				};
 
 				$scope.selectedSkillChange = function(skill) {
+					console.info(skill,'?');
 					if (!skill) return;
 					$scope.skillId = skill.Id;
 					stateGoToAgents({
@@ -809,9 +808,9 @@
 					showPopupButton: true
 				};
 
-				$element.find('input').on('keydown', function(ev) {
-				 ev.stopPropagation();
-		 		});
+				// $element.find('input').on('keydown', function(ev) {
+				//  ev.stopPropagation();
+				// 	});
 			}
 		]);
 })();
