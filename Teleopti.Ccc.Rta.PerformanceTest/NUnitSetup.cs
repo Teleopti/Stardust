@@ -42,62 +42,64 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 
 			TestSiteConfigurationSetup.Setup();
 
-			IntegrationIoCTest.Setup(builder =>
-			{
-				builder.RegisterType<TestConfiguration>().SingleInstance();
-				builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
-				builder.RegisterType<StatesSender>().SingleInstance().ApplyAspects();
-				builder.RegisterType<StatesArePersisted>().SingleInstance().ApplyAspects();
-				builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
-				builder.RegisterType<ConfigurableSyncEventPublisher>().SingleInstance();
-				builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
-			}, this);
-			
 			var dataHash = DefaultDataCreator.HashValue ^ TestConfiguration.HashValue;
 			var path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Rta");
 
-			Console.WriteLine("COMEONENOWFNURK");
-			var a = DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash);
-			Console.WriteLine("/COMEONENOWFNURK");
 			var haveDatabases =
-				a &&
+				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
 				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
 			if (!haveDatabases)
-				createDatabase(path, dataHash);
+			{
+				DataSourceHelper.CreateDatabases();
 
+				IntegrationIoCTest.Setup(builder =>
+				{
+					builder.RegisterType<TestConfiguration>().SingleInstance();
+					builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
+					builder.RegisterType<StatesSender>().SingleInstance().ApplyAspects();
+					builder.RegisterType<StatesArePersisted>().SingleInstance().ApplyAspects();
+					builder.RegisterType<ConfigurableSyncEventPublisher>().SingleInstance();
+					builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
+				}, this);
+
+				StateHolderProxyHelper.SetupFakeState(
+					DataSourceHelper.CreateDataSource(TransactionHooks),
+					DefaultPersonThatCreatesData.PersonThatCreatesDbData,
+					DefaultBusinessUnit.BusinessUnit
+				);
+
+				DefaultDataCreator.Create();
+				DefaultAnalyticsDataCreator.OneTimeSetup();
+				DataSourceHelper.ClearAnalyticsData();
+				DefaultAnalyticsDataCreator.Create();
+				DataCreator.Create();
+
+				DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
+				DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
+
+				StateHolderProxyHelper.Logout();
+			}
+			else
+			{
+				IntegrationIoCTest.Setup(builder =>
+				{
+					builder.RegisterType<TestConfiguration>().SingleInstance();
+					builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
+					builder.RegisterType<StatesSender>().SingleInstance().ApplyAspects();
+					builder.RegisterType<StatesArePersisted>().SingleInstance().ApplyAspects();
+					builder.RegisterType<ConfigurableSyncEventPublisher>().SingleInstance();
+					builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
+				}, this);
+			}
+			
 			HangfireClientStarter.Start();
-
-			TestSiteConfigurationSetup.RecycleApplication();
-			TestSiteConfigurationSetup.StartApplicationSync();
 
 			Guid businessUnitId;
 			using (DataSource.OnThisThreadUse(DataSourceHelper.TestTenantName))
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
 			Impersonate.Impersonate(DataSourceHelper.TestTenantName, businessUnitId);
 		}
-
-		private void createDatabase(string path, int dataHash)
-		{
-			DataSourceHelper.CreateDatabases();
-
-			StateHolderProxyHelper.SetupFakeState(
-				DataSourceHelper.CreateDataSource(TransactionHooks),
-				DefaultPersonThatCreatesData.PersonThatCreatesDbData,
-				DefaultBusinessUnit.BusinessUnit
-				);
-
-			DefaultDataCreator.Create();
-			DefaultAnalyticsDataCreator.OneTimeSetup();
-			DataSourceHelper.ClearAnalyticsData();
-			DefaultAnalyticsDataCreator.Create();
-			DataCreator.Create();
-
-			DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
-			DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
-
-			StateHolderProxyHelper.Logout();
-		}
-
+		
 		[OneTimeTearDown]
 		public void Teardown()
 		{

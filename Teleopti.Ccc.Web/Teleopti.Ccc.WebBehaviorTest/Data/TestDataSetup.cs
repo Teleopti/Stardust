@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			LocalSystem.DefaultDataCreator.Create();
 			LocalSystem.DefaultAnalyticsDataCreator.OneTimeSetup();
 
-			DataSourceHelper.BackupApplicationDatabase(LocalSystem.DefaultDataCreator.HashValue);
+			DataSourceHelper.BackupApplicationDatabase(DefaultDataCreator.HashValue);
 		}
 
 		public static void ClearAnalyticsData()
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void RestoreCcc7Data()
 		{
-			DataSourceHelper.RestoreApplicationDatabase(LocalSystem.DefaultDataCreator.HashValue);
+			DataSourceHelper.RestoreApplicationDatabase(DefaultDataCreator.HashValue);
 		}
 
 		public static void SetupDefaultScenario()

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 			_unitOfWork = unitOfWork;
 		}
 
-		private readonly IEnumerable<IHashableDataSetup> setups = new IHashableDataSetup[]
+		private static readonly IEnumerable<IHashableDataSetup> setups = new IHashableDataSetup[]
 		{
 			new DefaultPersonThatCreatesData(),
 			new DefaultLicense(),
@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 			new DefaultMatrixApplicationFunctions()
 		};
 
-		private int? _hashValue;
+		private static int? _hashValue;
 
-		public int HashValue
+		public static int HashValue
 		{
 			get
 			{
