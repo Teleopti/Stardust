@@ -95,11 +95,11 @@ SELECT
 	f.scheduled_contract_time_absence_m,
 	f.scheduled_work_time_absence_m,
 	f.scheduled_paid_time_absence_m
-FROM mart.fact_schedule f
-INNER JOIN mart.dim_person p
+FROM mart.fact_schedule f with (nolock)
+INNER JOIN mart.dim_person p  with (nolock)
 	ON f.person_id=p.person_id
 	AND f.shift_startdate_local_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
-INNER JOIN mart.dim_date d
+INNER JOIN mart.dim_date d  with (nolock)
 	ON d.date_id = f.shift_startdate_local_id
 WHERE d.date_date BETWEEN @date_from AND @date_to
 AND f.scenario_id = @scenario_id
@@ -122,7 +122,7 @@ BEGIN
 				0
 	FROM 
 		  #fact_schedule f
-	INNER JOIN mart.dim_absence ab
+	INNER JOIN mart.dim_absence ab  with (nolock)
 		  ON ab.absence_id=f.absence_id
 	WHERE ab.absence_id IN (SELECT id FROM #absences)--only selected absences
 	AND ab.absence_id<>-1 --ej activity
@@ -144,7 +144,7 @@ BEGIN
 				0
 	FROM 
 		  #fact_schedule f
-	INNER JOIN mart.dim_absence ab
+	INNER JOIN mart.dim_absence ab  with (nolock)
 		  ON ab.absence_id=f.absence_id
 	WHERE ab.absence_id IN (SELECT id FROM #absences)--only selected absences
 	AND ab.absence_id<>-1 --ej activity
@@ -154,10 +154,10 @@ END
 /*part day or full day?*/
 INSERT INTO #full_absence_days
 SELECT p.person_code,d.date_date, absence_id,day_count
-FROM mart.fact_schedule_day_count f
-INNER JOIN mart.dim_person p
+FROM mart.fact_schedule_day_count f  with (nolock)
+INNER JOIN mart.dim_person p  with (nolock)
       ON f.person_id=p.person_id
-INNER JOIN mart.dim_date d 
+INNER JOIN mart.dim_date d   with (nolock)
       ON f.shift_startdate_local_id = d.date_id
 WHERE d.date_date BETWEEN @date_from AND @date_to
 AND f.scenario_id=@scenario_id
