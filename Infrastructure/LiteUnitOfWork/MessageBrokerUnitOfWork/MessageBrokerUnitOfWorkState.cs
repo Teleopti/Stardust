@@ -11,8 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork
 {
 	public class MessageBrokerUnitOfWorkState : ICurrentMessageBrokerUnitOfWork, IMessageBrokerUnitOfWorkScope, IDisposable
 	{
-		[ThreadStatic]
-		private static IDictionary _threadState;
+		[ThreadStatic] private static IDictionary _threadState;
 		private const string itemsKey = "MessageBrokerUnitOfWork";
 
 		private readonly ICurrentHttpContext _httpContext;
@@ -67,9 +66,15 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork
 			if (uow == null)
 				return;
 			setItem(itemsKey, null);
-			if (exception == null)
-				uow.Commit();
-			uow.Dispose();
+			try
+			{
+				if (exception == null)
+					uow.Commit();
+			}
+			finally
+			{
+				uow.Dispose();
+			}
 		}
 
 		private T getItem<T>(string key)
