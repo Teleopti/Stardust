@@ -7,6 +7,10 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork
 {
+	public class NestedReadModelUnitOfWorkException : Exception
+	{
+	}
+
 	public class ReadModelUnitOfWorkFactory : IReadModelUnitOfWorkFactory
 	{
 		private readonly string _connectionString;
@@ -29,6 +33,8 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork
 
 		public void StartUnitOfWork()
 		{
+			if (_state.Get() != null)
+				throw new NestedReadModelUnitOfWorkException();
 			_state.Set(new LiteUnitOfWork(_sessionFactory.OpenSession()));
 		}
 
