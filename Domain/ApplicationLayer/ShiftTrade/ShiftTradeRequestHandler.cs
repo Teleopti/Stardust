@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Specification;
-using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -49,7 +48,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IShiftTradePendingReasonsService _shiftTradePendingReasonsService;
-		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 		private readonly IShiftTradeValidator _validator;
 
 		public ShiftTradeRequestHandler(
@@ -63,8 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation,
 			IDifferenceCollectionService<IPersistableScheduleData> differenceService,
 			IBusinessRuleProvider businessRuleProvider,
-			IShiftTradePendingReasonsService shiftTradePendingReasonsService,
-			IGlobalSettingDataRepository globalSettingDataRepository)
+			IShiftTradePendingReasonsService shiftTradePendingReasonsService)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_validator = validator;
@@ -79,7 +76,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			_differenceService = differenceService;
 			_businessRuleProvider = businessRuleProvider;
 			_shiftTradePendingReasonsService = shiftTradePendingReasonsService;
-			_globalSettingDataRepository = globalSettingDataRepository;
 
 			logger.Info("New instance of Shift Trade saga was created");
 		}
@@ -172,11 +168,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 					if (shouldShiftTradeBeAutoGranted.IsSatisfiedBy(shiftTradeRequest))
 					{
 						var ruleResponses = autoApproveShiftTrade(personRequest, approvalService);
-
-						var shouldDeny = _businessRuleProvider.ShouldDeny(allEnabledRules, ruleResponses);
-						if (shouldDeny)
+						if (ruleResponses.Any())
 						{
-							personRequest.Deny(ruleResponses.First().Message, _authorization);
+							var shouldDeny = _businessRuleProvider.ShouldDeny(allEnabledRules, ruleResponses);
+							if (shouldDeny)
+							{
+								personRequest.Deny(ruleResponses.First().Message, _authorization);
+							}
 						}
 
 						_shiftTradePendingReasonsService.SetBrokenBusinessRulesFieldOnPersonRequest(ruleResponses, personRequest);
@@ -184,8 +182,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 					else
 					{
 						_shiftTradePendingReasonsService.SimulateApproveAndSetBusinessRuleResponsesOnFail(shiftTradeRequest,
-							allEnabledRules,
-							_schedulingResultStateHolder);
+							allEnabledRules, _schedulingResultStateHolder);
 					}
 				}
 				catch (ShiftTradeRequestStatusException exception)

@@ -17,7 +17,6 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -54,12 +53,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			businessRuleProvider = new FakeBusinessRuleProvider();
 			newBusinessRuleCollection = new FakeNewBusinessRuleCollection();
 			shiftTradePendingReasonsService = new ShiftTradePendingReasonsService(requestFactory, scenarioRepository);
-			_globalSettingDataRepository = new FakeGlobalSettingDataRepository();
 
 			target = new ShiftTradeRequestHandler(schedulingResultState, validator, requestFactory, scenarioRepository,
 				personRequestRepository, scheduleStorage, personRepository, personRequestCheckAuthorization,
 				scheduleDictionarySaver, loader, differenceCollectionService, businessRuleProvider,
-				shiftTradePendingReasonsService, _globalSettingDataRepository);
+				shiftTradePendingReasonsService);
 		}
 
 		private ShiftTradeRequestHandler target;
@@ -81,7 +79,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private IBusinessRuleProvider businessRuleProvider;
 		private INewBusinessRuleCollection newBusinessRuleCollection;
 		private IShiftTradePendingReasonsService shiftTradePendingReasonsService;
-		private IGlobalSettingDataRepository _globalSettingDataRepository;
 
 		private void createRepositories()
 		{

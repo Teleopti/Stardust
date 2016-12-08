@@ -38,8 +38,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private IShiftTradePendingReasonsService _shiftTradePendingReasonsService;
 		private ShiftTradeTestHelper _shiftTradeTestHelper;
 
-		private IGlobalSettingDataRepository _globalSettingDataRepository;
-
 		[SetUp]
 		public void Setup()
 
@@ -60,8 +58,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			_shiftTradeTestHelper = new ShiftTradeTestHelper (_schedulingResultStateHolder, _scheduleStorage, _personRepository,
 				_businessRuleProvider, _businessRuleCollection, _currentScenario, new FakeScheduleProjectionReadOnlyActivityProvider());
-
-			_globalSettingDataRepository = new FakeGlobalSettingDataRepository();
 		}
 
 		[Test]
@@ -100,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_target = new ShiftTradeRequestHandler(_schedulingResultStateHolder, validator, _requestFactory, _currentScenario,
 				_personRequestRepository, _scheduleStorage, _personRepository, null, null,
 				_loadSchedulingDataForRequestWithoutResourceCalculation, null, _businessRuleProvider,
-				_shiftTradePendingReasonsService, _globalSettingDataRepository);
+				_shiftTradePendingReasonsService);
 
 			_target.Handle(_shiftTradeTestHelper.GetAcceptShiftTradeEvent(personTo, personRequest.Id.Value));
 
@@ -244,7 +240,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			_shiftTradeTestHelper.HandleRequest(_shiftTradeTestHelper.GetAcceptShiftTradeEvent(personTo, personRequest.Id.Value), toggle39473IsOff);
 
-			return new basicShiftTradeTestResult()
+			return new basicShiftTradeTestResult
 			{
 				ActivityTo = activityPersonTo,
 				ActivityFrom = activityPersonFrom,
