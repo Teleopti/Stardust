@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -58,6 +60,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             target.LastChange = change;
             Assert.AreEqual(change, target.LastChange);
         }
+
+	    [Test]
+	    public void ShouldNotProduceRequestAbsenceRemovedEventWhenNotInDefaultScenario()
+	    {
+		    var nonDefaultScenario = ScenarioFactory.CreateScenario("non default", false, false);
+			var personAbsence = new PersonAbsence(person,nonDefaultScenario,new AbsenceLayer(absence,new DateTimePeriod(2001,1,1,2002,1,1)));
+			personAbsence.NotifyDelete();
+
+		    var events = personAbsence.PopAllEvents();
+		    events.Count().Should().Be.EqualTo(0);
+
+	    }
 
         /// <summary>
         /// Protected constructor works.

@@ -140,8 +140,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public override void NotifyDelete()
 		{
 			base.NotifyDelete();
+			if (!_scenario.DefaultScenario) return;
+
 			var requestPersonAbsenceRemovedEvent = new RequestPersonAbsenceRemovedEvent()
-           {
+			{
 				PersonId = Person.Id.GetValueOrDefault(),
 				ScenarioId = Scenario.Id.GetValueOrDefault(),
 				StartDateTime = Period.StartDateTime,
@@ -149,7 +151,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault(),
 				JobName = "RequestPersonAbsenceRemovedEvent"
 			};
-			
+
 			AddEvent(requestPersonAbsenceRemovedEvent);
 		}
 
