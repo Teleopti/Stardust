@@ -24,8 +24,14 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 		{
 			var unitOfWork = _unitOfWork.Current();
-			unitOfWork.PersistAll();
-			unitOfWork.Dispose();
+			try
+			{
+				unitOfWork.PersistAll();
+			}
+			finally
+			{
+				unitOfWork.Dispose();
+			}
 		}
 	}
 }
