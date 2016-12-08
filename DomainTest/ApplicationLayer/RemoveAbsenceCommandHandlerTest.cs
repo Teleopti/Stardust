@@ -5,7 +5,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
@@ -58,8 +57,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
 			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator,
-				_loggedOnUser, new AbsenceRequestCancelService (new PersonRequestAuthorizationCheckerForTest(), _scenario)
-				, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), new PersonRequestAuthorizationCheckerForTest());
+				_loggedOnUser,
+				new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), new PersonRequestAuthorizationCheckerForTest());
 		}
 
 		[Test]
@@ -88,137 +87,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Assert.That(_scheduleStorage.LoadAll().Any() == false);
 		}
-
-		[Test]
-		public void ShouldCancelApprovedRequestWhenRelatedPersonAbsenceIsRemoved()
-		{
-			var startDate = new DateTime(2015, 10, 1, 13, 0, 0, DateTimeKind.Utc);
-			var endDate = new DateTime(2015, 10, 1, 17, 0, 0, DateTimeKind.Utc);
-			var dateTimePeriod = new DateTimePeriod(startDate, endDate);
-
-			var person = PersonFactory.CreatePersonWithId();
-			var absenceLayer = new AbsenceLayer(new Absence(), dateTimePeriod);
-
-			var absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
-			var absenceRequest = new AbsenceRequest(absence, dateTimePeriod);
-			var personRequest = new PersonRequest(person, absenceRequest);
-
-			var personAbsence = new PersonAbsence(person, _scenario.Current(), absenceLayer, personRequest).WithId();
-			var personAbsenceInDifferentScenario = new PersonAbsence(person, ScenarioFactory.CreateScenarioWithId ("Low", false), absenceLayer, personRequest).WithId();
-
-			personRequest.PersonAbsences.Add (personAbsence);
-			personRequest.PersonAbsences.Add(personAbsenceInDifferentScenario);
-
-			personRequest.Pending();
-			personRequest.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
-
-			_scheduleStorage.Add(personAbsence);
-			_scheduleStorage.Add(personAbsenceInDifferentScenario);
-
-			var target = new RemovePersonAbsenceCommandHandler(_personAbsenceRemover, _scheduleStorage, _scenario);
-
-			var command = new RemovePersonAbsenceCommand
-			{
-				ScheduleDate = startDate,
-				Person = person,
-				PersonAbsences = new[] { personAbsence }
-			};
-
-			target.Handle(command);
-
-			Assert.That(personRequest.IsCancelled);
-		}
-
-		[Test]
-		public void ShouldNotCancelApprovedRequestWhenNotDefaultScenario()
-		{
-
-			var nonDefaultScenario = ScenarioFactory.CreateScenarioWithId ("Low", false);
-			var currentScenario = new FakeCurrentScenario();
-			currentScenario.FakeScenario (nonDefaultScenario);
-
-			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator,
-				_loggedOnUser, new AbsenceRequestCancelService(new PersonRequestAuthorizationCheckerForTest(), currentScenario)
-				, new CheckingPersonalAccountDaysProvider(new FakePersonAbsenceAccountRepository()), new PersonRequestAuthorizationCheckerForTest());
-
-
-			var startDate = new DateTime(2015, 10, 1, 13, 0, 0, DateTimeKind.Utc);
-			var endDate = new DateTime(2015, 10, 1, 17, 0, 0, DateTimeKind.Utc);
-			var dateTimePeriod = new DateTimePeriod(startDate, endDate);
-
-			var person = PersonFactory.CreatePersonWithId();
-			var absenceLayer = new AbsenceLayer(new Absence(), dateTimePeriod);
-
-			var absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
-			var absenceRequest = new AbsenceRequest(absence, dateTimePeriod);
-			var personRequest = new PersonRequest(person, absenceRequest);
-
-			var personAbsence = new PersonAbsence(person, currentScenario.Current(), absenceLayer, personRequest).WithId();
-			
-			personRequest.PersonAbsences.Add(personAbsence);
-			
-			personRequest.Pending();
-			personRequest.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
-
-			_scheduleStorage.Add(personAbsence);
-			
-			var target = new RemovePersonAbsenceCommandHandler (_personAbsenceRemover, _scheduleStorage, currentScenario);
-			var command = new RemovePersonAbsenceCommand
-			{
-				ScheduleDate = startDate,
-				Person = person,
-				PersonAbsences = new[] { personAbsence }
-			};
-
-			target.Handle(command);
-
-			Assert.IsFalse(personRequest.IsCancelled);
-		}
-
-
-		[Test]
-		public void ShouldNotCancelApprovedRequestWhenRelatedPersonAbsenceIsRemovedAndTheRequestHasSplitPartsRemaining()
-		{
-			var startDate = new DateTime(2015, 10, 1, 13, 0, 0, DateTimeKind.Utc);
-			var endDate = new DateTime(2015, 10, 1, 17, 0, 0, DateTimeKind.Utc);
-			var dateTimePeriod = new DateTimePeriod(startDate, endDate);
-			var dateTimePeriod2 = new DateTimePeriod(new DateTime(2015, 10, 3, 13, 0, 0, DateTimeKind.Utc), new DateTime(2015, 10, 3, 17, 0, 0, DateTimeKind.Utc));
-
-			var person = PersonFactory.CreatePersonWithId();
-
-			var absenceLayer = new AbsenceLayer(new Absence(), dateTimePeriod);
-			var absenceLayer2 = new AbsenceLayer(new Absence(), dateTimePeriod2);
-
-			var absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
-			var absenceRequest = new AbsenceRequest(absence, dateTimePeriod);
-			var personRequest = new PersonRequest(person, absenceRequest);
-
-			personRequest.Pending();
-			personRequest.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
-
-			var personAbsence = new PersonAbsence(person, _scenario.Current(), absenceLayer, personRequest).WithId();
-			var personAbsence2 = new PersonAbsence(person, _scenario.Current(), absenceLayer2, personRequest).WithId();
-			personRequest.PersonAbsences.Add(personAbsence);
-			personRequest.PersonAbsences.Add(personAbsence2);
-
-			_scheduleStorage.Add(personAbsence);
-			_scheduleStorage.Add(personAbsence2);
-
-			var target = new RemovePersonAbsenceCommandHandler(_personAbsenceRemover, _scheduleStorage, _scenario);
-
-			var command = new RemovePersonAbsenceCommand
-			{
-				ScheduleDate = startDate,
-				Person = person,
-				PersonAbsences = new[] { personAbsence }
-			};
-
-			target.Handle(command);
-
-			Assert.AreEqual(1, _scheduleStorage.LoadAll().Count);
-			Assert.IsFalse(personRequest.IsCancelled);
-		}
-
 
 
 		[Test]
@@ -356,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				schedulingResultStateHolder);
 			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService,
 				_personAbsenceCreator,
-				_loggedOnUser, new AbsenceRequestCancelService(new PersonRequestAuthorizationCheckerForTest(), _scenario),
+				_loggedOnUser,
 				new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), new PersonRequestAuthorizationCheckerForTest());
 		}
 

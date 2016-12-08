@@ -72,7 +72,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			system.UseTestDouble<CancelAbsenceRequestCommandValidator>().For<ICancelAbsenceRequestCommandValidator>();
 			system.UseTestDouble<WriteProtectedScheduleCommandValidator>().For<IWriteProtectedScheduleCommandValidator>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<AbsenceRequestCancelService>().For<IAbsenceRequestCancelService>();
 			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
 			system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
@@ -383,7 +382,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private PersonAbsence createPersonAbsence(IAbsence absence,DateTimePeriod dateTimePeriodOfAbsenceRequest,IPerson person, IPersonRequest personRequest)
 		{
 			var absenceLayer = new AbsenceLayer(absence,dateTimePeriodOfAbsenceRequest);
-			var personAbsence = new PersonAbsence(person, CurrentScenario.Current(), absenceLayer, personRequest).WithId();
+			var personAbsence = new PersonAbsence(person, CurrentScenario.Current(), absenceLayer).WithId();
 
 			PersonAbsenceRepository.Add(personAbsence);
 			ScheduleStorage.Add(personAbsence);

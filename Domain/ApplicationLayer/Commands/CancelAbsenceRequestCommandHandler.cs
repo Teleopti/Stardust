@@ -18,12 +18,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IWriteProtectedScheduleCommandValidator _writeProtectedScheduleCommandValidator;
 		private readonly ICancelAbsenceRequestCommandValidator _cancelAbsenceRequestCommandValidator;
 		private readonly IGlobalSettingDataRepository _globalSettingsDataRepository;
+		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 
 		public CancelAbsenceRequestCommandHandler(IPersonRequestRepository personRequestRepository,
 			IPersonAbsenceRepository personAbsenceRepository, IPersonAbsenceRemover personAbsenceRemover,
 			IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
 			IWriteProtectedScheduleCommandValidator writeProtectedScheduleCommandValidator,
-			ICancelAbsenceRequestCommandValidator cancelAbsenceRequestCommandValidator, IGlobalSettingDataRepository globalSettingsDataRepository)
+			ICancelAbsenceRequestCommandValidator cancelAbsenceRequestCommandValidator, IGlobalSettingDataRepository globalSettingsDataRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization)
 		{
 			_personRequestRepository = personRequestRepository;
 			_personAbsenceRepository = personAbsenceRepository;
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_writeProtectedScheduleCommandValidator = writeProtectedScheduleCommandValidator;
 			_cancelAbsenceRequestCommandValidator = cancelAbsenceRequestCommandValidator;
 			_globalSettingsDataRepository = globalSettingsDataRepository;
+			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 		}
 
 		public void Handle(CancelAbsenceRequestCommand command)
@@ -101,6 +103,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 					command.ErrorMessages = command.ErrorMessages.Concat(errorMessages).ToList();
 					return false;
 				}
+
+				personRequest.Cancel(_personRequestCheckAuthorization);
 
 				return true;
 			}

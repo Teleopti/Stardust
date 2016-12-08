@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -17,9 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private IScenario _scenario;
 		private IAbsenceLayer _layer;
 		private DateTime? _lastChange;
-		private IPersonRequest _personRequest;
-
-
+		
 		public PersonAbsence(IPerson agent, IScenario scenario, IAbsenceLayer layer)
 		{
 			_person = agent;
@@ -27,15 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_layer = layer;
 			
 		}
-
-
-		public PersonAbsence(IPerson agent, IScenario scenario, IAbsenceLayer layer, IPersonRequest personRequest)
-		{
-			_person = agent;
-			_scenario = scenario;
-			_layer = layer;
-			_personRequest = personRequest;
-		}
+	
 
 		/// <summary>
 		/// Constructor for CommandHandlers
@@ -146,6 +137,22 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			AddEvent(personAbsenceRemovedEvent);
 		}
 
+		public override void NotifyDelete()
+		{
+			base.NotifyDelete();
+			var requestPersonAbsenceRemovedEvent = new RequestPersonAbsenceRemovedEvent()
+           {
+				PersonId = Person.Id.GetValueOrDefault(),
+				ScenarioId = Scenario.Id.GetValueOrDefault(),
+				StartDateTime = Period.StartDateTime,
+				EndDateTime = Period.EndDateTime,
+				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault(),
+				JobName = "RequestPersonAbsenceRemovedEvent"
+			};
+			
+			AddEvent(requestPersonAbsenceRemovedEvent);
+		}
+
 		public virtual void AddExplicitAbsence(IPerson person, IAbsence absence, DateTime startDateTime, DateTime endDateTime)
 		{
 			startDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(startDateTime, DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
@@ -189,28 +196,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			AddEvent(personAbsenceModifiedEvent);
 		}
-
-		public override void NotifyDelete()
-		{
-			base.NotifyDelete();
-			var requestPersonAbsenceRemovedEvent = new RequestPersonAbsenceRemovedEvent()
-			{
-				PersonId = Person.Id.GetValueOrDefault(),
-				ScenarioId = Scenario.Id.GetValueOrDefault(),
-				StartDateTime = Period.StartDateTime,
-				EndDateTime = Period.EndDateTime,
-				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault(),
-				JobName = "RequestPersonAbsenceRemovedEvent"
-			};
-
-			if (PersonRequest != null)
-			{
-				requestPersonAbsenceRemovedEvent.PersonRequestId = PersonRequest.Id.GetValueOrDefault();
-			}
-
-			AddEvent(requestPersonAbsenceRemovedEvent);
-		}
-		
+				
 		protected PersonAbsence()
 		{
 		}
@@ -251,16 +237,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual bool BelongsToScenario(IScenario scenario)
 		{
 			return Scenario.Equals(scenario);
-		}
-
-
-
-		public virtual IPersonRequest PersonRequest
-		{
-			get { return _personRequest; }
-			set { _personRequest = value; }
-		}
-
+		}	
 
 		public virtual string FunctionPath
 		{
@@ -313,7 +290,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						if (dateTimePeriod.ElapsedTime() > TimeSpan.Zero)
 						{
 							var newLayer = new AbsenceLayer(Layer.Payload, dateTimePeriod);
-							IPersonAbsence personAbsence = new PersonAbsence(Person, Scenario, newLayer, _personRequest);
+							IPersonAbsence personAbsence = new PersonAbsence(Person, Scenario, newLayer);
 							splitList.Add(personAbsence);
 						}
 					}

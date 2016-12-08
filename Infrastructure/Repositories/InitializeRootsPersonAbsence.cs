@@ -18,12 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             foreach (var personAbsence in _personAbsences)
             {
                 if (!LazyLoadingManager.IsInitialized(personAbsence.Layer.Payload))
-                    LazyLoadingManager.Initialize(personAbsence.Layer.Payload);
-
-	            if (!LazyLoadingManager.IsInitialized (personAbsence.PersonRequest))
-					LazyLoadingManager.Initialize(personAbsence.PersonRequest);
-	            
-
+                    LazyLoadingManager.Initialize(personAbsence.Layer.Payload);	         
             }
         }
     }

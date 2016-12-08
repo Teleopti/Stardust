@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 						{
 							// add the part before archivePeriod.Start
 							var newLayer = new AbsenceLayer(absence.Layer.Payload, new DateTimePeriod(absence.Period.StartDateTime, archivePeriod.StartDateTime.AddMinutes(-1)));
-							IPersonAbsence personAbsence = new PersonAbsence(absence.Person, absence.Scenario, newLayer, absence.PersonRequest);
+							IPersonAbsence personAbsence = new PersonAbsence(absence.Person, absence.Scenario, newLayer);
 							_scheduleStorage.Add(personAbsence);
 
 						}
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 						{
 							// add the part after archivePeriod.End
 							var newLayer = new AbsenceLayer(absence.Layer.Payload, new DateTimePeriod(archivePeriod.EndDateTime.AddMinutes(1), absence.Period.EndDateTime));
-							IPersonAbsence personAbsence = new PersonAbsence(absence.Person, absence.Scenario, newLayer, absence.PersonRequest);
+							IPersonAbsence personAbsence = new PersonAbsence(absence.Person, absence.Scenario, newLayer);
 							_scheduleStorage.Add(personAbsence);
 						}
 

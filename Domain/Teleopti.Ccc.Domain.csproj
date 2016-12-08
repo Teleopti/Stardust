@@ -382,7 +382,6 @@
     <Compile Include="ApplicationLayer\Events\RunRequestWaitlistEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ScenarioChangedEvents.cs" />
     <Compile Include="ApplicationLayer\Events\DayOffTemplateChangedEvent.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestCancelService.cs" />
     <Compile Include="ApplicationLayer\Events\ExportMultisiteSkillsToSkillEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ShiftCategoryChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Forecast\ExportMultisiteSkillProcessor.cs" />

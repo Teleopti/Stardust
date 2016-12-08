@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var absenceLayer = new AbsenceLayer(_absence, new DateTimePeriod(_startDateTime, _endDateTime));
 			_scheduleStorage.Clear();
-			_scheduleStorage.Add(new PersonAbsence(_person, _currentScenario.Current(), absenceLayer, personRequest1));
+			_scheduleStorage.Add(new PersonAbsence(_person, _currentScenario.Current(), absenceLayer));
 
 			_target = new ApproveRequestsWithValidatorsEventHandler(_currentUnitOfWorkFactory,
 				getAbsenceRequestProcessor(_person, _personRequest), _personRequestRepository,
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var absenceLayer = new AbsenceLayer(_absence, new DateTimePeriod(_startDateTime, _endDateTime));
 			_scheduleStorage.Clear();
-			_scheduleStorage.Add(new PersonAbsence(_person, _currentScenario.Current(), absenceLayer, personRequest1));
+			_scheduleStorage.Add(new PersonAbsence(_person, _currentScenario.Current(), absenceLayer));
 
 			_startDateTime = new DateTime(2016, 3, 1, 12, 0, 0, DateTimeKind.Utc);
 			_endDateTime = new DateTime(2016, 3, 1, 14, 0, 0, DateTimeKind.Utc);

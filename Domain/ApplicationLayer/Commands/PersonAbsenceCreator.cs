@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				new DateTimePeriod(absenceCreatorInfo.AbsenceTimePeriod.StartDateTime, 
 				absenceCreatorInfo.AbsenceTimePeriod.EndDateTime));
 
-			var personAbsence = absenceCreatorInfo.ScheduleDay.CreateAndAddAbsence(absenceLayer, absenceCreatorInfo.PersonRequest) as PersonAbsence;
+			var personAbsence = absenceCreatorInfo.ScheduleDay.CreateAndAddAbsence(absenceLayer) as PersonAbsence;
 
 			return personAbsence;
 		}

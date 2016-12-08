@@ -10,14 +10,12 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
@@ -100,26 +98,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Assert.That(!allPersonAbsences.Any());
 		}
 
-		[Test]
-		public void ShouldRetainAbsenceRequestAfterPartOfAbsenceIsDeleted()
-		{
-			var periodForAbsence = new DateTimePeriod(
-				new DateTime(2016, 03, 1, 13, 0, 0, DateTimeKind.Utc),
-				new DateTime(2016, 03, 5, 17, 0, 0, DateTimeKind.Utc));
-
-			var periodToRemove = new DateTimePeriod(
-				new DateTime(2016, 03, 2, 0, 0, 0, DateTimeKind.Utc),
-				new DateTime(2016, 03, 3, 8, 0, 0, DateTimeKind.Utc));
-
-			var absence = AbsenceFactory.CreateAbsence("holiday");
-			var absenceRequest = new AbsenceRequest(absence, periodForAbsence);
-
-			var allPersonAbsences = removePartPersonAbsence(periodForAbsence, periodToRemove, absenceRequest).ToArray();
-			var personAbsence1 = (PersonAbsence)allPersonAbsences[0];
-			var personAbsence2 = (PersonAbsence)allPersonAbsences[1];
-			Assert.AreSame(absenceRequest.Parent, personAbsence1.PersonRequest);
-			Assert.AreSame(absenceRequest.Parent, personAbsence2.PersonRequest);
-		}
+		
 
 		[Test]
 		public void ShouldRemovePartPersonAbsenceWhenAbsencePeriodCoveredPeriodToRemove()
@@ -198,8 +177,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
-			var personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator, loggedOnUser, new AbsenceRequestCancelService(new PersonRequestAuthorizationCheckerForTest(), _scenario)
-				, new CheckingPersonalAccountDaysProvider(new FakePersonAbsenceAccountRepository()), new PersonRequestAuthorizationCheckerForTest());
+			var personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator, loggedOnUser,
+				new CheckingPersonalAccountDaysProvider(new FakePersonAbsenceAccountRepository()), new PersonRequestAuthorizationCheckerForTest());
 
 			var target = new RemovePartPersonAbsenceCommandHandler(personAbsenceRemover, _scheduleStorage, _scenario);
 
@@ -274,45 +253,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			}
 		}
 
-		[Test]
-		public void ShouldReturnInsufficientPermissionErrorMessage()
-		{
-			var startDate = new DateTime(2016, 01, 01, 00, 00, 00, DateTimeKind.Utc);
-			var endDate = new DateTime(2016, 01, 01, 01, 00, 00, DateTimeKind.Utc);
-			var period = new DateTimePeriod(startDate, endDate);
-			var absence = new Absence();
-			var layer = new AbsenceLayer(absence, period);
-			var person = PersonFactory.CreatePersonWithId();
-			var personAbsence = new PersonAbsence(person, _scenario.Current(), layer).WithId();
-			personAbsence.PersonRequest = new PersonRequest(person, new AbsenceRequest(absence, period));
-
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-
-			var personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService,
-				_personAbsenceCreator, loggedOnUser,
-				new AbsenceRequestCancelService(new PersonRequestAuthorizationCheckerForTest(), _scenario)
-				, new CheckingPersonalAccountDaysProvider(new FakePersonAbsenceAccountRepository()),
-				new PersonRequestAuthorizationCheckerConfigurable { HasCancelPermission = false });
-
-			var target = new RemovePartPersonAbsenceCommandHandler(personAbsenceRemover, _scheduleStorage, _scenario);
-
-			var command = new RemovePartPersonAbsenceCommand
-			{
-				ScheduleDate = startDate,
-				Person = person,
-				PersonAbsences = new[] {personAbsence},
-				PeriodToRemove = period
-			};
-
-			target.Handle(command);
-
-			var error = command.Errors;
-			Assert.That(error != null);
-			Assert.That(error.PersonId == person.Id.Value);
-			Assert.That(error.PersonName == person.Name);
-			Assert.That(error.ErrorMessages.Contains(Resources.InsufficientPermission));
-		}
 
 		private IEnumerable<IPersistableScheduleData> removePartPersonAbsence(DateTimePeriod periodForAbsence,
 			DateTimePeriod periodToRemove, IAbsenceRequest absenceRequest = null)
@@ -327,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
-			var personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator, loggedOnUser, new AbsenceRequestCancelService(new PersonRequestAuthorizationCheckerForTest(), _scenario)
+			var personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator, loggedOnUser
 				, new CheckingPersonalAccountDaysProvider(new FakePersonAbsenceAccountRepository()), new PersonRequestAuthorizationCheckerForTest());
 			var target = new RemovePartPersonAbsenceCommandHandler(personAbsenceRemover, _scheduleStorage, _scenario);
 

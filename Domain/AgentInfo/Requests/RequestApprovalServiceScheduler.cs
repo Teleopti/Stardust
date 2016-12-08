@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			if (dayScheduleForAbsenceReqStart.FullAccess)
 			{
 				var layer = new AbsenceLayer(absence, period);
-				var personAbsence = new PersonAbsence(person, _scenario, layer, personRequest);
+				var personAbsence = new PersonAbsence(person, _scenario, layer);
 
 				scheduleDaysForCheckingAccount.ForEach(s => s.Add(personAbsence));
 

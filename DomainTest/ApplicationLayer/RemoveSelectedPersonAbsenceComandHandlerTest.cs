@@ -3,7 +3,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -60,8 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(_person);
 			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate,_saveSchedulePartService,
-				_personAbsenceCreator,loggedOnUser,
-				new AbsenceRequestCancelService(new PersonRequestAuthorizationCheckerForTest(),_scenario)
+				_personAbsenceCreator,loggedOnUser
 				,new CheckingPersonalAccountDaysProvider(new FakePersonAbsenceAccountRepository()),
 				new PersonRequestAuthorizationCheckerForTest());
 

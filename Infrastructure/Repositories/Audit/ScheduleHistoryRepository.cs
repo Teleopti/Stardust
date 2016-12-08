@@ -64,14 +64,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Gt(periodWithExtraAtEnd.StartDateTime))
 				.Results();
 
-
-			foreach (var absence in absences)
-			{
-				if (!LazyLoadingManager.IsInitialized(absence.PersonRequest))
-					LazyLoadingManager.Initialize(absence.PersonRequest);
-			}
-
-
+	
 			return absences;
 
 		}

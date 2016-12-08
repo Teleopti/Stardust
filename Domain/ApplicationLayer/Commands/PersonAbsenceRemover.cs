@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly ISaveSchedulePartService _saveSchedulePartService;
 		private readonly IPersonAbsenceCreator _personAbsenceCreator;
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly IAbsenceRequestCancelService _absenceRequestCancelService;
 		private readonly ICheckingPersonalAccountDaysProvider _checkingPersonalAccountDaysProvider;
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 
@@ -23,13 +22,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			ISaveSchedulePartService saveSchedulePartService,
 			IPersonAbsenceCreator personAbsenceCreator,
 			ILoggedOnUser loggedOnUser,
-			IAbsenceRequestCancelService absenceRequestCancelService, ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider, IPersonRequestCheckAuthorization personRequestCheckAuthorization)
+		 ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider, IPersonRequestCheckAuthorization personRequestCheckAuthorization)
 		{
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_saveSchedulePartService = saveSchedulePartService;
 			_personAbsenceCreator = personAbsenceCreator;
 			_loggedOnUser = loggedOnUser;
-			_absenceRequestCancelService = absenceRequestCancelService;
 			_checkingPersonalAccountDaysProvider = checkingPersonalAccountDaysProvider;
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 		}
@@ -100,11 +98,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				return new[] {Resources.CouldNotRemoveAbsenceFromProtectedSchedule};
 			}
 
-			if (!hasRemoveAbsencePermission(personAbsences))
-			{
-				return new[] {Resources.InsufficientPermission};
-			}
-
 			foreach (var personAbsence in personAbsences)
 			{
 				personAbsence.RemovePersonAbsence(commandInfo);
@@ -137,7 +130,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				if (!periodToRemove.HasValue)
 				{
 					// Cancel the request if removing entire absence
-					_absenceRequestCancelService.CancelAbsenceRequestsFromPersonAbsence(personAbsence);
 					continue;
 				}
 
@@ -145,7 +137,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				if (!newAbsencePeriods.Any())
 				{
 					// Cancel the request if removing part absence but no new absence need be created
-					_absenceRequestCancelService.CancelAbsenceRequestsFromPersonAbsence(personAbsence);
 					continue;
 				}
 				errorMessages.AddRange(createNewAbsencesForSplitAbsence(person, personAbsence,
@@ -172,7 +163,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 					ScheduleDay = scheduleDay,
 					ScheduleRange = scheduleRange,
 					AbsenceTimePeriod = period,
-					PersonRequest = personAbsence.PersonRequest,
 					TrackedCommandInfo = commandInfo
 				}, false);
 
@@ -208,10 +198,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			return scheduleDaysForChecking;
 		}
 
-		private bool hasRemoveAbsencePermission(IList<IPersonAbsence> personAbsences)
-		{
-			return personAbsences.All(personAbsence => personAbsence.PersonRequest == null
-													   || _personRequestCheckAuthorization.HasCancelRequestPermission(personAbsence.PersonRequest));
-		}
 	}
 }

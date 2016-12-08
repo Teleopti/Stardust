@@ -43,9 +43,7 @@ namespace Teleopti.Interfaces.Domain
 
 	    void ReplaceLayer(IAbsence newAbsence, DateTimePeriod newPeriod);
 	    void RemovePersonAbsence (TrackedCommandInfo trackedCommandInfo);
-
-	    IPersonRequest PersonRequest { get; set; }
-
+	 
 	    void FullDayAbsence(IPerson person, TrackedCommandInfo trackedCommandInfo);
 
 	    void IntradayAbsence(IPerson person, TrackedCommandInfo trackedCommandInfo);

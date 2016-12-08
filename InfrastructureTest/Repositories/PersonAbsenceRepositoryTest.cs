@@ -270,71 +270,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			verifyRelatedObjectsAreEagerlyLoaded(retList);
 			retList.Single().Period.Should().Be.EqualTo(period1);
 		}
-
-
-		[Test]
-		public void CanFindRequestThatCreatedTheAbsence()
-		{
-			var absenceVacation = AbsenceFactory.CreateAbsence("Vacation");
-			PersistAndRemoveFromUnitOfWork(absenceVacation);
-
-			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
-			var absenceRequest = new AbsenceRequest(absenceVacation, period);
-			var personRequest = new PersonRequest(agent, absenceRequest);
-
-			PersistAndRemoveFromUnitOfWork(personRequest);
-
-			var layer1 = new AbsenceLayer(absenceVacation, period);
-			var personAbsence = new PersonAbsence(agent, defaultScenario, layer1, personRequest);
-			PersistAndRemoveFromUnitOfWork(personAbsence);
-
-			var personAbsences = new PersonAbsenceRepository(CurrUnitOfWork).Find(period.ChangeEndTime(TimeSpan.FromDays(1)), defaultScenario).ToArray();
-			var personAbsenceRetrieved = personAbsences[0];
 			
-			Assert.IsTrue(LazyLoadingManager.IsInitialized(personAbsenceRetrieved.PersonRequest));
-			Assert.AreEqual(personRequest.Id, personAbsenceRetrieved.PersonRequest.Id);
-
-		}
-		
-		[Test]
-		public void CanFindRequestThatCreatedTheAbsenceIfInSameScenario()
-		{
-			Assert.IsTrue(testFindAbsenceFromPersonRequest(defaultScenario));
-		}
-
-		[Test]
-		public void CannotFindRequestThatCreatedTheAbsenceIfNotInSameScenario()
-		{
-			Assert.IsFalse(testFindAbsenceFromPersonRequest(ScenarioFactory.CreateScenarioWithId("test", false)));
-		}
-
-		private bool testFindAbsenceFromPersonRequest(IScenario queryScenario)
-	    {
-
-			var absenceVacation = AbsenceFactory.CreateAbsence("Vacation");
-			PersistAndRemoveFromUnitOfWork(absenceVacation);
-
-			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
-			var absenceRequest = new AbsenceRequest(absenceVacation, period);
-			var personRequest = new PersonRequest(agent, absenceRequest);
-
-			PersistAndRemoveFromUnitOfWork(personRequest);
-
-			var layer1 = new AbsenceLayer(absenceVacation, period);
-			var personAbsence = new PersonAbsence(agent, defaultScenario, layer1, personRequest);
-			PersistAndRemoveFromUnitOfWork(personAbsence);
-
-			var personAbsences = new PersonAbsenceRepository(CurrUnitOfWork).Find(personRequest, queryScenario).ToArray();
-
-			if (personAbsences.Any())
-			{
-				var personAbsenceRetrieved = personAbsences[0];
-				return personRequest.Id == personAbsenceRetrieved.PersonRequest.Id;
-			}
-
-			return false;
-
-	    }
 
 		/// <summary>
 		/// Determines whether this instance [can find agent absences with correct scenario and priod].

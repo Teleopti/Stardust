@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		private PersonAbsence createPersonAbsence(IAbsence absence, IPersonRequest personRequest, IScenario scenario)
 		{
 			var absenceLayer = new AbsenceLayer(absence, personRequest.Request.Period);
-			var personAbsence = new PersonAbsence(personRequest.Person, scenario, absenceLayer, personRequest).WithId();
+			var personAbsence = new PersonAbsence(personRequest.Person, scenario, absenceLayer).WithId();
 			return personAbsence;
 		}
 	}

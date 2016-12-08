@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -239,19 +238,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
         }
 
-		[Test]
-		public void AllSplitPartsShouldRetainRequestReference()
-		{
-			var period = new DateTimePeriod(2000, 10, 1, 2000, 10, 6);
-			var absenceRequest = new AbsenceRequest(AbsenceFactory.CreateAbsence("Holiday"), period);
-			  var personRequest = absenceRequest.Parent as IPersonRequest;
-			var personAbsence = new PersonAbsence(person, scenario, new AbsenceLayer(absence, period), personRequest );
 
-			var splitPersonAbsences = personAbsence.Split(new DateTimePeriod(2000, 10, 2, 2000, 10, 3));
-
-			Assert.AreEqual(2, splitPersonAbsences.Count);
-			Assert.AreSame(personRequest, splitPersonAbsences[0].PersonRequest);
-			Assert.AreSame(personRequest, splitPersonAbsences[1].PersonRequest);
-		}
 	}
 }

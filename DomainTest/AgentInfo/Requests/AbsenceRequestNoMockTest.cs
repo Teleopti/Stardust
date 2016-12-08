@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		}
 		
 		[Test]
-		public void WhenAbsenceRequestIsAcceptedAbsenceShouldHaveRequestReference()
+		public void WhenAbsenceRequestIsAcceptedAbsenceShouldBeCorrect()
 		{
 			var startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
 			var endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var personAbsences = scheduleDay.PersonAbsenceCollection(true);
 			var personAbsence = personAbsences[0];
 
-			Assert.AreSame(personRequest, personAbsence.PersonRequest);
+			personAbsence.Layer.Period.Should().Be.EqualTo(period);
 
 		}
 

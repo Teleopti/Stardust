@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -51,24 +49,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			foreach (var personList in persons.Batch(400))
 			{
-				//Find all requests associated with absences
 				var people = personList.ToArray();
 				
 				retList.AddRange(Session.CreateCriteria(typeof(PersonAbsence), "abs")
 				    .Add(restrictions)
 					.Add(Restrictions.InG("Person", people))
 				    .SetResultTransformer(Transformers.DistinctRootEntity)
-				    .List<IPersonAbsence>());
-
-				Session.CreateCriteria(typeof(PersonRequest))
-					.Add(Subqueries.PropertyIn("Id",
-						DetachedCriteria.For<PersonAbsence>("abs")
-							.Add(restrictions)
-							.Add(Restrictions.InG("Person", people))
-							.Add(Restrictions.IsNotNull("PersonRequest"))
-							.SetProjection(Projections.Property("PersonRequest"))))
-				.SetFetchMode("PersonAbsences", FetchMode.Join)
-					.List();
+				    .List<IPersonAbsence>());		
 			}
 
 			initializeAbsences(retList);
@@ -105,18 +92,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.Add(Restrictions.InG("Id", absenceIdList))
 					.Add(Restrictions.Eq("Scenario", scenario))
 					.SetResultTransformer(Transformers.DistinctRootEntity)
-					.List<IPersonAbsence>());
-
-				//Find all requests associated with absences
-				Session.CreateCriteria(typeof(PersonRequest))
-					.Add(Subqueries.PropertyIn("Id",
-						DetachedCriteria.For<PersonAbsence>("abs")
-							.Add(Restrictions.InG("Id", absenceIdList))
-							.Add(Restrictions.Eq("Scenario", scenario))
-							.Add(Restrictions.IsNotNull("PersonRequest"))
-							.SetProjection(Projections.Property("PersonRequest"))))
-					.SetFetchMode("PersonAbsences", FetchMode.Join)
-					.List();
+					.List<IPersonAbsence>());				
 			}
 
 			initializeAbsences(retList);
@@ -140,18 +116,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 
-		public IList<IPersonAbsence> Find(IPersonRequest personRequest, IScenario scenario)
-		{
-			var retList = Session.CreateCriteria(typeof(PersonAbsence))
-                       .Add(Restrictions.Eq("PersonRequest", personRequest))
-					   .Add(Restrictions.Eq("Scenario", scenario))
-					   .List<IPersonAbsence>();
-
-			return retList;
-		}
-
-
-
 		/// <summary>
 		/// Finds the specified period.
 		/// </summary>
@@ -173,17 +137,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var retList = Session.CreateCriteria(typeof(PersonAbsence), "abs")
 						.Add(restrictions)
 						.SetResultTransformer(Transformers.DistinctRootEntity)
-						.List<IPersonAbsence>();
-
-			//Find all requests associated with absences
-			Session.CreateCriteria(typeof(PersonRequest))
-				.Add(Subqueries.PropertyIn("Id",
-					DetachedCriteria.For<PersonAbsence>("abs")
-						.Add(restrictions)
-						.Add(Restrictions.IsNotNull("PersonRequest"))
-						.SetProjection(Projections.Property("PersonRequest"))))
-				.SetFetchMode("PersonAbsences", FetchMode.Join)
-				.List();
+						.List<IPersonAbsence>();			
 
 			initializeAbsences(retList);
 			return retList;

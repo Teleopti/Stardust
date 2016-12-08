@@ -462,8 +462,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var personAbsence =
 				PersonAbsenceFactory.CreatePersonAbsence(person, Scenario.Current(), dateTimePeriod, absence).WithId();
 			((FakePersonAbsenceRepository)PersonAbsenceRepository).Add(personAbsence);
-			personAbsence.PersonRequest = personRequest;
-			personRequest.PersonAbsences.Add(personAbsence);
 
 			ScheduleStorage.Add(personAbsence);
 
@@ -507,7 +505,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var personRequest = createNewAbsenceRequest(person, absence, dateTimePeriod);
 
 			var personAbsence = new PersonAbsence(person, Scenario.Current(),
-				new AbsenceLayer(absence, dateTimePeriod), personRequest);
+				new AbsenceLayer(absence, dateTimePeriod));
 			((FakePersonAbsenceRepository)PersonAbsenceRepository).Add(personAbsence);
 
 			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(dateTimePeriod.StartDateTime);

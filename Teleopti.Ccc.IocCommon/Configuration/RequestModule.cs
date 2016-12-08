@@ -50,17 +50,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RequestApprovalServiceFactory>().As<IRequestApprovalServiceFactory>().InstancePerDependency();
 			builder.RegisterType<AbsenceRequestValidatorProvider>().As<IAbsenceRequestValidatorProvider>().SingleInstance();
 			builder.RegisterType<AbsenceRequestIntradayFilter>().As<IAbsenceRequestIntradayFilter>().SingleInstance();
-			builder.RegisterType<MultiAbsenceRequestsUpdater>().As<IMultiAbsenceRequestsUpdater>().InstancePerLifetimeScope();
-
-			//ROBTODO: remove when Wfm_Requests_Cancel_37741 is always true
-			if (_configuration.Toggle (Toggles.Wfm_Requests_Cancel_37741))
-			{
-				builder.RegisterType<AbsenceRequestCancelService>().As<IAbsenceRequestCancelService>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<AbsenceRequestCancelServiceWfmRequestsCancel37741ToggleOff>().As<IAbsenceRequestCancelService>().SingleInstance();
-			}
+			builder.RegisterType<MultiAbsenceRequestsUpdater>().As<IMultiAbsenceRequestsUpdater>().InstancePerLifetimeScope();			
 
 			if (_configuration.Toggle(Toggles.Wfm_Requests_ApprovingModifyRequests_41930))
 			{
