@@ -36,9 +36,15 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork
 		{
 			var uow = _state.Get();
 			_state.Set(null);
-			if (exception == null)
-				uow.Commit();
-			uow.Dispose();
+			try
+			{
+				if (exception == null)
+					uow.Commit();
+			}
+			finally
+			{
+				uow.Dispose();
+			}
 		}
 
 		public void Dispose()
