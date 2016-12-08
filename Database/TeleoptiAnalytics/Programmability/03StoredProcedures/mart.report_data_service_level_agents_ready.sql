@@ -250,7 +250,7 @@ SELECT	CASE @interval_type
 			WHEN 7 THEN d.weekday_resource_key
 		END AS 'period',
 		COUNT(DISTINCT dp.person_code)	'scheduled_agents_ready'
-FROM mart.fact_schedule fs
+FROM mart.fact_schedule fs WITH (NOLOCK)
 INNER JOIN [mart].[DimPersonLocalized](@date_from, @date_to) dpl
 	ON dpl.person_id = fs.person_id
 INNER JOIN mart.dim_person dp 

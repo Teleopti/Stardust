@@ -57,7 +57,7 @@ isnull(sum(dd.scheduled_ready_time_m)/60, 0) as scheduled_ready_time_m
 from
 (select dd.date_date, 
 isnull((fa.scheduled_ready_time_m), 0) as scheduled_ready_time_m
-from #dim_date dd left outer join mart.fact_schedule fa
+from #dim_date dd left outer join mart.fact_schedule fa WITH (NOLOCK)
 on dd.date_id = fa.schedule_date_id
 and fa.person_id in (select dp.person_id from #person dp)) dd
 group by dd.date_date) b

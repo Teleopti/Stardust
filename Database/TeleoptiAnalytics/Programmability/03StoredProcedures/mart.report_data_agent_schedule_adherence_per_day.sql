@@ -236,7 +236,7 @@ ELSE
 /* speed?
 SELECT *
 INTO #fact_schedule_all_columns
-FROM mart.fact_schedule fs
+FROM mart.fact_schedule fs WITH (NOLOCK)
 INNER JOIN @date d
 ON fs.schedule_date_id = d.date_id
 */
@@ -316,7 +316,7 @@ SELECT
 	SUM(fs.scheduled_time_m)*60,
 	SUM(fs.scheduled_ready_time_m)*60,
 	COUNT(fs.interval_id)		
-FROM mart.fact_schedule fs
+FROM mart.fact_schedule fs WITH (NOLOCK)
 INNER JOIN #person_id a
 	ON fs.person_id = a.person_id
 INNER JOIN #bridge_time_zone b
@@ -334,7 +334,7 @@ GROUP BY fs.schedule_date_id,fs.person_id,fs.interval_id,fs.scenario_id
 --a) In case there are multiple activities per interval, we use activities where in_ready_time = 1
 UPDATE #fact_schedule
 SET activity_id= fs.activity_id
-FROM mart.fact_schedule fs
+FROM mart.fact_schedule fs WITH (NOLOCK)
 	INNER JOIN #fact_schedule SchTemp
 	ON SchTemp.schedule_date_id=fs.schedule_date_id
 	AND SchTemp.person_id=fs.person_id
@@ -348,7 +348,7 @@ WHERE a.in_ready_time=1
 -- b) in case there is no ready time; just take any one
 UPDATE #fact_schedule
 SET activity_id= fs.activity_id
-FROM mart.fact_schedule fs
+FROM mart.fact_schedule fs WITH (NOLOCK)
 	INNER JOIN #fact_schedule SchTemp
 	ON SchTemp.schedule_date_id=fs.schedule_date_id
 	AND SchTemp.person_id=fs.person_id
@@ -362,7 +362,7 @@ WHERE SchTemp.activity_id IS NULL
 --Update with absence code
 UPDATE #fact_schedule
 SET absence_id= fs.absence_id
-FROM mart.fact_schedule fs
+FROM mart.fact_schedule fs WITH (NOLOCK)
 INNER JOIN #fact_schedule SchTemp
 	ON SchTemp.schedule_date_id=fs.schedule_date_id
 	AND SchTemp.person_id=fs.person_id

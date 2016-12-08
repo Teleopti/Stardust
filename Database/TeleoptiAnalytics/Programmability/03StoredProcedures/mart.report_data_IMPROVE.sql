@@ -252,7 +252,7 @@ SELECT	fs.shift_startdate_local_id,
 		fs.scheduled_ready_time_m, 
 		fs.scheduled_contract_time_m,
 		fs.scheduled_paid_time_m
-FROM mart.fact_schedule fs
+FROM mart.fact_schedule fs WITH (NOLOCK)
 INNER JOIN #person_acd_subSP p
 	ON p.person_id=fs.person_id
 	AND fs.shift_startdate_local_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local

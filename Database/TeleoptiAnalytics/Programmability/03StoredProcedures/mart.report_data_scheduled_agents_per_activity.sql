@@ -83,7 +83,7 @@ IF @intervals_per_day > 0 SELECT @intervals_length_m = 1440/@intervals_per_day
 
 INSERT INTO #fact_schedule
 SELECT shift_startdate_local_id,schedule_date_id, person_id, interval_id, scenario_id, activity_id, scheduled_time_m, scheduled_time_activity_m
-FROM mart.fact_schedule fs
+FROM mart.fact_schedule fs WITH (NOLOCK)
 --WHERE schedule_date_id IN (SELECT b.date_id FROM mart.bridge_time_zone b INNER JOIN mart.dim_date d ON b.local_date_id = d.date_id 
 --							WHERE d.date_date BETWEEN  @date_from AND @date_to
 --							AND b.time_zone_id=@time_zone_id)

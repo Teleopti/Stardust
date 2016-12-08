@@ -205,7 +205,7 @@ SELECT	fs.schedule_date_id,
 		SUM(fs.scheduled_time_m), 
 		SUM(fs.scheduled_ready_time_m), 
 		SUM(fs.scheduled_contract_time_m)
-FROM mart.fact_schedule fs
+FROM mart.fact_schedule fs WITH (NOLOCK)
 INNER JOIN #person p
 	ON fs.person_id=p.person_id 
 	AND shift_startdate_local_id between p.valid_from_date_id_local AND p.valid_to_date_id_local

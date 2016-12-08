@@ -432,7 +432,7 @@ SELECT
 		scheduled_time_m,
 		scheduled_ready_time_m
 FROM 
-	mart.fact_schedule fs
+	mart.fact_schedule fs WITH (NOLOCK)
 INNER JOIN #person_id p
 	ON fs.person_id = p.person_id
 	AND fs.shift_startdate_local_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
