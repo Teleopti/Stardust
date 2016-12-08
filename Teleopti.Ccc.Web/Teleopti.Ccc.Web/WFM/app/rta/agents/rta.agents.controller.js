@@ -107,7 +107,7 @@
 						reload: true,
 						notify: true
 					} : {};
-					$state.go(stateName, selection);
+					$state.go(stateName, selection, options);
 				}
 
 				RtaService.getSkills()
@@ -146,13 +146,15 @@
 				};
 
 				$scope.selectedSkillChange = function(skill) {
-					console.info(skill,'?');
 					if (!skill) return;
 					$scope.skillId = skill.Id;
-					stateGoToAgents({
-						skillIds: skill.Id,
-						skillAreaId: undefined
-					});
+					if(skill.Id != skillIds[0])
+						{
+							stateGoToAgents({
+								skillIds: skill.Id,
+								skillAreaId: undefined
+							});
+					}
 				}
 
 				$scope.selectedSkillAreaChange = function(skillArea) {
@@ -807,10 +809,6 @@
 					showResizer: true,
 					showPopupButton: true
 				};
-
-				// $element.find('input').on('keydown', function(ev) {
-				//  ev.stopPropagation();
-				// 	});
 			}
 		]);
 })();

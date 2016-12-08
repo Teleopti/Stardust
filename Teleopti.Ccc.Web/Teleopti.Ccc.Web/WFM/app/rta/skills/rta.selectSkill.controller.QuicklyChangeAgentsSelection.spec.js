@@ -1,5 +1,5 @@
 'use strict';
-xdescribe('RtaAgentsCtrl', function() {
+describe('RtaAgentsCtrl', function() {
 	var $interval,
 		$httpBackend,
 		$state,
