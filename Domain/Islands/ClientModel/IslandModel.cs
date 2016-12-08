@@ -24,12 +24,7 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 
 	public class SkillGroupModel : IComparable<SkillGroupModel>
 	{
-		public SkillGroupModel()
-		{
-			Skills = new List<SkillModel>();
-		}
-
-		public ICollection<SkillModel> Skills { get; set; }
+		public IEnumerable<SkillModel> Skills { get; set; }
 		public int NumberOfAgentsOnSkillGroup { get; set; }
 
 		public int CompareTo(SkillGroupModel other)
@@ -38,10 +33,15 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 		}
 	}
 
-	public class SkillModel
+	public class SkillModel : IComparable<SkillModel>
 	{
 		public string Name { get; set; }
 		public int NumberOfAgentsOnSkill { get; set; }
 		public string ActivityName { get; set; }
+
+		public int CompareTo(SkillModel other)
+		{
+			return other.NumberOfAgentsOnSkill - NumberOfAgentsOnSkill;
+		}
 	}
 }

@@ -45,15 +45,14 @@ namespace Teleopti.Ccc.Domain.Islands
 			foreach (var skillGroup in _skillGroups)
 			{
 				var skillGroupModel = new SkillGroupModel();
-				foreach (var skill in skillGroup.Skills)
+				var skillsModel = skillGroup.Skills.Select(skill => new SkillModel
 				{
-					skillGroupModel.Skills.Add(new SkillModel
-					{
-						Name = skill.Name,
-						NumberOfAgentsOnSkill = _noAgentsKnowingSkill[skill],
-						ActivityName = skill.Activity?.Name
-					});
-				}
+					Name = skill.Name,
+					NumberOfAgentsOnSkill = _noAgentsKnowingSkill[skill],
+					ActivityName = skill.Activity?.Name
+				}).ToList();
+				skillsModel.Sort();
+				skillGroupModel.Skills = skillsModel;
 				skillGroupModel.NumberOfAgentsOnSkillGroup = skillGroup.Agents.Count();
 				skillGroupModels.Add(skillGroupModel);
 			}

@@ -98,8 +98,8 @@ namespace Teleopti.Ccc.DomainTest.Islands
 
 			var model = IslandModelFactory.Create();
 
-			model.AfterReducing.Islands.Single().SkillGroups.First().Skills.Count.Should().Be.EqualTo(2);
-			model.BeforeReducing.Islands.Single().SkillGroups.First().Skills.Count.Should().Be.EqualTo(2);
+			model.AfterReducing.Islands.Single().SkillGroups.First().Skills.Count().Should().Be.EqualTo(2);
+			model.BeforeReducing.Islands.Single().SkillGroups.First().Skills.Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -113,8 +113,22 @@ namespace Teleopti.Ccc.DomainTest.Islands
 
 			var model = IslandModelFactory.Create();
 
-			model.AfterReducing.Islands.Single().SkillGroups.Single(x => x.Skills.Count==2).Skills.First().NumberOfAgentsOnSkill.Should().Be.EqualTo(2);
-			model.BeforeReducing.Islands.Single().SkillGroups.Single(x => x.Skills.Count==2).Skills.First().NumberOfAgentsOnSkill.Should().Be.EqualTo(2);
+			model.AfterReducing.Islands.Single().SkillGroups.Single(x => x.Skills.Count()==2).Skills.First().NumberOfAgentsOnSkill.Should().Be.EqualTo(2);
+			model.BeforeReducing.Islands.Single().SkillGroups.Single(x => x.Skills.Count()==2).Skills.First().NumberOfAgentsOnSkill.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldOrderByNumberOfAgentsOnSkill()
+		{
+			var skill1 = new Skill("1");
+			var skill2 = new Skill("2");
+			PersonRepository.Has(skill1, skill2);
+			PersonRepository.Has(skill2);
+
+			var model = IslandModelFactory.Create();
+
+			model.AfterReducing.Islands.Single().SkillGroups.Single(x => x.Skills.Count() == 2).Skills.First().Name.Should().Be.EqualTo(skill2.Name);
+			model.BeforeReducing.Islands.Single().SkillGroups.Single(x => x.Skills.Count() == 2).Skills.First().Name.Should().Be.EqualTo(skill2.Name);
 		}
 
 		[Test]
