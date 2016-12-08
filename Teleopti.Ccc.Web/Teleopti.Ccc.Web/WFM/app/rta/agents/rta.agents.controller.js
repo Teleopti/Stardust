@@ -98,7 +98,6 @@
 							$scope.sites = organization;
 							keepSelectionForOrganization();
 						});
-
 				});
 
 				function stateGoToAgents(selection) {
@@ -107,7 +106,7 @@
 						reload: true,
 						notify: true
 					} : {};
-					$state.go(stateName, selection);
+					$state.go(stateName, selection, options);
 				}
 
 				RtaService.getSkills()
@@ -164,11 +163,11 @@
 
 				var selectedSiteId;
 
-				$scope.selectSite = function(siteId) {
-					selectedSiteId = $scope.isSelectedSite(siteId) ? '' : siteId;
+				$scope.expandSite = function(siteId) {
+					selectedSiteId = $scope.isSiteToBeExpanded(siteId) ? '' : siteId;
 				};
 
-				$scope.isSelectedSite = function(siteId) {
+				$scope.isSiteToBeExpanded = function(siteId) {
 					return selectedSiteId === siteId;
 				};
 
@@ -185,7 +184,6 @@
 				function keepSelectionForOrganization() {
 					if (!$scope.showOrgSelection)
 						return;
-
 					selectSiteAndTeamsUnder();
 
 					if (teamIds.length > 0)
