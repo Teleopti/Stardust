@@ -31,7 +31,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			ICurrentTransactionHooks transactionHooks,
 			IDataSourceConfigurationSetter dataSourceConfigurationSetter, 
 			ICurrentHttpContext httpContext,
-			IUpdatedBy updatedBy, INHibernateConfigurationCache nhibernateConfigurationCache)
+			IUpdatedBy updatedBy, 
+			INHibernateConfigurationCache nhibernateConfigurationCache)
 		{
 			_enversConfiguration = enversConfiguration;
 			_transactionHooks = transactionHooks;

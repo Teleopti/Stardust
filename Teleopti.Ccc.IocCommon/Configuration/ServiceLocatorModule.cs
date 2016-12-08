@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			// set service locators
 			inject(container, typeof (ServiceLocatorForEntity));
 			inject(container, typeof (ServiceLocatorForLegacy));
+			inject(container, typeof (Infrastructure.ServiceLocatorForLegacy));
 
 			// resolve the disposer so that we are sure its dispose method will be called
 			container.Resolve<serviceLocatorDisposer>();
@@ -57,6 +58,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				clear(typeof(ServiceLocatorForEntity));
 				clear(typeof(ServiceLocatorForLegacy));
+				clear(typeof(Infrastructure.ServiceLocatorForLegacy));
 			}
 
 		}

@@ -2,6 +2,7 @@ using System;
 using NHibernate;
 using NHibernate.Engine;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
@@ -17,13 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ICurrentTransactionHooks _transactionHooks;
 		private readonly IUpdatedBy _updatedBy;
 
-		protected internal NHibernateUnitOfWorkFactory(
-			ISessionFactory sessionFactory,
-			IAuditSetter auditSettingProvider,
-			string connectionString,
-			ICurrentTransactionHooks transactionHooks,
-			IUpdatedBy updatedBy,
-			string tenant)
+		protected internal NHibernateUnitOfWorkFactory(ISessionFactory sessionFactory, IAuditSetter auditSettingProvider, string connectionString, ICurrentTransactionHooks transactionHooks, IUpdatedBy updatedBy, string tenant)
 		{
 			ConnectionString = connectionString;
 			_factory = sessionFactory;
@@ -92,6 +87,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			businessUnitFilter.Enable(session, businessUnitId());
 			QueryFilter.Deleted.Enable(session, null);
 			QueryFilter.DeletedPeople.Enable(session, null);
+
+			if (ServiceLocatorForLegacy.ToggleManager.IsEnabled(Toggles.No_UnitOfWork_Nesting_42148))
+				if (_context.Get() != null)
+					throw new NestedUnitOfWorkException();
 
 			new NHibernateUnitOfWork(
 				_context,

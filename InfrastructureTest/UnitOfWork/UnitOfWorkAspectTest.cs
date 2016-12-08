@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -210,6 +211,29 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			UnitOfWork.HasCurrent().Should().Be.False();
 		}
+
+		[Test]
+		public void ShouldNotAllowNestedUnitOfWork()
+		{
+			var wasHere = false;
+
+			Assert.Throws<NestedUnitOfWorkException>(() =>
+			{
+				TheService.Does(a =>
+				{
+					TheService.Does(b =>
+					{
+						wasHere = true;
+					});
+					wasHere = true;
+				});
+				wasHere = true;
+			});
+
+			wasHere.Should().Be.False();
+			UnitOfWork.HasCurrent().Should().Be.False();
+		}
+
 
 	}
 
