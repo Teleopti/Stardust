@@ -197,6 +197,28 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 			Assert.DoesNotThrow(target.DoesNothingWithTheUnitOfWork);
 		}
 
+		[Test]
+		public void ShouldNotAllowNestedUnitOfWork()
+		{
+			var wasHere = false;
+
+			Assert.Throws<NestedMessageBrokerUnitOfWorkException>(() =>
+			{
+				TheService.Does(a =>
+				{
+					TheService.Does(b =>
+					{
+						wasHere = true;
+					});
+					wasHere = true;
+				});
+				wasHere = true;
+			});
+
+			wasHere.Should().Be.False();
+			UnitOfWork.Current().Should().Be.Null();
+		}
+
 		private static Thread onAnotherThread(Action action)
 		{
 			var thread = new Thread(() => action());

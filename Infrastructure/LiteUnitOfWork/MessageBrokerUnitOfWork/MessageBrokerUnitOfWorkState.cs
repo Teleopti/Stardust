@@ -9,10 +9,15 @@ using Teleopti.Ccc.Infrastructure.Web;
 
 namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork
 {
+	public class NestedMessageBrokerUnitOfWorkException : Exception
+	{
+	}
+
 	public class MessageBrokerUnitOfWorkState : ICurrentMessageBrokerUnitOfWork, IMessageBrokerUnitOfWorkScope, IDisposable
 	{
 		[ThreadStatic] private static IDictionary _threadState;
 		private const string itemsKey = "MessageBrokerUnitOfWork";
+		private const string messageBrokerUnitOfWorkStarted = itemsKey + "Started";
 
 		private readonly ICurrentHttpContext _httpContext;
 		private readonly IConfigReader _configReader;
@@ -44,13 +49,16 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork
 
 		public void Start()
 		{
+			if (getItem<bool>(messageBrokerUnitOfWorkStarted))
+				throw new NestedMessageBrokerUnitOfWorkException();
 			configure();
-			setItem(itemsKey + "Started", true);
+			
+			setItem(messageBrokerUnitOfWorkStarted, true);
 		}
 
 		public ILiteUnitOfWork Current()
 		{
-			if (!getItem<bool>(itemsKey + "Started"))
+			if (!getItem<bool>(messageBrokerUnitOfWorkStarted))
 				return null;
 			var uow = getItem<LiteUnitOfWork>(itemsKey);
 			if (uow != null) return uow;
@@ -61,7 +69,7 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork
 
 		public void End(Exception exception)
 		{
-			setItem(itemsKey + "Started", null);
+			setItem(messageBrokerUnitOfWorkStarted, null);
 			var uow = getItem<LiteUnitOfWork>(itemsKey);
 			if (uow == null)
 				return;
