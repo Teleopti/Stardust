@@ -298,6 +298,8 @@
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
     <Compile Include="DomainTestWithStaticDependenciesAvoidUseAttribute.cs" />
     <Compile Include="Islands\IslandModelAfterReducingTest.cs" />
+    <Compile Include="Islands\IslandModelBeforeReducingTest.cs" />
+    <Compile Include="Islands\IslandModelTest.cs" />
     <Compile Include="ReadModelValidator\ReadModelValidatorTest.cs" />
     <Compile Include="ScheduleStorageRepositoryWrapperTest.cs" />
     <Compile Include="ResourceCalculation\CalculateResourceReadModelTest.cs" />

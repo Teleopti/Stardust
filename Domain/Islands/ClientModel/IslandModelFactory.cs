@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 			var islandTopModel = new IslandTopModel();
 
 			islandTopModel.AfterReducing = from Island island in islands select island.CreateClientModel();
+			islandTopModel.BeforeReducing = islandTopModel.AfterReducing;
 
 			return islandTopModel;
 

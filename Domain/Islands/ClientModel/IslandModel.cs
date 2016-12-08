@@ -5,6 +5,7 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 	public class IslandTopModel
 	{
 		public IEnumerable<IslandModel> AfterReducing { get; set; }
+		public IEnumerable<IslandModel> BeforeReducing { get; set; }
 	}
 
 	public class IslandModel
