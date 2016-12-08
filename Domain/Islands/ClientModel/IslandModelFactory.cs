@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Interfaces.Domain;
 
@@ -22,19 +23,8 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 			var period = DateOnly.Today.ToDateOnlyPeriod();
 			var agents = _peopleInOrganization.Agents(period);
 
-			var islandsBefore = _createIslands.Create(new ReduceNoSkillGroups(), agents, period);
-			var islandsModelBefore = new IslandsModel
-			{
-				Islands = from Island island in islandsBefore select island.CreateClientModel()
-			};
-			islandsModelBefore.NumberOfAgentsOnAllIsland = islandsModelBefore.Islands.Sum(x => x.NumberOfAgentsOnIsland);
-
-			var islandsAfter = _createIslands.Create(_reduceSkillGroups, agents, period);
-			var islandsModelAfter = new IslandsModel
-			{
-				Islands = from Island island in islandsAfter select island.CreateClientModel()
-			};
-			islandsModelAfter.NumberOfAgentsOnAllIsland = islandsModelAfter.Islands.Sum(x => x.NumberOfAgentsOnIsland);
+			var islandsModelBefore = createIslandsModel(new ReduceNoSkillGroups(), agents, period);
+			var islandsModelAfter = createIslandsModel(_reduceSkillGroups, agents, period);
 
 			var islandTopModel = new IslandTopModel
 			{
@@ -43,6 +33,17 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 			};
 
 			return islandTopModel;
+		}
+
+		private IslandsModel createIslandsModel(IReduceSkillGroups reduceSkillGroups, IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		{
+			var islands = _createIslands.Create(reduceSkillGroups, agents, period);
+			var islandsModel = new IslandsModel
+			{
+				Islands = from Island island in islands select island.CreateClientModel()
+			};
+			islandsModel.NumberOfAgentsOnAllIsland = islandsModel.Islands.Sum(x => x.NumberOfAgentsOnIsland);
+			return islandsModel;
 		}
 	}
 }
