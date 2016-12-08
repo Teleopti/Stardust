@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 		private ISiteRepository siteRepository;
 		private IBusinessUnitRepository businessUnitRepository;
 		private ICurrentBusinessUnit currentBusinessUnit;
+		private FakeLoggedOnUser loggedOnUser;
 
 		[SetUp]
 		public void Setup()
@@ -33,6 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 			currentBusinessUnit = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			currentBusinessUnit.Stub(x => x.Current()).Return(bu1);
 			businessUnitRepository.Stub(x => x.Get(bu1.Id.GetValueOrDefault())).Return(bu1);
+			loggedOnUser = new FakeLoggedOnUser();
 		}
 
 		[Test]
@@ -46,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 
 			siteRepository.Stub(x => x.LoadAll()).Return(new List<ISite>(){site});
 			
-			ITeamsProvider teamsProvider = new TeamsProvider(siteRepository, currentBusinessUnit, new Global.FakePermissionProvider());
+			ITeamsProvider teamsProvider = new TeamsProvider(siteRepository, currentBusinessUnit, new Global.FakePermissionProvider(), loggedOnUser);
 			target = new TeamHierarchyController(teamsProvider);
 			
 			var result = target.Get() as dynamic;

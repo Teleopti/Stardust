@@ -13,12 +13,14 @@ namespace Teleopti.Ccc.Web.Core
 		private readonly ISiteRepository _siteRepository;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly IPermissionProvider _permissionProvider;
+		private readonly ILoggedOnUser _loggedOnUser;
 
-		public TeamsProvider(ISiteRepository siteRepository, ICurrentBusinessUnit currentBusinessUnit, IPermissionProvider permissionProvider)
+		public TeamsProvider(ISiteRepository siteRepository, ICurrentBusinessUnit currentBusinessUnit, IPermissionProvider permissionProvider, ILoggedOnUser loggedOnUser)
 		{
 			_siteRepository = siteRepository;
 			_currentBusinessUnit = currentBusinessUnit;
 			_permissionProvider = permissionProvider;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public IEnumerable<TeamViewModel> Get(string siteId)
@@ -71,6 +73,7 @@ namespace Teleopti.Ccc.Web.Core
 			var currentBusinessUnit = _currentBusinessUnit.Current();
 			var sites = _siteRepository.LoadAll().OrderBy(site => site.Description.Name);
 			var siteViewModels = new List<SiteViewModelWithTeams>();
+			var logonUserTeamId = _loggedOnUser.CurrentUser().MyTeam(date) != null ? _loggedOnUser.CurrentUser().MyTeam(date).Id : null;
 
 			foreach (var site in sites)
 			{
@@ -104,7 +107,8 @@ namespace Teleopti.Ccc.Web.Core
 			{
 				Id = currentBusinessUnit.Id ?? Guid.Empty,
 				Name = currentBusinessUnit.Name,
-				Children = siteViewModels
+				Children = siteViewModels,
+				LogonUserTeamId = logonUserTeamId
 			};
 		}
 	}

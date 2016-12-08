@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 {
@@ -11,5 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 			get { return _sites; }
 			set { _sites = value; }
 		}
+
+		public Guid ? LogonUserTeamId { get; set; }
 	}
 }

@@ -128,9 +128,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchPermittedTeamHierachy")]
-		public virtual BusinessUnitWithSitesViewModel FetchPermittedTeamHierachy(DateOnly date)
+		public virtual BusinessUnitWithSitesViewModel FetchPermittedTeamHierachy(DateTime date)
 		{
-			return _teamProvider.GetPermittedTeamHierachy(date);
+			
+			return _teamProvider.GetPermittedTeamHierachy(new DateOnly(date));
 		}
 
 	}

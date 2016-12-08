@@ -431,7 +431,10 @@
 			teamScheduleSvc.getAvalableHierachy(vm.scheduleDateMoment().format("YYYY-MM-DD"))
 				.then(function (response) {
 					var data = response.data;
-					vm.availableGroups = data.Children;
+					vm.availableGroups = {
+						sites: data.Children,
+						logonUserTeamId: data.LogonUserTeamId
+					};
 				})
 		]).then(vm.init);
 	};
