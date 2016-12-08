@@ -111,8 +111,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void RemovingMandatoryRuleShouldResultDoingNothing()
 		{
 			setup();
-			_target.Add(new dummyRule(true));
-			_target.DoNotHaltModify(typeof(dummyRule));
+			_target.Add(new DummyRule(true));
+			_target.DoNotHaltModify(typeof(DummyRule));
 			Assert.AreEqual(totalNumberOfRules + 1, _target.Count);
 		}
 
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void VerifyClearKeepsMandatory()
 		{
 			setup();
-			_target.Add(new dummyRule(true));
+			_target.Add(new DummyRule(true));
 			_target.Clear();
 			Assert.AreEqual(totalNumberOfRules + 1, _target.Count);
 		}
@@ -247,43 +247,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		private static bool collectionContainsType(IEnumerable<INewBusinessRule> businessRuleCollection, Type type)
 		{
 			return businessRuleCollection.Any(rule => rule.GetType() == type);
-		}
-
-		public class dummyRule : INewBusinessRule
-		{
-			public dummyRule(bool mandatory)
-			{
-				IsMandatory = mandatory;
-				FriendlyName = string.Empty;
-			}
-
-			public string ErrorMessage => string.Empty;
-
-			public bool IsMandatory { get; }
-
-			public bool HaltModify { get; set; }
-
-			public bool ForDelete
-			{
-				get { throw new NotImplementedException(); }
-				set { throw new NotImplementedException(); }
-			}
-
-			public bool Checked { get; private set; }
-
-			public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,
-				IEnumerable<IScheduleDay> scheduleDays)
-			{
-				Checked = true;
-				return new List<IBusinessRuleResponse>
-				{
-					new BusinessRuleResponse(typeof(dummyRule), "Check Result of dummyRule", true,
-						IsMandatory, new DateTimePeriod(), new Person(), new DateOnlyPeriod(), FriendlyName)
-				};
-			}
-
-			public string FriendlyName { get; }
-			public string Description => "Description of dummyRule";
 		}
 	}
 }

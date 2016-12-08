@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -45,20 +46,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldGetAllEnabledBusinessRulesForShiftTradeRequest()
 		{
-			var stateHolder=new FakeSchedulingResultStateHolder();
-			setGlobalSettingDataRepository(false, true);
+			var stateHolder = new FakeSchedulingResultStateHolder();
+			switchRuleInSetting(new Dictionary<Type, bool>
+			{
+				{typeof(NewMaxWeekWorkTimeRule), false},
+				{typeof(NewNightlyRestRule), true}
+			});
 
 			var target = new ConfigurableBusinessRuleProvider(_globalSettingDataRepository);
-			var result = target.GetAllEnabledBusinessRulesForShiftTradeRequest(stateHolder,false);
+			var result = target.GetAllEnabledBusinessRulesForShiftTradeRequest(stateHolder, false);
 			var count = target.GetBusinessRulesForShiftTradeRequest(stateHolder, false).Count;
 			result.Count(x => x.GetType() == typeof(NewMaxWeekWorkTimeRule)).Should().Be.EqualTo(0);
-			result.Count.Should().Be.EqualTo(count-1);
+			result.Count.Should().Be.EqualTo(count - 1);
 		}
 
 		[Test]
 		public void ShouldDenyWhenRuleConfigsHasAnyAutoDeny()
 		{
-			setGlobalSettingDataRepository(RequestHandleOption.AutoDeny);
+			setDummyRuleHanleOption(RequestHandleOption.AutoDeny);
 			var ruleCollection = createBusinessRuleCollection();
 			var ruleResponses = createBusinessRuleResponses();
 
@@ -71,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldNotDenyWhenRuleConfigsHasNoAutoDeny()
 		{
-			setGlobalSettingDataRepository(RequestHandleOption.Pending);
+			setDummyRuleHanleOption(RequestHandleOption.Pending);
 			var ruleCollection = createBusinessRuleCollection();
 			var ruleResponses = createBusinessRuleResponses();
 
@@ -96,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldNotDenyWhenNoRuleResponse()
 		{
-			setGlobalSettingDataRepository(RequestHandleOption.Pending);
+			setDummyRuleHanleOption(RequestHandleOption.Pending);
 			var ruleCollection = createBusinessRuleCollection();
 
 			var target = new ConfigurableBusinessRuleProvider(_globalSettingDataRepository);
@@ -108,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		private static List<IBusinessRuleResponse> createBusinessRuleResponses()
 		{
 			var ruleResponses = new List<IBusinessRuleResponse>();
-			var response = new BusinessRuleResponse(typeof(NewBusinessRuleCollectionTest.dummyRule), "no go", false, false,
+			var response = new BusinessRuleResponse(typeof(DummyRule), "no go", false, false,
 				new DateTimePeriod(), PersonFactory.CreatePersonWithId(),
 				new DateOnlyPeriod(new DateOnly(2008, 12, 22), new DateOnly(2008, 12, 25)), "tjillevippen");
 			ruleResponses.Add(response);
@@ -118,52 +123,47 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		private static INewBusinessRuleCollection createBusinessRuleCollection()
 		{
 			var ruleCollection = NewBusinessRuleCollection.Minimum();
-			ruleCollection.Add(new NewBusinessRuleCollectionTest.dummyRule(true));
+			ruleCollection.Add(new DummyRule(true));
 			return ruleCollection;
 		}
 
-		private void setGlobalSettingDataRepository(bool isFirstEnabled,bool isSecondEnabled)
+		private void switchRuleInSetting(Dictionary<Type, bool> ruleDictionary)
 		{
+			var businessRuleConfigs = ruleDictionary.Select(x => new ShiftTradeBusinessRuleConfig
+			{
+				BusinessRuleType = x.Key.FullName,
+				Enabled = x.Value,
+				HandleOptionOnFailed = RequestHandleOption.Pending
+			});
+
 			var shiftTradeSetting = new ShiftTradeSettings
 			{
-				BusinessRuleConfigs = new[]
-				{
-					new ShiftTradeBusinessRuleConfig()
-					{
-						BusinessRuleType = typeof(NewMaxWeekWorkTimeRule).FullName,
-						Enabled = isFirstEnabled,
-						HandleOptionOnFailed = RequestHandleOption.Pending
-					},
-					new ShiftTradeBusinessRuleConfig()
-					{
-						BusinessRuleType = typeof(NewNightlyRestRule).FullName,
-						Enabled = isSecondEnabled,
-						HandleOptionOnFailed = RequestHandleOption.Pending
-					}
-				}
+				BusinessRuleConfigs = businessRuleConfigs.ToArray()
 			};
 
-			_globalSettingDataRepository = MockRepository.GenerateMock<IGlobalSettingDataRepository>();
-			_globalSettingDataRepository.Stub(x => x.FindValueByKey(ShiftTradeSettings.SettingsKey, new ShiftTradeSettings()))
-				.IgnoreArguments()
-				.Return(shiftTradeSetting);
+			setShiftTradeSetting(shiftTradeSetting);
 		}
 
-		private void setGlobalSettingDataRepository(RequestHandleOption option)
+		private void setDummyRuleHanleOption(RequestHandleOption option)
 		{
 			var shiftTradeSetting = new ShiftTradeSettings
 			{
 				BusinessRuleConfigs = new[]
 				{
-					new ShiftTradeBusinessRuleConfig()
+					new ShiftTradeBusinessRuleConfig
 					{
-						BusinessRuleType = typeof(NewBusinessRuleCollectionTest.dummyRule).FullName,
+						BusinessRuleType = typeof(DummyRule).FullName,
 						Enabled = true,
 						HandleOptionOnFailed = option
 					}
 				}
 			};
 
+			setShiftTradeSetting(shiftTradeSetting);
+		}
+
+		private void setShiftTradeSetting(ShiftTradeSettings shiftTradeSetting)
+		{
 			_globalSettingDataRepository = MockRepository.GenerateMock<IGlobalSettingDataRepository>();
 			_globalSettingDataRepository.Stub(x => x.FindValueByKey(ShiftTradeSettings.SettingsKey, new ShiftTradeSettings()))
 				.IgnoreArguments()
