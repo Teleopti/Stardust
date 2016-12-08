@@ -6,6 +6,7 @@ using System.Threading;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
@@ -189,13 +190,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void WhenTheMessageWithTitleIsDeletedByTheSender(string title)
 		{
 			Browser.Interactions.AssertExists(".message-list");
-			Guid id;
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var repository = new PushMessageDialogueRepository(uow);
-				IPushMessageDialogue pushMessageDialogue = repository.LoadAll().First(m => m.PushMessage.GetTitle(new NoFormatting()).Equals(title));
-				id = pushMessageDialogue.Id.GetValueOrDefault();
-			}
+			// TODO: should probably be injected somehow
+			var repository = new PushMessageDialogueRepository(UnitOfWorkFactory.CurrentUnitOfWork());
+			var pushMessageDialogue = repository.LoadAll().First(m => m.PushMessage.GetTitle(new NoFormatting()).Equals(title));
+			var id = pushMessageDialogue.Id.GetValueOrDefault();
 
 			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(1);");
 			
