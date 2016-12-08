@@ -56,8 +56,11 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			var dataHash = DefaultDataCreator.HashValue ^ TestConfiguration.HashValue;
 			var path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Rta");
 
+			Console.WriteLine("COMEONENOWFNURK");
+			var a = DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash);
+			Console.WriteLine("/COMEONENOWFNURK");
 			var haveDatabases =
-				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
+				a &&
 				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
 			if (!haveDatabases)
 				createDatabase(path, dataHash);
