@@ -171,6 +171,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();
 			system.UseTestDouble<FakeNoteRepository>().For<INoteRepository>();
 			system.UseTestDouble<FakePublicNoteRepository>().For<IPublicNoteRepository>();
+			system.UseTestDouble<FakeWorkloadRepository>().For<IWorkloadRepository>();
+			system.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
             // schedule readmodels
             system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
 			system.UseTestDouble<FakeProjectionVersionPersister>().For<IProjectionVersionPersister>();

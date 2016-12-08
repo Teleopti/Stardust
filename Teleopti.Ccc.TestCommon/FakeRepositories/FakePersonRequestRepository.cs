@@ -21,9 +21,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			{
 				entity.SetId(Guid.NewGuid());
 			}
-			var clone = (PersonRequest) entity.Clone();
-			clone.SetId(entity.Id);
-			_requestRepository.Add(clone);
+			//var clone = (PersonRequest) entity.Clone();
+			//clone.SetId(entity.Id);
+			//_requestRepository.Add(clone);
+			_requestRepository.Add(entity);
 		}
 
 		public void Remove(IPersonRequest entity)
