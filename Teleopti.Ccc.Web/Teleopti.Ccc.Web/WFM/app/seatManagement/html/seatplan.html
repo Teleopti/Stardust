@@ -32,7 +32,6 @@
 
 </div>
 
-
 <div class="seatplan material-depth-1" ui-view>
 	<seat-plan-report ng-if="seatplan.isReportOpened" toggle="seatplan.isReportOpened = !seatplan.isReportOpened"
 					  selected-period="seatplan.reportPeriod" selected-teams="seatplan.reportSelectedTeams"
@@ -40,53 +39,69 @@
 
 	<seatmap-canvas occupancy date="seatplan.selectedDate" toggle="seatplan.showSeatmap()" ng-if="!seatplan.isLoadingCalendar && seatplan.isSeatMapBookingViewOpened"></seatmap-canvas>
 
-	<div class="row" ng-show="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened">
-
-		<div class="col-sm-12 seatplan-calendar">
-
-			<div uib-datepicker seatplan-month-change-emitter ng-model="seatplan.selectedDate"
-				 ng-change="seatplan.onChangeOfDate()" class="wfm-datepicker"
-				 datepicker-options="seatplan.datepickerOptions">
-			</div>
+	<div ng-show="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened">
+		
+		<div class="row">
 			
-		</div>
+			<div class="col-sm-5 seatplan-calendar">
 
-		<div class="planning-day-detail" ng-if="seatplan.selectedDate!=null">
+				<div uib-datepicker seatplan-month-change-emitter ng-model="seatplan.selectedDate"
+					 ng-change="seatplan.onChangeOfDate()" class="wfm-datepicker"
+					 datepicker-options="seatplan.datepickerOptions">
+				</div>
 
-			<h4>{{seatplan.selectedDate | date : "fullDate"}}</h4>
-			<md-divider md-insert></md-divider>
-			<p>
-				<h3>{{ seatplan.getToDayInfo() | translate}}: </h3>
-			</p>
-
-			<div class="wfm-chip-wrap" ng-if="!seatplan.isLoadingCalendar">
-				<span class="wfm-chip">
-					<span class="chip-handle chip-success">
-						<i class="mdi mdi-thumb-up"></i>
-					</span>
-					<span class="chip-text">{{seatplan.seatBookingSummaryForDay.NumberOfBookings}} {{'SuccessfulBookings' | translate}}</span>
-				</span>
-				<span class="wfm-chip">
-					<span class="chip-handle">
-						<i class="mdi mdi-alert-circle"></i>
-					</span>
-					<span class="chip-text">{{seatplan.seatBookingSummaryForDay.NumberOfUnscheduledAgentDays}} {{'AgentsDoNotRequireSeats' | translate}}</span>
-				</span>
-				<span class="wfm-chip">
-					<span class="chip-handle chip-warning">
-						<i class="mdi mdi-alert"></i>
-					</span>
-					<span class="chip-text">{{seatplan.seatBookingSummaryForDay.NumberOfScheduleDaysWithoutBookings}} {{'AgentsWithoutBookings' | translate}}</span>
-				</span>
 			</div>
 
-			<button class="wfm-btn wfm-btn-invis-primary"
-					ng-click="seatplan.showSeatmap()" ng-if="!seatplan.isLoadingCalendar">
-				{{'ViewSeatBookings' | translate}}
-			</button>
+			<div class="planning-day-detail col-sm-7" ng-if="seatplan.selectedDate!=null">
 
+				<h4>{{seatplan.selectedDate | date : "fullDate"}}</h4>
+				<md-divider md-insert></md-divider>
+				<p>
+					<h3>{{ seatplan.getToDayInfo() | translate}}: </h3>
+				</p>
+				
+				
+				<div ng-show="seatplan.isLoadingStuff()">
+					<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+				</div>
+
+				<div class="wfm-chip-wrap" ng-if="!seatplan.isLoadingCalendar">
+					<span class="wfm-chip">
+						<span class="chip-handle chip-success">
+							<i class="mdi mdi-thumb-up"></i>
+						</span>
+						<span class="chip-text">{{seatplan.seatBookingSummaryForDay.NumberOfBookings}} {{'SuccessfulBookings' | translate}}</span>
+					</span>
+					<span class="wfm-chip">
+						<span class="chip-handle">
+							<i class="mdi mdi-alert-circle"></i>
+						</span>
+						<span class="chip-text">{{seatplan.seatBookingSummaryForDay.NumberOfUnscheduledAgentDays}} {{'AgentsDoNotRequireSeats' | translate}}</span>
+					</span>
+					<span class="wfm-chip">
+						<span class="chip-handle chip-warning">
+							<i class="mdi mdi-alert"></i>
+						</span>
+						<span class="chip-text">{{seatplan.seatBookingSummaryForDay.NumberOfScheduleDaysWithoutBookings}} {{'AgentsWithoutBookings' | translate}}</span>
+					</span>
+				</div>
+
+			</div>
 		</div>
+		<div class="row">
+			<div class="planning-period-button-bar">
+				<button class="wfm-btn wfm-btn-invis-primary"
+						ng-click="seatplan.showSeatmap()" ng-if="!seatplan.isLoadingCalendar">
+					{{'ViewSeatBookings' | translate}}
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
 
+
+<div class="seatplan material-depth-1" ui-view  ng-if="seatplan.usePlanningPeriods && !seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened">
+	<div class="row">
 		<div class="col-sm-12 seatplan-planning-periods">
 
 			<h3 class="planning-period-title">{{ 'PlanningPeriodsFor' | translate }} {{seatplan.selectedDate | date : "MMMM" }}</h3>
@@ -113,6 +128,23 @@
 				</wfm-card>
 			</wfm-card-list>
 		</div>
-
 	</div>
 </div>
+
+
+<div class="seatplan material-depth-1" ui-view ng-if="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened && !seatplan.usePlanningPeriods">
+	
+	<div class="row">
+		<div class="col-sm-12 seatplan-planning-periods">
+			<h3 class="planning-period-title">{{ 'PlanSeats' | translate }}</h3>
+
+			<md-divider md-insert></md-divider>
+
+			<seat-plan-init-manual-period on-seat-plan-complete="seatplan.onSeatPlanComplete()"
+										  on-seat-plan-start="seatplan.onSeatPlanStart()" show-report="seatplan.showReport">
+
+			</seat-plan-init-manual-period>
+		</div>
+		</div>
+</div>
+

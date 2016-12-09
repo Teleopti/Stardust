@@ -253,7 +253,8 @@
 		vm.parentVm = controllers[1];
 		vm.rightPanelVm = controllers[2];
 
-		vm.parentVm.rightPanelOptions.panelTitle = "SeatBookingsList";
+		vm.parentVm.rightPanelOptions.panelTitle = " ";
+		vm.parentVm.rightPanelOptions.sidePanelTitle = "SeatBookingsList";
 
 		vm.init();
 	};

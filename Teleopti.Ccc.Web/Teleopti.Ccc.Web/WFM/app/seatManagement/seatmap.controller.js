@@ -30,7 +30,8 @@
 		vm.zoomData = { min: 0.1, max: 2, step: 0.05, zoomValue: 1 };
 		vm.rightPanelOptions = {
 			panelState: false,
-			panelTitle: "SeatProperties",
+			panelTitle : " ",
+			sidePanelTitle: "SeatProperties",
 			showCloseButton: true,
 			showBackdrop: false,
 			showResizer: true,
@@ -38,7 +39,8 @@
 		};
 		vm.prefixSuffixPanelOptions = {
 			panelState: false,
-			panelTitle: "LocationProperties",
+			panelTitle: " ",
+			sidePanelTitle: "LocationProperties",
 			showCloseButton: true,
 			showBackdrop: false,
 			showResizer: true,
@@ -103,6 +105,7 @@
 		vm.getActiveObjects = function () {
 			vm.activeSeats = [];
 			vm.otherActiveObjects = [];
+
 			vm.rightPanelOptions.showPopupButton = true;
 
 			canvasUtils.getActiveSeatObjects(canvas, vm.seats, vm.activeSeats);

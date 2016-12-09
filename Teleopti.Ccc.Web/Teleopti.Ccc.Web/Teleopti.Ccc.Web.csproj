@@ -1407,6 +1407,8 @@
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.sites.spec.js" />
     <Content Include="WFM\app\rta\skills\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.teams.spec.js" />
+    <Content Include="WFM\app\seatManagement\html\seatplaninitmanualperiod.html" />
+    <Content Include="WFM\app\seatManagement\seatplaninitmanualperiod.directive.js" />
     <Content Include="WFM\app\skillPrio\skillprio.activity.service.js" />
     <Content Include="WFM\app\skillPrio\skillprio.aggregator.service.js" />
     <Content Include="WFM\app\skillPrio\skillPrio.backend.fake.js" />

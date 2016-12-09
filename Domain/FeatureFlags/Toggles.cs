@@ -129,6 +129,8 @@
 		Wfm_Requests_ApprovingModifyRequests_41930,
 		wfm_Requests_ReadModelOldData_42046,
 
+		Wfm_Seatplan_UseDatePeriodForPlanning_42167,
+
 		Wfm_Intraday_38074,
 
 		Wfm_People_PrepareForRelease_39040,

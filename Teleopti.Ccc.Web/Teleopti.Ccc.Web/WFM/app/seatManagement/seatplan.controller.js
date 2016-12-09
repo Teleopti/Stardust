@@ -4,15 +4,16 @@
 
 	angular.module('wfm.seatPlan').controller('SeatPlanCtrl', seatPlanDirectiveController);
 
-	seatPlanDirectiveController.$inject = ['ResourcePlannerSvrc', 'seatPlanService', '$stateParams', '$timeout', '$scope'];
+	seatPlanDirectiveController.$inject = ['ResourcePlannerSvrc', 'seatPlanService', '$stateParams', '$timeout', '$scope', 'Toggle'];
 
-	function seatPlanDirectiveController(resourcePlannerService, seatPlanService, params, $timeout, $scope) {
+	function seatPlanDirectiveController(resourcePlannerService, seatPlanService, params, $timeout, $scope, toggleService) {
 
 		var vm = this;
 
 		vm.isLoadingCalendar = true;
 		vm.isLoadingPlanningPeriods = true;
 		vm.planningPeriods = [];
+		vm.usePlanningPeriods = !toggleService.Wfm_Seatplan_UseDatePeriodForPlanning_42167;
 
 		vm.isLoadingStuff = function () {
 			return vm.isLoadingCalendar || vm.isLoadingPlanningPeriods;
@@ -113,7 +114,7 @@
 			customClass: function(data) {
 				var date = data.date,
 					mode = data.mode;
-				vm.getDayClass(date, mode);
+				return vm.getDayClass(date, mode);
 			}
 		};
 
@@ -182,10 +183,12 @@
 			return dayInfoString;
 		};
 
-		vm.getDayClass= function (date, mode) {		
+		vm.getDayClass = function (date, mode) {
+
+			var dayClass = '';
+
 			if (mode === 'day') {
 
-				var dayClass = '';
 				var dayToCheck = moment(date);
 
 				vm.seatPlanDateStatuses.forEach(function (status) {

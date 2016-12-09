@@ -4,6 +4,18 @@
 	margin-bottom: 20px;
 }
 
+.seatplan-header{
+    .view-title{
+        min-height: 55px;
+    }
+}
+
+#seatmap-toolbar{
+    .context-menu{
+        z-index:999;
+    }
+}
+
 .calendar-progress {
 	display: inline-block;
 	width: 50px;
@@ -13,12 +25,9 @@
 }
 
 .planning-day-detail {
-	position: relative;
 	height: 235px;
-	margin-left: 320px;
-	padding-right: 15px;
 	padding-left: 15px;
-    padding-top:7px;
+    padding-top:5px;
 }
 
 .planning-day-detail .wfm-btn-invis-primary {
@@ -29,8 +38,8 @@
 
 .planning-period-button-bar {
 	float: right;
-	margin-top: 15px;
 	padding: 0 10px;
+    min-height: 50px;
 }
 
 .planning-period-progress-bar {
@@ -39,14 +48,37 @@
 }
 
 .seatplan-calendar {
-	clear: both;
-	overflow: hidden;
-	width: 290px;
-	height: 240px;
-	margin: 0;
-	padding: 5px;
-	background: white;
+	max-width: 320px;
 }
+
+
+/*.seatplan-manual-planning-calendar {
+	height: 100%;
+	margin-top: 10px;
+	padding: 5px;
+
+
+    .dropdown-menu {
+                text-align: left !important;
+    }
+    
+    .line-center{
+            text-align: left !important;
+
+    }
+
+    .wfm-datepicker-wrap {
+
+        box-shadow: none !important;
+
+              
+
+        .sub-header{
+            text-align: center;
+        }
+    }
+	
+}*/
 
 .seatplan-planning-periods{
     padding-top:10px;
