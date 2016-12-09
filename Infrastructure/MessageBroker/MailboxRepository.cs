@@ -44,7 +44,9 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 
 		public IEnumerable<Message> PopMessages(Guid id, DateTime? expiredAt)
 		{
-			var mailbox = load(id, null).Single();
+			var mailbox = load(id, null).SingleOrDefault();
+			if (mailbox == null)
+				return Enumerable.Empty<Message>();
 			var messages = mailbox.Notifications;
 			if (messages.Any() || expiredAt.HasValue)
 			{

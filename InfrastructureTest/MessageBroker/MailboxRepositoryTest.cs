@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 	public class MailboxRepositoryTest
 	{
 		public IMailboxRepository Target;
-		public ICurrentMessageBrokerUnitOfWork CurrentMessageBrokerUnitOfWork;
+		public ICurrentMessageBrokerUnitOfWork UnitOfWork;
 		public MutableNow Now;
 		
 		[Test]
@@ -117,17 +117,21 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		[Test]
 		public void ShouldPurgeExpiredMailbox()
 		{
+			var businessUnitId = Guid.NewGuid().ToString();
 			var mailbox = new Mailbox
 			{
 				Id = Guid.NewGuid(),
-				ExpiresAt = "2015-06-26 08:30".Utc()
+				ExpiresAt = "2015-06-26 08:30".Utc(),
+				Route = new Message { BusinessUnitId = businessUnitId }.Routes().First()
 			};
 			Target.Add(mailbox);
+			Target.AddMessage(new Message { BusinessUnitId = businessUnitId });
 
 			Now.Is("2015-06-26 08:30");
 			Target.Purge();
 
 			Target.Load(mailbox.Id).Should().Be.Null();
+			Target.PopMessages(mailbox.Id, null).Should().Be.Empty();
 		}
 	}
 }
