@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -49,56 +51,67 @@ namespace Teleopti.Ccc.Web.BrokerListenSimulator
 		{
 			_number = $"#{screen}/{client}";
 
-			AddSubscription(new Subscription
-            {
-				MailboxId = Guid.NewGuid().ToString(),
-				DomainType = typeof(IScheduleChangedEvent).Name,
-                DomainReferenceId = Subscription.IdToString(_scenario.Current().Id.Value),
-                DomainReferenceType = typeof(Scenario).AssemblyQualifiedName,
-                LowerBoundary = Subscription.DateToString(data.SchedulingScreenStartDate),
-                UpperBoundary = Subscription.DateToString(data.SchedulingScreenEndDate),
-                DataSource = _dataSource.CurrentName(),
-                BusinessUnitId = Subscription.IdToString(_scenario.Current().Id.Value),
-            }, callback);
+				//AddSubscription(new Subscription
+				//{
+				//	DomainType = typeof(IScheduleChangedEvent).Name,
+				//	DomainReferenceId = Subscription.IdToString(_scenario.Current().Id.Value),
+				//	DomainReferenceType = typeof(Scenario).AssemblyQualifiedName,
+				//	LowerBoundary = Subscription.DateToString(data.SchedulingScreenStartDate),
+				//	UpperBoundary = Subscription.DateToString(data.SchedulingScreenEndDate),
+				//	DataSource = _dataSource.CurrentName(),
+				//	BusinessUnitId = Subscription.IdToString(_businessUnit.Current().Id.Value),
+				//}, callback);
 
-            AddSubscription(new Subscription
-            {
+			AddSubscription(new Subscription
+			{
+				MailboxId = Guid.NewGuid().ToString(),
+				DomainType = typeof(IScheduleChangedMessage).Name,
+				DomainReferenceId = Subscription.IdToString(_scenario.Current().Id.Value),
+				DomainReferenceType = typeof(Scenario).AssemblyQualifiedName,
+				LowerBoundary = Subscription.DateToString(data.SchedulingScreenStartDate),
+				UpperBoundary = Subscription.DateToString(data.SchedulingScreenEndDate),
+				DataSource = _dataSource.CurrentName(),
+				BusinessUnitId = Subscription.IdToString(_businessUnit.Current().Id.Value),
+			}, callback);
+
+			AddSubscription(new Subscription
+			{
 				MailboxId = Guid.NewGuid().ToString(),
 				DomainType = typeof(IPersistableScheduleData).Name,
-                DomainReferenceId = null,
-                DomainReferenceType = null,
-                LowerBoundary = Subscription.DateToString(data.SchedulingScreenStartDate),
-                UpperBoundary = Subscription.DateToString(data.SchedulingScreenEndDate),
-                DataSource = _dataSource.CurrentName(),
-                BusinessUnitId = Subscription.IdToString(_businessUnit.Current().Id.Value),
+				DomainReferenceId = null,
+				DomainReferenceType = null,
+				LowerBoundary = Subscription.DateToString(data.SchedulingScreenStartDate),
+				UpperBoundary = Subscription.DateToString(data.SchedulingScreenEndDate),
+				DataSource = _dataSource.CurrentName(),
+				BusinessUnitId = Subscription.IdToString(_businessUnit.Current().Id.Value),
 			}, callback);
 
 			AddSubscription(new Subscription
-            {
+			{
 				MailboxId = Guid.NewGuid().ToString(),
 				DomainType = typeof(IMeeting).Name,
-                DomainReferenceId = null,
-                DomainReferenceType = null,
-                LowerBoundary = Subscription.DateToString(Consts.MinDate),
-                UpperBoundary = Subscription.DateToString(Consts.MaxDate),
-                DataSource = _dataSource.CurrentName(),
-                BusinessUnitId = Subscription.IdToString(_businessUnit.Current().Id.Value),
+				DomainReferenceId = null,
+				DomainReferenceType = null,
+				LowerBoundary = Subscription.DateToString(Consts.MinDate),
+				UpperBoundary = Subscription.DateToString(Consts.MaxDate),
+				DataSource = _dataSource.CurrentName(),
+				BusinessUnitId = Subscription.IdToString(_businessUnit.Current().Id.Value),
 			}, callback);
 
 			AddSubscription(new Subscription
-            {
+			{
 				MailboxId = Guid.NewGuid().ToString(),
-                DomainType = typeof(IPersonRequest).Name,
-                DomainReferenceId = null,
-                DomainReferenceType = null,
-                LowerBoundary = Subscription.DateToString(Consts.MinDate),
-                UpperBoundary = Subscription.DateToString(Consts.MaxDate),
-                DataSource = _dataSource.CurrentName(),
-                BusinessUnitId = Subscription.IdToString(_businessUnit.Current().Id.Value),
+				DomainType = typeof(IPersonRequest).Name,
+				DomainReferenceId = null,
+				DomainReferenceType = null,
+				LowerBoundary = Subscription.DateToString(Consts.MinDate),
+				UpperBoundary = Subscription.DateToString(Consts.MaxDate),
+				DataSource = _dataSource.CurrentName(),
+				BusinessUnitId = Subscription.IdToString(_businessUnit.Current().Id.Value),
 			}, callback);
 		}
-
-		private void AddSubscription(Subscription subscription, EventHandler<EventMessageArgs> callback)
+		
+	    private void AddSubscription(Subscription subscription, EventHandler<EventMessageArgs> callback)
 		{
 			//_messageBroker.RegisterSubscription(subscription, callback);
 			startPoll(subscription);
@@ -113,33 +126,38 @@ namespace Teleopti.Ccc.Web.BrokerListenSimulator
 			return $"{_url.Url.TrimEnd('/')}/{call}";
 		}
 
-		private async void startPoll(Subscription subscription)
+		private void startPoll(Subscription subscription)
 		{
-			while (true)
+			get(url($"MessageBroker/PopMessages?route={subscription.Route()}&id={subscription.MailboxId}"));
+
+			Task.Factory.StartNew(() =>
 			{
-				await Task.Delay(TimeSpan.FromSeconds(120)); // default at this time
-				var result = await get(url($"MessageBroker/PopMessages?route={subscription.Route()}&id={subscription.MailboxId}"));
-				var messages = _deserializer.DeserializeObject<Message[]>(result);
-				messages.ForEach(m =>
+				while (true)
 				{
-					callback(this, null);
-				});
-			}
+					Task.Delay(TimeSpan.FromSeconds(120)).Wait(); // default at this time
+					var result = get(url($"MessageBroker/PopMessages?route={subscription.Route()}&id={subscription.MailboxId}"));
+					var messages = _deserializer.DeserializeObject<Message[]>(result);
+					messages.ForEach(m =>
+					{
+						callback(this, null);
+					});
+				}
+			}, TaskCreationOptions.LongRunning);
 		}
 
-		private async void post(string url, string content)
+		private void post(string url, string content)
 		{
-			var result = await _httpClient.PostAsync(url, new StringContent(content, Encoding.UTF8, "application/json"));
+			var result = _httpClient.PostAsync(url, new StringContent(content, Encoding.UTF8, "application/json")).Result;
 			if (result.StatusCode != HttpStatusCode.OK)
 				throw new Exception($"POST failed! {result.StatusCode}");
 		}
 
-		private async Task<string> get(string url)
+		private string get(string url)
 		{
-			var result = await _httpClient.GetAsync(url);
+			var result = _httpClient.GetAsync(url).Result;
 			if (result.StatusCode != HttpStatusCode.OK)
 				throw new Exception($"GET failed! {result.StatusCode}");
-			return await result.Content.ReadAsStringAsync();
+			return result.Content.ReadAsStringAsync().Result;
 		}
 
 		private void callback(object sender, EventMessageArgs e)

@@ -43,61 +43,74 @@ namespace Teleopti.Ccc.Web.BrokerListenSimulator
 			};
 			Simulate(data, 200, 2);
 		}
-		
+
 		private static void Simulate(SimulationData data, int clients, int screens)
 		{
-			var currentDatasource = new FakeCurrentDatasource(new DataSourceState());
-			currentDatasource.FakeName(data.DataSource);
-
-			var businessUnit = new BusinessUnit("..");
-			businessUnit.SetId(data.BusinessUnit);
-			var currentBusinessUnit = new FakeCurrentBusinessUnit();
-			currentBusinessUnit.FakeBusinessUnit(businessUnit);
-
-			var scenario = new Scenario("..");
-			scenario.SetId(data.Scenario);
-			var currentScenario = new FakeCurrentScenario();
-			currentScenario.FakeScenario(scenario);
 
 			Console.WriteLine("starting {0} clients with {1} screens each", clients, screens);
 
 			var s = new Stopwatch();
 			s.Start();
-			Enumerable.Range(1, clients).ForEach(client =>
+
+			var startClients = Enumerable.Range(1, clients).Select(client =>
 			{
-				var builder = new ContainerBuilder();
-				var iocArgs = new IocArgs(new ConfigReader())
+				return Task.Factory.StartNew(() =>
 				{
-					MessageBrokerListeningEnabled = true,
-					ImplementationTypeForCurrentUnitOfWork = typeof(FromFactory),
-				};
-				var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
-				builder.RegisterModule(new CommonModule(configuration));
-				builder.RegisterInstance(currentScenario).As<ICurrentScenario>();
-				builder.RegisterInstance(currentDatasource).As<ICurrentDataSource>();
-				builder.RegisterInstance(currentBusinessUnit).As<ICurrentBusinessUnit>();
-				builder.RegisterType<SimulateSchedulingScreen>().InstancePerDependency();
-				var container = builder.Build();
+					Console.WriteLine($"client {client}");
+					var currentDatasource = new FakeCurrentDatasource(new DataSourceState());
+					currentDatasource.FakeName(data.DataSource);
 
-				container.Resolve<IMessageBrokerUrl>()
-					.Configure(data.Url);
+					var businessUnit = new BusinessUnit("..");
+					businessUnit.SetId(data.BusinessUnit);
+					var currentBusinessUnit = new FakeCurrentBusinessUnit();
+					currentBusinessUnit.FakeBusinessUnit(businessUnit);
 
-				var messageBroker = container.Resolve<IMessageBrokerComposite>();
-				messageBroker.StartBrokerService(true);
-				while (!messageBroker.IsAlive)
-					Task.Delay(500);
+					var scenario = new Scenario("..");
+					scenario.SetId(data.Scenario);
+					var currentScenario = new FakeCurrentScenario();
+					currentScenario.FakeScenario(scenario);
 
-				var screenSimulations = Enumerable.Range(1, screens).Select(screen => {
-					var schedulingScreen = container.Resolve<SimulateSchedulingScreen>();
-					return Task.Factory.StartNew(() =>
+					var builder = new ContainerBuilder();
+					var iocArgs = new IocArgs(new ConfigReader())
 					{
-						schedulingScreen.Simulate(data, screen, client);
-					}, TaskCreationOptions.LongRunning);
-				});
+						MessageBrokerListeningEnabled = true,
+						ImplementationTypeForCurrentUnitOfWork = typeof(FromFactory),
+					};
+					var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
+					builder.RegisterModule(new CommonModule(configuration));
+					builder.RegisterInstance(currentScenario).As<ICurrentScenario>();
+					builder.RegisterInstance(currentDatasource).As<ICurrentDataSource>();
+					builder.RegisterInstance(currentBusinessUnit).As<ICurrentBusinessUnit>();
+					builder.RegisterType<SimulateSchedulingScreen>().InstancePerDependency();
+					var container = builder.Build();
 
-				Task.WaitAll(screenSimulations.ToArray());
+					container.Resolve<IMessageBrokerUrl>()
+						.Configure(data.Url);
+
+					var messageBroker = container.Resolve<IMessageBrokerComposite>();
+					messageBroker.StartBrokerService(true);
+					Console.WriteLine($"starting broker {client}");
+					while (!messageBroker.IsAlive)
+						Task.Delay(500).Wait();
+					Console.WriteLine($"started broker {client}");
+
+					Enumerable.Range(1, screens).ForEach(screen =>
+					{
+
+						Console.WriteLine($"starting screen {client}-{screen}");
+						container.Resolve<SimulateSchedulingScreen>()
+							.Simulate(data, screen, client);
+						Console.WriteLine($"started screen {client}-{screen}");
+
+					});
+
+					Console.WriteLine($"/client {client}");
+				}, TaskCreationOptions.LongRunning);
 			});
 
+
+			Console.WriteLine($"waiting...");
+			Task.WaitAll(startClients.ToArray());
 			Console.WriteLine("Started listening, took {0}", s.Elapsed);
 			Console.ReadKey();
 		}

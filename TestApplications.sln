@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.MyTimeTraf
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.BrokerListenSimulator", "TestApplications\Teleopti.Ccc.Web.BrokerListenSimulator\Teleopti.Ccc.Web.BrokerListenSimulator.csproj", "{6A69E3EA-B647-427B-9EDC-3746CA2BF9A6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.BrokerLoadGenerator", "TestApplications\Teleopti.Ccc.Web.BrokerLoadGenerator\Teleopti.Ccc.Web.BrokerLoadGenerator.csproj", "{013784BD-5542-48BE-A10B-B919C0F15D77}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -143,6 +145,14 @@ Global
 		{6A69E3EA-B647-427B-9EDC-3746CA2BF9A6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6A69E3EA-B647-427B-9EDC-3746CA2BF9A6}.Release|x86.ActiveCfg = Release|Any CPU
 		{6A69E3EA-B647-427B-9EDC-3746CA2BF9A6}.Release|x86.Build.0 = Release|Any CPU
+		{013784BD-5542-48BE-A10B-B919C0F15D77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{013784BD-5542-48BE-A10B-B919C0F15D77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{013784BD-5542-48BE-A10B-B919C0F15D77}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{013784BD-5542-48BE-A10B-B919C0F15D77}.Debug|x86.Build.0 = Debug|Any CPU
+		{013784BD-5542-48BE-A10B-B919C0F15D77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{013784BD-5542-48BE-A10B-B919C0F15D77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{013784BD-5542-48BE-A10B-B919C0F15D77}.Release|x86.ActiveCfg = Release|Any CPU
+		{013784BD-5542-48BE-A10B-B919C0F15D77}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
