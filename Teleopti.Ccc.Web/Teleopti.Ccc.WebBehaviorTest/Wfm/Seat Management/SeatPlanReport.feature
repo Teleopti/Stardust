@@ -35,12 +35,13 @@ Background:
 		| EndTime        | 2015-01-01 17:00 |
 		| Shift category | Day              |
 
-
+@ignore
 Scenario: Should be able to view the report
 	When I view Seat plan on "2015-01-01"
 	And I click SeatPlanReport button
 	Then I should be able to view the report content
 
+@ignore
 Scenario: Should filter report by date when we enter report from planning period
 	Given I have a shift with
 		| Field          | Value            |
