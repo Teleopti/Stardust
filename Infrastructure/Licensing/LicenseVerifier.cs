@@ -30,11 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 				ILicenseService licenseService;
 				try
 				{
-					using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
-					{
-
-						licenseService = XmlLicenseService();
-					}
+					licenseService = XmlLicenseService();
 
 					if (licenseService.ExpirationDate.Subtract(licenseService.ExpirationGracePeriod) < DateTime.Now)
 					{

@@ -4,6 +4,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory
@@ -33,7 +34,12 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             {
                 _licenseVerificationResultDto = new LicenseVerificationResultDto(false);
 								var verifier = new LicenseVerifier(this, unitOfWorkFactory, new LicenseRepository(new FromFactory(() => unitOfWorkFactory)));
-                var licenseService = verifier.LoadAndVerifyLicense();
+
+	            ILicenseService licenseService;
+				using (unitOfWorkFactory.CreateAndOpenUnitOfWork())
+	            {
+					licenseService = verifier.LoadAndVerifyLicense();
+				}
 
                 if (licenseService != null)
                 {

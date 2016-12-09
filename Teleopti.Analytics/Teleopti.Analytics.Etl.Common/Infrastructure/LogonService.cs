@@ -31,14 +31,15 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 			var unitOfWorkFactory = selectedDataSource.DataSource.Application;
 			var licenseVerifier = new LicenseVerifier(this, unitOfWorkFactory, new LicenseRepository(new FromFactory(() => unitOfWorkFactory)));
-			var licenseService = licenseVerifier.LoadAndVerifyLicense();
-			if (licenseService == null)
-				return false;
-
-			LicenseProvider.ProvideLicenseActivator(unitOfWorkFactory.Name, licenseService);
-
 			using (var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
+				var licenseService = licenseVerifier.LoadAndVerifyLicense();
+				if (licenseService == null)
+					return false;
+
+				LicenseProvider.ProvideLicenseActivator(unitOfWorkFactory.Name, licenseService);
+
+
 				var roleToPrincipalCommand =
 					new RoleToPrincipalCommand(
 						new ClaimSetForApplicationRole(
@@ -48,7 +49,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 								)
 							)
 						);
-					
+
 				roleToPrincipalCommand.Execute(TeleoptiPrincipal.CurrentPrincipal, unitOfWorkFactory, new PersonRepository(new ThisUnitOfWork(uow)));
 			}
 			return true;

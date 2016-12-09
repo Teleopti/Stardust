@@ -11,6 +11,7 @@ using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages;
 
@@ -89,7 +90,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				dataSource.Application,
 				new LicenseRepository(new FromFactory(() => dataSource.Application))
 				);
-			var licenseService = licenseVerifier.LoadAndVerifyLicense();
+
+			ILicenseService licenseService;
+			using (dataSource.Application.CreateAndOpenUnitOfWork())
+			{
+				licenseService = licenseVerifier.LoadAndVerifyLicense();
+			}
+				
 			if (licenseService == null)
 			{
 				Logger.Error("No license could be found.");
