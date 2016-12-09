@@ -1,9 +1,8 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module("wfm.teamSchedule").service("ScheduleManagement", [
-		"$resource", "Toggle", "$q", "$filter", 'TeamSchedule', 'GroupScheduleFactory', 'CurrentUserInfo',
-		function ($resource, toggleSvc, $q, $filter, teamScheduleSvc, groupScheduleFactory, CurrentUserInfo) {
+	angular.module("wfm.teamSchedule").service("ScheduleManagement", ["Toggle", "$filter", 'TeamSchedule', 'GroupScheduleFactory', 'CurrentUserInfo',
+		function (toggleSvc, $filter, teamScheduleSvc, groupScheduleFactory, CurrentUserInfo) {
 			var svc = this;
 
 			svc.rawSchedules = [];

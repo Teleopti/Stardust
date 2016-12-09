@@ -2,8 +2,71 @@
 	'use strict';
 
 	angular.module('wfm.teamSchedule').directive('addAbsence', addAbsenceDirective);
+	
+	function addAbsenceDirective() {
+		return {
+			restrict: 'E',
+			scope: {},
+			controller: addAbsenceCtrl,
+			controllerAs: 'vm',
+			bindToController: true,
+			templateUrl: 'app/teamSchedule/html/addAbsence.tpl.html',
+			require: ['^teamscheduleCommandContainer', 'addAbsence'],
+			link: function (scope, elem, attrs, ctrls) {
+				var containerCtrl = ctrls[0],
+					selfCtrl = ctrls[1];
 
-	addAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'ScheduleManagement', 'teamScheduleNotificationService', '$locale', 'CommandCheckService', 'belongsToDateDecider'];
+				scope.vm.containerCtrl = containerCtrl;
+
+				scope.vm.selectedDate = containerCtrl.getDate;
+				scope.vm.trackId = containerCtrl.getTrackId();
+				scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
+				scope.vm.getActionCb = containerCtrl.getActionCb;
+				scope.vm.getCurrentTimezone = containerCtrl.getCurrentTimezone;
+				scope.vm.isAddFullDayAbsenceAvailable = function () {
+					return containerCtrl.hasPermission('IsAddFullDayAbsenceAvailable');
+				};
+				scope.vm.checkPersonalAccountEnabled = containerCtrl.hasToggle('CheckPersonalAccountEnabled');
+				scope.vm.manageScheduleForDistantTimezonesEnabled = containerCtrl.hasToggle('ManageScheduleForDistantTimezonesEnabled');
+
+				scope.vm.isAddIntradayAbsenceAvailable = function () {
+					return containerCtrl.hasPermission('IsAddIntradayAbsenceAvailable');
+				};
+
+				scope.vm.timeRange = {
+					startTime: selfCtrl.getDefaultAbsenceStartTime(),
+					endTime: selfCtrl.getDefaultAbsenceEndTime()
+				};
+
+				scope.$watch(function () {
+					var format = scope.vm.isFullDayAbsence ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm';
+					return {
+						startTime: moment(scope.vm.timeRange.startTime).format(format),
+						endTime: moment(scope.vm.timeRange.endTime).format(format)
+					}
+				},
+					function (newValue, oldValue) {
+						scope.vm.updateInvalidAgents();
+					},
+					true);
+
+				scope.vm.isFullDayAbsence = scope.vm.isAddFullDayAbsenceAvailable();
+
+				selfCtrl.updateDateAndTimeFormat();
+				scope.$on('$localeChangeSuccess', selfCtrl.updateDateAndTimeFormat);
+
+				elem.find('team-schedule-datepicker').on('focus', function (e) {
+					e.target.querySelector('input').focus();
+				});
+
+				elem.find('uib-timepicker').on('focus', function (e) {
+					e.target.querySelector('input').focus();
+				});
+			}
+		};
+	}
+
+	addAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'ScheduleManagement', 'teamScheduleNotificationService', '$locale', 'CommandCheckService', 'belongsToDateDecider'];	
 
 	function addAbsenceCtrl(PersonAbsenceSvc, personSelectionSvc, scheduleManagementSvc, teamScheduleNotificationService, $locale, CommandCheckService, belongsToDateDecider) {
 		var vm = this;
@@ -144,70 +207,6 @@
 		vm.updateDateAndTimeFormat = function() {
 			var timeFormat = $locale.DATETIME_FORMATS.shortTime;
 			vm.showMeridian = timeFormat.indexOf("h:") >= 0 || timeFormat.indexOf("h.") >= 0;
-		};
-	}
-
-
-	function addAbsenceDirective() {
-		return {
-			restrict: 'E',
-			scope: {},
-			controller: addAbsenceCtrl,
-			controllerAs: 'vm',
-			bindToController: true,
-			templateUrl: 'app/teamSchedule/html/addAbsence.tpl.html',
-			require: ['^teamscheduleCommandContainer', 'addAbsence'],
-			link: function (scope, elem, attrs, ctrls) {
-				var containerCtrl = ctrls[0],
-					selfCtrl = ctrls[1];
-
-				scope.vm.containerCtrl = containerCtrl;
-
-				scope.vm.selectedDate = containerCtrl.getDate;
-				scope.vm.trackId = containerCtrl.getTrackId();
-				scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
-				scope.vm.getActionCb = containerCtrl.getActionCb;
-				scope.vm.getCurrentTimezone = containerCtrl.getCurrentTimezone;
-				scope.vm.isAddFullDayAbsenceAvailable = function () {
-					return containerCtrl.hasPermission('IsAddFullDayAbsenceAvailable');
-				};
-				scope.vm.checkPersonalAccountEnabled = containerCtrl.hasToggle('CheckPersonalAccountEnabled');
-				scope.vm.manageScheduleForDistantTimezonesEnabled = containerCtrl.hasToggle('ManageScheduleForDistantTimezonesEnabled');
-
-				scope.vm.isAddIntradayAbsenceAvailable = function () {
-					return containerCtrl.hasPermission('IsAddIntradayAbsenceAvailable');
-				};
-
-				scope.vm.timeRange = {
-					startTime: selfCtrl.getDefaultAbsenceStartTime(),
-					endTime: selfCtrl.getDefaultAbsenceEndTime()
-				};
-
-				scope.$watch(function () {
-					var format = scope.vm.isFullDayAbsence ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm';
-					return {
-						startTime: moment(scope.vm.timeRange.startTime).format(format),
-						endTime: moment(scope.vm.timeRange.endTime).format(format)
-					}
-				},
-					function (newValue, oldValue) {
-						scope.vm.updateInvalidAgents();
-					},
-					true);
-
-				scope.vm.isFullDayAbsence = scope.vm.isAddFullDayAbsenceAvailable();
-
-				selfCtrl.updateDateAndTimeFormat();
-				scope.$on('$localeChangeSuccess', selfCtrl.updateDateAndTimeFormat);
-
-				elem.find('team-schedule-datepicker').on('focus', function (e) {
-					e.target.querySelector('input').focus();
-				});
-
-				elem.find('uib-timepicker').on('focus', function (e) {
-					e.target.querySelector('input').focus();
-				});
-			}
 		};
 	}
 })();

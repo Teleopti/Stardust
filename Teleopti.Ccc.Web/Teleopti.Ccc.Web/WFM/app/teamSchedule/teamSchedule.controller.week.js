@@ -3,9 +3,9 @@
 
 	angular.module('wfm.teamSchedule').controller('TeamScheduleWeeklyCtrl', TeamScheduleWeeklyCtrl);
 
-	TeamScheduleWeeklyCtrl.$inject = ['$stateParams', '$locale', '$filter', 'PersonScheduleWeekViewCreator', 'UtilityService', 'weekViewScheduleSvc', 'Toggle', 'TeamSchedule', 'signalRSVC', '$scope'];
+	TeamScheduleWeeklyCtrl.$inject = ['$stateParams', '$q','$locale', '$filter', 'PersonScheduleWeekViewCreator', 'UtilityService', 'weekViewScheduleSvc', 'Toggle', 'TeamSchedule', 'signalRSVC', '$scope'];
 
-	function TeamScheduleWeeklyCtrl(params, $locale, $filter, WeekViewCreator, Util, weekViewScheduleSvc, toggleSvc, teamScheduleSvc, signalR, $scope) {
+	function TeamScheduleWeeklyCtrl(params, $q, $locale, $filter, WeekViewCreator, Util, weekViewScheduleSvc, toggleSvc, teamScheduleSvc, signalR, $scope) {
 		var vm = this;
 		vm.searchOptions = {
 			keyword: angular.isDefined(params.keyword) && params.keyword !== '' ? params.keyword : '',
@@ -35,6 +35,7 @@
 		};
 
 		vm.scheduleDate = params.selectedDate || new Date();
+		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 
 		vm.startOfWeek = moment(vm.scheduleDate).startOf('week').toDate();
 
@@ -65,9 +66,7 @@
 			});
 		};
 
-		init();
-
-		function init() {
+		vm.init = function() {
 			vm.toggles = {
 				SelectAgentsPerPageEnabled: toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230,
 				SeeScheduleChangesByOthers: toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
@@ -114,7 +113,18 @@
 			vm.loadSchedules();
 
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
-		}
+		};
+
+		$q.all([
+			teamScheduleSvc.getAvalableHierachy(vm.scheduleDateMoment().format("YYYY-MM-DD"))
+				.then(function (response) {
+					var data = response.data;
+					vm.availableGroups = {
+						sites: data.Children,
+						logonUserTeamId: data.LogonUserTeamId
+					};
+				})
+			]).then(vm.init);
 
 		function momentToYYYYMMDD(m) {
 			var YYYY = '' + m.year();

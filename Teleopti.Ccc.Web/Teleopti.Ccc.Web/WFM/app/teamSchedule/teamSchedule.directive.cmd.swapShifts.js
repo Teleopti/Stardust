@@ -4,6 +4,28 @@
 
 	angular.module('wfm.teamSchedule').directive('swapShifts', swapShiftsDirective);
 
+	function swapShiftsDirective() {
+		return {
+			restrict: 'E',
+			scope: {},
+			controller: swapShiftsCtrl,
+			controllerAs: 'vm',
+			bindToController: true,
+			require: ['^teamscheduleCommandContainer', 'swapShifts'],
+			link: function (scope, elem, attrs, ctrls) {
+					var containerCtrl = ctrls[0],
+						selfCtrl = ctrls[1];
+
+					scope.vm.selectedDate = containerCtrl.getDate;
+					scope.vm.trackId = containerCtrl.getTrackId();
+					scope.vm.getActionCb = containerCtrl.getActionCb;
+					scope.vm.resetActiveCmd = containerCtrl.resetActiveCmd;
+
+					selfCtrl.init();
+				}
+		};
+	}
+
 	swapShiftsCtrl.$inject = ['SwapShifts', 'PersonSelection', 'teamScheduleNotificationService'];
 
 	function swapShiftsCtrl(SwapShiftsSvc, PersonSelection, notification) {
@@ -42,30 +64,5 @@
 		vm.init = function () {
 			vm.swapShifts();
 		};
-	}
-
-
-	function swapShiftsDirective() {
-		return {
-			restrict: 'E',
-			scope: {},
-			controller: swapShiftsCtrl,
-			controllerAs: 'vm',
-			bindToController: true,
-			require: ['^teamscheduleCommandContainer', 'swapShifts'],
-			link: postlink
-		}
-
-		function postlink(scope, elem, attrs, ctrls) {
-			var containerCtrl = ctrls[0],
-				selfCtrl = ctrls[1];
-
-			scope.vm.selectedDate = containerCtrl.getDate;
-			scope.vm.trackId = containerCtrl.getTrackId();
-			scope.vm.getActionCb = containerCtrl.getActionCb;
-			scope.vm.resetActiveCmd = containerCtrl.resetActiveCmd;
-
-			selfCtrl.init();
-		}
 	}
 })();

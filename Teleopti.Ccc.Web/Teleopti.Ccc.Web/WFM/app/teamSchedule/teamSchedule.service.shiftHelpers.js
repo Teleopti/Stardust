@@ -1,10 +1,7 @@
-﻿'use strict';
-
-(function () {
+﻿(function () {
+	'use strict';
 
 	angular.module('wfm.teamSchedule').factory('ShiftHelper', ShiftHelper);
-
-	//shiftHelper.$inject = [];
 
 	function ShiftHelper() {
 		var service = {};
@@ -50,5 +47,4 @@
 
 		return service;
 	};
-
 }());

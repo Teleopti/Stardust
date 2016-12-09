@@ -3,6 +3,28 @@
 
 	angular.module('wfm.teamSchedule').directive('undoSchedule', undoScheduleDirective);
 
+	function undoScheduleDirective() {
+		return {
+			restrict: 'E',
+			scope: {},
+			controller: undoScheduleCtrl,
+			controllerAs: 'vm',
+			bindToController: true,
+			require: ['^teamscheduleCommandContainer', 'undoSchedule'],
+			link: function (scope, elem, attrs, ctrls) {
+					var containerCtrl = ctrls[0],
+						selfCtrl = ctrls[1];
+
+					scope.vm.selectedDate = containerCtrl.getDate;
+					scope.vm.trackId = containerCtrl.getTrackId();
+					scope.vm.getActionCb = containerCtrl.getActionCb;
+					scope.vm.resetActiveCmd = containerCtrl.resetActiveCmd;
+
+					selfCtrl.init();
+				}
+		};
+	}
+
 	undoScheduleCtrl.$inject = ['PersonSelection', 'ActivityService', '$wfmModal', 'ScheduleManagement', 'teamScheduleNotificationService', 'ScenarioTestUtil'];
 
 	function undoScheduleCtrl(PersonSelection, ActivityService, $wfmModal, scheduleManagementSvc, notification, ScenarioTestUtil) {
@@ -83,29 +105,5 @@
 				vm.undoSchedule();
 			}
 		};
-	}
-
-	function undoScheduleDirective() {
-		return {
-			restrict: 'E',
-			scope: {},
-			controller: undoScheduleCtrl,
-			controllerAs: 'vm',
-			bindToController: true,
-			require: ['^teamscheduleCommandContainer', 'undoSchedule'],
-			link: postlink
-		}
-
-		function postlink(scope, elem, attrs, ctrls) {
-			var containerCtrl = ctrls[0],
-				selfCtrl = ctrls[1];
-
-			scope.vm.selectedDate = containerCtrl.getDate;
-			scope.vm.trackId = containerCtrl.getTrackId();
-			scope.vm.getActionCb = containerCtrl.getActionCb;
-			scope.vm.resetActiveCmd = containerCtrl.resetActiveCmd;
-
-			selfCtrl.init();
-		}
 	}
 })();

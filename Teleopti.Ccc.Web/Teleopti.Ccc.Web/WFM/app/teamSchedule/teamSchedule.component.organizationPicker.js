@@ -33,7 +33,7 @@
 		};
 
 		function populateGroupList() {
-			if(!ctrl.availableGroups.sites || ctrl.availableGroups.sites.length == 0) return;
+			if(!ctrl.availableGroups || !ctrl.availableGroups.sites || ctrl.availableGroups.sites.length == 0) return;
 			ctrl.groupList = [];
 			logonUserTeamId = ctrl.availableGroups.logonUserTeamId;
 

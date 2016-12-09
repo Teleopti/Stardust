@@ -1,5 +1,33 @@
 ﻿(function () {
+
+	"use strict";
 	angular.module('wfm.teamSchedule').directive('teamscheduleCommandContainer', teamscheduleCommandContainer);
+
+	function teamscheduleCommandContainer() {
+		return {
+			restrict: 'E',
+			controller: teamscheduleCommandContainerCtrl,
+			scope: {
+				date: '=',
+				timezone: '=',
+				actionCallback: '&?',
+				configurations: '=?',
+				onReady: '&'
+			},
+			controllerAs: 'vm',
+			bindToController: true,
+			templateUrl: 'app/teamSchedule/html/teamscheduleCommandContainer.html',
+			link: function (scope, elem) {
+					scope.$on('teamSchedule.init.command', function (e, d) {
+						scope.vm.setActiveCmd(d.activeCmd);
+					});
+
+					scope.$on('teamSchedule.reset.command', function (e, d) {
+						scope.vm.resetActiveCmd();
+					});
+				}
+		};
+	}
 
 	teamscheduleCommandContainerCtrl.$inject = ['$filter',  'guidgenerator', 'CommandCheckService'];
 
@@ -56,33 +84,5 @@
 		vm.activeCommandCheck = function(){
 			return CommandCheckService.getCommandCheckStatus();
 		};
-	}
-
-	function teamscheduleCommandContainer() {
-		return {
-			restrict: 'E',
-			controller: teamscheduleCommandContainerCtrl,
-			scope: {
-				date: '=',
-				timezone: '=',
-				actionCallback: '&?',
-				configurations: '=?',
-				onReady: '&'
-			},
-			controllerAs: 'vm',
-			bindToController: true,
-			templateUrl: 'app/teamSchedule/html/teamscheduleCommandContainer.html',
-			link: postlink
-		}
-
-		function postlink(scope, elem) {
-			scope.$on('teamSchedule.init.command', function (e, d) {
-				scope.vm.setActiveCmd(d.activeCmd);
-			});
-
-			scope.$on('teamSchedule.reset.command', function (e, d) {
-				scope.vm.resetActiveCmd();
-			});
-		}
 	}
 })();

@@ -1,9 +1,7 @@
 (function () {
 	'use strict';
 
-	angular
-	.module('wfm.teamSchedule')
-	.config(stateConfig);
+	angular.module('wfm.teamSchedule').config(stateConfig);
 
 	function stateConfig($stateProvider) {
 		$stateProvider.state('teams', {

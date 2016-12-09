@@ -7,9 +7,11 @@
 	</div>
 </div>
 
-<div class="team-schedule panel wfm-block material-depth-1">
+<div class="team-schedule panel wfm-block material-depth-1 week-view">
 	<div class="teamschedule-header">
 		<div class="leftside-part">
+			<organization-picker ng-if="false && vm.toggles.DisplayScheduleOnBusinessHierachyEnabled" available-groups="vm.availableGroups" class="organization-picker-container"></organization-picker>
+
 			<span class="people-search-container">
 				<wfm-multiple-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"></wfm-multiple-search-input>
 			</span>

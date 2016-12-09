@@ -4,6 +4,30 @@
 
 	angular.module('wfm.teamSchedule').directive('removeAbsence', removeAbsenceDirective);
 
+	function removeAbsenceDirective() {
+		return {
+			restrict: 'E',
+			scope: {},
+			controller: removeAbsenceCtrl,
+			controllerAs: 'vm',
+			bindToController: true,
+			require: ['^teamscheduleCommandContainer', 'removeAbsence'],
+			link: postlink
+		};
+
+		function postlink(scope, elem, attrs, ctrls) {
+			var containerCtrl = ctrls[0],
+				selfCtrl = ctrls[1];
+
+			scope.vm.selectedDate = containerCtrl.getDate;
+			scope.vm.trackId = containerCtrl.getTrackId();
+			scope.vm.getActionCb = containerCtrl.getActionCb;
+			scope.vm.resetActiveCmd = containerCtrl.resetActiveCmd;
+
+			selfCtrl.init();
+		}
+	}
+
 	removeAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'teamScheduleNotificationService', '$wfmModal', 'ScenarioTestUtil'];
 
 	function removeAbsenceCtrl(PersonAbsenceSvc, PersonSelection, notification, $wfmModal, ScenarioTestUtil) {
@@ -75,29 +99,5 @@
 			else
 				vm.popDialog();
 		};
-	}
-
-	function removeAbsenceDirective() {
-		return {
-			restrict: 'E',
-			scope: {},
-			controller: removeAbsenceCtrl,
-			controllerAs: 'vm',
-			bindToController: true,
-			require: ['^teamscheduleCommandContainer', 'removeAbsence'],
-			link: postlink
-		};
-
-		function postlink(scope, elem, attrs, ctrls) {
-			var containerCtrl = ctrls[0],
-				selfCtrl = ctrls[1];
-
-			scope.vm.selectedDate = containerCtrl.getDate;
-			scope.vm.trackId = containerCtrl.getTrackId();
-			scope.vm.getActionCb = containerCtrl.getActionCb;
-			scope.vm.resetActiveCmd = containerCtrl.resetActiveCmd;
-
-			selfCtrl.init();
-		}
 	}
 })();

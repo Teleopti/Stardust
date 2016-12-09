@@ -2,9 +2,9 @@
 	'use strict';
 	angular.module("wfm.teamSchedule").service("ValidateRulesService", ValidateRulesService);
 
-	ValidateRulesService.$inject = ["$http", "$q", "$timeout"];
+	ValidateRulesService.$inject = ["$http", "$q"];
 
-	function ValidateRulesService($http, $q, $timeout) {
+	function ValidateRulesService($http, $q){
 
 		var self = this;
 		var getValidationRulesUrl = '../api/TeamScheduleData/FetchAllValidationRules';

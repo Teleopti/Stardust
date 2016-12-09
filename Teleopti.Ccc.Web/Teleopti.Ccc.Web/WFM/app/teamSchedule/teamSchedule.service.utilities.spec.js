@@ -35,7 +35,5 @@
 		expect(result.length).toBe(7);
 		expect(result[0].name).toBe('Monday');
 		expect(moment(result[0].date).format('YYYY-MM-DD')).toBe('2016-08-15');
-
-
 	});
 });

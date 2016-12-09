@@ -4,6 +4,27 @@
 
 	angular.module('wfm.teamSchedule').directive('removeActivity', removeActivityDirective);
 
+	function removeActivityDirective() {
+		return {
+			restrict: 'E',
+			scope: {},
+			controller: removeActivityCtrl,
+			controllerAs: 'vm',
+			bindToController: true,
+			require: ['^teamscheduleCommandContainer', 'removeActivity'],
+			link: function (scope, elem, attrs, ctrls) {
+					var containerCtrl = ctrls[0],
+						selfCtrl = ctrls[1];
+
+					scope.vm.selectedDate = containerCtrl.getDate;
+					scope.vm.trackId = containerCtrl.getTrackId();
+					scope.vm.getActionCb = containerCtrl.getActionCb;
+					scope.vm.resetActiveCmd = containerCtrl.resetActiveCmd;
+					selfCtrl.init();
+				}
+		};
+	}
+
 	removeActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'teamScheduleNotificationService', '$wfmModal', 'ScheduleManagement', 'ScenarioTestUtil'];
 
 	function removeActivityCtrl(ActivityService, PersonSelection, notification, $wfmModal, scheduleManagementSvc, ScenarioTestUtil) {
@@ -77,30 +98,5 @@
 			else
 				vm.popDialog();
 		};
-	}
-
-
-	function removeActivityDirective() {
-		return {
-			restrict: 'E',
-			scope: {},
-			controller: removeActivityCtrl,
-			controllerAs: 'vm',
-			bindToController: true,
-			require: ['^teamscheduleCommandContainer', 'removeActivity'],
-			link: postlink
-		}
-
-		function postlink(scope, elem, attrs, ctrls) {
-			var containerCtrl = ctrls[0],
-				selfCtrl = ctrls[1];
-
-			scope.vm.selectedDate = containerCtrl.getDate;
-			scope.vm.trackId = containerCtrl.getTrackId();
-			scope.vm.getActionCb = containerCtrl.getActionCb;
-			scope.vm.resetActiveCmd = containerCtrl.resetActiveCmd;
-
-			selfCtrl.init();
-		}
 	}
 })();

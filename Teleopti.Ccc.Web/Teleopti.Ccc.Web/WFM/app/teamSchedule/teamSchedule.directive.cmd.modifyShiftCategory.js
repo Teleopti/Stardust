@@ -3,6 +3,30 @@
 
 	angular.module('wfm.teamSchedule').directive('modifyShiftCategory', modifyShiftCategoryDirective);
 
+	function modifyShiftCategoryDirective() {
+		return {
+			restrict: 'E',
+			controller: modifyShiftCategoryCtrl,
+			controllerAs: 'vm',
+			bindToController: true,
+			templateUrl: 'app/teamSchedule/html/modifyShiftCategory.tpl.html',
+			require: ['^teamscheduleCommandContainer', 'modifyShiftCategory'],
+			link: function linkFn(scope, elem, attrs, ctrls) {
+				var containerCtrl = ctrls[0],
+					selfCtrl = ctrls[1];
+
+				scope.vm.containerCtrl = containerCtrl;
+
+				scope.vm.selectedDate = containerCtrl.getDate;
+				scope.vm.trackId = containerCtrl.getTrackId();
+				scope.vm.getActionCb = containerCtrl.getActionCb;
+				scope.vm.getCurrentTimezone = containerCtrl.getCurrentTimezone;
+
+				scope.vm.init();
+			}
+		};
+	}
+
 	modifyShiftCategoryCtrl.$inject = ['ShiftCategoryService', 'PersonSelection', 'teamScheduleNotificationService'];
 
 	function modifyShiftCategoryCtrl(shiftCategorySvc, personSelectionSvc, teamScheduleNotificationService){
@@ -76,30 +100,4 @@
 			});
 		};
 	}
-
-	function modifyShiftCategoryDirective() {
-		return {
-			restrict: 'E',
-			controller: modifyShiftCategoryCtrl,
-			controllerAs: 'vm',
-			bindToController: true,
-			templateUrl: 'app/teamSchedule/html/modifyShiftCategory.tpl.html',
-			require: ['^teamscheduleCommandContainer', 'modifyShiftCategory'],
-			link: function linkFn(scope, elem, attrs, ctrls) {
-				var containerCtrl = ctrls[0],
-					selfCtrl = ctrls[1];
-
-				scope.vm.containerCtrl = containerCtrl;
-
-				scope.vm.selectedDate = containerCtrl.getDate;
-				scope.vm.trackId = containerCtrl.getTrackId();
-				scope.vm.getActionCb = containerCtrl.getActionCb;
-				scope.vm.getCurrentTimezone = containerCtrl.getCurrentTimezone;
-
-				scope.vm.init();
-			}
-		};
-	}
-
-
 })();

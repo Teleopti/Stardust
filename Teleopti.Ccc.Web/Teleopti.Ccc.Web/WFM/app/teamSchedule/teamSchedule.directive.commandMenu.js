@@ -1,8 +1,8 @@
 ﻿"use strict";
 (function () {
-	angular.module('wfm.teamSchedule').directive('teamscheduleCommandMenu', [teamscheduleCommandMenu]);
+	angular.module('wfm.teamSchedule').directive('teamscheduleCommandMenu', teamscheduleCommandMenuDirective);
 
-	function teamscheduleCommandMenu() {
+	function teamscheduleCommandMenuDirective() {
 		return {
 			restrict: 'E',
 			scope: {

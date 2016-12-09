@@ -4,39 +4,6 @@
 
 	angular.module('wfm.teamSchedule').directive('noteEditor', noteEditorDirective);
 
-	noteEditorCtrl.$inject = ['$scope', 'ScheduleNoteManagementService', 'NoticeService'];
-
-	function noteEditorCtrl($scope, ScheduleNoteMgmt, NoticeService) {
-		var vm = this;
-		vm.label = 'InternalNote';
-		vm.submit = function () {
-			ScheduleNoteMgmt.submitInternalNoteForPerson(vm.noteInputOption.personId, vm.internalNotes, vm.noteInputOption.selectedDate).then(function(data) {
-				vm.noteInputOption.showEditor = false;
-				if (data && data.length > 0) {
-					var errorMsg = data[0].ErrorMessages.join(', ');
-					NoticeService.error(errorMsg, null, true);
-				} else {
-					ScheduleNoteMgmt.setInternalNoteForPerson(vm.noteInputOption.personId, vm.internalNotes);
-				}
-			});
-			
-		};
-		
-		vm.cancel = function () {
-			vm.noteInputOption.showEditor = false;
-		};
-
-		$scope.$watch(function () {
-			return vm.noteInputOption;
-			},
-			function (newValue) {
-				if (newValue) {
-					vm.internalNotes = ScheduleNoteMgmt.getInternalNoteForPerson(vm.noteInputOption.personId);
-				}
-			}
-		);
-	}
-
 	function noteEditorDirective() {
 		return {
 			restrict: 'E',
@@ -67,6 +34,9 @@
 	}
 
 	function linkFn(scope, elem, attrs){
+		if(scope.noteInputOption)
+			scope.noteInputOption.showEditor = false;
+
 		scope.$watch(function () {
 			return scope.vm.noteInputOption;
 		},function(newValue){
@@ -79,4 +49,37 @@
 			}
 		});
 	}
+
+	noteEditorCtrl.$inject = ['$scope', 'ScheduleNoteManagementService', 'NoticeService'];
+
+	function noteEditorCtrl($scope, ScheduleNoteMgmt, NoticeService) {
+		var vm = this;
+		vm.label = 'InternalNote';
+
+		vm.submit = function () {
+			ScheduleNoteMgmt.submitInternalNoteForPerson(vm.noteInputOption.personId, vm.internalNotes, vm.noteInputOption.selectedDate).then(function(data) {
+				vm.noteInputOption.showEditor = false;
+				if (data && data.length > 0) {
+					var errorMsg = data[0].ErrorMessages.join(', ');
+					NoticeService.error(errorMsg, null, true);
+				} else {
+					ScheduleNoteMgmt.setInternalNoteForPerson(vm.noteInputOption.personId, vm.internalNotes);
+				}
+			});
+		};
+		
+		vm.cancel = function () {
+			vm.noteInputOption.showEditor = false;
+		};
+
+		$scope.$watch(function () {
+				return vm.noteInputOption;
+			},
+			function (newValue) {
+				if (newValue) {
+					vm.internalNotes = ScheduleNoteMgmt.getInternalNoteForPerson(vm.noteInputOption.personId);
+				}
+			}
+		);
+	};
 })();
