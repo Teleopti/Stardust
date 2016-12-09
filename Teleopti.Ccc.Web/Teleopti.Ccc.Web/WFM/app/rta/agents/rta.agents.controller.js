@@ -166,14 +166,9 @@
 					});
 				}
 
-				$scope.expandSite = function(siteId) {
-					selectedSiteId = $scope.isSiteToBeExpanded(siteId) ? '' : siteId;
+				$scope.expandSite = function(site) {
+					site.isExpanded = !site.isExpanded;
 				};
-
-				$scope.isSiteToBeExpanded = function(siteId) {
-					return selectedSiteId === siteId;
-				};
-
 
 				$scope.goToAgents = function() {
 					var selection = {};

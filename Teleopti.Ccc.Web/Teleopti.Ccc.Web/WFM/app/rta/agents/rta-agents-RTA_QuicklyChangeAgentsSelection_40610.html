@@ -89,9 +89,9 @@
           				</md-select-header>
 								</div>
 								<md-optgroup ng-repeat="site in sites | filter:searchTerm" class="rta-option-group">
-									<span ng-click="expandSite(site.Id)" style="margin-right:6px"><i class="mdi" ng-class="isSiteToBeExpanded(site.Id) ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i></span>
+									<span ng-click="expandSite(site)" style="margin-right:6px"><i class="mdi" ng-class="site.isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i></span>
 					<md-checkbox ng-model="site.isChecked" ng-value="site.Id" ng-class="site.isMarked ? 'rta-marked-checkbox' : ''">{{site.Name}}</md-checkbox>
-					<md-option ng-show="isSiteToBeExpanded(site.Id)" ng-selected="teamChecked(site, team)" ng-value="team.Id" ng-repeat="team in site.Teams">{{team.Name}}</md-option>
+					<md-option ng-show="site.isExpanded" ng-selected="teamChecked(site, team)" ng-value="team.Id" ng-repeat="team in site.Teams">{{team.Name}}</md-option>
 					</md-optgroup>
 					</md-select>
 					</md-input-container>
@@ -100,8 +100,6 @@
 			</div>
 		</div>
 	</div>
-
-
 
 	<div class="panel material-depth-1" ng-show="showOrgSelection">
 		<div class="con-row">
