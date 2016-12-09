@@ -49,19 +49,20 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
 				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
 			if (!haveDatabases)
-			{
 				DataSourceHelper.CreateDatabases();
 
-				IntegrationIoCTest.Setup(builder =>
-				{
-					builder.RegisterType<TestConfiguration>().SingleInstance();
-					builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
-					builder.RegisterType<StatesSender>().SingleInstance().ApplyAspects();
-					builder.RegisterType<StatesArePersisted>().SingleInstance().ApplyAspects();
-					builder.RegisterType<ConfigurableSyncEventPublisher>().SingleInstance();
-					builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
-				}, this);
+			IntegrationIoCTest.Setup(builder =>
+			{
+				builder.RegisterType<TestConfiguration>().SingleInstance();
+				builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
+				builder.RegisterType<StatesSender>().SingleInstance().ApplyAspects();
+				builder.RegisterType<StatesArePersisted>().SingleInstance().ApplyAspects();
+				builder.RegisterType<ConfigurableSyncEventPublisher>().SingleInstance();
+				builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
+			}, this);
 
+			if (!haveDatabases)
+			{
 				StateHolderProxyHelper.SetupFakeState(
 					DataSourceHelper.CreateDataSource(TransactionHooks),
 					DefaultPersonThatCreatesData.PersonThatCreatesDbData,
@@ -79,19 +80,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 
 				StateHolderProxyHelper.Logout();
 			}
-			else
-			{
-				IntegrationIoCTest.Setup(builder =>
-				{
-					builder.RegisterType<TestConfiguration>().SingleInstance();
-					builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
-					builder.RegisterType<StatesSender>().SingleInstance().ApplyAspects();
-					builder.RegisterType<StatesArePersisted>().SingleInstance().ApplyAspects();
-					builder.RegisterType<ConfigurableSyncEventPublisher>().SingleInstance();
-					builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
-				}, this);
-			}
-			
+
 			HangfireClientStarter.Start();
 
 			Guid businessUnitId;
