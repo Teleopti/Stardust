@@ -6,9 +6,12 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Archiving;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -21,6 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 	public class ImportScheduleHandlerTest : ScheduleManagementTestBase
 	{
 		public ImportScheduleHandler Target;
+		public IPersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 
 		[SetUp]
 		public void Setup()
@@ -265,6 +269,44 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 				absences.Count.Should().Be.EqualTo(2);
 				absences.Any(x => x.Period == existingPersonAbsence.Period).Should().Be.True();
 				absences.Any(x => x.Period == newPersonAbsence.Period).Should().Be.True();
+			});
+
+			VerifyJobResultIsUpdated();
+		}
+
+		[Test]
+		[Ignore("Not implemented yet")]
+		public void ShouldUpdatePersonAccountIfNeeded()
+		{
+			AddDefaultTypesToRepositories();
+
+			var existingAbsence = AbsenceFactory.CreateAbsence("gone");
+			existingAbsence.Tracker = Tracker.CreateDayTracker();
+			var absenceStartDate = makeUtc(Period.StartDate.Date + TimeSpan.FromDays(1));
+			var newPersonAbsence = new PersonAbsence(Person, SourceScenario, new AbsenceLayer(existingAbsence,
+					new DateTimePeriod(absenceStartDate, makeUtc(absenceStartDate + TimeSpan.FromHours(48)))));
+
+			// Set up person account and link it to existingAbsence
+			var personAbsenceAccount = new PersonAbsenceAccount(Person, existingAbsence);
+			personAbsenceAccount.Add(new AccountDay(Period.StartDate) { Accrued = TimeSpan.FromDays(25) });
+
+			WithUnitOfWork.Do(() =>
+			{
+				AbsenceRepository.Add(existingAbsence);
+				ScheduleStorage.Add(newPersonAbsence);
+
+				PersonAbsenceAccountRepository.Add(personAbsenceAccount);
+			});
+
+			WithUnitOfWork.Do(() => Target.Handle(createImportEvent()));
+
+			WithUnitOfWork.Do(() =>
+			{
+				var absence = PersonAbsenceRepository.LoadAll().FirstOrDefault(x => x.BelongsToScenario(TargetScenario));
+				absence.Should().Not.Be.Null();
+				// Verify the persons account has been updated
+				var accounts = PersonAbsenceAccountRepository.Find(Person);
+				accounts.AllPersonAccounts().First().Remaining.Should().Be.EqualTo(TimeSpan.FromDays(23));
 			});
 
 			VerifyJobResultIsUpdated();
