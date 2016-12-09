@@ -137,7 +137,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time.Timeline
             //If within the period, it will keep the startdateTime
             _target.Period = _nowPeriod;
             _target.ChangeNowTime();
-            Assert.AreEqual(_target.NowPeriod.StartDateTime,_nowPeriod.StartDateTime);
+	        var diff = Math.Abs(_target.NowPeriod.StartDateTime.Subtract(_nowPeriod.StartDateTime).TotalSeconds);
+			Assert.Less(diff, 1);
             Assert.AreNotEqual(_target.NowPeriod,_nowPeriod,"Just check that it has changed the EndDateTime");
         }
 
