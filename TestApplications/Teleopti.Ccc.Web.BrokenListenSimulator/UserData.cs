@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Web.TestApplicationsCommon
+namespace Teleopti.Ccc.Web.BrokenListenSimulator
 {
 	public class UserData
 	{

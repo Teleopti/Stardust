@@ -14,7 +14,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators;
 using Teleopti.Ccc.Web.BrokenListenSimulator.SimulationData;
 using Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators;
-using Teleopti.Ccc.Web.TestApplicationsCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.BrokenListenSimulator
@@ -174,7 +173,6 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 				{
 					MessageBrokerListeningEnabled = true,
 					ImplementationTypeForCurrentUnitOfWork = typeof (FromFactory),
-					ThrottleMessages = false
 				};
 				var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
 				builder.RegisterModule(new CommonModule(configuration));

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
-using Teleopti.Ccc.Web.TestApplicationsCommon;
 
 namespace Teleopti.Ccc.Web.Loadtest
 {

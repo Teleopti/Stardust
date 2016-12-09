@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.BrokerListenSimulator", "TestApplications\Teleopti.Ccc.Web.BrokenListenSimulator\Teleopti.Ccc.Web.BrokerListenSimulator.csproj", "{34D5B843-AC93-4D94-B87E-AB8C249FD74C}"
 EndProject
@@ -28,8 +28,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "References", "References", "{CFBBC070-B67C-46A5-8101-5FFF3C01BE7E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.Loadtest", "TestApplications\Teleopti.Ccc.Web.Loadtest\Teleopti.Ccc.Web.Loadtest.csproj", "{0C91D97E-6D20-43CB-AD0A-51E3536AFB53}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.TestApplicationsCommon", "TestApplications\Teleopti.Ccc.Web.TestApplicationsCommon\Teleopti.Ccc.Web.TestApplicationsCommon.csproj", "{8B8B982E-6482-4170-8E35-0AF8AE7D6FC3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -135,14 +133,6 @@ Global
 		{0C91D97E-6D20-43CB-AD0A-51E3536AFB53}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0C91D97E-6D20-43CB-AD0A-51E3536AFB53}.Release|x86.ActiveCfg = Release|Any CPU
 		{0C91D97E-6D20-43CB-AD0A-51E3536AFB53}.Release|x86.Build.0 = Release|Any CPU
-		{8B8B982E-6482-4170-8E35-0AF8AE7D6FC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8B8B982E-6482-4170-8E35-0AF8AE7D6FC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8B8B982E-6482-4170-8E35-0AF8AE7D6FC3}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{8B8B982E-6482-4170-8E35-0AF8AE7D6FC3}.Debug|x86.Build.0 = Debug|Any CPU
-		{8B8B982E-6482-4170-8E35-0AF8AE7D6FC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8B8B982E-6482-4170-8E35-0AF8AE7D6FC3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8B8B982E-6482-4170-8E35-0AF8AE7D6FC3}.Release|x86.ActiveCfg = Release|Any CPU
-		{8B8B982E-6482-4170-8E35-0AF8AE7D6FC3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

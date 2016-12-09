@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Web.BrokenListenSimulator.SimulationData;
-using Teleopti.Ccc.Web.TestApplicationsCommon;
 
 namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
 {

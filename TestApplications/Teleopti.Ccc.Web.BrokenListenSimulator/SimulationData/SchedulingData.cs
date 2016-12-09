@@ -1,5 +1,4 @@
 using System;
-using Teleopti.Ccc.Web.TestApplicationsCommon;
 
 namespace Teleopti.Ccc.Web.BrokenListenSimulator.SimulationData
 {

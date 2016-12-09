@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 
-namespace Teleopti.Ccc.Web.TestApplicationsCommon
+namespace Teleopti.Ccc.Web.BrokenListenSimulator
 {
     public abstract class TrafficSimulatorBase : IDisposable
     {

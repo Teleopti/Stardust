@@ -64,12 +64,10 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
 
 	    public override void CallbackAction()
 	    {
-		    
 	    }
 
 	    public override void LogOn(SchedulingData data)
 	    {
-		    throw new NotImplementedException();
 	    }
     }
 }
