@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Web.BrokerListenSimulator
 				while (!messageBroker.IsAlive)
 					Task.Delay(500);
 
-				var subscriptions = Enumerable.Range(1, screens).Select(screen => {
+				var screenSimulations = Enumerable.Range(1, screens).Select(screen => {
 					var schedulingScreen = container.Resolve<SimulateSchedulingScreen>();
 					return Task.Factory.StartNew(() =>
 					{
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Web.BrokerListenSimulator
 					}, TaskCreationOptions.LongRunning);
 				});
 
-				Task.WaitAll(subscriptions.ToArray());
+				Task.WaitAll(screenSimulations.ToArray());
 			});
 
 			Console.WriteLine("Started listening, took {0}", s.Elapsed);
