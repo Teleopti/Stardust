@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.Web.BrokenListenSimulator.SimulationData
+namespace Teleopti.Ccc.Web.MyTimeTrafficSimulator.SimulationData
 {
     public class SchedulingData : SimulationDataBase
     {

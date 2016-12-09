@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Web.BrokenListenSimulator
+namespace Teleopti.Ccc.Web.MyTimeTrafficSimulator
 {
 	public class UserData
 	{

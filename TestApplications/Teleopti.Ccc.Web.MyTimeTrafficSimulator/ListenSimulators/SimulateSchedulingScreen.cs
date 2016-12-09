@@ -3,11 +3,11 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
-using Teleopti.Ccc.Web.BrokenListenSimulator.SimulationData;
+using Teleopti.Ccc.Web.MyTimeTrafficSimulator.SimulationData;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
+namespace Teleopti.Ccc.Web.MyTimeTrafficSimulator.ListenSimulators
 {
     public class SimulateSchedulingScreen : SimulateBase<SchedulingData>
     {

@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace Teleopti.Ccc.Web.BrokenListenSimulator
+namespace Teleopti.Ccc.Web.MyTimeTrafficSimulator
 {
 	public class Stats
 	{

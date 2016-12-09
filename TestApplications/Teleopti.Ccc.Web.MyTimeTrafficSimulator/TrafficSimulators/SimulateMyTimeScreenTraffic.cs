@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Teleopti.Ccc.Web.BrokenListenSimulator.SimulationData;
+using Teleopti.Ccc.Web.MyTimeTrafficSimulator.SimulationData;
 
-namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
+namespace Teleopti.Ccc.Web.MyTimeTrafficSimulator.TrafficSimulators
 {
     public class SimulateMyTimeScreenTraffic : TrafficSimulatorBase
     {       

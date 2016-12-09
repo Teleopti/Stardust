@@ -12,7 +12,7 @@ using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
+namespace Teleopti.Ccc.Web.MyTimeTrafficSimulator.ListenSimulators
 {
 	public abstract class SimulateBase<T>
 	{

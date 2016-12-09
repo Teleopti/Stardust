@@ -11,12 +11,12 @@ using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators;
-using Teleopti.Ccc.Web.BrokenListenSimulator.SimulationData;
-using Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators;
+using Teleopti.Ccc.Web.MyTimeTrafficSimulator.ListenSimulators;
+using Teleopti.Ccc.Web.MyTimeTrafficSimulator.SimulationData;
+using Teleopti.Ccc.Web.MyTimeTrafficSimulator.TrafficSimulators;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.BrokenListenSimulator
+namespace Teleopti.Ccc.Web.MyTimeTrafficSimulator
 {
 	internal class Program
 	{
