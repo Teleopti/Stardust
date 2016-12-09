@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Autofac;
@@ -18,6 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			_resolver = resolver;
 		}
 
+		[DebuggerStepThrough]
 		public void Intercept(IInvocation invocation)
 		{
 			var attributes = invocation.Method.GetCustomAttributes<AspectAttribute>(false);

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Linq;
 using Autofac;
 using Autofac.Core;
@@ -13,7 +14,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			registration.Preparing += onComponentPreparing;
 		}
 
-		static void onComponentPreparing(object sender, PreparingEventArgs e)
+		[DebuggerStepThrough]
+		private static void onComponentPreparing(object sender, PreparingEventArgs e)
 		{
 			var t = e.Component.Activator.LimitType;
 			e.Parameters = e.Parameters.Union(new[]
