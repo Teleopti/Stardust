@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Search.Controllers
@@ -10,10 +12,12 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 	public class SearchTermParser : ISearchTermParser
 	{
 		private readonly ILoggedOnUser _loggonUser;
+		private readonly IToggleManager _toggleManager;
 
-		public SearchTermParser(ILoggedOnUser loggonUser)
+		public SearchTermParser(ILoggedOnUser loggonUser, IToggleManager toggleManager)
 		{
 			_loggonUser = loggonUser;
+			_toggleManager = toggleManager;
 		}
 
 		public static IDictionary<PersonFinderField, string> Parse(string values)
@@ -75,7 +79,8 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 
 		public IDictionary<PersonFinderField, string> Parse(string values, DateOnly date)
 		{
-			values = Keyword(values, date);
+			if (!_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260))
+				values = Keyword(values, date);
 			return Parse(values);
 		}
 

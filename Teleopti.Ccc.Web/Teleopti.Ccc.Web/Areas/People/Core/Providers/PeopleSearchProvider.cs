@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 
 		private bool isPersonMatched(IPerson person, DateOnly date, PersonFinderField field, string value)
 		{
-			var personPeriods = person.PersonPeriods(new DateOnlyPeriod(date, date));
+			var personPeriod = person.Period(date);
 			var terms = parse(value);
 			switch (field)
 			{
@@ -147,34 +147,34 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 				case PersonFinderField.Note:
 					return terms.Any(t => person.Note.ContainsIgnoreCase(t));
 				case PersonFinderField.BudgetGroup:
-					return terms.Any(t => personPeriods.Any(p => p.BudgetGroup != null && p.BudgetGroup.Name.ContainsIgnoreCase(t)));
+					return terms.Any(t => personPeriod.BudgetGroup != null && personPeriod.BudgetGroup.Name.ContainsIgnoreCase(t));
 				case PersonFinderField.Contract:
-					return terms.Any(t => personPeriods.Any(p => p.PersonContract != null && p.PersonContract.Contract.Description.Name.ContainsIgnoreCase(t)));
+					return terms.Any(t => personPeriod.PersonContract != null && personPeriod.PersonContract.Contract.Description.Name.ContainsIgnoreCase(t));
 				case PersonFinderField.ContractSchedule:
-					return terms.Any(t => personPeriods.Any(p => p.PersonContract.ContractSchedule.Description.Name.ContainsIgnoreCase(t)));
+					return terms.Any(t => personPeriod.PersonContract.ContractSchedule.Description.Name.ContainsIgnoreCase(t));
 				case PersonFinderField.Organization:
-					return terms.Any(t => personPeriods.Any(p => p.Team.SiteAndTeam.ContainsIgnoreCase(t)));
+					return terms.Any(t => personPeriod.Team.SiteAndTeam.ContainsIgnoreCase(t));
 				case PersonFinderField.PartTimePercentage:
-					return terms.Any(t => personPeriods.Any(p => p.PersonContract != null && p.PersonContract.PartTimePercentage.Description.Name.ContainsIgnoreCase(
-						t)));
+					return terms.Any(t => personPeriod.PersonContract != null && personPeriod.PersonContract.PartTimePercentage.Description.Name.ContainsIgnoreCase(
+						t));
 				case PersonFinderField.ShiftBag:
-					return terms.Any(t => personPeriods.Any(p => p.RuleSetBag !=null &&p.RuleSetBag.Description.Name.ContainsIgnoreCase(t)));
+					return terms.Any(t => personPeriod.RuleSetBag !=null && personPeriod.RuleSetBag.Description.Name.ContainsIgnoreCase(t));
 				case PersonFinderField.Skill:
-					return terms.Any(t => personPeriods.Any(p => p.PersonSkillCollection.Any(s => s.Skill.Name.ContainsIgnoreCase(t))));
+					return terms.Any(t => personPeriod.PersonSkillCollection.Any(s => s.Skill.Name.ContainsIgnoreCase(t)));
 				case PersonFinderField.Role:
 					return terms.Any(t => person.PermissionInformation.ApplicationRoleCollection.Any(r => r.Name.ContainsIgnoreCase(t)));
 				default:
 					return terms.Any(t => person.Name.FirstName.ContainsIgnoreCase(t))
 						   || terms.Any(t => person.Name.LastName.ContainsIgnoreCase(t))
 						   || terms.Any(t => person.Note.ContainsIgnoreCase(t))
-						   || terms.Any(t => personPeriods.Any(p => p.BudgetGroup != null && p.BudgetGroup.Name.ContainsIgnoreCase(t)))
-						   || terms.Any(t => personPeriods.Any(p => p.PersonContract != null && p.PersonContract.Contract.Description.Name.ContainsIgnoreCase(t)))
-						   || terms.Any(t => personPeriods.Any(p => p.PersonContract != null && p.PersonContract.ContractSchedule.Description.Name.ContainsIgnoreCase(t)))
-						   || terms.Any(t => personPeriods.Any(p => p.Team.SiteAndTeam.ContainsIgnoreCase(t)))
-						   || terms.Any(t => personPeriods.Any(p => p.PersonContract != null && p.PersonContract.PartTimePercentage.Description.Name.ContainsIgnoreCase(
-						t)))
-						   || terms.Any(t => personPeriods.Any(p => p.RuleSetBag != null && p.RuleSetBag.Description.Name.ContainsIgnoreCase(t)))
-						   || terms.Any(t => personPeriods.Any(p => p.PersonSkillCollection.Any(s => s.Skill.Name.ContainsIgnoreCase(t))))
+						   || terms.Any(t => personPeriod.BudgetGroup != null && personPeriod.BudgetGroup.Name.ContainsIgnoreCase(t))
+						   || terms.Any(t => personPeriod.PersonContract != null && personPeriod.PersonContract.Contract.Description.Name.ContainsIgnoreCase(t))
+						   || terms.Any(t => personPeriod.PersonContract != null && personPeriod.PersonContract.ContractSchedule.Description.Name.ContainsIgnoreCase(t))
+						   || terms.Any(t => personPeriod.Team.SiteAndTeam.ContainsIgnoreCase(t))
+						   || terms.Any(t => personPeriod.PersonContract != null && personPeriod.PersonContract.PartTimePercentage.Description.Name.ContainsIgnoreCase(
+						t))
+						   || terms.Any(t => personPeriod.RuleSetBag != null && personPeriod.RuleSetBag.Description.Name.ContainsIgnoreCase(t))
+						   || terms.Any(t => personPeriod.PersonSkillCollection.Any(s => s.Skill.Name.ContainsIgnoreCase(t)))
 						   || terms.Any(t => person.PermissionInformation.ApplicationRoleCollection.Any(r => r.Name.ContainsIgnoreCase(t)));
 			}
 
