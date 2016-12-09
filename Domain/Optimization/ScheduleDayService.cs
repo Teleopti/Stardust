@@ -15,13 +15,15 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
     	private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 	    private readonly Func<ISchedulerStateHolder> _schedulingResultStateHolder;
+	    private readonly IUserTimeZone _userTimeZone;
 
 	    public ScheduleDayService(IScheduleService scheduleService,
 								  IDeleteSchedulePartService deleteSchedulePartService,
 								  IResourceOptimization resourceOptimizationHelper,
 								  IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			Func<ISchedulerStateHolder> schedulingResultStateHolder
+			Func<ISchedulerStateHolder> schedulingResultStateHolder,
+			IUserTimeZone userTimeZone
 			)
 		{
 			_scheduleService = scheduleService;
@@ -30,13 +32,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 		    _schedulingResultStateHolder = schedulingResultStateHolder;
+			_userTimeZone = userTimeZone;
 		}
 
 		public bool ScheduleDay(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions)
         {
 			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
 
-        	var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder().SchedulingResultState);
+        	var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder().SchedulingResultState, _userTimeZone);
 			return _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, _schedulePartModifyAndRollbackService);
         }
 

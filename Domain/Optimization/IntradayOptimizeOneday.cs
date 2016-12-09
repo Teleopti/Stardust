@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleMatrixPro _matrix;
 		private readonly IIntradayOptimizeOneDayCallback _intradayOptimizeOneDayCallback;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public IntradayOptimizeOneday(IScheduleResultDailyValueCalculator dailyValueCalculator,
 			IScheduleService scheduleService,
@@ -38,7 +39,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
 			IScheduleMatrixPro matrix,
 			IIntradayOptimizeOneDayCallback intradayOptimizeOneDayCallback,
-			ISchedulingResultStateHolder schedulingResultStateHolder)
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			IUserTimeZone userTimeZone)
 		{
 			_dailyValueCalculator = dailyValueCalculator;
 			_scheduleService = scheduleService;
@@ -54,6 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_matrix = matrix;
 			_intradayOptimizeOneDayCallback = intradayOptimizeOneDayCallback;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_userTimeZone = userTimeZone;
 		}
 
 		public bool Execute(DateOnly dateOnly)
@@ -145,7 +148,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IScheduleDayPro scheduleDay = _matrix.FullWeeksPeriodDictionary[day];
 			schedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;
 
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder, _userTimeZone);
 
 			if (!_scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, effectiveRestriction, resourceCalculateDelayer, _rollbackService))
 			{

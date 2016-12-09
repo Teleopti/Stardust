@@ -24,12 +24,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IResourceOptimization> _resourceOptimizationHelper;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public ClassicScheduleCommand(IMatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			Func<IResourceOptimization> resourceOptimizationHelper,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
-			PeriodExtractorFromScheduleParts periodExtractor)
+			PeriodExtractorFromScheduleParts periodExtractor,
+			IUserTimeZone userTimeZone)
 		{
 			_matrixListFactory = matrixListFactory;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
@@ -37,6 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_schedulerStateHolder = schedulerStateHolder;
 			_periodExtractor = periodExtractor;
+			_userTimeZone = userTimeZone;
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
@@ -97,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private void solveWeeklyRest(ISchedulingOptions schedulingOptions, IList<IScheduleDay> selectedSchedules, ISchedulerStateHolder schedulerStateHolder, 
 									DateOnlyPeriod selectedPeriod, ISchedulingProgress backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper(), 1, schedulingOptions.ConsiderShortBreaks, _schedulerStateHolder().SchedulingResultState);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper(), 1, schedulingOptions.ConsiderShortBreaks, _schedulerStateHolder().SchedulingResultState, _userTimeZone);
 			ISchedulePartModifyAndRollbackService rollbackService =
 				new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
 					_scheduleDayChangeCallback(),

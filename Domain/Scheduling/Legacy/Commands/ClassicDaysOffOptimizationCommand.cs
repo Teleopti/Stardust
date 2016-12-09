@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly PersonalSkillsProvider _personalSkillsProvider;
 		private readonly ScheduleChangesAffectedDates _resourceCalculateDaysDecider;
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public ClassicDaysOffOptimizationCommand(IOptimizerHelperHelper optimizerHelperHelper, 
 			IScheduleMatrixLockableBitArrayConverterEx bitArrayConverter,
@@ -49,7 +50,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			PersonalSkillsProvider personalSkillsProvider,
 			ScheduleChangesAffectedDates resourceCalculateDaysDecider,
-			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider)
+			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
+			IUserTimeZone userTimeZone)
 		{
 			_optimizerHelperHelper = optimizerHelperHelper;
 			_bitArrayConverter = bitArrayConverter;
@@ -68,6 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_personalSkillsProvider = personalSkillsProvider;
 			_resourceCalculateDaysDecider = resourceCalculateDaysDecider;
 			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
+			_userTimeZone = userTimeZone;
 		}
 
 		public void Execute(
@@ -157,7 +160,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					25,
 					_dayOffDecisionMaker);
 
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, scheduleResultStateHolder());
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, scheduleResultStateHolder(), _userTimeZone);
 
 			var dayOffOptimizerConflictHandler = new DayOffOptimizerConflictHandler(scheduleMatrix, scheduleService,
 				_effectiveRestrictionCreator,
@@ -199,7 +202,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					mainShiftOptimizeActivitySpecificationSetter,
 					dayOffOptimizerPreMoveResultPredictor,
 					daysOffPreferences,
-					_schedulerStateHolder().SchedulingResultState);
+					_schedulerStateHolder().SchedulingResultState,
+					_userTimeZone);
 
 			IDayOffOptimizerContainer optimizerContainer =
 				new DayOffOptimizerContainer(_bitArrayConverter,

@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 	    private readonly IScheduleService _scheduleService;
     	private readonly IResourceOptimization _resourceOptimizationHelper;
+	    private readonly IUserTimeZone _userTimeZone;
 
 	    private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
         private readonly HashSet<IWorkShiftFinderResult> _finderResults = new HashSet<IWorkShiftFinderResult>();
@@ -38,12 +39,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public StudentSchedulingService( ISchedulingResultStateHolder schedulingResultStateHolder,
             IEffectiveRestrictionCreator effectiveRestrictionCreator, IScheduleService scheduleService,
-			IResourceOptimization resourceOptimizationHelper)
+			IResourceOptimization resourceOptimizationHelper,
+			IUserTimeZone userTimeZone)
 		{
 		    _schedulingResultStateHolder = schedulingResultStateHolder;
 		    _effectiveRestrictionCreator = effectiveRestrictionCreator;
 		    _scheduleService = scheduleService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_userTimeZone = userTimeZone;
 		}
 
 	    public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions,
@@ -53,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    var skills = _schedulingResultStateHolder.Skills;
 		    if (skills.Length == 0) return false;
 		    var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
-			    schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder);
+			    schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder, _userTimeZone);
 
 
 		    schedulingOptions.OnlyShiftsWhenUnderstaffed = true;

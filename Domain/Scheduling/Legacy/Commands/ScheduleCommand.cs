@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public ScheduleCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
 			IRequiredScheduleHelper requiredScheduleOptimizerHelper,
@@ -38,8 +39,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			PeriodExtractorFromScheduleParts periodExtractor,
-			CascadingResourceCalculationContextFactory resourceCalculationContextFactory
-			)
+			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
+			IUserTimeZone userTimeZone)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_requiredScheduleOptimizerHelper = requiredScheduleOptimizerHelper;
@@ -53,6 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
 			_periodExtractor = periodExtractor;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
+			_userTimeZone = userTimeZone;
 		}
 
 		[TestLogTime]
@@ -90,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
 					{
 						var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
-							schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState);
+							schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState, _userTimeZone);
 
 						ISchedulePartModifyAndRollbackService rollbackService =
 							new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
@@ -158,7 +160,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			var rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState, _userTimeZone);
 			_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod,
 											matrixesOfSelectedScheduleDays, backgroundWorker, dayOffOptimizationPreferenceProvider);
 		}	

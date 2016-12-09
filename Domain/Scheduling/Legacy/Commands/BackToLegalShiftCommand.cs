@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly IPersonListExtractorFromScheduleParts _extractor;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
+		private readonly IUserTimeZone _userTimeZone;
 		private ISchedulingProgress _backgroundWorker;
 
 		public BackToLegalShiftCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
@@ -36,7 +37,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IResourceOptimization resourceOptimizationHelper,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			IPersonListExtractorFromScheduleParts extractor,
-			PeriodExtractorFromScheduleParts periodExtractor)
+			PeriodExtractorFromScheduleParts periodExtractor,
+			IUserTimeZone userTimeZone)
 		{
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
@@ -49,6 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 			_extractor = extractor;
 			_periodExtractor = periodExtractor;
+			_userTimeZone = userTimeZone;
 		}
 
 		public void Execute(ISchedulingProgress backgroundWorker,
@@ -82,7 +85,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var rollbackService = new SchedulePartModifyAndRollbackService(schedulingResultStateHolder,
 				_scheduleDayChangeCallback,
 				tagSetter);
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingResultStateHolder);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingResultStateHolder, _userTimeZone);
 			_backToLegalShiftService.Progress += _backToLegalShiftService_Progress;
 			_backToLegalShiftService.Execute(selectedTeamBlocks, schedulingOptions, schedulingResultStateHolder, rollbackService,
 				resourceCalculateDelayer);

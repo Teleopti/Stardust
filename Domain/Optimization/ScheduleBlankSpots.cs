@@ -14,18 +14,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly IResourceOptimization _resourceOptimizationHelper;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public ScheduleBlankSpots(IScheduleService scheduleService,
 			ISchedulePartModifyAndRollbackService rollbackService,
 			Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			IResourceOptimization resourceOptimizationHelper)
+			IResourceOptimization resourceOptimizationHelper,
+			IUserTimeZone userTimeZone)
 		{
 			_scheduleService = scheduleService;
 			_rollbackService = rollbackService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_userTimeZone = userTimeZone;
 		}
 
 		public void Execute(IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers, IOptimizationPreferences optimizerPreferences)
@@ -46,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 						continue;
 
 					var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, schedulingOptions);
-				    var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, stateHolder);
+				    var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, stateHolder, _userTimeZone);
 
 					if (!_scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, _rollbackService))
 					{

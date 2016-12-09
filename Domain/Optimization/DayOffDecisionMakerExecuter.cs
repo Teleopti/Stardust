@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     	private readonly IDayOffOptimizerPreMoveResultPredictor _dayOffOptimizerPreMoveResultPredictor;
 	    private readonly IDaysOffPreferences _daysOffPreferences;
 	    private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+	    private readonly IUserTimeZone _userTimeZone;
 	    private readonly ILogWriter _logWriter;
 
         public DayOffDecisionMakerExecuter(
@@ -54,8 +55,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
 			IDayOffOptimizerPreMoveResultPredictor dayOffOptimizerPreMoveResultPredictor,
 			IDaysOffPreferences daysOffPreferences,
-			ISchedulingResultStateHolder schedulingResultStateHolder
-            )
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			IUserTimeZone userTimeZone
+						)
         {
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
             _smartDayOffBackToLegalStateService = smartDayOffBackToLegalStateService;
@@ -77,6 +79,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         	_dayOffOptimizerPreMoveResultPredictor = dayOffOptimizerPreMoveResultPredictor;
 	        _daysOffPreferences = daysOffPreferences;
 	        _schedulingResultStateHolder = schedulingResultStateHolder;
+	        _userTimeZone = userTimeZone;
 
 	        _logWriter = new LogWriter<DayOffDecisionMakerExecuter>();
         }
@@ -426,7 +429,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	            }
 
 	            var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
-				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder);
+				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder, _userTimeZone);
 
 	            bool schedulingResult = _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer,  _schedulePartModifyAndRollbackService);
 

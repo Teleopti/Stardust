@@ -19,18 +19,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ScheduleOvertimeOnNonScheduleDays _scheduleOvertimeOnNonScheduleDays;
 		private readonly FullResourceCalculation _fullResourceCalculation;
 		private readonly IResourceOptimization _resourceOptimizationHelper;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public ScheduleOvertime(Func<ISchedulingResultStateHolder> schedulingResultStateHolder, 
 																	IScheduleOvertimeService scheduleOvertimeService,
 																	ScheduleOvertimeOnNonScheduleDays scheduleOvertimeOnNonScheduleDays,
 																	FullResourceCalculation fullResourceCalculation,
-																	IResourceOptimization resourceOptimizationHelper)
+																	IResourceOptimization resourceOptimizationHelper,
+																	IUserTimeZone userTimeZone)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_scheduleOvertimeService = scheduleOvertimeService;
 			_scheduleOvertimeOnNonScheduleDays = scheduleOvertimeOnNonScheduleDays;
 			_fullResourceCalculation = fullResourceCalculation;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_userTimeZone = userTimeZone;
 		}
 
 		public void Execute(IOvertimePreferences overtimePreferences, 
@@ -38,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 										IList<IScheduleDay> selectedSchedules)
 		{
 			_fullResourceCalculation.Execute();
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, _schedulingResultStateHolder());
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, _schedulingResultStateHolder(), _userTimeZone);
 			var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
 			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
 			var cancel = false;

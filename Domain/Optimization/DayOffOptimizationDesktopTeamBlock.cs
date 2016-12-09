@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IResourceOptimizationHelperExtended _resouceOptimizationHelperExtended;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public DayOffOptimizationDesktopTeamBlock(IResourceOptimization resourceOptimizationHelper,
 								ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
@@ -31,7 +32,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 								Func<ISchedulerStateHolder> schedulerStateHolder,
 								IResourceOptimizationHelperExtended resouceOptimizationHelperExtended,
 								CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
-								TeamInfoFactoryFactory teamInfoFactoryFactory)
+								TeamInfoFactoryFactory teamInfoFactoryFactory,
+								IUserTimeZone userTimeZone)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_teamBlockDayOffOptimizerService = teamBlockDayOffOptimizerService;
@@ -42,6 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resouceOptimizationHelperExtended = resouceOptimizationHelperExtended;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
+			_userTimeZone = userTimeZone;
 		}
 
 		public void Execute(DateOnlyPeriod selectedPeriod, 
@@ -66,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 				var selectedPersons = matrixList.Select(x => x.Person).Distinct().ToList();
 
-				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder());
+				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder(), _userTimeZone);
 				var teamInfoFactory = _teamInfoFactoryFactory.Create(stateHolder.AllPermittedPersons, stateHolder.Schedules, groupPageLight);
 
 				_teamBlockDayOffOptimizerService.OptimizeDaysOff(matrixList,

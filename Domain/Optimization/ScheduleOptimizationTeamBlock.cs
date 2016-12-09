@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IResourceOptimization _resourceOptimizationHelper;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public ScheduleOptimizationTeamBlock(
 			IFillSchedulerStateHolder fillSchedulerStateHolder, 
@@ -48,7 +49,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
 			IResourceOptimization resourceOptimizationHelper,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
-			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended)
+			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
+			IUserTimeZone userTimeZone)
 		{
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -65,6 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
+			_userTimeZone = userTimeZone;
 		}
 
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
@@ -96,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForDayOffOptimization, optimizationPreferences, period);
 
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences); 
-			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState);
+			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState, _userTimeZone);
 
 			_groupPersonBuilderWrapper.SetSingleAgentTeam();
 

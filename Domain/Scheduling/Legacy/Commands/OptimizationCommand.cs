@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IPersonListExtractorFromScheduleParts _personExtractor;
 		private readonly ScheduleMatrixOriginalStateContainerCreator _scheduleMatrixOriginalStateContainerCreator;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public OptimizationCommand(IGroupPageCreator groupPageCreator,
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
@@ -38,7 +39,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IPersonListExtractorFromScheduleParts personExtractor,
 			ScheduleMatrixOriginalStateContainerCreator scheduleMatrixOriginalStateContainerCreator,
-			CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
+			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
+			IUserTimeZone userTimeZone)
 		{
 			_groupPageCreator = groupPageCreator;
 			_groupScheduleGroupPageDataProvider = groupScheduleGroupPageDataProvider;
@@ -52,6 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_personExtractor = personExtractor;
 			_scheduleMatrixOriginalStateContainerCreator = scheduleMatrixOriginalStateContainerCreator;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
+			_userTimeZone = userTimeZone;
 		}
 
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, ISchedulingProgress backgroundWorker,
@@ -121,7 +124,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				var selectedPersons = _personExtractor.ExtractPersons(selectedSchedules);
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
-					schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState);
+					schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState, _userTimeZone);
 				var tagSetter = new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling);
 				var rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
 					_scheduleDayChangeCallback,

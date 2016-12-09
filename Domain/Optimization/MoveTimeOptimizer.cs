@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     	private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 	    private readonly IScheduleMatrixPro _matrix;
 	    private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+	    private readonly IUserTimeZone _userTimeZone;
 
 	    public MoveTimeOptimizer(
             IPeriodValueCalculator periodValueCalculator,
@@ -49,7 +50,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             ISchedulingOptionsCreator schedulingOptionsCreator,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
 			IScheduleMatrixPro matrix,
-			ISchedulingResultStateHolder schedulingResultStateHolder)
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			IUserTimeZone userTimeZone)
         {
             _periodValueCalculator = periodValueCalculator;
             _personalSkillsDataExtractor = personalSkillsDataExtractor;
@@ -67,6 +69,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         	_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
 		    _matrix = matrix;
 		    _schedulingResultStateHolder = schedulingResultStateHolder;
+	        _userTimeZone = userTimeZone;
         }
 
 		public bool Execute()
@@ -113,7 +116,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             //delete schedule on the two days
             IList<IScheduleDay> listToDelete = new List<IScheduleDay> { firstDay.DaySchedulePart(), secondDay.DaySchedulePart() };
 			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService, schedulingOptions.ConsiderShortBreaks, false);
-            var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder);
+            var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder, _userTimeZone);
 
             if (!tryScheduleFirstDay(firstDayDate, schedulingOptions, firstDayEffectiveRestriction, firstDayContractTime))
             {
@@ -224,7 +227,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
 			IScheduleDayPro scheduleDay = _matrix.GetScheduleDayByKey(day);
             schedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder, _userTimeZone);
 
         	var dic = _workShiftOriginalStateContainer.OldPeriodDaysState;
         	IScheduleDay originalScheduleDay = dic[day];

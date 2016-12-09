@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -75,7 +76,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 												   _resourceOptimizationHelper,
 												   _dayOffOptimizationPreferenceProvider,
 													 MockRepository.GenerateStub<IDeleteAndResourceCalculateService>(),
-													 new ScheduleResultDataExtractorProvider(new PersonalSkillsProvider(), new SkillPriorityProvider()));
+													 new ScheduleResultDataExtractorProvider(new PersonalSkillsProvider(), new SkillPriorityProvider()), UserTimeZone.Make());
 		}
 
 		[Test]

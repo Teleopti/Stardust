@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly ITeamBlockRemoveShiftCategoryBackToLegalService _teamBlockRemoveShiftCategoryBackToLegalService;
 		private readonly INightRestWhiteSpotSolverServiceFactory _nightRestWhiteSpotSolverServiceFactory;
+		private readonly IUserTimeZone _userTimeZone;
 
 
 		public RequiredScheduleHelper(ISchedulePeriodListShiftCategoryBackToLegalStateService shiftCategoryBackToLegalState, 
@@ -61,7 +62,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				IScheduleDayEquator scheduleDayEquator, 
 				IMatrixListFactory matrixListFactory, 
 				ITeamBlockRemoveShiftCategoryBackToLegalService teamBlockRemoveShiftCategoryBackToLegalService,
-				INightRestWhiteSpotSolverServiceFactory nightRestWhiteSpotSolverServiceFactory)
+				INightRestWhiteSpotSolverServiceFactory nightRestWhiteSpotSolverServiceFactory,
+				IUserTimeZone userTimeZone)
 		{
 			_shiftCategoryBackToLegalState = shiftCategoryBackToLegalState;
 			_ruleSetBagsOfGroupOfPeopleCanHaveShortBreak = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
@@ -78,6 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_matrixListFactory = matrixListFactory;
 			_teamBlockRemoveShiftCategoryBackToLegalService = teamBlockRemoveShiftCategoryBackToLegalService;
 			_nightRestWhiteSpotSolverServiceFactory = nightRestWhiteSpotSolverServiceFactory;
+			_userTimeZone = userTimeZone;
 		}
 
 		public void RemoveShiftCategoryBackToLegalState(
@@ -101,7 +104,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					var schedulePartModifyAndRollbackService = new SchedulePartModifyAndRollbackService(_resultStateHolder(), _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
 					var shiftNudgeDirective = new ShiftNudgeDirective();
-					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _resultStateHolder());
+					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _resultStateHolder(), _userTimeZone);
 					foreach (var matrix in matrixList)
 					{
 						_teamBlockRemoveShiftCategoryBackToLegalService.Execute(schedulingOptions, matrix, _resultStateHolder(), schedulePartModifyAndRollbackService, resourceCalculateDelayer, matrixList, shiftNudgeDirective, optimizationPreferences);

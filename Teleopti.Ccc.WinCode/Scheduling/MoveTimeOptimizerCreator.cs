@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public MoveTimeOptimizerCreator(
 			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
@@ -34,7 +35,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IResourceOptimization resourceOptimizationHelper,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
-			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider)
+			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
+			IUserTimeZone userTimeZone)
 		{
 			_scheduleMatrixContainerList = scheduleMatrixContainerList;
 			_workShiftContainerList = workShiftContainerList;
@@ -48,6 +50,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_dayOffOptimizationPreferenceProvider = dayOffOptimizationPreferenceProvider;
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
 			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
+			_userTimeZone = userTimeZone;
 		}
 
 		/// <summary>
@@ -100,7 +103,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						schedulingOptionsCreator,
 						mainShiftOptimizeActivitySpecificationSetter,
 						scheduleMatrixPro,
-						_schedulingResultStateHolder);
+						_schedulingResultStateHolder,
+						_userTimeZone);
 
 				result.Add(optimizer);
 			}

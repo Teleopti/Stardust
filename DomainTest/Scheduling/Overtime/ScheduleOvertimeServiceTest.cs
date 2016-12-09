@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -112,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
 				SkillActivity = phoneActivity
 			};
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, true, stateHolder.SchedulingResultState);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, true, stateHolder.SchedulingResultState, UserTimeZone.Make());
 			var rules = NewBusinessRuleCollection.Minimum();
 			TimeZoneGuard.SetTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			var scheduleTagSetter = new ScheduleTagSetter(overtimePreference.ScheduleTag);
@@ -266,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
 				SkillActivity = phoneActivity
 			};
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, true, stateHolder.SchedulingResultState);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, true, stateHolder.SchedulingResultState, UserTimeZone.Make());
 			var rules = NewBusinessRuleCollection.Minimum();
 			var scheduleTagSetter = new ScheduleTagSetter(overtimePreference.ScheduleTag);
 			TimeZoneGuard.SetTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());

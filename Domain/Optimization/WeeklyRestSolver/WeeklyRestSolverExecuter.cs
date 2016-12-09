@@ -15,18 +15,21 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public WeeklyRestSolverExecuter(Func<ISchedulerStateHolder> schedulerStateHolder, 
 			IResourceOptimization resourceOptimizationHelper, 
 			IMatrixListFactory matrixListFactory, 
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,
-			IScheduleDayChangeCallback scheduleDayChangeCallback)
+			IScheduleDayChangeCallback scheduleDayChangeCallback,
+			IUserTimeZone userTimeZone)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_matrixListFactory = matrixListFactory;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
+			_userTimeZone = userTimeZone;
 		}
 
 		public void Resolve(IOptimizationPreferences optimizationPreferences, DateOnlyPeriod period, IEnumerable<IScheduleDay> scheduleDays, IList<IPerson> people, 
@@ -35,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var rollbackService = new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState,
 				_scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
-			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulerStateHolder().SchedulingResultState);
+			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulerStateHolder().SchedulingResultState, _userTimeZone);
 			var matrixes = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, scheduleDays);
 
 			_weeklyRestSolverCommand.Execute(schedulingOptions,

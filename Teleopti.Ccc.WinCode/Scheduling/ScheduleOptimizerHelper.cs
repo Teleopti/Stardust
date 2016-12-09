@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.DayOffPlanning;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
@@ -100,7 +99,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					_container.Resolve<IResourceOptimization>(),
 					dayOffOptimizationPreferenceProvider,
 					_container.Resolve<IDeleteAndResourceCalculateService>(),
-					scheduleResultDataExtractorProvider);
+					scheduleResultDataExtractorProvider,
+					_container.Resolve<IUserTimeZone>());
 
 			IList<IMoveTimeOptimizer> optimizers = creator.Create();
 			var service = new MoveTimeOptimizerContainer(optimizers, periodValueCalculator);
@@ -375,7 +375,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(),
 				tagSetter);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
-				schedulingOptions.ConsiderShortBreaks, _stateHolder());
+				schedulingOptions.ConsiderShortBreaks, _stateHolder(), _container.Resolve<IUserTimeZone>());
 			var intraIntervalOptimizationCommand = _container.Resolve<IIntraIntervalOptimizationCommand>();
 			intraIntervalOptimizationCommand.Execute(optimizationPreferences, selectedPeriod, selectedDays,
 				_schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackService, resourceCalculateDelayer,

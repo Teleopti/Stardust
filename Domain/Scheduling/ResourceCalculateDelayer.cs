@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly int _calculationFrequency;
 		private readonly bool _considerShortBreaks;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly IUserTimeZone _userTimeZone;
 		private DateOnly? _lastDate;
 		private int _counter = 1;
 		private bool _paused;
@@ -17,12 +18,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			IResourceOptimization resourceOptimizationHelper, 
 			int calculationFrequency, 
 			bool considerShortBreaks,
-			ISchedulingResultStateHolder schedulingResultStateHolder)
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			IUserTimeZone userTimeZone)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_calculationFrequency = calculationFrequency;
 			_considerShortBreaks = considerShortBreaks;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_userTimeZone = userTimeZone;
 		}
 
 		public void CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod, bool doIntraIntervalCalculation)
@@ -73,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		private bool isNightShift(DateTimePeriod period)
 		{
-			var tz = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			var tz = _userTimeZone.TimeZone();
 			var viewerStartDate = new DateOnly(period.StartDateTimeLocal(tz));
 			var viewerEndDate = new DateOnly(period.EndDateTimeLocal(tz).AddMinutes(-1));
 

@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -54,7 +55,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																 _dayOffsInPeriodCalculator,
 																 _effectiveRestrictionCreator, 
                                                                  _scheduleService,
-																 _resourceOptimizationHelper);
+																 _resourceOptimizationHelper,
+																 UserTimeZone.Make());
 			_mocks.VerifyAll();
 			_mocks.BackToRecordAll();
 		}

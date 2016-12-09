@@ -26,16 +26,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	    private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
         private readonly HashSet<IWorkShiftFinderResult> _finderResults = new HashSet<IWorkShiftFinderResult>();
+	    private IUserTimeZone _userTimeZone;
 
-        public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
+	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public FixedStaffSchedulingService(
             Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 			IDayOffsInPeriodCalculator dayOffsInPeriodCalculator, 
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IScheduleService scheduleService, 
-			IResourceOptimization resourceOptimizationHelper)
+			IResourceOptimization resourceOptimizationHelper,
+			IUserTimeZone userTimeZone)
 		{
+			_userTimeZone = userTimeZone;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
@@ -70,7 +73,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			    _resourceOptimizationHelper,
 			    schedulingOptions.ResourceCalculateFrequency,
 			    schedulingOptions.ConsiderShortBreaks,
-					_schedulingResultStateHolder());
+					_schedulingResultStateHolder(),
+					_userTimeZone);
 
 		    var personDateDictionary = (from p in selectedParts
 			    group p.DateOnlyAsPeriod.DateOnly by p.Person
