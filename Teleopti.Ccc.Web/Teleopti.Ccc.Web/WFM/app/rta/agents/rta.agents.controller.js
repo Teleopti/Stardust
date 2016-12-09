@@ -90,6 +90,7 @@
 				$scope.skillAreasLoaded = false;
 				$scope.teamsSelected = [];
 				var enableWatchOnTeam = false;
+				$scope.selectFieldText = 'Select organization';
 				$scope.searchTerm;
 				toggleService.togglesLoaded.then(function() {
 					$scope.showOrgSelection = toggleService.RTA_QuicklyChangeAgentsSelection_40610;
@@ -97,6 +98,7 @@
 						RtaService.getOrganization()
 						.then(function(organization) {
 							$scope.sites = organization;
+							console.log();
 							keepSelectionForOrganization();
 						});
 				});
@@ -118,13 +120,13 @@
 							$scope.selectedSkill = getSelected(skills, skillIds[0]);
 					});
 
-					RtaService.getSkillAreas()
-						.then(function(skillAreas) {
-							$scope.skillAreasLoaded = true;
-							$scope.skillAreas = skillAreas.SkillAreas;
-							if (skillAreaId != null && skillIds.length == 0)
-								$scope.selectedSkillArea = getSelected($scope.skillAreas, skillAreaId);
-						});
+				RtaService.getSkillAreas()
+					.then(function(skillAreas) {
+						$scope.skillAreasLoaded = true;
+						$scope.skillAreas = skillAreas.SkillAreas;
+						if (skillAreaId != null && skillIds.length == 0)
+							$scope.selectedSkillArea = getSelected($scope.skillAreas, skillAreaId);
+					});
 
 				function getSelected(outOf, shouldMatch) {
 					return outOf.find(function(o) {
@@ -148,21 +150,20 @@
 				$scope.selectedSkillChange = function(skill) {
 					if (!skill) return;
 					$scope.skillId = skill.Id;
-					if(skill.Id != skillIds[0])
-						{
-							stateGoToAgents({
-								skillIds: skill.Id,
-								skillAreaId: undefined
-							});
+					if (skill.Id != skillIds[0]) {
+						stateGoToAgents({
+							skillIds: skill.Id,
+							skillAreaId: undefined
+						});
 					}
 				}
 
 				$scope.selectedSkillAreaChange = function(skillArea) {
 					if (!skillArea) return;
-						stateGoToAgents({
-							skillAreaId: skillArea.Id,
-							skillIds: []
-						});
+					stateGoToAgents({
+						skillAreaId: skillArea.Id,
+						skillIds: []
+					});
 				}
 
 				$scope.expandSite = function(siteId) {
@@ -184,6 +185,7 @@
 				}
 
 				function keepSelectionForOrganization() {
+
 					if (!$scope.showOrgSelection)
 						return;
 					selectSiteAndTeamsUnder();
@@ -191,10 +193,23 @@
 					if (teamIds.length > 0)
 						$scope.teamsSelected = teamIds;
 					enableWatchOnTeam = true;
+					updateSelectFieldText();
+				}
+
+				function countTeamsSelected() {
+					var checkedTeamsCount = 0;
+					console.log($scope.sites);
+					$scope.sites.forEach(function(site) {
+						if (siteIds.indexOf(site.Id) > -1) {
+							checkedTeamsCount = checkedTeamsCount + site.Teams.length;
+							console.log('site.Teams.length', site.Teams.length, site);
+						}
+					});
+					return checkedTeamsCount + $scope.teamsSelected.length;
 				}
 
 				function selectSiteAndTeamsUnder() {
-					if(siteIds.length === 0)
+					if (siteIds.length === 0)
 						return;
 					siteIds.forEach(function(sid) {
 						var theSite = $scope.sites.find(function(site) {
@@ -259,7 +274,7 @@
 				}
 
 				$scope.forTest_selectTeam = function(teams) {
-					setTimeout(function(){
+					setTimeout(function() {
 						$scope.teamsSelected = teams;
 					}, 1000);
 				}
@@ -299,7 +314,7 @@
 						site.Teams.forEach(function(team) {
 							team.isChecked = $scope.teamsSelected.indexOf(team.Id) > -1;
 							var teamChanged = ($scope.teamsSelected.indexOf(team.Id) > -1 !== oldTeamsSelected.indexOf(team.Id) > -1);
-							if(oldTeamsSelected.length > 0 && teamChanged){
+							if (oldTeamsSelected.length > 0 && teamChanged) {
 								anyChangeForThatSite = true;
 							}
 						});
@@ -308,16 +323,22 @@
 							return team.isChecked;
 						});
 
-						if(checkedTeams.length > 0 || anyChangeForThatSite)
-								site.isChecked = checkedTeams.length === site.Teams.length;
+						if (checkedTeams.length > 0 || anyChangeForThatSite)
+							site.isChecked = checkedTeams.length === site.Teams.length;
 					});
 				};
 
 				$scope.$watch('teamsSelected', function(newValue, oldValue) {
 					if (JSON.stringify(newValue) !== JSON.stringify(oldValue) && enableWatchOnTeam) {
+						updateSelectFieldText();
 						$scope.updateSite(oldValue);
 					}
 				});
+
+				function updateSelectFieldText() {
+					var howManyTeamsSelected = countTeamsSelected();
+					$scope.selectFieldText = howManyTeamsSelected === 0 ? 'Select organization' : howManyTeamsSelected + ' teams selected';
+				}
 
 				(function initialize() {
 					$scope.pollingLock = false;
@@ -808,9 +829,10 @@
 					showPopupButton: true
 				};
 
-				$scope.onSearchOrganization = function($event){
+				$scope.onSearchOrganization = function($event) {
 					$event.stopPropagation();
 				};
+
 			}
 		]);
 })();
