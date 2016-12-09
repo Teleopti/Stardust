@@ -106,7 +106,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			var aggregatedValidatorList = new HashSet<IAbsenceRequestValidator>();
 			IList<IPersonRequest> personRequests;
 			var stopwatch = new Stopwatch();
-			IScenario currentScenario;
 
 			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -114,7 +113,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				preloadData();
 				personRequests = _personRequestRepository.Find(personRequestsIds);
 				_personRepository.FindPeople(personRequests.Select(x => x.Person.Id.GetValueOrDefault()));
-				currentScenario = _scenarioRepository.Current();
+				var currentScenario = _scenarioRepository.Current();
 				stopwatch.Stop();
 				_feedback.SendProgress($"Done preloading data! It took {stopwatch.Elapsed}");
 

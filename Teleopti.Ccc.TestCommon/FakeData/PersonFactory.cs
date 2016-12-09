@@ -82,6 +82,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return ret;
 		}
 
+		public static IPerson CreatePerson(WorkflowControlSet wfcs)
+		{
+			var ret = CreatePerson();
+			ret.WorkflowControlSet = wfcs;
+			return ret;
+		}
+
 		public static IPerson CreatePersonWithId()
 		{
 			return CreatePerson().WithId();
