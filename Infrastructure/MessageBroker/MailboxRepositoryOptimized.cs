@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NHibernate;
 using NHibernate.Transform;
 using NHibernate.Util;
 using Teleopti.Ccc.Domain.MessageBroker;
@@ -98,7 +99,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 					.SetParameter(nameof(Message.EndDate), message.EndDate)
 					.SetParameter(nameof(Message.StartDate), message.StartDate)
 					.SetParameter(nameof(Message.DomainUpdateType), message.DomainUpdateType)
-					.SetParameter(nameof(Message.BinaryData), message.BinaryData)
+					.SetParameter(nameof(Message.BinaryData), message.BinaryData, NHibernateUtil.StringClob)
 					.SetParameter(nameof(Message.TrackId), message.TrackId)
 					.ExecuteUpdate();
 			});
