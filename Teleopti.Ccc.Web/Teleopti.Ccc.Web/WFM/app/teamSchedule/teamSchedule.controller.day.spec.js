@@ -193,81 +193,82 @@ describe("teamschedule controller tests", function() {
 				};
 			}
 		};
-		teamScheduleService.searchSchedules = {
-			query: function() {
-				var today = "2015-10-26";
-				var queryDeferred = $q.defer();
-				queryDeferred.resolve({
-					Schedules: [
-						{
-							"PersonId": "221B-Baker-SomeoneElse",
-							"Name": "SomeoneElse",
-							"Date": today,
-							"Projection": [
-								{
-								    "ShiftLayerIds": ["activity1"],
-									"Color": "#80FF80",
-									"Description": "Email",
-									"Start": today + " 07:00",
-									"Minutes": 480
-								},
-								{
-								    "ShiftLayerIds": ["activity2"],
-									"Color": "#80FF80",
-									"Description": "Email",
-									"Start": today + " 15:00",
-									"Minutes": 120
-								}
-							],
-							"IsFullDayAbsence": false,
-							"DayOff": null,
-							"Timezone": {
-								"IanaId": "Europe/Berlin", 
-								"DisplayName": "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna"
-							}
-						},
-						{
-							"PersonId": "221B-Sherlock",
-							"Name": "Sherlock Holmes",
-							"Date": today,
-							"Projection": [
-								{
-								    "ShiftLayerIds": ["activity1"],
-									"Color": "#80FF80",
-									"Description": "Email",
-									"Start": today + " 08:00",
-									"Minutes": 480
-								}
-							],
-							"IsFullDayAbsence": false,
-							"DayOff": null,
-							"Timezone": {
-								"IanaId": "Europe/Berlin",
-								"DisplayName": "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna"
-							}
-						},
-						{
-							"PersonId": "person-emptySchedule",
-							"Name": "Sherlock Holmes",
-							"Date": today,
-							"Projection": [],
-							"IsFullDayAbsence": false,
-							"DayOff": null,
-							"Timezone": {
-								"IanaId": "Asia/Shanghai",
-								"DisplayName": "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-							}
-						}
-					],
-					Total: 3,
-					Keyword: ""
-				});
 
-				return {
-					$promise: queryDeferred.promise
-				};
+		teamScheduleService.searchSchedules = function (input) {
+			var today = "2015-10-26";
+			var scheduleData = {
+				Schedules: [
+					{
+						"PersonId": "221B-Baker-SomeoneElse",
+						"Name": "SomeoneElse",
+						"Date": today,
+						"Projection": [
+							{
+								"ShiftLayerIds": ["activity1"],
+								"Color": "#80FF80",
+								"Description": "Email",
+								"Start": today + " 07:00",
+								"Minutes": 480
+							},
+							{
+								"ShiftLayerIds": ["activity2"],
+								"Color": "#80FF80",
+								"Description": "Email",
+								"Start": today + " 15:00",
+								"Minutes": 120
+							}
+						],
+						"IsFullDayAbsence": false,
+						"DayOff": null,
+						"Timezone": {
+							"IanaId": "Europe/Berlin",
+							"DisplayName": "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna"
+						}
+					},
+					{
+						"PersonId": "221B-Sherlock",
+						"Name": "Sherlock Holmes",
+						"Date": today,
+						"Projection": [
+							{
+								"ShiftLayerIds": ["activity1"],
+								"Color": "#80FF80",
+								"Description": "Email",
+								"Start": today + " 08:00",
+								"Minutes": 480
+							}
+						],
+						"IsFullDayAbsence": false,
+						"DayOff": null,
+						"Timezone": {
+							"IanaId": "Europe/Berlin",
+							"DisplayName": "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna"
+						}
+					},
+					{
+						"PersonId": "person-emptySchedule",
+						"Name": "Sherlock Holmes",
+						"Date": today,
+						"Projection": [],
+						"IsFullDayAbsence": false,
+						"DayOff": null,
+						"Timezone": {
+							"IanaId": "Asia/Shanghai",
+							"DisplayName": "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
+						}
+					}
+				],
+				Total: 3,
+				Keyword: ""
+			};
+			var response = { data: scheduleData };
+			return {
+				then:function(callback) {
+					callback(response);
+				}
 			}
-		};
+		}
+		
 
 		teamScheduleService.getSchedules = function(date, agents) {
 			return {
@@ -333,52 +334,5 @@ describe("teamschedule controller tests", function() {
 				mockSignalRBackendServer.notifyClients = messageHandler;
 			}
 		};
-	}
-	
-	function createSchedule(personId, belongsToDate, dayOff, projectionInfoArray) {
-
-		var dateMoment = moment(belongsToDate);
-		var projections = [];
-
-		var fakeSchedule = {
-			PersonId: personId,
-			Date: dateMoment,
-			DayOff: dayOff == null ? null : createDayOff(),
-			Shifts: [{
-				Date: dateMoment,
-				Projections: createProjection(),
-				AbsenceCount: 0,
-				ActivityCount: 0
-			}],
-			ScheduleEndTime: function () { return dateMoment.endOf('day') },
-			AllowSwap: function () { return false; }
-		};
-
-		function createProjection() {
-
-			if (dayOff == null) {
-				projectionInfoArray.forEach(function (projectionInfo) {
-					var dateMomentCopy = moment(dateMoment);
-
-					projections.push({
-						Start: dateMomentCopy.add(projectionInfo.startHour, 'hours').format('YYYY-MM-DD HH:mm'),
-						Minutes: moment.duration(projectionInfo.endHour - projectionInfo.startHour, 'hours').asMinutes()
-					});
-				});
-			}
-
-			return projections;
-		};
-
-		function createDayOff() {
-			return {
-				DayOffName: 'Day off',
-				Start: dateMoment.format('YYYY-MM-DD HH:mm'),
-				Minutes: 1440
-			};
-
-		};
-
-		return fakeSchedule;
 	}
 });
