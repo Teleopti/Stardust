@@ -1,0 +1,138 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.Intraday
+{
+	public class EstimatedServiceLevelProvider
+	{
+		private readonly ForecastedCallsProvider _forecastedCallsProvider;
+		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
+		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
+		private readonly IUserTimeZone _timeZone;
+
+		public EstimatedServiceLevelProvider(ForecastedCallsProvider forecastedCallsProvider,
+			ForecastedStaffingProvider forecastedStaffingProvider,
+			ScheduledStaffingProvider scheduledStaffingProvider,
+			IUserTimeZone timeZone)
+		{
+			_forecastedCallsProvider = forecastedCallsProvider;
+			_forecastedStaffingProvider = forecastedStaffingProvider;
+			_scheduledStaffingProvider = scheduledStaffingProvider;
+			_timeZone = timeZone;
+		}
+
+		public double EslSummary(IList<EslInterval> eslIntervals)
+		{
+			var sumOfForecastedCalls = eslIntervals.Sum(x => x.ForecastedCalls);
+			var sumOfAnsweredCallsWithinSL = eslIntervals.Sum(x => x.AnsweredCallsWithinServiceLevel);
+			return sumOfAnsweredCallsWithinSL/sumOfForecastedCalls;
+		}
+
+		public IList<EslInterval> CalculateEslIntervals(IList<ISkill> skills, 
+			ICollection<ISkillDay> skillDays, 
+			IntradayIncomingViewModel queueStatistics,
+			int minutesPerInterval)
+		{
+			var eslIntervals = new List<EslInterval>();
+			if (!skillDays.Any())
+				return eslIntervals;
+			var serviceCalculatorService = new StaffingCalculatorServiceFacade();
+
+			var forecastedCalls = _forecastedCallsProvider.Load(skills, skillDays, queueStatistics.LatestActualIntervalStart, minutesPerInterval);
+			var forecastedStaffing = _forecastedStaffingProvider.StaffingPerSkill(skills, skillDays, minutesPerInterval)
+				.Where(x => x.StartTime <= queueStatistics.LatestActualIntervalStart)
+				.ToList();
+			var scheduledStaffing = _scheduledStaffingProvider.StaffingPerSkill(skills, minutesPerInterval);
+
+			foreach (var skill in skills)
+			{
+				var skillForecastedStaffing = forecastedStaffing
+					.Where(s => s.SkillId == skill.Id.Value).ToList();
+				foreach (var interval in skillForecastedStaffing)
+				{
+					eslIntervals.Add(calculateEslInterval(skillDays, 
+						minutesPerInterval, interval, skill, scheduledStaffing, forecastedCalls, serviceCalculatorService));
+				}
+			}
+
+			return eslIntervals
+				.GroupBy(g => g.StartTime)
+				.Select(s => new EslInterval
+				{
+					StartTime = s.Key,
+					ForecastedCalls = s.Sum(x => x.ForecastedCalls),
+					Esl = s.Sum(x => x.AnsweredCallsWithinServiceLevel)/s.Sum(x => x.ForecastedCalls)
+				})
+				.ToList();
+		}
+
+		private EslInterval calculateEslInterval(ICollection<ISkillDay> skillDays, 
+			int minutesPerInterval, 
+			StaffingIntervalModel interval,
+			ISkill skill, 
+			IList<SkillStaffingIntervalLightModel> scheduledStaffing, 
+			ForecastedCallsModel forecastedCalls,
+			StaffingCalculatorServiceFacade serviceCalculatorService)
+		{
+			var intervalStartTimeUtc = TimeZoneHelper.ConvertToUtc(interval.StartTime, _timeZone.TimeZone());
+			var skillDaysForSkill = skillDays
+				.Where(x => x.Skill.Id.Value == skill.Id.Value);
+
+			var serviceAgreement = getServiceAgreement(skillDaysForSkill, intervalStartTimeUtc);
+			if (serviceAgreement == new ServiceAgreement())
+				return new EslInterval();
+
+			var scheduledStaffingInterval = scheduledStaffing
+				.SingleOrDefault(x => x.Id == interval.SkillId && x.StartDateTime == interval.StartTime).StaffingLevel;
+			var task = forecastedCalls.CallsPerSkill[skill.Id.Value].FirstOrDefault(x => x.StartTime == interval.StartTime);
+			var esl = serviceCalculatorService.ServiceLevelAchievedOcc(
+				scheduledStaffingInterval,
+				serviceAgreement.ServiceLevel.Seconds,
+				task.Calls,
+				task.AverageHandleTime,
+				TimeSpan.FromMinutes(minutesPerInterval),
+				serviceAgreement.ServiceLevel.Percent.Value,
+				interval.Agents,
+				1);
+
+			return new EslInterval
+			{
+				StartTime = interval.StartTime,
+				ForecastedCalls = task.Calls,
+				Esl = esl
+			};
+		}
+
+		private static ServiceAgreement getServiceAgreement(IEnumerable<ISkillDay> skillDays, DateTime intervalStartTimeUtc)
+		{
+			ISkillData skillData = null;
+			foreach (var skillDay in skillDays)
+			{
+				skillData = skillDay.SkillDataPeriodCollection
+					.SingleOrDefault(
+						skillDataPeriod => skillDataPeriod.Period.StartDateTime <= intervalStartTimeUtc &&
+												 skillDataPeriod.Period.EndDateTime > intervalStartTimeUtc
+					);
+				if (skillData != null)
+					break;
+			}
+			return skillData?.ServiceAgreement ?? new ServiceAgreement();
+		}
+
+		public double?[] DataSeries(IList<EslInterval> eslIntervals, IntradayIncomingViewModel queueIncoming)
+		{
+			var dataSeries = eslIntervals
+				.Select(x => (double?) x.Esl)
+				.ToList();
+			var nullCount = queueIncoming.IncomingDataSeries.Time.Length - dataSeries.Count;
+			for (int interval = 0; interval < nullCount; interval++)
+				dataSeries.Add(null);
+
+			return dataSeries.ToArray();
+		}
+	}
+}
