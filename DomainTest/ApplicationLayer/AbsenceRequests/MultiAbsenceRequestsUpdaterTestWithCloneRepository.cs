@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new StaffingThresholdValidator(),
 				Period = firstDay.ToDateOnlyPeriod().Inflate(1),
-				OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(DateTime.UtcNow), new DateOnly(DateTime.UtcNow.AddDays(1))),
+				OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(DateTime.UtcNow).AddDays(-1), new DateOnly(DateTime.UtcNow.AddDays(1))),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			};
 
