@@ -538,14 +538,15 @@ people-selection-list .panel {
 }
 
 .seatmap-bottom-bar {
-	position: absolute;
-	bottom: 1px;
-	left: 0;
-	right: 0;
 	height: 48px;
 
 	md-slider {
 		width: 200px;
 		margin-left: 40px;
 	}
+}
+
+
+.booking-view .seatmap-bottom-bar{
+	transform: translateY(-100%);
 }

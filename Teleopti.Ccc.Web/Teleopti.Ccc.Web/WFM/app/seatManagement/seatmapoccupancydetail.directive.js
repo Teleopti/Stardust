@@ -253,7 +253,7 @@
 		vm.parentVm = controllers[1];
 		vm.rightPanelVm = controllers[2];
 
-		vm.parentVm.rightPanelOptions.panelTitle = " ";
+		vm.parentVm.rightPanelOptions.panelTitle = " "; //remove when styleguide update
 		vm.parentVm.rightPanelOptions.sidePanelTitle = "SeatBookingsList";
 
 		vm.init();
