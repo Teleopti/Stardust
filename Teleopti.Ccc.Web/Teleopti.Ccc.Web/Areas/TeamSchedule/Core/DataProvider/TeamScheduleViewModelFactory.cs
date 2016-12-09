@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			DateOnly dateInUserTimeZone,int pageSize,int currentPageIndex,bool isOnlyAbsences)
 		{
 			var permittedPersons = new List<IPerson>();
+			var peopleCanSeeConfidentialAbsencesFor = new List<Guid>();
 			if (selectedTeamIds.Length == 0)
 			{
 				var searchCriteria = _searchProvider.CreatePersonFinderSearchCriteria(criteriaDictionary, 9999, 1,
@@ -63,13 +64,18 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				permittedPersons.AddRange(
 					_searchProvider.GetPermittedPersonList(matchedPersons, dateInUserTimeZone,
 						DefinedRaptorApplicationFunctionPaths.ViewSchedules).ToArray());
+
+				peopleCanSeeConfidentialAbsencesFor = _searchProvider.GetPermittedPersonIdList(searchCriteria, dateInUserTimeZone,
+					DefinedRaptorApplicationFunctionPaths.ViewConfidential).ToList();
+
 			}
 			else
 			{
 				permittedPersons.AddRange(_searchProvider.SearchPermittedPeopleWithinTeams(selectedTeamIds, criteriaDictionary, dateInUserTimeZone));
 			}
+			
 
-			if (isOnlyAbsences)
+			if(isOnlyAbsences)
 			{
 				permittedPersons = _searchProvider.SearchPermittedPeopleWithAbsence(permittedPersons,dateInUserTimeZone).ToList();
 			}
@@ -82,12 +88,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					Total = permittedPersons.Count,
 				};
 			}
-
-			var peopleCanSeeConfidentialAbsencesFor =
-					permittedPersons.Where(
-						p =>
-							_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential,
-								dateInUserTimeZone, p)).Select(p => p.Id.GetValueOrDefault()).ToList();
 
 			var canSeeUnpublishedSchedules =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
