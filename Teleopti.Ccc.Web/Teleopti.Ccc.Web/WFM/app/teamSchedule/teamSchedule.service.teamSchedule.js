@@ -6,22 +6,23 @@
 
 			var service = this;
 			var getTeamsHierachyUrl = '../api/TeamScheduleData/FetchPermittedTeamHierachy';
+			var searchDayViewScheduleUrl = '../api/TeamSchedule/SearchSchedules';
 
 			service.getAvalableHierachy = getAvalableHierachy;
 
-			service.searchSchedules = $resource("../api/TeamSchedule/SearchSchedules", {
-				keyword: "@keyword",
-				date: "@queryDate",
-				pageSize: "@pageSize",
-				currentPageIndex: "@currentPageIndex",
-				isOnlyAbsences: "@isOnlyAbsences"
-			}, {
-				query: {
-					method: "GET",
-					params: {},
-					isArray: false
-				}
-			});
+			service.searchSchedules = searchSchedule;
+
+			function searchSchedule(input) {
+				return $q(function(resolve, reject) {
+					$http.post(searchDayViewScheduleUrl, input)
+						.then(function(data) {
+								resolve(data);
+							},
+							function(err) {
+								reject(err);
+							});
+				});
+			}
 
 
 			// gradually replace with $http.post

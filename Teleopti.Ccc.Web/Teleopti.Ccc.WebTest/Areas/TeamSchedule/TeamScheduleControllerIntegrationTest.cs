@@ -48,7 +48,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var person = PersonFactory.CreatePersonWithGuid("Sherlock", "Holmes");
 			PeopleSearchProvider.Add(person);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -76,7 +83,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -111,7 +125,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -137,7 +158,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -166,7 +194,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -190,7 +225,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -227,7 +269,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			scheduleDay.Add(pa);
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 
 			var schedule = result.Single();
 			var projectionVm = schedule.Projection.ToList();
@@ -257,7 +306,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -288,7 +344,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -321,7 +384,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -357,7 +427,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -390,7 +467,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -431,7 +515,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -475,7 +566,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -509,7 +607,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			scheduleDayPrevious.Add(paPrev);
 			ScheduleProvider.AddScheduleDay(scheduleDayPrevious);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 
 			result.Count.Should().Be.EqualTo(2);
 			result.First().Date.Should().Be.EqualTo("2020-01-01");
@@ -530,7 +635,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			scheduleDayPrevious.Add(paPrev);
 			ScheduleProvider.AddScheduleDay(scheduleDayPrevious);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 
 			result.Count.Should().Be.EqualTo(2);
 			result.First().Date.Should().Be.EqualTo("2020-01-01");
@@ -555,7 +667,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			scheduleDay.Add(pa);
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 
 			result.Count.Should().Be.EqualTo(1);
 			var schedule = result.First();
@@ -629,7 +748,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ScheduleProvider.AddScheduleDay(scheduleDay1);
 			ScheduleProvider.AddScheduleDay(scheduleDay2);
 
-			var result = Target.SearchSchedules("firstName:a1 b1 c1 d1 e1 f1", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "firstName:a1 b1 c1 d1 e1 f1",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 
 			result.Count.Should().Be.EqualTo(6);
 			result[0].Name.Should().Be.EqualTo("b1@b1");
@@ -657,7 +783,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			scheduleDay.Add(pa);
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 			var shiftLayers = pa.ShiftLayers.ToList();
 			var schedule = result.Single();
 			var projectionVm = schedule.Projection.ToList();
@@ -734,7 +867,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ScheduleProvider.AddScheduleDay(scheduleDay1);
 			ScheduleProvider.AddScheduleDay(scheduleDay2);
 
-			var result = Target.SearchSchedules("firstName:a1 b1 c1 d1 e1 f1", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "firstName:a1 b1 c1 d1 e1 f1",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 
 			result.Count.Should().Be.EqualTo(6);
 			result[0].Name.Should().Be.EqualTo("b1@b1");
@@ -817,7 +957,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ScheduleProvider.AddScheduleDay(scheduleDay1);
 			ScheduleProvider.AddScheduleDay(scheduleDay2);
 
-			var result = Target.SearchSchedules("firstName:a1 b1 c1 d1 e1 f1", scheduleDate, 2, 2, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "firstName:a1 b1 c1 d1 e1 f1",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 2,
+				CurrentPageIndex = 2,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 
 			result.Count.Should().Be.EqualTo(3);
 
@@ -878,7 +1025,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -898,7 +1052,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();

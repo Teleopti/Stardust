@@ -81,6 +81,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 				: _permittedPeople;
 		}
 
+		public IEnumerable<IPerson> SearchPermittedPeopleWithinTeams(Guid[] selectedTeamIds, IDictionary<PersonFinderField, string> criteriaDictionary,
+			DateOnly dateInUserTimeZone)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IEnumerable<Guid> GetPermittedPersonIdList(PersonFinderSearchCriteria searchCriteria,DateOnly currentDate,
 			string function)
 		{

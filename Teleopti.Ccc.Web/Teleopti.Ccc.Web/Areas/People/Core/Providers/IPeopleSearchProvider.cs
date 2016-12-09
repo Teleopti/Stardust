@@ -17,6 +17,10 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		IEnumerable<IPerson> SearchPermittedPeople(PersonFinderSearchCriteria searchCriteria, DateOnly dateInUserTimeZone,
 			string function);
 
+		IEnumerable<IPerson> SearchPermittedPeopleWithinTeams(Guid[] selectedTeamIds,
+			IDictionary<PersonFinderField, string> criteriaDictionary,
+			DateOnly dateInUserTimeZone);
+
 		IEnumerable<Guid> GetPermittedPersonIdList(PersonFinderSearchCriteria searchCriteria, DateOnly currentDate,
 			string function);
 	
