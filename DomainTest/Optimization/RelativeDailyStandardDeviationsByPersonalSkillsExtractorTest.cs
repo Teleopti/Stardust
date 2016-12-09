@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	        _target = new RelativeDailyValueByPersonalSkillsExtractor(_matrix, _advancedPreferences,
 	                                                                  _skillStaffPeriodToSkillIntervalDataMapper,
 	                                                                  _skillIntervalDataDivider,
-	                                                                  _skillIntervalDataAggregator, new PersonalSkillsProvider(), _stateHolder);
+	                                                                  _skillIntervalDataAggregator, new PersonalSkillsProvider(), _stateHolder, UserTimeZone.Make());
 			_skillIntervalDatas = new List<ISkillIntervalData>();
         }
 

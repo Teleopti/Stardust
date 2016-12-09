@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
 	    private readonly PersonalSkillsProvider _personalSkillsProvider;
 	    private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+	    private readonly IUserTimeZone _userTimeZone;
 	    private readonly IScheduleMatrixPro _scheduleMatrix;
 
 	    public RelativeDailyValueByPersonalSkillsExtractor(IScheduleMatrixPro scheduleMatrix,
@@ -30,7 +31,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 	                                                       ISkillIntervalDataDivider skillIntervalDataDivider,
 															ISkillIntervalDataAggregator skillIntervalDataAggregator,
 															PersonalSkillsProvider personalSkillsProvider,
-															ISchedulingResultStateHolder schedulingResultStateHolder)
+															ISchedulingResultStateHolder schedulingResultStateHolder,
+															IUserTimeZone userTimeZone)
 	    {
 		    _scheduleMatrix = scheduleMatrix;
 		    _advancedPreferences = advancedPreferences;
@@ -39,6 +41,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		    _skillIntervalDataAggregator = skillIntervalDataAggregator;
 		    _personalSkillsProvider = personalSkillsProvider;
 		    _schedulingResultStateHolder = schedulingResultStateHolder;
+		    _userTimeZone = userTimeZone;
 	    }
 
 	    public IList<double?> Values()
@@ -93,7 +96,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
                scheduleDay.Date, scheduleDay.Date.AddDays(1),
-               TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+							 _userTimeZone.TimeZone());
 
 			IList<IList<ISkillIntervalData>> nestedList = new List<IList<ISkillIntervalData>>();
 
