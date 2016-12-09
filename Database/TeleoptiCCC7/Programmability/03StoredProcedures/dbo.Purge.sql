@@ -20,6 +20,7 @@ declare @BatchSize int
 declare @MaxDate datetime
 declare @SuperRole uniqueidentifier
 declare @Start smalldatetime
+declare @TheDate smalldatetime
 
 set @start = getdate()
 set @SuperRole='193AD35C-7735-44D7-AC0C-B8EDA0011E5F'
@@ -333,11 +334,19 @@ if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
 	return
 
 --New Adherence read models. Purge for now since we have not yet built or tested with lots of historical data.
-delete ReadModel.AdherencePercentage
-where BelongsToDate < dateadd(day,-3,getdate())
+--Smaller chunks, it may time out on cloud otherwise.
+select @TheDate = isnull(min(BelongsToDate),'20000101') from ReadModel.AdherencePercentage
 
-if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
-	return
+while @TheDate < dateadd(day,-3,getdate())
+begin
+	delete ReadModel.AdherencePercentage
+	where BelongsToDate <= @TheDate
+
+	select @TheDate = dateadd(day,1,@TheDate)
+
+	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+		return
+end
 
 delete ReadModel.AdherenceDetails
 where BelongsToDate < dateadd(day,-3,getdate())
