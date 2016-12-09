@@ -68,7 +68,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var selectedPeriod = _periodExtractor.ExtractPeriod(selectedSchedules);
 			if (!selectedPeriod.HasValue) return;
 
-			setThreadCulture();
 			bool lastCalculationState = schedulerStateHolder.SchedulingResultState.SkipResourceCalculation;
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;
 
@@ -164,12 +163,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			optimizationPreferences.Extra.BlockTypeValue = BlockFinderType.SingleDay;
 			_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, 
 											selectedPeriod, allMatrixes, backgroundWorker, dayOffOptimizationPreferenceProvider);
-		}
-		
-		private static void setThreadCulture()
-		{
-			Thread.CurrentThread.CurrentCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
-			Thread.CurrentThread.CurrentUICulture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
 		}
 	}
 }
