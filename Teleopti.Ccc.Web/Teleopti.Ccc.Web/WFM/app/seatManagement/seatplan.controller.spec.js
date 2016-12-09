@@ -9,6 +9,19 @@ describe('SeatPlanCtrl', function () {
 		beforeEach(function() {
 			module('wfm.seatPlan');
 			module('externalModules');
+
+
+			module(function ($provide) {
+				$provide.service('Toggle', function() {
+					return {
+						Wfm_Seatplan_UseDatePeriodForPlanning_42167: false,
+						togglesLoaded: {
+							then: function(cb) { cb(); }
+						}
+					}
+				});	
+			});
+
 		});
 
 	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_) {
