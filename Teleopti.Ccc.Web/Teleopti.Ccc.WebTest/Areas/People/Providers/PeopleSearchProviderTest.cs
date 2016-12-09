@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 		private ILoggedOnUser loggedOnUser;
 		private FakeCurrentBusinessUnit currentBusinessUnit;
 		private FakeCurrentScenario currentScenario;
-		private FakeTeamRepository teamRepository;
 
 		[SetUp]
 		public void Setup()
@@ -42,14 +40,13 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			loggedOnUser = new FakeLoggedOnUser();
 			currentScenario = new FakeCurrentScenario();
-			teamRepository = new FakeTeamRepository();
 
 			currentBusinessUnit = new FakeCurrentBusinessUnit();
 
 			currentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("bu"));
 			
 			target = new PeopleSearchProvider(searchRepository, personRepository,
-				permissionProvider, optionalColumnRepository, personAbsenceRepository, loggedOnUser,currentBusinessUnit, currentScenario, teamRepository);
+				new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository, loggedOnUser,currentBusinessUnit, currentScenario);
 		}
 
 		[Test]
@@ -81,10 +78,6 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 				return true;
 			}));
 			personRepository.Add(person);
-			permissionProvider.Stub(
-				x =>
-					x.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.WebPeople, DateOnly.Today,
-						personFinderDisplayRow)).Return(true);
 
 			var optionalColumn = new OptionalColumn("CellPhone");
 			optionalColumnRepository.Stub(x => x.GetOptionalColumns<Person>()).Return(new List<IOptionalColumn>
@@ -182,7 +175,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			personRepository.Add(person);
 
 			personAbsenceRepository.Add(createPersonAbsence(person));
-			target = new PeopleSearchProvider(searchRepository, personRepository, new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository, loggedOnUser,currentBusinessUnit,currentScenario, new FakeTeamRepository());
+			target = new PeopleSearchProvider(searchRepository, personRepository, new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository, loggedOnUser,currentBusinessUnit,currentScenario);
 
 			var searchCriteria = new Dictionary<PersonFinderField, string>
 			{
@@ -202,7 +195,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 		{
 			personRepository = new FakePersonRepository();
 			target = new PeopleSearchProvider(searchRepository, personRepository,
-				new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository, loggedOnUser,currentBusinessUnit, currentScenario, new FakeTeamRepository());
+				new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository, loggedOnUser,currentBusinessUnit, currentScenario);
 
 			var searchCriteria = new Dictionary<PersonFinderField, string>
 			{
@@ -244,139 +237,6 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 
 			var result = target.SearchPermittedPeopleSummary(searchCriteria, 20, 1, DateOnly.Today, new Dictionary<string, bool>(), DefinedRaptorApplicationFunctionPaths.WebPeople);
 			result.TotalPages.Should().Be.GreaterThan(2);
-		}
-
-		[Test]
-		public void ShouldReturnMatchedPeopleInGivenTeamsForSpecificField()
-		{
-			var date = new DateOnly(2016, 12, 9);
-			var person1 = PersonFactory.CreatePerson("Ashley", "Andeen").WithId();
-			var person2 = PersonFactory.CreatePerson("ashley", "smith").WithId();
-			var team = TeamFactory.CreateSimpleTeam("team1").WithId();
-			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(date, team);
-			person1.AddPersonPeriod(personPeriod);
-			person2.AddPersonPeriod(personPeriod);
-			personRepository.Add(person1);
-			personRepository.Add(person2);
-			teamRepository.Add(team);
-
-			permissionProvider.Stub(
-				x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, person1)).Return(true);
-			permissionProvider.Stub(
-				x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, person2)).Return(true);
-
-			var searchCriteria = new Dictionary<PersonFinderField, string>
-			{
-				{
-					PersonFinderField.FirstName, "ash"
-				}
-			};
-
-			var result = target.SearchPermittedPeopleWithinTeams(new[] {team.Id.Value}, searchCriteria, date);
-			result.Count().Should().Be.EqualTo(2);
-		}
-
-		[Test]
-		public void ShouldReturnMatchedPeopleInGivenTeamsForOneWordQuotation()
-		{
-			var date = new DateOnly(2016, 12, 9);
-			var person1 = PersonFactory.CreatePerson("agent 1", "Andeen").WithId();
-			var person2 = PersonFactory.CreatePerson("ashley", "smith").WithId();
-			var site = SiteFactory.CreateSimpleSite("site");
-			var team = TeamFactory.CreateSimpleTeam("team1").WithId();
-			team.Site = site;
-			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(date, team);
-			person1.AddPersonPeriod(personPeriod);
-			person2.AddPersonPeriod(personPeriod);
-			personRepository.Add(person1);
-			personRepository.Add(person2);
-			teamRepository.Add(team);
-
-			permissionProvider.Stub(
-				x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, person1)).Return(true);
-			permissionProvider.Stub(
-				x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, person2)).Return(true);
-
-			var searchCriteria = new Dictionary<PersonFinderField, string>
-			{
-				{
-					PersonFinderField.All, "\"agent 1\""
-				}
-			};
-
-			var result = target.SearchPermittedPeopleWithinTeams(new[] {team.Id.Value}, searchCriteria, date);
-			result.Count().Should().Be.EqualTo(1);
-			result.First().Id.Should().Be.EqualTo(person1.Id);
-		}
-
-		[Test]
-		public void ShouldReturnMatchedPeopleInGivenTeamsForMutiTerms()
-		{
-			var date = new DateOnly(2016, 12, 9);
-			var person1 = PersonFactory.CreatePerson("agent 1", "Andeen").WithId();
-			var person2 = PersonFactory.CreatePerson("ashley", "smith").WithId();
-			var site = SiteFactory.CreateSimpleSite("site");
-			var team = TeamFactory.CreateSimpleTeam("team1").WithId();
-			team.Site = site;
-			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(date, team);
-			person1.AddPersonPeriod(personPeriod);
-			person2.AddPersonPeriod(personPeriod);
-			personRepository.Add(person1);
-			personRepository.Add(person2);
-			teamRepository.Add(team);
-
-			permissionProvider.Stub(
-				x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, person1)).Return(true);
-			permissionProvider.Stub(
-				x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, person2)).Return(true);
-
-			var searchCriteria = new Dictionary<PersonFinderField, string>
-			{
-				{
-					PersonFinderField.All, "\"agent 1\" smith"
-				}
-			};
-
-			var result = target.SearchPermittedPeopleWithinTeams(new[] {team.Id.Value}, searchCriteria, date);
-			result.Count().Should().Be.EqualTo(2);
-			result.First().Id.Should().Be.EqualTo(person1.Id);
-			result.Second().Id.Should().Be.EqualTo(person2.Id);
-		}
-
-		[Test]
-		public void ShouldReturnMatchedPeopleInGivenTeamsForMutiFields()
-		{
-			var date = new DateOnly(2016, 12, 9);
-			var person1 = PersonFactory.CreatePerson("agent 1", "Andeen").WithId();
-			var person2 = PersonFactory.CreatePerson("ashley", "smith").WithId();
-			var site = SiteFactory.CreateSimpleSite("site");
-			var team = TeamFactory.CreateSimpleTeam("team1").WithId();
-			team.Site = site;
-			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(date, team);
-			person1.AddPersonPeriod(personPeriod);
-			person2.AddPersonPeriod(personPeriod);
-			personRepository.Add(person1);
-			personRepository.Add(person2);
-			teamRepository.Add(team);
-
-			permissionProvider.Stub(
-				x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, person1)).Return(true);
-			permissionProvider.Stub(
-				x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, person2)).Return(true);
-
-			var searchCriteria = new Dictionary<PersonFinderField, string>
-			{
-				{
-					PersonFinderField.FirstName, "\"agent 1\" ashley"
-				},
-				{
-					PersonFinderField.LastName, "smith"
-				}
-			};
-
-			var result = target.SearchPermittedPeopleWithinTeams(new[] {team.Id.Value}, searchCriteria, date);
-			result.Count().Should().Be.EqualTo(1);
-			result.First().Id.Should().Be.EqualTo(person2.Id);
 		}
 
 		private IPersonAbsence createPersonAbsence(IPerson person)

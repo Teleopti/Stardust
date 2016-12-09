@@ -10,8 +10,7 @@
 <div class="team-schedule panel wfm-block material-depth-1" ng-click="vm.showDatePicker && (vm.showDatePicker = false)">
 	<div class="teamschedule-header" layout="row">
 		<div class="leftside-part">
-			<organization-picker ng-if="vm.toggles.DisplayScheduleOnBusinessHierachyEnabled" available-groups="vm.availableGroups" class="organization-picker-container"
-								 on-pick="vm.changeSelectedTeams(groups)"></organization-picker>
+			<organization-picker ng-if="vm.toggles.DisplayScheduleOnBusinessHierachyEnabled" available-groups="vm.availableGroups" class="organization-picker-container"></organization-picker>
 			
 			<span class="people-search-container" ng-if="vm.searchEnabled">
 				<wfm-multiple-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"></wfm-multiple-search-input>

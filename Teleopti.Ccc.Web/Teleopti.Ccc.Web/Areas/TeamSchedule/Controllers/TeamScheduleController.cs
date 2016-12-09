@@ -73,23 +73,23 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return Json(permissions);
 		}
 
-		[UnitOfWork, HttpPost, Route("api/TeamSchedule/SearchSchedules")]
-		public virtual JsonResult<GroupScheduleViewModel> SearchSchedules(SearchDaySchedulesFormData input)
+		[UnitOfWork, HttpGet, Route("api/TeamSchedule/SearchSchedules")]
+		public virtual JsonResult<GroupScheduleViewModel> SearchSchedules(string keyword, DateTime date, int pageSize, int currentPageIndex, bool isOnlyAbsences)
 		{
-			var currentDate = input.Date;
+			var currentDate = new DateOnly(date);
 			var myTeam = _loggonUser.CurrentUser().MyTeam(currentDate);
 
-			if (string.IsNullOrEmpty(input.Keyword) && myTeam == null)
+			if (string.IsNullOrEmpty(keyword) && myTeam == null)
 			{
 				return
 					Json(new GroupScheduleViewModel {Schedules = new List<GroupScheduleShiftViewModel>(), Total = 0, Keyword = ""});
 			}
 
-			var criteriaDictionary = _parser.Parse(input.Keyword, currentDate);
+			var criteriaDictionary = _parser.Parse(keyword, currentDate);
 
 			var result =
-				_teamScheduleViewModelFactory.CreateViewModel(input.SelectedTeamIds ?? new Guid[] {} , criteriaDictionary, currentDate, input.PageSize, input.CurrentPageIndex, input.IsOnlyAbsences);
-			result.Keyword = _parser.Keyword(input.Keyword, currentDate);
+				_teamScheduleViewModelFactory.CreateViewModel(criteriaDictionary, currentDate, pageSize, currentPageIndex, isOnlyAbsences);
+			result.Keyword = _parser.Keyword(keyword, currentDate);
 
 			return Json(result);
 		}
