@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			QueryFilter.Deleted.Enable(session, null);
 			QueryFilter.DeletedPeople.Enable(session, null);
 
-			if (ServiceLocatorForLegacy.ToggleManager.IsEnabled(Toggles.No_UnitOfWork_Nesting_42148))
+			if (ServiceLocatorForLegacy.ToggleManager.IsEnabled(Toggles.No_UnitOfWork_Nesting_42175))
 				if (_context.Get() != null)
 					throw new NestedUnitOfWorkException();
 
