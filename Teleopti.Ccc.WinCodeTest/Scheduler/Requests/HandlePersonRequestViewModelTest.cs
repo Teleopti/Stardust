@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
@@ -28,8 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         private DateTimePeriod _schedulePeriod;
         private Dictionary<IPerson, IPersonAccountCollection> _allAccounts;
         private IEventAggregator _eventAggregator;
-        private int _propertyChangedEventCallCount;
-        private TimeZoneInfo _TimeZoneInfo;
+        private TimeZoneInfo _timeZoneInfo;
 
         [SetUp]
         public void Setup()
@@ -51,61 +51,39 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             _shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
 
             _allAccounts = new Dictionary<IPerson, IPersonAccountCollection> { { _person, acc } };
-            _TimeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+            _timeZoneInfo = TimeZoneInfo.Utc;
             _target = new HandlePersonRequestViewModel(_schedulePeriod, new List<IPerson> { _person }, new UndoRedoContainer(), _allAccounts,
-                _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
+                _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _timeZoneInfo);
         }
 
         [Test]
         public void VerifySelectedModels()
         {
-            var adapter1 = CreateModel(_person);
-            var adapter2 = CreateModel(_person);
-            var adapter3 = CreateModel(_person);
-            _target.AddPersonRequestViewModel(adapter1);
-            _target.AddPersonRequestViewModel(adapter2);
-            _target.AddPersonRequestViewModel(adapter3);
+			_target.CreatePersonRequestViewModels(new List<IPersonRequest> {_source,_source,_source},_shiftTradeRequestStatusChecker, new PersonRequestAuthorizationCheckerForTest());
 
+	        _target.PersonRequestViewModels.MoveCurrentToPosition(0);
+	        ((PersonRequestViewModel) _target.PersonRequestViewModels.CurrentItem).IsSelected = true;
+	        _target.PersonRequestViewModels.MoveCurrentToPosition(1);
+	        ((PersonRequestViewModel) _target.PersonRequestViewModels.CurrentItem).IsSelected = true;
 
-            adapter1.IsSelected = true;
-            adapter2.IsSelected = true;
-            adapter3.IsSelected = false;
+	        _target.SelectedModels.Count.Should().Be.EqualTo(2);
 
-            Assert.IsTrue(_target.SelectedModels.Contains(adapter1));
-            Assert.IsTrue(_target.SelectedModels.Contains(adapter2));
-            Assert.IsFalse(_target.SelectedModels.Contains(adapter3));
+			_target.PersonRequestViewModels.MoveCurrentToPosition(2);
+			((PersonRequestViewModel)_target.PersonRequestViewModels.CurrentItem).IsSelected = true;
 
-            adapter3.IsSelected = true;
-
-            Assert.IsTrue(_target.SelectedModels.Contains(adapter1));
-            Assert.IsTrue(_target.SelectedModels.Contains(adapter2));
-            Assert.IsTrue(_target.SelectedModels.Contains(adapter3));
-        }
+			_target.SelectedModels.Count.Should().Be.EqualTo(3);
+		}
 
         [Test]
         public void VerifySelectedModel()
         {
-            var adapter = CreateModel(_person);
-            _target.AddPersonRequestViewModel(adapter);
+			_target.CreatePersonRequestViewModels(new List<IPersonRequest> { _source }, _shiftTradeRequestStatusChecker, new PersonRequestAuthorizationCheckerForTest());
 
-            Assert.IsNull(_target.SelectedModel);
+			Assert.IsNull(_target.SelectedModel);
             _target.PersonRequestViewModels.MoveCurrentToFirst();
-            Assert.AreEqual(_target.SelectedModel, adapter);
+            Assert.IsNotNull(_target.SelectedModel);
         }
-
-        [Test]
-        public void VerifyCreatePersonRequestViewModels()
-        {
-
-            IList<IPersonRequest> reguests = new List<IPersonRequest> { _source };
-            _target.CreatePersonRequestViewModels(reguests, _shiftTradeRequestStatusChecker, new PersonRequestAuthorizationCheckerForTest());
-
-            Assert.AreEqual(_target.PersonRequestViewModels.Count, 1);
-            //Select the first:
-            _target.PersonRequestViewModels.MoveCurrentToPosition(0);
-            Assert.AreEqual(_target.SelectedModel.PersonRequest, _source);
-        }
-
+		
         [Test]
         public void VerifyThatTheModelsAreOrderedByLastUpdatedByDefault()
         {
@@ -144,7 +122,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         public void VerifyValidatesAgainstSchedulePeriod()
         {
             _target = new HandlePersonRequestViewModel(new DateTimePeriod(DateTime.MinValue.ToUniversalTime(), DateTime.MaxValue.ToUniversalTime()),
-                new List<IPerson> { _person }, new UndoRedoContainer(), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
+                new List<IPerson> { _person }, new UndoRedoContainer(), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _timeZoneInfo);
 
             IList<IPersonRequest> requests = new List<IPersonRequest> { _source };
             _target.CreatePersonRequestViewModels(requests, new ShiftTradeRequestStatusCheckerForTestDoesNothing(), new PersonRequestAuthorizationCheckerForTest());
@@ -153,7 +131,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             Assert.IsTrue(_target.SelectedModel.IsWithinSchedulePeriod, "The model is within the period, so its set to true");
 
             _target = new HandlePersonRequestViewModel(new DateTimePeriod(DateTime.MinValue.ToUniversalTime(), DateTime.MinValue.AddDays(2).ToUniversalTime()),
-                new List<IPerson> { _person }, new UndoRedoContainer(), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
+                new List<IPerson> { _person }, new UndoRedoContainer(), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _timeZoneInfo);
             _target.CreatePersonRequestViewModels(requests, new ShiftTradeRequestStatusCheckerForTestDoesNothing(), new PersonRequestAuthorizationCheckerForTest());
             _target.PersonRequestViewModels.MoveCurrentToFirst();
             Assert.IsFalse(_target.SelectedModel.IsWithinSchedulePeriod, "Model is outside the period, so it should be set to false when created");
@@ -163,7 +141,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         public void VerifyValidatesAgainstSchedulePeriodAndPerson()
         {
             _target = new HandlePersonRequestViewModel(new DateTimePeriod(DateTime.MinValue.ToUniversalTime(), DateTime.MaxValue.ToUniversalTime()),
-                new List<IPerson> { _person }, new UndoRedoContainer(), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
+                new List<IPerson> { _person }, new UndoRedoContainer(), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _timeZoneInfo);
 
             IList<IPersonRequest> requests = new List<IPersonRequest> { _source };
             _target.CreatePersonRequestViewModels(requests, new ShiftTradeRequestStatusCheckerForTestDoesNothing(), new PersonRequestAuthorizationCheckerForTest());
@@ -172,61 +150,32 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             Assert.IsTrue(_target.SelectedModel.IsWithinSchedulePeriod, "The model is within the period, so its set to true");
 
             _target = new HandlePersonRequestViewModel(new DateTimePeriod(DateTime.MinValue.ToUniversalTime(), DateTime.MaxValue.ToUniversalTime()),
-                new List<IPerson> { PersonFactory.CreatePerson("Tommy") }, new UndoRedoContainer(), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
+                new List<IPerson> { PersonFactory.CreatePerson("Tommy") }, new UndoRedoContainer(), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _timeZoneInfo);
             _target.CreatePersonRequestViewModels(requests, new ShiftTradeRequestStatusCheckerForTestDoesNothing(), new PersonRequestAuthorizationCheckerForTest());
             _target.PersonRequestViewModels.MoveCurrentToFirst();
             Assert.IsFalse(_target.SelectedModel.IsWithinSchedulePeriod, "Model is within the period but purson is not within, so it should be set to false when created");
         }
-
-        [Test]
-        public void ShouldCallNotifyChangeOn14PropertiesOnPersonRequestViewModel()
-        {
-            var personRequestViewModel = CreateModel(_person);
-            personRequestViewModel.PropertyChanged += personRequestViewModel_PropertyChanged;
-            _target.AddPersonRequestViewModel(personRequestViewModel);
-
-            _target.UpdatePersonRequestViewModels();
-            personRequestViewModel.PropertyChanged -= personRequestViewModel_PropertyChanged;
-
-            Assert.AreEqual(14, _propertyChangedEventCallCount);
-        }
-
+		
         [Test]
         public void ShouldDeletePersonRequestViewModelFromCollection()
         {
-            var personRequestViewModel = CreateModel(_person);
-            personRequestViewModel.PersonRequest.SetId(Guid.NewGuid());
-            _target.AddPersonRequestViewModel(personRequestViewModel);
-            IPersonRequest personRequestDomain = new PersonRequest(_person);
-            personRequestDomain.SetId(personRequestViewModel.PersonRequest.Id);
+			_target.CreatePersonRequestViewModels(new List<IPersonRequest> { _source.WithId() }, _shiftTradeRequestStatusChecker, new PersonRequestAuthorizationCheckerForTest());
 
-            Assert.IsTrue(_target.PersonRequestViewModels.Contains(personRequestViewModel));
-            _target.DeletePersonRequestViewModel(personRequestDomain);
-            Assert.IsFalse(_target.PersonRequestViewModels.Contains(personRequestViewModel));
+			_target.PersonRequestViewModels.Count.Should().Be.EqualTo(1);
+            _target.DeletePersonRequestViewModel(_source);
+            _target.PersonRequestViewModels.Count.Should().Be.EqualTo(0);
         }
 
         [Test]
         public void ShouldNotDeletePersonRequestViewModelFromCollectionIfNotFound()
         {
-            var personRequestViewModel = CreateModel(_person);
-            personRequestViewModel.PersonRequest.SetId(Guid.NewGuid());
-            _target.AddPersonRequestViewModel(personRequestViewModel);
+			_target.CreatePersonRequestViewModels(new List<IPersonRequest> { _source.WithId() }, _shiftTradeRequestStatusChecker, new PersonRequestAuthorizationCheckerForTest());
 
-            IPerson unknownPerson = PersonFactory.CreatePerson("John", "Dow");
-            IPersonRequest personRequestDomain = new PersonRequest(unknownPerson);
-            personRequestDomain.SetId(Guid.NewGuid());
-
-            Assert.AreEqual(1, _target.PersonRequestViewModels.Count);
-            _target.DeletePersonRequestViewModel(personRequestDomain);
-            Assert.AreEqual(1, _target.PersonRequestViewModels.Count);
-        }
-
-        void personRequestViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            _propertyChangedEventCallCount++;
-        }
-
-        #region filters
+			_target.PersonRequestViewModels.Count.Should().Be.EqualTo(1);
+			_target.DeletePersonRequestViewModel(_source.WithId());
+			_target.PersonRequestViewModels.Count.Should().Be.EqualTo(0);
+		}
+		
         [Test]
         public void VerifyFilterIsCreated()
         {
@@ -237,9 +186,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         public void VerifyNewlyAddedItemsDoNotGetFiltered()
         {
             //Its not so often, but just incase, if somebody ads a new request, this will be shown even if the filter is active
-            var modelToAdd = CreateModel(_person);
-            IList<IPersonRequest> reguests = new List<IPersonRequest> { _source };
-            _target.CreatePersonRequestViewModels(reguests, _shiftTradeRequestStatusChecker, new PersonRequestAuthorizationCheckerForTest());
+            IList<IPersonRequest> requests = new List<IPersonRequest> { _source };
+            _target.CreatePersonRequestViewModels(requests, _shiftTradeRequestStatusChecker, new PersonRequestAuthorizationCheckerForTest());
 
             Assert.AreEqual(_target.PersonRequestViewModels.Count, 1);
             _target.ShowOnly(GetAllModels());
@@ -248,7 +196,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             Assert.AreEqual(_target.PersonRequestViewModels.Count, 1);
 
             //Add another model:
-            _target.AddPersonRequestViewModel(modelToAdd);
+            _target.InsertPersonRequestViewModel(_source,_shiftTradeRequestStatusChecker,new PersonRequestAuthorizationCheckerForTest());
             Assert.AreEqual(_target.PersonRequestViewModels.Count, 2, "The added model should be shown");
 
         }
@@ -256,15 +204,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         [Test]
         public void VerifyShowOnly()
         {
-            //Create som models
-            var adapter1 = CreateModel(_person);
-            var adapter2 = CreateModel(_person);
-            var adapter3 = CreateModel(_person);
-            var adapter4 = CreateModel(_person);
-            _target.AddPersonRequestViewModel(adapter1);
-            _target.AddPersonRequestViewModel(adapter2);
-            _target.AddPersonRequestViewModel(adapter3);
-            _target.AddPersonRequestViewModel(adapter4);
+            _target.CreatePersonRequestViewModels(new List<IPersonRequest> {_source,_source,_source,_source},_shiftTradeRequestStatusChecker,new PersonRequestAuthorizationCheckerForTest());
+
+	        _target.PersonRequestViewModels.MoveCurrentToPosition(0);
+	        var adapter1 = (PersonRequestViewModel) _target.PersonRequestViewModels.CurrentItem;
+			_target.PersonRequestViewModels.MoveCurrentToPosition(2);
+			var adapter3 = (PersonRequestViewModel) _target.PersonRequestViewModels.CurrentItem;
 
             Assert.AreEqual(_target.PersonRequestViewModels.Count, 4);
             IList<PersonRequestViewModel> list = new List<PersonRequestViewModel> { adapter1, adapter3 };
@@ -279,9 +224,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             _target.ShowAll();
             Assert.AreEqual(_target.PersonRequestViewModels.Count, 4);
         }
-
-        #endregion filters
-        #region helpers
+		
         private static IPersonRequest CreateRequestObject(IPerson person, DateTimePeriod period)
         {
             IAbsence absence = AbsenceFactory.CreateAbsence("absence");
@@ -291,17 +234,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             request.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
             return request;
         }
-
-        private PersonRequestViewModel CreateModel(IPerson person)
-        {
-            return new PersonRequestViewModel(_source, _shiftTradeRequestStatusChecker, _allAccounts[person], _eventAggregator, _TimeZoneInfo);
-        }
-
+		
         private IList<PersonRequestViewModel> GetAllModels()
         {
             return (IList<PersonRequestViewModel>)_target.PersonRequestViewModels.SourceCollection;
         }
-
-        #endregion
     }
 }

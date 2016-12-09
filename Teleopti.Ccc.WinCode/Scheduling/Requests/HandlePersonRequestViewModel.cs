@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows.Data;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WinCode.Common.Collections;
 using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Interfaces.Domain;
@@ -103,10 +102,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 			{
 				RequestViewModels.Clear();
 				_showOnlymodels.Clear();
-				foreach (var request in personRequests)
-				{
-					InsertPersonRequestViewModel(request, statusChecker, authorization);
-				}	
+				_showOnlymodels.AddRange(personRequests.Select(request => insertPersonRequestViewModel(request, statusChecker, authorization)));
 			}
             filterItems();
 		}
@@ -117,9 +113,20 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 			PersonRequestViewModels.CustomSort = customSorter;
 		}
 
-		public void InsertPersonRequestViewModel(IPersonRequest request, IShiftTradeRequestStatusChecker statusChecker, IPersonRequestCheckAuthorization authorization)
+		public void InsertPersonRequestViewModel(IPersonRequest request, IShiftTradeRequestStatusChecker statusChecker,
+			IPersonRequestCheckAuthorization authorization)
 		{
-			if (!authorization.HasViewRequestPermission(request) || request.IsNew) return;
+			var model = insertPersonRequestViewModel(request,statusChecker,authorization);
+			if (model != null)
+			{
+				_showOnlymodels.Add(model);
+				filterItems();
+			}
+		}
+
+		private PersonRequestViewModel insertPersonRequestViewModel(IPersonRequest request, IShiftTradeRequestStatusChecker statusChecker, IPersonRequestCheckAuthorization authorization)
+		{
+			if (!authorization.HasViewRequestPermission(request) || request.IsNew) return null;
 
 			var model = new PersonRequestViewModel(request, statusChecker, _allAccounts[request.Person], _eventAggregator, _timeZoneInfo);
 			var okByMeSpecification = new ShiftTradeRequestOkByMeSpecification(statusChecker);
@@ -128,16 +135,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 
 			if (afterPeriodSpecification.IsSatisfiedBy(request) ||
 				(!okByMeSpecification.IsSatisfiedBy(request) &&
-				!referredSpecification.IsSatisfiedBy(request)))
-				AddPersonRequestViewModel(model);
+				 !referredSpecification.IsSatisfiedBy(request)))
+			{
+				addPersonRequestViewModel(model);
+			}
+			return model;
 		}
 
-		public void AddPersonRequestViewModel(PersonRequestViewModel personRequestViewModel)
+		private void addPersonRequestViewModel(PersonRequestViewModel personRequestViewModel)
 		{
 			personRequestViewModel.ValidateIfWithinSchedulePeriod(_schedulePeriod, _permittedPersons);
 			RequestViewModels.Add(personRequestViewModel);
-			_showOnlymodels.Add(personRequestViewModel);
-			filterItems();
 		}
 
 		/// <summary>
