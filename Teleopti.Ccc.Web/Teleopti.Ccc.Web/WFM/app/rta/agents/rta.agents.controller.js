@@ -193,7 +193,7 @@
 					if (teamIds.length > 0)
 						$scope.teamsSelected = teamIds;
 					enableWatchOnTeam = true;
-					updateSelectFieldText();
+				  updateSelectFieldText();
 				}
 
 				function countTeamsSelected() {
@@ -203,7 +203,8 @@
 							checkedTeamsCount = checkedTeamsCount + site.Teams.length;
 						}
 					});
-					return checkedTeamsCount + $scope.teamsSelected.length;
+					checkedTeamsCount = checkedTeamsCount + $scope.teamsSelected.length;
+					return checkedTeamsCount;
 				}
 
 				function selectSiteAndTeamsUnder() {
@@ -334,7 +335,6 @@
 				};
 				$scope.$watch('teamsSelected', function(newValue, oldValue) {
 					if (JSON.stringify(newValue) !== JSON.stringify(oldValue) && enableWatchOnTeam) {
-						updateSelectFieldText();
 						$scope.updateSite(oldValue);
 					}
 				});
