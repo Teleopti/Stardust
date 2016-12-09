@@ -10,7 +10,7 @@
 			controller: addAbsenceCtrl,
 			controllerAs: 'vm',
 			bindToController: true,
-			templateUrl: 'app/teamSchedule/html/addAbsence.tpl.html',
+			templateUrl: 'app/teamSchedule/commands/teams.directive.cmd.addAbsence.html',
 			require: ['^teamscheduleCommandContainer', 'addAbsence'],
 			link: function (scope, elem, attrs, ctrls) {
 				var containerCtrl = ctrls[0],

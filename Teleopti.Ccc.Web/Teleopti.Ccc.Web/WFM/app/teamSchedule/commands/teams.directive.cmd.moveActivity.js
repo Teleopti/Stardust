@@ -10,7 +10,7 @@
 			controller: moveActivityCtrl,
 			controllerAs: 'vm',
 			bindToController: true,
-			templateUrl: 'app/teamSchedule/html/moveActivity.tpl.html',
+			templateUrl: 'app/teamSchedule/commands/teams.directive.cmd.moveActivity.html',
 			require: ['^teamscheduleCommandContainer', 'moveActivity'],
 			link: function (scope, elem, attrs, ctrls) {
 				var containerCtrl = ctrls[0],

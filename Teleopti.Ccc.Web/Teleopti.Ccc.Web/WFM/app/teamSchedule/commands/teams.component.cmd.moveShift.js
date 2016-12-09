@@ -5,7 +5,7 @@
 		require: {
 			containerCtrl: '^teamscheduleCommandContainer'
 		},
-		templateUrl: 'app/teamSchedule/html/moveShift.tpl.html',
+		templateUrl: 'app/teamSchedule/commands/teams.component.cmd.moveShift.html',
 		controller: MoveShiftCtrl
 	});
 

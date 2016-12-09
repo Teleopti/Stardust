@@ -1,27 +1,25 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.teamSchedule').directive('addActivity', addActivityDirective);
-	
-	function addActivityDirective() {
+	angular.module('wfm.teamSchedule').directive('addPersonalActivity', addPersonalActivity);
+
+	function addPersonalActivity() {
 		return {
 			restrict: 'E',
 			scope: {},
-			controller: addActivityCtrl,
+			controller: addPersonalActivityCtrl,
 			controllerAs: 'vm',
 			bindToController: true,
-			templateUrl: 'app/teamSchedule/html/addActivity.tpl.html',
-			require: ['^teamscheduleCommandContainer', 'addActivity'],
+			templateUrl: 'app/teamSchedule/commands/teams.directive.cmd.addPersonalActivity.html',
+			require: ['^teamscheduleCommandContainer', 'addPersonalActivity'],
 			link: function(scope, elem, attrs, ctrls) {
 				var containerCtrl = ctrls[0],
 					selfCtrl = ctrls[1];
 
-				scope.vm.containerCtrl = containerCtrl;
-
 				scope.vm.selectedDate = containerCtrl.getDate;
+				scope.vm.trackId = containerCtrl.getTrackId();
 				scope.vm.currentTimezone = containerCtrl.getCurrentTimezone;
 				scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
-				scope.vm.trackId = containerCtrl.getTrackId();
 				scope.vm.getActionCb = containerCtrl.getActionCb;
 				scope.vm.checkCommandActivityLayerOrders = containerCtrl.hasToggle('CheckOverlappingCertainActivitiesEnabled');
 				scope.vm.manageScheduleForDistantTimezonesEnabled = containerCtrl
@@ -31,6 +29,8 @@
 					startTime: selfCtrl.getDefaultActvityStartTime(),
 					endTime: selfCtrl.getDefaultActvityEndTime()
 				};
+
+				scope.vm.containerCtrl = containerCtrl;
 
 				scope.$watch(function() {
 						if (!scope.vm.timeRange) return null;
@@ -50,17 +50,17 @@
 			}
 		};
 	}
+	
+	addPersonalActivityCtrl.$inject = ['$scope', 'ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleManagement', 'teamScheduleNotificationService', 'CommandCheckService', 'belongsToDateDecider'];
 
-	addActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleManagement', 'teamScheduleNotificationService', 'CommandCheckService', 'belongsToDateDecider'];
-
-	function addActivityCtrl(activityService, personSelectionSvc, utility, scheduleManagementSvc, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider) {
+	function addPersonalActivityCtrl($scope, activityService, personSelectionSvc, utility, scheduleManagementSvc, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider) {
 		var vm = this;
 
-		vm.label = 'AddActivity';
+		vm.label = 'AddPersonalActivity';
 
 		vm.isNextDay = false;
 		vm.disableNextDay = false;
-		vm.notAllowedNameListString = "";
+		vm.notAllowedNameListString = '';
 		vm.availableActivitiesLoaded = false;
 		vm.checkingCommand = false;
 		vm.selectedAgents = personSelectionSvc.getCheckedPersonInfoList();
@@ -71,17 +71,17 @@
 			vm.availableActivitiesLoaded = true;
 		});
 
-		function decidePersonBelongsToDates(agents, targetTimeRange) {			
-			return agents.map(function (selectedAgent) {
+		function decidePersonBelongsToDates(agents, targetTimeRange) {
+			return agents.map(function (agent) {
 				var belongsToDate = vm.manageScheduleForDistantTimezonesEnabled
 					? belongsToDateDecider.decideBelongsToDate(targetTimeRange,
-						belongsToDateDecider.normalizePersonScheduleVm(scheduleManagementSvc.findPersonScheduleVmForPersonId(selectedAgent.PersonId), vm.currentTimezone()),
+						belongsToDateDecider.normalizePersonScheduleVm(scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId), vm.currentTimezone()),
 						vm.selectedDate())
 					: vm.selectedDate();
 
 				return {
 					Date: belongsToDate,
-					PersonId: selectedAgent.PersonId
+					PersonId: agent.PersonId
 				};
 			});
 		}
@@ -90,11 +90,11 @@
 			return { startTime: moment(vm.timeRange.startTime), endTime: moment(vm.timeRange.endTime) };
 		}
 
-		vm.anyValidAgent = function () {
+		vm.anyValidAgent = function() {
 			return vm.invalidAgents.length != vm.selectedAgents.length;
 		};
 
-		vm.updateInvalidAgents = function () {
+		vm.updateInvalidAgents = function() {
 			var belongsToDates = decidePersonBelongsToDates(vm.selectedAgents, getTimeRangeMoment());
 			vm.invalidAgents = [];
 
@@ -103,16 +103,16 @@
 					if (!belongsToDates[i].Date) vm.invalidAgents.push(vm.selectedAgents[i]);
 				}
 			} else {
-				vm.selectedAgents.filter(function (agent) { return !vm.isNewActivityAllowedForAgent(agent, vm.timeRange); })
-					.forEach(function (agent) {
+				vm.selectedAgents.filter(function(agent) { return !vm.isNewActivityAllowedForAgent(agent, vm.timeRange); })
+					.forEach(function(agent) {
 						vm.invalidAgents.push(agent);
 					});
 			}
 
-			vm.notAllowedNameListString = vm.invalidAgents.map(function (x) { return x.Name; }).join(', ');
+			vm.notAllowedNameListString = vm.invalidAgents.map(function(x) { return x.Name; }).join(', ');
 		};
 
-		vm.isNewActivityAllowedForAgent = function(agent, timeRange) {
+		vm.isNewActivityAllowedForAgent = function (agent, timeRange) {
 			var mNewActivityStart = moment(timeRange.startTime);
 			var mNewActivityEnd = moment(timeRange.endTime);
 			var mScheduleStart = moment(agent.ScheduleStartTime);
@@ -129,30 +129,28 @@
 			}
 		};
 
-		var addActivity = function(requestData) {
-			var personIds = requestData.PersonDates.map(function(personDate) {
+		function addPersonalActivity(requestData) {
+			var personIds = requestData.PersonDates.map(function (personDate) {
 				return personDate.PersonId;
 			});
-			if (requestData.PersonDates.length > 0) {
-				activityService.addActivity(requestData)
-					.then(function(response) {
-						if (vm.getActionCb(vm.label)) {
-							vm.getActionCb(vm.label)(vm.trackId, personIds);
+
+			if(requestData.PersonDates.length > 0){
+				activityService.addPersonalActivity(requestData).then(function (response) {
+					if (vm.getActionCb(vm.label)) {
+						vm.getActionCb(vm.label)(vm.trackId, personIds);
+					}
+					teamScheduleNotificationService.reportActionResult({
+						success: 'SuccessfulMessageForAddingActivity',
+						warning: 'PartialSuccessMessageForAddingActivity'
+					}, vm.selectedAgents.map(function(x) {
+						return {
+							PersonId: x.PersonId,
+							Name: x.Name
 						}
-						teamScheduleNotificationService.reportActionResult({
-								success: 'SuccessfulMessageForAddingActivity',
-								warning: 'PartialSuccessMessageForAddingActivity'
-							},
-							vm.selectedAgents.map(function(x) {
-								return {
-									PersonId: x.PersonId,
-									Name: x.Name
-								}
-							}),
-							response.data);
-						vm.checkingCommand = false;
-					});
-			} else {
+					}), response.data);
+					vm.checkingCommand = false;
+				});
+			}else{
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, personIds);
 				}
@@ -160,48 +158,45 @@
 			}
 		};
 
-		function getRequestData() {		
+		function getRequestData() {
 			var invalidPersonIds = vm.invalidAgents.map(function (agent) {
 				return agent.PersonId;
 			});
 			var validAgents = vm.selectedAgents.filter(function (agent) {
 				return invalidPersonIds.indexOf(agent.PersonId) < 0;
 			});
-
-			return {
-				PersonDates: decidePersonBelongsToDates(validAgents, getTimeRangeMoment()),
+			return {				
+				PersonDates: decidePersonBelongsToDates(validAgents, getTimeRangeMoment()),				
 				StartTime: vm.convertTime(moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm")),
 				EndTime: vm.convertTime(moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm")),
 				ActivityId: vm.selectedActivityId,
-				ActivityType: 1,
+				ActivityType:2,
 				TrackedCommandInfo: {
 					TrackId: vm.trackId
 				}
 			};
 		}
 
-		vm.addActivity = function () {
+		vm.addPersonalActivity = function () {
 			var requestData = getRequestData();
 			if (vm.checkCommandActivityLayerOrders){
 				vm.checkingCommand = true;
-				CommandCheckService.checkAddActivityOverlapping(requestData)
-					.then(function(data) {
-						addActivity(data);
-					});
+				CommandCheckService.checkAddPersonalActivityOverlapping(requestData).then(function(data) {
+					addPersonalActivity(data);
+				});
 			}
 			else
-				addActivity(requestData);
+				addPersonalActivity(requestData);
 		};
 
-		vm.getDefaultActvityStartTime =  function () {
+		vm.getDefaultActvityStartTime = function() {
 			var curDateMoment = moment(vm.selectedDate());
-			var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
+			var personIds = vm.selectedAgents.map(function(agent) { return agent.PersonId; });
 			var overnightEnds = scheduleManagementSvc.getLatestPreviousDayOvernightShiftEnd(curDateMoment, personIds);
 			var latestShiftStart = scheduleManagementSvc.getLatestStartOfSelectedSchedule(curDateMoment, personIds);
 
 			// Set to 08:00 for empty schedule or day off
 			var defaultStart = curDateMoment.clone().hour(8).minute(0).second(0).toDate();
-
 			if (overnightEnds !== null) {
 				defaultStart = moment(overnightEnds).add(1, 'hour').toDate();
 			}
@@ -220,9 +215,9 @@
 			}
 
 			return defaultStart;
-		}
+		};
 
-		vm.getDefaultActvityEndTime = function () {
+		vm.getDefaultActvityEndTime = function() {
 			return moment(vm.getDefaultActvityStartTime()).add(1, 'hour').toDate();
 		};
 	}

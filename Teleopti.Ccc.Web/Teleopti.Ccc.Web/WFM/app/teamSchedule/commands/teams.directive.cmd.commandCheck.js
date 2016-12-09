@@ -9,7 +9,7 @@
 			controller: commandCheckCtrl,
 			controllerAs: 'vm',
 			bindToController: true,
-			templateUrl: 'app/teamSchedule/html/commandCheck.tpl.html',
+			templateUrl: 'app/teamSchedule/commands/teams.directive.cmd.commandCheck.html',
 			require: ['^teamscheduleCommandContainer', 'commandCheck'],
 			link: function (scope, elem, attrs, ctrls) {
 				var containerCtrl = ctrls[0];

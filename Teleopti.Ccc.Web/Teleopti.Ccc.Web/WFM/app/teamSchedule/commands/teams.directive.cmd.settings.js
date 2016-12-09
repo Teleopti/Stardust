@@ -8,7 +8,7 @@
 			controller: settingsCtrl,
 			controllerAs: 'vm',
 			require: ['^teamscheduleCommandContainer', 'settings'],
-			templateUrl: 'app/teamSchedule/html/settings.tpl.html'
+			templateUrl: 'app/teamSchedule/commands/teams.directive.cmd.settings.html'
 		}
 	}
 

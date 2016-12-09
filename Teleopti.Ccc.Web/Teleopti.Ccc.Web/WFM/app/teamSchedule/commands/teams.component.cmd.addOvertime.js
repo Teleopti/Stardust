@@ -2,7 +2,7 @@
 	'use strict';
 	angular.module('wfm.teamSchedule').component('addOvertime',
 	{
-		templateUrl: 'app/teamSchedule/html/addOvertime.tpl.html',
+		templateUrl: 'app/teamSchedule/commands/teams.component.cmd.addOvertime.html',
 		require: {
 			containerCtrl: '^teamscheduleCommandContainer'
 		},

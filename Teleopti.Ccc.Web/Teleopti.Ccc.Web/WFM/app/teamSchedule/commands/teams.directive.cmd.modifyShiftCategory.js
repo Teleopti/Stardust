@@ -9,7 +9,7 @@
 			controller: modifyShiftCategoryCtrl,
 			controllerAs: 'vm',
 			bindToController: true,
-			templateUrl: 'app/teamSchedule/html/modifyShiftCategory.tpl.html',
+			templateUrl: 'app/teamSchedule/commands/teams.directive.cmd.modifyShiftCategory.html',
 			require: ['^teamscheduleCommandContainer', 'modifyShiftCategory'],
 			link: function linkFn(scope, elem, attrs, ctrls) {
 				var containerCtrl = ctrls[0],
