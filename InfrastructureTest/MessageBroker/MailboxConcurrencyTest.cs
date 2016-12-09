@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.TestCommon;
@@ -10,6 +11,11 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {
+	[Toggle(Toggles.Mailbox_Optimization_41900)]
+	public class MailboxConcurrencyOptimizedTest : MailboxConcurrencyTest
+	{
+	}
+
 	[TestFixture]
 	[AnalyticsDatabaseTest]
 	public class MailboxConcurrencyTest

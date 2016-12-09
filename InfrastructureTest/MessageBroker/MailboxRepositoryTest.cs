@@ -3,13 +3,20 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {
+	[Toggle(Toggles.Mailbox_Optimization_41900)]
+	public class MailboxRepositoryOptimizedTest : MailboxRepositoryTest
+	{
+	}
+
 	[TestFixture]
 	[MessageBrokerUnitOfWorkTest]
 	public class MailboxRepositoryTest
@@ -69,8 +76,6 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 				Id = mailboxId,
 				Route = new Message { BusinessUnitId = businessUnitId }.Routes().First()
 			});
-			var mailbox = Target.Load(mailboxId);
-			Target.Add(mailbox);
 			Target.AddMessage(new Message { BusinessUnitId = businessUnitId });
 			Target.AddMessage(new Message { BusinessUnitId = businessUnitId });
 
