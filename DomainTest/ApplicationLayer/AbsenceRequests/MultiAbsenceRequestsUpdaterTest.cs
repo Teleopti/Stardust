@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -17,9 +24,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
-	[DomainTest]
+	[DomainTestWithStaticDependenciesAvoidUse]
 	[TestFixture, SetCulture("en-US")]
-	public class MultiAbsenceRequestsUpdaterTest
+	public class MultiAbsenceRequestsUpdaterTest : ISetup
 	{
 		public IMultiAbsenceRequestsUpdater Target;
 		public FakeScenarioRepository ScenarioRepository;
@@ -32,7 +39,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public MutableNow Now;
-		
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
+		}
 
 		[Test]
 		public void ShouldDenyIfPeriodNotOpenForRequest()
@@ -90,6 +101,66 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			req.DenyReason.Should().Be.EqualTo(string.Format(Resources.RequestDenyReasonRequestExpired, req.Request.Period.StartDateTime, 15));
 		}
 
+		[Test]
+		public void ShouldOnlyApprove50RequestsSoNotUnderstaffed()
+		{
+			Now.Is(DateTime.UtcNow);
+			var firstDay = new DateOnly(2015, 10, 12);
+			var activity = ActivityRepository.Has("activityName");
+			var skill = SkillRepository.Has("skillName", activity);
+			skill.StaffingThresholds = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
+
+			var scenario = ScenarioRepository.Has("scnearioName");
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var contract = new Contract("_")
+			{
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
+			};
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var workflowControlSet = new WorkflowControlSet { AbsenceRequestWaitlistEnabled = false }.WithId();
+
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				Period = firstDay.ToDateOnlyPeriod().Inflate(1),
+				OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(DateTime.UtcNow), new DateOnly(DateTime.UtcNow.AddDays(1))),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			};
+
+			workflowControlSet.InsertPeriod(absenceRequestOpenPeriod, 0);
+
+			var contractSchedule = new ContractSchedule("_");
+			var partTimePercentage = new PartTimePercentage("_");
+			var team = new Team { Site = new Site("site") };
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
+			var category = new ShiftCategory("shiftCategory");
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 150, 150));
+
+			var reqs = new List<IPersonRequest>();
+			for (int i = 0; i < 200; i++)
+			{
+				var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, skill);
+				agent.WorkflowControlSet = workflowControlSet;
+				var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, firstDay.ToDateTimePeriod(agent.PermissionInformation.DefaultTimeZone()), category, scenario);
+				PersonAssignmentRepository.Has(assignment);
+				var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, firstDay.ToDateTimePeriod(agent.PermissionInformation.DefaultTimeZone()))).WithId();
+				personRequest.Pending();
+				PersonRequestRepository.Add(personRequest);
+				reqs.Add(personRequest);
+			}
+
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
+
+			Target.UpdateAbsenceRequest(reqs.Select(x => x.Id.GetValueOrDefault()).ToList());
+
+			reqs.Count(x => x.IsApproved).Should().Be.EqualTo(50); //with 0% threshold
+			reqs.Count(x => x.IsDenied).Should().Be.EqualTo(150);
+
+		}
+
 
 		private List<IPersonRequest> createNewRequest(IAbsence absence, IPerson person)
 		{
@@ -144,5 +215,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				absenceLayer);
 			PersonAbsenceRepository.Has(personAbsence);
 		}
+
+
 	}
 }
