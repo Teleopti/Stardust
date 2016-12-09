@@ -18,7 +18,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	[DomainTestWithStaticDependenciesAvoidUse] //Change to DomainTest - ShouldOnlyConsiderPrimarySkillDuringOptimization now fails if end user sits in UTC (default if DomainTest) and not +1 (default if DomainTestWithStaticDependenciesAvoidUse)
+	[DomainTestWithStaticDependenciesAvoidUse]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	[LoggedOnAppDomain]
 	[TestFixture(true)]
