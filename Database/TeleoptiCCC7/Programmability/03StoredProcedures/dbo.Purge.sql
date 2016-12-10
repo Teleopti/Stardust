@@ -58,53 +58,56 @@ select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting 
 update person set IsDeleted = 1
 where isnull(TerminalDate,'20591231') < @KeepUntil
 
-insert into #Deleted
-select top(20) p.Id
-from Person p
-where p.IsDeleted = 1
-and exists (select 1 from PersonPeriod pp where pp.Parent = p.Id)
+while 20 < (select count(1) from Person p inner join personperiod pp on pp.parent = p.id where IsDeleted = 1) --Large customers may have way more than 20 leavers per day
+begin
+	insert into #Deleted
+	select top(20) p.Id
+	from Person p
+	where p.IsDeleted = 1
+	and exists (select 1 from PersonPeriod pp where pp.Parent = p.Id)
 
-delete SchedulePeriodShiftCategoryLimitation
-from SchedulePeriodShiftCategoryLimitation scl
-inner join SchedulePeriod sp on scl.SchedulePeriod = sp.Id
-inner join #Deleted p on sp.Parent = p.Id
+	delete SchedulePeriodShiftCategoryLimitation
+	from SchedulePeriodShiftCategoryLimitation scl
+	inner join SchedulePeriod sp on scl.SchedulePeriod = sp.Id
+	inner join #Deleted p on sp.Parent = p.Id
 
-delete SchedulePeriod
-from SchedulePeriod sp
-inner join #Deleted p on sp.Parent = p.Id
+	delete SchedulePeriod
+	from SchedulePeriod sp
+	inner join #Deleted p on sp.Parent = p.Id
 
-delete ExternalLogOnCollection
-from ExternalLogOnCollection ex
-inner join PersonPeriod pp on ex.PersonPeriod = pp.Id
-inner join #Deleted p on pp.Parent = p.Id
+	delete ExternalLogOnCollection
+	from ExternalLogOnCollection ex
+	inner join PersonPeriod pp on ex.PersonPeriod = pp.Id
+	inner join #Deleted p on pp.Parent = p.Id
 
-delete PersonSkill
-from PersonSkill ps
-inner join PersonPeriod pp on ps.Parent = pp.Id
-inner join #Deleted p on pp.Parent = p.Id
+	delete PersonSkill
+	from PersonSkill ps
+	inner join PersonPeriod pp on ps.Parent = pp.Id
+	inner join #Deleted p on pp.Parent = p.Id
 
-delete PersonPeriod
-from PersonPeriod pp
-inner join #Deleted p on pp.Parent = p.Id
+	delete PersonPeriod
+	from PersonPeriod pp
+	inner join #Deleted p on pp.Parent = p.Id
 
-delete top (100) Auditing.Revision
-from Auditing.Revision r
-inner join Auditing.PersonAssignment_AUD pa on pa.REV = r.Id
-inner join person p on pa.Person = p.Id
-where p.IsDeleted = 1
+	delete top (100) Auditing.Revision
+	from Auditing.Revision r
+	inner join Auditing.PersonAssignment_AUD pa on pa.REV = r.Id
+	inner join person p on pa.Person = p.Id
+	where p.IsDeleted = 1
 
-delete top (100) Auditing.Revision
-from Auditing.Revision r
-inner join Auditing.PersonAbsence_AUD pa on pa.REV = r.Id
-inner join person p on pa.Person = p.Id
-where p.IsDeleted = 1
+	delete top (100) Auditing.Revision
+	from Auditing.Revision r
+	inner join Auditing.PersonAbsence_AUD pa on pa.REV = r.Id
+	inner join person p on pa.Person = p.Id
+	where p.IsDeleted = 1
 
-delete ReadModel.PersonScheduleDay
-from ReadModel.PersonScheduleDay ps
-inner join #Deleted d on d.Id = ps.PersonId
+	delete ReadModel.PersonScheduleDay
+	from ReadModel.PersonScheduleDay ps
+	inner join #Deleted d on d.Id = ps.PersonId
 
-if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
-	return
+	if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+		return
+end
 
 /*
 exec Purge
