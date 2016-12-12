@@ -1,4 +1,5 @@
 ﻿@WFM
+@OnlyRunIfDisabled('WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260')
 @OnlyRunIfEnabled('WfmReportPortal_LeaderBoard_39440')
 Feature: Leaderboard
 

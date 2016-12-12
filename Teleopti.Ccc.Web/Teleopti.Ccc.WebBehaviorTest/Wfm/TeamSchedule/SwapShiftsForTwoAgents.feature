@@ -1,4 +1,5 @@
 ﻿@WFM
+@OnlyRunIfDisabled('WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260')
 @RunOnlyIfEnabled('WfmTeamSchedule_SwapShifts_36231')
 Feature: SwapShiftsForTwoAgents
 	As a team leader

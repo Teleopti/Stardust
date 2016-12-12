@@ -1,4 +1,5 @@
 ﻿@WFM
+@OnlyRunIfDisabled('WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260')
 @OnlyRunIfEnabled('WfmTeamSchedule_ShowNightlyRestWarning_39619')
 Feature: Show business rules warning
 	As a team leader

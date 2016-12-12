@@ -1,4 +1,5 @@
 ﻿@WFM
+@OnlyRunIfDisabled('WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260')
 @OnlyRunIfEnabled('WfmTeamSchedule_RevertToPreviousSchedule_39002')
 Feature: Undo Schedule Change
 	As a team leader

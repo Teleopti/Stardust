@@ -1,4 +1,5 @@
 ﻿@WFM
+@OnlyRunIfDisabled('WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260')
 @OnlyRunIfEnabled('WfmTeamSchedule_ShowShiftCategory_39796')
 Feature: ShiftCategory
 	In order to find the mismatched shift
