@@ -99,6 +99,7 @@ Scenario: the action button of people is invisible
 	And I click add agents to seat button
 	Then I should not see the action buttons of people
 
+@OnlyRunIfDisabled('Wfm_Seatplan_UseDatePeriodForPlanning_42167')
 Scenario: be able to close people list
 	When I view Seat plan on "2015-01-01"
 	And I press seat map booking view button
