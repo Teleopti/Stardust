@@ -27347,6 +27347,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Service level.
+        /// </summary>
+        public static string ServiceLevel {
+            get {
+                return ResourceManager.GetString("ServiceLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Service Level Analysis.
         /// </summary>
         public static string ServiceLevelAnalysis {

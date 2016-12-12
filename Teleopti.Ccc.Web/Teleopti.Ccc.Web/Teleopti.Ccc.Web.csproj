@@ -1483,7 +1483,7 @@
     <Content Include="WFM\app\intraday\intraday.area.controller.spec.js" />
     <Content Include="WFM\app\intraday\intraday.config.controller.spec.js" />
     <Content Include="WFM\app\intraday\intraday.monitor.staffing.service.js" />
-    <Content Include="WFM\app\intraday\intraday.performence.service.js" />
+    <Content Include="WFM\app\intraday\intraday.performance.service.js" />
     <Content Include="WFM\app\intraday\intraday.routes.js" />
     <Content Include="WFM\app\intraday\intraday.time.service.js" />
     <Content Include="WFM\app\intraday\intraday.traffic.service.js" />

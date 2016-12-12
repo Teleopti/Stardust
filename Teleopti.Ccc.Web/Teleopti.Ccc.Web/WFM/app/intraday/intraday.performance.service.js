@@ -18,6 +18,10 @@
 					series: {},
 					max : {}
 				},
+				estimatedServiceLevelObj: {
+					series: {},
+					max: {}
+				},
 				summary: {},
 				hasMonitorData: false,
 				timeSeries: [],
@@ -32,6 +36,7 @@
 				performanceData.averageSpeedOfAnswerObj.series = result.DataSeries.AverageSpeedOfAnswer;
 				performanceData.abandonedRateObj.series = result.DataSeries.AbandonedRate;
 				performanceData.serviceLevelObj.series = result.DataSeries.ServiceLevel;
+				performanceData.estimatedServiceLevelObj.series = result.DataSeries.EstimatedServiceLevels;
 
 				performanceData.latestActualInterval = $filter('date')(result.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(result.LatestActualIntervalEnd, 'shortTime');
 				intervalStart = $filter('date')(result.LatestActualIntervalStart, 'shortTime');
@@ -39,15 +44,18 @@
 				performanceData.averageSpeedOfAnswerObj.max = Math.max.apply(Math, performanceData.averageSpeedOfAnswerObj.series);
 				performanceData.abandonedRateObj.max = Math.max.apply(Math, performanceData.abandonedRateObj.series);
 				performanceData.serviceLevelObj.max = Math.max.apply(Math, performanceData.serviceLevelObj.series);
+				performanceData.estimatedServiceLevelObj.max = Math.max.apply(Math, performanceData.estimatedServiceLevelObj.series);
 
 				performanceData.averageSpeedOfAnswerObj.series.splice(0, 0, 'ASA');
 				performanceData.abandonedRateObj.series.splice(0, 0, 'Abandoned_rate');
 				performanceData.serviceLevelObj.series.splice(0, 0, 'Service_level');
+				performanceData.estimatedServiceLevelObj.series.splice(0, 0, 'ESL');
 
 				performanceData.summary = {
 					summaryAbandonedRate: $filter('number')(result.Summary.AbandonRate * 100, 1),
 					summaryServiceLevel: $filter('number')(result.Summary.ServiceLevel * 100, 1),
-					summaryAsa: $filter('number')(result.Summary.AverageSpeedOfAnswer, 1)
+					summaryAverageSpeedOfAnswer: $filter('number')(result.Summary.AverageSpeedOfAnswer, 1),
+					summaryEstimatedServiceLevel: $filter('number')(result.Summary.EstimatedServiceLevel, 1)
 				};
 
 				angular.forEach(result.DataSeries.Time, function (value, key) {
@@ -72,7 +80,7 @@
 				performanceData.currentInterval = [];
 				for (var i = 0; i < performanceData.timeSeries.length; i++) {
 					if (performanceData.timeSeries[i] === intervalStart) {
-						performanceData.currentInterval[i] = performanceData.serviceLevelObj.max;
+						performanceData.currentInterval[i] = performanceData.averageSpeedOfAnswerObj.max;
 					}else{
 						performanceData.currentInterval[i] = null;
 					}
@@ -85,6 +93,7 @@
 				performanceData.averageSpeedOfAnswerObj.series = [];
 				performanceData.abandonedRateObj.series = [];
 				performanceData.serviceLevelObj.series = [];
+				performanceData.estimatedServiceLevelObj.series = [];
 			};
 
 			service.pollSkillData = function (selectedItem) {
@@ -123,10 +132,11 @@
 									performanceData.averageSpeedOfAnswerObj.series,
 									performanceData.abandonedRateObj.series,
 									performanceData.serviceLevelObj.series,
+									performanceData.estimatedServiceLevelObj.series,
 									performanceData.currentInterval
 								],
 								groups: [
-									['ASA'],['Abandoned_rate'],['Service_level']
+									['ASA'],['Abandoned_rate'],['Service_level'],['ESL']
 								],
 								order: 'desc',
 								hide: hiddenArray,
@@ -136,16 +146,19 @@
 								colors: {
 									ASA: '#0099FF',
 									Abandoned_rate: '#E91E63',
-									Service_level: '#FB8C00'
+									Service_level: '#FB8C00',
+									ESL: '#F488C8'
 								},
 								names: {
 									ASA: $translate.instant('AverageSpeedOfAnswer') + ' ←',
 									Abandoned_rate: $translate.instant('AbandonedRate') + ' →',
 									Service_level: $translate.instant('ServiceLevel') + ' →',
+									ESL: $translate.instant('ESL') + ' →'
 								},
 								axes: {
 									Service_level: 'y2',
-									Abandoned_rate: 'y2'
+									Abandoned_rate: 'y2',
+									ESL: 'y2'
 								}
 							},
 							axis: {

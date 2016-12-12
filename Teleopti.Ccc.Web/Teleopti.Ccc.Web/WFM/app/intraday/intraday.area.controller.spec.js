@@ -78,7 +78,7 @@ describe('IntradayAreaCtrl', function () {
 		trafficAndPerformanceData = {
 			LatestActualIntervalEnd: "0001-01-01T16:00:00",
 			LatestActualIntervalStart: "0001-01-01T15:45:00",
-			IncomingDataSeries: {
+			DataSeries: {
 				AbandonedRate: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
 				AverageHandleTime: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
 				AverageSpeedOfAnswer: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
@@ -88,7 +88,7 @@ describe('IntradayAreaCtrl', function () {
 				ServiceLevel: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
 				Time: ["0001-01-01T00:00:00", "0001-01-01T00:15:00", "0001-01-01T00:30:00", "0001-01-01T00:45:00"]
 			},
-			IncomingSummary: {
+			Summary: {
 				AbandonRate: 0.05594855305466238,
 				AbandonedCalls: 87,
 				AnsweredCalls: 1468,
@@ -110,14 +110,14 @@ describe('IntradayAreaCtrl', function () {
 		performanceData = {
 			LatestActualIntervalEnd: "0001-01-01T16:00:00",
 			LatestActualIntervalStart: "0001-01-01T15:45:00",
-			IntradayPerformanceDataSeries: {
+			DataSeries: {
 				AbandonedRate: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
-				AverageHandleTime: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
 				AverageSpeedOfAnswer: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
 				EstimatedServiceLevels: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+				ServiceLevel: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
 				Time: ["0001-01-01T00:00:00", "0001-01-01T00:15:00", "0001-01-01T00:30:00", "0001-01-01T00:45:00"]
 			},
-			IntradayPerformanceSummary: {
+			Summary: {
 				AbandonRate: 0.05594855305466238,
 				AverageSpeedOfAnswer: 22,
 				ServiceLevel: 0.8392282958199357,
@@ -331,6 +331,18 @@ describe('IntradayAreaCtrl', function () {
 		$httpBackend.flush();
 
 		expect(scope.viewObj.serviceLevelObj.series.length).toBeGreaterThan(5);
+	});
+
+	it('should show estimated service level in performance tab and skill is selected', function () {
+		createController(false);
+		scope.activeTab = 1;
+
+		scope.selectedSkillChange(scope.skills[0]);
+		$httpBackend.flush();
+
+		expect(scope.viewObj.estimatedServiceLevelObj.series.length).toBeGreaterThan(0);
+		expect(scope.viewObj.summary.summaryEstimatedServiceLevel).toBeGreaterThan(0);
+
 	});
 
 	it('should only poll staffing skill data when staffing tab and skill is selected', function () {

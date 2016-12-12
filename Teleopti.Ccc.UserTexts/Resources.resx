@@ -15332,4 +15332,8 @@ These options are activated:
     <value>{0} teams selected</value>
     <comment>Selected teams text of organization picker in WFM/Teams</comment>
   </data>
+  <data name="ServiceLevel" xml:space="preserve">
+    <value>Service level</value>
+    <comment>header in web intraday</comment>
+  </data>
 </root>

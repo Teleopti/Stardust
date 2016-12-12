@@ -198,13 +198,17 @@
 											<thead>
 												<tr>
 													<th></th>
-													<th>{{'Actual'|translate}}</th>
+													<th>{{'Average'|translate}}</th>
 												</tr>
 											</thead>
 											<tbody>
 												<tr>
-													<td>{{'ServiceLevelPercentSign'|translate}}</td>
+													<td>{{'ServiceLevel'|translate}}</td>
 													<td class="number-cell">{{viewObj.summary.summaryServiceLevel}} %</td>
+												</tr>
+												<tr>
+													<td>{{'ESL'|translate}}</td>
+													<td class="number-cell">{{viewObj.summary.summaryEstimatedServiceLevel}} %</td>
 												</tr>
 												<tr>
 													<td>{{'AbandonedRate'|translate}}</td>
@@ -212,7 +216,7 @@
 												</tr>
 												<tr>
 													<td>{{'AverageSpeedOfAnswer'|translate}}</td>
-													<td class="number-cell">{{viewObj.summary.summaryAsa}} {{'SecondShort'|translate}}</td>
+													<td class="number-cell">{{viewObj.summary.summaryAverageSpeedOfAnswer}} {{'SecondShort'|translate}}</td>
 												</tr>
 											</tbody>
 										</table>
