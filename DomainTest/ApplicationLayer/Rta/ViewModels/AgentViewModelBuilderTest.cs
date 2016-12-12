@@ -105,6 +105,44 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		}
 
 		[Test]
+		public void ShouldGetAgentForSiteAndTeam()
+		{
+			var paris = Guid.NewGuid();
+			var red = Guid.NewGuid();
+			var london = Guid.NewGuid();
+			var students = Guid.NewGuid();
+			var john = Guid.NewGuid();
+			var bill = Guid.NewGuid();
+			Now.Is("2016-11-09".Utc());
+			Database
+				.WithSite(paris, "paris")
+				.WithTeam(red, "red")
+				.WithAgent(john, "John Smith", 123)
+				.WithSite(london, "london")
+				.WithTeam(students, "students")
+				.WithAgent(bill, "Bill Gates", 124)
+				.WithAgentNameDisplayedAs("{EmployeeNumber} - {FirstName} {LastName}")
+				;
+
+			var viewModel = Target.For(new ViewModelFilter { SiteIds = new[] { london }, TeamIds = new[] { red } });
+
+			var johnVm = viewModel.Single(p => p.PersonId == john);
+			johnVm.SiteId.Should().Be(paris.ToString());
+			johnVm.SiteName.Should().Be("paris");
+			johnVm.TeamId.Should().Be(red.ToString());
+			johnVm.TeamName.Should().Be("red");
+			johnVm.Name.Should().Be("123 - John Smith");
+
+			var billVm = viewModel.Single(p => p.PersonId == bill);
+			billVm.SiteId.Should().Be(london.ToString());
+			billVm.SiteName.Should().Be("london");
+			billVm.TeamId.Should().Be(students.ToString());
+			billVm.TeamName.Should().Be("students");
+			billVm.Name.Should().Be("124 - Bill Gates");
+
+		}
+
+		[Test]
 		public void ShouldGetAgentForSkillAndTeam()
 		{
 			var skill = Guid.NewGuid();

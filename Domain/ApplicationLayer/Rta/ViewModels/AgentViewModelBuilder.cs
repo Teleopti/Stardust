@@ -73,6 +73,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				return forSkillSiteTeam(filter.SiteIds.ToArray(), filter.TeamIds.ToArray(), filter.SkillIds.ToArray());
 			if (filter.SiteIds != null && filter.SkillIds != null)
 				return forSkillAndSite(filter.SiteIds.ToArray(), filter.SkillIds.ToArray());
+			if (filter.SiteIds != null && filter.TeamIds != null)
+				return forSiteTeam(filter.SiteIds.ToArray(), filter.TeamIds.ToArray());
 			if (filter.SiteIds != null)
 				return forSites(filter.SiteIds.ToArray());
 			if (filter.TeamIds != null && filter.SkillIds != null)
@@ -80,6 +82,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			if (filter.TeamIds != null)
 				return forTeams(filter.TeamIds.ToArray());
 			return forSkill(filter.SkillIds.ToArray());
+		}
+
+		private IEnumerable<AgentViewModel> forSiteTeam(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds)
+		{
+			return forSites(siteIds).Concat(forTeams(teamIds));
 		}
 
 		private IEnumerable<AgentViewModel> forSites(IEnumerable<Guid> siteIds)
