@@ -117,16 +117,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		public void DeleteBridgeGroupPagePersonExcludingPersonPeriods(Guid personId, ICollection<int> personPeriodIds, Guid businessUnitId)
+		public void DeleteBridgeGroupPagePersonExcludingPersonPeriods(Guid personId, ICollection<int> personPeriodIds)
 		{
 			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
 				$@"exec mart.[etl_bridge_group_page_person_delete_removed]
 					 @person_code=:{nameof(personId)}
-					,@person_ids=:{nameof(personPeriodIds)}
-					,@business_unit_code=:{nameof(businessUnitId)}")
+					,@person_ids=:{nameof(personPeriodIds)}")
 				.SetParameter(nameof(personId), personId)
-				.SetParameter(nameof(personPeriodIds), string.Join(",", personPeriodIds))
-				.SetParameter(nameof(businessUnitId), businessUnitId);
+				.SetParameter(nameof(personPeriodIds), string.Join(",", personPeriodIds));
 			query.ExecuteUpdate();
 		}
 

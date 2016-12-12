@@ -7,14 +7,13 @@ GO
 -- =============================================
 CREATE PROCEDURE [mart].[etl_bridge_group_page_person_delete_removed]
 @person_code uniqueidentifier,
-@person_ids nvarchar(max),
-@business_unit_code uniqueidentifier
+@person_ids nvarchar(max)
 AS
 BEGIN
 
 	delete bgpp from [mart].[bridge_group_page_person] bgpp
 	inner join mart.dim_person p
-		on bgpp.person_id = p.person_id AND p.business_unit_code = @business_unit_code
+		on bgpp.person_id = p.person_id
 	left outer join mart.SplitStringInt(@person_ids) pp
 		on pp.id = p.person_id
 	where p.person_code=@person_code

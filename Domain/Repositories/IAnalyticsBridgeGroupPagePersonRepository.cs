@@ -12,6 +12,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IEnumerable<Guid> GetGroupPagesForPersonPeriod(int personId, Guid businessUnitId);
 		void DeleteBridgeGroupPagePersonForPersonPeriod(int personId, ICollection<Guid> groupIds, Guid businessUnitId);
 		void AddBridgeGroupPagePersonForPersonPeriod(int personId, ICollection<Guid> groupIds, Guid businessUnitId);
-		void DeleteBridgeGroupPagePersonExcludingPersonPeriods(Guid personId, ICollection<int> personPeriodIds, Guid businessUnitId);
+		void DeleteBridgeGroupPagePersonExcludingPersonPeriods(Guid personId, ICollection<int> personPeriodIds);
 	}
 }

@@ -48,9 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					var analyticsPersonPeriod = analyticsPersonPeriods.FirstOrDefault(x => x.PersonPeriodCode == personPeriod.Id.GetValueOrDefault());
 					if (analyticsPersonPeriod == null)
 						throw new PersonPeriodMissingInAnalyticsException(personPeriod.Id.GetValueOrDefault());
-					if (analyticsPersonPeriod.BusinessUnitCode != @event.LogOnBusinessUnitId)
-						throw new ApplicationException($"Found the PersonPeriod ({analyticsPersonPeriod.PersonPeriodCode}) in analytics but for a different Business Unit ({analyticsPersonPeriod.BusinessUnitCode}) than the event ({@event.LogOnBusinessUnitId})");
-					var groupPages = _analyticsGroupPageRepository.GetBuildInGroupPageBase(@event.LogOnBusinessUnitId).ToList();
+					var groupPages = _analyticsGroupPageRepository.GetBuildInGroupPageBase(analyticsPersonPeriod.BusinessUnitCode).ToList();
 					var groupIds = new List<analyticsGroupForPerson>();
 
 					handleSkills(personPeriod, groupIds, groupPages);
@@ -61,14 +59,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					handleNotes(person.Note, groupIds, groupPages);
 					handleCustomGroups(personId, groupIds);
 
-					var deletedGroupIds = updatePersonGroups(analyticsPersonPeriod.PersonId, groupIds, @event.LogOnBusinessUnitId);
+					var deletedGroupIds = updatePersonGroups(analyticsPersonPeriod.PersonId, groupIds, analyticsPersonPeriod.BusinessUnitCode);
 
-					clearEmptyGroups(deletedGroupIds, @event.LogOnBusinessUnitId);
+					clearEmptyGroups(deletedGroupIds, analyticsPersonPeriod.BusinessUnitCode);
 				}
 				// Remove any group pages associated with deleted person periods or deleted persons
 				var analyticsPersonPeriodIds = analyticsPersonPeriods.Select(x => x.PersonId).ToList();
 				logger.Debug($"Deleting bridge group page person {personId} excluding person periods {string.Join(",", analyticsPersonPeriodIds)}");
-				_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePersonExcludingPersonPeriods(personId, analyticsPersonPeriodIds, @event.LogOnBusinessUnitId);
+				_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePersonExcludingPersonPeriods(personId, analyticsPersonPeriodIds);
 			}
 		}
 
