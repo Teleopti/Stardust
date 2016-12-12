@@ -25,7 +25,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	[DomainTestWithStaticDependenciesAvoidUse] //FIX ME!
+	[DomainTest]
 	[TestFixture(true, true)]
 	[TestFixture(false, true)]
 	[TestFixture(true, false)]

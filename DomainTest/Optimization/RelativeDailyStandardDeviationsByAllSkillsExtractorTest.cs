@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _skillStaffPeriodHolder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
             _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
-            _target = new RelativeDailyStandardDeviationsByAllSkillsExtractor(_matrix, _schedulingOptions, _stateHolder);
+            _target = new RelativeDailyStandardDeviationsByAllSkillsExtractor(_matrix, _schedulingOptions, _stateHolder, TimeZoneInfoFactory.StockholmTimeZoneInfo());
         }
 
         [Test]

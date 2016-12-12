@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public IScheduleResultDataExtractor CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(IScheduleMatrixPro scheduleMatrix, ISchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-			return new RelativeDailyStandardDeviationsByAllSkillsExtractor(scheduleMatrix, schedulingOptions, schedulingResultStateHolder);
+			return new RelativeDailyStandardDeviationsByAllSkillsExtractor(scheduleMatrix, schedulingOptions, schedulingResultStateHolder, _userTimeZone.TimeZone());
 		}
     }
 }

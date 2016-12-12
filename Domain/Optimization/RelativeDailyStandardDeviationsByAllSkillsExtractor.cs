@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -13,13 +14,15 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         private readonly ISchedulingOptions _schedulingOptions;
 	    private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+	    private readonly TimeZoneInfo _userTimeZoneInfo;
 	    private readonly IScheduleMatrixPro _scheduleMatrix;
 
-        public RelativeDailyStandardDeviationsByAllSkillsExtractor(IScheduleMatrixPro scheduleMatrix, ISchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder)
+        public RelativeDailyStandardDeviationsByAllSkillsExtractor(IScheduleMatrixPro scheduleMatrix, ISchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder, TimeZoneInfo userTimeZoneInfo)
         {
             _scheduleMatrix = scheduleMatrix;
             _schedulingOptions = schedulingOptions;
 	        _schedulingResultStateHolder = schedulingResultStateHolder;
+	        _userTimeZoneInfo = userTimeZoneInfo;
         }
 
         public IList<double?> Values()
@@ -52,9 +55,8 @@ namespace Teleopti.Ccc.Domain.Optimization
         private IList<double> GetIntradayRelativePersonnelDeficits(DateOnly scheduleDay)
         {
 
-            DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-               scheduleDay.Date, scheduleDay.Date.AddDays(1),
-               TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+	        DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
+		        scheduleDay.Date, scheduleDay.Date.AddDays(1), _userTimeZoneInfo);
 
             IList<ISkill> allSkills = new List<ISkill>();
             foreach (var skill in _schedulingResultStateHolder.Skills)
