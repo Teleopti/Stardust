@@ -16,12 +16,13 @@ using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	//TODO: before adding more tests here remove mess with mix of repos and stateholder
-	[DomainTestWithStaticDependenciesAvoidUse]
+	[DomainTest]
 	public class BackToLegalShiftCommandTest
 	{
 		public BackToLegalShiftCommand Target;
