@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			using (var page = new BudgetGroupPropertiesPage((IBudgetGroup)Presenter.GetSelectedEntity(),_repositoryFactory,_unitOfWorkFactory))
 			{
 				page.Initialize(PropertyPagesHelper.BudgetGroupPages(), new LazyLoadingManagerWrapper());
-				using (var propertiesPages = new PropertiesPages(page))
+				using (var propertiesPages = new PropertiesPages(page, _unitOfWorkFactory))
 				{
 					propertiesPages.ShowDialog(this);
 				}

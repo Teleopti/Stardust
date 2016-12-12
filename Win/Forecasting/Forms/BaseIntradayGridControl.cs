@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
@@ -244,14 +245,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             return cellModel;
         }
 
-        private NumericCellModel InitializeCallNumericCellVariableDecimals()
-        {
-            NumericCellModel cellModel = new NumericCellModel(Model);
-            cellModel.NumberOfDecimals = CurrentForecasterSettings().NumericCellVariableDecimals;
-            return cellModel;
-        }
+	    private NumericCellModel InitializeCallNumericCellVariableDecimals()
+	    {
+		    NumericCellModel cellModel = new NumericCellModel(Model);
+		    cellModel.NumberOfDecimals = CurrentForecasterSettings().NumericCellVariableDecimals;
+		    return cellModel;
+	    }
 
-        protected virtual void CreateGridRows()
+	    protected virtual void CreateGridRows()
         {
             var date = (_taskOwnerDay != null) ? _taskOwnerDay.CurrentDate : DateOnly.MinValue;
             IList<DateOnly> dates = new List<DateOnly> { date };

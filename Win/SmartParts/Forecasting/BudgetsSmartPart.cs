@@ -6,16 +6,18 @@ using System.Windows.Forms;
 using Microsoft.Practices.CompositeUI.SmartParts;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Common.UI.SmartPartControls.SmartParts;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.SmartParts.Forecasting
 {
     [SmartPart]
     public partial class BudgetsSmartPart : SmartPartBase, IDrawingBehavior, ILocalized
     {
-        private IDictionary<Guid, IDictionary<Guid, IList<IForecastProcessReport>>> _allBudgetForecasting;
+	    private IDictionary<Guid, IDictionary<Guid, IList<IForecastProcessReport>>> _allBudgetForecasting;
         private IList<NamedEntity> _workloadNames;
         private IList<NamedEntity> _lastUpatedScenarios;
         private ForecastGraphsControl _forecasterControl;
@@ -32,7 +34,7 @@ namespace Teleopti.Ccc.Win.SmartParts.Forecasting
 
         public BudgetsSmartPart()
         {
-            InitializeComponent();
+	        InitializeComponent();
             if (!DesignMode) SetTexts();
 
             ForecastPeriod = new DateOnlyPeriod(DateTime.Today.Year, 1, 1, DateTime.Today.Year, 12, 31);
@@ -121,8 +123,10 @@ namespace Teleopti.Ccc.Win.SmartParts.Forecasting
                     if (index % rowsOfOneScenario == 0)
                     {
                         var scenarioId = _lastUpatedScenarios[index / rowsOfOneScenario].Id;
-                        var scenario = _smartPartModel.GetScenarioById(scenarioId);
-                        EntityUpdateInformation updateInformation;
+	                    IScenario scenario;
+						using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+							scenario = _smartPartModel.GetScenarioById(scenarioId);
+	                    EntityUpdateInformation updateInformation;
                         _allLastUpdatedByText.TryGetValue(scenario, out updateInformation);
                         toolTipInfo = _drawSmartPart.GetScenarioToolTip(drawPositionAndWidth, updateInformation, cursorX);
                     }
@@ -149,11 +153,13 @@ namespace Teleopti.Ccc.Win.SmartParts.Forecasting
             _lastUpatedScenarios = new List<NamedEntity>();
             _skill = _smartPartModel.Skill;
             if (_skill != null)
-            {
-                _allLastUpdatedByText =
-                    _smartPartModel.SetLastUpdatedWorkloadDetailedValuesOfAllScenarios(true);
-                _allBudgetForecasting = _smartPartModel.ProcessAllBudgetForecasting(ForecastPeriod);
-                _allLastUpdatedByText.TryGetValue(_smartPartModel.DefaultScenario, out _lastUpdatedByText);
+			{
+				using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					_allLastUpdatedByText = _smartPartModel.SetLastUpdatedWorkloadDetailedValuesOfAllScenarios(true);
+					_allBudgetForecasting = _smartPartModel.ProcessAllBudgetForecasting(ForecastPeriod);
+	            }
+	            _allLastUpdatedByText.TryGetValue(_smartPartModel.DefaultScenario, out _lastUpdatedByText);
                 _workloadNames = _smartPartModel.WorkloadNames;
                 var scenarioList = _smartPartModel.FindLastUpdatedScenarios(_allLastUpdatedByText);
                 foreach (IScenario scenario in scenarioList)

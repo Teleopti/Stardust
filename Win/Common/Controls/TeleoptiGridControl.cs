@@ -119,12 +119,9 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			{
 				if (_currentSettings == null)
 				{
-					using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-					{
-						_currentSettings = new PersonalSettingDataRepository(uow).FindValueByKey("Forecaster",
-																								 new ForecasterSettings());
-						return _currentSettings;
-					}
+					var uow = UnitOfWorkFactory.CurrentUnitOfWork();
+					_currentSettings = new PersonalSettingDataRepository(uow).FindValueByKey("Forecaster", new ForecasterSettings());
+					return _currentSettings;
 				}
 				return _currentSettings;
 			}

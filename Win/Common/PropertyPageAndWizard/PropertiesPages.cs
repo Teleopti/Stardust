@@ -5,12 +5,14 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 {
 	public partial class PropertiesPages : BaseDialogForm
 	{
 		private readonly IAbstractPropertyPages _propertyPages;
+		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
 		protected PropertiesPages()
 		{
@@ -18,10 +20,11 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			if (!DesignMode) SetTexts();
 		}
 
-		public PropertiesPages(IAbstractPropertyPages propertyPages) : this()
+		public PropertiesPages(IAbstractPropertyPages propertyPages, IUnitOfWorkFactory unitOfWorkFactory) : this()
 		{
 			Name = Name + "." + propertyPages.GetType().Name; // For TestComplete
 			_propertyPages = propertyPages;
+			_unitOfWorkFactory = unitOfWorkFactory;
 			_propertyPages.Owner = this;
 			if (!_propertyPages.ModeCreateNew)
 			{
@@ -70,13 +73,15 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 		private void buttonOkClick(object sender, EventArgs e)
 		{
 			Cursor = Cursors.WaitCursor;
-			IEnumerable<IRootChangeInfo> updatesMade = _propertyPages.Save();
+			IEnumerable<IRootChangeInfo> updatesMade;
+			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+				updatesMade = _propertyPages.Save();
 			if (updatesMade != null)
-			{
-				Close();
-				Main.EntityEventAggregator.TriggerEntitiesNeedRefresh(this, updatesMade);
-				DialogResult = DialogResult.OK;
-			}
+				{
+					Close();
+					Main.EntityEventAggregator.TriggerEntitiesNeedRefresh(this, updatesMade);
+					DialogResult = DialogResult.OK;
+				}
 			Cursor = Cursors.Default;
 		}
 
