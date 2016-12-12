@@ -372,7 +372,7 @@ namespace Teleopti.Ccc.Win.Payroll
 			using (var pepp = new PayrollExportPropertiesPages(payrollExport, _repositoryFactory, _unitOfWorkFactory))
 			{
 				pepp.Initialize(PropertyPagesHelper.GetPayrollExportPages(false, _componentContext), new LazyLoadingManagerWrapper());
-				using (var pp = new PropertiesPages(pepp, _unitOfWorkFactory))
+				using (var pp = new PropertiesPages(pepp))
 				{
 					pp.ShowDialog(this);
 				}

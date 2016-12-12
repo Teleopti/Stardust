@@ -80,14 +80,16 @@ namespace Teleopti.Ccc.Win.SmartParts.Forecasting
         {
             get
             {
-	            if (_scenarios.Count == 0)
-				{
-					var uow = UnitOfWorkFactory.CurrentUnitOfWork();
-					var scenarioRepository = new ScenarioRepository(uow);
-		            _scenarios = scenarioRepository.LoadAll();
-		            return _scenarios;
-	            }
-	            return _scenarios;
+                if (_scenarios.Count == 0)
+                {
+                    using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+                    {
+                        ScenarioRepository scenarioRepository = new ScenarioRepository(uow);
+                        _scenarios = scenarioRepository.LoadAll();
+                    }
+                    return _scenarios;
+                }
+                return _scenarios;
             }
         }
 
@@ -173,23 +175,25 @@ namespace Teleopti.Ccc.Win.SmartParts.Forecasting
 
             if (_skill != null)
             {
-	            var uow = UnitOfWorkFactory.CurrentUnitOfWork();
-				SkillDayRepository skillRepository = new SkillDayRepository(uow);
-				foreach (var scenario in Scenarios)
-				{
-					ISkillDay skillDay = skillRepository.FindLatestUpdated(_skill, scenario, longterm);
-					if (skillDay != null)
-					{
-						EntityUpdateInformation values = new EntityUpdateInformation();
-						TimeZoneInfo timeZoneInfo =
-							TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
-						values.LastUpdate = TimeZoneHelper.ConvertFromUtc(skillDay.UpdatedOn.Value, timeZoneInfo);
-						values.Name = skillDay.UpdatedBy.Name;
-						values.Tag = scenario.Description.Name;
-						allvalues.Add(scenario, values);
-					}
-				}
-			}
+                using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+                {
+                    SkillDayRepository skillRepository = new SkillDayRepository(uow);
+                    foreach (var scenario in Scenarios)
+                    {
+                        ISkillDay skillDay = skillRepository.FindLatestUpdated(_skill, scenario, longterm);
+                        if (skillDay != null)
+                        {
+                            EntityUpdateInformation values = new EntityUpdateInformation();
+                            TimeZoneInfo timeZoneInfo =
+                                TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+                            values.LastUpdate = TimeZoneHelper.ConvertFromUtc(skillDay.UpdatedOn.Value, timeZoneInfo);
+	                        values.Name = skillDay.UpdatedBy.Name;
+                            values.Tag = scenario.Description.Name;
+                            allvalues.Add(scenario, values);
+                        }
+                    }
+                }
+            }
             return allvalues;
         }
 

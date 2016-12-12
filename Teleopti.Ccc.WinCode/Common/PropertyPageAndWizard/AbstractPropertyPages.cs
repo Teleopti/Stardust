@@ -288,10 +288,12 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
         {
             if (CurrentPage.Depopulate(AggregateRootObject))
             {
-	            var uow = _unitOfWorkFactory.CurrentUnitOfWork();
-				IEnumerable<IRootChangeInfo> changesMade = UnitOfWork.PersistAll();
-				uow.PersistAll();
-				return changesMade;
+                using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+                {
+                    IEnumerable<IRootChangeInfo> changesMade = UnitOfWork.PersistAll();
+                    uow.PersistAll();
+                    return changesMade;
+                }
             }
             return null;
         }

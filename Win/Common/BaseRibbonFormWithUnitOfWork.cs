@@ -105,8 +105,14 @@ namespace Teleopti.Ccc.Win.Common
         /// </remarks>
         protected void PersistAll(object key)
         {
-            var uow = GetObjectsUnitOfWork(key);
-            var updatesMade = uow.PersistAll();
+            IUnitOfWork uow = GetObjectsUnitOfWork(key);
+
+            IEnumerable<IRootChangeInfo> updatesMade;
+            using (var runSql = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                updatesMade = uow.PersistAll();
+                runSql.PersistAll();
+            }
 
             Main.EntityEventAggregator.TriggerEntitiesNeedRefresh(ParentForm, updatesMade);
         }
