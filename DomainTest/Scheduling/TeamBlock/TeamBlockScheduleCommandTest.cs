@@ -18,11 +18,12 @@ using Teleopti.Ccc.DomainTest.SchedulingScenarios;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {
-	[DomainTestWithStaticDependenciesAvoidUse]
+	[DomainTest]
 	public class TeamBlockScheduleCommandTest
 	{
 		public ITeamBlockScheduleCommand Target;
@@ -91,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			};
 
 			var selectedSchedules = stateHolder.Schedules[agent1].ScheduledDayCollection(period).ToList();
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, null, UserTimeZone.Make()); //CHECK THIS
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, null, new UtcTimeZone());
 
 			ISchedulePartModifyAndRollbackService rollbackService =
 				new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState,
@@ -176,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			};
 
 			var selectedSchedules = stateHolder.Schedules[agent1].ScheduledDayCollection(period).ToList();
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, stateHolder.SchedulingResultState, UserTimeZone.Make());
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, stateHolder.SchedulingResultState, new UtcTimeZone());
 
 			ISchedulePartModifyAndRollbackService rollbackService =
 				new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState,

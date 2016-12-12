@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {
-	[DomainTestWithStaticDependenciesAvoidUse]
+	[DomainTest]
 	public class Bug39939
 	{
 		public FullScheduling Target;
