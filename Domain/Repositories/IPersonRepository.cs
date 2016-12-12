@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// Created date: 2008-03-13
 		/// </remarks>
 		ICollection<IPerson> FindPeopleBelongTeam(ITeam team, DateOnlyPeriod period);
+		ICollection<IPerson> FindPeopleBelongTeams(ITeam[] teams, DateOnlyPeriod period);
 
 		ICollection<IPerson> FindPeopleBelongTeamWithSchedulePeriod(ITeam team, DateOnlyPeriod period);
 

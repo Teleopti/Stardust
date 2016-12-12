@@ -121,6 +121,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			_searchRepository.Find(search);
 		}
 
+		public void PopulateSearchCriteriaResult(PersonFinderSearchCriteria search, Guid[] teamIds)
+		{
+			_searchRepository.FindInTeams(search, teamIds);
+		}
+
 		private IEnumerable<Guid> getPermittedPersonIdList(IDictionary<PersonFinderField, string> criteriaDictionary,
 			int pageSize, int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns, string function)
 		{

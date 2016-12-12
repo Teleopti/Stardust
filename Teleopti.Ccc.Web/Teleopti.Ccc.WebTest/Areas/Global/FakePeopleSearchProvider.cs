@@ -146,6 +146,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			});
 		}
 
+		public void PopulateSearchCriteriaResult(PersonFinderSearchCriteria search, Guid[] teamIds)
+		{
+			throw new NotImplementedException();
+		}
+
 		private PersonFinderDisplayRow toPersonFinderDisplayRow(IPerson p, DateOnly date, int rowNumber)
 		{
 			var team = p.MyTeam(date);

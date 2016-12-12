@@ -10,6 +10,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 	public class SearchTermParserTest
 	{
 		[Test]
+		public void ShouldParseEmptySearchTermString()
+		{
+			const string searchTerm = "  ";
+			var result = SearchTermParser.Parse(searchTerm);
+
+			Assert.AreEqual(0,result.Count());
+		
+		}
+
+
+		[Test]
 		public void ShouldParseSearchTermString()
 		{
 			const string searchTerm = "FirstName: aa bb; LastName: cc dd";

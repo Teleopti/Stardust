@@ -32,5 +32,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			string function);
 
 		void PopulateSearchCriteriaResult(PersonFinderSearchCriteria search);
+		void PopulateSearchCriteriaResult(PersonFinderSearchCriteria search, Guid[] teamIds);
 	}
 }

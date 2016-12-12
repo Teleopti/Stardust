@@ -172,11 +172,13 @@
 		function getParamsForLoadingSchedules(options) {
 			options = options || {};
 			var params = {
-				keyword: options.keyword || vm.searchOptions.keyword,
-				date: options.date || momentToYYYYMMDD(vm.scheduleDateMoment()),
-				pageSize: options.pageSize || vm.paginationOptions.pageSize,
-				currentPageIndex: options.currentPageIndex || vm.paginationOptions.pageNumber,
-				isOnlyAbsences: vm.onlyLoadScheduleWithAbsence
+				SelectedTeamIds: vm.selectedTeamIds ? vm.selectedTeamIds : [],
+				Keyword: options.keyword || vm.searchOptions.keyword,
+				Date: options.date || momentToYYYYMMDD(vm.scheduleDateMoment()),
+				PageSize: options.pageSize || vm.paginationOptions.pageSize,
+				CurrentPageIndex: options.currentPageIndex || vm.paginationOptions.pageNumber,
+				IsOnlyAbsences: vm.onlyLoadScheduleWithAbsence
+				
 			};
 			return params;
 		}
@@ -205,6 +207,11 @@
 			scheduleMgmtSvc.recreateScheduleVm(vm.scheduleDateMoment(), timezone);			
 			personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 		};
+
+		vm.changeSelectedTeams = function(groups) {
+		    vm.selectedTeamIds = groups;
+		    vm.resetSchedulePage();
+		}
 	
 		vm.loadSchedules = function() {
 			vm.isLoading = true;
@@ -213,7 +220,8 @@
 			if(vm.searchEnabled){
 				var params = getParamsForLoadingSchedules();
 
-				teamScheduleSvc.searchSchedules.query(params).$promise.then(function (result) {
+				teamScheduleSvc.searchSchedules(params).then(function (response) {
+					var result = response.data;
 					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment(), vm.currentTimezone);
 					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, vm.scheduleDateMoment());
 					afterSchedulesLoaded(result);

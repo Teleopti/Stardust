@@ -96,6 +96,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
+		public ICollection<IPerson> FindPeopleBelongTeams(ITeam[] teams, DateOnlyPeriod period)
+		{
+			ICollection<IPerson> retList = Session.CreateCriteria(typeof(Person),"per")
+				.SetFetchMode("PersonPeriodCollection",FetchMode.Join)
+				.SetFetchMode("PersonPeriodCollection.Team",FetchMode.Join)
+				.Add(Restrictions.Or(
+					Restrictions.IsNull("TerminalDate"),
+					Restrictions.Ge("TerminalDate",period.StartDate)
+						))
+				.Add(Subqueries.Exists(findActivePeriod(teams,period)))
+				.AddOrder(Order.Asc("Name.LastName"))
+				.AddOrder(Order.Asc("Name.FirstName"))
+				.SetResultTransformer(Transformers.DistinctRootEntity)
+				.List<IPerson>();
+
+			return retList;
+		}
+
+
 		public ICollection<IPerson> FindPeopleBelongTeam(ITeam team, DateOnlyPeriod period)
 		{
 			ICollection<IPerson> retList = Session.CreateCriteria(typeof(Person), "per")
@@ -572,6 +591,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					  .SetEntity("bu", ServiceLocatorForEntity.CurrentBusinessUnit.Current())
 					  .SetProperties(period)
 					  .List<Guid>();
+		}
+
+		private static DetachedCriteria findActivePeriod(ITeam[] teams,DateOnlyPeriod dateOnlyPeriod)
+		{
+			return DetachedCriteria.For(typeof(PersonPeriod))
+				.SetProjection(Projections.Id())
+				.Add(Restrictions.Le("StartDate",dateOnlyPeriod.EndDate))
+				.Add(Restrictions.Ge("internalEndDate",dateOnlyPeriod.StartDate))
+				.Add(Restrictions.EqProperty("Parent","per.Id"))
+				.Add(Restrictions.In("Team",teams));
 		}
 
 		private static DetachedCriteria findActivePeriod(ITeam team, DateOnlyPeriod dateOnlyPeriod)

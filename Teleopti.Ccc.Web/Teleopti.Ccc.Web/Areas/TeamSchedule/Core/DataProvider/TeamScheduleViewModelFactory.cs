@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
@@ -22,40 +24,57 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly ITeamScheduleProjectionProvider _teamScheduleProjectionProvider;
 		private readonly IProjectionProvider _projectionProvider;
-		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 		private readonly IPeopleSearchProvider _searchProvider;
 		private readonly IPersonRepository _personRepository;
 		private readonly IUserCulture _userCulture;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
-		private readonly IUserTimeZone _userTimeZone;
+		private readonly IToggleManager _toggleManager;
+		private readonly ITeamRepository _teamRepository;
 
-
-		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider,IScheduleProvider scheduleProvider,
-			ITeamScheduleProjectionProvider teamScheduleProjectionProvider,ILoggedOnUser loggedOnUser,
-			ICommonAgentNameProvider commonAgentNameProvider,IPeopleSearchProvider searchProvider,
-			IPersonRepository personRepository,IUserCulture userCulture,IProjectionProvider projectionProvider,IIanaTimeZoneProvider ianaTimeZoneProvider,IUserTimeZone userTimeZone)
+		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider,IScheduleProvider scheduleProvider,ITeamScheduleProjectionProvider teamScheduleProjectionProvider,IProjectionProvider projectionProvider,ICommonAgentNameProvider commonAgentNameProvider,IPeopleSearchProvider searchProvider,IPersonRepository personRepository,IUserCulture userCulture,IIanaTimeZoneProvider ianaTimeZoneProvider,IToggleManager toggleManager,ITeamRepository teamRepository)
 		{
 			_permissionProvider = permissionProvider;
 			_scheduleProvider = scheduleProvider;
 			_teamScheduleProjectionProvider = teamScheduleProjectionProvider;
-			_loggedOnUser = loggedOnUser;
+			_projectionProvider = projectionProvider;
 			_commonAgentNameProvider = commonAgentNameProvider;
 			_searchProvider = searchProvider;
 			_personRepository = personRepository;
 			_userCulture = userCulture;
-			_projectionProvider = projectionProvider;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
-			_userTimeZone = userTimeZone;
+			_toggleManager = toggleManager;
+			_teamRepository = teamRepository;
 		}
 
-		public GroupScheduleViewModel CreateViewModel(IDictionary<PersonFinderField,string> criteriaDictionary,
+
+		public GroupScheduleViewModel CreateViewModel(Guid[] teamIds,IDictionary<PersonFinderField,string> criteriaDictionary,
 			DateOnly dateInUserTimeZone,int pageSize,int currentPageIndex,bool isOnlyAbsences)
 		{
+			IList<IPerson> matchedPersons;
 			var searchCriteria = _searchProvider.CreatePersonFinderSearchCriteria(criteriaDictionary,9999,1,dateInUserTimeZone,null);
-			_searchProvider.PopulateSearchCriteriaResult(searchCriteria);
-			var targetIds = searchCriteria.DisplayRows.Where(r => r.RowNumber > 0).Select(r => r.PersonId).Distinct();
-			var matchedPersons = _personRepository.FindPeople(targetIds);
+			var businessHierachyToggle = _toggleManager.IsEnabled(Toggles.WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260);
+
+			if(businessHierachyToggle && criteriaDictionary.Count == 0)
+			{
+				var teams = _teamRepository.FindTeams(teamIds).ToArray();
+				matchedPersons =
+					_personRepository.FindPeopleBelongTeams(teams,new DateOnlyPeriod(dateInUserTimeZone,dateInUserTimeZone)).ToList();
+			}
+			else
+			{
+				if(businessHierachyToggle)
+				{
+					_searchProvider.PopulateSearchCriteriaResult(searchCriteria,teamIds);
+				}
+				else
+				{
+					_searchProvider.PopulateSearchCriteriaResult(searchCriteria);
+				}
+				var targetIds = searchCriteria.DisplayRows.Where(r => r.RowNumber > 0).Select(r => r.PersonId).Distinct();
+				matchedPersons = _personRepository.FindPeople(targetIds).ToList();
+			}
+
 			var permittedPersons =
 				_searchProvider.GetPermittedPersonList(matchedPersons,dateInUserTimeZone,
 					DefinedRaptorApplicationFunctionPaths.ViewSchedules).ToArray();
@@ -249,7 +268,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 								DisplayName = scheduleDay.Person.PermissionInformation.DefaultTimeZone().DisplayName
 							};
 							dayScheduleViewModel.DateTimeSpan = personAssignment.PeriodExcludingPersonalActivity();
-							
+
 							if(personAssignment.ShiftCategory != null)
 							{
 								dayScheduleViewModel.Color =
@@ -308,7 +327,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			//Array.Sort(personScheduleDaysToSort,new TeamScheduleComparer(canSeeUnpublishedSchedules,_permissionProvider));
 			var previousDay = scheduleDate.AddDays(-1);
 			var scheduleDaysForPreviousDayLookup =
-				_scheduleProvider.GetScheduleForPersons(scheduleDate.AddDays(-1), people).ToLookup(p => p.Person);
+				_scheduleProvider.GetScheduleForPersons(scheduleDate.AddDays(-1),people).ToLookup(p => p.Person);
 			var nextDay = scheduleDate.AddDays(1);
 			var scheduleDaysForNextDayLookup =
 				_scheduleProvider.GetScheduleForPersons(nextDay,people).ToLookup(p => p.Person);
