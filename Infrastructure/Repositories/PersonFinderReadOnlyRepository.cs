@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using static System.String;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var matches = Regex.Matches(notParsedSearchValue, splitPattern);
 			var result =
 				(from object match in matches select match.ToString().Replace("\"", "").Trim())
-				.Where(x => !string.IsNullOrEmpty(x));
+				.Where(x => !IsNullOrEmpty(x));
 
 			return new HashSet<string>(result);
 		}
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			foreach (var criteria in criterias)
 			{
 				var values = parse(criteria.Value)
-					.Aggregate("", (current, value) => string.Concat(current, value, splitter))
+					.Aggregate("", (current, value) => Concat(current, value, splitter))
 					.TrimEnd(splitter);
 
 				builder.AppendFormat("{0}:{1},", criteria.Key, values);
@@ -100,6 +101,48 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
+		public void FindInTeams(IPersonFinderSearchCriteria personFinderSearchCriteria, Guid[] teamIds)
+		{
+			personFinderSearchCriteria.TotalRows = 0;
+			var cultureId = Domain.Security.Principal.TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
+
+			var minDate = new DateOnly(1753, 1, 1);
+			if (personFinderSearchCriteria.TerminalDate < minDate)
+				personFinderSearchCriteria.TerminalDate = minDate;
+			var uow = _currentUnitOfWork.Current();
+
+			if (personFinderSearchCriteria.SearchCriterias.Count == 0)
+			{
+				return;
+			}
+
+			var teamIdsString = Join(",", teamIds.Select(x => x.ToString())); 
+
+			var result = ((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
+				"exec [ReadModel].[PersonFinderWithCriteriaAndTeams] @search_criterias=:searchCriterias_string, "
+				+ "@leave_after=:leave_after, @start_row =:start_row, @end_row=:end_row, @order_by=:order_by, @culture=:culture, @business_unit_id=:business_unit_id, @belongs_to_date=:belongs_to_date, @teamIds=:teamIds")
+				.SetString("searchCriterias_string", createSearchString(personFinderSearchCriteria.SearchCriterias))
+				.SetDateOnly("leave_after", personFinderSearchCriteria.TerminalDate)
+				.SetInt32("start_row", personFinderSearchCriteria.StartRow)
+				.SetInt32("end_row", personFinderSearchCriteria.EndRow)
+				.SetString("order_by", generateOrderByString(personFinderSearchCriteria.SortColumns))
+				.SetInt32("culture", cultureId)
+				.SetGuid("business_unit_id", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+				.SetDateOnly("belongs_to_date", personFinderSearchCriteria.BelongsToDate)
+				.SetString("teamIds",teamIdsString)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(PersonFinderDisplayRow)))
+				.SetReadOnly(true)
+				.List<IPersonFinderDisplayRow>();
+
+			int row = 0;
+			foreach (var personFinderDisplayRow in result)
+			{
+				personFinderSearchCriteria.TotalRows = personFinderDisplayRow.TotalCount;
+				personFinderSearchCriteria.SetRow(row, personFinderDisplayRow);
+				row++;
+			}
+		}
+
 		private string generateOrderByString(IDictionary<string, bool> sortColumns)
 		{
 			if (sortColumns == null || !sortColumns.Any())
@@ -117,7 +160,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				{"terminaldate", 4}
 			};
 
-			var orderBy = string.Empty;
+			var orderBy = Empty;
 
 			var terminalDateExist = false;
 			foreach (var col in sortColumns)
@@ -125,11 +168,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				var columnName = col.Key.Trim().ToLower();
 				if (columnMapping.ContainsKey(columnName))
 				{
-					orderBy += string.Format("{0}:{1},", columnMapping[columnName], col.Value ? 1 : 0);
+					orderBy += Format("{0}:{1},", columnMapping[columnName], col.Value ? 1 : 0);
 				}
 				else if (!terminalDateExist)
 				{
-					orderBy += string.Format("{0}:{1},", columnMapping["terminaldate"], col.Value ? 1 : 0);
+					orderBy += Format("{0}:{1},", columnMapping["terminaldate"], col.Value ? 1 : 0);
 					terminalDateExist = true;
 				}
 			}
@@ -177,7 +220,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void UpdateFindPerson(ICollection<Guid> ids)
 		{
-			string inputIds = String.Join(",", (from p in ids select p.ToString()));
+			string inputIds = Join(",", (from p in ids select p.ToString()));
 			var uow = _currentUnitOfWork.Current();
 
 			((NHibernateUnitOfWork) uow).Session.CreateSQLQuery("exec [ReadModel].[UpdateFindPerson] :inputIds")
@@ -187,7 +230,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void UpdateFindPersonData(ICollection<Guid> ids)
 		{
-			string inputIds = String.Join(",", (from p in ids select p.ToString()));
+			string inputIds = Join(",", (from p in ids select p.ToString()));
 			var uow = _currentUnitOfWork.Current();
 			((NHibernateUnitOfWork) uow).Session.CreateSQLQuery("exec [ReadModel].[UpdateFindPersonData] :inputIds")
 				.SetString("inputIds", inputIds)

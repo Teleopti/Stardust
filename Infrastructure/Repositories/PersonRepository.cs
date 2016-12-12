@@ -112,7 +112,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<IPerson>();
 
 			return retList;
-
 		}
 
 		public ICollection<IPerson> FindPeopleBelongTeamWithSchedulePeriod(ITeam team, DateOnlyPeriod period)
