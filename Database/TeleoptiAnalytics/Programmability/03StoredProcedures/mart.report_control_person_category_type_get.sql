@@ -27,7 +27,7 @@ SELECT
 	@user_person_id = person_id,
 	@user_team_id	= team_id
 FROM 
-	mart.dim_person d 
+	mart.dim_person d WITH (NOLOCK)
 WHERE 
 	person_code= @person_code
 

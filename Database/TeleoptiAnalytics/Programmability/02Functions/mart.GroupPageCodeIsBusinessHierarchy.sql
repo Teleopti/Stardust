@@ -23,7 +23,7 @@ RETURNS bit
 AS
 BEGIN
 
-	IF EXISTS(SELECT * FROM mart.dim_group_page WHERE group_page_code = @group_page_code)
+	IF EXISTS(SELECT * FROM mart.dim_group_page WITH (NOLOCK) WHERE group_page_code = @group_page_code)
 	BEGIN
 		RETURN 0
 	END

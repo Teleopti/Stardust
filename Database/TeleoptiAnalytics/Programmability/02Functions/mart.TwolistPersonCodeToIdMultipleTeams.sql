@@ -37,7 +37,7 @@ BEGIN
 	
 	INSERT INTO @ids
 	SELECT dp.person_id
-		FROM mart.dim_person dp
+		FROM mart.dim_person dp WITH (NOLOCK)
 		INNER JOIN [mart].[DimPersonLocalized](@date_from,@date_to) dpl
 		ON		dp.person_id = dpl.person_id
 				AND dpl.valid_from_date_local <= @date_to

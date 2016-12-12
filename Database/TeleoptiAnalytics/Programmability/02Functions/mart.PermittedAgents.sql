@@ -49,8 +49,8 @@ BEGIN
            WHERE id NOT IN
                       (
                                  SELECT b.person_id
-                                 FROM mart.dim_group_page gp
-                                            INNER JOIN mart.bridge_group_page_person b ON gp.group_page_id = b.group_page_id
+                                 FROM mart.dim_group_page gp WITH (NOLOCK)
+                                            INNER JOIN mart.bridge_group_page_person b  WITH (NOLOCK) ON gp.group_page_id = b.group_page_id
                                  WHERE gp.group_page_code = @group_page_code
                                             AND gp.group_id = @group_page_group_id       
                       )
