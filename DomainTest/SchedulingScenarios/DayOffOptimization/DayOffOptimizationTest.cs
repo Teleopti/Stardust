@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -86,7 +85,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			skill.TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 			var scenario = ScenarioRepository.Has("some name");
 			var team = new Team { Description = new Description("team"), Site = new Site("_")};
 			var contract = new Contract("_");
@@ -156,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			skill.TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+
 			var scenario = ScenarioRepository.Has("some name");
 			var team = new Team { Description = new Description("team"), Site = new Site("_")};
 			var contract = new Contract("_");
