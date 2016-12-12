@@ -106,6 +106,7 @@ Scenario: be able to close people list
 	And I click cancel button after open people search list
 	Then I should not see people search list
 
+@OnlyRunIfDisabled('Wfm_Seatplan_UseDatePeriodForPlanning_42167')
 Scenario: be able to assign agent to selected seat
 	When I view Seat plan on "2015-01-01"
 	And I press seat map booking view button
