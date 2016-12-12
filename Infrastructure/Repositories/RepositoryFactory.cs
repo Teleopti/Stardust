@@ -100,15 +100,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return new SkillRepository(unitOfWork);
 		}
 
-		/// <summary>
-		/// Creates the SkillType repository.
-		/// </summary>
-		/// <param name="unitOfWork">The uow.</param>
-		/// <returns></returns>
-		public ISkillTypeRepository CreateSkillTypeRepository(IUnitOfWork unitOfWork)
-		{
-			return new SkillTypeRepository(unitOfWork);
-		}
 
 		/// <summary>
 		/// Creates the Workload repository.

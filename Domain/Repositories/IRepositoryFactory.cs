@@ -147,17 +147,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IWorkloadRepository CreateWorkloadRepository(IUnitOfWork unitOfWork);
 
 		/// <summary>
-		/// Creates the skill type repository.
-		/// </summary>
-		/// <param name="unitOfWork">The unit of work.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-09-24
-		/// </remarks>
-		ISkillTypeRepository CreateSkillTypeRepository(IUnitOfWork unitOfWork);
-
-		/// <summary>
 		/// Creates the contract schedule repository.
 		/// </summary>
 		/// <param name="unitOfWork">The unit of work.</param>

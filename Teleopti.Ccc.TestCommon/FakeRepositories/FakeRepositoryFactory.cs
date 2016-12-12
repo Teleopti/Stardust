@@ -173,11 +173,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new System.NotImplementedException();
 		}
 
-		public ISkillTypeRepository CreateSkillTypeRepository(IUnitOfWork unitOfWork)
-		{
-			throw new System.NotImplementedException();
-		}
-
 		public IContractScheduleRepository CreateContractScheduleRepository(IUnitOfWork unitOfWork)
 		{
 			return _contractScheduleRepository;

@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
         	IList<ISkill> skills;
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                ISkillTypeRepository skillTypeRepository = _repositoryFactory.CreateSkillTypeRepository(unitOfWork);
+                ISkillTypeRepository skillTypeRepository = new SkillTypeRepository(unitOfWork);
                 skillTypeList = skillTypeRepository.LoadAll();
 				ISkillRepository rep = _repositoryFactory.CreateSkillRepository(unitOfWork);
                 skills = rep.LoadAll();

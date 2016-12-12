@@ -44,21 +44,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.IsNotNull(new RepositoryFactory().CreatePersonRepository(uow));
 		}
 
-		/// <summary>
-		/// Verifies the skill type repository can be created.
-		/// Don't really understand this factory, but anyway
-		/// </summary>
-		/// <remarks>
-		/// Created by: peterwe
-		/// Created date: 2007-10-19
-		/// </remarks>
-		[Test]
-		public void VerifySkillTypeRepositoryCanBeCreated()
-		{
-			mocks.ReplayAll();
-			Assert.IsNotNull(new RepositoryFactory().CreateSkillTypeRepository(uow));
-		}
-
 		[Test]
 		public void VerifyPersonAbsenceAccountRepositoryCanBeCreated()
 		{
