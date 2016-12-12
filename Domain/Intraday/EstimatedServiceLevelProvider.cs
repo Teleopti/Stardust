@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var dataSeries = eslIntervals
 				.Select(x => (double?) x.Esl)
 				.ToList();
-			var nullCount = queueIncoming.IncomingDataSeries.Time.Length - dataSeries.Count;
+			var nullCount = queueIncoming.DataSeries.Time.Length - dataSeries.Count;
 			for (int interval = 0; interval < nullCount; interval++)
 				dataSeries.Add(null);
 

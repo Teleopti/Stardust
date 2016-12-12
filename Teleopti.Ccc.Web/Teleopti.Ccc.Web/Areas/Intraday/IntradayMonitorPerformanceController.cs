@@ -13,11 +13,13 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 	public class IntradayMonitorPerformanceController : ApiController
 	{
 		private readonly ISkillAreaRepository _skillAreaRepository;
-		private MonitorPerformanceProvider _monitorPerformanceProvider;
+		private readonly MonitorPerformanceProvider _monitorPerformanceProvider;
 
-		public IntradayMonitorPerformanceController(ISkillAreaRepository skillAreaRepository)
+		public IntradayMonitorPerformanceController(ISkillAreaRepository skillAreaRepository,
+			MonitorPerformanceProvider monitorPerformanceProvider)
 		{
 			_skillAreaRepository = skillAreaRepository;
+			_monitorPerformanceProvider = monitorPerformanceProvider;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareaperformance/{id}")]

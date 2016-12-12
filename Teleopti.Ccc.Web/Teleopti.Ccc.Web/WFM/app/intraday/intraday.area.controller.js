@@ -28,7 +28,6 @@
 			var autocompleteSkillArea;
 			var timeoutPromise;
 			var pollingTimeout = 60000;
-			var activeTab = 0;
 			$scope.DeleteSkillAreaModal = false;
 			$scope.prevArea;
 			$scope.drillable;
@@ -36,7 +35,6 @@
 			.replace('{0}', $translate.instant('Intraday'))
 			.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank'>")
 			.replace('{2}', '</a>');
-			var noDataMessage = $translate.instant('NoDataAvailable');
 			var prevSkill;
 			$scope.currentInterval = [];
 			$scope.format = intradayService.formatDateTime;

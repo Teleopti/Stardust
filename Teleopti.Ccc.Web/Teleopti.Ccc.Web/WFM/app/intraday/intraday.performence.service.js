@@ -25,14 +25,13 @@
 			};
 
 			var hiddenArray = [];
-			var interval;
 			var intervalStart;
 			service.setPerformanceData = function (result) {
 				resetData();
 
-				performanceData.averageSpeedOfAnswerObj.series = result.StatisticsDataSeries.AverageSpeedOfAnswer;
-				performanceData.abandonedRateObj.series = result.StatisticsDataSeries.AbandonedRate;
-				performanceData.serviceLevelObj.series = result.StatisticsDataSeries.ServiceLevel;
+				performanceData.averageSpeedOfAnswerObj.series = result.DataSeries.AverageSpeedOfAnswer;
+				performanceData.abandonedRateObj.series = result.DataSeries.AbandonedRate;
+				performanceData.serviceLevelObj.series = result.DataSeries.ServiceLevel;
 
 				performanceData.latestActualInterval = $filter('date')(result.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(result.LatestActualIntervalEnd, 'shortTime');
 				intervalStart = $filter('date')(result.LatestActualIntervalStart, 'shortTime');
@@ -46,12 +45,12 @@
 				performanceData.serviceLevelObj.series.splice(0, 0, 'Service_level');
 
 				performanceData.summary = {
-					summaryAbandonedRate: $filter('number')(result.StatisticsSummary.AbandonRate * 100, 1),
-					summaryServiceLevel: $filter('number')(result.StatisticsSummary.ServiceLevel * 100, 1),
-					summaryAsa: $filter('number')(result.StatisticsSummary.AverageSpeedOfAnswer, 1)
+					summaryAbandonedRate: $filter('number')(result.Summary.AbandonRate * 100, 1),
+					summaryServiceLevel: $filter('number')(result.Summary.ServiceLevel * 100, 1),
+					summaryAsa: $filter('number')(result.Summary.AverageSpeedOfAnswer, 1)
 				};
 
-				angular.forEach(result.StatisticsDataSeries.Time, function (value, key) {
+				angular.forEach(result.DataSeries.Time, function (value, key) {
 					this.push($filter('date')(value, 'shortTime'));
 				}, performanceData.timeSeries);
 
@@ -89,7 +88,7 @@
 			};
 
 			service.pollSkillData = function (selectedItem) {
-				intradayService.getSkillMonitorStatistics.query(
+				intradayService.getSkillMonitorPerformance.query(
 					{
 						id: selectedItem.Id
 					})
@@ -102,7 +101,7 @@
 				};
 
 				service.pollSkillAreaData = function (selectedItem) {
-					intradayService.getSkillAreaMonitorStatistics.query(
+					intradayService.getSkillAreaMonitorPerformance.query(
 						{
 							id: selectedItem.Id
 						})

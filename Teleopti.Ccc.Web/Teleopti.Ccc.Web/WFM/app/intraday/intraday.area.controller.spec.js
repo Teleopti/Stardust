@@ -13,6 +13,7 @@ describe('IntradayAreaCtrl', function () {
 	var unsupportedSkills = [];
 	var skillAreaInfo;
 	var trafficAndPerformanceData;
+	var performanceData;
 	var staffingData;
 	var emptyStaffingData;
 	var timeData;
@@ -77,7 +78,7 @@ describe('IntradayAreaCtrl', function () {
 		trafficAndPerformanceData = {
 			LatestActualIntervalEnd: "0001-01-01T16:00:00",
 			LatestActualIntervalStart: "0001-01-01T15:45:00",
-			StatisticsDataSeries: {
+			IncomingDataSeries: {
 				AbandonedRate: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
 				AverageHandleTime: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
 				AverageSpeedOfAnswer: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
@@ -87,7 +88,7 @@ describe('IntradayAreaCtrl', function () {
 				ServiceLevel: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
 				Time: ["0001-01-01T00:00:00", "0001-01-01T00:15:00", "0001-01-01T00:30:00", "0001-01-01T00:45:00"]
 			},
-			StatisticsSummary: {
+			IncomingSummary: {
 				AbandonRate: 0.05594855305466238,
 				AbandonedCalls: 87,
 				AnsweredCalls: 1468,
@@ -103,6 +104,24 @@ describe('IntradayAreaCtrl', function () {
 				OfferedCalls: 1555,
 				ServiceLevel: 0.8392282958199357,
 				SpeedOfAnswer: 32296
+			}
+		};
+
+		performanceData = {
+			LatestActualIntervalEnd: "0001-01-01T16:00:00",
+			LatestActualIntervalStart: "0001-01-01T15:45:00",
+			IntradayPerformanceDataSeries: {
+				AbandonedRate: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+				AverageHandleTime: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+				AverageSpeedOfAnswer: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+				EstimatedServiceLevels: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+				Time: ["0001-01-01T00:00:00", "0001-01-01T00:15:00", "0001-01-01T00:30:00", "0001-01-01T00:45:00"]
+			},
+			IntradayPerformanceSummary: {
+				AbandonRate: 0.05594855305466238,
+				AverageSpeedOfAnswer: 22,
+				ServiceLevel: 0.8392282958199357,
+				EstimatedServiceLevel: 0.8735783757893
 			}
 		};
 
@@ -157,6 +176,16 @@ describe('IntradayAreaCtrl', function () {
 		$httpBackend.whenGET("../api/intraday/monitorskillstatistics/5f15b334-22d1-4bc1-8e41-72359805d30f")
 		.respond(function () {
 			return [200, trafficAndPerformanceData];
+		});
+
+		$httpBackend.whenGET("../api/intraday/monitorskillareaperformance/fa9b5393-ef48-40d1-b7cc-09e797589f81")
+		.respond(function () {
+			return [200, performanceData];
+		});
+
+		$httpBackend.whenGET("../api/intraday/monitorskillperformance/5f15b334-22d1-4bc1-8e41-72359805d30f")
+		.respond(function () {
+			return [200, performanceData];
 		});
 
 		$httpBackend.whenGET("../api/intraday/monitorskillstaffing/5f15b334-22d1-4bc1-8e41-72359805d30f")

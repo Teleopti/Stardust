@@ -1479,17 +1479,12 @@
     <Content Include="WFM\app\global\i18n\wfm.i18n.service.spec.js" />
     <Content Include="WFM\app\global\shortcuts\wfm.shortcuts.service.js" />
     <Content Include="WFM\app\intraday\intraday-area.html" />
-    <Content Include="WFM\app\intraday\intraday-staffing.html" />
     <Content Include="WFM\app\intraday\intraday.area.controller.js" />
     <Content Include="WFM\app\intraday\intraday.area.controller.spec.js" />
     <Content Include="WFM\app\intraday\intraday.config.controller.spec.js" />
     <Content Include="WFM\app\intraday\intraday.monitor.staffing.service.js" />
     <Content Include="WFM\app\intraday\intraday.performence.service.js" />
     <Content Include="WFM\app\intraday\intraday.routes.js" />
-    <Content Include="WFM\app\intraday\intraday.staffing.controller.js" />
-    <Content Include="WFM\app\intraday\intraday.staffing.controller.spec.js" />
-    <Content Include="WFM\app\intraday\intraday.staffing.service.js" />
-    <Content Include="WFM\app\intraday\intraday.staffing.service.spec.js" />
     <Content Include="WFM\app\intraday\intraday.time.service.js" />
     <Content Include="WFM\app\intraday\intraday.traffic.service.js" />
     <Content Include="WFM\app\outbound\outbound.routes.js" />

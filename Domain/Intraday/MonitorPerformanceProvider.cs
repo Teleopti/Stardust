@@ -49,19 +49,21 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			return new IntradayPerformanceViewModel
 			{
+				LatestActualIntervalStart = queueStatistics.LatestActualIntervalStart,
+				LatestActualIntervalEnd = queueStatistics.LatestActualIntervalEnd,
 				DataSeries = new IntradayPerformanceDataSeries
 				{
-					Time = queueStatistics.IncomingDataSeries.Time,
+					Time = queueStatistics.DataSeries.Time,
 					EstimatedServiceLevels = _estimatedServiceLevelProvider.DataSeries(eslIntervals, queueStatistics),
-					AverageSpeedOfAnswer = queueStatistics.IncomingDataSeries.AverageSpeedOfAnswer,
-					AbandonedRate = queueStatistics.IncomingDataSeries.AbandonedRate,
-					ServiceLevel = queueStatistics.IncomingDataSeries.ServiceLevel
+					AverageSpeedOfAnswer = queueStatistics.DataSeries.AverageSpeedOfAnswer,
+					AbandonedRate = queueStatistics.DataSeries.AbandonedRate,
+					ServiceLevel = queueStatistics.DataSeries.ServiceLevel
 				},
 				Summary = new IntradayPerformanceSummary
 				{
-					AbandonRate = queueStatistics.IncomingSummary.AbandonRate,
-					AverageSpeedOfAnswer = queueStatistics.IncomingSummary.AverageSpeedOfAnswer,
-					ServiceLevel = queueStatistics.IncomingSummary.ServiceLevel,
+					AbandonRate = queueStatistics.Summary.AbandonRate,
+					AverageSpeedOfAnswer = queueStatistics.Summary.AverageSpeedOfAnswer,
+					ServiceLevel = queueStatistics.Summary.ServiceLevel,
 					EstimatedServiceLevel = _estimatedServiceLevelProvider.EslSummary(eslIntervals)
 				}
 			};

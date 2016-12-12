@@ -88,12 +88,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var expectedActualCallsSum = _firstInterval.OfferedCalls + _secondInterval.OfferedCalls;
 			var expectedActualHandleTimeSum = _firstInterval.HandleTime + _secondInterval.HandleTime;
 
-			viewModel.IncomingSummary.ForecastedCalls.Should().Be.EqualTo(expectedForecastedCallsSum);
-			viewModel.IncomingSummary.ForecastedHandleTime.Should().Be.EqualTo(expectedForecastedHandleTimeSum);
-			viewModel.IncomingSummary.ForecastedAverageHandleTime.Should().Be.EqualTo(expectedForecastedHandleTimeSum / expectedForecastedCallsSum);
-			viewModel.IncomingSummary.OfferedCalls.Should().Be.EqualTo(expectedActualCallsSum);
-			viewModel.IncomingSummary.HandleTime.Should().Be.EqualTo(expectedActualHandleTimeSum);
-			viewModel.IncomingSummary.AverageHandleTime.Should().Be.EqualTo(expectedActualHandleTimeSum / expectedActualCallsSum);
+			viewModel.Summary.ForecastedCalls.Should().Be.EqualTo(expectedForecastedCallsSum);
+			viewModel.Summary.ForecastedHandleTime.Should().Be.EqualTo(expectedForecastedHandleTimeSum);
+			viewModel.Summary.ForecastedAverageHandleTime.Should().Be.EqualTo(expectedForecastedHandleTimeSum / expectedForecastedCallsSum);
+			viewModel.Summary.OfferedCalls.Should().Be.EqualTo(expectedActualCallsSum);
+			viewModel.Summary.HandleTime.Should().Be.EqualTo(expectedActualHandleTimeSum);
+			viewModel.Summary.AverageHandleTime.Should().Be.EqualTo(expectedActualHandleTimeSum / expectedActualCallsSum);
 		}
 
 		[Test, SetCulture("sv-SE")]
@@ -105,9 +105,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingDataSeries.Time.Length.Should().Be.EqualTo(2);
-			viewModel.IncomingDataSeries.Time.First().Should().Be.EqualTo(_firstInterval.IntervalDate.AddMinutes(_firstInterval.IntervalId * minutesPerInterval));
-			viewModel.IncomingDataSeries.Time.Second().Should().Be.EqualTo(_firstInterval.IntervalDate.AddMinutes(_secondInterval.IntervalId * minutesPerInterval));
+			viewModel.DataSeries.Time.Length.Should().Be.EqualTo(2);
+			viewModel.DataSeries.Time.First().Should().Be.EqualTo(_firstInterval.IntervalDate.AddMinutes(_firstInterval.IntervalId * minutesPerInterval));
+			viewModel.DataSeries.Time.Second().Should().Be.EqualTo(_firstInterval.IntervalDate.AddMinutes(_secondInterval.IntervalId * minutesPerInterval));
 		}
 
 		[Test]
@@ -119,9 +119,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingDataSeries.ForecastedCalls.Length.Should().Be.EqualTo(2);
-			viewModel.IncomingDataSeries.ForecastedCalls.First().Should().Be.EqualTo(_firstInterval.ForecastedCalls);
-			viewModel.IncomingDataSeries.ForecastedCalls.Second().Should().Be.EqualTo(_secondInterval.ForecastedCalls);
+			viewModel.DataSeries.ForecastedCalls.Length.Should().Be.EqualTo(2);
+			viewModel.DataSeries.ForecastedCalls.First().Should().Be.EqualTo(_firstInterval.ForecastedCalls);
+			viewModel.DataSeries.ForecastedCalls.Second().Should().Be.EqualTo(_secondInterval.ForecastedCalls);
 		}
 
 		[Test]
@@ -133,9 +133,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingDataSeries.ForecastedAverageHandleTime.Length.Should().Be.EqualTo(2);
-			viewModel.IncomingDataSeries.ForecastedAverageHandleTime.First().Should().Be.EqualTo(_firstInterval.ForecastedAverageHandleTime);
-			viewModel.IncomingDataSeries.ForecastedAverageHandleTime.Second().Should().Be.EqualTo(_secondInterval.ForecastedAverageHandleTime);
+			viewModel.DataSeries.ForecastedAverageHandleTime.Length.Should().Be.EqualTo(2);
+			viewModel.DataSeries.ForecastedAverageHandleTime.First().Should().Be.EqualTo(_firstInterval.ForecastedAverageHandleTime);
+			viewModel.DataSeries.ForecastedAverageHandleTime.Second().Should().Be.EqualTo(_secondInterval.ForecastedAverageHandleTime);
 		}
 
 		[Test]
@@ -147,9 +147,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingDataSeries.OfferedCalls.Length.Should().Be.EqualTo(2);
-			viewModel.IncomingDataSeries.OfferedCalls.First().Should().Be.EqualTo(_firstInterval.OfferedCalls);
-			viewModel.IncomingDataSeries.OfferedCalls.Second().Should().Be.EqualTo(_secondInterval.OfferedCalls);
+			viewModel.DataSeries.OfferedCalls.Length.Should().Be.EqualTo(2);
+			viewModel.DataSeries.OfferedCalls.First().Should().Be.EqualTo(_firstInterval.OfferedCalls);
+			viewModel.DataSeries.OfferedCalls.Second().Should().Be.EqualTo(_secondInterval.OfferedCalls);
 		}
 
 		[Test]
@@ -161,9 +161,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingDataSeries.AverageHandleTime.Length.Should().Be.EqualTo(2);
-			viewModel.IncomingDataSeries.AverageHandleTime.First().Should().Be.EqualTo(_firstInterval.AverageHandleTime);
-			viewModel.IncomingDataSeries.AverageHandleTime.Second().Should().Be.EqualTo(_secondInterval.AverageHandleTime);
+			viewModel.DataSeries.AverageHandleTime.Length.Should().Be.EqualTo(2);
+			viewModel.DataSeries.AverageHandleTime.First().Should().Be.EqualTo(_firstInterval.AverageHandleTime);
+			viewModel.DataSeries.AverageHandleTime.Second().Should().Be.EqualTo(_secondInterval.AverageHandleTime);
 		}
 
 		[Test]
@@ -188,8 +188,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingDataSeries.OfferedCalls.Length.Should().Be.EqualTo(3);
-			viewModel.IncomingDataSeries.OfferedCalls[1].Should().Be.EqualTo(null);
+			viewModel.DataSeries.OfferedCalls.Length.Should().Be.EqualTo(3);
+			viewModel.DataSeries.OfferedCalls[1].Should().Be.EqualTo(null);
 		}
 
 		[Test]
@@ -214,8 +214,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingDataSeries.AverageHandleTime.Length.Should().Be.EqualTo(3);
-			viewModel.IncomingDataSeries.AverageHandleTime[1].Should().Be.EqualTo(null);
+			viewModel.DataSeries.AverageHandleTime.Length.Should().Be.EqualTo(3);
+			viewModel.DataSeries.AverageHandleTime[1].Should().Be.EqualTo(null);
 		}
 
 
@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingDataSeries.AverageHandleTime.Length.Should().Be.EqualTo(2);
+			viewModel.DataSeries.AverageHandleTime.Length.Should().Be.EqualTo(2);
 			viewModel.LatestActualIntervalStart.Should().Be.EqualTo(_firstInterval.IntervalDate.AddMinutes(_firstInterval.IntervalId * minutesPerInterval));
 			viewModel.LatestActualIntervalEnd.Should().Be.EqualTo(_firstInterval.IntervalDate.AddMinutes((_firstInterval.IntervalId + 1) * minutesPerInterval));
 		}
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingDataSeries.AverageHandleTime.Length.Should().Be.EqualTo(0);
+			viewModel.DataSeries.AverageHandleTime.Length.Should().Be.EqualTo(0);
 			viewModel.LatestActualIntervalStart.Should().Be.EqualTo(null);
 			viewModel.LatestActualIntervalEnd.Should().Be.EqualTo(null);
 		}
@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			double allOfferedCalls = _firstInterval.OfferedCalls.Value + _secondInterval.OfferedCalls.Value;
 			var expectedDiff = (allOfferedCalls - allForecastedCalls) * 100 / allForecastedCalls;
 
-			viewModel.IncomingSummary.ForecastedActualCallsDiff.Should().Be.EqualTo(expectedDiff);
+			viewModel.Summary.ForecastedActualCallsDiff.Should().Be.EqualTo(expectedDiff);
 		}
 
 		[Test]
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingSummary.ForecastedActualCallsDiff.Should().Be.EqualTo(-99);
+			viewModel.Summary.ForecastedActualCallsDiff.Should().Be.EqualTo(-99);
 		}
 
 		[Test]
@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var expectedDiff = (actualAverageHandleTime - forecastedAverageHandleTime) * 100 / forecastedAverageHandleTime;
 
-			viewModel.IncomingSummary.ForecastedActualHandleTimeDiff.Should().Be.EqualTo(expectedDiff);
+			viewModel.Summary.ForecastedActualHandleTimeDiff.Should().Be.EqualTo(expectedDiff);
 		}
 
 		[Test]
@@ -301,7 +301,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingSummary.ForecastedActualHandleTimeDiff.Should().Be.EqualTo(-99);
+			viewModel.Summary.ForecastedActualHandleTimeDiff.Should().Be.EqualTo(-99);
 		}
 
 		[Test]
@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingSummary.ForecastedAverageHandleTime.Should().Be.EqualTo(0);
+			viewModel.Summary.ForecastedAverageHandleTime.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingSummary.AverageHandleTime.Should().Be.EqualTo(0);
+			viewModel.Summary.AverageHandleTime.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -335,9 +335,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingDataSeries.AverageSpeedOfAnswer.Length.Should().Be.EqualTo(2);
-			viewModel.IncomingDataSeries.AverageSpeedOfAnswer.First().Should().Be.EqualTo(_firstInterval.SpeedOfAnswer / _firstInterval.AnsweredCalls);
-			viewModel.IncomingDataSeries.AverageSpeedOfAnswer.Second().Should().Be.EqualTo(_secondInterval.SpeedOfAnswer / _secondInterval.AnsweredCalls);
+			viewModel.DataSeries.AverageSpeedOfAnswer.Length.Should().Be.EqualTo(2);
+			viewModel.DataSeries.AverageSpeedOfAnswer.First().Should().Be.EqualTo(_firstInterval.SpeedOfAnswer / _firstInterval.AnsweredCalls);
+			viewModel.DataSeries.AverageSpeedOfAnswer.Second().Should().Be.EqualTo(_secondInterval.SpeedOfAnswer / _secondInterval.AnsweredCalls);
 		}
 
 		[Test]
@@ -349,9 +349,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingDataSeries.AbandonedRate.Length.Should().Be.EqualTo(2);
-			viewModel.IncomingDataSeries.AbandonedRate.First().Should().Be.EqualTo(_firstInterval.AbandonedRate * 100);
-			viewModel.IncomingDataSeries.AbandonedRate.Second().Should().Be.EqualTo(_secondInterval.AbandonedRate * 100);
+			viewModel.DataSeries.AbandonedRate.Length.Should().Be.EqualTo(2);
+			viewModel.DataSeries.AbandonedRate.First().Should().Be.EqualTo(_firstInterval.AbandonedRate * 100);
+			viewModel.DataSeries.AbandonedRate.Second().Should().Be.EqualTo(_secondInterval.AbandonedRate * 100);
 		}
 
 		[Test]
@@ -363,9 +363,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingDataSeries.ServiceLevel.Length.Should().Be.EqualTo(2);
-			viewModel.IncomingDataSeries.ServiceLevel.First().Should().Be.EqualTo(_firstInterval.ServiceLevel * 100);
-			viewModel.IncomingDataSeries.ServiceLevel.Second().Should().Be.EqualTo(_secondInterval.ServiceLevel * 100);
+			viewModel.DataSeries.ServiceLevel.Length.Should().Be.EqualTo(2);
+			viewModel.DataSeries.ServiceLevel.First().Should().Be.EqualTo(_firstInterval.ServiceLevel * 100);
+			viewModel.DataSeries.ServiceLevel.Second().Should().Be.EqualTo(_secondInterval.ServiceLevel * 100);
 		}
 
 		[Test]
@@ -377,7 +377,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingSummary.AverageSpeedOfAnswer.Should()
+			viewModel.Summary.AverageSpeedOfAnswer.Should()
 					.Be.EqualTo((_firstInterval.SpeedOfAnswer + _secondInterval.SpeedOfAnswer) / (_firstInterval.AnsweredCalls + _secondInterval.AnsweredCalls));
 		}
 
@@ -388,7 +388,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingSummary.AverageSpeedOfAnswer.Should().Be.EqualTo(-99);
+			viewModel.Summary.AverageSpeedOfAnswer.Should().Be.EqualTo(-99);
 		}
 
 		[Test]
@@ -400,7 +400,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingSummary.ServiceLevel.Should()
+			viewModel.Summary.ServiceLevel.Should()
 					.Be.EqualTo((_firstInterval.AnsweredCallsWithinSL + _secondInterval.AnsweredCallsWithinSL) / (_firstInterval.OfferedCalls + _secondInterval.OfferedCalls));
 		}
 
@@ -411,7 +411,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingSummary.ServiceLevel.Should().Be.EqualTo(-99);
+			viewModel.Summary.ServiceLevel.Should().Be.EqualTo(-99);
 		}
 
 		[Test]
@@ -423,7 +423,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingSummary.AbandonRate.Should()
+			viewModel.Summary.AbandonRate.Should()
 					.Be.EqualTo((_firstInterval.AbandonedCalls + _secondInterval.AbandonedCalls) / (_firstInterval.OfferedCalls + _secondInterval.OfferedCalls));
 		}
 
@@ -434,7 +434,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingSummary.AbandonRate.Should().Be.EqualTo(-99);
+			viewModel.Summary.AbandonRate.Should().Be.EqualTo(-99);
 		}
 
 		[Test]
@@ -459,12 +459,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			viewModel.IncomingDataSeries.AverageSpeedOfAnswer.Length.Should().Be.EqualTo(3);
-			viewModel.IncomingDataSeries.AbandonedRate.Length.Should().Be.EqualTo(3);
-			viewModel.IncomingDataSeries.ServiceLevel.Length.Should().Be.EqualTo(3);
-			viewModel.IncomingDataSeries.AverageSpeedOfAnswer[1].Should().Be.EqualTo(null);
-			viewModel.IncomingDataSeries.AbandonedRate[1].Should().Be.EqualTo(null);
-			viewModel.IncomingDataSeries.ServiceLevel[1].Should().Be.EqualTo(null);
+			viewModel.DataSeries.AverageSpeedOfAnswer.Length.Should().Be.EqualTo(3);
+			viewModel.DataSeries.AbandonedRate.Length.Should().Be.EqualTo(3);
+			viewModel.DataSeries.ServiceLevel.Length.Should().Be.EqualTo(3);
+			viewModel.DataSeries.AverageSpeedOfAnswer[1].Should().Be.EqualTo(null);
+			viewModel.DataSeries.AbandonedRate[1].Should().Be.EqualTo(null);
+			viewModel.DataSeries.ServiceLevel[1].Should().Be.EqualTo(null);
 		}
 		[Test]
 		public void ShouldOnlyLoadDataForSupportedSkills()

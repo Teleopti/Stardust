@@ -189,6 +189,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			result.Summary.ServiceLevel.Should().Be.GreaterThan(0);
 			result.Summary.AverageSpeedOfAnswer.Should().Be.GreaterThan(0);
 			result.Summary.AbandonRate.Should().Be.GreaterThan(0);
+			result.LatestActualIntervalStart.Should().Be.EqualTo(latestStatsTime);
+			result.LatestActualIntervalEnd.Should().Be.EqualTo(latestStatsTime.AddMinutes(minutesPerInterval));
 		}
 
 		[Test]

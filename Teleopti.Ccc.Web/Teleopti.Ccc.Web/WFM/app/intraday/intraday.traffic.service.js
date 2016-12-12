@@ -29,16 +29,15 @@
 			};
 
 			var hiddenArray = [];
-			var interval;
 			var intervalStart;
 			var max;
 
 			service.setTrafficData = function (result) {
 				clearData();
-				trafficData.forecastedCallsObj.series = result.StatisticsDataSeries.ForecastedCalls;
-				trafficData.actualCallsObj.series = result.StatisticsDataSeries.OfferedCalls;
-				trafficData.forecastedAverageHandleTimeObj.series = result.StatisticsDataSeries.ForecastedAverageHandleTime;
-				trafficData.actualAverageHandleTimeObj.series = result.StatisticsDataSeries.AverageHandleTime;
+				trafficData.forecastedCallsObj.series = result.DataSeries.ForecastedCalls;
+				trafficData.actualCallsObj.series = result.DataSeries.OfferedCalls;
+				trafficData.forecastedAverageHandleTimeObj.series = result.DataSeries.ForecastedAverageHandleTime;
+				trafficData.actualAverageHandleTimeObj.series = result.DataSeries.AverageHandleTime;
 
 				trafficData.latestActualInterval = $filter('date')(result.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(result.LatestActualIntervalEnd, 'shortTime');
 				intervalStart = $filter('date')(result.LatestActualIntervalStart, 'shortTime');
@@ -54,15 +53,15 @@
 				trafficData.actualAverageHandleTimeObj.series.splice(0, 0, 'AHT');
 
 				trafficData.summary = {
-					summaryForecastedCalls: $filter('number')(result.StatisticsSummary.ForecastedCalls, 1),
-					summaryForecastedAverageHandleTime: $filter('number')(result.StatisticsSummary.ForecastedAverageHandleTime, 1),
-					summaryOfferedCalls: $filter('number')(result.StatisticsSummary.OfferedCalls, 1),
-					summaryAverageHandleTime: $filter('number')(result.StatisticsSummary.AverageHandleTime, 1),
-					forecastActualCallsDifference: $filter('number')(result.StatisticsSummary.ForecastedActualCallsDiff, 1),
-					forecastActualAverageHandleTimeDifference: $filter('number')(result.StatisticsSummary.ForecastedActualHandleTimeDiff, 1)
+					summaryForecastedCalls: $filter('number')(result.Summary.ForecastedCalls, 1),
+					summaryForecastedAverageHandleTime: $filter('number')(result.Summary.ForecastedAverageHandleTime, 1),
+					summaryOfferedCalls: $filter('number')(result.Summary.OfferedCalls, 1),
+					summaryAverageHandleTime: $filter('number')(result.Summary.AverageHandleTime, 1),
+					forecastActualCallsDifference: $filter('number')(result.Summary.ForecastedActualCallsDiff, 1),
+					forecastActualAverageHandleTimeDifference: $filter('number')(result.Summary.ForecastedActualHandleTimeDiff, 1)
 				};
 
-				angular.forEach(result.StatisticsDataSeries.Time, function (value, key) {
+				angular.forEach(result.DataSeries.Time, function (value, key) {
 					this.push($filter('date')(value, 'shortTime'));
 				}, trafficData.timeSeries);
 

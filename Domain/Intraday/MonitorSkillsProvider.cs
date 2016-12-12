@@ -115,8 +115,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 				LatestActualIntervalEnd = latestQueueStatsIntervalId == -1
 					? null
 					: (DateTime?)latestQueueStatsIntervalDate.AddMinutes(latestQueueStatsIntervalId*intervalLength + intervalLength),
-				IncomingSummary = summary,
-				IncomingDataSeries = new IntradayIncomingDataSeries
+				Summary = summary,
+				DataSeries = new IntradayIncomingDataSeries
 				{
 					Time = timeSeries.ToArray(),
 					ForecastedCalls = forecastedCallsSeries.ToArray(),

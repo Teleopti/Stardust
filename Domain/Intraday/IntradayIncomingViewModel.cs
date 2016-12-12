@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 	    public DateTime? LatestActualIntervalStart { get; set; }
         public DateTime? LatestActualIntervalEnd { get; set; }
-		public IntradayIncomingSummary IncomingSummary { get; set; }
-		public IntradayIncomingDataSeries IncomingDataSeries { get; set; }
+		public IntradayIncomingSummary Summary { get; set; }
+		public IntradayIncomingDataSeries DataSeries { get; set; }
 	}
 }

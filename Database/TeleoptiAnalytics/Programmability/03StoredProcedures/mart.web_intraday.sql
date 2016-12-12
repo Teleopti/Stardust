@@ -7,7 +7,7 @@ GO
 -- Create date: 2016-02-24
 -- Description:	Load queue statistics and forecast data both by interval and by day. Used by web intraday.
 -- =============================================
--- EXEC [mart].[web_intraday] 'W. Europe Standard Time', '2016-06-03', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753'
+-- EXEC [mart].[web_intraday] 'W. Europe Standard Time', '2016-12-09', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753'
 -- EXEC [mart].[web_intraday] 'W. Europe Standard Time', '2016-04-13', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753,C5FFFC8F-BCD6-47F7-9352-9F0800E39578'
 -- EXEC mart.web_intraday 'GMT Standard Time', '2016-11-01', '32411FDD-5A63-45B2-98AE-A59B00B9CDF3'
 CREATE PROCEDURE [mart].[web_intraday]
@@ -88,6 +88,7 @@ BEGIN
 		AND bz.time_zone_id = @time_zone_id
 		AND d.date_date = @today
 	GROUP BY
+		d.date_date,
 		i.interval_id
 
 	-- Prepare Queue stats

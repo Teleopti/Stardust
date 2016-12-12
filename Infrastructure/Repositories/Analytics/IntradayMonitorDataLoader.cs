@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					uow.Session()
 						.CreateSQLQuery("exec mart.web_intraday @time_zone_code=:TimeZone, @today=:Today, @skill_list=:SkillList")
 						.AddScalar("IntervalId", NHibernateUtil.Int16)
+						.AddScalar("IntervalDate", NHibernateUtil.DateTime)
 						.AddScalar("ForecastedCalls", NHibernateUtil.Double)
 						.AddScalar("ForecastedHandleTime", NHibernateUtil.Double)
 						.AddScalar("ForecastedAverageHandleTime", NHibernateUtil.Double)
