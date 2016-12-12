@@ -93,6 +93,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		{
 			var sites = allPermittedSites();
 			var org = from site in sites
+					  where site.TeamCollection.Count > 0
 				select new OrganizationSiteViewModel
 				{
 					Id = site.Id.Value,

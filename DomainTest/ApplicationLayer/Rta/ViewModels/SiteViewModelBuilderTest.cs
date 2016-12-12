@@ -132,5 +132,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			org.Teams.Select(t => t.Name).Should().Have.SameValuesAs("Team1", "Team2");
 		}
 
+		[Test]
+		public void ShouldBuildForOrganizationExcludeSiteIfNoTeam()
+		{
+			var london = Guid.NewGuid();
+			var excludedSite = Guid.NewGuid();
+			var team1 = Guid.NewGuid();
+			var team2 = Guid.NewGuid();
+
+			Database
+				.WithSite(london, "London")
+				.WithTeam(team1, "Team1")
+				.WithTeam(team2, "Team2")
+				.WithSite(excludedSite);
+
+			var org = Target.ForOrganization().Single();
+
+			org.Id.Should().Be(london);
+			org.Name.Should().Be("London");
+			org.Teams.Select(t => t.Id).Should().Have.SameValuesAs(team1, team2);
+			org.Teams.Select(t => t.Name).Should().Have.SameValuesAs("Team1", "Team2");
+		}
+
 	}
 }
