@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
 	[TestFixture(false)]
 	[TestFixture(true)]
-	[DomainTestWithStaticDependenciesAvoidUse]
+	[DomainTest]
 	public class DayOffOptimizationDayOffRulesTest : DayOffOptimizationScenario, ISetup
 	{
 		public IScheduleOptimization Target;

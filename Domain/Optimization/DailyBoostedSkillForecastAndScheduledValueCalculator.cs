@@ -10,11 +10,13 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         private readonly Func<ISchedulingResultStateHolder> _schedulingStateHolder;
 	    private readonly ISkillPriorityProvider _skillPriorityProvider;
+	    private readonly IUserTimeZone _userTimeZone;
 
-	    public DailyBoostedSkillForecastAndScheduledValueCalculator(Func<ISchedulingResultStateHolder> schedulingStateHolder, ISkillPriorityProvider skillPriorityProvider)
+	    public DailyBoostedSkillForecastAndScheduledValueCalculator(Func<ISchedulingResultStateHolder> schedulingStateHolder, ISkillPriorityProvider skillPriorityProvider, IUserTimeZone userTimeZone)
 	    {
 		    _schedulingStateHolder = schedulingStateHolder;
 		    _skillPriorityProvider = skillPriorityProvider;
+		    _userTimeZone = userTimeZone;
 	    }
 
 	    public ForecastScheduleValuePair CalculateDailyForecastAndScheduleDataForSkill(ISkill skill, DateOnly scheduleDay)
@@ -73,9 +75,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             return (ret.ScheduleValue/ret.ForecastValue) * 100;
         }
 
-        private static DateTimePeriod CreateDateTimePeriodFromScheduleDay(DateOnly scheduleDay)
+        private DateTimePeriod CreateDateTimePeriodFromScheduleDay(DateOnly scheduleDay)
         {
-            return new DateOnlyPeriod(scheduleDay, scheduleDay).ToDateTimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+            return new DateOnlyPeriod(scheduleDay, scheduleDay).ToDateTimePeriod(_userTimeZone.TimeZone());
         }
 
         private ForecastScheduleValuePair CalculateSkillStaffPeriodForecastAndScheduledValue(ISkill skill, ISkillStaffPeriod skillStaffPeriod)

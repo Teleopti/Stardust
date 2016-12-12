@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
 
@@ -25,7 +27,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
 
 		    _calculator =
 			    new DailyBoostedSkillForecastAndScheduledValueCalculator(
-				    () => _rowManager.SchedulerStateHolder.SchedulingResultState, skillPriorityProvider);
+				    () => _rowManager.SchedulerStateHolder.SchedulingResultState, skillPriorityProvider, new SpecificTimeZone(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
 	    }
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]

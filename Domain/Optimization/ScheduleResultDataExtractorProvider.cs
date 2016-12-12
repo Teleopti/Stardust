@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             ISkillExtractor skillExtractor = new ScheduleMatrixPersonalSkillExtractor(scheduleMatrix, _personalSkillsProvider);
             if (optimizerPreferences.UseTweakedValues)
             {
-                var dailySkillForecastAndScheduledValueCalculator = new DailyBoostedSkillForecastAndScheduledValueCalculator(()=> schedulingResultStateHolder, _skillPriorityProvider);
+                var dailySkillForecastAndScheduledValueCalculator = new DailyBoostedSkillForecastAndScheduledValueCalculator(()=> schedulingResultStateHolder, _skillPriorityProvider, _userTimeZone);
                 return new RelativeBoostedDailyDifferencesByPersonalSkillsExtractor(scheduleMatrix, dailySkillForecastAndScheduledValueCalculator, skillExtractor);
             }
             else
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator;
             if (optimizerPreferences.UseTweakedValues)
             {
-                dailySkillForecastAndScheduledValueCalculator = new DailyBoostedSkillForecastAndScheduledValueCalculator(()=>stateHolder, _skillPriorityProvider);
+                dailySkillForecastAndScheduledValueCalculator = new DailyBoostedSkillForecastAndScheduledValueCalculator(()=>stateHolder, _skillPriorityProvider, _userTimeZone);
                 return new RelativeBoostedDailyDifferencesByAllSkillsExtractor(selectedPeriod,
                                                                                dailySkillForecastAndScheduledValueCalculator,
                                                                                allSkillExtractor);
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator;
 			if (optimizerPreferences.UseTweakedValues)
 			{
-				dailySkillForecastAndScheduledValueCalculator = new DailyBoostedSkillForecastAndScheduledValueCalculator(() => stateHolder, _skillPriorityProvider);
+				dailySkillForecastAndScheduledValueCalculator = new DailyBoostedSkillForecastAndScheduledValueCalculator(() => stateHolder, _skillPriorityProvider, _userTimeZone);
 				return new RelativeBoostedDailyDifferencesByAllSkillsExtractor(selectedPeriod,
 																			   dailySkillForecastAndScheduledValueCalculator,
 																			   primarySkillExtractor);
