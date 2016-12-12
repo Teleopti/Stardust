@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _mock = new MockRepository();
             _scheduleMatrix = _mock.StrictMock<IScheduleMatrixPro>();
             _advancedPreferences = new AdvancedPreferences();
-            _target = new ScheduleResultDataExtractorProvider(new PersonalSkillsProvider(), new SkillPriorityProvider());
+            _target = new ScheduleResultDataExtractorProvider(new PersonalSkillsProvider(), new SkillPriorityProvider(), new UtcTimeZone());
         }
 
         [Test]

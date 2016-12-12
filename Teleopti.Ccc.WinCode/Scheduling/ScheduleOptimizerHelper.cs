@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var scheduleService = _container.Resolve<IScheduleService>();
 
 			var scheduleResultDataExtractorProvider = new ScheduleResultDataExtractorProvider(_container.Resolve<PersonalSkillsProvider>(),
-				_container.Resolve<ISkillPriorityProvider>());
+				_container.Resolve<ISkillPriorityProvider>(), _container.Resolve<IUserTimeZone>());
 
 			IMoveTimeOptimizerCreator creator =
 				new MoveTimeOptimizerCreator(scheduleMatrixOriginalStateContainerList,

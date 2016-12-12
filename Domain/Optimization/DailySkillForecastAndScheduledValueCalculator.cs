@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -9,11 +8,13 @@ namespace Teleopti.Ccc.Domain.Optimization
     public class DailySkillForecastAndScheduledValueCalculator : IDailySkillForecastAndScheduledValueCalculator
     {
         private readonly Func<ISchedulingResultStateHolder> _schedulingStateHolder;
+	    private readonly IUserTimeZone _userTimeZone;
 
-        public DailySkillForecastAndScheduledValueCalculator(Func<ISchedulingResultStateHolder> schedulingStateHolder)
-        {
-            _schedulingStateHolder = schedulingStateHolder;
-        }
+	    public DailySkillForecastAndScheduledValueCalculator(Func<ISchedulingResultStateHolder> schedulingStateHolder, IUserTimeZone userTimeZone)
+	    {
+		    _schedulingStateHolder = schedulingStateHolder;
+		    _userTimeZone = userTimeZone;
+	    }
 
         public ForecastScheduleValuePair CalculateDailyForecastAndScheduleDataForSkill(ISkill skill, DateOnly scheduleDay)
         {
@@ -55,11 +56,11 @@ namespace Teleopti.Ccc.Domain.Optimization
             throw new NotImplementedException();
         }
 
-        private static DateTimePeriod CreateDateTimePeriodFromScheduleDay(DateOnly scheduleDay)
+        private DateTimePeriod CreateDateTimePeriodFromScheduleDay(DateOnly scheduleDay)
         {
             return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
                 scheduleDay.Date, scheduleDay.Date.AddDays(1),
-                TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+								_userTimeZone.TimeZone());
         }
 
         private static double ForecastValue(ISkillStaffPeriod skillStaffPeriod)

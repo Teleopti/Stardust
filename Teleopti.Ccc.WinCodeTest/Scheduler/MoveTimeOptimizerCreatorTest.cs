@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 												   _resourceOptimizationHelper,
 												   _dayOffOptimizationPreferenceProvider,
 													 MockRepository.GenerateStub<IDeleteAndResourceCalculateService>(),
-													 new ScheduleResultDataExtractorProvider(new PersonalSkillsProvider(), new SkillPriorityProvider()), UserTimeZone.Make());
+													 new ScheduleResultDataExtractorProvider(new PersonalSkillsProvider(), new SkillPriorityProvider(), UserTimeZone.Make()), UserTimeZone.Make());
 		}
 
 		[Test]
