@@ -1,5 +1,4 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -134,11 +133,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IStatisticRepository CreateStatisticRepository()
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public IAgentStateReadModelLegacyReader CreateRtaRepository()
 		{
 			throw new System.NotImplementedException();
 		}
@@ -359,16 +353,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IPersonalSettingDataRepository CreatePersonalSettingDataRepository(IUnitOfWork unitOfWork)
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public IGamificationSettingRepository CreateGamificationSettingRepository(IUnitOfWork unitOfWork)
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public ITeamGamificationSettingRepository CreateTeamGamificationSettingRepository(IUnitOfWork unitOfWork)
 		{
 			throw new System.NotImplementedException();
 		}
