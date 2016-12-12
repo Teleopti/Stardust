@@ -103,17 +103,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		ISkillDayRepository CreateSkillDayRepository(IUnitOfWork unitOfWork);
 
 		/// <summary>
-		/// Creates the validated volume day repository.
-		/// </summary>
-		/// <param name="unitOfWork">The unit of work.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-06-26
-		/// </remarks>
-		IValidatedVolumeDayRepository CreateValidatedVolumeDayRepository(IUnitOfWork unitOfWork);
-
-		/// <summary>
 		/// Creates the multisite day repository.
 		/// </summary>
 		/// <param name="unitOfWork">The unit of work.</param>

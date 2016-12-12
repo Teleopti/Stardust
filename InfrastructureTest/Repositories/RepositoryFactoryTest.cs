@@ -122,13 +122,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void VerifyCreateValidatedVolumeDayRepository()
-		{
-			mocks.ReplayAll();
-			Assert.IsNotNull(new RepositoryFactory().CreateValidatedVolumeDayRepository(uow));
-		}
-
-		[Test]
 		public void VerifyCreateMultisiteDayRepository()
 		{
 			mocks.ReplayAll();

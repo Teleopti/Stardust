@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var rep = _repositoryFactory.CreateValidatedVolumeDayRepository(uow);
+                var rep = new ValidatedVolumeDayRepository(new ThisUnitOfWork(uow));
                 return rep.FindLastValidatedDay(workload);
             }
         }
@@ -122,7 +123,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var rep = _repositoryFactory.CreateValidatedVolumeDayRepository(uow);
+                var rep = new ValidatedVolumeDayRepository(new ThisUnitOfWork(uow));
                 var validatedVolumeDays = rep.FindRange(dateTimePeriod, workload);
                 if (validatedVolumeDays == null || workloadDaysToValidate == null)
                     return new List<IValidatedVolumeDay>(0);
@@ -180,9 +181,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             }
         }
 
-        private void SaveValidatedVolumeDays(IEnumerable<IValidatedVolumeDay> validatedVolumeDays, IUnitOfWork uow)
+        private static void SaveValidatedVolumeDays(IEnumerable<IValidatedVolumeDay> validatedVolumeDays, IUnitOfWork uow)
         {
-            var rep = _repositoryFactory.CreateValidatedVolumeDayRepository(uow);
+            var rep = new ValidatedVolumeDayRepository(new ThisUnitOfWork(uow));
             foreach (var validatedVolumeDay in validatedVolumeDays)
             {
                 rep.Add(validatedVolumeDay);

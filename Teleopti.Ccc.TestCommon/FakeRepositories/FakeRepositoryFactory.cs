@@ -153,11 +153,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new System.NotImplementedException();
 		}
 
-		public IValidatedVolumeDayRepository CreateValidatedVolumeDayRepository(IUnitOfWork unitOfWork)
-		{
-			throw new System.NotImplementedException();
-		}
-
 		public IMultisiteDayRepository CreateMultisiteDayRepository(IUnitOfWork unitOfWork)
 		{
 			throw new System.NotImplementedException();

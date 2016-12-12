@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -224,7 +225,7 @@ namespace Teleopti.Ccc.Win.SmartParts.Forecasting
             {
                 using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
-                    IValidatedVolumeDayRepository validatedVolumeDayRepository = new RepositoryFactory().CreateValidatedVolumeDayRepository(uow);
+                    IValidatedVolumeDayRepository validatedVolumeDayRepository = new ValidatedVolumeDayRepository(new ThisUnitOfWork(uow));
                     IValidatedVolumeDay validatedVolumeDay = validatedVolumeDayRepository.FindLatestUpdated(_skill);
                     if (validatedVolumeDay != null)
                     {

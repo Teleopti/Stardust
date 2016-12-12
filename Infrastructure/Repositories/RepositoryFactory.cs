@@ -162,20 +162,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return new SkillDayRepository(unitOfWork);
 		}
 
-		/// <summary>
-		/// Creates the validated volume day repository.
-		/// </summary>
-		/// <param name="unitOfWork">The unit of work.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-06-26
-		/// </remarks>
-		public IValidatedVolumeDayRepository CreateValidatedVolumeDayRepository(IUnitOfWork unitOfWork)
-		{
-			return new ValidatedVolumeDayRepository(new ThisUnitOfWork(unitOfWork));
-		}
-
 		public IMultisiteDayRepository CreateMultisiteDayRepository(IUnitOfWork unitOfWork)
 		{
 			return new MultisiteDayRepository(unitOfWork);
