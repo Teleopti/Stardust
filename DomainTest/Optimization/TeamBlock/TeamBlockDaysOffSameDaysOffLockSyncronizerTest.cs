@@ -12,11 +12,12 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 {
-	[DomainTestWithStaticDependenciesAvoidUse]
+	[DomainTest]
 	public class TeamBlockDaysOffSameDaysOffLockSyncronizerTest
 	{
 		public TeamBlockDaysOffSameDaysOffLockSyncronizer Target;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var scenario = new Scenario("scenario");
 			var schedulePeriod1 = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
 			var schedulePeriod2 = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
+			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
 			BusinessUnitRepository.Add(businessUnit);
 			var sameSite = SiteFactory.CreateSiteWithOneTeam("team");
 			businessUnit.AddSite(sameSite);
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var scenario = new Scenario("scenario1");
 			var schedulePeriod1 = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
 			var schedulePeriod2 = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
+			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
 			BusinessUnitRepository.Add(businessUnit);
 			var sameSite = SiteFactory.CreateSiteWithOneTeam("team");
 			businessUnit.AddSite(sameSite);
