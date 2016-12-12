@@ -21,7 +21,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	[DomainTestWithStaticDependenciesAvoidUse] //FIX ME!
+	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	[LoggedOnAppDomain]
 	[TestFixture(true)]
@@ -170,6 +170,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var dateOnly = new DateOnly(2015, 10, 12);
 			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
 			SkillDayRepository.Has(new[] { skill.CreateSkillDayWithDemandFactory(scenario, dateOnly, TimeSpan.FromMinutes(60)) });
+			SkillDayRepository.Has(new[] { skill.CreateSkillDayWithDemandFactory(scenario, dateOnly.AddDays(1), TimeSpan.FromMinutes(60)) });
 			for (var i = 0; i < numberOfAgents; i++)
 			{
 				var agent = PersonRepository.Has(new Contract("_"), new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1), skill);
