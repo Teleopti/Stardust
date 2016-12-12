@@ -54,7 +54,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		[When(@"I click add agents to seat button")]
 		public void WhenIClickAddAgentsToSeatButton()
 		{
-		    Browser.Interactions.Click(".seatbooking-operations-add .add-agents");
+			Browser.Interactions.AssertExists(".seatbooking-operations-add");
+			Browser.Interactions.Click(".seatbooking-operations-add .add-agents");
 		}
 
 		[Then(@"I should see people search list")]
