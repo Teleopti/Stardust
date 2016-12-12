@@ -555,7 +555,7 @@ team-schedule-datepicker {
 			min-width: 150px;
 
 			span.person-name-text {
-				float: right;
+				display: inline-block;
 				word-break: break-word;
 				white-space: normal;
 			}
