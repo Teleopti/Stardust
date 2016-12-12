@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		[When(@"I press seat map booking view button")]
 		public void WhenIPressSeatMapBookingViewButton()
 		{
-			Browser.Interactions.Click(".planning-period-button-bar .wfm-btn-invis-primary");
+			Browser.Interactions.Click("#view-seatbookings-button");
 		}
 
 		[Then(@"the seat map booking should be opened")]
