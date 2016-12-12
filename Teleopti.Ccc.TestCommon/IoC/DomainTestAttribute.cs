@@ -197,7 +197,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 					person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 					person.PermissionInformation.SetCulture(CultureInfoFactory.CreateEnglishCulture());
 					person.PermissionInformation.SetUICulture(CultureInfoFactory.CreateEnglishCulture());
-					principal = new TeleoptiPrincipal(new TeleoptiIdentity("Fake Login", null, null, null, null), person);
+					var loggedOnBu = new BusinessUnit("loggedOnBu").WithId();
+					principal = new TeleoptiPrincipal(new TeleoptiIdentity("Fake Login", null, loggedOnBu, null, null), person);
 				}
 				context.SetCurrentPrincipal(principal);
 			}
