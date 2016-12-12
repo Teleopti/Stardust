@@ -29,9 +29,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 		private readonly ScheduleDictionaryLoadOptions _options = new ScheduleDictionaryLoadOptions(true, true);
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IPersonAccountUpdater _personAccountUpdater;
-		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 
-		public ImportScheduleHandler(IPersonRepository personRepository, IScenarioRepository scenarioRepository, IScheduleStorage scheduleStorage, ICurrentUnitOfWork currentUnitOfWork, IUpdatedBy updatedBy, IJobResultRepository jobResultRepository, IPersonAccountUpdater personAccountUpdater, IPersonAbsenceAccountRepository personAbsenceAccountRepository)
+		public ImportScheduleHandler(IPersonRepository personRepository, IScenarioRepository scenarioRepository, IScheduleStorage scheduleStorage, ICurrentUnitOfWork currentUnitOfWork, IUpdatedBy updatedBy, IJobResultRepository jobResultRepository, IPersonAccountUpdater personAccountUpdater)
 		{
 			_personRepository = personRepository;
 			_scenarioRepository = scenarioRepository;
@@ -40,7 +39,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 			_updatedBy = updatedBy;
 			_jobResultRepository = jobResultRepository;
 			_personAccountUpdater = personAccountUpdater;
-			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 		}
 
 		[ImpersonateSystem]
@@ -61,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 			{
 				var timeZone = person.PermissionInformation.DefaultTimeZone();
 				var importPeriod = new DateTimePeriod(timeZone.SafeConvertTimeToUtc(period.StartDate.Date), timeZone.SafeConvertTimeToUtc(period.EndDate.Date).AddHours(23).AddMinutes(59));
-				clearSchedules(targetScheduleDictionary, person, period, importPeriod);
+				clearSchedules(targetScheduleDictionary, person, period);
 				importSchedules(sourceScheduleDictionary, targetScheduleDictionary, toScenario, person, period, importPeriod);
 			});
 
@@ -70,7 +68,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 				@event.TotalMessages);
 		}
 
-		private void clearSchedules(IScheduleDictionary scheduleDictionary, IPerson person, DateOnlyPeriod period, DateTimePeriod importPeriod)
+		private void clearSchedules(IScheduleDictionary scheduleDictionary, IPerson person, DateOnlyPeriod period)
 		{
 			var scheduleDays = scheduleDictionary.SchedulesForPeriod(period, person);
 			var changes = false;
