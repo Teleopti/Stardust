@@ -10,19 +10,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly IEnumerable<DateOnly> _scheduleDays;
         private readonly IOptimizationPreferences _optimizerPreferences;
         private readonly ISchedulingResultStateHolder _stateHolder;
-        private readonly IList<ISkill> _activeSkills;
+	    private readonly IUserTimeZone _userTimeZone;
+	    private readonly IList<ISkill> _activeSkills;
 
-        public ScheduleMatrixValueCalculatorPro(IEnumerable<DateOnly> scheduleDays, IOptimizationPreferences optimizerPreferences, ISchedulingResultStateHolder stateHolder, IList<ISkill> activeSkills)
-        {
-            _scheduleDays = scheduleDays;
-            _optimizerPreferences = optimizerPreferences;
-            _stateHolder = stateHolder;
-            _activeSkills = activeSkills;
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-        public ScheduleMatrixValueCalculatorPro(IEnumerable<DateOnly> scheduleDays, IOptimizationPreferences optimizerPreferences, ISchedulingResultStateHolder stateHolder)
-            : this(scheduleDays, optimizerPreferences, stateHolder, stateHolder.Skills){}
+	    public ScheduleMatrixValueCalculatorPro(IEnumerable<DateOnly> scheduleDays,
+		    IOptimizationPreferences optimizerPreferences, ISchedulingResultStateHolder stateHolder, IUserTimeZone userTimeZone)
+	    {
+			_scheduleDays = scheduleDays;
+			_optimizerPreferences = optimizerPreferences;
+			_stateHolder = stateHolder;
+		    _userTimeZone = userTimeZone;
+		    _activeSkills = stateHolder.Skills;
+		}
 
         public IEnumerable<DateOnly> ScheduleDays
         {
@@ -42,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public double? DayValueForSkills(DateOnly scheduleDay, IList<ISkill> skillList)
         {
             DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-                scheduleDay.Date, scheduleDay.Date.AddDays(1), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+                scheduleDay.Date, scheduleDay.Date.AddDays(1), _userTimeZone.TimeZone());
 
             IList<ISkillStaffPeriod> skillStaffPeriods =
                 _stateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(skillList, dateTimePeriod);
