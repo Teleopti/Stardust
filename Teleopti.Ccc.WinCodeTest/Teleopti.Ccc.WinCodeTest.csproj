@@ -209,7 +209,6 @@
     <Compile Include="Budgeting\BudgetGroupWeekFilterTest.cs" />
     <Compile Include="Budgeting\BudgetGroupWeekModelTest.cs" />
     <Compile Include="Budgeting\BudgetGroupWeekPresenterTest.cs" />
-    <Compile Include="Budgeting\BudgetGroupWizardPageTest.cs" />
     <Compile Include="Budgeting\BudgetGroupNavigatorTest.cs" />
     <Compile Include="Budgeting\BudgetNavigatorDataServiceTest.cs" />
     <Compile Include="Budgeting\BudgetSettingsProviderTest.cs" />
@@ -799,8 +798,6 @@
     <Compile Include="Forecasting\SkillPages\MultisiteSkillPropertiesPagesTest.cs" />
     <Compile Include="Common\EntitiesUpdatedEventArgsTest.cs" />
     <Compile Include="Common\LanguageResourceHelperTest.cs" />
-    <Compile Include="Common\PropertyPageAndWizard\AbstractPropertyPagesTest.cs" />
-    <Compile Include="Common\PropertyPageAndWizard\AbstractWizardPagesTest.cs" />
     <Compile Include="Common\PropertyPageAndWizard\AfterSavedEventArgsTest.cs" />
     <Compile Include="Common\PropertyPageAndWizard\WizardNameChangedEventArgsTest.cs" />
     <Compile Include="Common\PropertyReflectorTest.cs" />
@@ -810,9 +807,7 @@
     <Compile Include="Common\GuiHelpers\ListBoxItemTest.cs" />
     <Compile Include="Forecasting\OpenHourHelperTest.cs" />
     <Compile Include="Forecasting\SkillPages\SkillPropertiesPagesTest.cs" />
-    <Compile Include="Forecasting\SkillPages\SkillWizardPagesTest.cs" />
     <Compile Include="Forecasting\WorkloadPages\WorkloadPropertiesPagesTest.cs" />
-    <Compile Include="Forecasting\WorkloadPages\WorkloadWizardPagesTest.cs" />
     <Compile Include="PeopleAdmin\Models\PersonGeneralModelTest.cs" />
     <Compile Include="Common\ClipHandlerTest.cs" />
     <Compile Include="Common\ClipTest.cs" />
