@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Archiving;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
@@ -25,6 +26,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 	{
 		public ImportScheduleHandler Target;
 		public IPersonAbsenceAccountRepository PersonAbsenceAccountRepository;
+		public IContractRepository ContractRepository;
+		public IPartTimePercentageRepository PartTimePercentageRepository;
+		public IContractScheduleRepository ContractScheduleRepository;
+		public ITeamRepository TeamRepository;
+		public ISiteRepository SiteRepository;
 
 		[SetUp]
 		public void Setup()
@@ -34,6 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			TargetScenario = new Scenario("default") { DefaultScenario = true };
 			Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 5);
 			Person = PersonFactory.CreatePerson("Tester Testersson");
+
 		}
 
 		[Test]
@@ -252,7 +259,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			var existingPersonAbsence = new PersonAbsence(Person, TargetScenario, new AbsenceLayer(existingAbsence,
 					new DateTimePeriod(makeUtc(Period.StartDate.Date), makeUtc(Period.StartDate.Date + TimeSpan.FromDays(1)))));
 			var newPersonAbsence = new PersonAbsence(Person, SourceScenario, new AbsenceLayer(existingAbsence,
-					new DateTimePeriod(makeUtc(Period.StartDate.Date+TimeSpan.FromHours(1)), makeUtc(Period.StartDate.Date + TimeSpan.FromHours(2)))));
+					new DateTimePeriod(makeUtc(Period.StartDate.Date + TimeSpan.FromHours(1)), makeUtc(Period.StartDate.Date + TimeSpan.FromHours(2)))));
 
 			WithUnitOfWork.Do(() =>
 			{
@@ -275,11 +282,26 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 		}
 
 		[Test]
-		[Ignore("Not implemented yet")]
+		//[Ignore("Not implemented yet")]
 		public void ShouldUpdatePersonAccountIfNeeded()
 		{
-			AddDefaultTypesToRepositories();
+			var contract = new Contract("something");
+			var partTimePercentage = new PartTimePercentage("something");
+			var contractSchedule = new ContractSchedule("something");
+			var site = new Site("test");
+			var team = new Team { Description = new Description("test"), Site = site };
 
+			WithUnitOfWork.Do(() =>
+			{
+				ContractRepository.Add(contract);
+				PartTimePercentageRepository.Add(partTimePercentage);
+				ContractScheduleRepository.Add(contractSchedule);
+				SiteRepository.Add(site);
+				TeamRepository.Add(team);
+			});
+
+			Person.AddPersonPeriod(new PersonPeriod(Period.StartDate, new PersonContract(contract, partTimePercentage, contractSchedule), team));
+			AddDefaultTypesToRepositories();
 			var existingAbsence = AbsenceFactory.CreateAbsence("gone");
 			existingAbsence.Tracker = Tracker.CreateDayTracker();
 			var absenceStartDate = makeUtc(Period.StartDate.Date + TimeSpan.FromDays(1));

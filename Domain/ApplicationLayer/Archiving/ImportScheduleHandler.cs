@@ -28,8 +28,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 		private readonly IUpdatedBy _updatedBy;
 		private readonly ScheduleDictionaryLoadOptions _options = new ScheduleDictionaryLoadOptions(true, true);
 		private readonly IJobResultRepository _jobResultRepository;
+		private readonly IPersonAccountUpdater _personAccountUpdater;
+		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 
-		public ImportScheduleHandler(IPersonRepository personRepository, IScenarioRepository scenarioRepository, IScheduleStorage scheduleStorage, ICurrentUnitOfWork currentUnitOfWork, IUpdatedBy updatedBy, IJobResultRepository jobResultRepository)
+		public ImportScheduleHandler(IPersonRepository personRepository, IScenarioRepository scenarioRepository, IScheduleStorage scheduleStorage, ICurrentUnitOfWork currentUnitOfWork, IUpdatedBy updatedBy, IJobResultRepository jobResultRepository, IPersonAccountUpdater personAccountUpdater, IPersonAbsenceAccountRepository personAbsenceAccountRepository)
 		{
 			_personRepository = personRepository;
 			_scenarioRepository = scenarioRepository;
@@ -37,6 +39,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 			_currentUnitOfWork = currentUnitOfWork;
 			_updatedBy = updatedBy;
 			_jobResultRepository = jobResultRepository;
+			_personAccountUpdater = personAccountUpdater;
+			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 		}
 
 		[ImpersonateSystem]
@@ -85,9 +89,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 
 		private void importSchedules(IScheduleDictionary sourceScheduleDictionary, IScheduleDictionary targetScheduleDictionary, IScenario toScenario, IPerson person, DateOnlyPeriod period, DateTimePeriod importPeriod)
 		{
-			var scheduleDays = sourceScheduleDictionary.SchedulesForPeriod(period, person);
+			var scheduleDays = sourceScheduleDictionary.SchedulesForPeriod(period, person).ToList();
 			var added = new HashSet<Guid>();
-
 			foreach (var scheduleDay in scheduleDays)
 			{
 				foreach (var scheduleData in scheduleDay.PersistableScheduleDataCollection())
@@ -114,12 +117,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 					{
 						added.Add(scheduleData.Id.GetValueOrDefault());
 						_scheduleStorage.Add(changedScheduleData);
+						var changedAbsence = changedScheduleData as PersonAbsence;
+						if (changedAbsence?.Layer.Payload.Tracker != null)
+						{
+							_currentUnitOfWork.Current().PersistAll();
+							_personAccountUpdater.UpdateForAbsence(person, changedAbsence.Layer.Payload, new DateOnly(changedAbsence.Period.StartDateTime));
+						}
 					}
-
 				}
 			}
 		}
-
-		
 	}
 }
