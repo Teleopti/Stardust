@@ -57,19 +57,7 @@ namespace Teleopti.Ccc.Web.BrokerListenSimulator
 				return Task.Factory.StartNew(() =>
 				{
 					Console.WriteLine($"client {client}");
-					var currentDatasource = new FakeCurrentDatasource(new DataSourceState());
-					currentDatasource.FakeName(data.DataSource);
-
-					var businessUnit = new BusinessUnit("..");
-					businessUnit.SetId(data.BusinessUnit);
-					var currentBusinessUnit = new FakeCurrentBusinessUnit();
-					currentBusinessUnit.FakeBusinessUnit(businessUnit);
-
-					var scenario = new Scenario("..");
-					scenario.SetId(data.Scenario);
-					var currentScenario = new FakeCurrentScenario();
-					currentScenario.FakeScenario(scenario);
-
+					
 					var builder = new ContainerBuilder();
 					var iocArgs = new IocArgs(new ConfigReader())
 					{
@@ -78,36 +66,45 @@ namespace Teleopti.Ccc.Web.BrokerListenSimulator
 					};
 					var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
 					builder.RegisterModule(new CommonModule(configuration));
-					builder.RegisterInstance(currentScenario).As<ICurrentScenario>();
-					builder.RegisterInstance(currentDatasource).As<ICurrentDataSource>();
-					builder.RegisterInstance(currentBusinessUnit).As<ICurrentBusinessUnit>();
+					builder.RegisterType<FakeCurrentDatasource>().AsSelf().As<ICurrentDataSource>().SingleInstance();
+					builder.RegisterType<FakeCurrentBusinessUnit>().AsSelf().As<ICurrentBusinessUnit>().SingleInstance();
+					builder.RegisterType<FakeCurrentScenario>().AsSelf().As<ICurrentScenario>().SingleInstance();
 					builder.RegisterType<SimulateSchedulingScreen>().InstancePerDependency();
 					var container = builder.Build();
 
-					container.Resolve<IMessageBrokerUrl>()
-						.Configure(data.Url);
+					container.Resolve<FakeCurrentDatasource>().FakeName(data.DataSource);
 
-					var messageBroker = container.Resolve<IMessageBrokerComposite>();
-					messageBroker.StartBrokerService(true);
-					Console.WriteLine($"starting broker {client}");
-					while (!messageBroker.IsAlive)
-						Task.Delay(500).Wait();
-					Console.WriteLine($"started broker {client}");
+					var businessUnit = new BusinessUnit("..");
+					businessUnit.SetId(data.BusinessUnit);
+					container.Resolve<FakeCurrentBusinessUnit>().FakeBusinessUnit(businessUnit);
+
+					var scenario = new Scenario("..");
+					scenario.SetId(data.Scenario);
+					container.Resolve<FakeCurrentScenario>().FakeScenario(scenario);
+
+					container.Resolve<IMessageBrokerUrl>().Configure(data.Url);
+
+					Console.WriteLine($"client.screens {client}");
+
+					// WE DONT NEED IT NOW, BUT THIS PROBABLY NEEDS TO BE SHARED
+					//var messageBroker = container.Resolve<IMessageBrokerComposite>();
+					//messageBroker.StartBrokerService(true);
+					//Console.WriteLine($"starting broker {client}");
+					//while (!messageBroker.IsAlive)
+					//	Task.Delay(500).Wait();
+					//Console.WriteLine($"started broker {client}");
 
 					Enumerable.Range(1, screens).ForEach(screen =>
 					{
-
 						Console.WriteLine($"starting screen {client}-{screen}");
 						container.Resolve<SimulateSchedulingScreen>()
 							.Simulate(data, screen, client);
 						Console.WriteLine($"started screen {client}-{screen}");
-
 					});
 
 					Console.WriteLine($"/client {client}");
 				}, TaskCreationOptions.LongRunning);
 			});
-
 
 			Console.WriteLine($"waiting...");
 			Task.WaitAll(startClients.ToArray());

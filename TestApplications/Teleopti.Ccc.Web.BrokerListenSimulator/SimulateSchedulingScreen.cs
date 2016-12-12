@@ -130,19 +130,19 @@ namespace Teleopti.Ccc.Web.BrokerListenSimulator
 		{
 			get(url($"MessageBroker/PopMessages?route={subscription.Route()}&id={subscription.MailboxId}"));
 
-			Task.Factory.StartNew(() =>
-			{
-				while (true)
-				{
-					Task.Delay(TimeSpan.FromSeconds(120)).Wait(); // default at this time
-					var result = get(url($"MessageBroker/PopMessages?route={subscription.Route()}&id={subscription.MailboxId}"));
-					var messages = _deserializer.DeserializeObject<Message[]>(result);
-					messages.ForEach(m =>
-					{
-						callback(this, null);
-					});
-				}
-			}, TaskCreationOptions.LongRunning);
+			//Task.Factory.StartNew(() =>
+			//{
+			//	while (true)
+			//	{
+			//		Task.Delay(TimeSpan.FromSeconds(120)).Wait(); // default at this time
+			//		var result = get(url($"MessageBroker/PopMessages?route={subscription.Route()}&id={subscription.MailboxId}"));
+			//		var messages = _deserializer.DeserializeObject<Message[]>(result);
+			//		messages.ForEach(m =>
+			//		{
+			//			callback(this, null);
+			//		});
+			//	}
+			//}, TaskCreationOptions.LongRunning);
 		}
 
 		private void post(string url, string content)
