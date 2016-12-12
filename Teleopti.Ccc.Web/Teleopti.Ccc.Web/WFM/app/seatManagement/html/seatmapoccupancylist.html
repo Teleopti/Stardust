@@ -21,15 +21,15 @@
 			<li class="active" ng-repeat="booking in detail.Occupancies" ng-class="{'default-cursor':booking.IsEmpty}">
 				<span class="list-item-container seat-booking-seatname pull-left" ng-show="$index == 0">{{'Seat'|translate}} {{booking.LocationPrefix}}{{detail.SeatName}}{{booking.LocationSuffix}}:</span>
 				
-				<span class="list-item-container seat-booking-seatname pull-left" ng-show="$index !== 0"></span>
+				<span class="list-item-container seat-booking-seatname pull-left" ng-show="$index !== 0">&nbsp;</span>
 
-				<span ng-show="!booking.IsEmpty" class="list-item-container seat-booking-item" ng-class="[{'first-seat-booking':$index==0},{'not-first-seat-booking':$index!=0},vm.getSeatBookingDetailClass(booking)]">
+				<span ng-show="!booking.IsEmpty" class="list-item-container seat-booking-item" ng-class="{'first-seat-booking',vm.getSeatBookingDetailClass(booking)]">
 					{{vm.getDisplayTime(booking)}}
 					&nbsp;&nbsp;{{booking.FirstName}}
 					&nbsp;{{booking.LastName}}
 				</span>
 
-				<span ng-show="booking.IsEmpty" class="list-item-container seat-booking-item" ng-class="{'first-seat-booking':$index==0}">{{'SeatHasNoBookings'|translate}}</span>
+				<span ng-show="booking.IsEmpty" class="list-item-container seat-booking-item" ng-class="{'first-seat-booking'}">{{'SeatHasNoBookings'|translate}}</span>
 
 				<div class="wfm-leave-behind wfm-leave-behind-1" ng-show="!booking.IsEmpty">
 					<span ng-click="vm.deleteSeatBooking(booking)"><i class="mdi mdi-delete"></i></span>
