@@ -2,11 +2,11 @@
 //DONT REMOVE X
 xdescribe('PermissionsCtrlRefact', function () {
   var $httpBackend,
-  fakeBackend,
-  $timeout,
-  $controller,
-  permissionsDataService,
-  vm;
+    fakeBackend,
+    $timeout,
+    $controller,
+    permissionsDataService,
+    vm;
 
   beforeEach(function () {
     module('wfm.permissions');
@@ -44,7 +44,6 @@ xdescribe('PermissionsCtrlRefact', function () {
       return [201, { Name: 'Agent' }];
     });
     $httpBackend.whenPOST('../api/Permissions/Roles/4b102279-888a-45ee-b537-b48036bc27d0/Functions').respond(function (method, url, data, headers) {
-      console.log(data);
       return 200;
     });
 
@@ -209,15 +208,15 @@ xdescribe('PermissionsCtrlRefact', function () {
 
   it('should get roles', function () {
     fakeBackend
-    .withRole({
-      BuiltIn: false,
-      DescriptionText: 'Agent',
-      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-      IsAnyBuiltIn: true,
-      IsMyRole: false,
-      Name: 'Agent'
-    })
-    .withRole(
+      .withRole({
+        BuiltIn: false,
+        DescriptionText: 'Agent',
+        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        Name: 'Agent'
+      })
+      .withRole(
       {
         BuiltIn: true,
         DescriptionText: 'SuperAdmin',
@@ -227,1591 +226,1591 @@ xdescribe('PermissionsCtrlRefact', function () {
         Name: '_superAdmin'
       });
 
-      $httpBackend.flush();
+    $httpBackend.flush();
 
-      expect(vm.roles.length).toEqual(2);
-    });
+    expect(vm.roles.length).toEqual(2);
+  });
 
-    it('should create role', function () {
-      var name = 'rolename';
-      fakeBackend.withOrganizationSelection(
-        {
-          Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
-          Name: "CarlCCDemo",
-          Type: "BusinessUnit",
-          ChildNodes: []
-        });
-        $httpBackend.flush();
-
-        vm.createRole(name);
-        $httpBackend.flush();
-
-        expect(vm.roles.length).toBe(1);
+  it('should create role', function () {
+    var name = 'rolename';
+    fakeBackend.withOrganizationSelection(
+      {
+        Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
+        Name: "CarlCCDemo",
+        Type: "BusinessUnit",
+        ChildNodes: []
       });
+    $httpBackend.flush();
 
-      it('should select newly created role', function () {
-        var name = 'rolename';
-        fakeBackend.withOrganizationSelection(
+    vm.createRole(name);
+    $httpBackend.flush();
+
+    expect(vm.roles.length).toBe(1);
+  });
+
+  it('should select newly created role', function () {
+    var name = 'rolename';
+    fakeBackend.withOrganizationSelection(
+      {
+        Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
+        Name: "CarlCCDemo",
+        Type: "BusinessUnit",
+        ChildNodes: []
+      });
+    $httpBackend.flush();
+
+    vm.createRole(name);
+    $httpBackend.flush()
+
+    expect(vm.roles[0].IsSelected).toBe(true);
+    expect(vm.selectedRole.DescriptionText).toEqual(name);
+  });
+
+  it('should unselect selected org data for previous role when creating new role', function () {
+    fakeBackend
+      .withRole({
+        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64'
+      })
+      .withRoleInfo({
+        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+        AvailableFunctions: [],
+        AvailableBusinessUnits: [
           {
             Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
-            Name: "CarlCCDemo",
-            Type: "BusinessUnit",
-            ChildNodes: []
-          });
-          $httpBackend.flush();
-
-          vm.createRole(name);
-          $httpBackend.flush()
-
-          expect(vm.roles[0].IsSelected).toBe(true);
-          expect(vm.selectedRole.DescriptionText).toEqual(name);
-        });
-
-        it('should unselect selected org data for previous role when creating new role', function() {
-          fakeBackend
-          .withRole({
-            Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64'
-          })
-          .withRoleInfo({
-            Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-            AvailableFunctions: [],
-            AvailableBusinessUnits: [
-              {
-                Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
-                Name: "CarlCCDemo"
-              }
-            ],
-            AvailableSites: [
-              {
-                Id: '41815804-7c51-4f43-a1ae-ecb2a17a2177',
-                Name: 'Site1'
-              }
-            ],
-            AvailableTeams: [
+            Name: "CarlCCDemo"
+          }
+        ],
+        AvailableSites: [
+          {
+            Id: '41815804-7c51-4f43-a1ae-ecb2a17a2177',
+            Name: 'Site1'
+          }
+        ],
+        AvailableTeams: [
+          {
+            Id: '58643cfb-6f7d-4128-a014-0c8f82209d68',
+            Name: 'Team1'
+          }
+        ]
+      })
+      .withOrganizationSelection(
+      {
+        Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
+        Name: "CarlCCDemo",
+        Type: "BusinessUnit",
+        ChildNodes: [
+          {
+            Id: '41815804-7c51-4f43-a1ae-ecb2a17a2177',
+            Name: 'Site1',
+            IsSelected: true,
+            ChildNodes: [
               {
                 Id: '58643cfb-6f7d-4128-a014-0c8f82209d68',
-                Name: 'Team1'
+                Name: 'Team1',
+                IsSelected: true,
               }
             ]
-          })
-          .withOrganizationSelection(
-            {
-              Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
-              Name: "CarlCCDemo",
-              Type: "BusinessUnit",
-              ChildNodes: [
-                {
-                  Id: '41815804-7c51-4f43-a1ae-ecb2a17a2177',
-                  Name: 'Site1',
-                  IsSelected: true,
-                  ChildNodes: [
-                    {
-                      Id: '58643cfb-6f7d-4128-a014-0c8f82209d68',
-                      Name: 'Team1',
-                      IsSelected: true,
-                    }
-                  ]
-                }
-              ]
-            },
-            []
-          );
-          $httpBackend.flush();
+          }
+        ]
+      },
+      []
+      );
+    $httpBackend.flush();
 
-          vm.createRole('Johan Dam');
-          $httpBackend.flush();
+    vm.createRole('Johan Dam');
+    $httpBackend.flush();
 
-          expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(false);
-          expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(false);
-        });
+    expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(false);
+    expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(false);
+  });
 
-        it('should unselect previous selected role when creating new role', function () {
-          var name = 'rolename';
-          fakeBackend
-          .withRole({
+  it('should unselect previous selected role when creating new role', function () {
+    var name = 'rolename';
+    fakeBackend
+      .withRole({
+        IsSelected: true,
+        BuiltIn: false,
+        DescriptionText: 'Agent',
+        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        Name: 'Agent'
+      })
+      .withOrganizationSelection(
+      {
+        Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
+        Name: "CarlCCDemo",
+        Type: "BusinessUnit",
+        ChildNodes: []
+      });
+    $httpBackend.flush();;
+
+    vm.createRole(name);
+    $httpBackend.flush()
+
+    expect(vm.selectedRole.IsSelected).toEqual(true);
+    expect(vm.selectedRole.DescriptionText).toEqual(name);
+    expect(vm.roles[0].IsSelected).toBe(true);
+    expect(vm.roles[1].IsSelected).toBe(false);
+  });
+
+  it('should unselect new roll when selecting other role', function () {
+    var name = 'rolename';
+    fakeBackend
+      .withRole({
+        IsSelected: true,
+        BuiltIn: false,
+        DescriptionText: 'Agent',
+        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        Name: 'Agent'
+      })
+      .withOrganizationSelection(
+      {
+        Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
+        Name: "CarlCCDemo",
+        Type: "BusinessUnit",
+        ChildNodes: []
+      });
+    $httpBackend.flush();
+
+    vm.createRole(name);
+    $httpBackend.flush()
+    vm.selectRole(vm.roles[1]);
+    $httpBackend.flush();
+
+    expect(vm.roles[0].IsSelected).toBe(false);
+    expect(vm.roles[1].IsSelected).toBe(true);
+
+  });
+
+  it('should close create role modal on submit', function () {
+    var name = 'rolename';
+    fakeBackend
+      .withOrganizationSelection(
+      {
+        Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
+        Name: "CarlCCDemo",
+        Type: "BusinessUnit",
+        ChildNodes: []
+      });
+    $httpBackend.flush();
+
+
+    vm.createRole(name);
+    $httpBackend.flush();
+
+    expect(vm.showCreateModal).toBe(false);
+  });
+
+  it('should clear new role name on submit', function () {
+    var name = 'rolename';
+    fakeBackend.withOrganizationSelection(
+      {
+        Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
+        Name: "CarlCCDemo",
+        Type: "BusinessUnit",
+        ChildNodes: []
+      });
+    $httpBackend.flush();
+
+    vm.createRole(name);
+    $httpBackend.flush();
+
+    expect(vm.roleName).toBe('');
+  });
+
+  it('should put newly created roll on top of roles list', function () {
+    var name = 'rolename'
+    fakeBackend
+      .withRole({
+        BuiltIn: false,
+        DescriptionText: 'Agent',
+        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        Name: 'Agent'
+      })
+      .withRole(
+      {
+        BuiltIn: true,
+        DescriptionText: 'SuperAdmin',
+        Id: '7afefc4f-3231-401b-8174-6525a5e47f23',
+        IsAnyBuiltIn: true,
+        IsMyRole: true,
+        Name: '_superAdmin'
+      })
+      .withOrganizationSelection(
+      {
+        Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
+        Name: "CarlCCDemo",
+        Type: "BusinessUnit",
+        ChildNodes: []
+      });
+    $httpBackend.flush();
+
+    vm.createRole(name);
+    $httpBackend.flush();
+
+    expect(vm.roles[0].DescriptionText).toBe(name);
+  });
+
+  xit('should be able to edit the name of a role', function (done) {
+    fakeBackend.withRole({
+      BuiltIn: false,
+      DescriptionText: 'Agent',
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      IsAnyBuiltIn: true,
+      IsMyRole: false,
+      Name: 'Agent'
+    });
+    $httpBackend.flush();
+
+    vm.editRole('newRoleName', vm.roles[0]);
+    $httpBackend.flush();
+
+    expect(vm.roles[0].DescriptionText).toBe('newRoleName');
+    done();
+  });
+
+  it('should select edited role after name change', function () {
+    fakeBackend.withRole({
+      BuiltIn: false,
+      DescriptionText: 'Agent',
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      IsAnyBuiltIn: true,
+      IsMyRole: false,
+      Name: 'Agent'
+    });
+    $httpBackend.flush();
+
+    vm.editRole('newRoleName', vm.roles[0]);
+    $httpBackend.flush();
+
+    expect(vm.roles[0].IsSelected).toBe(true);
+  });
+
+  it('should be able to delete a roll', function () {
+    fakeBackend.withRole({
+      BuiltIn: false,
+      DescriptionText: 'Agent',
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      IsAnyBuiltIn: true,
+      IsMyRole: false,
+      Name: 'Agent'
+    })
+      .withOrganizationSelection(
+      {
+        Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
+        Name: "CarlCCDemo",
+        Type: "BusinessUnit",
+        ChildNodes: []
+      });
+    $httpBackend.flush();
+
+    vm.deleteRole(vm.roles[0]);
+    $httpBackend.flush();
+
+    expect(vm.roles.length).toEqual(0);
+  });
+
+  it('should unselect selected org data for previous role when deleting that role', function () {
+    fakeBackend
+      .withRole({
+        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+        IsSelected: true
+      })
+      .withRoleInfo({
+        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+        AvailableFunctions: [],
+        AvailableBusinessUnits: [
+          {
+            Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
+            Name: "CarlCCDemo"
+          }
+        ],
+        AvailableSites: [
+          {
+            Id: '41815804-7c51-4f43-a1ae-ecb2a17a2177',
+            Name: 'Site1'
+          }
+        ],
+        AvailableTeams: [
+          {
+            Id: '58643cfb-6f7d-4128-a014-0c8f82209d68',
+            Name: 'Team1'
+          }
+        ]
+      })
+      .withOrganizationSelection(
+      {
+        Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
+        Name: "CarlCCDemo",
+        Type: "BusinessUnit",
+        ChildNodes: [
+          {
+            Id: '41815804-7c51-4f43-a1ae-ecb2a17a2177',
+            Name: 'Site1',
             IsSelected: true,
-            BuiltIn: false,
-            DescriptionText: 'Agent',
-            Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-            IsAnyBuiltIn: true,
-            IsMyRole: false,
-            Name: 'Agent'
-          })
-          .withOrganizationSelection(
-            {
-              Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
-              Name: "CarlCCDemo",
-              Type: "BusinessUnit",
-              ChildNodes: []
-            });
-            $httpBackend.flush();;
-
-            vm.createRole(name);
-            $httpBackend.flush()
-
-            expect(vm.selectedRole.IsSelected).toEqual(true);
-            expect(vm.selectedRole.DescriptionText).toEqual(name);
-            expect(vm.roles[0].IsSelected).toBe(true);
-            expect(vm.roles[1].IsSelected).toBe(false);
-          });
-
-          it('should unselect new roll when selecting other role', function () {
-            var name = 'rolename';
-            fakeBackend
-            .withRole({
-              IsSelected: true,
-              BuiltIn: false,
-              DescriptionText: 'Agent',
-              Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-              IsAnyBuiltIn: true,
-              IsMyRole: false,
-              Name: 'Agent'
-            })
-            .withOrganizationSelection(
+            ChildNodes: [
               {
-                Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
-                Name: "CarlCCDemo",
-                Type: "BusinessUnit",
-                ChildNodes: []
-              });
-              $httpBackend.flush();
+                Id: '58643cfb-6f7d-4128-a014-0c8f82209d68',
+                Name: 'Team1',
+                IsSelected: true,
+              }
+            ]
+          }
+        ]
+      },
+      []
+      );
+    $httpBackend.flush();
 
-              vm.createRole(name);
-              $httpBackend.flush()
-              vm.selectRole(vm.roles[1]);
-              $httpBackend.flush();
+    vm.deleteRole(vm.roles[0]);
+    $httpBackend.flush();
 
-              expect(vm.roles[0].IsSelected).toBe(false);
-              expect(vm.roles[1].IsSelected).toBe(true);
+    expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(false);
+    expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(false);
+  });
 
-            });
+  it('should clear selected role when deleting selected role', function () {
+    fakeBackend.withRole({
+      BuiltIn: false,
+      DescriptionText: 'Agent',
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      IsAnyBuiltIn: true,
+      IsMyRole: false,
+      Name: 'Agent'
+    })
+      .withOrganizationSelection(
+      {
+        Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
+        Name: "CarlCCDemo",
+        Type: "BusinessUnit",
+        ChildNodes: []
+      });
+    $httpBackend.flush();
+    vm.selectRole = vm.roles[0];
 
-            it('should close create role modal on submit', function () {
-              var name = 'rolename';
-              fakeBackend
-              .withOrganizationSelection(
-                {
-                  Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
-                  Name: "CarlCCDemo",
-                  Type: "BusinessUnit",
-                  ChildNodes: []
-                });
-                $httpBackend.flush();
+    vm.deleteRole(vm.roles[0]);
+    $httpBackend.flush();
+
+    expect(vm.selectedRole.Id).not.toEqual('e7f360d3-c4b6-41fc-9b2d-9b5e015aae64');
+  });
+
+  it('should unselect role functions when deleting that role', function () {
+    fakeBackend.withRole({
+      BuiltIn: false,
+      DescriptionText: 'Agent',
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      IsAnyBuiltIn: true,
+      IsMyRole: false,
+      IsSelected: true,
+      Name: 'Agent'
+    }).withApplicationFunction({
+      ChildFunctions: [],
+      FunctionCode: 'Raptor',
+      FunctionDescription: 'xxOpenRaptorApplication',
+      FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+      IsDisabled: false,
+      IsSelected: true,
+      LocalizedFunctionDescription: 'Open Teleopti WFM'
+    }).withRoleInfo({
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      AvailableFunctions: [
+        {
+          Id: '63656f9a-be16-4bb7-9012-9bde01232075'
+        }
+      ]
+    })
+      .withOrganizationSelection(
+      {
+        Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
+        Name: "CarlCCDemo",
+        Type: "BusinessUnit",
+        ChildNodes: []
+      });
+    $httpBackend.flush();
+    vm.selectedRole = vm.roles[0];
+    vm.deleteRole(vm.roles[0]);
+    $httpBackend.flush();
+
+    expect(vm.applicationFunctions[0].IsSelected).toEqual(false);
+  });
+
+  it('should not unselect role functions for selected role when deleting other role', function () {
+    fakeBackend
+      .withRole({
+        BuiltIn: false,
+        DescriptionText: 'Agent',
+        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        IsSelected: true,
+        Name: 'Agent'
+      })
+      .withApplicationFunction({
+        ChildFunctions: [],
+        FunctionCode: 'Raptor',
+        FunctionDescription: 'xxOpenRaptorApplication',
+        FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+        IsDisabled: false,
+        IsSelected: true,
+        LocalizedFunctionDescription: 'Open Teleopti WFM'
+      })
+      .withRoleInfo({
+        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+        AvailableFunctions: [
+          {
+            Id: '63656f9a-be16-4bb7-9012-9bde01232075'
+          }
+        ]
+      })
+      .withRole({
+        BuiltIn: false,
+        DescriptionText: 'Carl',
+        Id: 'f1e9237f-7bd8-4ca9-aebb-e49b80d8a4cf',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        IsSelected: false,
+        Name: 'Agent'
+      })
+      .withOrganizationSelection(
+      {
+        Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
+        Name: "CarlCCDemo",
+        Type: "BusinessUnit",
+        ChildNodes: []
+      });
+    $httpBackend.flush();
+    vm.selectedRole = vm.roles[0];
+
+    vm.deleteRole(vm.roles[1]);
+    $httpBackend.flush();
+
+    expect(vm.roles[0].IsSelected).toEqual(true);
+    expect(vm.applicationFunctions[0].IsSelected).toEqual(true);
+    expect(vm.roles.length).toEqual(1);
+  });
+
+  it('should not be able to delete a built in roll', function () {
+    fakeBackend.withRole({
+      BuiltIn: true,
+      DescriptionText: 'Systemadministator',
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      IsAnyBuiltIn: true,
+      IsMyRole: false,
+      Name: '_superUser'
+    });
+    $httpBackend.flush();
+
+    vm.deleteRole(vm.roles[0]);
+
+    expect(vm.roles.length).toEqual(1);
+  });
+
+  it('should not be able to modify Built in role', function () {
+    fakeBackend.withRole({
+      BuiltIn: true,
+      DescriptionText: 'Systemadministator',
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      IsAnyBuiltIn: true,
+      IsMyRole: true,
+      Name: '_superUser'
+    });
+    $httpBackend.flush();
+
+    var result = vm.checkMyRole(vm.roles[0]);
+
+    expect(result).toEqual(false);
+  });
+
+  it('should be able to copy a role', function () {
+    fakeBackend.withRole({
+      BuiltIn: false,
+      DescriptionText: 'Agent',
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      IsAnyBuiltIn: true,
+      IsMyRole: false,
+      Name: 'Agent'
+    });
+    $httpBackend.flush();
+
+    vm.copyRole(vm.roles[0]);
+    $httpBackend.flush();
+
+    expect(vm.roles.length).toEqual(2);
+    expect(vm.roles[0].Name).toEqual('Agent');
+    expect(vm.roles[1].Name).toEqual('Agent');
+  });
+
+  it('should select newly copied role', function () {
+    fakeBackend.withRole({
+      BuiltIn: false,
+      IsSelected: true,
+      DescriptionText: 'Agent',
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      IsAnyBuiltIn: true,
+      IsMyRole: false,
+      Name: 'Agent'
+    });
+    $httpBackend.flush();
+
+    vm.copyRole(vm.roles[0]);
+    $httpBackend.flush();
+
+    expect(vm.roles[0].IsSelected).toBe(true);
+  });
+
+  it('should set newly copied role to selected role', function () {
+    fakeBackend
+      .withRole({
+        BuiltIn: false,
+        DescriptionText: 'Agent',
+        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        IsSelected: true,
+        Name: 'Agent'
+      })
+      .withApplicationFunction({
+        ChildFunctions: [],
+        FunctionCode: 'Raptor',
+        FunctionDescription: 'xxOpenRaptorApplication',
+        FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+        IsDisabled: false,
+        IsSelected: true,
+        LocalizedFunctionDescription: 'Open Teleopti WFM'
+      })
+      .withRoleInfo({
+        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+        AvailableFunctions: [
+          {
+            Id: '63656f9a-be16-4bb7-9012-9bde01232075'
+          }
+        ]
+      });
+    $httpBackend.flush();
+    vm.selectedRole = vm.roles[0];
+    vm.copyRole(vm.roles[0]);
+    $httpBackend.flush();
+
+    expect(vm.roles[1].IsSelected).toEqual(false);
+    expect(vm.selectedRole.Id).not.toEqual(vm.roles[1].Id)
+    expect(vm.roles.length).toEqual(2);
+  });
+
+  it('should unselect previously selected role when copying role', function () {
+    fakeBackend.withRole({
+      BuiltIn: false,
+      IsSelected: true,
+      DescriptionText: 'Agent',
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      IsAnyBuiltIn: true,
+      IsMyRole: false,
+      Name: 'Agent'
+    });
+    $httpBackend.flush();
+
+    vm.copyRole(vm.roles[0]);
+    $httpBackend.flush();
+
+    expect(vm.roles[1].IsSelected).toBe(false);
+  });
+
+  it('should put copied role on top of roles list', function () {
+    fakeBackend
+      .withRole({
+        BuiltIn: false,
+        DescriptionText: 'HermansRoll',
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        Name: 'HermansRoll'
+      }).withRole({
+        BuiltIn: false,
+        DescriptionText: 'Agent',
+        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        Name: 'Agent'
+      });
+    $httpBackend.flush();
+
+    vm.copyRole(vm.roles[1]);
+    $httpBackend.flush();
+
+    expect(vm.roles[0].Name).toEqual('Agent');
+  });
+
+  it('should be able to select a role', function () {
+    fakeBackend
+      .withRole({
+        BuiltIn: false,
+        DescriptionText: 'HermansRoll',
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        Name: 'HermansRoll'
+      })
+      .withRoleInfo({
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        AvailableFunctions: []
+      });
+    $httpBackend.flush();
+
+    vm.selectRole(vm.roles[0]);
+    $httpBackend.flush();
+
+    expect(vm.roles[0].IsSelected).toBe(true);
+  });
+
+  it('should deselect selcted role when selecting another role', function () {
+    fakeBackend
+      .withRole({
+        BuiltIn: false,
+        DescriptionText: 'CarlsRoll',
+        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        Name: 'CarlsRoll'
+      }).withRole({
+        BuiltIn: false,
+        DescriptionText: 'CarlsRoll',
+        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        Name: 'CarlsRoll'
+      })
+      .withRoleInfo({
+        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+        AvailableFunctions: []
+      });
+    $httpBackend.flush();
+
+    vm.selectRole(vm.roles[0]);
+    $httpBackend.flush();
+    vm.selectRole(vm.roles[1]);
+    $httpBackend.flush();
 
 
-                vm.createRole(name);
-                $httpBackend.flush();
+    expect(vm.roles[0].IsSelected).toBe(false);
+    expect(vm.roles[1].IsSelected).toBe(true);
+  });
 
-                expect(vm.showCreateModal).toBe(false);
-              });
+  it('should fetch additional info for selected role', function () {
+    fakeBackend
+      .withRole({
+        BuiltIn: false,
+        DescriptionText: 'HermansRoll',
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        Name: 'HermansRoll'
+      })
+      .withRoleInfo({
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        AvailableFunctions: [
+          {
+            Id: '63656f9a-be16-4bb7-9012-9bde01232075'
+          }
+        ]
+      });
+    $httpBackend.flush();
 
-              it('should clear new role name on submit', function () {
-                var name = 'rolename';
-                fakeBackend.withOrganizationSelection(
+    vm.selectRole(vm.roles[0]);
+    $httpBackend.flush();
+
+    expect(vm.selectedRole.AvailableFunctions[0].Id).toEqual('63656f9a-be16-4bb7-9012-9bde01232075');
+  });
+
+  it('should indicate available functions for selected role', function () {
+    fakeBackend
+      .withRole({
+        BuiltIn: false,
+        DescriptionText: 'HermansRoll',
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        Name: 'HermansRoll'
+      })
+      .withRoleInfo({
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        AvailableFunctions: [
+          {
+            Id: '63656f9a-be16-4bb7-9012-9bde01232075'
+          }
+        ]
+      }).withApplicationFunction({
+        ChildFunctions: [],
+        FunctionCode: 'Raptor',
+        FunctionDescription: 'xxOpenRaptorApplication',
+        FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+        IsDisabled: false,
+        LocalizedFunctionDescription: 'Open Teleopti WFM'
+      });;
+    $httpBackend.flush();
+
+    vm.selectRole(vm.roles[0]);
+    $httpBackend.flush();
+
+    expect(vm.applicationFunctions[0].IsSelected).toEqual(true);
+  });
+
+
+  it('should indicate available functions for selected role', function () {
+    fakeBackend
+      .withRole({
+        BuiltIn: false,
+        DescriptionText: 'HermansRoll',
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        Name: 'HermansRoll'
+      })
+      .withRoleInfo({
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        AvailableFunctions: [
+          {
+            Id: '63656f9a-be16-4bb7-9012-9bde01232075'
+          }
+        ]
+      }).withApplicationFunction({
+        FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+        ChildFunctions: []
+      }).withApplicationFunction({
+        FunctionId: '63656f9a-be16-4bb7-9012-9bde01232074',
+        ChildFunctions: []
+      });
+    $httpBackend.flush();
+
+    vm.selectRole(vm.roles[0]);
+    $httpBackend.flush();
+
+    expect(vm.applicationFunctions.find(function (fn) { return fn.FunctionId == '63656f9a-be16-4bb7-9012-9bde01232075' }).IsSelected).toEqual(true);
+    expect(vm.applicationFunctions.find(function (fn) { return fn.FunctionId == '63656f9a-be16-4bb7-9012-9bde01232074' }).IsSelected).toEqual(false);
+  });
+
+  it('should indicate all available functions for selected role', function () {
+    fakeBackend
+      .withRole({
+        BuiltIn: false,
+        DescriptionText: 'HermansRoll',
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        Name: 'HermansRoll'
+      })
+      .withRoleInfo({
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        AvailableFunctions: [
+          {
+            Id: '63656f9a-be16-4bb7-9012-9bde01232075',
+          },
+          {
+            Id: 'f73154af-8d6d-4250-b066-d6ead56bfc16',
+          }
+        ]
+      })
+      .withApplicationFunction({
+        FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+        ChildFunctions: [
+          {
+            FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+          }
+        ]
+      });
+    $httpBackend.flush();
+
+    vm.selectRole(vm.roles[0]);
+    $httpBackend.flush();
+
+    expect(vm.applicationFunctions[0].IsSelected).toEqual(true);
+    expect(vm.applicationFunctions[0].ChildFunctions[0].IsSelected).toEqual(true);
+  });
+
+
+  it('should indicate all available functions for selected role but BETTER', function () {
+    fakeBackend
+      .withRole({
+        BuiltIn: false,
+        DescriptionText: 'HermansRoll',
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        Name: 'HermansRoll'
+      })
+      .withRoleInfo({
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        AvailableFunctions: [
+          {
+            Id: '63656f9a-be16-4bb7-9012-9bde01232075'
+          },
+          {
+            Id: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+          }
+        ]
+      })
+      .withApplicationFunction({
+        FunctionId: '6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7',
+        Name: 'FunctionOne',
+        ChildFunctions: []
+      })
+      .withApplicationFunction({
+        FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+        Name: 'FunctionTwo',
+        ChildFunctions: [
+          {
+            FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc'
+          },
+          {
+            FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+          }
+        ]
+      });
+    $httpBackend.flush();
+
+    vm.selectRole(vm.roles[0]);
+    $httpBackend.flush();
+
+    expect(vm.applicationFunctions[1].IsSelected).toEqual(true);
+    expect(vm.applicationFunctions[1].ChildFunctions[0].IsSelected).toEqual(false);
+    expect(vm.applicationFunctions[1].ChildFunctions[1].IsSelected).toEqual(true);
+  });
+
+  it('should indicate all ApplicationFunctions and its ChildFunctions for selected role', function () {
+    fakeBackend
+      .withRole({
+        BuiltIn: false,
+        DescriptionText: 'HermansRoll',
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        Name: 'HermansRoll'
+      })
+      .withRoleInfo({
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        AvailableFunctions: [
+          {
+            Id: '63656f9a-be16-4bb7-9012-9bde01232075'
+          },
+          {
+            Id: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+          },
+          {
+            Id: '52b6f3de-55e0-45b2-922e-316f8538f60c'
+          }
+        ]
+      })
+      .withApplicationFunction({
+        FunctionId: '6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7',
+        Name: 'FunctionOne',
+        ChildFunctions: []
+      })
+      .withApplicationFunction({
+        FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+        Name: 'FunctionTwo',
+        ChildFunctions: [
+          {
+            FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc',
+            ChildFunctions: [
+              {
+                FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c',
+                ChildFunctions: [
                   {
-                    Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
-                    Name: "CarlCCDemo",
-                    Type: "BusinessUnit",
-                    ChildNodes: []
-                  });
-                  $httpBackend.flush();
-
-                  vm.createRole(name);
-                  $httpBackend.flush();
-
-                  expect(vm.roleName).toBe('');
-                });
-
-                it('should put newly created roll on top of roles list', function () {
-                  var name = 'rolename'
-                  fakeBackend
-                  .withRole({
-                    BuiltIn: false,
-                    DescriptionText: 'Agent',
-                    Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                    IsAnyBuiltIn: true,
-                    IsMyRole: false,
-                    Name: 'Agent'
-                  })
-                  .withRole(
-                    {
-                      BuiltIn: true,
-                      DescriptionText: 'SuperAdmin',
-                      Id: '7afefc4f-3231-401b-8174-6525a5e47f23',
-                      IsAnyBuiltIn: true,
-                      IsMyRole: true,
-                      Name: '_superAdmin'
-                    })
-                    .withOrganizationSelection(
-                      {
-                        Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
-                        Name: "CarlCCDemo",
-                        Type: "BusinessUnit",
-                        ChildNodes: []
-                      });
-                      $httpBackend.flush();
-
-                      vm.createRole(name);
-                      $httpBackend.flush();
-
-                      expect(vm.roles[0].DescriptionText).toBe(name);
-                    });
-
-                    xit('should be able to edit the name of a role', function (done) {
-                      fakeBackend.withRole({
-                        BuiltIn: false,
-                        DescriptionText: 'Agent',
-                        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                        IsAnyBuiltIn: true,
-                        IsMyRole: false,
-                        Name: 'Agent'
-                      });
-                      $httpBackend.flush();
-
-                      vm.editRole('newRoleName', vm.roles[0]);
-                      $httpBackend.flush();
-
-                      expect(vm.roles[0].DescriptionText).toBe('newRoleName');
-                      done();
-                    });
-
-                    it('should select edited role after name change', function () {
-                      fakeBackend.withRole({
-                        BuiltIn: false,
-                        DescriptionText: 'Agent',
-                        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                        IsAnyBuiltIn: true,
-                        IsMyRole: false,
-                        Name: 'Agent'
-                      });
-                      $httpBackend.flush();
-
-                      vm.editRole('newRoleName', vm.roles[0]);
-                      $httpBackend.flush();
-
-                      expect(vm.roles[0].IsSelected).toBe(true);
-                    });
-
-                    it('should be able to delete a roll', function () {
-                      fakeBackend.withRole({
-                        BuiltIn: false,
-                        DescriptionText: 'Agent',
-                        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                        IsAnyBuiltIn: true,
-                        IsMyRole: false,
-                        Name: 'Agent'
-                      })
-                      .withOrganizationSelection(
-                        {
-                          Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
-                          Name: "CarlCCDemo",
-                          Type: "BusinessUnit",
-                          ChildNodes: []
-                        });
-                        $httpBackend.flush();
-
-                        vm.deleteRole(vm.roles[0]);
-                        $httpBackend.flush();
-
-                        expect(vm.roles.length).toEqual(0);
-                      });
-
-                      it('should unselect selected org data for previous role when deleting that role', function() {
-                        fakeBackend
-                        .withRole({
-                          Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                          IsSelected: true
-                        })
-                        .withRoleInfo({
-                          Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                          AvailableFunctions: [],
-                          AvailableBusinessUnits: [
-                            {
-                              Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
-                              Name: "CarlCCDemo"
-                            }
-                          ],
-                          AvailableSites: [
-                            {
-                              Id: '41815804-7c51-4f43-a1ae-ecb2a17a2177',
-                              Name: 'Site1'
-                            }
-                          ],
-                          AvailableTeams: [
-                            {
-                              Id: '58643cfb-6f7d-4128-a014-0c8f82209d68',
-                              Name: 'Team1'
-                            }
-                          ]
-                        })
-                        .withOrganizationSelection(
-                          {
-                            Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
-                            Name: "CarlCCDemo",
-                            Type: "BusinessUnit",
-                            ChildNodes: [
-                              {
-                                Id: '41815804-7c51-4f43-a1ae-ecb2a17a2177',
-                                Name: 'Site1',
-                                IsSelected: true,
-                                ChildNodes: [
-                                  {
-                                    Id: '58643cfb-6f7d-4128-a014-0c8f82209d68',
-                                    Name: 'Team1',
-                                    IsSelected: true,
-                                  }
-                                ]
-                              }
-                            ]
-                          },
-                          []
-                        );
-                        $httpBackend.flush();
-
-                        vm.deleteRole(vm.roles[0]);
-                        $httpBackend.flush();
-
-                        expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toEqual(false);
-                        expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(false);
-                      });
-
-                      it('should clear selected role when deleting selected role', function () {
-                        fakeBackend.withRole({
-                          BuiltIn: false,
-                          DescriptionText: 'Agent',
-                          Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                          IsAnyBuiltIn: true,
-                          IsMyRole: false,
-                          Name: 'Agent'
-                        })
-                        .withOrganizationSelection(
-                          {
-                            Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
-                            Name: "CarlCCDemo",
-                            Type: "BusinessUnit",
-                            ChildNodes: []
-                          });
-                          $httpBackend.flush();
-                          vm.selectRole = vm.roles[0];
-
-                          vm.deleteRole(vm.roles[0]);
-                          $httpBackend.flush();
-
-                          expect(vm.selectedRole.Id).not.toEqual('e7f360d3-c4b6-41fc-9b2d-9b5e015aae64');
-                        });
-
-                        it('should unselect role functions when deleting that role', function () {
-                          fakeBackend.withRole({
-                            BuiltIn: false,
-                            DescriptionText: 'Agent',
-                            Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                            IsAnyBuiltIn: true,
-                            IsMyRole: false,
-                            IsSelected: true,
-                            Name: 'Agent'
-                          }).withApplicationFunction({
-                            ChildFunctions: [],
-                            FunctionCode: 'Raptor',
-                            FunctionDescription: 'xxOpenRaptorApplication',
-                            FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
-                            IsDisabled: false,
-                            IsSelected: true,
-                            LocalizedFunctionDescription: 'Open Teleopti WFM'
-                          }).withRoleInfo({
-                            Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                            AvailableFunctions: [
-                              {
-                                Id: '63656f9a-be16-4bb7-9012-9bde01232075'
-                              }
-                            ]
-                          })
-                          .withOrganizationSelection(
-                            {
-                              Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
-                              Name: "CarlCCDemo",
-                              Type: "BusinessUnit",
-                              ChildNodes: []
-                            });
-                            $httpBackend.flush();
-                            vm.selectedRole = vm.roles[0];
-                            vm.deleteRole(vm.roles[0]);
-                            $httpBackend.flush();
-
-                            expect(vm.applicationFunctions[0].IsSelected).toEqual(false);
-                          });
-
-                          it('should not unselect role functions for selected role when deleting other role', function () {
-                            fakeBackend
-                            .withRole({
-                              BuiltIn: false,
-                              DescriptionText: 'Agent',
-                              Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                              IsAnyBuiltIn: true,
-                              IsMyRole: false,
-                              IsSelected: true,
-                              Name: 'Agent'
-                            })
-                            .withApplicationFunction({
-                              ChildFunctions: [],
-                              FunctionCode: 'Raptor',
-                              FunctionDescription: 'xxOpenRaptorApplication',
-                              FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
-                              IsDisabled: false,
-                              IsSelected: true,
-                              LocalizedFunctionDescription: 'Open Teleopti WFM'
-                            })
-                            .withRoleInfo({
-                              Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                              AvailableFunctions: [
-                                {
-                                  Id: '63656f9a-be16-4bb7-9012-9bde01232075'
-                                }
-                              ]
-                            })
-                            .withRole({
-                              BuiltIn: false,
-                              DescriptionText: 'Carl',
-                              Id: 'f1e9237f-7bd8-4ca9-aebb-e49b80d8a4cf',
-                              IsAnyBuiltIn: true,
-                              IsMyRole: false,
-                              IsSelected: false,
-                              Name: 'Agent'
-                            })
-                            .withOrganizationSelection(
-                              {
-                                Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
-                                Name: "CarlCCDemo",
-                                Type: "BusinessUnit",
-                                ChildNodes: []
-                              });
-                              $httpBackend.flush();
-                              vm.selectedRole = vm.roles[0];
-
-                              vm.deleteRole(vm.roles[1]);
-                              $httpBackend.flush();
-
-                              expect(vm.roles[0].IsSelected).toEqual(true);
-                              expect(vm.applicationFunctions[0].IsSelected).toEqual(true);
-                              expect(vm.roles.length).toEqual(1);
-                            });
-
-                            it('should not be able to delete a built in roll', function () {
-                              fakeBackend.withRole({
-                                BuiltIn: true,
-                                DescriptionText: 'Systemadministator',
-                                Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                                IsAnyBuiltIn: true,
-                                IsMyRole: false,
-                                Name: '_superUser'
-                              });
-                              $httpBackend.flush();
-
-                              vm.deleteRole(vm.roles[0]);
-
-                              expect(vm.roles.length).toEqual(1);
-                            });
-
-                            it('should not be able to modify Built in role', function () {
-                              fakeBackend.withRole({
-                                BuiltIn: true,
-                                DescriptionText: 'Systemadministator',
-                                Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                                IsAnyBuiltIn: true,
-                                IsMyRole: true,
-                                Name: '_superUser'
-                              });
-                              $httpBackend.flush();
-
-                              var result = vm.checkMyRole(vm.roles[0]);
-
-                              expect(result).toEqual(false);
-                            });
-
-                            it('should be able to copy a role', function () {
-                              fakeBackend.withRole({
-                                BuiltIn: false,
-                                DescriptionText: 'Agent',
-                                Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                                IsAnyBuiltIn: true,
-                                IsMyRole: false,
-                                Name: 'Agent'
-                              });
-                              $httpBackend.flush();
-
-                              vm.copyRole(vm.roles[0]);
-                              $httpBackend.flush();
-
-                              expect(vm.roles.length).toEqual(2);
-                              expect(vm.roles[0].Name).toEqual('Agent');
-                              expect(vm.roles[1].Name).toEqual('Agent');
-                            });
-
-                            it('should select newly copied role', function () {
-                              fakeBackend.withRole({
-                                BuiltIn: false,
-                                IsSelected: true,
-                                DescriptionText: 'Agent',
-                                Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                                IsAnyBuiltIn: true,
-                                IsMyRole: false,
-                                Name: 'Agent'
-                              });
-                              $httpBackend.flush();
-
-                              vm.copyRole(vm.roles[0]);
-                              $httpBackend.flush();
-
-                              expect(vm.roles[0].IsSelected).toBe(true);
-                            });
-
-                            it('should set newly copied role to selected role', function () {
-                              fakeBackend
-                              .withRole({
-                                BuiltIn: false,
-                                DescriptionText: 'Agent',
-                                Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                                IsAnyBuiltIn: true,
-                                IsMyRole: false,
-                                IsSelected: true,
-                                Name: 'Agent'
-                              })
-                              .withApplicationFunction({
-                                ChildFunctions: [],
-                                FunctionCode: 'Raptor',
-                                FunctionDescription: 'xxOpenRaptorApplication',
-                                FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
-                                IsDisabled: false,
-                                IsSelected: true,
-                                LocalizedFunctionDescription: 'Open Teleopti WFM'
-                              })
-                              .withRoleInfo({
-                                Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                                AvailableFunctions: [
-                                  {
-                                    Id: '63656f9a-be16-4bb7-9012-9bde01232075'
-                                  }
-                                ]
-                              });
-                              $httpBackend.flush();
-                              vm.selectedRole = vm.roles[0];
-                              vm.copyRole(vm.roles[0]);
-                              $httpBackend.flush();
-
-                              expect(vm.roles[1].IsSelected).toEqual(false);
-                              expect(vm.selectedRole.Id).not.toEqual(vm.roles[1].Id)
-                              expect(vm.roles.length).toEqual(2);
-                            });
-
-                            it('should unselect previously selected role when copying role', function () {
-                              fakeBackend.withRole({
-                                BuiltIn: false,
-                                IsSelected: true,
-                                DescriptionText: 'Agent',
-                                Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                                IsAnyBuiltIn: true,
-                                IsMyRole: false,
-                                Name: 'Agent'
-                              });
-                              $httpBackend.flush();
-
-                              vm.copyRole(vm.roles[0]);
-                              $httpBackend.flush();
-
-                              expect(vm.roles[1].IsSelected).toBe(false);
-                            });
-
-                            it('should put copied role on top of roles list', function () {
-                              fakeBackend
-                              .withRole({
-                                BuiltIn: false,
-                                DescriptionText: 'HermansRoll',
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                IsAnyBuiltIn: true,
-                                IsMyRole: false,
-                                Name: 'HermansRoll'
-                              }).withRole({
-                                BuiltIn: false,
-                                DescriptionText: 'Agent',
-                                Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                                IsAnyBuiltIn: true,
-                                IsMyRole: false,
-                                Name: 'Agent'
-                              });
-                              $httpBackend.flush();
-
-                              vm.copyRole(vm.roles[1]);
-                              $httpBackend.flush();
-
-                              expect(vm.roles[0].Name).toEqual('Agent');
-                            });
-
-                            it('should be able to select a role', function () {
-                              fakeBackend
-                              .withRole({
-                                BuiltIn: false,
-                                DescriptionText: 'HermansRoll',
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                IsAnyBuiltIn: true,
-                                IsMyRole: false,
-                                Name: 'HermansRoll'
-                              })
-                              .withRoleInfo({
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                AvailableFunctions: []
-                              });
-                              $httpBackend.flush();
-
-                              vm.selectRole(vm.roles[0]);
-                              $httpBackend.flush();
-
-                              expect(vm.roles[0].IsSelected).toBe(true);
-                            });
-
-                            it('should deselect selcted role when selecting another role', function () {
-                              fakeBackend
-                              .withRole({
-                                BuiltIn: false,
-                                DescriptionText: 'CarlsRoll',
-                                Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                                IsAnyBuiltIn: true,
-                                IsMyRole: false,
-                                Name: 'CarlsRoll'
-                              }).withRole({
-                                BuiltIn: false,
-                                DescriptionText: 'CarlsRoll',
-                                Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                                IsAnyBuiltIn: true,
-                                IsMyRole: false,
-                                Name: 'CarlsRoll'
-                              })
-                              .withRoleInfo({
-                                Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                                AvailableFunctions: []
-                              });
-                              $httpBackend.flush();
-
-                              vm.selectRole(vm.roles[0]);
-                              $httpBackend.flush();
-                              vm.selectRole(vm.roles[1]);
-                              $httpBackend.flush();
-
-
-                              expect(vm.roles[0].IsSelected).toBe(false);
-                              expect(vm.roles[1].IsSelected).toBe(true);
-                            });
-
-                            it('should fetch additional info for selected role', function () {
-                              fakeBackend
-                              .withRole({
-                                BuiltIn: false,
-                                DescriptionText: 'HermansRoll',
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                IsAnyBuiltIn: true,
-                                IsMyRole: false,
-                                Name: 'HermansRoll'
-                              })
-                              .withRoleInfo({
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                AvailableFunctions: [
-                                  {
-                                    Id: '63656f9a-be16-4bb7-9012-9bde01232075'
-                                  }
-                                ]
-                              });
-                              $httpBackend.flush();
-
-                              vm.selectRole(vm.roles[0]);
-                              $httpBackend.flush();
-
-                              expect(vm.selectedRole.AvailableFunctions[0].Id).toEqual('63656f9a-be16-4bb7-9012-9bde01232075');
-                            });
-
-                            it('should indicate available functions for selected role', function () {
-                              fakeBackend
-                              .withRole({
-                                BuiltIn: false,
-                                DescriptionText: 'HermansRoll',
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                IsAnyBuiltIn: true,
-                                IsMyRole: false,
-                                Name: 'HermansRoll'
-                              })
-                              .withRoleInfo({
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                AvailableFunctions: [
-                                  {
-                                    Id: '63656f9a-be16-4bb7-9012-9bde01232075'
-                                  }
-                                ]
-                              }).withApplicationFunction({
-                                ChildFunctions: [],
-                                FunctionCode: 'Raptor',
-                                FunctionDescription: 'xxOpenRaptorApplication',
-                                FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
-                                IsDisabled: false,
-                                LocalizedFunctionDescription: 'Open Teleopti WFM'
-                              });;
-                              $httpBackend.flush();
-
-                              vm.selectRole(vm.roles[0]);
-                              $httpBackend.flush();
-
-                              expect(vm.applicationFunctions[0].IsSelected).toEqual(true);
-                            });
-
-
-                            it('should indicate available functions for selected role', function () {
-                              fakeBackend
-                              .withRole({
-                                BuiltIn: false,
-                                DescriptionText: 'HermansRoll',
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                IsAnyBuiltIn: true,
-                                IsMyRole: false,
-                                Name: 'HermansRoll'
-                              })
-                              .withRoleInfo({
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                AvailableFunctions: [
-                                  {
-                                    Id: '63656f9a-be16-4bb7-9012-9bde01232075'
-                                  }
-                                ]
-                              }).withApplicationFunction({
-                                FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
-                                ChildFunctions: []
-                              }).withApplicationFunction({
-                                FunctionId: '63656f9a-be16-4bb7-9012-9bde01232074',
-                                ChildFunctions: []
-                              });
-                              $httpBackend.flush();
-
-                              vm.selectRole(vm.roles[0]);
-                              $httpBackend.flush();
-
-                              expect(vm.applicationFunctions.find(function (fn) { return fn.FunctionId == '63656f9a-be16-4bb7-9012-9bde01232075' }).IsSelected).toEqual(true);
-                              expect(vm.applicationFunctions.find(function (fn) { return fn.FunctionId == '63656f9a-be16-4bb7-9012-9bde01232074' }).IsSelected).toEqual(false);
-                            });
-
-                            it('should indicate all available functions for selected role', function () {
-                              fakeBackend
-                              .withRole({
-                                BuiltIn: false,
-                                DescriptionText: 'HermansRoll',
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                IsAnyBuiltIn: true,
-                                IsMyRole: false,
-                                Name: 'HermansRoll'
-                              })
-                              .withRoleInfo({
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                AvailableFunctions: [
-                                  {
-                                    Id: '63656f9a-be16-4bb7-9012-9bde01232075',
-                                  },
-                                  {
-                                    Id: 'f73154af-8d6d-4250-b066-d6ead56bfc16',
-                                  }
-                                ]
-                              })
-                              .withApplicationFunction({
-                                FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
-                                ChildFunctions: [
-                                  {
-                                    FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
-                                  }
-                                ]
-                              });
-                              $httpBackend.flush();
-
-                              vm.selectRole(vm.roles[0]);
-                              $httpBackend.flush();
-
-                              expect(vm.applicationFunctions[0].IsSelected).toEqual(true);
-                              expect(vm.applicationFunctions[0].ChildFunctions[0].IsSelected).toEqual(true);
-                            });
-
-
-                            it('should indicate all available functions for selected role but BETTER', function () {
-                              fakeBackend
-                              .withRole({
-                                BuiltIn: false,
-                                DescriptionText: 'HermansRoll',
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                IsAnyBuiltIn: true,
-                                IsMyRole: false,
-                                Name: 'HermansRoll'
-                              })
-                              .withRoleInfo({
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                AvailableFunctions: [
-                                  {
-                                    Id: '63656f9a-be16-4bb7-9012-9bde01232075'
-                                  },
-                                  {
-                                    Id: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
-                                  }
-                                ]
-                              })
-                              .withApplicationFunction({
-                                FunctionId: '6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7',
-                                Name: 'FunctionOne',
-                                ChildFunctions: []
-                              })
-                              .withApplicationFunction({
-                                FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
-                                Name: 'FunctionTwo',
-                                ChildFunctions: [
-                                  {
-                                    FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc'
-                                  },
-                                  {
-                                    FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
-                                  }
-                                ]
-                              });
-                              $httpBackend.flush();
-
-                              vm.selectRole(vm.roles[0]);
-                              $httpBackend.flush();
-
-                              expect(vm.applicationFunctions[1].IsSelected).toEqual(true);
-                              expect(vm.applicationFunctions[1].ChildFunctions[0].IsSelected).toEqual(false);
-                              expect(vm.applicationFunctions[1].ChildFunctions[1].IsSelected).toEqual(true);
-                            });
-
-                            it('should indicate all ApplicationFunctions and its ChildFunctions for selected role', function () {
-                              fakeBackend
-                              .withRole({
-                                BuiltIn: false,
-                                DescriptionText: 'HermansRoll',
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                IsAnyBuiltIn: true,
-                                IsMyRole: false,
-                                Name: 'HermansRoll'
-                              })
-                              .withRoleInfo({
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                AvailableFunctions: [
-                                  {
-                                    Id: '63656f9a-be16-4bb7-9012-9bde01232075'
-                                  },
-                                  {
-                                    Id: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
-                                  },
-                                  {
-                                    Id: '52b6f3de-55e0-45b2-922e-316f8538f60c'
-                                  }
-                                ]
-                              })
-                              .withApplicationFunction({
-                                FunctionId: '6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7',
-                                Name: 'FunctionOne',
-                                ChildFunctions: []
-                              })
-                              .withApplicationFunction({
-                                FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
-                                Name: 'FunctionTwo',
-                                ChildFunctions: [
-                                  {
-                                    FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc',
-                                    ChildFunctions: [
-                                      {
-                                        FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c',
-                                        ChildFunctions: [
-                                          {
-                                            FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc'
-                                          },
-                                          {
-                                            FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c'
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
-                                  }
-                                ]
-                              });
-                              $httpBackend.flush();
-
-                              vm.selectRole(vm.roles[0]);
-                              $httpBackend.flush();
-
-                              expect(vm.applicationFunctions[1].IsSelected).toEqual(true);
-                              expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].IsSelected).toEqual(true);
-                              expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].ChildFunctions[1].IsSelected).toEqual(true);
-                            });
-
-                            it('should fetch organization info for selected role', function () {
-                              fakeBackend
-                              .withRole({
-                                BuiltIn: false,
-                                DescriptionText: 'HermansRoll',
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                IsAnyBuiltIn: true,
-                                IsMyRole: false,
-                                Name: 'HermansRoll'
-                              })
-                              .withRoleInfo({
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                AvailableDataRange: 3,
-                                AvailableFunctions: [],
-                                AvailableSites: [
-                                  {
-                                    Id: 'd66f60f5-264c-4277-80eb-9b5e015ab495'
-                                  }
-                                ],
-                                AvailableTeams: [
-                                  {
-                                    Id: '6a21c802-7a34-4917-8dfd-9b5e015ab461'
-                                  }
-                                ]
-                              })
-                              $httpBackend.flush();
-
-                              vm.selectRole(vm.roles[0]);
-                              $httpBackend.flush();
-
-                              expect(vm.selectedRole.AvailableDataRange).toEqual(3);
-                              expect(vm.selectedRole.AvailableSites[0].Id).toEqual('d66f60f5-264c-4277-80eb-9b5e015ab495');
-                              expect(vm.selectedRole.AvailableTeams[0].Id).toEqual('6a21c802-7a34-4917-8dfd-9b5e015ab461');
-                            });
-
-                            it('should indicate available business unit for selected role', function () {
-                              fakeBackend
-                              .withRole({
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0'
-                              })
-                              .withRoleInfo({
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                AvailableFunctions: [],
-                                AvailableBusinessUnits: [
-                                  {
-                                    Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
-                                    Name: "CarlCCDemo"
-                                  },
-                                  {
-                                    Id: "928dd0bc-bf40-412e-b970-b48036bc27d0",
-                                    Name: "TeleoptiCCCDemo"
-                                  }
-                                ]
-                              })
-                              .withOrganizationSelection(
-                                {
-                                  ChildNodes: [],
-                                  Id: "928dd0bc-bf40-412e-b970-b48036bc27d0",
-                                  Name: "TeleoptiCCCDemo"
-                                },
-                                []
-                              );
-                              $httpBackend.flush();
-
-                              vm.selectRole(vm.roles[0]);
-                              $httpBackend.flush();
-
-                              expect(vm.organizationSelection.BusinessUnit.IsSelected).toBe(true);
-                            });
-
-                            it('should indicate available site for selected role', function () {
-                              fakeBackend
-                              .withRole({
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0'
-                              })
-                              .withRoleInfo({
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                AvailableFunctions: [],
-                                AvailableBusinessUnits: [
-                                  {
-                                    Id: "928dd0bc-bf40-412e-b970-b48036bc27d0",
-                                    Name: "TeleoptiCCCDemo"
-                                  }
-                                ],
-                                AvailableDataRange: 3,
-                                AvailableSites: [
-                                  {
-                                    Id: 'd66f60f5-264c-4277-80eb-9b5e015ab495'
-                                  }
-                                ]
-                              })
-                              .withOrganizationSelection(
-                                {
-                                  Id: "928dd0bc-bf40-412e-b970-b48036bc27d0",
-                                  Name: "TeleoptiCCCDemo",
-                                  ChildNodes: [
-                                    {
-                                      Id: 'd66f60f5-264c-4277-80eb-9b5e015ab495'
-                                    },
-                                    {
-                                      Id: '8c2dfdc5-6f92-4fab-9a39-676b88c26a53'
-                                    }
-                                  ]
-                                },
-                                []
-                              );
-                              $httpBackend.flush();
-
-                              vm.selectRole(vm.roles[0]);
-                              $httpBackend.flush();
-
-                              expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toBe(false);
-                              expect(vm.organizationSelection.BusinessUnit.ChildNodes[1].IsSelected).toBe(true);
-                            });
-
-                            it('should indicate available business unit when selecting a different role', function () {
-                              fakeBackend
-                              .withRole({
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                Name: 'Carl'
-                              })
-                              .withRoleInfo({
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                AvailableFunctions: [],
-                                AvailableBusinessUnits: [
-                                  {
-                                    Id: "729b9399-d80a-46a7-a0dd-df18b89b12b9",
-                                    Name: "TeleoptiCCCDemo"
-                                  }
-                                ],
-                                AvailableSites: [
-                                  {
-                                    Id: "b36f9ab9-2f2a-472e-9a51-5a8dbf47b7b1",
-                                    Name: "London",
-                                  }
-                                ],
-                                AvailableTeams: [
-                                    {
-                                      Id: "95de4e34-6f18-4129-a962-7cf0d57f1ac4",
-                                      Name: "London-Team1",
-                                    },
-                                    {
-                                      Id: "6f4cec84-f5ce-4e62-9fc2-274172ec385b",
-                                      Name: "London-Team2",
-                                    }
-                                ]
-                              })
-                              .withRole({
-                                Id: '9c8e66ed-088e-41c8-8704-7110220f8fac',
-                                Name: 'Herman'
-                              })
-                              .withRoleInfo({
-                                Id: '9c8e66ed-088e-41c8-8704-7110220f8fac',
-                                AvailableFunctions: [],
-                                AvailableBusinessUnits: [
-                                  {
-                                    Id: "729b9399-d80a-46a7-a0dd-df18b89b12b9",
-                                    Name: "TeleoptiCCCDemo"
-                                  }
-                                ],
-                                AvailableSites: [
-                                  {
-                                    Id: "123f651b-5235-40d4-9d34-6be51b55df65",
-                                    Name: "Paris",
-                                  }
-                                ],
-                                AvailableTeams: [
-                                    {
-                                      Id: "000478e4-d11f-42bc-9ead-435f2eab160a",
-                                      Name: "Paris-Team1",
-                                    },
-                                    {
-                                      Id: "930addd3-79c6-47ef-96e2-6c68c8f522f3",
-                                      Name: "Paris-Team2",
-                                    }
-                                ]
-                              })
-                              .withOrganizationSelection(
-                                {
-                                  Id: "729b9399-d80a-46a7-a0dd-df18b89b12b9",
-                                  Name: "TeleoptiCCCDemo",
-                                  ChildNodes: [
-                                    {
-                                      Id: 'b36f9ab9-2f2a-472e-9a51-5a8dbf47b7b1',
-                                      Name: 'London',
-                                      ChildNodes: [
-                                        {
-                                          Id: "95de4e34-6f18-4129-a962-7cf0d57f1ac4",
-                                          Name: "London-Team1"
-                                        },
-                                        {
-                                          Id: "6f4cec84-f5ce-4e62-9fc2-274172ec385b",
-                                          Name: "London-Team2"
-                                        }
-                                      ]
-                                    },// HERMAN //
-                                    {
-                                      Id: '123f651b-5235-40d4-9d34-6be51b55df65',
-                                      Name: 'Paris',
-                                      ChildNodes: [
-                                        {
-                                          Id: "000478e4-d11f-42bc-9ead-435f2eab160a",
-                                          Name: "Paris-Team1",
-                                        },
-                                        {
-                                          Id: "930addd3-79c6-47ef-96e2-6c68c8f522f3",
-                                          Name: "Paris-Team2",
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                []
-                              );
-                              $httpBackend.flush();
-
-                              vm.selectRole(vm.roles[0]);
-                              $httpBackend.flush();
-                              vm.selectRole(vm.roles[1]);
-                              $httpBackend.flush();
-
-                              console.log(vm.organizationSelection.BusinessUnit.ChildNodes);
-                              expect(vm.organizationSelection.BusinessUnit.IsSelected).toBe(true);
-                              expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toBe(false);
-                              expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toBe(false);
-                              expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[1].IsSelected).toBe(false);
-                              expect(vm.organizationSelection.BusinessUnit.ChildNodes[1].IsSelected).toBe(true);
-                              expect(vm.organizationSelection.BusinessUnit.ChildNodes[1].ChildNodes[0].IsSelected).toBe(true);
-                              expect(vm.organizationSelection.BusinessUnit.ChildNodes[1].ChildNodes[1].IsSelected).toBe(true);
-                            });
-
-                            ///FORTSÄTT HÄR JAO,,,, det här måste fixas inom sin tid ändå latmaskar....
-                            xit('should indicate available business unit when selecting a different role', function () {
-                              fakeBackend
-                              .withRole({
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                Name: 'Carl'
-                              })
-                              .withRoleInfo({
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                AvailableFunctions: [],
-                                AvailableBusinessUnits: [
-                                  {
-                                    Id: "729b9399-d80a-46a7-a0dd-df18b89b12b9",
-                                    Name: "CarlCCDemo"
-                                  }
-                                ],
-                                AvailableSites: [
-                                  {
-                                    Id: "b36f9ab9-2f2a-472e-9a51-5a8dbf47b7b1",
-                                    Name: "Site1",
-                                    ChildNodes: []
-                                  },
-                                  {
-                                    Id: "34f3c450-c206-454c-96ab-623c8daa7c53",
-                                    Name: "Site2",
-                                    ChildNodes: []
-                                  }
-                                ]
-                              })
-                              .withRole({
-                                Id: '9c8e66ed-088e-41c8-8704-7110220f8fac',
-                                Name: 'Herman'
-                              })
-                              .withRoleInfo({
-                                Id: '9c8e66ed-088e-41c8-8704-7110220f8fac',
-                                AvailableFunctions: [],
-                                AvailableBusinessUnits: [
-                                  {
-                                    Id: "729b9399-d80a-46a7-a0dd-df18b89b12b9",
-                                    Name: "CarlCCDemo"
-                                  }
-                                ],
-                                AvailableSites: [
-                                  {
-                                    Id: "123f651b-5235-40d4-9d34-6be51b55df65",
-                                    Name: "SiteA",
-                                    ChildNodes: []
-                                  },
-                                  {
-                                    Id: "438ab59e-5c50-48c6-bd11-dc0ccd2af5d5",
-                                    Name: "SiteB",
-                                    ChildNodes: []
-                                  }
-                                ]
-                              })
-                              .withOrganizationSelection(
-                                {
-                                  Id: "729b9399-d80a-46a7-a0dd-df18b89b12b9",
-                                  Name: "TeleoptiCCCDemo",
-                                  ChildNodes: [
-                                    {
-                                      Id: 'b36f9ab9-2f2a-472e-9a51-5a8dbf47b7b1',
-                                      ChildNodes: []
-                                    },
-                                    {
-                                      Id: '34f3c450-c206-454c-96ab-623c8daa7c53',
-                                      ChildNodes: []
-                                    },
-                                    {
-                                      Id: '123f651b-5235-40d4-9d34-6be51b55df65',
-                                      ChildNodes: []
-                                    },
-                                    {
-                                      Id: '438ab59e-5c50-48c6-bd11-dc0ccd2af5d5',
-                                      ChildNodes: []
-                                    }
-                                  ]
-                                },
-                                []
-                              );
-                              $httpBackend.flush();
-
-                              vm.selectRole(vm.roles[0]);
-                              $httpBackend.flush();
-                              vm.selectRole(vm.roles[1]);
-                              $httpBackend.flush();
-
-                              expect(vm.organizationSelection.BusinessUnit.IsSelected).toBe(true);
-                              expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toBe(false);
-                              expect(vm.organizationSelection.BusinessUnit.ChildNodes[1].IsSelected).toBe(false);
-                              expect(vm.organizationSelection.BusinessUnit.ChildNodes[2].IsSelected).toBe(true);
-                              expect(vm.organizationSelection.BusinessUnit.ChildNodes[3].IsSelected).toBe(true);
-                            });
-
-                            it('should select all functions when toggle all function', function () {
-                              fakeBackend
-                              .withApplicationFunction({
-                                FunctionId: '6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7',
-                                Name: 'All',
-                                ChildFunctions: [],
-                                IsSelected: false
-                              })
-                              .withApplicationFunction({
-                                FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
-                                Name: 'FunctionTwo',
-                                ChildFunctions: [
-                                  {
-                                    FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc',
-                                    ChildFunctions: [
-                                      {
-                                        FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c',
-                                        ChildFunctions: [
-                                          {
-                                            FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc'
-                                          },
-                                          {
-                                            FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c'
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
-                                  }
-                                ]
-                              });
-                              $httpBackend.flush();
-
-                              vm.toggleAllFunction();
-                              $httpBackend.flush();
-
-                              expect(vm.applicationFunctions[0].IsSelected).toEqual(true);
-                              expect(vm.applicationFunctions[1].IsSelected).toEqual(true);
-                              expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].IsSelected).toEqual(true);
-                              expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].ChildFunctions[1].IsSelected).toEqual(true);
-                            });
-
-                            it('should save all functions for role when toggle all function', function () {
-                              fakeBackend
-                              .withRole({
-                                BuiltIn: false,
-                                DescriptionText: 'HermansRoll',
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                IsAnyBuiltIn: true,
-                                IsMyRole: false,
-                                Name: 'HermansRoll'
-                              })
-                              .withRoleInfo({
-                                Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                AvailableFunctions: []
-                              })
-                              .withApplicationFunction({
-                                FunctionId: '6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7',
-                                Name: 'All',
-                                ChildFunctions: [],
-                                IsSelected: false
-                              })
-                              .withApplicationFunction({
-                                FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
-                                Name: 'FunctionTwo',
-                                ChildFunctions: [
-                                  {
-                                    FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc',
-                                    ChildFunctions: [
-                                      {
-                                        FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c',
-                                        ChildFunctions: [
-                                          {
-                                            FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc'
-                                          },
-                                          {
-                                            FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c'
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
-                                  }
-                                ]
-                              });
-                              $httpBackend.flush();
-                              spyOn(permissionsDataService, 'selectAllFunction');
-
-                              vm.selectRole(vm.roles[0]);
-                              $httpBackend.flush();
-                              vm.toggleAllFunction();
-
-                              expect(permissionsDataService.selectAllFunction).toHaveBeenCalled();
-                            });
-
-                            it('should delete all functions for role when untoggle all function', function () {
-                              fakeBackend
-                              .withRole({
-                                BuiltIn: false,
-                                DescriptionText: 'HermansRoll',
-                                Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                                IsAnyBuiltIn: true,
-                                IsMyRole: false,
-                                Name: 'HermansRoll'
-                              })
-                              .withRoleInfo({
-                                Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                                AvailableFunctions: [
-                                  {
-                                    Id: '6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7'
-                                  },
-                                  {
-                                    Id: '63656f9a-be16-4bb7-9012-9bde01232075'
-                                  },
-                                  {
-                                    Id: '7656320f-1391-4332-bcaa-6cf16cbcb8dc'
-                                  },
-                                  {
-                                    Id: '52b6f3de-55e0-45b2-922e-316f8538f60c'
-                                  },
-                                  {
-                                    Id: '6856320f-1391-4332-bcaa-6cf16cbcb8dc'
-                                  },
-                                  {
-                                    Id: '52b6f3de-55e0-45b2-922e-316f8538f60c'
-                                  },
-                                  {
-                                    Id: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
-                                  },
-                                  {
-                                    Id: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
-                                  }
-                                ]
-                              })
-                              .withApplicationFunction({
-                                FunctionId: '6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7',
-                                Name: 'All',
-                                ChildFunctions: [],
-                                IsSelected: true
-                              })
-                              .withApplicationFunction({
-                                FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
-                                Name: 'FunctionTwo',
-                                ChildFunctions: [
-                                  {
-                                    FunctionId: '7656320f-1391-4332-bcaa-6cf16cbcb8dc',
-                                    ChildFunctions: [
-                                      {
-                                        FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c',
-                                        ChildFunctions: [
-                                          {
-                                            FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc'
-                                          },
-                                          {
-                                            FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c'
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
-                                  }
-                                ]
-                              });
-                              $httpBackend.flush();
-                              spyOn(permissionsDataService, 'selectAllFunction');
-
-                              vm.selectRole(vm.roles[0]);
-                              $httpBackend.flush();
-                              vm.toggleAllFunction();
-
-                              expect(permissionsDataService.selectAllFunction).toHaveBeenCalled();
-                            });
-
-                            it('should deselect all functions when toggle all function', function () {
-                              fakeBackend
-                              .withApplicationFunction({
-                                FunctionId: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-                                Name: 'All',
-                                ChildFunctions: [],
-                                IsSelected: true
-                              })
-                              .withApplicationFunction({
-                                FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
-                                Name: 'FunctionTwo',
-                                IsSelected: true,
-                                ChildFunctions: [
-                                  {
-                                    FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc',
-                                    IsSelected: true,
-                                    ChildFunctions: [
-                                      {
-                                        FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c',
-                                        IsSelected: true,
-                                        ChildFunctions: [
-                                          {
-                                            FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc',
-                                            IsSelected: true
-                                          },
-                                          {
-                                            FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c',
-                                            IsSelected: true
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16',
-                                        IsSelected: true
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16',
-                                    IsSelected: true
-                                  }
-                                ]
-                              });
-                              $httpBackend.flush();
-
-                              vm.toggleAllFunction();
-                              $httpBackend.flush();
-
-                              expect(vm.applicationFunctions[0].IsSelected).toEqual(false);
-                              expect(vm.applicationFunctions[1].IsSelected).toEqual(false);
-                              expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].IsSelected).toEqual(false);
-                              expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].ChildFunctions[1].IsSelected).toEqual(false);
-                            });
-
-                            it('should only show selected function when pressing selected filter', function () {
-                              inject(function ($filter) {
-                                fakeBackend
-                                .withRole({
-                                  BuiltIn: false,
-                                  DescriptionText: 'HermansRoll',
-                                  Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                  IsAnyBuiltIn: true,
-                                  IsMyRole: false,
-                                  Name: 'HermansRoll'
-                                })
-                                .withRoleInfo({
-                                  Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                  AvailableFunctions: [
-                                    {
-                                      Id: '63656f9a-be16-4bb7-9012-9bde01232075',
-                                      IsSelected: true
-                                    }
-                                  ]
-                                })
-                                .withApplicationFunction({
-                                  FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
-                                  Name: 'SelectedFunction',
-                                  ChildFunctions: [],
-                                  IsSelected: true
-                                })
-                                .withApplicationFunction({
-                                  FunctionId: '9995eba9-c304-40b7-866b-5c77b3e76f8d',
-                                  Name: 'UnselectedFunction',
-                                  ChildFunctions: [],
-                                  IsSelected: false
-                                });
-                                $httpBackend.flush();
-
-                                vm.selectRole(vm.roles[0]);
-                                $httpBackend.flush();
-                                vm.selectedFunctionsFilter();
-
-                                expect(vm.componentFunctions.length).toEqual(1);
-                              });
-                            });
-                            //DEN HÄR KÄNNS LITE SMÅ FUNKY CAAARL
-                            it('should reset filters', function () {
-                              inject(function ($filter) {
-                                fakeBackend
-                                .withRole({
-                                  BuiltIn: false,
-                                  DescriptionText: 'HermansRoll',
-                                  Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                  IsAnyBuiltIn: true,
-                                  IsMyRole: false,
-                                  Name: 'HermansRoll'
-                                })
-                                .withRoleInfo({
-                                  Id: '4b102279-888a-45ee-b537-b48036bc27d0',
-                                  AvailableFunctions: [
-                                    {
-                                      Id: '63656f9a-be16-4bb7-9012-9bde01232075',
-                                      IsSelected: true
-                                    }
-                                  ]
-                                })
-                                .withApplicationFunction({
-                                  FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
-                                  Name: 'SelectedFunction',
-                                  ChildFunctions: [],
-                                  IsSelected: true
-                                })
-                                .withApplicationFunction({
-                                  FunctionId: '9995eba9-c304-40b7-866b-5c77b3e76f8d',
-                                  Name: 'UnselectedFunction',
-                                  ChildFunctions: [
-                                    {
-                                      FunctionId: 'be3321cd-96f1-450c-9aaf-7c5fcaf259aa',
-                                      IsSelected: true,
-                                      ChildFunctions: []
-                                    },
-                                    {
-                                      FunctionId: 'f68a4cec-4274-455f-acaf-958f79da1db6',
-                                      IsSelected: false,
-                                      ChildFunctions: []
-                                    }
-                                  ],
-                                  IsSelected: false
-                                });
-                                $httpBackend.flush();
-
-                                vm.selectRole(vm.roles[0]);
-                                $httpBackend.flush();
-                                console.log('innan ', vm.componentFunctions);
-                                vm.unSelectedFunctionsFilter();
-                                console.log('unselect ', vm.componentFunctions);
-                                vm.allFunctionsFilter();
-                                console.log('efter ', vm.componentFunctions);
-
-                                expect(vm.componentFunctions.length).toEqual(2);
-                                expect(vm.componentFunctions[1].ChildFunctions.length).toEqual(2);
-                              });
-                            });
-
-                          });
+                    FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc'
+                  },
+                  {
+                    FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c'
+                  }
+                ]
+              },
+              {
+                FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+              }
+            ]
+          },
+          {
+            FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+          }
+        ]
+      });
+    $httpBackend.flush();
+
+    vm.selectRole(vm.roles[0]);
+    $httpBackend.flush();
+
+    expect(vm.applicationFunctions[1].IsSelected).toEqual(true);
+    expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].IsSelected).toEqual(true);
+    expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].ChildFunctions[1].IsSelected).toEqual(true);
+  });
+
+  it('should fetch organization info for selected role', function () {
+    fakeBackend
+      .withRole({
+        BuiltIn: false,
+        DescriptionText: 'HermansRoll',
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        Name: 'HermansRoll'
+      })
+      .withRoleInfo({
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        AvailableDataRange: 3,
+        AvailableFunctions: [],
+        AvailableSites: [
+          {
+            Id: 'd66f60f5-264c-4277-80eb-9b5e015ab495'
+          }
+        ],
+        AvailableTeams: [
+          {
+            Id: '6a21c802-7a34-4917-8dfd-9b5e015ab461'
+          }
+        ]
+      })
+    $httpBackend.flush();
+
+    vm.selectRole(vm.roles[0]);
+    $httpBackend.flush();
+
+    expect(vm.selectedRole.AvailableDataRange).toEqual(3);
+    expect(vm.selectedRole.AvailableSites[0].Id).toEqual('d66f60f5-264c-4277-80eb-9b5e015ab495');
+    expect(vm.selectedRole.AvailableTeams[0].Id).toEqual('6a21c802-7a34-4917-8dfd-9b5e015ab461');
+  });
+
+  it('should indicate available business unit for selected role', function () {
+    fakeBackend
+      .withRole({
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0'
+      })
+      .withRoleInfo({
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        AvailableFunctions: [],
+        AvailableBusinessUnits: [
+          {
+            Id: "127a343f-3f86-44ca-9b55-bcf04491ce7a",
+            Name: "CarlCCDemo"
+          },
+          {
+            Id: "928dd0bc-bf40-412e-b970-b48036bc27d0",
+            Name: "TeleoptiCCCDemo"
+          }
+        ]
+      })
+      .withOrganizationSelection(
+      {
+        ChildNodes: [],
+        Id: "928dd0bc-bf40-412e-b970-b48036bc27d0",
+        Name: "TeleoptiCCCDemo"
+      },
+      []
+      );
+    $httpBackend.flush();
+
+    vm.selectRole(vm.roles[0]);
+    $httpBackend.flush();
+
+    expect(vm.organizationSelection.BusinessUnit.IsSelected).toBe(true);
+  });
+
+  it('should indicate available site for selected role', function () {
+    fakeBackend
+      .withRole({
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0'
+      })
+      .withRoleInfo({
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        AvailableFunctions: [],
+        AvailableBusinessUnits: [
+          {
+            Id: "928dd0bc-bf40-412e-b970-b48036bc27d0",
+            Name: "TeleoptiCCCDemo"
+          }
+        ],
+        AvailableDataRange: 3,
+        AvailableSites: [
+          {
+            Id: 'd66f60f5-264c-4277-80eb-9b5e015ab495'
+          }
+        ]
+      })
+      .withOrganizationSelection(
+      {
+        Id: "928dd0bc-bf40-412e-b970-b48036bc27d0",
+        Name: "TeleoptiCCCDemo",
+        ChildNodes: [
+          {
+            Id: 'd66f60f5-264c-4277-80eb-9b5e015ab495'
+          },
+          {
+            Id: '8c2dfdc5-6f92-4fab-9a39-676b88c26a53'
+          }
+        ]
+      },
+      []
+      );
+    $httpBackend.flush();
+
+    vm.selectRole(vm.roles[0]);
+    $httpBackend.flush();
+
+    expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toBe(true);
+    expect(vm.organizationSelection.BusinessUnit.ChildNodes[1].IsSelected).toBe(false);
+  });
+
+  it('should indicate available org data when selecting a different role', function () {
+    fakeBackend
+      .withRole({
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        Name: 'Carl'
+      })
+      .withRoleInfo({
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        AvailableFunctions: [],
+        AvailableBusinessUnits: [
+          {
+            Id: "729b9399-d80a-46a7-a0dd-df18b89b12b9",
+            Name: "TeleoptiCCCDemo"
+          }
+        ],
+        AvailableSites: [
+          {
+            Id: "b36f9ab9-2f2a-472e-9a51-5a8dbf47b7b1",
+            Name: "London",
+          }
+        ],
+        AvailableTeams: [
+          {
+            Id: "95de4e34-6f18-4129-a962-7cf0d57f1ac4",
+            Name: "London-Team1",
+          },
+          {
+            Id: "6f4cec84-f5ce-4e62-9fc2-274172ec385b",
+            Name: "London-Team2",
+          }
+        ]
+      })
+      .withRole({
+        Id: '9c8e66ed-088e-41c8-8704-7110220f8fac',
+        Name: 'Herman'
+      })
+      .withRoleInfo({
+        Id: '9c8e66ed-088e-41c8-8704-7110220f8fac',
+        AvailableFunctions: [],
+        AvailableBusinessUnits: [
+          {
+            Id: "729b9399-d80a-46a7-a0dd-df18b89b12b9",
+            Name: "TeleoptiCCCDemo"
+          }
+        ],
+        AvailableSites: [
+          {
+            Id: "123f651b-5235-40d4-9d34-6be51b55df65",
+            Name: "Paris",
+          }
+        ],
+        AvailableTeams: [
+          {
+            Id: "000478e4-d11f-42bc-9ead-435f2eab160a",
+            Name: "Paris-Team1",
+          },
+          {
+            Id: "930addd3-79c6-47ef-96e2-6c68c8f522f3",
+            Name: "Paris-Team2",
+          }
+        ]
+      })
+      .withOrganizationSelection(
+      {
+        Id: "729b9399-d80a-46a7-a0dd-df18b89b12b9",
+        Name: "TeleoptiCCCDemo",
+        ChildNodes: [
+          {
+            Id: 'b36f9ab9-2f2a-472e-9a51-5a8dbf47b7b1',
+            Name: 'London',
+            ChildNodes: [
+              {
+                Id: "95de4e34-6f18-4129-a962-7cf0d57f1ac4",
+                Name: "London-Team1"
+              },
+              {
+                Id: "6f4cec84-f5ce-4e62-9fc2-274172ec385b",
+                Name: "London-Team2"
+              }
+            ]
+          },// HERMAN //
+          {
+            Id: '123f651b-5235-40d4-9d34-6be51b55df65',
+            Name: 'Paris',
+            ChildNodes: [
+              {
+                Id: "000478e4-d11f-42bc-9ead-435f2eab160a",
+                Name: "Paris-Team1",
+              },
+              {
+                Id: "930addd3-79c6-47ef-96e2-6c68c8f522f3",
+                Name: "Paris-Team2",
+              }
+            ]
+          }
+        ]
+      },
+      []
+      );
+    $httpBackend.flush();
+
+    vm.selectRole(vm.roles[0]);
+    $httpBackend.flush();
+    vm.selectRole(vm.roles[1]);
+    $httpBackend.flush();
+
+    console.log(vm.organizationSelection.BusinessUnit.ChildNodes);
+    expect(vm.organizationSelection.BusinessUnit.IsSelected).toBe(true);
+    expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toBe(false);
+    expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toBe(false);
+    expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[1].IsSelected).toBe(false);
+    expect(vm.organizationSelection.BusinessUnit.ChildNodes[1].IsSelected).toBe(true);
+    expect(vm.organizationSelection.BusinessUnit.ChildNodes[1].ChildNodes[0].IsSelected).toBe(true);
+    expect(vm.organizationSelection.BusinessUnit.ChildNodes[1].ChildNodes[1].IsSelected).toBe(true);
+  });
+
+  ///FORTSÄTT HÄR JAO,,,, det här måste fixas inom sin tid ändå latmaskar....
+  xit('should indicate available business unit when selecting a different role', function () {
+    fakeBackend
+      .withRole({
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        Name: 'Carl'
+      })
+      .withRoleInfo({
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        AvailableFunctions: [],
+        AvailableBusinessUnits: [
+          {
+            Id: "729b9399-d80a-46a7-a0dd-df18b89b12b9",
+            Name: "CarlCCDemo"
+          }
+        ],
+        AvailableSites: [
+          {
+            Id: "b36f9ab9-2f2a-472e-9a51-5a8dbf47b7b1",
+            Name: "Site1",
+            ChildNodes: []
+          },
+          {
+            Id: "34f3c450-c206-454c-96ab-623c8daa7c53",
+            Name: "Site2",
+            ChildNodes: []
+          }
+        ]
+      })
+      .withRole({
+        Id: '9c8e66ed-088e-41c8-8704-7110220f8fac',
+        Name: 'Herman'
+      })
+      .withRoleInfo({
+        Id: '9c8e66ed-088e-41c8-8704-7110220f8fac',
+        AvailableFunctions: [],
+        AvailableBusinessUnits: [
+          {
+            Id: "729b9399-d80a-46a7-a0dd-df18b89b12b9",
+            Name: "CarlCCDemo"
+          }
+        ],
+        AvailableSites: [
+          {
+            Id: "123f651b-5235-40d4-9d34-6be51b55df65",
+            Name: "SiteA",
+            ChildNodes: []
+          },
+          {
+            Id: "438ab59e-5c50-48c6-bd11-dc0ccd2af5d5",
+            Name: "SiteB",
+            ChildNodes: []
+          }
+        ]
+      })
+      .withOrganizationSelection(
+      {
+        Id: "729b9399-d80a-46a7-a0dd-df18b89b12b9",
+        Name: "TeleoptiCCCDemo",
+        ChildNodes: [
+          {
+            Id: 'b36f9ab9-2f2a-472e-9a51-5a8dbf47b7b1',
+            ChildNodes: []
+          },
+          {
+            Id: '34f3c450-c206-454c-96ab-623c8daa7c53',
+            ChildNodes: []
+          },
+          {
+            Id: '123f651b-5235-40d4-9d34-6be51b55df65',
+            ChildNodes: []
+          },
+          {
+            Id: '438ab59e-5c50-48c6-bd11-dc0ccd2af5d5',
+            ChildNodes: []
+          }
+        ]
+      },
+      []
+      );
+    $httpBackend.flush();
+
+    vm.selectRole(vm.roles[0]);
+    $httpBackend.flush();
+    vm.selectRole(vm.roles[1]);
+    $httpBackend.flush();
+
+    expect(vm.organizationSelection.BusinessUnit.IsSelected).toBe(true);
+    expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].IsSelected).toBe(false);
+    expect(vm.organizationSelection.BusinessUnit.ChildNodes[1].IsSelected).toBe(false);
+    expect(vm.organizationSelection.BusinessUnit.ChildNodes[2].IsSelected).toBe(true);
+    expect(vm.organizationSelection.BusinessUnit.ChildNodes[3].IsSelected).toBe(true);
+  });
+
+  it('should select all functions when toggle all function', function () {
+    fakeBackend
+      .withApplicationFunction({
+        FunctionId: '6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7',
+        Name: 'All',
+        ChildFunctions: [],
+        IsSelected: false
+      })
+      .withApplicationFunction({
+        FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+        Name: 'FunctionTwo',
+        ChildFunctions: [
+          {
+            FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc',
+            ChildFunctions: [
+              {
+                FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c',
+                ChildFunctions: [
+                  {
+                    FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc'
+                  },
+                  {
+                    FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c'
+                  }
+                ]
+              },
+              {
+                FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+              }
+            ]
+          },
+          {
+            FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+          }
+        ]
+      });
+    $httpBackend.flush();
+
+    vm.toggleAllFunction();
+    $httpBackend.flush();
+
+    expect(vm.applicationFunctions[0].IsSelected).toEqual(true);
+    expect(vm.applicationFunctions[1].IsSelected).toEqual(true);
+    expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].IsSelected).toEqual(true);
+    expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].ChildFunctions[1].IsSelected).toEqual(true);
+  });
+
+  it('should save all functions for role when toggle all function', function () {
+    fakeBackend
+      .withRole({
+        BuiltIn: false,
+        DescriptionText: 'HermansRoll',
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        Name: 'HermansRoll'
+      })
+      .withRoleInfo({
+        Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+        AvailableFunctions: []
+      })
+      .withApplicationFunction({
+        FunctionId: '6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7',
+        Name: 'All',
+        ChildFunctions: [],
+        IsSelected: false
+      })
+      .withApplicationFunction({
+        FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+        Name: 'FunctionTwo',
+        ChildFunctions: [
+          {
+            FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc',
+            ChildFunctions: [
+              {
+                FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c',
+                ChildFunctions: [
+                  {
+                    FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc'
+                  },
+                  {
+                    FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c'
+                  }
+                ]
+              },
+              {
+                FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+              }
+            ]
+          },
+          {
+            FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+          }
+        ]
+      });
+    $httpBackend.flush();
+    spyOn(permissionsDataService, 'selectAllFunction');
+
+    vm.selectRole(vm.roles[0]);
+    $httpBackend.flush();
+    vm.toggleAllFunction();
+
+    expect(permissionsDataService.selectAllFunction).toHaveBeenCalled();
+  });
+
+  it('should delete all functions for role when untoggle all function', function () {
+    fakeBackend
+      .withRole({
+        BuiltIn: false,
+        DescriptionText: 'HermansRoll',
+        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+        IsAnyBuiltIn: true,
+        IsMyRole: false,
+        Name: 'HermansRoll'
+      })
+      .withRoleInfo({
+        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+        AvailableFunctions: [
+          {
+            Id: '6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7'
+          },
+          {
+            Id: '63656f9a-be16-4bb7-9012-9bde01232075'
+          },
+          {
+            Id: '7656320f-1391-4332-bcaa-6cf16cbcb8dc'
+          },
+          {
+            Id: '52b6f3de-55e0-45b2-922e-316f8538f60c'
+          },
+          {
+            Id: '6856320f-1391-4332-bcaa-6cf16cbcb8dc'
+          },
+          {
+            Id: '52b6f3de-55e0-45b2-922e-316f8538f60c'
+          },
+          {
+            Id: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+          },
+          {
+            Id: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+          }
+        ]
+      })
+      .withApplicationFunction({
+        FunctionId: '6b4d0b6f-72c9-48a5-a0e6-d8d0d78126b7',
+        Name: 'All',
+        ChildFunctions: [],
+        IsSelected: true
+      })
+      .withApplicationFunction({
+        FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+        Name: 'FunctionTwo',
+        ChildFunctions: [
+          {
+            FunctionId: '7656320f-1391-4332-bcaa-6cf16cbcb8dc',
+            ChildFunctions: [
+              {
+                FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c',
+                ChildFunctions: [
+                  {
+                    FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc'
+                  },
+                  {
+                    FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c'
+                  }
+                ]
+              },
+              {
+                FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+              }
+            ]
+          },
+          {
+            FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16'
+          }
+        ]
+      });
+    $httpBackend.flush();
+    spyOn(permissionsDataService, 'selectAllFunction');
+
+    vm.selectRole(vm.roles[0]);
+    $httpBackend.flush();
+    vm.toggleAllFunction();
+
+    expect(permissionsDataService.selectAllFunction).toHaveBeenCalled();
+  });
+
+  it('should deselect all functions when toggle all function', function () {
+    fakeBackend
+      .withApplicationFunction({
+        FunctionId: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+        Name: 'All',
+        ChildFunctions: [],
+        IsSelected: true
+      })
+      .withApplicationFunction({
+        FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+        Name: 'FunctionTwo',
+        IsSelected: true,
+        ChildFunctions: [
+          {
+            FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc',
+            IsSelected: true,
+            ChildFunctions: [
+              {
+                FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c',
+                IsSelected: true,
+                ChildFunctions: [
+                  {
+                    FunctionId: '6856320f-1391-4332-bcaa-6cf16cbcb8dc',
+                    IsSelected: true
+                  },
+                  {
+                    FunctionId: '52b6f3de-55e0-45b2-922e-316f8538f60c',
+                    IsSelected: true
+                  }
+                ]
+              },
+              {
+                FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16',
+                IsSelected: true
+              }
+            ]
+          },
+          {
+            FunctionId: 'f73154af-8d6d-4250-b066-d6ead56bfc16',
+            IsSelected: true
+          }
+        ]
+      });
+    $httpBackend.flush();
+
+    vm.toggleAllFunction();
+    $httpBackend.flush();
+
+    expect(vm.applicationFunctions[0].IsSelected).toEqual(false);
+    expect(vm.applicationFunctions[1].IsSelected).toEqual(false);
+    expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].IsSelected).toEqual(false);
+    expect(vm.applicationFunctions[1].ChildFunctions[0].ChildFunctions[0].ChildFunctions[1].IsSelected).toEqual(false);
+  });
+
+  it('should only show selected function when pressing selected filter', function () {
+    inject(function ($filter) {
+      fakeBackend
+        .withRole({
+          BuiltIn: false,
+          DescriptionText: 'HermansRoll',
+          Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+          IsAnyBuiltIn: true,
+          IsMyRole: false,
+          Name: 'HermansRoll'
+        })
+        .withRoleInfo({
+          Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+          AvailableFunctions: [
+            {
+              Id: '63656f9a-be16-4bb7-9012-9bde01232075',
+              IsSelected: true
+            }
+          ]
+        })
+        .withApplicationFunction({
+          FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+          Name: 'SelectedFunction',
+          ChildFunctions: [],
+          IsSelected: true
+        })
+        .withApplicationFunction({
+          FunctionId: '9995eba9-c304-40b7-866b-5c77b3e76f8d',
+          Name: 'UnselectedFunction',
+          ChildFunctions: [],
+          IsSelected: false
+        });
+      $httpBackend.flush();
+
+      vm.selectRole(vm.roles[0]);
+      $httpBackend.flush();
+      vm.selectedFunctionsFilter();
+
+      expect(vm.componentFunctions.length).toEqual(1);
+    });
+  });
+  //DEN HÄR KÄNNS LITE SMÅ FUNKY CAAARL
+  it('should reset filters', function () {
+    inject(function ($filter) {
+      fakeBackend
+        .withRole({
+          BuiltIn: false,
+          DescriptionText: 'HermansRoll',
+          Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+          IsAnyBuiltIn: true,
+          IsMyRole: false,
+          Name: 'HermansRoll'
+        })
+        .withRoleInfo({
+          Id: '4b102279-888a-45ee-b537-b48036bc27d0',
+          AvailableFunctions: [
+            {
+              Id: '63656f9a-be16-4bb7-9012-9bde01232075',
+              IsSelected: true
+            }
+          ]
+        })
+        .withApplicationFunction({
+          FunctionId: '63656f9a-be16-4bb7-9012-9bde01232075',
+          Name: 'SelectedFunction',
+          ChildFunctions: [],
+          IsSelected: true
+        })
+        .withApplicationFunction({
+          FunctionId: '9995eba9-c304-40b7-866b-5c77b3e76f8d',
+          Name: 'UnselectedFunction',
+          ChildFunctions: [
+            {
+              FunctionId: 'be3321cd-96f1-450c-9aaf-7c5fcaf259aa',
+              IsSelected: true,
+              ChildFunctions: []
+            },
+            {
+              FunctionId: 'f68a4cec-4274-455f-acaf-958f79da1db6',
+              IsSelected: false,
+              ChildFunctions: []
+            }
+          ],
+          IsSelected: false
+        });
+      $httpBackend.flush();
+
+      vm.selectRole(vm.roles[0]);
+      $httpBackend.flush();
+      console.log('innan ', vm.componentFunctions);
+      vm.unSelectedFunctionsFilter();
+      console.log('unselect ', vm.componentFunctions);
+      vm.allFunctionsFilter();
+      console.log('efter ', vm.componentFunctions);
+
+      expect(vm.componentFunctions.length).toEqual(2);
+      expect(vm.componentFunctions[1].ChildFunctions.length).toEqual(2);
+    });
+  });
+
+});

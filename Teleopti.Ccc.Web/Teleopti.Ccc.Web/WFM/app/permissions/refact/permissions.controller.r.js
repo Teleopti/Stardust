@@ -1,9 +1,9 @@
-(function() {
+(function () {
   'use strict';
 
   angular
-  .module('wfm.permissions')
-  .controller('PermissionsCtrlRefact', PermissionsCtrl);
+    .module('wfm.permissions')
+    .controller('PermissionsCtrlRefact', PermissionsCtrl);
 
   PermissionsCtrl.$inject = ['$filter', 'PermissionsServiceRefact', 'permissionsDataService'];
 
@@ -45,7 +45,7 @@
       listHandler(filteredArray);
     }
 
-    function allFunctionsFilter(){
+    function allFunctionsFilter() {
       listHandler(vm.applicationFunctions);
     }
 
@@ -92,7 +92,7 @@
 
     function createRole(roleName) {
       var roleData = { Description: roleName };
-      PermissionsServiceRefact.roles.save(roleData).$promise.then(function(data) {
+      PermissionsServiceRefact.roles.save(roleData).$promise.then(function (data) {
         vm.roles.unshift(data);
         vm.selectedRole = data;
         permissionsDataService.setSelectedRole(vm.selectedRole);
@@ -110,10 +110,10 @@
     }
 
     function editRole(newRoleName, role) {
-      PermissionsServiceRefact.manage.update({ Id: role.Id, newDescription: newRoleName }).$promise.then(function() {
-        PermissionsServiceRefact.roles.query().$promise.then(function(data) {
+      PermissionsServiceRefact.manage.update({ Id: role.Id, newDescription: newRoleName }).$promise.then(function () {
+        PermissionsServiceRefact.roles.query().$promise.then(function (data) {
           vm.roles = data;
-          var selected = data.find(function(r) {
+          var selected = data.find(function (r) {
             return r.Id === role.Id;
           });
           markSelectedRole(selected);
@@ -151,7 +151,7 @@
     }
 
     function copyRole(role) {
-      PermissionsServiceRefact.copyRole.copy({ Id: role.Id }).$promise.then(function(data) {
+      PermissionsServiceRefact.copyRole.copy({ Id: role.Id }).$promise.then(function (data) {
         vm.roles.unshift(data);
         vm.selectedRole = data;
         permissionsDataService.setSelectedRole(vm.selectedRole);
@@ -163,7 +163,7 @@
     function selectRole(role) {
       markSelectedRole(role);
 
-      PermissionsServiceRefact.manage.getRoleInformation({ Id: role.Id }).$promise.then(function(data) {
+      PermissionsServiceRefact.manage.getRoleInformation({ Id: role.Id }).$promise.then(function (data) {
         vm.selectedRole = data;
         permissionsDataService.setSelectedRole(vm.selectedRole);
         if (vm.selectedRole.AvailableBusinessUnits) {
@@ -173,8 +173,8 @@
         var functions = vm.applicationFunctions;
         while (functions != null && functions.length > 0) {
           var next = [];
-          functions.forEach(function(fn) {
-            fn.IsSelected = vm.selectedRole.AvailableFunctions.some(function(afn) {
+          functions.forEach(function (fn) {
+            fn.IsSelected = vm.selectedRole.AvailableFunctions.some(function (afn) {
               return fn.FunctionId === afn.Id;
             });
             if (fn.ChildFunctions != null) {
@@ -187,11 +187,7 @@
       });
     }
 
-    var findMatchingBu = function () {
-
-    }
-
-    function matchOrganizationData() {
+    function matchOrganizationData2() {
       var sites = vm.organizationSelection.BusinessUnit.ChildNodes;
 
       for (var i = 0; i < vm.selectedRole.AvailableBusinessUnits.length; i++) {
@@ -211,8 +207,8 @@
             }
           }
           if (sites[i].ChildNodes.length > 0 && vm.selectedRole.AvailableTeams.length > 0) {
-          for (var a = 0; a < vm.selectedRole.AvailableTeams.length; a++) {
-              if (sites[i].ChildNodes[a].Id == vm.selectedRole.AvailableTeams[a].Id){
+            for (var a = 0; a < vm.selectedRole.AvailableTeams.length; a++) {
+              if (sites[i].ChildNodes[a].Id == vm.selectedRole.AvailableTeams[a].Id) {
                 sites[i].ChildNodes[a].IsSelected = true;
               } else {
                 sites[i].ChildNodes[a].IsSelected = false;
@@ -223,26 +219,41 @@
       }
     }
 
-    function matchOrganizationData2() {
-      for (var i = 0; i < vm.selectedRole.AvailableBusinessUnits.length; i++) {
-        if (vm.selectedRole.AvailableBusinessUnits[i].Id == vm.organizationSelection.BusinessUnit.Id) {
-          vm.organizationSelection.BusinessUnit.IsSelected = true;
-          break;
-        }
-      }
+    var matchBusinessUnit = function () {
+      vm.organizationSelection.BusinessUnit.IsSelected = vm.selectedRole.AvailableBusinessUnits.some(function (bu) {
+        return vm.organizationSelection.BusinessUnit.Id == bu.Id;
+      });
+    };
 
-      if (vm.organizationSelection.BusinessUnit.ChildNodes.length > 0) {
-        for (var i = 0; i < vm.organizationSelection.BusinessUnit.ChildNodes.length; i++) {
-          for (var j = 0; j < vm.selectedRole.AvailableSites.length; j++) {
-            if (vm.organizationSelection.BusinessUnit.ChildNodes[i].Id == vm.selectedRole.AvailableSites[j].Id) {
-              vm.organizationSelection.BusinessUnit.ChildNodes[i].IsSelected = true;
-            } else {
-              vm.organizationSelection.BusinessUnit.ChildNodes[i].IsSelected = false;
-            }
+    var matchSites = function (sites) {
+      sites.forEach(function (site) {
+        site.IsSelected = vm.selectedRole.AvailableSites.some(function (s) {
+          return site.Id == s.Id;
+        });
+      });
+    };
+
+    var matchTeams = function (sites) {
+      for (var i = 0; i < sites.length; i++) {
+        for (var j = 0; j < sites[i].ChildNodes.length; j++) {
+          if (sites[i].ChildNodes[j].Id == vm.selectedRole.AvailableTeams[i].Id){
+            sites[i].ChildNodes[j].IsSelected = true;
+          }else {
+            sites[i].ChildNodes[j].IsSelected = false;
           }
         }
       }
+    };
 
+    // sites[i].ChildNodes[j].IsSelected = vm.selectedRole.AvailableTeams.every(function (t) {
+    //         return sites[i].ChildNodes[j].IsSelected == t.Id;
+    //       })
+
+    function matchOrganizationData() {
+      var sites = vm.organizationSelection.BusinessUnit.ChildNodes;
+      matchBusinessUnit();
+      matchSites(sites);
+      matchTeams(sites);
     }
 
     var previously = null;
@@ -262,15 +273,15 @@
     }
 
     function fetchData() {
-      PermissionsServiceRefact.roles.query().$promise.then(function(data) {
+      PermissionsServiceRefact.roles.query().$promise.then(function (data) {
         vm.roles = data;
       });
-      PermissionsServiceRefact.applicationFunctions.query().$promise.then(function(data) {
+      PermissionsServiceRefact.applicationFunctions.query().$promise.then(function (data) {
         vm.applicationFunctions = data;
         listHandler(vm.applicationFunctions);
         prepareTree(vm.applicationFunctions);
       });
-      PermissionsServiceRefact.organizationSelection.get().$promise.then(function(data) {
+      PermissionsServiceRefact.organizationSelection.get().$promise.then(function (data) {
         vm.organizationSelection = data;
       });
     }
