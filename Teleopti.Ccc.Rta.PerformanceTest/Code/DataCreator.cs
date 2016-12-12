@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		private readonly WithUnitOfWork _withUnitOfWork;
 		private readonly ITeamRepository _teams;
 		private readonly IPersonRepository _persons;
+		private readonly IExternalLogOnRepository _externalLogOns;
 		private readonly IContractRepository _contracts;
 		private readonly IPartTimePercentageRepository _partTimePercentages;
 		private readonly IContractScheduleRepository _contractSchedules;
@@ -55,6 +56,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			WithUnitOfWork withUnitOfWork,
 			ITeamRepository teams,
 			IPersonRepository persons,
+			IExternalLogOnRepository externalLogOns,
 			IContractRepository contracts,
 			IPartTimePercentageRepository partTimePercentages,
 			IContractScheduleRepository contractSchedules,
@@ -74,6 +76,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			_withUnitOfWork = withUnitOfWork;
 			_teams = teams;
 			_persons = persons;
+			_externalLogOns = externalLogOns;
 			_contracts = contracts;
 			_partTimePercentages = partTimePercentages;
 			_contractSchedules = contractSchedules;
@@ -125,6 +128,16 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 						var personContract = new PersonContract(contract, partTimePercentage, contractSchedule);
 						var personPeriod = new PersonPeriod("2001-01-01".Date(), personContract, team);
 						person.AddPersonPeriod(personPeriod);
+
+						var logon = new ExternalLogOn
+						{
+							AcdLogOnName = name,// is not used?
+							DataSourceId = _testConfiguration.DataSourceId,
+							AcdLogOnOriginalId = _testConfiguration.SourceId, // this is what the rta receives
+							AcdLogOnMartId = -1
+						};
+						_externalLogOns.Add(logon);
+						person.AddExternalLogOn(logon, personPeriod);
 
 						rogers.Add(person);
 					});
