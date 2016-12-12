@@ -48,26 +48,23 @@ Background:
 		| EndTime        | 2015-01-01 17:00 |
 		| Shift category | Day              |
 
-@ignore
+
 Scenario: be able to open the seat map booking view
 	When I view Seat plan on "2015-01-01"
 	And I press seat map booking view button
 	Then the seat map booking should be opened
 
-@ignore
 Scenario: be able to go back to seat plan
 	When I view Seat plan on "2015-01-01"
 	And I press seat map booking view button
 	And I press back button on seat booking view
 	Then I should go back to seat plan
 
-@ignore
-Scenario: the date is the same with I chosed
+Scenario: the date is the same with I chose
 	When I view Seat plan on "2015-01-01"
 	And I press seat map booking view button
 	Then the date of datepicker should be correct
 
-@ignore
 Scenario: be able to view booking detail of selected seat
 	Given there is a seat booking for me
 		| Field         | Value            |
@@ -79,7 +76,6 @@ Scenario: be able to view booking detail of selected seat
 	And I press seat map booking view button
 	Then I am able to view booking detail of selected seat
 
-@ignore
 Scenario: be able to delete seat booking for the first seat
 	Given there is a seat booking for me
 		| Field         | Value            |
@@ -91,21 +87,18 @@ Scenario: be able to delete seat booking for the first seat
 	And I press seat map booking view button
 	Then I delete the first record under the seat booking details
 
-@ignore
 Scenario: be able to open people search list
 	When I view Seat plan on "2015-01-01"
 	And I press seat map booking view button
 	And I click add agents to seat button
 	Then I should see people search list
 
-@ignore
 Scenario: the action button of people is invisible
 	When I view Seat plan on "2015-01-01"
 	And I press seat map booking view button
 	And I click add agents to seat button
 	Then I should not see the action buttons of people
 
-@ignore
 Scenario: be able to close people list
 	When I view Seat plan on "2015-01-01"
 	And I press seat map booking view button
@@ -113,7 +106,6 @@ Scenario: be able to close people list
 	And I click cancel button after open people search list
 	Then I should not see people search list
 
-@ignore
 Scenario: be able to assign agent to selected seat
 	When I view Seat plan on "2015-01-01"
 	And I press seat map booking view button

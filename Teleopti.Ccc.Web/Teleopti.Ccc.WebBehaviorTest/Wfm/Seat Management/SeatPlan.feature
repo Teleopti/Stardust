@@ -27,7 +27,7 @@ Background:
 	And I am englishspeaking swede
 	
 
-@ignore
+@OnlyRunIfDisabled('Wfm_Seatplan_UseDatePeriodForPlanning_42167')
 Scenario: display seat plan planning period list
 	When I view Seat plan on "2015-05-01"
 	Then I should see planning period available for seat planning from '2015-05-10'to '2015-06-09'
