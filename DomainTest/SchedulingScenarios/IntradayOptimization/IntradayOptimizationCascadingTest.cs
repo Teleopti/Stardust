@@ -18,7 +18,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	[DomainTestWithStaticDependenciesAvoidUse] //FIX ME!
+	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	[LoggedOnAppDomain]
 	[TestFixture(true)]
@@ -60,8 +60,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			SkillDayRepository.Has(new List<ISkillDay>
 							 {
-								skillA.CreateSkillDayWithDemandOnInterval(scenario,dateOnly,0, new Tuple<TimePeriod, double>(new TimePeriod(17, 15, 17, 30), 1)),
-								skillB.CreateSkillDayWithDemandOnInterval(scenario,dateOnly,0, new Tuple<TimePeriod, double>(new TimePeriod(8, 0, 8, 15), 2))
+								skillA.CreateSkillDayWithDemandOnInterval(scenario,dateOnly, 1, new Tuple<TimePeriod, double>(new TimePeriod(17, 15, 17, 30), 2)),
+								skillB.CreateSkillDayWithDemandOnInterval(scenario,dateOnly, 1, new Tuple<TimePeriod, double>(new TimePeriod(8, 0, 8, 15), 10))
 							 });
 
 			PersonAssignmentRepository.Has(agentA, scenario, activity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
