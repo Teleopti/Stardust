@@ -29,10 +29,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IPersonRepository _personRepository;
 		private readonly IUserCulture _userCulture;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
-		private readonly IToggleManager _toggleManager;
-		private readonly ITeamRepository _teamRepository;
+		private readonly IToggleManager _toggleManager;		
 
-		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider,IScheduleProvider scheduleProvider,ITeamScheduleProjectionProvider teamScheduleProjectionProvider,IProjectionProvider projectionProvider,ICommonAgentNameProvider commonAgentNameProvider,IPeopleSearchProvider searchProvider,IPersonRepository personRepository,IUserCulture userCulture,IIanaTimeZoneProvider ianaTimeZoneProvider,IToggleManager toggleManager,ITeamRepository teamRepository)
+		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider,IScheduleProvider scheduleProvider,ITeamScheduleProjectionProvider teamScheduleProjectionProvider,IProjectionProvider projectionProvider,ICommonAgentNameProvider commonAgentNameProvider,IPeopleSearchProvider searchProvider,IPersonRepository personRepository,IUserCulture userCulture,IIanaTimeZoneProvider ianaTimeZoneProvider,IToggleManager toggleManager)
 		{
 			_permissionProvider = permissionProvider;
 			_scheduleProvider = scheduleProvider;
@@ -43,37 +42,26 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_personRepository = personRepository;
 			_userCulture = userCulture;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
-			_toggleManager = toggleManager;
-			_teamRepository = teamRepository;
+			_toggleManager = toggleManager;			
 		}
 
 
 		public GroupScheduleViewModel CreateViewModel(Guid[] teamIds,IDictionary<PersonFinderField,string> criteriaDictionary,
 			DateOnly dateInUserTimeZone,int pageSize,int currentPageIndex,bool isOnlyAbsences)
 		{
-			IList<IPerson> matchedPersons;
 			var searchCriteria = _searchProvider.CreatePersonFinderSearchCriteria(criteriaDictionary,9999,1,dateInUserTimeZone,null);
 			var businessHierachyToggle = _toggleManager.IsEnabled(Toggles.WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260);
-
-			if(businessHierachyToggle && criteriaDictionary.Count == 0)
+			
+			if(businessHierachyToggle)
 			{
-				var teams = _teamRepository.FindTeams(teamIds).ToArray();
-				matchedPersons =
-					_personRepository.FindPeopleBelongTeams(teams,new DateOnlyPeriod(dateInUserTimeZone,dateInUserTimeZone)).ToList();
+				_searchProvider.PopulateSearchCriteriaResult(searchCriteria,teamIds);
 			}
 			else
 			{
-				if(businessHierachyToggle)
-				{
-					_searchProvider.PopulateSearchCriteriaResult(searchCriteria,teamIds);
-				}
-				else
-				{
-					_searchProvider.PopulateSearchCriteriaResult(searchCriteria);
-				}
-				var targetIds = searchCriteria.DisplayRows.Where(r => r.RowNumber > 0).Select(r => r.PersonId).Distinct();
-				matchedPersons = _personRepository.FindPeople(targetIds).ToList();
+				_searchProvider.PopulateSearchCriteriaResult(searchCriteria);
 			}
+			var targetIds = searchCriteria.DisplayRows.Where(r => r.RowNumber > 0).Select(r => r.PersonId).Distinct();
+			var matchedPersons = _personRepository.FindPeople(targetIds).ToList();			
 
 			var permittedPersons =
 				_searchProvider.GetPermittedPersonList(matchedPersons,dateInUserTimeZone,
