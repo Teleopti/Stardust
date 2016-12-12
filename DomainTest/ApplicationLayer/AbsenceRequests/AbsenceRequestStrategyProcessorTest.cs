@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_nearFutureThreshold = _now.AddMinutes(-10);
 			_farFutureThreshold = _now.AddMinutes(-20);
 			_initialPeriod = new DateOnlyPeriod(new DateOnly(_now.AddDays(-1)), new DateOnly(_now.AddDays(_windowSize)));
-			system.UseTestDouble<NoFilterRequestsWithDifferentVersion>().For<IFilterRequestsWithDifferentVersion>();
+			system.UseTestDouble<FilterRequestsWithDifferentVersion41930ToggleOff>().For<IFilterRequestsWithDifferentVersion>();
 		}
 
 		[Test]

@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		}
 	}
 
-	public class NoFilterRequestsWithDifferentVersion : IFilterRequestsWithDifferentVersion
+	public class FilterRequestsWithDifferentVersion41930ToggleOff : IFilterRequestsWithDifferentVersion
 	{
 		public IList<IEnumerable<Guid>> Filter(IDictionary<Guid, int> reqVersions, IList<IEnumerable<Guid>> potentialBulk)
 		{

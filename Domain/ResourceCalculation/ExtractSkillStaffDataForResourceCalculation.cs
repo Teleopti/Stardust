@@ -17,12 +17,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 
-		public ISkillSkillStaffPeriodExtendedDictionary ExtractSkillStaffPeriodDictionary(DateOnlyPeriod periodDateOnly)
-		{
-			var resCalcData = ExtractResourceCalculationData(periodDateOnly);
-			return resCalcData.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
-		}
-
 		public IResourceCalculationData ExtractResourceCalculationData(DateOnlyPeriod periodDateOnly)
 		{
 			_loaderForResourceCalculation.PreFillInformation(periodDateOnly);
@@ -36,19 +30,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		[TestLogTime]
 		public virtual void DoCalculation(DateOnlyPeriod period, IResourceCalculationData resCalcData)
 		{
-#pragma warning disable 618
-			using (_resourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills, true))
-#pragma warning restore 618
+			using (_resourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills, true,period))
 			{
 				_resourceOptimizationHelper.ResourceCalculate(period, resCalcData);
 			}
 		}
-
 	}
 
 	public interface IExtractSkillStaffDataForResourceCalculation
 	{
-		ISkillSkillStaffPeriodExtendedDictionary ExtractSkillStaffPeriodDictionary(DateOnlyPeriod periodDateOnly);
 		IResourceCalculationData ExtractResourceCalculationData(DateOnlyPeriod periodDateOnly);
 		void DoCalculation(DateOnlyPeriod period, IResourceCalculationData resCalcData);
 	}
