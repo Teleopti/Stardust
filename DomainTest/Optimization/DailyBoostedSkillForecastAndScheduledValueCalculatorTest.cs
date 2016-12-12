@@ -12,7 +12,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
     [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class DailyBoostedSkillForecastAndScheduledValueCalculatorTest
     {
         private IDailySkillForecastAndScheduledValueCalculator _target;
@@ -46,8 +45,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _skillStaffPeriods = new List<ISkillStaffPeriod>();
             DateOnly dtDateOnly = new DateOnly(2010, 1, 2);
             DateTimePeriod dtPeriod = new DateTimePeriod(
-                new DateTime(2010, 1, 1, 23, 0, 0, 0, DateTimeKind.Utc),
-                new DateTime(2010, 1, 2, 23, 0, 0, 0, DateTimeKind.Utc));
+                new DateTime(2010, 1, 2, 0, 0, 0, 0, DateTimeKind.Utc),
+                new DateTime(2010, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc));
 
             using (_mock.Record())
             {
@@ -72,10 +71,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             const int skillStaffPeriod1PeriodMinutes = 10;
 
             DateOnly dtDateOnly = new DateOnly(2010, 1, 2);
-            DateTimePeriod dtPeriod = new DateTimePeriod(
-                new DateTime(2010, 1, 1, 23, 0, 0, 0, DateTimeKind.Utc),
-                new DateTime(2010, 1, 2, 23, 0, 0, 0, DateTimeKind.Utc));
-            DateTimePeriod schedulePeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 0, skillStaffPeriod1PeriodMinutes, 0, DateTimeKind.Utc));
+			DateTimePeriod dtPeriod = new DateTimePeriod(
+					new DateTime(2010, 1, 2, 0, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2010, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc));
+
+			DateTimePeriod schedulePeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 0, skillStaffPeriod1PeriodMinutes, 0, DateTimeKind.Utc));
 
             using (_mock.Record())
             {
@@ -110,10 +110,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             const int skillStaffPeriod2PeriodMinutes = 5;
 
             DateOnly dtDateOnly = new DateOnly(2010, 1, 2);
-            DateTimePeriod dtPeriod = new DateTimePeriod(
-                new DateTime(2010, 1, 1, 23, 0, 0, 0, DateTimeKind.Utc),
-                new DateTime(2010, 1, 2, 23, 0, 0, 0, DateTimeKind.Utc));
-            DateTimePeriod schedulePeriod1 = new DateTimePeriod(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 0, skillStaffPeriod1PeriodMinutes, 0, DateTimeKind.Utc));
+			DateTimePeriod dtPeriod = new DateTimePeriod(
+					new DateTime(2010, 1, 2, 0, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2010, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc));
+
+			DateTimePeriod schedulePeriod1 = new DateTimePeriod(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 0, skillStaffPeriod1PeriodMinutes, 0, DateTimeKind.Utc));
             DateTimePeriod schedulePeriod2 = new DateTimePeriod(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 0, skillStaffPeriod2PeriodMinutes, 0, DateTimeKind.Utc));
 
             using (_mock.Record())
