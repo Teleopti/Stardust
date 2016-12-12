@@ -2,8 +2,8 @@
   'use strict';
 
   angular
-    .module('wfm.permissions')
-    .controller('PermissionsCtrlRefact', PermissionsCtrl);
+  .module('wfm.permissions')
+  .controller('PermissionsCtrlRefact', PermissionsCtrl);
 
   PermissionsCtrl.$inject = ['$filter', 'PermissionsServiceRefact', 'permissionsDataService'];
 
@@ -30,7 +30,6 @@
     vm.listHandler = listHandler;
 
 
-    //FRÅGA NICKLAS, clona arrayen som vi får in så vi inte skriver övert den jao
     function listHandler(arr) {
       vm.componentFunctions = [].concat(arr);
     }
@@ -166,56 +165,30 @@
       PermissionsServiceRefact.manage.getRoleInformation({ Id: role.Id }).$promise.then(function (data) {
         vm.selectedRole = data;
         permissionsDataService.setSelectedRole(vm.selectedRole);
-        if (vm.selectedRole.AvailableBusinessUnits) {
-          matchOrganizationData();
-        }
 
-        var functions = vm.applicationFunctions;
-        while (functions != null && functions.length > 0) {
-          var next = [];
-          functions.forEach(function (fn) {
-            fn.IsSelected = vm.selectedRole.AvailableFunctions.some(function (afn) {
-              return fn.FunctionId === afn.Id;
-            });
-            if (fn.ChildFunctions != null) {
-              next = next.concat(fn.ChildFunctions);
-            }
-          });
-
-          functions = next;
-        }
+      if (vm.selectedRole.AvailableTeams != null && vm.selectedRole.AvailableTeams.length > 0){
+        matchOrganizationData();
+      }
+      if (vm.selectedRole.AvailableTeams != null && vm.selectedRole.AvailableTeams.length < 1){
+        toggleOrganizationSelecton(vm.organizationSelection.BusinessUnit, false);
+      }
+        matchFunctionsForSelctedRole();
       });
     }
 
-    function matchOrganizationData2() {
-      var sites = vm.organizationSelection.BusinessUnit.ChildNodes;
-
-      for (var i = 0; i < vm.selectedRole.AvailableBusinessUnits.length; i++) {
-        if (vm.selectedRole.AvailableBusinessUnits[i].Id == vm.organizationSelection.BusinessUnit.Id) {
-          vm.organizationSelection.BusinessUnit.IsSelected = true;
-          break;
-        }
-      }
-
-      if (sites.length > 0) {
-        for (var i = 0; i < sites.length; i++) {
-          for (var j = 0; j < vm.selectedRole.AvailableSites.length; j++) {
-            if (sites[i].Id == vm.selectedRole.AvailableSites[j].Id) {
-              sites[i].IsSelected = true;
-            } else {
-              sites[i].IsSelected = false;
-            }
+    function matchFunctionsForSelctedRole(){
+      var functions = vm.applicationFunctions;
+      while (functions != null && functions.length > 0) {
+        var next = [];
+        functions.forEach(function (fn) {
+          fn.IsSelected = vm.selectedRole.AvailableFunctions.some(function (afn) {
+            return fn.FunctionId === afn.Id;
+          });
+          if (fn.ChildFunctions != null) {
+            next = next.concat(fn.ChildFunctions);
           }
-          if (sites[i].ChildNodes.length > 0 && vm.selectedRole.AvailableTeams.length > 0) {
-            for (var a = 0; a < vm.selectedRole.AvailableTeams.length; a++) {
-              if (sites[i].ChildNodes[a].Id == vm.selectedRole.AvailableTeams[a].Id) {
-                sites[i].ChildNodes[a].IsSelected = true;
-              } else {
-                sites[i].ChildNodes[a].IsSelected = false;
-              }
-            }
-          }
-        }
+        });
+        functions = next;
       }
     }
 
@@ -233,21 +206,29 @@
       });
     };
 
-    var matchTeams = function (sites) {
+    var matchTeams2 = function (sites){
       for (var i = 0; i < sites.length; i++) {
         for (var j = 0; j < sites[i].ChildNodes.length; j++) {
-          if (sites[i].ChildNodes[j].Id == vm.selectedRole.AvailableTeams[i].Id){
+          if (vm.selectedRole.AvailableTeams[j] != null && sites[i].ChildNodes[j].Id == vm.selectedRole.AvailableTeams[j].Id){
             sites[i].ChildNodes[j].IsSelected = true;
           }else {
             sites[i].ChildNodes[j].IsSelected = false;
           }
         }
       }
-    };
+    }
 
-    // sites[i].ChildNodes[j].IsSelected = vm.selectedRole.AvailableTeams.every(function (t) {
-    //         return sites[i].ChildNodes[j].IsSelected == t.Id;
-    //       })
+    var matchTeams = function (sites) {
+      sites.forEach(function(site){
+        site.ChildNodes.forEach(function(team, index){
+          if (vm.selectedRole.AvailableTeams[index] != null && team.Id == vm.selectedRole.AvailableTeams[index].Id) {
+            team.IsSelected = true;
+          } else {
+            team.IsSelected = false;
+          }
+        });
+      });
+    };
 
     function matchOrganizationData() {
       var sites = vm.organizationSelection.BusinessUnit.ChildNodes;

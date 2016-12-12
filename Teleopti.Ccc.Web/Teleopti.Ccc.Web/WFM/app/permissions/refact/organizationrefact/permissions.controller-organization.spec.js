@@ -2,12 +2,12 @@
 //DONT REMOVE X
 xdescribe('component: permissionsList', function () {
   var $httpBackend,
-    fakeBackend,
-    $controller,
-    $componentController,
-    permissionsDataService,
-    ctrl,
-    vm;
+  fakeBackend,
+  $controller,
+  $componentController,
+  permissionsDataService,
+  ctrl,
+  vm;
 
   beforeEach(function () {
     module('wfm.permissions');
@@ -24,6 +24,9 @@ xdescribe('component: permissionsList', function () {
     vm = $controller('PermissionsCtrlRefact');
 
     $httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/AvailableData').respond(function (method, url, data, headers) {
+      return 200;
+    });
+    $httpBackend.whenPOST('../api/Permissions/Roles/1805c09e-39fe-4472-af28-ba9f3e8df759/AvailableData').respond(function (method, url, data, headers) {
       return 200;
     });
     $httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/DeleteData').respond(function (method, url, data, headers) {
@@ -65,10 +68,10 @@ xdescribe('component: permissionsList', function () {
       IsMyRole: false,
       Name: 'Agent'
     })
-      .withRoleInfo({
-        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-        AvailableFunctions: []
-      }).withOrganizationSelection(BusinessUnit, DynamicOptions);
+    .withRoleInfo({
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      AvailableFunctions: []
+    }).withOrganizationSelection(BusinessUnit, DynamicOptions);
     $httpBackend.flush();
     ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection });
     permissionsDataService.setSelectedRole(vm.roles[0]);
@@ -96,10 +99,10 @@ xdescribe('component: permissionsList', function () {
       IsMyRole: false,
       Name: 'Agent'
     })
-      .withRoleInfo({
-        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-        AvailableFunctions: []
-      }).withOrganizationSelection(BusinessUnit, DynamicOptions);
+    .withRoleInfo({
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      AvailableFunctions: []
+    }).withOrganizationSelection(BusinessUnit, DynamicOptions);
     $httpBackend.flush();
     ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection });
     permissionsDataService.setSelectedRole(vm.roles[0]);
@@ -138,10 +141,10 @@ xdescribe('component: permissionsList', function () {
       IsMyRole: false,
       Name: 'Agent'
     })
-      .withRoleInfo({
-        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-        AvailableFunctions: []
-      }).withOrganizationSelection(BusinessUnit, []);
+    .withRoleInfo({
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      AvailableFunctions: []
+    }).withOrganizationSelection(BusinessUnit, []);
     $httpBackend.flush();
     ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection });
     permissionsDataService.setSelectedRole(vm.roles[0]);
@@ -185,10 +188,10 @@ xdescribe('component: permissionsList', function () {
       IsMyRole: false,
       Name: 'Agent'
     })
-      .withRoleInfo({
-        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-        AvailableFunctions: []
-      }).withOrganizationSelection(BusinessUnit, []);
+    .withRoleInfo({
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      AvailableFunctions: []
+    }).withOrganizationSelection(BusinessUnit, []);
     $httpBackend.flush();
     ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection });
     permissionsDataService.setSelectedRole(vm.roles[0]);
@@ -223,10 +226,10 @@ xdescribe('component: permissionsList', function () {
       IsMyRole: false,
       Name: 'Agent'
     })
-      .withRoleInfo({
-        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-        AvailableFunctions: []
-      }).withOrganizationSelection(BusinessUnit, DynamicOptions);
+    .withRoleInfo({
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      AvailableFunctions: []
+    }).withOrganizationSelection(BusinessUnit, DynamicOptions);
     $httpBackend.flush();
     ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection });
     permissionsDataService.setSelectedRole(vm.roles[0]);
@@ -263,10 +266,10 @@ xdescribe('component: permissionsList', function () {
       IsMyRole: false,
       Name: 'Agent'
     })
-      .withRoleInfo({
-        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-        AvailableFunctions: []
-      }).withOrganizationSelection(BusinessUnit, DynamicOptions);
+    .withRoleInfo({
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      AvailableFunctions: []
+    }).withOrganizationSelection(BusinessUnit, DynamicOptions);
     $httpBackend.flush();
     ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection });
     permissionsDataService.setSelectedRole(vm.roles[0]);
@@ -309,10 +312,10 @@ xdescribe('component: permissionsList', function () {
       IsMyRole: false,
       Name: 'Agent'
     })
-      .withRoleInfo({
-        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-        AvailableFunctions: []
-      }).withOrganizationSelection(BusinessUnit, DynamicOptions);
+    .withRoleInfo({
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      AvailableFunctions: []
+    }).withOrganizationSelection(BusinessUnit, DynamicOptions);
     $httpBackend.flush();
     ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection });
     permissionsDataService.setSelectedRole(vm.roles[0]);
@@ -358,10 +361,10 @@ xdescribe('component: permissionsList', function () {
       IsMyRole: false,
       Name: 'Agent'
     })
-      .withRoleInfo({
-        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-        AvailableFunctions: []
-      }).withOrganizationSelection(BusinessUnit, DynamicOptions);
+    .withRoleInfo({
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      AvailableFunctions: []
+    }).withOrganizationSelection(BusinessUnit, DynamicOptions);
     $httpBackend.flush();
     ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection });
     permissionsDataService.setSelectedRole(vm.roles[0]);
@@ -407,10 +410,10 @@ xdescribe('component: permissionsList', function () {
       IsMyRole: false,
       Name: 'Agent'
     })
-      .withRoleInfo({
-        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-        AvailableFunctions: []
-      }).withOrganizationSelection(BusinessUnit, DynamicOptions);
+    .withRoleInfo({
+      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+      AvailableFunctions: []
+    }).withOrganizationSelection(BusinessUnit, DynamicOptions);
     $httpBackend.flush();
     ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection });
     permissionsDataService.setSelectedRole(vm.roles[0]);
@@ -451,132 +454,202 @@ xdescribe('component: permissionsList', function () {
         Type: 'Site',
         IsSelected: false
       }
+    ]
+  };
+
+  fakeBackend.withRole({
+    BuiltIn: false,
+    DescriptionText: 'Agent',
+    Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+    IsAnyBuiltIn: true,
+    IsMyRole: false,
+    Name: 'Agent'
+  })
+  .withRoleInfo({
+    Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+    AvailableFunctions: []
+  })
+  .withOrganizationSelection(BusinessUnit, []);
+  $httpBackend.flush();
+  ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection });
+  spyOn(permissionsDataService, 'selectOrganization');
+  permissionsDataService.setSelectedRole(vm.roles[0]);
+
+  ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
+
+  expect(permissionsDataService.selectOrganization).toHaveBeenCalledWith(preparedObject);
+});
+
+it('should delete all org data for selected role', function () {
+  var BusinessUnit = {
+    Id: "b2f7feae-d777-4f94-bf9d-d180a215ec09",
+    Name: "TeleoptiCCCDemo",
+    Type: "BusinessUnit",
+    IsSelected: true,
+    ChildNodes: [{
+      ChildNodes: [
+        {
+          Id: "5d2cef4b-a994-4e6f-bb44-87c8306c2052",
+          Name: "JagÄrEttTeam",
+          Type: "Team",
+          IsSelected: true
+        }
+      ],
+      Id: "a2816f4d-691b-4e0b-9950-6f815259dc68",
+      Name: "London",
+      Type: "Site",
+      IsSelected: true
+    }]
+  };
+  fakeBackend
+  .withRole({
+    BuiltIn: false,
+    DescriptionText: 'Agent',
+    Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+    IsAnyBuiltIn: true,
+    IsMyRole: false,
+    Name: 'Agent'
+  })
+  .withRoleInfo({
+    Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+    AvailableFunctions: [],
+    AvailableBusinessUnits: [{ Name: "London", Id: "b2f7feae-d777-4f94-bf9d-d180a215ec09" }],
+    AvailableSites: [{ Name: "London", Id: "a2816f4d-691b-4e0b-9950-6f815259dc68" }],
+    AvailableTeams: [{ Name: "JagÄrEttTeam", Id: "5d2cef4b-a994-4e6f-bb44-87c8306c2052" }]
+  })
+  .withOrganizationSelection(BusinessUnit, []);
+  $httpBackend.flush();
+  ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection });
+  permissionsDataService.setSelectedRole(vm.roles[0]);
+
+  ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
+  $httpBackend.flush();
+
+  expect(fakeBackend.getInfoForSelecteRole().AvailableBusinessUnits.length).toEqual(0);
+  expect(fakeBackend.getInfoForSelecteRole().AvailableSites.length).toEqual(0);
+  expect(fakeBackend.getInfoForSelecteRole().AvailableTeams.length).toEqual(0);
+});
+
+//Måste fixa fakebakend för delete och post. Göra mer dynamiskt, inte hårdkoda idn/parametrar.
+it('should delete unselected data for selected role', function(){
+  var BusinessUnit = {
+    Id: "b2f7feae-d777-4f94-bf9d-d180a215ec09",
+    Name: "TeleoptiCCCDemo",
+    Type: "BusinessUnit",
+    IsSelected: true,
+    ChildNodes: [{
+      ChildNodes: [
+        {
+          Id: "5d2cef4b-a994-4e6f-bb44-87c8306c2052",
+          Name: "JagÄrEttTeam",
+          Type: "Team",
+          IsSelected: true
+        }
+      ],
+      Id: "a2816f4d-691b-4e0b-9950-6f815259dc68",
+      Name: "London",
+      Type: "Site",
+      IsSelected: true
+    }]
+  };
+  fakeBackend
+  .withRole({
+    BuiltIn: false,
+    DescriptionText: 'Agent',
+    Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+    IsAnyBuiltIn: true,
+    IsMyRole: false,
+    Name: 'Agent'
+  })
+  .withRoleInfo({
+    Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+    AvailableFunctions: [],
+    AvailableBusinessUnits: [{ Name: "London", Id: "b2f7feae-d777-4f94-bf9d-d180a215ec09" }],
+    AvailableSites: [{ Name: "London", Id: "a2816f4d-691b-4e0b-9950-6f815259dc68" }],
+    AvailableTeams: [{ Name: "JagÄrEttTeam", Id: "5d2cef4b-a994-4e6f-bb44-87c8306c2052" }]
+  })
+  .withOrganizationSelection(BusinessUnit, []);
+  $httpBackend.flush();
+  ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection });
+  permissionsDataService.setSelectedRole(vm.roles[0]);
+
+  ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0]);
+  $httpBackend.flush();
+
+  expect(fakeBackend.getInfoForSelecteRole().AvailableBusinessUnits.length).toEqual(1);
+  expect(fakeBackend.getInfoForSelecteRole().AvailableSites.length).toEqual(1);
+  expect(fakeBackend.getInfoForSelecteRole().AvailableTeams.length).toEqual(0);
+});
+
+it('should have correct avaiable number of teams for selected role', function(){
+  fakeBackend
+  .withRole({
+    BuiltIn: false,
+    DescriptionText: 'Agent',
+    Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+    IsAnyBuiltIn: false,
+    IsMyRole: false,
+    Name: 'Agent'
+  })
+  .withRoleInfo({
+    Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
+    AvailableFunctions: [],
+    AvailableBusinessUnits: [],
+    AvailableSites: [],
+    AvailableTeams: []
+  })
+  .withRole({
+    BuiltIn: false,
+    DescriptionText: 'Agent2',
+    Id: '1805c09e-39fe-4472-af28-ba9f3e8df759',
+    IsAnyBuiltIn: false,
+    IsMyRole: false,
+    Name: 'Agent'
+  })
+  .withRoleInfo({
+    Id: '1805c09e-39fe-4472-af28-ba9f3e8df759',
+    AvailableFunctions: [],
+    AvailableBusinessUnits: [],
+    AvailableSites: [],
+    AvailableTeams: []
+  })
+  .withOrganizationSelection({
+    Id: "b2f7feae-d777-4f94-bf9d-d180a215ec09",
+    Name: "TeleoptiCCCDemo",
+    Type: "BusinessUnit",
+    ChildNodes: [{
+      Id: "a2816f4d-691b-4e0b-9950-6f815259dc68",
+      Name: "London",
+      Type: "Site",
+      ChildNodes: [
+        {
+          Id: "5d2cef4b-a994-4e6f-bb44-87c8306c2052",
+          Name: "London-Team1",
+          Type: "Team"
+        },
+        {
+          Id: "c6326a58-8876-497f-be97-8dce62cc0c11",
+          Name: "London-Team2",
+          Type: "Team"
+        }
       ]
-    };
-
-    fakeBackend.withRole({
-      BuiltIn: false,
-      DescriptionText: 'Agent',
-      Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-      IsAnyBuiltIn: true,
-      IsMyRole: false,
-      Name: 'Agent'
-    })
-      .withRoleInfo({
-        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-        AvailableFunctions: []
-      })
-      .withOrganizationSelection(BusinessUnit, []);
-    $httpBackend.flush();
-    ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection });
-    spyOn(permissionsDataService, 'selectOrganization');
-    permissionsDataService.setSelectedRole(vm.roles[0]);
-
-    ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
-
-    expect(permissionsDataService.selectOrganization).toHaveBeenCalledWith(preparedObject);
+    }]
   });
+  $httpBackend.flush();
+  ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection });
+  vm.selectRole(vm.roles[0]);
+  $httpBackend.flush();
 
-  it('should delete all org data for selected role', function () {
-    var BusinessUnit = {
-      Id: "b2f7feae-d777-4f94-bf9d-d180a215ec09",
-      Name: "TeleoptiCCCDemo",
-      Type: "BusinessUnit",
-      IsSelected: true,
-      ChildNodes: [{
-        ChildNodes: [
-          {
-            Id: "5d2cef4b-a994-4e6f-bb44-87c8306c2052",
-            Name: "JagÄrEttTeam",
-            Type: "Team",
-            IsSelected: true
-          }
-        ],
-        Id: "a2816f4d-691b-4e0b-9950-6f815259dc68",
-        Name: "London",
-        Type: "Site",
-        IsSelected: true
-      }]
-    };
-    fakeBackend
-      .withRole({
-        BuiltIn: false,
-        DescriptionText: 'Agent',
-        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-        IsAnyBuiltIn: true,
-        IsMyRole: false,
-        Name: 'Agent'
-      })
-      .withRoleInfo({
-        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-        AvailableFunctions: [],
-        AvailableBusinessUnits: [{ Name: "London", Id: "b2f7feae-d777-4f94-bf9d-d180a215ec09" }],
-        AvailableSites: [{ Name: "London", Id: "a2816f4d-691b-4e0b-9950-6f815259dc68" }],
-        AvailableTeams: [{ Name: "JagÄrEttTeam", Id: "5d2cef4b-a994-4e6f-bb44-87c8306c2052" }]
-      })
-      .withOrganizationSelection(BusinessUnit, []);
-    $httpBackend.flush();
-    ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection });
-    permissionsDataService.setSelectedRole(vm.roles[0]);
+  ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0]);
+  $httpBackend.flush();
+  vm.selectRole(vm.roles[1]);
+  $httpBackend.flush();
+  ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[1]);
+  $httpBackend.flush();
 
-    ctrl.toggleNode(vm.organizationSelection.BusinessUnit);
-    $httpBackend.flush();
-
-    expect(fakeBackend.getInfoForSelecteRole().AvailableBusinessUnits.length).toEqual(0);
-    expect(fakeBackend.getInfoForSelecteRole().AvailableSites.length).toEqual(0);
-    expect(fakeBackend.getInfoForSelecteRole().AvailableTeams.length).toEqual(0);
-  });
-
-  //Måste fixa fakebakend för delete och post. Göra mer dynamiskt, inte hårdkoda idn/parametrar.
-  it('should delete unselected data for selected role', function(){
-     var BusinessUnit = {
-      Id: "b2f7feae-d777-4f94-bf9d-d180a215ec09",
-      Name: "TeleoptiCCCDemo",
-      Type: "BusinessUnit",
-      IsSelected: true,
-      ChildNodes: [{
-        ChildNodes: [
-          {
-            Id: "5d2cef4b-a994-4e6f-bb44-87c8306c2052",
-            Name: "JagÄrEttTeam",
-            Type: "Team",
-            IsSelected: true
-          }
-        ],
-        Id: "a2816f4d-691b-4e0b-9950-6f815259dc68",
-        Name: "London",
-        Type: "Site",
-        IsSelected: true
-      }]
-    };
-    fakeBackend
-      .withRole({
-        BuiltIn: false,
-        DescriptionText: 'Agent',
-        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-        IsAnyBuiltIn: true,
-        IsMyRole: false,
-        Name: 'Agent'
-      })
-      .withRoleInfo({
-        Id: 'e7f360d3-c4b6-41fc-9b2d-9b5e015aae64',
-        AvailableFunctions: [],
-        AvailableBusinessUnits: [{ Name: "London", Id: "b2f7feae-d777-4f94-bf9d-d180a215ec09" }],
-        AvailableSites: [{ Name: "London", Id: "a2816f4d-691b-4e0b-9950-6f815259dc68" }],
-        AvailableTeams: [{ Name: "JagÄrEttTeam", Id: "5d2cef4b-a994-4e6f-bb44-87c8306c2052" }]
-      })
-      .withOrganizationSelection(BusinessUnit, []);
-    $httpBackend.flush();
-    ctrl = $componentController('permissionsList', null, { org: vm.organizationSelection });
-    permissionsDataService.setSelectedRole(vm.roles[0]);
-
-    ctrl.toggleNode(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0]);
-    $httpBackend.flush();
-
-    expect(fakeBackend.getInfoForSelecteRole().AvailableBusinessUnits.length).toEqual(1);
-    expect(fakeBackend.getInfoForSelecteRole().AvailableSites.length).toEqual(1);
-    expect(fakeBackend.getInfoForSelecteRole().AvailableTeams.length).toEqual(0);
-  });
+  expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].IsSelected).toEqual(false);
+  expect(vm.organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[1].IsSelected).toEqual(true);
+});
 
 
 });

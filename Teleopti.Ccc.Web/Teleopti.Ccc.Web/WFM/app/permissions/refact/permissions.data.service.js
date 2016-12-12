@@ -16,7 +16,6 @@
         this.selectAllFunction = selectAllFunction;
 
         var selectedRole;
-        var data = {};
 
         function selectFunction(selectedRole, functions, func) {
             if (func.IsSelected) {
@@ -96,6 +95,7 @@
         }
 
         function arrayCreator(orgData) {
+            var data = {};
             var attributeName = orgData.Type + 's';
             if (!data[attributeName]) {
                 data[attributeName] = [];
