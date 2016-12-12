@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture]
-	[DomainTestWithStaticDependenciesAvoidUse]
+	[DomainTest]
 	public class AddOvertimeActivityCommandHandlerTest : ISetup
 	{
 		public AddOvertimeActivityCommandHandler Target;
