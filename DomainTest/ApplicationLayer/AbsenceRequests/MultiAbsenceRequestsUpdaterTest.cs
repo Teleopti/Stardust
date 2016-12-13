@@ -208,8 +208,79 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			reqs.Count(x => x.IsDenied).Should().Be.EqualTo(150);
 		}
 
+
 		[Test]
-		[Ignore("buggelibug")]
+		public void ShouldHandleDifferentSkillSetups()
+		{
+			Now.Is(new DateTime(2016, 12, 1, 10, 0, 0));
+			var firstDay = new DateOnly(2016, 12, 1);
+			var activity = ActivityRepository.Has("activityName");
+			var skill1 = SkillRepository.Has("skillName1", activity);
+			var skill2 = SkillRepository.Has("skillName2", activity);
+			skill1.StaffingThresholds = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
+			skill2.StaffingThresholds = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
+
+			var scenario = ScenarioRepository.Has("scnearioName");
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var contract = new Contract("_")
+			{
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
+			};
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var workflowControlSet = new WorkflowControlSet().WithId();
+
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			};
+
+			workflowControlSet.InsertPeriod(absenceRequestOpenPeriod, 0);
+
+			var contractSchedule = new ContractSchedule("_");
+			var partTimePercentage = new PartTimePercentage("_");
+			var team = new Team { Site = new Site("site") };
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
+			var category = new ShiftCategory("shiftCategory");
+			SkillDayRepository.Has(skill1.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 150));
+			SkillDayRepository.Has(skill2.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 150));
+
+			var reqs = new List<IPersonRequest>();
+			for (int i = 0; i < 200; i++)
+			{
+				var agent1 = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, skill1);
+				var agent2 = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, skill2);
+				agent1.WorkflowControlSet = workflowControlSet;
+				agent2.WorkflowControlSet = workflowControlSet;
+				var assignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent1, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04), category, scenario);
+				var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent2, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04), category, scenario);
+				PersonAssignmentRepository.Has(assignment1);
+				PersonAssignmentRepository.Has(assignment2);
+				var personRequest1 = new PersonRequest(agent1, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04))).WithId();
+				var personRequest2 = new PersonRequest(agent2, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 04))).WithId();
+				personRequest1.Pending();
+				personRequest2.Pending();
+				PersonRequestRepository.Add(personRequest1);
+				PersonRequestRepository.Add(personRequest2);
+				reqs.Add(personRequest1);
+				reqs.Add(personRequest2);
+			}
+
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
+
+			Target.UpdateAbsenceRequest(reqs.Select(x => x.Id.GetValueOrDefault()).ToList());
+
+			reqs.Count(x => x.IsApproved).Should().Be.EqualTo(100); // 50 of each skill
+			reqs.Count(x => x.IsDenied).Should().Be.EqualTo(300);
+		}
+
+
+		[Test]
 		public void ShouldHandleMidnightShifts()
 		{
 			Now.Is(new DateTime(2016, 12, 1, 10, 0, 0));

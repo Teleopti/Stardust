@@ -30,56 +30,57 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
 			var localPeriod = absenceRequest.Period.ToDateOnlyPeriod(timeZone);
 			var schedules = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Schedules[absenceRequest.Person].ScheduledDayCollection(localPeriod);
+			var date = new DateOnly(absenceRequest.Period.StartDateTime);
+			var skills = personSkillProvider.SkillsOnPersonDate(absenceRequest.Person, date);
 
+			if (!IsSkillOpenForDateOnly(date, skills.Skills))
+				return result;
+
+			var datesToResourceCalculate = absenceRequest.Period.ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+			var calculatedPeriod = absenceRequest.Period;
+
+			var resCalcData = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.ToResourceOptimizationData(true, false);
+			foreach (var dateOnly in datesToResourceCalculate.DayCollection())
+			{
+				requiredForHandlingAbsenceRequest.ResourceOptimizationHelper.ResourceCalculate(dateOnly, resCalcData);
+			}
+
+			var absenceLayerCollection = new List<IVisualLayer>();
 			foreach (var scheduleDay in schedules)
 			{
-				var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
-				var skills = personSkillProvider.SkillsOnPersonDate(absenceRequest.Person, date);
-				if (!IsSkillOpenForDateOnly(date, skills.Skills))
-					continue;
-
-				//As the resource calculation currently always being made from the viewpoint timezone, this is what we need here!
-				var dayPeriod = scheduleDay.DateOnlyAsPeriod.Period();
-				var datesToResourceCalculate = dayPeriod.ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
-
-				var resCalcData = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.ToResourceOptimizationData(true, false);
-				foreach (DateOnly dateOnly in datesToResourceCalculate.DayCollection())
-				{
-					requiredForHandlingAbsenceRequest.ResourceOptimizationHelper.ResourceCalculate(dateOnly, resCalcData);
-				}
-
-				var calculatedPeriod = datesToResourceCalculate.ToDateTimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 				var absenceLayers = scheduleDay.ProjectionService().CreateProjection().FilterLayers(absenceRequest.Absence);
+				absenceLayerCollection.AddRange(absenceLayers);
+			}
 
-				foreach (var absenceLayer in absenceLayers)
+
+			foreach (var absenceLayer in absenceLayerCollection)
+			{
+				var sharedPeriod = calculatedPeriod.Intersection(absenceLayer.Period);
+				if (!sharedPeriod.HasValue) continue;
+
+				var sharedRequestPeriod = absenceRequest.Period.Intersection(sharedPeriod.Value);
+				if (!sharedRequestPeriod.HasValue) continue;
+
+				foreach (var skill in skills.Skills)
 				{
-					var sharedPeriod = calculatedPeriod.Intersection(absenceLayer.Period);
-					if (!sharedPeriod.HasValue) continue;
+					if (skill == null) continue;
+					var skillStaffPeriodList = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> {skill}, sharedRequestPeriod.Value);
 
-					var sharedRequestPeriod = absenceRequest.Period.Intersection(sharedPeriod.Value);
-					if (!sharedRequestPeriod.HasValue) continue;
-
-					foreach (var skill in skills.Skills)
+					if (skillStaffPeriodList == null || skillStaffPeriodList.Count == 0)
 					{
-						if (skill == null) continue;
-						var skillStaffPeriodList = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill }, sharedRequestPeriod.Value);
+						continue;
+					}
 
-						if (skillStaffPeriodList == null || skillStaffPeriodList.Count == 0)
-						{
-							continue;
-						}
+					var validatedUnderStaffingResult = ValidateUnderstaffing(skill, skillStaffPeriodList, timeZone, result);
+					if (!validatedUnderStaffingResult.IsValid)
+					{
+						result.AddUnderstaffingDay(date);
+					}
 
-						var validatedUnderStaffingResult = ValidateUnderstaffing(skill, skillStaffPeriodList, timeZone, result);
-						if (!validatedUnderStaffingResult.IsValid)
-						{
-							result.AddUnderstaffingDay(date);
-						}
-
-						var validatedSeriousUnderStaffingResult = ValidateSeriousUnderstaffing(skill, skillStaffPeriodList, timeZone, result);
-						if (!validatedSeriousUnderStaffingResult.IsValid)
-						{
-							result.AddSeriousUnderstaffingDay(date);
-						}
+					var validatedSeriousUnderStaffingResult = ValidateSeriousUnderstaffing(skill, skillStaffPeriodList, timeZone, result);
+					if (!validatedSeriousUnderStaffingResult.IsValid)
+					{
+						result.AddSeriousUnderstaffingDay(date);
 					}
 				}
 			}
