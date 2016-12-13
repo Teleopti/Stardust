@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -15,17 +11,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     public class RequestPresenter : IRequestPresenter
     {
         private readonly IPersonRequestCheckAuthorization _authorization;
-        private static IDictionary<Guid, IPerson> _filteredPersonDictionary;
-        
+        private IDictionary<Guid, IPerson> _filteredPersonDictionary;
         private IUndoRedoContainer _undoRedo;
 
         public RequestPresenter(IPersonRequestCheckAuthorization authorization)
         {
             _authorization = authorization;
         }
-
-
-        public static void InitializeFileteredPersonDictionary(IDictionary<Guid, IPerson> filteredPersonDictionary)
+		
+        public void InitializeFileteredPersonDictionary(IDictionary<Guid, IPerson> filteredPersonDictionary)
         {
             _filteredPersonDictionary = filteredPersonDictionary;
         }
@@ -35,19 +29,19 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// <param name="adapterList"></param>
         /// <param name="filterExpression"></param>
         /// <returns></returns>
-        public static IList<PersonRequestViewModel> FilterAdapters(IList<PersonRequestViewModel> adapterList, IList<string> filterExpression)
+        public IList<PersonRequestViewModel> FilterAdapters(IList<PersonRequestViewModel> adapterList, IList<string> filterExpression)
         {
 			var filteredData = searchText(adapterList, filterExpression);
             return filteredData;
         }
 
-		public static IList<PersonRequestViewModel> FilterAdapters(IList<PersonRequestViewModel> adapterList,
+		public IList<PersonRequestViewModel> FilterAdapters(IList<PersonRequestViewModel> adapterList,
 		                                                           IEnumerable<Guid> filteredPersons)
 		{
 			return adapterList.Where(p => filteredPersons.Contains(p.PersonRequest.Person.Id.GetValueOrDefault())).ToList();
 		}
 
-        private static IList<PersonRequestViewModel> searchText(IEnumerable<PersonRequestViewModel> data,
+        private IList<PersonRequestViewModel> searchText(IEnumerable<PersonRequestViewModel> data,
                                                  IList<string> filterExpression
                                                  )
         {
@@ -72,7 +66,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             return filteredRequest;
         }
 
-        private static bool findText(string filterText, PersonRequestViewModel element)
+        private bool findText(string filterText, PersonRequestViewModel element)
         {
             var requestedDate = element.RequestedDate;
             var personRequestStartDate = element.PersonRequest.Request.Period.StartDateTime;
@@ -206,139 +200,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public void CommitUndo()
         {
-            if (_undoRedo!=null) _undoRedo.CommitBatch();
+	        _undoRedo?.CommitBatch();
         }
 
         public void RollbackUndo()
         {
-            if (_undoRedo!=null) _undoRedo.RollbackBatch();
+	        _undoRedo?.RollbackBatch();
         }
-    }
-
-    public class DenyPersonRequestCommand : IHandlePersonRequestCommand
-    {
-        private readonly IRequestPresenterCallback _callback;
-        private readonly IPersonRequestCheckAuthorization _authorization;
-        private const string DenyReasonResourceKey = "RequestDenyReasonSupervisor";
-
-        public DenyPersonRequestCommand(IRequestPresenterCallback callback, IPersonRequestCheckAuthorization authorization)
-        {
-            _callback = callback;
-            _authorization = authorization;
-        }
-
-        public void Execute()
-        {
-            Model.PersonRequest.Deny(DenyReasonResourceKey,_authorization);
-            _callback.CommitUndo();
-        }
-
-        public PersonRequestViewModel Model
-        {
-            get; set;
-        }
-    }
-
-    public interface IRequestPresenterCallback
-    {
-        void CommitUndo();
-        void RollbackUndo();
-    }
-
-    public interface IHandlePersonRequestCommand : IExecutableCommand
-    {
-        PersonRequestViewModel Model { get; set; }
-    }
-
-    public interface IApprovePersonRequestCommand : IHandlePersonRequestCommand
-    {
-        IList<IBusinessRuleResponse> Approve(INewBusinessRuleCollection newBusinessRules);
-    }
-
-    public class ApprovePersonRequestCommand : IApprovePersonRequestCommand
-    {
-        private readonly IViewBase _view;
-        private readonly IScheduleDictionary _schedules;
-        private readonly IScenario _scenario;
-        private readonly IRequestPresenterCallback _callback;
-        private readonly IHandleBusinessRuleResponse _handleBusinessRuleResponse;
-        private readonly IPersonRequestCheckAuthorization _authorization;
-        private readonly IOverriddenBusinessRulesHolder _overriddenBusinessRulesHolder;
-        private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-        private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
-        private readonly INewBusinessRuleCollection _newBusinessRules;
-		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
-
-		public ApprovePersonRequestCommand(IViewBase view, IScheduleDictionary schedules, IScenario scenario, IRequestPresenterCallback callback, IHandleBusinessRuleResponse handleBusinessRuleResponse,
-            IPersonRequestCheckAuthorization authorization, INewBusinessRuleCollection newBusinessRules, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, IScheduleDayChangeCallback scheduleDayChangeCallback, IGlobalSettingDataRepository globalSettingDataRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository)
-        {
-            _view = view;
-            _schedules = schedules;
-            _newBusinessRules = newBusinessRules;
-            _overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
-            _scheduleDayChangeCallback = scheduleDayChangeCallback;
-            _globalSettingDataRepository = globalSettingDataRepository;
-			_personAbsenceAccountRepository = personAbsenceAccountRepository;
-			_scenario = scenario;
-            _callback = callback;
-            _handleBusinessRuleResponse = handleBusinessRuleResponse;
-            _authorization = authorization;
-        }
-
-        public void Execute()
-        {
-            if (TryModify())
-            {
-                _callback.CommitUndo();
-            }
-            else
-            {
-                _callback.RollbackUndo();
-            }
-        }
-
-        private bool TryModify()
-        {
-            var lstBusinessRuleResponseToOverride = new List<IBusinessRuleResponse>();
-            var lstBusinessRuleResponse = Approve( _newBusinessRules);
-            var handleBusinessRules = new HandleBusinessRules(_handleBusinessRuleResponse, _view, _overriddenBusinessRulesHolder);
-            lstBusinessRuleResponseToOverride.AddRange(handleBusinessRules.Handle(lstBusinessRuleResponse, lstBusinessRuleResponseToOverride));
-            if (!lstBusinessRuleResponse.Any())
-                return true;
-            // try again with overriden
-            if (lstBusinessRuleResponseToOverride.Count > 0)
-            {
-                lstBusinessRuleResponseToOverride.ForEach(_newBusinessRules.DoNotHaltModify);
-                lstBusinessRuleResponse = Approve( _newBusinessRules);
-                lstBusinessRuleResponseToOverride = new List<IBusinessRuleResponse>();
-                foreach (var response in lstBusinessRuleResponse)
-                {
-                    if (!response.Overridden)
-                        lstBusinessRuleResponseToOverride.Add(response);
-                }
-            }
-            else
-            {
-                return false;
-            }
-            //if it's more than zero now. Cancel!!!
-            if (lstBusinessRuleResponseToOverride.Count > 0)
-            {
-                // show a MessageBox, another not overridable rule (Mandatory) might have been found later in the SheduleRange
-                // will probably not happen
-                _view.ShowErrorMessage(lstBusinessRuleResponse.First().Message, Resources.ViolationOfABusinessRule);
-                return false;
-            }
-            return true;
-        }
-
-        public IList<IBusinessRuleResponse> Approve(INewBusinessRuleCollection newBusinessRules)
-        {
-            var service = new RequestApprovalServiceScheduler(_schedules, _scenario, new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _scheduleDayChangeCallback, _globalSettingDataRepository, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), _authorization);
-
-            return Model.PersonRequest.Approve(service, _authorization);
-        }
-
-        public PersonRequestViewModel Model { get; set; }
     }
 }

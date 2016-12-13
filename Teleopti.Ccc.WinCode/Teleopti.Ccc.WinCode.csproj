@@ -593,6 +593,7 @@
     <Compile Include="Scheduling\AgentStudentAvailabilityEditCommand.cs" />
     <Compile Include="Scheduling\AgentStudentAvailabilityPresenter.cs" />
     <Compile Include="Scheduling\AgentStudentAvailabilityRemoveCommand.cs" />
+    <Compile Include="Scheduling\ApprovePersonRequestCommand.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryDirection.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryModel.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryPresenter.cs" />
@@ -607,6 +608,7 @@
     <Compile Include="Scheduling\AgentOvertimeAvailabilityAddCommand.cs" />
     <Compile Include="Scheduling\AgentOvertimeAvailabilityEditCommand.cs" />
     <Compile Include="Scheduling\AgentOvertimeAvailabilityRemoveCommand.cs" />
+    <Compile Include="Scheduling\DenyPersonRequestCommand.cs" />
     <Compile Include="Scheduling\ExportToScenarioAbsenceFinder.cs" />
     <Compile Include="Scheduling\ExportToScenarioAccountPersister.cs" />
     <Compile Include="Scheduling\ExtendReduceDaysOffHelper.cs" />
@@ -620,8 +622,11 @@
     <Compile Include="Scheduling\IAgentPreferenceView.cs" />
     <Compile Include="Scheduling\IAgentStudentAvailabilityCommand.cs" />
     <Compile Include="Scheduling\IAgentStudentAvailabilityView.cs" />
+    <Compile Include="Scheduling\IApprovePersonRequestCommand.cs" />
+    <Compile Include="Scheduling\IHandlePersonRequestCommand.cs" />
     <Compile Include="Scheduling\IOvertimePreferencesDialog.cs" />
     <Compile Include="Scheduling\IProgressReporter.cs" />
+    <Compile Include="Scheduling\IRequestPresenterCallback.cs" />
     <Compile Include="Scheduling\ISchedulePresenterBase.cs" />
     <Compile Include="Scheduling\ISchedulingScreenPersister.cs" />
     <Compile Include="Scheduling\MultiplicatorsetForPasteSpecialFilter.cs" />

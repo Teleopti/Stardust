@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public void DoNotHaltModify(IBusinessRuleResponse businessRuleResponseToOverride)
 		{
-			throw new NotImplementedException();
+			DoNotHaltModify(businessRuleResponseToOverride.TypeOfRule);
 		}
 
 		public void DoNotHaltModify(Type businessRuleType)
@@ -54,9 +54,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public void SetUICulture(CultureInfo cultureInfo)
 		{
-
+			UICulture = cultureInfo;
 		}
 
-		public CultureInfo UICulture { get; }
+		public CultureInfo UICulture { get; private set; }
 	}
 }

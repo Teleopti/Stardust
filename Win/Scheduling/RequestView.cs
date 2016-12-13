@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	    private IEventAggregator _eventAggregator;
         private readonly IPersonRequestCheckAuthorization _authorization;
 		private bool _isWindowLoaded;
+	    private RequestPresenter _presenter;
 
         public RequestView(FrameworkElement handlePersonRequestView, ISchedulerStateHolder schedulerStateHolder, IUndoRedoContainer container, IDictionary<IPerson, IPersonAccountCollection> allAccountPersonCollection,IEventAggregator eventAggregator)
         {
@@ -36,7 +37,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             _container = container;
             _personRequestList = schedulerStateHolder.PersonRequests;
             _authorization = new PersonRequestCheckAuthorization();
-            _shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerWithSchedule(schedulerStateHolder.Schedules,_authorization);
+			_presenter = new RequestPresenter(_authorization);
+			_shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerWithSchedule(schedulerStateHolder.Schedules,_authorization);
             _model = new HandlePersonRequestViewModel(schedulerStateHolder.RequestedPeriod.Period(), schedulerStateHolder.AllPermittedPersons, _container, allAccountPersonCollection, _eventAggregator, _authorization, schedulerStateHolder.TimeZoneInfo);
             CreatePersonRequestViewModels(schedulerStateHolder, handlePersonRequestView);
             
@@ -73,9 +75,9 @@ namespace Teleopti.Ccc.Win.Scheduling
         public void FilterGrid(IList<string> filterWords, IDictionary<Guid, IPerson> filteredPersonDictionary)
         {
 			var allModels = (IList<PersonRequestViewModel>)_model.PersonRequestViewModels.SourceCollection;
-            RequestPresenter.InitializeFileteredPersonDictionary(filteredPersonDictionary);
-            var modelsToShow = RequestPresenter.FilterAdapters(allModels, filterWords);
-			_source = RequestPresenter.FilterAdapters(modelsToShow, filterWords);
+            _presenter.InitializeFileteredPersonDictionary(filteredPersonDictionary);
+            var modelsToShow = _presenter.FilterAdapters(allModels, filterWords);
+			_source = _presenter.FilterAdapters(modelsToShow, filterWords);
 			_model.ShowOnly(_source);
 	        foreach (var model in allModels)
 		        model.IsSelected = false;
@@ -85,8 +87,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void FilterPersons(IEnumerable<Guid> persons)
 		{
-			_source =
-				RequestPresenter.FilterAdapters((IList<PersonRequestViewModel>) _model.PersonRequestViewModels.SourceCollection,
+			_source = _presenter.FilterAdapters((IList<PersonRequestViewModel>) _model.PersonRequestViewModels.SourceCollection,
 				                                persons);
 			_model.ShowOnly(_source);
 		}

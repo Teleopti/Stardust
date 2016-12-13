@@ -37,17 +37,14 @@ namespace Teleopti.Interfaces.Domain
 						}
 
 						var payload = layer.Payload.UnderlyingPayload;
-						var requiresSeat = false;
 						var activity = payload as IActivity;
 						if (activity != null)
 						{
-							requiresSeat = activity.RequiresSeat;
-							yield return
-							new ResourceLayer
+							yield return new ResourceLayer
 							{
-								Resource = fractionPeriod.HasValue ? fractionPeriod.Value.ElapsedTime().TotalMinutes / minutesSplit : 1d,
+								Resource = fractionPeriod?.ElapsedTime().TotalMinutes / minutesSplit ?? 1d,
 								PayloadId = payload.Id.GetValueOrDefault(),
-								RequiresSeat = requiresSeat,
+								RequiresSeat = activity.RequiresSeat,
 								Period = currentIntervalPeriod,
 								FractionPeriod = fractionPeriod
 							};

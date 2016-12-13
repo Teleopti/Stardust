@@ -11,7 +11,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 		}
 
+		public FakeBusinessRulesResponseHandler WithDialogResult(DialogResult result)
+		{
+			DialogResult = result;
+			return this;
+		}
+
 		public bool ApplyToAll { get; }
-		public DialogResult DialogResult { get; }
+		public DialogResult DialogResult { get; private set; }
 	}
 }
