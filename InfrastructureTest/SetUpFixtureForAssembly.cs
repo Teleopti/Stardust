@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			builder.RegisterType<FakeToggleManager>().As<IToggleManager>().SingleInstance();
 			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterType<FakeHangfireEventClient>().As<IHangfireEventClient>().SingleInstance();
+			builder.RegisterType<SirLeakAlot>().As<INestedUnitOfWorkStrategy>().SingleInstance();
 			var container = builder.Build();
 
 			IDictionary<string, string> appSettings = new Dictionary<string, string>();
