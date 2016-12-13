@@ -3,7 +3,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[
 DROP PROCEDURE [ReadModel].[PersonFinderWithCriteriaAndTeams]
 GO
 
--- EXEC [ReadModel].[PersonFinderWithCriteriaAndTeams] 'FirstName : ashley; pierre, Organization: london', '2001-01-01', 1, 100, '1:1,2:0', 1053, '928DD0BC-BF40-412E-B970-9B5E015AADEA'
+-- EXEC [ReadModel].[PersonFinderWithCriteriaAndTeams] 'FirstName : ashley; pierre, Organization: london', '2001-01-01', 1, 100, '1:1,2:0', 1053, '928DD0BC-BF40-412E-B970-9B5E015AADEA', '2001-01-01', '34590A63-6331-4921-BC9F-9B5E015AB495,34590A63-6331-4921-BC9F-9B5E015AB495'
 -- =============================================
 -- Author:      Chundan
 -- Create date: 2016-12-09
@@ -212,7 +212,7 @@ BEGIN
 			BEGIN
 			IF @valueClause <> '('
 				SELECT @valueClause = @valueClause + ' OR '
-			SELECT @valueClause = @valueClause + 'SearchValue LIKE N''%' + @searchKeyword + '%'''
+			SELECT @valueClause = @valueClause + 'fp.SearchValue LIKE N''%' + @searchKeyword + '%'''
 			END
 			SELECT @notProcessedSearchValue = LTRIM(RTRIM(SUBSTRING(@notProcessedSearchValue, @keywordSplitterIndex + 1,
 			LEN(@notProcessedSearchValue) - @keywordSplitterIndex)))
@@ -221,21 +221,22 @@ BEGIN
 		SELECT @valueClause = @valueClause + ')'
 	END
 	ELSE
-		SELECT @valueClause = 'SearchValue like N''%' + @searchValue + '%'''
+		SELECT @valueClause = 'fp.SearchValue like N''%' + @searchValue + '%'''
 	
-	SELECT @dynamicSQL = 'SELECT PersonId FROM ReadModel.FindPerson  with (nolock) '
-				 +'INNER JOIN #teamId t ON t.tId = TeamId WHERE '
+	SELECT @dynamicSQL = 'SELECT fp.PersonId FROM ReadModel.FindPerson fp '
+				 +'INNER JOIN #teamId t with (nolock)   ON t.tId = fp.TeamId '
+				 +' WHERE '
 
 	IF @valueClause <> '()'
 	BEGIN
 		SELECT @dynamicSQL = @dynamicSQL
-			+ 'ISNULL(TerminalDate, ''2100-01-01'') >= ''' + @leave_after_ISO + ''' ' 
-			+ ' AND ( (StartDateTime IS NULL OR StartDateTime <=  ''' + @belongs_to_date_ISO + ''' ) AND ( EndDateTime IS NULL OR EndDateTime >= ''' + @belongs_to_date_ISO + ''' ))'
+			+ 'ISNULL(fp.TerminalDate, ''2100-01-01'') >= ''' + @leave_after_ISO + ''' ' 
+			+ ' AND ( (fp.StartDateTime IS NULL OR fp.StartDateTime <=  ''' + @belongs_to_date_ISO + ''' ) AND ( fp.EndDateTime IS NULL OR fp.EndDateTime >= ''' + @belongs_to_date_ISO + ''' ))'
 			+ ' AND ' + @valueClause
 
 		--If 'All' set searchtype as a separate AND condition
 		IF @searchType <> 'All'
-			SELECT @dynamicSQL = @dynamicSQL + ' AND (SearchType = '''' OR SearchType = '''+ @searchType + ''')'
+			SELECT @dynamicSQL = @dynamicSQL + ' AND (fp.SearchType = '''' OR fp.SearchType = '''+ @searchType + ''')'
 
 		--add INTERSECT between each result set
 		IF @cursorCount <> @criteriaCount --But NOT on last condition, the syntax is different
