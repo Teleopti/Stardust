@@ -1,6 +1,6 @@
 'use strict';
 
-fdescribe('component: permissionsTree', function () {
+xdescribe('component: permissionsTree', function () {
 	var $httpBackend,
 	fakeBackend,
 	$controller,
