@@ -44,9 +44,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
         private ShiftEditorViewModel _model;
         private GenericEvent<TriggerShiftEditorUpdate> _triggerShiftEditoEvent;
         private SubscriptionToken _subscriptionToken;
-
-
-
+		
 		public bool Enabled
 		{
 			get { return (bool)GetValue(EnabledProperty); }
@@ -55,8 +53,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
 
 		public static readonly DependencyProperty EnabledProperty =
 			DependencyProperty.Register("Enabled", typeof(bool), typeof(WpfShiftEditor), new PropertyMetadata(false));
-
-
+		
         public WpfShiftEditor(IEventAggregator eventAggregator,ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu)
         {
 			_model = new ShiftEditorViewModel(eventAggregator, createLayerViewModelService, showMeetingsInContextMenu, new EditableShiftMapper());
@@ -71,17 +68,13 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
             //Listen for changes in editor
             _triggerShiftEditoEvent = eventAggregator.GetEvent<GenericEvent<TriggerShiftEditorUpdate>>();
             _subscriptionToken = _triggerShiftEditoEvent.Subscribe(TriggerUpdate);
-		
         }
 
         private void TriggerUpdate(EventParameters<TriggerShiftEditorUpdate> obj)
         {
 	        Enabled = false;
-            if (ShiftUpdated != null)
-            {
-	            ShiftUpdated(this, new ShiftEditorEventArgs(_model.SchedulePart));
-            }
-            commitChanges(_model.SchedulePart);
+			ShiftUpdated?.Invoke(this, new ShiftEditorEventArgs(_model.SchedulePart));
+			commitChanges(_model.SchedulePart);
         }
 
         public void LoadSelectablePayloads()
@@ -102,12 +95,9 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
 	        Enabled = true;
         }
 
-        public IScheduleDay SchedulePart
-        {
-            get { return _model.SchedulePart; }
-        }
+        public IScheduleDay SchedulePart => _model.SchedulePart;
 
-        public TimeSpan Interval
+	    public TimeSpan Interval
         {
             get { return _model.Interval; }
             set { _model.Interval = value; }
@@ -141,14 +131,13 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
         {
             ILayerViewModel currentLayer = e.OriginalSource as ILayerViewModel;
             _model.SelectLayer(currentLayer);
-            if (SelectionChanged != null) SelectionChanged(this, new ShiftEditorEventArgs(SchedulePart));
+			SelectionChanged?.Invoke(this, new ShiftEditorEventArgs(SchedulePart));
 
 
-            FrameworkElement uiElement = sender as FrameworkElement;
-            if (uiElement != null)
-                uiElement.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+			FrameworkElement uiElement = sender as FrameworkElement;
+	        uiElement?.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
 
-            if(Keyboard.GetKeyStates(Key.LeftShift)==KeyStates.Down||Keyboard.GetKeyStates(Key.RightShift)==KeyStates.Down)
+	        if(Keyboard.GetKeyStates(Key.LeftShift)==KeyStates.Down||Keyboard.GetKeyStates(Key.RightShift)==KeyStates.Down)
             {
                 SelectGroupMoveLayers(currentLayer);
             }
@@ -164,30 +153,18 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private void PreviewMeetingSelected(object sender, RoutedEventArgs e)
         {
-        	var handler = MeetingClicked;
-            if (handler!= null)
-            {
-            	handler(this, EventArgs.Empty);
-            }
-        }
+			MeetingClicked?.Invoke(this, EventArgs.Empty);
+		}
 
         public void EditorShiftUpdated(IScheduleDay part)
         {
-        	var handler = ShiftUpdated;
-            if (handler!=null)
-            {
-            	handler(this,new ShiftEditorEventArgs(part));
-            }
-        }
+			ShiftUpdated?.Invoke(this, new ShiftEditorEventArgs(part));
+		}
 
         public void EditorUpdateCommandExecuted(IScheduleDay part)
         {
-        	var handler = ShiftUpdated;
-            if (handler!= null)
-            {
-            	handler(this, new ShiftEditorEventArgs(SchedulePart));
-            }
-        }
+			ShiftUpdated?.Invoke(this, new ShiftEditorEventArgs(SchedulePart));
+		}
 
 	    public void EditorAddActivity(IScheduleDay part, DateTimePeriod? period)
 	    {
@@ -201,9 +178,8 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
 
 	    public void EditorSelectionChanged(IScheduleDay part)
         {
-        	var handler = SelectionChanged;
-            if (handler!= null) handler(this, new ShiftEditorEventArgs(part));
-        }
+			SelectionChanged?.Invoke(this, new ShiftEditorEventArgs(part));
+		}
 
         public void EditorAddActivity(IScheduleDay part, DateTimePeriod? period, IPayload payload)
         {
@@ -277,92 +253,55 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
 
         public void EditorCommitChangesExecuted(IScheduleDay part)
         {
-            //Added this call to Shift updated here, makes the save button lite after update is pressed. /Peter
-        	var handler = ShiftUpdated;
-            if (handler!= null)
-            {
-            	handler(this, new ShiftEditorEventArgs(part));
-            }
-            //************
+			//Added this call to Shift updated here, makes the save button lite after update is pressed. /Peter
+			ShiftUpdated?.Invoke(this, new ShiftEditorEventArgs(part));
+			//************
 
-            commitChanges(part);
+			commitChanges(part);
         }
 
         private void commitChanges(IScheduleDay part)
         {
-        	var handler = CommitChanges;
-            if (handler!= null)
-            {
-            	handler(this, new ShiftEditorEventArgs(part));
-            }
-        }
+			CommitChanges?.Invoke(this, new ShiftEditorEventArgs(part));
+		}
 
         public void EditorEditMeetingExecuted(IPersonMeeting personMeeting)
         {
-        	var handler = EditMeeting;
-            if(handler!=null)
-            {
-            	handler(this,new CustomEventArgs<IPersonMeeting>(personMeeting));
-            }
-        }
+			EditMeeting?.Invoke(this, new CustomEventArgs<IPersonMeeting>(personMeeting));
+		}
 
         public void EditorDeleteMeetingExecuted(IPersonMeeting personMeeting)
         {
-        	var handler = DeleteMeeting;
-            if (handler!= null)
-            {
-            	handler(this, new CustomEventArgs<IPersonMeeting>(personMeeting));
-            }
+			DeleteMeeting?.Invoke(this, new CustomEventArgs<IPersonMeeting>(personMeeting));
         }
 
         public void EditorRemoveParticipantsFromMeetingExecuted(IPersonMeeting personMeeting)
         {
-        	var handler = RemoveParticipant;
-            if (handler!= null)
-            {
-            	handler(this, new CustomEventArgs<IPersonMeeting>(personMeeting));
-            }
-            
-        }
+			RemoveParticipant?.Invoke(this, new CustomEventArgs<IPersonMeeting>(personMeeting));
+		}
 
         public void EditorCreateMeetingExecuted(IPersonMeeting personMeeting)
         {
-        	var handler = CreateMeeting;
-            if (handler!= null)
-            {
-            	handler(this, new CustomEventArgs<IPersonMeeting>(personMeeting));
-            }
-        }
+			CreateMeeting?.Invoke(this, new CustomEventArgs<IPersonMeeting>(personMeeting));
+		}
 
 	    public void EditorShowLayersExecuted()
 	    {
-			var handler = ShowLayers;
-			if (handler != null)
-			{
-				handler(this, new EventArgs());
-			}
+			ShowLayers?.Invoke(this, EventArgs.Empty);
 		}
-
-
+		
 	    public void OnUndo(EventArgs e)
         {
-            var handler = Undo;
-            if (handler != null) handler(this, e);
-        }
+			Undo?.Invoke(this, e);
+		}
 
         #endregion
 
-        public IList<IPayload> SelectablePayloads
-        {
-            get { return _model.EditLayer.SelectablePayloads; }
-        }
+        public IList<IPayload> SelectablePayloads => _model.EditLayer.SelectablePayloads;
 
-        public IList<IShiftCategory> SelectableShiftCategories
-        {
-            get { return _model.Settings.ShiftCategories; }
-        }
+	    public IList<IShiftCategory> SelectableShiftCategories => _model.Settings.ShiftCategories;
 
-        public void LoadFromStateHolder(ICommonStateHolder commonStateHolder)
+	    public void LoadFromStateHolder(ICommonStateHolder commonStateHolder)
         {
 			foreach (var absence in commonStateHolder.Absences)
 			{
