@@ -359,7 +359,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 					SkillId = skillDay.Skill.Id.Value,
 					StartDateTime = TimeZoneHelper.ConvertFromUtc(intervalTime, TimeZone.TimeZone()),
 					EndDateTime = TimeZoneHelper.ConvertFromUtc(intervalTime, TimeZone.TimeZone()).AddMinutes(minutesPerInterval),
-					StaffingLevel = 18 * random.Next(100,130) / 100d
+					StaffingLevel = 18 * random.Next(100,110) / 100d
 				});
 			}
 			return scheduledStats;
@@ -397,7 +397,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		{
 			var scenario = fakeScenarioAndIntervalLength();
 			var random = new Random();
-			var agents = 19 * random.Next(100, 130)/100d;
+			var agents = 19 * random.Next(100, 110)/100d;
 			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), agents, new Tuple<TimePeriod, double>(openHours, agents)).WithId();
 			var index = 0;
 
