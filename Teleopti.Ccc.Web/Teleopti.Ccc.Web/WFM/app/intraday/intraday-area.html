@@ -206,7 +206,7 @@
 													<td>{{'ServiceLevel'|translate}}</td>
 													<td class="number-cell">{{viewObj.summary.summaryServiceLevel}} %</td>
 												</tr>
-												<tr>
+												<tr ng-if="toggles.showEsl">
 													<td>{{'ESL'|translate}}</td>
 													<td class="number-cell">{{viewObj.summary.summaryEstimatedServiceLevel}} %</td>
 												</tr>

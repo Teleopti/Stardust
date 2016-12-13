@@ -70,26 +70,26 @@
 				return staffingData;
 			}
 
-			service.pollSkillData = function (selectedItem, showOptimalStaffing, showScheduledStaffing) {
+			service.pollSkillData = function (selectedItem, toggles) {
 				intradayService.getSkillStaffingData.query(
 					{
 						id: selectedItem.Id
 					})
 					.$promise.then(function (result) {
-						return service.setStaffingData(result, showOptimalStaffing, showScheduledStaffing);
+						return service.setStaffingData(result, toggles.showOptimalStaffing, toggles.showScheduledStaffing);
 					},
 					function (error) {
 						staffingData.hasMonitorData = false;
 					});
 			};
 
-			service.pollSkillAreaData = function (selectedItem, showOptimalStaffing, showScheduledStaffing) {
+			service.pollSkillAreaData = function (selectedItem, toggles) {
 				intradayService.getSkillAreaStaffingData.query(
 					{
 						id: selectedItem.Id
 					})
 					.$promise.then(function (result) {
-						return service.setStaffingData(result, showOptimalStaffing, showScheduledStaffing);
+						return service.setStaffingData(result, toggles.showOptimalStaffing, toggles.showScheduledStaffing);
 					},
 					function (error) {
 						staffingData.hasMonitorData = false;

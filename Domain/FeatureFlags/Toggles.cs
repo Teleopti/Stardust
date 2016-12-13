@@ -199,7 +199,8 @@
 		SchedulingScreen_BatchAgentValidation_41552,
 		Wfm_Intraday_ScheduledStaffing_41476,
 		Mailbox_Optimization_41900,
-		No_UnitOfWork_Nesting_42175
+		No_UnitOfWork_Nesting_42175,
+		Wfm_Intraday_ESL_41827
 		// ReSharper restore InconsistentNaming
 	}
 }

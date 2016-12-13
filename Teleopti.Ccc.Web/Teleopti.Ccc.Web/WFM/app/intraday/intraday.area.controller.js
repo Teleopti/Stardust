@@ -31,6 +31,11 @@
 			$scope.DeleteSkillAreaModal = false;
 			$scope.prevArea;
 			$scope.drillable;
+			$scope.toggles = {
+				showOptimalStaffing: [],
+				showScheduledStaffing: [],
+				showEsl: []
+			};
 			var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
 			.replace('{0}', $translate.instant('Intraday'))
 			.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank'>")
@@ -41,8 +46,9 @@
 			$scope.viewObj;
 			NoticeService.info(message, null, true);
 			toggleSvc.togglesLoaded.then(function () {
-				$scope.showOptimalStaffing = toggleSvc.Wfm_Intraday_OptimalStaffing_40921;
-				$scope.showScheduledStaffing = toggleSvc.Wfm_Intraday_ScheduledStaffing_41476;
+				$scope.toggles.showOptimalStaffing = toggleSvc.Wfm_Intraday_OptimalStaffing_40921;
+				$scope.toggles.showScheduledStaffing = toggleSvc.Wfm_Intraday_ScheduledStaffing_41476;
+				$scope.toggles.showEsl = toggleSvc.Wfm_Intraday_ESL_41827;
 			});
 
 
@@ -247,10 +253,10 @@
 				if ($scope.selectedItem !== null && $scope.selectedItem !== undefined) {
 					if ($scope.selectedItem.Skills) {
 						console.log();
-						services[activeTab].pollSkillAreaData($scope.selectedItem, $scope.showOptimalStaffing, $scope.showScheduledStaffing);
+						services[activeTab].pollSkillAreaData($scope.selectedItem, $scope.toggles);
 						var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
 					} else {
-						services[activeTab].pollSkillData($scope.selectedItem, $scope.showOptimalStaffing, $scope.showScheduledStaffing);
+						services[activeTab].pollSkillData($scope.selectedItem, $scope.toggles);
 						var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
 					}
 					$scope.viewObj = services[activeTab].getData();

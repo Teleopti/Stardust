@@ -27,6 +27,7 @@ describe('IntradayAreaCtrl', function () {
 					return {
 						Wfm_Intraday_OptimalStaffing_40921: true,
 						Wfm_Intraday_ScheduledStaffing_41476: true,
+						Wfm_Intraday_ESL_41827: true,
 						togglesLoaded: {
 							then: function(cb) { cb(); }
 						}
@@ -399,7 +400,7 @@ describe('IntradayAreaCtrl', function () {
 		createController(false);
 		scope.activeTab = 2;
 
-		scope.showOptimalStaffing = true;
+		scope.toggles.showOptimalStaffing = true;
 
 		scope.selectedSkillAreaChange(scope.skillAreas[0]);
 		$httpBackend.flush();
@@ -411,7 +412,7 @@ describe('IntradayAreaCtrl', function () {
 		createController(false);
 		scope.activeTab = 2;
 
-		scope.showOptimalStaffing = false;
+		scope.toggles.showOptimalStaffing = false;
 
 		scope.selectedSkillAreaChange(scope.skillAreas[0]);
 		$httpBackend.flush();
@@ -423,7 +424,7 @@ describe('IntradayAreaCtrl', function () {
 		createController(false);
 		scope.activeTab = 2;
 
-		scope.showScheduledStaffing = true;
+		scope.toggles.showScheduledStaffing = true;
 
 		scope.selectedSkillAreaChange(scope.skillAreas[0]);
 		$httpBackend.flush();
@@ -435,12 +436,38 @@ describe('IntradayAreaCtrl', function () {
 		createController(false);
 		scope.activeTab = 2;
 
-		scope.showScheduledStaffing = false;
+		scope.toggles.showScheduledStaffing = false;
 
 		scope.selectedSkillAreaChange(scope.skillAreas[0]);
 		$httpBackend.flush();
 
 		expect(scope.viewObj.scheduledStaffing.length).toEqual(1);
+	});
+
+	it('should show ESL in performance view when toggle is enabled', function () {
+		createController(false);
+		scope.activeTab = 1;
+
+		scope.toggles.showEsl = true;
+
+		scope.selectedSkillAreaChange(scope.skillAreas[0]);
+		$httpBackend.flush();
+
+		expect(scope.viewObj.estimatedServiceLevelObj.series.length).toBeGreaterThan(0);
+		expect(scope.viewObj.summary.summaryEstimatedServiceLevel).toBeGreaterThan(0);
+	});
+
+	it('should show ESL in performance view when toggle is disabled', function () {
+		createController(false);
+		scope.activeTab = 1;
+
+		scope.toggles.showEsl = false;
+
+		scope.selectedSkillAreaChange(scope.skillAreas[0]);
+		$httpBackend.flush();
+
+		expect(scope.viewObj.estimatedServiceLevelObj.series.length).toEqual(1);
+		expect(scope.viewObj.summary.summaryEstimatedServiceLevel).toEqual(undefined);
 	});
 
 });

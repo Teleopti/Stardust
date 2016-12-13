@@ -30,13 +30,14 @@
 
 			var hiddenArray = [];
 			var intervalStart;
-			service.setPerformanceData = function (result) {
+			service.setPerformanceData = function (result, showEsl) {
 				resetData();
 
 				performanceData.averageSpeedOfAnswerObj.series = result.DataSeries.AverageSpeedOfAnswer;
 				performanceData.abandonedRateObj.series = result.DataSeries.AbandonedRate;
 				performanceData.serviceLevelObj.series = result.DataSeries.ServiceLevel;
-				performanceData.estimatedServiceLevelObj.series = result.DataSeries.EstimatedServiceLevels;
+				if(showEsl)
+					performanceData.estimatedServiceLevelObj.series = result.DataSeries.EstimatedServiceLevels;
 
 				performanceData.latestActualInterval = $filter('date')(result.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(result.LatestActualIntervalEnd, 'shortTime');
 				intervalStart = $filter('date')(result.LatestActualIntervalStart, 'shortTime');
@@ -54,9 +55,11 @@
 				performanceData.summary = {
 					summaryAbandonedRate: $filter('number')(result.Summary.AbandonRate * 100, 1),
 					summaryServiceLevel: $filter('number')(result.Summary.ServiceLevel * 100, 1),
-					summaryAverageSpeedOfAnswer: $filter('number')(result.Summary.AverageSpeedOfAnswer, 1),
-					summaryEstimatedServiceLevel: $filter('number')(result.Summary.EstimatedServiceLevel, 1)
+					summaryAverageSpeedOfAnswer: $filter('number')(result.Summary.AverageSpeedOfAnswer, 1)
 				};
+
+				if (showEsl)
+					performanceData.summary.summaryEstimatedServiceLevel = $filter('number')(result.Summary.EstimatedServiceLevel, 1);
 
 				angular.forEach(result.DataSeries.Time, function (value, key) {
 					this.push($filter('date')(value, 'shortTime'));
@@ -96,26 +99,26 @@
 				performanceData.estimatedServiceLevelObj.series = [];
 			};
 
-			service.pollSkillData = function (selectedItem) {
+			service.pollSkillData = function (selectedItem, toggles) {
 				intradayService.getSkillMonitorPerformance.query(
 					{
 						id: selectedItem.Id
 					})
 					.$promise.then(function (result) {
-						service.setPerformanceData(result);
+						service.setPerformanceData(result, toggles.showEsl);
 					},
 					function (error) {
 						performanceData.hasMonitorData = false;
 					});
 				};
 
-				service.pollSkillAreaData = function (selectedItem) {
+				service.pollSkillAreaData = function (selectedItem, toggles) {
 					intradayService.getSkillAreaMonitorPerformance.query(
 						{
 							id: selectedItem.Id
 						})
 						.$promise.then(function (result) {
-							service.setPerformanceData(result);
+							service.setPerformanceData(result, toggles.showEsl);
 						},
 						function (error) {
 							performanceData.hasMonitorData = false;
