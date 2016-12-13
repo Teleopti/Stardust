@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Logon.Aspects;
@@ -32,6 +33,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			Process(@event, handlerType);
 		}
 
+		private Action<T> MakeDelegate<T>(T eventType, object handler, MethodInfo method)
+		{
+			var actionType = typeof(Action<>).MakeGenericType(eventType.GetType());
+			return (Action<T>)Delegate.CreateDelegate(actionType, handler, method);
+		}
+		
 		public virtual void Process(IEvent @event, Type handlerType)
 		{
 			using (_initiatorIdentifierScope.OnThisThreadUse(InitiatorIdentifier.FromMessage(@event)))
@@ -42,7 +49,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					{
 						var handler = scope.Resolve(handlerType);
 						var method = _resolver.HandleMethodFor(handler.GetType(), @event);
-						method.Invoke(handler, new[] { @event });
+						//method.Invoke(handler, new[] { @event });
+
+						//var actionType = typeof(Action<>).MakeGenericType(@event.GetType());
+						//dynamic action = Delegate.CreateDelegate(actionType, handler, method);
+						//action.Invoke(@event);
+						//action.Method.Invoke(handler, new [] { @event });
+
+						var d = MakeDelegate((dynamic) @event, handler, method);
+						//var actionType = typeof(Action<>).MakeGenericType(((dynamic)@event).GetType());
+						//var d = (Action<dynamic>)Delegate.CreateDelegate(actionType, handler, method);
+						d.Invoke((dynamic)@event);
+
 					}
 				}
 				catch (TargetInvocationException e)

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -91,6 +93,29 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			Handler.HandledOnDataSource.Should().Be("tenant");
 		}
 
+		[Test]
+		public void ShouldThrowExceptionFromHandler()
+		{
+			Handler.Throws = new NullReferenceException();
+
+			Assert.Throws<NullReferenceException>(() =>
+			{
+				Target.Process(null, "tenant", typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AHandler).AssemblyQualifiedName);
+			});
+		}
+
+		[Test]
+		[Setting("HangfireJobTimeoutSeconds", 1)]
+		public void ShouldThrowOnTimeout()
+		{
+			Handler.Takes = TimeSpan.FromSeconds(2);
+
+			Assert.Throws<TimeoutException>(() =>
+			{
+				Target.Process(null, "tenant", typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AHandler).AssemblyQualifiedName);
+			});
+		}
+
 		public class AnEvent : Event
 		{
 			public string Data { get; set; }
@@ -101,14 +126,20 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			private readonly ICurrentDataSource _dataSource;
 			public List<IEvent> HandledEvents = new List<IEvent>();
 			public string HandledOnDataSource;
+			public TimeSpan Takes;
+			public Exception Throws;
 
 			public AHandler(ICurrentDataSource dataSource)
 			{
 				_dataSource = dataSource;
 			}
 
+
 			public void Handle(AnEvent @event)
 			{
+				Thread.Sleep(Takes);
+				if (Throws != null)
+					throw Throws;
 				HandledOnDataSource = _dataSource.Current().DataSourceName;
 				HandledEvents.Add(@event);
 			}
