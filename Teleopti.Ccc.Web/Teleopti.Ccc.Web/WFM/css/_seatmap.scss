@@ -9,41 +9,36 @@
 	overflow: hidden;
 	width: 100%;
 }
-
-.seatmap-container.seatplan{
+.seatmap-container.seatplan {
 	margin: 0;
 }
-
 .seatmap {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
+	height: 100%;
 	padding: 0;
-	z-index: 0;
 	overflow: hidden;
 	background: $white;
 
 	.wfm-block {
 		margin: 0;
 		padding: 0;
-		position: absolute;
+		position: relative;
 		top: 41px;
 		right: 0;
 		bottom: 0;
 		left: 0;
+		box-shadow: none;
+		-webkit-box-shadow: none;
 	}
-
 	.wfm-block-edit-mode {
-		position: relative;
-		top: 0;
+		top: 10px;
+		bottom: 0;
 	}
 }
-
 .seatmap-view-header {
 	height: 41px;
-	position: relative;
+	position: absolute;
+	top: 0;
+	width: 100%;
 	z-index: 2;
 	border-bottom: 1px solid #e1e2e3;
 
@@ -53,26 +48,21 @@
 		border-radius: 0px;
 		text-transform: none;
 	}
-
 	.return-button:hover {
 		background: #0099ff !important;
 		color: $white !important;
 	}
-
 	.wfm-btn-invis-primary:hover {
 		background: #0099ff;
 		color: $white !important;
 	}
-
 	.wfm-fab {
 		transition-duration: 0s;
 	}
-
 	.button-active {
 		background: #0099FF !important;
 		color: $white !important;
 	}
-
 	.seatmap-view-datepicker {
 		.wfm-datepicker {
 			background: $white;
@@ -82,7 +72,6 @@
 			z-index: 2;
 		}
 	}
-
 	.turn-off-datepicker {
 		width: 100%;
 		height: 40px;
@@ -94,13 +83,12 @@
 		background: transparent;
 	}
 }
-
 .location-breadcrumb {
 	background: $white;
 	position: absolute;
 	height: 25px;
 	top: 0;
-	right: 0;
+	right: 40px;
 	left: 0;
 	padding-top: 5px;
 	z-index: 1;
@@ -109,7 +97,6 @@
 		color: #09F;
 		cursor: pointer;
 	}
-
 	div {
 		height: 30px;
 		position: relative;
@@ -118,42 +105,39 @@
 		background: $white;
 		display: inline-block;
 	}
-
 	.breadcrumb-inverse {
 		font-size: 95%;
 		float: left;
 	}
-
 	.breadcrumb-inverse a, .breadcrumb-inverse > .active {
 		color: #09F !important;
 		padding: 0px;
 		margin-left: 5px;
 	}
-
 	.breadcrumb-inverse span {
 		position: relative;
 		margin-left: 5px;
 	}
 }
-
+.seatmap-right-panel {
+	min-height: 35px;
+	margin-top: 10px;
+}
 seatmap-editor {
 	z-index: 100;
 	background: $white;
 	border-bottom: 1px solid #e1e2e3;
 }
-
 .top-adjust {
 	top: 23px;
 }
-
 @media(min-width:1475px) {
 	.top-adjust {
 		top: -20px;
 	}
 }
-
 #seatmap-toolbar {
-	padding-left: 0px;
+	padding: 5px 5px 10px 5px;
 	border-bottom: 1px solid #e1e2e3;
 
 	.context-menu {
@@ -163,20 +147,17 @@ seatmap-editor {
 		span {
 			left: 0;
 			margin: 2px 0 0 0;
-			box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+			box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .26);
 		}
-
 		ul li {
 			white-space: nowrap;
 		}
-
 		ul li .md-alt-text {
 			box-shadow: none;
 			float: right;
 		}
 	}
 }
-
 .quick-access-toolbar {
 	padding-left: 1px;
 
@@ -187,7 +168,6 @@ seatmap-editor {
 		top: 10px;
 		left: 24px;
 	}
-
 	.group-icon {
 		position: relative;
 		top: -1px;
@@ -195,7 +175,6 @@ seatmap-editor {
 		height: 19px;
 		background: url(../app/seatManagement/images/group.svg);
 	}
-
 	.ungroup-icon {
 		position: relative;
 		top: -1px;
@@ -204,18 +183,15 @@ seatmap-editor {
 		background: url(../app/seatManagement/images/ungroup.svg);
 	}
 }
-
 .quick-access-toolbar > button {
 	margin-top: 2px;
 	box-shadow: none;
 	border: 1px solid $gray012;
 }
-
 .quick-access-toolbar > button:hover {
 	box-shadow: none;
 	border: 1px solid $gray026;
 }
-
 .seatmap-load-image {
 	.load-image-file {
 		padding: 4px 10px;
@@ -232,7 +208,6 @@ seatmap-editor {
 		*display: inline;
 		*zoom: 1;
 	}
-
 	.load-image-file input {
 		position: absolute;
 		font-size: 100px;
@@ -242,14 +217,12 @@ seatmap-editor {
 		filter: alpha(opacity=0);
 		cursor: pointer;
 	}
-
 	.load-image-file:hover {
 		color: #444;
 		background: #eee;
 		border-color: #ccc;
 		text-decoration: none;
 	}
-
 	#image-preview {
 		display: block;
 		max-width: 100%;
@@ -258,7 +231,6 @@ seatmap-editor {
 		margin: 10px auto;
 	}
 }
-
 .seatmap-spinner {
 	position: absolute;
 	left: 50%;
@@ -266,7 +238,6 @@ seatmap-editor {
 	margin-left: -32px;
 	margin-top: -62px;
 }
-
 .wfm-block-edit-mode {
 	md-content.layout-padding {
 		position: absolute;
@@ -277,7 +248,6 @@ seatmap-editor {
 		overflow: visible;
 		padding: 0;
 	}
-
 	.layout-padding .input-prepend {
 		position: absolute;
 		top: 40px;
@@ -286,7 +256,6 @@ seatmap-editor {
 		left: 0;
 		height: 20px;
 	}
-
 	.seat-roles {
 		position: absolute;
 		top: 65px;
@@ -295,16 +264,17 @@ seatmap-editor {
 		left: 0;
 		overflow: auto;
 	}
-
-    .seat-number-input {
-        margin-left: 10px;
-    }
+	.seat-number-input {
+		margin-left: 10px;
+	}
 }
-
+.seatmap-canvas {
+	position: relative;
+	height: 100%;
+}
 .seatmap-canvas .resizable {
 	min-width: 450px;
 }
-
 .seat-property-message {
 	position: absolute;
 	right: 0;
@@ -314,17 +284,13 @@ seatmap-editor {
 	z-index: 2;
 	padding: 5px;
 }
-
-.planning-period-content{
-       max-width: 1600px;
+.planning-period-content {
+	max-width: 1600px;
 }
-
 .seatmap-canvas .right-panel-edit-mode .resizable {
 	bottom: 0;
 	min-width: 310px;
 }
-
-
 seatmap-occupancy-detail {
 	top: 0;
 	bottom: 0;
@@ -332,27 +298,23 @@ seatmap-occupancy-detail {
 	right: 0;
 	left: 0;
 
-    .add-booking-detail {
+	.add-booking-detail {
 		top: 50px;
-        bottom: 0;
-        position: absolute !important;
-	    width: 100%;
+		bottom: 0;
+		position: absolute !important;
+		width: 100%;
 
 		.date-range-picker-wrapper {
 			width: 250px;
-            height: 30px;
+			height: 30px;
 		}
-
-
 		.input-prepend input[type=text] {
 			width: 90% !important;
 		}
-
 		.people-search-input {
 		}
 	}
 }
-
 .seatbooking-operations-add, .seatbooking-operations-cancel {
 	position: absolute;
 	top: 0;
@@ -367,12 +329,10 @@ seatmap-occupancy-detail {
 		margin: 0 5px;
 		background: $white;
 	}
-
 	.wfm-btn:hover {
 		background: #f1f2f3;
 	}
 }
-
 people-selection-list {
 	top: 40px;
 	bottom: 0;
@@ -381,55 +341,44 @@ people-selection-list {
 	left: 0;
 	overflow: hidden;
 
-    wfm-multiple-search-input{
-		.advanced-input-dropdown{
+	wfm-multiple-search-input {
+		.advanced-input-dropdown {
 			top: 14px;
 			left: 17px;
 			width: 321px;
 		}
-
-		.advanced-input{
+		.advanced-input {
 			width: 316px;
 		}
-
-		.expand-advanced-input{
-			max-width:100%;
+		.expand-advanced-input {
+			max-width: 100%;
 		}
-
-		.panel{
-			position:relative;
+		.panel {
+			position: relative;
 		}
-    }
-
-
+	}
 }
-
 people-selection-list > div.view-header {
 	display: none;
 }
-
 people-selection-list .panel {
-
-    bottom: 80px;
-    position : absolute;
-    top: 0px;
-    width: 100%;
-    padding-left: 10px;
-    box-shadow: none;
+	bottom: 80px;
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	padding-left: 10px;
+	box-shadow: none;
 
 	.col-md-4 {
 		width: 100%;
 	}
-
 	.split-3-1 {
 		display: none;
 	}
-
 	.notice-spacer {
 		margin: 0;
 		padding: 0;
 	}
-
 	.select-all-dialog {
 		margin: 0;
 		transition: all 0.35s;
@@ -437,7 +386,6 @@ people-selection-list .panel {
 		-webkit-transition: all 0.35s;
 		-o-transition: all 0.35s;
 	}
-
 	.big-table-wrapper {
 		height: 100%;
 		box-shadow: none;
@@ -455,23 +403,18 @@ people-selection-list .panel {
 			}
 		}
 	}
-
 	.pagination {
 		margin: 5px 0px;
 	}
-
 	.pagination li {
 		padding: 4px 8px 4px 8px;
 	}
-
 	.people-list.grid {
 		height: 100%;
 	}
 }
-
 .seatmap-occupancy-detail {
-
-    height: 100%;
+	height: 100%;
 
 	.seat-booking-list {
 		overflow: auto;
@@ -485,31 +428,25 @@ people-selection-list .panel {
 			overflow-y: auto;
 			max-height: none;
 		}
-
 		.wfm-list li {
-			border-top: 1px solid rgba(0,0,0,0.06);
-			border-bottom: 1px solid rgba(0,0,0,0.06);
+			border-top: 1px solid rgba(0, 0, 0, 0.06);
+			border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 		}
-
 		.seat-booking-seatname {
 			width: 50px;
 			overflow: hidden;
 		}
-
 		span {
 			max-width: 100%;
 		}
-
 		.default-cursor {
 			cursor: default;
 		}
-
 		.seatmap-seatbooking-previousday {
 			color: #a0a0a0;
 		}
 	}
 }
-
 .seatmap-bottom-bar {
 	height: 48px;
 
@@ -517,9 +454,4 @@ people-selection-list .panel {
 		width: 200px;
 		margin-left: 40px;
 	}
-}
-
-
-.booking-view .seatmap-bottom-bar{
-	transform: translateY(-100%);
 }

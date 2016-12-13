@@ -24,7 +24,7 @@
 
 		<seatmap-editor ng-if="vm.showEditor"></seatmap-editor>
 
-		<div class="wfm-block" ng-class="{'wfm-block-edit-mode':(vm.showEditor)} ">
+		<div class="wfm-block panel" ng-class="{'wfm-block-edit-mode':(vm.showEditor)} ">
 
 			<div class="location-breadcrumb" ng-click="vm.isDatePickerOpened = false">
 				<span ng-if="!vm.isLoading" class="breadcrumb-inverse" ng-repeat="breadcrumb in vm.breadcrumbs">
@@ -33,37 +33,41 @@
 					<span class="divider" ng-if="!$last">></span>
 				</span>
 			</div>
+
+			<div class="seatmap-right-panel pull-right">
 			
-			<wfm-right-panel panel-options="vm.rightPanelOptions" on-open="vm.getRoles()">
+				<wfm-right-panel panel-options="vm.rightPanelOptions" on-open="vm.getRoles()">
 
-				<seatmap-occupancy-detail schedule-date="vm.selectedDate" refresh-seat-map="vm.refreshSeatMap()" ng-if="vm.showOccupancy"></seatmap-occupancy-detail>
+					<seatmap-occupancy-detail schedule-date="vm.selectedDate" refresh-seat-map="vm.refreshSeatMap()" ng-if="vm.showOccupancy"></seatmap-occupancy-detail>
 
-				<seatmap-object-property roles="vm.roles" seats="vm.activeSeats" update-seat-number="vm.updateSeatNumber(seat, newNumber)" ng-if="vm.showEditor"></seatmap-object-property>
+					<seatmap-object-property roles="vm.roles" seats="vm.activeSeats" update-seat-number="vm.updateSeatNumber(seat, newNumber)" ng-if="vm.showEditor"></seatmap-object-property>
 
-			</wfm-right-panel>
+				</wfm-right-panel>
 
-			<wfm-right-panel panel-options="vm.prefixSuffixPanelOptions">
+				<div class="clearfix" ng-if="vm.showEditor"></div>
 
-				<div class="con-row">
-					<div class="con-flex">
-						{{'Prefix' | translate}}
-						<input type="text" ng-model="vm.locationPrefix" ng-maxlength="6" maxlength="6" ng-change="vm.prefixOrSuffixChanged = true" placeholder="{{'Prefix' | translate}}..." />
+				<wfm-right-panel panel-options="vm.prefixSuffixPanelOptions">
+
+					<div class="con-row">
+						<div class="con-flex">
+							{{'Prefix' | translate}}
+							<input type="text" ng-model="vm.locationPrefix" ng-maxlength="6" maxlength="6" ng-change="vm.prefixOrSuffixChanged = true" placeholder="{{'Prefix' | translate}}..." />
+						</div>
+						<div class="con-flex">
+							{{'Suffix' | translate}}
+							<input type="text" ng-model="vm.locationSuffix" ng-maxlength="6" maxlength="6" ng-change="vm.prefixOrSuffixChanged = true" placeholder="{{'Suffix' | translate}}..." />
+						</div>
 					</div>
-					<div class="con-flex">
-						{{'Suffix' | translate}}
-						<input type="text" ng-model="vm.locationSuffix" ng-maxlength="6" maxlength="6" ng-change="vm.prefixOrSuffixChanged = true" placeholder="{{'Suffix' | translate}}..." />
-					</div>
-				</div>
 
-			</wfm-right-panel>
+				</wfm-right-panel>
+
+			</div>
 
 			<canvas id="c" ng-mouseenter="vm.scrollListen = true" ng-mouseleave="vm.scrollListen = false"></canvas>
 
 			<div ng-show="vm.isLoading" class="seatmap-spinner">
 				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 			</div>
-
-		
 
 			<div class="seatmap-bottom-bar">
 				<div class="seatmap-zoom-bar">

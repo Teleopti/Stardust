@@ -30,7 +30,6 @@
 		vm.zoomData = { min: 0.1, max: 2, step: 0.05, zoomValue: 1 };
 		vm.rightPanelOptions = {
 			panelState: false,
-			panelTitle : " ",//remove when styleguide update
 			sidePanelTitle: "SeatProperties",
 			showCloseButton: true,
 			showBackdrop: false,
@@ -39,7 +38,6 @@
 		};
 		vm.prefixSuffixPanelOptions = {
 			panelState: false,
-			panelTitle: " ",//remove when styleguide update
 			sidePanelTitle: "LocationProperties",
 			showCloseButton: true,
 			showBackdrop: false,
