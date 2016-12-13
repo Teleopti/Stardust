@@ -813,15 +813,14 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var person = PersonFactory.CreatePerson("Kalle", "kula");
 			var waitlistedPersonRequest = new PersonRequest(person);
 			var absence = new Absence();
-			person.WorkflowControlSet = createWorkFlowControlSet(
-				new DateTime(2015, 12, 12, 00, 00, 00, DateTimeKind.Utc),
-				new DateTime(2016, 12, 12, 00, 00, 00, DateTimeKind.Utc), absence, new GrantAbsenceRequest(), true);
+			person.WorkflowControlSet = createWorkFlowControlSet(absence, new GrantAbsenceRequest(), true);
 			waitlistedPersonRequest.Request = new AbsenceRequest(absence, new DateTimePeriod(2016, 9, 6, 2016, 9, 6));
 			waitlistedPersonRequest.ForcePending();
-			waitlistedPersonRequest.Deny( null, _authorization,null, PersonRequestDenyOption.AutoDeny);
+			waitlistedPersonRequest.Deny(null, _authorization, null, PersonRequestDenyOption.AutoDeny);
 			waitlistedPersonRequest.IsWaitlisted.Should().Be(true);
 
-			waitlistedPersonRequest.Deny( null, _authorization, null, PersonRequestDenyOption.AutoDeny | PersonRequestDenyOption.AlreadyAbsence);
+			waitlistedPersonRequest.Deny(null, _authorization, null,
+				PersonRequestDenyOption.AutoDeny | PersonRequestDenyOption.AlreadyAbsence);
 			waitlistedPersonRequest.IsDenied.Should().Be(true);
 			waitlistedPersonRequest.IsWaitlisted.Should().Be(false);
 		}
@@ -832,9 +831,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var person = PersonFactory.CreatePerson("Kalle", "kula");
 			var waitlistedPersonRequest = new PersonRequest(person);
 			var absence = new Absence();
-			person.WorkflowControlSet = createWorkFlowControlSet(
-				new DateTime(2015, 12, 12, 00, 00, 00, DateTimeKind.Utc),
-				new DateTime(2016, 12, 12, 00, 00, 00, DateTimeKind.Utc), absence, new GrantAbsenceRequest(), true);
+			person.WorkflowControlSet = createWorkFlowControlSet(absence, new GrantAbsenceRequest(), true);
 			waitlistedPersonRequest.Request = new AbsenceRequest(absence, new DateTimePeriod(2016, 9, 6, 2016, 9, 6));
 			waitlistedPersonRequest.ForcePending();
 			waitlistedPersonRequest.Deny(null, _authorization, null,PersonRequestDenyOption.AutoDeny | PersonRequestDenyOption.RequestExpired);
@@ -848,9 +845,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var person = PersonFactory.CreatePerson("Kalle", "kula");
 			var waitlistedPersonRequest = new PersonRequest(person);
 			var absence = new Absence();
-			person.WorkflowControlSet = createWorkFlowControlSet(
-				new DateTime(2015, 12, 12, 00, 00, 00, DateTimeKind.Utc),
-				new DateTime(2016, 12, 12, 00, 00, 00, DateTimeKind.Utc), absence, new GrantAbsenceRequest(), true);
+			person.WorkflowControlSet = createWorkFlowControlSet(absence, new GrantAbsenceRequest(), true);
 			waitlistedPersonRequest.Request = new AbsenceRequest(absence, new DateTimePeriod(2016, 9, 6, 2016, 9, 6));
 			waitlistedPersonRequest.ForcePending();
 			waitlistedPersonRequest.Deny(null, _authorization, null, PersonRequestDenyOption.AutoDeny);
@@ -874,9 +869,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			personRequest.SetNew();
 			var person = absenceRequest.Person;
 
-			person.WorkflowControlSet = createWorkFlowControlSet(
-				new DateTime(2015, 12, 12, 00, 00, 00, DateTimeKind.Utc),
-				new DateTime(2016, 12, 12, 00, 00, 00, DateTimeKind.Utc), absence, new GrantAbsenceRequest(), waitlistingEnabled);
+			person.WorkflowControlSet = createWorkFlowControlSet(absence, new GrantAbsenceRequest(), waitlistingEnabled);
 
 			personRequest.Deny( null, _authorization);
 
@@ -885,10 +878,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		}
 
 
-		private static WorkflowControlSet createWorkFlowControlSet(DateTime startDate, DateTime endDate, IAbsence absence, IProcessAbsenceRequest processAbsenceRequest, bool waitlistingIsEnabled)
+		private static WorkflowControlSet createWorkFlowControlSet(IAbsence absence, IProcessAbsenceRequest processAbsenceRequest, bool waitlistingIsEnabled)
 		{
 			var workflowControlSet = new WorkflowControlSet { AbsenceRequestWaitlistEnabled = waitlistingIsEnabled };
-
+			var startDate = new DateTime(2015, 12, 12, 00, 00, 00, DateTimeKind.Utc);
+			var endDate = new DateTime(DateTime.Now.Year + 1, 12, 12, 00, 00, 00, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 
 			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod()
