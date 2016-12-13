@@ -15328,4 +15328,8 @@ These options are activated:
     <value>Search a site or team</value>
     <comment>Placeholder for the organization multiselect in RTA</comment>
   </data>
+  <data name="SeveralTeamsSelected" xml:space="preserve">
+    <value>{0} teams selected</value>
+    <comment>Selected teams text of organization picker in WFM/Teams</comment>
+  </data>
 </root>

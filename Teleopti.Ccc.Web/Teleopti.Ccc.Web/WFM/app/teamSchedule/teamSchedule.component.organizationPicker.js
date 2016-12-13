@@ -23,7 +23,9 @@
 
 		ctrl.$onInit = function() {
 			populateGroupList();
-			ctrl.selectedTeamIds.push(logonUserTeamId);
+			if(logonUserTeamId != null){
+				ctrl.selectedTeamIds.push(logonUserTeamId);
+			}
 			ctrl.onSelectionDone();
 		};
 
@@ -58,8 +60,10 @@
 
 		ctrl.formatSelectedDisplayName = function() {
 			if (!ctrl.selectedTeamIds) return '';
+
 			if (ctrl.selectedTeamIds.length > 1)
-				return ctrl.selectedTeamIds.length + " teams selected";
+				return $translate.instant("SeveralTeamsSelected").replace("{0}",ctrl.selectedTeamIds.length);
+
 			for (var i = 0; i < ctrl.groupList.length; i++) {
 				var teams = ctrl.groupList[i].teams
 				for (var j = 0; j < teams.length; j++) {
@@ -68,7 +72,7 @@
 					}
 				}
 			}
-			return $translate.instant('Organization');
+			return $translate.instant("Organization");
 		};
 		
 		ctrl.processSearchTermFilter = function(site) {
