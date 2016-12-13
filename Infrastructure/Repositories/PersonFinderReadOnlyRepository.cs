@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Castle.Core.Internal;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -110,11 +111,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (personFinderSearchCriteria.TerminalDate < minDate)
 				personFinderSearchCriteria.TerminalDate = minDate;
 			var uow = _currentUnitOfWork.Current();
-
-			if (personFinderSearchCriteria.SearchCriterias.Count == 0)
-			{
-				return;
-			}
 
 			var teamIdsString = Join(",", teamIds.Select(x => x.ToString())); 
 

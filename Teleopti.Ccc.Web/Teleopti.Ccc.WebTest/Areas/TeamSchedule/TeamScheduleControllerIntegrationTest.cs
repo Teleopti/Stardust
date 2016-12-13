@@ -6,11 +6,14 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -34,6 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public Global.FakePermissionProvider PermissionProvider;
 		public FakePeopleSearchProvider PeopleSearchProvider;
 		public FakePersonRepository PersonRepository;
+		public FakeToggleManager ToggleManager;
 
 		[Test]
 		public void TargetShouldNotBeNull()
@@ -648,6 +652,61 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			result.First().Date.Should().Be.EqualTo("2020-01-01");
 			result.Second().Date.Should().Be.EqualTo("2019-12-31");
 		}
+		[Test]
+		public void ShouldReturnEmptyScheduleVmWhenThereIsNoSelectedTeamAfterEnablingOrganizaationPicker()
+		{
+			ToggleManager.Enable(Toggles.WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260);
+			var scheduleDate = new DateTime(2020,1,1,0,0,0,0,DateTimeKind.Utc);
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock","Holmes");
+			PeopleSearchProvider.Add(person);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
+
+			var scheduleDayPrevious = ScheduleDayFactory.Create(new DateOnly(scheduleDate).AddDays(-1),person,scenario);
+			var paPrev = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,
+				new DateTimePeriod(2019,12,31,20,2020,1,1,3));
+			scheduleDayPrevious.Add(paPrev);
+			ScheduleProvider.AddScheduleDay(scheduleDayPrevious);
+
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "Sherlock",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false,
+				SelectedTeamIds = new Guid[] {}
+			}).Content.Schedules.ToList();
+
+			result.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldReturnEmptyScheduleVmWhenThereIsNoSearchTermAndUserHasNoTeamAfterDisablingOrganizaationPicker()
+		{
+			var scheduleDate = new DateTime(2020,1,1,0,0,0,0,DateTimeKind.Utc);
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock","Holmes");
+			PeopleSearchProvider.Add(person);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
+
+			var scheduleDayPrevious = ScheduleDayFactory.Create(new DateOnly(scheduleDate).AddDays(-1),person,scenario);
+			var paPrev = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,
+				new DateTimePeriod(2019,12,31,20,2020,1,1,3));
+			scheduleDayPrevious.Add(paPrev);
+			ScheduleProvider.AddScheduleDay(scheduleDayPrevious);
+
+			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
+			{
+				Keyword = "",
+				Date = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			}).Content.Schedules.ToList();
+
+			result.Count.Should().Be.EqualTo(0);
+		}
 
 		[Test]
 		public void ShouldIndicateOvertimeActivityForScheduleSearch()
@@ -1074,6 +1133,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void Setup(ISystem system,IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();
+			system.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
 		}
 	}
 }

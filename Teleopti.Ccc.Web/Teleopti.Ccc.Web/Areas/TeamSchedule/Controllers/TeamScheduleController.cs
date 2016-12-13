@@ -4,12 +4,12 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
@@ -33,13 +33,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly ISettingsPersisterAndProvider<AgentsPerPageSetting> _agentsPerPagePersisterAndProvider;
 		private readonly ISwapMainShiftForTwoPersonsCommandHandler _swapMainShiftForTwoPersonsHandler;
 		private readonly ISearchTermParser _parser;
+		private readonly IToggleManager _toggleManager;
 
 		public TeamScheduleController(ITeamScheduleViewModelFactory teamScheduleViewModelFactory,
 			ILoggedOnUser loggonUser,
 			IAuthorization authorization, IAbsencePersister absencePersister,
 			ISettingsPersisterAndProvider<AgentsPerPageSetting> agentsPerPagePersisterAndProvider,
 			ISwapMainShiftForTwoPersonsCommandHandler swapMainShiftForTwoPersonsHandler,
-			ISearchTermParser parser)
+			ISearchTermParser parser, IToggleManager toggleManager)
 		{
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
 			_loggonUser = loggonUser;
@@ -49,6 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_agentsPerPagePersisterAndProvider = agentsPerPagePersisterAndProvider;
 			_swapMainShiftForTwoPersonsHandler = swapMainShiftForTwoPersonsHandler;
 			_parser = parser;
+			_toggleManager = toggleManager;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/GetPermissions")]
@@ -79,10 +81,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			var currentDate = input.Date;
 			var myTeam = _loggonUser.CurrentUser().MyTeam(currentDate);
 
-			if(string.IsNullOrEmpty(input.Keyword) && myTeam == null)
+			if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260))
 			{
-				return
-					Json(new GroupScheduleViewModel { Schedules = new List<GroupScheduleShiftViewModel>(),Total = 0,Keyword = "" });
+				if(input.SelectedTeamIds != null && !input.SelectedTeamIds.Any())
+					return
+					Json(new GroupScheduleViewModel { Schedules = new List<GroupScheduleShiftViewModel>(), Total = 0, Keyword = "" });
+			}
+			else
+			{
+				if(string.IsNullOrEmpty(input.Keyword) && myTeam == null)
+					return
+					Json(new GroupScheduleViewModel { Schedules = new List<GroupScheduleShiftViewModel>(), Total = 0, Keyword = "" });
 			}
 
 			var criteriaDictionary = _parser.Parse(input.Keyword,currentDate);
