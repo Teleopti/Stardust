@@ -27,19 +27,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return rules;
 		}
 
-		public INewBusinessRuleCollection GetAllEnabledBusinessRulesForShiftTradeRequest(ISchedulingResultStateHolder schedulingResultStateHolder,
+		public virtual INewBusinessRuleCollection GetAllEnabledBusinessRulesForShiftTradeRequest(ISchedulingResultStateHolder schedulingResultStateHolder,
 			bool enableSiteOpenHoursRule)
 		{
 			return GetBusinessRulesForShiftTradeRequest(schedulingResultStateHolder, enableSiteOpenHoursRule);
 		}
 
-		public bool ShouldDeny(INewBusinessRuleCollection enabledRules, IList<IBusinessRuleResponse> ruleResponses)
+		public virtual bool ShouldDeny(INewBusinessRuleCollection enabledRules, IList<IBusinessRuleResponse> ruleResponses)
 		{
 			return false;
 		}
 	}
 
-	public class ConfigurableBusinessRuleProvider : IBusinessRuleProvider
+	public class ConfigurableBusinessRuleProvider : BusinessRuleProvider
 	{
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 
@@ -48,24 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			_globalSettingDataRepository = globalSettingDataRepository;
 		}
 
-		public INewBusinessRuleCollection GetAllBusinessRules(ISchedulingResultStateHolder schedulingResultStateHolder)
-		{
-			return NewBusinessRuleCollection.All(schedulingResultStateHolder);
-		}
-
-		public INewBusinessRuleCollection GetBusinessRulesForShiftTradeRequest(ISchedulingResultStateHolder schedulingResultStateHolder, bool enableSiteOpenHoursRule)
-		{
-			var rules = NewBusinessRuleCollection.All(schedulingResultStateHolder);
-			rules.DoNotHaltModify(typeof(NewPersonAccountRule));
-			rules.DoNotHaltModify(typeof(OpenHoursRule));
-			rules.Add(new NonMainShiftActivityRule());
-			if (enableSiteOpenHoursRule)
-				rules.Add(new SiteOpenHoursRule(new SiteOpenHoursSpecification()));
-
-			return rules;
-		}
-
-		public INewBusinessRuleCollection GetAllEnabledBusinessRulesForShiftTradeRequest(ISchedulingResultStateHolder schedulingResultStateHolder,
+		public override INewBusinessRuleCollection GetAllEnabledBusinessRulesForShiftTradeRequest(ISchedulingResultStateHolder schedulingResultStateHolder,
 			bool enableSiteOpenHoursRule)
 		{
 			var rules = GetBusinessRulesForShiftTradeRequest(schedulingResultStateHolder, enableSiteOpenHoursRule);
@@ -91,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return result;
 		}
 
-		public bool ShouldDeny(INewBusinessRuleCollection enabledRules, IList<IBusinessRuleResponse> ruleResponses)
+		public override bool ShouldDeny(INewBusinessRuleCollection enabledRules, IList<IBusinessRuleResponse> ruleResponses)
 		{
 			if (ruleResponses == null || !ruleResponses.Any()) return false;
 
