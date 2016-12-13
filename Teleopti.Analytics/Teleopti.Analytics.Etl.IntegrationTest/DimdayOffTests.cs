@@ -60,7 +60,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			var raptorRepository = new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, null, null);
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
-			var dsFactory = new DataSourcesFactory(new EnversConfiguration(), new NoTransactionHooks(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), UpdatedBy.Make(), new MemoryNhibernateConfigurationCache());
+			var dsFactory = new DataSourcesFactory(new EnversConfiguration(), new NoTransactionHooks(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), new MemoryNhibernateConfigurationCache());
 			jobParameters = new JobParameters(
 				dateList, 1, "UTC", 15, "", "False",
 				CultureInfo.CurrentCulture,

@@ -36,17 +36,15 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ApplicationUnitOfWorkContext _context;
 		private readonly IAuditSetter _auditSettingProvider;
 		private readonly ICurrentTransactionHooks _transactionHooks;
-		private readonly IUpdatedBy _updatedBy;
-		private readonly INestedUnitOfWorkStrategy _nestedUnitOfWork;
 
+		// can not inject here because the lifetime of the factory
+		// is longer than the container when running unit tests
 		protected internal NHibernateUnitOfWorkFactory(
 			ISessionFactory sessionFactory, 
 			IAuditSetter auditSettingProvider, 
 			string connectionString, 
 			ICurrentTransactionHooks transactionHooks, 
-			IUpdatedBy updatedBy, 
-			string tenant,
-			INestedUnitOfWorkStrategy nestedUnitOfWork
+			string tenant
 			)
 		{
 			ConnectionString = connectionString;
@@ -54,8 +52,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_context = new ApplicationUnitOfWorkContext(tenant);
 			_auditSettingProvider = auditSettingProvider;
 			_transactionHooks = transactionHooks;
-			_updatedBy = updatedBy;
-			_nestedUnitOfWork = nestedUnitOfWork;
 		}
 
 		public string Name
@@ -112,9 +108,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private IUnitOfWork createAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel, IQueryFilter businessUnitFilter)
 		{
-			_nestedUnitOfWork.Strategize(_context);
+			ServiceLocatorForLegacy.NestedUnitOfWorkStrategy.Strategize(_context);
 
-			var session = _factory.OpenSession(new AggregateRootInterceptor(_updatedBy));
+			var session = _factory.OpenSession(new AggregateRootInterceptor(ServiceLocatorForLegacy.UpdatedBy));
 
 			businessUnitFilter.Enable(session, businessUnitId());
 			QueryFilter.Deleted.Enable(session, null);

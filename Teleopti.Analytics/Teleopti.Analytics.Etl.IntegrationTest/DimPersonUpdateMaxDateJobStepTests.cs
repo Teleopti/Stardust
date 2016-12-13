@@ -164,7 +164,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				AnalyticsPersonPeriodDateFixer);
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
 			var dsFactory = new DataSourcesFactory(new EnversConfiguration(), new NoTransactionHooks(),
-				DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), UpdatedBy.Make(),
+				DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(),
 				new MemoryNhibernateConfigurationCache());
 			jobParameters = new JobParameters(
 				dateList, 1, "UTC", 15, "", "False",

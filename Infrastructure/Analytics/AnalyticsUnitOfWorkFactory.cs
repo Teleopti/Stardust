@@ -1,5 +1,4 @@
 using NHibernate;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
@@ -10,21 +9,18 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 	{
 		private readonly ISessionFactory _factory;
 		private readonly ICurrentTransactionHooks _transactionHooks;
-		private readonly IUpdatedBy _updatedBy;
 		private readonly AnalyticsUnitOfWorkContext _context;
-
 
 		protected internal AnalyticsUnitOfWorkFactory(
 			ISessionFactory sessionFactory,
 			string connectionString,
 			string tenant,
-			ICurrentTransactionHooks transactionHooks,
-			IUpdatedBy updatedBy)
+			ICurrentTransactionHooks transactionHooks
+			)
 		{
 			ConnectionString = connectionString;
 			_factory = sessionFactory;
 			_transactionHooks = transactionHooks;
-			_updatedBy = updatedBy;
 			_context = new AnalyticsUnitOfWorkContext(tenant);
 		}
 		
@@ -45,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 		{
 			new AnalyticsUnitOfWork(
 				_context,
-				_factory.OpenSession(new AggregateRootInterceptor(_updatedBy)),
+				_factory.OpenSession(new AggregateRootInterceptor(ServiceLocatorForLegacy.UpdatedBy)),
 				_transactionHooks
 				);
 

@@ -21,24 +21,21 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ICurrentTransactionHooks _transactionHooks;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private readonly ICurrentHttpContext _httpContext;
-		private readonly IUpdatedBy _updatedBy;
 		private readonly INHibernateConfigurationCache _nhibernateConfigurationCache;
 
 		public const string AnalyticsDataSourceName = "AnalyticsDatasource";
 
 		public DataSourcesFactory(
-			IEnversConfiguration enversConfiguration,
-			ICurrentTransactionHooks transactionHooks,
+			IEnversConfiguration enversConfiguration, 
+			ICurrentTransactionHooks transactionHooks, 
 			IDataSourceConfigurationSetter dataSourceConfigurationSetter, 
-			ICurrentHttpContext httpContext,
-			IUpdatedBy updatedBy, 
+			ICurrentHttpContext httpContext, 
 			INHibernateConfigurationCache nhibernateConfigurationCache)
 		{
 			_enversConfiguration = enversConfiguration;
 			_transactionHooks = transactionHooks;
 			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
 			_httpContext = httpContext;
-			_updatedBy = updatedBy;
 			_nhibernateConfigurationCache = nhibernateConfigurationCache;
 		}
 
@@ -79,9 +76,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_enversConfiguration.AuditSettingProvider,
 				applicationConnectionString,
 				_transactionHooks,
-				_updatedBy,
-				tenant,
-				ServiceLocatorForLegacy.NestedUnitOfWorkStrategy
+				tenant
 				);
 
 			AnalyticsUnitOfWorkFactory statFactory = null;
@@ -98,8 +93,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					buildSessionFactory(statConfiguration),
 					statConfiguration.Properties[Environment.ConnectionString], 
 					tenant, 
-					_transactionHooks, 
-					_updatedBy);
+					_transactionHooks
+					);
 			}
 
 			var readModel = new ReadModelUnitOfWorkFactory(_httpContext, applicationConnectionString);
