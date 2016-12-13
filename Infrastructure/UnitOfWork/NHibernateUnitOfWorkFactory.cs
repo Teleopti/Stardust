@@ -2,7 +2,6 @@ using System;
 using NHibernate;
 using NHibernate.Engine;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
@@ -10,6 +9,27 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
+	public interface INestedUnitOfWorkStrategy
+	{
+		void Strategize(ApplicationUnitOfWorkContext context);
+	}
+
+	public class SirLeakAlot : INestedUnitOfWorkStrategy
+	{
+		public void Strategize(ApplicationUnitOfWorkContext context)
+		{
+		}
+	}
+
+	public class ThrowOnNestedUnitOfWork : INestedUnitOfWorkStrategy
+	{
+		public void Strategize(ApplicationUnitOfWorkContext context)
+		{
+			if (context.Get() != null)
+				throw new NestedUnitOfWorkException();
+		}
+	}
+
 	public class NHibernateUnitOfWorkFactory : IUnitOfWorkFactory
 	{
 		private readonly ISessionFactory _factory;
@@ -17,8 +37,17 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly IAuditSetter _auditSettingProvider;
 		private readonly ICurrentTransactionHooks _transactionHooks;
 		private readonly IUpdatedBy _updatedBy;
+		private readonly INestedUnitOfWorkStrategy _nestedUnitOfWork;
 
-		protected internal NHibernateUnitOfWorkFactory(ISessionFactory sessionFactory, IAuditSetter auditSettingProvider, string connectionString, ICurrentTransactionHooks transactionHooks, IUpdatedBy updatedBy, string tenant)
+		protected internal NHibernateUnitOfWorkFactory(
+			ISessionFactory sessionFactory, 
+			IAuditSetter auditSettingProvider, 
+			string connectionString, 
+			ICurrentTransactionHooks transactionHooks, 
+			IUpdatedBy updatedBy, 
+			string tenant,
+			INestedUnitOfWorkStrategy nestedUnitOfWork
+			)
 		{
 			ConnectionString = connectionString;
 			_factory = sessionFactory;
@@ -26,6 +55,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_auditSettingProvider = auditSettingProvider;
 			_transactionHooks = transactionHooks;
 			_updatedBy = updatedBy;
+			_nestedUnitOfWork = nestedUnitOfWork;
 		}
 
 		public string Name
@@ -82,15 +112,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private IUnitOfWork createAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel, IQueryFilter businessUnitFilter)
 		{
+			_nestedUnitOfWork.Strategize(_context);
+
 			var session = _factory.OpenSession(new AggregateRootInterceptor(_updatedBy));
 
 			businessUnitFilter.Enable(session, businessUnitId());
 			QueryFilter.Deleted.Enable(session, null);
 			QueryFilter.DeletedPeople.Enable(session, null);
-
-			if (ServiceLocatorForLegacy.ToggleManager.IsEnabled(Toggles.No_UnitOfWork_Nesting_42175))
-				if (_context.Get() != null)
-					throw new NestedUnitOfWorkException();
 
 			new NHibernateUnitOfWork(
 				_context,
@@ -113,4 +141,5 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_factory.Dispose();
 		}
 	}
+
 }

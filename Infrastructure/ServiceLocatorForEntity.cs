@@ -1,5 +1,4 @@
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure
 {
@@ -8,21 +7,14 @@ namespace Teleopti.Ccc.Infrastructure
 
 	public static class ServiceLocatorForLegacy
 	{
-		private static IToggleManager _toggleManager;
+		private static INestedUnitOfWorkStrategy _nestedUnitOfWorkStrategy;
 
-		public static IToggleManager ToggleManager
+		public static INestedUnitOfWorkStrategy NestedUnitOfWorkStrategy
 		{
-			get { return _toggleManager ?? new NoToggleManager(); }
-			set { _toggleManager = value; }
+			get { return _nestedUnitOfWorkStrategy ?? new ThrowOnNestedUnitOfWork(); }
+			set { _nestedUnitOfWorkStrategy = value; }
 		}
 		
 	}
-
-	public class NoToggleManager : IToggleManager
-	{
-		public bool IsEnabled(Toggles toggle)
-		{
-			return false;
-		}
-	}
+	
 }

@@ -80,7 +80,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				applicationConnectionString,
 				_transactionHooks,
 				_updatedBy,
-				tenant
+				tenant,
+				ServiceLocatorForLegacy.NestedUnitOfWorkStrategy
 				);
 
 			AnalyticsUnitOfWorkFactory statFactory = null;

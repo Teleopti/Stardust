@@ -215,6 +215,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 							CommonModule.ToggleManagerForIoc(iocArgs));
 
 				builder.RegisterModule(new CommonModule(configuration));
+				builder.RegisterType<SirLeakAlot>().As<INestedUnitOfWorkStrategy>().SingleInstance();
 				builder.RegisterType<WinTenantCredentials>().As<ICurrentTenantCredentials>().SingleInstance();
 				builder.RegisterModule(new EncryptionModule(configuration));
 				builder.RegisterModule<EventAggregatorModule>();
