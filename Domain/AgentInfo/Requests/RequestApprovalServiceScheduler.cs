@@ -64,6 +64,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 			if (dayScheduleForAbsenceReqStart.FullAccess)
 			{
+
+				var scheduleDaysBefore = totalScheduleRange.ScheduledDayCollection(period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone())).ToList();
 				var layer = new AbsenceLayer(absence, period);
 				var personAbsence = new PersonAbsence(person, _scenario, layer);
 
@@ -75,6 +77,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					// Why this call again? None is overridden before
 					result = _scheduleDictionary.Modify(ScheduleModifier.Request, scheduleDaysForCheckingAccount, _newBusinessRules, _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
 				}
+
+				var scheduleDaysAfter = totalScheduleRange.ScheduledDayCollection(period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone())).ToList();
+
+				ScheduleChangedCallback(scheduleDaysBefore, scheduleDaysAfter);
 
 				foreach (var response in result)
 				{
@@ -93,6 +99,17 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			// Anyway, not full access is not an error that can be overridden
 			return new List<IBusinessRuleResponse>();
 		}
+
+		public void ScheduleChangedCallback(IList<IScheduleDay> scheduleDaysBefore, IList<IScheduleDay> scheduleDaysAfter)
+		{
+			for (int i = 1; i < scheduleDaysBefore.Count(); i++)
+			{
+				var partBefore = scheduleDaysBefore[i];
+				var partAfter = scheduleDaysAfter[i];
+				_scheduleDayChangeCallback.ScheduleDayChanged(partBefore, partAfter);
+			}
+		}
+
 		public IEnumerable<IBusinessRuleResponse> ApproveShiftTrade(IShiftTradeRequest shiftTradeRequest)
 		{
 			var shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerWithSchedule(_scheduleDictionary, _personRequestCheckAuthorization);

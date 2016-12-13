@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				return;
 			}
 
-			UndoAll(requiredForProcessingAbsenceRequest.UndoRedoContainer);
+			UndoAll(requiredForProcessingAbsenceRequest, requiredForHandlingAbsenceRequest, absenceRequest);
 			requiredForProcessingAbsenceRequest.AfterUndoCallback();
 
 			var personRequest = (IPersonRequest)absenceRequest.Parent;

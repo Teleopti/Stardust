@@ -42,16 +42,18 @@ namespace Teleopti.Interfaces.Domain
 						if (activity != null)
 						{
 							requiresSeat = activity.RequiresSeat;
-						}
-						yield return
+							yield return
 							new ResourceLayer
-								{
-									Resource = fractionPeriod.HasValue ? fractionPeriod.Value.ElapsedTime().TotalMinutes/minutesSplit : 1d,
-									PayloadId = payload.Id.GetValueOrDefault(),
-									RequiresSeat = requiresSeat,
-									Period = currentIntervalPeriod,
-									FractionPeriod = fractionPeriod
-								};
+							{
+								Resource = fractionPeriod.HasValue ? fractionPeriod.Value.ElapsedTime().TotalMinutes / minutesSplit : 1d,
+								PayloadId = payload.Id.GetValueOrDefault(),
+								RequiresSeat = requiresSeat,
+								Period = currentIntervalPeriod,
+								FractionPeriod = fractionPeriod
+							};
+						}
+						
+								
 						if (currentIntervalPeriod.EndDateTime > layer.Period.EndDateTime)
 						{
 							break;

@@ -11,6 +11,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
     [TestFixture]
+	[Ignore("Temporarily ignored")]
     public class GrantAbsenceRequestTest
     {
         private IProcessAbsenceRequest _target;

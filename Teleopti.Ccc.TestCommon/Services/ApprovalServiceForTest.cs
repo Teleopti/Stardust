@@ -31,6 +31,11 @@ namespace Teleopti.Ccc.TestCommon.Services
 			return null;
 		}
 
+		public void ScheduleChangedCallback(IList<IScheduleDay> scheduleDaysBefore, IList<IScheduleDay> scheduleDaysAfter)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void SetBusinessRuleResponse(params IBusinessRuleResponse[] brokenRule)
 	    {
 	        businessRuleResponse = brokenRule;

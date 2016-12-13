@@ -210,7 +210,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 
 		[Test]
-		[Ignore("To Be fixed! Bug 42174 ")]
 		public void ShouldNotApproveAllRequestsIfRequestsStartsAfterEndOfShiftAndEndsTheNextDay()
 		{
 			Now.Is(new DateTime(2016, 12, 1, 10, 0, 0));
@@ -271,9 +270,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			reqs.Count(x => x.IsDenied).Should().Be.EqualTo(150);
 		}
 
-		[Test]
-		[Ignore("Debugfriendly Bug 42174 ")]
-		public void ShouldNotApproveAllRequestsIfRequestsStartsAfterEndOfShiftAndEndsTheNextDay2()
+		[Test] //debug friendly, assert the same as above
+		public void ShouldNotApproveAllRequestsIfRequestsStartsAfterEndOfShiftAndEndsTheNextDayDebugFriendly()
 		{
 			Now.Is(new DateTime(2016, 12, 1, 10, 0, 0));
 			var firstDay = new DateOnly(2016, 12, 1);

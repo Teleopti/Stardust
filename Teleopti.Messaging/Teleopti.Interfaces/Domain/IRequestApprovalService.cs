@@ -26,5 +26,7 @@ namespace Teleopti.Interfaces.Domain
 		IEnumerable<IBusinessRuleResponse> ApproveShiftTrade(IShiftTradeRequest shiftTradeRequest);
 
 		IPersonAbsence GetApprovedPersonAbsence();
+
+		void ScheduleChangedCallback(IList<IScheduleDay> scheduleDaysBefore, IList<IScheduleDay> scheduleDaysAfter);
 	}
 }
