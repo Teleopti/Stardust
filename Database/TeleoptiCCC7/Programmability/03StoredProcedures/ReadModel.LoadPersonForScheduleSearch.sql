@@ -44,9 +44,9 @@ BEGIN
 		gr.TeamId as TeamId,
 		gr.SiteId as SiteId,
 		gr.BusinessUnitId as BusinessUnitId
-	FROM ReadModel.GroupingReadOnly gr
+	FROM @GroupIds gids 
+	    INNER JOIN ReadModel.GroupingReadOnly gr ON gids.GroupId = gr.GroupId	
 		INNER JOIN Person p ON gr.PersonId = p.Id
-		INNER JOIN @GroupIds gids ON gids.GroupId = gr.GroupId
 	WHERE gr.Businessunitid = @businessUnitId
 		AND @scheduleDate BETWEEN gr.StartDate and isnull(gr.EndDate,'2059-12-31')
 		AND (gr.LeavingDate >= @scheduleDate OR gr.LeavingDate IS NULL)
