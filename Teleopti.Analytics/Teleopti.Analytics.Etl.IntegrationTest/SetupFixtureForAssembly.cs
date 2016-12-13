@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Infrastructure;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
@@ -22,6 +23,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks());
+			ServiceLocatorForLegacy.NestedUnitOfWorkStrategy = new SirLeakAlot();
 
 			var personThatCreatesTestData = PersonFactory.CreatePerson("UserThatCreatesTestData", "password");
 
@@ -61,6 +63,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			openUnitOfWork();
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
 			TestState.TestDataFactory = new TestDataFactory(new ThisUnitOfWork(TestState.UnitOfWork), tenantUnitOfWorkManager, tenantUnitOfWorkManager);
+			ServiceLocatorForLegacy.NestedUnitOfWorkStrategy = new SirLeakAlot();
 		}
 
 		public static void EndTest()
