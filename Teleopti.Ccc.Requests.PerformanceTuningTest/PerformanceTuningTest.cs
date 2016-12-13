@@ -56,5 +56,36 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 
             });
         }
+
+        [Test, Ignore("works only on olas small db")]
+        public void ShouldHandle200AbsenceRequestsFastTwo()
+        {
+            using (DataSource.OnThisThreadUse("Teleopti WFM"))
+                AsSystem.Logon("Teleopti WFM", new Guid("D71B7AF6-3DC9-490F-9A5D-A6CE00B2FAE5"));
+
+            WithUnitOfWork.Do(() =>
+            {
+                var personRequests =
+                    PersonRequestRepository.FindPersonRequestWithinPeriod(
+                        new DateTimePeriod(new DateTime(2016, 12, 05, 23, 0, 0, DateTimeKind.Utc),
+                            new DateTime(2016, 12, 8, 23, 0, 0, DateTimeKind.Utc)))
+                        .Where(x => x.Request is AbsenceRequest);
+
+                var absenceRequestIds = personRequests.Select(x => x.Id.GetValueOrDefault()).ToList();
+
+                var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent()
+                {
+                    PersonRequestIds = absenceRequestIds,
+                    InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
+                    LogOnBusinessUnitId = new Guid("D71B7AF6-3DC9-490F-9A5D-A6CE00B2FAE5"),
+                    LogOnDatasource = "Teleopti WFM",
+                    Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
+                    Sent = DateTime.UtcNow
+                };
+
+                Target.Handle(newMultiAbsenceRequestsCreatedEvent);
+
+            });
+        }
     }
 }
