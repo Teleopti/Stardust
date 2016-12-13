@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			var assAandB = new PersonAssignment(agentAandB, scenario, dateOnly);
 			var assA = new PersonAssignment(agentA, scenario, dateOnly);
 			assA.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
-			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agentAandB,}, new[] { assAandB}, new[] { skillDayA, skillDayB });
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agentAandB, agentA}, new[] { assAandB, assA}, new[] { skillDayA, skillDayB });
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
 			var overtimePreference = new OvertimePreferences { OvertimeType = definitionSet, ShiftBagToUse = new RuleSetBag(ruleSet), ScheduleTag = new ScheduleTag() };
 
