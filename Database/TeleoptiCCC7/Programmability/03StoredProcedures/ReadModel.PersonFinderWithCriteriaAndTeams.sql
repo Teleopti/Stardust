@@ -88,9 +88,6 @@ SELECT * FROM dbo.SplitStringString(@teamIds)
 
 --select * from #SearchStrings
 
-SELECT @dynamicSQL = 'SELECT fp.PersonId FROM #teamId t '
-				 +'INNER JOIN ReadModel.FindPerson fp with (nolock)   ON t.tId = fp.TeamId '
-
 DECLARE @searchString nvarchar(max)
 DECLARE SearchStringCursor CURSOR FOR
 SELECT RTRIM(LTRIM(SearchString)) FROM #SearchStrings ORDER BY SearchString;
@@ -226,7 +223,9 @@ BEGIN
 	ELSE
 		SELECT @valueClause = 'fp.SearchValue like N''%' + @searchValue + '%'''
 	
-	SELECT @dynamicSQL = @dynamicSQL + ' WHERE '
+	SELECT @dynamicSQL = 'SELECT fp.PersonId FROM #teamId t '
+				 +'INNER JOIN ReadModel.FindPerson fp with (nolock)   ON t.tId = fp.TeamId '
+				 +' WHERE '
 
 	IF @valueClause <> '()'
 	BEGIN
