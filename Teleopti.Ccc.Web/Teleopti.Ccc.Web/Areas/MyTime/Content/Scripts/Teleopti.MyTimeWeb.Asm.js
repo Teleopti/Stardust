@@ -14,12 +14,12 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Asm = (function () {
-	var refreshSeconds = 1;
+	var refreshSeconds = 5;
 	var pixelPerHours = 40;
 	var timeLineMarkerWidth = 40;
 	var vm;
-    var notifyOptions = {};
-    var ajax = new Teleopti.MyTimeWeb.Ajax();
+	var notifyOptions = {};
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var _settings;
 	var userTimeZoneMinuteOffset = 0;
 	var _notificationTrackIdList = [];
@@ -33,7 +33,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	};
 
 	function getUtcNowString() {
-
 		var now = new Date(new Date().getTeleoptiTime());
 		var dateStr = (now.getUTCMonth() + 1).toString() + '/' +
 					   now.getUTCDate().toString() + '/' +
@@ -47,7 +46,15 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		var self = this;
 		self.intervalPointer = null;
 
+		function setCurrentTime() {
+			self.now(new Date(new Date(getUtcNowString()).getTime() + userTimeZoneMinuteOffset * 60000));
+		}
+
 		self.loadViewModel = function () {
+			// Clear existed interval to prevent duplicate invoke to setCurrentTime()
+			if (self.intervalPointer !== null) {
+				clearInterval(self.intervalPointer);
+			}
 
 			ajax.Ajax({
 				url: 'Asm/Today',
@@ -61,8 +68,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 					self.unreadMessageCount(data.UnreadMessageCount);
 					$('.asm-outer-canvas').show();
 					userTimeZoneMinuteOffset = data.UserTimeZoneMinuteOffset;
+					setCurrentTime();
 					self.intervalPointer = setInterval(function () {
-						self.now(new Date(new Date(getUtcNowString()).getTime() + userTimeZoneMinuteOffset * 60000));
+						setCurrentTime();
 					}, 1000 * refreshSeconds);
 				}
 			});
@@ -76,31 +84,22 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			self.layers(newLayers);
 		};
 
+		self.currentLayerString = ko.observable(null);
+		self.nextLayerString = ko.observable(null);
+
 		self.hours = ko.observableArray();
 		self.layers = ko.observableArray();
-		self.visibleLayers = ko.computed(function () {
-			return $.grep(self.layers(), function (n, i) {
-				return n.visible();
-			});
-		});
-		self.currentLayerString = ko.computed(function () {
-			var layer = self.visibleLayers()[0];
-			if (typeof layer != "undefined" && layer.active()) {
-				return layer.title();
-			}
-			return null;
-		});
-		self.nextLayerString = ko.computed(function () {
-			var layer;
-			if (self.currentLayerString() == null) {
-				layer = self.visibleLayers()[0];
-			} else {
-				layer = self.visibleLayers()[1];
-			}
-			if (typeof layer != "undefined") {
-				return layer.title();
-			}
-			return null;
+		self.visibleLayers = ko.observableArray();
+
+		self.visibleLayers.subscribe(function (newVisualLayers) {
+			var currentLayer = newVisualLayers[0];
+			var currentLayerDesc = currentLayer != undefined && currentLayer.active() ? currentLayer.title() : null;
+
+			var nextLayer = currentLayerDesc == null ? newVisualLayers[0] : newVisualLayers[1];
+			var nextLayerDesc = nextLayer != undefined ? nextLayer.title() : null;
+
+			self.currentLayerString(currentLayerDesc);
+			self.nextLayerString(nextLayerDesc);
 		});
 
 		self.now = ko.observable(new Date().getTeleoptiTime());
@@ -110,22 +109,26 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			var now = new Date(self.now());
 			var msSinceStart = (now.getHours() * 60 * 60 + now.getMinutes() * 60 + now.getSeconds() + 24 * 60 * 60) * 1000;
 			var hoursSinceStart = msSinceStart / 1000 / 60 / 60;
-			return -(pixelPerHours * hoursSinceStart) + 'px';
+			return - (pixelPerHours * hoursSinceStart) + 'px';
 		});
+
 		self.now.subscribe(function (currentMs) {
 			var yesterdayPlus2Days = moment(new Date(self.yesterday().getTime())).add('days',2).toDate();
 			if (currentMs > yesterdayPlus2Days.getTime()) {
 				var todayMinus1 = moment(new Date(currentMs)).add('days', -1).startOf('day').toDate();
 				self.yesterday(todayMinus1);
 			}
+
+			var visibleLayers = $.grep(self.layers(),
+				function(n, i) {
+					return n.visible();
+				});
+			self.visibleLayers(visibleLayers);
 		});
 		self.unreadMessages = ko.computed(function () {
 			return self.unreadMessageCount() > 0;
 		});
 		self.yesterday.subscribe(function () {
-			if (self.intervalPointer != null) {
-				clearInterval(self.intervalPointer);
-			}
 			self.loadViewModel();
 		});
 		self.openMessages = function () {
@@ -229,9 +232,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		_notificationTrackIdList.push(notification.TrackId);
 		return true;
 	}
-    
+
 	function _makeSureWeAreLoggedOn() {
-		
 		var ajax = new Teleopti.MyTimeWeb.Ajax();
 		ajax.Ajax({
 			url: 'UserData/FetchUserData',
@@ -242,12 +244,11 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				setTimeout(_makeSureWeAreLoggedOn, 20 * 60 * 1000);
 			}
 		});
-		
 	}
 
-    function _startPollingToAvoidLogOut() {
-        setTimeout(_makeSureWeAreLoggedOn, 20 * 60 * 1000);
-    }
+	function _startPollingToAvoidLogOut() {
+		setTimeout(_makeSureWeAreLoggedOn, 20 * 60 * 1000);
+	}
 
 	return {
 		ShowAsm: function(settings) {
@@ -258,14 +259,13 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		ListenForScheduleChanges: _listenForScheduleChanges,
 		UpdateNotificationDisplayTimeSetting: _updateNotificationDisplayTimeSetting,
 		NotifyWhenScheduleChangedListener: function (notification, skipValidSchedulePeriod) {
-		    var shouldValid = skipValidSchedulePeriod ? true : _validSchedulePeriod(notification);
-		    if ( shouldValid && _validateNotificationSource(notification)) {
-				var changedDateRange;
-				if (notification.StartDate == notification.EndDate)
+			var shouldValid = skipValidSchedulePeriod ? true : _validSchedulePeriod(notification);
+			if ( shouldValid && _validateNotificationSource(notification)) {
+				var changedDateRange = new moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate)).format('L');
+				if (notification.StartDate !== notification.EndDate)
 				{
-					changedDateRange = new moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate)).format('L');
-				} else {
-					changedDateRange = new moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate)).format('L') + ' - ' + new moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate)).format('L');
+					changedDateRange = changedDateRange + ' - '
+						+ new moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate)).format('L');
 				}
 				var notifyText = notifyOptions[notification.DomainType].notifyText.format(changedDateRange);
 				Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions[notification.DomainType], notifyText);
@@ -278,7 +278,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		},
 		SetMessageCount: function (data) {
 			if (vm) {
-				vm.unreadMessageCount(data.UnreadMessagesCount);				
+				vm.unreadMessageCount(data.UnreadMessagesCount);
 			}
 		},
 		MakeSureWeAreLoggedOn: _makeSureWeAreLoggedOn

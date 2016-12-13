@@ -1,50 +1,50 @@
 ﻿@using Teleopti.Ccc.UserTexts
 
 <script type="text/javascript">
-    $(function() {
-        Teleopti.MyTimeWeb.AjaxSettings = { baseUrl: '@Url.Content("~/MyTime/")' };
-        Teleopti.MyTimeWeb.Asm.ShowAsm(
-        {
-            baseUrl: '@Url.Content("~/MyTime#")'
-        });
-        @if (  ViewBag.HasAsmPermission)
-        {
-            <text>
+	$(function () {
+		Teleopti.MyTimeWeb.AjaxSettings = { baseUrl: '@Url.Content("~/MyTime/")' };
+		Teleopti.MyTimeWeb.Asm.ShowAsm(
+		{
+			baseUrl: '@Url.Content("~/MyTime#")'
+		});
+		@if (  ViewBag.HasAsmPermission)
+		{
+			<text>
 		Teleopti.MyTimeWeb.AsmMessage.ListenForMessages(function (data) {
 			Teleopti.MyTimeWeb.AsmMessage.FetchMessageInfo(data.DomainId, Teleopti.MyTimeWeb.Asm.SetMessageCount);
 		});
 		Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges({
-				notifyText: '@Resources.YourScheduleTheDATEHasChanged',
-				originalDocumentTitle: document.title,
-				baseUrl: '@Url.Content("~/")',
-				webNotification: function () {
-					return window.opener == null; //to avoid double messages to web notification if both portal and asm is open
-				},
-				header: '@Resources.Teleopti'
+			notifyText: '@Resources.YourScheduleTheDATEHasChanged',
+			originalDocumentTitle: document.title,
+			baseUrl: '@Url.Content("~/")',
+			webNotification: function () {
+				return window.opener == null; //to avoid double messages to web notification if both portal and asm is open
 			},
+			header: '@Resources.Teleopti'
+		},
 			function (notification) {
 				Teleopti.MyTimeWeb.Asm.ReloadAsmViewModelListener(notification);
 				Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);
 				Teleopti.MyTimeWeb.AlertActivity.RefreshAlertNextActivity();
 			},
-            'IScheduleChangedInDefaultScenario'
-        );
+			'IScheduleChangedInDefaultScenario'
+		);
 
 		Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges(
-            {
-                notifyText: '@Resources.ShiftTradeRequestScheduleChanged',
-                originalDocumentTitle: document.title,
-                baseUrl: '@Url.Content("~/")',
-                header: '@Resources.Teleopti'
-            },
-            function (notification) {
-                Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification, true);
-                Teleopti.MyTimeWeb.AlertActivity.RefreshAlertNextActivity();
-            },
-            'IShiftTradeScheduleChangedInDefaultScenario'
-        );
+			{
+				notifyText: '@Resources.ShiftTradeRequestScheduleChanged',
+				originalDocumentTitle: document.title,
+				baseUrl: '@Url.Content("~/")',
+				header: '@Resources.Teleopti'
+			},
+			function (notification) {
+				Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification, true);
+				Teleopti.MyTimeWeb.AlertActivity.RefreshAlertNextActivity();
+			},
+			'IShiftTradeScheduleChangedInDefaultScenario'
+		);
 
-    	Teleopti.MyTimeWeb.AlertActivity.StartAlertNextActivity({
+		Teleopti.MyTimeWeb.AlertActivity.StartAlertNextActivity({
 			comingMessageTemplate: '@Resources.NextActivityComingMessage',
 			endingMessageTemplate: '@Resources.ShiftEndingMessage',
 			originalDocumentTitle: document.title,
@@ -54,9 +54,9 @@
 			},
 			header: '@Resources.Teleopti'
 		});
-	</text>
+		</text>
 	}
-    });
+	});
 </script>
 
 
@@ -67,9 +67,9 @@
 		</div>
 		<div class="asm-sliding-schedules" data-bind="style: { left : canvasPosition }">
 			<span data-bind="foreach: layers">
-				<span class="asm-layer" tabindex="0" ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}">
-          <span class="tip" data-bind="text: title"></span>
-        </span>
+				<span class="asm-layer" tabindex="0" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}">
+					<span class="tip" data-bind="text: title"></span>
+				</span>
 			</span>
 			<span data-bind="foreach: hours">
 				<span class="asm-timeline-line">
@@ -86,7 +86,7 @@
 			</div>
 			<div class="asm-info-canvas-column asm-info-canvas-column-messages" data-bind="visible: unreadMessages, click : openMessages">
 				<span class="glyphicon glyphicon-envelope" style="margin-right: 13px; position: relative; margin-top: 0">
-					<span style="padding-left: 2px; position: relative" data-bind="text: unreadMessageCount" id="message-count" ></span>
+					<span style="padding-left: 2px; position: relative" data-bind="text: unreadMessageCount" id="message-count"></span>
 				</span>
 			</div>
 		</div>

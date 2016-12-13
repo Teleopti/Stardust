@@ -81,7 +81,7 @@ Scenario: Current activity changes
 
 Scenario: Upcoming activity time period should be displayed
 	Given I have the role 'Full access to mytime'
-	And the time is '2030-01-01 00:01'
+	And the time is '2030-01-01 00:01Z'
 	When I view ASM
 	Then I should see next activity time as '08:00-11:00'
 
