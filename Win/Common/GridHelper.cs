@@ -515,6 +515,7 @@ namespace Teleopti.Ccc.Win.Common
             lockManager.ClearWriteProtected();
 	        foreach (var person in stateHolder.FilteredCombinedAgentsDictionary)
 	        {
+				if(person.Value.PersonWriteProtection == null) continue;
 				var writeProtectUntil = person.Value.PersonWriteProtection.WriteProtectedUntil();
 				if (writeProtectUntil.HasValue)
 				{
