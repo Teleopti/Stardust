@@ -98,7 +98,6 @@
 						RtaService.getOrganization()
 						.then(function(organization) {
 							$scope.sites = organization;
-							console.log();
 							keepSelectionForOrganization();
 						});
 				});
@@ -124,7 +123,7 @@
 					.then(function(skillAreas) {
 						$scope.skillAreasLoaded = true;
 						$scope.skillAreas = skillAreas.SkillAreas;
-						if (skillAreaId != null && skillIds.length == 0)
+						if (skillAreaId != null)
 							$scope.selectedSkillArea = getSelected($scope.skillAreas, skillAreaId);
 					});
 
@@ -150,7 +149,7 @@
 				$scope.selectedSkillChange = function(skill) {
 					if (!skill) return;
 					$scope.skillId = skill.Id;
-					if (skill.Id != skillIds[0]) {
+					if (skill.Id != skillIds[0] || $stateParams.skillAreaId) {
 						stateGoToAgents({
 							skillIds: skill.Id,
 							skillAreaId: undefined
@@ -160,6 +159,7 @@
 
 				$scope.selectedSkillAreaChange = function(skillArea) {
 					if (!skillArea) return;
+					if (skillArea.Id == $stateParams.skillAreaId) return;
 					stateGoToAgents({
 						skillAreaId: skillArea.Id,
 						skillIds: []
@@ -198,11 +198,9 @@
 
 				function countTeamsSelected() {
 					var checkedTeamsCount = 0;
-					console.log($scope.sites);
 					$scope.sites.forEach(function(site) {
 						if (siteIds.indexOf(site.Id) > -1) {
 							checkedTeamsCount = checkedTeamsCount + site.Teams.length;
-							console.log('site.Teams.length', site.Teams.length, site);
 						}
 					});
 					return checkedTeamsCount + $scope.teamsSelected.length;
