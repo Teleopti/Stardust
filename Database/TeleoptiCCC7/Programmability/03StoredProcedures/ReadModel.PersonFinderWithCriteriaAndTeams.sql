@@ -223,8 +223,8 @@ BEGIN
 	ELSE
 		SELECT @valueClause = 'fp.SearchValue like N''%' + @searchValue + '%'''
 	
-	SELECT @dynamicSQL = 'SELECT fp.PersonId FROM ReadModel.FindPerson fp '
-				 +'INNER JOIN #teamId t with (nolock)   ON t.tId = fp.TeamId '
+	SELECT @dynamicSQL = 'SELECT fp.PersonId FROM #teamId t '
+				 +'INNER JOIN ReadModel.FindPerson fp with (nolock)   ON t.tId = fp.TeamId '
 				 +' WHERE '
 
 	IF @valueClause <> '()'
