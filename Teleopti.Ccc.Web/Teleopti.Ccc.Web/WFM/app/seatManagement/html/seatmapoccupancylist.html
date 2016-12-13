@@ -23,13 +23,13 @@
 				
 				<span class="list-item-container seat-booking-seatname pull-left" ng-show="$index !== 0">&nbsp;</span>
 
-				<span ng-show="!booking.IsEmpty" class="list-item-container seat-booking-item" ng-class="{'first-seat-booking',vm.getSeatBookingDetailClass(booking)]">
+				<span ng-show="!booking.IsEmpty" class="list-item-container seat-booking-item" ng-class="vm.getSeatBookingDetailClass(booking)">
 					{{vm.getDisplayTime(booking)}}
 					&nbsp;&nbsp;{{booking.FirstName}}
 					&nbsp;{{booking.LastName}}
 				</span>
 
-				<span ng-show="booking.IsEmpty" class="list-item-container seat-booking-item" ng-class="{'first-seat-booking'}">{{'SeatHasNoBookings'|translate}}</span>
+				<span ng-show="booking.IsEmpty" class="list-item-container seat-booking-item" >{{'SeatHasNoBookings'|translate}}</span>
 
 				<div class="wfm-leave-behind wfm-leave-behind-1" ng-show="!booking.IsEmpty">
 					<span ng-click="vm.deleteSeatBooking(booking)"><i class="mdi mdi-delete"></i></span>

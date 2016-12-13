@@ -70,7 +70,7 @@
 			function doResize(canvas) {
 				var viewPortHeight = $('.seatmap').height();
 				var width = $('[ui-view]')[0].clientWidth - 0;
-				var heightReduction = $('#seatmap-toolbar').height() + 50;
+				var heightReduction = $('#seatmap-toolbar').height() + 100;
 
 				canvas.setHeight((viewPortHeight - heightReduction));
 
