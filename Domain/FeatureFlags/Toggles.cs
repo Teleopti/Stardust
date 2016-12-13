@@ -149,6 +149,7 @@
 		ResourcePlanner_MaxSeatsNew_40939,
 		ResourcePlanner_HideSkillPrioSliders_41312,
 		ResourcePlanner_SplitBigIslands_42049,
+		ResourcePlanner_CascadingScheduleOvertimeOnPrimary_41318,
 
 		Wfm_DisplayOnlineHelp_39402,
 
