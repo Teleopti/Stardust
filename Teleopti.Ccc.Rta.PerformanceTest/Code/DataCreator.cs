@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 						{
 							AcdLogOnName = name,// is not used?
 							DataSourceId = _testConfiguration.DataSourceId,
-							AcdLogOnOriginalId = _testConfiguration.SourceId, // this is what the rta receives
+							AcdLogOnOriginalId = name, // this is the user code the rta receives
 							AcdLogOnMartId = -1
 						};
 						_externalLogOns.Add(logon);
