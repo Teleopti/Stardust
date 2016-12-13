@@ -595,7 +595,7 @@
     <comment>Are you sure you want to delete?</comment>
   </data>
   <data name="AreYouSureYouWantToDeleteGrouping" xml:space="preserve">
-    <value>您确定想要删除 '{0}' 分组吗？</value>
+    <value>您确定想要删除“{0}”分组吗？</value>
     <comment>Are you sure you want to delete '{0}' grouping?</comment>
   </data>
   <data name="ArrowsRemove" xml:space="preserve">
@@ -5579,13 +5579,13 @@ Periods</comment>
     <value>用于注销</value>
   </data>
   <data name="AreYouSureYouWantToDeleteAvailability" xml:space="preserve">
-    <value>您确定要删除 '{0}' 可用性？</value>
+    <value>您确定要删除“{0}”可用性？</value>
   </data>
   <data name="AreYouSureYouWantToDeleteRotation" xml:space="preserve">
-    <value>您确定想要删除 ‘{0}’ 循环？</value>
+    <value>您确定想要删除“{0}”循环？</value>
   </data>
   <data name="AreYouSureYouWantToDeleteScenario" xml:space="preserve">
-    <value>您确定想要删除 '{0}' 情景？</value>
+    <value>您确定想要删除“{0}”情景？</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
     <value>确认删除</value>
@@ -5594,7 +5594,7 @@ Periods</comment>
     <value>授权失败</value>
   </data>
   <data name="CannotDeleteDefaultScenario" xml:space="preserve">
-    <value>不能删除默认的情景 '{0}'。</value>
+    <value>不能删除默认的情景“{0}”。</value>
   </data>
   <data name="ScoreCardPreviewHeaderToolTip" xml:space="preserve">
     <value>请双击这里在主界面打开</value>
@@ -5738,7 +5738,7 @@ Periods</comment>
     <value>您确定要删除计划分组 {0}{1}{0}吗？</value>
   </data>
   <data name="AreYouSureYouWantToDeletePartTimePercentage" xml:space="preserve">
-    <value>您确定要删除 '{0}' 兼职时间百分比吗？</value>
+    <value>您确定要删除“{0}”兼职时间百分比吗？</value>
   </data>
   <data name="StaffingEffect" xml:space="preserve">
     <value>人员配备结果</value>
@@ -5909,7 +5909,7 @@ Periods</comment>
     <value>周：</value>
   </data>
   <data name="AreYouSureYouWantToDeleteContract" xml:space="preserve">
-    <value>您确定要删除 '{0}' 合同吗？</value>
+    <value>您确定要删除“{0}”合同吗？</value>
   </data>
   <data name="ResReportAbandonmentAndSpeedOfAnswer" xml:space="preserve">
     <value>放弃和应答的速度</value>
@@ -5963,7 +5963,7 @@ Periods</comment>
     <value>小组测量指标</value>
   </data>
   <data name="AreYouSureYouWantToDeleteDayOff" xml:space="preserve">
-    <value>您确定想要删除 '{0}' 休息日吗？</value>
+    <value>您确定想要删除“{0}”休息日吗？</value>
   </data>
   <data name="AreYouSureYouWantToDeleteOptionalColumn" xml:space="preserve">
     <value>您确定想要删除 ‘{0}’ 自定义列吗？</value>
@@ -8622,7 +8622,7 @@ Teleopti R&amp;D</value>
     <value>公开备注：</value>
   </data>
   <data name="AreYouSureYouWantToDeleteContractSchedule" xml:space="preserve">
-    <value>你确定要删除 '{0}' 班表合同吗么？</value>
+    <value>你确定要删除“{0}”班表合同吗么？</value>
   </data>
   <data name="EqualOfEachShiftCategory" xml:space="preserve">
     <value>每个班次类别均等</value>
@@ -8859,7 +8859,7 @@ Teleopti R&amp;D</value>
     <value>不能在此时显示所有会议！</value>
   </data>
   <data name="InvalidTimeValue" xml:space="preserve">
-    <value>无效的时间值 '{0}'</value>
+    <value>无效的时间值“{0}”</value>
   </data>
   <data name="ChildSkillWithSameNameAsParentSkillWarning" xml:space="preserve">
     <value>可能有一个子技能和一个或两个父技能重名，或者多个子技能有同样的名称；请检查多站点技能的属性。预测模块会关闭。</value>
@@ -8901,7 +8901,7 @@ Teleopti R&amp;D</value>
     <value>优化：</value>
   </data>
   <data name="AreYouSureYouWantToDeleteItem" xml:space="preserve">
-    <value>您确定要删除 '{0}'？</value>
+    <value>您确定要删除“{0}”？</value>
   </data>
   <data name="MissingSubject" xml:space="preserve">
     <value>缺少主题</value>
@@ -10836,7 +10836,7 @@ Teleopti R&amp;D</value>
     <value>应用产品激活密钥</value>
   </data>
   <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
-    <value>说明：　　　　　　　　　　　　　　　　  * 购买一个授权（联系信息请参见www.teleopti.com）                                                * 收到产品激活密钥文件（如通过Email）         * 保存产品计划密钥到本地磁盘                         * 在应用产品密钥前保存您当前的工作             * 使用下方的“浏览”找到残品密钥文件               * 应用残品密钥                                                     * 应用程序将会关闭                                             * 重新启动MyTime以得到新授权的on功能选项* 再次开启应用程序</value>
+    <value>说明：　　　　　　　　　　　　　　　　  * 购买一个授权（联系信息请参见www.teleopti.com）                                                * 收到产品激活密钥文件（如通过Email）         * 保存产品计划密钥到本地磁盘                         * 在应用产品密钥前保存您当前的工作             * 使用下方的“浏览”找到产品密钥文件               * 应用产品密钥                                                     * 应用程序将会关闭                                             * 重新启动MyTime以得到新授权的on功能选项* 再次开启应用程序</value>
   </data>
   <data name="ApplyTo" xml:space="preserve">
     <value>应用到</value>
@@ -11212,7 +11212,7 @@ Teleopti R&amp;D</value>
     <value>删除游戏化设置</value>
   </data>
   <data name="AreYouSureYouWantToDeleteGamificationSetting" xml:space="preserve">
-    <value>您确认删除 '{0}' 此游戏化设置吗 ?</value>
+    <value>您确认删除“{0}”此游戏化设置吗 ?</value>
   </data>
   <data name="Announcement" xml:space="preserve">
     <value>发布调换班公告</value>
