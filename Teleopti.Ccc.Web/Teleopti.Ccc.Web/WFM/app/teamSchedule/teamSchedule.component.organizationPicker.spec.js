@@ -80,9 +80,9 @@
 		var displayName = ctrl.formatSelectedDisplayName();
 		expect(displayName).toEqual("team1");
 
-		ctrl.selectedTeamIds = ['team1','team2'];
+		ctrl.selectedTeamIds = [];
 		displayName = ctrl.formatSelectedDisplayName();
-		expect(displayName).toEqual("2 teams selected");
+		expect(displayName).toEqual("Organization");
 	}));
 
 	it("Should trigger onPick when selection done", function () {
