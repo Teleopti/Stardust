@@ -136,6 +136,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             }
         }
 
+		[Test]
+	    public void ShouldSelectDayAndDayAfter()
+	    {
+			var scaleCalculator = new DayPresenterScaleCalculator();
+		    var presenter = new DayPresenterNew(null, schedulerState, null,null, SchedulePartFilter.None, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), scaleCalculator, NullScheduleTag.Instance);
+			presenter.SelectDate(DateOnly.Today);
+			Assert.AreEqual(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1)), presenter.SelectedPeriod.DateOnlyPeriod);
+	    }
+
         private class DayPresenterNewTestClass : DayPresenterNew
         {
             internal DayPresenterNewTestClass(IScheduleViewBase view, ISchedulerStateHolder schedulerState, GridlockManager lockManager,
