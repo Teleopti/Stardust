@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teaminfo.GroupMembers).Return(_groupMembers);
 				Expect.Call(_restrictionAggregator.Aggregate(_schedules, _dateOnly, _person, _teamBlockInfo, _schedulingOptions)).Return(restriction);
 				Expect.Call(_sameOpenHoursInTeamBlock.Check(_skillDays, _teamBlockInfo, groupPersonSkillAggregator)).Return(true);
-				Expect.Call(_workShiftFilterService.FilterForRoleModel(new GroupPersonSkillAggregator(new PersonalSkillsProvider()), _schedules, _dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
+				Expect.Call(_workShiftFilterService.FilterForRoleModel(groupPersonSkillAggregator, _schedules, _dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 																		new WorkShiftFinderResult(_person, _dateOnly), true, false, _skillDays))
 					  .Return(new List<IShiftProjectionCache>());
 			}
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teaminfo.GroupMembers).Return(_groupMembers).Repeat.Any();
 				Expect.Call(_restrictionAggregator.Aggregate(_schedules, _dateOnly, _person, _teamBlockInfo, _schedulingOptions)).Return(restriction);
 				Expect.Call(_sameOpenHoursInTeamBlock.Check(_skillDays, _teamBlockInfo, groupPersonSkillAggregator)).Return(true);
-				Expect.Call(_workShiftFilterService.FilterForRoleModel(new GroupPersonSkillAggregator(new PersonalSkillsProvider()), _schedules, _dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
+				Expect.Call(_workShiftFilterService.FilterForRoleModel(groupPersonSkillAggregator, _schedules, _dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 																		new WorkShiftFinderResult(_person, _dateOnly), true, false, _skillDays))
 					  .Return(shifts);
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(null, _dateOnly, shifts, _skillDays, _teamBlockInfo, _schedulingOptions,TimeZoneGuard.Instance.TimeZone, false, null)).IgnoreArguments()
