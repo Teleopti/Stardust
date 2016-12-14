@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
-	[RemoveMeWithToggle("When removing toggle, this type shouldn't impl any interface and overtimePreferences param can be removed")]
+	[RemoveMeWithToggle("When removing toggle, this type shouldn't impl any interface")]
 	public class PersonSkillsUseAllForScheduleDaysOvertimeProvider : IPersonSkillsForScheduleDaysOvertimeProvider
 	{
 		public IEnumerable<ISkill> Execute(IOvertimePreferences overtimePreferences, IPersonPeriod personPeriod)
