@@ -1101,4 +1101,16 @@
   <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
     <value>按座席代表的状态时间</value>
   </data>
+  <data name="ResIncludeDetails" xml:space="preserve">
+    <value>包含详细信息：</value>
+  </data>
+  <data name="ResRequestStatusCancelled" xml:space="preserve">
+    <value>已取消</value>
+  </data>
+  <data name="ResRequestStatusWaitlisted" xml:space="preserve">
+    <value>已在等候列表</value>
+  </data>
+  <data name="MultipleActivitiesOrAbsences" xml:space="preserve">
+    <value>多个活动/缺勤</value>
+  </data>
 </root>
