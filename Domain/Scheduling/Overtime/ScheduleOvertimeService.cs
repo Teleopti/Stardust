@@ -53,9 +53,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 			var overtimeDuration = new MinMax<TimeSpan>(overtimePreferences.SelectedTimePeriod.StartTime, overtimePreferences.SelectedTimePeriod.EndTime);
 			var overtimeSpecifiedPeriod = new MinMax<TimeSpan>(overtimePreferences.SelectedSpecificTimePeriod.StartTime, overtimePreferences.SelectedSpecificTimePeriod.EndTime);
-			var overtimeLayerLengthPeriodsUtc = _overtimeLengthDecider.Decide(person, dateOnly, scheduleDay, overtimePreferences.SkillActivity, overtimeDuration, overtimeSpecifiedPeriod, overtimePreferences.AvailableAgentsOnly);
+			var overtimeLayerLengthPeriodsUtc = _overtimeLengthDecider.Decide(overtimePreferences, person, dateOnly, scheduleDay, overtimePreferences.SkillActivity, overtimeDuration, overtimeSpecifiedPeriod, overtimePreferences.AvailableAgentsOnly);
 
-			var oldRmsValue = calculatePeriodValue(dateOnly, overtimePreferences.SkillActivity, person, timeZoneInfo);
+			var oldRmsValue = calculatePeriodValue(overtimePreferences, dateOnly, overtimePreferences.SkillActivity, person, timeZoneInfo);
 
 			DateTimePeriod? overtimeLayerLengthPeriod = null;
 			foreach (var dateTimePeriod in overtimeLayerLengthPeriodsUtc)
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
 			resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null, false);
 
-			var newRmsValue = calculatePeriodValue(dateOnly, overtimePreferences.SkillActivity, person, timeZoneInfo);
+			var newRmsValue = calculatePeriodValue(overtimePreferences, dateOnly, overtimePreferences.SkillActivity, person, timeZoneInfo);
 			
 			if (!(newRmsValue > oldRmsValue)) return true;
 
@@ -110,9 +110,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			return false;
 		}
 
-		private double calculatePeriodValue(DateOnly dateOnly, IActivity activity, IPerson person, TimeZoneInfo timeZoneInfo)
+		private double calculatePeriodValue(IOvertimePreferences overtimePreferences, DateOnly dateOnly, IActivity activity, IPerson person, TimeZoneInfo timeZoneInfo)
 		{
-			var aggregateSkill = createAggregateSkill(person, dateOnly, activity);
+			var aggregateSkill = createAggregateSkill(overtimePreferences, person, dateOnly, activity);
 
 			if (aggregateSkill != null)
 			{
@@ -125,9 +125,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			return 0;
 		}
 
-		private IAggregateSkill createAggregateSkill(IPerson person, DateOnly dateOnly, IActivity activity)
+		private IAggregateSkill createAggregateSkill(IOvertimePreferences overtimePreferences, IPerson person, DateOnly dateOnly, IActivity activity)
 		{
-			var skills = _personSkillsForScheduleDaysOvertimeProvider.Execute(person.Period(dateOnly), activity).ToList();
+			var skills = _personSkillsForScheduleDaysOvertimeProvider.Execute(overtimePreferences, person.Period(dateOnly), activity).ToList();
 
 			if (skills.IsEmpty()) return null;
 

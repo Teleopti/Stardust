@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
 	public interface IPersonSkillsForScheduleDaysOvertimeProvider
 	{
-		IEnumerable<ISkill> Execute(IPersonPeriod personPeriod, IActivity activity);
+		IEnumerable<ISkill> Execute(IOvertimePreferences overtimePreferences, IPersonPeriod personPeriod, IActivity activity);
 	}
 }

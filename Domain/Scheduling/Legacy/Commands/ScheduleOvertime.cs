@@ -45,8 +45,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
 			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
 			var cancel = false;
-
-
 			foreach (var dateOnly in selectedDates)
 			{
 				var persons = selectedPersons.Randomize();

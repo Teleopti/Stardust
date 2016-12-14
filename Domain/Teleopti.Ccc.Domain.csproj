@@ -530,7 +530,7 @@
     <Compile Include="Scheduling\Overtime\IPersonSkillsForNonOvertimeProvider.cs" />
     <Compile Include="Scheduling\Overtime\IPersonSkillsForScheduleDaysOvertimeProvider.cs" />
     <Compile Include="Scheduling\Overtime\PersonSkillsUseAllForScheduleDaysOvertimeProvider.cs" />
-    <Compile Include="Scheduling\Overtime\PersonSkillsUsePrimaryForScheduleDaysOvertimeProvider.cs" />
+    <Compile Include="Scheduling\Overtime\PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider.cs" />
     <Compile Include="Scheduling\Overtime\PrimaryGroupPersonSkillAggregator.cs" />
     <Compile Include="Scheduling\Overtime\PrimaryOrAllPersonSkillForNonOvertimeProvider.cs" />
     <Compile Include="Scheduling\Rules\BusinessRuleConfigProvider.cs" />

@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			using (_mock.Record())
 			{
 				Expect.Call(_scheduleDay.Person).Return(_person);
-				Expect.Call(_overtimeLengthDecider.Decide(_person, _dateOnly, _scheduleDay, _activity,
+				Expect.Call(_overtimeLengthDecider.Decide(new OvertimePreferences(), _person, _dateOnly, _scheduleDay, _activity,
 					new MinMax<TimeSpan>(TimeSpan.Zero, new TimeSpan(1, 6, 0, 0)), new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero),
 					false)).IgnoreArguments().Return(new List<DateTimePeriod>());
 				Expect.Call(_schedulingResultStateHolder.SkillStaffPeriodHolder).Return(_skillStaffPeriodHolder).Repeat.AtLeastOnce();
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			using (_mock.Record())
 			{
 				Expect.Call(_scheduleDay.Person).Return(_person);
-				Expect.Call(_overtimeLengthDecider.Decide(_person, _dateOnly, _scheduleDay, _activity,
+				Expect.Call(_overtimeLengthDecider.Decide(new OvertimePreferences(), _person, _dateOnly, _scheduleDay, _activity,
 					new MinMax<TimeSpan>(TimeSpan.Zero, new TimeSpan(23, 59, 0)), new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero),
 					false)).IgnoreArguments().Return(new List<DateTimePeriod> {_dateTimePeriod});
 				Expect.Call(() => _scheduleDay.CreateAndAddOvertime(_activity, _dateTimePeriod, null));

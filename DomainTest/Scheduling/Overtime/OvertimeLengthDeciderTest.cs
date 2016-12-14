@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		[Test]
 		public void ShouldBeZeroIfPersonHasNoSkillOfOneActivity()
 		{
-			var result = _target.Decide(_person, DateOnly.Today, _scheduleDay,
+			var result = _target.Decide(new OvertimePreferences(), _person, DateOnly.Today, _scheduleDay,
 										ActivityFactory.CreateActivity("No Match Acitivity"),
 										new MinMax<TimeSpan>(TimeSpan.FromHours(1), TimeSpan.FromHours(2)),
 										_overtimeSpecifiedPeriod,
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			using (_mocks.Playback())
 			{
 
-				var resultLength = _target.Decide(_person, new DateOnly(_date), _scheduleDay, _skill1.Activity,duration,_overtimeSpecifiedPeriod, false);
+				var resultLength = _target.Decide(new OvertimePreferences(), _person, new DateOnly(_date), _scheduleDay, _skill1.Activity,duration,_overtimeSpecifiedPeriod, false);
 
 				Assert.That(resultLength.Count(), Is.EqualTo(0));
 			}
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			}
 			using (_mocks.Playback())
 			{
-				var resultLength = _target.Decide(_person, new DateOnly(_date), _scheduleDay, _skill1.Activity, duration,_overtimeSpecifiedPeriod, false);
+				var resultLength = _target.Decide(new OvertimePreferences(), _person, new DateOnly(_date), _scheduleDay, _skill1.Activity, duration,_overtimeSpecifiedPeriod, false);
 
 				Assert.That(resultLength.Count(), Is.EqualTo(0));
 			}
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			}
 			using (_mocks.Playback())
 			{
-				var resultLength = _target.Decide(_person, new DateOnly(_date), _scheduleDay, _skill1.Activity, duration, _overtimeSpecifiedPeriod, false);
+				var resultLength = _target.Decide(new OvertimePreferences(), _person, new DateOnly(_date), _scheduleDay, _skill1.Activity, duration, _overtimeSpecifiedPeriod, false);
 
 				Assert.That(resultLength.Count(), Is.EqualTo(0));
 			}

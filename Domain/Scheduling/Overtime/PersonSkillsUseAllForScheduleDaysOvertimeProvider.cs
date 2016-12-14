@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
+	[RemoveMeWithToggle("When removing toggle, this type shouldn't impl any interface and overtimePreferences param can be removed")]
 	public class PersonSkillsUseAllForScheduleDaysOvertimeProvider : IPersonSkillsForScheduleDaysOvertimeProvider
 	{
-		public IEnumerable<ISkill> Execute(IPersonPeriod personPeriod, IActivity activity)
+		public IEnumerable<ISkill> Execute(IOvertimePreferences overtimePreferences, IPersonPeriod personPeriod, IActivity activity)
 		{
 			var ret = new List<ISkill>();
 			foreach (var personSkill in personPeriod.PersonSkillCollection)
