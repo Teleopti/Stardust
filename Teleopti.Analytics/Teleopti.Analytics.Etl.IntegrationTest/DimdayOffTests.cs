@@ -15,7 +15,6 @@ using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -153,11 +152,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				analyticsDataFactory.Setup(new BusinessUnit(TestState.BusinessUnit, _datasource));
 				analyticsDataFactory.Setup(new DimDayOff(123, id, "Normal Day Off", _datasource, 0));
 				analyticsDataFactory.Persist();
-
-				var step = new DimDayOffJobStep(jobParameters);
-				var result = step.Run(new List<IJobStep>(), TestState.BusinessUnit, null, false);
-				result.HasError.Should().Be.False();
 			}
+
+			var step = new DimDayOffJobStep(jobParameters);
+			var result = step.Run(new List<IJobStep>(), TestState.BusinessUnit, null, false);
+			result.HasError.Should().Be.False();
 
 			using (SetupFixtureForAssembly.DataSource.Analytics.CreateAndOpenUnitOfWork())
 			{
