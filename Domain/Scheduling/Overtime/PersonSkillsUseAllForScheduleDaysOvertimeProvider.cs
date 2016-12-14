@@ -9,14 +9,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 	{
 		public IEnumerable<ISkill> Execute(IOvertimePreferences overtimePreferences, IPersonPeriod personPeriod)
 		{
-			var ret = new List<ISkill>();
+			var ret = new HashSet<ISkill>();
 			foreach (var personSkill in personPeriod.PersonSkillCollection)
 			{
 				var skill = personSkill.Skill;
 				if (!skill.Activity.Equals(overtimePreferences.SkillActivity))
 					continue;
-				if (!ret.Contains(skill))
-					ret.Add(skill);
+				ret.Add(skill);
 			}
 			return ret;
 		}
