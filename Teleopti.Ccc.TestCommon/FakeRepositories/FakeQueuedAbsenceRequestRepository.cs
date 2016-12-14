@@ -19,12 +19,21 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				return;
 			}
 
-			foreach (var queuedRequest in _queuedRequests)
+			if (_queuedRequests.All(queuedAbsenceRequest => queuedAbsenceRequest.PersonRequest != entity.PersonRequest))
 			{
-				if (queuedRequest.PersonRequest != entity.PersonRequest) continue;
-				_queuedRequests.Remove(queuedRequest);
 				_queuedRequests.Add(entity);
 				return;
+			}
+
+
+			foreach (var queuedRequest in _queuedRequests)
+			{
+				if (queuedRequest.PersonRequest == entity.PersonRequest)
+				{
+					_queuedRequests.Remove(queuedRequest);
+					_queuedRequests.Add(entity);
+					return;
+				}
 			}
 		}
 
