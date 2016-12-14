@@ -447,7 +447,6 @@
     <Compile Include="Foundation\MatrixRaptorExternalLogOnSynchronizationTest.cs" />
     <Compile Include="Foundation\MatrixRaptorQueueSynchronizationTest.cs" />
     <Compile Include="Foundation\MatrixSyncTest.cs" />
-    <Compile Include="Foundation\NonVersionedRootTest.cs" />
     <Compile Include="Foundation\OptimisticLockExceptionTest.cs" />
     <Compile Include="Foundation\MessageFilterManagerTests.cs" />
     <Compile Include="Foundation\RootChangeInfoTest.cs">
@@ -574,7 +573,6 @@
     <Compile Include="UnitOfWork\DoNotReuseTransactionLevelTest.cs" />
     <Compile Include="UnitOfWork\EventsPackageMessageTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\GroupPageCollectionChangedEventPublisherTest.cs" />
-    <Compile Include="UnitOfWork\HandlingOfUowTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\MeetingMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\PersonAssignmentEventPublishingTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\TransactionHookInvokationScheduleTest.cs" />

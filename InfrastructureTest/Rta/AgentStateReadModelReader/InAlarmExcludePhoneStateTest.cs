@@ -12,7 +12,7 @@ using Teleopti.Ccc.TestCommon;
 namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 {
 	[TestFixture]
-	[UnitOfWorkTest]
+	[DatabaseTest]
 	public class InAlarmExcludePhoneStateTest
 	{
 		public IAgentStateReadModelPersister Persister;
@@ -22,6 +22,172 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 		public MutableNow Now;
 		public IAgentStateReadModelLegacyReader Target;
 
+		[Test]
+		public void ShouldLoadForSkill()
+		{
+			Now.Is("2016-06-20 12:10");
+			Database
+				.WithAgent("agent1")
+				.WithSkill("phone")
+				.WithAgent("agent2")
+				.WithSkill("phone");
+			var personId1 = Database.PersonIdFor("agent1");
+			var personId2 = Database.PersonIdFor("agent2");
+			var skill = Database.SkillIdFor("phone");
+			var loggedOut = Guid.NewGuid();
+			WithUnitOfWork.Do(() =>
+			{
+				Groupings.UpdateGroupingReadModel(new[] { personId1, personId2 });
+				Persister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId1,
+					AlarmStartTime = "2016-06-20 12:00".Utc(),
+					IsRuleAlarm = true,
+					StateGroupId = loggedOut
+				});
+				Persister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId2,
+					AlarmStartTime = "2016-06-20 12:00".Utc(),
+					IsRuleAlarm = true,
+					StateGroupId = Guid.NewGuid()
+				});
+			});
+
+			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingPhoneStatesForSkills(new[] { skill }, new Guid?[] { loggedOut }))
+				.Single().PersonId.Should().Be(personId2);
+		}
+
+		[Test]
+		public void ShouldExcludeBothWithAndWithoutStateGroupForSkill()
+		{
+			Now.Is("2016-06-20 12:10");
+			Database
+				.WithAgent("agent1")
+				.WithSkill("phone")
+				.WithAgent("agent2")
+				.WithSkill("phone")
+				.WithAgent("agent3")
+				.WithSkill("phone");
+			var personId1 = Database.PersonIdFor("agent1");
+			var personId2 = Database.PersonIdFor("agent2");
+			var personId3 = Database.PersonIdFor("agent3");
+			var skill = Database.SkillIdFor("phone");
+			var loggedOut = Guid.NewGuid();
+			var training = Guid.NewGuid();
+			WithUnitOfWork.Do(() =>
+			{
+				Groupings.UpdateGroupingReadModel(new[] { personId1, personId2, personId3 });
+				Persister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId1,
+					AlarmStartTime = "2016-06-15 12:00".Utc(),
+					IsRuleAlarm = true,
+					StateGroupId = training
+				});
+				Persister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId2,
+					AlarmStartTime = "2016-06-20 12:00".Utc(),
+					IsRuleAlarm = true,
+					StateGroupId = null
+				});
+				Persister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId3,
+					AlarmStartTime = "2016-06-20 12:00".Utc(),
+					IsRuleAlarm = true,
+					StateGroupId = loggedOut
+				});
+			});
+
+			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingPhoneStatesForSkills(new[] { skill }, new Guid?[] { null, loggedOut }))
+				.Single().PersonId.Should().Be(personId1);
+		}
+
+		[Test]
+		public void ShouldExcludeStateWithoutStateGroupForSkill()
+		{
+			Now.Is("2016-06-20 12:10");
+			Database
+				.WithAgent("agent1")
+				.WithSkill("phone")
+				.WithAgent("agent2")
+				.WithSkill("phone");
+			var personId1 = Database.PersonIdFor("agent1");
+			var personId2 = Database.PersonIdFor("agent2");
+			var skill = Database.SkillIdFor("phone");
+			var loggedOut = Guid.NewGuid();
+			WithUnitOfWork.Do(() =>
+			{
+				Groupings.UpdateGroupingReadModel(new[] { personId1, personId2 });
+				Persister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId1,
+					AlarmStartTime = "2016-06-20 12:00".Utc(),
+					IsRuleAlarm = true,
+					StateGroupId = loggedOut
+				});
+				Persister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId2,
+					AlarmStartTime = "2016-06-20 12:00".Utc(),
+					IsRuleAlarm = true,
+					StateGroupId = null
+				});
+			});
+
+			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingPhoneStatesForSkills(new[] { skill }, new Guid?[] { null }))
+				.Single().PersonId.Should().Be(personId1);
+		}
+
+		[Test]
+		public void ShouldLoadStateWithoutStateGroupForSkill()
+		{
+			Now.Is("2016-06-20 12:10");
+			Database
+				.WithAgent("agent1")
+				.WithSkill("phone")
+				.WithAgent("agent2")
+				.WithSkill("phone");
+			var personId1 = Database.PersonIdFor("agent1");
+			var personId2 = Database.PersonIdFor("agent2");
+			var skill = Database.SkillIdFor("phone");
+			var loggedOut = Guid.NewGuid();
+			WithUnitOfWork.Do(() =>
+			{
+				Groupings.UpdateGroupingReadModel(new[] { personId1, personId2 });
+				Persister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId1,
+					AlarmStartTime = "2016-06-20 12:00".Utc(),
+					IsRuleAlarm = true,
+					StateGroupId = loggedOut
+				});
+				Persister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = personId2,
+					AlarmStartTime = "2016-06-20 12:00".Utc(),
+					IsRuleAlarm = true,
+					StateGroupId = null
+				});
+			});
+
+			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingPhoneStatesForSkills(new[] { skill }, new Guid?[] { loggedOut }))
+				.Single().PersonId.Should().Be(personId2);
+		}
+	}
+
+	[TestFixture]
+	[UnitOfWorkTest]
+	public class InAlarmExcludePhoneStateTest2
+	{
+		public IAgentStateReadModelPersister Persister;
+		public IGroupingReadOnlyRepository Groupings;
+		public Database Database;
+		public WithUnitOfWork WithUnitOfWork;
+		public MutableNow Now;
+		public IAgentStateReadModelLegacyReader Target;
 
 		[Test]
 		public void ShouldLoadForTeams()
@@ -97,42 +263,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 		}
 		
 		[Test]
-		public void ShouldLoadForSkill()
-		{
-			Now.Is("2016-06-20 12:10");
-			Database
-				.WithAgent("agent1")
-				.WithSkill("phone")
-				.WithAgent("agent2")
-				.WithSkill("phone");
-			var personId1 = Database.PersonIdFor("agent1");
-			var personId2 = Database.PersonIdFor("agent2");
-			var skill = Database.SkillIdFor("phone");
-			var loggedOut = Guid.NewGuid();
-			WithUnitOfWork.Do(() =>
-			{
-				Groupings.UpdateGroupingReadModel(new[] { personId1, personId2 });
-				Persister.PersistWithAssociation(new AgentStateReadModelForTest
-				{
-					PersonId = personId1,
-					AlarmStartTime = "2016-06-20 12:00".Utc(),
-					IsRuleAlarm = true,
-					StateGroupId = loggedOut
-				});
-				Persister.PersistWithAssociation(new AgentStateReadModelForTest
-				{
-					PersonId = personId2,
-					AlarmStartTime = "2016-06-20 12:00".Utc(),
-					IsRuleAlarm = true,
-					StateGroupId = Guid.NewGuid()
-				});
-			});
-
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingPhoneStatesForSkills(new[] { skill }, new Guid?[] { loggedOut }))
-				.Single().PersonId.Should().Be(personId2);
-		}
-
-		[Test]
 		public void ShouldLoadStatesWithoutStateGroupForTeams()
 		{
 			Now.Is("2016-06-15 12:00");
@@ -188,42 +318,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				.Single().PersonId.Should().Be(personId1);
 		}
 
-		[Test]
-		public void ShouldLoadStateWithoutStateGroupForSkill()
-		{
-			Now.Is("2016-06-20 12:10");
-			Database
-				.WithAgent("agent1")
-				.WithSkill("phone")
-				.WithAgent("agent2")
-				.WithSkill("phone");
-			var personId1 = Database.PersonIdFor("agent1");
-			var personId2 = Database.PersonIdFor("agent2");
-			var skill = Database.SkillIdFor("phone");
-			var loggedOut = Guid.NewGuid();
-			WithUnitOfWork.Do(() =>
-			{
-				Groupings.UpdateGroupingReadModel(new[] { personId1, personId2 });
-				Persister.PersistWithAssociation(new AgentStateReadModelForTest
-				{
-					PersonId = personId1,
-					AlarmStartTime = "2016-06-20 12:00".Utc(),
-					IsRuleAlarm = true,
-					StateGroupId = loggedOut
-				});
-				Persister.PersistWithAssociation(new AgentStateReadModelForTest
-				{
-					PersonId = personId2,
-					AlarmStartTime = "2016-06-20 12:00".Utc(),
-					IsRuleAlarm = true,
-					StateGroupId = null
-				});
-			});
-
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingPhoneStatesForSkills(new[] { skill }, new Guid?[] { loggedOut }))
-				.Single().PersonId.Should().Be(personId2);
-		}
-		
 		[Test]
 		public void ShouldoExcludeStateWithoutStateGroupForTeam()
 		{
@@ -321,7 +415,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				.Single().PersonId.Should().Be(personId1);
 		}
 
-
 		[Test]
 		public void ShouldExcludeBothWithAndWithoutStateGroupForSite()
 		{
@@ -361,87 +454,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.AgentStateReadModelReader
 				.Single().PersonId.Should().Be(personId1);
 		}
 		
-		[Test]
-		public void ShouldExcludeStateWithoutStateGroupForSkill()
-		{
-			Now.Is("2016-06-20 12:10");
-			Database
-				.WithAgent("agent1")
-				.WithSkill("phone")
-				.WithAgent("agent2")
-				.WithSkill("phone");
-			var personId1 = Database.PersonIdFor("agent1");
-			var personId2 = Database.PersonIdFor("agent2");
-			var skill = Database.SkillIdFor("phone");
-			var loggedOut = Guid.NewGuid();
-			WithUnitOfWork.Do(() =>
-			{
-				Groupings.UpdateGroupingReadModel(new[] { personId1, personId2 });
-				Persister.PersistWithAssociation(new AgentStateReadModelForTest
-				{
-					PersonId = personId1,
-					AlarmStartTime = "2016-06-20 12:00".Utc(),
-					IsRuleAlarm = true,
-					StateGroupId = loggedOut
-				});
-				Persister.PersistWithAssociation(new AgentStateReadModelForTest
-				{
-					PersonId = personId2,
-					AlarmStartTime = "2016-06-20 12:00".Utc(),
-					IsRuleAlarm = true,
-					StateGroupId = null
-				});
-			});
-
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingPhoneStatesForSkills(new[] { skill }, new Guid?[] { null }))
-				.Single().PersonId.Should().Be(personId1);
-		}
-
-		[Test]
-		public void ShouldExcludeBothWithAndWithoutStateGroupForSkill()
-		{
-			Now.Is("2016-06-20 12:10");
-			Database
-				.WithAgent("agent1")
-				.WithSkill("phone")
-				.WithAgent("agent2")
-				.WithSkill("phone")
-				.WithAgent("agent3")
-				.WithSkill("phone");
-			var personId1 = Database.PersonIdFor("agent1");
-			var personId2 = Database.PersonIdFor("agent2");
-			var personId3 = Database.PersonIdFor("agent3");
-			var skill = Database.SkillIdFor("phone");
-			var loggedOut = Guid.NewGuid();
-			var training = Guid.NewGuid();
-			WithUnitOfWork.Do(() =>
-			{
-				Groupings.UpdateGroupingReadModel(new[] { personId1, personId2, personId3 });
-				Persister.PersistWithAssociation(new AgentStateReadModelForTest
-				{
-					PersonId = personId1,
-					AlarmStartTime = "2016-06-15 12:00".Utc(),
-					IsRuleAlarm = true,
-					StateGroupId = training
-				});
-				Persister.PersistWithAssociation(new AgentStateReadModelForTest
-				{
-					PersonId = personId2,
-					AlarmStartTime = "2016-06-20 12:00".Utc(),
-					IsRuleAlarm = true,
-					StateGroupId = null
-				});
-				Persister.PersistWithAssociation(new AgentStateReadModelForTest
-				{
-					PersonId = personId3,
-					AlarmStartTime = "2016-06-20 12:00".Utc(),
-					IsRuleAlarm = true,
-					StateGroupId = loggedOut
-				});
-			});
-
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingPhoneStatesForSkills(new[] { skill }, new Guid?[] { null, loggedOut }))
-				.Single().PersonId.Should().Be(personId1);
-		}
 	}
 }

@@ -90,17 +90,15 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		[Test]
 		public void DataSourceExceptionShouldBeThrownIfZombiedTransactionWhenCommit()
 		{
-			var tempUow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
-			tempUow.FetchSession().Connection.Close();
-			Assert.Throws<DataSourceException>(() => tempUow.PersistAll());				
+			UnitOfWork.FetchSession().Connection.Close();
+			Assert.Throws<DataSourceException>(() => UnitOfWork.PersistAll());				
 		}
 
 		[Test]
 		public void DataSourceExceptionShouldNotBeThrownIfZombiedTransactionWhenDisposing()
 		{
-			var tempUow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
-			tempUow.FetchSession().Connection.Close();
-			tempUow.Dispose(); //implicit rollback
+			UnitOfWork.FetchSession().Connection.Close();
+			UnitOfWork.Dispose(); //implicit rollback
 		}
 
 		[Test, Ignore("Retry strategy is applied now")]

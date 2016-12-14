@@ -5,38 +5,41 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.InfrastructureTest.Helper;
-using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-    public class PersonalSettingDataRepositoryTest : DatabaseTest
+	[DatabaseTest]
+    public class PersonalSettingDataRepositoryTest
     {
         //dessa har nyckel "rätt"
-        private ISettingData personalForPerson;
-        private ISettingDataRepository rep;
-        private testData persValue;
+        public ISettingDataRepository Rep;
+	    public IPersonalSettingDataRepository PersonalSettingData;
+	    public IPersonRepository Persons;
+		public WithUnitOfWork WithUnitOfWork;
+
+		private ISettingData _personalForPerson;
+		private testData persValue;
         private testData defaultValue;
 
         [Test]
         public void VerifyPersonalGiveHit()
         {
             setupFields();
-            Assert.AreEqual(personalForPerson, ((ISettingValue)rep.FindValueByKey("rätt", defaultValue)).BelongsTo);
+	        var result = WithUnitOfWork.Get(() => Rep.FindValueByKey("rätt", defaultValue));
+            Assert.AreEqual(_personalForPerson, ((ISettingValue)result).BelongsTo);
         }
 
         [Test]
         public void VerifyGlobalGiveHit()
         {
             setupFields();
-            ISettingData s = new GlobalSettingData("ny");
-            PersistAndRemoveFromUnitOfWork(s);
-            Assert.AreEqual(s, ((ISettingValue)rep.FindValueByKey("ny", defaultValue)).BelongsTo);
+			ISettingData s = new GlobalSettingData("ny");
+			s.SetValue(defaultValue);
+			WithUnitOfWork.Do(() => s = Rep.PersistSettingValue("ny", s.GetValue(defaultValue)));
+
+	        var result = WithUnitOfWork.Get(() => Rep.FindValueByKey("ny", defaultValue));
+            Assert.AreEqual(s, ((ISettingValue)result).BelongsTo);
         }
 
 
@@ -44,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void VerifyNotExistingKeyGivesBackNewPersonal()
         {
             setupFields();
-            testData s = rep.FindValueByKey("not existing", defaultValue);
+            testData s = WithUnitOfWork.Get(() => Rep.FindValueByKey("not existing", defaultValue));
             Assert.AreEqual(defaultValue.Data, s.Data);
             Assert.AreEqual("not existing", ((ISettingValue)s).BelongsTo.Key);
             Assert.IsAssignableFrom<PersonalSettingData>(((ISettingValue)s).BelongsTo);
@@ -55,12 +58,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             setupFields();
 
-            testData s = rep.FindValueByKey("roger", defaultValue);
+            testData s = WithUnitOfWork.Get(() => Rep.FindValueByKey("roger", defaultValue));
             s.Data = 44;
-            Assert.AreEqual(((ISettingValue)s).BelongsTo, rep.PersistSettingValue(s));
-            Session.Flush();
-            Session.Clear();
-            Assert.AreEqual(44, rep.FindValueByKey("roger", defaultValue).Data);
+	        WithUnitOfWork.Do(() => Rep.PersistSettingValue(s));
+	        var result = WithUnitOfWork.Get(() => Rep.FindValueByKey("roger", defaultValue).Data);
+            Assert.AreEqual(44, result);
         }
 
 
@@ -69,12 +71,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             setupFields();
 
-            testData s = rep.FindValueByKey("roger", defaultValue);
+            testData s = WithUnitOfWork.Get(() => Rep.FindValueByKey("roger", defaultValue));
             s.Data = 44;
-            Assert.AreEqual(((ISettingValue)s).BelongsTo, rep.PersistSettingValue(s));
-            Session.Flush();
-            Session.Clear();
-            Assert.AreEqual(44, rep.FindValueByKey("roger", defaultValue).Data);
+	        WithUnitOfWork.Do(() => Rep.PersistSettingValue(s));
+	        var result = WithUnitOfWork.Get(() => Rep.FindValueByKey("roger", defaultValue));
+            Assert.AreEqual(44, result.Data);
         }
 
         [Test]
@@ -82,50 +83,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             setupFields();
             persValue.Data = 45;
-            rep.PersistSettingValue(persValue);
-            Session.Flush();
-            Session.Clear();
-            Assert.AreEqual(45, rep.FindValueByKey(personalForPerson.Key, defaultValue).Data);
+            WithUnitOfWork.Do(() => Rep.PersistSettingValue(persValue));
+	        var result = WithUnitOfWork.Get(() => Rep.FindValueByKey(_personalForPerson.Key, defaultValue).Data);
+            Assert.AreEqual(45, result);
         }
 
         [Test]
         public void SimulateTwoThreadsCreatingNewPersonalSettingLastShouldWin()
         {
             defaultValue = new testData();
-            CleanUpAfterTest();
-            rep = new PersonalSettingDataRepository(UnitOfWork);
-            testData looser = rep.FindValueByKey("roger", defaultValue);
+            testData looser = WithUnitOfWork.Get(() => Rep.FindValueByKey("roger", defaultValue));
             looser.Data = -100;
-            testData winner = rep.FindValueByKey("roger", defaultValue);
+            testData winner = WithUnitOfWork.Get(() => Rep.FindValueByKey("roger", defaultValue));
             winner.Data = 100;
-            try
-            {
-                rep.PersistSettingValue(looser);
-                UnitOfWork.PersistAll();
 
-                using (IUnitOfWork secondUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    rep = new PersonalSettingDataRepository(secondUow);
-                    rep.PersistSettingValue(winner);
-                    secondUow.PersistAll();
-                }
-                using (IUnitOfWork readUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    rep = new PersonalSettingDataRepository(readUow);
-                    testData read = rep.FindValueByKey("roger", defaultValue);
-                    Assert.AreEqual(winner.Data, read.Data);
-                    Assert.AreEqual(((ISettingValue)winner).BelongsTo, ((ISettingValue)read).BelongsTo);
-                }
+			WithUnitOfWork.Do(() => Rep.PersistSettingValue(looser));
 
-            }
-            finally
-            {
-                using (IUnitOfWork cleanUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    cleanUow.FetchSession().Delete(((ISettingValue)winner).BelongsTo);
-                    cleanUow.PersistAll();
-                }
-            }
+			WithUnitOfWork.Do(() => Rep.PersistSettingValue(winner));
+			WithUnitOfWork.Do(() =>
+			{
+				testData read = Rep.FindValueByKey("roger", defaultValue);
+				Assert.AreEqual(winner.Data, read.Data);
+				Assert.AreEqual(((ISettingValue)winner).BelongsTo, ((ISettingValue)read).BelongsTo);
+			});
 
         }
 
@@ -133,53 +113,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void SimulateTwoThreadsCreatingNewPersonalSettingLastShouldWinKey()
         {
             defaultValue = new testData();
-            CleanUpAfterTest();
-            rep = new PersonalSettingDataRepository(UnitOfWork);
-            testData looser = rep.FindValueByKey("roger", defaultValue);
+            testData looser = WithUnitOfWork.Get(() => Rep.FindValueByKey("roger", defaultValue));
             looser.Data = -100;
-            testData winner = rep.FindValueByKey("roger", defaultValue);
+            testData winner = WithUnitOfWork.Get(() => Rep.FindValueByKey("roger", defaultValue));
             winner.Data = 100;
-            try
-            {
-                rep.PersistSettingValue("roger",looser);
-                UnitOfWork.PersistAll();
 
-                using (IUnitOfWork secondUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    rep = new PersonalSettingDataRepository(secondUow);
-                    rep.PersistSettingValue("roger",winner);
-                    secondUow.PersistAll();
-                }
-                using (IUnitOfWork readUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    rep = new PersonalSettingDataRepository(readUow);
-                    testData read = rep.FindValueByKey("roger", defaultValue);
-                    Assert.AreEqual(winner.Data, read.Data);
-                    Assert.AreEqual(((ISettingValue)winner).BelongsTo, ((ISettingValue)read).BelongsTo);
-                }
-
-            }
-            finally
-            {
-                using (IUnitOfWork cleanUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    cleanUow.FetchSession().Delete(((ISettingValue)winner).BelongsTo);
-                    cleanUow.PersistAll();
-                }
-            }
-
+			WithUnitOfWork.Do(() => Rep.PersistSettingValue("roger", looser));
+			WithUnitOfWork.Do(() => Rep.PersistSettingValue("roger", winner));
+			WithUnitOfWork.Do(() =>
+			{
+				testData read = Rep.FindValueByKey("roger", defaultValue);
+				Assert.AreEqual(winner.Data, read.Data);
+				Assert.AreEqual(((ISettingValue)winner).BelongsTo, ((ISettingValue)read).BelongsTo);
+			});
         }
 
         [Test]
         public void VerifyLargeDataAmountPersonalData()
         {
             var data = new largeData(20000);
-            rep = new PersonalSettingDataRepository(UnitOfWork);
-            var corr = rep.FindValueByKey("theOne", data);
-            rep.PersistSettingValue(corr);
-            Session.Flush();
-            UnitOfWork.Clear();
-            var loaded = rep.FindValueByKey("theOne", new largeData(1));
+            var corr = WithUnitOfWork.Get(() => Rep.FindValueByKey("theOne", data));
+            WithUnitOfWork.Do(() => Rep.PersistSettingValue(corr));
+
+			var loaded = WithUnitOfWork.Get(() => Rep.FindValueByKey("theOne", new largeData(1)));
             Assert.AreEqual(20000, loaded.ByteSize());
             Assert.IsTrue(loaded.LastByte());
         }
@@ -214,22 +170,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyFindValueByKeyAndPerson()
 		{
 			setupFieldsForExternalPerson();
-
-			var rep = new PersonalSettingDataRepository(UnitOfWork);
-			testData s = rep.FindValueByKeyAndOwnerPerson("rätt", TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(UnitOfWork))), new testData());
-			Assert.AreEqual(((ISettingValue)s).BelongsTo, rep.PersistSettingValue(s));
-			Session.Flush();
-			Session.Clear();
-			Assert.AreEqual(44, rep.FindValueByKey("rätt", defaultValue).Data);
+			
+			testData s = WithUnitOfWork.Get(() =>
+				PersonalSettingData.FindValueByKeyAndOwnerPerson("rätt", TeleoptiPrincipal.CurrentPrincipal.GetPerson(Persons), new testData()));
+			var result1 = WithUnitOfWork.Get(() => PersonalSettingData.PersistSettingValue(s));
+			Assert.AreEqual(((ISettingValue)s).BelongsTo, result1);
+			var result2 = WithUnitOfWork.Get(() => PersonalSettingData.FindValueByKey("rätt", defaultValue).Data);
+			Assert.AreEqual(44, result2);
 		}
 
 		[Test]
 		public void VerifyNotFindValueByKeyAndPersonThenUseDefault()
 		{
 			setupFieldsForExternalPerson();
-
-			var rep = new PersonalSettingDataRepository(UnitOfWork);
-			testData s = rep.FindValueByKeyAndOwnerPerson("idonotexist", TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(UnitOfWork))), new testData { Data = -1});
+			
+			testData s = WithUnitOfWork.Get(() => 
+				PersonalSettingData.FindValueByKeyAndOwnerPerson("idonotexist", TeleoptiPrincipal.CurrentPrincipal.GetPerson(Persons), new testData { Data = -1 }));
 
 			s.Data.Should().Be.EqualTo(-1);
 		}
@@ -244,29 +200,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         private void setupFields()
         {
-            rep = new PersonalSettingDataRepository(UnitOfWork);
             defaultValue = new testData { Data = 435 };
-            persValue = rep.FindValueByKey("rätt", defaultValue);
+            persValue = WithUnitOfWork.Get(() => Rep.FindValueByKey("rätt", defaultValue));
             persValue.Data = 33;
-            rep.PersistSettingValue(persValue);
+            WithUnitOfWork.Do(() => Rep.PersistSettingValue(persValue));
 
-            ISettingData global = new GlobalSettingData("rätt");
-            global.SetValue(new testData {Data = 44});
-            PersistAndRemoveFromUnitOfWork(global);
+			ISettingData global = new GlobalSettingData("rätt");
+			global.SetValue(new testData { Data = 44 });
+			WithUnitOfWork.Do(() => Rep.PersistSettingValue("rätt", global.GetValue(defaultValue)));
 
-            Session.Flush();
-            personalForPerson = ((ISettingValue)persValue).BelongsTo;
+            _personalForPerson = ((ISettingValue)persValue).BelongsTo;
         }
 
 		private void setupFieldsForExternalPerson()
 		{
-			rep = new PersonalSettingDataRepository(UnitOfWork);
-			var person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(UnitOfWork)));
+			var person = WithUnitOfWork.Get(() => TeleoptiPrincipal.CurrentPrincipal.GetPerson(Persons));
 			ISettingData personalSettingData = new PersonalSettingData("rätt", person);
 			personalSettingData.SetValue(new testData { Data = 44 });
-			PersistAndRemoveFromUnitOfWork(personalSettingData);
-
-			Session.Flush();
+			WithUnitOfWork.Do(() => Rep.PersistSettingValue(personalSettingData.GetValue(defaultValue)));
 		}
     }
 }

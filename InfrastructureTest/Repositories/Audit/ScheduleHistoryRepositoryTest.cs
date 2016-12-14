@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -288,20 +289,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 		protected override void AuditSetup()
 		{
-			using (var tempSession = Session.SessionFactory.OpenSession())
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				using (var tx = tempSession.BeginTransaction())
-				{
-					revisionNumberAtSetupStart = tempSession.CreateCriteria<Revision>()
-														.SetProjection(Projections.Max("Id"))
-														.UniqueResult<long>();
-					//insert empty revision for more realistic tests
-					//DO NOT DO THIS IN REAL CODE!
-					var dummyRevision = tempSession.Auditer().GetCurrentRevision<Revision>(true);
-					dummyRevision.SetRevisionData(Agent);
-					tx.Commit();
-					revisionNumberAfterOneUnitTestModification = revisionNumberAtSetupStart + 2;
-				}
+				revisionNumberAtSetupStart = uow.FetchSession().CreateCriteria<Revision>()
+					.SetProjection(Projections.Max("Id"))
+					.UniqueResult<long>();
+				//insert empty revision for more realistic tests
+				//DO NOT DO THIS IN REAL CODE!
+				var dummyRevision = uow.FetchSession().Auditer().GetCurrentRevision<Revision>(true);
+				dummyRevision.SetRevisionData(Agent);
+				revisionNumberAfterOneUnitTestModification = revisionNumberAtSetupStart + 2;
 			}
 			target = new ScheduleHistoryRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 		}

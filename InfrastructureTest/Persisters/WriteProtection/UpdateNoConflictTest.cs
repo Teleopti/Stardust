@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Persisters.WriteProtection;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -15,7 +14,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.WriteProtection
 {
 	//conflicts are not handled
 	[TestFixture]
-	public class UpdateNoConflictTest : DatabaseTestWithoutTransaction
+	[DatabaseTest]
+	public class UpdateNoConflictTest
 	{
 		private IPersonWriteProtectionInfo writeProtection;
 		private IWriteProtectionPersister target;
@@ -46,7 +46,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.WriteProtection
 			writeProtectionsToSave.Should().Be.Empty();
 		}
 
-		protected override void SetupForRepositoryTestWithoutTransaction()
+		[SetUp]
+		protected void Setup()
 		{
 			//something is really wrong with the writeprotection mapping
 			repository = new WriteProtectionRepository(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make()));

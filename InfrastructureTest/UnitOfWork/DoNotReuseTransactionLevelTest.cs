@@ -8,7 +8,8 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
 	/// RK: My guess is that this test fails on sql server 2005...
-	public class DoNotReuseTransactionLevelTest : DatabaseTest
+	[DatabaseTest]
+	public class DoNotReuseTransactionLevelTest
 	{
 		[Test]
 		public void ShouldBeResetAfterExplcitlySetInEarlierTransaction()

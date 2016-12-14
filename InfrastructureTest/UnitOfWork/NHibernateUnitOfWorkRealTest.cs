@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -14,26 +15,28 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
     [TestFixture]
     [Category("BucketB")]
-    public class NHibernateUnitOfWorkRealTest : DatabaseTest
+	[DatabaseTest]
+    public class NHibernateUnitOfWorkRealTest
     {
         [Test]
         public void VerifyFlush()
         {
-            Session.SessionFactory.Statistics.Clear();
-            var p = PersonFactory.CreatePerson();
-            new PersonRepository(new ThisUnitOfWork(UnitOfWork)).Add(p);
-            Assert.IsTrue(UnitOfWork.IsDirty());
-            UnitOfWork.Flush();
-            Assert.IsFalse(UnitOfWork.IsDirty());
-            Assert.AreEqual(2, Session.SessionFactory.Statistics.EntityInsertCount);
+	        using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
+	        {
+		        var session = uow.FetchSession();
+				session.SessionFactory.Statistics.Clear();
+				var p = PersonFactory.CreatePerson();
+				new PersonRepository(new ThisUnitOfWork(uow)).Add(p);
+				Assert.IsTrue(uow.IsDirty());
+				uow.Flush();
+				Assert.IsFalse(uow.IsDirty());
+				Assert.AreEqual(2, session.SessionFactory.Statistics.EntityInsertCount);
+			}
         }
 
         [Test]
         public void VerifyImplicitTransaction()
         {
-            UnitOfWork.PersistAll();
-            CleanUpAfterTest();
-
             IPerson p;
             Guid id;
             using (var uow1 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
@@ -54,9 +57,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
         [Test]
         public void SetIdToNullToNewlyAddedRootsIfTranRollback()
         {
-            UnitOfWork.PersistAll();
-            CleanUpAfterTest();
-
             IPerson cantBePersisted;
             using (var uow1 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
             {
@@ -75,13 +75,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
             Assert.IsTrue(SetupFixtureForAssembly.loggedOnPerson.Id.HasValue);
             Assert.IsFalse(cantBePersisted.Id.HasValue);
-        }
-
-
-        private void removeFromDb(IPerson person)
-        {
-            Session.Delete(person);
-            Session.Flush();
         }
     }
 }

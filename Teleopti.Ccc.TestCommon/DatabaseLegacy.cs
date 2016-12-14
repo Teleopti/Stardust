@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.TestCommon
 			_businessUnits = businessUnits;
 		}
 
-		[UnitOfWork]
 		public virtual DatabaseLegacy WithStateGroup(string name)
 		{
 			_database.WithStateGroup(name);

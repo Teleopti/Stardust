@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			var assignment = new PersonAssignment(Person, SourceScenario, Period.StartDate);
 			WithUnitOfWork.Do(() => ScheduleStorage.Add(assignment));
 
-			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent(secondPerson)));
+			Target.Handle(createArchiveEvent(secondPerson));
 
 			var archivedAssignment = WithUnitOfWork.Get(() => PersonAssignmentRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(TargetScenario)));
 			archivedAssignment.Should().Be.Null();
@@ -67,12 +67,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 				ScheduleStorage.Add(secondAssignment);
 			});
 
-			WithUnitOfWork.Do(() =>
-			{
-				var archiveScheduleEvent = createArchiveEvent();
-				archiveScheduleEvent.PersonIds.Add(secondPerson.Id.GetValueOrDefault());
-				Target.Handle(archiveScheduleEvent);
-			});
+			var archiveScheduleEvent = createArchiveEvent();
+			archiveScheduleEvent.PersonIds.Add(secondPerson.Id.GetValueOrDefault());
+			Target.Handle(archiveScheduleEvent);
 
 			VerifyCanBeFoundInScheduleStorageForTargetScenario(Person);
 			VerifyCanBeFoundInScheduleStorageForTargetScenario(secondPerson);
@@ -92,8 +89,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 
 			var archiveScheduleEvent = createArchiveEvent();
 			archiveScheduleEvent.TotalMessages = 2;
-			WithUnitOfWork.Do(() => Target.Handle(archiveScheduleEvent));
-			WithUnitOfWork.Do(() => Target.Handle(archiveScheduleEvent));
+
+			Target.Handle(archiveScheduleEvent);
+			Target.Handle(archiveScheduleEvent);
 
 			VerifyCanBeFoundInScheduleStorageForTargetScenario(Person);
 			var archivedAssignment = WithUnitOfWork.Get(() => PersonAssignmentRepository.LoadAll().FirstOrDefault(x => x.Scenario.Equals(TargetScenario)));
@@ -127,7 +125,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			assignment.AddActivity(oldActivity, new TimePeriod(8, 17));
 			WithUnitOfWork.Do(() => ScheduleStorage.Add(existingAssignment));
 
-			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
+			Target.Handle(createArchiveEvent());
 
 			VerifyCanBeFoundInScheduleStorageForTargetScenario(Person);
 			WithUnitOfWork.Do(() =>
@@ -146,7 +144,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			AddDefaultTypesToRepositories();
 			testCase.CreateTypeInSourceScenario(WithUnitOfWork, this, Person, Period, SourceScenario, TargetScenario);
 
-			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
+			Target.Handle(createArchiveEvent());
 
 			VerifyCanBeFoundInScheduleStorageForTargetScenario(Person);
 
@@ -171,7 +169,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteOnTheDay));
 			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteAfter));
 
-			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
+			Target.Handle(createArchiveEvent());
 			var archivedNotes = WithUnitOfWork.Get(() => NoteRepository.LoadAll().Where(x => x.Scenario.Id == TargetScenario.Id).ToList());
 			archivedNotes.Should().Not.Be.Null();
 			archivedNotes.Count.Should().Be.EqualTo(1);
@@ -197,7 +195,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			WithUnitOfWork.Do(() => ScheduleStorage.Add(personAbsence));
 
 			// When calling handler
-			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
+			Target.Handle(createArchiveEvent());
 
 			// Then there should be a splitted absence in target instead where empty for the archived period
 			var defaultPersonAbsences = WithUnitOfWork.Get(() => PersonAbsenceRepository.LoadAll().Where(x => x.Scenario.Id == SourceScenario.Id)).ToList();
@@ -231,7 +229,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			WithUnitOfWork.Do(() => ScheduleStorage.Add(personAbsence));
 
 			// When calling handler
-			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
+			Target.Handle(createArchiveEvent());
 
 			// Then
 			var archivedPersonAbsences = WithUnitOfWork.Get(() => PersonAbsenceRepository.LoadAll().Where(x => x.Scenario.Id == TargetScenario.Id)).ToList();
@@ -272,7 +270,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			var note = new Note(Person, Period.StartDate, TargetScenario, "Test");
 			WithUnitOfWork.Do(() => ScheduleStorage.Add(note));
 
-			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
+			Target.Handle(createArchiveEvent());
 
 			VerifyCanBeFoundInScheduleStorageForTargetScenario(Person);
 			var archivedNote = WithUnitOfWork.Get(() => NoteRepository.LoadAll().FirstOrDefault(x => x.Scenario.Id == TargetScenario.Id));
@@ -292,7 +290,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteBefore));
 			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteAfter));
 
-			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
+			Target.Handle(createArchiveEvent());
+
 			var archivedNotes = WithUnitOfWork.Get(() => NoteRepository.LoadAll().Where(x => x.Scenario.Id == TargetScenario.Id));
 			archivedNotes.Count().Should().Be.EqualTo(2);
 		}
@@ -308,7 +307,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteBefore));
 			WithUnitOfWork.Do(() => ScheduleStorage.Add(noteAfter));
 
-			WithUnitOfWork.Do(() => Target.Handle(createArchiveEvent()));
+			Target.Handle(createArchiveEvent());
 
 			var archivedNotes = WithUnitOfWork.Get(() => NoteRepository.LoadAll().Where(x => x.Scenario.Id == TargetScenario.Id));
 			archivedNotes.Should().Be.Empty();

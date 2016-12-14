@@ -15,7 +15,8 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 {
 	[TestFixture]
-	public abstract class RequestPersisterBaseTest : DatabaseTestWithoutTransaction, IClearReferredShiftTradeRequests
+	[DatabaseTest]
+	public abstract class RequestPersisterBaseTest : IClearReferredShiftTradeRequests
 	{
 		protected IPerson Person { get; private set; }
 
@@ -72,7 +73,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 														);
 		}
 
-		protected override void SetupForRepositoryTestWithoutTransaction()
+		[SetUp]
+		protected void Setup()
 		{
 			Person = PersonFactory.CreatePerson("test person");
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())

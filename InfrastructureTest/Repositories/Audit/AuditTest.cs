@@ -3,8 +3,6 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.InfrastructureTest.Helper;
-using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -13,7 +11,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 {
 	[TestFixture]
 	[Category("BucketB")]
-	public abstract class AuditTest : DatabaseTestWithoutTransaction
+	[DatabaseTest]
+	public abstract class AuditTest
 	{
 		protected IPersonAssignment PersonAssignment { get; private set; }
 		protected IPerson Agent { get; private set; }
@@ -23,8 +22,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		protected IDayOffTemplate DayOffTemplate { get; private set; }
 		protected IMultiplicatorDefinitionSet MultiplicatorDefinitionSet { get; private set; }
 	
-
-		protected override sealed void SetupForRepositoryTestWithoutTransaction()
+		[SetUp]
+		protected void Setup()
 		{
 			turnOnAudit();
 			Agent = PersonFactory.CreatePerson();

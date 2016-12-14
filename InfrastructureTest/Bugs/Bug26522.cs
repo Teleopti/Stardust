@@ -1,38 +1,48 @@
 ﻿using NUnit.Framework;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Bugs
 {
-	public class Bug26522 : DatabaseTestWithoutTransaction
+	[DatabaseTest]
+	public class Bug26522
 	{
+		public IActivityRepository ActivityRepository;
+		public IShiftCategoryRepository ShiftCategoryRepository;
+		public IWorkShiftRuleSetRepository WorkShiftRuleSetRepository;
+
 		private IActivity activity;
 		private IShiftCategory shiftCategory;
 		private IWorkShiftRuleSet workShiftRuleSet;
 
-		protected override void SetupForRepositoryTestWithoutTransaction()
+		private void setup()
 		{
-			activity = new Activity("for test");
-			shiftCategory = new ShiftCategory("for test"); 
-			var template = new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 9, 0, 30),
-				new TimePeriodWithSegment(16, 0, 17, 0, 30), shiftCategory);
-			workShiftRuleSet = new WorkShiftRuleSet(template) {Description = new Description("used in test")};
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				activity = new Activity("for test");
+				shiftCategory = new ShiftCategory("for test");
+				var template = new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 9, 0, 30),
+					new TimePeriodWithSegment(16, 0, 17, 0, 30), shiftCategory);
+				workShiftRuleSet = new WorkShiftRuleSet(template) { Description = new Description("used in test") };
 
-			PersistAndRemoveFromUnitOfWork(activity);
-			PersistAndRemoveFromUnitOfWork(shiftCategory);
-			workShiftRuleSet.AddAccessibilityDate(new DateOnly(2000,1,1));
-			PersistAndRemoveFromUnitOfWork(workShiftRuleSet);
+				ActivityRepository.Add(activity);
+				ShiftCategoryRepository.Add(shiftCategory);
+				workShiftRuleSet.AddAccessibilityDate(new DateOnly(2000, 1, 1));
+				WorkShiftRuleSetRepository.Add(workShiftRuleSet);
 
-			UnitOfWork.PersistAll();
+				uow.PersistAll();
+			}
+
 		}
 
 		[Test]
 		public void ShouldPersistAddedAccessibilityDate()
 		{
+			setup();
 			workShiftRuleSet.AddAccessibilityDate(DateOnly.Today);
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{

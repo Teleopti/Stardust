@@ -12,8 +12,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.InfrastructureTest.Helper;
-using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -23,7 +21,8 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 {
 	[TestFixture]
-	public abstract class PersonAccountPersisterBaseTest : DatabaseTestWithoutTransaction
+	[DatabaseTest]
+	public abstract class PersonAccountPersisterBaseTest
 	{
 		private IPersonAbsenceAccount personAbsenceAccount;
 		protected IPersonAccountPersister Target { get; private set; }
@@ -44,7 +43,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 			}
 		}
 
-		protected override void SetupForRepositoryTestWithoutTransaction()
+		[SetUp]
+		public void Setup()
 		{
 			setupEntities();
 			makeTarget();
@@ -56,15 +56,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 			var currUnitOfWork = new CurrentUnitOfWork(uowFactory);
 			var rep = new PersonAbsenceAccountRepository(currUnitOfWork);
 			var repositoryFactory = new RepositoryFactory();
-			Target = new PersonAccountPersister(uowFactory, 
-																	rep, 
-																	MockRepository.GenerateMock<IInitiatorIdentifier>(),
-																	new PersonAccountConflictCollector(new DatabaseVersion(currUnitOfWork)),
-																	new PersonAccountConflictResolver(
-																		uowFactory,
-																		new TraceableRefreshService(new DefaultScenarioFromRepository(new ScenarioRepository(currUnitOfWork)), 
-																		new ScheduleStorage(currUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new FalseToggleManager(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currUnitOfWork))), 
-																		new PersonAbsenceAccountRepository(currUnitOfWork)));
+			Target = new PersonAccountPersister(
+				uowFactory,
+				rep,
+				MockRepository.GenerateMock<IInitiatorIdentifier>(),
+				new PersonAccountConflictCollector(new DatabaseVersion(currUnitOfWork)),
+				new PersonAccountConflictResolver(
+					uowFactory,
+					new TraceableRefreshService(
+						new DefaultScenarioFromRepository(new ScenarioRepository(currUnitOfWork)),
+						new ScheduleStorage(
+							currUnitOfWork, 
+							repositoryFactory, 
+							new PersistableScheduleDataPermissionChecker(),
+							new FalseToggleManager(), 
+							new ScheduleStorageRepositoryWrapper(repositoryFactory, currUnitOfWork))),
+					new PersonAbsenceAccountRepository(currUnitOfWork)));
 		}
 
 		private void setupEntities()

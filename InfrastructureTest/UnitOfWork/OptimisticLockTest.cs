@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			Guid id;
 
+			
 			//client 1
 			var uow1 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
 			var user1 = PersonFactory.CreatePerson();
@@ -30,12 +32,18 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			uow1.PersistAll();
 			id = user1.Id.Value;
 
-			//client 2
-			var uow2 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
-			var user2 = new PersonRepository(new ThisUnitOfWork(uow2)).Load(id);
-			user2.Name = new Name("change", "name");
-			uow2.PersistAll();
-			uow2.Dispose();
+			var other = new Thread(() =>
+			{
+				//client 2
+				var uow2 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
+				var user2 = new PersonRepository(new ThisUnitOfWork(uow2)).Load(id);
+				user2.Name = new Name("change", "name");
+				uow2.PersistAll();
+				uow2.Dispose();
+			});
+			other.Start();
+			other.Join();
+			
 
 			//client 1
 			user1.Name = new Name("change", "too");
@@ -77,12 +85,18 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			uow1.PersistAll();
 			id = user1.Id.Value;
 
-			//client 2
-			var uow2 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
-			var user2 = new PersonRepository(new ThisUnitOfWork(uow2)).Load(id);
-			user2.Period("2016-04-13".Date()).Note = "a note";
-			uow2.PersistAll();
-			uow2.Dispose();
+
+			var other = new Thread(() =>
+			{
+				//client 2
+				var uow2 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
+				var user2 = new PersonRepository(new ThisUnitOfWork(uow2)).Load(id);
+				user2.Period("2016-04-13".Date()).Note = "a note";
+				uow2.PersistAll();
+				uow2.Dispose();
+			});
+			other.Start();
+			other.Join();
 
 			//client 1
 			user1.Period("2016-04-13".Date()).Note = "another note";

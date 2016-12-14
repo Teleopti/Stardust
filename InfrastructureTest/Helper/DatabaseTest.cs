@@ -3,6 +3,7 @@ using NHibernate;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
@@ -57,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
 			_loginWithOpenUnitOfWork.Teardown();
 		}
 
-        protected void PersistAndRemoveFromUnitOfWork(IEntity obj)
+		protected void PersistAndRemoveFromUnitOfWork(IEntity obj)
         {
             Session.SaveOrUpdate(obj);
             Session.Flush();

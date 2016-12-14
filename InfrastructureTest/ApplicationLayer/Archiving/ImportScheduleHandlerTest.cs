@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			TargetScenario = new Scenario("default") { DefaultScenario = true };
 			Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 5);
 			Person = PersonFactory.CreatePerson("Tester Testersson");
-
 		}
 
 		[Test]
@@ -49,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			AddDefaultTypesToRepositories();
 			testCase.CreateTypeInSourceScenario(WithUnitOfWork, this, Person, Period, SourceScenario, TargetScenario);
 
-			WithUnitOfWork.Do(() => Target.Handle(createImportEvent()));
+			Target.Handle(createImportEvent());
 
 			VerifyCanBeFoundInScheduleStorageForTargetScenario(Person);
 
@@ -64,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 			AddDefaultTypesToRepositories();
 			testCase.CreateTypeInSourceScenario(WithUnitOfWork, this, Person, Period, SourceScenario, TargetScenario);
 
-			WithUnitOfWork.Do(() => Target.Handle(createImportEvent()));
+			Target.Handle(createImportEvent());
 
 			VerifyCanBeFoundInScheduleStorageForTargetScenario(Person);
 
@@ -90,7 +89,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 				ScheduleStorage.Add(assignment);
 			});
 
-			WithUnitOfWork.Do(() => Target.Handle(createImportEvent()));
+			Target.Handle(createImportEvent());
 
 			WithUnitOfWork.Do(() =>
 			{
@@ -129,7 +128,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 				ScheduleStorage.Add(newAssignment);
 			});
 
-			WithUnitOfWork.Do(() => Target.Handle(createImportEvent()));
+			Target.Handle(createImportEvent());
 
 			WithUnitOfWork.Do(() =>
 			{
@@ -165,7 +164,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 				ScheduleStorage.Add(personAbsence);
 			});
 
-			WithUnitOfWork.Do(() => Target.Handle(createImportEvent()));
+			Target.Handle(createImportEvent());
 
 			WithUnitOfWork.Do(() =>
 			{
@@ -204,7 +203,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 				ScheduleStorage.Add(newPersonAbsence);
 			});
 
-			WithUnitOfWork.Do(() => Target.Handle(createImportEvent()));
+			Target.Handle(createImportEvent());
 
 			WithUnitOfWork.Do(() =>
 			{
@@ -237,7 +236,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 				ScheduleStorage.Add(newPersonAbsence);
 			});
 
-			WithUnitOfWork.Do(() => Target.Handle(createImportEvent()));
+			Target.Handle(createImportEvent());
 
 			WithUnitOfWork.Do(() =>
 			{
@@ -268,7 +267,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 				ScheduleStorage.Add(newPersonAbsence);
 			});
 
-			WithUnitOfWork.Do(() => Target.Handle(createImportEvent()));
+			Target.Handle(createImportEvent());
 
 			WithUnitOfWork.Do(() =>
 			{
@@ -320,7 +319,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 				PersonAbsenceAccountRepository.Add(personAbsenceAccount);
 			});
 
-			WithUnitOfWork.Do(() => Target.Handle(createImportEvent()));
+			Target.Handle(createImportEvent());
 
 			WithUnitOfWork.Do(() =>
 			{

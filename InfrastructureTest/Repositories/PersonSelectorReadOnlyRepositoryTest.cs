@@ -9,7 +9,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture, Category("BucketB")]
-	public class PersonSelectorReadOnlyRepositoryTest : DatabaseTest
+	[DatabaseTest]
+	public class PersonSelectorReadOnlyRepositoryTest
 	{
 		private PersonSelectorReadOnlyRepository _target;
 
@@ -26,8 +27,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldLoadOrganization()
 		{
-			UnitOfWork.PersistAll();
-			CleanUpAfterTest();
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				_target = new PersonSelectorReadOnlyRepository(UnitOfWorkFactory.Current);
@@ -39,8 +38,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldLoadBuiltIn()
 		{
-			UnitOfWork.PersistAll();
-			CleanUpAfterTest();
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				_target = new PersonSelectorReadOnlyRepository(UnitOfWorkFactory.Current);
@@ -52,8 +49,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldLoadUserTabs()
 		{
-			UnitOfWork.PersistAll();
-			CleanUpAfterTest();
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				_target = new PersonSelectorReadOnlyRepository(UnitOfWorkFactory.Current);

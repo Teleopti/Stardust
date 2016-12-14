@@ -16,7 +16,6 @@ using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -25,7 +24,8 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
 	[TestFixture]
-	public abstract class ScheduleRangePersisterBaseTest : DatabaseTestWithoutTransaction, IReassociateDataForSchedules
+	[DatabaseTest]
+	public abstract class ScheduleRangePersisterBaseTest : IReassociateDataForSchedules
 	{
 		protected IPerson Person { get; private set; }
 		protected IActivity Activity { get; private set; }
@@ -36,7 +36,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected IScheduleRangePersister Target { get; private set; }
 		protected IDayOffTemplate DayOffTemplate { get; private set; }
 
-		protected override void SetupForRepositoryTestWithoutTransaction()
+		[SetUp]
+		protected void Setup()
 		{
 			setupEntities();
 			setupDatabase();

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 
@@ -29,16 +30,27 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void Publish(params IEvent[] events)
 		{
-			foreach (var @event in events)
+			onAnotherThread(() =>
 			{
-				foreach (var handlerType in _handlerTypes)
+				foreach (var @event in events)
 				{
-					var method = _resolver.HandleMethodFor(handlerType, @event);
-					if (method == null)
-						continue;
-					_processor.Process(@event, handlerType);
+					foreach (var handlerType in _handlerTypes)
+					{
+						var method = _resolver.HandleMethodFor(handlerType, @event);
+						if (method == null)
+							continue;
+						_processor.Process(@event, handlerType);
+					}
 				}
-			}
+			});
 		}
+
+		private static void onAnotherThread(Action action)
+		{
+			var thread = new Thread(action.Invoke);
+			thread.Start();
+			thread.Join();
+		}
+
 	}
 }

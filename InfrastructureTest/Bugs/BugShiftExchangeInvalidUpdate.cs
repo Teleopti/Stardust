@@ -3,9 +3,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -13,19 +10,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 {
 	[TestFixture]
 	[Category("BucketB")]
-	public class BugShiftExchangeInvalidUpdate : DatabaseTest
+	[DatabaseTest]
+	public class BugShiftExchangeInvalidUpdate
 	{
-		private IPersonRequestRepository personRequestRepository;
-
-		protected override void SetupForRepositoryTest()
-		{
-			personRequestRepository = new PersonRequestRepository(new FromFactory(() => SetupFixtureForAssembly.DataSource.Application));
-			
-			//make sure setup data is persisted
-			CleanUpAfterTest();
-			UnitOfWork.PersistAll();
-		}
-
+		public IPersonRequestRepository personRequestRepository;
+		
 		[Test]
 		public void ShouldNotUpdateShiftExchangeOfferOnRead()
 		{
@@ -53,20 +42,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 				((IVersioned) personRequestRepository.Get(id)).Version.Value
 					.Should().Be.EqualTo(version);
 			}
-
-			cleanup(id);
 		}
-
-		private void cleanup(Guid id)
-		{
-			using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
-			{
-				personRequestRepository.Remove(personRequestRepository.Find(id));
-				uow.PersistAll();
-			}
-		}
-
-
+		
 		private IPersonRequest createShiftExchangeOffer()
 		{
 			IPersonRequest request = new PersonRequest(SetupFixtureForAssembly.loggedOnPerson);

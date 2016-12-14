@@ -1,26 +1,28 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
 {
-	public class DatabaseVersionTest : DatabaseTest
+	[DatabaseTest]
+	public class DatabaseVersionTest
 	{
+		public DatabaseVersion Target;
+		public IPersonRepository PersonRepository;
+		public WithUnitOfWork WithUnitOfWork;
+
 		[Test]
 		public void VerifyDatabaseVersionOnExistingRoot()
 		{
-			CleanUpAfterTest();
 			var p = PersonFactory.CreatePerson();
-			PersistAndRemoveFromUnitOfWork(p);
-			UnitOfWork.PersistAll();
+			WithUnitOfWork.Do(() => PersonRepository.Add(p));
 
-			new DatabaseVersion(new ThisUnitOfWork(UnitOfWork)).FetchFor(p, false)
-				.Should().Be.GreaterThan(0);
+			WithUnitOfWork.Do(() => Target.FetchFor(p, false)
+				.Should().Be.GreaterThan(0));
 		}
 
 		[Test]
@@ -28,13 +30,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		{
 			//does not verify that a pess lock is created, just that the method works logically
 			//the lock itself will be tested in the use cases where needed
-			CleanUpAfterTest();
 			var p = PersonFactory.CreatePerson();
-			PersistAndRemoveFromUnitOfWork(p);
-			UnitOfWork.PersistAll();
+			WithUnitOfWork.Do(() => PersonRepository.Add(p));
 
-			new DatabaseVersion(new ThisUnitOfWork(UnitOfWork)).FetchFor(p, true)
-				.Should().Be.GreaterThan(0);
+			WithUnitOfWork.Do(() => Target.FetchFor(p, true)
+				.Should().Be.GreaterThan(0));
 		}
 
 
@@ -43,30 +43,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		{
 			var p = PersonFactory.CreatePerson();
 			p.SetId(Guid.NewGuid());
-			new DatabaseVersion(new ThisUnitOfWork(UnitOfWork)).FetchFor(p, false)
-				.Should().Not.Have.Value();
+			WithUnitOfWork.Do(() => Target.FetchFor(p, false)
+				.Should().Not.Have.Value());
 		}
 
 		[Test]
 		public void VerifyDatabaseVersionOnTransientRoot()
 		{
-			Assert.Throws<ArgumentException>(() => new DatabaseVersion(new ThisUnitOfWork(UnitOfWork)).FetchFor(PersonFactory.CreatePerson(), false));
+			Assert.Throws<ArgumentException>(() =>
+			{
+				WithUnitOfWork.Do(() => Target.FetchFor(PersonFactory.CreatePerson(), false));
+			});
 		}
 
 		[Test]
 		public void VerifyDatabaseVersionOnProxy()
 		{
-			CleanUpAfterTest();
+			//CleanUpAfterTest();
 			var p = PersonFactory.CreatePerson();
-			PersistAndRemoveFromUnitOfWork(p);
-			UnitOfWork.PersistAll();
+			WithUnitOfWork.Do(() => PersonRepository.Add(p));
 
-			using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
+			WithUnitOfWork.Do(() =>
 			{
-				var pProxy = new PersonRepository(new ThisUnitOfWork(uow)).Load(p.Id.Value);
-				new DatabaseVersion(new ThisUnitOfWork(uow)).FetchFor(pProxy, false)
+				var pProxy = PersonRepository.Load(p.Id.Value);
+				Target.FetchFor(pProxy, false)
 					.Should().Be.GreaterThan(0);
-			}
+			});
 		}
 	}
 }

@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
@@ -8,13 +10,22 @@ namespace Teleopti.Ccc.Infrastructure
 
 	public static class ServiceLocatorForLegacy
 	{
-		private static INestedUnitOfWorkStrategy _nestedUnitOfWorkStrategy;
+		private static INestedUnitOfWorkStrategy _nestedUnitOfWorkStrategy = null;
 		private static IUpdatedBy _updatedBy;
 
 		public static INestedUnitOfWorkStrategy NestedUnitOfWorkStrategy
 		{
-			get { return _nestedUnitOfWorkStrategy ?? new ThrowOnNestedUnitOfWork(); }
-			set { _nestedUnitOfWorkStrategy = value; }
+			get
+			{
+				var nestedUnitOfWorkStrategy = _nestedUnitOfWorkStrategy ?? new ThrowOnNestedUnitOfWork();
+				Console.WriteLine("GET" + nestedUnitOfWorkStrategy.GetType().Name);
+				return nestedUnitOfWorkStrategy;
+			}
+			set
+			{
+				Console.WriteLine($"SET {value?.GetType().Name} {new StackTrace().ToString()}");
+				_nestedUnitOfWorkStrategy = value;
+			}
 		}
 
 		public static IUpdatedBy UpdatedBy

@@ -4,36 +4,41 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Bugs
 {
 	[TestFixture]
 	[Category("BucketB")]
-	public class Bug22329 : DatabaseTest
+	[DatabaseTest]
+	public class Bug22329
 	{
-		private IPersonRequestRepository personRequestRepository;
-
-		protected override void SetupForRepositoryTest()
-		{
-			personRequestRepository = new PersonRequestRepository(new FromFactory(() => SetupFixtureForAssembly.DataSource.Application));
-			
-			//make sure setup data is persisted
-			CleanUpAfterTest();
-			UnitOfWork.PersistAll();
-		}
-
+		public IPersonRequestRepository personRequestRepository;
+		public IPersonRepository PersonRepository;
+		
 		[Test]
 		public void ShouldNotGenerateUpdateWhenShiftTradeRequestIsRead()
 		{
 			Guid id;
+			IPerson tradeWithPerson = SetupFixtureForAssembly.loggedOnPerson;
+			using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
+			{
+				PersonRepository.Add(tradeWithPerson);
+				uow.PersistAll();
+			}
 			//save
 			using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				var pr = createShiftTradeRequest();
+				IPersonRequest request = new PersonRequest(SetupFixtureForAssembly.loggedOnPerson);
+				IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
+						new List<IShiftTradeSwapDetail>
+											{
+												new ShiftTradeSwapDetail(SetupFixtureForAssembly.loggedOnPerson, tradeWithPerson, new DateOnly(2008, 7, 16),
+																								 new DateOnly(2008, 7, 16)),
+											});
+				request.Request = shiftTradeRequest;
+				var pr = request;
+
 				personRequestRepository.Add(pr);
 				id = pr.Id.Value;
 				uow.PersistAll();
@@ -53,33 +58,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 				((IVersioned) personRequestRepository.Get(id)).Version.Value
 					.Should().Be.EqualTo(version);
 			}
-
-			cleanup(id);
-		}
-
-		private void cleanup(Guid id)
-		{
-			using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
-			{
-				personRequestRepository.Remove(personRequestRepository.Find(id));
-				uow.PersistAll();
-			}
-		}
-
-
-		private IPersonRequest createShiftTradeRequest()
-		{
-			IPersonRequest request = new PersonRequest(SetupFixtureForAssembly.loggedOnPerson);
-			IPerson tradeWithPerson = SetupFixtureForAssembly.loggedOnPerson;
-			PersistAndRemoveFromUnitOfWork(tradeWithPerson);
-			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
-					new List<IShiftTradeSwapDetail>
-										{
-												new ShiftTradeSwapDetail(SetupFixtureForAssembly.loggedOnPerson, tradeWithPerson, new DateOnly(2008, 7, 16),
-																								 new DateOnly(2008, 7, 16)),
-										});
-			request.Request = shiftTradeRequest;
-			return request;
 		}
 	}
 }
