@@ -58,6 +58,7 @@
 
         function selectOrganization(orgData) {
             var data = prepareData(orgData);
+
             var selectedData = {
                 Type: orgData.Type,
                 Id: data.Id,
@@ -67,10 +68,12 @@
                 if (orgData.IsSelected) {
                     PermissionsServiceRefact.assignOrganizationSelection.postData(data).$promise.then(function (result) {
                         if (result != null) {
-                            console.log('assign bu data result ', result);
+                          console.log(result);
+                          return result;
                         }
                     });
                 } else {
+                  data1.BusinessUnits = [];
                     PermissionsServiceRefact.deleteAllData.delete(data).$promise.then(function () {
                         if (result != null) {
                             console.log('delete all bu data result', result);
@@ -94,20 +97,21 @@
             }
         }
 
+        var data1 = {};
+
         function arrayCreator(orgData) {
-            var data = {};
             var attributeName = orgData.Type + 's';
-            if (!data[attributeName]) {
-                data[attributeName] = [];
+            if (!data1[attributeName]) {
+                data1[attributeName] = [];
             }
-            data[attributeName].push(orgData.Id);
+            data1[attributeName].push(orgData.Id);
 
             if (orgData.ChildNodes != null && orgData.ChildNodes.length > 0) {
                 for (var i = 0; i < orgData.ChildNodes.length; i++) {
                     arrayCreator(orgData.ChildNodes[i]);
                 }
             }
-            return data;
+            return data1;
         }
 
         function prepareData(orgData) {
