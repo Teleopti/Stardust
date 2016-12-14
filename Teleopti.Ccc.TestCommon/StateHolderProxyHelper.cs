@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.TestCommon
 		public static void Logout()
 		{
 			principalContext.SetCurrentPrincipal(null);
-			CurrentAuthorization.DefaultTo(null);
 	    }
 
         public static void ClearAndInitializeStateHolder(IState stateMock)
