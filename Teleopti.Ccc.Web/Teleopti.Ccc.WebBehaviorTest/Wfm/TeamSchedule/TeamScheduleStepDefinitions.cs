@@ -367,7 +367,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[Then(@"I should see week view schedule table")]
 		public void ThenIShouldSeeWeekViewScheduleTable()
 		{
-			Browser.Interactions.AssertExists(".weekview-td");
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true, () =>
+			{
+				Browser.Interactions.AssertExists(".weekview-td");
+			});
 		}
 
 		[When(@"I navigate to next week in week view")]

@@ -17,6 +17,7 @@
 		};
 
 		vm.isLoading = false;
+		vm.scheduleFullyLoaded = false;
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
 
 		vm.onKeyWordInSearchInputChanged = function() {
@@ -30,7 +31,8 @@
 		};
 
 		vm.resetSchedulePage = function () {
-			vm.paginationOptions.pageNumber = 1;			
+			vm.paginationOptions.pageNumber = 1;
+			vm.scheduleFullyLoaded = false;
 			vm.loadSchedules();
 		};
 
@@ -61,6 +63,7 @@
 				vm.groupWeeks = WeekViewCreator.Create(data.PersonWeekSchedules);
 				vm.paginationOptions.totalPages = vm.paginationOptions.pageSize > 0? Math.ceil(data.Total / (vm.paginationOptions.pageSize + 0.01) ) : 0;
 				vm.isLoading = false;
+				vm.scheduleFullyLoaded = true;
 			}).catch(function() {
 				vm.isLoading = false;
 			});
