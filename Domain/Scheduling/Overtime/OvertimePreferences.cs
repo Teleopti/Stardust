@@ -16,5 +16,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         public bool AvailableAgentsOnly { get; set; }
 
 	    public IRuleSetBag ShiftBagToUse { get; set; }
+		public UseSkills UseSkills { get; set; }
     }
 }

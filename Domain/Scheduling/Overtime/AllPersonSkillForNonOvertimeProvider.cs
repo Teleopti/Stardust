@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
-		public IGroupPersonSkillAggregator SkillAggregator()
+		public IGroupPersonSkillAggregator SkillAggregator(IOvertimePreferences overtimePreferences)
 		{
 			return _groupPersonSkillAggregator;
 		}

@@ -13,5 +13,12 @@
         bool AllowBreakWeeklyRest { get; set; }
         bool AvailableAgentsOnly { get; set; }
 		IRuleSetBag ShiftBagToUse { get; set; }
+	    UseSkills UseSkills { get; set; }
+    }
+
+	public enum UseSkills
+	{
+		All,
+		Primary
 	}
 }

@@ -78,7 +78,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var teamInfo = _teamInfoFactory.CreateTeamInfo(stateHolder.SchedulingResultState.PersonsInOrganization, agent, date, _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, new[] { scheduleDay }));
 			var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, date, schedulingOptions.BlockFinder(), true);
 			_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, date, schedulingOptions, rollbackService, resourceCalculateDelayer,
-				stateHolder.SchedulingResultState.AllSkillDays(), stateHolder.SchedulingResultState.Schedules, shiftNudgeDirective, createRules(overtimePreferences), _personSkillsForNonOvertimeProvider.SkillAggregator());
+				stateHolder.SchedulingResultState.AllSkillDays(), stateHolder.SchedulingResultState.Schedules, 
+				shiftNudgeDirective, createRules(overtimePreferences), _personSkillsForNonOvertimeProvider.SkillAggregator(overtimePreferences));
 		}
 
 		private ShiftNudgeDirective createShiftNudgeDirective(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences)

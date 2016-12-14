@@ -532,7 +532,7 @@
     <Compile Include="Scheduling\Overtime\PersonSkillsUseAllForScheduleDaysOvertimeProvider.cs" />
     <Compile Include="Scheduling\Overtime\PersonSkillsUsePrimaryForScheduleDaysOvertimeProvider.cs" />
     <Compile Include="Scheduling\Overtime\PrimaryGroupPersonSkillAggregator.cs" />
-    <Compile Include="Scheduling\Overtime\PrimaryPersonSkillForNonOvertimeProvider.cs" />
+    <Compile Include="Scheduling\Overtime\PrimaryOrAllPersonSkillForNonOvertimeProvider.cs" />
     <Compile Include="Scheduling\Rules\BusinessRuleConfigProvider.cs" />
     <Compile Include="Scheduling\SeatLimitation\DesktopMaxSeatCallback.cs" />
     <Compile Include="Scheduling\SeatLimitation\DoubleExtensions.cs" />
