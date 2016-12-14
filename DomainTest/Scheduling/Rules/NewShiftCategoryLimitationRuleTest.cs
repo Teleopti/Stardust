@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
 		private MockRepository _mocks;
-        private INewBusinessRule _target;
+        private NewShiftCategoryLimitationRule _target;
         private IShiftCategoryLimitationChecker _limitationChecker;
         private Dictionary<IPerson, IScheduleRange> _dic;
         private IVirtualSchedulePeriodExtractor _virtualSchedulePeriodExtractor;

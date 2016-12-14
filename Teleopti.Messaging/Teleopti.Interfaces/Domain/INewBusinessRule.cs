@@ -8,12 +8,6 @@ namespace Teleopti.Interfaces.Domain
 	public interface INewBusinessRule
 	{
 		/// <summary>
-		/// Gets the error message.
-		/// </summary>
-		/// <value>The error message.</value>
-		string ErrorMessage { get; }
-
-		/// <summary>
 		/// Gets a value indicating whether this instance is mandatory.
 		/// </summary>
 		/// <value>

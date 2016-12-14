@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 	[TestWithStaticDependenciesAvoidUse]
 	public class NewNightlyRestRuleTest
     {
-        private INewBusinessRule _target;
+        private NewNightlyRestRule _target;
         private IDictionary<IPerson, IScheduleRange> _ranges;
         private IScheduleDay _scheduleDay;
         private IScheduleDay _yesterday;

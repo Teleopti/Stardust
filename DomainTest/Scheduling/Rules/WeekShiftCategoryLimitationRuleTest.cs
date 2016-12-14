@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 	[TestWithStaticDependenciesAvoidUse]
 	public class WeekShiftCategoryLimitationRuleTest
 	{
-		private INewBusinessRule _target;
+		private WeekShiftCategoryLimitationRule _target;
 		private IShiftCategoryLimitationChecker _limitationChecker;
 		private Dictionary<IPerson, IScheduleRange> _dic;
 		private IVirtualSchedulePeriodExtractor _virtualSchedulePeriodExtractor;

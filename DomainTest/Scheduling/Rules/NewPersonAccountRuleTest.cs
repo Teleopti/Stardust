@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 	[TestWithStaticDependenciesAvoidUse]
 	public class NewPersonAccountRuleTest
     {
-        private INewBusinessRule _target;
+        private NewPersonAccountRule _target;
         private ISchedulingResultStateHolder _stateHolder;
         private IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
 	    private IPersistableScheduleDataPermissionChecker _permissionChecker;
