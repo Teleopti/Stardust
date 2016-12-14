@@ -326,6 +326,12 @@
 					});
 				};
 
+				$scope.clearOrgSelection = function(){
+					$scope.sites.forEach(function(site){
+						if(site.isChecked)
+							site.isChecked = false;
+					});
+				};
 				$scope.$watch('teamsSelected', function(newValue, oldValue) {
 					if (JSON.stringify(newValue) !== JSON.stringify(oldValue) && enableWatchOnTeam) {
 						updateSelectFieldText();
