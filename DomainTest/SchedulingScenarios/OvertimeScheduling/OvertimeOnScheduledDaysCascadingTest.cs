@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 {
 	[DomainTest]
 	[TestFixture(true)]
-	[TestFixture(false)]
+	//[TestFixture(false)]
 	public class OvertimeOnScheduledDaysCascadingTest : IConfigureToggleManager
 	{
 		private readonly bool _resourcePlannerCascadingScheduleOvertimeOnPrimary41318;
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			skillB.SetCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 16, 0));
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 16, 0));
-			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 10);
 			var agentAandB = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agentAandB.AddPeriodWithSkills(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB });
