@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -24,7 +23,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 	public class ForecastedStaffingViewModelCreatorTest : ISetup
 	{
 		public ForecastedStaffingViewModelCreator Target;
-		public ForecastedCallsProvider ForecastedCallsProvider;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeSkillDayRepository SkillDayRepository;
@@ -34,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
 
-		private int minutesPerInterval = 15;
+		private const int minutesPerInterval = 15;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -51,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillRepository.Has(skill);
 
 			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
-			SkillDayRepository.Add(skillDay);
+			SkillDayRepository.Has(skillDay);
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -77,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillRepository.Has(skill);
 
 			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
-			SkillDayRepository.Add(skillDay);
+			SkillDayRepository.Has(skillDay);
 
 			var actualCalls = createStatistics(skillDay, latestStatsTime);
 			IntradayQueueStatisticsLoader.Has(actualCalls);
@@ -91,8 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var expectedUpdatedForecastOnLastInterval = vm.DataSeries.ForecastedStaffing.Last() * deviationWithReforecast;
 			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(expectedUpdatedForecastOnLastInterval);
 		}
-
-
+		
 		[Test]
 		public void ShouldReturnStaffingCorrectlyWhenViewingAfterSkillIsClosed()
 		{
@@ -106,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillRepository.Has(skill);
 
 			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
-			SkillDayRepository.Add(skillDay);
+			SkillDayRepository.Has(skillDay);
 
 			IntradayQueueStatisticsLoader.Has(createStatistics(skillDay, latestStatsTime));
 
@@ -129,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skill = createEmailSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30));
 			SkillRepository.Has(skill);
 
-			var vm = Target.Load(new Guid[] { skill.Id.Value });
+			var vm = Target.Load(new[] { skill.Id.Value });
 
 			vm.DataSeries.Should().Be.EqualTo(null);
 		}
@@ -147,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillRepository.Has(skill);
 
 			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
-			SkillDayRepository.Add(skillDay);
+			SkillDayRepository.Has(skillDay);
 
 			IntradayQueueStatisticsLoader.Has(createStatistics(skillDay, latestStatsTime));
 
@@ -167,7 +164,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var scenario = fakeScenarioAndIntervalLength();
 
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30));
-
 			SkillRepository.Has(skill);
 
 			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30));
@@ -187,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var actualCallsPerSkill = skillDay.WorkloadDayCollection.First().TaskPeriodList[0].Tasks +
 									  skillDay.WorkloadDayCollection.Last().TaskPeriodList[0].Tasks;
 
-			SkillDayRepository.Add(skillDay);
+			SkillDayRepository.Has(skillDay);
 
 			var actualIntervals = new List<SkillIntervalStatistics>
 			{
@@ -196,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 					SkillId = skill.Id.Value,
 					StartTime = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc),
 					Calls = actualCallsPerSkill * 1.2d
-				},
+				}
 			};
 
 			IntradayQueueStatisticsLoader.Has(actualIntervals);
@@ -228,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			IntradayQueueStatisticsLoader.Has(actualIntervals);
 			SkillRepository.Has(skill);
-			SkillDayRepository.Add(skillDay);
+			SkillDayRepository.Has(skillDay);
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -266,7 +262,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var actualIntervals = createStatistics(skillDay, latestStatsTime);
 
 			SkillRepository.Has(skill);
-			SkillDayRepository.Add(skillDay);
+			SkillDayRepository.Has(skillDay);
 			IntradayQueueStatisticsLoader.Has(actualIntervals);
 
 			var vm = Target.Load(new[] { skill.Id.Value });
@@ -350,7 +346,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 			IntradayQueueStatisticsLoader.Has(actualCalls);
-			SkillDayRepository.Add(skillDay);
+			SkillDayRepository.Has(skillDay);
 
 			var actualStaffing = getActualStaffing(skillDay, actualCalls);
 			var averageDeviation = calculateAverageDeviation(actualCalls, skillDay);
@@ -373,13 +369,11 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var skill1 = createSkill(minutesPerInterval, "skill1", new TimePeriod(8, 0, 8, 30));
 			var skill2 = createSkill(minutesPerInterval, "skill2", new TimePeriod(8, 0, 8, 30));
-			SkillRepository.Has(skill1);
-			SkillRepository.Has(skill2);
+			SkillRepository.Has(skill1,skill2);
 
 			var skillDay1 = createSkillDay(skill1, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
 			var skillDay2 = createSkillDay(skill2, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
-			SkillDayRepository.Add(skillDay1);
-			SkillDayRepository.Add(skillDay2);
+			SkillDayRepository.Has(skillDay1,skillDay2);
 
 			var vm = Target.Load(new[] { skill1.Id.Value, skill2.Id.Value });
 
@@ -391,10 +385,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		public void ShouldShowUpdatedStaffingFromLatestStatsTimeWhenNowIsEarlier()
+		public void ShouldShowUpdatedStaffingFromLatestStatsTimeWhenNowIsEarlierForDevTestAndDemoCases()
 		{
-			// This test is for dev, test and demo cases
-
 			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
 			var latestStatsTime = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
@@ -404,7 +396,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 45));
 
 			SkillRepository.Has(skill);
-			SkillDayRepository.Add(skillDay);
+			SkillDayRepository.Has(skillDay);
 			IntradayQueueStatisticsLoader.Has(new List<SkillIntervalStatistics>
 			{
 				new SkillIntervalStatistics { SkillId = skill.Id.Value, StartTime = latestStatsTime, Calls = 30 }
@@ -429,7 +421,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillDay = createSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 45));
 
 			SkillRepository.Has(skill);
-			SkillDayRepository.Add(skillDay);
+			SkillDayRepository.Has(skillDay);
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
@@ -460,8 +452,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
             vm.DataSeries.UpdatedForecastedStaffing.Should().Be.Empty();
             vm.DataSeries.ActualStaffing.Should().Be.Empty();
         }
-
-
+		
 		[Test]
 		public void ShouldCalculateUpdatedForecastedStaffingCorrectlyForThreeSkills()
 		{
@@ -479,18 +470,14 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillDayWithoutReforecast = createSkillDay(skillWithoutReforecast, scenario, Now.UtcDateTime(), new TimePeriod(7, 45, 8, 15));
 
 			var actualCalls1 = createStatistics(skillDayWithReforecast1, latestStatsTime);
-			var actualCalls2 = createStatistics(skillDayWithReforecast2, latestStatsTime);			
-			var actualCallsTotal = new List<SkillIntervalStatistics>();
+			var actualCalls2 = createStatistics(skillDayWithReforecast2, latestStatsTime);
 
+			var actualCallsTotal = new List<SkillIntervalStatistics>();
 			actualCallsTotal.AddRange(actualCalls1);
 			actualCallsTotal.AddRange(actualCalls2);
 
-			SkillRepository.Has(skillWithReforecast1);
-			SkillRepository.Has(skillWithReforecast2);
-			SkillRepository.Has(skillWithoutReforecast);
-			SkillDayRepository.Add(skillDayWithReforecast1);
-			SkillDayRepository.Add(skillDayWithReforecast2);
-			SkillDayRepository.Add(skillDayWithoutReforecast);
+			SkillRepository.Has(skillWithReforecast1,skillWithReforecast2,skillWithoutReforecast);
+			SkillDayRepository.Has(skillDayWithReforecast1,skillDayWithReforecast2,skillDayWithoutReforecast);
 			IntradayQueueStatisticsLoader.Has(actualCallsTotal);
 
 			var deviationWithReforecast1 = calculateAverageDeviation(actualCalls1, skillDayWithReforecast1);
@@ -510,8 +497,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			Math.Round((double)vm.DataSeries.UpdatedForecastedStaffing.Last(),3).Should().Be.EqualTo(expectedUpdatedStaffing);
 			expectedUpdatedStaffing.Should().Be.EqualTo(Math.Round((double)vm.DataSeries.ForecastedStaffing.Last() * finalDeviationFactor,3));
 		}
-
-
+		
 		[Test]
         public void ShouldReturnActualStaffingUpUntilLatestStatsTimeEvenWhenWeHaveStatsBeforeOpenHours()
         {
@@ -534,7 +520,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
             };
 			skillStats.AddRange(createStatistics(skillDay,latestStatsTime));
 
-			SkillDayRepository.Add(skillDay);
+			SkillDayRepository.Has(skillDay);
 			SkillRepository.Has(skill);
 			IntradayQueueStatisticsLoader.Has(skillStats);
 
@@ -567,7 +553,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
             };
 
 			SkillRepository.Has(skill);
-			SkillDayRepository.Add(skillDay);
+			SkillDayRepository.Has(skillDay);
 			IntradayQueueStatisticsLoader.Has(skillStats);
 
             var vm = Target.Load(new[] { skill.Id.Value });
@@ -600,10 +586,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			actualCallsTotal.AddRange(actualCalls1);
 			actualCallsTotal.AddRange(actualCalls2);
 
-			SkillRepository.Has(skill1);
-			SkillRepository.Has(skill2);
-			SkillDayRepository.Add(skillDay1);
-			SkillDayRepository.Add(skillDay2);
+			SkillRepository.Has(skill1,skill2);
+			SkillDayRepository.Has(skillDay1,skillDay2);
 			IntradayQueueStatisticsLoader.Has(actualCallsTotal);
 
 			var actualStaffingSkill1 = getActualStaffing(skillDay1, actualCalls1);
@@ -637,10 +621,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			actualStatsTotal.AddRange(actualPhoneStats);
 			actualStatsTotal.AddRange(actualEmailStats);
 
-			SkillRepository.Has(phoneSkill);
-			SkillRepository.Has(emailSkill);
-			SkillDayRepository.Add(skillDayPhone);
-			SkillDayRepository.Add(skillDayEmail);
+			SkillRepository.Has(phoneSkill,emailSkill);
+			SkillDayRepository.Has(skillDayPhone,skillDayEmail);
 			IntradayQueueStatisticsLoader.Has(actualStatsTotal);
 
 			var actualStaffingSkill1 = getActualStaffing(skillDayPhone, actualPhoneStats);
@@ -664,9 +646,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 
-			var scheduledStaffingList = new List<SkillStaffingInterval>()
+			var scheduledStaffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval() {
+				new SkillStaffingInterval {
 					SkillId = skill.Id.Value,
 					StartDateTime = userNow,
 					EndDateTime = userNow.AddMinutes(minutesPerInterval),
@@ -695,15 +677,15 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 
-			var scheduledStaffingList = new List<SkillStaffingInterval>()
+			var scheduledStaffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval() {
+				new SkillStaffingInterval {
 					SkillId = skill1.Id.Value,
 					StartDateTime = userNow,
 					EndDateTime = userNow.AddMinutes(minutesPerInterval),
 					StaffingLevel = 5.7d
 				},
-				new SkillStaffingInterval() {
+				new SkillStaffingInterval {
 					SkillId = skill2.Id.Value,
 					StartDateTime = userNow,
 					EndDateTime = userNow.AddMinutes(minutesPerInterval),
@@ -711,8 +693,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				}
 			};
 
-			SkillRepository.Has(skill1);
-			SkillRepository.Has(skill2);
+			SkillRepository.Has(skill1,skill2);
 			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
 
 			var vm = Target.Load(new[] { skill1.Id.Value, skill2.Id.Value });
@@ -738,7 +719,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
 
 			SkillRepository.Has(skill);
-			SkillDayRepository.Add(skillDay);
+			SkillDayRepository.Has(skillDay);
 
 			var skillStats = new List<SkillIntervalStatistics>
 			{
@@ -775,7 +756,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.ActualStaffing.First().Should().Be.EqualTo(null);
 			vm.DataSeries.ActualStaffing[1].Should().Be.GreaterThan(0d);
 			vm.DataSeries.ActualStaffing.Last().Should().Be.EqualTo(null);
-
 		}
 
 		[Test]
@@ -793,7 +773,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
 
 			SkillRepository.Has(skill);
-			SkillDayRepository.Add(skillDay);
+			SkillDayRepository.Has(skillDay);
 			IntradayQueueStatisticsLoader.Has(createStatistics(skillDay, latestStatsTime));
 
 			var scheduledStaffingList = createScheduledStaffing(skill, scheduledStartTime, scheduledStartTime.AddMinutes(3 * minutesPerInterval));
@@ -835,7 +815,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
 
 			SkillRepository.Has(skill);
-			SkillDayRepository.Add(skillDay);
+			SkillDayRepository.Has(skillDay);
 
 			var skillStats = createStatistics(skillDay, latestStatsTime);
 
@@ -878,7 +858,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillDay = createSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30));
 
 			SkillRepository.Has(skill);
-			SkillDayRepository.Add(skillDay);
+			SkillDayRepository.Has(skillDay);
 
 			var skillStats = createStatistics(skillDay, latestStatsTime);
 
@@ -906,15 +886,15 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 
-			var scheduledStaffingList = new List<SkillStaffingInterval>()
+			var scheduledStaffingList = new List<SkillStaffingInterval>
 			{
-				new SkillStaffingInterval() {
+				new SkillStaffingInterval {
 					SkillId = skill.Id.Value,
 					StartDateTime = userNow,
 					EndDateTime = userNow.AddMinutes(minutesPerInterval),
 					StaffingLevel = 15d
 				},
-				new SkillStaffingInterval() {
+				new SkillStaffingInterval {
 					SkillId = skill.Id.Value,
 					StartDateTime = userNow.AddMinutes(-minutesPerInterval),
 					EndDateTime = userNow,
@@ -933,8 +913,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.ScheduledStaffing.First().Should().Be.EqualTo(scheduledStaffingList.Last().StaffingLevel);
 			vm.DataSeries.ScheduledStaffing.Last().Should().Be.EqualTo(scheduledStaffingList.First().StaffingLevel);
 		}
-
-
+		
 		private Scenario fakeScenarioAndIntervalLength()
 		{
 			IntervalLengthFetcher.Has(minutesPerInterval);
@@ -945,11 +924,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 		private ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours)
 		{
-			var activity = new Activity("activity_" + skillName).WithId();
 			var skill =
 				new Skill(skillName, skillName, Color.Empty, intervalLength, new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony))
 				{
-					Activity = activity,
 					TimeZone = TimeZoneInfo.Utc
 				}.WithId();
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours);
@@ -959,11 +936,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 		private ISkill createEmailSkill(int intervalLength, string skillName, TimePeriod openHours)
 		{
-			var activity = new Activity("activity_" + skillName).WithId();
 			var skill =
 				new Skill(skillName, skillName, Color.Empty, intervalLength, new SkillTypeEmail(new Description("SkillTypeEmail"), ForecastSource.InboundTelephony))
 				{
-					Activity = activity,
 					TimeZone = TimeZoneInfo.Utc
 				}.WithId();
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours);
@@ -977,11 +952,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), 3, new Tuple<TimePeriod, double>(openHours, 3)).WithId();
 			var index = 0;
 
+			var workloadDay = skillDay.WorkloadDayCollection.First();
 			for (TimeSpan intervalStart = openHours.StartTime; intervalStart < openHours.EndTime; intervalStart = intervalStart.Add(TimeSpan.FromMinutes(skill.DefaultResolution)))
 			{
-				skillDay.WorkloadDayCollection.First().TaskPeriodList[index].Tasks = random.Next(5,50);
-				skillDay.WorkloadDayCollection.First().TaskPeriodList[index].AverageTaskTime = TimeSpan.FromSeconds(120);
-				skillDay.WorkloadDayCollection.First().TaskPeriodList[index].AverageAfterTaskTime = TimeSpan.FromSeconds(200);			
+				workloadDay.TaskPeriodList[index].Tasks = random.Next(5,50);
+				workloadDay.TaskPeriodList[index].AverageTaskTime = TimeSpan.FromSeconds(120);
+				workloadDay.TaskPeriodList[index].AverageAfterTaskTime = TimeSpan.FromSeconds(200);			
 				index++;
 			}
 
@@ -1013,17 +989,15 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			}
 			return skillStats;
 		}
-
-
+		
 		private IList<SkillIntervalStatistics> createSkillDaysYesterdayTodayTomorrow(ISkill skill, Scenario scenario, DateTime userNow, DateTime latestStatsTime)
 		{
 			var skillStats = new List<SkillIntervalStatistics>();
-			var skillYesterday = createSkillDay(skill, scenario, userNow.AddDays(-1), new TimePeriod(0, 0, 24, 0));
-			var skillToday = createSkillDay(skill, scenario, userNow, new TimePeriod(0, 0, 24, 0));
-			var skillTomorrow = createSkillDay(skill, scenario, userNow.AddDays(1), new TimePeriod(0, 0, 24, 0));
-			SkillDayRepository.Add(skillYesterday);
-			SkillDayRepository.Add(skillToday);
-			SkillDayRepository.Add(skillTomorrow);
+			var timePeriod = new TimePeriod(0, 0, 24, 0);
+			var skillYesterday = createSkillDay(skill, scenario, userNow.AddDays(-1), timePeriod);
+			var skillToday = createSkillDay(skill, scenario, userNow, timePeriod);
+			var skillTomorrow = createSkillDay(skill, scenario, userNow.AddDays(1), timePeriod);
+			SkillDayRepository.Has(skillYesterday,skillToday,skillTomorrow);
 			skillStats.AddRange(createStatistics(skillYesterday, latestStatsTime));
 			skillStats.AddRange(createStatistics(skillToday, latestStatsTime));
 			skillStats.AddRange(createStatistics(skillTomorrow, latestStatsTime));
@@ -1066,8 +1040,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			return actualStaffingSkill1;
 		}
-
-
+		
 		private IEnumerable<SkillStaffingInterval> createScheduledStaffing(ISkill skill, DateTime scheduledStartTime, DateTime scheduledEndTime)
 		{
 			var scheduledStaffing = new List<SkillStaffingInterval>();
@@ -1087,6 +1060,5 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			}
 			return scheduledStaffing;
 		}
-
 	}
 }

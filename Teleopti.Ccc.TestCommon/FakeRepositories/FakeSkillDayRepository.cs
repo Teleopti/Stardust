@@ -23,6 +23,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return skillDays;
 		}
 
+		public void Has(params ISkillDay[] skillDays)
+		{
+			_skillDays.AddRange(skillDays);
+		}
+
 		public void Remove(ISkillDay root)
 		{
 			throw new NotImplementedException();
