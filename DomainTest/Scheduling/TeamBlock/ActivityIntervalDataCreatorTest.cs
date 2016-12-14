@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_mocks = new MockRepository();
 			_createSkillIntervalDataPerDateAndActivity = _mocks.StrictMock<ICreateSkillIntervalDataPerDateAndActivity>();
 			_dayIntervalDataCalculator = _mocks.StrictMock<IDayIntervalDataCalculator>();
-			_target = new ActivityIntervalDataCreator(_createSkillIntervalDataPerDateAndActivity, _dayIntervalDataCalculator, groupPersonSkillAggregator);
+			_target = new ActivityIntervalDataCreator(_createSkillIntervalDataPerDateAndActivity, _dayIntervalDataCalculator);
 			_teamBlockInfo = _mocks.StrictMock<ITeamBlockInfo>();
 			_skillIntervalDatasPerActivity = new Dictionary<IActivity, IList<ISkillIntervalData>>();
 			_skillIntervalData = new SkillIntervalData(new DateTimePeriod(), 77, 76, 1, null, null);
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				var result = _target.CreateFor(_teamBlockInfo, DateOnly.MinValue, skillDays, true);
+				var result = _target.CreateFor(new GroupPersonSkillAggregator(new PersonalSkillsProvider()), _teamBlockInfo, DateOnly.MinValue, skillDays, true);
 				Assert.IsTrue(result[_activity].ContainsKey(new DateTimePeriod().StartDateTime));
 				Assert.AreEqual(_skillIntevalDataList[0], result[_activity][new DateTimePeriod().StartDateTime]);
 			}

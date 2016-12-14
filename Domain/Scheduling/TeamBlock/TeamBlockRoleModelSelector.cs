@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private IShiftProjectionCache filterAndSelect(IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, bool useShiftsForRestrictions, IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			var isSameOpenHoursInBlock = _sameOpenHoursInTeamBlock.Check(allSkillDays, teamBlockInfo, groupPersonSkillAggregator);
-			var shifts = _workShiftFilterService.FilterForRoleModel(schedules, datePointer, teamBlockInfo, effectiveRestriction,
+			var shifts = _workShiftFilterService.FilterForRoleModel(groupPersonSkillAggregator, schedules, datePointer, teamBlockInfo, effectiveRestriction,
 				schedulingOptions,
 				new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupMembers.First(), datePointer),
 				isSameOpenHoursInBlock, useShiftsForRestrictions, allSkillDays);
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (shifts.IsNullOrEmpty())
 				return null;
 
-			return workShiftSelector.SelectShiftProjectionCache(datePointer, shifts, allSkillDays, teamBlockInfo, schedulingOptions, TimeZoneGuard.Instance.CurrentTimeZone(), true, teamBlockInfo.TeamInfo.GroupMembers.First());
+			return workShiftSelector.SelectShiftProjectionCache(groupPersonSkillAggregator, datePointer, shifts, allSkillDays, teamBlockInfo, schedulingOptions, TimeZoneGuard.Instance.CurrentTimeZone(), true, teamBlockInfo.TeamInfo.GroupMembers.First());
 		}
 	}
 }

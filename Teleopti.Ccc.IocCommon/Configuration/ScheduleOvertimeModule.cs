@@ -22,10 +22,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Toggle(Toggles.ResourcePlanner_CascadingScheduleOvertimeOnPrimary_41318))
 			{
 				builder.RegisterType<PersonSkillsUsePrimaryForScheduleDaysOvertimeProvider>().As<IPersonSkillsForScheduleDaysOvertimeProvider>().SingleInstance();
+				builder.RegisterType<PrimaryPersonSkillForNonOvertimeProvider>().As<IPersonSkillsForNonOvertimeProvider>().SingleInstance();
+				builder.RegisterType<PrimaryGroupPersonSkillAggregator>().SingleInstance();
 			}
 			else
 			{
 				builder.RegisterType<PersonSkillsUseAllForScheduleDaysOvertimeProvider>().As<IPersonSkillsForScheduleDaysOvertimeProvider>().SingleInstance();
+				builder.RegisterType<AllPersonSkillForNonOvertimeProvider>().As<IPersonSkillsForNonOvertimeProvider>().SingleInstance();
 			}
 		}
 	}

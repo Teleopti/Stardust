@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -24,8 +25,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;
 		private readonly IWorkShiftSelector _workShiftSelector;
-		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
-
+		private readonly IPersonSkillsForNonOvertimeProvider _personSkillsForNonOvertimeProvider;
+		
 		public ScheduleOvertimeOnNonScheduleDays(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockScheduler teamBlockScheduler,
 			IMatrixListFactory matrixListFactory,
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor,
 			IWorkShiftSelector workShiftSelector,
-			IGroupPersonSkillAggregator groupPersonSkillAggregator) //heres the spot!
+			IPersonSkillsForNonOvertimeProvider personSkillsForNonOvertimeProvider)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockScheduler = teamBlockScheduler;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 			_weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
 			_workShiftSelector = workShiftSelector;
-			_groupPersonSkillAggregator = groupPersonSkillAggregator;
+			_personSkillsForNonOvertimeProvider = personSkillsForNonOvertimeProvider;
 		}
 
 		public void SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences, IResourceCalculateDelayer resourceCalculateDelayer)
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var teamInfo = _teamInfoFactory.CreateTeamInfo(stateHolder.SchedulingResultState.PersonsInOrganization, agent, date, _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, new[] { scheduleDay }));
 			var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, date, schedulingOptions.BlockFinder(), true);
 			_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, date, schedulingOptions, rollbackService, resourceCalculateDelayer,
-				stateHolder.SchedulingResultState.AllSkillDays(), stateHolder.SchedulingResultState.Schedules, shiftNudgeDirective, createRules(overtimePreferences), _groupPersonSkillAggregator);
+				stateHolder.SchedulingResultState.AllSkillDays(), stateHolder.SchedulingResultState.Schedules, shiftNudgeDirective, createRules(overtimePreferences), _personSkillsForNonOvertimeProvider.SkillAggregator());
 		}
 
 		private ShiftNudgeDirective createShiftNudgeDirective(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences)

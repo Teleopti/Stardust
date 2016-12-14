@@ -86,7 +86,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		}
 
 		[Test]
-		[Ignore("41318")]
 		public void ShouldNotPlaceOverTimeShiftDueToNoUnderstaffingOnPrimarySkill()
 		{
 			var scenario = new Scenario("_");

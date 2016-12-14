@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_proposedRestrictionAggregator,
 				_workShiftFilterService,
 				_teamScheduling,
-				_activityIntervalDataCreator, _maxSeatInformationGeneratorBasedOnIntervals, _maxSeatSkillAggregator, null);
+				_activityIntervalDataCreator, _maxSeatInformationGeneratorBasedOnIntervals, _maxSeatSkillAggregator, null, new GroupPersonSkillAggregator(new PersonalSkillsProvider()));
 
 			_dateOnly = new DateOnly(2013, 11, 12);
 			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("bill"), _dateOnly);
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 						.Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_schedules, _dateOnly, _person2, _teamBlockInfo, restriction,
 																		 _schedulingOptions, finderResult, false)).Return(shifts);
-				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(_dateOnly, shifts, _skillDays, _teamBlockInfo, _schedulingOptions, TimeZoneGuard.Instance.TimeZone, false, null)).IgnoreArguments().Return(shifts[0]).Repeat.AtLeastOnce();
+				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(null, _dateOnly, shifts, _skillDays, _teamBlockInfo, _schedulingOptions, TimeZoneGuard.Instance.TimeZone, false, null)).IgnoreArguments().Return(shifts[0]).Repeat.AtLeastOnce();
 				
 				Expect.Call(_teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null, null)).IgnoreArguments().Return(false);
 				Expect.Call(_teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null, null)).IgnoreArguments().Return(false);
@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_schedules, _dateOnly, _person2, _teamBlockInfo, restriction,
 															_schedulingOptions, finderResult, false)).Return(shifts);
-				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(_dateOnly, shifts, _skillDays, _teamBlockInfo, _schedulingOptions, TimeZoneGuard.Instance.TimeZone, false, null)).IgnoreArguments().Return(shifts[0]).Repeat.AtLeastOnce();
+				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(null, _dateOnly, shifts, _skillDays, _teamBlockInfo, _schedulingOptions, TimeZoneGuard.Instance.TimeZone, false, null)).IgnoreArguments().Return(shifts[0]).Repeat.AtLeastOnce();
 				Expect.Call(_teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null, null)).IgnoreArguments().Return(false);
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 						.Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_schedules, _dateOnly, _person2, _teamBlockInfo, restriction,
 																		 _schedulingOptions, finderResult, false)).Return(shifts);
-				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(_dateOnly, shifts, _skillDays, _teamBlockInfo, _schedulingOptions, TimeZoneGuard.Instance.TimeZone, false, null)).IgnoreArguments().Return(shifts[0]).Repeat.AtLeastOnce();
+				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(null, _dateOnly, shifts, _skillDays, _teamBlockInfo, _schedulingOptions, TimeZoneGuard.Instance.TimeZone, false, null)).IgnoreArguments().Return(shifts[0]).Repeat.AtLeastOnce();
 				Expect.Call(_teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null, null)).IgnoreArguments().Return(false);
 				Expect.Call(_teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null, null)).IgnoreArguments().Return(false);
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,

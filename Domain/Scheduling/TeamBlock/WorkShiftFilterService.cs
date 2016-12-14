@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface IWorkShiftFilterService
 	{
-		IList<IShiftProjectionCache> FilterForRoleModel(IScheduleDictionary schedules, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult, bool isSameOpenHoursInBlock, bool useShiftsForRestrictions, IEnumerable<ISkillDay> skillDays);
+		IList<IShiftProjectionCache> FilterForRoleModel(IGroupPersonSkillAggregator groupPersonSkillAggregator, IScheduleDictionary schedules, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult, bool isSameOpenHoursInBlock, bool useShiftsForRestrictions, IEnumerable<ISkillDay> skillDays);
 		IList<IShiftProjectionCache> FilterForTeamMember(IScheduleDictionary schedules, DateOnly dateOnly, IPerson person, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult, bool useShiftsForRestrictions);
 	}
 
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_openHoursFilter = openHoursFilter;
 		}
 
-		public IList<IShiftProjectionCache> FilterForRoleModel(IScheduleDictionary schedules, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
+		public IList<IShiftProjectionCache> FilterForRoleModel(IGroupPersonSkillAggregator groupPersonSkillAggregator, IScheduleDictionary schedules, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
 			IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult,
 			bool isSameOpenHoursInBlock, bool useShiftsForRestrictions, IEnumerable<ISkillDay> skillDays)
 		{
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (schedulingOptions.ShiftCategory != null)
 				effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
 
-			var filteredRuleSetList = _ruleSetAccordingToAccessabilityFilter.FilterForRoleModel(teamBlockInfo, schedulingOptions, useShiftsForRestrictions).ToList();
+			var filteredRuleSetList = _ruleSetAccordingToAccessabilityFilter.FilterForRoleModel(groupPersonSkillAggregator, teamBlockInfo, schedulingOptions, useShiftsForRestrictions).ToList();
 			filteredRuleSetList = _ruleSetPersonalSkillsActivityFilter.FilterForRoleModel(filteredRuleSetList,
 				teamBlockInfo.TeamInfo, dateOnly).ToList();
 

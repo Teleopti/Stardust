@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
 		private readonly IMaxSeatSkillAggregator _maxSeatSkillAggregator;
 		private readonly IWorkShiftSelectorForIntraInterval _workSelectorForIntraInterval;
+		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
 		public TeamBlockSingleDayScheduler(ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
 			IProposedRestrictionAggregator proposedRestrictionAggregator,
@@ -43,7 +44,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IActivityIntervalDataCreator activityIntervalDataCreator,
 			IMaxSeatInformationGeneratorBasedOnIntervals maxSeatInformationGeneratorBasedOnIntervals,
 			IMaxSeatSkillAggregator maxSeatSkillAggregator,
-			IWorkShiftSelectorForIntraInterval workSelectorForIntraInterval)
+			IWorkShiftSelectorForIntraInterval workSelectorForIntraInterval,
+			IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
 			_proposedRestrictionAggregator = proposedRestrictionAggregator;
@@ -53,6 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_maxSeatInformationGeneratorBasedOnIntervals = maxSeatInformationGeneratorBasedOnIntervals;
 			_maxSeatSkillAggregator = maxSeatSkillAggregator;
 			_workSelectorForIntraInterval = workSelectorForIntraInterval;
+			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
 		// TODO Move to separate class
@@ -89,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return resultList;
 
 			var allSkillDays = schedulingResultStateHolder.AllSkillDays();
-			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockSingleDayInfo, day, allSkillDays, false);
+			var activityInternalData = _activityIntervalDataCreator.CreateFor(_groupPersonSkillAggregator, teamBlockSingleDayInfo, day, allSkillDays, false);
 			var maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, day, allSkillDays, TimeZoneGuard.Instance.CurrentTimeZone(), true);
 			
 
@@ -179,7 +182,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (shifts.IsNullOrEmpty())
 				return null;
 
-			return workShiftSelector.SelectShiftProjectionCache(day, shifts, allSkillDays, teamBlockSingleDayInfo, schedulingOptions, TimeZoneGuard.Instance.CurrentTimeZone(), false, person);
+			return workShiftSelector.SelectShiftProjectionCache(_groupPersonSkillAggregator, day, shifts, allSkillDays, teamBlockSingleDayInfo, schedulingOptions, TimeZoneGuard.Instance.CurrentTimeZone(), false, person);
 		}
 	}
 }

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface IActivityIntervalDataCreator
 	{
-		Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> CreateFor(ITeamBlockInfo teamBlockInfo,
+		Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> CreateFor(IGroupPersonSkillAggregator groupPersonSkillAggregator, ITeamBlockInfo teamBlockInfo,
 		                                                                                           DateOnly day, 
 																																															 IEnumerable<ISkillDay> allSkillDays,
 																									bool forRoleModel);
@@ -17,24 +17,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		private readonly ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
 		private readonly IDayIntervalDataCalculator _dayIntervalDataCalculator;
-		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
 		public ActivityIntervalDataCreator(
 			ICreateSkillIntervalDataPerDateAndActivity createSkillIntervalDataPerDateAndActivity,
-			IDayIntervalDataCalculator dayIntervalDataCalculator,
-			IGroupPersonSkillAggregator groupPersonSkillAggregator)
+			IDayIntervalDataCalculator dayIntervalDataCalculator)
 		{
 			_createSkillIntervalDataPerDateAndActivity = createSkillIntervalDataPerDateAndActivity;
 			_dayIntervalDataCalculator = dayIntervalDataCalculator;
-			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
-		public Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> CreateFor(ITeamBlockInfo teamBlockInfo,
+		public Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> CreateFor(IGroupPersonSkillAggregator groupPersonSkillAggregator, ITeamBlockInfo teamBlockInfo,
 		                                                                                  DateOnly day,
 																																											IEnumerable<ISkillDay> allSkillDays,
 																							bool forRoleModel)
 		{
-			var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo, allSkillDays, _groupPersonSkillAggregator);
+			var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo, allSkillDays, groupPersonSkillAggregator);
 			var activities = new HashSet<IActivity>();
 			foreach (var dicPerActivity in skillIntervalDataPerDateAndActivity.Values)
 			{
