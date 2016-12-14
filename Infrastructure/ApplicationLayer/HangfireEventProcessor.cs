@@ -1,7 +1,10 @@
 using System;
 using System.Linq;
+using System.Runtime.ExceptionServices;
+using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
@@ -11,15 +14,18 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly IJsonEventDeserializer _deserializer;
 		private readonly ResolveEventHandlers _resolver;
 		private readonly CommonEventProcessor _processor;
+		private readonly TimeSpan _timeout;
 
 		public HangfireEventProcessor(
 			IJsonEventDeserializer deserializer,
 			ResolveEventHandlers resolver,
-			CommonEventProcessor processor)
+			CommonEventProcessor processor,
+			IConfigReader config)
 		{
 			_deserializer = deserializer;
 			_resolver = resolver;
 			_processor = processor;
+			_timeout = TimeSpan.FromSeconds(config.ReadValue("HangfireJobTimeoutSeconds", 15*60));
 		}
 
 		public void Process(string displayName, string tenant, string eventType, string serializedEvent, string handlerType)
@@ -36,13 +42,34 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 			var publishTo = handlers.Single(o => o == handlerT);
 
-			_processor.Process(tenant, @event, publishTo);
+			runWithTimeout(tenant, @event, publishTo);
 		}
 
-		public void Process(string tenant, IEvent @event, Type handlerType)
+		private void runWithTimeout(string tenant, IEvent @event, Type publishTo)
 		{
-			_processor.Process(tenant, @event, handlerType);
+			Exception exception = null;
+			var thread = new Thread(() =>
+			{
+				try
+				{
+					_processor.Process(tenant, @event, publishTo);
+				}
+				catch (Exception e)
+				{
+					exception = e;
+				}
+			});
+			thread.Start();
+			thread.Join(_timeout);
+			if (thread.IsAlive)
+			{
+				thread.Abort();
+				while (thread.IsAlive)
+					Thread.Sleep(100);
+				throw new TimeoutException($"Hangfire job did not finish within {_timeout}", exception);
+			}
+			if (exception != null)
+				ExceptionDispatchInfo.Capture(exception).Throw();
 		}
-
 	}
 }

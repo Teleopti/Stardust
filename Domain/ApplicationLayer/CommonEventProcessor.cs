@@ -1,5 +1,4 @@
 using System;
-using System.Reflection;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Domain.MessageBroker;
@@ -9,18 +8,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public class CommonEventProcessor
 	{
-		private readonly ResolveEventHandlers _resolver;
 		private readonly IResolve _resolve;
 		private readonly IInitiatorIdentifierScope _initiatorIdentifierScope;
 		private readonly ITrackingMessageSender _trackingMessageSender;
 
 		public CommonEventProcessor(
-			ResolveEventHandlers resolver,
 			IResolve resolve,
 			IInitiatorIdentifierScope initiatorIdentifierScope,
 			ITrackingMessageSender trackingMessageSender)
 		{
-			_resolver = resolver;
 			_resolve = resolve;
 			_initiatorIdentifierScope = initiatorIdentifierScope;
 			_trackingMessageSender = trackingMessageSender;
@@ -31,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		{
 			Process(@event, handlerType);
 		}
-
+		
 		public virtual void Process(IEvent @event, Type handlerType)
 		{
 			using (_initiatorIdentifierScope.OnThisThreadUse(InitiatorIdentifier.FromMessage(@event)))
@@ -40,22 +36,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				{
 					using (var scope = _resolve.NewScope())
 					{
-						var handler = scope.Resolve(handlerType);
-						var method = _resolver.HandleMethodFor(handler.GetType(), @event);
-						method.Invoke(handler, new[] { @event });
+						dynamic handler = scope.Resolve(handlerType);
+						handler.Handle((dynamic) @event);
 					}
 				}
-				catch (TargetInvocationException e)
+				catch (Exception)
 				{
-					PreserveStack.ForInnerOf(e);
 					sendTrackingMessage(@event);
-					throw e;
-				}
-				catch (Exception e)
-				{
-					PreserveStack.For(e);
-					sendTrackingMessage(@event);
-					throw e;
+					throw;
 				}
 			}
 		}

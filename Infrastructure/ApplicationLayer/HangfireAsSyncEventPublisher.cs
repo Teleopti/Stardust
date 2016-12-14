@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				{
 					try
 					{
-						_processor.Process(tenant, @event, handler);
+						_processor.Process("", tenant, @event, handler.FullName);
 					}
 					catch (Exception e)
 					{
