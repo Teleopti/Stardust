@@ -312,20 +312,38 @@ namespace Teleopti.Ccc.Domain.Collection
                     lock (_permissionLockObject)
                     {
                         scheduleTagSetter.SetTagOnScheduleDays(modifier, scheduleParts);
-
+						scheduleDayChangeCallback.ScheduleDayBeforeChanging();
+                            
                         foreach (var part in scheduleParts)
                         {
-                            var range = ((ScheduleRange) this[part.Person]);
+                            var range = (ScheduleRange) this[part.Person];
                             var partBefore = range.ReFetch(part);
-                            scheduleDayChangeCallback.ScheduleDayBeforeChanging();
+	                        var absences =
+		                        partBefore.PersonAbsenceCollection().Concat(part.PersonAbsenceCollection())
+			                        .Select(a => a.Period.ToDateOnlyPeriod(part.Person.PermissionInformation.DefaultTimeZone()));
+	                        IEnumerable<IScheduleDay> partsBefore;
+	                        if (absences.Any())
+	                        {
+		                        partsBefore = range.ScheduledDayCollection(absences.OrderByDescending(a => a.EndDate).First());
+	                        }
+	                        else
+	                        {
+		                        partsBefore = new[] {partBefore};
+	                        }
+
                             range.ModifyInternal(part);
 							// permission can prevent part to be applied so let us check
-							var partAfter = range.ReFetch(part);				
-							scheduleDayChangeCallback.ScheduleDayChanged(partBefore, partAfter);
 
-							OnPartModified(new ModifyEventArgs(modifier, partAfter.Person, partAfter.Period, part));
+	                        foreach (var scheduleDay in partsBefore)
+							{
+								var partAfter = range.ReFetch(scheduleDay);
 
-                        }
+								scheduleDayChangeCallback.ScheduleDayChanged(scheduleDay, partAfter);
+							}
+
+							var partAfter2 = range.ReFetch(part);
+							OnPartModified(new ModifyEventArgs(modifier, partAfter2.Person, partAfter2.Period, part));
+						}
                     }
 
                     foreach (var rangeClone in rangeClones.Values)

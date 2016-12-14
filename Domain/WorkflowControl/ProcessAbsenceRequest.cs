@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
@@ -36,11 +35,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		protected void UndoAll(RequiredForProcessingAbsenceRequest requiredForProcessingAbsenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest, IAbsenceRequest request)
 		{
-			var scheduleDaysBefore = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder?.Schedules[request.Person].ScheduledDayCollection(request.Period.ToDateOnlyPeriod(request.Person.PermissionInformation.DefaultTimeZone())).ToList();
 			requiredForProcessingAbsenceRequest.UndoRedoContainer?.UndoAll();
-			var scheduleDaysAfter = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder?.Schedules[request.Person].ScheduledDayCollection(request.Period.ToDateOnlyPeriod(request.Person.PermissionInformation.DefaultTimeZone())).ToList();
-
-			requiredForProcessingAbsenceRequest.RequestApprovalService?.ScheduleChangedCallback(scheduleDaysBefore, scheduleDaysAfter);
 		}
 
 		public abstract void Process(IAbsenceRequest absenceRequest,

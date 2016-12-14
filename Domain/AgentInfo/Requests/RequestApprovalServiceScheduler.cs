@@ -64,8 +64,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 			if (dayScheduleForAbsenceReqStart.FullAccess)
 			{
-
-				var scheduleDaysBefore = totalScheduleRange.ScheduledDayCollection(period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone())).ToList();
 				var layer = new AbsenceLayer(absence, period);
 				var personAbsence = new PersonAbsence(person, _scenario, layer);
 
@@ -77,11 +75,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					// Why this call again? None is overridden before
 					result = _scheduleDictionary.Modify(ScheduleModifier.Request, scheduleDaysForCheckingAccount, _newBusinessRules, _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
 				}
-
-				var scheduleDaysAfter = totalScheduleRange.ScheduledDayCollection(period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone())).ToList();
-
-				ScheduleChangedCallback(scheduleDaysBefore, scheduleDaysAfter);
-
+				
 				foreach (var response in result)
 				{
 					if (!response.Overridden)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -560,6 +561,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			{
 				SetAuthorizationServiceExpectations();
 				Expect.Call(part.Person).Return(dummyPerson).Repeat.AtLeastOnce();
+				Expect.Call(part.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>())).Repeat.AtLeastOnce();
 				Expect.Call(part.PersistableScheduleDataCollection()).Return(new List<IPersistableScheduleData>()).Repeat.AtLeastOnce();
 				Expect.Call(part.PersonAssignment()).Return(null);
 				Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2000, 1, 1), dummyPerson.PermissionInformation.DefaultTimeZone()));
