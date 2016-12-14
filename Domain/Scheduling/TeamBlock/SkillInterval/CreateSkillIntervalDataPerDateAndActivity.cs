@@ -7,32 +7,30 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 {
 	public interface ICreateSkillIntervalDataPerDateAndActivity
 	{
-		Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>> CreateFor(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> allSkillDays);
+		Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>> CreateFor(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> allSkillDays, IGroupPersonSkillAggregator groupPersonSkillAggregator);
 	}
 
 	public class CreateSkillIntervalDataPerDateAndActivity : ICreateSkillIntervalDataPerDateAndActivity
 	{
-		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly ICreateSkillIntervalDatasPerActivtyForDate _createSkillIntervalDatasPerActivtyForDate;
 		private readonly IMaxSeatSkillAggregator  _maxSeatSkillAggregator;
 		private readonly ISkillIntervalDataDivider  _intervalDataDivider;
 
-		public CreateSkillIntervalDataPerDateAndActivity(IGroupPersonSkillAggregator groupPersonSkillAggregator,
+		public CreateSkillIntervalDataPerDateAndActivity(
 		                                                 ICreateSkillIntervalDatasPerActivtyForDate
 			                                                 createSkillIntervalDatasPerActivtyForDate, IMaxSeatSkillAggregator maxSeatSkillAggregator, ISkillIntervalDataDivider intervalDataDivider)
 		{
-			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 			_createSkillIntervalDatasPerActivtyForDate = createSkillIntervalDatasPerActivtyForDate;
 			_maxSeatSkillAggregator = maxSeatSkillAggregator;
 			_intervalDataDivider = intervalDataDivider;
 		}
 
-		public Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>> CreateFor(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> allSkillDays)
+		public Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>> CreateFor(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> allSkillDays, IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			var dayIntervalDataPerDateAndActivity = new Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>>();
 			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers.ToList();
 			var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
-			var skills = _groupPersonSkillAggregator.AggregatedSkills(groupMembers, blockPeriod).ToList();
+			var skills = groupPersonSkillAggregator.AggregatedSkills(groupMembers, blockPeriod).ToList();
 			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(groupMembers , blockPeriod);
 			bool hasMaxSeatSkill = maxSeatSkills.Any();
 			foreach (var dateOnly in blockPeriod.DayCollection())

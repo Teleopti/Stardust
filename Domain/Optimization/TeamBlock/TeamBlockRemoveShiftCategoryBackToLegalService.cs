@@ -24,8 +24,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly IShiftCategoryLimitCounter _shiftCategoryLimitCounter;
 		private readonly IWorkShiftSelector _workShiftSelector;
+		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
-		public TeamBlockRemoveShiftCategoryBackToLegalService(ITeamBlockScheduler teamBlockScheduler, ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockClearer teamBlockClearer,  ITeamBlockSchedulingOptions teamBlockSchedulingOptions, IShiftCategoryWeekRemover shiftCategoryWeekRemover, IShiftCategoryPeriodRemover shiftCategoryPeriodRemover, ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, IShiftCategoryLimitCounter shiftCategoryLimitCounter, IWorkShiftSelector workShiftSelector)
+		public TeamBlockRemoveShiftCategoryBackToLegalService(ITeamBlockScheduler teamBlockScheduler, ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockClearer teamBlockClearer,  ITeamBlockSchedulingOptions teamBlockSchedulingOptions, IShiftCategoryWeekRemover shiftCategoryWeekRemover, IShiftCategoryPeriodRemover shiftCategoryPeriodRemover, ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, IShiftCategoryLimitCounter shiftCategoryLimitCounter, IWorkShiftSelector workShiftSelector, IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			_teamBlockScheduler = teamBlockScheduler;
 			_teamInfoFactory = teamInfoFactory;
@@ -37,6 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 			_shiftCategoryLimitCounter = shiftCategoryLimitCounter;
 			_workShiftSelector = workShiftSelector;
+			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros, ShiftNudgeDirective shiftNudgeDirective, IOptimizationPreferences optimizationPreferences)
@@ -74,11 +76,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					}
 
 					var allSkillDays = schedulingResultStateHolder.AllSkillDays();
-					var success = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions, rollbackService, resourceCalculateDelayer, allSkillDays, schedulingResultStateHolder.Schedules, shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder));
+					var success = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions, rollbackService, resourceCalculateDelayer, allSkillDays, schedulingResultStateHolder.Schedules, shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator);
 					if (success) continue;
 
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
-					success = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions, rollbackService, resourceCalculateDelayer, allSkillDays, schedulingResultStateHolder.Schedules, shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder));
+					success = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions, rollbackService, resourceCalculateDelayer, allSkillDays, schedulingResultStateHolder.Schedules, shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator);
 					if (success) continue;
 
 					_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);

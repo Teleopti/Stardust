@@ -24,16 +24,18 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 		private readonly IWorkShiftSelector _workShiftSelector;
+		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
 		public ShiftNudgeLater(ITeamBlockClearer teamBlockClearer,
 			ITeamBlockRestrictionAggregator teamBlockRestrictionAggregator, ITeamBlockScheduler teamBlockScheduler, 
-			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter, IWorkShiftSelector workShiftSelector)
+			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter, IWorkShiftSelector workShiftSelector, IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			_teamBlockClearer = teamBlockClearer;
 			_teamBlockRestrictionAggregator = teamBlockRestrictionAggregator;
 			_teamBlockScheduler = teamBlockScheduler;
 			_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
 			_workShiftSelector = workShiftSelector;
+			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
 		public bool Nudge(IScheduleDay scheduleDay, ISchedulePartModifyAndRollbackService rollbackService,
@@ -83,7 +85,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 			bool result = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, shiftDate, schedulingOptions,
 				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules,
-				new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Right), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder));
+				new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Right), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator);
 			if (!result)
 			{
 				rollbackService.Rollback();

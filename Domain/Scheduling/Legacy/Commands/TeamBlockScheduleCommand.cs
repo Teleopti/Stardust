@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 		private readonly IWorkShiftSelector _workShiftSelector;
+		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
 		public TeamBlockScheduleCommand(IFixedStaffSchedulingService fixedStaffSchedulingService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -54,7 +55,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamMatrixChecker teamMatrixChecker,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			PeriodExtractorFromScheduleParts periodExtractor,
-			IWorkShiftSelector workShiftSelector)
+			IWorkShiftSelector workShiftSelector,
+			IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -75,6 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 			_periodExtractor = periodExtractor;
 			_workShiftSelector = workShiftSelector;
+			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
 		public IWorkShiftFinderResultHolder Execute(ISchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
@@ -164,7 +167,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_teamBlockMaxSeatChecker,
 					validatedTeamBlockExtractor,
 					_teamMatrixChecker,
-					_workShiftSelector);
+					_workShiftSelector,
+					_groupPersonSkillAggregator);
 
 			return schedulingService;
 		}

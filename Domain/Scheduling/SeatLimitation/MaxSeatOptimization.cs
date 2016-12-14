@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly IsOverMaxSeat _isOverMaxSeat;
 		private readonly ScheduleChangesAffectedDates _scheduleChangesAffectedDates;
 		private readonly ScheduledTeamBlockInfoFactory _scheduledTeamBlockInfoFactory;
+		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
 		public MaxSeatOptimization(MaxSeatSkillDataFactory maxSeatSkillDataFactory,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
@@ -56,7 +57,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			IDeleteSchedulePartService deleteSchedulePartService,
 			IsOverMaxSeat isOverMaxSeat,
 			ScheduleChangesAffectedDates scheduleChangesAffectedDates,
-			ScheduledTeamBlockInfoFactory scheduledTeamBlockInfoFactory)
+			ScheduledTeamBlockInfoFactory scheduledTeamBlockInfoFactory,
+			IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			_maxSeatSkillDataFactory = maxSeatSkillDataFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
@@ -71,6 +73,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_isOverMaxSeat = isOverMaxSeat;
 			_scheduleChangesAffectedDates = scheduleChangesAffectedDates;
 			_scheduledTeamBlockInfoFactory = scheduledTeamBlockInfoFactory;
+			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
 		public void Optimize(DateOnlyPeriod period, 
@@ -108,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						var scheduleWasSuccess = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo,
 							datePoint, schedulingOptions, rollbackService,
 							new DoNothingResourceCalculateDelayer(), skillDaysForTeamBlockInfo.Union(allSkillDays), schedules,
-							new ShiftNudgeDirective(), businessRules);
+							new ShiftNudgeDirective(), businessRules, _groupPersonSkillAggregator);
 						var maxPeaksAfter = _maxSeatPeak.Fetch(scheduleCallback.ModifiedDates, skillDaysForTeamBlockInfo);
 
 						if (scheduleWasSuccess &&

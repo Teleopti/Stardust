@@ -13,16 +13,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 	{
 		private readonly ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
 		private readonly ISkillIntervalDataOpenHour _skillIntervalDataOpenHour;
+		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
-		public TeamBlockOpenHoursValidator(ICreateSkillIntervalDataPerDateAndActivity createSkillIntervalDataPerDateAndActivity, ISkillIntervalDataOpenHour skillIntervalDataOpenHour)
+		public TeamBlockOpenHoursValidator(ICreateSkillIntervalDataPerDateAndActivity createSkillIntervalDataPerDateAndActivity, ISkillIntervalDataOpenHour skillIntervalDataOpenHour, IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			_createSkillIntervalDataPerDateAndActivity = createSkillIntervalDataPerDateAndActivity;
 			_skillIntervalDataOpenHour = skillIntervalDataOpenHour;
+			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
 		public bool Validate(ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-			var dayIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo, schedulingResultStateHolder.AllSkillDays());
+			var dayIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo, schedulingResultStateHolder.AllSkillDays(), _groupPersonSkillAggregator);
 			var firstDate = findFirstNoneDayOffDayForAnyTeamMember(teamBlockInfo.BlockInfo.BlockPeriod,
 				teamBlockInfo.TeamInfo.GroupMembers.ToList(), schedulingResultStateHolder);
 			var firstDateActivities = dayIntervalDataPerDateAndActivity[firstDate].Keys.ToList();

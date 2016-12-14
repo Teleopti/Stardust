@@ -25,17 +25,19 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 		private readonly IWorkShiftSelector _workShiftSelector;
+		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
 		public ShiftNudgeEarlier(ITeamBlockClearer teamBlockClearer,
 			ITeamBlockRestrictionAggregator teamBlockRestrictionAggregator, ITeamBlockScheduler teamBlockScheduler, 
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
-			IWorkShiftSelector workShiftSelector)
+			IWorkShiftSelector workShiftSelector, IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			_teamBlockClearer = teamBlockClearer;
 			_teamBlockRestrictionAggregator = teamBlockRestrictionAggregator;
 			_teamBlockScheduler = teamBlockScheduler;
 			_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
 			_workShiftSelector = workShiftSelector;
+			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
 
@@ -99,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 			bool result = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, shiftDate, schedulingOptions,
 				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules,
-				new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Left), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder));
+				new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Left), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator);
 
 
 			if (!result)

@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IDayOffDecisionMaker _dayOffDecisionMaker;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly IWorkShiftSelector _workShiftSelector;
+		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
 		public TeamBlockDayOffOptimizerService(
 			ILockableBitArrayFactory lockableBitArrayFactory,
@@ -76,7 +77,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IOptimizerHelperHelper optimizerHelper,
 			IDayOffDecisionMaker dayOffDecisionMaker,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
-			IWorkShiftSelector workShiftSelector)
+			IWorkShiftSelector workShiftSelector,
+			IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			_lockableBitArrayFactory = lockableBitArrayFactory;
 			_lockableBitArrayChangesTracker = lockableBitArrayChangesTracker;
@@ -100,6 +102,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_dayOffDecisionMaker = dayOffDecisionMaker;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_workShiftSelector = workShiftSelector;
+			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
 		public void OptimizeDaysOff(
@@ -608,7 +611,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 
 				bool success = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions,
-					rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules, new ShiftNudgeDirective(), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder));
+					rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules, new ShiftNudgeDirective(), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator);
 				if (!success)
 					return false;
 			}

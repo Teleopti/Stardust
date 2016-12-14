@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 		private ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
 		private BlockInfo _blockInfo;
 		private IEnumerable<ISkillDay> _skillDays;
+		private readonly GroupPersonSkillAggregator groupPersonSkillAggregator = new GroupPersonSkillAggregator(new PersonalSkillsProvider());
 
 		[SetUp]
 		public void Setup()
@@ -58,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 
 			using (_mock.Record())
 			{
-				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _skillDays))
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _skillDays, groupPersonSkillAggregator))
 					.Return(skillIntervalDataPerDateAndActivity);
 				//sample date
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 17), intervalDataForDate1))
@@ -70,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 18), intervalDataForDate2))
 					.Return(dateTimePeriodDay2.TimePeriodLocal());
 			}
-			Assert.IsFalse(_target.Check(_skillDays, _teamBlockInfo));
+			Assert.IsFalse(_target.Check(_skillDays, _teamBlockInfo, groupPersonSkillAggregator));
 		}
 
 		[Test]
@@ -96,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 
 			using (_mock.Record())
 			{
-				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _skillDays))
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _skillDays, groupPersonSkillAggregator))
 					.Return(skillIntervalDataPerDateAndActivity);
 				//sample date
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 17), intervalDataForDate1))
@@ -108,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 18), intervalDataForDate2))
 					.Return(dateTimePeriodDay2.TimePeriodLocal());
 			}
-			Assert.IsTrue(_target.Check(_skillDays, _teamBlockInfo));
+			Assert.IsTrue(_target.Check(_skillDays, _teamBlockInfo, groupPersonSkillAggregator));
 		}
 
 		[Test]
@@ -134,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 
 			using (_mock.Record())
 			{
-				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _skillDays))
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _skillDays, groupPersonSkillAggregator))
 					.Return(skillIntervalDataPerDateAndActivity);
 				//sample date
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 17), intervalDataForDate1))
@@ -146,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 18), intervalDataForDate2))
 					.Return(null);
 			}
-			Assert.IsTrue(_target.Check(_skillDays, _teamBlockInfo));
+			Assert.IsTrue(_target.Check(_skillDays, _teamBlockInfo, groupPersonSkillAggregator));
 		}
 
 		[Test]
@@ -172,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 
 			using (_mock.Record())
 			{
-				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _skillDays))
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _skillDays, groupPersonSkillAggregator))
 					.Return(skillIntervalDataPerDateAndActivity);
 				//sample date
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 17), intervalDataForDate1))
@@ -186,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 				Expect.Call(_openHourForDate.OpenHours(new DateOnly(2013, 12, 18), intervalDataForDate2))
 					.Return(dateTimePeriodDay2.TimePeriodLocal());
 			}
-			Assert.IsTrue(_target.Check(_skillDays, _teamBlockInfo));
+			Assert.IsTrue(_target.Check(_skillDays, _teamBlockInfo, groupPersonSkillAggregator));
 		}
 	}
 }

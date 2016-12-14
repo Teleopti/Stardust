@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
@@ -27,13 +28,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private Dictionary<DateTime, ISkillIntervalData> _skillIntervalDataPerTimeSpan;
 		private ISkillIntervalData _skillIntervalData;
 
+		private readonly GroupPersonSkillAggregator groupPersonSkillAggregator = new GroupPersonSkillAggregator(new PersonalSkillsProvider());
+
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
 			_createSkillIntervalDataPerDateAndActivity = _mocks.StrictMock<ICreateSkillIntervalDataPerDateAndActivity>();
 			_dayIntervalDataCalculator = _mocks.StrictMock<IDayIntervalDataCalculator>();
-			_target = new ActivityIntervalDataCreator(_createSkillIntervalDataPerDateAndActivity, _dayIntervalDataCalculator);
+			_target = new ActivityIntervalDataCreator(_createSkillIntervalDataPerDateAndActivity, _dayIntervalDataCalculator, groupPersonSkillAggregator);
 			_teamBlockInfo = _mocks.StrictMock<ITeamBlockInfo>();
 			_skillIntervalDatasPerActivity = new Dictionary<IActivity, IList<ISkillIntervalData>>();
 			_skillIntervalData = new SkillIntervalData(new DateTimePeriod(), 77, 76, 1, null, null);
@@ -54,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var skillDays = Enumerable.Empty<ISkillDay>();
 			using (_mocks.Record())
 			{
-				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, skillDays))
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, skillDays, groupPersonSkillAggregator))
 						.Return(_skillIntervalDatasPerActivityAndDate);
 				Expect.Call(_dayIntervalDataCalculator.Calculate(_skillIntervalDataListPerDate, DateOnly.MinValue))
 						.Return(_skillIntervalDataPerTimeSpan);

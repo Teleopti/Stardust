@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;
 		private readonly IWorkShiftSelector _workShiftSelector;
+		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
 		public ScheduleOvertimeOnNonScheduleDays(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockScheduler teamBlockScheduler,
@@ -32,7 +33,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamInfoFactory teamInfoFactory,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor,
-			IWorkShiftSelector workShiftSelector)
+			IWorkShiftSelector workShiftSelector,
+			IGroupPersonSkillAggregator groupPersonSkillAggregator) //heres the spot!
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockScheduler = teamBlockScheduler;
@@ -42,6 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 			_weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
 			_workShiftSelector = workShiftSelector;
+			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
 		public void SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences, IResourceCalculateDelayer resourceCalculateDelayer)
@@ -71,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var teamInfo = _teamInfoFactory.CreateTeamInfo(stateHolder.SchedulingResultState.PersonsInOrganization, agent, date, _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, new[] { scheduleDay }));
 			var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, date, schedulingOptions.BlockFinder(), true);
 			_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, date, schedulingOptions, rollbackService, resourceCalculateDelayer,
-				stateHolder.SchedulingResultState.AllSkillDays(), stateHolder.SchedulingResultState.Schedules, shiftNudgeDirective, createRules(overtimePreferences));
+				stateHolder.SchedulingResultState.AllSkillDays(), stateHolder.SchedulingResultState.Schedules, shiftNudgeDirective, createRules(overtimePreferences), _groupPersonSkillAggregator);
 		}
 
 		private ShiftNudgeDirective createShiftNudgeDirective(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences)

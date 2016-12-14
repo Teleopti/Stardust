@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockSteadyStateValidator _teamTeamBlockSteadyStateValidator;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly IWorkShiftSelector _workShiftSelector;
+		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly RestrictionOverLimitValidator _teamBlockOptimizationLimits;
 
 		public TeamBlockIntradayOptimizationService(ITeamBlockGenerator teamBlockGenerator,
@@ -54,7 +55,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
 			ITeamBlockSteadyStateValidator teamTeamBlockSteadyStateValidator,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
-			IWorkShiftSelector workShiftSelector)
+			IWorkShiftSelector workShiftSelector,
+			IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			_teamBlockScheduler = teamBlockScheduler;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
@@ -66,6 +68,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamTeamBlockSteadyStateValidator = teamTeamBlockSteadyStateValidator;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_workShiftSelector = workShiftSelector;
+			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 			_teamBlockGenerator = teamBlockGenerator;
 			_teamBlockOptimizationLimits = teamBlockOptimizationLimits;
 		}
@@ -153,7 +156,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			
 				var success = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, datePoint, schedulingOptions,
 					schedulePartModifyAndRollbackService,
-					resourceCalculateDelayer, skillDays.ToSkillDayEnumerable(), scheduleDictionary, new ShiftNudgeDirective(), businessRuleCollection);
+					resourceCalculateDelayer, skillDays.ToSkillDayEnumerable(), scheduleDictionary, new ShiftNudgeDirective(), businessRuleCollection, _groupPersonSkillAggregator);
 				if (!success)
 				{
 					var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingIntraday + Resources.Colon + Resources.RollingBackSchedulesFor + " " +

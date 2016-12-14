@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 								IEnumerable<ISkillDay> allSkillDays,
 								IScheduleDictionary schedules,
 								ShiftNudgeDirective shiftNudgeDirective,
-								INewBusinessRuleCollection businessRules);
+								INewBusinessRuleCollection businessRules,
+								IGroupPersonSkillAggregator groupPersonSkillAggregator);
 	}
 
 	public class TeamBlockScheduler : ITeamBlockScheduler
@@ -32,16 +33,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ITeamBlockRoleModelSelector _roleModelSelector;
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
+		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
 		public TeamBlockScheduler(ITeamBlockSingleDayScheduler singleDayScheduler,
 		                          ITeamBlockRoleModelSelector roleModelSelector,
 									ITeamBlockClearer teamBlockClearer, 
-									ITeamBlockSchedulingOptions teamBlockSchedulingOptions)
+									ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
+									IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			_singleDayScheduler = singleDayScheduler;
 			_roleModelSelector = roleModelSelector;
 			_teamBlockClearer = teamBlockClearer;
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
+			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
@@ -55,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IEnumerable<ISkillDay> allSkillDays,
 			IScheduleDictionary schedules,
 			ShiftNudgeDirective shiftNudgeDirective,
-			INewBusinessRuleCollection businessRules)
+			INewBusinessRuleCollection businessRules, IGroupPersonSkillAggregator groupPersonSkillAggregator)
 
 		{
 			var teamInfo = teamBlockInfo.TeamInfo;
@@ -63,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (selectedTeamMembers.IsEmpty())
 				return true;
 			IShiftProjectionCache roleModelShift = _roleModelSelector.Select(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(),
-				schedulingOptions, shiftNudgeDirective.EffectiveRestriction);
+				schedulingOptions, shiftNudgeDirective.EffectiveRestriction, groupPersonSkillAggregator);
 
 			var cancelMe = false;
 			if (roleModelShift == null)
@@ -89,7 +93,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 					schedulingOptions.NotAllowedShiftCategories.Add(roleModelShift.TheMainShift.ShiftCategory);
 					roleModelShift = _roleModelSelector.Select(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(),
-						schedulingOptions, shiftNudgeDirective.EffectiveRestriction);
+						schedulingOptions, shiftNudgeDirective.EffectiveRestriction, _groupPersonSkillAggregator);
 					success = tryScheduleBlock(workShiftSelector, teamBlockInfo, schedulingOptions, selectedBlockDays,
 						roleModelShift, rollbackService, resourceCalculateDelayer, allSkillDays, schedules, shiftNudgeDirective, businessRules, ()=>
 						{
@@ -113,7 +117,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (!success && _teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(schedulingOptions))
 			{
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
-				roleModelShift = _roleModelSelector.Select(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(),schedulingOptions, shiftNudgeDirective.EffectiveRestriction);		
+				roleModelShift = _roleModelSelector.Select(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(),schedulingOptions, shiftNudgeDirective.EffectiveRestriction, _groupPersonSkillAggregator);		
 				success = tryScheduleBlock(workShiftSelector, teamBlockInfo, schedulingOptions, selectedBlockDays, roleModelShift, rollbackService, resourceCalculateDelayer, allSkillDays, schedules, shiftNudgeDirective, businessRules, ()=>
 				{
 					cancelMe = true;

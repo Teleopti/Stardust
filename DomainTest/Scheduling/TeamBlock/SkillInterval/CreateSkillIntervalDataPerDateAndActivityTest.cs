@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
@@ -59,8 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 			_blockInfo = new BlockInfo(new DateOnlyPeriod(2014,05,28,2014,05,28));
 			_skill1 = SkillFactory.CreateSkill("skill1");
 			_maxSeatSkill = SkillFactory.CreateSkill("maxSeatSkill1");
-			_target = new CreateSkillIntervalDataPerDateAndActivity(_groupPersonSkillAggregator,
-				_createSkillIntervalDatasPerActivtyForDate, _maxSeatSkillAggregator, _intervalDataDivider);
+			_target = new CreateSkillIntervalDataPerDateAndActivity(_createSkillIntervalDatasPerActivtyForDate, _maxSeatSkillAggregator, _intervalDataDivider);
 		}
 
 		[Test]
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 			}
 			using (_mock.Playback() )
 			{
-				var result =  _target.CreateFor(_teamBlockInfo, skillDays);
+				var result =  _target.CreateFor(_teamBlockInfo, skillDays, _groupPersonSkillAggregator);
 				Assert.AreEqual(2,result.Count );
 			}
 		}
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 			}
 			using (_mock.Playback())
 			{
-				var result = _target.CreateFor(_teamBlockInfo, skillDays);
+				var result = _target.CreateFor(_teamBlockInfo, skillDays, _groupPersonSkillAggregator);
 				Assert.AreEqual(2, result.Count);
 			}
 		}
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 			}
 			using (_mock.Playback())
 			{
-				var result = _target.CreateFor(_teamBlockInfo, skillDays);
+				var result = _target.CreateFor(_teamBlockInfo, skillDays, _groupPersonSkillAggregator);
 				Assert.AreEqual(2, result.Count);
 			}
 		}

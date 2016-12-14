@@ -12,14 +12,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ITeamBlockRoleModelSelector _roleModelSelector;
 		private readonly ITeamBlockSingleDayScheduler _singleDayScheduler;
 		private readonly IWorkShiftSelector _workShiftSelector;
+		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
 		public ShiftProjectionCachesForIntraInterval(ITeamBlockRoleModelSelector roleModelSelector, 
 																								ITeamBlockSingleDayScheduler singleDayScheduler,
-																								IWorkShiftSelector workShiftSelector)
+																								IWorkShiftSelector workShiftSelector,
+																								IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			_roleModelSelector = roleModelSelector;
 			_singleDayScheduler = singleDayScheduler;
 			_workShiftSelector = workShiftSelector;
+			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
 		public IList<IWorkShiftCalculationResultHolder> Execute(
@@ -35,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (selectedTeamMembers.IsEmpty())
 				return resultList;
 
-			var roleModelShift = _roleModelSelector.Select(schedulingResultStateHolder.Schedules, schedulingResultStateHolder.AllSkillDays(), _workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(), schedulingOptions, new EffectiveRestriction());
+			var roleModelShift = _roleModelSelector.Select(schedulingResultStateHolder.Schedules, schedulingResultStateHolder.AllSkillDays(), _workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(), schedulingOptions, new EffectiveRestriction(), _groupPersonSkillAggregator);
 
 			if (roleModelShift == null)
 				return resultList;

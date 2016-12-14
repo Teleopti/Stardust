@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         private readonly IValidatedTeamBlockInfoExtractor  _validatedTeamBlockExtractor;
 	    private readonly ITeamMatrixChecker _teamMatrixChecker;
 	    private readonly IWorkShiftSelector _workShiftSelector;
+	    private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
 	    public TeamBlockSchedulingService
 		    (ISchedulingOptions schedulingOptions, ITeamInfoFactory teamInfoFactory, ITeamBlockScheduler teamBlockScheduler,
@@ -42,7 +43,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			    IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, ITeamBlockMaxSeatChecker teamBlockMaxSeat,
 			    IValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor,
 			ITeamMatrixChecker teamMatrixChecker,
-			IWorkShiftSelector workShiftSelector)
+			IWorkShiftSelector workShiftSelector,
+			IGroupPersonSkillAggregator groupPersonSkillAggregator)
 	    {
 		    _teamInfoFactory = teamInfoFactory;
 		    _teamBlockScheduler = teamBlockScheduler;
@@ -52,6 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    _validatedTeamBlockExtractor = validatedTeamBlockExtractor;
 		    _teamMatrixChecker = teamMatrixChecker;
 		    _workShiftSelector = workShiftSelector;
+		    _groupPersonSkillAggregator = groupPersonSkillAggregator;
 		    _schedulingOptions = schedulingOptions;
 	    }
 
@@ -127,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 schedulePartModifyAndRollbackService.ClearModificationCollection();
 	            if (_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, datePointer, _schedulingOptions,
 	                                                          schedulePartModifyAndRollbackService,
-	                                                         resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules, new ShiftNudgeDirective(), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder)))
+	                                                         resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules, new ShiftNudgeDirective(), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator))
 		            verifyScheduledTeamBlock(selectedPersons, schedulePartModifyAndRollbackService, datePointer,
 		                                     dateOnlySkipList, teamBlockInfo, isCancelled, schedulingResultStateHolder.SkillDays);
 				else

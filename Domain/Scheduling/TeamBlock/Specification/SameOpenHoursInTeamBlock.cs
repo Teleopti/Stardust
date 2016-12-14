@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
 {
 	public interface ISameOpenHoursInTeamBlock
 	{
-		bool Check(IEnumerable<ISkillDay> allSkillDays, ITeamBlockInfo skillDays);
+		bool Check(IEnumerable<ISkillDay> allSkillDays, ITeamBlockInfo skillDays, IGroupPersonSkillAggregator groupPersonSkillAggregator);
 	}
 
 	public class SameOpenHoursInTeamBlock : ISameOpenHoursInTeamBlock
@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
 			_createSkillIntervalDataPerDateAndActivity = createSkillIntervalDataPerDateAndActivity;
 		}
 
-		public bool Check(IEnumerable<ISkillDay> allSkillDays, ITeamBlockInfo teamBlockInfo)
+		public bool Check(IEnumerable<ISkillDay> allSkillDays, ITeamBlockInfo teamBlockInfo, IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
-			var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo, allSkillDays);
+			var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo, allSkillDays, groupPersonSkillAggregator);
 
 			var dates = skillIntervalDataPerDateAndActivity.Keys;
 			TimePeriod? sampleOpenHour = null;
