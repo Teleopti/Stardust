@@ -25,6 +25,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	    }
 
 		[Test]
+		public void ShouldMatchAllValuesInGivenTeamsWithEmptyCriteria()
+		{
+			var crit = new PersonFinderSearchCriteria(new Dictionary<PersonFinderField, string>(), 10,
+				new DateOnly(2012, 1, 1), new Dictionary<string, bool>(), new DateOnly(2011, 12, 1));
+			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
+			_target.FindInTeams(crit, new []{team1Id});
+			Assert.That(crit.TotalRows, Is.EqualTo(1));
+		}
+
+		[Test]
 		public void ShouldMatchAllValuesInAllCriteriaInGivenTeams()
 		{
 			var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "Ashley Agent", 10,

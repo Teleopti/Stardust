@@ -106,6 +106,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			personFinderSearchCriteria.TotalRows = 0;
 			var cultureId = Domain.Security.Principal.TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
+			if (personFinderSearchCriteria.SearchCriterias.Count == 0 && teamIds.Length == 0)
+			{
+				return;
+			}
 
 			var minDate = new DateOnly(1753, 1, 1);
 			if (personFinderSearchCriteria.TerminalDate < minDate)
