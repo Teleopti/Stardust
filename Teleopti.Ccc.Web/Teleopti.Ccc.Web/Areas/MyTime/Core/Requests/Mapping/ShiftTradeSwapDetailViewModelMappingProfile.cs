@@ -39,7 +39,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.From, o => o.MapFrom(s => s.SchedulePartFrom))
 				.ForMember(d=> d.TimeLineHours, o=>o.MapFrom(s=> _timelineViewModelFactory.CreateTimeLineHours(createTimelinePeriod(s))))
 				.ForMember(d=> d.TimeLineStartDateTime, o=>o.MapFrom(s=> createTimelinePeriod(s).StartDateTime))
-				.ForMember(d => d.Date, o => o.MapFrom(s => s.DateFrom.Date));
+				.ForMember(d => d.Date, o => o.ResolveUsing(
+					s => DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(s.DateFrom.Date, TimeZoneInfo.Utc))); // the source is using CultureInfo.CurrentCulture.Calendar
 
 			CreateMap<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>()
 				.ConvertUsing(o =>

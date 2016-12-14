@@ -218,12 +218,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var from = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			var to = new DateTime(2001, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+			var expected = "2001-01-01T00:00:00.0000000";
 
 			var shiftTrade = CreateShiftTrade(from, to, null, null);
 
 			var result = Mapper.Map<IShiftTradeSwapDetail, ShiftTradeSwapDetailsViewModel>(shiftTrade.ShiftTradeSwapDetails.First());
 
-			result.Date.Should().Be.EqualTo(from);
+			result.Date.Should().Be.EqualTo(expected);
 		}		
 		
 		[Test]

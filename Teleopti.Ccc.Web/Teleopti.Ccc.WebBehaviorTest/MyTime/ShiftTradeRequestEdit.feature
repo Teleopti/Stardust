@@ -172,6 +172,38 @@ Scenario: Show schedules of the shift trade
 	| Start time | 12:00 |
 	| End time   | 22:00 |
 
+Scenario: shift trade date should in sync 
+	Given I have the role 'Full access to mytime'
+	And I am located in Hawaii
+	And Ashley Andeen is located in Hawaii
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team       | The team   |
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category        | Day              |
+	| Lunch3HoursAfterStart | True             |
+	And 'Ashley Andeen' has a shift with
+	| Field          | Value            |
+	| StartTime      | 2030-01-01 12:00 |
+	| EndTime        | 2030-01-01 22:00 |
+	| Shift category | Day              |
+	And I have created a shift trade request
+	| Field    | Value         |
+	| To       | Ashley Andeen |
+	| DateTo   | 2030-01-01    |
+	| DateFrom | 2030-01-01    |
+	| Pending  | True          |
+	And I am viewing requests
+	When I click on the existing request in the list
+	Then I should see shift trade date as '2030-01-01'
+	And I should see trade date in detail as '2030-01-01'
+
 Scenario: Show day off in a shifttrade
 	Given I have the role 'Full access to mytime'
 	And there is a dayoff with

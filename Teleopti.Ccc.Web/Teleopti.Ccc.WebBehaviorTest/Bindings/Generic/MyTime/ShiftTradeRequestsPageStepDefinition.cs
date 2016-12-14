@@ -261,6 +261,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertFirstContains(".request-text", fiftyFirstCharsOfMessage);
 		}
 
+		[Then(@"I should see trade date in detail as '(.*)'")]
+		public void ThenIShouldSeeTradeDateInDetail(string date)
+		{
+			Browser.Interactions.AssertFirstContains(".trade-day-detail .trade-date", date);
+		}
+
+		[Then(@"I should see shift trade date as '(.*)'")]
+		public void ThenIShouldSeeShiftTradeDate(string date)
+		{
+			Browser.Interactions.AssertFirstContains(".request-body .request-data-date", date);
+		}
+
 		[When(@"I enter subject '(.*)'")]
 		public void WhenIEnterSubject(string subject)
 		{
