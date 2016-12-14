@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Repositories;
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 		private readonly IExtractBudgetGroupPeriods _extractBudgetGroupPeriod;
 		private readonly IAbsenceTimeProviderCache _absenceTimeProviderCache;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(AbsenceTimeProvider));
 
 		public AbsenceTimeProvider(	ILoggedOnUser loggedOnUser, 
 									IScenarioRepository scenarioRepository, 
@@ -57,7 +59,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var absenceAgentses = target as IList<AbsenceAgents> ?? target.ToList();
 			foreach (var payloadWorkTime in absenceTime)
 			{
-				var absenceAgent = absenceAgentses.First(a => a.Date == payloadWorkTime.BelongsToDate);
+				var absenceAgent = absenceAgentses.FirstOrDefault(a => a.Date == payloadWorkTime.BelongsToDate);
+				if (absenceAgent == null)
+				{
+					var absenceAgentsDaysStr = String.Join(", ", absenceAgentses.Select(a => "" + a.Date.Day + " " + a.Date.Kind));
+					var payloadWorkTimeStr = payloadWorkTime.BelongsToDate.Day + " " + payloadWorkTime.BelongsToDate.Kind;
+					Logger.Warn($"Date mismatch: {absenceAgentsDaysStr} <-> {payloadWorkTimeStr}");
+					continue;
+				}
 				absenceAgent.AbsenceTime += TimeSpan.FromTicks(payloadWorkTime.TotalContractTime).TotalMinutes;
 				absenceAgent.HeadCounts += payloadWorkTime.HeadCounts;
 			}
