@@ -21,11 +21,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OvertimeRelativeDifferenceCalculator>().As<IOvertimeRelativeDifferenceCalculator>();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_CascadingScheduleOvertimeOnPrimary_41318))
 			{
-				builder.RegisterType<PersonSkillsUsePrimaryForOvertimeProvider>().As<IPersonSkillsForOvertimeProvider>().SingleInstance();
+				builder.RegisterType<PersonSkillsUsePrimaryForScheduleDaysOvertimeProvider>().As<IPersonSkillsForScheduleDaysOvertimeProvider>().SingleInstance();
 			}
 			else
 			{
-				builder.RegisterType<PersonSkillsUseAllForOvertimeProvider>().As<IPersonSkillsForOvertimeProvider>().SingleInstance();
+				builder.RegisterType<PersonSkillsUseAllForScheduleDaysOvertimeProvider>().As<IPersonSkillsForScheduleDaysOvertimeProvider>().SingleInstance();
 			}
 		}
 	}

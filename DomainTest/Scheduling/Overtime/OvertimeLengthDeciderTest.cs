@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             _target = new OvertimeLengthDecider(_skillResolutionProvider, _overtimeSkillStaffPeriodToSkillIntervalDataMapper,
                                                 _overtimeSkillIntervalDataDivider, ()=>_schedulingResultStateHolder, 
 												_calculateBestOvertime, _overtimePeriodValueMapper,
-												_overtimeSkillIntervalDataAggregator, new PersonSkillsUseAllForOvertimeProvider());
+												_overtimeSkillIntervalDataAggregator, new PersonSkillsUseAllForScheduleDaysOvertimeProvider());
         }
 
 		[Test]

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
         private readonly ICalculateBestOvertime _calculateBestOvertime;
         private readonly IOvertimeSkillIntervalDataAggregator _overtimeSkillIntervalDataAggregator;
-	    private readonly IPersonSkillsForOvertimeProvider _personSkillsForOvertimeProvider;
+	    private readonly IPersonSkillsForScheduleDaysOvertimeProvider _personSkillsForScheduleDaysOvertimeProvider;
 
 
 	    public OvertimeLengthDecider(ISkillResolutionProvider skillResolutionProvider,
@@ -27,12 +27,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
                                      IOvertimeSkillIntervalDataDivider overtimeSkillIntervalDataDivider,
                                      Func<ISchedulingResultStateHolder> schedulingResultStateHolder, ICalculateBestOvertime calculateBestOvertime, OvertimePeriodValueMapper overtimePeriodValueMapper, 
                                      IOvertimeSkillIntervalDataAggregator overtimeSkillIntervalDataAggregator,
-																		 IPersonSkillsForOvertimeProvider personSkillsForOvertimeProvider
+																		 IPersonSkillsForScheduleDaysOvertimeProvider personSkillsForScheduleDaysOvertimeProvider
 			)
         {
             _overtimePeriodValueMapper = overtimePeriodValueMapper;
             _overtimeSkillIntervalDataAggregator = overtimeSkillIntervalDataAggregator;
-	        _personSkillsForOvertimeProvider = personSkillsForOvertimeProvider;
+	        _personSkillsForScheduleDaysOvertimeProvider = personSkillsForScheduleDaysOvertimeProvider;
 	        _skillResolutionProvider = skillResolutionProvider;
             _overtimeSkillStaffPeriodToSkillIntervalDataMapper = overtimeSkillStaffPeriodToSkillIntervalDataMapper;
             _overtimeSkillIntervalDataDivider = overtimeSkillIntervalDataDivider;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 		public IEnumerable<DateTimePeriod> Decide(IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay, IActivity activity, MinMax<TimeSpan> duration, MinMax<TimeSpan> specifiedPeriod, bool onlyAvailableAgents)
         {
-            var skills = _personSkillsForOvertimeProvider.Execute(person.Period(dateOnly), activity).ToList();
+            var skills = _personSkillsForScheduleDaysOvertimeProvider.Execute(person.Period(dateOnly), activity).ToList();
             if (skills.Count == 0) return Enumerable.Empty<DateTimePeriod>();
             var minimumResolution = _skillResolutionProvider.MinimumResolution(skills);
             var skillDays = _schedulingResultStateHolder().SkillDaysOnDateOnly(new List<DateOnly> { dateOnly.AddDays(-1), dateOnly, dateOnly.AddDays(1) });

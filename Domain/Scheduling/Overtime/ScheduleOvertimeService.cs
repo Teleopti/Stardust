@@ -27,21 +27,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IGridlockManager _gridlockManager;
 		private readonly ITimeZoneGuard _timeZoneGuard;
-		private readonly IPersonSkillsForOvertimeProvider _personSkillsForOvertimeProvider;
+		private readonly IPersonSkillsForScheduleDaysOvertimeProvider _personSkillsForScheduleDaysOvertimeProvider;
 
 		public ScheduleOvertimeService(IOvertimeLengthDecider overtimeLengthDecider, 
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IGridlockManager gridlockManager,
 			ITimeZoneGuard timeZoneGuard,
-			IPersonSkillsForOvertimeProvider personSkillsForOvertimeProvider)
+			IPersonSkillsForScheduleDaysOvertimeProvider personSkillsForScheduleDaysOvertimeProvider)
 		{
 			_overtimeLengthDecider = overtimeLengthDecider;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_gridlockManager = gridlockManager;
 			_timeZoneGuard = timeZoneGuard;
-			_personSkillsForOvertimeProvider = personSkillsForOvertimeProvider;
+			_personSkillsForScheduleDaysOvertimeProvider = personSkillsForScheduleDaysOvertimeProvider;
 		}
 
 		public bool SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences, IResourceCalculateDelayer resourceCalculateDelayer, DateOnly dateOnly, INewBusinessRuleCollection rules, IScheduleTagSetter scheduleTagSetter)
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 		private IAggregateSkill createAggregateSkill(IPerson person, DateOnly dateOnly, IActivity activity)
 		{
-			var skills = _personSkillsForOvertimeProvider.Execute(person.Period(dateOnly), activity).ToList();
+			var skills = _personSkillsForScheduleDaysOvertimeProvider.Execute(person.Period(dateOnly), activity).ToList();
 
 			if (skills.IsEmpty()) return null;
 

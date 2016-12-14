@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
-	public class PersonSkillsUseAllForOvertimeProvider : IPersonSkillsForOvertimeProvider
+	public class PersonSkillsUseAllForScheduleDaysOvertimeProvider : IPersonSkillsForScheduleDaysOvertimeProvider
 	{
 		public IEnumerable<ISkill> Execute(IPersonPeriod personPeriod, IActivity activity)
 		{
