@@ -13,6 +13,9 @@
 	.relative {
 		position: relative;
 	}
+	.inline-block{
+		display: inline-block;
+	}
 	.start-ellipsis, .end-ellipsis {
 		position: absolute;
 		top: 2px;
@@ -171,6 +174,7 @@
 	}
 	.con-footer.teamschedule-footer {
 		border-top: 1px solid $gray026;
+		min-height: 60px;
 
 		.notice-spacer {
 			float: left;
@@ -197,7 +201,7 @@
 //Header
 .teamschedule-header {
 	padding: .8em .5em .2em .5em;
-	min-height: 56px;
+	min-height: 60px;
 	border-bottom: 1px solid $gray026;
 	display: -ms-flexbox;
 	display: flex;
