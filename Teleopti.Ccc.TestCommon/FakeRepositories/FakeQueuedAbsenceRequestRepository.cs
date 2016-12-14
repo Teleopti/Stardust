@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Util;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -14,7 +13,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IQueuedAbsenceRequest entity)
 		{
-			_queuedRequests.Add(entity);
+			if (_queuedRequests.Count == 0)
+			{
+				_queuedRequests.Add(entity);
+				return;
+			}
+
+			foreach (var queuedRequest in _queuedRequests)
+			{
+				if (queuedRequest.PersonRequest != entity.PersonRequest) continue;
+				_queuedRequests.Remove(queuedRequest);
+				_queuedRequests.Add(entity);
+				return;
+			}
 		}
 
 		public void Remove(IQueuedAbsenceRequest entity)

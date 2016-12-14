@@ -58,12 +58,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 					throw;
 				}
 
+				checkAndProcessDeny(personRequest);
+				
 				if (_toggleManager.IsEnabled(Toggles.Wfm_Requests_ApprovingModifyRequests_41930))
 				{
-					if (personRequest.Request.Period != existingPeriod)
+					if (personRequest.Request.Period != existingPeriod && !personRequest.IsDenied)
 					{
 						var updatedRows = _queuedAbsenceRequestRepository.UpdateRequestPeriod(personRequest.Id.GetValueOrDefault(), personRequest.Request.Period);
-						if(updatedRows == 0)
+						if (updatedRows == 0)
 							throw new InvalidOperationException();
 					}
 						
@@ -72,12 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			else
 			{
 				personRequest = _mapper.Map<AbsenceRequestForm, IPersonRequest>(form);
-				var result = _absenceRequestSynchronousValidator.Validate(personRequest);
-				if (!result.IsValid)
-				{
-					personRequest.Deny(result.ValidationErrors, _personRequestCheckAuthorization, null,
-									   PersonRequestDenyOption.AutoDeny | result.DenyOption.GetValueOrDefault(PersonRequestDenyOption.None));
-				}
+				checkAndProcessDeny(personRequest);
 				_personRequestRepository.Add(personRequest);
 
 				if (!personRequest.IsDenied)
@@ -88,6 +85,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			}
 
 			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+		}
+
+		private void checkAndProcessDeny(IPersonRequest personRequest)
+		{
+			var result = _absenceRequestSynchronousValidator.Validate(personRequest);
+			if (!result.IsValid)
+			{
+				personRequest.Deny(result.ValidationErrors, _personRequestCheckAuthorization, null,
+									PersonRequestDenyOption.AutoDeny | result.DenyOption.GetValueOrDefault(PersonRequestDenyOption.None));
+			}
 		}
 	}
 }
