@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			set { _haltModify = value; }
 		}
 
-		public bool Configurable => true;
+		public bool Configurable => false;
 
 		public bool ForDelete { get; set; }
 
