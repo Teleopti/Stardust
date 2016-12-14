@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
     public interface IOvertimeLengthDecider
     {
-		IEnumerable<DateTimePeriod> Decide(IOvertimePreferences overtimePreferences, IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay, IActivity activity, MinMax<TimeSpan> duration, MinMax<TimeSpan> specifiedPeriod, bool onlyAvailableAgents);
+		IEnumerable<DateTimePeriod> Decide(IOvertimePreferences overtimePreferences, IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay, MinMax<TimeSpan> duration, MinMax<TimeSpan> specifiedPeriod, bool onlyAvailableAgents);
     }
 
     public class OvertimeLengthDecider : IOvertimeLengthDecider
@@ -40,9 +40,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             _calculateBestOvertime = calculateBestOvertime;
         }
 
-		public IEnumerable<DateTimePeriod> Decide(IOvertimePreferences overtimePreferences, IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay, IActivity activity, MinMax<TimeSpan> duration, MinMax<TimeSpan> specifiedPeriod, bool onlyAvailableAgents)
+		public IEnumerable<DateTimePeriod> Decide(IOvertimePreferences overtimePreferences, IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay, MinMax<TimeSpan> duration, MinMax<TimeSpan> specifiedPeriod, bool onlyAvailableAgents)
         {
-            var skills = _personSkillsForScheduleDaysOvertimeProvider.Execute(overtimePreferences, person.Period(dateOnly), activity).ToList();
+            var skills = _personSkillsForScheduleDaysOvertimeProvider.Execute(overtimePreferences, person.Period(dateOnly)).ToList();
             if (skills.Count == 0) return Enumerable.Empty<DateTimePeriod>();
             var minimumResolution = _skillResolutionProvider.MinimumResolution(skills);
             var skillDays = _schedulingResultStateHolder().SkillDaysOnDateOnly(new List<DateOnly> { dateOnly.AddDays(-1), dateOnly, dateOnly.AddDays(1) });

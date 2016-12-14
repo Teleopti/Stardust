@@ -16,11 +16,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			_personalSkillsProvider = personalSkillsProvider;
 		}
 
-		public IEnumerable<ISkill> Execute(IOvertimePreferences overtimePreferences, IPersonPeriod personPeriod, IActivity activity)
+		public IEnumerable<ISkill> Execute(IOvertimePreferences overtimePreferences, IPersonPeriod personPeriod)
 		{
 			return overtimePreferences.UseSkills == UseSkills.Primary ? 
-				new HashSet<ISkill>(_personalSkillsProvider.PersonSkills(personPeriod).Select(x => x.Skill)).Where(x => x.Activity.Equals(activity)) : 
-				_personSkillsUseAllForScheduleDaysOvertimeProvider.Execute(overtimePreferences, personPeriod, activity);
+				new HashSet<ISkill>(_personalSkillsProvider.PersonSkills(personPeriod).Select(x => x.Skill)).Where(x => x.Activity.Equals(overtimePreferences.SkillActivity)) : 
+				_personSkillsUseAllForScheduleDaysOvertimeProvider.Execute(overtimePreferences, personPeriod);
 		}
 	}
 }
