@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			TeamRepository.Add(team);
 			TeamRepository.Add(anotherTeam);
 			PermissionProvider.Enable();
-			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.TeamSchedule, team, date);
+			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, team, date);
 
 			var permittedHierachy = Target.GetPermittedTeamHierachy(date);
 
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			SiteRepository.Add(site);
 			TeamRepository.Add(team);
 			PermissionProvider.Enable();
-			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.TeamSchedule, team, date);
+			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, team, date);
 
 			var permittedHierachy = Target.GetPermittedTeamHierachy(date);
 

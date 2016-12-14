@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Web.Core
 				var teams = site.SortedTeamCollection.Where(t => t.IsChoosable);
 				foreach (var team in teams)
 				{
-					if (_permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule, date, team))
+					if (_permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, date, team))
 					{
 						siteViewModel.Children.Add(new TeamViewModel
 						{
