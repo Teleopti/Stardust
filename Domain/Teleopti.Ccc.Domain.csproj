@@ -1109,7 +1109,6 @@
     <Compile Include="Forecasting\Import\WorkloadDayOpenHoursDictionary.cs" />
     <Compile Include="Forecasting\ITaskOwnerPeriod.cs" />
     <Compile Include="Forecasting\OverrideTask.cs" />
-    <Compile Include="Forecasting\SkillMap_DEV.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacade.cs" />
     <Compile Include="Aop\Core\IAspect.cs" />
     <Compile Include="Aop\IReadModelUnitOfWorkAspect.cs" />
@@ -3115,9 +3114,6 @@
     <EmbeddedResource Include="SeatPlanning\SeatBooking.hbm.xml" />
     <EmbeddedResource Include="SeatPlanning\Seat.hbm.xml" />
     <EmbeddedResource Include="SeatPlanning\Location.hbm.xml" />
-    <EmbeddedResource Include="Forecasting\SkillMap_DEV.hbm.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityWorkDayRanks.hbm.xml" />
     <EmbeddedResource Include="Common\AgentBadgeTransaction.hbm.xml">
       <SubType>Designer</SubType>
