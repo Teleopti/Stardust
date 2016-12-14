@@ -124,6 +124,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithTeam(team1,"Team1")
 				.WithTeam(team2, "Team2");
 
+			AgentsInSite.Has(london, 20);
+
 			var org = Target.ForOrganization().Single();
 			
 			org.Id.Should().Be(london);
@@ -146,12 +148,39 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithTeam(team2, "Team2")
 				.WithSite(excludedSite);
 
+			AgentsInSite.Has(london, 20);
+			AgentsInSite.Has(excludedSite, 20);
+
 			var org = Target.ForOrganization().Single();
 
 			org.Id.Should().Be(london);
 			org.Name.Should().Be("London");
 			org.Teams.Select(t => t.Id).Should().Have.SameValuesAs(team1, team2);
 			org.Teams.Select(t => t.Name).Should().Have.SameValuesAs("Team1", "Team2");
+		}
+
+		[Test]
+		public void ShouldBuildForOrganizationExcludeSiteIfNoAgent()
+		{
+			var london = Guid.NewGuid();
+			var excludedSite = Guid.NewGuid();
+			var team1 = Guid.NewGuid();
+			var team2 = Guid.NewGuid();
+
+			Database
+				.WithSite(london, "London")
+				.WithTeam(team1, "Team1")
+				.WithSite(excludedSite, "excludedSite")
+				.WithTeam(team2, "Team2");
+
+			AgentsInSite.Has(london, 20);
+
+			var org = Target.ForOrganization().Single();
+
+			org.Id.Should().Be(london);
+			org.Name.Should().Be("London");
+			org.Teams.Select(t => t.Id).Should().Have.SameValuesAs(team1);
+			org.Teams.Select(t => t.Name).Should().Have.SameValuesAs("Team1");
 		}
 
 	}

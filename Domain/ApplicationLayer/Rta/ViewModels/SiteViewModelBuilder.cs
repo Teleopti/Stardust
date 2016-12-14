@@ -92,8 +92,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public IEnumerable<OrganizationSiteViewModel> ForOrganization()
 		{
 			var sites = allPermittedSites();
-			var org = from site in sites
-					  where site.TeamCollection.Count > 0
+			var numberOfAgents = sites.Any() ? _numberOfAgentsInSiteReader.FetchNumberOfAgents(sites.Select((s) => s.Id.Value)) : new Dictionary<Guid, int>();
+			var org = from num in numberOfAgents
+					  from site in sites
+					  where num.Key == site.Id.Value && num.Value > 0 && site.TeamCollection.Count > 0
 				select new OrganizationSiteViewModel
 				{
 					Id = site.Id.Value,
