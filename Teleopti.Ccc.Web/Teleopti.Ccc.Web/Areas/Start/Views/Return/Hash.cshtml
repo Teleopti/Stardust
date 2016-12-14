@@ -69,7 +69,9 @@
 					return;
 				}
 			}
-			window.location.replace(redirectUrl);
+			if (redirectUrl){
+				window.location.replace(redirectUrl);
+			}
 		}
 
 		function getParameterByName(name) {
