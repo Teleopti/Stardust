@@ -29,7 +29,6 @@ SET NOCOUNT ON
 
 --if empty input, then RETURN
 IF @search_criterias = '' RETURN
-SELECT @search_criterias = REPLACE(@search_criterias, '''', '') -- Remove all single quote to prevent SQL injection (Is that OK?)
 SELECT @search_criterias = REPLACE(@search_criterias, '%', '[%]') --make '%' valuable search value
 
 --declare
@@ -208,7 +207,7 @@ BEGIN
 			BEGIN
 			IF @valueClause <> '('
 				SELECT @valueClause = @valueClause + ' OR '
-			SELECT @valueClause = @valueClause + 'SearchValue LIKE N''%' + @searchKeyword + '%'''
+			SELECT @valueClause = @valueClause + 'SearchValue LIKE N''%' + REPLACE(@searchKeyword, '''', '''''') + '%'''
 			END
 			SELECT @notProcessedSearchValue = LTRIM(RTRIM(SUBSTRING(@notProcessedSearchValue, @keywordSplitterIndex + 1,
 			LEN(@notProcessedSearchValue) - @keywordSplitterIndex)))
@@ -217,7 +216,7 @@ BEGIN
 		SELECT @valueClause = @valueClause + ')'
 	END
 	ELSE
-		SELECT @valueClause = 'SearchValue like N''%' + @searchValue + '%'''
+		SELECT @valueClause = 'SearchValue like N''%' + REPLACE(@searchValue, '''', '''''') + '%'''
 
 	IF @valueClause <> '()'
 	BEGIN

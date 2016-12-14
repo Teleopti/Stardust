@@ -28,7 +28,6 @@ SET NOCOUNT ON
 
 --if empty input, then RETURN
 IF @teamIds = '' AND @search_criterias = '' RETURN
-SELECT @search_criterias = REPLACE(@search_criterias, '''', '') -- Remove all single quote to prevent SQL injection (Is that OK?)
 SELECT @search_criterias = REPLACE(@search_criterias, '%', '[%]') --make '%' valuable search value
 
 --declare
@@ -220,7 +219,7 @@ BEGIN
 			BEGIN
 			IF @valueClause <> '('
 				SELECT @valueClause = @valueClause + ' OR '
-			SELECT @valueClause = @valueClause + 'fp.SearchValue LIKE N''%' + @searchKeyword + '%'''
+			SELECT @valueClause = @valueClause + 'fp.SearchValue LIKE N''%' + REPLACE(@searchKeyword, '''', '''''') + '%'''
 			END
 			SELECT @notProcessedSearchValue = LTRIM(RTRIM(SUBSTRING(@notProcessedSearchValue, @keywordSplitterIndex + 1,
 			LEN(@notProcessedSearchValue) - @keywordSplitterIndex)))
@@ -229,7 +228,7 @@ BEGIN
 		SELECT @valueClause = @valueClause + ')'
 	END
 	ELSE
-		SELECT @valueClause = 'fp.SearchValue like N''%' + @searchValue + '%'''
+		SELECT @valueClause = 'fp.SearchValue like N''%' + REPLACE(@searchValue, '''', '''''') + '%'''
 	
 	SELECT @dynamicSQL = 'SELECT fp.PersonId FROM #teamId t '
 				 +'INNER JOIN ReadModel.FindPerson fp with (nolock)   ON t.tId = fp.TeamId '

@@ -106,7 +106,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.That(crit.TotalRows, Is.EqualTo(2));
 		}
 
-
+		[Test]
+		public void ShouldLoadPersonsByTeamContainingApostrophe()
+		{
+			var crit = new PersonFinderSearchCriteria(PersonFinderField.All,"\"X'mas\"",10,
+				new DateOnly(2016,1,1),new Dictionary<string,bool>(),new DateOnly(2011,12,1));
+			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
+			_target.Find(crit);
+			Assert.That(crit.TotalRows,Is.EqualTo(1));
+		}
 
 
 		[Test]
@@ -269,6 +277,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				.SetGuid("siteId", siteId)
 				.ExecuteUpdate();
 
-	    }
+			Session.CreateSQLQuery(
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType, TeamId, SiteId,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('C0E35119-4661-4A1B-8772-9B5E015B2564','Petter','Bay','137567','',NULL,'X''mas Team','B0E35119-4661-4A1B-8772-9B5E015B2564','Organization',:teamId, :siteId,:businessUnitId, :startDateTime, :endDateTime)")
+				.SetGuid("businessUnitId",buid)
+				.SetDateTime("startDateTime",new DateTime(2011,1,1))
+				.SetDateTime("endDateTime",new DateTime(2045,1,1))
+				.SetGuid("teamId",team1Id)
+				.SetGuid("siteId",siteId)
+				.ExecuteUpdate();
+
+		}
     }
 }
