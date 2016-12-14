@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 {
 	[DomainTest]
 	[TestFixture(true)]
-	//[TestFixture(false)]
+	[TestFixture(false)]
 	public class OvertimeOnScheduledDaysCascadingTest : IConfigureToggleManager
 	{
 		private readonly bool _resourcePlannerCascadingScheduleOvertimeOnPrimary41318;
