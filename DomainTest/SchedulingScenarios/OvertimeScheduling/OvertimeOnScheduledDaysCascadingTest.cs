@@ -92,7 +92,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		}
 
 		[Test]
-		[Ignore("41318")]
 		public void ShouldNotPlaceOverTimeShiftDueToNoUnderstaffingOnPrimarySkill()
 		{
 			var scenario = new Scenario("_");
@@ -112,7 +111,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			var agentAandB = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agentAandB.AddPeriodWithSkills(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB });
 			agentAandB.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
-			agentAandB.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
 			var assAandB = new PersonAssignment(agentAandB, scenario, dateOnly);
 			assAandB.AddActivity(activity, new TimePeriod(8, 0, 15, 0));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agentAandB }, new[] { assAandB }, new[] { skillDayA, skillDayB });
@@ -127,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 
 			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agentAandB].ScheduledDay(dateOnly) });
 
-			var overtimeWasPlaced =stateHolder.Schedules[agentAandB].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Any();
+			var overtimeWasPlaced =stateHolder.Schedules[agentAandB].ScheduledDay(dateOnly).PersonAssignment().OvertimeActivities().Any();
 			if (_resourcePlannerCascadingScheduleOvertimeOnPrimary41318)
 			{
 				overtimeWasPlaced.Should().Be.False();
@@ -140,7 +138,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 
 		public void Configure(FakeToggleManager toggleManager)
 		{
-			toggleManager.Enable(Toggles.ResourcePlanner_CascadingScheduleOvertimeOnPrimary_41318);
+			if (_resourcePlannerCascadingScheduleOvertimeOnPrimary41318)
+			{
+				toggleManager.Enable(Toggles.ResourcePlanner_CascadingScheduleOvertimeOnPrimary_41318);
+			}
 		}
 	}
 }

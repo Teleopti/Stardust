@@ -131,7 +131,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 
 		public void Configure(FakeToggleManager toggleManager)
 		{
-			toggleManager.Enable(Toggles.ResourcePlanner_CascadingScheduleOvertimeOnPrimary_41318);
+			if (_resourcePlannerCascadingScheduleOvertimeOnPrimary41318)
+			{
+				toggleManager.Enable(Toggles.ResourcePlanner_CascadingScheduleOvertimeOnPrimary_41318);
+			}
 		}
 	}
 }

@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterModule(new IntraIntervalOptimizationServiceModule(_configuration));
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();
 			builder.RegisterModule<BackToLegalShiftModule>();
-			builder.RegisterModule<ScheduleOvertimeModule>();
+			builder.RegisterModule(new ScheduleOvertimeModule(_configuration));
 
 			builder.RegisterType<ClassicScheduleCommand>().As<IClassicScheduleCommand>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleCommand>().InstancePerLifetimeScope().ApplyAspects();

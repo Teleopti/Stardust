@@ -526,6 +526,9 @@
     <Compile Include="ResourceCalculation\SkillStaffingIntervalLightModel.cs" />
     <Compile Include="ResourceCalculation\StaffingIntervalChange.cs" />
     <Compile Include="Scheduling\DoNothingResourceCalculateDelayer.cs" />
+    <Compile Include="Scheduling\Overtime\IPersonSkillsForOvertimeProvider.cs" />
+    <Compile Include="Scheduling\Overtime\PersonSkillsUseAllForOvertimeProvider.cs" />
+    <Compile Include="Scheduling\Overtime\PersonSkillsUsePrimaryForOvertimeProvider.cs" />
     <Compile Include="Scheduling\Rules\BusinessRuleConfigProvider.cs" />
     <Compile Include="Scheduling\SeatLimitation\DesktopMaxSeatCallback.cs" />
     <Compile Include="Scheduling\SeatLimitation\DoubleExtensions.cs" />

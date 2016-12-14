@@ -27,18 +27,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IGridlockManager _gridlockManager;
 		private readonly ITimeZoneGuard _timeZoneGuard;
+		private readonly IPersonSkillsForOvertimeProvider _personSkillsForOvertimeProvider;
 
 		public ScheduleOvertimeService(IOvertimeLengthDecider overtimeLengthDecider, 
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IGridlockManager gridlockManager,
-			ITimeZoneGuard timeZoneGuard)
+			ITimeZoneGuard timeZoneGuard,
+			IPersonSkillsForOvertimeProvider personSkillsForOvertimeProvider)
 		{
 			_overtimeLengthDecider = overtimeLengthDecider;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_gridlockManager = gridlockManager;
 			_timeZoneGuard = timeZoneGuard;
+			_personSkillsForOvertimeProvider = personSkillsForOvertimeProvider;
 		}
 
 		public bool SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences, IResourceCalculateDelayer resourceCalculateDelayer, DateOnly dateOnly, INewBusinessRuleCollection rules, IScheduleTagSetter scheduleTagSetter)
@@ -124,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 		private IAggregateSkill createAggregateSkill(IPerson person, DateOnly dateOnly, IActivity activity)
 		{
-			var skills = aggregateSkills(person, dateOnly).Where(x => x.Activity == activity).ToList();
+			var skills = _personSkillsForOvertimeProvider.Execute(person.Period(dateOnly), activity).ToList();
 
 			if (skills.IsEmpty()) return null;
 
@@ -142,19 +145,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			}
 
 			return aggregateSkillSkill;
-		}
-
-		private static IEnumerable<ISkill> aggregateSkills(IPerson person, DateOnly dateOnly)
-		{
-			var ret = new List<ISkill>();
-			var personPeriod = person.Period(dateOnly);
-
-			foreach (var personSkill in personPeriod.PersonSkillCollection)
-			{
-				if (!ret.Contains(personSkill.Skill))
-					ret.Add(personSkill.Skill);
-			}
-			return ret;
 		}
 
 		private IEnumerable<ISkillStaffPeriod> skillStaffPeriods(IAggregateSkill aggregateSkill, DateTime date, TimeZoneInfo timeZoneInfo)

@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			_rules = NewBusinessRuleCollection.Minimum();
 			_scheduleTagSetter = _mock.StrictMock<IScheduleTagSetter>();
 			_schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
-			_target = new ScheduleOvertimeService(_overtimeLengthDecider, _schedulePartModifyAndRollbackService, _schedulingResultStateHolder, new GridlockManager(), new FakeTimeZoneGuard());
+			_target = new ScheduleOvertimeService(_overtimeLengthDecider, _schedulePartModifyAndRollbackService, _schedulingResultStateHolder, new GridlockManager(), new FakeTimeZoneGuard(), new PersonSkillsUseAllForOvertimeProvider());
 			_person = PersonFactory.CreatePerson("person");
 			_activity = ActivityFactory.CreateActivity("activity");
 			_skill = SkillFactory.CreateSkill("skill");
