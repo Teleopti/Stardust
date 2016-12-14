@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				.SetGuid("businessUnitId",buid)
 				.SetDateTime("startDateTime",new DateTime(2011,1,1))
 				.SetDateTime("endDateTime",new DateTime(2045,1,1))
-				.SetGuid("teamId",team1Id)
+				.SetGuid("teamId",Guid.NewGuid())
 				.SetGuid("siteId",siteId)
 				.ExecuteUpdate();
 
