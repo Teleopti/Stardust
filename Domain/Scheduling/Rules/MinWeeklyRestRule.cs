@@ -86,8 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 					if (!_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(currentSchedules, personWeek.Week, weeklyRest))
 					{
 						string weeklyRestString = DateHelper.HourMinutesString(weeklyRest.TotalMinutes);
-						string message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
-							_businessRuleWeeklyRestErrorMessage, weeklyRestString);
+						var message = string.Format(_businessRuleWeeklyRestErrorMessage, weeklyRestString);
 						foreach (DateOnly dateOnly in personWeek.Week.DayCollection())
 						{
 							IBusinessRuleResponse response = createResponse(person, dateOnly, message,
@@ -95,7 +94,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 							responseList.Add(response);
 							oldResponses.Add(response);
 						}
-						// }
 					}
 				}
 			}
