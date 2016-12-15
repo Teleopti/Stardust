@@ -4,39 +4,24 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Helper
 {
-    public abstract class DatabaseTest
-    {
+    public abstract class DatabaseTest : INotCompatibleWithIoCTest
+	{
 	    private ISession _session;
 	    private IPerson _loggedOnPerson;
 	    private IUnitOfWork _unitOfWork;
 	    private SetupFixtureForAssembly.TestScope _loginWithOpenUnitOfWork;
 
-	    protected ISession Session
-	    {
-		    get { return _session; }
-	    }
-
-	    protected IPerson LoggedOnPerson
-	    {
-		    get { return _loggedOnPerson; }
-	    }
-
-	    protected IUnitOfWork UnitOfWork
-	    {
-		    get { return _unitOfWork; }
-	    }
-
-	    protected ICurrentUnitOfWork CurrUnitOfWork
-	    {
-		    get { return new ThisUnitOfWork(_unitOfWork);}
-	    }
-
-	    protected MockRepository Mocks { get; private set; }
+	    protected ISession Session => _session;
+		protected IPerson LoggedOnPerson => _loggedOnPerson;
+		protected IUnitOfWork UnitOfWork => _unitOfWork;
+		protected ICurrentUnitOfWork CurrUnitOfWork => new ThisUnitOfWork(_unitOfWork);
+		protected MockRepository Mocks { get; private set; }
 
         [SetUp]
         public void Setup()

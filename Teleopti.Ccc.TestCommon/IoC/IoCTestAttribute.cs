@@ -17,6 +17,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		void SimulateRestart();
 	};
 
+	public interface INotCompatibleWithIoCTest
+	{
+	}
+
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = false)]
 	public class IoCTestAttribute : Attribute, ITestAction, IIoCTestContext
 	{
@@ -56,6 +60,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public void BeforeTest(ITest testDetails)
 		{
 			_fixture = testDetails.Fixture;
+			if (_fixture is INotCompatibleWithIoCTest)
+				throw new NotSupportedException("This fixture (or base fixtures) is not compatible with a IoC test attributeDatabaseTest");
 			_service = new IoCTestService(testDetails, this);
 			buildContainer();
 			Startup(_container);
