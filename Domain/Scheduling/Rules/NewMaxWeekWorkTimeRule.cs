@@ -23,8 +23,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			_localizedMessage2 = Resources.BusinessRuleNoContractErrorMessage;
 		}
 
-		public string ErrorMessage => string.Empty;
-
 		public bool IsMandatory => false;
 
 		public bool HaltModify

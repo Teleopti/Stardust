@@ -20,11 +20,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			_businessRuleNoSkillsOpenErrorMessage = Resources.BusinessRuleNoSkillsOpenErrorMessage;
 		}
 
-		public string ErrorMessage
-		{
-			get { return ""; }
-		}
-
 		public bool IsMandatory
 		{
 			get { return false; }

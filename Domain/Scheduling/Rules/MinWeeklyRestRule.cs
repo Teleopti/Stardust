@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -27,11 +26,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			_businessRuleNoContractErrorMessage = Resources.BusinessRuleNoContractErrorMessage;
 			_businessRuleWeeklyRestErrorMessage = Resources.BusinessRuleWeeklyRestErrorMessage;
 			_businessRuleWeeklyRestFriendlyName = Resources.BusinessRuleWeeklyRestFriendlyName;
-		}
-
-		public string ErrorMessage
-		{
-			get { return ""; }
 		}
 
 		public bool IsMandatory

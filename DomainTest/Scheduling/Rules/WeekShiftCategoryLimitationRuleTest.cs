@@ -50,7 +50,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			Assert.IsNotNull(_target);
 			Assert.IsFalse(_target.IsMandatory);
 			Assert.IsTrue(_target.HaltModify);
-			Assert.AreEqual("", _target.ErrorMessage);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability",

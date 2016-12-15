@@ -19,11 +19,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private bool _haltModify = true;
 
-		public string ErrorMessage
-		{
-			get { return string.Empty; }
-		}
-
 		public bool IsMandatory
 		{
 			get { return false; }

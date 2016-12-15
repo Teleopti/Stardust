@@ -8,8 +8,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	{
 		public DataPartOfAgentDay()
 		{
-			//Vad är detta!?!?
-			ErrorMessage = string.Empty;
 			IsMandatory = true;
 			HaltModify = true;
 			ForDelete = true;
@@ -17,7 +15,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			Description = Resources.DescriptionOfDataPartOfAgentDay;
 		}
 
-		public string ErrorMessage { get; private set; }
 		public bool IsMandatory { get; private set; }
 		public bool HaltModify { get; set; }
 		public bool Configurable => false;

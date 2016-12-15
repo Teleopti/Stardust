@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
     {
     	private readonly IWorkTimeStartEndExtractor _workTimeStartEndExtractor;
     	private bool _haltModify = true;
-        private readonly string _errorMessage = string.Empty;
 	    private readonly string _localizedMessage;
 
 	    public NewNightlyRestRule(IWorkTimeStartEndExtractor workTimeStartEndExtractor)
@@ -21,11 +20,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			Description = Resources.DescriptionOfNewNightlyRestRule;
 			_localizedMessage = Resources.BusinessRuleNightlyRestRuleErrorMessage;
 		}
-
-    	public string ErrorMessage
-        {
-            get { return _errorMessage; }
-        }
 
         public bool IsMandatory
         {

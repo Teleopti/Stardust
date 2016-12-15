@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             Assert.IsTrue(_target.HaltModify);
             Assert.IsFalse(_target.IsMandatory);
             Assert.IsFalse(_target.ForDelete);
-            Assert.AreEqual(string.Empty, _target.ErrorMessage);
         }
 
         [Test]

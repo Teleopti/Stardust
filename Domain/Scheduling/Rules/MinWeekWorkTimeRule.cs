@@ -20,11 +20,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			_businessRuleMinWeekWorktimeErrorMessage = Resources.BusinessRuleMinWeekWorktimeErrorMessage;
 		}
 
-		public string ErrorMessage
-		{
-			get { return ""; }
-		}
-
 		public bool IsMandatory
 		{
 			get { return false; }

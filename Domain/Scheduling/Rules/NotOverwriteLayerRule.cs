@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 {
 	public class NotOverwriteLayerRule : INewBusinessRule
 	{
-		private readonly string _errorMessage = string.Empty;
 		private bool _haltModify = true;
 		private readonly string _businessRuleOverlappingErrorMessage3;
 
@@ -18,11 +17,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			FriendlyName = Resources.BusinessRuleOverlappingFriendlyName3;
 			Description = Resources.DescriptionOfNotOverwriteLayerRule;
 			_businessRuleOverlappingErrorMessage3 = Resources.BusinessRuleOverlappingErrorMessage3;
-		}
-
-		public string ErrorMessage
-		{
-			get { return _errorMessage; }
 		}
 
 		public bool IsMandatory

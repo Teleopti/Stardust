@@ -52,8 +52,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			FriendlyName = string.Empty;
 		}
 
-		public string ErrorMessage => string.Empty;
-
 		public bool IsMandatory { get; }
 
 		public bool HaltModify { get; set; }

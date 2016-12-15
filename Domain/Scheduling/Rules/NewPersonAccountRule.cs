@@ -29,11 +29,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			_businessRulePersonAccountError1 = Resources.BusinessRulePersonAccountError1;
 		}
 
-		public string ErrorMessage
-		{
-			get { return string.Empty; }
-		}
-
 		public bool IsMandatory
 		{
 			get { return false; }

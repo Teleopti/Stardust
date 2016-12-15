@@ -56,7 +56,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			// ska man kunna ändra det??
 			_target.HaltModify = false;
 			Assert.IsFalse(_target.HaltModify);
-			Assert.AreEqual("", _target.ErrorMessage);
 		}
 
 		[Test]

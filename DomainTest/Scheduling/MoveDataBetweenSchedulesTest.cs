@@ -192,24 +192,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Assert.IsEmpty(result);
 			}
 
-		// TODO: bugs #39138,#39065 have caused the absence request cancellation functionality to be reverted
-		//[Test]
-		//public void ShouldNotExportAbsenceRequests()
-		//{
-		//	var person = new Person { Name = new Name("_", "_") };
-		//	var period = new DateTimePeriod(2000, 1, 3, 2000, 1, 4);
-		//	var absence = AbsenceFactory.CreateAbsence("absence");
-		//	var absenceRequest = new AbsenceRequest(absence, period);
-		//	var personAbsence = new PersonAbsence(person, new Scenario("_"), new AbsenceLayer(absence, period), absenceRequest);
-		//	var part = createPartWithData(personAbsence, new DateOnly(2000, 1, 3));
-
-		//	target.CopySchedulePartsToAnotherDictionary(destination, new List<IScheduleDay> { part });
-
-		//	var data = destination[person].ScheduledDay(new DateOnly(2000, 1, 3)).PersistableScheduleDataCollection();
-		//	var destinationPersonAbsence = data.First() as IPersonAbsence ;
-		//	destinationPersonAbsence.AbsenceRequest.Should().Be.Null();
-		//}
-
 		private static IScheduleDay createPartWithData(IScheduleData data, DateOnly dateOnly)
         {
             IScenario scenario = data.Scenario;
@@ -228,11 +210,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
         private class NewFailingRule : INewBusinessRule
         {
-	        public string ErrorMessage
-            {
-                get { return "hotta brudar från djursholm"; }
-            }
-
             public bool IsMandatory
             {
                 get { return false; }

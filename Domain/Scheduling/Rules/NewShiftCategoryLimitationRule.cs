@@ -23,9 +23,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			_localizedMessage = Resources.BusinessRuleShiftCategoryLimitationErrorMessage2;
 		}
 
-		public string ErrorMessage { get { return ""; } }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		public bool IsMandatory
 		{
 			get { return false; }

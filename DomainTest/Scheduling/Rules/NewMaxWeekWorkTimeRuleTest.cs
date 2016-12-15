@@ -62,7 +62,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             // ska man kunna ändra det??
             _target.HaltModify = false;
             Assert.IsFalse(_target.HaltModify);
-            Assert.AreEqual("", _target.ErrorMessage);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
