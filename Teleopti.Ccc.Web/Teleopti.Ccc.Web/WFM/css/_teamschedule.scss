@@ -364,7 +364,8 @@
 				color: $gray054;
 
 				.md-label {
-					margin-left: 35px;
+					margin: 0 35px;
+					white-space: nowrap;
 				}
 			}
 			& > md-checkbox:hover {
