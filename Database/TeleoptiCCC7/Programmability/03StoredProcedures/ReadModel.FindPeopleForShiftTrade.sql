@@ -89,7 +89,7 @@ BEGIN
 END
 ELSE
 BEGIN
-
+        select Parent into #personSkill2 from PersonSkill where Skill in (SELECT skill FROM #personSkill) and Active = 1
  -- all the person that have the skills that are must to make trade
         Insert
         into #persons
@@ -98,9 +98,8 @@ BEGIN
         INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
         AND pp.Team in(SELECT * FROM @GroupIds)
         AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
-        INNER JOIN PersonSkill ps ON ps.Parent = pp.Id AND ps.Active = 1
-        WHERE Skill in(SELECT * FROM #personSkill)
-        AND (p.TerminalDate >= '2016-09-25' OR p.TerminalDate IS NULL)
+        INNER JOIN #personSkill2 ps ON ps.Parent = pp.Id
+        WHERE (p.TerminalDate >= '2016-09-25' OR p.TerminalDate IS NULL)
         AND p.WorkflowControlSet IS NOT NULL
         AND p.id <> @fromPersonId
 		AND p.IsDeleted = 0
