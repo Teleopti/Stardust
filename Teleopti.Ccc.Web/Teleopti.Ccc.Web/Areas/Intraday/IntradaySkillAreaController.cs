@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			return Ok();
 		}
 
-		[UnitOfWork, HttpGet, Route("api/intraday/skillarea"), Route("api/SkillAreas")]
+		[UnitOfWork, HttpGet, Route("api/intraday/skillarea")]
 		public virtual IHttpActionResult GetSkillAreas()
 		{
 			return Ok(new SkillAreaInfo
@@ -52,12 +52,6 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		{
 			_deleteSkillArea.Do(id);
 			return Ok();
-		}
-
-		[UnitOfWork, HttpGet, Route("api/SkillArea/For")]
-		public virtual IHttpActionResult NameFor(Guid skillAreaId)
-		{
-			return Ok(_fetchSkillArea.Get(skillAreaId));
 		}
 	}
 
