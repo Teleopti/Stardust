@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (!state.IsAlarm())
 				return null;
 
-			if (state.RuleChanged())
-				return currentTime.AddSeconds(state.AlarmThresholdTime());
-			return stored.AlarmStartTime;
+			if (stored?.AlarmStartTime != null)
+				return stored.AlarmStartTime;
+			return currentTime.AddSeconds(state.AlarmThresholdTime());
 		}
 
 		public bool IsAlarm(StateRuleInfo state)
