@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.DBManager.Library
 		// ALTER DATABASE {0} SET SINGLE_USER WITH ROLLBACK IMMEDIATE
 		public void Drop(string databaseName)
 		{
-			Console.WriteLine("Drop");
 			_usingMaster.ExecuteTransactionlessNonQuery($@"
 				
 				DECLARE @kill varchar(8000) = '';
@@ -46,7 +45,6 @@ namespace Teleopti.Ccc.DBManager.Library
 				GO
 
 			", 300);
-			Console.WriteLine("/Drop");
 		}
 
 		public void Create(string databaseName)
