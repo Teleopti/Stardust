@@ -20,11 +20,12 @@
 			initialSelectedTeamIds;
 
 		ctrl.groupList = [];
+		ctrl.availableTeamIds = [];
 		ctrl.selectedTeamIds = [];
 
 		ctrl.$onInit = function() {
 			populateGroupList();
-			if(logonUserTeamId != null){
+			if(logonUserTeamId != null && ctrl.availableTeamIds.indexOf(logonUserTeamId) > -1){
 				ctrl.selectedTeamIds.push(logonUserTeamId);
 			}
 			ctrl.onSelectionDone();
@@ -57,6 +58,7 @@
 						id: t.Id,
 						name: t.Name
 					});
+					ctrl.availableTeamIds.push(t.Id);
 				});
 				ctrl.groupList.push(site);
 			});

@@ -16,11 +16,10 @@
 	it("should populate hierachy list", inject(function () {
 		var bindings = {
 			availableGroups: {
-				sites:[ {
+				sites:[{
 					Id:'site1', Name:'site1', Children:[ {
 						Id: 'team1', Name:'team1'
-					}
-					]
+					}]
 				},
 				{
 					Id:"site2", Name:'site2', Children:[ {
@@ -28,10 +27,8 @@
 					},
 					{
 						Id: 'team3', Name:'team3'
-					}
-					]
-				}
-				],
+					}]
+				}],
 				logonUserTeamId: 'logonUserTeamId'
 			},
 
@@ -51,11 +48,10 @@
 	it("should extract the right abbreviation of the selected time zone ", inject(function () {
 		var bindings = {
 			availableGroups: {
-				sites:[ {
+				sites:[{
 					Id:'site1', Name:'site1', Children:[ {
 						Id: 'team1', Name:'team1'
-					}
-					]
+					}]
 				},
 				{
 					Id:"site2", Name:'site2', Children:[ {
@@ -63,10 +59,8 @@
 					},
 					{
 						Id: 'team3', Name:'team3'
-					}
-					]
-				}
-				],
+					}]
+				}],
 				logonUserTeamId: 'logonUserTeamId'
 			},
 
@@ -76,6 +70,7 @@
 		var ctrl = $componentController('organizationPicker', null, bindings);
 		ctrl.$onInit();
 
+		ctrl.onPickerOpen();
 		ctrl.selectedTeamIds = ['team1'];
 		var displayName = ctrl.formatSelectedDisplayName();
 		expect(displayName).toEqual("team1");
@@ -88,39 +83,66 @@
 	it("Should trigger onPick when selection done", function () {
 		var selectedTeams=[];
 		var bindings = {
-			availableGroups: [
+			availableGroups: {
+				sites:[{
+					Id:'site1', Name:'site1', Children:[ {
+						Id: 'team1', Name:'team1'
+					}]
+				},
 				{
-					Id: 'site1',
-					Name: 'site1',
-					Children: [
-						{
-							Id: 'team1',
-							Name: 'team1'
-						}
-					]
-				}, {
-					Id: "site2",
-					Name: 'site2',
-					Children: [
-						{
-							Id: 'team2',
-							Name: 'team2'
-						},
-						{
-							Id: 'team3',
-							Name: 'team3'
-						}
-					]
+					Id:"site2", Name:'site2', Children:[ {
+						Id: 'team2', Name:'team2'
+					},
+					{
+						Id: 'team3', Name:'team3'
+					}]
+				}],
+				logonUserTeamId: null
+			},
 
-				}
-			],
 			onPick: function(input) {
 				selectedTeams = input.groups;
 			}
 		};
+
 		var ctrl = $componentController('organizationPicker', null, bindings);
 		ctrl.$onInit();
 
+		ctrl.onPickerOpen();
+		ctrl.selectedTeamIds = ['team1', 'team2'];
+		ctrl.onSelectionDone();
+		expect(selectedTeams.length).toEqual(2);
+	});
+
+	it("should calculate selected team ids number correctly", function () {
+		var selectedTeams=[];
+		var bindings = {
+			availableGroups: {
+				sites:[{
+					Id:'site1', Name:'site1', Children:[ {
+						Id: 'team1', Name:'team1'
+					}]
+				},
+				{
+					Id:"site2", Name:'site2', Children:[ {
+						Id: 'team2', Name:'team2'
+					},
+					{
+						Id: 'team3', Name:'team3'
+					}]
+				}],
+				logonUserTeamId: 'logonUserTeamId'
+			},
+
+			onPick: function(input) {
+				selectedTeams = input.groups;
+			}
+		};
+
+		var ctrl = $componentController('organizationPicker', null, bindings);
+		ctrl.$onInit();
+
+		ctrl.onPickerOpen();
 		ctrl.selectedTeamIds = ['team1', 'team2'];
 		ctrl.onSelectionDone();
 		expect(selectedTeams.length).toEqual(2);
