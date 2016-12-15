@@ -4337,7 +4337,7 @@ Periods</comment>
   </data>
   <data name="SelectSiteColon" xml:space="preserve">
     <value>選擇網站：</value>
-    <comment>V?lj site:</comment>
+    <comment>Välj site:</comment>
   </data>
   <data name="SelectWorkingdaysForThisContractSchedule" xml:space="preserve">
     <value>為該班表合同選擇工作日</value>
@@ -5475,7 +5475,7 @@ Periods</comment>
   </data>
   <data name="YouHaveUnsavedDataDoYouWantToCloseAnyWay" xml:space="preserve">
     <value>您希望保存班表的改動嗎？</value>
-    <comment>Vill du spara ?ndringar gjorda i schemat?</comment>
+    <comment>Vill du spara ändringar gjorda i schemat?</comment>
   </data>
   <data name="YourChangesWillBeDiscardedReloading" xml:space="preserve">
     <value>您的改動將被放棄。重新載入中…</value>
@@ -10836,7 +10836,16 @@ Teleopti R&amp;D</value>
     <value>應用產品啟用金鑰</value>
   </data>
   <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
-    <value>說明：　　　　　　　　　　　　　　　　  * 購買一個授權（聯繫資訊請參見www.teleopti.com）                                                * 收到產品啟用金鑰檔（如通過Email）         * 保存產品計畫金鑰到本地磁片                         * 在應用產品金鑰前保存您當前的工作             * 使用下方的“流覽”找到殘品金鑰文件               * 應用殘品金鑰                                                     * 應用程式將會關閉                                             * 重新開機MyTime以得到新授權的on功能選項* 再次開啟應用程式</value>
+    <value>說明：
+* 購買一個授權（聯繫資訊請參見www.teleopti.com）
+* 收到產品啟用金鑰檔（如通過Email）
+* 保存產品啟用金鑰到本地磁片
+* 在應用產品金鑰前保存您當前的工作
+* 使用下方的“流覽”找到產品金鑰檔
+* 應用產品啟用金鑰
+* 應用程式將會關閉
+* 重新開機MyTime以得到新授權的on功能選項
+* 再次開啟應用程式</value>
   </data>
   <data name="ApplyTo" xml:space="preserve">
     <value>應用到</value>
@@ -12524,5 +12533,768 @@ Teleopti R&amp;D</value>
   </data>
   <data name="DoubleClickHereToEditText" xml:space="preserve">
     <value>按兩下此處以編輯文本</value>
+  </data>
+  <data name="ValidatingPersons2" xml:space="preserve">
+    <value>人員總數{1}, 正在驗證{0}</value>
+  </data>
+  <data name="MultipleSeatsSelected" xml:space="preserve">
+    <value>(多個座位已選定)</value>
+  </data>
+  <data name="WFMReleaseNotificationWithoutOldModuleLink" xml:space="preserve">
+    <value>{0}已改進! 我們期待您的{1}回饋。{2}</value>
+  </data>
+  <data name="WFMReleaseNotification" xml:space="preserve">
+    <value>{0}已改進! 我們期待您的{1}回饋。{2} 舊的{3}可在有限時間內訪問。</value>
+  </data>
+  <data name="UnsupportedSkills" xml:space="preserve">
+    <value>{0}未支持的技能</value>
+  </data>
+  <data name="RequestInvalidStateTransition" xml:space="preserve">
+    <value>申請當前為{0}，無法被{1}。</value>
+  </data>
+  <data name="AbandonedRate" xml:space="preserve">
+    <value>放棄率</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>個人帳戶</value>
+  </data>
+  <data name="BusinessRuleNoSiteOpenHourFriendlyName" xml:space="preserve">
+    <value>活動超出網站開放時間</value>
+  </data>
+  <data name="BusinessRuleNoSkillsOpenFriendlyName" xml:space="preserve">
+    <value>活動超出技能開放時間</value>
+  </data>
+  <data name="AddOvertimeActivity" xml:space="preserve">
+    <value>添加加班活動</value>
+  </data>
+  <data name="PartialSuccessMessageForAddingActivity" xml:space="preserve">
+    <value>為{0}個座席代表添加活動。{1}個成功{2}個失敗。</value>
+  </data>
+  <data name="PartialSuccessMessageForAddingOvertime" xml:space="preserve">
+    <value>為{0}個座席代表添加加班活動，{1}個成功{2}個失敗。</value>
+  </data>
+  <data name="AgentsDoNotRequireSeats" xml:space="preserve">
+    <value>座席代表不需要座位</value>
+  </data>
+  <data name="AgentsWithoutBookings" xml:space="preserve">
+    <value>座席代表沒有預定座位</value>
+  </data>
+  <data name="Alert" xml:space="preserve">
+    <value>告警</value>
+  </data>
+  <data name="AllRequests" xml:space="preserve">
+    <value>所有申請</value>
+  </data>
+  <data name="AllPermittedSitesToMakeShiftTradeWith" xml:space="preserve">
+    <value>所有網站</value>
+  </data>
+  <data name="WaitlistPeriod" xml:space="preserve">
+    <value>所有等候列表中的申請將在選定的週期內被處理</value>
+  </data>
+  <data name="ApproveBasedOnBusinessRules" xml:space="preserve">
+    <value>基於業務規則審批</value>
+  </data>
+  <data name="ArchiveSchedule" xml:space="preserve">
+    <value>存檔班表</value>
+  </data>
+  <data name="ArchiveScheduleDescription" xml:space="preserve">
+    <value>將班表從默認情景存檔到另一個情景，將覆蓋目標情景中選定週期的班表。</value>
+  </data>
+  <data name="ConfirmDeleteCampaign" xml:space="preserve">
+    <value>您確定要刪除此活動嗎？親</value>
+  </data>
+  <data name="AreYouSureToUndoSelectedSchedule" xml:space="preserve">
+    <value>您確定想要撤銷選定座席代表的最後一次班表變更嗎？</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>您確定？</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>回到列表</value>
+  </data>
+  <data name="Backout" xml:space="preserve">
+    <value>撤銷</value>
+  </data>
+  <data name="BrokenRules" xml:space="preserve">
+    <value>打破的規則</value>
+  </data>
+  <data name="BySeniority" xml:space="preserve">
+    <value>根據年資</value>
+  </data>
+  <data name="CanNotMoveMultipleAcivitiesForAgent" xml:space="preserve">
+    <value>無法為座席代表{0}移動多個活動。</value>
+  </data>
+  <data name="CanNotMoveMultipleActivitiesForSelectedAgents" xml:space="preserve">
+    <value>無法為選定的座席代表移動多個活動。</value>
+  </data>
+  <data name="ConfirmCancelRequest" xml:space="preserve">
+    <value>取消已批准的申請將從您的班表中移除相關的缺勤活動。您確定要繼續嗎？</value>
+  </data>
+  <data name="CannotApplyChangeToAgentsInDifferentTimezone" xml:space="preserve">
+    <value>無法為在不同時區的座席代表應用變更</value>
+  </data>
+  <data name="CannotDeleteBaseActivity" xml:space="preserve">
+    <value>無法刪除基礎活動</value>
+  </data>
+  <data name="RequestInvalidMessageLength" xml:space="preserve">
+    <value>無法保存此回復資訊，內容不能超過2000個字元</value>
+  </data>
+  <data name="RequestInvalidMessageModification" xml:space="preserve">
+    <value>無法保持您對該申請的回復，因為它已被{0}</value>
+  </data>
+  <data name="CannotUndoScheduleChange" xml:space="preserve">
+    <value>無法撤銷班表變更</value>
+  </data>
+  <data name="ActivityConflictsWithOvernightShiftsFromPreviousDay" xml:space="preserve">
+    <value>無法添加活動到前一天的班次中。</value>
+  </data>
+  <data name="PartialSuccessMessageForEditingShiftCategory" xml:space="preserve">
+    <value>為{0}個座席代表變更班次類別。 {1}個成功 {2}個失敗</value>
+  </data>
+  <data name="ConfigureValidationWarnings" xml:space="preserve">
+    <value>配置有效性警告</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>繼續</value>
+  </data>
+  <data name="CurrentRequests" xml:space="preserve">
+    <value>當前申請</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>儀錶板</value>
+  </data>
+  <data name="DateRange" xml:space="preserve">
+    <value>日期範圍</value>
+  </data>
+  <data name="DateRangeIsAMaximumOfSixtyDays" xml:space="preserve">
+    <value>日期方位最大為60天</value>
+  </data>
+  <data name="BusinessRuleDayOffFriendlyName" xml:space="preserve">
+    <value>休息日衝突</value>
+  </data>
+  <data name="DescriptionOfNewDayOffRule" xml:space="preserve">
+    <value>休息日活動衝突</value>
+  </data>
+  <data name="DeletePerson" xml:space="preserve">
+    <value>刪除人員</value>
+  </data>
+  <data name="DoNotModifyForTheseAgents" xml:space="preserve">
+    <value>這些座席代表不做變更</value>
+  </data>
+  <data name="DoneArchivingForXPeopleDot" xml:space="preserve">
+    <value>已為{0}個人完成存檔</value>
+  </data>
+  <data name="DoneImportingForXPeopleDot" xml:space="preserve">
+    <value>已為{0}個人完成導入</value>
+  </data>
+  <data name="EditLocationProperty" xml:space="preserve">
+    <value>編輯位置屬性</value>
+  </data>
+  <data name="EditShiftCategory" xml:space="preserve">
+    <value>編輯班次類別</value>
+  </data>
+  <data name="EmploymentNumber" xml:space="preserve">
+    <value>座席代表工號</value>
+  </data>
+  <data name="EnableShiftTradeRequestMaxSeatsValidation" xml:space="preserve">
+    <value>啟用最大座位驗證</value>
+  </data>
+  <data name="ExtendExistingShift" xml:space="preserve">
+    <value>擴展已有班次</value>
+  </data>
+  <data name="AddAbsenceFailed" xml:space="preserve">
+    <value>添加缺勤失敗</value>
+  </data>
+  <data name="FailedMessageForUndoSchedule" xml:space="preserve">
+    <value>撤銷選定座席代表的班表變更失敗</value>
+  </data>
+  <data name="FilterReports" xml:space="preserve">
+    <value>篩選報表</value>
+  </data>
+  <data name="FirstComeFirstServed" xml:space="preserve">
+    <value>先到先得</value>
+  </data>
+  <data name="FromScenarioColon" xml:space="preserve">
+    <value>從情景：</value>
+  </data>
+  <data name="Full" xml:space="preserve">
+    <value>全部</value>
+  </data>
+  <data name="FullOrPartial" xml:space="preserve">
+    <value>全部或部分</value>
+  </data>
+  <data name="HelpLabel" xml:space="preserve">
+    <value>幫助</value>
+  </data>
+  <data name="AgentHistoricalAdherence" xml:space="preserve">
+    <value>歷史遵循度</value>
+  </data>
+  <data name="ImportSchedule" xml:space="preserve">
+    <value>導入班表</value>
+  </data>
+  <data name="ImportScheduleDescription" xml:space="preserve">
+    <value>從其他情景導入班表到默認情景，選定週期內目標情景中一些已存在的班表將被合併。</value>
+  </data>
+  <data name="IncludedSkills" xml:space="preserve">
+    <value>已包括的技能</value>
+  </data>
+  <data name="InternalNote" xml:space="preserve">
+    <value>內部備註</value>
+  </data>
+  <data name="ShiftTradeRequestMaxSeatValidationInterval" xml:space="preserve">
+    <value>當驗證座位利用率時使用的時段</value>
+  </data>
+  <data name="IntradayWithShrinkage" xml:space="preserve">
+    <value>當日包含損耗</value>
+  </data>
+  <data name="AbsenceRequestCancellationThresholdExceeded" xml:space="preserve">
+    <value>已無法取消此申請。該申請可在不遲於其開始日期的{0}天之前被取消。</value>
+  </data>
+  <data name="LatestActualInterval" xml:space="preserve">
+    <value>最晚實際時段</value>
+  </data>
+  <data name="Level" xml:space="preserve">
+    <value>級別</value>
+  </data>
+  <data name="LoadRequests" xml:space="preserve">
+    <value>載入申請</value>
+  </data>
+  <data name="LoadingRequestsTreeDots" xml:space="preserve">
+    <value>正在載入申請...</value>
+  </data>
+  <data name="LoadingSkillAreas" xml:space="preserve">
+    <value>正在載入技能區域...</value>
+  </data>
+  <data name="LoadingSkills" xml:space="preserve">
+    <value>正在載入技能...</value>
+  </data>
+  <data name="LocationProperties" xml:space="preserve">
+    <value>位置屬性</value>
+  </data>
+  <data name="MatchColon" xml:space="preserve">
+    <value>符合：</value>
+  </data>
+  <data name="NewMaxWeekWorkTimeRuleName" xml:space="preserve">
+    <value>每週最多工作時間</value>
+  </data>
+  <data name="ShiftTradeRequestMaxSeatsValidation" xml:space="preserve">
+    <value>最大座位驗證</value>
+  </data>
+  <data name="DescriptionOfNewMaxWeekWorkTimeRule" xml:space="preserve">
+    <value>每週最多工作時間</value>
+  </data>
+  <data name="DescriptionOfNonMainShiftActivityRule" xml:space="preserve">
+    <value>班次中的會議，個人活動或加班活動</value>
+  </data>
+  <data name="MinWeekWorkTimeRuleName" xml:space="preserve">
+    <value>每週最少工作時間</value>
+  </data>
+  <data name="MinWeeklyWorkTime" xml:space="preserve">
+    <value>每週最少工作時間</value>
+  </data>
+  <data name="AbsenceRequestExpiredThreshold" xml:space="preserve">
+    <value>最小審批時間閾值(申請開始前的分鐘數):</value>
+  </data>
+  <data name="DescriptionOfMinWeeklyRestRule" xml:space="preserve">
+    <value>每週最少休息時間</value>
+  </data>
+  <data name="DescriptionOfMinWeekWorkTimeRule" xml:space="preserve">
+    <value>每週最少工作時間</value>
+  </data>
+  <data name="NoPermissionToModifyPersonAssignment" xml:space="preserve">
+    <value>更多資訊關於預測方法及異常值檢測</value>
+  </data>
+  <data name="MoveInvalidOverlappedActivity" xml:space="preserve">
+    <value>移動無效的重疊活動</value>
+  </data>
+  <data name="MoveNonoverwritableActivityForTheseAgents" xml:space="preserve">
+    <value>為這些座席代表移動不可覆蓋活動</value>
+  </data>
+  <data name="MoveShift" xml:space="preserve">
+    <value>移動班次</value>
+  </data>
+  <data name="PartialSuccessMessageForMovingActivity" xml:space="preserve">
+    <value>為{0}個座席代表移動活動，{1}個成功　{2}個失敗。</value>
+  </data>
+  <data name="MoveInvalidOverlappedActivityWarning" xml:space="preserve">
+    <value>為{0}個座席代表移動無效的重疊活動，{1}個成功　{2}個失敗。</value>
+  </data>
+  <data name="PartialSuccessMessageForMovingShift" xml:space="preserve">
+    <value>為{0}個座席代表移動班次， {1}個成功　{2} 個失敗。</value>
+  </data>
+  <data name="DescriptionOfNewNightlyRestRule" xml:space="preserve">
+    <value>夜間休息時間</value>
+  </data>
+  <data name="BusinessRuleNightlyRestRuleFriendlyName" xml:space="preserve">
+    <value>夜間休息時間被打破</value>
+  </data>
+  <data name="NewNightlyRestRuleName" xml:space="preserve">
+    <value>夜間休息時間</value>
+  </data>
+  <data name="NoChangeHasBeenMade" xml:space="preserve">
+    <value>未做變更</value>
+  </data>
+  <data name="BusinessRuleNoSiteOpenHourErrorMessage" xml:space="preserve">
+    <value>在{2} - {3}網站{1}未在{0}找到開放時間</value>
+  </data>
+  <data name="NoPermissionAddOvertimeActivity" xml:space="preserve">
+    <value>沒有許可權為座席代表{0}添加加班活動。</value>
+  </data>
+  <data name="NoPermissionAddPersonalActivity" xml:space="preserve">
+    <value>沒有許可權為座席代表{0}添加個人活動。</value>
+  </data>
+  <data name="NoPermissionMoveAgentActivity" xml:space="preserve">
+    <value>沒有許可權為座席代表{0}移動活動。</value>
+  </data>
+  <data name="NoPermissionRemoveAgentAbsence" xml:space="preserve">
+    <value>沒有許可權為座席代表{0}一處缺勤。</value>
+  </data>
+  <data name="RequestWaitlistedReasonPersonAccount" xml:space="preserve">
+    <value>您的個人帳戶餘額中沒有足夠的剩餘時間。</value>
+  </data>
+  <data name="YouHaveSelectedXAgent" xml:space="preserve">
+    <value>您已經選擇了{0}個座席代表。</value>
+  </data>
+  <data name="PartialSuccessMessageForRemovingActivity" xml:space="preserve">
+    <value>為{0}個座席代表移除活動，{1}個成功，{2}個失敗。</value>
+  </data>
+  <data name="PartialSuccessMessageForRemovingAbsence" xml:space="preserve">
+    <value>為{0}個座席代表移除缺勤，{1}個成功，{2}個失敗。</value>
+  </data>
+  <data name="TryOutTheNewImprovedTeams" xml:space="preserve">
+    <value>嘗試已改進的Teams模組！</value>
+  </data>
+  <data name="CanNotAddActivityToAgentWithoutShift" xml:space="preserve">
+    <value>您不能為{0}添加活動，因為其第二天沒有班次。</value>
+  </data>
+  <data name="PreviewTheNewIntradayTool" xml:space="preserve">
+    <value>預覽新的當日工具！</value>
+  </data>
+  <data name="NonWorkingDays" xml:space="preserve">
+    <value>非工作日</value>
+  </data>
+  <data name="UseShiftsFromColon" xml:space="preserve">
+    <value>使用班次自：</value>
+  </data>
+  <data name="AbsenceRequestCancellationThreshold" xml:space="preserve">
+    <value>在缺勤日期前可取消申請的天數：</value>
+  </data>
+  <data name="SelectedAgentsColon" xml:space="preserve">
+    <value>已選定的座席代表：</value>
+  </data>
+  <data name="SuccessfulMessageForMovingActivity" xml:space="preserve">
+    <value>已成功為選定的座席代表移動活動</value>
+  </data>
+  <data name="TheNewTimeIsNotAllowedFor" xml:space="preserve">
+    <value>新的時間將不會被應用於</value>
+  </data>
+  <data name="ScheduleIsWriteProtected" xml:space="preserve">
+    <value>無法為{0}變更{1}的班表，因為其已被防寫。</value>
+  </data>
+  <data name="PersonAssignmentIsNotValid" xml:space="preserve">
+    <value>人員分配無效</value>
+  </data>
+  <data name="Unselect" xml:space="preserve">
+    <value>未選擇</value>
+  </data>
+  <data name="CanNotAddPersonalActivityToAgentWithoutShift" xml:space="preserve">
+    <value>當沒有班次時您無法添加個人活動</value>
+  </data>
+  <data name="SubmitProcessWaitlistedRequestsSuccess" xml:space="preserve">
+    <value>{0}期間的等候列表請求已經開始處理。</value>
+  </data>
+  <data name="ProcessWaitlistedRequestsFinished" xml:space="preserve">
+    <value>{0}期間的等候列表請求已經處理完成。</value>
+  </data>
+  <data name="ProcessWaitlist" xml:space="preserve">
+    <value>處理等候列表</value>
+  </data>
+  <data name="ProcessWaitlistRequestsReminder" xml:space="preserve">
+    <value>等候清單處理將在後臺運行並需要一些時間完成</value>
+  </data>
+  <data name="ShiftTrade" xml:space="preserve">
+    <value>調換班</value>
+  </data>
+  <data name="ProductActivationKeyV8Perpetual" xml:space="preserve">
+    <value>根據授權協定中的限制性條款此系統授權給"{0}"。
+
+產品啟用金鑰包含了最多{1}個啟動的座席代表。
+
+主版本號：{4}
+
+產品啟用金鑰架構是："{2}".
+以下選項已被啟動：
+{3}</value>
+  </data>
+  <data name="SeatProductActivationKeyV8Perpetual" xml:space="preserve">
+    <value>根據授權協定中的限制性條款此系統授權給"{0}"。
+
+產品啟用金鑰包含了最多{1}個座位。
+
+主版本號：{4}
+
+產品啟用金鑰架構是："{2}".
+以下選項已被啟動：
+{3}</value>
+  </data>
+  <data name="SummaryUpToLatestActualInterval" xml:space="preserve">
+    <value>直到最新的實際時段摘要</value>
+  </data>
+  <data name="ShiftLengthExceed36Hours" xml:space="preserve">
+    <value>班次長度超過36個小時</value>
+  </data>
+  <data name="PreviewTheNewRequestsModule" xml:space="preserve">
+    <value>預覽最新的申請模組！</value>
+  </data>
+  <data name="PreviewTheNewPeopleModule" xml:space="preserve">
+    <value>預覽最新的人員模組！</value>
+  </data>
+  <data name="ReportOptions" xml:space="preserve">
+    <value>報表選項</value>
+  </data>
+  <data name="ShowOnlyAgentsWithNoSeat" xml:space="preserve">
+    <value>僅顯示沒有座位的座席代表</value>
+  </data>
+  <data name="PartialSuccessMessageForUndoSchedule" xml:space="preserve">
+    <value>為{0}個座席代表撤銷班表變更， {1}個成功 {2}個失敗</value>
+  </data>
+  <data name="SuccessfulMessageForUndoSchedule" xml:space="preserve">
+    <value>已成功為所選座席代表撤銷上次班表變更</value>
+  </data>
+  <data name="ShiftTradeRequestScheduleChanged" xml:space="preserve">
+    <value>{0}的調換班申請需要被再次接受，因為對方的班表已更改。</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>暫停</value>
+  </data>
+  <data name="PausedAt" xml:space="preserve">
+    <value>暫停於</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>播放</value>
+  </data>
+  <data name="RtaPauseDisableNotice" xml:space="preserve">
+    <value>即時遵守度監控已啟動</value>
+  </data>
+  <data name="RtaPauseEnabledNotice" xml:space="preserve">
+    <value>即時遵守都監控暫停於{0}！點擊播放以恢復</value>
+  </data>
+  <data name="SelectAllPeopleInEveryPage" xml:space="preserve">
+    <value>選擇每頁上的所有人</value>
+  </data>
+  <data name="UnselectAllPeopleInEveryPage" xml:space="preserve">
+    <value>取消選擇每頁上的所有人</value>
+  </data>
+  <data name="OrganizeCascadingSkills" xml:space="preserve">
+    <value>Organize Cascading Skills</value>
+  </data>
+  <data name="Prefix" xml:space="preserve">
+    <value>首碼</value>
+  </data>
+  <data name="Suffix" xml:space="preserve">
+    <value>尾碼</value>
+  </data>
+  <data name="NotAllowedChange" xml:space="preserve">
+    <value>不允許變更</value>
+  </data>
+  <data name="NightRest" xml:space="preserve">
+    <value>夜間休息</value>
+  </data>
+  <data name="WeeklyRestTime" xml:space="preserve">
+    <value>每週休息時間</value>
+  </data>
+  <data name="PersonAccount" xml:space="preserve">
+    <value>個人帳戶</value>
+  </data>
+  <data name="SkillOpeningHours" xml:space="preserve">
+    <value>技能開放時間</value>
+  </data>
+  <data name="ShiftActivity" xml:space="preserve">
+    <value>班次活動</value>
+  </data>
+  <data name="ShowWarnings" xml:space="preserve">
+    <value>顯示告警</value>
+  </data>
+  <data name="SubmitApproveBasedOnBusinessRulesSuccess" xml:space="preserve">
+    <value>已選定的申請正在基於規則進行審批。</value>
+  </data>
+  <data name="ApproveBasedOnBusinessRulesFinished" xml:space="preserve">
+    <value>已基於規則完成申請的處理。</value>
+  </data>
+  <data name="SuccessfulMessageForEditingShiftCategory" xml:space="preserve">
+    <value>已成功為選定的座席代表變更班次類別</value>
+  </data>
+  <data name="SeatNumber" xml:space="preserve">
+    <value>座位編號</value>
+  </data>
+  <data name="SeatBookingSummary" xml:space="preserve">
+    <value>座位預定總結</value>
+  </data>
+  <data name="SuccessfulBookings" xml:space="preserve">
+    <value>成功預定</value>
+  </data>
+  <data name="SelectACategory" xml:space="preserve">
+    <value>選擇一個類別</value>
+  </data>
+  <data name="NotOk" xml:space="preserve">
+    <value>不OK</value>
+  </data>
+  <data name="ReplyAndCancel" xml:space="preserve">
+    <value>回復並取消</value>
+  </data>
+  <data name="ReplySuccess" xml:space="preserve">
+    <value>您對{0}的申請資訊已被保存</value>
+  </data>
+  <data name="SelectBusinessRulesWithColon" xml:space="preserve">
+    <value>選擇業務規則：</value>
+  </data>
+  <data name="ValidateRequestsBasedOnBudgetAllotment" xml:space="preserve">
+    <value>基於預算限額驗證申請</value>
+  </data>
+  <data name="ValidateRequestsBasedOnIntraday" xml:space="preserve">
+    <value>基於當日人力檢查驗證申請</value>
+  </data>
+  <data name="NoPermissionToEditShiftCategory" xml:space="preserve">
+    <value>無權為座席代表編輯班次類別</value>
+  </data>
+  <data name="ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping" xml:space="preserve">
+    <value>此活動將覆蓋現有不允許覆蓋的活動</value>
+  </data>
+  <data name="OverrideForTheseAgents" xml:space="preserve">
+    <value>為這些座席代表覆蓋</value>
+  </data>
+  <data name="ManageOpenHours" xml:space="preserve">
+    <value>網站開放時間</value>
+  </data>
+  <data name="SaveSiteOpenHoursSuccess" xml:space="preserve">
+    <value>已更新開放時間</value>
+  </data>
+  <data name="TheFollowingAgentsHaveAffectedActivities" xml:space="preserve">
+    <value>以下座席代表有被影響的活動：</value>
+  </data>
+  <data name="SiteOpeningHours" xml:space="preserve">
+    <value>網站開放時間</value>
+  </data>
+  <data name="ToggleClose" xml:space="preserve">
+    <value>切換關閉</value>
+  </data>
+  <data name="BusinessRuleOverlappingErrorMessage3" xml:space="preserve">
+    <value>不可覆蓋的活動{0}在時段{1}內，被活動{2}覆蓋于時段{3}。</value>
+  </data>
+  <data name="MinWeeklyRestRuleName" xml:space="preserve">
+    <value>每週休息時間</value>
+  </data>
+  <data name="NewDayOffRuleName" xml:space="preserve">
+    <value>班次與休息日重疊</value>
+  </data>
+  <data name="NotOverwriteLayerRuleName" xml:space="preserve">
+    <value>活動複寫</value>
+  </data>
+  <data name="NewActivityOverlapsNonoverwritableActivities" xml:space="preserve">
+    <value>新添加的活動與不可覆蓋的活動重疊</value>
+  </data>
+  <data name="BusinessRuleMaxWeekWorkTimeFriendlyName" xml:space="preserve">
+    <value>該周包含了太多的工作時間</value>
+  </data>
+  <data name="BusinessRuleMinWeekWorktimeFriendlyName" xml:space="preserve">
+    <value>該周包含了太少的工作時間</value>
+  </data>
+  <data name="BusinessRuleOverlappingFriendlyName3" xml:space="preserve">
+    <value>不可覆蓋的活動被覆蓋了</value>
+  </data>
+  <data name="BusinessRulePersonAccountFriendlyName" xml:space="preserve">
+    <value>個人帳戶超過了積值</value>
+  </data>
+  <data name="BusinessRuleShiftCategoryLimitationFriendlyName" xml:space="preserve">
+    <value>週期內班次類別限制規則被打破</value>
+  </data>
+  <data name="BusinessRuleShiftCategoryLimitationFriendlyName1" xml:space="preserve">
+    <value>周中班次類別限制規則被打破</value>
+  </data>
+  <data name="BusinessRuleWeeklyRestFriendlyName" xml:space="preserve">
+    <value>該周沒有規定的每週休息時間</value>
+  </data>
+  <data name="Overwritable" xml:space="preserve">
+    <value>可覆蓋</value>
+  </data>
+  <data name="ValidationAlerts" xml:space="preserve">
+    <value>有效性警報</value>
+  </data>
+  <data name="ReforecastedStaff" xml:space="preserve">
+    <value>重新預測的座席代表數</value>
+  </data>
+  <data name="ShiftTradeMaxSeatViolationDenyReason" xml:space="preserve">
+    <value>調換班申請已被拒絕因為沒有足夠的可用座位。</value>
+  </data>
+  <data name="ShiftTradeRequestSettings" xml:space="preserve">
+    <value>調換班申請設置</value>
+  </data>
+  <data name="NoPermissionToMoveInvalidOverlappedActivity" xml:space="preserve">
+    <value>您沒有許可權移動無效的重疊活動。</value>
+  </data>
+  <data name="OverlappedNonoverwritableActivitiesExist" xml:space="preserve">
+    <value>仍有重疊的不可覆蓋的活動</value>
+  </data>
+  <data name="MoveInvalidOverlappedActivitySuccess" xml:space="preserve">
+    <value>已成功為選定的座席代表移動了無效的重疊活動</value>
+  </data>
+  <data name="NoPermissionToViewErrorMessage" xml:space="preserve">
+    <value>您沒有許可權查看此頁。</value>
+  </data>
+  <data name="ValidateRequestsBasedOnExpiration" xml:space="preserve">
+    <value>通過最小審批閾值驗證</value>
+  </data>
+  <data name="StaffingInformationMissing" xml:space="preserve">
+    <value>技能{0}的人力資訊缺失</value>
+  </data>
+  <data name="TeamsModule" xml:space="preserve">
+    <value>Teams</value>
+  </data>
+  <data name="RequiredStaff" xml:space="preserve">
+    <value>需要的坐席代表數</value>
+  </data>
+  <data name="RequestDenyReasonRequestExpired" xml:space="preserve">
+    <value>您的缺勤申請被自動拒絕。該申請的開始時間是{0}，應至少晚於當前時間{1}分鐘。</value>
+  </data>
+  <data name="TheFollowingAgentsPersonAccountsWillBeAffected" xml:space="preserve">
+    <value>以下座席代表的個人帳戶將被影響：</value>
+  </data>
+  <data name="ThisAbsenceWillExceedPersonAccountLimits" xml:space="preserve">
+    <value>此缺勤將超過個人帳戶限制。</value>
+  </data>
+  <data name="RecipientHasNoShiftTradePermission" xml:space="preserve">
+    <value>接受者沒有調換班許可權</value>
+  </data>
+  <data name="TooManySelectedAgents" xml:space="preserve">
+    <value>您選擇的座席代表過多。請選擇少於55個人。</value>
+  </data>
+  <data name="UnsupportedSkill" xml:space="preserve">
+    <value>不支持的技能</value>
+  </data>
+  <data name="UnsupportedSkillMsg" xml:space="preserve">
+    <value>該技能不被支持</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>組織</value>
+  </data>
+  <data name="SortByStartDate" xml:space="preserve">
+    <value>開始日期</value>
+  </data>
+  <data name="SortByUpdateDate" xml:space="preserve">
+    <value>更新日期</value>
+  </data>
+  <data name="SkillAreaColon" xml:space="preserve">
+    <value>技能區：</value>
+  </data>
+  <data name="TheActivityCanNotBeAddedTo" xml:space="preserve">
+    <value>該活動無法被添加到</value>
+  </data>
+  <data name="TheAbsenceCanNotBeAddedTo" xml:space="preserve">
+    <value>該缺勤無法被添加到</value>
+  </data>
+  <data name="ArchivingConfirmationWithParameters" xml:space="preserve">
+    <value>您將要覆蓋選定的小組在情景'{0}'中所有已存在的班表，在週期{1} - {2}。</value>
+  </data>
+  <data name="PickASmallerDatePeriodDot" xml:space="preserve">
+    <value>選取一個更小的日期範圍。</value>
+  </data>
+  <data name="PickAtleastOneTeamDot" xml:space="preserve">
+    <value>至少選取一個小組。</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>運行</value>
+  </data>
+  <data name="RunArchiving" xml:space="preserve">
+    <value>運行存檔中</value>
+  </data>
+  <data name="TheScenarioYouArchiveFromMustBeTheDefaultScenarioDot" xml:space="preserve">
+    <value>您所存檔的源情景必須是默認情景。</value>
+  </data>
+  <data name="TheScenarioYouArchiveToMustNotBeTheDefaultScenarioDot" xml:space="preserve">
+    <value>您所存檔的目標情景不能是預設情景。</value>
+  </data>
+  <data name="ToScenarioColon" xml:space="preserve">
+    <value>目標情景：</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToArchiveFromDot" xml:space="preserve">
+    <value>您需要選取一個源情景進行存檔。</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToArchiveToDot" xml:space="preserve">
+    <value>您需要選取一個目標情景進行存檔。</value>
+  </data>
+  <data name="YourSelectionResultedInZeroPeopleDot" xml:space="preserve">
+    <value>您選擇了0人。</value>
+  </data>
+  <data name="NotificationTimeToStay" xml:space="preserve">
+    <value>通知持續時間(秒)</value>
+  </data>
+  <data name="SuccessfulMessageForMovingShift" xml:space="preserve">
+    <value>已成功為選定的座席代表移動班次</value>
+  </data>
+  <data name="NoSitesFound" xml:space="preserve">
+    <value>所選技能未找到對應網站</value>
+  </data>
+  <data name="SelectAMultiplicatorDefinitionSet" xml:space="preserve">
+    <value>選擇一個乘數定義集</value>
+  </data>
+  <data name="SuccessfulMessageForAddingOvertime" xml:space="preserve">
+    <value>已成功為選定的座席代表添加了加班活動。</value>
+  </data>
+  <data name="RequestedPeriodIsTooLong" xml:space="preserve">
+    <value>請求的週期太長！</value>
+  </data>
+  <data name="YouNeedToSelectADateInTheFutureDot" xml:space="preserve">
+    <value>您需要選擇一個未來日期。</value>
+  </data>
+  <data name="Primary" xml:space="preserve">
+    <value>主要的</value>
+  </data>
+  <data name="ImportingConfirmationWithParameters" xml:space="preserve">
+    <value>您將要合併選定的小組在情景'{0}'中一些已存在的班表，在週期{1} - {2}。</value>
+  </data>
+  <data name="RunImporting" xml:space="preserve">
+    <value>運行導入中</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToImportFromDot" xml:space="preserve">
+    <value>您需要選取一個導入的源情景。</value>
+  </data>
+  <data name="SendToAdministrator" xml:space="preserve">
+    <value>發送給管理員</value>
+  </data>
+  <data name="WhenValidationFails" xml:space="preserve">
+    <value>當驗證失敗</value>
+  </data>
+  <data name="ResetRules" xml:space="preserve">
+    <value>重置規則</value>
+  </data>
+  <data name="ShiftTradeRequestValidatingRules" xml:space="preserve">
+    <value>正在驗證規則</value>
+  </data>
+  <data name="DescriptionOfDataPartOfAgentDay" xml:space="preserve">
+    <value>將移動一個工作班次到另一天</value>
+  </data>
+  <data name="DescriptionOfNewShiftCategoryLimitationRule" xml:space="preserve">
+    <value>按週期的班次類別限制</value>
+  </data>
+  <data name="DescriptionOfWeekShiftCategoryLimitationRule" xml:space="preserve">
+    <value>按周的班次類別限制</value>
+  </data>
+  <data name="DescriptionOfNotOverwriteLayerRule" xml:space="preserve">
+    <value>班次中不可覆蓋的活動</value>
+  </data>
+  <data name="DescriptionOfNewPersonAccountRule" xml:space="preserve">
+    <value>個人帳戶</value>
+  </data>
+  <data name="DescriptionOfSiteOpenHoursRule" xml:space="preserve">
+    <value>網站開放時間</value>
+  </data>
+  <data name="DescriptionOfOpenHoursRule" xml:space="preserve">
+    <value>技能開放時間</value>
+  </data>
+  <data name="SearchAnOrganization" xml:space="preserve">
+    <value>搜索一個組織</value>
+  </data>
+  <data name="DenyDueToTechnicalProblems" xml:space="preserve">
+    <value>人力資訊沒有在系統中更新。請聯繫系統管理員。</value>
   </data>
 </root>
