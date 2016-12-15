@@ -327,7 +327,9 @@
 						if(site.isChecked)
 							site.isChecked = false;
 					});
+					$scope.teamsSelected = [];
 				};
+
 				$scope.$watch('teamsSelected', function(newValue, oldValue) {
 					if (JSON.stringify(newValue) !== JSON.stringify(oldValue) && enableWatchOnTeam) {
 						$scope.updateSite(oldValue);
