@@ -45,27 +45,23 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleDayReadModel
 			dates.ForEach(d =>
 			{
 				var ts = timestamp = timestamp.AddMinutes(1);
-				WithUnitOfWork.Do(() =>
+				Handler.Handle(new ProjectionChangedEvent
 				{
-					Handler.Handle(new ProjectionChangedEvent
+					PersonId = personId,
+					LogOnBusinessUnitId = businessUnitId,
+					ScenarioId = scenarioId,
+					IsInitialLoad = false,
+					IsDefaultScenario = true,
+					ScheduleDays = new List<ProjectionChangedEventScheduleDay>
 					{
-						PersonId = personId,
-						LogOnBusinessUnitId = businessUnitId,
-						ScenarioId = scenarioId,
-						IsInitialLoad = false,
-						IsDefaultScenario = true,
-						ScheduleDays = new List<ProjectionChangedEventScheduleDay>
-								{
-									new ProjectionChangedEventScheduleDay
-									{
-										Date = d.Date,
-										Version = 0
-									}
-								},
-						Timestamp = ts,
-						ScheduleLoadTimestamp = ts
-					});
-
+						new ProjectionChangedEventScheduleDay
+						{
+							Date = d.Date,
+							Version = 0
+						}
+					},
+					Timestamp = ts,
+					ScheduleLoadTimestamp = ts
 				});
 			});
 			dates.ForEach(d =>
@@ -74,27 +70,23 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleDayReadModel
 					var ts = timestamp = timestamp.AddMinutes(1);
 					simulator.ProcessAsync(() =>
 					{
-						WithUnitOfWork.Do(() =>
+						Handler.Handle(new ProjectionChangedEvent
 						{
-							Handler.Handle(new ProjectionChangedEvent
+							PersonId = personId,
+							LogOnBusinessUnitId = businessUnitId,
+							ScenarioId = scenarioId,
+							IsInitialLoad = false,
+							IsDefaultScenario = true,
+							ScheduleDays = new List<ProjectionChangedEventScheduleDay>
 							{
-								PersonId = personId,
-								LogOnBusinessUnitId = businessUnitId,
-								ScenarioId = scenarioId,
-								IsInitialLoad = false,
-								IsDefaultScenario = true,
-								ScheduleDays = new List<ProjectionChangedEventScheduleDay>
+								new ProjectionChangedEventScheduleDay
 								{
-									new ProjectionChangedEventScheduleDay
-									{
-										Date = d.Date,
-										Version = v
-									}
-								},
-								Timestamp = ts,
-								ScheduleLoadTimestamp = ts
-							});
-
+									Date = d.Date,
+									Version = v
+								}
+							},
+							Timestamp = ts,
+							ScheduleLoadTimestamp = ts
 						});
 
 					});

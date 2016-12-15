@@ -46,16 +46,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.PersonScheduleDayRead
 			dates.ForEach(d =>
 			{
 				var ts = timestamp = timestamp.AddMinutes(1);
-				WithUnitOfWork.Do(() =>
+				Handler.Handle(new ProjectionChangedEvent
 				{
-					Handler.Handle(new ProjectionChangedEvent
-					{
-						PersonId = personId,
-						LogOnBusinessUnitId = businessUnitId,
-						ScenarioId = scenarioId,
-						IsInitialLoad = false,
-						IsDefaultScenario = true,
-						ScheduleDays = new List<ProjectionChangedEventScheduleDay>
+					PersonId = personId,
+					LogOnBusinessUnitId = businessUnitId,
+					ScenarioId = scenarioId,
+					IsInitialLoad = false,
+					IsDefaultScenario = true,
+					ScheduleDays = new List<ProjectionChangedEventScheduleDay>
 								{
 									new ProjectionChangedEventScheduleDay
 									{
@@ -63,10 +61,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.PersonScheduleDayRead
 										Version = 0
 									}
 								},
-						Timestamp = ts,
-						ScheduleLoadTimestamp = ts
-					});
-
+					Timestamp = ts,
+					ScheduleLoadTimestamp = ts
 				});
 			});
 			dates.ForEach(d =>
@@ -75,16 +71,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.PersonScheduleDayRead
 					var ts = timestamp = timestamp.AddMinutes(1);
 					simulator.ProcessAsync(() =>
 					{
-						WithUnitOfWork.Do(() =>
+						Handler.Handle(new ProjectionChangedEvent
 						{
-							Handler.Handle(new ProjectionChangedEvent
-							{
-								PersonId = personId,
-								LogOnBusinessUnitId = businessUnitId,
-								ScenarioId = scenarioId,
-								IsInitialLoad = false,
-								IsDefaultScenario = true,
-								ScheduleDays = new List<ProjectionChangedEventScheduleDay>
+							PersonId = personId,
+							LogOnBusinessUnitId = businessUnitId,
+							ScenarioId = scenarioId,
+							IsInitialLoad = false,
+							IsDefaultScenario = true,
+							ScheduleDays = new List<ProjectionChangedEventScheduleDay>
 								{
 									new ProjectionChangedEventScheduleDay
 									{
@@ -92,10 +86,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.PersonScheduleDayRead
 										Version = v
 									}
 								},
-								Timestamp = ts,
-								ScheduleLoadTimestamp = ts
-							});
-
+							Timestamp = ts,
+							ScheduleLoadTimestamp = ts
 						});
 
 					});
