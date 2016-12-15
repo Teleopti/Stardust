@@ -14,7 +14,8 @@
         this.selectOrganization = selectOrganization;
         this.prepareData = prepareData;
         this.selectAllFunction = selectAllFunction;
-
+        this.selectDynamicOption = selectDynamicOption;
+        this.prepareDynamicOption = prepareDynamicOption;
         var selectedRole;
 
         function selectFunction(selectedRole, functions, func) {
@@ -56,6 +57,24 @@
             }
         }
 
+        function prepareDynamicOption(option) {
+            return  {
+                Id: selectedRole.Id,
+                RangeOption: option.RangeOption
+            }
+        }
+
+        function selectDynamicOption(option) {
+            var preparedObject = prepareDynamicOption(option);
+
+            PermissionsServiceRefact.assignOrganizationSelection.postData(preparedObject).$promise.then(function (result) {
+                if (result != null) {
+                    console.log(result);
+                    return result;
+                }
+            });
+        }
+
         function selectOrganization(orgData) {
             var data = prepareData(orgData);
 
@@ -68,12 +87,12 @@
                 if (orgData.IsSelected) {
                     PermissionsServiceRefact.assignOrganizationSelection.postData(data).$promise.then(function (result) {
                         if (result != null) {
-                          console.log(result);
-                          return result;
+                            console.log(result);
+                            return result;
                         }
                     });
                 } else {
-                  data1.BusinessUnits = [];
+                    data1.BusinessUnits = [];
                     PermissionsServiceRefact.deleteAllData.delete(data).$promise.then(function () {
                         if (result != null) {
                             console.log('delete all bu data result', result);

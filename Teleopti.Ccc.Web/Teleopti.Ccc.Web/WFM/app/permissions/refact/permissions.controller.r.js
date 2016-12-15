@@ -28,7 +28,11 @@
     vm.selectedRole = {};
     vm.componentFunctions = [];
     vm.listHandler = listHandler;
+    vm.selectDynamicOption = selectDynamicOption;
 
+    function selectDynamicOption(option) {
+      permissionsDataService.selectDynamicOption(option);
+    }
 
     function listHandler(arr) {
       vm.componentFunctions = [].concat(arr);
