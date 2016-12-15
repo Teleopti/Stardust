@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			var personFrom = _loggedOnUser.CurrentUser();
 
 			var personFromSchedulePeriod = getSchedulePeriod(personFromScheduleView, personFrom.PermissionInformation.DefaultTimeZone());
-			var projection = _projectionProvider.Projection (toScheduleDay);
+			var projection = _projectionProvider.Projection(toScheduleDay);
 			if (!projection.HasLayers)
 			{
 				return true;
@@ -66,7 +66,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			});
 
 			return isSatisfiedPersonFromSiteOpenHours && isSatisfiedPersonToSiteOpenHours;
-
 		}
 
 		public IEnumerable<ShiftTradeAddPersonScheduleViewModel> FilterScheduleView(
@@ -97,7 +96,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 						return true;
 					}
 
-					if (shiftTradeAddPersonScheduleView.ScheduleLayers == null || !shiftTradeAddPersonScheduleView.ScheduleLayers.Any())
+					if (shiftTradeAddPersonScheduleView.IsDayOff ||
+						shiftTradeAddPersonScheduleView.ScheduleLayers == null || !shiftTradeAddPersonScheduleView.ScheduleLayers.Any())
 					{
 						return true;
 					}

@@ -48,10 +48,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			};
 
 			var filteredScheduleDays =
-				scheduleDays.Where(scheduleDay => Target.FilterSchedule(scheduleDay, _personFromScheduleView));
+				scheduleDays.Where(scheduleDay => Target.FilterSchedule(scheduleDay, _personFromScheduleView)).ToList();
 
-			filteredScheduleDays.Count().Should().Be(1);
-			filteredScheduleDays.FirstOrDefault().Person.Should().Be(person1);
+			filteredScheduleDays.Count.Should().Be(1);
+			filteredScheduleDays.First().Person.Should().Be(person1);
 		}
 
 		[Test]
@@ -69,10 +69,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			};
 
 			var filteredScheduleDays =
-				scheduleDays.Where(scheduleDay => Target.FilterSchedule(scheduleDay, _personFromScheduleView));
+				scheduleDays.Where(scheduleDay => Target.FilterSchedule(scheduleDay, _personFromScheduleView)).ToList();
 
-			filteredScheduleDays.Count().Should().Be(1);
-			filteredScheduleDays.FirstOrDefault().Person.Should().Be(person1);
+			filteredScheduleDays.Count.Should().Be(1);
+			filteredScheduleDays.First().Person.Should().Be(person1);
 		}
 
 		[Test]
@@ -113,10 +113,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			};
 
 			var filteredScheduleDays =
-				scheduleDays.Where(scheduleDay => Target.FilterSchedule(scheduleDay, _personFromScheduleView));
+				scheduleDays.Where(scheduleDay => Target.FilterSchedule(scheduleDay, _personFromScheduleView)).ToList();
 
-			filteredScheduleDays.Count().Should().Be(1);
-			filteredScheduleDays.FirstOrDefault().Person.Should().Be(person1);
+			filteredScheduleDays.Count.Should().Be(1);
+			filteredScheduleDays.First().Person.Should().Be(person1);
 		}
 
 		[Test]
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				Target.FilterScheduleView(shiftTradeAddPersonScheduleViews, _personFromScheduleView, datePersons).ToList();
 
 			filteredShiftTradeAddPersonScheduleViews.Count.Should().Be(1);
-			filteredShiftTradeAddPersonScheduleViews.FirstOrDefault().PersonId.Should().Be(person1.Id.GetValueOrDefault());
+			filteredShiftTradeAddPersonScheduleViews.First().PersonId.Should().Be(person1.Id.GetValueOrDefault());
 		}
 
 		[Test]
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				Target.FilterScheduleView(shiftTradeAddPersonScheduleViews, _personFromScheduleView, datePersons).ToList();
 
 			filteredShiftTradeAddPersonScheduleViews.Count.Should().Be(1);
-			filteredShiftTradeAddPersonScheduleViews.FirstOrDefault().PersonId.Should().Be(person1.Id.GetValueOrDefault());
+			filteredShiftTradeAddPersonScheduleViews.First().PersonId.Should().Be(person1.Id.GetValueOrDefault());
 		}
 
 		[Test]
@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				{ DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(9), TimeSpan.FromHours(33)) }
 			});
 			prepareData(personFrom);
-	
+
 			var person1 = createPersonWithSiteOpenHours(8, 15);
 
 			var shiftTradeAddPersonScheduleViews = new[]
@@ -242,16 +242,19 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				Target.FilterScheduleView(shiftTradeAddPersonScheduleViews, _personFromScheduleView, datePersons).ToList();
 
 			filteredShiftTradeAddPersonScheduleViews.Count.Should().Be(1);
-			filteredShiftTradeAddPersonScheduleViews.FirstOrDefault().PersonId.Should().Be(person1.Id.GetValueOrDefault());
+			filteredShiftTradeAddPersonScheduleViews.First().PersonId.Should().Be(person1.Id.GetValueOrDefault());
 		}
 
 		[Test]
-		public void ShouldReturnNightShiftScheduleViewForEmptySiteOpenHour()
+		public void ShouldFilterScheduleViewWithDayOff()
 		{
-			var personFrom = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>());
+			var personFrom = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>
+			{
+				{ DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(9), TimeSpan.FromHours(33)) }
+			});
 			prepareData(personFrom);
 
-			var person1 = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>());
+			var person1 = createPersonWithSiteOpenHours(8, 15);
 
 			var shiftTradeAddPersonScheduleViews = new[]
 			{
@@ -266,7 +269,51 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				Target.FilterScheduleView(shiftTradeAddPersonScheduleViews, _personFromScheduleView, datePersons).ToList();
 
 			filteredShiftTradeAddPersonScheduleViews.Count.Should().Be(1);
-			filteredShiftTradeAddPersonScheduleViews.FirstOrDefault().PersonId.Should().Be(person1.Id.GetValueOrDefault());
+			filteredShiftTradeAddPersonScheduleViews.First().PersonId.Should().Be(person1.Id.GetValueOrDefault());
+		}
+
+		[Test]
+		public void ShouldReturnNightShiftScheduleViewForEmptySiteOpenHour()
+		{
+			var today = DateTime.Today.Date;
+			var dayOfWeek = today.DayOfWeek;
+			var personFrom = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>
+			{
+				{ dayOfWeek, new TimePeriod(TimeSpan.FromHours(9), TimeSpan.FromHours(33)) }
+			});
+			prepareData(personFrom);
+
+			var person1 = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>());
+
+			var tomorrow = today.AddDays(1);
+			var dayoffLayerViewModel = new[]
+			{
+				new TeamScheduleLayerViewModel
+				{
+					TitleHeader = "Dayoff Layer",
+					LengthInMinutes = (int) (tomorrow - today).TotalMinutes,
+					Start = today,
+					End = tomorrow
+				}
+			};
+			var shiftTradeAddPersonScheduleViews = new[]
+			{
+				new ShiftTradeAddPersonScheduleViewModel
+				{
+					PersonId = person1.Id.GetValueOrDefault(),
+					ScheduleLayers = dayoffLayerViewModel,
+					IsDayOff = true,
+					Name = "test",
+					Total = dayoffLayerViewModel.Length
+				}
+			};
+
+			var datePersons = new DatePersons { Date = _shiftTradeDate, Persons = new[] { person1 } };
+			var filteredShiftTradeAddPersonScheduleViews =
+				Target.FilterScheduleView(shiftTradeAddPersonScheduleViews, _personFromScheduleView, datePersons).ToList();
+
+			filteredShiftTradeAddPersonScheduleViews.Count.Should().Be(1);
+			filteredShiftTradeAddPersonScheduleViews.First().PersonId.Should().Be(person1.Id.GetValueOrDefault());
 		}
 
 		[Test]
@@ -286,7 +333,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var filteredShiftExchangeOffers = shiftExchangeOffers
 				.Where(shiftExchangeOffer => Target.FilterShiftExchangeOffer(shiftExchangeOffer, _personFromScheduleView)).ToList();
 			filteredShiftExchangeOffers.Count.Should().Be(1);
-			filteredShiftExchangeOffers.FirstOrDefault().Person.Should().Be(person1);
+			filteredShiftExchangeOffers.First().Person.Should().Be(person1);
 		}
 
 		[Test]
@@ -306,7 +353,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var filteredShiftExchangeOffers = shiftExchangeOffers
 				.Where(shiftExchangeOffer => Target.FilterShiftExchangeOffer(shiftExchangeOffer, _personFromScheduleView)).ToList();
 			filteredShiftExchangeOffers.Count.Should().Be(1);
-			filteredShiftExchangeOffers.FirstOrDefault().Person.Should().Be(person1);
+			filteredShiftExchangeOffers.First().Person.Should().Be(person1);
 		}
 
 		[Test]
@@ -347,7 +394,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var filteredShiftExchangeOffers = shiftExchangeOffers
 				.Where(shiftExchangeOffer => Target.FilterShiftExchangeOffer(shiftExchangeOffer, _personFromScheduleView)).ToList();
 			filteredShiftExchangeOffers.Count.Should().Be(1);
-			filteredShiftExchangeOffers.FirstOrDefault().Person.Should().Be(person1);
+			filteredShiftExchangeOffers.First().Person.Should().Be(person1);
 		}
 
 		private void prepareData(IPerson person = null)
@@ -395,7 +442,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private IPerson createPersonWithSiteOpenHours(int startHour, int endHour, bool isOpenHoursClosed = false)
 		{
 			var team = TeamFactory.CreateTeam("team", "site");
-			var siteOpenHour = new SiteOpenHour()
+			var siteOpenHour = new SiteOpenHour
 			{
 				IsClosed = isOpenHoursClosed,
 				Parent = team.Site,
@@ -412,7 +459,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var team = TeamFactory.CreateTeam("team", "site");
 			foreach (var openHour in openHours)
 			{
-				var siteOpenHour = new SiteOpenHour()
+				var siteOpenHour = new SiteOpenHour
 				{
 					Parent = team.Site,
 					TimePeriod = openHour.Value,
@@ -452,7 +499,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var scenario = CurrentScenario.Current();
 			var scheduleDay = ScheduleDayFactory.Create(date, person, scenario);
 			var shiftExchangeOffer = new ShiftExchangeOffer(scheduleDay,
-				new ShiftExchangeCriteria() {DayType = ShiftExchangeLookingForDay.EmptyDay},
+				new ShiftExchangeCriteria {DayType = ShiftExchangeLookingForDay.EmptyDay},
 				ShiftExchangeOfferStatus.Pending);
 			return shiftExchangeOffer;
 		}
@@ -461,7 +508,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			var scenario = CurrentScenario.Current();
 			var scheduleDay = ScheduleDayFactory.Create(_shiftTradeDate, person, scenario);
-			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var assignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, _shiftTradeDate);
 			foreach (var timePeriod in timePeriods)
 			{
