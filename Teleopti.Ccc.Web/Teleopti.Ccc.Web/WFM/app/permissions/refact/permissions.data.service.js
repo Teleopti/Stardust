@@ -92,8 +92,7 @@
                         }
                     });
                 } else {
-                    data1.BusinessUnits = [];
-                    PermissionsServiceRefact.deleteAllData.delete(data).$promise.then(function () {
+                    PermissionsServiceRefact.deleteAllData.delete(data).$promise.then(function (result) {
                         if (result != null) {
                             console.log('delete all bu data result', result);
                         }
@@ -108,7 +107,7 @@
                 });
             }
             else if (!orgData.IsSelected) {
-                PermissionsServiceRefact.deleteAvailableData.delete(selectedData).$promise.then(function () {
+                PermissionsServiceRefact.deleteAvailableData.delete(selectedData).$promise.then(function (result) {
                     if (result != null) {
                         console.log('delete data result', result);
                     }
@@ -116,21 +115,44 @@
             }
         }
 
-        var data1 = {};
-
         function arrayCreator(orgData) {
-            var attributeName = orgData.Type + 's';
-            if (!data1[attributeName]) {
-                data1[attributeName] = [];
-            }
-            data1[attributeName].push(orgData.Id);
-
-            if (orgData.ChildNodes != null && orgData.ChildNodes.length > 0) {
-                for (var i = 0; i < orgData.ChildNodes.length; i++) {
-                    arrayCreator(orgData.ChildNodes[i]);
+            var map = {};
+            if (orgData.Type == "BusinessUnit") {
+                if (map.BusinessUnits == null) {
+                    map.BusinessUnits = [];
                 }
+                map.BusinessUnits = map.BusinessUnits.concat(orgData.Id);
+                
+                if (map.Sites == null) {
+                    map.Sites = [];
+                }
+                map.Sites = map.Sites.concat(orgData.ChildNodes.map(function(site) { return site.Id; }));
+                
+                if (map.Teams == null) {
+                    map.Teams = [];
+                }
+                orgData.ChildNodes.map(function(site) { return site.ChildNodes; })
+                    .forEach(function(teams) {
+                        map.Teams = map.Teams.concat(teams.map(function(team) { return team.Id; }));
+                    });
+            } else if (orgData.Type == "Site") {
+                if (map.Sites == null) {
+                    map.Sites = [];
+                }
+                map.Sites = map.Sites.concat(orgData.Id);
+                
+                if (map.Teams == null) {
+                    map.Teams = [];
+                }
+                map.Teams = map.Teams.concat(orgData.ChildNodes.map(function(site) { return site.Id; }));
+            } else if (orgData.Type == "Team") {
+                if (map.Teams == null) {
+                    map.Teams = [];
+                }
+                map.Teams = map.Teams.concat(orgData.Id);
             }
-            return data1;
+
+            return map;
         }
 
         function prepareData(orgData) {

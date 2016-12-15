@@ -5,7 +5,6 @@
   .module('wfm.permissions')
   .config(stateConfig);
 
-  //Dont remove any commented stuff in permissions please!
   // function stateConfig($stateProvider) {
   //   $stateProvider.state('permissions', {
 	// 		url: '/permissions',

@@ -22,14 +22,14 @@ function PermissionsListController(permissionsDataService) {
     }
 
     if (node.Type === 'Site') {
-      ctrl.org.BusinessUnit.IsSelected = true;
+      ctrl.org.BusinessUnit.IsSelected = selectedOrNot;
 
       for (var i = 0; i < node.ChildNodes.length; i++) {
         node.ChildNodes[i].IsSelected = selectedOrNot;
       }
     }
     if (node.Type === 'Team') {
-      ctrl.org.BusinessUnit.IsSelected = true;
+      ctrl.org.BusinessUnit.IsSelected = selectedOrNot;
       traverseNodes(node);
     }
   }
@@ -40,13 +40,10 @@ function PermissionsListController(permissionsDataService) {
     for (var i = 0; i < sites.length; i++) {
       for (var j = 0; j < sites[i].ChildNodes.length; j++) {
         if (sites[i].ChildNodes[j].Id === node.Id) {
-          sites[i].IsSelected = true;
           var isAllSelected = sites[i].ChildNodes.every(function(team){
-            return !team.IsSelected;
+            return team.IsSelected;
           });
-          if (isAllSelected) {
-            sites[i].IsSelected = false;
-          }
+          sites[i].IsSelected = isAllSelected;
         }
       }
     }

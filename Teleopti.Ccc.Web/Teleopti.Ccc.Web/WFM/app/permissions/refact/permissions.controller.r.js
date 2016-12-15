@@ -210,26 +210,12 @@
       });
     };
 
-    var matchTeams2 = function (sites){
-      for (var i = 0; i < sites.length; i++) {
-        for (var j = 0; j < sites[i].ChildNodes.length; j++) {
-          if (vm.selectedRole.AvailableTeams[j] != null && sites[i].ChildNodes[j].Id == vm.selectedRole.AvailableTeams[j].Id){
-            sites[i].ChildNodes[j].IsSelected = true;
-          }else {
-            sites[i].ChildNodes[j].IsSelected = false;
-          }
-        }
-      }
-    }
-
     var matchTeams = function (sites) {
-      sites.forEach(function(site){
-        site.ChildNodes.forEach(function(team, index){
-          if (vm.selectedRole.AvailableTeams[index] != null && team.Id == vm.selectedRole.AvailableTeams[index].Id) {
-            team.IsSelected = true;
-          } else {
-            team.IsSelected = false;
-          }
+      sites.forEach(function(site) {
+        site.ChildNodes.forEach(function(team) {
+          team.IsSelected = vm.selectedRole.AvailableTeams.some(function(t) {
+            return team.Id == t.Id;
+          }); 
         });
       });
     };

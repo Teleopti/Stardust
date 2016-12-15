@@ -1,5 +1,5 @@
 'use strict';
-//DONT REMOVE X
+
 xdescribe('component: permissionsList', function () {
   var $httpBackend,
   fakeBackend,
