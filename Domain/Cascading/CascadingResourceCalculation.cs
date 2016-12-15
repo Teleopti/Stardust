@@ -8,30 +8,19 @@ namespace Teleopti.Ccc.Domain.Cascading
 		private readonly ResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly ShovelResources _shovelResources;
 
-		public CascadingResourceCalculation(ResourceOptimizationHelper resourceOptimizationHelper,
-																ShovelResources shovelResources)
+		public CascadingResourceCalculation(ResourceOptimizationHelper resourceOptimizationHelper, ShovelResources shovelResources)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_shovelResources = shovelResources;
 		}
 
-		public void ResourceCalculate(DateOnlyPeriod dateOnlyPeriod, IResourceCalculationData resourceCalculationData)
-		{
-			doForPeriod(dateOnlyPeriod, resourceCalculationData);
-		}
-
-		public void ResourceCalculate(DateOnly localDate, IResourceCalculationData resourceCalculationData)
-		{
-			doForPeriod(new DateOnlyPeriod(localDate, localDate), resourceCalculationData);
-		}
-
-		private void doForPeriod(DateOnlyPeriod period, IResourceCalculationData resourceCalculationData)
+		public void ResourceCalculate(DateOnlyPeriod period, IResourceCalculationData resourceCalculationData)
 		{
 			foreach (var date in period.DayCollection())
 			{
 				_resourceOptimizationHelper.ResourceCalculate(date, resourceCalculationData);
 			}
-			if (!ResourceCalculationContext.PrimarySkillMode()) 
+			if (!ResourceCalculationContext.PrimarySkillMode())
 			{
 				_shovelResources.Execute(resourceCalculationData.SkillStaffPeriodHolder, resourceCalculationData.Schedules, resourceCalculationData.Skills, period);
 			}
