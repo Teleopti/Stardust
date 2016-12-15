@@ -40,8 +40,6 @@ namespace Teleopti.Interfaces.Domain
 		/// <returns></returns>
 		IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays);
 
-		string FriendlyName { get; }
-
 		/// <summary>
 		/// A string to show in shift trade system setting, user can understand what will be validate in this rule
 		/// </summary>
