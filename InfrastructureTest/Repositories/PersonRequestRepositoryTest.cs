@@ -2032,9 +2032,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				Name = "dd",
 				AbsenceRequestWaitlistEnabled = true,
-				AbsenceRequestWaitlistProcessOrder = WaitlistProcessOrder.BySeniority
-
-			};
+				AbsenceRequestWaitlistProcessOrder = WaitlistProcessOrder.BySeniority,
+				AbsenceRequestExpiredThreshold = 15
+			}; 
 			waitlistedWCS.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
 			{
 				Absence = absence,
@@ -2048,7 +2048,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var wcs = new WorkflowControlSet()
 			{
 				Name = "No Waitlist",
-				AbsenceRequestWaitlistEnabled = false
+				AbsenceRequestWaitlistEnabled = false,
+				AbsenceRequestExpiredThreshold = 15
 			};
 			wcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
 			{

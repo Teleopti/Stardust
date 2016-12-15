@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			businessUnit.AddSite(site);
 			site.AddTeam(team);
 			var workflowControlSet = new WorkflowControlSet("new set");
+			workflowControlSet.AbsenceRequestExpiredThreshold = 15;
 
 			var person1Period = PersonPeriodFactory.CreatePersonPeriod(startDate, team);
 			var person1 = PersonFactory.CreatePerson("anna", "andersson");

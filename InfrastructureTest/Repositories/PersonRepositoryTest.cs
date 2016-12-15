@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(absence);
 
 			_workflowControlSet = new WorkflowControlSet("A WCS");
+			_workflowControlSet.AbsenceRequestExpiredThreshold = 15;
 			PersistAndRemoveFromUnitOfWork(_workflowControlSet);
 		}
 

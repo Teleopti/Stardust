@@ -64,6 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			workflowControlSet.SchedulePublishedToDate = new DateTime(2000, 1, 10);
 			workflowControlSet.PreferencePeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11);
 			workflowControlSet.PreferenceInputPeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11);
+			workflowControlSet.AbsenceRequestExpiredThreshold = 15;
 
 			PersistAndRemoveFromUnitOfWork(workflowControlSet);
 
@@ -115,6 +116,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			workflowControlSet.SchedulePublishedToDate = new DateTime(2000, 1, 10);
 			workflowControlSet.PreferencePeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11);
 			workflowControlSet.PreferenceInputPeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11);
+			workflowControlSet.AbsenceRequestExpiredThreshold = 15;
 
 			PersistAndRemoveFromUnitOfWork(workflowControlSet);
 
@@ -173,6 +175,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			workflowControlSet.SchedulePublishedToDate = new DateTime(2000, 1, 10);
 			workflowControlSet.PreferencePeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11);
 			workflowControlSet.PreferenceInputPeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11);
+			workflowControlSet.AbsenceRequestExpiredThreshold = 15;
 
 			PersistAndRemoveFromUnitOfWork(workflowControlSet);
 
@@ -238,6 +241,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			workflowControlSet.SchedulePublishedToDate = new DateTime(2000, 1, 10);
 			workflowControlSet.PreferencePeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11);
 			workflowControlSet.PreferenceInputPeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11);
+			workflowControlSet.AbsenceRequestExpiredThreshold = 15;
 
 			PersistAndRemoveFromUnitOfWork(workflowControlSet);
 
@@ -291,8 +295,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             workflowControlSet.SchedulePublishedToDate = new DateTime(2000, 1, 10);
             workflowControlSet.PreferencePeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11);
             workflowControlSet.PreferenceInputPeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11);
+				workflowControlSet.AbsenceRequestExpiredThreshold = 15;
 
-            PersistAndRemoveFromUnitOfWork(workflowControlSet);
+			PersistAndRemoveFromUnitOfWork(workflowControlSet);
 
             per1.WorkflowControlSet = workflowControlSet;
             per2.WorkflowControlSet = workflowControlSet;

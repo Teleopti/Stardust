@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             workflowControlSet.AddAllowedPreferenceShiftCategory(_shiftCategory);
             workflowControlSet.AddAllowedPreferenceAbsence(_absence);
             workflowControlSet.AddAllowedAbsenceForReport(_absence);
+				workflowControlSet.AbsenceRequestExpiredThreshold = 15;
 
             workflowControlSet.AutoGrantShiftTradeRequest = true;
             return workflowControlSet;
