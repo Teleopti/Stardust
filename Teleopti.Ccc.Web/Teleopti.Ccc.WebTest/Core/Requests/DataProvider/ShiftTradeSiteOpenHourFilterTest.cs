@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
-		public void ShouldFilterScheduleViewWithDayOff()
+		public void ShouldReturnNightShiftScheduleViewForEmptySiteOpenHour()
 		{
 			var personFrom = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>
 			{
@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
-		public void ShouldReturnNightShiftScheduleViewForEmptySiteOpenHour()
+		public void ShouldReturnScheduleViewWithDayOff()
 		{
 			var today = DateTime.Today.Date;
 			var dayOfWeek = today.DayOfWeek;
