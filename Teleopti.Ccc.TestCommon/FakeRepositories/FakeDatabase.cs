@@ -174,9 +174,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return database.WithScenario(id, null);
 		}
 
+		public static FakeDatabase WithActivity(this FakeDatabase database)
+		{
+			return database.WithActivity(null, null, null);
+		}
+
 		public static FakeDatabase WithActivity(this FakeDatabase database, Guid? id)
 		{
-			return database.WithActivity(id, null);
+			return database.WithActivity(id, null, null);
 		}
 
 		public static FakeDatabase WithDayOffTemplate(this FakeDatabase database, Guid? id)
@@ -686,7 +691,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithActivity(Guid? id, string name)
 		{
-			return WithActivity(id, RandomName.Make(), null);
+			return WithActivity(id, name, null);
 		}
 
 		public FakeDatabase WithActivity(Guid? id, string name, Color? color)
@@ -812,7 +817,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			IActivity activity = null;
 			if (activityId != null)
 			{
-				ensureExists(_activities, activityId, () => WithActivity(activityId, null));
+				ensureExists(_activities, activityId, () => WithActivity(activityId, null, null));
 				_activity = _activities.LoadAll().Single(x => x.Id == activityId) as Activity;
 				activity = _activity;
 			}

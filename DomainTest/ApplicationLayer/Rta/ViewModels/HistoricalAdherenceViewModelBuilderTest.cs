@@ -189,13 +189,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Database
 				.WithAgent(person, "nicklas", TimeZoneInfoFactory.ChinaTimeZoneInfo())
 				.WithAssignment(person, "2016-10-11")
-				.WithActivity(null, null)
+				.WithActivity()
 				.WithAssignedActivity("2016-10-11 00:00", "2016-10-11 09:00")
 				.WithAssignment(person, "2016-10-12")
-				.WithActivity(null, null)
+				.WithActivity()
 				.WithAssignedActivity("2016-10-12 00:00", "2016-10-12 09:00")
 				.WithAssignment(person, "2016-10-13")
-				.WithActivity(null, null)
+				.WithActivity()
 				.WithAssignedActivity("2016-10-13 00:00", "2016-10-13 09:00");
 
 			var data = Target.Build(person);

@@ -136,8 +136,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					DisplayColor = layer.DisplayColor().ToArgb(),
 					EndDateTime = layer.Period.EndDateTime,
 					Name = layer.DisplayDescription().Name,
-					PayloadId = layer.Payload.Id.Value,
-					PersonId = person.Id.Value,
+					PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
+					PersonId = person.Id.GetValueOrDefault(),
 					ShortName = layer.DisplayDescription().ShortName,
 					StartDateTime = layer.Period.StartDateTime
 				})
