@@ -182,7 +182,10 @@ function PersonSelectionService() {
 	svc.unselectAllPerson = function (schedules) {
 		angular.forEach(schedules, function (personSchedule) {
 			personSchedule.IsSelected = false;
-			svc.updatePersonSelection(personSchedule);
+			svc.toggleAllPersonProjections(personSchedule, personSchedule.Date);
+			if (!personSchedule.IsSelected && svc.personInfo[personSchedule.PersonId]) {
+				delete svc.personInfo[personSchedule.PersonId];
+			}
 		});
 	};
 
