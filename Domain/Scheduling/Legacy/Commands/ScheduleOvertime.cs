@@ -18,14 +18,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IScheduleOvertimeService _scheduleOvertimeService;
 		private readonly ScheduleOvertimeOnNonScheduleDays _scheduleOvertimeOnNonScheduleDays;
 		private readonly FullResourceCalculation _fullResourceCalculation;
-		private readonly IResourceOptimization _resourceOptimizationHelper;
+		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IUserTimeZone _userTimeZone;
 
 		public ScheduleOvertime(Func<ISchedulingResultStateHolder> schedulingResultStateHolder, 
 																	IScheduleOvertimeService scheduleOvertimeService,
 																	ScheduleOvertimeOnNonScheduleDays scheduleOvertimeOnNonScheduleDays,
 																	FullResourceCalculation fullResourceCalculation,
-																	IResourceOptimization resourceOptimizationHelper,
+																	IResourceCalculation resourceOptimizationHelper,
 																	IUserTimeZone userTimeZone)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;

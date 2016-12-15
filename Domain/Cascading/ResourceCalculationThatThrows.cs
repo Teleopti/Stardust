@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
-	public class ResourceCalculationThatThrows : IResourceOptimization
+	public class ResourceCalculationThatThrows : IResourceCalculation
 	{
 		public void ResourceCalculate(DateOnly localDate, IResourceCalculationData resourceCalculationData)
 		{

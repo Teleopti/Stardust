@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 	    private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 	    private readonly IScheduleService _scheduleService;
-	    private readonly IResourceOptimization _resourceOptimizationHelper;
+	    private readonly IResourceCalculation _resourceOptimizationHelper;
 
 	    private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
         private readonly HashSet<IWorkShiftFinderResult> _finderResults = new HashSet<IWorkShiftFinderResult>();
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			IDayOffsInPeriodCalculator dayOffsInPeriodCalculator, 
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IScheduleService scheduleService, 
-			IResourceOptimization resourceOptimizationHelper,
+			IResourceCalculation resourceOptimizationHelper,
 			IUserTimeZone userTimeZone)
 		{
 			_userTimeZone = userTimeZone;

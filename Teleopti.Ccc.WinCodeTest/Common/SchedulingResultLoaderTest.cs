@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 		    var skillDayLoadHelper = MockRepository.GenerateMock<ISkillDayLoadHelper>();
 		    skillDayLoadHelper.Expect(x => x.LoadSchedulerSkillDays(new DateOnlyPeriod(), null, null)).IgnoreArguments().Return(new Dictionary<ISkill, IEnumerable<ISkillDay>>());
-			target = new SchedulingResultLoader(_schedulerState, _repositoryFactory, new EventAggregator(), MockRepository.GenerateMock<ILazyLoadingManager>(), peopleAndSkillLoaderDecider, MockRepository.GenerateMock<IPeopleLoader>(), skillDayLoadHelper, MockRepository.GenerateMock<IResourceOptimization>(), MockRepository.GenerateMock<LoadScheduleByPersonSpecification>(), _scheduleStorageFactory);
+			target = new SchedulingResultLoader(_schedulerState, _repositoryFactory, new EventAggregator(), MockRepository.GenerateMock<ILazyLoadingManager>(), peopleAndSkillLoaderDecider, MockRepository.GenerateMock<IPeopleLoader>(), skillDayLoadHelper, MockRepository.GenerateMock<IResourceCalculation>(), MockRepository.GenerateMock<LoadScheduleByPersonSpecification>(), _scheduleStorageFactory);
         }
 
         [Test]

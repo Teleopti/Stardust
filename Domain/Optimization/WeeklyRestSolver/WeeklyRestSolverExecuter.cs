@@ -11,14 +11,14 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	public class WeeklyRestSolverExecuter
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly IResourceOptimization _resourceOptimizationHelper;
+		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly IUserTimeZone _userTimeZone;
 
 		public WeeklyRestSolverExecuter(Func<ISchedulerStateHolder> schedulerStateHolder, 
-			IResourceOptimization resourceOptimizationHelper, 
+			IResourceCalculation resourceOptimizationHelper, 
 			IMatrixListFactory matrixListFactory, 
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,

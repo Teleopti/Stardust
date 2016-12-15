@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Win.Meetings
 		public MeetingImpactView(IMeetingViewModel meetingViewModel, 
 								ISchedulerStateHolder schedulerStateHolder, 
 								MeetingComposerView meetingComposerView, 
-								IResourceOptimization resourceOptimizationHelper,
+								IResourceCalculation resourceOptimizationHelper,
 								ISkillPriorityProvider skillPriorityProvider)
 			: this()
 		{

@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	public class SafeRollbackAndResourceCalculation : ISafeRollbackAndResourceCalculation
 	{
-		private readonly IResourceOptimization _resourceOptimizationHelper;
+		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 
-		public SafeRollbackAndResourceCalculation(IResourceOptimization resourceOptimizationHelper, Func<ISchedulingResultStateHolder> schedulingResultStateHolder)
+		public SafeRollbackAndResourceCalculation(IResourceCalculation resourceOptimizationHelper, Func<ISchedulingResultStateHolder> schedulingResultStateHolder)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_schedulingResultStateHolder = schedulingResultStateHolder;

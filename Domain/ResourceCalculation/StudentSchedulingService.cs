@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 	    private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 	    private readonly IScheduleService _scheduleService;
-    	private readonly IResourceOptimization _resourceOptimizationHelper;
+    	private readonly IResourceCalculation _resourceOptimizationHelper;
 	    private readonly IUserTimeZone _userTimeZone;
 
 	    private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public StudentSchedulingService( ISchedulingResultStateHolder schedulingResultStateHolder,
             IEffectiveRestrictionCreator effectiveRestrictionCreator, IScheduleService scheduleService,
-			IResourceOptimization resourceOptimizationHelper,
+			IResourceCalculation resourceOptimizationHelper,
 			IUserTimeZone userTimeZone)
 		{
 		    _schedulingResultStateHolder = schedulingResultStateHolder;

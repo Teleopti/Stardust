@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly OptimizationResult _optimizationResult;
 		private readonly ITeamBlockDayOffOptimizerService _teamBlockDayOffOptimizerService;
-		private readonly IResourceOptimization _resourceOptimizationHelper;
+		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IUserTimeZone _userTimeZone;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			OptimizationResult optimizationResult,
 			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
-			IResourceOptimization resourceOptimizationHelper,
+			IResourceCalculation resourceOptimizationHelper,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IUserTimeZone userTimeZone)

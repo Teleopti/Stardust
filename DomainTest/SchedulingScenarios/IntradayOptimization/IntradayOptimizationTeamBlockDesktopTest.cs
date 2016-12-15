@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		[RemoveMeWithToggle("Should not be necessary when toggle is on/removed", Toggles.ResourcePlanner_MaxSeatsNew_40939)]
 		public IInitMaxSeatForStateHolder InitMaxSeatForStateHolder;
-		public IResourceOptimization ResourceOptimization;
+		public IResourceCalculation ResourceOptimization;
 
 		public IntradayOptimizationTeamBlockDesktopTest(bool resourcePlannerMaxSeatsNew40939, bool resourcePlannerSplitBigIslands42049)
 		{

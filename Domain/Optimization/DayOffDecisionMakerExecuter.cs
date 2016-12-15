@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IPeriodValueCalculator _periodValueCalculator;
         private readonly IWorkShiftBackToLegalStateServicePro _workTimeBackToLegalStateService;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-        private readonly IResourceOptimization _resourceOptimizationHelper;
+        private readonly IResourceCalculation _resourceOptimizationHelper;
         private readonly ScheduleChangesAffectedDates _resourceCalculateDaysDecider;
         private readonly IDayOffOptimizerValidator _dayOffOptimizerValidator;
         private readonly IDayOffOptimizerConflictHandler _dayOffOptimizerConflictHandler;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IPeriodValueCalculator periodValueCalculator,
             IWorkShiftBackToLegalStateServicePro workTimeBackToLegalStateService,
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
-            IResourceOptimization resourceOptimizationHelper,
+            IResourceCalculation resourceOptimizationHelper,
             ScheduleChangesAffectedDates resourceCalculateDaysDecider,
             IDayOffOptimizerValidator dayOffOptimizerValidator,
             IDayOffOptimizerConflictHandler dayOffOptimizerConflictHandler,

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCode.Common
         private readonly IPeopleAndSkillLoaderDecider _peopleAndSkillLoaderDecider;
         private readonly IPeopleLoader _peopleLoader;
         private readonly ISkillDayLoadHelper _skillDayLoadHelper;
-        private readonly IResourceOptimization _resourceOptimizationHelper;
+        private readonly IResourceCalculation _resourceOptimizationHelper;
         private readonly LoadScheduleByPersonSpecification _loadScheduleByPersonSpecification;
 	    private readonly IScheduleStorageFactory _scheduleStorageFactory;
 	    private ILoaderDeciderResult _deciderResult;
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WinCode.Common
                                     IPeopleAndSkillLoaderDecider peopleAndSkillLoaderDecider,
                                     IPeopleLoader peopleLoader,
             ISkillDayLoadHelper skillDayLoadHelper,
-            IResourceOptimization resourceOptimizationHelper,
+            IResourceCalculation resourceOptimizationHelper,
             LoadScheduleByPersonSpecification loadScheduleByPersonSpecification,
 						IScheduleStorageFactory scheduleStorageFactory)
         {

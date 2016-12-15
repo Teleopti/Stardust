@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	{
 		public ITeamBlockScheduleCommand Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
-		public IResourceOptimization ResourceOptimizationHelper;
+		public IResourceCalculation ResourceOptimizationHelper;
 		public Func<IScheduleDayChangeCallback> ScheduleDayChangeCallback;
 		public IGroupPersonBuilderForOptimizationFactory GroupPersonBuilderForOptimizationFactory;
 		public FakeBusinessUnitRepository BusinessUnitRepository;

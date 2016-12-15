@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IExtendReduceDaysOffHelper _extendReduceDaysOffHelper;
 		private readonly Func<ISchedulingResultStateHolder> _stateHolder;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
-		private readonly IResourceOptimization _resourceOptimizationHelper;
+		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private ResourceOptimizerProgressEventArgs _progressEvent;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_schedulerStateHolder = () => _container.Resolve<ISchedulerStateHolder>();
 			_stateHolder = () => _schedulerStateHolder().SchedulingResultState;
 			_scheduleDayChangeCallback = () => _container.Resolve<IScheduleDayChangeCallback>();
-			_resourceOptimizationHelper = _container.Resolve<IResourceOptimization>();
+			_resourceOptimizationHelper = _container.Resolve<IResourceCalculation>();
 			_optimizerHelperHelper = _container.Resolve<IOptimizerHelperHelper>();
 			_bitArrayConverter = _container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
 			_resourceCalculationContextFactory = _container.Resolve<CascadingResourceCalculationContextFactory>();
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					rollbackService,
 					_stateHolder(),
 					_container.Resolve<IEffectiveRestrictionCreator>(),
-					_container.Resolve<IResourceOptimization>(),
+					_container.Resolve<IResourceCalculation>(),
 					dayOffOptimizationPreferenceProvider,
 					_container.Resolve<IDeleteAndResourceCalculateService>(),
 					scheduleResultDataExtractorProvider,

@@ -11,14 +11,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly IScheduleService _scheduleService;
 		private readonly Func<IWorkShiftFinderResultHolder> _workShiftFinderResultHolder;
-		private readonly IResourceOptimization _resourceOptimization;
+		private readonly IResourceCalculation _resourceOptimization;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IUserTimeZone _userTimeZone;
 
 		public NightRestWhiteSpotSolverServiceFactory(IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
 			IScheduleService scheduleService, 
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder, 
-			IResourceOptimization resourceOptimization,
+			IResourceCalculation resourceOptimization,
 			Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 			IUserTimeZone userTimeZone)
 		{

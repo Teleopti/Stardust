@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
     	private readonly IScheduleService _scheduleService;
         private readonly IDeleteSchedulePartService _deleteSchedulePartService;
-        private readonly IResourceOptimization _resourceOptimizationHelper;
+        private readonly IResourceCalculation _resourceOptimizationHelper;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
     	private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 	    private readonly Func<ISchedulerStateHolder> _schedulingResultStateHolder;
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 	    public ScheduleDayService(IScheduleService scheduleService,
 								  IDeleteSchedulePartService deleteSchedulePartService,
-								  IResourceOptimization resourceOptimizationHelper,
+								  IResourceCalculation resourceOptimizationHelper,
 								  IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			Func<ISchedulerStateHolder> schedulingResultStateHolder,

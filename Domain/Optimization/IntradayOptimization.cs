@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IIntradayOptimizerContainer _intradayOptimizerContainer;
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
-		private readonly IResourceOptimization _resourceOptimization;
+		private readonly IResourceCalculation _resourceOptimization;
 
 		public IntradayOptimization(Func<ISchedulerStateHolder> schedulerStateHolder,
 			IntradayOptimizer2Creator intradayOptimizer2Creator,
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IIntradayOptimizerContainer intradayOptimizerContainer,
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter,
 			IOptimizationPreferencesProvider optimizationPreferencesProvider,
-			IResourceOptimization resourceOptimization)
+			IResourceCalculation resourceOptimization)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_intradayOptimizer2Creator = intradayOptimizer2Creator;

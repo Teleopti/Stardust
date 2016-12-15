@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
-	public class CascadingResourceCalculation : IResourceOptimization
+	public class CascadingResourceCalculation : IResourceCalculation
 	{
 		private readonly ResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly ShovelResources _shovelResources;

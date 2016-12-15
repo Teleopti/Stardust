@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	[DomainTest]
 	public class ResourceCalculationTest
 	{
-		public IResourceOptimization ResourceOptimizationHelper;
+		public IResourceCalculation ResourceOptimizationHelper;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeTimeZoneGuard TimeZoneGuard;
 

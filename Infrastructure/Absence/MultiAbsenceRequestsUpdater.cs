@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly IBudgetGroupHeadCountSpecification _budgetGroupHeadCountSpecification;
 		private readonly IBudgetGroupAllowanceSpecification _budgetGroupAllowanceSpecification;
 		private readonly IAlreadyAbsentSpecification _alreadyAbsentSpecification;
-		private readonly IResourceOptimization _resourceOptimizationHelper;
+		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IPersonRequestCheckAuthorization _authorization;
 		private readonly IRequestFactory _requestFactory;
 		private readonly ICurrentScenario _scenarioRepository;
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			IAlreadyAbsentSpecification alreadyAbsentSpecification,
 			IPersonRequestCheckAuthorization authorization,
 			IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification,
-			IResourceOptimization resourceOptimizationHelper,
+			IResourceCalculation resourceOptimizationHelper,
 			IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification,
 			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
 			ICommandDispatcher commandDispatcher,

@@ -17,13 +17,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	{
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
-		private readonly IResourceOptimization _resourceOptimizationHelper;
+		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IResourceCalculateAfterDeleteDecider _resourceCalculateAfterDeleteDecider;
 		private readonly AffectedDates _affectedDates;
 
 		public DeleteAndResourceCalculateService(Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 																					IDeleteSchedulePartService deleteSchedulePartService, 
-																					IResourceOptimization resourceOptimizationHelper,
+																					IResourceCalculation resourceOptimizationHelper,
 																					IResourceCalculateAfterDeleteDecider resourceCalculateAfterDeleteDecider,
 																					AffectedDates affectedDates)
 		{

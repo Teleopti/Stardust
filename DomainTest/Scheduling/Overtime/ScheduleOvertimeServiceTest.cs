@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 	public class ScheduleOvertimeServiceTest
 	{
 		public IScheduleOvertimeService Target;
-		public IResourceOptimization ResourceOptimizationHelper;
+		public IResourceCalculation ResourceOptimizationHelper;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakePersonRepository PersonRepository;

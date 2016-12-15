@@ -15,7 +15,7 @@ namespace Teleopti.Interfaces.Domain
 
 	public struct RequiredForHandlingAbsenceRequest
 	{
-		public RequiredForHandlingAbsenceRequest(ISchedulingResultStateHolder schedulingResultStateHolder, IPersonAccountBalanceCalculator personAccountBalanceCalculator, IResourceOptimization resourceOptimizationHelper, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification = null)
+		public RequiredForHandlingAbsenceRequest(ISchedulingResultStateHolder schedulingResultStateHolder, IPersonAccountBalanceCalculator personAccountBalanceCalculator, IResourceCalculation resourceOptimizationHelper, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification = null)
 		{
 			ResourceOptimizationHelper = resourceOptimizationHelper;
 			BudgetGroupAllowanceSpecification = budgetGroupAllowanceSpecification;
@@ -30,7 +30,7 @@ namespace Teleopti.Interfaces.Domain
 
 		public IBudgetGroupAllowanceSpecification BudgetGroupAllowanceSpecification { get; }
 
-		public IResourceOptimization ResourceOptimizationHelper { get; }
+		public IResourceCalculation ResourceOptimizationHelper { get; }
 
 		public IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification { get; }
 	}

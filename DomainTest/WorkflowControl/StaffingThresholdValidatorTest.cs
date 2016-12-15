@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         private StaffingThresholdValidator _target;
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private PersonRequestFactory _personRequestFactory;
-        private IResourceOptimization _resourceOptimizationHelper;
+        private IResourceCalculation _resourceOptimizationHelper;
         private IPerson _person;
 
         private ISkill _skill;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _dictionary = new ScheduleDictionaryForTest(MockRepository.GenerateMock<IScenario>(),schedulingDateTimePeriod.StartDateTime);
             _schedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(schedulingDateTimePeriod);
             _schedulingResultStateHolder.Schedules = _dictionary;
-			_resourceOptimizationHelper = MockRepository.GenerateMock<IResourceOptimization>();
+			_resourceOptimizationHelper = MockRepository.GenerateMock<IResourceCalculation>();
             _personRequestFactory = new PersonRequestFactory();
             _person = PersonFactory.CreatePersonWithId();
             _person.PermissionInformation.SetCulture(new CultureInfo(1033));

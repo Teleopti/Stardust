@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class ResourceCalculateDelayer : IResourceCalculateDelayer
 	{
-		private readonly IResourceOptimization _resourceOptimizationHelper;
+		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly int _calculationFrequency;
 		private readonly bool _considerShortBreaks;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private bool _paused;
 
 		public ResourceCalculateDelayer(
-			IResourceOptimization resourceOptimizationHelper, 
+			IResourceCalculation resourceOptimizationHelper, 
 			int calculationFrequency, 
 			bool considerShortBreaks,
 			ISchedulingResultStateHolder schedulingResultStateHolder,

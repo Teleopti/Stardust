@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	[DomainTest]
 	public class CascadingResourceCalculationOverstaffedTest
 	{
-		public IResourceOptimization Target;
+		public IResourceCalculation Target;
 		public FakeTimeZoneGuard TimeZoneGuard;
 
 		[Test]
