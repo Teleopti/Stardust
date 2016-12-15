@@ -28,8 +28,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 		public double EslSummary(IList<EslInterval> eslIntervals)
 		{
 			var sumOfForecastedCalls = eslIntervals.Sum(x => x.ForecastedCalls);
-			var sumOfAnsweredCallsWithinSL = eslIntervals.Sum(x => x.AnsweredCallsWithinServiceLevel);
-			return sumOfAnsweredCallsWithinSL/sumOfForecastedCalls;
+			var sumOfAnsweredCallsWithinSL = eslIntervals
+				.Sum(x => x.AnsweredCallsWithinServiceLevel);
+			return sumOfAnsweredCallsWithinSL/sumOfForecastedCalls*100;
 		}
 
 		public IList<EslInterval> CalculateEslIntervals(IList<ISkill> skills, 
@@ -67,6 +68,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 					ForecastedCalls = s.Sum(x => x.ForecastedCalls),
 					Esl = s.Sum(x => x.AnsweredCallsWithinServiceLevel)/s.Sum(x => x.ForecastedCalls)
 				})
+				.OrderBy(t => t.StartTime)
 				.ToList();
 		}
 
@@ -126,7 +128,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		public double?[] DataSeries(IList<EslInterval> eslIntervals, IntradayIncomingViewModel queueIncoming)
 		{
 			var dataSeries = eslIntervals
-				.Select(x => (double?) x.Esl)
+				.Select(x => (double?) x.Esl * 100)
 				.ToList();
 			var nullCount = queueIncoming.DataSeries.Time.Length - dataSeries.Count;
 			for (int interval = 0; interval < nullCount; interval++)
