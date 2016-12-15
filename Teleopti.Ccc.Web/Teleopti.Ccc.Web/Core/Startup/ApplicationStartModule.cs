@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -34,21 +35,28 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		{
 			// exclude TestController from principal stuff
 			var url = HttpContext.Current.Request.Url.AbsolutePath.ToLowerInvariant();
-			if (url.Contains("/togglehandler/")) return;
-			if (url.Contains("/test/")) return;
-			if (url.Contains("/content/")) return;
-			if (url.Contains("/signalr/ping")) return;
-			if (url.Contains("/js/")) return;
-			if (url.Contains("/css/")) return;
-			if (url.Contains("/html/")) return;
-			if (url.Contains("/vendor/")) return;
+			if (isTestController(url)) return;
 
-			var requestContextInitializer = DependencyResolver
-					.Current
-					.GetService<IRequestContextInitializer>()
-				;
+			var requestContextInitializer = DependencyResolver.Current.GetService<IRequestContextInitializer>();
 
 			requestContextInitializer.SetupPrincipalAndCulture(onlyUseGregorianCalendar(HttpContext.Current));
+		}
+
+		private static bool isTestController(string url)
+		{
+			var keyWords = new[]
+			{
+				"/togglehandler/",
+				"/test/",
+				"/content/",
+				"/signalr/ping",
+				"/js/",
+				"/css/",
+				"/html/",
+				"/vendor/"
+			};
+
+			return keyWords.Any(url.Contains);
 		}
 
 		private void checkForStartupErrors(object sender, EventArgs e)
@@ -85,13 +93,11 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			var useGregorianCalendar = string.Empty;
 			var headers = context.Request.Headers;
 			useGregorianCalendar = headers["X-Use-GregorianCalendar"] ?? useGregorianCalendar;
-			if (string.IsNullOrEmpty(useGregorianCalendar)) return false;
-			return bool.Parse(useGregorianCalendar);
+			return !string.IsNullOrEmpty(useGregorianCalendar) && bool.Parse(useGregorianCalendar);
 		}
 
 		public void Dispose()
 		{
 		}
-
 	}
 }
