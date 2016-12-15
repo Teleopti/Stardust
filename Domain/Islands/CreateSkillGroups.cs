@@ -24,6 +24,8 @@ namespace Teleopti.Ccc.Domain.Islands
 				if (personPeriod == null)
 					continue;
 				var agentsSkills = _personalSkillsProvider.PersonSkills(personPeriod).Select(x => x.Skill).ToList();
+				if(!agentsSkills.Any())
+					continue;
 
 				ICollection<IPerson> list;
 				if (skillGroups.TryGetValue(agentsSkills, out list))

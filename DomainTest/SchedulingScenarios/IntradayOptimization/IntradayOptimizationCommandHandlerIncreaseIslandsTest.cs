@@ -252,5 +252,19 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count()
 				.Should().Be.EqualTo(2);
 		}
+
+		[Test]
+		public void ShouldNotCreateIslandsOfAgentsKnowingNoSkills()
+		{
+			var skillA = new Skill("A");
+			PersonRepository.Has(new Person().KnowsSkill(skillA).WithId());
+			PersonRepository.Has(new Person().KnowsSkill().WithId()); //has personperiod with no skill -> should not be included
+			PersonRepository.Has(new Person().WithId()); //has no personperiod -> should not be included
+
+			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
+
+			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single().AgentsInIsland.Count()
+				.Should().Be.EqualTo(1);
+		}
 	}
 }
