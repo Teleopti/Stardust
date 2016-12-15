@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         private bool _doNotBreakWeeklyRest =  false;
         private bool _availableAgentsOnly = false ;
 	    private Guid? _ruleSetBagId;
+	    private UseSkills _useSkills = UseSkills.All;
 
         public void MapTo(IOvertimePreferences overtimePreferences , 
 						IEnumerable<IScheduleTag> scheduleTags, 
@@ -77,6 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             overtimePreferences.AllowBreakNightlyRest = _doNotBreakNightlyRest;
             overtimePreferences.AllowBreakWeeklyRest = _doNotBreakWeeklyRest;
             overtimePreferences.AvailableAgentsOnly = _availableAgentsOnly;
+	        overtimePreferences.UseSkills = _useSkills;
         }
 
         public void MapFrom(IOvertimePreferences overtimePreferences)
@@ -98,6 +100,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 	        {
 		        _ruleSetBagId = null;
 	        }
+
+	        _useSkills = overtimePreferences.UseSkills;
         }
     }
 }

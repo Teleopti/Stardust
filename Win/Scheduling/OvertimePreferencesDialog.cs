@@ -68,6 +68,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 			labelUseSkills.Visible = show;
 			radioButtonAll.Visible = show;
 			radioButtonPrimary.Visible = show;
+
+			if (show)
+			{
+				radioButtonAll.Checked = _overtimePreferences.UseSkills.Equals(UseSkills.All);
+				radioButtonPrimary.Checked = _overtimePreferences.UseSkills.Equals(UseSkills.Primary);
+			}
+
+			else
+			{
+				radioButtonAll.Checked = true;
+				radioButtonPrimary.Checked = false;
+			}
 		}
 
 		private void initOvertimeTypes()
@@ -288,6 +300,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			else
 			{
 				_overtimePreferences.ShiftBagToUse = null;
+			}
+
+			if (radioButtonAll.Checked)
+			{
+				_overtimePreferences.UseSkills = UseSkills.All;
+			}
+			else
+			{
+				_overtimePreferences.UseSkills = UseSkills.Primary;
 			}
 		}
 
