@@ -33,9 +33,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return GetBusinessRulesForShiftTradeRequest(schedulingResultStateHolder, enableSiteOpenHoursRule);
 		}
 
-		public virtual bool ShouldDeny(INewBusinessRuleCollection enabledRules, IList<IBusinessRuleResponse> ruleResponses)
+		public virtual IBusinessRuleResponse GetDeniableResponse(INewBusinessRuleCollection enabledRules, IList<IBusinessRuleResponse> ruleResponses)
 		{
-			return false;
+			return null;
 		}
 	}
 
@@ -74,26 +74,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return result;
 		}
 
-		public override bool ShouldDeny(INewBusinessRuleCollection enabledRules, IList<IBusinessRuleResponse> ruleResponses)
+		public override IBusinessRuleResponse GetDeniableResponse(INewBusinessRuleCollection enabledRules, IList<IBusinessRuleResponse> ruleResponses)
 		{
-			if (ruleResponses == null || !ruleResponses.Any()) return false;
+			if (ruleResponses == null || !ruleResponses.Any()) return null;
 
 			var shiftTradeSetting = _globalSettingDataRepository.FindValueByKey(ShiftTradeSettings.SettingsKey, new ShiftTradeSettings());
 			var ruleConfigs = shiftTradeSetting.BusinessRuleConfigs;
-			if (ruleConfigs == null || !ruleConfigs.Any()) return false;
+			if (ruleConfigs == null || !ruleConfigs.Any()) return null;
 
 			var brokenRules = enabledRules.Where(rule => ruleResponses.Any(r => r.TypeOfRule == rule.GetType())).ToList();
-			if (!brokenRules.Any()) return false;
+			if (!brokenRules.Any()) return null;
 
 			foreach (var rule in brokenRules)
 			{
 				var config = ruleConfigs.FirstOrDefault(c => c.BusinessRuleType == rule.GetType().FullName);
 				if (config?.HandleOptionOnFailed != null && config.HandleOptionOnFailed.Value == RequestHandleOption.AutoDeny)
 				{
-					return true;
+					return ruleResponses.FirstOrDefault(r=>r.TypeOfRule == rule.GetType());
 				}
 			}
-			return false;
+			return null;
 		}
 	}
 }

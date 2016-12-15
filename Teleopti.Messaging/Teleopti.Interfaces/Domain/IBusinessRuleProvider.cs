@@ -12,6 +12,6 @@ namespace Teleopti.Interfaces.Domain
 		INewBusinessRuleCollection GetAllEnabledBusinessRulesForShiftTradeRequest(ISchedulingResultStateHolder schedulingResultStateHolder,
 			bool enableSiteOpenHoursRule);
 
-		bool ShouldDeny(INewBusinessRuleCollection enabledRules, IList<IBusinessRuleResponse> ruleResponses);
+		IBusinessRuleResponse GetDeniableResponse(INewBusinessRuleCollection enabledRules, IList<IBusinessRuleResponse> ruleResponses);
 	}
 }

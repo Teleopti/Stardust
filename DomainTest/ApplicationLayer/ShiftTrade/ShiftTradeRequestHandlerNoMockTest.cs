@@ -11,7 +11,9 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
+using Teleopti.Ccc.DomainTest.Scheduling.Rules;
 using Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -133,10 +135,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var scheduleDate = new DateTime(2016, 7, 25);
 			var scheduleDateOnly = new DateOnly(scheduleDate);
 
-			var personTo = createPersonWithMinTimePerWeek(scheduleDateOnly);
+			var personTo = createPerson();
+			setMinTimePerWeek(personTo, scheduleDateOnly);
 			var activityPersonTo = new Activity("Shift_PersonTo").WithId();
 
-			var personFrom = createPersonWithMinTimePerWeek(scheduleDateOnly);
+			var personFrom = createPerson();
+			setMinTimePerWeek(personFrom, scheduleDateOnly);
 			var activityPersonFrom = new Activity("Shift_PersonFrom").WithId();
 
 			for (var i = 0; i < 7; i++)
@@ -171,10 +175,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var scheduleDate = new DateTime(2016, 7, 25);
 			var scheduleDateOnly = new DateOnly(scheduleDate);
 
-			var personTo = createPersonWithSiteOpenHours(8, 17);
+			var personTo = createPerson();
+			setSiteOpenHours(personTo, 8, 17);
 			var activityPersonTo = new Activity("Shift_PersonTo").WithId();
 
-			var personFrom = createPersonWithSiteOpenHours(8, 17);
+			var personFrom = createPerson();
+			setSiteOpenHours(personFrom, 8, 17);
 			var activityPersonFrom = new Activity("Shift_PersonFrom").WithId();
 
 			var dateTimePeriod = scheduleDateOnly.ToDateTimePeriod(new TimePeriod(8, 0, 18, 0),
@@ -199,6 +205,78 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_shiftTradeTestHelper.HandleRequest(@event, false, businessRuleProvider);
 
 			Assert.IsTrue(personRequest.BrokenBusinessRules.Value.HasFlag(BusinessRuleFlags.SiteOpenHoursRule));
+		}
+
+		[Test]
+		public void ShouldReturnDenyReasonForTheFirstDeniableBrokenRule()
+		{
+			var scheduleDate = new DateTime(2016, 7, 25);
+			var scheduleDateOnly = new DateOnly(scheduleDate);
+
+			var personTo = createPerson();
+			setSiteOpenHours(personTo, 8, 17);
+			setMinTimePerWeek(personTo, scheduleDateOnly);
+			var activityPersonTo = new Activity("Shift_PersonTo").WithId();
+
+			var personFrom = createPerson();
+			setSiteOpenHours(personFrom, 8, 17);
+			setMinTimePerWeek(personFrom, scheduleDateOnly);
+			var activityPersonFrom = new Activity("Shift_PersonFrom").WithId();
+
+			for (var i = 0; i < 7; i++)
+			{
+				var dateTimePeriod = new DateTimePeriod(scheduleDate.AddDays(i).AddHours(8).ToUniversalTime(),
+				scheduleDate.AddDays(i).AddHours(10).ToUniversalTime());
+				_shiftTradeTestHelper.AddPersonAssignment(personTo, dateTimePeriod, activityPersonTo);
+				_shiftTradeTestHelper.AddPersonAssignment(personFrom, dateTimePeriod, activityPersonFrom);
+			}
+
+			var personRequest = _shiftTradeTestHelper.PrepareAndGetPersonRequest(personFrom, personTo, scheduleDateOnly);
+
+			_shiftTradeTestHelper.SetPersonAccounts(personTo, personFrom, scheduleDateOnly);
+
+			var @event = _shiftTradeTestHelper.GetAcceptShiftTradeEvent(personTo, personRequest.Id.GetValueOrDefault());
+			@event.UseSiteOpenHoursRule = true;
+			@event.UseMinWeekWorkTime = true;
+			_schedulingResultStateHolder.UseMinWeekWorkTime = @event.UseMinWeekWorkTime;
+
+			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
+			globalSettingDataRepository.PersistSettingValue(ShiftTradeSettings.SettingsKey, getShiftTradeSettings());
+			var businessRuleProvider = new ConfigurableBusinessRuleProvider(globalSettingDataRepository);
+
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, null,
+				new DateOnlyPeriod(new DateOnly(scheduleDate), new DateOnly(scheduleDate.AddDays(7))), _currentScenario.Current());
+			var businessRules = businessRuleProvider.GetAllBusinessRules(_schedulingResultStateHolder);
+			businessRules.Add(new SiteOpenHoursRule(new SiteOpenHoursSpecification()));
+			_shiftTradeTestHelper.SetApprovalService(scheduleDictionary, businessRules);
+
+			_shiftTradeTestHelper.HandleRequest(@event, false, businessRuleProvider);
+
+			Assert.IsTrue(personRequest.IsDenied);
+			Assert.IsTrue(personRequest.DenyReason.Contains("No open hours for"), personRequest.DenyReason);
+		}
+
+		private ShiftTradeSettings getShiftTradeSettings()
+		{
+			var shiftTradeSettings = new ShiftTradeSettings
+			{
+				BusinessRuleConfigs = new[]
+				{
+					new ShiftTradeBusinessRuleConfig
+					{
+						BusinessRuleType = typeof(MinWeekWorkTimeRule).FullName,
+						Enabled = true,
+						HandleOptionOnFailed = RequestHandleOption.Pending
+					},
+					new ShiftTradeBusinessRuleConfig
+					{
+						BusinessRuleType = typeof(SiteOpenHoursRule).FullName,
+						Enabled = true,
+						HandleOptionOnFailed = RequestHandleOption.AutoDeny
+					}
+				}
+			};
+			return shiftTradeSettings;
 		}
 
 		private basicShiftTradeTestResult doBasicShiftTrade(IWorkflowControlSet workflowControlSet, bool addBrokenBusinessRules = false, bool toggle39473IsOff = false)
@@ -293,6 +371,40 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_personRepository.Add(person);
 
 			return person;
+		}
+
+		private IPerson createPerson()
+		{
+			var workControlSet = ShiftTradeTestHelper.CreateWorkFlowControlSet(true);
+			var startDate = new DateOnly(2016, 1, 1);
+			var team = TeamFactory.CreateTeam("team", "site");
+
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDate, team);
+			person.WorkflowControlSet = workControlSet;
+			_personRepository.Add(person);
+
+			return person;
+		}
+
+		private void setSiteOpenHours(IPerson person, int startHour, int endHour)
+		{
+			var startDate = new DateOnly(2016, 1, 1);
+			var team = person.MyTeam(startDate);
+			var siteOpenHour = new SiteOpenHour()
+			{
+				IsClosed = true,
+				Parent = team.Site,
+				TimePeriod = new TimePeriod(startHour, 0, endHour, 0),
+				WeekDay = DayOfWeek.Monday
+			};
+			team.Site.AddOpenHour(siteOpenHour);
+		}
+
+		private void setMinTimePerWeek(IPerson person, DateOnly scheduleDateOnly)
+		{
+			var minTimePerWeek = TimeSpan.FromHours(40);
+			person.Period(scheduleDateOnly).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(minTimePerWeek,
+				TimeSpan.Zero, TimeSpan.Zero, TimeSpan.Zero);
 		}
 
 		private class basicShiftTradeTestResult

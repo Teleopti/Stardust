@@ -7,16 +7,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	public class FakeBusinessRuleProvider:IBusinessRuleProvider
 	{
 		private INewBusinessRuleCollection _businessRuleCollection;
-		private bool _shouldDeny;
+		private IBusinessRuleResponse _deniableResponse;
 
 		public void SetBusinessRules(INewBusinessRuleCollection businessRuleCollection)
 		{
 			_businessRuleCollection = businessRuleCollection;
 		}
 
-		public void SetShouldDeny(bool shouldDeny)
+		public void SetDeniableResponse(IBusinessRuleResponse deniableResponse)
 		{
-			_shouldDeny = shouldDeny;
+			_deniableResponse = deniableResponse;
 		}
 
 		public INewBusinessRuleCollection GetAllBusinessRules(ISchedulingResultStateHolder schedulingResultStateHolder)
@@ -36,9 +36,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return _businessRuleCollection;
 		}
 
-		public bool ShouldDeny(INewBusinessRuleCollection enabledRules, IList<IBusinessRuleResponse> ruleResponses)
+		public IBusinessRuleResponse GetDeniableResponse(INewBusinessRuleCollection enabledRules, IList<IBusinessRuleResponse> ruleResponses)
 		{
-			return _shouldDeny;
+			return _deniableResponse;
 		}
 	}
 }

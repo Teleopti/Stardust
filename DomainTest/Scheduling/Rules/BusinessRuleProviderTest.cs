@@ -68,9 +68,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var ruleResponses = createBusinessRuleResponses(typeof(DummyRule));
 
 			var target = new ConfigurableBusinessRuleProvider(_globalSettingDataRepository);
-			var result = target.ShouldDeny(ruleCollection, ruleResponses);
+			var result = target.GetDeniableResponse(ruleCollection, ruleResponses);
 
-			result.Should().Be.True();
+			result.Should().Not.Be(null);
 		}
 
 		[Test]
@@ -81,9 +81,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var ruleResponses = createBusinessRuleResponses(typeof(DummyRule));
 
 			var target = new ConfigurableBusinessRuleProvider(_globalSettingDataRepository);
-			var result = target.ShouldDeny(ruleCollection, ruleResponses);
+			var result = target.GetDeniableResponse(ruleCollection, ruleResponses);
 
-			result.Should().Be.False();
+			result.Should().Be(null);
 		}
 
 		[Test]
@@ -94,9 +94,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var ruleResponses = createBusinessRuleResponses(typeof(AnotherDummyRule));
 
 			var target = new ConfigurableBusinessRuleProvider(_globalSettingDataRepository);
-			var result = target.ShouldDeny(ruleCollection, ruleResponses);
+			var result = target.GetDeniableResponse(ruleCollection, ruleResponses);
 
-			result.Should().Be.False();
+			result.Should().Be(null);
 		}
 
 		[Test]
@@ -106,9 +106,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var ruleResponses = createBusinessRuleResponses(typeof(DummyRule));
 
 			var target = new ConfigurableBusinessRuleProvider(new FakeGlobalSettingDataRepository());
-			var result = target.ShouldDeny(ruleCollection, ruleResponses);
+			var result = target.GetDeniableResponse(ruleCollection, ruleResponses);
 
-			result.Should().Be.False();
+			result.Should().Be(null);
 		}
 
 		[Test]
@@ -118,9 +118,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var ruleCollection = createBusinessRuleCollection();
 
 			var target = new ConfigurableBusinessRuleProvider(_globalSettingDataRepository);
-			var result = target.ShouldDeny(ruleCollection, null);
+			var result = target.GetDeniableResponse(ruleCollection, null);
 
-			result.Should().Be.False();
+			result.Should().Be(null);
 		}
 
 		private static List<IBusinessRuleResponse> createBusinessRuleResponses(Type ruleType)

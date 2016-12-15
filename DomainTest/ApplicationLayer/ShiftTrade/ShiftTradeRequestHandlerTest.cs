@@ -371,7 +371,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			newBusinessRuleCollection.Add(new NewPersonAccountRule(null, null));
 
 			((FakeBusinessRuleProvider)businessRuleProvider).SetBusinessRules(newBusinessRuleCollection);
-			((FakeBusinessRuleProvider)businessRuleProvider).SetShouldDeny(true);
+			((FakeBusinessRuleProvider)businessRuleProvider).SetDeniableResponse(ruleResponse1);
 			target.Handle(accept);
 			Assert.AreEqual(false, personRequest.IsNew);
 			Assert.AreEqual(false, personRequest.IsPending);
