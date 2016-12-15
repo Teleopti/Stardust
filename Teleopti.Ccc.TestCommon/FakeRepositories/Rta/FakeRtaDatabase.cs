@@ -100,7 +100,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			AgentStateMaintainer agentStateMaintainer,
 			IScheduleStorage scheduleStorage,
 			FakeSiteInAlarmReader siteInAlarmReader,
-			FakeTeamInAlarmReader teamInAlarmReader
+			FakeTeamInAlarmReader teamInAlarmReader,
+			FakeMeetingRepository meetings
 			) : base(
 				tenants, 
 				persons, 
@@ -128,7 +129,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				externalLogOns, 
 				dataSources,
 				siteInAlarmReader, 
-				teamInAlarmReader)
+				teamInAlarmReader,
+				meetings)
 		{
 			_agentStates = agentStates;
 			_agentStateReadModels = agentStateReadModels;
@@ -284,6 +286,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			return base.WithScenario(id, @default) as FakeRtaDatabase;
 		}
+
 	}
 
 	public static class FakeDatabaseUserExtensions

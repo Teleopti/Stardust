@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var shift = Database.PersistedReadModel.Shift.Single();
 			shift.StartTime.Should().Be("2016-10-14 09:00".Utc());
 			shift.EndTime.Should().Be("2016-10-14 17:00".Utc());
-			shift.Name.Should("vacation");
+			shift.Name.Should().Be("vacation");
 		}
 
 		[Test]

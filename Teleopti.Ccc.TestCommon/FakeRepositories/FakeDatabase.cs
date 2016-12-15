@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -238,6 +239,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakeDataSources _dataSources;
 		private readonly FakeSiteInAlarmReader _siteInAlarmReader;
 		private readonly FakeTeamInAlarmReader _teamInAlarmReader;
+		private readonly FakeMeetingRepository _meetings;
 
 
 		private BusinessUnit _businessUnit;
@@ -258,9 +260,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private Guid? _platform;
 		private RtaStateGroup _stateGroup;
 		private RtaRule _rtaRule;
+		private Meeting _meeting;
 
 		public static string DefaultTenantName = "default";
 		public static Guid DefaultBusinessUnitId = Guid.NewGuid();
+		
 
 		public FakeDatabase(
 			FakeTenants tenants,
@@ -289,7 +293,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakeExternalLogOnRepository externalLogOns,
 			FakeDataSources dataSources,
 			FakeSiteInAlarmReader siteInAlarmReader,
-			FakeTeamInAlarmReader teamInAlarmReader
+			FakeTeamInAlarmReader teamInAlarmReader,
+			FakeMeetingRepository meetings
 			)
 		{
 			_tenants = tenants;
@@ -319,6 +324,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_siteInAlarmReader = siteInAlarmReader;
 			_teamInAlarmReader = teamInAlarmReader;
 			_mappings = mappings;
+			_meetings = meetings;
 
 			createDefaultData();
 		}
@@ -651,9 +657,36 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
+		public FakeDatabase WithMeeting(string subject, string start, string end)
+		{
+			ensureExists(_scenarios, null, () => WithScenario(null, true));
+			_meeting = new Meeting(
+				_person, 
+				new[] {new MeetingPerson(_person, false) }, 
+				subject, 
+				null, 
+				null, 
+				_activity, 
+				_scenario)
+			{
+				StartDate = start.Date(),
+				EndDate = end.Date(),
+				StartTime = start.Utc().TimeOfDay,
+				EndTime = end.Utc().TimeOfDay,
+			};
+			_meeting.SetId(Guid.NewGuid());
+			_meetings.Has(_meeting);
+			return this;
+		}
+
 		public FakeDatabase WithActivity(Guid? id, Color? color)
 		{
 			return WithActivity(id, RandomName.Make(), color);
+		}
+
+		public FakeDatabase WithActivity(Guid? id, string name)
+		{
+			return WithActivity(id, RandomName.Make(), null);
 		}
 
 		public FakeDatabase WithActivity(Guid? id, string name, Color? color)

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -8,29 +10,31 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeMeetingRepository : IMeetingRepository
 	{
+		private readonly IList<IMeeting> meetings = new List<IMeeting>();
+
 		public void Add(IMeeting root)
 		{
-			throw new NotImplementedException();
+			meetings.Add(root);
 		}
 
 		public void Remove(IMeeting root)
 		{
-			throw new NotImplementedException();
+			meetings.Remove(root);
 		}
 
 		public IMeeting Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return meetings.FirstOrDefault(x => x.Id == id);
 		}
 
 		public IList<IMeeting> LoadAll()
 		{
-			throw new NotImplementedException();
+			return meetings;
 		}
 
 		public IMeeting Load(Guid id)
 		{
-			throw new NotImplementedException();
+			return meetings.First(x => x.Id == id);
 		}
 
 		public long CountAllEntities()
@@ -62,8 +66,20 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, bool includeForOrganizer = true)
 		{
-			//impl correct when needed
-			return new List<IMeeting>();
+			return (from m in meetings
+				where m.Scenario == scenario
+				let matchPersons = includeForOrganizer ?
+					m.MeetingPersons.Select(mp => mp.Person).Append(m.Organizer) :
+					m.MeetingPersons.Select(mp => mp.Person)
+				where matchPersons.Any(persons.Contains)
+				where new DateOnlyPeriod(m.StartDate, m.EndDate).Intersection(period).HasValue
+				select m
+			).ToList();
+		}
+
+		public void Has(IMeeting meeting)
+		{
+			Add(meeting);
 		}
 	}
 }
