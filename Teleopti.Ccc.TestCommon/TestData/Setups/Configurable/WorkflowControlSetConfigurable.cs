@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string BusinessUnit { get; set; }
 		public bool AnonymousTrading { get; set; }
 		public bool AbsenceRequestWaitlistEnabled { get; set; }
+		public int? AbsenceRequestExpiredThreshold { get; set; }
 
 		public WorkflowControlSetConfigurable()
 		{
@@ -43,7 +44,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var workflowControlSet = new WorkflowControlSet(Name) { SchedulePublishedToDate = !string.IsNullOrEmpty(SchedulePublishedToDate) ? DateTime.Parse(SchedulePublishedToDate) : (DateTime?)null };
+			var workflowControlSet = new WorkflowControlSet(Name)
+			{
+				SchedulePublishedToDate =
+					!string.IsNullOrEmpty(SchedulePublishedToDate) ? DateTime.Parse(SchedulePublishedToDate) : (DateTime?) null,
+				AbsenceRequestExpiredThreshold = AbsenceRequestExpiredThreshold ?? 15
+			};
 
 			if (!string.IsNullOrEmpty(StudentAvailabilityPeriodStart) && !string.IsNullOrEmpty(StudentAvailabilityPeriodEnd))
 			{
@@ -81,19 +87,19 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				workflowControlSet.AddAllowedPreferenceAbsence(absence);
 				workflowControlSet.AbsenceRequestWaitlistEnabled = AbsenceRequestWaitlistEnabled;
 
-				var absenceRequestOpenPeriodStart = String.IsNullOrEmpty(AbsenceRequestOpenPeriodStart)
+				var absenceRequestOpenPeriodStart = string.IsNullOrEmpty(AbsenceRequestOpenPeriodStart)
 														? new DateOnly(1900, 1, 1)
 														: new DateOnly(DateTime.Parse(AbsenceRequestOpenPeriodStart));
 
-				var absenceRequestOpenPeriodEnd = String.IsNullOrEmpty(AbsenceRequestOpenPeriodEnd)
+				var absenceRequestOpenPeriodEnd = string.IsNullOrEmpty(AbsenceRequestOpenPeriodEnd)
 											? new DateOnly(2040, 12, 31)
 											: new DateOnly(DateTime.Parse(AbsenceRequestOpenPeriodEnd));
 
-				var absenceRequestPreferencePeriodStart = String.IsNullOrEmpty(AbsenceRequestPreferencePeriodStart)
+				var absenceRequestPreferencePeriodStart = string.IsNullOrEmpty(AbsenceRequestPreferencePeriodStart)
 														? new DateOnly(1900, 1, 1)
 														: new DateOnly(DateTime.Parse(AbsenceRequestPreferencePeriodStart));
 
-				var absenceRequestPreferencePeriodEnd = String.IsNullOrEmpty(AbsenceRequestPreferencePeriodEnd)
+				var absenceRequestPreferencePeriodEnd = string.IsNullOrEmpty(AbsenceRequestPreferencePeriodEnd)
 											? new DateOnly(2040, 12, 31)
 											: new DateOnly(DateTime.Parse(AbsenceRequestPreferencePeriodEnd));
 
@@ -111,18 +117,22 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 					case null:
 						workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new AbsenceRequestNoneValidator();
 						break;
+
 					case "intraday":
 						workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new StaffingThresholdValidator();
 						break;
+
 					case "budgetgroup":
 						workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
 						break;
+
 					case "budgetgroup head count":
 						workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new BudgetGroupHeadCountValidator();
 						break;
+
 					case "mix":
 						var mixedList = new List<IAbsenceRequestValidator>{
-							new BudgetGroupAllowanceValidator(), 
+							new BudgetGroupAllowanceValidator(),
 							new BudgetGroupHeadCountValidator(),
 							new StaffingThresholdValidator()
 						};
@@ -146,9 +156,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 					case null:
 						workflowControlSet.AbsenceRequestOpenPeriods.First().AbsenceRequestProcess = new PendingAbsenceRequest();
 						break;
+
 					case "yes":
 						workflowControlSet.AbsenceRequestOpenPeriods.First().AbsenceRequestProcess = new GrantAbsenceRequest();
 						break;
+
 					case "deny":
 						workflowControlSet.AbsenceRequestOpenPeriods.First().AbsenceRequestProcess = new DenyAbsenceRequest();
 						break;
