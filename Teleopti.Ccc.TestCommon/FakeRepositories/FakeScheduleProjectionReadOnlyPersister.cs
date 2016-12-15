@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
@@ -31,7 +28,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void AddActivity(ScheduleProjectionReadOnlyModel model)
 		{
 			_data.Add(model);
-			Console.Write(_data.Count);
 		}
 
 		public bool BeginAddingSchedule(DateOnly date, Guid scenarioId, Guid personId, int version)
@@ -57,7 +53,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<ScheduledActivity> ForPerson(DateOnly from, DateOnly to, Guid personId)
 		{
-			Console.Write(_data.Count);
 			return (
 				from l in _data
 				where
@@ -70,7 +65,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<ScheduledActivity> ForPersons(DateOnly from, DateOnly to, IEnumerable<Guid> personIds)
 		{
-			Console.Write(_data.Count);
 			return (
 				from l in _data
 				where
@@ -90,6 +84,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			_data.Clear();
 		}
+
 		public void Clear(Guid personId)
 		{
 			var toRemove = _data.Where(x => x.PersonId == personId).ToList();

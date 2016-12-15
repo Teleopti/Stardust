@@ -32,27 +32,18 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public bool TryRestore(string path, string name)
 		{
-			Console.WriteLine("TryRestore");
 			var fileName = name + ".bak";
 			var source = Path.Combine(path, fileName);
 			if (!File.Exists(source))
-			{
-				Console.WriteLine("/TryRestore false");
 				return false;
-			}
 			var localSource = Path.Combine(sqlBackupPath(), fileName);
 			File.Copy(source, localSource, true);
 
 			var tasks = new DatabaseTasks(_usingMaster, null);
-			Console.WriteLine("TryRestore Drop");
 			tasks.Drop(_databaseName);
-			Console.WriteLine("TryRestore /Drop");
-			Console.WriteLine("TryRestore RESORWE");
 			_usingMaster.Execute($@"RESTORE DATABASE {_databaseName} FROM DISK = '{localSource}' WITH REPLACE");
-			Console.WriteLine("TryRestore /RESORWE");
 
 			File.Delete(localSource);
-			Console.WriteLine("/TryRestore true");
 			return true;
 		}
 

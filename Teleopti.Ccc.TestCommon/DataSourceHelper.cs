@@ -71,11 +71,8 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static bool TryRestoreApplicationDatabaseBySql(string path, int dataHash)
 		{
-			Console.WriteLine("TryRestoreApplicationDatabaseBySql");
 			var database = application();
-			var r = database.BackupBySql().TryRestore(path, database.BackupNameForRestore(dataHash));
-			Console.WriteLine("/TryRestoreApplicationDatabaseBySql");
-			return r;
+			return database.BackupBySql().TryRestore(path, database.BackupNameForRestore(dataHash));
 		}
 
 
