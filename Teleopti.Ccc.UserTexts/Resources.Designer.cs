@@ -32851,6 +32851,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use skills:.
+        /// </summary>
+        public static string UseSkillsColon {
+            get {
+                return ResourceManager.GetString("UseSkillsColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use Standard Deviation.
         /// </summary>
         public static string UseStandardDeviation {

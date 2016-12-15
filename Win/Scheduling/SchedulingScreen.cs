@@ -6843,12 +6843,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 						}
 					}
 
+					var showUseSkills = _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CascadingScheduleOvertimeOnPrimary_41318);
 					using (var options = new OvertimePreferencesDialog(_schedulerState.CommonStateHolder.ActiveScheduleTags,
 																	"OvertimePreferences", 
 																	_schedulerState.CommonStateHolder.ActiveActivities, 
 																	resolution, 
 																	definitionSets,
-																	ruleSetBags))
+																	ruleSetBags,
+																	showUseSkills))
 					{
 						if (options.ShowDialog(this) != DialogResult.OK) return;
 						options.Refresh();

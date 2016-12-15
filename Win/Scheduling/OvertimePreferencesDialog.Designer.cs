@@ -49,6 +49,9 @@
 			this.checkBoxAllowBreakingNightlyRest = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxAllowBreakingWeeklyRest = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxOnAvailableAgentsOnly = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.labelUseSkills = new System.Windows.Forms.Label();
+			this.radioButtonAll = new System.Windows.Forms.RadioButton();
+			this.radioButtonPrimary = new System.Windows.Forms.RadioButton();
 			this.tableLayoutPanelButtons = new System.Windows.Forms.TableLayoutPanel();
 			this.buttonOK = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonCancel = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -75,7 +78,7 @@
 			// 
 			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(6, 366);
+			this.label1.Location = new System.Drawing.Point(6, 367);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(140, 15);
 			this.label1.TabIndex = 5;
@@ -109,7 +112,7 @@
 			// 
 			this.tableLayoutPanelMain.ColumnCount = 2;
 			this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 211F));
+			this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 210F));
 			this.tableLayoutPanelMain.Controls.Add(this.comboBoxShiftBags, 1, 8);
 			this.tableLayoutPanelMain.Controls.Add(this.label6, 0, 6);
 			this.tableLayoutPanelMain.Controls.Add(this.label3, 0, 0);
@@ -128,12 +131,15 @@
 			this.tableLayoutPanelMain.Controls.Add(this.checkBoxAllowBreakingNightlyRest, 0, 11);
 			this.tableLayoutPanelMain.Controls.Add(this.checkBoxAllowBreakingWeeklyRest, 0, 12);
 			this.tableLayoutPanelMain.Controls.Add(this.checkBoxOnAvailableAgentsOnly, 0, 13);
+			this.tableLayoutPanelMain.Controls.Add(this.labelUseSkills, 0, 16);
+			this.tableLayoutPanelMain.Controls.Add(this.radioButtonAll, 0, 17);
+			this.tableLayoutPanelMain.Controls.Add(this.radioButtonPrimary, 0, 18);
 			this.tableLayoutPanelMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelMain.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanelMain.Margin = new System.Windows.Forms.Padding(7);
 			this.tableLayoutPanelMain.Name = "tableLayoutPanelMain";
 			this.tableLayoutPanelMain.Padding = new System.Windows.Forms.Padding(3);
-			this.tableLayoutPanelMain.RowCount = 17;
+			this.tableLayoutPanelMain.RowCount = 19;
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
@@ -149,19 +155,21 @@
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
-			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 222F));
-			this.tableLayoutPanelMain.Size = new System.Drawing.Size(494, 463);
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
+			this.tableLayoutPanelMain.Size = new System.Drawing.Size(494, 520);
 			this.tableLayoutPanelMain.TabIndex = 11;
 			// 
 			// comboBoxShiftBags
 			// 
 			this.comboBoxShiftBags.BackColor = System.Drawing.Color.White;
-			this.comboBoxShiftBags.BeforeTouchSize = new System.Drawing.Size(205, 23);
+			this.comboBoxShiftBags.BeforeTouchSize = new System.Drawing.Size(204, 23);
 			this.comboBoxShiftBags.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxShiftBags.Location = new System.Drawing.Point(283, 169);
+			this.comboBoxShiftBags.Location = new System.Drawing.Point(284, 169);
 			this.comboBoxShiftBags.Name = "comboBoxShiftBags";
-			this.comboBoxShiftBags.Size = new System.Drawing.Size(205, 23);
+			this.comboBoxShiftBags.Size = new System.Drawing.Size(204, 23);
 			this.comboBoxShiftBags.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxShiftBags.TabIndex = 26;
 			// 
@@ -192,11 +200,11 @@
 			// 
 			this.comboBoxAdvActivity.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.comboBoxAdvActivity.BackColor = System.Drawing.Color.White;
-			this.comboBoxAdvActivity.BeforeTouchSize = new System.Drawing.Size(205, 23);
+			this.comboBoxAdvActivity.BeforeTouchSize = new System.Drawing.Size(204, 23);
 			this.comboBoxAdvActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAdvActivity.Location = new System.Drawing.Point(283, 35);
+			this.comboBoxAdvActivity.Location = new System.Drawing.Point(284, 35);
 			this.comboBoxAdvActivity.Name = "comboBoxAdvActivity";
-			this.comboBoxAdvActivity.Size = new System.Drawing.Size(205, 23);
+			this.comboBoxAdvActivity.Size = new System.Drawing.Size(204, 23);
 			this.comboBoxAdvActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvActivity.TabIndex = 14;
 			// 
@@ -213,11 +221,11 @@
 			// 
 			// fromToTimeDurationPicker1
 			// 
-			this.fromToTimeDurationPicker1.Location = new System.Drawing.Point(283, 63);
+			this.fromToTimeDurationPicker1.Location = new System.Drawing.Point(284, 63);
 			this.fromToTimeDurationPicker1.MinMaxEndTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimeDurationPicker1.MinMaxEndTime")));
 			this.fromToTimeDurationPicker1.MinMaxStartTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimeDurationPicker1.MinMaxStartTime")));
 			this.fromToTimeDurationPicker1.Name = "fromToTimeDurationPicker1";
-			this.fromToTimeDurationPicker1.Size = new System.Drawing.Size(205, 26);
+			this.fromToTimeDurationPicker1.Size = new System.Drawing.Size(204, 26);
 			this.fromToTimeDurationPicker1.TabIndex = 18;
 			this.fromToTimeDurationPicker1.WholeDayText = "xxNextDay";
 			// 
@@ -234,11 +242,11 @@
 			// 
 			// fromToTimePickerSpecifiedPeriod
 			// 
-			this.fromToTimePickerSpecifiedPeriod.Location = new System.Drawing.Point(283, 95);
+			this.fromToTimePickerSpecifiedPeriod.Location = new System.Drawing.Point(284, 95);
 			this.fromToTimePickerSpecifiedPeriod.MinMaxEndTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimePickerSpecifiedPeriod.MinMaxEndTime")));
 			this.fromToTimePickerSpecifiedPeriod.MinMaxStartTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimePickerSpecifiedPeriod.MinMaxStartTime")));
 			this.fromToTimePickerSpecifiedPeriod.Name = "fromToTimePickerSpecifiedPeriod";
-			this.fromToTimePickerSpecifiedPeriod.Size = new System.Drawing.Size(205, 26);
+			this.fromToTimePickerSpecifiedPeriod.Size = new System.Drawing.Size(204, 26);
 			this.fromToTimePickerSpecifiedPeriod.TabIndex = 24;
 			this.fromToTimePickerSpecifiedPeriod.WholeDayCheckboxVisible = true;
 			this.fromToTimePickerSpecifiedPeriod.WholeDayText = "xxNextDay";
@@ -258,22 +266,22 @@
 			// comboBoxAdvTag
 			// 
 			this.comboBoxAdvTag.BackColor = System.Drawing.Color.White;
-			this.comboBoxAdvTag.BeforeTouchSize = new System.Drawing.Size(205, 23);
+			this.comboBoxAdvTag.BeforeTouchSize = new System.Drawing.Size(204, 23);
 			this.comboBoxAdvTag.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAdvTag.Location = new System.Drawing.Point(283, 363);
+			this.comboBoxAdvTag.Location = new System.Drawing.Point(284, 363);
 			this.comboBoxAdvTag.Name = "comboBoxAdvTag";
-			this.comboBoxAdvTag.Size = new System.Drawing.Size(205, 23);
+			this.comboBoxAdvTag.Size = new System.Drawing.Size(204, 23);
 			this.comboBoxAdvTag.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvTag.TabIndex = 12;
 			// 
 			// comboBoxAdvOvertimeType
 			// 
 			this.comboBoxAdvOvertimeType.BackColor = System.Drawing.Color.White;
-			this.comboBoxAdvOvertimeType.BeforeTouchSize = new System.Drawing.Size(205, 23);
+			this.comboBoxAdvOvertimeType.BeforeTouchSize = new System.Drawing.Size(204, 23);
 			this.comboBoxAdvOvertimeType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAdvOvertimeType.Location = new System.Drawing.Point(283, 334);
+			this.comboBoxAdvOvertimeType.Location = new System.Drawing.Point(284, 334);
 			this.comboBoxAdvOvertimeType.Name = "comboBoxAdvOvertimeType";
-			this.comboBoxAdvOvertimeType.Size = new System.Drawing.Size(205, 23);
+			this.comboBoxAdvOvertimeType.Size = new System.Drawing.Size(204, 23);
 			this.comboBoxAdvOvertimeType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvOvertimeType.TabIndex = 15;
 			// 
@@ -337,6 +345,42 @@
 			this.checkBoxOnAvailableAgentsOnly.Text = "xxOnAvailableAgentsOnly";
 			this.checkBoxOnAvailableAgentsOnly.ThemesEnabled = false;
 			// 
+			// labelUseSkills
+			// 
+			this.labelUseSkills.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.labelUseSkills.AutoSize = true;
+			this.labelUseSkills.Location = new System.Drawing.Point(6, 406);
+			this.labelUseSkills.Name = "labelUseSkills";
+			this.labelUseSkills.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
+			this.labelUseSkills.Size = new System.Drawing.Size(94, 22);
+			this.labelUseSkills.TabIndex = 29;
+			this.labelUseSkills.Text = "xxUseSkillsColon";
+			this.labelUseSkills.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// radioButtonAll
+			// 
+			this.radioButtonAll.AutoSize = true;
+			this.radioButtonAll.Checked = true;
+			this.radioButtonAll.Location = new System.Drawing.Point(6, 431);
+			this.radioButtonAll.Name = "radioButtonAll";
+			this.radioButtonAll.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+			this.radioButtonAll.Size = new System.Drawing.Size(52, 19);
+			this.radioButtonAll.TabIndex = 30;
+			this.radioButtonAll.TabStop = true;
+			this.radioButtonAll.Text = "xxAll";
+			this.radioButtonAll.UseVisualStyleBackColor = true;
+			// 
+			// radioButtonPrimary
+			// 
+			this.radioButtonPrimary.AutoSize = true;
+			this.radioButtonPrimary.Location = new System.Drawing.Point(6, 456);
+			this.radioButtonPrimary.Name = "radioButtonPrimary";
+			this.radioButtonPrimary.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+			this.radioButtonPrimary.Size = new System.Drawing.Size(79, 19);
+			this.radioButtonPrimary.TabIndex = 31;
+			this.radioButtonPrimary.Text = "xxPrimary";
+			this.radioButtonPrimary.UseVisualStyleBackColor = true;
+			// 
 			// tableLayoutPanelButtons
 			// 
 			this.tableLayoutPanelButtons.ColumnCount = 2;
@@ -345,7 +389,7 @@
 			this.tableLayoutPanelButtons.Controls.Add(this.buttonOK, 0, 0);
 			this.tableLayoutPanelButtons.Controls.Add(this.buttonCancel, 1, 0);
 			this.tableLayoutPanelButtons.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelButtons.Location = new System.Drawing.Point(0, 498);
+			this.tableLayoutPanelButtons.Location = new System.Drawing.Point(0, 555);
 			this.tableLayoutPanelButtons.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanelButtons.Name = "tableLayoutPanelButtons";
 			this.tableLayoutPanelButtons.RowCount = 1;
@@ -392,7 +436,7 @@
 			// tabControlTopLevel
 			// 
 			this.tabControlTopLevel.ActiveTabColor = System.Drawing.Color.DarkGray;
-			this.tabControlTopLevel.BeforeTouchSize = new System.Drawing.Size(502, 492);
+			this.tabControlTopLevel.BeforeTouchSize = new System.Drawing.Size(502, 549);
 			this.tabControlTopLevel.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlTopLevel.Controls.Add(this.tabPageGenaral);
 			this.tabControlTopLevel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -400,7 +444,7 @@
 			this.tabControlTopLevel.ItemSize = new System.Drawing.Size(59, 22);
 			this.tabControlTopLevel.Location = new System.Drawing.Point(3, 3);
 			this.tabControlTopLevel.Name = "tabControlTopLevel";
-			this.tabControlTopLevel.Size = new System.Drawing.Size(502, 492);
+			this.tabControlTopLevel.Size = new System.Drawing.Size(502, 549);
 			this.tabControlTopLevel.TabIndex = 14;
 			this.tabControlTopLevel.TabPanelBackColor = System.Drawing.Color.White;
 			this.tabControlTopLevel.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
@@ -415,7 +459,7 @@
 			this.tabPageGenaral.Name = "tabPageGenaral";
 			this.tabPageGenaral.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPageGenaral.ShowCloseButton = true;
-			this.tabPageGenaral.Size = new System.Drawing.Size(502, 471);
+			this.tabPageGenaral.Size = new System.Drawing.Size(502, 528);
 			this.tabPageGenaral.TabIndex = 1;
 			this.tabPageGenaral.Text = "xxGeneral";
 			this.tabPageGenaral.ThemesEnabled = false;
@@ -433,7 +477,7 @@
 			this.tableLayoutPanel3.RowCount = 2;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(508, 544);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(508, 601);
 			this.tableLayoutPanel3.TabIndex = 15;
 			// 
 			// OvertimePreferencesDialog
@@ -442,7 +486,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BorderColor = System.Drawing.Color.Blue;
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.ClientSize = new System.Drawing.Size(508, 544);
+			this.ClientSize = new System.Drawing.Size(508, 601);
 			this.Controls.Add(this.tableLayoutPanel3);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -501,5 +545,8 @@
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label7;
+		private System.Windows.Forms.Label labelUseSkills;
+		private System.Windows.Forms.RadioButton radioButtonAll;
+		private System.Windows.Forms.RadioButton radioButtonPrimary;
 	}
 }

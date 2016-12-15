@@ -32,7 +32,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 										IEnumerable<IActivity> availableActivity, 
 										int resolution, 
 										IList<IMultiplicatorDefinitionSet> definitionSets,
-										IList<IRuleSetBag> shiftBags)
+										IList<IRuleSetBag> shiftBags,
+										bool showUseSkills)
 			: this()
 		{
 			_scheduleTags = scheduleTags;
@@ -49,15 +50,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 			initActivityList();
 			initOvertimeTypes();
 			initShiftBags();
+			initUseSkills(showUseSkills);
 			setDefaultTimePeriod();
 			setDefaultSpecificPeriod();
 			setInitialValues();
+			
 			_presenter.SetStateButtons(_definitionSets);
 		}
 
 		public IOvertimePreferences Preferences
 		{
 			get { return _overtimePreferences; }
+		}
+
+		private void initUseSkills(bool show)
+		{
+			labelUseSkills.Visible = show;
+			radioButtonAll.Visible = show;
+			radioButtonPrimary.Visible = show;
 		}
 
 		private void initOvertimeTypes()

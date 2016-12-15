@@ -15336,4 +15336,8 @@ These options are activated:
     <value>Service level</value>
     <comment>header in web intraday</comment>
   </data>
+  <data name="UseSkillsColon" xml:space="preserve">
+    <value>Use skills:</value>
+    <comment>Schedule Overtime on primary skills or all skills</comment>
+  </data>
 </root>
