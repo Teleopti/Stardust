@@ -16,7 +16,8 @@
 	function organizationPickerCtrl($scope, $translate) {
 		var ctrl = this,
 			currentSite,
-			logonUserTeamId;
+			logonUserTeamId,
+			initialSelectedTeamIds;
 
 		ctrl.groupList = [];
 		ctrl.selectedTeamIds = [];
@@ -32,6 +33,10 @@
 		ctrl.$onChanges = function(changesObj) {
 			if (!changesObj.availableGroups || !changesObj.availableGroups.sites || changesObj.availableGroups.sites.length == 0) return;
 			populateGroupList();
+		};
+
+		ctrl.onPickerOpen = function(){
+			initialSelectedTeamIds = ctrl.selectedTeamIds.concat();
 		};
 
 		function populateGroupList() {
@@ -55,7 +60,6 @@
 				});
 				ctrl.groupList.push(site);
 			});
-
 		}
 
 		ctrl.formatSelectedDisplayName = function() {
@@ -140,18 +144,26 @@
 		};
 
 		ctrl.onSelectionDone = function() {
-			ctrl.searchTerm = '';
+			ctrl.searchTerm ='';
 
-			if(ctrl.groupList.length > 0){
-				ctrl.groupList.forEach(function(s){
+			if(ctrl.groupList.length > 0) {
+				ctrl.groupList.forEach(function(s) {
 					s.expanded = false;
 				});
 			}
 
-			//load the schedule data
-			ctrl.onPick({
-				groups: ctrl.selectedTeamIds
-			});
+			//load the schedule data when team ids changed
+			if(!Array.isArray(ctrl.selectedTeamIds) || !Array.isArray(initialSelectedTeamIds))
+				return;
+
+			if(ctrl.selectedTeamIds.length == initialSelectedTeamIds.length 
+				&& ctrl.selectedTeamIds.every(function(id) {
+					return initialSelectedTeamIds.indexOf(id) > -1;
+				})) {
+				return;
+			}
+
+			ctrl.onPick({groups: ctrl.selectedTeamIds});
 		};
 	}
 })();

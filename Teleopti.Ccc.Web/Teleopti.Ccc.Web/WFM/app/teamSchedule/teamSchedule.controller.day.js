@@ -211,7 +211,7 @@
 		vm.changeSelectedTeams = function(groups) {
 		    vm.selectedTeamIds = groups;
 		    vm.resetSchedulePage();
-		}
+		};
 	
 		vm.loadSchedules = function() {
 			vm.isLoading = true;
