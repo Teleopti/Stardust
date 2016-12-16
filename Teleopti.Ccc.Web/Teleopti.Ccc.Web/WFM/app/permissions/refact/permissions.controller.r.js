@@ -29,6 +29,8 @@
     vm.componentFunctions = [];
     vm.listHandler = listHandler;
     vm.selectDynamicOption = selectDynamicOption;
+    var functionsFilter = $filter('functionsFilter');
+    
 
     function selectDynamicOption(option) {
       permissionsDataService.selectDynamicOption(option);
@@ -39,12 +41,12 @@
     }
 
     function unSelectedFunctionsFilter() {
-      var filteredArray = $filter('unSelectedFunctionsFilter')(vm.componentFunctions);
+      var filteredArray = functionsFilter.unselected(vm.componentFunctions);
       listHandler(filteredArray);
     }
 
     function selectedFunctionsFilter() {
-      var filteredArray = $filter('selectedFunctionsFilter')(vm.componentFunctions);
+      var filteredArray = functionsFilter.selected(vm.componentFunctions);
       listHandler(filteredArray);
     }
 

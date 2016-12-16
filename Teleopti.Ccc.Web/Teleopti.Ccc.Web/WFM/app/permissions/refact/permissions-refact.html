@@ -208,7 +208,7 @@
 									<div class="con-flex">
 										<md-select ng-model="model" placeholder="Pick an option">
 											<h2>{{'AddGlobalAuthorizationLabel'| translate}}</h2>
-											<md-option selected ng-repeat="option in vm.organizationSelection.DynamicOptions" ng-click="vm.selectDynamicOption(option)">{{option.Name}}</md-option>
+											<md-option selected ng-repeat="option in vm.organizationSelection.DynamicOptions" ng-click="vm.selectDynamicOption(option)" ng-value="option.RangeOption">{{option.Name}}</md-option>
 										</md-select>
 									</div>
 								</div>

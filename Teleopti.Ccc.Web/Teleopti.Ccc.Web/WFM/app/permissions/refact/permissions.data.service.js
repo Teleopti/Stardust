@@ -69,7 +69,6 @@
 
             PermissionsServiceRefact.assignOrganizationSelection.postData(preparedObject).$promise.then(function (result) {
                 if (result != null) {
-                    console.log(result);
                     return result;
                 }
             });
@@ -87,7 +86,6 @@
                 if (orgData.IsSelected) {
                     PermissionsServiceRefact.assignOrganizationSelection.postData(data).$promise.then(function (result) {
                         if (result != null) {
-                            console.log(result);
                             return result;
                         }
                     });
