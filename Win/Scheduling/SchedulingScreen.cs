@@ -505,7 +505,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			setupContextMenuSkillGrid();
 			setupToolbarButtonsChartViews();
 			contextMenuViews.Opened += contextMenuViews_Opened;
-			setHeaderText(loadingPeriod.StartDate, loadingPeriod.EndDate);
+			setHeaderText(loadingPeriod.StartDate, loadingPeriod.EndDate, null, null);
 			setLoadingOptions();
 			setShowRibbonTexts();
 			setMenuItemsHardToLeftToRight();
@@ -546,11 +546,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripButtonValidation.Checked = _validation;
 		}
 
-		private void setHeaderText(DateOnly start, DateOnly end)
+		private void setHeaderText(DateOnly start, DateOnly end, DateOnly? outerStart, DateOnly? outerEnd)
 		{
 			CultureInfo currentCultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			string startDate = start.Date.ToString("d", currentCultureInfo);
 			string endDate = end.Date.ToString("d", currentCultureInfo);
+			if (outerStart.HasValue && outerEnd.HasValue)
+			{
+				if(start.AddDays(-7) != outerStart || end.AddDays(14) != outerEnd)
+				{
+					startDate = start.Date.ToString("d", currentCultureInfo) + "-" + end.Date.ToString("d", currentCultureInfo);
+					endDate = "(" + outerStart.Value.Date.ToString("d", currentCultureInfo) + "-" + outerEnd.Value.Date.ToString("d", currentCultureInfo) + ")";			
+				}
+			}
+			
 			Text = string.Format(currentCultureInfo, Resources.TeleoptiCCCColonModuleColonFromToDateScenarioColon,
 				Resources.Schedules, startDate, endDate, _scenario.Description.Name);
 		}
@@ -2498,14 +2507,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 			loadScenarioMenuItems();
 
 			toolStripStatusLabelStatus.Text = "SETTING UP SKILL TABS...";
+			ResumeLayout(true);
 			Refresh();
+			SuspendLayout();
 			setupSkillTabs();
 
 			toolStripStatusLabelStatus.Text = "SETTING UP INFO TABS...";
 			Refresh();
 			setupInfoTabs();
 			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXLoadingFormThreeDots");
+			ResumeLayout(true);
 			Refresh();
+			SuspendLayout();
 
 			if (schedulerSplitters1.PinnedPage != null)
 				schedulerSplitters1.TabSkillData.SelectedTab = schedulerSplitters1.PinnedPage;
@@ -2516,6 +2529,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 													  LanguageResourceHelper.Translate("XXLoadedColon") +
 													  " " + _schedulerState.SchedulingResultState.PersonsInOrganization.Count;
 			toolStripStatusLabelNumberOfAgents.Visible = true;
+			var loadedPeriod = _schedulerState.LoadedPeriod.Value.ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+			setHeaderText(_schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate, _schedulerState.RequestedPeriod.DateOnlyPeriod.EndDate, loadedPeriod.StartDate, loadedPeriod.EndDate);
 			
 			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler) && _loadRequsts)
 			{
@@ -3834,7 +3849,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					LoadDaysAfterLeft = true
 				};
-				stateHolder.LoadSchedules(new ScheduleStorage(new ThisUnitOfWork(uow), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker(), _container.Resolve<IToggleManager>(), _container.Resolve<IScheduleStorageRepositoryWrapper>()), personsInOrganizationProvider, scheduleDictionaryLoadOptions, period);
+				stateHolder.LoadSchedules(
+					new ScheduleStorage(new ThisUnitOfWork(uow), new RepositoryFactory(),
+						new PersistableScheduleDataPermissionChecker(), _container.Resolve<IToggleManager>(),
+						_container.Resolve<IScheduleStorageRepositoryWrapper>()), personsInOrganizationProvider,
+					scheduleDictionaryLoadOptions, period);
 				_schedulerState.Schedules.SetUndoRedoContainer(_undoRedo);
 			}
 			SchedulerState.Schedules.PartModified += _schedules_PartModified;
