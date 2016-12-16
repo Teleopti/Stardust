@@ -77,7 +77,9 @@
 								<div class="demo-select-header">
 									<md-select-header>
 										<i class="mdi mdi-magnify"></i>
-										</button>
+										<span ng-if="searchTerm.length > 0" ng-click="clearSearchTerm()" class="pull-right grow-out rta-clear-search">
+											<i class="mdi mdi-close"></i>
+										</span>
             				<input ng-model="searchTerm"
 		                   type="search"
 		                   placeholder="{{'SearchASiteOrTeam' | translate}}"
