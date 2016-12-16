@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var sumOfForecastedCalls = eslIntervals.Sum(x => x.ForecastedCalls);
 			var sumOfAnsweredCallsWithinSL = eslIntervals
 				.Sum(x => x.AnsweredCallsWithinServiceLevel);
-			return sumOfAnsweredCallsWithinSL/sumOfForecastedCalls*100;
+			return Math.Abs(sumOfForecastedCalls) > 0.01 ? sumOfAnsweredCallsWithinSL /sumOfForecastedCalls*100 ?? 0:0;
 		}
 
 		public IList<EslInterval> CalculateEslIntervals(IList<ISkill> skills, 
@@ -60,13 +60,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 				}
 			}
 
+
 			return eslIntervals
 				.GroupBy(g => g.StartTime)
 				.Select(s => new EslInterval
 				{
 					StartTime = s.Key,
 					ForecastedCalls = s.Sum(x => x.ForecastedCalls),
-					Esl = s.Sum(x => x.AnsweredCallsWithinServiceLevel)/s.Sum(x => x.ForecastedCalls)
+					Esl = Math.Abs(s.Sum(x => x.ForecastedCalls)) < 0.01 ? null:s.Sum(x => x.AnsweredCallsWithinServiceLevel) / s.Sum(x => x.ForecastedCalls)
 				})
 				.OrderBy(t => t.StartTime)
 				.ToList();

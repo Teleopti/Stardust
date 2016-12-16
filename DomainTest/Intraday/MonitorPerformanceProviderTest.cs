@@ -331,6 +331,36 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(1);
 			result.DataSeries.EstimatedServiceLevels.First().Should().Be.EqualTo(0d);
+			result.Summary.EstimatedServiceLevel.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldHandleEslSummaryWithZeroForecast()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			fakeScenarioAndIntervalLength();
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 15));
+			var scenario = fakeScenarioAndIntervalLength();
+			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), 0, new Tuple<TimePeriod, double>(new TimePeriod(8, 0, 8, 15), 0)).WithId();
+
+
+			IntradayMonitorDataLoader.AddInterval(new IncomingIntervalModel()
+			{
+				IntervalDate = userNow.Date,
+				IntervalId = new IntervalBase(userNow, (60 / minutesPerInterval) * 24).Id,
+				ForecastedCalls = 0,
+				OfferedCalls = 1
+			});
+
+			SkillRepository.Has(skill);
+			SkillDayRepository.Has(skillDay);
+
+			var result = Target.Load(new Guid[] { skill.Id.Value });
+
+			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(1);
+			result.DataSeries.EstimatedServiceLevels.First().Should().Be.EqualTo(null);
+			result.Summary.EstimatedServiceLevel.Should().Be.EqualTo(0);
 		}
 
 		[Test]

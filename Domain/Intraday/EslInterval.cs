@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		public DateTime StartTime { get; set; }
 		public double ForecastedCalls{ get; set; }
-		public double Esl { get; set; }
-		public double AnsweredCallsWithinServiceLevel => ForecastedCalls * Esl;
+		public double? Esl { get; set; }
+		public double? AnsweredCallsWithinServiceLevel => ForecastedCalls * Esl;
 	}
 }
