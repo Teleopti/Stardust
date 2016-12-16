@@ -104,5 +104,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	    {
 		    return TimeZoneInfo.FindSystemTimeZoneById("Iran Standard Time");
 	    }
+
+	    public static TimeZoneInfo Kathmandu()
+	    {
+		    return TimeZoneInfo.FindSystemTimeZoneById("Nepal Standard Time");
+	    }
     }
 }

@@ -183,6 +183,34 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(numberOfSeats);
 		}
 
+		[Ignore("#42060")]
+		[TestCase(15, ExpectedResult = 1d)]
+		[TestCase(30, ExpectedResult = 1d)]
+		public double ShouldCalculateResourcesOnSkillWithTimeZoneKathmandu(int intervalLength)
+		{
+			var scenario = new Scenario("_");
+			var date = DateOnly.Today;
+			var activity = new Activity("_");
+			var skill = new Skill("_", "_", Color.Empty, intervalLength, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
+			{
+				Activity = activity,
+				TimeZone = TimeZoneInfoFactory.Kathmandu()
+			};
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(9, 0, 17, 0));
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 10);
+			var agent = new Person().WithId();
+			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.Kathmandu());
+			agent.AddPeriodWithSkill(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
+			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
+			var ass = new PersonAssignment(agent, scenario, date);
+			ass.AddActivity(activity, new TimePeriod(9, 0, 17, 0));
+			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, skillDay);
+
+			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+
+			return skillDay.SkillStaffPeriodCollection.First().CalculatedResource;
+		}
+
 		public void Configure(FakeToggleManager toggleManager)
 		{
 			if (_resourcePlannerMaxSeatsNew40939)
