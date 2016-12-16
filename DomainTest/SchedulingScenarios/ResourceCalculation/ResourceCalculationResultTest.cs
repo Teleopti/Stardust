@@ -196,14 +196,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				Activity = activity,
 				TimeZone = TimeZoneInfoFactory.Kathmandu()
 			};
-			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(9, 0, 17, 0));
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(9, 17));
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 10);
 			var agent = new Person().WithId();
 			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.Kathmandu());
 			agent.AddPeriodWithSkill(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
-			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
 			var ass = new PersonAssignment(agent, scenario, date);
-			ass.AddActivity(activity, new TimePeriod(9, 0, 17, 0));
+			ass.AddActivity(activity, new TimePeriod(9, 17));
 			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, skillDay);
 
 			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
