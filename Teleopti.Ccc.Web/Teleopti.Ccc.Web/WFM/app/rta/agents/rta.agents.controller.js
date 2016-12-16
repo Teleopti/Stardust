@@ -92,7 +92,6 @@
 				var enableWatchOnTeam = false;
 				$scope.selectFieldText = 'Select organization';
 				$scope.searchTerm = "";
-				$scope.enableButton = false;
 				toggleService.togglesLoaded.then(function() {
 					$scope.showOrgSelection = toggleService.RTA_QuicklyChangeAgentsSelection_40610;
 					if ($scope.showOrgSelection)
@@ -308,7 +307,6 @@
 				});
 
 				$scope.updateSite = function(oldTeamsSelected) {
-					$scope.enableButton = true;
 					$scope.sites.forEach(function(site) {
 						var anyChangeForThatSite = false;
 						site.Teams.forEach(function(team) {
@@ -329,7 +327,6 @@
 				};
 
 				$scope.clearOrgSelection = function(){
-					$scope.enableButton = !$scope.enableButton;
 					$scope.sites.forEach(function(site){
 						if(site.isChecked)
 							site.isChecked = false;
