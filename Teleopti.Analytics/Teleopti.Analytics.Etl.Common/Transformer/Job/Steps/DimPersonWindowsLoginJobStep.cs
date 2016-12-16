@@ -56,7 +56,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 					foreach (var windowsLogonInfo in toBeUpdated)
 					{
 						sqlCommand.CommandText += string.Format(updateStatement, windowsLogonInfo.WindowsDomain,
-							windowsLogonInfo.WindowsUsername, windowsLogonInfo.PersonCode);
+							windowsLogonInfo.WindowsUsername.Replace("'", "''"), windowsLogonInfo.PersonCode);
 					}
 
 					affectedRows = sqlCommand.ExecuteNonQuery();
