@@ -77,17 +77,15 @@
 								<div class="demo-select-header">
 									<md-select-header>
 										<i class="mdi mdi-magnify"></i>
-										<button class="wfm-fab  material-depth-1 mini pull-right rta-btn-clear-org-sel" ng-click="clearOrgSelection()">
-											<i class="mdi mdi-close"></i>
 										</button>
             				<input ng-model="searchTerm"
 		                   type="search"
 		                   placeholder="{{'SearchASiteOrTeam' | translate}}"
 											 ng-keydown="onSearchOrganization($event)"
 		                   class="picker-searchbox md-text rta-options-search-input">
-
           				</md-select-header>
 								</div>
+								<button class="wfm-btn wfm-btn-invis-primary" ng-class="enableButton ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-disabled="!enableButton" ng-click="clearOrgSelection()">Clear All</button>
 								<md-optgroup ng-repeat="site in sites | filter:searchTerm" class="rta-option-group">
 									<span ng-click="expandSite(site)" style="margin-right:6px"><i class="mdi" ng-class="site.isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i></span>
 					<md-checkbox ng-model="site.isChecked" ng-value="site.Id" ng-class="site.isMarked ? 'rta-marked-checkbox' : ''">{{site.Name}}</md-checkbox>

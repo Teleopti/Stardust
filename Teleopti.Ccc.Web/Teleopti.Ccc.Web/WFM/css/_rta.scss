@@ -121,8 +121,11 @@
 .rta-no-pointer {
 	pointer-events: none;
 }
-.rta-option-group, .demo-select-header {
+.rta-option-group {
 	margin: 0px 16px 8px 16px;
+}
+.demo-select-header {
+	margin: 0px 16px;
 }
 .rta-options-search-input {
 	outline: 0;
