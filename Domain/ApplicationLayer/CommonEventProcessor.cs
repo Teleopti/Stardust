@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		{
 			Process(@event, handlerType);
 		}
-		
+
 		public virtual void Process(IEvent @event, Type handlerType)
 		{
 			using (_initiatorIdentifierScope.OnThisThreadUse(InitiatorIdentifier.FromMessage(@event)))
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					using (var scope = _resolve.NewScope())
 					{
 						dynamic handler = scope.Resolve(handlerType);
-						handler.Handle((dynamic) @event);
+						handler.Handle((dynamic)@event);
 					}
 				}
 				catch (Exception)
