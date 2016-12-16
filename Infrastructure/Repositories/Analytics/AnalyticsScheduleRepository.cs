@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					row.TimePart.PaidTimeActivityMinutes,
 					row.TimePart.PaidTimeAbsenceMinutes,
 					row.PersonPart.BusinessUnitId,
-					row.DatePart.DatasourceUpdateDate,
+					row.DatePart.DatasourceUpdateDate == DateTime.MinValue ? DateTime.UtcNow : row.DatePart.DatasourceUpdateDate,
 					row.TimePart.OverTimeId);
 			}
 
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetGuid(nameof(personId), personId)
 				.SetGuid(nameof(scenarioId), scenarioId)
 				.SetGuid(nameof(businessUnitId), businessUnitId)
-				.SetDateTime(nameof(datasourceUpdateDate), datasourceUpdateDate)
+				.SetDateTime(nameof(datasourceUpdateDate), datasourceUpdateDate == DateTime.MinValue ? DateTime.UtcNow : datasourceUpdateDate)
 				.ExecuteUpdate();
 		}
 
