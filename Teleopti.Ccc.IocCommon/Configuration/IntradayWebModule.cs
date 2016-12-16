@@ -53,6 +53,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SplitSkillStaffInterval>().As<SplitSkillStaffInterval>().SingleInstance();
 			builder.RegisterType<SkillStaffingIntervalProvider>().As<SkillStaffingIntervalProvider>().SingleInstance();
 			builder.RegisterType<JobStartTimeRepository>().As<IJobStartTimeRepository>().SingleInstance();
+			builder.RegisterType<SkillCombinationResourceRepository>().As<ISkillCombinationResourceRepository>().SingleInstance();
+			
 		}
 	}
 
