@@ -152,7 +152,9 @@
 					if (skill.Id != skillIds[0] || $stateParams.skillAreaId) {
 						stateGoToAgents({
 							skillIds: skill.Id,
-							skillAreaId: undefined
+							skillAreaId: undefined,
+							siteIds: siteIds,
+							teamIds: teamIds
 						});
 					}
 				}
@@ -162,7 +164,9 @@
 					if (skillArea.Id == $stateParams.skillAreaId) return;
 					stateGoToAgents({
 						skillAreaId: skillArea.Id,
-						skillIds: []
+						skillIds: [],
+						siteIds: siteIds,
+						teamIds: teamIds
 					});
 				}
 
