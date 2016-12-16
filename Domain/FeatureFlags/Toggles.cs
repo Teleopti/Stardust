@@ -128,6 +128,7 @@
 		Wfm_Requests_Configurable_BusinessRules_For_ShiftTrade_40770,
 		Wfm_Requests_ApprovingModifyRequests_41930,
 		wfm_Requests_ReadModelOldData_42046,
+		Wfm_Requests_ImproveStaffingForCascadingSkills_41969,
 
 		Wfm_Seatplan_UseDatePeriodForPlanning_42167,
 

@@ -401,7 +401,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<LoaderForResourceCalculation>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<UpdateStaffingLevelReadModel>().As<IUpdateStaffingLevelReadModel>().InstancePerLifetimeScope().ApplyAspects();
-			builder.RegisterType<ExtractSkillStaffDataForResourceCalculation>().As<IExtractSkillStaffDataForResourceCalculation>().InstancePerLifetimeScope().ApplyAspects();
+			registerType<IExtractSkillStaffDataForResourceCalculation, ExtractSkillStaffDataForResourceCalculation, ExtractCascadingSkillStaffDataForResourceCalculation>(builder,
+				Toggles.Wfm_Requests_ImproveStaffingForCascadingSkills_41969);
+
 
 			if (_configuration.Toggle(Toggles.ResourcePlanner_HideSkillPrioSliders_41312))
 			{
@@ -678,6 +680,20 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<BudgetGroupHeadCountSpecification>().As<IBudgetGroupHeadCountSpecification>();
 			builder.RegisterType<SwapAndModifyService>().As<ISwapAndModifyService>();
 			builder.RegisterType<SwapService>().As<ISwapService>();
+		}
+
+		private void registerType<T, TToggleOn, TToggleOff>(ContainerBuilder builder, Toggles toggle)
+			where TToggleOn : T
+			where TToggleOff : T
+		{
+			if (_configuration.Toggle(toggle))
+			{
+				builder.RegisterType<TToggleOn>().As<T>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<TToggleOff>().As<T>().SingleInstance();
+			}
 		}
 	}
 }
