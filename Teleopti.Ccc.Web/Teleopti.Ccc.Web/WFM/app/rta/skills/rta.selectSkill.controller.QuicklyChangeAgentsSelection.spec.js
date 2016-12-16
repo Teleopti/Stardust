@@ -847,7 +847,9 @@ describe('RtaAgentsCtrl', function() {
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
 			skillIds: 'phoneSkillGuid',
-			skillAreaId: undefined
+			skillAreaId: undefined,
+			siteIds: [],
+			teamIds: []
 		}, {
 			reload: true,
 			notify: true
@@ -868,7 +870,9 @@ describe('RtaAgentsCtrl', function() {
 
 		expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
 			skillAreaId: 'phoneAndEmailGuid',
-			skillIds: []
+			skillIds: [],
+			siteIds: [],
+			teamIds: []
 		}, {
 			reload: true,
 			notify: true
@@ -920,7 +924,9 @@ describe('RtaAgentsCtrl', function() {
 
 				expect($state.go).toHaveBeenCalledWith('rta.select-skill', {
 					skillAreaId: 'phoneAndEmailGuid',
-					skillIds: []
+					skillIds: [],
+					siteIds: [],
+					teamIds: []
 				}, {
 					reload: true,
 					notify: true
