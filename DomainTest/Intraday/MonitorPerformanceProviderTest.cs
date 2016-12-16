@@ -334,41 +334,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		public void ShouldHandleEslSummaryWithNoIncomingStatistics()
-		{
-			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
-			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
-			var latestStatsTime = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
-			fakeScenarioAndIntervalLength();
-			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(0, 0, 24, 0));
-			//var skillDay = createSkillDay(skill, Now.UtcDateTime(), new TimePeriod(0, 0, 24, 0));
-
-			//var scheduledStaffingList = createScheduledStaffing(skillDay);
-
-			IntradayMonitorDataLoader.AddInterval(new IncomingIntervalModel()
-			{
-				IntervalDate = latestStatsTime.Date,
-				IntervalId = new IntervalBase(latestStatsTime, (60 / minutesPerInterval) * 24).Id,
-				OfferedCalls = 22,
-				ForecastedCalls = 20
-			});
-			IntradayMonitorDataLoader.AddInterval(new IncomingIntervalModel()
-			{
-				IntervalDate = latestStatsTime.Date,
-				IntervalId = new IntervalBase(latestStatsTime.AddMinutes(minutesPerInterval), (60 / minutesPerInterval) * 24).Id,
-				ForecastedCalls = 21
-			});
-
-			SkillRepository.Has(skill);
-			//SkillDayRepository.Add(skillDay);
-			//ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
-
-			var result = Target.Load(new Guid[] { skill.Id.Value });
-		
-			double.IsNaN(result.Summary.EstimatedServiceLevel).Should().Be.EqualTo(false);
-		}
-
-		[Test]
 		public void ShouldReturnNoEslWhenNoForecast()
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
