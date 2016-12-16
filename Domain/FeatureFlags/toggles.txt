@@ -158,7 +158,6 @@ WfmGlobalLayout_personalOptions_37114 = true
 
 ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = false # needs to be false until we get further....
 ResourcePlanner_CascadingSkillsGUI_40018 = false #Hold release of Cascading UI until we have a proper UI
-ResourcePlanner_FilterOvertimeAvail_37113 = true
 ResourcePlanner_NegativeOrderIndex_39062 = true
 ResourcePlanner_MaxSeatsNew_40939 = RC #prototype, not to be released for now
 ResourcePlanner_SplitBigIslands_42049 = RC 

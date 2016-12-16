@@ -6712,9 +6712,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			var defaultDate = _scheduleView.SelectedDateLocal();
 
-			var useAllowIntersect =
-				_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_FilterOvertimeAvail_37113);
-			using (var view = new FilterOvertimeAvailabilityView(defaultDate, _schedulerState, useAllowIntersect))
+			using (var view = new FilterOvertimeAvailabilityView(defaultDate, _schedulerState))
 			{
 				if (view.ShowDialog() == DialogResult.OK)
 				{
