@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			sqlText.AppendFormat("SELECT '{0}', 1, '{1}', '{2}', {3}, {4}, {4}, 1, null, '{5}', '{5}', 0"
 				, queueCode, 
 				new Guid("3F0886AB-7B25-4E95-856A-0D726EDC2A67"), 
-				DateTime.Now, 
+				DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 
 				newQueueId, 
 				fakeQueueAggId,
 				uniqueQueueName);
