@@ -392,6 +392,7 @@
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationResultTest.cs" />
     <Compile Include="SchedulingScenarios\ScheduleDictionaryCreator.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\BackToLegalShiftCommandTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\DoNotRunNightRestWhiteSpotTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCallbackDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCommandSpecificTest.cs" />
