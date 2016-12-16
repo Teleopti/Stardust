@@ -2,7 +2,9 @@
 using System.IdentityModel.Services;
 using System.Linq;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
 using Teleopti.Ccc.Web.Core;
@@ -32,6 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_authenticationModule = authenticationModule;
 			_currentHttpContext = currentHttpContext;
 			_loadAllTenantsUsers = loadAllTenantsUsers;
+
 		}
 
 		public ActionResult Index()
@@ -45,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public ViewResult SignIn()
 		{
 			ViewBag.LayoutBase = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel();
-			return View();
+				return View("SignIn");
 		}
 
 		public ActionResult SignOut()

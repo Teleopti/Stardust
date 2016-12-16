@@ -4,6 +4,7 @@ using System.Web.Routing;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Core;
@@ -33,6 +34,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 
 			_target = new AuthenticationController(null, _formsAuthentication, _sessionSpecificDataProvider, authenticationModule,  new FakeCurrentHttpContext(new FakeHttpContext()), null);
 			new TestControllerBuilder().InitializeController(_target);
+		}
+		private static FakeToggleManager getToggleManager()
+		{
+			var toggleManager = new FakeToggleManager();
+			return toggleManager;
 		}
 
 		[TearDown]

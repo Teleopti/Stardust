@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
 using Teleopti.Ccc.Web.Areas.Start.Models.LayoutBase;
@@ -24,6 +25,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var result = target.SignIn();
 			result.ViewName.Should().Be.EqualTo(string.Empty);
 			Assert.That(result.ViewBag.LayoutBase, Is.SameAs(layoutBaseViewModel));
+		}
+		private static FakeToggleManager getToggleManager()
+		{
+			var toggleManager = new FakeToggleManager();
+			return toggleManager;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]

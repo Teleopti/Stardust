@@ -14,6 +14,7 @@ using System.Web.Routing;
 using DotNetOpenAuth.OpenId.Provider;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Util;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.SSO.Controllers;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
@@ -31,12 +32,18 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			request.Stub(x => x.AcceptTypes).Return(new[] { "application/xrds+xml" });
 			var context = new FakeHttpContext("/");
 			context.SetRequest(request);
-			var target = new OpenIdController(null, null, null, null);
+			var target = new OpenIdController(null, null, null, null, getToggleManager());
 			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
 
 			var result = target.Identifier();
 
 			(result as ViewResult).ViewName.Should().Be.EqualTo("Xrds");
+		}
+
+		private static FakeToggleManager getToggleManager()
+		{
+			var toggleManager = new FakeToggleManager();
+			return toggleManager;
 		}
 
 		[Test]
@@ -45,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://mock/"), new Uri("http://mock/"));
 			var context = new FakeHttpContext("/");
 			context.SetRequest(request);
-			var target = new OpenIdController(null, null, null, null);
+			var target = new OpenIdController(null, null, null, null, getToggleManager());
 			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
 
 			var result = target.Identifier();
@@ -56,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		[Test]
 		public void ShouldReturnAskUserView()
 		{
-			var target = new OpenIdController(null, null, null, null);
+			var target = new OpenIdController(null, null, null, null, getToggleManager());
 
 			var result = target.AskUser();
 
@@ -70,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			var httpContextBase = new FakeHttpContext("testRelative/");
 			httpContextBase.SetRequest(new FakeHttpRequest("testRelative/", new Uri("http://test/"), new Uri("http://referer/")));
 			var openIdProviderWapper = MockRepository.GenerateMock<IOpenIdProviderWapper>();
-			var target = new OpenIdController(openIdProviderWapper, new FakeCurrentHttpContext(httpContextBase), null, formsAuthentication);
+			var target = new OpenIdController(openIdProviderWapper, new FakeCurrentHttpContext(httpContextBase), null, formsAuthentication, getToggleManager());
 
 			var request = new FakeAuthenticationRequest
 			{

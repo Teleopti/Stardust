@@ -1,61 +1,8 @@
-
-#selector div {
-	display: block;
-	padding-bottom: 15px;
+﻿body {
+	background: #ebebeb;
+	background-size: cover;
 }
 
-#buttons, #buttons br {
-	clear: both;
-}
-.button {
-	width: 110px;
-	height: 60px;
-	border: 1px solid #DDD;
-	margin: 6px;
-	float: left;
-	text-align:center;
-	padding: 10px;
-}
-a.button:hover 
-{
-	border: 1px solid #aaa;
-	    
-}
-a.button:focus {
-	outline: none;
-}
-a.button:focus
-{
--moz-outline-style: none;
-}
-
-.login-form {
-	max-width: 300px;
-	margin-right: auto;
-	margin-left: auto;
-}
-
-.panel-info, .panel-heading, .panel-info>.panel-heading {
-    background-color: #0099FF;
-    border-color: #0099FF;
-}
-
-body, .login-header { 
-    color: #000; 
-    font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif;
-}
-
-.login-header {
-    text-align: center;
-}
-
-.login-message {
-	text-align: center;
-	color: rgb(118, 118, 118);
-	position: absolute;
-    bottom: 10px;
-    right: 0;
-}
 
 .animate-material {
   animation-name: material;
@@ -64,20 +11,20 @@ body, .login-header {
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
 
-  height: 25%;
+  max-height: 25%;
 }
 
 @keyframes material {
   to {
     opacity: 1;
-    height: 100%;
+	max-height: 100%;
   }
 }
 
 .animate-content {
   animation-name: content;
   animation-duration: 0.5s;
-  animation-delay: 0.7s;
+  animation-delay: 1s;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   margin: 0 20px;
@@ -113,18 +60,8 @@ body, .login-header {
   }
 }
 
-body{
-  background: #ebebeb;
-  background-size: cover;
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-}
 
-#spinnerwrapper {
-	visibility: hidden;
+.loader {
 	z-index: 2800;
 	top: 50% !important;
 	left: 50% !important;
@@ -142,8 +79,8 @@ body{
 	animation: load8 1.1s infinite linear;
 }
 
-	#spinnerwrapper,
-	#spinnerwrapper:after {
+	.loader,
+	.loader:after {
 		border-radius: 50%;
 		width: 5em;
 		height: 5em;
@@ -173,9 +110,6 @@ body{
 	}
 }
 
-
-/*.yahoo { background: url("/Content/images/yahoo.gif") no-repeat scroll center center rgb(255, 255, 255);}
-.google { background: url("/Content/images/google.png") no-repeat scroll center center rgb(255, 255, 255);}
-.liveid { background: url("/Content/images/liveid.png") no-repeat scroll center center rgb(255, 255, 255);}
-.facebook { background: url("/Content/images/facebook.png") no-repeat scroll center center rgb(255, 255, 255);}
-.twitter { background: url("/Content/images/twitter.png") no-repeat scroll center center rgb(255, 255, 255);}*/
+#BusinessUnits {
+	padding-bottom: 15px;
+}

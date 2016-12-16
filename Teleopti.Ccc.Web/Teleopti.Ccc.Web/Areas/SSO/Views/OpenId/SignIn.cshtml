@@ -4,102 +4,148 @@
 @section head {
 	@Styles.Render(BundleScripts.SsoCss)
 	@Scripts.Render(BundleScripts.SsoJs)
+	@Styles.Render("~/areas/sso/Content/Css/main.min.css")
+	@Styles.Render("~/areas/sso/Content/Css/newLogin.css")
+
+
 
 	<!-- dont want to minify this one... Will be corrupt using IE8 (bug 26427)-->
 	<script src="@Url.Content("~/Content/jquery-plugin/jquery.placeholder.js")"></script>
 
 	<script type="text/javascript">
-		var authentication;
-		$(function () {
-			//isTeleoptiProvider is used to tell the fat client that the teleopti browser is used as a provider.
-			//this is used to enable the profile menu in the fat client only if its a Teleopti provider
-			if (typeof isTeleoptiProvider !== 'undefined') {
-				isTeleoptiProvider();
+	var authentication;
+	$(function () {
+		//isTeleoptiProvider is used to tell the fat client that the teleopti browser is used as a provider.
+		//this is used to enable the profile menu in the fat client only if its a Teleopti provider
+		if (typeof isTeleoptiProvider !== 'undefined') {
+			isTeleoptiProvider();
+		}
+
+		if (typeof (Teleopti) === 'undefined') {
+			Teleopti = {};
+
+			if (typeof (Teleopti.SSO) === 'undefined') {
+				Teleopti.SSO = {};
 			}
+		}
 
-			if (typeof (Teleopti) === 'undefined') {
-				Teleopti = {};
+		if (typeof (Teleopti.SSO.Authentication) === 'undefined') {
+			Teleopti.SSO.Authentication = {};
+		}
 
-				if (typeof (Teleopti.SSO) === 'undefined') {
-					Teleopti.SSO = {};
-				}
-			}
-
-			if (typeof (Teleopti.SSO.Authentication) === 'undefined') {
-				Teleopti.SSO.Authentication = {};
-			}
-
-			Teleopti.SSO.Authentication.Settings = {
-				baseUrl: '@Url.Content("~/")',
-				returnUrl: '@ViewBag.ReturnUrl',
-				pendingRequest: '@ViewBag.PendingRequest'
-			};
-			authentication = new Teleopti.SSO.Authentication.Init();
-		});
+		Teleopti.SSO.Authentication.Settings = {
+			baseUrl: '@Url.Content("~/")',
+			returnUrl: '@ViewBag.ReturnUrl',
+			pendingRequest: '@ViewBag.PendingRequest'
+		};
+		authentication = new Teleopti.SSO.Authentication.Init();
+	});
 	</script>
 }
 
 <section id="page-signin">
-    <div class="container" id="Login-container">
-        <div class="login-header">
-            <h1>Teleopti WFM</h1>
-        </div>
-        <div id="view" class="login-form"></div>
-        <div id="signin">
-            <form data-bind="submit: SignIn">
-				<div>
-					<div class="form-group">
-						<input type="text" id="Username-input" class="form-control" placeholder="@Resources.UserName" data-bind="value: UserName, valueUpdate: 'afterkeydown',enable: Ajax.Inactive" autocomplete="off" autocapitalize="off" autocorrect="off" />
-					</div>
-					<div class="form-group">
-						<input type="password" id="Password-input" class="form-control" placeholder="@Resources.Password" data-bind="value: Password, valueUpdate: 'afterkeydown',enable: Ajax.Inactive" autocomplete="off" />
-					</div>
-					<div class="form-group">
-						<div class="checkbox" style="padding-left: 0" data-bind="visible: IsLogonFromBrowser">
-							<label>
-								<input type="checkbox" data-bind="checked: RememberMe, enable: Ajax.Inactive"> @Resources.RememberMe
-							</label>
+	<style>
+		body {
+			background: @Url.Content("../../Content/Images/bg.png") center center no-repeat fixed;
+			background-size: cover;
+		}
+	</style>
+	<div id="Login-container">
+		<div id="view" class="login-form"></div>
+		<div id="signin">
+			<div class="con-row" style="margin-top: 10%;">
+				<div class="con-flex"></div>
+				<div class="con-flex">
+					<div class="panel material-depth-1 line-center animate-material">
+						<div class="sub-header">
+							<h1>TELEOPTI WFM</h1>
+						</div>
+						<div class="con-row">
+							<div class="con-flex">
+								<form class="wfm-form animate-content" data-bind="submit: SignIn">
+									<div class="form-input-wrap">
+										<input type="text" id="Username-input" placeholder="@Resources.UserName" data-bind="value: UserName, valueUpdate: 'afterkeydown',enable: Ajax.Inactive" autocapitalize="off" autocorrect="off" />
+									</div>
+									<div class="form-input-wrap">
+										<input type="password" id="Password-input" placeholder="@Resources.Password" data-bind="value: Password, valueUpdate: 'afterkeydown',enable: Ajax.Inactive" autocomplete="off" />
+									</div>
+									<div class="form-input-wrap">
+										<div class="wfm-checkbox" data-bind="visible: IsLogonFromBrowser">
+											<input type="checkbox" id="check1" data-bind="checked: RememberMe, enable: Ajax.Inactive">
+											<label for="check1">
+												<span class="wfm-checkbox-toggle"></span>
+												<span class="wfm-checkbox-label">@Resources.RememberMe </span>
+											</label>
+										</div>
+									</div>
+									<button class="wfm-btn wfm-btn-primary" id="Signin-button" type="submit" data-bind="enable: Ajax.Inactive" style="margin-top: 10px">@Resources.SignIn</button>
+									<div data-bind="visible: Ajax.Active" class="loader"></div>
+								</form>
+							</div>
 						</div>
 					</div>
 				</div>
-                <div id="Signin-error" 
-					 class="alert alert-warning" 
-					 data-bind="visible: HasErrorMessage, text: ErrorMessage"
-                     data-nobusinessunitext="@Resources.NoAllowedBusinessUnitFoundInCurrentDatabase"
-					 data-nodatasourcetext="@Resources.NoDatasource">
-                </div>
+				<div class="con-flex"></div>
+			</div>
+			<div class="con-row">
+				<div class="con-flex"></div>
+				<div class="con-flex">
+					<div id="Signin-error"
+						 class="alert alert-warning formError material-depth-1"
+						 data-bind="visible: HasErrorMessage, text: ErrorMessage"
+						 data-nobusinessunitext="@Resources.NoAllowedBusinessUnitFoundInCurrentDatabase"
+						 data-nodatasourcetext="@Resources.NoDatasource">
+					</div>
+				</div>
+				<div class="con-flex"></div>
+			</div>
+		</div>
 
-                <button class="btn btn-primary" id="Signin-button" type="submit" data-bind="enable: Ajax.Inactive" style="margin-top: 10px">@Resources.SignIn</button>
-                <img data-bind="visible: Ajax.Active" src="@Url.Content("~/Areas/SSO/Content/Images/ajax-loader-small.gif")" alt="..." />
-            </form>
-        </div>
+		<div id="changepassword">
+			<div class="con-row">
+				<div class="con-flex"></div>
+				<div class="con-flex">
+					<div class="panel material-depth-1 line-center animate-material">
+						<div class="sub-header">
+							<h1>@Resources.PasswordSettings</h1>
+						</div>
+						<div class="con-row">
+							<div class="con-flex wfm-form animate-content">
+								<div class="form-group">
+									<input type="password" id="Old-password" placeholder="@Resources.PasswordOld" data-bind="value: OldPassword" />
+								</div>
+								<div class="form-group">
+									<input type="password" id="New-password" placeholder="@Resources.NewPassword" data-bind="value: NewPassword" />
+								</div>
+								<div class="form-group">
+									<input type="password" id="Confirm-new-password" placeholder="@Resources.ConfirmNewPassword" data-bind="value: ConfirmNewPassword" />
+								</div>
+								<!-- <div id="Password-change-error" class="alert alert-warning" data-bind="visible: ErrorMessage().length > 0, text: ErrorMessage"
+										  data-notmatch="@Resources.PasswordsDoNotMatch">
+								</div> -->
+								<button class="wfm-btn wfm-btn-default" id="Skip-button" data-bind="visible: !MustChangePassword(), click: SkipChangePassword">@Resources.Skip</button>
+								<button class="wfm-btn wfm-btn-primary" id="Change-password-button" data-bind="click: ApplyChangePassword">@Resources.Apply</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="con-flex"></div>
+			</div>
+			<div class="con-row">
+				<div class="con-flex"></div>
+				<div class="con-flex">
+					<div id="PasswordAlreadyExpired" class="alert alert-warning formError material-depth-1" data-bind="visible: MustChangePassword">
+						<button type="button" class="close" data-dismiss="alert">x</button>
+						<strong>@Resources.WarningWithExclamatory</strong> @Resources.YourPasswordHasAlreadyExpired
+					</div>
+					<div id="PasswordExpireSoon" class="alert alert-warning formError material-depth-1" data-bind="visible: !MustChangePassword()">
+						<button type="button" class="close" data-dismiss="alert">x</button>
+						<strong>@Resources.WarningWithExclamatory</strong> @Resources.YourPasswordWillExpireSoon
+					</div>
+				</div>
+				<div class="con-flex"></div>
+			</div>
+		</div>
 
-        <div id="changepassword">
-            <div id="PasswordAlreadyExpired" class="alert alert-warning login-warning" data-bind="visible: MustChangePassword">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                <strong>@Resources.WarningWithExclamatory</strong> @Resources.YourPasswordHasAlreadyExpired
-            </div>
-            <div id="PasswordExpireSoon" class="alert alert-warning login-warning" data-bind="visible: !MustChangePassword()">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                <strong>@Resources.WarningWithExclamatory</strong> @Resources.YourPasswordWillExpireSoon
-            </div>
-            <div class="login-form"> 
-                <div class="form-group">
-                    <input type="password" id="New-password" placeholder="@Resources.NewPassword" data-bind="value: NewPassword" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <input type="password" id="Confirm-new-password" placeholder="@Resources.ConfirmNewPassword" data-bind="value: ConfirmNewPassword" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <input type="password" id="Old-password" placeholder="@Resources.PasswordOld" data-bind="value: OldPassword" class="form-control" />
-                </div>
-                <div id="Password-change-error" class="alert alert-warning" data-bind="visible: ErrorMessage().length > 0, text: ErrorMessage"
-					data-notmatch="@Resources.PasswordsDoNotMatch">
-                </div>
-                <button class="btn btn-primary" id="Change-password-button" data-bind="click: ApplyChangePassword">@Resources.Apply</button>
-                <button class="btn btn-primary" id="Skip-button" data-bind="visible: !MustChangePassword(), click: SkipChangePassword">@Resources.Skip</button>
-            </div>
-        </div>
-    </div>
+	</div>
 </section>
-

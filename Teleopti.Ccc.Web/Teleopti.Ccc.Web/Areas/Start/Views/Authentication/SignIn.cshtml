@@ -4,6 +4,9 @@
 @section head {
 	@Styles.Render(BundleScripts.SignInCss)
 	@Scripts.Render(BundleScripts.SignInJs)
+	@Styles.Render("~/Areas/Start/Content/Css/main.min.css")
+	@Styles.Render("~/Areas/Start/Content/Css/newLogin.css")
+
 
 	<script type="text/javascript">
 		var authentication;
@@ -24,39 +27,60 @@
 }
 
 <section id="page-signin">
-	<div class="container" id="Login-container">
+	<div id="Login-container">
 		<div id="Exception-div" class="alert alert-danger hide">
 			<button type="button" class="close" data-dismiss="alert">×</button>
 			<span id="Exception-message"></span>
 		</div>
-	    <div class="login-header">
-	        <h1>Teleopti WFM</h1>
-	    </div>
-        <div id="view" class="login-form"></div>
+
+		<div class="con-row" style="margin-top: 10%;">
+			<div class="con-flex"></div>
+			<div class="con-flex">
+				<div class="panel material-depth-1 line-center animate-material">
+					<div class="sub-header">
+						<h1>Teleopti WFM</h1>
+					</div>
+					<div class="con-row">
+						<div class="con-flex">
+							<div class="animate-content">
+								<div id="view"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="con-flex"></div>
+		</div>
+
 		<div id="signin">
 			<div id="Signin-error"
-				 class="alert alert-warning"
+				 class="alert alert-warning formError material-depth-1"
 				 data-bind="visible: HasErrorMessage, text: ErrorMessage"
 				 data-nobusinessunitext="@Resources.NoAllowedBusinessUnitFoundInCurrentDatabase"
 				 data-nodatasourcetext="@Resources.NoDatasource"
 				 data-nopermissiontext="@Resources.InsufficientPermissionForWeb">
 			</div>
-			<div data-bind="if: ShowSignInAsAnotherUser">
-				<a class="btn btn-primary" href="@signOutUrl">@Resources.SignInAsAnotherUser</a>
-			</div>
 
-			<img data-bind="visible: Ajax.Active" src="@Url.Content("~/Areas/Start/Content/Images/ajax-loader-small.gif")" alt="..." />
+			<a data-bind="if: ShowSignInAsAnotherUser" style="display: inline-block;" class="wfm-btn wfm-btn-primary" href="@signOutUrl">@Resources.SignInAsAnotherUser</a>
+			
 		</div>
 
 		<div id="businessunit">
 			<div id="BusinessUnit-error"
-				 class="alert alert-warning"
-				 data-bind="visible: HasErrors, text: ErrorMesg">
+			     class="alert alert-warning formError material-depth-1"
+			     data-bind="visible: HasErrors, text: ErrorMesg">
 			</div>
-			<div id="BusinessUnits" data-bind="visible: !HasErrors(), foreach: BusinessUnits" class="list-group">
-				<a href="#" class="list-group-item" data-bind="text: Name, click: Select"></a>
-			</div>
-		</div>
+			<p>@Resources.PleaseChooseABusinessUnit</p>
+			<ul id="BusinessUnits" data-bind="visible: !HasErrors(), foreach: BusinessUnits" class="list-group">
+				<li>
+					<a href="#" class="list-group-item" data-bind="text: Name, click: Select"></a>
+				</li>
+			</ul>
+			<div data-bind="visible: Ajax.Active" class="loader"></div>
+
+</div>
+		
+		
 
 		<div id="menu">
 			<div data-bind="foreach: Applications" class="list-group">
@@ -64,5 +88,6 @@
 			</div>
 		</div>
 	</div>
+
 </section>
 

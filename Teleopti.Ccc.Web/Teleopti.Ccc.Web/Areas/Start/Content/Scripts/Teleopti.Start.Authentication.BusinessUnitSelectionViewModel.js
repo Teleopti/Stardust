@@ -9,6 +9,8 @@ Teleopti.Start.Authentication.BusinessUnitSelectionViewModel = function (data) {
 			return false;
 		return errorMessage && errorMessage.length > 0;
 	});
+	this.Ajax = new Teleopti.Start.Authentication.JQueryAjaxViewModel();
+	
 
 	this.LoadBusinessUnits = function () {
 		data.authenticationState.GetDataForBusinessUnitSelectionView({

@@ -1358,6 +1358,12 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.AbsenceRequestDetailViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewNew.js" />
+    <Content Include="Areas\SSO\Content\Css\newLogin.css" />
+    <Content Include="Areas\SSO\Content\Css\main.min.css" />
+    <Content Include="Areas\SSO\Content\Images\bg.png" />
+    <Content Include="Areas\Start\Content\Css\newLogin.css" />
+    <Content Include="Areas\Start\Content\Css\main.min.css" />
+    <Content Include="Areas\Start\Content\Images\bg.png" />
     <Content Include="Content\jqueryui\jquery.ui.dialog.js" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui.css" />
     <Content Include="Content\jqueryui\smoothness\jquery.ui.dialog.css" />

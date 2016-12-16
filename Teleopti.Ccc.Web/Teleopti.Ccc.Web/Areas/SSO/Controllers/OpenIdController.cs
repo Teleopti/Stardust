@@ -19,6 +19,8 @@ using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
 using Teleopti.Ccc.Web.Core;
 using log4net;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 {
@@ -30,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		private readonly IFormsAuthentication _formsAuthentication;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(OpenIdController));
 
-		public OpenIdController(IOpenIdProviderWapper openIdProvider, ICurrentHttpContext currentHttpContext,ILayoutBaseViewModelFactory layoutBaseViewModelFactory, IFormsAuthentication formsAuthentication)
+		public OpenIdController(IOpenIdProviderWapper openIdProvider, ICurrentHttpContext currentHttpContext,ILayoutBaseViewModelFactory layoutBaseViewModelFactory, IFormsAuthentication formsAuthentication, IToggleManager toggleManager)
 		{
 			_openIdProvider = openIdProvider;
 			_currentHttpContext = currentHttpContext;
@@ -90,6 +92,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		public ViewResult SignIn()
 		{
 			ViewBag.LayoutBase = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel();
+	
 			return View("SignIn");
 		}
 
