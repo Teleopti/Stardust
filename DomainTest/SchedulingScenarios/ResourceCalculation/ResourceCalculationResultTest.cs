@@ -184,9 +184,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Ignore("#42060")]
-		[TestCase(15, ExpectedResult = 1d)]
-		[TestCase(30, ExpectedResult = 1d)]
-		public double ShouldCalculateResourcesOnSkillWithTimeZoneKathmandu(int intervalLength)
+		[Test]
+		public void ShouldCalculateResourcesOnSkillWithTimeZoneKathmandu([Values(15, 30)] int intervalLength)
 		{
 			var scenario = new Scenario("_");
 			var date = DateOnly.Today;
@@ -207,7 +206,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 
-			return skillDay.SkillStaffPeriodCollection.First().CalculatedResource;
+			skillDay.SkillStaffPeriodCollection.First().CalculatedResource
+				.Should().Be.EqualTo(1);
 		}
 
 		public void Configure(FakeToggleManager toggleManager)
