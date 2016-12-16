@@ -114,9 +114,9 @@
 								<div class="form-group">
 									<input type="password" id="Confirm-new-password" placeholder="@Resources.ConfirmNewPassword" data-bind="value: ConfirmNewPassword" />
 								</div>
-								<!-- <div id="Password-change-error" class="alert alert-warning" data-bind="visible: ErrorMessage().length > 0, text: ErrorMessage"
+								<div id="Password-change-error" class="alert alert-warning formError material-depth-1" data-bind="visible: ErrorMessage().length > 0, text: ErrorMessage"
 										  data-notmatch="@Resources.PasswordsDoNotMatch">
-								</div> -->
+								</div>
 								<button class="wfm-btn wfm-btn-default" id="Skip-button" data-bind="visible: !MustChangePassword(), click: SkipChangePassword">@Resources.Skip</button>
 								<button class="wfm-btn wfm-btn-primary" id="Change-password-button" data-bind="click: ApplyChangePassword">@Resources.Apply</button>
 							</div>
