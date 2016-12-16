@@ -268,6 +268,13 @@
 
 					selectedSite.Teams.forEach(function(team) {
 						team.isChecked = selectedSite.isChecked;
+						if(selectedSite.isChecked){
+								$scope.teamsSelected.push(team.Id);
+							}
+							else {
+								var index = $scope.teamsSelected.indexOf(team.Id);
+								$scope.teamsSelected.splice(index, 1);
+							}
 					});
 				}
 

@@ -115,7 +115,7 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.teamChecked(scope.sites[0], scope.sites[0].Teams[1])).toBe(false);
 	});
 
-	xit('should unselect site when unselecting all teams and site was in stateParams', function() {
+	it('should unselect site when unselecting all teams and site was in stateParams', function() {
 		stateParams.siteIds = ['LondonGuid'];
 		$fakeBackend.withOrganization({
 			Id: 'LondonGuid',
@@ -128,8 +128,12 @@ describe('RtaAgentsCtrl', function() {
 
 		$controllerBuilder.createController()
 			.apply(function() {
-				scope.forTest_selectTeam([]);
+				scope.teamsSelected = ['LondonTeam2'];
+			})
+			.apply(function(){
+				scope.teamsSelected = [];
 			});
+
 		expect(scope.sites[0].isChecked).toBe(false);
 	});
 
@@ -699,7 +703,7 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.sites[0].isChecked).not.toBe(true);
 	});
 
-	xit('should unselect site when all teams are unselected', function() {
+	it('should unselect site when all teams are unselected', function() {
 		$fakeBackend
 			.withOrganization({
 				Id: 'ParisGuid',
@@ -713,6 +717,9 @@ describe('RtaAgentsCtrl', function() {
 		$controllerBuilder.createController()
 			.apply(function() {
 				scope.forTest_selectSite(scope.sites[0]);
+			})
+			.apply(function() {
+				scope.teamsSelected = ['ParisTeam2'];
 			})
 			.apply(function() {
 				scope.teamsSelected = [];
@@ -814,7 +821,7 @@ describe('RtaAgentsCtrl', function() {
 		});
 	});
 
-	xit('should unselect site when the only team under it is unselected', function() {
+	it('should unselect site when the only team under it is unselected', function() {
 		$fakeBackend.withOrganization({
 			Id: 'LondonGuid',
 			Teams: [{
