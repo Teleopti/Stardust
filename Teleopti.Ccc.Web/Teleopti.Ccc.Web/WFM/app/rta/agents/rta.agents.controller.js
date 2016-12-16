@@ -278,12 +278,6 @@
 					});
 				}
 
-				$scope.forTest_selectTeam = function(teams) {
-					setTimeout(function() {
-						$scope.teamsSelected = teams;
-					}, 1000);
-				}
-
 				$scope.$watch('pause', function() {
 					if ($scope.pause) {
 						$scope.pausedAt = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
@@ -339,6 +333,7 @@
 							site.isChecked = false;
 					});
 					$scope.teamsSelected = [];
+					$scope.selectFieldText = 'Select organization';
 				};
 
 				$scope.clearSearchTerm = function() {
