@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Forecasting.Cascading
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_CascadingSkillsGUI_40018)]
 	public class CascadingSkillPresenter
 	{
 		private readonly ISkillRepository _skillRepository;
