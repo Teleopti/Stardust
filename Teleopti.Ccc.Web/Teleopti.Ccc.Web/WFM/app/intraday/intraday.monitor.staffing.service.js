@@ -46,14 +46,8 @@
 					staffingData.timeSeries.splice(0, 0, 'x');
 				}
 
-				staffingData.forecastedStaffing.series.splice(0, 0, 'Forecasted_staffing');
-				staffingData.forecastedStaffing.updatedSeries.splice(0, 0, 'Updated_forecasted_staffing');
-				staffingData.actualStaffingSeries.splice(0, 0, 'Actual_staffing');
-				staffingData.scheduledStaffing.splice(0, 0, 'Scheduled_staffing');
-
 				staffingData.hasMonitorData = true;
-
-				var forecastedStaffingMax = Math.max.apply(Math, result.DataSeries.ForecastedStaffing);
+				var forecastedStaffingMax = Math.max.apply(Math, staffingData.forecastedStaffing.series);
 				var updatedForecastedStaffingMax = Math.max.apply(Math, result.DataSeries.UpdatedForecastedStaffing);
 				if (forecastedStaffingMax > updatedForecastedStaffingMax) {
 					staffingData.forecastedStaffing.max = forecastedStaffingMax;
@@ -61,6 +55,10 @@
 					staffingData.forecastedStaffing.max = updatedForecastedStaffingMax;
 				}
 
+				staffingData.forecastedStaffing.series.splice(0, 0, 'Forecasted_staffing');
+				staffingData.forecastedStaffing.updatedSeries.splice(0, 0, 'Updated_forecasted_staffing');
+				staffingData.actualStaffingSeries.splice(0, 0, 'Actual_staffing');
+				staffingData.scheduledStaffing.splice(0, 0, 'Scheduled_staffing');
 
 				service.loadStaffingChart(staffingData);
 				return staffingData;

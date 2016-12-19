@@ -233,14 +233,14 @@
 							</md-content>
 						</md-tab>
 						<md-tab label="Staffing" ng-click="pollActiveTabDataHelper(activeTab)">
-							<md-content class="md-padding" ng-show="viewObj.timeSeries.length > 2 && viewObj.forecastedStaffing.series[1] > 0">
+							<md-content class="md-padding" ng-show="viewObj.timeSeries.length > 2 && viewObj.forecastedStaffing.max > 0">
 								<div class="con-row">
 									<div class="con-flex">
 										<div class="wfm-chart intraday-chart" id="staffingChart"></div>
 									</div>
 								</div>
 							</md-content>
-							<md-content ng-cloak class="md-padding" ng-if="viewObj.timeSeries.length < 2 || viewObj.forecastedStaffing.series[1] == null">
+							<md-content ng-cloak class="md-padding" ng-if="viewObj.timeSeries.length < 2 || viewObj.forecastedStaffing.max == 0">
 								<div class="con-row">
 									<div class="con-flex no-data-available">
 										{{'NoDataAvailable'|translate}}
