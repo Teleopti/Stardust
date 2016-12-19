@@ -58,7 +58,7 @@
 							<div class="con-flex">
 								<form class="wfm-form animate-content" data-bind="submit: SignIn">
 									<div class="form-input-wrap">
-										<input type="text" id="Username-input" placeholder="@Resources.UserName" data-bind="value: UserName, valueUpdate: 'afterkeydown',enable: Ajax.Inactive" autocapitalize="off" autocorrect="off" />
+										<input type="text" id="Username-input" placeholder="@Resources.UserName" data-bind="value: UserName, valueUpdate: 'afterkeydown',enable: Ajax.Inactive" autofocus autocapitalize="off" autocorrect="off" />
 									</div>
 									<div class="form-input-wrap">
 										<input type="password" id="Password-input" placeholder="@Resources.Password" data-bind="value: Password, valueUpdate: 'afterkeydown',enable: Ajax.Inactive" autocomplete="off" />
@@ -81,7 +81,7 @@
 				</div>
 				<div class="con-flex"></div>
 			</div>
-			<div class="con-row">
+			<div class="con-row error-row">
 				<div class="con-flex"></div>
 				<div class="con-flex">
 					<div id="Signin-error"
