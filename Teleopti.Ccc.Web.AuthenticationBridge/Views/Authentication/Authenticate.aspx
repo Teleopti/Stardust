@@ -9,7 +9,7 @@
 	<div class="con-row" style="margin-top: 10%;">
 		<div class="con-flex"></div>
 		<div class="con-flex">
-			<div class="panel material-depth-1 line-center animate-material">
+			<div style="min-height: 54px;" class="panel material-depth-1 line-center animate-material">
 				<div class="sub-header">
 					<h1>TELEOPTI WFM</h1>
 				</div>
@@ -35,7 +35,7 @@
 		</div>
 		<div class="con-flex"></div>
 	</div>
-	<div class="con-row">
+	<div class="con-row error-row">
 		<div class="con-flex">
 			<div class="login-message formError">
 				<% if (!string.IsNullOrEmpty(Model.ErrorMessage))
