@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			{
 				StartDate = _today,
 				EndDate = _today,
-				StartTime = new TimeOfDay(TimeSpan.FromHours(7)),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(9)),
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			});
 
