@@ -152,14 +152,14 @@ namespace Stardust.Node.Workers
 				var stopwatch = new Stopwatch();
 				stopwatch.Start();
 
-				while (stopwatch.Elapsed.Seconds <= 60)
+				while (stopwatch.Elapsed.Seconds <= 60 && !isWorking) 
 				{
 					if (IsCancellationRequested)
 					{
 						CurrentMessageTimeoutTaskCancellationTokenSource.Token.ThrowIfCancellationRequested();
 					}
 
-					Thread.Sleep(TimeSpan.FromSeconds(5));
+					Thread.Sleep(TimeSpan.FromMilliseconds(200));
 				}
 
 				// Current message timed out.
