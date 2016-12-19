@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var person = PersonFactory.CreatePersonWithId();
 			person.WorkflowControlSet = new WorkflowControlSet
 			{
-				AbsenceRequestExpiredThreshold = absenceRequestExpiredThreshold
+				AbsenceRequestExpiredThreshold = absenceRequestExpiredThreshold.GetValueOrDefault()
 			}.WithId();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			return person;

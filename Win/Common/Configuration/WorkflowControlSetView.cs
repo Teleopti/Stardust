@@ -1202,7 +1202,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void txtAbsenceRequestExpiredThreshold_Leave(object sender, EventArgs e)
 		{
-			_presenter.SetAbsenceRequestExpiredThreshold(txtAbsenceRequestExpiredThreshold.IntegerValue());
+			_presenter.SetAbsenceRequestExpiredThreshold(txtAbsenceRequestExpiredThreshold.IntegerValue().GetValueOrDefault());
 		}
 	}
 }

@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private bool _absenceRequestWaitlistEnabled;
 		private WaitlistProcessOrder _absenceRequestWaitlistProcessOrder;
 		private int? _absenceRequestCancellationThreshold;
-		private int? _absenceRequestExpiredThreshold;
+		private int _absenceRequestExpiredThreshold = 15;
 		private DateTime? _schedulePublishedToDate;
 		private int? _writeProtection;
 		private TimeSpan _shiftTradeTargetTimeFlexibility;
@@ -345,7 +345,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			set { _absenceRequestCancellationThreshold = value; }
 		}
 
-		public virtual int? AbsenceRequestExpiredThreshold
+		public virtual int AbsenceRequestExpiredThreshold
 		{
 			get { return _absenceRequestExpiredThreshold; }
 			set { _absenceRequestExpiredThreshold = value; }
