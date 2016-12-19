@@ -13,7 +13,7 @@ body {
 	animation-delay: 0.5s;
 	animation-iteration-count: 1;
 	animation-fill-mode: forwards;
-	max-height: 25%;
+	max-height: 54px;
 }
 
 @keyframes material {
@@ -29,13 +29,15 @@ body {
 	animation-delay: 1s;
 	animation-iteration-count: 1;
 	animation-fill-mode: forwards;
-	margin: 0 20px;
 	opacity: 0;
+	visibility: hidden;
+	margin: 0 20px;
 }
 
 @keyframes content {
 	to {
 		opacity: 1;
+		visibility: visible;
 	}
 }
 
@@ -44,6 +46,13 @@ body {
 	transform: translate3d(0, 0, 0);
 	backface-visibility: hidden;
 	perspective: 1000px;
+}
+
+.error-row {
+	position: fixed;
+	top: 5px;
+	left: 0;
+	right: 0;
 }
 
 @keyframes shake {
