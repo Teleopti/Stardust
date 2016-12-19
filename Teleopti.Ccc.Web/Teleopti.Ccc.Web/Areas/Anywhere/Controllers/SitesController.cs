@@ -6,9 +6,12 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)]
 	public class SitesController : ApiController
 	{
 		private readonly ISiteRepository _siteRepository;
@@ -25,23 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_siteViewModelBuilder = siteViewModelBuilder;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/Sites")]
-		public virtual IHttpActionResult Index()
-		{
-			return Ok(_siteViewModelBuilder.Build());
-		}
 
-		[UnitOfWork, ReadModelUnitOfWork, HttpGet, Route("api/Sites/Organization")]
-		public virtual IHttpActionResult GetOrganization()
-		{
-			return Ok(_siteViewModelBuilder.ForOrganization());
-		}
-
-		[UnitOfWork, ReadModelUnitOfWork, HttpGet, Route("api/Sites/ForSkills")]
-		public virtual IHttpActionResult SitesForSkill([FromUri]Guid[] skillIds)
-		{
-			return Ok(_siteViewModelBuilder.ForSkills(skillIds));
-		}
 
 		[UnitOfWork, HttpGet, Route("api/Sites/Get")]
 		public virtual IHttpActionResult Get(Guid siteId)
@@ -53,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				Name = site.Description.Name
 			});
 		}
-		
+
 		[UnitOfWork, HttpGet, Route("api/Sites/GetBusinessUnitId")]
 		public virtual IHttpActionResult GetBusinessUnitId(Guid siteId)
 		{
@@ -61,6 +48,25 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Ok(site.BusinessUnit.Id.GetValueOrDefault());
 		}
 
+
+		[UnitOfWork, HttpGet, Route("api/Sites")]
+		public virtual IHttpActionResult Index()
+		{
+			return Ok(_siteViewModelBuilder.Build());
+		}
+		
+		[UnitOfWork, ReadModelUnitOfWork, HttpGet, Route("api/Sites/Organization")]
+		public virtual IHttpActionResult GetOrganization()
+		{
+			return Ok(_siteViewModelBuilder.ForOrganization());
+		}
+
+		[UnitOfWork, ReadModelUnitOfWork, HttpGet, Route("api/Sites/ForSkills")]
+		public virtual IHttpActionResult SitesForSkill([FromUri]Guid[] skillIds)
+		{
+			return Ok(_siteViewModelBuilder.ForSkills(skillIds));
+		}
+		
 		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Sites/GetOutOfAdherenceForAllSites")]
 		public virtual IHttpActionResult GetOutOfAdherenceForAllSites()
 		{

@@ -2,9 +2,12 @@
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)]
 	public class TeamsController : ApiController
 	{
 		private readonly AgentsInAlarmForTeamsViewModelBuilder _inAlarmForTeams;
@@ -19,6 +22,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_inAlarmForTeams = inAlarmForTeams;
 			_teamViewModelBuilder = teamViewModelBuilder;
 			_getBusinessUnitId = getBusinessUnitId;
+		}
+
+		[UnitOfWork, HttpGet, Route("api/Teams/GetBusinessUnitId")]
+		public virtual IHttpActionResult GetBusinessUnitId(Guid teamId)
+		{
+			return Ok(_getBusinessUnitId.Get(teamId));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Teams/Build")]
@@ -43,12 +52,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		public virtual IHttpActionResult InAlarmCountForSkills([FromUri]Guid siteId, [FromUri]Guid[] skillIds)
 		{
 			return Ok(_inAlarmForTeams.ForSkills(siteId, skillIds));
-		}
-
-		[UnitOfWork, HttpGet, Route("api/Teams/GetBusinessUnitId")]
-		public virtual IHttpActionResult GetBusinessUnitId(Guid teamId)
-		{
-			return Ok(_getBusinessUnitId.Get(teamId));
 		}
 	}
 }
