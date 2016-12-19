@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
+				using (var transaction = connection.BeginTransaction())
 				{
 					using (var sqlBulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
 					{
