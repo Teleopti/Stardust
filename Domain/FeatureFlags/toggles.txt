@@ -160,7 +160,7 @@ ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = false # needs to be false 
 ResourcePlanner_CascadingSkillsGUI_40018 = false #Hold release of Cascading UI until we have a proper UI
 ResourcePlanner_NegativeOrderIndex_39062 = true
 ResourcePlanner_MaxSeatsNew_40939 = RC #prototype, not to be released for now
-ResourcePlanner_SplitBigIslands_42049 = RC 
+ResourcePlanner_SplitBigIslands_42049 = true
 
 Wfm_DisplayOnlineHelp_39402 = RC
 
