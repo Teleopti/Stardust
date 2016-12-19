@@ -1190,7 +1190,7 @@ xdescribe('PermissionsCtrl', function() {
         });
     });
 
-    fdescribe('PermissionsCtrl - filters', function() {
+    describe('PermissionsCtrl - filters', function() {
 
         it('should only show selected function when pressing selected filter', function() {
             inject(function($filter) {

@@ -4,6 +4,11 @@ function PermissionsListController(permissionsDataService) {
   ctrl.toggleNode = toggleNode;
 
   function toggleNode(node) {
+    var selectedRole = permissionsDataService.getSelectedRole() || null;
+
+    if (selectedRole === null || selectedRole.BuiltIn || selectedRole.IsMyRole){
+      return;
+    }
     toggleSelection(node);
     permissionsDataService.selectOrganization(node);
   }
@@ -11,7 +16,7 @@ function PermissionsListController(permissionsDataService) {
   function toggleSelection(node) {
     node.IsSelected = !node.IsSelected;
     var selectedOrNot = node.IsSelected;
-    
+
     if (node.Type === 'BusinessUnit') {
       for (var i = 0; i < node.ChildNodes.length; i++) {
         node.ChildNodes[i].IsSelected = selectedOrNot;
@@ -22,28 +27,51 @@ function PermissionsListController(permissionsDataService) {
     }
 
     if (node.Type === 'Site') {
-      ctrl.org.BusinessUnit.IsSelected = selectedOrNot;
+      if (!ctrl.org.BusinessUnit.IsSelected) {
+        ctrl.org.BusinessUnit.IsSelected = true;
+      }
 
       for (var i = 0; i < node.ChildNodes.length; i++) {
         node.ChildNodes[i].IsSelected = selectedOrNot;
       }
+      var noSiteSelected = ctrl.org.BusinessUnit.ChildNodes.every(function(site){
+        return !site.IsSelected;
+      });
+      if (noSiteSelected) {
+        ctrl.org.BusinessUnit.IsSelected = false;
+      }
     }
     if (node.Type === 'Team') {
-      ctrl.org.BusinessUnit.IsSelected = selectedOrNot;
+      if (!ctrl.org.BusinessUnit.IsSelected) {
+        ctrl.org.BusinessUnit.IsSelected = true;
+      }
       traverseNodes(node);
     }
   }
 
-  function traverseNodes(node){
+  function traverseNodes(node) {
     var sites = ctrl.org.BusinessUnit.ChildNodes;
+
 
     for (var i = 0; i < sites.length; i++) {
       for (var j = 0; j < sites[i].ChildNodes.length; j++) {
         if (sites[i].ChildNodes[j].Id === node.Id) {
-          var isAllSelected = sites[i].ChildNodes.every(function(team){
+          var notAllTeamsInSiteSelected = sites[i].ChildNodes.some(function(team){
             return team.IsSelected;
           });
-          sites[i].IsSelected = isAllSelected;
+          if (notAllTeamsInSiteSelected) {
+            sites[i].IsSelected = true;
+          }
+          else {
+            sites[i].IsSelected = false;
+            var notAllSitesInBuSelected = sites.some(function(site){
+              return site.IsSelected;
+            });
+            if (!notAllSitesInBuSelected) {
+              ctrl.org.BusinessUnit.IsSelected = false;
+            }
+          }
+
         }
       }
     }
