@@ -116,7 +116,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void Persist()
 		{
-			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			syncRuleConfigs();
+
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				_shiftTradeSettings = new GlobalSettingDataRepository(uow).PersistSettingValue(_shiftTradeSettings).GetValue(new ShiftTradeSettings());
 
@@ -150,6 +152,26 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public ViewType ViewType
 		{
 			get { return ViewType.SystemSetting; }
+		}
+
+		private void syncRuleConfigs()
+		{
+			for (var i = 1; i < businessRuleSettingGrid.RowCount; i++)
+			{
+				var ruleName = businessRuleSettingGrid[i, 1].CellValue.ToString();
+				var businessRuleConfig = _shiftTradeSettings.BusinessRuleConfigs.FirstOrDefault(b => b.FriendlyName == ruleName);
+				if (businessRuleConfig == null) continue;
+				businessRuleConfig.Enabled = bool.Parse(businessRuleSettingGrid[i, 2].CellValue.ToString());
+				if (businessRuleConfig.Enabled)
+				{
+					businessRuleConfig.HandleOptionOnFailed =
+						((ShiftTradeRequestHandleOptionView)businessRuleSettingGrid[i, 3].CellValue).RequestHandleOption;
+				}
+				else
+				{
+					businessRuleConfig.HandleOptionOnFailed = null;
+				}
+			}
 		}
 
 		private void configBusinessRuleSettingGrid()
