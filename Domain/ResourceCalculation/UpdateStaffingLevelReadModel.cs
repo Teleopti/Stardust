@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -14,16 +15,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IExtractSkillStaffDataForResourceCalculation _extractSkillStaffDataForResourceCalculation;
 		private readonly INow _now;
 		private readonly IStardustJobFeedback _feedback;
+		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 
 		public UpdateStaffingLevelReadModel(
 			IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository,
 			INow now, IExtractSkillStaffDataForResourceCalculation extractSkillStaffDataForResourceCalculation,
-			IStardustJobFeedback feedback)
+			IStardustJobFeedback feedback, ISkillCombinationResourceRepository skillCombinationResourceRepository)
 		{
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 			_now = now;
 			_extractSkillStaffDataForResourceCalculation = extractSkillStaffDataForResourceCalculation;
 			_feedback = feedback;
+			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 		}
 
 		[TestLogTime]
@@ -43,8 +46,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				period);
 
 			if (models.Any())
+			{
 				_scheduleForecastSkillReadModelRepository.Persist(models, timeWhenResourceCalcDataLoaded);
-
+				//_skillCombinationResourceRepository.PersistSkillCombinationResource(resCalcData.SkillCombinationHolder.SkillCombinationResources);
+			}
+			
 			_scheduleForecastSkillReadModelRepository.Purge();
 		}
 
@@ -103,6 +109,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private static void setUseShrinkage(IResourceCalculationData resourceCalculationData, DateTimePeriod period)
 		{
+			//resourceCalculationData.SkillCombinationHolder.StartRecodingValuesWithShrinkage();
 			var periods = resourceCalculationData.SkillStaffPeriodHolder.SkillStaffPeriodList(resourceCalculationData.Skills,
 				period);
 			foreach (var skillStaffPeriod in periods)

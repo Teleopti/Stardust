@@ -21,6 +21,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Intraday;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -173,6 +174,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakePublicNoteRepository>().For<IPublicNoteRepository>();
 			system.UseTestDouble<FakeWorkloadRepository>().For<IWorkloadRepository>();
 			system.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
+			system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
             // schedule readmodels
             system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
 			system.UseTestDouble<FakeProjectionVersionPersister>().For<IProjectionVersionPersister>();

@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			Assert.IsNotNull(_target);
 
-			ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult(_inPeriod);
+			ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult(_inPeriod,null,false);
 			Assert.AreEqual(0.83,
 							outDic[_personAssignmentListContainer.ContainedSkills["PhoneA"]].First(
 								s => s.Key.StartDateTime == _inPeriod.StartDateTime).Value.Payload.CalculatedResource,
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 												  _personSkillProvider);
 			Assert.IsNotNull(_target);
 
-			ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult(_inPeriod);
+			ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult(_inPeriod,null,false);
 			Assert.AreEqual(0.0 / _inPeriod.ElapsedTime().TotalMinutes,
 							outDic[_personAssignmentListContainer.ContainedSkills["PhoneA"]].First(
 								s => s.Key.StartDateTime == _inPeriod.StartDateTime).Value.Payload.CalculatedResource,
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_resources,
 				_personSkillProvider);
 
-			ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult(_inPeriod);
+			ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult(_inPeriod,null,false);
 			Assert.AreEqual(outDic, _skillStaffPeriods);
 		}
 

@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			Schedules = scheduleDictionary;
 			Skills = skills;
 			SkillStaffPeriodHolder = new SkillStaffPeriodHolder(skillDays);
+			SkillCombinationHolder = new SkillCombinationHolder();
 			SkillDays = skillDays;
 		}
 
@@ -39,5 +40,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public ISkillStaffPeriodHolder SkillStaffPeriodHolder { get; }
 		public IDictionary<ISkill, IEnumerable<ISkillDay>> SkillDays { get; }
 		public bool SkipResourceCalculation { get; }
+		public SkillCombinationHolder SkillCombinationHolder { get; }
 	}
 }

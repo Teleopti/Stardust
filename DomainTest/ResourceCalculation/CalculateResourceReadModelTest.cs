@@ -117,6 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			changes.FirstOrDefault().EndDateTime.Should().Be.EqualTo(dateTime.AddMinutes(60));
 		}
 
+
 		private ISkillStaffPeriod getSkillStaffPeriod(DateTimePeriod period)
 		{
 			var skillStaffperiod = new SkillStaffPeriod(period, new Task(), new ServiceAgreement(), new StaffingCalculatorServiceFacade());

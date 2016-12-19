@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using NHibernate;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -90,11 +91,15 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 				
 			return null;
 		}
-	}
 
-	public interface ISkillCombinationResourceRepository
-	{
-		void PersistSkillCombination(IEnumerable<IEnumerable<Guid>> skillCombination);
-		Guid? LoadSkillCombination(IEnumerable<Guid> skillCombination);
+		public void PersistSkillCombinationResource(IEnumerable<SkillCombinationResource> skillCombinationResources)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

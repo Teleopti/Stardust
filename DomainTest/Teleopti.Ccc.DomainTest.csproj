@@ -306,6 +306,7 @@
     <Compile Include="ResourceCalculation\FakeExtractSkillStaffDataForResourceCalculation.cs" />
     <Compile Include="ResourceCalculation\FakeResourceCalculationData.cs" />
     <Compile Include="ResourceCalculation\FakeSkillStaffPeriodHolder.cs" />
+    <Compile Include="ResourceCalculation\SkillCombinationResourceExtractorTest.cs" />
     <Compile Include="ScheduleStorageRepositoryWrapperTest.cs" />
     <Compile Include="ResourceCalculation\CalculateResourceReadModelTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationTest.cs" />

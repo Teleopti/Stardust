@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				resourceCalculationData.Skills,
 				relevantProjections, _personSkillProvider);
 
-			schedulingResultService.SchedulingResult(timePeriod);
+			schedulingResultService.SchedulingResult(timePeriod, resourceCalculationData, false);
 
 			if (considerShortBreaks)
 			{

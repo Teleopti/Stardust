@@ -34,30 +34,42 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_personSkillProvider = personSkillProvider;
 		}
 
-		//only used by ETL
-		public ISkillSkillStaffPeriodExtendedDictionary SchedulingResult(DateTimePeriod periodWithSchedules)
+		//public ISkillSkillStaffPeriodExtendedDictionary SchedulingResult(DateTimePeriod periodWithSchedules, IResourceCalculationData resourceCalculationData = null )
+		//{
+		//	DateTimePeriod? relevantPeriod = _relevantSkillStaffPeriods.Period();
+		//	if (!relevantPeriod.HasValue)
+		//		return _relevantSkillStaffPeriods;
+
+		//	var intersectingPeriod = relevantPeriod.Value.Intersection(periodWithSchedules);
+
+		//	if (!intersectingPeriod.HasValue)
+		//		return _relevantSkillStaffPeriods;
+
+		//	return SchedulingResult(intersectingPeriod.Value,resourceCalculationData);
+		//}
+
+		public ISkillSkillStaffPeriodExtendedDictionary SchedulingResult(DateTimePeriod periodToRecalculate, IResourceCalculationData resourceCalculationData = null,  bool emptyCache = true)
 		{
-			DateTimePeriod? relevantPeriod = _relevantSkillStaffPeriods.Period();
-			if (!relevantPeriod.HasValue)
-				return _relevantSkillStaffPeriods;
+			if (!emptyCache)
+			{
+				DateTimePeriod? relevantPeriod = _relevantSkillStaffPeriods.Period();
+				if (!relevantPeriod.HasValue)
+					return _relevantSkillStaffPeriods;
 
-			var intersectingPeriod = relevantPeriod.Value.Intersection(periodWithSchedules);
+				var intersectingPeriod = relevantPeriod.Value.Intersection(periodToRecalculate);
 
-			if (!intersectingPeriod.HasValue)
-				return _relevantSkillStaffPeriods;
+				if (!intersectingPeriod.HasValue)
+					return _relevantSkillStaffPeriods;
 
-			return SchedulingResult(intersectingPeriod.Value,true);
-		}
+			}
 
-		public ISkillSkillStaffPeriodExtendedDictionary SchedulingResult(DateTimePeriod periodToRecalculate, bool emptyCache)
-		{
 			if (!_allSkills.Any())
 				return _relevantSkillStaffPeriods;
 			IAffectedPersonSkillService personSkillService = new AffectedPersonSkillService(_allSkills);
 
 			var rc = new ScheduleResourceOptimizer(_relevantProjections, _relevantSkillStaffPeriods, personSkillService,
 			                                       emptyCache, new ActivityDivider());
-			rc.Optimize(periodToRecalculate);
+			rc.Optimize(periodToRecalculate, resourceCalculationData);
 
 			return _relevantSkillStaffPeriods;
 		}

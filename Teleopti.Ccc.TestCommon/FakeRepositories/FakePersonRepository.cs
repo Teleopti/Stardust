@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPerson> FindPeopleInOrganizationQuiteLight(DateOnlyPeriod period)
 		{
-			throw new NotImplementedException();
+			return _persons.Where(p => p.PersonPeriods(period).Count > 0).ToArray();
 		}
 
 		public IList<IPerson> FindUsers(DateOnly date)

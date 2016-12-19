@@ -21,5 +21,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public ISkillStaffPeriodHolder SkillStaffPeriodHolder { get; private set; }
 		public IDictionary<ISkill, IEnumerable<ISkillDay>> SkillDays { get; }
 		public bool SkipResourceCalculation { get; }
+		public SkillCombinationHolder SkillCombinationHolder { get; }
 	}
 }

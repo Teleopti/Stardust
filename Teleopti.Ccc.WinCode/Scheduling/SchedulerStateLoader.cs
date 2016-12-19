@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			{
 				var service =
 					new SchedulingResultService(_schedulerState.SchedulingResultState, _schedulerState.SchedulingResultState.Skills, _personSkillProvider);
-				service.SchedulingResult(_schedulerState.RequestedPeriod.Period(), true);
+				service.SchedulingResult(_schedulerState.RequestedPeriod.Period(),null, true);
 			}
 		}
 	}

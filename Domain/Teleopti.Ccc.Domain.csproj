@@ -521,6 +521,7 @@
     <Compile Include="Logon\ImpersonateSystemAspect.cs" />
     <Compile Include="Logon\ImpersonateSystemAttribute.cs" />
     <Compile Include="Repositories\IScheduleStorageRepositoryWrapper.cs" />
+    <Compile Include="Repositories\ISkillCombinationResourceRepository.cs" />
     <Compile Include="Repositories\ScheduleStorageRepositoryWrapper.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationExtensions.cs" />
     <Compile Include="ResourceCalculation\SkillStaffingInterval.cs" />
