@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using log4net;
@@ -24,7 +26,7 @@ namespace Stardust.Node
 		}
 
 		private NodeConfiguration NodeConfiguration { get; set; }
-		
+
 		[HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
 		public IHttpActionResult PrepareToStartJob(JobQueueItemEntity jobQueueItemEntity)
 		{
@@ -33,22 +35,27 @@ namespace Stardust.Node
 			{
 				return ResponseMessage(isValidRequest);
 			}
-
-			Task.Factory.StartNew(() =>
+			if (!_workerWrapper.IsWorking)
 			{
-				var task=_workerWrapper.CreateTimeoutCurrentMessageTask(jobQueueItemEntity);
+				Task.Factory.StartNew(() =>
+				                      {
+					                      try
+					                      {
+						                      var stopwatch = new Stopwatch();
+						                      stopwatch.Start();
 
-				try
-				{
-					task.Start();
-				}
-
-				catch (Exception)
-				{				
-				}				
-			});
-
-			return Ok();
+						                      while (stopwatch.Elapsed.Seconds <= 60 && !_workerWrapper.IsWorking)
+						                      {
+							                      Thread.Sleep(TimeSpan.FromMilliseconds(200));
+						                      }
+					                      }
+					                      catch (Exception)
+					                      {
+					                      }
+				                      });
+				return Ok();
+			}
+			return Conflict();
 		}
 
 		[HttpPut, AllowAnonymous, Route(NodeRouteConstants.UpdateJob)]

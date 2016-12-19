@@ -2,9 +2,7 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Http;
 using Stardust.Node.Entities;
-using Stardust.Node.Workers;
 
 namespace Stardust.Node.Interfaces
 {
@@ -15,6 +13,7 @@ namespace Stardust.Node.Interfaces
 		CancellationTokenSource CancellationTokenSource { get; set; }
 
 		bool IsCancellationRequested { get; }
+		bool IsWorking { get; }
 
 		Task Task { get; }
 
@@ -27,7 +26,5 @@ namespace Stardust.Node.Interfaces
 		HttpResponseMessage ValidateStartJob(JobQueueItemEntity jobQueueItemEntity);
 
 		void CancelTimeoutCurrentMessageTask();
-
-		Task CreateTimeoutCurrentMessageTask(JobQueueItemEntity jobQueueItemEntity);
 	}
 }

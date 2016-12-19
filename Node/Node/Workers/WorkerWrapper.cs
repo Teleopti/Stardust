@@ -40,7 +40,7 @@ namespace Stardust.Node.Workers
 		private readonly TrySendStatusToManagerTimer _trySendJobFaultedStatusToManagerTimer;
 		private JobQueueItemEntity _currentMessageToProcess;
 		private TrySendStatusToManagerTimer _trySendStatusToManagerTimer;
-		private bool isWorking;
+		private bool _isWorking;
 
 		public WorkerWrapper(IInvokeHandler invokeHandler,
 		                     NodeConfiguration nodeConfiguration,
@@ -65,7 +65,7 @@ namespace Stardust.Node.Workers
 			_trySendJobFaultedStatusToManagerTimer = trySendJobFaultedStatusToManagerTimer;
 			_trySendJobDetailToManagerTimer = trySendJobDetailToManagerTimer;
 
-			isWorking = false;
+			_isWorking = false;
 
 			_trySendJobDetailToManagerTimer.Start();
 			_nodeStartUpNotificationToManagerTimer.Start();
@@ -141,36 +141,10 @@ namespace Stardust.Node.Workers
 			}
 		}
 
-		public Task CreateTimeoutCurrentMessageTask(JobQueueItemEntity jobQueueItemEntity)
-		{
-			_currentMessageToProcess = jobQueueItemEntity;
-
-			CurrentMessageTimeoutTaskCancellationTokenSource = new CancellationTokenSource();
-
-			return new Task(() =>
-			{
-				var stopwatch = new Stopwatch();
-				stopwatch.Start();
-
-				while (stopwatch.Elapsed.Seconds <= 60 && !isWorking) 
-				{
-					if (IsCancellationRequested)
-					{
-						CurrentMessageTimeoutTaskCancellationTokenSource.Token.ThrowIfCancellationRequested();
-					}
-
-					Thread.Sleep(TimeSpan.FromMilliseconds(200));
-				}
-
-				// Current message timed out.
-				_currentMessageToProcess = null;
-			}, CurrentMessageTimeoutTaskCancellationTokenSource.Token);
-		}
-
 		public void StartJob(JobQueueItemEntity jobQueueItemEntity)
 		{
-			if (isWorking) return;
-			isWorking = true;
+			if (IsWorking) return;
+			_isWorking = true;
 			CancellationTokenSource = new CancellationTokenSource();
 
 			_currentMessageToProcess = jobQueueItemEntity;
@@ -242,7 +216,7 @@ namespace Stardust.Node.Workers
 			                  }, TaskContinuationOptions.LongRunning)
 				.ContinueWith(t =>
 				              {
-					              isWorking = false;
+								  _isWorking = false;
 				              });
 
 			Task.Start();
@@ -280,6 +254,14 @@ namespace Stardust.Node.Workers
 			{
 				return CancellationTokenSource != null &&
 				       CancellationTokenSource.IsCancellationRequested;
+			}
+		}
+
+		public bool IsWorking
+		{
+			get
+			{
+				return _isWorking;
 			}
 		}
 
