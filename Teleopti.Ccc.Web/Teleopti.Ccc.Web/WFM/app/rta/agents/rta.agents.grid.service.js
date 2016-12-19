@@ -61,6 +61,14 @@
 					headerCellFilter: 'translate'
 				};
 
+				var timeInAlarm = {
+					displayName: 'Time in Alarm',
+					field: 'TimeInAlarm',
+					headerCellTemplate: headerCellTemplate,
+					cellTemplate: coloredCellTemplate,
+					headerCellFilter: 'translate'
+				};
+
 				var shift = {
 					displayName: 'Shift',
 					field: 'Shift',
@@ -88,6 +96,7 @@
 				columnDefs.push(shift);
 				columnDefs.push(alarm);
 				columnDefs.push(timeOutOfAdherence);
+				columnDefs.push(timeInAlarm);
 				columnDefs.push(state);
 
 

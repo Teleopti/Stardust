@@ -58,6 +58,7 @@
 				$scope.filteredData = [];
 				$scope.format = RtaFormatService.formatDateTime;
 				$scope.formatDuration = RtaFormatService.formatDuration;
+				$scope.formatToSeconds = RtaFormatService.formatToSeconds;
 				$scope.hexToRgb = RtaFormatService.formatHexToRgb;
 				$scope.agentDetailsUrl = RtaRouteService.urlForAgentDetails;
 				$scope.agentsInAlarm = !$stateParams.showAllAgents;
@@ -301,7 +302,7 @@
 						filterData();
 						if (newValue && $scope.pause) {
 							$scope.filteredData.sort(function(a, b) {
-								return b.TimeInAlarm - a.TimeInAlarm;
+								return $scope.formatToSeconds(b.TimeInAlarm) - $scope.formatToSeconds(a.TimeInAlarm);
 							});
 						}
 					}
@@ -502,7 +503,7 @@
 								Alarm: state.Alarm,
 								Color: state.Color,
 								TimeInState: state.TimeInState,
-								TimeInAlarm: state.TimeInAlarm,
+								TimeInAlarm: getTimeInAlarm(state),
 								TimeInRule: state.TimeInAlarm ? state.TimeInRule : null,
 								TimeOutOfAdherence: getTimeOutOfAdherence(state, timeInfo),
 								OutOfAdherences: getOutOfAdherences(state, timeInfo),
@@ -537,6 +538,11 @@
 							return $scope.formatDuration(seconds);
 						}
 					}
+				}
+
+				function getTimeInAlarm(state) {
+					if(state.TimeInAlarm !== null)
+						return $scope.formatDuration(state.TimeInAlarm);
 				}
 
 				function getOutOfAdherences(state, timeInfo) {

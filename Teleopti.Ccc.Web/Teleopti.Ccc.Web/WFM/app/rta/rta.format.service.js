@@ -20,6 +20,10 @@
 				return (Math.floor(durationInSeconds.asHours()) + moment(durationInSeconds.asMilliseconds()).format(':mm:ss'));
 			};
 
+			this.formatToSeconds = function(duration) {
+				return moment.duration(duration, 'seconds');
+			}
+
 			this.formatHexToRgb = function(hex) {
 				hex = hex ? hex.substring(1) : 'ffffff';
 				var bigint = parseInt(hex, 16);
