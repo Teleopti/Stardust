@@ -27,8 +27,8 @@ namespace Stardust.Manager
 
 		public JobRepository(ManagerConfiguration managerConfiguration,
 		                     RetryPolicyProvider retryPolicyProvider,
-							 CreateSqlCommandHelper createSqlCommandHelper, 
-							 IHttpSender httpSender)
+		                     CreateSqlCommandHelper createSqlCommandHelper,
+		                     IHttpSender httpSender)
 		{
 			if (retryPolicyProvider == null)
 			{
@@ -108,7 +108,7 @@ namespace Stardust.Manager
 
 			return listToReturn;
 		}
-		
+
 
 		private void DeleteJobQueueItemByJobId(Guid jobId)
 		{
@@ -170,7 +170,7 @@ namespace Stardust.Manager
 			}
 		}
 
-		public void CancelJobByJobId(Guid jobId )
+		public void CancelJobByJobId(Guid jobId)
 		{
 			try
 			{
@@ -189,8 +189,8 @@ namespace Stardust.Manager
 				throw;
 			}
 		}
-		
-		public void UpdateResultForJob(Guid jobId,string result, DateTime ended)
+
+		public void UpdateResultForJob(Guid jobId, string result, DateTime ended)
 		{
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
@@ -214,7 +214,7 @@ namespace Stardust.Manager
 			}
 		}
 
-		public void CreateJobDetailByJobId(Guid jobId,string detail, DateTime created)
+		public void CreateJobDetailByJobId(Guid jobId, string detail, DateTime created)
 		{
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
@@ -226,7 +226,7 @@ namespace Stardust.Manager
 				}
 			}
 		}
-		
+
 
 		public JobQueueItem GetJobQueueItemByJobId(Guid jobId)
 		{
@@ -289,7 +289,7 @@ namespace Stardust.Manager
 
 			return job;
 		}
-		
+
 
 		public IList<Job> GetAllJobs()
 		{
@@ -360,7 +360,7 @@ namespace Stardust.Manager
 
 			return jobs;
 		}
-		
+
 
 		public IList<JobDetail> GetJobDetailsByJobId(Guid jobId)
 		{
@@ -448,7 +448,7 @@ namespace Stardust.Manager
 				throw;
 			}
 		}
-	
+
 
 		private void CancelJobByJobIdWorker(Guid jobId)
 		{
