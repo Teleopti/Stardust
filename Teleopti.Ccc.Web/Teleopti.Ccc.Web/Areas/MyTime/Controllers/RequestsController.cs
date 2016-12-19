@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
@@ -180,7 +179,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			var commandResult = _cancelAbsenceRequestCommandProvider.CancelAbsenceRequest(id);
 
 			var result = new RequestCommandHandlingResult(
-				commandResult.AffectedRequestId.HasValue ? new List<Guid>() {commandResult.AffectedRequestId.Value} : null,
+				commandResult.AffectedRequestId.HasValue ? new List<Guid> { commandResult.AffectedRequestId.Value } : null,
 				commandResult.ErrorMessages);
 
 			if (result.Success)
@@ -195,23 +194,38 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpPostOrPut]
 		public virtual JsonResult ShiftTradeRequestSchedule(DateOnly selectedDate, ScheduleFilter filter, Paging paging)
 		{
-			var allTeamIds = filter.TeamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
+			var allTeamIds = new List<Guid>();
+			if (!string.IsNullOrEmpty(filter.TeamIds))
+			{
+				var teamIdStrings = filter.TeamIds.Split(',');
+				foreach (var teamIdString in teamIdStrings)
+				{
+					Guid teamId;
+					if (!Guid.TryParse(teamIdString.Trim(), out teamId)) continue;
+
+					allTeamIds.Add(teamId);
+				}
+			}
+
+			var timeFilter = _timeFilterHelper.GetFilter(selectedDate, filter.FilteredStartTimes, filter.FilteredEndTimes,
+				filter.IsDayOff, filter.IsEmptyDay);
+
 			var data = new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = selectedDate,
 				TeamIdList = allTeamIds,
 				Paging = paging,
-				TimeFilter = _timeFilterHelper.GetFilter(selectedDate, filter.FilteredStartTimes, filter.FilteredEndTimes,
-						filter.IsDayOff, filter.IsEmptyDay),
+				TimeFilter = timeFilter,
 				SearchNameText = filter.SearchNameText,
 				TimeSortOrder = filter.TimeSortOrder
 			};
-			if (data.TimeFilter == null && data.TimeSortOrder == null &&
-				_toggleManager.IsEnabled(Toggles.MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211))
-			{
-				return Json(_shiftTradeScheduleViewModelFactory.CreateViewModel(data));
-			}
-			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data));
+
+			var loadScheduleWithoutReadModel = data.TimeFilter == null && data.TimeSortOrder == null
+				&& _toggleManager.IsEnabled(Toggles.MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211);
+
+			return Json(loadScheduleWithoutReadModel
+				? _shiftTradeScheduleViewModelFactory.CreateViewModel(data)
+				: _requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data));
 		}
 
 		[UnitOfWork]
