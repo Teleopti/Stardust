@@ -17,7 +17,7 @@
 		var ctrl = this,
 			currentSite,
 			logonUserTeamId,
-			initialSelectedTeamIds;
+			initialSelectedTeamIds = [];
 
 		ctrl.groupList = [];
 		ctrl.availableTeamIds = [];
@@ -155,9 +155,6 @@
 			}
 
 			//load the schedule data when team ids changed
-			if(!Array.isArray(ctrl.selectedTeamIds) || !Array.isArray(initialSelectedTeamIds))
-				return;
-
 			if(ctrl.selectedTeamIds.length == initialSelectedTeamIds.length 
 				&& ctrl.selectedTeamIds.every(function(id) {
 					return initialSelectedTeamIds.indexOf(id) > -1;
