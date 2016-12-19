@@ -2,12 +2,16 @@
 
 .seatmap-container {
 	position: absolute;
-	top: 0;
+	top: 39px;
 	left: 0;
 	right: 0;
 	bottom: 10px;
 	overflow: hidden;
 	width: 100%;
+}
+
+.seatmap-container.seatplan{
+	margin: 0;
 }
 
 .seatmap {
@@ -18,7 +22,6 @@
 	bottom: 0;
 	padding: 0;
 	z-index: 0;
-	height: 100%;
 	overflow: hidden;
 	background: $white;
 
@@ -130,18 +133,6 @@
 	.breadcrumb-inverse span {
 		position: relative;
 		margin-left: 5px;
-	}
-}
-
-.seatmap-canvas {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-
-	.booking-view {
-		top: 40px;
 	}
 }
 
@@ -313,12 +304,6 @@ seatmap-editor {
 .seatmap-canvas .resizable {
 	min-width: 450px;
 }
-
-/*.seatmap .call-out-button {
-	top: 0px;
-	margin: 2px;
-	z-index: 1;
-}*/
 
 .seat-property-message {
 	position: absolute;
