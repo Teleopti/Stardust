@@ -61,64 +61,64 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		}
 
 		[Test]
-		public void ShouldDenyWhenRuleConfigsHasAnyAutoDeny()
+		public void ShouldReturnResponseWhenAnyRuleSetAsAutoDeny()
 		{
 			setDummyRuleHanleOption(RequestHandleOption.AutoDeny);
 			var ruleCollection = createBusinessRuleCollection();
 			var ruleResponses = createBusinessRuleResponses(typeof(DummyRule));
 
 			var target = new ConfigurableBusinessRuleProvider(_globalSettingDataRepository);
-			var result = target.GetDeniableResponse(ruleCollection, ruleResponses);
+			var result = target.GetFirstDeniableResponse(ruleCollection, ruleResponses);
 
 			result.Should().Not.Be(null);
 		}
 
 		[Test]
-		public void ShouldNotDenyWhenRuleConfigsHasNoAutoDeny()
+		public void ShouldReturnNothingWhenNoRuleSetAsAutoDeny()
 		{
 			setDummyRuleHanleOption(RequestHandleOption.Pending);
 			var ruleCollection = createBusinessRuleCollection();
 			var ruleResponses = createBusinessRuleResponses(typeof(DummyRule));
 
 			var target = new ConfigurableBusinessRuleProvider(_globalSettingDataRepository);
-			var result = target.GetDeniableResponse(ruleCollection, ruleResponses);
+			var result = target.GetFirstDeniableResponse(ruleCollection, ruleResponses);
 
 			result.Should().Be(null);
 		}
 
 		[Test]
-		public void ShouldNotDenyWhenRuleNotFailed()
+		public void ShouldReturnNothingWhenRuleNotFailed()
 		{
 			setDummyRuleHanleOption(RequestHandleOption.AutoDeny);
 			var ruleCollection = createBusinessRuleCollection();
 			var ruleResponses = createBusinessRuleResponses(typeof(AnotherDummyRule));
 
 			var target = new ConfigurableBusinessRuleProvider(_globalSettingDataRepository);
-			var result = target.GetDeniableResponse(ruleCollection, ruleResponses);
+			var result = target.GetFirstDeniableResponse(ruleCollection, ruleResponses);
 
 			result.Should().Be(null);
 		}
 
 		[Test]
-		public void ShouldNotDenyWhenNoRuleConfig()
+		public void ShouldReturnNothingWhenNoRuleConfig()
 		{
 			var ruleCollection = createBusinessRuleCollection();
 			var ruleResponses = createBusinessRuleResponses(typeof(DummyRule));
 
 			var target = new ConfigurableBusinessRuleProvider(new FakeGlobalSettingDataRepository());
-			var result = target.GetDeniableResponse(ruleCollection, ruleResponses);
+			var result = target.GetFirstDeniableResponse(ruleCollection, ruleResponses);
 
 			result.Should().Be(null);
 		}
 
 		[Test]
-		public void ShouldNotDenyWhenNoRuleResponse()
+		public void ShouldReturnNothingWhenNoRuleResponse()
 		{
 			setDummyRuleHanleOption(RequestHandleOption.Pending);
 			var ruleCollection = createBusinessRuleCollection();
 
 			var target = new ConfigurableBusinessRuleProvider(_globalSettingDataRepository);
-			var result = target.GetDeniableResponse(ruleCollection, null);
+			var result = target.GetFirstDeniableResponse(ruleCollection, null);
 
 			result.Should().Be(null);
 		}

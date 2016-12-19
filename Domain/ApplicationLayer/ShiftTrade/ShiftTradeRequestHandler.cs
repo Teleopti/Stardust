@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 						var ruleResponses = autoApproveShiftTrade(personRequest, approvalService);
 						if (ruleResponses.Any())
 						{
-							var deniableResponse = _businessRuleProvider.GetDeniableResponse(allEnabledRules, ruleResponses);
+							var deniableResponse = _businessRuleProvider.GetFirstDeniableResponse(allEnabledRules, ruleResponses);
 							if (deniableResponse != null)
 							{
 								personRequest.Deny(deniableResponse.Message, _authorization);

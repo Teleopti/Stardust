@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return GetBusinessRulesForShiftTradeRequest(schedulingResultStateHolder, enableSiteOpenHoursRule);
 		}
 
-		public virtual IBusinessRuleResponse GetDeniableResponse(INewBusinessRuleCollection enabledRules, IList<IBusinessRuleResponse> ruleResponses)
+		public virtual IBusinessRuleResponse GetFirstDeniableResponse(INewBusinessRuleCollection enabledRules, IList<IBusinessRuleResponse> ruleResponses)
 		{
 			return null;
 		}
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return result;
 		}
 
-		public override IBusinessRuleResponse GetDeniableResponse(INewBusinessRuleCollection enabledRules, IList<IBusinessRuleResponse> ruleResponses)
+		public override IBusinessRuleResponse GetFirstDeniableResponse(INewBusinessRuleCollection enabledRules, IList<IBusinessRuleResponse> ruleResponses)
 		{
 			if (ruleResponses == null || !ruleResponses.Any()) return null;
 

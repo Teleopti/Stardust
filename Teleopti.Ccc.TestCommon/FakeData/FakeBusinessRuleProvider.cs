@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return _businessRuleCollection;
 		}
 
-		public IBusinessRuleResponse GetDeniableResponse(INewBusinessRuleCollection enabledRules, IList<IBusinessRuleResponse> ruleResponses)
+		public IBusinessRuleResponse GetFirstDeniableResponse(INewBusinessRuleCollection enabledRules, IList<IBusinessRuleResponse> ruleResponses)
 		{
 			return _deniableResponse;
 		}
