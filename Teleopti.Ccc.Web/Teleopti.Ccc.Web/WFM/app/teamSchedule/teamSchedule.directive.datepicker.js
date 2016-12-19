@@ -45,7 +45,7 @@
 				return;
 			}
 
-			var newDateObj = new Date(currentDateStr);
+			var newDateObj = moment(currentDateStr).toDate();
 
 			if (!isValidDate(newDateObj)) {
 				return;
