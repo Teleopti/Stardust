@@ -4,11 +4,14 @@ using Castle.Core.Internal;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers;
+using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.All)]
 	public class RtaToolController : ApiController
 	{
 		private readonly IDataSourceReader _dataSources;
