@@ -54,8 +54,11 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			return 0;
 		}
 
+		private IScenario _setScenario;
 		public IList<IScenario> LoadScenario()
 		{
+			if (_setScenario != null)
+				return new[] {_setScenario };
 			// Create default scenario
 			IScenario scenario1 = CreateScenario("My Default Scenario", true);
 
@@ -67,6 +70,11 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			scenarios.Add(scenario2);
 
 			return scenarios;
+		}
+
+		public void SetLoadScenario(IScenario scenario)
+		{
+			_setScenario = scenario;
 		}
 
 		private static IScenario CreateScenario(string name, bool isDefaultScenario)
@@ -115,10 +123,17 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			return 0;
 		}
 
+		private IScheduleDictionary _scheduleDictionary;
 		public IScheduleDictionary LoadSchedule(DateTimePeriod period, IScenario scenario, ICommonStateHolder stateHolder)
 		{
+			if (_scheduleDictionary != null)
+				return _scheduleDictionary;
 			IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(new DateTimePeriod());
 			return new ScheduleDictionary(scenario, scheduleDateTimePeriod, new PersistableScheduleDataPermissionChecker());
+		}
+		public void SetLoadSchedule(IScheduleDictionary scheduleDictionary)
+		{
+			_scheduleDictionary = scheduleDictionary;
 		}
 
 		public IScheduleDictionary LoadSchedule(DateTimePeriod period, IScenario scenario, IList<IPerson> persons)
@@ -200,9 +215,14 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			return new List<ISkill>();
 		}
 
+		private IList<ISkill> _loadSkillWithSkillDays = new List<ISkill>();
 		public IList<ISkill> LoadSkillWithSkillDays(DateOnlyPeriod period)
 		{
-			return new List<ISkill>();
+			return _loadSkillWithSkillDays;
+		}
+		public void SetLoadSkillWithSkillDays(IList<ISkill> skills)
+		{
+			_loadSkillWithSkillDays = skills;
 		}
 
 		public int PersistScheduleForecastSkill(DataTable dataTable)
@@ -318,9 +338,14 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			return 0;
 		}
 
+		private IDictionary<ISkill, IEnumerable<ISkillDay>> _skillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
 		public IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSkillDays(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
 		{
-			return new Dictionary<ISkill, IEnumerable<ISkillDay>>();
+			return _skillDays;
+		}
+		public void SetLoadSkillDays(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)
+		{
+			_skillDays = skillDays;
 		}
 
 		public IEnumerable<ISkillDay> LoadSkillDays(IScenario scenario, DateTime lastCheck)

@@ -26,7 +26,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			_name = string.Empty;
 			_jobParameters = jobParameters;
 			_jobCategory = JobCategoryType.DoNotNeedDatePeriod;
+			ClearDataTablesAfterRun = true;
 		}
+
+		public bool ClearDataTablesAfterRun { get; set; }
 
 		public string Name
 		{
@@ -101,8 +104,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			return (IJobStepResult)Result.Clone();
 		}
 
+
 		private void ClearDataTables()
 		{
+			if (!ClearDataTablesAfterRun)
+				return;
 			if (_bulkInsertDataTable1 != null)
 				_bulkInsertDataTable1.Rows.Clear();
 			if (_bulkInsertDataTable2 != null)
