@@ -103,6 +103,15 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			for (int i = 0; i < cInfo.Length - 1; i++)
 			{
 				culture = new Culture(cInfo[i].LCID, cInfo[i].DisplayName);
+				try
+				{
+					CultureInfo.GetCultureInfo(cInfo[i].LCID);
+				}
+				catch (Exception)
+				{				
+					continue;
+				}
+
 				_cultureCollection.Add(culture);
 
 				uiCulture = new Culture(cInfo[i].LCID, cInfo[i].Name);

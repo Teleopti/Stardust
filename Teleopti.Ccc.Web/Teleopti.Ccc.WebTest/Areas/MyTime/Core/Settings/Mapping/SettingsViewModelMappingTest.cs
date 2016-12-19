@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
@@ -35,7 +37,21 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Settings.Mapping
 		public void ShouldFetchAllCulturesOnComputer()
 		{
 			var result = Mapper.Map<IPerson, SettingsViewModel>(new Person());
-			result.Cultures.Should().Have.Count.GreaterThanOrEqualTo(CultureInfo.GetCultures(CultureTypes.SpecificCultures).Length);
+			var cInfo = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
+			var validCultures = new List<CultureInfo>();
+			for (int i = 0; i < cInfo.Length - 1; i++)
+			{
+				try
+				{
+					CultureInfo.GetCultureInfo(cInfo[i].LCID);
+				}
+				catch (Exception)
+				{
+					continue;
+				}
+				validCultures.Add(cInfo[i]);
+			}
+			result.Cultures.Should().Have.Count.GreaterThanOrEqualTo(validCultures.Count);
 			result.Cultures.Should().Not.Be.Empty();
 		}
 

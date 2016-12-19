@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.UserTexts;
@@ -40,7 +42,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.Mapping
 
 		private static CultureInfo[] allCulturesSortedByNamePlusBrowserDefault()
 		{
-			return CultureInfo.GetCultures(CultureTypes.SpecificCultures).OrderBy(culture => culture.DisplayName).ToArray();
+			CultureInfo[] cInfo = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
+			var validCultures = new List<CultureInfo>();
+			for (int i = 0; i < cInfo.Length - 1; i++)
+			{
+				try
+				{
+					CultureInfo.GetCultureInfo(cInfo[i].LCID);
+				}
+				catch (Exception)
+				{
+					continue;
+				}
+				validCultures.Add(cInfo[i]);
+			}
+			return validCultures.OrderBy(culture => culture.DisplayName).ToArray();
 		}
 	}
 }
