@@ -129,7 +129,7 @@
 					<span class="wfm-switch-label">{{'InAlarm'|translate}}</span>
 					<span class="wfm-switch-toggle" ng-class="pause ? 'rta-disabled-switch' : ''"></span>
 				</label>
-					<span ng-if="agents.length > maxNumberOfAgents">Agents in alarm</span>
+					<span ng-if="agents.length > maxNumberOfAgents">{{'AgentsInAlarm'|translate}}</span>
 				</div>
 			</div>
 		</div>
@@ -140,7 +140,7 @@
 			</div>
 		</div>
 		<wfm-right-panel ng-if="agentsInAlarm && !pause" panel-options="rightPanelOptions" style="min-height:400px">
-			<h3><i class="mdi mdi-filter-outline"></i>Include agents in states:</h3>
+			<h3><i class="mdi mdi-filter-outline"></i>{{'IncludeAgentsInStatesColon'|translate}}</h3>
 			<div ng-repeat="state in states">
 				<div class="wfm-checkbox">
 					<label>

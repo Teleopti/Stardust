@@ -15340,4 +15340,12 @@ These options are activated:
     <value>Use skills:</value>
     <comment>Schedule Overtime on primary skills or all skills</comment>
   </data>
+  <data name="AgentsInAlarm" xml:space="preserve">
+    <value>Agents in alarm</value>
+    <comment>Text to be displayed when more then 50 agents in selection and no switch in RTA agents view</comment>
+  </data>
+  <data name="IncludeAgentsInStatesColon" xml:space="preserve">
+    <value>Include agents in states:</value>
+    <comment>Text in filter by state group in RTA</comment>
+  </data>
 </root>

@@ -1907,6 +1907,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Agents in alarm.
+        /// </summary>
+        public static string AgentsInAlarm {
+            get {
+                return ResourceManager.GetString("AgentsInAlarm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Agents inc..
         /// </summary>
         public static string AgentsInc {
@@ -13079,6 +13088,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Include {
             get {
                 return ResourceManager.GetString("Include", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Include agents in states:.
+        /// </summary>
+        public static string IncludeAgentsInStatesColon {
+            get {
+                return ResourceManager.GetString("IncludeAgentsInStatesColon", resourceCulture);
             }
         }
         
