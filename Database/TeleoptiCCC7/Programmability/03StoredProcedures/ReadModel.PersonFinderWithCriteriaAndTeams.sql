@@ -173,7 +173,7 @@ SELECT @belongs_to_date_ISO = CONVERT(NVARCHAR(10), @belongs_to_date,120)
 IF @criteriaCount = 0 AND @teamIds <> ''
 BEGIN
 	SELECT @dynamicSQL = 'SELECT fp.PersonId FROM #teamId t '
-					 + 'INNER JOIN ReadModel.FindPerson fp with (nolock)   ON t.tId = fp.TeamId '
+					 + 'INNER JOIN ReadModel.FindPerson fp with (nolock)   ON t.tId = fp.PersonPeriodTeamId '
 					 + 'WHERE ISNULL(fp.TerminalDate, ''2100-01-01'') >= ''' + @leave_after_ISO + ''' ' 
 					 + 'AND ( (fp.StartDateTime IS NULL OR fp.StartDateTime <=  ''' + @belongs_to_date_ISO + ''' ) AND ( fp.EndDateTime IS NULL OR fp.EndDateTime >= ''' + @belongs_to_date_ISO + ''' ))'
 END
@@ -231,7 +231,7 @@ BEGIN
 		SELECT @valueClause = 'fp.SearchValue like N''%' + REPLACE(@searchValue, '''', '''''') + '%'''
 	
 	SELECT @dynamicSQL = 'SELECT fp.PersonId FROM #teamId t '
-				 +'INNER JOIN ReadModel.FindPerson fp with (nolock)   ON t.tId = fp.TeamId '
+				 +'INNER JOIN ReadModel.FindPerson fp with (nolock)   ON t.tId = fp.PersonPeriodTeamId '
 				 +' WHERE '
 
 	IF @valueClause <> '()'
