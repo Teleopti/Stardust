@@ -6,7 +6,9 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 	[Serializable]
 	public class ShiftTradeBusinessRuleConfig : IShiftTradeBusinessRuleConfig
 	{
-		// Full name of business rule class, use string since Type could not be serialized
+		/// <summary>
+		/// Full name of business rule class, use string since Type could not be serialized.
+		/// </summary>
 		public string BusinessRuleType { get; set; }
 
 		public string FriendlyName { get; set; }

@@ -57,7 +57,25 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var result = target.GetAllEnabledBusinessRulesForShiftTradeRequest(stateHolder, false);
 			var count = target.GetBusinessRulesForShiftTradeRequest(stateHolder, false).Count;
 			result.Count(x => x.GetType() == typeof(NewMaxWeekWorkTimeRule)).Should().Be.EqualTo(0);
+			result.Count(x => x.GetType() == typeof(NewNightlyRestRule)).Should().Be.EqualTo(1);
 			result.Count.Should().Be.EqualTo(count - 1);
+		}
+
+		[Test]
+		public void ShouldGetAllBusinessRulesForShiftTradeRequestIfNotConfigured()
+		{
+			var stateHolder = new FakeSchedulingResultStateHolder();
+
+			setShiftTradeSetting(new ShiftTradeSettings {BusinessRuleConfigs = null});
+			var target = new ConfigurableBusinessRuleProvider(_globalSettingDataRepository);
+			var allRules = target.GetBusinessRulesForShiftTradeRequest(stateHolder, true);
+			var enabledRules = target.GetAllEnabledBusinessRulesForShiftTradeRequest(stateHolder, true);
+
+			enabledRules.Count.Should().Be.EqualTo(allRules.Count);
+			foreach (var rule in allRules)
+			{
+				enabledRules.Item(rule.GetType()).Should().Not.Be(null);
+			}
 		}
 
 		[Test]

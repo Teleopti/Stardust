@@ -53,9 +53,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			var rules = GetBusinessRulesForShiftTradeRequest(schedulingResultStateHolder, enableSiteOpenHoursRule);
 
-			var shiftTradeSetting = _globalSettingDataRepository.FindValueByKey(ShiftTradeSettings.SettingsKey,
-				new ShiftTradeSettings());
-			var ruleConfigs = shiftTradeSetting.BusinessRuleConfigs;
+			var ruleConfigs = _globalSettingDataRepository.FindValueByKey(ShiftTradeSettings.SettingsKey,
+				new ShiftTradeSettings()).BusinessRuleConfigs;
 
 			var enabledRules = ruleConfigs != null && ruleConfigs.Any()
 				? rules.Where(r =>
