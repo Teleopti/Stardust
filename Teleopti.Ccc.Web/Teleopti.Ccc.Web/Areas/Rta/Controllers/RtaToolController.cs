@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 				.Select(x => new
 				{
 					Name = x.Name,
-					State = x.StateCollection.First().StateCode
+					Code = x.StateCollection.First().StateCode
 				})
 				.OrderBy(x => x.Name)
 				.ToArray());
