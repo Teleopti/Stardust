@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.IocCommon;
@@ -9,6 +8,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			personRepository = new FakePersonRepository();
 		}
 		[Test]
-		public void ShouldReturnPermittedTeamsHierachy()
+		public void ShouldReturnPermittedTeamsHierachyWhenUserHasMyTeamSchedulesPermission()
 		{
 			var date = new DateOnly(2016, 11, 29);
 			var bu = BusinessUnitFactory.CreateWithId("_");
@@ -57,11 +57,47 @@ namespace Teleopti.Ccc.WebTest.Core
 			permittedHierachy.Name.Should().Be.EqualTo("_");
 			permittedHierachy.Children.First().Name.Should().Be.EqualTo("mysite");
 			permittedHierachy.Children.First().Children.Single().Name.Should().Be.EqualTo("myteam");
-
 		}
 
 		[Test]
-		public void ShouldReturnLogonUserTeamId()
+		public void ShouldReturnPermittedTeamsHierachyUnderCurrentBusinessUnit()
+		{
+			var date = new DateOnly(2016, 11, 29);
+			
+			var team = TeamFactory.CreateTeamWithId("team");
+			var anotherTeam = TeamFactory.CreateTeamWithId("anotherTeam").WithId();
+			var site = SiteFactory.CreateSimpleSite("site").WithId();
+			var site2 = SiteFactory.CreateSimpleSite("site2").WithId();
+
+			var bu = BusinessUnitFactory.CreateWithId("bu");
+			var bu2 = BusinessUnitFactory.CreateWithId("bu2");
+
+			site.AddTeam(team);
+			site.SetBusinessUnit(bu);
+			site2.AddTeam(anotherTeam);
+			site2.SetBusinessUnit(bu2);
+
+			CurrentBusinessUnit.FakeBusinessUnit(bu);
+
+			SiteRepository.Add(site);
+			SiteRepository.Add(site2);
+			TeamRepository.Add(team);
+			TeamRepository.Add(anotherTeam);
+
+			PermissionProvider.Enable();
+			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, team, date);
+			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, anotherTeam, date);
+
+			var permittedHierachy = Target.GetPermittedTeamHierachy(date);
+
+			permittedHierachy.Children.Count.Should().Be.EqualTo(1);
+			permittedHierachy.Name.Should().Be.EqualTo("bu");
+			permittedHierachy.Children.First().Name.Should().Be.EqualTo("site");
+			permittedHierachy.Children.First().Children.Single().Name.Should().Be.EqualTo("team");
+		}
+
+		[Test]
+		public void ShouldReturnLogonUserTeamIdWhenUserHasMyTeamSchedulesPermission()
 		{
 
 			var date = new DateOnly(2016, 11, 29);
