@@ -472,29 +472,27 @@ namespace Stardust.Manager
 								}
 							}
 						}
-						if (sentToWorkerNodeUri != null)
+						if (sentToWorkerNodeUri == null) return;
+						var builderHelper = new NodeUriBuilderHelper(sentToWorkerNodeUri);
+						var uriCancel = builderHelper.GetCancelJobUri(jobId);
+						var response = _httpSender.DeleteAsync(uriCancel).Result;
+
+						if (response != null && response.IsSuccessStatusCode)
 						{
-							var builderHelper = new NodeUriBuilderHelper(sentToWorkerNodeUri);
-							var uriCancel = builderHelper.GetCancelJobUri(jobId);
-							var response = _httpSender.DeleteAsync(uriCancel).Result;
-
-							if (response != null && response.IsSuccessStatusCode)
+							using (var createUpdateCancellingResultCommand = _createSqlCommandHelper.CreateUpdateCancellingResultCommand(jobId, sqlConnection, sqlTransaction))
 							{
-								using (var createUpdateCancellingResultCommand = _createSqlCommandHelper.CreateUpdateCancellingResultCommand(jobId, sqlConnection, sqlTransaction))
-								{
-									createUpdateCancellingResultCommand.ExecuteNonQueryWithRetry(_retryPolicy);
-								}
-								using (var deleteFromJobDefinitionsCommand = _createSqlCommandHelper.CreateDeleteFromJobQueueCommand(jobId, sqlConnection, sqlTransaction))
-								{
-									deleteFromJobDefinitionsCommand.ExecuteNonQueryWithRetry(_retryPolicy);
-								}
-
-								sqlTransaction.Commit();
+								createUpdateCancellingResultCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 							}
-							else
+							using (var deleteFromJobDefinitionsCommand = _createSqlCommandHelper.CreateDeleteFromJobQueueCommand(jobId, sqlConnection, sqlTransaction))
 							{
-								this.Log().ErrorWithLineNumber("Could not send cancel to node. JobId: " + jobId);
+								deleteFromJobDefinitionsCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 							}
+
+							sqlTransaction.Commit();
+						}
+						else
+						{
+							this.Log().ErrorWithLineNumber("Could not send cancel to node. JobId: " + jobId);
 						}
 					}
 				}
@@ -520,8 +518,8 @@ namespace Stardust.Manager
 					{
 						selectJobQueueItemCommand.CommandType = CommandType.StoredProcedure;
 
-						SqlParameter retVal = new SqlParameter("@idd", SqlDbType.UniqueIdentifier);
-						retVal.Direction = ParameterDirection.ReturnValue;
+						var retVal = new SqlParameter("@idd", SqlDbType.UniqueIdentifier)
+							{Direction = ParameterDirection.ReturnValue};
 						selectJobQueueItemCommand.Parameters.Add(retVal);
 
 						using (var reader = selectJobQueueItemCommand.ExecuteReaderWithRetry(_retryPolicy))
@@ -545,7 +543,7 @@ namespace Stardust.Manager
 
 					if (response != null && (response.IsSuccessStatusCode || response.StatusCode.Equals(HttpStatusCode.BadRequest)))
 					{
-						string sentToWorkerNodeUri = availableNode.ToString();
+						var sentToWorkerNodeUri = availableNode.ToString();
 						using (var sqlTransaction = sqlConnection.BeginTransaction())
 						{
 							using (var insertIntoJobCommand = _createSqlCommandHelper.CreateInsertIntoJobCommand(jobQueueItem, sentToWorkerNodeUri, sqlConnection, sqlTransaction))
@@ -574,8 +572,7 @@ namespace Stardust.Manager
 						urijob = builderHelper.GetUpdateJobUri(jobQueueItem.JobId);
 
 						//what should happen if this response is not 200? 
-						var resp = _httpSender.PutAsync(urijob, null);
-
+						_httpSender.PutAsync(urijob, null);
 					}
 					else
 					{
@@ -583,7 +580,7 @@ namespace Stardust.Manager
 						{
 							if (response == null)
 							{
-								var updateCommandText = @"UPDATE [Stardust].[WorkerNode] 
+								const string updateCommandText = @"UPDATE [Stardust].[WorkerNode] 
 											SET Alive = @Alive
 											WHERE Url = @Url";
 
@@ -594,7 +591,7 @@ namespace Stardust.Manager
 									command.ExecuteNonQueryWithRetry(_retryPolicy);
 								}
 							}
-							var commandText = "update [Stardust].[JobQueue] set Tagged = NULL where JobId = @Id";
+							const string commandText = "update [Stardust].[JobQueue] set Tagged = NULL where JobId = @Id";
 
 							using (var cmd = new SqlCommand(commandText, sqlConnection, sqlTransaction))
 							{
@@ -615,7 +612,7 @@ namespace Stardust.Manager
 		}
 
 
-		private JobDetail CreateJobDetailFromSqlDataReader(SqlDataReader sqlDataReader)
+		private static JobDetail CreateJobDetailFromSqlDataReader(SqlDataReader sqlDataReader)
 		{
 			var jobDetail = new JobDetail
 			{
@@ -628,7 +625,7 @@ namespace Stardust.Manager
 		}
 
 
-		private Job CreateJobFromSqlDataReader(SqlDataReader sqlDataReader)
+		private static Job CreateJobFromSqlDataReader(SqlDataReader sqlDataReader)
 		{
 			var job = new Job
 			{
@@ -646,7 +643,7 @@ namespace Stardust.Manager
 			return job;
 		}
 
-		private JobQueueItem CreateJobQueueItemFromSqlDataReader(SqlDataReader sqlDataReader)
+		private static JobQueueItem CreateJobQueueItemFromSqlDataReader(SqlDataReader sqlDataReader)
 		{
 			var jobQueueItem = new JobQueueItem
 			{
@@ -662,7 +659,7 @@ namespace Stardust.Manager
 
 		public bool DoesJobQueueItemExists(Guid jobId)
 		{
-			var count = 0;
+			int count;
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
 				sqlConnection.OpenWithRetry(_retryPolicy);
