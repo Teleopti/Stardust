@@ -109,17 +109,17 @@
 				$scope.sendRandomBatch = function () {
 					var selectedAgents = $scope.gridApi.selection.getSelectedRows();
 					if (selectedAgents.length === 0)
-						sendBatch($scope.agents.map(function (a) {
-							return createState(a.UserCode, a.DataSource, getRandomStateCode().Code)
+						sendBatch($scope.agents.map(function (s) {
+							return createState(s.UserCode, s.DataSource, getRandomStateCode())
 						}));
 					else {
 						sendBatch(selectedAgents.map(function (s) {
-							return createState(s.UserCode, a.DataSource, getRandomStateCode().Code);
+							return createState(s.UserCode, s.DataSource, getRandomStateCode());
 						}));
 					}
 				}
 				function getRandomStateCode() {
-					return $scope.stateCodes[Math.floor(Math.random() * $scope.stateCodes.length)]
+					return $scope.stateCodes[Math.floor(Math.random() * $scope.stateCodes.length)].Code
 				}
 
 				function sendBatch(batch) {

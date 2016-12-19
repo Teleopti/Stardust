@@ -57,12 +57,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		{
 			return Ok(_stateGroups.LoadAllCompleteGraph()
 				.Where(x => !x.StateCollection.IsNullOrEmpty())
+				.OrderByDescending(x => x.Available)
+				.ThenBy(x => x.DefaultStateGroup)
+				.ThenBy(x => x.IsLogOutState)
 				.Select(x => new
 				{
 					Name = x.Name,
 					Code = x.StateCollection.First().StateCode
 				})
-				.OrderBy(x => x.Name)
 				.ToArray());
 		}
 	}
