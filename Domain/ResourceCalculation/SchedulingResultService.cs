@@ -34,20 +34,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_personSkillProvider = personSkillProvider;
 		}
 
-		//public ISkillSkillStaffPeriodExtendedDictionary SchedulingResult(DateTimePeriod periodWithSchedules, IResourceCalculationData resourceCalculationData = null )
-		//{
-		//	DateTimePeriod? relevantPeriod = _relevantSkillStaffPeriods.Period();
-		//	if (!relevantPeriod.HasValue)
-		//		return _relevantSkillStaffPeriods;
-
-		//	var intersectingPeriod = relevantPeriod.Value.Intersection(periodWithSchedules);
-
-		//	if (!intersectingPeriod.HasValue)
-		//		return _relevantSkillStaffPeriods;
-
-		//	return SchedulingResult(intersectingPeriod.Value,resourceCalculationData);
-		//}
-
 		public ISkillSkillStaffPeriodExtendedDictionary SchedulingResult(DateTimePeriod periodToRecalculate, IResourceCalculationData resourceCalculationData = null,  bool emptyCache = true)
 		{
 			if (!emptyCache)
@@ -79,19 +65,22 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (!_allSkills.Any())
 				return new ResourceCalculationDataContainer(_personSkillProvider, 60, false);
 
-			int minutesSplit = _allSkills.Min(s => s.DefaultResolution);
+			var minutesSplit = _allSkills.Min(s => s.DefaultResolution);
 			var resources = new ResourceCalculationDataContainer(_personSkillProvider, minutesSplit, false);
 
-			Parallel.ForEach(scheduleDictionary.Keys, person =>
+			foreach (var person in scheduleDictionary.Keys)
 			{
 				var range = scheduleDictionary[person];
 				var period = range.TotalPeriod();
-				if (!period.HasValue) return;
+				if (!period.HasValue) continue;
 
 				var scheduleDays =
 					range.ScheduledDayCollection(period.Value.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()));
-				Parallel.ForEach(scheduleDays, scheduleDay => resources.AddScheduleDayToContainer(scheduleDay, minutesSplit));
-			});
+				foreach (var scheduleDay in scheduleDays)
+				{
+					resources.AddScheduleDayToContainer(scheduleDay, minutesSplit);
+				}
+			}
 
 			return resources;
 		}

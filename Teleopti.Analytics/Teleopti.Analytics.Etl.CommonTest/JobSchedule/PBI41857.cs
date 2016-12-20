@@ -27,8 +27,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 	[DomainTest]
 	public class PBI41857
 	{
-		[Test, Ignore("PBI41857")]
-		public void ShouldCalculateResourceBasedOnPrimarSkill()
+		[Test]
+		public void ShouldCalculateResourceBasedOnPrimarySkill()
 		{
 			var date = new DateOnly(2016, 12, 20);
 			var dateAsUtc = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, DateTimeKind.Utc);
