@@ -18,27 +18,7 @@ namespace Stardust.Node.Workers
 		public async Task<HttpResponseMessage> PostAsync(Uri url,
 		                                                 object data)
 		{
-			try
-			{
-				using (var client = new HttpClient())
-				{
-					var sez = JsonConvert.SerializeObject(data);
-
-					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-					var response = await client.PostAsync(url,
-					                                      new StringContent(sez,
-					                                                        Encoding.Unicode,
-					                                                        "application/json"))
-						.ConfigureAwait(false);
-					return response;
-				}
-			}
-			catch (Exception exp)
-			{
-				Logger.ErrorWithLineNumber(exp.Message, exp);
-				throw;
-			}
+			return await PostAsync(url, data, CancellationToken.None);
 		}
 
 		public async Task<HttpResponseMessage> PostAsync(Uri url,
