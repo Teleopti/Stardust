@@ -373,7 +373,12 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			//remove line breaks for summary display...
 			$.each(textSegs, function (index, text) {
 				if (text !== undefined && text !== '') {
-					var updatedText = index === 0 ? _setAgentName(text, data.From) : _setAgentName(text, data.To);
+					var updatedText = text;
+					if (index === 0) {
+						if (data.From !== "") updatedText = _setAgentName(text, data.From);
+					} else {
+						if (data.To !== "") updatedText = _setAgentName(text, data.To);
+					}
 					textNoBr = textNoBr + updatedText + " ";
 					messageInList.push(updatedText + "\n");
 				}
