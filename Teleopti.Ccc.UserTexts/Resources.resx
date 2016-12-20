@@ -8264,6 +8264,10 @@ Period</value>
     <value>Your shift trade request has been denied by the recipient.</value>
     <comment>Your Shift Trade Request has been denied by the person asked.</comment>
   </data>
+  <data name="RequestDenyReasonAutoPurge" xml:space="preserve">
+    <value>Purged since request was not handled in time.</value>
+    <comment>Deny reason for PersonRequest when denied by auto purge</comment>
+  </data>
   <data name="RequestDenyReasonPersonAccount" xml:space="preserve">
     <value>Your absence request has been denied automatically. You don't have enough time left in your personal account balance.</value>
     <comment>Your Absence Request has been denied due to Personal Account Check.</comment>

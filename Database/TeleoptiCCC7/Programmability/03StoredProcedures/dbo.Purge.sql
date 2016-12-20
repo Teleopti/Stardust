@@ -327,11 +327,16 @@ if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
 --Autodeny requests if not handled in time.
 select @KeepUntil = dateadd(day,-1*(select isnull(Value,120) from PurgeSetting where [Key] = 'DenyPendingRequestsAfterNDays'),getdate())
 
-update PersonRequest set RequestStatus = 1
-from PersonRequest pr inner join Request r on r.Parent = pr.Id
-where r.EndDateTime < @KeepUntil
-and pr.RequestStatus = 0 --Pending
-and pr.IsDeleted = 0
+update PersonRequest
+   set RequestStatus = 1 -- Denied
+     , DenyReason = 'RequestDenyReasonAutoPurge'
+     , UpdatedOn = GETUTCDATE()
+     , UpdatedBy = '3F0886AB-7B25-4E95-856A-0D726EDC2A67'  -- System
+     , [Version] = [Version] + 1
+  from PersonRequest pr inner join Request r on r.Parent = pr.Id
+ where r.EndDateTime < @KeepUntil
+   and pr.RequestStatus = 0 --Pending
+   and pr.IsDeleted = 0
 
 if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
 	return
@@ -379,5 +384,4 @@ where Start is NULL and [End] is NULL
 END
 
 GO
-
 

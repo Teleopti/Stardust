@@ -23874,6 +23874,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Purged since request was not handled in time..
+        /// </summary>
+        public static string RequestDenyReasonAutoPurge {
+            get {
+                return ResourceManager.GetString("RequestDenyReasonAutoPurge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your absence request has been denied automatically. There is not enough budgeted allowance left for this request..
         /// </summary>
         public static string RequestDenyReasonBudgetGroupAllowance {
