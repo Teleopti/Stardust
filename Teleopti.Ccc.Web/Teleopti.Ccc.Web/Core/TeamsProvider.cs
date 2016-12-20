@@ -75,6 +75,7 @@ namespace Teleopti.Ccc.Web.Core
 			var siteViewModels = new List<SiteViewModelWithTeams>();
 			var logonUserTeamId = _loggedOnUser.CurrentUser().MyTeam(date) != null ? _loggedOnUser.CurrentUser().MyTeam(date).Id : null;
 
+
 			foreach (var site in sites)
 			{
 				var siteViewModel = new SiteViewModelWithTeams()
@@ -94,7 +95,15 @@ namespace Teleopti.Ccc.Web.Core
 							Name = team.Description.Name
 						});
 					}
-
+					else if(logonUserTeamId != null && logonUserTeamId == team.Id 
+						&& _permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, date, _loggedOnUser.CurrentUser()))
+					{
+						siteViewModel.Children.Add(new TeamViewModel
+						{
+							Id = team.Id.Value.ToString(),
+							Name = team.Description.Name
+						});
+					}
 				}
 				if (siteViewModel.Children.Any())
 				{

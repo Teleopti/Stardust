@@ -132,5 +132,42 @@ namespace Teleopti.Ccc.WebTest.Core
 			permittedHierachy.Children.First().Children.Single().Name.Should().Be.EqualTo("myteam");
 			permittedHierachy.LogonUserTeamId.Should().Be(team.Id);
 		}
+
+		[Test]
+		public void ShouldReturnLogonUserTeamIdWhenUserHasMyOwnDataPermissionOnly()
+		{
+
+			var date = new DateOnly(2016, 11, 29);
+			var bu = BusinessUnitFactory.CreateWithId("_");
+			CurrentBusinessUnit.FakeBusinessUnit(bu);
+			var team = TeamFactory.CreateTeamWithId("myteam");
+			var site = SiteFactory.CreateSimpleSite("mysite").WithId();
+
+			var contract = ContractFactory.CreateContract("Contract");
+			contract.WithId();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(date, personContract, team);
+
+			var me = PersonFactory.CreatePerson().WithId();
+			me.AddPersonPeriod(personPeriod);
+
+			personRepository.Add(me);
+
+			CurrentLoggedOnUser.SetFakeLoggedOnUser(me);
+
+			site.AddTeam(team);
+			SiteRepository.Add(site);
+			TeamRepository.Add(team);
+			PermissionProvider.Enable();
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, me, date);
+
+			var permittedHierachy = Target.GetPermittedTeamHierachy(date);
+
+			permittedHierachy.Children.Count.Should().Be.EqualTo(1);
+			permittedHierachy.Name.Should().Be.EqualTo("_");
+			permittedHierachy.Children.First().Name.Should().Be.EqualTo("mysite");
+			permittedHierachy.Children.First().Children.Single().Name.Should().Be.EqualTo("myteam");
+			permittedHierachy.LogonUserTeamId.Should().Be(team.Id);
+		}
 	}
 }
