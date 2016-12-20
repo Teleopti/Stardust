@@ -239,9 +239,7 @@ BEGIN
 					 + 'WHERE ISNULL(fp.TerminalDate, ''2100-01-01'') >= ''' + @leave_after_ISO + ''' ' 
 					 + 'AND ( (fp.StartDateTime IS NULL OR fp.StartDateTime <=  ''' + @belongs_to_date_ISO + ''' ) AND ( fp.EndDateTime IS NULL OR fp.EndDateTime >= ''' + @belongs_to_date_ISO + ''' ))'
 					 + ' AND ' + @valueClause
-		
-		SELECT @dynamicSQL = @dynamicSQL + ' AND ' + @valueClause
-
+				
 		--If 'All' set searchtype as a separate AND condition
 		IF @searchType <> 'All'
 			SELECT @dynamicSQL = @dynamicSQL + ' AND (fp.SearchType = '''' OR fp.SearchType = '''+ @searchType + ''')'
