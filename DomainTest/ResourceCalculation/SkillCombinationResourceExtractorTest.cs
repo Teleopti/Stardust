@@ -93,38 +93,36 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			persistedCombinations.First().Resource.Should().Be.EqualTo(3);
 		}
 
-		//[Test]
-		//public void ShouldSpecifySkillCombinationOnIntervalWithShrinkage()
-		//{
-		//	var activity = ActivityFactory.CreateActivity("phone");
-		//	activity.RequiresSkill = true;
-		//	var period = new DateTimePeriod(2016, 12, 19, 0, 2016, 12, 19, 1);
+		[Test]
+		public void ShouldIgnoreToPersistResourceIfSkillCombinationIsAnEmptyKey()
+		{
+			var activity = ActivityFactory.CreateActivity("phone");
+			var period = new DateTimePeriod(2016, 12, 19, 0, 2016, 12, 19, 1);
 
-		//	var scenario = ScenarioRepository.Has("default");
+			var scenario = ScenarioRepository.Has("default");
 
-		//	var saleSkill = SkillRepository.Has("sales", activity);
-		//	var supportSkill = SkillRepository.Has("support", activity);
-		//	var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 12, 19), new[] { saleSkill, supportSkill }).WithId();
+			var saleSkill = SkillRepository.Has("sales", activity);
 
-		//	PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, period, ShiftCategoryFactory.CreateShiftCategory(), scenario));
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 12, 19), new ISkill[] {}).WithId();
+			var person2 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 12, 19), new [] { saleSkill }).WithId();
 
+			person.PermissionInformation.SetDefaultTimeZone(saleSkill.TimeZone);
+			person2.PermissionInformation.SetDefaultTimeZone(saleSkill.TimeZone);
 
-		//	var saleSkillDay = saleSkill.CreateSkillDayWithDemand(scenario, new DateOnly(2016, 12, 19), 1);
-		//	saleSkillDay.SkillDataPeriodCollection.ForEach(skillDataPeriod =>
-		//	{
-		//		skillDataPeriod.Shrinkage = new Percent(0.5);
-		//	});
-		//	SkillDayRepository.Has(saleSkillDay);
-		//	SkillDayRepository.Has(supportSkill.CreateSkillDayWithDemand(scenario, new DateOnly(2016, 12, 19), 1));
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, period, ShiftCategoryFactory.CreateShiftCategory(), scenario);
+			var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person2, period, ShiftCategoryFactory.CreateShiftCategory(), scenario);
+			PersonAssignmentRepository.Has(ass);
+			PersonAssignmentRepository.Has(ass2);
 
-		//	PersonRepository.Has(person);
-		//	Target.Update(period);
+			SkillDayRepository.Has(saleSkill.CreateSkillDayWithDemand(scenario, new DateOnly(2016, 12, 19), 1));
 
-		//	var persistedCombinations = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(15)));
-		//	persistedCombinations.Count().Should().Be.EqualTo(1);
-		//	persistedCombinations.First().SkillCombination.Count().Should().Be.EqualTo(2);
-		//	persistedCombinations.First().ResourceWithShrinkage.Should().Be.EqualTo(1);
-		//}
+			PersonRepository.Has(person);
+			PersonRepository.Has(person2);
+			Target.Update(period);
+
+			var persistedCombinations = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(15)));
+			persistedCombinations.Count().Should().Be.EqualTo(1);
+		}
 
 	}
 	

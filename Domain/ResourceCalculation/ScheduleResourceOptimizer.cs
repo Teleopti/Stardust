@@ -110,14 +110,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					optimizedActivityData.RelativePersonResources
 						.ForEach(resources =>
 								 {
-									 resourceCalculationData.SkillCombinationHolder
-										 .Add(new SkillCombinationResource
-											  {
-												  StartDateTime = completeIntervalPeriod.StartDateTime,
-												  EndDateTime = completeIntervalPeriod.EndDateTime,
-												  SkillCombination = resources.Key.Split('_').Select(Guid.Parse),
-												  Resource = resources.Value
-											  });
+									 if (resources.Key != "")
+										 resourceCalculationData.SkillCombinationHolder
+											 .Add(new SkillCombinationResource
+												  {
+													  StartDateTime = completeIntervalPeriod.StartDateTime,
+													  EndDateTime = completeIntervalPeriod.EndDateTime,
+													  SkillCombination = resources.Key.Split('_').Select(Guid.Parse).ToList(),
+													  Resource = resources.Value
+												  });
 								 });
 				}
 				setFurnessResultsToSkillStaffPeriods(completeIntervalPeriod, relevantSkillStaffPeriods, optimizedActivityData);
