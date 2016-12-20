@@ -201,7 +201,8 @@
 		Wfm_Intraday_ScheduledStaffing_41476,
 		Mailbox_Optimization_41900,
 		No_UnitOfWork_Nesting_42175,
-		Wfm_Intraday_ESL_41827
+		Wfm_Intraday_ESL_41827,
+		AbsenceRequests_Intraday_UseCascading_41969
 		// ReSharper restore InconsistentNaming
 	}
 }

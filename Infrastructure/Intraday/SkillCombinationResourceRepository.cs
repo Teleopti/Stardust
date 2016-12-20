@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			return null;
 		}
 
-		public void PersistSkillCombinationResource(IEnumerable<SkillCombinationResource> skillCombinationResources)
+		public virtual void PersistSkillCombinationResource(IEnumerable<SkillCombinationResource> skillCombinationResources)
 		{
 			var skillCombinations = loadSkillCombination();
 			var dt = new DataTable();
@@ -170,4 +170,18 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 		public double Resource;
 		public Guid SkillId;
 	}
+
+
+	public class SkillCombinationResourceRepositoryEmpty : SkillCombinationResourceRepository
+	{
+		public SkillCombinationResourceRepositoryEmpty(INow now, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory) : base(now, currentUnitOfWorkFactory)
+		{
+		}
+
+		public override void PersistSkillCombinationResource(IEnumerable<SkillCombinationResource> skillCombinationResources)
+		{
+			
+		}
+	}
+
 }

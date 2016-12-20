@@ -216,3 +216,4 @@ Wfm_Intraday_ScheduledStaffing_41476 = RC
 Mailbox_Optimization_41900 = RC
 No_UnitOfWork_Nesting_42175 = RC
 Wfm_Intraday_ESL_41827 = RC
+AbsenceRequests_Intraday_UseCascading_41969 = RC
