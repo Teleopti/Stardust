@@ -55,5 +55,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Assert.IsTrue(config.HandleOptionOnFailed == RequestHandleOption.Pending);
 			}
 		}
+
+		[Test]
+		public void ShouldReturnMinWeekWorkTimeRuleConfig()
+		{
+			var stateHolder = new FakeSchedulingResultStateHolder {UseMinWeekWorkTime = true};
+			var businessRules = NewBusinessRuleCollection.All(stateHolder);
+
+			var businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
+			businessRuleProvider.Stub(x => x.GetBusinessRulesForShiftTradeRequest(stateHolder, true))
+				.IgnoreArguments().Return(businessRules);
+
+			var target = new BusinessRuleConfigProvider(businessRuleProvider, stateHolder);
+			var result = target.GetDefaultConfigForShiftTradeRequest().ToList();
+			Assert.IsTrue(result.Any(r => r.BusinessRuleType == typeof(MinWeekWorkTimeRule).FullName));
+		}
 	}
 }
