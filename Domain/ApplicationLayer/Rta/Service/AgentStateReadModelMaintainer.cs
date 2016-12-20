@@ -9,7 +9,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class AgentStateReadModelMaintainer :
 		IRunOnHangfire,
 		IHandleEvent<PersonDeletedEvent>,
-		IHandleEvent<PersonAssociationChangedEvent>
+		IHandleEvent<PersonAssociationChangedEvent>,
+		IHandleEvent<TenantHourTickEvent>
 	{
 		private readonly IAgentStateReadModelPersister _persister;
 		private readonly INow _now;
@@ -21,6 +22,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[UnitOfWork]
+		public virtual void Handle(TenantHourTickEvent @event)
+		{
+			_persister.DeleteOldRows(_now.UtcDateTime());
+		}
+
+		[UnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
 			_persister.SetDeleted(@event.PersonId, expirationFor(@event));
@@ -29,7 +36,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[UnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{
-			_persister.DeleteOldRows(_now.UtcDateTime());
 
 			if (!@event.TeamId.HasValue)
 			{
@@ -50,5 +56,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			return ((dynamic) @event).Timestamp.AddMinutes(30);
 		}
+
 	}
 }
