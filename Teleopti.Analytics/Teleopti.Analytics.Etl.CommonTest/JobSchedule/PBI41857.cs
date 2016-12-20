@@ -27,7 +27,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 	[DomainTest]
 	public class PBI41857
 	{
-		[Test, Ignore("Claes - This is green but it shouldnt...")]
+		[Test, Ignore("PBI41857")]
 		public void ShouldShovel()
 		{
 			var date = new DateOnly(2016, 12, 20);
@@ -45,15 +45,12 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 			var skillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>
 			{
 				[primarySkill] = new[] {primarySkill.CreateSkillDayWithDemand(scenario, date, 0.5)},
-				[secondarySkill] = new[] {secondarySkill.CreateSkillDayWithDemand(scenario, date, 2)}
+				[secondarySkill] = new[] {secondarySkill.CreateSkillDayWithDemand(scenario, date, 1)}
 			};
-			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).KnowsSkill(primarySkill, secondarySkill);
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).KnowsSkill(primarySkill, secondarySkill).WithId();
 			var ass = new PersonAssignment(agent, scenario, date);
 			ass.AddActivity(activity, new TimePeriod(0, 24));
-			var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc).KnowsSkill(primarySkill, secondarySkill);
-			var ass2 = new PersonAssignment(agent2, scenario, date);
-			ass2.AddActivity(activity, new TimePeriod(0, 24));
-			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, new DateTimePeriod(dateAsUtc, dateAsUtc.AddDays(1)), ass, ass2);
+			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, new DateTimePeriod(dateAsUtc, dateAsUtc.AddDays(1)), ass);
 			var raptorRep = new RaptorRepositoryForTest();
 			raptorRep.SetLoadSkillWithSkillDays(new [] {primarySkill, secondarySkill});
 			raptorRep.SetLoadScenario(scenario);
@@ -68,14 +65,20 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 
 			var result = target.BulkInsertDataTable1;
 			const double expectedScheduledOnPrimary = 0.5;
-			const double expectedScheduledOnSecondary = 1.5;
+			const double expectedScheduledOnSecondary = 0.5;
 			var rowsOnDate = result.Rows.Cast<DataRow>().Where(x => (DateTime)x["date"] == dateAsUtc);
 			var primaryRows = rowsOnDate.Where(x => (Guid) x["skill_code"] == primarySkill.Id.Value);
 			var secondaryRows = rowsOnDate.Where(x => (Guid) x["skill_code"] == secondarySkill.Id.Value);
-			primaryRows.All(x => Math.Abs((double)x["scheduled_resources"]) - expectedScheduledOnPrimary < 0.01)
-				.Should().Be.True();
-			secondaryRows.All(x => Math.Abs((double)x["scheduled_resources"]) - expectedScheduledOnSecondary < 0.01)
-				.Should().Be.True();
+
+			foreach (var primaryRow in primaryRows)
+			{
+				primaryRow["scheduled_resources"].Should().Be.EqualTo(expectedScheduledOnPrimary);
+			}
+
+			foreach (var secondaryRow in secondaryRows)
+			{
+				secondaryRow["scheduled_resources"].Should().Be.EqualTo(expectedScheduledOnSecondary);
+			}
 		}
 	}
 }
