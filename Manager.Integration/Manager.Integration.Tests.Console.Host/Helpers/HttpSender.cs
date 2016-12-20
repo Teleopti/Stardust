@@ -11,13 +11,13 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 	public class HttpSender 
 	{
 		public async Task<HttpResponseMessage> PostAsync(Uri url,
-		                                                 object data)
+		                                                 object data = null)
 		{
 			try
 			{
 				using (var client = new HttpClient())
 				{
-					var sez = JsonConvert.SerializeObject(data);
+					var sez = data == null ? "" : JsonConvert.SerializeObject(data);
 
 					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 					var response =
@@ -36,27 +36,7 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 				throw;
 			}
 		}
-
-		public async Task<HttpResponseMessage> PostAsync(Uri url)
-		{
-			try
-			{
-				using (var client = new HttpClient())
-				{
-					var response = await client.PostAsync(url, null);
-
-					return response;
-				}
-			}
-			catch (Exception exp)
-			{
-				string msg = exp.Message;
-			}
-
-			return null;
-		}
-	
-
+		
 		public async Task<HttpResponseMessage> DeleteAsync(Uri url)
 		{
 			try
