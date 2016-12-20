@@ -10,6 +10,7 @@
   animation-delay: 0.5s;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
+
   max-height: 25%;
 }
 
@@ -42,13 +43,6 @@
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   perspective: 1000px;
-}
-
-.error-row {
-	position: fixed;
-	top: 5px;
-	left: 0;
-	right: 0;
 }
 
 @keyframes shake {
