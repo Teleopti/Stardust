@@ -16,7 +16,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 			var builder = new ContainerBuilder();
 			builder.RegisterType<AspectInterceptor>();
 			builder.RegisterType<AspectedClass>().ApplyAspects();
+			builder.RegisterType<DoubleAspectedClass>().ApplyAspects();
 			builder.RegisterType<AResolvedAspect.TheResolvedAspect>();
+			builder.RegisterType<ThrowingOnBeforeAspect.TheResolvedAspect>();
+			builder.RegisterType<ThrowingOnAfterAspect.TheResolvedAspect>();
 			return builder.Build();
 		}
 
@@ -126,6 +129,43 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 			actual.Should().Be.SameInstanceAs(expected);
 		}
 
+		[Test]
+		public void ShouldInvokeAllAfterInvocationMethods()
+		{
+			var afterInvoke = false;
+			var container = setupContainer();
+			AResolvedAspect.AfterCallback = () => afterInvoke = true;
+
+			var target = container.Resolve<DoubleAspectedClass>();
+
+			Assert.Throws<FileNotFoundException>(target.ThrowsAfterAspectedMethod);
+			afterInvoke.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldInvokeAfterInvocationForCompletedBeforeInvocationMethods()
+		{
+			var afterInvoke = false;
+			var container = setupContainer();
+			AResolvedAspect.AfterCallback = () => afterInvoke = true;
+
+			var target = container.Resolve<DoubleAspectedClass>();
+
+			Assert.Throws<FileNotFoundException>(target.ThrowsBeforeAspectedMethod);
+			afterInvoke.Should().Be.True();
+		}
+
+		public class DoubleAspectedClass
+		{
+			[AResolvedAspect]
+			[ThrowingOnBeforeAspect]
+			public virtual void ThrowsBeforeAspectedMethod() { }
+
+			[AResolvedAspect]
+			[ThrowingOnAfterAspect]
+			public virtual void ThrowsAfterAspectedMethod() { }
+		}
+
 		public class AspectedClass
 		{
 			public Action AspectedMethodCallback;
@@ -134,7 +174,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 			public virtual void AttributedMethod() { }
 
 			[AResolvedAspect]
-			public virtual void ResolvedAspectMethod() { if (AspectedMethodCallback != null) AspectedMethodCallback(); }
+			public virtual void ResolvedAspectMethod()
+			{
+				AspectedMethodCallback?.Invoke();
+			}
 
 		}
 
@@ -154,13 +197,47 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 			{
 				public void OnBeforeInvocation(IInvocationInfo invocation)
 				{
-					if (BeforeCallback != null) BeforeCallback();
+					BeforeCallback?.Invoke();
 				}
 
 				public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 				{
-					if (AfterCallback != null) AfterCallback();
-					if (AfterCallbackWithException != null) AfterCallbackWithException(exception);
+					AfterCallback?.Invoke();
+					AfterCallbackWithException?.Invoke(exception);
+				}
+			}
+		}
+
+		private class ThrowingOnBeforeAspect : AspectAttribute
+		{
+			public ThrowingOnBeforeAspect() : base(typeof(TheResolvedAspect)) { }
+
+			public class TheResolvedAspect : IAspect
+			{
+				public void OnBeforeInvocation(IInvocationInfo invocation)
+				{
+					throw new FileNotFoundException();
+				}
+
+				public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
+				{
+				}
+			}
+		}
+
+		private class ThrowingOnAfterAspect : AspectAttribute
+		{
+			public ThrowingOnAfterAspect() : base(typeof(TheResolvedAspect)) { }
+
+			public class TheResolvedAspect : IAspect
+			{
+				public void OnBeforeInvocation(IInvocationInfo invocation)
+				{
+				}
+
+				public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
+				{
+					throw new FileNotFoundException();
 				}
 			}
 		}

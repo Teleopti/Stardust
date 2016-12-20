@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using Autofac;
 using Castle.DynamicProxy;
 using log4net;
@@ -37,15 +39,20 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 				;
 
 			var invocationInfo = new InvocationInfo(invocation);
+			var completedBefores = new List<IAspect>();
 			try
 			{
-				aspects.ForEach(a => a.OnBeforeInvocation(invocationInfo));
+				aspects.ForEach(a =>
+				{
+					a.OnBeforeInvocation(invocationInfo);
+					completedBefores.Add(a);
+				});
 			}
 			catch (Exception e)
 			{
 				LogManager.GetLogger(invocation.TargetType)
 					.Error($"Aspect call before {invocation.Method.Name} failed", e);
-				throw;
+				runAfters(invocation, completedBefores, invocationInfo, e);
 			}
 
 			Exception exception = null;
@@ -60,22 +67,36 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			}
 			finally
 			{
-
-				try
-				{
-					aspects
-						.Reverse()
-						.ForEach(a => a.OnAfterInvocation(exception, invocationInfo))
-						;
-				}
-				catch (Exception e)
-				{
-					LogManager.GetLogger(invocation.TargetType)
-					.Error($"Aspect call after {invocation.Method.Name} failed", e);
-					throw;
-				}
-
+				runAfters(invocation, aspects, invocationInfo, exception);
 			}
-		}	
+		}
+
+		private static void runAfters(IInvocation invocation, IEnumerable<IAspect> aspects, IInvocationInfo invocationInfo, Exception exception)
+		{
+			var exceptions = new List<Exception>();
+			if (exception != null)
+				exceptions.Add(exception);
+
+			aspects
+				.Reverse()
+				.ForEach(a =>
+				{
+					try
+					{
+						a.OnAfterInvocation(exception, invocationInfo);
+					}
+					catch (Exception e)
+					{
+						LogManager.GetLogger(invocation.TargetType)
+							.Error($"Aspect call after {invocation.Method.Name} failed", e);
+						exceptions.Add(e);
+					}
+				});
+
+			if (exceptions.Count == 1)
+				ExceptionDispatchInfo.Capture(exceptions.First()).Throw();
+			if (exceptions.Any())
+				throw new AggregateException(exceptions);
+		}
 	}
 }
