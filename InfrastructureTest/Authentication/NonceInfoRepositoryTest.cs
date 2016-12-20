@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
                     Target.Add(new NonceInfo
                     {
                         Context = context,
-                        Nonce = Guid.NewGuid().ToString().Substring(0,8),
+                        Nonce = Guid.NewGuid().ToString("N").Substring(0, 16),
                         Timestamp = expired.Subtract(TimeSpan.FromTicks(random.Next(100)))
                     });
                 }
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
             {
                 tasks.Add(new Task(() =>
                 {
-                    var n = Guid.NewGuid().ToString().Substring(0, 8);
+                    var n = Guid.NewGuid().ToString("N").Substring(0, 16);
                     using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
                     {
                         var nonceInfo = Target.Find(context, n, nonExpired);
