@@ -183,7 +183,7 @@
 		vm.mutateMoment = mutateMoment;
 		vm.sameDate = sameDate;
 
-		if (!angular.isDefined(vm.disableNextDay)) {
+		if (angular.isUndefined(vm.disableNextDay)) {
 			vm.disableNextDay = false;
 		}
 

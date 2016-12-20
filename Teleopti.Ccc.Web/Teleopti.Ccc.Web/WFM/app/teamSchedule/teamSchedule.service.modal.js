@@ -11,10 +11,10 @@
 
         var defaultTemplate = 'app/teamSchedule/html/commandConfirmDialog.tpl.html';
         var confirmModalTemplate = 'app/teamSchedule/html/miniConfirmModal.tpl.html';
-        var defaultController = 'commandConfirmDialog';
+        var defaultController = 'CommandConfirmDialogController';
 
         function show(options) {
-
+            //not using anywhere?
             options.templateUrl = options.templateUrl || defaultTemplate;
             options.controller = options.controller || defaultController;
             options.parent = options.parent || angular.element(document.body);
@@ -32,7 +32,7 @@
                 var scope = $rootScope.$new();
                 var parent = options.parent;
 
-                if (typeof options.locals === 'object') {
+                if (angular.isObject(options.locals)) {
                     for (var key in options.locals) {
                         scope[key] = options.locals[key];
                     }
@@ -50,7 +50,7 @@
 
                 function removeModal() {
                     scope.$evalAsync(function (scope) {
-                        if (typeof options.onRemoving === 'function') {
+                        if (angular.isFunction(options.onRemoving)) {
                             options.onRemoving();
                         }
 

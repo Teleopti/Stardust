@@ -91,7 +91,7 @@
 		function startMinutes(groupSchedule, baseDate) {
 			var start = getMinStartTimeInMinute(groupSchedule, baseDate);
 
-			if (start === undefined || start >= 1440) // 1440 means 0:00 of next day, to make sure we alwayse show timelines for current day
+			if (angular.isUndefined(start) || start >= 1440) // 1440 means 0:00 of next day, to make sure we alwayse show timelines for current day
 				return shiftHelper.MinutesForHourOfDay(8);
 										
 			start = start > defaultViewRange.start ? start : defaultViewRange.start;
@@ -107,7 +107,7 @@
 
 			var end = getMaxEndTimeInMinute(groupSchedule, baseDate);
 
-			if (end === undefined || end <= 0) // 0 means 0:00 of current day, to make sure we alwayse show timelines for current day
+			if (angular.isUndefined(end) || end <= 0) // 0 means 0:00 of current day, to make sure we alwayse show timelines for current day
 				return shiftHelper.MinutesForHourOfDay(16);
 
 			end = end < defaultViewRange.end ? end : defaultViewRange.end; 			
@@ -149,7 +149,7 @@
 		};
 
 		function hourPointViewModel(baseDate, minutes, start, percentPerMinute, isLabelHidden) {
-			var time = ((baseDate == undefined)
+			var time = ((angular.isUndefined(baseDate))
 				? moment()
 				: moment(baseDate)).startOf('day').add(minutes, 'minutes');
 

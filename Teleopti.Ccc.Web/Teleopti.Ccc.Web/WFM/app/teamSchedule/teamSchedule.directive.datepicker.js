@@ -90,7 +90,7 @@
 	});
 
 	function testDateStringFormat(dateStr) {
-		if (typeof dateStr !== 'string') {
+		if (!angular.isString(dateStr)) {
 			return false;
 		}
 		var format = /^(\d{4})-(\d{2})-(\d{2})$/;

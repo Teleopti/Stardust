@@ -1,216 +1,216 @@
-﻿(function () {
+﻿(function() {
 	'use strict';
 
-	angular.module("wfm.teamSchedule").service("ScheduleManagement", ["Toggle", "$filter", 'TeamSchedule', 'GroupScheduleFactory', 'CurrentUserInfo',
-		function (toggleSvc, $filter, teamScheduleSvc, groupScheduleFactory, CurrentUserInfo) {
-			var svc = this;
+	angular.module("wfm.teamSchedule").service("ScheduleManagement", ["Toggle", "$filter", 'TeamSchedule', 'GroupScheduleFactory', 'CurrentUserInfo', ScheduleManagementService]);
 
-			svc.rawSchedules = [];
-			svc.groupScheduleVm = {};
+	function ScheduleManagementService(toggleSvc, $filter, teamScheduleSvc, groupScheduleFactory, CurrentUserInfo) {
+		var svc = this;
 
-			svc.findPersonScheduleVmForPersonId = findPersonScheduleVmForPersonId;
+		svc.rawSchedules = [];
+		svc.groupScheduleVm = {};
 
-			function findPersonScheduleVmForPersonId(personId) {
-				var result = svc.groupScheduleVm.Schedules.filter(function(vm) {
-					return vm.PersonId === personId;
-				});
-				if (result.length === 0) return null;
-				return result[0];
+		svc.findPersonScheduleVmForPersonId = findPersonScheduleVmForPersonId;
+
+		function findPersonScheduleVmForPersonId(personId) {
+			var result = svc.groupScheduleVm.Schedules.filter(function(vm) {
+				return vm.PersonId === personId;
+			});
+			if (result.length === 0) return null;
+			return result[0];
+		}
+
+		function convertScheduleToTimezone(schedule, timezone) {
+
+			if ((!timezone) || (timezone === CurrentUserInfo.CurrentUserInfo().DefaultTimeZone)) return schedule;
+
+			var copiedSchedule = angular.copy(schedule);
+
+			angular.forEach(copiedSchedule.Projection, function(p) {
+				p.Start = $filter('timezone')(p.Start, timezone);
+				p.End = $filter('timezone')(p.End, timezone);
+			});
+			if (copiedSchedule.DayOff) {
+				copiedSchedule.DayOff.Start = $filter('timezone')(copiedSchedule.DayOff.Start, timezone);
+				copiedSchedule.DayOff.End = $filter('timezone')(copiedSchedule.DayOff.End, timezone);
 			}
 
-			function convertScheduleToTimezone(schedule, timezone) {
+			return copiedSchedule;
+		}
 
-				if ((!timezone) || (timezone === CurrentUserInfo.CurrentUserInfo().DefaultTimeZone)) return schedule;
+		var recreateScheduleVm = function(scheduleDateMoment, timezone) {
+			var timezoneAdjustedSchedules = svc.rawSchedules.map(function(schedule) {
+				return convertScheduleToTimezone(schedule, timezone);
+			});
 
-				var copiedSchedule = angular.copy(schedule);
-				
-				angular.forEach(copiedSchedule.Projection, function(p) {
-					p.Start = $filter('timezone')(p.Start, timezone);
-					p.End = $filter('timezone')(p.End, timezone);
-				});
-				if (copiedSchedule.DayOff) {
-					copiedSchedule.DayOff.Start = $filter('timezone')(copiedSchedule.DayOff.Start, timezone);
-					copiedSchedule.DayOff.End = $filter('timezone')(copiedSchedule.DayOff.End, timezone);
-				}
+			var useNextDaySchedules = toggleSvc.WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305;
 
-				return copiedSchedule;
-			}
+			svc.groupScheduleVm = groupScheduleFactory.Create(timezoneAdjustedSchedules, scheduleDateMoment, useNextDaySchedules);
+		};
 
-			var recreateScheduleVm = function (scheduleDateMoment, timezone) {				
-				var timezoneAdjustedSchedules = svc.rawSchedules.map(function(schedule) {
-					return convertScheduleToTimezone(schedule, timezone);
-				});
+		svc.recreateScheduleVm = recreateScheduleVm;
 
-				var useNextDaySchedules = toggleSvc.WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305;
+		svc.resetSchedules = function(schedules, scheduleDateMoment, timezone) {
+			svc.rawSchedules = schedules;
+			recreateScheduleVm(scheduleDateMoment, timezone);
+		};
 
-				svc.groupScheduleVm = groupScheduleFactory.Create(timezoneAdjustedSchedules, scheduleDateMoment, useNextDaySchedules);
-			};
+		svc.mergeSchedules = function(schedules, scheduleDateMoment, timezone) {
+			recreateScheduleVm(scheduleDateMoment, timezone);
+		};
 
-			svc.recreateScheduleVm = recreateScheduleVm;
+		svc.updateScheduleForPeoples = function(personIdList, scheduleDateMoment, timezone, afterLoading) {
+			var scheduleDateStr = scheduleDateMoment.format('YYYY-MM-DD');
+			teamScheduleSvc.getSchedules(scheduleDateStr, personIdList).then(function(result) {
 
-			svc.resetSchedules = function (schedules, scheduleDateMoment, timezone) {
-				svc.rawSchedules = schedules;
-				recreateScheduleVm(scheduleDateMoment, timezone);
-			};
-
-			svc.mergeSchedules = function (schedules, scheduleDateMoment, timezone) {
-				recreateScheduleVm(scheduleDateMoment, timezone);
-			};
-
-			svc.updateScheduleForPeoples = function(personIdList, scheduleDateMoment, timezone, afterLoading) {
-				var scheduleDateStr = scheduleDateMoment.format('YYYY-MM-DD');
-				teamScheduleSvc.getSchedules(scheduleDateStr, personIdList).then(function(result) {
-
-					angular.forEach(result.Schedules, function(schedule) {						
-						for (var i = 0; i < svc.rawSchedules.length; i++) {
-							if (schedule.PersonId === svc.rawSchedules[i].PersonId && svc.rawSchedules[i].Date === schedule.Date) {
-								svc.rawSchedules[i] = schedule;
-								break;
-							}
-						}
-					});
-					svc.mergeSchedules(svc.rawSchedules, scheduleDateMoment, timezone);
-					afterLoading();
-				});
-			};
-
-			svc.resetSchedulesForPeople = function(personIds) {
-				angular.forEach(personIds, function(person) {
-					var length = svc.groupScheduleVm.Schedules.length;
-					for (var i = 0; i < length; i++) {
-						var schedule = svc.groupScheduleVm.Schedules[i];
-						if (person === schedule.PersonId) {
-							schedule.IsSelected = false;
-							var shiftsForSelectedDate = schedule.Shifts.filter(function(shift) {
-								return shift.Date === schedule.Date;
-							});
-							if (shiftsForSelectedDate.length > 0) {
-								angular.forEach(shiftsForSelectedDate[0].Projections, function(projection) {
-									projection.Selected = false;
-								});
-							}
+				angular.forEach(result.Schedules, function(schedule) {
+					for (var i = 0; i < svc.rawSchedules.length; i++) {
+						if (schedule.PersonId === svc.rawSchedules[i].PersonId && svc.rawSchedules[i].Date === schedule.Date) {
+							svc.rawSchedules[i] = schedule;
 							break;
 						}
 					}
 				});
+				svc.mergeSchedules(svc.rawSchedules, scheduleDateMoment, timezone);
+				afterLoading();
+			});
+		};
 
-			};
-
-			svc.getEarliestStartOfSelectedSchedule = function (scheduleDateMoment, selectedPersonIds) {
-				selectedPersonIds.forEach(function (x) {
-					if (typeof x !== 'string')
-						throw "Invalid parameter.";
-				});
-
-				var startUpdated = false;
-				var earlistStart = moment("2099-12-31");
-
-				svc.groupScheduleVm.Schedules.forEach(function (schedule) {
-					var scheduleStart = moment(schedule.ScheduleStartTime());
-
-					if (selectedPersonIds.indexOf(schedule.PersonId) > -1 && scheduleStart < earlistStart) {
-						startUpdated = true;
-						earlistStart = scheduleStart;
-					}
-				});
-
-				if (!startUpdated) {
-					// Set to 08:00 for empty schedule or day off
-					earlistStart = scheduleDateMoment.startOf('day').add(8, 'hour');
-				}
-			
-				return earlistStart.toDate();
-			}
-
-			svc.getLatestStartOfSelectedSchedule = function (scheduleDateMoment, selectedPersonIds) {
-				selectedPersonIds.forEach(function (x) {
-					if (typeof x !== 'string')
-						throw "Invalid parameter.";
-				});
-
-				var startUpdated = false;
-				var latestStart = scheduleDateMoment.startOf('day');
-
-				svc.groupScheduleVm.Schedules.forEach(function (schedule) {
-					var scheduleStart = moment(schedule.ScheduleStartTime());
-
-					if (selectedPersonIds.indexOf(schedule.PersonId) > -1 && scheduleStart > latestStart) {
-						startUpdated = true;
-						latestStart = scheduleStart;
-					}
-				});
-
-				return startUpdated ? latestStart.toDate() : null;
-			};
-
-			svc.getLatestPreviousDayOvernightShiftEnd = function (scheduleDateMoment, selectedPersonIds) {
-				selectedPersonIds.forEach(function (x) {
-					if (typeof x !== 'string')
-						throw "Invalid parameter.";
-				});
-
-				var previousDayShifts = [];
-
-				svc.groupScheduleVm.Schedules.forEach(function (schedule) {
-					if (selectedPersonIds.indexOf(schedule.PersonId) > -1) {
-						previousDayShifts = previousDayShifts.concat(schedule.Shifts.filter(function(shift) {
-							return shift.Projections.length > 0
-								&& shift.Date !== scheduleDateMoment.format('YYYY-MM-DD');
-						}));
-					}
-				});
-
-				if (previousDayShifts.length === 0) return null;
-
-				var latestEndTimeMoment = null;
-
-				previousDayShifts.forEach(function(shift) {
-					shift.Projections.forEach(function(projection) {
-						var projectionEndMoment = moment(projection.Start).add(projection.Minutes, 'minute');
-						if (latestEndTimeMoment === null || latestEndTimeMoment < projectionEndMoment)
-							latestEndTimeMoment = projectionEndMoment;
-					});
-				});
-
-				return latestEndTimeMoment ? latestEndTimeMoment.toDate() : null;
-			}
-
-			svc.getLatestStartTimeOfSelectedScheduleProjection = function (scheduleDateMoment, selectedPersonIds) {
-
-				selectedPersonIds.forEach(function(x) {
-					if (typeof x !== 'string')
-						throw "Invalid parameter.";
-				});
-
-				var latestStart = null;
-				var projectionShiftLayerIds = [];
-				var currentDayShifts = [];
-
-				svc.groupScheduleVm.Schedules.forEach(function (schedule) {
-					if (selectedPersonIds.indexOf(schedule.PersonId) > -1) {
-						currentDayShifts = currentDayShifts.concat(schedule.Shifts.filter(function (shift) {
-							return shift.Date === scheduleDateMoment.format('YYYY-MM-DD');
-						}));
-					}
-				});
-				currentDayShifts.forEach(function (shift) {
-					if (shift.Projections) {
-						shift.Projections.forEach(function (projection) {
-							var scheduleStart = moment(projection.Start).toDate();
-							if (projection.Selected && (latestStart === null || scheduleStart >= latestStart )) {
-							    var exist =  projection.ShiftLayerIds && projection.ShiftLayerIds.some(function (layerId) {
-									return projectionShiftLayerIds.indexOf(layerId) > -1;
-								});
-								if (exist) return;
-
-								latestStart = scheduleStart;
-								projectionShiftLayerIds = projectionShiftLayerIds.concat(projection.ShiftLayerIds);
-							}
+		svc.resetSchedulesForPeople = function(personIds) {
+			angular.forEach(personIds, function(person) {
+				var length = svc.groupScheduleVm.Schedules.length;
+				for (var i = 0; i < length; i++) {
+					var schedule = svc.groupScheduleVm.Schedules[i];
+					if (person === schedule.PersonId) {
+						schedule.IsSelected = false;
+						var shiftsForSelectedDate = schedule.Shifts.filter(function(shift) {
+							return shift.Date === schedule.Date;
 						});
+						if (shiftsForSelectedDate.length > 0) {
+							angular.forEach(shiftsForSelectedDate[0].Projections, function(projection) {
+								projection.Selected = false;
+							});
+						}
+						break;
 					}
-				});
-				return latestStart;
-			};
+				}
+			});
+
+		};
+
+		svc.getEarliestStartOfSelectedSchedule = function(scheduleDateMoment, selectedPersonIds) {
+			selectedPersonIds.forEach(function(x) {
+				if (!angular.isString(x))
+					throw "Invalid parameter.";
+			});
+
+			var startUpdated = false;
+			var earlistStart = moment("2099-12-31");
+
+			svc.groupScheduleVm.Schedules.forEach(function(schedule) {
+				var scheduleStart = moment(schedule.ScheduleStartTime());
+
+				if (selectedPersonIds.indexOf(schedule.PersonId) > -1 && scheduleStart < earlistStart) {
+					startUpdated = true;
+					earlistStart = scheduleStart;
+				}
+			});
+
+			if (!startUpdated) {
+				// Set to 08:00 for empty schedule or day off
+				earlistStart = scheduleDateMoment.startOf('day').add(8, 'hour');
+			}
+
+			return earlistStart.toDate();
 		}
-	]);
+
+		svc.getLatestStartOfSelectedSchedule = function(scheduleDateMoment, selectedPersonIds) {
+			selectedPersonIds.forEach(function(x) {
+				if (!angular.isString(x))
+					throw "Invalid parameter.";
+			});
+
+			var startUpdated = false;
+			var latestStart = scheduleDateMoment.startOf('day');
+
+			svc.groupScheduleVm.Schedules.forEach(function(schedule) {
+				var scheduleStart = moment(schedule.ScheduleStartTime());
+
+				if (selectedPersonIds.indexOf(schedule.PersonId) > -1 && scheduleStart > latestStart) {
+					startUpdated = true;
+					latestStart = scheduleStart;
+				}
+			});
+
+			return startUpdated ? latestStart.toDate() : null;
+		};
+
+		svc.getLatestPreviousDayOvernightShiftEnd = function(scheduleDateMoment, selectedPersonIds) {
+			selectedPersonIds.forEach(function(x) {
+				if (!angular.isString(x))
+					throw "Invalid parameter.";
+			});
+
+			var previousDayShifts = [];
+
+			svc.groupScheduleVm.Schedules.forEach(function(schedule) {
+				if (selectedPersonIds.indexOf(schedule.PersonId) > -1) {
+					previousDayShifts = previousDayShifts.concat(schedule.Shifts.filter(function(shift) {
+						return shift.Projections.length > 0 &&
+							shift.Date !== scheduleDateMoment.format('YYYY-MM-DD');
+					}));
+				}
+			});
+
+			if (previousDayShifts.length === 0) return null;
+
+			var latestEndTimeMoment = null;
+
+			previousDayShifts.forEach(function(shift) {
+				shift.Projections.forEach(function(projection) {
+					var projectionEndMoment = moment(projection.Start).add(projection.Minutes, 'minute');
+					if (latestEndTimeMoment === null || latestEndTimeMoment < projectionEndMoment)
+						latestEndTimeMoment = projectionEndMoment;
+				});
+			});
+
+			return latestEndTimeMoment ? latestEndTimeMoment.toDate() : null;
+		}
+
+		svc.getLatestStartTimeOfSelectedScheduleProjection = function(scheduleDateMoment, selectedPersonIds) {
+
+			selectedPersonIds.forEach(function(x) {
+				if (!angular.isString(x))
+					throw "Invalid parameter.";
+			});
+
+			var latestStart = null;
+			var projectionShiftLayerIds = [];
+			var currentDayShifts = [];
+
+			svc.groupScheduleVm.Schedules.forEach(function(schedule) {
+				if (selectedPersonIds.indexOf(schedule.PersonId) > -1) {
+					currentDayShifts = currentDayShifts.concat(schedule.Shifts.filter(function(shift) {
+						return shift.Date === scheduleDateMoment.format('YYYY-MM-DD');
+					}));
+				}
+			});
+			currentDayShifts.forEach(function(shift) {
+				if (shift.Projections) {
+					shift.Projections.forEach(function(projection) {
+						var scheduleStart = moment(projection.Start).toDate();
+						if (projection.Selected && (latestStart === null || scheduleStart >= latestStart)) {
+							var exist = projection.ShiftLayerIds && projection.ShiftLayerIds.some(function(layerId) {
+								return projectionShiftLayerIds.indexOf(layerId) > -1;
+							});
+							if (exist) return;
+
+							latestStart = scheduleStart;
+							projectionShiftLayerIds = projectionShiftLayerIds.concat(projection.ShiftLayerIds);
+						}
+					});
+				}
+			});
+			return latestStart;
+		};
+	}
 })();

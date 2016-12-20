@@ -2,7 +2,7 @@
 	'use strict';
 	angular.module('wfm.teamSchedule')
 		.directive('scheduleTable', scheduleTableDirective)
-		.controller('scheduleTableCtrl', ['$scope', 'Toggle', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', 'ScheduleNoteManagementService', scheduleTableController]);
+		.controller('ScheduleTableController', ['$scope', 'Toggle', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', 'ScheduleNoteManagementService', ScheduleTableController]);
 
 	function scheduleTableDirective() {
 		return {
@@ -16,12 +16,12 @@
 			restrict: 'E',
 			controllerAs: 'vm',
 			bindToController: true,
-			controller: 'scheduleTableCtrl',
+			controller: 'ScheduleTableController',
 			templateUrl: 'app/teamSchedule/html/scheduletable.html'
 		};
 	}
 
-	function scheduleTableController($scope, toggleSvc, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt) {
+	function ScheduleTableController($scope, toggleSvc, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt) {
 		var vm = this;
 
 		vm.updateAllSelectionInCurrentPage = function (isAllSelected) {

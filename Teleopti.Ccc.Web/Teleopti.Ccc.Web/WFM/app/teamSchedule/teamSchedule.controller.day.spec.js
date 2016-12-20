@@ -165,7 +165,7 @@ describe("teamschedule controller tests", function() {
 	}));
 		
 	function setUpController($controller) {
-		return $controller("TeamScheduleCtrl", {
+		return $controller("TeamScheduleController", {
 			$scope: rootScope,
 			personSelectionSvc: personSelection
 		});

@@ -1,17 +1,14 @@
-﻿(function () {
+﻿(function() {
 	"use strict";
+	angular.module("wfm.teamSchedule").service("SwapShifts", ["$http", SwapShiftsSevice]);
 
-	angular.module("wfm.teamSchedule").service("SwapShifts", [
-		"$http",
-		function ($http) {
-			var svc = this;
+	function SwapShiftsSevice($http) {
+		var svc = this;
+		var url = "../api/TeamSchedule/SwapShifts";
+		svc.swapShifts = swapShifts;
 
-			var url = "../api/TeamSchedule/SwapShifts";
-			svc.swapShifts = swapShifts;
-
-			function swapShifts(swapShiftsForm) {
-				return $http.post(url, swapShiftsForm);
-			}
+		function swapShifts(swapShiftsForm) {
+			return $http.post(url, swapShiftsForm);
 		}
-	]);
+	}
 })();

@@ -61,7 +61,7 @@
 
 		shiftCategorySvc.fetchShiftCategories().then(function(response){
 			vm.shiftCategoriesList = response.data;
-			if (Array.isArray(response.data)) {
+			if (angular.isArray(response.data)) {
 				response.data.forEach(function (shiftCat) {
 					var displayColorHex = shiftCat.DisplayColor.substring(1);
 					shiftCat.ContrastColor = getContrastYIQ(displayColorHex);

@@ -85,6 +85,7 @@
 				true
 			);
 			$wfmModal.confirm(message, title).then(function (result) {
+				
 				vm.resetActiveCmd();
 
 				if (result) {

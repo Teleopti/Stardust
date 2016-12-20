@@ -35,7 +35,7 @@
 		vm.removeActivity = function () {
 			var personIds = vm.selectedPersonProjections.map(function (x) { return x.PersonId; });
 			var personProjectionsWithSelectedActivities = vm.selectedPersonProjections.filter(function (x) {
-				return (Array.isArray(x.SelectedActivities) && x.SelectedActivities.length > 0);
+				return (angular.isArray(x.SelectedActivities) && x.SelectedActivities.length > 0);
 			});
 			
 			var requestData = {				

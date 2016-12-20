@@ -1,6 +1,6 @@
 ﻿(function () {
 	'use strict';
-	angular.module('wfm.teamSchedule').controller('TeamScheduleCtrl', [
+	angular.module('wfm.teamSchedule').controller('TeamScheduleController', [
 		'$scope',
 		'$q',
 		'$translate',

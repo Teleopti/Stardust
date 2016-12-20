@@ -1,45 +1,45 @@
 ﻿(function() {
 	'use strict';
 
-	angular.module('wfm.teamSchedule').controller('commandConfirmDialog',
-		['$scope', '$mdDialog', '$translate', commandConfirmDialog]);
+	angular.module('wfm.teamSchedule').controller('CommandConfirmDialogController',
+		['$scope', '$mdDialog', '$translate', CommandConfirmDialogController]);
 
 
-	function commandConfirmDialog($scope, $mdDialog, $translate) {
-
-		var ctrl = $scope;
+	function CommandConfirmDialogController($scope, $mdDialog, $translate) {
+		//I am afraid this is dialog not used at all. 
+		var vm = this;
 
 		init();
 		
 		function init() {
-			$scope.commandTitle = ctrl.commandTitle;
-			$scope.needFix = false;
-			$scope.showFixDetail = false;
-			$scope.toggleFixDetail = toggleFixDetail;
-			$scope.translatedMessage = message(ctrl.getTargets().length);
-			$scope.hasError = false;
-			$scope.isRemoveCommand = ctrl.commandTitle.indexOf('Remove') > -1;
-			$scope.isRemoveAbsence = ctrl.commandTitle === 'RemoveAbsence';
-			$scope.getCommandMessage = ctrl.getCommandMessage;
-			if ($scope.isRemoveAbsence) {
-				$scope.removeFullDayAbsence = false;
-				$scope.toggleRemoveFullDayAbsence = function () {					
-					$scope.removeFullDayAbsence = !$scope.removeFullDayAbsence;
+			vm.commandTitle = $scope.commandTitle;
+			vm.needFix = false;
+			vm.showFixDetail = false;
+			vm.toggleFixDetail = toggleFixDetail;
+			vm.translatedMessage = message($scope.getTargets().length);
+			vm.hasError = false;
+			vm.isRemoveCommand = $scope.commandTitle.indexOf('Remove') > -1;
+			vm.isRemoveAbsence = $scope.commandTitle === 'RemoveAbsence';
+			vm.getCommandMessage = $scope.getCommandMessage;
+			if (vm.isRemoveAbsence) {
+				vm.removeFullDayAbsence = false;
+				vm.toggleRemoveFullDayAbsence = function () {					
+					vm.removeFullDayAbsence = !vm.removeFullDayAbsence;
 				};
 			}
 
-			if (ctrl.fix) {
-				$scope.needFix = true;
-				$scope.translatedWarningMessage = warningMessage(ctrl.fix.targets.length);
-				$scope.fix = getFix(ctrl.fix.action);
-				$scope.fixTargets = ctrl.fix.targets;
-			} else if (ctrl.require) {
-				checkRequire(ctrl.getTargets().length);
+			if ($scope.fix) {
+				vm.needFix = true;
+				vm.translatedWarningMessage = warningMessage($scope.fix.targets.length);
+				vm.fix = getFix($scope.fix.action);
+				vm.fixTargets = $scope.fix.targets;
+			} else if ($scope.require) {
+				checkRequire($scope.getTargets().length);
 			}
 			
-			$scope.apply = getApply(ctrl.command);
-			$scope.hide = function () { $scope.showModal = false; };
-			$scope.cancel = function () { $scope.showModal = false; };
+			vm.apply = getApply($scope.command);
+			vm.hide = function () { vm.showModal = false; };
+			vm.cancel = function () { vm.showModal = false; };
 
 		}
 
@@ -57,43 +57,43 @@
 
 		function getApply(action) {
 			return function () {
-				if ($scope.isRemoveAbsence) {
-					action($scope.removeFullDayAbsence);
+				if (vm.isRemoveAbsence) {
+					action(vm.removeFullDayAbsence);
 				} else {
 					action();
 				}
 
-				$scope.showModal = false;
+				vm.showModal = false;
 			};
 		}
 
 		function checkRequire(targetsLength) {
-			if (ctrl.require) {
-				if (!ctrl.require.check(targetsLength)) {
-					$scope.translatedErrorMessage = errorMessage(ctrl.require.message);
-					$scope.hasError = true;
-					$scope.needFix = false;
+			if ($scope.require) {
+				if (!$scope.require.check(targetsLength)) {
+					vm.translatedErrorMessage = errorMessage($scope.require.message);
+					vm.hasError = true;
+					vm.needFix = false;
 				}
 			} else {
 				if (targetsLength <= 0) {
-					$scope.translatedErrorMessage = errorMessage('MustSelectAtLeastOneAgent');
-					$scope.hasError = true;
-					$scope.needFix = false;
+					vm.translatedErrorMessage = errorMessage('MustSelectAtLeastOneAgent');
+					vm.hasError = true;
+					vm.needFix = false;
 				}
 			}
 		}
 
 		function getFix(action) {
 			return function () {
-				action($scope.removeFullDayAbsence);
-				$scope.needFix = false;
-				$scope.translatedMessage = message(ctrl.getTargets().length);
-				checkRequire(ctrl.getTargets().length);
+				action(vm.removeFullDayAbsence);
+				vm.needFix = false;
+				vm.translatedMessage = message($scope.getTargets().length);
+				checkRequire($scope.getTargets().length);
 			};
 		}
 
 		function toggleFixDetail() {			
-			$scope.showFixDetail = !$scope.showFixDetail;
+			vm.showFixDetail = !vm.showFixDetail;
 		}
 	}
 })();

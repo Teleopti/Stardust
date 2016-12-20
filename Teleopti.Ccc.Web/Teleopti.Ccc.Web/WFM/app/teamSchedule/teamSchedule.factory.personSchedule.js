@@ -1,8 +1,8 @@
 ﻿(function() {
 	'use strict';
-	angular.module('wfm.teamSchedule').factory('PersonSchedule', ['$filter',PersonSchedule]);
+	angular.module('wfm.teamSchedule').factory('PersonSchedule', ['$filter',personScheduleFactory]);
 
-	function PersonSchedule($filter) {
+	function personScheduleFactory($filter) {
 
 		var personScheduleFactory = {
 			Create: create
@@ -60,21 +60,21 @@
 
 			var dayOffVm = createDayOffViewModel(schedule.DayOff, timeLine, personSchedule);
 						
-			if (projectionVms !== undefined) personSchedule.Shifts = [shiftVm];
-			if (dayOffVm !== undefined) personSchedule.DayOffs = [dayOffVm];
+			if (angular.isDefined(projectionVms)) personSchedule.Shifts = [shiftVm];
+			if (angular.isDefined(dayOffVm)) personSchedule.DayOffs = [dayOffVm];
 			
 			return personSchedule;
 		}
 
 		function createProjections(projections, timeline, shiftVm) {
-			if (projections == undefined || projections.length === 0) {
+			if (angular.isUndefined(projections) || projections.length === 0) {
 				return undefined;
 			}
 
 			var projectionVms = projections.map(function(projection) {
 				return createShiftProjectionViewModel(projection, timeline, shiftVm);
 			}).filter(function(result) {
-				return result !== undefined;
+				return angular.isDefined(result);
 			});
 
 			for (var i = 0; i < projectionVms.length; i ++) {
@@ -85,7 +85,7 @@
 		}
 
 		function createDayOffViewModel(dayOff, timeLine, personSchedule) {
-			if (dayOff == undefined) {
+			if (angular.isUndefined(dayOff) || dayOff === null) {
 				return undefined;
 			}
 
@@ -186,14 +186,14 @@
 			};
 
 			var otherProjections = createProjections(otherSchedule.Projection, timeLine, newShift);
-			if (otherProjections != undefined) {
+			if (angular.isDefined(otherProjections)) {
 				newShift.Projections = otherProjections;
 				this.Shifts.push(newShift);
 			}
 
 			var otherDayOffVm = createDayOffViewModel(otherSchedule.DayOff, timeLine, this);
 
-			if (otherDayOffVm != undefined) {
+			if (angular.isDefined(otherDayOffVm)) {
 				this.DayOffs.push(otherDayOffVm);
 			}
 		}
@@ -209,14 +209,14 @@
 			};
 
 			var otherProjections = createProjections(otherSchedule.Projection, timeLine, newShift);
-			if (otherProjections != undefined) {
+			if (angular.isDefined(otherProjections)) {
 				newShift.Projections = otherProjections;
 				this.ExtraShifts.push(newShift);
 			}
 
 			var otherDayOffVm = createDayOffViewModel(otherSchedule.DayOff, timeLine, this);
 
-			if (otherDayOffVm != undefined) {
+			if (angular.isDefined(otherDayOffVm)) {
 				this.DayOffs.push(otherDayOffVm);
 			}
 		}

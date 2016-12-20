@@ -1,6 +1,8 @@
 (function() {
 	'use strict';
-	angular.module('wfm.teamSchedule').directive('headWidthHelper', [function() {
+	angular.module('wfm.teamSchedule').directive('headWidthHelper', [headWidthHelperDirective]);
+
+	function headWidthHelperDirective() {
 		return {
 			restrict: "A",
 			scope: {},
@@ -18,7 +20,7 @@
 				}
 			}
 		}
-	}]);
+	}
 
 	function isMobilecheck() {
 		var check = false;

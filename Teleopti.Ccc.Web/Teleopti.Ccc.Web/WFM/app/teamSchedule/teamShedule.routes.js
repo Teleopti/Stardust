@@ -7,10 +7,10 @@
 		$stateProvider.state('teams', {
 			url: '/teams',
 			templateUrl: 'app/teamSchedule/html/schedule.html',
-			controller: 'TeamScheduleDefaultCtrl as vm'
+			controller: 'TeamScheduleDefaultController as vm'
 		}).state('teams.dayView', {
 			templateUrl: 'app/teamSchedule/html/dayViewSchedule.html',
-			controller: 'TeamScheduleCtrl as vm',
+			controller: 'TeamScheduleController as vm',
 			params: {
 				keyword: '',
 				selectedDate: new Date()
@@ -18,7 +18,7 @@
 		}).state('teams.for', {
 			url: '/?personId',
 			templateUrl: 'app/teamSchedule/html/dayViewSchedule.html',
-			controller: 'TeamScheduleCtrl as vm',
+			controller: 'TeamScheduleController as vm',
 			params: {
 				personId: ''
 			}
@@ -29,7 +29,7 @@
 				selectedDate: new Date()
 			},
 			templateUrl: 'app/teamSchedule/html/weekViewSchedule.html',
-			controller: 'TeamScheduleWeeklyCtrl as vm'
+			controller: 'TeamScheduleWeeklyController as vm'
 		})
 	}
 })();

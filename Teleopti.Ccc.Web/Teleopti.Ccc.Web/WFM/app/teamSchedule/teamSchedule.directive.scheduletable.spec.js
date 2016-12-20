@@ -465,7 +465,7 @@ describe('teamschedule schedule table controller tests', function () {
 	}
 
 	function setUpController($controller) {
-		return $controller('scheduleTableCtrl', { $scope: scope, personSelectionSvc: personSelection });
+		return $controller('ScheduleTableController', { $scope: scope, personSelectionSvc: personSelection });
 	}
 
 	function createSchedule(personId, belongsToDate, dayOff, projectionInfoArray) {

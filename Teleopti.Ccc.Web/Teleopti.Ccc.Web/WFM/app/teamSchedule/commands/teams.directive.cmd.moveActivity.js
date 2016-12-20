@@ -136,7 +136,7 @@
 	    	var validAgents = vm.selectedAgents.filter(function(agent) {
 			    return invalidPersonIds.indexOf(agent.PersonId) < 0;
 		    }).filter(function (x) {
-	    		return (Array.isArray(x.SelectedActivities) && x.SelectedActivities.length === 1);
+	    		return (angular.isArray(x.SelectedActivities) && x.SelectedActivities.length === 1);
 	    	});
 
 			var personActivities = [];
@@ -172,7 +172,7 @@
 	    vm.moveActivity = function () {
 		    var requestData = getRequestData();
 	    	var multiActivitiesSelectedAgentsList = vm.selectedAgents.filter(function (x) {
-	    		return (Array.isArray(x.SelectedActivities) && x.SelectedActivities.length > 1);
+	    		return (angular.isArray(x.SelectedActivities) && x.SelectedActivities.length > 1);
 	    	});
 
 	    	if (multiActivitiesSelectedAgentsList.length > 0) {

@@ -6,7 +6,7 @@
 			if (this == null) {
 				throw new TypeError('Array.prototype.find called on null or undefined');
 			}
-			if (typeof predicate !== 'function') {
+			if (!angular.isFunction(predicate)) {
 				throw new TypeError('predicate must be a function');
 			}
 			var list = Object(this);
@@ -135,7 +135,7 @@
 		}
 
 		function collectResult(key, value, results) {
-			if (results[key] === undefined)
+			if (angular.isUndefined(results[key]))
 				results[key] = [value];
 			else if (results[key].indexOf(value) < 0)
 				results[key].push(value);
