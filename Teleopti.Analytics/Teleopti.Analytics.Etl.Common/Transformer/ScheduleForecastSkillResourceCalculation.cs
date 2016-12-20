@@ -1,32 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer
 {
 	public class ScheduleForecastSkillResourceCalculation : IScheduleForecastSkillResourceCalculation
 	{
+		private readonly ShovelResources _shovelResources;
 		private readonly IDictionary<ISkill, IEnumerable<ISkillDay>> _skillDaysDictionary;
 		private readonly ISchedulingResultService _schedulingResultService;
-		private readonly IList<ISkillStaffPeriod> _skillStaffPeriodCollection;
+		private readonly ISkillStaffPeriodHolder _skillStaffPeriodHolder;
+		private readonly IScheduleDictionary _scheduleDictionary;
+		private readonly IEnumerable<ISkill> _skillsWithSkillDays;
 		private Dictionary<IScheduleForecastSkillKey, IScheduleForecastSkill> _scheduleForecastSkillDictionary;
 		private readonly int _intervalsPerDay;
 		private readonly DateTimePeriod _period;
-
-		private ScheduleForecastSkillResourceCalculation()
+		
+		public ScheduleForecastSkillResourceCalculation(ShovelResources shovelResources,
+									IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysDictionary, 
+									ISchedulingResultService schedulingResultService, 
+									ISkillStaffPeriodHolder skillStaffPeriodHolder,
+									IScheduleDictionary scheduleDictionary,
+									IEnumerable<ISkill> skillsWithSkillDays,
+									int intervalsPerDay, 
+									DateTimePeriod period)
 		{
-
-		}
-
-		public ScheduleForecastSkillResourceCalculation(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysDictionary, ISchedulingResultService schedulingResultService, IList<ISkillStaffPeriod> skillStaffPeriodCollection, int intervalsPerDay, DateTimePeriod period)
-			: this()
-		{
+			_shovelResources = shovelResources;
 			_skillDaysDictionary = skillDaysDictionary;
 			_intervalsPerDay = intervalsPerDay;
 			_period = period;
 			_schedulingResultService = schedulingResultService;
-			_skillStaffPeriodCollection = skillStaffPeriodCollection;
+			_skillStaffPeriodHolder = skillStaffPeriodHolder;
+			_scheduleDictionary = scheduleDictionary;
+			_skillsWithSkillDays = skillsWithSkillDays;
 		}
 
 		public Dictionary<IScheduleForecastSkillKey, IScheduleForecastSkill> GetResourceDataExcludingShrinkage(DateTime insertDateTime)
@@ -45,12 +53,15 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		{
 			initializeScheduleForecastSkillDictionary();
 
-			foreach (ISkillStaffPeriod skillStaffPeriod in _skillStaffPeriodCollection)
+			
+			foreach (ISkillStaffPeriod skillStaffPeriod in _skillStaffPeriodHolder.SkillStaffPeriodList(_skillsWithSkillDays, _scheduleDictionary.Period.VisiblePeriod))
 			{
 				skillStaffPeriod.Payload.UseShrinkage = useShrinkage;
 			}
 
 			_schedulingResultService.SchedulingResult(_period);
+			var dateOnlyPeriodInUtc = _period.ToDateOnlyPeriod(TimeZoneInfo.Utc); //don't know if correct - copied from StageScheduleForecastSkillJobStep when getting skills
+			_shovelResources.Execute(_skillStaffPeriodHolder, _scheduleDictionary, _skillsWithSkillDays, dateOnlyPeriodInUtc);
 
 			collectResourceData(_skillDaysDictionary, useShrinkage, insertDateTime);
 		}
@@ -129,6 +140,5 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				scheduleForecastSkill.UpdateDate = insertDateTime;
 			}
 		}
-
 	}
 }

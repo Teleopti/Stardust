@@ -5,6 +5,7 @@ using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
@@ -45,10 +46,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 				{
 					ISchedulingResultService schedulingResultService =
 						new SchedulingResultService(schedulingResultStateHolder, skills, new CascadingPersonSkillProvider());
-					DateTimePeriod visiblePeriod = scheduleDictionary.Period.VisiblePeriod;
 					IScheduleForecastSkillResourceCalculation scheduleForecastSkillResourceCalculation =
-						new ScheduleForecastSkillResourceCalculation(skillDaysDictionary, schedulingResultService,
-																	 schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(skills, visiblePeriod),
+						new ScheduleForecastSkillResourceCalculation(new ShovelResources(new AddResourcesToSubSkills(), new ReducePrimarySkillResources(), new SkillGroupPerActivityProvider(), new PrimarySkillOverstaff(), new TimeZoneGuard()), 
+																	skillDaysDictionary, schedulingResultService,
+																	schedulingResultStateHolder.SkillStaffPeriodHolder,
+																	schedulingResultStateHolder.Schedules,
+																	skills,
 																	 _jobParameters.IntervalsPerDay, period);
 
 					//Transform data from Raptor to Matrix format

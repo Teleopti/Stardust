@@ -6,7 +6,11 @@ using Rhino.Mocks;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData;
+using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using SkillFactory = Teleopti.Ccc.TestCommon.FakeData.SkillFactory;
@@ -38,12 +42,16 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			_skillDaysDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
 			_skillDaysDictionary.Add(skill, skillDayCollection.ToList());
 
-			ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod();
-			IList<ISkillStaffPeriod> skillStaffPeriods = new List<ISkillStaffPeriod> { skillStaffPeriod };
-
 			const int intervalPerDay = 96;
 
-			_target = new ScheduleForecastSkillResourceCalculation(_skillDaysDictionary, _schedulingResultService, skillStaffPeriods, intervalPerDay, _scheduleLoadedForPeriod);
+			_target = new ScheduleForecastSkillResourceCalculation(new ShovelResources(new AddResourcesToSubSkills(), new ReducePrimarySkillResources(), new SkillGroupPerActivityProvider(), new PrimarySkillOverstaff(), new TimeZoneGuard()),
+				_skillDaysDictionary, 
+				_schedulingResultService,
+				new SkillStaffPeriodHolder(_skillDaysDictionary),  
+				new ScheduleDictionaryForTest(new Scenario("_"), new DateTimePeriod()),
+				new[] {skill},
+				intervalPerDay, 
+				_scheduleLoadedForPeriod);
 		}
 
 		[Test]

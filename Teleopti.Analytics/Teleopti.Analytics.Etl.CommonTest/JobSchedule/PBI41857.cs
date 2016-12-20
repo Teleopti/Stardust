@@ -81,7 +81,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 			}
 		}
 
-		[Test, Ignore("PBI41857")]
+		[Test]
 		public void ShouldShovel()
 		{
 			var date = new DateOnly(2016, 12, 20);
