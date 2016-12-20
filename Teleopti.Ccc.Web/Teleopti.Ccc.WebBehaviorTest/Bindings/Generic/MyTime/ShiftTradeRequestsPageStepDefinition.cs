@@ -67,9 +67,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			if (owner == "anonym")
 				return Browser.Interactions.IsContain("#Request-shift-trade-bulletin-board .shift-trade-agent-name", "Anonym");
 			if (owner == "my")
-				return Browser.Interactions.IsAnyVisible(".shift-trade-my-schedule .shift-trade-layer");
+				return Browser.Interactions.IsVisible(".shift-trade-my-schedule .shift-trade-layer");
 
-			return Browser.Interactions.IsAnyVisible("#agent-in-bulletin-board");
+			return Browser.Interactions.IsVisible("#agent-in-bulletin-board");
 
 		}
 
@@ -430,7 +430,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			Browser.Interactions.TryUntil(
 				() => Browser.Interactions.Click("#agent-in-bulletin-board"),
-				() => Browser.Interactions.IsAnyVisible("#Request-add-shift-trade-detail-section"),
+				() => Browser.Interactions.IsVisible("#Request-add-shift-trade-detail-section"),
 				TimeSpan.FromMilliseconds(1000));
 
 			Browser.Interactions.AssertAnyContains("#Request-add-shift-trade-detail-section", Resources.SureToMakeShiftTrade);
@@ -442,7 +442,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			Browser.Interactions.TryUntil(
 				() => Browser.Interactions.Click("#agent-in-bulletin-board"),
-				() => Browser.Interactions.IsAnyVisible("#Request-add-shift-trade-detail-section"),
+				() => Browser.Interactions.IsVisible("#Request-add-shift-trade-detail-section"),
 				TimeSpan.FromMilliseconds(1000));
 		}
 

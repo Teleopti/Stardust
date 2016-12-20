@@ -14,6 +14,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 			Browser.Interactions.Click("#view-seatbookings-button");
 		}
 
+		[When(@"I navigate to seat map view")]
+		public void WhenINavigateToSeatMapView()
+		{
+			Browser.Interactions.TryUntil(() =>
+				{
+					Browser.Interactions.Click(".nav-item-active");
+					Browser.Interactions.Click("#view-seatbookings-button");
+				},
+				() => Browser.Interactions.IsVisible(".seatbooking-operations-add .add-agents"),
+				TimeSpan.FromMilliseconds(1000));
+		}
+
+		[When(@"I see advanced search")]
+		public void WhenISeeAdvancedSearch()
+		{
+			Browser.Interactions.TryUntil(
+				() => Browser.Interactions.Click(".seatbooking-operations-add .add-agents"),
+				() => Browser.Interactions.IsVisible("#advanced-search"),
+				TimeSpan.FromMilliseconds(1000));
+		}
+
 		[Then(@"the seat map booking should be opened")]
 		public void ThenTheSeatMapBookingShouldBeOpened()
 		{

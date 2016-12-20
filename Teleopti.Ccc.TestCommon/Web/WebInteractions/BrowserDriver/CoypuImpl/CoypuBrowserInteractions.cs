@@ -58,7 +58,10 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 		private void tryUntil(Action tryThis, Func<bool> until, TimeSpan waitBeforeRetry, Options o = null)
 		{
 			var opts = o ?? options();
+			var originalTimeOut = specialTimeout;
+			specialTimeout = TimeSpan.FromMilliseconds(1000);
 			_browser.TryUntil(tryThis, until, waitBeforeRetry, opts);
+			specialTimeout = originalTimeOut;
 		}
 
 		public string Javascript(string javascript)
@@ -75,7 +78,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 		{
 			tryUntil(tryThis, until, waitBeforeRetry);
 		}
-		public bool IsAnyVisible(string selector)
+		public bool IsVisible(string selector)
 		{
 			return _browser.FindCss(selector, optionsVisibleOnly()).Exists(options());
 		}

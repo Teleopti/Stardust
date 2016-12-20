@@ -108,8 +108,8 @@ Scenario: be able to close people list
 
 Scenario: be able to assign agent to selected seat
 	When I view Seat plan on "2015-01-01"
-	And I press seat map booking view button
-	And I click add agents to seat button
+	And I navigate to seat map view
+	And I see advanced search
 	And I search people with keyword 'I'
 	And I select agent 'I' from search list
 	And I click assign button

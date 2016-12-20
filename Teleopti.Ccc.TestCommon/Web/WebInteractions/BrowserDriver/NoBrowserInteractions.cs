@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			throw new NotImplementedException();
 		}
 
-		public bool IsAnyVisible(string selector)
+		public bool IsVisible(string selector)
 		{
 			throw new NotImplementedException();
 		}
