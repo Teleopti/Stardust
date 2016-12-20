@@ -11300,6 +11300,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter....
+        /// </summary>
+        public static string FilterThreeDots {
+            get {
+                return ResourceManager.GetString("FilterThreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Final.
         /// </summary>
         public static string Final {
@@ -12674,6 +12683,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string HideDetails {
             get {
                 return ResourceManager.GetString("HideDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide filter.
+        /// </summary>
+        public static string HideFilter {
+            get {
+                return ResourceManager.GetString("HideFilter", resourceCulture);
             }
         }
         
@@ -28408,6 +28426,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShowExcelReport {
             get {
                 return ResourceManager.GetString("ShowExcelReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show filter.
+        /// </summary>
+        public static string ShowFilter {
+            get {
+                return ResourceManager.GetString("ShowFilter", resourceCulture);
             }
         }
         

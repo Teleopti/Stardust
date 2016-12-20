@@ -3,7 +3,7 @@
 (function () {
 
 	angular.module('wfm.requests')
-		.factory('ShiftTradeGridConfiguration', ['$filter', 'Toggle', 'requestsDefinitions', function ($filter, toggleSvc, requestDefinitions) {
+		.factory('ShiftTradeGridConfiguration', ['$filter', '$translate', 'Toggle', 'requestsDefinitions', function ($filter, $translate, toggleSvc, requestDefinitions) {
 
 			var columns = [];
 
@@ -192,7 +192,7 @@
 						headerCellClass: 'request-subject-header',
 						filter: {
 							disableCancelFilterButton: true,
-							placeholder: 'Filter...'
+							placeholder: $translate.instant('FilterThreeDots')
 						},
 						visible: false,
 						pinnedRight: true,
@@ -216,7 +216,7 @@
 						cellTooltip: true,
 						filter: {
 							disableCancelFilterButton: true,
-							placeholder: 'Filter...'
+							placeholder: $translate.instant('FilterThreeDots')
 						},
 						filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\" > <input ng-enter=\"enter()\" ' +
 							'type=\"text\" class=\"ui-grid-filter-input ui-grid-filter-input-{{$index}}\" ng-model=\"colFilter.term\" ' +

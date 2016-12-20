@@ -15352,4 +15352,20 @@ These options are activated:
     <value>Include agents in states:</value>
     <comment>Text in filter by state group in RTA</comment>
   </data>
+  <data name="FilterThreeDots" xml:space="preserve">
+    <value>Filter...</value>
+    <comment>Tip message for WFM request module</comment>
+  </data>
+  <data name="HideFilter" xml:space="preserve">
+    <value>Hide filter</value>
+    <comment>Tip message for WFM request module</comment>
+  </data>
+  <data name="ShowFilter" xml:space="preserve">
+    <value>Show filter</value>
+    <comment>Tip message for WFM request module</comment>
+  </data>
+  <data name="UpdateResourceCalculations" xml:space="preserve">
+    <value>Update Resource Calculations</value>
+    <comment>Menu item in WFM request module</comment>
+  </data>
 </root>

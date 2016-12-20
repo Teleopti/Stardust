@@ -3,13 +3,11 @@
 (function () {
 
 	angular.module('wfm.requests')
-		.factory('TextAndAbsenceGridConfiguration', ['Toggle', function (toggleSvc) {
-
+		.factory('TextAndAbsenceGridConfiguration', ['Toggle', '$translate', function (toggleSvc, $translate) {
 			var columns = [];
 
 			var service = {
 				columnDefinitions: columnDefinitions
-				
 			}
 
 			function setupColumns() {
@@ -46,7 +44,7 @@
 					headerCellClass: 'request-subject-header',
 					filter: {
 						disableCancelFilterButton: true,
-						placeholder: 'Filter...'
+						placeholder: $translate.instant('FilterThreeDots')
 					},
 					filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\">' +
 						'<input xng-enter=\"enter()\" type=\"text\"  ng-model=\"colFilter.term\" ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\" aria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" /></div>'
@@ -61,7 +59,7 @@
 					cellTooltip: true,
 					filter: {
 						disableCancelFilterButton: true,
-						placeholder: 'Filter...'
+						placeholder: $translate.instant('FilterThreeDots')
 					},
 					filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\" > <input ng-enter=\"enter()\" type=\"text\" ng-model=\"colFilter.term\" ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\" aria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" /></div>'
 				},
@@ -95,25 +93,18 @@
 					};
 
 					columns.splice(12, 0, accountColumn);
-
 				}
-
-
 			}
 
 			function columnDefinitions() {
-
 				if (columns.length === 0) {
 					setupColumns();
 				}
 
 				// since upgrading to ui-grid 3.2.6, require copy of columns array
 				return angular.copy(columns);
-
 			}
 
 			return service;
-
 		}]);
-
 }());

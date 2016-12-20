@@ -13297,4 +13297,16 @@ Teleopti R&amp;D</value>
   <data name="DenyDueToTechnicalProblems" xml:space="preserve">
     <value>人力信息没有在系统中更新。请联系系统管理员。</value>
   </data>
+  <data name="FilterThreeDots" xml:space="preserve">
+    <value>筛选条件...</value>
+  </data>
+  <data name="HideFilter" xml:space="preserve">
+    <value>隐藏筛选栏</value>
+  </data>
+  <data name="ShowFilter" xml:space="preserve">
+    <value>显示筛选栏</value>
+  </data>
+  <data name="UpdateResourceCalculations" xml:space="preserve">
+    <value>更新资源计算</value>
+  </data>
 </root>
