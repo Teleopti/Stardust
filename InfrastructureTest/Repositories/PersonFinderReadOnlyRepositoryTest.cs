@@ -37,12 +37,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldMatchAllValuesInAllCriteriaInGivenTeams()
 		{
-			var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "Ashley Agent", 10,
+			var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "Ashley", 10,
 				new DateOnly(2012, 1, 1), new Dictionary<string, bool>(), new DateOnly(2011, 12, 1));
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
-			_target.FindInTeams(crit, new []{team1Id});
+			_target.FindInTeams(crit, new []{team1Id, team2Id});
 			Assert.That(crit.TotalRows, Is.EqualTo(1));
-		}	
+		}
+
+
+		[Test]
+		public void ShouldNotLoadPersonsInGivenTeamsWithMultipleConflictingSimpleCriteria()
+		{
+			var crit = new PersonFinderSearchCriteria(PersonFinderField.All,"Ashley Pierre",10,
+				new DateOnly(2016,1,1),new Dictionary<string,bool>(),new DateOnly(2011,12,1));
+			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
+			_target.FindInTeams(crit,new[] { team1Id, team2Id });
+			Assert.That(crit.TotalRows,Is.EqualTo(0));
+		}
 
 		[Test]
 		public void ShouldMatchAllValuesInAllCriteria()
