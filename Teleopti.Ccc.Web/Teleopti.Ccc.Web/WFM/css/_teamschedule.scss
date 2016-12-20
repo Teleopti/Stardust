@@ -315,11 +315,15 @@
 	}
 	.md-select-value {
 		align-items: flex-end;
-	}
+	}	
 }
 .organization-picker {
 	min-width: 200px !important;
 	margin: 0 0 0 -0.5em;
+
+	.must-hide {
+		display: none !important;
+	}
 
 	md-select-menu, md-content._md {
 		width: 100%;

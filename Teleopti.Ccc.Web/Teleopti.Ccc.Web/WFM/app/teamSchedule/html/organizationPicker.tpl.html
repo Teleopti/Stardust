@@ -1,6 +1,5 @@
 ﻿<div layout="row">
 	<md-input-container>
-	<label>{{'Organization' | translate}}</label>
 		<md-select ng-model="$ctrl.selectedTeamIds" md-on-close="$ctrl.onSelectionDone()" md-on-open="$ctrl.onPickerOpen()" md-selected-text="$ctrl.formatSelectedDisplayName()" data-md-container-class="organization-picker" multiple>
 			<md-select-header class="picker-select-header">
 				<input ng-model="$ctrl.searchTerm" type="search" placeholder="{{'SearchAnOrganization' | translate}}" class="picker-searchbox md-text" ng-keydown="$ctrl.onSearchOrganization($event)">
@@ -12,7 +11,7 @@
 						<i class="mdi" ng-class="site.expanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i>
 					</span>
 				</div>
-				<md-option ng-if="site.expanded" ng-value="team.id" ng-click="$ctrl.setCurrentSiteValue(site)" ng-repeat="team in site.teams | filter: $ctrl.processSearchTermFilter(site)">{{team.name}}</md-option>
+				<md-option ng-class="{'must-hide': !site.expanded }" ng-value="team.id" ng-click="$ctrl.setCurrentSiteValue(site)" ng-repeat="team in site.teams | filter: $ctrl.processSearchTermFilter(site)">{{team.name}}</md-option>
 			</md-optgroup>
 		</md-select>
 	 </md-input-container>
