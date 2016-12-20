@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -20,8 +19,8 @@ namespace Teleopti.Interfaces.Domain
 	public class SkillCombinationResource
 	{
 		public DateTime StartDateTime { get; set; }
+		public DateTime EndDateTime { get; set; }
 		public double Resource { get; set; }
-		public double ResourceWithShrinkage { get; set; }
 		public IEnumerable<Guid> SkillCombination { get; set; }
 	}
 
@@ -32,15 +31,7 @@ namespace Teleopti.Interfaces.Domain
 
 		public void Add(SkillCombinationResource skillCombinationResource)
 		{
-			if (_withShrinkage)
-			{
-				var skillCombinationInterval =
-					_skillCombinationResources.FirstOrDefault(x => x.StartDateTime == skillCombinationResource.StartDateTime && x.SkillCombination.SequenceEqual(skillCombinationResource.SkillCombination));
-				if (skillCombinationInterval != null)
-					skillCombinationInterval.ResourceWithShrinkage = skillCombinationResource.Resource;
-
-			}
-			else
+			if (!_withShrinkage)
 			{
 				_skillCombinationResources.Add(skillCombinationResource);
 			}

@@ -5,11 +5,13 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Intraday;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Intraday
 {
 	[TestFixture]
 	[UnitOfWorkTest]
+	[Ignore("WIP")]
 	public class SkillCombinationResourceRepositoryTest
 	{
 		public ISkillCombinationResourceRepository Target;
@@ -57,6 +59,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 
 			var combinationIdAfter = Target.LoadSkillCombination(new List<Guid> { skill1, skill2 });
 			combinationIdBefore.Should().Be.EqualTo(combinationIdAfter);
+		}
+
+		[Test][Ignore("ignore")]
+		public void ShouldPersistSkillCombinationResource()
+		{
+			var combinationResources = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2016, 12, 20, 0, 0, 0),
+					EndDateTime = new DateTime(2016, 12, 20, 0, 15, 0),
+					Resource = 1,
+					SkillCombination = new[] {Guid.NewGuid()}
+				}
+			};
+			Target.PersistSkillCombinationResource(combinationResources);
+
+			var loadedCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 0, 2016, 12, 20, 1));
+			loadedCombinationResources.Count().Should().Be.EqualTo(1);
+			
 		}
 	}
 

@@ -48,7 +48,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (models.Any())
 			{
 				_scheduleForecastSkillReadModelRepository.Persist(models, timeWhenResourceCalcDataLoaded);
-				//_skillCombinationResourceRepository.PersistSkillCombinationResource(resCalcData.SkillCombinationHolder.SkillCombinationResources);
+				if(resCalcData.SkillCombinationHolder != null)
+					_skillCombinationResourceRepository.PersistSkillCombinationResource(resCalcData.SkillCombinationHolder.SkillCombinationResources);
 			}
 			
 			_scheduleForecastSkillReadModelRepository.Purge();
@@ -109,7 +110,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private static void setUseShrinkage(IResourceCalculationData resourceCalculationData, DateTimePeriod period)
 		{
-			//resourceCalculationData.SkillCombinationHolder.StartRecodingValuesWithShrinkage();
+			resourceCalculationData.SkillCombinationHolder?.StartRecodingValuesWithShrinkage();
 			var periods = resourceCalculationData.SkillStaffPeriodHolder.SkillStaffPeriodList(resourceCalculationData.Skills,
 				period);
 			foreach (var skillStaffPeriod in periods)

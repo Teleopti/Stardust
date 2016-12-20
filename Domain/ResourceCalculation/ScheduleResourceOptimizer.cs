@@ -114,6 +114,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 										 .Add(new SkillCombinationResource
 											  {
 												  StartDateTime = completeIntervalPeriod.StartDateTime,
+												  EndDateTime = completeIntervalPeriod.EndDateTime,
 												  SkillCombination = resources.Key.Split('_').Select(Guid.Parse),
 												  Resource = resources.Value
 											  });

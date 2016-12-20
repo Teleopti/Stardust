@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldSpecifyRourceSkillCombinationOnInterval()
+		public void ShouldSpecifyResourceSkillCombinationOnInterval()
 		{
 			var activity = ActivityFactory.CreateActivity("phone");
 			activity.RequiresSkill = true;
