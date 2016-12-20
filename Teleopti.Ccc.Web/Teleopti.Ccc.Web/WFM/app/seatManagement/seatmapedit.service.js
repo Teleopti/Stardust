@@ -446,6 +446,8 @@ angular.module('wfm.seatMap')
 		 		var left = 0;
 		 		var offset = 20;
 		 		var maxRange = objects.length;
+				objects.sort(function(seatA, seatB) { return seatA.priority - seatB.priority });
+
 		 		for (var i = 0; i < maxRange; i ++) {
 		 			var o = objects[i];
 		 			if (i == 0) {
@@ -470,6 +472,7 @@ angular.module('wfm.seatMap')
 		 		var top = 0;
 		 		var offset = 20;
 		 		var maxRange = objects.length;
+		 		objects.sort(function (seatA, seatB) { return seatA.priority - seatB.priority });
 		 		for (var i = 0; i < maxRange; i++) {
 		 			var o = objects[i];
 		 			if (i == 0) {

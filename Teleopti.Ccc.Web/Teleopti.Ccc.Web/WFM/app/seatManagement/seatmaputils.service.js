@@ -406,12 +406,13 @@
 					canvas.renderAll();
 					var allSeats = getObjectsByType(canvas, 'seat');
 					for (var loadedSeat in allSeats) {
+						var seat = allSeats[loadedSeat];
 
-						allSeats[loadedSeat].priority = seatsIdAndPriorityDic[allSeats[loadedSeat].id];
-						allSeats[loadedSeat].name = seatsIdAndPriorityDic[allSeats[loadedSeat].id];
+						seat.priority = seatsIdAndPriorityDic[allSeats[loadedSeat].id];
+						seat.name = seat.priority;
 
-						if (allSeats[loadedSeat].priority > seatPriority) {
-							seatPriority = allSeats[loadedSeat].priority;
+						if (seat.priority > seatPriority) {
+							seatPriority = seat.priority;
 						}
 					}
 					canvas.renderAll();
