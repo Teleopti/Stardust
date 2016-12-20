@@ -28,14 +28,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<RequestFactory>().As<IRequestFactory>();
 			builder.RegisterType<PersonRequestCheckAuthorization>().As<IPersonRequestCheckAuthorization>();
-			if (_configuration.Toggle(Toggles.Wfm_Requests_Configurable_BusinessRules_For_ShiftTrade_40770))
-			{
-				builder.RegisterType<ConfigurableBusinessRuleProvider>().As<IBusinessRuleProvider>();
-			}
-			else
-			{
-				builder.RegisterType<BusinessRuleProvider>().As<IBusinessRuleProvider>();
-			}
+			registerType<IBusinessRuleProvider, ConfigurableBusinessRuleProvider, BusinessRuleProvider>(builder,
+					Toggles.Wfm_Requests_Configurable_BusinessRules_For_ShiftTrade_40770);
 			builder.RegisterType<BudgetGroupAllowanceSpecification>().As<IBudgetGroupAllowanceSpecification>();
 			builder.RegisterType<AlreadyAbsentSpecification>().As<IAlreadyAbsentSpecification>();
 			builder.RegisterType<AbsenceRequestUpdater>().As<IAbsenceRequestUpdater>().SingleInstance();
