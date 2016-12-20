@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 		private IAnalyticsPersonPeriodRepository _personPeriodRepository;
 		private IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private IAnalyticsAbsenceRepository _analyticsAbsenceRepository;
+		private IBusinessUnit _businessUnit;
 
 		[SetUp]
 		public void Setup()
@@ -33,12 +35,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			_personPeriodRepository = new FakeAnalyticsPersonPeriodRepository();
 			_analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
 			_analyticsAbsenceRepository = new FakeAnalyticsAbsenceRepository();
+			_businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
 
 			_target = new AnalyticsRequestUpdater(_personRequestRepository, _analyticsRequestRepository, _analyticsDateRepository, _analyticsBusinessUnitRepository, _personPeriodRepository, _analyticsAbsenceRepository);
 		}
 
 		[Test]
-		public void MssingDateInAnalyticsDatabaseThrows()
+		public void MissingDateInAnalyticsDatabaseThrows()
 		{
 			_analyticsDateRepository = new FakeAnalyticsDateRepository(new DateTime(2000, 1, 1), new DateTime(2000, 1, 1));
 			_target = new AnalyticsRequestUpdater(_personRequestRepository, _analyticsRequestRepository, _analyticsDateRepository, _analyticsBusinessUnitRepository, _personPeriodRepository, _analyticsAbsenceRepository);
@@ -52,6 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			var personRequest = (PersonRequest)personRequestFactory.CreatePersonRequest(person);
 			personRequest.SetId(Guid.NewGuid());
 			personRequest.Request.SetId(Guid.NewGuid());
+			((IBelongsToBusinessUnit)personRequest).SetBusinessUnit(_businessUnit);
 			_personRequestRepository.Add(personRequest);
 
 			_personPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
@@ -80,6 +84,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			var personRequest = new PersonRequestFactory().CreatePersonRequest();
 			personRequest.SetId(Guid.NewGuid());
 			personRequest.Request.SetId(Guid.NewGuid());
+			((IBelongsToBusinessUnit)personRequest).SetBusinessUnit(_businessUnit);
 			_personRequestRepository.Add(personRequest);
 			Assert.Throws<PersonPeriodMissingInAnalyticsException>(() => _target.Handle(new PersonRequestChangedEvent { PersonRequestId = personRequest.Id.GetValueOrDefault(), LogOnBusinessUnitId = Guid.NewGuid() }));
 		}
@@ -96,6 +101,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			var personRequest = personRequestFactory.CreatePersonRequest(person);
 			personRequest.SetId(Guid.NewGuid());
 			personRequest.Request.SetId(Guid.NewGuid());
+			((IBelongsToBusinessUnit)personRequest).SetBusinessUnit(_businessUnit);
 			_personRequestRepository.Add(personRequest);
 
 			_personPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
@@ -110,6 +116,49 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 
 			_analyticsRequestRepository.AnalyticsRequestedDays.Should().Not.Be.Empty();
 			_analyticsRequestRepository.AnalyticsRequests.Should().Not.Be.Empty();
+		}
+
+		[Test]
+		public void ShouldAddRequestWithGivenBusinessUnit()
+		{
+			var person = PersonFactory.CreatePerson("Test");
+			person.SetId(Guid.NewGuid());
+			var personRequestFactory = new PersonRequestFactory
+			{
+				Request = new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow + TimeSpan.FromDays(1)))
+			};
+			var personRequest = personRequestFactory.CreatePersonRequest(person);
+			personRequest.SetId(Guid.NewGuid());
+			personRequest.Request.SetId(Guid.NewGuid());
+			((IBelongsToBusinessUnit)personRequest).SetBusinessUnit(_businessUnit);
+			_personRequestRepository.Add(personRequest);
+
+			var analyticsBu = new AnalyticBusinessUnit
+			{
+				BusinessUnitCode = _businessUnit.Id.Value,
+				BusinessUnitId = 11
+			};
+			((FakeAnalyticsBusinessUnitRepository) _analyticsBusinessUnitRepository).UseList = true;
+			_analyticsBusinessUnitRepository.AddOrUpdate(analyticsBu);
+
+			_personPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
+			{
+				PersonCode = person.Id.GetValueOrDefault(),
+				PersonId = 1,
+				ValidFromDate = DateTime.UtcNow - TimeSpan.FromDays(10),
+				ValidToDate = DateTime.UtcNow + TimeSpan.FromDays(10)
+			});
+
+			var requestEvent = new PersonRequestDeletedEvent
+			{
+				PersonRequestId = personRequest.Id.GetValueOrDefault(),
+				LogOnBusinessUnitId = Guid.NewGuid()
+			};
+			_target.Handle(requestEvent);
+
+			_analyticsRequestRepository.AnalyticsRequestedDays.Should().Not.Be.Empty();
+			_analyticsRequestRepository.AnalyticsRequests.Should().Not.Be.Empty();
+			_analyticsRequestRepository.AnalyticsRequests[0].BusinessUnitId.Should().Be.EqualTo(analyticsBu.BusinessUnitId);
 		}
 
 
