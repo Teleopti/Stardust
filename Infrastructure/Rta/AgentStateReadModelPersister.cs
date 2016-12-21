@@ -179,22 +179,21 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public AgentStateReadModel Load(Guid personId)
 		{
-			return _unitOfWork.Current().Session()
-				.CreateSQLQuery(@"SELECT * FROM [ReadModel].[AgentState] WHERE PersonId = :PersonId")
+			var internalModel = _unitOfWork.Current().Session()
+				.CreateSQLQuery(@"SELECT TOP 1 * FROM [ReadModel].[AgentState] WHERE PersonId = :PersonId")
 				.SetParameter("PersonId", personId)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
-				.List<internalModel>()
-				.Select(x =>
-				{
-					(x as AgentStateReadModel).Shift = _deserializer.DeserializeObject<AgentStateActivityReadModel[]>(x.Shift);
-					x.Shift = null;
-					(x as AgentStateReadModel).OutOfAdherences =
-						_deserializer.DeserializeObject<AgentStateOutOfAdherenceReadModel[]>(x.OutOfAdherences);
-					x.OutOfAdherences = null;
-					return x;
-				})
-				.FirstOrDefault();
+				.UniqueResult<internalModel>();
+			if (internalModel == null) return null;
+
+			((AgentStateReadModel) internalModel).Shift = _deserializer.DeserializeObject<AgentStateActivityReadModel[]>(internalModel.Shift);
+			internalModel.Shift = null;
+			((AgentStateReadModel) internalModel).OutOfAdherences =
+				_deserializer.DeserializeObject<AgentStateOutOfAdherenceReadModel[]>(internalModel.OutOfAdherences);
+			internalModel.OutOfAdherences = null;
+
+			return internalModel;
 		}
 
 		public void UpsertAssociation(Guid personId, Guid teamId, Guid? siteId, Guid? businessUnitId)
