@@ -1,7 +1,6 @@
 using System;
 using System.Drawing;
 using System.Linq;
-using NHibernate.Util;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -421,29 +420,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Target.DeleteOldRows("2016-10-04 09:00".Utc());
 
 			Target.Load(personId).Should().Be.Null();
-		}
-
-
-		[Test]
-		public void ShouldRemoveLotsOfRowsAtATime()
-		{
-			var personIds = Enumerable
-				.Range(1, 110)
-				.Select(x => Guid.NewGuid())
-				.Select(personId =>
-				{
-					var model = new AgentStateReadModelForTest { PersonId = personId };
-					Target.PersistWithAssociation(model);
-					Target.SetDeleted(personId, "2016-10-04 08:29".Utc());
-					return personId;
-				})
-				.ToArray();
-
-			Target.DeleteOldRows("2016-10-04 09:00".Utc());
-
-			personIds
-				.ForEach(personId =>
-				Target.Load(personId).Should().Be.Null());
 		}
 	}
 }

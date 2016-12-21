@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
@@ -167,14 +166,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public void DeleteOldRows(DateTime now)
 		{
-			while (_unitOfWork.Current().Session()
+			_unitOfWork.Current().Session()
 				.CreateSQLQuery(
-					@"DELETE TOP (100) FROM [ReadModel].[AgentState] WHERE ExpiresAt <= :now")
+					@"DELETE FROM [ReadModel].[AgentState] WHERE ExpiresAt <= :now")
 				.SetParameter("now", now)
-				.ExecuteUpdate() > 0)
-			{
-				Thread.Sleep(100);
-			}
+				.ExecuteUpdate()
+				;
 		}
 
 		public AgentStateReadModel Load(Guid personId)
