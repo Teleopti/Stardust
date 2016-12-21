@@ -5960,7 +5960,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void undoRedoSelectAndRefresh()
 		{
-			if (_lastModifiedPart != null)
+			if (_lastModifiedPart != null && _lastModifiedPart.ModifiedPart != null)
 			{
 				selectCellFromPersonDate(_lastModifiedPart.ModifiedPerson,_lastModifiedPart.ModifiedPart.DateOnlyAsPeriod.DateOnly);
 			}
