@@ -8,16 +8,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
-    public interface INewDayOffRule : INewBusinessRule{}
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
+	public interface INewDayOffRule : INewBusinessRule{}
 
 	public class NewDayOffRule : INewDayOffRule
 	{
 		private readonly IWorkTimeStartEndExtractor _workTimeStartEndExtractor;
 		private readonly CultureInfo _loggedOnCulture = Thread.CurrentThread.CurrentCulture;
 
-		private bool _haltModify = true;
-		private string _errorMessage = "";
 		private readonly string _businessRuleDayOffErrorMessage1;
 		private readonly string _businessRuleDayOffErrorMessage2;
 		private readonly string _businessRuleDayOffErrorMessage4;
@@ -32,22 +30,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			_businessRuleDayOffErrorMessage4 = Resources.BusinessRuleDayOffErrorMessage4;
 		}
 
-		public string ErrorMessage
-		{
-			get { return _errorMessage; }
-			private set { _errorMessage = value; }
-		}
+		public string ErrorMessage { get; private set; } = "";
 
-		public bool IsMandatory
-		{
-			get { return false; }
-		}
+		public bool IsMandatory => false;
 
-		public bool HaltModify
-		{
-			get { return _haltModify; }
-			set { _haltModify = value; }
-		}
+		public bool HaltModify { get; set; } = true;
 
 		public bool Configurable => true;
 
@@ -95,19 +82,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private dayForValidation convert(IScheduleDay scheduleDay)
 		{
-			var dayForValidation = new dayForValidation {Date = scheduleDay.DateOnlyAsPeriod.DateOnly};
 			var assignment = scheduleDay.PersonAssignment();
-			if (assignment != null)
+			if (assignment == null) return new dayForValidation
 			{
-				var projection = new Lazy<IVisualLayerCollection>(assignment.ProjectionService().CreateProjection);
-				dayForValidation.ProjectionStart =
-					new Lazy<DateTime?>(() => _workTimeStartEndExtractor.WorkTimeStart(projection.Value));
-				dayForValidation.ProjectionEnd = new Lazy<DateTime?>(() => _workTimeStartEndExtractor.WorkTimeEnd(projection.Value));
-				dayForValidation.HasAssignment = true;
-				dayForValidation.StartDateTime = assignment.Period.StartDateTime;
-				dayForValidation.DayOff = assignment.DayOff();
-			}
-			return dayForValidation;
+				Date = scheduleDay.DateOnlyAsPeriod.DateOnly
+			};
+
+			var projection = new Lazy<IVisualLayerCollection>(assignment.ProjectionService().CreateProjection);
+			return new dayForValidation
+			{
+				Date = scheduleDay.DateOnlyAsPeriod.DateOnly,
+				ProjectionStart = new Lazy<DateTime?>(() => _workTimeStartEndExtractor.WorkTimeStart(projection.Value)),
+				ProjectionEnd = new Lazy<DateTime?>(() => _workTimeStartEndExtractor.WorkTimeEnd(projection.Value)),
+				HasAssignment = true,
+				StartDateTime = assignment.Period.StartDateTime,
+				DayOff = assignment.DayOff()
+			};
 		}
 
 		private class dayForValidation
@@ -130,16 +120,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 					dayOff.Anchor);
 				return true;
 			}
-			if (DayOffConflictWithAssignmentBefore(dayOff, assignmentBeforePeriod) ||
-				DayOffConflictWithAssignmentAfter(dayOff, assignmentAfterPeriod))
-			{
-				if (dayOffCannotBeMoved(dayOff, assignmentBeforePeriod, assignmentAfterPeriod))
-				{
-					return true;
-				}
-			}
 
-			return false;
+			if (!DayOffConflictWithAssignmentBefore(dayOff, assignmentBeforePeriod) &&
+				!DayOffConflictWithAssignmentAfter(dayOff, assignmentAfterPeriod)) return false;
+
+			return dayOffCannotBeMoved(dayOff, assignmentBeforePeriod, assignmentAfterPeriod);
 		}
 
 		private bool dayOffCannotBeMoved(IDayOff dayOff, DateTimePeriod assignmentBeforePeriod,
@@ -151,33 +136,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 			if (DayOffConflictWithAssignmentBefore(dayOff, assignmentBeforePeriod))
 			{
-				string day = dayOff.Anchor.Date.ToString("d", _loggedOnCulture);
+				var day = dayOff.Anchor.Date.ToString("d", _loggedOnCulture);
 				// find out how long the conflict is
-				TimeSpan conflictTime = assignmentBeforePeriod.EndDateTime - startDayOff;
+				var conflictTime = assignmentBeforePeriod.EndDateTime - startDayOff;
 				// flexibility does not allow the move
-				if (dayOff.Boundary.EndDateTime < endDayOff.Add(conflictTime))
-				{
-					ErrorMessage = string.Format(_loggedOnCulture, _businessRuleDayOffErrorMessage2 + ErrorMessage,
-						day);
-					return true;
-				}
+				if (dayOff.Boundary.EndDateTime >= endDayOff.Add(conflictTime)) return false;
+
+				ErrorMessage = string.Format(_loggedOnCulture, _businessRuleDayOffErrorMessage2 + ErrorMessage, day);
+				return true;
 				// if the flexibility allows it and we don't get a conflict at the end it can be moved
-				return false;
 			}
 			else
 			{
-				string day = dayOff.Anchor.Date.ToString("d", _loggedOnCulture);
+				var day = dayOff.Anchor.Date.ToString("d", _loggedOnCulture);
 				// find out how long the conflict is
-				TimeSpan conflictTime = assignmentAfterPeriod.StartDateTime - endDayOff;
+				var conflictTime = assignmentAfterPeriod.StartDateTime - endDayOff;
 				// flexibility does not allow the move
-				if (startDayOff.Add(conflictTime) < dayOff.Boundary.StartDateTime)
-				{
-					ErrorMessage = string.Format(_loggedOnCulture, _businessRuleDayOffErrorMessage4 + ErrorMessage,
-						day);
-					return true;
-				}
+				if (startDayOff.Add(conflictTime) >= dayOff.Boundary.StartDateTime) return false;
+
+				ErrorMessage = string.Format(_loggedOnCulture, _businessRuleDayOffErrorMessage4 + ErrorMessage, day);
+				return true;
 				// if the flexibility allows it and we don't get a conflict at the end it cann be moved
-				return false;
 			}
 		}
 
@@ -214,8 +193,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private static DateTimePeriod dayOffStartEnd(IDayOff dayOff)
 		{
-			DateTime startDayOff = dayOff.Anchor.AddMinutes(-(dayOff.TargetLength.TotalMinutes/2));
-			DateTime endDayOff = dayOff.Anchor.AddMinutes((dayOff.TargetLength.TotalMinutes/2));
+			var startDayOff = dayOff.Anchor.AddMinutes(-(dayOff.TargetLength.TotalMinutes/2));
+			var endDayOff = dayOff.Anchor.AddMinutes((dayOff.TargetLength.TotalMinutes/2));
 
 			return new DateTimePeriod(startDayOff, endDayOff);
 		}
@@ -225,23 +204,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var dop = dateOnly.ToDateOnlyPeriod();
 			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
-			IBusinessRuleResponse response = new BusinessRuleResponse(typeof (NewDayOffRule), message, _haltModify, IsMandatory,
-				period, person, dateOnlyPeriod, FriendlyName) {Overridden = !_haltModify};
+			IBusinessRuleResponse response = new BusinessRuleResponse(typeof (NewDayOffRule), message, HaltModify, IsMandatory,
+				period, person, dateOnlyPeriod, FriendlyName) {Overridden = !HaltModify};
 			return response;
 		}
 
 		private DateTimePeriod periodOfLayerBefore(IDayOff personDayOff, dayForValidation[] daysToCheck)
 		{
-			var assignmentJustBeforeDayOff = getAssignmentJustBeforeDayOff(personDayOff, daysToCheck);
 			var layerBeforePeriod = new DateTimePeriod(1900, 1, 1, 1900, 1, 2);
 
-			if (assignmentJustBeforeDayOff != null)
+			var assignmentJustBeforeDayOff = getAssignmentJustBeforeDayOff(personDayOff, daysToCheck);
+			if (assignmentJustBeforeDayOff == null) return layerBeforePeriod;
+
+			if (assignmentJustBeforeDayOff.ProjectionStart.Value.HasValue &&
+				assignmentJustBeforeDayOff.ProjectionEnd.Value.HasValue)
 			{
-				if (assignmentJustBeforeDayOff.ProjectionStart.Value.HasValue &&
-					assignmentJustBeforeDayOff.ProjectionEnd.Value.HasValue)
-					layerBeforePeriod = new DateTimePeriod(assignmentJustBeforeDayOff.ProjectionStart.Value.Value,
-						assignmentJustBeforeDayOff.ProjectionEnd.Value.Value);
+				layerBeforePeriod = new DateTimePeriod(assignmentJustBeforeDayOff.ProjectionStart.Value.Value,
+					assignmentJustBeforeDayOff.ProjectionEnd.Value.Value);
 			}
+
 			return layerBeforePeriod;
 		}
 
@@ -250,19 +231,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			dayForValidation returnVal = null;
 			foreach (var day in daysToCheck)
 			{
-				if (day.HasAssignment)
-				{
-					if(day.Date.Date >= dayOff.Anchor.Date)
-						continue;
+				if (!day.HasAssignment) continue;
 
-					if (day.StartDateTime < dayOff.Anchor && (returnVal==null || returnVal.StartDateTime<day.StartDateTime))
-					{
-						returnVal = day;
-					}
-					else
-					{
-						break;
-					}
+				if(day.Date.Date >= dayOff.Anchor.Date)
+					continue;
+
+				if (day.StartDateTime < dayOff.Anchor && (returnVal==null || returnVal.StartDateTime<day.StartDateTime))
+				{
+					returnVal = day;
+				}
+				else
+				{
+					break;
 				}
 			}
 
@@ -271,33 +251,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private DateTimePeriod periodOfLayerAfter(IDayOff personDayOff, dayForValidation[] daysToCheck)
 		{
-			var assignmentJustAfterDayOff = getAssignmentJustAfterDayOff(personDayOff, daysToCheck);
 			var periodOfAssignmentAfter = new DateTimePeriod(2100, 1, 1, 2100, 1, 2);
-			if (assignmentJustAfterDayOff != null)
-			{
-				if (assignmentJustAfterDayOff.ProjectionStart.Value.HasValue &&
-					assignmentJustAfterDayOff.ProjectionEnd.Value.HasValue)
-					periodOfAssignmentAfter = new DateTimePeriod(assignmentJustAfterDayOff.ProjectionStart.Value.Value,
-						assignmentJustAfterDayOff.ProjectionEnd.Value.Value);
-			}
+
+			var assignmentJustAfterDayOff = getAssignmentJustAfterDayOff(personDayOff, daysToCheck);
+			if (assignmentJustAfterDayOff == null) return periodOfAssignmentAfter;
+
+			if (assignmentJustAfterDayOff.ProjectionStart.Value.HasValue &&
+				assignmentJustAfterDayOff.ProjectionEnd.Value.HasValue)
+				periodOfAssignmentAfter = new DateTimePeriod(assignmentJustAfterDayOff.ProjectionStart.Value.Value,
+					assignmentJustAfterDayOff.ProjectionEnd.Value.Value);
 			return periodOfAssignmentAfter;
 		}
 
 		private static dayForValidation getAssignmentJustAfterDayOff(IDayOff dayOff, dayForValidation[] daysToCheck)
 		{
-			foreach (var day in daysToCheck)
-			{
-				if (day.HasAssignment)
-				{
-					if (day.Date.Date <= dayOff.Anchor.Date)
-						continue;
-
-					if (day.StartDateTime > dayOff.Anchor)
-						return day;
-				}
-			}
-
-			return null;
+			return daysToCheck.Where(day => day.HasAssignment)
+				.Where(day => day.Date.Date > dayOff.Anchor.Date)
+				.FirstOrDefault(day => day.StartDateTime > dayOff.Anchor);
 		}
 	}
 }

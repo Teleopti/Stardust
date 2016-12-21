@@ -172,14 +172,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return result;
 		}
 
-		public IEnumerable<IBusinessRuleResponse> CheckRules(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
+		public IEnumerable<IBusinessRuleResponse> CheckRules(IDictionary<IPerson, IScheduleRange> rangeClones,
+			IEnumerable<IScheduleDay> scheduleDays)
 		{
+			var scheduleDayList = scheduleDays.ToList();
 			var responseList = new List<IBusinessRuleResponse>();
 			using (new UICultureContext(_culture))
 			{
 				foreach (var rule in this)
 				{
-					var retList = rule.Validate(rangeClones, scheduleDays);
+					var retList = rule.Validate(rangeClones, scheduleDayList);
 					responseList.AddRange(retList);
 				}
 			}

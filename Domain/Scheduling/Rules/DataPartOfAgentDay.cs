@@ -26,19 +26,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			foreach (var scheduleDay in scheduleDays)
 			{
 				var assignment = scheduleDay.PersonAssignment();
-				if (assignment != null)
-				{
-					var assignmentPeriod = assignment.Period;
-					var dateOnly = assignment.Date;
-					var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
-					//don't want dep to person here...
-					var dateOnlyAsDatePeriod = dateOnlyPeriod.ToDateTimePeriod(scheduleDay.Person.PermissionInformation.DefaultTimeZone());
+				if (assignment == null) continue;
 
-					if (!dateOnlyAsDatePeriod.Contains(assignmentPeriod.StartDateTime))
-					{
-						ret.Add(new BusinessRuleResponse(typeof(DataPartOfAgentDay), Resources.NotAllowedMoveOfAssignmentToOtherDate, true, true, assignmentPeriod,
-																						 scheduleDay.Person, dateOnlyPeriod, FriendlyName));
-					}
+				var assignmentPeriod = assignment.Period;
+				var dateOnly = assignment.Date;
+				var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
+				//don't want dep to person here...
+				var dateOnlyAsDatePeriod = dateOnlyPeriod.ToDateTimePeriod(scheduleDay.Person.PermissionInformation.DefaultTimeZone());
+
+				if (!dateOnlyAsDatePeriod.Contains(assignmentPeriod.StartDateTime))
+				{
+					ret.Add(new BusinessRuleResponse(typeof(DataPartOfAgentDay), Resources.NotAllowedMoveOfAssignmentToOtherDate, true, true, assignmentPeriod,
+						scheduleDay.Person, dateOnlyPeriod, FriendlyName));
 				}
 			}
 			return ret;

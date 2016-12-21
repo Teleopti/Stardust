@@ -17,18 +17,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			Description = Resources.DescriptionOfSiteOpenHoursRule;
 		}
 
-		private bool _haltModify = true;
+		public bool IsMandatory => false;
 
-		public bool IsMandatory
-		{
-			get { return false; }
-		}
-
-		public bool HaltModify
-		{
-			get { return _haltModify; }
-			set { _haltModify = value; }
-		}
+		public bool HaltModify { get; set; } = true;
 
 		public bool Configurable => false;
 
@@ -68,14 +59,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				return null;
 
 			var period = layerCollection.Period().Value;
-			if (!_siteOpenHoursSpecification.IsSatisfiedBy(new SiteOpenHoursCheckItem { Period = period , Person = person }))
-			{
-				var response = createResponse(person, date, getErrorMessage(person, date, period));
-				oldResponses.Add(response);
-				return response;
-			}
+			var checkItem = new SiteOpenHoursCheckItem { Period = period, Person = person };
+			if (_siteOpenHoursSpecification.IsSatisfiedBy(checkItem)) return null;
 
-			return null;
+			var response = createResponse(person, date, getErrorMessage(person, date, period));
+			oldResponses.Add(response);
+			return response;
 		}
 
 		private IBusinessRuleResponse createResponse(IPerson person, DateOnly scheduleDate, string message)
@@ -84,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			var response = new BusinessRuleResponse(typeof(SiteOpenHoursRule), message, HaltModify, IsMandatory,
 				period, person, dop, FriendlyName)
-			{Overridden = !_haltModify };
+			{Overridden = !HaltModify };
 			return response;
 		}
 

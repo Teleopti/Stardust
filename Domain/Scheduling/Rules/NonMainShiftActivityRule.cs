@@ -9,18 +9,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 {
 	public class NonMainShiftActivityRule : INewBusinessRule
 	{
-		private bool _haltModify = true;
+		public bool IsMandatory => false;
 
-		public bool IsMandatory
-		{
-			get { return false; }
-		}
-
-		public bool HaltModify
-		{
-			get { return _haltModify; }
-			set { _haltModify = value; }
-		}
+		public bool HaltModify { get; set; } = true;
 
 		public bool Configurable => true;
 
@@ -41,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 				if (hasNonMainShiftActivity)
 				{
-					string message = string.Format(CultureInfo.CurrentCulture,
+					var message = string.Format(CultureInfo.CurrentCulture,
 						Resources.HasNonMainShiftActivityErrorMessage, person.Name,
 						dateOnly.Date.ToShortDateString());
 					ret.Add(createResponse(scheduleDay.Person, dateOnly, message, typeof (NonMainShiftActivityRule)));
@@ -56,28 +47,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private bool isPersonalActivityOverSchedule(IPersonAssignment personAssignment)
 		{
-			var shiftLayers = personAssignment.ShiftLayers;
+			var shiftLayers = personAssignment.ShiftLayers.ToList();
 			var activities = personAssignment.PersonalActivities();
-			if (activities != null && activities.Any(activity => isOverSchedule(activity.Period, shiftLayers)))
-			{
-				return true;
-			}
-
-			return false;
+			return activities != null && activities.Any(activity => isOverSchedule(activity.Period, shiftLayers));
 		}
 
 		private bool isMeetingOverSchedule(IScheduleDay currentSchedule)
 		{
-			var shiftLayers = currentSchedule.PersonAssignment().ShiftLayers;
+			var shiftLayers = currentSchedule.PersonAssignment().ShiftLayers.ToList();
 			var meetings = currentSchedule.PersonMeetingCollection();
-			if (meetings != null && meetings.Any(personMeeting => isOverSchedule(personMeeting.Period, shiftLayers)))
-			{
-				return true;
-			}
-			return false;
+			return meetings != null && meetings.Any(personMeeting => isOverSchedule(personMeeting.Period, shiftLayers));
 		}
 
-		private bool isOverSchedule(DateTimePeriod period, IEnumerable<IShiftLayer> layers)
+		private bool isOverSchedule(DateTimePeriod period, IList<IShiftLayer> layers)
 		{
 			if (!layers.Any()) return true;
 
@@ -86,10 +68,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 			foreach (var shiftLayer in layers)
 			{
-				if (!shiftLayer.Payload.InWorkTime)
+				if (shiftLayer.Payload.InWorkTime) continue;
+
+				var layerStartTime = shiftLayer.Period.StartDateTime;
+				var layerEndTime = shiftLayer.Period.EndDateTime;
+				if ((layerStartTime < period.EndDateTime && layerEndTime > period.StartDateTime)
+					|| (layerEndTime > period.StartDateTime && layerStartTime < period.EndDateTime))
 				{
-					if ((shiftLayer.Period.StartDateTime < period.EndDateTime && shiftLayer.Period.EndDateTime > period.StartDateTime)
-						||( shiftLayer.Period.EndDateTime > period.StartDateTime && shiftLayer.Period.StartDateTime < period.EndDateTime)) return true;
+					return true;
 				}
 			}
 
@@ -100,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			var dop = dateOnly.ToDateOnlyPeriod();
 			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-			var response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dop, FriendlyName) { Overridden = !_haltModify };
+			var response = new BusinessRuleResponse(type, message, HaltModify, IsMandatory, period, person, dop, FriendlyName) { Overridden = !HaltModify };
 			return response;
 		}
 	}

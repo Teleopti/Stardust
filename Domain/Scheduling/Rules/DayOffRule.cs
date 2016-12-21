@@ -6,137 +6,123 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
 {
 	public class DayOffRule :  IAssignmentPeriodRule
-    {
-
+	{
 		public DateTimePeriod LongestDateTimePeriodForAssignment(IScheduleRange current, DateOnly dateToCheck)
-        {
-            IDayOff dayOffBefore = null;
-            IDayOff dayOffAfter = null;
-            var  approximateTime = DateTime.SpecifyKind(dateToCheck.Date.AddHours(12), DateTimeKind.Unspecified);
+		{
+			IDayOff dayOffBefore = null;
+			IDayOff dayOffAfter = null;
+			var  approximateTime = DateTime.SpecifyKind(dateToCheck.Date.AddHours(12), DateTimeKind.Unspecified);
 
-			IEnumerable<IScheduleDay> partCollection = current.ScheduledDayCollection(new DateOnlyPeriod(dateToCheck.AddDays(-3),
-		                                                                        dateToCheck.AddDays(3)));
+			var period = new DateOnlyPeriod(dateToCheck.AddDays(-3), dateToCheck.AddDays(3));
+			var partCollection = current.ScheduledDayCollection(period).ToList();
 
-		    foreach (IScheduleDay scheduleDay in partCollection)
-		    {
-			    var ass = scheduleDay.PersonAssignment();
-					if (ass != null)
-					{
-						var dayOff = ass.DayOff();
-						if (dayOff != null)
-						{
-							if (dayOff.Anchor < approximateTime)
-							{
-								dayOffBefore = dayOff;
-							}
-							if (dayOffAfter == null && approximateTime < dayOff.Anchor)
-							{
-								dayOffAfter = dayOff;
-							}
-						}
-					}
-		    }
-            
-            DateTime latestEndTime = latestEndTimeBeforeDayOff(dayOffAfter, partCollection);
-            DateTime earliestStartTime = earliestStartTimeAfterDayOff(current, dayOffBefore, partCollection);
+			foreach (var scheduleDay in partCollection)
+			{
+				var ass = scheduleDay.PersonAssignment();
+				var dayOff = ass?.DayOff();
+				if (dayOff == null) continue;
 
-            return new DateTimePeriod(earliestStartTime, latestEndTime);
-        }
+				if (dayOff.Anchor < approximateTime)
+				{
+					dayOffBefore = dayOff;
+				}
+				if (dayOffAfter == null && approximateTime < dayOff.Anchor)
+				{
+					dayOffAfter = dayOff;
+				}
+			}
+
+			var latestEndTime = latestEndTimeBeforeDayOff(dayOffAfter, partCollection);
+			var earliestStartTime = earliestStartTimeAfterDayOff(current, dayOffBefore, partCollection);
+
+			return new DateTimePeriod(earliestStartTime, latestEndTime);
+		}
 
 		private static DateTime earliestStartTimeAfterDayOff(IScheduleRange current, IDayOff dayOff, IEnumerable<IScheduleDay> partCollection)
-        {
-            if (dayOff == null)
-            {
-                return current.Period.StartDateTime;
-            }
-            DateTime earliestStartTime;
-            IPersonAssignment layerBefore = getScheduledAssignmentJustBeforeDayOff(dayOff, partCollection);
-            if (layerBefore == null)
-            {
-                earliestStartTime = dayOff.InnerBoundary.EndDateTime;
-            }
-            else
-            {
-                TimeSpan differ = layerBefore.Period.EndDateTime - dayOffStartEnd(dayOff).StartDateTime;
-                earliestStartTime = dayOffStartEnd(dayOff).EndDateTime.Add(differ);
-                if(earliestStartTime < dayOff.InnerBoundary.EndDateTime)
-                {
-                    earliestStartTime = dayOff.InnerBoundary.EndDateTime;
-                }
-            }
+		{
+			if (dayOff == null)
+			{
+				return current.Period.StartDateTime;
+			}
+			DateTime earliestStartTime;
+			var layerBefore = getScheduledAssignmentJustBeforeDayOff(dayOff, partCollection);
+			if (layerBefore == null)
+			{
+				earliestStartTime = dayOff.InnerBoundary.EndDateTime;
+			}
+			else
+			{
+				var differ = layerBefore.Period.EndDateTime - dayOffStartEnd(dayOff).StartDateTime;
+				earliestStartTime = dayOffStartEnd(dayOff).EndDateTime.Add(differ);
+				if(earliestStartTime < dayOff.InnerBoundary.EndDateTime)
+				{
+					earliestStartTime = dayOff.InnerBoundary.EndDateTime;
+				}
+			}
 
-            return earliestStartTime;
-        }
+			return earliestStartTime;
+		}
 
 		private static DateTime latestEndTimeBeforeDayOff(IDayOff dayOff, IEnumerable<IScheduleDay> partCollection)
-        {
-            if (dayOff == null)
-            {
-                return partCollection.Last().Period.EndDateTime;
-            }
-            DateTime latestEndTime;
-            
-            IPersonAssignment layerAfter = getScheduledAssignmentJustAfterDayOff(dayOff, partCollection);
-            if (layerAfter == null)
-            {
-                latestEndTime = dayOff.InnerBoundary.StartDateTime;
-            }
-            else
-            {
-                TimeSpan differ = layerAfter.Period.StartDateTime - dayOffStartEnd(dayOff).EndDateTime;
-                latestEndTime = dayOffStartEnd(dayOff).StartDateTime.Add(differ);
-                if(latestEndTime > dayOff.InnerBoundary.StartDateTime)
-                {
-                    latestEndTime = dayOff.InnerBoundary.StartDateTime;
-                }
-            }
+		{
+			if (dayOff == null)
+			{
+				return partCollection.Last().Period.EndDateTime;
+			}
+			DateTime latestEndTime;
 
-            return latestEndTime;
-        }
+			var layerAfter = getScheduledAssignmentJustAfterDayOff(dayOff, partCollection);
+			if (layerAfter == null)
+			{
+				latestEndTime = dayOff.InnerBoundary.StartDateTime;
+			}
+			else
+			{
+				var differ = layerAfter.Period.StartDateTime - dayOffStartEnd(dayOff).EndDateTime;
+				latestEndTime = dayOffStartEnd(dayOff).StartDateTime.Add(differ);
+				if(latestEndTime > dayOff.InnerBoundary.StartDateTime)
+				{
+					latestEndTime = dayOff.InnerBoundary.StartDateTime;
+				}
+			}
 
-        private static DateTimePeriod dayOffStartEnd(IDayOff dayOff)
-        {
-            DateTime startDayOff = dayOff.Anchor.AddMinutes(-(dayOff.TargetLength.TotalMinutes / 2));
-            DateTime endDayOff = dayOff.Anchor.AddMinutes((dayOff.TargetLength.TotalMinutes / 2));
+			return latestEndTime;
+		}
 
-            return new DateTimePeriod(startDayOff, endDayOff);
-        }
+		private static DateTimePeriod dayOffStartEnd(IDayOff dayOff)
+		{
+			var startDayOff = dayOff.Anchor.AddMinutes(-(dayOff.TargetLength.TotalMinutes / 2));
+			var endDayOff = dayOff.Anchor.AddMinutes((dayOff.TargetLength.TotalMinutes / 2));
+
+			return new DateTimePeriod(startDayOff, endDayOff);
+		}
 
 		private static IPersonAssignment getScheduledAssignmentJustBeforeDayOff(IDayOff dayOff, IEnumerable<IScheduleDay> partCollection)
-        {
-            IPersonAssignment returnVal = null;
-			foreach (IScheduleDay scheduleDay in partCollection)
+		{
+			IPersonAssignment returnVal = null;
+			foreach (var scheduleDay in partCollection)
 			{
 				var assignment = scheduleDay.PersonAssignment();
-				if (assignment != null && assignment.MainActivities().Any())
+				if (assignment == null || !assignment.MainActivities().Any()) continue;
+				if (assignment.Period.StartDateTime.Date == dayOff.Anchor.Date)
+					continue;
+				if (assignment.Period.StartDateTime < dayOff.Anchor)
 				{
-					if (assignment.Period.StartDateTime.Date == dayOff.Anchor.Date)
-						continue;
-					if (assignment.Period.StartDateTime < dayOff.Anchor)
-					{
-						returnVal = assignment;
-					}
+					returnVal = assignment;
 				}
 			}
 
 			return returnVal;
-        }
+		}
 
 		private static IPersonAssignment getScheduledAssignmentJustAfterDayOff(IDayOff dayOff,
 			IEnumerable<IScheduleDay> partCollection)
 		{
-			foreach (IScheduleDay scheduleDay in partCollection)
-			{
-				var assignment = scheduleDay.PersonAssignment();
-				if (assignment != null && assignment.MainActivities().Any())
-				{
-					if (assignment.Period.StartDateTime.Date == dayOff.Anchor.Date)
-						continue;
-					if (assignment.Period.StartDateTime > dayOff.Anchor)
-						return assignment;
-				}
-			}
-			return null;
+			var assignments = partCollection.Select(scheduleDay => scheduleDay.PersonAssignment());
+			var validAssignments = assignments.Where(assignment => assignment != null && assignment.MainActivities().Any())
+				.Where(assignment => assignment.Period.StartDateTime.Date != dayOff.Anchor.Date);
+
+			return validAssignments.FirstOrDefault(assignment => assignment.Period.StartDateTime > dayOff.Anchor);
 		}
-    }
+	}
 }

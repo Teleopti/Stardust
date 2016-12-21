@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	public class OpenHoursRule : INewBusinessRule
 	{
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private bool _haltModify = true;
 		private readonly string _businessRuleNoSkillsOpenErrorMessage;
 
 		public OpenHoursRule(ISchedulingResultStateHolder schedulingResultStateHolder)
@@ -20,22 +19,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			_businessRuleNoSkillsOpenErrorMessage = Resources.BusinessRuleNoSkillsOpenErrorMessage;
 		}
 
-		public bool IsMandatory
-		{
-			get { return false; }
-		}
+		public bool IsMandatory => false;
 
-		public bool HaltModify
-		{
-			get { return _haltModify; }
-			set { _haltModify = value; }
-		}
+		public bool HaltModify { get; set; } = true;
 
 		public bool Configurable => false;
 
 		public bool ForDelete { get; set; }
 
-		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
+		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,
+			IEnumerable<IScheduleDay> scheduleDays)
 		{
 			var responseList = new List<IBusinessRuleResponse>();
 			foreach (var scheduleDay in scheduleDays)
@@ -49,22 +42,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		public string FriendlyName { get; }
 		public string Description { get; }
 
-		private IEnumerable<IBusinessRuleResponse> checkDay(IDictionary<IPerson, IScheduleRange> rangeClones, IScheduleDay scheduleDay)
+		private IEnumerable<IBusinessRuleResponse> checkDay(IDictionary<IPerson, IScheduleRange> rangeClones,
+			IScheduleDay scheduleDay)
 		{
 			ICollection<IBusinessRuleResponse> responseList = new List<IBusinessRuleResponse>();
-			IPerson person = scheduleDay.Person;
-			DateOnly dateToCheck = scheduleDay.DateOnlyAsPeriod.DateOnly;
-			IScheduleRange currentSchedules = rangeClones[person];
+			var person = scheduleDay.Person;
+			var dateToCheck = scheduleDay.DateOnlyAsPeriod.DateOnly;
+			var currentSchedules = rangeClones[person];
 			var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
 			oldResponses.Remove(createResponse(person, dateToCheck, "remove"));
 			//on delete this should be empty and never runned
 
-			IBusinessRuleResponse response = checkScheduleDay(scheduleDay, person, dateToCheck);
-			if(response != null)
-			{
-				responseList.Add(response);
-				oldResponses.Add(response);
-			}
+			var response = checkScheduleDay(scheduleDay, person, dateToCheck);
+			if (response == null) return responseList;
+
+			responseList.Add(response);
+			oldResponses.Add(response);
 
 			return responseList;
 		}
@@ -72,64 +65,62 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message)
 		{
 			var dop = dateOnly.ToDateOnlyPeriod();
-			DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-			IBusinessRuleResponse response = new BusinessRuleResponse(typeof(OpenHoursRule), message, _haltModify, IsMandatory, period, person, dop, FriendlyName) { Overridden = !_haltModify };
+			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+			IBusinessRuleResponse response = new BusinessRuleResponse(typeof(OpenHoursRule), message, HaltModify, IsMandatory,
+				period, person, dop, FriendlyName) {Overridden = !HaltModify};
 			return response;
 		}
 
 		private IBusinessRuleResponse checkScheduleDay(IScheduleDay scheduleDay, IPerson person, DateOnly dateOnly)
 		{
-			if (scheduleDay.HasProjection())
+			if (!scheduleDay.HasProjection()) return null;
+
+			var layerCollection = scheduleDay.ProjectionService().CreateProjection();
+			if (layerCollection == null || !layerCollection.HasLayers)
+				return null;
+			var period = layerCollection.Period().Value;
+			var timeZone = person.PermissionInformation.DefaultTimeZone();
+
+			foreach (var layer in layerCollection.FilterLayers<IActivity>())
 			{
-				IVisualLayerCollection layerCollection = scheduleDay.ProjectionService().CreateProjection();
-				if (layerCollection == null || !layerCollection.HasLayers)
-					return null;
-				DateTimePeriod period = layerCollection.Period().Value;
-				var timeZone = person.PermissionInformation.DefaultTimeZone();
+				var activity = (IActivity) layer.Payload;
+				if (!activity.RequiresSkill) continue;
 
-				foreach (IVisualLayer layer in layerCollection.FilterLayers<IActivity>())
-				{
-					var activity = (IActivity) layer.Payload;
-					if (activity.RequiresSkill)
-					{
-					 IEnumerable<DateTimePeriod> openHours = createOpenHoursForAgent(period, dateOnly, person,activity );
+				var openHours = createOpenHoursForAgent(period, dateOnly, person, activity);
+				if (openHours.Any(dateTimePeriod => dateTimePeriod.Contains(layer.Period))) continue;
 
-						bool found = openHours.Any(dateTimePeriod => dateTimePeriod.Contains(layer.Period));
-						if (!found)
-						{
-							var errorMessage = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
-								_businessRuleNoSkillsOpenErrorMessage,
-								layer.DisplayDescription(),
-								layer.Period.StartDateTimeLocal(timeZone),
-								layer.Period.EndDateTimeLocal(timeZone));
-							return createResponse(person, dateOnly, errorMessage);
-						}
-					}
-				}
+				var errorMessage = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
+					_businessRuleNoSkillsOpenErrorMessage,
+					layer.DisplayDescription(),
+					layer.Period.StartDateTimeLocal(timeZone),
+					layer.Period.EndDateTimeLocal(timeZone));
+				return createResponse(person, dateOnly, errorMessage);
 			}
 			return null;
 		}
 
-		private IEnumerable<DateTimePeriod> createOpenHoursForAgent(DateTimePeriod period, DateOnly date, IPerson person,IActivity activity )
+		private IEnumerable<DateTimePeriod> createOpenHoursForAgent(DateTimePeriod period, DateOnly date, IPerson person,
+			IActivity activity)
 		{
 			var ret = new List<DateTimePeriod>();
 
-			IList<ISkill> agentSkills = SkillsOnPerson(date, person);
+			var agentSkills = SkillsOnPerson(date, person);
 
-			if(agentSkills.Count == 0)
+			if (agentSkills.Count == 0)
 				return ret;
-			if(_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.Count == 0)
+			if (_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.Count == 0)
 				return ret;
 
-			for (int index = 0; index < agentSkills.Count; index++)
+			for (var index = 0; index < agentSkills.Count; index++)
 			{
 				var agentSkill = agentSkills[index];
-				if (!agentSkill.Activity.Equals( activity))
+				if (!agentSkill.Activity.Equals(activity))
 				{
 					continue;
 				}
 				ISkillStaffPeriodDictionary skillStaffPeriodDictionary;
-				if (_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(agentSkill, out skillStaffPeriodDictionary))
+				if (_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(agentSkill,
+					out skillStaffPeriodDictionary))
 				{
 					ret.AddRange(skillStaffPeriodDictionary.SkillOpenHoursCollection.Where(s => s.Intersect(period)));
 				}
@@ -145,8 +136,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			if (period != null)
 			{
 				skills.AddRange(from personSkill in period.PersonSkillCollection
-								where personSkill.Active
-								select personSkill.Skill);
+					where personSkill.Active
+					select personSkill.Skill);
 			}
 
 			return skills;

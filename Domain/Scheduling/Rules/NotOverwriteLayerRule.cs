@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 {
 	public class NotOverwriteLayerRule : INewBusinessRule
 	{
-		private bool _haltModify = true;
 		private readonly string _businessRuleOverlappingErrorMessage3;
 
 		public NotOverwriteLayerRule()
@@ -19,16 +18,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			_businessRuleOverlappingErrorMessage3 = Resources.BusinessRuleOverlappingErrorMessage3;
 		}
 
-		public bool IsMandatory
-		{
-			get { return false; }
-		}
+		public bool IsMandatory => false;
 
-		public bool HaltModify
-		{
-			get { return _haltModify; }
-			set { _haltModify = value; }
-		}
+		public bool HaltModify { get; set; } = true;
 
 		public bool Configurable => true;
 
@@ -98,55 +90,54 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				for (var j = i + 1; j < layers.Length; j++)
 				{
 					var layerWithHighPriority = layers[j];
+
 					if(layerWithHighPriority.Payload.Equals(layerWithLowPriority.Payload))
 						continue;
 
-					if (layerWithHighPriority.Period.Intersect(layerWithLowPriority.Period))
+					if (!layerWithHighPriority.Period.Intersect(layerWithLowPriority.Period))
+						continue;
+
+					result.Add(new OverlappingLayers
 					{
-						result.Add(new OverlappingLayers
-						{
-							LayerBelowId = layerWithLowPriority.Id.GetValueOrDefault(),
-							LayerBelowName = layerWithLowPriority.Payload.Name,
-							LayerBelowPeriod = layerWithLowPriority.Period,
-							LayerAboveId = layerWithHighPriority.Id.GetValueOrDefault(),
-							LayerAboveName = layerWithHighPriority.Payload.Name,
-							LayerAbovePeriod = layerWithHighPriority.Period
-						});
-					}
+						LayerBelowId = layerWithLowPriority.Id.GetValueOrDefault(),
+						LayerBelowName = layerWithLowPriority.Payload.Name,
+						LayerBelowPeriod = layerWithLowPriority.Period,
+						LayerAboveId = layerWithHighPriority.Id.GetValueOrDefault(),
+						LayerAboveName = layerWithHighPriority.Payload.Name,
+						LayerAbovePeriod = layerWithHighPriority.Period
+					});
 				}
 
 				foreach (var personMeeting in meetings)
 				{
-					if (personMeeting.Period.Intersect(layerWithLowPriority.Period))
+					if (!personMeeting.Period.Intersect(layerWithLowPriority.Period)) continue;
+
+					var overlappingLayerIssue = new OverlappingLayers
 					{
-						var overlappingLayerIssue = new OverlappingLayers
-						{
-							LayerBelowId = layerWithLowPriority.Id.GetValueOrDefault(),
-							LayerBelowName = layerWithLowPriority.Payload.Name,
-							LayerBelowPeriod = layerWithLowPriority.Period,
-							LayerAboveId = personMeeting.Id.GetValueOrDefault(),
-							LayerAboveName = personMeeting.ToLayer().Payload.Name,
-							LayerAbovePeriod = personMeeting.Period
-						};
-						result.Add(overlappingLayerIssue);
-					}
+						LayerBelowId = layerWithLowPriority.Id.GetValueOrDefault(),
+						LayerBelowName = layerWithLowPriority.Payload.Name,
+						LayerBelowPeriod = layerWithLowPriority.Period,
+						LayerAboveId = personMeeting.Id.GetValueOrDefault(),
+						LayerAboveName = personMeeting.ToLayer().Payload.Name,
+						LayerAbovePeriod = personMeeting.Period
+					};
+					result.Add(overlappingLayerIssue);
 				}
 
 				foreach (var personalShiftLayer in personalShiftLayers)
 				{
-					if (personalShiftLayer.Period.Intersect(layerWithLowPriority.Period))
+					if (!personalShiftLayer.Period.Intersect(layerWithLowPriority.Period)) continue;
+
+					var overlappingLayerIssue = new OverlappingLayers
 					{
-						var overlappingLayerIssue = new OverlappingLayers
-						{
-							LayerBelowId = layerWithLowPriority.Id.GetValueOrDefault(),
-							LayerBelowName = layerWithLowPriority.Payload.Name,
-							LayerBelowPeriod = layerWithLowPriority.Period,
-							LayerAboveId = personalShiftLayer.Id.GetValueOrDefault(),
-							LayerAboveName = personalShiftLayer.Payload.Name,
-							LayerAbovePeriod = personalShiftLayer.Period
-						};
-						result.Add(overlappingLayerIssue);
-					}
+						LayerBelowId = layerWithLowPriority.Id.GetValueOrDefault(),
+						LayerBelowName = layerWithLowPriority.Payload.Name,
+						LayerBelowPeriod = layerWithLowPriority.Period,
+						LayerAboveId = personalShiftLayer.Id.GetValueOrDefault(),
+						LayerAboveName = personalShiftLayer.Payload.Name,
+						LayerAbovePeriod = personalShiftLayer.Period
+					};
+					result.Add(overlappingLayerIssue);
 				}
 			}
 
@@ -156,25 +147,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message)
 		{
 			var dop = new DateOnlyPeriod(dateOnly, dateOnly);
-			DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-			IBusinessRuleResponse response = new BusinessRuleResponse(typeof(NotOverwriteLayerRule), message, _haltModify, IsMandatory, period, person, dop, FriendlyName) { Overridden = !_haltModify };
-			return response;
+			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+			return new BusinessRuleResponse(typeof(NotOverwriteLayerRule), message, HaltModify, IsMandatory, period, person, dop,
+				FriendlyName) {Overridden = !HaltModify};
 		}
 
 		private IBusinessRuleResponse createResponse(IPerson person,DateOnly dateOnly, OverlappingLayers overlappingLayers)
 		{
 			var dop = dateOnly.ToDateOnlyPeriod();
 			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-			string errorMessage = createErrorMessage(overlappingLayers);
+			var errorMessage = createErrorMessage(overlappingLayers);
 			IBusinessRuleResponse response = new BusinessRuleResponse(
 				typeof(NotOverwriteLayerRule),
 				errorMessage,
-				_haltModify,
+				HaltModify,
 				IsMandatory,
 				period,
 				person,
 				dop,
-				FriendlyName) {Overridden = !_haltModify};
+				FriendlyName) {Overridden = !HaltModify};
 			return response;
 		}
 
@@ -186,12 +177,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var layerBelowTimePeriod = overlappingLayers.LayerBelowPeriod.TimePeriod(loggedOnTimezone);
 			var layerAboveTimePeriod = overlappingLayers.LayerAbovePeriod.TimePeriod(loggedOnTimezone);
 
-			string ret = string.Format(loggedOnCulture,
-									   _businessRuleOverlappingErrorMessage3,
-									   overlappingLayers.LayerBelowName,
-									   layerBelowTimePeriod.ToShortTimeString(loggedOnCulture),
-									   overlappingLayers.LayerAboveName,
-									   layerAboveTimePeriod.ToShortTimeString(loggedOnCulture));
+			var ret = string.Format(loggedOnCulture,
+				_businessRuleOverlappingErrorMessage3,
+				overlappingLayers.LayerBelowName,
+				layerBelowTimePeriod.ToShortTimeString(loggedOnCulture),
+				overlappingLayers.LayerAboveName,
+				layerAboveTimePeriod.ToShortTimeString(loggedOnCulture));
 			return ret;
 		}
 

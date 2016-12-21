@@ -14,8 +14,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		//private readonly ISchedulingResultStateHolder _schedules;
 		private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
 
-		private bool _haltModify = true;
-		private bool _forDelete;
 		private static readonly object modifiedAccountLock = new object();
 		private readonly string _businessRulePersonAccountError1;
 
@@ -29,24 +27,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			_businessRulePersonAccountError1 = Resources.BusinessRulePersonAccountError1;
 		}
 
-		public bool IsMandatory
-		{
-			get { return false; }
-		}
+		public bool IsMandatory => false;
 
-		public bool HaltModify
-		{
-			get { return _haltModify; }
-			set { _haltModify = value; }
-		}
+		public bool HaltModify { get; set; } = true;
 
 		public bool Configurable => false;
 
-		public bool ForDelete
-		{
-			get { return _forDelete; }
-			set { _forDelete = value; }
-		}
+		public bool ForDelete { get; set; }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
@@ -69,8 +56,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				var affectedAccounts = new HashSet<IAccount>();
 				foreach (var scheduleDay in enumerable[rangeCloneValueKey.Key])
 				{
-					DateOnly dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
-					IEnumerable<IAccount> accounts = myAccounts.Find(dateOnly);
+					var dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
+					var accounts = myAccounts.Find(dateOnly);
 					foreach (var account in accounts)
 					{
 						affectedAccounts.Add(account);
@@ -80,15 +67,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				var timeZone = rangeCloneValueKey.Value.Person.PermissionInformation.DefaultTimeZone();
 				foreach (var affectedAccount in affectedAccounts)
 				{
-					DateOnlyPeriod rangePeriod = rangeCloneValueKey.Value.Period.ToDateOnlyPeriod(timeZone);
-					DateOnlyPeriod? intersection = affectedAccount.Period().Intersection(rangePeriod);
+					var rangePeriod = rangeCloneValueKey.Value.Period.ToDateOnlyPeriod(timeZone);
+					var intersection = affectedAccount.Period().Intersection(rangePeriod);
 					if (!intersection.HasValue)
 						continue;
 
 					var lastRemaining = affectedAccount.Remaining;
-					IList<IScheduleDay> scheduleDaysForAccount = new List<IScheduleDay>(rangeCloneValueKey.Value.ScheduledDayCollection(intersection.Value));
+					IList<IScheduleDay> scheduleDaysForAccount =
+						new List<IScheduleDay>(rangeCloneValueKey.Value.ScheduledDayCollection(intersection.Value));
 					affectedAccount.Owner.Absence.Tracker.Track(affectedAccount, affectedAccount.Owner.Absence,
-																			  scheduleDaysForAccount);
+						scheduleDaysForAccount);
 
 					if (lastRemaining != affectedAccount.Remaining)
 					{
@@ -102,23 +90,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 					var oldResponses = rangeCloneValueKey.Value.BusinessRuleResponseInternalCollection;
 					foreach (var scheduleDay in scheduleDaysForAccount)
 					{
-						oldResponses.Remove(createResponse(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod, string.Empty, typeof(NewPersonAccountRule), affectedAccount.Owner.Absence.Id));
+						oldResponses.Remove(createResponse(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod, string.Empty,
+							typeof(NewPersonAccountRule), affectedAccount.Owner.Absence.Id));
 					}
-					if(affectedAccount.IsExceeded)
-					{
-						foreach (var scheduleDay in scheduleDaysForAccount)
-						{
-							string message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
-													_businessRulePersonAccountError1,
-													affectedAccount.Owner.Absence.Description.Name, affectedAccount.Period().StartDate.ToShortDateString());
+					if (!affectedAccount.IsExceeded) continue;
 
-							if (!ForDelete)
-							{
-								var response = createResponse(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod, message,
-									typeof(NewPersonAccountRule), affectedAccount.Owner.Absence.Id);
-								responseList.Add(response);
-							}
-						}
+					foreach (var scheduleDay in scheduleDaysForAccount)
+					{
+						var message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, _businessRulePersonAccountError1,
+							affectedAccount.Owner.Absence.Description.Name, affectedAccount.Period().StartDate.ToShortDateString());
+
+						if (ForDelete) continue;
+
+						var response = createResponse(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod, message,
+							typeof(NewPersonAccountRule), affectedAccount.Owner.Absence.Id);
+						responseList.Add(response);
 					}
 				}
 				foreach (var businessRuleResponse in responseList)
@@ -137,7 +123,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		private IBusinessRuleResponse createResponse(IPerson person, IDateOnlyAsDateTimePeriod dateOnly, string message, Type type, Guid? absenceId)
 		{
 			var dop = dateOnly.DateOnly.ToDateOnlyPeriod();
-			IBusinessRuleResponse response = new BusinessRuleResponseWithAbsenceId(type, message, _haltModify, IsMandatory, dateOnly.Period(), person, dop, FriendlyName, absenceId) { Overridden = !_haltModify };
+			IBusinessRuleResponse response = new BusinessRuleResponseWithAbsenceId(type, message, HaltModify, IsMandatory, dateOnly.Period(), person, dop, FriendlyName, absenceId) { Overridden = !HaltModify };
 			return response;
 		}
 	}
