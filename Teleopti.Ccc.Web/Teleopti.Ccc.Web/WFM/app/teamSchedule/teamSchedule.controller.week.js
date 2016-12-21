@@ -19,6 +19,11 @@
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
+		vm.scheduleDate = params.selectedDate || new Date();
+		vm.selectedTeamIds = params.selectedTeamIds || [];
+		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
+
+		vm.startOfWeek = moment(vm.scheduleDate).startOf('week').toDate();
 
 		vm.onKeyWordInSearchInputChanged = function() {
 			vm.loadSchedules();
@@ -35,11 +40,6 @@
 			vm.scheduleFullyLoaded = false;
 			vm.loadSchedules();
 		};
-
-		vm.scheduleDate = params.selectedDate || new Date();
-		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
-
-		vm.startOfWeek = moment(vm.scheduleDate).startOf('week').toDate();
 
 		vm.onStartOfWeekChanged = function () {
 			vm.scheduleDate = new Date(vm.startOfWeek.getTime());
@@ -71,6 +71,7 @@
 
 		vm.changeSelectedTeams = function(groups) {
 			vm.selectedTeamIds = groups;
+			params.selectedTeamIds = vm.selectedTeamIds;
 			vm.resetSchedulePage();
 		};
 
@@ -79,6 +80,7 @@
 				SelectAgentsPerPageEnabled: toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230,
 				SeeScheduleChangesByOthers: toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
 				DisplayScheduleOnBusinessHierachyEnabled: toggleSvc.WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260,
+				DisplayWeekScheduleOnBusinessHierachyEnabled: toggleSvc.WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252,
 				
 				AbsenceReportingEnabled: toggleSvc.WfmTeamSchedule_AbsenceReporting_35995,
 				AddActivityEnabled: toggleSvc.WfmTeamSchedule_AddActivity_37541,
@@ -118,7 +120,9 @@
 			};
 			vm.weekDays = Util.getWeekdays(vm.scheduleDate);
 			vm.paginationOptions.totalPages = 1;
-			vm.loadSchedules();
+
+			if (!vm.toggles.DisplayWeekScheduleOnBusinessHierachyEnabled)
+				vm.loadSchedules();
 
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
 		};
@@ -127,9 +131,11 @@
 			teamScheduleSvc.getAvalableHierachy(vm.scheduleDateMoment().format("YYYY-MM-DD"))
 				.then(function (response) {
 					var data = response.data;
+					var preSelectedTeamIds = vm.selectedTeamIds.length > 0 ? vm.selectedTeamIds : [data.LogonUserTeamId];
+
 					vm.availableGroups = {
 						sites: data.Children,
-						logonUserTeamId: data.LogonUserTeamId
+						preSelectedTeamIds: preSelectedTeamIds
 					};
 			})
 			]).then(vm.init);

@@ -13,7 +13,7 @@
 	.relative {
 		position: relative;
 	}
-	.inline-block{
+	.inline-block {
 		display: inline-block;
 	}
 	.start-ellipsis, .end-ellipsis {
@@ -315,16 +315,15 @@
 	}
 	.md-select-value {
 		align-items: flex-end;
-	}	
+	}
 }
 .organization-picker {
 	min-width: 200px !important;
-	margin: 0 0 0 2em;
+	margin: 0 0 0 2.3em;
 
 	.must-hide {
 		display: none !important;
 	}
-
 	md-select-menu, md-content._md {
 		width: 100%;
 		max-height: 600px;
@@ -374,6 +373,9 @@
 			}
 			& > md-checkbox:hover {
 				background-color: rgba(0, 0, 0, .06) !important;
+			}
+			& > md-checkbox.md-checked .md-ink-ripple .md-icon{
+				background-color: #09F;
 			}
 			.partial-selected .md-icon {
 				background-color: #09F;

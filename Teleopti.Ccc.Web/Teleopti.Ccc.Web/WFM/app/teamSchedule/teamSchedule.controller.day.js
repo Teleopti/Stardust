@@ -30,12 +30,13 @@
 		vm.availableTimezones = [];
 		vm.availableGroups = [];
 		vm.currentTimezone;
+		vm.availableGroups = [];
 	
 		vm.toggleForSelectAgentsPerPageEnabled = false;
 		vm.onlyLoadScheduleWithAbsence = false;
 		vm.permissionsAndTogglesLoaded = false;
 		vm.lastCommandTrackId = '';
-
+		vm.selectedTeamIds = $stateParams.selectedTeamIds || [];
 		vm.searchEnabled = $state.current.name != 'teams.for';
 		vm.showDatePicker = false;
 
@@ -209,7 +210,8 @@
 		};
 
 		vm.changeSelectedTeams = function(groups) {
-		    vm.selectedTeamIds = groups;
+			vm.selectedTeamIds = groups;
+			$stateParams.selectedTeamIds = vm.selectedTeamIds;
 		    vm.resetSchedulePage();
 		};
 	
@@ -357,6 +359,7 @@
 				SelectAgentsPerPageEnabled: toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230,
 				SeeScheduleChangesByOthers: toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
 				DisplayScheduleOnBusinessHierachyEnabled: toggleSvc.WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260,
+				DisplayWeekScheduleOnBusinessHierachyEnabled: toggleSvc.WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252,
 				
 				AbsenceReportingEnabled: toggleSvc.WfmTeamSchedule_AbsenceReporting_35995,
 				AddActivityEnabled: toggleSvc.WfmTeamSchedule_AddActivity_37541,
@@ -412,7 +415,9 @@
 										|| vm.toggles.RemoveAbsenceEnabled
 										|| vm.toggles.SwapShiftEnabled
 										|| vm.toggles.ModifyShiftCategoryEnabled;
-			vm.resetSchedulePage();
+
+			if (!vm.toggles.DisplayWeekScheduleOnBusinessHierachyEnabled)
+				vm.resetSchedulePage();
 
 			
 			var template = $translate.instant('WFMReleaseNotification');
@@ -436,9 +441,11 @@
 			teamScheduleSvc.getAvalableHierachy(vm.scheduleDateMoment().format("YYYY-MM-DD"))
 				.then(function (response) {
 					var data = response.data;
+					var preSelectedTeamIds = vm.selectedTeamIds.length > 0 ? vm.selectedTeamIds : [data.LogonUserTeamId];
+
 					vm.availableGroups = {
 						sites: data.Children,
-						logonUserTeamId: data.LogonUserTeamId
+						preSelectedTeamIds: preSelectedTeamIds
 					};
 				})
 		]).then(vm.init);

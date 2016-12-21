@@ -2,8 +2,7 @@
 
     'use strict';
 
-    angular.module('wfm.teamSchedule')
-    .directive('viewChanger', viewChangerDirective);
+    angular.module('wfm.teamSchedule').directive('viewChanger', viewChangerDirective);
 
     function viewChangerDirective() {
         return {
@@ -13,10 +12,11 @@
             controllerAs: 'vc',
             scope: {
                 selectedDate: '=?',
-                keyword: '=?'
+                keyword: '=?',
+                selectedTeamIds: '=?'
             },
             bindToController: true,
-            controller: viewChangerController,
+            controller: viewChangerController
         };
     }
 
@@ -37,6 +37,7 @@
 
             if (vc.keyword) params.keyword = vc.keyword;
             if (vc.selectedDate) params.selectedDate = vc.selectedDate;
+            if (vc.selectedTeamIds) params.selectedTeamIds = vc.selectedTeamIds;
 
             $state.go(viewState, params);
         };

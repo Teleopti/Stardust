@@ -16,34 +16,49 @@
 	function organizationPickerCtrl($scope, $translate) {
 		var ctrl = this,
 			currentSite,
-			logonUserTeamId,
+			preSelectedTeamIds = [],
 			initialSelectedTeamIds = [];
 
 		ctrl.groupList = [];
 		ctrl.availableTeamIds = [];
 		ctrl.selectedTeamIds = [];
 
-		ctrl.$onInit = function() {
+		ctrl.$onInit = function() {};
+
+		ctrl.$onChanges = function() {
 			populateGroupList();
-			if(logonUserTeamId != null && ctrl.availableTeamIds.indexOf(logonUserTeamId) > -1){
-				ctrl.selectedTeamIds.push(logonUserTeamId);
+
+			if (preSelectedTeamIds != null && preSelectedTeamIds.length > 0) {
+				if (preSelectedTeamIds.every(function(tId) {
+						return ctrl.availableTeamIds.indexOf(tId) > -1;
+					})) {
+					ctrl.selectedTeamIds = ctrl.selectedTeamIds.concat(preSelectedTeamIds);
+				}
 			}
+
+			updateAllSiteSelection();
 			ctrl.onSelectionDone();
 		};
 
-		ctrl.$onChanges = function(changesObj) {
-			if (!changesObj.availableGroups || !changesObj.availableGroups.sites || changesObj.availableGroups.sites.length == 0) return;
-			populateGroupList();
+		ctrl.refresh = function(changesObj) {
+			if (!changesObj ||
+				!changesObj.availableGroups ||
+				!changesObj.availableGroups.currentValue ||
+				!changesObj.availableGroups.currentValue.sites ||
+				changesObj.availableGroups.currentValue.sites.length == 0) return;
+
+			ctrl.refresh();
 		};
 
-		ctrl.onPickerOpen = function(){
+		ctrl.onPickerOpen = function() {
 			initialSelectedTeamIds = ctrl.selectedTeamIds.concat();
 		};
 
 		function populateGroupList() {
-			if(!ctrl.availableGroups || !ctrl.availableGroups.sites || ctrl.availableGroups.sites.length == 0) return;
+			if (!ctrl.availableGroups || !ctrl.availableGroups.sites || ctrl.availableGroups.sites.length == 0) return;
 			ctrl.groupList = [];
-			logonUserTeamId = ctrl.availableGroups.logonUserTeamId;
+
+			preSelectedTeamIds = ctrl.availableGroups.preSelectedTeamIds;
 
 			ctrl.availableGroups.sites.forEach(function(g) {
 				var site = {
@@ -68,7 +83,7 @@
 			if (!ctrl.selectedTeamIds) return '';
 
 			if (ctrl.selectedTeamIds.length > 1)
-				return $translate.instant("SeveralTeamsSelected").replace("{0}",ctrl.selectedTeamIds.length);
+				return $translate.instant("SeveralTeamsSelected").replace("{0}", ctrl.selectedTeamIds.length);
 
 			for (var i = 0; i < ctrl.groupList.length; i++) {
 				var teams = ctrl.groupList[i].teams
@@ -80,17 +95,17 @@
 			}
 			return $translate.instant("Organization");
 		};
-		
+
 		ctrl.processSearchTermFilter = function(site) {
-			if(site && ctrl.searchTerm.length > 0) {
-				if(site.name.toLowerCase().indexOf(ctrl.searchTerm.toLowerCase()) > -1) {
+			if (site && ctrl.searchTerm.length > 0) {
+				if (site.name.toLowerCase().indexOf(ctrl.searchTerm.toLowerCase()) > -1) {
 					return '';
 				}
 				return ctrl.searchTerm;
 			}
 		};
 
-		ctrl.showTeamListOfSite = function(site, event){
+		ctrl.showTeamListOfSite = function(site, event) {
 			site.expanded = !site.expanded;
 			event.stopPropagation();
 		};
@@ -114,10 +129,21 @@
 			});
 		}
 
-		ctrl.partialTeamsSelected = function(site){
-			return site && site.teams.some(function(team){
-				return ctrl.selectedTeamIds.indexOf(team.id) > -1;
+		ctrl.partialTeamsSelected = function(site) {
+			if (!site) return false;
+
+			var some = false,
+				all = true;
+
+			site.teams.forEach(function(team) {
+				if (ctrl.selectedTeamIds.indexOf(team.id) > -1) {
+					some = true;
+				} else {
+					all = false;
+				}
 			});
+
+			return some && !all;
 		};
 
 		ctrl.setCurrentSiteValue = function(site) {
@@ -128,41 +154,47 @@
 			return ctrl.selectedTeamIds;
 		}, function(newValue, oldValue, scope) {
 			if (newValue)
-				updateGroupSelection();
+				updateGroupSelection(currentSite);
 		});
 
-		function updateGroupSelection() {
-			if (!currentSite) return;
-			if (currentSite.teams.every(function(team) {
-					return ctrl.selectedTeamIds.indexOf(team.id) > -1;
-				}))
-				currentSite.isChecked = true;
-			else
-				currentSite.isChecked = false;
+		function updateAllSiteSelection() {
+			ctrl.groupList.forEach(updateGroupSelection);
 		}
 
-		ctrl.onSearchOrganization = function($event){
+		function updateGroupSelection(site) {
+			if (!site) return;
+			if (site.teams && site.teams.every(function(team) {
+					return ctrl.selectedTeamIds.indexOf(team.id) > -1;
+				}))
+				site.isChecked = true;
+			else
+				site.isChecked = false;
+		}
+
+		ctrl.onSearchOrganization = function($event) {
 			$event.stopPropagation();
 		};
 
 		ctrl.onSelectionDone = function() {
-			ctrl.searchTerm ='';
+			ctrl.searchTerm = '';
 
-			if(ctrl.groupList.length > 0) {
+			if (ctrl.groupList.length > 0) {
 				ctrl.groupList.forEach(function(s) {
 					s.expanded = false;
 				});
 			}
 
 			//load the schedule data when team ids changed
-			if(ctrl.selectedTeamIds.length == initialSelectedTeamIds.length 
-				&& ctrl.selectedTeamIds.every(function(id) {
+			if (ctrl.selectedTeamIds.length == initialSelectedTeamIds.length &&
+				ctrl.selectedTeamIds.every(function(id) {
 					return initialSelectedTeamIds.indexOf(id) > -1;
 				})) {
 				return;
 			}
 
-			ctrl.onPick({groups: ctrl.selectedTeamIds});
+			ctrl.onPick({
+				groups: ctrl.selectedTeamIds
+			});
 		};
 	}
 })();

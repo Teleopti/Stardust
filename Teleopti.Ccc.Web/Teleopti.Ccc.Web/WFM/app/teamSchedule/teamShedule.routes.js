@@ -13,7 +13,8 @@
 			controller: 'TeamScheduleController as vm',
 			params: {
 				keyword: '',
-				selectedDate: new Date()
+				selectedDate: new Date(),
+				selectedTeamIds: []
 			}
 		}).state('teams.for', {
 			url: '/?personId',
@@ -26,7 +27,8 @@
 			url: '/week',
 			params: {
 				keyword: '',
-				selectedDate: new Date()
+				selectedDate: new Date(),
+				selectedTeamIds: []
 			},
 			templateUrl: 'app/teamSchedule/html/weekViewSchedule.html',
 			controller: 'TeamScheduleWeeklyController as vm'

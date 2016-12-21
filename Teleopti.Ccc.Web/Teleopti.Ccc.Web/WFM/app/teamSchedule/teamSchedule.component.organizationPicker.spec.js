@@ -36,7 +36,9 @@
 		};
 
 		var ctrl = $componentController('organizationPicker', null, bindings);
-		ctrl.$onInit();
+		ctrl.refresh({
+			
+		});
 
 		expect(ctrl.groupList.length).toEqual(2);
 		expect(ctrl.groupList[0].id).toEqual("site1");
@@ -68,7 +70,7 @@
 		};
 
 		var ctrl = $componentController('organizationPicker', null, bindings);
-		ctrl.$onInit();
+		ctrl.refresh();
 
 		ctrl.onPickerOpen();
 		ctrl.selectedTeamIds = ['team1'];
@@ -106,7 +108,7 @@
 		};
 
 		var ctrl = $componentController('organizationPicker', null, bindings);
-		ctrl.$onInit();
+		ctrl.refresh();
 
 		ctrl.onPickerOpen();
 		ctrl.selectedTeamIds = ['team1', 'team2'];
