@@ -10,8 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	public class NewPersonAccountRule : INewBusinessRule
 	{
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-
-		//private readonly ISchedulingResultStateHolder _schedules;
+		
 		private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
 
 		private static readonly object modifiedAccountLock = new object();
@@ -21,7 +20,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_allAccounts = allAccounts;
-			//_schedules = schedules;
 			FriendlyName = Resources.BusinessRulePersonAccountFriendlyName;
 			Description = Resources.DescriptionOfNewPersonAccountRule;
 			_businessRulePersonAccountError1 = Resources.BusinessRulePersonAccountError1;
@@ -83,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 						if (_schedulingResultStateHolder.Schedules == null)
 							_schedulingResultStateHolder.Schedules = rangeClones.Values.FirstOrDefault().Owner;
 						//Tell someone this account is dirty
-						lock (modifiedAccountLock) { }
+						lock (modifiedAccountLock)
 							_schedulingResultStateHolder.Schedules.ModifiedPersonAccounts.Add((IPersonAbsenceAccount) affectedAccount.Root());
 					}
 
