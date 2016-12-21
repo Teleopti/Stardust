@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
             var activityRepository = MockRepository.GenerateMock<IActivityRepository>();
-            var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+            var scheduleDictionary = new ScheduleDictionaryForTest(ScenarioFactory.CreateScenario("default",true,false),_period);
             var scheduleRepository = MockRepository.GenerateMock<IScheduleStorage>();
             var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
             var skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();
@@ -74,7 +74,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             skillRepository.Stub(x => x.FindAllWithSkillDays(_targetPeriod)).Return(new Collection<ISkill>{_selectedSkill});
             activityRepository.Stub(x => x.LoadAll()).Return(new List<IActivity>());
             skillDayRepository.Stub(x => x.FindReadOnlyRange(_targetPeriod, new List<ISkill>(), _targetScenario)).IgnoreArguments().Return(new Collection<ISkillDay>());
-            scheduleDictionary.Stub(x => x.Keys).Return(new Collection<IPerson>());
 
             _targetStateLoader = new SchedulerStateLoader(_targetStateHolder, _repositoryFactory, _unitOfWorkFactory, _lazyManager, _scheduleStorageFactory);
             var scheduleDateTimePeriod =
