@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -9,14 +8,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	public class OpenHoursRule : INewBusinessRule
 	{
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private readonly string _businessRuleNoSkillsOpenErrorMessage;
 
 		public OpenHoursRule(ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
-			FriendlyName = Resources.BusinessRuleNoSkillsOpenFriendlyName;
-			Description = Resources.DescriptionOfOpenHoursRule;
-			_businessRuleNoSkillsOpenErrorMessage = Resources.BusinessRuleNoSkillsOpenErrorMessage;
 		}
 
 		public bool IsMandatory => false;
@@ -39,8 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return responseList;
 		}
 
-		public string FriendlyName { get; }
-		public string Description { get; }
+		public string Description => Resources.DescriptionOfOpenHoursRule;
 
 		private IEnumerable<IBusinessRuleResponse> checkDay(IDictionary<IPerson, IScheduleRange> rangeClones,
 			IScheduleDay scheduleDay)
@@ -64,10 +58,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message)
 		{
+			var friendlyName = Resources.BusinessRuleNoSkillsOpenFriendlyName;
 			var dop = dateOnly.ToDateOnlyPeriod();
 			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			IBusinessRuleResponse response = new BusinessRuleResponse(typeof(OpenHoursRule), message, HaltModify, IsMandatory,
-				period, person, dop, FriendlyName) {Overridden = !HaltModify};
+				period, person, dop, friendlyName) {Overridden = !HaltModify};
 			return response;
 		}
 
@@ -78,9 +73,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var layerCollection = scheduleDay.ProjectionService().CreateProjection();
 			if (layerCollection == null || !layerCollection.HasLayers)
 				return null;
+
 			var period = layerCollection.Period().Value;
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 
+			var errorMessageTemplate = Resources.BusinessRuleNoSkillsOpenErrorMessage;
 			foreach (var layer in layerCollection.FilterLayers<IActivity>())
 			{
 				var activity = (IActivity) layer.Payload;
@@ -89,8 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				var openHours = createOpenHoursForAgent(period, dateOnly, person, activity);
 				if (openHours.Any(dateTimePeriod => dateTimePeriod.Contains(layer.Period))) continue;
 
-				var errorMessage = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
-					_businessRuleNoSkillsOpenErrorMessage,
+				var errorMessage = string.Format(errorMessageTemplate,
 					layer.DisplayDescription(),
 					layer.Period.StartDateTimeLocal(timeZone),
 					layer.Period.EndDateTimeLocal(timeZone));

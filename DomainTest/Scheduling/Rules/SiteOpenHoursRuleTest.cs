@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
@@ -30,14 +29,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			result.Count().Should().Be(0);
 		}
 
-		[Test]
+		[Test, SetUICulture("sv-SE")]
 		public void ShouldReturnResponseWhenStartHourIsNotSatisfied()
 		{
 			var person = createPersonWithSiteOpenHours(8, 17);
-			var result = executeValidate(person, 7, 17);
-			result.Count().Should().Be(1);
-			var response = result.FirstOrDefault();
+			var result = executeValidate(person, 7, 17).ToArray();
+			result.Length.Should().Be(1);
+
+			var response = result.First();
 			response.Person.Equals(person);
+			Assert.IsTrue(response.FriendlyName.StartsWith("Aktivitet utanför"));
+			Assert.IsTrue(response.Message.StartsWith("Inga öppettider för"));
 		}
 
 		[Test]

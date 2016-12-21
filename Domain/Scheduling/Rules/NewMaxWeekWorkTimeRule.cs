@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -11,16 +12,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	public class NewMaxWeekWorkTimeRule : INewBusinessRule
 	{
 		private readonly IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;
-		private readonly string _localizedMessage1;
-		private readonly string _localizedMessage2;
 
 		public NewMaxWeekWorkTimeRule(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor)
 		{
 			_weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
-			FriendlyName = Resources.BusinessRuleMaxWeekWorkTimeFriendlyName;
-			Description = Resources.DescriptionOfNewMaxWeekWorkTimeRule;
-			_localizedMessage1 = Resources.BusinessRuleMaxWeekWorkTimeErrorMessage;
-			_localizedMessage2 = Resources.BusinessRuleNoContractErrorMessage;
 		}
 
 		public bool IsMandatory => false;
@@ -34,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,
 			IEnumerable<IScheduleDay> scheduleDays)
 		{
+			var currentUiCulture = Thread.CurrentThread.CurrentCulture;
 			var responseList = new HashSet<IBusinessRuleResponse>();
 			var personWeeks = _weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(scheduleDays);
 
@@ -47,12 +43,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 					oldResponses.Remove(createResponse(person, day, "remove", typeof(NewMaxWeekWorkTimeRule)));
 				}
 				double maxTimePerWeekMinutes;
+
+				var maxWeekWorkTimeErrorMessage = Resources.BusinessRuleMaxWeekWorkTimeErrorMessage;
+				var noContractErrorMessage = Resources.BusinessRuleNoContractErrorMessage;
 				if (!setMaxTimePerWeekMinutes(out maxTimePerWeekMinutes, personWeek))
 				{
 					// set errors on all days
 					foreach (var dateOnly in personWeek.Week.DayCollection())
 					{
-						var message = string.Format(CultureInfo.CurrentCulture, _localizedMessage2, person.Name,
+						var message = string.Format(currentUiCulture, noContractErrorMessage, person.Name,
 							dateOnly.Date.ToShortDateString());
 						var response = createResponse(person, dateOnly, message, typeof(NewMaxWeekWorkTimeRule));
 						if (!ForDelete)
@@ -68,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 					var sumWorkTimeString = DateHelper.HourMinutesString(sumWorkTime);
 					var maxTimePerWeekString = DateHelper.HourMinutesString(maxTimePerWeekMinutes);
-					var message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, _localizedMessage1,
+					var message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, maxWeekWorkTimeErrorMessage,
 						sumWorkTimeString, maxTimePerWeekString);
 					foreach (var dateOnly in personWeek.Week.DayCollection())
 					{
@@ -83,8 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return responseList;
 		}
 
-		public string FriendlyName { get; }
-		public string Description { get; }
+		public string Description => Resources.DescriptionOfNewMaxWeekWorkTimeRule;
 
 		private static bool setMaxTimePerWeekMinutes(out double maxTimePerWeek, PersonWeek personWeek)
 		{
@@ -118,10 +116,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message, Type type)
 		{
+			var friendlyName = Resources.BusinessRuleMaxWeekWorkTimeFriendlyName;
 			var dop = dateOnly.ToDateOnlyPeriod();
 			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-			var response = new BusinessRuleResponse(type, message, HaltModify, IsMandatory, period, person, dop, FriendlyName)
-												 {Overridden = !HaltModify};
+			var response = new BusinessRuleResponse(type, message, HaltModify, IsMandatory, period, person, dop,
+				friendlyName) {Overridden = !HaltModify};
 			return response;
 		}
 	}

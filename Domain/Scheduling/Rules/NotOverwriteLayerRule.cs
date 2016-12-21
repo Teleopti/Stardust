@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Security.Principal;
+using System.Threading;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -9,14 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 {
 	public class NotOverwriteLayerRule : INewBusinessRule
 	{
-		private readonly string _businessRuleOverlappingErrorMessage3;
-
-		public NotOverwriteLayerRule()
-		{
-			FriendlyName = Resources.BusinessRuleOverlappingFriendlyName3;
-			Description = Resources.DescriptionOfNotOverwriteLayerRule;
-			_businessRuleOverlappingErrorMessage3 = Resources.BusinessRuleOverlappingErrorMessage3;
-		}
+		private string friendlyName => Resources.BusinessRuleOverlappingFriendlyName3;
 
 		public bool IsMandatory => false;
 
@@ -38,8 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return responseList;
 		}
 
-		public string FriendlyName { get; }
-		public string Description { get; }
+		public string Description => Resources.DescriptionOfNotOverwriteLayerRule;
 
 		private IEnumerable<IBusinessRuleResponse> checkDay(IDictionary<IPerson, IScheduleRange> rangeClones, IScheduleDay scheduleDay)
 		{
@@ -149,14 +141,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var dop = new DateOnlyPeriod(dateOnly, dateOnly);
 			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			return new BusinessRuleResponse(typeof(NotOverwriteLayerRule), message, HaltModify, IsMandatory, period, person, dop,
-				FriendlyName) {Overridden = !HaltModify};
+				friendlyName) {Overridden = !HaltModify};
 		}
 
 		private IBusinessRuleResponse createResponse(IPerson person,DateOnly dateOnly, OverlappingLayers overlappingLayers)
 		{
 			var dop = dateOnly.ToDateOnlyPeriod();
 			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-			var errorMessage = createErrorMessage(overlappingLayers);
+			var errorMessage = createErrorMessage(person, overlappingLayers);
 			IBusinessRuleResponse response = new BusinessRuleResponse(
 				typeof(NotOverwriteLayerRule),
 				errorMessage,
@@ -165,24 +157,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				period,
 				person,
 				dop,
-				FriendlyName) {Overridden = !HaltModify};
+				friendlyName) {Overridden = !HaltModify};
 			return response;
 		}
 
-		private string createErrorMessage(OverlappingLayers overlappingLayers)
+		private string createErrorMessage(IPerson person, OverlappingLayers overlappingLayers)
 		{
-			var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
-			var loggedOnTimezone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			var errorMessage = Resources.BusinessRuleOverlappingErrorMessage3;
+			var currentUiCulture = Thread.CurrentThread.CurrentCulture;
+			var timezone = person.PermissionInformation.DefaultTimeZone();
 
-			var layerBelowTimePeriod = overlappingLayers.LayerBelowPeriod.TimePeriod(loggedOnTimezone);
-			var layerAboveTimePeriod = overlappingLayers.LayerAbovePeriod.TimePeriod(loggedOnTimezone);
+			var layerBelowTimePeriod = overlappingLayers.LayerBelowPeriod.TimePeriod(timezone);
+			var layerAboveTimePeriod = overlappingLayers.LayerAbovePeriod.TimePeriod(timezone);
 
-			var ret = string.Format(loggedOnCulture,
-				_businessRuleOverlappingErrorMessage3,
+			var ret = string.Format(currentUiCulture,
+				errorMessage,
 				overlappingLayers.LayerBelowName,
-				layerBelowTimePeriod.ToShortTimeString(loggedOnCulture),
+				layerBelowTimePeriod.ToShortTimeString(currentUiCulture),
 				overlappingLayers.LayerAboveName,
-				layerAboveTimePeriod.ToShortTimeString(loggedOnCulture));
+				layerAboveTimePeriod.ToShortTimeString(currentUiCulture));
 			return ret;
 		}
 

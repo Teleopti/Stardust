@@ -178,8 +178,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             }
         }
 
-        [Test]
-        public void ValidateReturnListWithSevenWhenNoPersonPeriod()
+        [Test, SetUICulture("sv-SE")]
+		public void ValidateReturnListWithSevenWhenNoPersonPeriod()
         {
             var person = _mocks.StrictMock<IPerson>();
             var range = _mocks.StrictMock<IScheduleRange>();
@@ -209,8 +209,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
             using (_mocks.Playback())
             {
-                var ret = _target.Validate(dic, lstOfDays);
-                Assert.AreEqual(7, ret.Count());
+                var ret = _target.Validate(dic, lstOfDays).ToArray();
+				foreach (var response in ret)
+				{
+					Assert.IsTrue(response.FriendlyName.StartsWith("Veckan har för"));
+					Assert.IsTrue(response.Message.StartsWith("Person nn mm har"));
+				}
+				Assert.AreEqual(7, ret.Length);
             }
         }
 

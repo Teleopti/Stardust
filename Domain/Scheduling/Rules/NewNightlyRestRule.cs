@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Security.Principal;
+using System.Threading;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -9,15 +9,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 {
 	public class NewNightlyRestRule : INewBusinessRule
 	{
+		private static string friendlyName => Resources.BusinessRuleNightlyRestRuleFriendlyName;
 		private readonly IWorkTimeStartEndExtractor _workTimeStartEndExtractor;
-		private readonly string _localizedMessage;
 
 		public NewNightlyRestRule(IWorkTimeStartEndExtractor workTimeStartEndExtractor)
 		{
 			_workTimeStartEndExtractor = workTimeStartEndExtractor;
-			FriendlyName = Resources.BusinessRuleNightlyRestRuleFriendlyName;
-			Description = Resources.DescriptionOfNewNightlyRestRule;
-			_localizedMessage = Resources.BusinessRuleNightlyRestRuleErrorMessage;
 		}
 
 		public bool IsMandatory => false;
@@ -48,8 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return responsList;
 		}
 
-		public string FriendlyName { get; }
-		public string Description { get; }
+		public string Description => Resources.DescriptionOfNewNightlyRestRule;
 
 		public void ClearMyResponses(IList<IBusinessRuleResponse> responseList, IPerson person, DateOnly dateOnly)
 		{
@@ -154,7 +150,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 
 			return new BusinessRuleResponse(typeof(NewNightlyRestRule), "", HaltModify, IsMandatory, period, person,
-				dateOnlyPeriod, FriendlyName);
+				dateOnlyPeriod, friendlyName);
 		}
 
 		private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, DateOnly dateOnly1, DateOnly dateOnly2,
@@ -164,7 +160,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			var errorMessage = createErrorMessage(dateOnly1, dateOnly2, nightRest, currentRest);
 			var response = new BusinessRuleResponse(typeof(NewNightlyRestRule), errorMessage, HaltModify, IsMandatory, period,
-					person, new DateOnlyPeriod(dateOnly1, dateOnly2), FriendlyName)
+					person, new DateOnlyPeriod(dateOnly1, dateOnly2), friendlyName)
 				{Overridden = overridden};
 			AddMyResponse(addToRange.BusinessRuleResponseInternalCollection, response);
 			return response;
@@ -172,12 +168,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private string createErrorMessage(DateOnly dateOnly1, DateOnly dateOnly2, TimeSpan nightRest, TimeSpan currentRest)
 		{
-			var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			var errorMessage = Resources.BusinessRuleNightlyRestRuleErrorMessage;
+			var currentUiCulture = Thread.CurrentThread.CurrentCulture;
 			var start = dateOnly1.ToShortDateString();
 			var end = dateOnly2.ToShortDateString();
-			var rest = TimeHelper.GetLongHourMinuteTimeString(currentRest, loggedOnCulture);
-			var ret = string.Format(loggedOnCulture, _localizedMessage,
-				TimeHelper.GetLongHourMinuteTimeString(nightRest, loggedOnCulture), start, end, rest);
+			var rest = TimeHelper.GetLongHourMinuteTimeString(currentRest, currentUiCulture);
+			var ret = string.Format(currentUiCulture, errorMessage,
+				TimeHelper.GetLongHourMinuteTimeString(nightRest, currentUiCulture), start, end, rest);
 			return ret;
 		}
 	}

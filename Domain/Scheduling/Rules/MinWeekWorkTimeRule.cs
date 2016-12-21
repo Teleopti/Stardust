@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Security.Principal;
+using System.Threading;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -14,8 +14,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		public MinWeekWorkTimeRule(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor)
 		{
 			_weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
-			FriendlyName = Resources.BusinessRuleMinWeekWorktimeFriendlyName;
-			Description = Resources.DescriptionOfMinWeekWorkTimeRule;
 			_businessRuleMinWeekWorktimeErrorMessage = Resources.BusinessRuleMinWeekWorktimeErrorMessage;
 		}
 
@@ -27,8 +25,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		public bool ForDelete { get; set; }
 
-		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,IEnumerable<IScheduleDay> scheduleDays)
+		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
 		{
+			var currentUiCulture = Thread.CurrentThread.CurrentUICulture;
 			var responseList = new HashSet<IBusinessRuleResponse>();
 			var personWeeks = _weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(scheduleDays);
 
@@ -41,6 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				{
 					oldResponses.Remove(createResponse(person, day, "remove", typeof(MinWeekWorkTimeRule)));
 				}
+
 				TimeSpan minTimePerWeek;
 				if (!setMinTimePerWeekMinutes(out minTimePerWeek, personWeek))
 					continue;
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 				var sumWorkTimeString = DateHelper.HourMinutesString(sumWorkTime);
 				var minTimePerWeekString = DateHelper.HourMinutesString(minTimePerWeek.TotalMinutes);
-				var message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, _businessRuleMinWeekWorktimeErrorMessage, sumWorkTimeString, minTimePerWeekString);
+				var message = string.Format(currentUiCulture, _businessRuleMinWeekWorktimeErrorMessage, sumWorkTimeString, minTimePerWeekString);
 				foreach (var dateOnly in personWeek.Week.DayCollection())
 				{
 					var response = createResponse(person, dateOnly, message, typeof(MinWeekWorkTimeRule));
@@ -64,11 +64,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 					oldResponses.Add(response);
 				}
 			}
+
 			return responseList;
 		}
 
-		public string FriendlyName { get; }
-		public string Description { get; }
+		public string Description => Resources.DescriptionOfMinWeekWorkTimeRule;
 
 		private static bool setMinTimePerWeekMinutes(out TimeSpan minTimePerWeek, PersonWeek personWeek)
 		{
@@ -120,7 +120,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			var dop = dateOnly.ToDateOnlyPeriod();
 			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-			IBusinessRuleResponse response = new BusinessRuleResponse(type, message, HaltModify, IsMandatory, period, person, dop, FriendlyName) { Overridden = !HaltModify };
+			var friendlyName = Resources.BusinessRuleMinWeekWorktimeFriendlyName;
+			IBusinessRuleResponse response = new BusinessRuleResponse(type, message, HaltModify, IsMandatory, period, person, dop,
+				friendlyName) { Overridden = !HaltModify };
 			return response;
 		}
 	}

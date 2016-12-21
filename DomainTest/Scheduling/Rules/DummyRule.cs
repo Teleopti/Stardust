@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
@@ -11,7 +12,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public DummyRule(bool mandatory)
 		{
 			IsMandatory = mandatory;
-			FriendlyName = string.Empty;
 		}
 
 		public string ErrorMessage => string.Empty;
@@ -32,15 +32,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,
 			IEnumerable<IScheduleDay> scheduleDays)
 		{
+			var errorMessage = Resources.BusinessRuleOverlappingErrorMessage2;
+			var friendlyName = Resources.BusinessRuleOverlappingFriendlyName3;
 			Checked = true;
 			return new List<IBusinessRuleResponse>
 			{
-				new BusinessRuleResponse(typeof(DummyRule), "Check Result of DummyRule", true,
-					IsMandatory, new DateTimePeriod(), new Person(), new DateOnlyPeriod(), FriendlyName)
+				new BusinessRuleResponse(typeof(DummyRule), errorMessage, true,
+					IsMandatory, new DateTimePeriod(), new Person(), new DateOnlyPeriod(), friendlyName)
 			};
 		}
-
-		public string FriendlyName { get; }
+		
 		public string Description => "Description of DummyRule";
 	}
 

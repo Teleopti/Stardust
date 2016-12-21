@@ -16,18 +16,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		private readonly IWorkTimeStartEndExtractor _workTimeStartEndExtractor;
 		private readonly CultureInfo _loggedOnCulture = Thread.CurrentThread.CurrentCulture;
 
-		private readonly string _businessRuleDayOffErrorMessage1;
-		private readonly string _businessRuleDayOffErrorMessage2;
-		private readonly string _businessRuleDayOffErrorMessage4;
-
 		public NewDayOffRule(IWorkTimeStartEndExtractor workTimeStartEndExtractor)
 		{
 			_workTimeStartEndExtractor = workTimeStartEndExtractor;
-			FriendlyName = Resources.BusinessRuleDayOffFriendlyName;
-			Description = Resources.DescriptionOfNewDayOffRule;
-			_businessRuleDayOffErrorMessage1 = Resources.BusinessRuleDayOffErrorMessage1;
-			_businessRuleDayOffErrorMessage2 = Resources.BusinessRuleDayOffErrorMessage2;
-			_businessRuleDayOffErrorMessage4 = Resources.BusinessRuleDayOffErrorMessage4;
 		}
 
 		public string ErrorMessage { get; private set; } = "";
@@ -77,8 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return responseList;
 		}
 
-		public string FriendlyName { get; }
-		public string Description { get; }
+		public string Description => Resources.DescriptionOfNewDayOffRule;
 
 		private dayForValidation convert(IScheduleDay scheduleDay)
 		{
@@ -113,10 +103,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		public bool DayOffDoesConflictWithActivity(IDayOff dayOff, DateTimePeriod assignmentBeforePeriod,
 			DateTimePeriod assignmentAfterPeriod)
 		{
+			var dayOffErrorMessage1 = Resources.BusinessRuleDayOffErrorMessage1;
 			if (dayOff.TargetLength > (assignmentAfterPeriod.StartDateTime - assignmentBeforePeriod.EndDateTime))
 			{
 				// we can't fit the day off beween the days
-				ErrorMessage = string.Format(_loggedOnCulture, _businessRuleDayOffErrorMessage1 + ErrorMessage,
+				ErrorMessage = string.Format(_loggedOnCulture, dayOffErrorMessage1 + ErrorMessage,
 					dayOff.Anchor);
 				return true;
 			}
@@ -142,7 +133,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				// flexibility does not allow the move
 				if (dayOff.Boundary.EndDateTime >= endDayOff.Add(conflictTime)) return false;
 
-				ErrorMessage = string.Format(_loggedOnCulture, _businessRuleDayOffErrorMessage2 + ErrorMessage, day);
+				var dayOffErrorMessage2 = Resources.BusinessRuleDayOffErrorMessage2;
+				ErrorMessage = string.Format(_loggedOnCulture, dayOffErrorMessage2 + ErrorMessage, day);
 				return true;
 				// if the flexibility allows it and we don't get a conflict at the end it can be moved
 			}
@@ -154,7 +146,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				// flexibility does not allow the move
 				if (startDayOff.Add(conflictTime) >= dayOff.Boundary.StartDateTime) return false;
 
-				ErrorMessage = string.Format(_loggedOnCulture, _businessRuleDayOffErrorMessage4 + ErrorMessage, day);
+				var dayOffErrorMessage4 = Resources.BusinessRuleDayOffErrorMessage4;
+				ErrorMessage = string.Format(_loggedOnCulture, dayOffErrorMessage4 + ErrorMessage, day);
 				return true;
 				// if the flexibility allows it and we don't get a conflict at the end it cann be moved
 			}
@@ -204,8 +197,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var dop = dateOnly.ToDateOnlyPeriod();
 			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
+			var friendlyName = Resources.BusinessRuleDayOffFriendlyName;
 			IBusinessRuleResponse response = new BusinessRuleResponse(typeof (NewDayOffRule), message, HaltModify, IsMandatory,
-				period, person, dateOnlyPeriod, FriendlyName) {Overridden = !HaltModify};
+				period, person, dateOnlyPeriod, friendlyName) {Overridden = !HaltModify};
 			return response;
 		}
 

@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
@@ -145,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			scheduleDay.BusinessRuleResponseCollection.Count.Should().Be.EqualTo(0);
 		}
 
-		[Test]
+		[Test, SetUICulture("sv-SE")]
 		public void ShouldShowValidationAlertIfOverwrittenByAnotherMainShiftLayer()
 		{
 			var scenario = new Scenario("_");
@@ -172,7 +171,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
 			scheduleDay.BusinessRuleResponseCollection.Count.Should().Be.EqualTo(1);
-			scheduleDay.BusinessRuleResponseCollection.First().TypeOfRule.Should().Be.EqualTo(typeof(NotOverwriteLayerRule));
+
+			var response = scheduleDay.BusinessRuleResponseCollection.First();
+			response.TypeOfRule.Should().Be.EqualTo(typeof(NotOverwriteLayerRule));
+			Assert.IsTrue(response.FriendlyName.StartsWith("Icke överskrivningsbar aktivitet"));
+			Assert.IsTrue(response.Message.StartsWith("Den icke överskrivningsbara"));
 
 			var scheduleDayToModify = stateHolder.Schedules.SchedulesForDay(dateOnly).First();
 			scheduleDayToModify.PersonAssignment().RemoveActivity(scheduleDayToModify.PersonAssignment().ShiftLayers.ToList()[2]);

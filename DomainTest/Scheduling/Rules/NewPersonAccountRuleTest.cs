@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             }
         }
 
-        [Test]
+        [Test, SetUICulture("sv-SE")]
         public void ShouldUpdateRuleResponse()
         {
             var mocks = new MockRepository();
@@ -110,18 +110,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                                                                          "W. Europe Standard Time")));
 
             }
-            using (mocks.Playback())
-            {
-                var responses = _target.Validate(new Dictionary<IPerson, IScheduleRange>
-                                     {
-                                         {
-                                             person,
-                                             new ScheduleRange(_stateHolder.Schedules,
-                                                               new ScheduleParameters(scenario, person, range), _permissionChecker)
-                                             }
-                                     }, new Collection<IScheduleDay> { scheduleDay });
-                Assert.That(responses.Count(), Is.EqualTo(1));
-            }
+	        using (mocks.Playback())
+	        {
+		        var responses = _target.Validate(new Dictionary<IPerson, IScheduleRange>
+		        {
+			        {
+				        person,
+				        new ScheduleRange(_stateHolder.Schedules,
+					        new ScheduleParameters(scenario, person, range), _permissionChecker)
+			        }
+		        }, new Collection<IScheduleDay> {scheduleDay}).ToArray();
+		        Assert.That(responses.Length, Is.EqualTo(1));
+
+				foreach (var response in responses)
+				{
+					Assert.IsTrue(response.FriendlyName.StartsWith("Tidsuppföljningen överskrider"));
+					Assert.IsTrue(response.Message.StartsWith("Tidsuppföljning för"));
+				}
+			}
         }
 
 		[Test]

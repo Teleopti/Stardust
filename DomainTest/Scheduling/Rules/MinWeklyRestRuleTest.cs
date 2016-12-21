@@ -349,7 +349,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"),
-		 Test]
+			Test, SetUICulture("sv-SE")]
 		public void ValidateReturnListOfErrorsWhenNotEnoughWeeklyRest()
 		{
 			var maxTimePerWeek = new TimeSpan(40, 0, 0);
@@ -392,8 +392,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			}
 			using (_mocks.Playback())
 			{
-				var ret = _target.Validate(dic, lstOfDays);
-				Assert.AreEqual(7, ret.Count());
+				var ret = _target.Validate(dic, lstOfDays).ToArray();
+				foreach (var response in ret)
+				{
+					Assert.IsTrue(response.FriendlyName.StartsWith("Veckan uppfyller inte"));
+					Assert.IsTrue(response.Message.StartsWith("Veckan har inte tillräckligt"));
+				}
+				Assert.AreEqual(7, ret.Length);
 			}
 		}
 

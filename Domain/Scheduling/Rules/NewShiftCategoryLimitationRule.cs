@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Security.Principal;
+using System.Threading;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -9,16 +9,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	{
 		private readonly IShiftCategoryLimitationChecker _limitationChecker;
 		private readonly IVirtualSchedulePeriodExtractor _virtualSchedulePeriodExtractor;
-		private readonly string _localizedMessage;
 
 		public NewShiftCategoryLimitationRule(IShiftCategoryLimitationChecker limitationChecker,
 			IVirtualSchedulePeriodExtractor virtualSchedulePeriodExtractor)
 		{
 			_limitationChecker = limitationChecker;
 			_virtualSchedulePeriodExtractor = virtualSchedulePeriodExtractor;
-			FriendlyName = Resources.BusinessRuleShiftCategoryLimitationFriendlyName;
-			Description = Resources.DescriptionOfNewShiftCategoryLimitationRule;
-			_localizedMessage = Resources.BusinessRuleShiftCategoryLimitationErrorMessage2;
 		}
 
 		public bool IsMandatory => false;
@@ -32,6 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Scheduling.Rules.NewShiftCategoryLimitationRule.createResponse(Teleopti.Interfaces.Domain.IPerson,Teleopti.Interfaces.Domain.DateOnly,System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
 		{
+			var currentUiCulture = Thread.CurrentThread.CurrentCulture;
 			var responseList = new HashSet<IBusinessRuleResponse>();
 
 			var virtualSchedulePeriods =
@@ -58,8 +55,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 					if (!_limitationChecker.IsShiftCategoryOverPeriodLimit(shiftCategoryLimitation, period, currentSchedules,
 						out datesWithCategory)) continue;
 
-					var message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
-						_localizedMessage, shiftCategoryLimitation.ShiftCategory.Description.Name);
+					var errorMessage = Resources.BusinessRuleShiftCategoryLimitationErrorMessage2;
+					var message = string.Format(currentUiCulture, errorMessage, shiftCategoryLimitation.ShiftCategory.Description.Name);
 					foreach (var dateOnly in datesWithCategory)
 					{
 						if (!ForDelete)
@@ -75,15 +72,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return responseList;
 		}
 
-		public string FriendlyName { get; }
-		public string Description { get; }
+		public string Description => Resources.DescriptionOfNewShiftCategoryLimitationRule;
 
 		private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message)
 		{
+			var friendlyName = Resources.BusinessRuleShiftCategoryLimitationFriendlyName;
 			var dop = dateOnly.ToDateOnlyPeriod();
 			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			var response = new BusinessRuleResponse(typeof(NewShiftCategoryLimitationRule), message, HaltModify, IsMandatory,
-					period, person, dop, FriendlyName)
+					period, person, dop, friendlyName)
 				{Overridden = !HaltModify};
 			return response;
 		}

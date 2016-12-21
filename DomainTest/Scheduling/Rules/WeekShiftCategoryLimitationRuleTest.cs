@@ -33,11 +33,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			_dic = MockRepository.GenerateMock<Dictionary<IPerson, IScheduleRange>>();
 			_virtualSchedulePeriodExtractor = MockRepository.GenerateMock<IVirtualSchedulePeriodExtractor>();
 			_weeksFromScheduleDaysExtractor = MockRepository.GenerateMock<IWeeksFromScheduleDaysExtractor>();
-			_target = new WeekShiftCategoryLimitationRule(_limitationChecker, _virtualSchedulePeriodExtractor, _weeksFromScheduleDaysExtractor);
+			_target = new WeekShiftCategoryLimitationRule(_limitationChecker, _virtualSchedulePeriodExtractor,
+				_weeksFromScheduleDaysExtractor);
 
 			_limitation = MockRepository.GenerateMock<IShiftCategoryLimitation>();
 
-			_limits = new List<IShiftCategoryLimitation> { _limitation };
+			_limits = new List<IShiftCategoryLimitation> {_limitation};
 			_limitations = new ReadOnlyCollection<IShiftCategoryLimitation>(_limits);
 			_shiftCategory = new ShiftCategory("Dummy");
 			_permissionInformation = MockRepository.GenerateMock<IPermissionInformation>();
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability",
-			"CA1506:AvoidExcessiveClassCoupling"), Test]
+			 "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ValidateReturnsEmptyListWhenNotTooManyOfSameCategoryInWeek()
 		{
 			var dateOnlyPeriod = new DateOnlyPeriod(2010, 8, 2, 2010, 8, 29);
@@ -89,18 +90,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			person.Stub(x => x.Equals(person)).Return(true).Repeat.AtLeastOnce();
 			IList<DateOnly> datesWithCategory;
 			_limitationChecker.Stub(
-				x =>
-					x.IsShiftCategoryOverWeekLimit(_limitation, range,
-						new DateOnlyPeriod(new DateOnly(2010, 8, 23), new DateOnly(2010, 8, 29)), out datesWithCategory))
+					x =>
+						x.IsShiftCategoryOverWeekLimit(_limitation, range,
+							new DateOnlyPeriod(new DateOnly(2010, 8, 23), new DateOnly(2010, 8, 29)), out datesWithCategory))
 				.
 				Return(false);
 
-			IEnumerable<IBusinessRuleResponse> ret = _target.Validate(_dic, lstOfDays);
+			var ret = _target.Validate(_dic, lstOfDays);
 			Assert.AreEqual(0, ret.Count());
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability",
-			"CA1506:AvoidExcessiveClassCoupling"), Test]
+			 "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ValidateReturnsListOfResponsesWhenTooManyOfSameCategoryInWeek()
 		{
 			var dateOnlyPeriod = new DateOnlyPeriod(2010, 8, 2, 2010, 8, 29);
@@ -139,9 +140,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			range.Stub(x => x.BusinessRuleResponseInternalCollection).Return(oldResponses);
 			person.Stub(x => x.Equals(person)).Return(true).Repeat.AtLeastOnce();
 			_limitationChecker.Stub(
-				x =>
-					x.IsShiftCategoryOverWeekLimit(_limitation, range,
-						new DateOnlyPeriod(new DateOnly(2010, 8, 23), new DateOnly(2010, 8, 29)), out datesWithCategory))
+					x =>
+						x.IsShiftCategoryOverWeekLimit(_limitation, range,
+							new DateOnlyPeriod(new DateOnly(2010, 8, 23), new DateOnly(2010, 8, 29)), out datesWithCategory))
 				.
 				Return(true).OutRef(datesWithCategory);
 
@@ -149,21 +150,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			person.Stub(x => x.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
 			_permissionInformation.Stub(x => x.DefaultTimeZone()).Return(_timeZone).Repeat.AtLeastOnce();
 
-			IEnumerable<IBusinessRuleResponse> ret = _target.Validate(_dic, lstOfDays);
+			var ret = _target.Validate(_dic, lstOfDays);
 			Assert.AreNotEqual(0, ret.Count());
-
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability",
-			"CA1506:AvoidExcessiveClassCoupling"), Test]
+			 "CA1506:AvoidExcessiveClassCoupling"), Test, SetUICulture("sv-SE")]
 		public void ValidateReturnsListWhenTooManyOfSameCategoryInWeekIsEmpty()
 		{
 			var dateOnlyPeriod = new DateOnlyPeriod(2010, 8, 2, 2010, 8, 29);
 			var weekPeriod = new DateOnlyPeriod(2010, 8, 23, 2010, 8, 29);
 			var person = MockRepository.GenerateMock<IPerson>();
 			var range = MockRepository.GenerateMock<IScheduleRange>();
-			_dic = new Dictionary<IPerson, IScheduleRange>();
-			_dic.Add(person, range);
+			_dic = new Dictionary<IPerson, IScheduleRange> {{person, range}};
 			_target = new WeekShiftCategoryLimitationRule(_limitationChecker, _virtualSchedulePeriodExtractor,
 				_weeksFromScheduleDaysExtractor);
 
@@ -186,9 +185,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var oldResponses = new List<IBusinessRuleResponse>();
 
 			_virtualSchedulePeriodExtractor.Stub(x => x.CreateVirtualSchedulePeriodsFromScheduleDays(lstOfDays)).
-			Return(vPeriods);
+				Return(vPeriods);
 			_weeksFromScheduleDaysExtractor.Stub(x => x.CreateWeeksFromScheduleDaysExtractor(lstOfDays)).
-			Return(personWeeks);
+				Return(personWeeks);
 			vPeriod1.Stub(x => x.IsValid).Return(true).Repeat.Twice();
 			vPeriod2.Stub(x => x.IsValid).Return(true).Repeat.Twice();
 
@@ -199,18 +198,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			vPeriod2.Stub(x => x.Person).Return(person).Repeat.Times(3);
 
 			vPeriod1.Stub(x => x.ShiftCategoryLimitationCollection()).
-			Return(_limitations);
+				Return(_limitations);
 			vPeriod2.Stub(x => x.ShiftCategoryLimitationCollection()).
-			Return(_limitations);
+				Return(_limitations);
 
 			_limitation.Stub(x => x.Weekly).Return(true).Repeat.Twice();
 			range.Stub(x => x.BusinessRuleResponseInternalCollection).Return(oldResponses);
 			person.Stub(x => x.Equals(person)).Return(true).Repeat.Twice();
 
 			_limitationChecker.Stub(
-				x =>
-					x.IsShiftCategoryOverWeekLimit(_limitation, range,
-						new DateOnlyPeriod(new DateOnly(2010, 8, 23), new DateOnly(2010, 8, 29)), out datesWithCategory))
+					x =>
+						x.IsShiftCategoryOverWeekLimit(_limitation, range,
+							new DateOnlyPeriod(new DateOnly(2010, 8, 23), new DateOnly(2010, 8, 29)), out datesWithCategory))
 				.
 				Return(true).Repeat.Twice().OutRef(datesWithCategory);
 
@@ -219,8 +218,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			_permissionInformation.Stub(x => x.DefaultTimeZone()).Return(_timeZone).Repeat.AtLeastOnce();
 			person.Stub(x => x.Equals(person)).Return(true).Repeat.AtLeastOnce();
 
-			IEnumerable<IBusinessRuleResponse> ret = _target.Validate(_dic, lstOfDays);
-			Assert.AreEqual(4, ret.Count());
+			var ret = _target.Validate(_dic, lstOfDays).ToArray();
+			Assert.AreEqual(4, ret.Length);
+			foreach (var response in ret)
+			{
+				Assert.IsTrue(response.FriendlyName.StartsWith("Skiftkategoribegränsningarna är"));
+				Assert.IsTrue(response.Message.StartsWith("Veckan har för"));
+			}
 		}
 
 		[Test]
@@ -278,10 +282,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			person2.Stub(x => x.Equals(person2)).Return(true).Repeat.AtLeastOnce();
 
 			_limitationChecker.Stub(
-				x => x.IsShiftCategoryOverWeekLimit(_limitation, range, weekPeriod, out datesWithCategory)).
+					x => x.IsShiftCategoryOverWeekLimit(_limitation, range, weekPeriod, out datesWithCategory)).
 				Return(true).OutRef(datesWithCategory);
 			_limitationChecker.Stub(
-				x => x.IsShiftCategoryOverWeekLimit(_limitation, range2, weekPeriod, out datesWithCategory))
+					x => x.IsShiftCategoryOverWeekLimit(_limitation, range2, weekPeriod, out datesWithCategory))
 				.Return(true).OutRef(datesWithCategory);
 
 			_limitation.Stub(x => x.ShiftCategory).Return(_shiftCategory).Repeat.AtLeastOnce();
@@ -291,7 +295,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			person2.Stub(x => x.Equals(person)).Return(false).Repeat.AtLeastOnce();
 			person.Stub(x => x.Equals(person2)).Return(false).Repeat.AtLeastOnce();
 
-			IEnumerable<IBusinessRuleResponse> ret = _target.Validate(_dic, lstOfDays);
+			var ret = _target.Validate(_dic, lstOfDays);
 			Assert.AreEqual(8, ret.Count());
 		}
 
@@ -302,14 +306,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var rangeClones = new Dictionary<IPerson, IScheduleRange>();
 
 			_virtualSchedulePeriodExtractor.Expect(v => v.CreateVirtualSchedulePeriodsFromScheduleDays(null))
-										   .IgnoreArguments()
-										   .Return(new List<IVirtualSchedulePeriod>());
+				.IgnoreArguments()
+				.Return(new List<IVirtualSchedulePeriod>());
 			_weeksFromScheduleDaysExtractor.Expect(w => w.CreateWeeksFromScheduleDaysExtractor(null))
-										   .IgnoreArguments()
-										   .Return(new List<PersonWeek>());
+				.IgnoreArguments()
+				.Return(new List<PersonWeek>());
 
 			Assert.DoesNotThrow(() => _target.Validate(rangeClones, scheduleDays));
-			
 		}
 	}
 }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -12,7 +11,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		private readonly IShiftCategoryLimitationChecker _limitationChecker;
 		private readonly IVirtualSchedulePeriodExtractor _virtualSchedulePeriodExtractor;
 		private readonly IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;
-		private readonly string _localizedMessage;
 
 		public WeekShiftCategoryLimitationRule(IShiftCategoryLimitationChecker limitationChecker,
 			IVirtualSchedulePeriodExtractor virtualSchedulePeriodExtractor,
@@ -21,9 +19,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			_limitationChecker = limitationChecker;
 			_virtualSchedulePeriodExtractor = virtualSchedulePeriodExtractor;
 			_weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
-			FriendlyName = Resources.BusinessRuleShiftCategoryLimitationFriendlyName1;
-			Description = Resources.DescriptionOfWeekShiftCategoryLimitationRule;
-			_localizedMessage = Resources.BusinessRuleShiftCategoryLimitationErrorMessage;
 		}
 
 		public bool IsMandatory => false;
@@ -37,6 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,
 			IEnumerable<IScheduleDay> scheduleDays)
 		{
+			var errorMessage = Resources.BusinessRuleShiftCategoryLimitationErrorMessage;
 			var responseList = new HashSet<IBusinessRuleResponse>();
 
 			var scheduleDaysList = scheduleDays.ToArray();
@@ -105,9 +101,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 							continue;
 						}
 
-						var message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
-							_localizedMessage,
-							shiftCategoryLimitation.ShiftCategory.Description.Name);
+						var message = string.Format(errorMessage, shiftCategoryLimitation.ShiftCategory.Description.Name);
 						foreach (var dateOnly in datesWithCategory)
 						{
 							var dop = dateOnly.ToDateOnlyPeriod();
@@ -128,15 +122,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return responseList;
 		}
 
-		public string FriendlyName { get; }
-		public string Description { get; }
+		public string Description => Resources.DescriptionOfWeekShiftCategoryLimitationRule;
 
 		private IBusinessRuleResponse createResponse(IPerson person, DateOnlyPeriod dop, DateTimePeriod period, string message,
 			Type type)
 		{
-			IBusinessRuleResponse response = new BusinessRuleResponse(type, message, HaltModify, IsMandatory, period, person, dop,
-				FriendlyName) {Overridden = !HaltModify};
-			return response;
+			var friendlyName = Resources.BusinessRuleShiftCategoryLimitationFriendlyName1;
+			return new BusinessRuleResponse(type, message, HaltModify, IsMandatory, period, person, dop,
+				friendlyName) {Overridden = !HaltModify};
 		}
 	}
 }

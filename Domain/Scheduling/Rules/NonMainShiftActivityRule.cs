@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -17,8 +18,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		public bool ForDelete { get; set; }
 
-		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
+		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,
+			IEnumerable<IScheduleDay> scheduleDays)
 		{
+			var currentUiCulture = Thread.CurrentThread.CurrentCulture;
 			var ret = new List<IBusinessRuleResponse>();
 			foreach (var scheduleDay in scheduleDays)
 			{
@@ -28,21 +31,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 				var hasNonMainShiftMeeting = isMeetingOverSchedule(scheduleDay);
 				var hasNonMainShiftActivity = isPersonalActivityOverSchedule(assignment);
-				hasNonMainShiftActivity = hasNonMainShiftActivity || hasNonMainShiftMeeting || (assignment.OvertimeActivities() != null && assignment.OvertimeActivities().Any());
+				hasNonMainShiftActivity = hasNonMainShiftActivity || hasNonMainShiftMeeting ||
+										  (assignment.OvertimeActivities() != null && assignment.OvertimeActivities().Any());
 
-				if (hasNonMainShiftActivity)
-				{
-					var message = string.Format(CultureInfo.CurrentCulture,
-						Resources.HasNonMainShiftActivityErrorMessage, person.Name,
-						dateOnly.Date.ToShortDateString());
-					ret.Add(createResponse(scheduleDay.Person, dateOnly, message, typeof (NonMainShiftActivityRule)));
-				}
+				if (!hasNonMainShiftActivity) continue;
+
+				var message = string.Format(currentUiCulture, Resources.HasNonMainShiftActivityErrorMessage, person.Name,
+					dateOnly.Date.ToShortDateString());
+				ret.Add(createResponse(scheduleDay.Person, dateOnly, message, typeof(NonMainShiftActivityRule)));
 			}
 
 			return ret;
 		}
 
-		public string FriendlyName => Resources.HasNonMainShiftActivityErrorMessage;
 		public string Description => Resources.DescriptionOfNonMainShiftActivityRule;
 
 		private bool isPersonalActivityOverSchedule(IPersonAssignment personAssignment)
@@ -84,9 +85,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message, Type type)
 		{
+			var friendlyName = Resources.HasNonMainShiftActivityErrorMessage;
 			var dop = dateOnly.ToDateOnlyPeriod();
 			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-			var response = new BusinessRuleResponse(type, message, HaltModify, IsMandatory, period, person, dop, FriendlyName) { Overridden = !HaltModify };
+			var response = new BusinessRuleResponse(type, message, HaltModify, IsMandatory, period, person, dop,
+				friendlyName) { Overridden = !HaltModify };
 			return response;
 		}
 	}

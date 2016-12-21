@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -132,8 +133,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				 .Validate(null, new[] { scheduleOk })
 				 .Should().Be.Empty();
 		}
-		
-		[Test]
+
+		[Test, SetUICulture("sv-SE")]
 		public void ShouldResultInTwoResponses()
 		{
 			var start = new DateTime(2000, 1, 1, 11, 0, 0, DateTimeKind.Utc);
@@ -146,20 +147,28 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var person = scheduleDataWithPersonalActivity.Person;
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 
-			string message = string.Format(CultureInfo.CurrentCulture,
-												 Resources.HasNonMainShiftActivityErrorMessage, scheduleDataWithPersonalActivity.Person.Name,
-												 dateOnly.Date.ToShortDateString());
-			var expected = new BusinessRuleResponse(typeof(NonMainShiftActivityRule), message, true, false, period.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()),
-					                         scheduleDataWithPersonalActivity.Person, period, "tjillevippen");
+			var message = string.Format(
+				Resources.HasNonMainShiftActivityErrorMessage, scheduleDataWithPersonalActivity.Person.Name,
+				dateOnly.Date.ToShortDateString());
+			var expected = new BusinessRuleResponse(typeof(NonMainShiftActivityRule), message, true, false,
+				period.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()),
+				scheduleDataWithPersonalActivity.Person, period, "tjillevippen");
 
-			var pa = new PersonAssignment(scheduleDataWithPersonalActivity.Person, scheduleDataWithPersonalActivity.Scenario, dateOnly);
+			var pa = new PersonAssignment(scheduleDataWithPersonalActivity.Person, scheduleDataWithPersonalActivity.Scenario,
+				dateOnly);
 			pa.AddPersonalActivity(new Activity("p"), assignmentPeriod);
 			scheduleDataWithPersonalActivity.Add(pa);
 
 			var targetRel = new NonMainShiftActivityRule()
-				.Validate(null, new[] {scheduleDataWithPersonalActivity, scheduleDataWithPersonalActivity});
+				.Validate(null, new[] {scheduleDataWithPersonalActivity, scheduleDataWithPersonalActivity})
+				.ToArray();
 
 			targetRel.Should().Have.SameValuesAs(expected, expected);
+			foreach (var response in targetRel)
+			{
+				Assert.IsTrue(response.FriendlyName.StartsWith("Personen"));
+				Assert.IsTrue(response.Message.StartsWith("Personen  har en"));
+			}
 		}
 
 		[Test]

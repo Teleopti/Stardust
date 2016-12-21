@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -19,21 +20,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private IPermissionInformation _permissionInformation;
         private TimeZoneInfo _timeZone;
         private IContract _contract1;
-        private IContract _contract2;
-        private IContract _contract3;
+	    private IContract _contract3;
         private IPersonContract _personContract1;
-        private IPersonContract _personContract2;
-        private IPersonPeriod _personPeriod1;
-        private IPersonPeriod _personPeriod2;
+	    private IPersonPeriod _personPeriod1;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _weeksFromScheduleDaysExtractor = _mocks.StrictMock<IWeeksFromScheduleDaysExtractor>();
             _target = new MinWeekWorkTimeRule(_weeksFromScheduleDaysExtractor);
             _permissionInformation = _mocks.StrictMock<IPermissionInformation>();
-            _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
             var maxTimePerWeek = new TimeSpan(40, 0, 0);
             var minTimePerWeek1 = new TimeSpan(40, 0, 0);
             var minTimePerWeek2 = new TimeSpan(32, 0, 0);
@@ -45,13 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 EmploymentType = EmploymentType.FixedStaffNormalWorkTime
                 
             };
-
-            _contract2 = new Contract("for test")
-            {
-                WorkTimeDirective = new WorkTimeDirective(minTimePerWeek2, maxTimePerWeek, nightlyRest, weeklyRest),
-                EmploymentType = EmploymentType.FixedStaffNormalWorkTime
-            };
-
+			
             _contract3 = new Contract("for test")
             {
                 WorkTimeDirective = new WorkTimeDirective(minTimePerWeek2, maxTimePerWeek, nightlyRest, weeklyRest),
@@ -59,9 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             };
 
             _personContract1 = _mocks.StrictMock<IPersonContract>();
-            _personContract2 = _mocks.StrictMock<IPersonContract>();
             _personPeriod1 = _mocks.StrictMock<IPersonPeriod>();
-            _personPeriod2 = _mocks.StrictMock<IPersonPeriod>();
         }
 
         [Test]
@@ -74,8 +64,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             Assert.IsFalse(_target.HaltModify);
         }
 
-        [Test]
-        public void ShouldReturnFilledListWhenTooLittleWorkTime()
+		[Test, SetUICulture("sv-SE")]
+		public void ShouldReturnFilledListWhenTooLittleWorkTime()
         {
             var person = _mocks.StrictMock<IPerson>();
             var range = _mocks.StrictMock<IScheduleRange>();
@@ -124,8 +114,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
             using (_mocks.Playback())
             {
-                var ret = _target.Validate(dic, lstOfDays);
-                Assert.AreEqual(7, ret.Count());
+				var ret = _target.Validate(dic, lstOfDays).ToArray();
+	            foreach (var response in ret)
+	            {
+		            Assert.IsTrue(response.FriendlyName.StartsWith("Veckan har för"));
+		            Assert.IsTrue(response.Message.StartsWith("Veckan innehåller för"));
+	            }
+	            Assert.AreEqual(7, ret.Length);
             }
         }
 

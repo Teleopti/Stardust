@@ -10,20 +10,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	{
 		private readonly IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;
 		private readonly IPersonWeekViolatingWeeklyRestSpecification _personWeekViolatingWeeklyRestSpecification;
-		private readonly string _businessRuleNoContractErrorMessage;
-		private readonly string _businessRuleWeeklyRestErrorMessage;
-		private readonly string _businessRuleWeeklyRestFriendlyName;
 
 		public MinWeeklyRestRule(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor,
 			IPersonWeekViolatingWeeklyRestSpecification personWeekViolatingWeeklyRestSpecification)
 		{
 			_weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
 			_personWeekViolatingWeeklyRestSpecification = personWeekViolatingWeeklyRestSpecification;
-			FriendlyName = Resources.MinWeeklyRestRuleName;
-			Description = Resources.DescriptionOfMinWeeklyRestRule;
-			_businessRuleNoContractErrorMessage = Resources.BusinessRuleNoContractErrorMessage;
-			_businessRuleWeeklyRestErrorMessage = Resources.BusinessRuleWeeklyRestErrorMessage;
-			_businessRuleWeeklyRestFriendlyName = Resources.BusinessRuleWeeklyRestFriendlyName;
 		}
 
 		public bool IsMandatory => false;
@@ -37,6 +29,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,
 			IEnumerable<IScheduleDay> scheduleDays)
 		{
+			var noContractErrorMessage = Resources.BusinessRuleNoContractErrorMessage;
+			var weeklyRestErrorMessage = Resources.BusinessRuleWeeklyRestErrorMessage;
+			var weeklyRestFriendlyName = Resources.BusinessRuleWeeklyRestFriendlyName;
+
 			var responseList = new HashSet<IBusinessRuleResponse>();
 			var personWeeks = _weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(scheduleDays, true);
 
@@ -48,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				foreach (var day in personWeek.Week.DayCollection())
 				{
 					oldResponses.Remove(createResponse(person, day, "remove", typeof(MinWeeklyRestRule),
-						_businessRuleNoContractErrorMessage));
+						noContractErrorMessage));
 				}
 
 				TimeSpan weeklyRest;
@@ -57,10 +53,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 					// set errors on all days
 					foreach (var dateOnly in personWeek.Week.DayCollection())
 					{
-						var message = string.Format(_businessRuleNoContractErrorMessage, person.Name,
+						var message = string.Format(noContractErrorMessage, person.Name,
 							dateOnly.Date.ToShortDateString());
 						var response = createResponse(person, dateOnly, message,
-							typeof(MinWeeklyRestRule), _businessRuleNoContractErrorMessage);
+							typeof(MinWeeklyRestRule), noContractErrorMessage);
 						if (!ForDelete)
 							responseList.Add(response);
 						oldResponses.Add(response);
@@ -72,11 +68,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 						continue;
 
 					var weeklyRestString = DateHelper.HourMinutesString(weeklyRest.TotalMinutes);
-					var message = string.Format(_businessRuleWeeklyRestErrorMessage, weeklyRestString);
+					var message = string.Format(weeklyRestErrorMessage, weeklyRestString);
 					foreach (var dateOnly in personWeek.Week.DayCollection())
 					{
 						var response = createResponse(person, dateOnly, message,
-							typeof(MinWeeklyRestRule), _businessRuleWeeklyRestFriendlyName);
+							typeof(MinWeeklyRestRule), weeklyRestFriendlyName);
 						responseList.Add(response);
 						oldResponses.Add(response);
 					}
@@ -86,8 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return responseList;
 		}
 
-		public string FriendlyName { get; }
-		public string Description { get; }
+		public string Description => Resources.DescriptionOfMinWeeklyRestRule;
 
 		private static bool setWeeklyRest(out TimeSpan weeklyRest, PersonWeek personWeek)
 		{

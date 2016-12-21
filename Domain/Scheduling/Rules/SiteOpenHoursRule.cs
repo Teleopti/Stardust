@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
@@ -13,8 +14,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		public SiteOpenHoursRule(ISiteOpenHoursSpecification siteOpenHoursSpecification)
 		{
 			_siteOpenHoursSpecification = siteOpenHoursSpecification;
-			FriendlyName = Resources.BusinessRuleNoSiteOpenHourFriendlyName;
-			Description = Resources.DescriptionOfSiteOpenHoursRule;
 		}
 
 		public bool IsMandatory => false;
@@ -40,8 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return responseList;
 		}
 
-		public string FriendlyName { get; }
-		public string Description { get; }
+		public string Description => Resources.DescriptionOfSiteOpenHoursRule;
 
 		private IBusinessRuleResponse checkScheduleDay(IDictionary<IPerson, IScheduleRange> rangeClones, IScheduleDay scheduleDay)
 		{
@@ -69,20 +67,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private IBusinessRuleResponse createResponse(IPerson person, DateOnly scheduleDate, string message)
 		{
+			var friendlyName = Resources.BusinessRuleNoSiteOpenHourFriendlyName;
 			var dop = new DateOnlyPeriod(scheduleDate, scheduleDate);
 			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			var response = new BusinessRuleResponse(typeof(SiteOpenHoursRule), message, HaltModify, IsMandatory,
-				period, person, dop, FriendlyName)
+				period, person, dop, friendlyName)
 			{Overridden = !HaltModify };
 			return response;
 		}
 
 		private string getErrorMessage(IPerson person, DateOnly scheduleDate, DateTimePeriod scheduleTimePeriod)
 		{
+			var currentUiCulture = Thread.CurrentThread.CurrentCulture;
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var dayOfWeek = Resources.ResourceManager.GetString(scheduleDate.DayOfWeek.ToString());
 			var siteName = person.MyTeam(scheduleDate).Site.Description.Name;
-			return string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
+			return string.Format(currentUiCulture,
 				Resources.BusinessRuleNoSiteOpenHourErrorMessage,
 				dayOfWeek,
 				siteName,

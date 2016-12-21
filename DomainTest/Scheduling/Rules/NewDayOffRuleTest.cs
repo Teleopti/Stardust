@@ -192,8 +192,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _mocks.VerifyAll();
         }
 
-        [Test]
-        public void ValidatedFailsWhenAssignmentBeforeAndAfterConflicts()
+        [Test, SetUICulture("sv-SE")]
+		public void ValidatedFailsWhenAssignmentBeforeAndAfterConflicts()
         {
 			setup();
 			var assWithDayOff = new PersonAssignment(_person, _scenario, new DateOnly(2007, 8, 3));
@@ -217,8 +217,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
             _mocks.ReplayAll();
 
-            var result = _target.Validate(_dic, _days);
-            Assert.AreEqual(1, result.Count());
+            var result = _target.Validate(_dic, _days).ToArray();
+            Assert.AreEqual(1, result.Length);
+
+	        var response = result.First();
+			Assert.IsTrue(response.FriendlyName.StartsWith("Fridagskonflikt"));
+			Assert.IsTrue(response.Message.StartsWith("Fridagen den "));
             _mocks.VerifyAll();
         }
 

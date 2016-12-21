@@ -84,6 +84,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			Assert.AreEqual("sv-SE", _target.UICulture.Name);
 		}
 
+		[Test, SetUICulture("en-GB")]
+		public void MessageOfRespsonseShouldMatchCultureSet()
+		{
+			var rules = NewBusinessRuleCollection.Minimum();
+			rules.Add(new DummyRule(true));
+			rules.DoNotHaltModify(typeof(DataPartOfAgentDay));
+
+			rules.SetUICulture(CultureInfo.GetCultureInfo(1053));
+			var responses = rules.CheckRules(new Dictionary<IPerson, IScheduleRange>(), new List<IScheduleDay>()).First();
+			
+			Assert.AreEqual(responses.FriendlyName, "Icke överskrivningsbar aktivitet överskriven");
+			Assert.AreEqual(responses.Message, "Det finns två överlappande skift.");
+		}
+
 		[Test]
 		public void VerifyMinimum()
 		{

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -14,15 +15,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
 
 		private static readonly object modifiedAccountLock = new object();
-		private readonly string _businessRulePersonAccountError1;
 
-		public NewPersonAccountRule(ISchedulingResultStateHolder schedulingResultStateHolder, IDictionary<IPerson, IPersonAccountCollection> allAccounts)
+		public NewPersonAccountRule(ISchedulingResultStateHolder schedulingResultStateHolder,
+			IDictionary<IPerson, IPersonAccountCollection> allAccounts)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_allAccounts = allAccounts;
-			FriendlyName = Resources.BusinessRulePersonAccountFriendlyName;
-			Description = Resources.DescriptionOfNewPersonAccountRule;
-			_businessRulePersonAccountError1 = Resources.BusinessRulePersonAccountError1;
 		}
 
 		public bool IsMandatory => false;
@@ -36,6 +34,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
 		{
+			var currentUiCulture = Thread.CurrentThread.CurrentCulture;
+			var errorMessage = Resources.BusinessRulePersonAccountError1;
 			var responseList = new List<IBusinessRuleResponse>();
 
 			var firstOrDefault = rangeClones.Values.FirstOrDefault();
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 					foreach (var scheduleDay in scheduleDaysForAccount)
 					{
-						var message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, _businessRulePersonAccountError1,
+						var message = string.Format(currentUiCulture, errorMessage,
 							affectedAccount.Owner.Absence.Description.Name, affectedAccount.Period().StartDate.ToShortDateString());
 
 						if (ForDelete) continue;
@@ -114,14 +114,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 			return responseList;
 		}
-
-		public string FriendlyName { get; }
-		public string Description { get; }
+		
+		public string Description => Resources.DescriptionOfNewPersonAccountRule;
 
 		private IBusinessRuleResponse createResponse(IPerson person, IDateOnlyAsDateTimePeriod dateOnly, string message, Type type, Guid? absenceId)
 		{
+			var friendlyName = Resources.BusinessRulePersonAccountFriendlyName;
 			var dop = dateOnly.DateOnly.ToDateOnlyPeriod();
-			IBusinessRuleResponse response = new BusinessRuleResponseWithAbsenceId(type, message, HaltModify, IsMandatory, dateOnly.Period(), person, dop, FriendlyName, absenceId) { Overridden = !HaltModify };
+			IBusinessRuleResponse response = new BusinessRuleResponseWithAbsenceId(type, message, HaltModify, IsMandatory, dateOnly.Period(), person,
+				dop, friendlyName, absenceId) { Overridden = !HaltModify };
 			return response;
 		}
 	}
