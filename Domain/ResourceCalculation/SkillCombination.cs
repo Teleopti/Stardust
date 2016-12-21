@@ -34,6 +34,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return _skillKeys.Contains(skill);
 		}
 
+		public SkillCombination ForActivity(Guid activityId)
+		{
+			return new SkillCombination(Skills.Where(x => x.Activity.Id.GetValueOrDefault() == activityId).ToArray(), _period, SkillEfficiencies);
+		}
+
 		public string Key { get; private set; }
 		public ISkill[] Skills { get; private set; }
 		public SkillEffiencyResource[] SkillEfficiencies { get; private set; }

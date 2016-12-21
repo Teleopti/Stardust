@@ -41,8 +41,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public void AddResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
 		{
 			PeriodResource resources = _dictionary.GetOrAdd(resourceLayer.Period, new PeriodResource());
-			
-			var skills = fetchSkills(person, personDate);
+
+			var skills = fetchSkills(person, personDate);//.ForActivity(resourceLayer.PayloadId);
+			if (skills.Key == "") return;
 			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
 			_skills.TryAdd(skills.Key,skills.Skills);
 			if (resourceLayer.RequiresSeat)
@@ -60,7 +61,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				return;
 			}
 
-			var skills = fetchSkills(person, personDate);
+			var skills = fetchSkills(person, personDate);//.ForActivity(resourceLayer.PayloadId);
+			if (skills.Key == "") return;
 			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
 
 			resources.RemoveResource(key, skills, resourceLayer.Resource, resourceLayer.FractionPeriod);

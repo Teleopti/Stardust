@@ -50,9 +50,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			PersonRepository.Has(person);
 			Target.Update(period);
 
-			var persistedCombinations = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(period.StartDateTime,period.StartDateTime.AddMinutes(15)));
-			persistedCombinations.Count().Should().Be.EqualTo(1);
-			persistedCombinations.First().SkillCombination.Count().Should().Be.EqualTo(2);
+			var persistedCombinationResources = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(period.StartDateTime,period.StartDateTime.AddMinutes(15)));
+			persistedCombinationResources.Count().Should().Be.EqualTo(1);
+			persistedCombinationResources.First().SkillCombination.Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -60,14 +60,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			var activity = ActivityFactory.CreateActivity("phone");
 			activity.RequiresSkill = true;
-			var activityEmail = ActivityFactory.CreateActivity("Email");
-			activity.RequiresSkill = true;
 			var period = new DateTimePeriod(2016, 12, 19, 0, 2016, 12, 19, 1);
 
 			var scenario = ScenarioRepository.Has("default");
 
 			var saleSkill = SkillRepository.Has("sales", activity);
-			var supportSkill = SkillRepository.Has("support", activityEmail);
+			var supportSkill = SkillRepository.Has("support", activity);
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 12, 19), new[] { saleSkill, supportSkill }).WithId();
 			var person2 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 12, 19), new[] { saleSkill, supportSkill }).WithId();
 			var person3 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 12, 19), new[] { saleSkill, supportSkill }).WithId();
@@ -87,10 +85,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			PersonRepository.Has(person3);
 			Target.Update(period);
 
-			var persistedCombinations = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(15)));
-			persistedCombinations.Count().Should().Be.EqualTo(1);
-			persistedCombinations.First().SkillCombination.Count().Should().Be.EqualTo(2);
-			persistedCombinations.First().Resource.Should().Be.EqualTo(3);
+			var persistedCombinationResources = SkillCombinationResourceRepository.LoadSkillCombinationResources(period);
+			persistedCombinationResources.Count().Should().Be.EqualTo(4);
+			persistedCombinationResources.First().SkillCombination.Count().Should().Be.EqualTo(2);
+			persistedCombinationResources.First().Resource.Should().Be.EqualTo(3);
 		}
 
 		[Test]
@@ -120,9 +118,39 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			PersonRepository.Has(person2);
 			Target.Update(period);
 
-			var persistedCombinations = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(15)));
-			persistedCombinations.Count().Should().Be.EqualTo(1);
+			var persistedCombinationResources = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(15)));
+			persistedCombinationResources.Count().Should().Be.EqualTo(1);
 		}
+
+		[Test]
+		public void ShouldAddSkillsMatchingScheduledActivityOnly()
+		{
+			var period = new DateTimePeriod(2016, 12, 19, 0, 2016, 12, 19, 1);
+			var scenario = ScenarioRepository.Has("default");
+
+			var activity = ActivityFactory.CreateActivity("phone");
+			var activity2 = ActivityFactory.CreateActivity("email");
+			
+			var saleSkill = SkillRepository.Has("sales", activity);
+			var buySkill = SkillRepository.Has("buy", activity2);
+			
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 12, 19), new[] { saleSkill, buySkill }).WithId();
+
+			person.PermissionInformation.SetDefaultTimeZone(saleSkill.TimeZone);
+
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, period, ShiftCategoryFactory.CreateShiftCategory(), scenario);
+			PersonAssignmentRepository.Has(ass);
+
+			SkillDayRepository.Has(saleSkill.CreateSkillDayWithDemand(scenario, new DateOnly(2016, 12, 19), 1));
+			SkillDayRepository.Has(buySkill.CreateSkillDayWithDemand(scenario, new DateOnly(2016, 12, 19), 1));
+
+			PersonRepository.Has(person);
+			Target.Update(period);
+
+			var persistedCombinationResources = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(15)));
+			persistedCombinationResources.Single().SkillCombination.Count().Should().Be.EqualTo(1);
+		}
+
 
 	}
 	
