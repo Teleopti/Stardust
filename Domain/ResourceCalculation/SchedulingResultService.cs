@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -68,14 +67,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var minutesSplit = _allSkills.Min(s => s.DefaultResolution);
 			var resources = new ResourceCalculationDataContainer(_personSkillProvider, minutesSplit, false);
 
-			foreach (var person in scheduleDictionary.Keys)
+			foreach (var item in scheduleDictionary)
 			{
-				var range = scheduleDictionary[person];
+				var range = item.Value;
 				var period = range.TotalPeriod();
 				if (!period.HasValue) continue;
 
 				var scheduleDays =
-					range.ScheduledDayCollection(period.Value.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()));
+					range.ScheduledDayCollection(period.Value.ToDateOnlyPeriod(item.Key.PermissionInformation.DefaultTimeZone()));
 				foreach (var scheduleDay in scheduleDays)
 				{
 					resources.AddScheduleDayToContainer(scheduleDay, minutesSplit);
