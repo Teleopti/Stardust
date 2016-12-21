@@ -1,9 +1,9 @@
 ﻿(function() {
 	angular.module("wfm.teamSchedule").service("UtilityService", utilityService);
 
-	utilityService.$inject = ['$locale', 'CurrentUserInfo'];
+	utilityService.$inject = ['CurrentUserInfo'];
 
-	function utilityService($locale, CurrentUserInfo) {
+	function utilityService(CurrentUserInfo) {
 
 		var self = this;
 		var tick = 15;
