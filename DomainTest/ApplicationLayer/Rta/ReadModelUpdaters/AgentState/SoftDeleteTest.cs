@@ -89,9 +89,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 				TeamId = null,
 				Timestamp = "2016-10-04 08:00".Utc()
 			});
-
 			Now.Is("2016-10-04 08:30");
-			Target.Handle(new TenantHourTickEvent());
+			
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				PersonId = Guid.NewGuid(),
+				TeamId = Guid.NewGuid(),
+				Timestamp = "2016-10-04 08:30".Utc()
+			});
 			
 			Persister.Load(personId).Should().Be.Null();
 		}
