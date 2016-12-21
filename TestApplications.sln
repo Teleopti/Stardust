@@ -33,6 +33,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.BrokerList
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.BrokerLoadGenerator", "TestApplications\Teleopti.Ccc.Web.BrokerLoadGenerator\Teleopti.Ccc.Web.BrokerLoadGenerator.csproj", "{013784BD-5542-48BE-A10B-B919C0F15D77}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.SignalRListenSimulator", "Teleopti.Ccc.Web.SignalRListenSimulator\Teleopti.Ccc.Web.SignalRListenSimulator.csproj", "{AEEBB56A-71BD-40BD-84F1-9E60F2ECF017}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.SignalRLoadGenerator", "Teleopti.Ccc.Web.SignalRLoadGenerator\Teleopti.Ccc.Web.SignalRLoadGenerator.csproj", "{4510515C-491D-4323-9F25-0BB6CBE4044F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,6 +157,22 @@ Global
 		{013784BD-5542-48BE-A10B-B919C0F15D77}.Release|Any CPU.Build.0 = Release|Any CPU
 		{013784BD-5542-48BE-A10B-B919C0F15D77}.Release|x86.ActiveCfg = Release|Any CPU
 		{013784BD-5542-48BE-A10B-B919C0F15D77}.Release|x86.Build.0 = Release|Any CPU
+		{AEEBB56A-71BD-40BD-84F1-9E60F2ECF017}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEEBB56A-71BD-40BD-84F1-9E60F2ECF017}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEEBB56A-71BD-40BD-84F1-9E60F2ECF017}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AEEBB56A-71BD-40BD-84F1-9E60F2ECF017}.Debug|x86.Build.0 = Debug|Any CPU
+		{AEEBB56A-71BD-40BD-84F1-9E60F2ECF017}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEEBB56A-71BD-40BD-84F1-9E60F2ECF017}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEEBB56A-71BD-40BD-84F1-9E60F2ECF017}.Release|x86.ActiveCfg = Release|Any CPU
+		{AEEBB56A-71BD-40BD-84F1-9E60F2ECF017}.Release|x86.Build.0 = Release|Any CPU
+		{4510515C-491D-4323-9F25-0BB6CBE4044F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4510515C-491D-4323-9F25-0BB6CBE4044F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4510515C-491D-4323-9F25-0BB6CBE4044F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4510515C-491D-4323-9F25-0BB6CBE4044F}.Debug|x86.Build.0 = Debug|Any CPU
+		{4510515C-491D-4323-9F25-0BB6CBE4044F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4510515C-491D-4323-9F25-0BB6CBE4044F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4510515C-491D-4323-9F25-0BB6CBE4044F}.Release|x86.ActiveCfg = Release|Any CPU
+		{4510515C-491D-4323-9F25-0BB6CBE4044F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
