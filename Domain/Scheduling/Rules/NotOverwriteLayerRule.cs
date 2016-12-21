@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -165,10 +166,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			var errorMessage = Resources.BusinessRuleOverlappingErrorMessage3;
 			var currentUiCulture = Thread.CurrentThread.CurrentCulture;
-			var timezone = person.PermissionInformation.DefaultTimeZone();
+			var loggedOnTimezone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 
-			var layerBelowTimePeriod = overlappingLayers.LayerBelowPeriod.TimePeriod(timezone);
-			var layerAboveTimePeriod = overlappingLayers.LayerAbovePeriod.TimePeriod(timezone);
+			var layerBelowTimePeriod = overlappingLayers.LayerBelowPeriod.TimePeriod(loggedOnTimezone);
+			var layerAboveTimePeriod = overlappingLayers.LayerAbovePeriod.TimePeriod(loggedOnTimezone);
 
 			var ret = string.Format(currentUiCulture,
 				errorMessage,
