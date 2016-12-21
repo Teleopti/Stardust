@@ -55,7 +55,9 @@
 		WfmTeamSchedule_SetAgentsPerPage_36230,
 		WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
 		WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260,
-		
+		WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252,
+
+
 		WfmTeamSchedule_AbsenceReporting_35995,
 		WfmTeamSchedule_AddActivity_37541,
 		WfmTeamSchedule_AddPersonalActivity_37742,
