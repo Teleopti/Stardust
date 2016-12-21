@@ -69,6 +69,11 @@
 			});
 		};
 
+		vm.changeSelectedTeams = function(groups) {
+			vm.selectedTeamIds = groups;
+			vm.resetSchedulePage();
+		};
+
 		vm.init = function() {
 			vm.toggles = {
 				SelectAgentsPerPageEnabled: toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230,
@@ -126,7 +131,7 @@
 						sites: data.Children,
 						logonUserTeamId: data.LogonUserTeamId
 					};
-				})
+			})
 			]).then(vm.init);
 
 		function momentToYYYYMMDD(m) {
@@ -139,6 +144,7 @@
 		function getParamsForLoadingSchedules(options) {
 			options = options || {};
 			var params = {
+				SelectedTeamIds: vm.selectedTeamIds ? vm.selectedTeamIds : [],
 				Keyword: options.keyword || vm.searchOptions.keyword,
 				Date: options.date || momentToYYYYMMDD(moment(vm.startOfWeek)),
 				PageSize: options.pageSize || vm.paginationOptions.pageSize,

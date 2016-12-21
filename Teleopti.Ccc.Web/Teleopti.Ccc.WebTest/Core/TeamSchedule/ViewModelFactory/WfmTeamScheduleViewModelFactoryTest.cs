@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Ccc.WebTest.Areas.TeamSchedule;
@@ -29,6 +30,27 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public FakeUserCulture UserCulture;
 		public FakeUserTimeZone UserTimeZone;
 		public Areas.Global.FakePermissionProvider PermissionProvider;
+		private ITeam team;
+		private IPerson person;
+
+		private void SetUpPersonAndCulture()
+		{
+			UserCulture.Is(CultureInfoFactory.CreateSwedishCulture());
+
+			person = PersonFactory.CreatePerson("Sherlock","Holmes");
+			person.WithId();
+
+			var contract = ContractFactory.CreateContract("Contract");
+			contract.WithId();
+			team = TeamFactory.CreateSimpleTeam().WithId();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010,1,1),personContract,team);
+
+			person.AddPersonPeriod(personPeriod);
+			PeopleSearchProvider.Add(person);
+
+			PersonRepository.Has(person);
+		}
 
 		[Test]
 		public void TargetShouldNotBeNull()
@@ -39,12 +61,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForWorkingDay()
 		{
-			UserCulture.Is(CultureInfoFactory.CreateSwedishCulture());
+			SetUpPersonAndCulture();
+
 			var scheduleDate = new DateOnly(2020,1,1);
-			var person = PersonFactory.CreatePerson("Sherlock","Holmes");
-			person.WithId();
-			PeopleSearchProvider.Add(person);
-			PersonRepository.Has(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
@@ -59,7 +78,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(searchTerm, scheduleDate, 20, 1);
+			var result = Target.CreateWeekScheduleViewModel(new []{team.Id.Value}, searchTerm, scheduleDate, 20, 1);
 
 			result.Total.Should().Be(1);
 
@@ -78,12 +97,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForDayOff()
 		{
-			UserCulture.Is(CultureInfoFactory.CreateSwedishCulture());
+			SetUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2020,1,1);
-			var person = PersonFactory.CreatePerson("Sherlock","Holmes");
-			person.WithId();
-			PeopleSearchProvider.Add(person);
-			PersonRepository.Has(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
@@ -96,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(searchTerm, scheduleDate, 20, 1);
+			var result = Target.CreateWeekScheduleViewModel(new []{team.Id.Value}, searchTerm, scheduleDate, 20, 1);
 
 			result.Total.Should().Be(1);
 
@@ -114,12 +129,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForFullDayAbsence()
 		{
-			UserCulture.Is(CultureInfoFactory.CreateSwedishCulture());
+			SetUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2020,1,1);
-			var person = PersonFactory.CreatePerson("Sherlock","Holmes");
-			person.WithId();
-			PeopleSearchProvider.Add(person);
-			PersonRepository.Has(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
@@ -138,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(searchTerm, scheduleDate, 20, 1);
+			var result = Target.CreateWeekScheduleViewModel(new []{team.Id.Value}, searchTerm, scheduleDate, 20, 1);
 
 			result.Total.Should().Be(1);
 
@@ -155,15 +166,11 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldIndicateTerminationForTerminatedPerson()
 		{
-			UserCulture.Is(CultureInfoFactory.CreateSwedishCulture());
-			var scheduleDate = new DateOnly(2020,1,1);
-			var person = PersonFactory.CreatePerson("Sherlock","Holmes");
-			person.TerminatePerson(new DateOnly(2019, 12,1), new PersonAccountUpdaterDummy());
-			person.WithId();
-			PeopleSearchProvider.Add(person);
-			PersonRepository.Has(person);
+			SetUpPersonAndCulture();
+			var scheduleDate = new DateOnly(2020, 1, 1);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
+			person.TerminatePerson(new DateOnly(2019,12,1),new PersonAccountUpdaterDummy());
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)),
@@ -180,7 +187,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(searchTerm, scheduleDate, 20, 1);
+			var result = Target.CreateWeekScheduleViewModel(new []{team.Id.Value}, searchTerm, scheduleDate, 20, 1);
 
 			result.Total.Should().Be(1);
 
@@ -198,18 +205,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldListAgentWhoChangedToMatchingSearchDuringTheWeek()
 		{
-			UserCulture.Is(CultureInfoFactory.CreateSwedishCulture());
+			SetUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2020,1,1);
-			var person = PersonFactory.CreatePerson("Sherlock","Holmes");
-			person.TerminatePerson(new DateOnly(2019,12,1),new PersonAccountUpdaterDummy());
-			person.WithId();
-
+			
 			PeopleSearchProvider.EnableDateFilter();
 			PeopleSearchProvider.Add(new DateOnly(2020, 1, 5), person);
 
-			PersonRepository.Has(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
 			CurrentScenario.FakeScenario(scenario);
+
+			person.TerminatePerson(new DateOnly(2019,12,1),new PersonAccountUpdaterDummy());
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,
 				new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)),
@@ -226,10 +231,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(searchTerm,scheduleDate,20,1);
+			var result = Target.CreateWeekScheduleViewModel(new []{team.Id.Value}, searchTerm,scheduleDate,20,1);
 
 			result.Total.Should().Be(1);
-
+			
 			var first = result.PersonWeekSchedules.First();
 
 			first.PersonId.Should().Be(person.Id.GetValueOrDefault());
@@ -245,13 +250,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldShowPersonScheduleOnTheTerminationDate()
 		{
-			UserCulture.Is(CultureInfoFactory.CreateSwedishCulture());
+			SetUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2020,1,1);
-			var person = PersonFactory.CreatePerson("Sherlock","Holmes");
-			person.TerminatePerson(new DateOnly(2020,1,1),new PersonAccountUpdaterDummy());
-			person.WithId();
-			PeopleSearchProvider.Add(person);
-			PersonRepository.Has(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
 			CurrentScenario.FakeScenario(scenario);
 
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(searchTerm,scheduleDate,20,1);
+			var result = Target.CreateWeekScheduleViewModel(new []{team.Id.Value}, searchTerm,scheduleDate,20,1);
 
 			result.Total.Should().Be(1);
 
@@ -289,14 +289,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForNotPermittedConfidentialAbs()
 		{
-			UserCulture.Is(CultureInfoFactory.CreateSwedishCulture());
+			SetUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2020,1,1);
-			var person = PersonFactory.CreatePerson("Sherlock","Holmes");
-			person.WithId();
-			PeopleSearchProvider.Add(person);
-			PersonRepository.Has(person);
-
-
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
@@ -317,7 +311,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(searchTerm, scheduleDate, 20, 1);
+			var result = Target.CreateWeekScheduleViewModel(new []{team.Id.Value}, searchTerm, scheduleDate, 20, 1);
 
 			result.Total.Should().Be(1);
 
@@ -335,14 +329,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForPermittedConfidentialAbs()
 		{
-			UserCulture.Is(CultureInfoFactory.CreateSwedishCulture());
+			SetUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2020,1,1);
-			var person = PersonFactory.CreatePerson("Sherlock","Holmes");
-			person.WithId();
-			PeopleSearchProvider.Add(person);
 			PeopleSearchProvider.AddPersonWithViewConfidentialPermission(person);
-			PersonRepository.Has(person);
-
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
@@ -364,7 +353,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(searchTerm, scheduleDate, 20, 1);
+			var result = Target.CreateWeekScheduleViewModel(new []{team.Id.Value}, searchTerm, scheduleDate, 20, 1);
 
 			result.Total.Should().Be(1);
 
@@ -382,14 +371,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForNotPermittedUnpublishedSchedule()
 		{
-			UserCulture.Is(CultureInfoFactory.CreateSwedishCulture());
+			SetUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2020,1,1);
-			var person = PersonFactory.CreatePerson("Sherlock","Holmes");
-			person.WithId();
 			person.WorkflowControlSet = new WorkflowControlSet();
 			person.WorkflowControlSet.SchedulePublishedToDate = new DateTime(2019,1,1);
-			PeopleSearchProvider.Add(person);
-			PersonRepository.Has(person);
 
 			PermissionProvider.Enable();
 
@@ -411,7 +396,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(searchTerm, scheduleDate, 20, 1);
+			var result = Target.CreateWeekScheduleViewModel(new []{team.Id.Value}, searchTerm, scheduleDate, 20, 1);
 
 			result.Total.Should().Be(1);
 
@@ -428,14 +413,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForPermittedUnpublishedSchedule()
 		{
-			UserCulture.Is(CultureInfoFactory.CreateSwedishCulture());
+			SetUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2020,1,1);
-			var person = PersonFactory.CreatePerson("Sherlock","Holmes");
-			person.WithId();
 			person.WorkflowControlSet = new WorkflowControlSet();
 			person.WorkflowControlSet.SchedulePublishedToDate = new DateTime(2019,1,1);
-			PeopleSearchProvider.Add(person);
-			PersonRepository.Has(person);
 
 			PermissionProvider.Enable();
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
@@ -458,7 +439,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(searchTerm, scheduleDate, 20, 1);
+			var result = Target.CreateWeekScheduleViewModel(new []{team.Id.Value}, searchTerm, scheduleDate, 20, 1);
 
 			result.Total.Should().Be(1);
 
@@ -476,12 +457,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldProvideWeeklyContractTimeInWeeklyViewModel()
 		{
-			UserCulture.Is(CultureInfoFactory.CreateSwedishCulture());
+			SetUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2020,1,1);
-			var person = PersonFactory.CreatePerson("Sherlock","Holmes");			
-			person.WithId();
-			PeopleSearchProvider.Add(person);
-			PersonRepository.Has(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
 			CurrentScenario.FakeScenario(scenario);
 
@@ -498,7 +475,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(searchTerm,scheduleDate,20,1);
+			var result = Target.CreateWeekScheduleViewModel(new []{team.Id.Value}, searchTerm,scheduleDate,20,1);
 
 			result.Total.Should().Be(1);
 
@@ -512,9 +489,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldViewAgentOrderByLastNameInWeekView()
 		{
 			UserCulture.Is(CultureInfoFactory.CreateSwedishCulture());
-			var scheduleDate = new DateOnly(2020, 1, 1);
-			var person = PersonFactory.CreatePerson("Bill", "Mamer");
-			var person2 = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			var scheduleDate = new DateOnly(2020,1,1);
+			var person = PersonFactory.CreatePerson("Bill","Mamer");
+			var person2 = PersonFactory.CreatePerson("Sherlock","Holmes");
 			person.WithId();
 			person2.WithId();
 			PeopleSearchProvider.Add(person);
@@ -522,17 +499,17 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PersonRepository.Has(person);
 			PersonRepository.Has(person2);
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
 			CurrentScenario.FakeScenario(scenario);
 
 			var activity = ActivityFactory.CreateActivity("Phone");
 			activity.InContractTime = true;
-			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day", "blue");
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day","blue");
 
-			var startTimeUtc = new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-			var endTimeUtc = new DateTime(2020, 1, 1, 9, 0, 0, DateTimeKind.Utc);
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(startTimeUtc, endTimeUtc), shiftCategory, scenario);
-			var pa2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person2, new DateTimePeriod(startTimeUtc, endTimeUtc), shiftCategory, scenario);
+			var startTimeUtc = new DateTime(2020,1,1,0,0,0,DateTimeKind.Utc);
+			var endTimeUtc = new DateTime(2020,1,1,9,0,0,DateTimeKind.Utc);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity,person,new DateTimePeriod(startTimeUtc,endTimeUtc),shiftCategory,scenario);
+			var pa2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity,person2,new DateTimePeriod(startTimeUtc,endTimeUtc),shiftCategory,scenario);
 
 			ScheduleStorage.Add(pa);
 			ScheduleStorage.Add(pa2);
@@ -542,7 +519,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.All, "e"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(searchTerm, scheduleDate, 20, 1);
+			var result = Target.CreateWeekScheduleViewModel(new []{team.Id.Value}, searchTerm, scheduleDate, 20, 1);
 
 			result.Total.Should().Be(2);
 
@@ -556,12 +533,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void CreateViewModelForPeopleShouldReturnAgentsEvenTheyhaveNoScheduleDay()
 		{
 
-			UserCulture.Is(CultureInfoFactory.CreateSwedishCulture());
+			SetUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2020,1,1);
-			var person = PersonFactory.CreatePerson("Sherlock","Holmes");
-			person.WithId();
-			PeopleSearchProvider.Add(person);
-			PersonRepository.Has(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
 			CurrentScenario.FakeScenario(scenario);
 

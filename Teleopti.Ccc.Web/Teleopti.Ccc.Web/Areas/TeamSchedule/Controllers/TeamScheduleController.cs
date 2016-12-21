@@ -109,16 +109,24 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			var currentDate = new DateOnly(input.Date);
 			var myTeam = _loggonUser.CurrentUser().MyTeam(currentDate);
 
-			if(string.IsNullOrEmpty(input.Keyword) && myTeam == null)
+
+			if(_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252))
 			{
-				return
+				if(input.SelectedTeamIds != null && !input.SelectedTeamIds.Any())
+					return
 					Json(new GroupWeekScheduleViewModel { PersonWeekSchedules = new List<PersonWeekScheduleViewModel>(),Total = 0,Keyword = "" });
 			}
+			else
+			{
+				if(string.IsNullOrEmpty(input.Keyword) && myTeam == null)
+					return
+					Json(new GroupWeekScheduleViewModel { PersonWeekSchedules = new List<PersonWeekScheduleViewModel>(),Total = 0,Keyword = "" });
+			}			
 
 			var criteriaDictionary = _parser.Parse(input.Keyword, currentDate);
 
 			var result =
-				_teamScheduleViewModelFactory.CreateWeekScheduleViewModel(criteriaDictionary,currentDate, input.PageSize, input.CurrentPageIndex);
+				_teamScheduleViewModelFactory.CreateWeekScheduleViewModel(input.SelectedTeamIds, criteriaDictionary,currentDate, input.PageSize, input.CurrentPageIndex);
 			result.Keyword = _parser.Keyword(input.Keyword, currentDate);
 
 			return Json(result);

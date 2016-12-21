@@ -10,6 +10,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		GroupScheduleViewModel CreateViewModel(Guid[] teamIds, IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone, int pageSize, int currentPageIndex, bool isOnlyAbsences);
 		GroupScheduleViewModel CreateViewModelForPeople(Guid[] personIds, DateOnly scheduleDate);
 
-		GroupWeekScheduleViewModel CreateWeekScheduleViewModel(IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone, int pageSize, int currentPageIndex);
+		GroupWeekScheduleViewModel CreateWeekScheduleViewModel(Guid[] teamIds,IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone, int pageSize, int currentPageIndex);
 	}
 }
