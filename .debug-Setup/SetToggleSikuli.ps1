@@ -34,14 +34,14 @@ else
 {
     if (!($obj -ne $null))
     {
-    Write-Host "ToggleMode key is not present in: $webconfig"
-    Write-Host "Will add ToggleMode: $SetToggleMode to: $webconfig"
-    $newAppSetting = $doc.CreateElement("add")
-    $doc.configuration.appSettings.AppendChild($newAppSetting)
-    $newAppSetting.SetAttribute("key","ToggleMode");
-    $newAppSetting.SetAttribute("value","$SetToggleMode");
+		Write-Host "ToggleMode key is not present in: $webconfig"
+		Write-Host "Will add ToggleMode: $SetToggleMode to: $webconfig"
+		$newAppSetting = $doc.CreateElement("add")
+		$doc.configuration.appSettings.AppendChild($newAppSetting)
+		$newAppSetting.SetAttribute("key","ToggleMode");
+		$newAppSetting.SetAttribute("value","$SetToggleMode");
             
-    $doc.Save($webConfig)
+		$doc.Save($webConfig) | out-null
     }
 
 }
