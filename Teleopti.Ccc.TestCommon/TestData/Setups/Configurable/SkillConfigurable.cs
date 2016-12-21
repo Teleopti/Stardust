@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var skillType = SkillTypeFactory.CreateSkillType();
+			var skillType = new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony);
 			var skillTypeRepository = new SkillTypeRepository(currentUnitOfWork);
 			skillTypeRepository.Add(skillType);
 			

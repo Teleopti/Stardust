@@ -777,6 +777,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[Given(@"I am viewing intraday page")]
+		[When(@"I am viewing intraday page")]
 		public void GivenIAmViewingIntradayPage()
 		{
 			TestControllerMethods.Logon();

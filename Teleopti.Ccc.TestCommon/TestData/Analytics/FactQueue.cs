@@ -17,14 +17,16 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		private readonly IQueueData _queue;
 		private readonly IDatasourceData _datasource;
 		private readonly IBridgeTimeZone _bridgeTimeZone;
+		private readonly int _latestStatisticsIntervalId;
 
-		public FactQueue(IDateData dates, IIntervalData intervals, IQueueData queue, IDatasourceData datasource, IBridgeTimeZone bridgeTimeZone)
+		public FactQueue(IDateData dates, IIntervalData intervals, IQueueData queue, IDatasourceData datasource, IBridgeTimeZone bridgeTimeZone, int latestStatisticsIntervalId)
 		{
 			_dates = dates;
 			_intervals = intervals;
 			_queue = queue;
 			_datasource = datasource;
 			_bridgeTimeZone = bridgeTimeZone;
+			_latestStatisticsIntervalId = latestStatisticsIntervalId;
 		}
 
 		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture) {
@@ -45,7 +47,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			            let datasource_id = (int) q["datasource_id"]
 			            let time_zone_id = datasource.FindTimeZoneIdByDatasourceId(datasource_id)
 			            let bridgeTimeZones = _bridgeTimeZone.Rows.FindBridgeTimeZoneRowsByIds(date_id, interval_id, time_zone_id)
-						where bridgeTimeZones.Any()
+						where bridgeTimeZones.Any() && interval_id <= _latestStatisticsIntervalId
 						let bridgeTimeZone = bridgeTimeZones.Single()
 			            select new
 			                   	{

@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.TestCommon
 			workloadDay.CreateFromTemplate(dateOnly, workload,
 				(IWorkloadDayTemplate) workload.GetTemplate(TemplateTarget.Workload, dateOnly.DayOfWeek));
 			workloadDays.Add(workloadDay);
-			var skillDay = new SkillDay(dateOnly, skill, scenario, workloadDays, skillDataPeriods).WithId();
+			var skillDay = new SkillDay(dateOnly, skill, scenario, workloadDays, skillDataPeriods);
 			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new List<ISkillDay> {skillDay},
 				new DateOnlyPeriod(dateOnly, dateOnly));
 			return skillDay;

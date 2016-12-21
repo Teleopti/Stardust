@@ -528,8 +528,6 @@
     <Compile Include="Bindings\Generic\AbsenceStepDefinitions.cs" />
     <Compile Include="MyTime\AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\ForecastStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Configurable\ForecastConfigurable.cs" />
     <Compile Include="Bindings\Generic\Anywhere\PersonSchedulePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\SkillStepDefinitions.cs" />
     <Compile Include="Data\Setups\DoNotUse\AbsenceInContractTime.cs" />

@@ -21,8 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				Name = queue
 			});
 		}
-
-
+		
 		[Given(@"there is queue statistics for '(.*)'")]
 		public void GivenThereIsQueueStatisticsFor(string name)
 		{
@@ -51,8 +50,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 			foreach (var day in days)
 			{
-				DataMaker.Data().Analytics().Setup(new FactQueue(day.Item1, intervalData, queue, datasourceData, day.Item2));
-				
+				DataMaker.Data().Analytics().Setup(new FactQueue(day.Item1, intervalData, queue, datasourceData, day.Item2, 96));
 			}
 
 			DataMaker.Data().Apply(new QueueSourceConfigurable

@@ -1,9 +1,12 @@
-﻿using TechTalk.SpecFlow;
+﻿using System;
+using System.Collections.Generic;
+using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 {
@@ -43,6 +46,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 				QueueSourceName = queue,
 				Open24Hours = true
 			});
+		}
+
+		[Given(@"there is queue statistics for the skill '(.*)' up until '(.*)'")]
+		public void GivenThereIsQueueStatisticsForTheSkillUpUntil(string skillName, string time)
+		{
+			var latestStatisticsTime = DateTime.Parse(time);
+
+			DataMaker.Data().Analytics().Apply(new QueueStatisticsForSkill(skillName, latestStatisticsTime));
+		}
+
+		[Given(@"there is forecast data for skill '(.*)' for date '(.*)'")]
+		public void GivenThereIsForecastDataForSkillForDate(string skillName, string date)
+		{
+			var theDate = DateTime.Parse(date);
+
+			DataMaker.Data().Apply(new ForecastConfigurable(skillName, theDate));
 		}
 
 		[Given(@"I select to create a new Skill Area")]
@@ -118,5 +137,43 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 				Skills = skills
 			});
 		}
+
+		[Then(@"I should see incoming traffic data in the chart")]
+		public void ThenIShouldSeeIncomingTrafficDataInTheChart()
+		{
+			
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var forecastedCalls = parseFloat(scope.viewObj.forecastedCallsObj.series[1]);" +
+				"return (forecastedCalls > 0);"
+				, "True");
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var calls = parseFloat(scope.viewObj.actualCallsObj.series[1]);" +
+				"return (calls > 0);" 
+				, "True");
+			Browser.Interactions.AssertJavascriptResultContains(
+							"var scope = angular.element(document.querySelector('.c3')).scope();" +
+							"var faht = parseFloat(scope.viewObj.forecastedAverageHandleTimeObj.series[1]);" +
+							"return (faht > 0);"
+							, "True");
+			Browser.Interactions.AssertJavascriptResultContains(
+							"var scope = angular.element(document.querySelector('.c3')).scope();" +
+							"var aaht = parseFloat(scope.viewObj.actualAverageHandleTimeObj.series[1]);" +
+							"return (aaht > 0);"
+							, "True");
+		}
+
+		[Then(@"I should see a summary of today's incoming traffic")]
+		public void ThenIShouldSeeASummaryOfTodaySIncomingTraffic()
+		{
+			Browser.Interactions.AssertJavascriptResultContains("return $('.forecasted-calls').text().length > 0", "True");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.offered-calls').text().length > 0", "True");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.calls-difference').text().length > 0", "True");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.forecasted-aht').text().length > 0", "True");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.aht').text().length > 0", "True");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.aht-difference ').text().length > 0", "True");
+		}
+
 	}
 }
