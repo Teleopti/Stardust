@@ -32,6 +32,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			dynamic result = target.CurrentUser();
 			Assert.AreEqual(TimeZoneInfo.Local.DisplayName, result.DefaultTimeZoneName);
 		}
+
+		[Test]
+		public void ShouldGetTheCurrentLoggonUserCulture()
+		{
+			var person = PersonFactory.CreatePerson();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
+			var culture = CultureInfoFactory.CreateUsCulture();
+			var uiCulture = CultureInfoFactory.CreateSwedishCulture();
+			person.PermissionInformation.SetCulture(culture);
+			person.PermissionInformation.SetUICulture(uiCulture);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Pelle", null, null, null, null), person);
+			var currentPrinciple = new FakeCurrentTeleoptiPrincipal(principal);
+			var target = new UserController(currentPrinciple, new FakeIanaTimeZoneProvider());
+			dynamic result = target.CurrentUser();
+			Assert.AreEqual(uiCulture.IetfLanguageTag, result.Language);
+			Assert.AreEqual(culture.Name, result.DateFormatLocale);
+		}
 	}
 
 	public class FakeIanaTimeZoneProvider : IIanaTimeZoneProvider

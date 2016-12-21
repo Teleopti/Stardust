@@ -20,16 +20,20 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		public object CurrentUser()
 		{
 			var principal = _currentTeleoptiPrincipal.Current();
-			var defaultTimezone = principal is TeleoptiPrincipalCacheable
-				? ((TeleoptiPrincipalCacheable) principal).Person.PermissionInformation.DefaultTimeZone()
+			var principalCacheable = principal as TeleoptiPrincipalCacheable;
+			
+			var defaultTimezone = principalCacheable != null
+				? principalCacheable.Person.PermissionInformation.DefaultTimeZone()
 				: principal.Regional.TimeZone;
+			
+			var regionnal = principalCacheable != null ? principalCacheable.Regional: principal.Regional;
 			return new
 			{
 				UserName = principal.Identity.Name,
 				DefaultTimeZone = _ianaTimeZoneProvider.WindowsToIana(defaultTimezone.Id),
 				DefaultTimeZoneName = defaultTimezone.DisplayName,
-				Language = CultureInfo.CurrentUICulture.IetfLanguageTag,
-				DateFormatLocale = CultureInfo.CurrentCulture.Name,
+				Language = regionnal.UICulture.IetfLanguageTag,
+				DateFormatLocale = regionnal.Culture.Name,
 				NumberFormat = CultureInfo.CurrentCulture.NumberFormat
 			};
 		}
