@@ -60,6 +60,7 @@ Scenario: Should be able to see day view toggle button in week view
 	Then I should be able to see day view toggle button
 
 @OnlyRunIfDisabled('WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260')
+@OnlyRunIfDisabled('WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252')
 Scenario: Should be able to toggle week view
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
