@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				}
 			}
 
-            _target = new ScheduleResourceOptimizer(_resources, _skillStaffPeriods, _personSkillService, true, _activityDivider);
+            _target = new ScheduleResourceOptimizer(_resources, new SkillResourceCalculationPeriodWrapper(_skillStaffPeriods), _personSkillService, true, _activityDivider);
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             var activityDivider = new ActivityDivider();
             IDividedActivityData dividedActivityData =
-                activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService, _personAssignmentListContainer.ContainedActivities["Phone"], _resources, _inPeriod);
+                activityDivider.DivideActivity(new SkillResourceCalculationPeriodWrapper(_skillStaffPeriods), _personSkillService, _personAssignmentListContainer.ContainedActivities["Phone"], _resources, _inPeriod);
             var furnessDataConverter = new FurnessDataConverter(dividedActivityData);
             IFurnessData furnessData = furnessDataConverter.ConvertDividedActivityToFurnessData();
             _furnessEvaluator = new FurnessEvaluator(furnessData);
@@ -84,10 +84,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyResourceOptimizing()
         {
             var activityDivider = new ActivityDivider();
-            IDividedActivityData dividedActivityData =
-                activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService, _personAssignmentListContainer.ContainedActivities["Phone"], _resources, _inPeriod);
+	        var resourceCalculationPeriodDictionary = new SkillResourceCalculationPeriodWrapper(_skillStaffPeriods);
+	        IDividedActivityData dividedActivityData =
+                activityDivider.DivideActivity(resourceCalculationPeriodDictionary, _personSkillService, _personAssignmentListContainer.ContainedActivities["Phone"], _resources, _inPeriod);
 
-            Expect.Call(_activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService,
+            Expect.Call(_activityDivider.DivideActivity(resourceCalculationPeriodDictionary, _personSkillService,
                                                         _personAssignmentListContainer.ContainedActivities["Phone"],
                                                         _resources,
                                                         _inPeriod)).Return(dividedActivityData).IgnoreArguments().Repeat.AtLeastOnce();
@@ -108,10 +109,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyResourceOptimizingWithOccupancyAdjustment()
         {
             var activityDivider = new ActivityDivider();
-            IDividedActivityData dividedActivityData =
-                activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService, _personAssignmentListContainer.ContainedActivities["Phone"], _resources, _inPeriod);
+	        var skillResourceCalculationPeriodDictionary = new SkillResourceCalculationPeriodWrapper(_skillStaffPeriods);
+	        IDividedActivityData dividedActivityData =
+                activityDivider.DivideActivity(skillResourceCalculationPeriodDictionary, _personSkillService, _personAssignmentListContainer.ContainedActivities["Phone"], _resources, _inPeriod);
 
-            Expect.Call(_activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService,
+            Expect.Call(_activityDivider.DivideActivity(skillResourceCalculationPeriodDictionary, _personSkillService,
                                                         _personAssignmentListContainer.ContainedActivities["Phone"],
                                                         _resources,
                                                         _inPeriod)).Return(dividedActivityData).IgnoreArguments().Repeat.AtLeastOnce();

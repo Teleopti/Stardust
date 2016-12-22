@@ -1,13 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Security;
 
 namespace Teleopti.Interfaces.Domain
 {
-    /// <summary>
-    /// Dictionary of skill, dictionary of datetimeperiod, ISkillStaffPeriod
-    /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix")]
+	public interface ISkillResourceCalculationPeriodDictionary
+	{
+		bool TryGetValue(ISkill skill, out IResourceCalculationPeriodDictionary resourceCalculationPeriods);
+		bool IsOpen(ISkill skill, DateTimePeriod periodToCalculate);
+		IEnumerable<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> Items();
+	}
+
+	public interface IResourceCalculationPeriodDictionary
+	{
+		IEnumerable<KeyValuePair<DateTimePeriod,IResourceCalculationPeriod>>  Items();
+		bool TryGetValue(DateTimePeriod dateTimePeriod, out IResourceCalculationPeriod resourceCalculationPeriod);
+		IEnumerable<IResourceCalculationPeriod> OnlyValues();
+	}
+
+	/// <summary>
+	/// Dictionary of skill, dictionary of datetimeperiod, ISkillStaffPeriod
+	/// </summary>
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix")]
     public interface ISkillSkillStaffPeriodExtendedDictionary
     {
         /// <summary>

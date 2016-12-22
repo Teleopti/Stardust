@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Collection
     public class SkillSkillStaffPeriodExtendedDictionary : Dictionary<ISkill, ISkillStaffPeriodDictionary>, ISkillSkillStaffPeriodExtendedDictionary
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SkillSkillStaffPeriodDictionary"/> class.
+        /// Initializes a new instance of the <see cref="SkillSkillStaffPeriodExtendedDictionary"/> class.
         /// </summary>
         /// <remarks>
         /// Created by: robink

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -50,9 +51,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			if (!_allSkills.Any())
 				return _relevantSkillStaffPeriods;
-			IAffectedPersonSkillService personSkillService = new AffectedPersonSkillService(_allSkills);
+			var personSkillService = new AffectedPersonSkillService(_allSkills);
 
-			var rc = new ScheduleResourceOptimizer(_relevantProjections, _relevantSkillStaffPeriods, personSkillService,
+			var rc = new ScheduleResourceOptimizer(_relevantProjections, new SkillResourceCalculationPeriodWrapper(_relevantSkillStaffPeriods), personSkillService,
 			                                       emptyCache, new ActivityDivider());
 			rc.Optimize(periodToRecalculate, resourceCalculationData);
 
@@ -82,6 +83,43 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 
 			return resources;
+		}
+	}
+
+	public class SkillResourceCalculationPeriodWrapper : ISkillResourceCalculationPeriodDictionary
+	{
+		private readonly ISkillSkillStaffPeriodExtendedDictionary _relevantSkillStaffPeriods;
+
+		public SkillResourceCalculationPeriodWrapper(ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods)
+		{
+			_relevantSkillStaffPeriods = relevantSkillStaffPeriods;
+		}
+
+		public bool TryGetValue(ISkill skill, out IResourceCalculationPeriodDictionary resourceCalculationPeriods)
+		{
+			ISkillStaffPeriodDictionary wrappedDictionary;
+			if (_relevantSkillStaffPeriods.TryGetValue(skill, out wrappedDictionary))
+			{
+				resourceCalculationPeriods = wrappedDictionary;
+				return true;
+			}
+			resourceCalculationPeriods = null;
+			return false;
+		}
+
+		public bool IsOpen(ISkill skill, DateTimePeriod periodToCalculate)
+		{
+			ISkillStaffPeriodDictionary dictionary;
+			if (_relevantSkillStaffPeriods.TryGetValue(skill, out dictionary))
+			{
+				return dictionary.SkillOpenHoursCollection.Any(openHourPeriod => openHourPeriod.Intersect(periodToCalculate));
+			}
+			return false;
+		}
+
+		public IEnumerable<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> Items()
+		{
+			return ((SkillSkillStaffPeriodExtendedDictionary)_relevantSkillStaffPeriods).Select(w => new KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>(w.Key, w.Value));
 		}
 	}
 }

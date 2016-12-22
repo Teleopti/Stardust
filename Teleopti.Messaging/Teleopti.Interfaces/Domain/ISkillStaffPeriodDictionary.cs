@@ -6,8 +6,8 @@ namespace Teleopti.Interfaces.Domain
     /// <summary>
     /// Represents a dictionary of ISkillStaffPeriods, keyed by Period
     /// </summary>
-    public interface ISkillStaffPeriodDictionary : IDictionary<DateTimePeriod, ISkillStaffPeriod>
-    {
+    public interface ISkillStaffPeriodDictionary : IDictionary<DateTimePeriod, ISkillStaffPeriod>, IResourceCalculationPeriodDictionary
+	{
         /// <summary>
         /// Gets the skill open hours collection.
         /// </summary>
@@ -27,17 +27,5 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2009-02-12
         /// </remarks>
         IAggregateSkill Skill { get; }
-
-        /// <summary>
-        /// Tries the get resolution adjusted value.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2009-05-13
-        /// </remarks>
-        bool TryGetResolutionAdjustedValue(DateTimePeriod key, out ISkillStaffPeriod value);
     }
 }

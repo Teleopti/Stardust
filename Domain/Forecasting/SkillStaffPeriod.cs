@@ -459,7 +459,17 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-        public TimeSpan ForecastedIncomingDemand()
+	    public void SetCalculatedLoggedOn(double loggedOn)
+	    {
+		    Payload.CalculatedLoggedOn = loggedOn;
+	    }
+		
+	    public void ResetMultiskillMinOccupancy()
+	    {
+		    Payload.MultiskillMinOccupancy = null;
+	    }
+
+	    public TimeSpan ForecastedIncomingDemand()
         {
             return TimeSpan.FromMinutes(Payload.ForecastedIncomingDemand*Period.ElapsedTime().TotalMinutes);
         }

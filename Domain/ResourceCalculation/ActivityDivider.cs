@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Created by: Tamas
         /// Created date: 2008-02-07
         /// </remarks>
-        IDividedActivityData DivideActivity(ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods,
+        IDividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
                                                              IAffectedPersonSkillService affectedPersonSkillService,
                                                            IActivity activity,
 														   IResourceCalculationDataContainer filteredProjections,
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
     public class ActivityDivider : IActivityDivider
     {
-        public IDividedActivityData DivideActivity(ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods,
+        public IDividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
             IAffectedPersonSkillService affectedPersonSkillService,
             IActivity activity,
 			IResourceCalculationDataContainer filteredProjections,
@@ -102,16 +102,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return dividedActivity;
         }
 
-	    private static double? skillDayDemand(ISkill skill, ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods, DateTimePeriod periodToCalculate)
+	    private static double? skillDayDemand(ISkill skill, ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods, DateTimePeriod periodToCalculate)
         {
-            ISkillStaffPeriodDictionary skillStaffPeriods;
+			IResourceCalculationPeriodDictionary skillStaffPeriods;
             bool anythingOpen = false;
             if (!relevantSkillStaffPeriods.TryGetValue(skill, out skillStaffPeriods))
                 return null;
 
             double totalTime = 0;
 
-            foreach (var skillStaffPeriod in skillStaffPeriods)
+            foreach (var skillStaffPeriod in skillStaffPeriods.Items())
             {
                 if (periodToCalculate.StartDateTime>skillStaffPeriod.Key.EndDateTime) continue;
                 if (periodToCalculate.EndDateTime<skillStaffPeriod.Key.StartDateTime) break;
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
                 if (intersection.HasValue)
                 {
-                    if (!anythingOpen && skillStaffPeriods.SkillOpenHoursCollection.Any(openHourPeriod => openHourPeriod.Intersect(periodToCalculate)))
+                    if (!anythingOpen && relevantSkillStaffPeriods.IsOpen(skill, periodToCalculate))
                     {
 	                    anythingOpen = true;
                     }

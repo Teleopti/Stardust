@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.Collection
 {
     public class SkillStaffPeriodDictionary : ISkillStaffPeriodDictionary
-    {
+	{
         private Lazy<IList<DateTimePeriod>> _openHoursCollection;
         private readonly IDictionary<DateTimePeriod, ISkillStaffPeriod> _wrappedDictionary = new Dictionary<DateTimePeriod, ISkillStaffPeriod>();
         private readonly IAggregateSkill _skill;
@@ -55,17 +55,22 @@ namespace Teleopti.Ccc.Domain.Collection
             return _wrappedDictionary.GetEnumerator();
         }
 
- 
-        /// <summary>
-        /// Removes the specified key.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2009-01-23
-        /// </remarks>
-        public bool Remove(DateTimePeriod key)
+	    public IDictionary<DateTimePeriod, ISkillStaffPeriod> InnerDictionary()
+	    {
+		    return _wrappedDictionary;
+	    }
+
+
+		/// <summary>
+		/// Removes the specified key.
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2009-01-23
+		/// </remarks>
+		public bool Remove(DateTimePeriod key)
         {
 			var remove = _wrappedDictionary.Remove(key);
 	        if (remove)
@@ -230,20 +235,6 @@ namespace Teleopti.Ccc.Domain.Collection
             get { return _skill; }
         }
 
-        public bool TryGetResolutionAdjustedValue(DateTimePeriod key, out ISkillStaffPeriod value)
-        {
-            int defaultRes = ((ISkill) _skill).DefaultResolution;
-            DateTimePeriod adjustedKey = key;
-            if(key.ElapsedTime().TotalMinutes != defaultRes)
-            {
-                DateTime adjustedStart =
-                    key.StartDateTime.Date.Add(TimeHelper.FitToDefaultResolution(key.StartDateTime.TimeOfDay, defaultRes));
-                adjustedKey = new DateTimePeriod(adjustedStart, adjustedStart.AddMinutes(defaultRes));
-            }
-
-            return _wrappedDictionary.TryGetValue(adjustedKey, out value);
-        }
-
         /// <summary>
         /// Clears this instance.
         /// </summary>
@@ -341,5 +332,45 @@ namespace Teleopti.Ccc.Domain.Collection
         }
 
         #endregion
-    }
+
+		public IEnumerable<KeyValuePair<DateTimePeriod, IResourceCalculationPeriod>> Items()
+		{
+			return _wrappedDictionary.Select(w => new KeyValuePair<DateTimePeriod, IResourceCalculationPeriod>(w.Key, w.Value));
+		}
+
+		public bool TryGetValue(DateTimePeriod dateTimePeriod, out IResourceCalculationPeriod resourceCalculationPeriod)
+		{
+			ISkillStaffPeriod period;
+			if (_wrappedDictionary.TryGetValue(dateTimePeriod, out period))
+			{
+				resourceCalculationPeriod = period;
+				return true;
+			}
+			resourceCalculationPeriod = null;
+			return false;
+		}
+
+		IEnumerable<IResourceCalculationPeriod> IResourceCalculationPeriodDictionary.OnlyValues()
+		{
+			return _wrappedDictionary.Values;
+		}
+	}
+
+	public static class SkillDictionaryExtensions
+	{
+		public static bool TryGetResolutionAdjustedValue(this IResourceCalculationPeriodDictionary source, ISkill skill, DateTimePeriod key, out IResourceCalculationPeriod value)
+		{
+			int defaultRes = skill.DefaultResolution;
+			DateTimePeriod adjustedKey = key;
+			if (key.ElapsedTime().TotalMinutes != defaultRes)
+			{
+				DateTime adjustedStart =
+					key.StartDateTime.Date.Add(TimeHelper.FitToDefaultResolution(key.StartDateTime.TimeOfDay, defaultRes));
+				adjustedKey = new DateTimePeriod(adjustedStart, adjustedStart.AddMinutes(defaultRes));
+			}
+
+			return source.TryGetValue(adjustedKey, out value);
+		}
+
+	}
 }

@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyDivideActivity()
         {
             IDividedActivityData dividedActivity = 
-                _target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(_testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
+                _target.DivideActivity(new SkillResourceCalculationPeriodWrapper(_skillStaffPeriods), new AffectedPersonSkillService(_testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
 
             VerifyPersonSkillResourcesData(dividedActivity);
 
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				{
 					{skill, SkillDayFactory.PrepareSkillDay(skill, periodToCalculate.StartDateTime, 0)}
 				};
-			var dividedActivity = _target.DivideActivity(skillStaffPeriods,
+			var dividedActivity = _target.DivideActivity(new SkillResourceCalculationPeriodWrapper(skillStaffPeriods),
 			                       new AffectedPersonSkillService(new[] {skill}), skill.Activity, _resources,
 								   periodToCalculate);
 
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             mocks.ReplayAll();
 
-			_target.DivideActivity(skillStaffPeriods, new AffectedPersonSkillService(_testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
+			_target.DivideActivity(new SkillResourceCalculationPeriodWrapper(skillStaffPeriods), new AffectedPersonSkillService(_testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
         }
 
         [Test]
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _target = new ActivityDivider();
 
             IDividedActivityData result =
-				_target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(_testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
+				_target.DivideActivity(new SkillResourceCalculationPeriodWrapper(_skillStaffPeriods), new AffectedPersonSkillService(_testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
             Assert.AreEqual(3, result.TargetDemands.Count);
         }
 
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             dictionary.Clear();
             _target = new ActivityDivider();
             IDividedActivityData result =
-				_target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(_testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
+				_target.DivideActivity(new SkillResourceCalculationPeriodWrapper(_skillStaffPeriods), new AffectedPersonSkillService(_testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
             Assert.AreEqual(2, result.TargetDemands.Count);
         }
 
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 
 			IDividedActivityData result =
-				_target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(_testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
+				_target.DivideActivity(new SkillResourceCalculationPeriodWrapper(_skillStaffPeriods), new AffectedPersonSkillService(_testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
 			Assert.AreEqual(2, result.TargetDemands.Count);
 		}
 

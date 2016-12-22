@@ -138,11 +138,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
         public void VerifyTryGetResolutionAdjustedValue()
         {
             DateTimePeriod dtp1 = new DateTimePeriod(new DateTime(2000, 1, 1, 17, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 17, 30, 0, DateTimeKind.Utc));
-            ISkillStaffPeriod ssp;
-            Assert.IsFalse(_target.TryGetResolutionAdjustedValue(dtp1, out ssp));
+            IResourceCalculationPeriod ssp;
+            Assert.IsFalse(_target.TryGetResolutionAdjustedValue(_skill,dtp1, out ssp));
             dtp1 = new DateTimePeriod(new DateTime(2000, 1, 1, 10, 15, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 10, 30, 0, DateTimeKind.Utc));
-            Assert.IsTrue(_target.TryGetResolutionAdjustedValue(dtp1, out ssp));
-            Assert.AreEqual(_dtp1, ssp.Period);
+            Assert.IsTrue(_target.TryGetResolutionAdjustedValue(_skill, dtp1, out ssp));
+            Assert.AreEqual(_dtp1, ((ISkillStaffPeriod)ssp).Period);
         }
     }
 }
