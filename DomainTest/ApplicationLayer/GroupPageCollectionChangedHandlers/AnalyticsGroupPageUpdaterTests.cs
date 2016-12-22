@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHandlers
 {
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 		[SetUp]
 		public void Setup()
 		{
-			_groupPageRepository = MockRepository.GenerateMock<IGroupPageRepository>();
+			_groupPageRepository = new FakeGroupPageRepository();
 			_analyticsGroupPageRepository = MockRepository.GenerateMock<IAnalyticsGroupPageRepository>();
 			_analyticsBridgeGroupPagePersonRepository = MockRepository.GenerateMock<IAnalyticsBridgeGroupPagePersonRepository>();
 
@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 		public void ShouldDeleteGroupPagesAndBridgeGroupPagePersonWhenAGroupPageIsDeleted()
 		{
 			var groupPageIdCollection = new List<Guid> { Guid.NewGuid()};
-			_groupPageRepository.Stub(x => x.LoadGroupPagesByIds(groupPageIdCollection)).Return(new IGroupPage[] {});
 
 			var groupPageCollectionChangedEvent = new GroupPageCollectionChangedEvent {LogOnBusinessUnitId = _businessUnitId};
 			groupPageCollectionChangedEvent.SetGroupPageIdCollection( groupPageIdCollection);
@@ -58,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			var personWithGuid = PersonFactory.CreatePersonWithGuid("person1","person1Last");
 			rootPersonGroup.AddPerson(personWithGuid);
 			groupPage.AddRootPersonGroup(rootPersonGroup);
-			_groupPageRepository.Stub(x => x.LoadGroupPagesByIds(groupPageIdCollection)).Return(new IGroupPage[] { groupPage });
+			_groupPageRepository.Add(groupPage);
 			_analyticsGroupPageRepository.Stub(x => x.GetGroupPage(groupPageId, _businessUnitId)).Return(new AnalyticsGroup[] {});
 			_analyticsBridgeGroupPagePersonRepository.Stub(x => x.GetBridgeGroupPagePerson(rootPersonGroup.Id.GetValueOrDefault(), _businessUnitId)).Return(new Guid[] { });
 
@@ -95,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			var personWithGuid = PersonFactory.CreatePersonWithGuid("person1", "person1Last");
 			rootPersonGroup.AddPerson(personWithGuid);
 			groupPage.AddRootPersonGroup(rootPersonGroup);
-			_groupPageRepository.Stub(x => x.LoadGroupPagesByIds(groupPageIdCollection)).Return(new IGroupPage[] { groupPage });
+			_groupPageRepository.Add(groupPage);
 			_analyticsGroupPageRepository.Stub(x => x.GetGroupPage(groupPageId, _businessUnitId)).Return(new[]
 			{
 				new AnalyticsGroup
@@ -138,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			childPersonGroup.AddPerson(person2);
 			rootPersonGroup.AddChildGroup(childPersonGroup);
 			groupPage.AddRootPersonGroup(rootPersonGroup);
-			_groupPageRepository.Stub(x => x.LoadGroupPagesByIds(groupPageIdCollection)).Return(new IGroupPage[] { groupPage });
+			_groupPageRepository.Add(groupPage);
 			_analyticsGroupPageRepository.Stub(x => x.GetGroupPage(groupPageId, _businessUnitId)).Return(new[]
 			{
 				new AnalyticsGroup
@@ -174,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			var childPersonGroup = new ChildPersonGroup();
 			rootPersonGroup.AddChildGroup(childPersonGroup);
 			groupPage.AddRootPersonGroup(rootPersonGroup);
-			_groupPageRepository.Stub(x => x.LoadGroupPagesByIds(groupPageIdCollection)).Return(new IGroupPage[] { groupPage });
+			_groupPageRepository.Add(groupPage);
 			_analyticsGroupPageRepository.Stub(x => x.GetGroupPage(groupPageId, _businessUnitId)).Return(new[]
 			{
 				new AnalyticsGroup

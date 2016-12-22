@@ -2,18 +2,18 @@
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.DayOff;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.DayOff
 {
 	[TestFixture]
-	public class DayOffTemplateChangedHandlerTests
+	public class AnalyticsDayOffUpdaterTests
 	{
 		private AnalyticsDayOffUpdater _target;
 		private FakeAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.DayOff
 		{
 			_analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
 			_analyticsDayOffRepository = new FakeAnalyticsDayOffRepository();
-			_dayOffTemplateRepository = MockRepository.GenerateMock<IDayOffTemplateRepository>();
+			_dayOffTemplateRepository = new FakeDayOffTemplateRepository();
 
 			_target = new AnalyticsDayOffUpdater(_analyticsBusinessUnitRepository, _analyticsDayOffRepository, _dayOffTemplateRepository);
 		}
@@ -42,11 +42,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.DayOff
 				LogOnBusinessUnitId = businessUnitCode
 			};
 
-			var dayOffTemplate = new DayOffTemplate { UpdatedOn = DateTime.Today };
-			dayOffTemplate.SetId(id);
+			var dayOffTemplate = new DayOffTemplate { UpdatedOn = DateTime.Today }.WithId(id);
 			dayOffTemplate.ChangeDescription("DayOffName", "DD");
-
-			_dayOffTemplateRepository.Stub(x => x.Get(id)).Return(dayOffTemplate);
+			_dayOffTemplateRepository.Add(dayOffTemplate);
 
 			_target.Handle(@event);
 
@@ -74,18 +72,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.DayOff
 				LogOnBusinessUnitId = businessUnitCode
 			};
 
-			var dayOffTemplate = new DayOffTemplate { UpdatedOn = DateTime.Today };
-			dayOffTemplate.SetId(id);
+			var dayOffTemplate = new DayOffTemplate { UpdatedOn = DateTime.Today }.WithId(id);
 			dayOffTemplate.ChangeDescription("DayOffName", "DD");
-
-			_dayOffTemplateRepository.Stub(x => x.Get(id)).Return(dayOffTemplate);
+			_dayOffTemplateRepository.Add(dayOffTemplate);
 
 			_target.Handle(@event);
 			_analyticsDayOffRepository.DayOffs().Count.Should().Be.EqualTo(1);
 			_analyticsDayOffRepository.DayOffs().First().DayOffName.Should().Be.EqualTo(dayOffTemplate.Description.Name);
 
 			dayOffTemplate.ChangeDescription("DayOffName update", "DD");
-			_dayOffTemplateRepository.Stub(x => x.Get(id)).Return(dayOffTemplate);
 
 			_target.Handle(@event);
 

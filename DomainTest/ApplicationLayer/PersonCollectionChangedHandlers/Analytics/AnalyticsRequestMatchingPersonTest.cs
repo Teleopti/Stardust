@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
@@ -14,16 +15,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		[Test]
 		public void ShouldUpdateUnlinkedPersonids()
 		{
-			var analyticsPersonPeriodRepository = MockRepository.GenerateMock<IAnalyticsPersonPeriodRepository>();
-			var @event = new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = Guid.NewGuid() };
+			var analyticsPersonPeriodRepository = new FakeAnalyticsPersonPeriodRepository();
 			var personId = Guid.NewGuid();
-			@event.SetPersonIdCollection(new[] { personId });
+			var @event = new AnalyticsPersonCollectionChangedEvent { LogOnBusinessUnitId = Guid.NewGuid(), PersonIdCollection = { personId } };
 			var personPeriodId = 21;
-			analyticsPersonPeriodRepository.Stub(x => x.GetPersonPeriods(personId)).Return(new[] { new AnalyticsPersonPeriod
+			analyticsPersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
 			{
 				PersonCode = personId,
 				PersonId = personPeriodId
-			} });
+			});
 			var analyticsRequestRepository = MockRepository.GenerateMock<IAnalyticsRequestRepository>();
 			var target = new AnalyticsRequestMatchingPerson(analyticsPersonPeriodRepository, analyticsRequestRepository);
 

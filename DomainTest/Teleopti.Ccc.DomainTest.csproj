@@ -250,7 +250,7 @@
     <Compile Include="ApplicationLayer\ApproveRequestCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Commands\AbsenceCommandConverterTest.cs" />
     <Compile Include="ApplicationLayer\Forecast\ExportMultisiteSkillsToSkillTest.cs" />
-    <Compile Include="ApplicationLayer\DayOff\DayOffTemplateChangedHandlerTests.cs" />
+    <Compile Include="ApplicationLayer\DayOff\AnalyticsDayOffUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\Forecast\ExportMultisiteSkillToSkillTest.cs" />
     <Compile Include="ApplicationLayer\Forecast\ForecastsAnalyzeQueryResultTest.cs" />
     <Compile Include="ApplicationLayer\Forecast\ForecastsAnalyzeQueryTest.cs" />
@@ -275,7 +275,7 @@
     <Compile Include="ApplicationLayer\Preference\Analytics\PreferenceFulfillmentChangedHandlerTests.cs" />
     <Compile Include="ApplicationLayer\Preference\Analytics\AnalyticsPreferenceUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AcdLoginPersonMapTests.cs" />
-    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\UpdatePersonGroupsAnalyticsHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPersonGroupsHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPersonPeriodUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\RemoveActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\RunWaitlistCommandHandlerTest.cs" />

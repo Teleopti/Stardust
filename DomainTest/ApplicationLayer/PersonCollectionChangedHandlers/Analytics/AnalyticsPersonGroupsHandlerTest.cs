@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
 	[TestFixture]
-	public class UpdatePersonGroupsAnalyticsHandlerTest
+	public class AnalyticsPersonGroupsHandlerTest
 	{
 		private AnalyticsPersonGroupsHandler _target;
 		private IAnalyticsGroupPageRepository _analyticsGroupPageRepository;

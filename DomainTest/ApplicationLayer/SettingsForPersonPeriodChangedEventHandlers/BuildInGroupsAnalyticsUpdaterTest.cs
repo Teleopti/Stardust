@@ -7,6 +7,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEventHa
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChangedEventHandlers
@@ -27,11 +30,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 		public void Setup()
 		{
 			_analyticsGroupPageRepository = MockRepository.GenerateMock<IAnalyticsGroupPageRepository>();
-			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
-			_partTimePercentageRepository = MockRepository.GenerateMock<IPartTimePercentageRepository>();
-			_ruleSetBagRepository = MockRepository.GenerateMock<IRuleSetBagRepository>();
-			_contractRepository = MockRepository.GenerateMock<IContractRepository>();
-			_contractScheduleRepository = MockRepository.GenerateMock<IContractScheduleRepository>();
+			_skillRepository = new FakeSkillRepository();
+			_partTimePercentageRepository = new FakePartTimePercentageRepository();
+			_ruleSetBagRepository = new FakeRuleSetBagRepository();
+			_contractRepository = new FakeContractRepository();
+			_contractScheduleRepository = new FakeContractScheduleRepository();
 
 			_target = new BuildInGroupsAnalyticsUpdater(_analyticsGroupPageRepository, _skillRepository, _partTimePercentageRepository, _ruleSetBagRepository, _contractRepository, _contractScheduleRepository);
 			_businessUnitId = Guid.NewGuid();
@@ -47,15 +50,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 
 			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId, _businessUnitId))
 				.Return(new AnalyticsGroup {GroupName = "GroupName", GroupCode = entityId});
-			_partTimePercentageRepository.Stub(r => r.Get(entityId)).Return(new PartTimePercentage(updateGroupName));
-			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(null);
-			_contractRepository.Stub(r => r.Get(entityId)).Return(null);
-			_contractScheduleRepository.Stub(r => r.Get(entityId)).Return(null);
-			_skillRepository.Stub(r => r.Get(entityId)).Return(null);
+			_partTimePercentageRepository.Add(new PartTimePercentage(updateGroupName).WithId(entityId));
 
 			_target.Handle(@event);
 
-			_partTimePercentageRepository.AssertWasCalled(r => r.Get(entityId));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroup>.Matches(a => a.GroupName == updateGroupName)));
 		}
 
@@ -69,15 +67,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 
 			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId, _businessUnitId))
 				.Return(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId });
-			_partTimePercentageRepository.Stub(r => r.Get(entityId)).Return(null);
-			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(new RuleSetBag {Description = new Description(updateGroupName)});
-			_contractRepository.Stub(r => r.Get(entityId)).Return(null);
-			_contractScheduleRepository.Stub(r => r.Get(entityId)).Return(null);
-			_skillRepository.Stub(r => r.Get(entityId)).Return(null);
+			_ruleSetBagRepository.Add(new RuleSetBag { Description = new Description(updateGroupName) }.WithId(entityId));
 			_target.Handle(@event);
 
-			_partTimePercentageRepository.AssertWasCalled(r => r.Get(entityId));
-			_ruleSetBagRepository.AssertWasCalled(r => r.Get(entityId));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroup>.Matches(a => a.GroupName == updateGroupName)));
 		}
 
@@ -91,17 +83,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 
 			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId, _businessUnitId))
 				.Return(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId });
-			_partTimePercentageRepository.Stub(r => r.Get(entityId)).Return(null);
-			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(null);
-			_contractRepository.Stub(r => r.Get(entityId)).Return(new Contract(updateGroupName));
-			_contractScheduleRepository.Stub(r => r.Get(entityId)).Return(null);
-			_skillRepository.Stub(r => r.Get(entityId)).Return(null);
+			_contractRepository.Add(new Contract(updateGroupName).WithId(entityId));
 
 			_target.Handle(@event);
 
-			_partTimePercentageRepository.AssertWasCalled(r => r.Get(entityId));
-			_ruleSetBagRepository.AssertWasCalled(r => r.Get(entityId));
-			_contractRepository.AssertWasCalled(r => r.Get(entityId));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroup>.Matches(a => a.GroupName == updateGroupName)));
 		}
 
@@ -115,18 +100,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 
 			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId, _businessUnitId))
 				.Return(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId });
-			_partTimePercentageRepository.Stub(r => r.Get(entityId)).Return(null);
-			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(null);
-			_contractRepository.Stub(r => r.Get(entityId)).Return(null);
-			_contractScheduleRepository.Stub(r => r.Get(entityId)).Return(new ContractSchedule(updateGroupName));
-			_skillRepository.Stub(r => r.Get(entityId)).Return(null);
+			_contractScheduleRepository.Add(new ContractSchedule(updateGroupName).WithId(entityId));
 
 			_target.Handle(@event);
 
-			_partTimePercentageRepository.AssertWasCalled(r => r.Get(entityId));
-			_ruleSetBagRepository.AssertWasCalled(r => r.Get(entityId));
-			_contractRepository.AssertWasCalled(r => r.Get(entityId));
-			_contractScheduleRepository.AssertWasCalled(r => r.Get(entityId));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroup>.Matches(a => a.GroupName == updateGroupName)));
 		}
 
@@ -140,21 +117,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 
 			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId, _businessUnitId))
 				.Return(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId });
-			_partTimePercentageRepository.Stub(r => r.Get(entityId)).Return(null);
-			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(null);
-			_contractRepository.Stub(r => r.Get(entityId)).Return(null);
-			_contractScheduleRepository.Stub(r => r.Get(entityId)).Return(null);
-			var skill = new Domain.Forecasting.Skill();
+			var skill = new Domain.Forecasting.Skill().WithId(entityId);
 			skill.ChangeName(updateGroupName);
-			_skillRepository.Stub(r => r.Get(entityId)).Return(skill);
+			_skillRepository.Add(skill);
 
 			_target.Handle(@event);
 
-			_partTimePercentageRepository.AssertWasCalled(r => r.Get(entityId));
-			_ruleSetBagRepository.AssertWasCalled(r => r.Get(entityId));
-			_contractRepository.AssertWasCalled(r => r.Get(entityId));
-			_contractScheduleRepository.AssertWasCalled(r => r.Get(entityId));
-			_skillRepository.AssertWasCalled(r => r.Get(entityId));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroup>.Matches(a => a.GroupName == updateGroupName)));
 		}
 
@@ -184,19 +152,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 
 			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId, _businessUnitId))
 				.Return(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId });
-			_partTimePercentageRepository.Stub(r => r.Get(entityId)).Return(null);
-			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(null);
-			_contractRepository.Stub(r => r.Get(entityId)).Return(null);
-			_contractScheduleRepository.Stub(r => r.Get(entityId)).Return(null);
-			_skillRepository.Stub(r => r.Get(entityId)).Return(null);
 
 			_target.Handle(@event);
 
-			_partTimePercentageRepository.AssertWasCalled(r => r.Get(entityId));
-			_ruleSetBagRepository.AssertWasCalled(r => r.Get(entityId));
-			_contractRepository.AssertWasCalled(r => r.Get(entityId));
-			_contractScheduleRepository.AssertWasCalled(r => r.Get(entityId));
-			_skillRepository.AssertWasCalled(r => r.Get(entityId));
 			_analyticsGroupPageRepository.AssertWasNotCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroup>.Matches(a => a.GroupName == updateGroupName)));
 		}
 	}

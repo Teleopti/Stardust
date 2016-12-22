@@ -1,12 +1,12 @@
 using System;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Skill;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 
@@ -16,18 +16,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Skill
 	[TestWithStaticDependenciesAvoidUse]
 	public class AnalyticsSkillUpdaterTest
 	{
-		FakeAnalyticsSkillRepository analyticsSkillRepository;
-		ISkillRepository skillRepository;
-		IAnalyticsTimeZoneRepository analyticsTimeZoneRepository;
-		FakeAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository;
+		private AnalyticsSkillUpdater target;
+		private FakeAnalyticsSkillRepository analyticsSkillRepository;
+		private ISkillRepository skillRepository;
+		private FakeAnalyticsTimeZoneRepository analyticsTimeZoneRepository;
+		private FakeAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository;
 
 		[SetUp]
 		public void SetUp()
 		{
 			analyticsSkillRepository = new FakeAnalyticsSkillRepository();
-			skillRepository = MockRepository.GenerateMock<ISkillRepository>();
-			analyticsTimeZoneRepository = MockRepository.GenerateMock<IAnalyticsTimeZoneRepository>();
+			skillRepository = new FakeSkillRepository();
+			analyticsTimeZoneRepository = new FakeAnalyticsTimeZoneRepository();
 			analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
+			target = new AnalyticsSkillUpdater(skillRepository, analyticsSkillRepository, analyticsBusinessUnitRepository,
+				analyticsTimeZoneRepository);
 		}
 
 		[Test]
@@ -37,12 +40,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Skill
 			{
 				SkillId = Guid.NewGuid()
 			};
-			var skill = SkillFactory.CreateSkill("skillName1");
-			skillRepository.Stub(x => x.Get(@event.SkillId)).Return(skill);
-			analyticsTimeZoneRepository.Stub(x => x.Get(skill.TimeZone.Id)).Return(new AnalyticsTimeZone());
-
-			var target = new AnalyticsSkillUpdater(skillRepository, analyticsSkillRepository, analyticsBusinessUnitRepository, analyticsTimeZoneRepository);
-
+			var skill = SkillFactory.CreateSkill("skillName1").WithId(@event.SkillId);
+			skillRepository.Add(skill);
 			target.Handle(@event);
 
 			analyticsSkillRepository.Skills(2)
@@ -58,11 +57,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Skill
 			{
 				SkillId = Guid.NewGuid()
 			};
-			var skill = SkillFactory.CreateSkill("skillName1");
-			skillRepository.Stub(x => x.Get(@event.SkillId)).Return(skill);
-			analyticsTimeZoneRepository.Stub(x => x.Get(skill.TimeZone.Id)).Return(new AnalyticsTimeZone());
-
-			var target = new AnalyticsSkillUpdater(skillRepository, analyticsSkillRepository, analyticsBusinessUnitRepository, analyticsTimeZoneRepository);
+			var skill = SkillFactory.CreateSkill("skillName1").WithId(@event.SkillId);
+			skillRepository.Add(skill);
 
 			target.Handle(@event);
 

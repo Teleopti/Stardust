@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public ISkill Get(Guid id)
 		{
-			return _skills.First(x => x.Id == id);
+			return _skills.FirstOrDefault(x => x.Id == id);
 		}
 
 		public IList<ISkill> LoadAll()

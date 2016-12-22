@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Analytics;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.MultiplicatorDefinitionSetHandlers;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -27,13 +28,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.MultiplicatorDefinitionSetHan
 		public void Setup()
 		{
 			_analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
-			_analyticsOvertimeRepository = MockRepository.GenerateMock<IAnalyticsOvertimeRepository>();
-			_multiplicatorDefinitionSetRepository = MockRepository.GenerateMock<IMultiplicatorDefinitionSetRepository>();
-
-			multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("Test", MultiplicatorType.Overtime);
-			multiplicatorDefinitionSet.SetId(Guid.NewGuid());
-			_multiplicatorDefinitionSetRepository.Stub(x => x.Get(multiplicatorDefinitionSet.Id.GetValueOrDefault()))
-				.Return(multiplicatorDefinitionSet);
+			_analyticsOvertimeRepository = new FakeAnalyticsOvertimeRepository();
+			_multiplicatorDefinitionSetRepository = new FakeMultiplicatorDefinitionSetRepository();
+			multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("Test", MultiplicatorType.Overtime).WithId(Guid.NewGuid());
+			_multiplicatorDefinitionSetRepository.Add(multiplicatorDefinitionSet);
 
 			_target = new AnalyticsOvertimeUpdater(_analyticsOvertimeRepository, _analyticsBusinessUnitRepository, _multiplicatorDefinitionSetRepository);
 		}
@@ -44,11 +42,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.MultiplicatorDefinitionSetHan
 			@event.MultiplicatorDefinitionSetId = multiplicatorDefinitionSet.Id.GetValueOrDefault();
 			_target.Handle((dynamic)@event);
 
-			_analyticsOvertimeRepository.AssertWasCalled(r =>
-					r.AddOrUpdate(Arg<AnalyticsOvertime>.Matches(ao =>
-								ao.IsDeleted == multiplicatorDefinitionSet.IsDeleted &&
-								ao.OvertimeCode == multiplicatorDefinitionSet.Id.GetValueOrDefault() &&
-								ao.OvertimeName == multiplicatorDefinitionSet.Name)));
+			var analyticsOvertime = _analyticsOvertimeRepository.Overtimes().FirstOrDefault(x => x.OvertimeCode == multiplicatorDefinitionSet.Id);
+			analyticsOvertime.Should().Not.Be.Null();
 		}
 
 		[Test, TestCaseSource(nameof(nonOvertimeEvents))]
@@ -58,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.MultiplicatorDefinitionSetHan
 
 			_target.Handle((dynamic)@event);
 
-			_analyticsOvertimeRepository.AssertWasNotCalled(r => r.AddOrUpdate(Arg<AnalyticsOvertime>.Is.Anything));
+			_analyticsOvertimeRepository.Overtimes().Should().Be.Empty();
 		}
 
 		#region TestData

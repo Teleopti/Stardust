@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -12,27 +13,27 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IGroupPage root)
 		{
-			throw new NotImplementedException();
+			_groupPages.Add(root);
 		}
 
 		public void Remove(IGroupPage root)
 		{
-			throw new NotImplementedException();
+			_groupPages.Remove(root);
 		}
 
 		public IGroupPage Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _groupPages.FirstOrDefault(x => x.Id == id);
 		}
 
 		public IGroupPage Load(Guid id)
 		{
-			throw new NotImplementedException();
+			return _groupPages.First(x => x.Id == id);
 		}
 
 		public IList<IGroupPage> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _groupPages;
 		}
 
 		public IList<IGroupPage> LoadAllGroupPageBySortedByDescription()
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IGroupPage> LoadGroupPagesByIds(IEnumerable<Guid> groupPageIds)
 		{
-			throw new NotImplementedException();
+			return _groupPages.Where(x => groupPageIds.ToList().Contains(x.Id.Value)).ToList();
 		}
 
 		public IList<IGroupPage> GetGroupPagesForPerson(Guid personId)
