@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Collection
 {
@@ -22,12 +21,6 @@ namespace Teleopti.Ccc.Domain.Collection
 			}
 			skillStaffPeriod = null;
 			return false;
-		}
-
-		public static void AddResources(this ISkillStaffPeriod skillStaffPeriod, double resourceToAdd)
-		{
-			var newValue = Math.Max(0, skillStaffPeriod.CalculatedResource + resourceToAdd);
-			skillStaffPeriod.SetCalculatedResource65(newValue);
 		}
 	}
 }

@@ -892,7 +892,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 	    public void AddResources(double resourcesToAdd)
 	    {
-			SkillStaffPeriodExtensions.AddResources(this, resourcesToAdd);
+			var newValue = Math.Max(0, CalculatedResource + resourcesToAdd);
+			SetCalculatedResource65(newValue);
 		}
     }
 
