@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 {
@@ -214,6 +216,45 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertJavascriptResultContains("return $('.esl').text().length > 0", "True");
 			Browser.Interactions.AssertJavascriptResultContains("return $('.abandoned-rate').text().length > 0", "True");
 			Browser.Interactions.AssertJavascriptResultContains("return $('.average-speed-of-answer').text().length > 0", "True");
+		}
+
+		[Given(@"there are scheduled agents for '(.*)' for date '(.*)'")]
+		public void GivenThereAreScheduledAgentsForForDate(string skill, string date)
+		{
+			var theDate = DateTime.Parse(date);
+			DataMaker.Data().Apply(new ScheduleForecastSkillReadModelConfigurable(skill, theDate));
+		}
+
+		[When(@"I am navigating to intraday staffing view")]
+		public void WhenIAmNavigatingToIntradayStaffingView()
+		{
+			Browser.Interactions.Javascript("$('md-tab-item:nth-child(3)').click();");
+		}
+
+		[Then(@"I should see staffing data in the chart")]
+		public void ThenIShouldSeeStaffingDataInTheChart()
+		{
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var forecastedStaffing = parseFloat(scope.viewObj.forecastedStaffing.series[1]);" +
+				"return (forecastedStaffing >= 0);"
+				, "True");
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var count = scope.viewObj.forecastedStaffing.updatedSeries.length;" + 
+				"var forecastedStaffing = parseFloat(scope.viewObj.forecastedStaffing.updatedSeries[count-1]);" +
+				"return (forecastedStaffing >= 0);"
+				, "True");
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var actualStaffing = parseFloat(scope.viewObj.actualStaffingSeries[1]);" +
+				"return (actualStaffing >= 0);"
+				, "True");
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var scheduledStaffing = parseFloat(scope.viewObj.scheduledStaffing[1]);" +
+				"return (scheduledStaffing >= 0);"
+				, "True");
 		}
 	}
 }

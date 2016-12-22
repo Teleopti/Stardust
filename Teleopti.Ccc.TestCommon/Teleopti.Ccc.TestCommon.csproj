@@ -406,6 +406,7 @@
     <Compile Include="TestData\GlobalPrincipalState.cs" />
     <Compile Include="TestData\Setups\Configurable\ForecastConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\ScheduleForecastSkillReadModelConfigurable.cs" />
     <Compile Include="TestData\Setups\Default\DefaultAnalyticsDataCreator.cs" />
     <Compile Include="TestData\Setups\Default\DefaultBusinessUnit.cs" />
     <Compile Include="TestData\Setups\Default\DefaultDataCreator.cs" />

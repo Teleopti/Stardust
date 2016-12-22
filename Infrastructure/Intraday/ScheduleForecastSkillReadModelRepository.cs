@@ -8,6 +8,7 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -16,12 +17,12 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 {
 	public class ScheduleForecastSkillReadModelRepository : IScheduleForecastSkillReadModelRepository
 	{
-		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly INow _now;
 
-		public ScheduleForecastSkillReadModelRepository(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, INow now)
+		public ScheduleForecastSkillReadModelRepository(ICurrentUnitOfWork currentUnitOfWork, INow now)
 		{
-			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_currentUnitOfWork = currentUnitOfWork;
 			_now = now;
 		}
 
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 				dt.Rows.Add(row);
 			}
 
-			var connectionString = _currentUnitOfWorkFactory.Current().ConnectionString;
+			var connectionString = _currentUnitOfWork.Session().Connection.ConnectionString;
 
 
 			using (var connection = new SqlConnection(connectionString))
@@ -121,7 +122,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 		public IEnumerable<SkillStaffingInterval> GetBySkills(Guid[] guids, DateTime startDateTime, DateTime endDateTime)
 		{
-			var result = ((NHibernateUnitOfWork)_currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
+			var result = _currentUnitOfWork.Session().CreateSQLQuery(
 				@"SELECT 
 				[SkillId], [StartDateTime], [EndDateTime], [Forecast], [StaffingLevel], [ForecastWithShrinkage], [StaffingLevelWithShrinkage] FROM [ReadModel].[ScheduleForecastSkill]
 				where (( [StartDateTime] < :startDateTime  and   [EndDateTime] > :startDateTime) 
@@ -145,7 +146,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 		public void Purge()
 		{
-			var connectionString = _currentUnitOfWorkFactory.Current().ConnectionString;
+			var connectionString = _currentUnitOfWork.Session().Connection.ConnectionString;
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
@@ -198,7 +199,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 		public IDictionary<Guid,DateTime> GetLastCalculatedTime()
 		{
 			var result =
-				 ((NHibernateUnitOfWork)_currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
+				 _currentUnitOfWork.Session().CreateSQLQuery(
 							@"select s.BusinessUnit, min(insertedon) as InsertedOn from ReadModel.ScheduleForecastSkill sfs, Skill s
 							where sfs.SkillId = s.Id
 						group by s.BusinessUnit")
@@ -210,7 +211,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 		public void PersistChange(StaffingIntervalChange staffingIntervalChanges)
 		{
-			((NHibernateUnitOfWork)_currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(@"
+			_currentUnitOfWork.Session().CreateSQLQuery(@"
 						INSERT INTO [ReadModel].[ScheduleForecastSkillChange]
 						(
 							[SkillId]
@@ -238,7 +239,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 		public IEnumerable<StaffingIntervalChange> GetReadModelChanges(DateTimePeriod dateTimePeriod)
 		{
-			var result = ((NHibernateUnitOfWork)_currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
+			var result = _currentUnitOfWork.Session().CreateSQLQuery(
 			@"SELECT 
 					[SkillId]
                             ,[StartDateTime]

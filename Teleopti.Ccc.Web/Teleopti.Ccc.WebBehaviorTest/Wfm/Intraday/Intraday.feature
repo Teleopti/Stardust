@@ -45,12 +45,12 @@ Scenario: View performance for a skill area
 	And I should see a summary of today's performance
 	
 Scenario: View staffing for one skill
-	Given the time is '2016-12-21 14:00'
-	And there is queue statistics for the skill 'Skill A' up until '2016-12-21 13:30'
-	And there is forecast data for 'Skill A' in Analytics
-	And there are scheduled agents for 'Skill A'
+	Given the time is '2016-12-22 14:00'
+	And there is queue statistics for the skill 'Skill A' up until '2016-12-22 13:30'
+	And there is forecast data for skill 'Skill A' for date '2016-12-22'
+	And there are scheduled agents for 'Skill A' for date '2016-12-22'
 	When I am viewing intraday page
+	And I should see incoming traffic data in the chart
+	And I am navigating to intraday staffing view
 	Then I should see staffing data in the chart
-	And I should see a summary of today's staffing
-
 	
