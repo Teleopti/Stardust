@@ -248,10 +248,12 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\PhoneStateViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradePersonProvider.cs" />
+    <Compile Include="Cascading\EmptyShovelResourceDataForInterval.cs" />
     <Compile Include="Cascading\OrderedSkillGroups.cs" />
     <Compile Include="Cascading\ResourceCalculationThatThrows.cs" />
     <Compile Include="Cascading\ResourceDistributionForSkillGroupsWithSameIndex.cs" />
     <Compile Include="Cascading\ReverseSkillRoutingPriorities.cs" />
+    <Compile Include="Cascading\ShovelResourceDataExtensions.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityModel.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityPersister.cs" />
     <Compile Include="Common\ClearPersonRelatedInformation.cs" />

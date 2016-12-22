@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
@@ -446,11 +447,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var ret = this.TryGetSkillStaffPeriod(skill, period, out skillStaffPeriod);
 			dataForInterval = skillStaffPeriod;
 			return ret;
-		}
-
-		public IShovelResourceDataForInterval GetDataForInterval(ISkill skill, DateTimePeriod period)
-		{
-			return this.SkillStaffPeriodOrDefault(skill, period);
 		}
 	}
 }
