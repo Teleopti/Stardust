@@ -8,19 +8,5 @@ namespace Teleopti.Ccc.Domain.Collection
 		{
 			return skillStaffPeriod.CalculatedResource - skillStaffPeriod.CalculatedLoggedOn;
 		}
-
-		public static bool TryGetSkillStaffPeriod(this ISkillStaffPeriodHolder skillStaffPeriodHolder, ISkill skill, DateTimePeriod period, out ISkillStaffPeriod skillStaffPeriod)
-		{
-			ISkillStaffPeriodDictionary skillStaffPeriodDictionary;
-			if(skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skill, out skillStaffPeriodDictionary))
-			{
-				if(skillStaffPeriodDictionary.TryGetValue(period, out skillStaffPeriod))
-				{
-					return true;
-				}
-			}
-			skillStaffPeriod = null;
-			return false;
-		}
 	}
 }

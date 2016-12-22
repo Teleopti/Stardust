@@ -443,10 +443,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public bool TryGetDataForInterval(ISkill skill, DateTimePeriod period, out IShovelResourceDataForInterval dataForInterval)
 		{
-			ISkillStaffPeriod skillStaffPeriod;
-			var ret = this.TryGetSkillStaffPeriod(skill, period, out skillStaffPeriod);
-			dataForInterval = (IShovelResourceDataForInterval) skillStaffPeriod;
-			return ret;
+			ISkillStaffPeriodDictionary skillStaffPeriodDictionary;
+			if (SkillSkillStaffPeriodDictionary.TryGetValue(skill, out skillStaffPeriodDictionary))
+			{
+				ISkillStaffPeriod skillStaffPeriod;
+				if (skillStaffPeriodDictionary.TryGetValue(period, out skillStaffPeriod))
+				{
+					dataForInterval = (IShovelResourceDataForInterval)skillStaffPeriod;
+					return true;
+				}
+			}
+			dataForInterval = null;
+			return false;
 		}
 	}
 }
