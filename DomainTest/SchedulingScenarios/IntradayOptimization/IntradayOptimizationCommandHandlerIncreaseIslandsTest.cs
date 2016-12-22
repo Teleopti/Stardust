@@ -114,10 +114,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public void ShouldOnlyConsiderPrimarySkillsWhenReducingSkillGroup()
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 4);
-			var skillA = new Skill("A");
-			skillA.SetCascadingIndex(1);
-			var skillB = new Skill("B");
-			skillB.SetCascadingIndex(2);
+			var skillA = new Skill("A").WithCascadingIndex(1);
+			var skillB = new Skill("B").WithCascadingIndex(2);
 			var skillAagents = Enumerable.Range(0, 16).Select(x => new Person().KnowsSkill(skillA));
 			var skillABagents = Enumerable.Range(0, 5).Select(x => new Person().KnowsSkill(skillA, skillB));
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
