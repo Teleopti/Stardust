@@ -284,8 +284,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			var workflowControlSet = createWorkFlowControlSet(absence);
-			var primarySkill = SkillFactory.CreateSkillWithId("PrimarySkill1");
-			primarySkill.SetCascadingIndex(1);
+			var primarySkill = SkillFactory.CreateSkillWithId("PrimarySkill1").WithCascadingIndex(1);
 			var cascadingSkill = SkillFactory.CreateSkillWithId("cascadingSkill");
 
 			var person = createAndSetupPerson(workflowControlSet, new[] {primarySkill, cascadingSkill});
@@ -347,8 +346,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			var workflowControlSet = createWorkFlowControlSet(absence);
-			var primarySkill = SkillFactory.CreateSkillWithId("PrimarySkill1");
-			primarySkill.SetCascadingIndex(1);
+			var primarySkill = SkillFactory.CreateSkillWithId("PrimarySkill1").WithCascadingIndex(1);
 			var cascadingSkill = SkillFactory.CreateSkillWithId("cascadingSkill");
 
 			var person = createAndSetupPerson(workflowControlSet, new[] {primarySkill, cascadingSkill});
@@ -447,11 +445,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			var workflowControlSet = createWorkFlowControlSet(absence);
-			var skill1 = SkillFactory.CreateSkillWithId("PrimarySkill1");
-			skill1.SetCascadingIndex(1);
-			var skill2 = SkillFactory.CreateSkillWithId("PrimarySkill2");
-			skill2.SetCascadingIndex(1);
-
+			var skill1 = SkillFactory.CreateSkillWithId("PrimarySkill1").WithCascadingIndex(1);
+			var skill2 = SkillFactory.CreateSkillWithId("PrimarySkill2").WithCascadingIndex(2);
 			var person = createAndSetupPerson(workflowControlSet, new[] {skill1, skill2});
 
 			LoggedOnUser.SetFakeLoggedOnUser(person);
@@ -483,10 +478,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			var workflowControlSet = createWorkFlowControlSet(absence);
-			var skill1 = SkillFactory.CreateSkillWithId("PrimarySkill1");
-			skill1.SetCascadingIndex(1);
-			var skill2 = SkillFactory.CreateSkillWithId("PrimarySkill2");
-			skill2.SetCascadingIndex(1);
+			var skill1 = SkillFactory.CreateSkillWithId("PrimarySkill1").WithCascadingIndex(1);
+			var skill2 = SkillFactory.CreateSkillWithId("PrimarySkill2").WithCascadingIndex(1);
 			var skill3 = SkillFactory.CreateSkillWithId("PrimarySkill2");
 
 
@@ -631,9 +624,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			var workflowControlSet = createWorkFlowControlSet(absence);
-			var primarySkill = SkillFactory.CreateSkillWithId("PrimarySkill1");
-			primarySkill.SetCascadingIndex(1);
-
+			var primarySkill = SkillFactory.CreateSkillWithId("PrimarySkill1").WithCascadingIndex(1);
 			var person = createAndSetupPerson(workflowControlSet, new[] {primarySkill});
 
 			IntradayRequestWithinOpenHourValidator.FakeOpenHourStatus.Add(primarySkill.Id.GetValueOrDefault(),
@@ -744,11 +735,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			var workflowControlSet = createWorkFlowControlSet(absence, useShrinkageValidator);
 
-			_primarySkill1 = SkillFactory.CreateSkillWithId("PrimarySkill1");
-			_primarySkill1.SetCascadingIndex(1);
-			_primarySkill2 = SkillFactory.CreateSkillWithId("PrimarySkill2");
-			_primarySkill2.SetCascadingIndex(1);
-
+			_primarySkill1 = SkillFactory.CreateSkillWithId("PrimarySkill1").WithCascadingIndex(1);
+			_primarySkill2 = SkillFactory.CreateSkillWithId("PrimarySkill2").WithCascadingIndex(1);
 			var person = createAndSetupPerson(workflowControlSet, new[] {_primarySkill1, _primarySkill2});
 
 			LoggedOnUser.SetFakeLoggedOnUser(person);

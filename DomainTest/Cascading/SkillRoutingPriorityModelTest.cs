@@ -31,9 +31,8 @@ namespace Teleopti.Ccc.DomainTest.Cascading
 		public void ShouldMapSkillWithCascadingIndex()
 		{
 			var activity = new Activity("activity").WithId();
-			var skill = SkillFactory.CreateSkillWithId("_");
+			var skill = SkillFactory.CreateSkillWithId("_").WithCascadingIndex(3);
 			skill.Activity = activity;
-			skill.SetCascadingIndex(3);
 			SkillRepository.Add(skill);
 
 			var result = Target.SkillRoutingPriorityModelRows();
@@ -84,19 +83,16 @@ namespace Teleopti.Ccc.DomainTest.Cascading
 		public void ShouldReversePriorityOrderBecauseWenGuiWantsIt()
 		{
 			var activity = new Activity("activity").WithId();
-			var skill1 = SkillFactory.CreateSkillWithId("_");
+			var skill1 = SkillFactory.CreateSkillWithId("_").WithCascadingIndex(2);
 			skill1.Activity = activity;
-			skill1.SetCascadingIndex(2);
 			SkillRepository.Add(skill1);
 
-			var skill2 = SkillFactory.CreateSkillWithId("_");
+			var skill2 = SkillFactory.CreateSkillWithId("_").WithCascadingIndex(3);
 			skill2.Activity = activity;
-			skill2.SetCascadingIndex(3);
 			SkillRepository.Add(skill2);
 
-			var skill3 = SkillFactory.CreateSkillWithId("_");
+			var skill3 = SkillFactory.CreateSkillWithId("_").WithCascadingIndex(5);
 			skill3.Activity = activity;
-			skill3.SetCascadingIndex(5);
 			SkillRepository.Add(skill3);
 
 			var result = Target.SkillRoutingPriorityModelRows();
@@ -110,24 +106,20 @@ namespace Teleopti.Ccc.DomainTest.Cascading
 		public void ShouldReversePriorityOrderBecauseWenGuiWantsIt2()
 		{
 			var activity = new Activity("activity").WithId();
-			var skill1 = SkillFactory.CreateSkillWithId("_");
+			var skill1 = SkillFactory.CreateSkillWithId("_").WithCascadingIndex(2);
 			skill1.Activity = activity;
-			skill1.SetCascadingIndex(2);
 			SkillRepository.Add(skill1);
 
-			var skill2 = SkillFactory.CreateSkillWithId("_");
+			var skill2 = SkillFactory.CreateSkillWithId("_").WithCascadingIndex(3);
 			skill2.Activity = activity;
-			skill2.SetCascadingIndex(3);
 			SkillRepository.Add(skill2);
 
-			var skill3 = SkillFactory.CreateSkillWithId("_");
+			var skill3 = SkillFactory.CreateSkillWithId("_").WithCascadingIndex(5);
 			skill3.Activity = activity;
-			skill3.SetCascadingIndex(5);
 			SkillRepository.Add(skill3);
 
-			var skill4 = SkillFactory.CreateSkillWithId("_");
+			var skill4 = SkillFactory.CreateSkillWithId("_").WithCascadingIndex(6);
 			skill4.Activity = activity;
-			skill4.SetCascadingIndex(6);
 			SkillRepository.Add(skill4);
 
 			var result = Target.SkillRoutingPriorityModelRows();
@@ -142,24 +134,20 @@ namespace Teleopti.Ccc.DomainTest.Cascading
 		public void ShouldReversePriorityOrderBecauseWenGuiWantsIt3()
 		{
 			var activity = new Activity("activity").WithId();
-			var skill1 = SkillFactory.CreateSkillWithId("_");
+			var skill1 = SkillFactory.CreateSkillWithId("_").WithCascadingIndex(2);
 			skill1.Activity = activity;
-			skill1.SetCascadingIndex(2);
 			SkillRepository.Add(skill1);
 
-			var skill2 = SkillFactory.CreateSkillWithId("_");
+			var skill2 = SkillFactory.CreateSkillWithId("_").WithCascadingIndex(3);
 			skill2.Activity = activity;
-			skill2.SetCascadingIndex(3);
 			SkillRepository.Add(skill2);
 
-			var skill3 = SkillFactory.CreateSkillWithId("_");
+			var skill3 = SkillFactory.CreateSkillWithId("_").WithCascadingIndex(3);
 			skill3.Activity = activity;
-			skill3.SetCascadingIndex(3);
 			SkillRepository.Add(skill3);
 
-			var skill4 = SkillFactory.CreateSkillWithId("_");
+			var skill4 = SkillFactory.CreateSkillWithId("_").WithCascadingIndex(6);
 			skill4.Activity = activity;
-			skill4.SetCascadingIndex(6);
 			SkillRepository.Add(skill4);
 
 			var result = Target.SkillRoutingPriorityModelRows();
