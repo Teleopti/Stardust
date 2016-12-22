@@ -445,7 +445,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			ISkillStaffPeriod skillStaffPeriod;
 			var ret = this.TryGetSkillStaffPeriod(skill, period, out skillStaffPeriod);
-			dataForInterval = skillStaffPeriod;
+			dataForInterval = (IShovelResourceDataForInterval) skillStaffPeriod;
 			return ret;
 		}
 	}

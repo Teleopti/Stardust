@@ -12,8 +12,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
     /// <summary>
     /// Holds data needed to calculate staffing needs (activity start, end, length, occupancy etc.).
     /// </summary>
-    public class SkillStaffPeriod : Layer<ISkillStaff>, ISkillStaffPeriod, IAggregateSkillStaffPeriod
-    {
+    public class SkillStaffPeriod : Layer<ISkillStaff>, ISkillStaffPeriod, IAggregateSkillStaffPeriod, IShovelResourceDataForInterval
+	{
         private readonly SortedList<DateTime, ISkillStaffSegmentPeriod> _sortedSegmentCollection;
         private IList<ISkillStaffSegmentPeriod> _segmentInThisCollection;
         private readonly IStaffingCalculatorServiceFacade _staffingCalculatorService;

@@ -10,7 +10,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: robink
     /// Created date: 2008-09-18
     /// </remarks>
-    public interface ISkillStaffPeriod : ILayer<ISkillStaff>, ICloneableEntity<ILayer<ISkillStaff>>, IShovelResourceDataForInterval
+    public interface ISkillStaffPeriod : ILayer<ISkillStaff>, ICloneableEntity<ILayer<ISkillStaff>>
 	{
         /// <summary>
         /// Gets the segment collection.
@@ -422,5 +422,9 @@ namespace Teleopti.Interfaces.Domain
 		double IntraIntervalValue { get; set; }
 		IList<int> IntraIntervalSamples { get; set; }
 		double RelativeDifferenceWithShrinkage { get; }
+		double AbsoluteDifference { get; }
+		double CalculatedResource { get; }
+		double RelativeDifference { get; }
+		double FStaff { get; }
 	}
 }
