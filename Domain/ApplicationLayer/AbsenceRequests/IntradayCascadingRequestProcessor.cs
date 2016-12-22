@@ -54,10 +54,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 			var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod);
 			var skillStaffingIntervals = new List<SkillStaffingInterval>();
+			var skillInterval = (int)combinationResources.FirstOrDefault().EndDateTime.Subtract(combinationResources.FirstOrDefault().StartDateTime).TotalMinutes;
 			foreach (var day in scheduleDays)
 			{
 				var projection = day.ProjectionService().CreateProjection().FilterLayers(personRequest.Request.Period);
-				var skillInterval = (int)combinationResources.FirstOrDefault().EndDateTime.Subtract(combinationResources.FirstOrDefault().StartDateTime).TotalMinutes;
+				
 				var layers = projection.ToResourceLayers(skillInterval);
 				
 				foreach (var layer in layers)
@@ -74,7 +75,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						{
 							foreach (var interval in skillStaffIntervals)
 							{
-								var resources = combinationResources.Where(x => x.SkillCombination.Contains(skill.Id.GetValueOrDefault())).Sum(skillCombinationResource => skillCombinationResource.Resource / skillCombinationResource.SkillCombination.Count());
+								var resources = combinationResources.Where(x => x.SkillCombination.Contains(skill.Id.GetValueOrDefault()) && x.StartDateTime == interval.StartDateTime)
+									.Sum(skillCombinationResource => skillCombinationResource.Resource / skillCombinationResource.SkillCombination.Count());
 								interval.StaffingLevel = resources;
 								skillStaffingIntervals.Add(interval);
 							}

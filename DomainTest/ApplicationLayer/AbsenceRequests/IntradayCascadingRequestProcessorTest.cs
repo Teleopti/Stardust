@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 
-		[Test][Ignore("WIP")]
+		[Test]
 		public void ShouldApproveIfEnoughStaffingForBothActivities()
 		{
 			var scenario = ScenarioRepository.Has("scenario");
@@ -232,17 +232,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var agent = PersonRepository.Has(skill, skill2, skill3, skill4);
 			var period1 = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 			var period2 = new DateTimePeriod(2016, 12, 1, 9, 2016, 12, 1, 10);
-			
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, period1, new ShiftCategory("category"), scenario));
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity2, agent, period2, new ShiftCategory("category"), scenario));
 
-			var scheduleRange = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false), new DateTimePeriod(period1.StartDateTime, period2.EndDateTime), scenario)[agent];
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, period1, new ShiftCategory("category"), scenario);
+			ass.AddActivity(activity2, period2);
+			PersonAssignmentRepository.Has(ass);
+			
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(new[]
 																			   {
 																				   new SkillCombinationResource
 																				   {
 																					   StartDateTime = period1.StartDateTime,
-																					   EndDateTime = period2.EndDateTime,
+																					   EndDateTime = period1.EndDateTime,
 																					   Resource = 10,
 																					   SkillCombination = new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
 																				   },
@@ -325,16 +325,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var agent = PersonRepository.Has(skill, skill2, skill3, skill4);
 			var period1 = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 			var period2 = new DateTimePeriod(2016, 12, 1, 9, 2016, 12, 1, 10);
-			
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, period1, new ShiftCategory("category"), scenario));
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity2, agent, period2, new ShiftCategory("category"), scenario));
+
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, period1, new ShiftCategory("category"), scenario);
+			ass.AddActivity(activity2, period2);
+			PersonAssignmentRepository.Has(ass);
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(new[]
 																			   {
 																				   new SkillCombinationResource
 																				   {
 																					   StartDateTime = period1.StartDateTime,
-																					   EndDateTime = period2.EndDateTime,
+																					   EndDateTime = period1.EndDateTime,
 																					   Resource = 10,
 																					   SkillCombination = new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
 																				   },
