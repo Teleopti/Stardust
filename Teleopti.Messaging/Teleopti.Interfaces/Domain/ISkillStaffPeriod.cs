@@ -33,12 +33,6 @@ namespace Teleopti.Interfaces.Domain
         IList<ISkillStaffSegmentPeriod> SegmentInThisCollection { get; }
 
         /// <summary>
-        /// Gets or sets the smoothness.
-        /// </summary>
-        /// <value>The smoothness.</value>
-        double RelativeDifference { get; }
-
-        /// <summary>
         /// Gets the relative difference for display only.
         /// </summary>
         /// <value>The relative difference for display only.</value>
@@ -62,12 +56,6 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2009-02-09
         /// </remarks>
         double RelativeDifferenceIncoming { get; }
-
-        /// <summary>
-        /// Gets or sets the absolute difference between the scheduled and the forecasted value.
-        /// </summary>
-        /// <value>The absolute difference.</value>
-        double AbsoluteDifference { get; }
 
         /// <summary>
         /// Returns the sum if all forecasted distributed demands
@@ -238,16 +226,6 @@ namespace Teleopti.Interfaces.Domain
         double IncomingDifference { get; }
 
         /// <summary>
-        /// Gets the F staff.
-        /// </summary>
-        /// <value>The F staff.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-11-24
-        /// </remarks>
-        double FStaff { get; }
-
-        /// <summary>
         /// Gets the staffing calculator service.
         /// </summary>
         /// <value>The staffing calculator service.</value>
@@ -282,16 +260,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <returns></returns>
         double ScheduledHours();
-
-        /// <summary>
-        /// Gets the calculated resource.
-        /// </summary>
-        /// <value>The calculated resource.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2009-02-13
-        /// </remarks>
-        double CalculatedResource { get; }
 
         /// <summary>
         /// Calculates the TRAFF of FStaff as time.
