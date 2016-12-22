@@ -26,25 +26,27 @@ Scenario: Remove Skill Area
 	Then I should no longer be able to monitor 'Area A'
 
 Scenario: View incoming traffic for one skill
-	Given the time is '2016-12-09 14:00'
-	And there is queue statistics for the skill 'Skill A' up until '2016-12-09 13:30'
-	And there is forecast data for skill 'Skill A' for date '2016-12-09'
+	Given the time is '2016-12-21 14:00'
+	And there is queue statistics for the skill 'Skill A' up until '2016-12-21 13:30'
+	And there is forecast data for skill 'Skill A' for date '2016-12-21'
 	When I am viewing intraday page
 	Then I should see incoming traffic data in the chart
 	And I should see a summary of today's incoming traffic
 		
 Scenario: View performance for a skill area
-	Given the time is '2016-12-09 14:00'
+	Given the time is '2016-12-22 14:00'
 	And there is a Skill Area called 'Area A' that monitors skill 'Skill A'
-	And there is queue statistics for the skill 'Skill A' up until '2016-12-09 13:30'
-	And there is forecast data for skill 'Skill A' for date '2016-12-09'
+	And there is queue statistics for the skill 'Skill A' up until '2016-12-22 13:30'
+	And there is forecast data for skill 'Skill A' for date '2016-12-22'
 	When I am viewing intraday page
+	And I should see incoming traffic data in the chart
+	And I am navigating to intraday performance view
 	Then I should see performance data in the chart
 	And I should see a summary of today's performance
 	
 Scenario: View staffing for one skill
-	Given the time is '2016-12-09 14:00'
-	And there is queue statistics for the skill 'Skill A' up until '2016-12-09 13:30'
+	Given the time is '2016-12-21 14:00'
+	And there is queue statistics for the skill 'Skill A' up until '2016-12-21 13:30'
 	And there is forecast data for 'Skill A' in Analytics
 	And there are scheduled agents for 'Skill A'
 	When I am viewing intraday page

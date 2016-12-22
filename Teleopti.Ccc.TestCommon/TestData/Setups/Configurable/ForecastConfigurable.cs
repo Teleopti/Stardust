@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var skillDay = skill.CreateSkillDayWithDemandOnInterval(defaultScenario, date, 5,
 				new Tuple<TimePeriod, double>(openHours, 5));
 			skillDayRepository.Add(skillDay);
-			skillDay.MergeSkillDataPeriods(skillDay.SkillDataPeriodCollection.ToList());
 			var workloadDay = skillDay.WorkloadDayCollection[0];
 
 			workloadDay.ChangeOpenHours(new List<TimePeriod> {openHours});

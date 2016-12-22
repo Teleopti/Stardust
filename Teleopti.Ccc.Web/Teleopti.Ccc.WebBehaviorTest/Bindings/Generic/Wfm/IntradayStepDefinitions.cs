@@ -139,28 +139,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		}
 
 		[Then(@"I should see incoming traffic data in the chart")]
+		[When(@"I should see incoming traffic data in the chart")]
 		public void ThenIShouldSeeIncomingTrafficDataInTheChart()
 		{
 			
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('.c3')).scope();" +
 				"var forecastedCalls = parseFloat(scope.viewObj.forecastedCallsObj.series[1]);" +
-				"return (forecastedCalls > 0);"
+				"return (forecastedCalls >= 0);"
 				, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('.c3')).scope();" +
 				"var calls = parseFloat(scope.viewObj.actualCallsObj.series[1]);" +
-				"return (calls > 0);" 
+				"return (calls >= 0);" 
 				, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
 							"var scope = angular.element(document.querySelector('.c3')).scope();" +
 							"var faht = parseFloat(scope.viewObj.forecastedAverageHandleTimeObj.series[1]);" +
-							"return (faht > 0);"
+							"return (faht >= 0);"
 							, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
 							"var scope = angular.element(document.querySelector('.c3')).scope();" +
 							"var aaht = parseFloat(scope.viewObj.actualAverageHandleTimeObj.series[1]);" +
-							"return (aaht > 0);"
+							"return (aaht >= 0);"
 							, "True");
 		}
 
@@ -175,5 +176,44 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertJavascriptResultContains("return $('.aht-difference ').text().length > 0", "True");
 		}
 
+		[When(@"I am navigating to intraday performance view")]
+		public void WhenIAmNavigatingToIntradayPerformanceView()
+		{
+			Browser.Interactions.Javascript("$('md-tab-item:nth-child(2)').click();");
+		}
+
+		[Then(@"I should see performance data in the chart")]
+		public void ThenIShouldSeePerformanceDataInTheChart()
+		{
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var asa = parseFloat(scope.viewObj.averageSpeedOfAnswerObj.series[1]);" +
+				"return (asa >= 0);"
+				, "True");
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var abandonedRate = parseFloat(scope.viewObj.abandonedRateObj.series[1]);" +
+				"return (abandonedRate >= 0);"
+				, "True");
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var sl = parseFloat(scope.viewObj.serviceLevelObj.series[1]);" +
+				"return (sl >= 0);"
+				, "True");
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var esl = parseFloat(scope.viewObj.estimatedServiceLevelObj.series[1]);" +
+				"return (esl >= 0);"
+				, "True");
+		}
+
+		[Then(@"I should see a summary of today's performance")]
+		public void ThenIShouldSeeASummaryOfTodaySPerformance()
+		{
+			Browser.Interactions.AssertJavascriptResultContains("return $('.service-level').text().length > 0", "True");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.esl').text().length > 0", "True");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.abandoned-rate').text().length > 0", "True");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.average-speed-of-answer').text().length > 0", "True");
+		}
 	}
 }
