@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -258,9 +259,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 				PersonIds = new[] { person.Id.GetValueOrDefault() }
 			}, BusinessRuleFlags.NewDayOffRule).Single();
 
+			var currentUiCulture = Thread.CurrentThread.CurrentUICulture;
 			var warning = result.Warnings.Single();
 			warning.Content.Should()
-				.Be.EqualTo(string.Format(Resources.BusinessRuleDayOffErrorMessage2, new DateOnly(2016, 7, 19).ToShortDateString()));
+				.Be.EqualTo(string.Format(Resources.BusinessRuleDayOffErrorMessage2, new DateOnly(2016, 7, 19).ToShortDateString(currentUiCulture)));
 			warning.RuleType.Should().Be.EqualTo("NewDayOffRuleName");
 		}
 
@@ -1107,15 +1109,13 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			personAssignment.AddActivity(stickyActivity, stickyActivityPeriod);
 			personAssignment.AddActivity(normalActivity,normalActivityPeriod);
 			
-			var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			var loggedOnCulture = Thread.CurrentThread.CurrentUICulture;
 			var loggedOnTimezone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
-
 
 			var stickyActvityTimePeriod = stickyActivityPeriod.TimePeriod(loggedOnTimezone);
 			var normalActivityTimePeriod = normalActivityPeriod.TimePeriod(loggedOnTimezone);
 
 			ScheduleStorage.Add(personAssignment);
-			
 
 			var results = Target.GetBusinessRuleValidationResults(new FetchRuleValidationResultFormData
 			{
@@ -1168,7 +1168,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			personAssignment.AddActivity(stickyActivity,stickyActivityPeriod);
 			personAssignment.AddPersonalActivity(normalActivity,normalActivityPeriod);
 
-			var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			var loggedOnCulture = Thread.CurrentThread.CurrentUICulture;
 			var loggedOnTimezone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 
 
@@ -1312,6 +1312,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			result.Count.Should().Be(1);
 			result[0].PersonId.Should().Be(person.Id.Value);
 		}
+
 		[Test]
 		public void ShouldReturnPeopleWhosePersonAccountWillBeExceededWhenAddingAbsenceToOvernightShift()
 		{
