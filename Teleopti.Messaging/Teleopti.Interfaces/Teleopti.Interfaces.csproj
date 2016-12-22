@@ -140,6 +140,7 @@
     <Compile Include="Domain\IExpiredRequestValidator.cs" />
     <Compile Include="Domain\IOverrideTask.cs" />
     <Compile Include="Domain\IPersonLeavingUpdater.cs" />
+    <Compile Include="Domain\IResourceCalculationPeriod.cs" />
     <Compile Include="Domain\IShiftTradeBusinessRuleConfig.cs" />
     <Compile Include="Domain\IShovelResourceData.cs" />
     <Compile Include="Domain\IShovelResourceDataForInterval.cs" />

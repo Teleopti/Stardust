@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
 {
-    /// <summary>
+	/// <summary>
     /// Periodized staffing information for skill day
     /// </summary>
     /// <remarks>
     /// Created by: robink
     /// Created date: 2008-09-18
     /// </remarks>
-    public interface ISkillStaffPeriod : ILayer<ISkillStaff>, ICloneableEntity<ILayer<ISkillStaff>>
+    public interface ISkillStaffPeriod : ILayer<ISkillStaff>, ICloneableEntity<ILayer<ISkillStaff>>, IResourceCalculationPeriod
 	{
         /// <summary>
         /// Gets the segment collection.
@@ -56,17 +56,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2009-02-09
         /// </remarks>
         double RelativeDifferenceIncoming { get; }
-
-        /// <summary>
-        /// Returns the sum if all forecasted distributed demands
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-08-28
-        /// </remarks>
-        double ForecastedDistributedDemand { get; }
-
+		
         /// <summary>
         /// Gets the forecasted distributed demand with shrinkage.
         /// </summary>
@@ -108,17 +98,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-09-19
         /// </remarks>
         IActiveAgentCount ActiveAgentCount { get; set; }
-
-        /// <summary>
-        /// Sets the calculated resource65.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2009-02-04
-        /// </remarks>
-        void SetCalculatedResource65(double value);
-
+		
         /// <summary>
         /// Picks the resource65.
         /// </summary>
