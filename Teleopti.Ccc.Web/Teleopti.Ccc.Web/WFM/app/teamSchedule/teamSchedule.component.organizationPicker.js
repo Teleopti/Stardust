@@ -25,7 +25,7 @@
 
 		ctrl.$onInit = function() {};
 
-		ctrl.$onChanges = function() {
+		ctrl.refresh = function() {
 			populateGroupList();
 
 			if (preSelectedTeamIds != null && preSelectedTeamIds.length > 0) {
@@ -40,7 +40,7 @@
 			ctrl.onSelectionDone();
 		};
 
-		ctrl.refresh = function(changesObj) {
+		ctrl.$onChanges = function(changesObj) {
 			if (!changesObj ||
 				!changesObj.availableGroups ||
 				!changesObj.availableGroups.currentValue ||
