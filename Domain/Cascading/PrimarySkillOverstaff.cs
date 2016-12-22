@@ -1,25 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class PrimarySkillOverstaff
 	{
-		public ShovelResourcesState AvailableSum(ISkillStaffPeriodHolder skillStaffPeriodHolder, IEnumerable<CascadingSkillGroup> allSkillGroups, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval)
+		public ShovelResourcesState AvailableSum(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillGroup> allSkillGroups, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval)
 		{
 			var primarySkillsExistsButTheyAreAllClosed = true;
 			var dic = new Dictionary<ISkill, double>();
 
 			foreach (var primarySkill in skillGroupsWithSameIndex.First().PrimarySkills)
 			{
-				ISkillStaffPeriod primarySkillStaffPeriod;
-				if (!skillStaffPeriodHolder.TryGetSkillStaffPeriod(primarySkill, interval, out primarySkillStaffPeriod))
+				IShovelResourceDataForInterval shovelResourceDataForInterval;
+				if (!shovelResourceData.TryGetDataForInterval(primarySkill, interval, out shovelResourceDataForInterval))
 					continue;
 				primarySkillsExistsButTheyAreAllClosed = false;
-				var primarySkillOverstaff = primarySkillStaffPeriod.AbsoluteDifference;
+				var primarySkillOverstaff = shovelResourceDataForInterval.AbsoluteDifference;
 				if (!primarySkillOverstaff.IsOverstaffed())
 					continue;
 
@@ -29,12 +28,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 					var resourcesOnOtherSkillGroup = otherSkillGroup.RemainingResources;
 					foreach (var otherPrimarySkill in otherSkillGroup.PrimarySkills.Where(x => !x.Equals(primarySkill)))
 					{
-						resourcesOnOtherSkillGroup -= skillStaffPeriodHolder.SkillStaffPeriodOrDefault(otherPrimarySkill, interval).CalculatedResource;
+						resourcesOnOtherSkillGroup -= shovelResourceData.GetDataForInterval(otherPrimarySkill, interval).CalculatedResource;
 					}
 					resourcesOnOtherSkillGroupsContainingThisPrimarySkill += resourcesOnOtherSkillGroup;
 				}
 
-				var otherSkillGroupOverstaff = Math.Max(resourcesOnOtherSkillGroupsContainingThisPrimarySkill - primarySkillStaffPeriod.FStaff, 0);
+				var otherSkillGroupOverstaff = Math.Max(resourcesOnOtherSkillGroupsContainingThisPrimarySkill - shovelResourceDataForInterval.FStaff, 0);
 				dic.Add(primarySkill, primarySkillOverstaff - otherSkillGroupOverstaff);
 			}
 
@@ -48,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 				}
 			}
 
-			return new ShovelResourcesState(dic, new ResourceDistributionForSkillGroupsWithSameIndex(skillStaffPeriodHolder, skillGroupsWithSameIndex, interval)); 
+			return new ShovelResourcesState(dic, new ResourceDistributionForSkillGroupsWithSameIndex(shovelResourceData, skillGroupsWithSameIndex, interval));
 		}
 	}
 }

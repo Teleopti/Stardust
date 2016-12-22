@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
@@ -41,9 +40,9 @@ namespace Teleopti.Ccc.Domain.Cascading
 			return TotalOverstaffingAtStart * _resourceDistribution.For(skillgroup);
 		}
 
-		public void AddResourcesTo(ISkillStaffPeriod skillStaffPeriod, CascadingSkillGroup skillGroup, double value)
+		public void AddResourcesTo(IShovelResourceDataForInterval shovelResourceDataForInterval, CascadingSkillGroup skillGroup, double value)
 		{
-			skillStaffPeriod.AddResources(value);
+			shovelResourceDataForInterval.AddResources(value);
 			RemainingOverstaffing -= value;
 			ResourcesMoved += value;
 			skillGroup.RemainingResources -= value;

@@ -22,5 +22,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public IDictionary<ISkill, IEnumerable<ISkillDay>> SkillDays { get; }
 		public bool SkipResourceCalculation { get; }
 		public SkillCombinationHolder SkillCombinationHolder { get; }
+		public IShovelResourceData ToShovelResourceData()
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }

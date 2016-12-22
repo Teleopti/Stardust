@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
@@ -10,12 +9,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 	{
 		private readonly Lazy<IDictionary<CascadingSkillGroup, double>> _distributions;
 
-		public ResourceDistributionForSkillGroupsWithSameIndex(ISkillStaffPeriodHolder skillStaffPeriodHolder, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval)
+		public ResourceDistributionForSkillGroupsWithSameIndex(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval)
 		{
-			_distributions = new Lazy<IDictionary<CascadingSkillGroup, double>>(() => init(skillStaffPeriodHolder, skillGroupsWithSameIndex, interval));
+			_distributions = new Lazy<IDictionary<CascadingSkillGroup, double>>(() => init(shovelResourceData, skillGroupsWithSameIndex, interval));
 		}
 
-		private static IDictionary<CascadingSkillGroup, double> init(ISkillStaffPeriodHolder skillStaffPeriodHolder, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval)
+		private static IDictionary<CascadingSkillGroup, double> init(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval)
 		{
 			var ret = new Dictionary<CascadingSkillGroup, double>();
 			var tottiRelativeDifference = 0d;
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			{
 				foreach (var otherPrimarySkill in skillGroupWithSameIndex.PrimarySkills)
 				{
-					var relDiffInOtherPrimarySkill = skillStaffPeriodHolder.SkillStaffPeriodOrDefault(otherPrimarySkill, interval).AbsoluteDifference;
+					var relDiffInOtherPrimarySkill = shovelResourceData.GetDataForInterval(otherPrimarySkill, interval).AbsoluteDifference;
 					//TODO: suspicious code here - bug? Only include positive values here?
 					if (!double.IsNaN(relDiffInOtherPrimarySkill)) 
 					{
@@ -33,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			}
 			foreach (var skillGroup in skillGroupsWithSameIndex)
 			{
-				var myrelativeDifference = skillGroup.PrimarySkills.Sum(primarySkill => skillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval).AbsoluteDifference);
+				var myrelativeDifference = skillGroup.PrimarySkills.Sum(primarySkill => shovelResourceData.GetDataForInterval(primarySkill, interval).AbsoluteDifference);
 				var myFactor = myrelativeDifference / tottiRelativeDifference;
 				ret[skillGroup] = double.IsNaN(myFactor) ? 1 : myFactor;
 			}

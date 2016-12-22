@@ -141,6 +141,8 @@
     <Compile Include="Domain\IOverrideTask.cs" />
     <Compile Include="Domain\IPersonLeavingUpdater.cs" />
     <Compile Include="Domain\IShiftTradeBusinessRuleConfig.cs" />
+    <Compile Include="Domain\IShovelResourceData.cs" />
+    <Compile Include="Domain\IShovelResourceDataForInterval.cs" />
     <Compile Include="Domain\Paging.cs" />
     <Compile Include="Domain\IPermissionProvider.cs" />
     <Compile Include="Domain\IProjectionVersionPersister.cs" />

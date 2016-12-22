@@ -422,7 +422,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			skillStaffPeriod.Stub(x => x.RelativeDifference).Return(relativeDifference);
 			skillStaffPeriod.Stub(x => x.Period).Return(skillDateTimePeriod);
 
-			var skillStaffPeriodHolder = MockRepository.GenerateMock<ISkillStaffPeriodHolder>();
+			var skillStaffPeriodHolder = MockRepository.GenerateMock<ISkillStaffPeriodHolder, IShovelResourceData>();
 			skillStaffPeriodHolder.Stub(
 				x => x.SkillStaffPeriodList(new List<ISkill> { skill }, skillDateTimePeriod)).IgnoreArguments()
 				.Return(new List<ISkillStaffPeriod>

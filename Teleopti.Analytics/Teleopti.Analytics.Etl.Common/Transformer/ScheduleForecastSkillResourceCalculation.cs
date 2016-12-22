@@ -61,7 +61,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 			_schedulingResultService.SchedulingResult(_period);
 			var dateOnlyPeriodInUtc = _period.ToDateOnlyPeriod(TimeZoneInfo.Utc); //don't know if correct - copied from StageScheduleForecastSkillJobStep when getting skills
-			_shovelResources.Execute(_skillStaffPeriodHolder, _scheduleDictionary, _skillsWithSkillDays, dateOnlyPeriodInUtc);
+			_shovelResources.Execute((IShovelResourceData)_skillStaffPeriodHolder, _scheduleDictionary, _skillsWithSkillDays, dateOnlyPeriodInUtc);
 
 			collectResourceData(_skillDaysDictionary, useShrinkage, insertDateTime);
 		}

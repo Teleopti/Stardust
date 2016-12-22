@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -888,6 +889,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 return _periodDistribution;
             }
         }
+
+	    public void AddResources(double resourcesToAdd)
+	    {
+			SkillStaffPeriodExtensions.AddResources(this, resourcesToAdd);
+		}
     }
 
 	public class PopulationStatisticsCalculatedValues : IPopulationStatisticsCalculatedValues

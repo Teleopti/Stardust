@@ -1,12 +1,11 @@
 using System;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class ReducePrimarySkillResources
 	{
-		public void Execute(ShovelResourcesState state, ISkillStaffPeriodHolder skillStaffPeriodHolder, DateTimePeriod interval)
+		public void Execute(ShovelResourcesState state, IShovelResourceData shovelResourceData, DateTimePeriod interval)
 		{
 			if (jumpOutEarly(state))
 				return;
@@ -14,11 +13,11 @@ namespace Teleopti.Ccc.Domain.Cascading
 			foreach (var keyValueForPrimarySkillAndResources in state.ResourcesAvailableForPrimarySkill)
 			{
 				var primarySkill = keyValueForPrimarySkillAndResources.Key;
-				var skillStaffPeriod = skillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval);
+				var shovelDataForInterval = shovelResourceData.GetDataForInterval(primarySkill, interval);
 				var overstaffForSkill = keyValueForPrimarySkillAndResources.Value;
 				var percentageOverstaff = overstaffForSkill / state.TotalOverstaffingAtStart;
 				var resourceToSubtract = state.ResourcesMoved * percentageOverstaff;
-				skillStaffPeriod.AddResources(-resourceToSubtract);
+				shovelDataForInterval.AddResources(-resourceToSubtract);
 			}
 		}
 

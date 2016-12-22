@@ -8,8 +8,8 @@ using Task = Teleopti.Ccc.Domain.Forecasting.Task;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public class SkillStaffPeriodHolder : ISkillStaffPeriodHolder
-    {
+    public class SkillStaffPeriodHolder : ISkillStaffPeriodHolder, IShovelResourceData
+	{
 	    private ISkillSkillStaffPeriodExtendedDictionary _internalDictionary;
         private readonly object Locker = new object();
 
@@ -438,6 +438,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public bool GuessResourceCalculationHasBeenMade()
 		{
 			return _internalDictionary.GuessResourceCalculationHasBeenMade();
+		}
+
+		public bool TryGetDataForInterval(ISkill skill, DateTimePeriod period, out IShovelResourceDataForInterval dataForInterval)
+		{
+			ISkillStaffPeriod skillStaffPeriod;
+			var ret = this.TryGetSkillStaffPeriod(skill, period, out skillStaffPeriod);
+			dataForInterval = skillStaffPeriod;
+			return ret;
+		}
+
+		public IShovelResourceDataForInterval GetDataForInterval(ISkill skill, DateTimePeriod period)
+		{
+			return this.SkillStaffPeriodOrDefault(skill, period);
 		}
 	}
 }
