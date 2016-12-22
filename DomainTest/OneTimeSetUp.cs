@@ -5,7 +5,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 namespace Teleopti.Ccc.DomainTest
 {
 	[SetUpFixture]
-	[Parallelizable]
 	public class OneTimeSetUp
 	{
 		[OneTimeSetUp]
