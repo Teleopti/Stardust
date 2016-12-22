@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IGroupPage> GetGroupPagesForPerson(Guid personId)
 		{
-			throw new NotImplementedException();
+			return _groupPages.Where(x => x.RootGroupCollection.Any(y => y.PersonCollection.Any(p => p.Id == personId))).ToList();
 		}
 
 		public void Has(IGroupPage groupPage)

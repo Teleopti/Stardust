@@ -39,10 +39,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_personRepository = new FakePersonRepository();
 			_analyticsGroupPageRepository = MockRepository.GenerateMock<IAnalyticsGroupPageRepository>();
 			_analyticsBridgeGroupPagePersonRepository = MockRepository.GenerateMock<IAnalyticsBridgeGroupPagePersonRepository>();
-			_groupPageRepository = MockRepository.GenerateMock<IGroupPageRepository>();
+			_groupPageRepository = new FakeGroupPageRepository();
 			_analyticsPersonPeriodRepository = new FakeAnalyticsPersonPeriodRepository();
 
-			_groupPageRepository.Stub(r => r.GetGroupPagesForPerson(Arg<Guid>.Is.Anything)).Return(new IGroupPage[] { });
 			_target = new AnalyticsPersonGroupsHandler(_personRepository, _analyticsBridgeGroupPagePersonRepository, _analyticsGroupPageRepository, _groupPageRepository, _analyticsPersonPeriodRepository);
 			_businessUnitId = Guid.NewGuid();
 		}
@@ -528,10 +527,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				.Return(new AnalyticsGroupPage[] { });
 			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(_analyticsPersonPeriod.PersonId, _businessUnitId))
 				.Return(new Guid[] { });
-			
 
-			_groupPageRepository.Stub(r => r.GetGroupPagesForPerson(_person.Id.GetValueOrDefault()))
-				.Return(new[] { groupPage }).Repeat.Any();
+			_groupPageRepository.Add(groupPage);
 
 			_target.Handle(@event);
 
@@ -562,8 +559,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase(_businessUnitId))
 				.Return(new AnalyticsGroupPage[] { });
-			_groupPageRepository.Stub(r => r.GetGroupPagesForPerson(_person.Id.GetValueOrDefault()))
-				.Return(new[] { groupPage }).Repeat.Any();
+			_groupPageRepository.Add(groupPage);
 			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(_analyticsPersonPeriod.PersonId, _businessUnitId))
 				.Return(new[] { rootPersonGroup.Id.GetValueOrDefault() });
 
