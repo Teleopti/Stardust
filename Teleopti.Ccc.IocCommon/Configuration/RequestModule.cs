@@ -50,7 +50,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AbsenceRequestStrategyProcessor>().As<IAbsenceRequestStrategyProcessor>().SingleInstance();
 			builder.RegisterType<DenyLongQueuedAbsenceRequests>().As<DenyLongQueuedAbsenceRequests>().SingleInstance();
 			builder.RegisterType<ArrangeRequestsByProcessOrder>().As<ArrangeRequestsByProcessOrder>().SingleInstance();
-			builder.RegisterType<IntradayRequestProcessor>().As<IIntradayRequestProcessor>().SingleInstance();
 			builder.RegisterType<ResourceAllocator>().As<ResourceAllocator>().SingleInstance();
 			builder.RegisterType<IntradayRequestWithinOpenHourValidator>().As<IIntradayRequestWithinOpenHourValidator>().SingleInstance();
 			builder.RegisterType<AlreadyAbsentValidator>().As<IAlreadyAbsentValidator>();
@@ -75,6 +74,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			registerType
 				<IBusinessRuleConfigProvider, BusinessRuleConfigProvider, BusinessRuleConfigProvider25635ToggleOff>(builder,
 						Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635);
+			registerType<IIntradayRequestProcessor, IntradayCascadingRequestProcessor,
+				IntradayRequestProcessor>(builder, Toggles.AbsenceRequests_Intraday_UseCascading_41969);
 		}
 
 		private void registerType<T, TToggleOn, TToggleOff>(ContainerBuilder builder, Toggles toggle)

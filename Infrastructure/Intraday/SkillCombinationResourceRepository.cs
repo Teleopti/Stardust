@@ -74,30 +74,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 		}
 
 
-
-		public Guid? LoadSkillCombination(IEnumerable<Guid> skillCombination)
-		{
-			var result = ((NHibernateUnitOfWork) _currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
-					@"   select  outerTable.Id  from 
-					[ReadModel].[SkillCombination]  outerTable
-			join	(select Id, count(Id) c from [ReadModel].[SkillCombination] group by Id) as innerTable
-			on outerTable.Id = innerTable.Id
-			where outerTable.SkillId in (:skillIds)
-			and innerTable.c = :skillCount
-			group by outerTable.Id
-			having count(*)  = :skillCount")
-				.AddScalar("Id", NHibernateUtil.Guid)
-				.SetInt32("skillCount", skillCombination.ToList().Count())
-				.SetParameterList("skillIds", skillCombination.ToArray())
-				.List<Guid>();
-			//if the result if more than one may be we could delete all  records with those combination ids
-			//we found out while writing a test ( it should not happen though)
-			if (result.Any())
-				return result.FirstOrDefault();
-			
-			return null;
-		}
-
+		
 		public virtual void PersistSkillCombinationResource(IEnumerable<SkillCombinationResource> skillCombinationResources)
 		{
 			var skillCombinations = loadSkillCombination();
