@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 			Target = new PersonAccountPersister(
 				uowFactory,
 				rep,
-				MockRepository.GenerateMock<IInitiatorIdentifier>(),
+				new FakeInitiatorIdentifier(), 
 				new PersonAccountConflictCollector(new DatabaseVersion(currUnitOfWork)),
 				new PersonAccountConflictResolver(
 					uowFactory,

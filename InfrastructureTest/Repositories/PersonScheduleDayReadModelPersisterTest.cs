@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
@@ -13,6 +11,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Messaging.Client.Composite;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -24,8 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldIndicateIfInitializedOrNot()
 		{
 			clearReadModel();
-			var target = new PersonScheduleDayReadModelPersister(CurrUnitOfWork,
-				MockRepository.GenerateMock<IMessageBrokerComposite>(), null);
+			var target = new PersonScheduleDayReadModelPersister(CurrUnitOfWork, new DoNotSend(), null);
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
 		
@@ -52,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldNotCrashIfShiftIsBiggerThanFourThousandAsCompressed()
 		{
-			var target = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(), MockRepository.GenerateMock<IMessageBrokerComposite>(), MockRepository.GenerateMock<ICurrentDataSource>());
+			var target = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(), new DoNotSend(), new FakeCurrentDatasource("dummy"));
 			var personId = Guid.NewGuid();
 			
 			const string shift = @"{\'FirstName\':\'????????? ?????\',\'LastName\':\'7004202\',\'EmploymentNumber\':\'\',\'Id\':\'4b9853d6-4073-48d4-a9b0-9e3f0101ff55\',\'Date\':\'2012-01-12T00:00:00\',\'WorkTimeMinutes\':664,\'ContractTimeMinutes\':664,\'Projection\':[{\'Color\':\'#00FF00\',\'Start\':\'2012-01-12T09:45:00Z\',\'End\':\'2012-01-12T10:52:00Z\',\'Minutes\':67,\'Title\':\'??????? / ????? ???????\'},{\'Color\':\'#000000\',\'Start\':\'2012-01-12T10:52:00Z\',\'End\':\'2012-01-12T10:55:00Z\',\'Minutes\':3,\'Title\':\'????????? ????????? (??????) / Techn pause\'},{\'Color\':\'#00FF00\',\'Start\':\'2012-01-12T10:55:00Z\',\'End\':\'2012-01-12T11:00:00Z\',\'Minutes\':5,\'Title\':\'??????? / ????? ???????\'},{\'Color\':\'#FF0000\',\'Start\':\'2012-01-12T11:00:00Z\',\'End\':\'2012-01-12T11:15:00Z\',\'Minutes\':15,\'Title\':\'??????? / Personal\'},{\'Color\':\'#00FF00\',\'Start\':\'2012-01-12T11:15:00Z\',\'End\':\'2012-01-12T11:34:00Z\',\'Minutes\':19,\'Title\':\'??????? / ????? ???????\'},{\'Color\':\'#000000\',\'Start\':\'2012-01-12T11:34:
@@ -79,7 +77,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 		public void ShouldPersistIsDayOff()
 		{
 			var uow = CurrentUnitOfWork.Make();
-			var target = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(), MockRepository.GenerateMock<IMessageBrokerComposite>(), MockRepository.GenerateMock<ICurrentDataSource>());
+			var target = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(), new DoNotSend(), new FakeCurrentDatasource("dummy"));
 			
 			var model = new PersonScheduleDayReadModel
 				{
@@ -104,7 +102,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 		[Test]
 		public void ShouldPersistNewReadModel()
 		{
-			var target = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(), MockRepository.GenerateMock<IMessageBrokerComposite>(), null);						
+			var target = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(), new DoNotSend(), null);						
 			var date = new DateTime(2012, 8, 29);
 			var readModel = new PersonScheduleDayReadModel
 			{
@@ -127,7 +125,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 		[Test]
 		public void ShouldPersistNewReadModels()
 		{
-			var target = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(), MockRepository.GenerateMock<IMessageBrokerComposite>(), null);						
+			var target = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(), new DoNotSend(), null);						
 			var date = new DateTime(2012, 8, 29);			
 			var buId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
@@ -167,7 +165,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 		public void ShouldPersistNewerReadModel()
 		{
 			var uow = CurrentUnitOfWork.Make();
-			var target = new PersonScheduleDayReadModelPersister(uow, MockRepository.GenerateMock<IMessageBrokerComposite>(), null);						
+			var target = new PersonScheduleDayReadModelPersister(uow, new DoNotSend(), null);						
 			var date = new DateTime(2012, 8, 29);
 			DateTime oldTimestamp = DateTime.UtcNow;
 			var personId = Guid.NewGuid();
@@ -214,7 +212,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 		public void ShouldPersistNewerReadModelWhenOldVersionIsNull()
 		{
 			var uow = CurrentUnitOfWork.Make();
-			var target = new PersonScheduleDayReadModelPersister(uow, MockRepository.GenerateMock<IMessageBrokerComposite>(), null);
+			var target = new PersonScheduleDayReadModelPersister(uow, new DoNotSend(), null);
 			var date = new DateTime(2012, 8, 29);
 			DateTime oldTimestamp = DateTime.UtcNow;
 			var personId = Guid.NewGuid();
@@ -261,7 +259,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 		public void ShouldNotPersistOlderReadModel()
 		{
 			var uow = CurrentUnitOfWork.Make();
-			var target = new PersonScheduleDayReadModelPersister(uow, MockRepository.GenerateMock<IMessageBrokerComposite>(), null);
+			var target = new PersonScheduleDayReadModelPersister(uow, new DoNotSend(), null);
 			var date = new DateTime(2012, 8, 29);
 			DateTime oldTimestamp = DateTime.UtcNow;
 			var personId = Guid.NewGuid();

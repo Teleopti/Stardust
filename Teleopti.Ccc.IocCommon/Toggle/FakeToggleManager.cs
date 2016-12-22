@@ -7,6 +7,19 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Ccc.IocCommon.Toggle
 {
+	public class FakeAllToggles : IAllToggles
+	{
+		private readonly HashSet<Toggles> _toggles = new HashSet<Toggles>();
+
+		public FakeAllToggles(params Toggles[] toggles)
+		{
+			toggles.ForEach(t => _toggles.Add(t));
+		}
+		public ISet<Toggles> Toggles()
+		{
+			return _toggles;
+		}
+	}
 	public class FakeToggleManager : IToggleManager
 	{
 		private readonly IList<Toggles> _enabled = new List<Toggles>();

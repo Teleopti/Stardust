@@ -17,6 +17,8 @@ using Teleopti.Interfaces.Infrastructure;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Messaging.Client.Composite;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -509,8 +511,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 
 			var uow = CurrentUnitOfWork.Make();
-			var target = new PersonScheduleDayReadModelPersister(uow, MockRepository.GenerateMock<IMessageBrokerComposite>(),
-				MockRepository.GenerateMock<ICurrentDataSource>());
+			var target = new PersonScheduleDayReadModelPersister(uow, new DoNotSend(), 
+				new FakeCurrentDatasource("dummy"));
 
 			var model = new PersonScheduleDayReadModel
 			{

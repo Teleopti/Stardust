@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -909,7 +908,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldNotIncludeShiftTradeOfTerminatedPersonTo()
 		{
 			var personTo = PersonFactory.CreatePerson("person to");
-			personTo.TerminatePerson(new DateOnly(1900, 1, 1), MockRepository.GenerateMock<IPersonAccountUpdater>());
+			personTo.TerminatePerson(new DateOnly(1900, 1, 1), new PersonAccountUpdaterDummy());
 			var personFrom = PersonFactory.CreatePerson("person from");
 			PersistAndRemoveFromUnitOfWork(personTo);
 			PersistAndRemoveFromUnitOfWork(personFrom);
@@ -977,7 +976,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var personTo = PersonFactory.CreatePerson("person to");
 			var personFrom = PersonFactory.CreatePerson("person from");
-			personFrom.TerminatePerson(new DateOnly(1900, 1, 1), MockRepository.GenerateMock<IPersonAccountUpdater>());
+			personFrom.TerminatePerson(new DateOnly(1900, 1, 1), new PersonAccountUpdaterDummy());
 			PersistAndRemoveFromUnitOfWork(personTo);
 			PersistAndRemoveFromUnitOfWork(personFrom);
 
@@ -1803,7 +1802,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldNotFilterDeletedPeople()
 		{
 			var personTo = PersonFactory.CreatePerson("person to");
-			personTo.TerminatePerson(new DateOnly(1900, 1, 1), MockRepository.GenerateMock<IPersonAccountUpdater>());
+			personTo.TerminatePerson(new DateOnly(1900, 1, 1), new PersonAccountUpdaterDummy());
 			var personFrom = PersonFactory.CreatePerson("person from");
 			((Person) personFrom).SetDeleted();
 			PersistAndRemoveFromUnitOfWork(personTo);

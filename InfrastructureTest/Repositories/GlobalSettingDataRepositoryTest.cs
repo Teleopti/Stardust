@@ -2,7 +2,6 @@
 using System.Security.Principal;
 using System.Threading;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting;
@@ -155,8 +154,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 	    private void changeBusinessUnit(IBusinessUnit businessUnit,IPerson person)
 	    {
-			 var dataSource = MockRepository.GenerateMock<IDataSource>();
-			 var identity = new TeleoptiIdentity("test user", dataSource, businessUnit, WindowsIdentity.GetCurrent(), null);
+			 var identity = new TeleoptiIdentity("test user", new FakeDataSource(), businessUnit, WindowsIdentity.GetCurrent(), null);
 			 //var threadPreviousPerson = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
 			 var principalForTest = new TeleoptiPrincipal(identity, person);
 			 Thread.CurrentPrincipal = new TeleoptiPrincipal(identity, person);

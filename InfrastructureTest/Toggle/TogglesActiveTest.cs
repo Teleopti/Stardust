@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.IocCommon.Toggle;
 
 namespace Teleopti.Ccc.InfrastructureTest.Toggle
 {
@@ -13,11 +14,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		public void ShouldGetEnabledToggle()
 		{
 			const Toggles toggle = (Toggles) 33;
-			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
-			var allToggles = MockRepository.GenerateMock<IAllToggles>();
+			var toggleManager = new FakeToggleManager(toggle);
+			var allToggles = new FakeAllToggles(toggle);
 			var target = new TogglesActive(toggleManager, allToggles);
-			toggleManager.Stub(x => x.IsEnabled(toggle)).Return(true);
-			allToggles.Stub(x => x.Toggles()).Return(new HashSet<Toggles>(new[] {toggle}));
 
 			target.AllActiveToggles()[toggle]
 				.Should().Be.True();
@@ -27,11 +26,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		public void ShouldGetDisabledToggle()
 		{
 			const Toggles toggle = (Toggles)76;
-			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
-			var allToggles = MockRepository.GenerateMock<IAllToggles>();
+			var toggleManager = new FakeToggleManager();
+			var allToggles = new FakeAllToggles(toggle);
 			var target = new TogglesActive(toggleManager, allToggles);
-			toggleManager.Stub(x => x.IsEnabled(toggle)).Return(false);
-			allToggles.Stub(x => x.Toggles()).Return(new HashSet<Toggles>(new[] { toggle }));
 
 			target.AllActiveToggles()[toggle]
 				.Should().Be.False();
@@ -42,12 +39,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		{
 			const Toggles toggle1 = (Toggles)1;
 			const Toggles toggle2 = (Toggles)2;
-			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
-			var allToggles = MockRepository.GenerateMock<IAllToggles>();
+			var toggleManager = new FakeToggleManager();
+			var allToggles = new FakeAllToggles(toggle1, toggle2);
 			var target = new TogglesActive(toggleManager, allToggles);
-			toggleManager.Stub(x => x.IsEnabled(toggle1)).Return(true);
-			toggleManager.Stub(x => x.IsEnabled(toggle2)).Return(false);
-			allToggles.Stub(x => x.Toggles()).Return(new HashSet<Toggles>(new[] { toggle1, toggle2 }));
+			toggleManager.Enable(toggle1);
+			toggleManager.Disable(toggle2);
 
 			target.AllActiveToggles()
 				.Should().Have.SameValuesAs(

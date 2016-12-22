@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
@@ -19,6 +20,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 	[TestFixture]
 	public class ScheduleRefresherTest
 	{
+		private class noMessageQueueRemoval : IMessageQueueRemoval
+		{
+			public readonly List<IEventMessage> RemovedMessages = new List<IEventMessage>();
+			public void Remove(IEventMessage eventMessage)
+			{
+				RemovedMessages.Add(eventMessage);
+			}
+
+			public void Remove(PersistConflict persistConflict)
+			{
+			}
+		}
+
 		[Test]
 		public void ShouldUpdatePersonAssignmentsInDictionary()
 		{
@@ -29,8 +43,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 				new FakePersonRepositoryLegacy(person),
 				null,
 				new FakePersonAssignmentRepository(personAssignment),
-				MockRepository.GenerateMock<IPersonAbsenceRepository>(),
-				MockRepository.GenerateMock<IMessageQueueRemoval>()
+				new FakePersonAbsenceRepository(),
+				new noMessageQueueRemoval()
 				);
 			var scheduleDictionary = new ScheduleDictionaryForTest(personAssignment.Scenario, period);
 			var messages = new[] {new EventMessage
@@ -65,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 				null,
 				new FakePersonAssignmentRepository(personAssignment),
 				personAbsenceRepository,
-				MockRepository.GenerateMock<IMessageQueueRemoval>()
+				new noMessageQueueRemoval()
 			);
 
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period);
@@ -106,8 +120,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 				new FakePersonRepositoryLegacy(person),
 				updateScheduleDataFromMessages,
 				new FakePersonAssignmentRepository(personAssignment),
-				MockRepository.GenerateMock<IPersonAbsenceRepository>(),
-				MockRepository.GenerateMock<IMessageQueueRemoval>()
+				new FakePersonAbsenceRepository(),
+				new noMessageQueueRemoval()
 				);
 			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
 			var scheduleRange = new ScheduleRange(scheduleDictionary, new ScheduleParameters(personAssignment.Scenario, person, period), new PersistableScheduleDataPermissionChecker());
@@ -147,8 +161,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 				new FakePersonRepositoryLegacy(person),
 				null,
 				new FakePersonAssignmentRepository(),
-				MockRepository.GenerateMock<IPersonAbsenceRepository>(),
-				MockRepository.GenerateMock<IMessageQueueRemoval>()
+				new FakePersonAbsenceRepository(),
+				new noMessageQueueRemoval()
 				);
 			var scheduleDictionary = ScheduleDictionaryForTest.WithPersonAssignment(personAssignment.Scenario, period, personAssignment);
 			var messages = new[] {new EventMessage
@@ -175,8 +189,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 				new FakePersonRepositoryLegacy(person),
 				null,
 				new FakePersonAssignmentRepository(personAssignment),
-				MockRepository.GenerateMock<IPersonAbsenceRepository>(),
-				MockRepository.GenerateMock<IMessageQueueRemoval>()
+				new FakePersonAbsenceRepository(),
+				new noMessageQueueRemoval()
 				);
 			var scheduleDictionary = new ScheduleDictionaryForTest(personAssignment.Scenario, period);
 			var messages = new[] {new EventMessage
@@ -198,12 +212,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 			var period = new DateTimePeriod(2013, 9, 4, 2013, 9, 5);
 			var person = PersonFactory.CreatePersonWithId();
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person, new DateOnly(2013, 9, 4));
-			var remover = MockRepository.GenerateMock<IMessageQueueRemoval>();
+			var remover = new noMessageQueueRemoval();
 			var target = new ScheduleRefresher(
 				new FakePersonRepositoryLegacy(person),
 				null,
 				new FakePersonAssignmentRepository(),
-				MockRepository.GenerateMock<IPersonAbsenceRepository>(),
+				new FakePersonAbsenceRepository(),
 				remover
 				);
 			var scheduleDictionary = ScheduleDictionaryForTest.WithPersonAssignment(personAssignment.Scenario, period, personAssignment);
@@ -216,7 +230,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 				}};
 
 			target.Refresh(scheduleDictionary, messages, null, null, _ => true);
-			remover.AssertWasCalled(x => x.Remove(messages.Single()));
+			remover.RemovedMessages.Should().Contain(messages.Single());
 		}
 	}
 }

@@ -1,7 +1,6 @@
-﻿using Rhino.Mocks;
-using SharpTestsEx;
+﻿using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
@@ -10,7 +9,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 	{
 		protected override IPersonRequest Given()
 		{
-			PersonRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
+			PersonRequestRepository = new FakePersonRequestRepository();
 			return new PersonRequest(Person, new TextRequest(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
 		}
 
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 
 		protected override void Then(IPersonRequest yourRequest)
 		{
-			PersonRequestRepository.AssertWasNotCalled(x => x.Add(yourRequest));
+			PersonRequestRepository.LoadAll().Should().Not.Contain(yourRequest);
 			//don't understand why - but this is how it worked before...
 			ClearRefferedRequestsWasCalled.Should().Be.True();
 		}

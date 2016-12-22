@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Messaging.Client.Composite;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -252,9 +251,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		private void clearReadModel(Guid personId, Guid businessUnitId, DateTime date)
 		{
-			var persister = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(),
-																	MockRepository.GenerateMock<IMessageBrokerComposite>(),
-																	MockRepository.GenerateMock<ICurrentDataSource>());
+			var persister = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(), new DoNotSend(), new FakeCurrentDatasource("asd"));
 
 			persister.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, null, false);
 		}
@@ -282,9 +279,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			WithUnitOfWork.Do(uow =>
 			{
 
-				var persister = new PersonScheduleDayReadModelPersister(uow,
-																		MockRepository.GenerateMock<IMessageBrokerComposite>(),
-																		MockRepository.GenerateMock<ICurrentDataSource>());
+				var persister = new PersonScheduleDayReadModelPersister(uow, new DoNotSend(), new FakeCurrentDatasource("asd"));
 
 				persister.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, new[] { model }, false);
 			});

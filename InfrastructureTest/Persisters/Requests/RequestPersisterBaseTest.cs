@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -7,10 +6,9 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Persisters.Requests;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 {
@@ -68,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 			target = new RequestPersister(CurrentUnitOfWorkFactory.Make(), 
 														PersonRequestRepository,
 														this,
-														MockRepository.GenerateMock<IInitiatorIdentifier>(),
+														new FakeInitiatorIdentifier(), 
 														new ThisAuthorization(Authorization)
 														);
 		}
