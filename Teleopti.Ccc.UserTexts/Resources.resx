@@ -15368,4 +15368,12 @@ These options are activated:
     <value>Update Resource Calculations</value>
     <comment>Menu item in WFM request module</comment>
   </data>
+  <data name="Performance" xml:space="preserve">
+    <value>Performance</value>
+    <comment>tab label in web intraday</comment>
+  </data>
+  <data name="Staffing" xml:space="preserve">
+    <value>Staffing</value>
+    <comment>tab label in web intraday</comment>
+  </data>
 </root>

@@ -21244,6 +21244,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Performance.
+        /// </summary>
+        public static string Performance {
+            get {
+                return ResourceManager.GetString("Performance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Performance Manager.
         /// </summary>
         public static string PerformanceManager {
@@ -29465,6 +29474,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Staffing.
+        /// </summary>
+        public static string Staffing {
+            get {
+                return ResourceManager.GetString("Staffing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Staffing effect.
         /// </summary>
         public static string StaffingEffect {
@@ -32469,6 +32487,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string UpdateInfo {
             get {
                 return ResourceManager.GetString("UpdateInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Resource Calculations.
+        /// </summary>
+        public static string UpdateResourceCalculations {
+            get {
+                return ResourceManager.GetString("UpdateResourceCalculations", resourceCulture);
             }
         }
         
