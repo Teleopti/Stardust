@@ -8,6 +8,12 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public static class SkillExtensions
 	{
+		public static ISkill WithCascadingIndex(this ISkill skill, int index)
+		{
+			skill.SetCascadingIndex(index);
+			return skill;
+		}
+
 		public static ISkillDay CreateSkillDayWithDemandPerHour(this ISkill skill, IScenario scenario, DateOnly dateOnly, TimeSpan defaultDemand, Tuple<int, TimeSpan> specificHourDemand)
 		{
 			var skillDataPeriods = new List<ISkillDataPeriod>();
