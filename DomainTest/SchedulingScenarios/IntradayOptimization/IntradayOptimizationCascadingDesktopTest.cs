@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -193,11 +192,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Optimize(new[] { agentAB, agentAC }, new DateOnlyPeriod(date, date), new OptimizationPreferencesDefaultValueProvider().Fetch(), null);
 
-			var skillAShovledResources = schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillA].Single().SkillStaffPeriodCollection.First().ResourceLoggonOnDiff();
-			var skillBShovledResources = schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillB].Single().SkillStaffPeriodCollection.First().ResourceLoggonOnDiff();
-			var skillCShovledResources = schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillC].Single().SkillStaffPeriodCollection.First().ResourceLoggonOnDiff();
-			(skillAShovledResources + skillBShovledResources + skillCShovledResources).IsZero()
-				.Should().Be.True();
+			var skillASSkillStaffPeriod = schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillA].Single().SkillStaffPeriodCollection.First();
+			var skillBSSkillStaffPeriod = schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillB].Single().SkillStaffPeriodCollection.First();
+			var skillCSSkillStaffPeriod = schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillC].Single().SkillStaffPeriodCollection.First();
+
+			(skillASSkillStaffPeriod.CalculatedResource - skillASSkillStaffPeriod.CalculatedLoggedOn +
+			(skillBSSkillStaffPeriod.CalculatedResource - skillBSSkillStaffPeriod.CalculatedLoggedOn) +
+			(skillCSSkillStaffPeriod.CalculatedResource - skillCSSkillStaffPeriod.CalculatedLoggedOn))
+				.IsZero().Should().Be.True();
 		}
 
 		[Test]
