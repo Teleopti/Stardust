@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	public class NewDayOffRule : INewDayOffRule
 	{
 		private readonly IWorkTimeStartEndExtractor _workTimeStartEndExtractor;
-		private readonly CultureInfo _loggedOnCulture = Thread.CurrentThread.CurrentCulture;
+		private readonly CultureInfo _loggedOnCulture = Thread.CurrentThread.CurrentUICulture;
 
 		public NewDayOffRule(IWorkTimeStartEndExtractor workTimeStartEndExtractor)
 		{

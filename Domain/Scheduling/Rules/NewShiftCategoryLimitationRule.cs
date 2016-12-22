@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Scheduling.Rules.NewShiftCategoryLimitationRule.createResponse(Teleopti.Interfaces.Domain.IPerson,Teleopti.Interfaces.Domain.DateOnly,System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
 		{
-			var currentUiCulture = Thread.CurrentThread.CurrentCulture;
+			var currentUiCulture = Thread.CurrentThread.CurrentUICulture;
 			var responseList = new HashSet<IBusinessRuleResponse>();
 
 			var virtualSchedulePeriods =

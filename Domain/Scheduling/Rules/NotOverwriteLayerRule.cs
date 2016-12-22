@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		private string createErrorMessage(IPerson person, OverlappingLayers overlappingLayers)
 		{
 			var errorMessage = Resources.BusinessRuleOverlappingErrorMessage3;
-			var currentUiCulture = Thread.CurrentThread.CurrentCulture;
+			var currentUiCulture = Thread.CurrentThread.CurrentUICulture;
 			var loggedOnTimezone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 
 			var layerBelowTimePeriod = overlappingLayers.LayerBelowPeriod.TimePeriod(loggedOnTimezone);

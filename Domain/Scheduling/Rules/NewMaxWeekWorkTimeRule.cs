@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,
 			IEnumerable<IScheduleDay> scheduleDays)
 		{
-			var currentUiCulture = Thread.CurrentThread.CurrentCulture;
+			var currentUiCulture = Thread.CurrentThread.CurrentUICulture;
 			var responseList = new HashSet<IBusinessRuleResponse>();
 			var personWeeks = _weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(scheduleDays);
 

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
 		{
-			var currentUiCulture = Thread.CurrentThread.CurrentCulture;
+			var currentUiCulture = Thread.CurrentThread.CurrentUICulture;
 			var errorMessage = Resources.BusinessRulePersonAccountError1;
 			var responseList = new List<IBusinessRuleResponse>();
 

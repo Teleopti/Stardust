@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,
 			IEnumerable<IScheduleDay> scheduleDays)
 		{
-			var currentUiCulture = Thread.CurrentThread.CurrentCulture;
+			var currentUiCulture = Thread.CurrentThread.CurrentUICulture;
 			var ret = new List<IBusinessRuleResponse>();
 			foreach (var scheduleDay in scheduleDays)
 			{

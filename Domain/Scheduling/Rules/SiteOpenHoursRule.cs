@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private string getErrorMessage(IPerson person, DateOnly scheduleDate, DateTimePeriod scheduleTimePeriod)
 		{
-			var currentUiCulture = Thread.CurrentThread.CurrentCulture;
+			var currentUiCulture = Thread.CurrentThread.CurrentUICulture;
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var dayOfWeek = Resources.ResourceManager.GetString(scheduleDate.DayOfWeek.ToString());
 			var siteName = person.MyTeam(scheduleDate).Site.Description.Name;

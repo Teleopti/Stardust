@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		private string createErrorMessage(DateOnly dateOnly1, DateOnly dateOnly2, TimeSpan nightRest, TimeSpan currentRest)
 		{
 			var errorMessage = Resources.BusinessRuleNightlyRestRuleErrorMessage;
-			var currentUiCulture = Thread.CurrentThread.CurrentCulture;
+			var currentUiCulture = Thread.CurrentThread.CurrentUICulture;
 			var start = dateOnly1.ToShortDateString();
 			var end = dateOnly2.ToShortDateString();
 			var rest = TimeHelper.GetLongHourMinuteTimeString(currentRest, currentUiCulture);
