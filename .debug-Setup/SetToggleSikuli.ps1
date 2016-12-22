@@ -27,7 +27,7 @@ if ($obj.value)
 {
     Write-Host "Setting new ToggleMode to:" $SetToggleMode
     $obj.value = "$SetToggleMode"
-    $doc.Save($webConfig)
+    $doc.Save($webConfig) | out-null
 }
     
 else
