@@ -157,7 +157,8 @@ WHERE pp.StartDate < @date AND pp.EndDate >= @date
 UPDATE [ReadModel].[FindPerson] 
 SET [TeamId] = t.Id,
 	[SiteId] = s.Id,
-	[BusinessUnitId] = s.BusinessUnit 
+	[BusinessUnitId] = s.BusinessUnit,
+    [PersonPeriodTeamId] = 	ISNULL(p.PersonPeriodTeamId, t.Id)
 FROM [ReadModel].[FindPerson] p
 LEFT JOIN #CurrentPeriod pp ON p.PersonId = pp.Parent AND pp.Parent in (SELECT person FROM #ids)
 INNER JOIN Team t WITH (NOLOCK) ON pp.Team = t.Id
