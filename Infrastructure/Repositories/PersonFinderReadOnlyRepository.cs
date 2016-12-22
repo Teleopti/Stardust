@@ -114,11 +114,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var minDate = new DateOnly(1753, 1, 1);
 			if (personFinderSearchCriteria.TerminalDate < minDate)
 				personFinderSearchCriteria.TerminalDate = minDate;
-			var uow = _currentUnitOfWork.Current();
-
+			
 			var teamIdsString = Join(",", teamIds.Select(x => x.ToString())); 
 
-			var result = ((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
+			var result = _currentUnitOfWork.Session().CreateSQLQuery(
 				"exec [ReadModel].[PersonFinderWithCriteriaAndTeams] @search_criterias=:searchCriterias_string, "
 				+ "@leave_after=:leave_after, @start_row =:start_row, @end_row=:end_row, @order_by=:order_by, @culture=:culture, @business_unit_id=:business_unit_id, @belongs_to_date=:belongs_to_date, @teamIds=:teamIds")
 				.SetString("searchCriterias_string", createSearchString(personFinderSearchCriteria.SearchCriterias))

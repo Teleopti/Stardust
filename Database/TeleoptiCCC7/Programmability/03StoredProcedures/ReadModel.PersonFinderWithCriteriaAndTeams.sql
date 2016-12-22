@@ -60,6 +60,7 @@ CREATE TABLE #SearchStringsInAll (SearchWord nvarchar(200) COLLATE database_defa
 -- Temp table for splitted criteria
 CREATE TABLE #SearchCriteria (SearchType nvarchar(200) NOT NULL, SearchValue nvarchar(max) NULL)
 CREATE TABLE #PersonId (PersonId uniqueidentifier)
+CREATE TABLE #IntermediatePersonId (PersonId uniqueidentifier)
 CREATE TABLE #TeamId (tId uniqueidentifier)
 
 CREATE TABLE #result (
@@ -169,13 +170,19 @@ SELECT @leave_after_ISO = CONVERT(NVARCHAR(10), @leave_after,120)
 --convert @belongs_to_date to ISO-format string
 SELECT @belongs_to_date_ISO = CONVERT(NVARCHAR(10), @belongs_to_date,120)
 
---search teams only when search criteria is empty
+
+
+INSERT INTO  #IntermediatePersonId
+SELECT p.Id FROM #teamId t 
+INNER JOIN dbo.PersonPeriod pp with (nolock)   ON t.tId = pp.Team 
+INNER JOIN dbo.Person p with (nolock) ON pp.Parent = p.Id 
+WHERE ISNULL(p.TerminalDate, '2100-01-01') >=  @leave_after_ISO  
+AND  (pp.StartDate IS NULL OR pp.StartDate <=  @belongs_to_date_ISO  ) AND ( pp.EndDate IS NULL OR pp.EndDate >=  @belongs_to_date_ISO )
+
+
 IF @criteriaCount = 0 AND @teamIds <> ''
 BEGIN
-	SELECT @dynamicSQL = 'SELECT fp.PersonId FROM #teamId t '
-					 + 'INNER JOIN ReadModel.FindPerson fp with (nolock)   ON t.tId = fp.PersonPeriodTeamId '
-					 + 'WHERE ISNULL(fp.TerminalDate, ''2100-01-01'') >= ''' + @leave_after_ISO + ''' ' 
-					 + 'AND ( (fp.StartDateTime IS NULL OR fp.StartDateTime <=  ''' + @belongs_to_date_ISO + ''' ) AND ( fp.EndDateTime IS NULL OR fp.EndDateTime >= ''' + @belongs_to_date_ISO + ''' ))'
+	SELECT @dynamicSQL = 'SELECT PersonId FROM #IntermediatePersonId '
 END
 
 ------------
@@ -234,11 +241,10 @@ BEGIN
 
 	IF @valueClause <> '()'
 	BEGIN
-		SELECT @dynamicSQL = @dynamicSQL + 'SELECT fp.PersonId FROM #teamId t '
-					 + 'INNER JOIN ReadModel.FindPerson fp with (nolock)   ON t.tId = fp.PersonPeriodTeamId '
-					 + 'WHERE ISNULL(fp.TerminalDate, ''2100-01-01'') >= ''' + @leave_after_ISO + ''' ' 
-					 + 'AND ( (fp.StartDateTime IS NULL OR fp.StartDateTime <=  ''' + @belongs_to_date_ISO + ''' ) AND ( fp.EndDateTime IS NULL OR fp.EndDateTime >= ''' + @belongs_to_date_ISO + ''' ))'
-					 + ' AND ' + @valueClause
+		SELECT @dynamicSQL = @dynamicSQL + 'SELECT fp.PersonId FROM #IntermediatePersonId t '
+					 + 'INNER JOIN ReadModel.FindPerson fp with (nolock)   ON t.PersonId = fp.PersonId '
+					 + 'WHERE '
+					 + @valueClause
 				
 		--If 'All' set searchtype as a separate AND condition
 		IF @searchType <> 'All'
