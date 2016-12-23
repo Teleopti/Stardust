@@ -49,28 +49,20 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			var skillADay = skillA.CreateSkillDayWithDemand(scenario, date, 2);
 			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 16);
 			var skillBDay = skillB.CreateSkillDayWithDemand(scenario, date, 2);
-
 			var agentKnowingSkillAandB1 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agentKnowingSkillAandB1.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
 				new[] { skillA, skillB });
 			agentKnowingSkillAandB1.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
-
 			var agentKnowingSkillAandB2 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agentKnowingSkillAandB2.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
 				new[] { skillA, skillB });
 			agentKnowingSkillAandB2.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
-
 			var agentThatShouldNotGetOverTime = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agentThatShouldNotGetOverTime.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
 				new[] { skillA });
 			agentThatShouldNotGetOverTime.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
-
-			var assAandB1 = new PersonAssignment(agentKnowingSkillAandB1, scenario, date);
-			assAandB1.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
-			var assAandB2 = new PersonAssignment(agentKnowingSkillAandB2, scenario, date);
-			assAandB2.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
-
-
+			var assAandB1 = new PersonAssignment(agentKnowingSkillAandB1, scenario, date).WithLayer(activity, new TimePeriod(8, 16));
+			var assAandB2 = new PersonAssignment(agentKnowingSkillAandB2, scenario, date).WithLayer(activity, new TimePeriod(8, 16));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agentKnowingSkillAandB1, agentKnowingSkillAandB2, agentThatShouldNotGetOverTime }, new[] { assAandB1, assAandB2 }, new[] { skillADay, skillBDay });
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
 			var overtimePreference = new OvertimePreferences { OvertimeType = definitionSet, ShiftBagToUse = new RuleSetBag(ruleSet), ScheduleTag = new ScheduleTag() };
@@ -101,8 +93,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			agentA.AddPeriodWithSkills(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB });
 			agentA.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
 			var assAandB = new PersonAssignment(agentAandB, scenario, dateOnly);
-			var assA = new PersonAssignment(agentA, scenario, dateOnly);
-			assA.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
+			var assA = new PersonAssignment(agentA, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 16));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agentAandB, agentA}, new[] { assAandB, assA}, new[] { skillDayA, skillDayB });
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
 			var overtimePreference = new OvertimePreferences
@@ -146,8 +137,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			agentA.AddPeriodWithSkills(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB });
 			agentA.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
 			var assAandB = new PersonAssignment(agentAandB, scenario, dateOnly);
-			var assA = new PersonAssignment(agentA, scenario, dateOnly);
-			assA.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
+			var assA = new PersonAssignment(agentA, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 16));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agentAandB, agentA }, new[] { assAandB, assA }, new[] { skillDayA, skillDayB });
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
 			var overtimePreference = new OvertimePreferences

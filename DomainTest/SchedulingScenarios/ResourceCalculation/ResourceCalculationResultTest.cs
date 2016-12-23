@@ -58,9 +58,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 				agent.AddPeriodWithSkill(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")),  new Team { Site = new Site("_") }), skill);
 				agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
-				var ass = new PersonAssignment(agent, scenario, date);
-				ass.AddActivity(activity, new TimePeriod(9, 0, 17, 0));
-
+				var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 				agents.Add(agent);
 				asses.Add(ass);
 			}
@@ -90,8 +88,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var agent = new Person().WithId();
 			agent.AddPeriodWithSkill(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
-			var ass = new PersonAssignment(agent, scenario, date);
-			ass.AddActivity(activity, new TimePeriod(9, 0, 17, 0));
+			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] {agent}, new[] {ass}, skillDay);
 
 			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
@@ -108,8 +105,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			var siteWithMaxSeats = new Site("_") {MaxSeats = 10}.WithId();
 			agent.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = siteWithMaxSeats }), Enumerable.Empty<ISkill>());
-			var ass = new PersonAssignment(agent, scenario, date);
-			ass.AddActivity(activity, new TimePeriod(9, 0, 17, 0));
+			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, Enumerable.Empty<ISkillDay>());
 			InitMaxSeatForStateHolder.Execute(15);
 
@@ -133,8 +129,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			var siteWithMaxSeats = new Site("_") { MaxSeats = 10 }.WithId();
 			agent.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = siteWithMaxSeats }), Enumerable.Empty<ISkill>());
-			var ass = new PersonAssignment(agent, scenario, date);
-			ass.AddActivity(activity, new TimePeriod(9, 0, 17, 0));
+			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, Enumerable.Empty<ISkillDay>());
 			InitMaxSeatForStateHolder.Execute(intervalLength);
 
@@ -158,8 +153,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			var siteWithMaxSeats = new Site("_") { MaxSeats = numberOfSeats }.WithId();
 			agent.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = siteWithMaxSeats }), Enumerable.Empty<ISkill>());
-			var ass = new PersonAssignment(agent, scenario, date);
-			ass.AddActivity(activity, new TimePeriod(9, 0, 17, 0));
+			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, Enumerable.Empty<ISkillDay>());
 			InitMaxSeatForStateHolder.Execute(15);
 
@@ -185,8 +179,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var agent = new Person().WithId();
 			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.Kathmandu());
 			agent.AddPeriodWithSkill(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
-			var ass = new PersonAssignment(agent, scenario, date);
-			ass.AddActivity(activity, new TimePeriod(9, 17));
+			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, skillDay);
 
 			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);

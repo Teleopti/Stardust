@@ -65,9 +65,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			{
 				for (var i = 0; i < 7; i++)
 				{
-					var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(i));
-					ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
-					ass.SetShiftCategory(shiftCategory);
+					var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));
 					if (i == 5 || i == 6) //saturday or sunday
 					{
 						ass.SetDayOff(new DayOffTemplate());

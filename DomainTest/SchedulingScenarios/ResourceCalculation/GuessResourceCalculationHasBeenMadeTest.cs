@@ -33,8 +33,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var agent = new Person().WithId();
 			agent.AddPeriodWithSkill(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
-			var ass = new PersonAssignment(agent, scenario, date);
-			ass.AddActivity(activity, new TimePeriod(9, 0, 17, 0));
+			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agent }, new[] { ass }, skillDay);
 
 			stateHolder.SchedulingResultState.GuessResourceCalculationHasBeenMade()
@@ -56,8 +55,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var agent = new Person().WithId();
 			agent.AddPeriodWithSkill(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
-			var ass = new PersonAssignment(agent, scenario, date);
-			ass.AddActivity(activity, new TimePeriod(9, 0, 17, 0));
+			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agent}, new[] {ass}, skillDay);
 
 			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);

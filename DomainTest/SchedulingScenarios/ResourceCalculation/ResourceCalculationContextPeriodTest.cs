@@ -39,8 +39,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var today = DateOnly.Today;
 			var agent = new Person().InTimeZone(TimeZoneInfo.FindSystemTimeZoneById(agentTimeZone));
 			agent.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(today.AddDays(-10), skill));
-			var assignment = new PersonAssignment(agent, scenario, today.AddDays(shiftDayFromToday));
-			assignment.AddActivity(activity, new TimePeriod(shiftStart, shiftStart + 8));
+			var assignment = new PersonAssignment(agent, scenario, today.AddDays(shiftDayFromToday)).WithLayer(activity, new TimePeriod(shiftStart, shiftStart + 8));
 			var period = new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1));
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, period, TimeSpan.FromMinutes(30));
 			var resourceCalculationData = ResourceCalculationDataCreator.WithData(scenario, period , new[] { assignment }, skillDay, false, false);

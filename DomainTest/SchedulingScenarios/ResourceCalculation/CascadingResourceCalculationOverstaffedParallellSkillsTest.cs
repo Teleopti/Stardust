@@ -35,8 +35,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillB2 = new Skill("B2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
 			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB1, skillB2);
-			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new [] {ass}, new[] { skillDayA, skillDayB1, skillDayB2 }, false, false));
 
@@ -61,8 +60,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillB2 = new Skill("B2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
 			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB1, skillB2);
-			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass }, new[] { skillDayA, skillDayB1, skillDayB2 }, false, false));
 
@@ -88,14 +86,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB1, skillB2);
 			var agentB2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillB2);
-			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
-			var assB2 = new PersonAssignment(agentB2, scenario, dateOnly);
-			assB2.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
+			var assB2 = new PersonAssignment(agentB2, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass, assB2 }, new[] { skillDayA, skillDayB1, skillDayB2 }, false, false));
-
-
+			
 			skillDayA.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
 			skillDayB1.SkillStaffPeriodCollection.First().AbsoluteDifference
@@ -117,11 +112,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillB = new Skill("skillB").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
 			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var multiSkilledAgent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA1, skillA2, skillB);
-			var multiSkilledAss = new PersonAssignment(multiSkilledAgent, scenario, dateOnly);
-			multiSkilledAss.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
+			var multiSkilledAss = new PersonAssignment(multiSkilledAgent, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9));
 			var agentA1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA1);
-			var a1Ass = new PersonAssignment(agentA1, scenario, dateOnly);
-			a1Ass.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
+			var a1Ass = new PersonAssignment(agentA1, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9));
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new [] {multiSkilledAss, a1Ass}, new[] { skillDayA1, skillDayA2, skillDayB }, false, false));
 
@@ -147,8 +140,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillB = new Skill("skillB").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
 			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 0.3);
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA1, skillA2, skillB);
-			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9));
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass }, new[] { skillDayA1, skillDayA2, skillDayB }, false, false));
 
@@ -173,8 +165,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillB = new Skill("skillB").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(7, 9);
 			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA1, skillA2, skillB);
-			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(activity, new TimePeriod(7, 0, 8, 0));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(7, 8));
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass }, new[] { skillDayA1, skillDayA2, skillDayB }, false, false));
 
@@ -197,8 +188,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillB = new Skill("skillB").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(7, 9);
 			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA1, skillA2, skillB);
-			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(activity, new TimePeriod(7, 0, 8, 0));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(7, 8));
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass }, new[] { skillDayA1, skillDayA2, skillDayB }, false, false));
 
@@ -224,14 +214,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			for (var i = 0; i < 5; i++)
 			{
 				var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB1, skillB2);
-				var ass = new PersonAssignment(agent, scenario, dateOnly);
-				ass.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
-				asses.Add(ass);
-
+				asses.Add(new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9)));
 				var agentB1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillB1);
-				var assB1 = new PersonAssignment(agentB1, scenario, dateOnly);
-				assB1.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
-				asses.Add(assB1);
+				asses.Add(new PersonAssignment(agentB1, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9)));
 			}
 			var skillDays = b1BeforeB2 ? new[] {skillDayA, skillDayB1, skillDayB2} : new[] {skillDayA, skillDayB2, skillDayB1};
 
@@ -261,19 +246,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			for (var i = 0; i < 20; i++)
 			{
 				var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB1, skillB2);
-				var ass = new PersonAssignment(agent, scenario, dateOnly);
-				ass.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
-				asses.Add(ass);	
+				asses.Add(new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9)));
 			}
-
 			for (var i = 0; i < 5; i++)
 			{
 				var agentB1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillB1);
-				var assB1 = new PersonAssignment(agentB1, scenario, dateOnly);
-				assB1.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
-				asses.Add(assB1);
+				asses.Add(new PersonAssignment(agentB1, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9)));
 			}
-
 			var skillDays = b1BeforeB2 ? new[] { skillDayA, skillDayB1, skillDayB2 } : new[] { skillDayA, skillDayB2, skillDayB1 };
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, asses, skillDays, false, false));
@@ -301,18 +280,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var asses = new List<IPersonAssignment>();
 			// These shouldn't be moved//
 			var agentA1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA1);
-			var assA1 = new PersonAssignment(agentA1, scenario, dateOnly);
-			assA1.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
-			asses.Add(assA1);
+			asses.Add(new PersonAssignment(agentA1, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9)));
 			var agentA2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA2);
-			var assA2 = new PersonAssignment(agentA2, scenario, dateOnly);
-			assA2.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
-			asses.Add(assA2);
+			asses.Add(new PersonAssignment(agentA2, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9)));
 			//                         //
 			var multiskilledAgent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA1, skillA2, skillB);
-			var assMultiSkilled = new PersonAssignment(multiskilledAgent, scenario, dateOnly);
-			assMultiSkilled.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
-			asses.Add(assMultiSkilled);
+			asses.Add(new PersonAssignment(multiskilledAgent, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9)));
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, asses, new[] { skillDayA1, skillDayA2, skillDayB }, false, false));
 
@@ -337,8 +310,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillB = new Skill("skillB").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
 			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 0.27000000000000007); //gave wrong result
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA1, skillA2, skillB);
-			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9));
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass }, new[] { skillDayA1, skillDayA2, skillDayB }, false, false));
 
@@ -363,11 +335,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillB2 = new Skill("B2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
 			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA1, skillA2, skillB1);
-			var ass1 = new PersonAssignment(agent1, scenario, dateOnly);
-			ass1.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
+			var ass1 = new PersonAssignment(agent1, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
 			var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA1, skillA2, skillB2);
-			var ass2 = new PersonAssignment(agent2, scenario, dateOnly);
-			ass2.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
+			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass1, ass2 }, new[] { skillDayA1, skillDayA2, skillDayB1, skillDayB2 }, false, false));
 
@@ -396,11 +366,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillB2 = new Skill("B2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
 			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 10);
 			var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA1, skillA2, skillB1);
-			var ass1 = new PersonAssignment(agent1, scenario, dateOnly);
-			ass1.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
+			var ass1 = new PersonAssignment(agent1, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
 			var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA1, skillA2, skillB2);
-			var ass2 = new PersonAssignment(agent2, scenario, dateOnly);
-			ass2.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
+			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass1, ass2 }, new[] { skillDayA1, skillDayA2, skillDayB1, skillDayB2 }, false, false));
 
@@ -433,11 +401,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			for (var i = 0; i < 2; i++)
 			{
 				var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA1, skillA2, skillB1);
-				var ass1 = new PersonAssignment(agent1, scenario, dateOnly);
-				ass1.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
+				var ass1 = new PersonAssignment(agent1, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9));
 				var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA1, skillA2, skillB2);
-				var ass2 = new PersonAssignment(agent2, scenario, dateOnly);
-				ass2.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
+				var ass2 = new PersonAssignment(agent2, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9));
 				assignments.Add(ass1);
 				assignments.Add(ass2);
 			}
@@ -474,34 +440,24 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillDaySilver = skillSilver.CreateSkillDayWithDemand(scenario, dateOnly, 3.47);
 			var skillDayBronze = skillBronze.CreateSkillDayWithDemand(scenario, dateOnly, 7.76);
 			var skillDayBronze1 = skillBronze1.CreateSkillDayWithDemand(scenario, dateOnly, 7.76);
-
 			var asses = new List<IPersonAssignment>();
-
 			//platinum, bronze, bronze1
 			for (var i = 0; i < 2; i++)
 			{
 				var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillPlatinum, skillBronze, skillBronze1);
-				var ass = new PersonAssignment(agent, scenario, dateOnly);
-				ass.AddActivity(activity, new TimePeriod(10, 0, 10, 30));
-				asses.Add(ass);
+				asses.Add(new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(10, 0, 10, 30)));
 			}
-
 			//platinum1, silver, bronze1
 			for (var i = 0; i < 12; i++)
 			{
 				var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillPlatinum1, skillSilver, skillBronze1);
-				var ass = new PersonAssignment(agent, scenario, dateOnly);
-				ass.AddActivity(activity, new TimePeriod(10, 0, 10, 30));
-				asses.Add(ass);
+				asses.Add(new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(10, 0, 10, 30)));
 			}
-
 			//platinum, platinum1, gold, bronze, bronze1
 			for (var i = 0; i < 10; i++)
 			{
 				var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillPlatinum, skillPlatinum1, skillGold, skillBronze, skillBronze1);
-				var ass = new PersonAssignment(agent, scenario, dateOnly);
-				ass.AddActivity(activity, new TimePeriod(10, 0, 10, 30));
-				asses.Add(ass);
+				asses.Add(new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(10, 0, 10, 30)));
 			}
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, asses, new[] { skillDayPlatinum, skillDayGold, skillDayPlatinum1, skillDaySilver, skillDayBronze, skillDayBronze1 }, false, false));
@@ -509,9 +465,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillDayBronze1ResultBefore = skillDayBronze1.SkillStaffPeriodCollection.First().AbsoluteDifference;
 
 			var multiSkillAgent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillPlatinum, skillPlatinum1, skillGold, skillBronze, skillBronze1);
-			var multiSkillAss = new PersonAssignment(multiSkillAgent, scenario, dateOnly);
-			multiSkillAss.AddActivity(activity, new TimePeriod(10, 0, 10, 30));
-			asses.Add(multiSkillAss);
+			asses.Add(new PersonAssignment(multiSkillAgent, scenario, dateOnly).WithLayer(activity, new TimePeriod(10, 0, 10, 30)));
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, asses, new[] { skillDayPlatinum, skillDayGold, skillDayPlatinum1, skillDaySilver, skillDayBronze, skillDayBronze1 }, false, false));
 
@@ -543,18 +497,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			for (var i = 0; i < 1; i++)
 			{
 				var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillGold, skillBronze0);
-				var ass = new PersonAssignment(agent, scenario, dateOnly);
-				ass.AddActivity(activity, new TimePeriod(10, 0, 10, 30));
-				asses.Add(ass);
+				asses.Add(new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(10, 0, 10, 30)));
 			}
 
 			//gold, bronze1, bronze2
 			for (var i = 0; i < 1; i++)
 			{
 				var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillGold, skillBronz1, skillBronze2);
-				var ass = new PersonAssignment(agent, scenario, dateOnly);
-				ass.AddActivity(activity, new TimePeriod(10, 0, 10, 30));
-				asses.Add(ass);
+				asses.Add(new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(10, 0, 10, 30)));
 			}
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, asses, new[] { skillDayGold, skillDayBronze0, skillDayBronze1, skillDayBronze2 }, false, false));
@@ -586,18 +536,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			for (var i = 0; i < 1; i++)
 			{
 				var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillGold, skillSilver, skillSilver1);
-				var ass = new PersonAssignment(agent, scenario, dateOnly);
-				ass.AddActivity(activity, new TimePeriod(10, 0, 10, 30));
-				asses.Add(ass);
+				asses.Add(new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(10, 0, 10, 30)));
 			}
 
 			//gold, silver, bronze
 			for (var i = 0; i < 1; i++)
 			{
 				var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillGold, skillSilver, skillBronze);
-				var ass = new PersonAssignment(agent, scenario, dateOnly);
-				ass.AddActivity(activity, new TimePeriod(10, 0, 10, 30));
-				asses.Add(ass);
+				asses.Add(new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(10, 0, 10, 30)));
 			}
 
 			var singleSkillAgent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillSilver);

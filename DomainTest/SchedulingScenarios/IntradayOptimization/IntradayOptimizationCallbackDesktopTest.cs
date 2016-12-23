@@ -56,10 +56,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				var agent = new Person().WithId();
 				agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 				agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
-				var ass = new PersonAssignment(agent, scenario, dateOnly);
-				ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 17, 0));
-				ass.SetShiftCategory(new ShiftCategory("_").WithId());
-				asses.Add(ass);
+				asses.Add(new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(phoneActivity, new TimePeriod(8, 17)));
 			}
 			SchedulerStateHolderFrom.Fill(scenario, dateOnly, asses.Select(x => x.Person), asses, skillDay);
 
@@ -82,10 +79,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				var agent = new Person().WithId();
 				agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 				agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
-				var ass = new PersonAssignment(agent, scenario, dateOnly);
-				ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 17, 0));
-				ass.SetShiftCategory(new ShiftCategory("_").WithId());
-				asses.Add(ass);
+				asses.Add(new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(phoneActivity, new TimePeriod(8, 17)));
 			}
 			SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), asses.Select(x => x.Person), asses, new List<ISkillDay>());
 

@@ -65,9 +65,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var asses = new List<IPersonAssignment>();
 			for (var i = 0; i < 7; i++)
 			{
-				var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(i));
-				ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
-				ass.SetShiftCategory(shiftCategory);
+				var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));
 				asses.Add(ass);
 				if (i == 5)
 				{
@@ -136,12 +134,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var asses = new List<IPersonAssignment>();
 			for (var i = 0; i < 7; i++)
 			{
-				var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(i));
-				var assMaxSeat = new PersonAssignment(agentMaxSeat, scenario, firstDay.AddDays(i));
-				ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
-				assMaxSeat.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
-				ass.SetShiftCategory(shiftCategory);
-				assMaxSeat.SetShiftCategory(shiftCategory);
+				var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));
+				var assMaxSeat = new PersonAssignment(agentMaxSeat, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));
 				asses.Add(ass);
 				asses.Add(assMaxSeat);
 				if (i != 5) continue;

@@ -63,9 +63,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			{
 				for (var i = 0; i < 7; i++)
 				{
-					var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(i));
-					ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
-					ass.SetShiftCategory(shiftCategory);
+					var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));
 					asses.Add(ass);
 					if (i == 5 || i==6)
 					{
@@ -172,9 +170,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var dayOffTemplate = new DayOffTemplate();
 			for (var i = 0; i < 7; i++)
 			{
-				var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(i));
-				ass.AddActivity(activity2, new TimePeriod(8, 0, 16, 0));
-				ass.SetShiftCategory(shiftCategory);
+				var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity2, new TimePeriod(8, 16));
 				asses.Add(ass);
 				if (i == 5 || i == 6)
 				{
@@ -227,9 +223,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				for (var day = 0; day < 21; day++)
 				{
 					var currentDay = firstDay.AddDays(day);
-					var ass = new PersonAssignment(agent, scenario, currentDay);
-					ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
-					ass.SetShiftCategory(shiftCategory);
+					var ass = new PersonAssignment(agent, scenario, currentDay).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));
 					if (i < 7)
 					{
 						if (day == 5 || day == 6 || day == 12 || day == 13 || day == 19 || day == 20)

@@ -29,9 +29,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var activity = new Activity("_");
 			var scenario = new Scenario("_");
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfoFactory.SingaporeTimeZoneInfo());
-			var ass = new PersonAssignment(agent, scenario, date);
-			ass.AddActivity(activity, new TimePeriod(0, 0, 1, 0));
-			ass.SetShiftCategory(new ShiftCategory("_"));
+			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(0, 1)).ShiftCategory(new ShiftCategory("_"));
 			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date.AddWeeks(-1), date.AddWeeks(1)), new[] { agent }, new[] {ass}, Enumerable.Empty<ISkillDay>());
 
 			var schedule = stateHolder.Schedules[agent].ScheduledDay(date);
@@ -52,9 +50,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date.AddWeeks(-1), date.AddWeeks(1)), new[] { agent }, Enumerable.Empty<IPersonAssignment>(), Enumerable.Empty<ISkillDay>());
 
 			var schedule = stateHolder.Schedules[agent].ScheduledDay(date);
-			var ass = new PersonAssignment(agent, scenario, date);
-			ass.AddActivity(activity, new TimePeriod(0, 0, 1, 0));
-			ass.SetShiftCategory(new ShiftCategory("_"));
+			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(0, 1)).ShiftCategory(new ShiftCategory("_"));
 			schedule.AddMainShift(ass);
 			stateHolder.Schedules.Modify(schedule, ScheduleDayChangeCallback);
 
@@ -70,16 +66,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var activity = new Activity("_");
 			var scenario = new Scenario("_");
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
-			var assPrevious = new PersonAssignment(agent, scenario, date);
-			assPrevious.AddActivity(activity, new TimePeriod(10,0, 11, 0));
-			assPrevious.SetShiftCategory(new ShiftCategory("_"));
+			var assPrevious = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(10, 11)).ShiftCategory(new ShiftCategory("_"));
 			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date.AddWeeks(-1), date.AddWeeks(1)), new[] { agent }, new[] { assPrevious }, Enumerable.Empty<ISkillDay>());
 
 			var schedule = stateHolder.Schedules[agent].ScheduledDay(date);
 			schedule.DeleteMainShift();
-			var assCurrent = new PersonAssignment(agent, scenario, date);
-			assCurrent.AddActivity(activity, new TimePeriod(23, 45, 24, 45));
-			assCurrent.SetShiftCategory(new ShiftCategory("_"));
+			var assCurrent = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(23, 45, 24, 45)).ShiftCategory(new ShiftCategory("_"));
 			schedule.AddMainShift(assCurrent);
 			stateHolder.Schedules.Modify(schedule, ScheduleDayChangeCallback);
 
@@ -94,9 +86,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var activity = new Activity("_");
 			var scenario = new Scenario("_");
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-			var assPrevious = new PersonAssignment(agent, scenario, date);
-			assPrevious.AddActivity(activity, new TimePeriod(10, 0, 11, 0));
-			assPrevious.SetShiftCategory(new ShiftCategory("_"));
+			var assPrevious = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(10, 11)).ShiftCategory(new ShiftCategory("_"));
 			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date.AddWeeks(-1), date.AddWeeks(1)), new[] { agent }, new[] { assPrevious }, Enumerable.Empty<ISkillDay>());
 			var undoRedoContainer = new UndoRedoWithScheduleCallbackContainer(ScheduleDayChangeCallback);
 			stateHolder.Schedules.SetUndoRedoContainer(undoRedoContainer);
@@ -118,9 +108,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var activity = new Activity("_");
 			var scenario = new Scenario("_");
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-			var assPrevious = new PersonAssignment(agent, scenario, date);
-			assPrevious.AddActivity(activity, new TimePeriod(10, 0, 11, 0));
-			assPrevious.SetShiftCategory(new ShiftCategory("_"));
+			var assPrevious = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(10, 11)).ShiftCategory(new ShiftCategory("_"));
 			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date.AddWeeks(-1), date.AddWeeks(1)), new[] { agent }, new[] { assPrevious }, Enumerable.Empty<ISkillDay>());
 			var undoRedoContainer = new UndoRedoWithScheduleCallbackContainer(ScheduleDayChangeCallback);
 			stateHolder.Schedules.SetUndoRedoContainer(undoRedoContainer);

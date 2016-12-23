@@ -66,8 +66,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(17, 15, 17, 15, 15), new ShiftCategory("_").WithId())));
-			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 17, 0));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(phoneActivity, new TimePeriod(8, 17));
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, new[] { ass }, skillDay);
 			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
 			optimizationPreferences.General.OptimizationStepShiftsWithinDay = true;
@@ -108,12 +107,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			agent.AddPersonPeriod(new PersonPeriod(dateOnly, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team));
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
-			var assOneHour = new PersonAssignment(agentScheduledOneHour, scenario, dateOnly);
-			assOneHour.AddActivity(activity, new TimePeriod(16, 17));
-			assOneHour.SetShiftCategory(new ShiftCategory("_"));
-			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(activity, new TimePeriod(9, 17));
-			ass.SetShiftCategory(new ShiftCategory("_"));
+			var assOneHour = new PersonAssignment(agentScheduledOneHour, scenario, dateOnly).ShiftCategory(new ShiftCategory("_")).WithLayer(activity, new TimePeriod(16, 17));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_")).WithLayer(activity, new TimePeriod(9, 17));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(),
 															new[] { agent, agentScheduledOneHour },
 															new[] { ass, assOneHour },
@@ -150,12 +145,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			agent.AddPersonPeriod(new PersonPeriod(dateOnly, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team));
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
-			var assOneHour = new PersonAssignment(agentScheduledOneHour, scenario, dateOnly);
-			assOneHour.AddActivity(activity, new TimePeriod(16, 17));
-			assOneHour.SetShiftCategory(new ShiftCategory("_"));
-			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(activity, new TimePeriod(9, 17));
-			ass.SetShiftCategory(new ShiftCategory("_"));
+			var assOneHour = new PersonAssignment(agentScheduledOneHour, scenario, dateOnly).ShiftCategory(new ShiftCategory("_")).WithLayer(activity, new TimePeriod(16, 17));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_")).WithLayer(activity, new TimePeriod(9, 17));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(),
 															new[] { agent, agentScheduledOneHour },
 															new[] { ass, assOneHour },
@@ -192,12 +183,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			agent.AddPersonPeriod(new PersonPeriod(dateOnly, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team));
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
-			var assOneHour = new PersonAssignment(agentScheduledOneHour, scenario, dateOnly);
-			assOneHour.AddActivity(activity, new TimePeriod(16, 17));
-			assOneHour.SetShiftCategory(new ShiftCategory("_"));
-			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(activity, new TimePeriod(9, 17));
-			ass.SetShiftCategory(new ShiftCategory("_"));
+			var assOneHour = new PersonAssignment(agentScheduledOneHour, scenario, dateOnly).ShiftCategory(new ShiftCategory("_")).WithLayer(activity, new TimePeriod(16, 17));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_")).WithLayer(activity, new TimePeriod(9, 17));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(),
 															new[] { agent, agentScheduledOneHour },
 															new[] { ass, assOneHour },
@@ -232,9 +219,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			agent.AddPersonPeriod(new PersonPeriod(dateOnly, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team));
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
-			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(activity, new TimePeriod(9, 17));
-			ass.SetShiftCategory(new ShiftCategory("_"));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_")).WithLayer(activity, new TimePeriod(9, 17));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(),
 															new[] { agent },
 															new[] { ass },
@@ -276,10 +261,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
-			var assOneHour = new PersonAssignment(agentScheduledOneHour, scenario, dateOnly);
-			assOneHour.AddActivity(activity, new TimePeriod(16, 17));
-			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(activity, new TimePeriod(8, 16));
+			var assOneHour = new PersonAssignment(agentScheduledOneHour, scenario, dateOnly).WithLayer(activity, new TimePeriod(16, 17));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 16));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(),
 															new[] { agent, agentScheduledOneHour },
 															new[] { ass, assOneHour },

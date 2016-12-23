@@ -36,18 +36,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillB2 = new Skill("B2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
 			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 280);
 			var agentA1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB1, skillB2);
-			var assA1 = new PersonAssignment(agentA1, scenario, dateOnly);
-			assA1.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
+			var assA1 = new PersonAssignment(agentA1, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9));
 			var agentB1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillB1);
-			var assB1 = new PersonAssignment(agentB1, scenario, dateOnly);
-			assB1.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
+			var assB1 = new PersonAssignment(agentB1, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9));
 			var allAsses = new List<IPersonAssignment>();
 			for (var i = 0; i < 200; i++)
 			{
 				var agentB2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillB2);
-				var assB2 = new PersonAssignment(agentB2, scenario, dateOnly);
-				assB2.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
-				allAsses.Add(assB2);
+				allAsses.Add(new PersonAssignment(agentB2, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9)));
 			}
 			allAsses.Add(assA1);
 			allAsses.Add(assB1);

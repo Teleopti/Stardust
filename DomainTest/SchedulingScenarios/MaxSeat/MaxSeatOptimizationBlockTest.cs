@@ -64,9 +64,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 2);
 			agent.AddPersonPeriod(new PersonPeriod(dateOnly.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = new RuleSetBag(ruleSet) });
 			agent.AddSchedulePeriod(schedulePeriod);
-			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(activity, new TimePeriod(8, 16));
-			ass.SetShiftCategory(new ShiftCategory("_"));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_")).WithLayer(activity, new TimePeriod(8, 16));
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)), new[] { agentScheduledForAnHourData.Assignment, ass });
 			var optPreferences = DefaultMaxSeatOptimizationPreferences.Create(TeamBlockType.Block);
 			optPreferences.Extra.UseBlockSameShiftCategory = true;
@@ -93,9 +91,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 2);
 			agent.AddPersonPeriod(new PersonPeriod(dateOnly.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = new RuleSetBag(ruleSet) });
 			agent.AddSchedulePeriod(schedulePeriod);
-			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(activity, new TimePeriod(8, 16));
-			ass.SetShiftCategory(new ShiftCategory("_"));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_")).WithLayer(activity, new TimePeriod(8, 16));
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)), new[] { agentScheduledForAnHourData.Assignment, ass });
 			var optPreferences = DefaultMaxSeatOptimizationPreferences.Create(TeamBlockType.Block);
 			optPreferences.Extra.UseBlockSameShift = true;
@@ -122,9 +118,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 2);
 			agent.AddPersonPeriod(new PersonPeriod(dateOnly.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = new RuleSetBag(ruleSet) });
 			agent.AddSchedulePeriod(schedulePeriod);
-			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(activity, new TimePeriod(8, 16));
-			ass.SetShiftCategory(new ShiftCategory("_"));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_")).WithLayer(activity, new TimePeriod(8, 16));
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)), new[] { agentScheduledForAnHourData.Assignment, ass });
 			var optPreferences = DefaultMaxSeatOptimizationPreferences.Create(TeamBlockType.Block);
 			optPreferences.Extra.UseBlockSameShift = true;

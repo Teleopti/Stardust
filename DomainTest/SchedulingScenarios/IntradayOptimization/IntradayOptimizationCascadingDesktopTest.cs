@@ -63,9 +63,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			agent.AddPeriodWithSkills(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB });
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
-			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 17, 0));
-			ass.SetShiftCategory(new ShiftCategory("_").WithId());
+			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(phoneActivity, new TimePeriod(8, 17)).ShiftCategory(new ShiftCategory("_").WithId());
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { skillDayA, skillDayB });
 
 			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), null);
@@ -93,10 +91,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var agentB = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agentB.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillB });
 			agentB.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Week, 1));
-			var assAB = new PersonAssignment(agentAB, scenario, date);
-			assAB.AddActivity(activity, new TimePeriod(8, 0, 17, 0));
-			var assB = new PersonAssignment(agentB, scenario, date);
-			assB.AddActivity(activity, new TimePeriod(8, 0, 17, 0));
+			var assAB = new PersonAssignment(agentAB, scenario, date).WithLayer(activity, new TimePeriod(8, 17));
+			var assB = new PersonAssignment(agentB, scenario, date).WithLayer(activity, new TimePeriod(8, 17));
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agentAB, agentB }, new[] { assAB, assB }, new[] { skillDayA, skillDayB });
 
 			using (ResourceCalculationContextFactory.Create(schedulerStateHolderFrom.Schedules, schedulerStateHolderFrom.SchedulingResultState.Skills, false, date.ToDateOnlyPeriod()))
@@ -129,10 +125,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var agentB = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agentB.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillB });
 			agentB.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Week, 1));
-			var assAB = new PersonAssignment(agentAB, scenario, date);
-			assAB.AddActivity(activity, new TimePeriod(8, 0, 17, 0));
-			var assB = new PersonAssignment(agentB, scenario, date);
-			assB.AddActivity(activity, new TimePeriod(8, 0, 17, 0));
+			var assAB = new PersonAssignment(agentAB, scenario, date).WithLayer(activity, new TimePeriod(8, 17));
+			var assB = new PersonAssignment(agentB, scenario, date).WithLayer(activity, new TimePeriod(8, 17));
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agentAB, agentB }, new[] { assAB, assB }, new[] { skillDayA, skillDayB });
 
 			FullResourceCalculation.Execute();
@@ -164,10 +158,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var agentAC = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agentAC.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillC });
 			agentAC.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Week, 1));
-			var assAB = new PersonAssignment(agentAB, scenario, date);
-			assAB.AddActivity(activity, new TimePeriod(8, 0, 17, 0));
-			var assAC = new PersonAssignment(agentAC, scenario, date);
-			assAC.AddActivity(activity, new TimePeriod(8, 0, 17, 0));
+			var assAB = new PersonAssignment(agentAB, scenario, date).WithLayer(activity, new TimePeriod(8, 17));
+			var assAC = new PersonAssignment(agentAC, scenario, date).WithLayer(activity, new TimePeriod(8, 17));
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agentAB, agentAC }, new[] { assAB, assAC }, new[] { skillDayA, skillDayB, skillDayC });
 
 			FullResourceCalculation.Execute();
@@ -202,9 +194,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			agent.AddPeriodWithSkills(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA });
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
-			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 8, 5));
-			ass.SetShiftCategory(new ShiftCategory("_").WithId());
+			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(phoneActivity, new TimePeriod(8, 0, 8, 5)).ShiftCategory(new ShiftCategory("_").WithId());
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { skillDayA });
 			schedulerStateHolderFrom.ConsiderShortBreaks = true;
 
@@ -232,9 +222,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			agent.AddPeriodWithSkills(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA });
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
-			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 8, 5));
-			ass.SetShiftCategory(new ShiftCategory("_").WithId());
+			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(phoneActivity, new TimePeriod(8, 0, 8, 5)).ShiftCategory(new ShiftCategory("_").WithId());
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { skillDayA });
 			schedulerStateHolderFrom.ConsiderShortBreaks = false;
 
