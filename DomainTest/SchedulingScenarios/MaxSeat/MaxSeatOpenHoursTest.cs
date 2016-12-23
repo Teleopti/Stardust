@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var team = new Team { Description = new Description("_"), Site = site };
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true, RequiresSkill = true }.WithId();
-			var skill = new Skill("_", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity };
+			var skill = new Skill("_").For(activity);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(8, 24));
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var team = new Team { Description = new Description("_"), Site = site };
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true, RequiresSkill = true }.WithId();
-			var skill = new Skill("_", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity };
+			var skill = new Skill("_").For(activity);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(8, 24));
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var team = new Team { Description = new Description("_"), Site = site };
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true, RequiresSkill = true }.WithId();
-			var skill = new Skill("_", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity };
+			var skill = new Skill("_").For(activity);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(0, 7), new TimePeriod(8, 24));
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var team = new Team { Description = new Description("_"), Site = site };
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
-			var skill = new Skill("_", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity };
+			var skill = new Skill("_").For(activity);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(0, 8), new TimePeriod(8, 24));
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");

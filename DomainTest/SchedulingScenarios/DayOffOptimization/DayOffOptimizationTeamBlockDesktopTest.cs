@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
 			var activity = new Activity("_");
-			var skill = new Skill("_", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity }.WithFullOpenHours();
+			var skill = new Skill("_").For(activity).WithFullOpenHours();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSetBag = RuleSetBagRepository.Has(new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory))) {Description = new Description("_")});
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
 			var activity = new Activity("_");
-			var skill = new Skill("_", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity }.WithFullOpenHours();
+			var skill = new Skill("_").For(activity).WithFullOpenHours();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSetBag = new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory))) { Description = new Description("_") };
@@ -205,8 +205,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(3));
 			var activity = new Activity("_");
 
-			var channelSales = new Skill("A", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity }.WithId();
-			var directSales = new Skill("B", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity }.WithId();
+			var channelSales = new Skill("A").For(activity).WithId();
+			var directSales = new Skill("B").For(activity).WithId();
 
 			WorkloadFactory.CreateWorkloadWithFullOpenHoursDuringWeekdays(channelSales);
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(directSales);

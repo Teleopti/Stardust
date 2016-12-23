@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var date = new DateOnly(2000, 1, 2);
 			var activity = new Activity("_");
-			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
+			var skill = new Skill("_")
 			{
 				Activity = activity,
 				TimeZone = TimeZoneInfo.Utc

@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
 			var activity = new Activity("_");
-			var skillA = new Skill("A", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity }.WithId().WithCascadingIndex(1);
-			var skillB = new Skill("B", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity }.WithId().WithCascadingIndex(2);
+			var skillA = new Skill("A").For(activity).WithId().WithCascadingIndex(1);
+			var skillB = new Skill("B").For(activity).WithId().WithCascadingIndex(2); 
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 16, 0));
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 16, 0));
 			var scenario = new Scenario("_");
@@ -95,8 +95,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
 			var activity = new Activity("_");
-			var skillA = new Skill("A", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity }.WithId().WithCascadingIndex(1);
-			var skillB = new Skill("B", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity }.WithId().WithCascadingIndex(2);
+			var skillA = new Skill("A").For(activity).WithId().WithCascadingIndex(1);
+			var skillB = new Skill("B").For(activity).WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 16, 0));
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 16, 0));
 			var scenario = new Scenario("_");

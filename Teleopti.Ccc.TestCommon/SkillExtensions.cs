@@ -21,6 +21,18 @@ namespace Teleopti.Ccc.TestCommon
 			return skill;
 		}
 
+		public static ISkill For(this ISkill skill, IActivity activity)
+		{
+			skill.Activity = activity;
+			return skill;
+		}
+
+		public static ISkill InTimeZone(this ISkill skill, TimeZoneInfo timeZoneInfo)
+		{
+			skill.TimeZone = timeZoneInfo;
+			return skill;
+		}
+
 		public static ISkillDay CreateSkillDayWithDemandPerHour(this ISkill skill, IScenario scenario, DateOnly dateOnly, TimeSpan defaultDemand, Tuple<int, TimeSpan> specificHourDemand)
 		{
 			var skillDataPeriods = new List<ISkillDataPeriod>();

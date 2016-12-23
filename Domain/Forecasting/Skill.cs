@@ -47,9 +47,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
         }
 
-		public Skill(string name)
+		public Skill(string name) : this(name, "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
 		{
-			ChangeName(name);
 		}
 
         /// <summary>
