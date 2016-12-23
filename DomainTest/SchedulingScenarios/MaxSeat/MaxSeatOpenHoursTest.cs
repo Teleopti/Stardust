@@ -93,8 +93,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var team = new Team { Description = new Description("_"), Site = site };
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true, RequiresSkill = true }.WithId();
-			var skill = new Skill("_").For(activity);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(0, 7), new TimePeriod(8, 24));
+			var skill = new Skill("_").For(activity).WithOpenHours(new TimePeriod(0, 7), new TimePeriod(8, 24));
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(7, 0, 8, 0, 60), new TimePeriodWithSegment(15, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
@@ -118,8 +117,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var team = new Team { Description = new Description("_"), Site = site };
 			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
-			var skill = new Skill("_").For(activity);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(0, 8), new TimePeriod(8, 24));
+			var skill = new Skill("_").For(activity).WithOpenHours(new TimePeriod(0, 8), new TimePeriod(8, 24));
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(7, 0, 7, 0, 60), new TimePeriodWithSegment(15, 0, 15, 0, 60), new ShiftCategory("_").WithId()));

@@ -17,7 +17,13 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static ISkill WithOpenHours(this ISkill skill, int startHour, int endHour)
 		{
-			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(startHour, endHour));
+			skill.WithOpenHours(new TimePeriod(startHour, endHour));
+			return skill;
+		}
+
+		public static ISkill WithOpenHours(this ISkill skill, params TimePeriod[] periods)
+		{
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, periods);
 			return skill;
 		}
 

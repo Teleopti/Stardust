@@ -497,26 +497,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
 
-			var skillPlatinum = new Skill("platinum").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(1);
-			var skillGold = new Skill("gold").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(1);
-			var skillPlatinum1 = new Skill("platinum1").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(1);
-			var skillSilver = new Skill("silver").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(2);
-			var skillBronze = new Skill("bronze").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(3);
-			var skillBronze1 = new Skill("bronze1").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(4);
-
-			skillPlatinum.SetId(new Guid("dcb092cf-107e-4b39-8ae4-53fd26a69c6a"));
-			skillGold.SetId(new Guid("000ea41a-d63e-492f-ae97-71e956e494ff"));
-			skillPlatinum1.SetId(new Guid("8b633a5b-323a-49b5-a748-3d27192ed389"));
-			skillSilver.SetId(new Guid("15be7c61-f850-4064-b9b3-33c74891291c"));
-			skillBronze.SetId(new Guid("de6c88cb-ef94-43d5-9ea8-e606d5086d3c"));
-			skillBronze1.SetId(new Guid("d227a88c-017a-435a-aafd-a1c065badb7e"));
-
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillPlatinum, new TimePeriod(10, 0, 10, 30));
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillGold, new TimePeriod(10, 0, 10, 30));
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillPlatinum1, new TimePeriod(10, 0, 10, 30));
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillSilver, new TimePeriod(10, 0, 10, 30));
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillBronze, new TimePeriod(10, 0, 10, 30));
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillBronze1, new TimePeriod(10, 0, 10, 30));
+			var skillPlatinum = new Skill("platinum").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(1).WithId().WithOpenHours(new TimePeriod(10, 0, 10, 30));
+			var skillGold = new Skill("gold").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(1).WithId().WithOpenHours(new TimePeriod(10, 0, 10, 30));
+			var skillPlatinum1 = new Skill("platinum1").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(1).WithId().WithOpenHours(new TimePeriod(10, 0, 10, 30));
+			var skillSilver = new Skill("silver").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(2).WithId().WithOpenHours(new TimePeriod(10, 0, 10, 30));
+			var skillBronze = new Skill("bronze").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(3).WithId().WithOpenHours(new TimePeriod(10, 0, 10, 30));
+			var skillBronze1 = new Skill("bronze1").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(4).WithId().WithOpenHours(new TimePeriod(10, 0, 10, 30));
 
 			var skillDayPlatinum = skillPlatinum.CreateSkillDayWithDemand(scenario, dateOnly, 6.49);
 			var skillDayGold = skillGold.CreateSkillDayWithDemand(scenario, dateOnly, 2.78);
@@ -585,20 +571,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
 
-			var skillGold = new Skill("gold").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(1);
-			var skillBronze0 = new Skill("silver").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(2);
-			var skillBronz1 = new Skill("bronze").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(2);
-			var skillBronze2 = new Skill("bronze1").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(2);
-
-			skillGold.SetId(new Guid("000ea41a-d63e-492f-ae97-71e956e494ff"));
-			skillBronze0.SetId(new Guid("15be7c61-f850-4064-b9b3-33c74891291c"));
-			skillBronz1.SetId(new Guid("de6c88cb-ef94-43d5-9ea8-e606d5086d3c"));
-			skillBronze2.SetId(new Guid("d227a88c-017a-435a-aafd-a1c065badb7e"));
-
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillGold, new TimePeriod(10, 0, 10, 30));
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillBronze0, new TimePeriod(10, 0, 10, 30));
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillBronz1, new TimePeriod(10, 0, 10, 30));
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillBronze2, new TimePeriod(10, 0, 10, 30));
+			var skillGold = new Skill("gold").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(1).WithId().WithOpenHours(new TimePeriod(10, 0, 10, 30));
+			var skillBronze0 = new Skill("silver").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(2).WithId().WithOpenHours(new TimePeriod(10, 0, 10, 30));
+			var skillBronz1 = new Skill("bronze").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(2).WithId().WithOpenHours(new TimePeriod(10, 0, 10, 30));
+			var skillBronze2 = new Skill("bronze1").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(2).WithId().WithOpenHours(new TimePeriod(10, 0, 10, 30));
 
 			var skillDayGold = skillGold.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var skillDayBronze0 = skillBronze0.CreateSkillDayWithDemand(scenario, dateOnly, 1);
@@ -642,20 +618,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
 
-			var skillGold = new Skill("gold").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(1);
-			var skillSilver = new Skill("silver").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(2);
-			var skillSilver1 = new Skill("silver1").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(2);
-			var skillBronze = new Skill("bronze").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(3);
-
-			skillGold.SetId(new Guid("000ea41a-d63e-492f-ae97-71e956e494ff"));
-			skillSilver.SetId(new Guid("15be7c61-f850-4064-b9b3-33c74891291c"));
-			skillSilver1.SetId(new Guid("d227a88c-017a-435a-aafd-a1c065badb7e"));
-			skillBronze.SetId(new Guid("de6c88cb-ef94-43d5-9ea8-e606d5086d3c"));
-			
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillGold, new TimePeriod(10, 0, 10, 30));
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillSilver, new TimePeriod(10, 0, 10, 30));
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillSilver1, new TimePeriod(10, 0, 10, 30));
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillBronze, new TimePeriod(10, 0, 10, 30));
+			var skillGold = new Skill("gold").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(1).WithId().WithOpenHours(new TimePeriod(10, 0, 10, 30));
+			var skillSilver = new Skill("silver").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(2).WithId().WithOpenHours(new TimePeriod(10, 0, 10, 30));
+			var skillSilver1 = new Skill("silver1").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(2).WithId().WithOpenHours(new TimePeriod(10, 0, 10, 30));
+			var skillBronze = new Skill("bronze").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(3).WithId().WithOpenHours(new TimePeriod(10, 0, 10, 30));
 			
 			var skillDayGold = skillGold.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var skillDaySilver = skillSilver.CreateSkillDayWithDemand(scenario, dateOnly, 1);

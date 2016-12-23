@@ -39,11 +39,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var date = DateOnly.Today;
 			var activity = new Activity("_").WithId();
 			var scenario = new Scenario("_");
-			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(7, 45, 16, 0));
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).WithOpenHours(new TimePeriod(7, 45, 16, 0));
 			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, date, 1);
-			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(7, 45, 16, 0));
+			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).WithOpenHours(new TimePeriod(7, 45, 16, 0));
 			var skillDayB = skillB.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(lateInterval, 1000)); //should not shovel resources here when deciding what shift to choose		
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(earlyInterval, TimeSpan.FromMinutes(15)), new TimePeriodWithSegment(lateInterval, TimeSpan.FromMinutes(15)), new ShiftCategory("_").WithId()));
 			var agents = new List<IPerson>();
@@ -91,11 +89,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var date = DateOnly.Today; 
 			var activity = new Activity("_").WithId();
 			var scenario = new Scenario("_");
-			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(7, 45, 16, 0));
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).WithOpenHours(new TimePeriod(7, 45, 16, 0));
 			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, date, 1);
-			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(7, 45, 16, 0));
+			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).WithOpenHours(new TimePeriod(7, 45, 16, 0));
 			var skillDayB = skillB.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(lateInterval, 1000)); //should not shovel resources here when deciding what shift to choose		
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(earlyInterval, TimeSpan.FromMinutes(15)), new TimePeriodWithSegment(lateInterval, TimeSpan.FromMinutes(15)), new ShiftCategory("_").WithId()));
 			var agents = new List<IPerson>();
@@ -139,11 +135,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var activity = new Activity("_").WithId();
 			var scenario = new Scenario("_");
-			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 16, 0));
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).WithOpenHours(8, 16);
 			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, date, 0);
-			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 16, 0));
+			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).WithOpenHours(8, 16);
 			var skillDayB = skillB.CreateSkillDayWithDemandOnInterval(scenario, date, 1);
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8,0,8,0,15), new TimePeriodWithSegment(16,0,16,0,15), new ShiftCategory("_").WithId()));
 			var contract = new Contract("_")
@@ -178,11 +172,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var activity = new Activity("_").WithId();
 			var scenario = new Scenario("_");
-			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(0, 0, 8, 0));
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).WithOpenHours(0, 8);
 			var skillDaysA = skillA.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, 1, 1, 1, 1, 1, 1, 1); //lower demand
-			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(16, 0, 24, 0));
+			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).WithOpenHours(16, 24);
 			var skillDaysB = skillB.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, 2, 2, 2, 2, 2, 2, 2); //higher demand
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(0, 0, 16, 0, 60), new TimePeriodWithSegment(8, 0, 24, 0, 60), new ShiftCategory("_").WithId()));
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillA, skillB);

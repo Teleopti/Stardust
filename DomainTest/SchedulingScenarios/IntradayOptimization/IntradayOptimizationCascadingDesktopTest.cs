@@ -196,8 +196,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36)),
 				PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9)
 			};
-			var skillA = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 8, 15));
+			var skillA = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).WithOpenHours(new TimePeriod(8, 0, 8, 15));
 			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkills(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA });
@@ -227,8 +226,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36)),
 				PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9)
 			};
-			var skillA = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 8, 15));
+			var skillA = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).WithOpenHours(new TimePeriod(8, 0, 8, 15));
 			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkills(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA });
