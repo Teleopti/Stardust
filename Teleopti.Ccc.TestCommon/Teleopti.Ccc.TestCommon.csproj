@@ -189,6 +189,8 @@
     <Compile Include="FakeRepositories\FakeAnalyticsHourlyAvailabilityRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsIntervalRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsOvertimeRepository.cs" />
+    <Compile Include="FakeRepositories\FakeAnalyticsPermissionExecutionRepository.cs" />
+    <Compile Include="FakeRepositories\FakeAnalyticsPermissionRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsRequestRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsScenarioRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsDayOffRepository.cs" />
