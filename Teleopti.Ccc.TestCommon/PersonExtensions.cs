@@ -19,11 +19,11 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			if (skills.Any())
 			{
-				agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), skills);
+				agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team {Site = new Site("_")}), skills);
 			}
 			else
 			{
-				agent.AddPersonPeriod(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()));
+				agent.AddPersonPeriod(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }));
 			}
 			return agent;
 		}
