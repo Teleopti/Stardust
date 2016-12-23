@@ -43,11 +43,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var date = DateOnly.Today;
 			var activity = new Activity("_");
-			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
-			{
-				Activity = activity,
-				TimeZone = TimeZoneInfo.Utc
-			};
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(9, 0, 17, 0));
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, demandedAgents);
 			foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
@@ -83,11 +79,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var date = DateOnly.Today;
 			var activity = new Activity("_");
-			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
-			{
-				Activity = activity,
-				TimeZone = TimeZoneInfo.Utc
-			};
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(9, 0, 17, 0));
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 2.4555555);
 			foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
@@ -190,11 +182,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var date = DateOnly.Today;
 			var activity = new Activity("_");
-			var skill = new Skill("_", "_", Color.Empty, intervalLength, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
-			{
-				Activity = activity,
-				TimeZone = TimeZoneInfoFactory.Kathmandu()
-			};
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(9, 17));
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 10);
 			var agent = new Person().WithId();
