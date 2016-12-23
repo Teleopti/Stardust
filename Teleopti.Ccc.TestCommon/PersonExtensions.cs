@@ -28,13 +28,10 @@ namespace Teleopti.Ccc.TestCommon
 			return agent;
 		}
 
-		public static Person WithPersonPeriod(this Person agent, DateOnly date, IWorkShiftRuleSet ruleSet, params ISkill[] skills )
+		public static Person WithPersonPeriod(this Person agent, IWorkShiftRuleSet ruleSet, params ISkill[] skills)
 		{
-			agent.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skills);
-			if (ruleSet != null)
-			{
-				agent.Period(date).RuleSetBag = new RuleSetBag(ruleSet);
-			}
+			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skills);
+			agent.Period(DateOnly.MinValue).RuleSetBag = new RuleSetBag(ruleSet);
 			return agent;
 		}
 	}
