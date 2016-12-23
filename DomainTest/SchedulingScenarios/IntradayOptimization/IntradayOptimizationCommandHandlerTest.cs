@@ -106,8 +106,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldCreateTwoEventsIfSameSkillsButDiffersDueToPrimarySkill()
 		{
-			var skill1 = new Skill().WithId().WithCascadingIndex(1);
-			var skill2 = new Skill().WithId().WithCascadingIndex(2);
+			var skill1 = new Skill().WithId().CascadingIndex(1);
+			var skill2 = new Skill().WithId().CascadingIndex(2);
 			var agent1 = new Person().WithId();
 			agent1.AddPeriodWithSkills(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()),
 				new[] { skill1, skill2 });

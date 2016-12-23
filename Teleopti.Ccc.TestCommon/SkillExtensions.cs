@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.TestCommon
 			return skill;
 		}
 
-		public static ISkill WithCascadingIndex(this ISkill skill, int index)
+		public static ISkill CascadingIndex(this ISkill skill, int index)
 		{
 			skill.SetCascadingIndex(index);
 			return skill;

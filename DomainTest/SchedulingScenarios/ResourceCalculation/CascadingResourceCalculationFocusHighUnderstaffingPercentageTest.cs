@@ -29,11 +29,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).IsOpenBetween(8, 9);
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(8, 9);
 			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0);
-			var skillB1 = new Skill("B1").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).IsOpenBetween(8, 9);
+			var skillB1 = new Skill("B1").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
 			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 21);
-			var skillB2 = new Skill("B2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).IsOpenBetween(8, 9);
+			var skillB2 = new Skill("B2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
 			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 280);
 			var agentA1 = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agentA1.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB1, skillB2 });

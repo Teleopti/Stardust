@@ -44,9 +44,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), TimeSpan.FromHours(1), TimeSpan.FromHours(16)) };
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
-			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).IsOpenBetween(8, 16);
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(8, 16);
 			var skillADay = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 2);
-			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).IsOpenBetween(8, 16);
+			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 16);
 			var skillBDay = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 2);
 			var agentKnowingSkillAandB1 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agentKnowingSkillAandB1.AddPeriodWithSkills(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), TimeSpan.FromHours(1), TimeSpan.FromHours(16)) };
 			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
-			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).IsOpenBetween(8, 16);
-			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).IsOpenBetween(8, 16);
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(8, 16);
+			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 16);
 			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 10);
 			var agentAandB = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
@@ -133,8 +133,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), TimeSpan.FromHours(1), TimeSpan.FromHours(16)) };
 			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
-			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).IsOpenBetween(8, 16);
-			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).IsOpenBetween(8, 16);
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(8, 16);
+			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 16);
 			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 10);
 			var agentAandB = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);

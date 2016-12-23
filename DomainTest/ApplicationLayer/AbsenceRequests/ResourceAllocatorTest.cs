@@ -577,8 +577,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		private IPerson createAndSetupPerson(IWorkflowControlSet workflowControlSet)
 		{
-			_primarySkill = SkillFactory.CreateSkillWithId("PrimarySkill1").WithCascadingIndex(1);
-			_secondarySkill = SkillFactory.CreateSkillWithId("SecondarySkill").WithCascadingIndex(2);
+			_primarySkill = SkillFactory.CreateSkillWithId("PrimarySkill1").CascadingIndex(1);
+			_secondarySkill = SkillFactory.CreateSkillWithId("SecondarySkill").CascadingIndex(2);
 			_unsortedSkill15 = SkillFactory.CreateSkillWithId("NotCascadingSkill15", 15);
 			_unsortedSkill30 = SkillFactory.CreateSkillWithId("NotCascadingSkill30", 30);
 
