@@ -185,8 +185,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(16, 0, 24, 0));
 			var skillDaysB = skillB.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, 2, 2, 2, 2, 2, 2, 2); //higher demand
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(0, 0, 16, 0, 60), new TimePeriodWithSegment(8, 0, 24, 0, 60), new ShiftCategory("_").WithId()));
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-			agent.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB });
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(date,ruleSet, skillA, skillB);
 			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Week, 1));
 			agent.Period(date).RuleSetBag = new RuleSetBag(ruleSet);
 			agent.SchedulePeriod(date).SetDaysOff(2);

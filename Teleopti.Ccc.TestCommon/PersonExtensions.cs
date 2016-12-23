@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
@@ -23,6 +24,16 @@ namespace Teleopti.Ccc.TestCommon
 			else
 			{
 				agent.AddPersonPeriod(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()));
+			}
+			return agent;
+		}
+
+		public static Person WithPersonPeriod(this Person agent, DateOnly date, IWorkShiftRuleSet ruleSet, params ISkill[] skills )
+		{
+			agent.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skills);
+			if (ruleSet != null)
+			{
+				agent.Period(date).RuleSetBag = new RuleSetBag(ruleSet);
 			}
 			return agent;
 		}
