@@ -1,12 +1,19 @@
 ﻿using System;
+using System.Drawing;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -401,20 +408,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
 		}
 
-		[Test]  //WIP to be edited to only work if shoveling
+		[Test]  
 		public void ShouldApproveRequestIfShovel()
 		{
 			var scenario = ScenarioRepository.Has("scenario");
 			var activity = ActivityRepository.Has("activity");
 			var skill1 = SkillRepository.Has("skillA", activity).WithId();
 			var skill2 = SkillRepository.Has("skillB", activity).WithId();
-			var skill3 = SkillRepository.Has("skillC", activity).WithId();
 			skill1.SetCascadingIndex(1);
 			skill2.SetCascadingIndex(2);
-			skill2.SetCascadingIndex(3);
 
 
-			var agent = PersonRepository.Has(skill3);
+			var agent = PersonRepository.Has(skill2);
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, period, new ShiftCategory("category"), scenario));
@@ -425,23 +430,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 																				   {
 																					   StartDateTime = period.StartDateTime,
 																					   EndDateTime = period.EndDateTime,
-																					   Resource = 100,
+																					   Resource = 1,
 																					   SkillCombination = new[] {skill1.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
 																				   },
-																				   new SkillCombinationResource
-																				   {
-																					   StartDateTime = period.StartDateTime,
-																					   EndDateTime = period.EndDateTime,
-																					   Resource = 10,
-																					   SkillCombination = new[] {skill2.Id.GetValueOrDefault(), skill3.Id.GetValueOrDefault() }
-																				   },
-																					new SkillCombinationResource
+																				 new SkillCombinationResource
 																				   {
 																					   StartDateTime = period.StartDateTime,
 																					   EndDateTime = period.EndDateTime,
 																					   Resource = 1,
-																					   SkillCombination = new[] {skill3.Id.GetValueOrDefault() }
-																				   }
+																					   SkillCombination = new[] { skill2.Id.GetValueOrDefault()}
+																				   },
 																			   });
 
 			ScheduleForecastSkillReadModelRepository.Persist(new[]
@@ -450,21 +448,82 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 																 {
 																	 StartDateTime = period.StartDateTime,
 																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 50,
+																	 Forecast = 0,
 																	 SkillId = skill1.Id.GetValueOrDefault()
 																 },
 																 new SkillStaffingInterval
 																 {
 																	 StartDateTime = period.StartDateTime,
 																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 50,
+																	 Forecast = 1,
 																	 SkillId = skill2.Id.GetValueOrDefault()
+																 }
+															 }, DateTime.Now);
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
+
+			Target.Process(personRequest, period.StartDateTime);
+
+			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
+		}
+
+		[Test]
+		public void ShouldApproveRequestIfShovelAndHasUnsortedSkills()
+		{
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill1 = SkillRepository.Has("skillA", activity).WithId();
+			var skill2 = SkillRepository.Has("skillB", activity).WithId();
+			var skill3 = SkillRepository.Has("skillUnsorted", activity).WithId();
+			skill1.SetCascadingIndex(1);
+			skill2.SetCascadingIndex(2);
+
+
+			var agent = PersonRepository.Has(skill2);
+			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
+
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, period, new ShiftCategory("category"), scenario));
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(new[]
+																			   {
+																				   new SkillCombinationResource
+																				   {
+																					   StartDateTime = period.StartDateTime,
+																					   EndDateTime = period.EndDateTime,
+																					   Resource = 2,
+																					   SkillCombination = new[] {skill1.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault(), skill3.Id.GetValueOrDefault() }
+																				   },
+																				 new SkillCombinationResource
+																				   {
+																					   StartDateTime = period.StartDateTime,
+																					   EndDateTime = period.EndDateTime,
+																					   Resource = 1,
+																					   SkillCombination = new[] { skill2.Id.GetValueOrDefault()}
+																				   },
+																			   });
+
+			ScheduleForecastSkillReadModelRepository.Persist(new[]
+															 {
+																 new SkillStaffingInterval
+																 {
+																	 StartDateTime = period.StartDateTime,
+																	 EndDateTime = period.EndDateTime,
+																	 Forecast = 0,
+																	 SkillId = skill1.Id.GetValueOrDefault()
 																 },
 																 new SkillStaffingInterval
 																 {
 																	 StartDateTime = period.StartDateTime,
 																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 5,
+																	 Forecast = 1,
+																	 SkillId = skill2.Id.GetValueOrDefault()
+																 },
+																  new SkillStaffingInterval
+																 {
+																	 StartDateTime = period.StartDateTime,
+																	 EndDateTime = period.EndDateTime,
+																	 Forecast = 0,
 																	 SkillId = skill3.Id.GetValueOrDefault()
 																 }
 															 }, DateTime.Now);
@@ -476,6 +535,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
 		}
+
 	}
 
 	

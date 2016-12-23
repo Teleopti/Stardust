@@ -107,8 +107,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					foreach (var periodResource in resources)
 					{
 						if (periodResource.Resource == 0) continue;
-						var skills = periodResource.SkillCombination;
-						
+						var minCascadingIndex = allSkills.Where(s => periodResource.SkillCombination.Any(x => x == s.Id.GetValueOrDefault())).Min(s => s.CascadingIndex ?? int.MaxValue);
+						var skills = allSkills.Where(s => periodResource.SkillCombination.Any(x => x == s.Id.GetValueOrDefault()) && (!s.IsCascading() || s.CascadingIndex == minCascadingIndex)).Select(s => s.Id.GetValueOrDefault());
+
 						var personSkillEfficiencyRow = new Dictionary<ISkill, double>();
 						var relativePersonSkillResourceRow = new Dictionary<ISkill, double>();
 						var personSkillResourceRow = new Dictionary<ISkill, double>();
@@ -174,7 +175,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					}
 
 					//Shovling
-					var something = new SkillStaffIntervalHolder(relevantSkillStaffPeriods);
+					var skillStaffIntervalHolder = new SkillStaffIntervalHolder(relevantSkillStaffPeriods);
 					var cascadingSkills = new CascadingSkills(allSkills);
 					if (cascadingSkills.Any())
 					{
@@ -213,9 +214,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						var allSkillGroups = orderedSkillGroups.AllSkillGroups();
 						foreach (var skillGroupsWithSameIndex in orderedSkillGroups)
 						{
-							var state = _primarySkillOverstaff.AvailableSum(something, allSkillGroups, skillGroupsWithSameIndex, layer.Period);
-							_addResourcesToSubSkills.Execute(state, something, skillGroupsWithSameIndex, layer.Period);
-							_reducePrimarySkillResources.Execute(state, something, layer.Period);
+							var state = _primarySkillOverstaff.AvailableSum(skillStaffIntervalHolder, allSkillGroups, skillGroupsWithSameIndex, layer.Period);
+							_addResourcesToSubSkills.Execute(state, skillStaffIntervalHolder, skillGroupsWithSameIndex, layer.Period);
+							_reducePrimarySkillResources.Execute(state, skillStaffIntervalHolder, layer.Period);
 						}
 					}
 				}

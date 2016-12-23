@@ -59,7 +59,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public double AbsoluteDifference => CalculatedResource - FStaff;
 		public double RelativeDifference => new DeviationStatisticData(FStaff, CalculatedResource).RelativeDeviation;
-		public double CalculatedResource { get; set; }
-		public double FStaff { get; set; }
+
+		public double CalculatedResource	
+		{
+			get { return StaffingLevel; }
+			set { StaffingLevel = value; }
+		}
+
+		public double FStaff
+		{
+			get { return Forecast; }
+			set { Forecast = value; }
+		}
 	}
 }
