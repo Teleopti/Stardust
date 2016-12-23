@@ -28,16 +28,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA.SetCascadingIndex(1);
+			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
+			
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 9, 0));
 			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
-			var skillB1 = new Skill("B1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB1.SetCascadingIndex(2);
+			var skillB1 = new Skill("B1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB1, new TimePeriod(8, 0, 9, 0));
 			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var skillB2 = new Skill("B2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB2.SetCascadingIndex(2);
+			var skillB2 = new Skill("B2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB2, new TimePeriod(8, 0, 9, 0));
 			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
@@ -61,16 +59,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA.SetCascadingIndex(1);
+			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 9, 0));
 			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
-			var skillB1 = new Skill("B1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB1.SetCascadingIndex(2);
+			var skillB1 = new Skill("B1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB1, new TimePeriod(8, 0, 9, 0));
 			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var skillB2 = new Skill("B2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB2.SetCascadingIndex(2);
+			var skillB2 = new Skill("B2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB2, new TimePeriod(8, 0, 9, 0));
 			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
@@ -94,16 +89,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA.SetCascadingIndex(1);
+			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 9, 0));
 			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0);
-			var skillB1 = new Skill("B1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB1.SetCascadingIndex(2);
+			var skillB1 = new Skill("B1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB1, new TimePeriod(8, 0, 9, 0));
 			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 10);
-			var skillB2 = new Skill("B2Overstaffed", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB2.SetCascadingIndex(2);
+			var skillB2 = new Skill("B2Overstaffed", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB2, new TimePeriod(8, 0, 9, 0));
 			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
@@ -132,16 +124,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA1 = new Skill("skillA1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA1.SetCascadingIndex(1);
+			var skillA1 = new Skill("skillA1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA1, new TimePeriod(8, 0, 9, 0));
 			var skillDayA1 = skillA1.CreateSkillDayWithDemand(scenario, dateOnly, 0); //-> lite mer än 1 överbemannat
-			var skillA2 = new Skill("skillA2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA2.SetCascadingIndex(1);
+			var skillA2 = new Skill("skillA2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA2, new TimePeriod(8, 0, 9, 0));
 			var skillDayA2 = skillA2.CreateSkillDayWithDemand(scenario, dateOnly, 2); //-> lite mer än 1 underbemannat
-			var skillB = new Skill("skillB", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB.SetCascadingIndex(2);
+			var skillB = new Skill("skillB", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 9, 0));
 			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var multiSkilledAgent = new Person().InTimeZone(TimeZoneInfo.Utc);
@@ -170,16 +159,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA1 = new Skill("skillA1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA1.SetCascadingIndex(1);
+			var skillA1 = new Skill("skillA1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA1, new TimePeriod(8, 0, 9, 0));
 			var skillDayA1 = skillA1.CreateSkillDayWithDemand(scenario, dateOnly, 0.2);
-			var skillA2 = new Skill("skillA2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA2.SetCascadingIndex(1);
+			var skillA2 = new Skill("skillA2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA2, new TimePeriod(8, 0, 9, 0));
 			var skillDayA2 = skillA2.CreateSkillDayWithDemand(scenario, dateOnly, 0.3);
-			var skillB = new Skill("skillB", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB.SetCascadingIndex(2);
+			var skillB = new Skill("skillB", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 9, 0));
 			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 0.3);
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
@@ -203,16 +189,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA1 = new Skill("skillA1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA1.SetCascadingIndex(1);
+			var skillA1 = new Skill("skillA1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA1, new TimePeriod(7, 0, 9, 0));
 			var skillDayA1 = skillA1.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var skillA2 = new Skill("skillA2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA2.SetCascadingIndex(1);
+			var skillA2 = new Skill("skillA2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA2, new TimePeriod(8, 0, 9, 0));
 			var skillDayA2 = skillA2.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var skillB = new Skill("skillB", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB.SetCascadingIndex(2);
+			var skillB = new Skill("skillB", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(7, 0, 9, 0));
 			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
@@ -234,16 +217,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA1 = new Skill("skillA1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA1.SetCascadingIndex(1);
+			var skillA1 = new Skill("skillA1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA1, new TimePeriod(8, 0, 9, 0));
 			var skillDayA1 = skillA1.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var skillA2 = new Skill("skillA2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA2.SetCascadingIndex(1);
+			var skillA2 = new Skill("skillA2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA2, new TimePeriod(8, 0, 9, 0));
 			var skillDayA2 = skillA2.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var skillB = new Skill("skillB", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB.SetCascadingIndex(2);
+			var skillB = new Skill("skillB", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(7, 0, 9, 0));
 			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
@@ -265,16 +245,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA.SetCascadingIndex(1);
+			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 9, 0));
 			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0);
-			var skillB1 = new Skill("B1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB1.SetCascadingIndex(2);
+			var skillB1 = new Skill("B1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB1, new TimePeriod(8, 0, 9, 0));
 			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 10);
-			var skillB2 = new Skill("B2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB2.SetCascadingIndex(2);
+			var skillB2 = new Skill("B2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB2, new TimePeriod(8, 0, 9, 0));
 			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var asses = new List<IPersonAssignment>();
@@ -312,16 +289,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA.SetCascadingIndex(1);
+			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 9, 0));
 			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0);
-			var skillB1 = new Skill("B1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB1.SetCascadingIndex(2);
+			var skillB1 = new Skill("B1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB1, new TimePeriod(8, 0, 9, 0));
 			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 10);
-			var skillB2 = new Skill("B2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB2.SetCascadingIndex(2);
+			var skillB2 = new Skill("B2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB2, new TimePeriod(8, 0, 9, 0));
 			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var asses = new List<IPersonAssignment>();
@@ -363,16 +337,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA1 = new Skill("skillA1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA1.SetCascadingIndex(1);
+			var skillA1 = new Skill("skillA1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA1, new TimePeriod(8, 0, 9, 0));
 			var skillDayA1 = skillA1.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
-			var skillA2 = new Skill("skillA2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA2.SetCascadingIndex(1);
+			var skillA2 = new Skill("skillA2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA2, new TimePeriod(8, 0, 9, 0));
 			var skillDayA2 = skillA2.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var skillB = new Skill("skillB", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB.SetCascadingIndex(2);
+			var skillB = new Skill("skillB", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 9, 0));
 			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var asses = new List<IPersonAssignment>();
@@ -413,16 +384,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA1 = new Skill("skillA1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA1.SetCascadingIndex(1);
+			var skillA1 = new Skill("skillA1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA1, new TimePeriod(8, 0, 9, 0));
 			var skillDayA1 = skillA1.CreateSkillDayWithDemand(scenario, dateOnly, 0.7300000000000002); //gave wrong result
-			var skillA2 = new Skill("skillA2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA2.SetCascadingIndex(1);
+			var skillA2 = new Skill("skillA2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA2, new TimePeriod(8, 0, 9, 0));
 			var skillDayA2 = skillA2.CreateSkillDayWithDemand(scenario, dateOnly, 0);
-			var skillB = new Skill("skillB", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB.SetCascadingIndex(2);
+			var skillB = new Skill("skillB", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 9, 0));
 			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 0.27000000000000007); //gave wrong result
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
@@ -444,20 +412,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA1 = new Skill("A1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA1.SetCascadingIndex(1);
+			var skillA1 = new Skill("A1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA1, new TimePeriod(8, 0, 9, 0));
 			var skillDayA1 = skillA1.CreateSkillDayWithDemand(scenario, dateOnly, 0);
-			var skillA2 = new Skill("A2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA2.SetCascadingIndex(1);
+			var skillA2 = new Skill("A2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA2, new TimePeriod(8, 0, 9, 0));
 			var skillDayA2 = skillA2.CreateSkillDayWithDemand(scenario, dateOnly, 0);
-			var skillB1 = new Skill("B1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB1.SetCascadingIndex(2);
+			var skillB1 = new Skill("B1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB1, new TimePeriod(8, 0, 9, 0));
 			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var skillB2 = new Skill("B2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB2.SetCascadingIndex(2);
+			var skillB2 = new Skill("B2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB2, new TimePeriod(8, 0, 9, 0));
 			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc);
@@ -489,20 +453,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA1 = new Skill("A1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA1.SetCascadingIndex(1);
+			var skillA1 = new Skill("A1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA1, new TimePeriod(8, 0, 9, 0));
 			var skillDayA1 = skillA1.CreateSkillDayWithDemand(scenario, dateOnly, 0);
-			var skillA2 = new Skill("A2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA2.SetCascadingIndex(1);
+			var skillA2 = new Skill("A2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA2, new TimePeriod(8, 0, 9, 0));
 			var skillDayA2 = skillA2.CreateSkillDayWithDemand(scenario, dateOnly, 0);
-			var skillB1 = new Skill("B1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB1.SetCascadingIndex(2);
+			var skillB1 = new Skill("B1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB1, new TimePeriod(8, 0, 9, 0));
 			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 10);
-			var skillB2 = new Skill("B2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB2.SetCascadingIndex(2);
+			var skillB2 = new Skill("B2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB2, new TimePeriod(8, 0, 9, 0));
 			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 10);
 			var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc);
@@ -534,20 +494,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA1 = new Skill("A1", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA1.SetCascadingIndex(1);
+			var skillA1 = new Skill("A1", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA1, new TimePeriod(8, 0, 9, 0));
 			var skillDayA1 = skillA1.CreateSkillDayWithDemand(scenario, dateOnly, 1); //one agent should be put here
-			var skillA2 = new Skill("A2", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA2.SetCascadingIndex(1);
+			var skillA2 = new Skill("A2", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA2, new TimePeriod(8, 0, 9, 0));
 			var skillDayA2 = skillA2.CreateSkillDayWithDemand(scenario, dateOnly, 1); //one agent should be put here
-			var skillB1 = new Skill("B1", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB1.SetCascadingIndex(2);
+			var skillB1 = new Skill("B1", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB1, new TimePeriod(8, 0, 9, 0));
 			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 2); //one agent should be put here
-			var skillB2 = new Skill("B2", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB2.SetCascadingIndex(2);
+			var skillB2 = new Skill("B2", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB2, new TimePeriod(8, 0, 9, 0));
 			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 2); //one agent should be put here
 
@@ -587,12 +543,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
 
-			var skillPlatinum = new Skill("platinum", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
-			var skillGold = new Skill("gold", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
-			var skillPlatinum1 = new Skill("platinum1", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
-			var skillSilver = new Skill("silver", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
-			var skillBronze = new Skill("bronze", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
-			var skillBronze1 = new Skill("bronze1", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
+			var skillPlatinum = new Skill("platinum", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(1);
+			var skillGold = new Skill("gold", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(1);
+			var skillPlatinum1 = new Skill("platinum1", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(1);
+			var skillSilver = new Skill("silver", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(2);
+			var skillBronze = new Skill("bronze", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(3);
+			var skillBronze1 = new Skill("bronze1", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(4);
 
 			skillPlatinum.SetId(new Guid("dcb092cf-107e-4b39-8ae4-53fd26a69c6a"));
 			skillGold.SetId(new Guid("000ea41a-d63e-492f-ae97-71e956e494ff"));
@@ -600,13 +556,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			skillSilver.SetId(new Guid("15be7c61-f850-4064-b9b3-33c74891291c"));
 			skillBronze.SetId(new Guid("de6c88cb-ef94-43d5-9ea8-e606d5086d3c"));
 			skillBronze1.SetId(new Guid("d227a88c-017a-435a-aafd-a1c065badb7e"));
-
-			skillPlatinum.SetCascadingIndex(1);
-			skillGold.SetCascadingIndex(1);
-			skillPlatinum1.SetCascadingIndex(1);
-			skillSilver.SetCascadingIndex(2);
-			skillBronze.SetCascadingIndex(3);
-			skillBronze1.SetCascadingIndex(4);
 
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillPlatinum, new TimePeriod(10, 0, 10, 30));
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillGold, new TimePeriod(10, 0, 10, 30));
@@ -682,20 +631,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
 
-			var skillGold = new Skill("gold", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
-			var skillBronze0 = new Skill("silver", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
-			var skillBronz1 = new Skill("bronze", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
-			var skillBronze2 = new Skill("bronze1", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
+			var skillGold = new Skill("gold", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(1);
+			var skillBronze0 = new Skill("silver", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(2);
+			var skillBronz1 = new Skill("bronze", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(2);
+			var skillBronze2 = new Skill("bronze1", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(2);
 
 			skillGold.SetId(new Guid("000ea41a-d63e-492f-ae97-71e956e494ff"));
 			skillBronze0.SetId(new Guid("15be7c61-f850-4064-b9b3-33c74891291c"));
 			skillBronz1.SetId(new Guid("de6c88cb-ef94-43d5-9ea8-e606d5086d3c"));
 			skillBronze2.SetId(new Guid("d227a88c-017a-435a-aafd-a1c065badb7e"));
-
-			skillGold.SetCascadingIndex(1);
-			skillBronze0.SetCascadingIndex(2);
-			skillBronz1.SetCascadingIndex(2);
-			skillBronze2.SetCascadingIndex(2);
 
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillGold, new TimePeriod(10, 0, 10, 30));
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillBronze0, new TimePeriod(10, 0, 10, 30));
@@ -744,20 +688,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
 
-			var skillGold = new Skill("gold", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
-			var skillSilver = new Skill("silver", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
-			var skillSilver1 = new Skill("silver1", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
-			var skillBronze = new Skill("bronze", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
+			var skillGold = new Skill("gold", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(1);
+			var skillSilver = new Skill("silver", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(2);
+			var skillSilver1 = new Skill("silver1", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(2);
+			var skillBronze = new Skill("bronze", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(3);
 
 			skillGold.SetId(new Guid("000ea41a-d63e-492f-ae97-71e956e494ff"));
 			skillSilver.SetId(new Guid("15be7c61-f850-4064-b9b3-33c74891291c"));
 			skillSilver1.SetId(new Guid("d227a88c-017a-435a-aafd-a1c065badb7e"));
 			skillBronze.SetId(new Guid("de6c88cb-ef94-43d5-9ea8-e606d5086d3c"));
-			
-			skillGold.SetCascadingIndex(1);
-			skillSilver.SetCascadingIndex(2);
-			skillSilver1.SetCascadingIndex(2);
-			skillBronze.SetCascadingIndex(3);
 			
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillGold, new TimePeriod(10, 0, 10, 30));
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillSilver, new TimePeriod(10, 0, 10, 30));
