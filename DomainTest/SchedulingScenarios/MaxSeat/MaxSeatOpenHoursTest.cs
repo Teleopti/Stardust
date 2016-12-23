@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
