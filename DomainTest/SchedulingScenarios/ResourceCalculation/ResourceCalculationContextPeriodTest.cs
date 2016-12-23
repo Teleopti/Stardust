@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -31,9 +32,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			TimeZoneGuard.SetTimeZone(userTimeZone);
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
-			var skill = SkillFactory.CreateSkill("skill").IsOpen();
-			skill.Activity = activity;
-			skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(agentTimeZone);
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.FindSystemTimeZoneById(agentTimeZone)).IsOpen();
 			var today = DateOnly.Today;
 			var agent = new Person().InTimeZone(TimeZoneInfo.FindSystemTimeZoneById(agentTimeZone));
 			agent.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(today.AddDays(-10), skill));
@@ -41,7 +40,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var period = new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1));
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, period, TimeSpan.FromMinutes(30));
 			var resourceCalculationData = ResourceCalculationDataCreator.WithData(scenario, period , new[] { assignment }, skillDay, false, false);
-		
 
 			var expected = assignment.Period.Intersect(today.ToDateTimePeriod(userTimeZone));
 			using (ResourceCalculationContextFactory.Create(resourceCalculationData.Schedules, resourceCalculationData.Skills, false, today.ToDateOnlyPeriod()))
