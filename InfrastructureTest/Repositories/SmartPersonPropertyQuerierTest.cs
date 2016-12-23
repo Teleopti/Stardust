@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			team.Site = site;
 			team.Description = new Description("sdf");
 			var wcs = new WorkflowControlSet("Test");
-			wcs.AbsenceRequestExpiredThreshold = 15;
 
 			PersistAndRemoveFromUnitOfWork(ctrSched);
 			PersistAndRemoveFromUnitOfWork(percentage);
@@ -61,7 +60,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			team.Site = site;
 			team.Description = new Description("sdf");
 			var wcs = new WorkflowControlSet("Test");
-			wcs.AbsenceRequestExpiredThreshold = 15;
 
 			PersistAndRemoveFromUnitOfWork(ctrSched);
 			PersistAndRemoveFromUnitOfWork(percentage);
@@ -97,8 +95,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			team.Description = new Description("sdf");
 			var wcs1 = new WorkflowControlSet("Test1");
 			var wcs2 = new WorkflowControlSet("Test2");
-			wcs1.AbsenceRequestExpiredThreshold = 15;
-			wcs2.AbsenceRequestExpiredThreshold = 15;
 
 			PersistAndRemoveFromUnitOfWork(ctrSched);
 			PersistAndRemoveFromUnitOfWork(percentage);

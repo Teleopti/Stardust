@@ -267,8 +267,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				SchedulePublishedToDate = new DateTime (2000, 1, 10),
 				PreferencePeriod = new DateOnlyPeriod (2000, 2, 10, 2000, 2, 11),
-				PreferenceInputPeriod = new DateOnlyPeriod (2000, 2, 10, 2000, 2, 11),
-				AbsenceRequestExpiredThreshold = 15
+				PreferenceInputPeriod = new DateOnlyPeriod (2000, 2, 10, 2000, 2, 11)
 			};
 
 			skills.ForEach (skill =>
