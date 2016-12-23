@@ -67,13 +67,18 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 		{
 			var result = ((NHibernateUnitOfWork) _currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
 					@"select Id, SkillId from [ReadModel].[SkillCombination]")
-				.List<Tuple<Guid, Guid>>();
+					.SetResultTransformer(Transformers.AliasToBean<internalSkillCombination>())
+				.List<internalSkillCombination>();
 
-			var dictionary = result.GroupBy(x => x.Item1).ToDictionary(k => k.Select(x => x.Item2).ToArray(), v => v.Key);
+			var dictionary = result.GroupBy(x => x.Id).ToDictionary(k => k.Select(x => x.SkillId).ToArray(), v => v.Key);
 			return dictionary;
 		}
 
-
+		private class internalSkillCombination
+		{
+			public Guid Id { get; set; }
+			public Guid SkillId { get; set; }
+		}
 		
 		public virtual void PersistSkillCombinationResource(IEnumerable<SkillCombinationResource> skillCombinationResources)
 		{
