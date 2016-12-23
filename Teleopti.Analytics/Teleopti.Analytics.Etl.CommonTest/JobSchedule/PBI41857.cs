@@ -47,7 +47,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 				[primarySkill] = new[] { primarySkill.CreateSkillDayWithDemand(scenario, date, 1) },
 				[secondarySkill] = new[] { secondarySkill.CreateSkillDayWithDemand(scenario, date, 1) }
 			};
-			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).KnowsSkill(primarySkill, secondarySkill).WithId();
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(primarySkill, secondarySkill).WithId();
 			var ass = new PersonAssignment(agent, scenario, date);
 			ass.AddActivity(activity, new TimePeriod(0, 24));
 			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, new DateTimePeriod(dateAsUtc, dateAsUtc.AddDays(1)), ass);
@@ -101,7 +101,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 				[primarySkill] = new[] {primarySkill.CreateSkillDayWithDemand(scenario, date, 0.5)},
 				[secondarySkill] = new[] {secondarySkill.CreateSkillDayWithDemand(scenario, date, 1)}
 			};
-			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).KnowsSkill(primarySkill, secondarySkill).WithId();
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(primarySkill, secondarySkill).WithId();
 			var ass = new PersonAssignment(agent, scenario, date);
 			ass.AddActivity(activity, new TimePeriod(0, 24));
 			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, new DateTimePeriod(dateAsUtc, dateAsUtc.AddDays(1)), ass);

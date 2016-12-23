@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.DomainTest.Islands
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 2);
 			var skillA = new Skill("A");
 			var skillB = new Skill("B");
-			Enumerable.Range(0, 3).Select(x => new Person().KnowsSkill(skillA))
+			Enumerable.Range(0, 3).Select(x => new Person().WithPersonPeriod(skillA))
 				.ForEach(x => PersonRepository.Has(x));
-			PersonRepository.Has(new Person().KnowsSkill(skillA, skillB));
-			PersonRepository.Has(new Person().KnowsSkill(skillB));
+			PersonRepository.Has(new Person().WithPersonPeriod(skillA, skillB));
+			PersonRepository.Has(new Person().WithPersonPeriod(skillB));
 
 			var model = IslandModelFactory.Create();
 			model.AfterReducing.Islands.All(x => x.SkillGroups.Count() == 1) //two islands with one skillgroup each

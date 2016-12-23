@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 5);
 			var skillA = new Skill("A");
 			var skillB = new Skill("B");
-			var skillAagents = Enumerable.Range(0, agentsSkillA).Select(x => new Person().KnowsSkill(skillA));
-			var skillABagents = Enumerable.Range(0, agentsSkillAB).Select(x => new Person().KnowsSkill(skillA, skillB));
+			var skillAagents = Enumerable.Range(0, agentsSkillA).Select(x => new Person().WithPersonPeriod(skillA));
+			var skillABagents = Enumerable.Range(0, agentsSkillAB).Select(x => new Person().WithPersonPeriod(skillA, skillB));
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(7, 4);
 			var skillA = new Skill("A");
 			var skillB = new Skill("B");
-			var skillAagents = Enumerable.Range(0, agentsSkillA).Select(x => new Person().KnowsSkill(skillA));
-			var skillABagents = Enumerable.Range(0, agentsSkillAB).Select(x => new Person().KnowsSkill(skillA, skillB));
+			var skillAagents = Enumerable.Range(0, agentsSkillA).Select(x => new Person().WithPersonPeriod(skillA));
+			var skillABagents = Enumerable.Range(0, agentsSkillAB).Select(x => new Person().WithPersonPeriod(skillA, skillB));
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
@@ -65,9 +65,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skillA = new Skill("A");
 			var skillB = new Skill("B");
 			var skillC = new Skill("C");
-			var skillAagents21 = Enumerable.Range(0, 11).Select(x => new Person().KnowsSkill(skillA));
-			var skillABagents5 = Enumerable.Range(0, 5).Select(x => new Person().KnowsSkill(skillA, skillB));
-			var skillACagents5 = Enumerable.Range(0, 5).Select(x => new Person().KnowsSkill(skillA, skillC));
+			var skillAagents21 = Enumerable.Range(0, 11).Select(x => new Person().WithPersonPeriod(skillA));
+			var skillABagents5 = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillB));
+			var skillACagents5 = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillC));
 			skillAagents21.Union(skillABagents5).Union(skillACagents5).ForEach(x => PersonRepository.Has(x));
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
@@ -82,9 +82,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skillA = new Skill("A");
 			var skillB = new Skill("B");
 			var skillC = new Skill("C");
-			var skillAagents = Enumerable.Range(0, 26).Select(x => new Person().KnowsSkill(skillA).WithId());
-			var skillABagents = Enumerable.Range(0, 7).Select(x => new Person().KnowsSkill(skillA, skillB).WithId());
-			var skillACagents = Enumerable.Range(0, 8).Select(x => new Person().KnowsSkill(skillA, skillC).WithId());
+			var skillAagents = Enumerable.Range(0, 26).Select(x => new Person().WithPersonPeriod(skillA).WithId());
+			var skillABagents = Enumerable.Range(0, 7).Select(x => new Person().WithPersonPeriod(skillA, skillB).WithId());
+			var skillACagents = Enumerable.Range(0, 8).Select(x => new Person().WithPersonPeriod(skillA, skillC).WithId());
 			skillAagents.Union(skillABagents).Union(skillACagents).ForEach(x => PersonRepository.Has(x));
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
@@ -101,8 +101,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 4);
 			var skillA = new Skill("A") { Activity = new Activity("A") };
 			var skillB = new Skill("B") { Activity = new Activity("B") };
-			var skillAagents = Enumerable.Range(0, 16).Select(x => new Person().KnowsSkill(skillA));
-			var skillABagents = Enumerable.Range(0, 5).Select(x => new Person().KnowsSkill(skillA, skillB));
+			var skillAagents = Enumerable.Range(0, 16).Select(x => new Person().WithPersonPeriod(skillA));
+			var skillABagents = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillB));
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
@@ -116,8 +116,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 4);
 			var skillA = new Skill("A").WithCascadingIndex(1);
 			var skillB = new Skill("B").WithCascadingIndex(2);
-			var skillAagents = Enumerable.Range(0, 16).Select(x => new Person().KnowsSkill(skillA));
-			var skillABagents = Enumerable.Range(0, 5).Select(x => new Person().KnowsSkill(skillA, skillB));
+			var skillAagents = Enumerable.Range(0, 16).Select(x => new Person().WithPersonPeriod(skillA));
+			var skillABagents = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillB));
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
@@ -161,10 +161,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public void ShouldNotCauseStackOverflowExceptionDueToTooManyRecursiveCalls()
 		{
 			var skill = new Skill("shared");
-			PersonRepository.Has(new Person().KnowsSkill(skill));
+			PersonRepository.Has(new Person().WithPersonPeriod(skill));
 			for (var i = 0; i < 200; i++)
 			{
-				PersonRepository.Has(new Person().KnowsSkill(skill, new Skill(i.ToString())));
+				PersonRepository.Has(new Person().WithPersonPeriod(skill, new Skill(i.ToString())));
 			}
 			Assert.DoesNotThrow(() =>
 			{
@@ -182,10 +182,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skillD = new Skill("D").WithId();
 			var skillE = new Skill("E").WithId();
 			var skillF = new Skill("F").WithId();
-			var skillABCagents = Enumerable.Range(0, 2).Select(x => new Person().KnowsSkill(skillA, skillB, skillC).WithId());
-			var skillCEagents = Enumerable.Range(0, 5).Select(x => new Person().KnowsSkill(skillC, skillE).WithId());
-			var skillCDagents = Enumerable.Range(0, 1).Select(x => new Person().KnowsSkill(skillC, skillD).WithId());
-			var skillFEagents = Enumerable.Range(0, 1).Select(x => new Person().KnowsSkill(skillF, skillE).WithId());
+			var skillABCagents = Enumerable.Range(0, 2).Select(x => new Person().WithPersonPeriod(skillA, skillB, skillC).WithId());
+			var skillCEagents = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillC, skillE).WithId());
+			var skillCDagents = Enumerable.Range(0, 1).Select(x => new Person().WithPersonPeriod(skillC, skillD).WithId());
+			var skillFEagents = Enumerable.Range(0, 1).Select(x => new Person().WithPersonPeriod(skillF, skillE).WithId());
 			skillABCagents.Union(skillCEagents).Union(skillCDagents).Union(skillFEagents).ForEach(x => PersonRepository.Has(x));
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
@@ -205,8 +205,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			var skillA = new Skill("A");
 			var skillB = new Skill("B");
-			var skillAagents = Enumerable.Range(0, 4).Select(x => new Person().KnowsSkill(skillA));
-			var skillABagents = Enumerable.Range(0, 1).Select(x => new Person().KnowsSkill(skillA, skillB));
+			var skillAagents = Enumerable.Range(0, 4).Select(x => new Person().WithPersonPeriod(skillA));
+			var skillABagents = Enumerable.Range(0, 1).Select(x => new Person().WithPersonPeriod(skillA, skillB));
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
@@ -223,8 +223,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			var skillA = new Skill("A");
 			var skillB = new Skill("B");
-			var skillAagents = Enumerable.Range(0, 4).Select(x => new Person().KnowsSkill(skillA));
-			var skillABagents = Enumerable.Range(0, 1).Select(x => new Person().KnowsSkill(skillA, skillB));
+			var skillAagents = Enumerable.Range(0, 4).Select(x => new Person().WithPersonPeriod(skillA));
+			var skillABagents = Enumerable.Range(0, 1).Select(x => new Person().WithPersonPeriod(skillA, skillB));
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
@@ -241,8 +241,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			var skillA = new Skill("A");
 			var skillB = new Skill("B");
-			var skillAagents = Enumerable.Range(0, 4).Select(x => new Person().KnowsSkill(skillA));
-			var skillABagents = Enumerable.Range(0, 1).Select(x => new Person().KnowsSkill(skillA, skillB));
+			var skillAagents = Enumerable.Range(0, 4).Select(x => new Person().WithPersonPeriod(skillA));
+			var skillABagents = Enumerable.Range(0, 1).Select(x => new Person().WithPersonPeriod(skillA, skillB));
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
@@ -255,8 +255,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public void ShouldNotCreateIslandsOfAgentsKnowingNoSkills()
 		{
 			var skillA = new Skill("A");
-			PersonRepository.Has(new Person().KnowsSkill(skillA).WithId());
-			PersonRepository.Has(new Person().KnowsSkill().WithId()); //has personperiod with no skill -> should not be included
+			PersonRepository.Has(new Person().WithPersonPeriod(skillA).WithId());
+			PersonRepository.Has(new Person().WithPersonPeriod().WithId()); //has personperiod with no skill -> should not be included
 			PersonRepository.Has(new Person().WithId()); //has no personperiod -> should not be included
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });

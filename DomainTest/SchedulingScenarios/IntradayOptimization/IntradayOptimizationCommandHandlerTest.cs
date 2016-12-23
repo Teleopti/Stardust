@@ -245,8 +245,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		{
 			var skillA = new Skill("A").WithId();
 			var skillB = new Skill("B").WithId();
-			var agentsA = Enumerable.Range(0, 10).Select(x => new Person().KnowsSkill(skillA));
-			var agentsAB = Enumerable.Range(0, 10).Select(x => new Person().KnowsSkill(skillA, skillB));
+			var agentsA = Enumerable.Range(0, 10).Select(x => new Person().WithPersonPeriod(skillA));
+			var agentsAB = Enumerable.Range(0, 10).Select(x => new Person().WithPersonPeriod(skillA, skillB));
 			agentsA.Union(agentsAB).ForEach(x => PersonRepository.Has(x));
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
