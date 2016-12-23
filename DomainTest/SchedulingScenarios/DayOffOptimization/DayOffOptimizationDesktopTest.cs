@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
 			var activity = new Activity("_");
-			var skill = new Skill("_", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) {Activity = activity}.WithFullOpenHours();
+			var skill = new Skill("_").For(activity).WithFullOpenHours();
 			var scenario = new Scenario("_");
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			schedulePeriod.SetDaysOff(1);
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
 			var activity = new Activity("_") {RequiresSeat = true};
 			var skill = new Skill("_").For(activity).WithFullOpenHours();
-			var skillMaxSeat = new Skill("SkillMaxSeat", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.MaxSeatSkill)) { Activity = activity }.WithFullOpenHours();
+			var skillMaxSeat = new Skill("SkillMaxSeat").For(activity).WithFullOpenHours();
 			var scenario = new Scenario("_");
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			schedulePeriod.SetDaysOff(1);

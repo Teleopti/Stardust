@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
-			var skill = new Skill("skillet", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithFullOpenHours();
+			var skill = new Skill("skillet").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithFullOpenHours();
 			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, dateOnly, 1, new Tuple<TimePeriod, double>(new TimePeriod(16, 17), 10));
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 9, 0, 60), new TimePeriodWithSegment(17, 0, 17, 0, 60), shiftCategory));
 			var agentScheduledOneHour = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
