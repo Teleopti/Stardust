@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.IocCommon;
@@ -197,14 +196,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 																 {
 																	 StartDateTime = period.StartDateTime,
 																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 3,
+																	 Forecast = 4.6,
 																	 SkillId = skill.Id.GetValueOrDefault()
 																 },
 																 new SkillStaffingInterval
 																 {
 																	 StartDateTime = period.StartDateTime,
 																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 5,
+																	 Forecast = 4.6,
 																	 SkillId = skill2.Id.GetValueOrDefault()
 																 }
 															 }, DateTime.Now);
@@ -297,7 +296,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 																	 StartDateTime = period2.StartDateTime,
 																	 EndDateTime = period2.EndDateTime,
 																	 Forecast = 4,
-																	 SkillId = skill3.Id.GetValueOrDefault()
+																	 SkillId = skill4.Id.GetValueOrDefault()
 																 }
 															 }, DateTime.Now);
 
@@ -368,14 +367,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 																 {
 																	 StartDateTime = period1.StartDateTime,
 																	 EndDateTime = period1.EndDateTime,
-																	 Forecast = 4,
+																	 Forecast = 5,
 																	 SkillId = skill.Id.GetValueOrDefault()
 																 },
 																  new SkillStaffingInterval
 																 {
 																	 StartDateTime = period1.StartDateTime,
 																	 EndDateTime = period1.EndDateTime,
-																	 Forecast = 4,
+																	 Forecast = 5,
 																	 SkillId = skill2.Id.GetValueOrDefault()
 																 },
 																 new SkillStaffingInterval
@@ -389,7 +388,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 																 {
 																	 StartDateTime = period2.StartDateTime,
 																	 EndDateTime = period2.EndDateTime,
-																	 Forecast = 4,
+																	 Forecast = 5,
 																	 SkillId = skill4.Id.GetValueOrDefault()
 																 }
 															 }, DateTime.Now);
@@ -400,6 +399,82 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Target.Process(personRequest, period1.StartDateTime);
 
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
+		}
+
+		[Test]  //WIP to be edited to only work if shoveling
+		public void ShouldApproveRequestIfShovel()
+		{
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill1 = SkillRepository.Has("skillA", activity).WithId();
+			var skill2 = SkillRepository.Has("skillB", activity).WithId();
+			var skill3 = SkillRepository.Has("skillC", activity).WithId();
+			skill1.SetCascadingIndex(1);
+			skill2.SetCascadingIndex(2);
+			skill2.SetCascadingIndex(3);
+
+
+			var agent = PersonRepository.Has(skill3);
+			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
+
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, period, new ShiftCategory("category"), scenario));
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(new[]
+																			   {
+																				   new SkillCombinationResource
+																				   {
+																					   StartDateTime = period.StartDateTime,
+																					   EndDateTime = period.EndDateTime,
+																					   Resource = 100,
+																					   SkillCombination = new[] {skill1.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
+																				   },
+																				   new SkillCombinationResource
+																				   {
+																					   StartDateTime = period.StartDateTime,
+																					   EndDateTime = period.EndDateTime,
+																					   Resource = 10,
+																					   SkillCombination = new[] {skill2.Id.GetValueOrDefault(), skill3.Id.GetValueOrDefault() }
+																				   },
+																					new SkillCombinationResource
+																				   {
+																					   StartDateTime = period.StartDateTime,
+																					   EndDateTime = period.EndDateTime,
+																					   Resource = 1,
+																					   SkillCombination = new[] {skill3.Id.GetValueOrDefault() }
+																				   }
+																			   });
+
+			ScheduleForecastSkillReadModelRepository.Persist(new[]
+															 {
+																 new SkillStaffingInterval
+																 {
+																	 StartDateTime = period.StartDateTime,
+																	 EndDateTime = period.EndDateTime,
+																	 Forecast = 50,
+																	 SkillId = skill1.Id.GetValueOrDefault()
+																 },
+																 new SkillStaffingInterval
+																 {
+																	 StartDateTime = period.StartDateTime,
+																	 EndDateTime = period.EndDateTime,
+																	 Forecast = 50,
+																	 SkillId = skill2.Id.GetValueOrDefault()
+																 },
+																 new SkillStaffingInterval
+																 {
+																	 StartDateTime = period.StartDateTime,
+																	 EndDateTime = period.EndDateTime,
+																	 Forecast = 5,
+																	 SkillId = skill3.Id.GetValueOrDefault()
+																 }
+															 }, DateTime.Now);
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
+
+			Target.Process(personRequest, period.StartDateTime);
+
+			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
 		}
 	}
 
