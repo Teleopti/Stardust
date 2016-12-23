@@ -251,8 +251,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var prioritizedSkill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
-			WorkloadFactory.CreateWorkloadThatIsClosed(prioritizedSkill);
+			var prioritizedSkill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).IsClosed();
 			var prioritizedSkillDay = prioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var nonPrioritizedSkill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).WithOpenHours(8, 9);
 			var nonPrioritizedSkillDay = nonPrioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);

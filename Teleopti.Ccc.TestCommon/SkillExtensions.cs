@@ -27,6 +27,18 @@ namespace Teleopti.Ccc.TestCommon
 			return skill;
 		}
 
+		public static ISkill WithFullOpenHoursDuringWeekends(this ISkill skill)
+		{
+			WorkloadFactory.CreateWorkloadWithFullOpenHoursDuringWeekdays(skill);
+			return skill;
+		}
+
+		public static ISkill IsClosed(this ISkill skill)
+		{
+			WorkloadFactory.CreateWorkloadThatIsClosed(skill);
+			return skill;
+		}
+
 		public static ISkill WithCascadingIndex(this ISkill skill, int index)
 		{
 			skill.SetCascadingIndex(index);

@@ -135,8 +135,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var dateOnly = DateOnly.Today;
 			var prioritizedSkill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).WithOpenHours(8, 9);
 			var prioritizedSkillDay = prioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var nonPrioritizedSkill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2);
-			WorkloadFactory.CreateWorkloadThatIsClosed(nonPrioritizedSkill);
+			var nonPrioritizedSkill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).IsClosed();
 			var nonPrioritizedSkillDay = nonPrioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(prioritizedSkill, nonPrioritizedSkill);
 			var ass1 = new PersonAssignment(agent1, scenario, dateOnly);
@@ -157,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).IsClosed();
 			WorkloadFactory.CreateWorkloadThatIsClosed(skillA);
 			var skillADay = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).WithOpenHours(6, 7);
@@ -178,10 +177,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA1 = new Skill("A1").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
-			var skillA2 = new Skill("A2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
-			WorkloadFactory.CreateWorkloadThatIsClosed(skillA1);
-			WorkloadFactory.CreateWorkloadThatIsClosed(skillA2);
+			var skillA1 = new Skill("A1").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).IsClosed();
+			var skillA2 = new Skill("A2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).IsClosed();
 			var skillADay1 = skillA1.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var skillADay2 = skillA2.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).WithOpenHours(6, 7);
@@ -203,9 +200,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
 			var skillA1 = new Skill("A1").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).WithOpenHours(6, 7);
-			var skillA2 = new Skill("A2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
+			var skillA2 = new Skill("A2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).IsClosed();
 			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).WithOpenHours(6, 7);
-			WorkloadFactory.CreateWorkloadThatIsClosed(skillA2);
 			var skillADay1 = skillA1.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 			var skillADay2 = skillA2.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 			var skillBDay = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 10);

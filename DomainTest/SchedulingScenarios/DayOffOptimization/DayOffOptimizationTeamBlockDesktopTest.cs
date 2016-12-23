@@ -152,8 +152,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			activity1.RequiresSkill = true;
 			activity2.RequiresSkill = true;
 			var skill1 = new Skill("_").For(activity1).WithId().WithFullOpenHours();
-			var skill2 = new Skill("_").For(activity2).WithId();
-			WorkloadFactory.CreateWorkloadWithFullOpenHoursDuringWeekdays(skill2);
+			var skill2 = new Skill("_").For(activity2).WithId().WithFullOpenHoursDuringWeekends();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity1, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
@@ -204,13 +203,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(3));
 			var activity = new Activity("_");
-
-			var channelSales = new Skill("A").For(activity).WithId();
-			var directSales = new Skill("B").For(activity).WithId();
-
-			WorkloadFactory.CreateWorkloadWithFullOpenHoursDuringWeekdays(channelSales);
-			WorkloadFactory.CreateWorkloadWithFullOpenHours(directSales);
-
+			var channelSales = new Skill("A").For(activity).WithId().WithFullOpenHoursDuringWeekends();
+			var directSales = new Skill("B").For(activity).WithId().WithFullOpenHours();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSetBag = RuleSetBagRepository.Has(new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory))) { Description = new Description("_") });
