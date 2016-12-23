@@ -587,7 +587,7 @@
 		// CSS hack for IE10, IE11
 		@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none), (-ms-accelerator:true) {
 			.click-modal .dialog{
-				min-width:900px;
+				min-width:1300px;
 			}
 		}
 	}
