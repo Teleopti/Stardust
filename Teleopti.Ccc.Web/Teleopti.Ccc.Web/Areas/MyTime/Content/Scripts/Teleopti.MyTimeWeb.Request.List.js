@@ -355,11 +355,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 	_setAgentName = function (message, name) {
 		// replace agent name (as a work-around is inside [] so they can be found inside the message SLOB)
-		var idx = message.indexOf("]");
-		if (idx > 0) {
-			return message.replace(message.substr(1, idx - 1), name);
-		}
-		return message;
+		var placeholderReg = /^\[(.?|.+?)\]/gi;
+		return message.replace(placeholderReg, '[' + name + ']');
 	};
 
 	ko.utils.extend(RequestItemViewModel.prototype, {
