@@ -85,12 +85,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skill1 = new Skill().WithId();
 			var skill2 = new Skill().WithId();
 			var skill3 = new Skill().WithId();
-			var agent1 = new Person().WithId();
-			agent1.AddPeriodWithSkills(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), 
-				new[] { skill1, skill2});
-			var agent2 = new Person().WithId();
-			agent2.AddPeriodWithSkills(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), 
-				new[] { skill2, skill3 });
+			var agent1 = new Person().WithId().WithPersonPeriod(skill1, skill2);
+			var agent2 = new Person().WithId().WithPersonPeriod(skill2, skill3);
 			PersonRepository.Has(agent1);
 			PersonRepository.Has(agent2);
 
@@ -108,12 +104,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		{
 			var skill1 = new Skill().WithId().CascadingIndex(1);
 			var skill2 = new Skill().WithId().CascadingIndex(2);
-			var agent1 = new Person().WithId();
-			agent1.AddPeriodWithSkills(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()),
-				new[] { skill1, skill2 });
-			var agent2 = new Person().WithId();
-			agent2.AddPeriodWithSkills(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()),
-				new[] { skill2 });
+			var agent1 = new Person().WithId().WithPersonPeriod(skill1, skill2);
+			var agent2 = new Person().WithId().WithPersonPeriod(skill2);
 			PersonRepository.Has(agent1);
 			PersonRepository.Has(agent2);
 

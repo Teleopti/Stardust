@@ -35,19 +35,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 21);
 			var skillB2 = new Skill("B2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
 			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 280);
-			var agentA1 = new Person().InTimeZone(TimeZoneInfo.Utc);
-			agentA1.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB1, skillB2 });
+			var agentA1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB1, skillB2);
 			var assA1 = new PersonAssignment(agentA1, scenario, dateOnly);
 			assA1.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
-			var agentB1 = new Person().InTimeZone(TimeZoneInfo.Utc);
-			agentB1.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillB1 });
+			var agentB1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillB1);
 			var assB1 = new PersonAssignment(agentB1, scenario, dateOnly);
 			assB1.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
 			var allAsses = new List<IPersonAssignment>();
 			for (var i = 0; i < 200; i++)
 			{
-				var agentB2 = new Person().InTimeZone(TimeZoneInfo.Utc);
-				agentB2.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillB2 });
+				var agentB2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillB2);
 				var assB2 = new PersonAssignment(agentB2, scenario, dateOnly);
 				assB2.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
 				allAsses.Add(assB2);

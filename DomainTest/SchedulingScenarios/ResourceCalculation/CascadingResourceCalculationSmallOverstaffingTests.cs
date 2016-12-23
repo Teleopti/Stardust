@@ -89,14 +89,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var subSkill1Day = subSkill1.CreateSkillDayWithDemand(scenario, dateOnly, 0.01); //rel diff 1 -> most of resources will be put here first loop
 			var subSkill2 = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
 			var subSkill2Day = subSkill2.CreateSkillDayWithDemand(scenario, dateOnly, 1.1); //rel diff 0.1 -> just 0.1/1.1 of resources will be put here first loop
-			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
-			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), 
-				new[] { primarySkill, subSkill1, subSkill2 });
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(primarySkill, subSkill1, subSkill2);
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
-			var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc);
-			agent2.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
-				new[] { subSkill2 });
+			var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(subSkill2);
 			var ass2 = new PersonAssignment(agent2, scenario, dateOnly);
 			ass2.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
 
