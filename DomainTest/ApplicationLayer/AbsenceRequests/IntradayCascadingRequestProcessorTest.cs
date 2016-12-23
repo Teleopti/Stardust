@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Linq;
+using NHibernate.Util;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.IocCommon;
@@ -529,6 +532,64 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
 		}
 
+		[Test]
+		public void ShouldUpdateDeltaIfRequestIsApproved()
+		{
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill = SkillRepository.Has("skillA", activity).WithId();
+
+			var agent = PersonRepository.Has(skill);
+			var period1 = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
+			var period2 = new DateTimePeriod(2016, 12, 1, 9, 2016, 12, 1, 10);
+			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 10);
+
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, period, new ShiftCategory("category"), scenario));
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(new[]
+																			   {
+																				   new SkillCombinationResource
+																				   {
+																					   StartDateTime = period1.StartDateTime,
+																					   EndDateTime = period1.EndDateTime,
+																					   Resource = 10,
+																					   SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+																				   },
+																				   new SkillCombinationResource
+																				   {
+																					   StartDateTime = period2.StartDateTime,
+																					   EndDateTime = period2.EndDateTime,
+																					   Resource = 10,
+																					   SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+																				   }
+																			   });
+
+			ScheduleForecastSkillReadModelRepository.Persist(new[]
+															 {
+																 new SkillStaffingInterval
+																 {
+																	 StartDateTime = period1.StartDateTime,
+																	 EndDateTime = period1.EndDateTime,
+																	 Forecast = 5,
+																	 SkillId = skill.Id.GetValueOrDefault()
+																 },
+																 new SkillStaffingInterval
+																 {
+																	 StartDateTime = period2.StartDateTime,
+																	 EndDateTime = period2.EndDateTime,
+																	 Forecast = 5,
+																	 SkillId = skill.Id.GetValueOrDefault()
+																 }
+															 }, DateTime.Now);
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
+
+			Target.Process(personRequest, period.StartDateTime);
+
+			SkillCombinationResourceRepository.LoadSkillCombinationResources(period).First().Resource.Should().Be.EqualTo(9);
+			SkillCombinationResourceRepository.LoadSkillCombinationResources(period).Second().Resource.Should().Be.EqualTo(9);
+		}
 	}
 
 	

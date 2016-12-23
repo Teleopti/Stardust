@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Util;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -16,13 +18,19 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period)
 		{
-			return
-				_combinationResources.Where(x => x.StartDateTime >= period.StartDateTime && x.StartDateTime < period.EndDateTime);
+			var resources = _combinationResources.Where(x => x.StartDateTime >= period.StartDateTime && x.StartDateTime < period.EndDateTime);
+			return resources.Select(resource => new SkillCombinationResource
+									{
+										StartDateTime = resource.StartDateTime, EndDateTime = resource.EndDateTime, Resource = resource.Resource, SkillCombination = resource.SkillCombination
+									}).ToList();
 		}
 
 		public void PersistChange(SkillCombinationResource skillCombinationResource)
 		{
-			throw new System.NotImplementedException();
+			foreach (var combinationResource in _combinationResources.Where(x => x.StartDateTime == skillCombinationResource.StartDateTime && x.SkillCombination.NonSequenceEquals(skillCombinationResource.SkillCombination)))
+			{
+				combinationResource.Resource -= 1;
+			}
 		}
 	}
 }
