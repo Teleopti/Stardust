@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		[Test]
 		public void ShouldReturnActualValues()
 		{
-			var skill = new Skill {Priority = 1, OverstaffingFactor = new Percent(.75)};
+			var skill = new Skill("_") {Priority = 1, OverstaffingFactor = new Percent(.75)};
 			var priority = Target.GetPriority(skill);
 			priority.Should().Be.EqualTo(1);
 
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		[Toggle(Toggles.ResourcePlanner_HideSkillPrioSliders_41312)]
 		public void ShouldReturnNeutralValues()
 		{
-			var skill = new Skill { Priority = 1, OverstaffingFactor = new Percent(.75) };
+			var skill = new Skill("_") { Priority = 1, OverstaffingFactor = new Percent(.75) };
 			var priority = Target.GetPriority(skill);
 			priority.Should().Be.EqualTo(4);
 

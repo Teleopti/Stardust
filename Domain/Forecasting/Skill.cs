@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private Percent _overstaffingFactor = new Percent(.5);
 	    private int _maxParallelTasks;
 
-	    public Skill()
+	    public Skill() : this("_")
         {
         }
 

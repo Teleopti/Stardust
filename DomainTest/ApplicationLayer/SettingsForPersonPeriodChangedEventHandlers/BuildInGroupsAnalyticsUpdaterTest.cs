@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 			var updateGroupName = "UpdateGroupName";
 
 			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId, BusinessUnitCode = _businessUnitId });
-			var skill = new Domain.Forecasting.Skill().WithId(entityId);
+			var skill = new Domain.Forecasting.Skill("_").WithId(entityId);
 			skill.ChangeName(updateGroupName);
 			_skillRepository.Add(skill);
 
