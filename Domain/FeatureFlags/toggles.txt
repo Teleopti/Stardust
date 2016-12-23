@@ -1,5 +1,4 @@
 ﻿
-
 # Note: If you change this file in production, app pool will recycle!
 #
 # How to...
@@ -53,7 +52,6 @@ RTA_SpreadTransactionLocksStrategy_41823 = true
 
 WfmPermission_ReplaceOldPermission_34671 = true
 
-
 WfmTeamSchedule_SetAgentsPerPage_36230 = true
 WfmTeamSchedule_SeeScheduleChangesByOthers_36303 = true
 WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260 = RC
@@ -97,7 +95,6 @@ WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305 = true
 WfmTeamSchedule_MoveToBaseLicense_41039 = true
 WfmTeamSchedule_MakeNewMyTeamDefault_39744 = true
 
-
 WfmReportPortal_Basic_38825 = true
 WfmReportPortal_LeaderBoard_39440 = true
 
@@ -132,7 +129,7 @@ Wfm_Requests_Check_Expired_Requests_40274 = true
 Wfm_Requests_Configurable_BusinessRules_For_ShiftTrade_40770 = RC
 Wfm_Requests_ApprovingModifyRequests_41930 = RC
 wfm_Requests_ReadModelOldData_42046 = RC
-
+Wfm_Requests_ShowBudgetAllowanceDetail_41945 = DEV
 
 Wfm_Seatplan_UseDatePeriodForPlanning_42167 = DEV
 

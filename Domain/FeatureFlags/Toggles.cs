@@ -6,6 +6,7 @@
 	{
 		//Don't remove these - used in tests
 		TestToggle,
+
 		TestToggle2,
 		TestToggle3,
 
@@ -51,12 +52,10 @@
 		WfmPermission_ReplaceOldPermission_34671,
 		WfmIntraday_MonitorActualvsForecasted_35176,
 
-		
 		WfmTeamSchedule_SetAgentsPerPage_36230,
 		WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
 		WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260,
 		WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252,
-
 
 		WfmTeamSchedule_AbsenceReporting_35995,
 		WfmTeamSchedule_AddActivity_37541,
@@ -69,33 +68,32 @@
 		WfmTeamSchedule_RemoveAbsence_36705,
 		WfmTeamSchedule_RemoveActivity_37743,
 		WfmTeamSchedule_RevertToPreviousSchedule_39002,
-		
+
 		WfmTeamSchedule_ShowShiftCategory_39796,
 		WfmTeamSchedule_ModifyShiftCategory_39797,
 		WfmTeamSchedule_ShowContractTime_38509,
 		WfmTeamSchedule_EditAndDisplayInternalNotes_40671,
-		
+
 		WfmTeamSchedule_WeekView_39870,
 		WfmTeamSchedule_WeeklyContractTime_39871,
-		
+
 		WfmTeamSchedule_ShowNightlyRestWarning_39619,
 		WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799,
 		WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800,
 		WfmTeamSchedule_ShowDayOffWarning_39801,
 		WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
 		WfmTeamSchedule_FilterValidationWarnings_40110,
-		
+
 		WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938,
 		WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279,
 		WfmTeamSchedule_CheckPersonalAccountWhenAddingAbsence_41088,
-		
+
 		WfmTeamSchedule_MakePersonalActivityUnmerged_40252,
 		WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925,
 		WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305,
-		
+
 		WfmTeamSchedule_MoveToBaseLicense_41039,
 		WfmTeamSchedule_MakeNewMyTeamDefault_39744,
-
 
 		WebByPassDefaultPermissionCheck_37984,
 
@@ -131,6 +129,7 @@
 		Wfm_Requests_ApprovingModifyRequests_41930,
 		wfm_Requests_ReadModelOldData_42046,
 		Wfm_Requests_ImproveStaffingForCascadingSkills_41969,
+		Wfm_Requests_ShowBudgetAllowanceDetail_41945,
 
 		Wfm_Seatplan_UseDatePeriodForPlanning_42167,
 
