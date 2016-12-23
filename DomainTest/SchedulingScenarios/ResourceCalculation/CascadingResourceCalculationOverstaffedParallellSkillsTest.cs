@@ -393,16 +393,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 2); //one agent should be put here
 			var skillB2 = new Skill("B2").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
 			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 2); //one agent should be put here
-
 			var assignments = new List<IPersonAssignment>();
 			for (var i = 0; i < 2; i++)
 			{
 				var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA1, skillA2, skillB1);
-				var ass1 = new PersonAssignment(agent1, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9));
 				var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA1, skillA2, skillB2);
-				var ass2 = new PersonAssignment(agent2, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9));
-				assignments.Add(ass1);
-				assignments.Add(ass2);
+				assignments.Add(new PersonAssignment(agent1, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9)));
+				assignments.Add(new PersonAssignment(agent2, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9)));
 			}
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, assignments, new[] { skillDayA1, skillDayA2, skillDayB1, skillDayB2 }, false, false));
@@ -418,93 +415,25 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldValueSkillGroupsWithMorePrimarySkillsHigherWhenCascadingIndexesAreEqualOnOtherSkillGroup()
-		{
-			var scenario = new Scenario("_");
-			var activity = new Activity("_");
-			var dateOnly = DateOnly.Today;
-
-			var skillPlatinum = new Skill("platinum").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).CascadingIndex(1).WithId().IsOpen(new TimePeriod(10, 0, 10, 30));
-			var skillGold = new Skill("gold").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).CascadingIndex(1).WithId().IsOpen(new TimePeriod(10, 0, 10, 30));
-			var skillPlatinum1 = new Skill("platinum1").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).CascadingIndex(1).WithId().IsOpen(new TimePeriod(10, 0, 10, 30));
-			var skillSilver = new Skill("silver").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).CascadingIndex(2).WithId().IsOpen(new TimePeriod(10, 0, 10, 30));
-			var skillBronze = new Skill("bronze").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).CascadingIndex(3).WithId().IsOpen(new TimePeriod(10, 0, 10, 30));
-			var skillBronze1 = new Skill("bronze1").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).CascadingIndex(4).WithId().IsOpen(new TimePeriod(10, 0, 10, 30));
-
-			var skillDayPlatinum = skillPlatinum.CreateSkillDayWithDemand(scenario, dateOnly, 6.49);
-			var skillDayGold = skillGold.CreateSkillDayWithDemand(scenario, dateOnly, 2.78);
-			var skillDayPlatinum1 = skillPlatinum1.CreateSkillDayWithDemand(scenario, dateOnly, 3.49);
-			var skillDaySilver = skillSilver.CreateSkillDayWithDemand(scenario, dateOnly, 3.47);
-			var skillDayBronze = skillBronze.CreateSkillDayWithDemand(scenario, dateOnly, 7.76);
-			var skillDayBronze1 = skillBronze1.CreateSkillDayWithDemand(scenario, dateOnly, 7.76);
-			var asses = new List<IPersonAssignment>();
-			//platinum, bronze, bronze1
-			for (var i = 0; i < 2; i++)
-			{
-				var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillPlatinum, skillBronze, skillBronze1);
-				asses.Add(new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(10, 0, 10, 30)));
-			}
-			//platinum1, silver, bronze1
-			for (var i = 0; i < 12; i++)
-			{
-				var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillPlatinum1, skillSilver, skillBronze1);
-				asses.Add(new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(10, 0, 10, 30)));
-			}
-			//platinum, platinum1, gold, bronze, bronze1
-			for (var i = 0; i < 10; i++)
-			{
-				var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillPlatinum, skillPlatinum1, skillGold, skillBronze, skillBronze1);
-				asses.Add(new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(10, 0, 10, 30)));
-			}
-
-			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, asses, new[] { skillDayPlatinum, skillDayGold, skillDayPlatinum1, skillDaySilver, skillDayBronze, skillDayBronze1 }, false, false));
-
-			var skillDayBronze1ResultBefore = skillDayBronze1.SkillStaffPeriodCollection.First().AbsoluteDifference;
-
-			var multiSkillAgent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillPlatinum, skillPlatinum1, skillGold, skillBronze, skillBronze1);
-			asses.Add(new PersonAssignment(multiSkillAgent, scenario, dateOnly).WithLayer(activity, new TimePeriod(10, 0, 10, 30)));
-
-			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, asses, new[] { skillDayPlatinum, skillDayGold, skillDayPlatinum1, skillDaySilver, skillDayBronze, skillDayBronze1 }, false, false));
-
-			var skillDayBronze1ResultAfter = skillDayBronze1.SkillStaffPeriodCollection.First().AbsoluteDifference;
-
-			skillDayBronze1ResultAfter.Should().Be.EqualTo(skillDayBronze1ResultBefore);
-		}
-
-		[Test]
 		public void ShouldValueSkillGroupsWithMoreSubSkillsHigherWhenCascadingIndexesAreEqualOnOtherSkillGroup()
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-
 			var skillGold = new Skill("gold").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).CascadingIndex(1).WithId().IsOpen(new TimePeriod(10, 0, 10, 30));
 			var skillBronze0 = new Skill("silver").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).CascadingIndex(2).WithId().IsOpen(new TimePeriod(10, 0, 10, 30));
 			var skillBronz1 = new Skill("bronze").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).CascadingIndex(2).WithId().IsOpen(new TimePeriod(10, 0, 10, 30));
 			var skillBronze2 = new Skill("bronze1").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).CascadingIndex(2).WithId().IsOpen(new TimePeriod(10, 0, 10, 30));
-
 			var skillDayGold = skillGold.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var skillDayBronze0 = skillBronze0.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var skillDayBronze1 = skillBronz1.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var skillDayBronze2 = skillBronze2.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var agentGoldBronze0 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillGold, skillBronze0);
+			var assGoldBronze0 = new PersonAssignment(agentGoldBronze0, scenario, dateOnly).WithLayer(activity, new TimePeriod(10, 0, 10, 30));
+			var agentGoldBronze1Bronze2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillGold, skillBronz1, skillBronze2);
+			var assGoldBronze1Bronze2 = new PersonAssignment(agentGoldBronze1Bronze2, scenario, dateOnly).WithLayer(activity, new TimePeriod(10, 0, 10, 30));
 
-			var asses = new List<IPersonAssignment>();
-
-			//gold, bronze0
-			for (var i = 0; i < 1; i++)
-			{
-				var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillGold, skillBronze0);
-				asses.Add(new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(10, 0, 10, 30)));
-			}
-
-			//gold, bronze1, bronze2
-			for (var i = 0; i < 1; i++)
-			{
-				var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillGold, skillBronz1, skillBronze2);
-				asses.Add(new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(10, 0, 10, 30)));
-			}
-
-			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, asses, new[] { skillDayGold, skillDayBronze0, skillDayBronze1, skillDayBronze2 }, false, false));
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new [] {assGoldBronze0, assGoldBronze1Bronze2}, new[] { skillDayGold, skillDayBronze0, skillDayBronze1, skillDayBronze2 }, false, false));
 
 			skillDayBronze1.SkillStaffPeriodCollection.First().AbsoluteDifference.Should().Be.EqualTo(-0.5);
 			skillDayBronze2.SkillStaffPeriodCollection.First().AbsoluteDifference.Should().Be.EqualTo(-0.5);
@@ -516,33 +445,19 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-
 			var skillGold = new Skill("gold").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).CascadingIndex(1).WithId().IsOpen(new TimePeriod(10, 0, 10, 30));
 			var skillSilver = new Skill("silver").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).CascadingIndex(2).WithId().IsOpen(new TimePeriod(10, 0, 10, 30));
 			var skillSilver1 = new Skill("silver1").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).CascadingIndex(2).WithId().IsOpen(new TimePeriod(10, 0, 10, 30));
 			var skillBronze = new Skill("bronze").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).CascadingIndex(3).WithId().IsOpen(new TimePeriod(10, 0, 10, 30));
-			
 			var skillDayGold = skillGold.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var skillDaySilver = skillSilver.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var skillDaySilver1 = skillSilver1.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var skillDayBronze = skillBronze.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			
 			var asses = new List<IPersonAssignment>();
-
-			//gold, silver, silver1
-			for (var i = 0; i < 1; i++)
-			{
-				var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillGold, skillSilver, skillSilver1);
-				asses.Add(new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(10, 0, 10, 30)));
-			}
-
-			//gold, silver, bronze
-			for (var i = 0; i < 1; i++)
-			{
-				var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillGold, skillSilver, skillBronze);
-				asses.Add(new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(10, 0, 10, 30)));
-			}
-
+			var agentGoldSilverSilver1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillGold, skillSilver, skillSilver1);
+			asses.Add(new PersonAssignment(agentGoldSilverSilver1, scenario, dateOnly).WithLayer(activity, new TimePeriod(10, 0, 10, 30)));
+			var agentGoldSilverBronze = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillGold, skillSilver, skillBronze);
+			asses.Add(new PersonAssignment(agentGoldSilverBronze, scenario, dateOnly).WithLayer(activity, new TimePeriod(10, 0, 10, 30)));
 			var singleSkillAgent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillSilver);
 			var singleSkillAss = new PersonAssignment(singleSkillAgent, scenario, dateOnly);
 			singleSkillAss.AddActivity(activity, new TimePeriod(10, 0, 10, 30));
