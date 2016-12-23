@@ -61,8 +61,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var primarySkill2Day = primarySkill2.CreateSkillDayWithDemand(scenario, dateOnly, primarySkillDemand);
 			var subSkill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
 			var subSkillDay = subSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
-			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { primarySkill1, primarySkill2, subSkill });
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(primarySkill1, primarySkill2, subSkill);
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
 
