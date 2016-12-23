@@ -2118,9 +2118,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldFilteredByMoreThan2100People()
+		public void ShouldFilteredByMoreThan1000People()
 		{
-			var count = 2101;
+			var count = 1001;
 			var persons = new List<IPerson>(count);
 			for (int i = 0; i < count; i++)
 			{

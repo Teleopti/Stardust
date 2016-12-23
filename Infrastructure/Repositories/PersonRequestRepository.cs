@@ -876,7 +876,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private static AbstractCriterion createPersonInCriterion(string propertyName, IReadOnlyCollection<IPerson> people)
 		{
-			if (people.Count <= 2100)
+			if (people.Count <= 1000)
 			{
 				return Restrictions.InG(propertyName, people);
 			}
