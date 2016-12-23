@@ -20,5 +20,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				_combinationResources.Where(x => x.StartDateTime >= period.StartDateTime && x.StartDateTime < period.EndDateTime);
 		}
 
+		public void PersistChange(SkillCombinationResource skillCombinationResource)
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }
