@@ -9,25 +9,25 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public static class SkillExtensions
 	{
-		public static ISkill WithFullOpenHours(this ISkill skill)
+		public static ISkill IsOpen(this ISkill skill)
 		{
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			return skill;
 		}
 
-		public static ISkill WithOpenHours(this ISkill skill, int startHour, int endHour)
+		public static ISkill IsOpenBetween(this ISkill skill, int startHour, int endHour)
 		{
-			skill.WithOpenHours(new TimePeriod(startHour, endHour));
+			skill.IsOpen(new TimePeriod(startHour, endHour));
 			return skill;
 		}
 
-		public static ISkill WithOpenHours(this ISkill skill, params TimePeriod[] periods)
+		public static ISkill IsOpen(this ISkill skill, params TimePeriod[] periods)
 		{
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, periods);
 			return skill;
 		}
 
-		public static ISkill WithFullOpenHoursDuringWeekends(this ISkill skill)
+		public static ISkill IsOpenDuringWeekends(this ISkill skill)
 		{
 			WorkloadFactory.CreateWorkloadWithFullOpenHoursDuringWeekdays(skill);
 			return skill;

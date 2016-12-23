@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			TimeZoneGuard.SetTimeZone(userTimeZone);
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
-			var skill = SkillFactory.CreateSkill("skill").WithFullOpenHours();
+			var skill = SkillFactory.CreateSkill("skill").IsOpen();
 			skill.Activity = activity;
 			skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(agentTimeZone);
 			var today = DateOnly.Today;
