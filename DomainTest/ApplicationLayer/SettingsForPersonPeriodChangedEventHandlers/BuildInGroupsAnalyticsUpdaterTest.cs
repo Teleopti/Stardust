@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEventHandlers;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 		[SetUp]
 		public void Setup()
 		{
-			_analyticsGroupPageRepository = MockRepository.GenerateMock<IAnalyticsGroupPageRepository>();
+			_analyticsGroupPageRepository = new FakeAnalyticsGroupPageRepository();
 			_skillRepository = new FakeSkillRepository();
 			_partTimePercentageRepository = new FakePartTimePercentageRepository();
 			_ruleSetBagRepository = new FakeRuleSetBagRepository();
@@ -43,119 +43,107 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 		[Test]
 		public void ShouldUpdatePartTimePercentage()
 		{
-			var @event = new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId };
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
-			@event.SetIdCollection(new [] {entityId});
 
-			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId, _businessUnitId))
-				.Return(new AnalyticsGroup {GroupName = "GroupName", GroupCode = entityId});
+			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId, BusinessUnitCode = _businessUnitId});
 			_partTimePercentageRepository.Add(new PartTimePercentage(updateGroupName).WithId(entityId));
 
-			_target.Handle(@event);
+			_target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
 
-			_analyticsGroupPageRepository.AssertWasCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroup>.Matches(a => a.GroupName == updateGroupName)));
+			_analyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
+				.GroupName.Should()
+				.Be.EqualTo(updateGroupName);
 		}
 
 		[Test]
 		public void ShouldUpdateRuleSetBag()
 		{
-			var @event = new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId };
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
-			@event.SetIdCollection(new[] { entityId });
 
-			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId, _businessUnitId))
-				.Return(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId });
+			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId, BusinessUnitCode = _businessUnitId });
 			_ruleSetBagRepository.Add(new RuleSetBag { Description = new Description(updateGroupName) }.WithId(entityId));
-			_target.Handle(@event);
+			_target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
 
-			_analyticsGroupPageRepository.AssertWasCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroup>.Matches(a => a.GroupName == updateGroupName)));
+			_analyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
+				.GroupName.Should()
+				.Be.EqualTo(updateGroupName);
 		}
 
 		[Test]
 		public void ShouldUpdateContract()
 		{
-			var @event = new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId };
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
-			@event.SetIdCollection(new[] { entityId });
 
-			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId, _businessUnitId))
-				.Return(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId });
+			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId, BusinessUnitCode = _businessUnitId });
 			_contractRepository.Add(new Contract(updateGroupName).WithId(entityId));
 
-			_target.Handle(@event);
+			_target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
 
-			_analyticsGroupPageRepository.AssertWasCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroup>.Matches(a => a.GroupName == updateGroupName)));
+			_analyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
+				.GroupName.Should()
+				.Be.EqualTo(updateGroupName);
 		}
 
 		[Test]
 		public void ShouldUpdateContractSchedule()
 		{
-			var @event = new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId };
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
-			@event.SetIdCollection(new[] { entityId });
 
-			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId, _businessUnitId))
-				.Return(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId });
+			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId, BusinessUnitCode = _businessUnitId });
 			_contractScheduleRepository.Add(new ContractSchedule(updateGroupName).WithId(entityId));
 
-			_target.Handle(@event);
+			_target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
 
-			_analyticsGroupPageRepository.AssertWasCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroup>.Matches(a => a.GroupName == updateGroupName)));
+			_analyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
+				.GroupName.Should()
+				.Be.EqualTo(updateGroupName);
 		}
 
 		[Test]
 		public void ShouldUpdateSkill()
 		{
-			var @event = new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId };
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
-			@event.SetIdCollection(new[] { entityId });
 
-			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId, _businessUnitId))
-				.Return(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId });
+			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId, BusinessUnitCode = _businessUnitId });
 			var skill = new Domain.Forecasting.Skill().WithId(entityId);
 			skill.ChangeName(updateGroupName);
 			_skillRepository.Add(skill);
 
-			_target.Handle(@event);
+			_target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
 
-			_analyticsGroupPageRepository.AssertWasCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroup>.Matches(a => a.GroupName == updateGroupName)));
+			_analyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
+				.GroupName.Should()
+				.Be.EqualTo(updateGroupName);
 		}
-
+		
 		[Test]
 		public void ShouldNotUpdateIfNotExisting()
 		{
-			var @event = new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId };
 			var entityId = Guid.NewGuid();
-			var updateGroupName = "UpdateGroupName";
-			@event.SetIdCollection(new[] { entityId });
 
-			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId, _businessUnitId))
-				.Return(null);
+			_target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
 
-			_target.Handle(@event);
-
-			_analyticsGroupPageRepository.AssertWasNotCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroup>.Matches(a => a.GroupName == updateGroupName)));
+			_analyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
+				.Should().Be.Null();
 		}
 
 		[Test]
 		public void ShouldNotUpdateIfNotSpecificType()
 		{
-			var @event = new SettingsForPersonPeriodChangedEvent {LogOnBusinessUnitId = _businessUnitId};
 			var entityId = Guid.NewGuid();
-			var updateGroupName = "UpdateGroupName";
-			@event.SetIdCollection(new[] { entityId });
 
-			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId, _businessUnitId))
-				.Return(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId });
+			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId, BusinessUnitCode = _businessUnitId });
 
-			_target.Handle(@event);
+			_target.Handle(new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId, IdCollection = { entityId } });
 
-			_analyticsGroupPageRepository.AssertWasNotCalled(r => r.UpdateGroupPage(Arg<AnalyticsGroup>.Matches(a => a.GroupName == updateGroupName)));
+			_analyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, _businessUnitId)
+				.GroupName.Should()
+				.Be.EqualTo("GroupName");
 		}
 	}
 }
