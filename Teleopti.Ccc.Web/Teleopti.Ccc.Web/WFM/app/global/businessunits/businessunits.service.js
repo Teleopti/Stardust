@@ -5,9 +5,9 @@
         .module('wfm.businessunits')
         .factory('BusinessUnitsService', BusinessUnitsService);
 
-    BusinessUnitsService.$inject = ['$sessionStorage', '$q', '$resource', '$http'];
+    BusinessUnitsService.$inject = ['$window', '$q', '$resource', '$http'];
 
-    function BusinessUnitsService($sessionStorage, $q, $resource, $http) {
+    function BusinessUnitsService($window, $q, $resource, $http) {
         var service = {
 					getAllBusinessUnits: getAllBusinessUnits,
 					setBusinessUnit: setBusinessUnit,
@@ -49,18 +49,17 @@
 					}
 					return deferred.promise;
 				};
-
 				function setBusinessUnit(buid) {
 					setBusinessUnitInSessionStorage(buid);
 					setBusinessUnitInHeaders(buid);
 				};
 
 				function setBusinessUnitInSessionStorage(buid) {
-					$sessionStorage.buid = buid;
+					$window.sessionStorage.setItem('buid', buid);
 				};
 
 				function getBusinessUnitFromSessionStorage() {
-					return $sessionStorage.buid;
+					return $window.sessionStorage.buid;
 				};
 
 				function setBusinessUnitInHeaders(buid) {

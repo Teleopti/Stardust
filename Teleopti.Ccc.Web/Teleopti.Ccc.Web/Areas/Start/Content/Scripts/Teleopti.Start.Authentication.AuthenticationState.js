@@ -170,7 +170,11 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 	};
 
 	this.AttemptGotoApplicationBySelectingBusinessUnit = function (options) {
-		authenticationModel.businessUnitId = options.data.businessUnitId;
+	    authenticationModel.businessUnitId = options.data.businessUnitId;
+
+	    if (window.sessionStorage) {
+	    	window.sessionStorage.setItem("buid", authenticationModel.businessUnitId);
+	    }
 
 		var error = options.error || gotoSignInView;
 		var errormessage = options.errormessage || gotoSignInView;
