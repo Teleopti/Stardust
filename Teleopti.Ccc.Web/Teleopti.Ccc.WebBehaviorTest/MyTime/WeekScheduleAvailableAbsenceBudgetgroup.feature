@@ -77,6 +77,30 @@ Scenario: Show the user a green indication when allowance exceeds used absence
 	And I have the workflow control set 'Open absence period'
 	When I view my week schedule for date '2023-04-01'
 	Then I should see an 'green' indication for chance of absence request on '2023-04-01'
+	
+#for bug 42261
+Scenario: Traffic light language should be set accordingly
+	Given there is a budgetday
+	| Field						| Value					|
+	| BudgetGroup				| TheBudgetGroup		|
+	| Date						| 2023-04-01			|
+	| Allowance					| 3 					|
+	| FulltimeEquivalentHours	| 8						|
+	And I have the role 'Full access to mytime'
+	And I have absence time for
+	| Field			| Value					|
+	| Date			| 2023-04-01			|
+	| Hours			| 3						|
+	| BudgetGroup	| NameOfTheBudgetGroup	|
+	| Absence		| holiday				|
+	And I am chinese
+	And I have the workflow control set 'Open absence period'
+	When I view my week schedule for date '2023-04-01'
+	Then I should see an hint '缺勤申请被批准的机会是：很有可能' for chance of absence request on '2023-04-01'
+	And I view my settings
+	And I change language to english
+	And I view my week schedule for date '2023-04-01'
+	And I should see an hint 'Chance of getting absence request granted: Good' for chance of absence request on '2023-04-01'
 
 Scenario: Show the user a yellow indication when there is a fair amount of allowance compared to used absence
 	Given there is a budgetday

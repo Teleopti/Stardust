@@ -15,13 +15,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 			"green"
 		};
 
-		private static readonly string[] _texts = 
-		{
-			UserTexts.Resources.Poor,
-			UserTexts.Resources.Fair,
-			UserTexts.Resources.Good
-		};
-
 		private readonly IAllowanceProvider _allowanceProvider;
 		private readonly IAbsenceTimeProvider _absenceTimeProvider;
 		private readonly INow _now;
@@ -38,6 +31,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 
 		public List<IAbsenceRequestProbability> GetAbsenceRequestProbabilityForPeriod(DateOnlyPeriod period)
 		{
+			var texts = new[]
+			{
+				UserTexts.Resources.Poor,
+				UserTexts.Resources.Fair,
+				UserTexts.Resources.Good
+			};
 			var absenceTimeCollection = _absenceTimeProvider.GetAbsenceTimeForPeriod(period).ToList();
 			var allowanceCollection = _allowanceProvider.GetAllowanceForPeriod(period).ToList();
 
@@ -84,7 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 				{
 					Date = dateOnly,
 					CssClass = probabilityIndex >= 0 ? _cssClass[probabilityIndex] : string.Empty,
-					Text = probabilityIndex >= 0 ? _texts[probabilityIndex] : string.Empty,
+					Text = probabilityIndex >= 0 ? texts[probabilityIndex] : string.Empty,
 					Availability = allowanceDay != null && allowanceDay.Availability
 				});
 			}

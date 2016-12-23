@@ -15,16 +15,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 	[Binding]
 	public class MyProfileStepDefinitions
 	{
-		[When(@"I view my settings")]
-		[When(@"I view my regional settings")]
-		public void WhenIViewMyRegionalSettings()
-		{
-			if (!DataMaker.Data().HasSetup<IUserRoleSetup>())
-				DataMaker.Data().Apply(new Agent_ThingThatReallyAppliesSetupsInConstructor());
-			TestControllerMethods.Logon();
-			Navigation.GotoRegionalSettings();
-		}
-
 		[When(@"I view password setting page")]
 		[When(@"I view my password")]
 		public void WhenIViewMyPassword()
@@ -101,6 +91,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		}
 
 		[When(@"I change language to english")]
+		[Then(@"I change language to english")]
 		public void WhenIChangeLanguageToEnglish()
 		{
 			Browser.Interactions.SelectOptionByTextUsingJQuery("#CultureUi-Picker", CultureInfo.GetCultureInfo(1033).DisplayName.Substring(0, 3));

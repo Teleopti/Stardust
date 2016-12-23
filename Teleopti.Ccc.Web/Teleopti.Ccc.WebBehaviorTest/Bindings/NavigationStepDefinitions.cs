@@ -143,6 +143,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		[Given(@"I view my week schedule for date '(.*)'")]
 		[When(@"I view my week schedule for date '(.*)'")]
+		[Then(@"I view my week schedule for date '(.*)'")]
 		public void WhenIViewMyWeekScheduleForDate(DateTime date)
 		{
 			TestControllerMethods.Logon();
@@ -240,6 +241,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			DataMaker.Data().ApplyAfterSetup(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			Navigation.GotoAnywhereTeamSchedule(date, IdForTeam(teamName), buIdForTeam(teamName));
+		}
+
+		[When(@"I view my settings")]
+		[Then(@"I view my settings")]
+		[When(@"I view my regional settings")]
+		public void WhenIViewMyRegionalSettings()
+		{
+			if (!DataMaker.Data().HasSetup<IUserRoleSetup>())
+				DataMaker.Data().Apply(new Agent_ThingThatReallyAppliesSetupsInConstructor());
+			TestControllerMethods.Logon();
+			Navigation.GotoRegionalSettings();
 		}
 
 		private static Guid IdForTeam(string teamName)

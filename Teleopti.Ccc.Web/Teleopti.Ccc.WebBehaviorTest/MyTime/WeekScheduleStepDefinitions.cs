@@ -212,6 +212,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 				string.Format(".weekview-day[data-mytime-date='{0}'] .holiday-agents[style*='none']", date.ToString("yyyy-MM-dd")));
 		}
 
+		[Then(@"I should see an hint '(.*)' for chance of absence request on '(.*)'")]
+		public void ThenIShouldSeeAnHintForChanceOfAbsenceRequestOn(string text, DateTime date)
+		{
+			Browser.Interactions.AssertKnockoutContextContains(string.Format(".weekview-day[data-mytime-date={0}]", date.ToString("yyyy-MM-dd")), "holidayChanceText()", text);
+		}
+
 		[Then(@"I should see an empty indication for chance of absence request on '(.*)'")]
 		public void ThenIShouldSeeAnEmptyIndicationForChanceOfAbsenceRequestOn(DateTime date)
 		{
