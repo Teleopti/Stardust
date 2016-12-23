@@ -15,6 +15,12 @@ namespace Teleopti.Ccc.TestCommon
 			return skill;
 		}
 
+		public static ISkill WithOpenHours(this ISkill skill, int startHour, int endHour)
+		{
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(startHour, endHour));
+			return skill;
+		}
+
 		public static ISkill WithCascadingIndex(this ISkill skill, int index)
 		{
 			skill.SetCascadingIndex(index);

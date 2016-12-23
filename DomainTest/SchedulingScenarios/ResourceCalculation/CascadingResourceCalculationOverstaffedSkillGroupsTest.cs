@@ -27,14 +27,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 9, 0));
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).WithOpenHours(8, 9);
 			var skillADay = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 9, 0));
+			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).WithOpenHours(8, 9);
 			var skillBDay = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var skillC = new Skill("C").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(3);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillC, new TimePeriod(8, 0, 9, 0));
+			var skillC = new Skill("C").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(3).WithOpenHours(8, 9);
 			var skillCDay = skillC.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agent1.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), 
@@ -63,14 +60,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 9, 0));
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).WithOpenHours(8, 9);
 			var skillADay = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
-			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 9, 0));
+			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).WithOpenHours(8, 9);
 			var skillBDay = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
-			var skillC = new Skill("C").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(3);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillC, new TimePeriod(8, 0, 9, 0));
+			var skillC = new Skill("C").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(3).WithOpenHours(8, 9);
 			var skillCDay = skillC.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
 			var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agent1.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
@@ -99,17 +93,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 9, 0));
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).WithOpenHours(8, 9);
 			var skillADay = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
-			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 9, 0));
+			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).WithOpenHours(8, 9);
 			var skillBDay = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
-			var skillC = new Skill("C").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(3);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillC, new TimePeriod(8, 0, 9, 0));
+			var skillC = new Skill("C").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(3).WithOpenHours(8, 9);
 			var skillCDay = skillC.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
-			var skillD = new Skill("D").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(4);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillD, new TimePeriod(8, 0, 9, 0));
+			var skillD = new Skill("D").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(4).WithOpenHours(8, 9);
 			var skillDDay = skillD.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 			var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agent1.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
@@ -140,11 +130,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 9, 0));
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).WithOpenHours(8, 9);
 			var skillADay = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 9, 0));
+			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).WithOpenHours(8, 9);
 			var skillBDay = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 2);
 			var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agent1.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
@@ -176,14 +164,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 9, 0));
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).WithOpenHours(8, 9);
 			var skillADay = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
-			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 9, 0));
+			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).WithOpenHours(8, 9);
 			var skillBDay = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var skillC = new Skill("C").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(3);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillC, new TimePeriod(8, 0, 9, 0));
+			var skillC = new Skill("C").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(3).WithOpenHours(8, 9);
 			var skillCDay = skillC.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agent1.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
@@ -212,17 +197,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 9, 0));
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).WithOpenHours(8, 9);
 			var skillADay = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 9, 0));
+			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).WithOpenHours(8, 9);
 			var skillBDay = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
-			var skillC = new Skill("C").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(3);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillC, new TimePeriod(8, 0, 9, 0));
+			var skillC = new Skill("C").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(3).WithOpenHours(8, 9);
 			var skillCDay = skillC.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
-			var skillD = new Skill("D").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(4);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillD, new TimePeriod(8, 0, 9, 0));
+			var skillD = new Skill("D").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(4).WithOpenHours(8, 9);
 			var skillDDay = skillD.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agent1.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
@@ -258,14 +239,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 9, 0));
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1).WithOpenHours(8, 9);
 			var skillADay = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 9, 0));
+			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2).WithOpenHours(8, 9);
 			var skillBDay = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var skillC = new Skill("C").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(3);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillC, new TimePeriod(8, 0, 9, 0));
+			var skillC = new Skill("C").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(3).WithOpenHours(8, 9);
 			var skillCDay = skillC.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agent1.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),

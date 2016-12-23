@@ -43,8 +43,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var date = DateOnly.Today;
 			var activity = new Activity("_");
-			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(9, 0, 17, 0));
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithOpenHours(9, 17);
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, demandedAgents);
 			foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 			{
@@ -79,8 +78,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var date = DateOnly.Today;
 			var activity = new Activity("_");
-			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(9, 0, 17, 0));
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithOpenHours(9, 17);
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 2.4555555);
 			foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 			{
@@ -182,8 +180,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var date = DateOnly.Today;
 			var activity = new Activity("_");
-			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(9, 17));
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithOpenHours(9, 17);
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 10);
 			var agent = new Person().WithId();
 			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.Kathmandu());
