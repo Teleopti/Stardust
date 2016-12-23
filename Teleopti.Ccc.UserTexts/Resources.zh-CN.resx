@@ -9465,7 +9465,7 @@ Teleopti R&amp;D</value>
     <value>自定义报表</value>
   </data>
   <data name="DoNotBreakMaximumSeats" xml:space="preserve">
-    <value>不要打破最大席位数</value>
+    <value>不要超过最大席位数</value>
   </data>
   <data name="RequestDenyReasonAlreadyAbsent" xml:space="preserve">
     <value>在指定周期中的班表已经包含缺席</value>
@@ -12616,7 +12616,7 @@ Teleopti R&amp;D</value>
     <value>撤销</value>
   </data>
   <data name="BrokenRules" xml:space="preserve">
-    <value>打破的规则</value>
+    <value>违反的规则</value>
   </data>
   <data name="BySeniority" xml:space="preserve">
     <value>根据年资</value>
@@ -12826,7 +12826,7 @@ Teleopti R&amp;D</value>
     <value>夜间休息时间</value>
   </data>
   <data name="BusinessRuleNightlyRestRuleFriendlyName" xml:space="preserve">
-    <value>夜间休息时间被打破</value>
+    <value>违反夜间休息时间规则</value>
   </data>
   <data name="NewNightlyRestRuleName" xml:space="preserve">
     <value>夜间休息时间</value>
@@ -13106,10 +13106,10 @@ Teleopti R&amp;D</value>
     <value>个人账户超过了积值</value>
   </data>
   <data name="BusinessRuleShiftCategoryLimitationFriendlyName" xml:space="preserve">
-    <value>周期内班次类别限制规则被打破</value>
+    <value>违反周期内班次类别限制规则</value>
   </data>
   <data name="BusinessRuleShiftCategoryLimitationFriendlyName1" xml:space="preserve">
-    <value>周中班次类别限制规则被打破</value>
+    <value>违反周中班次类别限制规则</value>
   </data>
   <data name="BusinessRuleWeeklyRestFriendlyName" xml:space="preserve">
     <value>该周没有规定的每周休息时间</value>
