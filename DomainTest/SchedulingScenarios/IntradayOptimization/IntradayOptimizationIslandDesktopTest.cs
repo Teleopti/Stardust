@@ -333,7 +333,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		{
 			var scenario = new Scenario("_");
 			var dateOnly = new DateOnly(2010, 1, 1);
-			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = new Activity("_"), TimeZone = TimeZoneInfo.Utc }.WithId().WithFullOpenHours();
+			var skill = new Skill("_").For(new Activity("_")).InTimeZone(TimeZoneInfo.Utc).WithId().WithFullOpenHours();
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);

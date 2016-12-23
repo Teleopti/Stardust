@@ -179,10 +179,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var scheduledActivity = new Activity("activity that will be scheduled").WithId();
 			var dateOnly = DateOnly.Today;
-			var highestPrioSkill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = new Activity("_").WithId(), TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
+			var highestPrioSkill = new Skill("_").For(new Activity("_").WithId()).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(highestPrioSkill, new TimePeriod(8, 0, 9, 0));
 			var highestPrioSkillDay = highestPrioSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var nonHighestPrioSkill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = scheduledActivity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
+			var nonHighestPrioSkill = new Skill("_").For(scheduledActivity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(nonHighestPrioSkill, new TimePeriod(8, 0, 9, 0));
 			var nonHighestPrioSkillDay = nonHighestPrioSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(DateOnly.MinValue, null, highestPrioSkill, nonHighestPrioSkill);
@@ -316,10 +316,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var prioritizedSkill = new Skill("_", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
+			var prioritizedSkill = new Skill("_").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(prioritizedSkill, new TimePeriod(8, 0, 9, 0));
 			var prioritizedSkillDay = prioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var nonCascadingSkill = new Skill("_", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			var nonCascadingSkill = new Skill("_").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId();
 			WorkloadFactory.CreateWorkloadWithOpenHours(nonCascadingSkill, new TimePeriod(8, 0, 9, 0));
 			var nonCascadingSkillDay = nonCascadingSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(DateOnly.MinValue, null, nonCascadingSkill);

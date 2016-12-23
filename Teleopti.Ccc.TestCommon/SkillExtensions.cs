@@ -33,6 +33,12 @@ namespace Teleopti.Ccc.TestCommon
 			return skill;
 		}
 
+		public static ISkill DefaultResolution(this ISkill skill, int minutes)
+		{
+			skill.DefaultResolution = minutes;
+			return skill;
+		}
+
 		public static ISkillDay CreateSkillDayWithDemandPerHour(this ISkill skill, IScenario scenario, DateOnly dateOnly, TimeSpan defaultDemand, Tuple<int, TimeSpan> specificHourDemand)
 		{
 			var skillDataPeriods = new List<ISkillDataPeriod>();

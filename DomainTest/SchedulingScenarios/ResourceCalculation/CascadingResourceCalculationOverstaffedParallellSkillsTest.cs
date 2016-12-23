@@ -494,16 +494,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA1 = new Skill("A1", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
+			var skillA1 = new Skill("A1").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA1, new TimePeriod(8, 0, 9, 0));
 			var skillDayA1 = skillA1.CreateSkillDayWithDemand(scenario, dateOnly, 1); //one agent should be put here
-			var skillA2 = new Skill("A2", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(1);
+			var skillA2 = new Skill("A2").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA2, new TimePeriod(8, 0, 9, 0));
 			var skillDayA2 = skillA2.CreateSkillDayWithDemand(scenario, dateOnly, 1); //one agent should be put here
-			var skillB1 = new Skill("B1", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
+			var skillB1 = new Skill("B1").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB1, new TimePeriod(8, 0, 9, 0));
 			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 2); //one agent should be put here
-			var skillB2 = new Skill("B2", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId().WithCascadingIndex(2);
+			var skillB2 = new Skill("B2").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().WithCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB2, new TimePeriod(8, 0, 9, 0));
 			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 2); //one agent should be put here
 
@@ -543,12 +543,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
 
-			var skillPlatinum = new Skill("platinum", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(1);
-			var skillGold = new Skill("gold", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(1);
-			var skillPlatinum1 = new Skill("platinum1", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(1);
-			var skillSilver = new Skill("silver", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(2);
-			var skillBronze = new Skill("bronze", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(3);
-			var skillBronze1 = new Skill("bronze1", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(4);
+			var skillPlatinum = new Skill("platinum").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(1);
+			var skillGold = new Skill("gold").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(1);
+			var skillPlatinum1 = new Skill("platinum1").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(1);
+			var skillSilver = new Skill("silver").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(2);
+			var skillBronze = new Skill("bronze").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(3);
+			var skillBronze1 = new Skill("bronze1").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(4);
 
 			skillPlatinum.SetId(new Guid("dcb092cf-107e-4b39-8ae4-53fd26a69c6a"));
 			skillGold.SetId(new Guid("000ea41a-d63e-492f-ae97-71e956e494ff"));
@@ -631,10 +631,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
 
-			var skillGold = new Skill("gold", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(1);
-			var skillBronze0 = new Skill("silver", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(2);
-			var skillBronz1 = new Skill("bronze", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(2);
-			var skillBronze2 = new Skill("bronze1", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(2);
+			var skillGold = new Skill("gold").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(1);
+			var skillBronze0 = new Skill("silver").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(2);
+			var skillBronz1 = new Skill("bronze").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(2);
+			var skillBronze2 = new Skill("bronze1").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(2);
 
 			skillGold.SetId(new Guid("000ea41a-d63e-492f-ae97-71e956e494ff"));
 			skillBronze0.SetId(new Guid("15be7c61-f850-4064-b9b3-33c74891291c"));
@@ -688,10 +688,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
 
-			var skillGold = new Skill("gold", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(1);
-			var skillSilver = new Skill("silver", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(2);
-			var skillSilver1 = new Skill("silver1", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(2);
-			var skillBronze = new Skill("bronze", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithCascadingIndex(3);
+			var skillGold = new Skill("gold").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(1);
+			var skillSilver = new Skill("silver").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(2);
+			var skillSilver1 = new Skill("silver1").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(2);
+			var skillBronze = new Skill("bronze").For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).WithCascadingIndex(3);
 
 			skillGold.SetId(new Guid("000ea41a-d63e-492f-ae97-71e956e494ff"));
 			skillSilver.SetId(new Guid("15be7c61-f850-4064-b9b3-33c74891291c"));
