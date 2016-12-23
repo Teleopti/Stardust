@@ -32,8 +32,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			{
 				Activity = activity,
 				TimeZone = TimeZoneInfo.Utc
-			};
-			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+			}.WithFullOpenHours();
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, TimeSpan.FromMinutes(60));
 			var agent = new Person().WithId();
 			agent.AddPeriodWithSkill(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
@@ -56,8 +55,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			{
 				Activity = activity,
 				TimeZone = TimeZoneInfo.Utc
-			};
-			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+			}.WithFullOpenHours();
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, TimeSpan.FromMinutes(60));
 			var agent = new Person().WithId();
 			agent.AddPeriodWithSkill(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);

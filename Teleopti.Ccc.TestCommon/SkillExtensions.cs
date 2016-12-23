@@ -2,12 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
 {
 	public static class SkillExtensions
 	{
+		public static ISkill WithFullOpenHours(this ISkill skill)
+		{
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+			return skill;
+		}
+
 		public static ISkill WithCascadingIndex(this ISkill skill, int index)
 		{
 			skill.SetCascadingIndex(index);
