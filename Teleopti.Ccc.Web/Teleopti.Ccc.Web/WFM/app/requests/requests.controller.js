@@ -12,6 +12,7 @@
 		var periodForAbsenceRequest, periodForShiftTradeRequest;
 		var absenceRequestTabIndex = 0;
 		var shiftTradeRequestTabIndex = 1;
+		vm.selectedTeamIds = [];
 
 		$q.all([
 				toggleService.togglesLoaded,
@@ -35,6 +36,10 @@
 			}
 		}];
 		
+		vm.changeSelectedTeams = function(teams) {
+			vm.selectedTeamIds = teams;
+		}
+
 		function init() {
 			vm.isRequestsEnabled = toggleService.Wfm_Requests_Basic_35986;
 			vm.isPeopleSearchEnabled = toggleService.Wfm_Requests_People_Search_36294;

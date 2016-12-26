@@ -64,6 +64,7 @@
 				EndDate: moment(filter.period.endDate).format('YYYY-MM-DD'),
 				SortingOrders: sortingOrders.join(','),
 				AgentSearchTerm: filter.agentSearchTerm,
+				SelectedTeamIds: filter.selectedTeamIds,
 				Filters: filter.filters
 			};
 
@@ -84,7 +85,8 @@
 				StartDate: filter.period.startDate,
 				EndDate: filter.period.endDate,
 				SortingOrders: sortingOrders,
-				AgentSearchTerm: filter.agentSearchTerm
+				AgentSearchTerm: filter.agentSearchTerm,
+				SelectedTeamIds: filter.selectedTeamIds
 			};
 
 			if (paging !== null) {

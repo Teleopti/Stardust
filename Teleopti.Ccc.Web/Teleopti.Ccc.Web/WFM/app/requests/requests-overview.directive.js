@@ -21,6 +21,7 @@
 
 		vm.filters = [];
 		vm.agentSearchTerm = "";
+		vm.selectedTeamIds = [];
 		vm.reload = reload;
 		vm.sortingOrders = [];
 
@@ -128,6 +129,7 @@
 			var requestsFilter = {
 				period: vm.period,
 				agentSearchTerm: vm.agentSearchTerm,
+				selectedTeamIds: vm.selectedTeamIds,
 				filters: vm.filters
 			}
 
@@ -153,6 +155,7 @@
 			scope: {
 				period: '=?',
 				agentSearchTerm: '=?',
+				selectedTeamIds: '=?',
 				filters: '=?',
 				filterEnabled: '=?',
 				isActive: '=?'
@@ -175,6 +178,7 @@
 					startDate: vm.period ? vm.period.startDate : null,
 					endDate: vm.period ? vm.period.endDate : null,
 					agentSearchTerm: vm.agentSearchTerm ? vm.agentSearchTerm : '',
+					selectedTeamIds: vm.selectedTeamIds ? vm.selectedTeamIds : [],
 					filters: vm.filters,
 					isActive: vm.isActive,
 					sortingOrders: vm.sortingOrders
