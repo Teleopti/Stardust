@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.FormData
 		public IDictionary<PersonFinderField, string> AgentSearchTerm;
 		public IDictionary<RequestFilterField, string> Filters;
 		public Paging Paging = new Paging();
+		public Guid[] SelectedTeamIds;
 	}
 
 	public class AllRequestsFormDataConverter : IModelBinder
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.FormData
 			var filters = bindingContext.ValueProvider.GetValue("Filters");
 			var take = bindingContext.ValueProvider.GetValue("Take");
 			var skip = bindingContext.ValueProvider.GetValue("Skip");
+			var selectedTeamIds = bindingContext.ValueProvider.GetValue("SelectedTeamIds");
 
 			if (startDate == null || endDate == null)
 			{
@@ -59,7 +61,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.FormData
 				SortingOrders = parseRequestsSortingOrders(sortingOrders),
 				AgentSearchTerm = parseAgentSearchTerm(agentSearchTerm),
 				Filters = parseRequestFilters(filters),
-				Paging = parsePaging(take, skip)
+				Paging = parsePaging(take, skip),
+				SelectedTeamIds = parseSelectedTeamIds(selectedTeamIds)
 			};
 			return true;
 		}
@@ -100,7 +103,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.FormData
 		private IDictionary<PersonFinderField, string> parseAgentSearchTerm(ValueProviderResult result)
 		{
 			return string.IsNullOrWhiteSpace(result?.AttemptedValue)
-				? null
+				? new Dictionary<PersonFinderField, string>()
 				: SearchTermParser.Parse(result.AttemptedValue);
 		}
 
@@ -130,6 +133,21 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.FormData
 			}
 
 			return result;
+		}
+
+		private Guid[] parseSelectedTeamIds(ValueProviderResult result)
+		{
+			var teamIds = new List<Guid>();
+			if (result == null) return teamIds.ToArray();
+
+			var input = result.AttemptedValue;
+
+			foreach (var id in input.Split(','))
+			{
+				teamIds.Add(new Guid(id));
+			}
+
+			return teamIds.ToArray();
 		}
 
 		private static bool isValidDateRange(DateTime date)

@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			personFinderSearchCriteria.TotalRows = 0;
 			var cultureId = Domain.Security.Principal.TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
-			if (personFinderSearchCriteria.SearchCriterias.Count == 0 && teamIds.Length == 0)
+			if (teamIds.Length == 0)
 			{
 				return;
 			}

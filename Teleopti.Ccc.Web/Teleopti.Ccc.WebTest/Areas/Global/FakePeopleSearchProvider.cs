@@ -148,7 +148,24 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 		public void PopulateSearchCriteriaResult(PersonFinderSearchCriteria search, Guid[] teamIds)
 		{
-			throw new NotImplementedException();
+			var people = new List<IPerson>();
+			var date = search.BelongsToDate;
+			if (_enableDateFilter)
+			{
+				people = !_permittedPeopleByDate.ContainsKey(date) ? new List<IPerson>() : _permittedPeopleByDate[date].ToList();
+			}
+			else
+			{
+				people = _permittedPeople.ToList();
+			}
+			people = people.Where(p => p.PersonPeriodCollection.Any(pp => teamIds.ToList().Contains(pp.Team.Id.Value))).ToList();
+			search.TotalRows = people.Count;
+			int row = 0;
+			people.ForEach(p =>
+			{
+				search.SetRow(row, toPersonFinderDisplayRow(p, date, row + 1));
+				row++;
+			});
 		}
 
 		private PersonFinderDisplayRow toPersonFinderDisplayRow(IPerson p, DateOnly date, int rowNumber)

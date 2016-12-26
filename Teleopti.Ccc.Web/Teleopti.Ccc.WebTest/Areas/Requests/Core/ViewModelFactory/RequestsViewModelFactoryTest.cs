@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public IToggleManager ToggleManager;
 		public IUserCulture UserCulture;
 		public IApplicationRoleRepository ApplicationRoleRepository;
+		public FakePersonRepository PersonRepository;
 
 		private List<IPerson> people;
 		private readonly IAbsence absence = AbsenceFactory.CreateAbsence("absence1").WithId();
@@ -48,17 +49,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
+			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 		}
 
 		[Test]
 		public void ShouldGetRequests()
 		{
+			((FakeToggleManager)ToggleManager).Disable(Toggles.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309);
 			setUpRequests();
 
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2015, 10, 1),
-				EndDate = new DateOnly(2015, 10, 9)
+				EndDate = new DateOnly(2015, 10, 9),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
 			};
 
 			var result = Target.Create(input);
@@ -66,14 +70,56 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		}
 
 		[Test]
+		public void ShouldGetRequestsInTeams()
+		{
+			((FakeToggleManager)ToggleManager).Enable(Toggles.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309);
+			var team = TeamFactory.CreateSimpleTeam("_").WithId();
+			team.Site = SiteFactory.CreateSimpleSite("site");
+			setUpRequests(team);
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 1),
+				EndDate = new DateOnly(2015, 10, 9),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SelectedTeamIds = new []{team.Id.Value}
+			};
+
+			var result = Target.Create(input);
+			result.Count().Should().Be.EqualTo(3);
+		}
+
+		[Test]
+		public void ShouldGetNoRequestsInWrongTeams()
+		{
+			((FakeToggleManager)ToggleManager).Enable(Toggles.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309);
+			var team = TeamFactory.CreateSimpleTeam("_").WithId();
+			team.Site = SiteFactory.CreateSimpleSite("site");
+			setUpRequests(team);
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 1),
+				EndDate = new DateOnly(2015, 10, 9),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SelectedTeamIds = new []{Guid.NewGuid()}
+			};
+
+			var result = Target.Create(input);
+			result.Count().Should().Be.EqualTo(0);
+		}
+
+		[Test]
 		public void ShouldGetRequestsForDay()
 		{
+			((FakeToggleManager)ToggleManager).Disable(Toggles.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309);
 			setUpRequests();
 
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2015, 10, 1),
-				EndDate = new DateOnly(2015, 10, 1)
+				EndDate = new DateOnly(2015, 10, 1),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
 			};
 
 			var result = Target.Create(input);
@@ -83,12 +129,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldGetRequestsForSecondDay()
 		{
+			((FakeToggleManager)ToggleManager).Disable(Toggles.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309);
 			setUpRequests();
 
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2015, 10, 2),
-				EndDate = new DateOnly(2015, 10, 2)
+				EndDate = new DateOnly(2015, 10, 2),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
 			};
 
 			var result = Target.Create(input);
@@ -98,12 +146,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldOrderByNameCorrectly()
 		{
+			((FakeToggleManager)ToggleManager).Disable(Toggles.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309);
 			setUpRequests();
 
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
 				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.AgentNameAsc }
 			};
 
@@ -126,7 +176,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2015, 10, 1),
-				EndDate = new DateOnly(2015, 12, 31)
+				EndDate = new DateOnly(2015, 12, 31),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
 			};
 
 			var result = Target.Create(input);
@@ -136,6 +187,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldNotSeeRequestBeforePermissionDate()
 		{
+			((FakeToggleManager)ToggleManager).Disable(Toggles.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309);
 			setUpRequests();
 
 			var permissionProvider = PermissionProvider as Global.FakePermissionProvider;
@@ -145,7 +197,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2015, 10, 1),
-				EndDate = new DateOnly(2015, 10, 31)
+				EndDate = new DateOnly(2015, 10, 31),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
 			};
 
 			var result = Target.Create(input);
@@ -176,12 +229,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldGetRequestsInRequestListViewModel()
 		{
+			((FakeToggleManager)ToggleManager).Disable(Toggles.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309);
 			setUpRequests();
 
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2015, 10, 1),
-				EndDate = new DateOnly(2015, 10, 9)
+				EndDate = new DateOnly(2015, 10, 9),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
 			};
 
 			var result = Target.CreateRequestListViewModel(input);
@@ -217,7 +272,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldNotSeeRequestBeforePermissionDateInRequestListViewModel()
 		{
-
+			((FakeToggleManager)ToggleManager).Disable(Toggles.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309);
 			setUpRequests();
 
 			var permissionProvider = PermissionProvider as Global.FakePermissionProvider;
@@ -228,7 +283,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2015, 10, 1),
-				EndDate = new DateOnly(2015, 10, 31)
+				EndDate = new DateOnly(2015, 10, 31),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
 			};
 
 			var result = Target.CreateRequestListViewModel(input);
@@ -269,6 +325,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldReturnPersonAccountApprovalSummary()
 		{
+			((FakeToggleManager)ToggleManager).Disable(Toggles.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309);
 			var accountDay = new AccountDay(new DateOnly(2015, 1, 1))
 			{
 				BalanceIn = TimeSpan.FromDays(0),
@@ -299,6 +356,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldNotReturnPersonAccountOutsideOfRequestPeriodInApprovalSummary()
 		{
+			((FakeToggleManager)ToggleManager).Disable(Toggles.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309);
 			var accountDay = new AccountDay(new DateOnly(2015, 1, 1))
 			{
 				BalanceIn = TimeSpan.FromDays(0),
@@ -341,7 +399,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2015, 10, 3),
-				EndDate = new DateOnly(2015, 10, 9)
+				EndDate = new DateOnly(2015, 10, 9),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>()
 			};
 
 			var result = Target.CreateRequestListViewModel(input);
@@ -378,6 +437,39 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				PersonFactory.CreatePerson ("test3").WithId()
 			}
 			.ToList();
+
+			var personRequests = new[]
+			{
+				 new PersonRequest(people[0], textRequest1).WithId(),
+				 new PersonRequest(people[1], absenceRequest).WithId(),
+				 new PersonRequest (people[2], textRequest2).WithId()
+			};
+
+			PersonRequestRepository.AddRange(personRequests);
+
+			return personRequests.ToList();
+		}
+
+		private IEnumerable<IPersonRequest> setUpRequests(ITeam team)
+		{
+			var textRequest1 = new TextRequest(new DateTimePeriod(2015, 10, 1, 2015, 10, 6));
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
+			var textRequest2 = new TextRequest(new DateTimePeriod(2015, 10, 2, 2015, 10, 7));
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2015, 10, 1), team);
+
+			people = new[]
+			{
+				PersonFactory.CreatePerson ("test1").WithId(),
+				PersonFactory.CreatePerson ("test2").WithId(),
+				PersonFactory.CreatePerson ("test3").WithId()
+			}
+			.ToList();
+			people.ForEach(p =>
+			{
+				p.AddPersonPeriod(personPeriod);
+				((FakePeopleSearchProvider)PeopleSearchProvider).Add(p);
+				PersonRepository.Add(p);
+			});
 
 			var personRequests = new[]
 			{
