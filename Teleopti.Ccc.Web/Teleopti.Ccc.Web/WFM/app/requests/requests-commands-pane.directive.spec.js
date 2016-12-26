@@ -1,5 +1,5 @@
 ﻿'use strict';
-describe('[RequestsCommandPaneDirectiveTests]', function () {
+xdescribe('[RequestsCommandPaneDirectiveTests]', function () {
 	var $compile,
 		$rootScope,
 		$controller;
@@ -62,7 +62,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		requestCommandParamsHolder = _requestCommandParamsHolder_;
 	}));
 
-	it('processWaitlistedRequests command submit scucess, should notify the result', function () {
+	fit('processWaitlistedRequests command submit scucess, should notify the result', function () {
 		var test = setUpTarget();
 		var handleResult = {
 			Success: true,
@@ -71,6 +71,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		}
 		requestsDataService.submitCommandIsASucess(true);
 		requestsDataService.setRequestCommandHandlingResult(handleResult);
+		console.log("test", test);
 
 		test.requestCommandPaneScope.processWaitlistRequests();
 
@@ -523,6 +524,12 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 				}
 			];
 		}
+		this.getAvailableHierachy = function () {
+			var response = { data: {} };
+			return {
+				then: function (cb) { cb(response); }
+			}
+		}
 	}
 
 	function FakeSingalRService() {
@@ -553,6 +560,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		{
 			$scope: scope,
 			requestsNotificationService: requestsNotificationService,
+			requestsDataService:requestsDataService,
 			CurrentUserInfo: currentUserInfo
 		});
 		_notificationResult = [];

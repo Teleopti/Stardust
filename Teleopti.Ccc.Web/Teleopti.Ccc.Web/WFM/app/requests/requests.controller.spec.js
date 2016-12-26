@@ -28,6 +28,17 @@ describe('RequestsControllerTests', function () {
 			$provide.service('requestCommandParamsHolder', function () {
 				return requestCommandParamsHolder;
 			});
+			$provide.service('requestsDataService',
+				function() {
+					return {
+						getAvailableHierachy: function () {
+							var response = { data: {} };
+							return {
+								then: function (cb) { cb(response); }
+							}
+						}
+					}
+				});
 		});
 	});
 

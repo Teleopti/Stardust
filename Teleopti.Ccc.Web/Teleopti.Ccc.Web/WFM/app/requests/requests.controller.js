@@ -19,7 +19,7 @@
 				requestsDataService.getAvailableHierachy(moment().format("YYYY-MM-DD"))
 				.then(function (response) {
 					var data = response.data;
-					var preSelectedTeamIds = [data.LogonUserTeamId];
+					var preSelectedTeamIds = data.LogonUserTeamId ? [data.LogonUserTeamId]:[];
 					vm.availableGroups = {
 						sites: data.Children,
 						preSelectedTeamIds: preSelectedTeamIds
