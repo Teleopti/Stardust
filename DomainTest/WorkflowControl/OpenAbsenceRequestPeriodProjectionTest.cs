@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -481,5 +482,48 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
 		    Assert.AreEqual(expected, ((DenyAbsenceRequest) projectedPeriods[0].AbsenceRequestProcess).DenyReason);
 	    }
+
+		[Test]
+	    public void ShouldReturnDenyFromToPeriodAndAutoGrantRollingPeriod()
+	    {
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var openForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 31);
+			_openAbsenceRequestPeriods.Clear();
+			_openAbsenceRequestPeriods.Add(new AbsenceRequestOpenRollingPeriod()
+			{
+				BetweenDays = new MinMax<int>(0, 1),
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
+				OpenForRequestsPeriod = openForRequestsPeriod,
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+			_openAbsenceRequestPeriods.Add(new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
+				Period = new DateOnlyPeriod(2016, 12, 24, 2016, 12, 25),
+				OpenForRequestsPeriod = openForRequestsPeriod,
+				AbsenceRequestProcess = new DenyAbsenceRequest()
+			});
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_openAbsenceRequestPeriodExtractor.AvailablePeriods).Return(_openAbsenceRequestPeriods);
+				Expect.Call(_openAbsenceRequestPeriodExtractor.AllPeriods).Return(_openAbsenceRequestPeriods);
+				Expect.Call(_openAbsenceRequestPeriodExtractor.ViewpointDate).Return(new DateOnly(2016, 12, 23)).Repeat.AtLeastOnce();
+			}
+
+			var dateCulture = CultureInfo.GetCultureInfo("en-US");
+			var languageCulture = CultureInfo.GetCultureInfo("en-US");
+			var requestPeriod = new DateOnlyPeriod(2016, 12, 24, 2016, 12, 24);
+
+			var projectedPeriods = _target.GetProjectedPeriods(requestPeriod, dateCulture, languageCulture);
+
+			Assert.AreEqual(2, projectedPeriods.Count);
+			Assert.IsTrue(projectedPeriods.Any(p => p.AbsenceRequestProcess is DenyAbsenceRequest));
+			Assert.IsTrue(projectedPeriods.Any(p => p.AbsenceRequestProcess is GrantAbsenceRequest));
+		}
     }
 }

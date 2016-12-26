@@ -592,5 +592,48 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			reqs.Count(x => x.IsApproved).Should().Be.EqualTo(1); //with 0% threshold
 			reqs.Count(x => x.IsDenied).Should().Be.EqualTo(1);
 		}
+
+		[Test]
+		public void ShouldDenyIfDenyFromToPeriodOverridesAutoGrantRollingPeriod()
+		{
+			var scenario = ScenarioRepository.Has("scnearioName");
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var tomorrow = DateOnly.Today.AddDays(1);
+			var theDayAfterTomorrow = DateOnly.Today.AddDays(2);
+
+			var wfcs = new WorkflowControlSet().WithId();
+			var openForRequestsPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(30));
+
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenRollingPeriod()
+			{
+				BetweenDays = new MinMax<int>(0, 1),
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
+				OpenForRequestsPeriod = openForRequestsPeriod,
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
+				Period = new DateOnlyPeriod(tomorrow, theDayAfterTomorrow),
+				OpenForRequestsPeriod = openForRequestsPeriod,
+				AbsenceRequestProcess = new DenyAbsenceRequest()
+			});
+
+			var person = PersonFactory.CreatePerson(wfcs).WithId();
+
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, tomorrow.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()))).WithId();
+			personRequest.Pending();
+			PersonRequestRepository.Add(personRequest);
+
+			Target.UpdateAbsenceRequest(new List<Guid> { personRequest.Id.GetValueOrDefault() });
+
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should().Be.EqualTo("RequestDenyReasonAutodeny");
+		}
 	}
 }

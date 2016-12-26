@@ -62,7 +62,15 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 							Period = new DateOnlyPeriod(currentTime, layerEndTime)
 						};
 						workingColl.Add(newLayer);
-						currentTime = layerEndTime.AddDays(1);
+						if (inverseLoop < _layerCollectionOriginal.Count - 1 &&
+							layerEndTime == _layerCollectionOriginal[inverseLoop + 1].Period.StartDate)
+						{
+							currentTime = layerEndTime;
+						}
+						else
+						{
+							currentTime = layerEndTime.AddDays(1);
+						}
 						layerFound = true;
 						break;
 					}
