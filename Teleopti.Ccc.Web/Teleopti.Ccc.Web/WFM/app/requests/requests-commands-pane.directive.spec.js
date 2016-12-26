@@ -62,7 +62,7 @@ xdescribe('[RequestsCommandPaneDirectiveTests]', function () {
 		requestCommandParamsHolder = _requestCommandParamsHolder_;
 	}));
 
-	fit('processWaitlistedRequests command submit scucess, should notify the result', function () {
+	it('processWaitlistedRequests command submit scucess, should notify the result', function () {
 		var test = setUpTarget();
 		var handleResult = {
 			Success: true,
