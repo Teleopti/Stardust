@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Web.Core
 
 		}
 
-		public BusinessUnitWithSitesViewModel GetPermittedTeamHierachy(DateOnly date)
+		public BusinessUnitWithSitesViewModel GetPermittedTeamHierachy(DateOnly date, string permission)
 		{
 			var currentBusinessUnit = _currentBusinessUnit.Current();
 			var sites = _siteRepository.LoadAll().Where(site => site.BusinessUnit.Id == currentBusinessUnit.Id).OrderBy(site => site.Description.Name);
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Web.Core
 				var teams = site.SortedTeamCollection.Where(t => t.IsChoosable);
 				foreach (var team in teams)
 				{
-					if (_permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, date, team))
+					if (_permissionProvider.HasTeamPermission(permission, date, team))
 					{
 						siteViewModel.Children.Add(new TeamViewModel
 						{
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Web.Core
 						});
 					}
 					else if(logonUserTeamId != null && logonUserTeamId == team.Id 
-						&& _permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, date, _loggedOnUser.CurrentUser()))
+						&& _permissionProvider.HasPersonPermission(permission, date, _loggedOnUser.CurrentUser()))
 					{
 						siteViewModel.Children.Add(new TeamViewModel
 						{

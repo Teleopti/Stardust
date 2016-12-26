@@ -18,6 +18,7 @@
 		var maintainOpenHoursUrl = '../api/Sites/MaintainOpenHours';
 		var getLastCaluclatedDateUrl = '../GetLastCaluclatedDateTime';
 		var resourceCalculateUrl = '../TriggerResourceCalculate';
+		var getTeamsHierachyUrl = '../api/Requests/FetchPermittedTeamHierachy';
 
 		this.getAllRequestsPromise_old = function (filter, sortingOrders) {
 			return $http.post(loadTextAndAbsenceRequestsUrl_old, requestsDefinitions.normalizeRequestsFilter_old(filter, sortingOrders));
@@ -105,7 +106,7 @@
 			return statuses;
 		}
 
-		this.getAllBusinessRulesForApproving = function () {
+		this.getAllBusinessRulesForApproving = function() {
 			return [
 				{
 					Id: requestsDefinitions.REQUEST_VALIDATORS.BudgetAllotmentValidator,
@@ -129,6 +130,11 @@
 					Enabled: toggleSvc.Wfm_Requests_Check_Expired_Requests_40274
 				}
 			];
-		}
+		};
+
+		this.getAvailableHierachy = function(dateStr) {
+			var input = getTeamsHierachyUrl + "?date=" + dateStr;
+			return $http.get(input);
+		};
 	}
 })();

@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			PermissionProvider.Enable();
 			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, team, date);
 
-			var permittedHierachy = Target.GetPermittedTeamHierachy(date);
+			var permittedHierachy = Target.GetPermittedTeamHierachy(date, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			permittedHierachy.Children.Count.Should().Be.EqualTo(1);
 			permittedHierachy.Name.Should().Be.EqualTo("_");
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, team, date);
 			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, anotherTeam, date);
 
-			var permittedHierachy = Target.GetPermittedTeamHierachy(date);
+			var permittedHierachy = Target.GetPermittedTeamHierachy(date, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			permittedHierachy.Children.Count.Should().Be.EqualTo(1);
 			permittedHierachy.Name.Should().Be.EqualTo("bu");
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			PermissionProvider.Enable();
 			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, team, date);
 
-			var permittedHierachy = Target.GetPermittedTeamHierachy(date);
+			var permittedHierachy = Target.GetPermittedTeamHierachy(date, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			permittedHierachy.Children.Count.Should().Be.EqualTo(1);
 			permittedHierachy.Name.Should().Be.EqualTo("_");
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			PermissionProvider.Enable();
 			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, me, date);
 
-			var permittedHierachy = Target.GetPermittedTeamHierachy(date);
+			var permittedHierachy = Target.GetPermittedTeamHierachy(date, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			permittedHierachy.Children.Count.Should().Be.EqualTo(1);
 			permittedHierachy.Name.Should().Be.EqualTo("_");

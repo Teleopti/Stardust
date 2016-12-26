@@ -8,6 +8,8 @@ using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -20,15 +22,17 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		private readonly IRequestCommandHandlingProvider _commandHandlingProvider;
 		private readonly IShiftTradeRequestViewModelFactory _shiftTradeRequestViewModelFactory;
 		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly ITeamsProvider _teamsProvider;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory,
 			IRequestCommandHandlingProvider commandHandlingProvider,
-			ILoggedOnUser loggedOnUser, IShiftTradeRequestViewModelFactory shiftTradeRequestViewModelFactory)
+			ILoggedOnUser loggedOnUser, IShiftTradeRequestViewModelFactory shiftTradeRequestViewModelFactory, ITeamsProvider teamsProvider)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_commandHandlingProvider = commandHandlingProvider;
 			_loggedOnUser = loggedOnUser;
 			_shiftTradeRequestViewModelFactory = shiftTradeRequestViewModelFactory;
+			_teamsProvider = teamsProvider;
 		}
 
 		[HttpPost, Route("api/Requests/loadTextAndAbsenceRequests"), UnitOfWork]
@@ -88,6 +92,13 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 			var endTimeUtc = timezone.SafeConvertTimeToUtc(endTime);
 			var period = new DateTimePeriod(startTimeUtc, endTimeUtc);
 			return _commandHandlingProvider.RunWaitlist(period);
+		}
+
+		[UnitOfWork, HttpGet, Route("api/Requests/FetchPermittedTeamHierachy")]
+		public virtual BusinessUnitWithSitesViewModel FetchPermittedTeamHierachy(DateTime date)
+		{
+
+			return _teamsProvider.GetPermittedTeamHierachy(new DateOnly(date), DefinedRaptorApplicationFunctionPaths.WebRequests);
 		}
 	}
 }

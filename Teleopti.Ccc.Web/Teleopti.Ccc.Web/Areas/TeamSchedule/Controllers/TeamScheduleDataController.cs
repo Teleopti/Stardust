@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
@@ -131,7 +132,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		public virtual BusinessUnitWithSitesViewModel FetchPermittedTeamHierachy(DateTime date)
 		{
 			
-			return _teamProvider.GetPermittedTeamHierachy(new DateOnly(date));
+			return _teamProvider.GetPermittedTeamHierachy(new DateOnly(date), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 		}
 
 	}

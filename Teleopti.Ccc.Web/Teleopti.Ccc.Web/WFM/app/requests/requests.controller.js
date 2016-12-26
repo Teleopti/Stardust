@@ -3,9 +3,9 @@
 
 	angular.module('wfm.requests').controller('RequestsCtrl', requestsController);
 
-	requestsController.$inject = ["$scope", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "NoticeService", "CurrentUserInfo"];
+	requestsController.$inject = ["$q", "$scope", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "NoticeService", "CurrentUserInfo"];
 
-	function requestsController($scope, $translate, toggleService, requestsDefinitions, requestsNotificationService, noticeSvc, CurrentUserInfo) {
+	function requestsController($q, $scope, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, noticeSvc, CurrentUserInfo) {
 		var vm = this;
 		vm.onAgentSearchTermChanged = onAgentSearchTermChanged;
 
@@ -13,7 +13,19 @@
 		var absenceRequestTabIndex = 0;
 		var shiftTradeRequestTabIndex = 1;
 
-		toggleService.togglesLoaded.then(init);
+		$q.all([
+				toggleService.togglesLoaded,
+				requestsDataService.getAvailableHierachy(moment().format("YYYY-MM-DD"))
+				.then(function (response) {
+					var data = response.data;
+					var preSelectedTeamIds = [data.LogonUserTeamId];
+					vm.availableGroups = {
+						sites: data.Children,
+						preSelectedTeamIds: preSelectedTeamIds
+					};
+				})
+			])
+			.then(init);
 
 		vm.dateRangeCustomValidators = [{
 			key: 'max60Days',
@@ -37,6 +49,7 @@
 			
 			vm.filterToggleEnabled = toggleService.Wfm_Requests_Filtering_37748;
 			vm.filterEnabled = vm.filterToggleEnabled;
+			vm.businessHierarchyToggleEnabled = toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309;
 
 			var defaultDateRange = {
 				startDate: moment().startOf('week')._d,
