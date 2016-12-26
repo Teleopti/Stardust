@@ -1,5 +1,5 @@
 ﻿'use strict';
-xdescribe('[RequestsCommandPaneDirectiveTests]', function () {
+describe('[RequestsCommandPaneDirectiveTests]', function () {
 	var $compile,
 		$rootScope,
 		$controller;
@@ -71,7 +71,6 @@ xdescribe('[RequestsCommandPaneDirectiveTests]', function () {
 		}
 		requestsDataService.submitCommandIsASucess(true);
 		requestsDataService.setRequestCommandHandlingResult(handleResult);
-		console.log("test", test);
 
 		test.requestCommandPaneScope.processWaitlistRequests();
 
@@ -563,6 +562,8 @@ xdescribe('[RequestsCommandPaneDirectiveTests]', function () {
 			requestsDataService:requestsDataService,
 			CurrentUserInfo: currentUserInfo
 		});
+		scope.$digest();
+
 		_notificationResult = [];
 		var targetScope = $rootScope.$new();
 		targetScope.onCommandSuccess = requestsController.onCommandSuccess;
