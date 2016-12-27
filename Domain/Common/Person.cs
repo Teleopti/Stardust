@@ -830,11 +830,14 @@ namespace Teleopti.Ccc.Domain.Common
 
 	    public virtual ISiteOpenHour SiteOpenHour(DateOnly dateOnly)
 	    {
-			var siteOpenHours = MyTeam(dateOnly).Site.OpenHourCollection;
-			foreach (var siteOpenHour in siteOpenHours)
+			if (MyTeam(dateOnly) != null)
 			{
-				if (siteOpenHour.WeekDay == dateOnly.DayOfWeek)
-					return siteOpenHour;
+				var siteOpenHours = MyTeam(dateOnly).Site.OpenHourCollection;
+				foreach (var siteOpenHour in siteOpenHours)
+				{
+					if (siteOpenHour.WeekDay == dateOnly.DayOfWeek)
+						return siteOpenHour;
+				}
 			}
 			return null;
 		}

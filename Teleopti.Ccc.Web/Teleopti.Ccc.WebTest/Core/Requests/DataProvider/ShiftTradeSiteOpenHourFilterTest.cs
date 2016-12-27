@@ -128,6 +128,57 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
+		public void ShouldOnlyFilterScheduleDayWhenThereIsOnlyAScheduleDay()
+		{
+			var personFrom = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>
+			{
+				{ DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(9), TimeSpan.FromHours(33)) }
+			});
+			prepareData(personFrom);
+
+			var person1 = createPersonWithSiteOpenHours(8, 15);
+
+			var scheduleDays = new[]
+			{
+				createScheduleDay(person1, new TimePeriod(TimeSpan.FromHours(22), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(10))))
+			};
+			_personFromScheduleView.ScheduleLayers = null;
+			var filteredScheduleDays =
+				scheduleDays.Where(scheduleDay => Target.FilterSchedule(scheduleDay, _personFromScheduleView)).ToList();
+
+			filteredScheduleDays.Count.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldOnlyFilterScheduleViewModelWhenThereIsOnlyAScheduleViewModel()
+		{
+			prepareData();
+			Assert.True(Target.FilterSchedule(null, _personFromScheduleView));
+		}
+
+		[Test]
+		public void ShouldFilterTradeeScheduleEvenIfTraderhasADayOff()
+		{
+			prepareData();
+
+			var person1 = createPersonWithSiteOpenHours(8, 15);
+			var person2 = createPersonWithSiteOpenHours(8, 11);
+
+			var scheduleDays = new[]
+			{
+				createScheduleDay(person1, new TimePeriod(8, 30, 10, 30), new TimePeriod(11, 30, 14, 30)),
+				createScheduleDay(person2, new TimePeriod(8, 30, 10, 30), new TimePeriod(11, 30, 14, 30))
+			};
+			_personFromScheduleView = createShiftTradeAddPersonScheduleViewModelWithDayOff(person1);
+
+			var filteredScheduleDays =
+				scheduleDays.Where(scheduleDay => Target.FilterSchedule(scheduleDay, _personFromScheduleView)).ToList();
+
+			filteredScheduleDays.Count.Should().Be(1);
+			filteredScheduleDays.First().Person.Should().Be(person1);
+		}
+
+		[Test]
 		public void ShouldFilterScheduleViewByCurrentUserSiteOpenHour()
 		{
 			prepareData();
@@ -150,7 +201,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				})
 			};
 
-			var datePersons = new DatePersons {Date = _shiftTradeDate, Persons = new[] {person1, person2}};
+			var datePersons = new DatePersons { Date = _shiftTradeDate, Persons = new[] { person1, person2 } };
 			var filteredShiftTradeAddPersonScheduleViews =
 				Target.FilterScheduleView(shiftTradeAddPersonScheduleViews, _personFromScheduleView, datePersons).ToList();
 
@@ -180,7 +231,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				})
 			};
 
-			var datePersons = new DatePersons {Date = _shiftTradeDate, Persons = new[] {person1, person2}};
+			var datePersons = new DatePersons { Date = _shiftTradeDate, Persons = new[] { person1, person2 } };
 			var filteredShiftTradeAddPersonScheduleViews =
 				Target.FilterScheduleView(shiftTradeAddPersonScheduleViews, _personFromScheduleView, datePersons).ToList();
 
@@ -369,7 +420,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			};
 
 			var filteredShiftExchangeOffers = shiftExchangeOffers
-				.Where(shiftExchangeOffer =>  Target.FilterShiftExchangeOffer(shiftExchangeOffer, _personFromScheduleView)).ToList();
+				.Where(shiftExchangeOffer => Target.FilterShiftExchangeOffer(shiftExchangeOffer, _personFromScheduleView)).ToList();
 			filteredShiftExchangeOffers.Count.Should().Be(1);
 		}
 
@@ -429,11 +480,27 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			};
 		}
 
+		private static ShiftTradeAddPersonScheduleViewModel createShiftTradeAddPersonScheduleViewModelWithDayOff(IPerson person)
+		{
+			var teamScheduleLayerViewModels = new List<TeamScheduleLayerViewModel>();
+
+			return new ShiftTradeAddPersonScheduleViewModel
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				ScheduleLayers = teamScheduleLayerViewModels.ToArray(),
+				Name = "test",
+				Total = teamScheduleLayerViewModels.Count,
+				IsDayOff = true,
+				IsFullDayAbsence = true,
+				DayOffName = "dayOff"
+			};
+		}
+
 		private static TeamScheduleLayerViewModel createTeamScheduleLayerViewModel(DateTime start, DateTime end)
 		{
 			return new TeamScheduleLayerViewModel
 			{
-				LengthInMinutes = (int) (end - start).TotalMinutes,
+				LengthInMinutes = (int)(end - start).TotalMinutes,
 				Start = start,
 				End = end
 			};
@@ -499,7 +566,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var scenario = CurrentScenario.Current();
 			var scheduleDay = ScheduleDayFactory.Create(date, person, scenario);
 			var shiftExchangeOffer = new ShiftExchangeOffer(scheduleDay,
-				new ShiftExchangeCriteria {DayType = ShiftExchangeLookingForDay.EmptyDay},
+				new ShiftExchangeCriteria { DayType = ShiftExchangeLookingForDay.EmptyDay },
 				ShiftExchangeOfferStatus.Pending);
 			return shiftExchangeOffer;
 		}
