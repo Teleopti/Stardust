@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 	public class StaffingThresholdValidatorTest
     {
         private StaffingThresholdValidator _target;
+        private StaffingThresholdValidatorHelper _targetHelper;  //Do like this until we can remove toggles
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private PersonRequestFactory _personRequestFactory;
         private IResourceCalculation _resourceOptimizationHelper;
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         public void Setup()
         {
             _target = new StaffingThresholdValidator();
+			_targetHelper = new StaffingThresholdValidatorHelper(_target.GetIntervalsForUnderstaffing, _target.GetIntervalsForSeriousUnderstaffing);
             DateTimePeriod schedulingDateTimePeriod = new DateTimePeriod(2010, 02, 01, 2010, 02, 28);
             _dictionary = new ScheduleDictionaryForTest(MockRepository.GenerateMock<IScenario>(),schedulingDateTimePeriod.StartDateTime);
             _schedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(schedulingDateTimePeriod);
@@ -341,7 +343,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             var understaffingDetails = new UnderstaffingDetails();
 			
-			var validateUnderStaffingSkillDay1 = _target.ValidateUnderstaffing(_skill,
+			var validateUnderStaffingSkillDay1 = _targetHelper.ValidateUnderstaffing(_skill,
 		                                                                                          new List<ISkillStaffPeriod>
 		                                                                                              {
 		                                                                                                  skillDay1
@@ -349,7 +351,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		                                                                                              [0]
 		                                                                                              }, _timeZone, understaffingDetails);
 
-		    var validatedUnderStaffingSkillDay2 = _target.ValidateUnderstaffing(_skill,
+		    var validatedUnderStaffingSkillDay2 = _targetHelper.ValidateUnderstaffing(_skill,
 		                                                                                           new List<ISkillStaffPeriod>
 		                                                                                               {
 		                                                                                                   skillDay2
@@ -391,8 +393,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		    skillDay2.SetCalculatedStaffCollection(updatedValues2);
             updatedValues2.BatchCompleted();
 		    var detail = new UnderstaffingDetails();
-			var staffingThresholdValidator = new StaffingThresholdValidator();
-			var validatedUnderStaffing = staffingThresholdValidator.ValidateUnderstaffing(_skill,
+			var validatedUnderStaffing = _targetHelper.ValidateUnderstaffing(_skill,
 		                                                                                  new List<ISkillStaffPeriod>
 		                                                                                      {
 		                                                                                          skillDay1
@@ -424,8 +425,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             var updatedValues1 = new NewSkillStaffPeriodValues(new List<ISkillStaffPeriod> { skillStaffPeriod1 });
             skillDay1.SetCalculatedStaffCollection(updatedValues1);
             updatedValues1.BatchCompleted();
-			var staffingThresholdValidator = new StaffingThresholdValidator();
-			var validatedUnderStaffing = staffingThresholdValidator.ValidateUnderstaffing(_skill,
+			var validatedUnderStaffing = _targetHelper.ValidateUnderstaffing(_skill,
                                                                                           new List<ISkillStaffPeriod>
                                                                                               {
                                                                                                   skillDay1
@@ -507,16 +507,14 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         public void ShouldThrowExceptionIfSkillStaffPeriodListIsNull()
         {
             var skill = SkillFactory.CreateSkill("test");
-			var staffingThresholdValidator = new StaffingThresholdValidator();
-			Assert.Throws<ArgumentNullException>(() => staffingThresholdValidator.ValidateSeriousUnderstaffing(skill, null, skill.TimeZone, new UnderstaffingDetails()));
+			Assert.Throws<ArgumentNullException>(() => _targetHelper.ValidateSeriousUnderstaffing(skill, null, skill.TimeZone, new UnderstaffingDetails()));
         }
 
         [Test]
         public void ShouldThrowExceptionIfSkillStaffPeriodListArgumentIsNull()
         {
             var skill = SkillFactory.CreateSkill("test");
-			var staffingThresholdValidator = new StaffingThresholdValidator();
-			Assert.Throws<ArgumentNullException>(() => staffingThresholdValidator.ValidateUnderstaffing(skill, null, skill.TimeZone, new UnderstaffingDetails()));
+			Assert.Throws<ArgumentNullException>(() => _targetHelper.ValidateUnderstaffing(skill, null, skill.TimeZone, new UnderstaffingDetails()));
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]

@@ -33,12 +33,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			}
 		}
 		
-		protected override Specification<ISkillStaffPeriod> GetIntervalsForUnderstaffing(ISkill skill)
+		public override Specification<ISkillStaffPeriod> GetIntervalsForUnderstaffing(ISkill skill)
 		{
 			return new IntervalShrinkageHasUnderstaffing(skill);
 		}
 
-		protected override Specification<ISkillStaffPeriod> GetIntervalsForSeriousUnderstaffing(ISkill skill)
+		public override Specification<ISkillStaffPeriod> GetIntervalsForSeriousUnderstaffing(ISkill skill)
 		{
 			return new IntervalShrinkageHasSeriousUnderstaffing(skill);
 		}
