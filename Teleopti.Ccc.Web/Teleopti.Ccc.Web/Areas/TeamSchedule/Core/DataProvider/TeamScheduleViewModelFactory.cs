@@ -27,11 +27,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 		private readonly IPeopleSearchProvider _searchProvider;
 		private readonly IPersonRepository _personRepository;
-		private readonly IUserCulture _userCulture;
-		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
-		private readonly IToggleManager _toggleManager;		
+	    private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
+		private readonly IToggleManager _toggleManager;
 
-		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider,IScheduleProvider scheduleProvider,ITeamScheduleProjectionProvider teamScheduleProjectionProvider,IProjectionProvider projectionProvider,ICommonAgentNameProvider commonAgentNameProvider,IPeopleSearchProvider searchProvider,IPersonRepository personRepository,IUserCulture userCulture,IIanaTimeZoneProvider ianaTimeZoneProvider,IToggleManager toggleManager)
+		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider, IScheduleProvider scheduleProvider,
+			ITeamScheduleProjectionProvider teamScheduleProjectionProvider, IProjectionProvider projectionProvider,
+			ICommonAgentNameProvider commonAgentNameProvider, IPeopleSearchProvider searchProvider,
+			IPersonRepository personRepository, IIanaTimeZoneProvider ianaTimeZoneProvider, IToggleManager toggleManager)
 		{
 			_permissionProvider = permissionProvider;
 			_scheduleProvider = scheduleProvider;
@@ -40,9 +42,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_commonAgentNameProvider = commonAgentNameProvider;
 			_searchProvider = searchProvider;
 			_personRepository = personRepository;
-			_userCulture = userCulture;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
-			_toggleManager = toggleManager;			
+			_toggleManager = toggleManager;
 		}
 
 
@@ -149,12 +150,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		public GroupWeekScheduleViewModel CreateWeekScheduleViewModel(
 			Guid[] teamIds,
 			IDictionary<PersonFinderField,string> criteriaDictionary,
-			DateOnly dateInUserTimeZone,int pageSize,int currentPageIndex)
+			DateOnly startOfWeekInUserTimeZone,int pageSize,int currentPageIndex)
 		{
 			var businessHierachyToggle = _toggleManager.IsEnabled(Toggles.WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252);
 
-			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(dateInUserTimeZone,_userCulture.GetCulture().DateTimeFormat.FirstDayOfWeek);
-			var week = new DateOnlyPeriod(firstDayOfWeek,firstDayOfWeek.AddDays(6));
+			var week = new DateOnlyPeriod(startOfWeekInUserTimeZone, startOfWeekInUserTimeZone.AddDays(6));
 
 			var weekDays = week.DayCollection();
 			var personIds = new HashSet<Guid>();
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				});
 
 			var viewableConfidentialAbsenceAgents =
-				weekDays.ToDictionary(d => d,d => _searchProvider.GetPermittedPersonIdList(pagedPeople,dateInUserTimeZone,
+				weekDays.ToDictionary(d => d,d => _searchProvider.GetPermittedPersonIdList(pagedPeople,startOfWeekInUserTimeZone,
 				   DefinedRaptorApplicationFunctionPaths.ViewConfidential));
 
 			var result = new List<PersonWeekScheduleViewModel>();
