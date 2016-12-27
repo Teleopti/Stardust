@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
@@ -36,16 +37,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
     public class RequestAllowanceModel : IRequestAllowanceModel
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly IBudgetDayRepository _budgetDayRepository;
         private readonly IBudgetGroupRepository _budgetGroupRepository;
         private readonly ICurrentScenario _scenarioRepository;
-        private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
-        private IList<double> _allowanceCollection;
-        private IList<double> _totalAllowanceCollection;
-        private IEnumerable<PayloadWorkTime> _usedAbsences;
+		private readonly IRequestAllowanceProvider _requestAllowanceProvider;
         private DateOnly _selectedDate;
-        private IList<double> _fteCollection;
-        
+
         public RequestAllowanceModel(IUnitOfWorkFactory unitOfWorkFactory,
                                     IBudgetDayRepository budgetDayRepository, 
                                     IBudgetGroupRepository budgetGroupRepository,
@@ -53,11 +49,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
                                     IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
-            _budgetDayRepository = budgetDayRepository;
             _budgetGroupRepository = budgetGroupRepository;
             _scenarioRepository = scenarioRepository;
-            _scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
-            VisibleModel = new List<BudgetAbsenceAllowanceDetailModel>();
+			_requestAllowanceProvider = new RequestAllowanceProvider(scheduleProjectionReadOnlyPersister, _scenarioRepository, budgetDayRepository);
+			VisibleModel = new List<BudgetAbsenceAllowanceDetailModel>();
             BudgetGroups = new List<IBudgetGroup>();
             AbsencesInBudgetGroup = new HashSet<IAbsence>();
         }
@@ -111,17 +106,28 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 
         public void ReloadModel(DateOnlyPeriod visibleWeek, bool reloadAllowance)
         {
-            using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 clearModels();
                 WeekName = getWeekHeader(SelectedDate, VisibleWeek);
-                if (reloadAllowance)
-                {
-                    loadBudgetData(visibleWeek);
-                }
-                loadAbsencesInBudgetGroup();
-                loadUsedAbsences(visibleWeek);
-                loadModels(visibleWeek);
+				loadAbsencesInBudgetGroup();
+	            var budgetAbsenceAllowanceDetails = _requestAllowanceProvider.GetBudgetAbsenceAllowanceDetails(visibleWeek, SelectedBudgetGroup,
+		            AbsencesInBudgetGroup);
+	            foreach (var budgetAbsenceAllowanceDetail in budgetAbsenceAllowanceDetails)
+	            {
+		            VisibleModel.Add(new BudgetAbsenceAllowanceDetailModel
+		            {
+			            AbsoluteDifference = budgetAbsenceAllowanceDetail.AbsoluteDifference,
+			            Allowance = AllowanceSelected ? budgetAbsenceAllowanceDetail.Allowance : budgetAbsenceAllowanceDetail.TotalAllowance,
+			            Date = new DateDayModel(budgetAbsenceAllowanceDetail.Date),
+			            RelativeDifference = budgetAbsenceAllowanceDetail.RelativeDifference,
+			            TotalHeadCounts = budgetAbsenceAllowanceDetail.TotalHeadCounts,
+			            UsedTotalAbsences = budgetAbsenceAllowanceDetail.UsedTotalAbsences,
+			            UsedAbsencesDictionary =
+				            budgetAbsenceAllowanceDetail.UsedAbsencesDictionary.ToDictionary(
+					            item => Convert.ToString(item.Key.Id, CultureInfo.CurrentCulture), item => item.Value)
+		            });
+	            }
             }
         }
 
@@ -146,49 +152,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
                 }
             }
         }
-        
-        private void loadModels(DateOnlyPeriod visibleWeek)
-        {
-            for (var i = 0; i < visibleWeek.DayCount(); i++)
-            {
-                var currentDate = visibleWeek.StartDate.AddDays(i);
-                var absenceDict = new Dictionary<string, double>();
-                foreach (var absence in AbsencesInBudgetGroup)
-                {
-                    var payloadWorkTime = _usedAbsences.FirstOrDefault(ua => ua.PayloadId.Equals(absence.Id.GetValueOrDefault()) && ua.BelongsToDate.Equals(currentDate.Date));
-                    if (payloadWorkTime != null)
-                    {
-                        var usedFTEs =_fteCollection[i] != 0 ? TimeSpan.FromTicks(payloadWorkTime.TotalContractTime).TotalMinutes*1d/TimeDefinition.MinutesPerHour/_fteCollection[i] : 0d;
-                        absenceDict.Add(Convert.ToString(absence.Id, CultureInfo.CurrentCulture), usedFTEs);
-                    }
-                }
-                var allowance = AllowanceSelected ? _allowanceCollection[i] : _totalAllowanceCollection[i];
-                var usedTotalAbsences = absenceDict.Sum(a => a.Value);
-                var absoluteDiff = allowance - usedTotalAbsences;
-                var relativeDiff = new Percent(usedTotalAbsences / allowance);
-                var headCounts = getHeadCounts(SelectedBudgetGroup, currentDate);
-                
-                var detailModel = new BudgetAbsenceAllowanceDetailModel
-                                      {
-                                          Date = new DateDayModel(currentDate),
-                                          Allowance = allowance,
-                                          UsedAbsencesDictionary = absenceDict,
-                                          UsedTotalAbsences = usedTotalAbsences,
-                                          AbsoluteDifference = absoluteDiff,
-                                          RelativeDifference = relativeDiff,
-                                          TotalHeadCounts = headCounts
-                                      };
-                VisibleModel.Add(detailModel);
-            }
-        }
-
-        private int getHeadCounts(IBudgetGroup selectedBudgetGroup, DateOnly currentDate)
-        {
-            // Need to check CurrentDateUTC...
-            //var currentDateUtc = TimeZoneHelper.ConvertToUtc(currentDate, selectedBudgetGroup.TimeZone);
-            return _scheduleProjectionReadOnlyPersister.GetNumberOfAbsencesPerDayAndBudgetGroup(selectedBudgetGroup.Id.GetValueOrDefault(), currentDate);
-        }
-
+       
         private void loadAbsencesInBudgetGroup()
         {
             if (SelectedBudgetGroup is EmptyBudgetGroup) return;
@@ -200,49 +164,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
             }
         }
 
-        private void loadBudgetData(DateOnlyPeriod period)
-        {
-            var budgetDays = new List<IBudgetDay>();
-             if (!(SelectedBudgetGroup is EmptyBudgetGroup))
-                budgetDays = _budgetDayRepository.Find(DefaultScenario, SelectedBudgetGroup, period).ToList();
-            budgetDays = addMissingDays(budgetDays, VisibleWeek).ToList();
-            _allowanceCollection = budgetDays.Select(b => b.Allowance).ToList();
-            _totalAllowanceCollection = budgetDays.Select(b => b.TotalAllowance).ToList();
-            _fteCollection = budgetDays.Select(b => b.FulltimeEquivalentHours).ToList();
-        }
-
-        private void loadUsedAbsences(DateOnlyPeriod period)
-        {
-            if (SelectedBudgetGroup is EmptyBudgetGroup) return;
-            _usedAbsences = _scheduleProjectionReadOnlyPersister.AbsenceTimePerBudgetGroup(period, SelectedBudgetGroup, DefaultScenario);
-        }
-
         private void loadDefaultScenario()
         {
             DefaultScenario = _scenarioRepository.Current();
-        }
-
-        private IEnumerable<IBudgetDay> addMissingDays(IEnumerable<IBudgetDay> existingBudgetDays, DateOnlyPeriod period)
-        {
-            var dayCollection = period.DayCollection();
-            var allBudgetDaysForPeriod = new List<IBudgetDay>(dayCollection.Count);
-
-            foreach (DateOnly date in dayCollection)
-            {
-                var budgetDay = existingBudgetDays.FirstOrDefault(d => d.Day == date);
-                if (budgetDay == null)
-                {
-                    budgetDay = new BudgetDay(SelectedBudgetGroup, DefaultScenario, date);
-                    initiateBudgetDayWithDefaultValue(budgetDay);
-                }
-                allBudgetDaysForPeriod.Add(budgetDay);
-            }
-            return allBudgetDaysForPeriod;
-        }
-
-        private static void initiateBudgetDayWithDefaultValue(IBudgetDay budgetDay)
-        {
-            budgetDay.AbsenceThreshold = new Percent(1.0);
         }
         
         private static string getWeekHeader(DateOnly date, DateOnlyPeriod week)

@@ -1,0 +1,125 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
+using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.AgentInfo.Requests
+{
+	public class RequestAllowanceProvider : IRequestAllowanceProvider
+	{
+		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
+		private readonly ICurrentScenario _scenarioRepository;
+		private readonly IBudgetDayRepository _budgetDayRepository;
+
+		public RequestAllowanceProvider(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, ICurrentScenario scenarioRepository, IBudgetDayRepository budgetDayRepository)
+		{
+			_scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
+			_scenarioRepository = scenarioRepository;
+			_budgetDayRepository = budgetDayRepository;
+		}
+
+		public IList<IBudgetAbsenceAllowanceDetail> GetBudgetAbsenceAllowanceDetails(DateOnlyPeriod period, IBudgetGroup selectedBudgetGroup, IEnumerable<IAbsence> absencesInBudgetGroup)
+		{
+			var budgetAbsenceAllowanceDetails = new List<IBudgetAbsenceAllowanceDetail>();
+			var usedAbsences = loadUsedAbsences(selectedBudgetGroup, period);
+			var budgetDays = loadBudgetDays(selectedBudgetGroup, period);
+			var fteCollection = budgetDays.Select(b => b.FulltimeEquivalentHours).ToList();
+			var allowanceCollection = budgetDays.Select(b => b.Allowance).ToList();
+			var totalAllowanceCollection = budgetDays.Select(b => b.TotalAllowance).ToList();
+			for (var i = 0; i < period.DayCount(); i++)
+			{
+				var currentDate = period.StartDate.AddDays(i);
+				var absenceDict = new Dictionary<IAbsence, double>();
+				foreach (var absence in absencesInBudgetGroup)
+				{
+					var payloadWorkTime = usedAbsences.FirstOrDefault(ua => ua.PayloadId.Equals(absence.Id.GetValueOrDefault()) && ua.BelongsToDate.Equals(currentDate.Date));
+					if (payloadWorkTime != null)
+					{
+						var usedFTEs = fteCollection[i] != 0 ? TimeSpan.FromTicks(payloadWorkTime.TotalContractTime).TotalMinutes * 1d / TimeDefinition.MinutesPerHour / fteCollection[i] : 0d;
+						absenceDict.Add(absence, usedFTEs);
+					}
+				}
+				var allowance = allowanceCollection[i];
+				var totalAllowance = totalAllowanceCollection[i];
+				var usedTotalAbsences = absenceDict.Sum(a => a.Value);
+				var absoluteDiff = allowance - usedTotalAbsences;
+				var relativeDiff = new Percent(usedTotalAbsences / allowance);
+				var headCounts = getHeadCounts(selectedBudgetGroup, currentDate);
+
+				var detailModel = new BudgetAbsenceAllowanceDetail
+				{
+					Date = currentDate,
+					Allowance = allowance,
+					TotalAllowance = totalAllowance,
+					UsedAbsencesDictionary = absenceDict,
+					UsedTotalAbsences = usedTotalAbsences,
+					AbsoluteDifference = absoluteDiff,
+					RelativeDifference = relativeDiff,
+					TotalHeadCounts = headCounts
+				};
+				budgetAbsenceAllowanceDetails.Add(detailModel);
+			}
+			return budgetAbsenceAllowanceDetails;
+		}
+
+		private List<PayloadWorkTime> loadUsedAbsences(IBudgetGroup selectedBudgetGroup, DateOnlyPeriod period)
+		{
+			var usedAbsences = new List<PayloadWorkTime>();
+			if (isBudgetGroupNullOrEmpty(selectedBudgetGroup)) return usedAbsences;
+			usedAbsences =
+				_scheduleProjectionReadOnlyPersister.AbsenceTimePerBudgetGroup(period, selectedBudgetGroup,
+					_scenarioRepository.Current()).ToList();
+			return usedAbsences;
+		}
+
+		private List<IBudgetDay> loadBudgetDays(IBudgetGroup selectedBudgetGroup, DateOnlyPeriod period)
+		{
+			var budgetDays = new List<IBudgetDay>();
+			if (!isBudgetGroupNullOrEmpty(selectedBudgetGroup))
+				budgetDays = _budgetDayRepository.Find(_scenarioRepository.Current(), selectedBudgetGroup, period).ToList();
+			selectedBudgetGroup = selectedBudgetGroup ?? new BudgetGroup {Name = UserTexts.Resources.Empty};
+			budgetDays = addMissingDays(selectedBudgetGroup, budgetDays, period).ToList();
+			return budgetDays;
+		}
+
+		private IEnumerable<IBudgetDay> addMissingDays(IBudgetGroup selectedBudgetGroup, IEnumerable<IBudgetDay> existingBudgetDays, DateOnlyPeriod period)
+		{
+			var dayCollection = period.DayCollection();
+			var allBudgetDaysForPeriod = new List<IBudgetDay>(dayCollection.Count);
+
+			foreach (var date in dayCollection)
+			{
+				var budgetDay = existingBudgetDays.FirstOrDefault(d => d.Day == date);
+				if (budgetDay == null)
+				{
+					budgetDay = new BudgetDay(selectedBudgetGroup, _scenarioRepository.Current(), date);
+					initiateBudgetDayWithDefaultValue(budgetDay);
+				}
+				allBudgetDaysForPeriod.Add(budgetDay);
+			}
+			return allBudgetDaysForPeriod;
+		}
+
+		private static void initiateBudgetDayWithDefaultValue(IBudgetDay budgetDay)
+		{
+			budgetDay.AbsenceThreshold = new Percent(1.0);
+		}
+
+		private int getHeadCounts(IBudgetGroup selectedBudgetGroup, DateOnly currentDate)
+		{
+			if (isBudgetGroupNullOrEmpty(selectedBudgetGroup))
+				return 0;
+			return _scheduleProjectionReadOnlyPersister.GetNumberOfAbsencesPerDayAndBudgetGroup(selectedBudgetGroup.Id.GetValueOrDefault(), currentDate);
+		}
+
+		private bool isBudgetGroupNullOrEmpty(IBudgetGroup selectedBudgetGroup)
+		{
+			return string.IsNullOrWhiteSpace(selectedBudgetGroup?.Name);
+		}
+	}
+}
