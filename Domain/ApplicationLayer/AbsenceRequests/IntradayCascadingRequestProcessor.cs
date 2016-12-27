@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Secrets.Furness;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
@@ -28,6 +29,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly AddResourcesToSubSkills _addResourcesToSubSkills;
 		private readonly ReducePrimarySkillResources _reducePrimarySkillResources;
 		private readonly PrimarySkillOverstaff _primarySkillOverstaff;
+		private readonly IScheduleForecastSkillReadModelValidator _scheduleForecastSkillReadModelValidator;
+		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
 
 		private const double _quotient = 1d; // the outer quotient: default = 1
@@ -36,7 +39,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		public IntradayCascadingRequestProcessor(ICommandDispatcher commandDispatcher, 
 			ISkillCombinationResourceRepository skillCombinationResourceRepository, IPersonSkillProvider personSkillProvider, 
 			IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository,
-			ISkillRepository skillRepository, IActivityRepository activityRepository, AddResourcesToSubSkills addResourcesToSubSkills, ReducePrimarySkillResources reducePrimarySkillResources, PrimarySkillOverstaff primarySkillOverstaff)
+			ISkillRepository skillRepository, IActivityRepository activityRepository, AddResourcesToSubSkills addResourcesToSubSkills, 
+			ReducePrimarySkillResources reducePrimarySkillResources, PrimarySkillOverstaff primarySkillOverstaff, 
+			IScheduleForecastSkillReadModelValidator scheduleForecastSkillReadModelValidator, ICurrentBusinessUnit currentBusinessUnit)
 		{
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
@@ -49,21 +54,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_addResourcesToSubSkills = addResourcesToSubSkills;
 			_reducePrimarySkillResources = reducePrimarySkillResources;
 			_primarySkillOverstaff = primarySkillOverstaff;
+			_scheduleForecastSkillReadModelValidator = scheduleForecastSkillReadModelValidator;
+			_currentBusinessUnit = currentBusinessUnit;
 		}
 
 		public void Process(IPersonRequest personRequest, DateTime startTime)
 		{
-			//Need to validate skillCombo Read model
-			//if (!_scheduleForecastSkillReadModelValidator.Validate(_currentBusinessUnit.Current().Id.GetValueOrDefault()))
-			//{
-			//	sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
-			//	return;
-			//}
+			if (!_scheduleForecastSkillReadModelValidator.Validate(_currentBusinessUnit.Current().Id.GetValueOrDefault()))
+			{
+				sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
+				return;
+			}
 
 			//what if the agent changes personPeriod in the middle of the request period?
 
 			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(personRequest.Request.Period).ToArray();
-			if (!combinationResources.Any()) return;
+			if (!combinationResources.Any())
+			{
+				sendDenyCommand(personRequest.Id.GetValueOrDefault(), Resources.DenyDueToTechnicalProblems);
+				return;
+			}  
 
 			var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), personRequest.Request.Period, _currentScenario.Current())[personRequest.Person];
 

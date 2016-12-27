@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using NHibernate.Util;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -8,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.IocCommon;
@@ -20,11 +20,10 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
-	[AllTogglesOn]
 	[TestFixture]
 	public class IntradayCascadingRequestProcessorTest : ISetup
 	{
-		public IIntradayRequestProcessor Target;
+		public IntradayCascadingRequestProcessor Target;
 		public FakePersonRepository PersonRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeActivityRepository ActivityRepository;
@@ -34,11 +33,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeScheduleForecastSkillReadModelRepository ScheduleForecastSkillReadModelRepository;
 		public FakeCommandDispatcher CommandDispatcher;
 		public IScheduleStorage ScheduleStorage;
+		public MutableNow Now;
 
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
+			system.UseTestDouble<IntradayCascadingRequestProcessor>().For<IIntradayRequestProcessor>();
+			system.UseTestDouble<ScheduleForecastSkillReadModelValidator>().For<IScheduleForecastSkillReadModelValidator>();
 		}
 
 		[Test]
@@ -590,9 +592,51 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			SkillCombinationResourceRepository.LoadSkillCombinationResources(period).First().Resource.Should().Be.EqualTo(9);
 			SkillCombinationResourceRepository.LoadSkillCombinationResources(period).Second().Resource.Should().Be.EqualTo(9);
 		}
-	}
 
-	
+		[Test]
+		public void DenyIfReadModelDataIsTooOld()
+		{
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill = SkillRepository.Has("skillA", activity).WithId();
+			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
+			var now = new DateTime(2016, 12, 1, 7, 0, 0);
+
+			var agent = PersonRepository.Has(skill);
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, period, new ShiftCategory("category"), scenario));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
+
+			Now.Is(now);
+			ScheduleForecastSkillReadModelRepository.LastCalculatedDate.Add(personRequest.BusinessUnit.Id.GetValueOrDefault(), now.AddHours(-3));
+			Target.Process(personRequest, period.StartDateTime);
+			var denyCommand = CommandDispatcher.LatestCommand as DenyRequestCommand;
+			denyCommand.DenyReason.Should().Contain("Please contact system administrator");
+		}
+
+		[Test]
+		public void DenyIfReadModelDataIsNotTooOldButNoSkillCombinationsInReadModel()
+		{
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill = SkillRepository.Has("skillA", activity).WithId();
+			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
+			var now = new DateTime(2016, 12, 1, 7, 0, 0);
+
+			var agent = PersonRepository.Has(skill);
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, period, new ShiftCategory("category"), scenario));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
+
+			Now.Is(now);
+			ScheduleForecastSkillReadModelRepository.LastCalculatedDate.Add(personRequest.BusinessUnit.Id.GetValueOrDefault(), now.AddHours(-1));
+			Target.Process(personRequest, period.StartDateTime);
+			var denyCommand = CommandDispatcher.LatestCommand as DenyRequestCommand;
+			denyCommand.DenyReason.Should().Contain("Please contact system administrator");
+		}
+	}
 }
 
 	
