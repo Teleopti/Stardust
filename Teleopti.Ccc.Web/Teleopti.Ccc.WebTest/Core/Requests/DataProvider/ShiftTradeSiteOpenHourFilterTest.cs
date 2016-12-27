@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var scheduleDays = new[]
 			{
 				createScheduleDay(person1, new TimePeriod(8, 30, 10, 30), new TimePeriod(11, 30, 14, 30)),
-				createScheduleDay(person2, new TimePeriod(8, 30, 10, 30), new TimePeriod(11, 30, 14, 30))
+				createScheduleDay(person2, new TimePeriod(8, 30, 10, 30), new TimePeriod(11, 30, 15, 30))
 			};
 			_personFromScheduleView = createShiftTradeAddPersonScheduleViewModelWithDayOff(person1);
 
